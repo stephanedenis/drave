@@ -326,6 +326,28 @@ sur peu de paramètres peut très bien ne pas trouver, puisqu'il optimiserait le
 
 ---
 
+## AUDIT DES DRAPEAUX PAR CHEMIN — FAIT (11 octobre 11 h) : méthode, portée, et ce qui reste
+
+Après le défaut de câblage de `--ffn-gain`, criblage statique des trois fonctions d'exécution
+(assignations `mdl.<champ> = …`) : `run_infer` 30 champs, `run_ppl` 16, **`run_ppl_reparti` 3**.
+
+**L'ANGLE MORT, et il est important** : le criblage annonce 29 champs « absents » pour
+`run_infer`, dont `act_thresh`, `act_topk`, `attn_topk`, `qk_topk`, `moe_topk` — **qui sont
+câblés**, mais par le **helper** `appliquer_quantification`, que le criblage ne lit pas. Il ne
+voit que les assignations écrites *dans* la fonction. Conclusion : **« absent du criblage »
+n'est pas « non câblé »**, et le confondre aurait produit un faux rapport.
+
+**Ce qu'il a établi** : le chemin réparti assigne 3 champs en propre, le helper en couvre 7 de
+plus, et c'est **ce qui restait hors des deux** qui contenait le défaut (`ffn_gain`) — la
+méthode a donc servi, avec sa portée exacte.
+
+**Ce qui N'EST PAS concluant, écrit comme tel** : les candidats restants (`--attn-window`,
+`--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`, `--trace-flux`) n'ont
+pas été départagés — la mesure en réparti a rendu des perplexités **vides**, et une mesure vide
+ne prouve rien. **À instruire, pas déclarés sains.**
+
+---
+
 ## DÉFAUT TROUVÉ ET CORRIGÉ (11 octobre 10 h 30) : `--ffn-gain` ne faisait RIEN en réparti
 
 En mesurant l'interaction du gain d'entrée avec le découpage, la mesure a rendu **le même

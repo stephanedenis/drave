@@ -29972,3 +29972,93 @@ code=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 38. Un drapeau qui ne faisait RIEN dans le chemin répar … [5744 caractères tronqués]`
+
+  ```
+docs defaut cable
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+719ab85 Defaut trouve et corrige : --ffn-gain ne faisait RIEN dans le chemin reparti
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 20 livré : un drapeau qui ne faisait **rien** dans le chemin réparti — trouvé, corrigé, gardé
+
+**Ce round** — 1 commit poussé, 122 tests verts, `porte-gain.sh` à **8 cas** (verte).
+
+En cherchant à mesurer l'interaction du gain d'entrée (E4) avec le **découpage**, la mesure a rendu **exactement le même chiffre avec et sans le drapeau** (42,5477). Ce n'était pas une absence d'effet : une absence de **câblage**.
+
+`--ffn-gain` était appliqué dans `run_infer` et `run_ppl`, et **pas** dans `run_ppl_reparti` : dans le chemin réparti — celui sur lequel porte tout ce sprint — le réglage ne faisait **rien, en silence**. C'est la famille de défauts que ce dépôt traque, et celui-ci comptait double : un réglage fin qui ne survit pas à la distribution est exactement ce qu'on ne veut pas découvrir en production.
+
+**Corrigé** et mesuré : réparti sans réglage **180,5245**, avec `0:0.75` **222,3496** ⇒ le drapeau agit. Le *signe* n'est pas celui du chemin local (−11,5 % sur 128 jetons) parce que la fenêtre de 32 jetons est trop courte : **ce n'est pas une mesure de qualité, c'est un contrôle de câblage**, et la porte le traite comme tel (elle exige que les chiffres **diffèrent**).
+
+**Le piège de fenêtre a mordu une troisième fois** dans la même tentative : `--ppl --limit 128` note les **128 premiers** jetons d'un fichier qui en compte 85 625, `--ppl-reparti` **tronque aux 128 derniers**. Trois portes le documentent désormais, et le rapport aussi.
+
+**Bilan** : 20 rounds, **22 portes toutes vertes**, 122 tests, ~39 sections de rapport. Les défauts trouvés cette session par la mesure — et non par relecture — se comptent maintenant par dizaines : deux portes fausses, un décalage d'un jeton, un `sys.exit` qui sortait en 1, un poids par défaut à zéro, un drapeau non câblé en réparti. L'objectif reste **actif**.
+
+
+## Tour 64
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 21/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 21 : audit systématique — quels autres drapeaux ne sont câblés que dans certains chemins ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport re, pathlib\nsrc = pathlib.Path(\"drave-core/src/main.rs\").read_text()\n# bornes des trois fonctions d'exécution\nbornes = {}\nfor nom in [\"run_ppl_reparti\", \"run_ppl(\", \"run_infer(\"]:\n    i = src. … [754 caractères tronqués]`
+
+  ```
+fonctions : ['run_infer(', 'run_ppl_reparti', 'run_ppl(']
+  run_infer(       : 30 champs assignés
+  run_ppl_reparti  : 3 champs assignés
+  run_ppl(         : 16 champs assignés
+
+  run_infer( — champs absents des autres chemins (29) :
+    act_levels, act_renorm, act_thresh, act_topk, act_topk_proj, attn_sinks, attn_topk, attn_window, couche_debut, couche_fin, emb_imposee, emb_imposee_lot, etat_sortie, flux_brut, flux_force, fusion_pos, hc_porte_imposee, hebb, hebb_diff, lot, moe_topk, patch, qk_topk, stop_id, stop_id2, swa_pattern, tete_garantie, tete_restreinte, trace
+
+  run_ppl_reparti — champs absents des autres chemins (2) :
+    couche_fin, hc_porte_imposee
+
+  run_ppl( — champs absents des autres chemins (15) :
+    act_renorm, act_thresh, act_topk, act_topk_proj, attn_sinks, attn_topk, attn_window, flux_force, hebb, hebb_diff, moe_topk, patch, qk_topk, swa_pattern, trace
+  ```
+
+### 🤖 Assistant
+
+⏵ L'audit donne des CANDIDATS — je mesure si `--act-topk` et `--attn-topk` agissent en réparti
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn appliquer_quantification\" -A 12 drave-core/src/main.rs | grep -E \"mdl\\.[a-z_]+ =\" | head -8", "description": "Check what appliquer_quantification wires"}`
+
+  ```
+2838-    mdl.act_thresh = opt.act_thresh;
+2839-    mdl.act_topk = opt.act_topk;
+2840-    mdl.act_renorm = opt.act_renorm;
+2844-    mdl.act_topk_proj = opt.topk_proj;
+2845-    mdl.attn_topk = opt.attn_topk;
+2846-    mdl.qk_topk = opt.qk_topk;
+2847-    mdl.moe_topk = opt.moe_topk;
+  ```
+
+### 🤖 Assistant
+
+⏵ La plupart des candidats sont couverts par un helper — reste `--attn-window` : je mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((65600 + RANDOM % 200)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [993 caractères tronqués]`
+
+  ```
+réparti nu            : 
+  --attn-window 16      :    SANS EFFET
+  --act-topk 64         :    SANS EFFET
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure non concluante (perplexité vide) — je consigne l'audit avec sa portée exacte, sans conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 39. Audit des drapeaux par CHEMIN : une méthode de crib … [5664 caractères tronqués]`

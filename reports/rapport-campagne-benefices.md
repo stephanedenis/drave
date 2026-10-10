@@ -2401,6 +2401,43 @@ locale » du même run. C'est écrit dans trois portes maintenant, et c'est écr
 
 **La porte** : `tools/porte-gain.sh`, cas 8 (le drapeau doit agir en réparti), 8 cas verts.
 
+## 39. Audit des drapeaux par CHEMIN : une méthode de criblage, et sa portée exacte
+
+Après avoir trouvé `--ffn-gain` non câblé dans le chemin réparti (§38), la question qui suit
+est mécanique : **combien d'autres drapeaux ne sont câblés que dans certains chemins ?**
+
+**La méthode** (criblage statique) : extraire de `main.rs` les bornes des trois fonctions
+d'exécution (`run_infer`, `run_ppl`, `run_ppl_reparti`), puis comparer les ensembles
+d'assignations `mdl.<champ> = …` de chacune.
+
+| fonction | champs assignés en propre |
+|---|---|
+| `run_infer` | 30 |
+| `run_ppl` | 16 |
+| **`run_ppl_reparti`** | **3** |
+
+**Et c'est là qu'il faut être précis sur ce que la méthode PROUVE.** Le criblage a annoncé 29
+champs « absents des autres chemins » pour `run_infer`, dont `act_thresh`, `act_topk`,
+`attn_topk`, `qk_topk`, `moe_topk`… Or ces champs **sont** câblés dans les autres chemins — par
+le **helper** `appliquer_quantification(&mut mdl, &opt)`, que le criblage ne lit pas. Le
+criblage a donc un **angle mort** : il ne voit que les assignations écrites *dans* la fonction.
+
+**Ce qu'il a réellement établi** : le chemin réparti assigne 3 champs en propre, le helper en
+couvre 7 de plus, et c'est **précisément ce qui restait hors des deux** qui contenait le défaut
+trouvé — `ffn_gain`, ni dans le helper, ni dans la fonction. La méthode a donc **servi**, à
+condition de ne pas confondre « absent du criblage » avec « non câblé ».
+
+**Ce qui n'est PAS concluant, et il faut le dire** : les candidats restants
+(`--attn-window`, `--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`,
+`--trace-flux`) n'ont **pas** été départagés — la tentative de mesure en chemin réparti a rendu
+des perplexités **vides** (extraction en échec), et une mesure vide ne prouve rien. Ils sont
+donc **à instruire**, pas déclarés sains ni défectueux.
+
+**Prochaine commande, écrite ici pour être exécutable telle quelle** : pour chaque candidat,
+comparer en chemin réparti `--limit <longueur du fichier>` avec et sans le drapeau (jamais
+`--limit` écrit à la main, cf. §36), et exiger que les deux chiffres **diffèrent** — c'est un
+contrôle de câblage, pas une mesure de qualité.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,
