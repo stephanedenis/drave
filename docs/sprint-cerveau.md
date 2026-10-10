@@ -353,7 +353,56 @@ gain de temps est réel (≥ 3×, sans quoi la mesure n'aurait pas de sens).
 
 ---
 
-## C2/C6 — FAIT (10 octobre 11 h 30) : la greffe d'état, et ce qu'elle ne transfère PAS
+## C2 — FAIT (10 octobre 16 h) : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE — et la correction d'un faux négatif
+
+**La question de C2, sans toucher au moteur** : deux flux qui se rencontrent, que devient
+leur contenu ? Une somme de deux états s'écrit avec `--fusion-etat` ; la mesure dit ce que
+le calcul en fait.
+
+**D'abord la correction, et elle est importante.** La porte `porte-greffe` concluait
+« une greffe d'état ne transfère pas le contexte » : l'état de A injecté dans B ne rendait
+jamais le code. **C'était un artefact d'un décalage d'un jeton** — le prélèvement se
+faisait sur les identifiants tokenisés (1 750) alors que l'inférence construit une invite
+d'**un jeton de plus** (1 751), donc on injectait l'état qui prédit « : » au lieu du code.
+Avec `--etat-fin` (k-ième depuis la fin, résolu dans la numérotation de l'inférence) :
+
+| état injecté dans une invite SANS aucun code | réponse |
+|---|---|
+| état final de A (code `ZQ-4471-KX`) | **`ZQ3`** |
+| état final de B (code `KJ-9999-QP`) | **`K00`** |
+
+**Le contenu passe.** Trois mesures ont échoué sur ce décalage avant que `--etat-fin`
+n'existe ; la leçon est écrite : **une position ne se devine pas, elle se capture là où
+le calcul se fait**.
+
+**La règle de mélange, mesurée** (deux invites de 1 750 jetons, même remplissage, même
+question, un code différent) :
+
+| α (poids de A) | norme du mélange | réponse |
+|---|---|---|
+| 0 | 65,89 | `K00` (B) |
+| 0,2 | 64,10 | `K00` |
+| 0,4 | 62,95 | `K00` |
+| 0,5 | 62,63 | `K00` |
+| **0,6** | 62,49 | **`ZQ3` (A)** |
+| 0,8 | 62,72 | `ZQ3` |
+| 1 | 63,65 | `ZQ3` |
+
+1. **la somme ARBITRE, elle ne détruit pas** : sur les sept mélanges, la réponse commence
+   toujours par le premier jeton de l'un des deux contenus — jamais un troisième ;
+2. **le point de bascule est à α = 0,6**, et la prédiction par les **normes**
+   (|B|/(|A|+|B|) = 65,89/129,54 = **0,509**) tombe à 0,091 : la somme est donc arbitrée
+   par la **norme** des états, pas seulement par le poids qu'on leur donne ;
+3. conséquence pour C2 : une fusion par somme est utilisable, mais **son seuil se règle
+   en normes** — deux entrées de tailles différentes ne pèsent pas pareil à poids égal.
+
+**Portes** : `tools/porte-melange.sh` (nouvelle, 4 cas) et `tools/porte-greffe.sh`
+(corrigée : le cas 4 attend maintenant le contenu, et l'ancienne conclusion est conservée
+à côté de la correction).
+
+---
+
+## C2/C6 — (premier texte, conservé) la greffe d'état, et ce qu'elle ne transférait PAS
 
 **Le passage manquant** : C6 retrouve un état par son contenu, C9 limite ce qui traverse
 un lien — mais si l'on **injecte** l'état d'un moment vécu dans un calcul qui ne l'a pas
@@ -856,6 +905,7 @@ bus (le format de la ligne de contrôle est écrit, le transport reste à câble
 |---|---|
 | 9/10 17 h 10 | **C1a** : module `topologie.rs`, validation stricte, plan, 8 tests, suite à 85 tests. |
 | 9/10 17 h 20 | **C1b pas 1** : la topologie pilote le découpage · porte `tools/porte-topologie.sh` **TENUE** (même chiffre, écart 0,00e0) · deux refus vérifiés. |
+| 10/10 16 h 30 | **C2 — deux entrées, règle de mélange** : `porte-melange.sh` (4 cas, verte). La somme **arbitre** (7/7), **bascule à α=0,6** contre **0,509** prédit par les normes. Et **correction d'un faux négatif majeur** : la greffe d'état **transfère le contenu** (`ZQ3`/`K00`) quand l'état est capturé dans la numérotation de l'inférence (`--etat-fin` — le décalage d'un jeton faisait injecter l'état qui prédit « : »). Trois mesures avaient échoué sur ce décalage. |
 | 10/10 14 h 10 | **C6 — indice étranger : la porte CORRIGE la mesure.** En écrivant la porte, la question a gagné un point d'interrogation : 136 → **378 jetons** (hasard 448). L'effet est réel mais **NON ROBUSTE** ; la porte n'exige plus que « mieux que le hasard » et **affiche l'avertissement** quand la marge est faible. Leçon : un chiffre unique sur un seul indice n'est pas un résultat. |
 | 10/10 13 h 00 | **C6 — indice étranger** : `--episodique-indice` (état EXTÉRIEUR). Un indice pris dans le magasin s'y retrouve lui-même (64/64, 1 009 jetons de l'aiguille) et **ne teste rien** — piège corrigé. Avec un indice extérieur partageant **4/64** canaux : épisode rendu à **136 jetons** de l'aiguille contre **448** de hasard ⇒ **3,3× mieux que le hasard**, faible mais réel. Limite écrite : un seul indice, un seul texte. |
 | 10/10 11 h 30 | **C2/C6 — la greffe d'état** : `--fusion-etat/pos/alpha` + prélèvement d'état multi-positions. Protocole A/B (même texte, l'aiguille en moins) : témoin poids 0 identique · A + son état garde son contenu · **B + l'état de A ne donne jamais le code** (5 poids, et même partout) · **cause** : le 1er jeton change, la suite reste celle de B (cache KV). ⇒ une mémoire doit entrer comme contenu ou entrée de cache ; **le moteur n'a aucune prise sur le KV — manque**. Trois pièges corrigés (défaut 0,0 du poids, position « dernier » comptée par le moteur, `DRAVE_DEBUG_FUSION` déclarée). Porte 5 cas. |

@@ -12,7 +12,21 @@
 #   · on prélève l'état BRUT (après la dernière couche, avant la norme finale) à la
 #     DERNIÈRE position de A, et on l'injecte dans B.
 #
-# CE QUE LA MESURE A DONNÉ, et pourquoi chaque cas est là :
+# ⚠️ CORRECTION DU 10 OCTOBRE (soir) — LA CONCLUSION D'ORIGINE ÉTAIT UN ARTEFACT.
+# Cette porte concluait « une greffe d'état n'est pas une greffe de contexte », parce que
+# l'état de A injecté dans B ne rendait jamais le code. C'ÉTAIT FAUX, et la cause était
+# un décalage d'un jeton : le prélèvement se faisait sur les identifiants tokenisés
+# (`--tokenize`, 1 750 jetons) alors que l'inférence construit une invite d'UN JETON DE
+# PLUS (1 751). L'état prélevé était donc celui qui prédit le DERNIER JETON DU TEXTE
+# (« : ») au lieu de celui qui prédit le code — et il rendait « : ».
+# Avec un prélèvement fait LÀ OÙ LE CALCUL SE FAIT (`--etat-fin`, k-ième depuis la fin,
+# résolu dans la numérotation de l'inférence), le contenu PASSE : l'état de A injecté
+# dans une invite qui ne contient AUCUN code fait répondre « ZQ3 », celui de B « K00 ».
+# Ce qui reste vrai et que la porte continue de verrouiller : un poids de 0 ne change
+# rien, et l'état doit être injecté à la DERNIÈRE position (l'injecter au milieu d'une
+# invite n'a pas d'effet sur la réponse).
+#
+# CE QUE LA MESURE AVAIT DONNÉ (conclusion d'origine, conservée pour mémoire) :
 #   1. poids 0 ⇒ sortie IDENTIQUE à l'absence de greffe (le témoin de non-effet : sans
 #      lui, rien de ce qui suit ne serait interprétable) ;
 #   2. A + SON PROPRE état reste « ZQ… » ⇒ la greffe achemine bien la direction de
@@ -65,10 +79,10 @@ echo "  B (sans aiguille) : $IB"
 printf '%s' "$IA" | grep -q "1863" \
   || { echo "  ❌ A ne produit pas le jeton du code (1863) : la greffe ne pourrait rien prouver"; exit 1; }
 
-echo "=== 1. prélever l'état de la dernière position de A ==="
-"$D" "$M" --ppl "$T/A.ids" --limit "$NA" --ctx "$CTX" --threads 12 \
-   --etat-sortie "$T/etatA" --etat-pos "$((NA - 1))" 2>&1 | grep -E "capture|perplexité" | sed 's/^/  /'
-ETAT="$T/etatA.$((NA - 1))"
+echo "=== 1. prélever l'état de la dernière position DE L'INFÉRENCE (--etat-fin) ==="
+"$D" "$M" --infer --prompt "$(cat "$T/A.txt")" --n 1 --temp 0 --ctx "$CTX" --threads 12 \
+   --etat-fin "$T/etatA" 1 2>&1 | grep -E "capture" | sed 's/^/  /'
+ETAT=$(ls "$T"/etatA.* 2>/dev/null | head -1)
 [ -s "$ETAT" ] || { echo "  ❌ l'état n'a pas été écrit"; exit 1; }
 
 echo "=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ==="
@@ -84,19 +98,21 @@ printf '%s' "$IA2" | grep -qE "48|1863" \
        echo "     d'injection n'achemine rien jusqu'à la tête"; exit 1; }
 echo "  ✅ l'état injecté porte bien la direction du contenu de A"
 
-echo "=== 4. LE NÉGATIF : l'état de A dans B ne donne PAS le code, à aucun poids ==="
+echo "=== 4. CORRIGÉ : l'état de A dans C (sans aucun code) DONNE le code ==="
 PORTE=0
 for A in 1 2 4 10 100; do
   R=$(gen "$T/B.txt" --fusion-etat "$ETAT" --fusion-pos dernier --fusion-alpha "$A")
   printf '  poids %-4s : %s\n' "$A" "$R"
-  printf '%s' "$R" | grep -q "1863" && PORTE=1
+  # Le critère porte sur les IDENTIFIANTS : `gen` rend « ids générés : […] », et 1863
+  # est le premier jeton de « ZQ-… ». Chercher la lettre « Z » dans cette ligne ne
+  # pouvait pas réussir — la porte échouait sur sa propre vérification (attrapé au
+  # premier essai de la version corrigée).
+  printf '%s' "$R" | grep -qE "^\[1863," && PORTE=1
 done
-RC=$(gen "$T/B.txt" --fusion-etat "$ETAT" --fusion-pos 18446744073709551615 --fusion-alpha 100)
-echo "  toutes positions, poids 100 : $RC"
-printf '%s' "$RC" | grep -q "1863" && PORTE=1
-[ "$PORTE" = 0 ] || { echo "  ❌ le code est apparu : la greffe d'état transfère donc le CONTEXTE,";
-  echo "     contrairement à ce qui a été mesuré — la conclusion du rapport serait fausse"; exit 1; }
-echo "  ✅ aucun poids ne porte le code : une greffe d'état n'est pas une greffe de contexte"
+[ "$PORTE" = 1 ] || { echo "  ❌ le contenu de A ne sort PAS de la greffe, même au bon endroit :";
+  echo "     la correction du 10 octobre ne tient pas sur cette exécution"; exit 1; }
+echo "  ✅ l'état de A, prélevé LÀ OÙ LE CALCUL SE FAIT, porte bien son contenu"
+echo "     (l'ancienne conclusion négative était un décalage d'un jeton, pas une propriété"
 
 echo "=== 5. la CAUSE : après le premier jeton, la suite appartient à B ==="
 # Les jetons de B réapparaissent dans la sortie greffée ; ceux de A non. C'est

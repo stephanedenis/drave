@@ -1882,7 +1882,29 @@ blocs », pont symétrique (le même `--pont-k` des deux côtés). Les huit coup
 testées en dense f32, quatre en encodé ; les points intermédiaires (13, 14, 16, 17) ne
 sont pas mesurés.
 
-## 28. La greffe d'état (C2/C6) : branchée, et elle ne transfère PAS le contexte
+## 28. La greffe d'état (C2/C6) : elle TRANSFÈRE le contenu — ma première conclusion était fausse
+
+> **CORRECTION DU 10 OCTOBRE (soir).** Ce qui suit concluait « une greffe d'état n'est pas
+> une greffe de contexte ». **C'était un artefact d'un décalage d'un jeton**, pas une
+> propriété du moteur : le prélèvement se faisait sur les identifiants tokenisés
+> (`--tokenize`, 1 750 jetons) alors que l'inférence construit une invite d'**un jeton de
+> plus** (1 751). L'état prélevé était donc celui qui prédit le dernier jeton du texte
+> (« : ») au lieu de celui qui prédit le code.
+>
+> **Mesuré à nouveau, avec le prélèvement fait là où le calcul se fait** (`--etat-fin`,
+> k-ième position depuis la fin, résolue dans la numérotation de l'inférence) :
+>
+> | état injecté dans une invite qui ne contient AUCUN code | réponse |
+> |---|---|
+> | état final de l'invite A (code `ZQ-4471-KX`) | **`ZQ3`** |
+> | état final de l'invite B (code `KJ-9999-QP`) | **`K00`** |
+>
+> **Le contenu passe.** La greffe d'état est donc un mécanisme utilisable — et c'est le
+> fondement de l'entrée de cache (C2) qui reste à construire. La leçon de méthode, elle,
+> reste : **une position ne se devine pas, elle se capture là où le calcul se fait** ;
+> trois mesures ont échoué pour cette raison avant que `--etat-fin` n'existe.
+
+### 28 bis. Ce que la greffe d'état faisait vraiment (texte d'origine, conservé)
 
 C6 sait stocker un état et le retrouver par son contenu ; C9 sait limiter ce qui
 traverse un lien. Restait le **passage** : si l'on injecte l'état d'un moment vécu dans

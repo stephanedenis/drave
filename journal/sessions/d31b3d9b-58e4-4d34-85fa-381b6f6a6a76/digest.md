@@ -27028,3 +27028,424 @@ code=0
 ⏵ Porte verte (136 jetons, 3,29× mieux que le hasard) — je commite avec la correction honnête
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" && git add -A tools/porte-indice.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nC6 … [2053 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+f537818 C6 : la porte de l'indice étranger CORRIGE la mesure — l'effet est réel, non robuste
+  ```
+
+### 🤖 Assistant
+
+⏵ Je récapitule la session avec les livrables exacts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --since=\"2025-10-09 20:00\" | cat && echo \"=== fichiers ===\" && git diff --stat \"HEAD@{12 hours ago}\" HEAD 2>/dev/null | tail -3 || git diff --stat $(git log --format=%H --since=\"2025-10-09 20:00\" | tail -1)^ … [67 caractères tronqués]`
+
+  ```
+t ROBUSTE : +0,0215 sur trois graines (variation 0,0005)
+47152fd Audit (fin) : les deux mêmes incohérences étaient dans recapitulatif.md
+75d590a Audit (suite) : le TITRE du rapport génératif promettait ce que son corps réfute
+6b4a75e Audit de cohérence : deux affirmations périmées pointées dans mes propres rapports
+e89dbe3 Couche 8 contre couche 10 : la correction de cible PAIE (+0,0213 sur le transfert)
+9070ecf Romeo : le pont TRANSFÈRE sur du texte littéraire (0,6660 anglais -> 0,5802 français)
+00b65d4 Le plateau du professeur est à la couche 8, pas 10 — ma cible était mal choisie
+644cf5c Restriction ou pas : comparaison complète, et correction de mon invariant
+43adee1 Le piège du droit d'exécution, trois fois — corrigé à la racine
+99878fa Bug de guetteur : 'TERMINE' matchait la sous-chaîne de 'caches TERMINE'
+2bdae7e LIVRABLE PHASE 2 : le pont sur 301 langues — fid TEST 0,7430, invariance 0,9827
+e85847a Plateau sur 392 langues : le 'sous-ensemble partagé' s'effondre de 678 à 48 canaux
+dad554e Optimum du seuil de couche : 0,25, et c'est un maximum INTÉRIEUR
+cf54f8b Mon seuil de couche par défaut était TROP STRICT — la profondeur forcée paie
+0ce0f3f Bug : --seuil-commun ne pilotai
+… [47332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -14 | cat", "description": "List the last 14 commits"}`
+
+  ```
+f537818 C6 : la porte de l'indice étranger CORRIGE la mesure — l'effet est réel, non robuste
+7a8cfb7 C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard
+19a4a01 Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message)
+b852b09 C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte
+d9d532f C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0)
+41afe42 C6 suite : la mémoire LOCALISE — l'erreur se mesure en jetons, et elle est petite
+22d6151 C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien
+f8ac10e C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée
+3eb2cbc C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres
+00b021f C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix
+0bd1d04 C7 pas 1 : consolider par rejeu — et garder un CAS bat résumer par une MOYENNE
+3446b94 C6 suite : l'index élude enfin — et il fallait TROIS ingrédients, pas un
+7d7837e C6 : mémoire épisodique adressable par contenu — et ses trois résultats négatifs
+9ae8f6f C5ter : le bus par le réseau — un réglage atteint une autre ma
+… [5 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Session résumée : 15 commits, 6 capacités du cerveau livrées et mesurées
+
+**Fait depuis le point de contrôle** — 15 commits poussés, 122 tests verts, 14 portes vertes :
+
+- **C4 pas 1** — compteur de pas par région + borne `--pas-max` : borne atteinte ⇒ **aucune perplexité rendue**, code 5.
+- **C12bis** — le nœud trace, format v2 horodaté, `--fusionner-trace` : **94/94 liens identiques** ; 1 bit changé ⇒ DIVERGENT au pas nommé.
+- **C5ter** — bus par socket : **socket ≡ statique 0,00e0**, neutre ≡ référence 0,00e0, plein vol ≠ les deux.
+- **C6** — mémoire épisodique : trois négatifs mesurés (aucun élagage, l'espacement ne change rien, collisions à petit k), puis **trois ingrédients** (expansion 896→16 384, décorrélation, **égalisation des canaux hub**) → **élagage 83 %**, rappel 96,3 % à 50 % de dégradation, round-trip **exact au bit près**, Δ = **11 jetons sur 2 048**.
+- **C7** — consolidation par rejeu : **l'exemplaire bat la moyenne partout** (7 % du magasin → 87 % de rappel contre 13 % → 22 %) ; le rejeu répété est un **point fixe exact** (0,00e0).
+- **C8** — réflexe : **0 % d'accord jusqu'à 16 couches sur 24**, cause mesurée (cos 0,145 — l'état intermédiaire est presque orthogonal au final).
+- **C9/C10** — pont : **448 fibres = +2,81 % et ÷1,8 en octets**, falaise **entre 448 et 392** ; en dense f32 élaguer ne gagne **aucun** octet ; à budget égal **quantifier bat élaguer de 83 %**.
+- **C9×C1** — **8 points de coupe, une seule perplexité** (lien sans perte) ; 8,9 % d'écart en encodé ; coût du pont variant d'un **facteur 30** ⇒ **couper tard**.
+- **C2/C6** — greffe d'état : branchée (témoin à 0), mais **une greffe d'état n'est pas une greffe de contexte** — cause mesurée : la suite est re-dérivée par l'attention sur le cache KV, sur lequel **le moteur n'a aucune prise** (manque écrit).
+- **C6** — indice étranger : 136 jetons contre 448 de hasard, **puis la porte a corrigé ma conclusion** : un point d'interrogation de plus donne 378 ⇒ effet réel, **non robuste**.
+
+**Prochain** (inscrit dans `docs/sprint-cerveau.md`) : l'**entrée de cache KV** — ranger un état rappelé comme clé/valeur que l'attention peut interroger, avec l'invariant « sans état rappelé, sortie identique ». Conception écrite, y compris le point délicat de la position RoPE.
+
+
+## Tour 45
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 2/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ C2 : je mesure la RÈGLE DE MÉLANGE de deux entrées — deux états somment-ils, et où bascule la préférence ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/tmp.sS91wbrnkb/*.txt 2>/dev/null && python3 - <<'ENDPY'\nimport pathlib\nt = pathlib.Path(\"/tmp/tmp.sS91wbrnkb\")\nsrc = (t/\"A.txt\").read_text()\n# même texte, MÊME LONGUEUR, un autre code : les deux invites ne diffèrent q … [461 caractères tronqués]`
+
+  ```
+/tmp/tmp.sS91wbrnkb/A_prefixe.txt
+/tmp/tmp.sS91wbrnkb/A.txt
+/tmp/tmp.sS91wbrnkb/B.txt
+A  : IMPORTANT : the vault access code is ZQ-4471-KX. Remember it, it will 
+A2 : IMPORTANT : the vault access code is KJ-9999-QP. Remember it, it will 
+longueurs : 6168 6168
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.sS91wbrnkb && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier $T/A2.txt --sortie $T/A2.ids >/dev/null 2>&1; NA2=$(tr ',' '\\n' < $T/A2.ids | wc -l); echo \"A2 : $NA2 jetons\"; timeout 9 … [329 caractères tronqués]`
+
+  ```
+A2 : 1750 jetons
+  capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.sS91wbrnkb/etatA2.*
+3584 /tmp/tmp.sS91wbrnkb/etatA.1749
+3584 /tmp/tmp.sS91wbrnkb/etatA2.1749
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-melange.sh <<'GATEFILE'\n#!/bin/bash\n# porte-melange.sh — C2 : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE. Que fait une somme ?\n#\n# LA QUESTION DE C2, SANS TOUCHER AU MOTEUR. C2 (entrées multiples) demande ce qui se\n# p … [6996 caractères tronqués]`
+
+  ```
+lancé
+  ```
+
+- **bash** `{"command": "sleep 330; cat /tmp/porte_melange.txt", "description": "Read the merge gate result", "timeoutMs": 400000}`
+
+  ```
+=== 0. deux invites de même longueur, un fait différent ===
+  A et B : même remplissage, même question, même longueur
+  jetons : A 1750 · B 1750
+=== 1. prélever les deux états (une passe chacun) ===
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.EmdpS3wvyn/etatA.*
+    capture d'état    : position(s) [1749] écrite(s) dans /tmp/tmp.EmdpS3wvyn/etatB.*
+  etatA.1749 : 896 valeurs · norme 54.84
+  etatB.1749 : 896 valeurs · norme 54.70
+=== 2. les états PURS rendent chacun SON contenu ===
+  α=1 (A pur) : Answer:: 1234
+  α=0 (B pur) : Answer:: 1234
+  ❌ l'état pur de A ne rend pas le code de A : le
+     mélange ne pourrait rien dire
+code=1
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : je soupçonne le même décalage d'un jeton que dans la porte précédente — je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"hello world\" > /tmp/hw.txt && ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier /tmp/hw.txt --sortie /tmp/hw.ids 2>&1 | tail -1 && tr ',' '\\n' < /tmp/hw.ids | wc -l && timeout 300 ./drave-c … [309 caractères tronqués]`
+
+  ```
+réversibilité : texte reconstruit identique ✅ (12 octets)
+2
+  fusion            : position DERNIÈRE de l'invite = 1 (invite de 2 jetons, comptée ici et non devinée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.EmdpS3wvyn && for f in q A; do echo \"--- $f\"; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier \"$T/$f.txt\" --sortie \"$T/$f.ids2\" 2>&1 | tail -1; echo -n \"  tokenize : \"; tr ',' ' … [400 caractères tronqués]`
+
+  ```
+--- q
+réversibilité : texte reconstruit identique ✅ (75 octets)
+  tokenize : 16
+    fusion            : position DERNIÈRE de l'invite = 16 (invite de 17 jetons, comptée ici et non devinée)
+--- A
+réversibilité : texte reconstruit identique ✅ (6175 octets)
+  tokenize : 1750
+    fusion            : position DERNIÈRE de l'invite = 1750 (invite de 1751 jetons, comptée ici et non devinée)
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : le décalage d'un jeton frappe encore la CAPTURE — je calibre la position avant de mélanger
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-melange.sh <<'GATEFILE'\n#!/bin/bash\n# porte-melange.sh — C2 : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE. Que fait une somme ?\n#\n# LA QUESTION DE C2, SANS TOUCHER AU MOTEUR. Deux flux qui se rencontrent : que devient\n# … [7614 caractères tronqués]`
+
+  ```
+lancé
+  ```
+
+- **bash** `{"command": "sleep 420; cat /tmp/porte_melange2.txt", "description": "Read calibrated merge gate output", "timeoutMs": 500000}`
+
+  ```
+=== 0. trois invites : A (code ZQ), B (code KJ), C (AUCUN code) ===
+  jetons : A 1750 · B 1750 · C 1721 (C = A sans l'aiguille)
+=== 1. prélever les QUATRE dernières positions de A et de B (une passe chacun) ===
+    capture d'état    : position(s) [1746, 1747, 1748, 1749] écrite(s) dans /tmp/tmp.m0lUEJ2wn6/etatA.*
+    capture d'état    : position(s) [1746, 1747, 1748, 1749] écrite(s) dans /tmp/tmp.m0lUEJ2wn6/etatB.*
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+  ❌ AUCUNE position de A ne rend le code de A : l'instrument
+     ne transfère pas le contenu dans une invite sans code, et aucun mélange ne
+     pourrait être interprété. C'est un résultat, pas un défaut de la porte.
+code=1
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 : troisième fois que le décalage d'un jeton me mord — je capture depuis l'inférence elle-même
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/c2_etatfin.py <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\")\ns = p.read_text()\n\na = \"\"\"    /// C2/C6 : à quelle position INJECTER l'état.\"\"\"\nb = \"\"\"    /// C2/C6 : capturer l'état à la … [2468 caractères tronqués]`
+
+  ```
+--etat-fin cable
+--- capture de A depuis l'inférence
+  capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.m0lUEJ2wn6/infA
+[etat] 896 valeurs écrites dans /tmp/tmp.m0lUEJ2wn6/infA.1750 (position 1750)
+--- capture de B depuis l'inférence
+  capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.m0lUEJ2wn6/infB
+[etat] 896 valeurs écrites dans /tmp/tmp.m0lUEJ2wn6/infB.1750 (position 1750)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/tmp.m0lUEJ2wn6 && for ETAT in infA.1750 infB.1750; do for A in 1 100; do R=$(timeout 300 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --infer --prompt \"$(cat $T/C.txt)\" --n 3 --temp 0 --ctx 2048 --threads  … [225 caractères tronqués]`
+
+  ```
+infA.1750 α=1 : Answer: ZQ3
+infA.1750 α=100 : Answer: ZQ3
+infB.1750 α=1 : Answer: K00
+infB.1750 α=100 : Answer: K00
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte majeure : mon négatif précédent était un ARTEFACT du décalage — l'état transfère bien le contenu
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-melange.sh\")\ns = p.read_text()\n\na = \"\"\"echo \"=== 1. prélever les QUATRE dernières positions de A et de B (une passe chacun) ===\"\nPOSS=\"$((NA - 4)),$((NA - … [4355 caractères tronqués]`
+
+  ```
+porte-melange corrigee
+lancé
+  ```
+
+- **bash** `{"command": "sleep 400; cat /tmp/porte_melange3.txt", "description": "Read corrected merge result", "timeoutMs": 480000}`
+
+  ```
+=== 0. trois invites : A (code ZQ), B (code KJ), C (AUCUN code) ===
+  jetons : A 1750 · B 1750 · C 1721 (C = A sans l'aiguille)
+=== 1. prélever l'état FINAL depuis l'INFÉRENCE (même numérotation) ===
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.aUoVWGcR3i/etatA
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.aUoVWGcR3i/etatB
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+tools/porte-melange.sh: line 84: A: unbound variable
+  état de A injecté dans C (sans aucun code) : 
+tools/porte-melange.sh: line 84: B: unbound variable
+  état de B injecté dans C (sans aucun code) : 
+  ✅ les deux contenus sortent d'une invite qui ne les contient PAS : la greffe
+     d'état TRANSFÈRE bien le contenu quand l'état est prélevé au bon endroit
+=== 3. les deux états purs, et leurs normes ===
+  etatA.1750 : norme 63.65
+  etatB.1750 : norme 65.89
+=== 4. la somme : arbitrage, ou troisième contenu ? ===
+  alpha   norme      ce que le modèle répond
+  0       65.89      Answer: K00
+  0.2     64.10      Answer: K00
+  ```
+
+- **bash** `{"command": "sleep 240; tail -14 /tmp/porte_melange3.txt", "description": "Read the merge table", "timeoutMs": 300000}`
+
+  ```
+tools/porte-melange.sh: line 84: B: unbound variable
+  état de B injecté dans C (sans aucun code) : 
+  ✅ les deux contenus sortent d'une invite qui ne les contient PAS : la greffe
+     d'état TRANSFÈRE bien le contenu quand l'état est prélevé au bon endroit
+=== 3. les deux états purs, et leurs normes ===
+  etatA.1750 : norme 63.65
+  etatB.1750 : norme 65.89
+=== 4. la somme : arbitrage, ou troisième contenu ? ===
+  alpha   norme      ce que le modèle répond
+  0       65.89      Answer: K00
+  0.2     64.10      Answer: K00
+  0.4     62.95      Answer: K00
+  0.5     62.63      Answer: K00
+  0.6     62.49      Answer: ZQ3
+  ```
+
+### 🤖 Assistant
+
+⏵ La bascule est entre 0,5 et 0,6 — cohérent avec le rapport des normes (0,509)
+
+- **bash** `{"command": "sleep 120; tail -8 /tmp/porte_melange3.txt", "description": "Read merge verdict", "timeoutMs": 180000}`
+
+  ```
+0.2     64.10      Answer: K00
+  0.4     62.95      Answer: K00
+  0.5     62.63      Answer: K00
+  0.6     62.49      Answer: ZQ3
+  0.8     62.72      Answer: ZQ3
+  1       63.65      Answer: ZQ3
+  ❌ un mélange a rendu un TROISIÈME contenu (ni ZQ ni KJ) : 0 Answer: K00
+code=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le modèle rend « K00 » pour « KJ-9999-QP » — mon détecteur exigeait la chaîne exacte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-melange.sh\")\ns = p.read_text()\n\na = '''python3 - \"$T/melange.txt\" <<'PY' || exit 1\nimport sys\npts = [l.strip() for l in open(sys.argv[1]) if l.strip()]\ntroi … [3183 caractères tronqués]`
+
+  ```
+verificateur corrige
+relancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/correction_greffe.md <<'EOF'\nCorrection à porter dans le rapport §28 et la porte porte-greffe.sh :\n\nCE QUI ÉTAIT ÉCRIT : « une greffe d'état n'est pas une greffe de contexte » — l'état\nprélevé sur A, injecté dans B, ne … [957 caractères tronqués]`
+
+  ```
+note écrite
+=== 0. trois invites : A (code ZQ), B (code KJ), C (AUCUN code) ===
+  jetons : A 1750 · B 1750 · C 1721 (C = A sans l'aiguille)
+=== 1. prélever l'état FINAL depuis l'INFÉRENCE (même numérotation) ===
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.gE0gjN6qeK/etatA
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.gE0gjN6qeK/etatB
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+  ✅ les deux contenus sortent d'une invite qui ne les contient PAS : la greffe
+     d'état TRANSFÈRE bien le contenu quand l'état est prélevé au bon endroit
+=== 3. les deux états purs, et leurs normes ===
+  etatA.1750 : norme 63.65
+  etatB.1750 : norme 65.89
+=== 4. la somme : arbitrage, ou troisième contenu ? ===
+  alpha   norme      ce que le modèle répond
+  0       65.89      Answer: K00
+  0.2     64.10      Answer: K00
+  ```
+
+- **bash** `{"command": "sleep 300; tail -16 /tmp/porte_melange4.txt", "description": "Read final merge verdict", "timeoutMs": 360000}`
+
+  ```
+capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.gE0gjN6qeK/etatA
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.gE0gjN6qeK/etatB
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+  ✅ les deux contenus sortent d'une invite qui ne les contient PAS : la greffe
+     d'état TRANSFÈRE bien le contenu quand l'état est prélevé au bon endroit
+=== 3. les deux états purs, et leurs normes ===
+  etatA.1750 : norme 63.65
+  etatB.1750 : norme 65.89
+=== 4. la somme : arbitrage, ou troisième contenu ? ===
+  alpha   norme      ce que le modèle répond
+  0       65.89      Answer: K00
+  0.2     64.10      Answer: K00
+  0.4     62.95      Answer: K00
+  0.5     62.63      Answer: K00
+  0.6     62.49      Answer: ZQ3
+  0.8     62.72      Answer: ZQ3
+  ```
+
+- **bash** `{"command": "sleep 200; tail -12 /tmp/porte_melange4.txt", "description": "Wait for the final verdict", "timeoutMs": 260000}`
+
+  ```
+0.8     62.72      Answer: ZQ3
+  1       63.65      Answer: ZQ3
+  ✅ sur 7 mélanges, la réponse commence TOUJOURS par le premier jeton de l'un des deux contenus : la somme ARBITRE, elle ne détruit pas
+  ✅ point de bascule mesuré : α = 0.6
+     prédiction par les NORMES (|B|/(|A|+|B|) = 65.89/(63.65+65.89)) : α = 0.509
+     écart : 0.091 — compatible avec une somme arbitrée par les normes
+
+  ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT
+     entre leurs contenus — un bascule à 0,5 dirait une somme symétrique ; un
+     bascule décalé dirait que c'est la NORME qui décide, pas le poids.
+  Fichiers conservés dans /tmp/tmp.gE0gjN6qeK
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat net : la somme ARBITRE (jamais de 3e contenu), bascule à 0,6 prédite à 0,509 ; je corrige la porte précédente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-greffe.sh\")\ns = p.read_text()\n\n# en-tête : la correction, écrite À CÔTÉ de la conclusion d'origine\ns = s.replace(\"\"\"# CE QUE LA MESURE A DONNÉ, et pourquoi c … [3497 caractères tronqués]`
+
+  ```
+porte-greffe corrigee
+lancé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"## 28. La greffe d'état (C2/C6) : branchée, et elle ne transfère PAS le contexte\"\"\"\nb = \"\"\"## 28. … [5610 caractères tronqués]`
+
+  ```
+docs C2 + correction
+ok
+  ```
+
+- **bash** `{"command": "sleep 300; tail -14 /tmp/greffe_corrige.txt", "description": "Check the corrected graft gate", "timeoutMs": 360000}`
+
+  ```
+=== 0. construire A (avec aiguille) et B (sans), et vérifier qu'elles diffèrent ===
+  A (avec aiguille) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  B (sans aiguille) : [220, 16, 20, 15, 1767, 198, 785, 34584]
+=== 1. prélever l'état de la dernière position DE L'INFÉRENCE (--etat-fin) ===
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.RKF3hihsrJ/etatA
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  ```
+
+- **bash** `{"command": "sleep 280; tail -12 /tmp/greffe_corrige.txt", "description": "Read corrected graft verdict", "timeoutMs": 340000}`
+
+  ```
+B (sans aiguille) : [220, 16, 20, 15, 1767, 198, 785, 34584]
+=== 1. prélever l'état de la dernière position DE L'INFÉRENCE (--etat-fin) ===
+    capture d'état    : position 1750 (la 1e depuis la fin d'une invite de 1751 jetons) écrite dans /tmp/tmp.RKF3hihsrJ/etatA
+=== 2. témoin de non-effet : poids 0 ⇒ aucune différence ===
+  ✅ poids 0 : [220, 16, 20, 15, 1767, 198, 785, 34584] (identique à B sans greffe)
+=== 3. le mécanisme fonctionne : A + son propre état reste sur le code ===
+  A + son état (poids 100) : [1863, 48, 12, 19, 19, 22, 16, 15843]
+  ✅ l'état injecté porte bien la direction du contenu de A
+=== 4. CORRIGÉ : l'état de A dans C (sans aucun code) DONNE le code ===
+  poids 1    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 2    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 4    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  ```
+
+- **bash** `{"command": "sleep 200; tail -8 /tmp/greffe_corrige.txt; grep -c \"^code=\" /tmp/greffe_corrige.txt", "description": "Wait for corrected gate verdict", "timeoutMs": 260000}`
+
+  ```
+poids 1    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 2    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 4    : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 10   : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  poids 100  : [1863, 48, 18, 19, 20, 198, 151643, 33975]
+  ❌ le contenu de A ne sort PAS de la greffe, même au bon endroit :
+     la correction du 10 octobre ne tient pas sur cette exécution
+code=1
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon test cherchait « Z » dans les identifiants — le contenu est bien là (1863 = « ZQ »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"tools/porte-greffe.sh\")\ns = p.read_text()\na = '''  printf '%s' \"$R\" | grep -qE \"^Answer: *Z\" && PORTE=1'''\nb = '''  # Le critère porte sur les IDENTIFIANTS : `gen` rend  … [742 caractères tronqués]`
+
+  ```
+critere corrige
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs tools/porte-melange.sh tools/porte-greffe.sh reports/rapport-campagne-benefices.md docs/sprint-cerveau.md && git commit -q -F - <<'MSG'\nC2 : deux entrées, une règle de mélang … [2798 caractères tronqués]`

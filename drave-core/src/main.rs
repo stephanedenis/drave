@@ -689,6 +689,12 @@ struct Options {
     /// C2/C6 : où écrire l'état brut, et à quelles positions.
     etat_sortie: Option<String>,
     etat_pos: Vec<usize>,
+    /// C2/C6 : capturer l'état à la K-ième position depuis la FIN de l'invite
+    /// (1 = la dernière). C'est la seule façon FIABLE de nommer « la fin » : les
+    /// positions ne se devinent pas (`--tokenize` et `--prompt` ne comptent pas les
+    /// mêmes jetons pour un texte qui finit par un saut de ligne — 17 contre 16,
+    /// mesuré), et s'y tromper a fait échouer deux mesures avant que ce drapeau existe.
+    etat_fin: Option<(String, usize)>,
     /// C2/C6 : à quelle position INJECTER l'état. `usize::MAX` = partout, ce qui
     /// n'est presque jamais ce qu'on veut : on rappelle un souvenir au moment de
     /// répondre, pas à chaque jeton de la question.
@@ -916,6 +922,12 @@ fn analyser(args: &[String]) -> Options {
             "--etat-sortie" => { o.etat_sortie = Some(suivant(i).clone()); 2 }
             // Une LISTE de positions : « 2248,4151 ». Deux prélevements d'un même
             // contexte tiennent alors en une seule passe.
+            "--etat-fin" => {
+                let f = suivant(i).clone();
+                let k = args.get(i + 2).and_then(|x| x.parse().ok()).unwrap_or(1);
+                o.etat_fin = Some((f, k));
+                3
+            }
             "--etat-pos" => {
                 o.etat_pos = suivant(i).split(',')
                     .filter_map(|x| x.trim().parse().ok()).collect();
@@ -1372,6 +1384,17 @@ troncature aux {} derniers", ids.len(), garde, ctx, n_new, garde);
     // La position « dernière » se résout ICI, APRÈS la troncature : la résoudre avant
     // viserait un jeton que la troncature a retiré, et la greffe tomberait à côté —
     // exactement l'erreur d'un jeton qui avait été commise à la main.
+    // La capture se résout ICI AUSSI, dans la numérotation de l'inférence : c'est la
+    // même longueur d'invite qui sert au calcul et à la capture, donc plus de décalage.
+    if let Some((f, k)) = opt.etat_fin.as_ref() {
+        if !ids.is_empty() {
+            let dans = (*k).clamp(1, ids.len());
+            let pos = ids.len() - dans;
+            println!("  capture d'état    : position {pos} (la {dans}e depuis la fin d'une \
+invite de {} jetons) écrite dans {f}", ids.len());
+            mdl.etat_sortie = Some((f.clone(), vec![pos]));
+        }
+    }
     if opt.fusion_dernier && !ids.is_empty() {
         mdl.fusion_pos = ids.len() - 1;
         println!("  fusion            : position DERNIÈRE de l'invite = {} (invite de {} \

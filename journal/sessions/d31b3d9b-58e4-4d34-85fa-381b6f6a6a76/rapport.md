@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 41.3 h |
-| Tours | 44 |
-| Messages | 1679 |
-| Appels d'outils | 1589 |
+| Durée | 42.5 h |
+| Tours | 45 |
+| Messages | 1708 |
+| Appels d'outils | 1616 |
 | Fichiers touchés | 61 |
-| Commandes | 1339 |
+| Commandes | 1366 |
 | Sous-agents | 3 |
-| Commits | 133 |
+| Commits | 134 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -123,6 +123,8 @@
 **Tour 43** — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occupper le temps imparti au lieu de t'arrêter là où ta planification de sprint arrive au terme. C'est du gaspillage de temps précieux que d'arrêter trop vite. Je préfère interrompre un sprint car j'ai de nouvelles idées que de consatater que tout a été arreté car on est arrivé au bout du plan.  … [284 caractères tronqués]
 
 **Tour 44** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
+
+**Tour 45** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1469 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2058,7 +2060,7 @@ Je continue sur cette liste — il
 
 ### Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
 
-*322 appels d'outils.* Actions notables :
+*324 appels d'outils.* Actions notables :
 
 - bash — Implement per-region step counters and the step bound
 - bash — Write and run the clock/step-bound gate
@@ -2074,11 +2076,50 @@ Je continue sur cette liste — il
 - bash — Extend trace format to v2 with timestamps
 - bash — Add merge, clock drift, link verification
 - bash — Rewrite link pairing and build
-- … et 295 autres
+- … et 297 autres
 
 **Synthèse produite :**
 
-⏵ Porte verte (136 jetons, 3,29× mieux que le hasard) — je commite avec la correction honnête
+⏵ Session résumée : 15 commits, 6 capacités du cerveau livrées et mesurées
+
+**Fait depuis le point de contrôle** — 15 commits poussés, 122 tests verts, 14 portes vertes :
+
+- **C4 pas 1** — compteur de pas par région + borne `--pas-max` : borne atteinte ⇒ **aucune perplexité rendue**, code 5.
+- **C12bis** — le nœud trace, format v2 horodaté, `--fusionner-trace` : **94/94 liens identiques** ; 1 bit changé ⇒ DIVERGENT au pas nommé.
+- **C5ter** — bus par socket : **socket ≡ statique 0,00e0**, neutre ≡ référence 0,00e0, plein vol ≠ les deux.
+- **C6** — mémoire épisodique : trois négatifs mesurés (aucun élagage, l'espacement ne change rien, collisions à petit k), puis **trois ingrédients** (expansion 896→16 384, décorrélation, **égalisation des canaux hub**) → **élagage 83 %**, rappel 96,3 % à 50 % de dégradation, round-trip **exact au bit près**, Δ = **11 jetons sur 2 048**.
+- **C7** — consolidation par rejeu : **l'exemplaire bat la moyenne partout** (7 % du magasin → 87 % de rappel contre 13 % → 22 %) ; le rejeu répété est un **point fixe exact** (0,00e0).
+- **C8** — réflexe : **0 % d'accord jusqu'à 16 couches sur 24**, cause mesurée (cos 0,145 — l'état intermédiaire est presque orthogonal au final).
+- **C9/C10** — pont : **448 fibres = +2,81 % et ÷1,8 en octets**, falaise **entre 448 et 392** ; en dense f32 élaguer ne gagne **aucun** octet ; à budget égal **quantifier bat élaguer de 83 %**.
+- **C9×C1** — **8 points de coupe, une seule perplexité** (lien sans perte) ; 8,9 % d'écart en encodé ; coût du pont variant d'un **facteur 30** ⇒ **couper tard**.
+- **C2/C6** — greffe d'état : branchée (témoin à 0), mais **une greffe d'état n'est pas une greffe de contexte** — cause mesurée : la suite est re-dérivée par l'attention sur le cache KV, sur lequel **le moteur n'a aucune prise** (manque écrit).
+- **C6** — indice étranger : 136 jetons contre 448 de hasard, **puis la porte a corrigé ma conclusion** : un point d'interrogation de plus donne 378 ⇒ effet réel, **non robuste**.
+
+**Prochain** (inscrit dans `docs/sprint-cerveau.md`) : l'**entrée de cache KV** — ranger un état rappelé comme clé/valeur que l'attention peut interroger, avec l'invariant « sans état rappelé, sortie identique ». Conception écrite, y compris le point délicat de la position RoPE.
+
+### Tour 45 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1749 caractères tronqués]
+
+*25 appels d'outils.* Actions notables :
+
+- bash — Build the second-content prompt
+- bash — Capture the second content state
+- bash — Write and launch the merge-rule gate
+- bash — Read the merge gate result
+- bash — Diagnose the token-count difference
+- bash — Compare token counts for the gate prompts
+- bash — Rewrite with calibration and relaunch
+- bash — Read calibrated merge gate output
+- bash — Add capture-from-inference and test
+- bash — Calibrate with inference-captured states
+- bash — Correct the merge gate and relaunch
+- bash — Read corrected merge result
+- bash — Read the merge table
+- bash — Read merge verdict
+- … et 11 autres
+
+**Synthèse produite :**
+
+⏵ Mon test cherchait « Z » dans les identifiants — le contenu est bien là (1863 = « ZQ »)
 
 ## 3. Travail accompli
 
@@ -2196,7 +2237,7 @@ Je continue sur cette liste — il
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1299 autres
+- … et 1326 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2477,4 +2518,5 @@ Je continue sur cette liste — il
 - C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard  Toutes les mesures précédentes interrogeaient la mémoire avec un indice ISSU 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F - <<'MSG' C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E "^test result" && gi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A drave-core/src/main.rs drave-core/src/model.rs tools/porte-melange.sh tools/porte-greffe.sh rep
 
