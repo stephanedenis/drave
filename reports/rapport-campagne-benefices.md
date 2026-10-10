@@ -2782,6 +2782,37 @@ drapeaux ne font rien en réparti ? » — et elle est **chiffrée**, pas estim�
 défauts qu'elle a fait apparaître (`--ffn-gain`, `--attn-window`) ont été corrigés et **mesurés
 avant/après** aux rounds 20 et 42.
 
+### 46 bis. Le dernier candidat est instruit — et c'est le plus grave des cinq
+
+`--attn-sinks 4` n'agit **pas** en réparti. Instruit : il n'agit **pas non plus en local**
+(14,6496 dans les deux cas). La lecture du code donne la réponse, et elle est nette :
+
+```text
+main.rs:1036   --attn-sinks N   →  o.attn_sinks = N
+main.rs:1227   run_infer        →  if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+main.rs:7114   run_ppl          →  if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+main.rs:4425   run_ppl_reparti  →  mdl.attn_sinks = opt.attn_sinks;      (round 42)
+model.rs:2961  Act::appliquer   →  m.attn_sinks = self.attn_sinks       (protocole v7)
+```
+
+**Le champ `Model.attn_sinks` est écrit dans les trois chemins d'exécution, transporté par le
+protocole v7… et LU NULLE PART.** Aucune occurrence de `self.attn_sinks` dans le calcul : ce sont
+les puits **appris** (`lay.sinks`, le tenseur `attn_sinks.weight`) qui sont consommés par
+l'attention (lignes 5591, 5624, 5653), pas ce compteur.
+
+**C'est le cinquième défaut de la même famille** — après `--ffn-gain` en réparti (round 20), le
+poids de greffe par défaut à zéro (round 15), `--attn-window` (rounds 23-42) et le `sys.exit` qui
+sortait en 1 (round 13) — **et c'est le plus grave**, parce que le drapeau a été **transporté par
+un protocole** (une modification de version, 91 → 99 octets) avant qu'on s'aperçoive qu'il ne
+pouvait rien faire : le v7 a fait voyager un réglage **mort**.
+
+**Deux issues, et le choix est un choix de conception** : (1) **implémenter** le compteur — `n`
+jetons puits au début de la séquence, comme le décrit `model.rs:2435` — ce qui est un vrai
+mécanisme d'attention (et différent des puits *appris*) ; ou (2) **retirer le drapeau**, car un
+drapeau qui ne peut rien faire est pire qu'aucun drapeau : il donne l'illusion d'un réglage. Dans
+les deux cas, la **porte** doit suivre : elle doit exiger que le drapeau **agisse**, ou qu'il
+n'existe plus.
+
 ## Annexe — manifeste des journaux
 
 Les journaux bruts sont dans `/tmp/campagne24/`. **59 fichiers d'étape (79 Kio)**,

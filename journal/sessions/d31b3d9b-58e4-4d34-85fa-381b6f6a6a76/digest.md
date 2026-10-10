@@ -32033,3 +32033,89 @@ nu                        : 72.0185
 ⏵ Table définitive : cinq drapeaux AGISSENT en réparti, trois sont inertes (dont deux attendus)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 46. Inventaire des drapeaux en chemin RÉPARTI : cinq ag … [5408 caractères tronqués]`
+
+  ```
+inventaire consigne
+63203d7 Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 43 livré : inventaire **définitif** des drapeaux en réparti — six sur dix agissent, un seul candidat ouvert
+
+**Ce round** — 1 commit poussé. L'audit du round 21 avait produit des **candidats** sans les départager (mesure vide due à un port hors bornes). Après le v7, le v8 et les corrections des rounds 20 et 42, l'inventaire est fait — **nœud relancé à chaque essai** (il sert **une** connexion : mon premier banc les faisait tous échouer, quatrième erreur de harnais du sprint).
+
+| drapeau | réparti (réf. **72,0185**) | verdict |
+|---|---|---|
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (corrigé round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (corrigé round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | sans effet — **attendu** (rien à décider sans fenêtre) |
+| `--sans-fenetre` | 72,0185 | sans effet — **attendu** (fenêtre absente) |
+| `--moe-topk 2` | 72,0185 | sans effet — **attendu** (modèle **dense**) |
+| **`--attn-sinks 4`** | 72,0185 | **à instruire** — les puits devraient peser |
+
+**Six sur dix agissent**, trois inertes pour une raison **identifiée**, **un seul candidat ouvert**. C'est la réponse chiffrée à la question du round 21 — « combien d'autres drapeaux ne font rien en réparti ? » — et les **deux vrais défauts** qu'elle a fait apparaître ont été corrigés et mesurés avant/après.
+
+**Bilan** : 43 rounds, **22 portes toutes vertes**, 122 tests. Les quatre erreurs de harnais du sprint (port hors bornes, `sys.exit` qui sort en 1, variable `D` écrasée, nœud non relancé) ont toutes été **trouvées par la mesure**, jamais par relecture — comme les quatre défauts du moteur de la même famille. L'objectif reste **actif**.
+
+
+## Tour 87
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 44/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 44 : `--attn-sinks` est inerte en réparti — l'est-il aussi en LOCAL (le moteur le lit-il) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && A=$(./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 128 --ctx 512 --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+\" | grep -oE \"[0-9.]+\") && B=$(./drave-core/target/rel … [483 caractères tronqués]`
+
+  ```
+local nu             : 14.6496
+  local --attn-sinks 4 : 14.6496  (SANS EFFET)
+166:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+1657:/// * les puits appris (`attn_sinks`, un par tête) entrent dans le **softmax**.
+2435:    /// clés, plus `attn_sinks` jetons puits au début de la séquence.
+2464:    pub attn_sinks: usize,
+3984:                    sinks: g.dequant_optionnel(&p("attn_sinks.weight")).unwrap_or_default(),
+4169:                sinks: if g.tensor(&p("attn_sinks.weight")).is_some() {
+  ```
+
+### 🤖 Assistant
+
+⏵ `--attn-sinks` est inerte **des deux côtés** — je cherche s'il est lu dans le calcul
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"attn_sinks\\|\\.sinks\" drave-core/src/model.rs | grep -vE \"^\\s*[0-9]+:\\s*///|pub attn_sinks|sinks: \" | head -8; echo \"--- assignation du drapeau ---\"; grep -n \"mdl.attn_sinks\\|attn_sinks = \" drave-core/src/main.rs … [79 caractères tronqués]`
+
+  ```
+166:    // Les puits par tête (`attn_sinks.weight`), eux, SONT implémentés : gpt-oss
+172:    // Réserve connue : `attn_mla` ne consomme PAS `lay.sinks`. Aucun modèle du
+4002:                     if m0.sinks.is_empty() { "aucun" } else { "par tête" });
+4170:                    Some(g.dequant(&p("attn_sinks.weight"))) } else { None },
+4230:        let sinks_vus = layers.iter().filter(|l| l.sinks.is_some()).count();
+5591:                    let puits: Option<Vec<f32>> = lay.sinks.as_ref()
+5624:                            let puits = lay.sinks.as_ref().map(|s| s[hh]);
+5653:                    let puits = lay.sinks.as_ref().map(|s| s[hh]);
+--- assignation du drapeau ---
+1036:            "--attn-sinks" => { o.attn_sinks = suivant(i).parse().unwrap(); 2 }
+1227:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+2961:        m.attn_sinks = self.attn_sinks as usize;
+4425:    mdl.attn_sinks = opt.attn_sinks;
+7114:    if attn_sinks > 0 { mdl.attn_sinks = attn_sinks; }
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : `Model.attn_sinks` est **écrit partout et lu nulle part** — le drapeau ne peut rien faire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Ce que cet inventaire vaut** : c'est la réponse à la question posée au §39 — « combien d'autres\ndrape … [6271 caractères tronqués]`

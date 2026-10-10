@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.5 h |
-| Tours | 86 |
-| Messages | 2012 |
-| Appels d'outils | 1838 |
+| Tours | 87 |
+| Messages | 2017 |
+| Appels d'outils | 1841 |
 | Fichiers touchés | 61 |
-| Commandes | 1588 |
+| Commandes | 1591 |
 | Sous-agents | 3 |
-| Commits | 176 |
+| Commits | 177 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -207,6 +207,8 @@
 **Tour 85** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 86** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 87** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3526,7 +3528,38 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 
 **Synthèse produite :**
 
-⏵ Table définitive : cinq drapeaux AGISSENT en réparti, trois sont inertes (dont deux attendus)
+⏵ Round 43 livré : inventaire **définitif** des drapeaux en réparti — six sur dix agissent, un seul candidat ouvert
+
+**Ce round** — 1 commit poussé. L'audit du round 21 avait produit des **candidats** sans les départager (mesure vide due à un port hors bornes). Après le v7, le v8 et les corrections des rounds 20 et 42, l'inventaire est fait — **nœud relancé à chaque essai** (il sert **une** connexion : mon premier banc les faisait tous échouer, quatrième erreur de harnais du sprint).
+
+| drapeau | réparti (réf. **72,0185**) | verdict |
+|---|---|---|
+| `--act-topk 64` | 362 333,58 | **agit** |
+| `--qk-topk 64` | 4 760,07 | **agit** |
+| `--attn-window 32` | 1 571,30 | **agit** (corrigé round 42) |
+| `--act-thresh 0,01` | 98,83 | **agit** |
+| `--ffn-gain 0:0.75` | 76,88 | **agit** (corrigé round 20) |
+| `--attn-topk 64` | 71,47 | **agit** |
+| `--swa-pattern 2` | 72,0185 | sans effet — **attendu** (rien à décider sans fenêtre) |
+| `--sans-fenetre` | 72,0185 | sans effet — **attendu** (fenêtre absente) |
+| `--moe-topk 2` | 72,0185 | sans effet — **attendu** (modèle **dense**) |
+| **`--attn-sinks 4`** | 72,0185 | **à instruire** — les puits devraient peser |
+
+**Six sur dix agissent**, trois inertes pour une raison **identifiée**, **un seul candidat ouvert**. C'est la réponse chiffrée à la question du round 21 — « combien d'autres drapeaux ne font rien en réparti ? » — et les **deux vrais défauts** qu'elle a fait apparaître ont été corrigés et mesurés avant/après.
+
+**Bilan** : 43 rounds, **22 portes toutes vertes**, 122 tests. Les quatre erreurs de harnais du sprint (port hors bornes, `sys.exit` qui sort en 1, variable `D` écrasée, nœud non relancé) ont toutes été **trouvées par la mesure**, jamais par relecture — comme les quatre défauts du moteur de la même famille. L'objectif reste **actif**.
+
+### Tour 87 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check whether the engine reads attn_sinks at all
+- bash — Find where attn_sinks is read in the computation
+- bash — Commit the attn-sinks finding
+
+**Synthèse produite :**
+
+⏵ Découverte : `Model.attn_sinks` est **écrit partout et lu nulle part** — le drapeau ne peut rien faire
 
 ## 3. Travail accompli
 
@@ -3644,7 +3677,7 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1548 autres
+- … et 1551 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3967,5 +4000,6 @@ Suite directe de la correction du round 41 : `mdl.attn_window`, `mdl.swa_pattern
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf42.txt 2>&1; echo "porte-flux code=$?"; tail -2 /tmp/pf42.t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
