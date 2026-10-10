@@ -120,8 +120,12 @@ complet, 202 avec 7 morceaux — la non-linéarité n'aide pas à cette échelle
 le **transfert à un autre corpus** est mesuré ([`rapport-c8-transfert-corpus.md`](../reports/rapport-c8-transfert-corpus.md)) :
 entraînée sur la campagne et testée sur de la **prose**, la tête rend **210,21** contre
 **363 649** pour la tête empruntée (÷1 730), à ×25 du modèle complet — le coût du domaine est
-**×2,6**. Les vraies questions restantes : le **transfert inter-langue** (les deux corpus sont du
-français), la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
+**×2,6**. Le **transfert inter-langue** a été tenté ([`rapport-c8-inter-langue.md`](../reports/rapport-c8-inter-langue.md)) :
+il **échoue** (aucun gain depuis le français sur un morceau multilingue) — mais le corpus est
+l'UDHR **parallèle**, donc les morceaux ne sont pas indépendants, et le chiffre « 3,1 contre 29,9 »
+qui semblait donner raison à la tête est une **recopie de contenu**. Le protocole propre reste à
+faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
+la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
 `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
 
 ## 7. Les corrections à ne pas réintroduire

@@ -38489,3 +38489,80 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état renvoie à la note, et le journal la consigne\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"Les interfaces `--entree`,\n> `--sortie` et la tâche fermée **rest … [2665 caractères tronqués]`
+
+  ```
+note + journal
+poussé
+5
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la capture multilingue pour le test inter-langue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-multi.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-multi.log", "description": "Wait for multilingual capture", "timeou … [13 caractères tronqués]`
+
+  ```
+21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"Entraîner sur les morceaux\" /tmp/c8-multi.log 2>/dev/null; then break; fi; sleep 60; done; grep -c \"morceau .* états\" /tmp/c8-multi.log; ls /tmp/c8-multi/ | grep -c \"^morceau-\"", "description … [68 caractères tronqués]`
+
+  ```
+30
+30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python\nA=$(python3 -c \"print(','.join(f'/tmp/c8-corpus/etat-m{i}' for i in range(0,31) if i != 7))\")\nM=$(python3 -c \"print(','.join(f'/tmp/c8-multi/etat-m{i}' for i in range(0,29)))\")\necho \"référ … [956 caractères tronqués]`
+
+  ```
+référence modèle complet sur le morceau multilingue 29 :
+perplexité 29.9154 sur
+=== TRANSFERT inter-langue : entraîné sur le français de campagne → test MULTILINGUE ===
+avant entraînement (A = identité) : perplexité TEST = 582,361.8322
+meilleur test : époque 0 · 582,361.8322
+| chemin tronqué, tête **entraînée** (adaptateur, époque 0) | **582,361.8322** |
+=== DANS le corpus multilingue (28 → m29) ===
+avant entraînement (A = identité) : perplexité TEST = 582,361.8322
+  époque   1/20 · perte train 42,626.6150 (perplexité) · test 3,488.3409  ← meilleur test
+  époque   2/20 · perte train 450.2282 (perplexité) · test 3,100.5333  ← meilleur test
+meilleur test : époque 2 · 3,100.5333
+| chemin tronqué, tête **entraînée** (adaptateur, époque 2) | **3,100.5333** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat suspect : la tête entraînée (3,1) bat le modèle complet (29,9) — je regarde la nature du corpus avant de conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 900 /tmp/campagne24/corpus_multi.txt; echo; echo \"=== répétition ? ===\"; head -c 4000 /tmp/campagne24/corpus_multi.txt | tr ' ' '\\n' | sort | uniq -c | sort -rn | head -6; wc -c /tmp/campagne24/corpus_multi.txt /tmp/campag … [87 caractères tronqués]`
+
+  ```
+Дарбанзаалак ауаҩы абри Адекларациа ирыланаҳәо азинқәеи ахақәиҭрақәеи зегь имазароуп, милаҭлеи, хаҵалеи ҧҳәыслеи, бызшәалеи, хылҵшьҭралеи, динлеи, маллеи, маҵуралеи, нхарҭа ҭыҧлеи дунеихәаҧшышьалеи, цәаҧшшәахәылеи дызҵазкуазаалак. Иара убас дахьықәнхо атәыла аполитикатә, азинтә, ма Адунеижәларбжьаратәи астатус зеиҧшразаалак, уи атәыла хьыҧшымзаргь, ма ахатә напхгара амамкуа аӡәыр инапаҵаҟа иҟазагь, мамзаргьы даҽакала ахақәиҭра наӡа амамзаргьы.
+Tiep ureung na hak saban bandum bebah lam grak, bebah lam bicara me
+=== répétition ? ===
+     20 e
+     18 nɛ
+     11 ko
+     10 he
+      8 nɔ
+      7 ngon
+271958 /tmp/campagne24/corpus_multi.txt
+555299 /tmp/campagne24/ids_b2_multilingue.txt
+827257 total
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : le corpus multilingue est l'UDHR **parallèle** (même texte en ~100 langues) — les morceaux ne sont pas indépendants, ça fausse la comparaison
+
+- **write** `{"content": "# C8 — transfert inter-langue : ce que le corpus multilingue dit vraiment (et le piège du corpus PARALLÈLE)\n\n> Campagne : **cerveau** · expérience : tête entraînée sur le français, testée sur un corpus\n> multilingue — puis tête entraînée dans ce corpus\n> Question : après le transfer … [4723 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-inter-langue.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"Les vraies questions restantes : le **transfert inter-langue** (les deux corpus sont du\nfrançais), la **régularisation** … [4037 caractères tronqués]`

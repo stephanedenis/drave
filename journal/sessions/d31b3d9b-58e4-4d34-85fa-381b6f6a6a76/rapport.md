@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 52.6 h |
+| Durée | 52.9 h |
 | Tours | 88 |
-| Messages | 2391 |
-| Appels d'outils | 2194 |
-| Fichiers touchés | 80 |
-| Commandes | 1907 |
+| Messages | 2397 |
+| Appels d'outils | 2200 |
+| Fichiers touchés | 81 |
+| Commandes | 1912 |
 | Sous-agents | 3 |
-| Commits | 214 |
+| Commits | 215 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*352 appels d'outils.* Actions notables :
+*358 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 325 autres
+- … et 331 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la capture, j'écris la note de conception de la PÉRIPHÉRIE (la moitié du C8 du plan qui reste)
+⏵ Découverte : le corpus multilingue est l'UDHR **parallèle** (même texte en ~100 langues) — les morceaux ne sont pas indépendants, ça fausse la comparaison
 
 ## 3. Travail accompli
 
@@ -3694,6 +3694,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-generalisation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-transfert-corpus.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/note-peripherie-c8.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-inter-langue.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3743,7 +3744,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1867 autres
+- … et 1872 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4105,4 +4106,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert)" && git push -q origin master && echo poussé; git log --on
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("reports/rapport-c8-generalisation.md"); s = p.read_te
 - Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes  La moitie « reflexe » de C8 est mesuree ; l'autre moitie du p
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_text() old = """Le
 
