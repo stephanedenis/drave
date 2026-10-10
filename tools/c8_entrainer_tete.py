@@ -138,7 +138,10 @@ def charger_etats(prefixe: str):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--etats", required=True)
+    ap.add_argument("--etats", default=None,
+                    help="un préfixe : moitié entraînement, moitié test (même texte)")
+    ap.add_argument("--train", default=None, help="préfixes séparés par des virgules")
+    ap.add_argument("--test", default=None, help="préfixes séparés par des virgules (textes JAMAIS vus)")
     ap.add_argument("--ids", required=True)
     ap.add_argument("--modele", required=True)
     ap.add_argument("--limite", type=int, default=8192)
@@ -151,12 +154,50 @@ def main() -> int:
     ap.add_argument("--ppl_complet", type=float, default=None)
     a = ap.parse_args()
 
-    ids = charger_ids(a.ids, a.limite)
-    pos, X = charger_etats(a.etats)
-    garde = pos + 1 < len(ids)
-    pos, X = pos[garde], X[garde]
-    y = ids[pos + 1]
-    print(f"états : {X.shape[0]} × {X.shape[1]} · cibles : {len(y)} jetons (positions {pos.min()}..{pos.max()})")
+    if not (a.etats or (a.train and a.test)):
+        raise SystemExit("donner --etats (un texte, partagé) ou --train ET --test (textes distincts)")
+
+    def ids_du_morceau(pref: str) -> str:
+        """Le fichier d'identifiants QUI VA AVEC ce préfixe d'états.
+
+        Les cibles d'un morceau sont SES jetons : lire un seul fichier d'ids pour tous les
+        morceaux donnait des cibles étrangères aux états — un apprentissage sur du bruit, qui
+        aurait « mesuré » que la tête ne généralise pas. Convention : `etat-m3` ↔ `morceau-3.txt`
+        dans le même dossier ; à défaut, on retombe sur `--ids`.
+        """
+        m = re.search(r"etat-m(\d+)$", pref)
+        if m:
+            voisin = pathlib.Path(pref).parent / f"morceau-{m.group(1)}.txt"
+            if voisin.exists():
+                return str(voisin)
+        return a.ids
+
+    def jeu(prefixes: list[str]):
+        """Concatène des préfixes d'états avec LEURS cibles (les ids de leur morceau)."""
+        Xs, ys = [], []
+        for pref in prefixes:
+            ids_p = charger_ids(ids_du_morceau(pref), a.limite)
+            pos_p, X_p = charger_etats(pref)
+            garde = pos_p + 1 < len(ids_p)
+            pos_p, X_p = pos_p[garde], X_p[garde]
+            Xs.append(X_p)
+            ys.append(ids_p[pos_p + 1])
+        return np.vstack(Xs), np.concatenate(ys)
+
+    if a.train and a.test:
+        Xtr, ytr = jeu(a.train.split(","))
+        Xte, yte = jeu(a.test.split(","))
+        print(f"entraînement : {Xtr.shape[0]} états · test (textes jamais vus) : {Xte.shape[0]} états")
+    else:
+        pos, X = charger_etats(a.etats)
+        ids = charger_ids(a.ids, a.limite)
+        garde = pos + 1 < len(ids)
+        pos, X = pos[garde], X[garde]
+        y = ids[pos + 1]
+        coupe = len(y) // 2
+        Xtr, ytr, Xte, yte = X[:coupe], y[:coupe], X[coupe:], y[coupe:]
+        print(f"un seul texte : {len(y)} états (moitié entraînement, moitié test)")
+    h_etats = Xtr.shape[1]
 
     f, tenseurs, debut = lire_entete(a.modele)
     nom_tete = "output.weight" if "output.weight" in tenseurs else "token_embd.weight"
@@ -183,14 +224,14 @@ def main() -> int:
     # premier matmul (attrapé ici, pas en production), et convertir la tête à chaque pas
     # coûterait 0,5 Go de copie par lot.
     gt = torch.from_numpy(g).to(dev).half()
-    Xt = torch.from_numpy(X).to(dev).half()
-    yt = torch.from_numpy(y).to(dev)
+    Xtr_t = torch.from_numpy(Xtr).to(dev).half()
+    ytr_t = torch.from_numpy(ytr).to(dev)
     print(f"appareil : {dev} · tête en {'fp16' if dev == 'cuda' else 'fp32'} "
           f"({Wt.numel() * Wt.element_size() / 1e9:.2f} Go)")
 
-    coupe = len(y) // 2
-    tr = slice(0, coupe)
-    te = slice(coupe, len(y))
+    Xte_t = torch.from_numpy(Xte).to(dev).half()
+    yte_t = torch.from_numpy(yte).to(dev)
+    coupe = len(ytr)
 
     A = torch.eye(h, device=dev, dtype=torch.float32, requires_grad=True)   # identité
     opt = torch.optim.Adam([A], lr=a.pas)
@@ -201,24 +242,21 @@ def main() -> int:
         return (x.float() / torch.sqrt(m + eps)).half() * poids
 
     def perte(idx) -> torch.Tensor:
-        logits = rmsnorm((Xt[idx].float() @ A.T).half(), gt) @ Wt.T
-        return torch.nn.functional.cross_entropy(logits.float(), yt[idx])
+        logits = rmsnorm((Xtr_t[idx].float() @ A.T).half(), gt) @ Wt.T
+        return torch.nn.functional.cross_entropy(logits.float(), ytr_t[idx])
 
     @torch.no_grad()
-    def perplexite(idx) -> float:
+    def perplexite(X, y) -> float:
         nll, n = 0.0, 0
-        for d in range(0, (idx.stop - idx.start) if isinstance(idx, slice) else len(idx), 512):
-            lo = (idx.start or 0) + d
-            hi = min(lo + 512, idx.stop if isinstance(idx, slice) else len(idx))
-            if lo >= hi:
-                break
-            logits = rmsnorm((Xt[lo:hi].float() @ A.T).half(), gt) @ Wt.T
-            nll += torch.nn.functional.cross_entropy(logits.float(), yt[lo:hi],
+        for lo in range(0, len(y), 512):
+            hi = min(lo + 512, len(y))
+            logits = rmsnorm((X[lo:hi].float() @ A.T).half(), gt) @ Wt.T
+            nll += torch.nn.functional.cross_entropy(logits.float(), y[lo:hi],
                                                      reduction="sum").item()
             n += hi - lo
         return float(np.exp(nll / max(n, 1)))
 
-    ppl0 = perplexite(te)
+    ppl0 = perplexite(Xte_t, yte_t)
     print(f"\navant entraînement (A = identité) : perplexité TEST = {ppl0:,.4f}")
     meilleur = (ppl0, 0, A.detach().clone())
     for e in range(a.epoques):
@@ -234,7 +272,7 @@ def main() -> int:
         if (e + 1) % max(1, a.epoques // 8) == 0 or e == 0:
             with torch.no_grad():
                 ppl_tr = float(np.exp(tot / coupe))
-            ppl_te = perplexite(te)
+            ppl_te = perplexite(Xte_t, yte_t)
             marque = ""
             if ppl_te < meilleur[0]:
                 # LA MEILLEURE ÉPOQUE EST GARDÉE : au-delà, l'adaptateur apprend le texte
@@ -246,10 +284,10 @@ def main() -> int:
 
     # on évalue la MEILLEURE époque retrouvée, pas la dernière
     A.data.copy_(meilleur[2].to(A.dtype))
-    ppl_final = perplexite(te)
+    ppl_final = perplexite(Xte_t, yte_t)
     print(f"\nmeilleur test : époque {meilleur[1]} · {meilleur[0]:,.4f}")
     with torch.no_grad():
-        ppl_train = perplexite(tr)
+        ppl_train = perplexite(Xtr_t, ytr_t)
     print()
     print("| chemin | perplexité (TEST) |")
     print("|---|---|")

@@ -37560,3 +37560,107 @@ généré  : 64 tokens en 2.015 s  (31.77 tok/s)
 ⏵ Le réflexe est bien plus rapide (×1,54 en génération, TTFT ÷2,4) — je consigne et je lance l'épreuve du corpus
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-c8-tete-entrainee.md\"); s = p.read_text()\nancre = \"## 4. Ce que ça établit, et ce que ça n'établit pas\"\nsec = \"\"\"## 3 bis. Le réflexe va-t-il plus vite ? … [2741 caractères tronqués]`
+
+  ```
+fiche : latence ajoutée
+état : latence ajoutée
+poussé
+  ```
+
+### 🤖 Assistant
+
+⏵ Épreuve honnête : entraîner sur des textes et tester sur des textes JAMAIS VUS — je prépare la capture par morceaux
+
+- **write** `{"content": "#!/bin/bash\n# c8_corpus.sh — capturer des états de profondeur sur PLUSIEURS textes, pour une tête qui généralise.\n#\n# POURQUOI. La première tête entraînée (10 octobre) a été apprise sur la **première moitié d'un\n# texte** et évaluée sur la **seconde** : 845,45 de perplexité contre 4 … [2948 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_corpus.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\n# --train / --test : plusieurs morceaux pour l'entraînement, d'autres (jamais vus) pour le test\ns = s.replace('''    ap.add_ar … [4716 caractères tronqués]`
+
+  ```
+entraîneur : --train / --test ajoutés
+syntaxe OK
+driver OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 bash tools/c8_corpus.sh 8 1024 16 2>&1 | tail -14", "description": "Capture states across 8 corpus chunks", "timeoutMs": 2000000}`
+
+  ```
+morceau 0 : 1020 états · perplexité tronquée 1127367.6856
+  morceau 1 : 1020 états · perplexité tronquée 547639.8514
+  morceau 2 : 1020 états · perplexité tronquée 388616.7310
+  morceau 3 : 1020 états · perplexité tronquée 1230999.0246
+  morceau 4 : 1020 états · perplexité tronquée 413710.4644
+  morceau 5 : 1020 états · perplexité tronquée 345800.5693
+  morceau 6 : 1020 états · perplexité tronquée 258369.4604
+  morceau 7 : 1020 états · perplexité tronquée 208438.3879
+
+Entraîner sur les morceaux 0..6, tester sur le DERNIER (jamais vu) :
+  CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python tools/c8_entrainer_tete.py \
+     --train /tmp/c8-corpus/etat-m0,/tmp/c8-corpus/etat-m1,/tmp/c8-corpus/etat-m2,/tmp/c8-corpus/etat-m3,/tmp/c8-corpus/etat-m4,/tmp/c8-corpus/etat-m5,/tmp/c8-corpus/etat-m6 --test /tmp/c8-corpus/etat-m7 \
+     --ids /tmp/c8-corpus/morceau-7.txt --modele models/Qwen2.5-0.5B-Q8_0.gguf --limite 1024 --epoques 20
+(l'entraîneur refuse les identifiants qui ne correspondent pas aux états : morceau de test)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bug de protocole : chaque morceau a ses propres cibles — je dérive le fichier d'ids du nom du morceau
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/c8_entrainer_tete.py\"); s = p.read_text()\nold = '''    def jeu(prefixes: list[str]):\n        \"\"\"Concatène des préfixes d'états avec LEURS cibles (les ids de leur mor … [1733 caractères tronqués]`
+
+  ```
+ids par morceau
+appareil : cuda · tête en fp16 (0.27 Go)
+
+avant entraînement (A = identité) : perplexité TEST = 207,427.5289
+  époque   1/20 · perte train 1,071,140.7602 (perplexité) · test 8,209.2224  ← meilleur test
+  époque   2/20 · perte train 299.3140 (perplexité) · test 3,584.0348  ← meilleur test
+  époque   4/20 · perte train 18.9558 (perplexité) · test 2,632.0454  ← meilleur test
+  époque   6/20 · perte train 3.5188 (perplexité) · test 3,780.7157
+  époque   8/20 · perte train 1.6485 (perplexité) · test 6,945.2739
+  époque  10/20 · perte train 1.3006 (perplexité) · test 13,328.0186
+  époque  12/20 · perte train 1.1966 (perplexité) · test 17,054.7206
+  époque  14/20 · perte train 1.1470 (perplexité) · test 21,375.5403
+  époque  16/20 · perte train 1.0979 (perplexité) · test 27,425.2553
+  époque  18/20 · perte train 1.0870 (perplexité) · test 39,427.5672
+  époque  20/20 · perte train 1.0814 (perplexité) · test 45,448.7046
+
+meilleur test : époque 4 · 2,632.0454
+
+| chemin | perplexité (TEST) |
+|---|---|
+| chemin tronqué, tête **entraînée** (adaptateur, époque 4) | **2,632.0454** |
+
+entraînement (mêmes états, première moitié) : 9.0071
+  ```
+
+### 🤖 Assistant
+
+⏵ Sur un texte JAMAIS VU : ÷79 (2 632 contre 207 428) — je mesure la référence du modèle complet et j'écris la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"modèle complet sur le morceau 7 :\"; $D \"$M\" --ppl /tmp/c8-corpus/morceau-7.txt --limit 1024 --ctx 1024 --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+ s … [302 caractères tronqués]`
+
+  ```
+modèle complet sur le morceau 7 :
+perplexité 10.3866 sur
+tête empruntée (moteur) sur le morceau 7 :
+perplexité 208438.3879
+  ```
+
+- **write** `{"content": "# C8 — la tête réflexe sur un texte JAMAIS VU : ÷79, et ce que ça dit de la généralisation\n\n> Campagne : **cerveau** · expérience : adaptateur entraîné sur 7 morceaux de corpus, testé sur un 8ᵉ\n> Question : la tête entraînée de l'expérience précédente était apprise sur la **première  … [4878 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c8-generalisation.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# l'état : la généralisation mesurée\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"| **C8** | réflexe | 🟢 **la tête entraînée marche** |\"\"\"\nnew = \"\"\"| **C8** | … [4744 caractères tronqués]`

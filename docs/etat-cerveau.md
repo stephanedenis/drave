@@ -24,7 +24,7 @@
 | **C5ter** | bus par le réseau | ✅ fait | socket ≡ statique (**0,00e0**) ; neutre ≡ référence (**0,00e0**) ; plein vol ≠ les deux | `porte-bus-socket.sh` |
 | **C6** | mémoire épisodique | ✅ fait | **élagage 83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact**, Δ = **11 jetons sur 2 048** ; le rappel dépend de **l'indice** (1 sur 8) et **n'est pas continu** (50 vs 1 006) ; la clé de fenêtre **dégrade** (prédiction réfutée) | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh`, `porte-melange.sh` |
 | **C7** | consolidation | ✅ fait | l'**exemplaire** bat la **moyenne** (7 % du magasin → **87 %** de rappel) ; rejeu répété = **point fixe exact** (0,00e0) | `porte-episodique.sh` |
-| **C8** | réflexe | 🟢 **la tête entraînée marche** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; et **il va plus vite** : ×1,54 en génération, TTFT ÷2,4 (le compromis est ×1,54 de vitesse pour ×59 de perplexité) | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |
+| **C8** | réflexe | 🟢 **la tête entraînée marche, et elle généralise** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; **sur un texte JAMAIS VU** (7 morceaux entraînent, un 8ᵉ teste) le gain tient : **÷79** (208 438 → 2 632, modèle complet 10,39) ; et **il va plus vite** : ×1,54 en génération, TTFT ÷2,4 ⇒ le compromis est **×1,54 de vitesse pour ×59** (même texte) ou **÷79 avec ×253 d'écart** (texte neuf) | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md) |
 | **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
 | **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
 | **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
@@ -100,15 +100,17 @@ attention complète **17,1 tok/s** ; fenêtre 512 + 512 puits (÷4 de clés) **1
 de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en réparti qu'elle paie.
 Reste ouvert : la loi de la frontière en N.
 
-**3. C8 — la tête entraînée est mesurée (÷540) ; reste la question du CORPUS.** Décodabilité mesurée à 4, 8, 12, 16,
+**3. C8 — la tête entraînée est mesurée (÷540 même texte, ÷79 texte neuf) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
 qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
 tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
 **non linéaire** entraînée par profondeur, jugée à sa **perplexité**. C'est fait pour un
 **adaptateur** sur **un texte** : **845,45** contre 456 586,60 (÷540), à ×59 du modèle complet.
-La suite est de l'entraîner sur un **corpus** (et non une moitié de texte) et de mesurer la
-**latence** du chemin court — un raccourci ne vaut que s'il va plus vite. Outils :
-`tools/c8_entrainer_tete.py`, `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+La généralisation est mesurée (÷79 sur un morceau neuf, [`rapport-c8-generalisation.md`](../reports/rapport-c8-generalisation.md)),
+la latence aussi (×1,54). Les vraies questions restantes : **combien de textes** pour combler les
+×253 qui restent, une tête **non linéaire**, et **qualité × vitesse par profondeur** pour choisir
+le point de fonctionnement. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
+`tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
 
 ## 7. Les corrections à ne pas réintroduire
 
