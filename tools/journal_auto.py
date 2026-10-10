@@ -210,7 +210,7 @@ def ecrire(chemin: Path, contenu: str, dry: bool, journal: list[str]) -> None:
         chemin.write_text(contenu, encoding="utf-8")
 
 
-def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
+def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | None = None) -> int:
     commits = git_commits(jour)
     sessions = sessions_du_jour(jour)
     par_theme: dict[str, list[dict]] = {}
@@ -318,6 +318,21 @@ def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
         for c in sorted(commits, key=lambda c: c["heure"]):
             lignes.append(f"| {c['heure']} | `{c['hash']}` | {c['sujet']} |")
         lignes.append("")
+    # la TABLE DES THÈMES, écrite à côté : c'est la règle de classement, elle doit être lisible
+    # (et modifiable) sans lire le script
+    table = ["# Thèmes du journal", "",
+             "> Généré par `tools/journal_auto.py` — c'est la **règle de classement** des fichiers",
+             "> `journal/AAAA-MM-JJ_<thème>.md`. Un commit (ou une étape de session) est classé par",
+             "> le **premier** thème dont un mot-clé apparaît dans son texte ; à défaut, par les",
+             "> **chemins** touchés ; à défaut, en `divers`. Pour changer le classement, éditer la",
+             "> table `THEMES` du script et relancer : rien d'autre n'est à toucher.", "",
+             "| thème | ce qu'il couvre | mots-clés | chemins |", "|---|---|---|---|"]
+    for slug, titre, mots, chemins in THEMES:
+        table.append(f"| `{slug}` | {titre} | {', '.join(mots)} | {', '.join(chemins)} |")
+    table += [f"| `{THEME_DEFAUT[0]}` | {THEME_DEFAUT[1]} | — | — |", ""]
+    if themes_ecrits is not None and "themes" not in themes_ecrits:
+        themes_ecrits.append("themes")
+        ecrire(JOURNAL / "THEMES.md", "\n".join(table), dry, trace)
     notes = lire_notes(JOURNAL / f"{jour}.md")
     lignes += ["## Le récit de la journée (écrit à la main)", "", NOTES_DEB, notes, NOTES_FIN, ""]
     ecrire(JOURNAL / f"{jour}.md", "\n".join(lignes), dry, trace)
@@ -349,8 +364,9 @@ def main() -> int:
 
     trace: list[str] = []
     total = 0
+    themes_ecrits: list = []
     for j in jours:
-        n = generer_jour(j, a.dry_run, trace)
+        n = generer_jour(j, a.dry_run, trace, themes_ecrits)
         total += n
         if not a.quiet:
             print(f"{j} : {n} commits")

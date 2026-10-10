@@ -35101,3 +35101,59 @@ P=/home/stephane/gpu-env/bin/python
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/organisation-du-depot.md\"); s = p.read_text()\nold = \"\"\"**C'est automatisé** (`tools/journal_auto.py`, appelé par le `pre-commit`) : les commits du jour\nviennent de ** … [1720 caractères tronqués]`
+
+  ```
+convention enrichie
+poussé
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         388 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+
+| fenêtre \ puits | 0 | 64 | 128 |
+|---|---|---|---|
+| **128** | 20.6093 | 17.6891 | 16.4784 |
+| **256** | 18.4229 | 16.4944 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,args | grep \"[p]orte-\\|[t]outes-les-portes\" | head -5; ls -la /tmp/portes-1210b/ | tail -6; echo \"=== carte 2048 ===\"; ps -eo pid,etime,args | grep \"[c]arte-fenetre\" | head -2", "description": "Check which gat … [14 caractères tronqués]`
+
+  ```
+101806       09:49 timeout 2400 bash tools/porte-greffe.sh
+ 101807       09:49 bash tools/porte-greffe.sh
+ 187538       00:53 bash tools/porte-greffe.sh
+4131175       25:55 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'R3=\$(' tools/porte-gain.sh; DELAI=2400 JOURNAUX=/tmp/portes-1210b bash tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "CODE_PASSE=$?" >> /tmp/passe-complete.log; tail -40 /tmp/passe-complete.log
+4131177       25:55 bash tools/toutes-les-portes.sh
+-rw-r--r--.   1 stephane stephane    525 10 oct 10:12 porte-delais.log
+-rw-r--r--.   1 stephane stephane   6042 10 oct 10:15 porte-episodique.log
+-rw-r--r--.   1 stephane stephane    437 10 oct 10:16 porte-flux.log
+-rw-r--r--.   1 stephane stephane   1802 10 oct 10:16 porte-fusion.log
+-rw-r--r--.   1 stephane stephane   4240 10 oct 10:22 porte-gain.log
+-rw-r--r--.   1 stephane stephane    913 10 oct 10:31 porte-greffe.log
+=== carte 2048 ===
+  61168       12:47 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && LIMITE=2048 CTX=2048 FENETRES="128 256 512" PUITS="0 64 128" bash tools/carte-fenetre-puits.sh 2048 > /tmp/carte-2048.md 2>&1; echo "CODE=$?"; cat /tmp/carte-2048.m
+… [60 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la table des thèmes dans le journal (visible, modifiable), puis je fais le point
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\nold = '''    notes = lire_notes(JOURNAL / f\"{jour}.md\")'''\nnew = '''    # la TABLE DES THÈMES, écrite à côté : c'est la règle de  … [2199 caractères tronqués]`
+
+  ```
+table des thèmes ajoutée
+# Thèmes du journal
+
+> Généré par `tools/journal_auto.py` — c'est la **règle de classement** des fichiers
+> `journal/AAAA-MM-JJ_<thème>.md`. Un commit (ou une étape de session) est classé par
+> le **premier** thème dont un mot-clé apparaît dans son texte ; à défaut, par les
+> **chemins** touchés ; à défaut, en `divers`. Pour changer le classement, éditer la
+> table `THEMES` du script et relancer : rien d'autre n'est à toucher.
+
+| thème | ce qu'il couvre | mots-clés | chemins |
+|---|---|---|---|
+| `attention` | Attention, fenêtre, puits | attention, fenêtre, fenetre, puits, sinks, attn-, softmax, swa, kv | model.rs |
+| `memoire` | Mémoire épisodique, consolidation, greffe | mémoire, memoire, épisodique, episodique, greffe, consolid, rappel, indice, magasin, c6, c7, clé, cle | episodique.rs |
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable\n\nLes themes etaient dans le script seulement. La table est maintenant ecrite dans le\njournal (theme, ce qu'il couvre … [309 caractères tronqués]`
