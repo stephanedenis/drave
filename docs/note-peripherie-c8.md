@@ -81,3 +81,36 @@ sortie scalaire par pas, et une tâche fermée de **poursuite de consigne**.
    (plus rapide, moins bon) ;
 4. alors seulement, si la tâche le demande : une **vision** (patchs) comme type d'entrée
    supplémentaire.
+
+## 6. Ce qui reste, et la conception de la STRUCTURE de mémoire (17:32 HAE)
+
+La tâche fermée (poursuite d'un signal) n'est pas résolue, et la mesure dit pourquoi : l'état de
+sortie porte le signal **courant** (R² 0,992) mais **pas** celui d'il y a 8 pas (R² −0,681, y
+compris pour une lecture non linéaire) ; un tampon remis **en entrée** ne le rend que
+**partiellement** lisible (+0,283) ; une **ligne à retard** le rend exactement (1,000). Autrement
+dit : **retenir demande une structure qui ne passe pas par la transformation du réseau**
+(`reports/rapport-c8-peripherie.md` § 2 ter et 2 quater).
+
+**Conception minimale proposée** (à écrire AVANT le code, comme les autres) :
+
+| élément | proposition | pourquoi |
+|---|---|---|
+| **tampon** | `--memoire K` : les K derniers signaux injectés sont conservés dans la région frontière, **hors du réseau** | c'est la seule structure dont la mesure dit qu'elle retient (R² 1,000) |
+| **lecture** | `--sortie-memoire K` : le fichier de sortie reçoit, par pas, la valeur **retenue** (v[t−K]) **et** l'état du réseau | on sépare ce que la STRUCTURE retient de ce que le RÉSEAU produit — sans quoi on ne saurait pas qui a fait quoi |
+| **usage** | la valeur retenue peut être **réinjectée** (`--entree-memoire`) ou **publiée** : les deux sont mesurables | réinjecter teste si le réseau sait s'en servir ; publier teste si la mémoire est exacte |
+
+**Les portes à tenir, écrites avant le code** :
+
+1. **la mémoire est EXACTE** : `--memoire 8 --sortie-memoire 8` doit rendre `v[t−8]` au bit près
+   (R² = 1,000, et l'erreur nulle) — c'est un tampon, pas un approximateur ;
+2. **elle ne coûte pas de paires** : la mémoire ne passe par aucune couche ⇒ les paires par
+   décision doivent être **identiques** avec et sans elle (la métrique du plan) ;
+3. **elle ne s'améliore pas toute seule** : réinjectée dans le réseau (`--entree-memoire`), elle ne
+   doit pas dégrader la lecture du présent (le réseau la transforme — mesuré : +0,852 au lieu de
+   +0,980 quand on injecte 9 canaux) ;
+4. **le bornage est explicite** : `--memoire K` avec K > pas est **refusé** (code 2), et un débordement
+   de canaux aussi (déjà vérifié pour `--entree-memoire`).
+
+**Ce que cette conception NE prétend PAS** : que le **modèle** apprenne à se servir de la mémoire.
+Elle rend la poursuite **possible** côté architecture ; l'apprentissage de son usage est un autre
+chantier (et c'est celui que C7 vise).

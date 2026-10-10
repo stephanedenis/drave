@@ -40411,3 +40411,17 @@ CODE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**un état n'es … [3719 caractères tronqués]`
+
+  ```
+état et journal mis à jour
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         345 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+17:32
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe : je complète la note de périphérie avec la STRUCTURE de mémoire (prochaine étape de C8)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/note-peripherie-c8.md\"); s = p.read_text()\ns = s.rstrip(\"\\n\" … [4567 caractères tronqués]`
