@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 49.3 h |
 | Tours | 88 |
-| Messages | 2178 |
-| Appels d'outils | 1992 |
+| Messages | 2182 |
+| Appels d'outils | 1996 |
 | Fichiers touchés | 69 |
-| Commandes | 1723 |
+| Commandes | 1726 |
 | Sous-agents | 3 |
-| Commits | 185 |
+| Commits | 186 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3586,7 +3586,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 
 ### Tour 88 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*150 appels d'outils.* Actions notables :
+*154 appels d'outils.* Actions notables :
 
 - bash — Add the refusal and verify
 - bash — Move the refusal to the single point and verify
@@ -3602,11 +3602,11 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - bash — Read v7 removal context and flag inventory
 - bash — Read flag inventory section in docs
 - bash — Establish whether section 9 predates the v7 removal
-- … et 129 autres
+- … et 133 autres
 
 **Synthèse produite :**
 
-⏵ Je consigne la convention du journal automatisé, puis je committe
+⏵ Excellente matière : les lignes ⏵ des sessions sont les étapes du jour — je les intègre, classées par thème
 
 ## 3. Travail accompli
 
@@ -3732,7 +3732,7 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1683 autres
+- … et 1686 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4065,4 +4065,5 @@ Ce sont les puits **appris** (`lay.sinks`, tenseur `attn_sinks.weight`) que l'at
 - Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques)  Le journal paraissait ne contenir que des rapports de session gen
 - docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane  Pour chaque module (moteur, modele, cerveau/distribue, emulation,
 - $(cat <<'MSG' Journal automatise par JOUR et par THEME (tools/journal_auto.py), branche sur le pre-commit  Demande de Stephane : automatiser journal/ depuis git
+- Journal : les ETAPES du jour (lignes du journal de session) sont reprises par theme  Les rapports de session contiennent, tour par tour, ce que l'agent a consig
 

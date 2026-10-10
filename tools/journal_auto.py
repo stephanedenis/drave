@@ -149,6 +149,33 @@ def sessions_du_jour(jour: str) -> list[dict]:
     return trouvees
 
 
+def etapes_du_jour(sid: str) -> list[tuple[str, str]]:
+    """Les ÉTAPES du jour, telles que les a consignées le journal de session.
+
+    Chaque tour du rapport contient la « synthèse produite » — les lignes que l'agent écrit
+    pour dire CE QU'IL FAIT (`⏵ …`). C'est la matière la plus utile du journal : le titre du
+    tour dit la demande, ces lignes disent le travail. On les renvoie (texte, titre du tour),
+    dédoublonnées, dans l'ordre.
+    """
+    for d in (JOURNAL / "sessions").glob(f"{sid}-*"):
+        r = d / "rapport.md"
+        if not r.exists():
+            continue
+        etapes, tour, vues = [], "", set()
+        for l in r.read_text(encoding="utf-8", errors="replace").splitlines():
+            if l.startswith("### Tour "):
+                tour = l[4:].strip()
+                tour = tour if len(tour) <= 90 else tour[:87].rstrip() + "…"
+            elif l.startswith("⏵ "):
+                t = l[2:].strip()
+                cle = t.lower()
+                if t and cle not in vues:
+                    vues.add(cle)
+                    etapes.append((t, tour))
+        return etapes
+    return []
+
+
 def tours_de_session(sid: str) -> list[str]:
     """Les titres de tour du rapport de session (le détail reste dans le rapport)."""
     for d in (JOURNAL / "sessions").glob(f"{sid}-*"):
@@ -191,9 +218,13 @@ def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
         par_theme.setdefault(theme_de(c["sujet"], c["fichiers"]), []).append(c)
     # les tours de session, classés par thème (par mots-clés du titre)
     tours: dict[str, list[tuple[str, str]]] = {}
+    etapes: dict[str, list[str]] = {}
     for s in sessions:
         for t in tours_de_session(s["id"]):
             tours.setdefault(theme_de(t, []), []).append((s["id"], t))
+        for texte, tour in etapes_du_jour(s["id"]):
+            # les étapes sont classées comme les commits : par mots-clés de leur propre texte
+            etapes.setdefault(theme_de(texte + " " + tour, []), []).append(texte)
 
     themes = sorted(set(par_theme) | set(tours))
     fichiers_theme = []
@@ -218,6 +249,17 @@ def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
         else:
             lignes.append("*(aucun commit classé dans ce thème)*")
         lignes.append("")
+        if etapes.get(th):
+            plafond = 25
+            lignes += [f"## Étapes du jour ({len(etapes[th])})", "",
+                       "*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de "
+                       "session) :*", ""]
+            for e in etapes[th][:plafond]:
+                lignes.append(f"- {e}")
+            reste = len(etapes[th]) - plafond
+            if reste > 0:
+                lignes.append(f"- *(+{reste} autres étapes — voir les rapports de session)*")
+            lignes.append("")
         if tours.get(th):
             plafond = 20
             lignes += ["## Sessions (titres de tour)", ""]

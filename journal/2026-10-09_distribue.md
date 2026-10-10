@@ -29,6 +29,36 @@
 | 22:12 | `9ae8f6f` | C5ter : le bus par le réseau — un réglage atteint une autre machine | `relations-humaines.md`, `sprint-cerveau.md`, `main.rs` (+4) |
 | 23:48 | `22d6151` | C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+4) |
 
+## Étapes du jour (25)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- Campagne 24 h lancée : file de mesures + deux paires d'entraînement en parallèle
+- Registre des manques publié — et un point d'échelle qui nuance la structure innée
+- C1b pas 1 franchi, porte outillée et tenue — le relais est le prochain jalon
+- **C1 est livrée** : le relais est exact à trois instances — et il a fait trouver un vrai bug
+- **C12 livrée** : trace globale au bit près, rejeu sans divergence, et trace fausse détectée
+- Round 7 livré : C10 fermé — budget par lien, vérifié sur ce qui passe
+- Round 8 livré : C11 — les pannes sont nommées, avec leur propre code
+- Round 9 livré : C10 complet (octets **et** latence), quatre codes d'arrêt distincts
+- Round 11 : la rouge était la PORTE — et notre modèle entraîné survit au découpage
+- Round 12 livré : C11 — le registre des régions, la « découverte » du plan
+- Round 16 livré : le déséquilibre E/I est **localisé à l'entrée**, pas réparti
+- Round 20 livré : un drapeau qui ne faisait **rien** dans le chemin réparti — trouvé, corrigé, gardé
+- Round 26 livré : le protocole v7 **spécifié à l'octet près** — et explicitement pas implémenté
+- Round 27 livré : protocole v7 tenté puis **reverté** — neuf tests encodent la mise en page v6
+- Round 29 livré : le v7 vérifié sur **toutes** les portes réparties — huit vertes
+- Round 30 livré : protocole v8 **spécifié** — le compte de paires du nœud
+- Round 31 livré : **protocole v8** — le compte de paires du nœud voyage, et le chiffre a attrapé mon bug
+- Round 32 livré : budget de paires **tenté et reverté** — deux leçons, dont une donnée par la porte
+- Round 33 livré : **C10 CLOS** — trois budgets de lien, trois codes d'arrêt distincts
+- Round 34 livré : l'instrument de trace est **étalonné** — 50 ms injectés, 50,2 ms mesurés
+- Round 35 livré : la **gigue** d'un pas réparti — 7 ms sur 17,7, soit 40 %
+- Round 36 livré : la gigue avec un **vrai RTT** — 14,8 ms sur 30,2 (49 %)
+- Round 37 livré : un pas coûte **4 messages** — l'en-tête est écrit à part du corps
+- Round 40 livré : vérification après v7/v8 et la fusion des écritures — **huit portes réparties vertes**
+- Round 43 livré : inventaire **définitif** des drapeaux en réparti — six sur dix agissent, un seul candidat ouvert
+
 ## Sessions actives ce jour
 
 - `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)

@@ -68,8 +68,11 @@ Le nom commence par la **date** et finit par le **thème** : `ls journal/2026-10
 suit un thème d'un jour à l'autre.
 
 **C'est automatisé** (`tools/journal_auto.py`, appelé par le `pre-commit`) : les commits du jour
-viennent de **git** (heure d'auteur, en HAE), les sessions actives de `journal/README.md`, leurs
-titres de tour des rapports de session. Les thèmes sont attribués par mots-clés du sujet et par
+viennent de **git** (heure d'auteur, en HAE), les sessions actives de `journal/README.md`, et les
+**étapes du jour** — les lignes `⏵ …` que l'agent écrit dans le journal de session pour dire ce
+qu'il fait, tour par tour — sont reprises dans le thème correspondant : c'est le détail riche,
+classé, sans recopier la conversation. Titres de tour et liens vers les rapports complets
+complètent chaque fichier. Les thèmes sont attribués par mots-clés du sujet et par
 chemins touchés (liste dans le script : `tools/journal_auto.py --lister`). **Tout ce qui est
 écrit à la main dans le bloc « notes » est conservé** d'une génération à l'autre — le reste est
 régénéré, donc on n'écrit pas en dehors du bloc.
