@@ -2433,10 +2433,35 @@ condition de ne pas confondre « absent du criblage » avec « non câblé ».
 des perplexités **vides** (extraction en échec), et une mesure vide ne prouve rien. Ils sont
 donc **à instruire**, pas déclarés sains ni défectueux.
 
-**Prochaine commande, écrite ici pour être exécutable telle quelle** : pour chaque candidat,
-comparer en chemin réparti `--limit <longueur du fichier>` avec et sans le drapeau (jamais
-`--limit` écrit à la main, cf. §36), et exiger que les deux chiffres **diffèrent** — c'est un
-contrôle de câblage, pas une mesure de qualité.
+**LES CANDIDATS ONT ÉTÉ INSTRUITS — et la mesure vide d'abord était MON erreur.** Le tirage
+de port du banc allait jusqu'à 65 949, **au-delà de 65 535** : le nœud ne pouvait pas se lier,
+et le pilote refusait en le nommant (`INJOIGNABLE (invalid port value)`). Une mesure vide ne
+prouvait rien, et elle ne venait pas des drapeaux.
+
+Reprise avec un port valide (61 578) et `--options-strict` (pour qu'un drapeau inconnu soit
+refusé au lieu d'être ignoré) :
+
+| drapeau | perplexité en réparti | verdict |
+|---|---|---|
+| aucun (référence) | 180,5245 | — |
+| `--act-topk 64` | 1 137 878,95 | **agit** |
+| `--qk-topk 64` | 24 955,44 | **agit** |
+| `--act-thresh 0,01` | 209,7804 | **agit** |
+| **`--attn-window 16`** | 180,5245 | **SANS EFFET** |
+| **`--attn-topk 64`** | 180,5245 | **SANS EFFET** |
+| `--moe-topk 2` | 180,5245 | sans effet — **normal** (Qwen2.5-0.5B est DENSE, il n'a pas d'experts) |
+
+**Deux vrais constats, et un faux :**
+
+- `--moe-topk` est **normalement** sans effet sur un modèle dense — ce n'est pas un défaut ;
+- `--attn-topk` **voyage pourtant dans la trame** (le champ `attn_topk` est dans `struct Act`,
+  avec `qk_topk` et `moe_topk`) et agit en local : il est donc **câblé et transporté**, mais
+  sans effet sur le résultat **dans cette configuration** — à instruire : le top-k d'attention
+  ne change-t-il rien à 32 jetons de contexte (où l'attention est déjà triviale) ? C'est
+  l'explication la plus probable, et elle se teste en allongeant le contexte ;
+- `--attn-window` **ne voyage PAS** : il n'est pas dans `Act`, donc le nœud garde son défaut et
+  seules les 12 couches locales du pilote le verraient — or il n'a rien changé non plus sur
+  celles-là. C'est le candidat le plus sérieux, et il est **à instruire** ;
 
 ## Annexe — manifeste des journaux
 

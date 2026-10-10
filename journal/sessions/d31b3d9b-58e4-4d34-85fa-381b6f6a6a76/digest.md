@@ -30062,3 +30062,111 @@ réparti nu            :
 ⏵ Mesure non concluante (perplexité vide) — je consigne l'audit avec sa portée exacte, sans conclure
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"## Annexe — manifeste des journaux\"\nsec = \"\"\"## 39. Audit des drapeaux par CHEMIN : une méthode de crib … [5664 caractères tronqués]`
+
+  ```
+docs audit
+39d32f3 Audit des drapeaux par chemin : methode de criblage, portee exacte, et ce qui reste a instruire
+ M journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 21 livré : audit des drapeaux par chemin — méthode, angle mort, et ce qui reste **à instruire**
+
+**Ce round** — 1 commit poussé, arbre propre (hors `journal/`).
+
+Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique : *combien d'autres drapeaux ne sont câblés que dans certains chemins ?* Criblage statique des trois fonctions d'exécution (assignations `mdl.<champ> = …`) :
+
+| fonction | champs assignés en propre |
+|---|---|
+| `run_infer` | 30 |
+| `run_ppl` | 16 |
+| **`run_ppl_reparti`** | **3** |
+
+**L'angle mort, et il est important** : le criblage annonce 29 champs « absents » pour `run_infer`, dont `act_thresh`, `act_topk`, `attn_topk`, `qk_topk`, `moe_topk` — **qui sont câblés**, mais par le **helper** `appliquer_quantification`, que le criblage ne lit pas. Il ne voit que les assignations écrites *dans* la fonction. **« Absent du criblage » n'est pas « non câblé »**, et confondre les deux aurait produit un faux rapport — c'est écrit noir sur blanc.
+
+**Ce qu'il a établi** : le chemin réparti assigne 3 champs en propre, le helper en couvre 7 de plus, et c'est **ce qui restait hors des deux** qui contenait le défaut (`ffn_gain`). La méthode a donc servi — avec sa portée exacte.
+
+**Ce qui n'est pas concluant, écrit comme tel** : les candidats restants (`--attn-window`, `--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`, `--trace-flux`) n'ont **pas** été départagés — la mesure en réparti a rendu des perplexités **vides**, et une mesure vide ne prouve rien. Ils sont **à instruire**, pas déclarés sains ni défectueux, avec la commande exacte pour le faire.
+
+**Bilan** : 21 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport (§1 → §39). L'objectif reste **actif** — les trois chantiers nommés dans `docs/sprint-cerveau.md` (budget `paires/s` via protocole v7, tête dédiée par profondeur C8, instruction des drapeaux candidats) attendent leur premier round.
+
+
+## Tour 65
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 22/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 22 : la mesure vide d'hier — je regarde la SORTIE COMPLÈTE d'un candidat (`--attn-window`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((65800 + RANDOM % 150)) && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\n … [856 caractères tronqués]`
+
+  ```
+--- pilote nu ---
+[flux] 85626 jetons fournis > limite 32 (ctx 512) : troncature aux 32 derniers
+[flux] pilote : 12 couches en local, 12 chez le pair, 32 jetons
+  référence locale  : perplexité 180.5245  (1.2 s)
+[pannes] PANNE : le pair local → 127.0.0.1:65868 est INJOIGNABLE (invalid port value). Aucune perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du même calcul. Vérifiez que le nœud écoute (--flux-serveur 127.0.0.1:65868).
+--- avec --attn-window 16 ---
+[flux] 85626 jetons fournis > limite 32 (ctx 512) : troncature aux 32 derniers
+[flux] pilote : 12 couches en local, 12 chez le pair, 32 jetons
+  référence locale  : perplexité 180.5245  (1.1 s)
+[pannes] PANNE : le pair local → 127.0.0.1:65868 est INJOIGNABLE (invalid port value). Aucune perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du même calcul. Vérifiez que le nœud écoute (--flux-serveur 127.0.0.1:65868).
+[stderr]
+bash: line 9: 3696822 Aborted                    (core dumped) ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --flux-serveur $PORT --ctx 512 --threads 8 > $T/n.log 2>&1
+  ```
+
+### 🤖 Assistant
+
+⏵ C'était MON erreur : port 65868 > 65535 (le moteur a refusé en le nommant) — je refais proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d) && PORT=$((60000 + RANDOM % 5000)) && echo \"port=$PORT\" && cat > $T/topo.json <<JSON\n{\"regions\":[\n  {\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},\n  {\"id\":\"d\",\"couches\":[12,23],\"instance\": … [1085 caractères tronqués]`
+
+  ```
+port=61578
+  nu                 : 180.5245
+  --attn-window 16     : 180.5245     SANS EFFET
+  --act-topk 64        : 1137878.9487 AGIT
+  --attn-topk 64       : 180.5245     SANS EFFET
+  --qk-topk 64         : 24955.4441   AGIT
+  --act-thresh 0.01    : 209.7804     AGIT
+  --moe-topk 2         : 180.5245     SANS EFFET
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois drapeaux sans effet en réparti — je vérifie s'ils voyagent dans la trame (`Act`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'struct Act' drave-core/src/main.rs | head -1 | cut -d: -f1),+18p\" drave-core/src/main.rs", "description": "Inspect the Act struct transported in frames"}`
+
+  ```
+struct Act {
+    levels: f32,
+    thresh: f32,
+    topk: u32,
+    renorm: bool,
+    /// Top-k par projection (q, k, v, o, gate, up, down) : « topk est une FRACTION
+    /// de la dimension » (voir `quant_scratch`), donc ces valeurs décident de ce
+    /// qui est calculé. Elles voyagent pour la même raison que le seuil.
+    topk_proj: [u32; 7],
+    attn_topk: u32,
+    qk_topk: u32,
+    moe_topk: u32,
+}
+
+impl Act {
+    fn du_modele(m: &model::Model) -> Self {
+        let mut topk_proj = [0u32; 7];
+        for (i, v) in m.act_topk_proj.iter().enumerate() { topk_proj[i] = *v as u32; }
+        Act { levels: m.act_levels, thresh: m.act_thresh, topk: m.act_topk as u32,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Prochaine commande, écrite ici pour être exécutable telle quelle** : pour chaque candidat,\ncomparer e … [5748 caractères tronqués]`

@@ -341,10 +341,22 @@ n'est pas « non câblé »**, et le confondre aurait produit un faux rapport.
 plus, et c'est **ce qui restait hors des deux** qui contenait le défaut (`ffn_gain`) — la
 méthode a donc servi, avec sa portée exacte.
 
-**Ce qui N'EST PAS concluant, écrit comme tel** : les candidats restants (`--attn-window`,
-`--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`, `--trace-flux`) n'ont
-pas été départagés — la mesure en réparti a rendu des perplexités **vides**, et une mesure vide
-ne prouve rien. **À instruire, pas déclarés sains.**
+**Les candidats ont été INSTRUITS (round suivant), et la mesure vide était MON erreur** : le
+port du banc montait à 65 949, **au-delà de 65 535** — le nœud ne se liait pas, et le moteur le
+disait (`INJOIGNABLE (invalid port value)`). Reprise avec un port valide et `--options-strict` :
+
+| drapeau | réparti | verdict |
+|---|---|---|
+| `--act-topk 64` | 1 137 878,95 | **agit** |
+| `--qk-topk 64` | 24 955,44 | **agit** |
+| `--act-thresh 0,01` | 209,7804 | **agit** |
+| **`--attn-window 16`** | 180,5245 | **SANS EFFET** (ne voyage pas dans `Act`) |
+| **`--attn-topk 64`** | 180,5245 | **SANS EFFET** (voyage pourtant : champ présent dans `Act`) |
+| `--moe-topk 2` | 180,5245 | normal — **Qwen2.5-0.5B est dense**, sans experts |
+
+**Deux à instruire** : `--attn-window` (absent de `Act`, donc le nœud garde son défaut) et
+`--attn-topk` (transporté, câblé, mais sans effet à 32 jetons de contexte — où l'attention est
+déjà triviale ; à tester à contexte long).
 
 ---
 

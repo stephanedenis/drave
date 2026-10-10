@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 47.0 h |
-| Tours | 64 |
-| Messages | 1882 |
-| Appels d'outils | 1752 |
+| Tours | 65 |
+| Messages | 1888 |
+| Appels d'outils | 1756 |
 | Fichiers touchés | 61 |
-| Commandes | 1502 |
+| Commandes | 1506 |
 | Sous-agents | 3 |
-| Commits | 154 |
+| Commits | 155 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -163,6 +163,8 @@
 **Tour 63** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 64** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 65** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2803,7 +2805,38 @@ En cherchant à mesurer l'interaction du gain d'entrée (E4) avec le **découpag
 
 **Synthèse produite :**
 
-⏵ Mesure non concluante (perplexité vide) — je consigne l'audit avec sa portée exacte, sans conclure
+⏵ Round 21 livré : audit des drapeaux par chemin — méthode, angle mort, et ce qui reste **à instruire**
+
+**Ce round** — 1 commit poussé, arbre propre (hors `journal/`).
+
+Après le défaut de câblage de `--ffn-gain` (round 20), la question mécanique : *combien d'autres drapeaux ne sont câblés que dans certains chemins ?* Criblage statique des trois fonctions d'exécution (assignations `mdl.<champ> = …`) :
+
+| fonction | champs assignés en propre |
+|---|---|
+| `run_infer` | 30 |
+| `run_ppl` | 16 |
+| **`run_ppl_reparti`** | **3** |
+
+**L'angle mort, et il est important** : le criblage annonce 29 champs « absents » pour `run_infer`, dont `act_thresh`, `act_topk`, `attn_topk`, `qk_topk`, `moe_topk` — **qui sont câblés**, mais par le **helper** `appliquer_quantification`, que le criblage ne lit pas. Il ne voit que les assignations écrites *dans* la fonction. **« Absent du criblage » n'est pas « non câblé »**, et confondre les deux aurait produit un faux rapport — c'est écrit noir sur blanc.
+
+**Ce qu'il a établi** : le chemin réparti assigne 3 champs en propre, le helper en couvre 7 de plus, et c'est **ce qui restait hors des deux** qui contenait le défaut (`ffn_gain`). La méthode a donc servi — avec sa portée exacte.
+
+**Ce qui n'est pas concluant, écrit comme tel** : les candidats restants (`--attn-window`, `--attn-sinks`, `--swa-pattern`, `--patch`, `--hebb-*`, `--flux-forcer`, `--trace-flux`) n'ont **pas** été départagés — la mesure en réparti a rendu des perplexités **vides**, et une mesure vide ne prouve rien. Ils sont **à instruire**, pas déclarés sains ni défectueux, avec la commande exacte pour le faire.
+
+**Bilan** : 21 rounds, **22 portes toutes vertes**, 122 tests, 40 sections de rapport (§1 → §39). L'objectif reste **actif** — les trois chantiers nommés dans `docs/sprint-cerveau.md` (budget `paires/s` via protocole v7, tête dédiée par profondeur C8, instruction des drapeaux candidats) attendent leur premier round.
+
+### Tour 65 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Diagnose the empty measurement
+- bash — Resolve the candidate flags with a valid port
+- bash — Inspect the Act struct transported in frames
+- bash — Document the resolved candidates
+
+**Synthèse produite :**
+
+⏵ Trois drapeaux sans effet en réparti — je vérifie s'ils voyagent dans la trame (`Act`)
 
 ## 3. Travail accompli
 
@@ -2921,7 +2954,7 @@ En cherchant à mesurer l'interaction du gain d'entrée (E4) avec le **découpag
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1462 autres
+- … et 1466 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3220,6 +3253,7 @@ En cherchant à mesurer l'interaction du gain d'entrée (E4) avec le **découpag
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
