@@ -35980,3 +35980,56 @@ started background job bash-31
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-fenetre-puits-attention.md\"); s = p.read_text()\n\n# 1) le verdict d'en-tête : la version complète\nold = \"\"\"> Verdict : **oui à courte portée, non à longue* … [8335 caractères tronqués]`
+
+  ```
+fiche corrigée et étendue
+état mis à jour
+poussé
+b4f1589 Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant les deux mesures, je vérifie la qualité du classement par thème du journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport sys; sys.path.insert(0, \"tools\"); import journal_auto as ja\ncs = ja.git_commits(\"2026-10-09\")\nfrom collections import defaultdict\npar = defaultdict(list)\nfor c in cs: par[ja.theme_de(c[\"sujet\"],  … [268 caractères tronqués]`
+
+  ```
+--- modele (30)
+     Dim 512 : le prix de la parcimonie croît avec l'échelle (+6,7 % et +8,0 % contre +1,0 % 
+     Dim 512 : la structure innée coûte +6,7 % (contre +1,0 % à dim 384) pour ÷3,7 de lecture
+     Statuts d'expériences à jour : E1 et E3 faits, E2/E4 cadrées, et le pendant GPU du noyau
+     Nos modèles à décharges ne vont pas sur GPU : trop petits, et le noyau GPU est dense
+--- distribue (20)
+     C9 x C1 : où couper le modèle — le point de coupe est neutre, sauf à cause du lien
+     C5ter : le bus par le réseau — un réglage atteint une autre machine
+     C12bis : le nœud trace, et les traces de plusieurs processus se fusionnent
+     C4 pas 1 : compteur de pas par région et borne de terminaison explicite
+--- mesures (13)
+     C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres
+     Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail iden
+     Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux
+     README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre docum
+--- docs (10)
+     État resumable : la prochaine action en tête du fichier de sprint
+     C1b : la conceptio
+… [1383 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux défauts de classement (tout `model.rs` partait en « attention ») — je raffine, j'ajoute un thème « apprentissage » et je nettoie les fichiers périmés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/journal_auto.py\"); s = p.read_text()\n\nold = '''    (\"attention\", \"Attention, fenêtre, puits\", \n     [\"attention\", \"fenêtre\", \"fenetre\", \"puits\", \"sinks\", … [3267 caractères tronqués]`
+
+  ```
+themes raffinés + nettoyage des périmés
+0
+journal/2026-10-09_apprentissage.md journal/2026-10-09_attention.md journal/2026-10-09_distribue.md journal/2026-10-09_divers.md journal/2026-10-09_docs.md journal/2026-10-09_memoire.md journal/2026-10-09_mesures.md journal/2026-10-09_modele.md journal/2026-10-09_moteur.md journal/2026-10-09_portes.md journal/2026-10-10_attention.md journal/2026-10-10_distribue.md journal/2026-10-10_divers.md journal/2026-10-10_docs.md journal/2026-10-10_memoire.md journal/2026-10-10_mesures.md journal/2026-10-10_modele.md journal/2026-10-10_moteur.md journal/2026-10-10_portes.md 
+  apprentissage · Décorrélation en courbe de dose : elle améliore de façon mon
+  apprentissage · Signal externe mesuré : meilleur des modulateurs, et toujour
+  apprentissage · E7 et E8 implémentés et mesurés : la nouveauté empire la règ
+  attention · Contexte et lots : le contexte déclaré ne coûte rien à fenêt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nJournal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage\n\nDeux defauts vus en relisant le classement du 9 octobre :\n1. `model.rs` etait declare comme CHE … [1051 caractères tronqués]`

@@ -46,21 +46,26 @@ NOTES_DEB, NOTES_FIN = "<!-- notes -->", "<!-- /notes -->"
 # L'ordre COMPTE : le premier motif qui matche gagne (le plus spécifique d'abord). Chaque thème
 # a ses mots-clés (sujet du commit) et ses chemins (fichiers touchés).
 THEMES: list[tuple[str, str, list[str], list[str]]] = [
-    ("attention", "Attention, fenêtre, puits", 
-     ["attention", "fenêtre", "fenetre", "puits", "sinks", "attn-", "softmax", "swa", "kv"],
-     ["model.rs"]),
+    ("attention", "Attention, fenêtre, puits",
+     ["attention", "fenêtre", "fenetre", "puits", "sinks", "attn-", "softmax", "swa"],
+     []),
     ("memoire", "Mémoire épisodique, consolidation, greffe",
      ["mémoire", "memoire", "épisodique", "episodique", "greffe", "consolid", "rappel", "indice",
       "magasin", "c6", "c7", "clé", "cle"],
      ["episodique.rs"]),
+    ("apprentissage", "Règles locales, hebbien, modulateurs, distillation",
+     ["hebb", "décorrélation", "decorrelation", "modulateur", "nouveauté", "nouveaute",
+      "règle locale", "regle locale", "apprentissage", "distill", "impulsion", "décharge",
+      "decharge", "spiking", "log-normal", "élagage appris", "k-wta appris"],
+     []),
     ("distribue", "Régions, flux, protocoles, budgets, pannes",
      ["topologie", "région", "region", "nœud", "noeud", "flux", "bus", "latence", "budget",
       "panne", "registre", "trace", "protocole", "v7", "v8", "paires", "message", "gigue",
       "réparti", "reparti", "relais", "découpage", "decoupage", "lien"],
      ["topologie.rs", "trace_globale.rs", "bus.rs", "flux.rs"]),
     ("modele", "Modèles, entraînement, parcimonie, biologie",
-     ["modèle", "modele", "entraîn", "entrain", "distill", "parcimonie", "poids", "échelle",
-      "echelle", "biolog", "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "log-normal"],
+     ["modèle", "modele", "entraîn", "entrain", "parcimonie", "poids", "échelle", "echelle",
+      "biolog", "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9"],
      ["entrainer_moteur.py", "biologie"]),
     ("moteur", "Moteur : chargement, calcul, listes, quantification",
      ["moteur", "gguf", "listes", "quantif", "noyau", "gpu", "threads", "mmap", "lots",
@@ -360,6 +365,16 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
         lignes += [NOTES_DEB, notes, NOTES_FIN, ""]
         ecrire(nom, "\n".join(lignes), dry, trace)
         fichiers_theme.append((th, len(cs), f"{jour}_{th}.md"))
+
+    # NETTOYAGE : un fichier de thème qui n'est plus produit doit disparaître, sinon le journal
+    # garde un thème vide après un reclassement (et « l'évolution » montre des journées fantômes).
+    connus = {s_[0] for s_ in THEMES} | {THEME_DEFAUT[0]}
+    produits = {th for th, _, _ in fichiers_theme}
+    for vieux in JOURNAL.glob(f"{jour}_*.md"):
+        th_vieux = vieux.stem[len(jour) + 1:]
+        if th_vieux in connus and th_vieux not in produits and not dry:
+            vieux.unlink()
+            trace.append(f"  (retiré, thème vide) {vieux.relative_to(RACINE)}")
 
     # l'index du jour
     lignes = [

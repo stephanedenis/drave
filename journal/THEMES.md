@@ -8,10 +8,11 @@
 
 | thème | ce qu'il couvre | mots-clés | chemins |
 |---|---|---|---|
-| `attention` | Attention, fenêtre, puits | attention, fenêtre, fenetre, puits, sinks, attn-, softmax, swa, kv | model.rs |
+| `attention` | Attention, fenêtre, puits | attention, fenêtre, fenetre, puits, sinks, attn-, softmax, swa |  |
 | `memoire` | Mémoire épisodique, consolidation, greffe | mémoire, memoire, épisodique, episodique, greffe, consolid, rappel, indice, magasin, c6, c7, clé, cle | episodique.rs |
+| `apprentissage` | Règles locales, hebbien, modulateurs, distillation | hebb, décorrélation, decorrelation, modulateur, nouveauté, nouveaute, règle locale, regle locale, apprentissage, distill, impulsion, décharge, decharge, spiking, log-normal, élagage appris, k-wta appris |  |
 | `distribue` | Régions, flux, protocoles, budgets, pannes | topologie, région, region, nœud, noeud, flux, bus, latence, budget, panne, registre, trace, protocole, v7, v8, paires, message, gigue, réparti, reparti, relais, découpage, decoupage, lien | topologie.rs, trace_globale.rs, bus.rs, flux.rs |
-| `modele` | Modèles, entraînement, parcimonie, biologie | modèle, modele, entraîn, entrain, distill, parcimonie, poids, échelle, echelle, biolog, e1, e2, e3, e4, e5, e6, e7, e8, e9, log-normal | entrainer_moteur.py, biologie |
+| `modele` | Modèles, entraînement, parcimonie, biologie | modèle, modele, entraîn, entrain, parcimonie, poids, échelle, echelle, biolog, e1, e2, e3, e4, e5, e6, e7, e8, e9 | entrainer_moteur.py, biologie |
 | `moteur` | Moteur : chargement, calcul, listes, quantification | moteur, gguf, listes, quantif, noyau, gpu, threads, mmap, lots, profil, débit, debit | gguf.rs, model.rs, main.rs |
 | `mesures` | Campagnes et mesures | campagne, mesure, perplexité, perplexite, carte, banc, benchmark, aiguille | reports/ |
 | `portes` | Portes et vérifications | porte, portes, vérification, verification, tests, gate | tools/porte-, toutes-les-portes |
@@ -30,7 +31,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_attention.md) | `× 128` |
-| [2026-10-10](2026-10-10_attention.md) | `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `+0,33 %` · `10,4046` · `10,3703` |
+| [2026-10-10](2026-10-10_attention.md) | `+0,33 %` · `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `10,4046` · `10,3703` |
 
 ### `memoire` — Mémoire épisodique, consolidation, greffe
 
@@ -38,6 +39,12 @@ possible (`ls journal/*_<thème>.md`).
 |---|---|
 | [2026-10-09](2026-10-09_memoire.md) | `15 %` · `83 %` · `96 %` · `81 %` · `85 %` · `22 %` · `87 %` · `50 %` · `2 jetons` · `0,5 %` · `2048 jetons` · `11 jetons` |
 | [2026-10-10](2026-10-10_memoire.md) | `1006 jetons` · `136 jetons` · `50 jetons` |
+
+### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-09](2026-10-09_apprentissage.md) | `5,2 %` · `-12 %` · `−12 %` · `−5,2 %` |
 
 ### `distribue` — Régions, flux, protocoles, budgets, pannes
 
@@ -50,7 +57,7 @@ possible (`ls journal/*_<thème>.md`).
 
 | jour | chiffres du jour |
 |---|---|
-| [2026-10-09](2026-10-09_modele.md) | `+6,7 %` · `+8,0 %` · `+1,0 %` · `+3,8 %` · `÷3,7` · `1 %` · `÷2` · `5,2 %` · `-12 %` · `−12 %` · `−5,2 %` · `50 %` |
+| [2026-10-09](2026-10-09_modele.md) | `+6,7 %` · `+8,0 %` · `+1,0 %` · `+3,8 %` · `÷3,7` · `1 %` · `÷2` · `50 %` · `6 %` · `+1 %` |
 | [2026-10-10](2026-10-10_modele.md) | `24 couches` · `−11,5 %` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification

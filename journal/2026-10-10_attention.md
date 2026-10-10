@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,10 +21,11 @@
 | 10:07 | `85cf49c` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+5) |
 | 10:19 | `531e760` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) | `etat-cerveau.md`, `2026-10-10.md`, `README.md` (+4) |
 | 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
+| 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
 
 ## Chiffres du jour
 
-`+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `+0,33 %` · `10,4046` · `10,3703`
+`+0,33 %` · `+40 %` · `512 jetons` · `+2,0 %` · `−6,7 %` · `−1,4 %` · `256 jetons` · `÷2,67` · `2048 jetons` · `10,4046` · `10,3703`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -32,7 +33,6 @@
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
-- **01:02** — C2 : hypothèse — l'état injecté ne touche pas le cache KV ; je teste en injectant PARTOUT
 - **05:13** — C6 : je teste la clé de FENÊTRE — l'expérience qui découle du mécanisme k-WTA identifié
 - **05:24** — La référence reproduit exactement (50 et 1006) — j'attends les fenêtres 4, 16, 64
 - **05:33** — Prédiction RÉFUTÉE : la fenêtre détruit le bon indice (50 → 653) sans aider le mauvais
@@ -57,6 +57,7 @@
 - **09:41** — Round 44 livré : `--attn-sinks` — écrit partout, transporté par le v7, **lu nulle part**
 - **09:41** — Round 45 : `--attn-sinks` ne peut rien faire — je le REFUSE explicitement (un endroit, trois chemins)
 - **09:53** — Alerte méthodologique : `attn_sinks` semble LU quelque part (ligne 7472) — je vérifie avant de figer un refus fondé sur une prémisse fausse
+- **09:53** — Correction en cours : `attn_sinks` EST lu (branche à fenêtre) — je retire le refus fondé sur une prémisse fausse et je mesure
 - *(+11 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour

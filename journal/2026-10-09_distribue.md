@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-09.md](2026-10-09.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,7 +16,6 @@
 | 09:33 | `7041bcc` | Budget d'événements : le premier essai d'allocation ciblée ÉCHOUE, et il apprend pourquoi | `modele-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 10:37 | `7f24b33` | Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous | `biologie-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 13:29 | `4878d81` | M1 : le bus de valeur est implémenté, et la valeur auto-référentielle ne suffit pas | `architecture-cerveau-et-drave.md`, `impulsion-pure-apprenant.md`, `MANIFEST.md` (+2) |
-| 14:11 | `ed9034e` | M1 dans le moteur : le bus de modulation (nouveauté ou valeur), et la persistance de D | `main.rs`, `model.rs`, `MANIFEST.md` (+2) |
 | 17:06 | `59186cf` | C1a : la topologie de régions se lit, se vérifie et refuse les graphes incohérents | `sprint-cerveau.md`, `main.rs`, `topologie.rs` (+3) |
 | 17:12 | `536256f` | C1b pas 1 : la topologie PILOTE le découpage — porte tenue, même chiffre, 0,00e0 | `sprint-cerveau.md`, `main.rs`, `topologie.rs` (+4) |
 | 17:35 | `28da341` | C1b pas 2 : le RELAIS — trois régions sur trois instances, écart 0,00e0 | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
@@ -35,7 +34,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (63)
+## Étapes du jour (62)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -43,7 +42,6 @@
 - **02:22** — Correction de l'outil de carte de latence (le batch 2 a échoué dessus)
 - **02:23** — Balayage complet de la carte de latence sur deux tailles de modèle
 - **10:37** — Ajout du budget énergétique chiffré (cerveau contre notre implémentation)
-- **13:25** — M1 : implémentation du bus de modulation par la VALEUR (et non la nouveauté)
 - **14:11** — Commit du bus de valeur, puis mise en file de la vérification à l'échelle 512
 - **15:34** — Registre des manques publié — et un point d'échelle qui nuance la structure innée
 - **17:02** — Lancement du sprint cerveau : objectif autonome, plan, puis première brique (topologie)
@@ -64,11 +62,12 @@
 - **17:45** — C5 livrée : bus neutre exact au bit près, bus actif sur un nœud relais
 - **21:34** — Nouveau mode : timeboxing jusqu'à 9 h demain. Je repars sur C3 — les délais par lien
 - **21:38** — C5bis : la diffusion réseau du bus (port de contrôle séparé, sans toucher au protocole de données)
-- *(+38 autres étapes — voir les rapports de session)*
+- **21:43** — Même piège que pour C5 : un nœud FINAL absorbe le gain — je teste sur le relais
+- *(+37 autres étapes — voir les rapports de session)*
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 
