@@ -2514,10 +2514,22 @@ version de **6 à 7**.
 | découpage (12 + 12 couches) | **18,5520** |
 | **écart de flux** | **0,00e0** |
 
-**Les deux moitiés appliquent la même fenêtre** : le résultat est cohérent au bit près, là où
-le câblage sans transport donnait un facteur 4. Et le chemin purement local, avec le même
-réglage, donne 21,5801 — un autre calcul, mais un calcul **annoncé** : les deux réglages sont
-désormais appliqués des deux côtés, et non d'un seul.
+**⚠️ CORRECTION (12 octobre, round 41) — la conclusion ci-dessus était HÂTIVE.** Le v7
+**transporte** bien les trois champs (ils voyagent dans `Act`, le nœud les applique), mais le
+**PILOTE ne les applique toujours pas** : `mdl.attn_window`, `mdl.swa_pattern` et
+`mdl.attn_sinks` ne sont assignés **nulle part** dans `run_ppl_reparti` (vérifié par lecture du
+code). Les deux nombres qui « s'accordaient » (18,5520 contre 18,5520) s'accordaient parce que
+**NI l'un NI l'autre ne changeait** — pas parce que les deux côtés appliquaient la fenêtre.
+
+Mesure refaite au round 41 : à `--limit 128`, `--attn-window 64`, `--swa-pattern 2` et
+`--attn-sinks 4` donnent **tous 42,5477**, identiques au run sans drapeau, alors que le même
+`--attn-window 64` fait passer le chemin **local** de 13,1368 à 21,5801.
+
+**Ce qui reste donc à faire, et c'est la même famille que `--ffn-gain`** : assigner ces trois
+champs dans `run_ppl_reparti` (le transport est prêt, le refus est retiré, il ne manque que
+l'assignation). **Leçon** : deux nombres égaux ne prouvent pas qu'ils mesurent la même chose —
+il faut vérifier **pourquoi** ils sont égaux, et ici la raison était que le réglage était inerte
+des deux côtés.
 
 **Ce qui a failli faire échouer le changement, et qui est maintenant corrigé pour de bon** : les
 **tests de trame forgée** construisaient l'en-tête avec un remplissage de **dix mots littéral**.

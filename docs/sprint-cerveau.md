@@ -900,6 +900,32 @@ tomber `porte-flux` immédiatement.
 
 ---
 
+## CORRECTION (12 octobre 1 h 30) : le v7 transporte, mais le PILOTE n'applique pas
+
+Ma conclusion du round 28 (« les deux moitiés appliquent la même fenêtre, le résultat est cohérent
+au bit près ») était **hâtive**. Vérifié par lecture du code : `mdl.attn_window`,
+`mdl.swa_pattern` et `mdl.attn_sinks` ne sont assignés **nulle part** dans `run_ppl_reparti`. Le
+v7 les fait **voyager** (le nœud les applique, `Act::appliquer` les pose), mais le pilote garde
+ses valeurs par défaut.
+
+Mesure refaite : à `--limit 128`, `--attn-window 64`, `--swa-pattern 2` et `--attn-sinks 4`
+donnent **tous 42,5477**, identiques au run sans drapeau — alors que le même `--attn-window 64`
+fait passer le chemin **local** de 13,1368 à **21,5801**. Le réglage est donc **inerte en
+réparti**, des deux côtés du graphe, et le « 18,5520 = 18,5520 » du round 28 s'expliquait par là,
+pas par une application symétrique.
+
+**Ce qui reste à faire, et c'est la même famille que `--ffn-gain` (round 20) et que la fenêtre
+(round 23)** : assigner ces trois champs dans `run_ppl_reparti`. Le transport est prêt, le refus
+est retiré, **il ne manque que l'assignation** — trois lignes, avec la mesure avant/après que la
+porte exigera.
+
+**LEÇON, et elle vaut plus que la correction** : **deux nombres égaux ne prouvent pas qu'ils
+mesurent la même chose**. J'ai lu « 18,5520 = 18,5520 » comme une accord entre les deux côtés ;
+c'était un accord entre deux réglages **inertes**. La vérification qui manquait tenait en une
+ligne de lecture de code : « ce champ est-il assigné dans cette fonction ? ».
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·

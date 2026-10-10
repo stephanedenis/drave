@@ -31804,3 +31804,84 @@ FINI
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION APRÈS v7/v8 ET LA FUSION DES ÉCRITURES — FAITE (12  … [3597 caractères tronqués]`
+
+  ```
+verification consignee
+c749af2 Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 40 livré : vérification après v7/v8 et la fusion des écritures — **huit portes réparties vertes**
+
+**Ce round** — 1 commit poussé. Les rounds 28 à 39 ont touché **le protocole** (v7 : fenêtre d'attention ; v8 : compte de paires) et **le chemin d'envoi** (fusion des deux écritures). Les portes réparties ont été rejouées :
+
+| porte | résultat |
+|---|---|
+| `porte-pannes` · `porte-registre` · `porte-budget` · `porte-pont` · `porte-coupe` · `porte-fusion` · `porte-horloge` · `porte-bus-socket` | **code 0** chacune |
+| `porte-flux` (rejouée au round 38) | **code 0** — cinq modes, écarts inchangés |
+| tests | **122 verts** |
+
+**Aucune rouge.** Les trois modifications de protocole et la fusion des écritures ont laissé le **contrat d'échange intact** — un octet de décalage dans l'en-tête ou un envoi perdu auraient fait tomber `porte-flux` immédiatement.
+
+**Les trois chantiers qui attendent leur premier round**, inscrits avec leur commande :
+1. **C8 — une tête dédiée par profondeur** : `tools/entrainer_moteur.py` existe, et `porte-reflexe.sh` mesure déjà l'accord d'une tête *empruntée* — il suffit d'y mettre une tête apprise.
+2. **Les modèles H/I/J** : le dessin **I** a reçu sa mesure (−11,5 % sur la couche 0, mais **le levier porte sur deux couches et composer dégrade**) — un profil appris aurait à découvrir « une seule couche, un seul gain ».
+3. **C4 — l'asynchronisme réel** : instrument **étalonné** (50 ms injectés → 50,2 mesurés), **gigue chiffrée** (49 % d'un pas), **messages par pas** ramenés de 4 à 2,6. Tout ce qu'il faut est là.
+
+**Bilan** : 40 rounds, **22 portes toutes vertes**, 122 tests, neuf capacités livrées, protocoles v7 et v8, trois budgets de lien, une optimisation à −20 % sur le décodage, et une quarantaine de mesures documentées avec leurs conditions. L'objectif reste **actif**.
+
+
+## Tour 84
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 41/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 41 : v7 transportait TROIS champs — je vérifie les deux que je n'ai pas mesurés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [933 caractères tronqués]`
+
+  ```
+nu                        : 42.5477 42.5477 
+  --swa-pattern 2            : 42.5477 
+  --attn-sinks 4             : 42.5477 
+  --attn-window 64           : 42.5477
+  ```
+
+### 🤖 Assistant
+
+⏵ Une seule ligne pour les cas avec drapeau — je regarde la sortie complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=$(mktemp -d); PORT=$((60000 + RANDOM % 4000)); cat > $T/topo.json <<JSON\n{\"regions\":[{\"id\":\"local\",\"couches\":[0,11],\"instance\":\"local\"},{\"id\":\"d\",\"couches\":[12,23],\"instance\":\"127.0.0.1:$PORT\"}],\"liens\":[{\ … [551 caractères tronqués]`
+
+  ```
+paires du pair    : 22721986560 au total, 178.9 M par pas (annoncées par le nœud dans chaque trame — protocole v8)
+  horloge           : région locale 127 pas servis
+  écart             : 0.00e0
+  transport         : dense f32 · 3684 octets par flux (aller) · 3684 au retour · 100.0 % d'activité (896 neurones par flux) · 127 flux
+  temps             : 16.1 ms par jeton en local · 19.3 ms à attendre le pair (son calcul + l'aller-retour) · soit 1.19× le calcul local seul
+  ```
+
+### 🤖 Assistant
+
+⏵ Contradiction : la fenêtre ne change RIEN en réparti — ma conclusion du round 28 était hâtive ; je vérifie le câblage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR>4163 && NR<4400 && /attn_window|swa_pattern|attn_sinks/' drave-core/src/main.rs | head -5; echo \"--- assignations dans run_ppl_reparti : ---\"; python3 -c \"\nimport re,pathlib\ns=pathlib.Path('drave-core/src/main.rs').read_ … [482 caractères tronqués]`
+
+  ```
+--- assignations dans run_ppl_reparti : ---
+  mdl.attn_window = NON
+  mdl.swa_pattern = NON
+  mdl.attn_sinks  = NON
+  appliquer_quantification : appelé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\n\np = pathlib.Path(\"reports/rapport-campagne-benefices.md\")\ns = p.read_text()\na = \"\"\"**Les deux moitiés appliquent la même fenêtre** : le résultat est cohérent au bit près, là où\nle câblag … [5110 caractères tronqués]`

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 48.3 h |
-| Tours | 83 |
-| Messages | 1996 |
-| Appels d'outils | 1828 |
+| Tours | 84 |
+| Messages | 2002 |
+| Appels d'outils | 1832 |
 | Fichiers touchés | 61 |
-| Commandes | 1578 |
+| Commandes | 1582 |
 | Sous-agents | 3 |
-| Commits | 173 |
+| Commits | 174 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -201,6 +201,8 @@
 **Tour 82** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 83** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 84** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3435,7 +3437,37 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 
 **Synthèse produite :**
 
-⏵ Round 40 : vérification des portes touchées par les protocoles v7/v8 et la fusion des écritures
+⏵ Round 40 livré : vérification après v7/v8 et la fusion des écritures — **huit portes réparties vertes**
+
+**Ce round** — 1 commit poussé. Les rounds 28 à 39 ont touché **le protocole** (v7 : fenêtre d'attention ; v8 : compte de paires) et **le chemin d'envoi** (fusion des deux écritures). Les portes réparties ont été rejouées :
+
+| porte | résultat |
+|---|---|
+| `porte-pannes` · `porte-registre` · `porte-budget` · `porte-pont` · `porte-coupe` · `porte-fusion` · `porte-horloge` · `porte-bus-socket` | **code 0** chacune |
+| `porte-flux` (rejouée au round 38) | **code 0** — cinq modes, écarts inchangés |
+| tests | **122 verts** |
+
+**Aucune rouge.** Les trois modifications de protocole et la fusion des écritures ont laissé le **contrat d'échange intact** — un octet de décalage dans l'en-tête ou un envoi perdu auraient fait tomber `porte-flux` immédiatement.
+
+**Les trois chantiers qui attendent leur premier round**, inscrits avec leur commande :
+1. **C8 — une tête dédiée par profondeur** : `tools/entrainer_moteur.py` existe, et `porte-reflexe.sh` mesure déjà l'accord d'une tête *empruntée* — il suffit d'y mettre une tête apprise.
+2. **Les modèles H/I/J** : le dessin **I** a reçu sa mesure (−11,5 % sur la couche 0, mais **le levier porte sur deux couches et composer dégrade**) — un profil appris aurait à découvrir « une seule couche, un seul gain ».
+3. **C4 — l'asynchronisme réel** : instrument **étalonné** (50 ms injectés → 50,2 mesurés), **gigue chiffrée** (49 % d'un pas), **messages par pas** ramenés de 4 à 2,6. Tout ce qu'il faut est là.
+
+**Bilan** : 40 rounds, **22 portes toutes vertes**, 122 tests, neuf capacités livrées, protocoles v7 et v8, trois budgets de lien, une optimisation à −20 % sur le décodage, et une quarantaine de mesures documentées avec leurs conditions. L'objectif reste **actif**.
+
+### Tour 84 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Verify the other two transported fields
+- bash — Diagnose the flagged run
+- bash — Check whether the pilot applies the window
+- bash — Commit the correction
+
+**Synthèse produite :**
+
+⏵ Contradiction : la fenêtre ne change RIEN en réparti — ma conclusion du round 28 était hâtive ; je vérifie le câblage
 
 ## 3. Travail accompli
 
@@ -3553,7 +3585,7 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1538 autres
+- … et 1542 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3874,4 +3906,5 @@ Le gain est le **même en millisecondes** (~10 ms : deux messages en moins à 5 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-flux.sh > /tmp/pf38.txt 2>&1; echo "porte-flux code=$?"; tail -3 /tmp/pf38.t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
 
