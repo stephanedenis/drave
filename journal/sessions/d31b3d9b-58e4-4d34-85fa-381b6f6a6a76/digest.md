@@ -30953,3 +30953,65 @@ FINI
 ⏵ Les huit portes réparties sont vertes après le v7 — je consigne la vérification
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## VÉRIFICATION DU PROTOCOLE v7 SUR TOUTES LES PORTES RÉPARTIES — F … [2890 caractères tronqués]`
+
+  ```
+verification v7 consignee
+6df044f Verification du protocole v7 sur toutes les portes reparties : huit vertes
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 29 livré : le v7 vérifié sur **toutes** les portes réparties — huit vertes
+
+**Ce round** — 1 commit poussé. Le v7 change la **mise en page de la trame**, donc **toutes** les exécutions à deux nœuds : les huit portes qui parlent le protocole ont été rejouées.
+
+| porte | résultat |
+|---|---|
+| **`porte-flux.sh`** (les deux côtés, 5 modes) | **code 0** — écarts inchangés : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| `porte-pannes.sh` | **code 0** — pannes nommées, code 7 |
+| `porte-registre.sh` | **code 0** |
+| `porte-budget.sh` | **code 0** — budgets d'octets et de latence |
+| `porte-pont.sh` | **code 0** — fibres, falaise, symétrie |
+| `porte-coupe.sh` | **code 0** — points de coupe |
+| `porte-bus-socket.sh` | **code 0** — bus par le réseau |
+| `porte-horloge.sh` / `porte-fusion.sh` | **code 0** |
+
+**Huit vertes, aucune rouge, 122 tests verts.** Un en-tête décalé d'un octet aurait fait tomber la première ; les sept autres vérifient que le reste du contrat (pannes, budgets, fibres, registre, bus, horloge, traces) n'a pas bougé.
+
+**Ce qui attend son premier round** : le **compte de paires côté nœud** — même mécanisme que le v7 (un champ dans la trame de réponse, protocole v8) — pour clore le budget `paires/s`, troisième volet de C10 dont les octets et la latence sont déjà faits.
+
+**Bilan** : 29 rounds, **22 portes toutes vertes**, 122 tests, protocole v7 livré et vérifié. L'objectif reste **actif**.
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 30/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 30 : reconnaissance du v8 — où le nœud compte-t-il ses paires, et comment les lire ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn events_total\\|pub paires\\|paires:\\s*\\[\" drave-core/src/model.rs | head -6 && grep -n \"paires (poids\" -B 3 drave-core/src/main.rs | head -8", "description": "Find the pair counter API"}`
+
+  ```
+2395:    pub paires: [u64; 3],
+4467:            ctx, events: 0, paires: [0; 3], act_levels: 127.0, act_thresh: 0.0, act_topk: 0, act_renorm: false,
+8557:    pub fn events_total(&self) -> u64 { self.events }
+1512-             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+1513-    let pa = mdl.paires;
+1514-    let ng = (st.n_prompt + st.n_gen).max(1) as f64;
+1515:    println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
+--
+7299-    let pt: u64 = pa.iter().sum::<u64>() + scores;
+7300-    // Les scores sont souvent des ordres de grandeur sous les projections :
+7301-    // « 0.0 M » n'est pas une mesure, donc on les donne en kilo-paires.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY'\nimport pathlib\np = pathlib.Path(\"docs/sprint-cerveau.md\")\ns = p.read_text()\na = \"## ▶ PROCHAINE ACTION (à lire en premier)\"\nneuf = \"\"\"## PROTOCOLE v8 — SPÉCIFIÉ (11 octobre 17 h) : le compte de PAIRES  … [4415 caractères tronqués]`

@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 47.7 h |
-| Tours | 72 |
-| Messages | 1937 |
-| Appels d'outils | 1791 |
+| Tours | 73 |
+| Messages | 1941 |
+| Appels d'outils | 1793 |
 | Fichiers touchés | 61 |
-| Commandes | 1541 |
+| Commandes | 1543 |
 | Sous-agents | 3 |
-| Commits | 162 |
+| Commits | 163 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -179,6 +179,8 @@
 **Tour 71** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 72** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 73** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3087,7 +3089,37 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 
 **Synthèse produite :**
 
-⏵ Les huit portes réparties sont vertes après le v7 — je consigne la vérification
+⏵ Round 29 livré : le v7 vérifié sur **toutes** les portes réparties — huit vertes
+
+**Ce round** — 1 commit poussé. Le v7 change la **mise en page de la trame**, donc **toutes** les exécutions à deux nœuds : les huit portes qui parlent le protocole ont été rejouées.
+
+| porte | résultat |
+|---|---|
+| **`porte-flux.sh`** (les deux côtés, 5 modes) | **code 0** — écarts inchangés : 0,00e0 · 0,00e0 · 3,65e-2 · 0,00e0 · 4,45e-3 |
+| `porte-pannes.sh` | **code 0** — pannes nommées, code 7 |
+| `porte-registre.sh` | **code 0** |
+| `porte-budget.sh` | **code 0** — budgets d'octets et de latence |
+| `porte-pont.sh` | **code 0** — fibres, falaise, symétrie |
+| `porte-coupe.sh` | **code 0** — points de coupe |
+| `porte-bus-socket.sh` | **code 0** — bus par le réseau |
+| `porte-horloge.sh` / `porte-fusion.sh` | **code 0** |
+
+**Huit vertes, aucune rouge, 122 tests verts.** Un en-tête décalé d'un octet aurait fait tomber la première ; les sept autres vérifient que le reste du contrat (pannes, budgets, fibres, registre, bus, horloge, traces) n'a pas bougé.
+
+**Ce qui attend son premier round** : le **compte de paires côté nœud** — même mécanisme que le v7 (un champ dans la trame de réponse, protocole v8) — pour clore le budget `paires/s`, troisième volet de C10 dont les octets et la latence sont déjà faits.
+
+**Bilan** : 29 rounds, **22 portes toutes vertes**, 122 tests, protocole v7 livré et vérifié. L'objectif reste **actif**.
+
+### Tour 73 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Find the pair counter API
+- bash — Publish the v8 specification
+
+**Synthèse produite :**
+
+⏵ Round 30 : reconnaissance du v8 — où le nœud compte-t-il ses paires, et comment les lire ?
 
 ## 3. Travail accompli
 
@@ -3205,7 +3237,7 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 1501 autres
+- … et 1503 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3514,5 +3546,6 @@ Là où le câblage sans transport donnait **195,5685 contre 50,3829** — un fa
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib  p = pathlib.Path("reports/rapport-campagne-benefices.md") s = p.read_t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'ENDPY' import pathlib p = pathlib.Path("docs/sprint-cerveau.md") s = p.read_text() a = "## ▶ 
 

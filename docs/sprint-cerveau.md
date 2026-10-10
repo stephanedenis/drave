@@ -624,6 +624,46 @@ troisième volet de C10, dont les octets et la latence sont déjà faits.
 
 ---
 
+## PROTOCOLE v8 — SPÉCIFIÉ (11 octobre 17 h) : le compte de PAIRES du nœud
+
+Objectif : clore le troisième volet de C10 (le budget `paires/s`). Les paires sont calculées par
+**le nœud** ; le pilote ne peut donc pas les borner sans qu'elles lui soient **transportées**.
+
+**Reconnaissance faite** : le compteur existe et est déjà exploité côté local.
+
+```text
+model.rs:2395   pub paires: [u64; 3],        // attention · experts · partagé
+main.rs:1513    let pa = mdl.paires;         // le rapport le lit tel quel
+main.rs:7299    let pt: u64 = pa.iter().sum::<u64>() + scores;
+```
+
+**Les six modifications, sur le patron du v7 (éprouvé au round 28) :**
+
+1. **en-tête** : un `u64` (les paires dépassent 2³²) ⇒ `TAILLE_TETE` passe de **91 à 99** (huit
+   octets, pas quatre) ;
+2. `VERSION_FLUX` : **7 → 8** ;
+3. `envoyer_flux` : écrire `paires` à l'offset **91** — mais **attention** : ce champ a un sens
+   différent selon qui parle. Le pilote y met **0**, le nœud y met **son compte**. Le même
+   en-tête sert aux deux sens, et un champ « qui ne veut dire quelque chose que dans un sens »
+   doit être **écrit dans le commentaire** ;
+4. `recevoir_flux` : lire `u64` à l'offset 91 ⇒ un champ `paires_du_pair` dans `Flux` ;
+5. le pilote : accumuler et publier le compte du pair dans son rapport, à côté des octets ;
+6. le budget : `budget_paires` dans la topologie du lien, comparé au compte **du pair** par pas —
+   même conduite que les octets et la latence (arrêt explicite, **code 9**, aucune perplexité).
+
+**Ce qui vérifie ce changement** : les mêmes huit portes réparties que pour le v7
+(`porte-flux` en tête, qui fait parler les deux côtés sur cinq modes), plus un cas neuf pour le
+budget de paires. Les tests de trame forgée **calculent** maintenant leur remplissage — c'est le
+v7 qui l'a appris — donc seules les deux assertions « de mémoire » (taille, version) sont à
+mettre à jour.
+
+**Pourquoi ce n'est pas fait dans ce round** : le round 26 avait spécifié le v7, le 27 l'a tenté
+et reverté, le 28 l'a livré. Le v8 suit exactement le même chemin, et ce round-ci est celui de la
+spécification — avec, en plus, une difficulté que le v7 n'avait pas : **un champ directionnel**
+dans un en-tête partagé.
+
+---
+
 ## ▶ PROCHAINE ACTION (à lire en premier)
 
 État au **11 octobre 6 h 45** · **21 portes, toutes vertes** (`tools/porte-*.sh`) ·
