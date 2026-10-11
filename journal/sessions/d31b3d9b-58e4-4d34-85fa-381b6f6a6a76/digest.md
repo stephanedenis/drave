@@ -50766,3 +50766,11 @@ fiche B corrigée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\n# état : E6 corrigé, 31 portes (la porte des signes figés est remplacée)\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux  … [2681 caractères tronqués]`
+
+  ```
+état corrigé ; 2026-10-11 02:54
+5de4a929 E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold_deb = s.index(\"**E6 EST TRANCHÉE DEPUIS LE 11/10\")\nold_fin = s.index(\"**Ce que la biologie en retient**\")\nneuf = \"\ … [3534 caractères tronqués]`

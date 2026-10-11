@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 65.7 h |
 | Tours | 95 |
-| Messages | 3172 |
-| Appels d'outils | 2953 |
+| Messages | 3173 |
+| Appels d'outils | 2954 |
 | Fichiers touchés | 121 |
-| Commandes | 2491 |
+| Commandes | 2492 |
 | Sous-agents | 3 |
-| Commits | 280 |
+| Commits | 281 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*73 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,7 +3925,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 58 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
@@ -4107,7 +4107,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2451 autres
+- … et 2452 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4535,4 +4535,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF' BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX F
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF' Porte « invariants d
 - E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes" 2>&1 | tail -1; gi
+- Biologie : E6 corrigee dans la roadmap — la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent, trois chiffres retires" 2>&1 | tail -1; git 
 

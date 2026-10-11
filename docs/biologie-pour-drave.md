@@ -204,27 +204,34 @@ faits subsistent : la distribution obtenue n'est **pas** à queue lourde
 nettement moins bonne (2,2662 contre 1,9020 bits/octet) — ce qui suggère que **figer
 les signes coûte cher**, indépendamment du défaut de fichier.
 
-**E6 EST TRANCHÉE DEPUIS LE 11/10 — ET LA RÉPONSE N'EST PAS CELLE QU'ON ATTENDAIT.** Le défaut de
+**E6 EST TRANCHÉE DEPUIS LE 11/10 — ET ELLE DÉMENT SA PROPRE PREMIÈRE CONCLUSION.** Le défaut de
 code est corrigé (la tête liée à la table d'entrée était reparamétrée : M8), et un **plan 2×2**
 croise enfin les deux choses que le variant changeait à la fois — la **loi** des magnitudes et la
-**contrainte de signe**. À 25 % de poids gardés (l'élagage qui tue le témoin), perplexité :
+**contrainte de signe**. À 25 % de poids gardés, perplexité (occupation **identique** dans les
+quatre cases, vérifiée dans le fichier) :
 
-| magnitudes | signes | 100 % gardés | **25 % gardés** |
-|---|---|---:|---:|
-| libres (entraînées) | libres | 7,3429 | **49,4291** (×6,7) |
-| libres | **figés** | **7,3003** | **7,9467** (×1,09) |
-| log-normales | libres | 7,5112 | 36,3771 |
-| log-normales | figés | 7,5666 | 17,5009 |
+| magnitudes | signes | 100 % gardés | 50 % | **25 % gardés** |
+|---|---|---:|---:|---:|
+| libres (entraînées) | libres | 7,3429 | 7,5680 | **49,4291** |
+| libres | **figés** | 7,3003 | 7,2241 | **41,6677** |
+| log-normales | libres | 7,2741 | 7,4955 | 59,1526 |
+| log-normales | **figés** | 7,6168 | 7,8401 | **71,1531** |
 
-1. **C'est la CONTRAINTE DE SIGNE qui porte tout** (×1,09 contre ×6,7), et elle ne coûte rien :
-   sans élagage, le modèle à signes figés vaut **7,3003** — au même niveau que le témoin. Le
-   soupçon de 2026-10-10 (« figer les signes coûte cher ») était un artefact du défaut de fichier ;
-2. **la loi log-normale NUIT** : à contrainte comparable, 17,50 contre 7,95, soit **2,2× pire**.
-   La prédiction biologique (« une distribution multiplicative est élagable par construction »)
-   n'est donc **pas** vérifiée : ce qui aide est que `|w|` puisse **descendre à zéro** librement, ce
-   que `e^θ` interdit (plancher à 6,1e-6) ;
-3. **le résultat tient sur trois graines** (dense 49,43 · 55,45 · 46,61 contre 7,95 · 7,99 · 8,27 —
-   intervalles disjoints) et il est verrouillé par `tools/porte-signes-figes.sh`.
+1. **la loi log-normale COÛTE** : c'est le seul effet **cohérent** du plan, du même signe dans les
+   deux conditions de signe (**×1,20** et **×1,71** à 25 % gardés). La prédiction biologique
+   (« une distribution multiplicative est élagable par construction ») n'est **pas** vérifiée ;
+2. **la contrainte de signe n'a PAS d'effet cohérent** : figer les signes **aide** avec des
+   magnitudes libres (49,43 → 41,67) et **nuit** avec des magnitudes log-normales (59,15 → 71,15).
+   Il y a **interaction** : il n'y a pas de « mécanisme Dale » à annoncer ;
+3. **le levier d'élagage reste à trouver** : le meilleur point du plan gagne **×1,19** sur le
+   témoin, et les deux sont très loin de leur point de départ (7,30 et 7,34).
+
+**Trois chiffres publiés la veille sont RETIRÉS** (« signes figés à ×1,09 », « la loi log-normale
+2,2× pire », « trois graines ») : ils venaient de **deux défauts du harnais** — l'attention n'était
+pas élaguée pour les variantes reparamétrées, et l'inverse était appliqué **deux fois** à
+l'installation (poids de ±12 au lieu de ±0,08). Ni l'un ni l'autre n'était visible dans une
+perplexité. Détail, rétractation comprise :
+[`reports/rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md).
 
 **Ce que la biologie en retient** : le principe de Dale — un neurone est excitateur **ou**
 inhibiteur, et son signe ne change pas — est le levier, pas la statistique des efficacités. Détail
@@ -424,7 +431,7 @@ Aucune ne demande de nouveau moteur : le harnais d'entraînement (`--kwta`,
 | **E3** | **élagage développemental** : dense → élagage appris à 50 % | la trajectoire biologique (surproduire puis élaguer) bat-elle l'entraînement creux direct ? | **FAIT** : + poids élagués appris = **÷2 lectures à qualité égale** (5,1866 contre 5,1719 à 25 % d'activations), et −6,0 % en dense |
 | **E4** | **balance excitation/inhibition** : contrainte de signe (80/20) | la séparation E/I est-elle un levier de stabilité ? | **FAIT, et RÉFUTÉ** (côté entraînement) : à protocole identique, le ratio équilibré **0,5** donne **2,2729 bits/octet**, le ratio cortical **0,8** **2,3838** (+4,9 %) et **0,9** **2,5188** (+10,8 %) — dégradation **monotone** (`reports/rapport-e4-ratio-signes.md`). Côté inférence, l'optimum est du côté **amplification** (`porte-gain.sh`) : **ce n'est pas le SIGNE qui porte la qualité, c'est la MAGNITUDE** |
 | **E5** | **rejeu** : tracer une passe (DRVF), la rejouer, et distiller le modèle *sur ses propres traces* | le rejeu améliore-t-il la consolidation (comme le sommeil) ? | le moteur trace et rejoue déjà ; l'outil de distillation existe |
-| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\|θ\|}`, puis élaguer à 50 % et 25 % | une distribution multiplicative (celle du cerveau) rend-elle l'élagage gratuit, là où la nôtre est quasi gaussienne (p99,9/médiane 5,2) ? | **TRANCHÉE le 11/10 : NON** — c'est la **contrainte de signe** (Dale) qui rend l'élagage indolore (×1,09 contre ×6,7 au témoin à 25 % gardés) et elle ne coûte rien ; la loi log-normale **nuit** (17,50 contre 7,95 à contrainte comparable). Plan 2×2, trois graines, porte `tools/porte-signes-figes.sh` |
+| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\|θ\|}`, puis élaguer à 50 % et 25 % | une distribution multiplicative (celle du cerveau) rend-elle l'élagage gratuit, là où la nôtre est quasi gaussienne (p99,9/médiane 5,2) ? | **TRANCHÉE le 11/10 : NON** — plan 2×2 complet, occupation vérifiée dans le fichier : **la loi log-normale COÛTE** (×1,20 à ×1,71 à 25 % gardés, seul effet cohérent) et la **contrainte de signe n'a pas d'effet cohérent** (×1,19 dans un sens, ×0,83 dans l'autre). Le levier d'élagage reste à trouver ; trois chiffres publiés la veille sont **rétractés** (deux défauts du harnais) |
 
 **La première à faire est E1** : c'est la moins chère, elle teste directement la
 thèse « structure innée, poids appris », et elle se mesure avec le protocole de
