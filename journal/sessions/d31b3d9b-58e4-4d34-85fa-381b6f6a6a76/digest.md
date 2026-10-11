@@ -53383,3 +53383,224 @@ CODE=0
 ⏵ Commit : le prix de la forme creuse est chiffré (4× la mémoire, 2,6× le chargement)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour le dessin B\"\najout = \"\"\"## 2 ter. Le PRIX de la forme creuse : 4× la mé … [1774 caractères tronqués]`
+
+  ```
+fiche B : prix mémoire ajouté
+push=0
+14
+dim 11 oct 2026 05:40:04 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 59 : le prix complet de la forme creuse est chiffré — et il est dissuasif
+
+**Ce qui a été mesuré ce round** (en plus de la passe complète, en cours)
+
+| sur Qwen2.5-0.5B (531 Mo disque) | noyau dense | noyau creux |
+|---|---:|---:|
+| **mémoire maximale** | 1,22 Go | **4,99 Go** (**×4,1**) |
+| **chargement + calcul** | 11,4 s | **29,1 s** (×2,6) |
+| paires (élagué 25 %) | 496,8 M | 226,4 M (÷2,2) |
+| débit (élagué 25 %) | **13,6 tok/s** | 6,9 tok/s (×0,51) |
+
+Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×5,5**).
+
+**Pourquoi** : la forme creuse stocke **8 octets par non-nul** (une valeur f32 **et** une colonne u32) contre ~1,06 octet par poids en Q8_0. Une forme creuse **non quantifiée coûte plus qu'elle ne rapporte** — c'est le défaut de cette implémentation, et il compte autant que la vitesse.
+
+**Le dessin B a donc maintenant ses quatre chiffres** : paires ÷3,8 ✅, qualité identique ✅, vitesse ✗ (rattrape le dense seulement à 10 %, où le modèle est détruit), mémoire ✗ (×4). La version viable doit garder les **valeurs quantifiées** (i8 + échelle de bloc) et des **indices u16**.
+
+**Livré** : la porte `porte-poids-creux.sh` mesure désormais les quatre (exactitude, paires, vitesse avec son croisement, mémoire) ; fiche et roadmap mises à jour ; les trois passages qui portaient encore « 1 % » et « ÷7,9 » sans réserve sont marqués.
+
+**⚠ En cours** : la **passe complète des 34 portes**, lancée à 05 h 00 après trois modifications du moteur — 14 vertes à 05 h 40, verdict au round suivant.
+
+**État** : arbre propre, tout poussé, 122 tests verts.
+
+
+## Tour 103
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 60/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 60 : état de la passe complète des 34 portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -3 /tmp/passe0500.log | cut -c1-90; pgrep -af \"toutes-les-portes|porte-.*\\.sh\" | grep -v pgrep | head -2 | cut -c1-60; date", "description": "Check the ful … [15 caractères tronqués]`
+
+  ```
+14
+0
+  porte-greffe           ✅                         829 s    ✅ la porte est franchie. Ce qu
+  porte-harnais-invariants ✅                         105 s  ✅ porte harnais : installer un
+  porte-horloge          ✅                          27 s    ✅ borne atteinte : arrêt EXPLI
+620318 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qt
+620321 bash tools/toutes-les-portes.sh
+dim 11 oct 2026 05:40:23 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/ | tail -6; echo \"--- journal du jour (11/10) ---\"; ls journal/ | grep \"^2026-10-11\" | head -5; echo \"--- dernier commit ---\"; git log --oneline -3; git status --porcelain | head -3", "description": "Check the journa … [18 caractères tronqués]`
+
+  ```
+2026-10-11_modele.md
+2026-10-11_moteur.md
+2026-10-11_portes.md
+README.md
+sessions
+THEMES.md
+--- journal du jour (11/10) ---
+2026-10-11_apprentissage.md
+2026-10-11_attention.md
+2026-10-11_distribue.md
+2026-10-11_divers.md
+2026-10-11.md
+--- dernier commit ---
+7ba80147 Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'elle ne rapporte
+149a0ff9 Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere)
+e275dd7c Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 journal/2026-10-11.md", "description": "Read the day journal index"}`
+
+  ```
+# 2026-10-11
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**37 commits** · **1 session(s)** · **8 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 7 | [2026-10-11_apprentissage.md](2026-10-11_apprentissage.md) |
+| attention | 3 | [2026-10-11_attention.md](2026-10-11_attention.md) |
+| distribue | 6 | [2026-10-11_distribue.md](2026-10-11_distribue.md) |
+| divers | 0 | [2026-10-11_divers.md](2026-10-11_divers.md) |
+| mesures | 1 | [2026-10-11_mesures.md](2026-10-11_mesures.md) |
+| modele | 9 | [2026-10-11_modele.md](2026-10-11_modele.md) |
+| moteur | 5 | [2026-10-11_moteur.md](2026-10-11_moteur.md) |
+| portes | 6 | [2026-10-11_portes.md](2026-10-11_portes.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Wait and check the pass", "timeoutMs": 600000}`
+
+  ```
+16
+0
+  porte-jumeaux          ✅                          77 s  PORTE TENUE 
+dim 11 oct 2026 05:50:08 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -22 reports/rapport-passe-complete-portes.md 2>/dev/null; wc -l reports/rapport-passe-complete-portes.md", "description": "Read the pass report"}`
+
+  ```
+# Passe COMPLÈTE des portes : 22 vertes sur 22 — et une porte qui était verte en ne mesurant RIEN
+
+> Campagne : **outillage** · expérience : la passe complète (`tools/toutes-les-portes.sh`)
+> Question : les portes du dépôt passent-elles **toutes**, quand on les lance **toutes** ?
+> Verdict : **oui** — **22 sur 22** au premier passage (11 h 07), puis **23 sur 23** le 2026-10-10 à **15 h 15** en
+> **58 minutes** après l'ajout de `porte-peripherie.sh` et des changements du moteur
+> (15 h 15) — et la passe a trouvé ce qu'une porte lancée
+> seule ne pouvait pas montrer : `porte-tokenizer-kimi` sortait **verte en comparant zéro jeton**
+> (elle lisait `stdin`, que personne ne lui fournissait). Corrigée, elle compare maintenant
+> **10 textes** en **7,5 s**.
+> Date réelle : **2026-10-10 11:10 HAE** (heure de la machine ; la passe a tourné de 09 h 57 à
+> 11 h 07).
+> Protocole : `DELAI=2400 tools/toutes-les-portes.sh` — chaque porte bornée dans le temps, son
+> journal gardé dans `/tmp/portes-1210b/`.
+
+## 1. Pourquoi cette passe existe
+
+`tools/porte-gain.sh` § 9 était **rouge depuis le protocole v7** sans que personne le voie : elle
+exigeait un refus que le v7 avait **délibérément retiré**. Le
+… [334 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Continue waiting for the pass", "timeoutMs": 600000}`
+
+  ```
+16
+0
+  porte-jumeaux          ✅                          77 s  PORTE TENUE 
+dim 11 oct 2026 05:59:55 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af \"porte-.*\\.sh\" | grep -v pgrep | head -2 | cut -c1-60; ls -la /tmp/portes-0500/ 2>/dev/null | tail -3", "description": "Identify the currently running gate"}`
+
+  ```
+766387 timeout 2400 bash tools/porte-melange.sh
+766388 bash tools/porte-melange.sh
+-rw-r--r--.   1 stephane stephane   1981 11 oct 05:47 porte-indice.log
+-rw-r--r--.   1 stephane stephane   1375 11 oct 05:49 porte-jumeaux.log
+-rw-r--r--.   1 stephane stephane   1039 11 oct 05:58 porte-melange.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Wait for more gates", "timeoutMs": 600000}`
+
+  ```
+23
+0
+  porte-peripherie       ✅                           9 s  PORTE TENUE 
+dim 11 oct 2026 06:09:53 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Continue waiting for the pass", "timeoutMs": 600000}`
+
+  ```
+25
+0
+  porte-pont             ✅                          75 s    ✅ 448 fibr
+dim 11 oct 2026 06:19:40 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 590; grep -cE \"✅\" /tmp/passe0500.log; grep -cE \"❌\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Wait for the heavy gates", "timeoutMs": 600000}`
+
+  ```
+34
+0
+Journaux : /tmp/portes-0500
+dim 11 oct 2026 06:29:38 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète TERMINÉE : 34 portes, 34 vertes — relevé du verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/passe0500.log; echo \"--- somme des durées ---\"; grep -oE \"^  porte-[a-z0-9-]+ +✅ +[0-9]+ s\" /tmp/passe0500.log | grep -oE \"[0-9]+ s\" | grep -oE \"[0-9]+\" | python3 -c \"\nimport sys\nv=[int(x) for x in sys.stdin.r … [131 caractères tronqués]`
+
+  ```
+porte-trace            ✅                          25 s    ✅ la trace fausse est détectée et nommée
+--- 34 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-0500
+--- somme des durées ---
+34 portes · 5108 s = 85 min 8 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Relevé : 34/34 vertes, 85 min 8 s — régénération des repères et de l'état
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\nlog = pathlib.Path(\"/tmp/passe0500.log\").read_text()\nlignes = re.findall(r\"^  (porte-[a-z0-9-]+)\\s+✅\\s+([0-9]+) s\\s+(.*)$\", log, re.M)\np = pathlib.Path(\"docs/references-non-regressio … [2052 caractères tronqués]`
+
+  ```
+repères régénérés : 34 portes
+34
+> **2026-10-11 06 h 30 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+> par la passe complète des portes** (`tools/toutes-les-portes.sh`, **34 vertes sur
+> 34**, 85 min 8 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+> passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+> calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+> (jamais à sa place).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [2157 caractères tronqués]`

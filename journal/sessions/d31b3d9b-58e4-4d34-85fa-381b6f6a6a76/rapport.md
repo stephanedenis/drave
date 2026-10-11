@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 68.5 h |
-| Tours | 102 |
-| Messages | 3340 |
-| Appels d'outils | 3107 |
+| Durée | 69.3 h |
+| Tours | 103 |
+| Messages | 3355 |
+| Appels d'outils | 3120 |
 | Fichiers touchés | 126 |
-| Commandes | 2640 |
+| Commandes | 2653 |
 | Sous-agents | 3 |
-| Commits | 302 |
+| Commits | 303 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -239,6 +239,8 @@
 **Tour 101** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 102** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 103** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4255,7 +4257,49 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 
 **Synthèse produite :**
 
-⏵ Commit : le prix de la forme creuse est chiffré (4× la mémoire, 2,6× le chargement)
+⏵ Round 59 : le prix complet de la forme creuse est chiffré — et il est dissuasif
+
+**Ce qui a été mesuré ce round** (en plus de la passe complète, en cours)
+
+| sur Qwen2.5-0.5B (531 Mo disque) | noyau dense | noyau creux |
+|---|---:|---:|
+| **mémoire maximale** | 1,22 Go | **4,99 Go** (**×4,1**) |
+| **chargement + calcul** | 11,4 s | **29,1 s** (×2,6) |
+| paires (élagué 25 %) | 496,8 M | 226,4 M (÷2,2) |
+| débit (élagué 25 %) | **13,6 tok/s** | 6,9 tok/s (×0,51) |
+
+Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×5,5**).
+
+**Pourquoi** : la forme creuse stocke **8 octets par non-nul** (une valeur f32 **et** une colonne u32) contre ~1,06 octet par poids en Q8_0. Une forme creuse **non quantifiée coûte plus qu'elle ne rapporte** — c'est le défaut de cette implémentation, et il compte autant que la vitesse.
+
+**Le dessin B a donc maintenant ses quatre chiffres** : paires ÷3,8 ✅, qualité identique ✅, vitesse ✗ (rattrape le dense seulement à 10 %, où le modèle est détruit), mémoire ✗ (×4). La version viable doit garder les **valeurs quantifiées** (i8 + échelle de bloc) et des **indices u16**.
+
+**Livré** : la porte `porte-poids-creux.sh` mesure désormais les quatre (exactitude, paires, vitesse avec son croisement, mémoire) ; fiche et roadmap mises à jour ; les trois passages qui portaient encore « 1 % » et « ÷7,9 » sans réserve sont marqués.
+
+**⚠ En cours** : la **passe complète des 34 portes**, lancée à 05 h 00 après trois modifications du moteur — 14 vertes à 05 h 40, verdict au round suivant.
+
+**État** : arbre propre, tout poussé, 122 tests verts.
+
+### Tour 103 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Check the full pass status
+- bash — Check the journal and repo state
+- bash — Read the day journal index
+- bash — Wait and check the pass
+- bash — Read the pass report
+- bash — Continue waiting for the pass
+- bash — Identify the currently running gate
+- bash — Wait for more gates
+- bash — Wait for the heavy gates
+- bash — Read the pass verdict
+- bash — Regenerate the non-regression references
+- bash — Record the pass verdict and push
+
+**Synthèse produite :**
+
+⏵ Relevé : 34/34 vertes, 85 min 8 s — régénération des repères et de l'état
 
 ## 3. Travail accompli
 
@@ -4438,7 +4482,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2600 autres
+- … et 2613 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4888,4 +4932,5 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)" 2>&1 | tail 
 - Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere)" 2>&1 | tail -1; git push -q origin master; echo "push=
 - Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'el
+- Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal" 2>&1 | tail -1; git push -q origin master; echo "push=
 
