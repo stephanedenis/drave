@@ -49810,3 +49810,65 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1719 caractères tronqués]`
+
+  ```
+état ; 2026-10-11 01:38
+repères
+3a02191 Etat : 31 portes, la porte des signes figes est nommee avec son rouge
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push -q origin master; echo \"push=$?\"; git status --porcelain | head -3; echo \"--- prochaine piste : appliquer la recette hors du harnais ? ---\"; grep -n \"poids-lognormaux\\|signes-figes\" docs/biologie-pour-drave.md | head  … [85 caractères tronqués]`
+
+  ```
+push=0
+--- prochaine piste : appliquer la recette hors du harnais ? ---
+  ```
+
+### 🤖 Assistant
+
+⏵ La roadmap de biologie porte-t-elle encore l'ancienne conclusion d'E6 ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"E6\\|log-normal\\|lognormal\\|3 ter\" docs/biologie-pour-drave.md | head -12", "description": "Find the E6 section in the biology roadmap"}`
+
+  ```
+126:### 3 ter. Le fait biologique que nos modèles NE reproduisent PAS : des poids à queue lourde
+132:autour d'une moyenne : elles suivent une loi **log-normale**, sur plusieurs ordres de
+156:distribution **log-normale par construction** (c'est le générateur même de cette
+164:**E6 A ÉTÉ TENTÉE, ET ELLE A ÉCHOUÉ — PAR UN DÉFAUT DE CODE, PAS PAR UN RÉSULTAT.**
+193:**exactement** sa validation (1,9020 bits/octet), celui du modèle log-normal donne
+200:**E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —
+401:| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\|θ\|}`, puis élaguer à 50 % et 25 % | une distribution multiplicative (celle du cerveau) rend-elle l'élagage gratuit, là où la nôtre est quasi gaussienne (p99,9/médiane 5,2) ? | ~1 h 30 ; une reparamétrisation + `--elagage` |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md", "limit": 14, "offset": 196}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md</path>
+<type>file</type>
+<content>
+196: donne), ni la quantification (la référence PyTorch sur les mêmes poids donne 15 552),
+197: ni la matérialisation (écart mesuré 0,000e+00). La cause reste **ouverte** ; le
+198: variant est marqué inutilisable dans le harnais tant qu'elle ne l'est pas.
+199: 
+200: **E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —
+201: et c'est écrit comme tel plutôt que présenté comme un échec de la biologie. Deux
+202: faits subsistent : la distribution obtenue n'est **pas** à queue lourde
+203: (p99,9/médiane 5,5 contre 5,2 au témoin), et la validation d'entraînement est
+204: nettement moins bonne (2,2662 contre 1,9020 bits/octet) — ce qui suggère que **figer
+205: les signes coûte cher**, indépendamment du défaut de fichier.
+206: 
+207: ---
+208: 
+209: ## 3 bis. Le budget, chiffré : où nous en sommes
+
+(Showing lines 196-209 of 422. Use offset=210 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md", "new_string": "**E6 est donc INCONCLUSIVE : ni la prédiction, ni son contraire, ne sont établis** —\net c'est écrit comme tel plutôt que présenté comme un échec de la biologie. Deux\nfaits subsistent : la di … [2561 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold = \"| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\\\\|θ\\\\|}`, puis élaguer à 50 % et 25 % … [1347 caractères tronqués]`

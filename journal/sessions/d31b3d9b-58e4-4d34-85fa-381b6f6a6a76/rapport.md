@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 64.4 h |
+| Durée | 64.5 h |
 | Tours | 95 |
-| Messages | 3110 |
-| Appels d'outils | 2891 |
+| Messages | 3115 |
+| Appels d'outils | 2896 |
 | Fichiers touchés | 119 |
-| Commandes | 2437 |
+| Commandes | 2440 |
 | Sous-agents | 3 |
-| Commits | 274 |
+| Commits | 275 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3922,10 +3922,14 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Red test with the log-normal recipe
 - bash — Commit the gate and refusals
 - bash — Update docs for the 31st gate
+- bash — Push and look for the biology doc section
+- bash — Find the E6 section in the biology roadmap
+- read
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la porte « signes figés » et des refus explicites
+⏵ La roadmap de biologie porte-t-elle encore l'ancienne conclusion d'E6 ?
 
 ## 3. Travail accompli
 
@@ -3963,7 +3967,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh` | 1 | 1 |
 | `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 2 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/hebbien-differentiel-et-biologie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/impulsion-pure-apprenant.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
@@ -4101,7 +4105,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2397 autres
+- … et 2400 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4523,4 +4527,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes)" 2>&1 | tail -1; git log --oneline -1; git push -q origin
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF' Porte « signes figes » : la seule recette du depot qui rende l
 - Etat : 31 portes, la porte des signes figes est nommee avec son rouge" 2>&1 | tail -1; git log --oneline -1
+- Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact)" 2>&1 | tail -1; git log --oneline -
 
