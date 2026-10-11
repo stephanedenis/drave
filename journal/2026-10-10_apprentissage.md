@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 10:59 | `0b00de5` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage | `2026-10-09.md`, `2026-10-09_apprentissage.md`, `2026-10-09_attention.md` (+18) |
 | 20:54 | `4f11679` | M8 : trois causes ELIMINEES, une hypothese nommee — le defaut log-normal est toujours la (x78) | `manques.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+15) |
+| 23:48 | `b0afa88` | E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-10.md` (+16) |
 
 ## Étapes du jour (5)
 
@@ -23,10 +24,11 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.6 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-e6-poids-lognormaux.md](../reports/rapport-e6-poids-lognormaux.md)
 - [reports/rapport-m8-log-normal.md](../reports/rapport-m8-log-normal.md)
 
 <!-- notes -->

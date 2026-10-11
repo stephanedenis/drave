@@ -84,8 +84,20 @@ Le témoin ne sauve pas le variant — il rend la réfutation **propre**.
   vraie cause de la fragilité, pas la loi log-normale. Le test qui trancherait : un modèle
   log-normal à **signes libres**, élagué au même taux ;
 - **une seule échelle, une seule graine, un seul corpus** : le « +72,6 % » est un point ;
-- **elle ne dit rien des PAIRES** : sur un GGUF dense, élaguer ne réduit **aucune paire** mesurée —
-  les noyaux comptent `n_in × n_out` quelle que soit la densité (`--keep 0.5` du moteur lui-même
-  laisse le compte à **2,3 M** pendant que la perplexité passe de 4,56 à 5,82). Le gain de paires
-  n'existe que dans le **chemin par listes**, celui où la mesure historique a été faite
-  (`docs/modele-pour-drave.md` § 3 B).
+- **elle ne dit rien des PAIRES, et c'est un résultat en soi** : sur un GGUF dense, **aucun** chemin
+  d'exécution ne voit l'élagage dans le compte de paires. Mesuré sur le témoin dense, élagué à 50 %
+  de **tous** ses tenseurs de projection :
+
+  | chemin | non élagué | élagué à 50 % |
+  |---|---:|---:|
+  | `--flux` (f32 dense) | 2,3 M | **2,3 M** |
+  | `--flux-listes` | 2,3 M | **2,3 M** |
+  | `--lot 4 --flux-blocs` | 2,2 M | **2,2 M** |
+  | `--keep 0.5` du moteur lui-même | 2,3 M | **2,3 M** (perplexité 4,56 → 5,82) |
+
+  La raison est dans le code : `self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64`
+  (et `*paires += (q.n_in as u64) * (q.n_out as u64)` dans `matvec`). Le compteur mesure le travail
+  d'un noyau **dense** — `n_in × n_out` quelle que soit la densité — ce qui est **fidèle** à ce que
+  le moteur fait vraiment, et **muet** sur ce qui est stocké. Toute affirmation du type « ÷N de
+  paires » doit donc **nommer son instrument** : ici, c'est le nombre de **poids lus** du harnais
+  d'entraînement ou la taille de stockage, pas la ligne « paires » du moteur.

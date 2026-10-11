@@ -101,6 +101,15 @@ Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réd
 les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,
 `DRAVE_SANS_EMPRUNT=1` pour comparer la même arithmétique) :
 
+> **ATTENTION À L'INSTRUMENT (mesuré le 10/10).** Le compteur de paires **imprimé par le moteur**
+> ne voit **pas** l'élagage des poids : il additionne `n_in × n_out` par projection, sur **tous**
+> les chemins (`--flux`, `--flux-listes`, `--flux-blocs`, `--ppl`, et même sous `--keep 0.5`, qui
+> fait pourtant chuter la perplexité de 4,56 à 5,82). Sur un témoin dense élagué à 50 % de **tous**
+> ses tenseurs, il affiche **2,3 M** avant comme après. Ce qu'il mesure est le travail d'un noyau
+> **dense** — fidèlement — et **pas** ce qui est stocké. Les chiffres ci-dessous viennent donc d'un
+> **autre** instrument (poids lus / stockage), et tout « ÷N de paires » doit dire lequel. Détail :
+> [`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md) § 4.
+
 | poids gardés (par ligne) | activations | perplexité | **paires (événements)** |
 |---|---:|---:|---:|
 | 100 % | 100 % | 4,2831 | 1 585 574 447 |

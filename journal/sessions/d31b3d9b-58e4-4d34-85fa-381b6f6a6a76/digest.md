@@ -47975,3 +47975,131 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-e6.txt 2>&1 | tail -2; git log --oneline -1; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master 2>/dev/null | tail -2", "description": "Commi … [51 caractères tronqués]`
+
+  ```
+b0afa88 E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master; echo \"--- carte ---\"; tail -4 /tmp/carte-sortie.log; ls -1 /tmp/carte-sortie/*/etat.* 2>/dev/null | wc -l; date", "description": "Confirm push and sweep  … [10 caractères tronqués]`
+
+  ```
+b0afa88
+b0afa88
+--- carte ---
+corpus : 85625 jetons · sorties étudiées : 12 16 20 22
+
+=== 1. capturer l'état de chaque profondeur de sortie (et le chemin long) ===
+0
+sam 10 oct 2026 23:51:07 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : la carte ne capture encore rien
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/carte-sortie/ 2>/dev/null; echo \"--- processus ---\"; pgrep -af \"couches 0:\" | grep -v pgrep | head -6 | cut -c1-95; echo \"--- journaux ---\"; head -3 /tmp/carte-sortie/d12.log 2>/dev/null; ls -la /tmp/carte-sortie/*.log  … [72 caractères tronqués]`
+
+  ```
+--- processus ---
+7658 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/carte-sortie-pr
+7660 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/carte-sortie-pr
+7662 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/carte-sortie-pr
+7664 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/carte-sortie-pr
+7666 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/carte-sortie-pr
+--- journaux ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^T=\" tools/carte-sortie-profondeur.sh; ls -1 /tmp/carte-sortie-profondeur/ 2>/dev/null | head; echo \"--- états capturés ---\"; for d in 12 16 20 22; do echo \"d$d: $(ls -1 /tmp/carte-sortie-profondeur/d$d/etat.* 2>/dev/nu … [156 caractères tronqués]`
+
+  ```
+25:T=${TRAVAIL:-/tmp/carte-sortie-profondeur}
+corpus.ids
+d12
+d12.log
+d16
+d16.log
+d20
+d20.log
+d22
+d22.log
+e24
+--- états capturés ---
+d12: 1995
+d16: 1633
+d20: 1523
+d22: 1303
+e24: 61
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compteur de paires en mode LISTES voit-il, lui, l'élagage ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"D \\\"\\$MODELE\\\"\\|--flux\\|--lot\" tools/porte-flux.sh | head -12", "description": "Find the list-mode invocation"}`
+
+  ```
+55:    "$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 \
+118:tester "mode 0 — f32 dense"          "0"      --flux
+119:tester "mode 1 — listes quantifiées" "0"      --flux-listes
+120:tester "mode 2 — listes par blocs"   "6e-2"   --flux-blocs --lot 1
+121:tester "mode 3 — lot dense f32"      "0"      --lot 4
+122:tester "mode 4 — lot en listes"      "1e-2"   --lot 4 --flux-blocs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; I=/tmp/e6/val.ids\nfor MODE in \"--flux\" \"--flux-listes\" \"--lot 4 --flux-blocs\"; do\n  for N in /tmp/e6b/dense-modele.gguf /tmp/e6d/dense-g0.5.gguf; do\n    printf '%-24s %-26s ' \"$MODE\" \" … [297 caractères tronqués]`
+
+  ```
+--flux                   dense-modele               total 2.3 M 
+--flux                   dense-g0.5                 total 2.3 M 
+--flux-listes            dense-modele               total 2.3 M 
+--flux-listes            dense-g0.5                 total 2.3 M 
+--lot 4 --flux-blocs     dense-modele               total 2.2 M 
+--lot 4 --flux-blocs     dense-g0.5                 total 2.2 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"non_nuls\\|nb_paires\\|paires(\" drave-core/src/list.rs 2>/dev/null | head -8; grep -rn \"fn.*paires\" drave-core/src/*.rs | head -8", "description": "Look for a non-zero-aware pair count"}`
+
+  ```
+drave-core/src/main.rs:1178:                o.ffn_gain = Some(paires);
+drave-core/src/main.rs:3227:fn encoder_paires_blocs(idx: &[u16], val: &[i8]) -> Vec<u8> {
+drave-core/src/main.rs:3245:fn decoder_paires_blocs(corps: &[u8], n: usize) -> Result<(Vec<u16>, Vec<i8>), String> {
+drave-core/src/main.rs:7793:    fn paires_blocs_aller_retour_avec_echappement() {
+drave-core/src/main.rs:7806:    fn paires_blocs_tronquees_sont_refusees() {
+drave-core/src/main.rs:7948:    fn etat_forge(paires: &[(u16, i8)], n_blocs: u32, echelles: &[f32]) -> Vec<u8> {
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : le compteur de paires est structurel sur TOUS les chemins (mesuré)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "- **elle ne dit rien des PAIRES, et c'est un résultat en soi** : sur un GGUF dense, **aucun** chemin\n  d'exécution ne voit l'élagage dans le compte de paires. Mesuré sur le témoin  … [1377 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Le chemin par listes compte les\" -A 3 docs/modele-pour-drave.md | head -6", "description": "Locate the list-path pair claim"}`
+
+  ```
+100:Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit
+101-les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,
+102-`DRAVE_SANS_EMPRUNT=1` pour comparer la même arithmétique) :
+103-
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md", "new_string": "Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit\nles paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,\n`DRAVE_SANS_EMPRUNT=1` pou … [1072 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for d in 12 16 20 22; do printf 'd%s:%-6s ' \"$d\" \"$(ls -1 /tmp/carte-sortie-profondeur/d$d/etat.* 2>/dev/null | wc -l)\"; done; echo; echo \"e24: $(ls -1 /tmp/carte-sortie-profondeur/e24/etat.* 2>/dev/null | wc -l)\"; date", "desc … [33 caractères tronqués]`
+
+  ```
+d12:2506   d16:2125   d20:1879   d22:1644   
+e24: 432
+sam 10 oct 2026 23:53:24 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-instrument.txt <<'MSGEOF'\nInstrument : le compteur de paires du moteur ne voit PAS l'elagage des poids, sur aucun chemin\n\nMESURE. Sur le temoin dense elague a 50 % de TOUS ses tenseurs de projection :\n\n    che … [1088 caractères tronqués]`
