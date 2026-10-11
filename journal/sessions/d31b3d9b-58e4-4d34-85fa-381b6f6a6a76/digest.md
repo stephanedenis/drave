@@ -53604,3 +53604,33 @@ repères régénérés : 34 portes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [2157 caractères tronqués]`
+
+  ```
+push=0
+c5fd1747 Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+ValueError: substring not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"34 portes\" docs/etat-cerveau.md; sed -n '113,125p' docs/etat-cerveau.md | cut -c1-120", "description": "Locate the instruments section"}`
+
+  ```
+113:- **34 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+153:sur les **34 portes**, après trois modifications du moteur (occupation des poids, noyau creux,
+- **34 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
+  le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
+  tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
+  la **29e à 23 h 04**, `porte-sauvegarde-modele.sh`, **verte en ~1 min et vue ROUGE avec le défaut
+  rallumé** (`DRAVE_MAT_SANS_EXCLUSION=1`) — c'est elle qui verrouille la correction de M8. **Passe
+  complète relancée à 22 h 27 : 28 vertes sur 28, 73 min 21 s** (verdict imprimé, repères
+  régénérés dans `docs/references-non-regression.md`) ; la 29e a été vérifiée à part, elle n'était
+  pas dans la passe. La **30e à 00 h 35**, `porte-occupation-elagage.sh` (le fichier porte-t-il
+  l'élagage qu'il annonce ?) — **verte** (26,0 % pour 25 % demandés) et **vue ROUGE** avec
+  `DRAVE_SANS_ELAGAGE_F
+… [277 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\n# remplacer tout le paragraphe des portes (de « - **34 portes** » jusqu'à « 122 tests »)\ni = s.index(\"- **34 portes … [2447 caractères tronqués]`

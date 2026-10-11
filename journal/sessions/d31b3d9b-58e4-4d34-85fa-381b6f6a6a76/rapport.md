@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 69.3 h |
 | Tours | 103 |
-| Messages | 3355 |
-| Appels d'outils | 3120 |
+| Messages | 3357 |
+| Appels d'outils | 3122 |
 | Fichiers touchés | 126 |
-| Commandes | 2653 |
+| Commandes | 2655 |
 | Sous-agents | 3 |
-| Commits | 303 |
+| Commits | 304 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4282,7 +4282,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 
 ### Tour 103 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check the full pass status
 - bash — Check the journal and repo state
@@ -4296,6 +4296,8 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - bash — Read the pass verdict
 - bash — Regenerate the non-regression references
 - bash — Record the pass verdict and push
+- bash — Locate the instruments section
+- bash — Update the state with the pass verdict
 
 **Synthèse produite :**
 
@@ -4482,7 +4484,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2613 autres
+- … et 2615 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4933,4 +4935,5 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere)" 2>&1 | tail -1; git push -q origin master; echo "push=
 - Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'el
 - Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal" 2>&1 | tail -1; git push -q origin master; echo "push=
+- Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact" 2>&1 | tail -1
 

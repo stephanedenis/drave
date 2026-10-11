@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 04:57 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 06:31 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -110,33 +110,16 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **34 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
-  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
-  le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
-  tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
-  la **29e à 23 h 04**, `porte-sauvegarde-modele.sh`, **verte en ~1 min et vue ROUGE avec le défaut
-  rallumé** (`DRAVE_MAT_SANS_EXCLUSION=1`) — c'est elle qui verrouille la correction de M8. **Passe
-  complète relancée à 22 h 27 : 28 vertes sur 28, 73 min 21 s** (verdict imprimé, repères
-  régénérés dans `docs/references-non-regression.md`) ; la 29e a été vérifiée à part, elle n'était
-  pas dans la passe. La **30e à 00 h 35**, `porte-occupation-elagage.sh` (le fichier porte-t-il
-  l'élagage qu'il annonce ?) — **verte** (26,0 % pour 25 % demandés) et **vue ROUGE** avec
-  `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %). La **31e à 03 h 05**, `porte-harnais-invariants.sh` — elle
-  **remplace** `porte-signes-figes.sh`, dont le seuil de qualité mesurait un artefact (il est devenu
-  rouge tout seul une fois le défaut corrigé) : elle verrouille les deux **invariants** dont dépend
-  toute mesure d'élagage (installer une reparamétrisation ne change pas le modèle ; l'élagage atteint
-  les poids reparamétrés), **verte**, et **vue rouge par les deux bouts**
-  (`DRAVE_INSTALL_DOUBLE=1` → écart 1,200e+01 ; `DRAVE_ELAGAGE_SANS_PARAM=1` → attention à 98,6 %).
-  La **32e à 03 h 40**, `porte-audit-drapeaux.sh` (chaque drapeau laisse-t-il dans le FICHIER sa
-  trace ?) — **verte**, et **vue ROUGE** par `DRAVE_MASQUE_SANS_EXPERTS=1` (84,87 % au lieu de 26 %).
-  La **33e à 04 h 05**, `porte-occupation-moteur.sh` (le moteur annonce-t-il l'occupation, et
-  colle-t-elle à l'outil indépendant ?) — **verte** (écart **0,0 point**), et **vue ROUGE** avec
-  `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %). La **34e à 04 h 40**,
-  `porte-poids-creux.sh` (le noyau creux est-il exact, paie-t-il la sparsité, et à quelle densité
-  devient-il rentable ?) — **verte**, et **vue ROUGE** avec `DRAVE_CREUX_SANS_EFFET=1`. Détail :
-  `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
-  était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
-  `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
-  ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
+- **34 portes** `tools/porte-*.sh` — **passe complète le 2026-10-11 à 06 h 30 : 34 vertes sur 34,
+  85 min 8 s** (repères régénérés depuis le journal : `docs/references-non-regression.md`). La nuit
+  en a ajouté **six** — sauvegarde du modèle, occupation × élagage, invariants du harnais, audit des
+  drapeaux, occupation du moteur, poids creux — et **chacune a été vue ROUGE** avec son défaut
+  rallumé par une variable d'environnement : c'est ce qui distingue une porte d'une décoration. La
+  veille au soir, la passe avait montré que `porte-gain.sh` § 9 était **rouge depuis le v7** et
+  démasqué `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton**.
+  Une porte a été **retirée** : `porte-signes-figes.sh`, dont le seuil de qualité mesurait un
+  artefact (elle est devenue rouge toute seule une fois le défaut corrigé) — remplacée par
+  `porte-harnais-invariants.sh`, qui verrouille les **invariants** au lieu d'un résultat.
 - **122 tests** `cargo test`, crate **std seul, zéro dépendance**, profil `release` = binaire de
   mesure.
 - Mesures dédiées : `tools/carte-fenetre-puits.sh` (fenêtre × puits d'attention),
@@ -149,10 +132,9 @@
 
 ## 6. ▶ Prochaine action
 
-**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 11/10 à 05 h 00**
-sur les **34 portes**, après trois modifications du moteur (occupation des poids, noyau creux,
-variables d'environnement) ; le verdict remplace la ligne du § 5 et se consigne dans `journal/`.
-   *La passe du 10/10 à 22 h 27 (28 portes, 28 vertes, 73 min 21 s) est celle du § 5.*
+**1. Passe complète des portes — FAITE le 11/10 à 06 h 30 : 34 vertes sur 34, 85 min 8 s** (§ 5).
+Trois modifications du moteur l'avaient rendue nécessaire (occupation des poids, noyau creux,
+variables d'environnement) ; aucune n'a déplacé un chiffre d'une autre porte.
 
 **2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
 jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
