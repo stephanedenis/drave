@@ -5,15 +5,15 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 60.4 h |
-| Tours | 90 |
-| Messages | 2621 |
-| Appels d'outils | 2415 |
-| Fichiers touchés | 98 |
-| Commandes | 2108 |
+| Durée | 61.3 h |
+| Tours | 91 |
+| Messages | 2766 |
+| Appels d'outils | 2555 |
+| Fichiers touchés | 104 |
+| Commandes | 2196 |
 | Sous-agents | 3 |
-| Commits | 250 |
-| Compactages de contexte | 3 |
+| Commits | 253 |
+| Compactages de contexte | 4 |
 
 ## Objectifs déclarés
 
@@ -215,6 +215,8 @@
 **Tour 89** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 90** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 91** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3696,7 +3698,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*83 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3714,52 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 69 autres
+- … et 70 autres
 
 **Synthèse produite :**
 
-⏵ Le compte dans l'état n'a pas suivi (regex) — je corrige précisément
+**Round 47 — état vérifié (21:36 HAE, heure lue)** : **27 portes vertes sur 27** (passe complète de 60 min 13 s, relancée après chaque changement du moteur) · **122 tests verts** · arbre propre · tout poussé. Objectif laissé **actif** (du travail mesurable reste, et il est nommé).
+
+\## Ce que le round a livré
+
+**C8 clos — la STRUCTURE de mémoire est implémentée.** `--memoire K` retient les K derniers signaux **hors du réseau**, `--sortie-memoire F` les écrit. La tâche fermée est **résolue** : poursuite de `v[t−8]` depuis la mémoire → **R² 1,000, erreur nulle**, contre **−0,681** pour l'état du réseau et **+0,104** pour une récurrence qui fuit — pour **zéro paire de plus**. Porte `porte-memoire.sh` : exactitude **au bit près**, coût nul, deux refus, `--memoire 0` **exprimable**.
+
+**C2 — la récurrence existe maintenant… et elle nuit.** `--recurrence α` (la région consomme sa propre sortie du pas précédent) : exacte à α=0, déterministe, gratuite en paires, bornée — mais elle **détruit la lisibilité** : présent R² **0,906 → 0,112**, passé **−0,35 → −4,87**. Mécanisme : `h(t−1)` n'est pas le signal, c'est **ce que le réseau en a fait** — un écho, pas une mémoire. Le cycle à deux régions est conçu (5 portes écrites, `docs/note-cycle-c2.md`) et reste refusé par le validateur.
+
+**Biologie — deux expériences de la liste, toutes deux réfutées proprement (nouvelles mesures) :**
+- **E4 côté entraînement** : le ratio cortical de signes (80/20) **coûte** — 2,2729 → **2,3838** (+4,9 %) → **2,5188** (+10,8 %), dégradation monotone. Ce n'est pas le **signe** qui porte la qualité, c'est la **magnitude**.
+- **E2 croissance locale** : 2,3431 contre **2,3215** pour un masque aléatoire de **même densité** — « ajouter des câbles aide » est vrai, **« choisir où » ne paie pas**.
+
+**M8 (défaut log-normal)** — instruit, pas corrigé : le défaut tient (**×78**, 436,62 contre 5,60 attendu) et **trois causes sont éliminées** (poids, quantification Q8_0, structure des fichiers identiques) ; l'hypothèse restante est **nommée** — les **bornes d'activation** du moteur, que PyTorch n'a pas — avec trois tests écrits.
+
+**Deux clôtures de plus** : la non-monotonie fenêtre 128/256 à 512 jetons **est du corpus** (l'ordre s'inverse sur un autre corpus), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %** pour ÷1,33 de clés.
+
+**Quatre portes ajoutées** (jumeaux, c4-retard, mémoire, récurrence), l'aide du moteur décrit enfin la périphérie, et `docs/references-non-regression.md` est régénéré depuis le
+… [217 caractères tronqués]
+
+### Tour 91 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*139 appels d'outils.* Actions notables :
+
+- bash — Capture depth-24 states for the oracle analysis
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py`
+- job_list
+- bash — Check depth-24 capture and repo state
+- bash — Check depth-24 capture progress
+- bash — Inspect captured states and references
+- bash — Locate trained depth-16 adapter
+- read
+- bash — Inspect state capture implementation
+- bash — Launch small exact verification capture
+- bash — Resume depth-24 capture from last position
+- bash — Find perplexity computation convention
+- bash — Read perplexity loop convention
+- bash — Locate ppl accumulation
+- … et 109 autres
+
+**Synthèse produite :**
+
+⏵ Correction du message de commit (amendé avec le bon texte)
 
 ## 3. Travail accompli
 
@@ -3753,14 +3796,14 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesure_lot_disque.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte_latence.sh` | 1 | 1 |
 | `/tmp/campagne24/jour1_suite.sh` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/hebbien-differentiel-et-biologie.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/impulsion-pure-apprenant.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modularisation.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md` | 1 | 0 |
@@ -3789,7 +3832,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-fenetre-puits.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/organisation-du-depot.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py` | 1 | 0 |
@@ -3822,6 +3865,12 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c2-recurrence.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/note-cycle-c2.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py` | 2 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_chaine_etat.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh` | 1 | 10 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md` | 4 | 0 |
+| `/tmp/message-commit.txt` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3871,7 +3920,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2068 autres
+- … et 2156 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3999,7 +4048,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ## 5. Erreurs rencontrées
 
-89 sorties en erreur ou divergentes. Les premières :
+91 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4269,4 +4318,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/manques.md"); s = p.read_text() old = """| **M8*
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete7.log").read_tex
 - Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)" && git push -q origin master && echo poussé; timeout 600 cargo test --release 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F .git/COMMIT_EDITMSG 2>&1 | tail -3; echo "code=$?"; git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit.txt 2>&1 | tail -3; echo "code=$?"; git log --oneline -1; git
 

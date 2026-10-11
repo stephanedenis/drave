@@ -73,14 +73,14 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_mesures.md) | `392 fibres` · `79 Kio` · `+1 %` · `+4 %` · `+22 %` · `÷4` · `÷8` · `÷15` · `50 %` · `25 %` · `12,5 %` · `2 %` |
-| [2026-10-10](2026-10-10_mesures.md) | `-20 %` · `-8 %` · `512 jetons` · `4096 jetons` · `56,7642` · `10 %` · `×36` · `128 jetons` · `31 jetons` |
+| [2026-10-10](2026-10-10_mesures.md) | `-20 %` · `-8 %` · `512 jetons` · `4096 jetons` · `56,7642` · `10 %` · `×36` · `128 jetons` · `31 jetons` · `24 couches` |
 
 ### `portes` — Portes et vérifications
 
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_portes.md) | — |
-| [2026-10-10](2026-10-10_portes.md) | `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` · `1 s` · `0 jeton` · `×633` |
+| [2026-10-10](2026-10-10_portes.md) | `13 s` · `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` · `1 s` · `0 jeton` · `×633` |
 
 ### `docs` — Documentation, état, conventions
 

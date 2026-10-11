@@ -201,6 +201,25 @@ pas une reconstruction**.
 - **Pourquoi c'est spécifiquement Drave** : dans une architecture dense classique,
   sauter une couche casse le graphe et impose des masques ; dans une architecture
   événementielle, c'est simplement « ne rien envoyer ».
+- **MESURÉ le 10/10 : la borne est ≈ 9,6 % des paires, et le facteur limitant est le
+  chemin court, pas le routeur.** Deux chemins relus **hors du moteur** (chaîne
+  vérifiée *contre* le moteur : 0,013 % et 0,006 %) sur 3 925 jetons jamais vus :
+  l'état de **24** couches lu par la tête du modèle (perplexité **16,5611**,
+  justesse **44,97 %**) contre l'état de **16** couches lu par un adaptateur entraîné
+  (**1 343,48** · **20,33 %**). **Un oracle parfait ne pourrait sortir tôt que
+  `28,76 %` des jetons sans changer une seule décision** — soit **≈ 9,6 % des paires**
+  (un tiers des couches sur 29 % des jetons), et il faudrait qu'il soit parfait. Un
+  routeur réel ne dispose que de la **confiance** du chemin court : **aucun seuil
+  n'atteint la qualité du chemin long** (le meilleur, à 5,1 % de jetons sortis, rend
+  `44,74 %` contre `44,97 %`). Mais le seuil **sélectionne** (+2,87 points sur le
+  hasard à part égale) et, sur les 5 % de jetons les plus sûrs, l'écart court/long
+  tombe de **24,6 à 4,5 points** — c'est ce chiffre qu'un modèle entraîné pour la
+  sortie anticipée devrait **renverser**. Détail :
+  [`rapport-design-H-profondeur-routee.md`](../reports/rapport-design-H-profondeur-routee.md),
+  porte `tools/porte-profondeur-routee.sh`.
+- **Ce qui manque, précisé par la mesure** : non pas un routeur — la confiance suffit
+  à sélectionner — mais un **chemin court entraîné pour ça** : un adaptateur posé
+  après coup ne remplace pas huit couches.
 
 ### I. Budget d'ÉVÉNEMENTS appris, au lieu d'un k-WTA uniforme — **inédit, et mesurable aujourd'hui**
 

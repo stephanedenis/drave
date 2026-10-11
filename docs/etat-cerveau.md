@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 15:56 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 22:27 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -85,32 +85,62 @@
 
 ## 4. Dessins de modèle (`docs/modele-pour-drave.md` § 3)
 
-- **I — profondeur routée** : mesuré (**−11,5 %** au gain 0,75 de la couche 0), mais **2 couches
-  utiles seulement** et la composition des gains **dégrade** ; à entraîner pour de vrai.
-- **H — budget d'événements appris** et **J — quantification adaptée aux listes** : dessins
+> **Les lettres H et I étaient INVERSÉES ici** jusqu'au 10/10 (cet état appelait « I » la profondeur
+> routée et « H » le budget d'événements). La référence est `docs/modele-pour-drave.md` § 3 :
+> **H = routage par profondeur**, **I = budget d'événements appris**, **J = quantification par
+> listes**. Corrigé, parce que deux documents qui permutent deux lettres rendent toute citation
+> ambiguë.
+
+- **H — profondeur routée** : **borne MESURÉE le 10/10**. L'oracle **parfait** — celui qui sait
+  quand la réponse ne change pas — ne peut sortir tôt que **28,76 %** des jetons, soit **≈ 9,6 %**
+  des paires au mieux (un tiers des couches sur 29 % des jetons, 3 925 jetons jamais vus). Et
+  **aucun seuil de confiance n'atteint la qualité du chemin long** : le meilleur (5,1 % de jetons
+  sortis) rend **44,74 %** contre **44,97 %**. Pourtant le seuil **sélectionne** (+2,87 points sur
+  le hasard à part égale) et rapproche les deux chemins de **24,6 à 4,5 points** sur les 5 % de
+  jetons les plus sûrs ⇒ **le facteur limitant est le CHEMIN COURT, pas le routeur** : 24 couches
+  avec la tête du modèle = **16,5611** · **44,97 %** ; 16 couches avec un adaptateur entraîné =
+  **1 343,48** · **20,33 %**. Chaîne hors-ligne vérifiée *contre* le moteur (**0,013 %** et
+  **0,006 %**). [`rapport`](../reports/rapport-design-H-profondeur-routee.md) ·
+  `tools/porte-profondeur-routee.sh` · `tools/verifier_chaine_etat.py`.
+- **Gain par couche** (`--gain`, mesuré à part) : couche 0 à 0,75 ⇒ **−11,5 %** de perplexité, mais
+  **2 couches utiles seulement** et la composition des gains **dégrade**. Ce n'est pas H : c'est
+  une réduction d'activations dans une couche, pas un saut de couche.
+- **I — budget d'événements appris** et **J — quantification adaptée aux listes** : dessins
   évalués, **jamais entraînés** (manque **N4**).
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **27 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 21 h 33 : 27 vertes sur 27, 60 min 13 s** (dont les quatre ajoutées aujourd'hui : jumeaux, c4-retard, mémoire, récurrence)
-  (`tools/toutes-les-portes.sh`, chaque porte bornée, journaux gardés ; détail dans
-  `reports/rapport-passe-complete-portes.md`). La passe a servi à deux choses : elle a montré que
-  `porte-gain.sh` § 9 était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré), et
-  elle a démasqué `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait
-  `stdin`, que personne ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
+- **28 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et la **28e
+  ajoutée à 22 h 26 : `porte-profondeur-routee.sh`, verte en 9 min 20 s** (corpus tokenisé par la
+  porte elle-même, deux captures de profondeur, la mesure et ses trois verrous). La passe complète
+  des 28 est relancée à **22 h 27** ; son verdict remplace cette ligne. Détail :
+  `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
+  était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
+  `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
+  ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
 - **122 tests** `cargo test`, crate **std seul, zéro dépendance**, profil `release` = binaire de
   mesure.
 - Mesures dédiées : `tools/carte-fenetre-puits.sh` (fenêtre × puits d'attention),
   `tools/decouper-rapport.py` (un rapport par expérience), `tools/aiguille.py`,
-  `tools/proxy_latence.py`.
+  `tools/proxy_latence.py`, et pour le dessin H : `tools/lecture_etat.py` (relecture d'état
+  partagée), `tools/verifier_chaine_etat.py` (la relecture reproduit-elle le moteur ?),
+  `tools/profondeur_routee_oracle.py` (borne, cascade, témoin).
 
 ## 6. ▶ Prochaine action
 
-**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — verdict à consigner dans
-`journal/2026-10-10.md` et dans `docs/manques.md` (la ligne « les 23 portes sont vertes » était
-une affirmation sur une suite qui n'avait **jamais tourné comme une suite**).
+**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**
+après l'ajout de `porte-profondeur-routee.sh` (28 portes) ; le verdict remplace la ligne du § 5 et
+se consigne dans `journal/`.
 
-**2. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
+**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
+jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
+linéaire. Sortir à **20 couches** donnerait un chemin court bien meilleur — donc une borne plus
+haute et un écart court/long plus faible — et c'est **deux captures et une mesure**, rien de plus.
+Le chiffre à battre est nommé : au seuil 0,99 le court rend **80,39 %** contre **88,24 %** au long
+**sur les mêmes jetons** ([`rapport`](../reports/rapport-design-H-profondeur-routee.md)).
+
+**3. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
 À **512 jetons**, **fenêtre 128 + 64 puits** = **13,3968** contre **13,1368** (**+2,0 %**) pour
 **192 clés sur 512** (**÷2,67**). À **2 048 jetons**, la grille étendue tranche : **fenêtre 512 +

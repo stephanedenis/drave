@@ -42060,3 +42060,2533 @@ fcd442d Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jo
 ⏵ Le compte dans l'état n'a pas suivi (regex) — je corrige précisément
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"portes.*passe complète\" docs/etat-cerveau.md | head -2; python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\navant = re.search(r\"- \\*\\*\\d+ portes\\*\\*[^\\n]*\", s)\na … [791 caractères tronqués]`
+
+  ```
+95:- **25 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 20:28 : 26 vertes sur 26, 61 min 22 s**
+état : - **27 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 21 h 33 : 27
+poussé
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+(arbre propre si vide)
+21:36
+  ```
+
+- **todo_write** `{"todos": [{"content": "C8 : structure de mémoire livrée (--memoire) + porte (27ᵉ) + poursuite R² 1,000", "status": "completed"}, {"content": "E4 côté entraînement : ratio de signes cortical REFUTÉ (+4,9 % / +10,8 %)", "status": "completed"}, {"content": "E2 croissance locale : ne bat pas le hasard  … [602 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 0 in progress, 7 completed.
+  ```
+
+### 🤖 Assistant
+
+**Round 47 — état vérifié (21:36 HAE, heure lue)** : **27 portes vertes sur 27** (passe complète de 60 min 13 s, relancée après chaque changement du moteur) · **122 tests verts** · arbre propre · tout poussé. Objectif laissé **actif** (du travail mesurable reste, et il est nommé).
+
+## Ce que le round a livré
+
+**C8 clos — la STRUCTURE de mémoire est implémentée.** `--memoire K` retient les K derniers signaux **hors du réseau**, `--sortie-memoire F` les écrit. La tâche fermée est **résolue** : poursuite de `v[t−8]` depuis la mémoire → **R² 1,000, erreur nulle**, contre **−0,681** pour l'état du réseau et **+0,104** pour une récurrence qui fuit — pour **zéro paire de plus**. Porte `porte-memoire.sh` : exactitude **au bit près**, coût nul, deux refus, `--memoire 0` **exprimable**.
+
+**C2 — la récurrence existe maintenant… et elle nuit.** `--recurrence α` (la région consomme sa propre sortie du pas précédent) : exacte à α=0, déterministe, gratuite en paires, bornée — mais elle **détruit la lisibilité** : présent R² **0,906 → 0,112**, passé **−0,35 → −4,87**. Mécanisme : `h(t−1)` n'est pas le signal, c'est **ce que le réseau en a fait** — un écho, pas une mémoire. Le cycle à deux régions est conçu (5 portes écrites, `docs/note-cycle-c2.md`) et reste refusé par le validateur.
+
+**Biologie — deux expériences de la liste, toutes deux réfutées proprement (nouvelles mesures) :**
+- **E4 côté entraînement** : le ratio cortical de signes (80/20) **coûte** — 2,2729 → **2,3838** (+4,9 %) → **2,5188** (+10,8 %), dégradation monotone. Ce n'est pas le **signe** qui porte la qualité, c'est la **magnitude**.
+- **E2 croissance locale** : 2,3431 contre **2,3215** pour un masque aléatoire de **même densité** — « ajouter des câbles aide » est vrai, **« choisir où » ne paie pas**.
+
+**M8 (défaut log-normal)** — instruit, pas corrigé : le défaut tient (**×78**, 436,62 contre 5,60 attendu) et **trois causes sont éliminées** (poids, quantification Q8_0, structure des fichiers identiques) ; l'hypothèse restante est **nommée** — les **bornes d'activation** du moteur, que PyTorch n'a pas — avec trois tests écrits.
+
+**Deux clôtures de plus** : la non-monotonie fenêtre 128/256 à 512 jetons **est du corpus** (l'ordre s'inverse sur un autre corpus), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %** pour ÷1,33 de clés.
+
+**Quatre portes ajoutées** (jumeaux, c4-retard, mémoire, récurrence), l'aide du moteur décrit enfin la périphérie, et `docs/references-non-regression.md` est régénéré depuis le journal de la passe finale.
+
+**Prochain round** : implémenter le cycle à deux régions (conception et portes prêtes) — ou entraîner la mémoire/la récurrence pour voir si un modèle *appris* en tire, lui, quelque chose.
+
+
+## Tour 91
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 48/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 48 — projet de modèle I (profondeur routée) : je mesure d'abord la borne ORACLE avec les données C8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/c8-8k | wc -l; D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/mod; rm -rf $T; mkdir -p $T\nPOS=$(seq -s, 4 8191)\nnohup bash -c \"$D $M --ppl $I --limit 8192 -- … [260 caractères tronqués]`
+
+  ```
+8188
+capture des états de PROFONDEUR 24 lancée (pid 3350451)
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"profondeur_routee_oracle.py — dessin I : quelle part des couches un ROUTEUR PARFAIT pourrait-il éviter ?\n\nLA QUESTION (docs/modele-pour-drave.md § 3, dessin I « profondeur routée »). Un modèle peut-il\ndécider, **jeton par jeton**, de s'arrêter plus tôt ? … [9734 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+
+  ```
+./tools/decouper-rapport.py
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+./journal/2026-10-09.md
+./docs/modele-pour-drave.md
+./docs/relations-humaines.md
+./README.md
+=== occurrences ===
+./journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md:19192:> **Objectif** (create) : Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte : un graphe linéaire doit rendre des logits identiques au bit près et un découpage à trois régions doit égaler le modèle d'un seul tenant), C12 trace globale horodatée et rejeu exact (porte : rejeu == exécution, 0,00e0), C5 bus de modulation multi-canaux (porte : canal nul ⇒ sortie inchangée). Chaque capacité livrée avec son invariant vérifié, ses tests, sa mesure et sa documentation ; l'état d'avancement est écrit dans docs/sprint-cerveau.md à chaque round pour être resumable. Ne rien casser : les 23 portes du dépôt et le
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+bash-1 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 &
+echo "lance ; pid $!"
+bash-2 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --cache 1024 --pas 4000 > /tmp/essai_d256.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 320 --cache 1280 --pas 4000 > /tmp/essai_d320.log 2>&1) &
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 1.5 --decharge-seul --pas 4000 > /tmp/essai_s15.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 2.0 --decharge-seul --pas 4000 > /tmp/essai_s20.log 2>&1) &
+echo "deux files lancées"
+bash-3 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>&1 | head -5
+P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 8000 > /t
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+LIGNE 3171
+LIGNE 412
+LIGNE 698
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 203
+LIGNE 1662
+LIGNE 1051
+LIGNE 176
+LIGNE 150
+LIGNE 325
+LIGNE 155
+LIGNE 858
+LIGNE 2266
+LIGNE 1210
+LIGNE 354
+LIGNE 1257
+LIGNE 253
+LIGNE 1666
+LIGNE 230
+LIGNE 147
+LIGNE 3200
+LIGNE 1596
+LIGNE 521
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 271
+LIGNE 1527
+LIGNE 688
+LIGNE 150
+LIGNE 370
+LIGNE 155
+LIGNE 660
+LIGNE 930
+LIGNE 1558
+LIGNE 731
+LIGNE 711
+LIGNE 695
+LIGNE 1606
+LIGNE 604
+LIGNE 940
+LIGNE 407
+LIGNE 329
+LIGNE 1703
+LIGNE 944
+LIGNE 920
+LIGNE 1152
+LIGNE 1712
+LIGNE 623
+LIGNE 467
+LIGNE 815
+LIGNE 1692
+LIGNE 1145
+LIGNE 263
+LIGNE 6353
+LIGNE 231
+LIGNE 147
+LIGNE 7786
+LIGNE 6283
+LIGNE 550
+LIGNE 83
+LIGNE 85
+LIGNE 150
+LIGNE 656
+LIGNE 709
+LIGNE 1884
+LIGNE 451
+LIGNE 978
+LIGNE 983
+LIGNE 214
+LIGNE 2127
+LIGNE 228
+LIGNE 141
+LIGNE 2423
+LIGNE 83
+LIGNE 104
+LIGNE 2196
+LIGNE 76
+LIGNE 137
+LIGNE 85
+LIGNE 2164
+LIGNE 37090
+LIGNE 155
+LIGNE 323
+LIGNE 1105
+LIGNE 970
+LIGNE 220
+LIGNE 150
+LIGNE 389
+LIGNE 155
+LIGNE 398
+LIGNE 804
+LIGNE 1957
+LIGNE 1020
+LIGNE 246
+LIGNE 1099
+LIGNE 261
+LIGNE 1485
+LIGNE 230
+LIGNE 147
+LIGNE 2869
+LIGNE 1415
+LIGNE 1574
+LIGNE 83
+LIGNE 85
+LIGNE 155
+LIGNE 253
+LIGNE 1407
+LIGNE 703
+LIGNE 928
+LIGNE 1204
+LIGNE 476
+LIGNE 150
+LIGNE 390
+LIGNE 155
+LIGN
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+6860
+      06:11 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt; T=/tmp/c8-8k; rm -rf $T; mkdir -p $T POS=$(seq -s, 4 8191) echo "capture de 8188 états (16 couches)…"; time $D "$M" --ppl "$I" --limit 8192 --ctx 8192 --threads 8 --couches 0:16 --tete-partielle --etat-sortie "$T/etat" --etat-pos "$POS" 2>&1 | grep -E "perplexité|etat\] 896" | tail -2; ls $T | wc -l; du -sh $T
+      06:11 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 8192 --ctx 8192 --threads 8 --couches 0:16 --tete-partielle --etat-sortie /tmp/c8-8k/etat --etat-pos 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149
+… [3959 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Active auto-goal (round 48/60, phase "active", timebox expired but work continues): each round pick the highest-value item among (a) remaining plan capacities `docs/plan-cerveau-complet.md` (C3, C4, C2, C6, C7, C8, C9, C10, C5 network bus), (b) biology experiments E2–E9 (`docs/biologie-pour-drave.md`), (c) model designs H/I/J (`docs/modele-pour-drave.md`), (d) gaps in `docs/manques.md` (M1…M8) — implement or measure it, give it a verifiable gate, document, commit, push, chain immediately. Constraints: gates + tests stay green, `porte-flux.sh` after any execution-path change, release profile = measurement binary, crate std-only, resumable state updated each round (now `docs/etat-cerveau.md` + `journal/`).
+- User's standing instruction: "Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+- User mid-session feedback (both implemented): (1) `docs/`=fond, `reports/`=une expérience par fichier, `journal/`=événements datés avec liens; timestamps were in the FUTURE → must be read from `date`/git; (2) `README.md` and `REPRISE.md` must be lightened and point to the right documents; (3) automate `journal/` from git + `journal/sessions`, split per day×theme with names `AAAA-MM-JJ_<thème>.md`.
+- Reporting style: ≤10 lines per round, alerts first, no narrative, questions only when blocking; French; status line "⏵ …" (≤20 words) at the start of each response.
+
+## Key Technical Concepts
+- Drave: Rust inference engine `drave-core/`, **std-only, zero dependencies**, `lto=true, codegen-units=1`, GGUF mmap in place.
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; exit codes: 5 = step bound (C4), 6 = octets budget, 7 = link failure, 8 = latency budget, 9 = paires budget, 2 = explicit refusal.
+- Protocol v8 (99-byte header) transports settings (attn_window, swa_pattern, attn_sinks, top-k, thresholds, levels) + node pair count u64.
+- `--couches a:b` **excludes b** (0:24 = all 24 layers); `--tete-partielle` applies final norm + head at range end; state capture `--etat-sortie F --etat-pos p1,p2` writes `F.<pos>` (896 f32) and **requires `--tete-partielle`** to write anything.
+- REFD imposed-state format: header `b"REFD" + i32 ndim + 4×i32 ne`, block per position = `ne[0]*ne[1]`, rows start at `24 + pos*bloc*4`; correct header for per-position hidden states is `ndim=4, ne=[hidden,1,1,1]`; env var **`DRAVE_ETAT_ENTREE`** (no CLI flag) replaces the input embedding.
+- Periphery (C8) flags added today: `--entree signal:F`, `--entree-canal K`, `--entree-gain X`, `--entree-jeton N`, `--entree-memoire K`, `--delai N`, `--recurent`, `--sortie F`, `--memoire K`, `--sortie-memoire F`, `--recurrence α`.
+- Trainer `tools/entrainer_moteur.py`: byte-vocabulary corpus (256 symbols) ⇒ **ppl = 2^(bits/octet)**; new flags `--ratio-signes R`, `--croissance F --croissance-tous K --densite-cible D`; `--masque`, `--poids-lognormaux`, `--elance`, `--enseignant/--alpha-distill`; materialises θ=log|w| before `save_pretrained`.
+- Gate conventions: `set -u`, `cd "$(dirname "$0")/.."`, exit 2 on missing prerequisites, last ✅ line states what is locked, refusals must print "REFUS" and exit 2.
+
+## Files and Code
+- `tools/porte-*.sh` — now **27 gates**, all green (pass of 2026-10-10 21:33, 60 min 13 s): new ones `porte-jumeaux.sh`, `porte-c4-retard.sh`, `porte-memoire.sh`, `porte-recurrence.sh`; fixed earlier `porte-gain.sh` §9/§10, `porte-tokenizer-kimi.sh` (compared 0 tokens), `porte-reflexe.sh` (added linear-probe section 25.4 % vs 4.8 %).
+- `tools/toutes-les-portes.sh` — full pass instrument (all gates, time-bounded, logs kept, exit 1 with red tails).
+- `tools/journal_auto.py` — generates `journal/AAAA-MM-JJ_<thème>
+… [6508 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original: "revenir à l'essence de Drave et produire un modèle qui est à son meilleur dans une architecture événementielle facilement distribuable sur les divers types d'unité de traitement et ressources d'une machine et de plusieurs machines en réseau."
+- Active auto-goal (round 48/60, phase "active", timebox expired but work continues): each round pick the highest-value item among (a) remaining plan capacities `docs/plan-cerveau-complet.md` (C3, C4, C2, C6, C7, C8, C9, C10, C5 network bus), (b) biology experiments E2–E9 (`docs/biologie-pour-drave.md`), (c) model designs H/I/J (`docs/modele-pour-drave.md`), (d) gaps in `docs/manques.md` (M1…M8) — implement or measure it, give it a verifiable gate, document, commit, push, chain immediately. Constraints: gates + tests stay green, `porte-flux.sh` after any execution-path change, release profile = measurement binary, crate std-only, resumable state updated each round (now `docs/etat-cerveau.md` + `journal/`).
+- User's standing instruction: "Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+- User mid-session feedback (both implemented): (1) `docs/`=fond, `reports/`=une expérience par fichier, `journal/`=événements datés avec liens; timestamps were in the FUTURE → must be read from `date`/git; (2) `README.md` and `REPRISE.md` must be lightened and point to the right documents; (3) automate `journal/` from git + `journal/sessions`, split per day×theme with names `AAAA-MM-JJ_<thème>.md`.
+- Reporting style: ≤10 lines per round, alerts first, no narrative, questions only when blocking; French; status line "⏵ …" (≤20 words) at the start of each response.
+
+## Key Technical Concepts
+- Drave: Rust inference engine `drave-core/`, **std-only, zero dependencies**, `lto=true, codegen-units=1`, GGUF mmap in place.
+- Cost model: **paires = (poids non nuls) × (activations vivantes)**; exit codes: 5 = step bound (C4), 6 = octets budget, 7 = link failure, 8 = latency budget, 9 = paires budget, 2 = explicit refusal.
+- Protocol v8 (99-byte header) transports settings (attn_window, swa_pattern, attn_sinks, top-k, thresholds, levels) + node pair count u64.
+- `--couches a:b` **excludes b** (0:24 = all 24 layers); `--tete-partielle` applies final norm + head at range end; state capture `--etat-sortie F --etat-pos p1,p2` writes `F.<pos>` (896 f32) and **requires `--tete-partielle`** to write anything.
+- REFD imposed-state format: header `b"REFD" + i32 ndim + 4×i32 ne`, block per position = `ne[0]*ne[1]`, rows start at `24 + pos*bloc*4`; correct header for per-position hidden states is `ndim=4, ne=[hidden,1,1,1]`; env var **`DRAVE_ETAT_ENTREE`** (no CLI flag) replaces the input embedding.
+- Periphery (C8) flags added today: `--entree signal:F`, `--entree-canal K`, `--entree-gain X`, `--entree-jeton N`, `--entree-memoire K`, `--delai N`, `--recurent`, `--sortie F`, `--memoire K`, `--sortie-memoire F`, `--recurrence α`.
+- Trainer `tools/entrainer_moteur.py`: byte-vocabulary corpus (256 symbols) ⇒ **ppl = 2^(bits/octet)**; new flags `--ratio-signes R`, `--croissance F --croissance-tous K --densite-cible D`; `--masque`, `--poids-lognormaux`, `--elance`, `--enseignant/--alpha-distill`; materialises θ=log|w| before `save_pretrained`.
+- Gate conventions: `set -u`, `cd "$(dirname "$0")/.."`, exit 2 on missing prerequisites, last ✅ line states what is locked, refusals must print "REFUS" and exit 2.
+
+## Files and Code
+- `tools/porte-*.sh` — now **27 gates**, all green (pass of 2026-10-10 21:33, 60 min 13 s): new ones `porte-jumeaux.sh`, `porte-c4-retard.sh`, `porte-memoire.sh`, `porte-recurrence.sh`; fixed earlier `porte-gain.sh` §9/§10, `porte-tokenizer-kimi.sh` (compared 0 tokens), `porte-reflexe.sh` (added linear-probe section 25.4 % vs 4.8 %).
+- `tools/toutes-les-portes.sh` — full pass instrument (all gates, time-bounded, logs kept, exit 1 with red tails).
+- `tools/journal_auto.py` — generates `journal/AAAA-MM-JJ_<thème>.md` + day index + `journal/THEMES.md`; sources: git commits + `journal/sessions/<id>/session.jsonl.zstd` (timestamped ⏵ steps); preserves hand-written `<!-- notes -->` blocks; hooked in `.git/hooks/pre-commit`.
+- `tools/decouper-rapport.py` — split monoliths into `reports/<campagne>/NNN-…md` with git-derived dates (used for `campagne-benefices/` 51 fiches and `toutes-langues/` 107 fiches).
+- `tools/jumeaux.sh`, `tools/porte-jumeaux.sh` — C9 twins via imposed REFD states (exactness 27,4964 = 27,4964; identical twins no gain; noisy twin rescue = average, control écart 0,000 %; 8-bit exchange ÷4 bytes for +3,0 %, quantize beats prune).
+- `tools/c4_retard.sh`, `tools/porte-c4-retard.sh` — staleness: retard 1 → ×633 (9 277,98 vs 14,6496), retard 8 → ×10 343, missing state ×1,06 ⇒ never reuse.
+- `tools/peripherie_poursuite.py`, `tools/peripherie_memoire.py`, `tools/c8_*.py|sh` — C8 probes, depth curve, trained adapter, generalization.
+- `docs/etat.md`, `docs/etat-cerveau.md`, `docs/references-non-regression.md` (regenerated from pass logs), `docs/organisation-du-depot.md`, `docs/note-peripherie-c8.md`, `docs/note-lateralite-c9.md`, `docs/note-cycle-c2.md`, `docs/manques.md` (M8 updated; new **N5**).
+- `README.md` (65 lines) and `REPRISE.md` (85 lines) rewritten; old versions kept as `journal/2026-10-10-readme-historique.md` and `journal/2026-10-10-sprint-cerveau-recit.md`… (readme-historique + reprise-historique).
+- `drave-core/src/main.rs` — `run_peripherie` (entrée/sortie/délai/recurent/memoire/recurrence + pairs-per-decision metric), `appliquer_quantification`, usage text now documents periphery flags.
+- `drave-core/src/model.rs` — `pub fn entree_du_jeton(&self, tok: u32) -> Vec<f32>`.
+
+## Errors and Fixes
+- `--attn-sinks` refusal was based on a FALSE premise ("lu nulle part"): field IS read at `model.rs:7472/:7490` in the window branch; real defect was `if attn_sinks > 0` swallowing 0. Refusal removed before commit; fix = `attn_sinks_impose` + dashboard line + warning; gate §10 locks the true curve (0 → 1297,5437 catastrophic; 24 → 27,4439).
+- `porte-gain.sh` §9 was RED since v7 (demanded a refusal the v7 deliberately removed). Rewritten on the two-split test (65,6625 = 65,6625).
+- `porte-tokenizer-kimi.sh` was green comparing **0 tokens** (read stdin, nobody provided it) — fixed with embedded texts + refusal on zero comparisons.
+- Missing `import json` in `journal_auto.py` was swallowed by `except Exception: continue` (296 steps lost) — now `except json.JSONDecodeError` + counted warnings.
+- Script edited **while running** (bash reads incrementally) corrupted one output line; `git add/commit` inside a background job caused a HEAD-lock race → amended message; documented "never edit a running script / never git in background jobs".
+- Training/verification traps: `--couches a:b` exclusivity (labels off by one); test chunk left inside the training list (1,5978 = memorization); no seed fixed (2 632 vs 9 056); parallel corpus (UDHR) chunks not independent; state capture empty without `--tete-partielle`; REFD header block convention; sign tensor on CPU vs weights on GPU; `randperm(device=cuda)` with CPU generator; gradient accumulated **after** mask application would be zero.
+- User feedback: timestamps in the future (up to 12 October) → corrected everywhere using git commit times; **relapse the same day** (wrote 16:50–19:00 while the clock said 15:54) → corrected from commit times, rule strengthened in `docs/organisation-du-depot.md` § 4.
+
+## Pending Jobs
+- Depth-24 state capture running in background (`/tmp/mod/final.*`, `--couches 0:24`, positions 4…8191) for the design-I oracle analysis.
+- Measurements committed but not yet turned into gates where applicable (E2/E4/M8 fiches are report-only by design).
+- No gate yet for the C2 two-region cycle (design only, `docs/note-cycle-c2.md`).
+
+## Current Work
+- Round 48 started: chosen item = **design I (routed depth / mixture-of-depths)** via an **oracle bound** measurement: how many layers could a perfect per-token router skip at equal quality?
+- Just launched the depth-24 (full model) state capture to pair with the existing depth-16 states in `/tmp/c8-8k` (8188 states, 1024-token and 8192-token experiments) so that per-token predictions at depth 16 (trained adapter, from `tools/c8_entrainer_tete.py` machinery) and at depth 24 (model's own head) can be compared.
+- Working tree clean, all committed and pushed; last commit `fcd442d` (pass 27/27 + régénération des repères) plus the état count fix.
+
+## Next Step
+- When `/tmp/mod/final.*` is complete: build the per-token comparison (depth-16 trained adapter vs depth-24 full-model top-1), compute agreement/oracle savings and whether a confidence signal at depth 16 predicts disagreement, then write `reports/rapport-design-I-oracle.md`, update `docs/modele-pour-drave.md`/`docs/etat-cerveau.md` + journal, commit and push.
+
+## Critical Context
+- Verified state: **27/27 gates green** (2026-10-10 21:33, 60 min 13 s), **122 tests green**, tree clean, everything pushed to `origin/master` (private repo `git@github.com:stephanedenis/drave.git`).
+- Current time reference: machine clock ~21:40 EDT 2026-10-10; always read `date` before writing any stamp (rule learned the hard way twice).
+- Today's headline results: C8 memory structure delivered (`--memoire`, pursuit R² 1,000 for zero extra pairs; model itself retains nothing, R² −0,681); C9 laterality exact but gain NUL (rescue = average, control 0,000 %); C4 staleness ×633 per step ⇒ never reuse, missing costs ×1,06; C2 recurrence implemented but harmful (present 0,906 → 0,112); E4 sign-ratio refuted (2,2729 → 2,3838 → 2,5188); E2 growth loses to random at equal density (2,3431 vs 2,3215); M8 still open with three causes eliminated (weights/quantization/structure identical) and the remaining hypothesis = engine activation clamps + 16-bit activation quantization.
+- Fenêtre×puits: non-monotonicity at 512 tokens is corpus-dependent (reverses on a second corpus); window 384 + 64 sinks = +0,3 % for ÷1,33 keys; ÷4 keys in time = only +12 % throughput.
+- Methodology rules enforced: a number is verified by comparison, not coherence; equal numbers don't prove equal measurements; a claim must be tested where it can fail; refusals must be explicit (code 2) and zero must remain expressible; corrected conclusions stay next to the original ones.
+- Open design notes ready to implement next: C2 cycle (5 gates), C9 `--echange experts`, C8 memory useful to the model (training, C7).
+</compacted-summary>
+
+### 🤖 Assistant
+
+⏵ Vérification de la capture d'états profondeur 24 en arrière-plan
+
+- **job_list** `{}`
+
+  ```
+bash-1 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python tools/essai_decharge.py --pas 4000 --dim 192 --couches 4 --tetes 4 --cache 768 --lr 3e-3 --graine 1 > /tmp/essai_decharge_1.log 2>&1 &
+echo "lance ; pid $!"
+bash-2 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 256 --cache 1024 --pas 4000 > /tmp/essai_d256.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=0 $P -u tools/essai_decharge.py --dim 320 --cache 1280 --pas 4000 > /tmp/essai_d320.log 2>&1) &
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 1.5 --decharge-seul --pas 4000 > /tmp/essai_s15.log 2>&1; \
+ CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --seuil 2.0 --decharge-seul --pas 4000 > /tmp/essai_s20.log 2>&1) &
+echo "deux files lancées"
+bash-3 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-compute-apps=pid,used_memory --format=csv 2>&1 | head -5
+P=/home/stephane/gpu-env/bin/python
+(CUDA_VISIBLE_DEVICES=1 $P -u tools/essai_decharge.py --dim 192 --lr 1e-3 --pas 8000 > /t
+… [23793 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Vérification de la capture profondeur 24 et de l'état du dépôt
+
+- **bash** `{"command": "ls -la /tmp/mod/ 2>/dev/null | head -20; echo \"--- compte\"; ls /tmp/mod/final.* 2>/dev/null | wc -l; echo \"--- processus\"; pgrep -af \"drave\" | head -5; echo \"--- heure\"; date; echo \"--- dépôt\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head … [80 caractères tronqués]`
+
+  ```
+0,3551,3552,3553,3554,3555,3556,3557,3558,3559,3560,3561,3562,3563,3564,3565,3566,3567,3568,3569,3570,3571,3572,3573,3574,3575,3576,3577,3578,3579,3580,3581,3582,3583,3584,3585,3586,3587,3588,3589,3590,3591,3592,3593,3594,3595,3596,3597,3598,3599,3600,3601,3602,3603,3604,3605,3606,3607,3608,3609,3610,3611,3612,3613,3614,3615,3616,3617,3618,3619,3620,3621,3622,3623,3624,3625,3626,3627,3628,3629,3630,3631,3632,3633,3634,3635,3636,3637,3638,3639,3640,3641,3642,3643,3644,3645,3646,3647,3648,3649,3650,3651,3652,3653,3654,3655,3656,3657,3658,3659,3660,3661,3662,3663,3664,3665,3666,3667,3668,3669,3670,3671,3672,3673,3674,3675,3676,3677,3678,3679,3680,3681,3682,3683,3684,3685,3686,3687,3688,3689,3690,3691,3692,3693,3694,3695,3696,3697,3698,3699,3700,3701,3702,3703,3704,3705,3706,3707,3708,3709,3710,3711,3712,3713,3714,3715,3716,3717,3718,3719,3720,3721,3722,3723,3724,3725,3726,3727,3728,3729,3730,3731,3732,3733,3734,3735,3736,3737,3738,3739,3740,3741,3742,3743,3744,3745,3746,3747,3748,3749,3750,3751,3752,3753,3754,3755,3756,3757,3758,3759,3760,3761,3762,3763,3764,3765,3766,3767,3768,3769,3770,3771,3772,3773,3774,3775,3776,3777,3778,3779,3780,3781,3782,3783,3784,3785,3786,3787,3788,3789,379
+… [48792 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure propre : où en est la capture 24 couches ?
+
+- **bash** `{"command": "cd /tmp/mod && echo \"fichiers: $(ls -1 final.* 2>/dev/null | wc -l)\"; echo \"taille: $(du -sh /tmp/mod 2>/dev/null | cut -f1)\"; echo \"dernier: $(ls -1 final.* 2>/dev/null | sed 's/.*\\.//' | sort -n | tail -1)\"; echo \"--- pid 3350453 ---\"; ps -o pid,etime,stat,args -p 3350453 2>/ … [150 caractères tronqués]`
+
+  ```
+fichiers: 1439
+taille: 5,8M
+dernier: 1442
+--- pid 3350453 ---
+    PID     ELAPSED STAT COMMAND
+3350453       01:12 Rl   ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/campagne24/ids_0.5B-Q8.txt --limit 8192 
+--- capture.log ---
+eurs écrites dans /tmp/mod/final.1438 (position 1438)
+[etat] 896 valeurs écrites dans /tmp/mod/final.1439 (position 1439)
+[etat] 896 valeurs écrites dans /tmp/mod/final.1440 (position 1440)
+[etat] 896 valeurs écrites dans /tmp/mod/final.1441 (position 1441)
+[etat] 896 valeurs écrites dans /tmp/mod/final.1442 (position 1442)
+[etat] 896 valeurs écrites dans /tmp/mod/final.1443 (position 1443)
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection des états déjà capturés et des références
+
+- **bash** `{"command": "echo \"=== ref 8k ===\"; cat /tmp/c8-ref-8k.txt 2>/dev/null; echo; echo \"=== c8-8k ===\"; ls /tmp/c8-8k 2>/dev/null | wc -l; du -sh /tmp/c8-8k 2>/dev/null; echo \"=== mod (positions) ===\"; ls -1 /tmp/mod/final.* | sed 's/.*\\.//' | sort -n | head -3 | tr '\\n' ' '; echo \"... $(ls -1  … [235 caractères tronqués]`
+
+  ```
+=== ref 8k ===
+=== référence moteur, MÊME texte (8192 jetons) ===
+perplexité 456586.5954 sur
+=== modèle complet, MÊME texte ===
+perplexité 14.2342 sur
+
+=== c8-8k ===
+8188
+32M	/tmp/c8-8k
+=== mod (positions) ===
+4 5 6 ... 1707
+=== corpus ===
+394684 /tmp/campagne24/ids_0.5B-Q8.txt
+=== disque de /tmp ===
+tmpfs            63G   31G   33G  49% /tmp
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de l'adaptateur profondeur 16 déjà entraîné
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nproc; echo \"--- adaptateurs / têtes entraînées ---\"; ls -la /tmp/c8*/*.pt /tmp/c8*/*.npy /tmp/c8*/*.npz /tmp/c8*/*.gguf 2>/dev/null; ls -la /tmp/*/tete*.pt /tmp/*/adapt*.pt 2>/dev/null | head; echo \"--- outils c8 ---\"; ls tools/ … [239 caractères tronqués]`
+
+  ```
+40
+--- adaptateurs / têtes entraînées ---
+--- outils c8 ---
+c8_carte_profondeur.sh
+c8_corpus.sh
+c8_entrainer_tete.py
+c8_sonde_lineaire.py
+--- arguments de c8_entrainer_tete ---
+139:def main() -> int:
+141:    ap.add_argument("--etats", default=None,
+143:    ap.add_argument("--train", default=None, help="préfixes séparés par des virgules")
+144:    ap.add_argument("--test", default=None, help="préfixes séparés par des virgules (textes JAMAIS vus)")
+145:    ap.add_argument("--val", default=None,
+149:    ap.add_argument("--ids", default=None,
+152:    ap.add_argument("--modele", required=True)
+153:    ap.add_argument("--limite", type=int, default=8192)
+154:    ap.add_argument("--epoques", type=int, default=40)
+155:    ap.add_argument("--pas", type=float, default=1e-2)
+156:    ap.add_argument("--batch", type=int, default=256)
+157:    ap.add_argument("--repertoire", type=float, default=1e-5)
+158:    ap.add_argument("--graine", type=int, default=0,
+162:    ap.add_argument("--cachee", type=int, default=0,
+164:    ap.add_argument("--ppl_tronque", type=float, default=None,
+166:    ap.add_argument("--ppl_complet", type=float, default=None)
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du harnais C8 existant pour le réutiliser
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_entrainer_tete.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/c8_entrainer_tete.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """c8_entrainer_tete.py — C8 : une TÊTE ENTRAÎNÉE pour une profondeur donnée.
+3: 
+4: LA QUESTION, ET ELLE EST MAINTENANT PRÉCISE. La sonde linéaire a montré que l'état de la couche
+5: 16 **contient** le prochain jeton (40,8 % parmi les 256 plus fréquents, contre 4,0 % pour la
+6: classe majoritaire — `reports/rapport-c8-sonde-profondeur.md`). Mais le chemin tronqué, lui,
+7: avec la **tête du modèle**, rend **1 127 368** de perplexité contre **9,43** au modèle complet.
+8: Alors : une tête **entraînée** pour cette profondeur peut-elle combler l'écart ?
+9: 
+10: CE QUI EST ENTRAÎNÉ, ET CE QUI NE L'EST PAS. On n'entraîne **pas** de tête de sortie complète
+11: (151 936 × 896 = 136 M poids, pour 8 000 exemples : ce serait de l'apprentissage par cœur). On
+12: entraîne un **adaptateur** `A` (896 × 896) qui place l'état intermédiaire dans l'espace que la
+13: **tête liée du modèle** (`token_embd.weight`, gelée) sait déjà lire, la norme finale du modèle
+14: étant appliquée entre les deux — exactement la chaîne du moteur :
+15: 
+16:     logits = W_tête ·
+… [18437 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comprendre pourquoi la capture est si lente
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"etat_pos\\|etat-pos\\|capture\" drave-core/src/main.rs | head -40", "description": "Inspect state capture implementation"}`
+
+  ```
+530:/// C2/C6 : applique la capture et l'injection d'état sur un modèle chargé.
+536:                    fusion_pos: usize, etat_sortie: Option<String>, etat_pos: Vec<usize>) {
+559:        println!("  capture d'état    : position(s) {:?} écrite(s) dans {f}.*", etat_pos);
+560:        mdl.etat_sortie = Some((f.clone(), etat_pos));
+762:    etat_pos: Vec<usize>,
+763:    /// C2/C6 : capturer l'état à la K-ième position depuis la FIN de l'invite
+1032:            "--etat-pos" => {
+1033:                o.etat_pos = suivant(i).split(',')
+1299:                     opt.etat_sortie.clone(), opt.etat_pos);
+1546:    // La capture se résout ICI AUSSI, dans la numérotation de l'inférence : c'est la
+1547:    // même longueur d'invite qui sert au calcul et à la capture, donc plus de décalage.
+1552:            println!("  capture d'état    : position(s) {positions:?} (depuis la fin d'une invite \
+7309:         opt.etat_sortie.clone(), opt.etat_pos);
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la chaîne de lecture sur une petite capture exacte
+
+- **bash** `{"command": "kill 3350453 2>/dev/null; sleep 1; echo \"capture longue arrêtée ; positions sur disque : $(ls -1 /tmp/mod/final.* | wc -l)\"\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nD=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt\nrm  … [567 caractères tronqués]`
+
+  ```
+capture longue arrêtée ; positions sur disque : 2629
+vérification lancée (128 jetons, deux profondeurs)
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise de la capture 24 couches là où elle s'est arrêtée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nMAX=$(ls -1 /tmp/mod/final.* | sed 's/.*\\.//' | sort -n | tail -1); echo \"dernier écrit : $MAX\"\nD=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt\nPOS=$(seq -s, $((MAX+1)) 8191) … [282 caractères tronqués]`
+
+  ```
+dernier écrit : 2632
+reprise lancée depuis 2633 (pid 3373081)
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du module de lecture partagé et du vérificateur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl\" drave-core/src/main.rs | head -30; echo \"=== calcul ===\"; grep -n \"fn.*ppl\\|perplexite\\|perplexité\" drave-core/src/model.rs | head -20", "description": "Find perplexity computation convention"}`
+
+  ```
+71:/// Il était posé dans `run_infer` seulement : en `--ppl` il ne s'imprimait pas,
+93:        eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
+102:        eprintln!("                                     couches, tête appliquée à la fin de la");
+144:    // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+161:il faut écrire DRAVE_{} (voir docs/histoire.md). Rien n'a été appliqué.", &vieux[3..]);
+175:    // réparti (`--ppl-reparti`) et le nœud relais (`--flux-serveur`, `--region`)
+179:    let topologie_executee = args.iter().any(|a| a == "--ppl-reparti")
+210:        (opt.ppl_reparti.is_some(), "--ppl-reparti"),
+218:        (opt.ppl, "--ppl"), (opt.infer, "--infer"),
+238:    if let Some(pair) = opt.ppl_reparti.clone() { run_ppl_reparti(opt, &pair); return; }
+247:    if opt.ppl { run_ppl(opt); return; }
+524:/// **Sonde de plage** (`--tete-partielle`) : appliquer la tête de sortie à la
+530:/// C2/C6 : applique la capture et l'injection d'état sur un modèle chargé.
+535:fn appliquer_fusion(mdl: &mut model::Model, fusion_etat: Option<String>, fusion_alpha: f32,
+566:    eprintln!("[plage] `--tete-partielle` : la tête de sortie est
+… [2800 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn run_ppl\" drave-core/src/ ; echo \"---\"; sed -n \"$(grep -n 'fn run_ppl\\b' drave-core/src/*.rs | head -1 | cut -d: -f2),+70p\" $(grep -rln 'fn run_ppl\\b' drave-core/src/ | head -1) | grep -n \"nll\\|ln(\\|exp(\\|for  … [83 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:4334:fn run_ppl_reparti(opt: Options, pair: &str) {
+drave-core/src/main.rs:7295:fn run_ppl(opt: Options) {
+---
+29:    // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
+43:            // `--depuis N` : on charge N jetons de plus que la limite, pour que
+55:                    ce fichier de jetons vient d'un autre tokenizer");
+59:        println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7295,7420p' drave-core/src/main.rs | grep -n \"perplex\\|nll\\|exp\\|ln_\\|somme\\|for pos\\|fenetre\\|logits\" | head -30", "description": "Locate ppl accumulation"}`
+
+  ```
+4:    // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
+7:        eprintln!("[tete] --tete-restreinte ignore en perplexite ({f}) : une perplexite \
+21:        sans_fenetre, attn_sinks, attn_sinks_impose, attn_topk, qk_topk, act_thresh, act_topk, act_renorm,
+23:        ffn_gain, logits_bin, keep,
+39:        let raw = std::fs::read_to_string(&idfile).expect("fichier d'identifiants illisible");
+49:    // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
+87:        let brut = std::fs::read_to_string(f).expect("texte illisible");
+99:    poser_niveaux(&mut mdl, abits, "perplexité");
+101:        let pt = model::Patch::load(f).expect("chargement du greffon");
+119:    // MÊME précédence qu'en inférence (sans-fenetre d'abord, puis la fenêtre
+120:    // explicite) : l'ordre était inversé entre les deux modes.
+121:    if sans_fenetre { mdl.attn_window = 0; }
+124:    if sans_fenetre || swa_pattern.is_some() {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"perplexité {\" drave-core/src/main.rs | head; echo \"---\"; grep -n \"nll\\|neg_log\\|ln()\" drave-core/src/main.rs | sed -n '1,20p'", "description": "Find ppl print and NLL accumulation"}`
+
+  ```
+4632:    println!("  référence locale  : perplexité {ppl_ref:.4}  ({:.1} s)", t0.elapsed().as_secs_f64());
+4908:    println!("  deux nœuds        : perplexité {ppl:.4}  ({:.1} s)", t1.elapsed().as_secs_f64());
+7689:    println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
+---
+4319:fn nll_logits(lg: &[f32], cible: u32) -> f64 {
+4324:    (mx as f64 + somme.ln()) - lg[cible as usize] as f64
+4609:    let mut nll_ref = 0f64;
+4618:                    nll_ref += nll_logits(&lgs[i], ids[pos + i + 1]);
+4627:                nll_ref += nll_logits(&mdl.logits(&last), ids[pos + 1]);
+4631:    let ppl_ref = (nll_ref / (ids.len() - 1) as f64).exp();
+4658:    let mut nll = 0f64;
+4758:                    nll += nll_logits(&lgs[i], ids[pos + i + 1]);
+4900:            nll += nll_logits(&mdl.logits(&reduit), ids[pos + 1]);
+4904:    let ppl = (nll / (ids.len() - 1) as f64).exp();
+7509:    let mut nll = 0f64;
+7539:        let (mut nll_f, mut n_f) = (0f64, 0usize);
+7571:                let lse = mx as f64 + sum.ln();
+7572:                let nll_tok = lse - lg[chunk[pos + 1] as usize] as f64;
+7573:                nll += nll_tok;
+7574:                nll_f += nll_tok;
+7584:         
+… [266 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du module de lecture d'états partagé
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"lecture_etat.py — lire un GGUF et des états capturés, SANS le moteur.\n\nCes fonctions sont partagées par `verifier_chaine_etat.py` (qui vérifie que la chaîne hors-ligne\nreproduit la perplexité du MOTEUR) et `profondeur_routee_oracle.py` (qui mesure la bor … [7599 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du vérificateur de chaîne
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"verifier_chaine_etat.py — la chaîne hors-ligne reproduit-elle la perplexité DU MOTEUR ?\n\nPOURQUOI CE SCRIPT EXISTE. Les mesures de profondeur routée (dessin I) lisent des états capturés\npar le moteur et les repassent par la norme finale et la tête liée,  … [3107 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_chaine_etat.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la petite capture de vérification
+
+- **bash** `{"command": "ls /tmp/verif/fini 2>/dev/null && echo \"TERMINÉ\" || echo \"en cours\"; echo \"e16: $(ls -1 /tmp/verif/e16.* 2>/dev/null | wc -l) · e24: $(ls -1 /tmp/verif/e24.* 2>/dev/null | wc -l)\"; echo \"--- p24 ---\"; grep -E \"perplexité|capture\" /tmp/verif/p24.log 2>/dev/null | tail -3; echo  … [238 caractères tronqués]`
+
+  ```
+/tmp/verif/fini
+TERMINÉ
+e16: 127 · e24: 127
+--- p24 ---
+  capture d'état    : position(s) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126] écrite(s) dans /tmp/verif/e24.*
+     127 tokens notés — perplexité cumulée 14.650  (25.5 tok/s)
+=== perplexité 14.6496 sur 127 tokens (0 événements, 5.0 s) ===
+--- p16 ---
+  capture d'état    : position(s) [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96,
+… [342 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la chaîne hors-ligne contre les deux perplexités du moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/campagne24/ids_0.5B-Q8.txt\necho \"=== profondeur 24 (modèle complet) ===\"\n/home/stephane/gpu-env/bin/python tools/verifier_chaine_etat.py --etats /tmp/verif/e24 --ids \"$I\" --modele \"$M\"  … [323 caractères tronqués]`
+
+  ```
+=== profondeur 24 (modèle complet) ===
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 14.6477
+  perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+code=0
+=== profondeur 16 (tête appliquée à la fin de la plage) ===
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 429,660.5721
+  perplexité du moteur  : 429,684.6614
+  écart relatif         : 0.0056 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0056 % près
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la mesure : borne oracle de la profondeur routée
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"profondeur_routee_oracle.py — dessin I : ce qu'un routeur PARFAIT pourrait éviter.\n\nLA QUESTION (docs/modele-pour-drave.md, dessin I « profondeur routée »). Un modèle peut-il\ndécider, **jeton par jeton**, de s'arrêter plus tôt ? Avant d'entraîner un rout … [10441 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la mesure (adaptateur profondeur 16 contre modèle complet)
+
+- **bash** `{"command": "free -g | head -2; echo \"---\"; ls -1 /tmp/mod/final.* | sed 's/.*\\.//' | sort -n | tail -1; pgrep -af \"couches 0:24\" | head -2 | cut -c1-80", "description": "Check RAM and capture progress"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          24          18          13          97         101
+---
+2632
+3373081 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /t
+3395857 bash -c free -g | head -2; echo "---"; ls -1 /tmp/mod/final.* | sed 's/.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /home/stephane/gpu-env/bin/python -u tools/profondeur_routee_oracle.py \\\n  --etats16 /tmp/c8-8k/etat --etats24 /tmp/mod/final --ids /tmp/campagne24/ids_0.5B-Q8.txt \\\n  --modele models/Qwen2.5-0.5B-Q8_0.gguf --test-max 2632  … [167 caractères tronqués]`
+
+  ```
+mesure lancée (pid 3396531)
+test   : positions 4..2632 (2629 jetons)
+entraînement : 4036 états (3145..7180) · validation : 1010 (7181..8190)
+marge test/entraînement : 512 positions
+
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+avant entraînement (A = identité) : perplexité de validation = 647,458.9919
+  époque   1/30 · perte train 40,383,473.9199 · validation 18,355.1432  ← meilleur
+  époque   5/30 · perte train 29.3224 · validation 684.8031  ← meilleur
+  époque  10/30 · perte train 1.9390 · validation 574.2783  ← meilleur
+  époque  15/30 · perte train 1.1283 · validation 1,054.3055
+  époque  20/30 · perte train 1.0412 · validation 1,570.4665
+  époque  25/30 · perte train 1.0228 · validation 2,114.8633
+  époque  30/30 · perte train 1.0157 · validation 2,421.4687
+meilleure époque : 10 · validation 574.2783
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 10.6064 | 52.34 % |
+| court — 16 couches, adaptateur entraîné | 770.6284 | 22.29 % |
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du résultat complet de la mesure oracle
+
+- **bash** `{"command": "sleep 60; tail -30 /tmp/oracle.log; echo \"--- vivant ? $(pgrep -c -f profondeur_routee_oracle)\"", "description": "Read full oracle measurement output"}`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "tail -32 /tmp/oracle.log; echo \"--- processus : $(pgrep -c -f profondeur_routee_oracle)\"", "description": "Read oracle output tail"}`
+
+  ```
+époque   5/30 · perte train 29.3224 · validation 684.8031  ← meilleur
+  époque  10/30 · perte train 1.9390 · validation 574.2783  ← meilleur
+  époque  15/30 · perte train 1.1283 · validation 1,054.3055
+  époque  20/30 · perte train 1.0412 · validation 1,570.4665
+  époque  25/30 · perte train 1.0228 · validation 2,114.8633
+  époque  30/30 · perte train 1.0157 · validation 2,421.4687
+meilleure époque : 10 · validation 574.2783
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 10.6064 | 52.34 % |
+| court — 16 couches, adaptateur entraîné | 770.6284 | 22.29 % |
+
+ACCORD court/long : 30.20 % des 2629 jetons (794 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 55.91 %
+
+| seuil de confiance | sortis tôt | justesse globale | témoin au hasard |
+|---|---|---|---|
+| 0.00 | 100.0 % | 22.29 % | 22.29 % |
+| 0.50 | 46.5 % | 43.36 % | 38.18 % |
+| 0.70 | 30.2 % | 47.05 % | 43.25 % |
+| 0.90 | 14.8 % | 50.06 % | 47.83 % |
+| 0.95 | 9.6 % | 50.97 % | 49.40 % |
+| 0.99 | 4.0 % | 51.96 % | 51.09 % |
+
+(point de comparaison : tout en long = 52.34 % · tout en court = 22.29 %)
+
+confiance moyenne du ch
+… [357 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic de la lenteur de la capture longue
+
+- **bash** `{"command": "tail -5 /tmp/mod/capture2.log 2>/dev/null; echo \"--- fichiers : $(ls -1 /tmp/mod/final.* | wc -l) · max $(ls -1 /tmp/mod/final.* | sed 's/.*\\.//' | sort -n | tail -1)\"; echo \"--- etat du process\"; ps -o pid,etime,time,stat,pcpu -p 3373081 2>/dev/null; echo \"--- verif (temoin de vi … [133 caractères tronqués]`
+
+  ```
+[etat] 896 valeurs écrites dans /tmp/mod/final.4417 (position 4417)
+[etat] 896 valeurs écrites dans /tmp/mod/final.4418 (position 4418)
+[etat] 896 valeurs écrites dans /tmp/mod/final.4419 (position 4419)
+[etat] 896 valeurs écrites dans /tmp/mod/final.4420 (position 4420)
+[etat] 896 valeurs écrites dans /tmp/mod/final.4421 (position 4421)
+--- fichiers : 4418 · max 4422
+--- etat du process
+    PID     ELAPSED     TIME STAT %CPU
+3373081       04:47 00:44:28 Rl    928
+--- verif (temoin de vitesse) : 127 positions en ?
+=== perplexité 14.6496 sur 127 tokens (0 événements, 5.0 s) ===
+    projections : 0.0 M événements par token
+  ```
+
+### 🤖 Assistant
+
+⏵ Généralisation du protocole (test avant ou après l'entraînement)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "old_string": "    ap.add_argument(\"--test-max\", type=int, default=None,\n                    help=\"dernière position du TEST (défaut : la plus grande disponible en \"\n                         \"pr … [749 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "new_string": "    # --- le TEST : les positions où les DEUX profondeurs existent -----------------------------\n    communes = sorted(set(int(p) for p in pos24) & set(int(p) for p in pos16))\n    test … [3118 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "new_string": "    pos16, X16 = charger_etats(a.etats16)\n    pos24, X24 = charger_etats(a.etats24)\n    test_max = a.test_max if a.test_max is not None else int(pos24.max())", "old_string": "    pos16 … [256 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast,sys; ast.parse(open('tools/profondeur_routee_oracle.py').read()); print('syntaxe OK')\" && grep -n \"i16\\|i24\" tools/profondeur_routee_oracle.py; echo \"--- capture : $(ls -1 /tmp/m … [82 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- capture : 4660
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du corpus d'identifiants utilisé par les autres portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"ids\" tools/porte-flux.sh | head -8; echo \"=== corpus dans le dépôt ===\"; ls -la models/ 2>/dev/null | head; find . -name \"*.ids\" -o -name \"ids*.txt\" 2>/dev/null | grep -v \"/tmp\" | head -10; echo \"=== portes lourd … [139 caractères tronqués]`
+
+  ```
+38:IDS="$TRAVAIL/ids.txt"
+=== corpus dans le dépôt ===
+total 863324
+drwxr-xr-x. 1 stephane stephane        88 25 sep 17:13 .
+drwxr-xr-x. 1 stephane stephane       612 10 oct 11:35 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+./data/wikitext2_test.txt.ids
+=== portes lourdes : combien de temps ===
+74:    # `timeout` sur le PILOTE aussi : une régression du cadriciel qui bloque le
+76:    # sans préfixe v6) laissait la porte tourner jusqu'au `timeout` de
+77:    # `portes.sh`, et un `timeout` externe rend un code que personne ne lisait.
+78:    sortie=$(timeout 180 "$D" "$MODELE" --ppl-reparti "127.0.0.1:$PORT" \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/ | head; echo \"--- taille du corpus ids ---\"; wc -c data/wikitext2_test.txt.ids 2>/dev/null; head -c 100 data/wikitext2_test.txt.ids; echo; echo \"--- nombre de jetons ---\"; wc -w data/wikitext2_test.txt.ids", "descrip … [29 caractères tronqués]`
+
+  ```
+total 100692
+drwxr-xr-x. 1 stephane stephane       156  8 oct 09:42 .
+drwxr-xr-x. 1 stephane stephane       612 10 oct 11:35 ..
+-rw-r--r--. 1 stephane stephane 100276153  8 oct 09:42 corpus_en.txt
+-rw-r--r--. 1 stephane stephane   2032162  8 oct 09:42 corpus_en_val.txt
+-rw-r--r--. 1 stephane stephane    359041 25 sep 18:02 wikitext2_test.txt
+-rw-r--r--. 1 stephane stephane    398564  1 oct 07:37 wikitext2_test.txt.ids
+-rw-r--r--. 1 stephane stephane     30005 25 sep 17:53 wt2.json
+--- taille du corpus ids ---
+398564 data/wikitext2_test.txt.ids
+201,438,10498,102771,402,438,61915,10498,102771,402,344,411,3947,5485,1537,15758,305,31085,22491,120
+--- nombre de jetons ---
+1 data/wikitext2_test.txt.ids
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 200 data/wikitext2_test.txt.ids; echo; echo \"---\"; head -c 200 /tmp/campagne24/ids_0.5B-Q8.txt; echo; echo \"--- identiques ?\"; cmp -s data/wikitext2_test.txt.ids /tmp/campagne24/ids_0.5B-Q8.txt && echo OUI || echo NON; ec … [130 caractères tronqués]`
+
+  ```
+201,438,10498,102771,402,438,61915,10498,102771,402,344,411,3947,5485,1537,15758,305,31085,22491,1204,1166,936,260,20521,2390,15,34,71132,3615,377,270,15758,4923,455,10987,295,223,20,18,18,18,1204,116
+---
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8640,569,12,31,39400,3476,389,279,12425,4013,576,8596,304,220,17,15,15,15,659,109
+--- identiques ?
+NON
+--- jetons : 85222
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des captures sur le corpus du dépôt (reproductible)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=data/wikitext2_test.txt.ids\nrm -rf /tmp/wt16 /tmp/wt24; mkdir -p /tmp/wt16 /tmp/wt24\nPOS=$(seq -s, 4 8191)\n( /usr/bin/time -f \"%e s pour la capture 16 couche … [566 caractères tronqués]`
+
+  ```
+captures du corpus du dépôt lancées
+sam 10 oct 2026 21:44:52 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Choix de l'interpréteur Python et conventions des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"python\" tools/porte-c8.sh tools/porte-jumeaux.sh 2>/dev/null | head -10; echo \"=== en-tête d'une porte récente ===\"; sed -n '1,25p' tools/porte-jumeaux.sh", "description": "Check python conventions in gates"}`
+
+  ```
+tools/porte-jumeaux.sh:46:python3 - "$T" "$N" "$FRAC" <<'PY' || exit 1
+tools/porte-jumeaux.sh:70:python3 - <<PY || exit 1
+tools/porte-jumeaux.sh:96:python3 - "$T" "$N" <<'PY' || exit 1
+tools/porte-jumeaux.sh:120:python3 - <<PY || exit 1
+=== en-tête d'une porte récente ===
+#!/bin/bash
+# porte-jumeaux.sh — C9 : deux jumeaux, un échange par couche, et les invariants qui le bornent.
+#
+# CE QUE LA PORTE VERROUILLE, et pourquoi chacun de ces points :
+#   1. **échange désactivé ⇒ identique au modèle seul** (l'invariant du plan, au chiffre près) :
+#      un état imposé à la couche L puis les couches L..24 doivent rendre la perplexité du modèle
+#      entier. Sans cet invariant, tout le reste comparerait deux calculs différents ;
+#   2. **deux jumeaux IDENTIQUES qui s'échangent ne changent rien** : la moyenne de deux états
+#      égaux EST cet état (au bit près). C'est la garde du plan (« le gain est probablement nul »)
+#      écrite comme un test — si l'échange déplaçait le chiffre ici, ce serait un BUG, pas un gain ;
+#   3. **un jumeau dégradé est RÉCUPÉRÉ, et pas par magie** : mélanger un état propre et un état
+#      bruité ramène la perplexité près du propre — mais le CONTRÔLE (le même
+… [809 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"gpu-env\\|PYTHON\" tools/*.sh | head; echo \"=== où ===\"; grep -rn \"gpu-env\" tools/*.sh tools/*.py 2>/dev/null | head -5; echo \"=== porte c8 ? ===\"; ls tools/porte-c8*.sh 2>/dev/null; grep -rn \"c8_entrainer_tete\\|c … [96 caractères tronqués]`
+
+  ```
+tools/c8_corpus.sh
+tools/campagne-benefices.sh
+tools/carte_latence.sh
+tools/mesure_lot_disque.sh
+tools/porte-mistral.sh
+tools/porte-reparti-moteur.sh
+=== où ===
+tools/c8_corpus.sh:62:echo "  CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python tools/c8_entrainer_tete.py \\"
+tools/campagne-benefices.sh:167:        timeout 3600 /home/stephane/gpu-env/bin/python tools/premiere_couche_semantique.py \
+tools/carte_latence.sh:60:    /home/stephane/gpu-env/bin/python tools/proxy_latence.py "$RELAIS" "127.0.0.1:$PORT" "$ms" \
+tools/mesure_lot_disque.sh:36:    /home/stephane/gpu-env/bin/python - "$MODELE" <<'PY'
+tools/porte-mistral.sh:25:P=${P:-/home/stephane/gpu-env/bin/python}
+=== porte c8 ? ===
+tools/c8_carte_profondeur.sh:47:    sonde=$(python3 tools/c8_sonde_lineaire.py --etats "$prefixe" --ids "$IDS" \
+tools/c8_corpus.sh:62:echo "  CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python tools/c8_entrainer_tete.py \\"
+tools/porte-reflexe.sh:116:SONDE=$(python3 tools/c8_sonde_lineaire.py --etats "$T2/etat" --ids "$IDS" --limite "$NPOS" \
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte, en attente des chiffres à verrouiller
+
+- **write** `{"content": "#!/bin/bash\n# porte-profondeur-routee.sh — dessin I : ce qu'un routeur PARFAIT épargnerait, et ce qu'un\n# routeur RÉEL atteint.\n#\n# CE QUE LA PORTE VERROUILLE, et pourquoi chacun de ces points :\n#   1. **la chaîne hors-ligne reproduit le moteur** (deux profondeurs, < 0,2 %) : les c … [9272 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-profondeur-routee.sh && echo \"syntaxe OK\"; echo \"--- captures du corpus du dépôt ---\"; echo \"16 : $(ls -1 /tmp/wt16/etat.* 2>/dev/null | wc -l) · 24 : $(ls -1 /tmp/wt24/etat.* 2>/dev/null | wc -l)\"; tail -2  … [155 caractères tronqués]`
+
+  ```
+syntaxe OK
+--- captures du corpus du dépôt ---
+16 : 952 · 24 : 705
+[etat] 896 valeurs écrites dans /tmp/wt16/etat.955 (position 955)
+[etat] 896 valeurs écrites dans /tmp/wt16/etat.956 (position 956)
+--- mod (autre corpus) : 5279
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des deux mesures complètes en attente des captures
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; M=models/Qwen2.5-0.5B-Q8_0.gguf\nnohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nuntil [ \"$(ls -1 /tmp/mod/final.* 2>/dev/null | wc -l)\" -ge 8100 ]; do sleep 20; done\necho  … [1065 caractères tronqués]`
+
+  ```
+chaîne de mesures lancée (pid 3436097)
+sam 10 oct 2026 21:45:59 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la fiche dessin I à mettre à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dessin I\\|^## \\|^### \" docs/modele-pour-drave.md | head -40; echo \"=== reports ===\"; ls reports/ | head -20", "description": "Locate design I section and reports layout"}`
+
+  ```
+12:## 0. Moteur contre modèle : qui paie quoi
+37:## 1. Le coût, formalisé
+69:## 2. Ce que la campagne a déjà établi, et qui contraint le dessin
+82:## 3. Les candidats, et ce que chacun vaut
+87:### A. Modèle à activations creuses apprises (k-WTA) — **mesuré, gagnant**
+98:### B. Modèle à POIDS creux — **mesuré le 9/10, et c'est le levier oublié**
+129:### C. Routage d'experts — **mesuré : fort sur les paires, aveugle aux événements**
+141:### D. Disposition « par événements » des poids — **inédit, motivé par une mesure**
+155:### E. Tête et vocabulaire — **mesuré, et c'est un choix de modèle**
+168:### F. Attention : ce que le contexte coûte vraiment
+181:### G. Le lot et le routage se contredisent — **mesuré**
+188:### H. Routage par PROFONDEUR (chaque jeton ne traverse que k couches) — **inédit, et Drave l'exécute déjà**
+205:### I. Budget d'ÉVÉNEMENTS appris, au lieu d'un k-WTA uniforme — **inédit, et mesurable aujourd'hui**
+241:### J. Quantification adaptée au chemin par LISTES — **pratique, et chiffré**
+265:## 4. Le classement, et le modèle qui en sort
+296:## 4 bis. Nos modèles à décharges fonctionnent-ils en GPU ? Non — et il y a deux raisons distinctes
+340:## 5. Les expériences à fai
+… [501 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md", "offset": 186, "limit": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md</path>
+<type>file</type>
+<content>
+186: de lire tout le jeu chaud** — les deux ne se cumulent pas.
+187: 
+188: ### H. Routage par PROFONDEUR (chaque jeton ne traverse que k couches) — **inédit, et Drave l'exécute déjà**
+189: 
+190: Le levier le plus violent sur les paires n'est pas de réduire les activations d'une
+191: couche, c'est de **ne pas exécuter la couche du tout** : une couche sautée vaut
+192: zéro paire. Le moteur sait déjà exécuter une plage de couches (`--couches`, nœud
+193: partiel, découpage à deux nœuds) et son protocole de flux transporte une liste
+194: d'activations, pas un tenseur — donc **sauter une couche est une décision locale,
+195: pas une reconstruction**.
+196: 
+197: - **Gain attendu** : proportionnel au taux de saut — un jeton qui traverse 2 des 4
+198:   couches divise ses paires par 2, et se cumule avec A et B.
+199: - **Ce qui manque** : un modèle entraîné ainsi (mixture-of-depths) **et** un routeur
+200:   de profondeur bon marché — c'est un projet d'entraînement, pas de moteur.
+201: - **Pourquoi c'est spécifiquement Drave** : dans une architecture dense classique,
+202:   sauter 
+… [2888 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du nom du dessin : c'est H (profondeur routée), pas I
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/^\"\"\"profondeur_routee_oracle.py — dessin I :/\"\"\"profondeur_routee_oracle.py — dessin H :/; s/(docs\\/modele-pour-drave.md, dessin I « profondeur routée »)/(docs\\/modele-pour-drave.md, dessin H « routage par profondeu … [545 caractères tronqués]`
+
+  ```
+tools/profondeur_routee_oracle.py:2:"""profondeur_routee_oracle.py — dessin H : ce qu'un routeur PARFAIT pourrait éviter.
+tools/profondeur_routee_oracle.py:4:LA QUESTION (docs/modele-pour-drave.md, dessin H « routage par profondeur »). Un modèle peut-il
+tools/profondeur_routee_oracle.py:209:    print("de ces jetons (mêmes contexte et largeur). La question du dessin I n'est donc pas")
+tools/porte-profondeur-routee.sh:2:# porte-profondeur-routee.sh — dessin H : ce qu'un routeur PARFAIT épargnerait, et ce qu'un
+tools/porte-profondeur-routee.sh:7:#      dessin I sortent d'une relecture d'états en Python, hors du moteur. Si cette relecture est
+tools/porte-profondeur-routee.sh:39:    [ -e "$f" ] || { echo "  ❌ $f manquant : cette porte mesure le dessin I sur le corpus du dépôt"; exit 2; }
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i \"209s/du dessin I/du dessin H/\" tools/profondeur_routee_oracle.py && sed -i \"7s/dessin I sortent/dessin H sortent/; 39s/le dessin I sur/le dessin H sur/\" tools/porte-profondeur-routee.sh && grep -n \"dessin I\\b\" tools/*. … [206 caractères tronqués]`
+
+  ```
+tools/verifier_chaine_etat.py:4:POURQUOI CE SCRIPT EXISTE. Les mesures de profondeur routée (dessin I) lisent des états capturés
+tools/porte-gain.sh:116:# l'espoir d'un « profil appris par couche » (dessin I) se heurte à cette mesure : le meilleur
+(aucune ligne ci-dessus = corrigé)
+tools/profondeur_routee_oracle.py:3
+tools/porte-profondeur-routee.sh:3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '4s/profondeur routée (dessin I)/profondeur routée (dessin H)/' tools/verifier_chaine_etat.py && sed -n '4p' tools/verifier_chaine_etat.py; echo \"--- mesures ---\"; cat /tmp/oracles.log 2>/dev/null; tail -3 /tmp/oracleA.log 2 … [252 caractères tronqués]`
+
+  ```
+POURQUOI CE SCRIPT EXISTE. Les mesures de profondeur routée (dessin H) lisent des états capturés
+--- mesures ---
+--- captures ---
+mod: 5983 · wt16: 2753 · wt24: 2097
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du parseur de la porte sur le journal déjà produit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^\\$P - \"\\$T\\/oracle.log\"/,/^PY$/p' tools/porte-profondeur-routee.sh | sed '1d;$d' > /tmp/parseur.py && wc -l /tmp/parseur.py && /home/stephane/gpu-env/bin/python /tmp/parseur.py /tmp/oracle.log; echo \"code=$?\"", "desc … [45 caractères tronqués]`
+
+  ```
+62 /tmp/parseur.py
+  chemin long  : 52.34 % · chemin court : 22.29 % · témoin tout-court : 22.29 %
+  borne de l'oracle (accord) : 30.2 % · oracle par jeton : 55.91 %
+  meilleur gain du seuil sur le hasard : +5.18 points
+  confiance : 0.705 quand le court a raison contre le long, 0.41 sinon
+  ✅ chaîne vérifiée, chemin court nettement plus mauvais, borne de l'oracle chiffrée
+  ✅ aucun seuil de confiance n'atteint la qualité du chemin long (résultat négatif)
+  ✅ le seuil sélectionne quand même : +5.18 points sur le hasard à part égale
+code=0
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "echo \"=== 4. les verrous ===\"\n$P - \"$T/oracle.log\" <<'PY'\nimport re, sys", "old_string": "echo \"=== 4. les verrous ===\"\n$P - \"$T/oracle.log\" <<'PY' || exit 1\nimport re, sys"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "offset": 95, "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+95: just_long = nombre(r"long — 24 couches.*?\| ([\d.,]+) % \|")
+96: just_court = nombre(r"court — 16 couches.*?\| ([\d.,]+) % \|")
+97: accord = nombre(r"ACCORD court/long : ([\d.,]+) %")
+98: oracle = nombre(r"oracle \(le meilleur des deux par jeton\) : ([\d.,]+) %")
+99: ref = nombre(r"tout en long = ([\d.,]+) %")
+100: court_seul = nombre(r"tout en court = ([\d.,]+) %")
+101: conf_ok = nombre(r"d'accord avec le long : ([\d.,]+)")
+102: conf_ko = nombre(r"ne l'est pas : ([\d.,]+)")
+103: manquants = [n for n, v in (("justesse long", just_long), ("justesse court", just_court),
+104:                             ("accord", accord), ("oracle", oracle), ("référence", ref),
+105:                             ("confiance accord", conf_ok), ("confiance désaccord", conf_ko))
+106:              if v is None]
+107: if manquants:
+108:     print(f"  ❌ chiffres illisibles dans la sortie : {', '.join(manquants)}"); sys.exit(1)
+109: 
+110: echecs = []
+111: # 2. le chemin court est genuinement plus mauvais (et pas l'inverse : ce serait une fuite)
+112: if not just_court < just_long - 10:
+1
+… [2314 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "print(f\"  ✅ chemin court nettement plus mauvais, borne de l'oracle chiffrée\")\nprint(\"  ✅ aucun seuil de confiance n'atteint la qualité du chemin long (résultat négatif)\")", "old_stri … [199 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "limit": 18, "offset": 85}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+85: 
+86: echo
+87: echo "=== 4. les verrous ==="
+88: $P - "$T/oracle.log" <<'PY' || exit 1
+89: import re, sys
+90: t = open(sys.argv[1]).read()
+91: def nombre(motif, defaut=None):
+92:     m = re.search(motif, t)
+93:     return float(m.group(1).replace(",", "")) if m else defaut
+94: 
+95: just_long = nombre(r"long — 24 couches.*?\| ([\d.,]+) % \|")
+96: just_court = nombre(r"court — 16 couches.*?\| ([\d.,]+) % \|")
+97: accord = nombre(r"ACCORD court/long : ([\d.,]+) %")
+98: oracle = nombre(r"oracle \(le meilleur des deux par jeton\) : ([\d.,]+) %")
+99: ref = nombre(r"tout en long = ([\d.,]+) %")
+100: court_seul = nombre(r"tout en court = ([\d.,]+) %")
+101: conf_ok = nombre(r"d'accord avec le long : ([\d.,]+)")
+102: conf_ko = nombre(r"ne l'est pas : ([\d.,]+)")
+
+(Showing lines 85-102 of 158. Use offset=103 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "$P - \"$T/oracle.log\" <<'PY'\nimport re, sys", "old_string": "$P - \"$T/oracle.log\" <<'PY' || exit 1\nimport re, sys"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-profondeur-routee.sh && echo \"syntaxe OK\"; sed -n '/^\\$P - \"\\$T\\/oracle.log\"/,/^PY$/p' tools/porte-profondeur-routee.sh | sed '1d;$d' > /tmp/parseur.py && /home/stephane/gpu-env/bin/python /tmp/parseur.py / … [291 caractères tronqués]`
+
+  ```
+syntaxe OK
+  chemin long  : 52.34 % · chemin court : 22.29 % · témoin tout-court : 22.29 %
+  borne de l'oracle (accord) : 30.2 % · oracle par jeton : 55.91 %
+  meilleur gain du seuil sur le hasard : +5.18 points
+  confiance : 0.705 quand le court a raison contre le long, 0.41 sinon
+  ✅ chemin court nettement plus mauvais, borne de l'oracle chiffrée
+  ✅ aucun seuil de confiance n'atteint la qualité du chemin long (résultat négatif)
+  ✅ le seuil sélectionne quand même : +5.18 points sur le hasard à part égale
+code=0
+--- captures ---
+mod: 6691 · wt16: 4220 · wt24: 3236
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente suivie des deux mesures, avec récapitulatif à la fin
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q \"corpus B fini\" /tmp/oracles.log 2>/dev/null; do sleep 20; done; echo \"=== A (campagne24) ===\"; sed -n '/^test/,$p' /tmp/oracleA.log | head -22; echo; echo \"=== B (dépôt) ===\"; sed -n '/^test/,$p' /tmp/oracleB.log … [99 caractères tronqués]`
+
+  ```
+started background job bash-44
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de l'état reprenable pour préparer sa mise à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/etat-cerveau.md && sed -n '1,55p' docs/etat-cerveau.md", "description": "Read resumable state head"}`
+
+  ```
+173 docs/etat-cerveau.md
+# État du cerveau Drave — capacités, expériences, prochaine action
+
+> **2026-10-10 15:56 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
+> ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
+> (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
+> `reports/campagne-benefices/`, une par expérience).
+>
+> Roadmaps de référence : `docs/plan-cerveau-complet.md` (les douze capacités),
+> `docs/roadmap-drave.md`, `docs/modele-pour-drave.md` § 3 (dessins H/I/J),
+> `docs/biologie-pour-drave.md` (expériences E1-E9), `docs/manques.md` (ce qui manque).
+
+## 1. Les douze capacités
+
+| # | capacité | état | le chiffre qui le prouve | où |
+|---|---|---|---|---|
+| **C1** | graphe de régions | ✅ fait | la topologie **pilote** le découpage : même perplexité, écart **0,00e0** ; relais 3 régions / 3 instances : **0,00e0** | `tools/porte-topologie.sh` · fiche 34 |
+| **C2 (cycle 2 régions)** | la validation du plan | ⏳ **refusée par le validateur, et la conception est écrite** | un cycle n'est pas une bou
+… [7629 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dessin\\|### \\|## \" docs/etat-cerveau.md | sed -n '20,60p'", "description": "Find design section in state file"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\|^| \\*\\*[HIJ]\\|dessin\" docs/etat-cerveau.md | head -30", "description": "List state file headings"}`
+
+  ```
+1:# État du cerveau Drave — capacités, expériences, prochaine action
+10:> `docs/roadmap-drave.md`, `docs/modele-pour-drave.md` § 3 (dessins H/I/J),
+13:## 1. Les douze capacités
+61:## 2. Le chemin réparti (ce qui compte pour « distribuable »)
+73:## 3. Expériences de biologie (`docs/biologie-pour-drave.md`)
+86:## 4. Dessins de modèle (`docs/modele-pour-drave.md` § 3)
+90:- **H — budget d'événements appris** et **J — quantification adaptée aux listes** : dessins
+93:## 5. Les instruments (et leur état au 10 octobre)
+107:## 6. ▶ Prochaine action
+160:## 7. Les corrections à ne pas réintroduire
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 30, "offset": 86}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+86: ## 4. Dessins de modèle (`docs/modele-pour-drave.md` § 3)
+87: 
+88: - **I — profondeur routée** : mesuré (**−11,5 %** au gain 0,75 de la couche 0), mais **2 couches
+89:   utiles seulement** et la composition des gains **dégrade** ; à entraîner pour de vrai.
+90: - **H — budget d'événements appris** et **J — quantification adaptée aux listes** : dessins
+91:   évalués, **jamais entraînés** (manque **N4**).
+92: 
+93: ## 5. Les instruments (et leur état au 10 octobre)
+94: 
+95: - **27 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 21 h 33 : 27 vertes sur 27, 60 min 13 s** (dont les quatre ajoutées aujourd'hui : jumeaux, c4-retard, mémoire, récurrence)
+96:   (`tools/toutes-les-portes.sh`, chaque porte bornée, journaux gardés ; détail dans
+97:   `reports/rapport-passe-complete-portes.md`). La passe a servi à deux choses : elle a montré que
+98:   `porte-gain.sh` § 9 était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré), et
+99:   elle a démasqué `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait
+100:   `stdin`, que personne
+… [1072 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de l'attente des mesures
+
+- **job_output** `{"job_id": "bash-44", "wait": true, "timeout_ms": 240000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cat /tmp/oracles.log; echo \"--- captures : mod $(ls -1 /tmp/mod/final.* | wc -l) · wt16 $(ls -1 /tmp/wt16/etat.* 2>/dev/null | wc -l) · wt24 $(ls -1 /tmp/wt24/etat.* 2>/dev/null | wc -l)\"; tail -4 /tmp/oracleA.log 2>/dev/null; date", "description": "Check measurement progress"}`
+
+  ```
+=== corpus A (campagne24) ===
+corpus A fini (code 0)
+--- captures : mod 8188 · wt16 7308 · wt24 5795
+
+Lecture : sortir à 16 couches épargne 8 couches sur 24, soit un tiers des paires
+de ces jetons (mêmes contexte et largeur). La question du dessin H n'est donc pas
+« peut-on épargner ? » mais « sur quelle part des jetons, et le sait-on sans oracle ? »
+sam 10 oct 2026 21:54:43 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du résultat complet sur le premier corpus
+
+- **bash** `{"command": "sed -n '/^test/,$p' /tmp/oracleA.log", "description": "Read corpus A full result"}`
+
+  ```
+test   : positions 4200..8124 (3925 jetons)
+entraînement : 2947 états (4..2950) · validation : 737 (2951..3687)
+marge test/entraînement : 512 positions
+
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+avant entraînement (A = identité) : perplexité de validation = 708,259.4752
+  époque   1/30 · perte train 1,648,558,962.2891 · validation 19,150.3073  ← meilleur
+  époque   5/30 · perte train 26.3803 · validation 544.6380  ← meilleur
+  époque  10/30 · perte train 2.3223 · validation 363.2757  ← meilleur
+  époque  15/30 · perte train 1.2455 · validation 549.4166
+  époque  20/30 · perte train 1.0988 · validation 859.5104
+  époque  25/30 · perte train 1.0531 · validation 1,229.4025
+  époque  30/30 · perte train 1.0307 · validation 1,707.8406
+meilleure époque : 10 · validation 363.2757
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 16.5611 | 44.97 % |
+| court — 16 couches, adaptateur entraîné | 1,343.4782 | 20.33 % |
+
+ACCORD court/long : 28.76 % des 3925 jetons (1129 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 48.54 %
+
+| seuil de confiance | sortis tôt | jus
+… [718 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-44", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== A (campagne24) ===
+test   : positions 4200..8124 (3925 jetons)
+entraînement : 2947 états (4..2950) · validation : 737 (2951..3687)
+marge test/entraînement : 512 positions
+
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+avant entraînement (A = identité) : perplexité de validation = 708,259.4752
+  époque   1/30 · perte train 1,648,558,962.2891 · validation 19,150.3073  ← meilleur
+  époque   5/30 · perte train 26.3803 · validation 544.6380  ← meilleur
+  époque  10/30 · perte train 2.3223 · validation 363.2757  ← meilleur
+  époque  15/30 · perte train 1.2455 · validation 549.4166
+  époque  20/30 · perte train 1.0988 · validation 859.5104
+  époque  25/30 · perte train 1.0531 · validation 1,229.4025
+  époque  30/30 · perte train 1.0307 · validation 1,707.8406
+meilleure époque : 10 · validation 363.2757
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 16.5611 | 44.97 % |
+| court — 16 couches, adaptateur entraîné | 1,343.4782 | 20.33 % |
+
+ACCORD court/long : 28.76 % des 3925 jetons (1129 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 48.54 %
+
+=== B (dépôt) ==
+… [1228 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le corpus du dépôt donne une perplexité absurde — vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\necho \"=== modèle complet sur le corpus du dépôt (8192 jetons) ===\"\n$D \"$M\" --ppl data/wikitext2_test.txt.ids --limit 8192 --ctx 8192 --threads 8 2>&1 | grep - … [418 caractères tronqués]`
+
+  ```
+=== modèle complet sur le corpus du dépôt (8192 jetons) ===
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\n$D \"$M\" --ppl data/wikitext2_test.txt.ids --limit 1024 --ctx 1024 --threads 8 2>&1 | grep -oE \"perplexité [0-9.]+ sur\"; echo \"--- provenance ---\"; grep -rn \ … [296 caractères tronqués]`
+
+  ```
+perplexité 864.7587 sur
+--- provenance ---
+tools/campagne-benefices.sh:27:# `data/wikitext2_test.txt.ids` existe dans le dépôt, mais il vient d'un AUTRE
+tools/porte-profondeur-routee.sh:29:IDS=${IDS:-data/wikitext2_test.txt.ids}
+docs/campagne-benefices.md:16:`data/wikitext2_test.txt.ids` **vient d'un autre tokenizer** que Qwen2.5 : il
+docs/campagne-benefices.md:23:| ceux du dépôt (`data/wikitext2_test.txt.ids`) | **7 710,72** |
+--- max wt24 ---
+7750
+--- max wt16 ---
+8191
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de l'interface de tokenisation du moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tokenize\\|tokenise\" drave-core/src/main.rs | head -12; echo \"=== usage ===\"; ./drave-core/target/release/drave --aide 2>&1 | grep -i -A2 \"tokenis\" | head -12", "description": "Find tokenize option"}`
+
+  ```
+53:mod tokenizer;
+143:    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+217:        (opt.plan, "--plan"), (opt.tokenize, "--tokenize"),
+246:    if opt.tokenize { run_tokenize(opt); return; }
+696:/// Les modes (inférence, perplexité, plan, tokenize) la remplissent par la MÊME
+705:    infer: bool, ppl: bool, plan: bool, tokenize: bool, gpu_banc: bool, k3_essai: bool,
+765:    /// positions ne se devinent pas (`--tokenize` et `--prompt` ne comptent pas les
+777:    /// `--prompt` ne fait pas exactement celle de `--tokenize` (l'espace initial),
+942:    // --- tokenize / plan
+1048:            "--tokenize" => { o.tokenize = true; 1 }
+1381:        mdl.stop_id = build_tokenizer(&mdl.g).special_id("<|im_end|>");
+1389:        let tk = build_tokenizer(&mdl.g);
+=== usage ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'fn run_tokenize' drave-core/src/main.rs | cut -d: -f1),+40p\" drave-core/src/main.rs | grep -n \"print\\|println\\|ids\\|fichier\\|stdout\\|--\" | head -15; echo \"=== essai ===\"; head -c 300 data/wikitext2_test. … [174 caractères tronqués]`
+
+  ```
+4:    let fichier = opt.fichier.clone().unwrap_or_default();
+6:    // En-tête seul : le décodage du vocabulaire n'a pas besoin des poids, et
+7:    // `open` lisait le fichier entier (62 Go pour gpt-oss) à chaque appel.
+11:    let g = ouvrir_meta_tolerant(path, "--tokenize");
+13:    if !fichier.is_empty() {
+17:        let texte = std::fs::read_to_string(&fichier).expect("fichier illisible");
+18:        let ids = tk.encode(&texte);
+19:        let cible = if sortie.is_empty() { format!("{fichier}.ids") } else { sortie };
+20:        let corps: Vec<String> = ids.iter().map(|i| i.to_string()).collect();
+22:        println!("{} tokens écrits dans {cible} (vocabulaire du modèle : {})",
+23:                 ids.len(), tk.vocab_size());
+35:        let retour = tk.decode(&ids);
+40:            println!("réversibilité : texte reconstruit identique ✅ ({} octets)", texte.len());
+=== essai ===
+0 tokens
+
+recolle : ""
+  ```
+
+### 🤖 Assistant
+
+⏵ Tokenisation du texte avec le tokenizer du modèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\nrm -f /tmp/wt_qwen.ids; $D \"$M\" --tokenize data/wikitext2_test.txt --sortie /tmp/wt_qwen.ids 2>&1 | tail -2\nls -la /tmp/wt_qwen.ids; head -c 80 /tmp/wt_qwen.ids … [244 caractères tronqués]`
+
+  ```
+recolle : ""
+
+--- perplexité du modèle complet sur ce corpus ---
+[stderr]
+ls: cannot access '/tmp/wt_qwen.ids': No such file or directory
+head: cannot open '/tmp/wt_qwen.ids' for reading: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tokenize\\|sortie\" drave-core/src/main.rs | sed -n '1,6p'; echo \"=== parsing ===\"; sed -n '1046,1056p' drave-core/src/main.rs; echo \"=== fichier ===\"; grep -n \"fichier: Option<String>\\|o.fichier = \" drave-core/src/m … [167 caractères tronqués]`
+
+  ```
+53:mod tokenizer;
+94:        eprintln!("       drave --fusionner-trace T1 T2 [...] [--fusion-sortie F]");
+113:        eprintln!("       drave <modele> --entree signal:F --sortie G [--delai N] [--recurent]");
+115:        eprintln!("             [--entree-memoire K] [--memoire K --sortie-memoire H]");
+124:        eprintln!("                                     `--memoire K --sortie-memoire H` retient les K");
+126:        eprintln!("                                     paires), et `--recurrence α` réinjecte la sortie");
+=== parsing ===
+            "--bus-fichier" => { o.bus_fichier = Some(suivant(i).clone()); 2 }
+            "--pas-max" => { o.pas_max = suivant(i).parse().ok(); 2 }
+            "--tokenize" => { o.tokenize = true; 1 }
+            "--gpu-banc" => { o.gpu_banc = true; 1 }
+            // Test de fumée de la couche 0 de Kimi-K3, **sur un modèle même
+            // incomplet** (les tenseurs de la couche 0 arrivent tôt) : c'est ce
+            // qui permet de déboguer la structure avant la fin d'un transfert de
+            // 1,5 To. Ce n'est PAS une vérification (la référence ne tourne pas
+            // sur un modèle incomplet) — juste : ça charge, ça calcule, ça sort
+    
+… [1577 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf\nrm -f /tmp/wt_qwen.ids; $D \"$M\" --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/wt_qwen.ids 2>&1 | tail -2\nls -la /tmp/wt_qwen.ids && echo \"--- perp … [199 caractères tronqués]`
+
+  ```
+85626 tokens écrits dans /tmp/wt_qwen.ids (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (359041 octets)
+-rw-r--r--. 1 stephane stephane 394684 10 oct 21:59 /tmp/wt_qwen.ids
+--- perplexité (1024 jetons) ---
+perplexité 9.4341 sur
+  ```
+
+- **bash** `{"command": "cmp -s /tmp/wt_qwen.ids /tmp/campagne24/ids_0.5B-Q8.txt && echo \"IDENTIQUES — la campagne utilisait déjà ce corpus\" || echo \"DIFFÉRENTS\"; ls -la /tmp/campagne24/ids_0.5B-Q8.txt /tmp/wt_qwen.ids", "description": "Compare regenerated ids with campaign corpus"}`
+
+  ```
+IDENTIQUES — la campagne utilisait déjà ce corpus
+-rw-r--r--. 1 stephane stephane 394684  8 oct 21:19 /tmp/campagne24/ids_0.5B-Q8.txt
+-rw-r--r--. 1 stephane stephane 394684 10 oct 21:59 /tmp/wt_qwen.ids
+  ```
+
+### 🤖 Assistant
+
+⏵ Le corpus est reproduit par tokenisation ; nettoyage et mise à jour de la porte
+
+- **bash** `{"command": "pkill -f \"wt16/etat\\|wt24/etat\" 2>/dev/null; sleep 1; pgrep -af \"couches 0:2[0-9]\" | head -3 | cut -c1-60; rm -rf /tmp/wt16 /tmp/wt24 /tmp/wt_qwen.ids; echo \"captures du mauvais corpus supprimées\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain", "de … [51 caractères tronqués]`
+
+  ```
+captures du mauvais corpus supprimées
+?? tools/lecture_etat.py
+?? tools/porte-profondeur-routee.sh
+?? tools/profondeur_routee_oracle.py
+?? tools/verifier_chaine_etat.py
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "D=${D:-./drave-core/target/release/drave}\nM=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}\n# LE CORPUS EST TOKENISÉ PAR LA PORTE, avec le tokenizer du modèle. `data/wikitext2_test.txt.ids`\n# … [1900 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "limit": 30, "offset": 66}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+66:     [ -s "$T/v$PROF.126" ] || { echo "  ❌ la capture $PROF couches n'a rien écrit"; exit 1; }
+67:     echo "  — profondeur $PROF (moteur : $PPL)"
+68:     $P tools/verifier_chaine_etat.py --etats "$T/v$PROF" --ids "$IDS" --modele "$M" \
+69:         --ppl-attendue "$PPL" || exit 1
+70: done
+71: 
+72: echo
+73: echo "=== 2. capturer les deux profondeurs sur $N jetons ==="
+74: # 16 couches : TOUT le texte (l'adaptateur s'entraîne dessus).
+75: # 24 couches : seulement la zone de TEST (le chemin long n'est lu que là).
+76: POS16=$(seq -s, 4 $((N - 1)))
+77: POS24=$(seq -s, "$TEST_MIN" "$TEST_MAX")
+78: timeout "$DELAI" "$D" "$M" --ppl "$IDS" --limit "$N" --ctx "$N" --threads 8 --couches 0:16 \
+79:     --tete-partielle --etat-sortie "$T/e16" --etat-pos "$POS16" > "$T/e16.log" 2>&1
+80: N16=$(ls -1 "$T"/e16.* 2>/dev/null | grep -cE '\.[0-9]+$')
+81: timeout "$DELAI" "$D" "$M" --ppl "$IDS" --limit "$N" --ctx "$N" --threads 8 --couches 0:24 \
+82:     --etat-sortie "$T/e24" --etat-pos "$POS24" > "$T/e24.log" 2>&1
+83: N24=$(ls -1 "$T"/e24.* 2>/dev/null | grep -cE '\.[0-9]+$')
+8
+… [878 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "echo\necho \"=== 2. capturer les deux profondeurs sur $N jetons ===\"\n# 16 couches : TOUT le texte (l'adaptateur s'entraîne dessus).\n# 24 couches : seulement la zone de TEST (le chemin  … [2635 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-profondeur-routee.sh && echo \"syntaxe OK\" && nohup bash tools/porte-profondeur-routee.sh > /tmp/porte-H.log 2>&1 & sleep 30; cat /tmp/porte-H.log", "description": "Launch the new gate"}`
+
+  ```
+syntaxe OK
+=== 0. le corpus, tokenisé par le modèle ===
+  85626 tokens écrits dans /tmp/porte-profondeur-routee/corpus.ids (vocabulaire du modèle : 151936)
+  réversibilité : texte reconstruit identique ✅ (359041 octets)
+=== 1. la chaîne hors-ligne reproduit-elle le moteur ? (avant toute mesure) ===
+  — profondeur 16 (moteur : 429684.6614)
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_chaine_etat.py", line 69, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifier_chaine_etat.py", line 39, in main
+    pos, X = charger_etats(a.etats)
+             ~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", line 107, in charger_etats
+    fichiers = sorted(pathlib.Path(prefixe).parent.glob(pathlib.Path(prefixe).name + ".*"),
+                      key=lambda f: int(f.name.rsplit(".", 1)[1]))
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", line 108, in <lambda>
+    key=lambda f: int(f.name.rsplit(".", 1)[1]))
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: inva
+… [41 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : le glob d'états attrapait aussi le journal de la porte
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", "new_string": "def charger_etats(prefixe: str):\n    \"\"\"(positions triées, matrice n×896). Un fichier tronqué est IGNORÉ et compté.\n\n    Le glob `PREFIXE.*` attrape aussi ce qui n'est PAS un état — le journal … [1895 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", "limit": 25, "offset": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py</path>
+<type>file</type>
+<content>
+100:     if not vals:
+101:         raise SystemExit(f"{chemin} : aucun identifiant lisible")
+102:     return np.array(vals, dtype=np.int64)
+103: 
+104: 
+105: def charger_etats(prefixe: str):
+106:     """(positions triées, matrice n×896). Un fichier tronqué est IGNORÉ et compté."""
+107:     fichiers = sorted(pathlib.Path(prefixe).parent.glob(pathlib.Path(prefixe).name + ".*"),
+108:                       key=lambda f: int(f.name.rsplit(".", 1)[1]))
+109:     pos, lignes, tronques = [], [], 0
+110:     for f in fichiers:
+111:         octets = f.read_bytes()
+112:         if len(octets) % 4 or len(octets) == 0:
+113:             tronques += 1
+114:             continue
+115:         pos.append(int(f.name.rsplit(".", 1)[1]))
+116:         lignes.append(np.frombuffer(octets, dtype="<f4"))
+117:     if not lignes:
+118:         raise SystemExit(f"{prefixe} : aucun état lisible")
+119:     if tronques:
+120:         print(f"  ⚠ {prefixe} : {tronques} fichier(s) tronqué(s) ignoré(s)")
+121:     return np.array(pos, dtype=np.int64), np.vstack(lignes).astype(np.float32)
+122: 
+123: 
+124: # -------
+… [157 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py", "new_string": "def charger_etats(prefixe: str):\n    \"\"\"(positions triées, matrice n×896). Un fichier tronqué est IGNORÉ et compté.\n\n    Le glob `PREFIXE.*` attrape aussi ce qui n'est PAS un état : le journal … [1896 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lecture_etat.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/lecture_etat.py').read());print('syntaxe OK')\" && nohup bash tools/porte-profondeur-routee.sh > /tmp/porte-H.log 2>&1 & sleep 40; cat /tmp/porte-H.log", "descri … [42 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== 0. le corpus, tokenisé par le modèle ===
+  85626 tokens écrits dans /tmp/porte-profondeur-routee/corpus.ids (vocabulaire du modèle : 151936)
+  réversibilité : texte reconstruit identique ✅ (359041 octets)
+=== 1. la chaîne hors-ligne reproduit-elle le moteur ? (avant toute mesure) ===
+  — profondeur 16 (moteur : 429684.6614)
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 429,660.5721
+  perplexité du moteur  : 429,684.6614
+  écart relatif         : 0.0056 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0056 % près
+  — profondeur 24 (moteur : 14.6496)
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 14.6477
+  perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la porte, lecture du style des fiches existantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -45 reports/rapport-c9-lateralite.md", "description": "Read an existing report for style"}`
+
+  ```
+# C9 — latéralité : l'échange est exact, il ne crée pas de gain, et il récupère un jumeau dégradé à hauteur de sa moyenne
+
+> Campagne : **cerveau** · expérience : deux instances jumelles, échange d'état à une couche
+> Question : le plan (§ C9) demande deux jumeaux et un lien **homotopique par couche**, avec un
+> invariant (« échange désactivé ⇒ identique au modèle seul ») et une validation honnête (« un gain
+> de perplexité **ou** de robustesse — et si le gain est nul, le dire »). Alors : **l'échange
+> apporte-t-il quelque chose, et quoi ?**
+> Verdict : **trois résultats, dont deux négatifs et un explicable.**
+> (1) **l'échange désactivé est EXACT** : un état imposé à la couche 12 puis les couches 12..24
+> rendent **27,4964**, exactement la perplexité du modèle entier (64 jetons) ;
+> (2) **deux jumeaux identiques qui s'échangent ne changent RIEN** (27,4964 = 27,4964, au bit
+> près) : pas de gain gratuit, c'est la garde du plan ;
+> (3) **un jumeau DÉGRADÉ est récupéré** (163,17 → 36,13) — mais le **contrôle** (le même bruit à
+> moitié d'amplitude, qui est exactement ce que fait une moyenne) donne le **même chiffre**
+> (36,1307, écart **0,000 %**) : **c'est une moyenne, pas une latér
+… [1534 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Enrichissement décisif : comparer les deux chemins sur les mêmes jetons sortis
+
+- **bash** `{"command": "pkill -f \"porte-profondeur-routee\" 2>/dev/null; sleep 1; pkill -f \"etat-sortie /tmp/porte-profondeur\" 2>/dev/null; sleep 1; pgrep -af \"porte-profondeur-routee.sh|e16/etat|e24/etat\" | head -3; echo \"porte arrêtée\"", "description": "Stop the gate to enrich the measurement"}`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "new_string": "    # --- 2. la cascade : sortir tôt selon la confiance du chemin court --------------------------\n    conf = torch.softmax(L16, dim=-1).max(-1).values.numpy()\n    print(\"\\n| seuil d … [2949 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "limit": 30, "offset": 175}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py</path>
+<type>file</type>
+<content>
+175:     conf = torch.softmax(L16, dim=-1).max(-1).values.numpy()
+176:     print("\n| seuil de confiance | sortis tôt | justesse globale | témoin au hasard |")
+177:     print("|---|---|---|---|")
+178:     rng = np.random.default_rng(a.graine)
+179:     for seuil in (0.0, 0.5, 0.7, 0.9, 0.95, 0.99):
+180:         sortis = conf >= seuil
+181:         if sortis.sum() == 0:
+182:             continue
+183:         # justesse : chemin court sur les jetons sortis, chemin long sur les autres
+184:         juste = np.where(sortis, juste16, juste24).mean()
+185:         # témoin : la MÊME part de jetons, tirés au hasard (là où le choix ne veut rien dire)
+186:         temoin = 0.0
+187:         for _ in range(20):
+188:             t = rng.random(n) < sortis.mean()
+189:             temoin += np.where(t, juste16, juste24).mean() / 20
+190:         print(f"| {seuil:.2f} | {100 * sortis.mean():.1f} % | {100 * juste:.2f} % | "
+191:               f"{100 * temoin:.2f} % |")
+192:     print(f"\n(point de comparaison : tout en long = {100 * juste24.mean():.2f} % · "
+193:           f"tout e
+… [823 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py", "new_string": "    conf = torch.softmax(L16, dim=-1).max(-1).values.numpy()\n    print(\"\\n| seuil de confiance | sortis tôt | justesse globale | court sur les sortis | \"\n          \"long sur les so … [2726 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "limit": 30, "offset": 128}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+128:                             ("confiance accord", conf_ok), ("confiance désaccord", conf_ko))
+129:              if v is None]
+130: if manquants:
+131:     print(f"  ❌ chiffres illisibles dans la sortie : {', '.join(manquants)}"); sys.exit(1)
+132: 
+133: echecs = []
+134: # 2. le chemin court est genuinement plus mauvais (et pas l'inverse : ce serait une fuite)
+135: if not just_court < just_long - 10:
+136:     echecs.append(f"le chemin court ({just_court} %) n'est pas nettement plus mauvais que le "
+137:                   f"long ({just_long} %) : soit l'expérience ne mesure rien, soit il y a une fuite")
+138: # 3. la borne de l'oracle est un chiffre
+139: if not 5.0 <= accord <= 95.0:
+140:     echecs.append(f"accord = {accord} % : hors de la plage où la mesure a un sens")
+141: if not oracle > just_long:
+142:     echecs.append(f"l'oracle ({oracle} %) ne bat pas le chemin long seul ({just_long} %) : "
+143:                   f"les deux chemins sont trop proches pour que le routage ait un objet")
+144: # 4. aucun seuil n'atteint la qualité du long : le résultat NÉGATIF
+… [1017 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "# 4. aucun seuil n'atteint la qualité du long : le résultat NÉGATIF\nlignes = re.findall(r\"^\\| ([\\d.]+) \\| ([\\d.]+) % \\| ([\\d.]+) % \\| ([\\d.]+) % \\| ([\\d.]+) % \\| \"\n         … [2019 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"print(f\\\"  chemin long\" -A 6 tools/porte-profondeur-routee.sh | head -12", "description": "View gate summary printout"}`
+
+  ```
+171:print(f"  chemin long  : {just_long} % · chemin court : {just_court} % · "
+172-      f"témoin tout-court : {court_seul} %")
+173-print(f"  borne de l'oracle (accord) : {accord} % · oracle par jeton : {oracle} %")
+174-print(f"  meilleur gain du seuil sur le hasard : +{max(d for _, d in gagnants):.2f} points")
+175-print(f"  confiance : {conf_ok} quand le court a raison contre le long, {conf_ko} sinon")
+176-if echecs:
+177-    for e in echecs:
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "print(f\"  meilleur gain du seuil sur le hasard : +{max(d for _, d in gagnants):.2f} points\")\nprint(f\"  confiance : {conf_ok} quand le court a raison contre le long, {conf_ko} sinon\") … [400 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-profondeur-routee.sh && echo \"syntaxe OK\" && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/profondeur_routee_oracle.py').read());print('oracle OK')\"", "description": "Validate both scr … [6 caractères tronqués]`
+
+  ```
+syntaxe OK
+oracle OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Essai rapide du tableau enrichi avant de relancer la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/profondeur_routee_oracle.py \\\n  --etats16 /tmp/c8-8k/etat --etats24 /tmp/mod/final --ids /tmp/campagne24/ids_0.5B-Q8.txt \\\n  --modele models/Qwen2.5-0.5B-Q8_0.gguf --limite 8 … [214 caractères tronqués]`
+
+  ```
+code=0
+ACCORD court/long : 28.76 % des 3925 jetons (1129 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 48.54 %
+
+| seuil de confiance | sortis tôt | justesse globale | court sur les sortis | long sur les sortis | témoin au hasard |
+|---|---|---|---|---|---|
+| 0.00 | 100.0 % | 20.33 % | 20.33 % | 44.97 % | 20.33 % |
+| 0.50 | 41.1 % | 37.73 % | 39.31 % | 56.91 % | 34.86 % |
+| 0.70 | 26.4 % | 41.35 % | 47.30 % | 61.00 % | 38.51 % |
+| 0.90 | 13.4 % | 43.64 % | 62.24 % | 72.11 % | 41.63 % |
+| 0.95 | 9.9 % | 44.25 % | 70.88 % | 78.09 % | 42.57 % |
+| 0.99 | 5.1 % | 44.74 % | 86.57 % | 91.04 % | 43.67 % |
+
+(point de comparaison : tout en long = 44.97 % · tout en court = 20.33 %)
+Les colonnes « court » et « long » portent sur LES MÊMES jetons : si le court y reste
+derrière le long, le seuil de confiance ne trouve aucun sous-ensemble où sortir tôt
+soit neutre — et c'est cette colonne qu'un vrai modèle routé devrait renverser.
+
+confiance moyenne du chemin court — quand il est d'accord avec le long : 0.685 · quand il ne l'est pas : 0.360
+
+Lecture : sortir à 16 couches épargne 8 couches sur 24, soit un tiers des paires
+de ces jeto
+… [158 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la porte finale en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/porte-profondeur-routee && nohup bash tools/porte-profondeur-routee.sh > /tmp/porte-H.log 2>&1 & sleep 5; echo \"porte lancée (pid $!)\"; date", "description": "Launch final gate run"}`
+
+  ```
+porte lancée (pid 3643971)
+sam 10 oct 2026 22:05:17 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche du dessin H
+
+- **write** `{"content": "# Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 29 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr\n\n> Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**\n> Question : le dessin H (` … [8755 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la porte et correction d'un chiffre du témoin
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-design-H-profondeur-routee.md\")\ns = p.read_text(encoding=\"utf-8\")\ns = s.replace(\"il bat le tirage au hasard de\\n   **+5,18 points** (seuil 0,50 : 37,73 % con … [469 caractères tronqués]`
+
+  ```
+corrigé
+  perplexité hors-ligne : 14.6477
+  perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+--- états : 1 / 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la fiche dessin H de la roadmap
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md", "new_string": "- **Pourquoi c'est spécifiquement Drave** : dans une architecture dense classique,\n  sauter une couche casse le graphe et impose des masques ; dans une architecture\n  événementielle, c'est sim … [1764 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modele-pour-drave.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/porte-H.log; echo \"--- états : $(ls -1 /tmp/porte-profondeur-routee/e16.* 2>/dev/null | wc -l) / $(ls -1 /tmp/porte-profondeur-routee/e24.* 2>/dev/null | wc -l)\"; date", "description": "Check gate progress"}`
+
+  ```
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 14.6477
+  perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+--- états : 368 / 1
+sam 10 oct 2026 22:06:05 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction des lettres H/I dans l'état et enregistrement de la mesure
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "## 4. Dessins de modèle (`docs/modele-pour-drave.md` § 3)\n\n> **Les lettres H et I étaient INVERSÉES ici** jusqu'au 10/10 (cet état appelait « I » la profondeur\n> routée et « H » le budget d'événem … [2118 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '175,200p' docs/etat-cerveau.md; echo \"=== porte ===\"; tail -3 /tmp/porte-H.log; echo \"états : $(ls -1 /tmp/porte-profondeur-routee/e16.* 2>/dev/null | wc -l) / $(ls -1 /tmp/porte-profondeur-routee/e24.* 2>/dev/null | wc -l … [63 caractères tronqués]`
+
+  ```
+la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
+`tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+
+## 7. Les corrections à ne pas réintroduire
+
+1. `--limit` **diffère selon le chemin** (`--ppl` = N premiers jetons, `--ppl-reparti` = N
+   derniers) ⇒ dans une porte, compter les jetons du fichier ;
+2. une position ne se devine pas : `--tokenize` ≠ `--prompt` ⇒ `--etat-fin` (k-ième depuis la fin) ;
+3. `..Default::default()` donne **0,0** à un f32 (un poids de greffe nul, en silence) ;
+4. `sys.exit("message")` sort **toujours en 1** — une porte « verte » rendait 1 ;
+5. une porte rouge s'instruit **jusqu'à sa cause** (la rouge de répartition accusait le modèle,
+   c'était la porte) ;
+6. **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose** (18,5520 = 18,5520 était
+   deux réglages inertes ; 0 ≡ 4 puits était un zéro **avalé**) ;
+7. **une mesure d'inertie faite là où l'inertie est attendue ne dit rien** (les puits d'attention
+   sont inertes **sans fenêtre** — par construction) ;
+8. un **zéro inexprimable** est un défaut : `if drapeau > 0` transforme « zéro » en « défaut ».
+=== porte =
+… [137 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Allègement de la porte : le chemin long ne parcourt que la zone de test
+
+- **bash** `{"command": "pkill -f \"porte-profondeur-routee\" 2>/dev/null; sleep 1; pkill -f \"etat-sortie /tmp/porte-profondeur\" 2>/dev/null; sleep 1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/profondeur_routee_oracle.py \\\n  --etats16 /tmp/c … [340 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/profondeur_routee_oracle.py \\\n  --etats16 /tmp/c8-8k/etat --etats24 /tmp/mod/final --ids /tmp/campagne24/ids_0.5B-Q8.txt \\\n  --modele models/Qwen2.5-0.5B-Q8_0.gguf --limite 8 … [208 caractères tronqués]`
+
+  ```
+code=0
+test   : positions 1000..3000 (2001 jetons)
+entraînement : 3743 états (3512..7254) · validation : 936 (7255..8190)
+marge test/entraînement : 512 positions
+
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+avant entraînement (A = identité) : perplexité de validation = 681,943.4834
+  époque   1/30 · perte train 65,115,557.4976 · validation 28,111.2758  ← meilleur
+  époque   5/30 · perte train 29.9195 · validation 590.2283  ← meilleur
+  époque  10/30 · perte train 2.0025 · validation 480.0524  ← meilleur
+  époque  15/30 · perte train 1.1255 · validation 881.4015
+  époque  20/30 · perte train 1.0430 · validation 1,257.6685
+  époque  25/30 · perte train 1.0204 · validation 1,650.8628
+  époque  30/30 · perte train 1.0134 · validation 1,990.1834
+meilleure époque : 10 · validation 480.0524
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 11.9921 | 47.73 % |
+| court — 16 couches, adaptateur entraîné | 499.0613 | 23.19 % |
+
+ACCORD court/long : 30.93 % des 2001 jetons (619 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 51.92 %
+
+| seuil de confiance | sortis tôt
+… [1148 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour du protocole de la porte (test au début, entraînement après)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"tools/porte-profondeur-routee.sh\"); s = p.read_text()\ns = s.replace('TEST_MIN=${TEST_MIN:-4200}\\nTEST_MAX=${TEST_MAX:-8188}',\n              '# Le TEST est pris au DÉBUT et l'en … [1933 caractères tronqués]`
+
+  ```
+syntaxe OK
+37:TEST_MIN=${TEST_MIN:-4200}
+38:TEST_MAX=${TEST_MAX:-8188}
+[stderr]
+  File "<stdin>", line 3
+    s = s.replace('TEST_MIN=${TEST_MIN:-4200}\nTEST_MAX=${TEST_MAX:-8188}',
+                 ^
+SyntaxError: '(' was never closed
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "limit": 30, "offset": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+30: # existe dans le dépôt mais vient d'un AUTRE tokenizer : le modèle complet y rend 7 379 de
+31: # perplexité au lieu de 16,6, et une perplexité absurde rendrait toute la mesure absurde sans que
+32: # rien ne le signale (constaté, puis écarté — `docs/campagne-benefices.md` § « deux corpus »).
+33: TEXTE=${TEXTE:-data/wikitext2_test.txt}
+34: P=${P:-/home/stephane/gpu-env/bin/python}
+35: T=${TRAVAIL:-/tmp/porte-profondeur-routee}
+36: N=${N:-8192}
+37: TEST_MIN=${TEST_MIN:-4200}
+38: TEST_MAX=${TEST_MAX:-8188}
+39: EPOQUES=${EPOQUES:-30}
+40: DELAI=${DELAI:-2400}
+41: 
+42: for f in "$D" "$M" "$TEXTE"; do
+43:     [ -e "$f" ] || { echo "  ❌ $f manquant : cette porte mesure le dessin H sur le corpus du dépôt"; exit 2; }
+44: done
+45: $P -c "import torch" 2>/dev/null || { echo "  ❌ $P n'a pas torch : la relecture d'état en a besoin"; exit 2; }
+46: mkdir -p "$T"
+47: 
+48: echo "=== 0. le corpus, tokenisé par le modèle ==="
+49: rm -f "$T/corpus.ids"
+50: "$D" "$M" --tokenize --fichier "$TEXTE" --sortie "$T/corpus.ids" 2>&1 | sed 's/^/  /'
+51: IDS="$T/corpus.ids"
+52: [ -s "$IDS"
+… [525 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "N=${N:-8192}\n# Le TEST est pris au DÉBUT et l'entraînement APRÈS : le chemin long ne parcourt alors que la zone\n# de test (`--limit TEST_MAX+2`) au lieu des 8 192 jetons, et la porte di … [323 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "limit": 32, "offset": 78}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh</path>
+<type>file</type>
+<content>
+78: # 16 couches : TOUT le texte (l'adaptateur s'entraîne dessus).
+79: # 24 couches : seulement la zone de TEST (le chemin long n'est lu que là) — mais le moteur
+80: # traverse le texte jusqu'à la dernière position demandée, donc le parcours coûte pareil.
+81: # LES DEUX CAPTURES TOURNENT ENSEMBLE : en série elles prennent le double, et rien ne les lie.
+82: POS16=$(seq -s, 4 $((N - 1)))
+83: POS24=$(seq -s, "$TEST_MIN" "$TEST_MAX")
+84: T0=$(date +%s)
+85: "$D" "$M" --ppl "$IDS" --limit "$N" --ctx "$N" --threads 8 --couches 0:16 \
+86:     --tete-partielle --etat-sortie "$T/e16" --etat-pos "$POS16" > "$T/e16.log" 2>&1 &
+87: PID16=$!
+88: "$D" "$M" --ppl "$IDS" --limit "$N" --ctx "$N" --threads 8 --couches 0:24 \
+89:     --etat-sortie "$T/e24" --etat-pos "$POS24" > "$T/e24.log" 2>&1 &
+90: PID24=$!
+91: wait "$PID16"; C16=$?
+92: wait "$PID24"; C24=$?
+93: echo "  parcours terminés en $(( $(date +%s) - T0 )) s (codes $C16 et $C24)"
+94: N16=$(ls -1 "$T"/e16.* 2>/dev/null | grep -cE '\.[0-9]+$')
+95: N24=$(ls -1 "$T"/e24.* 2>/dev/null | grep -cE '\.[0-9]+$')
+96: echo "  états
+… [1047 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "# 16 couches : TOUT le texte — l'adaptateur s'entraîne sur la FIN, après la zone de test.\n# 24 couches : seulement la zone de TEST, et le parcours est BORNÉ à cette zone (`--limit`) : sa … [1460 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh", "new_string": "    --limite \"$N\" --test-min \"$TEST_MIN\" --test-max \"$TEST_MAX\" --train-partie apres \\", "old_string": "    --limite \"$N\" --test-min \"$TEST_MIN\" --test-max \"$TEST_MAX\" --trai … [19 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-profondeur-routee.sh && echo \"syntaxe OK\" && grep -n \"TEST_MIN=\\|TEST_MAX=\\|train-partie\\|limit \\$((TEST\" tools/porte-profondeur-routee.sh", "description": "Verify gate changes"}`
+
+  ```
+syntaxe OK
+41:TEST_MIN=${TEST_MIN:-1000}
+42:TEST_MAX=${TEST_MAX:-3000}
+88:"$D" "$M" --ppl "$IDS" --limit $((TEST_MAX + 2)) --ctx "$N" --threads 8 --couches 0:24 \
+107:    --limite "$N" --test-min "$TEST_MIN" --test-max "$TEST_MAX" --train-partie apres \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/porte-profondeur-routee && nohup bash tools/porte-profondeur-routee.sh > /tmp/porte-H.log 2>&1 & sleep 3; echo \"porte relancée (pid $!)\"; date", "description": "Launch the lightened gate"}`
+
+  ```
+porte relancée (pid 3665639)
+sam 10 oct 2026 22:08:03 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture de la fiche avec les chiffres du protocole de la porte
+
+- **write** `{"content": "# Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 31 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr\n\n> Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**\n> Question : le dessin H (` … [9137 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 reports/rapport-design-H-profondeur-routee.md && wc -l reports/rapport-design-H-profondeur-routee.md; echo \"=== porte ===\"; tail -2 /tmp/porte-H.log; echo \"états : $(ls -1 /tmp/porte-profondeur-routee/e16.* 2>/dev/null | w … [128 caractères tronqués]`
+
+  ```
+# Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 29 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr
+
+> Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**
+128 reports/rapport-design-H-profondeur-routee.md
+=== porte ===
+  écart relatif         : 0.0056 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0056 % près
+états : 0 / 0
+  ```
+
+- **write** `{"content": "# Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 31 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr\n\n> Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**\n> Question : le dessin H (` … [9064 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md", "limit": 12}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md</path>
+<type>file</type>
+<content>
+1: # Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 29 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr
+2: 
+3: > Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**
+4: > Question : le dessin H (`docs/modele-pour-drave.md` § 3) promet qu'une couche sautée vaut **zéro
+5: > paire**. Mais **qui** saute quoi ? Un routeur parfait ne se trompe jamais ; un routeur réel ne
+6: > dispose que de la **confiance** du chemin court. Alors : **combien un oracle épargnerait-il, et
+7: > qu'atteint un routeur qui ne sait rien ?**
+8: > Verdict : **quatre résultats, dont un seul est positif.**
+9: > (1) **la chaîne hors-ligne reproduit le moteur** — 0,013 % (24 couches) et 0,006 % (16 couches) :
+10: > les chiffres qui suivent sont ceux du moteur, pas ceux d'une relecture plausible ;
+11: > (2) **la borne de l'oracle vaut 28,76 %** des jetons : sur ces 1 129 jetons sur 3 925, sortir à
+12: > 16 couches ne change pas la décision. Au mieux **≈ 9,6 % des paires** (un tiers des c
+… [78 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Dessin H — profondeur routée : la borne de l'oracle vaut ≈ 31 % des jetons, et le chemin court reste derrière le chemin long même là où il est le plus sûr\n\n> Campagne : **cerveau** · expérience : sortir à **16 couches** au lieu de 24, **jeton par jeton**\n> Question : le dessin H (` … [9064 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la porte et vérification de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 /tmp/porte-H.log; echo \"états : $(ls -1 /tmp/porte-profondeur-routee/e16.* 2>/dev/null | wc -l) / $(ls -1 /tmp/porte-profondeur-routee/e24.* 2>/dev/null | wc -l)\"; wc -l reports/rapport-design-H-profondeur-routee.md; grep - … [108 caractères tronqués]`
+
+  ```
+perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+états : 475 / 1
+133 reports/rapport-design-H-profondeur-routee.md
+0
+sam 10 oct 2026 22:08:57 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture des manques N4/N5 pour les mettre à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N4\\|N5\" docs/manques.md | head -12", "description": "Find N4/N5 entries"}`
+
+  ```
+36:| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués, **jamais entraînés** | les trois leviers inédits de `docs/modele-pour-drave.md` § 3 (H, I, J) |
+37:| **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² 0,992**) mais celui d'il y a 8 pas **ne l'est pas** (−0,681) ; une **structure** (tampon lu directement) le rend **exactement** (1,000) — `reports/rapport-c8-peripherie.md`, `reports/rapport-c2-recurrence.md` | toute tâche qui demande de **retenir** (poursuite, mémoire de travail) côté modèle ; l'engine, lui, sait maintenant retenir (`--memoire`) — ce qui manque est que le **modèle** s'en serve, et c'est un entraînement |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md", "limit": 8, "offset": 33}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md</path>
+<type>file</type>
+<content>
+33: | **N1** | **structure innée à l'échelle** — gratuite à 25 % à dim 384 (+1,0 %), coûteuse à 12,5 % (+13,7 %) **et à dim 512 (+6,7 %)** | E1 et m16, mesurés | un connectome inné viable demande un masque **choisi**, pas aléatoire |
+34: | **N2** | **deux axes appris à l'échelle** — ÷7,8 à dim 384 | m11 mesuré ; m17 (dim 512) en cours | savoir si la recette tient en grandissant |
+35: | **N3** | **règle d'apprentissage locale** — aucune ne transfère | 5 variantes mesurées (nue, nouveauté, valeur, valeur externe, décorrélation) ; la meilleure reste **ne rien faire** | tout apprentissage par impulsions |
+36: | **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués, **jamais entraînés** | les trois leviers inédits de `docs/modele-pour-drave.md` § 3 (H, I, J) |
+37: | **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² 0,992**) mais celui d'il y a 8 pas **ne l'est pas** (−0,681) ; une **s
+… [441 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md", "new_string": "| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués, **jamais entraînés** — et pour H la **borne est maintenant me … [678 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/porte-H.log; echo \"états : $(ls -1 /tmp/porte-profondeur-routee/e16.* 2>/dev/null | wc -l) / $(ls -1 /tmp/porte-profondeur-routee/e24.* 2>/dev/null | wc -l)\"; sed -n '1,20p' docs/etat-cerveau.md | head -8", "descriptio … [34 caractères tronqués]`
+
+  ```
+✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+états : 1128 / 1
+# État du cerveau Drave — capacités, expériences, prochaine action
+
+> **2026-10-10 15:56 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
+> ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
+> (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
+> `reports/campagne-benefices/`, une par expérience).
+>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du crochet de journal automatique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat .git/hooks/pre-commit 2>/dev/null | head -20; echo \"=== journal du jour ===\"; ls journal/ | tail -6", "description": "Inspect journal hook"}`
+
+  ```
+#!/bin/sh
+# Archive les traces de session DSH avant chaque commit : le journal doit
+# accompagner le code, pas le suivre.
+cd "$(git rev-parse --show-toplevel)" || exit 0
+python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
+python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+# régénéré ensuite pour lister les fichiers produits.
+python3 tools/journal_auto.py --quiet >/dev/null 2>&1 || true
+python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
+git add journal 2>/dev/null || true
+exit 0
+=== journal du jour ===
+2026-10-10_portes.md
+2026-10-10-readme-historique.md
+2026-10-10-reprise-historique.md
+README.md
+sessions
+THEMES.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente suivie de la porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -qE \"porte profondeur routée|❌\" /tmp/porte-H.log 2>/dev/null; do sleep 20; done; echo \"=== fin de la porte ===\"; cat /tmp/porte-H.log", "description": "Wait for gate completion", "run_in_background": true}`
+
+  ```
+started background job bash-45
+  ```
+
+- **job_output** `{"job_id": "bash-45", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== fin de la porte ===
+=== 0. le corpus, tokenisé par le modèle ===
+  85626 tokens écrits dans /tmp/porte-profondeur-routee/corpus.ids (vocabulaire du modèle : 151936)
+  réversibilité : texte reconstruit identique ✅ (359041 octets)
+=== 1. la chaîne hors-ligne reproduit-elle le moteur ? (avant toute mesure) ===
+  — profondeur 16 (moteur : 429684.6614)
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 429,660.5721
+  perplexité du moteur  : 429,684.6614
+  écart relatif         : 0.0056 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0056 % près
+  — profondeur 24 (moteur : 14.6496)
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+  positions 0..126 (127 états, 127 prédictions)
+  perplexité hors-ligne : 14.6477
+  perplexité du moteur  : 14.6496
+  écart relatif         : 0.0130 %  (toléré 0.20 %)
+  ✅ la chaîne hors-ligne reproduit le moteur à 0.0130 % près
+
+=== 2. capturer les deux profondeurs sur 8192 jetons ===
+  parcours terminés en 517 s (codes 0 et 0)
+  états capturés : 8188 en profondeur 16 · 2001 en profondeur 24
+
+=== 3. la mesure : borne de l'oracle, cascade, 
+… [141 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du préfixe d'états de la porte, puis relance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'e16\\|e24' tools/porte-profondeur-routee.sh", "description": "Locate state prefix uses in gate"}`
+
+  ```
+86:    --tete-partielle --etat-sortie "$T/e16" --etat-pos "$POS16" > "$T/e16.log" 2>&1 &
+89:    --etat-sortie "$T/e24" --etat-pos "$POS24" > "$T/e24.log" 2>&1 &
+94:N16=$(ls -1 "$T"/e16.* 2>/dev/null | grep -cE '\.[0-9]+$')
+95:N24=$(ls -1 "$T"/e24.* 2>/dev/null | grep -cE '\.[0-9]+$')
+99:[ "$C16" = 0 ] && [ "$C24" = 0 ] || { echo "  ❌ un parcours a échoué"; tail -5 "$T/e16.log" "$T/e24.log" | sed 's/^/    /'; exit 1; }
+106:    --etats16 "$T/e16/etat" --etats24 "$T/e24/etat" --ids "$IDS" --modele "$M" \
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - \"$PWD/tools/porte-profondeur-routee.sh\" <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\npaires = [\n    ('--etat-sortie \"$T/e16\"', '--etat-sortie \"$T/e16/etat\"'),\n    ('--etat-sortie … [781 caractères tronqués]`
+
+  ```
+prefixes corriges
+syntaxe OK
+66:        --couches "$COUCHES" --tete-partielle --etat-sortie "$T/v$PROF" --etat-pos "$POSC" \
+84:mkdir -p "$T/e16" "$T/e24"
+87:    --tete-partielle --etat-sortie "$T/e16/etat" --etat-pos "$POS16" > "$T/e16.log" 2>&1 &
+90:    --etat-sortie "$T/e24/etat" --etat-pos "$POS24" > "$T/e24.log" 2>&1 &
+95:N16=$(ls -1 "$T"/e16/etat.* 2>/dev/null | grep -cE '\.[0-9]+$')
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance de la porte complète après correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/porte-profondeur-routee && nohup bash tools/porte-profondeur-routee.sh > /tmp/porte-H.log 2>&1 & sleep 3; echo \"porte relancée (pid $!)\"; date", "description": "Relaunch gate after prefix fix"}`
+
+  ```
+porte relancée (pid 3760322)
+sam 10 oct 2026 22:17:34 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -qE \"porte profondeur routée|❌\" /tmp/porte-H.log 2>/dev/null; do sleep 20; done; echo \"=== porte terminée ===\"; sed -n '/=== 3/,$p' /tmp/porte-H.log; echo \"--- code global ---\"; grep -c \"❌\" /tmp/porte-H.log", "desc … [69 caractères tronqués]`
+
+  ```
+started background job bash-46
+  ```
+
+- **job_output** `{"job_id": "bash-46", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== porte terminée ===
+=== 3. la mesure : borne de l'oracle, cascade, témoin ===
+  test   : positions 1000..3000 (2001 jetons)
+  entraînement : 3743 états (3512..7254) · validation : 936 (7255..8190)
+  | chemin | perplexité (test) | justesse@1 |
+  |---|---|---|
+  | long — 24 couches, tête du modèle | 11.9921 | 47.73 % |
+  | court — 16 couches, adaptateur entraîné | 499.0613 | 23.19 % |
+  ACCORD court/long : 30.93 % des 2001 jetons (619 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+  oracle (le meilleur des deux par jeton) : 51.92 %
+  | seuil de confiance | sortis tôt | justesse globale | court sur les sortis | long sur les sortis | témoin au hasard |
+  |---|---|---|---|---|---|
+  | 0.00 | 100.0 % | 23.19 % | 23.19 % | 47.73 % | 23.19 % |
+  | 0.50 | 47.2 % | 39.13 % | 38.24 % | 56.46 % | 35.89 % |
+  | 0.70 | 30.7 % | 42.78 % | 47.23 % | 63.36 % | 40.09 % |
+  | 0.90 | 15.3 % | 45.63 % | 58.17 % | 71.90 % | 43.94 % |
+  | 0.95 | 11.1 % | 46.33 % | 61.71 % | 74.32 % | 45.03 % |
+  | 0.99 | 5.1 % | 47.33 % | 80.39 % | 88.24 % | 46.50 % |
+  (point de comparaison : tout en long = 47.73 % · tout en court = 23.19 %)
+  confiance moyenne du chemin court — quand il est d'
+… [992 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte verte ; lancement de la passe complète en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"parcours terminés\" /tmp/porte-H.log; date; nohup env DELAI=2400 JOURNAUX=/tmp/portes-2218 bash tools/toutes-les-portes.sh > /tmp/passe-2218.log 2>&1 & sleep 3; echo \"passe complète lancée\"; date", "description": "Start f … [30 caractères tronqués]`
+
+  ```
+parcours terminés en 506 s (codes 0 et 0)
+sam 10 oct 2026 22:27:07 EDT
+passe complète lancée
+sam 10 oct 2026 22:27:10 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état reprenable (horodatage, instruments, suite)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 45, "offset": 112}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+112: 
+113: - **27 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 21 h 33 : 27 vertes sur 27, 60 min 13 s** (dont les quatre ajoutées aujourd'hui : jumeaux, c4-retard, mémoire, récurrence)
+114:   (`tools/toutes-les-portes.sh`, chaque porte bornée, journaux gardés ; détail dans
+115:   `reports/rapport-passe-complete-portes.md`). La passe a servi à deux choses : elle a montré que
+116:   `porte-gain.sh` § 9 était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré), et
+117:   elle a démasqué `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait
+118:   `stdin`, que personne ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
+119: - **122 tests** `cargo test`, crate **std seul, zéro dépendance**, profil `release` = binaire de
+120:   mesure.
+121: - Mesures dédiées : `tools/carte-fenetre-puits.sh` (fenêtre × puits d'attention),
+122:   `tools/decouper-rapport.py` (un rapport par expérience), `tools/aiguille.py`,
+123:   `tools/proxy_latence.py`.
+124: 
+125: ## 6. ▶ Prochaine action
+126: 
+127: **1. Passe complète des porte
+… [2782 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "- **28 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,\n  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et la **28e\n  a … [2138 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "## 6. ▶ Prochaine action\n\n**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**\naprès l'ajout de `porte-profondeur-routee.sh` (28 portes) ; le verdict r … [1117 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M' && python3 - \"$PWD/docs/etat-cerveau.md\" <<'PYEOF'\nimport pathlib, sys, subprocess\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=Tr … [367 caractères tronqués]`
+
+  ```
+2026-10-10 22:27
+horodatage mis à jour : 2026-10-10 22:27
+> **2026-10-10 22:27 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche des mentions du nombre de portes à mettre à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"27 portes\\|27 vertes\\|27/27\" docs/ README.md REPRISE.md journal/*.md 2>/dev/null | head -12", "description": "Find gate-count references"}`
+
+  ```
+docs/references-non-regression.md:4:> par la passe complète des portes** (`tools/toutes-les-portes.sh`, **27 vertes sur
+docs/references-non-regression.md:19:| toutes les portes | `tools/toutes-les-portes.sh` | **27 vertes**, ≈60 min, aucune sautée |
+docs/manques.md:59:  **27 vertes sur 27, en 60 min 13 s** (mesuré le 2026-10-10 à 21:33 HAE ; détail et durées
+journal/2026-10-10.md:150:| 21:33 | `fcd442d` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres |
+journal/2026-10-10_portes.md:21:| 21:33 | `fcd442d` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres | `manques.md`, `references-non-regression.md`, `2026-10-10.md` (+14) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -i -E \"reference|passe|rapport\" ; grep -rln \"references-non-regression\" tools/*.py tools/*.sh 2>/dev/null | head", "description": "Find reference regeneration tool"}`
+
+  ```
+decouper-rapport.py
+engram_reference.py
+rapport_du_pont.py
+sonde-passe-k3.sh
+v41_attention_reference.py
+v41_compresseur_reference.py
+v41_experts_reference.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"references-non-regression\" --include=*.py --include=*.sh . 2>/dev/null | grep -v \"^./docs\" | head -5; echo \"--- qui l'écrit ? ---\"; grep -n \"references-non-regression\\|references_non\" tools/toutes-les-portes.sh 2>/ … [71 caractères tronqués]`
+
+  ```
+--- qui l'écrit ? ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit et push de la mesure et de sa porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain && echo \"--- diff stat ---\" && git diff --stat | tail -5", "description": "Review working tree before commit"}`
+
+  ```
+M docs/etat-cerveau.md
+ M docs/manques.md
+ M docs/modele-pour-drave.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md
+?? reports/rapport-design-H-profondeur-routee.md
+?? tools/lecture_etat.py
+?? tools/porte-profondeur-routee.sh
+?? tools/profondeur_routee_oracle.py
+?? tools/verifier_chaine_etat.py
+--- diff stat ---
+ journal/README.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    4 +-
+ .../d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | 2220 ++++++++++++++++++++
+ .../rapport.md                                     |   78 +-
+ 7 files changed, 2351 insertions(+), 34 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG'\nDessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant\n\nLA QUESTION. Le dessin H (`docs/modele-pour-drave.md` § 3) promet qu'u … [2298 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 60000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo \"--- état ---\"; git status --porcelain | head -5; echo \"--- distant ---\"; git rev-parse --short HEAD; git rev-parse --short origin/master", "description": "Check commit and push status"}`
+
+  ```
+e2a710c Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)
+fcd442d Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres
+--- état ---
+M  docs/etat-cerveau.md
+M  docs/manques.md
+M  docs/modele-pour-drave.md
+ M journal/2026-10-10.md
+ M journal/2026-10-10_apprentissage.md
+--- distant ---
+e2a710c
+e2a710c
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit relancé avec plus de temps (le crochet de journal est lent)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/index.lock 2>/dev/null && echo \"verrou présent\" || echo \"pas de verrou\"; ls .git/COMMIT_EDITMSG >/dev/null && echo \"message présent\"; git add -A && echo \"index prêt\"", "description": "Check for git lock and restage"}`
+
+  ```
+pas de verrou
+message présent
+index prêt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F .git/COMMIT_EDITMSG 2>&1 | tail -3; echo \"code=$?\"; git log --oneline -1", "description": "Commit with saved message", "timeoutMs": 420000}`
+
+  ```
+code=0
+5abfb52 Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -12", "description": "Verify commit contents"}`
+
+  ```
+5abfb52 Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)
+ docs/etat-cerveau.md                               |   60 +-
+ docs/manques.md                                    |    2 +-
+ docs/modele-pour-drave.md                          |   19 +
+ journal/2026-10-10.md                              |    7 +-
+ journal/2026-10-10_apprentissage.md                |    2 +-
+ journal/2026-10-10_attention.md                    |    2 +-
+ journal/2026-10-10_distribue.md                    |    6 +-
+ journal/2026-10-10_divers.md                       |    8 +-
+ journal/2026-10-10_docs.md                         |    6 +-
+ journal/2026-10-10_memoire.md                      |    6 +-
+ journal/2026-10-10_mesures.md                      |    8 +-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | tail -8", "description": "Check commit tail for new files"}`
+
+  ```
+.../d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md | 2479 ++++++++++++++++++++
+ .../rapport.md                                     |   82 +-
+ reports/rapport-design-H-profondeur-routee.md      |  133 ++
+ tools/lecture_etat.py                              |  182 ++
+ tools/porte-profondeur-routee.sh                   |  199 ++
+ tools/profondeur_routee_oracle.py                  |  224 ++
+ tools/verifier_chaine_etat.py                      |   69 +
+ 24 files changed, 3458 insertions(+), 69 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du message de commit (amendé avec le bon texte)
+
+- **write** `{"content": "Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant\n\nLA QUESTION. Le dessin H (`docs/modele-pour-drave.md` § 3) promet qu'une couche sautee vaut zero\npaire. Mais qui saute quoi ? Un routeur parfait ne se trompe jamais  … [2181 caractères tronqués]`
+
+  ```
+<path>/tmp/message-commit.txt</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit.txt 2>&1 | tail -3; echo \"code=$?\"; git log --oneline -1; git show --stat --oneline HEAD | tail -3", "description": "Amend commit with correct message", "timeoutMs": 420000}`
