@@ -34,6 +34,7 @@ ordonné (`madvise`, lecture des experts par grappe) n'existe pas.
 | **N2** | **deux axes appris à l'échelle** — ÷7,8 à dim 384 | m11 mesuré ; m17 (dim 512) en cours | savoir si la recette tient en grandissant |
 | **N3** | **règle d'apprentissage locale** — aucune ne transfère | 5 variantes mesurées (nue, nouveauté, valeur, valeur externe, décorrélation) ; la meilleure reste **ne rien faire** | tout apprentissage par impulsions |
 | **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués, **jamais entraînés** | les trois leviers inédits de `docs/modele-pour-drave.md` § 3 (H, I, J) |
+| **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² 0,992**) mais celui d'il y a 8 pas **ne l'est pas** (−0,681) ; une **structure** (tampon lu directement) le rend **exactement** (1,000) — `reports/rapport-c8-peripherie.md`, `reports/rapport-c2-recurrence.md` | toute tâche qui demande de **retenir** (poursuite, mémoire de travail) côté modèle ; l'engine, lui, sait maintenant retenir (`--memoire`) — ce qui manque est que le **modèle** s'en serve, et c'est un entraînement |
 
 ---
 

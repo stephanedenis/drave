@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 59.0 h |
 | Tours | 90 |
-| Messages | 2583 |
-| Appels d'outils | 2378 |
+| Messages | 2584 |
+| Appels d'outils | 2379 |
 | Fichiers touchés | 97 |
-| Commandes | 2072 |
+| Commandes | 2073 |
 | Sous-agents | 3 |
-| Commits | 244 |
+| Commits | 245 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*46 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3712,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 32 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ C2 : la validation du plan demande un cycle à DEUX régions — j'écris la conception (le validateur le refuse encore)
+⏵ J'inscris au registre des manques ce que la journée a établi : le modèle ne retient pas un signal injecté
 
 ## 3. Travail accompli
 
@@ -3870,7 +3870,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2032 autres
+- … et 2033 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4262,4 +4262,5 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - C2 : la conception du CYCLE a deux regions, ecrite AVANT le code, avec ses cinq portes  Un cycle n'est pas « une boucle de plus » : une boucle locale vit DANS u
+- Registre des manques : N5 — le modele ne retient pas un signal injecte (mesure : present 0,992 / passe -0,681 / tampon 1,000)  Le registre gagne un manque MESUR
 

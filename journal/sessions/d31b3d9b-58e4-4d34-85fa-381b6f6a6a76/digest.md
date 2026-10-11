@@ -41498,3 +41498,18 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"docs/note-cycle-c2.md\"); s = p.read_text()\ns = s.replace(\"> **2026- … [4148 caractères tronqués]`
+
+  ```
+état : conception du cycle C2 renvoyée
+journal complété
+poussé
+  porte-indice           ✅                         751 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          76 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+20:10
+  ```
+
+### 🤖 Assistant
+
+⏵ J'inscris au registre des manques ce que la journée a établi : le modèle ne retient pas un signal injecté
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\nold = \"\"\"| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** |  … [2561 caractères tronqués]`
