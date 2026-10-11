@@ -50231,3 +50231,24 @@ dim 11 oct 2026 01:47:29 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF'\nBUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLUS elagues du tout (l'attention restait intacte)\n\nCE QUI S'EST PASSE. Sous reparametrisation, `named_parameters()` rend\n`... … [1741 caractères tronqués]`
+
+  ```
+5a5cec19 BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLUS elagues du tout (l'attention restait intacte)
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# marquer dans la fiche que les chiffres des variantes paramétrées sont en cours de re-mesure\np = pathlib.Path(\"reports/rapport-e6-poids-lognormaux.md\"); s = p.read_text()\nalerte = \"\"\"> **⚠ … [1347 caractères tronqués]`
+
+  ```
+alerte ajoutée
+> et sont **en cours de re-mesure** ; ceux du témoin dense, des contrôles et des occupations
+> restent valides. Le défaut est corrigé et vérifié (les quatre variantes donnent maintenant
+> 25,2 % d'occupation d'attention à 25 % gardés).
+
+# E6 — poids log-normaux : l'hypothèse est RÉFUTÉE, c'est la CONTRAINTE DE SIGNE qui fait tout
+
+> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une
+> log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)\" 2>&1 | tail -1; git push -q origin master; echo \"push=$?\ … [122 caractères tronqués]`

@@ -1,4 +1,14 @@
-# E6 — poids log-normaux : il y a un CROISEMENT. Le variant est pire à 50 % gardé, et bien meilleur à 25 %
+> **⚠ CHIFFRES EN COURS DE RE-MESURE (11/10, 01 h 50).** Un défaut vient d'être trouvé dans le
+> harnais : sous reparamétrisation, `named_parameters()` rend `...parametrizations.weight.original`
+> et **non** `...weight`, si bien qu'un filtre ajouté la veille excluait le poids lui-même — les
+> variantes **log-normale, signes libres et signes figés** n'avaient donc **que leurs experts
+> élagués** (attention : 1,0 % de zéros au lieu de 75 %). Tous les chiffres de cette fiche portant
+> sur ces trois variantes ont été mesurés sous un élagage **plus léger** que celui du témoin dense
+> et sont **en cours de re-mesure** ; ceux du témoin dense, des contrôles et des occupations
+> restent valides. Le défaut est corrigé et vérifié (les quatre variantes donnent maintenant
+> 25,2 % d'occupation d'attention à 25 % gardés).
+
+# E6 — poids log-normaux : l'hypothèse est RÉFUTÉE, c'est la CONTRAINTE DE SIGNE qui fait tout
 
 > Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une
 > log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne

@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 64.6 h |
 | Tours | 95 |
-| Messages | 3137 |
-| Appels d'outils | 2918 |
+| Messages | 3139 |
+| Appels d'outils | 2920 |
 | Fichiers touchés | 120 |
-| Commandes | 2461 |
+| Commandes | 2463 |
 | Sous-agents | 3 |
-| Commits | 276 |
+| Commits | 277 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,7 +3925,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 24 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
@@ -4106,7 +4106,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2421 autres
+- … et 2423 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4530,4 +4530,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - Etat : 31 portes, la porte des signes figes est nommee avec son rouge" 2>&1 | tail -1; git log --oneline -1
 - Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact)" 2>&1 | tail -1; git log --oneline -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF' BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLU
+- E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)" 2>&1 | tail -1; git
 
