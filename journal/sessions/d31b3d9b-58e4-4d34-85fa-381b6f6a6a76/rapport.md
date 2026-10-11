@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 59.7 h |
+| Durée | 60.4 h |
 | Tours | 90 |
-| Messages | 2615 |
-| Appels d'outils | 2409 |
+| Messages | 2620 |
+| Appels d'outils | 2414 |
 | Fichiers touchés | 98 |
-| Commandes | 2102 |
+| Commandes | 2107 |
 | Sous-agents | 3 |
-| Commits | 248 |
+| Commits | 249 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3712,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 63 autres
+- … et 68 autres
 
 **Synthèse produite :**
 
-⏵ M8 : trois hypothèses ÉLIMINÉES (poids, quantification, structure) — il reste les bornes d'activation du moteur ; je consigne
+⏵ **27 vertes sur 27** — je régénère les repères sur cette passe et je clos le round
 
 ## 3. Travail accompli
 
@@ -3871,7 +3871,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2062 autres
+- … et 2067 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4267,4 +4267,5 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - Passe du 20 h 28 : 26 vertes sur 26 (dont porte-memoire) — comptes mis a jour" && git push -q origin master && echo poussé
 - Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges  Dix drapeaux ajoutes aujourd hui (--entree signal:F, --entree-cana
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/manques.md"); s = p.read_text() old = """| **M8*
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete7.log").read_tex
 

@@ -56,7 +56,7 @@ portes mesurées.
   ne bouge pas jusqu'à 50 ms de latence par message.
 - **Le rejeu est exact** : 0,00e0.
 - **Les portes du dépôt tournent TOUTES, et toutes passent** : `tools/toutes-les-portes.sh`,
-  **26 vertes sur 26, en 61 min 22 s** (mesuré le 2026-10-10 à 20:28 HAE ; détail et durées
+  **27 vertes sur 27, en 60 min 13 s** (mesuré le 2026-10-10 à 21:33 HAE ; détail et durées
   dans `reports/rapport-passe-complete-portes.md`). La ligne qui était ici affirmait « les 23
   portes sont vertes » alors que la suite n'avait **jamais tourné comme une suite** : une
   porte était **rouge depuis le protocole v7** et une autre **verte en ne comparant rien**

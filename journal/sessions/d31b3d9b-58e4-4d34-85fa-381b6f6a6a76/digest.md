@@ -41977,3 +41977,69 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\nold = \"\"\"| **M8** | **défaut de sauvegarde du variant log-normal** — le fichier sauvé ne reproduit pas le modèle entraîné | entraînemen … [4567 caractères tronqués]`
+
+  ```
+registre : M8 mis à jour (trois causes éliminées, une nommée)
+journal complété
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         351 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+20:55
+[stderr]
+<stdin>:19: SyntaxWarning: invalid escape sequence '\|'
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la passe finale (27 portes) pour clore le round sur un état vérifié
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; tail -2 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Wait for the final pass", "timeoutMs": 600000}`
+
+  ```
+porte-greffe           ✅                         769 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+21:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 580; tail -2 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Continue waiting", "timeoutMs": 600000}`
+
+  ```
+porte-indice           ✅                         716 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          72 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+21:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete7.log 2>/dev/null; then break; fi; sleep 60; done; tail -7 /tmp/passe-complete7.log; head -1 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Wait for the … [37 caractères tronqués]`
+
+  ```
+porte-greffe           ✅                         769 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  porte-indice           ✅                         716 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          72 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+  porte-melange          ✅                         761 s    ✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT
+  porte-memoire          ✅                           6 s  PORTE TENUE : la mémoire retient les K derniers signaux HORS du réseau, exactement, sans
+  porte-mistral          ✅                           8 s      ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p
+=== PASSE COMPLÈTE DES PORTES (27 portes, borne 2400 s) ===
+21:24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete7.log 2>/dev/null; then break; fi; sleep 60; done; tail -9 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Get the final 27-gate verdict", "timeoutMs": 6 … [6 caractères tronqués]`
+
+  ```
+porte-reflexe          ✅                         102 s    ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit
+  porte-registre         ✅                          14 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-reparti-moteur   ✅                           1 s  PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  porte-tokenizer-kimi   ✅                           5 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          34 s    PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+  porte-trace            ✅                          24 s    ✅ la trace fausse est détectée et nommée
+--- 27 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1210h
+21:33
+  ```
+
+### 🤖 Assistant
+
+⏵ **27 vertes sur 27** — je régénère les repères sur cette passe et je clos le round
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-complete7.log\").read_text(encoding=\"utf-8\")\nlignes, total = [], 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+ … [4952 caractères tronqués]`
