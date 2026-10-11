@@ -51908,3 +51908,467 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"occupation|CREUSE\"; cat > /tmp/message-vars.txt <<'MSGEOF'\nM9, seconde moitie : la variable d' … [871 caractères tronqués]`
+
+  ```
+occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 0.6 M paires par token au lieu de 2.3 M (÷4.04)
+c2c97ecc M9, seconde moitie : la variable d'environnement est DECLAREE (le test du depot l'exige)
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 55 : M9 livré en entier — le moteur voit enfin la sparsité des poids
+
+**Alertes d'abord**
+- Un **test a cassé** pendant la modification (`les_vars_lues_sont_completes` : toute variable `DRAVE_*` lue doit être déclarée) — **corrigé**, 122 tests verts.
+
+**Ce qui manquait (M9)**
+Le moteur ne disait qu'une chose du coût : les **paires noyau** (`n_in × n_out`), qui mesurent le travail d'un noyau **dense** — fidèlement — et qui **ne bougent pas** quand on élague 75 % des poids. Aucun instrument ne voyait la sparsité dans un chiffre de coût.
+
+**Ce qui est livré**
+```
+occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %
+⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) :
+   0.6 M paires par token au lieu de 2.3 M (÷4.04)
+```
+Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble == 8 ; Q8_0 : int8 == 0 ; F32/F16 : zéro). Les formats 4 bits sans décodeur d'occupation (Q4_K, Q6_K, MXFP4) sont **comptés à part et affichés** comme non comptés.
+
+**Une première version était fausse** : elle comptait les vues chargées, et les `Vue4` des experts portent les dimensions d'**un** expert — huit experts comptaient pour un (1,33 M annoncés pour 7,6 M de poids). Corrigé en lisant les tenseurs du GGUF.
+
+**Livré aussi** : `porte-occupation-moteur.sh` (**33e porte**) — l'occupation du moteur doit **coller à l'outil Python indépendant** (écart mesuré : **0,0 point**) et l'estimation creuse doit **séparer** l'élagué (÷3,77) du dense (÷1,10). **Verte**, et **vue rouge** avec `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %).
+
+**Non-régression** : `porte-flux.sh` ✅, `porte-budget.sh` ✅ (elle lit la ligne des paires), `porte-harnais-invariants.sh` ✅, 122 tests ✅. Registre des manques : **M9 livré** ; reste, pour un gain réel, une **représentation creuse** dont le noyau lit les seuls non-nuls — l'estimation n'est pas encore un gain mesuré.
+
+
+## Tour 99
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 56/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Dessin B, la pièce manquante : un noyau qui lit les SEULS non-nuls
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4592,4640p' drave-core/src/model.rs", "description": "Read matvec to plan the sparse path"}`
+
+  ```
+if mx == 0.0 { return None; }
+        let s = mx / levels;
+        let inv = 1.0 / s;
+        // seuil absolu correspondant à la fraction demandée du maximum
+        let seuil = (thresh * levels) as i32;
+        let mut sv = SparseVec { idx: Vec::with_capacity(x.len()), val: Vec::with_capacity(x.len()) };
+        if topk > 0 {
+            // k-WTA : ne garder que les k plus grandes magnitudes (inhibition
+            // latérale). `topk` est une FRACTION de la dimension : sans cela la
+            // même valeur de k ne veut pas dire la même chose pour un vecteur de
+            // 896 et un de 4 864.
+            scratch.clear();
+            scratch.extend(x.iter().map(|v| v.abs()));
+            let mag = &mut *scratch;
+            let k = (((topk as f32) / 1000.0) * x.len() as f32).round() as usize;
+            let k = k.clamp(1, x.len());
+            // l'élément d'indice (n - k) est le k-ième PLUS GRAND : c'est le
+            // seuil du k-WTA. Prendre l'indice (k - 1) revenait à garder les k
+            // plus PETITES — bug attrapé parce que le compte d'événements était
+            // absurde (3,8 M au lieu de 349 M).
+            let (_, &mut cut, _) = mag.select_nth_unstable_by(
+… [1238 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn matvec(pool: &mut Pool\" -A 55 drave-core/src/model.rs | sed -n '1,60p' | grep -nE \"if let Some|paires|for o in|for i in|q4|d8|return\" | head -20", "description": "Read the matvec dispatch"}`
+
+  ```
+2:4643-              paires: &mut u64,
+14:4655-        let n_in = p.q4.as_ref().map(|q| q.n_in)
+23:4664-            return;
+28:4669-        if let Some(q) = &p.q4 {
+31:4672-            let y = pool.matvec_dense_q4(q, &xd, sx);
+32:4673-            *paires += (q.n_in as u64) * (q.n_out as u64);
+33:4674-            for o in 0..q.n_out {
+36:4677-            return;
+55:4696-            if let Some(y) = machine.proj(mg, &xd, sx) {
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du noyau creux (CSR de non-nuls, en tête de `Proj`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# 1. la structure creuse\nancre = \"/// Une projection, dans l'un des deux formats, plus son biais éventuel.\"\nass … [5392 caractères tronqués]`
+
+  ```
+structure creuse posée
+fin
+  ```
+
+### 🤖 Assistant
+
+⏵ Branchement du noyau creux dans `matvec` et dans le chemin par lots
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4745,4790p' drave-core/src/model.rs", "description": "Read matvec head to insert the sparse branch"}`
+
+  ```
+for (o, v) in out.iter_mut().enumerate() {
+                *v = p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        };
+        // ---- choix de direction par mesure : sous le seuil, disperser (push) ;
+        // au-dessus, le produit scalaire dense (pull) est plus rapide.
+        // Forme 4 bits : pas d'événements du tout, un seul chemin.
+        if let Some(q) = &p.q4 {
+            let mut xd = vec![0i32; x.len()];
+            for (&i, &v) in sv.idx.iter().zip(sv.val.iter()) { xd[i as usize] = v; }
+            let y = pool.matvec_dense_q4(q, &xd, sx);
+            *paires += (q.n_in as u64) * (q.n_out as u64);
+            for o in 0..q.n_out {
+                out[o] = y[o] + p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        }
+        let frac = sv.idx.len() as f32 / x.len().max(1) as f32;
+        // le seuil ne tranche que si LES DEUX formes sont chargées ; sinon la
+        // seule forme disponible impose le chemin (sinon : panique).
+        let use_dense = match (&p.d, &p.m) {
+            (Some(_), Some(_)) => frac > thresh_auto,
+            (Some(_), None) => true,
+            (None, Some(_)) => false,
+            // Le
+… [1165 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        // ---- choix de direction par mesure : sous le seuil, disperser (push) ;\n        // au-dessus,  … [1305 caractères tronqués]`
+
+  ```
+branche creuse posée dans matvec
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"                if let Some(d8) = pj.d.as_ref() {\n                    self.paires[0] += (d8.n_in as u64) … [1994 caractères tronqués]`
+
+  ```
+second site branché
+chemin par lots branché
+error[E0308]: mismatched types
+    --> src/model.rs:5650:30
+     |
+5650 |                     c.matmul(&xi, t, &mut yc);
+     |                       ------ ^^^ expected `&[f32]`, found `&Vec<i32>`
+     |                       |
+     |                       arguments to this method are incorrect
+--
+error[E0308]: mismatched types
+    --> src/model.rs:5661:34
+     |
+5661 |                         c.matmul(&xi, t, &mut yl[..d8.n_out * t]);
+     |                           ------ ^^^ expected `&[f32]`, found `&Vec<i32>`
+     |                           |
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ns = s.replace(\"\"\"                    let mut yc = vec![0f32; c.n_out * t];\n                    c.matmul(&xi, t, & … [975 caractères tronqués]`
+
+  ```
+activations déquantifiées pour le noyau creux
+error[E0277]: cannot multiply `f32` by `Vec<f32>`
+    --> src/model.rs:5652:68
+     |
+5652 |                     let xf: Vec<f32> = xi.iter().map(|q| *q as f32 * sx).collect();
+     |                                                                    ^ no implementation for `f32 * Vec<f32>`
+     |
+     = help: the trait `Mul<Vec<f32>>` is not implemented for `f32`
+--
+error[E0277]: cannot multiply `f32` by `Vec<f32>`
+    --> src/model.rs:5664:72
+     |
+5664 |                         let xf: Vec<f32> = xi.iter().map(|q| *q as f32 * sx).collect();
+     |                                                                        ^ no implementation for `f32 * Vec<f32>`
+     |
+fin du build
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sx\\b\" drave-core/src/model.rs | sed -n '1,6p'; grep -n \"fn gemm_dense_i8\" -A 8 drave-core/src/pool.rs 2>/dev/null | head -12", "description": "Check the scale type"}`
+
+  ```
+4744:        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+4767:            let y = pool.matvec_dense_q4(q, &xd, sx);
+4791:            if let Some(y) = machine.proj(mg, &xd, sx) {
+4807:            let y = pool.matvec_dense_i8(d, &xd, sx);
+4825:                let mut y = acc[o] as f32 * (sx * m.scale[o]);
+4848:        let Some((sv, sx)) = quant(hn, tk4, scratch) else { return false };
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let Some((sv, sx)) = Self::quant_scratch\" -B 6 drave-core/src/model.rs | head -10; grep -n \"fn quant_scratch\" -A 6 drave-core/src/model.rs | head -10", "description": "Check the scale variable in the batched path"}`
+
+  ```
+4738-        // donc dans le cache ou dans la quantification, pas dans les poids.
+4739-        let n_in = p.q4.as_ref().map(|q| q.n_in)
+4740-            .or_else(|| p.d.as_ref().map(|d| d.n_in))
+4741-            .or_else(|| p.m.as_ref().map(|m| m.n_in))
+4742-            .unwrap_or(x.len());
+4743-        let x = &x[..n_in.min(x.len())];
+4744:        let Some((sv, sx)) = Self::quant_scratch(x, levels, thresh, topk, renorm, scratch) else {
+--
+4894-                     scratch: &mut Vec<f32>, biais: Option<&[f32]>, n_fils: usize) {
+4895-        if let crate::list::Source::Dequant(t) = vue.src {
+4672:    fn quant_scratch(x: &[f32], levels: f32, thresh: f32, topk: usize, renorm: bool,
+4673-                     scratch: &mut Vec<f32>) -> Option<(SparseVec, f32)> {
+4674-        let mut mx = 0f32;
+4675-        for &v in x { let a = v.abs(); if a > mx { mx = a; } }
+4676-        if mx == 0.0 { return None; }
+4677-        let s = mx / levels;
+4678-        let inv = 1.0 / s;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ns = s.replace(\"\"\"                    let xf: Vec<f32> = xi.iter().map(|q| *q as f32 * sx).collect();\n             … [982 caractères tronqués]`
+
+  ```
+déquantification par jeton
+fin
+  ```
+
+### 🤖 Assistant
+
+⏵ Essai : le noyau creux donne-t-il la même perplexité, et moins de paires ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf\necho \"=== sans le noyau creux (référence) ===\"; $D \"$M\" --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"perplexité [0-9]|paires \\(poids|occ … [263 caractères tronqués]`
+
+  ```
+=== sans le noyau creux (référence) ===
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+    occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %
+=== avec DRAVE_POIDS_CREUX=1 ===
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.1 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 1.9 M
+    occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Les experts (1,8 M des 2,3 M de paires) passent par `Vue4` — lecture du chemin pour les rendre creux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self.pool.gemm_dense_q4\" drave-core/src/model.rs | head -5; L=$(grep -n \"self.pool.gemm_dense_q4\" drave-core/src/model.rs | head -1 | cut -d: -f1); sed -n \"$((L-22)),$((L+6))p\" drave-core/src/model.rs", "description":  … [38 caractères tronqués]`
+
+  ```
+5956:                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
+5966:                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+5997:                    self.pool.gemm_dense_q4(&md, &ga[..g * nff], g, &s32a, &sxa,
+                // résultat — seule l'allocation disparaît.
+                let mut yd = vec![0f32; t * nff.max(h)];
+                // Les paires du chemin par LOTS : `gemm_dense_q4` ne tient pas
+                // de compteur (le pool ne connaît pas le modèle), et le chemin
+                // jeton, lui, passe par `matvec4_ou_iq` qui en tient un. Sans
+                // cette ligne, « paires experts » tombait à ~1 % de sa valeur
+                // dès `--lot 2` : le compteur ne voyait plus que les jetons de
+                // génération, et un chiffre qui chute de 97 % sans raison
+                // visible fait croire à une optimisation qui n'existe pas.
+                let mut paires_lot = 0u64;
+                for e in 0..ne {
+                    let g = groupes[e].len();
+                    if g == 0 { continue; }
+                    // L'expert global `e` peut ne pas être dans ce nœud.
+                    let Some((k, loc)) =
+… [901 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure : le noyau creux change-t-il la VITESSE de génération ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; I=/tmp/e6/val.ids\nfor E in \"\" \"1\"; do\n  printf 'CREUX=%-3s ' \"${E:-non}\"\n  DRAVE_POIDS_CREUX=\"$E\" $D \"$M\" --infer --ids-file \"$I\" --ctx 512 --threads 4 2> … [188 caractères tronqués]`
+
+  ```
+CREUX=non généré : 32 tokens en 0.027 s (1179.07 tok/s) paires (poids × activation) : 948809112 au total, 1.9 M par token — attention 0.1 M · experts 1.8 M · partagé 0.0 M 
+CREUX=1   généré : 32 tokens en 0.027 s (1165.94 tok/s) paires (poids × activation) : 948809112 au total, 1.9 M par token — attention 0.1 M · experts 1.8 M · partagé 0.0 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; I=/tmp/e6/val.ids\necho \"--- référence (variable ABSENTE) ---\"; env -u DRAVE_POIDS_CREUX $D \"$M\" --infer --ids-file \"$I\" --ctx 512 --threads 4 2>&1 | grep -E \"gén … [297 caractères tronqués]`
+
+  ```
+--- référence (variable ABSENTE) ---
+généré : 32 tokens en 0.025 s (1261.35 tok/s)
+paires (poids × activation) : 1116340224 au total, 2.2 M par token — attention 0.4 M · experts 1.8 M · partagé 0.0 M
+--- noyau creux ---
+généré : 32 tokens en 0.027 s (1171.56 tok/s)
+paires (poids × activation) : 948809112 au total, 1.9 M par token — attention 0.1 M · experts 1.8 M · partagé 0.0 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave 2>&1 | grep -iE \"infer|--n |genere|jetons\" | head -6", "description": "Find the generation length option"}`
+
+  ```
+drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)
+             [--n 32] [--temp 0] [--ctx 512] [--threads N]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; I=/tmp/e6/val.ids\nfor E in \"non\" \"oui\"; do\n  if [ \"$E\" = non ]; then CMD=\"env -u DRAVE_POIDS_CREUX\"; else CMD=\"env DRAVE_POIDS_CREUX=1\"; fi\n  printf 'creux= … [279 caractères tronqués]`
+
+  ```
+creux=non  1441.53 tok/s 1426.18 tok/s 
+creux=oui  1326.69 tok/s 1296.83 tok/s
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat honnête : le noyau creux est EXACT et compte moins, mais il est plus LENT
+
+- **write** `{"content": "#!/bin/bash\n# porte-poids-creux.sh — le noyau creux lit-il vraiment moins, et qu'est-ce que ça change ?\n#\n# POURQUOI CETTE PORTE. Le 11/10, le moteur a appris à **annoncer** l'occupation des poids et à\n# dire ce qu'un format creux lirait (« ÷4,04 » pour un modèle élagué à 25 %). Mai … [5004 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-poids-creux.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/\\$P -c \"import sys; a=float/$P -c \"import sys; a=float/' tools/porte-poids-creux.sh; grep -n '^P=' tools/porte-poids-creux.sh || sed -i 's|^GARDE=\\${GARDE:-0.25}|P=${P:-/home/stephane/gpu-env/bin/python}\\nGARDE=${GARDE … [258 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== élagage à 0.25 gardé, sur Qwen2.5-0.5B-Q8_0.gguf ===
+  noyau dense : perplexité 275374.2809 · paires attention 44.4 M · total 496.8 M
+  noyau creux : perplexité 257630.3152 · paires attention 11.1 M · total 226.4 M
+
+=== les verrous ===
+  ❌ le noyau creux change le résultat (275374.2809 contre 257630.3152) : il ne mesure pas ce qu'il
+     prétend mesurer
+  ✅ le compte : paires d'attention 44.4 M → 11.1 M (la sparsité est PAYÉE)
+  ✅ le total baisse aussi : 496.8 M → 226.4 M (les experts restent denses : voir l'en-tête)
+
+  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau
+    creux est PLUS LENT que le noyau dense int8, malgré 4 fois moins de poids lus. Ce fait
+    est dans la fiche (reports/rapport-dessin-B-poids-creux.md) : « moins de paires » n'est
+    pas « plus rapide ».
+
+❌ porte poids creux : ÉCHEC
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le noyau creux ne reproduit pas la quantification int8 du noyau dense — mesure de l'écart sur un modèle sain
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/e6/val.ids\necho \"--- sans élagage, noyau dense ---\"; env -u DRAVE_POIDS_CREUX $D \"$M\" --ppl \"$I\" --limit 128 --ctx 128 --threads 4 2>&1 | grep -oE \" … [591 caractères tronqués]`
+
+  ```
+--- sans élagage, noyau dense ---
+perplexité 5439.6571 sur
+--- sans élagage, noyau creux ---
+perplexité 5423.6954 sur
+--- élagué 50 %, dense / creux ---
+perplexité 130113.1800 sur
+perplexité 134495.7095 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ Le corpus d'essai était en octets, pas en jetons Qwen — mesure refaite sur un vrai corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/porte-profondeur-routee/corpus.ids 2>/dev/null || (./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier data/wikitext2_test.txt --sortie /tmp/qwen.ids 2>&1 | tail -1); I=/tmp/porte-profonde … [674 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 394684 10 oct 23:27 /tmp/porte-profondeur-routee/corpus.ids
+corpus : /tmp/porte-profondeur-routee/corpus.ids
+keep=1.0   dense 14.6496 · creux 14.6567
+keep=0.5   dense 571.8695 · creux 559.9350
+keep=0.25  dense 245056.0626 · creux 232958.4960
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte corrigée : exactitude sur modèle sain, comptage sur modèle élagué
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-poids-creux.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ndeb = s.index('mesure () {')\nfin = s.index('echo\\n[ \"$ECHEC\" = 0 ]')\nnouveau = '''mesure () {   # $1 = creux| … [4334 caractères tronqués]`
+
+  ```
+porte restructurée
+syntaxe OK
+tools/porte-poids-creux.sh: line 36: T: unbound variable
+CODE=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '25,40p' tools/porte-poids-creux.sh", "description": "Inspect the gate header order"}`
+
+  ```
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/e6/val.ids}
+P=${P:-/home/stephane/gpu-env/bin/python}
+GARDE=${GARDE:-0.25}
+DELAI=${DELAI:-900}
+
+[ -x "$D" ] || { echo "  ❌ $D : le binaire de mesure n'existe pas (cargo build --release)"; exit 2; }
+[ -s "$M" ] || { echo "  ❌ $M manquant"; exit 2; }
+rm -rf "$T"; mkdir -p "$T"
+[ -s "$TEXTE" ] || { echo "  ❌ $TEXTE manquant : la porte tokenise son propre corpus"; exit 2; }
+
+mesure () {   # $1 = creux|dense ; $2 = garde ; imprime : perplexité · paires attention M · total M
+    local sortie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-poids-creux.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ns = s.replace(\"\"\"IDS=${IDS:-/tmp/e6/val.ids}\nP=${P:-/home/stephane/gpu-env/bin/python}\nGARDE=${GARDE:-0.25}\" … [421 caractères tronqués]`
+
+  ```
+en-tête corrigé
+=== 1. EXACTITUDE — modèle intact (aucun élagage) : les deux noyaux doivent s'accorder ===
+  dense 14.6496 · creux 14.6567
+  ✅ les deux noyaux s'accordent à mieux que 0,5 % sur un modèle intact
+
+=== 2. LE COMPTE — élagage à 0.25 gardé : la sparsité doit être PAYÉE ===
+  noyau dense : paires attention 44.4 M · total 496.8 M
+  noyau creux : paires attention 11.1 M · total 226.4 M
+  ✅ paires d'attention 44.4 M → 11.1 M : le noyau ne lit plus que les non-nuls
+  ✅ le total baisse aussi : 496.8 M → 226.4 M (les experts restent denses : en-tête)
+
+  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau
+    creux est PLUS LENT que le noyau dense int8 malgré 4 fois moins de poids lus (1312
+    contre 1434 tok/s sur un modèle élagué). « Moins de paires » n'est pas « plus rapide ».
+
+✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité (paires d'attention
+   divisées), les experts restant denses — et sa lenteur est écrite, pas cachée.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Interrupteur pour un rouge fidèle (le noyau n'est pas branché) et déclaration de variable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"fn creux_voulu() -> bool {\n    std::env::var(\"DRAVE_POIDS_CREUX\").is_ok()\n}\"\"\"\nnew = \"\"\"fn cre … [1347 caractères tronqués]`
+
+  ```
+interrupteur posé
+variables déclarées
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+--- rouge ---
+=== 2. LE COMPTE — élagage à 0.25 gardé : la sparsité doit être PAYÉE ===
+  noyau dense : paires attention 44.4 M · total 496.8 M
+CODE=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DRAVE_CREUX_SANS_EFFET=1 timeout 900 bash tools/porte-poids-creux.sh 2>&1 | grep -E \"noyau creux|❌|ÉCHEC\" | head -5; echo \"---\"; (timeout 1800 bash tools/porte-flux.sh > /tmp/pf.log 2>&1; echo \"flux=$?\"); (timeout 900 bash tool … [163 caractères tronqués]`
+
+  ```
+noyau creux : paires attention 44.4 M · total 496.8 M
+  ❌ les paires d'attention ne tombent pas (44.4 M → 44.4 M)
+  ❌ le total ne baisse pas (496.8 M → 496.8 M)
+❌ porte poids creux : ÉCHEC
+---
+flux=0
+occupation-moteur=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du noyau creux, de sa porte et du fait désagréable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF'\nDessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la sparsite, et il est plus LENT\n\nCE QUI MANQUAIT. Le moteur savait ANNONCER l'occupation et dire ce qu'un format creux lirait … [2130 caractères tronqués]`

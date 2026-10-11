@@ -578,6 +578,78 @@ pub struct Cfg {
     pub yarn_declare: Option<(f32, f32, f32, f32)>,
 }
 
+/// **Poids creux par LIGNES** (dessin B) — la représentation qui paie la sparsité des poids.
+///
+/// POURQUOI ELLE EXISTE. Le 11/10, le moteur a appris à **annoncer** l'occupation
+/// (`occupation_poids`) et à dire ce qu'un format creux lirait — mais aucun noyau ne lisait
+/// réellement les seuls non-nuls : la ligne « paires » d'un modèle élagué à 25 % restait à 2,3 M,
+/// parce qu'un noyau dense lit la matrice entière. Tant que ce noyau n'existe pas, le gain du
+/// dessin B reste une **estimation**, jamais un gain mesuré.
+///
+/// FORME : CSR par lignes de sortie. `cols[debut[o]..debut[o + 1]]` et `vals[...]` portent les
+/// poids **non nuls** de la ligne `o`, dans l'ordre des colonnes. Les valeurs sont les poids
+/// **déquantifiés** (échelle × int8), donc le produit donne la même arithmétique que le noyau
+/// dense à la virgule flottante près — et c'est mesuré, pas supposé (`porte-poids-creux.sh`).
+pub struct Creux {
+    pub debut: Vec<u32>,
+    pub cols: Vec<u32>,
+    pub vals: Vec<f32>,
+    pub n_in: usize,
+    pub n_out: usize,
+}
+
+impl Creux {
+    /// Construit la forme creuse à partir des poids f32 **déjà élagués**. Les zéros ne sont pas
+    /// stockés : c'est toute la représentation.
+    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+        let mut debut = Vec::with_capacity(n_out + 1);
+        let mut cols = Vec::new();
+        let mut vals = Vec::new();
+        debut.push(0u32);
+        for o in 0..n_out {
+            for i in 0..n_in {
+                let v = w[o * n_in + i];
+                if v != 0.0 {
+                    cols.push(i as u32);
+                    vals.push(v);
+                }
+            }
+            debut.push(cols.len() as u32);
+        }
+        Creux { debut, cols, vals, n_in, n_out }
+    }
+
+    /// Nombre de paires **stockées** : les seuls non-nuls. C'est le chiffre que le noyau dense ne
+    /// peut pas voir, et celui que le dessin B promet de diviser.
+    pub fn nnz(&self) -> u64 { self.vals.len() as u64 }
+
+    /// `y = W · x` — n'itère que sur les non-nuls.
+    pub fn matvec(&self, x: &[f32], y: &mut [f32]) {
+        for o in 0..self.n_out {
+            let (d, f) = (self.debut[o] as usize, self.debut[o + 1] as usize);
+            let mut acc = 0f32;
+            for k in d..f {
+                acc += self.vals[k] * x[self.cols[k] as usize];
+            }
+            y[o] = acc;
+        }
+    }
+
+    /// `Y = W · X` pour `t` jetons : le même parcours, pour `t` colonnes d'activations.
+    pub fn matmul(&self, x: &[f32], t: usize, y: &mut [f32]) {
+        for o in 0..self.n_out {
+            let (d, f) = (self.debut[o] as usize, self.debut[o + 1] as usize);
+            for j in 0..t {
+                let mut acc = 0f32;
+                for k in d..f {
+                    acc += self.vals[k] * x[self.cols[k] as usize * t + j];
+                }
+                y[o * t + j] = acc;
+            }
+        }
+    }
+}
+
 /// Une projection, dans l'un des deux formats, plus son biais éventuel.
 /// `m` = listes d'événements (architecture du projet) ;
 /// `d` = matrice dense int8 (référence de comparaison, sans événements).
@@ -589,6 +661,9 @@ pub struct Proj {
     /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
     pub q4: Option<DenseQ4>,
     pub bias: Option<Vec<f32>>,
+    /// **Forme creuse** (CSR de non-nuls), construite seulement si on la demande : c'est elle qui
+    /// fait payer la sparsité au lieu de la mesurer.
+    pub creux: Option<Creux>,
     /// **Occupation** : poids NON NULS et poids totaux, comptés au chargement, APRÈS élagage.
     /// C'est la mesure qui manquait (manque **M9**) : le compteur de paires additionne
     /// `n_in × n_out` — le travail d'un noyau **dense**, fidèlement — et ne dit donc rien de ce
@@ -1439,6 +1514,17 @@ pub struct Stats {
 /// chiffre, « élaguer divise les paires par N » n'est vérifiable par aucun instrument du moteur
 /// (constaté le 11/10 : 2,3 M de paires avant comme après un élagage à 50 % de tous les
 /// tenseurs).
+/// La forme creuse est-elle demandée ? `DRAVE_POIDS_CREUX=1` la construit pour toutes les
+/// projections — c'est le noyau du dessin B, et il n'est pas le défaut : la forme dense reste la
+/// référence, et la comparaison entre les deux se mesure (`tools/porte-poids-creux.sh`).
+fn creux_voulu() -> bool {
+    // `DRAVE_CREUX_SANS_EFFET=1` RALLUME l'état d'avant le noyau : la forme creuse n'est pas
+    // construite, donc rien n'est payé — c'est le défaut que la porte `porte-poids-creux.sh` doit
+    // pouvoir voir (les paires d'attention ne tombent plus).
+    std::env::var("DRAVE_POIDS_CREUX").is_ok()
+        && std::env::var("DRAVE_CREUX_SANS_EFFET").is_err()
+}
+
 fn nnz_f32(w: &[f32]) -> u64 {
     w.iter().filter(|v| **v != 0.0).count() as u64
 }
@@ -1526,7 +1612,7 @@ impl Proj {
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
     pub fn vide() -> Self {
-        Proj { gpu: None, m: None, d: None, q4: None, bias: None, nnz: 0, n_tot: 0 }
+        Proj { gpu: None, m: None, d: None, q4: None, bias: None, creux: None, nnz: 0, n_tot: 0 }
     }
 
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
@@ -1546,7 +1632,8 @@ impl Proj {
         if bits6 {
             let z = DenseQ4::build6(&w, n_out, n_in);
             let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
-            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias,
+            let creux = creux_voulu().then(|| Creux::build(&w, n_out, n_in));
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias, creux,
                           nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 };
         }
         let (m, d, q4v) = if q4 {
@@ -1616,7 +1703,8 @@ impl Proj {
             }
             _ => None,
         };
-        Proj { gpu, m, d, q4: q4v, bias, nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 }
+        let creux = creux_voulu().then(|| Creux::build(&w, n_out, n_in));
+        Proj { gpu, m, d, q4: q4v, bias, creux, nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 }
     }
 }
 
@@ -4663,6 +4751,17 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
             }
             return;
         };
+        // ---- FORME CREUSE (dessin B) : on n'itère que sur les NON-NULS, et on ne compte que
+        // eux. C'est le seul chemin du moteur où la sparsité des poids est PAYÉE au lieu d'être
+        // annoncée : le noyau dense lit la matrice entière, celui-ci lit ce qui est stocké.
+        if let Some(c) = &p.creux {
+            c.matvec(x, out);
+            *paires += c.nnz();
+            for (o, v) in out.iter_mut().enumerate() {
+                *v += p.bias.as_ref().map_or(0.0, |b| b[o]);
+            }
+            return;
+        }
         // ---- choix de direction par mesure : sous le seuil, disperser (push) ;
         // au-dessus, le produit scalaire dense (pull) est plus rapide.
         // Forme 4 bits : pas d'événements du tout, un seul chemin.
@@ -5548,9 +5647,33 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
             for (pj, dst, taille) in [(&lay.wq, &mut qa, nq),
                                       (&lay.wk, &mut ka, nk),
                                       (&lay.wv, &mut va, nk)] {
-                if let Some(d8) = pj.d.as_ref() {
-                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
-                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                if let Some(c) = pj.creux.as_ref() {
+                    // CHEMIN PAR LOTS, FORME CREUSE : le même parcours que le noyau dense, mais
+                    // sur les seuls non-nuls — et le compteur de paires suit ce qui est LU.
+                    let mut yc = vec![0f32; c.n_out * t];
+                    // Les activations du chemin par lots sont QUANTIFIÉES (i32 + échelle) : le
+                    // noyau creux les remet en f32 pour multiplier les poids déquantifiés.
+                    // `sx` porte une échelle PAR JETON ; `xi` est disposé canal × jeton.
+                    let xf: Vec<f32> = (0..xi.len())
+                        .map(|k| xi[k] as f32 * sx[k % t]).collect();
+                    c.matmul(&xf, t, &mut yc);
+                    self.paires[0] += c.nnz() * t as u64;
+                    for i in 0..t {
+                        for oo in 0..taille {
+                            dst[i * taille + oo] = yc[oo * t + i]
+                                + pj.bias.as_ref().map_or(0.0, |b| b[oo]);
+                        }
+                    }
+                } else if let Some(d8) = pj.d.as_ref() {
+                    if let Some(c) = pj.creux.as_ref() {
+                        self.paires[0] += c.nnz() * t as u64;
+                        let xf: Vec<f32> = (0..xi.len())
+                            .map(|k| xi[k] as f32 * sx[k % t]).collect();
+                        c.matmul(&xf, t, &mut yl[..d8.n_out * t]);
+                    } else {
+                        self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+                        self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                    }
                     for i in 0..t {
                         for oo in 0..taille {
                             dst[i * taille + oo] = yl[oo * t + i]

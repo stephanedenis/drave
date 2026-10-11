@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 66.9 h |
-| Tours | 98 |
-| Messages | 3246 |
-| Appels d'outils | 3021 |
-| Fichiers touchés | 125 |
-| Commandes | 2555 |
+| Durée | 67.2 h |
+| Tours | 99 |
+| Messages | 3274 |
+| Appels d'outils | 3047 |
+| Fichiers touchés | 126 |
+| Commandes | 2580 |
 | Sous-agents | 3 |
-| Commits | 290 |
+| Commits | 291 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -231,6 +231,8 @@
 **Tour 97** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 98** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 99** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4072,7 +4074,51 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 
 **Synthèse produite :**
 
-⏵ Le test des variables d'environnement exige la déclaration — correction
+⏵ Round 55 : M9 livré en entier — le moteur voit enfin la sparsité des poids
+
+**Alertes d'abord**
+- Un **test a cassé** pendant la modification (`les_vars_lues_sont_completes` : toute variable `DRAVE_*` lue doit être déclarée) — **corrigé**, 122 tests verts.
+
+**Ce qui manquait (M9)**
+Le moteur ne disait qu'une chose du coût : les **paires noyau** (`n_in × n_out`), qui mesurent le travail d'un noyau **dense** — fidèlement — et qui **ne bougent pas** quand on élague 75 % des poids. Aucun instrument ne voyait la sparsité dans un chiffre de coût.
+
+**Ce qui est livré**
+```
+occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %
+⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) :
+   0.6 M paires par token au lieu de 2.3 M (÷4.04)
+```
+Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble == 8 ; Q8_0 : int8 == 0 ; F32/F16 : zéro). Les formats 4 bits sans décodeur d'occupation (Q4_K, Q6_K, MXFP4) sont **comptés à part et affichés** comme non comptés.
+
+**Une première version était fausse** : elle comptait les vues chargées, et les `Vue4` des experts portent les dimensions d'**un** expert — huit experts comptaient pour un (1,33 M annoncés pour 7,6 M de poids). Corrigé en lisant les tenseurs du GGUF.
+
+**Livré aussi** : `porte-occupation-moteur.sh` (**33e porte**) — l'occupation du moteur doit **coller à l'outil Python indépendant** (écart mesuré : **0,0 point**) et l'estimation creuse doit **séparer** l'élagué (÷3,77) du dense (÷1,10). **Verte**, et **vue rouge** avec `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %).
+
+**Non-régression** : `porte-flux.sh` ✅, `porte-budget.sh` ✅ (elle lit la ligne des paires), `porte-harnais-invariants.sh` ✅, 122 tests ✅. Registre des manques : **M9 livré** ; reste, pour un gain réel, une **représentation creuse** dont le noyau lit les seuls non-nuls — l'estimation n'est pas encore un gain mesuré.
+
+### Tour 99 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*26 appels d'outils.* Actions notables :
+
+- bash — Read matvec to plan the sparse path
+- bash — Read the matvec dispatch
+- bash — Add the sparse CSR representation
+- bash — Read matvec head to insert the sparse branch
+- bash — Wire the sparse kernel into matvec
+- bash — Wire the sparse kernel into the batched path
+- bash — Dequantize activations for the sparse kernel
+- bash — Check the scale type
+- bash — Check the scale variable in the batched path
+- bash — Fix the per-token scale dequantization
+- bash — Compare sparse and dense kernels
+- bash — Read the batched expert computation
+- bash — Measure generation speed with and without the sparse kernel
+- bash — Proper comparison with the variable unset
+- … et 12 autres
+
+**Synthèse produite :**
+
+⏵ Commit du noyau creux, de sa porte et du fait désagréable
 
 ## 3. Travail accompli
 
@@ -4205,6 +4251,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-audit-drapeaux.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-moteur.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-poids-creux.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4254,7 +4301,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2515 autres
+- … et 2540 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4382,7 +4429,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 
 ## 5. Erreurs rencontrées
 
-107 sorties en erreur ou divergentes. Les premières :
+111 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4692,4 +4739,5 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF' M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids
 - M9 livre dans le registre des manques, et 33 portes dans l'etat" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 12
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF' Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la
 
