@@ -635,6 +635,55 @@ impl Creux {
         }
     }
 
+    /// `Y = W · X` quand les activations sont en disposition **jeton majeur** (`t` lignes de
+    /// `n_in` canaux) et la sortie en **sortie majeur** (`n_out` lignes de `t`). C'est la
+    /// disposition du chemin par lots des experts — la transposer coûterait plus que le gain.
+    pub fn matmul_jetons(&self, x: &[f32], t: usize, y: &mut [f32]) {
+        for o in 0..self.n_out {
+            let (d, f) = (self.debut[o] as usize, self.debut[o + 1] as usize);
+            let ligne = &mut y[o * t..(o + 1) * t];
+            for v in ligne.iter_mut() { *v = 0.0; }
+            for k in d..f {
+                let val = self.vals[k];
+                let c = self.cols[k] as usize;
+                for j in 0..t { ligne[j] += val * x[j * self.n_in + c]; }
+            }
+        }
+    }
+
+    /// Forme creuse d'une matrice **Q4_0 empruntée au fichier** — c'est le cas des experts.
+    ///
+    /// DÉCODAGE SANS DÉQUANTIFIER ENTIÈREMENT : le bloc ggml fait 18 octets (une échelle f16 puis
+    /// 16 nibbles), les nibbles BAS portent les colonnes 0-15 et les HAUTS les colonnes 16-31, et
+    /// `lut[q] · d` est le poids — exactement ce que fait `dot_source` du noyau dense, donc le
+    /// noyau creux des experts rend la MÊME arithmétique que le noyau dense des experts.
+    pub fn depuis_q4_0(base: *const u8, n_out: usize, n_in: usize, nb_ligne: usize,
+                      lut: &[i8; 16]) -> Self {
+        let mut debut = Vec::with_capacity(n_out + 1);
+        let mut cols = Vec::new();
+        let mut vals = Vec::new();
+        debut.push(0u32);
+        for o in 0..n_out {
+            for b in 0..nb_ligne {
+                let p = unsafe { base.add((o * nb_ligne + b) * 18) };
+                let d = unsafe { f32_depuis_f16(u16::from_le_bytes([*p, *p.add(1)])) };
+                let lo = b * 32;
+                let hi = (lo + 32).min(n_in);
+                for j in 0..(hi - lo) {
+                    let octet = unsafe { *p.add(2 + (j % 16)) };
+                    let nib = if j < 16 { octet & 15 } else { octet >> 4 };
+                    let w = lut[nib as usize] as f32 * d;
+                    if w != 0.0 {
+                        cols.push((lo + j) as u32);
+                        vals.push(w);
+                    }
+                }
+            }
+            debut.push(cols.len() as u32);
+        }
+        Creux { debut, cols, vals, n_in, n_out }
+    }
+
     /// `Y = W · X` pour `t` jetons : le même parcours, pour `t` colonnes d'activations.
     pub fn matmul(&self, x: &[f32], t: usize, y: &mut [f32]) {
         for o in 0..self.n_out {
@@ -889,10 +938,44 @@ n'est pas implémenté, et les indexer par l'expert global serait faux");
         }
         None => None,
     };
+    // FORMES CREUSES DES EXPERTS : construites une fois, au chargement, seulement si on les
+    // demande. Une `Vue4` porte PLUSIEURS experts (un par `e`, à `base + e × octets_expert`), donc
+    // on indexe par **expert GLOBAL** — c'est ce que rend `Moe::ou(e)`, et c'est plus simple que
+    // d'indexer par (vue, expert local). Un format sans décodeur d'occupation reste `None`, et le
+    // noyau dense prend le relais pour lui.
+    let (gate_c, up_c, down_c) = if creux_voulu() {
+        let par_vue = if gate.is_empty() { 0 } else { n_expert / gate.len() };
+        let batir = |vues: &Vec<Vue4>| -> Vec<Option<Creux>> {
+            let mut out: Vec<Option<Creux>> = Vec::with_capacity(n_expert);
+            for vue in vues.iter() {
+                for e in 0..par_vue {
+                    out.push(match vue.src {
+                        crate::list::Source::Q4_0 => {
+                            let base = unsafe { vue.base.add(e * vue.octets_expert()) };
+                            Some(Creux::depuis_q4_0(base, vue.n_out, vue.n_in, vue.nb,
+                                                    &crate::list::LUT_INT4))
+                        }
+                        _ => None,
+                    });
+                }
+            }
+            out
+        };
+        let (a, b, c) = (batir(&gate), batir(&up), batir(&down));
+        if std::env::var("DRAVE_CREUX_DEBUG").is_ok() {
+            eprintln!("[creux] experts : {} vues · n_expert {} · par_vue {} · formes {} / {} / {} \
+                       (Q4_0 ? {})",
+                      gate.len(), n_expert, par_vue, a.len(), b.len(), c.len(),
+                      gate.first().map(|v| matches!(v.src, crate::list::Source::Q4_0)).unwrap_or(false));
+        }
+        (a, b, c)
+    } else {
+        (Vec::new(), Vec::new(), Vec::new())
+    };
     Some(Moe {
         routeur, routeur_biais,
         biais_gate: bg, biais_up: bu, biais_down: bd,
-        n_ff, gate, up, down, shexp, tid2eid,
+        n_ff, gate, up, down, gate_c, up_c, down_c, shexp, tid2eid,
         masque: masque_elagage(l, n_expert),
         couche: l, numeros, n_expert_global: n_expert, local: map,
     })
@@ -1346,6 +1429,12 @@ pub struct Moe {
     pub gate: Vec<Vue4>,
     pub up: Vec<Vue4>,
     pub down: Vec<Vue4>,
+    /// **Formes creuses des experts** (`DRAVE_POIDS_CREUX=1`) : une par expert et par projection,
+    /// `None` quand le format n'a pas de décodeur d'occupation. Les experts pèsent 1,8 M des
+    /// 2,3 M de paires du modèle de test : sans eux, le noyau creux ne paierait que l'attention.
+    pub gate_c: Vec<Option<Creux>>,
+    pub up_c: Vec<Option<Creux>>,
+    pub down_c: Vec<Option<Creux>>,
     /// Couche dont ce mélange fait partie (pour le mapping).
     pub couche: usize,
     /// Numéro de cluster de chaque vue de `gate`/`up`/`down`. L'identifiant du
@@ -5957,9 +6046,18 @@ Utilisez `--lot 1`, ou implémentez les experts partagés ici");
                     sxg.clear();
                     for &(i, _) in groupes[e].iter() { s32g.push(s32[i].clone()); sxg.push(sx[i]); }
                     let mg = moe.gate[k].expert(loc);
-                    self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
-                                            &mut yq[..mg.n_out * g]);
-                    paires_lot += (mg.n_in as u64) * (mg.n_out as u64) * g as u64;
+                    // FORME CREUSE DES EXPERTS : mêmes valeurs que `dot_source` (lut · échelle),
+                    // mais on ne parcourt que les non-nuls — et le compteur suit ce qui est lu.
+                    if let Some(Some(c)) = moe.gate_c.get(e) {
+                        let xf: Vec<f32> = (0..g * h)
+                            .map(|p| s32g[p / h][p % h] as f32 * sxg[p / h]).collect();
+                        c.matmul_jetons(&xf, g, &mut yq[..c.n_out * g]);
+                        paires_lot += c.nnz() * g as u64;
+                    } else {
+                        self.pool.gemm_dense_q4(&mg, &xg[..g * h], g, &s32g, &sxg,
+                                                &mut yq[..mg.n_out * g]);
+                        paires_lot += (mg.n_in as u64) * (mg.n_out as u64) * g as u64;
+                    }
                     for j in 0..g {
                         for oo in 0..nff {
                             gate[oo * g + j] = yq[oo * g + j]
@@ -5967,9 +6065,16 @@ Utilisez `--lot 1`, ou implémentez les experts partagés ici");
                         }
                     }
                     let mu = moe.up[k].expert(loc);
-                    self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
-                                            &mut yq[..mu.n_out * g]);
-                    paires_lot += (mu.n_in as u64) * (mu.n_out as u64) * g as u64;
+                    if let Some(Some(c)) = moe.up_c.get(e) {
+                        let xf: Vec<f32> = (0..g * h)
+                            .map(|p| s32g[p / h][p % h] as f32 * sxg[p / h]).collect();
+                        c.matmul_jetons(&xf, g, &mut yq[..c.n_out * g]);
+                        paires_lot += c.nnz() * g as u64;
+                    } else {
+                        self.pool.gemm_dense_q4(&mu, &xg[..g * h], g, &s32g, &sxg,
+                                                &mut yq[..mu.n_out * g]);
+                        paires_lot += (mu.n_in as u64) * (mu.n_out as u64) * g as u64;
+                    }
                     for j in 0..g {
                         for oo in 0..nff {
                             up[oo * g + j] = yq[oo * g + j]
@@ -7919,19 +8024,39 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     // mmap comme avant, puis on le recopie.
                     let (vg, loc_g) = Self::resident(&mut self.cache_ram, 0, l, e as usize,
                                                      &moe.gate[kexp], loc);
+                    // FORME CREUSE DE L'EXPERT (dessin B) : mêmes valeurs que le noyau dense
+                    // (lut · échelle), mais on ne parcourt que les non-nuls, et le compteur suit
+                    // ce qui est LU. Le cache RAM recopie les mêmes octets, donc les valeurs
+                    // construites au chargement restent justes.
+                    if let Some(Some(c)) = moe.gate_c.get(e as usize) {
+                        c.matvec(&hn, &mut gate);
+                        *paires.get_mut(1).unwrap() += c.nnz();
+                        if let Some(b) = moe.biais_gate.as_ref() {
+                            for o in 0..c.n_out { gate[o] += b[e as usize * moe.n_ff + o]; }
+                        }
+                    } else {
                     Self::matvec4_ou_iq(pool, &vg, loc_g, &hn, &mut gate, &mut paires[1],
                                         self.act_levels,
                                         self.act_thresh, tk(4), self.act_renorm, &mut scratch,
                                         moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
+                    }
                     let mu = moe.up[kexp].expert(loc);
                     let (vu, loc_u) = Self::resident(&mut self.cache_ram, 1, l, e as usize,
                                                      &moe.up[kexp], loc);
+                    if let Some(Some(c)) = moe.up_c.get(e as usize) {
+                        c.matvec(&hn, &mut up);
+                        *paires.get_mut(1).unwrap() += c.nnz();
+                        if let Some(b) = moe.biais_up.as_ref() {
+                            for o in 0..c.n_out { up[o] += b[e as usize * moe.n_ff + o]; }
+                        }
+                    } else {
                     Self::matvec4_ou_iq(pool, &vu, loc_u, &hn, &mut up, &mut paires[1],
                                         self.act_levels,
                                         self.act_thresh, tk(5), self.act_renorm, &mut scratch,
                                         moe.biais_up.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
                                         threads_iq);
+                    }
                     Self::activation(&mut gate, &up, cfg.ffn_exp, cfg.ffn_act_oss,
                                      limite(l, false));
                     Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
@@ -7939,6 +8064,13 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let md = moe.down[kexp].expert(loc);
                     let (vd, loc_d) = Self::resident(&mut self.cache_ram, 2, l, e as usize,
                                                      &moe.down[kexp], loc);
+                    if let Some(Some(c)) = moe.down_c.get(e as usize) {
+                        c.matvec(&gate, &mut exp_out);
+                        *paires.get_mut(1).unwrap() += c.nnz();
+                        if let Some(b) = moe.biais_down.as_ref() {
+                            for o in 0..c.n_out { exp_out[o] += b[e as usize * h + o]; }
+                        }
+                    } else {
                     Self::matvec4_ou_iq(pool, &vd, loc_d, &gate, &mut exp_out, &mut paires[1],
                                     self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch,
                                     // Le biais de descente se découpe par la
@@ -7947,6 +8079,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                                     // pas sur Qwen3-MoE (768 contre 2 048).
                                     moe.biais_down.as_ref().map(|b| &b[e as usize * h..]),
                                     threads_iq);
+                    }
                     for i in 0..h { down[i] += w_exp * exp_out[i]; }
                 }
                 // La somme des experts ROUTÉS, avant l'expert partagé : c'est le
@@ -9371,6 +9504,7 @@ mod tests_router {
 
     fn moe_synthetique(routeur: Vec<f32>, biais: Option<Vec<f32>>, tid: Option<Vec<i32>>) -> Moe {
         Moe {
+            gate_c: Vec::new(), up_c: Vec::new(), down_c: Vec::new(),
             routeur,
             routeur_biais: biais,
             biais_gate: None, biais_up: None, biais_down: None,

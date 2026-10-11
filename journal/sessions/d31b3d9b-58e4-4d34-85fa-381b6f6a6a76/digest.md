@@ -52380,3 +52380,560 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\ni = s.index(\"## 2. La mesure, corrigée\")\nj = s.index(\"## 4. Ce que cette fiche ne dit PAS\")\nneuf = \"\"\"##  … [2739 caractères tronqués]`
+
+  ```
+fiche B mise à jour
+18:## 1. Ce qui bloquait, et ce qui est débloqué
+25:## 2. Le noyau creux : ce qu'il paie, et ce qu'il coûte
+50:## 3. Ce que ça change pour le dessin B
+59:## 4. Ce que cette fiche ne dit PAS
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 56 : la pièce manquante du dessin B est écrite — exacte, payante en paires, plus lente en temps
+
+**Ce qui manquait**
+Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait (÷4,04), mais **aucun noyau** ne lisait les seuls non-nuls : la ligne « paires » d'un modèle élagué restait à 2,3 M, parce qu'un noyau dense lit la matrice entière.
+
+**Ce qui est livré** : `Creux` — forme **CSR par lignes** (colonnes + valeurs non nulles), construite au chargement sous `DRAVE_POIDS_CREUX=1`, branchée dans le chemin jeton **et** dans le chemin par lots.
+
+**Trois mesures, et la troisième n'est pas à notre avantage**
+
+| mesure (Qwen2.5-0.5B, corpus tokenisé) | dense | creux |
+|---|---:|---:|
+| perplexité, modèle intact | 14,6496 | 14,6567 (**+0,05 %**) |
+| **paires d'attention**, élagué 25 % | 44,4 M | **11,1 M** (÷4) |
+| paires totales, élagué 25 % | 496,8 M | **226,4 M** (÷2,2) |
+| **débit**, élagué | **1434 tok/s** | 1312 tok/s (**−8,5 %**) |
+
+1. **exact** — et les deux noyaux ne font pas la même arithmétique (int8 quantifié contre f32 déquantifié) : 0,05 % d'écart sur un modèle sain, 5 % sur un modèle détruit, le creux étant le **plus fidèle** ;
+2. **la sparsité est enfin payée** au lieu d'être annoncée ;
+3. **mais « moins de paires » n'est pas « plus rapide »** : un CSR scalaire f32 perd contre un noyau dense int8 vectorisé, même en lisant 4× moins.
+
+**Livré aussi** : `porte-poids-creux.sh` (**34e porte**) — exactitude sur modèle intact, chute des paires sur modèle élagué, et **la lenteur écrite dans la porte elle-même**. **Verte**, et **vue rouge** avec `DRAVE_CREUX_SANS_EFFET=1` (44,4 M → 44,4 M).
+
+**Non-régression** : 122 tests ✅, `porte-flux.sh` ✅, `porte-occupation-moteur.sh` ✅.
+
+**Ce qui reste** : les **experts** (1,8 M des 2,3 M de paires) passent par `Vue4`/`DenseQ4` et restent denses ; et un noyau creux **vectorisé** reste à écrire pour que le compte devienne du temps.
+
+
+## Tour 100
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 57/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Experts creux : y a-t-il un décodeur Q4_0 déjà écrit à réutiliser ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn dequant\\|fn dequant_grille_dans\\|fn dequant\" drave-core/src/list.rs | head -8; echo \"=== usage ===\"; grep -rn \"dequant_grille_dans\" drave-core/src/*.rs | head -4", "description": "Find an existing Q4 dequantiz … [4 caractères tronqués]`
+
+  ```
+597:pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
+637:pub fn dequant_grille(t: u32, bloc: &[u8]) -> Vec<f32> {
+=== usage ===
+drave-core/src/list.rs:597:pub fn dequant_grille_dans(t: u32, bloc: &[u8], out: &mut [f32]) {
+drave-core/src/list.rs:639:    dequant_grille_dans(t, bloc, &mut v);
+drave-core/src/model.rs:1254:                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1240,1280p' drave-core/src/model.rs", "description": "Read the existing dequantization path for Vues"}`
+
+  ```
+// `unsafe impl Send`.
+        let base = unsafe { self.base.add(loc * self.n_out * nb * taille) } as usize;
+        let n_out = self.n_out;
+        let n_in = self.n_in;
+        let simd = simd_dot();
+        let travail = move |o0: usize, o1: usize, out: &mut [f32]| {
+            // Un tampon par FIL, réutilisé pour tous les blocs : c'est ce qui
+            // fait la différence entre 2,5 µs et 0,3 µs par super-bloc.
+            let mut valeurs = vec![0f32; 256];
+            for o in o0..o1 {
+                let mut acc = 0f32;
+                for b in 0..nb {
+                    let p = unsafe { (base as *const u8).add((o * nb + b) * taille) };
+                    let bloc = unsafe { std::slice::from_raw_parts(p, taille) };
+                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
+                    let lo = b * 256;
+                    let hi = (lo + 256).min(n_in);
+                    // Le produit scalaire du super-bloc : c'est LUI le poste,
+                    // pas la déquantification (mesuré : ×1,07 en vectorisant la
+                    // déquantification d'IQ1_M). Voir `dot_bloc_f32`.
+                    acc += dot_bloc_f32(&valeurs[..hi - lo], &x[lo
+… [793 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"impl DenseQ4\" -A 40 drave-core/src/list.rs | grep -nE \"pub fn|fn \" | head -12; echo \"=== expert(loc) ===\"; grep -n \"fn expert(\" -A 10 drave-core/src/model.rs | head -14", "description": "Look for a DenseQ4 decoder an … [19 caractères tronqués]`
+
+  ```
+2:710-    pub fn build(w: &[f32], n_out: usize, n_in: usize) -> Self {
+52:1325-    pub fn dot16(&self, o: usize, x: &[i16], sx32: &[i32]) -> f32 {
+=== expert(loc) ===
+1311:    fn expert(&self, e: usize) -> crate::list::DenseQ4 {
+1312-        let base = unsafe { self.base.add(e * self.octets_expert()) };
+1313-        unsafe {
+1314-            match self.src {
+1315-                crate::list::Source::Q4_K =>
+1316-                    crate::list::DenseQ4::emprunter_q4k(base, self.n_out, self.n_in, self.nb),
+1317-                crate::list::Source::Q6_K =>
+1318-                    crate::list::DenseQ4::emprunter_q6k(base, self.n_out, self.n_in, self.nb),
+1319-                crate::list::Source::Mxfp4 =>
+1320-                    crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, true),
+1321-                _ => crate::list::DenseQ4::emprunter(base, self.n_out, self.n_in, self.nb, false),
+  ```
+
+### 🤖 Assistant
+
+⏵ Layout Q4_0 du `DenseQ4` emprunté — lecture du noyau pour le décoder correctement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"pub unsafe fn emprunter(\" drave-core/src/list.rs | head -1 | cut -d: -f1); sed -n \"$((L)),$((L+26))p\" drave-core/src/list.rs", "description": "Read the Q4_0 borrowed layout"}`
+
+  ```
+pub unsafe fn emprunter(base: *const u8, n_out: usize, n_in: usize,
+                            nb_ligne: usize, mxfp4: bool) -> Self {
+        let (lut, e8m0) = if mxfp4 { (LUT_MXFP4, true) } else { (LUT_INT4, false) };
+        DenseQ4 {
+            n_in, n_out, lut, e8m0,
+            q: Vec::new(), sc: Vec::new(), scale: Vec::new(), plan6: None,
+            src: if mxfp4 { Source::Mxfp4 } else { Source::Q4_0 },
+            base, nb_ligne,
+        }
+    }
+
+    /// Repli scalaire du 6 bits.
+    fn dot16_q6_scalaire(&self, o: usize, x: &[i16]) -> f32 {
+        let half = self.n_in.div_ceil(2);
+        let n_bloc = self.n_in.div_ceil(BLOC_Q4);
+        let q4 = &self.q[o * half..(o + 1) * half];
+        let q2 = self.plan6.as_ref().unwrap();
+        let mut sum = 0f32;
+        for b in 0..n_bloc {
+            let (lo, hi) = (b * BLOC_Q4, ((b + 1) * BLOC_Q4).min(self.n_in));
+            let mut a = 0i32;
+            for k in 0..(hi - lo) {
+                let octet = q4[b * 16 + k / 2];
+                let nib = if k % 2 == 0 { octet & 0x0F } else { octet >> 4 };
+                let deux = (q2[o * n_bloc * 8 + b * 8 + k / 4] >> (2 * (k % 4))) & 3;
+                let v = (nib | (deux <
+… [61 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Source::Q4_0\" -B 4 -A 18 drave-core/src/list.rs | grep -nE \"base|nb_ligne|scale|i8|f16|nib|d \\*|sum\" | head -16", "description": "Find the Q4_0 dot product layout"}`
+
+  ```
+4:1075-            q: Vec::new(), sc: Vec::new(), scale: Vec::new(), plan6: None,
+6:1077-            base, nb_ligne,
+16:1087-        let mut sum = 0f32;
+22:1093-                let nib = if k % 2 == 0 { octet & 0x0F } else { octet >> 4 };
+53:1269:            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+54:1270-            Source::Mxfp4 => self.n_out * self.nb_ligne * 17,
+55:1271-            Source::Q4_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q4K,
+56:1272-            Source::Q6_K => self.n_out * self.nb_ligne * crate::gguf::TAILLE_Q6K,
+57:1273-            Source::Dequant(t) => self.n_out * self.nb_ligne * octets_grille(t),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Source::Q4_0 =>\" -B 12 drave-core/src/list.rs | grep -nE \"fn |base|18|let d|nib|sum|for \" | head -18", "description": "Locate the Q4_0 dot implementation"}`
+
+  ```
+2:1158-                    sum += d * sc as f32 * sq as f32 - dmin * mn as f32 * sx as f32;
+6:1162-        sum
+11:1167-    fn pas_source(&self) -> (usize, usize) {
+13:1169:            Source::Q4_0 => (18, 2),
+23:1265-    pub fn bits_per_weight(&self) -> f64 {
+27:1269:            Source::Q4_0 => self.n_out * self.nb_ligne * 18,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pas_source()\" drave-core/src/list.rs | head -4; L=$(grep -n \"let (taille, _) = self.pas_source()\" drave-core/src/list.rs | head -1 | cut -d: -f1); sed -n \"$((L-14)),$((L+22))p\" drave-core/src/list.rs", "description": " … [24 caractères tronqués]`
+
+  ```
+1195:        let (pas, decal) = self.pas_source();
+1223:        let (pas, decal) = self.pas_source();
+[stderr]
+sed: invalid option -- '1'
+Usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+      --debug
+                 annotate program execution
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+  --follow-symlinks
+                 follow symlinks when processing in place
+  -i[SUFFIX], --in-place[=SUFFIX]
+                 edit files in place (makes backup if SUFFIX supplied)
+  -l N, --line-length=N
+                 specify the desired line-wrap length for the 'l' command
+  --posix
+                 disable all GNU extensions.
+  -E, -r, --regexp-extended
+                 use extended regular expressions in the script
+                 (for portability use POSIX -E).
+  -s, --separate
+                 consider files as separate rather than as a single,
+                 continuous long stream.
+      --sandbox
+            
+… [748 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1190,1240p' drave-core/src/list.rs", "description": "Read the borrowed-source dot product"}`
+
+  ```
+}
+    }
+
+    /// Produit scalaire sur une matrice **empruntée** au fichier.
+    fn dot_source(&self, o: usize, x: &[i32]) -> f32 {
+        let (pas, decal) = self.pas_source();
+        let mut sum = 0f32;
+        for b in 0..self.nb_ligne {
+            let p = unsafe { self.base.add((o * self.nb_ligne + b) * pas) };
+            let d = unsafe { self.echelle_source(p) };
+            let qs = unsafe { std::slice::from_raw_parts(p.add(decal), 16) };
+            let lo = b * BLOC_Q4;
+            let hi = ((b + 1) * BLOC_Q4).min(self.n_in);
+            let mut a = 0i32;
+            for j in 0..(hi - lo) {
+                let octet = qs[j % 16] as usize;
+                let nib = if j < 16 { octet & 15 } else { octet >> 4 };
+                a += self.lut[nib] as i32 * x[lo + j];
+            }
+            sum += a as f32 * d;
+        }
+        sum
+    }
+
+    /// Même chose en AVX2. Les nibbles bas d'un bloc source sont les poids
+    /// 0–15 et les hauts les poids 16–31 : les deux groupes d'activations à
+    /// apparier sont **contigus**, donc aucun réentrelacement n'est nécessaire.
+    /// Les sommes par paires sont identiques à celles du chemin entrelacé, et
+    /// le résultat reste *
+… [1288 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation : forme creuse des experts, depuis les blocs Q4_0 empruntés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"base: \\*const u8\" drave-core/src/list.rs | head -3; grep -n \"pub nb_ligne\" drave-core/src/list.rs | head -2; grep -n \"LUT_INT4\" drave-core/src/list.rs | head -2", "description": "Check DenseQ4 field visibility"}`
+
+  ```
+364:    pub base: *const u8,
+440:    pub unsafe fn emprunter_q8(base: *const u8, n_out: usize, n_in: usize,
+699:    pub base: *const u8,
+365:    pub nb_ligne: usize,
+701:    pub nb_ligne: usize,
+542:pub const LUT_INT4: [i8; 16] = [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7];
+748:        DenseQ4 { n_in, n_out, lut: LUT_INT4, e8m0: false, q, sc, scale, plan6: None,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# 1. matmul en disposition « jeton majeur » + constructeur depuis Q4_0 emprunté\nancre = \"\"\"    /// `Y = W · X`  … [3658 caractères tronqués]`
+
+  ```
+structure et constructeur posés
+941:    Some(Moe {
+1380:pub struct Moe {
+1430:impl Moe {
+9427:    fn moe_synthetique(routeur: Vec<f32>, biais: Option<Vec<f32>>, tid: Option<Vec<i32>>) -> Moe {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '938,958p' drave-core/src/model.rs", "description": "Read the Moe construction site"}`
+
+  ```
+}
+        None => None,
+    };
+    Some(Moe {
+        routeur, routeur_biais,
+        biais_gate: bg, biais_up: bu, biais_down: bd,
+        n_ff, gate, up, down, shexp, tid2eid,
+        masque: masque_elagage(l, n_expert),
+        couche: l, numeros, n_expert_global: n_expert, local: map,
+    })
+}
+
+/// Vue sur un tenseur déjà quantifié, découpable **par expert**. Les experts
+/// sont empilés dans un tenseur 3D et **contigus** : l'expert `e` commence à
+/// `base + e × n_out × nb × pas`. Aucune copie, aucun découpage préalable.
+#[derive(Clone, Copy)]
+pub struct Vue4 {
+    pub base: *const u8,
+    pub n_out: usize,
+    pub n_in: usize,
+    pub nb: usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    Some(Moe {\n        routeur, routeur_biais,\n        biais_gate: bg, biais_up: bu, biais_down: bd,\n  … [1522 caractères tronqués]`
+
+  ```
+construction posée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn octets_expert\" -A 12 drave-core/src/model.rs | head -14", "description": "Read octets_expert"}`
+
+  ```
+1255:    fn octets_expert(&self) -> usize {
+1256-        use crate::list::Source::*;
+1257-        match self.src {
+1258-            Propre => 0,
+1259-            // Super-blocs de 256 poids : `DenseQ4` pour Q4_K/Q6_K, et
+1260-            // `matvec_dequant` (`nb = n_in / 256`) pour les grilles.
+1261-            Q4_K | Q6_K | Dequant(_) => self.n_out * (self.n_in / 256) * self.pas(),
+1262-            // Blocs de 32 poids (4,25 et 4,5 bits par poids).
+1263-            Mxfp4 | Q4_0 => self.n_out * (self.n_in / 32) * self.pas(),
+1264-        }
+1265-    }
+1266-
+1267-    fn pas(&self) -> usize {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ndeb = s.index(\"    // FORMES CREUSES DES EXPERTS : construites une fois, au chargement\")\nfin = s.index(\"    Some( … [1790 caractères tronqués]`
+
+  ```
+construction indexée par expert global
+fin
+  ```
+
+### 🤖 Assistant
+
+⏵ Branchement du noyau creux dans la boucle des experts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"                    let mg = moe.gate[k].expert(loc);\n                    self.pool.gemm_dense_q4(&mg, & … [1493 caractères tronqués]`
+
+  ```
+premier expert branché
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; env -u DRAVE_POIDS_CREUX $D \"$M\" --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"perplexité [0-9]|paires \\(poids\"; DRAVE_POIDS_CREUX=1 $D \" … [181 caractères tronqués]`
+
+  ```
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.1 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 1.9 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Branchement des deux autres projections d'experts et vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"                    let mu = moe.up[k].expert(loc);\n                    self.pool.gemm_dense_q4(&mu, &xg … [1381 caractères tronqués]`
+
+  ```
+up branché
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.1 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 1.9 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : la forme creuse des experts est-elle construite et atteinte ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        (batir(&gate), batir(&up), batir(&down))\"\"\"\nnew = \"\"\"        let (a, b, c) = (batir(&gate) … [886 caractères tronqués]`
+
+  ```
+diagnostic posé
+error[E0277]: `Source` doesn't implement `Debug`
+   --> src/model.rs:969:23
+    |
+967 |                        (Q4_0 ? {:?})",
+    |                                ---- required by this formatting parameter
+968 |                       gate.len(), n_expert, par_vue, a.len(), b.len(), c.len(),
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 31 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/ (Q4_0 ? {:?})\",/ (Q4_0 ? {})\",/' drave-core/src/model.rs && sed -i 's/                      gate.first().map(|v| v.src));/                      gate.first().map(|v| matches!(v.src, crate::list::Source::Q4_0)).unwrap_or(f … [403 caractères tronqués]`
+
+  ```
+[creux] experts : 1 vues · n_expert 8 · par_vue 8 · formes 8 / 8 / 8 (Q4_0 ? true)
+[creux] experts : 1 vues · n_expert 8 · par_vue 8 · formes 8 / 8 / 8 (Q4_0 ? true)
+[creux] experts : 1 vues · n_expert 8 · par_vue 8 · formes 8 / 8 / 8 (Q4_0 ? true)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"                    if let Some(Some(c)) = moe.gate_c.get(e) {\"\"\"\nnew = \"\"\"                    if  … [782 caractères tronqués]`
+
+  ```
+sonde posée
+0
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les experts sont calculés par le chemin jeton — localisation de l'autre site
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"expert(loc)\\|moe.gate\\[k\\]\\.expert\\|matvec4_ou_iq(\" drave-core/src/model.rs | head -10", "description": "Find all expert computation sites"}`
+
+  ```
+4984:    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+5007:        let d = vue.expert(loc);
+6048:                    let mg = moe.gate[k].expert(loc);
+6071:                    let mu = moe.up[k].expert(loc);
+6109:                    let md = moe.down[k].expert(loc);
+7990:                        moe.gate[k].prelire_expert(loc);
+7991:                        moe.up[k].prelire_expert(loc);
+7992:                        moe.down[k].prelire_expert(loc);
+8025:                    let mg = moe.gate[kexp].expert(loc);
+8031:                    Self::matvec4_ou_iq(pool, &vg, loc_g, &hn, &mut gate, &mut paires[1],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '8020,8060p' drave-core/src/model.rs", "description": "Read the token-path expert computation"}`
+
+  ```
+if fait {
+                        Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
+                                               l, &gate[..cfg.ffn_exp]);
+                        continue;
+                    }
+                    let mg = moe.gate[kexp].expert(loc);
+                    // Cache RAM : si l'expert y est, on lit SES octets (base
+                    // redirigée, loc = 0) au lieu du mmap ; sinon on lit le
+                    // mmap comme avant, puis on le recopie.
+                    let (vg, loc_g) = Self::resident(&mut self.cache_ram, 0, l, e as usize,
+                                                     &moe.gate[kexp], loc);
+                    Self::matvec4_ou_iq(pool, &vg, loc_g, &hn, &mut gate, &mut paires[1],
+                                        self.act_levels,
+                                        self.act_thresh, tk(4), self.act_renorm, &mut scratch,
+                                        moe.biais_gate.as_ref().map(|b| &b[e as usize * moe.n_ff..]),
+                                        threads_iq);
+                    let mu = moe.up[kexp].expert(loc);
+                    let (vu, loc_u) = Self::resident(&mut self.cache_ram, 1, l
+… [1745 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Branchement du noyau creux dans le chemin des experts jeton par jeton
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# gate\nold = \"\"\"                    Self::matvec4_ou_iq(pool, &vg, loc_g, &hn, &mut gate, &mut paires[1],\n     … [4710 caractères tronqués]`
+
+  ```
+trois sites jeton branchés
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf\nenv -u DRAVE_POIDS_CREUX $D \"$M\" --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"perplexité [0-9]|paires \\(poids\"\nDRAVE_POIDS_CREUX=1 $D \" … [181 caractères tronqués]`
+
+  ```
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.1 M · experts 0.4 M · partagé 0.0 M · scores 1 K · total 0.6 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Le noyau creux couvre maintenant TOUT le modèle (÷3,8 paires) — mesure de la vitesse
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; I=/tmp/e6/val.ids\nfor E in non oui; do\n  printf 'creux=%-4s ' \"$E\"\n  if [ \"$E\" = oui ]; then CMD=\"env DRAVE_POIDS_CREUX=1\"; else CMD=\"env -u DRAVE_POIDS_CREUX\ … [570 caractères tronqués]`
+
+  ```
+creux=non  1376.50 tok/s 1421.72 tok/s 
+creux=oui  857.31 tok/s 945.47 tok/s 
+--- perplexité 512 jetons (temps) ---
+creux=non  perplexité 8.0317 sur 511 tokens (0 événements, 0.3 s) ===
+creux=oui  perplexité 8.0318 sur 511 tokens (0 événements, 0.5 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Retrait des sondes, mise à jour de la porte (÷3,8 global) et vérifications
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"                    if std::env::var(\"DRAVE_CREUX_DEBUG\").is_ok() {\n                        eprintln!( … [2649 caractères tronqués]`
+
+  ```
+sonde retirée
+porte mise à jour
+=== 2. LE COMPTE — élagage à 0.25 gardé : la sparsité doit être PAYÉE ===
+  noyau dense : paires attention 44.4 M · total 496.8 M
+  noyau creux : paires attention 11.1 M · total 226.4 M
+  ✅ paires d'attention 44.4 M → 11.1 M : le noyau ne lit plus que les non-nuls
+  ✅ le TOTAL baisse aussi : 496.8 M → 226.4 M — attention ET experts (÷≈2 à 4)
+
+  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau
+    creux est BEAUCOUP plus LENT que les noyaux denses int8 — 900 contre 1 400 tok/s sur un
+    modèle élagué à 25 %, malgré 3,8 fois moins de poids lus. « Moins de paires » n'est pas
+    « plus rapide » : le coût en paires est un MODÈLE, la vitesse est une MESURE, et les deux
+    ne coïncident que si le noyau creux est lui aussi optimisé.
+
+✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité (paires d'attention
+   divisées), les experts restant denses — et sa lenteur est écrite, pas cachée.
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-poids-creux.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ns = s.replace('''echo \"✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité (paires d'attention\ … [1008 caractères tronqués]`
+
+  ```
+message final corrigé
+flux=0
+occupation-moteur=0
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    paires (poids × activation) par token : attention 0.1 M · experts 0.4 M · partagé 0.0 M · scores 1 K · total 0.6 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | tail -3", "description": "Run the test suite explicitly", "timeoutMs": 600000}`
+
+  ```
+For more information about this error, try `rustc --explain E0063`.
+warning: `drave-core` (bin "drave" test) generated 38 warnings
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 38 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^error\" -A 8 | head -16", "description": "Read the test build error", "timeoutMs": 600000}`
+
+  ```
+error[E0063]: missing fields `down_c`, `gate_c` and `up_c` in initializer of `model::Moe`
+    --> src/model.rs:9506:9
+     |
+9506 |         Moe {
+     |         ^^^ missing `down_c`, `gate_c` and `up_c`
+
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+--
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 38 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# le MoE synthétique des tests\nlignes = s.split(\"\\n\")\nfor i, l in enumerate(lignes):\n    if i > 9490 and l.stri … [718 caractères tronqués]`
+
+  ```
+champs ajoutés au MoE de test (ligne 9506 )
+error: test failed, to rerun pass `--bin drave`
+test result: FAILED. 121 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^---- |panicked\" -A 3 | head -10", "description": "Identify the failing test", "timeoutMs": 600000}`
+
+  ```
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (585026) panicked at src/main.rs:8185:13:
+DRAVE_CREUX_DEBUG est lu dans le source mais absent de VARS_LUES : un ancien nom QT_CREUX_DEBUG resterait muet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/    \"POIDS_CREUX\", \"CREUX_SANS_EFFET\",/    \"POIDS_CREUX\", \"CREUX_SANS_EFFET\", \"CREUX_DEBUG\",/' drave-core/src/main.rs && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^tes … [90 caractères tronqués]`
+
+  ```
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit : le noyau creux couvre maintenant les experts (÷3,8 paires, −36 % de vitesse)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF'\nLe noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT\n\nCE QUI A ETE AJOUTE. Les experts (1,8 M des 2,3 M de paires) ne passaient pas par `Proj` mais … [1891 caractères tronqués]`

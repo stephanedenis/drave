@@ -55,7 +55,7 @@ possible (`ls journal/*_<thème>.md`).
 |---|---|
 | [2026-10-09](2026-10-09_distribue.md) | `255 jetons` · `1,842` · `3,4 ms` · `×128` · `24 couches` · `59,0790` · `9 %` |
 | [2026-10-10](2026-10-10_distribue.md) | `0,992` · `0,681` · `1,000` · `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` |
-| [2026-10-11](2026-10-11_distribue.md) | — |
+| [2026-10-11](2026-10-11_distribue.md) | `÷3,8` · `3,8 paires` · `−36 %` |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 
@@ -71,7 +71,7 @@ possible (`ls journal/*_<thème>.md`).
 |---|---|
 | [2026-10-09](2026-10-09_moteur.md) | `8,6 Mo` · `243 Mo` · `8 jetons` · `8 Mo` |
 | [2026-10-10](2026-10-10_moteur.md) | `+3,0 %` · `0,283` · `0,399` · `-20 %` · `86 Gio` · `÷4` · `×78` |
-| [2026-10-11](2026-10-11_moteur.md) | — |
+| [2026-10-11](2026-10-11_moteur.md) | `8,5 %` |
 
 ### `mesures` — Campagnes et mesures
 
@@ -87,7 +87,7 @@ possible (`ls journal/*_<thème>.md`).
 |---|---|
 | [2026-10-09](2026-10-09_portes.md) | — |
 | [2026-10-10](2026-10-10_portes.md) | `13 s` · `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` · `1 s` · `0 jeton` · `×633` |
-| [2026-10-11](2026-10-11_portes.md) | `25 %` · `78 %` |
+| [2026-10-11](2026-10-11_portes.md) | `25 %` · `78 %` · `÷3,8` |
 
 ### `docs` — Documentation, état, conventions
 

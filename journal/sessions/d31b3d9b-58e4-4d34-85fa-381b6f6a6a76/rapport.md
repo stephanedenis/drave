@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 67.2 h |
-| Tours | 99 |
-| Messages | 3275 |
-| Appels d'outils | 3048 |
+| Durée | 67.5 h |
+| Tours | 100 |
+| Messages | 3310 |
+| Appels d'outils | 3081 |
 | Fichiers touchés | 126 |
-| Commandes | 2581 |
+| Commandes | 2614 |
 | Sous-agents | 3 |
-| Commits | 292 |
+| Commits | 293 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -233,6 +233,8 @@
 **Tour 98** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 99** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 100** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4118,7 +4120,55 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 
 **Synthèse produite :**
 
-⏵ Commit du noyau creux, de sa porte et du fait désagréable
+⏵ Round 56 : la pièce manquante du dessin B est écrite — exacte, payante en paires, plus lente en temps
+
+**Ce qui manquait**
+Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait (÷4,04), mais **aucun noyau** ne lisait les seuls non-nuls : la ligne « paires » d'un modèle élagué restait à 2,3 M, parce qu'un noyau dense lit la matrice entière.
+
+**Ce qui est livré** : `Creux` — forme **CSR par lignes** (colonnes + valeurs non nulles), construite au chargement sous `DRAVE_POIDS_CREUX=1`, branchée dans le chemin jeton **et** dans le chemin par lots.
+
+**Trois mesures, et la troisième n'est pas à notre avantage**
+
+| mesure (Qwen2.5-0.5B, corpus tokenisé) | dense | creux |
+|---|---:|---:|
+| perplexité, modèle intact | 14,6496 | 14,6567 (**+0,05 %**) |
+| **paires d'attention**, élagué 25 % | 44,4 M | **11,1 M** (÷4) |
+| paires totales, élagué 25 % | 496,8 M | **226,4 M** (÷2,2) |
+| **débit**, élagué | **1434 tok/s** | 1312 tok/s (**−8,5 %**) |
+
+1. **exact** — et les deux noyaux ne font pas la même arithmétique (int8 quantifié contre f32 déquantifié) : 0,05 % d'écart sur un modèle sain, 5 % sur un modèle détruit, le creux étant le **plus fidèle** ;
+2. **la sparsité est enfin payée** au lieu d'être annoncée ;
+3. **mais « moins de paires » n'est pas « plus rapide »** : un CSR scalaire f32 perd contre un noyau dense int8 vectorisé, même en lisant 4× moins.
+
+**Livré aussi** : `porte-poids-creux.sh` (**34e porte**) — exactitude sur modèle intact, chute des paires sur modèle élagué, et **la lenteur écrite dans la porte elle-même**. **Verte**, et **vue rouge** avec `DRAVE_CREUX_SANS_EFFET=1` (44,4 M → 44,4 M).
+
+**Non-régression** : 122 tests ✅, `porte-flux.sh` ✅, `porte-occupation-moteur.sh` ✅.
+
+**Ce qui reste** : les **experts** (1,8 M des 2,3 M de paires) passent par `Vue4`/`DenseQ4` et restent denses ; et un noyau creux **vectorisé** reste à écrire pour que le compte devienne du temps.
+
+### Tour 100 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*33 appels d'outils.* Actions notables :
+
+- bash — Find an existing Q4 dequantizer
+- bash — Read the existing dequantization path for Vues
+- bash — Look for a DenseQ4 decoder and expert accessor
+- bash — Read the Q4_0 borrowed layout
+- bash — Find the Q4_0 dot product layout
+- bash — Locate the Q4_0 dot implementation
+- bash — Read the Q4_0 dot loop
+- bash — Read the borrowed-source dot product
+- bash — Check DenseQ4 field visibility
+- bash — Add sparse expert structures
+- bash — Read the Moe construction site
+- bash — Build sparse expert forms at load
+- bash — Read octets_expert
+- bash — Index sparse experts by global expert id
+- … et 19 autres
+
+**Synthèse produite :**
+
+⏵ Commit : le noyau creux couvre maintenant les experts (÷3,8 paires, −36 % de vitesse)
 
 ## 3. Travail accompli
 
@@ -4301,7 +4351,7 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2541 autres
+- … et 2574 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4429,7 +4479,7 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 
 ## 5. Erreurs rencontrées
 
-111 sorties en erreur ou divergentes. Les premières :
+116 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4741,4 +4791,5 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 12
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF' Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la
 - Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF' Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 
 

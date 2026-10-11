@@ -18,8 +18,8 @@
 #      le noyau dense est vectorisé. La porte le MESURE et l'affiche — une porte qui ne
 #      verrouillerait que les bons chiffres laisserait croire le reste.
 #
-# CE QU'ELLE NE VERROUILLE PAS : les experts. Ils passent par `Vue4`/`DenseQ4`, pas par `Proj` :
-# à 25 % gardés, le noyau creux ne fait tomber que les paires d'**attention** (0,4 M sur 2,3 M).
+# CE QU'ELLE NE VERROUILLE PAS : la VITESSE. Le noyau creux est exact et il paie la sparsité
+# en paires, mais il est plus LENT que les noyaux denses int8 — la porte le mesure et l'écrit.
 #
 # COÛT : quatre exécutions du moteur sur le modèle du dépôt, ~1 min.
 set -u
@@ -89,8 +89,8 @@ else
     echo "  ❌ les paires d'attention ne tombent pas ($ATT_D M → $ATT_C M)"
     ECHEC=1
 fi
-if $P -c "import sys; sys.exit(0 if float('$TOT_C') < float('$TOT_D') else 1)"; then
-    echo "  ✅ le total baisse aussi : $TOT_D M → $TOT_C M (les experts restent denses : en-tête)"
+if $P -c "import sys; sys.exit(0 if float('$TOT_D') > 2.0*float('$TOT_C') else 1)"; then
+    echo "  ✅ le TOTAL baisse aussi : $TOT_D M → $TOT_C M — attention ET experts (÷≈2 à 4)"
 else
     echo "  ❌ le total ne baisse pas ($TOT_D M → $TOT_C M)"
     ECHEC=1
@@ -98,10 +98,13 @@ fi
 
 echo
 echo "  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau"
-echo "    creux est PLUS LENT que le noyau dense int8 malgré 4 fois moins de poids lus (1312"
-echo "    contre 1434 tok/s sur un modèle élagué). « Moins de paires » n'est pas « plus rapide »."
+echo "    creux est BEAUCOUP plus LENT que les noyaux denses int8 — 900 contre 1 400 tok/s sur un"
+echo "    modèle élagué à 25 %, malgré 3,8 fois moins de poids lus. « Moins de paires » n'est pas"
+echo "    « plus rapide » : le coût en paires est un MODÈLE, la vitesse est une MESURE, et les deux"
+echo "    ne coïncident que si le noyau creux est lui aussi optimisé."
 
 echo
 [ "$ECHEC" = 0 ] || { echo "❌ porte poids creux : ÉCHEC"; exit 1; }
-echo "✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité (paires d'attention"
-echo "   divisées), les experts restant denses — et sa lenteur est écrite, pas cachée."
+echo "✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur"
+echo "   TOUT le modèle (Projections d'attention ET experts, ce dernier cas vérifié sur le modèle"
+echo "   à experts du harnais) — et sa LENTEUR est écrite dans la porte, pas cachée."

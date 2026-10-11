@@ -28,7 +28,7 @@ const VARS_LUES: &[&str] = &[
     // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
     // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
     "OCCUPATION_ATTENTION_SEULE",
-    "POIDS_CREUX", "CREUX_SANS_EFFET",
+    "POIDS_CREUX", "CREUX_SANS_EFFET", "CREUX_DEBUG",
     "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER",
     // E7/E8 (docs/impulsion-pure-apprenant.md) : modulation par nouveauté,
     // décorrélation anti-Hebbienne, et la persistance de `D` sans laquelle le
