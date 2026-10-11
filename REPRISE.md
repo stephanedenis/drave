@@ -45,7 +45,14 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
 - **pas d'accent dans un nom de variable bash** (les noms de fonction, oui) ;
 - **sérialiser les gros lecteurs de disque** (deux lecteurs de 63 Go en parallèle : 8,6 Mo/s) ;
 - **`sys.exit("message")` sort toujours en 1** — une porte « verte » rendait 1 ;
-- **`..Default::default()` donne 0,0 à un f32** : un poids de greffe nul, en silence.
+- **`..Default::default()` donne 0,0 à un f32** : un poids de greffe nul, en silence ;
+- **un fichier `.ids` du dépôt ne dit pas avec quel tokenizer il a été fait** :
+  `data/wikitext2_test.txt.ids` vient d'un **autre** tokenizer que Qwen2.5 — le modèle complet y
+  rend **7 379** de perplexité au lieu de 16,6. Une mesure qui s'y appuie est absurde **sans que
+  rien ne le signale** ⇒ tokeniser soi-même (`--tokenize --fichier TEXTE --sortie F`) ;
+- **`--etat-sortie PREFIXE` écrit `PREFIXE.<position>`** : c'est un **préfixe de fichier**, pas un
+  dossier. Donner un dossier fait écrire `dossier.4`, `dossier.5`… et la relecture répond « aucun
+  état lisible » — la capture, elle, a bien eu lieu.
 
 ## 4. Les règles de méthode (le dépôt les applique à lui-même)
 

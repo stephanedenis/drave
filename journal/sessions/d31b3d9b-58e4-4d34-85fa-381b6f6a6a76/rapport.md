@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 61.4 h |
 | Tours | 91 |
-| Messages | 2780 |
-| Appels d'outils | 2569 |
-| Fichiers touchés | 106 |
-| Commandes | 2204 |
+| Messages | 2789 |
+| Appels d'outils | 2578 |
+| Fichiers touchés | 107 |
+| Commandes | 2211 |
 | Sous-agents | 3 |
-| Commits | 255 |
+| Commits | 258 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3739,7 +3739,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 91 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*153 appels d'outils.* Actions notables :
+*162 appels d'outils.* Actions notables :
 
 - bash — Capture depth-24 states for the oracle analysis
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py`
@@ -3755,11 +3755,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Find perplexity computation convention
 - bash — Read perplexity loop convention
 - bash — Locate ppl accumulation
-- … et 122 autres
+- … et 130 autres
 
 **Synthèse produite :**
 
-⏵ Ajout de la carte « où sortir » à la prochaine action de l'état
+⏵ Remise en linéaire : nouveau commit au lieu de réécrire l'historique poussé
 
 ## 3. Travail accompli
 
@@ -3873,6 +3873,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/tmp/message-commit.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh` | 1 | 1 |
 | `/tmp/message-commit2.txt` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -3922,7 +3923,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2164 autres
+- … et 2171 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4050,7 +4051,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ## 5. Erreurs rencontrées
 
-91 sorties en erreur ou divergentes. Les premières :
+92 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4325,4 +4326,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit.txt 2>&1 | tail -3; echo "code=$?"; git log --oneline -1; git
 - Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer  La borne mesuree (30,93 % des jetons, ~10,3 % des paires) ne vaut que po
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit2.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '6,8p'; 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-commit2.txt --amend 2>/dev/null; git log --oneline -1; git sta
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '\nDEUX PIEGES DE PLUS dans `REPRISE.md` § 3, tous les deux payes aujourd'"'"'hui : un fichier `.id
+- REPRISE : deux pieges de plus, tous les deux payes aujourd'hui  Un fichier .ids du depot ne dit pas avec quel tokenizer il a ete fait : data/wikitext2_test.txt.
 

@@ -44748,3 +44748,129 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit2.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '6,8p'; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master", "description": "Amend mess … [35 caractères tronqués]`
+
+  ```
+`tools/carte-sortie-profondeur.sh` capture une profondeur de sortie a la fois, entraine un
+adaptateur pour CHACUNE, et rend la carte « accord x couches sautees ». Il n'a pas encore tourne :
+push=0
+[stderr]
+fatal: Needed a single revision
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master 2>&1; git status -sb | head -2; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log", "description": "Confirm push and c … [12 caractères tronqués]`
+
+  ```
+e6c988e
+e6c988e
+## master...origin/master
+--- passe ---
+6
+  porte-delais           ✅                          20 s    ✅ le temps, lui, augmente : 6.42 s → 9.64 s (+3.2 s ≈ 50 ms × 64 pas)
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de REPRISE.md pour y refléter le résultat du dessin H
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md</path>
+<type>file</type>
+<content>
+1: # Reprise — démarrer une session de travail
+2: 
+3: > **Check-list, pas un état.** L'état vit dans [`docs/etat.md`](docs/etat.md) (index des modules)
+4: > et [`docs/etat-cerveau.md`](docs/etat-cerveau.md) (les douze capacités, avec le chiffre qui
+5: > prouve chacune). Ce fichier ne dit que : quoi lire, quoi vérifier, quels pièges éviter, et où
+6: > écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche par expérience**.
+7: > Version longue d'avant le 2026-10-10 : [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
+8: 
+9: ## 1. Les cinq premières minutes
+10: 
+11: ```bash
+12: date                                   # HAE (EDT, UTC−4) : on LIT l'horloge, on ne la suppose pas
+13: git log --oneline -5                   # ce qui vient d'être fait
+14: ls journal/ | tail -5                  # la journée en cours, par thème
+15: ```
+16: 
+17: Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/etat.md`](docs/etat.md)
+18: (état par module et **prochaine action**) → la fiche `reports/` du chantier en cours.
+19: 
+20: ## 2.
+… [4564 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de deux pièges appris aujourd'hui à la liste de reprise
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "- **`sys.exit(\"message\")` sort toujours en 1** — une porte « verte » rendait 1 ;\n- **`..Default::default()` donne 0,0 à un f32** : un poids de greffe nul, en silence ;\n- **un fichier `.ids` du dépôt ne dit … [769 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log; date", "description": "Check suite progress before committing"}`
+
+  ```
+6
+  porte-delais           ✅                          20 s    ✅ le temps, lui, augmente : 6.42 s → 9.64 s (+3.2 s ≈ 50 ms × 64 pas)
+sam 10 oct 2026 22:36:02 EDT
+  ```
+
+- **bash** `{"command": "pgrep -af \"porte-.*\\.sh\" | grep -v pgrep | head -3 | cut -c1-100; echo \"---\"; ls -la /tmp/portes-2218/ 2>/dev/null | tail -3; date", "description": "Identify currently running gate"}`
+
+  ```
+3901776 timeout 2400 bash tools/porte-episodique.sh
+3901777 bash tools/porte-episodique.sh
+3903227 bash tools/porte-episodique.sh
+---
+-rw-r--r--.   1 stephane stephane    997 10 oct 22:33 porte-coupe.log
+-rw-r--r--.   1 stephane stephane    525 10 oct 22:34 porte-delais.log
+-rw-r--r--.   1 stephane stephane   5238 10 oct 22:36 porte-episodique.log
+sam 10 oct 2026 22:36:07 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit des pièges, puis lecture du plan pour choisir la suite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-commit2.txt --amend 2>/dev/null; git log --oneline -1; git status --porcelain | head -3", "description": "Check working tree state"}`
+
+  ```
+7a550b1 Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"--- REPRISE commité ? ---\"; git show --stat --oneline HEAD | grep REPRISE || echo \"REPRISE.md PAS dans le dernier commit\"; git status --porcelain | head", "description": "Verify REPRISE.md committed"}`
+
+  ```
+7a550b1 Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+4ef5864 Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant
+e2a710c Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)
+--- REPRISE commité ? ---
+ REPRISE.md                                         |   9 +-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '\\nDEUX PIEGES DE PLUS dans `REPRISE.md` § 3, tous les deux payes aujourd'\"'\"'hui : un fichier `.ids` du depot\\nne dit pas avec quel tokenizer il a ete fait (7 379 de perplexite au lieu de 16,6), et\\n`--etat-sortie PREFIX … [482 caractères tronqués]`
+
+  ```
+d84ac3d Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+push=1
+fatal: Needed a single revision
+[stderr]
+To github.com:stephanedenis/drave.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'github.com:stephanedenis/drave.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+  ```
+
+### 🤖 Assistant
+
+⏵ Remise en linéaire : nouveau commit au lieu de réécrire l'historique poussé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset --soft e6c988e && git status --porcelain | head -3 && git commit -q -m \"REPRISE : deux pieges de plus, tous les deux payes aujourd'hui\n\nUn fichier .ids du depot ne dit pas avec quel tokenizer il a ete fait :\ndata/wikite … [655 caractères tronqués]`
