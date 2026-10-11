@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 64.0 h |
+| Durée | 64.3 h |
 | Tours | 94 |
-| Messages | 3091 |
-| Appels d'outils | 2874 |
+| Messages | 3097 |
+| Appels d'outils | 2880 |
 | Fichiers touchés | 118 |
-| Commandes | 2421 |
+| Commandes | 2427 |
 | Sous-agents | 3 |
-| Commits | 271 |
+| Commits | 272 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3861,7 +3861,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 94 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - bash — Read the log-normal parametrization class
 - bash — Add free-signs parametrization
@@ -3877,11 +3877,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Measure occupancy of free-sign models
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md`
 - bash — Re-read section headers
-- … et 24 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Commit du plan 2×2 complet
+⏵ Le résultat se reproduit (graine 2 : 55,45 contre 7,99) — attente de la dernière
 
 ## 3. Travail accompli
 
@@ -4056,7 +4056,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2381 autres
+- … et 2387 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4475,4 +4475,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF' E6, volet cout : ce qu'un format creux lirait, variant par variant 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF' E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui port
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_te
+- E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes)" 2>&1 | tail -1; git log --oneline -1; git push -q origin
 

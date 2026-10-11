@@ -132,6 +132,18 @@ Et **aux trois taux d'élagage**, les quatre variantes (même graine, même prot
    niveau », pas comme un gain — mais il écarte l'objection « on paie la robustesse par la
    qualité ». **Il n'y a rien à payer.**
 
+**ET LE RÉSULTAT SE REPRODUIT SUR TROIS GRAINES** (25 % gardés, même protocole) :
+
+| graine | témoin dense | **signes figés** | rapport |
+|---|---:|---:|---:|
+| 1 | 49,4291 | **7,9467** | ×6,2 |
+| 2 | 55,4520 | **7,9873** | ×6,9 |
+| 3 | 46,6111 | **8,2676** | ×5,6 |
+
+Le témoin dense varie de **46,6 à 55,5** (×5,6 à ×6,9 sur son propre point de départ) ; le modèle à
+signes figés reste entre **7,95 et 8,27**, soit **×1,09 à ×1,13**. Les intervalles ne se touchent
+pas : ce n'est pas une graine chanceuse.
+
 **Ce que ça change pour la suite.** Le levier n'est pas la loi des poids, c'est le **principe de
 Dale** — un signe choisi à la naissance et jamais changé. C'est une recette d'**entraînement** de
 trois lignes, pas un changement de moteur, et elle rend un modèle **quasi insensible à l'élagage** :

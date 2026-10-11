@@ -49568,3 +49568,65 @@ renuméroté
 ⏵ Commit du plan 2×2 complet
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **E6** | poids log-normaux | ✅  … [3683 caractères tronqués]`
+
+  ```
+E6 tranché ; 2026-10-11 01:12
+53ed627 E6, plan 2x2 complet : c'est la CONTRAINTE DE SIGNE qui fait tout — et la loi log-normale NUIT
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 900 bash tools/porte-sauvegarde-modele.sh > /tmp/p1.log 2>&1; echo \"sauvegarde=$?\"); (timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/p2.log 2>&1; echo \"occupation=$?\"); git status --porcelain | head -3; echo \ … [120 caractères tronqués]`
+
+  ```
+sauvegarde=0
+occupation=0
+--- HEAD ---
+53ed627 E6, plan 2x2 complet : c'est la CONTRAINTE DE SIGNE qui fait tout — et la loi log-normale NUIT
+d3a1ee8 E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale
+166bd61 E6, volet cout : ce qu'un format creux lirait, variant par variant
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du résultat sur deux autres graines (la conclusion ne peut pas tenir sur une seule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6i && mkdir -p /tmp/e6i && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --tet … [894 caractères tronqués]`
+
+  ```
+vérification multi-graines lancée (pid 348344)
+dim 11 oct 2026 01:15:46 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6i/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6i/codes.txt", "description": "Wait for the multi-seed verification", "timeoutMs": 900000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6i/codes.txt 2>/dev/null; ls /tmp/e6i/*.gguf 2>/dev/null | wc -l; tail -2 /tmp/e6i/run.log 2>/dev/null; date", "description": "Check multi-seed progress"}`
+
+  ```
+dense-g0.25-s2         perplexité 55.4520 sur
+sigfiges-g0.25-s2      perplexité 7.9873 sur
+dense-g0.25-s3         perplexité 46.6111 sur
+3
+dim 11 oct 2026 01:25:59 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Le résultat se reproduit (graine 2 : 55,45 contre 7,99) — attente de la dernière
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6i/codes.txt 2>/dev/null; do sleep 20; done; cat /tmp/e6i/codes.txt", "description": "Wait for the last seed", "timeoutMs": 600000}`
+
+  ```
+dense-g0.25-s2         perplexité 55.4520 sur
+sigfiges-g0.25-s2      perplexité 7.9873 sur
+dense-g0.25-s3         perplexité 46.6111 sur
+sigfiges-g0.25-s3      perplexité 8.2676 sur
+TERMINE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-e6-poids-lognormaux.md\"); s = p.read_text()\nancre = \"\"\"**Ce que ça change pour la suite.** Le levier n'est pas la loi des poids, c'est le **principe de\nDal … [1987 caractères tronqués]`
