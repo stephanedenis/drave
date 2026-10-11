@@ -74,15 +74,32 @@ Le plancher **aide** un peu le dense (45,12 contre 49,43) et ne comble pas l'éc
 **C'est l'instrument d'occupation (M9) qui a révélé le premier** : sans lui, rien dans le dépôt ne
 distinguait un modèle élagué à 25 % d'un modèle élagué à 78 %.
 
-## 4. Ce que cette fiche ne dit PAS
+## 4. Le volet COÛT, fermé par l'instrument d'occupation
+
+Le compteur de paires du moteur ne voit pas l'occupation (manque **M9**) : il rend **2,3 M** pour
+tous ces modèles. `tools/occupation_poids.py` donne l'autre colonne — ce qu'un format **creux**
+lirait, en supposant les non-nuls répartis comme les activations vivantes (**hypothèse**) :
+
+| modèle | paires noyau (moteur) | paires **creuses** estimées | ÷ |
+|---|---:|---:|---:|
+| dense, aucun élagage | 2,20 M | 1,99 M | ÷1,11 |
+| **dense, 25 % gardés** | 2,20 M | **0,55 M** | **÷4,0** |
+| **log-normal, 25 % gardés** | 2,20 M | **0,83 M** | **÷2,7** |
+
+**Le dense gagne le coût et perd la qualité ; le log-normal fait l'inverse.** À 25 % gardés, le
+dense lirait **÷4,0** de paires pour une perplexité de **49,43**, le log-normal **÷2,7** pour
+**17,50**. Le choix dépend donc de ce qu'on paie : des paires, ou de la qualité.
+
+## 5. Ce que cette fiche ne dit PAS
 
 - **les deux taux ne sont pas des courbes** : deux points (50 % et 25 %), une graine, une échelle
   (7,58 M paramètres), un corpus. Le croisement est **entre** les deux, il n'est pas localisé ;
 - **elle ne sépare pas la loi de sa contrainte** : les signes sont **figés** (principe de Dale) dans
   le variant, et c'est peut-être eux — plutôt que la loi log-normale — qui expliquent la
   robustesse. Le test qui trancherait : un modèle log-normal à **signes libres**, élagué pareil ;
-- **elle ne dit rien du coût réel** : le compteur de paires du moteur ne voit pas l'occupation
-  (M9), donc le gain de stockage se lit dans le **fichier** (occupation, octets) et non dans la
-  ligne « paires ». À 25 %, le log-normal stocke d'ailleurs **plus** que le dense ;
+- **le volet coût du § 4 est une ESTIMATION** : elle suppose les non-nuls répartis comme les
+  activations vivantes, et le compteur du moteur ne la vérifie pas (M9, seconde moitié à faire) ;
+  à 25 %, le log-normal stocke d'ailleurs **plus** de poids non nuls que le dense (30,1 % contre
+  26,0 %) ;
 - **elle ne dit pas que le variant est utilisable** : à 50 % il est 72 % pire, et à 100 % il est
   déjà 3 % derrière. Le croisement est un fait de biologie intéressant, pas encore un levier.

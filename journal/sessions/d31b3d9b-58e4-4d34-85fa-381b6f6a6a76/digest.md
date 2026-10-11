@@ -48941,3 +48941,71 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1828 caractères tronqués]`
+
+  ```
+horodatage 2026-10-11 00:33
+1
+repères mis à jour
+1ddcdcc Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Fermeture du volet coût : ce qu'un format creux lirait, pour chaque variant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in /tmp/e6b/dense-modele.gguf /tmp/e6f/dense-g0.25.gguf /tmp/e6d/lognormal-g0.25.gguf; do echo \"=== $(basename $M .gguf) ===\"; /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele \"$M\" --paires-attention 0.4 … [107 caractères tronqués]`
+
+  ```
+=== dense-modele ===
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.40 M** (÷1.01)
+  experts    paires noyau 1.80 M → paires creuses ≈ **1.59 M** (÷1.13)
+=== dense-g0.25 ===
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.10 M** (÷3.97)
+  experts    paires noyau 1.80 M → paires creuses ≈ **0.45 M** (÷4.00)
+=== lognormal-g0.25 ===
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.38 M** (÷1.04)
+  experts    paires noyau 1.80 M → paires creuses ≈ **0.45 M** (÷4.00)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "## 5. Le volet COÛT, fermé par l'instrument d'occupation\n\nLe compteur de paires du moteur ne voit pas l'occupation (manque **M9**) : il rend **2,3 M** pour\ntous ces modèles. `too … [809 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-e6-poids-lognormaux.md; tail -6 reports/rapport-e6-poids-lognormaux.md", "description": "Check the fiche structure after edit"}`
+
+  ```
+18:## 1. La mesure
+37:## 2. Le témoin, et pourquoi il était nécessaire
+61:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+77:## 5. Le volet COÛT, fermé par l'instrument d'occupation
+93:## 6. Ce que cette fiche ne dit PAS
+  robustesse. Le test qui trancherait : un modèle log-normal à **signes libres**, élagué pareil ;
+- **elle ne dit rien du coût réel** : le compteur de paires du moteur ne voit pas l'occupation
+  (M9), donc le gain de stockage se lit dans le **fichier** (occupation, octets) et non dans la
+  ligne « paires ». À 25 %, le log-normal stocke d'ailleurs **plus** que le dense ;
+- **elle ne dit pas que le variant est utilisable** : à 50 % il est 72 % pire, et à 100 % il est
+  déjà 3 % derrière. Le croisement est un fait de biologie intéressant, pas encore un levier.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/^## 5. Le volet COÛT/## 4. Le volet COÛT/; s/^## 6. Ce que cette fiche ne dit PAS/## 5. Ce que cette fiche ne dit PAS/' reports/rapport-e6-poids-lognormaux.md && grep -n \"^## \" reports/rapport-e6-poids-lognormaux.md; pyth … [951 caractères tronqués]`
+
+  ```
+18:## 1. La mesure
+37:## 2. Le témoin, et pourquoi il était nécessaire
+61:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+77:## 4. Le volet COÛT, fermé par l'instrument d'occupation
+93:## 5. Ce que cette fiche ne dit PAS
+limites ajustées
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF'\nE6, volet cout : ce qu'un format creux lirait, variant par variant\n\n`tools/occupation_poids.py` donne l'autre colonne que le compteur de paires ne voit pas (M9) :\n\n    modele                … [1009 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 63.4 h |
 | Tours | 93 |
-| Messages | 3045 |
-| Appels d'outils | 2830 |
+| Messages | 3050 |
+| Appels d'outils | 2835 |
 | Fichiers touchés | 118 |
-| Commandes | 2384 |
+| Commandes | 2388 |
 | Sous-agents | 3 |
-| Commits | 268 |
+| Commits | 269 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3823,7 +3823,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 93 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Inventory pair-counting sites and Proj struct
 - bash — Read Proj::load in full
@@ -3839,11 +3839,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check checkpoint zeros for both pruning rates
 - bash — Measure weight distribution near zero
 - bash — Read pruning events in both logs
-- … et 16 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ La porte montre le vrai défaut en rouge (78 % pour une cible de 25 %) — commit
+⏵ Fermeture du volet coût : ce qu'un format creux lirait, pour chaque variant
 
 ## 3. Travail accompli
 
@@ -3961,7 +3961,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 3 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
@@ -4018,7 +4018,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2344 autres
+- … et 2348 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4434,4 +4434,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF' E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % ga
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo "vert code=$?"; ta
 - Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge" 2>&1 | tail -1; git log --oneline -1; git push -q origin master; echo "push=$?"
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF' E6, volet cout : ce qu'un format creux lirait, variant par variant 
 
