@@ -51824,3 +51824,11 @@ CODE=1
 ⏵ Commit de la seconde moitié de M9 (le moteur voit l'occupation) et de sa porte
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF'\nM9, seconde moitie LIVREE : le moteur annonce l'occupation des poids, et ce qu'un format creux lirait\n\nCE QUI MANQUAIT. Le moteur ne savait dire qu'une chose du cout : les PAIRES NOYAU (`n_in  … [2011 caractères tronqués]`
+
+  ```
+c50fbe14 M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids, et ce qu'un format creux lirait
+push=0
+33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\ni = s.index(\"| **M9** |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **M9** | ~~aucun instrument ne mesure le coût de la SPAR … [2210 caractères tronqués]`

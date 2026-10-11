@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 66.8 h |
 | Tours | 98 |
-| Messages | 3240 |
-| Appels d'outils | 3015 |
+| Messages | 3241 |
+| Appels d'outils | 3016 |
 | Fichiers touchés | 125 |
-| Commandes | 2549 |
+| Commandes | 2550 |
 | Sous-agents | 3 |
-| Commits | 288 |
+| Commits | 289 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4052,7 +4052,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 
 ### Tour 98 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Inspect Vue4 and DenseQ4 structures
 - bash — Inspect the Q4 source enum
@@ -4068,7 +4068,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - bash — Inspect how expert Vues are built
 - bash — Find the GGUF tensor iteration API
 - bash — Inspect the Gguf struct for tensor access
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -4254,7 +4254,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2509 autres
+- … et 2510 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4690,4 +4690,5 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - Biologie : E1 et E2 corrigees dans la roadmap (connectome +9,4 %, croissance non pire que le hasard)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit" 2>&1 | tail -1; git push -q origin m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF' M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids
+- M9 livre dans le registre des manques, et 33 portes dans l'etat" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 

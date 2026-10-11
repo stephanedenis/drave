@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 03:42 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 03:57 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -110,7 +110,7 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **32 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+- **33 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
   dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
   le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
   tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
@@ -128,7 +128,9 @@
   (`DRAVE_INSTALL_DOUBLE=1` → écart 1,200e+01 ; `DRAVE_ELAGAGE_SANS_PARAM=1` → attention à 98,6 %).
   La **32e à 03 h 40**, `porte-audit-drapeaux.sh` (chaque drapeau laisse-t-il dans le FICHIER sa
   trace ?) — **verte**, et **vue ROUGE** par `DRAVE_MASQUE_SANS_EXPERTS=1` (84,87 % au lieu de 26 %).
-  Détail :
+  La **33e à 04 h 05**, `porte-occupation-moteur.sh` (le moteur annonce-t-il l'occupation, et
+  colle-t-elle à l'outil indépendant ?) — **verte** (écart **0,0 point**), et **vue ROUGE** avec
+  `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %). Détail :
   `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
   était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
   `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
