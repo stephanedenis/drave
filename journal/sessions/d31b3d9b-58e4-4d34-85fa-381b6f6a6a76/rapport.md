@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 63.3 h |
+| Durée | 63.4 h |
 | Tours | 93 |
-| Messages | 3044 |
-| Appels d'outils | 2829 |
+| Messages | 3045 |
+| Appels d'outils | 2830 |
 | Fichiers touchés | 118 |
-| Commandes | 2383 |
+| Commandes | 2384 |
 | Sous-agents | 3 |
-| Commits | 267 |
+| Commits | 268 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3823,7 +3823,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 93 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Inventory pair-counting sites and Proj struct
 - bash — Read Proj::load in full
@@ -3839,7 +3839,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check checkpoint zeros for both pruning rates
 - bash — Measure weight distribution near zero
 - bash — Read pruning events in both logs
-- … et 15 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -4018,7 +4018,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2343 autres
+- … et 2344 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4433,4 +4433,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF' Dessin H, carte des sorties : la borne monte quand on sort tard, m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF' E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % ga
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo "vert code=$?"; ta
+- Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge" 2>&1 | tail -1; git log --oneline -1; git push -q origin master; echo "push=$?"
 

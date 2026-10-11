@@ -48931,3 +48931,13 @@ CODE=1
 ⏵ La porte montre le vrai défaut en rouge (78 % pour une cible de 25 %) — commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo \"vert code=$?\"; tail -2 /tmp/porte-occ-vert.log; cat > /tmp/message-porte-occ.txt <<'MSGEOF'\nOccupation x elagage : une porte pour que le fich … [1372 caractères tronqués]`
+
+  ```
+vert code=0
+✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+   (et le harnais annonce l'élagage final — vu ROUGE avec DRAVE_SANS_ELAGAGE_FINAL=1).
+2028f86 Occupation x elagage : une porte pour que le fichier porte l'elagage qu'il ANNONCE
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1828 caractères tronqués]`

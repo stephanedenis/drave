@@ -9,9 +9,11 @@
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 >
-> **29e porte, hors passe** : `tools/porte-sauvegarde-modele.sh` (ajoutée après le lancement de
-> la passe) — **verte en ~1 min**, et **vue ROUGE** avec le défaut rallumé
-> (`DRAVE_MAT_SANS_EXCLUSION=1`).
+> **Deux portes ajoutées APRÈS le lancement de la passe** (elles n'y sont donc pas) :
+> `tools/porte-sauvegarde-modele.sh` (le fichier reproduit-il le modèle entraîné ?) — **verte en
+> ~1 min**, **vue ROUGE** avec `DRAVE_MAT_SANS_EXCLUSION=1` ; et
+> `tools/porte-occupation-elagage.sh` (le fichier porte-t-il l'élagage annoncé ?) — **verte**
+> (26,0 % pour 25 % demandés), **vue ROUGE** avec `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %).
 
 ## 1. Ce qui se vérifie en une commande
 
