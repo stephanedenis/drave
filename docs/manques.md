@@ -38,6 +38,8 @@ ordonné (`madvise`, lecture des experts par grappe) n'existe pas.
 
 ---
 
+| **M9** | **aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS** | mesuré le 10/10 : le compteur de paires du moteur additionne `n_in × n_out` par projection (`self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t`) et rend **2,3 M avant comme après** un élagage à 50 % de **tous** les tenseurs — sur `--flux`, `--flux-listes`, `--flux-blocs` et sous `--keep 0.5` (qui fait pourtant chuter la perplexité de 4,56 à 5,82). Le harnais n'est pas mieux loti : sa ligne « poids LUS » vaut **0,59 M pour les huit modèles** d'E6 (100 %, 50 %, 25 % gardés). C'est **fidèle** — un noyau dense lit la matrice entière — mais **muet** sur ce qui est stocké, donc tout « ÷N de paires » (dessin B, `docs/modele-pour-drave.md` § 3 B) doit **nommer son instrument**, et les chiffres historiques ne sont plus reproduits par le code actuel | rendre le coût **sensible à l'occupation** (compteur de non-nuls par ligne pour le chemin par listes, ou métrique « octets lus ») et le verrouiller par une porte : c'est la condition pour que le dessin « poids creux » soit mesurable, pas seulement raconté |
+
 ## 3. Les manques d'ARCHITECTURE (pour porter un cerveau)
 
 Les **douze capacités** de `docs/plan-cerveau-complet.md` § 1 — graphe de régions,

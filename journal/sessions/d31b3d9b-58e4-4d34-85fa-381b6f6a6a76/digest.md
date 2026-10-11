@@ -48103,3 +48103,88 @@ sam 10 oct 2026 23:53:24 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-instrument.txt <<'MSGEOF'\nInstrument : le compteur de paires du moteur ne voit PAS l'elagage des poids, sur aucun chemin\n\nMESURE. Sur le temoin dense elague a 50 % de TOUS ses tenseurs de projection :\n\n    che … [1088 caractères tronqués]`
+
+  ```
+2ef2774 Instrument : le compteur de paires du moteur ne voit PAS l'elagage des poids, sur aucun chemin
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD refs/remotes/origin/master 2>/dev/null | tail -2; sleep 240; for d in 12 16 20 22; do printf 'd%s:%-6s ' \"$d\" \"$(ls -1 /tmp/carte-sortie-profondeur/d$d/etat.* 2>/dev/null | wc -l)\"; done; echo; echo \"e … [152 caractères tronqués]`
+
+  ```
+d12:4402   d16:3721   d20:3302   d22:2941   
+e24: 1645
+dim 11 oct 2026 00:00:16 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Le coût « poids lus » des huit modèles d'E6 (côté instrument du harnais)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in /tmp/e6b/dense.log /tmp/e6b/lognormal.log /tmp/e6d/dense-g0.5.log /tmp/e6d/lognormal-g0.5.log /tmp/e6d/dense-g0.25.log /tmp/e6d/lognormal-g0.25.log /tmp/e6e/dense-plancher-g0.5.log /tmp/e6e/dense-plancher-g0.25.log; do\n  [  … [283 caractères tronqués]`
+
+  ```
+dense                      0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+lognormal                  0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+dense-g0.5                 0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+lognormal-g0.5             0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+dense-g0.25                0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+lognormal-g0.25            0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+dense-plancher-g0.5        0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+dense-plancher-g0.25       0.59 M poids LUS par jeton et par couche · 1.92 M stockés
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compteur varie-t-il selon le chemin d'emprunt (`DRAVE_SANS_EMPRUNT`) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"SANS_EMPRUNT\" drave-core/src/*.rs | head -4; D=./drave-core/target/release/drave; I=/tmp/e6/val.ids\nfor N in /tmp/e6b/dense-modele.gguf /tmp/e6d/dense-g0.5.gguf; do\n  for E in \"\" \"1\"; do\n    printf '%-18s SANS_EMPR … [277 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:27:    "SANS_EMPRUNT",
+drave-core/src/model.rs:1528:            // `DRAVE_SANS_EMPRUNT=1` force la reconstruction : c'est ce qui permet
+drave-core/src/model.rs:1530:            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+drave-core/src/model.rs:1537:            let emprunt = keep >= 1.0 && std::env::var("DRAVE_SANS_EMPRUNT").is_err();
+dense-modele       SANS_EMPRUNT=non total 2.3 M
+dense-modele       SANS_EMPRUNT=1  total 2.3 M
+dense-g0.5         SANS_EMPRUNT=non total 2.3 M
+dense-g0.5         SANS_EMPRUNT=1  total 2.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau manque nommé : aucun instrument ne mesure le coût de la sparsité des poids
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "  La raison est dans le code : `self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64`\n  (et `*paires += (q.n_in as u64) * (q.n_out as u64)` dans `matvec`). Le compteur … [1502 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md", "limit": 6, "offset": 36}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md</path>
+<type>file</type>
+<content>
+36: | **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués, **jamais entraînés** — et pour H la **borne est maintenant mesurée** : un oracle **parfait** ne sortirait tôt que **30,93 %** des jetons (≈ **10,3 %** des paires), et **aucun seuil de confiance** n'atteint la qualité du chemin long (47,33 % contre 47,73 %) — le facteur limitant est le **chemin court** (adaptateur à 23,19 % contre 47,73 %), pas le routeur — `reports/rapport-design-H-profondeur-routee.md` | les trois leviers inédits de `docs/modele-pour-drave.md` § 3 (H, I, J) |
+37: | **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² 0,992**) mais celui d'il y a 8 pas **ne l'est pas** (−0,681) ; une **structure** (tampon lu directement) le rend **exactement** (1,000) — `reports/rapport-c8-peripherie.md`, `reports/rapport-c2-recurrence.md` | toute tâche qui demande de **retenir** (poursuite, mémoire de travail) côté modèle
+… [280 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md", "new_string": "| **M9** | **aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS** | mesuré le 10/10 : le compteur de paires du moteur additionne `n_in × n_out` par projection (`self.paires[0] += (d8.n_in as u64) … [1029 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -12 docs/manques.md | grep -n \"M8\\|M9\\|^|\" | head -5; grep -n \"^| \\*\\*M9\\*\\*\" docs/manques.md | head -2; for d in 12 16 20 22; do printf 'd%s:%-6s ' \"$d\" \"$(ls -1 /tmp/carte-sortie-profondeur/d$d/etat.* 2>/dev/null  … [165 caractères tronqués]`
+
+  ```
+12:| # | manque | ce qui l'établit (mesure) | ce qu'il bloque | coût |
+41:| **M9** | **aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS** | mesuré le 10/10 : le compteur de paires du moteur additionne `n_in × n_out` par projection (`self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t`) et rend **2,3 M avant comme après** un élagage à 50 % de **tous** les tenseurs — sur `--flux`, `--flux-listes`, `--flux-blocs` et sous `--keep 0.5` (qui fait pourtant chuter la perplexité de 4,56 à 5,82). Le harnais n'est pas mieux loti : sa ligne « poids LUS » vaut **0,59 M pour les huit modèles** d'E6 (100 %, 50 %, 25 % gardés). C'est **fidèle** — un noyau dense lit la matrice entière — mais **muet** sur ce qui est stocké, donc tout « ÷N de paires » (dessin B, `docs/modele-pour-drave.md` § 3 B) doit **nommer son instrument**, et les chiffres historiques ne sont plus reproduits par le code actuel | rendre le coût **sensible à l'occupation** (compteur de non-nuls par ligne pour le chemin par listes, ou métrique « octets lus ») et le verrouiller par une porte : c'est la condition pour que le dessin « poids creux » soit mesurable, pas seulement raconté |
+d12:4801   d16:4034   d20:3606
+… [52 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF'\nM9 : aucun instrument du depot ne mesure le cout de la sparsite des poids — et les huit modeles d'E6 le prouvent\n\nCE QUI EST MESURE, sur huit modeles entraines (dense et log-normal, a 100 %, 50 … [1100 caractères tronqués]`

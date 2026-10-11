@@ -98,6 +98,14 @@ Le témoin ne sauve pas le variant — il rend la réfutation **propre**.
   La raison est dans le code : `self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64`
   (et `*paires += (q.n_in as u64) * (q.n_out as u64)` dans `matvec`). Le compteur mesure le travail
   d'un noyau **dense** — `n_in × n_out` quelle que soit la densité — ce qui est **fidèle** à ce que
-  le moteur fait vraiment, et **muet** sur ce qui est stocké. Toute affirmation du type « ÷N de
-  paires » doit donc **nommer son instrument** : ici, c'est le nombre de **poids lus** du harnais
-  d'entraînement ou la taille de stockage, pas la ligne « paires » du moteur.
+  le moteur fait vraiment, et **muet** sur ce qui est stocké.
+
+  Le harnais d'entraînement n'est pas mieux loti : sa ligne de coût est **la même pour les huit
+  modèles** entraînés ici (dense et log-normal, à 100 %, 50 % et 25 % de poids gardés, avec et sans
+  plancher) — `0,59 M poids LUS par jeton et par couche · 1,92 M stockés`. Elle décrit
+  l'**architecture**, pas l'occupation.
+
+  **Conclusion de méthode** : aujourd'hui, **aucun instrument du dépôt ne voit la sparsité des
+  poids dans un chiffre de coût**. Tout « ÷N de paires » doit donc **nommer son instrument**, et
+  les chiffres du dessin B (`docs/modele-pour-drave.md` § 3 B : « ÷7,9 ») viennent d'un comptage qui
+  n'est plus reproduit par le code actuel — c'est écrit à côté d'eux, et c'est le manque **M9**.

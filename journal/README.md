@@ -9,6 +9,7 @@ est en heure locale de la machine (**HAE = EDT, UTC−4**).
 
 | jour | index | thèmes |
 |---|---|---|
+| **2026-10-11** | [2026-10-11.md](2026-10-11.md) | — |
 | **2026-10-10** | [2026-10-10.md](2026-10-10.md) | [apprentissage](2026-10-10_apprentissage.md) · [attention](2026-10-10_attention.md) · [distribue](2026-10-10_distribue.md) · [divers](2026-10-10_divers.md) · [docs](2026-10-10_docs.md) · [memoire](2026-10-10_memoire.md) · [mesures](2026-10-10_mesures.md) · [modele](2026-10-10_modele.md) · [moteur](2026-10-10_moteur.md) · [portes](2026-10-10_portes.md) |
 | **2026-10-09** | [2026-10-09.md](2026-10-09.md) | [apprentissage](2026-10-09_apprentissage.md) · [attention](2026-10-09_attention.md) · [distribue](2026-10-09_distribue.md) · [divers](2026-10-09_divers.md) · [docs](2026-10-09_docs.md) · [memoire](2026-10-09_memoire.md) · [mesures](2026-10-09_mesures.md) · [modele](2026-10-09_modele.md) · [moteur](2026-10-09_moteur.md) · [portes](2026-10-09_portes.md) |
 
@@ -71,7 +72,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
-| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 62.7 h | 92 | 2780 | 115 | 263 | [rapport](sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) |
+| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 62.8 h | 92 | 2788 | 115 | 264 | [rapport](sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) |
 | `da69b1fa` | Tu travailles dans le dépôt | 2026-09-30 15:07 | 0.1 h | 1 | 45 | 1 | 0 | [rapport](sessions/da69b1fa-91b0-4c69-bb2b-58bf00e92e28/rapport.md) |
 | `dcaa24d6` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.0 h | 1 | 13 | 0 | 0 | [rapport](sessions/dcaa24d6-0017-4382-be21-8244c0fb9b7a/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |

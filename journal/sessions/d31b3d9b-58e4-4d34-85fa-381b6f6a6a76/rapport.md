@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 62.7 h |
+| Durée | 62.8 h |
 | Tours | 92 |
-| Messages | 2993 |
-| Appels d'outils | 2780 |
+| Messages | 3001 |
+| Appels d'outils | 2788 |
 | Fichiers touchés | 115 |
-| Commandes | 2341 |
+| Commandes | 2346 |
 | Sous-agents | 3 |
-| Commits | 263 |
+| Commits | 264 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3784,7 +3784,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 92 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*90 appels d'outils.* Actions notables :
+*98 appels d'outils.* Actions notables :
 
 - bash — Check suite and sweep status
 - read
@@ -3800,11 +3800,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check whether the engine reports pair counts
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md`
-- … et 67 autres
+- … et 74 autres
 
 **Synthèse produite :**
 
-⏵ Correction : le compteur de paires est structurel sur TOUS les chemins (mesuré)
+⏵ Nouveau manque nommé : aucun instrument ne mesure le coût de la sparsité des poids
 
 ## 3. Travail accompli
 
@@ -3848,7 +3848,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/architecture-cerveau-et-drave.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/plan-cerveau-complet.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/modularisation.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md` | 1 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/topologie.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/trace_globale.rs` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/relations-humaines.md` | 1 | 0 |
@@ -3922,7 +3922,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 2 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 2 | 2 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
@@ -3976,7 +3976,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2301 autres
+- … et 2306 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4387,4 +4387,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-ecrire.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '4,8p'; g
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-e6.txt 2>&1 | tail -2; git log --oneline -1; git push -q origi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-instrument.txt <<'MSGEOF' Instrument : le compteur de paires du moteur ne voit PAS l'el
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF' M9 : aucun instrument du depot ne mesure le cout de la sparsite des p
 
