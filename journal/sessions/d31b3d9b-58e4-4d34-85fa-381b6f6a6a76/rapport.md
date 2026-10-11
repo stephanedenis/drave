@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 66.5 h |
 | Tours | 97 |
-| Messages | 3211 |
-| Appels d'outils | 2988 |
+| Messages | 3213 |
+| Appels d'outils | 2990 |
 | Fichiers touchés | 124 |
-| Commandes | 2523 |
+| Commandes | 2525 |
 | Sous-agents | 3 |
-| Commits | 285 |
+| Commits | 286 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3999,7 +3999,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 97 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Re-measure E1 and E2 with the corrected mask
 - bash — Check E1/E2 progress
@@ -4009,6 +4009,8 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md`
 - bash — Update E1/E2 in the state with corrected numbers
 - bash — Commit the E1/E2 re-measurement
+- bash — Read the biology roadmap E1/E2 lines
+- bash — Correct the biology roadmap for E1/E2
 
 **Synthèse produite :**
 
@@ -4193,7 +4195,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2483 autres
+- … et 2485 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4626,4 +4628,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids)" 2>&1 | tail -1; git push -q origin master; echo "p
 - Etat : E2 aussi portait sur l'attention seule (masque 5,8 % + gradient lu au mauvais endroit)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git lo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF' E1 et E2 re-mesures avec un masque qui couvre tout le modele : le c
+- Biologie : E1 et E2 corrigees dans la roadmap (connectome +9,4 %, croissance non pire que le hasard)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 

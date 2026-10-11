@@ -51350,3 +51350,18 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF'\nE1 et E2 re-mesures avec un masque qui couvre tout le modele : le connectome coute 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard\n\nLE DEFAUT, RAPPELE. Le masque ne couvrait que  … [1831 caractères tronqués]`
+
+  ```
+97c4b475 E1 et E2 re-mesures avec un masque qui couvre tout le modele : le connectome coute 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\ni = s.index(\"| **E1** |\")\nj = s.index(\"\\n\", i)\nprint(\"AVANT :\", s[i:j][:200]); print()\nk = s.index(\"| **E2** |\")\n … [124 caractères tronqués]`
+
+  ```
+AVANT : | **E1** | **masque inné creux** : masque aléatoire fixe à **25 %** des connexions par ligne, seuls ces poids sont appris, mesuré au protocole 8 × 128 contre un dense iso-tout | la structure fixe suff
+
+AVANT E2 : | **E2** | **croissance** : partir de 10 % de connexions, en **ajouter** selon l'activité (règle locale) | l'inné + la croissance locale peuvent-ils remplacer l'apprentissage global des poids ? | **FA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\ni = s.index(\"| **E1** |\"); j = s.index(\"\\n\", i)\nancien_e1 = s[i:j]\nneuf_e1 = (ancien_e1.rstrip(\" |\") + \" — **RE-MESU … [1275 caractères tronqués]`
