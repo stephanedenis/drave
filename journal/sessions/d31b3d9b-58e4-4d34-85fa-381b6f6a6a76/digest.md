@@ -44590,3 +44590,161 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit.txt 2>&1 | tail -3; echo \"code=$?\"; git log --oneline -1; git show --stat --oneline HEAD | tail -3", "description": "Amend commit with correct message", "timeoutMs": 420000}`
+
+  ```
+code=0
+4ef5864 Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant
+ tools/profondeur_routee_oracle.py                  |  224 ++
+ tools/verifier_chaine_etat.py                      |   69 +
+ 24 files changed, 3514 insertions(+), 69 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push -q origin master; echo \"push code=$?\"; git rev-parse --short HEAD origin/master; echo \"--- passe en cours ---\"; tail -3 /tmp/passe-2218.log 2>/dev/null; date", "description": "Push and check suite progress", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+push code=0
+--- passe en cours ---
+  porte-bus              ✅                          75 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          91 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          60 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+sam 10 oct 2026 22:32:04 EDT
+[stderr]
+fatal: Needed a single revision
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master 2>&1 | head -2; git status -sb | head -2", "description": "Verify push reached remote"}`
+
+  ```
+4ef5864
+4ef5864
+## master...origin/master
+  ```
+
+### 🤖 Assistant
+
+⏵ Chasse aux chiffres périmés dans la fiche publiée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"3 925\\|16,5611\\|1 343\\|28,76\\|44,97\\|5,18\\|1 129\\|9,6 %\\|8 124\" reports/rapport-design-H-profondeur-routee.md; echo \"(aucune ligne = aucun chiffre périmé)\"; echo \"--- liens de la fiche ---\"; grep -oE \"\\`[a-zA … [274 caractères tronqués]`
+
+  ```
+58:**Le même résultat tient sur trois découpages différents du même texte** (l'accord vaut 28,76 %,
+(aucune ligne = aucun chiffre périmé)
+--- liens de la fiche ---
+vérification des liens terminée
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la carte « où sortir ? » pour la suite immédiate
+
+- **write** `{"content": "#!/bin/bash\n# carte-sortie-profondeur.sh — dessin H : **où** sortir ? L'accord et la qualité en fonction de la\n# profondeur de sortie.\n#\n# LA QUESTION QUE LA MESURE PRÉCÉDENTE LAISSE OUVERTE. `porte-profondeur-routee.sh` mesure **une**\n# sortie : 16 couches sur 24. Sa borne (l'acco … [5625 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh", "new_string": "meilleur = max(lignes, key=lambda l: l[4] * (24 - l[0]) / 24)\nprint()\nprint(f\"Meilleur produit (accord × couches sautées) : sortie **{meilleur[0]}**, soit \"\n      f\"**{meilleur[4] * … [899 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/carte-sortie-profondeur.sh && echo \"syntaxe OK\"; sed -n '/^PY$/,$p' tools/carte-sortie-profondeur.sh | head -2; echo \"--- passe en cours ---\"; grep -cE \"✅|❌\" /tmp/passe-2218.log; tail -2 /tmp/passe-2218.log; date" … [57 caractères tronqués]`
+
+  ```
+syntaxe OK
+PY
+--- passe en cours ---
+4
+  porte-bus-socket       ✅                          91 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          60 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+sam 10 oct 2026 22:32:50 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la carte « où sortir » à la prochaine action de l'état
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des\njetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur\nlinéai … [1308 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 16, "offset": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+130: ## 6. ▶ Prochaine action
+131: 
+132: **1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**
+133: après l'ajout de `porte-profondeur-routee.sh` (28 portes) ; le verdict remplace la ligne du § 5 et
+134: se consigne dans `journal/`.
+135: 
+136: **2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
+137: jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
+138: linéaire. Sortir à **20 couches** donnerait un chemin court bien meilleur — donc une borne plus
+139: haute et un écart court/long plus faible — et c'est **deux captures et une mesure**, rien de plus.
+140: Le chiffre à battre est nommé : au seuil 0,99 le court rend **80,39 %** contre **88,24 %** au long
+141: **sur les mêmes jetons** ([`rapport`](../reports/rapport-design-H-profondeur-routee.md)).
+142: 
+143: **3. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
+144: [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
+145: À **51
+… [161 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des\njetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur\nlinéai … [1312 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M' && python3 - \"$PWD/docs/etat-cerveau.md\" <<'PYEOF'\nimport pathlib, sys, subprocess\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=Tr … [360 caractères tronqués]`
+
+  ```
+2026-10-10 22:33
+horodatage : 2026-10-10 22:33
+140:**optimum**, et la courbe se mesure. `tools/carte-sortie-profondeur.sh` est **écrit** (sorties 12,
+> **2026-10-10 22:33 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer\n\nLa borne mesuree (30,93 % des jetons, ~10,3 % des paires) ne vaut que pour UNE sortie, 16 couches\nsur 24 — le … [530 caractères tronqués]`
+
+  ```
+e9396c7 Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+[stderr]
+bash: line 1: tools/carte-sortie-profondeur.sh: Permission denied
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format=%B | head -12", "description": "Inspect commit message for mangling"}`
+
+  ```
+Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+
+La borne mesuree (30,93 % des jetons, ~10,3 % des paires) ne vaut que pour UNE sortie, 16 couches
+sur 24 — le rapport le dit. Sortir plus tard rend le chemin court bien meilleur mais epargne moins
+de couches : il y a un optimum, et il se mesure.
+
+ capture une profondeur de sortie a la fois, entraine un
+adaptateur pour CHACUNE, et rend la carte « accord x couches sautees ». Il n'a pas encore tourne :
+l'etat le dit explicitement, pour que personne ne le cite comme un resultat.
+  ```
+
+- **write** `{"content": "Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer\n\nLa borne mesuree (30,93 % des jetons, ~10,3 % des paires) ne vaut que pour UNE sortie, 16 couches\nsur 24 — le rapport le dit. Sortir plus tard rend le chemin court bien meilleur mais epargne moins … [367 caractères tronqués]`
+
+  ```
+<path>/tmp/message-commit2.txt</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit2.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '6,8p'; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master", "description": "Amend mess … [35 caractères tronqués]`

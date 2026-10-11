@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 61.3 h |
+| Durée | 61.4 h |
 | Tours | 91 |
-| Messages | 2766 |
-| Appels d'outils | 2555 |
-| Fichiers touchés | 104 |
-| Commandes | 2196 |
+| Messages | 2780 |
+| Appels d'outils | 2569 |
+| Fichiers touchés | 106 |
+| Commandes | 2204 |
 | Sous-agents | 3 |
-| Commits | 253 |
+| Commits | 255 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3739,7 +3739,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 91 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*139 appels d'outils.* Actions notables :
+*153 appels d'outils.* Actions notables :
 
 - bash — Capture depth-24 states for the oracle analysis
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py`
@@ -3755,11 +3755,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Find perplexity computation convention
 - bash — Read perplexity loop convention
 - bash — Locate ppl accumulation
-- … et 109 autres
+- … et 122 autres
 
 **Synthèse produite :**
 
-⏵ Correction du message de commit (amendé avec le bon texte)
+⏵ Ajout de la carte « où sortir » à la prochaine action de l'état
 
 ## 3. Travail accompli
 
@@ -3832,7 +3832,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-fenetre-puits.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/organisation-du-depot.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py` | 1 | 0 |
@@ -3871,6 +3871,8 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-profondeur-routee.sh` | 1 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-profondeur-routee.md` | 4 | 0 |
 | `/tmp/message-commit.txt` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh` | 1 | 1 |
+| `/tmp/message-commit2.txt` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3920,7 +3922,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2156 autres
+- … et 2164 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4321,4 +4323,6 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F - <<'MSG' Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F .git/COMMIT_EDITMSG 2>&1 | tail -3; echo "code=$?"; git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit.txt 2>&1 | tail -3; echo "code=$?"; git log --oneline -1; git
+- Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer  La borne mesuree (30,93 % des jetons, ~10,3 % des paires) ne vaut que po
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-commit2.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '6,8p'; 
 

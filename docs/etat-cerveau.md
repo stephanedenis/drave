@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 22:27 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 22:33 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -136,9 +136,13 @@ se consigne dans `journal/`.
 **2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
 jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
 linéaire. Sortir à **20 couches** donnerait un chemin court bien meilleur — donc une borne plus
-haute et un écart court/long plus faible — et c'est **deux captures et une mesure**, rien de plus.
-Le chiffre à battre est nommé : au seuil 0,99 le court rend **80,39 %** contre **88,24 %** au long
-**sur les mêmes jetons** ([`rapport`](../reports/rapport-design-H-profondeur-routee.md)).
+haute et un écart court/long plus faible — mais épargnerait **4** couches au lieu de 8 : il y a un
+**optimum**, et la courbe se mesure. `tools/carte-sortie-profondeur.sh` est **écrit** (sorties 12,
+16, 20, 22 : une capture par profondeur, un adaptateur entraîné pour chacune, puis la carte
+« accord × couches sautées ») et **reste à lancer** : il n'a pas encore tourné, donc il ne prouve
+rien tant qu'il n'a pas rendu sa table. Le chiffre à battre est nommé : au seuil 0,99 le court rend
+**80,39 %** contre **88,24 %** au long **sur les mêmes jetons**
+([`rapport`](../reports/rapport-design-H-profondeur-routee.md)).
 
 **3. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).

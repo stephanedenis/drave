@@ -38,7 +38,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_memoire.md) | `15 %` · `83 %` · `96 %` · `81 %` · `85 %` · `22 %` · `87 %` · `50 %` · `2 jetons` · `0,5 %` · `2048 jetons` · `11 jetons` |
-| [2026-10-10](2026-10-10_memoire.md) | `1,000` · `0,913` · `1006 jetons` · `136 jetons` · `50 jetons` · `+12 %` · `÷4` · `0,906` · `0,112` |
+| [2026-10-10](2026-10-10_memoire.md) | `31 %` · `1,000` · `0,913` · `1006 jetons` · `136 jetons` · `50 jetons` · `+12 %` · `÷4` · `0,906` · `0,112` |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 
