@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 58.9 h |
+| Durée | 59.0 h |
 | Tours | 90 |
-| Messages | 2581 |
-| Appels d'outils | 2376 |
-| Fichiers touchés | 96 |
-| Commandes | 2071 |
+| Messages | 2583 |
+| Appels d'outils | 2378 |
+| Fichiers touchés | 97 |
+| Commandes | 2072 |
 | Sous-agents | 3 |
-| Commits | 243 |
+| Commits | 244 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3712,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 30 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ C2 récurrence : la boucle détruit la lisibilité du présent (0,906 → 0,112) sans créer de mémoire — j'écris la porte et la fiche
+⏵ C2 : la validation du plan demande un cycle à DEUX régions — j'écris la conception (le validateur le refuse encore)
 
 ## 3. Travail accompli
 
@@ -3820,6 +3820,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e2-croissance.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-recurrence.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c2-recurrence.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/note-cycle-c2.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3869,7 +3870,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2031 autres
+- … et 2032 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4260,4 +4261,5 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, subprocess heure = subprocess.run(["date", "+%H:%M"], capture_output=T
+- C2 : la conception du CYCLE a deux regions, ecrite AVANT le code, avec ses cinq portes  Un cycle n'est pas « une boucle de plus » : une boucle locale vit DANS u
 
