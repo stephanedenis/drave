@@ -50700,3 +50700,69 @@ OK
 ⏵ Retrait de la porte au seuil fragile, commit de la porte d'invariants
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF'\nPorte « invariants du harnais » : elle remplace une porte qui mesurait un artefact\n\nPOURQUOI L'ANCIENNE PORTE DISPARAIT. `porte-signes-figes.sh` … [2153 caractères tronqués]`
+
+  ```
+f506e0e7 Porte « invariants du harnais » : elle remplace une porte qui mesurait un artefact
+push=0
+31
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture de la fiche E6 avec les chiffres corrigés et la rétractation
+
+- **write** `{"content": "# E6 — poids log-normaux : les chiffres corrigés, et les trois chiffres RÉTRACTÉS\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md` § 3 ter)\n> Question : une distribution **multiplicative** des poids (celle du cortex) rend-elle l'élagage\n> moins cher que la … [7228 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l reports/rapport-e6-poids-lognormaux.md && head -2 reports/rapport-e6-poids-lognormaux.md", "description": "Re-read the fiche header"}`
+
+  ```
+190 reports/rapport-e6-poids-lognormaux.md
+> **⚠ CHIFFRES EN COURS DE RE-MESURE (11/10, 01 h 50).** Un défaut vient d'être trouvé dans le
+> harnais : sous reparamétrisation, `named_parameters()` rend `...parametrizations.weight.original`
+  ```
+
+- **write** `{"content": "# E6 — poids log-normaux : les chiffres corrigés, et les trois chiffres RÉTRACTÉS\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md` § 3 ter)\n> Question : une distribution **multiplicative** des poids (celle du cortex) rend-elle l'élagage\n> moins cher que la … [7269 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "limit": 3}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+1: > **⚠ CHIFFRES EN COURS DE RE-MESURE (11/10, 01 h 50).** Un défaut vient d'être trouvé dans le
+2: > harnais : sous reparamétrisation, `named_parameters()` rend `...parametrizations.weight.original`
+3: > et **non** `...weight`, si bien qu'un filtre ajouté la veille excluait le poids lui-même — les
+
+(Showing lines 1-3 of 190. Use offset=4 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "# E6 — poids log-normaux : les chiffres corrigés, et les trois chiffres RÉTRACTÉS\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md` § 3 ter)\n> Question : une distribution **multiplicative** des poids (celle du cortex) rend-elle l'élagage\n> moins cher que la … [7350 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# dessin B : la fiche s'appuyait sur les chiffres rétractés\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\ni = s.index(\"# Dessin B\")\nj = s.index(\"## 1. Ce q … [3417 caractères tronqués]`
+
+  ```
+fiche B corrigée
+18:## 1. Ce qui bloquait, et ce qui est débloqué
+25:## 2. La mesure, corrigée
+38:## 3. Ce que ça change pour le dessin B
+48:## 4. Ce que cette fiche ne dit PAS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\n# état : E6 corrigé, 31 portes (la porte des signes figés est remplacée)\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux  … [2681 caractères tronqués]`

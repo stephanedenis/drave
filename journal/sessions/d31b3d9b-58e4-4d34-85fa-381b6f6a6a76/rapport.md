@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 65.7 h |
 | Tours | 95 |
-| Messages | 3165 |
-| Appels d'outils | 2946 |
+| Messages | 3172 |
+| Appels d'outils | 2953 |
 | Fichiers touchés | 121 |
-| Commandes | 2488 |
+| Commandes | 2491 |
 | Sous-agents | 3 |
-| Commits | 279 |
+| Commits | 280 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*73 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,11 +3925,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 52 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-⏵ Retrait de la porte au seuil fragile, commit de la porte d'invariants
+⏵ Réécriture de la fiche E6 avec les chiffres corrigés et la rétractation
 
 ## 3. Travail accompli
 
@@ -4047,7 +4047,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 6 | 7 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
@@ -4107,7 +4107,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2448 autres
+- … et 2451 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4534,4 +4534,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)" 2>&1 | tail -1; git
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF' BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX F
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF' Porte « invariants d
+- E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes" 2>&1 | tail -1; gi
 

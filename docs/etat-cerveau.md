@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 01:38 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 02:54 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -77,7 +77,7 @@
 | **E1** | connectome inné | ✅ | un connectome **aléatoire** coûte **1 %** de perplexité et **divise les lectures par 4** (25 %) ; à 12,5 % : +13,7 % |
 | **E3** | deux axes appris | ✅ | ÷2 lectures à qualité égale ; ÷7,8 à dim 384 |
 | **E4** | équilibre E/I (inférence **et** entraînement) | ✅ | l'hypothèse est vraie **dans un seul sens** : l'inhibition **dégrade** de façon monotone (15,6908 → 19,4791 à la couche 12) ; l'optimum **intérieur** est du côté **amplification** (couche 0, gain 0,75 : **12,9635** contre 14,6496, **−11,5 %**) ; **falaise** à 0,25 (996,04) ; **les gains ne se composent pas** ; **côté entraînement, le ratio cortical de signes COÛTE** : 0,5 → 2,2729 bits/octet, 0,8 → 2,3838 (+4,9 %), 0,9 → 2,5188 (+10,8 %), dégradation monotone ([`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md)) |
-| **E6** | poids log-normaux | ✅ **tranché : c'est DALE, et la loi log-normale NUIT** | plan 2x2 complet (**trois graines**, même protocole), perplexité à **25 %** gardés · **100 %** gardés : **signes figés + magnitudes libres 7,9467 · 7,3003** (×1,09 seulement) · log-normal signes figés 17,5009 · 7,5666 · log-normal signes libres 36,3771 · 7,5112 · témoin dense **49,4291 · 7,3429** (×6,7) — et sur trois graines le dense donne 49,43 · 55,45 · 46,61 contre 7,95 · 7,99 · 8,27 aux signes figés, intervalles disjoints. La loi log-normale est **2,2× pire** que des magnitudes libres à contrainte de signe comparable ⇒ le levier est le **principe de Dale** (un signe choisi à la naissance), pas la distribution des poids — et il ne coûte rien (7,3003 sans élagage). Deux défauts de protocole corrigés en chemin (le « meilleur point » annulait l'élagage : 22,3 % de zéros publiés comme 25 % gardés, ce qui INVERSAIT la conclusion ; l'élagage ne couvrait que 5,8 % du modèle) ([`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md)) |
+| **E6** | poids log-normaux | ⚠️ **chiffres RÉTRACTÉS, puis corrigés** | le plan 2×2 refait proprement (occupation identique dans les quatre cases) : à **25 %** gardés — dense **49,4291** · signes figés + magnitudes libres **41,6677** · log-normal signes libres **59,1526** · log-normal signes figés **71,1531**. ⇒ **la loi log-normale COÛTE** (seul effet cohérent, ×1,20 à ×1,71) et **la contrainte de signe n'a pas d'effet cohérent** (×1,19 dans un sens, ×0,83 dans l'autre : interaction). Les chiffres du 11/10 annonçant ×1,09 et « trois graines » sont **retirés** : ils venaient de deux défauts du harnais (l'attention n'était pas élaguée pour les variantes reparamétrées ; l'inverse était appliqué deux fois à l'installation, poids ±12 au lieu de ±0,08). Les deux défauts sont **rallumables** et surveillés par `tools/porte-harnais-invariants.sh` ([`rapport`](../reports/rapport-e6-poids-lognormaux.md)) |
 | **E7/E8** | nouveauté, décorrélation | ✅ mesurées | la nouveauté **empire** la règle ; la décorrélation est **inerte**, et sa courbe de dose converge vers « ne rien apprendre » |
 | **E2** | croissance des connexions | ✅ réfutée | la croissance locale (par gradient accumulé) donne **2,3431** contre **2,3215** pour un masque statique de **même densité** : +0,9 % pire que le hasard ([`rapport-e2-croissance.md`](../reports/rapport-e2-croissance.md)) |
 | **E5** | rejeu et distillation | ⏳ cadrée | le moteur trace et rejoue (C7 : point fixe exact) ; l'outil de distillation existe |
@@ -120,9 +120,13 @@
   régénérés dans `docs/references-non-regression.md`) ; la 29e a été vérifiée à part, elle n'était
   pas dans la passe. La **30e à 00 h 35**, `porte-occupation-elagage.sh` (le fichier porte-t-il
   l'élagage qu'il annonce ?) — **verte** (26,0 % pour 25 % demandés) et **vue ROUGE** avec
-  `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %). La **31e à 01 h 45**, `porte-signes-figes.sh` (la
-  contrainte de signe rend-elle l'élagage indolore ?) — **verte** (×1,48 à 600 pas) et **vue ROUGE
-  par une AUTRE recette** (`EXTRA_SIGFIGES=--poids-lognormaux`, ×1,11). Détail :
+  `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %). La **31e à 03 h 05**, `porte-harnais-invariants.sh` — elle
+  **remplace** `porte-signes-figes.sh`, dont le seuil de qualité mesurait un artefact (il est devenu
+  rouge tout seul une fois le défaut corrigé) : elle verrouille les deux **invariants** dont dépend
+  toute mesure d'élagage (installer une reparamétrisation ne change pas le modèle ; l'élagage atteint
+  les poids reparamétrés), **verte**, et **vue rouge par les deux bouts**
+  (`DRAVE_INSTALL_DOUBLE=1` → écart 1,200e+01 ; `DRAVE_ELAGAGE_SANS_PARAM=1` → attention à 98,6 %).
+  Détail :
   `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
   était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
   `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
