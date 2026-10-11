@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 63.6 h |
+| Durée | 64.0 h |
 | Tours | 94 |
-| Messages | 3071 |
-| Appels d'outils | 2854 |
+| Messages | 3091 |
+| Appels d'outils | 2874 |
 | Fichiers touchés | 118 |
-| Commandes | 2404 |
+| Commandes | 2421 |
 | Sous-agents | 3 |
-| Commits | 270 |
+| Commits | 271 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3861,7 +3861,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 94 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Read the log-normal parametrization class
 - bash — Add free-signs parametrization
@@ -3877,11 +3877,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Measure occupancy of free-sign models
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md`
 - bash — Re-read section headers
-- … et 5 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Ajout du contrôle « signes libres » à la fiche E6
+⏵ Commit du plan 2×2 complet
 
 ## 3. Travail accompli
 
@@ -3999,7 +3999,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 7 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
@@ -4056,7 +4056,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2364 autres
+- … et 2381 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4184,7 +4184,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-98 sorties en erreur ou divergentes. Les premières :
+100 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4474,4 +4474,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge" 2>&1 | tail -1; git log --oneline -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF' E6, volet cout : ce qu'un format creux lirait, variant par variant 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF' E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui port
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_te
 

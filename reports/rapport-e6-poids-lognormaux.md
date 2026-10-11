@@ -5,9 +5,9 @@
 > Question : la biologie corticale a des efficacités synaptiques **log-normales** ; nos modèles
 > sont quasi gaussiens ; une distribution **multiplicative** devrait donc être **élagable par
 > construction**. Le variant vaut-il mieux **sous élagage** ?
-> Verdict : **OUI, mais seulement sous élagage AGRESSIF — et il y a un croisement.**
-> Un contrôle sépare ensuite les deux causes : **ce sont les SIGNES FIGÉS qui portent la
-> robustesse** (§ 4) — la loi log-normale seule n'apporte que ÷1,36.
+> Verdict : **NON — la bonne réponse est ailleurs, et le plan 2x2 la nomme.**
+> Un contrôle sépare ensuite les deux causes : **c'est la CONTRAINTE DE SIGNE qui porte tout**
+> (§ 4 et 4 ter) — et la **loi log-normale NUIT** (17,50 contre 7,95 à contrainte comparable).
 > À **50 %** de poids gardés, le témoin dense passe de **7,3429** à **7,5680** (+3,1 %) quand le
 > log-normal passe de **7,5666** à **13,0622** (+72,6 %) : **le dense gagne**. À **25 %**, le dense
 > s'effondre à **49,4291** (**×6,7**) quand le log-normal ne rend que **17,5009** (**×2,3**) :
@@ -76,7 +76,7 @@ Le plancher **aide** un peu le dense (45,12 contre 49,43) et ne comble pas l'éc
 **C'est l'instrument d'occupation (M9) qui a révélé le premier** : sans lui, rien dans le dépôt ne
 distinguait un modèle élagué à 25 % d'un modèle élagué à 78 %.
 
-## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale
+## 4. Premier contrôle : à loi log-normale, les signes libres ou figés ?
 
 Le variant log-normal diffère du témoin dense par **deux** choses : la **loi** des magnitudes
 (multiplicative) et le **signe figé** (principe de Dale). Le croisement du § 1 ne dit pas laquelle
@@ -92,11 +92,50 @@ basculer pendant l'entraînement.
 Et **sans aucun élagage**, les trois partent du même point : **7,3429** (dense) · **7,5112**
 (log-normal, signes libres) · **7,5666** (signes figés).
 
-**Lecture.** La **loi** log-normale apporte une petite part de la robustesse (36,38 contre 49,43,
-soit **÷1,36**) ; le **principe de Dale** en apporte l'essentiel (17,50 contre 36,38, soit encore
-**÷2,08**). Sous élagage agressif, ce n'est donc **pas** la distribution des magnitudes qui sauve le
+**Lecture (provisoire — le § 4 bis la corrige).** À loi log-normale, libérer les signes coûte cher
+(36,38 contre 17,50), donc la contrainte de signe **compte**. Mais ce plan ne dit pas si c'est
+ELLE qui fait tout : il manque le coin « magnitudes libres, signes figés », et c'est le § 4 bis. Sous élagage agressif, ce n'est donc **pas** la distribution des magnitudes qui sauve le
 modèle : c'est le fait qu'un poids ne puisse **pas changer de signe**. Un neurone excitateur le
 reste — et c'est cela qui rend l'élagage supportable.
+
+## 4 bis. LE PLAN 2x2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT
+
+Le § 4 comparait trois coins du plan 2x2. Le quatrième — **magnitudes libres, signes figés**
+(`w = signe · |θ|`, `--signes-figes`) — le complète, et il **renverse la lecture** :
+
+| 25 % de poids gardés | magnitudes libres, signes libres (dense) | **magnitudes libres, signes FIGÉS** | log-normales, signes libres | log-normales, signes FIGÉS |
+|---|---:|---:|---:|---:|
+| perplexité | 49,4291 | **7,9467** | 36,3771 | 17,5009 |
+| facteur sur le non-élagué | x6,7 | **x1,09** | x4,8 | x2,3 |
+| occupation stockée | 26,0 % | 30,3 % | 26,0 % | 30,1 % |
+
+Et **aux trois taux d'élagage**, les quatre variantes (même graine, même protocole) :
+
+| poids gardés | dense | **signes figés, magnitudes libres** | log-normal, signes libres | log-normal, signes figés |
+|---|---:|---:|---:|---:|
+| 100 % | 7,3429 | **7,3003** | 7,5112 | 7,5666 |
+| 50 % | 7,5680 | **7,3470** | 11,7783 | 13,0622 |
+| 25 % | 49,4291 | **7,9467** | 36,3771 | 17,5009 |
+
+**Trois conclusions, et la troisième est la plus forte.**
+
+1. **C'est la contrainte de signe qui porte tout.** Le modèle à signes figés et magnitudes libres
+   passe de **7,30** (aucun élagage) à **7,95** (25 % gardés) : **x1,09**. Le témoin dense, lui, est
+   multiplié par **6,7**. Aucune autre variante n'en approche.
+2. **La loi log-normale NUIT.** À contrainte comparable (signes figés), elle donne **17,50** là où
+   des magnitudes libres donnent **7,95** — **2,2 fois pire**. L'hypothèse d'E6 (« une distribution
+   multiplicative est élagable par construction ») n'est pas seulement inutile, elle est
+   **contre-productive**. Ce qui aide est que `|w|` puisse **descendre à zéro** librement — ce que
+   `e^θ` interdit (plancher à 6,1e-6).
+3. **le gain est là même sans élaguer** : à 100 %, les signes figés rendent **7,3003** contre
+   **7,3429** au témoin. L'écart est petit (0,6 %) et sur **une** graine : il se lit comme « au même
+   niveau », pas comme un gain — mais il écarte l'objection « on paie la robustesse par la
+   qualité ». **Il n'y a rien à payer.**
+
+**Ce que ça change pour la suite.** Le levier n'est pas la loi des poids, c'est le **principe de
+Dale** — un signe choisi à la naissance et jamais changé. C'est une recette d'**entraînement** de
+trois lignes, pas un changement de moteur, et elle rend un modèle **quasi insensible à l'élagage** :
+le dessin « poids creux » redevient mesurable autrement que par sa perte de qualité.
 
 ## 5. Le volet COÛT, fermé par l'instrument d'occupation
 

@@ -145,6 +145,16 @@ class PoidsLogNormaux(nn.Module):
         if libres:
             self.psi = nn.Parameter(signes * 6.0)
 
+    def right_inverse(self, w):
+        """Le chemin INVERSE : d'un poids cible vers `theta`, écrit UNE fois, ici.
+
+        POURQUOI ICI ET PAS AILLEURS. `ecrire_poids` refaisait ce calcul à la main
+        (`cible.abs().log().clamp(...)`) — la même formule recopiée, donc la même famille de
+        défaut que M8 : le jour où une DEUXIÈME paramétrisation apparaît (`--signes-figes`,
+        `w = signe·|theta|`), l'inverse recopié devient FAUX pour elle, en silence.
+        """
+        return w.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+
     def forward(self, theta):
         # Borne douce : e^{theta} sans borne laisse un pas d'AdamW multiplier un
         # poids par e^{0,3} ≈ 1,35 ; au-delà de ±12 nats on est déjà à 1,6×10^5.
@@ -152,6 +162,59 @@ class PoidsLogNormaux(nn.Module):
         if self.libres:
             return torch.tanh(self.psi) * magnitude
         return self.signes * magnitude
+
+
+class PoidsSignesFiges(nn.Module):
+    """`w = signe_inné · |theta|` — magnitudes LIBRES, signes FIGÉS.
+
+    LE QUATRIÈME COIN DU PLAN 2×2 D'E6. E6 croise deux choses : la **loi** des magnitudes
+    (multiplicative ou non) et la **contrainte de signe** (figée ou libre). Trois coins étaient
+    mesurés le 11/10 :
+
+    | magnitudes | signes | perplexité à 25 % gardés |
+    |---|---|---:|
+    | quelconques (entraînées) | libres | 49,4291 (le témoin dense) |
+    | log-normales | libres | 36,3771 |
+    | log-normales | **figés** | **17,5009** |
+
+    Il manquait celui-ci : **magnitudes libres, signes figés**. Sans lui, on ne peut pas dire si
+    Dale suffit ou si la loi log-normale ajoute quelque chose. À la naissance `theta = w0`, donc
+    `signes · |theta| = w0` exactement — le modèle part du même point que le témoin.
+    """
+
+    def __init__(self, signes):
+        super().__init__()
+        self.register_buffer("signes", signes)
+
+    def right_inverse(self, w):
+        return w.abs()
+
+    def forward(self, theta):
+        return self.signes * theta.abs()
+
+
+def installer_signes_figes(modele):
+    """Magnitudes libres, signes figés à la naissance (le quatrième coin du plan d'E6)."""
+    from torch.nn.utils.parametrize import register_parametrization
+    noms_par_tenseur = {}
+    for nom, p in modele.named_parameters(remove_duplicate=False):
+        noms_par_tenseur.setdefault(id(p), []).append(nom)
+    n, exclus = 0, []
+    for nom, mod in modele.named_modules():
+        if not isinstance(mod, nn.Linear):
+            continue
+        partages = noms_par_tenseur.get(id(mod.weight), [])
+        if len(partages) > 1:
+            exclus.append(nom)
+            continue
+        with torch.no_grad():
+            w = mod.weight
+            signes = w.sign().clone()
+        register_parametrization(mod, "weight", PoidsSignesFiges(signes))
+        n += 1
+    if exclus:
+        print(f"# POIDS PARTAGÉS : {len(exclus)} module(s) EXCLU(S) : {exclus}")
+    return n
 
 
 def installer_poids_lognormaux(modele, signes_libres=False):
@@ -187,10 +250,10 @@ def installer_poids_lognormaux(modele, signes_libres=False):
         with torch.no_grad():
             w = mod.weight
             signes = w.sign().clone()
-            theta0 = w.abs().clamp(min=1e-6).log()
-        register_parametrization(mod, "weight", PoidsLogNormaux(signes, signes_libres))
+        param = PoidsLogNormaux(signes, signes_libres)
+        register_parametrization(mod, "weight", param)
         with torch.no_grad():
-            mod.parametrizations.weight.original.copy_(theta0)
+            mod.parametrizations.weight.original.copy_(param.right_inverse(w))
         n += 1
     if exclus:
         print(f"# POIDS PARTAGÉS : {len(exclus)} module(s) EXCLU(S) de la reparamétrisation "
@@ -287,9 +350,9 @@ def ecrire_poids(mod, cible, ou="?"):
     avec_signe = cible != 0
     opposes = int(((cible.sign() != signes) & avec_signe).sum())
     nuls = int((~avec_signe).sum())
-    theta = cible.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+    # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
     with torch.no_grad():
-        par.original.copy_(theta)
+        par.original.copy_(par[0].right_inverse(cible))
     obtenu = mod.weight.detach()
     ok = avec_signe & (cible.sign() == signes)
     ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
@@ -409,9 +472,9 @@ def ecrire_poids_nomme(params, par_table, nom, cible, ou="?"):
     avec_signe = cible != 0
     opposes = int(((cible.sign() != signes) & avec_signe).sum())
     nuls = int((~avec_signe).sum())
-    theta = cible.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+    # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
     with torch.no_grad():
-        par.original.copy_(theta)
+        par.original.copy_(par[0].right_inverse(cible))
     obtenu = params[nom].detach()
     ok = avec_signe & (cible.sign() == signes)
     ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
@@ -452,6 +515,12 @@ def elaguer_lignes(modele, garde, plancher=0.0):
             continue
         if "embed_tokens" in nom:
             continue          # une table de recherche, pas une matrice : le moteur ne la taille pas
+        if "parametrizations" in nom:
+            # LES PARAMÈTRES INTERNES D'UNE REPARAMÉTRISATION NE SONT PAS DES POIDS. `psi` (le
+            # signe continu des signes libres) a la FORME d'une matrice de poids : le compter
+            # gonflait la couverture annoncée (44 tenseurs au lieu de 28) et le désignait à un
+            # élagage qui ne le concerne pas — on écrit dans `theta`, jamais dans `psi`.
+            continue
         total += p.numel()
         with torch.no_grad():
             w = p.detach()
@@ -624,6 +693,10 @@ def main():
                         "M8 (le fichier sauve ne reproduisait pas le modele entraine) est "
                         "CORRIGE depuis le 10/10 : la tete liee a la table d'entree est exclue "
                         "de la reparametrisation. Voir docs/biologie-pour-drave.md section 3 ter")
+    p.add_argument("--signes-figes", action="store_true",
+                   help="magnitudes LIBRES, signes FIGÉS (w = signe*|theta|) — le quatrième coin "
+                        "du plan 2x2 d'E6 : il dit si le principe de Dale SUFFIT à expliquer la "
+                        "robustesse à l'élagage, ou si la loi log-normale ajoute quelque chose.")
     p.add_argument("--signes-libres", action="store_true",
                    help="avec --poids-lognormaux : les signes deviennent un parametre CONTINU "
                         "(tanh(psi), initialise sur les signes de naissance) au lieu d'etre "
@@ -681,6 +754,10 @@ def main():
         n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
         print(f"# RATIO DE SIGNES (E4) : {a.ratio_signes:.2f} demandé, {reel:.4f} obtenu sur "
               f"{n} couches — magnitudes libres")
+    if a.signes_figes:
+        n = installer_signes_figes(modele)
+        print(f"# SIGNES FIGÉS (Dale) : {n} couches — magnitudes LIBRES (w = signe·|theta|), "
+              f"aucune loi imposée. Quatrième coin du plan 2x2 d'E6.")
     if a.poids_lognormaux:
         n = installer_poids_lognormaux(modele, a.signes_libres)
         print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "
@@ -846,7 +923,10 @@ def main():
     # L'export lit des poids ORDINAIRES : on matérialise avant d'écrire (sinon le
     # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
     # ne connaît pas).
-    if a.poids_lognormaux:
+    # MATÉRIALISER DÈS QU'UNE REPARAMÉTRISATION EXISTE — `--signes-figes` en pose une aussi, et
+    # l'oublier faisait sauver des clés `parametrizations.weight.original` que l'exporteur ne
+    # connaît pas : « tenseur model.layers.0.self_attn.q_proj.weight absent » à l'export.
+    if a.poids_lognormaux or a.signes_figes:
         materialiser_poids(modele)
     t_materialise = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
     if os.environ.get("DRAVE_MAT_DIAGNOSTIC") == "1":

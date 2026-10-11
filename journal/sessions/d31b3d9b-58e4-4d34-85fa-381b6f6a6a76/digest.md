@@ -49309,3 +49309,262 @@ E6 mis à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF'\nE6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale\n\nLE CONTROLE. Le variant log-normal differe du temoin par DEUX choses : la LOI des … [1396 caractères tronqués]`
+
+  ```
+d3a1ee8 E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Non-régression : les deux portes du harnais et les tests, après les changements
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 900 bash tools/porte-sauvegarde-modele.sh > /tmp/p1.log 2>&1; echo \"sauvegarde code=$?\") ; (timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/p2.log 2>&1; echo \"occupation code=$?\"); tail -1 /tmp/p1.log; tail -1  … [211 caractères tronqués]`
+
+  ```
+sauvegarde code=0
+occupation code=0
+   log-normal — et le poids partagé qui cassait le partage est exclu et nommé.
+   (et le harnais annonce l'élagage final — vu ROUGE avec DRAVE_SANS_ELAGAGE_FINAL=1).
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+### 🤖 Assistant
+
+⏵ Quatrième coin du plan 2×2 : magnitudes libres + signes FIGÉS
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nancre = \"def installer_poids_lognormaux(modele, signes_libres=False):\"\najout = '''class PoidsSignesFiges(nn.Modu … [3415 caractères tronqués]`
+
+  ```
+quatrième coin ajouté
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6h && mkdir -p /tmp/e6h && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [935 caractères tronqués]`
+
+  ```
+quatrième coin lancé (pid 334729)
+dim 11 oct 2026 00:51:41 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6h/codes.txt 2>/dev/null; do sleep 30; done; grep -vE \"^\\| \\*\\*total\" /tmp/e6h/codes.txt; grep -E \"^\\| \\*\\*total\" /tmp/e6h/codes.txt", "description": "Wait for the fourth corner results", "timeou … [13 caractères tronqués]`
+
+  ```
+sigfiges-g1.0 code=0
+sigfiges-g0.5 code=0
+sigfiges-g0.25 code=0
+TERMINE
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6h/codes.txt; for M in /tmp/e6h/*.gguf; do printf '%-20s ' \"$(basename $M .gguf)\"; /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele \"$M\" 2>&1 | grep -E \"^\\| \\*\\*total\"; done", "description": "Re … [30 caractères tronqués]`
+
+  ```
+sigfiges-g1.0 code=0
+sigfiges-g0.5 code=0
+sigfiges-g0.25 code=0
+TERMINE
+*                    
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'export du quatrième coin a échoué — diagnostic
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/e6h/sigfiges-g0.25.log; echo \"=== export ===\"; tail -5 /tmp/e6h/export-sigfiges-g0.25.log 2>/dev/null; ls /tmp/e6h/ | head", "description": "Inspect the failure"}`
+
+  ```
+# élagage FINAL réappliqué après la restauration du meilleur point (pas 1000) : cible 25% gardé — sans quoi le fichier porterait l'élagage de la rampe à ce pas-là
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 16.89it/s]
+
+  # meilleur point : pas 1000 · val 2.7047 bits/octet
+  # écrit dans /tmp/e6h/sigfiges-g0.25 · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+=== export ===
+    tenseurs = tenseurs_depuis_hf(poids, cfg, experts_q4=True)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", line 225, in tenseurs_depuis_hf
+    q8(b + "attn_q.weight", poids[p + "self_attn.q_proj.weight"]),
+                            ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'model.layers.0.self_attn.q_proj.weight'
+codes.txt
+export-sigfiges-g0.25.log
+export-sigfiges-g0.5.log
+export-sigfiges-g1.0.log
+run.log
+sigfiges-g0.25
+sigfiges-g0.25.log
+sigfiges-g0.5
+sigfiges-g0.5.log
+sigfiges-g1.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux défauts de plus, même famille : la matérialisation n'était pas appelée, et l'inverse était figé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# 1. right_inverse sur les deux classes\nold = \"\"\"    def forward(self, theta):\n        # Borne douce : e^{th … [5053 caractères tronqués]`
+
+  ```
+OK
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 65, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"materialiser_poids(modele)\" -B 3 tools/entrainer_moteur.py | head -12", "description": "Find the materialisation call site"}`
+
+  ```
+384-    return tot / max(n, 1) / math.log(2)
+385-
+386-
+387:def materialiser_poids(modele):
+--
+905-    # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
+906-    # ne connaît pas).
+907-    if a.poids_lognormaux:
+908:        materialiser_poids(modele)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    # fichier porterait des clés `parametrizations.weight.original` que l'exporteur\n    # ne connaît p … [915 caractères tronqués]`
+
+  ```
+matérialisation corrigée
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise des corrections non écrites (l'assertion avait interrompu le script)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nfaits = []\n\nold = \"\"\"    def forward(self, theta):\n        # Borne douce : e^{theta} sans borne laisse un pas … [3032 caractères tronqués]`
+
+  ```
+right_inverse log-normal | right_inverse signes figés | inverse par paramétrisation (2 site(s)) | installation initiale
+OK
+5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"right_inverse\" tools/entrainer_moteur.py; P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 200 --eval-tous … [481 caractères tronqués]`
+
+  ```
+148:    def right_inverse(self, w):
+189:    def right_inverse(self, w):
+256:            mod.parametrizations.weight.original.copy_(param.right_inverse(w))
+355:        par.original.copy_(par[0].right_inverse(cible))
+477:        par.original.copy_(par[0].right_inverse(cible))
+=== contrôle rapide des trois variantes ===
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+   ^ variante : --poids-lognormaux
+# élagage à 50% gardé : 44 tenseurs · 7,968,768 poids sur 7,968,768 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 50% gardé : 44 tenseurs · 7,968,768 poids sur 7,968,768 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 50% gardé : 44 tenseurs · 7,968,768 poids sur 7,968,768 (100.0 %
+… [621 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'élagage comptait les paramètres internes de reparamétrisation — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        if \"embed_tokens\" in nom:\n            continue          # une table de recherche, pas une ma … [1956 caractères tronqués]`
+
+  ```
+paramètres internes exclus
+OK
+quatrième coin relancé (pid 337853)
+dim 11 oct 2026 01:02:50 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6h/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6h/codes.txt; echo \"--- occupation ---\"; for M in /tmp/e6h/*.gguf; do printf '%-20s ' \"$(basename $M .gguf)\"; /home/stephane/gpu-env/bin/python to … [146 caractères tronqués]`
+
+  ```
+sigfiges-g1.0 entrainement=0
+perplexité 7.3003 sur
+sigfiges-g0.5 entrainement=0
+perplexité 7.3470 sur
+sigfiges-g0.25 entrainement=0
+perplexité 7.9467 sur
+TERMINE
+--- occupation ---
+sigfiges-g0.25       | **total** | **7,626,816** | **2,307,591** | **30.3 %** |
+sigfiges-g0.5        | **total** | **7,626,816** | **4,079,107** | **53.5 %** |
+sigfiges-g1.0        | **total** | **7,626,816** | **6,800,754** | **89.2 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ RÉSULTAT MAJEUR : les signes figés suffisent — et la loi log-normale NUIT
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "## 4 ter. LE PLAN 2×2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT\n\nLe § 4 comparait trois coins du plan. Le quatrième — **magnitudes libres, s … [2536 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## 5. Le volet\" reports/rapport-e6-poids-lognormaux.md; sed -n '99,102p' reports/rapport-e6-poids-lognormaux.md", "description": "Re-read the anchor"}`
+
+  ```
+101:## 5. Le volet COÛT, fermé par l'instrument d'occupation
+reste — et c'est cela qui rend l'élagage supportable.
+
+## 5. Le volet COÛT, fermé par l'instrument d'occupation
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "## 4 ter. LE PLAN 2×2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT\n\nLe § 4 comparait trois coins du plan 2×2. Le quatrième — **magnitudes libre … [2487 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "limit": 6, "offset": 98}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+98: modèle : c'est le fait qu'un poids ne puisse **pas changer de signe**. Un neurone excitateur le
+99: reste — et c'est cela qui rend l'élagage supportable.
+100: 
+101: ## 5. Le volet COÛT, fermé par l'instrument d'occupation
+102: 
+103: Le compteur de paires du moteur ne voit pas l'occupation (manque **M9**) : il rend **2,3 M** pour
+
+(Showing lines 98-103 of 129. Use offset=104 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-e6-poids-lognormaux.md\"); s = p.read_text()\nbloc = \"\"\"## 4 ter. LE PLAN 2x2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT … [3430 caractères tronqués]`
+
+  ```
+plan 2x2 ajouté
+20:## 1. La mesure
+39:## 2. Le témoin, et pourquoi il était nécessaire
+63:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+79:## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale
+101:## 4 ter. LE PLAN 2x2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT
+140:## 5. Le volet COÛT, fermé par l'instrument d'occupation
+156:## 6. Ce que cette fiche ne dit PAS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"reports/rapport-e6-poids-lognormaux.md\"); s = p.read_text()\ns = s.replace(\"## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale\",\n           … [1003 caractères tronqués]`
+
+  ```
+renuméroté
+20:## 1. La mesure
+39:## 2. Le témoin, et pourquoi il était nécessaire
+63:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+79:## 4. Premier contrôle : à loi log-normale, les signes libres ou figés ?
+101:## 4 bis. LE PLAN 2x2 COMPLET : c'est la CONTRAINTE DE SIGNE qui fait tout, et la loi log-normale NUIT
+140:## 5. Le volet COÛT, fermé par l'instrument d'occupation
+156:## 6. Ce que cette fiche ne dit PAS
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du plan 2×2 complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **E6** | poids log-normaux | ✅  … [3683 caractères tronqués]`
