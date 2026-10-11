@@ -41612,3 +41612,368 @@ aide complétée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave 2>&1 | grep -A 5 \"PÉRIPHÉRIE\" | head -8; git add -A && git commit -q -m \"Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges\n\nDix drapeaux ajoutes aujour … [569 caractères tronqués]`
+
+  ```
+PÉRIPHÉRIE (C8) : une région frontière
+                                     reçoit un SIGNAL (une valeur par ligne) au lieu
+                                     d'un jeton, et écrit l'état de chaque pas. Le
+                                     délai est DANS le moteur (`v[t-N]`), `--recurent`
+                                     garde l'historique (positions croissantes),
+                                     `--entree-memoire K` pose les K dernières valeurs
+poussé
+  porte-flux             ✅                          18 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+20:41
+  ```
+
+### 🤖 Assistant
+
+⏵ M8 (défaut de sauvegarde log-normal) est-il encore ouvert ? Le harnais dit l'avoir corrigé — je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"materialiser_poids\" tools/entrainer_moteur.py | head -5; sed -n '/def materialiser_poids/,/^def /p' tools/entrainer_moteur.py | tail -22", "description": "Inspect the log-normal save path"}`
+
+  ```
+193:def materialiser_poids(modele):
+539:        materialiser_poids(modele)
+    recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
+    — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+    """
+    from torch.nn.utils.parametrize import remove_parametrizations
+    n, ecart = 0, 0.0
+    with torch.no_grad():
+        for mod in modele.modules():
+            if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+                par = mod.parametrizations.weight
+                theta = par.original
+                signes = par[0].signes
+                attendu = signes * theta.clamp(-12.0, 6.0).exp()
+                ecart = max(ecart, float((mod.weight - attendu).abs().max()))
+                mod.weight.copy_(attendu)
+                remove_parametrizations(mod, "weight")
+                n += 1
+    print(f"# matérialisation : {n} couches · écart max avant copie {ecart:.3e} "
+          f"(0 = la reparamétrisation était déjà cohérente)")
+    return n
+
+
+def elaguer_lignes(modele, garde):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e6\nCUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \\\n  --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 3e-4 … [214 caractères tronqués]`
+
+  ```
+started background job bash-43
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; tail -8 /tmp/e6/journal.log 2>/dev/null; tail -2 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Check log-normal training and pass", "timeoutMs": 500000}`
+
+  ```
+pas   1000 · perte 1.8472 · val 2.9564 bits/octet · 61 s
+  pas   2000 · perte 1.7206 · val 2.6037 bits/octet · 118 s
+  pas   3000 · perte 1.5158 · val 2.4846 bits/octet · 173 s
+# matérialisation : 17 couches · écart max avant copie 0.000e+00 (0 = la reparamétrisation était déjà cohérente)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 18.17it/s]
+
+  # meilleur point : pas 3000 · val 2.4846 bits/octet
+  # écrit dans /tmp/e6/lognormal.gguf · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         351 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+20:49
+  ```
+
+### 👤 Utilisateur
+
+background job bash-43 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e6
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \
+  --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 3e-4 --graine 1 \
+  --poids-lognormaux --sortie /tmp/e6/lognormal.gguf > /tmp/e6/journal.log 2>&1
+tail -6 /tmp/e6/journal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Contrôle décisif de M8 : le fichier log-normal sauvé reproduit-il le modèle entraîné ? Je cherche le mode perplexité sur TEXTE
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--ppl-texte\"\\|ppl_texte' drave-core/src/main.rs | head -4; grep -n \"ppl-texte\" tools/*.sh | head -3", "description": "Find the text perplexity mode"}`
+
+  ```
+864:    ppl_texte: bool, prompt: Option<String>, limit: usize, depuis: usize,
+983:            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true;
+7311:        ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nCUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \\\n  --cache 768 --experts 8 --k 2 --seq 128 --lot 32 - … [617 caractères tronqués]`
+
+  ```
+=== perplexité moteur sur le texte de validation (200 Ko) ===
+  lognormal    dense        (validation annoncée à l'entraînement : log-normal 2,4846 bits/octet · dense à comparer)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '980,990p' drave-core/src/main.rs; ./drave-core/target/release/drave /tmp/e6/dense.gguf --ppl-texte /tmp/e6/val.txt --limit 128 --ctx 512 --threads 8 2>&1 | tail -3", "description": "Check the ppl-texte flag usage", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+let pas = match args[i].as_str() {
+            "--infer" => { o.infer = true; 1 }
+            "--ppl" => { o.ppl = true; o.ids_file = Some(suivant(i).clone()); 2 }
+            "--ppl-texte" => { o.ppl = true; o.ppl_texte = true;
+                               o.texte_file = Some(suivant(i).clone()); 2 }
+            "--plan" => { o.plan = true; 1 }
+            "--topologie" => { o.topologie = Some(suivant(i).clone()); 2 }
+            // C1b : le nœud RELAIS dit QUI il est dans la topologie ; c'est la
+            // topologie, et elle seule, qui dit à qui il transmet ensuite.
+            "--region" => { o.region = Some(suivant(i).clone()); 2 }
+            // C12 : la trace globale, et sa vérification par rejeu.
+thread 'main' (3237431) panicked at src/model.rs:3439:39:
+ouverture du GGUF: Custom { kind: NotFound, error: "/tmp/e6/dense.gguf est un dossier mais ne contient pas commun.gguf" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/e6/ | head; tail -5 /tmp/e6/dense.log 2>/dev/null; ls /tmp/e6/dense.gguf/ 2>/dev/null | head -4", "description": "Inspect the dense training output"}`
+
+  ```
+total 204
+drwxr-xr-x.   4 stephane stephane    140 10 oct 20:52 .
+drwxrwxrwt. 319 root     root     813000 10 oct 20:52 ..
+drwxr-xr-x.   2 stephane stephane    100 10 oct 20:52 dense.gguf
+-rw-r--r--.   1 stephane stephane    611 10 oct 20:52 dense.log
+-rw-r--r--.   1 stephane stephane    818 10 oct 20:45 journal.log
+drwxr-xr-x.   2 stephane stephane    100 10 oct 20:45 lognormal.gguf
+-rw-r--r--.   1 stephane stephane 200000 10 oct 20:52 val.txt
+  pas   3000 · perte 1.4551 · val 2.3533 bits/octet · 162 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 17.77it/s]
+
+  # meilleur point : pas 3000 · val 2.3533 bits/octet
+  # écrit dans /tmp/e6/dense.gguf · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+config.json
+generation_config.json
+model.safetensors
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; $P tools/exporter_gguf.py --help 2>&1 | head -20", "description": "Check the GGUF exporter usage"}`
+
+  ```
+usage: exporter_gguf.py [-h] --hf HF --sortie SORTIE [--f16]
+
+options:
+  -h, --help       show this help message and exit
+  --hf HF          dossier save_pretrained (config.json + safetensors)
+  --sortie SORTIE
+  --f16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nfor f in lognormal dense; do $P tools/exporter_gguf.py --hf /tmp/e6/$f.gguf --sortie /tmp/e6/$f-modele.gguf >/dev/null 2>&1; printf '%-10s exporté : %s octets\ … [539 caractères tronqués]`
+
+  ```
+lognormal  exporté : 4574656 octets
+dense      exporté : 4574656 octets
+=== perplexité MOTEUR sur le texte de validation (mêmes poids, même texte) ===
+  dense        lognormal    validation annoncée à l'entraînement : dense 2,3533 · log-normal 2,4846 bits/octet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave /tmp/e6/dense-modele.gguf --ppl-texte /tmp/e6/val.txt --limit 256 --ctx 512 --threads 8 2>&1 | tail -5", "description": "Run the exported model verbosely", "timeoutMs": 900000}`
+
+  ```
+[config] mélanges d'experts chargés : 4/4 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/4 couches · n_rot 48 · ffn 768 · experts 8
+[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)
+/tmp/e6/val.txt : 0 jetons (tokenizer du modèle), fenêtres de 512
+aucun jeton noté (il en faut au moins deux : le premier ne prédit rien)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tokenizer\\|tiktoken\\|Tokenizer\" tools/entrainer_moteur.py | head -6; grep -n \"ids\" tools/entrainer_moteur.py | grep -i \"sortie\\|dump\\|write\" | head -3", "description": "Find the trainer's tokenizer"}`
+
+  ```
+439:    # DISTILLATION : un enseignant gelé, de la MÊME famille et du MÊME tokenizer,
+356:                   help="part GARDÉE des poids, par ligne de sortie (0 = aucun "
+466:        sortie = modele(input_ids=x, labels=x)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"def charger_donnees\\|tokenizer\\|\\.tokens(\" tools/modele_commun.py tools/moteur_commun.py 2>/dev/null | head -6; ls tools/ | grep -i \"commun\\|modele_\" | head -5; grep -n \"import\" tools/entrainer_moteur.py | head -1 … [49 caractères tronqués]`
+
+  ```
+24:import argparse
+25:import math
+26:import os
+27:import sys
+28:import time
+30:import numpy as np
+31:import torch
+32:import torch.nn as nn
+35:from essai_decharge import charger, lot_aleatoire  # noqa: E402
+39:    from transformers import Qwen3Config, Qwen3ForCausalLM, Qwen3MoeConfig, Qwen3MoeForCausalLM
+143:    from torch.nn.utils.parametrize import register_parametrization
+170:    import torch as _torch
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def charger\\|def lot_aleatoire\" -A 12 tools/essai_decharge.py | head -32", "description": "Read the data loader and tokenizer"}`
+
+  ```
+340:def charger(chemins):
+341-    """Octets UTF-8 — 256 symboles, aucun alphabet à choisir.
+342-
+343-    Lire en octets plutôt qu'en caractères n'est pas un détail : le corpus
+344-    Wikipedia complet porte 3 237 caractères distincts, donc un embedding de
+345-    3 237 entrées coûterait plus cher que le reste du modèle, et une découpe en
+346-    « caractères » ferait dépendre la mesure du corpus choisi. En octets, la
+347-    mesure (bits par octet) est comparable partout.
+348-    """
+349-    morceaux = []
+350-    for c in chemins:
+351-        for f in sorted(glob.glob(c)):
+352-            with open(f, "rb") as fh:
+--
+359:def lot_aleatoire(ids, seq, lot, generateur):
+360-    i = torch.randint(0, len(ids) - seq - 1, (lot,), generator=generateur).numpy()
+361-    return (torch.from_numpy(np.stack([ids[j:j + seq] for j in i]).astype(np.int64)),
+362-            torch.from_numpy(np.stack([ids[j + 1:j + seq + 1] for j in i]).astype(np.int64)))
+363-
+364-
+365-def lots_valides(ids, seq, lot):
+366-    """Validation par fenêtres contiguës — jamais de recouvrement."""
+367-    n = (len(ids) - 1) // seq
+368-    for k in range(0, max(0, n - lot + 1), lot):
+369-        x = np.stack([ids[(k + j) * s
+… [233 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le corpus est en OCTETS (vocabulaire 256) : ppl = 2^(bits/octet) — je compare moteur et entraînement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\ndata = open('/tmp/e6/val.txt','rb').read()[:512]\nopen('/tmp/e6/val.ids','w').write(','.join(str(b) for b in data))\nprint('ids :', len(data), 'octets (vocabulaire de 256)')\nprint('attendu : dense 2^2,3533 =', round(2 … [390 caractères tronqués]`
+
+  ```
+ids : 512 octets (vocabulaire de 256)
+attendu : dense 2^2,3533 = 5.11 · log-normal 2^2,4846 = 5.597
+  dense      moteur : perplexité 7.3429 sur
+  lognormal  moteur : perplexité 436.6159 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ M8 est TOUJOURS ouvert : moteur 436,62 contre 5,60 annoncé (×78) — je regarde l'ordre matérialisation/sauvegarde
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '528,552p' tools/entrainer_moteur.py; grep -n \"save_pretrained\" tools/entrainer_moteur.py", "description": "Check materialisation vs save order"}`
+
+  ```
+if bpo < meilleur[0]:
+                meilleur = (bpo, {kk: v.detach().clone() for kk, v in modele.state_dict().items()}, pas)
+            print(f"  pas {pas:>6} · perte {perte.item():.4f} · val {bpo:.4f} bits/octet "
+                  f"· {time.time()-debut:.0f} s")
+            modele.train()
+
+    modele.load_state_dict(meilleur[1])
+    # L'export lit des poids ORDINAIRES : on matérialise avant d'écrire (sinon le
+    # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
+    # ne connaît pas).
+    if a.poids_lognormaux:
+        materialiser_poids(modele)
+    modele.eval()
+    os.makedirs(a.sortie, exist_ok=True)
+    modele.save_pretrained(a.sortie)
+    print(f"\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet")
+    print(f"  # écrit dans {a.sortie} · {n_params/1e6:.2f} M paramètres · "
+          f"{lit/1e6:.2f} M poids lus/jeton/couche")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+542:    modele.save_pretrained(a.sortie)
+  ```
+
+### 🤖 Assistant
+
+⏵ Hypothèse : l'export QUANTIFIE, et les poids log-normaux (queues lourdes) n'y survivent pas — je vérifie le format d'export
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Q4_0\\|Q8_0\\|F32\\|f16\\|def ecrire_gguf\" tools/exporter_gguf.py | head -10; python3 -c \"\nimport struct\nd = open('/tmp/e6/lognormal-modele.gguf','rb').read(400000)\nfor t in (b'Q4_0', b'Q8_0', b'F32', b'F16'): print(t. … [67 caractères tronqués]`
+
+  ```
+27:    exporter_gguf.py --hf modele_hf/ --sortie modele.gguf [--f16]
+37:GGML_F32, GGML_F16 = 0, 1
+38:GGML_Q4_0, GGML_Q8_0 = 2, 8
+43:# ------------------------------------------------------------------ Q8_0
+45:# moteur en Q8_0 : `q8_view` refuse tout autre type (« type 0 non géré » pour un
+46:# F32). Q8_0 est donc le format d'échange, et l'écrire ici évite de dépendre d'un
+49:    """Blocs de 32 : échelle f16 (`amax/127`) puis 32 entiers signés."""
+70:# ------------------------------------------------------------------- Q4_0
+72:# d'experts : Q4_K, Q6_K, MXFP4, Q4_0 et les super-blocs « sans noyau ». Un
+73:# tenseur d'experts en F32 est REFUSÉ — « format sans noyau ni déquantification »
+Q4_0 0
+Q8_0 0
+F32 0
+F16 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"quantifie\\|Q8_0\\|Q4_0\\|f16\" tools/exporter_gguf.py | sed -n '10,25p'; python3 - <<'PY'\nimport struct, pathlib\n# le type de chaque tenseur est dans l'en-tête GGUF : on lit les types présents\nb = pathlib.Path('/tmp/e6/ … [1452 caractères tronqués]`
+
+  ```
+78:    """Blocs de 32 poids : échelle f16 puis 16 octets (nibbles bas = 0..15,
+101:    Sans lui, la comparaison moteur/référence mesurerait la quantification Q4_0
+143:def ecrire_gguf(chemin, kv, tenseurs, f16=False):
+144:    """`tenseurs` : liste de (nom, tableau numpy) — tableau converti en f32/f16 —
+145:    ou de (nom, (octets, type_ggml)) pour un format écrit à la main (Q4_0)."""
+160:                a = np.ascontiguousarray(contenu.astype(np.float16 if f16 else np.float32))
+161:                ttype = GGML_F16 if f16 else GGML_F32
+207:    Les tenseurs 2D sont écrits en **Q8_0** : c'est le type que `q8_view` et
+209:    les quantifier n'apporterait rien et changerait le calcul.
+216:        return (nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape))
+243:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+251:                    t.append((b + nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape)))
+255:            # Jumeau dense : sa FFN peut être quantifiée en Q4_0 COMME les experts
+271:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+281:    point unique, la référence quantifiait la FFN dense en Q8_0 là où l'export
+282:    l'écr
+… [318 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'export écrit Q8_0/Q4_0 : je compare l'erreur de quantification des poids log-normaux et des poids denses
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport numpy as np, torch, glob\nfrom safetensors.torch import load_file\n\ndef q8_0(arr):\n    n = arr.size\n    pad = (-n) % 32\n    a = np.concatenate([arr.ravel(), np.zeros(pad, np.floa … [1037 caractères tronqués]`
+
+  ```
+dense      : erreur RMS relative Q8_0 = 0.0053 (pire tenseur 0.0055) · |w| max = 0.42 · poids au-delà de 10× la RMS : 0 tenseurs
+lognormal  : erreur RMS relative Q8_0 = 0.0054 (pire tenseur 0.0056) · |w| max = 0.43 · poids au-delà de 10× la RMS : 0 tenseurs
+  ```
+
+### 🤖 Assistant
+
+⏵ Poids statistiquement identiques… mais Q8_0 peut ÉCRASER les petits poids d'un tenseur à queue lourde : je compte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport numpy as np, glob\nfrom safetensors.torch import load_file\nfor nom in (\"dense\", \"lognormal\"):\n    sd = load_file(glob.glob(f\"/tmp/e6/{nom}.gguf/*.safetensors\")[0])\n    crush … [832 caractères tronqués]`
+
+  ```
+dense      : 0.74 % des poids écrasés à zéro par Q8_0 · pires tenseurs : [(np.float64(1.0), 'model.layers.1.mlp.gate.weig'), (np.float64(0.8), 'model.layers.0.mlp.gate.weig'), (np.float64(0.8), 'model.layers.0.mlp.experts.3')]
+lognormal  : 0.74 % des poids écrasés à zéro par Q8_0 · pires tenseurs : [(np.float64(1.3), 'model.layers.1.mlp.gate.weig'), (np.float64(1.0), 'model.layers.1.self_attn.k_p'), (np.float64(0.8), 'model.layers.2.mlp.experts.1')]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'hypothèse de quantification est réfutée aussi ; je compare les DEUX fichiers exportés tenseur par tenseur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport struct, pathlib\ndef entete(p):\n    b = pathlib.Path(p).read_bytes()\n    i = b.index(b'GGUF') + 4\n    i += 4\n    n_t, n_kv = struct.unpack('<QQ', b[i:i+16]); i += 16\n    def ch():\n        nonlocal i\n   … [1666 caractères tronqués]`
+
+  ```
+--- dense : 51 tenseurs · 4574656 octets · 17 métadonnées
+    rope/scale : [('qwen3moe.attention.layer_norm_rms_epsilon', 9.999999974752427e-07), ('qwen3moe.rope.freq_base', 10000.0)]
+--- lognormal : 51 tenseurs · 4574656 octets · 17 métadonnées
+    rope/scale : [('qwen3moe.attention.layer_norm_rms_epsilon', 9.999999974752427e-07), ('qwen3moe.rope.freq_base', 10000.0)]
+mêmes noms : True · mêmes formes/types : True
+  ```
+
+### 🤖 Assistant
+
+⏵ M8 : trois hypothèses ÉLIMINÉES (poids, quantification, structure) — il reste les bornes d'activation du moteur ; je consigne
+
+- **write** `{"content": "# M8 — le variant log-normal : trois causes ÉLIMINÉES, une restante nommée\n\n> Campagne : **moteur** · expérience : le fichier sauvé reproduit-il le modèle entraîné ?\n> Question (registre des manques, **M8**) : « le défaut de sauvegarde du variant log-normal — le\n> fichier sauvé ne r … [5225 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\nold = \"\"\"| **M8** | **défaut de sauvegarde du variant log-normal** — le fichier sauvé ne reproduit pas le modèle entraîné | entraînemen … [4567 caractères tronqués]`

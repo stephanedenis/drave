@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 59.5 h |
+| Durée | 59.7 h |
 | Tours | 90 |
-| Messages | 2592 |
-| Appels d'outils | 2387 |
-| Fichiers touchés | 97 |
-| Commandes | 2081 |
+| Messages | 2615 |
+| Appels d'outils | 2409 |
+| Fichiers touchés | 98 |
+| Commandes | 2102 |
 | Sous-agents | 3 |
-| Commits | 247 |
+| Commits | 248 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3712,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 41 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Les nouveaux drapeaux sont-ils dans l'aide du moteur ? (une option invisible est une option qu'on n'utilise pas)
+⏵ M8 : trois hypothèses ÉLIMINÉES (poids, quantification, structure) — il reste les bornes d'activation du moteur ; je consigne
 
 ## 3. Travail accompli
 
@@ -3821,6 +3821,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-recurrence.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c2-recurrence.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/note-cycle-c2.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3870,7 +3871,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2041 autres
+- … et 2062 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3998,7 +3999,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ## 5. Erreurs rencontrées
 
-88 sorties en erreur ou divergentes. Les premières :
+89 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4265,4 +4266,5 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - Registre des manques : N5 — le modele ne retient pas un signal injecte (mesure : present 0,992 / passe -0,681 / tampon 1,000)  Le registre gagne un manque MESUR
 - Passe du 20 h 28 : 26 vertes sur 26 (dont porte-memoire) — comptes mis a jour" && git push -q origin master && echo poussé
 - Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges  Dix drapeaux ajoutes aujourd hui (--entree signal:F, --entree-cana
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/manques.md"); s = p.read_text() old = """| **M8*
 
