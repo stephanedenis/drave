@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 64.5 h |
+| Durée | 64.6 h |
 | Tours | 95 |
-| Messages | 3115 |
-| Appels d'outils | 2896 |
-| Fichiers touchés | 119 |
-| Commandes | 2440 |
+| Messages | 3137 |
+| Appels d'outils | 2918 |
+| Fichiers touchés | 120 |
+| Commandes | 2461 |
 | Sous-agents | 3 |
-| Commits | 275 |
+| Commits | 276 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,11 +3925,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 2 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ La roadmap de biologie porte-t-elle encore l'ancienne conclusion d'E6 ?
+⏵ Relance complète d'E6 après le correctif (les trois variantes paramétrées étaient mesurées sans élagage de l'attention)
 
 ## 3. Travail accompli
 
@@ -4056,6 +4056,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-elagage.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dessin-B-poids-creux.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4105,7 +4106,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2400 autres
+- … et 2421 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4233,7 +4234,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-100 sorties en erreur ou divergentes. Les premières :
+102 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4528,4 +4529,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF' Porte « signes figes » : la seule recette du depot qui rende l
 - Etat : 31 portes, la porte des signes figes est nommee avec son rouge" 2>&1 | tail -1; git log --oneline -1
 - Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact)" 2>&1 | tail -1; git log --oneline -
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF' BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLU
 

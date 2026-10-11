@@ -4,13 +4,14 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11.md](2026-10-11.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:27 | `14ebf85` | E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 % | `etat-cerveau.md`, `manques.md`, `2026-10-11.md` (+12) |
-| 00:48 | `d3a1ee8` | E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+11) |
-| 01:12 | `53ed627` | E6, plan 2x2 complet : c'est la CONTRAINTE DE SIGNE qui fait tout — et la loi log-normale NUIT | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+12) |
+| 00:27 | `14ebf852` | E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 % | `etat-cerveau.md`, `manques.md`, `2026-10-11.md` (+12) |
+| 00:48 | `d3a1ee81` | E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+11) |
+| 01:12 | `53ed6277` | E6, plan 2x2 complet : c'est la CONTRAINTE DE SIGNE qui fait tout — et la loi log-normale NUIT | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+12) |
+| 01:40 | `38a6ca01` | Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact) | `biologie-pour-drave.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+9) |
 
 ## Chiffres du jour
 
@@ -30,7 +31,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 64.5 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 64.6 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

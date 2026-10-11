@@ -307,15 +307,6 @@ def imposer_ratio_signes(modele, ratio, graine=0):
     return n, positifs / max(total, 1)
 
 
-def signes_effectifs(par):
-    """Le signe que la paramétrisation applique VRAIMENT : `signes` figés, ou `tanh(psi)`.
-
-    Lire `par[0].signes` quand les signes sont libres donnerait le signe de NAISSANCE, pas celui
-    du modèle — et une écriture jugée « impossible » le serait à tort (ou l'inverse).
-    """
-    return torch.tanh(par[0].psi) if getattr(par[0], "libres", False) else par[0].signes
-
-
 def ecrire_poids(mod, cible, ou="?"):
     """Écrit `cible` dans le poids de `mod`, QUE LE MODULE SOIT REPARAMÉTRÉ OU NON.
 
@@ -346,17 +337,16 @@ def ecrire_poids(mod, cible, ou="?"):
         with torch.no_grad():
             mod.weight.copy_(cible)
         return 0, float((mod.weight.detach() - cible).abs().max())
-    signes = signes_effectifs(par)
-    avec_signe = cible != 0
-    opposes = int(((cible.sign() != signes) & avec_signe).sum())
-    nuls = int((~avec_signe).sum())
     # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
     with torch.no_grad():
         par.original.copy_(par[0].right_inverse(cible))
     obtenu = mod.weight.detach()
-    ok = avec_signe & (cible.sign() == signes)
-    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
-    return nuls + opposes, ecart
+    # LE COMPTE EST MESURÉ, PAS SUPPOSÉ. On comptait « les cibles nulles » comme non
+    # représentables : vrai pour une log-normale (plancher 6,1e-6), FAUX pour des signes figés
+    # (`|θ|` atteint zéro exactement). Ce qui compte est l'écart RÉEL entre la cible et le rendu.
+    ecarts = (obtenu - cible).abs()
+    non_repr = int((ecarts > 1e-6).sum())
+    return non_repr, float(ecarts.max())
 
 
 def ecrire_poids_partout(modele, fabrique, quoi):
@@ -468,17 +458,16 @@ def ecrire_poids_nomme(params, par_table, nom, cible, ou="?"):
         with torch.no_grad():
             params[nom].copy_(cible)
         return 0, float((params[nom].detach() - cible).abs().max())
-    signes = signes_effectifs(par)
-    avec_signe = cible != 0
-    opposes = int(((cible.sign() != signes) & avec_signe).sum())
-    nuls = int((~avec_signe).sum())
     # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
     with torch.no_grad():
         par.original.copy_(par[0].right_inverse(cible))
     obtenu = params[nom].detach()
-    ok = avec_signe & (cible.sign() == signes)
-    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
-    return nuls + opposes, ecart
+    # LE COMPTE EST MESURÉ, PAS SUPPOSÉ. On comptait « les cibles nulles » comme non
+    # représentables : vrai pour une log-normale (plancher 6,1e-6), FAUX pour des signes figés
+    # (`|θ|` atteint zéro exactement). Ce qui compte est l'écart RÉEL entre la cible et le rendu.
+    ecarts = (obtenu - cible).abs()
+    non_repr = int((ecarts > 1e-6).sum())
+    return non_repr, float(ecarts.max())
 
 
 def elaguer_lignes(modele, garde, plancher=0.0):
@@ -505,41 +494,58 @@ def elaguer_lignes(modele, garde, plancher=0.0):
     d'entrée** (que le moteur ne taille pas : c'est une table de recherche, pas une matrice), et
     on **annonce la couverture** — un élagage partiel tu, c'est un résultat faux.
     """
-    n_in_dernier = lambda w: w.shape[-1]          # noqa: E731 — la ligne est le dernier axe
+    def masque_lignes(w):
+        """La règle du moteur : garder les k plus grandes magnitudes de chaque LIGNE (dernier axe)."""
+        n_in = w.shape[-1]
+        k = max(1, int(round(garde * n_in)))
+        plat = w.reshape(-1, n_in)
+        idx = plat.abs().topk(k, dim=1).indices
+        return (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
+
     params = dict(modele.named_parameters())
     par_table = table_parametrisations(modele)
-    n, touches, non_repr, ecart = 0, 0, 0, 0.0
-    total = 0
+    n, touches, non_repr, ecart, total = 0, 0, 0, 0.0, 0
+
+    def poser(cible, nom_affiche, taille):
+        nonlocal n, touches, non_repr, ecart
+        if plancher > 0:
+            with torch.no_grad():
+                cible = torch.where(cible != 0, cible, torch.sign(cible) * plancher)
+        a, e = ecrire_poids_nomme(params, par_table, nom_affiche, cible)
+        non_repr += a
+        ecart = max(ecart, e)
+        touches += taille
+        n += 1
+
+    # 1. LES POIDS REPARAMÉTRÉS, PAR LEUR MODULE. Sous reparamétrisation, `named_parameters()`
+    #    rend `...parametrizations.weight.original` et **pas** `...weight` : une boucle sur les
+    #    noms de paramètres ne les voit donc PAS. C'est ce qui a fait qu'un modèle log-normal ou à
+    #    signes figés n'avait QUE ses experts élagués — l'attention restait intacte (1,0 % de
+    #    zéros au lieu de 75 %), sans que rien ne le dise : la couverture annoncée était fausse.
+    for nom in sorted(par_table):
+        mod = modele.get_submodule(nom[:-len(".weight")])
+        total += mod.weight.numel()
+        with torch.no_grad():
+            cible = masque_lignes(mod.weight.detach())
+        a, e = ecrire_poids(mod, cible)
+        non_repr += a
+        ecart = max(ecart, e)
+        touches += mod.weight.numel()
+        n += 1
+
+    # 2. LES AUTRES TENSEURS ≥ 2D (experts fusionnés, routeur) : des paramètres ordinaires.
     for nom, p in params.items():
         if p.dim() < 2:
             continue
         if "embed_tokens" in nom:
             continue          # une table de recherche, pas une matrice : le moteur ne la taille pas
         if "parametrizations" in nom:
-            # LES PARAMÈTRES INTERNES D'UNE REPARAMÉTRISATION NE SONT PAS DES POIDS. `psi` (le
-            # signe continu des signes libres) a la FORME d'une matrice de poids : le compter
-            # gonflait la couverture annoncée (44 tenseurs au lieu de 28) et le désignait à un
-            # élagage qui ne le concerne pas — on écrit dans `theta`, jamais dans `psi`.
-            continue
+            continue          # déjà traité au point 1, par le module
         total += p.numel()
         with torch.no_grad():
-            w = p.detach()
-            n_in = n_in_dernier(w)
-            k = max(1, int(round(garde * n_in)))
-            plat = w.reshape(-1, n_in)
-            idx = plat.abs().topk(k, dim=1).indices
-            cible = (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
-        if plancher > 0:
-            # LE TÉMOIN : magnitude plancher, SIGNE conservé — exactement ce qu'un poids
-            # log-normal élagué devient (6,1e-6), mais sur un modèle ordinaire.
-            with torch.no_grad():
-                cible = torch.where(cible != 0, cible,
-                                    torch.sign(w) * plancher)
-        a, e = ecrire_poids_nomme(params, par_table, nom, cible)
-        non_repr += a
-        ecart = max(ecart, e)
-        touches += p.numel()
-        n += 1
+            cible = masque_lignes(p.detach())
+        poser(cible, nom, p.numel())
+
     if plancher > 0:
         print(f"# TÉMOIN plancher : un poids élagué vaut ±{plancher:.1e} au lieu de 0 "
               f"(signe conservé)")

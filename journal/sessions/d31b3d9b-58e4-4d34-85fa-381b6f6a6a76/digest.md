@@ -49872,3 +49872,362 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/biologie-pour-drav
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold = \"| **E6** | **poids log-normaux** : apprendre `θ`, exécuter `w = signe(θ)·e^{\\\\|θ\\\\|}`, puis élaguer à 50 % et 25 % … [1347 caractères tronqués]`
+
+  ```
+tableau E6 mis à jour
+1
+38a6ca0 Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact)
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification d'échelle : la recette Dale tient-elle à 4× plus gros ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6k && mkdir -p /tmp/e6k && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 384 --couches 6 --tet … [953 caractères tronqués]`
+
+  ```
+vérification d'échelle lancée (dim 384, 6 couches) — pid 388233
+dim 11 oct 2026 01:41:13 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche du dessin B : « poids creux » enfin mesurable, grâce à la recette Dale
+
+- **write** `{"content": "# Dessin B (poids creux) — le levier existe enfin : élaguer à 25 % coûte ×1,09, pas ×6,7\n\n> Campagne : **cerveau** · dessin : **B — modèle à poids creux** (`docs/modele-pour-drave.md` § 3 B)\n> Question : le dessin B promet que la parcimonie des **poids** divise les paires. Or il buta … [4226 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dessin-B-poids-creux.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele /tmp/e6h/sigfiges-g0.25.gguf --paires-attention 0.4 --paires-experts 1.8 2>&1 | tail -4; echo \"--- échelle ---\"; cat /tmp/e6k/codes.txt 2>/dev/null; date", "descr … [67 caractères tronqués]`
+
+  ```
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.40 M** (÷1.01)
+  experts    paires noyau 1.80 M → paires creuses ≈ **0.45 M** (÷4.00)
+--- échelle ---
+dim 11 oct 2026 01:41:36 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Détail par genre du modèle à signes figés élagué
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele /tmp/e6h/sigfiges-g0.25.gguf 2>&1 | sed -n '3,11p'", "description": "Show occupancy by kind for the pruned frozen-signs model"}`
+
+  ```
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 1,769,472 | **25.0 %** |
+| attention | 443,520 | 438,015 | **98.8 %** |
+| tête | 49,344 | 48,996 | **99.3 %** |
+| table d'entrée | 49,152 | 48,804 | **99.3 %** |
+| autres | 6,912 | 2,304 | **33.3 %** |
+| **total** | **7,626,816** | **2,307,591** | **30.3 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Pourquoi l'attention reste non nulle chez les signes figés ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nfrom safetensors.torch import load_file\nimport numpy as np\nd = load_file(\"/tmp/e6h/sigfiges-g0.25/model.safetensors\")\natt_t = att_z = exp_t = exp_z = 0\nfor k, v in d.items():\n    if  … [468 caractères tronqués]`
+
+  ```
+point de contrôle : attention 4,608/448,512 = 1.0 % de zéros
+                    experts   5,308,416/7,077,888 = 75.0 % de zéros
+  ```
+
+### 🤖 Assistant
+
+⏵ BUG TROUVÉ : depuis le filtre « parametrizations », les poids reparamétrés n'étaient plus élagués
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"dim 384\" 2>/dev/null; pkill -f \"e6k\" 2>/dev/null; sleep 1; pgrep -af \"entrainer_moteur\" | grep -v pgrep | head -2 | cut -c1-50; echo \"--- la preuve ---\"; echo \"sigfiges-g0.25 : attention 1,0 % de zéros (jamais élag … [179 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af entrainer_moteur | grep -v pgrep | head -2 | cut -c1-60; sed -n '/^def elaguer_lignes/,/^    return n/p' tools/entrainer_moteur.py | tail -30", "description": "Inspect the current pruning function"}`
+
+  ```
+# élagage qui ne le concerne pas — on écrit dans `theta`, jamais dans `psi`.
+            continue
+        total += p.numel()
+        with torch.no_grad():
+            w = p.detach()
+            n_in = n_in_dernier(w)
+            k = max(1, int(round(garde * n_in)))
+            plat = w.reshape(-1, n_in)
+            idx = plat.abs().topk(k, dim=1).indices
+            cible = (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
+        if plancher > 0:
+            # LE TÉMOIN : magnitude plancher, SIGNE conservé — exactement ce qu'un poids
+            # log-normal élagué devient (6,1e-6), mais sur un modèle ordinaire.
+            with torch.no_grad():
+                cible = torch.where(cible != 0, cible,
+                                    torch.sign(w) * plancher)
+        a, e = ecrire_poids_nomme(params, par_table, nom, cible)
+        non_repr += a
+        ecart = max(ecart, e)
+        touches += p.numel()
+        n += 1
+    if plancher > 0:
+        print(f"# TÉMOIN plancher : un poids élagué vaut ±{plancher:.1e} au lieu de 0 "
+              f"(signe conservé)")
+    print(f"# élagage à {garde:.0%} gardé : {n} tenseurs · {touches:,} poids sur {total:,} "
+         
+… [272 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ndeb = s.index(\"    n_in_dernier = lambda w: w.shape[-1]\")\nfin = s.index(\"    if plancher > 0:\\n        print(f … [2830 caractères tronqués]`
+
+  ```
+élagage réparé : les poids reparamétrés passent par leur module
+OK
+    # 2. LES AUTRES TENSEURS ≥ 2D (experts fusionnés, routeur) : des paramètres ordinaires.
+    for nom, p in params.items():
+        if p.dim() < 2:
+            continue
+        if "embed_tokens" in nom:
+            continue          # une table de recherche, pas une matrice : le moteur ne la taille pas
+        if "parametrizations" in nom:
+            continue          # déjà traité au point 1, par le module
+        total += p.numel()
+        with torch.no_grad():
+            cible = masque_lignes(p.detach())
+        poser(cible, nom, p.numel())
+
+    if plancher > 0:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave; rm -rf /tmp/e6m && mkdir -p /tmp/e6m\nC=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 200 --eval-tou … [672 caractères tronqués]`
+
+  ```
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  → dense      
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00) · 331,776 poids NON représentables (signe figé ou zéro impossible)
+  → sigfiges   
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 1.907e-06) · 331,776 poids NON représentables (signe figé ou zéro impossible)
+  → lognormal  
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py", line 155, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py", line 115, in main
+    tenseurs = lire_tout(a.modele)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py", line 45, in lire_tout
+    f = open(chemin, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/e6m/dense.gguf'
+T
+… [1097 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compte « non représentables » était supposé, pas mesuré ; et l'export a échoué
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    signes = signes_effectifs(par)\n    avec_signe = cible != 0\n    opposes = int(((cible.sign() != si … [2183 caractères tronqués]`
+
+  ```
+OK
+(pas de journal d'export)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 22, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"return nuls + opposes\" tools/entrainer_moteur.py; sed -n '355,372p' tools/entrainer_moteur.py", "description": "Locate the counting sites"}`
+
+  ```
+359:    return nuls + opposes, ecart
+481:    return nuls + opposes, ecart
+        par.original.copy_(par[0].right_inverse(cible))
+    obtenu = mod.weight.detach()
+    ok = avec_signe & (cible.sign() == signes)
+    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
+    return nuls + opposes, ecart
+
+
+def ecrire_poids_partout(modele, fabrique, quoi):
+    """Applique `fabrique(mod.weight)` à tous les `nn.Linear`, en passant par `ecrire_poids`.
+
+    `quoi` sert au message : une écriture sans effet doit être **nommée**, jamais silencieuse.
+    """
+    n, non_repr, ecart = 0, 0, 0.0
+    for mod in modele.modules():
+        if isinstance(mod, nn.Linear):
+            cible = fabrique(mod.weight.detach())
+            a, e = ecrire_poids(mod, cible)
+            non_repr += a
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nvieux = \"\"\"    obtenu = mod.weight.detach()\n    ok = avec_signe & (cible.sign() == signes)\n    ecart = float(( … [1204 caractères tronqués]`
+
+  ```
+OK
+310:def signes_effectifs(par):
+349:    signes = signes_effectifs(par)
+471:    signes = signes_effectifs(par)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+AssertionError: 1 occurrence(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '345,362p' tools/entrainer_moteur.py; echo \"=== second site ===\"; sed -n '468,482p' tools/entrainer_moteur.py", "description": "Read both writer sites"}`
+
+  ```
+if par is None:
+        with torch.no_grad():
+            mod.weight.copy_(cible)
+        return 0, float((mod.weight.detach() - cible).abs().max())
+    signes = signes_effectifs(par)
+    avec_signe = cible != 0
+    opposes = int(((cible.sign() != signes) & avec_signe).sum())
+    nuls = int((~avec_signe).sum())
+    # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
+    with torch.no_grad():
+        par.original.copy_(par[0].right_inverse(cible))
+    obtenu = mod.weight.detach()
+    ok = avec_signe & (cible.sign() == signes)
+    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
+    return nuls + opposes, ecart
+
+
+def ecrire_poids_partout(modele, fabrique, quoi):
+=== second site ===
+        with torch.no_grad():
+            params[nom].copy_(cible)
+        return 0, float((params[nom].detach() - cible).abs().max())
+    signes = signes_effectifs(par)
+    avec_signe = cible != 0
+    opposes = int(((cible.sign() != signes) & avec_signe).sum())
+    nuls = int((~avec_signe).sum())
+    # L'INVERSE VIENT DE LA PARAMÉTRISATION — il n'est pas recopié ici.
+    with torch.no_grad():
+        par.original.copy_(par[0].right_inverse(cible))
+    obtenu = param
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nfor cible_obtenu, retour in ((\"mod.weight.detach()\", \"return nuls + opposes, ecart\"),\n                         … [1421 caractères tronqués]`
+
+  ```
+les deux sites mesurent l'écart réel
+OK
+310:def signes_effectifs(par):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"signes_effectifs\" tools/entrainer_moteur.py | wc -l; python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py\")\ns = p.read_text()\nif \"def signes_ … [572 caractères tronqués]`
+
+  ```
+1
+conservée : 1
+OK
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py\")\ns = p.read_text()\ndeb = s.index(\"def signes_effectifs(par):\")\nfin = s.index(\"def ecrire_poids( … [1264 caractères tronqués]`
+
+  ```
+helper retiré (les deux écrivains mesurent l'écart réel)
+OK
+0
+--- réessai du smoke test ---
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  export dense EN ÉCHEC
+  → dense      
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  export sigfiges EN ÉCHEC
+  → sigfiges   
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 6.144e-06) · 331,778 poids NON représentables (signe figé ou zéro impossible)
+  export lognormal EN ÉCHEC
+  → lognormal
+  ```
+
+### 🤖 Assistant
+
+⏵ L'export échoue pour toutes les variantes — lecture du journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/e6m/exp-dense.log; ls /tmp/e6m/dense/ 2>/dev/null", "description": "Read the export failure"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", line 375, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py", line 358, in main
+    cfg = json.load(open(os.path.join(a.hf, "config.json")))
+                    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/e6m/dense/config.json'
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 200 --eval-tous 200 --elagage-tous 100 … [151 caractères tronqués]`
+
+  ```
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+# élagage APPRIS : 25% des poids gardés par ligne, rampe sur la première moitié de l'entraînement
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  pas    200 · perte 2.0447 · val 3.7528 bits/octet · 11 s
+# élagage FINAL réappliqué après la restauration du meilleur point (pas 200) : cible 25% gardé — sans quoi le fichier porterait l'élagage de la rampe à ce pas-là
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 18.27it/s]
+
+  # meilleur point : pas 200 · val 3.7528 bits/octet
+  # écrit dans /tmp/e6m/dense2 · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon `grep -m1` tuait l'entraîneur (SIGPIPE) — test refait proprement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave; rm -rf /tmp/e6m; mkdir -p /tmp/e6m\nC=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 200 --eval-tous  … [791 caractères tronqués]`
+
+  ```
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effecti
+  → dense      experts %**  attention %**  **total** %**  Donner du  
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effecti
+  → sigfiges   experts %**  attention %**  **total** %**  Donner du  
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effecti
+  → lognormal  experts %**  attention %**  **total** %**  Donner du
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for N in dense sigfiges lognormal; do echo \"--- $N ---\"; $P tools/occupation_poids.py --modele /tmp/e6m/$N.gguf | grep -E \"^\\| (experts|attention)\"; done", "description": "Show attention and  … [30 caractères tronqués]`
+
+  ```
+--- dense ---
+| experts | 7,077,888 | 1,769,472 | **25.0 %** |
+| attention | 443,520 | 111,744 | **25.2 %** |
+--- sigfiges ---
+| experts | 7,077,888 | 1,769,472 | **25.0 %** |
+| attention | 443,520 | 111,744 | **25.2 %** |
+--- lognormal ---
+| experts | 7,077,888 | 1,769,472 | **25.0 %** |
+| attention | 443,520 | 111,776 | **25.2 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance complète d'E6 après le correctif (les trois variantes paramétrées étaient mesurées sans élagage de l'attention)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6n && mkdir -p /tmp/e6n && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --tet … [1159 caractères tronqués]`
+
+  ```
+relance E6 complète lancée (12 runs, ~40 min) — pid 391995
+dim 11 oct 2026 01:47:29 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF'\nBUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLUS elagues du tout (l'attention restait intacte)\n\nCE QUI S'EST PASSE. Sous reparametrisation, `named_parameters()` rend\n`... … [1741 caractères tronqués]`
