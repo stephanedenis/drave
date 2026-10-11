@@ -234,7 +234,7 @@ def installer_poids_lognormaux(modele, signes_libres=False):
     noms_par_tenseur = {}
     for nom, p in modele.named_parameters(remove_duplicate=False):
         noms_par_tenseur.setdefault(id(p), []).append(nom)
-    n, exclus = 0, []
+    n, exclus, ecart_install = 0, [], 0.0
     # UN DÉFAUT QU'ON PEUT RALLUMER EST UN DÉFAUT QU'ON PEUT TESTER. `DRAVE_MAT_SANS_EXCLUSION=1`
     # reparamètre aussi les poids partagés — c'est exactement M8 — pour vérifier que
     # `tools/porte-sauvegarde-modele.sh` le voit et passe au ROUGE.
@@ -248,13 +248,28 @@ def installer_poids_lognormaux(modele, signes_libres=False):
             exclus.append(f"{nom} (partagé avec {autres})")
             continue
         with torch.no_grad():
-            w = mod.weight
+            w = mod.weight.detach().clone()
             signes = w.sign().clone()
         param = PoidsLogNormaux(signes, signes_libres)
+        # L'INVERSE SE CALCULE **AVANT** L'ENREGISTREMENT, ET `w` EST UNE COPIE.
+        # `register_parametrization` réutilise le tenseur du poids et le MODIFIE SUR PLACE (il y
+        # écrit `right_inverse(w)`) : lire `w` après coup rend `log|log|w||`, l'inverse appliqué
+        # DEUX FOIS, et le modèle part avec des poids de ±12 au lieu de ±0,08. Mesuré : θ moyen
+        # 1,097 au lieu de −2,8, et une validation d'entraînement à 3,0713 bits/octet au lieu de
+        # 2,4874 — sans qu'aucun message ne le signale.
+        theta0 = param.right_inverse(w)
         register_parametrization(mod, "weight", param)
         with torch.no_grad():
-            mod.parametrizations.weight.original.copy_(param.right_inverse(w))
+            mod.parametrizations.weight.original.copy_(theta0)
+            # LE CONTRÔLE QUI MORD : installer une reparamétrisation ne doit PAS changer le
+            # modèle. S'il le change, tout ce qui suit mesure un autre modèle que le témoin.
+            ecart_install = max(ecart_install, float((mod.weight - w).abs().max()))
         n += 1
+    print(f"# installation : le modèle est INCHANGÉ (écart max {ecart_install:.3e} entre les poids "
+          f"d'avant et d'après la reparamétrisation)")
+    if ecart_install > 1e-4:
+        print("  ❌ la reparamétrisation CHANGE le modèle à l'installation : tout ce qui suit "
+              "compare deux modèles différents")
     if exclus:
         print(f"# POIDS PARTAGÉS : {len(exclus)} module(s) EXCLU(S) de la reparamétrisation "
               f"(sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :")

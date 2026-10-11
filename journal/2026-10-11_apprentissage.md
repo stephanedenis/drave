@@ -19,7 +19,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (5)
+## Étapes du jour (8)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -28,10 +28,13 @@
 - **00:47** — Le contrôle tranche : ce sont les SIGNES FIGÉS, pas la loi log-normale
 - **01:12** — RÉSULTAT MAJEUR : les signes figés suffisent — et la loi log-normale NUIT
 - **01:28** — Round 51 : E6 tranché — c'est DALE, la loi log-normale nuit (3 graines)
+- **02:17** — Pourquoi les variantes log-normales sont-elles bien pires qu'avant ? (comparaison des entraînements)
+- **02:17** — Le taux d'apprentissage et la décroissance sont modifiés par les poids log-normaux — lecture
+- **02:18** — Relance des variantes log-normales (leur initialisation était fausse : ±12 au lieu de ±0,08)
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 64.6 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 65.1 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

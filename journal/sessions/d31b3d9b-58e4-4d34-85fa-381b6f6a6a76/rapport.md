@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 64.6 h |
+| Durée | 65.1 h |
 | Tours | 95 |
-| Messages | 3139 |
-| Appels d'outils | 2920 |
+| Messages | 3150 |
+| Appels d'outils | 2931 |
 | Fichiers touchés | 120 |
-| Commandes | 2463 |
+| Commandes | 2474 |
 | Sous-agents | 3 |
-| Commits | 277 |
+| Commits | 278 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*40 appels d'outils.* Actions notables :
+*51 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,11 +3925,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 26 autres
+- … et 37 autres
 
 **Synthèse produite :**
 
-⏵ Relance complète d'E6 après le correctif (les trois variantes paramétrées étaient mesurées sans élagage de l'attention)
+⏵ Relance des variantes log-normales (leur initialisation était fausse : ±12 au lieu de ±0,08)
 
 ## 3. Travail accompli
 
@@ -4106,7 +4106,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2423 autres
+- … et 2434 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4531,4 +4531,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact)" 2>&1 | tail -1; git log --oneline -
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF' BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLU
 - E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)" 2>&1 | tail -1; git
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF' BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX F
 

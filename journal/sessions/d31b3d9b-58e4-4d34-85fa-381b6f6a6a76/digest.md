@@ -50252,3 +50252,205 @@ alerte ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)\" 2>&1 | tail -1; git push -q origin master; echo \"push=$?\ … [122 caractères tronqués]`
+
+  ```
+push=0
+dim 11 oct 2026 01:50:07 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; cat /tmp/e6n/codes.txt 2>/dev/null; date", "description": "Wait and check re-measurement progress", "timeoutMs": 600000}`
+
+  ```
+dense-g1.0           perplexité 7.3429 sur
+| **total** | **7,626,816** | **6,800,136** | **89.2 %** |
+dense-g0.5           perplexité 7.5680 sur
+| **total** | **7,626,816** | **3,862,829** | **50.6 %** |
+dense-g0.25          perplexité 49.4291 sur
+| **total** | **7,626,816** | **1,981,362** | **26.0 %** |
+sigfiges-g1.0        perplexité 7.3003 sur
+| **total** | **7,626,816** | **6,800,754** | **89.2 %** |
+dim 11 oct 2026 01:59:12 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; cat /tmp/e6n/codes.txt; date", "description": "Wait for more re-measurement results", "timeoutMs": 600000}`
+
+  ```
+dense-g1.0           perplexité 7.3429 sur
+| **total** | **7,626,816** | **6,800,136** | **89.2 %** |
+dense-g0.5           perplexité 7.5680 sur
+| **total** | **7,626,816** | **3,862,829** | **50.6 %** |
+dense-g0.25          perplexité 49.4291 sur
+| **total** | **7,626,816** | **1,981,362** | **26.0 %** |
+sigfiges-g1.0        perplexité 7.3003 sur
+| **total** | **7,626,816** | **6,800,754** | **89.2 %** |
+sigfiges-g0.5        perplexité 7.2241 sur
+| **total** | **7,626,816** | **3,862,869** | **50.6 %** |
+sigfiges-g0.25       perplexité 41.6677 sur
+| **total** | **7,626,816** | **1,981,298** | **26.0 %** |
+libres-g1.0          perplexité 11.0499 sur
+| **total** | **7,626,816** | **6,848,422** | **89.8 %** |
+dim 11 oct 2026 02:08:41 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Les chiffres corrigés changent la conclusion : l'avantage Dale est modeste, pas spectaculaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; grep -v \"total\" /tmp/e6n/codes.txt; date", "description": "Wait for the remaining variants", "timeoutMs": 600000}`
+
+  ```
+dense-g1.0           perplexité 7.3429 sur
+dense-g0.5           perplexité 7.5680 sur
+dense-g0.25          perplexité 49.4291 sur
+sigfiges-g1.0        perplexité 7.3003 sur
+sigfiges-g0.5        perplexité 7.2241 sur
+sigfiges-g0.25       perplexité 41.6677 sur
+libres-g1.0          perplexité 11.0499 sur
+libres-g0.5          perplexité 11.6153 sur
+libres-g0.25         perplexité 12.1345 sur
+lognormal-g1.0       perplexité 10.8346 sur
+dim 11 oct 2026 02:16:55 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Pourquoi les variantes log-normales sont-elles bien pires qu'avant ? (comparaison des entraînements)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ancien (e6b, 10/10) ===\"; grep -E \"POIDS LOG|pas +3000|meilleur point|matérialisation\" /tmp/e6b/lognormal.log | tail -4; echo \"=== nouveau (e6n, 11/10) ===\"; grep -E \"POIDS LOG|pas +3000|meilleur point|matérialisatio … [101 caractères tronqués]`
+
+  ```
+=== ancien (e6b, 10/10) ===
+# matérialisation : 16 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  # meilleur point : pas 3000 · val 2.4874 bits/octet
+  #   après matérialisation   2.4874
+  ✅ le fichier sauvé reproduit le modèle entraîné, et la matérialisation ne change rien
+=== nouveau (e6n, 11/10) ===
+# POIDS LOG-NORMAUX : 16 couches reparamétrées (w = signe(theta)·exp(|theta|)) — signes FIGÉS (principe de Dale)
+  pas   3000 · perte 1.9264 · val 3.0713 bits/octet · 168 s
+# matérialisation : 16 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  # meilleur point : pas 3000 · val 3.0713 bits/octet
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de l'installeur actuel (l'entraînement lui-même a changé)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^def installer_poids_lognormaux/,/^def installer_signes_figes/p' tools/entrainer_moteur.py | tail -30", "description": "Read the current installer"}`
+
+  ```
+from transformers import AutoModelForCausalLM
+        recharge = AutoModelForCausalLM.from_pretrained(a.sortie, dtype=torch.float32).to(dev)
+        t_disque = perte_de_validation(recharge, val, a, dev)
+        ecarts = []
+        for (n1, p1), (n2, p2) in zip(modele.named_parameters(), recharge.named_parameters()):
+            if n1 != n2:
+                ecarts.append((float("inf"), f"{n1} ≠ {n2}"))
+                continue
+            ecarts.append((float((p1.detach().float() - p2.detach().float()).abs().max()), n1))
+        ecarts.sort(reverse=True)
+        print(f"\n  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :")
+        print(f"  #   après la boucle          {t_avant:.4f} bits/octet")
+        print(f"  #   après restauration      {t_restaure:.4f}")
+        print(f"  #   après matérialisation   {t_materialise:.4f}")
+        print(f"  #   après relecture disque  {t_disque:.4f}")
+        print(f"  # écart de poids le plus grand (mémoire ↔ disque) : {ecarts[0][1]} → "
+              f"{ecarts[0][0]:.3e}")
+        if t_materialise / max(t_restaure, 1e-9) > 1.05:
+            print("  ❌ LA MATÉRIALISATION CHANGE LE MODÈLE (M8) : c'est là qu'il faut r
+… [376 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"^def installer_poids_lognormaux\" tools/entrainer_moteur.py | cut -d: -f1); sed -n \"$((L)),$((L+42))p\" tools/entrainer_moteur.py", "description": "Read the installer function body"}`
+
+  ```
+def installer_poids_lognormaux(modele, signes_libres=False):
+    """θ = log|w| appris, signes figés à la naissance (principe de Dale).
+
+    LES POIDS PARTAGÉS SONT EXCLUS, ET C'EST M8 (trouvé le 10/10). `tie_word_embeddings` fait
+    que `lm_head.weight` **est** `model.embed_tokens.weight` — le même objet. Reparamétrer la
+    tête remplace ce tenseur par une valeur *calculée* et **casse le partage** : la table
+    d'entrée reste figée à sa valeur initiale pendant tout l'entraînement, et à la
+    matérialisation c'est elle qui reçoit les poids de la tête. Le fichier sauvé ne reproduit
+    alors plus le modèle entraîné (validation **3,6465** → **8,8257** bits/octet), et la
+    perplexité du modèle exporté part à **436** sans qu'aucun tenseur ne manque ni ne soit trop
+    gros — d'où trois causes éliminées à côté avant que celle-ci ne soit trouvée.
+    """
+    from torch.nn.utils.parametrize import register_parametrization
+    # `remove_duplicate=False` : c'est justement le doublon qu'on cherche.
+    noms_par_tenseur = {}
+    for nom, p in modele.named_parameters(remove_duplicate=False):
+        noms_par_tenseur.setdefault(id(p), []).append(nom)
+    n, exclus = 0, []
+    # UN DÉFAUT Q
+… [1293 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le taux d'apprentissage et la décroissance sont modifiés par les poids log-normaux — lecture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"PROSCRITE\" -A 22 tools/entrainer_moteur.py | head -30", "description": "Read the weight-decay and lr handling"}`
+
+  ```
+787:    # AVEC DES POIDS LOG-NORMAUX, LA DÉCROISSANCE DE POIDS EST PROSCRITE : elle
+788-    # s'applique à `theta`, pas à `w`, et tirer theta vers 0 pousse |w| vers 1 au
+789-    # lieu de 0 — le modèle ne peut plus éteindre une connexion et l'entraînement
+790-    # diverge (mesuré : perte 8 458 en 200 pas). Le taux d'apprentissage est réduit
+791-    # pour la même raison : un pas sur theta est un pas MULTIPLICATIF sur w.
+792-    decroissance = 0.0 if a.poids_lognormaux else 0.01
+793-    if a.poids_lognormaux:
+794-        a.lr = min(a.lr, 3e-4)
+795-    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=decroissance)
+796-    g = torch.Generator().manual_seed(a.graine)
+797-    meilleur = (float("inf"), None, 0)
+798-    debut = time.time()
+799-    modele.train()
+800-    # DISTILLATION : un enseignant gelé, de la MÊME famille et du MÊME tokenizer,
+801-    # dont on imite la distribution entière et pas seulement l'argmax. C'est le
+802-    # levier que le dépôt n'avait jamais essayé (inventaire du 08/10 : « aucune
+803-    # distillation, mentionnée mais jamais réalisée »), et c'est le seul qui
+804-    # puisse rattraper l'écart de qualité d'un modèle creux sans lui ajouter
+… [267 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : l'installation écrit-elle bien θ = log|w| ? (mesure directe)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        param = PoidsLogNormaux(signes, signes_libres)\n        register_parametrization(mod, \"weight\ … [1250 caractères tronqués]`
+
+  ```
+diagnostic ajouté
+# DIAG installation model.layers.0.self_attn.q_proj : theta min 0.027 max 2.485 moyenne 1.097 · poids rendu min -12.00000 max 11.55982
+# POIDS LOG-NORMAUX : 16 couches reparamétrées (w = signe(theta)·exp(|theta|)) — signes FIGÉS (principe de Dale)
+  ```
+
+### 🤖 Assistant
+
+⏵ CAUSE TROUVÉE : l'inverse était appliqué DEUX FOIS à l'installation (le tenseur est modifié sur place)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        with torch.no_grad():\n            w = mod.weight\n            signes = w.sign().clone()\n      … [3298 caractères tronqués]`
+
+  ```
+installation corrigée + contrôle
+OK
+# installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+# POIDS LOG-NORMAUX : 16 couches reparamétrées (w = signe(theta)·exp(|theta|)) — signes FIGÉS (principe de Dale)
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance des variantes log-normales (leur initialisation était fausse : ±12 au lieu de ±0,08)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6o && mkdir -p /tmp/e6o && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --tet … [1052 caractères tronqués]`
+
+  ```
+relance log-normal + signes libres (6 runs, ~21 min) — pid 424948
+dim 11 oct 2026 02:18:50 EDT
+libres-g1.0          perplexité 11.0499 sur
+libres-g0.5          perplexité 11.6153 sur
+libres-g0.25         perplexité 12.1345 sur
+lognormal-g1.0       perplexité 10.8346 sur
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF'\nBUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX FOIS a l'installation — le modele log-normal partait avec des poids de ±12\n\nCE QUI SE PASSAIT. `register_parametrization` REU … [1430 caractères tronqués]`
