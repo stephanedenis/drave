@@ -21,7 +21,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (17)
+## Étapes du jour (18)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -42,10 +42,11 @@
 - **04:34** — Le noyau creux couvre maintenant TOUT le modèle (÷3,8 paires) — mesure de la vitesse
 - **04:41** — Commit : le noyau creux couvre maintenant les experts (÷3,8 paires, −36 % de vitesse)
 - **04:43** — Round 57 : le noyau creux couvre tout le modèle — ÷3,8 paires, et 36 % plus lent
+- **08:11** — Message actionnable pour la seule porte dont le modèle ne se régénère pas seule
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 69.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

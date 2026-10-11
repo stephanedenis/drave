@@ -14,6 +14,7 @@ cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+. tools/_corpus.sh    # régénère le corpus si /tmp a été effacé (redémarrage)
 LIMITE=${LIMITE:-64}
 PORT=${PORT:-$((53000 + RANDOM % 800))}
 T=$(mktemp -d)

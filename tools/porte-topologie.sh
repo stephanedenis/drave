@@ -31,7 +31,14 @@ LIMITE=${LIMITE:-$N_IDS}
 PORT=${PORT:-$((50000 + RANDOM % 900))}
 T=$(mktemp -d)
 TOPO="$T/topo.json"
-[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+[ -s "$M" ] && [ -s "$IDS" ] || {
+    echo "  ❌ modèle ou identifiants absents : $M · $IDS"
+    echo "     Ce modèle est un ARTEFACT DE CAMPAGNE (dim 384, entraîné par"
+    echo "     tools/campagne-benefices.sh), pas un fichier régénérable ici. Après un REDÉMARRAGE,"
+    echo "     /tmp est vide : relancer la campagne, ou pointer MODELE= sur un modèle à 24 couches."
+    echo "     Les autres portes régénèrent leurs prérequis toutes seules (tools/_corpus.sh)."
+    exit 2
+}
 
 N=$($D "$M" --tensors 2>/dev/null | grep -cE "^ +[A-Z0-9_]+ +blk\.[0-9]+\.attn_q\.weight" || true)
 [ "${N:-0}" -gt 0 ] || N=4

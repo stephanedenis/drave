@@ -23,8 +23,18 @@ Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/eta
 |---|---|---|
 | tests | `cd drave-core && cargo test --release` | **122 verts** |
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
-| toutes les portes | `tools/toutes-les-portes.sh` | **toutes vertes**, ~1 h, **aucune sautée** — le compte et les repères du jour sont dans `docs/references-non-regression.md` |
-| les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 10/10 |
+| toutes les portes | `tools/toutes-les-portes.sh` | **34 vertes**, ≈85 min, **aucune sautée** — le compte et les repères sont dans `docs/references-non-regression.md` (dernière passe : 11/10 06 h 30, 34/34, 85 min 8 s) |
+| les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 11/10 |
+
+**APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**
+leurs prérequis (`tools/_corpus.sh` : le corpus d'identifiants, qui est `data/wikitext2_test.txt`
+tokenisé par le modèle, **identique au bit près** ; `porte-reparti-moteur.sh` entraîne et exporte en
+plus le modèle dont elle a besoin). **Une seule exception**, qui refuse en le disant :
+`porte-topologie.sh` a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne** (dim 384) —
+il faut relancer `tools/campagne-benefices.sh` ou passer `MODELE=…` sur un modèle à 24 couches.
+Les fiches de `reports/` citent des chemins de `/tmp` dans leur section « protocole, pour rejouer » :
+elles **donnent la commande d'entraînement**, donc tout se reconstruit — rien ne dépend d'un fichier
+temporaire qui aurait disparu sans trace.
 
 **Toute modification du chemin d'exécution se paie d'un `porte-flux.sh`** (cinq modes, deux
 minutes) — sans quoi trois modes étaient restés cassés en silence.

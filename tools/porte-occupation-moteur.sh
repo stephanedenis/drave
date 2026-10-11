@@ -27,7 +27,19 @@ IDS=${IDS:-/tmp/e6/val.ids}
 DELAI=${DELAI:-1200}
 
 [ -x "$D" ] || { echo "  ❌ $D : le binaire de mesure n'existe pas (cargo build --release)"; exit 2; }
-[ -s "$IDS" ] || { echo "  ❌ $IDS manquant : cette porte a besoin d'un corpus d'évaluation"; exit 2; }
+# LE CORPUS EST RÉGÉNÉRÉ S'IL MANQUE : c'est le début de `data/corpus_en_val.txt` en OCTETS (le
+# vocabulaire des petits modèles du harnais fait 256 symboles, un jeton = un octet). Il vivait dans
+# /tmp, donc un redémarrage le faisait disparaître et la porte refusait — en accusant le harnais.
+if [ ! -s "$IDS" ]; then
+    echo "  (corpus $IDS absent — régénéré depuis data/corpus_en_val.txt)"
+    mkdir -p "$(dirname "$IDS")" 2>/dev/null || true
+    # PAS de `tr '\n' ','` : un octet 10 DANS les 512 premiers serait transformé en virgule et
+    # PERDU (mesuré : la porte ne trouvait plus aucune ligne d'occupation, parce que le moteur
+    # refusait le corpus). On écrit les valeurs d'octets, une par une.
+    "$P" -c "d = open('data/corpus_en_val.txt','rb').read()[:512]; \
+             open('$IDS','w').write(','.join(str(b) for b in d))" 2>/dev/null
+fi
+[ -s "$IDS" ] || { echo "  ❌ $IDS manquant ET non régénérable (data/corpus_en_val.txt ?)"; exit 2; }
 for f in data/corpus_en.txt data/corpus_en_val.txt; do
     [ -s "$f" ] || { echo "  ❌ $f manquant : cette porte entraîne de petits modèles"; exit 2; }
 done

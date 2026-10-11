@@ -53634,3 +53634,574 @@ ValueError: substring not found
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\n# remplacer tout le paragraphe des portes (de « - **34 portes** » jusqu'à « 122 tests »)\ni = s.index(\"- **34 portes … [2447 caractères tronqués]`
+
+  ```
+état mis à jour ; 2026-10-11 06:31
+push=0
+a409bdea Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan final : consolidation et vérification de l'état du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== arbre ===\"; git status --porcelain | head -3; [ -z \"$(git status --porcelain)\" ] && echo \"PROPRE\"; echo \"=== HEAD vs distant ===\"; git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master; echo \ … [348 caractères tronqués]`
+
+  ```
+=== arbre ===
+PROPRE
+=== HEAD vs distant ===
+a409bdea
+a409bdea
+=== portes ===
+34
+=== tests ===
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+=== dépendances du crate ===
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-575db9d8-0f5b-4dfb-a43a-e844787cce0c","revision":1,"objective":"Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, 
+… [264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 journal/2026-10-11.md; echo \"=== 10/10 ===\"; head -8 journal/2026-10-10.md", "description": "Check the auto-generated journals"}`
+
+  ```
+# 2026-10-11
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**39 commits** · **1 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 7 | [2026-10-11_apprentissage.md](2026-10-11_apprentissage.md) |
+| attention | 3 | [2026-10-11_attention.md](2026-10-11_attention.md) |
+=== 10/10 ===
+# 2026-10-10
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**124 commits** · **1 session(s)** · **10 thème(s)**
+  ```
+
+### 🤖 Assistant
+
+⏵ Objectif au terme de ses 60 rounds : vérification des contraintes et clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== contraintes de l'objectif ===\"; echo \"1. portes vertes : $(grep -c '^  porte-.*✅' /tmp/passe0500.log)/34 (passe du 11/10 06:30)\"; echo \"2. tests : $(timeout 600 cargo test --release --manifest-path drave-core/Cargo.tom … [616 caractères tronqués]`
+
+  ```
+=== contraintes de l'objectif ===
+1. portes vertes : 34/34 (passe du 11/10 06:30)
+2. tests : 122 passed
+3. binaire de mesure : 2901200 octets (profil release)
+4. dépendances du crate : 10 déclarations dans [dependencies]
+5. état resumable : > **2026-10-11 06:31 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+6. arbre : 0 modification(s) non validée(s)
+7. poussé : HEAD=a409bdea · origin/master=a409bdea
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\ns = pathlib.Path(\"drave-core/Cargo.toml\").read_text()\ndeps = None\nfor bloc in re.split(r\"^\\[\", s, flags=re.M)[1:]:\n    nom = bloc.split(\"]\", 1)[0].strip()\n    if nom == \"dependenci … [284 caractères tronqués]`
+
+  ```
+dépendances déclarées : AUCUNE (std seul)
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-575db9d8-0f5b-4dfb-a43a-e844787cce0c", "revision": 1}`
+
+> **Objectif** (complete) : Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre.
+
+
+  ```
+{"goal":{"id":"goal-575db9d8-0f5b-4dfb-a43a-e844787cce0c","revision":2,"objective":"Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, 
+… [269 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Clôture : 60 rounds, deux jours, 34 portes vertes — bilan de ce qui a été établi
+
+## Le résultat, en une ligne
+
+**34 portes vertes sur 34** (passe complète du 11/10 à 06 h 30, 85 min 8 s), **122 tests verts**, crate **std seul** (zéro dépendance), arbre **propre**, tout **poussé** (`a409bdea` = `origin/master`). Chaque affirmation de ce bilan est adossée à un chiffre lu dans un journal, pas à une narration.
+
+## Ce que les derniers rounds ont établi (et corrigé)
+
+**Le dessin B (« poids creux ») a maintenant ses quatre chiffres** — et trois sont contre nous :
+- **paires ÷3,8** sur un modèle élagué à 25 %, qualité identique (4,5886 = 4,5886), grâce à un **noyau creux réel** (`Creux`, CSR par lignes, attention **et** experts, `DRAVE_POIDS_CREUX=1`) ;
+- **vitesse ✗** : il ne rattrape le noyau dense int8 qu'à ~10 % de poids gardés, un régime où le modèle est détruit (perplexité ×41 000) ; à 25 % il est **2× plus lent** ;
+- **mémoire ✗** : **×4,1** (1,22 → 4,99 Go sur Qwen2.5-0.5B), parce que 8 octets par non-nul ;
+- la conclusion est écrite : *« moins de paires » n'est pas « plus rapide »* — le compte est un modèle, la vitesse une mesure.
+
+**Trois conclusions publiées ont été corrigées, avec leur rétractation visible :**
+- **M8** (bloquait E6 depuis deux jours) : `lm_head.weight` **est** `model.embed_tokens.weight` ; la reparamétrisation cassait le partage. Le moteur était **fidèle** (export simulé = ses chiffres exacts).
+- **E1/E2** : le connectome inné coûte **+9,4 %** (pas « 1 % ») et la croissance n'est **pas** pire que le hasard — le masque ne couvrait que **5,8 %** du modèle et le gradient était lu au mauvais endroit.
+- **E6** : la loi log-normale **coûte** ; la contrainte de signe n'a **pas** d'effet cohérent. Trois chiffres retirés (dont un « ×1,09 » spectaculaire) parce qu'ils venaient de deux défauts de harnais — dont un **inverse appliqué deux fois** qui faisait partir les modèles avec des poids de ±12.
+
+## Ce qui est vérifiable, et où
+
+- `docs/references-non-regression.md` — les 34 verdicts, régénérés depuis le journal de la passe ;
+- `docs/etat-cerveau.md` — l'état reprenable, horodaté, avec les corrections à ne pas réintroduire (§ 7) ;
+- `reports/rapport-e6-poids-lognormaux.md`, `…-design-B-poids-creux.md`, `…-design-H-*.md`, `…-e1-e2-connectome-croissance.md`, `…-m8-log-normal.md` — une fiche par expérience, rétractations en tête ;
+- `tools/porte-*.sh` — **six portes ajoutées cette nuit**, **chacune vue ROUGE** avec son défaut rallumé par une variable d'environnement ; une porte **retirée** parce que son seuil mesurait un artefact.
+
+## Ce que je vous recommande de regarder
+
+1. **`porte-signes-figes.sh` a été supprimée** : son seuil de qualité mesurait un artefact et devenait rouge tout seul après correction. C'est le seul retrait de porte de la session — à valider ou contester.
+2. **Les trois rétractations** (E1/E2, E6, M8) : elles changent des chiffres déjà publiés dans `docs/biologie-pour-drave.md` et `docs/modele-pour-drave.md`. Les anciens chiffres sont conservés à côté, jamais effacés — mais ils méritent votre relecture.
+3. **Le prochain pas du dessin B n'est pas un modèle, c'est un noyau** : garder les valeurs **quantifiées** (i8 + échelle de bloc) et des **indices u16** au lieu d'un f32 + u32 — c'est la condition pour que la forme creuse cesse de coûter 4× la mémoire.
+
+**Non établi / non fait, pour être honnête** : la seconde moitié du dessin H (sortie à 8 et 4 couches), la re-mesure complète d'E1/E2 à plusieurs graines, le noyau creux vectorisé, et les capacités du plan non touchées ces deux jours (C4 asynchronisme réel, le cycle C2, `--echange experts`). Rien de tout cela n'est mesuré, et rien de tout cela n'est revendiqué.
+
+
+## Tour 104
+
+### 👤 Utilisateur
+
+ferme tes activités et prépare le terrain pour une session  suivante. je vais éteindre l'ordinateur.
+
+### 🤖 Assistant
+
+⏵ Fermeture : processus en cours, puis dépendances /tmp des portes (un redémarrage les efface)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== processus en cours ===\"; pgrep -af \"drave|toutes-les-portes|porte-.*\\.sh|entrainer_moteur|python -u tools\" 2>/dev/null | grep -v pgrep | head -8 | cut -c1-90; echo \"(rien ci-dessus = aucun)\"; echo; echo \"=== portes  … [278 caractères tronqués]`
+
+  ```
+=== processus en cours ===
+(rien ci-dessus = aucun)
+
+=== portes qui exigent un fichier de /tmp ===
+tools/porte-budget.sh
+tools/porte-bus.sh
+tools/porte-bus-socket.sh
+tools/porte-c4-retard.sh
+tools/porte-coupe.sh
+tools/porte-delais.sh
+tools/porte-episodique.sh
+tools/porte-fusion.sh
+tools/porte-gain.sh
+tools/porte-greffe.sh
+
+=== détail ===
+tools/porte-budget.sh:19:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-bus.sh:14:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-bus-socket.sh:29:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-c4-retard.sh:22:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-coupe.sh:25:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-delais.sh:16:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-episodique.sh:21:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-fusion.sh:21:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-gain.sh:37:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+tools/porte-horloge.sh:14:IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+  ```
+
+### 🤖 Assistant
+
+⏵ Toutes les portes dépendent d'un corpus dans /tmp — qu'un redémarrage effacera. Inventaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== portes utilisant le corpus de /tmp ===\"; grep -c \"campagne24\" tools/porte-*.sh 2>/dev/null | grep -v \":0\" | wc -l; echo \"=== autres prérequis /tmp (hors corpus) ===\"; grep -n \"/tmp/\" tools/porte-*.sh | grep -vE \" … [558 caractères tronqués]`
+
+  ```
+=== portes utilisant le corpus de /tmp ===
+20
+=== autres prérequis /tmp (hors corpus) ===
+=== le corpus est-il reproductible ? ===
+-rw-r--r--. 1 stephane stephane 359041 25 sep 18:02 data/wikitext2_test.txt
+IDENTIQUE au corpus de /tmp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '10,22p' tools/porte-budget.sh; echo \"=== nombre de portes avec le motif exact ===\"; grep -c 'IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}' tools/porte-*.sh | grep -v \":0\" | wc -l; echo \"=== portes avec un autre motif /tmp … [145 caractères tronqués]`
+
+  ```
+# Ce que la porte verrouille :
+#   1. un budget GÉNÉREUX ne change RIEN au résultat (le lien déclaré est celui qui passe) ;
+#   2. un budget INSUFFISANT arrête l'exécution, nomme le lien, le dépassement et le pas,
+#      sort en code 6, et **ne rend aucune perplexité** — jamais un résultat partiel ;
+#   3. l'absence de budget ne change rien (le défaut) : c'est la porte de non-régression.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+LIMITE=${LIMITE:-48}
+PORT=${PORT:-$((60000 + RANDOM % 400))}
+T=$(mktemp -d)
+=== nombre de portes avec le motif exact ===
+16
+=== portes avec un autre motif /tmp ===
+tools/porte-occupation-moteur.sh:26:IDS=${IDS:-/tmp/e6/val.ids}
+tools/porte-reparti-moteur.sh:17:IDS=${IDS:-/tmp/route_ids.txt}
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# _corpus.sh — le corpus d'identifiants des portes, RÉGÉNÉRÉ s'il manque.\n#\n# POURQUOI CE FICHIER EXISTE. Seize portes lisent `/tmp/campagne24/ids_0.5B-Q8.txt`, un fichier de\n# `/tmp` — donc **effacé par un redémarrage**. La porte refuse alors (code 2) et donne l'impress … [1132 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/_corpus.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\nmotif = \"IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}\"\najout = motif + '\\n. tools/_corpus.sh    # régénère le corpus si /tmp a été effacé (redémarrage)'\nn = 0\nfor f in sorted(pathlib.Path(\"t … [405 caractères tronqués]`
+
+  ```
+patchée : porte-budget.sh
+  patchée : porte-bus-socket.sh
+  patchée : porte-bus.sh
+  patchée : porte-c4-retard.sh
+  patchée : porte-coupe.sh
+  patchée : porte-delais.sh
+  patchée : porte-episodique.sh
+  patchée : porte-fusion.sh
+  patchée : porte-gain.sh
+  patchée : porte-horloge.sh
+  patchée : porte-jumeaux.sh
+  patchée : porte-pannes.sh
+  patchée : porte-pont.sh
+  patchée : porte-reflexe.sh
+  patchée : porte-registre.sh
+  patchée : porte-trace.sh
+16 porte(s) rendues auto-suffisantes
+syntaxe OK (témoin)
+  ```
+
+### 🤖 Assistant
+
+⏵ Essai du scénario « /tmp effacé » : les portes se régénèrent-elles ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/campagne24/ids_0.5B-Q8.txt /tmp/sauve-corpus.ids && rm -f /tmp/campagne24/ids_0.5B-Q8.txt && echo \"corpus supprimé (simulation d'un redémarrage)\" && timeout 600 bash tools/porte-delais.sh 2>&1 | tail -4; echo \"CODE=${PIPES … [326 caractères tronqués]`
+
+  ```
+corpus supprimé (simulation d'un redémarrage)
+=== verdict ===
+  ✅ même perplexité (59.0790)
+  ✅ empreintes identiques : le délai ne change AUCUN chiffre
+  ✅ le temps, lui, augmente : 6.34 s → 9.08 s (+2.7 s ≈ 50 ms × 64 pas)
+CODE=0
+--- le fichier a-t-il été régénéré ? ---
+-rw-r--r--. 1 stephane stephane 394684 11 oct 08:04 /tmp/campagne24/ids_0.5B-Q8.txt
+IDENTIQUE à l'original
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '12,26p' tools/porte-reparti-moteur.sh; echo \"=== occupation-moteur ===\"; sed -n '24,30p' tools/porte-occupation-moteur.sh", "description": "Inspect the two remaining /tmp-dependent gates"}`
+
+  ```
+#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+MODELE=${MODELE:-/tmp/moteur_route.gguf}
+IDS=${IDS:-/tmp/route_ids.txt}
+PORT=${PORT:-$((49000 + RANDOM % 800))}
+CTX=${CTX:-256}
+# Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ. Il valait 128 ici alors que le fichier en
+# contient 255 : les deux chemins fenêtrent alors DIFFÉREMMENT (`--ppl` note les `limit`
+# PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS), et la porte comparait donc
+# deux textes différents — 37 à 58 % d'« écart » qui ne disaient rien du découpage.
+# Corrigé, la porte rend 173,0196 des deux côtés (écart 0,0000 %).
+if [ -s "$IDS" ]; then
+    N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+=== occupation-moteur ===
+T=${TRAVAIL:-/tmp/porte-occupation-moteur}
+PAS=${PAS:-200}
+IDS=${IDS:-/tmp/e6/val.ids}
+DELAI=${DELAI:-1200}
+
+[ -x "$D" ] || { echo "  ❌ $D : le binaire de mesure n'existe pas (cargo build --release)"; exit 2; }
+[ -s "$IDS" ] || { echo "  ❌ $IDS manquant : cette porte a besoin d'un corpus d'évaluation"; exit 2; }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1. occupation-moteur : régénère son corpus d'octets depuis data/corpus_en_val.txt\np = pathlib.Path(\"tools/porte-occupation-moteur.sh\"); s = p.read_text()\nold = \"\"\"IDS=${IDS:-/tmp/e6/val.i … [1997 caractères tronqués]`
+
+  ```
+occupation-moteur : corpus régénérable
+syntaxe OK
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,1
+régénération identique : True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/e6/val.ids /tmp/sauve-val.ids && rm -f /tmp/e6/val.ids && echo \"corpus octets supprimé\" && timeout 1200 bash tools/porte-occupation-moteur.sh 2>&1 | tail -5; echo \"CODE=${PIPESTATUS[0]}\"; cmp -s /tmp/e6/val.ids /tmp/sauve … [157 caractères tronqués]`
+
+  ```
+corpus octets supprimé
+=== les verrous ===
+  ❌ dense : le moteur n'annonce AUCUNE occupation
+  ❌ elague : le moteur n'annonce AUCUNE occupation
+
+❌ porte occupation du moteur : ÉCHEC
+CODE=1
+DIFFÉRENT
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma régénération shell perdait les octets 10 (sauts de ligne) — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-occupation-moteur.sh\"); s = p.read_text()\nold = \"\"\"    head -c 512 data/corpus_en_val.txt | tr '\\\\n' ',' | sed 's/,$//' > \"$IDS\" 2>/dev/null\"\"\"\nnew = \" … [872 caractères tronqués]`
+
+  ```
+régénération corrigée
+
+=== les verrous ===
+  ❌ dense : le moteur n'annonce AUCUNE occupation
+  ❌ elague : le moteur n'annonce AUCUNE occupation
+
+❌ porte occupation du moteur : ÉCHEC
+CODE=1
+DIFFÉRENT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 80 /tmp/e6/val.ids; echo; echo \"--- attendu ---\"; head -c 80 /tmp/sauve-val.ids; echo; echo \"--- la régénération manuelle ---\"; /home/stephane/gpu-env/bin/python -c \"\nd = open('data/corpus_en_val.txt','rb').read()[:512] … [257 caractères tronqués]`
+
+  ```
+Y Pants were an American all-female no wave band from New York City active from 
+--- attendu ---
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,109,101,114,105,99,97
+--- la régénération manuelle ---
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,109,101,114,105,99,97
+IDENTIQUE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A 8 \"LE CORPUS EST RÉGÉNÉRÉ\" tools/porte-occupation-moteur.sh", "description": "Read the current regeneration block"}`
+
+  ```
+30:# LE CORPUS EST RÉGÉNÉRÉ S'IL MANQUE : c'est le début de `data/corpus_en_val.txt` en OCTETS (le
+31-# vocabulaire des petits modèles du harnais fait 256 symboles, un jeton = un octet). Il vivait dans
+32-# /tmp, donc un redémarrage le faisait disparaître et la porte refusait — en accusant le harnais.
+33-if [ ! -s "$IDS" ]; then
+34-    echo "  (corpus $IDS absent — régénéré depuis data/corpus_en_val.txt)"
+35-    mkdir -p "$(dirname "$IDS")" 2>/dev/null || true
+36-    # PAS de `tr '\n' ','` : un octet 10 DANS les 512 premiers serait transformé en virgule et
+37-    # PERDU (mesuré : la porte ne trouvait plus aucune ligne d'occupation, parce que le moteur
+38-    # refusait le corpus). On écrit les valeurs d'octets, une par une.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '39,45p' tools/porte-occupation-moteur.sh; echo \"=== P est-il défini ? ===\"; grep -n \"^P=\\|P=\\${P\" tools/porte-occupation-moteur.sh | head -3", "description": "Check the P variable and the command"}`
+
+  ```
+"$P" -c "d = open('data/corpus_en_val.txt','rb').read()[:512]; \
+             open('$IDS','w').write(','.join(str(b) for b in d))" 2>/dev/null
+fi
+[ -s "$IDS" ] || { echo "  ❌ $IDS manquant ET non régénérable (data/corpus_en_val.txt ?)"; exit 2; }
+for f in data/corpus_en.txt data/corpus_en_val.txt; do
+    [ -s "$f" ] || { echo "  ❌ $f manquant : cette porte entraîne de petits modèles"; exit 2; }
+done
+=== P est-il défini ? ===
+22:P=${P:-/home/stephane/gpu-env/bin/python}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon second essai n'a pas régénéré (le fichier existait encore) — essai propre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f /tmp/e6/val.ids && ls /tmp/e6/val.ids 2>/dev/null || echo \"corpus bien supprimé\"; timeout 1200 bash tools/porte-occupation-moteur.sh 2>&1 | tail -6; echo \"CODE=${PIPESTATUS[0]}\"; cmp -s /tmp/e6/val.ids /tmp/sauve-val.ids && … [134 caractères tronqués]`
+
+  ```
+corpus bien supprimé
+  ✅ dense : le moteur et l'outil donnent la même occupation (écart 0.0 point)
+  ✅ elague : le moteur et l'outil donnent la même occupation (écart 0.0 point)
+  ✅ l'estimation SÉPARE : ÷3.77 pour le modèle élagué contre ÷1.10 au dense
+
+✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+   l'outil indépendant, et son estimation creuse sépare un modèle élagué d'un modèle dense.
+CODE=0
+régénéré À L'IDENTIQUE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '26,48p' tools/porte-reparti-moteur.sh", "description": "Check the last /tmp-dependent gate"}`
+
+  ```
+N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+else
+    N_IDS=0
+fi
+LIMITE=${LIMITE:-$N_IDS}
+COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au nœud
+
+TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")
+LOG_SRV="$TRAVAIL/serveur.log"
+
+[ -x "$D" ] || { echo "  $D absent : construire d'abord"; exit 1; }
+[ -s "$MODELE" ] || { echo "  $MODELE absent"; exit 1; }
+[ -s "$IDS" ] || { echo "  $IDS absent"; exit 1; }
+
+echo "=== référence : le modèle ENTIER, un seul processus ==="
+REF=$(timeout 300 "$D" "$MODELE" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 2>&1 \
+      | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
+[ -n "$REF" ] || { echo "  la référence n'a pas rendu de perplexité"; exit 1; }
+echo "  perplexité entière : $REF"
+
+echo "=== deux nœuds : $COUCHES couches locales, le reste à distance ==="
+"$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 > "$LOG_SRV" 2>&1 &
+SRV=$!
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière porte dépendante de /tmp : la rendre auto-suffisante (elle doit produire son modèle)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/moteur_route.gguf /tmp/moteur_dense.gguf /tmp/route_ids.txt 2>/dev/null; wc -c /tmp/route_ids.txt 2>/dev/null; head -c 40 /tmp/route_ids.txt 2>/dev/null; echo; sed -n '1,11p' tools/porte-reparti-moteur.sh", "description": … [36 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2367456  8 oct 11:07 /tmp/moteur_dense.gguf
+-rw-r--r--. 1 stephane stephane 4574656  8 oct 10:55 /tmp/moteur_route.gguf
+-rw-r--r--. 1 stephane stephane     920  8 oct 10:55 /tmp/route_ids.txt
+920 /tmp/route_ids.txt
+89,32,80,97,110,116,115,32,119,101,114,1
+#!/bin/bash
+# Porte de RÉPARTITION du modèle entraîné ici : deux nœuds, deux plages de couches.
+#
+# Ce qu'elle vérifie, et pourquoi elle est distincte de `tools/porte-flux.sh` :
+# celle-ci tourne sur Qwen2.5-0.5B, un modèle venu d'ailleurs. Ici c'est NOTRE
+# modèle (Qwen3-MoE entraîné sur le corpus d'octets), et la question n'est pas
+# « le transport est-il fidèle » mais « le modèle qu'on a produit est-il
+# découpable sans changer un chiffre ». Un modèle dont le routage d'experts ou
+# les normes dépendraient d'un état global ne passerait pas.
+#
+#   tools/porte-reparti-moteur.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-reparti-moteur.sh\"); s = p.read_text()\nold = \"\"\"[ -x \"$D\" ] || { echo \"  $D absent : construire d'abord\"; exit 1; }\n[ -s \"$MODELE\" ] || { echo \"  $MODEL … [2261 caractères tronqués]`
+
+  ```
+porte-reparti-moteur : auto-suffisante
+syntaxe OK
+  (/tmp/moteur_route.gguf absent — entraîné et exporté par la porte, ~20 s)
+=== référence : le modèle ENTIER, un seul processus ===
+  la référence n'a pas rendu de perplexité
+CODE=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/moteur_route.gguf 2>/dev/null; D=./drave-core/target/release/drave; $D /tmp/moteur_route.gguf --ppl /tmp/route_ids.txt --limit 255 --ctx 256 --threads 8 2>&1 | tail -5", "description": "Debug the reference run of the gate … [23 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 4574656 11 oct 08:08 /tmp/moteur_route.gguf
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 19.6 %
+    postes (ms/token) : projets-attn 0.07 | rope 0.02 | attention 0.17 | proj+mlp 0.28 | somme 0.54 | reste (tête + échantillonnage) 0.13
+    dont tête de sortie 0.21 | notation log-sum-exp 0.00 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.03 | softmax 0.01 | somme pondérée + écriture KV 0.12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/moteur_route.gguf --ppl /tmp/route_ids.txt --limit 255 --ctx 256 --threads 8 2>&1 | grep -E \"perplexité|REFUS|erreur|panique\" | head -4", "description": "Look for the perplexity line or  … [31 caractères tronqués]`
+
+  ```
+254 tokens notés — perplexité cumulée 9.175  (1496.9 tok/s)
+=== perplexité 9.1748 sur 254 tokens (0 événements, 0.2 s) ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compte de jetons était calculé AVANT la régénération (d'où `--limit 0`) — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-reparti-moteur.sh\"); s = p.read_text()\n# retirer les deux blocs de régénération de leur emplacement tardif\nbloc_ids = '''if [ ! -s \"$IDS\" ]; then\n    mkdir -p  … [1368 caractères tronqués]`
+
+  ```
+ordre corrigé
+=== référence : le modèle ENTIER, un seul processus ===
+  perplexité entière : 9.1748
+=== deux nœuds : 2 couches locales, le reste à distance ===
+  perplexité répartie : 9.1748 · écart de flux : 0.00e0
+PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle des portes patchées, puis inventaire des modèles de /tmp cités par les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== modèles de /tmp exigés par une porte ===\"; grep -n \"/tmp/[a-zA-Z0-9_./-]*\\.gguf\" tools/porte-*.sh | head -6; echo \"=== contrôle de 4 portes patchées ===\"; for p in porte-fusion porte-registre porte-horloge porte-pann … [211 caractères tronqués]`
+
+  ```
+=== modèles de /tmp exigés par une porte ===
+tools/porte-reparti-moteur.sh:12:#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+tools/porte-reparti-moteur.sh:16:MODELE=${MODELE:-/tmp/moteur_route.gguf}
+tools/porte-topologie.sh:15:M=${MODELE:-/tmp/m5_d384_dense.gguf}
+=== contrôle de 4 portes patchées ===
+porte-fusion : code=0 ·   trace fusionnée : 188 lignes
+porte-registre : code=0 ·   ✅ région absente : refusée en la nommant (code 2), rien n'
+porte-horloge : code=0 ·   ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perp
+porte-pannes : code=0 ·   ✅ pair absent : échec annoncé en 1 s (code 7), aucune perp
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '12,26p' tools/porte-topologie.sh; echo \"=== ce modèle existe-t-il, et est-il régénérable ? ===\"; ls -la /tmp/m5_d384_dense.gguf 2>/dev/null; ls /tmp/m5_d384* 2>/dev/null | head -3", "description": "Inspect the topology gate … [21 caractères tronqués]`
+
+  ```
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+M=${MODELE:-/tmp/m5_d384_dense.gguf}
+IDS=${IDS:-/tmp/campagne24/ids_m5_d384_dense.txt}
+COUCHES=${COUCHES:-2}
+# Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ — même piège que dans
+# `porte-reparti-moteur.sh`, trouvé en balayant les portes après l'avoir corrigé là-bas :
+# `--ppl` note les `limit` PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS.
+# Le fichier en contient 255 et la limite en annonçait 128 : les deux perplexités affichées
+# côte à côte portaient sur DEUX PASSAGES DIFFÉRENTS. La porte ne l'affirmait pas (elle
+# imprime, elle ne compare pas), donc elle passait — mais elle invitait à une comparaison
+# fausse, ce qui est exactement le genre de piège que ce dépôt refuse.
+if [ -s "$IDS" ]; then
+    N_IDS=$(tr ',' '\n' < "$IDS" | grep -c '[0-9]')
+=== ce modèle existe-t-il, et est-il régénérable ? ===
+-rw-r--r--. 1 stephane stephane 5094112  9 oct 05:05 /tmp/m5_d384_dense.gguf
+/tmp/m5_d384_dense.gguf
+/tmp/m5_d384_dense_q8.gguf
+/tmp/m5_d384_route_distille.gguf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODELE\\] \\|\\[ -s \\\"\\$M\\\"\\|absent\" tools/porte-topologie.sh | head -5; grep -n \"m5_d384_dense\" tools/campagne-benefices.sh | head -3", "description": "Find the topology gate's check and the campaign recipe"}`
+
+  ```
+34:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+96:    echo "  (modèle à 24 couches ou identifiants absents — cas sauté)"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"m5_d384\" tools/*.sh tools/*.py 2>/dev/null | grep -v porte-topologie | head -4", "description": "Find how the m5 model is produced"}`
+
+  ```
+tools/carte_latence.sh:20:MODELE=/tmp/m5_d384_route_distille.gguf
+  ```
+
+### 🤖 Assistant
+
+⏵ Message actionnable pour la seule porte dont le modèle ne se régénère pas seule
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/porte-topologie.sh\"); s = p.read_text()\nold = \"\"\"[ -s \"$M\" ] && [ -s \"$IDS\" ] || { echo \"  modèle ou identifiants absents\"; exit 2; }\"\"\"\nnew = \"\"\"[ -s \" … [851 caractères tronqués]`
+
+  ```
+message actionnable
+syntaxe OK
+  ❌ modèle ou identifiants absents : /tmp/m5_d384_dense.gguf · /tmp/inexistant.txt
+     Ce modèle est un ARTEFACT DE CAMPAGNE (dim 384, entraîné par
+     tools/campagne-benefices.sh), pas un fichier régénérable ici. Après un REDÉMARRAGE,
+     /tmp est vide : relancer la campagne, ou pointer MODELE= sur un modèle à 24 couches.
+     Les autres portes régénèrent leurs prérequis toutes seules (tools/_corpus.sh).
+  ```
+
+### 🤖 Assistant
+
+⏵ Note de reprise : ce qu'un redémarrage efface et comment le reconstruire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"REPRISE.md\"); s = p.read_text()\nold = \"\"\"## 2. Ce qui doit être vert\n\n| quoi | commande | attendu |\n|---|---|---|\n| tests | `cd drave-core && cargo test --release` | ** … [2365 caractères tronqués]`

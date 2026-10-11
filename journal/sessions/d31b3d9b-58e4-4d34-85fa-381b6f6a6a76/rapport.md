@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 69.3 h |
-| Tours | 103 |
-| Messages | 3357 |
-| Appels d'outils | 3122 |
-| Fichiers touchés | 126 |
-| Commandes | 2655 |
+| Durée | 71.0 h |
+| Tours | 104 |
+| Messages | 3392 |
+| Appels d'outils | 3154 |
+| Fichiers touchés | 127 |
+| Commandes | 2684 |
 | Sous-agents | 3 |
-| Commits | 304 |
+| Commits | 305 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -32,6 +32,8 @@
 - **complete** — Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémenter, avec portes mesurées, les trois premières capacités du plan docs/plan-cerveau-complet.md — C1 graphe de régions (descripteur de topologie, validateur de DAG, ordonnanceur par dépendances, pilote multi-nœuds ; porte 
 … [609 caractères tronqués]
 - **create** — Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais pa
+… [1001 caractères tronqués]
+- **complete** — Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais pa
 … [1001 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -241,6 +243,8 @@
 **Tour 102** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 103** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 104** — ferme tes activités et prépare le terrain pour une session  suivante. je vais éteindre l'ordinateur.
 
 ## 2. Déroulé, étape par étape
 
@@ -4282,7 +4286,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 
 ### Tour 103 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check the full pass status
 - bash — Check the journal and repo state
@@ -4298,10 +4302,60 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - bash — Record the pass verdict and push
 - bash — Locate the instruments section
 - bash — Update the state with the pass verdict
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Relevé : 34/34 vertes, 85 min 8 s — régénération des repères et de l'état
+⏵ Clôture : 60 rounds, deux jours, 34 portes vertes — bilan de ce qui a été établi
+
+\## Le résultat, en une ligne
+
+**34 portes vertes sur 34** (passe complète du 11/10 à 06 h 30, 85 min 8 s), **122 tests verts**, crate **std seul** (zéro dépendance), arbre **propre**, tout **poussé** (`a409bdea` = `origin/master`). Chaque affirmation de ce bilan est adossée à un chiffre lu dans un journal, pas à une narration.
+
+\## Ce que les derniers rounds ont établi (et corrigé)
+
+**Le dessin B (« poids creux ») a maintenant ses quatre chiffres** — et trois sont contre nous :
+- **paires ÷3,8** sur un modèle élagué à 25 %, qualité identique (4,5886 = 4,5886), grâce à un **noyau creux réel** (`Creux`, CSR par lignes, attention **et** experts, `DRAVE_POIDS_CREUX=1`) ;
+- **vitesse ✗** : il ne rattrape le noyau dense int8 qu'à ~10 % de poids gardés, un régime où le modèle est détruit (perplexité ×41 000) ; à 25 % il est **2× plus lent** ;
+- **mémoire ✗** : **×4,1** (1,22 → 4,99 Go sur Qwen2.5-0.5B), parce que 8 octets par non-nul ;
+- la conclusion est écrite : *« moins de paires » n'est pas « plus rapide »* — le compte est un modèle, la vitesse une mesure.
+
+**Trois conclusions publiées ont été corrigées, avec leur rétractation visible :**
+- **M8** (bloquait E6 depuis deux jours) : `lm_head.weight` **est** `model.embed_tokens.weight` ; la reparamétrisation cassait le partage. Le moteur était **fidèle** (export simulé = ses chiffres exacts).
+- **E1/E2** : le connectome inné coûte **+9,4 %** (pas « 1 % ») et la croissance n'est **pas** pire que le hasard — le masque ne couvrait que **5,8 %** du modèle et le gradient était lu au mauvais endroit.
+- **E6** : la loi log-normale **coûte** ; la contrainte de signe n'a **pas** d'effet cohérent. Trois chiffres retirés (dont un « ×1,09 » spectaculaire) parce qu'ils venaient de deux défauts de harnais — dont un **inverse appliqué deux fois** qui faisait partir les modèles avec des poids de ±12.
+
+\## Ce qui est vérifiable, et où
+
+- `docs/references-non-regression.md` — les 34 verdicts, régénérés depuis le journal de la passe ;
+- `docs/etat-cerveau.md` — l'état reprenable, horodaté, avec les corrections à ne pas réintroduire (§ 7) ;
+- `reports/rapport-e6-poids-lognormaux.md`, `…-design-B-poids-creux.md`, `…-design-H-*.md`, `…-e1-e2-connectome-croissance.md`, `…-m8-log-normal.md` — une fiche par expérience, rétractations en tête ;
+- `tools/porte-*.sh` — **six portes ajoutées cette nuit**, **chacune vue ROUGE** avec son défaut rallumé par une va
+… [1211 caractères tronqués]
+
+### Tour 104 — ferme tes activités et prépare le terrain pour une session  suivante. je vais éteindre l'ordinateur.
+
+*26 appels d'outils.* Actions notables :
+
+- bash — Check running processes and /tmp dependencies
+- bash — Inventory /tmp prerequisites and check reproducibility
+- bash — Check the gate preamble and motif uniformity
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/_corpus.sh`
+- bash — Make the 16 gates self-sufficient
+- bash — Test the gate after deleting the corpus
+- bash — Inspect the two remaining /tmp-dependent gates
+- bash — Make the occupancy gate regenerate its corpus
+- bash — Test the occupancy gate after deleting its corpus
+- bash — Fix the byte-corpus regeneration and retest
+- bash — Compare the regenerated corpus with the saved one
+- bash — Read the current regeneration block
+- bash — Check the P variable and the command
+- bash — Clean test of the corpus regeneration
+- … et 12 autres
+
+**Synthèse produite :**
+
+⏵ Note de reprise : ce qu'un redémarrage efface et comment le reconstruire
 
 ## 3. Travail accompli
 
@@ -4435,6 +4489,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-poids-creux.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/_corpus.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4484,7 +4539,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2615 autres
+- … et 2644 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4612,7 +4667,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 
 ## 5. Erreurs rencontrées
 
-116 sorties en erreur ou divergentes. Les premières :
+118 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4936,4 +4991,5 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'el
 - Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal" 2>&1 | tail -1; git push -q origin master; echo "push=
 - Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact" 2>&1 | tail -1
+- Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant" 2>&1 
 

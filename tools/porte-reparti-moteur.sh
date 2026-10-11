@@ -17,6 +17,15 @@ MODELE=${MODELE:-/tmp/moteur_route.gguf}
 IDS=${IDS:-/tmp/route_ids.txt}
 PORT=${PORT:-$((49000 + RANDOM % 800))}
 CTX=${CTX:-256}
+# RÉGÉNÉRER AVANT DE COMPTER : le nombre de jetons est lu DANS le fichier, donc le régénérer
+# après le comptage laissait `--limit 0` et la porte ne rendait aucune perplexité (mesuré).
+PP=${PP:-/home/stephane/gpu-env/bin/python}
+if [ ! -s "$IDS" ]; then
+    mkdir -p "$(dirname "$IDS")" 2>/dev/null || true
+    "$PP" -c "d = open('data/corpus_en_val.txt','rb').read()[:255]; \
+              open('$IDS','w').write(','.join(str(b) for b in d))" 2>/dev/null
+fi
+
 # Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ. Il valait 128 ici alors que le fichier en
 # contient 255 : les deux chemins fenêtrent alors DIFFÉREMMENT (`--ppl` note les `limit`
 # PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS), et la porte comparait donc
@@ -33,9 +42,25 @@ COUCHES=${COUCHES:-2}          # couches gardées côté pilote ; le reste au n�
 TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-reparti-XXXXXX")
 LOG_SRV="$TRAVAIL/serveur.log"
 
-[ -x "$D" ] || { echo "  $D absent : construire d'abord"; exit 1; }
-[ -s "$MODELE" ] || { echo "  $MODELE absent"; exit 1; }
-[ -s "$IDS" ] || { echo "  $IDS absent"; exit 1; }
+[ -x "$D" ] || { echo "  ❌ $D absent : construire d'abord (cargo build --release)"; exit 2; }
+
+# LA PORTE PRODUIT SES PROPRES PRÉREQUIS S'ILS MANQUENT. Ce modèle-là est le NÔTRE — entraîné par
+# `tools/entrainer_moteur.py` et exporté par `tools/`exporter_gguf.py`.
+# Il vivait dans /tmp, donc un redémarrage le faisait disparaître et la porte refusait ; elle
+# l'entraîne maintenant elle-même (~15 s), au lieu de dépendre d'un fichier temporaire.
+if [ ! -s "$MODELE" ]; then
+    if ! "$PP" -c "import torch, transformers" 2>/dev/null; then
+        echo "  ❌ $MODELE absent ET non régénérable ($PP n'a pas torch/transformers)"; exit 2
+    fi
+    echo "  ($MODELE absent — entraîné et exporté par la porte, ~20 s)"
+    "$PP" -u tools/entrainer_moteur.py --famille route --dim 192 --couches 4 --tetes 4 \
+        --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 400 \
+        --eval-tous 400 --sortie "${MODELE%.gguf}" > "${MODELE%.gguf}.log" 2>&1 \
+        && "$PP" tools/exporter_gguf.py --hf "${MODELE%.gguf}" --sortie "$MODELE" \
+           > "${MODELE%.gguf}.export.log" 2>&1
+fi
+[ -s "$MODELE" ] || { echo "  ❌ $MODELE absent ET non régénérable"; exit 2; }
+[ -s "$IDS" ] || { echo "  ❌ $IDS absent ET non régénérable"; exit 2; }
 
 echo "=== référence : le modèle ENTIER, un seul processus ==="
 REF=$(timeout 300 "$D" "$MODELE" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 2>&1 \
