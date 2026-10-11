@@ -41540,3 +41540,75 @@ Journaux : /tmp/portes-1210g
 ⏵ 26/26 vertes ; je lance la passe finale (27 portes, avec `--recurrence`) et je mets les comptes à jour
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210h nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete7.log 2>&1 & sleep 2; echo \"passe 27 portes lancée\"; ls tools/porte-*.sh | wc -l; python3 - <<'PYEOF'\nimport pathlib, re, subprocess\ … [1230 caractères tronqués]`
+
+  ```
+passe 27 portes lancée
+27
+docs/etat-cerveau.md : 1 remplacement(s) → 26 vertes, 61 min 22 s
+docs/manques.md : 1 remplacement(s) → 26 vertes, 61 min 22 s
+poussé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 560; tail -2 /tmp/passe-complete7.log; date '+%H:%M'", "description": "Wait for the 27-gate pass", "timeoutMs": 600000}`
+
+  ```
+porte-flux             ✅                          18 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+20:39
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe : audit d'un drapeau que je n'ai jamais vu mesuré — la quantification du cache KV
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"kv_bits\\|kv-bits\\|cache KV\" drave-core/src/main.rs drave-core/src/model.rs | head -8", "description": "Look for KV cache quantization flags"}`
+
+  ```
+drave-core/src/main.rs:629:        println!("[options] cache KV : {} bits{} · f16 avant {}",
+drave-core/src/main.rs:2834:    println!("  cache KV         : {} bits", plan.kv_bits);
+drave-core/src/main.rs:4977:    // Un cache KV rempli de valeurs déterministes, puis son miroir VRAM.
+drave-core/src/main.rs:7171:boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.len(), mdl.ctx,
+drave-core/src/main.rs:7225:        // position : `t` en récurrent (l'historique reste dans le cache KV), 0 sinon (chaque pas
+drave-core/src/main.rs:7759:    //! invisibles pour les six tests existants, qui ne couvraient que le cache KV.
+drave-core/src/model.rs:2376:    /// cache KV, par couche : `[n_kv_head × ctx × head_dim]`, en f32 ou quantifié
+drave-core/src/model.rs:2528:    /// Miroir VRAM du cache KV, une entrée par couche (`DRAVE_GPU_KV=1`).
+  ```
+
+### 🤖 Assistant
+
+⏵ Les nouveaux drapeaux sont-ils dans l'aide du moteur ? (une option invisible est une option qu'on n'utilise pas)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"--fusion-etat\"\\|fusionne un état\\|--entree\\b' drave-core/src/main.rs | head -5; sed -n '95,115p' drave-core/src/main.rs", "description": "Check the engine usage text"}`
+
+  ```
+987:            "--fusion-etat" => { o.fusion_etat = Some(suivant(i).clone()); 2 }
+1071:            "--entree" => { o.entree = Some(suivant(i).clone()); 2 }
+1072:            "--entree-canal" => { o.entree_canal = suivant(i).parse().unwrap(); 2 }
+1073:            "--entree-gain" => { o.entree_gain = suivant(i).parse().unwrap(); 2 }
+1075:            "--entree-jeton" => { o.entree_jeton = suivant(i).parse().unwrap(); 2 }
+        eprintln!("                                     fusionne des traces de plusieurs processus,");
+        eprintln!("                                     ordonnées par le TEMPS MURAL, mesure la");
+        eprintln!("                                     dérive des horloges et confronte les deux");
+        eprintln!("                                     bouts de chaque lien. Ne charge aucun");
+        eprintln!("                                     modèle.");
+        eprintln!("       drave <modele> --reflexe-essai N [--ids-file F]");
+        eprintln!("                                     RÉFLEXE (C8) : un modèle TRONQUÉ à L");
+        eprintln!("                                     couches, tête appliquée à la fin de la");
+        eprintln!("                     
+… [1184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nancre = '''        eprintln!(\"       drave <modele> --tensors      inventaire par les en-têtes seuls\");'''\najout = '''        ep … [2333 caractères tronqués]`
+
+  ```
+aide complétée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave --help 2>&1 | grep -c \"PÉRIPHÉRIE\"; ./drave-core/target/release/drave 2>&1 | grep -c \"PÉRIPHÉRIE\"; grep -n '\"--aide\"\\|\"--help\"' drave-core/src/main.rs | head -3", "description": "Verify the  … [21 caractères tronqués]`
+
+  ```
+0
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave 2>&1 | grep -A 5 \"PÉRIPHÉRIE\" | head -8; git add -A && git commit -q -m \"Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges\n\nDix drapeaux ajoutes aujour … [569 caractères tronqués]`
