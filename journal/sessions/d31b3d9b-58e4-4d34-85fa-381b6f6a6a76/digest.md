@@ -51194,3 +51194,17 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1739 caractères tronqués]`
+
+  ```
+état ; 2026-10-11 03:21
+1
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"E2\" docs/etat-cerveau.md | head -3", "description": "Locate the E2 line for the same scope note"}`
+
+  ```
+82:| **E2** | croissance des connexions | ✅ réfutée | la croissance locale (par gradient accumulé) donne **2,3431** contre **2,3215** pour un masque statique de **même densité** : +0,9 % pire que le hasard ([`rapport-e2-croissance.md`](../reports/rapport-e2-croissance.md)) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"| **E2** | croissance des connexions | ✅ réfutée | la croissance locale (par gradient accumulé) donne **2,3431** contre **2,3 … [1306 caractères tronqués]`

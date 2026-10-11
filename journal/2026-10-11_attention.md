@@ -4,11 +4,18 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11.md](2026-10-11.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 01:47 | `5a5cec19` | BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLUS elagues du tout (l'attention restait intacte) | `2026-10-11.md`, `2026-10-11_apprentissage.md`, `2026-10-11_divers.md` (+10) |
+| 03:21 | `712df7eb` | Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids) | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_portes.md` (+4) |
+
+## Chiffres du jour
+
+`5,8 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Étapes du jour (2)
 
