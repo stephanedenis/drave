@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11.md](2026-10-11.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 04:57 | `2fa0105a` | Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divise par 3,8 de paires | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+14) |
 | 04:59 | `c5cd3f93` | Registre : M9 livre en entier, et le fait desagreable ecrit (le noyau creux ne paie qu'a 10 %, ou le modele est mort) | `manques.md`, `2026-10-11.md`, `2026-10-11_moteur.md` (+4) |
 | 05:01 | `d7dada51` | Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %) | `modele-pour-drave.md`, `2026-10-11.md`, `2026-10-11_distribue.md` (+7) |
+| 08:11 | `22d9919c` | Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant | `REPRISE.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+32) |
 
 ## Chiffres du jour
 

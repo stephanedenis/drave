@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 06:31 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 08:13 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -131,6 +131,11 @@
   `tools/m8_plage_activations.py` · `tools/m8_simulation_export.py` (M8).
 
 ## 6. ▶ Prochaine action
+
+> **REPRISE APRÈS REDÉMARRAGE :** `/tmp` est vidé. Les portes **régénèrent** leurs prérequis
+> (`tools/_corpus.sh`, et `porte-reparti-moteur.sh` qui réentraîne son modèle) — sauf
+> `porte-topologie.sh`, qui a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne**, et
+> le dit en refusant. Détail : `REPRISE.md` § 2.
 
 **1. Passe complète des portes — FAITE le 11/10 à 06 h 30 : 34 vertes sur 34, 85 min 8 s** (§ 5).
 Trois modifications du moteur l'avaient rendue nécessaire (occupation des poids, noyau creux,

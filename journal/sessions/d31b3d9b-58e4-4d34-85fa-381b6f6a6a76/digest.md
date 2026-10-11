@@ -54205,3 +54205,49 @@ syntaxe OK
 ⏵ Note de reprise : ce qu'un redémarrage efface et comment le reconstruire
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"REPRISE.md\"); s = p.read_text()\nold = \"\"\"## 2. Ce qui doit être vert\n\n| quoi | commande | attendu |\n|---|---|---|\n| tests | `cd drave-core && cargo test --release` | ** … [2365 caractères tronqués]`
+
+  ```
+REPRISE : note de redémarrage ajoutée
+1
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : quelques portes après nettoyage simulé de /tmp, puis clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/campagne24/ids_0.5B-Q8.txt /tmp/sauve-corpus.ids && rm -f /tmp/campagne24/ids_0.5B-Q8.txt && cp /tmp/e6/val.ids /tmp/sauve-val.ids && rm -f /tmp/e6/val.ids && echo \"les deux corpus de /tmp sont supprimés (simulation)\" && fo … [361 caractères tronqués]`
+
+  ```
+les deux corpus de /tmp sont supprimés (simulation)
+porte-delais : code=0 ·   ✅ le temps, lui, augmente : 6.30 s → 9.76 s (+3.
+porte-fusion : code=0 ·   trace fusionnée : 188 lignes
+--- les corpus ont-ils été refaits ? ---
+/tmp/campagne24/ids_0.5B-Q8.txt 394684
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== processus restants ===\"; pgrep -af \"drave|porte-|entrainer_moteur|toutes-les\" 2>/dev/null | grep -v pgrep | wc -l; echo \"=== arbre ===\"; git status --porcelain | wc -l; echo \"=== HEAD vs distant ===\"; git rev-parse  … [349 caractères tronqués]`
+
+  ```
+=== processus restants ===
+0
+=== arbre ===
+0
+=== HEAD vs distant ===
+22d9919c
+22d9919c
+=== portes ===
+34
+=== dernières lignes de l'état ===
+> **2026-10-11 06:31 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+=== prochaine action ===
+## 6. ▶ Prochaine action
+
+**1. Passe complète des portes — FAITE le 11/10 à 06 h 30 : 34 vertes sur 34, 85 min 8 s** (§ 5).
+Trois modifications du moteur l'avaient rendue nécessaire (occupation des poids, noyau creux,
+variables d'environnement) ; aucune n'a déplacé un chiffre d'une autre porte.
+
+**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1057 caractères tronqués]`

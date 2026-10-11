@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 71.0 h |
 | Tours | 104 |
-| Messages | 3392 |
-| Appels d'outils | 3154 |
+| Messages | 3395 |
+| Appels d'outils | 3157 |
 | Fichiers touchés | 127 |
-| Commandes | 2684 |
+| Commandes | 2687 |
 | Sous-agents | 3 |
-| Commits | 305 |
+| Commits | 306 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4335,7 +4335,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 
 ### Tour 104 — ferme tes activités et prépare le terrain pour une session  suivante. je vais éteindre l'ordinateur.
 
-*26 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Check running processes and /tmp dependencies
 - bash — Inventory /tmp prerequisites and check reproducibility
@@ -4351,11 +4351,11 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - bash — Read the current regeneration block
 - bash — Check the P variable and the command
 - bash — Clean test of the corpus regeneration
-- … et 12 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Note de reprise : ce qu'un redémarrage efface et comment le reconstruire
+⏵ Vérification finale : quelques portes après nettoyage simulé de /tmp, puis clôture
 
 ## 3. Travail accompli
 
@@ -4539,7 +4539,7 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2644 autres
+- … et 2647 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4992,4 +4992,5 @@ Sur le petit modèle, le rapport mémoire est pire encore (12 Mo → 66 Mo, **×
 - Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal" 2>&1 | tail -1; git push -q origin master; echo "push=
 - Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact" 2>&1 | tail -1
 - Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant" 2>&1 
+- Etat : note de reprise apres redemarrage (les portes regenerent leurs prerequis, sauf la topologie qui le dit)" 2>&1 | tail -1; git push -q origin master; echo 
 
