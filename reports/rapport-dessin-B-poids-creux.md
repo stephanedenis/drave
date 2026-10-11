@@ -83,6 +83,22 @@ densité (E1 mesure le prix d'un connectome aléatoire à 12,9 % : **+18,4 %** d
 même alors, le gain de temps du noyau creux sur ce modèle serait de **~7 %**, pour un coût de
 qualité de 18 %. Le compte en paires, lui, tomberait bien de **÷3,8**.
 
+## 2 ter. Le PRIX de la forme creuse : 4× la mémoire, 2,6× le chargement
+
+La forme creuse stocke, par poids non nul, une **valeur f32 ET une colonne u32** — 8 octets, contre
+~1,06 octet par poids en Q8_0. Mesuré (Qwen2.5-0.5B, 531 Mo sur disque, 32 jetons) :
+
+| | mémoire maximale | chargement + calcul |
+|---|---:|---:|
+| noyau dense | 1,22 Go | 11,4 s |
+| **noyau creux** | **4,99 Go** | **29,1 s** |
+| rapport | **×4,1** | ×2,6 |
+
+Sur le petit modèle (7,6 M poids, 4,6 Mo sur disque), le rapport est pire encore : **12 Mo → 66 Mo**.
+**Une forme creuse qui n'est pas quantifiée coûte plus qu'elle ne rapporte** : elle échange ÷3,8 de
+paires contre ×4 de mémoire et ×2,6 de chargement. C'est le défaut de cette implémentation, et il
+compte autant que la vitesse.
+
 ## 3. Ce que ça change pour le dessin B
 
 - **le levier existe enfin, mesurable** : la sparsité des poids se paie en paires (÷4 sur
@@ -91,6 +107,10 @@ qualité de 18 %. Le compte en paires, lui, tomberait bien de **÷3,8**.
   creux de 32 alignés sur la quantification) — c'est un travail de noyau, pas de modèle ;
 - **les experts sont branchés** : 1,8 M → 0,4 M de paires sur le modèle à experts (÷3,8 au total,
   qualité identique). C'est la première fois que le dessin B est **payé** sur tout le modèle ;
+- **la mémoire est contre nous aussi** : 8 octets par non-nul (valeur f32 + colonne u32) font une
+  forme creuse **4 fois plus grosse** que le fichier Q8_0 qu'elle remplace. Une version viable doit
+  garder les **valeurs quantifiées** (i8 + échelle de bloc) et des **indices u16**, soit ~3 octets
+  par non-nul au pire ;
 - **la vitesse reste contre nous dans le régime utile** : le noyau creux ne rattrape le dense qu'à
   ~10 % de poids gardés, où un modèle élagué est détruit (×41 000). À 25 %, il est **deux fois plus
   lent** malgré ÷3,8 de paires. Le prochain pas n'est pas un modèle, c'est un **noyau** vectorisé

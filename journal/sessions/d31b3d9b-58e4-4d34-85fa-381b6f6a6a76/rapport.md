@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 68.2 h |
+| Durée | 68.5 h |
 | Tours | 102 |
-| Messages | 3335 |
-| Appels d'outils | 3102 |
+| Messages | 3340 |
+| Appels d'outils | 3107 |
 | Fichiers touchés | 126 |
-| Commandes | 2635 |
+| Commandes | 2640 |
 | Sous-agents | 3 |
-| Commits | 301 |
+| Commits | 302 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4235,7 +4235,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 
 ### Tour 102 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Launch the full gate suite
 - bash — Read the design B section of the roadmap
@@ -4250,10 +4250,12 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - bash — Sweep for other stale references
 - bash — Verify the gate-count context in the state
 - bash — Update next-action and wait
+- bash — Measure the load cost with occupancy counting
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Balayage des autres références périmées (comptes de portes, chiffres retirés)
+⏵ Commit : le prix de la forme creuse est chiffré (4× la mémoire, 2,6× le chargement)
 
 ## 3. Travail accompli
 
@@ -4436,7 +4438,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2595 autres
+- … et 2600 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4885,4 +4887,5 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)" 2>&1 | tail 
 - Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)" 2>&1 | tail 
 - Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere)" 2>&1 | tail -1; git push -q origin master; echo "push=
+- Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'el
 

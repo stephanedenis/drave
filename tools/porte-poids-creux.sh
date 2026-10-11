@@ -125,6 +125,30 @@ echo "  · repère mesuré : le creux RATTRAPE le dense vers 10 % de poids gard�
 echo "    0,51× à 0,25, 0,13× sans élagage) — au-dessus, le noyau dense int8 gagne."
 
 echo
+echo "=== 4. LA MÉMOIRE ET LE CHARGEMENT — le prix de la forme creuse ==="
+# La forme creuse stocke, par poids non nul, une VALEUR f32 et une COLONNE u32 : 8 octets, contre
+# ~1,06 octet par poids en Q8_0. Elle échange donc des paires contre de la mémoire — et il faut le
+# mesurer, pas l'espérer.
+memoire () {   # $1 = creux|dense ; imprime « RSS_Ko secondes »
+    local sortie
+    if [ "$1" = creux ]; then
+        sortie=$(DRAVE_POIDS_CREUX=1 /usr/bin/time -f "%M %e" timeout "$DELAI" "$D" "$M" --ppl \
+                 "$IDS" --limit 32 --ctx 32 --threads 4 2>&1 | tail -1)
+    else
+        sortie=$(env -u DRAVE_POIDS_CREUX /usr/bin/time -f "%M %e" timeout "$DELAI" "$D" "$M" --ppl \
+                 "$IDS" --limit 32 --ctx 32 --threads 4 2>&1 | tail -1)
+    fi
+    echo "$sortie"
+}
+read -r M_D T_D <<< "$(memoire dense)"
+read -r M_C T_C <<< "$(memoire creux)"
+echo "  dense : $(python3 -c "print(f'{$M_D/1048576:.2f}')") Go · ${T_D} s"
+echo "  creux : $(python3 -c "print(f'{$M_C/1048576:.2f}')") Go · ${T_C} s"
+echo "  ⚠ la forme creuse coûte $(python3 -c "print(f'{$M_C/max($M_D,1):.1f}')")× la mémoire du chargement dense"
+echo "    (8 octets par non-nul : une valeur f32 ET une colonne u32) — c'est le défaut de cette"
+echo "    implémentation, et il compte autant que la vitesse."
+
+echo
 echo "  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau"
 echo "    creux ne rattrape le dense qu'en dessous de ~10 % de poids gardés : à 25 % il est deux"
 echo "    fois plus lent (6,9 contre 13,6 tok/s sur Qwen2.5-0.5B), malgré 3,8 fois moins de poids"

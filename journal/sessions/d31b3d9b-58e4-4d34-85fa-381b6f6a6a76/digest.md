@@ -53316,3 +53316,70 @@ dim 11 oct 2026 05:21:52 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**\naprès l'ajout de `port … [987 caractères tronqués]`
+
+  ```
+prochaine action mise à jour
+push=0
+11
+  porte-gain             ✅                         351 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle : le comptage d'occupation au chargement coûte-t-il du temps ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/porte-profondeur-routee/corpus.ids; for R in 1 2; do /usr/bin/time -f \"  chargement+calcul : %e s\" env -u DRAVE_POIDS_CREUX $D \"$M\" --ppl \"$I\" --limit … [132 caractères tronqués]`
+
+  ```
+chargement+calcul : 9.37 s
+  chargement+calcul : 9.22 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/porte-profondeur-routee/corpus.ids; for E in non oui; do printf 'creux=%-4s ' \"$E\"; if [ \"$E\" = oui ]; then C=\"DRAVE_POIDS_CREUX=1\"; else C=\"env -u D … [210 caractères tronqués]`
+
+  ```
+creux=non  9.23 s
+creux=oui  24.31 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte chère : construire la forme creuse coûte 15 s et 4 Go sur 0,5 B — mesure de la mémoire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/porte-profondeur-routee/corpus.ids\nfor E in non oui; do printf 'creux=%-4s ' \"$E\"; if [ \"$E\" = oui ]; then C=\"DRAVE_POIDS_CREUX=1\"; else C=\"env -u D … [585 caractères tronqués]`
+
+  ```
+creux=non  mémoire max 1280304 Ko · 9.18 s
+creux=oui  mémoire max 5228456 Ko · 23.88 s
+--- et sur le petit modèle (7,6 M) ---
+creux=non  mémoire max 12072 Ko · 0.03 s
+creux=oui  mémoire max 66556 Ko · 0.17 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la mesure de mémoire à la porte et à la fiche (le noyau creux coûte 4× la mémoire)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-poids-creux.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nancre = '''echo\necho \"  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE :'''\najout = '''echo\necho \"=== 4. LA MÉMOIRE ET LE  … [1779 caractères tronqués]`
+
+  ```
+mesure de mémoire ajoutée
+syntaxe OK
+=== 4. LA MÉMOIRE ET LE CHARGEMENT — le prix de la forme creuse ===
+  dense : 1.22 Go · 11.43 s
+  creux : 4.99 Go · 29.13 s
+  ⚠ la forme creuse coûte 4.1× la mémoire du chargement dense
+    (8 octets par non-nul : une valeur f32 ET une colonne u32) — c'est le défaut de cette
+    implémentation, et il compte autant que la vitesse.
+
+  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau
+    creux ne rattrape le dense qu'en dessous de ~10 % de poids gardés : à 25 % il est deux
+    fois plus lent (6,9 contre 13,6 tok/s sur Qwen2.5-0.5B), malgré 3,8 fois moins de poids
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit : le prix de la forme creuse est chiffré (4× la mémoire, 2,6× le chargement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour le dessin B\"\najout = \"\"\"## 2 ter. Le PRIX de la forme creuse : 4× la mé … [1774 caractères tronqués]`
