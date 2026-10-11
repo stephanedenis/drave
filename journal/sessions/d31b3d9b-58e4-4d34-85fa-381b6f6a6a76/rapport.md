@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 62.8 h |
+| Durée | 63.1 h |
 | Tours | 92 |
-| Messages | 3001 |
-| Appels d'outils | 2788 |
-| Fichiers touchés | 115 |
-| Commandes | 2346 |
+| Messages | 3011 |
+| Appels d'outils | 2798 |
+| Fichiers touchés | 116 |
+| Commandes | 2355 |
 | Sous-agents | 3 |
-| Commits | 264 |
+| Commits | 265 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3784,7 +3784,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 92 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*98 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - bash — Check suite and sweep status
 - read
@@ -3800,11 +3800,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check whether the engine reports pair counts
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md`
-- … et 74 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
-⏵ Nouveau manque nommé : aucun instrument ne mesure le coût de la sparsité des poids
+⏵ Commit de la carte des sorties
 
 ## 3. Travail accompli
 
@@ -3927,6 +3927,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
 | `/tmp/message-e6.txt` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-carte-sorties.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3976,7 +3977,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2306 autres
+- … et 2315 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4388,4 +4389,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-e6.txt 2>&1 | tail -2; git log --oneline -1; git push -q origi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-instrument.txt <<'MSGEOF' Instrument : le compteur de paires du moteur ne voit PAS l'el
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF' M9 : aucun instrument du depot ne mesure le cout de la sparsite des p
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF' Dessin H, carte des sorties : la borne monte quand on sort tard, m
 

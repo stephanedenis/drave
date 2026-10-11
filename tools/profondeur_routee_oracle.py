@@ -60,6 +60,10 @@ def main() -> int:
                          "moitié du texte et entraîner sur la première, comme C8")
     ap.add_argument("--train-partie", choices=("avant", "apres"), default="apres",
                     help="où prendre les états d'entraînement, par rapport au test")
+    ap.add_argument("--couches-court", type=int, default=16,
+                    help="profondeur de sortie du chemin court, pour l'AFFICHAGE seulement : "
+                         "le libellé « 16 couches » était figé et la carte des sorties "
+                         "l'affichait à toutes les profondeurs")
     ap.add_argument("--marge", type=int, default=512,
                     help="positions laissées entre le test et l'entraînement (le texte voisin se "
                          "ressemble : sans marge, le test n'est plus un test)")
@@ -165,7 +169,8 @@ def main() -> int:
     print("| chemin | perplexité (test) | justesse@1 |")
     print("|---|---|---|")
     print(f"| long — 24 couches, tête du modèle | {ppl24:,.4f} | {100 * juste24.mean():.2f} % |")
-    print(f"| court — 16 couches, adaptateur entraîné | {ppl16:,.4f} | {100 * juste16.mean():.2f} % |")
+    print(f"| court — {a.couches_court} couches, adaptateur entraîné | {ppl16:,.4f} | "
+          f"{100 * juste16.mean():.2f} % |")
     print()
     print(f"ACCORD court/long : {100 * accord.mean():.2f} % des {n} jetons "
           f"({accord.sum()} jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.")

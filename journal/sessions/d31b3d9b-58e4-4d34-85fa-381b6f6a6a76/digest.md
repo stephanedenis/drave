@@ -48188,3 +48188,131 @@ d12:4801   d16:4034   d20:3606
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF'\nM9 : aucun instrument du depot ne mesure le cout de la sparsite des poids — et les huit modeles d'E6 le prouvent\n\nCE QUI EST MESURE, sur huit modeles entraines (dense et log-normal, a 100 %, 50 … [1100 caractères tronqués]`
+
+  ```
+673b4a2 M9 : aucun instrument du depot ne mesure le cout de la sparsite des poids — et les huit modeles d'E6 le prouvent
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master; until grep -qE \"=== 3. la carte|code=\" /tmp/carte-sortie.log 2>/dev/null; do sleep 30; done; tail -20 /tmp/carte-sortie.log", "description": "Wait for sw … [37 caractères tronqués]`
+
+  ```
+673b4a2
+673b4a2
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for d in 12 16 20 22; do printf 'd%s:%-6s ' \"$d\" \"$(ls -1 /tmp/carte-sortie-profondeur/d$d/etat.* 2>/dev/null | wc -l)\"; done; echo \"e24: $(ls -1 /tmp/carte-sortie-profondeur/e24/etat.* 2>/dev/null | wc -l)\"; tail -3 /tmp/carte … [69 caractères tronqués]`
+
+  ```
+d12:8188   d16:8188   d20:8188   d22:8188   e24: 2001
+
+=== 2. la mesure, une profondeur de sortie à la fois ===
+  sortie 12 : mesurée
+dim 11 oct 2026 00:14:10 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Premiers résultats de la carte des sorties
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^test/,$p' /tmp/carte-sortie-profondeur/oracle-12.log 2>/dev/null | head -22", "description": "Read the depth-12 result"}`
+
+  ```
+test   : positions 1000..3000 (2001 jetons)
+entraînement : 3743 états (3512..7254) · validation : 936 (7255..8190)
+marge test/entraînement : 512 positions
+
+tête token_embd.weight → logique (151936, 896) · appareil cuda
+avant entraînement (A = identité) : perplexité de validation = 3,303,544.7941
+  époque   1/30 · perte train 106,594,112.5818 · validation 42,200.7073  ← meilleur
+  époque   5/30 · perte train 24.0718 · validation 809.0501  ← meilleur
+  époque  10/30 · perte train 1.6791 · validation 770.3077  ← meilleur
+  époque  15/30 · perte train 1.0896 · validation 1,352.5227
+  époque  20/30 · perte train 1.0349 · validation 1,986.6051
+  époque  25/30 · perte train 1.0181 · validation 2,560.5544
+  époque  30/30 · perte train 1.0130 · validation 3,114.2425
+meilleure époque : 10 · validation 770.3077
+
+| chemin | perplexité (test) | justesse@1 |
+|---|---|---|
+| long — 24 couches, tête du modèle | 11.9921 | 47.73 % |
+| court — 16 couches, adaptateur entraîné | 762.0132 | 20.34 % |
+
+ACCORD court/long : 25.19 % des 2001 jetons (504 jetons) — sur ceux-là, sortir à 16 couches ne change pas la décision.
+oracle (le meilleur des deux par jeton) : 52.22 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente de la fin de la carte des sorties
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -qE \"Meilleur produit|code=\" /tmp/carte-sortie.log 2>/dev/null; do sleep 30; done; cat /tmp/carte-sortie.log | sed -n '/=== 3/,$p'", "description": "Wait for the sweep summary", "timeoutMs": 900000}`
+
+  ```
+=== 3. la carte ===
+| sortie | couches sautées | ppl court | justesse court | justesse long | **accord** | part sortie (seuil 0,99) | justesse globale |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 12 / 24 | 12 | 762.0132 | 20.34 % | 47.73 % | **25.19 %** | 5.0 % | 47.13 % |
+| 16 / 24 | 8 | 499.0613 | 23.19 % | 47.73 % | **30.93 %** | 5.1 % | 47.33 % |
+| 20 / 24 | 4 | 228.5551 | 30.58 % | 47.73 % | **41.98 %** | 6.6 % | 47.23 % |
+| 22 / 24 | 2 | 167.1173 | 28.94 % | 47.73 % | **42.33 %** | 4.7 % | 47.78 % |
+
+Meilleur produit (accord × couches sautées) : sortie **12**, soit **12.6 %** des paires épargnées — au mieux, avec un routeur parfait.
+Lecture : la colonne « accord » est ce qu'un routeur PARFAIT épargnerait sans rien changer ;
+la dernière colonne est ce qu'un seuil de confiance atteint réellement, à comparer à la
+justesse du chemin long seul (colonne 5).
+  ```
+
+### 🤖 Assistant
+
+⏵ Carte des sorties obtenue — rédaction de la fiche
+
+- **write** `{"content": "# Dessin H — la carte des points de sortie : la borne monte quand on sort tard, mais le gain atteignable s'effondre\n\n> Campagne : **cerveau** · expérience : sortir à **12, 16, 20 ou 22** couches au lieu de 24\n> Question : la mesure du dessin H (`reports/rapport-design-H-profondeur-ro … [4648 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-carte-sorties.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1. étiqueter la profondeur réelle dans le script d'oracle (le libellé « 16 couches » était figé)\np = pathlib.Path(\"tools/profondeur_routee_oracle.py\"); s = p.read_text()\ns = s.replace('''    … [1971 caractères tronqués]`
+
+  ```
+libellé corrigé
+carte mise à jour
+oracle OK
+carte OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"couches-court\" tools/carte-sortie-profondeur.sh; echo \"--- état des dessins ---\"; grep -n \"H — profondeur routée\" docs/etat-cerveau.md | head -2", "description": "Verify the sweep passes the depth"}`
+
+  ```
+72:        --couches-court "$S" \
+--- état des dessins ---
+94:- **H — profondeur routée** : **borne MESURÉE le 10/10**. L'oracle **parfait** — celui qui sait
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"- **H — profondeur routée** : **borne MESURÉE le 10/10**.\")\nj = s.index(\"\\n- **Gain par couche**\", i)\nneuf = \"\" … [1216 caractères tronqués]`
+
+  ```
+H mis à jour
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [246 caractères tronqués]`
+
+  ```
+horodatage 2026-10-11 00:15
+> **2026-10-11 00:15 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+dim 11 oct 2026 00:15:33 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la carte des sorties
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF'\nDessin H, carte des sorties : la borne monte quand on sort tard, mais le gain ATTEIGNABLE s'effondre\n\nLA QUESTION. La mesure precedente ne portait que sur UNE sortie (16 couches sur 24). Sor … [1786 caractères tronqués]`

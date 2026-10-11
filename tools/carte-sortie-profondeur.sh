@@ -69,6 +69,7 @@ for S in $SORTIES; do
     timeout "$DELAI" $P tools/profondeur_routee_oracle.py \
         --etats16 "$T/d$S/etat" --etats24 "$T/e24/etat" --ids "$IDS" --modele "$M" \
         --limite "$N" --test-min "$TEST_MIN" --test-max "$TEST_MAX" --train-partie apres \
+        --couches-court "$S" \
         --epoques "$EPOQUES" --graine 0 > "$T/oracle-$S.log" 2>&1
     c=$?
     [ "$c" = 0 ] || { echo "  ❌ sortie $S : la mesure a échoué (code $c)"; tail -8 "$T/oracle-$S.log" | sed 's/^/    /'; exit 1; }

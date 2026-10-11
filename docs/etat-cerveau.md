@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 23:46 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 00:15 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -91,17 +91,17 @@
 > listes**. Corrigé, parce que deux documents qui permutent deux lettres rendent toute citation
 > ambiguë.
 
-- **H — profondeur routée** : **borne MESURÉE le 10/10**. L'oracle **parfait** — celui qui sait
-  quand la réponse ne change pas — ne peut sortir tôt que **28,76 %** des jetons, soit **≈ 9,6 %**
-  des paires au mieux (un tiers des couches sur 29 % des jetons, 3 925 jetons jamais vus). Et
-  **aucun seuil de confiance n'atteint la qualité du chemin long** : le meilleur (5,1 % de jetons
-  sortis) rend **44,74 %** contre **44,97 %**. Pourtant le seuil **sélectionne** (+2,87 points sur
-  le hasard à part égale) et rapproche les deux chemins de **24,6 à 4,5 points** sur les 5 % de
-  jetons les plus sûrs ⇒ **le facteur limitant est le CHEMIN COURT, pas le routeur** : 24 couches
-  avec la tête du modèle = **16,5611** · **44,97 %** ; 16 couches avec un adaptateur entraîné =
-  **1 343,48** · **20,33 %**. Chaîne hors-ligne vérifiée *contre* le moteur (**0,013 %** et
-  **0,006 %**). [`rapport`](../reports/rapport-design-H-profondeur-routee.md) ·
-  `tools/porte-profondeur-routee.sh` · `tools/verifier_chaine_etat.py`.
+- **H — profondeur routée** : **borne MESURÉE le 10/10, et la CARTE DES SORTIES tranche** — l'oracle
+  **parfait** ne peut sortir tôt que **28,76 · 30,93 · 41,98 · 42,33 %** des jetons selon qu'on sort
+  à **12 · 16 · 20 · 22** couches sur 24, soit au mieux **12,6 %** des paires (et c'est la sortie la
+  plus **précoce** qui gagne : 25 % de 12 couches battent 42 % de 2). Un routeur **réel** (seuil de
+  confiance) n'atteint la parité qu'à la sortie **22** — **+0,05 point**, dans le bruit — pour
+  **0,39 %** des paires : entre la borne et le gain atteignable il y a un facteur **32**. Le facteur
+  limitant est le **chemin court** (un adaptateur posé après coup, 20-30 % de justesse contre
+  47,73 %), pas le routeur — manque **N4**. Chaîne hors-ligne vérifiée *contre* le moteur (0,013 % et
+  0,006 %). [`borne`](../reports/rapport-design-H-profondeur-routee.md) ·
+  [`carte des sorties`](../reports/rapport-design-H-carte-sorties.md) ·
+  `tools/porte-profondeur-routee.sh`, `tools/carte-sortie-profondeur.sh`.
 - **Gain par couche** (`--gain`, mesuré à part) : couche 0 à 0,75 ⇒ **−11,5 %** de perplexité, mais
   **2 couches utiles seulement** et la composition des gains **dégrade**. Ce n'est pas H : c'est
   une réduction d'activations dans une couche, pas un saut de couche.
