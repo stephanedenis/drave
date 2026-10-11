@@ -50454,3 +50454,249 @@ lognormal-g1.0       perplexité 10.8346 sur
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF'\nBUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX FOIS a l'installation — le modele log-normal partait avec des poids de ±12\n\nCE QUI SE PASSAIT. `register_parametrization` REU … [1430 caractères tronqués]`
+
+  ```
+fbbad1b9 BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX FOIS a l'installation — le modele log-normal partait avec des poids de ±12
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente des variantes relancées, puis réécriture honnête de la fiche E6
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6o/codes.txt 2>/dev/null; do sleep 60; done; cat /tmp/e6o/codes.txt; echo \"=== rappel (valides) ===\"; grep -v total /tmp/e6n/codes.txt | grep -E \"dense|sigfiges\"", "description": "Wait for the correcte … [41 caractères tronqués]`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6o/codes.txt 2>/dev/null; date", "description": "Check the re-run progress"}`
+
+  ```
+lognormal-g1.0     perplexité 7.6168 sur
+lognormal-g0.5     perplexité 7.8401 sur
+lognormal-g0.25    perplexité 71.1531 sur
+dim 11 oct 2026 02:30:19 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Chiffres corrigés : signes figés < dense < log-normal, à tous les taux — attente des « signes libres »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6o/codes.txt 2>/dev/null; do sleep 45; done; cat /tmp/e6o/codes.txt", "description": "Wait for the free-signs runs", "timeoutMs": 900000}`
+
+  ```
+lognormal-g1.0     perplexité 7.6168 sur
+lognormal-g0.5     perplexité 7.8401 sur
+lognormal-g0.25    perplexité 71.1531 sur
+libres-g1.0        perplexité 7.2741 sur
+libres-g0.5        perplexité 7.4955 sur
+libres-g0.25       perplexité 59.1526 sur
+TERMINE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for N in dense-g0.25 sigfiges-g0.25 lognormal-g0.25 libres-g0.25; do\n  F=/tmp/e6n/$N.gguf; [ -s \"$F\" ] || F=/tmp/e6o/$N.gguf\n  printf '%-16s ' \"$N\"; $P tools/occupation_poids.py --modele \"$ … [122 caractères tronqués]`
+
+  ```
+dense-g0.25       **1,981,362**   **26.0 %** 
+sigfiges-g0.25    **1,981,298**   **26.0 %** 
+lognormal-g0.25   **1,981,296**   **26.0 %** 
+libres-g0.25      **1,981,367**   **26.0 %**
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte des signes figés mesurait le même artefact — vérification après correctifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 bash tools/porte-signes-figes.sh 2>&1 | tail -8; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Re-run the frozen-signs gate after the fixes", "timeoutMs": 1200000}`
+
+  ```
+=== 1. témoin dense et recette « signes figés » (600 pas, élagage à 0.25 gardé) ===
+  dense      : occupation 26.0 · perplexité 17.7430
+  signes figés (--signes-figes) : occupation 26.0 · perplexité 15.7542
+
+=== 2. le verrou ===
+  occupation : dense 26.0 % · signes figés 26.0 %
+  perplexité : dense 17.7430 · signes figés 15.7542 · rapport ×1.13 (seuil ×1.20)
+  ❌ la recette --signes-figes n'apporte plus l'avantage attendu (×1.13 < ×1.20)
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte doit verrouiller l'effet RÉEL : la loi log-normale coûte, pas la contrainte de signe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave; rm -rf /tmp/e6p; mkdir -p /tmp/e6p\nC=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 600 --lr 3e-4 -- … [717 caractères tronqués]`
+
+  ```
+lognormal    perplexité 17.7185 sur
+libres       perplexité 18.0556 sur
+(rappel : dense 17,7430 · signes figés 15,7542 à 600 pas)
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle porte : les INVARIANTS du harnais (les deux bugs d'aujourd'hui), pas un seuil fragile
+
+- **write** `{"content": "#!/bin/bash\n# porte-harnais-invariants.sh — les deux invariants dont DÉPENDENT toutes les mesures d'élagage.\n#\n# POURQUOI CETTE PORTE EXISTE, ET POURQUOI ELLE REMPLACE UN SEUIL DE QUALITÉ. Le 11/10, deux\n# défauts du harnais ont invalidé des mesures déjà publiées — aucun des deux n' … [4750 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-harnais-invariants.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-harnais-invariants.sh && echo \"syntaxe OK\" && timeout 1200 bash tools/porte-harnais-invariants.sh 2>&1 | tail -20; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the new invariants gate", "timeoutMs": 1200 … [4 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== 1. installer une reparamétrisation NE CHANGE PAS le modèle ===
+  ❌ sigfiges : le harnais n'annonce PAS l'écart d'installation
+  lognormal : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+  libres : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+
+=== 2. l'élagage atteint AUSSI les poids reparamétrés (l'attention, pas seulement les experts) ===
+tools/porte-harnais-invariants.sh: line 74: printf: 25.0: invalid number
+  sigfiges : occupation de l'ATTENTION à 25.2 % (cible 0.25 gardé, soit 25 %)
+    ✅ l'attention est élaguée comme les experts
+tools/porte-harnais-invariants.sh: line 74: printf: 25.0: invalid number
+  lognormal : occupation de l'ATTENTION à 25.2 % (cible 0.25 gardé, soit 25 %)
+    ✅ l'attention est élaguée comme les experts
+tools/porte-harnais-invariants.sh: line 74: printf: 25.0: invalid number
+  libres : occupation de l'ATTENTION à 25.2 % (cible 0.25 gardé, soit 25 %)
+  
+… [77 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'invariant manquait pour les signes figés (et un printf râleur) — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    n, exclus = 0, []\n    for nom, mod in modele.named_modules():\n        if not isinstance(mod, nn.L … [2656 caractères tronqués]`
+
+  ```
+invariant ajouté aux signes figés
+printf retiré
+OK
+    ✅ écart 0.000e+00 ≤ 1e-4 : le modèle part du même point que le témoin
+  lognormal : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+  libres : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+
+=== 2. l'élagage atteint AUSSI les poids reparamétrés (l'attention, pas seulement les experts) ===
+  sigfiges : occupation de l'ATTENTION à 25.2 % (cible : 0.25 gardé)
+    ✅ l'attention est élaguée comme les experts
+  lognormal : occupation de l'ATTENTION à 25.2 % (cible : 0.25 gardé)
+    ✅ l'attention est élaguée comme les experts
+  libres : occupation de l'ATTENTION à 25.2 % (cible : 0.25 gardé)
+    ✅ l'attention est élaguée comme les experts
+
+✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+   atteint les poids reparamétrés (attention comprise) — pour les trois variantes.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux défauts doivent pouvoir se rallumer, pour que la porte ait un rouge
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# 1. rallumer le double inverse (log-normal)\nold = \"\"\"        theta0 = param.right_inverse(w)\n        register … [1853 caractères tronqués]`
+
+  ```
+OK
+=== rouge 1 : double inverse ===
+=== 1. installer une reparamétrisation NE CHANGE PAS le modèle ===
+  sigfiges : # installation : le modèle est INCHANGÉ (écart max 0.000e+00 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 0.000e+00 ≤ 1e-4 : le modèle part du même point que le témoin
+  lognormal : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+  libres : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+
+CODE=0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"for nom in sorted(par_table)\" -B 2 -A 2 tools/entrainer_moteur.py; grep -n \"theta0 = param.right_inverse(w)\" -A 4 tools/entrainer_moteur.py", "description": "Locate the two anchors precisely"}`
+
+  ```
+548-    #    signes figés n'avait QUE ses experts élagués — l'attention restait intacte (1,0 % de
+549-    #    zéros au lieu de 75 %), sans que rien ne le dise : la couverture annoncée était fausse.
+550:    for nom in sorted(par_table):
+551-        mod = modele.get_submodule(nom[:-len(".weight")])
+552-        total += mod.weight.numel()
+214:        theta0 = param.right_inverse(w)
+215-        register_parametrization(mod, "weight", param)
+216-        with torch.no_grad():
+217-            mod.parametrizations.weight.original.copy_(theta0)
+218-            # MÊME INVARIANT QUE POUR LA LOG-NORMALE : installer ne doit pas changer le modèle.
+--
+270:        theta0 = param.right_inverse(w)
+271-        register_parametrization(mod, "weight", param)
+272-        with torch.no_grad():
+273-            mod.parametrizations.weight.original.copy_(theta0)
+274-            # LE CONTRÔLE QUI MORD : installer une reparamétrisation ne doit PAS changer le
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nlignes = s.split(\"\\n\")\n# 1. le double inverse, dans installer_poids_lognormaux (ligne 270, index 269)\nassert l … [1478 caractères tronqués]`
+
+  ```
+interrupteurs posés
+OK
+272:        if os.environ.get("DRAVE_INSTALL_DOUBLE") == "1":
+554:    for nom in ([] if os.environ.get("DRAVE_ELAGAGE_SANS_PARAM") == "1"
+582:    if os.environ.get("DRAVE_ELAGAGE_SANS_PARAM") == "1":
+583:        print("# ⚠ DRAVE_ELAGAGE_SANS_PARAM=1 : poids reparamétrés SAUTÉS (défaut du 11/10)")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ROUGE 1 : double inverse ===\"; DRAVE_INSTALL_DOUBLE=1 timeout 1200 bash tools/porte-harnais-invariants.sh 2>&1 | sed -n '1,7p'; echo \"CODE=${PIPESTATUS[0]}\"; echo; echo \"=== ROUGE 2 : élagage sans les poids reparamétré … [220 caractères tronqués]`
+
+  ```
+=== ROUGE 1 : double inverse ===
+=== 1. installer une reparamétrisation NE CHANGE PAS le modèle ===
+  sigfiges : # installation : le modèle est INCHANGÉ (écart max 0.000e+00 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 0.000e+00 ≤ 1e-4 : le modèle part du même point que le témoin
+  lognormal : # installation : le modèle est INCHANGÉ (écart max 5.877e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 5.877e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+  libres : # installation : le modèle est INCHANGÉ (écart max 8.941e-06 entre les poids d'avant et d'après la reparamétrisation)
+    ✅ écart 8.941e-06 ≤ 1e-4 : le modèle part du même point que le témoin
+CODE=0
+
+=== ROUGE 2 : élagage sans les poids reparamétrés ===
+=== 2. l'élagage atteint AUSSI les poids reparamétrés (l'attention, pas seulement les experts) ===
+  sigfiges : occupation de l'ATTENTION à 98.6 % (cible : 0.25 gardé)
+    ❌ l'attention NE SUIT PAS la cible : les poids reparamétrés échappent à l'élagage
+  lognormal : occupation de l'ATTENTION à 99.3 % (cible : 0.25 gardé)
+    ❌ l'attention NE SUIT PAS la cible : les poids reparamétrés échappent à l'élagage
+  libres : occ
+… [146 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le rouge n°1 doit reproduire l'ALIASING réel (référence, pas copie)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        if os.environ.get(\"DRAVE_INSTALL_DOUBLE\") == \"1\":\n            # RALLUME LE DÉFAUT DU 11/10 … [1948 caractères tronqués]`
+
+  ```
+rouge fidèle au défaut réel
+OK
+# installation : le modèle est INCHANGÉ (écart max 1.200e+01 entre les poids d'avant et d'après la reparamétrisation)
+  ❌ la reparamétrisation CHANGE le modèle à l'installation : tout ce qui suit compare deux modèles différents
+  ```
+
+### 🤖 Assistant
+
+⏵ Retrait de la porte au seuil fragile, commit de la porte d'invariants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF'\nPorte « invariants du harnais » : elle remplace une porte qui mesurait un artefact\n\nPOURQUOI L'ANCIENNE PORTE DISPARAIT. `porte-signes-figes.sh` … [2153 caractères tronqués]`

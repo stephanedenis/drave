@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 65.1 h |
+| Durée | 65.7 h |
 | Tours | 95 |
-| Messages | 3150 |
-| Appels d'outils | 2931 |
-| Fichiers touchés | 120 |
-| Commandes | 2474 |
+| Messages | 3165 |
+| Appels d'outils | 2946 |
+| Fichiers touchés | 121 |
+| Commandes | 2488 |
 | Sous-agents | 3 |
-| Commits | 278 |
+| Commits | 279 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*51 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,11 +3925,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 37 autres
+- … et 52 autres
 
 **Synthèse produite :**
 
-⏵ Relance des variantes log-normales (leur initialisation était fausse : ±12 au lieu de ±0,08)
+⏵ Retrait de la porte au seuil fragile, commit de la porte d'invariants
 
 ## 3. Travail accompli
 
@@ -4057,6 +4057,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-elagage.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dessin-B-poids-creux.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-harnais-invariants.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4106,7 +4107,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2434 autres
+- … et 2448 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4234,7 +4235,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-102 sorties en erreur ou divergentes. Les premières :
+103 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4532,4 +4533,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-bug-elagage.txt <<'MSGEOF' BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLU
 - E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger)" 2>&1 | tail -1; git
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-install.txt <<'MSGEOF' BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX F
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF' Porte « invariants d
 

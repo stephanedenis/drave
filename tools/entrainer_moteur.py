@@ -199,7 +199,7 @@ def installer_signes_figes(modele):
     noms_par_tenseur = {}
     for nom, p in modele.named_parameters(remove_duplicate=False):
         noms_par_tenseur.setdefault(id(p), []).append(nom)
-    n, exclus = 0, []
+    n, exclus, ecart_install = 0, [], 0.0
     for nom, mod in modele.named_modules():
         if not isinstance(mod, nn.Linear):
             continue
@@ -208,10 +208,20 @@ def installer_signes_figes(modele):
             exclus.append(nom)
             continue
         with torch.no_grad():
-            w = mod.weight
+            w = mod.weight.detach().clone()
             signes = w.sign().clone()
-        register_parametrization(mod, "weight", PoidsSignesFiges(signes))
+        param = PoidsSignesFiges(signes)
+        theta0 = param.right_inverse(w)
+        register_parametrization(mod, "weight", param)
+        with torch.no_grad():
+            mod.parametrizations.weight.original.copy_(theta0)
+            # MÊME INVARIANT QUE POUR LA LOG-NORMALE : installer ne doit pas changer le modèle.
+            ecart_install = max(ecart_install, float((mod.weight - w).abs().max()))
         n += 1
+    print(f"# installation : le modèle est INCHANGÉ (écart max {ecart_install:.3e} entre les poids "
+          f"d'avant et d'après la reparamétrisation)")
+    if ecart_install > 1e-4:
+        print("  ❌ la reparamétrisation CHANGE le modèle à l'installation")
     if exclus:
         print(f"# POIDS PARTAGÉS : {len(exclus)} module(s) EXCLU(S) : {exclus}")
     return n
@@ -248,6 +258,9 @@ def installer_poids_lognormaux(modele, signes_libres=False):
             exclus.append(f"{nom} (partagé avec {autres})")
             continue
         with torch.no_grad():
+            # `w` est une COPIE (l'original est modifié sur place à l'enregistrement) ; `ref_double`
+            # est la RÉFÉRENCE qui sert à rallumer le défaut pour la porte.
+            ref_double = mod.weight if os.environ.get("DRAVE_INSTALL_DOUBLE") == "1" else None
             w = mod.weight.detach().clone()
             signes = w.sign().clone()
         param = PoidsLogNormaux(signes, signes_libres)
@@ -259,6 +272,11 @@ def installer_poids_lognormaux(modele, signes_libres=False):
         # 2,4874 — sans qu'aucun message ne le signale.
         theta0 = param.right_inverse(w)
         register_parametrization(mod, "weight", param)
+        if ref_double is not None:
+            # RALLUME LE DÉFAUT DU 11/10 : on relit la RÉFÉRENCE (pas une copie) après
+            # l'enregistrement — `register_parametrization` a écrit `right_inverse(w)` DANS ce
+            # tenseur, donc l'inverse s'applique deux fois et les poids partent à ±12.
+            theta0 = param.right_inverse(ref_double)
         with torch.no_grad():
             mod.parametrizations.weight.original.copy_(theta0)
             # LE CONTRÔLE QUI MORD : installer une reparamétrisation ne doit PAS changer le
@@ -537,7 +555,8 @@ def elaguer_lignes(modele, garde, plancher=0.0):
     #    noms de paramètres ne les voit donc PAS. C'est ce qui a fait qu'un modèle log-normal ou à
     #    signes figés n'avait QUE ses experts élagués — l'attention restait intacte (1,0 % de
     #    zéros au lieu de 75 %), sans que rien ne le dise : la couverture annoncée était fausse.
-    for nom in sorted(par_table):
+    for nom in ([] if os.environ.get("DRAVE_ELAGAGE_SANS_PARAM") == "1"
+                else sorted(par_table)):
         mod = modele.get_submodule(nom[:-len(".weight")])
         total += mod.weight.numel()
         with torch.no_grad():
@@ -564,6 +583,8 @@ def elaguer_lignes(modele, garde, plancher=0.0):
     if plancher > 0:
         print(f"# TÉMOIN plancher : un poids élagué vaut ±{plancher:.1e} au lieu de 0 "
               f"(signe conservé)")
+    if os.environ.get("DRAVE_ELAGAGE_SANS_PARAM") == "1":
+        print("# ⚠ DRAVE_ELAGAGE_SANS_PARAM=1 : poids reparamétrés SAUTÉS (défaut du 11/10)")
     print(f"# élagage à {garde:.0%} gardé : {n} tenseurs · {touches:,} poids sur {total:,} "
           f"({100 * touches / max(total, 1):.1f} % des poids de projection) · écriture effective "
           f"vérifiée (écart max {ecart:.3e})"
