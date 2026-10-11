@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 66.2 h |
-| Tours | 96 |
-| Messages | 3200 |
-| Appels d'outils | 2979 |
-| Fichiers touchés | 123 |
-| Commandes | 2515 |
+| Durée | 66.5 h |
+| Tours | 97 |
+| Messages | 3211 |
+| Appels d'outils | 2988 |
+| Fichiers touchés | 124 |
+| Commandes | 2523 |
 | Sous-agents | 3 |
-| Commits | 284 |
+| Commits | 285 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -227,6 +227,8 @@
 **Tour 95** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 96** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 97** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3953,7 +3955,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 96 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py`
 - bash — Run the harness flag audit
@@ -3969,11 +3971,48 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check the tail metric discriminates
 - bash — Make the audit verdicts comparative
 - bash — Run the comparative audit
-- … et 10 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Commit de l'audit, de sa porte et du masque étendu
+⏵ Round 53 : l'audit du harnais trouve deux défauts de plus — E1 et E2 portaient sur l'attention seule
+
+**Alertes d'abord**
+- **E1 et E2 ont mesuré 5,8 % du modèle** : leur « connectome inné à 25 % » et leur « croissance » ne touchaient que les projections d'**attention**. Les deux expériences sont marquées **à re-mesurer** dans l'état.
+
+**Ce que le nouvel audit a trouvé (premier passage)**
+| drapeau | promesse | mesuré dans le fichier |
+|---|---|---|
+| `--masque 0.25` | 25 % des poids gardés | **83,9 %** d'occupation (les `nn.Linear` seuls) |
+| `--croissance` | densifier | héritait du même défaut, **et** lisait `mod.weight.grad` — `None` quand le poids est reparamétré : **aucun gradient vu** |
+
+**Corrigés** (masque, croissance et application couvrent maintenant tout tenseur ≥ 2D sauf la table d'entrée, même règle que l'élagage) : masque 25 % → **23,94 %**, masque 10 % → **10,49 %**, croissance → **11,86 %** contre 10,49 % au même masque statique.
+
+**Livré**
+- `tools/audit_drapeaux_harnais.py` — pour chaque drapeau, une propriété **lisible dans le fichier exporté**, avec des verdicts **comparatifs** (la croissance se juge contre le même masque statique : un seuil absolu jugerait la théorie, pas le drapeau).
+- `porte-audit-drapeaux.sh` (**32e porte**) : **verte**, et **vue ROUGE** par `DRAVE_MASQUE_SANS_EXPERTS=1` (84,87 % au lieu de 26 %).
+- Une **observation** plutôt qu'un verdict pour `--poids-lognormaux` : le drapeau s'applique, mais la queue de distribution annoncée ne se retrouve pas dans le fichier (p99,9/médiane **4,36**, égale au témoin) — c'est un résultat d'E6, pas un défaut de harnais.
+
+**État** : arbre propre, tout poussé (`ca2208b4`), 4 portes du harnais vertes, **122 tests verts**.
+
+**Prochain round** : re-mesurer **E1** (connectome 25 % sur tout le modèle) et **E2** (croissance contre statique à densité égale), maintenant que l'instrument est honnête.
+
+### Tour 97 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Re-measure E1 and E2 with the corrected mask
+- bash — Check E1/E2 progress
+- bash — Wait for the full E1/E2 results
+- bash — Run the equal-density static control for E2
+- bash — Wait for the equal-density control
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md`
+- bash — Update E1/E2 in the state with corrected numbers
+- bash — Commit the E1/E2 re-measurement
+
+**Synthèse produite :**
+
+⏵ E2 aussi se retourne : la croissance n'est PAS pire que le hasard à densité égale
 
 ## 3. Travail accompli
 
@@ -4104,6 +4143,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-harnais-invariants.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-audit-drapeaux.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4153,7 +4193,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2475 autres
+- … et 2483 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4585,4 +4625,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-audit.txt <<'MSGEOF' Audit des drapeaux du harnais : deux defauts de plus, et une porte
 - Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids)" 2>&1 | tail -1; git push -q origin master; echo "p
 - Etat : E2 aussi portait sur l'attention seule (masque 5,8 % + gradient lu au mauvais endroit)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git lo
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF' E1 et E2 re-mesures avec un masque qui couvre tout le modele : le c
 

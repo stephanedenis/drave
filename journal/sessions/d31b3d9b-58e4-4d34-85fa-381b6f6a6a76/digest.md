@@ -51208,3 +51208,145 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"| **E2** | croissance des connexions | ✅ réfutée | la croissance locale (par gradient accumulé) donne **2,3431** contre **2,3 … [1306 caractères tronqués]`
+
+  ```
+E2 marqué
+push=0
+ca2208b4 Etat : E2 aussi portait sur l'attention seule (masque 5,8 % + gradient lu au mauvais endroit)
+712df7eb Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids)
+150fd5db Audit des drapeaux du harnais : deux defauts de plus, et une porte qui les surveille
+efec2b63 Biologie : E6 corrigee dans la roadmap — la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent, trois chiffres retires
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale du round : portes du harnais et tests
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 900 bash tools/porte-sauvegarde-modele.sh > /tmp/g1.log 2>&1; echo \"sauvegarde=$?\"); (timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/g2.log 2>&1; echo \"occupation=$?\"); (timeout 900 bash tools/porte-harnais-in … [280 caractères tronqués]`
+
+  ```
+sauvegarde=0
+occupation=0
+invariants=0
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 53 : l'audit du harnais trouve deux défauts de plus — E1 et E2 portaient sur l'attention seule
+
+**Alertes d'abord**
+- **E1 et E2 ont mesuré 5,8 % du modèle** : leur « connectome inné à 25 % » et leur « croissance » ne touchaient que les projections d'**attention**. Les deux expériences sont marquées **à re-mesurer** dans l'état.
+
+**Ce que le nouvel audit a trouvé (premier passage)**
+| drapeau | promesse | mesuré dans le fichier |
+|---|---|---|
+| `--masque 0.25` | 25 % des poids gardés | **83,9 %** d'occupation (les `nn.Linear` seuls) |
+| `--croissance` | densifier | héritait du même défaut, **et** lisait `mod.weight.grad` — `None` quand le poids est reparamétré : **aucun gradient vu** |
+
+**Corrigés** (masque, croissance et application couvrent maintenant tout tenseur ≥ 2D sauf la table d'entrée, même règle que l'élagage) : masque 25 % → **23,94 %**, masque 10 % → **10,49 %**, croissance → **11,86 %** contre 10,49 % au même masque statique.
+
+**Livré**
+- `tools/audit_drapeaux_harnais.py` — pour chaque drapeau, une propriété **lisible dans le fichier exporté**, avec des verdicts **comparatifs** (la croissance se juge contre le même masque statique : un seuil absolu jugerait la théorie, pas le drapeau).
+- `porte-audit-drapeaux.sh` (**32e porte**) : **verte**, et **vue ROUGE** par `DRAVE_MASQUE_SANS_EXPERTS=1` (84,87 % au lieu de 26 %).
+- Une **observation** plutôt qu'un verdict pour `--poids-lognormaux` : le drapeau s'applique, mais la queue de distribution annoncée ne se retrouve pas dans le fichier (p99,9/médiane **4,36**, égale au témoin) — c'est un résultat d'E6, pas un défaut de harnais.
+
+**État** : arbre propre, tout poussé (`ca2208b4`), 4 portes du harnais vertes, **122 tests verts**.
+
+**Prochain round** : re-mesurer **E1** (connectome 25 % sur tout le modèle) et **E2** (croissance contre statique à densité égale), maintenant que l'instrument est honnête.
+
+
+## Tour 97
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 54/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Re-mesure d'E1/E2 avec le masque corrigé (connectome et croissance sur tout le modèle)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e1e2 && mkdir -p /tmp/e1e2 && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --t … [1232 caractères tronqués]`
+
+  ```
+E1/E2 relancés (4 runs à 3000 pas, ~15 min) — pid 488726
+dim 11 oct 2026 03:27:39 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; grep -v total /tmp/e1e2/codes.txt 2>/dev/null; date", "description": "Check E1/E2 progress", "timeoutMs": 600000}`
+
+  ```
+temoin       val 2.3533 bits/octet  perplexité 7.3429 sur
+masque25     val 2.4660 bits/octet  perplexité 8.0317 sur
+dim 11 oct 2026 03:34:48 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ E1 corrigé : le connectome aléatoire coûte 9,4 %, pas 1 % — attente des deux derniers
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e1e2/codes.txt 2>/dev/null; do sleep 45; done; grep -v total /tmp/e1e2/codes.txt; echo \"--- occupations ---\"; grep total /tmp/e1e2/codes.txt", "description": "Wait for the full E1/E2 results", "timeoutMs" … [10 caractères tronqués]`
+
+  ```
+temoin       val 2.3533 bits/octet  perplexité 7.3429 sur
+masque25     val 2.4660 bits/octet  perplexité 8.0317 sur
+masque125    val 2.6072 bits/octet  perplexité 8.6970 sur
+croissance   val 2.4551 bits/octet  perplexité 8.1550 sur
+TERMINE
+--- occupations ---
+| **total** | **7,626,816** | **6,800,136** | **89.2 %** |
+| **total** | **7,626,816** | **1,827,107** | **24.0 %** |
+| **total** | **7,626,816** | **980,241** | **12.9 %** |
+| **total** | **7,626,816** | **1,590,591** | **20.9 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ E2 a besoin d'un statique à densité ÉGALE (21 %) pour être comparable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq … [1002 caractères tronqués]`
+
+  ```
+statique 21 % lancé — pid 499826
+dim 11 oct 2026 03:38:49 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche E1/E2 corrigée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e1e2/codes2.txt 2>/dev/null; do sleep 30; done; grep -v total /tmp/e1e2/codes2.txt; grep total /tmp/e1e2/codes2.txt", "description": "Wait for the equal-density control", "timeoutMs": 900000}`
+
+  ```
+statique21   val 2.5067 bits/octet  perplexité 8.1827 sur
+TERMINE
+| **total** | **7,626,816** | **1,551,726** | **20.3 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ E2 aussi se retourne : la croissance n'est PAS pire que le hasard à densité égale
+
+- **write** `{"content": "# E1 et E2, re-mesurés : le connectome aléatoire coûte 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard\n\n> Campagne : **biologie** · expériences : E1 (connectome inné) et E2 (croissance des connexions)\n> Question : la **structure** d'un réseau peut-elle être fixée à la na … [4911 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E1** | connectome inné |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **E1** | connectome inné | ✅ **RE … [1984 caractères tronqués]`
+
+  ```
+état ; 2026-10-11 03:42
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF'\nE1 et E2 re-mesures avec un masque qui couvre tout le modele : le connectome coute 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard\n\nLE DEFAUT, RAPPELE. Le masque ne couvrait que  … [1831 caractères tronqués]`
