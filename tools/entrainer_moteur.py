@@ -127,19 +127,34 @@ class PoidsLogNormaux(nn.Module):
     perte 12 137 après 400 pas.
 
     `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.
+
+    SIGNES LIBRES (`libres=True`) — POUR SÉPARER DEUX CAUSES QU'E6 CONFOND. La mesure du 11/10
+    donne un **croisement** : le variant log-normal est pire que le dense à 50 % de poids gardés
+    (13,06 contre 7,57) et bien meilleur à 25 % (17,50 contre 49,43). Mais le variant diffère du
+    témoin par **deux** choses : la **loi** des magnitudes (multiplicative) et le **signe figé**
+    (Dale). Laquelle explique la robustesse ? Avec `libres=True`, le signe devient un paramètre
+    **continu** `tanh(psi)`, initialisé sur les signes de naissance (`tanh(±6) = ±1,0000`) mais
+    libre de basculer : mêmes magnitudes, signes mobiles. Si le croisement disparaît, c'est Dale
+    qui portait le résultat, pas la loi log-normale.
     """
 
-    def __init__(self, signes):
+    def __init__(self, signes, libres=False):
         super().__init__()
         self.register_buffer("signes", signes)
+        self.libres = libres
+        if libres:
+            self.psi = nn.Parameter(signes * 6.0)
 
     def forward(self, theta):
         # Borne douce : e^{theta} sans borne laisse un pas d'AdamW multiplier un
         # poids par e^{0,3} ≈ 1,35 ; au-delà de ±12 nats on est déjà à 1,6×10^5.
-        return self.signes * theta.clamp(-12.0, 6.0).exp()
+        magnitude = theta.clamp(-12.0, 6.0).exp()
+        if self.libres:
+            return torch.tanh(self.psi) * magnitude
+        return self.signes * magnitude
 
 
-def installer_poids_lognormaux(modele):
+def installer_poids_lognormaux(modele, signes_libres=False):
     """θ = log|w| appris, signes figés à la naissance (principe de Dale).
 
     LES POIDS PARTAGÉS SONT EXCLUS, ET C'EST M8 (trouvé le 10/10). `tie_word_embeddings` fait
@@ -173,7 +188,7 @@ def installer_poids_lognormaux(modele):
             w = mod.weight
             signes = w.sign().clone()
             theta0 = w.abs().clamp(min=1e-6).log()
-        register_parametrization(mod, "weight", PoidsLogNormaux(signes))
+        register_parametrization(mod, "weight", PoidsLogNormaux(signes, signes_libres))
         with torch.no_grad():
             mod.parametrizations.weight.original.copy_(theta0)
         n += 1
@@ -229,6 +244,15 @@ def imposer_ratio_signes(modele, ratio, graine=0):
     return n, positifs / max(total, 1)
 
 
+def signes_effectifs(par):
+    """Le signe que la paramétrisation applique VRAIMENT : `signes` figés, ou `tanh(psi)`.
+
+    Lire `par[0].signes` quand les signes sont libres donnerait le signe de NAISSANCE, pas celui
+    du modèle — et une écriture jugée « impossible » le serait à tort (ou l'inverse).
+    """
+    return torch.tanh(par[0].psi) if getattr(par[0], "libres", False) else par[0].signes
+
+
 def ecrire_poids(mod, cible, ou="?"):
     """Écrit `cible` dans le poids de `mod`, QUE LE MODULE SOIT REPARAMÉTRÉ OU NON.
 
@@ -259,7 +283,7 @@ def ecrire_poids(mod, cible, ou="?"):
         with torch.no_grad():
             mod.weight.copy_(cible)
         return 0, float((mod.weight.detach() - cible).abs().max())
-    signes = par[0].signes
+    signes = signes_effectifs(par)
     avec_signe = cible != 0
     opposes = int(((cible.sign() != signes) & avec_signe).sum())
     nuls = int((~avec_signe).sum())
@@ -336,9 +360,10 @@ def materialiser_poids(modele):
         for nom, mod in list(modele.named_modules()):
             if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
                 par = mod.parametrizations.weight
-                theta = par.original
-                signes = par[0].signes
-                attendu = signes * theta.clamp(-12.0, 6.0).exp()
+                # LA FORMULE N'EST ÉCRITE QU'UNE FOIS, dans le `forward` de la paramétrisation.
+                # La réécrire ici est exactement ce qui a produit M8 : deux expressions qui
+                # devaient dire la même chose, et qui ont divergé en silence.
+                attendu = par[0](par.original).detach().clone()
                 if os.environ.get("DRAVE_MAT_SANS_COPIE") != "1":
                     mod.weight.copy_(attendu)
                 remove_parametrizations(mod, "weight")
@@ -380,7 +405,7 @@ def ecrire_poids_nomme(params, par_table, nom, cible, ou="?"):
         with torch.no_grad():
             params[nom].copy_(cible)
         return 0, float((params[nom].detach() - cible).abs().max())
-    signes = par[0].signes
+    signes = signes_effectifs(par)
     avec_signe = cible != 0
     opposes = int(((cible.sign() != signes) & avec_signe).sum())
     nuls = int((~avec_signe).sum())
@@ -595,10 +620,15 @@ def main():
                         "0,25 = un connectome inné qui ne garde qu'un quart des poids "
                         "par ligne, tiré aléatoirement, jamais modifié)")
     p.add_argument("--poids-lognormaux", action="store_true",
-                   help="INUTILISABLE EN L'ÉTAT (bug de sauvegarde, cf. "
-                        "docs/biologie-pour-drave.md § 3 ter) : le fichier sauvé ne "
-                        "reproduit pas le modèle entraîné (13,06 bits/octet au lieu "
-                        "de 2,27). Conservé pour la démonstration du défaut")
+                   help="poids tires d'une log-normale (w = signe*e^theta, principe de Dale). "
+                        "M8 (le fichier sauve ne reproduisait pas le modele entraine) est "
+                        "CORRIGE depuis le 10/10 : la tete liee a la table d'entree est exclue "
+                        "de la reparametrisation. Voir docs/biologie-pour-drave.md section 3 ter")
+    p.add_argument("--signes-libres", action="store_true",
+                   help="avec --poids-lognormaux : les signes deviennent un parametre CONTINU "
+                        "(tanh(psi), initialise sur les signes de naissance) au lieu d'etre "
+                        "figes. Separe la LOI des magnitudes du PRINCIPE DE DALE : c'est le "
+                        "controle qui dit laquelle des deux explique la robustesse d'E6 a 25 %.")
     p.add_argument("--croissance", type=float, default=0.0,
                    help="E2 : fraction des connexions ABSENTES ajoutée à chaque étape de "
                         "croissance, choisies par le |gradient| accumulé (règle locale). "
@@ -652,9 +682,11 @@ def main():
         print(f"# RATIO DE SIGNES (E4) : {a.ratio_signes:.2f} demandé, {reel:.4f} obtenu sur "
               f"{n} couches — magnitudes libres")
     if a.poids_lognormaux:
-        n = installer_poids_lognormaux(modele)
+        n = installer_poids_lognormaux(modele, a.signes_libres)
         print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "
-              f"(w = signe(theta)·exp(|theta|))")
+              f"(w = {'tanh(psi)' if a.signes_libres else 'signe(theta)'}·exp(|theta|))"
+              + (" — SIGNES LIBRES : mêmes magnitudes que la log-normale, signes mobiles"
+                 if a.signes_libres else " — signes FIGÉS (principe de Dale)"))
 
     # AVEC DES POIDS LOG-NORMAUX, LA DÉCROISSANCE DE POIDS EST PROSCRITE : elle
     # s'applique à `theta`, pas à `w`, et tirer theta vers 0 pousse |w| vers 1 au

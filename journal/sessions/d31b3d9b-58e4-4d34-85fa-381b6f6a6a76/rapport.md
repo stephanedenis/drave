@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 63.4 h |
-| Tours | 93 |
-| Messages | 3050 |
-| Appels d'outils | 2835 |
+| Durée | 63.6 h |
+| Tours | 94 |
+| Messages | 3071 |
+| Appels d'outils | 2854 |
 | Fichiers touchés | 118 |
-| Commandes | 2388 |
+| Commandes | 2404 |
 | Sous-agents | 3 |
-| Commits | 269 |
+| Commits | 270 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -221,6 +221,8 @@
 **Tour 92** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 93** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 94** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3843,7 +3845,43 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 **Synthèse produite :**
 
-⏵ Fermeture du volet coût : ce qu'un format creux lirait, pour chaque variant
+⏵ Round 50 : instrument M9, croisement E6, 30e porte — arbre propre et poussé
+
+**Alertes d'abord**
+- Une **conclusion inversée a été rattrapée** : le « meilleur point » de validation annulait l'élagage (22,3 % de zéros publiés comme « 25 % gardés », perplexité 9,02 au lieu de 49,43). Corrigé, annoncé, et **verrouillé par une porte**.
+
+**Ce qui a été livré ce round**
+1. **M9, première moitié** : `tools/occupation_poids.py` lit l'occupation d'un GGUF par genre (experts / attention / tête / table), en F32, F16, Q8_0 et Q4_0 — c'est **l'instrument qui a révélé le défaut de protocole**. Sans lui, rien ne distinguait un modèle élagué à 25 % d'un modèle à 78 %.
+2. **E6 : la conclusion s'INVERSE en un CROISEMENT** — à 50 % gardés le dense gagne (7,57 contre 13,06), à **25 % le log-normal gagne 2,8×** (17,50 contre 49,43, ×2,3 contre ×6,7). Témoin plancher à 25 % : 45,12 — le plancher n'est pas la cause.
+3. **Asymétrie de quantification** : dans les experts (Q4_0) le 6,1e-6 tombe à zéro, dans l'attention (Q8_0) il **survit** (96 % non nuls) — le log-normal **stocke plus** (30,1 % contre 26,0 %) et rend pourtant 2,8× moins de perplexité.
+4. **Volet coût** : dense à 25 % → **÷4,0** de paires estimées, log-normal → **÷2,7** ; le dense gagne le coût, perd la qualité.
+5. **30e porte** `porte-occupation-elagage.sh` : **verte** (26,0 % pour 25 % demandés) et **vue ROUGE** (78,0 %) avec `DRAVE_SANS_ELAGAGE_FINAL=1`.
+
+**Prochain round** : seconde moitié de M9 — rendre la ligne « paires » du moteur sensible à l'occupation (compteur de non-nuls par projection, experts inclus), ou assumer et documenter que la mesure creuse reste l'instrument Python ; puis le test qui sépare **Dale** de la **loi log-normale** (signes libres, même élagage).
+
+### Tour 94 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Read the log-normal parametrization class
+- bash — Add free-signs parametrization
+- bash — Find the call site to plumb the flag
+- bash — Plumb the free-signs flag
+- bash — Inspect the broken insertion point
+- bash — Repair the broken option block
+- bash — Repair with consistent naming
+- bash — Single source of truth for the formula
+- bash — Smoke-test the free-signs variant
+- bash — Run the free-signs control experiment
+- bash — Wait for the free-signs results
+- bash — Measure occupancy of free-sign models
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md`
+- bash — Re-read section headers
+- … et 5 autres
+
+**Synthèse produite :**
+
+⏵ Ajout du contrôle « signes libres » à la fiche E6
 
 ## 3. Travail accompli
 
@@ -3961,7 +3999,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 5 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
@@ -4018,7 +4056,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2348 autres
+- … et 2364 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4146,7 +4184,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-97 sorties en erreur ou divergentes. Les premières :
+98 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4435,4 +4473,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo "vert code=$?"; ta
 - Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge" 2>&1 | tail -1; git log --oneline -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF' E6, volet cout : ce qu'un format creux lirait, variant par variant 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF' E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui port
 

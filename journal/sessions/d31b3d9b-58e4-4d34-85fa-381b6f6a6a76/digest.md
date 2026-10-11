@@ -49009,3 +49009,303 @@ limites ajustées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-cout.txt <<'MSGEOF'\nE6, volet cout : ce qu'un format creux lirait, variant par variant\n\n`tools/occupation_poids.py` donne l'autre colonne que le compteur de paires ne voit pas (M9) :\n\n    modele                … [1009 caractères tronqués]`
+
+  ```
+166bd61 E6, volet cout : ce qu'un format creux lirait, variant par variant
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 50 : instrument M9, croisement E6, 30e porte — arbre propre et poussé
+
+**Alertes d'abord**
+- Une **conclusion inversée a été rattrapée** : le « meilleur point » de validation annulait l'élagage (22,3 % de zéros publiés comme « 25 % gardés », perplexité 9,02 au lieu de 49,43). Corrigé, annoncé, et **verrouillé par une porte**.
+
+**Ce qui a été livré ce round**
+1. **M9, première moitié** : `tools/occupation_poids.py` lit l'occupation d'un GGUF par genre (experts / attention / tête / table), en F32, F16, Q8_0 et Q4_0 — c'est **l'instrument qui a révélé le défaut de protocole**. Sans lui, rien ne distinguait un modèle élagué à 25 % d'un modèle à 78 %.
+2. **E6 : la conclusion s'INVERSE en un CROISEMENT** — à 50 % gardés le dense gagne (7,57 contre 13,06), à **25 % le log-normal gagne 2,8×** (17,50 contre 49,43, ×2,3 contre ×6,7). Témoin plancher à 25 % : 45,12 — le plancher n'est pas la cause.
+3. **Asymétrie de quantification** : dans les experts (Q4_0) le 6,1e-6 tombe à zéro, dans l'attention (Q8_0) il **survit** (96 % non nuls) — le log-normal **stocke plus** (30,1 % contre 26,0 %) et rend pourtant 2,8× moins de perplexité.
+4. **Volet coût** : dense à 25 % → **÷4,0** de paires estimées, log-normal → **÷2,7** ; le dense gagne le coût, perd la qualité.
+5. **30e porte** `porte-occupation-elagage.sh` : **verte** (26,0 % pour 25 % demandés) et **vue ROUGE** (78,0 %) avec `DRAVE_SANS_ELAGAGE_FINAL=1`.
+
+**Prochain round** : seconde moitié de M9 — rendre la ligne « paires » du moteur sensible à l'occupation (compteur de non-nuls par projection, experts inclus), ou assumer et documenter que la mesure creuse reste l'instrument Python ; puis le test qui sépare **Dale** de la **loi log-normale** (signes libres, même élagage).
+
+
+## Tour 94
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 51/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Séparer Dale de la loi log-normale : signes LIBRES (paramétrisation continue)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '113,145p' tools/entrainer_moteur.py", "description": "Read the log-normal parametrization class"}`
+
+  ```
+class PoidsLogNormaux(nn.Module):
+    """`w = signe_inné · e^{theta}` — log-normale par construction, signes FIXÉS.
+
+    POURQUOI (docs/biologie-pour-drave.md § 3 ter). Les efficacités synaptiques
+    corticales sont log-normales sur plusieurs ordres de grandeur ; nos modèles sont
+    quasi gaussiens (p99,9/médiane 5,2), d'où un élagage gratuit à 50 % et fatal à
+    25 %. Une distribution multiplicative est élagable par construction.
+
+    ET POURQUOI LES SIGNES SONT FIXÉS : en biologie, un neurone est excitateur OU
+    inhibiteur — son signe ne change pas (principe de Dale). Le figer à la naissance
+    est donc fidèle *et* numériquement nécessaire : une reparamétrisation qui
+    déduirait le signe de `theta` ne peut pas représenter un petit poids positif
+    (|w| = e^{theta} ≥ 1 dès que theta > 0), et l'entraînement diverge — mesuré,
+    perte 12 137 après 400 pas.
+
+    `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.
+    """
+
+    def __init__(self, signes):
+        super().__init__()
+        self.register_buffer("signes", signes)
+
+    def forward(self, theta):
+        # Borne douce : e^{theta} sans borne laisse un pas d'AdamW multiplier un
+        # poids par e
+… [329 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\nold = '''    `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.\n    \"\"\"\n\n    def __init__ … [2482 caractères tronqués]`
+
+  ```
+paramétrisation étendue
+157:def installer_poids_lognormaux(modele, signes_libres=False):
+191:        register_parametrization(mod, "weight", PoidsLogNormaux(signes, signes_libres))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"installer_poids_lognormaux(modele)\" tools/entrainer_moteur.py; grep -n \"POIDS LOG-NORMAUX\" -B 4 -A 3 tools/entrainer_moteur.py | head -14", "description": "Find the call site to plumb the flag"}`
+
+  ```
+670:        n = installer_poids_lognormaux(modele)
+667-        print(f"# RATIO DE SIGNES (E4) : {a.ratio_signes:.2f} demandé, {reel:.4f} obtenu sur "
+668-              f"{n} couches — magnitudes libres")
+669-    if a.poids_lognormaux:
+670-        n = installer_poids_lognormaux(modele)
+671:        print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "
+672-              f"(w = signe(theta)·exp(|theta|))")
+673-
+674:    # AVEC DES POIDS LOG-NORMAUX, LA DÉCROISSANCE DE POIDS EST PROSCRITE : elle
+675-    # s'applique à `theta`, pas à `w`, et tirer theta vers 0 pousse |w| vers 1 au
+676-    # lieu de 0 — le modèle ne peut plus éteindre une connexion et l'entraînement
+677-    # diverge (mesuré : perte 8 458 en 200 pas). Le taux d'apprentissage est réduit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = '''    if a.poids_lognormaux:\n        n = installer_poids_lognormaux(modele)\n        print(f\"# POIDS LOG-N … [1527 caractères tronqués]`
+
+  ```
+drapeau ajouté
+614:    p.add_argument("--signes-libres", action="store_true",
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')
+               ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 613
+    help="INUTILISABLE EN L'ÉTAT (bug de sauvegarde, cf. "
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '605,625p' tools/entrainer_moteur.py", "description": "Inspect the broken insertion point"}`
+
+  ```
+"Un modèle log-normal ne peut PAS atteindre zéro (|w| = e^theta >= "
+                        "e^-12 = 6,1e-6) — sans ce témoin, on accuserait la distribution alors "
+                        "que c'est peut-être le plancher.")
+    p.add_argument("--masque", type=float, default=0.0,
+                   help="part des CONNEXIONS existantes à la naissance (0 = dense ; "
+                        "0,25 = un connectome inné qui ne garde qu'un quart des poids "
+                        "par ligne, tiré aléatoirement, jamais modifié)")
+    p.add_argument("--poids-lognormaux", action="store_true",
+                   help="INUTILISABLE EN L'ÉTAT (bug de sauvegarde, cf. "
+    p.add_argument("--signes-libres", action="store_true",
+                   help="avec --poids-lognormaux : les signes deviennent un paramètre CONTINU "
+                        "(tanh(psi), initialisé sur les signes de naissance) au lieu d'être "
+                        "figés. Sépare la LOI des magnitudes du PRINCIPE DE DALE — c'est le "
+                        "contrôle qui dit laquelle des deux explique la robustesse d'E6 à 25 %.")
+                        "docs/biologie-pour-drave.md § 3 ter) : le fichier sauvé ne "
+       
+… [450 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ncasse = '''    p.add_argument(\"--poids-lognormaux\", action=\"store_true\",\n                   help=\"INUTILISABL … [1960 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+NameError: name 'réparé' is not defined. Did you mean: 'reparé'?
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')
+               ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 613
+    help="INUTILISABLE EN L'ÉTAT (bug de sauvegarde, cf. "
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ncasse = '''    p.add_argument(\"--poids-lognormaux\", action=\"store_true\",\n                   help=\"INUTILISABL … [2012 caractères tronqués]`
+
+  ```
+repare
+OK
+                        "par ligne, tiré aléatoirement, jamais modifié)")
+    p.add_argument("--poids-lognormaux", action="store_true",
+                   help="poids tires d'une log-normale (w = signe*e^theta, principe de Dale). "
+                        "M8 (le fichier sauve ne reproduisait pas le modele entraine) est "
+                        "CORRIGE depuis le 10/10 : la tete liee a la table d'entree est exclue "
+                        "de la reparametrisation. Voir docs/biologie-pour-drave.md section 3 ter")
+    p.add_argument("--signes-libres", action="store_true",
+                   help="avec --poids-lognormaux : les signes deviennent un parametre CONTINU "
+                        "(tanh(psi), initialise sur les signes de naissance) au lieu d'etre "
+                        "figes. Separe la LOI des magnitudes du PRINCIPE DE DALE : c'est le "
+  ```
+
+### 🤖 Assistant
+
+⏵ Une seule source de vérité pour la formule (sinon M8 se reproduit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# 1. la matérialisation appelle le forward de la paramétrisation, elle ne le RÉÉCRIT pas\nold = \"\"\"            … [3152 caractères tronqués]`
+
+  ```
+source unique + signes effectifs
+OK
+247:def signes_effectifs(par):
+286:    signes = signes_effectifs(par)
+366:                attendu = par[0](par.original).detach().clone()
+408:    signes = signes_effectifs(par)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 300 --eval-tous 300\"\nCUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_ … [264 caractères tronqués]`
+
+  ```
+# POIDS PARTAGÉS : 1 module(s) EXCLU(S) de la reparamétrisation (sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :
+# POIDS LOG-NORMAUX : 16 couches reparamétrées (w = tanh(psi)·exp(|theta|)) — SIGNES LIBRES : mêmes magnitudes que la log-normale, signes mobiles
+# matérialisation : 16 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  # meilleur point : pas 300 · val 3.7007 bits/octet
+  #   après la boucle          3.7007 bits/octet
+  #   après restauration      3.7007
+  #   après matérialisation   3.7007
+  #   après relecture disque  3.7007
+  ✅ le fichier sauvé reproduit le modèle entraîné, et la matérialisation ne change rien
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du contrôle décisif : log-normal à signes LIBRES, élagué pareil
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6g && mkdir -p /tmp/e6g && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [982 caractères tronqués]`
+
+  ```
+contrôle signes libres lancé (pid 323708)
+dim 11 oct 2026 00:37:37 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6g/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6g/codes.txt", "description": "Wait for the free-signs results", "timeoutMs": 900000}`
+
+  ```
+libres-g0.5 code=0
+perplexité 11.7783 sur
+libres-g0.25 code=0
+perplexité 36.3771 sur
+libres-g1.0 code=0
+perplexité 7.5112 sur
+TERMINE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle tranche : ce sont les SIGNES FIGÉS, pas la loi log-normale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in /tmp/e6g/libres-g1.0.gguf /tmp/e6g/libres-g0.5.gguf /tmp/e6g/libres-g0.25.gguf; do printf '%-20s ' \"$(basename $M .gguf)\"; /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele \"$M\" 2>&1 | grep -E \"^\\| \ … [76 caractères tronqués]`
+
+  ```
+libres-g1.0          | **total** | **7,626,816** | **6,800,576** | **89.2 %** |
+libres-g0.5          | **total** | **7,626,816** | **3,849,541** | **50.5 %** |
+libres-g0.25         | **total** | **7,626,816** | **1,981,279** | **26.0 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du contrôle « signes libres » à la fiche E6
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "## 4 bis. LE CONTRÔLE QUI TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale\n\nLe variant log-normal diffère du témoin dense par **deux** choses : la **loi** des magnitudes … [1316 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-e6-poids-lognormaux.md", "description": "Re-read section headers"}`
+
+  ```
+18:## 1. La mesure
+37:## 2. Le témoin, et pourquoi il était nécessaire
+61:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+77:## 4. Le volet COÛT, fermé par l'instrument d'occupation
+93:## 5. Ce que cette fiche ne dit PAS
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "limit": 4, "offset": 75}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+75: distinguait un modèle élagué à 25 % d'un modèle élagué à 78 %.
+76: 
+77: ## 4. Le volet COÛT, fermé par l'instrument d'occupation
+78: 
+
+(Showing lines 75-78 of 105. Use offset=79 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md", "new_string": "## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale\n\nLe variant log-normal diffère du témoin dense par **deux** choses : la **loi** des magnitudes\n(m … [1311 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/^## 5. Ce que cette fiche ne dit PAS/## 6. Ce que cette fiche ne dit PAS/' reports/rapport-e6-poids-lognormaux.md && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/re … [1197 caractères tronqués]`
+
+  ```
+fiche complétée
+9:> Un contrôle sépare ensuite les deux causes : **ce sont les SIGNES FIGÉS qui portent la
+20:## 1. La mesure
+39:## 2. Le témoin, et pourquoi il était nécessaire
+63:## 3. Deux défauts de protocole, trouvés en chemin — et ils avaient INVERSÉ la conclusion
+79:## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale
+101:## 5. Le volet COÛT, fermé par l'instrument d'occupation
+117:## 6. Ce que cette fiche ne dit PAS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux |\"); j = s.index(\"\\n\", i)\nneuf = (\"| … [1250 caractères tronqués]`
+
+  ```
+E6 mis à jour
+1
+166bd61 E6, volet cout : ce qu'un format creux lirait, variant par variant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF'\nE6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale\n\nLE CONTROLE. Le variant log-normal differe du temoin par DEUX choses : la LOI des … [1396 caractères tronqués]`

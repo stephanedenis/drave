@@ -16,9 +16,17 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
+## Étapes du jour (3)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:36** — Séparer Dale de la loi log-normale : signes LIBRES (paramétrisation continue)
+- **00:37** — Lancement du contrôle décisif : log-normal à signes LIBRES, élagué pareil
+- **00:47** — Le contrôle tranche : ce sont les SIGNES FIGÉS, pas la loi log-normale
+
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 63.4 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 63.6 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

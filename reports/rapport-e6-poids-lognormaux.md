@@ -6,6 +6,8 @@
 > sont quasi gaussiens ; une distribution **multiplicative** devrait donc être **élagable par
 > construction**. Le variant vaut-il mieux **sous élagage** ?
 > Verdict : **OUI, mais seulement sous élagage AGRESSIF — et il y a un croisement.**
+> Un contrôle sépare ensuite les deux causes : **ce sont les SIGNES FIGÉS qui portent la
+> robustesse** (§ 4) — la loi log-normale seule n'apporte que ÷1,36.
 > À **50 %** de poids gardés, le témoin dense passe de **7,3429** à **7,5680** (+3,1 %) quand le
 > log-normal passe de **7,5666** à **13,0622** (+72,6 %) : **le dense gagne**. À **25 %**, le dense
 > s'effondre à **49,4291** (**×6,7**) quand le log-normal ne rend que **17,5009** (**×2,3**) :
@@ -74,7 +76,29 @@ Le plancher **aide** un peu le dense (45,12 contre 49,43) et ne comble pas l'éc
 **C'est l'instrument d'occupation (M9) qui a révélé le premier** : sans lui, rien dans le dépôt ne
 distinguait un modèle élagué à 25 % d'un modèle élagué à 78 %.
 
-## 4. Le volet COÛT, fermé par l'instrument d'occupation
+## 4. Le contrôle qui TRANCHE : ce sont les SIGNES FIGÉS, pas la loi log-normale
+
+Le variant log-normal diffère du témoin dense par **deux** choses : la **loi** des magnitudes
+(multiplicative) et le **signe figé** (principe de Dale). Le croisement du § 1 ne dit pas laquelle
+des deux porte la robustesse. Le contrôle : **mêmes magnitudes log-normales, signes MOBILES** —
+`w = tanh(ψ) · e^θ`, ψ initialisé sur les signes de naissance (`tanh(±6) = ±1,0000`) mais libre de
+basculer pendant l'entraînement.
+
+| 25 % de poids gardés | témoin dense | log-normal, **signes libres** | log-normal, **signes figés** (Dale) |
+|---|---:|---:|---:|
+| perplexité | 49,4291 | **36,3771** | **17,5009** |
+| occupation stockée | 26,0 % | 26,0 % | 30,1 % |
+
+Et **sans aucun élagage**, les trois partent du même point : **7,3429** (dense) · **7,5112**
+(log-normal, signes libres) · **7,5666** (signes figés).
+
+**Lecture.** La **loi** log-normale apporte une petite part de la robustesse (36,38 contre 49,43,
+soit **÷1,36**) ; le **principe de Dale** en apporte l'essentiel (17,50 contre 36,38, soit encore
+**÷2,08**). Sous élagage agressif, ce n'est donc **pas** la distribution des magnitudes qui sauve le
+modèle : c'est le fait qu'un poids ne puisse **pas changer de signe**. Un neurone excitateur le
+reste — et c'est cela qui rend l'élagage supportable.
+
+## 5. Le volet COÛT, fermé par l'instrument d'occupation
 
 Le compteur de paires du moteur ne voit pas l'occupation (manque **M9**) : il rend **2,3 M** pour
 tous ces modèles. `tools/occupation_poids.py` donne l'autre colonne — ce qu'un format **creux**
@@ -90,13 +114,13 @@ lirait, en supposant les non-nuls répartis comme les activations vivantes (**hy
 dense lirait **÷4,0** de paires pour une perplexité de **49,43**, le log-normal **÷2,7** pour
 **17,50**. Le choix dépend donc de ce qu'on paie : des paires, ou de la qualité.
 
-## 5. Ce que cette fiche ne dit PAS
+## 6. Ce que cette fiche ne dit PAS
 
 - **les deux taux ne sont pas des courbes** : deux points (50 % et 25 %), une graine, une échelle
   (7,58 M paramètres), un corpus. Le croisement est **entre** les deux, il n'est pas localisé ;
-- **elle ne sépare pas la loi de sa contrainte** : les signes sont **figés** (principe de Dale) dans
-  le variant, et c'est peut-être eux — plutôt que la loi log-normale — qui expliquent la
-  robustesse. Le test qui trancherait : un modèle log-normal à **signes libres**, élagué pareil ;
+- **le § 4 sépare la loi de sa contrainte, et il donne raison à la contrainte** — mais sur UNE
+  graine, une échelle et deux taux d'élagage. Le `tanh(ψ)` est une manière parmi d'autres de
+  libérer les signes ;
 - **le volet coût du § 4 est une ESTIMATION** : elle suppose les non-nuls répartis comme les
   activations vivantes, et le compteur du moteur ne la vérifie pas (M9, seconde moitié à faire) ;
   à 25 %, le log-normal stocke d'ailleurs **plus** de poids non nuls que le dense (30,1 % contre
