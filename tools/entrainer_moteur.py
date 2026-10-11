@@ -777,7 +777,10 @@ def main():
     # 22,3 % de zéros dans le fichier au lieu de 75 %, et 9,0164 de perplexité présentée comme
     # « 25 % de poids gardés ». On RÉAPPLIQUE donc la cible après la restauration, pour que le
     # fichier porte ce qu'il annonce — et on le dit.
-    if a.elagage > 0.0 and a.elagage < 1.0:
+    # `DRAVE_SANS_ELAGAGE_FINAL=1` RALLUME l'ancien comportement (le fichier porte l'élagage de la
+    # rampe au pas du meilleur point) : un défaut qu'on peut rallumer est un défaut qu'une porte
+    # peut surveiller.
+    if a.elagage > 0.0 and a.elagage < 1.0 and os.environ.get("DRAVE_SANS_ELAGAGE_FINAL") != "1":
         print(f"# élagage FINAL réappliqué après la restauration du meilleur point (pas "
               f"{meilleur[2]}) : cible {a.elagage:.0%} gardé — sans quoi le fichier porterait "
               f"l'élagage de la rampe à ce pas-là")

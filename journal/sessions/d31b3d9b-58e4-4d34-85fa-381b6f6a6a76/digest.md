@@ -48839,3 +48839,95 @@ horodatage 2026-10-11 00:27
 ⏵ Commit du croisement E6, de l'instrument d'occupation et des deux corrections de protocole
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF'\nE6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 %\n\nLA MESURE, avec l'occupation VERIFIEE dans le fichier exporte :\n\n    poids gardes   occupatio … [1993 caractères tronqués]`
+
+  ```
+14ebf85 E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 %
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte de l'occupation annoncée (verte, et vue rouge avec l'ancien comportement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"    if a.elagage > 0.0 and a.elagage < 1.0:\"\nnew = \"\"\"    # `DRAVE_SANS_ELAGAGE_FINAL=1` RALLUME l'anc … [572 caractères tronqués]`
+
+  ```
+interrupteur ajouté
+OK
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-occupation-elagage.sh — le fichier porte-t-il l'élagage qu'il ANNONCE ?\n#\n# CE QUE LA PORTE VERROUILLE, et pourquoi :\n#   1. **l'occupation du fichier exporté correspond à la cible annoncée** — un modèle entraîné avec\n#      `--elagage 0.25` doit stocker ~25 % d … [4004 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-elagage.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-occupation-elagage.sh && echo \"syntaxe OK\" && timeout 900 bash tools/porte-occupation-elagage.sh 2>&1 | tail -22; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the new occupancy gate", "timeoutMs": 900000 … [1 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== 1. entraîner avec --elagage 0.25 (le meilleur point est choisi AVANT la rampe) ===
+  # élagage FINAL réappliqué après la restauration du meilleur point (pas 200) : cible 25% gardé — sans quoi le fichier porterait l'élagage de la rampe à ce pas-là
+    # meilleur point : pas 200 · val 3.5905 bits/octet
+
+=== 2. exporter, puis LIRE l'occupation dans le fichier ===
+  | genre | poids | non nuls | occupation |
+  |---|---:|---:|---:|
+  | experts | 7,077,888 | 1,769,472 | **25.0 %** |
+  | attention | 443,520 | 111,744 | **25.2 %** |
+  | tête | 49,344 | 48,963 | **99.2 %** |
+  | table d'entrée | 49,152 | 48,771 | **99.2 %** |
+  | autres | 6,912 | 2,304 | **33.3 %** |
+  | **total** | **7,626,816** | **1,981,254** | **26.0 %** |
+  
+  Donner `--paires-attention` et `--paires-experts` (lus sur la ligne « paires » du
+
+=== 3. le verrou ===
+  occupation lue : 26.0% · cible annoncée : 25% · plafond toléré : 35%
+  ✅ le fichier porte bien l'élagage annoncé (26.0% pour 25% demandés)
+
+✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+   (et le harnais annonce l'élagage final — vu ROUGE avec DRAVE_SANS_ELAGAGE_FINAL=1).
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte, ancien comportement RALLUMÉ (doit être ROUGE) ===\"; DRAVE_SANS_ELAGAGE_FINAL=1 timeout 900 bash tools/porte-occupation-elagage.sh 2>&1 | tail -10; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Verify the gate tu … [53 caractères tronqués]`
+
+  ```
+=== porte, ancien comportement RALLUMÉ (doit être ROUGE) ===
+=== 1. entraîner avec --elagage 0.25 (le meilleur point est choisi AVANT la rampe) ===
+    # meilleur point : pas 200 · val 3.5905 bits/octet
+  ❌ le harnais n'annonce PAS l'élagage final : le fichier pourrait porter celui de la
+     rampe sans que rien ne le dise
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Réordonnancement des verrous pour que le rouge montre le vrai défaut
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-occupation-elagage.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nbloc_annonce = '''if ! grep -q \"élagage FINAL\" \"$T/entrainement.log\"; then\n    echo \"  ❌ le harnais n … [1195 caractères tronqués]`
+
+  ```
+ordre corrigé
+syntaxe OK
+  | **total** | **7,626,816** | **5,946,457** | **78.0 %** |
+  
+  Donner `--paires-attention` et `--paires-experts` (lus sur la ligne « paires » du
+
+=== 3. le verrou ===
+  occupation lue : 78.0% · cible annoncée : 25% · plafond toléré : 35%
+  ❌ le fichier stocke 78.0% de poids non nuls pour une cible de 25% :
+     il porte l'élagage de la RAMPE au pas du meilleur point, pas la cible (défaut du 11/10)
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte montre le vrai défaut en rouge (78 % pour une cible de 25 %) — commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo \"vert code=$?\"; tail -2 /tmp/porte-occ-vert.log; cat > /tmp/message-porte-occ.txt <<'MSGEOF'\nOccupation x elagage : une porte pour que le fich … [1372 caractères tronqués]`

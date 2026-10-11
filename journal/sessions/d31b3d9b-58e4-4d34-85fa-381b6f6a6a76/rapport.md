@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 63.3 h |
 | Tours | 93 |
-| Messages | 3038 |
-| Appels d'outils | 2823 |
-| Fichiers touchés | 117 |
-| Commandes | 2378 |
+| Messages | 3044 |
+| Appels d'outils | 2829 |
+| Fichiers touchés | 118 |
+| Commandes | 2383 |
 | Sous-agents | 3 |
-| Commits | 266 |
+| Commits | 267 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3823,7 +3823,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 93 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inventory pair-counting sites and Proj struct
 - bash — Read Proj::load in full
@@ -3839,11 +3839,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check checkpoint zeros for both pruning rates
 - bash — Measure weight distribution near zero
 - bash — Read pruning events in both logs
-- … et 9 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Commit du croisement E6, de l'instrument d'occupation et des deux corrections de protocole
+⏵ La porte montre le vrai défaut en rouge (78 % pour une cible de 25 %) — commit
 
 ## 3. Travail accompli
 
@@ -3968,6 +3968,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/tmp/message-e6.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-carte-sorties.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-elagage.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4017,7 +4018,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2338 autres
+- … et 2343 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4431,4 +4432,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF' M9 : aucun instrument du depot ne mesure le cout de la sparsite des p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF' Dessin H, carte des sorties : la borne monte quand on sort tard, m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF' E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % ga
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-occupation-elagage.sh > /tmp/porte-occ-vert.log 2>&1; echo "vert code=$?"; ta
 
