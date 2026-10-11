@@ -52372,3 +52372,11 @@ occupation-moteur=0
 ⏵ Commit du noyau creux, de sa porte et du fait désagréable
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF'\nDessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la sparsite, et il est plus LENT\n\nCE QUI MANQUAIT. Le moteur savait ANNONCER l'occupation et dire ce qu'un format creux lirait … [2130 caractères tronqués]`
+
+  ```
+3e5d9c19 Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la sparsite, et il est plus LENT
+push=0
+34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\ni = s.index(\"## 2. La mesure, corrigée\")\nj = s.index(\"## 4. Ce que cette fiche ne dit PAS\")\nneuf = \"\"\"##  … [2739 caractères tronqués]`

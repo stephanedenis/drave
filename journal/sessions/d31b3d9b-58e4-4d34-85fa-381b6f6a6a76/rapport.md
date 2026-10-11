@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 67.2 h |
 | Tours | 99 |
-| Messages | 3274 |
-| Appels d'outils | 3047 |
+| Messages | 3275 |
+| Appels d'outils | 3048 |
 | Fichiers touchés | 126 |
-| Commandes | 2580 |
+| Commandes | 2581 |
 | Sous-agents | 3 |
-| Commits | 291 |
+| Commits | 292 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4098,7 +4098,7 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 
 ### Tour 99 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Read matvec to plan the sparse path
 - bash — Read the matvec dispatch
@@ -4114,7 +4114,7 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 - bash — Read the batched expert computation
 - bash — Measure generation speed with and without the sparse kernel
 - bash — Proper comparison with the variable unset
-- … et 12 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -4301,7 +4301,7 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2540 autres
+- … et 2541 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4740,4 +4740,5 @@ Lecture **dans le fichier**, par genre, **sans déquantifier** (Q4_0 : nibble ==
 - M9 livre dans le registre des manques, et 33 portes dans l'etat" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 12
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF' Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la
+- Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 
