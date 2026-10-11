@@ -21,6 +21,7 @@ Usage :
     entrainer_moteur.py --famille dense --dim 192 --couches 4 --cache 768 \
         --pas 20000 --sortie /tmp/modele_dense
 """
+import collections
 import argparse
 import math
 import os
@@ -139,19 +140,48 @@ class PoidsLogNormaux(nn.Module):
 
 
 def installer_poids_lognormaux(modele):
-    """θ = log|w| appris, signes figés à la naissance (principe de Dale)."""
+    """θ = log|w| appris, signes figés à la naissance (principe de Dale).
+
+    LES POIDS PARTAGÉS SONT EXCLUS, ET C'EST M8 (trouvé le 10/10). `tie_word_embeddings` fait
+    que `lm_head.weight` **est** `model.embed_tokens.weight` — le même objet. Reparamétrer la
+    tête remplace ce tenseur par une valeur *calculée* et **casse le partage** : la table
+    d'entrée reste figée à sa valeur initiale pendant tout l'entraînement, et à la
+    matérialisation c'est elle qui reçoit les poids de la tête. Le fichier sauvé ne reproduit
+    alors plus le modèle entraîné (validation **3,6465** → **8,8257** bits/octet), et la
+    perplexité du modèle exporté part à **436** sans qu'aucun tenseur ne manque ni ne soit trop
+    gros — d'où trois causes éliminées à côté avant que celle-ci ne soit trouvée.
+    """
     from torch.nn.utils.parametrize import register_parametrization
-    n = 0
-    for mod in modele.modules():
-        if isinstance(mod, nn.Linear):
-            with torch.no_grad():
-                w = mod.weight
-                signes = w.sign().clone()
-                theta0 = w.abs().clamp(min=1e-6).log()
-            register_parametrization(mod, "weight", PoidsLogNormaux(signes))
-            with torch.no_grad():
-                mod.parametrizations.weight.original.copy_(theta0)
-            n += 1
+    # `remove_duplicate=False` : c'est justement le doublon qu'on cherche.
+    noms_par_tenseur = {}
+    for nom, p in modele.named_parameters(remove_duplicate=False):
+        noms_par_tenseur.setdefault(id(p), []).append(nom)
+    n, exclus = 0, []
+    # UN DÉFAUT QU'ON PEUT RALLUMER EST UN DÉFAUT QU'ON PEUT TESTER. `DRAVE_MAT_SANS_EXCLUSION=1`
+    # reparamètre aussi les poids partagés — c'est exactement M8 — pour vérifier que
+    # `tools/porte-sauvegarde-modele.sh` le voit et passe au ROUGE.
+    sans_exclusion = os.environ.get("DRAVE_MAT_SANS_EXCLUSION") == "1"
+    for nom, mod in modele.named_modules():
+        if not isinstance(mod, nn.Linear):
+            continue
+        partages = noms_par_tenseur.get(id(mod.weight), [])
+        if len(partages) > 1 and not sans_exclusion:
+            autres = [x for x in partages if not x.startswith(nom + ".") and x != nom + ".weight"]
+            exclus.append(f"{nom} (partagé avec {autres})")
+            continue
+        with torch.no_grad():
+            w = mod.weight
+            signes = w.sign().clone()
+            theta0 = w.abs().clamp(min=1e-6).log()
+        register_parametrization(mod, "weight", PoidsLogNormaux(signes))
+        with torch.no_grad():
+            mod.parametrizations.weight.original.copy_(theta0)
+        n += 1
+    if exclus:
+        print(f"# POIDS PARTAGÉS : {len(exclus)} module(s) EXCLU(S) de la reparamétrisation "
+              f"(sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :")
+        for e in exclus:
+            print(f"#   {e}")
     return n
 
 
@@ -190,6 +220,25 @@ def imposer_ratio_signes(modele, ratio, graine=0):
     return n, positifs / max(total, 1)
 
 
+def perte_de_validation(modele, val, a, dev):
+    """La MÊME mesure que la boucle d'évaluation — extraite pour pouvoir la refaire à volonté.
+
+    Sans cette extraction, on ne saurait pas *où* le modèle change entre la fin de
+    l'entraînement et le fichier : la boucle mesure une fois, à un seul moment, et M8 a montré
+    que ce moment n'est pas le dernier.
+    """
+    modele.eval()
+    tot, n = 0.0, 0
+    with torch.no_grad():
+        for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+            xv = torch.from_numpy(
+                np.stack([val[(k * a.lot + j) * a.seq:(k * a.lot + j) * a.seq + a.seq]
+                          for j in range(a.lot)]).astype(np.int64)).to(dev)
+            tot += float(modele(input_ids=xv, labels=xv).loss) * xv.numel()
+            n += xv.numel()
+    return tot / max(n, 1) / math.log(2)
+
+
 def materialiser_poids(modele):
     """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
 
@@ -199,23 +248,42 @@ def materialiser_poids(modele):
     à l'entraînement, perplexité 8 668 dans le moteur et **15 552** pour la référence
     PyTorch sur les mêmes poids quantifiés (donc le fichier, pas le moteur). On
     recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
-    — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+    — et on l'écrit AVANT de retirer la reparamétrisation.
+
+    LE CONTRÔLE ÉTAIT TAUTOLOGIQUE, ET C'EST M8 (trouvé le 10/10). `mod.weight`, sous
+    reparamétrisation, **est déjà** `signes · clamp(theta).exp()` : comparer les deux AVANT la
+    copie compare une expression à elle-même et rend toujours 0 — le message « la
+    reparamétrisation était déjà cohérente » ne vérifiait rien. Le vrai contrôle est APRÈS :
+    ce que le module porte **une fois la reparamétrisation retirée** doit être exactement ce
+    qu'on a calculé. C'est là que la perte de validation passait de **3,6465** à **8,8257**
+    bits/octet sur le variant log-normal, sans que rien ne le signale.
     """
     from torch.nn.utils.parametrize import remove_parametrizations
-    n, ecart = 0, 0.0
+    n = 0
+    attendus = {}
     with torch.no_grad():
-        for mod in modele.modules():
+        for nom, mod in list(modele.named_modules()):
             if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
                 par = mod.parametrizations.weight
                 theta = par.original
                 signes = par[0].signes
                 attendu = signes * theta.clamp(-12.0, 6.0).exp()
-                ecart = max(ecart, float((mod.weight - attendu).abs().max()))
-                mod.weight.copy_(attendu)
+                if os.environ.get("DRAVE_MAT_SANS_COPIE") != "1":
+                    mod.weight.copy_(attendu)
                 remove_parametrizations(mod, "weight")
+                attendus[nom + ".weight"] = attendu.detach().clone()
                 n += 1
-    print(f"# matérialisation : {n} couches · écart max avant copie {ecart:.3e} "
-          f"(0 = la reparamétrisation était déjà cohérente)")
+    # LE CONTRÔLE QUI MORD : après le retrait, pas avant.
+    ecarts = []
+    for nom, p in modele.named_parameters():
+        if nom in attendus:
+            ecarts.append((float((p.detach() - attendus[nom]).abs().max()), nom))
+    ecarts.sort(reverse=True)
+    pire = ecarts[0] if ecarts else (0.0, "(aucun)")
+    print(f"# matérialisation : {n} couches · écart max APRÈS retrait {pire[0]:.3e} ({pire[1]})")
+    if pire[0] > 1e-6:
+        print("  ❌ la matérialisation n'écrit PAS la valeur du forward : le modèle sauvé n'est "
+              "pas le modèle entraîné (M8)")
     return n
 
 
@@ -342,6 +410,11 @@ def main():
     p.add_argument("--pas", type=int, default=20000)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--graine", type=int, default=1)
+    p.add_argument("--verifier-sauvegarde", action="store_true",
+                   help="APRÈS l'écriture : recalculer la perte de validation avec le modèle EN "
+                        "MÉMOIRE et avec le modèle RELU du disque, et refuser si les deux "
+                        "diffèrent. C'est le défaut M8 (« le fichier sauvé ne reproduit pas le "
+                        "modèle entraîné ») transformé en vérification automatique.")
     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
     p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à imiter")
     p.add_argument("--alpha-distill", type=float, default=0.0,
@@ -531,18 +604,92 @@ def main():
                   f"· {time.time()-debut:.0f} s")
             modele.train()
 
+    # OÙ LE MODÈLE CHANGE-T-IL ? Quatre mesures de la MÊME perte de validation, à quatre
+    # moments : après la boucle, après la restauration du meilleur point, après la
+    # matérialisation, et après relecture du disque. C'est ce découpage qui a trouvé la cause
+    # de M8 (la matérialisation changeait le modèle) là où trois causes avaient été éliminées
+    # ailleurs — parce que personne n'avait mesuré entre les étapes.
+    t_avant = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
     modele.load_state_dict(meilleur[1])
+    t_restaure = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
+    if os.environ.get("DRAVE_MAT_DIAGNOSTIC") == "1":
+        # COMPARAISON DES LOGITS, ET LOCALISATION PAR CROCHETS. Les poids écrits SONT la valeur
+        # du forward (vérifié : écart 0), et pourtant la perte change — donc c'est le chemin de
+        # calcul qui change. On enregistre la sortie de chaque module sur un lot fixe, avant et
+        # après, et on nomme le PREMIER module qui diverge : au-delà, tout diverge par ricochet.
+        xd = torch.from_numpy(
+            np.stack([val[j * a.seq:(j + 1) * a.seq] for j in range(a.lot)]).astype(np.int64)).to(dev)
+
+        def trace(m):
+            vus = collections.OrderedDict()
+
+            def accroche(nom):
+                def f(_m, _e, s):
+                    t = s[0] if isinstance(s, tuple) else s
+                    if torch.is_tensor(t) and t.is_floating_point():
+                        vus[nom] = t.detach().float().flatten()[:4096].cpu()
+                return f
+            prises = [mod.register_forward_hook(accroche(nom)) for nom, mod in m.named_modules()]
+            with torch.no_grad():
+                lg = m(input_ids=xd).logits.detach().float().cpu()
+            for p in prises:
+                p.remove()
+            return lg, vus
+
+        l_avant, v_avant = trace(modele)
     # L'export lit des poids ORDINAIRES : on matérialise avant d'écrire (sinon le
     # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
     # ne connaît pas).
     if a.poids_lognormaux:
         materialiser_poids(modele)
+    t_materialise = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
+    if os.environ.get("DRAVE_MAT_DIAGNOSTIC") == "1":
+        l_apres, v_apres = trace(modele)
+        print(f"\n  # DIAGNOSTIC : écart max sur les logits = {float((l_avant - l_apres).abs().max()):.3e}")
+        for nom, va in v_avant.items():
+            vb = v_apres.get(nom)
+            if vb is None or vb.shape != va.shape:
+                print(f"  #   {nom} : forme changée ou absent")
+                continue
+            d = float((va - vb).abs().max())
+            if d > 0:
+                print(f"  #   {nom} : écart {d:.3e}  ← PREMIER DIVERGENT")
+                break
+        else:
+            print("  #   aucun module ne diverge, mais les logits si : le calcul n'est pas en cause")
     modele.eval()
     os.makedirs(a.sortie, exist_ok=True)
     modele.save_pretrained(a.sortie)
     print(f"\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet")
     print(f"  # écrit dans {a.sortie} · {n_params/1e6:.2f} M paramètres · "
           f"{lit/1e6:.2f} M poids lus/jeton/couche")
+
+    if a.verifier_sauvegarde:
+        from transformers import AutoModelForCausalLM
+        recharge = AutoModelForCausalLM.from_pretrained(a.sortie, dtype=torch.float32).to(dev)
+        t_disque = perte_de_validation(recharge, val, a, dev)
+        ecarts = []
+        for (n1, p1), (n2, p2) in zip(modele.named_parameters(), recharge.named_parameters()):
+            if n1 != n2:
+                ecarts.append((float("inf"), f"{n1} ≠ {n2}"))
+                continue
+            ecarts.append((float((p1.detach().float() - p2.detach().float()).abs().max()), n1))
+        ecarts.sort(reverse=True)
+        print(f"\n  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :")
+        print(f"  #   après la boucle          {t_avant:.4f} bits/octet")
+        print(f"  #   après restauration      {t_restaure:.4f}")
+        print(f"  #   après matérialisation   {t_materialise:.4f}")
+        print(f"  #   après relecture disque  {t_disque:.4f}")
+        print(f"  # écart de poids le plus grand (mémoire ↔ disque) : {ecarts[0][1]} → "
+              f"{ecarts[0][0]:.3e}")
+        if t_materialise / max(t_restaure, 1e-9) > 1.05:
+            print("  ❌ LA MATÉRIALISATION CHANGE LE MODÈLE (M8) : c'est là qu'il faut regarder")
+            return 2
+        if t_disque / max(t_materialise, 1e-9) > 1.05:
+            print("  ❌ LE FICHIER SAUVÉ NE REPRODUIT PAS LE MODÈLE EN MÉMOIRE (M8)")
+            return 2
+        print("  ✅ le fichier sauvé reproduit le modèle entraîné, et la matérialisation ne "
+              "change rien")
     return 0
 
 

@@ -44874,3 +44874,1706 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ⏵ Remise en linéaire : nouveau commit au lieu de réécrire l'historique poussé
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset --soft e6c988e && git status --porcelain | head -3 && git commit -q -m \"REPRISE : deux pieges de plus, tous les deux payes aujourd'hui\n\nUn fichier .ids du depot ne dit pas avec quel tokenizer il a ete fait :\ndata/wikite … [655 caractères tronqués]`
+
+  ```
+M  REPRISE.md
+M  journal/2026-10-10.md
+M  journal/2026-10-10_divers.md
+84c8179 REPRISE : deux pieges de plus, tous les deux payes aujourd'hui
+e6c988e Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer
+4ef5864 Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des capacités restantes du plan
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 22, "offset": 56}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+56: | **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
+57: | **C11** | pannes et registre | ✅ fait | panne de lien **nommée**, code **7**, jamais de résultat partiel ; le **registre de régions** remplace les adresses dans les topologies | `porte-pannes.sh`, `porte-registre.sh` · fiches 33, 35 |
+58: | **C12** | trace globale | ✅ fait | **126 croisements**, aucune divergence ; une trace faussée d'**un bit** est détectée et nommée | `porte-trace.sh` |
+59: | **C12bis** | trace du nœud, fusion | ✅ fait | **94 liens** identiques ; 1 bit changé ⇒ **DIVERGENT** (code 3) ; format v1 **refusé** | `porte-fusion.sh` |
+60: 
+61: ## 2. Le chemin réparti (ce qui compte pour « distribuable »)
+62: 
+63: - **Protocole v8** (trame de 99 octets) : les réglages **voyagent** — fenêtre d'attention,
+64:   motif, puits d'attention, top-k, seuils, niveaux — et le nœud **annonce son compte de paires**
+65:   (u64), donc le pilote sait ce que coûte la moitié distante.
+6
+… [932 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 14, "offset": 77}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+77: | **E1** | connectome inné | ✅ | un connectome **aléatoire** coûte **1 %** de perplexité et **divise les lectures par 4** (25 %) ; à 12,5 % : +13,7 % |
+78: | **E3** | deux axes appris | ✅ | ÷2 lectures à qualité égale ; ÷7,8 à dim 384 |
+79: | **E4** | équilibre E/I (inférence **et** entraînement) | ✅ | l'hypothèse est vraie **dans un seul sens** : l'inhibition **dégrade** de façon monotone (15,6908 → 19,4791 à la couche 12) ; l'optimum **intérieur** est du côté **amplification** (couche 0, gain 0,75 : **12,9635** contre 14,6496, **−11,5 %**) ; **falaise** à 0,25 (996,04) ; **les gains ne se composent pas** ; **côté entraînement, le ratio cortical de signes COÛTE** : 0,5 → 2,2729 bits/octet, 0,8 → 2,3838 (+4,9 %), 0,9 → 2,5188 (+10,8 %), dégradation monotone ([`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md)) |
+80: | **E6** | poids log-normaux | ❌ échec de code | le fichier sauvé **ne reproduit pas** le modèle entraîné (13,0614 contre 2,2662 bits/octet) — manque **M8**, cause ouverte |
+81: | **E7/E8** | nouveauté, décorrélation | ✅ mesurées | la nouve
+… [1000 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"M8\" docs/manques.md | head -5; echo \"=== rapport E6 ===\"; ls reports/ | grep -i \"e6\\|lognormal\\|log-normal\" ; head -30 reports/rapport-e6-poids-lognormaux.md 2>/dev/null", "description": "Scope the M8 open defect"}`
+
+  ```
+21:| **M8** | **défaut du variant log-normal** — le fichier sauvé ne reproduit pas le modèle entraîné | re-mesuré le 2026-10-10 : témoin dense **7,3429** (×1,44 de l'export) contre **436,6159** pour le log-normal (×78), à entraînement égal (val 2,3533 contre 2,4846 bits/octet) | le variant reste **inutilisable** en l'état ; **trois causes sont ÉLIMINÉES** (poids sauvés identiques en statistiques ; quantification Q8_0 identique, 0,74 % de poids écrasés dans les deux cas ; fichiers GGUF structurellement identiques) | **hypothèse restante** : les **bornes d'activation du moteur** (clamps SwiGLU + quantification 16 bits), que PyTorch n'a pas — trois tests écrits dans `reports/rapport-m8-log-normal.md` § 3 |
+=== rapport E6 ===
+rapport-m8-log-normal.md
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des trois tests écrits pour M8 (prochain chantier)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^#\\|^##\\|^###\" reports/rapport-m8-log-normal.md | head -20; echo \"=== § 3 ===\"; sed -n \"$(grep -n '^## 3' reports/rapport-m8-log-normal.md | head -1 | cut -d: -f1),+45p\" reports/rapport-m8-log-normal.md", "descriptio … [34 caractères tronqués]`
+
+  ```
+1:# M8 — le variant log-normal : trois causes ÉLIMINÉES, une restante nommée
+14:## 1. Le fait, mesuré deux fois
+25:## 2. Les trois hypothèses éliminées
+38:## 3. L'hypothèse restante, et comment la tester
+58:## 4. Ce que cette fiche ne dit pas
+66:## 5. Protocole, pour rejouer
+=== § 3 ===
+## 3. L'hypothèse restante, et comment la tester
+
+**Le moteur borne les activations, PyTorch non.** Le moteur a des **clamps** (SwiGLU :
+`clamp_exp`, `clamp_shexp`) et **quantifie les activations** (16 bits en mode perplexité) —
+deux choix de stabilité qui n'existent pas dans l'entraînement. Un modèle log-normal, dont les
+magnitudes couvrent plusieurs ordres de grandeur (par construction : `|w| = exp(θ)`), peut
+produire des activations **hors des bornes du moteur** là où le témoin dense, aux poids
+gaussiens, reste dedans.
+
+**Les trois tests qui trancheraient**, dans l'ordre du moins cher :
+
+1. **mesurer la plage des activations** des deux modèles en PyTorch (minimum/maximum par couche) et
+   la comparer aux bornes du moteur — si le log-normal les dépasse et pas le dense, la cause est
+   trouvée ;
+2. **élargir les clamps** dans le moteur (ou les désactiver par un drapeau de diagnostic) et
+   regarder
+… [1710 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/e6/ 2>/dev/null | head -8; echo \"--- e2/e4 ---\"; ls /tmp/e2 /tmp/e4 2>/dev/null | head -8; echo \"--- état de la passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-70; date", "description": "Check M8 artifacts and suite progress"}`
+
+  ```
+total 9144
+drwxr-xr-x.   4 stephane stephane     200 10 oct 20:53 .
+drwxrwxrwt. 325 root     root      813340 10 oct 22:39 ..
+drwxr-xr-x.   2 stephane stephane     100 10 oct 20:52 dense.gguf
+-rw-r--r--.   1 stephane stephane     611 10 oct 20:52 dense.log
+-rw-r--r--.   1 stephane stephane 4574656 10 oct 20:52 dense-modele.gguf
+-rw-r--r--.   1 stephane stephane     818 10 oct 20:45 journal.log
+drwxr-xr-x.   2 stephane stephane     100 10 oct 20:45 lognormal.gguf
+--- e2/e4 ---
+/tmp/e2:
+croissance.gguf
+croissance.log
+statique10.gguf
+statique10.log
+statique25.gguf
+statique25.log
+
+--- état de la passe ---
+9
+  porte-fusion           ✅                           7 s    ✅ v1 refus
+sam 10 oct 2026 22:39:59 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Repérage des bornes d'activation du moteur pour le test M8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"clamp_exp\\|clamp_shexp\\|CLAMP\" drave-core/src/*.rs | head -12; echo \"=== bornes ===\"; grep -rn -B2 -A6 \"fn clamp_shexp\\|fn clamp_exp\" drave-core/src/model.rs | head -30", "description": "Find engine activation clam … [4 caractères tronqués]`
+
+  ```
+drave-core/src/gguf.rs:199:    /// Une liste de métadonnées en flottants — `swiglu_clamp_exp` est une liste
+drave-core/src/model.rs:2605:    /// Bornes du **clamp SwiGLU** de DeepSeek-V4, par couche : `swiglu_clamp_exp`
+drave-core/src/model.rs:2606:    /// pour les experts, `swiglu_clamp_shexp` pour l'expert partagé (qui
+drave-core/src/model.rs:2608:    pub clamp_exp: Vec<f32>,
+drave-core/src/model.rs:2609:    pub clamp_shexp: Vec<f32>,
+drave-core/src/model.rs:3676:        // V4 (V4-Flash) écrit une LISTE par couche (`swiglu_clamp_exp` /
+drave-core/src/model.rs:3677:        // `swiglu_clamp_shexp`) ; V4.1 écrit un SCALAIRE `swiglu_limit`. Sans la
+drave-core/src/model.rs:3678:        // seconde lecture, `clamp_exp` restait vide, `limite()` rendait 0 et
+drave-core/src/model.rs:3699:        let clamp_exp: Vec<f32> = liste_ou_scalaire("swiglu_clamp_exp");
+drave-core/src/model.rs:3700:        let clamp_shexp: Vec<f32> = liste_ou_scalaire("swiglu_clamp_shexp");
+drave-core/src/model.rs:4500:            clamp_exp, clamp_shexp,
+drave-core/src/model.rs:4962:    /// `silu(gate) * up`. C'est le `swiglu_clamp_exp` du modèle, par couche, et
+=== bornes ===
+  ```
+
+- **bash** `{"command": "ls -la /tmp/e6/dense.gguf/ /tmp/e6/lognormal.gguf/ 2>/dev/null | head -14; echo \"=== sauvegarde dans l'entraîneur ===\"; grep -n \"def save\\|save_pretrained\\|torch.save\\|json.dump\\|sortie\" tools/entrainer_moteur.py | tail -18", "description": "Inspect trainer save format"}`
+
+  ```
+/tmp/e6/dense.gguf/:
+total 29624
+drwxr-xr-x. 2 stephane stephane      100 10 oct 20:52 .
+drwxr-xr-x. 4 stephane stephane      200 10 oct 20:53 ..
+-rw-r--r--. 1 stephane stephane      974 10 oct 20:52 config.json
+-rw-r--r--. 1 stephane stephane      153 10 oct 20:52 generation_config.json
+-rw-------. 1 stephane stephane 30325816 10 oct 20:52 model.safetensors
+
+/tmp/e6/lognormal.gguf/:
+total 29624
+drwxr-xr-x. 2 stephane stephane      100 10 oct 20:45 .
+drwxr-xr-x. 4 stephane stephane      200 10 oct 20:53 ..
+-rw-r--r--. 1 stephane stephane      974 10 oct 20:45 config.json
+-rw-r--r--. 1 stephane stephane      153 10 oct 20:45 generation_config.json
+=== sauvegarde dans l'entraîneur ===
+20:        --cache 384 --pas 20000 --sortie /tmp/modele_route
+22:        --pas 20000 --sortie /tmp/modele_dense
+71:    sortie (celle de l'attention, celle de la FFN).
+223:    """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `--keep`.
+351:    p.add_argument("--sortie", required=True)
+356:                   help="part GARDÉE des poids, par ligne de sortie (0 = aucun "
+466:        sortie = modele(input_ids=x, labels=x)
+467:        perte = sortie.loss
+474:            lgt_s = sortie.logits
+
+… [165 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /tmp/e6/lognormal.gguf/; echo \"=== config ===\"; python3 -c \"\nimport json;c=json.load(open('/tmp/e6/dense.gguf/config.json'));print(json.dumps(c,indent=1)[:600])\"", "description": "Check lognormal checkpoint and config"}`
+
+  ```
+total 29624
+drwxr-xr-x. 2 stephane stephane      100 10 oct 20:45 .
+drwxr-xr-x. 4 stephane stephane      200 10 oct 20:53 ..
+-rw-r--r--. 1 stephane stephane      974 10 oct 20:45 config.json
+-rw-r--r--. 1 stephane stephane      153 10 oct 20:45 generation_config.json
+-rw-------. 1 stephane stephane 30325816 10 oct 20:45 model.safetensors
+=== config ===
+{
+ "architectures": [
+  "Qwen3MoeForCausalLM"
+ ],
+ "attention_bias": false,
+ "attention_dropout": 0.0,
+ "bos_token_id": null,
+ "decoder_sparse_step": 1,
+ "dtype": "float32",
+ "eos_token_id": null,
+ "head_dim": 48,
+ "hidden_act": "silu",
+ "hidden_size": 192,
+ "initializer_range": 0.08,
+ "intermediate_size": 768,
+ "max_position_embeddings": 512,
+ "mlp_only_layers": [],
+ "model_type": "qwen3_moe",
+ "moe_intermediate_size": 384,
+ "norm_topk_prob": true,
+ "num_attention_heads": 4,
+ "num_experts_per_tok": 2,
+ "num_hidden_layers": 4,
+ "num_key_value_heads": 2,
+ "num_local_experts": 8,
+ "output_router
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du traitement 16 bits des activations dans le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"abits\\|f16\\b\" drave-core/src/model.rs | grep -i \"act\\|16\" | head -12; echo \"=== conversion ===\"; grep -rn \"as f16\\|to_f16\\|f16::from_f32\\|half::f16\" drave-core/src/*.rs | head -8", "description": "Find 16-bit  … [21 caractères tronqués]`
+
+  ```
+2062:/// f32 → f16 (IEEE 754 binary16), pour les échelles par bloc de la trace v3.
+2077:/// f16 → f32, l'inverse exact de la fonction ci-dessus (dénormalisés compris).
+2078:pub fn f32_depuis_f16(h: u16) -> f32 {
+2099:    /// 3 (`DRAVE_TRACE_BLOCS=1` : valeurs i8 et une échelle f16 par bloc de 32
+2120:        // f16 par bloc de 32 canaux (l'étude de compacité annonce −22 % de plus,
+2144:            // v3 : une échelle f16 par bloc de 32 canaux, valeurs i8. L'échelle
+2241:    /// Version 3 : les valeurs sont des f32 (i8 × échelle f16 de bloc), il n'y a
+2283:                // v3 : nombre de blocs u32 · échelles f16 · paires (écart u8, i8)
+2290:                    f32_depuis_f16(u16::from_le_bytes([eb[k*2], eb[k*2+1]]))).collect();
+3058:    /// `DRAVE_KV_F16=1` : arrondir clés et valeurs en f16 avant quantification.
+3073:    /// `DRAVE_KV_K_F16=1` : les CLÉS sont stockées en f16, sans quantification
+3080:    pub k_f16: bool,
+=== conversion ===
+drave-core/src/gguf.rs:1035:    pub fn f32_to_f16(f: f32) -> u16 {
+drave-core/src/gguf.rs:2084:                b.extend_from_slice(&Gguf::f32_to_f16(0.25).to_le_bytes());
+drave-core/src/gguf.rs:2126:                b.extend_from_slice(&Gguf::f32
+… [29 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn poser_niveaux\" -A 25 drave-core/src/main.rs | head -35", "description": "Read activation levels setup"}`
+
+  ```
+2933:fn poser_niveaux(mdl: &mut model::Model, abits: u32, source: &str) {
+2934-    if abits > 16 {
+2935-        eprintln!("[activation] --abits {abits} demandé ({source}) : borné à 16 (32 767 \
+2936-niveaux), la borne du stockage i16 des activations quantifiées. Au-delà, les valeurs \
+2937-étaient silencieusement saturées et le calcul faux d'un facteur 2^(abits-16).");
+2938-    }
+2939-    mdl.act_levels = niveaux_activation(abits);
+2940-}
+2941-
+2942-fn appliquer_quantification(mdl: &mut model::Model, opt: &Options) {
+2943-    let abits = if opt.abits_impose { opt.abits } else { 8 };
+2944-    poser_niveaux(mdl, abits, "modes flux");
+2945-    mdl.act_thresh = opt.act_thresh;
+2946-    mdl.act_topk = opt.act_topk;
+2947-    mdl.act_renorm = opt.act_renorm;
+2948-    // Les top-k étaient PUREMENT ignorés dans les modes flux (audit
+2949-    // `reports/rapport-drapeaux-ignores.md`, défaut n°1) : ils s'appliquent ici,
+2950-    // et ils voyagent dans l'en-tête pour que les deux nœuds fassent pareil.
+2951-    mdl.act_topk_proj = opt.topk_proj;
+2952-    mdl.attn_topk = opt.attn_topk;
+2953-    mdl.qk_topk = opt.qk_topk;
+2954-    mdl.moe_topk = opt.moe_topk;
+2955-}
+2956-
+2957-/// ---- Phase 3 :
+… [72 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Compréhension de la quantification d'activations du moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"fn niveaux_activation\" -A 12 drave-core/src/*.rs | head -20; echo \"=== usage d'act_levels ===\"; grep -rn \"act_levels\" drave-core/src/model.rs | head -8", "description": "Read activation quantization function"}`
+
+  ```
+drave-core/src/main.rs:2927:fn niveaux_activation(abits: u32) -> f32 {
+drave-core/src/main.rs-2928-    let abits = abits.clamp(1, 16);
+drave-core/src/main.rs-2929-    ((1u32 << (abits - 1)) - 1) as f32
+drave-core/src/main.rs-2930-}
+drave-core/src/main.rs-2931-
+drave-core/src/main.rs-2932-/// Applique `--abits` en le bornant, en ANNONÇANT la borne.
+drave-core/src/main.rs-2933-fn poser_niveaux(mdl: &mut model::Model, abits: u32, source: &str) {
+drave-core/src/main.rs-2934-    if abits > 16 {
+drave-core/src/main.rs-2935-        eprintln!("[activation] --abits {abits} demandé ({source}) : borné à 16 (32 767 \
+drave-core/src/main.rs-2936-niveaux), la borne du stockage i16 des activations quantifiées. Au-delà, les valeurs \
+drave-core/src/main.rs-2937-étaient silencieusement saturées et le calcul faux d'un facteur 2^(abits-16).");
+drave-core/src/main.rs-2938-    }
+drave-core/src/main.rs-2939-    mdl.act_levels = niveaux_activation(abits);
+=== usage d'act_levels ===
+2405:    pub act_levels: f32,
+4473:            ctx, events: 0, paires: [0; 3], paires_flux: 0, act_levels: 127.0,
+5489:            quantifier(&hn, &mut xi, &mut sx, self.act_levels, self.act_thresh);
+5515:                     
+… [445 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Point sur la passe complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe-2218.log; tail -2 /tmp/passe-2218.log | cut -c1-95; pgrep -af \"porte-.*\\.sh\" | grep -v pgrep | head -2 | cut -c1-70; date", "description": "Check suite progress"}`
+
+  ```
+9
+  porte-flux             ✅                          20 s    mode 4 — lot en listes           4.
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule 
+3906613 timeout 2400 bash tools/porte-gain.sh
+3906614 bash tools/porte-gain.sh
+sam 10 oct 2026 22:40:42 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du diagnostic M8 (plage d'activations)
+
+- **bash** `{"command": "ls -la /tmp/e6/val.txt /tmp/e6/val.ids 2>/dev/null; echo \"--- ids ---\"; head -c 60 /tmp/e6/val.ids 2>/dev/null; echo; echo \"--- transformers dispo ? ---\"; /home/stephane/gpu-env/bin/python -c \"import transformers; print(transformers.__version__)\" 2>&1 | tail -1", "description": "C … [33 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane   1859 10 oct 20:53 /tmp/e6/val.ids
+-rw-r--r--. 1 stephane stephane 200000 10 oct 20:52 /tmp/e6/val.txt
+--- ids ---
+89,32,80,97,110,116,115,32,119,101,114,101,32,97,110,32,65,1
+--- transformers dispo ? ---
+5.15.0
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"m8_plage_activations.py — M8, test n°1 : les activations du modèle log-normal tiennent-elles\ndans ce que le moteur sait représenter ?\n\nLE FAIT À EXPLIQUER (M8, `reports/rapport-m8-log-normal.md`). Le même entraînement, la même\nquantification, des fichie … [6519 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/m8_plage_activations.py').read());print('syntaxe OK')\"; grep -cE \"✅\" /tmp/passe-2218.log; date", "description": "Validate M8 script syntax"}`
+
+  ```
+syntaxe OK
+9
+sam 10 oct 2026 22:41:11 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du diagnostic M8 (job minuscule, n'interfère pas avec la passe)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/m8_plage_activations.py \\\n  --dense /tmp/e6/dense.gguf --lognormal /tmp/e6/lognormal.gguf --val /tmp/e6/val.txt --limite 512 2>&1 | tail -30", "description": "Run M8 activation … [19 caractères tronqués]`
+
+  ```
+Loading weights:   0%|          | 0/46 [00:00<?, ?it/s]Loading weights: 100%|██████████| 46/46 [00:00<00:00, 1445.65it/s]
+
+poids : dense |w| de 2.416e-08 à 4.219e-01 (rapport 17,461,029)
+        log-normal |w| de 1.595e-08 à 4.314e-01 (rapport 27,047,846)
+
+activations, 512 octets de contexte, quantization par vecteur à 32767 niveaux :
+
+| module | max\|a\| dense | plage dense | max\|a\| log-normal | plage log-normal | effacé dense | effacé log-normal |
+|---|---:|---:|---:|---:|---:|---:|
+| `lm_head` | 1.353e+01 | 3.2 | 7.602e+00 | 7.4 | 0.0001 | 0.0002 |
+| `model.layers.0.self_attn.o_proj` | 3.842e+00 | 10.2 | 4.282e+00 | 15.2 | 0.0003 | 0.0005 |
+| `model.layers.3.self_attn.o_proj` | 6.315e+00 | 9.8 | 4.900e+00 | 11.9 | 0.0003 | 0.0004 |
+| `model.layers.1.self_attn.v_proj` | 4.948e+00 | 5.4 | 4.903e+00 | 6.5 | 0.0002 | 0.0002 |
+| `model.layers.0.self_attn.k_proj` | 4.481e+00 | 4.7 | 4.205e+00 | 5.6 | 0.0001 | 0.0002 |
+| `model.layers.1.self_attn.o_proj` | 5.785e+00 | 10.0 | 4.150e+00 | 11.2 | 0.0003 | 0.0003 |
+| `model.layers.2.self_attn.v_proj` | 5.414e+00 | 6.2 | 5.573e+00 | 6.9 | 0.0002 | 0.0002 |
+| `model.layers.2.self_attn.k_proj` | 7.184e+00 | 6.6 | 5.351e+00 | 7.0 | 0.0002 |
+… [1015 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification : le modèle exporté porte-t-il des bornes d'activation ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport sys, pathlib\nsys.path.insert(0, \"tools\")\nfrom lecture_etat import lire_entete, _chaine, _valeur\nimport struct\nf = open(\"/tmp/e6/dense-modele.gguf\", \"rb\")\nf.read(4); struct … [621 caractères tronqués]`
+
+  ```
+clés de métadonnées : 17
+clés liées aux bornes d'activation : AUCUNE
+extrait : ['qwen3moe.block_count', 'qwen3moe.context_length', 'qwen3moe.embedding_length', 'qwen3moe.feed_forward_length', 'qwen3moe.attention.head_count', 'qwen3moe.attention.head_count_kv', 'qwen3moe.attention.key_length', 'qwen3moe.attention.value_length']
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du test n°1 de M8 (réfuté) et de la nouvelle piste
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "limit": 14, "offset": 55}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md</path>
+<type>file</type>
+<content>
+55:    n'y est pour rien et c'est bien un traitement d'activation — l'exporteur écrit aujourd'hui les
+56:    tenseurs 2D en Q8_0/Q4_0, il faudrait une option F32.
+57: 
+58: ## 4. Ce que cette fiche ne dit pas
+59: 
+60: - **elle ne corrige rien** : M8 reste ouvert, avec une cause nommée au lieu de « cause ouverte » ;
+61: - **un seul format d'export** (Q8_0/Q4_0) et **une seule échelle** (7,58 M paramètres) : le défaut
+62:   pourrait ne pas se reproduire à une autre taille ;
+63: - **le témoin dense n'est pas parfait non plus** (×1,44) : une partie de l'écart appartient à
+64:   l'export, et la part exacte du log-normal dans cet écart n'est pas séparée ici.
+65: 
+66: ## 5. Protocole, pour rejouer
+67: 
+68: ```bash
+
+(Showing lines 55-68 of 84. Use offset=69 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "## 3 bis. Le test n°1 est FAIT — et il RÉFUTE l'hypothèse restante\n\n**Mesuré le 2026-10-10 à 22 h 41** (`tools/m8_plage_activations.py`, les deux modèles chargés en\nPyTorch fp32, 512 o … [2154 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '1s/.*/# M8 — le variant log-normal : quatre causes ÉLIMINÉES, et le soupçon passe à l'\"'\"'export/' reports/rapport-m8-log-normal.md && head -2 reports/rapport-m8-log-normal.md; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/pa … [116 caractères tronqués]`
+
+  ```
+# M8 — le variant log-normal : quatre causes ÉLIMINÉES, et le soupçon passe à l'export
+
+--- passe ---
+9
+  porte-fusion           ✅                           7 s    
+sam 10 oct 2026 22:42:07 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des deux exports avant de conclure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/e6/*.gguf 2>/dev/null; /home/stephane/gpu-env/bin/python - <<'PY'\nimport sys, struct\nsys.path.insert(0, \"tools\")\nfrom lecture_etat import _chaine, _valeur\nfor f in (\"/tmp/e6/dense-modele.gguf\", \"/tmp/e6/lognormal … [597 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 4574656 10 oct 20:52 /tmp/e6/dense-modele.gguf
+-rw-r--r--. 1 stephane stephane 4574656 10 oct 20:52 /tmp/e6/lognormal-modele.gguf
+
+/tmp/e6/dense.gguf:
+total 29624
+drwxr-xr-x. 2 stephane stephane      100 10 oct 20:52 .
+drwxr-xr-x. 4 stephane stephane      200 10 oct 20:53 ..
+-rw-r--r--. 1 stephane stephane      974 10 oct 20:52 config.json
+-rw-r--r--. 1 stephane stephane      153 10 oct 20:52 generation_config.json
+-rw-------. 1 stephane stephane 30325816 10 oct 20:52 model.safetensors
+
+/tmp/e6/lognormal.gguf:
+total 29624
+drwxr-xr-x. 2 stephane stephane      100 10 oct 20:45 .
+drwxr-xr-x. 4 stephane stephane      200 10 oct 20:53 ..
+-rw-r--r--. 1 stephane stephane      974 10 oct 20:45 config.json
+-rw-r--r--. 1 stephane stephane      153 10 oct 20:45 generation_config.json
+-rw-------. 1 stephane stephane 30325816 10 oct 20:45 model.safetensors
+dense-modele.gguf : 51 tenseurs, 17 clés, bornes=AUCUNE
+lognormal-modele.gguf : 51 tenseurs, 17 clés, bornes=AUCUNE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le soupçon se précise : simuler l'export en PyTorch pour trancher
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Q8_0\\|Q4_0\\|q8\\|q4\\|type\" tools/exporter_gguf.py | head -20", "description": "Check exporter quantization choice"}`
+
+  ```
+38:GGML_Q4_0, GGML_Q8_0 = 2, 8
+43:# ------------------------------------------------------------------ Q8_0
+45:# moteur en Q8_0 : `q8_view` refuse tout autre type (« type 0 non géré » pour un
+46:# F32). Q8_0 est donc le format d'échange, et l'écrire ici évite de dépendre d'un
+48:def q8_0_encoder(a):
+50:    a = np.ascontiguousarray(a, dtype=np.float32)
+54:    d = (amax / 127.0).astype(np.float32)
+55:    inv = np.where(d != 0, 1.0 / np.where(d == 0, 1.0, d), 0.0).astype(np.float32)
+56:    q = np.clip(np.rint(plat * inv[:, None]), -127, 127).astype(np.int8)
+57:    octets = np.empty((plat.shape[0], 34), dtype=np.uint8)
+58:    octets[:, :2] = d.astype(np.float16).view(np.uint8).reshape(-1, 2)
+63:def q8_0_decoder(brut, forme):
+64:    a = np.frombuffer(brut, dtype=np.uint8).reshape(-1, 34)
+65:    d = a[:, :2].copy().view(np.float16).reshape(-1).astype(np.float32)
+66:    q = a[:, 2:].copy().view(np.int8).astype(np.float32)
+70:# ------------------------------------------------------------------- Q4_0
+72:# d'experts : Q4_K, Q6_K, MXFP4, Q4_0 et les super-blocs « sans noyau ». Un
+75:# chargement meurt sur « blk.0.ffn_gate.weight absent ». Q4_0 est le plus simple
+77:def q4_0_encoder(a):
+79:   
+… [75 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"q8_0_encoder\\|q4_0_encoder\\|def exporter\\|Q4_0 if\\|expert\" tools/exporter_gguf.py | head -14", "description": "Find which tensors are quantized how"}`
+
+  ```
+8:`ffn_gate_inp.weight`, experts SwiGLU `ffn_{gate,up,down}_exps.weight`, normes
+15:  * les experts sont en **[n_expert, n_ff, n_embd]** (`ffn_down_exps` :
+16:    [n_expert, n_embd, n_ff]) ;
+19:  * `norm_topk_prob` doit être déclaré (`expert_weights_norm`), sinon le moteur
+48:def q8_0_encoder(a):
+72:# d'experts : Q4_K, Q6_K, MXFP4, Q4_0 et les super-blocs « sans noyau ». Un
+73:# tenseur d'experts en F32 est REFUSÉ — « format sans noyau ni déquantification »
+77:def q4_0_encoder(a):
+85:        f"Choisir une largeur d'expert multiple de 32.")
+183:def _experts(poids, p, n_exp):
+184:    """Les trois projections d'experts, dans les DEUX dispositions possibles.
+187:    pour les modèles récents), les experts sont FUSIONNÉS
+188:    (`experts.gate_up_proj`, forme (E, 2·ff, d), `gate` = première moitié —
+190:    souvent écrits UN PAR UN (`experts.{e}.gate_proj.weight`). Lire la mauvaise
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"encoder(\" tools/exporter_gguf.py | head -10; echo \"=== contexte ===\"; grep -n -B4 -A6 \"q4_0_encoder(\" tools/exporter_gguf.py | sed -n '1,40p'", "description": "Find encoder call sites"}`
+
+  ```
+48:def q8_0_encoder(a):
+77:def q4_0_encoder(a):
+216:        return (nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape))
+243:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+251:                    t.append((b + nom, (q8_0_encoder(arr), GGML_Q8_0, arr.shape)))
+271:                    t.append((b + nom, (q4_0_encoder(arr), GGML_Q4_0, arr.shape)))
+=== contexte ===
+73-# tenseur d'experts en F32 est REFUSÉ — « format sans noyau ni déquantification »
+74-# — et la couche retombe alors sur une FFN dense… qui n'existe pas : le
+75-# chargement meurt sur « blk.0.ffn_gate.weight absent ». Q4_0 est le plus simple
+76-# à écrire exactement, et il est relu par un vrai noyau.
+77:def q4_0_encoder(a):
+78-    """Blocs de 32 poids : échelle f16 puis 16 octets (nibbles bas = 0..15,
+79-    nibbles hauts = 16..31). Reproduction de `quantize_row_q4_0_ref` de ggml —
+80-    `d = max_signe / -8`, `q = min(15, tronc(v/d + 8,5))`."""
+81-    a = np.ascontiguousarray(a, dtype=np.float32)
+82-    assert a.shape[-1] % 32 == 0, (
+83-        f"dernière dimension {a.shape} non multiple de 32 : les blocs ggml font 32 poids, "
+--
+239-            gate, up, down = _experts(poids, p, n_exp)
+240
+… [1360 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def q4_0_decoder\\|def q4_0\" tools/exporter_gguf.py; sed -n '77,100p' tools/exporter_gguf.py", "description": "Check Q4_0 encoder details"}`
+
+  ```
+77:def q4_0_encoder(a):
+98:def q4_0_decoder(brut, forme):
+def q4_0_encoder(a):
+    """Blocs de 32 poids : échelle f16 puis 16 octets (nibbles bas = 0..15,
+    nibbles hauts = 16..31). Reproduction de `quantize_row_q4_0_ref` de ggml —
+    `d = max_signe / -8`, `q = min(15, tronc(v/d + 8,5))`."""
+    a = np.ascontiguousarray(a, dtype=np.float32)
+    assert a.shape[-1] % 32 == 0, (
+        f"dernière dimension {a.shape} non multiple de 32 : les blocs ggml font 32 poids, "
+        f"et le moteur REFUSE une couche dont l'entrée n'est pas un multiple de 32. "
+        f"Choisir une largeur d'expert multiple de 32.")
+    plat = a.reshape(-1, 32)
+    idx = np.abs(plat).argmax(axis=1)
+    mx = plat[np.arange(plat.shape[0]), idx]
+    d = (mx / -8.0).astype(np.float32)
+    inv = np.where(d != 0, 1.0 / np.where(d == 0, 1.0, d), 0.0).astype(np.float32)
+    q = np.clip(np.floor(plat * inv[:, None] + 8.5), 0, 15).astype(np.uint8)
+    octets = np.empty((plat.shape[0], 18), dtype=np.uint8)
+    octets[:, :2] = d.astype(np.float16).view(np.uint8).reshape(-1, 2)
+    octets[:, 2:] = (q[:, :16] | (q[:, 16:] << 4)).astype(np.uint8)
+    return octets.tobytes()
+
+
+def q4_0_decoder(brut, forme):
+    """Le che
+… [61 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"m8_simulation_export.py — M8 : l'écart vient-il de l'EXPORT ? On le simule en PyTorch.\n\nLE RAISONNEMENT, ET IL EST COURT. Le modèle dense rend **×1,44** de perplexité à l'export, le\nlog-normal **×78** — mêmes poids (plage 17,5 M contre 27,0 M, maximum 0, … [5685 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '98,112p' tools/exporter_gguf.py", "description": "Verify q4_0_decoder signature"}`
+
+  ```
+def q4_0_decoder(brut, forme):
+    """Le chemin inverse — c'est lui qui fabrique la RÉFÉRENCE en PyTorch.
+
+    Sans lui, la comparaison moteur/référence mesurerait la quantification Q4_0
+    au lieu du calcul du moteur : les deux côtés doivent partir des MÊMES poids.
+    """
+    a = np.frombuffer(brut, dtype=np.uint8).reshape(-1, 18)
+    d = a[:, :2].copy().view(np.float16).reshape(-1).astype(np.float32)
+    qs = a[:, 2:]
+    bas = (qs & 0x0F).astype(np.float32) - 8.0
+    haut = ((qs >> 4) & 0x0F).astype(np.float32) - 8.0
+    plat = np.concatenate([bas, haut], axis=1) * d[:, None]
+    return plat.reshape(forme)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/if nom.endswith(\"_exps.weight\") or \"_exps.\" in nom:/if \"expert\" in nom.lower() or \"_exps.\" in nom:/' tools/m8_simulation_export.py && grep -n \"expert\" tools/m8_simulation_export.py | head -3 && timeout 900 /home/s … [256 caractères tronqués]`
+
+  ```
+13:`tools/exporter_gguf.py`, appliqués aux mêmes tenseurs (experts en Q4_0, le reste en Q8_0) — et on
+41:    La règle de l'exporteur : les trois projections d'experts (`*_exps.weight`) passent en Q4_0,
+52:        if "expert" in nom.lower() or "_exps." in nom:
+512 jetons, appareil cuda
+
+| modèle | perplexité avant export | après export simulé | facteur |
+|---|---:|---:|---:|
+| dense | 7.1504 | 7.3429 | ×1.03 |
+| log-normal | 484.3354 | 436.5992 | ×0.90 |
+
+29 tenseurs quantifiés par modèle (experts en Q4_0, le reste en Q8_0).
+
+Dans le MOTEUR, le rapport mesuré était : dense ×1,44 · log-normal ×78.
+Simulé ici, en PyTorch : dense ×1.03 · log-normal ×0.90.
+  ⇒ l'export n'explique RIEN : le log-normal survit à la quantification en PyTorch,
+    donc le défaut est dans la LECTURE du GGUF par le moteur, et il faut y aller.
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte majeure : le moteur est fidèle ; c'est le fichier sauvé qui est déjà mauvais
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6/journal.log; echo \"=== journal dense ===\"; cat /tmp/e6/dense.log", "description": "Read training logs for both models"}`
+
+  ```
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+# POIDS LOG-NORMAUX : 17 couches reparamétrées (w = signe(theta)·exp(|theta|))
+  pas   1000 · perte 1.8472 · val 2.9564 bits/octet · 61 s
+  pas   2000 · perte 1.7206 · val 2.6037 bits/octet · 118 s
+  pas   3000 · perte 1.5158 · val 2.4846 bits/octet · 173 s
+# matérialisation : 17 couches · écart max avant copie 0.000e+00 (0 = la reparamétrisation était déjà cohérente)
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 18.17it/s]
+
+  # meilleur point : pas 3000 · val 2.4846 bits/octet
+  # écrit dans /tmp/e6/lognormal.gguf · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+=== journal dense ===
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  pas   1000 · perte 1.6759 · val 2.6576 bits/octet · 54 s
+  pas   2000 · perte 1.6322 · val 2.4430 bits/octet · 108 s
+  pas   3000 · perte 1.4551 · val 2.3533 bits/octet · 162 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<0
+… [157 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du code log-normal de l'entraîneur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lognormal\\|theta\\|reparam\\|matérialis\" tools/entrainer_moteur.py | head -25", "description": "Find log-normal implementation"}`
+
+  ```
+59:                  rope_parameters={"rope_theta": 10000.0, "rope_type": "default"})
+114:    """`w = signe_inné · e^{theta}` — log-normale par construction, signes FIXÉS.
+123:    est donc fidèle *et* numériquement nécessaire : une reparamétrisation qui
+124:    déduirait le signe de `theta` ne peut pas représenter un petit poids positif
+125:    (|w| = e^{theta} ≥ 1 dès que theta > 0), et l'entraînement diverge — mesuré,
+128:    `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.
+135:    def forward(self, theta):
+136:        # Borne douce : e^{theta} sans borne laisse un pas d'AdamW multiplier un
+138:        return self.signes * theta.clamp(-12.0, 6.0).exp()
+150:                theta0 = w.abs().clamp(min=1e-6).log()
+153:                mod.parametrizations.weight.original.copy_(theta0)
+194:    """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
+201:    recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
+202:    — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+210:                theta = par.original
+212:                attendu = signes * theta.clamp(-12.0, 6.0).exp()
+217:    print(f"# matérialisati
+… [497 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 50, "offset": 190}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+190:     return n, positifs / max(total, 1)
+191: 
+192: 
+193: def materialiser_poids(modele):
+194:     """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
+195: 
+196:     POURQUOI LA COPIE EST EXPLICITE (défaut trouvé le 9/10). Le premier essai se
+197:     contentait de `remove_parametrizations` : le fichier sauvé portait alors des
+198:     poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+199:     à l'entraînement, perplexité 8 668 dans le moteur et **15 552** pour la référence
+200:     PyTorch sur les mêmes poids quantifiés (donc le fichier, pas le moteur). On
+201:     recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
+202:     — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+203:     """
+204:     from torch.nn.utils.parametrize import remove_parametrizations
+205:     n, ecart = 0, 0.0
+206:     with torch.no_grad():
+207:         for mod in modele.modules():
+208:             if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+209:           
+… [1697 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'un vérificateur « le fichier sauvé reproduit-il l'entraînement ? »
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 45, "offset": 506}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+506:             frac = min(1.0, pas / max(1, a.pas * 0.5)) ** 3
+507:             garde = 1.0 - (1.0 - a.elagage) * frac
+508:             if garde < 1.0:
+509:                 elaguer_lignes(modele, garde)
+510: 
+511:         if pas % a.eval_tous == 0 or pas == a.pas:
+512:             modele.eval()
+513:             tot, n = 0.0, 0
+514:             with torch.no_grad():
+515:                 for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+516:                     xv = torch.from_numpy(
+517:                         np.stack([val[(k * a.lot + j) * a.seq:(k * a.lot + j) * a.seq + a.seq]
+518:                                   for j in range(a.lot)]).astype(np.int64)).to(dev)
+519:                     # LA MÊME séquence en entrée et en étiquettes : le modèle
+520:                     # décale lui-même (`shift_logits`/`shift_labels`). Passer une
+521:                     # entrée DÉJÀ décalée avec des étiquettes décalées décale
+522:                     # DEUX FOIS et mesure la prédiction de t+2 — l'erreur a été
+523:                     # commise ici, et elle a produit de
+… [1412 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 18, "offset": 344}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+344:     p.add_argument("--graine", type=int, default=1)
+345:     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+346:     p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à imiter")
+347:     p.add_argument("--alpha-distill", type=float, default=0.0,
+348:                    help="poids de la KL d'enseignant ; 0 = apprentissage ordinaire")
+349:     p.add_argument("--temperature", type=float, default=2.0, help="température de distillation")
+350:     p.add_argument("--eval-tous", type=int, default=1000)
+351:     p.add_argument("--sortie", required=True)
+352:     p.add_argument("--kwta", type=float, default=0.0,
+353:                    help="part GARDÉE par k-WTA sur l'entrée de o_proj/down_proj "
+354:                         "(0 = aucun ; 0,25 = on annule 75 %% des activations)")
+355:     p.add_argument("--elagage", type=float, default=0.0,
+356:                    help="part GARDÉE des poids, par ligne de sortie (0 = aucun "
+357:                         "élagage ; 0,5 = on annule la moitié des poids de chaque
+… [391 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    p.add_argument(\"--graine\", type=int, default=1)\n    p.add_argument(\"--verifier-sauvegarde\", action=\"store_true\",\n                   help=\"APRÈS l'écriture : recalculer la perte de v … [387 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    modele.eval()\n    os.makedirs(a.sortie, exist_ok=True)\n    modele.save_pretrained(a.sortie)\n    print(f\"\\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet\")\n  … [2879 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('syntaxe OK')\" && grep -cE \"✅\" /tmp/passe-2218.log; date", "description": "Validate trainer syntax and check suite"}`
+
+  ```
+syntaxe OK
+10
+sam 10 oct 2026 22:45:29 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif M8 : le fichier sauvé reproduit-il l'entraînement ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; rm -rf /tmp/m8v; mkdir -p /tmp/m8v\nC=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 400 --eval-tous 200\"\n( CUDA_VI … [624 caractères tronqués]`
+
+  ```
+=== DENSE code=0 ===
+  # meilleur point : pas 400 · val 3.1298 bits/octet
+  # VÉRIFICATION DE SAUVEGARDE : mémoire 3.1298 bits/octet · disque 3.1298 bits/octet · écart ×1.000
+  # écart de poids le plus grand : model.norm.weight → 0.000e+00
+  ✅ le fichier sauvé reproduit le modèle entraîné à mieux que 5 %
+=== LOG-NORMAL code=0 ===
+  pas    400 · perte 2.3845 · val 3.6465 bits/octet · 25 s
+  # meilleur point : pas 400 · val 3.6465 bits/octet
+  # VÉRIFICATION DE SAUVEGARDE : mémoire 8.8257 bits/octet · disque 8.8257 bits/octet · écart ×1.000
+  # écart de poids le plus grand : model.norm.weight → 0.000e+00
+  ✅ le fichier sauvé reproduit le modèle entraîné à mieux que 5 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause localisée : la matérialisation change le modèle — micro-test pour la mécanique
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 50, "offset": 112}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+112: 
+113: class PoidsLogNormaux(nn.Module):
+114:     """`w = signe_inné · e^{theta}` — log-normale par construction, signes FIXÉS.
+115: 
+116:     POURQUOI (docs/biologie-pour-drave.md § 3 ter). Les efficacités synaptiques
+117:     corticales sont log-normales sur plusieurs ordres de grandeur ; nos modèles sont
+118:     quasi gaussiens (p99,9/médiane 5,2), d'où un élagage gratuit à 50 % et fatal à
+119:     25 %. Une distribution multiplicative est élagable par construction.
+120: 
+121:     ET POURQUOI LES SIGNES SONT FIXÉS : en biologie, un neurone est excitateur OU
+122:     inhibiteur — son signe ne change pas (principe de Dale). Le figer à la naissance
+123:     est donc fidèle *et* numériquement nécessaire : une reparamétrisation qui
+124:     déduirait le signe de `theta` ne peut pas représenter un petit poids positif
+125:     (|w| = e^{theta} ≥ 1 dès que theta > 0), et l'entraînement diverge — mesuré,
+126:     perte 12 137 après 400 pas.
+127: 
+128:     `theta` est la log-magnitude, apprise ; `signes` est un tampon figé.
+129:     """
+130: 
+131:     def __init__(self, 
+… [1433 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Micro-test de la matérialisation (quelle valeur est réellement écrite ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport torch, torch.nn as nn\nfrom torch.nn.utils.parametrize import register_parametrization, remove_parametrizations\n\nclass P(nn.Module):\n    def __init__(s, signes):\n        super(). … [1282 caractères tronqués]`
+
+  ```
+écart (mod.weight − attendu) AVANT copy_   : 0.0
+écart APRÈS copy_                          : 0.0
+écart APRÈS remove_parametrizations        : 0.0
+θ conservé ?  False
+max |w| écrit : 1.234567642211914  · max |θ| : 4.4891462326049805
+  ```
+
+### 🤖 Assistant
+
+⏵ Instrumentation : à quelle étape le modèle change-t-il ?
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def perte_de_validation(modele, val, a, dev):\n    \"\"\"La MÊME mesure que la boucle d'évaluation — extraite pour pouvoir la refaire à volonté.\n\n    Sans cette extraction, on ne saurait pas * … [757 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    # OÙ LE MODÈLE CHANGE-T-IL ? Quatre mesures de la MÊME perte de validation, à quatre\n    # moments : après la boucle, après la restauration du meilleur point, après la\n    # matérialisatio … [5796 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('syntaxe OK')\" && P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --exp … [405 caractères tronqués]`
+
+  ```
+syntaxe OK
+code=2
+  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+  #   après la boucle          3.6465 bits/octet
+  #   après restauration      3.6465
+  #   après matérialisation   8.8257
+  #   après relecture disque  8.8257
+  # écart de poids le plus grand (mémoire ↔ disque) : model.norm.weight → 0.000e+00
+  ❌ LA MATÉRIALISATION CHANGE LE MODÈLE (M8) : c'est là qu'il faut regarder
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du contrôle tautologique : comparer APRÈS le retrait, module par module
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 32, "offset": 211}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+211: 
+212: def materialiser_poids(modele):
+213:     """Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.
+214: 
+215:     POURQUOI LA COPIE EST EXPLICITE (défaut trouvé le 9/10). Le premier essai se
+216:     contentait de `remove_parametrizations` : le fichier sauvé portait alors des
+217:     poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+218:     à l'entraînement, perplexité 8 668 dans le moteur et **15 552** pour la référence
+219:     PyTorch sur les mêmes poids quantifiés (donc le fichier, pas le moteur). On
+220:     recalcule donc la valeur exacte du `forward` — `signes · clamp(theta, −12, 6).exp()`
+221:     — et on l'écrit AVANT de retirer la reparamétrisation, en le VÉRIFIANT.
+222:     """
+223:     from torch.nn.utils.parametrize import remove_parametrizations
+224:     n, ecart = 0, 0.0
+225:     with torch.no_grad():
+226:         for mod in modele.modules():
+227:             if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+228:                 par = mod.parametrizations.weight
+229:      
+… [745 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def materialiser_poids(modele):\n    \"\"\"Écrit les poids DÉFINITIFS, puis retire la reparamétrisation.\n\n    POURQUOI LA COPIE EST EXPLICITE (défaut trouvé le 9/10). Le premier essai se\n     … [3933 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\" && P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 - … [401 caractères tronqués]`
+
+  ```
+OK
+code=2
+# matérialisation : 17 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+  #   après la boucle          3.6465 bits/octet
+  #   après restauration      3.6465
+  #   après matérialisation   8.8257
+  #   après relecture disque  8.8257
+  ❌ LA MATÉRIALISATION CHANGE LE MODÈLE (M8) : c'est là qu'il faut regarder
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience ciblée : la copie ou le retrait ?
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "                attendu = signes * theta.clamp(-12.0, 6.0).exp()\n                if os.environ.get(\"DRAVE_MAT_SANS_COPIE\") != \"1\":\n                    mod.weight.copy_(attendu)", "old_stri … [115 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/entrainer_moteur.py | grep -n \"^import\\|^from\" ; P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --lr 3e-4 --graine 1 --pas 4 … [361 caractères tronqués]`
+
+  ```
+code=2
+# matérialisation : 17 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  #   après la boucle          3.6465 bits/octet
+  #   après restauration      3.6465
+  #   après matérialisation   8.8257
+  #   après relecture disque  8.8257
+  ❌ LA MATÉRIALISATION CHANGE LE MODÈLE (M8) : c'est là qu'il faut regarder
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic par crochets : où les logits divergent-ils ?
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    # OÙ LE MODÈLE CHANGE-T-IL ? Quatre mesures de la MÊME perte de validation, à quatre\n    # moments : après la boucle, après la restauration du meilleur point, après la\n    # matérialisatio … [3863 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^import collections\\|^import os\\|^import\" tools/entrainer_moteur.py | head -8", "description": "Check imports in trainer"}`
+
+  ```
+24:import argparse
+25:import math
+26:import os
+27:import sys
+28:import time
+30:import numpy as np
+31:import torch
+32:import torch.nn as nn
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '24i import collections' tools/entrainer_moteur.py && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\" && P=/home/stephane/gpu-env/bin/python; C=\"--famille ro … [469 caractères tronqués]`
+
+  ```
+OK
+code=2
+# matérialisation : 17 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  # DIAGNOSTIC : écart max sur les logits = 1.293e+01
+  #   model.embed_tokens : écart 1.065e+01  ← PREMIER DIVERGENT
+  #   après la boucle          3.6465 bits/octet
+  #   après restauration      3.6465
+  #   après matérialisation   8.8257
+  #   après relecture disque  8.8257
+  # écart de poids le plus grand (mémoire ↔ disque) : model.norm.weight → 0.000e+00
+  ```
+
+### 🤖 Assistant
+
+⏵ Cause trouvée : la tête est LIÉE à la table d'entrée, et la matérialisation écrase les entrées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport json, torch\nc = json.load(open(\"/tmp/m8v/dense/config.json\"))\nprint(\"tie_word_embeddings :\", c.get(\"tie_word_embeddings\"))\nfrom transformers import AutoModelForCausalLM\nm = … [411 caractères tronqués]`
+
+  ```
+tie_word_embeddings : True
+même objet ? True · même stockage ? True
+forme table (256, 192) · forme tête (256, 192)
+a tie_weights ? True
+[stderr]
+Loading weights:   0%|          | 0/46 [00:00<?, ?it/s]Loading weights: 100%|██████████| 46/46 [00:00<00:00, 1417.68it/s]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : exclure les poids PARTAGÉS de la reparamétrisation
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def installer_poids_lognormaux(modele):\n    \"\"\"θ = log|w| appris, signes figés à la naissance (principe de Dale).\n\n    LES POIDS PARTAGÉS SONT EXCLUS, ET C'EST M8 (trouvé le 10/10). `tie_w … [2634 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 18, "offset": 142}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+142: def installer_poids_lognormaux(modele):
+143:     """θ = log|w| appris, signes figés à la naissance (principe de Dale)."""
+144:     from torch.nn.utils.parametrize import register_parametrization
+145:     n = 0
+146:     for mod in modele.modules():
+147:         if isinstance(mod, nn.Linear):
+148:             with torch.no_grad():
+149:                 w = mod.weight
+150:                 signes = w.sign().clone()
+151:                 theta0 = w.abs().clamp(min=1e-6).log()
+152:             register_parametrization(mod, "weight", PoidsLogNormaux(signes))
+153:             with torch.no_grad():
+154:                 mod.parametrizations.weight.original.copy_(theta0)
+155:             n += 1
+156:     return n
+157: 
+158: 
+159: def imposer_ratio_signes(modele, ratio, graine=0):
+
+(Showing lines 142-159 of 668. Use offset=160 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def installer_poids_lognormaux(modele):\n    \"\"\"θ = log|w| appris, signes figés à la naissance (principe de Dale).\n\n    LES POIDS PARTAGÉS SONT EXCLUS, ET C'EST M8 (trouvé le 10/10). `tie_w … [2683 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\" && P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 - … [408 caractères tronqués]`
+
+  ```
+OK
+code=0
+# POIDS PARTAGÉS : 1 module(s) EXCLU(S) de la reparamétrisation (sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :
+#   lm_head (partagé avec ['model.embed_tokens.weight'])
+# matérialisation : 16 couches · écart max APRÈS retrait 0.000e+00 (model.layers.3.self_attn.v_proj.weight)
+  #   après la boucle          3.5605 bits/octet
+  #   après restauration      3.5605
+  #   après matérialisation   3.5605
+  #   après relecture disque  3.5605
+  ✅ le fichier sauvé reproduit le modèle entraîné, et la matérialisation ne change rien
+  ```
+
+### 🤖 Assistant
+
+⏵ M8 CORRIGÉ ; contrôle de la passe complète avant de remesurer E6
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe-2218.log; tail -2 /tmp/passe-2218.log | cut -c1-90; pgrep -af \"porte-.*\\.sh\" | grep -v pgrep | head -2 | cut -c1-60; date", "description": "Check gate suite progress"}`
+
+  ```
+10
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace s
+  porte-gain             ✅                         347 s    ✅ drapeau VIVANT mais conditio
+3940111 timeout 2400 bash tools/porte-greffe.sh
+3940112 bash tools/porte-greffe.sh
+sam 10 oct 2026 22:52:39 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Remesure de E6 avec le correctif M8 (entraînement + export + moteur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6b && mkdir -p /tmp/e6b && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [973 caractères tronqués]`
+
+  ```
+remesure E6 lancée (pid 3943454)
+sam 10 oct 2026 22:52:45 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la cause trouvée et du correctif dans la fiche M8
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "## 3 ter. LA CAUSE EST TROUVÉE, ET ELLE N'ÉTAIT PAS DANS LE MOTEUR\n\n**Le 2026-10-10 à 22 h 50.** L'instrument qui l'a trouvée est une vérification ajoutée au harnais\n(`--verifier-sauve … [3551 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" reports/rapport-m8-log-normal.md; grep -n \"3 bis\" reports/rapport-m8-log-normal.md | head -2; tail -3 /tmp/e6b/codes.txt 2>/dev/null", "description": "Locate sections and check E6 progress"}`
+
+  ```
+14:## 1. Le fait, mesuré deux fois
+25:## 2. Les trois hypothèses éliminées
+38:## 3. L'hypothèse restante, et comment la tester
+58:## 3 bis. Le test n°1 est FAIT — et il RÉFUTE l'hypothèse restante
+90:## 4. Ce que cette fiche ne dit pas
+98:## 5. Protocole, pour rejouer
+58:## 3 bis. Le test n°1 est FAIT — et il RÉFUTE l'hypothèse restante
+[exit code: 1]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "limit": 6, "offset": 86}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md</path>
+<type>file</type>
+<content>
+86: lecture**. Le prochain test n'est donc plus le n°2 (élargir les clamps : il n'y en a pas) mais le
+87: **n°3, dans une version plus tranchante** : ré-exporter en F32 *et* comparer, tenseur par tenseur,
+88: le GGUF relu aux poids PyTorch d'origine — c'est la seule étape qui n'a jamais été regardée.
+89: 
+90: ## 4. Ce que cette fiche ne dit pas
+91: 
+
+(Showing lines 86-91 of 116. Use offset=92 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "## 3 ter. LA CAUSE EST TROUVÉE, ET ELLE N'ÉTAIT PAS DANS LE MOTEUR\n\n**Le 2026-10-10 à 22 h 50.** L'instrument qui l'a trouvée est une vérification ajoutée au harnais\n(`--verifier-sauve … [3545 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '1s/.*/# M8 — le variant log-normal : CAUSE TROUVÉE (le partage des poids), CORRIGÉE, et le moteur innocenté/' reports/rapport-m8-log-normal.md && head -1 reports/rapport-m8-log-normal.md; cat /tmp/e6b/codes.txt 2>/dev/null; e … [112 caractères tronqués]`
+
+  ```
+# M8 — le variant log-normal : CAUSE TROUVÉE (le partage des poids), CORRIGÉE, et le moteur innocenté
+--- passe ---
+10
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de M8 dans les manques et l'état
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md", "new_string": "| **M8** | ~~**défaut du variant log-normal** — le fichier sauvé ne reproduit pas le modèle entraîné~~ **CAUSE TROUVÉE ET CORRIGÉE le 2026-10-10 22 h 50** | la **tête liée à la table d'entrée** (`tie_word … [1483 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/manques.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6b/codes.txt 2>/dev/null; echo \"--- dense ---\"; grep -E \"VÉRIFICATION|après |meilleur point\" /tmp/e6b/dense.log 2>/dev/null | tail -6", "description": "Check E6 re-measurement progress"}`
+
+  ```
+--- dense ---
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "| **E6** | poids log-normaux | 🟡 **défaut M8 corrigé le 10/10 — à remesurer** | le fichier sauvé ne reproduisait pas le modèle entraîné parce que la **tête liée à la table d'entrée** était reparamétr … [727 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "- **`--etat-sortie PREFIXE` écrit `PREFIXE.<position>`** : c'est un **préfixe de fichier**, pas un\n  dossier. Donner un dossier fait écrire `dossier.4`, `dossier.5`… et la relecture répond « aucun\n  état lu  … [1147 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6b/codes.txt 2>/dev/null; echo \"---\"; ls -la /tmp/e6b/ | head -6; grep -cE \"✅\" /tmp/passe-2218.log; date", "description": "Check E6 progress and suite"}`
+
+  ```
+---
+total 4
+drwxr-xr-x.   2 stephane stephane     80 10 oct 22:52 .
+drwxrwxrwt. 327 root     root     813380 10 oct 22:54 ..
+-rw-r--r--.   1 stephane stephane    190 10 oct 22:53 dense.log
+-rw-r--r--.   1 stephane stephane      0 10 oct 22:52 run.log
+10
+sam 10 oct 2026 22:54:14 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte « le fichier sauvé reproduit le modèle »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"corpus\" tools/entrainer_moteur.py | head -6", "description": "Find trainer corpus default"}`
+
+  ```
+395:    p.add_argument("--donnees", nargs="+", default=["data/corpus_en.txt"])
+396:    p.add_argument("--validation", default="data/corpus_en_val.txt")
+469:          f"{stocke/1e6:.2f} M stockés · corpus {len(train)} octets · {dev}")
+  ```
+
+- **write** `{"content": "#!/bin/bash\n# porte-sauvegarde-modele.sh — le fichier sauvé reproduit-il le modèle ENTRAÎNÉ ?\n#\n# CE QUE LA PORTE VERROUILLE, et pourquoi chacun de ces points :\n#   1. **la perte de validation ne bouge à AUCUNE des quatre étapes** — après la boucle, après la\n#      restauration du  … [4380 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-sauvegarde-modele.sh && echo \"syntaxe OK\"; grep -E \"#   après\" /tmp/m8v/corrige.log; cat /tmp/e6b/codes.txt 2>/dev/null; echo \"(rien = E6 en cours)\"; date", "description": "Validate gate syntax, check logs"}`
+
+  ```
+syntaxe OK
+  #   après la boucle          3.5605 bits/octet
+  #   après restauration      3.5605
+  #   après matérialisation   3.5605
+  #   après relecture disque  3.5605
+(rien = E6 en cours)
+sam 10 oct 2026 22:54:41 EDT
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh", "new_string": "    # Les quatre moments doivent être ÉGAUX — on les relit dans le journal, pas dans une variable.\n    # Le premier nombre de chaque ligne, quel que soit le libellé du moment (« la boucl … [482 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-sauvegarde-modele.sh && grep -E \"^  #   après\" /tmp/m8v/corrige.log | awk '{for (i = 1; i <= NF; i++) if ($i ~ /^[0-9]+\\.[0-9]+$/) {print $i; break}}'", "description": "Test the four-moment extraction"}`
+
+  ```
+3.5605
+3.5605
+3.5605
+3.5605
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6b/codes.txt 2>/dev/null; tail -3 /tmp/e6b/dense.log 2>/dev/null; date", "description": "Check E6 re-measurement"}`
+
+  ```
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+  pas   1000 · perte 1.6759 · val 2.6576 bits/octet · 54 s
+  pas   2000 · perte 1.6322 · val 2.4430 bits/octet · 104 s
+sam 10 oct 2026 22:55:04 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des leçons de M8 aux corrections à ne pas réintroduire
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 14, "offset": 190}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+190: faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
+191: la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
+192: `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+193: 
+194: ## 7. Les corrections à ne pas réintroduire
+195: 
+196: 1. `--limit` **diffère selon le chemin** (`--ppl` = N premiers jetons, `--ppl-reparti` = N
+197:    derniers) ⇒ dans une porte, compter les jetons du fichier ;
+198: 2. une position ne se devine pas : `--tokenize` ≠ `--prompt` ⇒ `--etat-fin` (k-ième depuis la fin) ;
+199: 3. `..Default::default()` donne **0,0** à un f32 (un poids de greffe nul, en silence) ;
+200: 4. `sys.exit("message")` sort **toujours en 1** — une porte « verte » rendait 1 ;
+201: 5. une porte rouge s'instruit **jusqu'à sa cause** (la rouge de répartition accusait le modèle,
+202:    c'était la porte) ;
+203: 6. **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose** (18,5520 = 18,5520 était
+
+(Showing lines 190-203 of 207. Use offset=204
+… [25 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 8, "offset": 203}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+203: 6. **deux nombres égaux ne prouvent pas qu'ils mesurent la même chose** (18,5520 = 18,5520 était
+204:    deux réglages inertes ; 0 ≡ 4 puits était un zéro **avalé**) ;
+205: 7. **une mesure d'inertie faite là où l'inertie est attendue ne dit rien** (les puits d'attention
+206:    sont inertes **sans fenêtre** — par construction) ;
+207: 8. un **zéro inexprimable** est un défaut : `if drapeau > 0` transforme « zéro » en « défaut ».
+
+(End of file - total 207 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "8. un **zéro inexprimable** est un défaut : `if drapeau > 0` transforme « zéro » en « défaut » ;\n9. **un contrôle tautologique ne contrôle rien** : sous reparamétrisation, `module.weight` **est\n    … [962 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6b/codes.txt 2>/dev/null; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-70; date", "description": "Check E6 and suite status"}`
+
+  ```
+dense entrainement code=0
+dense export code=0
+dense moteur : perplexité 7.3429 sur
+--- passe ---
+10
+  porte-gain             ✅                         347 s    ✅ drapeau 
+sam 10 oct 2026 22:55:41 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'impact du correctif sur les portes existantes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"poids-lognormaux\\|lognormaux\" tools/*.sh 2>/dev/null; echo \"(aucun fichier ci-dessus = aucune porte n'utilise le variant)\"; grep -c \"verifier_sauvegarde\\|verifier-sauvegarde\" tools/*.sh 2>/dev/null | grep -v \":0\" … [61 caractères tronqués]`
+
+  ```
+tools/porte-sauvegarde-modele.sh
+(aucun fichier ci-dessus = aucune porte n'utilise le variant)
+tools/porte-sauvegarde-modele.sh:1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6b/codes.txt; echo \"--- lognormal ---\"; grep -E \"POIDS PARTAGÉS|partagé avec|VÉRIFICATION|#   après|meilleur point\" /tmp/e6b/lognormal.log 2>/dev/null | tail -8; date", "description": "Check log-normal re-run result"}`
+
+  ```
+dense entrainement code=0
+dense export code=0
+dense moteur : perplexité 7.3429 sur
+--- lognormal ---
+# POIDS PARTAGÉS : 1 module(s) EXCLU(S) de la reparamétrisation (sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :
+#   lm_head (partagé avec ['model.embed_tokens.weight'])
+sam 10 oct 2026 22:55:55 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout d'un interrupteur qui RALLUME le défaut (pour voir la porte rouge)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    n, exclus = 0, []\n    # UN DÉFAUT QU'ON PEUT RALLUMER EST UN DÉFAUT QU'ON PEUT TESTER. `DRAVE_MAT_SANS_EXCLUSION=1`\n    # reparamètre aussi les poids partagés — c'est exactement M8 — pour  … [1005 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\"; cat /tmp/e6b/codes.txt; tail -2 /tmp/e6b/lognormal.log 2>/dev/null", "description": "Validate switch and check E6"}`
+
+  ```
+OK
+dense entrainement code=0
+dense export code=0
+dense moteur : perplexité 7.3429 sur
+#   lm_head (partagé avec ['model.embed_tokens.weight'])
+# POIDS LOG-NORMAUX : 16 couches reparamétrées (w = signe(theta)·exp(|theta|))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6b/codes.txt 2>/dev/null; do sleep 15; done; cat /tmp/e6b/codes.txt; echo \"=== vérification des deux ===\"; for V in dense lognormal; do echo \"--- $V ---\"; grep -E \"VÉRIFICATION|#   après|meilleur poin … [110 caractères tronqués]`
+
+  ```
+dense entrainement code=0
+dense export code=0
+dense moteur : perplexité 7.3429 sur
+lognormal entrainement code=0
+lognormal export code=0
+lognormal moteur : perplexité 7.5666 sur
+TERMINE
+=== vérification des deux ===
+--- dense ---
+  # meilleur point : pas 3000 · val 2.3533 bits/octet
+  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+  #   après la boucle          2.3533 bits/octet
+  #   après restauration      2.3533
+  #   après matérialisation   2.3533
+  #   après relecture disque  2.3533
+--- lognormal ---
+  # meilleur point : pas 3000 · val 2.4874 bits/octet
+  # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+  #   après la boucle          2.4874 bits/octet
+  #   après restauration      2.4874
+  #   après matérialisation   2.4874
+  #   après relecture disque  2.4874
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de l'écart de texte entre l'entraîneur et le moteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 512 data/corpus_en_val.txt | python3 -c \"\nimport sys\nd = sys.stdin.buffer.read()\nopen('/tmp/e6b/val_train.ids','w').write(','.join(str(b) for b in d))\"\nD=./drave-core/target/release/drave\nfor V in dense lognormal; do\n … [359 caractères tronqués]`
+
+  ```
+dense      moteur (val du harnais) : perplexité 7.3429 sur
+lognormal  moteur (val du harnais) : perplexité 7.5666 sur
+--- pour mémoire, sur l'autre texte (val.ids) ---
+dense moteur : perplexité 7.3429 sur
+lognormal moteur : perplexité 7.5666 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction honnête du « ×1,44 » : deux dispositifs, pas deux textes
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "**Et le « ×1,44 » du témoin dense ?** Il n'a jamais été un défaut, mais ce n'est pas non plus une\nhistoire de textes : c'est **deux dispositifs de mesure différents**, et chacun est repr … [1304 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"1,44\" reports/rapport-m8-log-normal.md | head -4", "description": "Locate the ×1.44 paragraph"}`
+
+  ```
+18:| dense (témoin) | 2,3533 bits/octet — soit 2^2,3533 = **5,11** | **7,3429** (×1,44 : la quantification de l'export) |
+150:**Et le « ×1,44 » du témoin dense ?** Il n'existe pas : il venait d'une comparaison entre **deux
+161:- **le témoin dense n'est pas parfait non plus** (×1,44) : une partie de l'écart appartient à
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "limit": 10, "offset": 149}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md</path>
+<type>file</type>
+<content>
+149: 
+150: **Et le « ×1,44 » du témoin dense ?** Il n'existe pas : il venait d'une comparaison entre **deux
+151: textes différents** (la perte de validation du harnais d'entraînement d'un côté, un fichier de
+152: 512 octets de l'autre). Mesurée **sur le même texte aux quatre moments**, la perte du dense ne
+153: bouge pas d'un chiffre. La leçon est celle du dépôt : *deux nombres ne se comparent que s'ils
+154: mesurent la même chose sur la même matière*.
+155: 
+156: ## 4. Ce que cette fiche ne dit pas
+157: 
+158: - **elle ne corrige rien** : M8 reste ouvert, avec une cause nommée au lieu de « cause ouverte » ;
+
+(Showing lines 149-158 of 182. Use offset=159 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "**Et le « ×1,44 » du témoin dense ?** Il n'a jamais été un défaut, mais ce n'est pas non plus une\nhistoire de textes : ce sont **deux dispositifs de mesure**, et chacun est reproduit **e … [1200 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i '158s/.*/- **elle ne dit pas si le variant log-normal VAUT quelque chose** : la correction ci-dessus le rend/' reports/rapport-m8-log-normal.md && sed -n '156,166p' reports/rapport-m8-log-normal.md", "description": "Update the … [17 caractères tronqués]`
+
+  ```
+| val du harnais (2,3533 bits/octet) | 8 lots de 32 × 128 jetons sur les 32 premiers ko | **2,3533** (vérificateur) | — |
+| perplexité du moteur (7,3429) | un seul contexte de 512 jetons, au début du fichier | **7,3429** (export simulé) | **7,3429** |
+- **elle ne dit pas si le variant log-normal VAUT quelque chose** : la correction ci-dessus le rend
+Les deux lignes se répondent au chiffre près sur leur propre dispositif : l'écart de ×1,44 vient du
+**contexte** (128 jetons contre 512) et du **passage** (32 ko contre les 512 premiers octets) — pas
+du fichier, pas de l'export, pas du moteur. La leçon reste celle du dépôt : *deux nombres ne se
+comparent que s'ils mesurent la même chose, sur la même matière, avec le même dispositif*.
+
+## 4. Ce que cette fiche ne dit pas
+
+- **elle ne corrige rien** : M8 reste ouvert, avec une cause nommée au lieu de « cause ouverte » ;
+  ```
+
+### 🤖 Assistant
+
+⏵ Réparation d'une ligne abîmée par le sed
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "- **elle ne dit pas si le variant log-normal VAUT quelque chose** : la correction ci-dessus le rend\n  de nouveau **mesurable**, et c'est la question d'E6 (élagabilité), pas celle de M8 ; … [321 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "limit": 14, "offset": 155}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md</path>
+<type>file</type>
+<content>
+155: |---|---|---:|---:|
+156: | val du harnais (2,3533 bits/octet) | 8 lots de 32 × 128 jetons sur les 32 premiers ko | **2,3533** (vérificateur) | — |
+157: | perplexité du moteur (7,3429) | un seul contexte de 512 jetons, au début du fichier | **7,3429** (export simulé) | **7,3429** |
+158: - **elle ne dit pas si le variant log-normal VAUT quelque chose** : la correction ci-dessus le rend
+159: Les deux lignes se répondent au chiffre près sur leur propre dispositif : l'écart de ×1,44 vient du
+160: **contexte** (128 jetons contre 512) et du **passage** (32 ko contre les 512 premiers octets) — pas
+161: du fichier, pas de l'export, pas du moteur. La leçon reste celle du dépôt : *deux nombres ne se
+162: comparent que s'ils mesurent la même chose, sur la même matière, avec le même dispositif*.
+163: 
+164: ## 4. Ce que cette fiche ne dit pas
+165: 
+166: - **elle ne corrige rien** : M8 reste ouvert, avec une cause nommée au lieu de « cause ouverte » ;
+167: - **un seul format d'export** (Q8_0/Q4_0) et **une seule échelle** (7,58 M paramètres) : le défaut
+168:   pourrait ne
+… [111 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "Les deux lignes se répondent au chiffre près sur leur propre dispositif : l'écart de ×1,44 vient du", "old_string": "- **elle ne dit pas si le variant log-normal VAUT quelque chose** : la … [132 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "- **elle ne corrige plus rien — elle CORRIGE** (le correctif est décrit au § 3 ter et verrouillé par\n  `tools/porte-sauvegarde-modele.sh`) ; mais elle ne dit pas si le variant log-normal … [217 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '148,172p' reports/rapport-m8-log-normal.md", "description": "Verify M8 report structure is intact"}`
+
+  ```
+Le moteur lisait fidèlement un fichier qui était faux. **Le défaut n'a jamais été dans l'engine.**
+
+**Et le « ×1,44 » du témoin dense ?** Il n'a jamais été un défaut, mais ce n'est pas non plus une
+histoire de textes : ce sont **deux dispositifs de mesure**, et chacun est reproduit **exactement**
+par PyTorch sur le sien.
+
+| mesure | dispositif | PyTorch | moteur |
+|---|---|---:|---:|
+| val du harnais (2,3533 bits/octet) | 8 lots de 32 × 128 jetons sur les 32 premiers ko | **2,3533** (vérificateur) | — |
+| perplexité du moteur (7,3429) | un seul contexte de 512 jetons, au début du fichier | **7,3429** (export simulé) | **7,3429** |
+Les deux lignes se répondent au chiffre près sur leur propre dispositif : l'écart de ×1,44 vient du
+**contexte** (128 jetons contre 512) et du **passage** (32 ko contre les 512 premiers octets) — pas
+du fichier, pas de l'export, pas du moteur. La leçon reste celle du dépôt : *deux nombres ne se
+comparent que s'ils mesurent la même chose, sur la même matière, avec le même dispositif*.
+
+## 4. Ce que cette fiche ne dit pas
+
+- **elle ne corrige plus rien — elle CORRIGE** (le correctif est décrit au § 3 ter et verrouillé par
+  `tools/porte-sauvegarde-modele.sh
+… [476 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "| perplexité du moteur (7,3429) | un seul contexte de 512 jetons, au début du fichier | **7,3429** (export simulé) | **7,3429** |\n\nLes deux lignes se répondent au chiffre près sur leur  … [295 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "- **le prix de l'export est mesuré, lui** : le dense passe de **7,1504** (PyTorch, poids relus) à\n  **7,3429** après quantification simulée — soit **+2,7 %** — et le log-normal corrigé d … [288 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du coût de l'export pour les deux modèles corrigés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 /home/stephane/gpu-env/bin/python -u tools/m8_simulation_export.py --dense /tmp/e6b/dense --lognormal /tmp/e6b/lognormal --val /tmp/e6/val.ids --limite 512 2>&1 | grep -v \"Loading weights\" | tail -12", "description": "M … [41 caractères tronqués]`
+
+  ```
+| modèle | perplexité avant export | après export simulé | facteur |
+|---|---:|---:|---:|
+| dense | 7.1504 | 7.3429 | ×1.03 |
+| log-normal | 7.2712 | 7.5666 | ×1.04 |
+
+29 tenseurs quantifiés par modèle (experts en Q4_0, le reste en Q8_0).
+
+Dans le MOTEUR, le rapport mesuré était : dense ×1,44 · log-normal ×78.
+Simulé ici, en PyTorch : dense ×1.03 · log-normal ×1.04.
+  ⇒ l'export n'explique RIEN : le log-normal survit à la quantification en PyTorch,
+    donc le défaut est dans la LECTURE du GGUF par le moteur, et il faut y aller.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py", "new_string": "    (av_d, ap_d, _), (av_l, ap_l, n) = resultats[\"dense\"], resultats[\"log-normal\"]\n    print(f\"\\n{n} tenseurs quantifiés par modèle (experts en Q4_0, le reste en Q8_0).\")\n    print( … [2021 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py", "limit": 16, "offset": 96}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py</path>
+<type>file</type>
+<content>
+96:         resultats[nom] = (avant, apres, n)
+97:         print(f"| {nom} | {avant:,.4f} | {apres:,.4f} | ×{apres / avant:,.2f} |")
+98:         del m
+99:         if appareil == "cuda":
+100:             torch.cuda.empty_cache()
+101: 
+102:     (av_d, ap_d, _), (av_l, ap_l, n) = resultats["dense"], resultats["log-normal"]
+103:     print(f"\n{n} tenseurs quantifiés par modèle (experts en Q4_0, le reste en Q8_0).")
+104:     print(f"\nDans le MOTEUR, le rapport mesuré était : dense ×1,44 · log-normal ×78.")
+105:     print(f"Simulé ici, en PyTorch : dense ×{ap_d / av_d:,.2f} · log-normal ×{ap_l / av_l:,.2f}.")
+106:     if ap_l / av_l > 3 * (ap_d / av_d):
+107:         print("  ⇒ l'export à lui seul reproduit l'écart : le moteur est FIDÈLE, et M8 n'est pas un")
+108:         print("    défaut de lecture mais une FRAGILITÉ du variant log-normal à la quantification.")
+109:     elif ap_l / av_l < 1.5:
+110:         print("  ⇒ l'export n'explique RIEN : le log-normal survit à la quantification en PyTorch,")
+111:         print("    donc le défaut est dans la LECTURE du GGUF par l
+… [102 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py", "new_string": "    (av_d, ap_d, _), (av_l, ap_l, n) = resultats[\"dense\"], resultats[\"log-normal\"]\n    print(f\"\\n{n} tenseurs quantifiés par modèle (experts en Q4_0, le reste en Q8_0).\")\n    print( … [2012 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md", "new_string": "- **le prix de l'export est mesuré, lui** : le dense passe de **7,1504** (PyTorch, poids relus) à\n  **7,3429** après quantification simulée (**+2,7 %**), et le log-normal **corrigé** de  … [490 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-m8-log-normal.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte « sauvegarde » : essai vert puis essai rouge (défaut rallumé)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-60; echo \"=== porte sauvegarde, cas NORMAL ===\"; timeout 900 bash tools/porte-sauvegarde-modele.sh 2>&1 | tail -14; echo \"CODE=$?\"", "description": "Run th … [53 caractères tronqués]`
+
+  ```
+12
+  porte-horloge          ✅                          24 s    
+=== porte sauvegarde, cas NORMAL ===
+  # POIDS PARTAGÉS : 1 module(s) EXCLU(S) de la reparamétrisation (sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :
+  #   lm_head (partagé avec ['model.embed_tokens.weight'])
+    # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+    #   après la boucle          3.8819 bits/octet
+    #   après restauration      3.8819
+    #   après matérialisation   3.8819
+    #   après relecture disque  3.8819
+    # écart de poids le plus grand (mémoire ↔ disque) : model.norm.weight → 0.000e+00
+  ✅ les quatre moments donnent la même perte : 3.8819
+  ✅ le module partagé (lm_head ↔ table d'entrée) est exclu ET nommé
+
+✅ porte sauvegarde du modèle : la perte de validation est la MÊME aux quatre étapes
+   (boucle, restauration, matérialisation, disque), pour le témoin dense ET pour le variant
+   log-normal — et le poids partagé qui cassait le partage est exclu et nommé.
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte sauvegarde, DÉFAUT RALLUMÉ (doit être ROUGE) ===\"; DRAVE_MAT_SANS_EXCLUSION=1 timeout 900 bash tools/porte-sauvegarde-modele.sh 2>&1 | tail -12; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Verify the gate turns … [48 caractères tronqués]`
+
+  ```
+=== porte sauvegarde, DÉFAUT RALLUMÉ (doit être ROUGE) ===
+    # écart de poids le plus grand (mémoire ↔ disque) : model.norm.weight → 0.000e+00
+  ✅ les quatre moments donnent la même perte : 3.5528
+
+=== lognormal ===
+    # VÉRIFICATION DE SAUVEGARDE, quatre moments de la MÊME perte de validation :
+    #   après la boucle          4.1163 bits/octet
+    #   après restauration      4.1163
+    #   après matérialisation   8.8191
+    #   après relecture disque  8.8191
+    # écart de poids le plus grand (mémoire ↔ disque) : model.norm.weight → 0.000e+00
+  ❌ le fichier sauvé ne reproduit pas le modèle entraîné (code 2)
+❌ porte sauvegarde du modèle : ÉCHEC
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche E6 : ce que le variant log-normal vaut maintenant qu'il est mesurable
+
+- **write** `{"content": "# E6 — poids log-normaux : le variant est enfin MESURABLE, et il est très légèrement derrière le témoin\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une\n> log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne\n> Ques … [4000 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold_start = \"| **E6** | poids log-normaux |\"\ni = s.index(old_start); j = s.index(\"\\n\", i)\nneuf = (\"| **E6** | poids log-n … [686 caractères tronqués]`
+
+  ```
+E6 mis à jour
+80:| **E6** | poids log-normaux | ✅ **mesurable depuis la correction de M8** | le variant passe de **436,6** à **7,5666** de perplexité dans le moteur (le fichier sauvé reproduit enfin le modèle entraîné, quatre moments identiques, `porte-sauvegarde-modele.sh`) — contre **7,3429** pour le témoin dense au même entraînement, soit **+3,0 %** ; **l'élagabilité, qui est SA raison d'être, reste à mesurer** ([`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md)) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M' && python3 - \"$PWD/docs/etat-cerveau.md\" <<'PYEOF'\nimport pathlib, re, subprocess, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_outpu … [446 caractères tronqués]`
+
+  ```
+2026-10-10 23:03
+horodatage 2026-10-10 23:03
+113:- **29 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "limit": 16, "offset": 113}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md</path>
+<type>file</type>
+<content>
+113: - **29 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+114:   dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et la **28e
+115:   ajoutée à 22 h 26 : `porte-profondeur-routee.sh`, verte en 9 min 20 s** (corpus tokenisé par la
+116:   porte elle-même, deux captures de profondeur, la mesure et ses trois verrous). La passe complète
+117:   des 28 est relancée à **22 h 27** ; son verdict remplace cette ligne. Détail :
+118:   `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
+119:   était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
+120:   `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
+121:   ne lui fournissait) — corrigée, elle compare 10 textes en 7,5 s.
+122: - **122 tests** `cargo test`, crate **std seul, zéro dépendance**, profil `release` = binaire de
+123:   mesure.
+124: - Mesures dédiées : `tools/carte-fenetre-puits.sh` (fenêtre × puits d'attention),
+125:   `tools
+… [402 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "- **29 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,\n  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajouté … [1792 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du correctif M8, de sa porte et de la fiche E6
+
+- **write** `{"content": "M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree\n\nLA CAUSE, TROUVEE PAR UNE MESURE QUI N'EXISTAIT PAS. `--verifier-sauvegarde` recalcule la MEME\nperte de validation a QUATRE moments : apres la boucle, apres la restauration du  … [2735 caractères tronqués]`
+
+  ```
+<path>/tmp/message-m8.txt</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --porcelain | head -12 && git commit -q -F /tmp/message-m8.txt 2>&1 | tail -2; git log --oneline -1", "description": "Commit the M8 fix", "timeoutMs": 600000}`

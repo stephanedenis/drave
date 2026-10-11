@@ -52,7 +52,16 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
   rien ne le signale** ⇒ tokeniser soi-même (`--tokenize --fichier TEXTE --sortie F`) ;
 - **`--etat-sortie PREFIXE` écrit `PREFIXE.<position>`** : c'est un **préfixe de fichier**, pas un
   dossier. Donner un dossier fait écrire `dossier.4`, `dossier.5`… et la relecture répond « aucun
-  état lisible » — la capture, elle, a bien eu lieu.
+  état lu » — la capture, elle, a bien eu lieu ;
+- **un contrôle tautologique ne contrôle rien** : sous reparamétrisation, `module.weight` **est**
+  déjà `signes · clamp(θ).exp()`, donc comparer les deux rend toujours 0. C'est ce faux contrôle
+  qui a laissé **M8** ouvert deux jours — le vrai contrôle se fait **après** le retrait ;
+- **`tie_word_embeddings` partage un TENSEUR, pas une formule** : `lm_head.weight` **est**
+  `model.embed_tokens.weight`. Toute reparamétrisation de l'un **casse le partage** en silence
+  (l'autre reste figé à sa valeur initiale, et l'écriture suivante écrase le mauvais). Exclure les
+  poids **partagés** — `named_parameters(remove_duplicate=False)` les révèle ;
+- **une mesure à un seul moment ne dit pas *où* ça casse** : recalculer la **même** grandeur à
+  chaque étape (avant/après restauration/écriture/relecture) est ce qui a trouvé M8.
 
 ## 4. Les règles de méthode (le dépôt les applique à lui-même)
 
