@@ -614,23 +614,36 @@ def installer_masque_inne(modele, garde, graine):
     gen = torch.Generator().manual_seed(graine)
     masques = {}
     touches = total = 0
-    for nom, mod in modele.named_modules():
-        if isinstance(mod, nn.Linear):
-            w = mod.weight
-            k = max(1, int(round(garde * w.shape[1])))
-            # Le tirage se fait sur CPU (reproductible quelle que soit la
-            # machine), le masque vit sur le même appareil que les poids.
-            idx = torch.argsort(torch.rand(w.shape, generator=gen), dim=1)[:, :k]
-            masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
-            touches += w.numel()
-    # LA COUVERTURE EST DITE, PARCE QU'ELLE N'EST PAS TOTALE (constaté le 10/10). Seuls les
-    # `nn.Linear` sont masqués : les experts fusionnés de Qwen3MoeExperts (83 % des poids) ne le
-    # sont pas. Les chiffres d'E1 et E2 décrivent donc **les projections d'attention**, et il faut
-    # le lire ainsi — ou étendre le masque aux experts, ce qui est une AUTRE expérience.
-    total = sum(p.numel() for p in modele.parameters() if p.dim() >= 2)
+    # LE MASQUE COUVRE TOUT CE QUE L'ÉLAGAGE COUVRE (corrigé le 11/10). Il ne parcourait que les
+    # `nn.Linear` : **5,8 % des poids**, l'attention seule. Les experts fusionnés (83 % des poids)
+    # n'étaient jamais masqués, et les chiffres d'E1/E2 décrivent donc l'attention — mesuré par
+    # `tools/audit_drapeaux_harnais.py` : « connectome inné à 25 % » donnait une occupation de
+    # **83,9 %** dans le fichier au lieu de 26 %. On applique la même règle que `elaguer_lignes` :
+    # tout tenseur ≥ 2D sauf la table d'entrée et les paramètres internes de reparamétrisation.
+    # `DRAVE_MASQUE_SANS_EXPERTS=1` RALLUME l'ancienne couverture (les `nn.Linear` seuls, 5,8 %
+    # des poids) : un défaut qu'on peut rallumer est un défaut qu'une porte peut surveiller.
+    lineaires_seuls = os.environ.get("DRAVE_MASQUE_SANS_EXPERTS") == "1"
+    lineaires = {nom for nom, mod in modele.named_modules() if isinstance(mod, nn.Linear)}
+    for nom, p in modele.named_parameters():
+        if p.dim() < 2 or "embed_tokens" in nom or "parametrizations" in nom:
+            continue
+        if lineaires_seuls and nom[:-len(".weight")] not in lineaires:
+            continue
+        w = p.detach()
+        n_in = w.shape[-1]
+        k = max(1, int(round(garde * n_in)))
+        plat = w.reshape(-1, n_in)
+        # Le tirage se fait sur CPU (reproductible quelle que soit la machine), le masque vit sur
+        # le même appareil que les poids.
+        idx = torch.argsort(torch.rand(plat.shape, generator=gen), dim=1)[:, :k]
+        masques[nom] = torch.zeros_like(plat).scatter_(1, idx.to(w.device), 1.0).reshape(w.shape)
+        touches += w.numel()
+        total += w.numel()
     print(f"# MASQUE INNÉ à {garde:.0%} : {len(masques)} tenseurs · {touches:,} poids sur "
-          f"{total:,} ({100 * touches / max(total, 1):.1f} % des poids ≥ 2D) — les experts "
-          f"fusionnés ne sont PAS masqués")
+          f"{total:,} ({100 * touches / max(total, 1):.1f} % des poids ≥ 2D, table d'entrée exclue)")
+    if touches < total:
+        print("  ❌ le masque ne couvre PAS tous les tenseurs : les chiffres décriraient une "
+              "partie du modèle seulement")
     return masques
 
 
@@ -643,10 +656,15 @@ def accumer_gradient(modele, masques, accum):
     globale n'est nécessaire, et c'est le point de l'expérience : **la croissance peut-elle
     remplacer l'apprentissage de la structure ?**
     """
+    params = dict(modele.named_parameters())
+    par_table = table_parametrisations(modele)
     with torch.no_grad():
-        for nom, mod in modele.named_modules():
-            if isinstance(mod, nn.Linear) and nom in masques and mod.weight.grad is not None:
-                accum[nom].add_(mod.weight.grad.abs() * (1.0 - masques[nom]))
+        for nom, masque in masques.items():
+            # LE GRADIENT VIT SUR `theta` QUAND LE POIDS EST REPARAMÉTRÉ : lire `mod.weight.grad`
+            # rendrait None, et la croissance ne verrait aucun gradient — en silence.
+            g = (par_table[nom].original.grad if nom in par_table else params[nom].grad)
+            if g is not None:
+                accum[nom].add_(g.abs() * (1.0 - masque))
 
 
 def croitre(modele, masques, accum, fraction):
@@ -657,9 +675,7 @@ def croitre(modele, masques, accum, fraction):
     """
     ajoutees = 0
     with torch.no_grad():
-        for nom, mod in modele.named_modules():
-            if not isinstance(mod, nn.Linear) or nom not in masques:
-                continue
+        for nom in list(masques):
             absent = (masques[nom] == 0)
             n_abs = int(absent.sum().item())
             if n_abs == 0:
@@ -676,10 +692,15 @@ def croitre(modele, masques, accum, fraction):
 
 def appliquer_masque(modele, masques):
     """Le masque est réappliqué après CHAQUE pas : une connexion absente le reste."""
+    params = dict(modele.named_parameters())
+    par_table = table_parametrisations(modele)
     with torch.no_grad():
-        for nom, mod in modele.named_modules():
-            if isinstance(mod, nn.Linear) and nom in masques:
-                ecrire_poids(mod, mod.weight.detach() * masques[nom])
+        for nom, masque in masques.items():
+            if nom in par_table:
+                mod = modele.get_submodule(nom[:-len(".weight")])
+                ecrire_poids(mod, mod.weight.detach() * masque)
+            elif nom in params:
+                params[nom].mul_(masque)
 
 
 def main():

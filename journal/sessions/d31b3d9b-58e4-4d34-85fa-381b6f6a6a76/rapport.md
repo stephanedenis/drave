@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 65.7 h |
-| Tours | 95 |
-| Messages | 3173 |
-| Appels d'outils | 2954 |
-| Fichiers touchés | 121 |
-| Commandes | 2492 |
+| Durée | 66.2 h |
+| Tours | 96 |
+| Messages | 3197 |
+| Appels d'outils | 2976 |
+| Fichiers touchés | 123 |
+| Commandes | 2512 |
 | Sous-agents | 3 |
-| Commits | 281 |
+| Commits | 282 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -225,6 +225,8 @@
 **Tour 94** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 95** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 96** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3909,7 +3911,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*74 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3925,11 +3927,53 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Push and look for the biology doc section
 - bash — Find the E6 section in the biology roadmap
 - read
-- … et 59 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Réécriture de la fiche E6 avec les chiffres corrigés et la rétractation
+⏵ Round 52 : deux défauts du harnais trouvés, trois chiffres rétractés, conclusion corrigée
+
+**Alertes d'abord — ce round est un round de correction**
+- Les chiffres publiés au round 51 étaient **faux** : je les ai rétractés et re-mesurés.
+
+**Les deux défauts, tous deux invisibles dans une perplexité**
+1. **L'inverse appliqué DEUX FOIS à l'installation** — `register_parametrization` réécrit le tenseur du poids *sur place* ; relire une référence après coup donne `log|log|w||`. Le modèle log-normal partait avec des poids de **±12** au lieu de ±0,08 (θ moyen 1,097 au lieu de −2,8).
+2. **Les poids reparamétrés n'étaient plus élagués du tout** — sous reparamétrisation, `named_parameters()` rend `...parametrizations.weight.original` : un filtre sur les noms excluait le poids lui-même. L'**attention restait intacte** (1,0 % de zéros) pendant que la couverture annonçait « 100 % ». C'est `tools/occupation_poids.py` (M9) qui l'a démasqué.
+
+**Le plan 2×2 refait proprement** (occupation identique partout, vérifiée dans le fichier) :
+
+| poids gardés | dense | signes figés | log-normal signes libres | log-normal signes figés |
+|---|---:|---:|---:|---:|
+| 100 % | 7,3429 | **7,3003** | 7,2741 | 7,6168 |
+| 25 % | 49,4291 | **41,6677** | 59,1526 | 71,1531 |
+
+⇒ **la loi log-normale COÛTE** (seul effet cohérent : ×1,20 à ×1,71) ; **la contrainte de signe n'a pas d'effet cohérent** (×1,19 dans un sens, ×0,83 dans l'autre → interaction). Le levier d'élagage **reste à trouver** : ×1,19 au mieux.
+
+**Livré** : `porte-harnais-invariants.sh` (31e porte) qui remplace `porte-signes-figes.sh` — dont le seuil de qualité **mesurait l'artefact** et est devenu rouge tout seul après correction. Elle verrouille les **invariants** (installation neutre, élagage qui atteint les poids reparamétrés), est **verte**, et **vue rouge par les deux bouts** (`DRAVE_INSTALL_DOUBLE=1` → écart 12,0 ; `DRAVE_ELAGAGE_SANS_PARAM=1` → attention à 98,6 %). Fiches E6 et dessin B réécrites avec la rétractation en tête, roadmap de biologie et état alignés.
+
+### Tour 96 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*21 appels d'outils.* Actions notables :
+
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py`
+- bash — Run the harness flag audit
+- bash — Read the mask installer
+- bash — Extend the innate mask to all projections
+- bash — Read the mask application and growth code
+- bash — Extend growth and mask application
+- bash — Re-run the audit after extending the mask
+- bash — Read the growth call site
+- bash — Read the growth case log
+- bash — Compare tails of dense and log-normal models
+- bash — Check whether the two models are identical
+- bash — Check the tail metric discriminates
+- bash — Make the audit verdicts comparative
+- bash — Run the comparative audit
+- … et 7 autres
+
+**Synthèse produite :**
+
+⏵ Commit de l'audit, de sa porte et du masque étendu
 
 ## 3. Travail accompli
 
@@ -4058,6 +4102,8 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dessin-B-poids-creux.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-harnais-invariants.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-audit-drapeaux.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4107,7 +4153,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2452 autres
+- … et 2472 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4536,4 +4582,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rm -q tools/porte-signes-figes.sh && cat > /tmp/message-invariants.txt <<'MSGEOF' Porte « invariants d
 - E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes" 2>&1 | tail -1; gi
 - Biologie : E6 corrigee dans la roadmap — la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent, trois chiffres retires" 2>&1 | tail -1; git 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-audit.txt <<'MSGEOF' Audit des drapeaux du harnais : deux defauts de plus, et une porte
 
