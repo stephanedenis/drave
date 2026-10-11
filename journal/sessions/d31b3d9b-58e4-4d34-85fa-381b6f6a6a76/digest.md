@@ -47546,3 +47546,432 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-ecrire.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '4,8p'; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master 2>/dev/null | tail -2", "desc … [66 caractères tronqués]`
+
+  ```
+Sous reparametrisation, `mod.weight` est une valeur CALCULEE : `mod.weight.mul_(...)` et
+`.copy_(...)` remplissent un temporaire et ne changent RIEN, en silence. Trois sites du harnais
+faisaient exactement cela — l'elagage, le masque, le ratio de signes. Tout passe desormais par
+`ecrire_poids` / `ecrire_poids_nomme`, qui ecrivent dans le PARAMETRE (theta pour un poids
+log-normal) et VERIFIENT que le poids a bouge.
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master; cat /tmp/e6d/codes.txt 2>/dev/null; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; date", "description": "Confirm push and check progress"}`
+
+  ```
+24a7789
+24a7789
+--- passe ---
+19
+sam 10 oct 2026 23:27:19 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Le masque inné (E1/E2) couvrait-il aussi 5,8 % du modèle ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"def installer_masque_inne\" tools/entrainer_moteur.py | cut -d: -f1); sed -n \"$((L)),$((L+40))p\" tools/entrainer_moteur.py | grep -nE \"for |nn.Linear|masques\\[|return|print|couverture\" | head -12", "description": " … [28 caractères tronqués]`
+
+  ```
+21:    for nom, mod in modele.named_modules():
+22:        if isinstance(mod, nn.Linear):
+28:            masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+29:    return masques
+  ```
+
+### 🤖 Assistant
+
+⏵ Annonce de la couverture du masque + correction de la portée d'E1/E2
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 30, "offset": 440}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+440:         ecart = max(ecart, e)
+441:         touches += p.numel()
+442:         n += 1
+443:     print(f"# élagage à {garde:.0%} gardé : {n} tenseurs · {touches:,} poids sur {total:,} "
+444:           f"({100 * touches / max(total, 1):.1f} % des poids de projection) · écriture effective "
+445:           f"vérifiée (écart max {ecart:.3e})"
+446:           + (f" · {non_repr:,} poids NON représentables (signe figé ou zéro impossible)"
+447:              if non_repr else ""))
+448:     return n
+449: 
+450: 
+451: def installer_masque_inne(modele, garde, graine):
+452:     """Un CONNECTOME INNÉ : masque de connexions tiré UNE fois, puis jamais modifié.
+453: 
+454:     POURQUOI CETTE EXPÉRIENCE (docs/biologie-pour-drave.md, § 4). Le cerveau a un
+455:     plan de câblage largement partagé entre individus, très creux (~10 % de
+456:     probabilité de connexion, ~7 000 synapses par neurone) et dont seuls les POIDS
+457:     changent avec l'apprentissage. Si la structure peut être fixée à la naissance,
+458:     alors le coût d'exécution d'un modèle est **borné à la compilation** — le
+4
+… [777 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 18, "offset": 469}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+469:     gen = torch.Generator().manual_seed(graine)
+470:     masques = {}
+471:     for nom, mod in modele.named_modules():
+472:         if isinstance(mod, nn.Linear):
+473:             w = mod.weight
+474:             k = max(1, int(round(garde * w.shape[1])))
+475:             # Le tirage se fait sur CPU (reproductible quelle que soit la
+476:             # machine), le masque vit sur le même appareil que les poids.
+477:             idx = torch.argsort(torch.rand(w.shape, generator=gen), dim=1)[:, :k]
+478:             masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+479:     return masques
+480: 
+481: 
+482: def accumer_gradient(modele, masques, accum):
+483:     """Accumule |∂L/∂w| sur les connexions ABSENTES (celles que le masque interdit).
+484: 
+485:     C'est la règle LOCALE de E2 : pour une connexion interdite, le gradient reste calculable
+486:     (c'est le produit de l'activation d'entrée et du signal rétropropagé) — il dit exactement où
+
+(Showing lines 469-486 of 831. Use offset=487 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "    gen = torch.Generator().manual_seed(graine)\n    masques = {}\n    touches = total = 0\n    for nom, mod in modele.named_modules():\n        if isinstance(mod, nn.Linear):\n            w = m … [1717 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\"; cat /tmp/e6d/codes.txt 2>/dev/null; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log", "description": "Val … [26 caractères tronqués]`
+
+  ```
+OK
+dense-g0.5 code=0
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 7.5680 sur
+--- passe ---
+20
+  ```
+
+### 🤖 Assistant
+
+⏵ Attente des quatre mesures corrigées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6d/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6d/codes.txt", "description": "Wait for corrected E6 results", "timeoutMs": 900000}`
+
+  ```
+dense-g0.5 code=0
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 7.5680 sur
+lognormal-g0.5 code=0
+# élagage à 50% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 13.0622 sur
+dense-g0.25 code=0
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 9.0164 sur
+lognormal-g0.25 code=0
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 17.5009 sur
+TERMINE
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat INVERSÉ avec l'élagage complet ; il faut un témoin (plancher au lieu de zéro)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"elagage\" tools/entrainer_moteur.py | grep \"add_argument\" ", "description": "Locate the pruning CLI options"}`
+
+  ```
+572:    p.add_argument("--elagage", type=float, default=0.0,
+575:    p.add_argument("--elagage-tous", type=int, default=500,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '570,578p' tools/entrainer_moteur.py", "description": "Read pruning option definitions"}`
+
+  ```
+help="part GARDÉE par k-WTA sur l'entrée de o_proj/down_proj "
+                        "(0 = aucun ; 0,25 = on annule 75 %% des activations)")
+    p.add_argument("--elagage", type=float, default=0.0,
+                   help="part GARDÉE des poids, par ligne de sortie (0 = aucun "
+                        "élagage ; 0,5 = on annule la moitié des poids de chaque ligne)")
+    p.add_argument("--elagage-tous", type=int, default=500,
+                   help="pas entre deux élagages (rampe cubique de 1,0 vers la cible)")
+    p.add_argument("--masque", type=float, default=0.0,
+                   help="part des CONNEXIONS existantes à la naissance (0 = dense ; "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = '''    p.add_argument(\"--elagage-tous\", type=int, default=500,\n                   help=\"pas entre deux él … [2554 caractères tronqués]`
+
+  ```
+témoin plancher ajouté
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"w = p.detach()\" -A 8 tools/entrainer_moteur.py | head -12", "description": "Check the floor control uses w in scope"}`
+
+  ```
+432:            w = p.detach()
+433-            n_in = n_in_dernier(w)
+434-            k = max(1, int(round(garde * n_in)))
+435-            plat = w.reshape(-1, n_in)
+436-            idx = plat.abs().topk(k, dim=1).indices
+437-            cible = (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
+438-        if plancher > 0:
+439-            # LE TÉMOIN : magnitude plancher, SIGNE conservé — exactement ce qu'un poids
+440-            # log-normal élagué devient (6,1e-6), mais sur un modèle ordinaire.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6e && mkdir -p /tmp/e6e && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [935 caractères tronqués]`
+
+  ```
+témoin plancher lancé (pid 4166634)
+sam 10 oct 2026 23:38:16 EDT
+22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6e/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6e/codes.txt; echo \"=== passe ===\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -2 /tmp/passe-2218.log | cut -c1-70", "description": "Wait for the floo … [40 caractères tronqués]`
+
+  ```
+dense-plancher-g0.5 code=0
+# TÉMOIN plancher : un poids élagué vaut ±6.1e-06 au lieu de 0 (signe conservé)
+perplexité 7.5434 sur
+dense-plancher-g0.25 code=0
+# TÉMOIN plancher : un poids élagué vaut ±6.1e-06 au lieu de 0 (signe conservé)
+perplexité 8.9254 sur
+TERMINE
+=== passe ===
+28
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rie
+Journaux : /tmp/portes-2218
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète TERMINÉE (28/28) et témoin plancher rendu — récapitulatif
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 /tmp/passe-2218.log; echo \"=== carte des sorties ===\"; tail -5 /tmp/carte-sortie.log 2>/dev/null || echo \"(pas encore)\"; pgrep -af \"carte-sortie\" | grep -v pgrep | head -2 | cut -c1-50", "description": "Read the pass v … [25 caractères tronqués]`
+
+  ```
+porte-pont             ✅                          80 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-profondeur-routee ✅                         581 s  ✅ porte profondeur routée : 16 couches contre 24 sur 8192 jetons de corpus.ids,
+  porte-recurrence       ✅                          11 s  PORTE TENUE : la boucle existe, elle est déterministe, elle ne coûte aucune paire, son zéro
+  porte-reflexe          ✅                         106 s    ✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit
+  porte-registre         ✅                          14 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-reparti-moteur   ✅                           1 s  PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %)
+  porte-tokenizer-kimi   ✅                           5 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          37 s    PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+  porte-trace            ✅                          26 s    ✅ la trace fausse est dé
+… [206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"durée|total|min |s$\" /tmp/passe-2218.log | head -5; grep -E \"^\\s*porte-\" /tmp/passe-2218.log | awk '{print $NF==\"\" ? 0 : $(NF-1)}' >/dev/null; echo \"--- durées ---\"; grep -oE \"[0-9]+ s\\b\" /tmp/passe-2218.log | g … [163 caractères tronqués]`
+
+  ```
+3:  porte-budget           ✅                          42 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+18:  porte-memoire          ✅                           8 s  PORTE TENUE : la mémoire retient les K derniers signaux HORS du réseau, exactement, sans
+19:  porte-mistral          ✅                           9 s      ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= p
+--- durées ---
+--- nombre de portes ---
+28
+[stderr]
+bash: line 1: bc: command not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -oE \"^  porte-[a-z0-9-]+ +✅ +[0-9]+ s\" /tmp/passe-2218.log | grep -oE \"[0-9]+ s\" | grep -oE \"[0-9]+\" | python3 -c \"\nimport sys\nv=[int(x) for x in sys.stdin.read().split()]\nprint(f'{len(v)} portes · {sum(v)} s = {sum(v) … [114 caractères tronqués]`
+
+  ```
+28 portes · 4401 s = 73 min 21 s (somme des portes)
+=== PASSE COMPLÈTE DES PORTES (28 portes, borne 2400 s) ===
+    journaux : /tmp/portes-2218
+  porte-budget           ✅                          42 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour des repères de non-régression avec la passe du soir
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md", "limit": 35}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Repères de non-régression — ce qui ne doit PAS bouger
+2: 
+3: > **2026-10-10 21:33 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+4: > par la passe complète des portes** (`tools/toutes-les-portes.sh`, **27 vertes sur
+5: > 27**, 60 min 13 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+6: > passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+7: > calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+8: > (jamais à sa place).
+9: >
+10: > Détail complet : `reports/rapport-passe-complete-portes.md`.
+11: > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
+12: > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
+13: 
+14: ## 1. Ce qui se vérifie en une commande
+15: 
+16: | quoi | commande | attendu |
+17: |---|---|---|
+18: | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
+19: | toutes les portes | `tools/toutes-les-portes.sh` | **
+… [1466 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-2218.log\").read_text()\nlignes = re.findall(r\"^  (porte-[a-z0-9-]+)\\s+✅\\s+([0-9]+) s\\s+(.*)$\", log, re.M)\nprint(\"portes lues :\", len(lignes … [1651 caractères tronqués]`
+
+  ```
+portes lues : 28
+repères régénérés : 28 portes, 4401 s
+> **2026-10-10 23 h 41 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+> par la passe complète des portes** (`tools/toutes-les-portes.sh`, **28 vertes sur
+> 28**, 73 min 21 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+> passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+> calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+> (jamais à sa place).
+>
+
+## 1. Ce qui se vérifie en une commande
+
+| quoi | commande | attendu |
+|---|---|---|
+28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Détail complet\\|mesures de campagne\" docs/references-non-regression.md | head -3; sed -n '8,14p' docs/references-non-regression.md; echo \"--- carte ---\"; tail -4 /tmp/carte-sortie.log 2>/dev/null || echo \"(pas encore l … [63 caractères tronqués]`
+
+  ```
+## 1. Ce qui se vérifie en une commande
+
+| quoi | commande | attendu |
+|---|---|---|
+| tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **28 vertes**, ≈75 min, aucune sautée |
+--- carte ---
+(pas encore lancée)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md", "new_string": "> calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur\n> (jamais à sa place).\n>\n> Détail complet : `reports/rapport-passe-complete-portes.md`. … [321 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: > **2026-10-10 23 h 41 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+2: > par la passe complète des portes** (`tools/toutes-les-portes.sh`, **28 vertes sur
+3: > 28**, 73 min 21 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+4: > passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+5: > calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+6: > (jamais à sa place).
+7: >
+8: 
+9: ## 1. Ce qui se vérifie en une commande
+10: 
+
+(Showing lines 1-10 of 65. Use offset=11 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md", "new_string": "> (jamais à sa place).\n>\n> Détail complet : `reports/rapport-passe-complete-portes.md`.\n> Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par … [338 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pgrep -af \"carte-sortie|chaine\" | grep -v pgrep | head -3 | cut -c1-60; echo \"--- test de la carte à la main ---\"; timeout 60 bash -c 'head -3 /tmp/carte-sortie.log 2>/dev/null' ; ls -la /tmp/carte-sortie/ 2>/dev/null | head -4", … [58 caractères tronqués]`
+
+  ```
+--- test de la carte à la main ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement direct de la carte des sorties (la chaîne ne s'était pas déclenchée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/carte-sortie && nohup bash tools/carte-sortie-profondeur.sh > /tmp/carte-sortie.log 2>&1 & sleep 20; tail -5 /tmp/carte-sortie.log; date", "description": "Launch the exit-depth sweep"}`
+
+  ```
+corpus : 85625 jetons · sorties étudiées : 12 16 20 22
+
+=== 1. capturer l'état de chaque profondeur de sortie (et le chemin long) ===
+sam 10 oct 2026 23:45:43 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche E6 : hypothèse RÉFUTÉE, avec son témoin
+
+- **write** `{"content": "# E6 — poids log-normaux : l'hypothèse est RÉFUTÉE, et le témoin dit pourquoi ce n'est pas un artefact\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une\n> log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne\n> Quest … [5612 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état avec la réfutation d'E6
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **E6** | poids log-normaux | ❌ **RÉFUTÉE sous é … [885 caractères tronqués]`
+
+  ```
+E6 mis à jour
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1134 caractères tronqués]`
+
+  ```
+horodatage 2026-10-10 23:46
+- **29 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+  dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
+  le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
+  tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
+  la **29e à 23 h 04**, `porte-sauvegarde-modele.sh`, **verte en ~1 min et vue ROUGE avec le défaut
+  rallumé** (`DRAVE_MAT_SANS_EXCLUSION=1`) — c'est elle qui verrouille la correction de M8. **Passe
+  complète relancée à 22 h 27 : 28 vertes sur 28, 73 min 21 s** (verdict imprimé, repères
+  régénérés dans `docs/references-non-regression.md`) ; la 29e a été vérifiée à part, elle n'était
+  pas dans la passe. Détail :
+  `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/carte-sortie.log 2>/dev/null; echo \"--- états ---\"; ls -1 /tmp/carte-sortie/d*/etat.* 2>/dev/null | wc -l; date", "description": "Check sweep progress"}`
+
+  ```
+corpus : 85625 jetons · sorties étudiées : 12 16 20 22
+
+=== 1. capturer l'état de chaque profondeur de sortie (et le chemin long) ===
+--- états ---
+0
+sam 10 oct 2026 23:46:44 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la réfutation d'E6 et des repères de la passe
+
+- **write** `{"content": "E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve\n\nLA MESURE, a couverture d'elagage complete (28 tenseurs, 100 % des poids de projection) :\n\n    poids gardes   temoin dense            log-normal\n    100 %          7,3429     … [1808 caractères tronqués]`
+
+  ```
+<path>/tmp/message-e6.txt</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-e6.txt 2>&1 | tail -2; git log --oneline -1; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master 2>/dev/null | tail -2", "description": "Commi … [51 caractères tronqués]`

@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 62.2 h |
+| Durée | 62.6 h |
 | Tours | 92 |
-| Messages | 2952 |
-| Appels d'outils | 2739 |
-| Fichiers touchés | 113 |
-| Commandes | 2311 |
+| Messages | 2982 |
+| Appels d'outils | 2769 |
+| Fichiers touchés | 115 |
+| Commandes | 2332 |
 | Sous-agents | 3 |
-| Commits | 261 |
+| Commits | 262 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3784,7 +3784,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 92 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*49 appels d'outils.* Actions notables :
+*79 appels d'outils.* Actions notables :
 
 - bash — Check suite and sweep status
 - read
@@ -3800,11 +3800,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check whether the engine reports pair counts
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md`
-- … et 31 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Message de commit abîmé par les accents graves — correction par fichier
+⏵ Commit de la réfutation d'E6 et des repères de la passe
 
 ## 3. Travail accompli
 
@@ -3818,7 +3818,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 19 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 18 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 19 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
@@ -3922,9 +3922,11 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 2 | 0 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
+| `/tmp/message-e6.txt` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3974,7 +3976,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2271 autres
+- … et 2292 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4383,4 +4385,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --porcelain | head -12 && git commit -q -F /tmp/message-m8.txt 2>&1 | tail -2; gi
 - Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele  TROISIEME DEFAUT DE LA MEME FAMILLE, apres la mat
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-ecrire.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '4,8p'; g
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -F /tmp/message-e6.txt 2>&1 | tail -2; git log --oneline -1; git push -q origi
 

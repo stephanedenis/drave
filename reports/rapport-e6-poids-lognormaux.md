@@ -1,60 +1,91 @@
-# E6 — poids log-normaux : le variant est enfin MESURABLE, et il est très légèrement derrière le témoin
+# E6 — poids log-normaux : l'hypothèse est RÉFUTÉE, et le témoin dit pourquoi ce n'est pas un artefact
 
 > Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une
 > log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne
 > Question : la biologie corticale a des efficacités synaptiques **log-normales** ; nos modèles
-> sont quasi gaussiens ; une distribution multiplicative devrait être **élagable par
-> construction**. Le variant vaut-il mieux ?
-> Verdict : **on ne peut pas encore répondre à cette question — mais on peut enfin mesurer le
-> variant.** M8 (le fichier sauvé ne reproduisait pas le modèle entraîné) est **corrigé** : le
-> modèle log-normal passe de **436,6** de perplexité dans le moteur à **7,5666**, contre
-> **7,3429** pour le témoin dense au même entraînement. À qualité d'entraînement égale, le variant
-> est donc **+3,0 %** derrière — et l'élagabilité, qui est SA raison d'être, reste à mesurer.
-> Date réelle : **2026-10-10 23 h 00 HAE** (heure lue sur la machine).
-> Protocole : `tools/entrainer_moteur.py` (+ `--verifier-sauvegarde`) · export
-> `tools/exporter_gguf.py` · moteur `drave --ppl` · porte : `tools/porte-sauvegarde-modele.sh`.
+> sont quasi gaussiens ; une distribution **multiplicative** devrait donc être **élagable par
+> construction** — c'est SA raison d'être. Le variant vaut-il mieux **sous élagage** ?
+> Verdict : **NON — et de loin.** À 50 % de poids gardés, le témoin dense passe de **7,3429** à
+> **7,5680** (+3,1 %) quand le log-normal passe de **7,5666** à **13,0622** (**+72,6 %**). À 25 % :
+> **9,0164** (+22,8 %) contre **17,5009** (**+131 %**). L'hypothèse est **renversée** : le variant
+> log-normal n'est pas plus élagable, il l'est **beaucoup moins**.
+> Date réelle : **2026-10-10 23 h 38 HAE** (heure lue sur la machine).
+> Protocole : `tools/entrainer_moteur.py` (`--elagage`, `--plancher-elagage`) · export
+> `tools/exporter_gguf.py` · moteur `drave --ppl`.
 
-## 1. Ce qui bloquait, et ce qui est corrigé
+## 1. Ce qui bloquait, et ce qui a été corrigé avant de mesurer
 
 Le variant était **inutilisable** : le fichier sauvé ne reproduisait pas le modèle entraîné
-(perplexité **436,6** au lieu de ~5,6). La cause est trouvée et corrigée — elle n'était ni dans les
-poids, ni dans la quantification, ni dans le moteur : `tie_word_embeddings` fait que
-`lm_head.weight` **est** `model.embed_tokens.weight`, et reparamétrer la tête **cassait ce
-partage** (la table d'entrée restait figée pendant l'entraînement, puis recevait les poids de la
-tête à la matérialisation). Détail et preuves : [`rapport-m8-log-normal.md`](rapport-m8-log-normal.md)
-§ 3 ter. Les poids **partagés** sont désormais exclus de la reparamétrisation, et une vérification
-recalcule la **même** perte de validation à **quatre moments** (boucle, restauration,
-matérialisation, disque) : les quatre coïncident.
+(perplexité **436,6** au lieu de ~7,6). Cause trouvée et corrigée — `tie_word_embeddings` fait que
+`lm_head.weight` **est** `model.embed_tokens.weight`, et reparamétrer la tête cassait ce partage
+([`rapport-m8-log-normal.md`](rapport-m8-log-normal.md) § 3 ter). **Deux autres défauts de la même
+famille** ont été trouvés en préparant cette mesure, et corrigés :
 
-## 2. La mesure, après correctif
+1. **écrire dans un poids reparamétré n'écrivait rien** : `mod.weight` est une valeur *calculée*,
+   donc `mod.weight.mul_(...)` remplissait un temporaire — l'élagage d'un modèle log-normal ne
+   faisait **rien**, en silence. Tout passe par `ecrire_poids`, qui écrit dans le paramètre et
+   **vérifie** l'effet ;
+2. **l'élagage ne couvrait que 5,8 % du modèle** : il ne parcourait que les `nn.Linear`
+   (442 368 poids sur 7 575 552). Les experts fusionnés de `Qwen3MoeExperts` — 83 % des poids — et
+   le routeur n'étaient **jamais** élagués. La règle du moteur (`Proj::load` → `prune_rows`)
+   s'applique maintenant à **tout tenseur ≥ 2D sauf la table d'entrée**, et la couverture est
+   **annoncée** :
 
-Même protocole des deux côtés (`--famille route --dim 192 --couches 4 --tetes 4 --cache 768
---experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 3e-4 --graine 1`), même corpus, même export
-(Q8_0 pour les tenseurs ordinaires, Q4_0 pour les experts), même texte d'évaluation.
+```
+# élagage à 50% gardé : 28 tenseurs · 7 526 400 poids sur 7 526 400 (100.0 % des poids de projection)
+```
 
-| | val (bits/octet) | perplexité PyTorch, poids relus | export simulé | **moteur** |
-|---|---:|---:|---:|---:|
-| **dense** (témoin) | 2,3533 | 7,1504 | 7,3429 | **7,3429** |
-| **log-normal** | 2,4874 | 7,2712 | 7,5666 | **7,5666** |
+*Les deux premiers chiffres d'E6, mesurés avant ces corrections (dense **7,3028** contre log-normal
+**7,5372** à 50 %), sont **périmés** : ils portaient sur 5,8 % des poids et un élagage inopérant sur
+le variant. Ils restent ici pour mémoire, comme le veut la règle du dépôt — à côté, jamais à la
+place.*
 
-- le **moteur reproduit au chiffre près** l'export simulé en PyTorch (7,3429 = 7,3429 et
-  7,5666 = 7,5666) : la chaîne entraînement → export → moteur est vérifiée de bout en bout ;
-- le variant log-normal est **+3,0 %** de perplexité derrière le témoin dans le moteur, et sa
-  validation d'entraînement est **+5,7 %** derrière (2,4874 contre 2,3533 bits/octet) : il apprend
-  un peu moins bien, ce qui n'est pas la question posée ;
-- l'écart de **×1,44** qui figurait dans la fiche M8 entre la validation du harnais (5,11 de
-  perplexité) et le moteur (7,34) n'était **pas un défaut** : ce sont **deux dispositifs** (8 lots
-  de 32 × 128 jetons sur 32 ko contre un seul contexte de 512 jetons en tête de fichier), et
-  PyTorch reproduit exactement chacun des deux.
+## 2. La mesure, à couverture complète
 
-## 3. Ce que cette fiche ne dit PAS — et c'est la question d'E6
+Même entraînement des deux côtés (`--dim 192 --couches 4 --tetes 4 --experts 8 --k 2 --pas 3000
+--lr 3e-4 --graine 1`), mêmes 28 tenseurs élagués, même export, même texte.
 
-**L'élagabilité n'est pas mesurée ici.** C'est pourtant la raison d'être du variant : une
-distribution log-normale doit survivre à l'élagage là où une gaussienne s'effondre à 25 % de poids
-gardés. La suite est donc : entraîner les deux variants, les **élaguer** aux mêmes taux (50 %, 25 %)
-avec la règle exacte du moteur (`prune_rows`, par ligne de sortie), et comparer les perplexités.
-Le variant est maintenant **mesurable**, donc la question redevient posable — c'est tout ce que ce
-verdict affirme.
+| poids gardés | témoin dense | log-normal | écart |
+|---|---:|---:|---:|
+| 100 % (aucun élagage) | **7,3429** | **7,5666** | +3,0 % |
+| 50 % | **7,5680** (+3,1 %) | **13,0622** (+72,6 %) | **+72,6 %** |
+| 25 % | **9,0164** (+22,8 %) | **17,5009** (+131 %) | **+94 %** |
 
-**Et une limite de protocole** : une seule échelle (7,58 M paramètres), un seul taux
-d'apprentissage, une seule graine. Le « +3,0 % » du § 2 est un point, pas une courbe.
+**L'hypothèse biologique est réfutée** : à budget de poids égal, le modèle à poids log-normaux
+perd **beaucoup plus** de qualité que le modèle gaussien. La distribution multiplicative n'est pas
+un avantage pour l'élagage — dans cette implémentation, c'est un handicap.
+
+## 3. Le témoin, et pourquoi il était nécessaire
+
+Un poids log-normal **ne peut pas être nul** : `|w| = e^θ ≥ e^−12 = 6,1e-6`. Un poids « élagué »
+n'est donc pas annulé, il est **écrasé à 6,1e-6** — et il continue de contribuer. Le harnais le
+compte et l'annonce (`221 184 poids NON représentables` à 50 %). Sans témoin, on aurait pu accuser
+la **distribution** alors que la cause serait le **plancher**.
+
+Le témoin sépare les deux : le **même élagage** sur le **témoin dense**, mais avec un **plancher**
+de 6,1e-6 au lieu de zéro (signe conservé).
+
+| poids gardés | dense, zéros exacts | **dense, plancher 6,1e-6** | log-normal (plancher subi) |
+|---|---:|---:|---:|
+| 50 % | 7,5680 | **7,5434** | 13,0622 |
+| 25 % | 9,0164 | **8,9254** | 17,5009 |
+
+**Le plancher n'est pas la cause** : le dense avec plancher dégrade *moins* que le dense avec des
+zéros exacts (7,5434 contre 7,5680, et 8,9254 contre 9,0164). C'est la **distribution
+log-normale** qui rend le modèle fragile à l'élagage, pas l'impossibilité d'atteindre zéro.
+Le témoin ne sauve pas le variant — il rend la réfutation **propre**.
+
+## 4. Ce que cette fiche NE dit PAS
+
+- **elle ne dit pas que la biologie a tort** : elle dit qu'**une** façon de paramétrer des poids
+  log-normaux (`w = signe · e^θ` avec signes figés et θ borné) échoue à l'élagage. Une autre
+  paramétrisation (θ non borné, magnitudes renormalisées par ligne, seuil appris) n'est pas testée ;
+- **elle ne sépare pas les deux rôles du variant** : les signes figés (Dale) sont peut-être la
+  vraie cause de la fragilité, pas la loi log-normale. Le test qui trancherait : un modèle
+  log-normal à **signes libres**, élagué au même taux ;
+- **une seule échelle, une seule graine, un seul corpus** : le « +72,6 % » est un point ;
+- **elle ne dit rien des PAIRES** : sur un GGUF dense, élaguer ne réduit **aucune paire** mesurée —
+  les noyaux comptent `n_in × n_out` quelle que soit la densité (`--keep 0.5` du moteur lui-même
+  laisse le compte à **2,3 M** pendant que la perplexité passe de 4,56 à 5,82). Le gain de paires
+  n'existe que dans le **chemin par listes**, celui où la mesure historique a été faite
+  (`docs/modele-pour-drave.md` § 3 B).

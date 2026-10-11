@@ -393,7 +393,7 @@ def ecrire_poids_nomme(params, par_table, nom, cible, ou="?"):
     return nuls + opposes, ecart
 
 
-def elaguer_lignes(modele, garde):
+def elaguer_lignes(modele, garde, plancher=0.0):
     """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `model.rs::prune_rows`.
 
     POURQUOI LES DEUX AXES. Le coût de Drave est un nombre de PAIRES (poids non nul
@@ -435,11 +435,20 @@ def elaguer_lignes(modele, garde):
             plat = w.reshape(-1, n_in)
             idx = plat.abs().topk(k, dim=1).indices
             cible = (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
+        if plancher > 0:
+            # LE TÉMOIN : magnitude plancher, SIGNE conservé — exactement ce qu'un poids
+            # log-normal élagué devient (6,1e-6), mais sur un modèle ordinaire.
+            with torch.no_grad():
+                cible = torch.where(cible != 0, cible,
+                                    torch.sign(w) * plancher)
         a, e = ecrire_poids_nomme(params, par_table, nom, cible)
         non_repr += a
         ecart = max(ecart, e)
         touches += p.numel()
         n += 1
+    if plancher > 0:
+        print(f"# TÉMOIN plancher : un poids élagué vaut ±{plancher:.1e} au lieu de 0 "
+              f"(signe conservé)")
     print(f"# élagage à {garde:.0%} gardé : {n} tenseurs · {touches:,} poids sur {total:,} "
           f"({100 * touches / max(total, 1):.1f} % des poids de projection) · écriture effective "
           f"vérifiée (écart max {ecart:.3e})"
@@ -468,6 +477,7 @@ def installer_masque_inne(modele, garde, graine):
     """
     gen = torch.Generator().manual_seed(graine)
     masques = {}
+    touches = total = 0
     for nom, mod in modele.named_modules():
         if isinstance(mod, nn.Linear):
             w = mod.weight
@@ -476,6 +486,15 @@ def installer_masque_inne(modele, garde, graine):
             # machine), le masque vit sur le même appareil que les poids.
             idx = torch.argsort(torch.rand(w.shape, generator=gen), dim=1)[:, :k]
             masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+            touches += w.numel()
+    # LA COUVERTURE EST DITE, PARCE QU'ELLE N'EST PAS TOTALE (constaté le 10/10). Seuls les
+    # `nn.Linear` sont masqués : les experts fusionnés de Qwen3MoeExperts (83 % des poids) ne le
+    # sont pas. Les chiffres d'E1 et E2 décrivent donc **les projections d'attention**, et il faut
+    # le lire ainsi — ou étendre le masque aux experts, ce qui est une AUTRE expérience.
+    total = sum(p.numel() for p in modele.parameters() if p.dim() >= 2)
+    print(f"# MASQUE INNÉ à {garde:.0%} : {len(masques)} tenseurs · {touches:,} poids sur "
+          f"{total:,} ({100 * touches / max(total, 1):.1f} % des poids ≥ 2D) — les experts "
+          f"fusionnés ne sont PAS masqués")
     return masques
 
 
@@ -564,6 +583,13 @@ def main():
                         "élagage ; 0,5 = on annule la moitié des poids de chaque ligne)")
     p.add_argument("--elagage-tous", type=int, default=500,
                    help="pas entre deux élagages (rampe cubique de 1,0 vers la cible)")
+    p.add_argument("--plancher-elagage", type=float, default=0.0,
+                   help="TÉMOIN : au lieu d'annuler un poids élagué, le ramener à cette "
+                        "MAGNITUDE (signe conservé). Sert à séparer deux causes qu'on "
+                        "confondrait : « le poids est nul » et « le poids est très petit ». "
+                        "Un modèle log-normal ne peut PAS atteindre zéro (|w| = e^theta >= "
+                        "e^-12 = 6,1e-6) — sans ce témoin, on accuserait la distribution alors "
+                        "que c'est peut-être le plancher.")
     p.add_argument("--masque", type=float, default=0.0,
                    help="part des CONNEXIONS existantes à la naissance (0 = dense ; "
                         "0,25 = un connectome inné qui ne garde qu'un quart des poids "
@@ -713,7 +739,7 @@ def main():
             frac = min(1.0, pas / max(1, a.pas * 0.5)) ** 3
             garde = 1.0 - (1.0 - a.elagage) * frac
             if garde < 1.0:
-                elaguer_lignes(modele, garde)
+                elaguer_lignes(modele, garde, a.plancher_elagage)
 
         if pas % a.eval_tous == 0 or pas == a.pas:
             modele.eval()

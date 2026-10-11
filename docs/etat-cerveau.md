@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-10 23:03 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-10 23:46 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -77,7 +77,7 @@
 | **E1** | connectome inné | ✅ | un connectome **aléatoire** coûte **1 %** de perplexité et **divise les lectures par 4** (25 %) ; à 12,5 % : +13,7 % |
 | **E3** | deux axes appris | ✅ | ÷2 lectures à qualité égale ; ÷7,8 à dim 384 |
 | **E4** | équilibre E/I (inférence **et** entraînement) | ✅ | l'hypothèse est vraie **dans un seul sens** : l'inhibition **dégrade** de façon monotone (15,6908 → 19,4791 à la couche 12) ; l'optimum **intérieur** est du côté **amplification** (couche 0, gain 0,75 : **12,9635** contre 14,6496, **−11,5 %**) ; **falaise** à 0,25 (996,04) ; **les gains ne se composent pas** ; **côté entraînement, le ratio cortical de signes COÛTE** : 0,5 → 2,2729 bits/octet, 0,8 → 2,3838 (+4,9 %), 0,9 → 2,5188 (+10,8 %), dégradation monotone ([`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md)) |
-| **E6** | poids log-normaux | ✅ **mesurable depuis la correction de M8** | le variant passe de **436,6** à **7,5666** de perplexité dans le moteur (le fichier sauvé reproduit enfin le modèle entraîné, quatre moments identiques, `porte-sauvegarde-modele.sh`) — contre **7,3429** pour le témoin dense au même entraînement, soit **+3,0 %** ; **l'élagabilité, qui est SA raison d'être, reste à mesurer** ([`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md)) |
+| **E6** | poids log-normaux | ❌ **RÉFUTÉE sous élagage** | à **50 %** de poids gardés, le témoin dense passe de 7,3429 à **7,5680** (+3,1 %) quand le log-normal passe de 7,5666 à **13,0622** (+72,6 %) ; à **25 %** : 9,0164 (+22,8 %) contre **17,5009** (+131 %). **Témoin** (dense avec un plancher de 6,1e-6 au lieu de zéro, ce qu'un poids log-normal subit forcément) : 7,5434 et 8,9254 — le plancher n'est PAS la cause, c'est la distribution. La mesure a exigé trois corrections préalables (M8, l'écriture dans un poids reparamétré, et la couverture de l'élagage passée de 5,8 % à 100 %) ([`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md)) |
 | **E7/E8** | nouveauté, décorrélation | ✅ mesurées | la nouveauté **empire** la règle ; la décorrélation est **inerte**, et sa courbe de dose converge vers « ne rien apprendre » |
 | **E2** | croissance des connexions | ✅ réfutée | la croissance locale (par gradient accumulé) donne **2,3431** contre **2,3215** pour un masque statique de **même densité** : +0,9 % pire que le hasard ([`rapport-e2-croissance.md`](../reports/rapport-e2-croissance.md)) |
 | **E5** | rejeu et distillation | ⏳ cadrée | le moteur trace et rejoue (C7 : point fixe exact) ; l'outil de distillation existe |
@@ -115,9 +115,10 @@
   le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
   tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
   la **29e à 23 h 04**, `porte-sauvegarde-modele.sh`, **verte en ~1 min et vue ROUGE avec le défaut
-  rallumé** (`DRAVE_MAT_SANS_EXCLUSION=1`) — c'est elle qui verrouille la correction de M8. La passe
-  complète **des 28 premières** est relancée à **22 h 27** ; son verdict remplace cette ligne, et la
-  29e a été vérifiée à part (elle n'était pas dans la passe). Détail :
+  rallumé** (`DRAVE_MAT_SANS_EXCLUSION=1`) — c'est elle qui verrouille la correction de M8. **Passe
+  complète relancée à 22 h 27 : 28 vertes sur 28, 73 min 21 s** (verdict imprimé, repères
+  régénérés dans `docs/references-non-regression.md`) ; la 29e a été vérifiée à part, elle n'était
+  pas dans la passe. Détail :
   `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
   était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
   `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
