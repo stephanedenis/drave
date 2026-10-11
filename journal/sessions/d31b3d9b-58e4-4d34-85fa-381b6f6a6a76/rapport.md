@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 60.4 h |
 | Tours | 90 |
-| Messages | 2620 |
-| Appels d'outils | 2414 |
+| Messages | 2621 |
+| Appels d'outils | 2415 |
 | Fichiers touchés | 98 |
-| Commandes | 2107 |
+| Commandes | 2108 |
 | Sous-agents | 3 |
-| Commits | 249 |
+| Commits | 250 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3696,7 +3696,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 90 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*82 appels d'outils.* Actions notables :
+*83 appels d'outils.* Actions notables :
 
 - bash — Implement the frontier memory in the engine
 - bash — Test the frontier memory
@@ -3712,11 +3712,11 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Inspect the training harness options
 - bash — Find the trainer's weight initialization
 - bash — Read the log-normal installer and arg wiring
-- … et 68 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-⏵ **27 vertes sur 27** — je régénère les repères sur cette passe et je clos le round
+⏵ Le compte dans l'état n'a pas suivi (regex) — je corrige précisément
 
 ## 3. Travail accompli
 
@@ -3871,7 +3871,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2067 autres
+- … et 2068 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4268,4 +4268,5 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges  Dix drapeaux ajoutes aujourd hui (--entree signal:F, --entree-cana
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib p = pathlib.Path("docs/manques.md"); s = p.read_text() old = """| **M8*
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess log = pathlib.Path("/tmp/passe-complete7.log").read_tex
+- Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s)" && git push -q origin master && echo poussé; timeout 600 cargo test --release 
 

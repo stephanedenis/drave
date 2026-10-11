@@ -92,7 +92,7 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **25 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 20:28 : 26 vertes sur 26, 61 min 22 s**
+- **27 portes** `tools/porte-*.sh` — **passe complète le 2026-10-10 21 h 33 : 27 vertes sur 27, 60 min 13 s** (dont les quatre ajoutées aujourd'hui : jumeaux, c4-retard, mémoire, récurrence)
   (`tools/toutes-les-portes.sh`, chaque porte bornée, journaux gardés ; détail dans
   `reports/rapport-passe-complete-portes.md`). La passe a servi à deux choses : elle a montré que
   `porte-gain.sh` § 9 était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré), et

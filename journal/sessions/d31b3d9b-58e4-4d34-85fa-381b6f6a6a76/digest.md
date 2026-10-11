@@ -42043,3 +42043,20 @@ Journaux : /tmp/portes-1210h
 ⏵ **27 vertes sur 27** — je régénère les repères sur cette passe et je clos le round
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\nlog = pathlib.Path(\"/tmp/passe-complete7.log\").read_text(encoding=\"utf-8\")\nlignes, total = [], 0\nfor l in log.splitlines():\n    m = re.match(r\"^  (porte-\\S+)\\s+✅\\s+(\\d+ … [4952 caractères tronqués]`
+
+  ```
+repères : 27 portes · 60 min 13 s · 21:33
+docs/etat-cerveau.md mis à jour
+docs/manques.md mis à jour
+docs/etat-cerveau.md:0
+docs/manques.md:1
+docs/references-non-regression.md:2
+poussé
+fcd442d Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compte dans l'état n'a pas suivi (regex) — je corrige précisément
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"portes.*passe complète\" docs/etat-cerveau.md | head -2; python3 - <<'PYEOF'\nimport pathlib, re\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\navant = re.search(r\"- \\*\\*\\d+ portes\\*\\*[^\\n]*\", s)\na … [791 caractères tronqués]`
