@@ -53061,3 +53061,12 @@ keep=0.05  2793363.0236
 ⏵ Conclusion du dessin B : le croisement tombe là où le modèle est déjà mort — rédaction
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour le dessin B\"\najout = \"\"\"## 2 bis. OÙ le noyau creux devient rentable —  … [3295 caractères tronqués]`
+
+  ```
+fiche B : croisement ajouté
+état ; 2026-10-11 04:57
+34
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ns = s.replace(\"- **35 portes** `tools/porte-*.sh`\", \"- **34 portes** `tools/porte-*.sh`\")\ns = s.replace(\"\"\"  `DRAVE_OCCUPATIO … [738 caractères tronqués]`

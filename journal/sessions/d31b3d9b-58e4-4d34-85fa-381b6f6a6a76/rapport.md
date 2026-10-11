@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 67.8 h |
 | Tours | 101 |
-| Messages | 3318 |
-| Appels d'outils | 3087 |
+| Messages | 3319 |
+| Appels d'outils | 3088 |
 | Fichiers touchés | 126 |
-| Commandes | 2620 |
+| Commandes | 2621 |
 | Sous-agents | 3 |
-| Commits | 295 |
+| Commits | 296 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4196,13 +4196,14 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 
 ### Tour 101 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Find the break-even density for the sparse kernel
 - bash — Measure the sparse kernel with cache-exceeding weights
 - bash — Add the speed-density measurement to the gate
 - bash — Check quality at the crossing density
 - bash — Document the crossing and commit
+- bash — Fix the gate count
 
 **Synthèse produite :**
 
@@ -4389,7 +4390,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2580 autres
+- … et 2581 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4832,4 +4833,5 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF' Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 
 - Fiche B : le noyau creux couvre les experts (divise par 3,8 les paires) et reste 36 % plus lent — le prochain pas est un noyau, pas un modele" 2>&1 | tail -1; g
 - Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divi
+- Etat : 34 portes (et non 35), la porte du noyau creux nommee avec son rouge" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git status --porcelain |
 

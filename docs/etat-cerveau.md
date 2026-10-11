@@ -110,7 +110,7 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **35 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+- **34 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
   dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
   le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
   tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
@@ -130,7 +130,9 @@
   trace ?) — **verte**, et **vue ROUGE** par `DRAVE_MASQUE_SANS_EXPERTS=1` (84,87 % au lieu de 26 %).
   La **33e à 04 h 05**, `porte-occupation-moteur.sh` (le moteur annonce-t-il l'occupation, et
   colle-t-elle à l'outil indépendant ?) — **verte** (écart **0,0 point**), et **vue ROUGE** avec
-  `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %). Détail :
+  `DRAVE_OCCUPATION_ATTENTION_SEULE=1` (99,3 % contre 89,2 %). La **34e à 04 h 40**,
+  `porte-poids-creux.sh` (le noyau creux est-il exact, paie-t-il la sparsité, et à quelle densité
+  devient-il rentable ?) — **verte**, et **vue ROUGE** avec `DRAVE_CREUX_SANS_EFFET=1`. Détail :
   `reports/rapport-passe-complete-portes.md`. La passe de 21 h 33 a montré que `porte-gain.sh` § 9
   était **rouge depuis le v7** (elle exigeait un refus que le v7 a retiré) et a démasqué
   `porte-tokenizer-kimi.sh` **verte en ne comparant aucun jeton** (elle lisait `stdin`, que personne
