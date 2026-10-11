@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 63.1 h |
-| Tours | 92 |
-| Messages | 3011 |
-| Appels d'outils | 2798 |
-| Fichiers touchés | 116 |
-| Commandes | 2355 |
+| Durée | 63.3 h |
+| Tours | 93 |
+| Messages | 3038 |
+| Appels d'outils | 2823 |
+| Fichiers touchés | 117 |
+| Commandes | 2378 |
 | Sous-agents | 3 |
-| Commits | 265 |
+| Commits | 266 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -219,6 +219,8 @@
 **Tour 91** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 92** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 93** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3784,7 +3786,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 92 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*108 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — Check suite and sweep status
 - read
@@ -3800,11 +3802,48 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check whether the engine reports pair counts
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md`
-- … et 84 autres
+- … et 86 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la carte des sorties
+⏵ Round 49 : six livraisons vérifiées, arbre propre et poussé
+
+**Alertes d'abord**
+- Aucune : arbre propre, tout poussé (`38d47e1`), **29 portes** dont la passe complète **28/28 vertes** (73 min 21 s).
+
+**Ce qui a été livré ce round**
+1. **Dessin H — carte des sorties** (12/16/20/22) : la borne monte bien (25,19 % → 42,33 % d'accord), mais le gain **atteignable** s'effondre — parité seulement à la sortie 22, **+0,05 point sur 2 001 jetons, dans le bruit**, pour **0,39 %** des paires. **Facteur 32** entre la borne et le gain réel.
+2. **M8 corrigé** (bloquait E6 depuis deux jours) : `lm_head.weight` **est** `model.embed_tokens.weight` ; la reparamétrisation cassait le partage. Le contrôle qui gardait M8 ouvert était **tautologique**. Moteur **innocenté** (export simulé = 7,3429 et 436,5992, exactement ses chiffres).
+3. **E6 RÉFUTÉE, avec son témoin** : à 50 % de poids gardés, dense **7,5680** (+3,1 %) contre log-normal **13,0622** (+72,6 %). Le témoin (plancher 6,1e-6) donne 7,5434 : **le plancher n'est pas la cause, la distribution l'est**.
+4. **Troisième défaut de la même famille** : écrire dans un poids reparamétré **n'écrivait rien** (3 sites), et l'élagage ne couvrait que **5,8 %** du modèle (les experts fusionnés étaient ignorés) → **100 %** désormais, et la couverture est **annoncée**.
+5. **M9 nommé** : aucun instrument du dépôt ne mesure le coût de la sparsité des poids (compteur de paires structurel sur **tous** les chemins ; « poids lus » identique pour les 8 modèles d'E6). Les « ÷7,9 paires » du dessin B ne sont plus reproduits par le code actuel — écrit à côté du chiffre.
+6. **2 nouvelles portes** : `porte-profondeur-routee.sh` (verte, 9 min 20 s) et `porte-sauvegarde-modele.sh` (verte **et vue ROUGE** avec le défaut rallumé).
+
+**Prochain round** : M9 — rendre le coût **sensible à l'occupation** dans le moteur (compteur de non-nuls par projection + ligne « paires stockées »), avec sa porte ; c'est la condition pour que le dessin « poids creux » soit mesurable.
+
+### Tour 93 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*23 appels d'outils.* Actions notables :
+
+- bash — Inventory pair-counting sites and Proj struct
+- bash — Read Proj::load in full
+- bash — Find all Proj construction sites
+- bash — Inspect struct and construction details
+- bash — Add occupancy fields to Proj and build
+- bash — Read the Layer struct
+- bash — Read the Moe struct
+- bash — Revert the engine change
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py`
+- bash — Test the occupancy instrument
+- bash — Measure occupancy of pruned models
+- bash — Check checkpoint zeros for both pruning rates
+- bash — Measure weight distribution near zero
+- bash — Read pruning events in both logs
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ Commit du croisement E6, de l'instrument d'occupation et des deux corrections de protocole
 
 ## 3. Travail accompli
 
@@ -3922,12 +3961,13 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 2 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 3 | 2 |
 | `/tmp/message-m8.txt` | 1 | 0 |
 | `/tmp/message-ecrire.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/references-non-regression.md` | 0 | 2 |
 | `/tmp/message-e6.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-carte-sorties.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3977,7 +4017,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2315 autres
+- … et 2338 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4105,7 +4145,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-96 sorties en erreur ou divergentes. Les premières :
+97 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4390,4 +4430,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-instrument.txt <<'MSGEOF' Instrument : le compteur de paires du moteur ne voit PAS l'el
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9.txt <<'MSGEOF' M9 : aucun instrument du depot ne mesure le cout de la sparsite des p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF' Dessin H, carte des sorties : la borne monte quand on sort tard, m
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF' E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % ga
 

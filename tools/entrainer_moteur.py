@@ -771,6 +771,17 @@ def main():
     # ailleurs — parce que personne n'avait mesuré entre les étapes.
     t_avant = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
     modele.load_state_dict(meilleur[1])
+    # LE MEILLEUR POINT ANNULE L'ÉLAGAGE, ET IL FAUT LE DIRE (trouvé le 11/10). La sélection garde
+    # l'état du pas où la validation était la meilleure : si c'est le pas 1000, le fichier porte
+    # l'élagage de la RAMPE à ce pas-là (78 % gardé), pas la cible annoncée (25 %). Mesuré :
+    # 22,3 % de zéros dans le fichier au lieu de 75 %, et 9,0164 de perplexité présentée comme
+    # « 25 % de poids gardés ». On RÉAPPLIQUE donc la cible après la restauration, pour que le
+    # fichier porte ce qu'il annonce — et on le dit.
+    if a.elagage > 0.0 and a.elagage < 1.0:
+        print(f"# élagage FINAL réappliqué après la restauration du meilleur point (pas "
+              f"{meilleur[2]}) : cible {a.elagage:.0%} gardé — sans quoi le fichier porterait "
+              f"l'élagage de la rampe à ce pas-là")
+        elaguer_lignes(modele, a.elagage, a.plancher_elagage)
     t_restaure = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
     if os.environ.get("DRAVE_MAT_DIAGNOSTIC") == "1":
         # COMPARAISON DES LOGITS, ET LOCALISATION PAR CROCHETS. Les poids écrits SONT la valeur

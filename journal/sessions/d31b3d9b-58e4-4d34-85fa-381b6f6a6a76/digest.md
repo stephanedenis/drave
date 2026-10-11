@@ -48316,3 +48316,526 @@ dim 11 oct 2026 00:15:33 EDT
 ⏵ Commit de la carte des sorties
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-carte.txt <<'MSGEOF'\nDessin H, carte des sorties : la borne monte quand on sort tard, mais le gain ATTEIGNABLE s'effondre\n\nLA QUESTION. La mesure precedente ne portait que sur UNE sortie (16 couches sur 24). Sor … [1786 caractères tronqués]`
+
+  ```
+38d47e1 Dessin H, carte des sorties : la borne monte quand on sort tard, mais le gain ATTEIGNABLE s'effondre
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur sait-il déjà compter les poids non nuls (`--tensors`) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e6d/dense-g0.5.gguf --tensors 2>&1 | head -12", "description": "Check the tensor inventory output"}`
+
+  ```
+qwen3moe · 1 fichiers · 51 tenseurs · 0.00 Go de poids · en-têtes lus en 1.837648ms
+ · block_count 4 · embedding_length 192 · feed_forward_length 768 · attention.head_count 4 · attention.head_count_kv 2 · expert_count 8 · expert_used_count 2 · context_length 512
+  Q8_0     token_embd.weight                      [256, 192] · 0.0 M poids · fichier 0
+  F32      output_norm.weight                     [192] · 0.0 M poids · fichier 0
+  Q8_0     output.weight                          [256, 192] · 0.0 M poids · fichier 0
+  F32      blk.0.attn_norm.weight                 [192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_q.weight                    [192, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_k.weight                    [96, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_v.weight                    [96, 192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.attn_output.weight               [192, 192] · 0.0 M poids · fichier 0
+  F32      blk.0.ffn_norm.weight                  [192] · 0.0 M poids · fichier 0
+  Q8_0     blk.0.ffn_gate_inp.weight              [8, 192] · 0.0 M poids · fichier 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de l'état du dépôt pour ce round
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -5; echo \"--- HEAD ---\"; git log --oneline -6; echo \"--- arbre propre ? ---\"; [ -z \"$(git status --porcelain)\" ] && echo \"PROPRE\" || echo \"MODIFIÉ\"; echo \"--- portes ---\"; ls tools/porte-*.sh … [57 caractères tronqués]`
+
+  ```
+--- HEAD ---
+38d47e1 Dessin H, carte des sorties : la borne monte quand on sort tard, mais le gain ATTEIGNABLE s'effondre
+673b4a2 M9 : aucun instrument du depot ne mesure le cout de la sparsite des poids — et les huit modeles d'E6 le prouvent
+2ef2774 Instrument : le compteur de paires du moteur ne voit PAS l'elagage des poids, sur aucun chemin
+b0afa88 E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve
+24a7789 Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele
+1d3898f M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree
+--- arbre propre ? ---
+PROPRE
+--- portes ---
+29
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 49 : six livraisons vérifiées, arbre propre et poussé
+
+**Alertes d'abord**
+- Aucune : arbre propre, tout poussé (`38d47e1`), **29 portes** dont la passe complète **28/28 vertes** (73 min 21 s).
+
+**Ce qui a été livré ce round**
+1. **Dessin H — carte des sorties** (12/16/20/22) : la borne monte bien (25,19 % → 42,33 % d'accord), mais le gain **atteignable** s'effondre — parité seulement à la sortie 22, **+0,05 point sur 2 001 jetons, dans le bruit**, pour **0,39 %** des paires. **Facteur 32** entre la borne et le gain réel.
+2. **M8 corrigé** (bloquait E6 depuis deux jours) : `lm_head.weight` **est** `model.embed_tokens.weight` ; la reparamétrisation cassait le partage. Le contrôle qui gardait M8 ouvert était **tautologique**. Moteur **innocenté** (export simulé = 7,3429 et 436,5992, exactement ses chiffres).
+3. **E6 RÉFUTÉE, avec son témoin** : à 50 % de poids gardés, dense **7,5680** (+3,1 %) contre log-normal **13,0622** (+72,6 %). Le témoin (plancher 6,1e-6) donne 7,5434 : **le plancher n'est pas la cause, la distribution l'est**.
+4. **Troisième défaut de la même famille** : écrire dans un poids reparamétré **n'écrivait rien** (3 sites), et l'élagage ne couvrait que **5,8 %** du modèle (les experts fusionnés étaient ignorés) → **100 %** désormais, et la couverture est **annoncée**.
+5. **M9 nommé** : aucun instrument du dépôt ne mesure le coût de la sparsité des poids (compteur de paires structurel sur **tous** les chemins ; « poids lus » identique pour les 8 modèles d'E6). Les « ÷7,9 paires » du dessin B ne sont plus reproduits par le code actuel — écrit à côté du chiffre.
+6. **2 nouvelles portes** : `porte-profondeur-routee.sh` (verte, 9 min 20 s) et `porte-sauvegarde-modele.sh` (verte **et vue ROUGE** avec le défaut rallumé).
+
+**Prochain round** : M9 — rendre le coût **sensible à l'occupation** dans le moteur (compteur de non-nuls par projection + ligne « paires stockées »), avec sa porte ; c'est la condition pour que le dessin « poids creux » soit mesurable.
+
+
+## Tour 93
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 50/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ M9 : rendre le coût sensible à l'occupation des poids (inventaire des sites)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"paires\\[0\\] +=\\|paires\\[1\\] +=\\|paires\\[2\\] +=\\|\\*paires +=\" drave-core/src/model.rs | head -20; echo \"=== struct Proj ===\"; L=$(grep -n \"pub struct Proj\" drave-core/src/model.rs | cut -d: -f1); sed -n \"$((L … [105 caractères tronqués]`
+
+  ```
+4623:            *paires += (q.n_in as u64) * (q.n_out as u64);
+4649:                *paires += (x.len() as u64) * (mg.n_out as u64);
+4663:            *paires += (d.n_in as u64) * (d.n_out as u64);
+4677:            *paires += *events - avant;
+4764:            *paires += (vue.n_in as u64) * (vue.n_out as u64);
+4786:        *paires += (m.n_in as u64) * (m.n_out as u64);
+5502:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5691:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5840:                self.paires[1] += paires_lot;
+5971:        *paires += (m.q_a.len() + m.q_b.len() + m.kv_a.len()) as u64;
+6029:        *paires += nh as u64 * n as u64 * remontees;
+6291:                *paires += (m.comp_kv.len() + m.comp_gate.len()) as u64;
+6393:                    *paires += (m.idx_k.len() + idh) as u64;
+6404:                *paires += (hd as u64) * (m.ratio as u64) * 2;
+6438:                *paires += (m.idx_comp_kv.len() + m.idx_comp_gate.len()) as u64;
+6516:                *paires += (m.idx_q_b.len() + m.idx_proj.len()) as u64;
+6566:        *paires += (m.q_a.len() + m.q_b.len() + m.kv.len()) as u64;
+6588:        
+… [728 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation : compter les non-nuls au chargement d'une projection
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"    fn load(g: &Gguf, name: &str, bias\" drave-core/src/model.rs | cut -d: -f1); sed -n \"$((L)),$((L+60))p\" drave-core/src/model.rs", "description": "Read Proj::load in full"}`
+
+  ```
+fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+            q4: bool, bits6: bool) -> Self {
+        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let n_out = t.dims[0] as usize;
+        let n_in = t.dims[1] as usize;
+        let mut w = g.dequant(name);
+        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+        else { prune_rows(&mut w, n_out, n_in, keep); }
+        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+        // de la densité d'activation, entre dispersion (push) et produit
+        // scalaire dense (pull). Le croisement mesuré est à 22 %
+        // (`seuil_push = 0.22`, `reports/rapport-croisement-push-pull.md`).
+        // Six bits empaquetés : même déquantification que les autres chemins,
+        // mais la quantification vise la grille [-32, 31] au lieu de [-8, 7].
+        if bits6 {
+            let z = DenseQ4::build6(&w, n_out, n_in);
+            let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+        }
+        let (m, d, q4v) = if q4 {
+        
+… [2744 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Proj {\" drave-core/src/model.rs | head -12; echo \"--- total ---\"; grep -c \"Proj {\" drave-core/src/model.rs", "description": "Find all Proj construction sites"}`
+
+  ```
+584:pub struct Proj {
+1476:impl Proj {
+1480:        Proj { gpu: None, m: None, d: None, q4: None, bias: None }
+1500:            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+1569:        Proj { gpu, m, d, q4: q4v, bias }
+--- total ---
+5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '580,596p' drave-core/src/model.rs; echo \"=== 1560-1575 ===\"; sed -n '1560,1575p' drave-core/src/model.rs; echo \"=== autres Proj { ===\"; grep -n \"Proj {\" drave-core/src/*.rs | grep -v model.rs | head", "description": "In … [39 caractères tronqués]`
+
+  ```
+/// Une projection, dans l'un des deux formats, plus son biais éventuel.
+/// `m` = listes d'événements (architecture du projet) ;
+/// `d` = matrice dense int8 (référence de comparaison, sans événements).
+pub struct Proj {
+    /// Copie GPU des poids (sources Q8_0), si le déport est actif.
+    pub gpu: Option<crate::gpu::MatriceGpu>,
+    pub m: Option<PushMat>,
+    pub d: Option<DenseQ8>,
+    /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
+    pub q4: Option<DenseQ4>,
+    pub bias: Option<Vec<f32>>,
+}
+
+/// Type ggml → origine des blocs pour `Vue4`.
+fn source_de(t: u32) -> Option<crate::list::Source> {
+    use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+=== 1560-1575 ===
+            (Some(d8), Some(machine))
+                if d8.src == crate::list::Source8::Q8_0 && keep >= 1.0
+                   && n_out * d8.nb_ligne * 34 >= SEUIL_GPU => {
+                let octets = n_out * d8.nb_ligne * 34;
+                let blocs = unsafe { std::slice::from_raw_parts(d8.base, octets) };
+                machine.charger_proj(blocs, n_out, d8.nb_ligne)
+            }
+            _ => None,
+        };
+        Proj { gpu, m, d, q4: q4v, bias }
+    }
+}
+… [156 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/../drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# 1. les champs\nold = \"\"\"    /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.\n … [2622 caractères tronqués]`
+
+  ```
+Proj enrichi
+596:    pub nnz: u64,
+1442:fn nnz(w: &[f32]) -> u64 {
+1518:            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias, nnz: nnz(&w), n_tot: (n_out * n_in) as u64 };
+1587:        Proj { gpu, m, d, q4: q4v, bias, nnz: nnz(&w), n_tot: (n_out * n_in) as u64 }
+
+warning: `drave-core` (bin "drave") generated 56 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 25 suggestions)
+    Finished `release` profile [optimized] target(s) in 48.44s
+  ```
+
+### 🤖 Assistant
+
+⏵ Agrégation de l'occupation : structure d'une couche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"pub struct Layer\" drave-core/src/model.rs | cut -d: -f1); sed -n \"$((L)),$((L+28))p\" drave-core/src/model.rs", "description": "Read the Layer struct"}`
+
+  ```
+pub struct Layer {
+    pub attn_norm: Vec<f32>,
+    pub wq: Proj,
+    pub wk: Proj,
+    pub wv: Proj,
+    pub wo: Proj,
+    pub ffn_norm: Vec<f32>,
+    /// RMSNorm appliquée à chaque tête de Q et de K après projection
+    /// (Qwen3, Gemma 3…). Absente ailleurs.
+    pub q_norm: Option<Vec<f32>>,
+    pub k_norm: Option<Vec<f32>>,
+    /// Puits d'attention **appris** : un logit par tête, ajouté aux scores
+    /// comme une clé virtuelle dont la valeur est nulle. Elle ne contribue
+    /// qu'au dénominateur du softmax — c'est le « drain » que les modèles
+    /// récents (gpt-oss) apprennent au lieu de le bricoler.
+    pub sinks: Option<Vec<f32>>,
+    pub wgate: Proj,
+    pub wup: Proj,
+    pub wdown: Proj,
+    /// Rempli pour les modèles à mélange d'experts ; `wgate/wup/wdown` sont
+    /// alors vides.
+    pub moe: Option<Moe>,
+}
+
+pub struct Stats {
+    pub events: u64,
+    pub prompt_s: f64,
+    pub gen_s: f64,
+    pub n_prompt: usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"pub struct Moe\" drave-core/src/model.rs | cut -d: -f1); sed -n \"$((L)),$((L+22))p\" drave-core/src/model.rs", "description": "Read the Moe struct"}`
+
+  ```
+pub struct Moe {
+    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+    pub routeur: Vec<f32>,
+    /// Biais du routeur (gpt-oss en a un) : ajouté aux logits **avant** le
+    /// softmax.
+    pub routeur_biais: Option<Vec<f32>>,
+    /// Biais par expert, `[n_expert × n_ff]` : chaque expert a les siens, pour
+    /// ses trois projections. Absents chez Qwen3-MoE, présents chez gpt-oss.
+    pub biais_gate: Option<Vec<f32>>,
+    pub biais_up: Option<Vec<f32>>,
+    pub biais_down: Option<Vec<f32>>,
+    pub n_ff: usize,
+    /// Une vue par fichier porteur d'experts. Un GGUF ordinaire n'en a qu'une ;
+    /// un modèle en clusters en a une par `cluster-XX.gguf`, chacune ne
+    /// contenant que ses `experts_par_cluster` lignes.
+    pub gate: Vec<Vue4>,
+    pub up: Vec<Vue4>,
+    pub down: Vec<Vue4>,
+    /// Couche dont ce mélange fait partie (pour le mapping).
+    pub couche: usize,
+    /// Numéro de cluster de chaque vue de `gate`/`up`/`down`. L'identifiant du
+    /// mapping est un NUMÉRO ; sa place dans le `Vec` dépend de ce que ce nœud a
+    /// chargé. Les confondre marchait tant que les huit clusters étaient là —
+  ```
+
+### 🤖 Assistant
+
+⏵ Décision : instrument Python plutôt que modification du moteur (les experts ne passent pas par `Proj`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout drave-core/src/model.rs && git status --porcelain | head -3; echo \"--- revert OK ---\"; grep -c \"pub nnz\" drave-core/src/model.rs", "description": "Revert the engine change"}`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md
+--- revert OK ---
+0
+[stderr]
+Updated 1 path from the index
+[exit code: 1]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"occupation_poids.py — M9 : quelle part des poids est réellement STOCKÉE non nulle ?\n\nPOURQUOI CET INSTRUMENT EXISTE. Le compteur de paires du moteur additionne `n_in × n_out` par\nprojection : il mesure le travail d'un noyau **dense**, fidèlement — un noy … [6749 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele /tmp/e6b/dense-modele.gguf --paires-attention 0.4 --paires-experts 1.8 2>&1 | tail -20", "description": "Test the occupancy instrument"}`
+
+  ```
+modèle : dense-modele.gguf · 51 tenseurs · 7,626,816 poids
+
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 6,255,259 | **88.4 %** |
+| attention | 443,520 | 440,230 | **99.3 %** |
+| tête | 49,344 | 48,987 | **99.3 %** |
+| table d'entrée | 49,152 | 48,795 | **99.3 %** |
+| autres | 6,912 | 6,865 | **99.3 %** |
+| **total** | **7,626,816** | **6,800,136** | **89.2 %** |
+
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.40 M** (÷1.01)
+  experts    paires noyau 1.80 M → paires creuses ≈ **1.59 M** (÷1.13)
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification décisive : l'instrument voit-il l'élagage, lui ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in /tmp/e6d/dense-g0.5.gguf /tmp/e6d/dense-g0.25.gguf /tmp/e6d/lognormal-g0.5.gguf; do echo \"=== $(basename $M) ===\"; /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele \"$M\" --paires-attention 0.4 --paires … [95 caractères tronqués]`
+
+  ```
+=== dense-g0.5.gguf ===
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 3,538,869 | **50.0 %** |
+| attention | 443,520 | 222,336 | **50.1 %** |
+| tête | 49,344 | 48,988 | **99.3 %** |
+| table d'entrée | 49,152 | 48,796 | **99.3 %** |
+| autres | 6,912 | 3,840 | **55.6 %** |
+| **total** | **7,626,816** | **3,862,829** | **50.6 %** |
+
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+=== dense-g0.25.gguf ===
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 5,498,745 | **77.7 %** |
+| attention | 443,520 | 344,448 | **77.7 %** |
+| tête | 49,344 | 49,017 | **99.3 %** |
+| table d'entrée | 49,152 | 48,825 | **99.3 %** |
+| autres | 6,912 | 5,536 | **80.1 %** |
+| **total** | **7,626,816** | **5,946,571** | **78.0 %** |
+
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+=== lognormal-g0.5.gguf ===
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 3,538,906 | **50.0 %** |
+| attention | 443,520 | 425,970 | **96.0 %** |
+| tête | 49,344 | 49,005 | **99.3 %** |
+| table d'entrée | 49,152 | 48,813 | **99.3 %** |
+| autres | 6,912 | 3,840 |
+… [148 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compte d'occupation marche ; reste à expliquer g0.25 (77,7 %)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nfrom safetensors.torch import load_file\nimport numpy as np\nfor nom in (\"dense-g0.5\", \"dense-g0.25\"):\n    d = load_file(f\"/tmp/e6d/{nom}/model.safetensors\")\n    tot = nul = 0\n     … [295 caractères tronqués]`
+
+  ```
+dense-g0.5     point de contrôle : 3,763,200 / 7,526,400 = 50.0 % de zéros
+dense-g0.25    point de contrôle : 1,679,456 / 7,526,400 = 22.3 % de zéros
+  ```
+
+### 🤖 Assistant
+
+⏵ Explication : les zéros d'élagage repoussent au pas suivant — mesure de la distribution
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nfrom safetensors.torch import load_file\nimport numpy as np\nfor nom in (\"dense-g0.5\", \"dense-g0.25\"):\n    d = load_file(f\"/tmp/e6d/{nom}/model.safetensors\")\n    a = np.concatenate( … [551 caractères tronqués]`
+
+  ```
+dense-g0.5     exactement 0 : 50.00 % · |w| < 1e-4 : 50.00 % · < 1e-3 : 50.00 % · médiane non nulle 0.0948
+dense-g0.25    exactement 0 : 22.31 % · |w| < 1e-4 : 22.31 % · < 1e-3 : 22.31 % · médiane non nulle 0.0698
+=== ordre dans la boucle ===
+734-                    print(f"  [croissance] pas {pas} : +{n} connexions · densité {densite:.3%}")
+735-        # ÉLAGAGE À RAMPE CUBIQUE : on ne coupe pas la moitié des poids au premier
+736-        # pas (le modèle n'a rien appris), on y va progressivement — c'est la
+737-        # différence entre élaguer et détruire.
+738:        if a.elagage > 0.0 and pas % a.elagage_tous == 0:
+739-            frac = min(1.0, pas / max(1, a.pas * 0.5)) ** 3
+740-            garde = 1.0 - (1.0 - a.elagage) * frac
+741-            if garde < 1.0:
+742-                elaguer_lignes(modele, garde, a.plancher_elagage)
+743-
+744-        if pas % a.eval_tous == 0 or pas == a.pas:
+745-            modele.eval()
+746-            tot, n = 0.0, 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le dernier élagage de g0.25 a-t-il eu lieu ? (lecture du journal)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"élagage à|pas +[0-9]+ ·\" /tmp/e6d/dense-g0.25.log | head -20; echo \"=== g0.5 ===\"; grep -cE \"élagage à\" /tmp/e6d/dense-g0.5.log; grep -E \"élagage à\" /tmp/e6d/dense-g0.25.log | tail -3", "description": "Read pruning e … [20 caractères tronqués]`
+
+  ```
+# élagage à 97% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 78% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  pas   1000 · perte 1.6771 · val 2.6991 bits/octet · 54 s
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  pas   2000 · perte 1.7145 · val 3.9666 bits/octet · 107 s
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 25% gardé : 28 tenseurs · 7,526,400 poids sur 7,526,400 (100.0 % des poids de projection) · écriture effective vérifiée (écart max 0.000e+00)
+  pas   3000 · perte 1.5259 · val 2.9507 bits/octet · 162 s
+  # meilleur point : pas 1000 · val 2.6991 bits/octet
+=== g0.5 ===
+6
+# élagage à 25% gardé : 28 t
+… [433 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Défaut de protocole trouvé : le « meilleur point » annule l'élagage — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"meilleur point\" /tmp/e6d/*.log /tmp/e6e/*.log 2>/dev/null; echo \"--- occupation attendue vs mesurée ---\"; echo \"g0.5 : meilleur pas 1500+ → 50 % ; g0.25 : meilleur pas 1000 → 22 %\"", "description": "Check best-step sel … [20 caractères tronqués]`
+
+  ```
+/tmp/e6d/dense-g0.25.log:  # meilleur point : pas 1000 · val 2.6991 bits/octet
+/tmp/e6d/dense-g0.5.log:  # meilleur point : pas 3000 · val 2.4046 bits/octet
+/tmp/e6d/lognormal-g0.25.log:  # meilleur point : pas 3000 · val 4.0631 bits/octet
+/tmp/e6d/lognormal-g0.5.log:  # meilleur point : pas 3000 · val 3.4749 bits/octet
+/tmp/e6e/dense-plancher-g0.25.log:  # meilleur point : pas 1000 · val 2.6989 bits/octet
+/tmp/e6e/dense-plancher-g0.5.log:  # meilleur point : pas 3000 · val 2.4041 bits/octet
+--- occupation attendue vs mesurée ---
+g0.5 : meilleur pas 1500+ → 50 % ; g0.25 : meilleur pas 1000 → 22 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du protocole et relance des deux seules mesures faussées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    modele.load_state_dict(meilleur[1])\n    t_restaure = perte_de_validation(modele, val, a, dev) if a … [2688 caractères tronqués]`
+
+  ```
+protocole corrigé
+OK
+relance des deux mesures faussées (pid 311447)
+dim 11 oct 2026 00:20:46 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6f/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6f/codes.txt", "description": "Wait for the corrected 25% measurements", "timeoutMs": 900000}`
+
+  ```
+dense-g0.25 code=0
+# élagage FINAL réappliqué après la restauration du meilleur point (pas 1000) : cible 25% gardé — sans quoi le fichier porterait l'élagage de la rampe à ce pas-là
+perplexité 49.4291 sur
+dense-plancher-g0.25 code=0
+# élagage FINAL réappliqué après la restauration du meilleur point (pas 1000) : cible 25% gardé — sans quoi le fichier porterait l'élagage de la rampe à ce pas-là
+perplexité 45.1232 sur
+TERMINE
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat RETOURNÉ à 25 % — vérification de l'occupation réelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in /tmp/e6f/dense-g0.25.gguf /tmp/e6d/lognormal-g0.25.gguf; do echo \"=== $(basename $M) ===\"; /home/stephane/gpu-env/bin/python tools/occupation_poids.py --modele \"$M\" 2>&1 | sed -n '3,11p'; done", "description": "Verify oc … [35 caractères tronqués]`
+
+  ```
+=== dense-g0.25.gguf ===
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 1,769,472 | **25.0 %** |
+| attention | 443,520 | 111,744 | **25.2 %** |
+| tête | 49,344 | 49,017 | **99.3 %** |
+| table d'entrée | 49,152 | 48,825 | **99.3 %** |
+| autres | 6,912 | 2,304 | **33.3 %** |
+| **total** | **7,626,816** | **1,981,362** | **26.0 %** |
+
+=== lognormal-g0.25.gguf ===
+| genre | poids | non nuls | occupation |
+|---|---:|---:|---:|
+| experts | 7,077,888 | 1,769,471 | **25.0 %** |
+| attention | 443,520 | 425,927 | **96.0 %** |
+| tête | 49,344 | 49,005 | **99.3 %** |
+| table d'entrée | 49,152 | 48,813 | **99.3 %** |
+| autres | 6,912 | 2,304 | **33.3 %** |
+| **total** | **7,626,816** | **2,295,520** | **30.1 %** |
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de l'occupation des modèles non élagués, puis réécriture de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for M in /tmp/e6b/dense-modele.gguf /tmp/e6b/lognormal-modele.gguf /tmp/e6d/dense-g0.5.gguf /tmp/e6d/lognormal-g0.5.gguf /tmp/e6f/dense-plancher-g0.25.gguf; do printf '%-28s ' \"$(basename $M .gguf)\"; /home/stephane/gpu-env/bin/pyth … [142 caractères tronqués]`
+
+  ```
+dense-modele                 | **total** | **7,626,816** | **6,800,136** | **89.2 %** |
+lognormal-modele             | **total** | **7,626,816** | **6,801,480** | **89.2 %** |
+dense-g0.5                   | **total** | **7,626,816** | **3,862,829** | **50.6 %** |
+lognormal-g0.5               | **total** | **7,626,816** | **4,066,534** | **53.3 %** |
+dense-plancher-g0.25         | **total** | **7,626,816** | **1,981,700** | **26.0 %** |
+  ```
+
+- **write** `{"content": "# E6 — poids log-normaux : il y a un CROISEMENT. Le variant est pire à 50 % gardé, et bien meilleur à 25 %\n\n> Campagne : **biologie** · expérience : E6 (`docs/biologie-pour-drave.md`), poids tirés d'une\n> log-normale (`w = signe · e^θ`, principe de Dale) au lieu d'une gaussienne\n> Q … [5746 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ni = s.index(\"| **E6** | poids log-normaux |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **E6** | poids log-normaux | 🟡 **CROISEMENT mes … [2300 caractères tronqués]`
+
+  ```
+E6 corrigé
+M9 mis à jour
+1
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [703 caractères tronqués]`
+
+  ```
+horodatage 2026-10-11 00:27
+> **2026-10-11 00:27 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+133:  (où sortir), `tools/occupation_poids.py` (occupation d'un GGUF — manque M9), et
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du croisement E6, de l'instrument d'occupation et des deux corrections de protocole
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e6b.txt <<'MSGEOF'\nE6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 %\n\nLA MESURE, avec l'occupation VERIFIEE dans le fichier exporte :\n\n    poids gardes   occupatio … [1993 caractères tronqués]`
