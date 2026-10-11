@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 66.5 h |
+| Durée | 66.6 h |
 | Tours | 97 |
-| Messages | 3213 |
-| Appels d'outils | 2990 |
+| Messages | 3216 |
+| Appels d'outils | 2993 |
 | Fichiers touchés | 124 |
-| Commandes | 2525 |
+| Commandes | 2528 |
 | Sous-agents | 3 |
-| Commits | 286 |
+| Commits | 287 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3999,7 +3999,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 97 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Re-measure E1 and E2 with the corrected mask
 - bash — Check E1/E2 progress
@@ -4011,10 +4011,13 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Commit the E1/E2 re-measurement
 - bash — Read the biology roadmap E1/E2 lines
 - bash — Correct the biology roadmap for E1/E2
+- bash — Compute the sparse-pair estimate for E1 models
+- bash — Show the full sparse estimate output
+- bash — Add the cost side to the E1/E2 fiche
 
 **Synthèse produite :**
 
-⏵ E2 aussi se retourne : la croissance n'est PAS pire que le hasard à densité égale
+⏵ Volet coût d'E1 : ce que 4× moins de poids achètent (estimation sur les paires)
 
 ## 3. Travail accompli
 
@@ -4195,7 +4198,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2485 autres
+- … et 2488 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4629,4 +4632,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - Etat : E2 aussi portait sur l'attention seule (masque 5,8 % + gradient lu au mauvais endroit)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git lo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF' E1 et E2 re-mesures avec un masque qui couvre tout le modele : le c
 - Biologie : E1 et E2 corrigees dans la roadmap (connectome +9,4 %, croissance non pire que le hasard)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
+- E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit" 2>&1 | tail -1; git push -q origin m
 

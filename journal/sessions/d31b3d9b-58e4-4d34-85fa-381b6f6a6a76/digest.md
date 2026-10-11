@@ -51365,3 +51365,40 @@ AVANT E2 : | **E2** | **croissance** : partir de 10 % de connexions, en **ajoute
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\ni = s.index(\"| **E1** |\"); j = s.index(\"\\n\", i)\nancien_e1 = s[i:j]\nneuf_e1 = (ancien_e1.rstrip(\" |\") + \" — **RE-MESU … [1275 caractères tronqués]`
+
+  ```
+roadmap biologie : E1 et E2 corrigées
+2
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Volet coût d'E1 : ce que 4× moins de poids achètent (estimation sur les paires)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for N in temoin masque25 masque125; do echo \"=== $N ===\"; $P tools/occupation_poids.py --modele /tmp/e1e2/$N.gguf --paires-attention 0.4 --paires-experts 1.8 2>&1 | sed -n '/creux/,$p' | head -4 … [73 caractères tronqués]`
+
+  ```
+=== temoin ===
+=== masque25 ===
+=== masque125 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; for N in temoin masque25; do echo \"=== $N ===\"; $P tools/occupation_poids.py --modele /tmp/e1e2/$N.gguf --paires-attention 0.4 --paires-experts 1.8 2>&1 | tail -5; done", "description": "Show th … [31 caractères tronqués]`
+
+  ```
+=== temoin ===
+
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.40 M** (÷1.01)
+  experts    paires noyau 1.80 M → paires creuses ≈ **1.59 M** (÷1.13)
+=== masque25 ===
+
+Ce qu'un format CREUX lirait, en supposant les non-nuls répartis comme les
+activations vivantes (**hypothèse**, pas un résultat) :
+  attention  paires noyau 0.40 M → paires creuses ≈ **0.10 M** (÷3.99)
+  experts    paires noyau 1.80 M → paires creuses ≈ **0.41 M** (÷4.38)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-e1-e2-connectome-croissance.md\"); s = p.read_text()\nancre = \"## 3. Ce que ces deux re-mesures enseignent\"\najout = \"\"\"## 2 bis. Le volet COÛT d'E1 — ce qu … [1542 caractères tronqués]`

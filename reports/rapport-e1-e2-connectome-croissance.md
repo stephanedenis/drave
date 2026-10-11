@@ -56,6 +56,23 @@ venait du même défaut de couverture, doublé d'un second : le gradient était 
 le bruit d'une graine). Le résultat honnête est : **à densité égale, choisir les connexions par le
 gradient ne fait pas moins bien que les tirer au hasard** — la règle locale n'est pas réfutée.
 
+## 2 bis. Le volet COÛT d'E1 — ce que 4× moins de poids achètent
+
+Le compteur de paires du moteur ne voit pas l'occupation (manque **M9**) : il rend **2,3 M** pour
+tous ces modèles. `tools/occupation_poids.py` donne l'autre colonne, sous l'hypothèse (écrite dans
+l'outil) que les non-nuls se répartissent comme les activations vivantes :
+
+| modèle | occupation | paires noyau (moteur) | paires **creuses** estimées | ÷ | coût en perplexité |
+|---|---:|---:|---:|---:|---:|
+| témoin dense | 89,2 % | 2,20 M | 1,99 M | ÷1,11 | — |
+| connectome 25 % | 24,0 % | 2,20 M | **0,51 M** | **÷4,3** | **+9,4 %** |
+| connectome 12,5 % | 12,9 % | 2,20 M | **0,28 M** | **÷7,9** | **+18,4 %** |
+
+**Le compromis est enfin chiffré des deux côtés** : 4,3 fois moins de lectures pour 9,4 % de
+perplexité en plus, ou 7,9 fois moins pour 18,4 %. C'est le premier point du dépôt où une structure
+**innée** s'échange contre un coût mesuré — et il est modeste, mais il est réel, là où l'ancien
+« 1 % » le faisait passer pour gratuit.
+
 ## 3. Ce que ces deux re-mesures enseignent
 
 1. **une couverture partielle qui se tait fabrique des conclusions optimistes.** « Un connectome
