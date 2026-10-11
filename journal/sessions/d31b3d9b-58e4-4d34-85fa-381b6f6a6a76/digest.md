@@ -41198,3 +41198,128 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-e4-ratio-signes.md\"); s = p.read_text()\ns = s.replac … [5366 caractères tronqués]`
+
+  ```
+biologie : statut E4 mis à jour
+état : E4 complet (deux côtés)
+journal complété
+poussé
+  porte-fusion           ✅                           7 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         342 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+### 🤖 Assistant
+
+⏵ E2 (croissance des connexions) : je regarde comment le masque statique est appliqué pour ajouter la croissance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"masque\" tools/entrainer_moteur.py | head -20", "description": "Find the mask implementation"}`
+
+  ```
+98:            masque = torch.zeros_like(x).scatter_(-1, idx, 1.0)
+100:            return (x * masque,) + tuple(entree[1:])
+249:def installer_masque_inne(modele, garde, graine):
+250:    """Un CONNECTOME INNÉ : masque de connexions tiré UNE fois, puis jamais modifié.
+264:    point : si un masque ALÉATOIRE fixe suffit, alors la structure n'a pas besoin
+268:    masques = {}
+274:            # machine), le masque vit sur le même appareil que les poids.
+276:            masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+277:    return masques
+280:def appliquer_masque(modele, masques):
+281:    """Le masque est réappliqué après CHAQUE pas : une connexion absente le reste."""
+284:            if isinstance(mod, nn.Linear) and nom in masques:
+285:                mod.weight.mul_(masques[nom])
+320:    p.add_argument("--masque", type=float, default=0.0,
+359:    masques = None
+360:    if a.masque > 0.0:
+361:        masques = installer_masque_inne(modele, a.masque, a.graine)
+362:        print(f"# CONNECTOME INNÉ : {a.masque:.0%} des connexions, tirées une fois "
+364:              f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
+437:        if masques is no
+… [7 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '245,290p' tools/entrainer_moteur.py; sed -n '430,445p' tools/entrainer_moteur.py", "description": "Read the mask installer and application"}`
+
+  ```
+n += 1
+    return n
+
+
+def installer_masque_inne(modele, garde, graine):
+    """Un CONNECTOME INNÉ : masque de connexions tiré UNE fois, puis jamais modifié.
+
+    POURQUOI CETTE EXPÉRIENCE (docs/biologie-pour-drave.md, § 4). Le cerveau a un
+    plan de câblage largement partagé entre individus, très creux (~10 % de
+    probabilité de connexion, ~7 000 synapses par neurone) et dont seuls les POIDS
+    changent avec l'apprentissage. Si la structure peut être fixée à la naissance,
+    alors le coût d'exécution d'un modèle est **borné à la compilation** — le
+    nombre de paires par jeton est connu avant le premier pas d'entraînement — et
+    l'architecture événementielle n'a plus besoin d'un top-k à l'exécution, ni de la
+    fragilité qui va avec (« exécuter au taux appris, sinon le modèle se dégrade »,
+    § 5 ter de la campagne).
+
+    Ce n'est PAS de l'élagage : on ne retire pas des poids devenus petits, on
+    interdit des connexions dès le départ, et le tirage est aléatoire — c'est le
+    point : si un masque ALÉATOIRE fixe suffit, alors la structure n'a pas besoin
+    d'être apprise ; sinon, il faudra apprendre *où* sont les connexions.
+    """
+    gen = torch.Generator().manual_s
+… [1834 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente E2 : croissance locale des connexions (règle par le gradient accumulé des connexions absentes)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"tools/entrainer_moteur.py\"); s = p.read_text()\n\n# 1) la fonction de croissance\nancre = \"def appliquer_masque(modele, masques):\"\nfonction = '''def accumer_gradient(modele, … [5405 caractères tronqués]`
+
+  ```
+--croissance ajouté
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e2\ncommuns=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 1e-3 --graine 1\"\n# a) masque STATIQUE 10 % (E1)   b)  … [901 caractères tronqués]`
+
+  ```
+started background job bash-42
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; for f in statique10 statique25 croissance; do printf '%-12s ' $f; tail -3 /tmp/e2/$f.log 2>/dev/null | grep -oE \"val [0-9.]+ bits/octet|pas +[0-9]+ · perte\" | tail -1; done; echo \"=== passe ===\"; tail -2 /tmp/passe-com … [78 caractères tronqués]`
+
+  ```
+statique10   val 2.3635 bits/octet
+statique25   val 2.3215 bits/octet
+croissance   val 2.3431 bits/octet
+=== passe ===
+  porte-greffe           ✅                         784 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          23 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 👤 Utilisateur
+
+background job bash-42 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=/home/stephane/gpu-env/bin/python; mkdir -p /tmp/e2
+communs="--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 3000 --lr 1e-3 --graine 1"
+# a) masque STATIQUE 10 % (E1)   b) STATIQUE 25 % (même densité finale que la croissance)
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py $communs --masque 0.10 --sortie /tmp/e2/statique10.gguf > /tmp/e2/statique10.log 2>&1
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py $communs --masque 0.25 --sortie /tmp/e2/statique25.gguf > /tmp/e2/statique25.log 2>&1
+# c) CROISSANCE : 10 % au départ, +2 % des absentes toutes les 250 pas, plafonnée à 25 %
+CUDA_VISIBLE_DEVICES=0 $P -u tools/entrainer_moteur.py $communs --masque 0.10 --croissance 0.02 \
+   --croissance-tous 250 --densite-cible 0.25 --sortie /tmp/e2/croissance.gguf > /tmp/e2/croissance.log 2>&1
+for f in statique10 statique25 croissance; do printf '%-12s ' $f; grep -oE "val [0-9.]+ bits/octet" /tmp/e2/$f.log | tail -1; done
+grep -E "densité" /tmp/e2/croissance.log | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ E2 : la croissance locale (2,3431) ne bat PAS le masque statique de même densité (2,3215) — j'écris la fiche
+
+- **write** `{"content": "# E2 — la croissance locale ne bat pas la structure tirée au hasard (2,3431 contre 2,3215)\n\n> Campagne : **biologie** · expérience : croissance des connexions selon l'activité\n> Question (le plan la pose ainsi) : « partir de 10 % de connexions, en **ajouter** selon\n> l'activité — l' … [5183 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e2-croissance.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-e2-croissance.md\"); s = p.read_text()\ns = s.replace( … [5245 caractères tronqués]`

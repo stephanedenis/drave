@@ -277,6 +277,46 @@ def installer_masque_inne(modele, garde, graine):
     return masques
 
 
+def accumer_gradient(modele, masques, accum):
+    """Accumule |∂L/∂w| sur les connexions ABSENTES (celles que le masque interdit).
+
+    C'est la règle LOCALE de E2 : pour une connexion interdite, le gradient reste calculable
+    (c'est le produit de l'activation d'entrée et du signal rétropropagé) — il dit exactement où
+    « ajouter un câble » ferait le plus baisser la perte, au premier ordre. Aucune information
+    globale n'est nécessaire, et c'est le point de l'expérience : **la croissance peut-elle
+    remplacer l'apprentissage de la structure ?**
+    """
+    with torch.no_grad():
+        for nom, mod in modele.named_modules():
+            if isinstance(mod, nn.Linear) and nom in masques and mod.weight.grad is not None:
+                accum[nom].add_(mod.weight.grad.abs() * (1.0 - masques[nom]))
+
+
+def croitre(modele, masques, accum, fraction):
+    """Ajoute `fraction` des connexions ABSENTES, les plus « demandées » par le gradient.
+
+    La croissance est **par couche** : ajouter tout dans la même couche viderait les autres, et
+    la comparaison à un masque statique de même densité perdrait son sens.
+    """
+    ajoutees = 0
+    with torch.no_grad():
+        for nom, mod in modele.named_modules():
+            if not isinstance(mod, nn.Linear) or nom not in masques:
+                continue
+            absent = (masques[nom] == 0)
+            n_abs = int(absent.sum().item())
+            if n_abs == 0:
+                continue
+            k = max(1, int(round(fraction * n_abs)))
+            scores = accum[nom].clone()
+            scores[~absent] = -1.0                       # on ne « regrandit » pas l'existant
+            idx = torch.topk(scores.view(-1), k).indices
+            masques[nom].view(-1)[idx] = 1.0
+            accum[nom].zero_()
+            ajoutees += k
+    return ajoutees
+
+
 def appliquer_masque(modele, masques):
     """Le masque est réappliqué après CHAQUE pas : une connexion absente le reste."""
     with torch.no_grad():
@@ -326,6 +366,14 @@ def main():
                         "docs/biologie-pour-drave.md § 3 ter) : le fichier sauvé ne "
                         "reproduit pas le modèle entraîné (13,06 bits/octet au lieu "
                         "de 2,27). Conservé pour la démonstration du défaut")
+    p.add_argument("--croissance", type=float, default=0.0,
+                   help="E2 : fraction des connexions ABSENTES ajoutée à chaque étape de "
+                        "croissance, choisies par le |gradient| accumulé (règle locale). "
+                        "0 = masque statique (E1)")
+    p.add_argument("--croissance-tous", type=int, default=250,
+                   help="E2 : période (en pas) des étapes de croissance")
+    p.add_argument("--densite-cible", type=float, default=0.0,
+                   help="E2 : densité visée (0 = pas de borne ; la croissance s'arrête là)")
     p.add_argument("--ratio-signes", type=float, default=-1.0,
                    help="E4 (entraînement) : fraction POSITIVE des poids, imposée à la naissance "
                         "sans figer les magnitudes (0,5 = équilibré ; 0,8 = le ratio cortical "
@@ -357,8 +405,11 @@ def main():
         print(f"# élagage APPRIS : {a.elagage:.0%} des poids gardés par ligne, "
               f"rampe sur la première moitié de l'entraînement")
     masques = None
+    accum = {}
     if a.masque > 0.0:
         masques = installer_masque_inne(modele, a.masque, a.graine)
+        for nom, m in masques.items():
+            accum[nom] = torch.zeros_like(m)
         print(f"# CONNECTOME INNÉ : {a.masque:.0%} des connexions, tirées une fois "
               f"(graine {a.graine}) et jamais modifiées — "
               f"{sum(m.sum().item() for m in masques.values())/1e6:.2f} M connexions")
@@ -435,7 +486,19 @@ def main():
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
         if masques is not None:
+            # E2 : on accumule le gradient AVANT d'appliquer le masque — l'accumuler après
+            # aurait accumulé zéro sur les connexions interdites, c'est-à-dire précisément
+            # celles que la croissance doit départager.
+            if a.croissance > 0.0:
+                accumer_gradient(modele, masques, accum)
             appliquer_masque(modele, masques)
+        if a.croissance > 0.0 and pas % a.croissance_tous == 0:
+            densite = (sum(m.sum().item() for m in masques.values())
+                       / sum(m.numel() for m in masques.values()))
+            if a.densite_cible <= 0.0 or densite < a.densite_cible:
+                n = croitre(modele, masques, accum, a.croissance)
+                if pas % (a.croissance_tous * 4) == 0:
+                    print(f"  [croissance] pas {pas} : +{n} connexions · densité {densite:.3%}")
         # ÉLAGAGE À RAMPE CUBIQUE : on ne coupe pas la moitié des poids au premier
         # pas (le modèle n'a rien appris), on y va progressivement — c'est la
         # différence entre élaguer et détruire.
