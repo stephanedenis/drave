@@ -33,8 +33,19 @@ sur `models/Qwen2.5-0.5B-Q8_0.gguf` et un corpus tokenisé par le modèle :
 | perplexité, modèle **intact** | 14,6496 | 14,6567 | **+0,05 %** : les deux noyaux s'accordent |
 | perplexité, élagué à 25 % | 245 056 | 232 958 | −5 % : le creux est le **meilleur** des deux |
 | **paires d'attention**, élagué à 25 % | 44,4 M | **11,1 M** | **÷4** — la sparsité est **payée** |
-| paires totales, élagué à 25 % | 496,8 M | **226,4 M** | ÷2,2 (les experts restent denses) |
-| **débit** de génération, élagué | **1434 tok/s** | 1312 tok/s | **−8,5 %** : le creux est plus LENT |
+| paires totales, élagué à 25 % | 496,8 M | **226,4 M** | ÷2,2 (modèle dense) |
+| **débit** de génération, élagué | **1400 tok/s** | 900 tok/s | **−36 %** : le creux est plus LENT |
+
+**Et sur le modèle à EXPERTS du harnais** (25 % gardés, où les experts pèsent 1,8 M des 2,3 M de
+paires) — c'est là que le noyau creux change d'échelle, une fois les experts branchés comme les
+projections d'attention :
+
+| mesure | noyau dense | noyau creux |
+|---|---:|---:|
+| perplexité | 4,5886 | **4,5886** (identique) |
+| paires d'attention | 0,4 M | 0,1 M |
+| **paires d'experts** | 1,8 M | **0,4 M** |
+| **paires totales** | 2,3 M | **0,6 M** (**÷3,8**) |
 
 **Ce que ça dit, sans arrondir.** Le noyau creux **paie** la sparsité : il lit 4 fois moins de poids
 d'attention et le compteur de paires le voit. Mais il **ne va pas plus vite** — un parcours CSR
@@ -53,8 +64,11 @@ plus **fidèle**, pas le plus rapide.
   l'attention) au lieu de s'annoncer ;
 - **il ne paie pas encore en temps** : il faudrait un noyau creux **vectorisé** (SIMD, ou blocs
   creux de 32 alignés sur la quantification) — c'est un travail de noyau, pas de modèle ;
-- **les experts manquent** : ils passent par `Vue4`/`DenseQ4` et restent denses — 1,8 M des 2,3 M
-  de paires. Tant qu'ils n'ont pas leur forme creuse, le gain global reste ÷2,2 et non ÷4.
+- **les experts sont branchés** : 1,8 M → 0,4 M de paires sur le modèle à experts (÷3,8 au total,
+  qualité identique). C'est la première fois que le dessin B est **payé** sur tout le modèle ;
+- **la vitesse reste contre nous** : −36 % malgré 3,8× moins de poids lus. Le prochain pas n'est pas
+  un modèle, c'est un **noyau** : vectoriser le parcours creux (SIMD, ou blocs creux de 32 alignés
+  sur la quantification) pour que le compte devienne du temps.
 
 ## 4. Ce que cette fiche ne dit PAS
 

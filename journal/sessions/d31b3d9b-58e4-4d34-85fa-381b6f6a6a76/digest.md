@@ -52937,3 +52937,10 @@ test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
 ⏵ Commit : le noyau creux couvre maintenant les experts (÷3,8 paires, −36 % de vitesse)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF'\nLe noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT\n\nCE QUI A ETE AJOUTE. Les experts (1,8 M des 2,3 M de paires) ne passaient pas par `Proj` mais … [1891 caractères tronqués]`
+
+  ```
+bfbc26fc Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nold = \"\"\"| **paires d'attention**, élagué à 25 % | 44,4 M | **11,1 M** | **÷4** — la sparsité est **payée** |\n … [2098 caractères tronqués]`

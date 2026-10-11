@@ -4,15 +4,16 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11.md](2026-10-11.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 03:57 | `0ab6789b` | M9 livre dans le registre des manques, et 33 portes dans l'etat | `etat-cerveau.md`, `manques.md`, `2026-10-11.md` (+5) |
+| 04:41 | `bfbc26fc` | Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT | `main.rs`, `model.rs`, `2026-10-11.md` (+14) |
 
 ## Chiffres du jour
 
-`÷3,8` · `3,8 paires` · `−36 %`
+`36 %` · `÷3,8` · `3,8 paires` · `−36 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 67.5 h |
 | Tours | 100 |
-| Messages | 3310 |
-| Appels d'outils | 3081 |
+| Messages | 3311 |
+| Appels d'outils | 3082 |
 | Fichiers touchés | 126 |
-| Commandes | 2614 |
+| Commandes | 2615 |
 | Sous-agents | 3 |
-| Commits | 293 |
+| Commits | 294 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4148,7 +4148,7 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 
 ### Tour 100 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*33 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Find an existing Q4 dequantizer
 - bash — Read the existing dequantization path for Vues
@@ -4164,7 +4164,7 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 - bash — Build sparse expert forms at load
 - bash — Read octets_expert
 - bash — Index sparse experts by global expert id
-- … et 19 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
@@ -4351,7 +4351,7 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2574 autres
+- … et 2575 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4792,4 +4792,5 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux.txt <<'MSGEOF' Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la
 - Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF' Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 
+- Fiche B : le noyau creux couvre les experts (divise par 3,8 les paires) et reste 36 % plus lent — le prochain pas est un noyau, pas un modele" 2>&1 | tail -1; g
 
