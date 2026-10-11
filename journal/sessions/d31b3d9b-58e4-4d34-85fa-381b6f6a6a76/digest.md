@@ -51832,3 +51832,79 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\ni = s.index(\"| **M9** |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **M9** | ~~aucun instrument ne mesure le coût de la SPAR … [2210 caractères tronqués]`
+
+  ```
+M9 livré
+état ; 2026-10-11 03:57
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test result\" | tail -1; (timeout 1800 bash tools/porte-flux.sh > /tmp/ff.log 2>&1; echo \"flux=$?\"); (timeout 900 bash tools/porte-harnais-inv … [184 caractères tronqués]`
+
+  ```
+test result: FAILED. 121 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+flux=0
+invariants=0
+0ab6789b M9 livre dans le registre des manques, et 33 portes dans l'etat
+c50fbe14 M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids, et ce qu'un format creux lirait
+9644c161 E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit
+  ```
+
+### 🤖 Assistant
+
+⏵ ALERTE : un test casse par ma modification du moteur — identification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 cargo test --release --manifest-path drave-core/Cargo.toml 2>&1 | grep -E \"^test .* FAILED|^---- |panicked\" -A 3 | head -20", "description": "Identify the failing test", "timeoutMs": 600000}`
+
+  ```
+test tests_vars::les_vars_lues_sont_completes ... FAILED
+test episodique::tests::le_cout_annonce_est_le_cout_paye ... ok
+test materiel::tests::plan_dans_les_bornes ... ok
+test materiel::tests::detection_coherente ... ok
+--
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (526823) panicked at src/main.rs:8181:13:
+DRAVE_OCCUPATION_ATTENTION_SEULE est lu dans le source mais absent de VARS_LUES : un ancien nom QT_OCCUPATION_ATTENTION_SEULE resterait muet
+
+
+--
+test result: FAILED. 121 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ Le test des variables d'environnement exige la déclaration — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"VARS_LUES\" drave-core/src/main.rs | head -3; L=$(grep -n \"static VARS_LUES\\|const VARS_LUES\" drave-core/src/main.rs | head -1 | cut -d: -f1); sed -n \"$((L)),$((L+12))p\" drave-core/src/main.rs", "description": "Read th … [26 caractères tronqués]`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+157:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+8147:    use super::VARS_LUES;
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_FUSION", "DEBUG_YARN",
+    "DUMP_COUCHES",
+    "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+    "SANS_EMPRUNT",
+    "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER",
+    // E7/E8 (docs/impulsion-pure-apprenant.md) : modulation par nouveauté,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/main.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = '''    \"TRACE_BLOCS\", \"TUILE_LOT\", \"K3_COUCHES\"'''\nnew = '''    // M9 : rallume un compteur d'occupation  … [773 caractères tronqués]`
+
+  ```
+variable déclarée
+30:    "OCCUPATION_ATTENTION_SEULE",
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"occupation|CREUSE\"; cat > /tmp/message-vars.txt <<'MSGEOF'\nM9, seconde moitie : la variable d' … [871 caractères tronqués]`

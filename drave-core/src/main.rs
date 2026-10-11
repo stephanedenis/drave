@@ -25,6 +25,9 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
+    // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
+    // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
+    "OCCUPATION_ATTENTION_SEULE",
     "TRACE_BLOCS", "TUILE_LOT", "K3_COUCHES", "K3_SANS_ETAT", "K3_PASSE", "K3_TETE", "K3_LOGITS", "K3_GEN", "K3_MXFP4", "K3_TRACE_EXPERTS", "K3_IDS", "K3_DENSE_FIGE", "K3_STATS_EXPERTS", "K3_RELAIS_ENTREE", "K3_RELAIS_SORTIE", "HEBB_SEUIL", "HEBB_SIGNE", "HEBB_DECROI", "HEBB_SAUVER", "HEBB_CHARGER",
     // E7/E8 (docs/impulsion-pure-apprenant.md) : modulation par nouveauté,
     // décorrélation anti-Hebbienne, et la persistance de `D` sans laquelle le

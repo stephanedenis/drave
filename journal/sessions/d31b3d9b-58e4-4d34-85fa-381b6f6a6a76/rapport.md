@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 66.8 h |
+| Durée | 66.9 h |
 | Tours | 98 |
-| Messages | 3241 |
-| Appels d'outils | 3016 |
+| Messages | 3246 |
+| Appels d'outils | 3021 |
 | Fichiers touchés | 125 |
-| Commandes | 2550 |
+| Commandes | 2555 |
 | Sous-agents | 3 |
-| Commits | 289 |
+| Commits | 290 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4052,7 +4052,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 
 ### Tour 98 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Inspect Vue4 and DenseQ4 structures
 - bash — Inspect the Q4 source enum
@@ -4068,11 +4068,11 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - bash — Inspect how expert Vues are built
 - bash — Find the GGUF tensor iteration API
 - bash — Inspect the Gguf struct for tensor access
-- … et 9 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la seconde moitié de M9 (le moteur voit l'occupation) et de sa porte
+⏵ Le test des variables d'environnement exige la déclaration — correction
 
 ## 3. Travail accompli
 
@@ -4254,7 +4254,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2510 autres
+- … et 2515 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4382,7 +4382,7 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 
 ## 5. Erreurs rencontrées
 
-106 sorties en erreur ou divergentes. Les premières :
+107 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4691,4 +4691,5 @@ La croissance locale n'est **pas** « pire que le hasard à densité égale » :
 - E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit" 2>&1 | tail -1; git push -q origin m
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF' M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids
 - M9 livre dans le registre des manques, et 33 portes dans l'etat" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e1e2/masque25.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 12
 
