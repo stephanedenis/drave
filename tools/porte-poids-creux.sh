@@ -97,11 +97,39 @@ else
 fi
 
 echo
+echo "=== 3. LA VITESSE — elle DÉPEND de la densité, contrairement à celle du noyau dense ==="
+# C'est la propriété qui distingue un noyau creux d'un noyau dense : le dense lit la matrice
+# entière et sa vitesse ne bouge pas avec l'élagage ; le creux, lui, lit ce qui reste.
+vitesse () {   # $1 = creux|dense ; $2 = garde ; imprime les tok/s
+    local sortie
+    if [ "$1" = creux ]; then
+        sortie=$(DRAVE_POIDS_CREUX=1 timeout "$DELAI" "$D" "$M" --infer --ids-file "$IDS" \
+                 --n 64 --ctx 256 --threads 4 --keep "$2" 2>&1)
+    else
+        sortie=$(env -u DRAVE_POIDS_CREUX timeout "$DELAI" "$D" "$M" --infer --ids-file "$IDS" \
+                 --n 64 --ctx 256 --threads 4 --keep "$2" 2>&1)
+    fi
+    printf '%s' "$sortie" | grep -oE "\([0-9.]+ tok/s\)" | grep -oE "[0-9.]+"
+}
+V_D1=$(vitesse dense 1.0); V_C1=$(vitesse creux 1.0)
+V_D10=$(vitesse dense 0.10); V_C10=$(vitesse creux 0.10)
+echo "  garde 1,00 : dense $V_D1 tok/s · creux $V_C1 tok/s"
+echo "  garde 0,10 : dense $V_D10 tok/s · creux $V_C10 tok/s"
+if $P -c "import sys; sys.exit(0 if float('$V_C10') > 2.0*float('$V_C1') else 1)"; then
+    echo "  ✅ la vitesse du noyau creux SUIT la densité (×$(python3 -c "print(f'{float('$V_C10')/float('$V_C1'):.1f}')"))"
+else
+    echo "  ❌ le noyau creux ne gagne rien à être creux : il ne lit pas ce qu'il prétend lire"
+    ECHEC=1
+fi
+echo "  · repère mesuré : le creux RATTRAPE le dense vers 10 % de poids gardés (0,96× à 0,10,"
+echo "    0,51× à 0,25, 0,13× sans élagage) — au-dessus, le noyau dense int8 gagne."
+
+echo
 echo "  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau"
-echo "    creux est BEAUCOUP plus LENT que les noyaux denses int8 — 900 contre 1 400 tok/s sur un"
-echo "    modèle élagué à 25 %, malgré 3,8 fois moins de poids lus. « Moins de paires » n'est pas"
-echo "    « plus rapide » : le coût en paires est un MODÈLE, la vitesse est une MESURE, et les deux"
-echo "    ne coïncident que si le noyau creux est lui aussi optimisé."
+echo "    creux ne rattrape le dense qu'en dessous de ~10 % de poids gardés : à 25 % il est deux"
+echo "    fois plus lent (6,9 contre 13,6 tok/s sur Qwen2.5-0.5B), malgré 3,8 fois moins de poids"
+echo "    lus. « Moins de paires » n'est pas « plus rapide » : le coût en paires est un MODÈLE, la"
+echo "    vitesse est une MESURE, et il faut un noyau vectorisé pour que l'un devienne l'autre."
 
 echo
 [ "$ECHEC" = 0 ] || { echo "❌ porte poids creux : ÉCHEC"; exit 1; }

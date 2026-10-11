@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 67.5 h |
-| Tours | 100 |
-| Messages | 3311 |
-| Appels d'outils | 3082 |
+| Durée | 67.8 h |
+| Tours | 101 |
+| Messages | 3318 |
+| Appels d'outils | 3087 |
 | Fichiers touchés | 126 |
-| Commandes | 2615 |
+| Commandes | 2620 |
 | Sous-agents | 3 |
-| Commits | 294 |
+| Commits | 295 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -235,6 +235,8 @@
 **Tour 99** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 100** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 101** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4168,7 +4170,43 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 
 **Synthèse produite :**
 
-⏵ Commit : le noyau creux couvre maintenant les experts (÷3,8 paires, −36 % de vitesse)
+⏵ Round 57 : le noyau creux couvre tout le modèle — ÷3,8 paires, et 36 % plus lent
+
+**Ce qui a été ajouté**
+Les **experts** (1,8 M des 2,3 M de paires) ne passaient pas par `Proj` mais par `Vue4`/`DenseQ4` : le noyau creux ne payait que l'attention. Ils ont maintenant leur forme creuse, construite au chargement depuis les blocs **Q4_0 empruntés** (même décodage que `dot_source` : `lut[q] × échelle`), indexée par expert global, et branchée dans les **deux** chemins de calcul.
+
+**Mesure sur le modèle à experts, élagué à 25 %**
+
+| | dense | creux |
+|---|---:|---:|
+| perplexité | 4,5886 | **4,5886** (identique) |
+| paires attention | 0,4 M | 0,1 M |
+| **paires experts** | 1,8 M | **0,4 M** |
+| **paires totales** | 2,3 M | **0,6 M** (**÷3,8**) |
+
+Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226,4 M de paires. C'est la première fois que le dessin B est **payé** sur tout le modèle.
+
+**Et la vitesse, qui n'est pas à notre avantage** : **900 tok/s contre 1 400**, soit **−36 %** malgré 3,8× moins de poids lus. Un parcours CSR scalaire en f32 perd contre des noyaux denses int8 vectorisés. **« Moins de paires » n'est pas « plus rapide »** : le coût en paires est un *modèle*, la vitesse est une *mesure*.
+
+**Deux pièges, tous deux attrapés par les gardes du dépôt** : `les_vars_lues_sont_completes` a refusé deux fois une variable `DRAVE_*` non déclarée, et un `Moe` de test sans les nouveaux champs.
+
+**Porte** `porte-poids-creux.sh` : exactitude, chute des paires sur tout le modèle, et **la lenteur écrite dans la porte**. Verte ; vue rouge avec `DRAVE_CREUX_SANS_EFFET=1`. **122 tests**, `porte-flux.sh` et `porte-occupation-moteur.sh` vertes.
+
+**Le prochain pas n'est pas un modèle, c'est un noyau** : vectoriser le parcours creux (SIMD, ou blocs creux de 32 alignés sur la quantification) pour que le compte devienne du temps.
+
+### Tour 101 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Find the break-even density for the sparse kernel
+- bash — Measure the sparse kernel with cache-exceeding weights
+- bash — Add the speed-density measurement to the gate
+- bash — Check quality at the crossing density
+- bash — Document the crossing and commit
+
+**Synthèse produite :**
+
+⏵ Conclusion du dessin B : le croisement tombe là où le modèle est déjà mort — rédaction
 
 ## 3. Travail accompli
 
@@ -4351,7 +4389,7 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2575 autres
+- … et 2580 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4793,4 +4831,5 @@ Le moteur savait **annoncer** l'occupation et dire ce qu'un format creux lirait 
 - Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-creux2.txt <<'MSGEOF' Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 
 - Fiche B : le noyau creux couvre les experts (divise par 3,8 les paires) et reste 36 % plus lent — le prochain pas est un noyau, pas un modele" 2>&1 | tail -1; g
+- Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divi
 

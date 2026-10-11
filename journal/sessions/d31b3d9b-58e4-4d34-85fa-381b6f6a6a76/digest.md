@@ -52944,3 +52944,120 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nold = \"\"\"| **paires d'attention**, élagué à 25 % | 44,4 M | **11,1 M** | **÷4** — la sparsité est **payée** |\n … [2098 caractères tronqués]`
+
+  ```
+fiche B mise à jour
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 57 : le noyau creux couvre tout le modèle — ÷3,8 paires, et 36 % plus lent
+
+**Ce qui a été ajouté**
+Les **experts** (1,8 M des 2,3 M de paires) ne passaient pas par `Proj` mais par `Vue4`/`DenseQ4` : le noyau creux ne payait que l'attention. Ils ont maintenant leur forme creuse, construite au chargement depuis les blocs **Q4_0 empruntés** (même décodage que `dot_source` : `lut[q] × échelle`), indexée par expert global, et branchée dans les **deux** chemins de calcul.
+
+**Mesure sur le modèle à experts, élagué à 25 %**
+
+| | dense | creux |
+|---|---:|---:|
+| perplexité | 4,5886 | **4,5886** (identique) |
+| paires attention | 0,4 M | 0,1 M |
+| **paires experts** | 1,8 M | **0,4 M** |
+| **paires totales** | 2,3 M | **0,6 M** (**÷3,8**) |
+
+Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226,4 M de paires. C'est la première fois que le dessin B est **payé** sur tout le modèle.
+
+**Et la vitesse, qui n'est pas à notre avantage** : **900 tok/s contre 1 400**, soit **−36 %** malgré 3,8× moins de poids lus. Un parcours CSR scalaire en f32 perd contre des noyaux denses int8 vectorisés. **« Moins de paires » n'est pas « plus rapide »** : le coût en paires est un *modèle*, la vitesse est une *mesure*.
+
+**Deux pièges, tous deux attrapés par les gardes du dépôt** : `les_vars_lues_sont_completes` a refusé deux fois une variable `DRAVE_*` non déclarée, et un `Moe` de test sans les nouveaux champs.
+
+**Porte** `porte-poids-creux.sh` : exactitude, chute des paires sur tout le modèle, et **la lenteur écrite dans la porte**. Verte ; vue rouge avec `DRAVE_CREUX_SANS_EFFET=1`. **122 tests**, `porte-flux.sh` et `porte-occupation-moteur.sh` vertes.
+
+**Le prochain pas n'est pas un modèle, c'est un noyau** : vectoriser le parcours creux (SIMD, ou blocs creux de 32 alignés sur la quantification) pour que le compte devienne du temps.
+
+
+## Tour 101
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 58/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ À quelle densité le noyau creux devient-il RENTABLE ? (mesure du point de bascule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=/tmp/e1e2/masque25.gguf; I=/tmp/e6/val.ids\nprintf '%-8s %-12s %-12s %s\\n' \"keep\" \"dense tok/s\" \"creux tok/s\" \"rapport\"\nfor K in 1.0 0.5 0.25 0.10 0.05 0.02; do\n  d=$(env -u DRAVE_POI … [551 caractères tronqués]`
+
+  ```
+keep     dense tok/s  creux tok/s  rapport
+1.0      1366.71      1006.53      0.74x
+0.5      1386.30      1001.54      0.72x
+0.25     1331.74      946.74       0.71x
+0.10     1436.32      1058.71      0.74x
+0.05     1423.80      1083.03      0.76x
+0.02     1418.46      1090.44      0.77x
+  ```
+
+### 🤖 Assistant
+
+⏵ Le noyau creux ne gagne RIEN à toute densité sur le petit modèle — test à l'échelle où les poids ne tiennent plus en cache
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/porte-profondeur-routee/corpus.ids\nprintf '%-8s %-12s %-12s %s\\n' \"keep\" \"dense tok/s\" \"creux tok/s\" \"rapport\"\nfor K in 1.0 0.5 0.25 0.10; do\n   … [574 caractères tronqués]`
+
+  ```
+keep     dense tok/s  creux tok/s  rapport
+1.0      16.21        2.04         0.13x
+0.5      14.76        3.70         0.25x
+0.25     13.61        6.93         0.51x
+0.10     14.76        14.23        0.96x
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de bascule mesuré : le noyau creux rattrape le dense à ~10 % de poids gardés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-poids-creux.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nancre = '''echo\necho \"  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE :'''\najout = '''echo\necho \"=== 3. LA VITESSE — elle … [2872 caractères tronqués]`
+
+  ```
+porte enrichie de la mesure de vitesse
+syntaxe OK
+=== 3. LA VITESSE — elle DÉPEND de la densité, contrairement à celle du noyau dense ===
+  garde 1,00 : dense 16.62 tok/s · creux 1.83 tok/s
+  garde 0,10 : dense 14.10 tok/s · creux 15.13 tok/s
+  ✅ la vitesse du noyau creux SUIT la densité (×8.3)
+  · repère mesuré : le creux RATTRAPE le dense vers 10 % de poids gardés (0,96× à 0,10,
+    0,51× à 0,25, 0,13× sans élagage) — au-dessus, le noyau dense int8 gagne.
+
+  ⚠ MESURÉ, ET PAS À NOTRE AVANTAGE : à cette implémentation (CSR scalaire f32), le noyau
+    creux ne rattrape le dense qu'en dessous de ~10 % de poids gardés : à 25 % il est deux
+    fois plus lent (6,9 contre 13,6 tok/s sur Qwen2.5-0.5B), malgré 3,8 fois moins de poids
+    lus. « Moins de paires » n'est pas « plus rapide » : le coût en paires est un MODÈLE, la
+    vitesse est une MESURE, et il faut un noyau vectorisé pour que l'un devienne l'autre.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le point de bascule tombe-t-il dans un régime où le modèle est encore vivant ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; I=/tmp/porte-profondeur-routee/corpus.ids\nfor K in 1.0 0.5 0.25 0.10 0.05; do printf 'keep=%-5s ' \"$K\"; env -u DRAVE_POIDS_CREUX $D \"$M\" --ppl \"$I\" --limit  … [190 caractères tronqués]`
+
+  ```
+keep=1.0   14.6496
+keep=0.5   571.8695
+keep=0.25  245056.0626
+keep=0.10  601747.9044
+keep=0.05  2793363.0236
+  ```
+
+### 🤖 Assistant
+
+⏵ Conclusion du dessin B : le croisement tombe là où le modèle est déjà mort — rédaction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-dessin-B-poids-creux.md\"); s = p.read_text()\nancre = \"## 3. Ce que ça change pour le dessin B\"\najout = \"\"\"## 2 bis. OÙ le noyau creux devient rentable —  … [3295 caractères tronqués]`

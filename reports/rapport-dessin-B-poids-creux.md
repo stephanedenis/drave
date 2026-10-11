@@ -58,6 +58,31 @@ int8 (et les activations), le creux multiplie les poids **déquantifiés** en `f
 sain l'écart est de 0,05 % ; sur un modèle détruit il atteint 5 % — et c'est le creux qui est le
 plus **fidèle**, pas le plus rapide.
 
+## 2 bis. OÙ le noyau creux devient rentable — et ce n'est pas là où le modèle vit
+
+La vitesse du noyau dense **ne bouge pas** avec l'élagage (il lit la matrice entière) ; celle du
+noyau creux, elle, **suit la densité**. Mesuré sur Qwen2.5-0.5B, génération de 64 jetons :
+
+| poids gardés | noyau dense | noyau creux | rapport | perplexité (modèle **dense** élagué) |
+|---|---:|---:|---:|---:|
+| 100 % | 16,6 tok/s | 1,8 tok/s | 0,11× | 14,6496 |
+| 50 % | 14,8 | 3,7 | 0,25× | 571,87 |
+| 25 % | 13,6 | 6,9 | 0,51× | 245 056 |
+| **10 %** | 14,1 | **15,1** | **1,07×** | **601 748** |
+
+**Le croisement est vers 10 % de poids gardés — et c'est un régime où le modèle est déjà mort**
+(perplexité multipliée par **41 000**). Autrement dit : *le noyau creux ne rattrape le noyau dense
+que là où il n'y a plus de modèle à exécuter*.
+
+**Et sur le petit modèle** (7,58 M paramètres, qui tient dans le cache), le noyau creux est plus
+lent **à toutes les densités** (0,71× à 0,77×) : quand les poids tiennent en cache, le produit
+matrice-vecteur n'est pas le poste, et aucune parcimonie de poids ne peut aider.
+
+**Ce qu'il faudrait pour que le dessin B paie** : un modèle **entraîné** pour survivre à ~10 % de
+densité (E1 mesure le prix d'un connectome aléatoire à 12,9 % : **+18,4 %** de perplexité) — et
+même alors, le gain de temps du noyau creux sur ce modèle serait de **~7 %**, pour un coût de
+qualité de 18 %. Le compte en paires, lui, tomberait bien de **÷3,8**.
+
 ## 3. Ce que ça change pour le dessin B
 
 - **le levier existe enfin, mesurable** : la sparsité des poids se paie en paires (÷4 sur
@@ -66,9 +91,11 @@ plus **fidèle**, pas le plus rapide.
   creux de 32 alignés sur la quantification) — c'est un travail de noyau, pas de modèle ;
 - **les experts sont branchés** : 1,8 M → 0,4 M de paires sur le modèle à experts (÷3,8 au total,
   qualité identique). C'est la première fois que le dessin B est **payé** sur tout le modèle ;
-- **la vitesse reste contre nous** : −36 % malgré 3,8× moins de poids lus. Le prochain pas n'est pas
-  un modèle, c'est un **noyau** : vectoriser le parcours creux (SIMD, ou blocs creux de 32 alignés
-  sur la quantification) pour que le compte devienne du temps.
+- **la vitesse reste contre nous dans le régime utile** : le noyau creux ne rattrape le dense qu'à
+  ~10 % de poids gardés, où un modèle élagué est détruit (×41 000). À 25 %, il est **deux fois plus
+  lent** malgré ÷3,8 de paires. Le prochain pas n'est pas un modèle, c'est un **noyau** vectorisé
+  (SIMD, blocs creux alignés sur la quantification) — et il ne suffira pas : il faudra aussi un
+  modèle **entraîné** à survivre à ces densités.
 
 ## 4. Ce que cette fiche ne dit PAS
 

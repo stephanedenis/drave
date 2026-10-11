@@ -1,6 +1,6 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 03:57 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-11 04:57 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
@@ -110,7 +110,7 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **33 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
+- **35 portes** `tools/porte-*.sh` — les **27 premières vertes le 2026-10-10 21 h 33** (60 min 13 s,
   dont les quatre ajoutées ce jour-là : jumeaux, c4-retard, mémoire, récurrence) et **deux ajoutées
   le soir** : la **28e à 22 h 26**, `porte-profondeur-routee.sh`, **verte en 9 min 20 s** (corpus
   tokenisé par la porte elle-même, deux captures de profondeur, la mesure et ses trois verrous) ;
