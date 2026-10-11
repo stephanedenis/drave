@@ -337,6 +337,12 @@ localement).
 
 ### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %
 
+> **CE CHIFFRE EST RÉTRACTÉ (11/10) — il décrit 5,8 % du modèle.** Le masque ne couvrait que
+> les `nn.Linear` : l'**attention seule**. Re-mesuré avec un masque qui couvre tout le modèle :
+> **+9,4 %** à 25 % de densité et **+18,4 %** à 12,5 %. Le tableau et le raisonnement ci-dessous
+> restent justes **pour l'attention** ; ils ne valent pas pour le modèle entier. Voir
+> [`reports/rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md).
+
 Mesuré le 9 octobre à 12 h 06. Même modèle que le témoin dense (dim 384, 4 couches,
 40 000 pas, mêmes données, même export Q8), **sauf** qu'un quart des connexions de
 chaque ligne est tiré **au hasard à la naissance** et ne change plus jamais — seuls
@@ -348,7 +354,7 @@ les poids des connexions existantes sont appris.
 | **connectome inné à 25 %** (aléatoire, figé) | **5,0472** (+1,0 %) | **81,6 M (÷4,1)** | **276,2 tok/s (×2,1)** |
 
 **Un pour cent de perplexité pour quatre fois moins de lectures et deux fois plus de
-débit.** Et c'est un masque **aléatoire** : la structure n'a pas eu besoin d'être
+débit — sur l'attention.** (Rétracté pour le modèle entier : voir l'encadré ci-dessus.) Et c'est un masque **aléatoire** : la structure n'a pas eu besoin d'être
 apprise ni optimisée. La validation à l'entraînement suit (2,0413 contre 1,9020 pour
 le témoin, soit +7 % en bits/octet là où le moteur ne mesure que +1 % de perplexité —
 l'écart entre les deux unités est le même qu'au § 5 bis de la campagne).

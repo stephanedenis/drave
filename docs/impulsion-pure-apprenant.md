@@ -44,7 +44,7 @@ neuromodulateur.
 ÷2 lectures, qualité inchangée (+0,3 %). **Le substrat accepte d'apprendre sous
 contrainte** — c'est la condition d'un apprenant événementiel.
 
-**(d) Un connectome inné aléatoire coûte 1 %.** Masque de 25 % des connexions tiré à
+**(d) Un connectome inné aléatoire coûte 1 % — ATTENTION : sur l'attention seulement, rétracté le 11/10 (+9,4 % pour le modèle entier).** Masque de 25 % des connexions tiré à
 la naissance, jamais modifié : perplexité 5,0472 contre 4,9959, événements **÷4,1**,
 débit **×2,1** (§ 4 bis de `biologie-pour-drave.md`). **La structure peut être
 innée ; seuls les poids ont besoin d'être appris** — et c'est précisément ce qui rend

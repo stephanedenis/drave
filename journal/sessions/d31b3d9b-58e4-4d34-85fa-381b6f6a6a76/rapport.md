@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 67.8 h |
+| Durée | 68.0 h |
 | Tours | 102 |
-| Messages | 3326 |
-| Appels d'outils | 3093 |
+| Messages | 3330 |
+| Appels d'outils | 3097 |
 | Fichiers touchés | 126 |
-| Commandes | 2626 |
+| Commandes | 2630 |
 | Sous-agents | 3 |
-| Commits | 298 |
+| Commits | 300 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -4235,16 +4235,20 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 
 ### Tour 102 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Launch the full gate suite
 - bash — Read the design B section of the roadmap
 - bash — Update the roadmap for design B
 - bash — Commit and check the pass progress
+- bash — Sweep docs for retracted numbers
+- bash — Read the three stale passages
+- bash — Annotate all stale claims and commit
+- bash — Retry the annotations with valid strings
 
 **Synthèse produite :**
 
-⏵ Pendant la passe : le dessin B dans la roadmap, avec le fait mesuré
+⏵ Trois documents portent encore l'ancien « 1 % » ou le « ÷7,9 » sans réserve — correction
 
 ## 3. Travail accompli
 
@@ -4427,7 +4431,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2586 autres
+- … et 2590 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4873,4 +4877,6 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - Etat : 34 portes (et non 35), la porte du noyau creux nommee avec son rouge" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git status --porcelain |
 - Registre : M9 livre en entier, et le fait desagreable ecrit (le noyau creux ne paie qu'a 10 %, ou le modele est mort)" 2>&1 | tail -1; git push -q origin master
 - Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %)" 2>&1 | tail -1; git push -q origin master; 
+- Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)" 2>&1 | tail 
+- Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)" 2>&1 | tail 
 

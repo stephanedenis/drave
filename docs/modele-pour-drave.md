@@ -327,7 +327,9 @@ Par **gain sur les paires** × **certitude de la mesure** × **coût de mise en 
 > l'attention est **bornée par une fenêtre apprise**.
 
 Les mesures de ce document en donnent les trois premiers étages : ÷4 (activations),
-÷2 (poids, et ils se multiplient : **÷7,9 mesuré**), et un facteur de lecture qui
+÷2 (poids, et ils se multiplient : **÷7,9 mesuré** — chiffre du **9/10**, obtenu avec un autre
+instrument que la ligne « paires » du moteur, qui ne voit PAS l'élagage : voir l'encadré du
+§ 3 B), et un facteur de lecture qui
 peut aller jusqu'à ×28 sur disque dur. Les trois derniers demandent, dans l'ordre :
 un noyau Q8 par expert, un exporteur qui réordonne, et un entraînement à fenêtre.
 

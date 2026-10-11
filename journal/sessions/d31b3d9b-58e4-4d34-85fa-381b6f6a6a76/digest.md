@@ -53173,3 +53173,80 @@ dim 11 oct 2026 05:01:00 EDT
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %)\" 2>&1 | tail -1; git push -q origin master; echo \"push=$?\"; sleep 400; grep -cE \ … [140 caractères tronqués]`
+
+  ```
+push=0
+5
+  porte-bus-socket       ✅                          88 s    ✅ le bus d
+  porte-c4-retard        ✅                          60 s  PORTE TENUE
+  ```
+
+### 🤖 Assistant
+
+⏵ Balayage de cohérence : les chiffres rétractés sont-ils tous corrigés ou marqués ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ÷7,9 / 7,9 ===\"; grep -rn \"÷7,9\\|÷ 7,9\" docs/*.md reports/*.md 2>/dev/null | head -4; echo \"=== « 1 % » du connectome ===\"; grep -rn \"connectome aléatoire coûte\\|coûte \\*\\*1 %\\*\\*\\|coûte 1 %\" docs/*.md report … [229 caractères tronqués]`
+
+  ```
+=== ÷7,9 / 7,9 ===
+docs/modele-pour-drave.md:133:→ 101 M de paires, soit **÷7,9** pour la combinaison 50 %/25 %. 2) À 50 % de poids
+docs/modele-pour-drave.md:330:÷2 (poids, et ils se multiplient : **÷7,9 mesuré**), et un facteur de lecture qui
+reports/rapport-e1-e2-connectome-croissance.md:69:| connectome 12,5 % | 12,9 % | 2,20 M | **0,28 M** | **÷7,9** | **+18,4 %** |
+=== « 1 % » du connectome ===
+docs/biologie-pour-drave.md:338:### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %
+docs/impulsion-pure-apprenant.md:47:**(d) Un connectome inné aléatoire coûte 1 %.** Masque de 25 % des connexions tiré à
+reports/rapport-e1-e2-connectome-croissance.md:1:# E1 et E2, re-mesurés : le connectome aléatoire coûte 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard
+reports/rapport-e1-e2-connectome-croissance.md:6:> Verdict : **les deux conclusions publiées changent.** Le connectome aléatoire coûte **+9,4 %**
+=== ×1,09 / 7,9467 ===
+docs/biologie-pour-drave.md:229:**Trois chiffres publiés la veille sont RETIRÉS** (« signes figés à ×1,09 », « la loi log-normale
+docs/manques.md:18:| **M5** | **décodage spéculatif** — aucune ligne de moteur | brouillon générique ×0,70 · pai
+… [381 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois documents portent encore l'ancien « 1 % » ou le « ÷7,9 » sans réserve — correction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '336,352p' docs/biologie-pour-drave.md; echo \"=== impulsion ===\"; sed -n '45,52p' docs/impulsion-pure-apprenant.md; echo \"=== modele 328-332 ===\"; sed -n '328,332p' docs/modele-pour-drave.md", "description": "Read the thre … [18 caractères tronqués]`
+
+  ```
+localement).
+
+### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %
+
+Mesuré le 9 octobre à 12 h 06. Même modèle que le témoin dense (dim 384, 4 couches,
+40 000 pas, mêmes données, même export Q8), **sauf** qu'un quart des connexions de
+chaque ligne est tiré **au hasard à la naissance** et ne change plus jamais — seuls
+les poids des connexions existantes sont appris.
+
+| dim 384, 8 × 128 jetons | perplexité | **événements/fenêtre** | débit |
+|---|---:|---:|---:|
+| témoin dense (toutes les connexions) | **4,9959** | 336,7 M | 131,4 tok/s |
+| **connectome inné à 25 %** (aléatoire, figé) | **5,0472** (+1,0 %) | **81,6 M (÷4,1)** | **276,2 tok/s (×2,1)** |
+
+**Un pour cent de perplexité pour quatre fois moins de lectures et deux fois plus de
+débit.** Et c'est un masque **aléatoire** : la structure n'a pas eu besoin d'être
+apprise ni optimisée. La validation à l'entraînement suit (2,0413 contre 1,9020 pour
+=== impulsion ===
+contrainte** — c'est la condition d'un apprenant événementiel.
+
+**(d) Un connectome inné aléatoire coûte 1 %.** Masque de 25 % des connexions tiré à
+la naissance, jamais modifié : perplexité 5,0472 contre 4,9959, événements **÷4,1**,
+débit **×2,1** (§ 4 b
+… [569 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\n# 1. biologie : le titre de la section 4 bis porte le chiffre rétracté\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold = \"### 4 bis. E1 — le résultat : un connectome in … [2617 caractères tronqués]`
+
+  ```
+nothing to commit, working tree clean
+push=0
+7
+[stderr]
+  File "<stdin>", line 21
+    new2 = ("**(d) Un connectome inné aléatoire coûte 1 % — ⚠ sur l'ATTENTION seulement (rétracté le 11/10 :
+            ^
+SyntaxError: unterminated string literal (detected at line 21)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold = \"### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %\\n\"\nnew = (\"### 4 bis. E1 — le résultat : un c … [2255 caractères tronqués]`
