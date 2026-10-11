@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 64.4 h |
 | Tours | 95 |
-| Messages | 3109 |
-| Appels d'outils | 2890 |
+| Messages | 3110 |
+| Appels d'outils | 2891 |
 | Fichiers touchés | 119 |
-| Commandes | 2436 |
+| Commandes | 2437 |
 | Sous-agents | 3 |
-| Commits | 273 |
+| Commits | 274 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3909,7 +3909,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Test whether a short protocol shows the effect
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
@@ -3921,6 +3921,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Make refusals exit 2 and test
 - bash — Red test with the log-normal recipe
 - bash — Commit the gate and refusals
+- bash — Update docs for the 31st gate
 
 **Synthèse produite :**
 
@@ -4100,7 +4101,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2396 autres
+- … et 2397 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4521,4 +4522,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_te
 - E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes)" 2>&1 | tail -1; git log --oneline -1; git push -q origin
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF' Porte « signes figes » : la seule recette du depot qui rende l
+- Etat : 31 portes, la porte des signes figes est nommee avec son rouge" 2>&1 | tail -1; git log --oneline -1
 

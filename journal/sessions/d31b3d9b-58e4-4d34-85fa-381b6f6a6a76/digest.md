@@ -49802,3 +49802,11 @@ CODE=1
 ⏵ Commit de la porte « signes figés » et des refus explicites
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF'\nPorte « signes figes » : la seule recette du depot qui rende l'elagage indolore, et elle se verrouille\n\nCE QU'ELLE VERROUILLE. E6 a ete tranche par un plan 2x2 : sous elagage agressif c' … [1576 caractères tronqués]`
+
+  ```
+63cf920 Porte « signes figes » : la seule recette du depot qui rende l'elagage indolore, et elle se verrouille
+push=0
+31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1719 caractères tronqués]`

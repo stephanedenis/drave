@@ -13,7 +13,10 @@
 > `tools/porte-sauvegarde-modele.sh` (le fichier reproduit-il le modèle entraîné ?) — **verte en
 > ~1 min**, **vue ROUGE** avec `DRAVE_MAT_SANS_EXCLUSION=1` ; et
 > `tools/porte-occupation-elagage.sh` (le fichier porte-t-il l'élagage annoncé ?) — **verte**
-> (26,0 % pour 25 % demandés), **vue ROUGE** avec `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %).
+> (26,0 % pour 25 % demandés), **vue ROUGE** avec `DRAVE_SANS_ELAGAGE_FINAL=1` (78,0 %) ; et
+> `tools/porte-signes-figes.sh` (la contrainte de signe rend-elle l'élagage indolore ?) —
+> **verte** (×1,48), **vue ROUGE par une autre recette** (`EXTRA_SIGFIGES=--poids-lognormaux`,
+> ×1,11). **31 portes au total.**
 
 ## 1. Ce qui se vérifie en une commande
 
