@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 64.3 h |
-| Tours | 94 |
-| Messages | 3097 |
-| Appels d'outils | 2880 |
-| Fichiers touchés | 118 |
-| Commandes | 2427 |
+| Durée | 64.4 h |
+| Tours | 95 |
+| Messages | 3109 |
+| Appels d'outils | 2890 |
+| Fichiers touchés | 119 |
+| Commandes | 2436 |
 | Sous-agents | 3 |
-| Commits | 272 |
+| Commits | 273 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -223,6 +223,8 @@
 **Tour 93** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 94** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 95** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3881,7 +3883,48 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 **Synthèse produite :**
 
-⏵ Le résultat se reproduit (graine 2 : 55,45 contre 7,99) — attente de la dernière
+⏵ Round 51 : E6 tranché — c'est DALE, la loi log-normale nuit (3 graines)
+
+**Alertes d'abord**
+- Aucune : arbre propre, tout poussé (`58ecf21`), **les deux portes du harnais vertes**, **122 tests verts**.
+
+**Le résultat du round — le plan 2×2 est complet, et il renverse l'hypothèse d'E6**
+
+| poids gardés | dense | **signes figés, magnitudes libres** | log-normal signes libres | log-normal signes figés |
+|---|---:|---:|---:|---:|
+| 100 % | 7,3429 | **7,3003** | 7,5112 | 7,5666 |
+| 50 % | 7,5680 | **7,3470** | 11,7783 | 13,0622 |
+| 25 % | 49,4291 | **7,9467** | 36,3771 | 17,5009 |
+
+1. **C'est la contrainte de signe qui porte tout** : ×1,09 sous élagage agressif, contre ×6,7 pour le témoin.
+2. **La loi log-normale NUIT** : à contrainte comparable, 17,50 contre 7,95 — **2,2× pire**. Ce qui aide est que `|w|` puisse descendre à **zéro** librement, ce que `e^θ` interdit (plancher 6,1e-6).
+3. **Rien à payer** : sans élaguer, 7,3003 contre 7,3429.
+4. **Trois graines** : dense 49,43 · 55,45 · 46,61 contre 7,95 · 7,99 · 8,27 — **intervalles disjoints**.
+
+**Ce que ça donne à la suite** : un levier d'**entraînement** de trois lignes (`w = signe · |θ|`), pas un changement de moteur, qui rend le modèle quasi insensible à l'élagage — le dessin « poids creux » redevient mesurable autrement que par sa perte de qualité.
+
+**Trois défauts de plus, même famille que M8, trouvés et corrigés** : `--signes-figes` ne matérialisait pas (clés `parametrizations.*` sauvées) ; l'inverse poids→paramètre était **recopié** dans `ecrire_poids` (faux dès qu'une 2e paramétrisation existe — il vit maintenant dans `right_inverse`) ; l'élagage comptait les paramètres **internes** de la reparamétrisation (44 tenseurs annoncés au lieu de 28).
+
+**Prochain round** : porte du plan 2×2 (verrouiller la recette « signes figés » avec son rouge), puis le volet coût du dessin B sur un modèle devenu élagable sans douleur.
+
+### Tour 95 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Test whether a short protocol shows the effect
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh`
+- bash — Run the frozen-signs gate
+- bash — Fix extraction and rerun the gate
+- bash — Verify the gate turns red with another recipe
+- bash — Refuse inert flags explicitly
+- bash — Test the explicit refusal
+- bash — Make refusals exit 2 and test
+- bash — Red test with the log-normal recipe
+- bash — Commit the gate and refusals
+
+**Synthèse produite :**
+
+⏵ Commit de la porte « signes figés » et des refus explicites
 
 ## 3. Travail accompli
 
@@ -4007,6 +4050,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-design-H-carte-sorties.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/occupation_poids.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-elagage.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4056,7 +4100,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2387 autres
+- … et 2396 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4476,4 +4520,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-dale.txt <<'MSGEOF' E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui port
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF' import pathlib, re, subprocess p = pathlib.Path("docs/etat-cerveau.md"); s = p.read_te
 - E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes)" 2>&1 | tail -1; git log --oneline -1; git push -q origin
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF' Porte « signes figes » : la seule recette du depot qui rende l
 

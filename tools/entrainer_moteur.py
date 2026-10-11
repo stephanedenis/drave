@@ -758,6 +758,19 @@ def main():
         n = installer_signes_figes(modele)
         print(f"# SIGNES FIGÉS (Dale) : {n} couches — magnitudes LIBRES (w = signe·|theta|), "
               f"aucune loi imposée. Quatrième coin du plan 2x2 d'E6.")
+    # UN DRAPEAU QUI NE S'APPLIQUE PAS DOIT LE DIRE. `--signes-libres` n'a de sens qu'avec une
+    # reparamétrisation log-normale : sans elle, il était **silencieusement ignoré** et le run
+    # rendait exactement le témoin — un « réglage inerte » de plus, exactement ce que l'audit des
+    # drapeaux ignorés reproche au moteur.
+    for drapeau, actif, requiert in (("--signes-libres", a.signes_libres, a.poids_lognormaux),
+                                     ("--plancher-elagage", a.plancher_elagage > 0, a.elagage > 0)):
+        if actif and not requiert:
+            manque = "--poids-lognormaux" if drapeau == "--signes-libres" else "--elagage"
+            # `sys.exit("message")` SORT TOUJOURS EN 1 : le refus doit sortir en 2 (convention du
+            # dépôt, et piège documenté dans REPRISE.md § 3).
+            print(f"REFUS : {drapeau} demande sans {manque} : il serait ignore EN SILENCE, et le "
+                  f"resultat rendu serait celui du temoin.")
+            sys.exit(2)
     if a.poids_lognormaux:
         n = installer_poids_lognormaux(modele, a.signes_libres)
         print(f"# POIDS LOG-NORMAUX : {n} couches reparamétrées "

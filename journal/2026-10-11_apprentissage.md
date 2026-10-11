@@ -18,7 +18,7 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (4)
+## Étapes du jour (5)
 
 *Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
 
@@ -26,10 +26,11 @@
 - **00:37** — Lancement du contrôle décisif : log-normal à signes LIBRES, élagué pareil
 - **00:47** — Le contrôle tranche : ce sont les SIGNES FIGÉS, pas la loi log-normale
 - **01:12** — RÉSULTAT MAJEUR : les signes figés suffisent — et la loi log-normale NUIT
+- **01:28** — Round 51 : E6 tranché — c'est DALE, la loi log-normale nuit (3 graines)
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 64.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 64.4 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

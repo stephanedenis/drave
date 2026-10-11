@@ -49630,3 +49630,175 @@ TERMINE
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-e6-poids-lognormaux.md\"); s = p.read_text()\nancre = \"\"\"**Ce que ça change pour la suite.** Le levier n'est pas la loi des poids, c'est le **principe de\nDal … [1987 caractères tronqués]`
+
+  ```
+multi-graines ajouté
+état mis à jour ; 2026-10-11 01:27
+58ecf21 E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes)
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 51 : E6 tranché — c'est DALE, la loi log-normale nuit (3 graines)
+
+**Alertes d'abord**
+- Aucune : arbre propre, tout poussé (`58ecf21`), **les deux portes du harnais vertes**, **122 tests verts**.
+
+**Le résultat du round — le plan 2×2 est complet, et il renverse l'hypothèse d'E6**
+
+| poids gardés | dense | **signes figés, magnitudes libres** | log-normal signes libres | log-normal signes figés |
+|---|---:|---:|---:|---:|
+| 100 % | 7,3429 | **7,3003** | 7,5112 | 7,5666 |
+| 50 % | 7,5680 | **7,3470** | 11,7783 | 13,0622 |
+| 25 % | 49,4291 | **7,9467** | 36,3771 | 17,5009 |
+
+1. **C'est la contrainte de signe qui porte tout** : ×1,09 sous élagage agressif, contre ×6,7 pour le témoin.
+2. **La loi log-normale NUIT** : à contrainte comparable, 17,50 contre 7,95 — **2,2× pire**. Ce qui aide est que `|w|` puisse descendre à **zéro** librement, ce que `e^θ` interdit (plancher 6,1e-6).
+3. **Rien à payer** : sans élaguer, 7,3003 contre 7,3429.
+4. **Trois graines** : dense 49,43 · 55,45 · 46,61 contre 7,95 · 7,99 · 8,27 — **intervalles disjoints**.
+
+**Ce que ça donne à la suite** : un levier d'**entraînement** de trois lignes (`w = signe · |θ|`), pas un changement de moteur, qui rend le modèle quasi insensible à l'élagage — le dessin « poids creux » redevient mesurable autrement que par sa perte de qualité.
+
+**Trois défauts de plus, même famille que M8, trouvés et corrigés** : `--signes-figes` ne matérialisait pas (clés `parametrizations.*` sauvées) ; l'inverse poids→paramètre était **recopié** dans `ecrire_poids` (faux dès qu'une 2e paramétrisation existe — il vit maintenant dans `right_inverse`) ; l'élagage comptait les paramètres **internes** de la reparamétrisation (44 tenseurs annoncés au lieu de 28).
+
+**Prochain round** : porte du plan 2×2 (verrouiller la recette « signes figés » avec son rouge), puis le volet coût du dessin B sur un modèle devenu élagable sans douleur.
+
+
+## Tour 95
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 52/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Un protocole court suffit-il pour voir l'effet Dale ? (essai à 600 pas)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6j && mkdir -p /tmp/e6j && P=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nBASE=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 --k 2 --seq 128 --lot 32 --pas 600 --lr  … [622 caractères tronqués]`
+
+  ```
+dense        perplexité 17.7430 sur
+sigfiges     perplexité 12.0103 sur
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte de la recette « signes figés » (protocole court, seuil explicite)
+
+- **write** `{"content": "#!/bin/bash\n# porte-signes-figes.sh — la recette « signes figés » rend-elle vraiment l'élagage indolore ?\n#\n# CE QUE LA PORTE VERROUILLE. E6 a été tranché le 11/10 par un plan 2x2 : sous élagage agressif,\n# c'est la **contrainte de signe** (`w = signe · |θ|`, signe choisi à la naiss … [4925 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-signes-figes.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-signes-figes.sh && echo \"syntaxe OK\" && timeout 1200 bash tools/porte-signes-figes.sh 2>&1 | tail -12; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the frozen-signs gate", "timeoutMs": 1200000}`
+
+  ```
+syntaxe OK
+=== 1. témoin dense et recette « signes figés » (600 pas, élagage à 0.25 gardé) ===
+  dense      : occupation 26.0 · perplexité % 17.7430
+  signes figés (--signes-figes) : occupation 30.2 · perplexité % 12.0103
+
+=== 2. le verrou ===
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ValueError: could not convert string to float: '% 17.7430'
+CODE=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/porte-signes-figes.sh <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"          | grep -E \"^\\\\| \\\\*\\\\*total\" | grep -oE \"[0-9]+\\\\.[0-9]+ %\" | head -1)\"\"\"\nn … [488 caractères tronqués]`
+
+  ```
+extraction corrigée (le signe % faisait un champ de plus)
+  dense      : occupation 26.0 · perplexité 17.7430
+  signes figés (--signes-figes) : occupation 30.2 · perplexité 12.0103
+
+=== 2. le verrou ===
+  occupation : dense 26.0 % · signes figés 30.2 %
+  perplexité : dense 17.7430 · signes figés 12.0103 · rapport ×1.48 (seuil ×1.20)
+  ✅ la recette --signes-figes rend l'élagage à 26 % gardé ×1.48 moins cher que le témoin
+
+✅ porte signes figés : la contrainte de signe rend l'élagage indolore (et la porte a été
+   vue ROUGE avec une autre recette : EXTRA_SIGFIGES=--signes-libres).
+CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte avec une AUTRE recette (doit être ROUGE) ===\"; EXTRA_SIGFIGES=--signes-libres timeout 1200 bash tools/porte-signes-figes.sh 2>&1 | tail -7; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Verify the gate turns red  … [43 caractères tronqués]`
+
+  ```
+=== porte avec une AUTRE recette (doit être ROUGE) ===
+  dense      : occupation 26.0 · perplexité 17.7430
+  signes figés (--signes-libres) : occupation 26.0 · perplexité 17.7430
+
+=== 2. le verrou ===
+  occupation : dense 26.0 % · signes figés 26.0 %
+  perplexité : dense 17.7430 · signes figés 17.7430 · rapport ×1.00 (seuil ×1.20)
+  ❌ la recette --signes-libres n'apporte plus l'avantage attendu (×1.00 < ×1.20)
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ `--signes-libres` seul était ignoré en silence — refus explicite, puis rouge par une autre recette
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    if a.poids_lognormaux:\n        n = installer_poids_lognormaux(modele, a.signes_libres)\"\"\"\nnew  … [1405 caractères tronqués]`
+
+  ```
+refus ajouté
+OK
+266:def imposer_ratio_signes(modele, ratio, graine=0):
+753:    if a.ratio_signes >= 0.0:
+754:        n, reel = imposer_ratio_signes(modele, a.ratio_signes, a.graine)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"    for drapeau, actif, requiert in ((\"--signes-libres\", a.signes_libres, a.poids_lognormaux),\n      … [1586 caractères tronqués]`
+
+  ```
+refus ciblé
+OK
+# route · 7.58 M paramètres · 0.59 M poids LUS par jeton et par couche · 1.92 M stockés · corpus 100276153 octets · cuda
+REFUS : --signes-libres demande sans --poids-lognormaux : il serait ignore EN SILENCE, et le resultat rendu serait celui du temoin.
+code=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : un refus doit sortir en 2, jamais en 1 (piège documenté)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - tools/entrainer_moteur.py <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"            manque = \"--poids-lognormaux\" if drapeau == \"--signes-libres\" else \"--elagage\"\n      … [1248 caractères tronqués]`
+
+  ```
+sortie 2
+OK
+code=2
+REFUS : --plancher-elagage demande sans --elagage : il serait ignore EN SILENCE, et le resultat rendu serait celui du temoin.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== rouge par une AUTRE recette (log-normal) ===\"; EXTRA_SIGFIGES=--poids-lognormaux timeout 1200 bash tools/porte-signes-figes.sh 2>&1 | tail -6; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Red test with the log-normal  … [30 caractères tronqués]`
+
+  ```
+=== rouge par une AUTRE recette (log-normal) ===
+  signes figés (--poids-lognormaux) : occupation 30.3 · perplexité 16.0130
+
+=== 2. le verrou ===
+  occupation : dense 26.0 % · signes figés 30.3 %
+  perplexité : dense 17.7430 · signes figés 16.0130 · rapport ×1.11 (seuil ×1.20)
+  ❌ la recette --poids-lognormaux n'apporte plus l'avantage attendu (×1.11 < ×1.20)
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la porte « signes figés » et des refus explicites
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-porte-sig.txt <<'MSGEOF'\nPorte « signes figes » : la seule recette du depot qui rende l'elagage indolore, et elle se verrouille\n\nCE QU'ELLE VERROUILLE. E6 a ete tranche par un plan 2x2 : sous elagage agressif c' … [1576 caractères tronqués]`
