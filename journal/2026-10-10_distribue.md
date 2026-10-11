@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10.md](2026-10-10.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (24)
+## Commits du jour (25)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -32,10 +32,11 @@
 | 09:39 | `63203d7` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
 | 10:56 | `33676cb` | Journal : etapes DATEES par la trace de session (elles couvraient toute la session) | `2026-10-09_attention.md`, `2026-10-09_distribue.md`, `2026-10-09_divers.md` (+22) |
 | 13:16 | `eac873a` | C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+17) |
+| 20:10 | `97086a1` | Registre des manques : N5 — le modele ne retient pas un signal injecte (mesure : present 0,992 / passe -0,681 / tampon 1,000) | `manques.md`, `2026-10-10.md`, `2026-10-10_distribue.md` (+5) |
 
 ## Chiffres du jour
 
-`49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` · `14,6496` · `18,5520` · `12 couches`
+`0,992` · `0,681` · `1,000` · `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -72,7 +73,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 59.0 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 59.3 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

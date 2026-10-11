@@ -41513,3 +41513,30 @@ poussé
 ⏵ J'inscris au registre des manques ce que la journée a établi : le modèle ne retient pas un signal injecté
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\nold = \"\"\"| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** |  … [2561 caractères tronqués]`
+
+  ```
+registre : N5 ajouté
+journal complété
+poussé
+  porte-indice           ✅                         751 s    ✅ la porte est franchie. Limite, et elle est écrite : UN SEUL indice extérieur,
+  porte-jumeaux          ✅                          76 s  PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il
+20:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 9); do if grep -q \"CODE_PASSE=\" /tmp/passe-complete6.log 2>/dev/null; then break; fi; sleep 60; done; tail -5 /tmp/passe-complete6.log; head -1 /tmp/passe-complete6.log; date '+%H:%M'", "description": "Wait for the … [44 caractères tronqués]`
+
+  ```
+porte-topologie        ✅                          35 s    PORTE TENUE : le relais ne change pas un chiffre (42.5477)
+  porte-trace            ✅                          25 s    ✅ la trace fausse est détectée et nommée
+--- 26 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1210g
+=== PASSE COMPLÈTE DES PORTES (26 portes, borne 2400 s) ===
+20:28
+  ```
+
+### 🤖 Assistant
+
+⏵ 26/26 vertes ; je lance la passe finale (27 portes, avec `--recurrence`) et je mets les comptes à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DELAI=2400 JOURNAUX=/tmp/portes-1210h nohup bash tools/toutes-les-portes.sh > /tmp/passe-complete7.log 2>&1 & sleep 2; echo \"passe 27 portes lancée\"; ls tools/porte-*.sh | wc -l; python3 - <<'PYEOF'\nimport pathlib, re, subprocess\ … [1230 caractères tronqués]`

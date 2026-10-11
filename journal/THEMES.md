@@ -52,7 +52,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_distribue.md) | `255 jetons` · `1,842` · `3,4 ms` · `×128` · `24 couches` · `59,0790` · `9 %` |
-| [2026-10-10](2026-10-10_distribue.md) | `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` · `14,6496` · `18,5520` · `12 couches` |
+| [2026-10-10](2026-10-10_distribue.md) | `0,992` · `0,681` · `1,000` · `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 
