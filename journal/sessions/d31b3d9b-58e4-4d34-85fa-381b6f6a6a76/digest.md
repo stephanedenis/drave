@@ -53070,3 +53070,11 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\ns = s.replace(\"- **35 portes** `tools/porte-*.sh`\", \"- **34 portes** `tools/porte-*.sh`\")\ns = s.replace(\"\"\"  `DRAVE_OCCUPATIO … [738 caractères tronqués]`
+
+  ```
+compte corrigé (34) et porte nommée
+1
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\ni = s.index(\"| **M9** |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **M9** | ~~aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS~~ … [1337 caractères tronqués]`
