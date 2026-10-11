@@ -95,7 +95,19 @@ Entraîner avec un k-WTA sur l'entrée de toutes les couches linéaires, exécut
   dense) ; hors de son régime, 0,4 à 1,4 point de perplexité.
 - **Statut** : recette établie, reproductible (`--kwta` + `--act-topk`).
 
-### B. Modèle à POIDS creux — **mesuré le 9/10, et c'est le levier oublié**
+### B. Modèle à POIDS creux — **le levier existe, et il ne paie qu'à 10 % (mesuré le 11/10)**
+
+> **ÉTAT AU 11/10 — LE NOYAU EXISTE, ET LA MESURE TRANCHE.** Un **noyau creux** réel a été écrit
+> (`DRAVE_POIDS_CREUX=1`, CSR par lignes, attention ET experts). Il **paie** la sparsité :
+> ÷3,8 de paires sur un modèle élagué à 25 %, **qualité identique** (4,5886 = 4,5886). Mais sa
+> vitesse ne suit qu'à **~10 % de poids gardés** — un régime où un modèle élagué est déjà détruit
+> (perplexité ×41 000). À 25 %, il est **deux fois plus lent** que les noyaux denses int8 (6,9
+> contre 13,6 tok/s sur Qwen2.5-0.5B), et sur un petit modèle (7,58 M, en cache) il est plus lent
+> **à toutes les densités**. Et la vitesse du noyau dense, elle, **ne bouge pas** avec l'élagage :
+> **« moins de paires » n'est pas « plus rapide »** — le compte est un *modèle*, la vitesse une
+> *mesure*. Détail et tableau du croisement :
+> [`rapport-dessin-B-poids-creux.md`](../reports/rapport-dessin-B-poids-creux.md) · porte
+> `tools/porte-poids-creux.sh`.
 
 Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit
 les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,

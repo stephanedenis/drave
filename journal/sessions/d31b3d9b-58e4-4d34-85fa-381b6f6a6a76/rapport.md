@@ -6,13 +6,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
 | Durée | 67.8 h |
-| Tours | 101 |
-| Messages | 3320 |
-| Appels d'outils | 3089 |
+| Tours | 102 |
+| Messages | 3326 |
+| Appels d'outils | 3093 |
 | Fichiers touchés | 126 |
-| Commandes | 2622 |
+| Commandes | 2626 |
 | Sous-agents | 3 |
-| Commits | 297 |
+| Commits | 298 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -237,6 +237,8 @@
 **Tour 100** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 101** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 102** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4208,7 +4210,41 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 
 **Synthèse produite :**
 
-⏵ Conclusion du dessin B : le croisement tombe là où le modèle est déjà mort — rédaction
+⏵ Round 58 : le croisement du noyau creux est mesuré — il tombe là où le modèle est déjà mort
+
+**La mesure qui manquait : à quelle densité le noyau creux devient-il rentable ?**
+
+| poids gardés | noyau dense | noyau creux | rapport | perplexité (dense élagué) |
+|---|---:|---:|---:|---:|
+| 100 % | 16,6 tok/s | 1,8 tok/s | 0,11× | 14,6496 |
+| 50 % | 14,8 | 3,7 | 0,25× | 571,87 |
+| 25 % | 13,6 | 6,9 | 0,51× | 245 056 |
+| **10 %** | 14,1 | **15,1** | **1,07×** | **601 748** |
+
+1. La vitesse du noyau **dense ne bouge pas** avec l'élagage (il lit tout) ; celle du **creux suit la densité** (×8,3) — c'est la propriété qui prouve qu'il lit vraiment moins.
+2. **Le croisement est vers 10 % de poids gardés — un régime où le modèle est déjà détruit** (perplexité ×41 000). Le noyau creux ne rattrape le dense que là où il n'y a plus de modèle à exécuter.
+3. **Sur le petit modèle** (7,58 M, en cache), il est plus lent **à toutes les densités** (0,71-0,77×) : quand les poids tiennent en cache, le produit matrice-vecteur n'est pas le poste.
+
+**Livré** : la porte `porte-poids-creux.sh` mesure désormais ces trois choses — exactitude, chute des paires (÷3,8), et **la vitesse avec son croisement**, écrite dans la porte. Verte, vue rouge avec `DRAVE_CREUX_SANS_EFFET=1`.
+
+**Registre** : **M9 livré en entier** (instrument Python + ligne du moteur + noyau creux réel), avec le fait désagréable consigné. Ce qui reste pour que le compte devienne du temps : un noyau **vectorisé** *et* un modèle entraîné à survivre à ces densités — c'est **N4**.
+
+**État** : arbre propre, tout poussé, **34 portes**, 122 tests verts, `porte-flux.sh` verte.
+
+**Reste pour les deux derniers rounds** : soit le noyau vectorisé, soit revenir aux capacités du plan (C4 asynchronisme, C2 cycle) — je choisirai selon ce qui est le plus mesurable en une passe.
+
+### Tour 102 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Launch the full gate suite
+- bash — Read the design B section of the roadmap
+- bash — Update the roadmap for design B
+- bash — Commit and check the pass progress
+
+**Synthèse produite :**
+
+⏵ Pendant la passe : le dessin B dans la roadmap, avec le fait mesuré
 
 ## 3. Travail accompli
 
@@ -4391,7 +4427,7 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2582 autres
+- … et 2586 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4836,4 +4872,5 @@ Sur Qwen2.5-0.5B (dense) élagué à 25 % : 8,0317 → 8,0318 et 496,8 M → 226
 - Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divi
 - Etat : 34 portes (et non 35), la porte du noyau creux nommee avec son rouge" 2>&1 | tail -1; git push -q origin master; echo "push=$?"; git status --porcelain |
 - Registre : M9 livre en entier, et le fait desagreable ecrit (le noyau creux ne paie qu'a 10 %, ou le modele est mort)" 2>&1 | tail -1; git push -q origin master
+- Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %)" 2>&1 | tail -1; git push -q origin master; 
 

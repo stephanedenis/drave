@@ -53078,3 +53078,98 @@ push=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/manques.md\"); s = p.read_text()\ni = s.index(\"| **M9** |\"); j = s.index(\"\\n\", i)\nneuf = (\"| **M9** | ~~aucun instrument ne mesure le coût de la SPARSITÉ DES POIDS~~ … [1337 caractères tronqués]`
+
+  ```
+M9 : état final
+push=0
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 58 : le croisement du noyau creux est mesuré — il tombe là où le modèle est déjà mort
+
+**La mesure qui manquait : à quelle densité le noyau creux devient-il rentable ?**
+
+| poids gardés | noyau dense | noyau creux | rapport | perplexité (dense élagué) |
+|---|---:|---:|---:|---:|
+| 100 % | 16,6 tok/s | 1,8 tok/s | 0,11× | 14,6496 |
+| 50 % | 14,8 | 3,7 | 0,25× | 571,87 |
+| 25 % | 13,6 | 6,9 | 0,51× | 245 056 |
+| **10 %** | 14,1 | **15,1** | **1,07×** | **601 748** |
+
+1. La vitesse du noyau **dense ne bouge pas** avec l'élagage (il lit tout) ; celle du **creux suit la densité** (×8,3) — c'est la propriété qui prouve qu'il lit vraiment moins.
+2. **Le croisement est vers 10 % de poids gardés — un régime où le modèle est déjà détruit** (perplexité ×41 000). Le noyau creux ne rattrape le dense que là où il n'y a plus de modèle à exécuter.
+3. **Sur le petit modèle** (7,58 M, en cache), il est plus lent **à toutes les densités** (0,71-0,77×) : quand les poids tiennent en cache, le produit matrice-vecteur n'est pas le poste.
+
+**Livré** : la porte `porte-poids-creux.sh` mesure désormais ces trois choses — exactitude, chute des paires (÷3,8), et **la vitesse avec son croisement**, écrite dans la porte. Verte, vue rouge avec `DRAVE_CREUX_SANS_EFFET=1`.
+
+**Registre** : **M9 livré en entier** (instrument Python + ligne du moteur + noyau creux réel), avec le fait désagréable consigné. Ce qui reste pour que le compte devienne du temps : un noyau **vectorisé** *et* un modèle entraîné à survivre à ces densités — c'est **N4**.
+
+**État** : arbre propre, tout poussé, **34 portes**, 122 tests verts, `porte-flux.sh` verte.
+
+**Reste pour les deux derniers rounds** : soit le noyau vectorisé, soit revenir aux capacités du plan (C4 asynchronisme, C2 cycle) — je choisirai selon ce qui est le plus mesurable en une passe.
+
+
+## Tour 102
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 59/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Passe complète des 34 portes (le moteur a changé trois fois depuis la dernière)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && nohup env DELAI=2400 JOURNAUX=/tmp/portes-0500 bash tools/toutes-les-portes.sh > /tmp/passe0500.log 2>&1 & sleep 5; echo \"passe lancée (pid $!)\"; head -3 /tmp/passe0500.log", "description": "Launch the full gate suite"}`
+
+  ```
+dim 11 oct 2026 05:00:37 EDT
+passe lancée (pid 620318)
+=== PASSE COMPLÈTE DES PORTES (34 portes, borne 2400 s) ===
+    journaux : /tmp/portes-0500
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la passe : le dessin B dans la roadmap, avec le fait mesuré
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '98,130p' docs/modele-pour-drave.md | head -22", "description": "Read the design B section of the roadmap"}`
+
+  ```
+### B. Modèle à POIDS creux — **mesuré le 9/10, et c'est le levier oublié**
+
+Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit
+les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,
+`DRAVE_SANS_EMPRUNT=1` pour comparer la même arithmétique) :
+
+> **ATTENTION À L'INSTRUMENT (mesuré le 10/10).** Le compteur de paires **imprimé par le moteur**
+> ne voit **pas** l'élagage des poids : il additionne `n_in × n_out` par projection, sur **tous**
+> les chemins (`--flux`, `--flux-listes`, `--flux-blocs`, `--ppl`, et même sous `--keep 0.5`, qui
+> fait pourtant chuter la perplexité de 4,56 à 5,82). Sur un témoin dense élagué à 50 % de **tous**
+> ses tenseurs, il affiche **2,3 M** avant comme après. Ce qu'il mesure est le travail d'un noyau
+> **dense** — fidèlement — et **pas** ce qui est stocké. Les chiffres ci-dessous viennent donc d'un
+> **autre** instrument (poids lus / stockage), et tout « ÷N de paires » doit dire lequel. Détail :
+> [`rapport-e6-poids-lognormaux.md`](../reports/rapport-e6-poids-lognormaux.md) § 4.
+
+| poids gardés (par ligne) | activations | perplexité | **paires (événements)** |
+|---|---:|---:|---:|
+| 100 % | 100 %
+… [166 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/modele-pour-drave.md\"); s = p.read_text()\nancre = \"\"\"### B. Modèle à POIDS creux — **mesuré le 9/10, et c'est le levier oublié**\n\nLe chemin par listes compte les **n … [1513 caractères tronqués]`
+
+  ```
+roadmap : dessin B mis à jour
+=== PASSE COMPLÈTE DES PORTES (34 portes, borne 2400 s) ===
+    journaux : /tmp/portes-0500
+dim 11 oct 2026 05:01:00 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %)\" 2>&1 | tail -1; git push -q origin master; echo \"push=$?\"; sleep 400; grep -cE \ … [140 caractères tronqués]`

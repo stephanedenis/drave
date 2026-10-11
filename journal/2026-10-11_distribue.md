@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11.md](2026-10-11.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 04:41 | `bfbc26fc` | Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT | `main.rs`, `model.rs`, `2026-10-11.md` (+14) |
 | 04:42 | `b9772404` | Fiche B : le noyau creux couvre les experts (divise par 3,8 les paires) et reste 36 % plus lent — le prochain pas est un noyau, pas un modele | `2026-10-11.md`, `2026-10-11_distribue.md`, `README.md` (+5) |
 | 04:57 | `2fa0105a` | Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divise par 3,8 de paires | `etat-cerveau.md`, `2026-10-11.md`, `2026-10-11_apprentissage.md` (+14) |
+| 04:59 | `c5cd3f93` | Registre : M9 livre en entier, et le fait desagreable ecrit (le noyau creux ne paie qu'a 10 %, ou le modele est mort) | `manques.md`, `2026-10-11.md`, `2026-10-11_moteur.md` (+4) |
 
 ## Chiffres du jour
 
