@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 66.6 h |
-| Tours | 97 |
-| Messages | 3216 |
-| Appels d'outils | 2993 |
-| Fichiers touchés | 124 |
-| Commandes | 2528 |
+| Durée | 66.8 h |
+| Tours | 98 |
+| Messages | 3240 |
+| Appels d'outils | 3015 |
+| Fichiers touchés | 125 |
+| Commandes | 2549 |
 | Sous-agents | 3 |
-| Commits | 287 |
+| Commits | 288 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -229,6 +229,8 @@
 **Tour 96** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 97** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 98** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4017,7 +4019,60 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 **Synthèse produite :**
 
-⏵ Volet coût d'E1 : ce que 4× moins de poids achètent (estimation sur les paires)
+⏵ Round 54 : E1 et E2 re-mesurés — deux conclusions publiées corrigées
+
+**Alertes d'abord**
+- **E1 et E2 changeaient tous les deux** : le masque ne couvrait que 5,8 % des poids et le défaut se taisait.
+
+**E1 — le connectome inné coûte 9 %, pas 1 %** (occupation vérifiée dans le fichier)
+
+| modèle | occupation | val | perplexité | coût | ÷ lectures |
+|---|---:|---:|---:|---:|---:|
+| témoin dense | 89,2 % | 2,3533 | **7,3429** | — | — |
+| connectome 25 % | 24,0 % | 2,4660 | **8,0317** | **+9,4 %** | ÷4,3 |
+| connectome 12,5 % | 12,9 % | 2,6072 | **8,6970** | **+18,4 %** | ÷7,9 |
+
+Le compromis est enfin chiffré des deux côtés — il est modeste, mais il n'est **pas gratuit**.
+
+**E2 — la conclusion publiée est RENVERSÉE**
+
+| modèle | occupation | perplexité |
+|---|---:|---:|
+| statique 12,5 % | 12,9 % | 8,6970 |
+| **croissance 10 % → 25 %** | 20,9 % | **8,1550** |
+| statique à densité **égale** | 20,3 % | **8,1827** |
+
+La croissance locale n'est **pas** « pire que le hasard à densité égale » : elle est légèrement meilleure (0,3 %, dans le bruit d'une graine). L'ancien verdict venait du même défaut **et** d'un gradient lu sur `mod.weight.grad` — `None` quand le poids est reparamétré.
+
+**Ce que ça enseigne** : une couverture partielle qui se tait fabrique des conclusions optimistes, et le **même** défaut a produit **deux** verdicts faux. La re-mesure ne demande pas de refaire l'expérience : elle demande de **vérifier la couverture**.
+
+**État** : arbre propre, tout poussé (`97c4b475` et suivants), 4 portes du harnais vertes, 122 tests verts.
+
+**Prochain round** : la seconde moitié de **M9** — rendre la ligne « paires » du moteur sensible à l'occupation (compteur de non-nuls par projection, experts compris), avec `porte-flux.sh` après la modification du chemin d'exécution.
+
+### Tour 98 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Inspect Vue4 and DenseQ4 structures
+- bash — Inspect the Q4 source enum
+- bash — Read the Source enum and Q4_0 handling
+- bash — Add occupancy counting to the engine
+- bash — Find the pair print sites
+- bash — Read the ppl summary block
+- bash — Add the occupancy aggregation method
+- bash — Move the method into impl Model
+- bash — Place the method correctly and rebuild
+- bash — Print occupancy in the pair summary
+- bash — Fix format strings and test the new output
+- bash — Inspect how expert Vues are built
+- bash — Find the GGUF tensor iteration API
+- bash — Inspect the Gguf struct for tensor access
+- … et 8 autres
+
+**Synthèse produite :**
+
+⏵ Commit de la seconde moitié de M9 (le moteur voit l'occupation) et de sa porte
 
 ## 3. Travail accompli
 
@@ -4149,6 +4204,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-audit-drapeaux.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e1-e2-connectome-croissance.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-moteur.sh` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -4198,7 +4254,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2488 autres
+- … et 2509 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4326,7 +4382,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ## 5. Erreurs rencontrées
 
-103 sorties en erreur ou divergentes. Les premières :
+106 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4633,4 +4689,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-e1e2.txt <<'MSGEOF' E1 et E2 re-mesures avec un masque qui couvre tout le modele : le c
 - Biologie : E1 et E2 corrigees dans la roadmap (connectome +9,4 %, croissance non pire que le hasard)" 2>&1 | tail -1; git push -q origin master; echo "push=$?"
 - E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit" 2>&1 | tail -1; git push -q origin m
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF' M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids
 

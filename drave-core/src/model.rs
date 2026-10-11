@@ -589,6 +589,12 @@ pub struct Proj {
     /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
     pub q4: Option<DenseQ4>,
     pub bias: Option<Vec<f32>>,
+    /// **Occupation** : poids NON NULS et poids totaux, comptés au chargement, APRÈS élagage.
+    /// C'est la mesure qui manquait (manque **M9**) : le compteur de paires additionne
+    /// `n_in × n_out` — le travail d'un noyau **dense**, fidèlement — et ne dit donc rien de ce
+    /// qui est **stocké**. `nnz` permet de chiffrer l'autre colonne sans rien changer au calcul.
+    pub nnz: u64,
+    pub n_tot: u64,
 }
 
 /// Type ggml → origine des blocs pour `Vue4`.
@@ -1425,6 +1431,49 @@ pub struct Stats {
 /// de plus grande magnitude. C'est le levier qui compte pour le moteur : son
 /// coût est proportionnel au nombre de **non-zéros**, pas à la largeur des
 /// valeurs. `keep = 1.0` ne touche à rien.
+/// Nombre de poids NON NULS d'un tenseur — l'occupation réelle (manque M9).
+///
+/// POURQUOI CE N'EST PAS LA MÊME CHOSE QUE LES PAIRES. Le compteur de paires mesure le travail
+/// d'un noyau **dense** : `n_in × n_out`, que les poids soient nuls ou pas — et c'est exact, un
+/// noyau dense lit tout. Ce qu'un format **creux** lirait est autre chose. Sans ce deuxième
+/// chiffre, « élaguer divise les paires par N » n'est vérifiable par aucun instrument du moteur
+/// (constaté le 11/10 : 2,3 M de paires avant comme après un élagage à 50 % de tous les
+/// tenseurs).
+fn nnz_f32(w: &[f32]) -> u64 {
+    w.iter().filter(|v| **v != 0.0).count() as u64
+}
+
+/// Occupation d'un tenseur **Q4_0** lu en place, **sans le déquantifier** : dans un bloc ggml de
+/// 32 poids (2 octets d'échelle f16 + 16 octets de nibbles), la valeur vaut `(q − 8) · d` — elle
+/// est donc nulle si `q == 8`, ou si l'échelle `d` est nulle (le bloc entier).
+///
+/// Les autres formats 4 bits (Q4_K, Q6_K, MXFP4) ne sont PAS comptés ici : ils demandent chacun
+/// leur décodeur, et un compteur qui se tairait sur eux répéterait le défaut qu'on répare. Le
+/// nombre de poids NON comptés est donc rendu à part, pour être affiché.
+fn nnz_q4_0(vue: &Vue4) -> Option<(u64, u64)> {
+    if vue.src != crate::list::Source::Q4_0 {
+        return None;
+    }
+    let n_tot = (vue.n_out * vue.n_in) as u64;
+    let blocs = (n_tot as usize) / 32;
+    let mut nnz = 0u64;
+    unsafe {
+        for b in 0..blocs {
+            let p = vue.base.add(b * 18);
+            let d = f32_depuis_f16(u16::from_le_bytes([*p, *p.add(1)]));
+            if d == 0.0 {
+                continue;                      // bloc entier à zéro
+            }
+            for j in 0..16 {
+                let o = *p.add(2 + j);
+                if (o & 0x0F) != 8 { nnz += 1; }
+                if (o >> 4) != 8 { nnz += 1; }
+            }
+        }
+    }
+    Some((nnz, n_tot))
+}
+
 fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
     if keep >= 1.0 { return; }
     let k = ((n_in as f32 * keep) as usize).max(1);
@@ -1477,7 +1526,7 @@ impl Proj {
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
     pub fn vide() -> Self {
-        Proj { gpu: None, m: None, d: None, q4: None, bias: None }
+        Proj { gpu: None, m: None, d: None, q4: None, bias: None, nnz: 0, n_tot: 0 }
     }
 
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
@@ -1497,7 +1546,8 @@ impl Proj {
         if bits6 {
             let z = DenseQ4::build6(&w, n_out, n_in);
             let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
-            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias };
+            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias,
+                          nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 };
         }
         let (m, d, q4v) = if q4 {
             // Source déjà en Q4_0 : on importe les blocs tels quels. Sinon on
@@ -1566,7 +1616,7 @@ impl Proj {
             }
             _ => None,
         };
-        Proj { gpu, m, d, q4: q4v, bias }
+        Proj { gpu, m, d, q4: q4v, bias, nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 }
     }
 }
 
@@ -8252,6 +8302,92 @@ pas apprise — le flux doit transporter ces {} valeurs par jeton",
 
     /// Tête de sortie : produits scalaires entiers sur les lignes Q8_0 du
     /// plafond d'embedding (poids liés). Parallélisé par tranches de vocabulaire.
+    /// **Occupation des poids** (manque **M9**) : `(non-nuls, total, non-comptés)` par genre —
+    /// attention, experts, reste.
+    ///
+    /// ELLE SE LIT DANS LE **FICHIER**, PAS DANS LES STRUCTURES CHARGÉES. Une première version
+    /// comptait les `Vue4` des experts : elles portent les dimensions d'**UN** expert
+    /// (`[n_export, n_out, n_in]` → `(dims[1], dims[2])`), donc huit experts comptaient pour un —
+    /// le total annoncé valait **1,33 M** pour un modèle de **7,6 M** de poids. On parcourt donc
+    /// les tenseurs du GGUF, et chaque format est compté **sans déquantifier** : Q4_0 (nibble == 8
+    /// ou échelle nulle), Q8_0 (int8 == 0), F32/F16 (valeur nulle). Les formats 4 bits sans
+    /// décodeur d'occupation (Q4_K, Q6_K, MXFP4) sont comptés à part, pour être **affichés** comme
+    /// non comptés — un compteur partiel qui se tait répéterait le défaut qu'on répare.
+    pub fn occupation_poids(&self) -> [(u64, u64, u64); 3] {
+        use crate::gguf::{GGML_F16, GGML_F32, GGML_Q4_0, GGML_Q8_0};
+        let mut occ = [(0u64, 0u64, 0u64); 3];
+        // `DRAVE_OCCUPATION_ATTENTION_SEULE=1` RALLUME un compteur PARTIEL — celui qui n'aurait
+        // regardé que l'attention. C'est le défaut que cette fonction répare, et une porte doit
+        // pouvoir le voir : avec lui, le moteur et l'outil ne disent plus la même chose.
+        let attention_seule = std::env::var("DRAVE_OCCUPATION_ATTENTION_SEULE").is_ok();
+        for t in &self.g.tensors {
+            let n: u64 = t.dims.iter().product();
+            if t.dims.len() < 2 { continue; }
+            if attention_seule && !t.name.contains("attn") { continue; }
+            // TROIS GENRES, ET LEQUEL COMPTE POUR LES PAIRES. La ligne de paires ne compte que
+            // les PROJECTIONS (attention et experts) ; la table d'entrée et la tête n'y sont pas.
+            // Les mélanger dans « attention » diluait la mesure : un modèle masqué à 24 %
+            // s'affichait à 38 % parce que la table d'entrée (99 % de non-nuls) était moyennée
+            // avec l'attention.
+            let genre = if t.name.contains("exps") || t.name.contains("expert") {
+                1                                   // experts routés
+            } else if t.name.contains("attn") {
+                0                                   // projections d'attention
+            } else {
+                2                                   // table d'entrée, tête, routeur : hors des paires
+            };
+            let Some(ptr) = self.g.data_ptr(&t.name) else { continue };
+            let (nnz, compte) = unsafe {
+                match t.ttype {
+                    GGML_Q4_0 if n % 32 == 0 => {
+                        let blocs = n as usize / 32;
+                        let mut z = 0u64;
+                        for b in 0..blocs {
+                            let p = ptr.add(b * 18);
+                            let d = f32_depuis_f16(u16::from_le_bytes([*p, *p.add(1)]));
+                            if d == 0.0 { continue; }
+                            for j in 0..16 {
+                                let o = *p.add(2 + j);
+                                if (o & 0x0F) != 8 { z += 1; }
+                                if (o >> 4) != 8 { z += 1; }
+                            }
+                        }
+                        (z, true)
+                    }
+                    GGML_Q8_0 if n % 32 == 0 => {
+                        let blocs = n as usize / 32;
+                        let mut z = 0u64;
+                        for b in 0..blocs {
+                            let p = ptr.add(b * 34);
+                            let d = f32_depuis_f16(u16::from_le_bytes([*p, *p.add(1)]));
+                            if d == 0.0 { continue; }
+                            for j in 0..32 {
+                                if *p.add(2 + j) != 0 { z += 1; }
+                            }
+                        }
+                        (z, true)
+                    }
+                    GGML_F32 => {
+                        let v = std::slice::from_raw_parts(ptr as *const f32, n as usize);
+                        (v.iter().filter(|x| **x != 0.0).count() as u64, true)
+                    }
+                    GGML_F16 => {
+                        let mut z = 0u64;
+                        for i in 0..n as usize {
+                            let o = ptr.add(i * 2);
+                            if f32_depuis_f16(u16::from_le_bytes([*o, *o.add(1)])) != 0.0 { z += 1; }
+                        }
+                        (z, true)
+                    }
+                    _ => (0, false),
+                }
+            };
+            if compte { occ[genre].0 += nnz; occ[genre].1 += n; }
+            else { occ[genre].2 += n; }
+        }
+        occ
+    }
+
     pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {
         let mut scratch = Vec::with_capacity(h.len());
         let (sv, sx) = match Self::quant_scratch(h, self.act_levels, self.act_thresh,

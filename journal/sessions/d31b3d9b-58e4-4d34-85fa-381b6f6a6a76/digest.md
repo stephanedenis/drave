@@ -51402,3 +51402,425 @@ activations vivantes (**hypothèse**, pas un résultat) :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"reports/rapport-e1-e2-connectome-croissance.md\"); s = p.read_text()\nancre = \"## 3. Ce que ces deux re-mesures enseignent\"\najout = \"\"\"## 2 bis. Le volet COÛT d'E1 — ce qu … [1542 caractères tronqués]`
+
+  ```
+volet coût ajouté
+push=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 54 : E1 et E2 re-mesurés — deux conclusions publiées corrigées
+
+**Alertes d'abord**
+- **E1 et E2 changeaient tous les deux** : le masque ne couvrait que 5,8 % des poids et le défaut se taisait.
+
+**E1 — le connectome inné coûte 9 %, pas 1 %** (occupation vérifiée dans le fichier)
+
+| modèle | occupation | val | perplexité | coût | ÷ lectures |
+|---|---:|---:|---:|---:|---:|
+| témoin dense | 89,2 % | 2,3533 | **7,3429** | — | — |
+| connectome 25 % | 24,0 % | 2,4660 | **8,0317** | **+9,4 %** | ÷4,3 |
+| connectome 12,5 % | 12,9 % | 2,6072 | **8,6970** | **+18,4 %** | ÷7,9 |
+
+Le compromis est enfin chiffré des deux côtés — il est modeste, mais il n'est **pas gratuit**.
+
+**E2 — la conclusion publiée est RENVERSÉE**
+
+| modèle | occupation | perplexité |
+|---|---:|---:|
+| statique 12,5 % | 12,9 % | 8,6970 |
+| **croissance 10 % → 25 %** | 20,9 % | **8,1550** |
+| statique à densité **égale** | 20,3 % | **8,1827** |
+
+La croissance locale n'est **pas** « pire que le hasard à densité égale » : elle est légèrement meilleure (0,3 %, dans le bruit d'une graine). L'ancien verdict venait du même défaut **et** d'un gradient lu sur `mod.weight.grad` — `None` quand le poids est reparamétré.
+
+**Ce que ça enseigne** : une couverture partielle qui se tait fabrique des conclusions optimistes, et le **même** défaut a produit **deux** verdicts faux. La re-mesure ne demande pas de refaire l'expérience : elle demande de **vérifier la couverture**.
+
+**État** : arbre propre, tout poussé (`97c4b475` et suivants), 4 portes du harnais vertes, 122 tests verts.
+
+**Prochain round** : la seconde moitié de **M9** — rendre la ligne « paires » du moteur sensible à l'occupation (compteur de non-nuls par projection, experts compris), avec `porte-flux.sh` après la modification du chemin d'exécution.
+
+
+## Tour 98
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 55/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ M9, seconde moitié : rendre la ligne « paires » sensible à l'occupation (inventaire du moteur)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Vue4\" -A 12 drave-core/src/model.rs | head -16; echo \"=== DenseQ4 ===\"; grep -n \"pub struct DenseQ4\" -A 14 drave-core/src/list.rs 2>/dev/null | head -18", "description": "Inspect Vue4 and DenseQ4 structures" … [1 caractères tronqués]`
+
+  ```
+824:pub struct Vue4 {
+825-    pub base: *const u8,
+826-    pub n_out: usize,
+827-    pub n_in: usize,
+828-    pub nb: usize,
+829-    pub src: crate::list::Source,
+830-}
+831-
+832-/// **Porte de décroissance du KDA** — variante **K3** (`kda_gate_lower_bound = −5`) :
+833-///
+834-/// ```text
+835-/// g = borne · sigmoïde( exp(A_log) · (f_b(f_a(x)) + dt_bias) )
+836-/// ```
+=== DenseQ4 ===
+663:pub struct DenseQ4 {
+664-    pub n_in: usize,
+665-    pub n_out: usize,
+666-    /// Table des 16 nibbles → valeur entière signée. Par défaut `n − 8`
+667-    /// (grille symétrique int4) ; l'import MXFP4 y met les magnitudes E2M1
+668-    /// doublées, `±{0,1,2,3,4,6,8,12}`, qui sont exactement les valeurs du
+669-    /// format une fois l'échelle ramenée à une puissance de deux.
+670-    pub lut: [i8; 16],
+671-    /// Vrai si `sc` porte l'octet d'exposant E8M0 du format MXFP4 au lieu
+672-    /// d'une échelle relative sur 16 bits signés.
+673-    pub e8m0: bool,
+674-    pub q: Vec<u8>,        // n_out × ⌈n_in/2⌉ — vide si `src != Propre`
+675-    /// n_out × ⌈n_in/BLOC_Q4⌉ échelles de bloc (vide si `src != Propre`),
+676-    /// **relatives et signées**
+677-    /// (i16 stocké en u16). Le signe compte : Q
+… [31 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub enum Source\" -A 14 drave-core/src/list.rs | head -18; echo \"=== BLOC_Q4 ===\"; grep -rn \"BLOC_Q4\" drave-core/src/list.rs | head -3", "description": "Inspect the Q4 source enum"}`
+
+  ```
+342:pub enum Source8 {
+343-    /// Construite par nous : **une échelle par ligne** (historique).
+344-    Propre,
+345-    /// Construite par nous : **une échelle par bloc de 32**, comme Q8_0. C'est
+346-    /// l'hypothèse à tester — le 6 bits gagne peut-être grâce à ses échelles
+347-    /// fines et non grâce à ses deux bits de plus.
+348-    PropreBloc,
+349-    Q8_0,
+350-}
+351-
+352-pub struct DenseQ8 {
+353-    pub n_in: usize,
+354-    pub n_out: usize,
+355-    pub q: Vec<i8>,        // n_out × n_in — vide si `src == Q8_0`
+356-    pub scale: Vec<f32>,   // une par sortie — vide si `src == Q8_0`
+--
+644:pub enum Source {
+645-    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+=== BLOC_Q4 ===
+454:            let xb = &x[b * BLOC_Q4..b * BLOC_Q4 + BLOC_Q4];
+458:                for j in 0..BLOC_Q4 { s += (octets[2 + j] as i8 as i32) * xb[j]; }
+465:                for j in 0..BLOC_Q4 {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '644,650p' drave-core/src/list.rs; grep -n \"const BLOC_Q4\" drave-core/src/list.rs; echo \"=== layout Q4_0 dans Vue4 ===\"; grep -n \"Source::Q4_0\" drave-core/src/model.rs | head -5", "description": "Read the Source enum and … [16 caractères tronqués]`
+
+  ```
+pub enum Source {
+    Propre, Q4_0, Mxfp4, Q4_K, Q6_K,
+    /// Super-bloc de 256 poids **sans noyau dédié** : Q2_K, Q3_K, Q5_K, IQ1_S,
+    /// IQ1_M, IQ2_XXS, IQ3_XXS, IQ4_XS. Le produit se fait en déquantifiant le
+    /// super-bloc puis en accumulant en f32.
+    ///
+    /// Ces formats portent 30 % des poids de Kimi-K2.7, GLM-5.3 et
+539:pub const BLOC_Q4: usize = 32;
+=== layout Q4_0 dans Vue4 ===
+603:        GGML_Q4_0 => Some(Source::Q4_0),
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation : compter les non-nuls d'un tenseur Q4_0 sans le déquantifier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n\n# 1. nnz / n_tot sur Proj\nold = \"\"\"    /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d` … [3882 caractères tronqués]`
+
+  ```
+nnz_f32 et nnz_q4_0 posés
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `t`
+warning: unused variable: `id`
+warning: unused variable: `plan`
+build=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Agrégation de l'occupation et affichage dans la ligne des paires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"println!(\\\"paires (poids × activation) : {} au total\" drave-core/src/main.rs | head -1 | cut -d: -f1); echo \"ligne $L\"; grep -n \"paires (poids\" drave-core/src/main.rs; echo \"=== autres impressions ===\"; grep -n … [121 caractères tronqués]`
+
+  ```
+ligne 1622
+129:        eprintln!("                                     Affiche les paires (poids × activation) par");
+1622:    println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
+7260:    // LA MÉTRIQUE DU PLAN : les paires (poids × activation) par DÉCISION. C'est la seule unité
+7710:    println!("    paires (poids × activation) par token : attention {:.1} M · experts {:.1} M · partagé {:.1} M · scores {:.0} K · total {:.1} M",
+=== autres impressions ===
+7710:    println!("    paires (poids × activation) par token : attention {:.1} M · experts {:.1} M · partagé {:.1} M · scores {:.0} K · total {:.1} M",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '7700,7714p' drave-core/src/main.rs", "description": "Read the ppl summary block"}`
+
+  ```
+// n'affichait que des zéros avant ce compteur.
+    let pa = mdl.paires;
+    // Les scores d'attention (paires requête-clé) ne sont pas dans `paires` :
+    // ils sont comptés par `attn_events` depuis toujours. Le flux TOTAL d'un
+    // jeton est donc la somme des deux, sinon la part de l'attention serait
+    // fausse — et c'est la ligne qui dit où porter l'effort.
+    let scores = mdl.attn_events;
+    let pt: u64 = pa.iter().sum::<u64>() + scores;
+    // Les scores sont souvent des ordres de grandeur sous les projections :
+    // « 0.0 M » n'est pas une mesure, donc on les donne en kilo-paires.
+    println!("    paires (poids × activation) par token : attention {:.1} M · experts {:.1} M · partagé {:.1} M · scores {:.0} K · total {:.1} M",
+             pa[0] as f64 / n as f64 / 1e6, pa[1] as f64 / n as f64 / 1e6,
+             pa[2] as f64 / n as f64 / 1e6, scores as f64 / n as f64 / 1e3,
+             pt as f64 / n as f64 / 1e6);
+    println!("    dont en listes (une paire y est un événement) : {:.1} M — le reste est dense (déquantifié ou f32)",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# méthode d'agrégation sur Model\nancre = \"    pub fn appliquer(&mut self, couche: usize, pos: usize, dst: &mut [f32 … [1883 caractères tronqués]`
+
+  ```
+méthode occupation_poids ajoutée
+error[E0609]: no field `layers` on type `&FluxRelecteur`
+    --> src/model.rs:2408:24
+     |
+2408 |         for l in &self.layers {
+     |                        ^^^^^^ unknown field
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+---
+drave-core/target/release/drave 11 oct 03:47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# retirer le bloc mal placé\ndeb = s.index(\"    /// **Occupation des poids** (manque M9)\")\nfin = s.index(\"    pub … [705 caractères tronqués]`
+
+  ```
+ancres logits : ['    pub fn logits(&mut self, h: &[f32]) -> Vec<f32> {']
+error[E0609]: no field `layers` on type `&FluxRelecteur`
+    --> src/model.rs:2408:24
+     |
+2408 |         for l in &self.layers {
+     |                        ^^^^^^ unknown field
+     |
+--
+error: could not compile `drave-core` (bin "drave") due to 1 previous error; 30 warnings emitted
+build terminé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ndeb = s.index(\"    /// **Occupation des poids** (manque M9)\")\nfin = s.index(\"    pub fn appliquer(&mut self, couc … [519 caractères tronqués]`
+
+  ```
+bloc placé dans impl Model (logits)
+fin du build
+  ```
+
+### 🤖 Assistant
+
+⏵ Ligne d'occupation ajoutée au récapitulatif des paires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/main.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nancre = \"\"\"    println!(\"    dont en listes (une paire y est un événement) : {:.1} M — le reste est dense (déquant … [2107 caractères tronqués]`
+
+  ```
+affichage ajouté
+error: invalid format string: python's numeric grouping `,` is not supported in rust format strings
+    --> src/main.rs:7730:73
+     |
+7730 |             println!("    occupation des poids : {:.1} % de non-nuls ({:,} sur {:,}) — attention {:.1} % · experts {:.1} %",
+     |                                                                       - ^ expected `}` in format string
+     |                                                                       |
+     |                                                                       because of this opening brace
+--
+error: invalid format string: python's numeric grouping `,` is not supported in rust format strings
+    --> src/main.rs:7738:35
+     |
+7738 | ...   println!("    ⚠ {:,} poids d'experts NON comptés (format 4 bits sans décodeur d'occupation) : le chiffre est PARTIEL",
+     |                       - ^ expected `}` in format string
+     |                       |
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/main.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\ns = s.replace('println!(\"    occupation des poids : {:.1} % de non-nuls ({:,} sur {:,}) — attention {:.1} % · experts … [868 caractères tronqués]`
+
+  ```
+format corrigé
+fin
+     127 tokens notés — perplexité cumulée 4.589  (1785.0 tok/s)
+=== perplexité 4.5886 sur 127 tokens (0 événements, 0.1 s) ===
+    attention : 0.00 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+    occupation des poids : 23.5 % de non-nuls (312008 sur 1327104) — attention 0.0 % · experts 22.8 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 0.5 M paires par token au lieu de 2.3 M (÷4.30)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le total d'occupation (1,33 M) ne couvre pas les 7,6 M du modèle — diagnostic
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Vue4 {\" drave-core/src/model.rs | head -5; L=$(grep -n \"fn charger_experts\\|Vue4 { base\" drave-core/src/model.rs | head -1 | cut -d: -f1); sed -n \"$((L-4)),$((L+18))p\" drave-core/src/model.rs", "description": "Inspect … [28 caractères tronqués]`
+
+  ```
+697:            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
+718:        Some(Vue4 { base: g.data_ptr(nom)?, n_out, n_in, nb: n_in / bloc, src })
+830:pub struct Vue4 {
+1102:impl Vue4 {
+1252:unsafe impl Send for Vue4 {}
+            let Some(ptr) = g.data_ptr(nom) else {
+                eprintln!("[moe] couche {l} : données de « {nom} » introuvables");
+                return None;
+            };
+            out.push(Vue4 { base: ptr, n_out, n_in, nb: n_in / bloc, src });
+        }
+        Some((numeros, out))
+    };
+    // Vue d'un tenseur 3D NON découpé (l'expert partagé, qui reste dans le
+    // fichier commun) : aucune traduction d'index n'est nécessaire.
+    // Vue d'un tenseur NON découpé : l'expert partagé, qui reste dans le
+    // fichier commun. Il est en 2D (`[n_ff, hidden]`) — exiger 3 dimensions le
+    // refusait en silence, et l'expert partagé des modèles DeepSeek/GLM/Kimi
+    // n'était donc jamais calculé. Sa contribution n'est pas un détail : c'est
+    // un FFN entier, toujours actif, ajouté à la sortie des experts routés.
+    let vue_unique = |nom: &str| -> Option<Vue4> {
+        let t = g.tensor(nom)?;
+        let src = source_de(t.ttype)?;
+    
+… [213 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Compter l'occupation sur le FICHIER (tous les tenseurs), pas sur les vues chargées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn noms\\|pub fn tenseurs\\|pub fn liste\\|pub fn iter\" drave-core/src/gguf.rs | head -6; grep -n \"pub fn data_ptr\\|pub fn tensor\\b\" drave-core/src/gguf.rs | head -4", "description": "Find the GGUF tensor iteration … [6 caractères tronqués]`
+
+  ```
+1029:    pub fn tensor(&self, name: &str) -> Option<&TensorInfo> {
+1571:    pub fn data_ptr(&self, name: &str) -> Option<*const u8> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub tenseurs\\|tenseurs:\\|pub struct Gguf\" -A 6 drave-core/src/gguf.rs | head -24", "description": "Inspect the Gguf struct for tensor access"}`
+
+  ```
+333:pub struct Gguf {
+334-    pub meta: HashMap<String, Meta>,
+335-    pub tensors: Vec<TensorInfo>,
+336-    /// Un tampon par fichier. Un GGUF ordinaire en a un seul ; un modèle
+337-    /// découpé en porte autant que de morceaux. Les données ne sont jamais
+338-    /// recopiées d'un fichier à l'autre : chaque tenseur reste chez lui.
+339-    bufs: Vec<Tampon>,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# remplacer la méthode d'agrégation par une lecture du FICHIER\ndeb = s.index(\"    /// **Occupation des poids** (man … [4043 caractères tronqués]`
+
+  ```
+occupation lue dans le fichier
+fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for M in /tmp/e1e2/temoin.gguf /tmp/e1e2/masque25.gguf; do echo \"=== $(basename $M) ===\"; $D \"$M\" --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -E \"paires \\(poids|occup … [86 caractères tronqués]`
+
+  ```
+=== temoin.gguf ===
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+    occupation des poids : 89.2 % de non-nuls (6798024 sur 7624704) — attention 99.3 % · experts 88.4 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 2.1 M paires par token au lieu de 2.3 M (÷1.10)
+=== masque25.gguf ===
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+    occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 38.2 % · experts 22.8 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 0.9 M paires par token au lieu de 2.3 M (÷2.53)
+  ```
+
+### 🤖 Assistant
+
+⏵ Classement des genres et estimation sur les seules projections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = '''            let genre = if t.name.contains(\"exps\") || t.name.contains(\"expert\") { 1 } else { 0 };'''\nne … [2715 caractères tronqués]`
+
+  ```
+genres corrigés
+estimation restreinte aux projections
+temoin         occupation des poids : 89.2 % de non-nuls (6798024 sur 7624704) — attention 99.3 % · experts 88.4 %|    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 2.1 M paires par token au lieu de 2.3 M (÷1.10)|
+masque25       occupation des poids : 23.9 % de non-nuls (1824995 sur 7624704) — attention 24.9 % · experts 22.8 %|    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 0.6 M paires par token au lieu de 2.3 M (÷4.04)|
+  ```
+
+### 🤖 Assistant
+
+⏵ Non-régression : `porte-flux` et `porte-budget` (qui lisent la ligne des paires)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (timeout 1800 bash tools/porte-flux.sh > /tmp/f1.log 2>&1; echo \"flux=$?\"); tail -3 /tmp/f1.log; (timeout 900 bash tools/porte-budget.sh > /tmp/f2.log 2>&1; echo \"budget=$?\"); tail -3 /tmp/f2.log", "description": "Run flux and bu … [58 caractères tronqués]`
+
+  ```
+flux=0
+  mode 2 — listes par blocs        3.65e-2  ✅  (réf 61.9920 / deux nœuds 64.2535)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 60.8135 / deux nœuds 60.8135)
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+budget=0
+  genereux (10 G/pas) : paires annoncees 8408924160 · code 0
+  [budget] PAIRES DÉPASSÉES sur le lien local → d : 178913280 paires annoncées par le pair pour un budget de 1000000 par pas sur 1 pas (plafond 1000000) — l'exécution s'arr
+  ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte de l'occupation du moteur (comparée à l'outil, sur deux modèles)
+
+- **write** `{"content": "#!/bin/bash\n# porte-occupation-moteur.sh — le moteur annonce-t-il l'occupation, et COLLE-T-ELLE au fichier ?\n#\n# POURQUOI CETTE PORTE. Jusqu'au 11/10, le moteur ne savait dire qu'une chose du coût : les\n# **paires noyau** (`n_in × n_out`), qui mesurent le travail d'un noyau **dense* … [4859 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-occupation-moteur.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash -n tools/porte-occupation-moteur.sh && echo \"syntaxe OK\" && timeout 1200 bash tools/porte-occupation-moteur.sh 2>&1 | tail -10; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the engine occupancy gate", "timeoutMs": 1200 … [4 caractères tronqués]`
+
+  ```
+syntaxe OK
+  dense : moteur 89.2 % · outil 89.2 % · estimation creuse ÷1.10
+  elague : moteur 26.0 % · outil 26.0 % · estimation creuse ÷3.77
+
+=== les verrous ===
+  ✅ dense : le moteur et l'outil donnent la même occupation (écart 0.0 point)
+  ✅ elague : le moteur et l'outil donnent la même occupation (écart 0.0 point)
+  ✅ l'estimation SÉPARE : ÷3.77 pour le modèle élagué contre ÷1.10 au dense
+
+✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+   l'outil indépendant, et son estimation creuse sépare un modèle élagué d'un modèle dense.
+CODE=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Interrupteur pour un rouge qui montre une occupation FAUSSE (pas une ligne absente)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - drave-core/src/model.rs <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"\"\"        for t in &self.g.tensors {\n            let n: u64 = t.dims.iter().product();\n            if t.d … [1120 caractères tronqués]`
+
+  ```
+interrupteur posé
+--- rouge ---
+=== les verrous ===
+  ❌ dense : moteur 99.3 % contre outil 89.2 % — deux lectures du
+     même fichier ne disent pas la même chose
+  ✅ elague : le moteur et l'outil donnent la même occupation (écart 1.0 point)
+  ❌ l'estimation ne sépare pas l'élagué du dense (÷1.17 contre ÷1.00) :
+     un compteur qui rend le même chiffre ne mesure rien
+
+❌ porte occupation du moteur : ÉCHEC
+CODE=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la seconde moitié de M9 (le moteur voit l'occupation) et de sa porte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-m9b.txt <<'MSGEOF'\nM9, seconde moitie LIVREE : le moteur annonce l'occupation des poids, et ce qu'un format creux lirait\n\nCE QUI MANQUAIT. Le moteur ne savait dire qu'une chose du cout : les PAIRES NOYAU (`n_in  … [2011 caractères tronqués]`

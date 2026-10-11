@@ -7711,6 +7711,39 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
              pa[0] as f64 / n as f64 / 1e6, pa[1] as f64 / n as f64 / 1e6,
              pa[2] as f64 / n as f64 / 1e6, scores as f64 / n as f64 / 1e3,
              pt as f64 / n as f64 / 1e6);
+    // OCCUPATION DES POIDS — LA COLONNE QUI MANQUAIT (manque M9). La ligne ci-dessus mesure le
+    // travail d'un noyau DENSE : `n_in × n_out`, que les poids soient nuls ou pas. Ce qui suit dit
+    // ce qui est STOCKÉ, et ce qu'un format creux lirait — sous une hypothèse écrite à l'écran.
+    {
+        let occ = mdl.occupation_poids();
+        let (na, ta, ua) = occ[0];
+        let (ne, te, ue) = occ[1];
+        let (np, tp, _) = occ[2];
+        let (nnz, tot) = (na + ne + np, ta + te + tp);
+        if tot > 0 {
+            let dens = nnz as f64 / tot as f64;
+            // L'ESTIMATION NE PORTE QUE SUR LES PROJECTIONS : les paires `k` sont, dans
+            // l'ordre, celles de l'attention et celles des experts — la table d'entrée et la tête
+            // ne sont pas dans la ligne de paires, et les inclure dans l'occupation fausserait le
+            // rapport.
+            let po: f64 = pa.iter().enumerate()
+                .map(|(k, v)| {
+                    let (n, t, _) = occ[k.min(2)];
+                    if t == 0 { *v as f64 } else { *v as f64 * (n as f64 / t as f64) }
+                }).sum();
+            println!("    occupation des poids : {:.1} % de non-nuls ({} sur {}) — attention {:.1} % · experts {:.1} %",
+                     100.0 * dens, nnz, tot,
+                     100.0 * if ta > 0 { na as f64 / ta as f64 } else { 0.0 },
+                     100.0 * if te > 0 { ne as f64 / te as f64 } else { 0.0 });
+            println!("    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : {:.1} M paires par token au lieu de {:.1} M (÷{:.2})",
+                     po / n as f64 / 1e6, pa.iter().sum::<u64>() as f64 / n as f64 / 1e6,
+                     if po > 0.0 { pa.iter().sum::<u64>() as f64 / po } else { 1.0 });
+            if ue > 0 {
+                println!("    ⚠ {} poids d'experts NON comptés (format 4 bits sans décodeur d'occupation) : le chiffre est PARTIEL",
+                         ue);
+            }
+        }
+    }
     println!("    dont en listes (une paire y est un événement) : {:.1} M — le reste est dense (déquantifié ou f32)",
              mdl.events_total() as f64 / n as f64 / 1e6);
     if pt > 0 {
