@@ -5,14 +5,14 @@
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-08 09:11 |
-| Durée | 61.9 h |
-| Tours | 91 |
-| Messages | 2898 |
-| Appels d'outils | 2687 |
-| Fichiers touchés | 112 |
-| Commandes | 2270 |
+| Durée | 62.2 h |
+| Tours | 92 |
+| Messages | 2952 |
+| Appels d'outils | 2739 |
+| Fichiers touchés | 113 |
+| Commandes | 2311 |
 | Sous-agents | 3 |
-| Commits | 259 |
+| Commits | 261 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -217,6 +217,8 @@
 **Tour 90** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 **Tour 91** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
+
+**Tour 92** — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 m … [1470 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3739,7 +3741,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ### Tour 91 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*271 appels d'outils.* Actions notables :
+*274 appels d'outils.* Actions notables :
 
 - bash — Capture depth-24 states for the oracle analysis
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/profondeur_routee_oracle.py`
@@ -3755,11 +3757,54 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - bash — Find perplexity computation convention
 - bash — Read perplexity loop convention
 - bash — Locate ppl accumulation
-- … et 223 autres
+- … et 226 autres
 
 **Synthèse produite :**
 
-⏵ Commit du correctif M8, de sa porte et de la fiche E6
+⏵ Point d'étape : dessin H mesuré et M8 corrigé, passe complète en cours
+
+Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
+
+**1. Dessin H (profondeur routée) — la borne est mesurée, et elle est petite**
+- chaîne hors-ligne **vérifiée contre le moteur** (0,013 % et 0,006 %) avant toute mesure ;
+- **accord court/long : 30,93 %** des jetons ⇒ ≈ **10,3 % des paires** au mieux, avec un routeur **parfait** ;
+- **aucun seuil de confiance n'atteint la qualité du chemin long** (47,33 % contre 47,73 %) — résultat négatif ;
+- mais le seuil **sélectionne** (+3,24 pts sur le hasard) et sur les 5 % les plus sûrs l'écart court/long tombe de **24,5 à 7,9 pts** : le facteur limitant est le **chemin court**, pas le routeur.
+- 28e porte `porte-profondeur-routee.sh`, **verte en 9 min 20 s** ; fiche `reports/rapport-design-H-profondeur-routee.md`.
+
+**2. M8 — cause trouvée et corrigée** (bloquait E6 depuis deux jours)
+- la mesure manquante : la **même** perte recalculée à **quatre moments** → elle change à la **matérialisation** (3,6465 → 8,8257) ;
+- cause : `tie_word_embeddings` — `lm_head.weight` **est** `model.embed_tokens.weight` ; reparamétrer la tête **cassait le partage**, la table d'entrée restait figée puis recevait les poids de la tête ;
+- le contrôle qui gardait M8 ouvert était **tautologique** ; le vrai contrôle est **après** le retrait ;
+- **le moteur est innocenté au chiffre près** (export simulé = 7,3429 et 436,5992, exactement ses valeurs) ;
+- E6 redevient mesurable : log-normal **7,5666** contre dense **7,3429** (+3,0 %) — son élagabilité reste à mesurer.
+- 29e porte `porte-sauvegarde-modele.sh`, **verte** et **vue rouge** avec le défaut rallumé (`DRAVE_MAT_SANS_EXCLUSION=1`).
+
+⚠ Passe complète **relancée à 22 h 27** (28 portes) : en cours, 13/28. La carte des sorties 12/16/20/22 se lancera automatiquement ensuite.
+
+### Tour 92 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
+
+*49 appels d'outils.* Actions notables :
+
+- bash — Check suite and sweep status
+- read
+- bash — Find all weight write sites
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py`
+- bash — Route all weight writes through the helper
+- bash — Check the sign-ratio edit consistency
+- bash — Check sign-ratio return and message
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py`
+- bash — Test pruning now reaches parametrized weights
+- bash — Launch E6 pruning experiment
+- bash — Check whether the engine reports pair counts
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md`
+- … et 31 autres
+
+**Synthèse produite :**
+
+⏵ Message de commit abîmé par les accents graves — correction par fichier
 
 ## 3. Travail accompli
 
@@ -3773,7 +3818,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/essai_blocs.py` | 1 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/exporter_gguf.py` | 1 | 19 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte_moteur.py` | 1 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 14 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py` | 1 | 18 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-reparti-moteur.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/numa-segregation.md` | 1 | 3 |
@@ -3832,7 +3877,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-fenetre-puits.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/organisation-du-depot.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/decouper-rapport.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md` | 1 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-fenetre-puits-attention.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/journal_auto.py` | 1 | 0 |
@@ -3873,12 +3918,13 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 | `/tmp/message-commit.txt` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/carte-sortie-profondeur.sh` | 1 | 1 |
 | `/tmp/message-commit2.txt` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_plage_activations.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/m8_simulation_export.py` | 1 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-sauvegarde-modele.sh` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-e6-poids-lognormaux.md` | 1 | 0 |
 | `/tmp/message-m8.txt` | 1 | 0 |
+| `/tmp/message-ecrire.txt` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -3928,7 +3974,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2230 autres
+- … et 2271 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4056,7 +4102,7 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 
 ## 5. Erreurs rencontrées
 
-95 sorties en erreur ou divergentes. Les premières :
+96 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ```  ### 🤖 Assistant  ⏵ **En transformers 5, `AutoModel` rend directement `Qwen2Model` (pas de `.model`). Je corrige le diagnostic.**  - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitH
 - **T2** : 3310393 bash -c pgrep -af "essai_decharge" | grep python | head; echo "--- logs ---"; tail -2 /tmp/ec_d192_lr3e3.log 2>/dev/null; tail -2 /tmp/ec_d192_lr1e3.log 2>/dev/null; echo "---"; ls -la /tmp/ec
@@ -4335,4 +4381,6 @@ Le moteur savait déjà **imposer un état** (`DRAVE_ETAT_ENTREE`, format REFD) 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf '\nDEUX PIEGES DE PLUS dans `REPRISE.md` § 3, tous les deux payes aujourd'"'"'hui : un fichier `.id
 - REPRISE : deux pieges de plus, tous les deux payes aujourd'hui  Un fichier .ids du depot ne dit pas avec quel tokenizer il a ete fait : data/wikitext2_test.txt.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --porcelain | head -12 && git commit -q -F /tmp/message-m8.txt 2>&1 | tail -2; gi
+- Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele  TROISIEME DEFAUT DE LA MEME FAMILLE, apres la mat
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-ecrire.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '4,8p'; g
 

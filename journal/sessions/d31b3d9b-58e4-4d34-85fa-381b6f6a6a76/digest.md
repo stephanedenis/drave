@@ -46577,3 +46577,972 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git status --porcelain | head -12 && git commit -q -F /tmp/message-m8.txt 2>&1 | tail -2; git log --oneline -1", "description": "Commit the M8 fix", "timeoutMs": 600000}`
+
+  ```
+M  REPRISE.md
+M  docs/etat-cerveau.md
+M  docs/manques.md
+A  reports/rapport-e6-poids-lognormaux.md
+M  reports/rapport-m8-log-normal.md
+M  tools/entrainer_moteur.py
+A  tools/m8_plage_activations.py
+A  tools/m8_simulation_export.py
+A  tools/porte-sauvegarde-modele.sh
+1d3898f M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master 2>&1 | tail -2; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-60; date", "descript … [57 caractères tronqués]`
+
+  ```
+push=0
+fatal: Needed a single revision
+--- passe ---
+12
+  porte-horloge          ✅                          24 s    
+sam 10 oct 2026 23:05:25 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse --short HEAD; git rev-parse --short refs/remotes/origin/master; git status -sb | head -1; pgrep -af \"porte-.*\\.sh\" | grep -v pgrep | head -2 | cut -c1-55", "description": "Confirm push and running gate"}`
+
+  ```
+1d3898f
+1d3898f
+## master...origin/master
+3949977 timeout 2400 bash tools/porte-indice.sh
+3949978 bash tools/porte-indice.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ Enchaînement automatique : la carte des sorties se lancera après la passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nuntil grep -q \"^CODE_PASSE=\\|^code \" /tmp/passe-2218.log 2>/dev/null || ! pgrep -f \"toutes-les-portes\" >/dev/null; do sleep 30; done\nsleep 5\necho \"=== passe … [283 caractères tronqués]`
+
+  ```
+enchaînement posé (pid 4001049)
+sam 10 oct 2026 23:05:36 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Point d'étape : dessin H mesuré et M8 corrigé, passe complète en cours
+
+Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
+
+**1. Dessin H (profondeur routée) — la borne est mesurée, et elle est petite**
+- chaîne hors-ligne **vérifiée contre le moteur** (0,013 % et 0,006 %) avant toute mesure ;
+- **accord court/long : 30,93 %** des jetons ⇒ ≈ **10,3 % des paires** au mieux, avec un routeur **parfait** ;
+- **aucun seuil de confiance n'atteint la qualité du chemin long** (47,33 % contre 47,73 %) — résultat négatif ;
+- mais le seuil **sélectionne** (+3,24 pts sur le hasard) et sur les 5 % les plus sûrs l'écart court/long tombe de **24,5 à 7,9 pts** : le facteur limitant est le **chemin court**, pas le routeur.
+- 28e porte `porte-profondeur-routee.sh`, **verte en 9 min 20 s** ; fiche `reports/rapport-design-H-profondeur-routee.md`.
+
+**2. M8 — cause trouvée et corrigée** (bloquait E6 depuis deux jours)
+- la mesure manquante : la **même** perte recalculée à **quatre moments** → elle change à la **matérialisation** (3,6465 → 8,8257) ;
+- cause : `tie_word_embeddings` — `lm_head.weight` **est** `model.embed_tokens.weight` ; reparamétrer la tête **cassait le partage**, la table d'entrée restait figée puis recevait les poids de la tête ;
+- le contrôle qui gardait M8 ouvert était **tautologique** ; le vrai contrôle est **après** le retrait ;
+- **le moteur est innocenté au chiffre près** (export simulé = 7,3429 et 436,5992, exactement ses valeurs) ;
+- E6 redevient mesurable : log-normal **7,5666** contre dense **7,3429** (+3,0 %) — son élagabilité reste à mesurer.
+- 29e porte `porte-sauvegarde-modele.sh`, **verte** et **vue rouge** avec le défaut rallumé (`DRAVE_MAT_SANS_EXCLUSION=1`).
+
+⚠ Passe complète **relancée à 22 h 27** (28 portes) : en cours, 13/28. La carte des sorties 12/16/20/22 se lancera automatiquement ensuite.
+
+
+## Tour 92
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sans s'arrêter à la fin d'une liste de tâches. À chaque round : choisir la capacité ou l'expérience de plus grande valeur parmi (a) les capacités restantes du plan docs/plan-cerveau-complet.md — C3 délais par lien, C4 horloges/asynchronisme, C2 entrées multiples et récurrence, C6 mémoire épisodique, C7 consolidation, C8 périphérie, C9 latéralité, C10 budgets, et la diffusion réseau du bus de C5 ; (b) les expériences E2-E9 de docs/biologie-pour-drave.md et docs/hebbien-differentiel-et-biologie.md ; (c) les dessins de modèle H/I/J de docs/modele-pour-drave.md ; (d) les manques du registre docs/manques.md (noyau de listes pour les experts, noyau de listes GPU, encodeurs) — l'implémenter ou la mesurer, la doter d'une porte vérifiable, la documenter, commiter, pousser, et enchaîner immédiatement sur la suivante. Contraintes : les 23 portes du dépôt et tous les tests restent verts (porte-flux.sh après toute modification du chemin d'exécution), le profil release reste le binaire de mesure, le crate reste std seul, et docs/sprint-cerveau.md reste l'état resumable mis à jour à chaque round. Ne jamais s'arrêter faute de tâches planifiées : en inventer de nouvelles, mesurables, plutôt que d'attendre."
+Round: 49/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Contrôle de la passe complète et de la carte des sorties
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== passe ===\"; grep -cE \"✅\" /tmp/passe-2218.log 2>/dev/null; tail -2 /tmp/passe-2218.log 2>/dev/null | cut -c1-80; echo \"=== carte ===\"; tail -8 /tmp/carte-sortie.log 2>/dev/null; echo \"=== processus ===\"; pgrep  … [137 caractères tronqués]`
+
+  ```
+sam 10 oct 2026 23:05:52 EDT
+=== passe ===
+12
+  porte-greffe           ✅                         831 s    ✅ la porte est franc
+  porte-horloge          ✅                          24 s    ✅ borne atteinte : a
+=== carte ===
+=== processus ===
+3854867 bash tools/toutes-les-portes.sh
+3949977 timeout 2400 bash tools/porte-indice.sh
+3949978 bash tools/porte-indice.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ L'élagage agit-il sur un poids reparamétré ? (même famille de défaut)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 32, "offset": 268}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+268:                 theta = par.original
+269:                 signes = par[0].signes
+270:                 attendu = signes * theta.clamp(-12.0, 6.0).exp()
+271:                 if os.environ.get("DRAVE_MAT_SANS_COPIE") != "1":
+272:                     mod.weight.copy_(attendu)
+273:                 remove_parametrizations(mod, "weight")
+274:                 attendus[nom + ".weight"] = attendu.detach().clone()
+275:                 n += 1
+276:     # LE CONTRÔLE QUI MORD : après le retrait, pas avant.
+277:     ecarts = []
+278:     for nom, p in modele.named_parameters():
+279:         if nom in attendus:
+280:             ecarts.append((float((p.detach() - attendus[nom]).abs().max()), nom))
+281:     ecarts.sort(reverse=True)
+282:     pire = ecarts[0] if ecarts else (0.0, "(aucun)")
+283:     print(f"# matérialisation : {n} couches · écart max APRÈS retrait {pire[0]:.3e} ({pire[1]})")
+284:     if pire[0] > 1e-6:
+285:         print("  ❌ la matérialisation n'écrit PAS la valeur du forward : le modèle sauvé n'est "
+286:               "pas le modèle entraîné (M8)")
+287:     return
+… [729 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 28, "offset": 300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+300:     Ici on l'APPREND au lieu de l'imposer : le modèle s'adapte aux poids qui
+301:     restent. La règle est copiée de `model.rs::prune_rows` — garder les k plus
+302:     grandes magnitudes de chaque ligne — pour que l'entraînement et l'exécution
+303:     parlent du même modèle.
+304:     """
+305:     n = 0
+306:     with torch.no_grad():
+307:         for mod in modele.modules():
+308:             if isinstance(mod, nn.Linear):
+309:                 w = mod.weight
+310:                 k = max(1, int(round(garde * w.shape[1])))
+311:                 idx = w.abs().topk(k, dim=1).indices
+312:                 w.mul_(torch.zeros_like(w).scatter_(1, idx, 1.0))
+313:                 n += 1
+314:     return n
+315: 
+316: 
+317: def installer_masque_inne(modele, garde, graine):
+318:     """Un CONNECTOME INNÉ : masque de connexions tiré UNE fois, puis jamais modifié.
+319: 
+320:     POURQUOI CETTE EXPÉRIENCE (docs/biologie-pour-drave.md, § 4). Le cerveau a un
+321:     plan de câblage largement partagé entre individus, très creux (~10 % de
+322:     probabilité de connexion, ~7 000 syna
+… [550 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de toutes les écritures dans un poids (famille du défaut M8)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"\\.weight\\.\\|mod\\.weight\\|\\.weight =\\|w\\.mul_\\|w\\.copy_\\|\\.data\\.copy_\" tools/entrainer_moteur.py | head -20", "description": "Find all weight write sites"}`
+
+  ```
+167:        partages = noms_par_tenseur.get(id(mod.weight), [])
+173:            w = mod.weight
+178:            mod.parametrizations.weight.original.copy_(theta0)
+206:                w = mod.weight
+216:                w.copy_(w.abs() * signes.view_as(w))
+253:    LE CONTRÔLE ÉTAIT TAUTOLOGIQUE, ET C'EST M8 (trouvé le 10/10). `mod.weight`, sous
+272:                    mod.weight.copy_(attendu)
+309:                w = mod.weight
+312:                w.mul_(torch.zeros_like(w).scatter_(1, idx, 1.0))
+339:            w = mod.weight
+359:            if isinstance(mod, nn.Linear) and nom in masques and mod.weight.grad is not None:
+360:                accum[nom].add_(mod.weight.grad.abs() * (1.0 - masques[nom]))
+393:                mod.weight.mul_(masques[nom])
+641:    # fichier porterait des clés `parametrizations.weight.original` que l'exporteur
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'aide `ecrire_poids` (écrire là où ça compte, et le vérifier)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 30, "offset": 196}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+196:     suggère : **contraindre le RATIO de signes sans figer les magnitudes**. Ici, on redistribue
+197:     les signes à la naissance (sans remise, donc exactement `ratio` de positifs) et
+198:     l'entraînement reste libre — magnitudes, et signes si on ne demande pas de les figer.
+199:     """
+200:     import torch as _torch
+201:     g = _torch.Generator().manual_seed(graine)
+202:     n, total, positifs = 0, 0, 0
+203:     with _torch.no_grad():
+204:         for mod in modele.modules():
+205:             if isinstance(mod, nn.Linear):
+206:                 w = mod.weight
+207:                 k = int(round(ratio * w.numel()))
+208:                 # SUR LE MÊME APPAREIL QUE LE POIDS : un tenseur de signes sur CPU et un poids
+209:                 # sur GPU lèvent une erreur de device (attrapée au premier essai).
+210:                 # Le GÉNÉRATEUR reste sur CPU (seede de façon reproductible quel que soit
+211:                 # l'appareil) et la permutation est DÉPLACÉE : demander un `randperm` sur cuda
+212:                 # avec un générateur cpu lève « Expected a 'cuda
+… [704 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def ecrire_poids(mod, cible, ou=\"?\"):\n    \"\"\"Écrit `cible` dans le poids de `mod`, QUE LE MODULE SOIT REPARAMÉTRÉ OU NON.\n\n    POURQUOI CETTE FONCTION EXISTE. Sous reparamétrisation, `mo … [3008 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - \"$PWD/tools/entrainer_moteur.py\" <<'PYEOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\n# 1. eLagage par lignes\nold = \"\"\"    n = 0\n    with torch.no_grad():\n        for mod in modele.modul … [1744 caractères tronqués]`
+
+  ```
+trois sites d'écriture passés par ecrire_poids
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"non_repr\\|ecrire_poids\" tools/entrainer_moteur.py | head -14; echo \"--- retour de imposer_ratio_signes ---\"; sed -n '255,270p' tools/entrainer_moteur.py", "description": "Check the sign-ratio edit consistency"}`
+
+  ```
+202:    n, total, positifs, non_repr = 0, 0, 0, 0
+216:                a, e = ecrire_poids(mod, w.abs() * signes.view_as(w))
+217:                non_repr += a
+224:def ecrire_poids(mod, cible, ou="?"):
+244:    Retourne `(non_representables, ecart_max)` : le nombre de poids qui n'ont pas pu prendre
+267:def ecrire_poids_partout(modele, fabrique, quoi):
+268:    """Applique `fabrique(mod.weight)` à tous les `nn.Linear`, en passant par `ecrire_poids`.
+272:    n, non_repr, ecart = 0, 0, 0.0
+276:            a, e = ecrire_poids(mod, cible)
+277:            non_repr += a
+281:          + (f" · {non_repr} poids NON représentables (signe figé ou zéro impossible)"
+282:             if non_repr else ""))
+283:    return n, non_repr
+373:    n, _ = ecrire_poids_partout(modele, fabrique, f"élagage à {garde:.0%} gardé")
+--- retour de imposer_ratio_signes ---
+    avec_signe = cible != 0
+    opposes = int(((cible.sign() != signes) & avec_signe).sum())
+    nuls = int((~avec_signe).sum())
+    theta = cible.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+    with torch.no_grad():
+        par.original.copy_(theta)
+    obtenu = mod.weight.detach()
+    ok = avec_signe & (cible.sign() == signes)
+    ecart = float((
+… [332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"return n, positifs\" tools/entrainer_moteur.py; sed -n '218,224p' tools/entrainer_moteur.py", "description": "Check sign-ratio return and message"}`
+
+  ```
+221:    return n, positifs / max(total, 1)
+                n += 1
+                total += w.numel()
+                positifs += int((w > 0).sum().item())
+    return n, positifs / max(total, 1)
+
+
+def ecrire_poids(mod, cible, ou="?"):
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "                n += 1\n                total += w.numel()\n                positifs += int((w > 0).sum().item())\n    if non_repr:\n        print(f\"# RATIO DE SIGNES : {non_repr} poids n'ont P … [440 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "limit": 8, "offset": 216}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py</path>
+<type>file</type>
+<content>
+216:                 a, e = ecrire_poids(mod, w.abs() * signes.view_as(w))
+217:                 non_repr += a
+218:                 n += 1
+219:                 total += w.numel()
+220:                 positifs += int((w > 0).sum().item())
+221:     return n, positifs / max(total, 1)
+222: 
+223: 
+
+(Showing lines 216-223 of 757. Use offset=224 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "                a, e = ecrire_poids(mod, w.abs() * signes.view_as(w))\n                non_repr += a\n                n += 1\n                # RELIRE LE POIDS APRÈS L'ÉCRITURE : sous reparamétr … [951 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\" && P=/home/stephane/gpu-env/bin/python; C=\"--famille route --dim 192 --couches 4 --tetes 4 --cache 768 --experts 8 - … [604 caractères tronqués]`
+
+  ```
+OK
+=== témoin dense, élagage 50 % ===
+# élagage à 50% gardé : 17 couches · écriture effective vérifiée (écart max 0.000e+00)
+# élagage à 50% gardé : 17 couches · écriture effective vérifiée (écart max 0.000e+00)
+  pas    200 · perte 2.3240 · val 3.7050 bits/octet · 13 s
+  # meilleur point : pas 200 · val 3.7050 bits/octet
+=== log-normal, élagage 50 % ===
+# POIDS PARTAGÉS : 1 module(s) EXCLU(S) de la reparamétrisation (sinon le partage casse et le fichier sauvé n'est plus le modèle entraîné) :
+# élagage à 50% gardé : 17 couches · écriture effective vérifiée (écart max 2.980e-08) · 221184 poids NON représentables (signe figé ou zéro impossible)
+# élagage à 50% gardé : 17 couches · écriture effective vérifiée (écart max 2.980e-08) · 221184 poids NON représentables (signe figé ou zéro impossible)
+  pas    200 · perte 2.6201 · val 3.9668 bits/octet · 14 s
+  # meilleur point : pas 200 · val 3.9668 bits/octet
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la mesure E6 : élagage à 50 % et 25 %, deux variants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6c && mkdir -p /tmp/e6c && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [1191 caractères tronqués]`
+
+  ```
+E6 élagage lancé (pid 4001833)
+sam 10 oct 2026 23:08:26 EDT
+12
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; $D /tmp/e6b/dense-modele.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 2>&1 | grep -iE \"paires|poids|lectures\" | head -6", "description": "Check whether the engine reports pair co … [6 caractères tronqués]`
+
+  ```
+attention : 0.00 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Documentation du troisième défaut de la même famille
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md", "new_string": "- **une mesure à un seul moment ne dit pas *où* ça casse** : recalculer la **même** grandeur à\n  chaque étape (avant/après restauration/écriture/relecture) est ce qui a trouvé M8 ;\n- **écrire dans un poids r … [796 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/REPRISE.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md", "new_string": "11. **une mesure à un seul moment ne dit pas *où* ça casse** : recalculer la **même** grandeur à\n    chaque étape (avant/après restauration, matérialisation, relecture) est ce qui a trouvé M8 —\n    … [947 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/etat-cerveau.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/e6c/codes.txt 2>/dev/null; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-55; date", "description": "Check E6 pruning and suite progress"}`
+
+  ```
+--- passe ---
+12
+  porte-horloge          ✅                          24 
+sam 10 oct 2026 23:09:01 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'impact sur les expériences qui utilisent ces chemins
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"entrainer_moteur\" tools/*.sh | head; echo \"=== qui utilise --elagage/--masque/--ratio-signes ===\"; grep -rn \"elagage\\|masque\\|ratio-signes\" tools/*.sh 2>/dev/null | grep -v porte-sauvegarde | head -6", "description … [44 caractères tronqués]`
+
+  ```
+tools/porte-sauvegarde-modele.sh
+=== qui utilise --elagage/--masque/--ratio-signes ===
+tools/porte-budget.sh:85:# faute qu'une porte doit rendre visible, pas masquer.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6c/codes.txt 2>/dev/null; do sleep 30; done; cat /tmp/e6c/codes.txt", "description": "Wait for E6 pruning results", "timeoutMs": 900000}`
+
+  ```
+(no output)
+[timed out after 600000ms]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cat /tmp/e6c/codes.txt 2>/dev/null; echo \"--- en cours ---\"; ls /tmp/e6c/*.log 2>/dev/null | head -5; tail -2 /tmp/e6c/dense-g0.5.log 2>/dev/null; date; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe-2218.log", "description": "Check E6 progress"}`
+
+  ```
+dense-g0.5 entrainement code=0
+# élagage à 98% gardé : 17 couches · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 7.3028 sur
+paires (requête
+lognormal-g0.5 entrainement code=0
+# élagage à 98% gardé : 17 couches · écriture effective vérifiée (écart max 2.980e-08) · 9216 poids NON représentables (signe figé ou zéro impossible)
+perplexité 7.5372 sur
+paires (requête
+dense-g0.25 entrainement code=0
+# élagage à 97% gardé : 17 couches · écriture effective vérifiée (écart max 0.000e+00)
+perplexité 8.6048 sur
+paires (requête
+--- en cours ---
+/tmp/e6c/dense-g0.25.log
+/tmp/e6c/dense-g0.5.log
+/tmp/e6c/export-dense-g0.25.log
+/tmp/e6c/export-dense-g0.5.log
+/tmp/e6c/export-lognormal-g0.5.log
+  # meilleur point : pas 3000 · val 2.3722 bits/octet
+  # écrit dans /tmp/e6c/dense-g0.5 · 7.58 M paramètres · 0.59 M poids lus/jeton/couche
+sam 10 oct 2026 23:19:48 EDT
+--- passe ---
+14
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction correcte de la ligne des paires (le motif coupait à la virgule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && until grep -q TERMINE /tmp/e6c/codes.txt 2>/dev/null; do sleep 20; done; echo \"=== fini ===\"; D=./drave-core/target/release/drave\nprintf '%-22s %-12s %s\\n' \"modèle\" \"perplexité\" \"paires/token\"\nfor N in /tmp/e6b/dense-model … [629 caractères tronqués]`
+
+  ```
+=== fini ===
+modèle                perplexité  paires/token
+dense-modele           7.3429       total 2.3 M
+lognormal-modele       7.5666       total 2.3 M
+dense-g0.5             7.3028       total 2.3 M
+lognormal-g0.5         7.5372       total 2.3 M
+dense-g0.25            8.6048       total 2.3 M
+lognormal-g0.25        7.6685       total 2.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : les paires ne bougent pas — vérification détaillée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave\nfor N in dense-modele dense-g0.5 dense-g0.25; do\n  echo \"--- $N ---\"\n  F=/tmp/e6b/$N.gguf; [ -s \"$F\" ] || F=/tmp/e6c/$N.gguf\n  $D \"$F\" --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --thread … [128 caractères tronqués]`
+
+  ```
+--- dense-modele ---
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+--- dense-g0.5 ---
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+--- dense-g0.25 ---
+    paires (poids × activation) par token : attention 0.4 M · experts 1.8 M · partagé 0.0 M · scores 1 K · total 2.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Les zéros sont-ils vraiment dans les fichiers ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport sys, struct, torch\nsys.path.insert(0, \"tools\")\nfrom lecture_etat import lire_entete, lire_q8_0\n\ndef zeros_gguf(chemin):\n    f, ts, debut = lire_entete(chemin)\n    tot = nul = … [1213 caractères tronqués]`
+
+  ```
+dense-modele.gguf      zéros dans le GGUF :      4051 /    548928 = 0.74 %
+dense-g0.5.gguf        zéros dans le GGUF :    270374 /    548928 = 49.25 %
+dense-g0.25.gguf       zéros dans le GGUF :    405536 /    548928 = 73.88 %
+
+dense                  zéros dans le point de contrôle :         0 /   7575552 = 0.00 %
+dense-g0.5             zéros dans le point de contrôle :    245760 /   7575552 = 3.24 %
+dense-g0.25            zéros dans le point de contrôle :    368640 /   7575552 = 4.87 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Comment le moteur compte-t-il les paires ? (les zéros comptent-ils ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"paires (poids\" -B 20 drave-core/src/model.rs | grep -nE \"paires|pourcent|non_nuls|zeros|densit|compte\" | head -12", "description": "Find pair accounting in engine"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"paires (poids\" drave-core/src/*.rs | head -3; F=$(grep -rln \"paires (poids\" drave-core/src/*.rs | head -1); L=$(grep -n \"paires (poids\" \"$F\" | head -1 | cut -d: -f1); sed -n \"$((L-30)),$((L+4))p\" \"$F\"", "descrip … [37 caractères tronqués]`
+
+  ```
+drave-core/src/main.rs:129:        eprintln!("                                     Affiche les paires (poids × activation) par");
+drave-core/src/main.rs:1622:    println!("paires (poids × activation) : {} au total, {:.1} M par token — attention {:.1} M · experts {:.1} M · partagé {:.1} M",
+drave-core/src/main.rs:7260:    // LA MÉTRIQUE DU PLAN : les paires (poids × activation) par DÉCISION. C'est la seule unité
+        eprintln!("                                     modèle.");
+        eprintln!("       drave <modele> --reflexe-essai N [--ids-file F]");
+        eprintln!("                                     RÉFLEXE (C8) : un modèle TRONQUÉ à L");
+        eprintln!("                                     couches, tête appliquée à la fin de la");
+        eprintln!("                                     plage. Mesure l'accord de sa décision avec");
+        eprintln!("                                     celle du modèle entier, par profondeur :");
+        eprintln!("                                     combien de couches pour qu'un réflexe");
+        eprintln!("                                     tombe d'accord ?");
+        eprintln!("       drave <modele> --episodique-essai N [--episodi
+… [2568 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n 'println!(\"paires (poids × activation) : {} au total' drave-core/src/main.rs | cut -d: -f1); sed -n \"$((L-25)),$((L+3))p\" drave-core/src/main.rs", "description": "Read the pair total computation"}`
+
+  ```
+};
+        let cb: Option<&mut dyn FnMut(u32)> = if flux { Some(&mut affiche) } else { None };
+        mdl.generate(&ids, n_new, temp, top_p, rep_pen, hist, cb)
+    };
+    if prompt.is_some() {
+        let tk = build_tokenizer(&mdl.g);
+        let mut all: Vec<u32> = ids.clone();
+        all.extend(all_ids_of(&out));
+        println!("--- texte ---");
+        print!("{}", tk.decode(&all));
+        println!("\n--- ids générés : {:?}", &out);
+    } else {
+        println!("tokens générés : {:?}", &out);
+    }
+    println!("\n--- mesure ---");
+    println!("prompt  : {} tokens en {:.3} s  ({:.1} tok/s, TTFT {:.1} ms)",
+             st.n_prompt, st.prompt_s, st.n_prompt as f64 / st.prompt_s,
+             st.prompt_s * 1e3 / st.n_prompt.max(1) as f64);
+    println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
+             st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
+    stats_experts(&mdl);
+    println!("événements : {} au total, {:.1} par token",
+             st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
+    let pa = mdl.paires;
+    let ng = (st.n_prompt + st.n_gen).max(1) as f64;
+    println!("paires (poids × activation) : {} au total, {:.1} M par token — att
+… [249 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"paires\\[0\\]\\|paires\\[1\\]\\|paires\\[2\\]\" drave-core/src/model.rs | head -10", "description": "Find where pairs are accumulated"}`
+
+  ```
+5502:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5515:                                     &mut self.events, &mut self.paires[0], self.act_levels,
+5691:                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+5840:                self.paires[1] += paires_lot;
+7107:                    paires[0] += (nhc * VALEURS_PAR_RANGEE * kv_dim
+7223:                              &mut paires[0], self.dump_couches.as_deref(), l,
+7227:                               &mut paires[0], attn_events);
+7233:                Self::matvec(pool, &lay.wq, &hn, &mut q, events, &mut paires[0], self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+7234:                Self::matvec(pool, &lay.wk, &hn, &mut k, events, &mut paires[0], self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+7235:                Self::matvec(pool, &lay.wv, &hn, &mut v, events, &mut paires[0], self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection : le compteur de paires est-il aveugle aux poids nuls ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5490,5520p' drave-core/src/model.rs", "description": "Read the dense matvec pair counting"}`
+
+  ```
+Self::flux_lot(&mut self.trace, &mut self.flux_force, j0,
+                           0, l, t, &mut xi, &mut sx, h);
+            let t_proj = Instant::now();
+            // 2. q, k, v : un produit matrice-matrice chacun. Trois tampons
+            //    DISTINCTS (un `y` partagé avec un pas par projection mélangeait
+            //    les sorties : mesuré, une perplexité de 1,6 million).
+            let nq = nh * hd;
+            let nk = nkv * hd;
+            for (pj, dst, taille) in [(&lay.wq, &mut qa, nq),
+                                      (&lay.wk, &mut ka, nk),
+                                      (&lay.wv, &mut va, nk)] {
+                if let Some(d8) = pj.d.as_ref() {
+                    self.paires[0] += (d8.n_in as u64) * (d8.n_out as u64) * t as u64;
+                    self.pool.gemm_dense_i8(d8, &xi, t, &sx, &mut yl[..d8.n_out * t]);
+                    for i in 0..t {
+                        for oo in 0..taille {
+                            dst[i * taille + oo] = yl[oo * t + i]
+                                + pj.bias.as_ref().map_or(0.0, |b| b[oo]);
+                        }
+                    }
+                } else {
+                    // Pas de forme dense (
+… [572 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chemin jeton par jeton, lui, compte-t-il les zéros ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn matvec\" -A 30 drave-core/src/model.rs | grep -nE \"paires|nul|zero|valeur|rang|pour chaque|for \" | head -12", "description": "Inspect matvec pair accounting"}`
+
+  ```
+6:1150-        // tampon de travail entier (12 288 valeurs pour la descente d'un expert
+8:1152-        assert!(x.len() >= self.n_in, "expert de type {} : activation de {} valeurs \
+23:1167-            let mut valeurs = vec![0f32; 256];
+24:1168-            for o in o0..o1 {
+26:1170-                for b in 0..nb {
+29:1173-                    crate::list::dequant_grille_dans(t, bloc, &mut valeurs);
+34:2000-    for o in 0..n_out {
+37:2003-        for i in 0..n_in { acc += ligne[i] * x[i]; }
+83:2049-                for (k, o) in (o0..o1).enumerate() {
+86:2052-                    for i in 0..n_in { acc += ligne[i] * x[i]; }
+92:2058-        for p in poignees { let _ = p.join(); }
+97:4593-              paires: &mut u64,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^    fn matvec\\|pub fn matvec\\|fn matvec(\" drave-core/src/model.rs | head; L=$(grep -n \"fn matvec(\" drave-core/src/model.rs | head -1 | cut -d: -f1); sed -n \"$((L)),$((L+45))p\" drave-core/src/model.rs | grep -nE \"pa … [107 caractères tronqués]`
+
+  ```
+1145:    fn matvec_dequant(&self, loc: usize, t: u32, x: &[f32], out: &mut [f32], n_fils: usize) {
+4592:    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+4746:    fn matvec4_ou_iq(pool: &mut Pool, vue: &Vue4, loc: usize, x: &[f32], out: &mut [f32],
+4774:    fn matvec_q4(pool: &mut Pool, m: &crate::list::DenseQ4, x: &[f32], out: &mut [f32],
+2:              paires: &mut u64,
+14:        let n_in = p.q4.as_ref().map(|q| q.n_in)
+15:            .or_else(|| p.d.as_ref().map(|d| d.n_in))
+16:            .or_else(|| p.m.as_ref().map(|m| m.n_in))
+18:        let x = &x[..n_in.min(x.len())];
+28:        if let Some(q) = &p.q4 {
+32:            *paires += (q.n_in as u64) * (q.n_out as u64);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"paires_lot\" drave-core/src/model.rs | head -4; L=$(grep -n \"let paires_lot\" drave-core/src/model.rs | head -1 | cut -d: -f1); sed -n \"$((L-12)),$((L+6))p\" drave-core/src/model.rs", "description": "Find the expert pair  … [12 caractères tronqués]`
+
+  ```
+5774:                let mut paires_lot = 0u64;
+5789:                    paires_lot += (mg.n_in as u64) * (mg.n_out as u64) * g as u64;
+5799:                    paires_lot += (mu.n_in as u64) * (mu.n_out as u64) * g as u64;
+5830:                    paires_lot += (md.n_in as u64) * (md.n_out as u64) * g as u64;
+[stderr]
+sed: invalid option -- '1'
+Usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+      --debug
+                 annotate program execution
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+  --follow-symlinks
+                 follow symlinks when processing in place
+  -i[SUFFIX], --in-place[=SUFFIX]
+                 edit files in place (makes backup if SUFFIX supplied)
+  -l N, --line-length=N
+                 specify the desired line-wrap length for the 'l' command
+  --posix
+                 disable all GNU extensions.
+  -E, -r, --regexp-extended
+                 use extended regular expressions in the s
+… [958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5765,5800p' drave-core/src/model.rs", "description": "Read expert pair accounting context"}`
+
+  ```
+// résultat — seule l'allocation disparaît.
+                let mut yd = vec![0f32; t * nff.max(h)];
+                // Les paires du chemin par LOTS : `gemm_dense_q4` ne tient pas
+                // de compteur (le pool ne connaît pas le modèle), et le chemin
+                // jeton, lui, passe par `matvec4_ou_iq` qui en tient un. Sans
+                // cette ligne, « paires experts » tombait à ~1 % de sa valeur
+                // dès `--lot 2` : le compteur ne voyait plus que les jetons de
+                // génération, et un chiffre qui chute de 97 % sans raison
+                // visible fait croire à une optimisation qui n'existe pas.
+                let mut paires_lot = 0u64;
+                for e in 0..ne {
+                    let g = groupes[e].len();
+                    if g == 0 { continue; }
+                    // L'expert global `e` peut ne pas être dans ce nœud.
+                    let Some((k, loc)) = moe.ou(e) else { continue; };
+                    for (j, &(i, _)) in groupes[e].iter().enumerate() {
+                        xg[j * h..(j + 1) * h].copy_from_slice(&x16[i * h..(i + 1) * h]);
+                    }
+                    s32g.clear();
+                    s
+… [999 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test décisif : le compteur voit-il un élagage fait par le MOTEUR (`--keep`) ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; for K in \"\" \"--keep 0.5\" \"--keep 0.25\"; do\n  printf '%-14s ' \"${K:-sans élagage}\"\n  $D /tmp/e6b/dense-modele.gguf --ppl /tmp/e6/val.ids --limit 128 --ctx 128 --threads 4 $K 2>&1 | grep - … [135 caractères tronqués]`
+
+  ```
+sans élagage  perplexité 4.5631 total 2.3 M 
+--keep 0.5     perplexité 5.8198 total 2.3 M 
+--keep 0.25    perplexité 25.2891 total 2.3 M
+  ```
+
+### 🤖 Assistant
+
+⏵ D'où venait le « ÷7,9 » des paires avec élagage ? (provenance de l'instrument)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"7,9\\|7.9\" docs/modele-pour-drave.md | head -5; echo \"=== provenance ===\"; grep -rln \"1 586 M\\|1586\" reports/ docs/ 2>/dev/null | head -4", "description": "Trace the origin of the pair-reduction claim"}`
+
+  ```
+92:- **Mesuré** : à 25 % gardés, perplexité **5,1719 contre 10,8758** au témoin à taux
+112:→ 101 M de paires, soit **÷7,9** pour la combinaison 50 %/25 %. 2) À 50 % de poids
+121:| `kwta025` seul | 6,4282 · 335,3 M | 5,8131 · 168,3 M | 5,1719 · 84,2 M |
+309:÷2 (poids, et ils se multiplient : **÷7,9 mesuré**), et un facteur de lecture qui
+=== provenance ===
+docs/biologie-pour-drave.md
+docs/modele-pour-drave.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,125p' docs/modele-pour-drave.md", "description": "Read the pair-reduction measurement context"}`
+
+  ```
+Le chemin par listes compte les **non-nuls par ligne** : élaguer les poids réduit
+les paires *sans toucher aux activations*. Mesuré sur `m8_d512_kwta25` (128 jetons,
+`DRAVE_SANS_EMPRUNT=1` pour comparer la même arithmétique) :
+
+| poids gardés (par ligne) | activations | perplexité | **paires (événements)** |
+|---|---:|---:|---:|
+| 100 % | 100 % | 4,2831 | 1 585 574 447 |
+| 100 % | 25 % | **3,9152** | 398 967 618 |
+| **50 %** | **25 %** | **3,9139** | **201 308 279** |
+| 25 % | 25 % | 13,0141 | 100 757 395 |
+
+**Deux résultats.** 1) Les deux leviers **se multiplient** : 1 586 M → 399 M → 201 M
+→ 101 M de paires, soit **÷7,9** pour la combinaison 50 %/25 %. 2) À 50 % de poids
+gardés, **la perplexité ne bouge pas** (3,9139 contre 3,9152) — l'élagage imposé
+coûte zéro à ce taux. À 25 % il s'effondre (+232 %) : la limite est entre les deux.
+
+**ET C'EST APPRIS, MAINTENANT — mesuré le 9/10 à 11 h 32.** `m11_d384_kwta25_elag50`
+= `kwta025` (activations à 25 %, apprises) **+ élagage appris à 50 %** des poids :
+
+| dim 384 | aucune parcimonie | 50 % act. | **25 % act.** |
+|---|---|---|---|
+| `kwta025` seul | 6,4282 · 335,3 M | 5,8131 · 168,3 M | 5,1719 · 84,2 M |
+| **+ poids élagués appris** |
+… [227 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : l'élagage ne couvre que 7,2 % des poids — inspection des experts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport torch\nfrom safetensors.torch import load_file\nimport collections\nd = load_file(\"/tmp/e6b/dense/model.safetensors\")\nlin = 0; autres = collections.Counter(); ta = 0\nfor k, v in  … [545 caractères tronqués]`
+
+  ```
+poids 2D « linéaires » : 7,575,552
+autres poids :
+  (192,) → 1,728
+  (48,) → 384
+  total autres : 2,112
+
+  model.layers.0.mlp.experts.0.down_proj.weight : (192, 384) en torch.float32
+  model.layers.0.mlp.experts.0.gate_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.0.up_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.1.down_proj.weight : (192, 384) en torch.float32
+  model.layers.0.mlp.experts.1.gate_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.1.up_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.2.down_proj.weight : (192, 384) en torch.float32
+  model.layers.0.mlp.experts.2.gate_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.2.up_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.3.down_proj.weight : (192, 384) en torch.float32
+  model.layers.0.mlp.experts.3.gate_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.3.up_proj.weight : (384, 192) en torch.float32
+  model.layers.0.mlp.experts.4.down_proj.weight : (192, 384) en torch.float32
+  model.layers.0.mlp.experts.4.gate_proj.weight : (384, 192) en torch.float32
+  model.lay
+… [6328 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comment les experts apparaissent-ils dans le modèle vivant ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport torch, torch.nn as nn\nfrom transformers import AutoModelForCausalLM\nm = AutoModelForCausalLM.from_pretrained(\"/tmp/e6b/dense\", dtype=torch.float32)\nnoms = [n for n, _ in m.named … [606 caractères tronqués]`
+
+  ```
+paramètres contenant 'expert' : 46
+   model.embed_tokens.weight
+   model.layers.0.self_attn.q_proj.weight
+   model.layers.0.self_attn.k_proj.weight
+   model.layers.0.self_attn.v_proj.weight
+   model.layers.0.self_attn.o_proj.weight
+   model.layers.0.self_attn.q_norm.weight
+modules contenant 'expert' :
+   model.layers.0.mlp.experts → Qwen3MoeExperts
+   model.layers.1.mlp.experts → Qwen3MoeExperts
+   model.layers.2.mlp.experts → Qwen3MoeExperts
+   model.layers.3.mlp.experts → Qwen3MoeExperts
+
+tenseurs 2D : 21
+  3 premiers : [('model.embed_tokens.weight', (256, 192)), ('model.layers.0.self_attn.q_proj.weight', (192, 192)), ('model.layers.0.self_attn.k_proj.weight', (96, 192))]
+  poids 2D total : 7,575,552
+[stderr]
+Loading weights:   0%|          | 0/46 [00:00<?, ?it/s]Loading weights: 100%|██████████| 46/46 [00:00<00:00, 1565.13it/s]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY' 2>/dev/null\nimport torch, torch.nn as nn\nfrom transformers import AutoModelForCausalLM\nm = AutoModelForCausalLM.from_pretrained(\"/tmp/e6b/dense\", dtype=torch.float32)\ntot_lin = tot_exp … [475 caractères tronqués]`
+
+  ```
+autre     model.embed_tokens.weight                     (256, 192)
+  LINEAIRE  model.layers.0.self_attn.q_proj.weight        (192, 192)
+  LINEAIRE  model.layers.0.self_attn.k_proj.weight        (96, 192)
+  LINEAIRE  model.layers.0.self_attn.v_proj.weight        (96, 192)
+  LINEAIRE  model.layers.0.self_attn.o_proj.weight        (192, 192)
+  autre     model.layers.0.mlp.experts.gate_up_proj       (8, 768, 192)
+  autre     model.layers.0.mlp.experts.down_proj          (8, 192, 384)
+  autre     model.layers.0.mlp.gate.weight                (8, 192)
+  LINEAIRE  model.layers.1.self_attn.q_proj.weight        (192, 192)
+  LINEAIRE  model.layers.1.self_attn.k_proj.weight        (96, 192)
+  LINEAIRE  model.layers.1.self_attn.v_proj.weight        (96, 192)
+  LINEAIRE  model.layers.1.self_attn.o_proj.weight        (192, 192)
+  autre     model.layers.1.mlp.experts.gate_up_proj       (8, 768, 192)
+  autre     model.layers.1.mlp.experts.down_proj          (8, 192, 384)
+  autre     model.layers.1.mlp.gate.weight                (8, 192)
+  LINEAIRE  model.layers.2.self_attn.q_proj.weight        (192, 192)
+  LINEAIRE  model.layers.2.self_attn.k_proj.weight        (96, 192)
+  LINEAIRE  model.layers.2
+… [866 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La règle exacte du moteur (`prune_rows`) pour la copier fidèlement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && L=$(grep -n \"fn prune_rows\" drave-core/src/model.rs | cut -d: -f1); sed -n \"$((L)),$((L+40))p\" drave-core/src/model.rs", "description": "Read engine prune_rows rule"}`
+
+  ```
+fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+    if keep >= 1.0 { return; }
+    let k = ((n_in as f32 * keep) as usize).max(1);
+    let mut abs = vec![0f32; n_in];
+    for o in 0..n_out {
+        let row = &mut w[o * n_in..(o + 1) * n_in];
+        for (i, &v) in row.iter().enumerate() { abs[i] = v.abs(); }
+        // seuil = k-ième plus grande magnitude (sélection en O(n))
+        let (_, &mut seuil, _) = abs.select_nth_unstable_by(n_in - k, |a, b| a.partial_cmp(b).unwrap());
+        for v in row.iter_mut() { if v.abs() < seuil { *v = 0.0; } }
+    }
+}
+
+/// Élagage **structuré** : pour chaque source (entrée), on ne garde qu'une
+/// fenêtre contiguë de destinations, centrée sur la plus forte. Les listes
+/// d'événements deviennent des suites d'écarts de 1 — c'est la forme que
+/// produiraient des grappes efférentes imposées à l'entraînement.
+fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+    if keep >= 1.0 { return; }
+    let win = ((n_out as f32 * keep) as usize).max(1);
+    for i in 0..n_in {
+        let mut best_o = 0usize;
+        let mut best = 0f32;
+        for o in 0..n_out {
+            let a = w[o * n_in + i].abs();
+       
+… [627 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"prune_rows(\\|prune_structured(\" drave-core/src/model.rs | head; echo \"=== contexte ===\"; L=$(grep -n \"prune_rows(&mut\" drave-core/src/model.rs | head -1 | cut -d: -f1); sed -n \"$((L-18)),$((L+6))p\" drave-core/src/mo … [63 caractères tronqués]`
+
+  ```
+1428:fn prune_rows(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+1445:fn prune_structured(w: &mut [f32], n_out: usize, n_in: usize, keep: f32) {
+1489:        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+1490:        else { prune_rows(&mut w, n_out, n_in, keep); }
+=== contexte ===
+        DenseQ8::build(w, n_out, n_in)
+    }
+}
+
+impl Proj {
+    /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
+    /// dense, et le moteur ne doit pas le chercher.
+    pub fn vide() -> Self {
+        Proj { gpu: None, m: None, d: None, q4: None, bias: None }
+    }
+
+    fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
+            q4: bool, bits6: bool) -> Self {
+        let t = g.tensor(name).unwrap_or_else(|| panic!("tenseur {name} absent"));
+        let n_out = t.dims[0] as usize;
+        let n_in = t.dims[1] as usize;
+        let mut w = g.dequant(name);
+        if keep < 0.0 { prune_structured(&mut w, n_out, n_in, -keep); }
+        else { prune_rows(&mut w, n_out, n_in, keep); }
+        // `auto` charge les DEUX formes : le moteur choisit ensuite, par mesure
+        // de la densité d'activation, entre dispersion 
+… [318 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction : élaguer TOUS les tenseurs de projection, et dire la couverture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅\" /tmp/passe-2218.log; tail -1 /tmp/passe-2218.log | cut -c1-60; echo \"--- carte ---\"; tail -3 /tmp/carte-sortie.log 2>/dev/null; date", "description": "Check suite and sweep status"}`
+
+  ```
+14
+  porte-jumeaux          ✅                          76 s  PO
+--- carte ---
+sam 10 oct 2026 23:24:00 EDT
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py", "new_string": "def table_parametrisations(modele):\n    \"\"\"{nom du paramètre : objet de reparamétrisation} — pour écrire au BON endroit.\n\n    Seuls les `nn.Linear` peuvent être reparamétrés, mais leurs po … [5519 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_moteur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -c \"import ast;ast.parse(open('tools/entrainer_moteur.py').read());print('OK')\" && grep -n \"ecrire_poids_partout\\|mod.weight.mul_(masques\" tools/entrainer_moteur.py", "description": "Validate sy … [33 caractères tronqués]`
+
+  ```
+OK
+275:def ecrire_poids_partout(modele, fabrique, quoi):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"masques\\[nom\\]\" tools/entrainer_moteur.py | head -4; L=$(grep -n \"masques\\[nom\\]\" tools/entrainer_moteur.py | tail -1 | cut -d: -f1); sed -n \"$((L-14)),$((L+4))p\" tools/entrainer_moteur.py", "description": "Inspect … [28 caractères tronqués]`
+
+  ```
+478:            masques[nom] = torch.zeros_like(w).scatter_(1, idx.to(w.device), 1.0)
+494:                accum[nom].add_(mod.weight.grad.abs() * (1.0 - masques[nom]))
+508:            absent = (masques[nom] == 0)
+516:            masques[nom].view(-1)[idx] = 1.0
+            scores = accum[nom].clone()
+            scores[~absent] = -1.0                       # on ne « regrandit » pas l'existant
+            idx = torch.topk(scores.view(-1), k).indices
+            masques[nom].view(-1)[idx] = 1.0
+            accum[nom].zero_()
+            ajoutees += k
+    return ajoutees
+
+
+def appliquer_masque(modele, masques):
+    """Le masque est réappliqué après CHAQUE pas : une connexion absente le reste."""
+    with torch.no_grad():
+        for nom, mod in modele.named_modules():
+            if isinstance(mod, nn.Linear) and nom in masques:
+                ecrire_poids(mod, mod.weight.detach() * masques[nom])
+
+
+def main():
+    p = argparse.ArgumentParser()
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance d'E6 avec l'élagage corrigé (tous les tenseurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/e6d && mkdir -p /tmp/e6d && nohup bash -c '\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/home/stephane/gpu-env/bin/python; D=./drave-core/target/release/drave\nC=\"--famille route --dim 192 --couches 4 --tetes  … [1003 caractères tronqués]`
+
+  ```
+E6 corrigé lancé (pid 4043773)
+sam 10 oct 2026 23:24:31 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add -A && git commit -q -m \"Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele\n\nTROISIEME DEFAUT DE LA MEME FAMILLE, apres la materialisation et le partage des poids ( … [1446 caractères tronqués]`
+
+  ```
+bdcc15c Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele
+[stderr]
+bash: line 1: mod.weight: command not found
+bash: command substitution: line 1: syntax error near unexpected token `...'
+bash: command substitution: line 1: `mod.weight.mul_(...)'
+bash: command substitution: line 1: syntax error near unexpected token `...'
+bash: command substitution: line 1: `.copy_(...)'
+bash: line 1: ecrire_poids: command not found
+bash: line 1: ecrire_poids_nomme: command not found
+bash: line 1: elaguer_lignes: command not found
+bash: line 1: nn.Linear: command not found
+bash: command substitution: line 1: syntax error near unexpected token `|'
+bash: command substitution: line 1: `|w| = e^theta >= e^-12 = 6,1e-6'
+  ```
+
+### 🤖 Assistant
+
+⏵ Message de commit abîmé par les accents graves — correction par fichier
+
+- **write** `{"content": "Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele\n\nTROISIEME DEFAUT DE LA MEME FAMILLE, apres la materialisation et le partage des poids (M8).\nSous reparametrisation, `mod.weight` est une valeur CALCULEE : `mod.weight.mul_(. … [1195 caractères tronqués]`
+
+  ```
+<path>/tmp/message-ecrire.txt</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q --amend -F /tmp/message-ecrire.txt 2>&1 | tail -2; git log -1 --format=%B | sed -n '4,8p'; git push -q origin master; echo \"push=$?\"; git rev-parse --short HEAD refs/remotes/origin/master 2>/dev/null | tail -2", "desc … [66 caractères tronqués]`

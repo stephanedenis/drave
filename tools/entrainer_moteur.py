@@ -199,7 +199,7 @@ def imposer_ratio_signes(modele, ratio, graine=0):
     """
     import torch as _torch
     g = _torch.Generator().manual_seed(graine)
-    n, total, positifs = 0, 0, 0
+    n, total, positifs, non_repr = 0, 0, 0, 0
     with _torch.no_grad():
         for mod in modele.modules():
             if isinstance(mod, nn.Linear):
@@ -213,11 +213,82 @@ def imposer_ratio_signes(modele, ratio, graine=0):
                 perm = _torch.randperm(w.numel(), generator=g).to(w.device)
                 signes = _torch.full((w.numel(),), -1.0, device=w.device)
                 signes[perm[:k]] = 1.0
-                w.copy_(w.abs() * signes.view_as(w))
+                a, e = ecrire_poids(mod, w.abs() * signes.view_as(w))
+                non_repr += a
                 n += 1
-                total += w.numel()
-                positifs += int((w > 0).sum().item())
+                # RELIRE LE POIDS APRÈS L'ÉCRITURE : sous reparamétrisation, `w` est un tenseur
+                # calculé qui ne change pas — compter les positifs dessus compterait l'ANCIEN
+                # ratio, et le chiffre affiché décrirait un modèle qui n'existe plus.
+                apres = mod.weight.detach()
+                total += apres.numel()
+                positifs += int((apres > 0).sum().item())
+    if non_repr:
+        print(f"# RATIO DE SIGNES : {non_repr} poids n'ont PAS pu changer de signe — sous une "
+              f"reparamétrisation log-normale le signe est FIGÉ (principe de Dale), donc le ratio "
+              f"obtenu n'est pas celui qui était demandé.")
     return n, positifs / max(total, 1)
+
+
+def ecrire_poids(mod, cible, ou="?"):
+    """Écrit `cible` dans le poids de `mod`, QUE LE MODULE SOIT REPARAMÉTRÉ OU NON.
+
+    POURQUOI CETTE FONCTION EXISTE. Sous reparamétrisation, `mod.weight` est une valeur
+    **calculée** : `mod.weight.mul_(...)` ou `.copy_(...)` écrivent dans un tenseur temporaire et
+    **ne changent rien** — en silence. C'est la famille de défauts de M8 (la matérialisation et le
+    partage des poids), elle a coûté deux jours, et `--elagage` la reproduisait : élaguer un
+    modèle log-normal ne faisait **rien**, sans le dire.
+
+    LE CAS SANS ZÉRO, ET IL COMPTE POUR E6. Sous `w = signe · e^θ`, un poids ne peut pas être
+    exactement **nul** : le mieux est θ = −12, soit 6,1e-6. Un élagage ne peut donc pas annuler un
+    poids avant l'export — c'est la quantification Q8_0 qui l'arrondira à zéro dans son bloc (le
+    pas d'un bloc vaut max/127 ; à 0,1 de maximum, le pas est 7,9e-4, et 6,1e-6 y tombe à zéro).
+    Le nombre de poids dans ce cas est **retourné**, pour être écrit noir sur blanc plutôt que
+    supposé.
+
+    LE SIGNE NE CHANGE PAS (principe de Dale) : une cible de signe opposé au buffer `signes` ne
+    peut pas être représentée. On les compte et on le dit — c'est une limite du variant, pas un
+    détail d'implémentation.
+
+    Retourne `(non_representables, ecart_max)` : le nombre de poids qui n'ont pas pu prendre
+    exactement la valeur demandée, et l'écart maximum sur les AUTRES.
+    """
+    par = (mod.parametrizations.weight
+           if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight") else None)
+    cible = cible.detach()
+    if par is None:
+        with torch.no_grad():
+            mod.weight.copy_(cible)
+        return 0, float((mod.weight.detach() - cible).abs().max())
+    signes = par[0].signes
+    avec_signe = cible != 0
+    opposes = int(((cible.sign() != signes) & avec_signe).sum())
+    nuls = int((~avec_signe).sum())
+    theta = cible.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+    with torch.no_grad():
+        par.original.copy_(theta)
+    obtenu = mod.weight.detach()
+    ok = avec_signe & (cible.sign() == signes)
+    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
+    return nuls + opposes, ecart
+
+
+def ecrire_poids_partout(modele, fabrique, quoi):
+    """Applique `fabrique(mod.weight)` à tous les `nn.Linear`, en passant par `ecrire_poids`.
+
+    `quoi` sert au message : une écriture sans effet doit être **nommée**, jamais silencieuse.
+    """
+    n, non_repr, ecart = 0, 0, 0.0
+    for mod in modele.modules():
+        if isinstance(mod, nn.Linear):
+            cible = fabrique(mod.weight.detach())
+            a, e = ecrire_poids(mod, cible)
+            non_repr += a
+            ecart = max(ecart, e)
+            n += 1
+    print(f"# {quoi} : {n} couches · écriture effective vérifiée (écart max {ecart:.3e})"
+          + (f" · {non_repr} poids NON représentables (signe figé ou zéro impossible)"
+             if non_repr else ""))
+    return n, non_repr
 
 
 def perte_de_validation(modele, val, a, dev):
@@ -287,8 +358,43 @@ def materialiser_poids(modele):
     return n
 
 
+def table_parametrisations(modele):
+    """{nom du paramètre : objet de reparamétrisation} — pour écrire au BON endroit.
+
+    Seuls les `nn.Linear` peuvent être reparamétrés, mais leurs poids ne sont pas les seuls
+    tenseurs du modèle : les experts fusionnés (`gate_up_proj`, `down_proj`) sont des tenseurs
+    ordinaires, et c'est là que vit 83 % du modèle.
+    """
+    t = {}
+    for nom, mod in modele.named_modules():
+        if hasattr(mod, "parametrizations") and hasattr(mod.parametrizations, "weight"):
+            t[f"{nom}.weight"] = mod.parametrizations.weight
+    return t
+
+
+def ecrire_poids_nomme(params, par_table, nom, cible, ou="?"):
+    """Écrit `cible` dans le paramètre `nom`, reparamétré ou non. Voir `ecrire_poids`."""
+    cible = cible.detach()
+    par = par_table.get(nom)
+    if par is None:
+        with torch.no_grad():
+            params[nom].copy_(cible)
+        return 0, float((params[nom].detach() - cible).abs().max())
+    signes = par[0].signes
+    avec_signe = cible != 0
+    opposes = int(((cible.sign() != signes) & avec_signe).sum())
+    nuls = int((~avec_signe).sum())
+    theta = cible.abs().clamp(min=1e-6).log().clamp(-12.0, 6.0)
+    with torch.no_grad():
+        par.original.copy_(theta)
+    obtenu = params[nom].detach()
+    ok = avec_signe & (cible.sign() == signes)
+    ecart = float((obtenu[ok] - cible[ok]).abs().max()) if ok.any() else 0.0
+    return nuls + opposes, ecart
+
+
 def elaguer_lignes(modele, garde):
-    """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `--keep`.
+    """Élagage par MAGNITUDE, par LIGNE de sortie — la règle exacte de `model.rs::prune_rows`.
 
     POURQUOI LES DEUX AXES. Le coût de Drave est un nombre de PAIRES (poids non nul
     × activation vivante) : la sparsité d'activation divise ce nombre, la sparsité
@@ -301,16 +407,44 @@ def elaguer_lignes(modele, garde):
     restent. La règle est copiée de `model.rs::prune_rows` — garder les k plus
     grandes magnitudes de chaque ligne — pour que l'entraînement et l'exécution
     parlent du même modèle.
+
+    CE QUI ÉTAIT ÉLAGUÉ, ET CE QUI NE L'ÉTAIT PAS (trouvé le 10/10). Cette fonction ne parcourait
+    que les `nn.Linear` : **442 368 poids sur 7 575 552, soit 5,8 % du modèle**. Les experts
+    fusionnés de `Qwen3MoeExperts` (`gate_up_proj` (E, 2·ff, d), `down_proj` (E, d, ff)) — 83 %
+    des poids, et 1,8 M des 2,3 M de paires — n'étaient **jamais** élagués, et rien ne le disait.
+    Le moteur, lui, élague **toutes** les projections (`Proj::load` → `prune_rows` sur chaque
+    tenseur de matrice). On applique donc la même règle à **tout tenseur ≥ 2D sauf la table
+    d'entrée** (que le moteur ne taille pas : c'est une table de recherche, pas une matrice), et
+    on **annonce la couverture** — un élagage partiel tu, c'est un résultat faux.
     """
-    n = 0
-    with torch.no_grad():
-        for mod in modele.modules():
-            if isinstance(mod, nn.Linear):
-                w = mod.weight
-                k = max(1, int(round(garde * w.shape[1])))
-                idx = w.abs().topk(k, dim=1).indices
-                w.mul_(torch.zeros_like(w).scatter_(1, idx, 1.0))
-                n += 1
+    n_in_dernier = lambda w: w.shape[-1]          # noqa: E731 — la ligne est le dernier axe
+    params = dict(modele.named_parameters())
+    par_table = table_parametrisations(modele)
+    n, touches, non_repr, ecart = 0, 0, 0, 0.0
+    total = 0
+    for nom, p in params.items():
+        if p.dim() < 2:
+            continue
+        if "embed_tokens" in nom:
+            continue          # une table de recherche, pas une matrice : le moteur ne la taille pas
+        total += p.numel()
+        with torch.no_grad():
+            w = p.detach()
+            n_in = n_in_dernier(w)
+            k = max(1, int(round(garde * n_in)))
+            plat = w.reshape(-1, n_in)
+            idx = plat.abs().topk(k, dim=1).indices
+            cible = (plat * torch.zeros_like(plat).scatter_(1, idx, 1.0)).reshape(w.shape)
+        a, e = ecrire_poids_nomme(params, par_table, nom, cible)
+        non_repr += a
+        ecart = max(ecart, e)
+        touches += p.numel()
+        n += 1
+    print(f"# élagage à {garde:.0%} gardé : {n} tenseurs · {touches:,} poids sur {total:,} "
+          f"({100 * touches / max(total, 1):.1f} % des poids de projection) · écriture effective "
+          f"vérifiée (écart max {ecart:.3e})"
+          + (f" · {non_repr:,} poids NON représentables (signe figé ou zéro impossible)"
+             if non_repr else ""))
     return n
 
 
@@ -390,7 +524,7 @@ def appliquer_masque(modele, masques):
     with torch.no_grad():
         for nom, mod in modele.named_modules():
             if isinstance(mod, nn.Linear) and nom in masques:
-                mod.weight.mul_(masques[nom])
+                ecrire_poids(mod, mod.weight.detach() * masques[nom])
 
 
 def main():

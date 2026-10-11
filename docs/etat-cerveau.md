@@ -217,4 +217,10 @@ la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `too
     10/10 ; `named_parameters(remove_duplicate=False)` révèle les partages) ;
 11. **une mesure à un seul moment ne dit pas *où* ça casse** : recalculer la **même** grandeur à
     chaque étape (avant/après restauration, matérialisation, relecture) est ce qui a trouvé M8 —
-    et c'est ce que la porte `tools/porte-sauvegarde-modele.sh` verrouille désormais.
+    et c'est ce que la porte `tools/porte-sauvegarde-modele.sh` verrouille désormais ;
+12. **écrire dans un poids reparamétré n'écrit RIEN** : `mod.weight` est une valeur *calculée*, donc
+    `mul_`/`copy_` remplissent un temporaire — en silence. Trois sites du harnais le faisaient
+    (élagage, masque, ratio de signes) : tout passe par `ecrire_poids`, qui écrit dans le
+    **paramètre** et **vérifie** l'effet. Corollaire : **un poids log-normal ne peut pas être nul**
+    (`e^−12 = 6,1e-6`), donc l'élagage n'y fait zéro qu'à la quantification — le harnais **compte**
+    ces poids (221 184 à 50 %) au lieu de laisser croire le contraire.

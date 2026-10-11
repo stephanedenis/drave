@@ -61,7 +61,14 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
   (l'autre reste figé à sa valeur initiale, et l'écriture suivante écrase le mauvais). Exclure les
   poids **partagés** — `named_parameters(remove_duplicate=False)` les révèle ;
 - **une mesure à un seul moment ne dit pas *où* ça casse** : recalculer la **même** grandeur à
-  chaque étape (avant/après restauration/écriture/relecture) est ce qui a trouvé M8.
+  chaque étape (avant/après restauration/écriture/relecture) est ce qui a trouvé M8 ;
+- **écrire dans un poids reparamétré n'écrit RIEN** : `mod.weight` est une valeur *calculée*, donc
+  `mod.weight.mul_(...)` et `.copy_(...)` remplissent un temporaire — en silence. Trois sites du
+  harnais faisaient ça (élagage, masque, ratio de signes) ; tout passe maintenant par
+  `ecrire_poids`, qui écrit dans le **paramètre** et **vérifie** que le poids a bougé ;
+- **un poids log-normal ne peut pas être NUL** (`|w| = e^θ ≥ e^−12 = 6,1e-6`) : un élagage ne
+  l'annule qu'à la **quantification** de l'export. Le harnais **compte** ces poids et les annonce
+  au lieu de laisser croire que l'élagage a fait zéro.
 
 ## 4. Les règles de méthode (le dépôt les applique à lui-même)
 
