@@ -41323,3 +41323,150 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-e2-croissance.md\"); s = p.read_text()\ns = s.replace( … [5245 caractères tronqués]`
+
+  ```
+biologie : statut E2 mis à jour
+état : E2 mis à jour
+journal complété
+poussé
+  porte-greffe           ✅                         784 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          23 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la fin de la passe : C2 récurrence (refusée par le validateur aujourd'hui) — je lis le plan et j'écris la conception
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"C2 —\" -A 18 docs/plan-cerveau-complet.md | head -30", "description": "Read the plan's C2 section"}`
+
+  ```
+58:### C2 — Liens multiples et récurrence
+59-
+60-- **Cerveau** : chaque aire reçoit de plusieurs sources, et les boucles
+61-  cortico-thalamo-corticales dominent.
+62-- **Moteur** : une couche a **une** entrée (le résidu) ; aucune récurrence.
+63-- **Conception** : une région peut déclarer **plusieurs entrées** ; l'agrégation est
+64-  déclarée (somme, concaténation, porte apprise) — et la **récurrence** exige un
+65-  ordonnancement par *pas de temps* : une région peut consommer sa propre sortie du
+66-  pas précédent (état explicite par région).
+67-- **Interface** : `entrees: [{de, mode: "somme"|"concat"|"porte", delai_ms}]` ;
+68-  `recurrent: true` avec état persisté (`--etat <fichier>`).
+69-- **Invariant** : sans délai et sans récurrence, C1 s'applique (0,00e0).
+70-- **Validation** : un cycle à deux régions, comparé à une implémentation de référence
+71-  en une seule passe sur 4 pas de temps.
+72-- **Coût** : 2 semaines après C1. **Risque** : élevé — c'est là qu'on quitte la
+73-  certitude « une passe = un résultat ».
+74-
+75-### C3 — Délais par lien
+76-
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 récurrence : j'implémente la boucle « une région consomme sa propre sortie du pas précédent »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\ns = s.replace('''            \"--recurent\" => { o.recurent = true; 1 }''',\n'''            \"--recurent\" => { o.recurent = true;  … [4418 caractères tronqués]`
+
+  ```
+BUILD
+recurrence 0.0 :   paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+recurrence 0.5 :   paires par pas    : 357.8 M (la métrique du plan : poids × activation par décision)
+  ❌ la récurrence ne change rien
+  --recurrence -1 : code=0 (attendu 2)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 27, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ Mon patch n'a pas été appliqué (ancre ambiguë : `let t0` existe ailleurs) — je reprends avec des ancres uniques
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"drave-core/src/main.rs\"); s = p.read_text()\nn = 0\n\ndef remplace(avant, apres, attente=1):\n    global s, n\n    c = s.count(avant)\n    assert c == attente, f\"motif {c} foi … [4362 caractères tronqués]`
+
+  ```
+8 remplacements appliqués
+BUILD
+  ✅ la récurrence change la sortie
+  --recurrence -1 : code=2 (attendu 2)
+  ✅ --recurrence 0 = absence du drapeau (zéro exprimable)
+  ```
+
+### 🤖 Assistant
+
+⏵ La récurrence marche ; mesure : une boucle sur soi donne-t-elle une MÉMOIRE au réseau ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=./drave-core/target/release/drave; M=models/Qwen2.5-0.5B-Q8_0.gguf; T=/tmp/rec; python3 -c \"\nimport random; random.seed(11)\nopen('$T/b64.txt','w').write('\\n'.join(f'{random.uniform(-2,2):.9g}' for _ in range(64)))\"\nfor A in 0 … [494 caractères tronqués]`
+
+  ```
+recurrence 0.0   : lecture v[t-8]  RMSE   1.3884 · R² -0.350 —
+recurrence 0.25  : lecture v[t-8]  RMSE   1.8001 · R² -1.269 —
+recurrence 0.5   : lecture v[t-8]  RMSE   2.1426 · R² -2.215 —
+recurrence 1.0   : lecture v[t-8]  RMSE   2.8957 · R² -4.873 —
+=== passe ===
+  porte-gain             ✅                         342 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         784 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          23 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ La récurrence DÉGRADE la lisibilité (−0,35 → −4,87) ; je complète avec le signal présent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && T=/tmp/rec; for A in 0.0 0.25 0.5 1.0; do printf 'recurrence %-5s : ' $A; python3 tools/peripherie_poursuite.py --signal $T/b64.txt --etats $T/rec$A.f32 --delai 0 --lags \"0,8,-1\" 2>/dev/null | grep -E \"lecture v\\[t\\] \" | sed 's … [131 caractères tronqués]`
+
+  ```
+recurrence 0.0   : lecture v[t]    RMSE   0.3828 · R² +0.906 ✅  ← injecté
+recurrence 0.25  : lecture v[t]    RMSE   1.6116 · R² -0.674 —  ← injecté
+recurrence 0.5   : lecture v[t]    RMSE   1.1737 · R² +0.112 —  ← injecté
+recurrence 1.0   : lecture v[t]    RMSE   1.1652 · R² +0.125 —  ← injecté
+  porte-greffe           ✅                         784 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-horloge          ✅                          23 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+### 🤖 Assistant
+
+⏵ C2 récurrence : la boucle détruit la lisibilité du présent (0,906 → 0,112) sans créer de mémoire — j'écris la porte et la fiche
+
+- **write** `{"content": "#!/bin/bash\n# porte-recurrence.sh — C2 : la région consomme sa PROPRE sortie du pas précédent.\n#\n# CE QUE LE PLAN DEMANDE (docs/plan-cerveau-complet.md § C2) : « une région peut consommer sa\n# propre sortie du pas précédent (état explicite par région) », interface `recurrent: true`. … [4238 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-recurrence.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-recurrence.sh && bash -n tools/porte-recurrence.sh && timeout 1200 bash tools/porte-recurrence.sh 2>&1 | tail -14; echo \"CODE=${PIPESTATUS[0]}\"", "description": "Run the recurrence gate", "timeoutMs": 1500000}`
+
+  ```
+✅ identiques : le zéro est exprimable
+=== 2. la boucle est réelle et DÉTERMINISTE ===
+  ✅ la boucle change la sortie, et deux exécutions identiques sont identiques
+=== 3. elle ne coûte aucune paire ===
+  avec récurrence 357.8 M · sans 357.8 M
+  ✅ mêmes paires : la rétroaction ne traverse aucune couche de plus
+=== 4. les bornes sont explicites (code 2) ===
+  ✅ --recurrence -1 refusé et expliqué
+  ✅ --recurrence 100 refusé et expliqué
+
+PORTE TENUE : la boucle existe, elle est déterministe, elle ne coûte aucune paire, son zéro
+est exprimable et ses bornes sont refusées. Ce qu'elle FAIT à la lisibilité (elle la dégrade :
+présent 0,906 → 0,112) est mesuré dans reports/rapport-c2-recurrence.md — la porte ne le
+cache pas, elle ne le prétend pas non plus.
+CODE=0
+  ```
+
+- **write** `{"content": "# C2 — la récurrence (boucle sur soi) : la boucle existe, elle est bornée… et elle DÉGRADE la lisibilité\n\n> Campagne : **cerveau** · expérience : une région consomme sa propre sortie du pas précédent\n> Question (le plan, § C2) : « une région peut consommer sa propre sortie du pas pré … [4878 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-c2-recurrence.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, subprocess\nheure = subprocess.run([\"date\", \"+%H:%M\"], capture_output=True, text=True).stdout.strip()\np = pathlib.Path(\"reports/rapport-c2-recurrence.md\"); s = p.read_text()\ns = s.replace( … [5822 caractères tronqués]`

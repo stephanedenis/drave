@@ -15,6 +15,7 @@
 | # | capacité | état | le chiffre qui le prouve | où |
 |---|---|---|---|---|
 | **C1** | graphe de régions | ✅ fait | la topologie **pilote** le découpage : même perplexité, écart **0,00e0** ; relais 3 régions / 3 instances : **0,00e0** | `tools/porte-topologie.sh` · fiche 34 |
+| **C2 (récurrence)** | boucle sur soi (`--recurrence α`) | 🟡 **implémentée, bornée… et NUISIBLE** | le zéro est exact au bit près, la boucle est déterministe et ne coûte aucune paire ; mais la lecture du signal **présent** tombe de R² **0,906** à **0,112** (α = 0,5) et celle du passé de −0,35 à **−4,87** : la boucle réinjecte la **transformation** du réseau, pas son entrée ⇒ un écho, pas une mémoire | `tools/porte-recurrence.sh` · [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | **C2** | deux entrées, une règle | ✅ fait | deux entrées se **somment**, la somme **arbitre** (7/7) ; bascule à **α = 0,60** contre **0,509** prédit | fiche 03 |
 | **C2/C6** | greffe d'état | ✅ fait | l'état injecté **transfère le contenu** ; ma première conclusion négative était un **décalage d'un jeton**, corrigée | fiche 28 · `porte-greffe.sh` |
 | **C3** | délais par lien | ✅ fait | un délai change le **temps**, jamais un chiffre (+3,1 s pour 50 ms × 64 pas, même perplexité) ; instrument **calibré** : 50 ms injectés → **50,2** mesurés | `porte-delais.sh` · fiche 43 |

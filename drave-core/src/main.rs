@@ -875,6 +875,9 @@ struct Options {
     /// **Mémoire de la région frontière** : nombre de signaux retenus hors du réseau, et le
     /// fichier où la valeur retenue est écrite pas à pas (f32 brut, une valeur par pas).
     memoire: usize, sortie_memoire: Option<String>,
+    /// **C2 — récurrence** : poids de la sortie du pas précédent réinjectée dans l'entrée du pas
+    /// courant (`0.0` = pas de récurrence, et c'est la valeur par défaut).
+    recurrence: f32,
     config: bool,
     /// Profilage des neurones « chauds » (idée de PowerInfer) et fichier de
     /// sortie du classement.
@@ -937,7 +940,7 @@ fn analyser(args: &[String]) -> Options {
         fusion_alpha: 1.0, fusion_pos: usize::MAX,
         auto: true, limit: usize::MAX,
         entree: None, entree_canal: usize::MAX, entree_gain: 1.0, delai: 0, entree_jeton: 0,
-        recurent: false, entree_memoire: 0, memoire: 0, sortie_memoire: None,
+        recurent: false, entree_memoire: 0, memoire: 0, sortie_memoire: None, recurrence: 0.0,
         matrix: String::from("blk.0.ffn_gate.weight"),
         ..Default::default()
     };
@@ -1083,6 +1086,12 @@ fn analyser(args: &[String]) -> Options {
             // fait par l'interface, pas par le modèle). Avec lui, l'historique est dans le cache
             // KV, et la mémoire du signal devient une question mesurable.
             "--recurent" => { o.recurent = true; 1 }
+            // RÉCURRENCE (C2) : la région consomme sa PROPRE sortie du pas précédent, avec un
+            // poids déclaré : x0(t) += alpha · h(t−1). C'est la boucle que le plan décrit
+            // (« une région peut consommer sa propre sortie du pas précédent ») et que le
+            // validateur de topologie refuse encore dans un graphe (cycle) — ici elle est
+            // explicite, bornée, et mesurable dans la région frontière.
+            "--recurrence" => { o.recurrence = suivant(i).parse().unwrap(); 2 }
             // TAMPON explicite : les K derniers valeurs sont injectées sur les canaux suivants.
             // C'est la STRUCTURE dont la fiche `rapport-c8-peripherie.md` § 2 ter montre l'absence :
             // une récurrence qui fuit ne retient pas (R² 0,104), un tampon retient exactement.
@@ -7168,6 +7177,12 @@ boucle avancerait au-delà du cache KV. Donner `--ctx {}` (ou plus).", valeurs.l
 plus longue que la séquence ne retiendrait jamais rien de complet.", opt.memoire, valeurs.len());
         return 2;
     }
+    if !(0.0..=8.0).contains(&opt.recurrence) {
+        eprintln!("[peripherie] REFUS : `--recurrence {}` hors des bornes [0, 8] — une récurrence \
+de poids négatif ou absurde ne converge pas, et la refuser vaut mieux que de rendre un chiffre \
+qui n'en est pas un.", opt.recurrence);
+        return 2;
+    }
     if opt.memoire > 0 && opt.sortie_memoire.is_none() {
         eprintln!("[peripherie] REFUS : `--memoire {}` sans `--sortie-memoire F` — une mémoire qui \
 n'écrit rien ne se vérifie pas, et une mémoire invérifiable ne vaut pas mieux que pas de mémoire.",
@@ -7181,10 +7196,21 @@ n'écrit rien ne se vérifie pas, et une mémoire invérifiable ne vaut pas mieu
     // approximateur — et c'est ce que la fiche `rapport-c8-peripherie.md` § 2 ter oppose à une
     // récurrence qui fuit (0,104) comme à l'état du réseau (−0,681).
     let mut retenues: Vec<u8> = Vec::new();
+    // La sortie du pas précédent, pour la récurrence (C2). `None` au premier pas : une boucle
+    // n'a rien à consommer avant d'avoir produit.
+    let mut etat_precedent: Option<Vec<f32>> = None;
     for t in 0..valeurs.len() {
         let v = if t >= opt.delai { valeurs[t - opt.delai] } else { 0.0 };
         let mut x = base.clone();
         x[canal] += opt.entree_gain * v;
+        // C2 — RÉCURRENCE : ce que la région a produit au pas précédent entre dans l'entrée du
+        // pas courant. `alpha = 0` laisse le calcul EXACTEMENT comme sans le drapeau (le zéro
+        // est exprimable), et c'est ce que la porte vérifie.
+        if opt.recurrence != 0.0 {
+            if let Some(h) = etat_precedent.as_ref() {
+                for (xi, hi) in x.iter_mut().zip(h.iter()) { *xi += opt.recurrence * hi; }
+            }
+        }
         // LE TAMPON : les K valeurs précédentes sur les canaux suivants. Sans lui, le passé
         // n'existe nulle part dans l'entrée ; avec lui, il y est PAR CONSTRUCTION — et c'est la
         // différence entre « le modèle ne retient pas » et « on lui donne de quoi retenir ».
@@ -7200,6 +7226,7 @@ n'écrit rien ne se vérifie pas, et une mémoire invérifiable ne vaut pas mieu
         // est une décision indépendante).
         let pos = if opt.recurent { t } else { 0 };
         let etat = mdl.forward(bos, pos);
+        if opt.recurrence != 0.0 { etat_precedent = Some(etat.clone()); }
         for val in etat.iter() { octets.extend_from_slice(&val.to_le_bytes()); }
         injectees.push(v);
         if opt.memoire > 0 {
@@ -7229,6 +7256,10 @@ n'écrit rien ne se vérifie pas, et une mémoire invérifiable ne vaut pas mieu
     if opt.entree_memoire > 0 {
         println!("  tampon d'entrée   : {} pas (canaux {}..{})", opt.entree_memoire, canal + 1,
                  canal + opt.entree_memoire);
+    }
+    if opt.recurrence != 0.0 {
+        println!("  RÉCURRENCE (C2)   : la sortie du pas précédent entre dans l'entrée, poids {} \
+(le plan : « une région peut consommer sa propre sortie du pas précédent »)", opt.recurrence);
     }
     if opt.memoire > 0 {
         println!("  MÉMOIRE           : {} pas retenus hors du réseau ({} valeurs écrites dans {}) — \

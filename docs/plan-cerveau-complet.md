@@ -59,7 +59,13 @@ Chaque fiche : **structure cérébrale** → **état du moteur** → **conceptio
 
 - **Cerveau** : chaque aire reçoit de plusieurs sources, et les boucles
   cortico-thalamo-corticales dominent.
-- **Moteur** : une couche a **une** entrée (le résidu) ; aucune récurrence.
+- **Moteur** : une couche a **une** entrée (le résidu) ; aucune récurrence **dans le graphe**.
+  *(Mise à jour du 2026-10-10 : la boucle locale existe maintenant — `--recurrence α` dans la
+  région frontière, bornée, déterministe, gratuite en paires. Mesurée : elle **dégrade** la
+  lisibilité du signal (présent 0,906 → 0,112), parce qu'elle réinjecte la TRANSFORMATION du
+  réseau et non son entrée. Le cycle à deux régions reste refusé par le validateur, et c'est
+  cohérent : supporter la boucle et en tirer quelque chose sont deux choses —
+  `reports/rapport-c2-recurrence.md`.)*
 - **Conception** : une région peut déclarer **plusieurs entrées** ; l'agrégation est
   déclarée (somme, concaténation, porte apprise) — et la **récurrence** exige un
   ordonnancement par *pas de temps* : une région peut consommer sa propre sortie du

@@ -38,7 +38,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_memoire.md) | `15 %` · `83 %` · `96 %` · `81 %` · `85 %` · `22 %` · `87 %` · `50 %` · `2 jetons` · `0,5 %` · `2048 jetons` · `11 jetons` |
-| [2026-10-10](2026-10-10_memoire.md) | `1,000` · `0,913` · `1006 jetons` · `136 jetons` · `50 jetons` · `+12 %` · `÷4` |
+| [2026-10-10](2026-10-10_memoire.md) | `1,000` · `0,913` · `1006 jetons` · `136 jetons` · `50 jetons` · `+12 %` · `÷4` · `0,906` · `0,112` |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 
@@ -59,7 +59,7 @@ possible (`ls journal/*_<thème>.md`).
 | jour | chiffres du jour |
 |---|---|
 | [2026-10-09](2026-10-09_modele.md) | `+6,7 %` · `+8,0 %` · `+1,0 %` · `+3,8 %` · `÷3,7` · `1 %` · `÷2` · `50 %` · `6 %` · `+1 %` |
-| [2026-10-10](2026-10-10_modele.md) | `2,2729` · `2,3838` · `2,5188` · `24 couches` · `−11,5 %` · `8000 états` · `8188 états` · `×540` · `×59` · `×90` · `14,2342` · `÷79` |
+| [2026-10-10](2026-10-10_modele.md) | `2,3431` · `2,3215` · `2,2729` · `2,3838` · `2,5188` · `24 couches` · `−11,5 %` · `8000 états` · `8188 états` · `×540` · `×59` · `×90` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 
