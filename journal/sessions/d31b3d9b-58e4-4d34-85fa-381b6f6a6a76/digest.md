@@ -53250,3 +53250,69 @@ SyntaxError: unterminated string literal (detected at line 21)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/biologie-pour-drave.md\"); s = p.read_text()\nold = \"### 4 bis. E1 — le résultat : un connectome inné ALÉATOIRE coûte 1 %\\n\"\nnew = (\"### 4 bis. E1 — le résultat : un c … [2255 caractères tronqués]`
+
+  ```
+biologie OK
+impulsion OK
+modele OK
+push=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; git status --porcelain | head -2; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-60; date", "description": "Verify the commit and check the pass"}`
+
+  ```
+e275dd7c Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele)
+d7dada51 Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %)
+--- passe ---
+7
+  porte-delais           ✅                          20 s    
+dim 11 oct 2026 05:11:55 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 570; grep -cE \"✅\" /tmp/passe0500.log; tail -1 /tmp/passe0500.log | cut -c1-70; date", "description": "Wait and check the pass progress", "timeoutMs": 600000}`
+
+  ```
+11
+  porte-gain             ✅                         351 s    ✅ drapeau 
+dim 11 oct 2026 05:21:31 EDT
+  ```
+
+### 🤖 Assistant
+
+⏵ Balayage des autres références périmées (comptes de portes, chiffres retirés)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== comptes de portes ===\"; grep -rn \"2[0-9] portes\\|portes du dépôt\\|toutes les portes\" docs/*.md README.md REPRISE.md 2>/dev/null | grep -oE \"^[^:]+:[0-9]+:.*(2[0-9] portes|portes)\" | head -8; echo \"=== 436,6 ou 845  … [221 caractères tronqués]`
+
+  ```
+=== comptes de portes ===
+docs/etat-cerveau.md:153:après l'ajout de `porte-profondeur-routee.sh` (28 portes
+docs/glossaire.md:170:modification ne doit pas dégrader. Les portes
+docs/manques.md:60:- **Les portes du dépôt tournent TOUTES, et toutes passent** : `tools/toutes-les-portes
+docs/plan-deepseek41-complet.md:334:  4. les portes
+docs/references-non-regression.md:26:| toutes les portes | `tools/toutes-les-portes
+docs/relations-humaines.md:34:| **Ne rien casser** — les portes
+README.md:63:cd .. && tools/toutes-les-portes.sh            # toutes les portes
+REPRISE.md:26:| toutes les portes | `tools/toutes-les-portes
+=== 436,6 ou 845 ===
+docs/etat-cerveau.md:29:| **C8** | périphérie et réflexes (plan § C8) | ✅ **périphérie + mémoire livrées, réflexe mesuré** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; **sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), l
+… [2022 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,158p' docs/etat-cerveau.md; echo \"--- passe ---\"; grep -cE \"✅\" /tmp/passe0500.log; date", "description": "Verify the gate-count context in the state"}`
+
+  ```
+## 6. ▶ Prochaine action
+
+**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**
+après l'ajout de `porte-profondeur-routee.sh` (28 portes) ; le verdict remplace la ligne du § 5 et
+se consigne dans `journal/`.
+
+**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
+jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
+linéaire. Sortir à **20 couches** donnerait un chemin court bien meilleur — donc une borne plus
+--- passe ---
+11
+dim 11 oct 2026 05:21:52 EDT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nold = \"\"\"**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**\naprès l'ajout de `port … [987 caractères tronqués]`

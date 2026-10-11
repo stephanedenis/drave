@@ -149,9 +149,10 @@
 
 ## 6. ▶ Prochaine action
 
-**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 10/10 à 22 h 27**
-après l'ajout de `porte-profondeur-routee.sh` (28 portes) ; le verdict remplace la ligne du § 5 et
-se consigne dans `journal/`.
+**1. Passe complète des portes** (`tools/toutes-les-portes.sh`) — **relancée le 11/10 à 05 h 00**
+sur les **34 portes**, après trois modifications du moteur (occupation des poids, noyau creux,
+variables d'environnement) ; le verdict remplace la ligne du § 5 et se consigne dans `journal/`.
+   *La passe du 10/10 à 22 h 27 (28 portes, 28 vertes, 73 min 21 s) est celle du § 5.*
 
 **2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
 jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
