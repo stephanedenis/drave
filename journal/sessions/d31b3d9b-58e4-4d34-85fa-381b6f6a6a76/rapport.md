@@ -7,12 +7,12 @@
 | Début | 2026-10-08 09:11 |
 | Durée | 66.2 h |
 | Tours | 96 |
-| Messages | 3197 |
-| Appels d'outils | 2976 |
+| Messages | 3198 |
+| Appels d'outils | 2977 |
 | Fichiers touchés | 123 |
-| Commandes | 2512 |
+| Commandes | 2513 |
 | Sous-agents | 3 |
-| Commits | 282 |
+| Commits | 283 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -3953,7 +3953,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 
 ### Tour 96 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrès mesurés, sa … [1750 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/audit_drapeaux_harnais.py`
 - bash — Run the harness flag audit
@@ -3969,7 +3969,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - bash — Check the tail metric discriminates
 - bash — Make the audit verdicts comparative
 - bash — Run the comparative audit
-- … et 7 autres
+- … et 8 autres
 
 **Synthèse produite :**
 
@@ -4153,7 +4153,7 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - **T2** Check engine support for binary/ternary events
 - **T2** Inspect corpus file formats
 - **T2** Check English corpus size
-- … et 2472 autres
+- … et 2473 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4583,4 +4583,5 @@ Deux livraisons vérifiées depuis le dernier point, toutes deux poussées :
 - E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes" 2>&1 | tail -1; gi
 - Biologie : E6 corrigee dans la roadmap — la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent, trois chiffres retires" 2>&1 | tail -1; git 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/message-audit.txt <<'MSGEOF' Audit des drapeaux du harnais : deux defauts de plus, et une porte
+- Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids)" 2>&1 | tail -1; git push -q origin master; echo "p
 
