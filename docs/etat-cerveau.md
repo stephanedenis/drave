@@ -1,10 +1,20 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
-> **2026-10-11 08:13 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
+> **2026-10-12 16:45 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
 > `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
 > `reports/campagne-benefices/`, une par expérience).
+>
+> **Révision du 12/10 — le plan de travail (§ 6), et lui seul.** Trois constats, chacun vérifié :
+> une action était **périmée** (la carte des sorties de H avait tourné le 11/10 à 00 h 15, le plan
+> la disait « reste à lancer ») ; une **manquait** (le moteur ne voit pas l'array NVMe, que le
+> § 7.2 de `docs/configuration-nvme-raid-amd.md` attend sur le nœud 1) ; une **exception tombe**
+> (`porte-topologie.sh` après un redémarrage — sortie vérifiée le 12/10). Le chantier des
+> **lecteurs parallèles** y entre avec le chiffre qui manquait (×3,8 entre 1 et 8 lecteurs sur
+> l'array). **Aucun chiffre de capacité n'a bougé** : `git log --since="2026-10-11 06:30" --
+> drave-core/src` est **vide**, donc les 34 portes vertes du 11/10 restent valides. Fiche de la
+> machine : [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md).
 >
 > Roadmaps de référence : `docs/plan-cerveau-complet.md` (les douze capacités),
 > `docs/roadmap-drave.md`, `docs/modele-pour-drave.md` § 3 (dessins H/I/J),
@@ -133,26 +143,54 @@
 ## 6. ▶ Prochaine action
 
 > **REPRISE APRÈS REDÉMARRAGE :** `/tmp` est vidé. Les portes **régénèrent** leurs prérequis
-> (`tools/_corpus.sh`, et `porte-reparti-moteur.sh` qui réentraîne son modèle) — sauf
-> `porte-topologie.sh`, qui a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne**, et
-> le dit en refusant. Détail : `REPRISE.md` § 2.
+> (`tools/_corpus.sh`, et `porte-reparti-moteur.sh` qui réentraîne son modèle) — et **la dernière
+> exception a une sortie depuis le 12/10** : `porte-topologie.sh` tourne avec des prérequis
+> **persistants** sur l'array (`~/IA/scratch/prerequis/`, un fichier d'identifiants de 395 Ko) et
+> un modèle de substitution à 24 couches — vérifié, porte tenue (30,4363 puis 42,5477, écarts
+> **0,00e0** ; commande exacte : [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) § 8).
+> Détail : `REPRISE.md` § 2.
 
-**1. Passe complète des portes — FAITE le 11/10 à 06 h 30 : 34 vertes sur 34, 85 min 8 s** (§ 5).
-Trois modifications du moteur l'avaient rendue nécessaire (occupation des poids, noyau creux,
-variables d'environnement) ; aucune n'a déplacé un chiffre d'une autre porte.
+**1. Passe complète des portes — tenue, et toujours valide.** 34 vertes sur 34 le 11/10 à 06 h 30,
+85 min 8 s (§ 5). **Aucun commit moteur depuis** (`git log --since="2026-10-11 06:30" --
+drave-core/src` est vide) : les repères de `docs/references-non-regression.md` n'ont pas bougé. Le
+**changement de montage** du 12/10 (les modèles lourds et les artefacts vivent sur l'array, voir la
+fin de ce §) ne les a pas déplacés non plus : `tools/porte-flux.sh`, rejouée le 12/10, rend
+**61,9920 / 60,8135** — les valeurs de référence. Elle reste due après toute modification du chemin
+d'exécution.
 
-**2. Dessin H — la suite la plus directe est le POINT DE SORTIE.** La borne mesurée (30,93 % des
-jetons, ≈ 10,3 % des paires) porte sur **une** sortie : 16 couches sur 24, avec un adaptateur
-linéaire. Sortir à **20 couches** donnerait un chemin court bien meilleur — donc une borne plus
-haute et un écart court/long plus faible — mais épargnerait **4** couches au lieu de 8 : il y a un
-**optimum**, et la courbe se mesure. `tools/carte-sortie-profondeur.sh` est **écrit** (sorties 12,
-16, 20, 22 : une capture par profondeur, un adaptateur entraîné pour chacune, puis la carte
-« accord × couches sautées ») et **reste à lancer** : il n'a pas encore tourné, donc il ne prouve
-rien tant qu'il n'a pas rendu sa table. Le chiffre à battre est nommé : au seuil 0,99 le court rend
-**80,39 %** contre **88,24 %** au long **sur les mêmes jetons**
-([`rapport`](../reports/rapport-design-H-profondeur-routee.md)).
+**2. Le moteur ne voit pas l'array — deux lignes, et c'est l'action la moins chère du plan.**
+`drave … --materiel` liste `/home/stephane/FastNVMe` (nœud 0) et `/home/stephane/Data13TB`
+(nœud ?), **pas `/home/stephane/IA`**. La cause est nommée : la liste est **en dur** dans
+`drave-core/src/materiel.rs:244`, et le nœud se lit par `/sys/block/<bloc>/device/numa_node` — or
+`md0` n'a pas de `device/`, il faut passer par ses disques (`/sys/block/md0/md/dev-*/`) pour
+rendre le **nœud 1** attendu. Première commande, qui montre l'écart :
 
-**3. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
+```bash
+./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --materiel | grep DISQ
+```
+
+Mesure : [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) § 4.
+
+**3. Les lecteurs parallèles — le chiffre qui manquait est mesuré, et il est plus fort qu'annoncé.**
+Sur l'array : **1 lecteur = 1,95 Go/s, 8 lecteurs = 7,45 Go/s (×3,8)**. Le plan de `--materiel`
+calcule `lecteurs = 16` et **rien ne s'en sert** (§ 6.5.1 du doc de configuration) ; le motif
+d'accès coûte par ailleurs **35 %** (§ 6.5.2). Le départ entre « le motif » et « le matériel » se
+fait en une mesure : la passe disque qui lit un modèle **plus gros que la page cache** depuis
+l'array — celle de la campagne, dont on lit le `File system inputs` — comparée aux 7,45 Go/s du
+banc (`~/IA/outils/banc-io.py`, 26 s). Si la passe rend ~2 Go/s là où le banc rend 7,45, c'est le
+motif.
+
+**4. Dessin H — la carte des sorties a tourné (11/10 00 h 15) : ce n'est pas le point de sortie qui
+limite.** Quatre sorties (12, 16, 20, 22 sur 24) : l'accord de l'oracle monte quand on sort tard,
+mais le **gain atteignable s'effondre** — un routeur réel n'atteint la parité qu'à **22**
+(47,78 % contre 47,73 %, **+0,05 point**, dans le bruit) pour **0,39 %** des paires, soit un facteur
+**32** avec la borne (12,6 %). Le facteur limitant est le **chemin court**, c'est-à-dire le manque
+**N4**, pas le choix de D. Ce que la fiche laisse ouvert : les sorties **plus précoces** (8, 4 — la
+tendance du produit plaide pour l'aller voir) et la génération libre plutôt que le contexte imposé.
+Première commande : `SORTIES="8 4" tools/carte-sortie-profondeur.sh`
+([`rapport`](../reports/rapport-design-H-carte-sorties.md)).
+
+**5. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
 À **512 jetons**, **fenêtre 128 + 64 puits** = **13,3968** contre **13,1368** (**+2,0 %**) pour
 **192 clés sur 512** (**÷2,67**). À **2 048 jetons**, la grille étendue tranche : **fenêtre 512 +
@@ -171,7 +209,7 @@ La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** 
 corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
 seulement pour ÷1,33 de clés. Reste ouvert : la loi de la frontière en N.
 
-**0. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
+**6. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
 est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,
 contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un modèle routé
 ([`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md)) ; le coût compressé est de
@@ -179,7 +217,7 @@ contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un mod�
 coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue sans** et ne réutilise jamais
 ([`rapport-c4-retard.md`](../reports/rapport-c4-retard.md)).
 
-**3. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
+**7. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
 qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
 tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
@@ -198,6 +236,20 @@ qui semblait donner raison à la tête est une **recopie de contenu**. Le protoc
 faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
 la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
 `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+
+**Ce qui a changé dans la machine (12/10) — pour mémoire, ce n'est pas une action.** L'**array
+raid0** de 4 NVMe (938 Go, monté `~/IA`, **nœud 1**) porte les modèles lourds et les artefacts :
+V4.1-Flash-Q2 (341 Go), 5 shards de K3 sur 32 (228 Go), les clusters réécrits (116 Go). Mesuré :
+**92 µs** par entrée d'engram de 264 octets contre 27 713 µs sur le mécanique, **7,45 Go/s** en
+lecture à 8 flux, **2,86 Go/s** en écriture ; le **QPI ne coûte rien** à cette bande (trois
+placements : 7,41 / 7,42 / 7,47 Go/s) — mais il faut des lecteurs parallèles pour l'atteindre,
+d'où le point 3. **Aucune redondance** : rien d'unique n'y vit sans copie, et les 116 Go
+d'artefacts sont sauvegardés sur le mécanique, vérifiés **octet pour octet** (12/10). Ce qui n'a
+**pas** gagné à être déplacé, mesuré : la compilation de `drave-core` (48,03 s cible HDD contre
+48,79 s cible array — la cible reste sur le HDD) et le cache `uv` (il **lie** son cache aux
+environnements : deux systèmes de fichiers le feraient copier). Politique, chiffres et outils
+(`etat-raid.sh`, `banc-io.py`, `banc-numa-raid.py`) : `~/IA/README.md` · fiche
+[`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md).
 
 ## 7. Les corrections à ne pas réintroduire
 

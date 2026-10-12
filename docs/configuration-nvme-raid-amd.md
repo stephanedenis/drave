@@ -1,5 +1,16 @@
 # Nouvelle configuration : array NVMe sur le nœud 1, AMD pour le bureau
 
+> **2026-10-12 — l'intervention a eu lieu, et le pari est mesuré.** L'array existe (4 NVMe,
+> raid0, 938 Go, monté `/home/stephane/IA`) et la fiche
+> [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) répond au protocole du § 7 :
+> les 4 NVMe sont bien sur le **nœud 1**, les Quadro sont en **x16** (le pari du § 1 tient),
+> l'array rend **7,45 Go/s** en lecture à 8 flux pour **6-7 Go/s** attendus au § 8, et **2,86 Go/s**
+> en écriture — la réserve du § 8 sur les contrôleurs **DRAM-less** se confirme en aléa QD1 (l'array
+> n'y bat pas un NVMe seul). Le § 6.3 est tranché côté lecture : **le QPI ne coûte rien** à pleine
+> bande (7,41-7,47 Go/s selon le placement). Restent ouverts, et nommés dans la fiche : le
+> `read_ahead_kb` du § 6.2 (**root requis**), la montée du lien GPU **sous charge** (§ 7.5), et la
+> moitié « calcul » du § 6.3. Un écart trouvé : `drave … --materiel` **ne voit pas l'array** (§ 7.2).
+
 > 08/10. Document de préparation, écrit **avant** l'intervention : ce qu'il faut
 > vérifier au BIOS, ce qu'il faut installer, comment monter le RAID, comment
 > faire cohabiter la carte AMD avec les Quadro, et ce qu'il faudra mesurer pour

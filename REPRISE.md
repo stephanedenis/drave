@@ -32,6 +32,10 @@ tokenisé par le modèle, **identique au bit près** ; `porte-reparti-moteur.sh`
 plus le modèle dont elle a besoin). **Une seule exception**, qui refuse en le disant :
 `porte-topologie.sh` a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne** (dim 384) —
 il faut relancer `tools/campagne-benefices.sh` ou passer `MODELE=…` sur un modèle à 24 couches.
+**Depuis le 12/10, elle a une sortie vérifiée** : les prérequis **persistent sur l'array**
+(`~/IA/scratch/prerequis/ids_qwen05_wt2.txt`, tokenisé une fois par le modèle de substitution) et
+`MODELE= IDS= M3= IDS3=` pointent dessus — porte **tenue** (30,4363 puis 42,5477, écarts
+**0,00e0**). Commande exacte et chiffres : `reports/rapport-raid0-nvme.md` § 8.
 Les fiches de `reports/` citent des chemins de `/tmp` dans leur section « protocole, pour rejouer » :
 elles **donnent la commande d'entraînement**, donc tout se reconstruit — rien ne dépend d'un fichier
 temporaire qui aurait disparu sans trace.
