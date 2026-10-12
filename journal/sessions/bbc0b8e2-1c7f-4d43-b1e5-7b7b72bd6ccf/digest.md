@@ -734,3 +734,432 @@ docs/plan-modeles-lourds.md
 Line 91: | DeepSeek-V4 / V4-Flash | `deepseek4` (43 couches, 256 experts top-6, 1 M ctx) ; V4.1-Flash : `deepseek41` (40 couches, 384 experts top-6) | lecture des métadonnées et du tokenizer ✅ ; **lecteur multi-shards** ✅ ; MoE 128/top-8 ; attention MLA à rang faible **validée contre llama.cpp** (0,999024 sur GLM-5.3) | le forward `deepseek4`/`deepseek41` : hyper-connexions, sortie à rang faible, dé-rotation, attentions compressées CSA/HCA (**les puits par tête sont implémentés, mais pas branchés sur le chemin MLA** qu'utilise V4) |
   ```
 
+### 🤖 Assistant
+
+⏵ J'attends le commit et je relis la note finale
+
+- **job_output** `{"job_id": "bash-1", "wait": true, "timeout_ms": 180000}`
+
+  ```
+e8afe672 Docs : strata-pour-drave — S1-S6 ; M5 change de cahier des charges (le brouillon est une couche de la cible, V4.1 declare dspark_* 37-39), S4 (prechargement ordonne) en premiere action
+[status: completed, exit code: 0]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md", "limit": 60, "offset": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md</path>
+<type>file</type>
+<content>
+50: rapide » (`docs/modele-pour-drave.md` § 0). K3/V4 **ne tiennent pas en RAM** : une passe vérifiée y
+51: remplace plusieurs passes liées au disque.
+52: 
+53: **Ce qui change par rapport au plan.** `docs/roadmap-drave.md` axe 2 attend « un modèle brouillon ».
+54: À réécrire : le premier essai n'est pas un modèle séparé, c'est **une couche de la cible** (dernière
+55: couche, ou tête MTP si le GGUF en porte une). Le prérequis vérifiable devient : *le modèle porte-t-il
+56: une couche MTP, et son taux d'acceptation dépasse-t-il le coût d'une passe ?*
+57: 
+58: **Ce que le dépôt sait déjà des deux cibles** (vérifié dans nos propres documents, pas supposé) :
+59: **K3** n'a **aucune couche MTP vérifiée** (`docs/roadmap-drave.md` axe 2) ; **V4.1** **déclare** des
+60: clés `dspark_*` — « décodage spéculatif, cibles **37-39** » — dans la config lue par le moteur
+61: (`docs/plan-deepseek41-complet.md` § 3.2), et une note de session décrit « MTP | `dspark` : 128 experts
+62: top-3 sur les couches 37-39 » (`docs/glossaire.md` § 18). La question n'est donc pas *y a-t-il une
+63: couch
+… [3252 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie si les gros shards sont bien sur cette machine (ça décide du chantier possible)
+
+- **bash** `{"command": "df -h | grep -v tmpfs | head -8; echo '--- gros gguf (recherche bornée) ---'; timeout 45 find /home/stephane/Data13TB -maxdepth 3 -name '*.gguf' -size +5G -printf '%s\\t%p\\n' 2>/dev/null | sort -rn | head -8 || echo 'rien trouvé (ou délai)'", "description": "Check mounts and locate lar … [35 caractères tronqués]`
+
+  ```
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme1n1p2           828G  801G   27G  97% /
+efivarfs                 256K  103K  149K  41% /sys/firmware/efi/efivars
+none                     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service
+/dev/nvme1n1p2           828G  801G   27G  97% /.snapshots
+/dev/nvme1n1p2           828G  801G   27G  97% /opt
+/dev/nvme1n1p2           828G  801G   27G  97% /home
+/dev/nvme1n1p2           828G  801G   27G  97% /root
+--- gros gguf (recherche bornée) ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche élargie : où sont passés les modèles (et ce n'est pas anodin pour la suite)
+
+- **bash** `{"command": "timeout 50 find / -xdev -maxdepth 5 -name '*.gguf' -size +1G -printf '%s\\t%p\\n' 2>/dev/null | sort -rn | head -6; echo '--- gguf de toute taille (compte par dossier) ---'; timeout 30 find / -xdev -maxdepth 5 -name '*.gguf' 2>/dev/null | sed 's|/[^/]*$||' | sort | uniq -c | sort -rn |  … [185 caractères tronqués]`
+
+  ```
+--- gguf de toute taille (compte par dossier) ---
+--- occupation ---
+583M	/home/stephane/.vscode-insiders
+3,6G	/home/stephane/.config
+11G	/home/stephane/.vscode
+13G	/home/stephane/.local
+14G	/home/stephane/.cache
+  ```
+
+### 🤖 Assistant
+
+⏵ Ma recherche précédente était trop bornée (le silence ne prouvait rien) — je refais ciblé
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/ 2>/dev/null; echo '--- gguf sous Data13TB (profondeur 6) ---'; timeout 60 find /home/stephane/Data13TB -maxdepth 6 -name '*.gguf' -printf '%s\\t%p\\n' 2>/dev/null | sort -rn | head -10; echo '--- gros fichiers, tous types ---'; timeout 60 find /home/stephane/ … [170 caractères tronqués]`
+
+  ```
+stephane
+--- gguf sous Data13TB (profondeur 6) ---
+365713686528	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf
+63387346208	/home/stephane/Data13TB/stephane/modeles/gguf/gpt-oss-120b-MXFP4.gguf
+49971881124	/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4-Flash-UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf
+49968868928	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00002-of-00006.gguf
+49906751904	/home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-235B-A22B-Q2_K/Qwen3-235B-A22B-Instruct-2507-Q2_K-00001-of-00002.gguf
+49885925408	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00007-of-00008.gguf
+49728982688	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S-00003-of-00006.gguf
+49638722336	/home/stephane/Data13TB/stephane/modeles/gguf/Kimi-K2.7-Code-UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00002-of-00008.gguf
+49621122496	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-Flash-UD-IQ1_S/GLM-5.3-Flash-UD-IQ1_S-00002-of-00003.gguf
+49471673632	/home/stephane/Data13TB/stephane/modeles/gguf/GLM-5.3-UD-IQ1_S/GLM-5.3-UD-IQ1_S
+… [439 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les modèles sont là (V4.1-Flash compris) : je peux répondre à la question S1 tout de suite
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/modeles/gguf/ | head -20; echo '--- usage outil ---'; head -25 tools/lire_meta_gguf.py", "description": "List model inventory and tool usage"}`
+
+  ```
+total 150826352
+drwxr-xr-x. 1 stephane stephane        1242  3 oct 10:05 .
+drwxr-xr-x. 1 stephane stephane          26  1 oct 08:59 ..
+-rw-r--r--. 1 stephane stephane  1157671200 12 sep 19:02 bge-m3-FP16.gguf
+-rw-r--r--. 1 stephane stephane 13341237600 13 aoû 07:27 codestral-22b-v0.1-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane  8988109984 13 aoû 07:26 deepseek-r1-distill-qwen-14b-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane  1117320800 24 sep 10:44 deepseek-r1-distill-qwen-1.5b-q4_k_m.gguf
+drwxr-xr-x. 1 stephane stephane         118  1 oct 10:26 DeepSeek-V4.1-Flash-Q2
+drwxr-xr-x. 1 stephane stephane         492  1 oct 10:48 DeepSeek-V4-Flash-UD-IQ1_M
+-rw-r--r--. 1 stephane stephane   849103296 24 sep 13:15 eagle3-gpt-oss-120b-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane         252  1 oct 12:42 GLM-5.3-Flash-UD-IQ1_S
+drwxr-xr-x. 1 stephane stephane         432  1 oct 12:10 GLM-5.3-UD-IQ1_S
+-rw-r--r--. 1 stephane stephane 63387346208 24 sep 13:14 gpt-oss-120b-MXFP4.gguf
+drwxr-xr-x. 1 stephane stephane         688  1 oct 11:35 Kimi-K2.7-Code-UD-IQ1_M
+drwxr-xr-x. 1 stephane stephane        2432  3 oct 14:01 Kimi-K3-UD-Q4_K_XL
+drwxr-xr-x. 1 stephane stephane         134  1 oct 12:14 MiniMa
+… [1338 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution du premier pas S1 : les clés `dspark_*` et les tenseurs 37-39 de V4.1
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf\necho \"=== $M ===\"; ls -la \"$(dirname \"$M\")\" | head -5\necho '=== cles dspark / mtp ==='\ntimeout 120 python3 tools/lire_meta_gguf.py \"$M\" dspark mtp 2>&1 | head -30\necho '=== ten … [240 caractères tronqués]`
+
+  ```
+=== /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf ===
+total 357404416
+drwxr-xr-x. 1 stephane stephane          118  1 oct 10:26 .
+drwxr-xr-x. 1 stephane stephane         1242  3 oct 10:05 ..
+-rw-r--r--. 1 stephane stephane 365713686528  1 oct 10:26 DeepSeek-V4.1-Flash-Q2.gguf
+-rw-r--r--. 1 stephane stephane    268435456  1 oct 09:08 DeepSeek-V4.1-Flash-Q2.gguf.part
+=== cles dspark / mtp ===
+# /home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf
+# version 3 · 1046 tenseurs · 67 paires clé/valeur
+=== tenseurs : motifs draft/mtp ===
+(fin)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les clés `dspark_*` sont dans le JSON `deepseek41.config`, pas au premier niveau — je vérifie
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py", "offset": 60, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/lire_meta_gguf.py</path>
+<type>file</type>
+<content>
+60:     for _ in range(n_kv):
+61:         cle = r.chaine()
+62:         t = struct.unpack("<I", r.octets(4))[0]
+63:         v = r.valeur(t)
+64:         if motifs and not any(m in cle for m in motifs):
+65:             continue
+66:         if isinstance(v, list) and len(v) > 64:
+67:             v = v[:64] + [f"… (+{len(v) - 64})"]
+68:         print(f"{cle} = {v}")
+69: 
+70: 
+71: if __name__ == "__main__":
+72:     if len(sys.argv) < 2:
+73:         raise SystemExit(__doc__)
+74:     lire(sys.argv[1], sys.argv[2:])
+75: 
+76: 
+77: def lire_tenseur_f32(chemin, motif, index):
+78:     """Lit un tenseur F32 par nom (recherche par sous-chaîne) et le renvoie en
+79:     liste de f32. Sert à sortir une NORME ou une ÉCHELLE du GGUF pour recalculer
+80:     une étape hors du moteur — ce qui a permis de localiser l'écart CSA."""
+81:     r = Lecteur(chemin)
+82:     if r.octets(4) != b"GGUF":
+83:         raise SystemExit("ce n'est pas un GGUF")
+84:     version = struct.unpack("<I", r.octets(4))[0]
+85:     n_tensors, n_kv = struct.unpack("<QQ", r.octets(16))
+86:     alignement = 32
+87:     for _
+… [1447 caractères tronqués]
+  ```
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf\necho '=== cles contenant config ==='\ntimeout 120 python3 tools/lire_meta_gguf.py \"$M\" 2>&1 | grep -iE 'config' | cut -c1-120\necho '=== --tensors fonctionne-t-il sur ce fichier ? ==='\ … [160 caractères tronqués]`
+
+  ```
+=== cles contenant config ===
+deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"im
+=== --tensors fonctionne-t-il sur ce fichier ? ===
+
+thread 'main' (55652) panicked at src/main.rs:280:35:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur a paniqué (mauvais ordre d'arguments) — je nettoie et j'extrais la config V4.1
+
+- **bash** `{"command": "ls -la core* /home/stephane/Data13TB/stephane/GitHub/Qtrinet/core* 2>/dev/null; ls -la /var/lib/systemd/coredump/ 2>/dev/null | tail -3; echo '--- espace ---'; df -h / | tail -1\nM=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf\ntimeout  … [476 caractères tronqués]`
+
+  ```
+-rw-r-----+ 1 root root    191223 11 oct 08:06 core.drave.1000.d019fe8ae4da4490b1ae9f6a82cf4663.944100.1791720365000000.zst
+-rw-r-----+ 1 root root    191123 11 oct 08:06 core.drave.1000.d019fe8ae4da4490b1ae9f6a82cf4663.944317.1791720385000000.zst
+-rw-r-----+ 1 root root    191778 11 oct 08:06 core.drave.1000.d019fe8ae4da4490b1ae9f6a82cf4663.944403.1791720387000000.zst
+--- espace ---
+/dev/nvme1n1p2  828G  801G   27G  97% /
+--- taille lue : 2444 octets ---
+"dspark_block_size":5
+"dspark_markov_rank":256
+"dspark_n_routed_experts":128
+"dspark_noise_token_id":128799
+"dspark_num_experts_per_tok":3
+"dspark_target_layer_ids":[37
+--- nextn / mtp ---
+"num_nextn_predict_layers":3
+  ```
+
+- **grep** `{"path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "pattern": "\"--tensors\"|tensors"}`
+
+  ```
+Found 14 matches
+
+drave-core/src/main.rs
+Line 135:         eprintln!("       drave <modele> --tensors      inventaire par les en-têtes seuls");
+Line 215:         (opt.tensors, "--tensors"), (opt.banc_mla.is_some(), "--banc-mla"),
+Line 243:     if opt.tensors { run_tensors(); return; }
+Line 281:     println!("GGUF ouvert en {:?} — {} tenseurs", t0.elapsed(), g.tensors.len());
+Line 862:     /// `--tensors` : liste les tenseurs du fichier (nom, dimensions, type) et
+Line 865:     tensors: bool,
+Line 1064:             "--tensors" => { o.tensors = true; 1 }
+Line 1823:     // l'extraction du GGUF (la lecture des tenseurs est vérifiée par --tensors).
+Line 2254:     let tables: Vec<(String, usize)> = g.tensors.iter()
+Line 2875: fn run_tensors() {
+Line 2885:              arch, g.nb_fichiers(), g.tensors.len(),
+Line 2890:         for t in &g.tensors {
+Line 2911:     for t in &g.tensors {
+Line 6147:         for t in &g.tensors {
+  ```
+
+### 🤖 Assistant
+
+⏵ Les clés confirment 3 couches MTP ; je vérifie maintenant que leurs **poids** sont dans le fichier
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf\necho '=== ids de couches cibles (complet) ==='; grep -o '\"dspark_target_layer_ids\":\\[[0-9,]*\\]' /tmp/v41_config.txt\necho '=== tenseurs du brouillon dans le fichier ==='\ntimeout 300  … [606 caractères tronqués]`
+
+  ```
+=== ids de couches cibles (complet) ===
+"dspark_target_layer_ids":[37,38,39]
+=== tenseurs du brouillon dans le fichier ===
+  F16      blk.36.hc_attn_fn.weight               [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.36.hc_attn_base.weight             [24] · 0.0 M poids · fichier 0
+  F32      blk.36.hc_attn_scale.weight            [3] · 0.0 M poids · fichier 0
+  F32      blk.36.attn_norm.weight                [5120] · 0.0 M poids · fichier 0
+  F16      blk.36.hc_ffn_fn.weight                [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.36.hc_ffn_base.weight              [24] · 0.0 M poids · fichier 0
+  F32      blk.36.hc_ffn_scale.weight             [3] · 0.0 M poids · fichier 0
+  F32      blk.36.ffn_norm.weight                 [5120] · 0.0 M poids · fichier 0
+  F32      blk.36.attn_sinks.weight               [64] · 0.0 M poids · fichier 0
+  Q8_0     blk.36.attn_q_a.weight                 [1280, 5120] · 6.6 M poids · fichier 0
+  Q8_0     blk.36.attn_q_b.weight                 [32768, 1280] · 41.9 M poids · fichier 0
+  F32      blk.36.attn_q_a_norm.weight            [1280] · 0.0 M poids · fichier 0
+  Q8_0     blk.36.attn_kv.weight                  [512, 5120] · 2.6 M
+… [1647 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse précise : les couches 37-39 sont-elles dans le fichier V4.1, et K3 déclare-t-il un MTP ?
+
+- **bash** `{"command": "M=/home/stephane/Data13TB/stephane/modeles/gguf/DeepSeek-V4.1-Flash-Q2/DeepSeek-V4.1-Flash-Q2.gguf\ntimeout 300 ./drave-core/target/release/drave \"$M\" --tensors > /tmp/v41_tensors.txt 2>&1\necho \"=== couches presentes (max) ===\"; grep -oE 'blk\\.[0-9]+\\.' /tmp/v41_tensors.txt | sor … [781 caractères tronqués]`
+
+  ```
+=== couches presentes (max) ===
+blk.36.
+blk.37.
+blk.38.
+blk.39.
+=== nb tenseurs blk.37/38/39 ===
+75
+=== echantillon blk.37 ===
+  F16      blk.37.hc_attn_fn.weight               [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.37.hc_attn_base.weight             [24] · 0.0 M poids · fichier 0
+  F32      blk.37.hc_attn_scale.weight            [3] · 0.0 M poids · fichier 0
+  F32      blk.37.attn_norm.weight                [5120] · 0.0 M poids · fichier 0
+  F16      blk.37.hc_ffn_fn.weight                [24, 20480] · 0.5 M poids · fichier 0
+  F32      blk.37.hc_ffn_base.weight              [24] · 0.0 M poids · fichier 0
+=== tenseurs hors blk (tete/pool) ===
+deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-têtes lus en 66.605738ms
+ · vocab_size 129280
+  F16      token_embd.weight                      [129280, 5120] · 661.9 M poids · fichier 0
+  F32      output_norm.weight                     [5120] · 0.0 M poids · fichier 0
+  Q8_0     output.weight                          [129280, 5120] · 661.9 M poids · fichier 0
+=== K3 : cles de brouillon dans la config ===
+745
+(fin)
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la structure MTP (eh_proj/enorm) et je prends l'heure pour la fiche
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'\necho '=== tenseurs de tete MTP (V3-style) ==='\ngrep -iE 'eh_proj|enorm|hnorm|shared_head|embed_tokens|mtp|nextn|dspark' /tmp/v41_tensors.txt | grep -v 'blk\\.' | head -10\necho '=== poids des 3 couches (somme grossiere) ==='\ngrep -E 'blk\\.(37|38|39)\\.' /tm … [271 caractères tronqués]`
+
+  ```
+2026-10-12 08:57 EDT
+=== tenseurs de tete MTP (V3-style) ===
+=== poids des 3 couches (somme grossiere) ===
+=== revision : cles KV non-liste de K3 ===
+general.architecture = kimi-k3
+general.type = model
+general.name = Kimi-K3
+general.basename = Kimi-K3
+general.quantized_by = Unsloth
+general.size_label = 896x60B
+general.license = other
+general.license.name = kimi-k3
+general.repo_url = https://huggingface.co/unsloth
+general.base_model.count = 1
+general.base_model.0.name = Kimi K3
+general.base_model.0.organization = Moonshotai
+[stderr]
+bash: line 5: bc: command not found
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux détails à corriger (somme des poids, clé de config de K3) avant d'écrire la fiche
+
+- **bash** `{"command": "echo '=== poids des couches 37-39 (M) ==='\ngrep -E 'blk\\.(37|38|39)\\.' /tmp/v41_tensors.txt | sed -E 's/.*· ([0-9.]+) M poids.*/\\1/' | awk '{s+=$1} END {printf \"%.1f M poids (%.2f Go en Q2 melange)\\n\", s, s*2.1/8/1024}'\necho '=== nb tenseurs par couche 37-39 ==='\nfor L in 37 38 … [376 caractères tronqués]`
+
+  ```
+=== poids des couches 37-39 (M) ===
+41263.2 M poids (10.58 Go en Q2 melange)
+=== nb tenseurs par couche 37-39 ===
+blk.37 : 25 tenseurs
+blk.38 : 25 tenseurs
+blk.39 : 25 tenseurs
+=== K3 : une config JSON existe-t-elle dans les KV ? ===
+=== K3 : nb total de cles lues ===
+239
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier contrôle : la liste des clés K3 (pour que le négatif soit vérifié, pas silencieux)
+
+- **bash** `{"command": "echo '=== cles K3 (noms seuls, uniques) ==='\ngrep -oE '^[A-Za-z0-9_.-]+ = ' /tmp/k3_kv.txt | sed 's/ = $//' | sort -u | head -30\necho \"--- total cles distinctes : $(grep -oE '^[A-Za-z0-9_.-]+ = ' /tmp/k3_kv.txt | sort -u | wc -l) ---\"\necho '=== V4.1 : cles de premier niveau (les 12 … [316 caractères tronqués]`
+
+  ```
+=== cles K3 (noms seuls, uniques) ===
+general.architecture
+general.base_model.0.name
+general.base_model.0.organization
+general.base_model.0.repo_url
+general.base_model.count
+general.basename
+general.file_type
+general.license
+general.license.name
+general.name
+general.quantization_version
+general.quantized_by
+general.repo_url
+general.size_label
+general.tags
+general.type
+kimi-k3.activation.situ_beta
+kimi-k3.activation.situ_linear_beta
+kimi-k3.attention.head_count
+kimi-k3.attention.head_count_kv
+kimi-k3.attention.key_length
+kimi-k3.attention.key_length_mla
+kimi-k3.attention.kv_lora_rank
+kimi-k3.attention.layer_norm_rms_epsilon
+kimi-k3.attention.q_lora_rank
+kimi-k3.attention.value_length
+kimi-k3.attention.value_length_mla
+kimi-k3.attn_res.block_size
+kimi-k3.block_count
+kimi-k3.context_length
+--- total cles distinctes : 64 ---
+=== V4.1 : cles de premier niveau (les 12 premieres) ===
+general.architecture
+general.name
+general.source.url
+general.source.revision
+general.alignment
+deepseek41.config
+deepseek41.engram.encoding
+deepseek41.engram.layer_ids
+deepseek41.engram.rows
+deepseek41.engram.compressed_vocab_size
+deepseek41.engram.pad_id
+deepseek41.engram.token_map
+  ```
+
+### 🤖 Assistant
+
+⏵ Le négatif K3 est vérifié (64 clés listées) — j'écris la fiche `reports/` avec l'en-tête conventionnel
+
+- **write** `{"content": "> Campagne : M5 — le brouillon est-il **dans le fichier** ? · expérience 01\n> Question : le GGUF de V4.1 (et celui de K3) porte-t-il les **poids** d'une couche de brouillon, donc un décodage spéculatif **sans second modèle** ?\n> Verdict : **OUI pour V4.1** — le fichier **déclare** 3 c … [4827 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-couches-brouillon.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md", "new_string": "**Réponse mesurée le 2026-10-12** (`reports/rapport-v41-couches-brouillon.md`) : **oui pour V4.1** —\n`deepseek41.config` déclare `num_nextn_predict_layers = 3` et `dspark_target_layer_ids = [37 … [918 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md", "new_string": "2. **S1 ensuite** — le premier pas est **fait et mesuré** (`reports/rapport-v41-couches-brouillon.md`) :\n   le brouillon de V4.1 est **dans le fichier** (3 couches déclarées, 75 tenseurs, 41 26 … [777 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite la fiche et la note, et je te demande quel chantier ouvrir
+
+- **bash** `{"command": "git add docs/strata-pour-drave.md reports/rapport-v41-couches-brouillon.md && git commit -q -m \"Rapport : le brouillon de V4.1 est dans le fichier (3 couches declarees, 75 tenseurs, 41 263 M poids) ; K3 n'en declare aucun (64 cles verifiees) — S1 de strata-pour-drave mis a jour\" && gi … [95 caractères tronqués]`
+
+  ```
+started background job bash-2
+  ```
+
+- **ask_user_question** `{"questions": [{"id": "chantier", "header": "Chantier", "question": "Quel chantier ouvre-t-on maintenant ?", "options": [{"label": "S4 — préchargement ordonné (madvise + lecture par grappe)", "description": "Instruit le manque déjà chiffré (8,6 contre 243 Mo/s), sans notion nouvelle ; la porte compa … [701 caractères tronqués]`

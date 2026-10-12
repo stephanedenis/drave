@@ -5,14 +5,14 @@
 | Identifiant | `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-12 08:44 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 2 |
-| Messages | 22 |
-| Appels d'outils | 32 |
-| Fichiers touchés | 1 |
-| Commandes | 8 |
+| Messages | 38 |
+| Appels d'outils | 52 |
+| Fichiers touchés | 2 |
+| Commandes | 21 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -66,7 +66,7 @@ C'est exactement ce qui transforme un moteur en adoption de masse.
 
 ### Tour 2 — ok, à suivre et on adopte les bonnes idées.
 
-*24 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - read
 - bash — Read clock, recent commits, journal tail
@@ -81,10 +81,12 @@ C'est exactement ce qui transforme un moteur en adoption de masse.
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md`
 - bash — Commit note in background
 - job_output
+- bash — Check mounts and locate large GGUF files
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ J'attends le commit et je relis la note finale
+⏵ Je commite la fiche et la note, et je te demande quel chantier ouvrir
 
 ## 3. Travail accompli
 
@@ -92,7 +94,8 @@ C'est exactement ce qui transforme un moteur en adoption de masse.
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/strata-pour-drave.md` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v41-couches-brouillon.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -104,19 +107,44 @@ C'est exactement ce qui transforme un moteur en adoption de masse.
 - **T2** List local models and check binary
 - **T2** Check commit state and stale processes
 - **T2** Commit note in background
+- **T2** Check mounts and locate large GGUF files
+- **T2** Locate any large GGUF and see disk usage
+- **T2** Search Data13TB properly for models
+- **T2** List model inventory and tool usage
+- **T2** Read V4.1 dspark keys and draft tensors
+- **T2** Find config key and test tensors listing
+- **T2** Check core dump and extract dspark config keys
+- **T2** List draft-layer tensors in V4.1 and check K3
+- **T2** Verify draft layers present in V4.1 and K3 config
+- **T2** Check MTP head tensors and K3 metadata keys
+- **T2** Sum draft layer weights and confirm K3 config presence
+- **T2** List distinct metadata keys for K3 and V4.1
+- **T2** Commit report and note update
 
 ## 4. Mesures et résultats marquants
 
 - **T2** `[timed out after 60000ms]`
+- **T2** `/dev/nvme1n1p2           828G  801G   27G  97% /`
+- **T2** `efivarfs                 256K  103K  149K  41% /sys/firmware/efi/efivars`
+- **T2** `none                     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service`
+- **T2** `/dev/nvme1n1p2           828G  801G   27G  97% /.snapshots`
+- **T2** `/dev/nvme1n1p2           828G  801G   27G  97% /opt`
+- **T2** `/dev/nvme1n1p2           828G  801G   27G  97% /home`
+- **T2** `/dev/nvme1n1p2           828G  801G   27G  97% /root`
+- **T2** `/dev/nvme1n1p2  828G  801G   27G  97% /`
+- **T2** `deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-têtes lus en 66.247237ms`
+- **T2** `deepseek41 · 1 fichiers · 1046 tenseurs · 365.70 Go de poids · en-têtes lus en 66.605738ms`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : M journal/sessions/MANIFEST.md  M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md  M journal/sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md ?? docs/strata-pour-drave.md --- h
+- **T2** : === cles contenant config === deepseek41.config = {"architectures":["DeepseekV41ForCausalLM"],"bos_token_id":0,"dtype":"bfloat16","eos_token_id":1,"im === --tensors fonctionne-t-il sur ce fichier ? ==
 
 ## 6. Commits
 
 - Docs : strata-pour-drave — S1-S6, M5 change de cahier des charges (le brouillon est une couche de la cible), S4 (prechargement ordonne) en premiere action" && g
 - Docs : strata-pour-drave — S1-S6 ; M5 change de cahier des charges (le brouillon est une couche de la cible, V4.1 declare dspark_* 37-39), S4 (prechargement ord
+- Rapport : le brouillon de V4.1 est dans le fichier (3 couches declarees, 75 tenseurs, 41 263 M poids) ; K3 n'en declare aucun (64 cles verifiees) — S1 de strata
 

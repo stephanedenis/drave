@@ -55,12 +55,11 @@ remplace plusieurs passes liées au disque.
 couche, ou tête MTP si le GGUF en porte une). Le prérequis vérifiable devient : *le modèle porte-t-il
 une couche MTP, et son taux d'acceptation dépasse-t-il le coût d'une passe ?*
 
-**Ce que le dépôt sait déjà des deux cibles** (vérifié dans nos propres documents, pas supposé) :
-**K3** n'a **aucune couche MTP vérifiée** (`docs/roadmap-drave.md` axe 2) ; **V4.1** **déclare** des
-clés `dspark_*` — « décodage spéculatif, cibles **37-39** » — dans la config lue par le moteur
-(`docs/plan-deepseek41-complet.md` § 3.2), et une note de session décrit « MTP | `dspark` : 128 experts
-top-3 sur les couches 37-39 » (`docs/glossaire.md` § 18). La question n'est donc pas *y a-t-il une
-couche ?* mais *les **poids** du brouillon sont-ils dans le fichier, et que disent les clés ?*
+**Réponse mesurée le 2026-10-12** (`reports/rapport-v41-couches-brouillon.md`) : **oui pour V4.1** —
+`deepseek41.config` déclare `num_nextn_predict_layers = 3` et `dspark_target_layer_ids = [37, 38, 39]`,
+et les **75 tenseurs** de ces trois couches sont dans le fichier (**41 263 M poids**) ; **non pour K3**
+(64 clés distinctes, aucune `mtp` / `nextn` / `dspark`). Le prérequis de M5 n'est donc pas « trouver un
+brouillon » : c'est **exécuter les couches 37-39** et mesurer leur acceptation.
 
 **La porte.** Sur un modèle qu'on a déjà : jeton gourmand **identique au chemin sans brouillon** sur
 N positions (la sortie ne change pas, seule la vitesse change), puis le taux d'acceptation. Une porte
@@ -171,12 +170,11 @@ candidats, par ordre de coût croissant :
 1. **S4 d'abord** — le préchargement ordonné (`madvise` + lecture par grappe) instruit un manque
    **déjà chiffré** (8,6 contre 243 Mo/s) et ne demande aucune notion nouvelle dans le moteur ;
    sa porte compare deux exécutions du même fichier, préremplissage et décodage mesurés séparément.
-2. **S1 ensuite** — rouvrir M5 avec le cahier des charges corrigé (le brouillon est une couche de la
-   cible, pas un second modèle). La question qui ne coûte rien est déjà cadrée par le § 1 : lire les
-   clés `dspark_*` du shard qui porte la config, puis chercher les tenseurs des couches **37-39**
-   (`tools/lire_meta_gguf.py`, puis `--tensors`) — K3, lui, n'a aucune couche MTP vérifiée. La porte
-   ne s'écrit qu'après : jetons gourmands **identiques** au chemin sans brouillon, puis taux
-   d'acceptation par type de tâche.
+2. **S1 ensuite** — le premier pas est **fait et mesuré** (`reports/rapport-v41-couches-brouillon.md`) :
+   le brouillon de V4.1 est **dans le fichier** (3 couches déclarées, 75 tenseurs, 41 263 M poids).
+   Le pas suivant est la **porte de M5** : jetons gourmands **identiques** au chemin sans brouillon,
+   puis taux d'acceptation par type de tâche — vue **rouge** avec un brouillon volontairement
+   désaligné.
 
 **Ce que cette note ne dit pas** : qu'un chiffre de Strata soit reproductible ici. Aucun ne l'est
 tant qu'une porte ne l'a pas refait.
