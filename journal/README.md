@@ -9,6 +9,7 @@ est en heure locale de la machine (**HAE = EDT, UTC−4**).
 
 | jour | index | thèmes |
 |---|---|---|
+| **2026-10-12** | [2026-10-12.md](2026-10-12.md) | [divers](2026-10-12_divers.md) |
 | **2026-10-11** | [2026-10-11.md](2026-10-11.md) | [apprentissage](2026-10-11_apprentissage.md) · [attention](2026-10-11_attention.md) · [distribue](2026-10-11_distribue.md) · [divers](2026-10-11_divers.md) · [memoire](2026-10-11_memoire.md) · [mesures](2026-10-11_mesures.md) · [modele](2026-10-11_modele.md) · [moteur](2026-10-11_moteur.md) · [portes](2026-10-11_portes.md) |
 | **2026-10-10** | [2026-10-10.md](2026-10-10.md) | [apprentissage](2026-10-10_apprentissage.md) · [attention](2026-10-10_attention.md) · [distribue](2026-10-10_distribue.md) · [divers](2026-10-10_divers.md) · [docs](2026-10-10_docs.md) · [memoire](2026-10-10_memoire.md) · [mesures](2026-10-10_mesures.md) · [modele](2026-10-10_modele.md) · [moteur](2026-10-10_moteur.md) · [portes](2026-10-10_portes.md) |
 | **2026-10-09** | [2026-10-09.md](2026-10-09.md) | [apprentissage](2026-10-09_apprentissage.md) · [attention](2026-10-09_attention.md) · [distribue](2026-10-09_distribue.md) · [divers](2026-10-09_divers.md) · [docs](2026-10-09_docs.md) · [memoire](2026-10-09_memoire.md) · [mesures](2026-10-09_mesures.md) · [modele](2026-10-09_modele.md) · [moteur](2026-10-09_moteur.md) · [portes](2026-10-09_portes.md) |
@@ -67,6 +68,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
+| `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.1 h | 2 | 32 | 1 | 2 | [rapport](sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) |
 | `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
 | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/rapport.md) |
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |

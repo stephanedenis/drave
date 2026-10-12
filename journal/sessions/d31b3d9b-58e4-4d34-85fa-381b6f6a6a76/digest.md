@@ -54251,3 +54251,47 @@ variables d'environnement) ; aucune n'a déplacé un chiffre d'une autre porte.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport pathlib, re, subprocess\np = pathlib.Path(\"docs/etat-cerveau.md\"); s = p.read_text()\nheure = subprocess.run([\"date\", \"+%Y-%m-%d %H:%M\"], capture_output=True, text=True).stdout.strip()\ns, n = re.sub … [1057 caractères tronqués]`
+
+  ```
+état : 2026-10-11 08:13
+push=0
+6723034b Etat : note de reprise apres redemarrage (les portes regenerent leurs prerequis, sauf la topologie qui le dit)
+22d9919c Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant
+a409bdea Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact
+c5fd1747 Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est fermé : rien ne tourne, l'arbre est propre et poussé — vous pouvez éteindre
+
+## État avant extinction
+
+- **Aucun processus en cours** (0) : la passe complète, les entraînements et les mesures sont terminés.
+- **Arbre propre**, tout **poussé** : `6723034b` = `origin/master`.
+- **34 portes**, **122 tests** verts ; crate **std seul** ; binaire de mesure en profil `release`.
+
+## Ce que j'ai préparé pour la prochaine session
+
+Le piège que j'ai trouvé en fermant : **16 portes exigeaient un corpus dans `/tmp`** — qu'un redémarrage efface. Elles auraient toutes été rouges au réveil, en accusant le harnais.
+
+- **`tools/_corpus.sh`** (nouveau) : chaque porte **régénère son corpus** s'il manque, depuis `data/wikitext2_test.txt` — vérifié **identique au bit près** (`cmp`), et **testé en supprimant réellement les fichiers** : la porte repasse verte et le corpus est reconstruit à l'identique.
+- **`porte-reparti-moteur.sh`** : ne dépend plus d'un modèle de `/tmp` — elle **l'entraîne et l'exporte elle-même** (~20 s) ; testée après suppression, elle passe (perplexité entière = répartie, écart `0,00e0`).
+- **`porte-occupation-moteur.sh`** : régénère son corpus d'octets (le `tr` que j'avais écrit d'abord **perdait les octets 10** — attrapé au test, corrigé).
+- **Une seule exception, qui refuse en le disant** : `porte-topologie.sh` a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne** — le message dit quoi relancer, ou comment pointer `MODELE=` ailleurs.
+- **`REPRISE.md` § 2** et **`docs/etat-cerveau.md` § 6** portent la note de reprise correspondante.
+
+## Repères de la session
+
+- Dernière passe : **34/34 vertes, 85 min 8 s** (11/10 06 h 30), repères régénérés dans `docs/references-non-regression.md` **depuis le journal**, pas de mémoire.
+- **Six portes ajoutées**, **chacune vue rouge** avec son défaut rallumé ; **une retirée** (`porte-signes-figes.sh`) parce que son seuil mesurait un artefact.
+- Trois conclusions publiées **corrigées** (E1/E2, E6, M8), avec les anciens chiffres conservés **à côté**, jamais effacés — c'est écrit dans `reports/rapport-e6-poids-lognormaux.md` § 0 pour la rétractation la plus lourde.
+
+## À relire quand vous reprendrez
+
+1. Les **trois rétractations** — elles changent des chiffres déjà publiés dans `docs/biologie-pour-drave.md` et `docs/modele-pour-drave.md`.
+2. L'état de la ligne « poids creux » : paires **÷3,8** ✅, qualité ✅, vitesse ✗, mémoire ✗ (×4) — le prochain pas utile est un **noyau vectorisé** gardant les valeurs quantifiées.
+3. Rien d'autre n'attend : aucun travail en vol, aucun fichier temporaire dont une mesure dépendrait sans dire comment le refaire.
+
+Vous pouvez éteindre.
+
