@@ -55,6 +55,18 @@ décidé.* Rendre une forme « disponible à la demande » change le **choix** d
 dépend de sa présence (`use_dense` en dépendait) — la paresse doit donc reproduire exactement la
 disponibilité, pas la dépasser.
 
+## 2bis. Une troisième erreur de banc, attrapée par la PASSE : un nombre qui change d'unité
+
+`porte-push-paresseux.sh` lisait `chargées en [0-9.]+s` — et le moteur imprime une durée `{:?}` :
+**`601.034622ms`** quand le chargement est rapide, `7.36s` sinon. La porte **passait sur une machine
+lente** (le premier essai donnait 1,42 s) et rendait une chaîne **vide** sur une machine rapide
+(0,6 s) — d'où un `float("")` en pleine passe, à 02 h 18. C'est la passe complète qui l'a vue, pas
+une relecture : **une porte qui n'a tourné que dans les conditions de son auteur n'a pas tourné.**
+
+Corrigé : l'unité est **lue** (`µs`/`ms`/`s`) et normalisée, et la porte **refuse de mesurer sur du
+vide** — elle imprime la sortie brute du moteur au lieu d'un `float("")`. Mesure après correction :
+**0,68 s en paresseux contre 6,53 s en avance (9,6×)**.
+
 ## 3. Ce qui reste ouvert
 
 * `DRAVE_PUSH_TOT=1` rend l'ancien comportement, pour refaire la mesure ;

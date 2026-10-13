@@ -27,9 +27,25 @@ ids_de() {   # $1 = réglages d'environnement ; rend les ids générés
     env $1 "$D" "$M" --infer --prompt "$PROMPT" --n "$N" --ctx 64 --threads 8 --temp 0 2>&1 \
         | grep -oE "ids générés : \[[0-9, ]*\]" | head -1
 }
+# LE NOMBRE CHANGE D'UNITÉ SELON SA GRANDEUR : le moteur imprime « 601.03ms » (durée `{:?}`)
+# quand le chargement est rapide, et « 7.36s » sinon. La première version de cette porte ne
+# parsait que les secondes : elle passait sur une machine lente et rendait une chaîne VIDE sur
+# une machine rapide — trouvé par la passe complète du 13/10 à 02 h 18, pas par relecture.
+# On lit donc l'unité, et on normalise en secondes.
 charge_de() {  # $1 = réglages ; rend le temps de chargement en secondes
     env $1 "$D" "$M" --ppl "$IDS" --ctx 64 --limit 2 --threads 8 2>&1 \
-        | grep -oE "chargées en [0-9.]+s" | grep -oE "[0-9.]+" | head -1
+        | grep -oE "chargées en [0-9.]+(µs|ms|s)" | head -1 | grep -oE "[0-9.]+(µs|ms|s)"
+}
+
+# Conversion en secondes, et REFUS de mesurer sur du vide : une porte qui lit une chaîne vide
+# et se contente d'un `float("")` échoue sans dire pourquoi.
+en_secondes() {
+    case "$1" in
+        *µs) python3 -c "print(float('${1%µs}')/1e6)" ;;
+        *ms) python3 -c "print(float('${1%ms}')/1e3)" ;;
+        *s)  python3 -c "print(float('${1%s}'))" ;;
+        *)   echo "VIDE" ;;
+    esac
 }
 
 echo "porte de la paresse — $(basename "$M")"
@@ -53,8 +69,14 @@ fi
 echo "  ✅ vue ROUGE avec un défaut volontaire (DRAVE_PUSH_FAUX=1 change le texte)"
 
 # La paresse ne doit rien construire là où le chemin push n'est pas pris, et doit charger plus vite.
-T_PARe=$(charge_de "")
-T_AVANCE=$(charge_de "DRAVE_PUSH_TOT=1")
+T_PARe=$(en_secondes "$(charge_de "")")
+T_AVANCE=$(en_secondes "$(charge_de "DRAVE_PUSH_TOT=1")")
+if [ "$T_PARe" = "VIDE" ] || [ "$T_AVANCE" = "VIDE" ]; then
+    echo "  ❌ le temps de chargement est illisible (paresseux=« $T_PARe », avance=« $T_AVANCE »)"
+    echo "     sortie brute du moteur (paresseux) :"
+    env "$D" "$M" --ppl "$IDS" --ctx 64 --limit 2 --threads 8 2>&1 | grep -i "charg" | head -3 | sed 's/^/       /'
+    exit 1
+fi
 n_constructions=$(env "$D" "$M" --ppl "$IDS" --ctx 64 --limit 2 --threads 8 2>&1 \
                     | grep -c "^\[push\]")
 python3 - "$T_PARe" "$T_AVANCE" "$n_constructions" <<'PY' || exit 1
