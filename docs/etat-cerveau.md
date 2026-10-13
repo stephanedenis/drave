@@ -270,7 +270,15 @@ contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un mod�
 coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue sans** et ne réutilise jamais
 ([`rapport-c4-retard.md`](../reports/rapport-c4-retard.md)).
 
-**9. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
+**9. C8 — l'échelle est mesurée : la courbe monte encore, la capacité n'est pas la limite, donc le
+manque est bien N4.** Sur un morceau **jamais vu** : **1 032,58** (4 morceaux) · 369,22 (8) ·
+260,81 (15) · **179,59** (30) — ÷5,75 pour ×7,5 de données, ÷1,4 par doublement en fin de courbe ;
+et à données égales un adaptateur **non linéaire** (896→512→896) rend **376,01**, **2,1× pire**.
+Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
+mesuré contre-productif. Fiche :
+[`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
+comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
+30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
 qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
 tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
