@@ -37,6 +37,14 @@
 | **C6** | mémoire épisodique | ✅ fait | **élagage 83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact**, Δ = **11 jetons sur 2 048** ; le rappel dépend de **l'indice** (1 sur 8) et **n'est pas continu** (50 vs 1 006) ; la clé de fenêtre **dégrade** (prédiction réfutée) | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh`, `porte-melange.sh` |
 | **C7** | consolidation | ✅ fait | l'**exemplaire** bat la **moyenne** (7 % du magasin → **87 %** de rappel) ; rejeu répété = **point fixe exact** (0,00e0) | `porte-episodique.sh` |
 | **C8** | périphérie et réflexes (plan § C8) | ✅ **périphérie + mémoire livrées, réflexe mesuré** | sur **le même texte**, le chemin tronqué à 16 couches passe de **456 586,60** (tête empruntée) à **845,45** (adaptateur entraîné, test sur positions jamais vues) : **÷540** — le modèle complet vaut **14,2342** sur ce texte, donc le réflexe reste **×59** derrière. Ça surapprend vite (meilleur test à l'époque 6, ×127 train/test à la fin) ; **sur un texte JAMAIS VU** : avec 30 morceaux d'entraînement (le morceau de test exclu), la tête empruntée rend **697 572** et la tête entraînée **84,99**, à **×5,7** du modèle complet (15,02) ; avec 7 morceaux seulement : 202,17 — **les données comptent**, et **la non-linéarité n'aide pas** à cette échelle (272 contre 51 au linéaire) ; et **il va plus vite** : ×1,54 en génération, TTFT ÷2,4 ⇒ le compromis est **×1,54 de vitesse pour ×59** (même texte), **×5,7** (texte neuf) ou **×25** (autre corpus) d'écart au modèle complet | `porte-reflexe.sh` · fiches 26, [`sonde-profondeur`](../reports/rapport-c8-sonde-profondeur.md), [`tête entraînée`](../reports/rapport-c8-tete-entrainee.md), [`généralisation`](../reports/rapport-c8-generalisation.md), [`transfert de corpus`](../reports/rapport-c8-transfert-corpus.md) |
+| **C9 (latéralité)** | deux jumeaux, échange par couche | 🟡 **échange exact, gain NUL (mesuré)** | échange désactivé = modèle seul (27,4964 = 27,4964) ; jumeaux identiques ⇒ rien ne change ; jumeau bruité récupéré (163,17 → 36,13) **mais le contrôle donne le même chiffre** (36,1307, écart 0,000 %) : c'est une moyenne, pas une latéralité. La fusion de deux **vues valides** ne bat pas la meilleure des deux (127 jetons : 15,39 contre 14,65) | `tools/porte-jumeaux.sh` · [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) |
+| **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
+| **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
+| **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
+| **C11** | pannes et registre | ✅ fait | panne de lien **nommée**, code **7**, jamais de résultat partiel ; le **registre de régions** remplace les adresses dans les topologies | `porte-pannes.sh`, `porte-registre.sh` · fiches 33, 35 |
+| **C12** | trace globale | ✅ fait | **126 croisements**, aucune divergence ; une trace faussée d'**un bit** est détectée et nommée | `porte-trace.sh` |
+| **C12bis** | trace du nœud, fusion | ✅ fait | **94 liens** identiques ; 1 bit changé ⇒ **DIVERGENT** (code 3) ; format v1 **refusé** | `porte-fusion.sh` |
+
 > **Ce que « C8 » recouvre, et où on en est.** Le plan (`docs/plan-cerveau-complet.md` § C8) définit
 > C8 comme la **périphérie** : des régions frontière d'**entrée** et de **sortie**, et des
 > **réflexes** — des liens qui court-circuitent le graphe profond — avec pour invariant « entrée
@@ -60,13 +68,7 @@
 > pas d'amélioration par réinjection, bornage explicite). Détail :
 > [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception :
 > [`docs/note-peripherie-c8.md`](note-peripherie-c8.md).
-| **C9 (latéralité)** | deux jumeaux, échange par couche | 🟡 **échange exact, gain NUL (mesuré)** | échange désactivé = modèle seul (27,4964 = 27,4964) ; jumeaux identiques ⇒ rien ne change ; jumeau bruité récupéré (163,17 → 36,13) **mais le contrôle donne le même chiffre** (36,1307, écart 0,000 %) : c'est une moyenne, pas une latéralité. La fusion de deux **vues valides** ne bat pas la meilleure des deux (127 jetons : 15,39 contre 14,65) | `tools/porte-jumeaux.sh` · [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) |
-| **C9** | pont entre régions | ✅ fait | **448 fibres = +2,81 %** et **÷1,8** en octets ; falaise **entre 448 et 392** ; à budget égal **quantifier bat élaguer de 83 %** | `porte-pont.sh` · fiche 25 |
-| **C9×C1** | où couper | ✅ fait | **8 coupes, une seule perplexité (113,0068)** sans perte ; le coût du pont va de **+0,52 %** (coupe après 18 couches) à **+17,09 %** (après 15) — facteur **30** ⇒ **couper tard** | `porte-coupe.sh`, `tools/carte_coupe.sh` · fiche 27 |
-| **C10** | budgets | ✅ **clos** | trois budgets, trois codes distincts : octets (**6**), latence (**8**), paires (**9**) ; loi de latence **3,4 ms/token par ms de RTT** | fiches 32, 42 |
-| **C11** | pannes et registre | ✅ fait | panne de lien **nommée**, code **7**, jamais de résultat partiel ; le **registre de régions** remplace les adresses dans les topologies | `porte-pannes.sh`, `porte-registre.sh` · fiches 33, 35 |
-| **C12** | trace globale | ✅ fait | **126 croisements**, aucune divergence ; une trace faussée d'**un bit** est détectée et nommée | `porte-trace.sh` |
-| **C12bis** | trace du nœud, fusion | ✅ fait | **94 liens** identiques ; 1 bit changé ⇒ **DIVERGENT** (code 3) ; format v1 **refusé** | `porte-fusion.sh` |
+
 
 ## 2. Le chemin réparti (ce qui compte pour « distribuable »)
 

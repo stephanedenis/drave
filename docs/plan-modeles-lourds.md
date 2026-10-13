@@ -27,6 +27,9 @@ publiés, sans les requantifier.
 > [`docs/plan-deepseek41-complet.md`](plan-deepseek41-complet.md) — écrit « les
 > flux d'abord ». Les tableaux ci-dessous sont conservés tels quels, avec leur
 > état d'origine, pour qu'on puisse comparer.
+
+| modèle | ce que c'est | taille | contexte | état |
+|---|---|---|---|---|
 | **DeepSeek-V4.1-Flash** | le plus lourd des ouverts, MoE, agentique | **365,7 Go** (Q2) | — | **✅ arrivé** (12h40) |
 | **DeepSeek-V4** | la version complète | 3 761 Go | 1 M | hors budget disque |
 | **Kimi-K2.7-Code** | le meilleur agent de code ouvert | **303,9 Go** (UD-IQ1_M) | 262 k | ✅ arrivé |

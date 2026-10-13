@@ -52,7 +52,7 @@ et comme le texte reste visible, personne ne le voit. Trois règles, vérifiées
 `tools/porte-tableaux.sh` (38ᵉ porte, 413 fichiers, ~1 s) :
 
 1. l'en-tête, le séparateur et **chaque** ligne ont le **même nombre de cellules** ;
-2. une barre de valeur absolue **dans un espace de code** s'écrit `∣` (U+2223) : `\|` s'y affiche
+2. une barre de valeur absolue **dans un espace de code** s'écrit `∣` (U+2223) : `\` + `|` s'y affiche
    avec son antislash (mistune ne le déséchappe pas dans les backticks) ; **hors** tableau, une
    barre simple suffit ;
 3. un tableau **triangulaire** (des lignes de plus en plus longues) ne rend pas : on élargit

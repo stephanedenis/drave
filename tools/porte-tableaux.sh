@@ -56,6 +56,15 @@ for c in sys.argv[1:]:
     elif p.is_file():
         fichiers.append(p)
 
+def ressemble_a_une_ligne(l):
+    """Une ligne qui a l'air d'une ligne de tableau : elle commence et finit par `|` et porte au
+    moins deux barres non échappées. Sert à voir les lignes ORPHELINES — celles d'un tableau
+    interrompu par autre chose (une citation, une règle, un paragraphe), qui ne rendent pas.
+    C'est le défaut trouvé le 13/10 : un bloc de citation s'était glissé au milieu du tableau des
+    capacités, et les lignes C9 à C12bis se sont retrouvées hors du tableau, en texte."""
+    s = depouille(l)
+    return s.startswith('|') and s.endswith('|') and len(re.split(r'(?<!\\)\|', s)) >= 3
+
 defauts = []
 for f in fichiers:
     lignes = f.read_text(encoding='utf-8', errors='replace').splitlines()
@@ -79,6 +88,15 @@ for f in fichiers:
                 if not est_ligne(l) and not est_sep(l) and l.strip() and not l.lstrip().startswith('#'):
                     defauts.append((f, i + 1, "« \\| » hors tableau : l'antislash s'affiche — hors tableau, "
                                               "une barre simple suffit (∣ pour une valeur absolue)"))
+        # LIGNE ORPHELINE : elle a la forme d'une ligne de tableau, mais aucun en-tête ne la
+        # précède — le tableau a été interrompu, et tout ce qui suit ne rend pas.
+        if ressemble_a_une_ligne(l) and not est_ligne(l):
+            defauts.append((f, i + 1, "ligne de tableau HORS d'un tableau — un tableau interrompu "
+                                      "par une citation, une règle ou un paragraphe ?"))
+            i += 1; continue
+        if est_ligne(l) and not (i + 1 < len(lignes) and est_sep(lignes[i + 1])):
+            defauts.append((f, i + 1, "ligne de tableau sans en-tête ni séparateur (orpheline)"))
+            i += 1; continue
         if est_ligne(l) and i + 1 < len(lignes) and est_sep(lignes[i + 1]):
             attendu = cellules(lignes[i + 1])
             if cellules(l) != attendu:
