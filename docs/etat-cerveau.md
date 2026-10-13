@@ -243,7 +243,9 @@ régime sûr, et il est robuste.** À N = 2 048, garder **la moitié** des clés
 +2,1 %** sur **sept** textes (≤2,1 % chaque fois) ; garder le **quart** va de **+2,8 %** à
 **+49,2 %** — un **facteur 17,6 selon le texte**, qui domine toute tendance en N et explique la
 non-monotonie déjà notée. Conséquence : budgéter la moitié des clés, et ne jamais promouvoir un
-réglage plus agressif sur un seul texte. Fiche :
+réglage plus agressif sur un seul texte. **Et les deux façons de dépenser cette moitié se valent** :
+fenêtre 1 024 pure (+0,5 à +2,1 %) ou fenêtre 512 + 512 puits (+0,3 à +2,1 %) — le partage
+fenêtre/drain est un paramètre d'**implémentation**, pas de qualité. Fiche :
 [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md).
 
 **8. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
