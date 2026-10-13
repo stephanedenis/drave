@@ -122,9 +122,10 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **39 portes** `tools/porte-*.sh` — **passe du 2026-10-12 à 23 h 00 sur 36 portes : 34 vertes,
-  2 rouges** (~74 min), les deux rouges étant `porte-indice` et `porte-melange` (botte de foin
-  régénérée, effet non robuste — nommé dans `docs/references-non-regression.md`). La passe du
+- **39 portes** `tools/porte-*.sh` — **passe du 2026-10-13 à 13 h 44 : 37 vertes, 2 rouges**
+  (~82 min), les deux rouges étant `porte-indice` (le critère
+  **contrôle apparié** du 13/10 : l'indice réel ne bat pas le témoin) et `porte-melange` (le
+  mélange ne rend pas le code de A — nommés dans `docs/references-non-regression.md`). La passe du
   **2026-10-11 à 06 h 30** en comptait **34 vertes sur 34** (85 min 8 s) ; trois sont nées le
   12/10 : **`porte-prechargement.sh`** (S4 : à la
   demande / `madvise` / fils / tampons, cache évincé avant chaque bras), **`porte-m5-brouillon.sh`**

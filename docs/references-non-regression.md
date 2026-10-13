@@ -21,6 +21,12 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-13 à 13 h 44** (**39 portes, 37 vertes, 2 rouges**, ~82 min) : après l'échange
+> d'experts (C9) et le **nouveau critère** de `porte-indice` (contrôle apparié). Les deux rouges
+> sont les mêmes qu'avant, mais celui de `porte-indice` a **changé de cause** : il ne dit plus
+> « moins bien que le hasard » mais « pas mieux que le **témoin** » — une comparaison qui ne dépend
+> plus du texte. `porte-echange-experts` et `porte-tableaux` y sont **vertes**.
+>
 > **Porte ajoutée le 2026-10-13 à 13 h 20** : `porte-echange-experts.sh` (le routage imposé est
 > inerte par défaut, **exact** sur son propre routage — l'invariant qui fonde toute la mesure C9 —
 > et vivant sur un routage étranger). Vue **rouge** en retirant `DRAVE_TRACE_EXPERTS_ORDRE=1`
@@ -65,7 +71,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **39 portes** ; dernière passe : **35 vertes sur 37** (13/10 06 h 19, les deux rouges sont le critère d'indice extérieur), ≈72 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **39 portes** ; dernière passe : **37 vertes sur 39** (13/10 13 h 44), ≈82 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
