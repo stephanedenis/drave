@@ -10,7 +10,7 @@
 > mêmes octets montent en **0,27 ms** et **1,05 ms**. Autrement dit : **37 % du coût en Q4_K et
 > 91 % en MXFP4 sont l'allocation**, pas le transfert. Le lien, lui, rend **5,2 Go/s** (Q4_K) et
 > **4,2 Go/s** (MXFP4) en copies paginées.
-> Date réelle : 2026-10-13, 02 h 00-02 h 40 HAE (heure lue sur la machine)
+> Date réelle : 2026-10-12, 22 h 50-23 h 00 HAE (heure lue sur la machine ; source : git, commit `334f8085`)
 > Protocole : `drave --gpu-banc --matrix blk.0.ffn_gate_exps.weight` (`DRAVE_GPU=1`), 16 experts
 > montés un par un, puis 15 dans un tampon réutilisé ; banc dans `main.rs`
 > (`banc_transfert`), GPU 1 (Quadro RTX 5000)

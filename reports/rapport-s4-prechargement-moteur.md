@@ -82,7 +82,7 @@ Ce que ça dit :
 
 ---
 
-## 5. Deuxième mesure (12/10, 23 h) — la lecture séquentielle dans NOS tampons
+## 5. Deuxième mesure (12/10, 22 h 20) — la lecture séquentielle dans NOS tampons
 
 **La directive** (reçue le 12/10) : « favoriser une granularité fine de MoE en lecture
 séquentielle par allocation intelligente au lieu de virtualiser une grande mémoire en lecture

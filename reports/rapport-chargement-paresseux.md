@@ -10,7 +10,7 @@
 > (« dont en listes : 0,0 M », dit le moteur lui-même). Rendre cette construction **paresseuse**
 > (au premier usage réel) fait passer le chargement de **26,95 s à 7,36 s** (Qwen3-30B) et de
 > **6,85 s à 0,60 s** (Qwen2.5-0.5B), **sans déplacer un chiffre**.
-> Date réelle : 2026-10-13, 00 h 30-01 h 20 HAE (heure lue sur la machine)
+> Date réelle : 2026-10-12, 22 h 30-22 h 47 HAE (heure lue sur la machine ; source : git, commits `2bbecc86`)
 > Protocole : `--ppl … --limit 2`, cache évincé avant chaque essai ; mesure du chargement lue
 > dans la ligne du moteur (`[modele] … couches chargées en …s — listes … Go`)
 
