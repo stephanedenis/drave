@@ -239,9 +239,9 @@ de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en rép
 La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** (sur un second
 corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
 seulement pour ÷1,33 de clés. **La loi de la frontière en N a été cherchée (13/10 03 h 58) : il n'y en a pas — il y a un
-régime sûr, et il est robuste.** À N = 2 048, garder **la moitié** des clés coûte **+0,5 %, +1,9 %
-et +0,8 %** sur trois textes (≤2 % partout) ; garder le **quart** coûte **+49,2 %, +9,7 % et
-+5,3 %** — un **facteur 9 selon le texte**, qui domine toute tendance en N et explique la
+régime sûr, et il est robuste.** À N = 2 048, garder **la moitié** des clés coûte **+0,5 % à
++2,1 %** sur **sept** textes (≤2,1 % chaque fois) ; garder le **quart** va de **+2,8 %** à
+**+49,2 %** — un **facteur 17,6 selon le texte**, qui domine toute tendance en N et explique la
 non-monotonie déjà notée. Conséquence : budgéter la moitié des clés, et ne jamais promouvoir un
 réglage plus agressif sur un seul texte. Fiche :
 [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md).
