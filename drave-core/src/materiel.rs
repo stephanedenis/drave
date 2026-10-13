@@ -241,7 +241,12 @@ fn detecter_ram() -> (f64, f64) {
 /// aucun (il est en SATA).
 fn detecter_disques() -> Vec<Disque> {
     let mut out = Vec::new();
+    // L'array raid0 (4 NVMe, monté `~/IA`) est un **disque d'artefacts** comme
+    // `FastNVMe` : c'est là que vivent les modèles réécrits et les traces. Il manquait
+    // à cette liste jusqu'au 12/10 — `--materiel` ne le montrait pas, alors que le
+    // § 7.2 de `docs/configuration-nvme-raid-amd.md` attend de le voir « sur le nœud 1 ».
     for (chemin, artefact) in [("/home/stephane/FastNVMe", true),
+                               ("/home/stephane/IA", true),
                                ("/home/stephane/Data13TB", false)] {
         if !Path::new(chemin).is_dir() { continue; }
         // `df --output=avail` rend « 698G » : le suffixe doit être retiré.
@@ -260,6 +265,10 @@ fn detecter_disques() -> Vec<Disque> {
         let base = source.trim_start_matches("/dev/").to_string();
         let bloc = if base.starts_with("nvme") {
             base.split('p').next().unwrap_or(&base).to_string()
+        } else if base.starts_with("md") {
+            // Un array n'a pas de `device/numa_node` (`md0` n'est pas un périphérique
+            // PCI) : son nœud est celui de ses disques. `md0` -> `nvme0n1` -> nœud 1.
+            premier_membre(&base).unwrap_or_else(|| base.clone())
         } else if base.starts_with("mapper/") || base.starts_with("sd") {
             // Un volume LVM : on prend le premier disque SATA, faute de mieux —
             // il n'a de toute façon pas de nœud NUMA.
@@ -270,6 +279,20 @@ fn detecter_disques() -> Vec<Disque> {
         out.push(Disque { chemin: chemin.to_string(), libre_go, noeud, artefact });
     }
     out
+}
+
+/// Le premier disque d'un array : `md0` -> `/sys/block/md0/md/dev-nvme0n1` -> `nvme0n1`.
+///
+/// Rend `None` si le dossier n'existe pas (ce n'est pas un array) — l'appelant garde
+/// alors le nom tel quel et le nœud restera inconnu, ce qui est la vérité.
+fn premier_membre(md: &str) -> Option<String> {
+    let mut noms: Vec<String> = std::fs::read_dir(format!("/sys/block/{md}/md")).ok()?
+        .filter_map(|e| e.ok())
+        .filter_map(|e| e.file_name().into_string().ok())
+        .filter_map(|n| n.strip_prefix("dev-").map(|s| s.to_string()))
+        .collect();
+    noms.sort();
+    noms.into_iter().next()
 }
 
 impl Materiel {

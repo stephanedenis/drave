@@ -1372,14 +1372,29 @@ pour une projection de {} entrées × {} sorties", crate::gguf::Gguf::nom_type(t
 
     /// Demande au noyau de lancer la lecture de l'expert `e` **en avance**.
     ///
+    /// La plage brute de l'expert `e` dans le mapping : `(adresse, octets)`.
+    ///
+    /// Rendue sous cette forme (et non prélecturée ici) parce que la prélecture se fait
+    /// désormais **parallèlement**, sur les plages de tous les experts retenus à la fois
+    /// (`crate::gguf::prelecture_parallele`) : mesuré le 12/10, `madvise` sur la plage
+    /// entière ne fait rien (×1,06) là où des fils qui touchent les pages rendent ×3,5.
+    fn plage_expert(&self, e: usize) -> (usize, usize) {
+        let octets = self.octets_expert();
+        (unsafe { self.base.add(e * octets) } as usize, octets)
+    }
+
     /// Le routeur choisit ses `k` experts avant tout calcul : on connaît donc
     /// les plages à lire une couche entière à l'avance. Les demander d'un coup
     /// laisse le noyau paralléliser ses lectures de pages, au lieu de les subir
     /// une par une au fil du calcul.
+    ///
+    /// **Démenti le 12/10** : « les demander d'un coup » ne les faisait pas paralléliser —
+    /// `madvise` sur une plage entière rend ×1,06, et la granularité n'y change rien dans
+    /// le moteur (31 s dans les trois cas, `tools/porte-prechargement.sh`). Ce qui
+    /// parallélise, ce sont des fils qui entrent les pages eux-mêmes.
     fn prelire_expert(&self, e: usize) {
-        let octets = self.octets_expert();
-        let p = unsafe { self.base.add(e * octets) };
-        crate::gguf::prelire(p, octets);
+        let (addr, octets) = self.plage_expert(e);
+        crate::gguf::prelire(addr as *const u8, octets);
     }
 
     /// Octets bruts de l'expert `e` (tels qu'ils sont dans le fichier) : c'est
@@ -1579,6 +1594,24 @@ pub struct Layer {
     pub moe: Option<Moe>,
 }
 
+impl Layer {
+    /// Les plages mmappées des poids **denses** de la couche : attention (q, k, v, o)
+    /// et FFN dense quand il existe.
+    ///
+    /// Ce que la prélecture de S4 vise : ces lectures sont **connues d'avance** (aucun
+    /// routage ne les conditionne) et ce sont elles qui coûtent le plus cher dans une
+    /// passe à froid — mesuré le 12/10 : 2,9 Go lus par défauts de page à ~160 Mo/s pour
+    /// le premier jeton de Qwen3-30B, soit ~18 s des ~31 s de la passe.
+    pub fn plages_denses(&self) -> Vec<(usize, usize)> {
+        let mut v = Vec::with_capacity(7);
+        for p in [&self.wq, &self.wk, &self.wv, &self.wo,
+                  &self.wgate, &self.wup, &self.wdown] {
+            if let Some(plage) = p.plage() { v.push(plage); }
+        }
+        v
+    }
+}
+
 pub struct Stats {
     pub events: u64,
     pub prompt_s: f64,
@@ -1698,6 +1731,26 @@ fn construire_q8(w: &[f32], n_out: usize, n_in: usize) -> DenseQ8 {
 }
 
 impl Proj {
+    /// La plage **mmappée** de cette projection : `(adresse, octets)`, ou `None` si les
+    /// poids sont propres (calculés) ou déjà en RAM.
+    ///
+    /// Sert à la prélecture de la couche suivante (S4) : ce sont les lectures que la
+    /// passe paie le plus cher, et elles sont connues d'avance — aucun routage ne les
+    /// conditionne.
+    pub fn plage(&self) -> Option<(usize, usize)> {
+        if let Some(d8) = self.d.as_ref() {
+            if !d8.base.is_null() && d8.nb_ligne > 0 {
+                return Some((d8.base as usize, d8.n_out * d8.nb_ligne));
+            }
+        }
+        if let Some(d4) = self.q4.as_ref() {
+            if !d4.base.is_null() && d4.nb_ligne > 0 {
+                return Some((d4.base as usize, d4.n_out * d4.nb_ligne));
+            }
+        }
+        None
+    }
+
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
     pub fn vide() -> Self {
@@ -7325,7 +7378,28 @@ change (vivacité). Ce chiffre ne vaut pas comme référence.");
         // envoyait l'état final, et le pair les recalculait toutes par-dessus :
         // perplexité répartie 798,3 au lieu de 18,2. `forward_lot` et
         // `forward_mla` respectaient déjà la plage ; `forward` était l'exception.
+        let fils_prelecture = crate::gguf::fils_prelecture();
+        let prelecture_on = crate::gguf::prelecture_active();
+        // `DRAVE_PRELIRE_DENSE=0` ne garde que la prélecture des EXPERTS : sans ce
+        // témoin, un gain ne dirait pas laquelle des deux lectures l'a donné.
+        let prelecture_dense = crate::gguf::prelecture_dense_voulue();
         for l in self.couche_debut..self.couche_fin {
+            // ---------------------------------------------------- prélecture (S4)
+            // La couche SUIVANTE, pendant que celle-ci calcule : ses poids denses sont
+            // connus d'avance, et ce sont les lectures les plus chères d'une passe à
+            // froid. Mesuré le 12/10 (`tools/porte-prechargement.sh`) : par défauts de
+            // page, un jeton lit ses poids denses à ~160 Mo/s ; entrés par des fils qui
+            // parcourent les pages dans l'ordre, les mêmes octets passent à ~1 Go/s.
+            // Aucun routage n'est requis ici — contrairement aux experts, dont on ne
+            // sait rien avant d'avoir calculé la couche.
+            if prelecture_on && prelecture_dense && fils_prelecture > 0 {
+                if let Some(suivante) = layers.get(l + 1) {
+                    let plages = suivante.plages_denses();
+                    if !plages.is_empty() {
+                        crate::gguf::prelecture_parallele(&plages, fils_prelecture);
+                    }
+                }
+            }
             let lay = &layers[l];
             // **Engram (V4.1)** : l'injection se fait AVANT les mélanges du
             // raccord d'entrée — la référence écrit `residual = self.engram(
@@ -7977,16 +8051,35 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
                 }
                 for v in down.iter_mut() { *v = 0.0; }
-                // Prélecture : on connaît les experts du jeton AVANT de les
-                // calculer. Les demander tous d'un coup laisse le noyau lancer
-                // ses lectures de pages en parallèle — mesuré, le NVMe passe de
-                // 5,4 à 31 Go/s quand les lectures se recouvrent.
-                for &e in &idx {
-                    if let Some((k, loc)) = moe.ou(e) {
-                        moe.gate[k].prelire_expert(loc);
-                        moe.up[k].prelire_expert(loc);
-                        moe.down[k].prelire_expert(loc);
+                // Prélecture : on connaît les experts du jeton AVANT de les calculer.
+                //
+                // **Parallèle, et pas par `madvise`.** Mesuré le 12/10
+                // (`tools/banc-experts.py`, puis `tools/porte-prechargement.sh` dans le
+                // moteur) : une demande `madvise` sur la plage entière rend ×1,06 — rien —
+                // et découper la demande ne change rien dans une passe réelle (31 s dans
+                // les trois cas). Ce qui paie, ce sont des **fils qui entrent les pages
+                // eux-mêmes** : ×3,5 sur le mécanisme, 4 Go/s contre 1,1. Sans cela, la
+                // passe paie un défaut de page synchrone par page — un million pour un
+                // jeton de Qwen3-30B — soit ~30 s pour 4 Go.
+                let fils = crate::gguf::fils_prelecture();
+                if fils == 0 {
+                    for &e in &idx {
+                        if let Some((k, loc)) = moe.ou(e) {
+                            moe.gate[k].prelire_expert(loc);
+                            moe.up[k].prelire_expert(loc);
+                            moe.down[k].prelire_expert(loc);
+                        }
                     }
+                } else if crate::gguf::prelecture_active() {
+                    let mut plages: Vec<(usize, usize)> = Vec::with_capacity(idx.len() * 3);
+                    for &e in &idx {
+                        if let Some((k, loc)) = moe.ou(e) {
+                            plages.push(moe.gate[k].plage_expert(loc));
+                            plages.push(moe.up[k].plage_expert(loc));
+                            plages.push(moe.down[k].plage_expert(loc));
+                        }
+                    }
+                    crate::gguf::prelecture_parallele(&plages, fils);
                 }
                 for (&e, &poids_exp) in idx.iter().zip(poids.iter()) {
                     let w_exp = poids_exp;

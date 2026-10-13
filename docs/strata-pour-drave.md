@@ -114,6 +114,19 @@ lecture préchargée par grappe (`madvise` + ordre de couche). Le critère est u
 (octets/s) et un temps de préremplissage**, mesurés séparément du décodage — voir § 4, c'est là que
 leur bug le plus instructif se trouve.
 
+> **État au 2026-10-12 — la porte existe et elle a tranché.** `tools/porte-prechargement.sh`
+> (trois bras, cache évincé avant chacun : `DRAVE_PRELIRE=0`, `madvise`, fils) et
+> `tools/banc-prelire.py` / `tools/banc-experts.py` pour le mécanisme. Ce qu'on croyait — « tout
+> demander d'un coup laisse le noyau paralléliser » — est **faux** : `madvise` sur une plage
+> entière rend **×1,06**, et sa granularité ne change rien dans le moteur. Ce qui paie : des
+> **fils qui entrent les pages** (calcul d'une passe de 7,70 s à 3,65 s, −53 %) ; et ce qui paierait
+> plus est nommé — le **`pread` explicite en parallèle**, 3 995 Mo/s contre 1 126 (×3,5), qui
+> demande des **tampons** (chantier « lecteurs parallèles », § 6.5.1 de
+> `docs/configuration-nvme-raid-amd.md`). L'idée de Strata telle quelle — prélecturer la **couche
+> suivante** — a été **implémentée puis mesurée sans gain** (30,47 s sans, 32,05 s avec, témoin
+> `DRAVE_PRELIRE_DENSE=1`) : un préchargement synchrone ne se recouvre pas avec le calcul.
+> Détail : [`reports/rapport-s4-prechargement-moteur.md`](../reports/rapport-s4-prechargement-moteur.md).
+
 ### S5 — Le cache **adaptatif** — chez nous, sur les nœuds, pas en VRAM
 
 **Leur idée.** Le cache d'experts du GPU se remplit d'un profil, puis **s'adapte à la conversation**.
@@ -164,17 +177,21 @@ mesure. À reprendre dans `reports/` : la comparaison **et** la liste des limite
 
 ## 4. La prochaine action (une seule)
 
-Le dépôt choisit ce qui est mesurable maintenant, lui donne une porte, et l'écrit. Les deux
-candidats, par ordre de coût croissant :
+Le dépôt choisit ce qui est mesurable maintenant, lui donne une porte, et l'écrit.
 
-1. **S4 d'abord** — le préchargement ordonné (`madvise` + lecture par grappe) instruit un manque
-   **déjà chiffré** (8,6 contre 243 Mo/s) et ne demande aucune notion nouvelle dans le moteur ;
-   sa porte compare deux exécutions du même fichier, préremplissage et décodage mesurés séparément.
-2. **S1 ensuite** — le premier pas est **fait et mesuré** (`reports/rapport-v41-couches-brouillon.md`) :
-   le brouillon de V4.1 est **dans le fichier** (3 couches déclarées, 75 tenseurs, 41 263 M poids).
-   Le pas suivant est la **porte de M5** : jetons gourmands **identiques** au chemin sans brouillon,
-   puis taux d'acceptation par type de tâche — vue **rouge** avec un brouillon volontairement
-   désaligné.
+1. ~~**S4 d'abord**~~ — **fait le 12/10, et mesuré** : la porte
+   `tools/porte-prechargement.sh` existe (trois bras, cache évincé avant chacun), le mécanisme est
+   chiffré (`tools/banc-prelire.py`, `tools/banc-experts.py`), la prélecture parallèle est dans le
+   moteur (**calcul d'une passe : 7,70 s → 3,65 s**), et l'idée de Strata telle quelle
+   (couche suivante) a été **implémentée puis éteinte faute de gain**. Le reste de S4 est nommé :
+   le **`pread` explicite en parallèle** (×3,5 sur le mécanisme) demande des tampons — chantier
+   « lecteurs parallèles ».
+2. **S1 ensuite — c'est maintenant l'action.** Le premier pas est **fait et mesuré**
+   (`reports/rapport-v41-couches-brouillon.md`) : le brouillon de V4.1 est **dans le fichier**
+   (3 couches déclarées, 75 tenseurs, 41 263 M poids). Le pas suivant est la **porte de M5** :
+   jetons gourmands **identiques** au chemin sans brouillon, puis taux d'acceptation par type de
+   tâche — vue **rouge** avec un brouillon volontairement désaligné.
 
 **Ce que cette note ne dit pas** : qu'un chiffre de Strata soit reproductible ici. Aucun ne l'est
-tant qu'une porte ne l'a pas refait.
+tant qu'une porte ne l'a pas refait — et sur les deux qui ont été refaits (le préchargement et la
+lecture de la couche suivante), **un seul tient**.

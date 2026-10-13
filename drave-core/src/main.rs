@@ -25,6 +25,13 @@ const VARS_LUES: &[&str] = &[
     "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
+    // S4 (docs/strata-pour-drave.md) : la prélecture des experts. `PRELIRE` coupe tout
+    // (c'est le bras « à la demande » de `tools/porte-prechargement.sh`) ; `PRELIRE_FILS`
+    // choisit le nombre de fils qui entrent les pages (0 = l'ancien `madvise`) ;
+    // `PRELIRE_TRANCHE` garde l'ancienne granularité pour refaire la mesure qui a montré
+    // qu'elle ne changeait rien ; `PRELIRE_DENSE` rallume la prélecture de la couche
+    // suivante, mesurée sans gain (le témoin reste pour pouvoir la re-mesurer).
+    "PRELIRE_FILS", "PRELIRE_TRANCHE", "PRELIRE_DENSE",
     // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
     // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
     "OCCUPATION_ATTENTION_SEULE",

@@ -52,6 +52,21 @@ extern "C" {
 /// `MADV_WILLNEED` : « je vais lire cette plage, lance les lectures ».
 const MADV_WILLNEED: i32 = 3;
 
+/// Taille d'une demande de prélecture : **1 Mio**.
+///
+/// Mesuré le 12/10 (`tools/banc-experts.py`, 24 plages de 4 Mio dispersées, pages
+/// parcourues dans l'ordre du calcul, array raid0, cache évincé entre les bras) :
+///
+/// | demande | plage entière | **par tranches de 1 Mio** | 8 fils en `pread` |
+/// |---|---|---|---|
+/// | 1 126 Mo/s | 1 191 Mo/s (**×1,06**) | **2 797 Mo/s (×2,5)** | 3 995 Mo/s (×3,5) |
+///
+/// Une demande sur la plage ENTIÈRE ne sert donc à rien : le noyau ne traite
+/// qu'une fenêtre de lecture en avance par appel et le reste attend. Découpée en
+/// tranches d'un mégaoctet, chaque appel porte sur une fenêtre entière — d'où le
+/// facteur 2,5, sans une ligne de calcul en plus.
+const TRANCHE_PRELECTURE: usize = 1 << 20;
+
 /// Demande au noyau de **lancer en avance** les lectures d'une plage mappée.
 ///
 /// C'est la seule forme de parallélisme de lecture accessible depuis l'espace
@@ -59,6 +74,11 @@ const MADV_WILLNEED: i32 = 3;
 /// renoncer au mmap. Le noyau, lui, peut lancer plusieurs lectures de pages en
 /// parallèle — et c'est ce qui compte, parce que le NVMe passe de 5,4 Go/s à un
 /// lecteur à **31 Go/s à seize**.
+///
+/// **Par tranches d'un mégaoctet** (voir `TRANCHE_PRELECTURE`) : la demande est
+/// un appel par tranche, pas un appel pour la plage entière — mesuré, c'est le
+/// facteur 2,5. `DRAVE_PRELIRE_TRANCHE=0` rend l'ancien comportement (une seule
+/// demande), ce qui permet de refaire la mesure.
 ///
 /// Ne fait rien si la plage n'est pas mappée (modèle lu en mémoire) : l'appel
 /// est alors sans objet, pas faux.
@@ -68,7 +88,108 @@ pub fn prelire(ptr: *const u8, octets: usize) {
     // si un gain vient d'elle ou du cache qui se réchauffe d'un passage à
     // l'autre.
     if !prelire_active() { return; }
-    unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+    if !tranches_voulues() {
+        unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+        return;
+    }
+    let mut fait = 0usize;
+    while fait < octets {
+        let n = TRANCHE_PRELECTURE.min(octets - fait);
+        unsafe { madvise(ptr.add(fait) as *mut u8, n, MADV_WILLNEED); }
+        fait += n;
+    }
+}
+
+/// `DRAVE_PRELIRE_TRANCHE=0` : une seule demande pour la plage entière (l'ancien
+/// comportement, gardé pour refaire la mesure qui a montré ×2,5).
+fn tranches_voulues() -> bool {
+    match std::env::var("DRAVE_PRELIRE_TRANCHE") {
+        Ok(v) => !(v == "0" || v.eq_ignore_ascii_case("non") || v.eq_ignore_ascii_case("false")),
+        Err(_) => true,
+    }
+}
+
+/// Touche une adresse par page d'une plage : c'est ce qui **fait entrer les pages**.
+///
+/// `read_volatile` et non `read` : le compilateur a le droit de supprimer une lecture
+/// dont personne ne lit le résultat, et il ne s'en prive pas — la prélecture
+/// disparaîtrait alors du binaire sans que rien ne le dise.
+unsafe fn toucher(addr: usize, octets: usize) {
+    let p = addr as *const u8;
+    let mut i = 0usize;
+    while i < octets {
+        std::ptr::read_volatile(p.add(i));
+        i += 4096;
+    }
+}
+
+/// `DRAVE_PRELIRE=0` coupe AUSSI la prélecture parallèle : sans cela, le bras témoin
+/// « à la demande » ne serait plus à la demande, et la porte ne comparerait plus rien.
+pub fn prelecture_active() -> bool { prelire_active() }
+
+/// `DRAVE_PRELIRE_DENSE=1` : prélecturer aussi les poids **denses** de la couche suivante.
+///
+/// **Défaut : non — mesuré sans gain, et c'est un résultat.** Implémenté le 12/10 d'après
+/// la lecture de Strata (« lire la couche suivante pendant que l'attention tourne »), puis
+/// mesuré sur la même passe à 8 jetons, mêmes jetons, cache évincé entre les bras :
+///
+/// | bras | temps mural | octets lus | défauts majeurs |
+/// |---|---|---|---|
+/// | experts seuls (défaut) | **30,47 s** | 10,00 Go | 4 202 |
+/// | experts + denses | 32,05 s | 10,00 Go | 4 229 |
+///
+/// La prélecture dense n'ajoute **rien** : le préchargement synchrone ne se recouvre pas
+/// avec le calcul (il faut un fil dédié pour cela, et il faudra le mesurer à son tour), et
+/// les octets lus sont les mêmes. Le témoin reste, parce qu'un « ça n'apporte rien »
+/// mesuré vaut mieux qu'un « ça devrait aider » : c'est `DRAVE_PRELIRE_DENSE=1` qui
+/// rejouera la mesure.
+pub fn prelecture_dense_voulue() -> bool {
+    matches!(std::env::var("DRAVE_PRELIRE_DENSE").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+}
+
+/// `DRAVE_PRELIRE_FILS` : nombre de fils de prélecture (défaut 8, `0` la remplace par
+/// l'ancienne demande `madvise`).
+pub fn fils_prelecture() -> usize {
+    match std::env::var("DRAVE_PRELIRE_FILS") {
+        Ok(v) => v.parse().unwrap_or(8),
+        Err(_) => 8,
+    }
+}
+
+/// Prélecture **parallèle** : `fils` fils entrent les pages des plages données.
+///
+/// POURQUOI PAS `madvise`. Mesuré le 12/10 (`tools/banc-experts.py` : 24 plages de 4 Mio
+/// dispersées, pages parcourues dans l'ordre du calcul, cache évincé entre les bras) :
+///
+/// | demande (défauts de page) | `madvise` plage entière | `madvise` par tranches | **fils qui touchent** |
+/// |---|---|---|---|
+/// | 1 126 Mo/s | 1 191 Mo/s (×1,06) | 2 797 Mo/s (×2,5) | **3 995 Mo/s (×3,5)** |
+///
+/// Et dans le moteur, la granularité de `madvise` ne change rien du tout (31 s dans les
+/// trois cas) : le noyau ne parallélise pas une demande de prélecture comme il parallélise
+/// des défauts de page **simultanés**. Ici, ce sont donc les fils qui les lancent — c'est
+/// la seule forme de parallélisme de lecture accessible sans renoncer au mmap.
+///
+/// Les adresses voyagent en `usize` : un pointeur brut n'est pas `Send`, et le dépôt a
+/// déjà ce motif (`kimi_k3.rs`). Les plages viennent d'un mapping valable toute la vie du
+/// processus : les toucher est sûr, et n'écrit rien.
+pub fn prelecture_parallele(plages: &[(usize, usize)], fils: usize) {
+    if plages.is_empty() || fils <= 1 {
+        if let Some(&(addr, octets)) = plages.first() {
+            unsafe { toucher(addr, octets); }
+        }
+        return;
+    }
+    let par_fil = plages.len().div_ceil(fils);
+    std::thread::scope(|s| {
+        for groupe in plages.chunks(par_fil) {
+            s.spawn(move || {
+                for &(addr, octets) in groupe {
+                    unsafe { toucher(addr, octets); }
+                }
+            });
+        }
+    });
 }
 
 /// Demande au noyau de lancer la lecture du fichier ENTIER, une fois, au

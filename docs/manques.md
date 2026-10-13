@@ -24,6 +24,22 @@
 **8,6 Mo/s sur disque dur** contre 243 Mo/s en séquentiel (÷28) — un préchargement
 ordonné (`madvise`, lecture des experts par grappe) n'existe pas.
 
+**Mesuré, et son premier pas comblé le 12/10** — fiches
+[`reports/rapport-prelire-grappe.md`](../reports/rapport-prelire-grappe.md) (le mécanisme, hors
+moteur) et [`reports/rapport-s4-prechargement-moteur.md`](../reports/rapport-s4-prechargement-moteur.md)
+(la passe réelle). Les chiffres ci-dessus décrivent le régime **à la demande**, et ils tiennent :
+**29 Mo/s** au hasard sur l'array, **1 126 Mo/s** sur un motif d'experts. Ce qui paie n'est pas
+`madvise` — sur une plage entière il rend **×1,06**, et sa granularité **ne change rien** dans le
+moteur (31 à 36 s dans tous les cas) — mais des **fils qui entrent les pages** : la prélecture
+parallèle ramène le temps de **calcul** d'une passe de **7,70 s à 3,65 s** (−53 %) et la passe de
+35,03 s à 31,21 s, **perplexité identique**. Le témoin `DRAVE_PRELIRE=0` rend le bras « à la
+demande » rejouable.
+
+**Ce qui reste ouvert est nommé** : le **`pread` explicite depuis des fils** rend **3 995 Mo/s**
+contre 1 126 pour la demande (×3,5, `tools/banc-experts.py`) — mais il demande des **tampons**,
+donc un chemin de calcul qui lit dans une mémoire à nous plutôt que dans le mapping. C'est le
+chantier « lecteurs parallèles » du § 6.5.1 de `docs/configuration-nvme-raid-amd.md`.
+
 ---
 
 ## 2. Les manques du MODÈLE (ce qu'aucun modèle d'aujourd'hui ne fait)
