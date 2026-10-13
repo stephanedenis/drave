@@ -18,7 +18,7 @@ set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 MODELE=/tmp/m5_d384_route_distille.gguf
-IDS=/tmp/campagne24/route_ids128.txt
+IDS=${IDS:-/tmp/campagne24/route_ids128.txt}
 COUCHES=2
 LIMITE=128
 CTX=256

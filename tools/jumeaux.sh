@@ -21,6 +21,7 @@ cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+. tools/_corpus.sh   # régénère le corpus s'il manque (voir l'en-tête du fichier)
 N=${1:-32}          # jetons
 L=${2:-12}          # couche où les jumeaux se parlent
 FRAC=${3:-0.10}     # bruit du jumeau dégradé, en fraction de la RMS de l'état

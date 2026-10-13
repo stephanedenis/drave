@@ -18,6 +18,7 @@ cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+. tools/_corpus.sh   # régénère le corpus s'il manque (voir l'en-tête du fichier)
 LIMITE=${LIMITE:-1024}
 CLASSES=${CLASSES:-256}
 # PROFONDEURS = le NOMBRE DE COUCHES EXÉCUTÉES (1..24). Attention : `--couches a:b` EXCLUT `b`

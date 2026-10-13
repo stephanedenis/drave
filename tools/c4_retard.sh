@@ -21,6 +21,7 @@ cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+. tools/_corpus.sh   # régénère le corpus s'il manque (voir l'en-tête du fichier)
 N=${1:-128}
 L=${2:-12}
 RETARDS=${3:-"0 1 2 4 8 16"}
