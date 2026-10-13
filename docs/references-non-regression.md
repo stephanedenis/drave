@@ -21,6 +21,12 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-13 à 03 h 59** (**37 portes, 35 vertes, 2 rouges**, ~72 min) : les deux rouges
+> sont **les mêmes** que ci-dessous (le critère d'indice extérieur, marginal par construction), et
+> **`porte-push-paresseux` y est verte** — c'est la passe précédente qui l'avait attrapée, et
+> celle-ci vérifie la correction **dans les conditions où le défaut était apparu**. Les valeurs
+> des portes n'ont pas bougé.
+>
 > **Passe du 2026-10-13 à 01 h 13** (**37 portes, 34 vertes, 3 rouges**, ~68 min) : les deux
 > premiers rouges sont ceux de la botte de foin (voir ci-dessus) ; le troisième était **la porte
 > elle-même** — `porte-push-paresseux` lisait `chargées en …s` alors que le moteur imprime `…ms`

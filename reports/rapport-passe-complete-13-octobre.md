@@ -25,6 +25,16 @@ de la paresse était née. Aucune porte n'exerce le chemin VRAM : le pool est co
 A/B (`reports/rapport-vram-transfert.md` § 5), pas par la passe — c'est écrit ici pour que personne
 ne croie le contraire.
 
+### 1bis. Une troisième passe, après les réparations (03 h 59 → 05 h 12)
+
+| passe | portes | verdict | rouges |
+|---|---:|---|---|
+| 2026-10-13 03 h 59 | 37 | **35 vertes, 2 rouges** | les deux de la botte de foin, et **`porte-push-paresseux` est VERTE** |
+
+C'est la passe qui compte pour la correction de la porte : elle la vérifie **dans les conditions où
+le défaut était apparu** (même environnement, même machine, même enchaînement). Une porte réparée
+et revue verte **seule** ne l'aurait pas prouvé.
+
 ## 2. Ce que la première passe a attrapé : quatre portes qui ne mesuraient plus rien
 
 `porte-greffe`, `porte-indice`, `porte-melange` et `porte-topologie` sortaient **« code 2 »** —
