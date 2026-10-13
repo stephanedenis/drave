@@ -178,6 +178,13 @@ demande — perplexité identique dans les quatre bras. Ce qui reste, et qui est
 **`pread` par huit fils rend 3 995 Mo/s** contre 1 126 à la demande (`tools/banc-experts.py`), mais
 il demande des **tampons** — c'est-à-dire un **pool** et du **recouvrement**, pas des défauts de
 page. Note de conception : `docs/note-lecteurs-paralleles.md`.
+Le **pool de tampons** est fait aussi — et **neutre en temps** (mesuré : 2,4 s avant, 2,3-2,4 s
+après, perplexité identique) : l'hypothèse des défauts de page est réfutée, `glibc` réutilise déjà
+ces blocs. Il est gardé pour borner la mémoire (7,1 Mo au lieu de ~1 Go vivant) et pour rendre les
+allocations visibles (`[tampons] 32 allocations, 9184 réutilisations`). Reste : le **recouvrement**,
+dont l'ampleur est maintenant cernée — la passe de 8 jetons dure 2,3 s, dont 3,05 s de calcul
+mesurés sur 8 jetons par la porte : il n'y a presque rien à recouvrir, et l'idée de Strata
+(prélecturer la couche suivante) avait déjà été mesurée sans gain.
 
 **4. Le chargement construisait 2,7 Go de « listes » pour rien — FAIT** (commit `2bbecc86`) :
 **26,95 s → 7,36 s** sur Qwen3-30B, **6,85 s → 0,60 s** sur le 0,5B, sans déplacer un chiffre ; la

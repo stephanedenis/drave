@@ -45,9 +45,17 @@ Qwen3-30B, array, cache évincé avant chaque bras, perplexité identique dans l
 | **tampons séquentiels** | **6,22 Go** | **3,40 s** |
 
 C'est le seul bras qui gagne **et** sur les octets **et** sur le temps : la lecture en avance du
-noyau dépasse la plage utile de 75 %. Ce qui reste de ce chantier est en § 4 (le pool et le
-recouvrement), et le côté **VRAM** a été mesuré puis corrigé le même jour : **l'allocation** y est
-37 à 91 % du coût d'un montage, et un pool l'a supprimée (`reports/rapport-vram-transfert.md`).
+noyau dépasse la plage utile de 75 %. Ce qui reste de ce chantier est en § 4 (le recouvrement), et
+le côté **VRAM** a été mesuré puis corrigé le même jour : **l'allocation** y est 37 à 91 % du coût
+d'un montage, et un pool l'a supprimée (`reports/rapport-vram-transfert.md`).
+
+**Le pool des tampons est fait — et il est NEUTRE en temps.** Mesuré deux binaires du même arbre,
+deux répétitions chacun : **2,4 s avant, 2,3-2,4 s après**, perplexité 799,8557 dans les deux cas.
+L'hypothèse qui le motivait (« un tampon neuf = un `mmap` = 215 défauts de page, ~250 000 par
+jeton ») est **réfutée** : `glibc` réutilise les blocs de 0,88 Mo rendus par le jeton précédent. Il
+est gardé parce qu'il **borne** la mémoire des tampons (7,1 Mo au lieu de ~1 Go vivant) et parce que
+la ligne `[tampons]` rend une régression visible — pas pour sa vitesse. Fiche :
+[`reports/rapport-pool-tampons.md`](../reports/rapport-pool-tampons.md).
 
 ## 3. `MADV_POPULATE_READ` : TRANCHÉ le 13/10 — il ne remplace pas les tampons
 
