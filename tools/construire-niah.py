@@ -32,21 +32,25 @@ CORPUS = "data/wikitext2_test.txt"
 CAR_PAR_JETON = 3.5
 
 
-def corps(jetons, corpus=CORPUS):
-    """Le remplissage : une fenêtre VARIÉE du corpus, au milieu du fichier."""
+def corps(jetons, corpus=CORPUS, fenetre=1.0 / 3.0):
+    """Le remplissage : une fenêtre VARIÉE du corpus, à `fenetre` de sa longueur.
+
+    `--fenetre` existe pour une raison de MESURE, pas de confort : le critère des portes
+    (`porte-indice`, `porte-melange`) — un indice extérieur tombe plus près de l'aiguille que
+    le hasard — dépend du CONTENU du remplissage, et la botte de foin de la campagne n'a
+    jamais été versionnée. Faire varier la fenêtre dit si le critère tient sur un texte ou
+    s'il ne tient que sur celui qu'on a choisi.
+    """
     texte = pathlib.Path(corpus).read_text(encoding="utf-8", errors="replace")
     besoin = int(jetons * CAR_PAR_JETON)
     if len(texte) < besoin + 1000:
         sys.exit(f"corpus trop court : {len(texte)} caractères pour {besoin} demandés")
-    # Une fenêtre au milieu : les portes prennent le DÉBUT de ce qu'on rend, et une
-    # fenêtre qui commencerait au même endroit à chaque appel partagerait son remplissage
-    # d'une sonde à l'autre (c'est le défaut corrigé de l'aiguille v1).
-    debut = len(texte) // 3
+    debut = int(len(texte) * min(max(fenetre, 0.0), 0.95))
     return texte[debut:debut + besoin]
 
 
-def construire(jetons, profondeur):
-    b = corps(jetons)
+def construire(jetons, profondeur, fenetre=1.0 / 3.0):
+    b = corps(jetons, fenetre=fenetre)
     c = int(len(b) * profondeur)
     return b[:c] + AIGUILLE + b[c:] + "\nQuestion: What is the vault access code?\n"
 
@@ -66,6 +70,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--jetons", type=int, default=4096)
     ap.add_argument("--profondeur", type=float, default=0.5)
+    ap.add_argument("--fenetre", type=float, default=1.0 / 3.0,
+                    help="position de la fenêtre de remplissage dans le corpus (0 → 1)")
     ap.add_argument("--sortie", default="")
     ap.add_argument("--verifier", default="")
     a = ap.parse_args()
@@ -73,7 +79,7 @@ def main():
         return verifier(os.path.expanduser(a.verifier))
     sortie = os.path.expanduser(a.sortie or
                                 f"~/IA/scratch/prerequis/niah_{a.jetons}_{a.profondeur}.txt")
-    texte = construire(a.jetons, a.profondeur)
+    texte = construire(a.jetons, a.profondeur, a.fenetre)
     os.makedirs(os.path.dirname(sortie), exist_ok=True)
     pathlib.Path(sortie).write_text(texte, encoding="utf-8")
     print(f"{sortie} : {len(texte)} caractères écrits")

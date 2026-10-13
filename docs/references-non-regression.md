@@ -14,10 +14,12 @@
 > séquentielle dans nos tampons, chargement paresseux) ne déplacent aucun chiffre, et
 > `porte-flux.sh` l'a vérifié après chacun. Les **deux rouges sont nommés et instruits** :
 > `porte-indice` et `porte-melange` lisent une botte de foin **régénérée** (celle de la campagne
-> n'a jamais été versionnée, `tools/niah_4096_0.5.txt` l'est désormais) et l'effet qu'elles
-> mesurent — un indice extérieur qui tombe plus près de l'aiguille que le hasard — ne se reproduit
-> pas sur elle (482 jetons contre 370). La porte documente elle-même que l'effet est **réel mais
-> non robuste**.
+> n'a jamais été versionnée, `tools/niah_4096_0.5.txt` l'est désormais). Leur critère — un indice
+> extérieur qui tombe plus près de l'aiguille que le hasard — **ne survit pas à la
+> reconstruction** : mesuré sur **cinq fenêtres** du même corpus, **deux passent** (1,21× et 1,69×
+> mieux que le hasard) et **trois échouent** (jusqu'à 2,13× pire). Détail et recommandations :
+> [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
+> marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
 > **Passe du 10/10 à 22 h 27** (28 portes, 28 vertes, 73 min 21 s) : les six portes ajoutées
 > ensuite y sont **mesurées à part** — `porte-sauvegarde-modele`, `porte-occupation-elagage`,

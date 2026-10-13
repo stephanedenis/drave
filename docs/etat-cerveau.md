@@ -196,6 +196,16 @@ autre optimisation du déport ; le recouvrement ensuite (le noyau est plus court
 c'est le calcul CPU qu'il faut recouvrir). Première commande :
 `DRAVE_GPU=1 ./drave-core/target/release/drave <modele> --gpu-banc --matrix blk.0.ffn_gate_exps.weight`.
 
+**5bis. Deux portes rouges par CONSTRUCTION — le critère est à refaire, pas le moteur.**
+`porte-indice` et `porte-melange` exigent qu'un indice extérieur tombe plus près de l'aiguille que
+le hasard ; mesuré sur **cinq fenêtres** du même corpus, le critère passe **deux fois** (1,21× et
+1,69×) et échoue **trois fois** (jusqu'à 2,13× pire). L'entrée de la campagne n'a jamais été
+versionnée ; elle l'est maintenant (`tools/niah_4096_0.5.txt`, `tools/construire-niah.py --fenetre`).
+**La correction proposée** (écrite avant tout code) : un **contrôle apparié** — même invite, même
+longueur, une question qui ne désigne pas l'aiguille — pour que le texte s'annule, ou une moyenne
+sur plusieurs fenêtres. Fiche :
+[`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md).
+
 **6. Dessin H — la carte des sorties a tourné (11/10 00 h 15) : ce n'est pas le point de sortie qui
 limite.** Quatre sorties (12, 16, 20, 22 sur 24) : l'accord de l'oracle monte quand on sort tard,
 mais le **gain atteignable s'effondre** — un routeur réel n'atteint la parité qu'à **22**
