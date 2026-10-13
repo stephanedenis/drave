@@ -9,6 +9,16 @@
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 >
+> **Passe du 2026-10-12 à 23 h 00** (**36 portes, 34 vertes, 2 rouges**, ~74 min) : les valeurs
+> ci-dessous **n'ont pas bougé** — les changements de la nuit (prélecture parallèle, lecture
+> séquentielle dans nos tampons, chargement paresseux) ne déplacent aucun chiffre, et
+> `porte-flux.sh` l'a vérifié après chacun. Les **deux rouges sont nommés et instruits** :
+> `porte-indice` et `porte-melange` lisent une botte de foin **régénérée** (celle de la campagne
+> n'a jamais été versionnée, `tools/niah_4096_0.5.txt` l'est désormais) et l'effet qu'elles
+> mesurent — un indice extérieur qui tombe plus près de l'aiguille que le hasard — ne se reproduit
+> pas sur elle (482 jetons contre 370). La porte documente elle-même que l'effet est **réel mais
+> non robuste**.
+>
 > **Passe du 10/10 à 22 h 27** (28 portes, 28 vertes, 73 min 21 s) : les six portes ajoutées
 > ensuite y sont **mesurées à part** — `porte-sauvegarde-modele`, `porte-occupation-elagage`,
 > `porte-harnais-invariants`, `porte-audit-drapeaux`, `porte-occupation-moteur`,
@@ -20,7 +30,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **34 vertes**, ≈85 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **34 vertes sur 36** (12/10 : les deux rouges sont la botte de foin régénérée), ≈75 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
