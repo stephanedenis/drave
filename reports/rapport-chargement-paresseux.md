@@ -35,11 +35,28 @@ Ce que ça dit :
   26,82 s avec un seul fil ; optimiser la lecture ne le touche pas, c'est la construction qu'il
   fallait éviter ;
 * **il reste 7,36 s** (Qwen3-30B) : c'est la déquantification en f32 (`g.dequant`) plus la
-  reconstructions Q8 des tenseurs « denses » — le `--q4` les évite (**2,63 s**) en **empruntant
-  les blocs Q4_K du fichier**, au prix d'une représentation différente (perplexité 93228,4793
-  contre 95592,5272 sur une paire de jetons à froid : l'emprunt est **plus fidèle**, il ne
-  requantifie pas). Changer le défaut est une **décision**, pas une évidence : elle déplace des
-  chiffres et doit se mesurer sur une passe complète.
+  reconstruction Q8 des tenseurs « denses » — le `--q4` les évite (**2,10 s**) en **empruntant les
+  blocs Q4_K du fichier**.
+
+  **Correction d'une affirmation de la première version de cette fiche.** Elle disait, sur une
+  paire de jetons à froid, que l'emprunt était « plus fidèle » (93228 contre 95592). C'était un
+  artefact de départ à froid : mesuré sur **32 jetons**, l'ordre s'inverse et il est net —
+
+  | chemin | perplexité (32 jetons) | chargement |
+  |---|---:|---:|
+  | défaut (`auto`) | **33,6967** | 7,58 s |
+  | `--dense` | **33,6967** | 7,67 s |
+  | `--q4` (blocs du fichier) | **33,9093** | **2,10 s** |
+
+  L'emprunt est donc **0,63 % moins précis** (33,9093 contre 33,6967) — c'est attendu : la
+  reconstruction Q8 lit des poids déquantifiés en f32 à 8 bits, l'emprunt lit les blocs Q4_K du
+  fichier tels quels. Le défaut et `--dense` rendent **exactement** le même chiffre (la forme
+  paresseuse ne change pas le chemin choisi).
+
+  **La décision, chiffrée** : `--q4` échange **0,63 % de perplexité contre 5,5 s de chargement par
+  passe**. Sur une passe courte, ces 5,5 s dominent (7,6 s de chargement pour ~1 s de calcul) ;
+  sur une passe longue, elles disparaissent. Ce n'est pas au moteur de trancher à la place de
+  l'utilisateur : le défaut reste `auto`, et le drapeau est là.
 
 ## 2. L'anecdote qui compte : la porte du flux a attrapé ma paresse trop large
 
