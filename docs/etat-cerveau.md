@@ -122,7 +122,7 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **38 portes** `tools/porte-*.sh` — **passe du 2026-10-12 à 23 h 00 sur 36 portes : 34 vertes,
+- **39 portes** `tools/porte-*.sh` — **passe du 2026-10-12 à 23 h 00 sur 36 portes : 34 vertes,
   2 rouges** (~74 min), les deux rouges étant `porte-indice` et `porte-melange` (botte de foin
   régénérée, effet non robuste — nommé dans `docs/references-non-regression.md`). La passe du
   **2026-10-11 à 06 h 30** en comptait **34 vertes sur 34** (85 min 8 s) ; trois sont nées le
@@ -130,8 +130,10 @@
   demande / `madvise` / fils / tampons, cache évincé avant chaque bras), **`porte-m5-brouillon.sh`**
   (le fichier déclare ses 3 couches de brouillon et les porte — vue rouge sur un modèle qui ne les
   déclare pas), **`porte-push-paresseux.sh`** (la forme « listes » paresseuse rend le même texte
-  gourmand, et vue rouge avec `DRAVE_PUSH_FAUX=1`) et **`porte-tableaux.sh`** (un tableau Markdown
-  au mauvais nombre de cellules ne rend pas — et personne ne le voit). Repères :
+  gourmand, et vue rouge avec `DRAVE_PUSH_FAUX=1`) **`porte-tableaux.sh`** (un tableau Markdown
+  au mauvais nombre de cellules ne rend pas — et personne ne le voit) et
+  **`porte-echange-experts.sh`** (le routage imposé est inerte par défaut, **exact** sur son propre
+  routage — vu rouge sans `DRAVE_TRACE_EXPERTS_ORDRE` — et vivant sur un routage étranger). Repères :
   `docs/references-non-regression.md`. La nuit
   en a ajouté **six** — sauvegarde du modèle, occupation × élagage, invariants du harnais, audit des
   drapeaux, occupation du moteur, poids creux — et **chacune a été vue ROUGE** avec son défaut
@@ -264,8 +266,14 @@ fenêtre/drain est un paramètre d'**implémentation**, pas de qualité. Fiche :
 
 **8. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
 est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,
-contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un modèle routé
-([`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md)) ; le coût compressé est de
+contrôle à 0,000 %) — **la suite — `--echange experts` sur un modèle routé — est MESURÉE le 13/10, et elle est
+NÉGATIVE** : échanger les **choix d'experts** entre deux instances qui voient des textes différents
+détruit le calcul (×92,6 en échangeant tout), et à la couche où le modèle est le plus robuste (la
+dernière) l'effet **change de signe selon le texte** (×0,81 · ×1,46 · ×1,26) ; un routage
+**aléatoire** y fait aussi bien ou mieux, donc il n'y a **pas** de transfert. Le mécanisme
+(capture `DRAVE_TRACE_EXPERTS` + imposition `DRAVE_ROUTAGE_FORCER`, invariant **exact** verrouillé
+par `tools/porte-echange-experts.sh`) reste ; la piste latérale, non
+([`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md)) ; le coût compressé est de
 **÷4 d'octets pour +3,0 %** (8 bits par bloc), et quantifier bat élaguer **encore**. Retard : un pas
 coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue sans** et ne réutilise jamais
 ([`rapport-c4-retard.md`](../reports/rapport-c4-retard.md)).

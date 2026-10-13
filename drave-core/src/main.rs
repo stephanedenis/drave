@@ -39,6 +39,11 @@ const VARS_LUES: &[&str] = &[
     // 13/10 : la forme « listes » est construite À LA DEMANDE (6,1 s à 19,3 s gagnés par
     // chargement) ; `PUSH_TOT` rallume l'ancien comportement pour refaire la mesure.
     "PUSH_TOT", "PUSH_FAUX",
+    // 13/10 : l'échange de CHOIX D'EXPERTS (C9 sur un modèle routé). La capture existait
+    // (`DRAVE_TRACE_EXPERTS`) ; `DRAVE_ROUTAGE_FORCER` est son pendant — il relit un tel fichier
+    // et impose les experts, ce qui rend mesurable « et si cette instance avait routé comme
+    // l'autre ? ». Son invariant : s'imposer son PROPRE routage rend la perplexité de référence.
+    "ROUTAGE_FORCER", "TRACE_EXPERTS_ORDRE",
     // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
     // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
     "OCCUPATION_ATTENTION_SEULE",

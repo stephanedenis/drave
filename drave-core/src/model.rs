@@ -429,7 +429,66 @@ fn masque_elagage(l: usize, ne: usize) -> Option<Vec<f32>> {
     Some(masque)
 }
 
-fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f32)> {
+/// **Le routage imposé — C9 sur un modèle routé.** `DRAVE_TRACE_EXPERTS` écrit depuis toujours
+/// `couche cle e0 e1 …` (les experts choisis, par couche et par jeton) ; `DRAVE_ROUTAGE_FORCER`
+/// relit un tel fichier et **impose** ces choix : le routeur ne décide plus, les poids restent
+/// ceux du modèle pour les experts imposés. C'est ce qui permet d'échanger les **choix d'experts**
+/// entre deux instances qui voient des textes différents — la variante que
+/// `reports/rapport-c9-lateralite.md` § 3 nommait comme la seule plausible.
+///
+/// L'invariant à tenir, et il se mesure : imposer à une instance **son propre** routage rend
+/// **exactement** sa perplexité de référence (mêmes experts, mêmes poids, mêmes octets).
+fn lire_routage(texte: &str) -> std::collections::HashMap<(usize, u64), Vec<usize>> {
+    let mut table = std::collections::HashMap::new();
+    for l in texte.lines() {
+        let l = l.trim();
+        if l.is_empty() || l.starts_with('#') { continue; }
+        let champs: Vec<&str> = l.split_whitespace().collect();
+        if champs.len() < 3 { continue; }
+        let (Ok(couche), Ok(cle)) = (champs[0].parse::<usize>(), champs[1].parse::<u64>()) else {
+            continue;
+        };
+        let experts: Vec<usize> = champs[2..].iter().filter_map(|e| e.parse::<usize>().ok()).collect();
+        if !experts.is_empty() { table.insert((couche, cle), experts); }
+    }
+    table
+}
+
+/// `DRAVE_TRACE_EXPERTS_ORDRE=1` : écrire les experts dans l'ORDRE DE SÉLECTION au lieu de les
+/// trier. La trace triée est plus lisible, mais elle ne permet pas de reproduire l'accumulation
+/// flottante à l'octet près — c'est ce que l'invariant d'identité exige.
+fn trace_experts_ordre() -> bool {
+    matches!(std::env::var("DRAVE_TRACE_EXPERTS_ORDRE").as_deref(), Ok("1") | Ok("oui"))
+}
+
+/// La table imposée, chargée une fois (`DRAVE_ROUTAGE_FORCER=<fichier>`).
+fn routage_force() -> &'static Option<std::collections::HashMap<(usize, u64), Vec<usize>>> {
+    static F: std::sync::OnceLock<Option<std::collections::HashMap<(usize, u64), Vec<usize>>>> =
+        std::sync::OnceLock::new();
+    F.get_or_init(|| {
+        let chemin = std::env::var("DRAVE_ROUTAGE_FORCER").ok()?;
+        match std::fs::read_to_string(&chemin) {
+            Ok(t) => {
+                let table = lire_routage(&t);
+                eprintln!("[routage] {} choix imposés depuis {chemin}", table.len());
+                Some(table)
+            }
+            Err(e) => { eprintln!("[routage] {chemin} illisible ({e}) — routage normal"); None }
+        }
+    })
+}
+
+/// Le choix des experts : imposé s'il est dans la table, calculé sinon.
+fn choix_experts(force: Option<&std::collections::HashMap<(usize, u64), Vec<usize>>>,
+                 couche: usize, cle: u64, calcule: impl FnOnce() -> Vec<usize>) -> Vec<usize> {
+    match force.and_then(|m| m.get(&(couche, cle))) {
+        Some(v) => v.clone(),
+        None => calcule(),
+    }
+}
+
+fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize, couche: usize, cle: u64)
+    -> Vec<(usize, f32)> {
     let ne = moe.routeur.len() / x.len().max(1);
     let h = x.len();
     let mut logits = vec![0f32; ne];
@@ -470,22 +529,27 @@ fn router(cfg: &Cfg, moe: &Moe, x: &[f32], tid: u32, k: usize) -> Vec<(usize, f3
         for e in 0..ne.min(m.len()) { sel[e] += m[e]; }
     }
     let k = k.clamp(1, ne);
-    let chosis: Vec<usize> = match moe.tid2eid.as_ref() {
-        Some(t) => {
-            let base = tid as usize * k;
-            (0..k).map(|j| t[base + j].max(0) as usize).collect()
-        }
-        None => {
-            let mut idx: Vec<u32> = (0..ne as u32).collect();
-            if k < ne {
-                idx.select_nth_unstable_by(k, |&a, &b| {
-                    sel[b as usize].partial_cmp(&sel[a as usize]).unwrap()
-                });
-                idx.truncate(k);
+    // LE ROUTAGE IMPOSÉ PASSE AVANT LA SÉLECTION : les poids ci-dessous sont alors ceux du
+    // modèle pour les experts IMPOSÉS (même `probs`, même renorme), ce qui est bien « et si le
+    // routeur avait choisi ceux-là ? » et non « et si on avait pris d'autres poids ? ».
+    let chosis: Vec<usize> = choix_experts(routage_force().as_ref(), couche, cle, || {
+        match moe.tid2eid.as_ref() {
+            Some(t) => {
+                let base = tid as usize * k;
+                (0..k).map(|j| t[base + j].max(0) as usize).collect()
             }
-            idx.into_iter().map(|e| e as usize).collect()
+            None => {
+                let mut idx: Vec<u32> = (0..ne as u32).collect();
+                if k < ne {
+                    idx.select_nth_unstable_by(k, |&a, &b| {
+                        sel[b as usize].partial_cmp(&sel[a as usize]).unwrap()
+                    });
+                    idx.truncate(k);
+                }
+                idx.into_iter().map(|e| e as usize).collect()
+            }
         }
-    };
+    });
     let mut poids: Vec<f32> = chosis.iter().map(|&e| probs[e]).collect();
     // gpt-oss : le softmax porte sur les k POIDS retenus, après sélection.
     // La renormalisation MULTIPLIE par l'inverse au lieu de diviser : c'est ce
@@ -6187,14 +6251,14 @@ Utilisez `--lot 1`, ou implémentez les experts partagés ici");
                 for i in 0..t {
                     // Le MÊME routeur que le chemin jeton seul (voir `router`) :
                     // deux copies avaient divergé sur le biais de gpt-oss.
-                    let choix = router(&self.cfg, moe, &hn[i * h..(i + 1) * h], toks[i], k);
+                    let jeton = self.jeton_trace.saturating_sub(t as u64) + i as u64;
+                    let choix = router(&self.cfg, moe, &hn[i * h..(i + 1) * h], toks[i], k, l, jeton);
                     if trace_active {
                         use std::io::Write;
                         let mut ids: Vec<usize> = choix.iter().map(|(e, _)| *e).collect();
-                        ids.sort_unstable();
+                        if !trace_experts_ordre() { ids.sort_unstable(); }
                         let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
                         let f = self.trace_experts.as_mut().unwrap();
-                        let jeton = self.jeton_trace.saturating_sub(t as u64) + i as u64;
                         let _ = writeln!(f, "{} {} {}", l, jeton, liste.join(" "));
                     }
                     for (e, poids) in choix { groupes[e].push((i, poids)); }
@@ -8172,7 +8236,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 let k = if self.moe_topk > 0 { self.moe_topk } else { cfg.n_expert_used };
                 let k = k.clamp(1, ne);
                 // Une seule implémentation du routage, partagée avec le lot.
-                let choix = router(cfg, moe, &hn, tok, k);
+                let choix = router(cfg, moe, &hn, tok, k, l, pos as u64);
                 let idx: Vec<usize> = choix.iter().map(|(e, _)| *e).collect();
                 let poids: Vec<f32> = choix.iter().map(|(_, p)| *p).collect();
                 if self.profil_experts.is_some() {
@@ -8183,7 +8247,12 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 if let Some(f) = self.trace_experts.as_mut() {
                     use std::io::Write;
                     let mut ids: Vec<usize> = idx.clone();
-                    ids.sort_unstable();       // l'ordre de `select_nth` est arbitraire
+                    // L'ORDRE COMPTE : trié, la trace est lisible mais l'accumulation flottante
+                    // des experts change (mesuré : 37,2013 contre 37,1990 en s'imposant sa propre
+                    // trace triée — 0,006 %, assez pour fausser une mesure d'échange). Avec
+                    // `DRAVE_TRACE_EXPERTS_ORDRE=1`, la trace garde l'ordre de sélection et
+                    // l'imposition est alors EXACTE.
+                    if !trace_experts_ordre() { ids.sort_unstable(); }
                     let liste: Vec<String> = ids.iter().map(|e| e.to_string()).collect();
                     let _ = writeln!(f, "{} {} {}", l, pos, liste.join(" "));
                 }
@@ -9796,14 +9865,14 @@ mod tests_router {
 
         // 1. softmax sur tous, top-2, renormalisation.
         let m = moe_synthetique(logits.clone(), None, None);
-        let r = router(&cfg_synthetique(Gating::Softmax, true, 0.0, 0), &m, &x, 0, 2);
+        let r = router(&cfg_synthetique(Gating::Softmax, true, 0.0, 0), &m, &x, 0, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
         let (e2, e1) = ((2.0f32).exp(), (1.0f32).exp());
         let (s2, s1) = (e2 / (e2 + e1), e1 / (e2 + e1));
         assert!((r[0].1 - s2 / (s1 + s2)).abs() < 1e-6);
 
         // 2. sigmoïde, top-2, renormalisation.
-        let r = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &x, 0, 2);
+        let r = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &x, 0, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
         let sig = |v: f32| 1.0 / (1.0 + (-v).exp());
         let (a, b) = (sig(2.0), sig(1.0));
@@ -9811,13 +9880,13 @@ mod tests_router {
 
         // 3. top-k sur les logits BRUTS, softmax sur les k, aucune
         //    renormalisation ensuite (le softmax somme déjà à 1).
-        let r = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &x, 0, 2);
+        let r = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &x, 0, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
         let (p2, p1) = ((2.0f32).exp(), (1.0f32).exp());
         assert!((r[0].1 - p2 / (p1 + p2)).abs() < 1e-6);
 
         // 4. racine de softplus, top-2, renormalisation.
-        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m, &x, 0, 2);
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m, &x, 0, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
         let sp = |v: f32| (1.0 + v.exp()).ln().sqrt();
         let (a, b) = (sp(2.0), sp(1.0));
@@ -9834,12 +9903,12 @@ mod tests_router {
         // logit BRUT, donc minuscule.
         let logits = vec![0.0f32, 1.0, 2.0, -1.0];
         let m = moe_synthetique(logits.clone(), None, None);
-        let sans = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2);
+        let sans = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2, 0, 0);
         assert_eq!(sans.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
 
         let biais = vec![0.0f32, 0.0, 0.0, 10.0];
         let m = moe_synthetique(logits.clone(), Some(biais), None);
-        let avec = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2);
+        let avec = router(&cfg_synthetique(Gating::SoftmaxPoids, false, 0.0, 0), &m, &vec![1.0], 0, 2, 0, 0);
         assert_eq!(avec.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![3, 2],
                    "le biais doit changer la SÉLECTION");
         let (p3, p2) = ((-1.0f32).exp(), (2.0f32).exp());
@@ -9853,8 +9922,8 @@ mod tests_router {
     fn facteur_dechelle_apres_renormalisation() {
         let logits = vec![0.0f32, 1.0, 2.0, -1.0];
         let m = moe_synthetique(logits, None, None);
-        let sans = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &vec![1.0], 0, 2);
-        let avec = router(&cfg_synthetique(Gating::Sigmoid, true, 2.5, 0), &m, &vec![1.0], 0, 2);
+        let sans = router(&cfg_synthetique(Gating::Sigmoid, true, 0.0, 0), &m, &vec![1.0], 0, 2, 0, 0);
+        let avec = router(&cfg_synthetique(Gating::Sigmoid, true, 2.5, 0), &m, &vec![1.0], 0, 2, 0, 0);
         for (a, b) in sans.iter().zip(avec.iter()) {
             assert_eq!(a.0, b.0);
             assert!((b.1 - a.1 * 2.5).abs() < 1e-6, "{:?} contre {:?}", a, b);
@@ -9869,14 +9938,14 @@ mod tests_router {
         // Table : jeton 0 → experts 0 et 3 ; jeton 1 → experts 3 et 1.
         let table = vec![0i32, 3, 3, 1];
         let m = moe_synthetique(logits.clone(), None, Some(table));
-        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 0, 2);
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 0, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![0, 3]);
-        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 1, 2);
+        let r = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 2), &m, &vec![1.0], 1, 2, 0, 0);
         assert_eq!(r.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![3, 1]);
         // Sans table, le top-k donnerait les experts 2 et 1 : la table CHANGE la
         // sélection, elle ne la confirme pas.
         let m2 = moe_synthetique(logits, None, None);
-        let sans = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m2, &vec![1.0], 0, 2);
+        let sans = router(&cfg_synthetique(Gating::SqrtSoftplus, true, 0.0, 0), &m2, &vec![1.0], 0, 2, 0, 0);
         assert_eq!(sans.iter().map(|(e, _)| *e).collect::<Vec<_>>(), vec![2, 1]);
     }
 }
@@ -10082,4 +10151,34 @@ mod tests_kimi_k3 {
         assert!((out[0] - attendu0).abs() < 1e-3, "{} vs {}", out[0], attendu0);
         assert!((out[1] - attendu1).abs() < 1e-3, "{} vs {}", out[1], attendu1);
     }
+    #[test]
+    fn le_fichier_de_routage_se_lit_comme_la_trace() {
+        // Le format est EXACTEMENT celui qu'écrit `DRAVE_TRACE_EXPERTS` : « couche cle e0 e1 … »,
+        // les experts triés. Deux lignes, un commentaire, une ligne bancale : la dernière est
+        // ignorée sans bruit (un fichier tronqué ne doit pas faire échouer une mesure).
+        let t = "# couche cle experts\n0 4 3 17 42\n5 4 7 8\nligne bancale\n\n7 9 1 2\n";
+        let m = lire_routage(t);
+        assert_eq!(m.len(), 3);
+        assert_eq!(m.get(&(0, 4)), Some(&vec![3usize, 17, 42]));
+        assert_eq!(m.get(&(7, 9)), Some(&vec![1usize, 2]));
+        assert_eq!(m.get(&(5, 4)).map(|v| v.len()), Some(2));
+    }
+
+    #[test]
+    fn le_routage_impose_remplace_le_calcul() {
+        let mut m = std::collections::HashMap::new();
+        m.insert((3usize, 12u64), vec![9usize, 2, 5]);
+        // présent : on rend CE QUI EST IMPOSÉ, sans appeler le calcul (le compteur le prouve) ;
+        let mut appele = false;
+        let v = choix_experts(Some(&m), 3, 12, || { appele = true; vec![0, 1] });
+        assert_eq!(v, vec![9, 2, 5]);
+        assert!(!appele, "le calcul ne doit pas être appelé quand un choix est imposé");
+        // absent : on calcule ;
+        let v = choix_experts(Some(&m), 3, 13, || vec![7, 7]);
+        assert_eq!(v, vec![7, 7]);
+        // aucune table : on calcule toujours (c'est le cas par défaut, sans variable d'env) ;
+        let v = choix_experts(None, 3, 12, || vec![4, 4]);
+        assert_eq!(v, vec![4, 4]);
+    }
+
 }
