@@ -50,8 +50,11 @@ for off in $TEXTES; do
     [ -n "$ref" ] || { echo "  ❌ référence illisible pour le décalage $off"; exit 1; }
     ligne="$off $ref"
     for fen in $FENETRES; do
+        # `--attn-sinks 0` N'EST PAS « pas de puits » — mesuré le 13/10 à N=4096, fenêtre 2048 :
+        # 55,9647 avec, 12,3112 sans (référence 12,2177). Le zéro est un piège : il active le
+        # mécanisme avec zéro puits et casse l'attention. On OMET donc le drapeau.
         v=$("$D" "$M" --ppl "$f" --ctx "$N" --limit "$N" --threads 8 \
-            --attn-window "$fen" --attn-sinks 0 2>&1 \
+            --attn-window "$fen" 2>&1 \
             | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+")
         ligne="$ligne ${v:-NA}"
     done

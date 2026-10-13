@@ -75,6 +75,40 @@ et drain. C'est une bonne nouvelle pour le dessin — le partage devient un para
 (ce que le matériel sait faire : une fenêtre glissante contiguë, ou un drain indexé), pas de
 **qualité**.
 
+## 2sexies. À N = 4 096, la dispersion de la fenêtre N/4 se resserre — et la règle tient
+
+Même protocole que le § 2, à **N = 4 096**, sur trois textes (décalages 0, 10 000, 20 000), avec
+`tools/loi-fenetre-textes.sh` (outil écrit pour ça — il publie la moyenne, l'étendue et le minimum) :
+
+| décalage | référence | fenêtre 2 048 (**N/2**) | fenêtre 1 024 (**N/4**) |
+|---:|---:|---:|---:|
+| 0 | 12,2177 | +0,8 % | +3,2 % |
+| 10 000 | 7,3980 | +1,5 % | +4,7 % |
+| 20 000 | 12,7867 | +0,4 % | +4,4 % |
+| **moyenne** | — | **+0,9 %** (étendue **1,0 pt**) | **+4,1 %** (étendue **1,5 pt**) |
+
+À comparer au § 2 (N = 2 048, sept textes) : N/2 = **+0,5 à +2,1 %**, N/4 = **+2,8 à +49,2 %**
+(étendue **46 points**).
+
+* **le régime sûr se confirme** : garder **la moitié** des clés coûte ≤2,1 % aux deux N, sur dix
+  textes en tout — c'est l'énoncé le plus solide de cette fiche ;
+* **la dispersion, elle, ne se transporte pas non plus** : à N = 2 048 le quart des clés allait de
+  +2,8 % à **+49,2 %** selon le texte, à N = 4 096 il va de +3,2 % à +4,7 % (étendue 1,5 point).
+  Autrement dit, **même l'incertitude dépend de N et du texte** : ce n'est pas « une loi avec du
+  bruit », c'est une grandeur dont la queue épaisse apparaît à certains N ;
+* conséquence pratique **renforcée** : budgéter la moitié des clés, et ne jamais promouvoir un
+  réglage plus agressif sur un seul texte — la queue de N = 2 048 (+49 %) est exactement ce qu'un
+  banc sur un texte ne verrait pas.
+
+### Note de méthode : `--attn-sinks 0` n'est PAS « pas de puits »
+
+Mon premier essai de cet outil passait `--attn-sinks 0` pour dire « fenêtre pure ». Mesuré à
+N = 4 096, fenêtre 2 048 : **55,9647 avec**, **12,3112 sans** (référence **12,2177**). Le zéro
+**active** le mécanisme avec zéro puits et casse l'attention — c'est un piège, parce que zéro est
+la valeur qui *ressemble* au neutre. L'outil **omet** désormais le drapeau, et le commentaire dit
+pourquoi. (Le fait que `--attn-sinks 0` soit « exprimable » depuis le 10/10 ne veut pas dire qu'il
+soit neutre : ce sont deux choses différentes, et c'est la seconde qui compte pour une mesure.)
+
 ## 3. Conséquences pour le dessin de l'attention
 
 1. **budgéter la moitié des clés** : c'est le seul régime que trois textes confirment (≤2 %), et il
@@ -92,7 +126,8 @@ et drain. C'est une bonne nouvelle pour le dessin — le partage devient un para
 
 * **fermé** : « la loi de la frontière en N ». Réponse : pas de loi en N seule ; le régime sûr est
   une **fraction** (la moitié), le reste est gouverné par le texte ;
-* **laissé ouvert, et nommé** : la loi **moyennée** (combien de textes faut-il pour une barre
-  d'erreur donnée ? — sept textes donnent déjà une dispersion de 0,5 à 2,1 % pour la moitié des
-  clés, ce qui suggère qu'une dizaine suffit pour ce régime) et le comportement **avec puits** aux mêmes points — deux expériences qui se
+* **la loi moyennée a été commencée** (§ 2sexies : un outil la mesure, dix textes au total sur
+  deux N) — ce qui reste ouvert est la **queue** : combien de textes faut-il pour voir venir un
+  +49 % ? La réponse est « beaucoup », et c'est précisément pourquoi la règle est de ne pas
+  descendre sous la moitié des clés et le comportement **avec puits** aux mêmes points — deux expériences qui se
   mesurent avec le même outil, `FENETRES`/`PUITS`/`IDS` en paramètres.
