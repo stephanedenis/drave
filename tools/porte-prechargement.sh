@@ -32,6 +32,11 @@ M=${MODELE:-$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf}
 IDS=${IDS:-$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt}
 JETONS=${JETONS:-8}
 CTX=${CTX:-512}
+# `--dense` : le chargeur construit par DÉFAUT la représentation en listes des poids denses
+# (2,69 Go, **27,5 s** sur Qwen3-30B) — et cette passe ne s'en sert PAS (« dont en listes :
+# 0,0 M — le reste est dense », dit le moteur lui-même). Mesuré le 12/10 : 27,46 s de
+# chargement par défaut contre **7,77 s** avec `--dense`, perplexité IDENTIQUE (6449,7333).
+# Sans cette option, la porte mesurerait surtout le chargement, identique dans les trois bras.
 THREADS=${THREADS:-16}
 REPETITIONS=${REPETITIONS:-2}
 [ "${1:-}" = "--vite" ] && { JETONS=4; REPETITIONS=1; }
@@ -42,22 +47,28 @@ done
 command -v python3 >/dev/null || { echo "  ❌ python3 manquant (évinceur de cache)"; exit 2; }
 
 echo "porte du préchargement — $(basename "$M"), $JETONS jetons, ctx $CTX, $REPETITIONS répétition(s)"
-printf "%-10s %-6s %14s %10s %10s  %s\n" "bras" "rép" "octets lus" "mural" "calcul" "perplexité"
+printf "%-10s %-6s %14s %10s %10s %10s  %s\n" "bras" "rép" "octets lus" "mural" "chargement" "calcul" "perplexité"
 mesures=""
-for bras in "demande:DRAVE_PRELIRE=0" "madvise:DRAVE_PRELIRE_FILS=0" "fils:"; do
+#   tampons   DRAVE_TAMPONS=1       les experts RETENUS lus en `pread`, par offset croissant,
+#                                    dans nos tampons — le calcul lit ces octets (directive du
+#                                    12/10 : « granularité fine, lecture séquentielle,
+#                                    allocation intelligente au lieu de virtualiser »)
+for bras in "demande:DRAVE_PRELIRE=0" "madvise:DRAVE_PRELIRE_FILS=0" "fils:" "tampons:DRAVE_TAMPONS=1"; do
     nom=${bras%%:*}; reglages=${bras#*:}
     for r in $(seq 1 "$REPETITIONS"); do
         python3 tools/evincer-cache.py "$M" > /dev/null
         log=$(mktemp)
         /usr/bin/time -v env $reglages "$D" "$M" --ppl "$IDS" --ctx "$CTX" \
-            --limit "$JETONS" --threads "$THREADS" > "$log" 2>&1
+            --limit "$JETONS" --threads "$THREADS" --dense > "$log" 2>&1
+        chargement=$(grep -oE "chargées en [0-9.]+s" "$log" | grep -oE "[0-9.]+" | tail -1)
         blocs=$(grep -oE "File system inputs: [0-9]+" "$log" | grep -oE "[0-9]+" | tail -1)
         mural=$(grep -oE "m:ss\): [0-9:.]+" "$log" | grep -oE "[0-9]+:[0-9.]+$" | tail -1)
         calcul=$(grep -oE ", [0-9.]+ s\)" "$log" | grep -oE "[0-9.]+" | tail -1)
         ppl=$(grep -oE "perplexité [0-9.]+" "$log" | grep -oE "[0-9.]+" | tail -1)
         [ -n "$blocs" ] || { echo "  ❌ le bras $nom n'a rien mesuré :"; tail -3 "$log" | sed 's/^/     /'; rm -f "$log"; exit 1; }
         octets=$(python3 -c "print(f'{$blocs*512/1e9:.2f} Go')")
-        printf "%-10s %-6s %14s %10s %10s  %s\n" "$nom" "$r" "$octets" "$mural" "${calcul:-?} s" "$ppl"
+        printf "%-10s %-6s %14s %10s %10s %10s  %s\n" "$nom" "$r" "$octets" "$mural" \
+               "${chargement:-?}" "${calcul:-?} s" "$ppl"
         mesures="${mesures}${nom}|${r}|${blocs}|${mural}|${calcul:-0}|${ppl}"$'\n'
         rm -f "$log"
     done
@@ -85,10 +96,16 @@ if len({p for s in ppls.values() for p in s}) != 1:
 else:
     print("  ✅ perplexité identique dans les trois bras :", list(ppls.values())[0].pop())
 med = {nom: tuple(statistics.median(v[i] for v in vals) for i in range(3)) for nom, vals in par.items()}
-for nom in ("demande", "madvise", "fils"):
+for nom in ("demande", "madvise", "fils", "tampons"):
     if nom in med:
         go, s, calc = med[nom]
         print(f"     {nom:8} : {go:6.2f} Go lus · {s:6.2f} s murales · {calc:5.2f} s de calcul")
+if "tampons" in med and "fils" in med:
+    # Les tampons lisent MOINS d'octets que les fils (granularité fine : uniquement les
+    # plages retenues, pas de lecture en avance au-delà) ; ils ne doivent pas être plus lents.
+    if med["tampons"][1] > med["fils"][1] * 1.05:
+        print(f"  ❌ les tampons sont plus lents que les fils "
+              f"({med['tampons'][1]:.2f} s contre {med['fils'][1]:.2f} s)"); ok = False
 if "fils" in med and "demande" in med:
     # Les OCTETS ne sont pas un critère : la prélecture parallèle parcourt les plages
     # entières et lit donc plus que le strict nécessaire (10,0 Go contre 9,0 mesurés le

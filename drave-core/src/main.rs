@@ -32,6 +32,10 @@ const VARS_LUES: &[&str] = &[
     // qu'elle ne changeait rien ; `PRELIRE_DENSE` rallume la prélecture de la couche
     // suivante, mesurée sans gain (le témoin reste pour pouvoir la re-mesurer).
     "PRELIRE_FILS", "PRELIRE_TRANCHE", "PRELIRE_DENSE",
+    // 12/10 : la lecture SÉQUENTIELLE dans nos tampons (directive « granularité fine de MoE,
+    // allocation intelligente au lieu de virtualiser »). `TAMPONS` l'allume, `TAMPONS_FILS`
+    // choisit le nombre de fils de lecture.
+    "TAMPONS", "TAMPONS_FILS",
     // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
     // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
     "OCCUPATION_ATTENTION_SEULE",

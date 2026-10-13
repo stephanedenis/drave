@@ -12,9 +12,23 @@
 set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
-M=${MODELE:-/tmp/m5_d384_dense.gguf}
-IDS=${IDS:-/tmp/campagne24/ids_m5_d384_dense.txt}
+# LE PRÉREQUIS SE RÉGÉNÈRE, ET IL VIT SUR L'ARRAY. Jusqu'au 12/10 cette porte était la SEULE
+# qui refusait après un redémarrage (« /tmp est vide : relancer la campagne, ou pointer
+# MODELE= ») : elle réclamait `/tmp/m5_d384_dense.gguf`, un artefact de campagne en dim 384,
+# et ses identifiants. Une porte sautée n'est pas une porte verte — la passe complète du 12/10
+# l'a comptée rouge pour cette raison, et les trois autres rouges avaient la même cause
+# (`/tmp/campagne24/niah_4096_0.5.txt`, `tools/construire-niah.py` répare celles-là).
+#
+# Ce qu'elle vérifie — « la topologie PILOTE le découpage, à chiffre ÉGAL » — ne dépend pas du
+# modèle : un modèle dense à 24 couches fait le travail, et les identifiants se **tokenisent**
+# ici, une fois, dans un chemin qui survit au redémarrage.
+M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+IDS=${IDS:-$HOME/IA/scratch/prerequis/ids_qwen05_wt2.txt}
 COUCHES=${COUCHES:-2}
+if [ ! -s "$IDS" ] && [ -s "$M" ]; then
+    mkdir -p "$(dirname "$IDS")"
+    "$D" "$M" --tokenize --fichier data/wikitext2_test.txt --sortie "$IDS" >/dev/null 2>&1
+fi
 # Le NOMBRE DE JETONS EST COMPTÉ, PAS SUPPOSÉ — même piège que dans
 # `porte-reparti-moteur.sh`, trouvé en balayant les portes après l'avoir corrigé là-bas :
 # `--ppl` note les `limit` PREMIERS jetons, `--ppl-reparti` tronque aux `limit` DERNIERS.
@@ -27,7 +41,12 @@ if [ -s "$IDS" ]; then
 else
     N_IDS=0
 fi
-LIMITE=${LIMITE:-$N_IDS}
+LIMITE=${LIMITE:-$(( N_IDS < 512 ? N_IDS : 255 ))}
+# La borne : l'artefact de campagne portait **255** jetons, et la porte tient en une minute à
+# cette échelle. Les identifiants régénérés en portent 85 626 (tout `wikitext2_test.txt`), et
+# les prendre tous ferait tourner la porte des heures pour vérifier la MÊME chose : les quatre
+# cas comparent des perplexités entre elles, pas à un chiffre de campagne. `LIMITE=` reste
+# réglable pour qui veut la passe longue.
 PORT=${PORT:-$((50000 + RANDOM % 900))}
 T=$(mktemp -d)
 TOPO="$T/topo.json"
@@ -98,7 +117,7 @@ $D "$M" --ppl-reparti "127.0.0.1:1" --topologie "$TOPO" --ids-file "$IDS" --limi
 # découpage à deux régions, et l'écart de flux nul.
 echo "=== 5. trois régions sur trois instances (relais) ==="
 M3=${M3:-models/Qwen2.5-0.5B-Q8_0.gguf}
-IDS3=${IDS3:-/tmp/campagne24/ids_0.5B-Q8.txt}
+IDS3=${IDS3:-$IDS}      # le MÊME fichier : c'est le modèle M3 qui le tokenise
 if [ ! -s "$M3" ] || [ ! -s "$IDS3" ]; then
     echo "  (modèle à 24 couches ou identifiants absents — cas sauté)"
 else

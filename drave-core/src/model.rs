@@ -1568,6 +1568,34 @@ impl CacheExpertsRam {
         self.horloge += 1;
         self.table.insert((quoi, l, e), (copie, self.horloge));
     }
+
+    /// Installe un tampon **déjà lu** (lecture séquentielle, `gguf::lire_en_tampons`) sous la
+    /// clé `(quoi, l, e)`. Le calcul le trouvera par `pointeur()` et lira CES octets.
+    ///
+    /// Rend `false` si le budget ne peut pas le porter : un tampon qui ne rentre pas ne doit
+    /// pas être installé en silence (le calcul retomberait sur le mapping, ce qui est correct,
+    /// mais l'appelant doit pouvoir le dire).
+    pub fn installer(&mut self, quoi: u8, l: usize, e: usize, buf: Box<[u8]>) -> bool {
+        if buf.is_empty() || buf.len() > self.budget { return false; }
+        if let Some((vieux, _)) = self.table.remove(&(quoi, l, e)) { self.octets -= vieux.len(); }
+        while self.octets + buf.len() > self.budget && !self.table.is_empty() {
+            let plus_vieux = self.table.iter().min_by_key(|(_, (_, age))| *age)
+                                 .map(|(c, _)| *c).unwrap();
+            if let Some((o, _)) = self.table.remove(&plus_vieux) { self.octets -= o.len(); }
+        }
+        self.octets += buf.len();
+        self.horloge += 1;
+        self.table.insert((quoi, l, e), (buf, self.horloge));
+        true
+    }
+
+    /// Vide la table : la lecture séquentielle remplit **par couche** (les experts d'une
+    /// couche ne servent plus une fois la couche calculée), et un cache qui garde tout
+    /// redevient le cache mesuré perdant (`DRAVE_EXPERTS_RAM`).
+    pub fn vider(&mut self) {
+        self.table.clear();
+        self.octets = 0;
+    }
 }
 
 pub struct Layer {
@@ -4784,7 +4812,15 @@ forcent l'un ou l'autre partout",
             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
             flux_brut: false, tete_partielle: false,
             cache_experts,
-            cache_ram: match std::env::var("DRAVE_EXPERTS_RAM").ok()
+            cache_ram: if crate::gguf::tampons_voulus() {
+                    // Lecture séquentielle dans nos tampons : le « cache » n'est ici qu'un
+                    // PORTEUR pour les octets d'UNE couche (il est vidé à chaque couche) —
+                    // 1 Gio portent la couche la plus grosse vue jusqu'ici (V4.1 : 8 experts
+                    // × 3 matrices × 9,95 Mo ≈ 239 Mo).
+                    println!("[tampons] lecture séquentielle des experts dans nos tampons \
+(les experts retenus sont lus en `pread`, par offset croissant, puis le calcul lit ces octets)");
+                    Some(CacheExpertsRam::nouveau(1 << 30))
+                } else { match std::env::var("DRAVE_EXPERTS_RAM").ok()
                             .and_then(|v| v.parse::<usize>().ok()) {
                 Some(mo) if mo > 0 => {
                     println!("[experts] cache RAM des experts : {mo} Mo — ATTENTION, mesuré \
@@ -4793,7 +4829,7 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
                     Some(CacheExpertsRam::nouveau(mo << 20))
                 }
                 _ => None,
-            },
+            } },
             mla, mla_cache, jeton_trace: 0, trace: None, flux_force: None,
             emb_imposee: None, emb_imposee_lot: None, lot: 1,
             patch: None, ffn_gain: None, hebb: None, hebb_diff: None,
@@ -8061,8 +8097,38 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 // eux-mêmes** : ×3,5 sur le mécanisme, 4 Go/s contre 1,1. Sans cela, la
                 // passe paie un défaut de page synchrone par page — un million pour un
                 // jeton de Qwen3-30B — soit ~30 s pour 4 Go.
-                let fils = crate::gguf::fils_prelecture();
-                if fils == 0 {
+                // ---- lecture SÉQUENTIELLE dans nos tampons (direction du 12/10) ----
+                // « Favoriser une granularité fine de MoE en lecture séquentielle par
+                // allocation intelligente au lieu de virtualiser une grande mémoire en
+                // lecture aléatoire » : les plages des experts RETENUS sont lues par
+                // `pread`, **par offset croissant** (donc en séquentiel), puis le calcul lit
+                // ces octets (`resident()` les trouve dans le cache porteur). Mesuré :
+                // `pread` par 8 fils rend 3 995 Mo/s sur le motif d'experts contre 1 126 à la
+                // demande (tools/banc-experts.py) — et rien n'est lu en trop.
+                let tampons_on = crate::gguf::tampons_voulus();
+                if tampons_on {
+                    let mut plages: Vec<(usize, usize)> = Vec::with_capacity(idx.len() * 3);
+                    let mut cles: Vec<(u8, usize, usize)> = Vec::with_capacity(idx.len() * 3);
+                    for &e in &idx {
+                        if let Some((kexp, loc)) = moe.ou(e) {
+                            for (quoi, vue) in [(0u8, &moe.gate[kexp]),
+                                                (1u8, &moe.up[kexp]),
+                                                (2u8, &moe.down[kexp])] {
+                                plages.push(vue.plage_expert(loc));
+                                cles.push((quoi, l, e as usize));
+                            }
+                        }
+                    }
+                    if let Some(c) = self.cache_ram.as_mut() { c.vider(); }
+                    let lus = crate::gguf::lire_en_tampons(&plages, crate::gguf::fils_tampons());
+                    if let Some(c) = self.cache_ram.as_mut() {
+                        for (cle, buf) in cles.iter().zip(lus.into_iter()) {
+                            if let Some(b) = buf { c.installer(cle.0, cle.1, cle.2, b); }
+                        }
+                    }
+                }
+                let fils = if tampons_on { 0 } else { crate::gguf::fils_prelecture() };
+                if fils == 0 && !tampons_on {
                     for &e in &idx {
                         if let Some((k, loc)) = moe.ou(e) {
                             moe.gate[k].prelire_expert(loc);

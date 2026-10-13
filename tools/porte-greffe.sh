@@ -47,7 +47,13 @@ set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
-SRC=${SRC:-/tmp/campagne24/niah_4096_0.5.txt}
+# Le prérequis vit sur l'array et se RÉGÉNÈRE : tools/construire-niah.py.
+# Il vivait dans /tmp/campagne24, que chaque redémarrage emporte — la passe du
+# 12/10 a compté trois portes rouges (celles-ci) pour ce seul fichier disparu.
+SRC=${SRC:-$HOME/IA/scratch/prerequis/niah_4096_0.5.txt}
+if [ ! -s "$SRC" ] && [ -x tools/construire-niah.py ]; then
+    tools/construire-niah.py --jetons 4096 --profondeur 0.5 >/dev/null 2>&1
+fi
 CTX=${CTX:-2048}
 T=$(mktemp -d)
 [ -s "$M" ] && [ -s "$SRC" ] || { echo "  modèle ou source absents"; exit 2; }

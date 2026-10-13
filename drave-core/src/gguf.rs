@@ -270,6 +270,132 @@ impl Tampon {
     pub fn is_empty(&self) -> bool { self.len() == 0 }
 }
 
+// ------------------------------------------------------- lire dans NOS tampons
+//
+// POURQUOI. Mesuré le 12/10 : sur un motif d'experts, la lecture **à la demande** (défauts de
+// page) rend 1 126 Mo/s, la prélecture par `madvise` ×1,06, des fils qui entrent les pages
+// ×3,5 — et un `pread` explicite depuis huit fils **3 995 Mo/s** (`tools/banc-experts.py`).
+// La différence n'est pas le parallélisme (les deux en ont) mais le **chemin** : un défaut de
+// page fait une lecture par page, `pread` lit des plages entières dans une mémoire à nous.
+//
+// Ce que la direction du 12/10 demande : « favoriser une granularité fine de MoE en lecture
+// séquentielle par allocation intelligente au lieu de virtualiser une grande mémoire en
+// lecture aléatoire ». C'est ce que fait ce module : les plages des experts RETENUS, triées
+// par **offset de fichier** (donc lues en séquentiel), lues en parallèle dans des tampons
+// réutilisables — et le calcul lit ces tampons.
+//
+// Pour cela il faut savoir, pour une adresse mappée, **de quel fichier et de quel offset**
+// elle vient. D'où ce registre, rempli à l'ouverture de chaque mapping : il évite d'ajouter
+// deux champs à `Vue4` (et de toucher tous ses constructeurs).
+
+struct MappeInscrite { base: usize, len: usize, chemin: std::path::PathBuf }
+
+fn registre() -> &'static std::sync::Mutex<Vec<MappeInscrite>> {
+    static R: std::sync::OnceLock<std::sync::Mutex<Vec<MappeInscrite>>> = std::sync::OnceLock::new();
+    R.get_or_init(|| std::sync::Mutex::new(Vec::new()))
+}
+
+fn inscrire_mappe(base: usize, len: usize, chemin: &std::path::Path) {
+    if let Ok(mut v) = registre().lock() {
+        v.push(MappeInscrite { base, len, chemin: chemin.to_path_buf() });
+    }
+}
+
+/// `(chemin du fichier, offset)` d'une adresse mappée — `None` si elle n'est pas mappée
+/// (modèle lu en RAM : il n'y a alors rien à lire, tout est déjà là).
+pub fn localiser(addr: usize) -> Option<(std::path::PathBuf, u64)> {
+    let v = registre().lock().ok()?;
+    v.iter()
+        .find(|m| addr >= m.base && addr < m.base + m.len)
+        .map(|m| (m.chemin.clone(), (addr - m.base) as u64))
+}
+
+/// Un descripteur par fichier, ouvert une fois : `pread` sur un descripteur déjà ouvert ne
+/// paie ni `open` ni la résolution de chemin.
+fn descripteurs() -> &'static std::sync::Mutex<std::collections::HashMap<std::path::PathBuf, std::fs::File>> {
+    static D: std::sync::OnceLock<std::sync::Mutex<std::collections::HashMap<std::path::PathBuf, std::fs::File>>> =
+        std::sync::OnceLock::new();
+    D.get_or_init(|| std::sync::Mutex::new(std::collections::HashMap::new()))
+}
+
+fn descripteur(chemin: &std::path::Path) -> Option<std::fs::File> {
+    let mut d = descripteurs().lock().ok()?;
+    if let Some(f) = d.get(chemin) { return f.try_clone().ok(); }
+    let f = std::fs::File::open(chemin).ok()?;
+    d.insert(chemin.to_path_buf(), f.try_clone().ok()?);
+    Some(f)
+}
+
+/// `DRAVE_TAMPONS=1` : lire les experts retenus en séquentiel dans des tampons, et faire
+/// calculer le moteur **sur ces tampons** au lieu du mapping.
+pub fn tampons_voulus() -> bool {
+    matches!(std::env::var("DRAVE_TAMPONS").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+}
+
+/// Nombre de fils de lecture des tampons (`DRAVE_TAMPONS_FILS`, défaut : `DRAVE_PRELIRE_FILS`).
+pub fn fils_tampons() -> usize {
+    match std::env::var("DRAVE_TAMPONS_FILS") {
+        Ok(v) => v.parse().unwrap_or(8),
+        Err(_) => fils_prelecture().max(1),
+    }
+}
+
+/// Lit des plages mappées dans des tampons **à nous**, en parallèle, **dans l'ordre du
+/// fichier**. Rend un tampon par plage, dans l'ordre d'entrée (`None` si la plage n'est pas
+/// mappée ou n'est pas lisible — l'appelant retombe alors sur le mapping).
+pub fn lire_en_tampons(plages: &[(usize, usize)], fils: usize) -> Vec<Option<Box<[u8]>>> {
+    let mut sortie: Vec<Option<Box<[u8]>>> = (0..plages.len()).map(|_| None).collect();
+    // 1. résoudre chaque plage en (index, chemin, offset, octets)
+    let mut taches: Vec<(usize, std::path::PathBuf, u64, usize)> = Vec::with_capacity(plages.len());
+    for (i, &(addr, octets)) in plages.iter().enumerate() {
+        if octets == 0 { continue; }
+        if let Some((chemin, offset)) = localiser(addr) {
+            taches.push((i, chemin, offset, octets));
+        }
+    }
+    if taches.is_empty() { return sortie; }
+    // 2. trier par (fichier, offset) : c'est ce qui rend la lecture SÉQUENTIELLE
+    taches.sort_by(|a, b| a.1.cmp(&b.1).then(a.2.cmp(&b.2)));
+    // 3. lire par tranches contiguës de la liste triée, un fil par tranche
+    let par_fil = taches.len().div_ceil(fils.max(1));
+
+    let resultats: std::sync::Mutex<Vec<(usize, Box<[u8]>)>> = std::sync::Mutex::new(Vec::new());
+    let echecs = std::sync::atomic::AtomicUsize::new(0);
+    std::thread::scope(|s| {
+        for tranche in taches.chunks(par_fil) {
+            let resultats = &resultats;
+            let echecs = &echecs;
+            s.spawn(move || {
+                use std::os::unix::fs::FileExt;
+                let mut fd: Option<(std::path::PathBuf, std::fs::File)> = None;
+                for (i, chemin, offset, octets) in tranche {
+                    if fd.as_ref().map(|(c, _)| c != chemin).unwrap_or(true) {
+                        match descripteur(chemin) {
+                            Some(f) => fd = Some((chemin.clone(), f)),
+                            None => { echecs.fetch_add(1, std::sync::atomic::Ordering::Relaxed); continue; }
+                        }
+                    }
+                    let f = &fd.as_ref().unwrap().1;
+                    let mut buf = vec![0u8; *octets].into_boxed_slice();
+                    // `read_exact_at` : pas de position partagée, donc pas de course entre fils
+                    match f.read_exact_at(&mut buf, *offset) {
+                        Ok(()) => { if let Ok(mut r) = resultats.lock() { r.push((*i, buf)); } }
+                        Err(_) => { echecs.fetch_add(1, std::sync::atomic::Ordering::Relaxed); }
+                    }
+                }
+            });
+        }
+    });
+    for (i, buf) in resultats.into_inner().unwrap_or_default() {
+        sortie[i] = Some(buf);
+    }
+    if echecs.load(std::sync::atomic::Ordering::Relaxed) > 0 {
+        eprintln!("[tampons] {} plage(s) non lues — repli sur le mapping",
+                  echecs.load(std::sync::atomic::Ordering::Relaxed));
+    }
+    sortie
+}
+
 /// Faut-il mapper les fichiers ? Mappé par défaut : c'est moins de mémoire et
 /// moins d'octets lus. `DRAVE_MMAP=0` force la lecture complète (utile pour
 /// comparer, ou sur un système de fichiers qui refuse le mmap).
@@ -286,7 +412,9 @@ fn ouvrir_tampon(chemin: &Path) -> std::io::Result<Tampon> {
     let len = f.metadata()?.len() as usize;
     if mmap_voulu() {
         match Mappe::ouvrir(&f, len) {
-            Ok(m) => return Ok(Tampon::Mappe(m)),
+            // On inscrit le mapping : c'est ce qui permet, plus tard, de retrouver le
+            // FICHIER et l'OFFSET d'une adresse (lecture en tampons, `lire_en_tampons`).
+            Ok(m) => { inscrire_mappe(m.ptr as usize, len, chemin); return Ok(Tampon::Mappe(m)) }
             Err(e) => eprintln!("[gguf] mmap refusé sur {} ({e}) : lecture complète",
                                 chemin.display()),
         }
