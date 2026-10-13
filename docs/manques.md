@@ -35,10 +35,18 @@ parallèle ramène le temps de **calcul** d'une passe de **7,70 s à 3,65 s** (�
 35,03 s à 31,21 s, **perplexité identique**. Le témoin `DRAVE_PRELIRE=0` rend le bras « à la
 demande » rejouable.
 
-**Ce qui reste ouvert est nommé** : le **`pread` explicite depuis des fils** rend **3 995 Mo/s**
-contre 1 126 pour la demande (×3,5, `tools/banc-experts.py`) — mais il demande des **tampons**,
-donc un chemin de calcul qui lit dans une mémoire à nous plutôt que dans le mapping. C'est le
-chantier « lecteurs parallèles » du § 6.5.1 de `docs/configuration-nvme-raid-amd.md`.
+**Deuxième pas, la même nuit** : les **tampons** sont entrés dans le moteur (`DRAVE_TAMPONS=1`) —
+les experts **retenus** sont lus par `pread`, **par offset croissant** (donc en séquentiel), dans
+des tampons réutilisables, et le calcul lit ces octets. Mesuré sur la même passe à 8 jetons,
+cache évincé avant chaque bras : **6,22 Go lus et 3,40 s** de passe, contre **10,90 Go / 3,70 s**
+pour les fils qui entrent les pages et **9,52 Go / 5,97 s** à la demande — perplexité identique
+dans les quatre bras (`reports/rapport-s4-prechargement-moteur.md` § 5). C'est le seul bras qui
+gagne **et** sur les octets **et** sur le temps : la lecture en avance du noyau dépasse la plage
+utile de 75 %.
+
+**Ce qui reste ouvert est nommé** : le **pool** et le **recouvrement** (une copie ne se recouvre
+pas avec un calcul plus court qu'elle), et le même remède côté **VRAM** — où la mesure montre que
+**l'allocation** est 37 à 91 % du coût d'un montage d'expert (`reports/rapport-vram-transfert.md`).
 
 ---
 
