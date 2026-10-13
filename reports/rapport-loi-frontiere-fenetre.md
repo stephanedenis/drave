@@ -30,19 +30,23 @@ Lecture naïve : « la fenêtre 512 coûte 30 à 50 % quel que soit N, la 1 024 
 +5,6 % selon N, la 2 048 est sous 2 % ». On en tirerait une loi en N. **Le § 2 montre que c'est
 faux.**
 
-## 2. Le même point, sur trois textes (N = 2 048) — c'est la mesure qui tranche
+## 2. Le même point, sur SEPT textes (N = 2 048) — c'est la mesure qui tranche
 
 | texte (décalage du corpus) | référence | fenêtre 1 024 (N/2) | fenêtre 512 (N/4) |
 |---|---:|---:|---:|
-| 0 | 10,3703 | **+0,5 %** | **+49,2 %** |
+| 0 (début) | 10,3703 | **+0,5 %** | **+49,2 %** |
+| 10 000 | 10,1538 | **+2,1 %** | **+8,8 %** |
 | 20 000 | 14,6247 | **+1,9 %** | **+9,7 %** |
+| 30 000 | 15,7767 | **+1,6 %** | **+12,8 %** |
 | 40 000 | 11,0465 | **+0,8 %** | **+5,3 %** |
-| **dispersion** | — | **0,5 % à 1,9 %** | **5,3 % à 49,2 % (facteur 9)** |
+| 50 000 | 18,0669 | **+1,3 %** | **+3,9 %** |
+| 60 000 | 12,9855 | **+0,7 %** | **+2,8 %** |
+| **dispersion sur 7 textes** | — | **+0,5 % à +2,1 %** | **+2,8 % à +49,2 % (facteur 17,6)** |
 
-* **garder la moitié des clés est robuste** : trois textes, trois fois ≤2 %. Le coût ne dépend
-  presque pas du texte (0,5 / 1,9 / 0,8) ;
-* **garder le quart ne l'est pas** : le même réglage coûte **cinq fois** plus cher sur le premier
-  texte que sur le troisième. C'est ce qui rendait la série du § 1 non monotone : la valeur de
+* **garder la moitié des clés est robuste** : **sept** textes, **sept fois ≤2,1 %** — le coût ne
+  dépend presque pas du texte ;
+* **garder le quart ne l'est pas** : le même réglage va de **+2,8 %** à **+49,2 %** selon le texte
+  (**facteur 17,6**). C'est ce qui rendait la série du § 1 non monotone : la valeur de
   N = 1 024 (+51,4 % pour la fenêtre 512) n'était pas un effet de N, c'était **ce texte-là** ;
 * **donc la « loi en N » n'existe pas seule.** Toute loi doit être une **moyenne sur des textes**,
   avec sa dispersion — et la dispersion est du même ordre que l'effet cherché dès qu'on descend
@@ -52,8 +56,8 @@ faux.**
 
 1. **budgéter la moitié des clés** : c'est le seul régime que trois textes confirment (≤2 %), et il
    recoupe la campagne de 4 096 jetons (« garder la moitié des clés reste le régime sûr ») ;
-2. **en dessous, le prix n'est pas prévisible** : un banc qui montre « fenêtre N/4 = +5 % » sur un
-   texte peut montrer « +49 % » sur un autre. Toute promotion d'un réglage plus agressif doit se
+2. **en dessous, le prix n'est pas prévisible** : un banc qui montre « fenêtre N/4 = +2,8 % » sur un
+   texte peut montrer « +49,2 % » sur un autre — et c'est arrivé **sur sept textes du même corpus**. Toute promotion d'un réglage plus agressif doit se
    faire **sur plusieurs textes**, jamais sur un seul ;
 3. **le drain (puits) reste le levier à part entière** : cette expérience ne mesure que la fenêtre
    **pure** (`PUITS=0`), et le plan a montré que les puits portent l'information du début (jusqu'à
@@ -66,5 +70,6 @@ faux.**
 * **fermé** : « la loi de la frontière en N ». Réponse : pas de loi en N seule ; le régime sûr est
   une **fraction** (la moitié), le reste est gouverné par le texte ;
 * **laissé ouvert, et nommé** : la loi **moyennée** (combien de textes faut-il pour une barre
-  d'erreur donnée ?) et le comportement **avec puits** aux mêmes points — deux expériences qui se
+  d'erreur donnée ? — sept textes donnent déjà une dispersion de 0,5 à 2,1 % pour la moitié des
+  clés, ce qui suggère qu'une dizaine suffit pour ce régime) et le comportement **avec puits** aux mêmes points — deux expériences qui se
   mesurent avec le même outil, `FENETRES`/`PUITS`/`IDS` en paramètres.
