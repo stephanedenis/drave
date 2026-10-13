@@ -181,10 +181,11 @@ page. Note de conception : `docs/note-lecteurs-paralleles.md`.
 Le **pool de tampons** est fait aussi — et **neutre en temps** (mesuré : 2,4 s avant, 2,3-2,4 s
 après, perplexité identique) : l'hypothèse des défauts de page est réfutée, `glibc` réutilise déjà
 ces blocs. Il est gardé pour borner la mémoire (7,1 Mo au lieu de ~1 Go vivant) et pour rendre les
-allocations visibles (`[tampons] 32 allocations, 9184 réutilisations`). Reste : le **recouvrement**,
-dont l'ampleur est maintenant cernée — la passe de 8 jetons dure 2,3 s, dont 3,05 s de calcul
-mesurés sur 8 jetons par la porte : il n'y a presque rien à recouvrir, et l'idée de Strata
-(prélecturer la couche suivante) avait déjà été mesurée sans gain.
+allocations visibles (`[tampons] 32 allocations, 9184 réutilisations`). Reste : le **recouvrement**, dont
+l'ampleur est cernée — une passe de 8 jetons dure **2,3 s au total** (moteur déjà chargé), et
+l'idée de Strata (prélecturer la couche suivante) avait déjà été mesurée **sans gain** (30,47 s
+sans, 32,05 s avec). Le recouvrement ne peut porter que sur la part de **lecture**, que les tampons
+ont déjà réduite de 75 % : c'est un pas à faible rendement, et il est dit comme tel.
 
 **4. Le chargement construisait 2,7 Go de « listes » pour rien — FAIT** (commit `2bbecc86`) :
 **26,95 s → 7,36 s** sur Qwen3-30B, **6,85 s → 0,60 s** sur le 0,5B, sans déplacer un chiffre ; la
