@@ -25,12 +25,15 @@ set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
-# Le prérequis vit sur l'array et se RÉGÉNÈRE : tools/construire-niah.py.
-# Il vivait dans /tmp/campagne24, que chaque redémarrage emporte — la passe du
-# 12/10 a compté trois portes rouges (celles-ci) pour ce seul fichier disparu.
-SRC=${SRC:-$HOME/IA/scratch/prerequis/niah_4096_0.5.txt}
+# LA BOTTE DE FOIN EST VERSIONNÉE ICI (`tools/niah_4096_0.5.txt`), et c'est une correction de
+# méthode : celle de la campagne (8-10 octobre) vivait dans `/tmp/campagne24/`, donc elle a
+# disparu au premier redémarrage, et trois portes ont rendu « code 2 » le 12/10 pour ce seul
+# fichier. Un fichier d'entrée de mesure qui n'est pas versionné rend la mesure non
+# reproductible : on ne peut plus distinguer « le moteur a changé » de « l'entrée a changé ».
+# `tools/construire-niah.py` le régénère si besoin (même graine, même corpus).
+SRC=${SRC:-tools/niah_4096_0.5.txt}
 if [ ! -s "$SRC" ] && [ -x tools/construire-niah.py ]; then
-    tools/construire-niah.py --jetons 4096 --profondeur 0.5 >/dev/null 2>&1
+    tools/construire-niah.py --jetons 4096 --profondeur 0.5 --sortie "$SRC" >/dev/null 2>&1
 fi
 CTX=${CTX:-2048}
 T=$(mktemp -d)
