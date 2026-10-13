@@ -5898,6 +5898,61 @@ fn run_gpu_banc(opt: Options) {
 /// Le format est celui des experts : blocs de 17 octets. Le noyau est « une warp
 /// par ligne », comme les noyaux Q8_0 — c'est le même correctif d'accès mémoire,
 /// appliqué au format qui porte les 120 milliards de paramètres de gpt-oss.
+/// **Le transfert VRAM, par expert** — la mesure qui manquait pour décider du dessin.
+///
+/// Le cache d'experts du GPU téléverse **un expert à la fois** (`charger_mxfp4` sur les
+/// trois matrices), et c'est ce qui a été mesuré comme perdant (×1,09). Mais *pourquoi* :
+/// est-ce le noyau, ou le transfert ? Ce banc monte N experts **un par un** (granularité
+/// fine) et publie le débit et le temps par expert, séparément du noyau — sans quoi on ne
+/// saurait pas s'il faut streamer (double tampon, transferts recouverts) ou cesser de
+/// transférer.
+fn banc_transfert(machine: &crate::gpu::Gpu, blocs: &[u8], n_experts: usize, lignes: usize,
+                  nb: usize, octets_expert: usize, mxfp4: bool, etiquette: &str) {
+    use std::time::Instant;
+    // `lignes` = le nombre de lignes d'UN expert (`n_out` de la vue). La première version
+    // passait 1 : elle allouait 1 152 octets au lieu de 0,88 Mo et annonçait « 42 Go/s » —
+    // un chiffre impossible sur un lien PCIe, ce qui est exactement ce qui l'a dénoncé.
+    assert_eq!(lignes * nb * if mxfp4 { 17 } else { 144 }, octets_expert);
+    let n = n_experts.min(16);
+    if n <= 1 { return; }
+    if blocs.len() < n * octets_expert { return; }
+    let mut gardees = Vec::with_capacity(n);
+    let t0 = Instant::now();
+    for e in 0..n {
+        let bloc = &blocs[e * octets_expert..(e + 1) * octets_expert];
+        let m = if mxfp4 { machine.charger_mxfp4(bloc, lignes, nb) }
+                else { machine.charger_q4k(bloc, lignes, nb) };
+        match m { Some(m) => gardees.push(m), None => break }
+    }
+    let dt = t0.elapsed().as_secs_f64();
+    let octets = (gardees.len() * octets_expert) as f64;
+    if gardees.is_empty() || dt <= 0.0 { return; }
+    println!("  transfert {etiquette} : {} experts × {:.2} Mo en {:.1} ms → {:.2} Go/s \
+({:.3} ms/expert) [allocation + copie]",
+             gardees.len(), octets_expert as f64 / 1e6, dt * 1e3, octets / dt / 1e9,
+             dt * 1e3 / gardees.len() as f64);
+    // LE MÊME TRANSFERT SANS ALLOCATION : un tampon réutilisé. C'est la question du dessin —
+    // « granularité fine » n'oblige pas à allouer à chaque fois.
+    if let Some(premiere) = gardees.first() {
+        let t1 = Instant::now();
+        let mut fait = 0usize;
+        // La borne vient du NOMBRE D'EXPERTS, pas d'un compteur qui vient d'être mis à zéro :
+        // la première version écrivait `1..=n.min(...)` après `let mut n = 0` — zéro tour, et
+        // la ligne ne s'imprimait pas du tout (un silence qui ressemble à un succès).
+        for e in 1..=n_experts.min(gardees.len().saturating_sub(1)) {
+            let bloc = &blocs[e * octets_expert..(e + 1) * octets_expert];
+            if machine.recopier(premiere, bloc) { fait += 1; }
+        }
+        let dt1 = t1.elapsed().as_secs_f64();
+        if fait > 0 && dt1 > 0.0 {
+            let o1 = (fait * octets_expert) as f64;
+            println!("  transfert {etiquette} : {fait} experts dans UN tampon réutilisé → \
+{:.2} Go/s ({:.3} ms/expert) [copie seule]",
+                     o1 / dt1 / 1e9, dt1 * 1e3 / fait as f64);
+        }
+    }
+}
+
 fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     use std::time::Instant;
     let (blocs, nb) = g.mxfp4_blocks(nom).expect("matrice MXFP4");
@@ -5932,6 +5987,8 @@ fn banc_mxfp4(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     let tc = t0.elapsed().as_secs_f64();
     println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
     let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
+    banc_transfert(machine, blocs, t.dims[0] as usize, n_out, nb, n_out * nb * 17, true,
+                   "MXFP4, par expert");
     println!("  {}", machine.nom);
     let Some(m) = machine.charger_mxfp4(blocs, n_out, nb) else {
         println!("  allocation GPU impossible"); return;
@@ -6013,9 +6070,21 @@ fn banc_q6k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
 
 fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     use std::time::Instant;
-    let Some((blocs, nb)) = g.q4k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
+    let Some((blocs, _)) = g.q4k_blocks(nom) else { println!("pas une matrice Q4_K"); return };
     let t = g.tensor(nom).unwrap();
-    let (n_out, n_in) = (t.dims[0] as usize, t.dims[1] as usize);
+    // UN TENSEUR D'EXPERTS EST 3D, ET `q4k_blocks` NE LE SAIT PAS : il rend
+    // `dims[1]/256`, ce qui est juste pour une matrice 2D de projections (`dims[1]`
+    // y est `n_in`) et FAUX pour un tenseur d'experts, où `dims[1]` est `n_out` —
+    // mesuré : « 128 × 768 · 0,1 Mo · 3 super-blocs » pour un tenseur dont chaque
+    // expert fait 0,88 Mo et 8 super-blocs par ligne. Le chemin de PRODUCTION ne
+    // s'y trompe pas (`charger_moe` calcule son pas lui-même) ; c'est le banc qui
+    // lisait de travers, et il annonçait un débit pour la mauvaise taille.
+    let (n_experts, n_out, n_in) = if t.dims.len() >= 3 {
+        (t.dims[0] as usize, t.dims[1] as usize, t.dims[2] as usize)
+    } else {
+        (1usize, t.dims[0] as usize, t.dims[1] as usize)
+    };
+    let nb = n_in / 256;
     let octets = n_out * nb * 144;
     println!("matrice Q4_K {nom} : {n_out} × {n_in} · {:.1} Mo · {} super-blocs de 256",
              octets as f64 / 1e6, nb);
@@ -6042,6 +6111,12 @@ fn banc_q4k(opt: Options, g: &Gguf, nom: &str, threads: usize) {
     println!("  CPU  {threads} fils : {:>7.1} ms  ({:>6.1} Go/s)", tc * 1e3, octets as f64 / tc / 1e9);
     let Some(machine) = gpu::instance() else { println!("  GPU absent"); return };
     println!("  {}", machine.nom);
+    // Le transfert PAR EXPERT (granularité fine) est mesuré AVANT le reste : c'est lui qui
+    // décide si le streaming vaut la peine, et il ne doit pas être noyé dans le noyau.
+    if n_experts > 1 {
+        banc_transfert(machine, blocs, n_experts, n_out, nb, n_out * nb * 144, false,
+                       "Q4_K, par expert");
+    }
     let Some(m) = machine.charger_q4k(blocs, n_out, nb) else {
         println!("  allocation GPU impossible"); return;
     };

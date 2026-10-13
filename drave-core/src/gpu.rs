@@ -400,6 +400,18 @@ impl Gpu {
         }
     }
 
+    /// Recopie des octets dans une matrice **déjà allouée** — pas d'allocation.
+    ///
+    /// C'est ce qui sépare les deux coûts d'un transfert VRAM, et c'est la brique d'un pool
+    /// de tampons : mesuré le 13/10, un expert Q4_K monté par `charger_q4k` (allocation +
+    /// copie) coûte **3,385 ms**, pour 0,26 Go/s — très loin du lien. Sans cette mesure, on
+    /// ne saurait pas s'il faut réutiliser les tampons ou changer de lien.
+    pub fn recopier(&self, m: &MatriceGpu, blocs: &[u8]) -> bool {
+        if blocs.len() < m.octets_poids { return false; }
+        cu_ctx(self.ctx);
+        unsafe { cuMemcpyHtoD_v2(m.poids, blocs.as_ptr() as *const c_void, m.octets_poids) == 0 }
+    }
+
     /// Réserve une matrice **Q4_K** (144 octets par super-bloc de 256 poids).
     pub fn charger_q4k(&self, blocs: &[u8], n_out: usize, nb: usize) -> Option<MatriceGpu> {
         cu_ctx(self.ctx);
