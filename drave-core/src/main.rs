@@ -36,6 +36,9 @@ const VARS_LUES: &[&str] = &[
     // allocation intelligente au lieu de virtualiser »). `TAMPONS` l'allume, `TAMPONS_FILS`
     // choisit le nombre de fils de lecture.
     "TAMPONS", "TAMPONS_FILS",
+    // 13/10 : la forme « listes » est construite À LA DEMANDE (6,1 s à 19,3 s gagnés par
+    // chargement) ; `PUSH_TOT` rallume l'ancien comportement pour refaire la mesure.
+    "PUSH_TOT",
     // M9 : rallume un compteur d'occupation PARTIEL (l'attention seule) — c'est le défaut que la
     // ligne « occupation des poids » répare, et la porte doit pouvoir le voir.
     "OCCUPATION_ATTENTION_SEULE",

@@ -127,6 +127,12 @@ unsafe fn toucher(addr: usize, octets: usize) {
 /// « à la demande » ne serait plus à la demande, et la porte ne comparerait plus rien.
 pub fn prelecture_active() -> bool { prelire_active() }
 
+/// `DRAVE_PUSH_TOT=1` : construire la forme « listes » d'avance, comme avant le 12/10 —
+/// c'est le témoin qui rend la mesure de la paresse rejouable.
+pub fn push_tot_voulu() -> bool {
+    matches!(std::env::var("DRAVE_PUSH_TOT").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+}
+
 /// `DRAVE_PRELIRE_DENSE=1` : prélecturer aussi les poids **denses** de la couche suivante.
 ///
 /// **Défaut : non — mesuré sans gain, et c'est un résultat.** Implémenté le 12/10 d'après

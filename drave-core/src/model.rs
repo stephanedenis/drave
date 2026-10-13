@@ -706,6 +706,17 @@ pub struct Proj {
     /// Copie GPU des poids (sources Q8_0), si le déport est actif.
     pub gpu: Option<crate::gpu::MatriceGpu>,
     pub m: Option<PushMat>,
+    /// **La forme « listes » construite À LA DEMANDE.** Mesuré le 12/10 : la bâtir toujours
+    /// coûte **6,1 s** (Qwen2.5-0.5B, 0,71 Go) à **19,3 s** (Qwen3-30B, 2,69 Go) sur *chaque*
+    /// chargement — et une passe `--ppl` ordinaire ne s'en sert pas (« dont en listes :
+    /// 0,0 M », dit le moteur lui-même). Or le chemin push n'est choisi que si la densité
+    /// d'activation passe sous `seuil_push` (0,22) : on ne peut donc pas le savoir avant de
+    /// calculer. D'où la paresse : elle est construite au PREMIER usage réel, depuis le
+    /// fichier (`nom_push`), et jamais sinon. `DRAVE_PUSH_TOT=1` la construit d'avance
+    /// (l'ancien comportement, gardé pour refaire la mesure).
+    pub m_paresseux: std::sync::OnceLock<PushMat>,
+    /// Le nom du tenseur, gardé pour pouvoir construire `m_paresseux` plus tard.
+    pub nom_push: Option<String>,
     pub d: Option<DenseQ8>,
     /// Variante 4 bits de la forme dense (0,5 octet/poids). Exclusif de `d`.
     pub q4: Option<DenseQ4>,
@@ -1782,7 +1793,8 @@ impl Proj {
     /// Projection vide : les modèles à experts n'ont **pas** de tenseur FFN
     /// dense, et le moteur ne doit pas le chercher.
     pub fn vide() -> Self {
-        Proj { gpu: None, m: None, d: None, q4: None, bias: None, creux: None, nnz: 0, n_tot: 0 }
+        Proj { gpu: None, m: None, m_paresseux: std::sync::OnceLock::new(), nom_push: None,
+                  d: None, q4: None, bias: None, creux: None, nnz: 0, n_tot: 0 }
     }
 
     fn load(g: &Gguf, name: &str, bias: Option<&str>, dense: bool, auto: bool, keep: f32,
@@ -1803,7 +1815,8 @@ impl Proj {
             let z = DenseQ4::build6(&w, n_out, n_in);
             let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
             let creux = creux_voulu().then(|| Creux::build(&w, n_out, n_in));
-            return Proj { gpu: None, m: None, d: None, q4: Some(z), bias, creux,
+            return Proj { gpu: None, m: None, m_paresseux: std::sync::OnceLock::new(),
+                          nom_push: None, d: None, q4: Some(z), bias, creux,
                           nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 };
         }
         let (m, d, q4v) = if q4 {
@@ -1847,10 +1860,30 @@ impl Proj {
                     unsafe { DenseQ8::emprunter_q8(buf.as_ptr(), n_out, n_in, nb) },
                 _ => construire_q8(&w, n_out, n_in),
             };
-            (Some(PushMat::build(&w, n_out, n_in)), Some(dense8), None)
+            // La forme « listes » n'est construite ICI que si on la demande explicitement
+            // (`DRAVE_PUSH_TOT=1`) ou si l'élagage l'exige (keep < 1.0 : `w` est déjà modifié,
+            // le refaire plus tard donnerait un autre résultat). Sinon elle est PAESSEUSE :
+            // `nom_push` la fera construire au premier usage réel, depuis le fichier.
+            if keep >= 1.0 && !crate::gguf::push_tot_voulu() {
+                (None, Some(dense8), None)
+            } else {
+                (Some(PushMat::build(&w, n_out, n_in)), Some(dense8), None)
+            }
         } else {
             (Some(PushMat::build(&w, n_out, n_in)), None, None)
         };
+        // La forme push est-elle paresseuse ? Alors on garde le NOM : c'est lui qui
+        // permettra de la construire depuis le fichier au premier usage réel.
+        // ATTENTION — `auto && !dense` est indispensable : en mode `--dense`, la forme push
+        // n'était PAS chargée, donc `use_dense` valait toujours vrai. Rendre la forme
+        // paresseuse « disponible » y ferait basculer les couches creuses sur le chemin push
+        // — et le calcul change : la porte du flux l'a vu (58,8636 au lieu de 61,9920, et le
+        // mode « listes par blocs » est passé rouge). Une paresse ne doit pas élargir ce que
+        // le chargement avait décidé.
+        let nom_push_ou = if auto && !dense && m.is_none() && q4v.is_none() && d.is_some()
+                             && keep >= 1.0 && !crate::gguf::push_tot_voulu() {
+            Some(name.to_string())
+        } else { None };
         // Tous les modèles n'ont pas de biais QKV (Qwen3 n'en a pas) : son
         // absence est normale, pas une erreur.
         let bias = bias.filter(|b| g.tensor(b).is_some()).map(|b| g.dequant(b));
@@ -1874,7 +1907,8 @@ impl Proj {
             _ => None,
         };
         let creux = creux_voulu().then(|| Creux::build(&w, n_out, n_in));
-        Proj { gpu, m, d, q4: q4v, bias, creux, nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 }
+        Proj { gpu, m, m_paresseux: std::sync::OnceLock::new(), nom_push: nom_push_ou,
+               d, q4: q4v, bias, creux, nnz: nnz_f32(&w), n_tot: (n_out * n_in) as u64 }
     }
 }
 
@@ -4905,7 +4939,7 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
 
     /// Produit matrice-vecteur **par événements** : les activations actives
     /// poussent leur contribution dans les sorties de leur liste.
-    fn matvec(pool: &mut Pool, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
+    fn matvec(pool: &mut Pool, g: &Gguf, p: &Proj, x: &[f32], out: &mut [f32], events: &mut u64,
               paires: &mut u64,
               levels: f32, thresh: f32, topk: usize, renorm: bool, scratch: &mut Vec<f32>,
               thresh_auto: f32) {
@@ -4956,15 +4990,19 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
         let frac = sv.idx.len() as f32 / x.len().max(1) as f32;
         // le seuil ne tranche que si LES DEUX formes sont chargées ; sinon la
         // seule forme disponible impose le chemin (sinon : panique).
-        let use_dense = match (&p.d, &p.m) {
-            (Some(_), Some(_)) => frac > thresh_auto,
-            (Some(_), None) => true,
-            (None, Some(_)) => false,
+        // La forme « listes » est DISPONIBLE si elle est construite ou si elle peut l'être
+        // (paresseuse, `nom_push`) : le choix du chemin ne change donc pas — seule la
+        // construction attend le premier usage réel.
+        let m_dispo = p.m.is_some() || p.nom_push.is_some();
+        let use_dense = match (&p.d, m_dispo) {
+            (Some(_), true) => frac > thresh_auto,
+            (Some(_), false) => true,
+            (None, true) => false,
             // Le message porte les DEUX largeurs : c'est ce qui permet de
             // reconnaître la projection fautive (une MLA a wq/wk/wv vides, un
             // modèle à experts a la FFN dense vide) sans backtrace.
-            (None, None) => panic!("projection sans aucun format : {} entrées → {} sorties",
-                                   x.len(), out.len()),
+            (None, false) => panic!("projection sans aucun format : {} entrées → {} sorties",
+                                    x.len(), out.len()),
         };
         if let (Some(machine), Some(mg)) = (crate::gpu::instance(), p.gpu.as_ref()) {
             // Le noyau applique déjà l'échelle d'activation : rien à reprendre.
@@ -4995,7 +5033,25 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
             }
         }
         {
-            let m = p.m.as_ref().expect("projection sans format");
+            // Construction PARESSEUSE au premier usage réel : depuis le fichier (le `Gguf`
+            // vit aussi longtemps que le modèle), jamais avant. `DRAVE_PUSH_TOT=1` garde
+            // l'ancien comportement pour refaire la mesure.
+            let m = match p.m.as_ref() {
+                Some(m) => m,
+                None => p.m_paresseux.get_or_init(|| {
+                    let nom = p.nom_push.as_deref().unwrap_or("");
+                    // Une ligne, une fois par tenseur : sans elle, « la forme a-t-elle
+                    // vraiment été construite ? » se répondrait par une intuition.
+                    eprintln!("[push] {nom} : forme « listes » construite à la demande");
+                    // Les dimensions viennent de la forme dense (toujours présente quand la
+                    // forme push est paresseuse) : mêmes n_out × n_in que dans le chargeur.
+                    let (n_out, n_in) = p.q4.as_ref().map(|q| (q.n_out, q.n_in))
+                        .or_else(|| p.d.as_ref().map(|d| (d.n_out, d.n_in)))
+                        .unwrap_or((out.len(), x.len()));
+                    let w = g.dequant(nom);
+                    PushMat::build(&w, n_out, n_in)
+                }),
+            };
             // En listes, une paire EST un événement : on ne paie que les poids
             // non nuls. Les deux compteurs doivent donc avancer ensemble ici —
             // c'est ce qui rend l'écart avec un chemin dense lisible.
@@ -5862,7 +5918,7 @@ l'attention par lots est DENSE. Utiliser --lot 1 pour l'attention creuse.", self
                     // Pas de forme dense (mode push) : jeton par jeton.
                     for i in 0..t {
                         let mut out = vec![0f32; taille];
-                        Self::matvec(&mut self.pool, pj, &hn[i * h..(i + 1) * h], &mut out,
+                        Self::matvec(&mut self.pool, &self.g, pj, &hn[i * h..(i + 1) * h], &mut out,
                                      &mut self.events, &mut self.paires[0], self.act_levels,
                                      self.act_thresh, 0,
                                      self.act_renorm, &mut scratch, self.seuil_push);
@@ -7618,9 +7674,9 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                               att[0], att[1], att[2], att[3], att[4], att[5], att[6], att[7]);
                 }
             } else {
-                Self::matvec(pool, &lay.wq, &hn, &mut q, events, &mut paires[0], self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
-                Self::matvec(pool, &lay.wk, &hn, &mut k, events, &mut paires[0], self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
-                Self::matvec(pool, &lay.wv, &hn, &mut v, events, &mut paires[0], self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, g, &lay.wq, &hn, &mut q, events, &mut paires[0], self.act_levels, self.act_thresh, tk(0), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, g, &lay.wk, &hn, &mut k, events, &mut paires[0], self.act_levels, self.act_thresh, tk(1), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, g, &lay.wv, &hn, &mut v, events, &mut paires[0], self.act_levels, self.act_thresh, tk(2), self.act_renorm, &mut scratch, self.seuil_push);
                 self.prof[0] += tm.elapsed().as_secs_f64();
                 // Qwen3 normalise chaque tête de Q et K avant la rotation.
                 if lay.q_norm.is_some() || lay.k_norm.is_some() {
@@ -7989,7 +8045,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     Some(m) => m.nh * m.vd,
                     None => att.len(),
                 };
-                Self::matvec(pool, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
+                Self::matvec(pool, g, &lay.wo, &att[..n_att.min(att.len())], &mut o, events, &mut paires[0], self.act_levels, self.act_thresh, tk(3), self.act_renorm, &mut scratch, self.seuil_push);
             }
             // Hyper-connexions : `o` reste la SORTIE PURE de l'attention ; ce
             // sont les copies qui se rechargent (`comb`), et l'entrée de la FFN
@@ -8283,7 +8339,7 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                 self.prof[3] += tf.elapsed().as_secs_f64();
                 continue;
             }
-            Self::matvec(pool, &lay.wgate, &hn, &mut gate, events, &mut paires[2], self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, g, &lay.wgate, &hn, &mut gate, events, &mut paires[2], self.act_levels, self.act_thresh, tk(4), self.act_renorm, &mut scratch, self.seuil_push);
             // --- capteur hebbien : espionne la co-activation (entrée, sortie)
             // de la projection gate. Aucun effet sur le calcul.
             if let Some(hb) = self.hebb.as_mut() {
@@ -8309,11 +8365,11 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
                     let _ = hd.pas(&hn, &gate_brut, &mut gate);
                 }
             }
-            Self::matvec(pool, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, g, &lay.wup, &hn, &mut up, events, &mut paires[2], self.act_levels, self.act_thresh, tk(5), self.act_renorm, &mut scratch, self.seuil_push);
             Self::activation(&mut gate, &up, cfg.ffn, cfg.ffn_act_oss, 0.0);
             Self::compter_neurones(&mut self.profil_neurones, largeur_profil,
                                    l, &gate[..cfg.ffn]);
-            Self::matvec(pool, &lay.wdown, &gate, &mut down, events, &mut paires[2], self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
+            Self::matvec(pool, g, &lay.wdown, &gate, &mut down, events, &mut paires[2], self.act_levels, self.act_thresh, tk(6), self.act_renorm, &mut scratch, self.seuil_push);
             // --- greffon : neurone supplémentaire, sans réentraînement
             if let Some(pt) = self.patch.as_ref() {
                 if pt.layer == l {
