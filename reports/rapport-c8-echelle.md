@@ -77,6 +77,25 @@ Ce que ça dit :
   lecteur est entraîné — c'est l'inverse de ce que dit la tête empruntée, et c'est la tête
   entraînée qui compte pour un chemin court **appris** (le manque N4).
 
+## 2quater. Les deux leviers se multiplient (données × profondeur)
+
+Même protocole, deux profondeurs de sortie, trois volumes de données :
+
+| morceaux (k) | profondeur 16 (TEST) | profondeur 8 (TEST) | rapport 8/16 |
+|---:|---:|---:|---:|
+| 4 | 1 032,5798 | 1 745,5154 | ×1,69 |
+| 15 | 260,8050 | 382,4743 | ×1,47 |
+| 30 | 179,5909 | 267,9833 | ×1,49 |
+
+* **le rapport est presque constant (~×1,5)** : sortir deux fois plus tôt coûte le même facteur,
+  que l'on ait 4 ou 30 morceaux. Autrement dit, les deux leviers — **données** et **profondeur** —
+  agissent **indépendamment** et se multiplient ;
+* **corollaire pratique** : on ne « rattrape » pas une sortie précoce avec plus de données, et on
+  n'économise pas de données en sortant plus tard. Le choix de la profondeur se fait donc sur le
+  **coût** (couches sautées), pas sur la qualité relative ;
+* c'est cohérent avec le § 2bis : l'état précoce est **lisible** (le lecteur extrait l'essentiel),
+  et ce qui manque à la sortie précoce est une **petite** partie de l'information — ×1,5, pas ×10.
+
 ## 2ter. Robustesse : la graine ne change rien, le morceau de test change TOUT
 
 Deux contrôles sur la même configuration (k = 30, validation m30+m31) :

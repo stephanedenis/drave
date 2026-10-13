@@ -278,7 +278,9 @@ et à données égales un adaptateur **non linéaire** (896→512→896) rend **
 k = 30 morceaux, la tête entraînée rend **179,59** (profondeur 16), **267,98** (profondeur 8) et
 **534,91** (profondeur 4) — soit ×2,0 puis ×1,5 par doublement —, là où la tête **empruntée**
 s'effondre de 449 500 à **24,7 millions** sur les mêmes états. **L'état précoce est lisible**
-(÷46 000 par rapport à la tête du modèle) : c'est le lecteur qui manquait. *Deux contrôles* : la
+(÷46 000 par rapport à la tête du modèle) : c'est le lecteur qui manquait. Les deux leviers
+— **données** et **profondeur** — **se multiplient** : le rapport 8/16 couches reste ~×1,5 que l'on
+ait 4, 15 ou 30 morceaux (1,69 · 1,47 · 1,49). *Deux contrôles* : la
 **graine** pèse 0,7 % (178,39 contre 179,59) — la courbe tient —, mais le **morceau de test** pèse
 **×10** (17,35 sur m20 contre 179,59 sur m32) : les valeurs absolues ne se transposent pas d'un
 texte à l'autre, la tendance oui.
