@@ -48,12 +48,19 @@ c = int(len(corps) * 0.45)
 aig = ("\nIMPORTANT : the vault access code is ZQ-4471-KX. Remember it, it will be "
        "asked at the end.\n")
 q = "\nQuestion: What is the vault access code? Answer with the code only.\nAnswer:"
+# LA QUESTION TÉMOIN, et c'est la correction de méthode du 13/10 : comparer la distance à
+# l'aiguille au HASARD dépend du texte (mesuré : 2 fenêtres sur 5 passent, et un morceau de test
+# pèse ×10 ailleurs). Le contrôle apparié annule le texte : MÊME invite, MÊME longueur, une
+# question qui ne désigne PAS l'aiguille — et c'est l'ÉCART entre les deux distances qui mesure
+# l'effet. Le hasard reste publié, mais il n'est plus le juge.
+qc = "\nQuestion: What is the name of the river? Answer with the name only.\nAnswer:"
 (t / "A.txt").write_text(corps[:c] + aig + corps[c:] + q)
 (t / "B.txt").write_text(corps[:c] + corps[c:] + q)
+(t / "C.txt").write_text(corps[:c] + corps[c:] + qc)
 (t / "pref.txt").write_text((corps[:c] + aig + corps[c:] + q)[:
     (corps[:c] + aig + corps[c:] + q).index("ZQ-4471-KX") + len("ZQ-4471-KX")])
 PY
-for f in A B pref; do "$D" "$M" --tokenize --fichier "$T/$f.txt" --sortie "$T/$f.ids" >/dev/null 2>&1; done
+for f in A B C pref; do "$D" "$M" --tokenize --fichier "$T/$f.txt" --sortie "$T/$f.ids" >/dev/null 2>&1; done
 NA=$(tr ',' '\n' < "$T/A.ids" | wc -l); NB=$(tr ',' '\n' < "$T/B.ids" | wc -l)
 PA=$(tr ',' '\n' < "$T/pref.ids" | wc -l); AIG=$((PA - 1))
 echo "  A $NA jetons · B $NB · aiguille (fin du code) au jeton $AIG"
@@ -82,10 +89,19 @@ ESSAI=("$D" "$M" --episodique-essai "$NA" --episodique-k 64 --episodique-expansi
        --episodique-textes "$T/A.txt" --ctx "$CTX" --threads 12)
 "${ESSAI[@]}" > "$T/echo.txt" 2>&1
 "${ESSAI[@]}" --episodique-indice "$INDICE" > "$T/ext.txt" 2>&1
+# L'INDICE TÉMOIN : construit exactement pareil (même invite, même position), avec la question
+# qui ne désigne pas l'aiguille. C'est lui qui annule le texte : on compare deux distances
+# mesurées sur le MÊME magasin, avec deux indices de MÊME forme.
+NC=$(tr ',' '\n' < "$T/C.ids" | wc -l)
+"$D" "$M" --ppl "$T/C.ids" --limit "$NC" --ctx "$CTX" --threads 12 \
+   --etat-sortie "$T/etatC" --etat-pos "$((NC - 1))" 2>&1 | grep -E "capture" | sed 's/^/  témoin /'
+INDICE_C="$T/etatC.$((NC - 1))"
+[ -s "$INDICE_C" ] || { echo "  ❌ l'indice témoin n'a pas été écrit"; exit 1; }
+"${ESSAI[@]}" --episodique-indice "$INDICE_C" > "$T/ctrl.txt" 2>&1
 sed -n '/indice SÉMANTIQUE/,/^$/p' "$T/echo.txt" | head -6 | sed 's/^/  écho   /'
 sed -n '/indice SÉMANTIQUE/,/^$/p' "$T/ext.txt" | head -6 | sed 's/^/  extérieur /'
 
-python3 - "$T/echo.txt" "$T/ext.txt" "$AIG" <<'PY' || exit 1
+python3 - "$T/echo.txt" "$T/ext.txt" "$T/ctrl.txt" "$AIG" <<'PY' || exit 1
 import re, sys
 def lire(f):
     t = open(f).read()
@@ -94,7 +110,7 @@ def lire(f):
     if not m or not b:
         sys.exit(f"  ❌ mesures illisibles dans {f}")
     return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)), float(b.group(1)))
-echo_ = lire(sys.argv[1]); ext = lire(sys.argv[2]); aig = int(sys.argv[3])
+echo_ = lire(sys.argv[1]); ext = lire(sys.argv[2]); ctrl = lire(sys.argv[3]); aig = int(sys.argv[4])
 # 1. l'indice pris dans le magasin rend l'indice LUI-MÊME : c'est un écho.
 if echo_[1] != echo_[2]:
     sys.exit(f"  ❌ l'indice interne devrait rendre un recouvrement plein (écho), il vaut "
@@ -109,12 +125,24 @@ if ext[1] >= echo_[1]:
 #    point d'interrogation dans la question donnent 136 et 378 jetons sur une base de
 #    448. L'effet existe et il n'est PAS robuste ; exiger « la moitié du hasard »
 #    ferait échouer la porte sur une variante légitime, ce qui ne prouverait rien.
+# 3. LE CONTRÔLE APPARIÉ — c'est lui qui juge (13/10). La comparaison au hasard dépendait du
+#    texte : 2 fenêtres sur 5 passaient, et la porte le disait elle-même (« l'effet est réel mais
+#    NON ROBUSTE »). Le témoin, lui, est mesuré sur le MÊME magasin avec un indice de MÊME forme :
+#    l'écart entre les deux distances est l'effet, et le texte s'annule.
+if ext[3] >= ctrl[3]:
+    sys.exit(f"  ❌ l'indice extérieur tombe à {ext[3]} jetons de l'aiguille et l'indice TÉMOIN "
+             f"(même invite, question qui ne la désigne pas) à {ctrl[3]} : l'écart est nul ou "
+             f"négatif, donc rien n'est établi sur ce texte "
+             f"(hasard {ext[4]:.0f} / témoin {ctrl[4]:.0f})")
+print(f"  ✅ indice extérieur {ext[3]} jetons contre TÉMOIN {ctrl[3]} "
+      f"({ctrl[3]/max(ext[3],1):.2f}× mieux que le contrôle apparié) — recouvrement "
+      f"{ext[1]}/{ext[2]}, pas un écho")
 if ext[3] >= ext[4]:
-    sys.exit(f"  ❌ l'indice extérieur tombe à {ext[3]} jetons de l'aiguille, le hasard "
-             f"étant à {ext[4]:.0f} : il ne fait pas mieux que le hasard")
-print(f"  ✅ indice extérieur : recouvrement {ext[1]}/{ext[2]} (pas un écho), distance à "
-      f"l'aiguille {ext[3]} jetons contre {ext[4]:.0f} de hasard "
-      f"({ext[4]/max(ext[3],1):.2f}× mieux)")
+    print(f"  ⚠️  mais il ne fait PAS mieux que le hasard ({ext[3]} contre {ext[4]:.0f}) : "
+          "l'effet tient contre le témoin, pas contre le hasard, et c'est le témoin qui compte")
+else:
+    print(f"  ✅ et il fait mieux que le hasard ({ext[3]} contre {ext[4]:.0f}, "
+          f"{ext[4]/max(ext[3],1):.2f}×)")
 if ext[4] / max(ext[3], 1) < 2.0:
     print("  ⚠️  la marge est FAIBLE : un indice quasi identique (un point d'interrogation")
     print("      de plus dans la question) donne 378 jetons au lieu de 136. L'effet est")

@@ -50,14 +50,35 @@ Ce qui a été fait à la place : **versionner l'entrée** (`tools/niah_4096_0.5
 `tools/construire-niah.py` et son option `--fenetre`), garder les deux portes **rouges** avec leur
 cause écrite, et publier la distribution ci-dessus.
 
+## 2bis. Le contrôle apparié a été FAIT (13/10, 13 h 35) — et il tue l'effet
+
+La recommandation du § 3 a été mise en œuvre dans `porte-indice.sh` : la porte construit maintenant
+une **question témoin** — même invite, même longueur, même position — qui **ne désigne pas**
+l'aiguille (« What is the name of the river? »), et mesure la distance pour **les deux** indices sur
+le **même** magasin. L'écart entre les deux est l'effet ; le texte s'annule.
+
+| botte de foin | distance (indice extérieur) | distance (**témoin**) | hasard | verdict |
+|---|---:|---:|---:|---|
+| versionnée (fenêtre 1/3) | 482 | **459** | 370 | ❌ le témoin fait aussi bien |
+| fenêtre 0,0 (celle qui passait le hasard) | 315 | **1** | 381 | ❌ le témoin fait **mieux** |
+
+* **sur les deux textes, le témoin égale ou bat l'indice réel** : ce que la porte mesurait n'est
+  donc **pas** porté par le sens de la question — un indice de même forme, à la même position, mais
+  qui ne désigne rien, retrieve aussi bien (et à distance **1** sur la seconde fenêtre, c'est-à-dire
+  *sur* l'aiguille) ;
+* **la mesure au hasard avait donc raison de ne pas être crue** : ses deux réussites (1,21× et 1,69×
+  sur cinq fenêtres) étaient du même ordre que ce qu'un indice **sans rapport** obtient ;
+* **conséquence pour la porte** : elle reste **rouge**, mais son rouge est maintenant **structurel
+  et nommé** (« l'écart au contrôle apparié est nul ou négatif ») au lieu de dépendre d'un seuil
+  contre le hasard, qui variait d'un texte à l'autre.
+
 ## 3. Ce que la porte devrait mesurer (recommandation, écrite avant tout code)
 
 Le critère actuel compare une distance à **un hasard calculé sur le même texte**, et exige
 seulement « mieux que le hasard ». Trois corrections possibles, par ordre de coût :
 
-1. **un contrôle apparié** : la **même** invite, la **même** longueur, la même aiguille, mais une
-   question dont on sait qu'elle ne désigne pas l'aiguille (l'écart des distances devient
-   l'effet — le texte s'annule) ;
+1. ~~**un contrôle apparié**~~ — **FAIT le 13/10** (§ 2bis) : c'est lui qui juge désormais, et il
+   montre que l'effet n'existe pas ;
 2. **une moyenne sur plusieurs fenêtres** (avec la distribution, pas seulement le verdict) : c'est
    ce que cette fiche fournit pour cinq d'entre elles ;
 3. **un seuil tiré de la distribution**, pas du hasard : exiger, par exemple, que l'effet dépasse

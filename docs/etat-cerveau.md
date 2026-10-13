@@ -217,10 +217,13 @@ c'est le calcul CPU qu'il faut recouvrir). Première commande :
 le hasard ; mesuré sur **cinq fenêtres** du même corpus, le critère passe **deux fois** (1,21× et
 1,69×) et échoue **trois fois** (jusqu'à 2,13× pire). L'entrée de la campagne n'a jamais été
 versionnée ; elle l'est maintenant (`tools/niah_4096_0.5.txt`, `tools/construire-niah.py --fenetre`).
-**La correction proposée** (écrite avant tout code) : un **contrôle apparié** — même invite, même
-longueur, une question qui ne désigne pas l'aiguille — pour que le texte s'annule, ou une moyenne
-sur plusieurs fenêtres. Fiche :
-[`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md).
+**La correction a été faite le 13/10 (13 h 35) : un contrôle apparié** — même invite, même longueur,
+une question qui ne désigne pas l'aiguille — et **il tue l'effet** : sur la fenêtre versionnée,
+l'indice réel tombe à 482 jetons et le **témoin** à 459 ; sur la fenêtre qui passait le test du
+hasard, l'indice réel tombe à 315 et le témoin à **1**. Ce que la porte mesurait n'est donc **pas**
+porté par le sens de la question — les deux rouges restent, mais leur cause est maintenant
+**structurelle et nommée** au lieu de dépendre d'un seuil contre le hasard. Fiche :
+[`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) § 2bis.
 
 **6. Dessin H — la carte des sorties a tourné (11/10 00 h 15) : ce n'est pas le point de sortie qui
 limite.** Quatre sorties (12, 16, 20, 22 sur 24) : l'accord de l'oracle monte quand on sort tard,
