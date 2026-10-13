@@ -123,7 +123,7 @@ ici comme avertissement :
 
 | | ce que j'ai lancé | ce que ça compare |
 |---|---|---|
-| référence | `tools/ref_logits` sur V4-Flash, `REF_TENSORS='^(attn_derope|l_last)-2$'`, 128 positions | l'état de la couche 2 du **modèle entier** |
+| référence | `tools/ref_logits` sur V4-Flash, deux tenseurs (`attn_derope-2`, `l_last-2`), 128 positions | l'état de la couche 2 du **modèle entier** |
 | moteur | `--couches 2:3` **sans état injecté** | la couche 2 seule, son entrée étant l'**embarquement** |
 
 Les corrélations obtenues (0,05 à 0,40, pour les deux régimes, qui se tiennent à

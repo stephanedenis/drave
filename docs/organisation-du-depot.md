@@ -45,6 +45,19 @@ Nommage :
 | `*-pour-drave.md` | un apport extérieur traduit pour le moteur | `biologie-pour-drave.md` |
 | (sans préfixe) | un domaine : architecture, format, glossaire, conventions | `format-flux.md`, `manques.md` |
 
+### 1bis. Un tableau qui ne rend pas est un tableau qui n'existe pas
+
+Une **seule** ligne au mauvais nombre de cellules fait rendre **tout** le tableau comme du texte —
+et comme le texte reste visible, personne ne le voit. Trois règles, vérifiées par
+`tools/porte-tableaux.sh` (38ᵉ porte, 413 fichiers, ~1 s) :
+
+1. l'en-tête, le séparateur et **chaque** ligne ont le **même nombre de cellules** ;
+2. une barre de valeur absolue **dans un espace de code** s'écrit `∣` (U+2223) : `\|` s'y affiche
+   avec son antislash (mistune ne le déséchappe pas dans les backticks) ; **hors** tableau, une
+   barre simple suffit ;
+3. un tableau **triangulaire** (des lignes de plus en plus longues) ne rend pas : on élargit
+   l'en-tête et on remplit les trous par `—`.
+
 ## 2. `reports/` — UNE EXPÉRIENCE PAR FICHIER
 
 **Ce qui y va** : un fichier par expérience, avec **la question**, **le protocole**, **les

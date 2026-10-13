@@ -716,7 +716,7 @@ Un garde-fou le détecte maintenant (identifiant ≥ vocabulaire = erreur franch
 Q4_K/Q6_K comparée à une référence F16 des mêmes poids ; tokenizer o200k comparé
 à `/tokenize` ; perplexités recoupées avec `llama-perplexity` ; **logits comparés
 un à un à llama.cpp** sur les mêmes identifiants (corrélation 0,999976 au premier
-jeton, top-1 identique sur 63 positions, |ΔNLL| médian 0,076) ; tokenizer o200k
+jeton, top-1 identique sur 63 positions, ∣ΔNLL∣ médian 0,076) ; tokenizer o200k
 comparé à `llama-tokenize` sur 4 424 jetons (0 écart).
 
 ---
@@ -885,7 +885,7 @@ qui reste est classé par rentabilité mesurée.
 | `DRAVE_KV_K_F32=1` | garde les CLÉS en f32 (valeurs quantifiées) | mesuré : à 8 192, **64 %** de la taille f32 (5,125 octets par élément, échelles comprises) pour +0,023 %, contre +3,04 % pour l'int8 complet (28 % de la taille) — l'écart int8 vient des clés à 99 % (`reports/rapport-attribution-kv.md`) |
 | `DRAVE_KV_V_F32=1` | garde les VALEURS en f32 | +3,01 % : ne sert à rien, l'erreur ne passe pas par là |
 | `DRAVE_KV_K_F16=1` | clés en **f16** (2 octets/valeur, précision relative) | **le meilleur réglage mesuré** : à 8 192 jetons, clés f16 + valeurs int8 = **+0,018 %** pour **39 % de la taille f32** — contre +0,023 % pour les clés f32 (64 % de la taille) et +3,04 % pour l'int8 complet (28 %) |
-| `DRAVE_DUMP_COUCHES=<préfixe>` | écrit en f32 brut l'état résiduel et les intermédiaires (`hc_attn_pre`, `qr`, `qr_norm`, `q_norm`, `kv_norm`, `attn_derope`, `attn_out`, `l_last`), **par couche et par position** — à comparer avec `REF_DUMP` de `tools/ref_logits` via `tools/compare_etats.py` |
+| `DRAVE_DUMP_COUCHES=<préfixe>` | écrit en f32 brut l'état résiduel et les intermédiaires (`hc_attn_pre`, `qr`, `qr_norm`, `q_norm`, `kv_norm`, `attn_derope`, `attn_out`, `l_last`), **par couche et par position** | à comparer avec `REF_DUMP` de `tools/ref_logits` via `tools/compare_etats.py` |
 | `DRAVE_TRACE_BLOCS=1` | trace DRVF **v3** : valeurs i8, échelle f16 par bloc de 32 | 45 079 930 o contre 66 370 408 en v2 (−32 %), rejeu 19,4029 contre 19,3885 (+0,074 %) |
 | `DRAVE_FLUX_VERIF=1` | vérifie l'écart entre l'activation calculée et celle que la trace impose | 1,5e-5 en v2 ; **muet dès que `--lot > 1`** (le rejeu par lots passe par `flux_lot`) |
 | `DRAVE_HARMONY_TRACE=1` | trace les fenêtres du découpage « harmony » (gpt-oss) | diagnostic |
@@ -1130,7 +1130,7 @@ testé est une décoration.**
 
 ✅ **Doute instruit** (`reports/rapport-logits-gpu-vs-cpu.md`) : le déport des
 projections donne des logits **IDENTIQUES au CPU sur un modèle dense**
-(Qwen2.5-0.5B : écart moyen |ΔNLL| = 0,0000, perplexité 17,4315 des deux côtés) et
+(Qwen2.5-0.5B : écart moyen ∣ΔNLL∣ = 0,0000, perplexité 17,4315 des deux côtés) et
 les décale de **0,038 nat** sur gpt-oss (MxFP4, 128 experts top-8), avec le même
 jeton sur **497 des 511 positions** (les 14 divergences portent les plus grands
 écarts, jusqu'à 1,37 nat). Les noyaux GPU sont donc exacts ; ce qui diffère,
@@ -1169,7 +1169,7 @@ et `--infer --topk`, `--ppl-reparti --ids` sont bornés. **18 tests.**
 | 1 | **Noyau fusionné du top-k** : descente radix + collecte + somme en UN noyau par ligne | 8 lancements → 2 · tampon `nh × n × 4` supprimé · écart 7,2e-7 (avec puits) et 8,4e-7 (sans) |
 | 2 | **Le déport du top-k gagne** | attention plate 4,5–5,0 ms/jeton de 255 à 4 095 clés · croisement ~300 clés · ×7,8 à 4 095 clés |
 | 3 | **Le préremplissage déporté** | prompt de 3 961 jetons : **286,6 → 63,8 s** (×4,5) · perplexité 9,4335 / 9,4337 (écart relatif 2,1e-5) |
-| 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (|ΔNLL| moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
+| 4 | **Le déport des projections est EXACT sur un modèle dense** | logits bit à bit identiques (∣ΔNLL∣ moyen 0,0000) ; sur un MoE, 0,038 nat de décalage et 497/511 top-1 identiques → routage des experts (hypothèse) |
 | 5 | **Le noyau fusionné gagne au décodage, jusqu'à 16 k clés** | GPU plat, CPU 4,26 → 38,84 ms/jeton · k = 1 024 suffit à 8 192 clés (12,5 %) |
 | 6 | **L'attention creuse à 6 % n'est PAS moins fiable que l'attention complète** | neuf fenêtres contiguës, mêmes invites : **dense 8/9, k = 256 8/9**, et les échecs ne sont pas les mêmes fenêtres (dense rate la 3e, k = 256 rate la 1re) — le succès dépend de la divergence chaotique du décodage, pas du budget d'attention |
 | 7 | **Six artefacts qui promettaient ce qu'ils ne faisaient pas** | garde-fou jamais déclenché · échantillon lu comme un accord global · grep qui ne suit pas la chaîne d'appels · décalage de fenêtre remis à zéro · section annoncée dans un commit mais absente · **script de vérification qui ne lisait pas le code de sortie** (le correctif du livelock a été cru bon alors qu'il finissait en SIGABRT) |

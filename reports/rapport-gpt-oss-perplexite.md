@@ -73,7 +73,7 @@ séquence, un seul batch) et écrit les logits bruts, que
 | 511 jetons, YaRN, une seule fenêtre de 512 | **169,67** | **174,34** |
 
 Sur les 63 positions : corrélation des logits **0,999976**, **top-1 identique
-partout**, \|ΔNLL\| médian 0,076, max 1,49. L'écart résiduel est la
+partout**, ∣ΔNLL∣ médian 0,076, max 1,49. L'écart résiduel est la
 quantification de nos activations (15 bits, une échelle par vecteur) contre le
 f32 de llama.cpp — pas une erreur de calcul.
 
@@ -247,7 +247,7 @@ pas de rotation.
    YaRN : « Canberra. » ; avec : « The capital city of Australia is Canberra. »),
    donc l'enjeu est la calibration, pas la fluidité.
 2. **Quantification des activations** : l'écart résiduel avec llama.cpp
-   (\|ΔNLL\| médian 0,076) vient de notre int15 à une échelle par vecteur, contre
+   (∣ΔNLL∣ médian 0,076) vient de notre int15 à une échelle par vecteur, contre
    le f32 de la référence. C'est le même chantier que les échelles par bloc de
    `DenseQ8` (`REPRISE.md` §6.e).
 3. Le reste de `REPRISE.md` §6 (noyaux GPU, contexte long, vision) est inchangé.

@@ -75,7 +75,7 @@ Trois détails portent tout le comportement, et aucun n'est devinable :
    (couche, groupe, tête)), pas sur la table entière.
 
 S'y ajoutent la lecture (e4m3 × échelle e8m0 par bloc de 32, sortie bf16) et
-l'injection (une porte `sigmoid(±sqrt(max(|dot|, 1e-6)))` — le clamp est **dans**
+l'injection (une porte `sigmoid(±sqrt(max(∣dot∣, 1e-6)))` — le clamp est **dans**
 la racine et c'est un **maximum**, donc un produit scalaire minuscule est
 *amplifié* — multipliée par une valeur partagée entre les `hc` copies).
 
@@ -90,7 +90,7 @@ changement de sortie.
 | **adressage** (`^=` sur un repli collant, modulo par colonne) | **porté** | 10 000 jetons × 2 couches × 24 colonnes = **480 000 adresses, 0 écart** avec `tools/engram_reference.py`, sur les métadonnées **réelles** de V4.1 |
 | invariants du fichier | **vérifiés** | les 48 premiers recalculés sont identiques ; table de correspondance dense (99 092) ; 8 multiplicateurs impairs sous la borne ; chaque adresse tombe dans le seau de sa colonne |
 | **lecture d'une rangée** (e4m3 × e8m0 par bloc de 32) | **portée** | 2 000 rangées lues → **512 000 valeurs, identiques au bit près** au décodage Python des mêmes octets |
-| **injection** (porte `sigmoid(±sqrt(max(|dot|, 1e-6)))`, valeur partagée entre les `hc` copies) | **portée** | deux tests : conformité à la transcription Python (valeurs générées) et masque qui éteint la porte en rendant l'entrée **exactement** |
+| **injection** (porte `sigmoid(±sqrt(max(∣dot∣, 1e-6)))`, valeur partagée entre les `hc` copies) | **portée** | deux tests : conformité à la transcription Python (valeurs générées) et masque qui éteint la porte en rendant l'entrée **exactement** |
 
 Ce que la liste coûte et ce qu'elle dit, mesuré (`--engram-adresses`) : 10 000
 jetons en **5,9 ms**, **99,9 % de rangées distinctes**, **0,06 %** des 768 022 850

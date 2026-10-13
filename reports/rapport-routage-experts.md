@@ -111,7 +111,7 @@ identifiants, même contexte, même fenêtre — c'est la seule mesure qui sépa
 **gpt-oss-120b, 4 jetons, ctx 16** (jetons froids, donc perplexités hautes par
 construction) :
 
-| | perplexité | corrélation des logits (pos. 0) | écart \|NLL\| moyen | accord top-1 |
+| | perplexité | corrélation des logits (pos. 0) | écart ∣NLL∣ moyen | accord top-1 |
 |---|---|---|---|---|
 | llama.cpp (référence) | **5420,40** | — | — | — |
 | drave, biais **hors** des poids (nouveau) | **6443,13** | **0,989242** | 0,4364 | 2/4 |
@@ -136,7 +136,7 @@ YaRN, pas d'une erreur de calcul. La validation externe qui compte est celle de
 Qwen2.5-0.5B, **sans YaRN** : 19,3885 contre 18,9750 chez llama.cpp (2,2 %).
 
 Le nouveau est plus proche de la référence en perplexité **et** en corrélation ;
-l'ancien a un écart \|NLL\| moyen légèrement plus faible, mais un top-1 identique
+l'ancien a un écart ∣NLL∣ moyen légèrement plus faible, mais un top-1 identique
 et une corrélation moins bonne. Sur quatre jetons l'écart est trop mince pour
 trancher à lui seul — c'est le code de `build_moe_ffn` qui tranche (llama.cpp
 met bien le biais dans `selection_probs` et pas dans `probs`), et cette mesure

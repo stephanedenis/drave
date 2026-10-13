@@ -48,10 +48,10 @@ Modèle : MLP 32→64→10, entraîné sur 4096 exemples synthétiques, évalué
 
 ### Densité par plan (justifie — ou non — le CSR)
 
-| Magnitude | plan 0 | plan 1 |
-|---|---|---|
-| 2 bits | 50.9 % | 27.5 % |
-| 3 bits | 51.3 % | 44.1 % | 27.5 % |
+| Magnitude | plan 0 | plan 1 | plan 2 | plan 3 |
+|---|---|---|---|---|
+| 2 bits | 50.9 % | 27.5 % | — | — |
+| 3 bits | 51.3 % | 44.1 % | 27.5 % | — |
 | 4 bits | 51.5 % | 48.1 % | 42.8 % | 27.5 % |
 
 ## 3. Débit projeté sur la carte (Stratix V GS D5)

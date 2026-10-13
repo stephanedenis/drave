@@ -20,14 +20,14 @@ réponse, ici, est qu'elle **rapporte**.*
 Deux jeux de 1 024 tokens, réglage sur A, vérification sur B.
 
 | k (clés gardées) | PPL (A) | PPL (B) | 2 040 tokens | ctx 512 |
-|---|---|---|---|---|---|
+|---|---|---|---|---|
 | **dense** (référence) | 23,6125 | 26,2565 | 24,8995 | 19,5222 |
-| 128 | 23,5840 (−0,12 %) | — | — |
+| 128 | 23,5840 (−0,12 %) | — | — | — |
 | 64 | 23,4621 (−0,64 %) | 26,1959 (−0,23 %) | 24,6867 | **19,3700 (−0,78 %)** |
 | **32** | **23,3302 (−1,20 %)** | **26,1199 (−0,52 %)** | **24,6857 (−0,86 %)** | **19,4136 (−0,56 %)** |
-| 24 | — | — | 24,7043 |
-| 16 | 23,6591 (+0,20 %) | 26,5065 (+0,95 %) | — |
-| 8 | 24,9071 (+5,5 %) | — | — |
+| 24 | — | — | 24,7043 | — |
+| 16 | 23,6591 (+0,20 %) | 26,5065 (+0,95 %) | — | — |
+| 8 | 24,9071 (+5,5 %) | — | — | — |
 
 ➡️ **Restreindre l'attention aux 32 meilleures clés améliore la perplexité de
 0,5 à 1,2 % selon le jeu et le contexte, et le gain se reproduit sur des tokens
@@ -127,7 +127,7 @@ Deux réécritures, à perplexité **rigoureusement identique** (23,6125 dense,
 
 | boucle | avant | après |
 |---|---|---|
-| produit scalaire des scores | `for d in 0..hd { s += qh[d]*kt[d] }` | `qh.iter().zip(kt.iter()).map(\|(a,b)\| a*b).sum()` |
+| produit scalaire des scores | `for d in 0..hd { s += qh[d]*kt[d] }` | `qh.iter().zip(kt.iter()).map(∣(a,b)∣ a*b).sum()` |
 | somme pondérée | accumulation par dimension (stride 64) | accumulation **par clé** dans le vecteur de sortie (lecture séquentielle) |
 
 Mesure entrelacée, contexte 512 :

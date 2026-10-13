@@ -21,6 +21,13 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Porte ajoutée le 2026-10-13 à 08 h 40** : `porte-tableaux.sh` (vérifie que chaque tableau
+> Markdown du dépôt a le même nombre de cellules partout — une seule ligne fautive fait rendre tout
+> le tableau comme du texte, et le texte reste visible, donc le défaut est muet). Vue **rouge** sur
+> deux défauts volontaires. Fiche :
+> [`reports/rapport-tableaux-casses.md`](../reports/rapport-tableaux-casses.md). Elle n'était pas
+> encore dans une passe complète au moment de ce relevé.
+>
 > **Passe du 2026-10-13 à 06 h 19** (**37 portes, 35 vertes, 2 rouges**, ~71 min) : après le **pool
 > des tampons de lecture** (seul changement moteur depuis la précédente). Mêmes deux rouges, mêmes
 > valeurs ; `porte-prechargement` et `porte-push-paresseux` vertes. Le pool est **neutre en temps**
@@ -51,7 +58,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **34 vertes sur 36** (12/10 : les deux rouges sont la botte de foin régénérée), ≈75 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **38 portes** ; dernière passe : **35 vertes sur 37** (13/10 06 h 19, les deux rouges sont le critère d'indice extérieur), ≈72 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
