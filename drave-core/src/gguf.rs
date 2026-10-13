@@ -127,6 +127,13 @@ unsafe fn toucher(addr: usize, octets: usize) {
 /// « à la demande » ne serait plus à la demande, et la porte ne comparerait plus rien.
 pub fn prelecture_active() -> bool { prelire_active() }
 
+/// `DRAVE_PUSH_FAUX=1` : construire la forme paresseuse depuis une matrice de ZÉROS au lieu du
+/// fichier — un défaut VOLONTAIRE, pour que la porte qui vérifie la paresse puisse être vue
+/// ROUGE (`REPRISE.md` § 4 : « une porte qu'on n'a jamais vue rouge ne vérifie rien »).
+pub fn push_faux_voulu() -> bool {
+    matches!(std::env::var("DRAVE_PUSH_FAUX").as_deref(), Ok("1") | Ok("oui") | Ok("true"))
+}
+
 /// `DRAVE_PUSH_TOT=1` : construire la forme « listes » d'avance, comme avant le 12/10 —
 /// c'est le témoin qui rend la mesure de la paresse rejouable.
 pub fn push_tot_voulu() -> bool {

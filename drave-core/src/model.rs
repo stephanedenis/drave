@@ -5048,7 +5048,13 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
                     let (n_out, n_in) = p.q4.as_ref().map(|q| (q.n_out, q.n_in))
                         .or_else(|| p.d.as_ref().map(|d| (d.n_out, d.n_in)))
                         .unwrap_or((out.len(), x.len()));
-                    let w = g.dequant(nom);
+                    let w = if crate::gguf::push_faux_voulu() {
+                        // Défaut volontaire (voir `push_faux_voulu`) : la porte doit le voir.
+                        eprintln!("[push] {nom} : forme construite depuis des ZÉROS (DRAVE_PUSH_FAUX)");
+                        vec![0f32; n_out * n_in]
+                    } else {
+                        g.dequant(nom)
+                    };
                     PushMat::build(&w, n_out, n_in)
                 }),
             };

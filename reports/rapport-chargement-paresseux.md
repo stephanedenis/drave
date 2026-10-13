@@ -58,10 +58,12 @@ disponibilité, pas la dépasser.
 ## 3. Ce qui reste ouvert
 
 * `DRAVE_PUSH_TOT=1` rend l'ancien comportement, pour refaire la mesure ;
-* la construction paresseuse **n'a été déclenchée par aucune** des passes mesurées — il reste à
-  trouver le mode qui l'utilise vraiment (le chemin push existe : `PushMat`, `seuil_push`,
-  `reports/rapport-croisement-push-pull.md`) et à vérifier qu'elle rend alors **le même** chiffre
-  que la construction d'avance : c'est la porte qui manque, et elle s'écrit avec
-  `DRAVE_PUSH_TOT=1` comme témoin ;
+* ~~la construction paresseuse n'a été déclenchée par aucune des passes mesurées~~ — **trouvé, et
+  la porte existe** : c'est l'**inférence** (génération, conversation) qui prend le chemin push —
+  **93 tenseurs** construits à la demande sur Qwen2.5-0.5B —, alors que `--ppl` et ses variantes
+  (`--flux 1..4`, `--lot`, `--episodique`) n'en construisent **aucun**. `tools/porte-push-paresseux.sh`
+  le verrouille : même texte gourmand en paresseux et en avance (ids identiques), aucune
+  construction sur une passe `--ppl`, chargement **1,42 s contre 7,40 s** (5,2×), et la porte est
+  **vue ROUGE** avec `DRAVE_PUSH_FAUX=1` (forme construite depuis des zéros) ;
 * le reste du chargement (déquantification + reconstruction Q8, 7,4 s) est le prochain candidat
   mesuré — mais son remplacement (`--q4`, emprunt des blocs) **change la représentation**.
