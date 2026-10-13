@@ -21,6 +21,11 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-13 à 06 h 19** (**37 portes, 35 vertes, 2 rouges**, ~71 min) : après le **pool
+> des tampons de lecture** (seul changement moteur depuis la précédente). Mêmes deux rouges, mêmes
+> valeurs ; `porte-prechargement` et `porte-push-paresseux` vertes. Le pool est **neutre en temps**
+> — c'est mesuré à part (`reports/rapport-pool-tampons.md`), pas déduit de cette passe.
+>
 > **Passe du 2026-10-13 à 03 h 59** (**37 portes, 35 vertes, 2 rouges**, ~72 min) : les deux rouges
 > sont **les mêmes** que ci-dessous (le critère d'indice extérieur, marginal par construction), et
 > **`porte-push-paresseux` y est verte** — c'est la passe précédente qui l'avait attrapée, et

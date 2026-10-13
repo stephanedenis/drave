@@ -159,8 +159,11 @@
 > `/tmp/campagne24` et sa disparition avait rendu trois portes « code 2 » le 12/10.
 > Détail : `REPRISE.md` § 2.
 
-**1. Passe complète des portes — 34 vertes sur 34 le 11/10, relancée le 12/10 à 23 h 00 après les
-changements de la nuit** (§ 5 en porte le verdict). La porte du flux, rejouée après chaque
+**1. Passe complète des portes — QUATRE passes les 12 et 13/10, la dernière à 35 vertes sur 37**
+(§ 5). Les deux rouges sont **instruits** : le critère d'indice extérieur de `porte-indice` et
+`porte-melange` est **marginal par construction** (2 fenêtres sur 5 passent,
+`reports/rapport-niah-fragilite.md`) — ils ne disent rien du moteur. Les **valeurs des portes n'ont
+pas bougé** de toute la nuit. La porte du flux, rejouée après chaque
 changement, rend **exactement** ses valeurs de référence (61,9920 / 60,8135) : c'est elle qui a
 attrapé la paresse trop large du chargement (61,9920 → 58,8636), et c'est pour ça qu'elle se paie
 après toute modification du chemin d'exécution.

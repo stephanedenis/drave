@@ -30,6 +30,7 @@ ne croie le contraire.
 | passe | portes | verdict | rouges |
 |---|---:|---|---|
 | 2026-10-13 03 h 59 | 37 | **35 vertes, 2 rouges** | les deux de la botte de foin, et **`porte-push-paresseux` est VERTE** |
+| 2026-10-13 06 h 19 | 37 | **35 vertes, 2 rouges** | après le **pool des tampons** : mêmes deux rouges, mêmes valeurs, `porte-prechargement` et `porte-push-paresseux` vertes |
 
 C'est la passe qui compte pour la correction de la porte : elle la vérifie **dans les conditions où
 le défaut était apparu** (même environnement, même machine, même enchaînement). Une porte réparée
