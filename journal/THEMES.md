@@ -61,7 +61,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-10](2026-10-10_distribue.md) | `0,992` · `0,681` · `1,000` · `49 %` · `14,8 ms` · `40 %` · `7 ms` · `50 ms` · `50,2 ms` · `256 jetons` · `255 jetons` · `5,3719` |
 | [2026-10-11](2026-10-11_distribue.md) | `10 %` · `25 %` · `36 %` · `÷3,8` · `3,8 paires` · `−36 %` |
 | [2026-10-12](2026-10-12_distribue.md) | `91 %` · `11,72 ms` · `1,05 ms` · `0,27 ms` |
-| [2026-10-13](2026-10-13_distribue.md) | `0,7 %` |
+| [2026-10-13](2026-10-13_distribue.md) | `16 couches` · `0,7 %` |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 
