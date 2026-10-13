@@ -275,12 +275,13 @@ manque est bien N4.** Sur un morceau **jamais vu** : **1 032,58** (4 morceaux) �
 260,81 (15) · **179,59** (30) — ÷5,75 pour ×7,5 de données, ÷1,4 par doublement en fin de courbe ;
 et à données égales un adaptateur **non linéaire** (896→512→896) rend **376,01**, **2,1× pire**.
 **Et la profondeur de sortie est un levier bon marché dès que le lecteur est entraîné** : à
-k = 30 morceaux, la tête entraînée rend **179,59** (profondeur 16), **267,98** (profondeur 8) et
-**534,91** (profondeur 4) — soit ×2,0 puis ×1,5 par doublement —, là où la tête **empruntée**
+k = 30 morceaux, la tête entraînée rend **179,59** (profondeur 16), **205,58** (12), **267,98** (8) et
+**534,91** (4) — soit ×1,14 · ×1,30 · ×2,00 par 4 couches —, là où la tête **empruntée**
 s'effondre de 449 500 à **24,7 millions** sur les mêmes états. **L'état précoce est lisible**
 (÷46 000 par rapport à la tête du modèle) : c'est le lecteur qui manquait. Les deux leviers
-— **données** et **profondeur** — **se multiplient** : le rapport 8/16 couches reste ~×1,5 que l'on
-ait 4, 15 ou 30 morceaux (1,69 · 1,47 · 1,49). *Deux contrôles* : la
+— **données** et **profondeur** — **se multiplient largement** : le rapport 8/16 couches vaut 1,69 ·
+1,47 · 1,49 pour 4, 15 et 30 morceaux, mais il **dépend du texte** (×1,17 sur un second morceau de
+test) : le facteur va de 1,2 à 1,7, la direction ne change pas. *Deux contrôles* : la
 **graine** pèse 0,7 % (178,39 contre 179,59) — la courbe tient —, mais le **morceau de test** pèse
 **×10** (17,35 sur m20 contre 179,59 sur m32) : les valeurs absolues ne se transposent pas d'un
 texte à l'autre, la tendance oui.

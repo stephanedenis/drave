@@ -57,10 +57,11 @@ Ce que ça dit :
 Même protocole, mêmes 33 morceaux, mêmes 30 morceaux d'entraînement — seule la **profondeur de
 sortie** change (l'état lu par l'adaptateur) :
 
-| profondeur de sortie (sur 24 couches) | tête **empruntée** (chemin tronqué) | tête **entraînée** (k = 30) | écart tête entraînée / modèle complet | ÷ par rapport à la profondeur double |
+| profondeur de sortie (sur 24 couches) | tête **empruntée** (chemin tronqué) | tête **entraînée** (k = 30) | écart tête entraînée / modèle complet | × par 4 couches de moins |
 |---:|---:|---:|---:|---:|
-| **4** | 24 656 438,5178 | **534,9072** | ×37,6 | ×2,0 |
-| **8** | 4 481 378,8799 | **267,9833** | ×18,8 | ×1,5 |
+| **4** | 24 656 438,5178 | **534,9072** | ×37,6 | ×2,00 |
+| **8** | 4 481 378,8799 | **267,9833** | ×18,8 | ×1,30 |
+| **12** | 2 632 689,6916 | **205,5773** | ×14,4 | ×1,14 |
 | **16** | 449 500,6184 | **179,5909** | ×12,6 | — |
 
 Ce que ça dit :
@@ -68,8 +69,9 @@ Ce que ça dit :
 * **la tête empruntée s'effondre** quand on sort plus tôt : 24,7 M (profondeur 4) contre 449 k
   (profondeur 16), soit **×55** — et la chute est encore plus raide en dessous (÷5,5 puis ÷10 par
   doublement) ;
-* **la tête entraînée, elle, décroît doucement** : 535 → 268 → 180, soit **×2,0 puis ×1,5 par
-  doublement de profondeur** — une loi de puissance faible, pas un effondrement ;
+* **la tête entraînée, elle, décroît doucement** : 535 (4 couches) → 268 (8) → 206 (12) → 180 (16),
+  soit **×2,00 · ×1,30 · ×1,14 par 4 couches** — la pénalité **s'accélère** quand on sort très tôt,
+  mais elle reste loin de l'effondrement de la tête empruntée ;
 * **donc l'état précoce EST lisible** : à profondeur 4 (un sixième du réseau), un lecteur entraîné
   rend 535 là où la tête du modèle rend 24,7 millions (÷46 000). L'information utile est déjà là ;
   ce qui manquait, c'est le **lecteur** ;
@@ -87,12 +89,17 @@ Même protocole, deux profondeurs de sortie, trois volumes de données :
 | 15 | 260,8050 | 382,4743 | ×1,47 |
 | 30 | 179,5909 | 267,9833 | ×1,49 |
 
-* **le rapport est presque constant (~×1,5)** : sortir deux fois plus tôt coûte le même facteur,
-  que l'on ait 4 ou 30 morceaux. Autrement dit, les deux leviers — **données** et **profondeur** —
-  agissent **indépendamment** et se multiplient ;
-* **corollaire pratique** : on ne « rattrape » pas une sortie précoce avec plus de données, et on
-  n'économise pas de données en sortant plus tard. Le choix de la profondeur se fait donc sur le
-  **coût** (couches sautées), pas sur la qualité relative ;
+* **le rapport est presque le même à 4, 15 et 30 morceaux** (×1,69 · ×1,47 · ×1,49) : les deux
+  leviers — **données** et **profondeur** — agissent donc largement **indépendamment** et se
+  multiplient ;
+* **mais il dépend du TEXTE** : mesuré sur un second morceau de test (m20, jamais vu, le plus
+  facile des deux), le rapport 8/16 tombe à **×1,17** (20,37 contre 17,35). Ma première version de
+  cette fiche disait « ~×1,5 constant » : trop fort — le facteur va de **1,2 à 1,7** selon le
+  morceau. La direction, elle, ne change pas ;
+* **corollaire pratique** : on ne « rattrape » pas une sortie précoce avec plus de données (le
+  rapport ne se referme pas quand k monte), et on n'économise pas de données en sortant plus tard.
+  Le choix de la profondeur se fait donc sur le **coût** (couches sautées) — avec la réserve que le
+  facteur exact dépend du texte (1,2 à 1,7) ;
 * c'est cohérent avec le § 2bis : l'état précoce est **lisible** (le lecteur extrait l'essentiel),
   et ce qui manque à la sortie précoce est une **petite** partie de l'information — ×1,5, pas ×10.
 
