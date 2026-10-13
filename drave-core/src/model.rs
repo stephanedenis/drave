@@ -1932,16 +1932,44 @@ pub struct CacheExperts {
     pub evictions: u64,
     pub octets_envoyes: u64,
     ticks: u64,
+    /// **Tampons libérés, réutilisables.** Deux raisons, mesurées le 12/10 :
+    ///   * `charger_mxfp4` ALLOUE à chaque montage, et l'allocation est **37 %** (Q4_K) à **91 %**
+    ///     (MXFP4) du coût d'un montage — 11,72 ms contre 1,05 ms pour les mêmes 4,41 Mo
+    ///     (`reports/rapport-vram-transfert.md`) ;
+    ///   * `MatriceGpu` n'a **pas de `Drop`** : une éviction laissait la VRAM allouée pour de bon.
+    ///     Le pool garde ces tampons et les réutilise, donc la VRAM d'un run est bornée par
+    ///     `budget`, ce qui était l'intention du budget depuis le début.
+    libres: Vec<crate::gpu::MatriceGpu>,
+    /// Octets actuellement retenus par le pool (comptés dans le budget).
+    pub octets_libres: usize,
 }
 
 impl CacheExperts {
     pub fn nouveau(budget: usize) -> Self {
         CacheExperts { cartes: std::collections::HashMap::new(), octets: 0, budget,
-                       demandes: 0, manques: 0, evictions: 0, octets_envoyes: 0, ticks: 0 }
+                       demandes: 0, manques: 0, evictions: 0, octets_envoyes: 0, ticks: 0,
+                       libres: Vec::new(), octets_libres: 0 }
     }
 
     pub fn taux(&self) -> f64 {
         if self.demandes == 0 { 0.0 } else { 100.0 * (1.0 - self.manques as f64 / self.demandes as f64) }
+    }
+
+    /// Monte une matrice d'expert en VRAM : **depuis le pool** si un tampon de la bonne forme y
+    /// est, sinon en allouant. `recopier` écrit dans le tampon réutilisé (pas d'allocation, pas
+    /// de libération).
+    fn monter(&mut self, machine: &crate::gpu::Gpu, blocs: &[u8], n_out: usize, nb: usize)
+        -> Option<crate::gpu::MatriceGpu> {
+        let octets = n_out.checked_mul(nb)?.checked_mul(17)?;   // MXFP4 : 17 octets par bloc de 32
+        if let Some(i) = self.libres.iter().position(|m| m.octets_poids == octets) {
+            let m = self.libres.swap_remove(i);
+            self.octets_libres = self.octets_libres.saturating_sub(m.octets_poids);
+            if machine.recopier(&m, blocs) { return Some(m); }
+            // Recopie refusée : on ne perd pas le tampon, on le remet et on alloue.
+            self.octets_libres += m.octets_poids;
+            self.libres.push(m);
+        }
+        machine.charger_mxfp4(blocs, n_out, nb)
     }
 
     /// Les trois matrices de `(couche, expert)` en VRAM, envoyées si besoin.
@@ -1958,18 +1986,25 @@ impl CacheExperts {
         if !self.cartes.contains_key(&cle) {
             self.manques += 1;
             let octets = 3 * gate.n_out * gate.nb * 17;
-            while self.octets + octets > self.budget && !self.cartes.is_empty() {
+            // Le pool occupe de la VRAM : il compte dans le budget, sinon on dépasserait la
+            // carte en croyant la respecter.
+            while self.octets + self.octets_libres + octets > self.budget && !self.cartes.is_empty() {
                 let victime = self.cartes.iter().min_by_key(|(_, v)| v.3).map(|(k, _)| *k)?;
                 if let Some((g, u, d, _)) = self.cartes.remove(&victime) {
                     self.octets = self.octets
                         .saturating_sub(g.octets_poids + u.octets_poids + d.octets_poids);
                     self.evictions += 1;
+                    // Au POOL, pas à la poubelle : sans `Drop`, jeter ne libère rien.
+                    for m in [g, u, d] {
+                        self.octets_libres += m.octets_poids;
+                        self.libres.push(m);
+                    }
                 }
             }
             if self.octets + octets > self.budget { return None; }
-            let mg = machine.charger_mxfp4(gate.blocs_expert(e), gate.n_out, gate.nb)?;
-            let mu = machine.charger_mxfp4(up.blocs_expert(e), up.n_out, up.nb)?;
-            let md = machine.charger_mxfp4(down.blocs_expert(e), down.n_out, down.nb)?;
+            let mg = self.monter(machine, gate.blocs_expert(e), gate.n_out, gate.nb)?;
+            let mu = self.monter(machine, up.blocs_expert(e), up.n_out, up.nb)?;
+            let md = self.monter(machine, down.blocs_expert(e), down.n_out, down.nb)?;
             self.octets += mg.octets_poids + mu.octets_poids + md.octets_poids;
             self.octets_envoyes +=
                 (mg.octets_poids + mu.octets_poids + md.octets_poids) as u64;

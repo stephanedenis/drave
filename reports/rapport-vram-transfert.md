@@ -69,3 +69,39 @@ Ce que ça dit :
 * **une boucle qui ne tournait pas** : `let mut n = 0; for e in 1..=n.min(...)` — zéro tour, et la
   ligne « copie seule » ne s'imprimait pas. **Un silence qui ressemble à un succès** : c'est la
   même famille que « une mesure à un seul moment ne dit pas où ça casse » (`REPRISE.md` § 4).
+
+---
+
+## 5. Le pool, mesuré dans le moteur (13/10, 00 h 17)
+
+Le **pool de tampons VRAM** est entré dans `CacheExperts` : les évictions rendent leurs matrices au
+pool au lieu de les jeter, et un montage réutilise un tampon de la bonne forme (`gpu::recopier`),
+sinon il alloue. Le budget compte **aussi** le pool, sans quoi on dépasserait la carte en croyant la
+respecter.
+
+Mesures — gpt-oss-120b MXFP4, 2 jetons, `DRAVE_GPU_EXPERTS_GO=8`, mêmes identifiants, données
+chaudes en page cache (ce qui rend la comparaison **propre** : elle porte sur les montages, pas sur
+le disque) :
+
+| | temps mural | demandes | manques | montés sur le bus | **perplexité** |
+|---|---|---|---|---|---|
+| avant (allocation par montage) | 5,60 s | 288 | 264 (8,3 %) | 3,49 Go | 27736,1204 |
+| **après (pool)** | **4,95 s** | 288 | 264 (8,3 %) | 3,49 Go | 27736,1204 |
+
+**−11,6 % à travail identique** (mêmes 264 montages, mêmes 3,49 Go) : ~**2,5 ms par montage** de
+13,2 Mo, là où le banc annonçait l'allocation à ~10 ms sur un tampon de 4,4 Mo — l'écart vient de ce
+que le noyau et la lecture des blocs se recouvrent en partie. Perplexité **identique**.
+
+**Et une défaite trouvée dans le même chemin** : `MatriceGpu` n'a **pas de `Drop`** — une éviction
+laissait la VRAM allouée pour de bon, ce que le pool répare en gardant les tampons. La mesure
+ci-dessus n'a **0 éviction** (le budget de 8 Go tenait les 3,49 Go) : la fuite demande un run plus
+long pour se voir, et c'est écrit ici plutôt que supposé.
+
+## 6. Un faux A/B, corrigé — et pourquoi il faut le dire
+
+Le premier essai comparait les deux binaires **sans `DRAVE_GPU_EXPERTS`** : le cache n'était donc
+pas créé (`cache_experts` est *opt-in*), les deux runs étaient **CPU**, et les 10,7 % d'écart
+observés n'étaient que la **variance du disque dur** sur 13 Go de lectures. Le chiffre était
+plausible et faux — c'est exactement ce que `REPRISE.md` § 4 appelle « une mesure à un seul moment
+ne dit pas *où* ça casse » : sans vérifier que le chemin mesuré était **actif**, on compare deux
+fois la même chose.

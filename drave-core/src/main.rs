@@ -1273,10 +1273,13 @@ continuer avec un drapeau qui n'existe pas)");
 /// débit ne dit pas si c'est le cache ou le hasard du routage.
 fn stats_experts(mdl: &model::Model) {
     if let Some(c) = mdl.cache_experts.as_ref() {
+        // Le pool est publié À PART : c'est lui qui dit si la VRAM est bornée (avant lui, une
+        // éviction ne libérait rien — `MatriceGpu` n'a pas de `Drop`).
         println!("[gpu] experts : {} demandes, {} manques (succès {:.1} %), {} évictions, \
-{:.2} Go montés sur le bus, {:.2} Go résidents",
+{:.2} Go montés sur le bus, {:.2} Go résidents, {:.2} Go au pool",
                  c.demandes, c.manques, c.taux(), c.evictions,
-                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9);
+                 c.octets_envoyes as f64 / 1e9, c.octets as f64 / 1e9,
+                 c.octets_libres as f64 / 1e9);
     }
 }
 
