@@ -1271,6 +1271,17 @@ continuer avec un drapeau qui n'existe pas)");
 
 /// Ce que le cache d'experts a réellement attrapé : sans ce chiffre, un gain de
 /// débit ne dit pas si c'est le cache ou le hasard du routage.
+/// Le pool des tampons de lecture, publié à la fin d'une passe : sans cette ligne, « le pool
+/// sert-il ? » se répondrait par une intuition. Elle n'apparaît que si le chemin tampons a servi.
+fn stats_tampons() {
+    let (alloc, reutil, n, octets) = gguf::etat_pool();
+    if alloc + reutil == 0 { return; }
+    println!("[tampons] {alloc} allocations, {reutil} réutilisations, {n} gardés ({:.1} Mo) — \
+le pool évite {:.0} % des allocations",
+             octets as f64 / 1e6,
+             100.0 * reutil as f64 / (alloc + reutil) as f64);
+}
+
 fn stats_experts(mdl: &model::Model) {
     if let Some(c) = mdl.cache_experts.as_ref() {
         // Le pool est publié À PART : c'est lui qui dit si la VRAM est bornée (avant lui, une
@@ -1636,6 +1647,7 @@ jetons, comptée ici et non devinée)", mdl.fusion_pos, ids.len());
     println!("généré  : {} tokens en {:.3} s  ({:.2} tok/s)",
              st.n_gen, st.gen_s, st.n_gen as f64 / st.gen_s);
     stats_experts(&mdl);
+    stats_tampons();
     println!("événements : {} au total, {:.1} par token",
              st.events, st.events as f64 / (st.n_prompt + st.n_gen) as f64);
     let pa = mdl.paires;
@@ -7782,6 +7794,7 @@ prédit rien) — la perplexité cumulée n'a pas de sens ici");
                  t.enregistrements, t.actifs, t.octets as f64 / 1e6);
     }
     stats_experts(&mdl);
+    stats_tampons();
     println!("\n=== perplexité {:.4} sur {} tokens ({} événements, {:.1} s) ===",
              ppl, n, mdl.events_total(), t0.elapsed().as_secs_f64());
     println!("    {:.1} tok/s effectifs (avant + tête)", n as f64 / t0.elapsed().as_secs_f64());

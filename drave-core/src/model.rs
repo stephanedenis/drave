@@ -1604,7 +1604,11 @@ impl CacheExpertsRam {
     /// couche ne servent plus une fois la couche calculée), et un cache qui garde tout
     /// redevient le cache mesuré perdant (`DRAVE_EXPERTS_RAM`).
     pub fn vider(&mut self) {
-        self.table.clear();
+        // LES TAMPONS RETOURNENT AU POOL, ils ne partent pas au noyau : c'est ce qui évite
+        // ~1 152 allocations de 0,88 Mo par jeton (et leurs défauts de page).
+        for (_, (tampon, _)) in self.table.drain() {
+            crate::gguf::rendre_tampon(tampon);
+        }
         self.octets = 0;
     }
 }

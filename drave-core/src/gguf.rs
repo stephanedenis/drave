@@ -356,6 +356,58 @@ pub fn fils_tampons() -> usize {
 /// Lit des plages mappées dans des tampons **à nous**, en parallèle, **dans l'ordre du
 /// fichier**. Rend un tampon par plage, dans l'ordre d'entrée (`None` si la plage n'est pas
 /// mappée ou n'est pas lisible — l'appelant retombe alors sur le mapping).
+/// **Le pool des tampons de lecture.** Chaque bloc MoE d'un jeton demandait ~1 152 tampons de
+/// 0,88 Mo (48 couches × 8 experts × 3 matrices sur Qwen3-30B) et les **allouait à neuf** : un
+/// `mmap` anonyme par tampon (glibc au-dessus de 128 Ko), donc ~215 défauts de page **par**
+/// tampon — un quart de million par jeton, pour des pages que la lecture remplit aussitôt.
+/// Le pool garde les tampons d'un jeton pour le suivant : mêmes octets, mêmes tailles (les
+/// formes d'un modèle ne changent pas), zéro allocation après le premier tour.
+///
+/// Ce qui n'est PAS fait ici : aucune remise à zéro. `read_exact_at` remplit exactement les
+/// octets demandés, et un tampon n'est emprunté que pour **sa** taille (le pool est indexé par
+/// taille) — un tampon plus grand ne peut donc pas laisser traîner la fin d'une autre lecture.
+pub fn emprunter_tampon(octets: usize) -> Box<[u8]> {
+    if let Ok(mut l) = tampons_libres().lock() {
+        if let Some(i) = l.iter().position(|(o, _)| *o == octets) {
+            let (_, b) = l.swap_remove(i);
+            if let Ok(mut c) = stats_tampons().lock() { c.1 += 1; }
+            return b;
+        }
+    }
+    if let Ok(mut c) = stats_tampons().lock() { c.0 += 1; }
+    vec![0u8; octets].into_boxed_slice()
+}
+
+/// Rend un tampon au pool (taille indexée, plafond global pour ne pas garder la machine).
+pub fn rendre_tampon(b: Box<[u8]>) {
+    const PLAFOND: usize = 512 << 20;
+    if b.is_empty() { return; }
+    if let Ok(mut l) = tampons_libres().lock() {
+        let total: usize = l.iter().map(|(o, _)| *o).sum();
+        if total + b.len() <= PLAFOND {
+            l.push((b.len(), b));
+        }
+    }
+}
+
+/// (allocations, réutilisations, tampons gardés, octets gardés) — publié par `--materiel`-like.
+pub fn stats_tampons() -> &'static std::sync::Mutex<(u64, u64)> {
+    static S: std::sync::OnceLock<std::sync::Mutex<(u64, u64)>> = std::sync::OnceLock::new();
+    S.get_or_init(|| std::sync::Mutex::new((0, 0)))
+}
+
+pub fn etat_pool() -> (u64, u64, usize, usize) {
+    let (a, r) = stats_tampons().lock().map(|g| *g).unwrap_or((0, 0));
+    let (n, o) = tampons_libres().lock()
+        .map(|l| (l.len(), l.iter().map(|(o, _)| *o).sum())).unwrap_or((0, 0));
+    (a, r, n, o)
+}
+
+fn tampons_libres() -> &'static std::sync::Mutex<Vec<(usize, Box<[u8]>)>> {
+    static P: std::sync::OnceLock<std::sync::Mutex<Vec<(usize, Box<[u8]>)>>> = std::sync::OnceLock::new();
+    P.get_or_init(|| std::sync::Mutex::new(Vec::new()))
+}
+
 pub fn lire_en_tampons(plages: &[(usize, usize)], fils: usize) -> Vec<Option<Box<[u8]>>> {
     let mut sortie: Vec<Option<Box<[u8]>>> = (0..plages.len()).map(|_| None).collect();
     // 1. résoudre chaque plage en (index, chemin, offset, octets)
@@ -389,7 +441,8 @@ pub fn lire_en_tampons(plages: &[(usize, usize)], fils: usize) -> Vec<Option<Box
                         }
                     }
                     let f = &fd.as_ref().unwrap().1;
-                    let mut buf = vec![0u8; *octets].into_boxed_slice();
+                    // DU POOL, pas du noyau : voir `emprunter_tampon`.
+                    let mut buf = emprunter_tampon(*octets);
                     // `read_exact_at` : pas de position partagée, donc pas de course entre fils
                     match f.read_exact_at(&mut buf, *offset) {
                         Ok(()) => { if let Ok(mut r) = resultats.lock() { r.push((*i, buf)); } }
