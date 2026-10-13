@@ -31,6 +31,24 @@ RAID0, c'est le chemin de lecture qu'il faut paralléliser explicitement (`pread
 | `DRAVE_EXPERTS_RAM` | mesuré **perdant** (+4 % à 4 Go, +21 % à 32 Go) | c'est un **cache**, pas un **lecteur** : il copie au chargement, il ne lit pas en avance |
 | `blocs_expert(e) -> &[u8]` | existe | le chemin « expert en RAM » sait déjà rendre des **octets** : c'est la porte par laquelle un tampon peut entrer dans le calcul |
 
+## 2bis. État au 13/10 — les tampons sont dans le moteur, et ils gagnent sur les deux tableaux
+
+`DRAVE_TAMPONS=1` lit les experts **retenus** par `pread`, **par offset croissant**, dans des
+tampons réutilisables, et le calcul lit ces octets. Mesuré sur la même passe (8 jetons de
+Qwen3-30B, array, cache évincé avant chaque bras, perplexité identique dans les quatre) :
+
+| bras | octets lus | passe (mural − chargement) |
+|---|---|---|
+| à la demande (`DRAVE_PRELIRE=0`) | 9,52 Go | 5,97 s |
+| `madvise` | 8,04 Go | 7,25 s |
+| fils qui entrent les pages | 10,90 Go | 3,70 s |
+| **tampons séquentiels** | **6,22 Go** | **3,40 s** |
+
+C'est le seul bras qui gagne **et** sur les octets **et** sur le temps : la lecture en avance du
+noyau dépasse la plage utile de 75 %. Ce qui reste de ce chantier est en § 4 (le pool et le
+recouvrement), et le côté **VRAM** a été mesuré puis corrigé le même jour : **l'allocation** y est
+37 à 91 % du coût d'un montage, et un pool l'a supprimée (`reports/rapport-vram-transfert.md`).
+
 ## 3. Avant tout : `MADV_POPULATE_READ` vaut-il les tampons ?
 
 Le noyau 7.2 connaît **`MADV_POPULATE_READ` (22)** : entrer une plage d'un seul appel, sans passer
