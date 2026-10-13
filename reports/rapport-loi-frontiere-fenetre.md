@@ -52,6 +52,29 @@ faux.**
   avec sa dispersion — et la dispersion est du même ordre que l'effet cherché dès qu'on descend
   sous la moitié des clés.
 
+## 2bis. Les deux façons de dépenser la moitié des clés se valent (sept textes)
+
+Un budget d'un demi-million de clés peut se dépenser de deux manières : **une fenêtre pure de
+1 024**, ou **une fenêtre de 512 plus 512 puits** (le drain). Mesuré sur les sept mêmes textes,
+N = 2 048 :
+
+| texte (décalage) | référence | fenêtre 512 + 512 puits | fenêtre 1 024 pure |
+|---|---:|---:|---:|
+| 0 (début) | 10,3703 | **+0,3 %** | **+0,5 %** |
+| 10 000 | 10,1538 | **+2,1 %** | **+2,1 %** |
+| 20 000 | 14,6247 | **+1,5 %** | **+1,9 %** |
+| 30 000 | 15,7767 | **+1,9 %** | **+1,6 %** |
+| 40 000 | 11,0465 | **+1,5 %** | **+0,8 %** |
+| 50 000 | 18,0669 | **+0,6 %** | **+1,3 %** |
+| 60 000 | 12,9855 | **+1,3 %** | **+0,7 %** |
+| **dispersion** | — | **+0,3 % à +2,1 %** | **+0,5 % à +2,1 %** |
+
+**Les deux valent la même chose** (≤2,1 % partout, et aucune ne domine l'autre texte par texte).
+Autrement dit : ce qui compte est le **total** de clés gardées, pas leur **partage** entre fenêtre
+et drain. C'est une bonne nouvelle pour le dessin — le partage devient un paramètre d'**implémentation**
+(ce que le matériel sait faire : une fenêtre glissante contiguë, ou un drain indexé), pas de
+**qualité**.
+
 ## 3. Conséquences pour le dessin de l'attention
 
 1. **budgéter la moitié des clés** : c'est le seul régime que trois textes confirment (≤2 %), et il
