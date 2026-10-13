@@ -77,6 +77,27 @@ Ce que ça dit :
   lecteur est entraîné — c'est l'inverse de ce que dit la tête empruntée, et c'est la tête
   entraînée qui compte pour un chemin court **appris** (le manque N4).
 
+## 2ter. Robustesse : la graine ne change rien, le morceau de test change TOUT
+
+Deux contrôles sur la même configuration (k = 30, validation m30+m31) :
+
+| contrôle | perplexité TEST |
+|---|---:|
+| test sur **m32**, graine **0** | 179,5909 |
+| test sur **m32**, graine **1** | **178,3852** (−0,7 %) |
+| test sur **m20** (autre morceau jamais vu), graine 0 | **17,3503** |
+
+* **la graine ne pèse rien** : 178,39 contre 179,59, soit **0,7 %** — les écarts de la courbe
+  (÷1,4 par doublement) sont donc **très au-dessus** du bruit d'initialisation, et la courbe du § 1
+  tient ;
+* **le morceau de test pèse tout** : 17,35 sur m20 contre 179,59 sur m32, pour le **même**
+  entraînement — un facteur **10**. Les morceaux du corpus n'ont pas la même difficulté (la tête
+  empruntée le dit aussi : 147 k à 4,5 M selon le morceau) ;
+* **conséquence de lecture** : la courbe du § 1 est une courbe **à morceau de test fixé** (m32, le
+  plus difficile des deux mesurés), et ses valeurs **absolues** ne se transposent pas d'un texte à
+  l'autre. Ce qui se transpose, c'est la **tendance** ; une loi chiffrée demanderait une moyenne
+  sur plusieurs morceaux de test — ce n'est pas fait ici, et c'est écrit.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * elle ne sépare pas **quantité** et **diversité** : les k premiers morceaux sont des textes
@@ -84,5 +105,7 @@ Ce que ça dit :
   aléatoire de k morceaux donnerait la même tendance ou non, ce n'est pas mesuré ici ;
 * elle ne dit rien du **chemin court entraîné** (N4) : c'est justement ce qu'elle désigne comme la
   suite ;
-* la pente (~k^(−0,5)) est mesurée sur quatre points et une seule graine — assez pour dire
-  « ça monte encore, lentement », pas assez pour une loi.
+* la pente (~k^(−0,5)) est mesurée sur quatre points, **une seule graine** (mais le contrôle de
+  graine du § 2ter montre qu'elle pèse 0,7 %) et **un seul morceau de test** (et le même contrôle
+  montre que le morceau, lui, pèse ×10) : assez pour dire « ça monte encore, lentement », pas assez
+  pour une loi.
