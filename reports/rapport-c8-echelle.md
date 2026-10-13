@@ -52,6 +52,31 @@ Ce que ça dit :
 * **conséquence de dessin** : entraîner le chemin court (ou router la profondeur, `--routee`) est
   la seule voie qui reste pour C8 ; agrandir la tête est mesuré **contre-productif**.
 
+## 2bis. La profondeur de sortie : le chemin court est LISIBLE, même très tôt
+
+Même protocole, mêmes 33 morceaux, mêmes 30 morceaux d'entraînement — seule la **profondeur de
+sortie** change (l'état lu par l'adaptateur) :
+
+| profondeur de sortie (sur 24 couches) | tête **empruntée** (chemin tronqué) | tête **entraînée** (k = 30) | écart tête entraînée / modèle complet | ÷ par rapport à la profondeur double |
+|---:|---:|---:|---:|---:|
+| **4** | 24 656 438,5178 | **534,9072** | ×37,6 | ×2,0 |
+| **8** | 4 481 378,8799 | **267,9833** | ×18,8 | ×1,5 |
+| **16** | 449 500,6184 | **179,5909** | ×12,6 | — |
+
+Ce que ça dit :
+
+* **la tête empruntée s'effondre** quand on sort plus tôt : 24,7 M (profondeur 4) contre 449 k
+  (profondeur 16), soit **×55** — et la chute est encore plus raide en dessous (÷5,5 puis ÷10 par
+  doublement) ;
+* **la tête entraînée, elle, décroît doucement** : 535 → 268 → 180, soit **×2,0 puis ×1,5 par
+  doublement de profondeur** — une loi de puissance faible, pas un effondrement ;
+* **donc l'état précoce EST lisible** : à profondeur 4 (un sixième du réseau), un lecteur entraîné
+  rend 535 là où la tête du modèle rend 24,7 millions (÷46 000). L'information utile est déjà là ;
+  ce qui manquait, c'est le **lecteur** ;
+* conséquence de dessin : la **profondeur de sortie est un levier bon marché** dès lors que le
+  lecteur est entraîné — c'est l'inverse de ce que dit la tête empruntée, et c'est la tête
+  entraînée qui compte pour un chemin court **appris** (le manque N4).
+
 ## 3. Ce que cette fiche ne dit pas
 
 * elle ne sépare pas **quantité** et **diversité** : les k premiers morceaux sont des textes

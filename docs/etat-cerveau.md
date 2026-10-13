@@ -274,8 +274,13 @@ coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue san
 manque est bien N4.** Sur un morceau **jamais vu** : **1 032,58** (4 morceaux) · 369,22 (8) ·
 260,81 (15) · **179,59** (30) — ÷5,75 pour ×7,5 de données, ÷1,4 par doublement en fin de courbe ;
 et à données égales un adaptateur **non linéaire** (896→512→896) rend **376,01**, **2,1× pire**.
+**Et la profondeur de sortie est un levier bon marché dès que le lecteur est entraîné** : à
+k = 30 morceaux, la tête entraînée rend **179,59** (profondeur 16), **267,98** (profondeur 8) et
+**534,91** (profondeur 4) — soit ×2,0 puis ×1,5 par doublement —, là où la tête **empruntée**
+s'effondre de 449 500 à **24,7 millions** sur les mêmes états. **L'état précoce est lisible**
+(÷46 000 par rapport à la tête du modèle) : c'est le lecteur qui manquait.
 Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
-mesuré contre-productif. Fiche :
+mesuré contre-productif, et sortir plus tôt coûte peu. Fiche :
 [`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
 comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
 30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,
