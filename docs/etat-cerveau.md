@@ -260,10 +260,12 @@ La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** 
 corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
 seulement pour ÷1,33 de clés. **La loi de la frontière en N a été cherchée (13/10 03 h 58) : il n'y en a pas — il y a un
 régime sûr, et il est robuste.** À N = 2 048, garder **la moitié** des clés coûte **+0,5 % à
-+2,1 %** sur **sept** textes (≤2,1 % chaque fois) ; garder le **quart** va de **+2,8 %** à
++2,1 %** sur **sept** textes ; garder le **quart** va de **+2,8 %** à
 **+49,2 %** — un **facteur 17,6 selon le texte**, qui domine toute tendance en N et explique la
-non-monotonie déjà notée. Conséquence : budgéter la moitié des clés, et ne jamais promouvoir un
-réglage plus agressif sur un seul texte. **Et les deux façons de dépenser cette moitié se valent** :
+non-monotonie déjà notée. À N = 4 096, sur cinq textes, la moitié des clés coûte **+0,4 % à +3,0 %** (donc le
+« ≤2 % » ne vaut qu'à 2 048) et le quart **+3,2 % à +9,3 %** — l'étendue dépend donc **aussi** de N.
+Conséquence : budgéter la moitié des clés (~1 % en moyenne, **jusqu'à 3 %**), et ne jamais
+promouvoir un réglage plus agressif sur un seul texte. **Et les deux façons de dépenser cette moitié se valent** :
 fenêtre 1 024 pure (+0,5 à +2,1 %) ou fenêtre 512 + 512 puits (+0,3 à +2,1 %) — le partage
 fenêtre/drain est un paramètre d'**implémentation**, pas de qualité. Fiche :
 [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md).

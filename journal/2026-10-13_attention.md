@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13.md](2026-10-13.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 06:08 | `4a15e65d` | Plan 6.7 : les deux facons de depenser la moitie des cles se valent (fenetre pure ou fenetre + puits) — le partage est un parametre d'implementation | `etat-cerveau.md`, `2026-10-13.md`, `2026-10-13_attention.md` |
 | 13:43 | `d4e40d95` | porte-indice : le controle apparie est fait, et il TUE l'effet — l'indice reel tombe a 482 jetons contre 459 pour le temoin (et 315 contre 1 sur la fenetre qui passait le hasard) : ce que la porte mesurait n'est pas porte par le sens de la question | `etat-cerveau.md`, `2026-10-13.md`, `2026-10-13_modele.md` (+4) |
 | 16:22 | `df58cbe2` | Fenetre d'attention : la loi moyennee — a N=4096, N/2 coute +0,9 % (etendue 1,0 pt) et N/4 +4,1 % (1,5 pt), alors qu'a N=2048 le quart allait de +2,8 a +49,2 % : meme la DISPERSION depend de N et du texte | `2026-10-13.md`, `2026-10-13_memoire.md`, `rapport-loi-frontiere-fenetre.md` (+1) |
+| 16:24 | `84bc1b2a` | Journal du 13/10 : la passe a 37/39, la loi moyennee de la fenetre, et deux pieges mesures (--attn-sinks 0 qui n'est pas neutre, et mon propre pkill) | `2026-10-13.md`, `2026-10-13_attention.md`, `2026-10-13_moteur.md` (+1) |
 
 ## Chiffres du jour
 

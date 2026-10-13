@@ -85,15 +85,25 @@ Même protocole que le § 2, à **N = 4 096**, sur trois textes (décalages 0, 1
 | 0 | 12,2177 | +0,8 % | +3,2 % |
 | 10 000 | 7,3980 | +1,5 % | +4,7 % |
 | 20 000 | 12,7867 | +0,4 % | +4,4 % |
-| **moyenne** | — | **+0,9 %** (étendue **1,0 pt**) | **+4,1 %** (étendue **1,5 pt**) |
+| **30 000** | 16,1126 | **+3,0 %** | **+9,3 %** |
+| **40 000** | 12,6888 | +0,4 % | +5,5 % |
+| **moyenne sur 5 textes** | — | **+1,2 %** (étendue **2,6 pts**) | **+5,4 %** (étendue **6,1 pts**) |
+
+*Correction de ma propre conclusion, et c'est la troisième du jour* : avec trois textes j'avais écrit
+« N/2 = +0,9 %, étendue **1,0 point**, le régime sûr se confirme (≤2,1 %) ». Les deux textes
+suivants montent à **+3,0 %** — donc à N = 4 096, garder la moitié des clés coûte jusqu'à **3 %**, et
+l'énoncé « ≤2,1 % » ne tient plus. Trois textes ne suffisaient pas ; cinq non plus, mais ils
+suffisent à **démentir les trois premiers**.
 
 À comparer au § 2 (N = 2 048, sept textes) : N/2 = **+0,5 à +2,1 %**, N/4 = **+2,8 à +49,2 %**
 (étendue **46 points**).
 
-* **le régime sûr se confirme** : garder **la moitié** des clés coûte ≤2,1 % aux deux N, sur dix
-  textes en tout — c'est l'énoncé le plus solide de cette fiche ;
+* **le régime « moitié » coûte ~1 % en moyenne, et jusqu'à 3 %** sur les dix textes des deux N
+  (N = 2 048 : +0,5 à +2,1 % ; N = 4 096 : +0,4 à +3,0 %) — c'est le prix **borné** ; il n'est pas
+  nul, et l'énoncé « ≤2,1 % » ne vaut que pour N = 2 048 ;
 * **la dispersion, elle, ne se transporte pas non plus** : à N = 2 048 le quart des clés allait de
-  +2,8 % à **+49,2 %** selon le texte, à N = 4 096 il va de +3,2 % à +4,7 % (étendue 1,5 point).
+  +2,8 % à **+49,2 %** selon le texte (étendue 46 points), à N = 4 096 il va de +3,2 % à +9,3 %
+  (étendue 6,1 points).
   Autrement dit, **même l'incertitude dépend de N et du texte** : ce n'est pas « une loi avec du
   bruit », c'est une grandeur dont la queue épaisse apparaît à certains N ;
 * conséquence pratique **renforcée** : budgéter la moitié des clés, et ne jamais promouvoir un
