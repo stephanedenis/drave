@@ -29,13 +29,22 @@ Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/eta
 **APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**
 leurs prérequis (`tools/_corpus.sh` : le corpus d'identifiants, qui est `data/wikitext2_test.txt`
 tokenisé par le modèle, **identique au bit près** ; `porte-reparti-moteur.sh` entraîne et exporte en
-plus le modèle dont elle a besoin). **Une seule exception**, qui refuse en le disant :
-`porte-topologie.sh` a besoin de `/tmp/m5_d384_dense.gguf`, un **artefact de campagne** (dim 384) —
-il faut relancer `tools/campagne-benefices.sh` ou passer `MODELE=…` sur un modèle à 24 couches.
-**Depuis le 12/10, elle a une sortie vérifiée** : les prérequis **persistent sur l'array**
-(`~/IA/scratch/prerequis/ids_qwen05_wt2.txt`, tokenisé une fois par le modèle de substitution) et
-`MODELE= IDS= M3= IDS3=` pointent dessus — porte **tenue** (30,4363 puis 42,5477, écarts
-**0,00e0**). Commande exacte et chiffres : `reports/rapport-raid0-nvme.md` § 8.
+plus le modèle dont elle a besoin). **Plus aucune exception depuis le 12/10** — les deux cas qui dépendaient de `/tmp` sont réparés
+**par leurs défauts**, pas par des variables qu'il faut penser à passer :
+
+* `porte-topologie.sh` : prérequis **régénérés** (modèle dense à 24 couches, identifiants tokenisés
+  dans `~/IA/scratch/prerequis/ids_qwen05_wt2.txt` si absents, limite bornée à 255 comme
+  l'artefact de campagne) — porte **tenue** (30,4363 puis 42,5477, écarts **0,00e0**) ;
+* `porte-greffe.sh`, `porte-indice.sh`, `porte-melange.sh` : la botte de foin est **versionnée**
+  dans le dépôt (`tools/niah_4096_0.5.txt`, régénérable par `tools/construire-niah.py`). Elle
+  vivait dans `/tmp/campagne24` **sans jamais avoir été versionnée** : sa disparition a rendu trois
+  portes « code 2 » le 12/10, et c'est la leçon — **un fichier d'entrée de mesure qui n'est pas
+  versionné rend la mesure non reproductible** (on ne peut plus distinguer « le moteur a changé » de
+  « l'entrée a changé »).
+
+Sur la botte de foin **régénérée**, `porte-greffe` est verte ; `porte-indice` et `porte-melange`
+sont **rouges pour une raison de contenu** (l'indice extérieur tombe à 482 jetons de l'aiguille pour
+un hasard à 370) — la porte documente elle-même que l'effet est **réel mais non robuste**.
 Les fiches de `reports/` citent des chemins de `/tmp` dans leur section « protocole, pour rejouer » :
 elles **donnent la commande d'entraînement**, donc tout se reconstruit — rien ne dépend d'un fichier
 temporaire qui aurait disparu sans trace.

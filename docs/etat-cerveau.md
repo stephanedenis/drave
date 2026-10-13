@@ -120,8 +120,13 @@
 
 ## 5. Les instruments (et leur état au 10 octobre)
 
-- **34 portes** `tools/porte-*.sh` — **passe complète le 2026-10-11 à 06 h 30 : 34 vertes sur 34,
-  85 min 8 s** (repères régénérés depuis le journal : `docs/references-non-regression.md`). La nuit
+- **37 portes** `tools/porte-*.sh` — la passe du **2026-10-11 à 06 h 30** en comptait **34 vertes
+  sur 34** (85 min 8 s) ; trois sont nées le 12/10 : **`porte-prechargement.sh`** (S4 : à la
+  demande / `madvise` / fils / tampons, cache évincé avant chaque bras), **`porte-m5-brouillon.sh`**
+  (le fichier déclare ses 3 couches de brouillon et les porte — vue rouge sur un modèle qui ne les
+  déclare pas) et **`porte-push-paresseux.sh`** (la forme « listes » paresseuse rend le même texte
+  gourmand, et vue rouge avec `DRAVE_PUSH_FAUX=1`). Repères :
+  `docs/references-non-regression.md`. La nuit
   en a ajouté **six** — sauvegarde du modèle, occupation × élagage, invariants du harnais, audit des
   drapeaux, occupation du moteur, poids creux — et **chacune a été vue ROUGE** avec son défaut
   rallumé par une variable d'environnement : c'est ce qui distingue une porte d'une décoration. La
@@ -142,45 +147,53 @@
 
 ## 6. ▶ Prochaine action
 
-> **REPRISE APRÈS REDÉMARRAGE :** `/tmp` est vidé. Les portes **régénèrent** leurs prérequis
-> (`tools/_corpus.sh`, et `porte-reparti-moteur.sh` qui réentraîne son modèle) — et **la dernière
-> exception a une sortie depuis le 12/10** : `porte-topologie.sh` tourne avec des prérequis
-> **persistants** sur l'array (`~/IA/scratch/prerequis/`, un fichier d'identifiants de 395 Ko) et
-> un modèle de substitution à 24 couches — vérifié, porte tenue (30,4363 puis 42,5477, écarts
-> **0,00e0** ; commande exacte : [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) § 8).
+> **REPRISE APRÈS REDÉMARRAGE :** `/tmp` est vidé, et depuis le 12/10 **plus aucune porte n'en
+> dépend** : `porte-topologie.sh` a ses prérequis **régénérés** (modèle dense à 24 couches,
+> identifiants tokenisés dans `~/IA/scratch/prerequis/`, limite bornée à 255) — porte tenue
+> (30,4363 puis 42,5477, écarts **0,00e0**) ; les trois portes à aiguille (`porte-greffe`,
+> `porte-indice`, `porte-melange`) lisent un fichier **versionné dans le dépôt**
+> (`tools/niah_4096_0.5.txt`, régénérable par `tools/construire-niah.py`) — il vivait dans
+> `/tmp/campagne24` et sa disparition avait rendu trois portes « code 2 » le 12/10.
 > Détail : `REPRISE.md` § 2.
 
-**1. Passe complète des portes — tenue, et toujours valide.** 34 vertes sur 34 le 11/10 à 06 h 30,
-85 min 8 s (§ 5). **Aucun commit moteur depuis** (`git log --since="2026-10-11 06:30" --
-drave-core/src` est vide) : les repères de `docs/references-non-regression.md` n'ont pas bougé. Le
-**changement de montage** du 12/10 (les modèles lourds et les artefacts vivent sur l'array, voir la
-fin de ce §) ne les a pas déplacés non plus : `tools/porte-flux.sh`, rejouée le 12/10, rend
-**61,9920 / 60,8135** — les valeurs de référence. Elle reste due après toute modification du chemin
-d'exécution.
+**1. Passe complète des portes — 34 vertes sur 34 le 11/10, relancée le 12/10 à 23 h 00 après les
+changements de la nuit** (§ 5 en porte le verdict). La porte du flux, rejouée après chaque
+changement, rend **exactement** ses valeurs de référence (61,9920 / 60,8135) : c'est elle qui a
+attrapé la paresse trop large du chargement (61,9920 → 58,8636), et c'est pour ça qu'elle se paie
+après toute modification du chemin d'exécution.
 
-**2. Le moteur ne voit pas l'array — deux lignes, et c'est l'action la moins chère du plan.**
-`drave … --materiel` liste `/home/stephane/FastNVMe` (nœud 0) et `/home/stephane/Data13TB`
-(nœud ?), **pas `/home/stephane/IA`**. La cause est nommée : la liste est **en dur** dans
-`drave-core/src/materiel.rs:244`, et le nœud se lit par `/sys/block/<bloc>/device/numa_node` — or
-`md0` n'a pas de `device/`, il faut passer par ses disques (`/sys/block/md0/md/dev-*/`) pour
-rendre le **nœud 1** attendu. Première commande, qui montre l'écart :
+**2. ~~Le moteur ne voit pas l'array~~ — FAIT le 12/10** (commit `be29ebc4`). `--materiel` rend
+maintenant `DISQ /home/stephane/IA · 162 Go libres · nœud 1` : la liste n'est plus en dur
+(`materiel.rs`), et le nœud d'un array se lit sur **ses disques** (`/sys/block/md0/md/dev-*/`) —
+`md0` n'a pas de `device/numa_node`. Le § 7.2 de `docs/configuration-nvme-raid-amd.md` est satisfait.
 
-```bash
-./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --materiel | grep DISQ
-```
+**3. Les lecteurs parallèles — premier pas FAIT, et le suivant est chiffré.** `DRAVE_TAMPONS=1`
+lit les experts **retenus** par `pread`, **par offset croissant**, dans des tampons à nous, et le
+calcul lit ces octets (`reports/rapport-s4-prechargement-moteur.md` § 5) : **6,22 Go lus et 3,40 s**
+de passe contre **10,90 Go et 3,70 s** pour les fils qui entrent les pages, et 9,52 Go / 5,97 s à la
+demande — perplexité identique dans les quatre bras. Ce qui reste, et qui est mesuré :
+**`pread` par huit fils rend 3 995 Mo/s** contre 1 126 à la demande (`tools/banc-experts.py`), mais
+il demande des **tampons** — c'est-à-dire un **pool** et du **recouvrement**, pas des défauts de
+page. Note de conception : `docs/note-lecteurs-paralleles.md`.
 
-Mesure : [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) § 4.
+**4. Le chargement construisait 2,7 Go de « listes » pour rien — FAIT** (commit `2bbecc86`) :
+**26,95 s → 7,36 s** sur Qwen3-30B, **6,85 s → 0,60 s** sur le 0,5B, sans déplacer un chiffre ; la
+forme push est construite **au premier usage réel** (l'inférence la prend, les passes `--ppl` non :
+93 constructions contre 0), verrouillé par `tools/porte-push-paresseux.sh` — vue **rouge** avec
+`DRAVE_PUSH_FAUX=1`. Ce qui reste : les **7,36 s** de déquantification + reconstruction Q8 ; le
+chemin `--q4` les évite (**2,63 s**) mais **change la représentation** (emprunt des blocs Q4_K du
+fichier, plus fidèle) — c'est une **décision**, pas une évidence.
 
-**3. Les lecteurs parallèles — le chiffre qui manquait est mesuré, et il est plus fort qu'annoncé.**
-Sur l'array : **1 lecteur = 1,95 Go/s, 8 lecteurs = 7,45 Go/s (×3,8)**. Le plan de `--materiel`
-calcule `lecteurs = 16` et **rien ne s'en sert** (§ 6.5.1 du doc de configuration) ; le motif
-d'accès coûte par ailleurs **35 %** (§ 6.5.2). Le départ entre « le motif » et « le matériel » se
-fait en une mesure : la passe disque qui lit un modèle **plus gros que la page cache** depuis
-l'array — celle de la campagne, dont on lit le `File system inputs` — comparée aux 7,45 Go/s du
-banc (`~/IA/outils/banc-io.py`, 26 s). Si la passe rend ~2 Go/s là où le banc rend 7,45, c'est le
-motif.
+**5. La VRAM : ce qui coûte est l'ALLOCATION, pas le lien** (mesuré le 12/10,
+`reports/rapport-vram-transfert.md`). Un expert MXFP4 monté avec allocation coûte **11,72 ms**
+(0,38 Go/s) ; dans **un tampon réutilisé**, **1,05 ms** (4,19 Go/s) — 91 % du coût était
+l'allocation ; en Q4_K, 0,269 ms contre 0,171 ms. Le noyau GPU, lui, rend 0,1 ms là où le CPU met
+1,3 ms (Q4_K) et 65,8 ms (MXFP4). **Prochaine action** : un **pool de tampons VRAM** avant toute
+autre optimisation du déport ; le recouvrement ensuite (le noyau est plus court que la copie, donc
+c'est le calcul CPU qu'il faut recouvrir). Première commande :
+`DRAVE_GPU=1 ./drave-core/target/release/drave <modele> --gpu-banc --matrix blk.0.ffn_gate_exps.weight`.
 
-**4. Dessin H — la carte des sorties a tourné (11/10 00 h 15) : ce n'est pas le point de sortie qui
+**6. Dessin H — la carte des sorties a tourné (11/10 00 h 15) : ce n'est pas le point de sortie qui
 limite.** Quatre sorties (12, 16, 20, 22 sur 24) : l'accord de l'oracle monte quand on sort tard,
 mais le **gain atteignable s'effondre** — un routeur réel n'atteint la parité qu'à **22**
 (47,78 % contre 47,73 %, **+0,05 point**, dans le bruit) pour **0,39 %** des paires, soit un facteur
@@ -190,7 +203,7 @@ tendance du produit plaide pour l'aller voir) et la génération libre plutôt q
 Première commande : `SORTIES="8 4" tools/carte-sortie-profondeur.sh`
 ([`rapport`](../reports/rapport-design-H-carte-sorties.md)).
 
-**5. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
+**7. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
 À **512 jetons**, **fenêtre 128 + 64 puits** = **13,3968** contre **13,1368** (**+2,0 %**) pour
 **192 clés sur 512** (**÷2,67**). À **2 048 jetons**, la grille étendue tranche : **fenêtre 512 +
@@ -209,7 +222,7 @@ La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** 
 corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
 seulement pour ÷1,33 de clés. Reste ouvert : la loi de la frontière en N.
 
-**6. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
+**8. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
 est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,
 contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un modèle routé
 ([`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md)) ; le coût compressé est de
@@ -217,7 +230,7 @@ contrôle à 0,000 %) — la suite plausible est `--echange experts` sur un mod�
 coûte **×633**, un état manquant **×1,06** ⇒ l'ordonnanceur **continue sans** et ne réutilise jamais
 ([`rapport-c4-retard.md`](../reports/rapport-c4-retard.md)).
 
-**7. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
+**9. C8 — la tête entraînée généralise (÷540 même texte, ×5,7 du modèle sur un texte neuf avec 30 morceaux) ; reste l'échelle.** Décodabilité mesurée à 4, 8, 12, 16,
 20 et 24 couches (45,9 / 45,5 / 46,1 / 40,8 / 37,8 / 34,8 % parmi les 256 plus fréquents) contre
 qualité du chemin tronqué (12,4 M / 3,8 M / 3,3 M / 1,13 M / 3 210 / 9,43). L'information est là
 tôt, la qualité n'arrive que tard : **le maillon faible est la tête**, et la suite est une tête
@@ -236,6 +249,15 @@ qui semblait donner raison à la tête est une **recopie de contenu**. Le protoc
 faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
 la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
 `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+
+**Ce qui a changé dans le moteur (12/10, nuit) — les mesures sont dans trois fiches.** La
+**prélecture parallèle** des experts (calcul d'une passe : 7,70 s → 3,65 s), la **lecture
+séquentielle dans nos tampons** (`DRAVE_TAMPONS=1` : 6,22 Go lus / 3,40 s contre 10,90 / 3,70 pour
+les fils), le **chargement paresseux** (26,95 s → 7,36 s sur Qwen3-30B) et le **coût réel d'un
+transfert VRAM** (allocation = 37 à 91 % du coût). Fiches :
+[`prechargement`](../reports/rapport-s4-prechargement-moteur.md) ·
+[`chargement`](../reports/rapport-chargement-paresseux.md) ·
+[`VRAM`](../reports/rapport-vram-transfert.md).
 
 **Ce qui a changé dans la machine (12/10) — pour mémoire, ce n'est pas une action.** L'**array
 raid0** de 4 NVMe (938 Go, monté `~/IA`, **nœud 1**) porte les modèles lourds et les artefacts :
