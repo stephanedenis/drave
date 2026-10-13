@@ -286,7 +286,9 @@ test) : le facteur va de 1,2 à 1,7, la direction ne change pas. *Deux contrôle
 **×10** (17,35 sur m20 contre 179,59 sur m32) : les valeurs absolues ne se transposent pas d'un
 texte à l'autre, la tendance oui.
 Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
-mesuré contre-productif, et sortir plus tôt coûte peu. Fiche :
+mesuré contre-productif, et sortir plus tôt coûte peu. **Trois dessins proposés**, du moins cher au
+plus cher (adaptateur d'entrée → adaptateurs par couche → routeur de profondeur), avec **cinq portes
+écrites avant le code** : [`docs/note-chemin-court-n4.md`](note-chemin-court-n4.md). Fiche :
 [`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
 comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
 30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,
