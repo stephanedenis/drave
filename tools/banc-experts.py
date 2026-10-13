@@ -34,6 +34,7 @@ import time
 PAGE = 4096
 MIO = 1 << 20
 GIO = 1 << 30
+_MADV = None      # `madvise` de la libc, chargé à la demande (MADV_POPULATE_READ)
 
 
 def mo_par_s(octets, secondes):
@@ -74,6 +75,39 @@ def bras_madvise_tranches(mm, plages, rng):
     for base, octets in plages:
         for t in range(0, octets, MIO):
             mm.madvise(mmap.MADV_WILLNEED, base + t, min(MIO, octets - t))
+        for p in melange_pages(base, octets, rng):
+            mm[p]
+            n += 1
+    return mo_par_s(n * PAGE, time.perf_counter() - t0)
+
+
+def bras_populate(mm, plages, rng):
+    """`madvise(MADV_POPULATE_READ)` : le noyau entre la plage d'un seul appel.
+
+    Python n'expose pas cette constante (noyau 7.2 : `MADV_POPULATE_READ = 22`,
+    `/usr/include/asm-generic/mman-common.h`) — on l'appelle donc par `ctypes`. Si le
+    noyau la refuse, l'appel rend -1 et on le dit au lieu de mesurer du vide.
+    """
+    global _MADV
+    import ctypes
+    if _MADV is None:
+        libc = ctypes.CDLL("libc.so.6", use_errno=True)
+        libc.madvise.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int]
+        _MADV = libc.madvise
+    # L'ADRESSE, PAS L'OFFSET : `madvise` veut une adresse virtuelle. La première version
+    # passait l'offset dans le fichier (jusqu'à 18 Go) comme pointeur — le noyau répondait
+    # ENOMEM (« la plage contient de la mémoire non projetée »), et le bras ne mesurait rien
+    # du tout. Trouvé en sondant `MADV_POPULATE_READ` par tailles avec un mapping monté à la
+    # main : il marchait partout, donc le refus ne venait pas du noyau.
+    import ctypes as _ct
+    adresse = _ct.addressof(_ct.c_char.from_buffer(mm))
+    t0 = time.perf_counter()
+    n = 0
+    for base, octets in plages:
+        r = _MADV(_ct.c_void_p(adresse + base), _ct.c_size_t(octets), 22)
+        if r != 0:
+            import os as _os
+            raise OSError(_os.strerror(ctypes.get_errno()), "MADV_POPULATE_READ refusé")
         for p in melange_pages(base, octets, rng):
             mm[p]
             n += 1
@@ -131,7 +165,7 @@ def main():
     taille = os.path.getsize(fichier)
     octets_plage = taille_mio * MIO
     besoin = plages_n * octets_plage
-    bras = ("demande", "madvise-plage", "madvise-tranches", "pread-fils")
+    bras = ("demande", "madvise-plage", "madvise-tranches", "populate", "pread-fils")
     # L'espacement s'adapte au fichier : il faut 3 zones disjointes par bras, plus la marge
     # du contrôle à froid (8 Mio), et chaque zone doit rester bien plus grande que ce qu'un
     # bras y lit — sinon deux bras partagent des pages et le second lit du cache.
@@ -148,7 +182,7 @@ def main():
     resultats = {b: [] for b in bras}
     with open(fichier, "rb") as f:
         fd_evince = os.open(fichier, os.O_RDONLY)
-        mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_COPY)
         try:
             for r in range(3):
                 for i, b in enumerate(bras):
@@ -172,6 +206,8 @@ def main():
                         v = bras_madvise_plage(mm, plages, rng)
                     elif b == "madvise-tranches":
                         v = bras_madvise_tranches(mm, plages, rng)
+                    elif b == "populate":
+                        v = bras_populate(mm, plages, rng)
                     else:
                         v = bras_pread_fils(fichier, plages, fils)
                     resultats[b].append(v)

@@ -49,7 +49,33 @@ noyau dépasse la plage utile de 75 %. Ce qui reste de ce chantier est en § 4 (
 recouvrement), et le côté **VRAM** a été mesuré puis corrigé le même jour : **l'allocation** y est
 37 à 91 % du coût d'un montage, et un pool l'a supprimée (`reports/rapport-vram-transfert.md`).
 
-## 3. Avant tout : `MADV_POPULATE_READ` vaut-il les tampons ?
+## 3. `MADV_POPULATE_READ` : TRANCHÉ le 13/10 — il ne remplace pas les tampons
+
+La question était posée « avant tout » : le noyau entre une plage d'un seul appel (constante 22,
+absente de Python mais présente dans `libc`), ce qui pourrait rendre les tampons inutiles.
+Mesuré par `tools/banc-experts.py` (24 plages de 4 Mio, 101 Mo utiles par bras, array, médiane de
+trois répétitions) :
+
+| bras | débit utile (médiane) | |
+|---|---:|---|
+| à la demande | 1 021 Mo/s | |
+| `madvise` par plage | 1 070 Mo/s | |
+| `madvise` par tranches | 2 077 Mo/s | |
+| **`MADV_POPULATE_READ`** | **2 121 Mo/s** | ≈ `madvise` par tranches |
+| **`pread`, 8 fils** | **4 603 Mo/s** | **2,2× mieux** |
+
+**Verdict : `MADV_POPULATE_READ` ne vaut pas mieux que le `madvise` par tranches déjà en place**
+(2 121 contre 2 077, dans le bruit), et il reste **2,2× sous le `pread` parallèle**. Les tampons
+ne sont donc pas un détour : c'est le seul chemin qui atteint le débit du disque. Le chantier
+« lecteurs parallèles » garde son dessin — et la mesure est rejouable
+(`python3 tools/banc-experts.py <modele>`).
+
+*Et un défaut de banc corrigé au passage* : le bras `populate` passait l'**offset dans le fichier**
+comme adresse à `madvise`, qui veut une **adresse virtuelle** — le noyau répondait `ENOMEM` et le
+bras ne mesurait rien. Sondé par tailles avec un mapping monté à la main : `POPULATE_READ` marche
+partout, donc le refus ne venait pas du noyau.
+
+## 3bis. Le dessin tel qu'il a été construit
 
 Le noyau 7.2 connaît **`MADV_POPULATE_READ` (22)** : entrer une plage d'un seul appel, sans passer
 par un défaut par page. Si ce chemin rend ce que rendent huit fils qui touchent les pages

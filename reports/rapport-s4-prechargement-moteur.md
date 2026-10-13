@@ -123,3 +123,12 @@ le disque dur, où les octets coûtent plus cher que le temps).
 **Ce que la mesure ne dit pas** : `MADV_POPULATE_READ` (noyau 7.2, constante 22) n'a pas encore
 été mesuré — le banc porte le bras (`tools/banc-experts.py`, `populate`), et s'il rend ce que
 rendent les tampons, le chantier du § 4 de `docs/note-lecteurs-paralleles.md` n'a pas lieu d'être.
+## 6. `MADV_POPULATE_READ` — mesuré, et il ne remplace pas les tampons (13/10)
+
+Le noyau sait entrer une plage d'un seul appel (`MADV_POPULATE_READ = 22`), ce qui aurait pu rendre
+les tampons inutiles. Mesuré (24 plages de 4 Mio, array, médiane de 3) : **2 121 Mo/s** contre
+**2 077** pour le `madvise` par tranches, **1 021** à la demande et **4 603** pour `pread` par
+8 fils. Il ne vaut donc **pas mieux** que ce qui est en place, et reste **2,2× sous** le `pread`
+parallèle — les tampons sont le seul chemin qui atteint le débit du disque. Le bras du banc
+passait l'offset du fichier comme adresse à `madvise` (ENOMEM, aucune mesure) : corrigé.
+
