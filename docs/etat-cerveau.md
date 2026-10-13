@@ -211,10 +211,15 @@ limite.** Quatre sorties (12, 16, 20, 22 sur 24) : l'accord de l'oracle monte qu
 mais le **gain atteignable s'effondre** — un routeur réel n'atteint la parité qu'à **22**
 (47,78 % contre 47,73 %, **+0,05 point**, dans le bruit) pour **0,39 %** des paires, soit un facteur
 **32** avec la borne (12,6 %). Le facteur limitant est le **chemin court**, c'est-à-dire le manque
-**N4**, pas le choix de D. Ce que la fiche laisse ouvert : les sorties **plus précoces** (8, 4 — la
-tendance du produit plaide pour l'aller voir) et la génération libre plutôt que le contexte imposé.
-Première commande : `SORTIES="8 4" tools/carte-sortie-profondeur.sh`
-([`rapport`](../reports/rapport-design-H-carte-sorties.md)).
+**N4**, pas le choix de D. **Les sorties précoces ont été mesurées (13/10 02 h 27) : la réponse est non, et c'est chiffré.**
+La sortie **8** porte le meilleur produit théorique — **16,96 %** des paires épargnées au mieux,
+4,8× la sortie 22 — mais le **routeur réel y perd 0,30 point** (47,43 % contre 47,73 % pour le
+chemin long) : aux sorties précoces, aucun seuil de confiance n'atteint la parité. La sortie 4
+redescend (16,49 %). **Le facteur limitant est donc confirmé : la qualité du chemin court (N4)**,
+pas la profondeur de sortie. Fiche :
+[`rapport-design-H-sorties-precoces.md`](../reports/rapport-design-H-sorties-precoces.md).
+Ce qui reste ouvert de ce dessin : la **génération libre** (décodage, pas perplexité — un autre
+protocole), et le manque N4 lui-même.
 
 **7. Fenêtre × puits d'attention — MESURÉ : le DRAIN porte la qualité** (fiche
 [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md)).
