@@ -18,6 +18,19 @@ l'information perdue n'est pas dans l'état **tel qu'il est calculé** — pas p
 paramètres. Il faut donc que les couches **basses** produisent un état *plus lisible*, c'est-à-dire
 qu'elles soient **entraînées pour ça**.
 
+## 1bis. Ce que la prédictibilité des états ajoute (13/10, 17 h 10)
+
+Mesuré après l'écriture de cette note (`tools/predictibilite_etats.py`, fiche § 2septies) : l'état de
+profondeur 16 est prédictible à **R² 0,65** depuis l'état de profondeur 8 par une carte **linéaire**
+(identité : 0,19), **mais** les pas élémentaires (8→12 : 0,78 ; 12→16 : 0,75) sont mieux prédits que
+le saut direct — donc la composition n'est pas linéaire, et **~35 % de la variance profonde est
+créée par les couches intermédiaires**.
+
+Conséquence directe sur l'ordre proposé : le **dessin A** (un adaptateur d'entrée) ne peut pas
+fabriquer ces 35 % ; il ne peut que mieux *cadrer* ce qui existe déjà. C'est le **dessin B**
+(adaptateurs par couche) qui attaque la partie créée. A reste utile comme **contrôle** (il chiffre ce
+que « mieux cadrer » vaut), mais il ne peut pas être la réponse.
+
 ## 2. Trois dessins possibles (du moins cher au plus cher)
 
 | # | dessin | ce qu'on entraîne | coût | ce que ça teste |

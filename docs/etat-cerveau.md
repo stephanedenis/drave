@@ -303,7 +303,12 @@ est robuste — aucune loi chiffrée ne se tire d'un seul morceau de test.
 Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
 mesuré contre-productif, et sortir plus tôt coûte peu. **Trois dessins proposés**, du moins cher au
 plus cher (adaptateur d'entrée → adaptateurs par couche → routeur de profondeur), avec **cinq portes
-écrites avant le code** : [`docs/note-chemin-court-n4.md`](note-chemin-court-n4.md). Fiche :
+écrites avant le code** : [`docs/note-chemin-court-n4.md`](note-chemin-court-n4.md). **Et la mesure
+qui dit lequel** : l'état profond est prédictible à **R² 0,65** depuis l'état précoce par une carte
+**linéaire**, mais les pas élémentaires le sont mieux (0,78 et 0,75) → la composition n'est pas
+linéaire, **~35 % de la variance profonde est CRÉÉE par les couches intermédiaires**
+(`tools/predictibilite_etats.py`) : c'est le dessin **B** (adaptateurs par couche) qui l'attaque,
+pas le A. Fiche :
 [`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
 comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
 30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,

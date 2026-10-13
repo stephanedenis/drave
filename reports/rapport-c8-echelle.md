@@ -145,13 +145,44 @@ le second morceau de test (m20) :
   exactement ce que le § 2ter annonçait (le morceau pèse ×10). Une loi demanderait une **moyenne
   sur plusieurs morceaux de test**, avec sa dispersion : ce n'est pas fait, et c'est écrit ici.
 
+## 2septies. Un état précoce prédit-il un état profond ? Oui à 65 % — le reste est CRÉÉ
+
+La question N4 (« entraîner le chemin court ») suppose que sortir tôt **perd** de l'information.
+Demandé directement aux états : ce que la profondeur ajoute est-il **déjà dans l'état précoce**, ou
+est-il **créé** par les couches intermédiaires ? Mesure : régression **ridge linéaire** d'une
+profondeur vers une autre, sur les mêmes 33 morceaux (30 d'entraînement, 3 de test jamais vus),
+30 600 positions × 896 canaux (`tools/predictibilite_etats.py`) :
+
+| prédiction | R² TEST | contrôle : l'identité |
+|---|---:|---:|
+| profondeur **8 → 16** | **0,6547** | 0,1913 |
+| profondeur **16 → 8** | **0,7226** | −0,4997 |
+| profondeur 8 → 12 | **0,7825** | — |
+| profondeur 12 → 16 | **0,7531** | — |
+
+* **65 % de l'état profond est linéairement déterminé par l'état précoce** (contre 19 % pour
+  l'identité) : la profondeur ne *crée* donc pas tout — un bon lecteur peut extraire beaucoup d'un
+  état précoce, ce qui recoupe la courbe du § 2bis (×1,14 à ×2,00 par 4 couches) ;
+* **mais les pas élémentaires sont MIEUX prédits que le saut direct** (0,78 et 0,75 contre 0,65) :
+  si la composition était linéaire, le saut direct serait au moins aussi bon. Donc **~35 % de la
+  variance profonde apparaît dans les couches intermédiaires** — c'est de l'information **créée**,
+  et c'est exactement ce qu'un adaptateur sur un chemin gelé ne peut pas fabriquer ;
+* **le sens inverse est encore plus prédictible** (0,72) : l'état précoce est mieux contenu dans le
+  profond que l'inverse — la flèche du temps de l'information va bien de la profondeur vers la
+  surface, pas l'inverse ;
+* **conséquence pour N4** : entraîner le chemin court n'est pas un pis-aller, c'est le seul moyen
+  d'obtenir les ~35 % que la profondeur fabrique. La note
+  [`docs/note-chemin-court-n4.md`](../docs/note-chemin-court-n4.md) propose trois dessins ; cette
+  mesure dit pourquoi le **B** (adaptateurs par couche) est le premier qui puisse marcher.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * elle ne sépare pas **quantité** et **diversité** : les k premiers morceaux sont des textes
   *différents* (c'est voulu), mais leur position dans le corpus varie aussi avec k — un tirage
   aléatoire de k morceaux donnerait la même tendance ou non, ce n'est pas mesuré ici ;
-* elle ne dit rien du **chemin court entraîné** (N4) : c'est justement ce qu'elle désigne comme la
-  suite ;
+* elle ne dit rien du **chemin court entraîné** (N4) : le § 2septies dit seulement que ~35 % de
+  l'état profond est **créé** par les couches intermédiaires — la suite est d'entraîner ces couches
+  (dessin B de la note), pas d'adapter une sortie ;
 * la pente (~k^(−0,5)) est mesurée sur quatre points, **une seule graine** (mais le contrôle de
   graine du § 2ter montre qu'elle pèse 0,7 %) et **un seul morceau de test** (et le même contrôle
   montre que le morceau, lui, pèse ×10) : assez pour dire « ça monte encore, lentement », pas assez
