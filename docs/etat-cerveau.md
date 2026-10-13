@@ -238,7 +238,13 @@ attention complète **17,1 tok/s** ; fenêtre 512 + 512 puits (÷4 de clés) **1
 de parcimonie (clés, paires, octets), pas de vitesse locale** — c'est en réparti qu'elle paie.
 La **non-monotonie observée à 512 jetons est close** : elle est du **corpus** (sur un second
 corpus l'ordre s'inverse : 256 bat 128 de 5,4 %), et à 512 jetons **fenêtre 384 + 64 puits = +0,3 %**
-seulement pour ÷1,33 de clés. Reste ouvert : la loi de la frontière en N.
+seulement pour ÷1,33 de clés. **La loi de la frontière en N a été cherchée (13/10 03 h 58) : il n'y en a pas — il y a un
+régime sûr, et il est robuste.** À N = 2 048, garder **la moitié** des clés coûte **+0,5 %, +1,9 %
+et +0,8 %** sur trois textes (≤2 % partout) ; garder le **quart** coûte **+49,2 %, +9,7 % et
++5,3 %** — un **facteur 9 selon le texte**, qui domine toute tendance en N et explique la
+non-monotonie déjà notée. Conséquence : budgéter la moitié des clés, et ne jamais promouvoir un
+réglage plus agressif sur un seul texte. Fiche :
+[`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md).
 
 **8. C9 (latéralité) et C4 (retard) — mesurés, leurs suites sont nommées.** Latéralité : l'échange
 est exact, le gain entre deux vues est **nul** (et la récupération d'un jumeau bruité = une moyenne,

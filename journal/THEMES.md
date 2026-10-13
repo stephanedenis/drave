@@ -109,6 +109,12 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-12](2026-10-12_docs.md) | `-91 %` · `60 s` |
 | [2026-10-13](2026-10-13_docs.md) | — |
 
+### `outils` — Outils et harnais
+
+| jour | chiffres du jour |
+|---|---|
+| [2026-10-13](2026-10-13_outils.md) | — |
+
 ### `divers` — Ce qui ne rentre dans aucun thème
 
 | jour | chiffres du jour |

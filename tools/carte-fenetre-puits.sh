@@ -22,7 +22,15 @@ set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
-IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
+# PRÉREQUIS PERSISTANT, PAS /tmp : le fichier d'identifiants de la campagne vivait dans
+# /tmp/campagne24, que chaque redémarrage emporte (même famille de défaut que les trois portes à
+# aiguille, réparées le 12/10). Il est tokenisé une fois dans ~/IA/scratch/prerequis/ si absent.
+IDS=${IDS:-$HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt}
+if [ ! -s "$IDS" ]; then
+    mkdir -p "$(dirname "$IDS")"
+    "$D" "$M" --tokenize --fichier "${TEXTE:-data/wikitext2_test.txt}" --sortie "$IDS" \
+        >/dev/null 2>&1 || { echo "  ❌ tokenisation impossible vers $IDS"; exit 2; }
+fi
 LIMITE=${1:-128}
 CTX=${CTX:-512}
 # Balayage réglable : FENETRES et PUITS (le drain et la fenêtre sont deux leviers du MÊME
