@@ -283,8 +283,9 @@ s'effondre de 449 500 à **24,7 millions** sur les mêmes états. **L'état pré
 1,47 · 1,49 pour 4, 15 et 30 morceaux, mais il **dépend du texte** (×1,17 sur un second morceau de
 test) : le facteur va de 1,2 à 1,7, la direction ne change pas. *Deux contrôles* : la
 **graine** pèse 0,7 % (178,39 contre 179,59) — la courbe tient —, mais le **morceau de test** pèse
-**×10** (17,35 sur m20 contre 179,59 sur m32) : les valeurs absolues ne se transposent pas d'un
-texte à l'autre, la tendance oui.
+**×10** (17,35 sur m20 contre 179,59 sur m32) et la **forme** de la courbe ne se transporte pas :
+de 15 à 30 morceaux, m32 gagne ÷1,45 et m20 ÷22,8. Seule la **direction** (plus de données aide)
+est robuste — aucune loi chiffrée ne se tire d'un seul morceau de test.
 Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
 mesuré contre-productif, et sortir plus tôt coûte peu. **Trois dessins proposés**, du moins cher au
 plus cher (adaptateur d'entrée → adaptateurs par couche → routeur de profondeur), avec **cinq portes

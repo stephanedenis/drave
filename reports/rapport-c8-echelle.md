@@ -120,9 +120,30 @@ Deux contrôles sur la même configuration (k = 30, validation m30+m31) :
   entraînement — un facteur **10**. Les morceaux du corpus n'ont pas la même difficulté (la tête
   empruntée le dit aussi : 147 k à 4,5 M selon le morceau) ;
 * **conséquence de lecture** : la courbe du § 1 est une courbe **à morceau de test fixé** (m32, le
-  plus difficile des deux mesurés), et ses valeurs **absolues** ne se transposent pas d'un texte à
-  l'autre. Ce qui se transpose, c'est la **tendance** ; une loi chiffrée demanderait une moyenne
+  plus difficile des deux mesurés), et ni ses valeurs **absolues** ni sa **forme** ne se transposent
+  d'un texte à l'autre (§ 2quinquies : ÷1,45 sur m32 contre ÷22,8 sur m20 pour le même doublement).
+  Ce qui se transpose, c'est la **direction** (plus de données aide) ; une loi chiffrée demanderait une moyenne
   sur plusieurs morceaux de test — ce n'est pas fait ici, et c'est écrit.
+
+## 2quinquies. La courbe elle-même ne se transporte pas d'un texte à l'autre
+
+Le contrôle qui manquait, fait à la fin de la matinée : la **même** courbe de données, mesurée sur
+le second morceau de test (m20) :
+
+| morceaux (k) | TEST sur **m32** | TEST sur **m20** | rapport m20/m32 |
+|---:|---:|---:|---:|
+| 4 | 1 032,58 | 2 816,29 | ×2,73 |
+| 15 | 260,81 | 396,37 | ×1,52 |
+| 30 | 179,59 | **17,35** | **×0,10** |
+
+* **la direction tient** : les deux textes s'améliorent de façon monotone avec la donnée — c'est le
+  seul énoncé robuste de cette fiche ;
+* **la FORME ne tient pas** : de 15 à 30 morceaux, m32 gagne **÷1,45** et m20 gagne **÷22,8** — un
+  facteur 16 entre les deux textes pour le même doublement de données. Sur m20, la courbe a une
+  **falaise** (le lecteur « prend » ce texte d'un coup) ; sur m32, une pente douce ;
+* **donc aucune « loi » chiffrée ne peut être tirée d'un seul morceau de test** — et c'est
+  exactement ce que le § 2ter annonçait (le morceau pèse ×10). Une loi demanderait une **moyenne
+  sur plusieurs morceaux de test**, avec sa dispersion : ce n'est pas fait, et c'est écrit ici.
 
 ## 3. Ce que cette fiche ne dit pas
 
