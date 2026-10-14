@@ -21,6 +21,19 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-14 à 14 h 55** (**40 portes, 38 vertes, 2 rouges**, ~75 min) : après la
+> **porte d'exécution de N4** (le moteur applique un adaptateur de sortie appris :
+> `--adaptateur-sortie`, quatre fins de plage ; et `tools/exporter_gguf_dense.py` écrit un GGUF
+> dense Qwen2). Les deux rouges sont **les mêmes qu'avant**, avec la même cause structurelle
+> (`porte-indice` : l'indice extérieur tombe à 482 jetons contre 459 pour le témoin ; `porte-melange`
+> : l'état de A ne rend pas le code de A). **Aucune valeur de porte n'a bougé** — `porte-flux`
+> rend ses cinq modes aux références (61,9920 / 60,8135). La **40ᵉ porte** y est verte du premier
+> coup (`porte-adaptateur-sortie`, 58 s) : elle vérifie que le fichier réécrit rend **les mêmes
+> chiffres** (7,4242 et 4 481 378,8799), que l'adaptateur = identité ne change **rien** (0,00e0),
+> qu'une demi-échelle — que la norme ne peut pas absorber — **change** le chiffre (×2,9), et que
+> les trois cas invalides rendent **code 2**. Fiche :
+> [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md).
+>
 > **Passe du 2026-10-13 à 13 h 44** (**39 portes, 37 vertes, 2 rouges**, ~82 min) : après l'échange
 > d'experts (C9) et le **nouveau critère** de `porte-indice` (contrôle apparié). Les deux rouges
 > sont les mêmes qu'avant, mais celui de `porte-indice` a **changé de cause** : il ne dit plus
@@ -71,7 +84,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **39 portes** ; dernière passe : **37 vertes sur 39** (13/10 13 h 44), ≈82 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **40 portes** ; dernière passe : **38 vertes sur 40** (14/10 14 h 55), ≈75 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte

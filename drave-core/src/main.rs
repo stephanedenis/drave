@@ -590,6 +590,50 @@ fn poser_tete_partielle(mdl: &mut model::Model) {
 plage — le résultat est celui d'un modèle TRONQUÉ, pas du modèle entier");
 }
 
+/// **Porte d'exécution de N4** (`--adaptateur-sortie`) : lire la matrice `h × h` apprise en torch
+/// (f32 brut, ligne par ligne) et la poser sur le modèle, où elle s'applique à l'état **brut**
+/// juste avant la norme finale d'une plage (`adaptateur_sortie` dans `model.rs`).
+///
+/// REFUSÉ sans `--tete-partielle` : ailleurs, elle changerait le modèle au lieu de lire un chemin
+/// tronqué. Un drapeau ignoré en silence est le pire cas de ce dépôt — celui qui fait publier un
+/// chiffre qui ne mesure pas ce qu'on croit.
+fn appliquer_adaptateur(mdl: &mut model::Model, chemin: Option<&str>, tete_partielle: bool) {
+    let Some(f) = chemin else { return };
+    if !tete_partielle {
+        eprintln!("[adaptateur] `--adaptateur-sortie` sans `--tete-partielle` : l'adaptateur \
+s'applique à la FIN d'une plage (l'état brut avant la norme finale). Refusé plutôt qu'ignoré.");
+        std::process::exit(2);
+    }
+    let octets = match std::fs::read(f) {
+        Ok(o) => o,
+        Err(e) => {
+            eprintln!("[adaptateur] {f} illisible : {e}");
+            std::process::exit(2);
+        }
+    };
+    let h = mdl.cfg.hidden;
+    if octets.len() != h * h * 4 {
+        eprintln!("[adaptateur] {f} : {} octets pour une matrice {h}×{h} ({} attendus) — \
+refuser vaut mieux qu'appliquer une matrice tronquée", octets.len(), h * h * 4);
+        std::process::exit(2);
+    }
+    let v: Vec<f32> = (0..h * h)
+        .map(|i| f32::from_le_bytes(octets[4 * i..4 * i + 4].try_into().unwrap()))
+        .collect();
+    eprintln!("[adaptateur] {f} : matrice {h}×{h} chargée ({} octets, f32 brut)", octets.len());
+    mdl.adaptateur_sortie = Some(v);
+}
+
+/// Les deux vont ensemble — l'adaptateur ne lit qu'un chemin TRONQUÉ — et les séparer laisserait
+/// un mode l'oublier. C'est le défaut que la passe des portes avait attrapé sur le chargement
+/// paresseux : un drapeau qui ne s'applique que dans certains modes.
+fn poser_plage(mdl: &mut model::Model, tete_partielle: bool, adaptateur: Option<&str>) {
+    if tete_partielle {
+        poser_tete_partielle(mdl);
+    }
+    appliquer_adaptateur(mdl, adaptateur, tete_partielle);
+}
+
 /// **Tableau de bord des réglages en vigueur** (`--options-actives`), lus sur le
 /// MODÈLE après toutes les affectations.
 ///
@@ -935,6 +979,11 @@ struct Options {
     /// modèle tronqué », ce qui est la seule façon de vérifier une réduction
     /// finale dont les couches suivantes ne tournent pas encore.
     tete_partielle: bool,
+    /// **`--adaptateur-sortie F`** : matrice `h × h` apprise (f32 brut, ligne par ligne),
+    /// appliquée à l'état BRUT avant la norme finale d'une plage à tête partielle. C'est la porte
+    /// d'exécution de N4 : le chemin court entraîné se mesure alors dans le MOTEUR. Refusée sans
+    /// `--tete-partielle` (voir `appliquer_adaptateur`).
+    adaptateur_sortie: Option<String>,
     /// `--engram-adresses F` : écrit la **liste d'adresses** de l'engram
     /// (un entier par jeton et par colonne de hachage) et imprime ce qu'elle
     /// coûte — rangées distinctes, recouvrement entre jetons consécutifs.
@@ -1087,6 +1136,7 @@ fn analyser(args: &[String]) -> Options {
             "--options-actives" => { o.options_actives = true; 1 }
             "--options-strict" => { o.options_strict = true; 1 }
             "--tete-partielle" => { o.tete_partielle = true; 1 }
+            "--adaptateur-sortie" => { o.adaptateur_sortie = Some(suivant(i).clone()); 2 }
             "--ppl-reparti" => { o.ppl_reparti = Some(suivant(i).clone()); 2 }
             "--couches-locales" => { o.couches_locales = suivant(i).parse().unwrap(); 2 }
             "--couches" => {
@@ -1304,6 +1354,9 @@ fn run_infer(opt: Options) {
     let montre_options = opt.options_actives;
     // Une seule analyse de la ligne de commande (voir `analyser`) : chaque mode
     // ne fait plus que déstructurer ce dont il a besoin.
+    // Capturés AVANT la déstructuration (`let Options { .. } = opt` déplace des champs, et un
+    // emprunt après un déplacement partiel ne compile pas).
+    let (tete_partielle_opt, adaptateur_opt) = (opt.tete_partielle, opt.adaptateur_sortie.clone());
     let Options {
         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
         flux, session, chat, ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
@@ -1324,9 +1377,7 @@ fn run_infer(opt: Options) {
     let abits = if abits_impose { abits_opt } else { 8 };
     let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
                                              opt.couches);
-    if opt.tete_partielle {
-        poser_tete_partielle(&mut mdl);
-    }
+    poser_plage(&mut mdl, tete_partielle_opt, adaptateur_opt.as_deref());
     if let Some(f) = &opt.tete_restreinte {
         poser_tete_restreinte(&mut mdl, f);
     }
@@ -4590,6 +4641,11 @@ TRANSPORTÉS au nœud (protocole v7) : les deux moitiés calculent le même mod�
         eprintln!("[plage] `--tete-partielle` est sans effet en `--ppl-reparti` : la plage \
 y est le découpage entre nœuds (voir `--couches-locales`), pas un `--couches a:b`");
     }
+    if opt.adaptateur_sortie.is_some() {
+        eprintln!("[adaptateur] `--adaptateur-sortie` en `--ppl-reparti` : il n'est appliqué que \
+par le nœud qui termine la plage (`norme_finale`), et seulement si `--tete-partielle` y est \
+posé — le dire ici, plutôt que de rendre un chiffre inchangé sans un mot");
+    }
     if opt.options_actives { options_actives(&mdl, "pilote du flux", opt.ctx_impose, true, opt.keep, opt.attn_sinks_impose); }
     let mode = if opt.flux_blocs { MODE_BLOCS }
                else if opt.flux_liste { MODE_LISTE }
@@ -6617,6 +6673,7 @@ fn run_reflexe_essai(opt: Options) {
         let mut m = model::Model::load_partiel(&path, ctx, n_threads, false, 1.0, false, 0, 0,
                                                Some((0, l)));
         poser_tete_partielle(&mut m);
+        appliquer_adaptateur(&mut m, opt.adaptateur_sortie.as_deref(), true);
         let mut accord = 0usize; let mut accord5 = 0usize; let mut t_refl = 0.0f64;
         let mut cumul_cos = 0.0f64;
         for (pos, &t) in ids.iter().enumerate() {
@@ -7276,7 +7333,7 @@ de sortie ne produit rien, et une région frontière qui ne sort rien n'est pas 
     // le « réflexe » coûtait exactement le même prix — mesuré, et affiché comme tel.
     let mut mdl = model::Model::load_partiel(chemin, ctx, fils(opt), true, opt.keep, false, 0, 0,
                                              opt.couches);
-    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    poser_plage(&mut mdl, opt.tete_partielle, opt.adaptateur_sortie.as_deref());
     appliquer_quantification(&mut mdl, opt);
     if opt.attn_window > 0 { mdl.attn_window = opt.attn_window; }
     if opt.attn_sinks_impose { mdl.attn_sinks = opt.attn_sinks; }
@@ -7420,6 +7477,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     let (f_etat, f_alpha, f_pos, e_sortie, e_pos) =
         (opt.fusion_etat.clone(), opt.fusion_alpha, opt.fusion_pos,
          opt.etat_sortie.clone(), opt.etat_pos);
+    let (tete_partielle_opt, adaptateur_opt) = (opt.tete_partielle, opt.adaptateur_sortie.clone());
     let Options {
         ids_file: idfile, texte_file, ppl_texte: _, limit, depuis,
         ctx: ctx_opt, threads: threads_opt, abits: abits_opt,
@@ -7468,7 +7526,7 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
 
     let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
                                              opt.couches);
-    if opt.tete_partielle { poser_tete_partielle(&mut mdl); }
+    poser_plage(&mut mdl, tete_partielle_opt, adaptateur_opt.as_deref());
     appliquer_fusion(&mut mdl, f_etat, f_alpha, f_pos, e_sortie, e_pos);
     if let Some(chemin) = flux_forcer.as_deref() {
         match model::FluxRelecteur::lire(chemin) {

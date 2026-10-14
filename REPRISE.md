@@ -84,6 +84,15 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
   `--test m20` n'était pas un test — la fuite valait **×8** sur la perplexité, et trois énoncés
   publiés en découlaient (`reports/rapport-c8-echelle.md`, rectification du 14/10). Le banc
   `tools/n4_dessin_b.py` le dit maintenant lui-même (`⚠ FUITE`) ;
+- **un export F32 ne s'exécute pas** : `q8_view` ne connaît que Q8_0 (et Q4_0/Q4_K/Q6_K) — un GGUF
+  dense écrit en F32 se charge puis **panique** à la première projection (« q8_view : type 0 non
+  géré »). Le format d'échange est **Q8_0** ; les normes et les biais restent en f32
+  (`tools/exporter_gguf_dense.py`) ;
+- **la graine ne rend pas reproductible ce qui traverse les couches** : trois entraînements au
+  MÊME protocole et à la MÊME graine donnent, pour l'adaptateur de sortie (états précalculés),
+  exactement le même chiffre — et pour les bras LoRA, ÷1,32 · ÷1,46 · ÷1,43 sur m32 (cuBLAS choisit
+  ses noyaux selon l'état de la mémoire). Un chiffre qui rétropropage se cite avec son **étendue
+  entre exécutions**, jamais seul ;
 - **un repère de CORPUS n'est pas un repère de morceau** : le « modèle complet 14,2342 » des fiches
   C8 est la moyenne géométrique des 33 morceaux ; sur m32 le modèle complet rend **7,42**. Diviser
   une perplexité **par morceau** par un chiffre de **corpus** double le rapport annoncé ;

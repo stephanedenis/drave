@@ -3018,6 +3018,13 @@ pub struct Model {
     /// TRONQUÉ, ce qui est la seule façon de vérifier une réduction finale dont
     /// les couches suivantes ne tournent pas encore.
     pub tete_partielle: bool,
+    /// **Adaptateur de sortie** (`--adaptateur-sortie`) : une matrice `h × h` apprise (f32
+    /// brut, ligne par ligne) appliquée à l'état **brut**, juste AVANT la norme finale d'une
+    /// plage à tête partielle. C'est la **porte d'exécution** de N4 : le chemin court entraîné
+    /// (LoRA sur les couches basses + ce lecteur) se mesure alors dans le MOTEUR, et non plus
+    /// seulement en torch. Il est REFUSÉ sans `--tete-partielle` (il changerait le modèle, et
+    /// un drapeau ignoré en silence est le pire cas du dépôt).
+    pub adaptateur_sortie: Option<Vec<f32>>,
     /// Couches MLA, si le modèle en est un (`attn_kv_a_mqa` présent).
     pub mla: Option<Vec<Mla>>,
     /// Fichier d'état d'ENTRÉE (`DRAVE_ETAT_ENTREE`) : le résidu du premier
@@ -4948,6 +4955,7 @@ forcent l'un ou l'autre partout",
             couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
             couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
             flux_brut: false, tete_partielle: false,
+            adaptateur_sortie: None,
             cache_experts,
             cache_ram: if crate::gguf::tampons_voulus() {
                     // Lecture séquentielle dans nos tampons : le « cache » n'est ici qu'un
@@ -6410,6 +6418,20 @@ Utilisez `--lot 1`, ou implémentez les experts partagés ici");
             // Nœud intermédiaire : on rend le flux résiduel brut, sans norme.
             return (0..t).map(|i| x[i * h..(i + 1) * h].to_vec()).collect();
         }
+        if let Some(ad) = self.adaptateur_sortie.as_ref() {
+            // Même adaptateur que sur le chemin jeton par jeton — sans quoi `--lot 8` rendrait un
+            // autre modèle que `--lot 1`, en silence.
+            assert_eq!(ad.len(), h * h, "adaptateur de sortie : {} valeurs pour h = {h}", ad.len());
+            let mut z = vec![0f32; h];
+            for i in 0..t {
+                let r = &x[i * h..(i + 1) * h];
+                for o in 0..h {
+                    let ligne = &ad[o * h..(o + 1) * h];
+                    z[o] = ligne.iter().zip(r.iter()).map(|(a, b)| a * b).sum();
+                }
+                x[i * h..(i + 1) * h].copy_from_slice(&z);
+            }
+        }
         for i in 0..t {
             let r = x[i * h..(i + 1) * h].to_vec();
             Self::rmsnorm(&r, &self.out_norm, self.cfg.eps, &mut hn[i * h..(i + 1) * h]);
@@ -7308,6 +7330,16 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
             for i in 0..h { x[i] += d[i]; }
         }
         if (self.couche_fin >= self.cfg.n_layer || self.tete_partielle) && !self.flux_brut {
+            if let Some(ad) = self.adaptateur_sortie.as_ref() {
+                assert_eq!(ad.len(), h * h, "adaptateur de sortie : {} valeurs pour h = {h}",
+                           ad.len());
+                let mut z = vec![0f32; h];
+                for i in 0..h {
+                    let ligne = &ad[i * h..(i + 1) * h];
+                    z[i] = ligne.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+                }
+                x = z;
+            }
             Self::rmsnorm(&x, &self.out_norm, eps, &mut hn);
             hn
         } else {
@@ -8569,6 +8601,19 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
 le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
             }
         }
+        // ---- L'ADAPTATEUR DE SORTIE (porte d'exécution de N4) : une matrice h × h apprise en
+        // torch, appliquée à l'état BRUT avant la norme finale. Placée AVANT la capture
+        // ci-dessous, pour que `--etat-sortie` écrive bien l'état qui entre dans la tête.
+        if let Some(ad) = self.adaptateur_sortie.as_ref() {
+            assert_eq!(ad.len(), h * h, "adaptateur de sortie : {} valeurs pour h = {h}",
+                       ad.len());
+            let mut z = vec![0f32; h];
+            for i in 0..h {
+                let ligne = &ad[i * h..(i + 1) * h];
+                z[i] = ligne.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+            }
+            x = z;
+        }
         // ---- C2/C6 : l'état BRUT, capturé ou augmenté, juste AVANT la norme finale.
         // La position du prélèvement est celle du texte : un état prélevé à la
         // position p d'un contexte peut être injecté à n'importe quelle position d'un
@@ -8878,7 +8923,21 @@ pas apprise — le flux doit transporter ces {} valeurs par jeton",
             }
         } else { x };
         let mut hn = vec![0f32; self.cfg.hidden];
-        Self::rmsnorm(x, &self.out_norm, self.cfg.eps, &mut hn);
+        // Le lecteur appris s'applique aussi ici : c'est la même fin de plage, vue depuis le nœud
+        // qui reçoit l'état d'un autre. Sans quoi `--adaptateur-sortie` serait inerte en réparti.
+        let x = if let Some(ad) = self.adaptateur_sortie.as_ref().filter(|_| self.tete_partielle) {
+            let h = self.cfg.hidden;
+            assert_eq!(ad.len(), h * h, "adaptateur de sortie : {} valeurs pour h = {h}", ad.len());
+            let mut z = vec![0f32; h];
+            for i in 0..h {
+                let ligne = &ad[i * h..(i + 1) * h];
+                z[i] = ligne.iter().zip(x.iter()).map(|(a, b)| a * b).sum();
+            }
+            z
+        } else {
+            x.to_vec()
+        };
+        Self::rmsnorm(&x, &self.out_norm, self.cfg.eps, &mut hn);
         // Le même état que `hidden_final` sur un nœud qui a tout calculé : c'est
         // ce qui rend la RÉDUCTION FINALE comparable d'un côté à l'autre.
         Self::vider_couche(self.dump_couches.as_deref(), "reduit", 0, pos, &hn);

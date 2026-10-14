@@ -32,6 +32,24 @@ GGUF **Q8_0** ; ici on entraîne sur les poids **fp32** du même modèle (`Qwen2
 vérifié : les normes du GGUF sont **identiques au bit** à celles de ce dépôt HF, les matrices à
 5,5e-3 près, ce qui est l'erreur Q8_0). Les portes de concordance chiffrent cet écart.
 
+CE QUI SUIT, ET QUI EST LA PORTE D'EXÉCUTION (14/10). Ce banc mesure en torch ; pour que le
+MOTEUR rende le même verdict, trois commandes (`reports/rapport-n4-porte-execution.md`) :
+
+  # 1. entraîner ET écrire les poids appris
+  CUDA_VISIBLE_DEVICES=0 $PY tools/n4_dessin_b.py --profondeur 8 --train 30 --exclure 20 \
+      --val 30,31 --test 32,20 --epoques 20 --graine 0 --bras adaptateur,lora,lora+adaptateur \
+      --sauver /tmp/n4/poids --json /tmp/n4/exec.json
+  # 2. exporter le modèle dense (LoRA fusionné) et le lecteur appris
+  $PY tools/exporter_gguf_dense.py --hf <snapshot HF> --lora /tmp/n4/poids-lora_adaptateur.pt \
+      --couches-lora 8 --adapter-sortie /tmp/n4/adaptateur.f32 --sortie /tmp/n4/modele.gguf
+  # 3. mesurer dans le moteur
+  ./drave-core/target/release/drave /tmp/n4/modele.gguf --ppl morceau.txt --limit 1024 --ctx 1024 \
+      --threads 8 --couches 0:8 --tete-partielle --adaptateur-sortie /tmp/n4/adaptateur.f32
+
+ATTENTION À LA REPRODUCTIBILITÉ (mesuré le 14/10) : le bras `adaptateur` (états précalculés) rend
+le MÊME chiffre d'une exécution à l'autre, mais les bras qui rétropropagent à travers les couches
+donnent ÷1,32 · ÷1,46 · ÷1,43 sur m32 à graine fixée — citer un chiffre LoRA avec son étendue.
+
 Usage :
   CUDA_VISIBLE_DEVICES=0 /home/stephane/gpu-env/bin/python tools/n4_dessin_b.py \
       --profondeur 8 --train 30 --val 30,31 --test 32,20 --graine 0 --epoques 20 \
@@ -98,9 +116,14 @@ class LoraLineaire(nn.Module):
         return self.base(x) + (x @ self.A.T @ self.B.T) * self.echelle
 
 
-def poser_lora(modele, profondeur: int, rang: int, alpha: float) -> list[nn.Parameter]:
-    """Remplace q/k/v/o des `profondeur` premières couches par leur version LoRA."""
-    params = []
+def poser_lora(modele, profondeur: int, rang: int, alpha: float):
+    """Remplace q/k/v/o des `profondeur` premières couches par leur version LoRA.
+
+    Rend `(paramètres, fiches)` : la fiche porte le **nom HF** du poids (`model.layers.3.
+    self_attn.q_proj.weight`) et l'échelle — c'est ce qui permet à `exporter_gguf_dense.py` de
+    FUSIONNER l'adaptateur dans un GGUF (`W ← W + (α/r)·B·A`), c'est-à-dire de rendre le chemin
+    court exécutable par le moteur."""
+    params, fiches = [], []
     for i in range(profondeur):
         attn = modele.model.layers[i].self_attn
         for nom in ("q_proj", "k_proj", "v_proj", "o_proj"):
@@ -108,7 +131,9 @@ def poser_lora(modele, profondeur: int, rang: int, alpha: float) -> list[nn.Para
             lora = LoraLineaire(base, rang, alpha).to(base.weight.device, base.weight.dtype)
             setattr(attn, nom, lora)
             params += [lora.A, lora.B]
-    return params
+            fiches.append({"nom": f"model.layers.{i}.self_attn.{nom}.weight",
+                           "A": lora.A, "B": lora.B, "echelle": lora.echelle})
+    return params, fiches
 
 
 # ---------------------------------------------------------------------------------------------
@@ -129,7 +154,8 @@ class Banc:
         self.liste_tronquee = nn.ModuleList(self.toutes[:self.L])
         self.liste_pleine = self.m.model.layers
         self.tete = self.m.lm_head.weight                # LIÉE à l'embedding (tie_word_embeddings)
-        self.lora_params = poser_lora(self.m, self.L, a.rang, a.alpha) if a.rang > 0 else []
+        self.lora_params, self.lora_specs = (poser_lora(self.m, self.L, a.rang, a.alpha)
+                                             if a.rang > 0 else ([], []))
         print(f"modèle {a.modele.split('/')[-3]} · {len(self.toutes)} couches · troncature à {self.L} "
               f"· LoRA rang {a.rang} sur {len(self.lora_params) // 2} projections "
               f"({sum(p.numel() for p in self.lora_params):,} paramètres) · {self.dev} "
@@ -224,6 +250,13 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         return {"adaptateur": None if adaptateur is None else adaptateur.detach().clone(),
                 "lora": [p.detach().clone() for p in banc.lora_params] if avec_lora else None}
 
+    def tenseurs():
+        """Les poids APPRIS, prêts pour l'export (noms HF + échelle pour la fusion)."""
+        return {"adaptateur": None if adaptateur is None else adaptateur.detach().cpu(),
+                "lora": ([{"nom": f["nom"], "A": f["A"].detach().cpu(), "B": f["B"].detach().cpu(),
+                           "echelle": f["echelle"]} for f in banc.lora_specs]
+                         if avec_lora else [])}
+
     def restaurer(snap):
         if adaptateur is not None:
             adaptateur.data.copy_(snap["adaptateur"])
@@ -286,7 +319,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         restaurer(meilleur[2])
         res = {"bras": bras, "epoque": meilleur[1], "val": meilleur[0],
                "val_depart": ppl_depart_val, "test_depart_premier": ppl_depart,
-               "journal": journal, "train": ppl_etats(Xtr, ytr)}
+               "journal": journal, "train": ppl_etats(Xtr, ytr), "tenseurs": tenseurs()}
         for nom, (X, y) in Xte.items():
             res[nom] = ppl_etats(X, y)
         return res
@@ -341,7 +374,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
     restaurer(meilleur[2])
     res = {"bras": bras, "epoque": meilleur[1], "val": meilleur[0],
            "val_depart": ppl_depart_val, "test_depart_premier": ppl_depart,
-           "journal": journal,
+           "journal": journal, "tenseurs": tenseurs(),
            "train": banc.ppl(train, lambda ids: logits_chemin(ids, False))}
     for nom, morceaux in tests:
         res[nom] = banc.ppl(morceaux, lambda ids: logits_chemin(ids, False))
@@ -376,6 +409,9 @@ def main() -> int:
                     help="pas de l'adaptateur quand il apprend EN MÊME TEMPS que les couches")
     ap.add_argument("--bras", default="adaptateur,lora,lora+adaptateur")
     ap.add_argument("--json", default=None)
+    ap.add_argument("--sauver", default=None,
+                    help="préfixe : écrire les poids APPRIS de chaque bras (PREFIXE-<bras>.pt) "
+                         "pour que l'exporteur GGUF les fusionne")
     ap.add_argument("--etat-moteur", default=None,
                     help="préfixe d'états capturés par le moteur (--etat-sortie) pour vérifier "
                          "que l'état BRUT de la chaîne torch est celui du moteur")
@@ -477,6 +513,16 @@ def main() -> int:
               f"{r['test_depart_premier']:,.4f} contre {ppl_empruntee[idx_test[0][0]]:,.4f} "
               f"⇒ écart {rel:.2e}")
         r["invariant_identite"] = rel
+        if a.sauver:
+            import torch as _t
+            chemin = f"{a.sauver}-{bras.replace('+', '_')}.pt"
+            _t.save({"bras": bras, "graine": a.graine, "profondeur": a.profondeur,
+                     "rang": a.rang, "alpha": a.alpha, "epoque": r["epoque"],
+                     "val": r["val"], "m32": r["m32"], "m20": r["m20"],
+                     "adaptateur": r["tenseurs"]["adaptateur"], "lora": r["tenseurs"]["lora"]},
+                    chemin)
+            print(f"    poids écrits : {chemin}")
+        del r["tenseurs"]
         resultats["bras"][bras] = r
 
     noms = [n for n, _ in idx_test]

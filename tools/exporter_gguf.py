@@ -140,16 +140,23 @@ def _kv(f, cle, val):
         raise TypeError(f"type GGUF non géré pour {cle} : {type(val)}")
 
 
-def ecrire_gguf(chemin, kv, tenseurs, f16=False):
+def ecrire_gguf(chemin, kv, tenseurs, f16=False, kv_brutes=None, n_kv=None):
     """`tenseurs` : liste de (nom, tableau numpy) — tableau converti en f32/f16 —
-    ou de (nom, (octets, type_ggml)) pour un format écrit à la main (Q4_0)."""
+    ou de (nom, (octets, type_ggml)) pour un format écrit à la main (Q4_0).
+
+    `kv_brutes` : la section KV **telle quelle**, copiée d'un GGUF existant — le tokenizer et le
+    template de chat sont alors ceux que le moteur lit déjà, pas une reconstruction."""
     with open(chemin, "wb") as f:
         f.write(b"GGUF")
         f.write(struct.pack("<I", GGUF_VERSION))
         f.write(struct.pack("<Q", len(tenseurs)))
-        f.write(struct.pack("<Q", len(kv)))
-        for cle, val in kv:
-            _kv(f, cle, val)
+        if kv_brutes is not None:
+            f.write(struct.pack("<Q", len(kv) if n_kv is None else n_kv))
+            f.write(kv_brutes)
+        else:
+            f.write(struct.pack("<Q", len(kv)))
+            for cle, val in kv:
+                _kv(f, cle, val)
         decalage = 0
         donnees = []
         for nom, contenu in tenseurs:

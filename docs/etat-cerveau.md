@@ -331,10 +331,24 @@ d'entraînement** (la fuite vaut **×8,0** à profondeur 8 et **×14,4** à prof
 du 13/10 — `seq 0 29` pour `--train` **et** `--test m20` — est retrouvée), et **14,2342 est un
 chiffre de CORPUS** (moyenne géométrique des 33 morceaux : 14,4283 mesuré ici), pas un chiffre de
 morceau — sur m32 le modèle complet vaut **7,42**, donc les rapports « ×N du modèle complet » des
-fiches C8 sont deux fois trop optimistes. **Ce qui reste** : porter ce modèle entraîné dans le
-**moteur** (`tools/exporter_gguf.py` ne fait que la famille MoE de Qwen3 — écrire un GGUF dense
-Qwen2 est le prochain pas), et trancher ÷1,2-1,9 contre le bruit de graine sur plus de morceaux de
-test. Fiche :
+fiches C8 sont deux fois trop optimistes. **Et la PORTE D'EXÉCUTION est franchie (14/10,
+14 h 10-15 h 00) : le chemin court est mesuré par le MOTEUR.** `tools/exporter_gguf_dense.py`
+écrit un GGUF **dense Qwen2** (biais q/k/v, tête liée, métadonnées KV copiées verbatim — les
+38 paires, tokenizer compris) et fusionne les LoRA (`W ← W + (α/r)·B·A`) ;
+`drave --adaptateur-sortie F` applique le lecteur appris (`h × h` f32 brut) à l'état **brut** avant
+la norme finale d'une plage, sur les **trois** chemins de forward. Mesuré par `drave`, à
+profondeur 8, sur les deux morceaux jamais vus : `adaptateur` seul **272,45** (m32) / **168,85**
+(m20), `lora+adaptateur` **185,67** / **136,33** ⇒ **÷1,47** et **÷1,24** — le moteur retrouve
+torch à **2 %** (quantification Q8_0 : le modèle complet montre le même +3 %). Trois contrôles
+dans la 40ᵉ porte (`tools/porte-adaptateur-sortie.sh`) : écriture fidèle (7,4242 et 4 481 378,8799
+**au chiffre près** sur le fichier réécrit), invariant d'identité bit à bit, et **le drapeau
+agit** (une demi-échelle, que la norme ne peut pas absorber, multiplie la perplexité par 2,9) — les
+trois cas invalides rendant **code 2**. Fiche :
+[`rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md). **Ce qui reste** :
+trancher la **variabilité** — à graine fixée, le dessin A est reproductible au chiffre près, mais
+les bras qui rétropropagent à travers les couches donnent ÷1,32 · ÷1,46 · ÷1,43 sur m32 (trois
+exécutions) : le signe est stable, la taille varie de ±10 % — et mesurer la **génération libre**
+(décodage, pas perplexité) sur le chemin court. Fiche :
 [`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
 comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
 30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,
@@ -356,7 +370,10 @@ qui semblait donner raison à la tête est une **recopie de contenu**. Le protoc
 faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
 la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
 `tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`, `tools/n4_dessin_b.py` (dessin B,
-14/10 : LoRA sur les couches basses + adaptateur de sortie, portes de concordance torch ↔ moteur).
+14/10 : LoRA sur les couches basses + adaptateur de sortie, portes de concordance torch ↔ moteur),
+`tools/exporter_gguf_dense.py` (porte d'exécution : GGUF dense Qwen2, LoRA fusionné) et
+`tools/porte-adaptateur-sortie.sh` (40ᵉ porte : écriture fidèle, invariant d'identité, effet du
+drapeau, refus).
 
 **Ce qui a changé dans le moteur (12/10, nuit) — les mesures sont dans trois fiches.** La
 **prélecture parallèle** des experts (calcul d'une passe : 7,70 s → 3,65 s), la **lecture

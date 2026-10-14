@@ -53,6 +53,16 @@ l'entraînement — voir `reports/rapport-n4-dessin-b.md` § 4 pour la fuite que
   la lisibilité*, mais B sans lecteur entraîné ne se mesure pas — les deux se mesurent **ensemble**,
   ce que ce banc fait.
 
+## 1quater. La porte d'exécution est franchie (2026-10-14, 14 h) — le MOTEUR rend le même verdict
+
+`tools/exporter_gguf_dense.py` écrit un GGUF dense Qwen2 (LoRA fusionné, métadonnées copiées
+verbatim) et `drave --adaptateur-sortie F` applique le lecteur appris à l'état brut d'une plage.
+Mesuré par le moteur, profondeur 8, morceaux jamais vus : `adaptateur` **272,45** / **168,85**,
+`lora+adaptateur` **185,67** / **136,33** (÷1,47 et ÷1,24) — torch est retrouvé à 2 %.
+Détail et contrôles (écriture fidèle au chiffre près, invariant d'identité, drapeau qui agit,
+trois refus en code 2) : [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md).
+Ce qui reste ouvert : la variabilité entre exécutions (±10 %) et la **génération libre**.
+
 ## 2. Trois dessins possibles (du moins cher au plus cher)
 
 | # | dessin | ce qu'on entraîne | coût | ce que ça teste |
