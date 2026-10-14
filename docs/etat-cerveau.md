@@ -300,6 +300,13 @@ test) : le facteur va de 1,2 à 1,7, la direction ne change pas. *Deux contrôle
 **×10** (17,35 sur m20 contre 179,59 sur m32) et la **forme** de la courbe ne se transporte pas :
 de 15 à 30 morceaux, m32 gagne ÷1,45 et m20 ÷22,8. Seule la **direction** (plus de données aide)
 est robuste — aucune loi chiffrée ne se tire d'un seul morceau de test.
+> **Rectifié le 14/10** (voir le paragraphe ci-dessous et
+> [`reports/rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) § 4) : **ces trois chiffres
+> de m20 (17,35, et le ÷22,8 de la « falaise ») ont été mesurés avec m20 DANS la liste
+> d'entraînement** — donc ni « jamais vu », ni comparable à m32. Le facteur ×10 n'est pas établi,
+> la falaise est le passage du morceau dans l'entraînement, et le rapport 8/16 « de 1,2 à 1,7 »
+> perd son second point d'appui. Ce qui reste : la graine pèse 0,7 %, m32 est propre, et la
+> direction (plus de données aide) tient.
 Conclusion : entraîner le **chemin court** (N4) est la seule voie qui reste — agrandir la tête est
 mesuré contre-productif, et sortir plus tôt coûte peu. **Trois dessins proposés**, du moins cher au
 plus cher (adaptateur d'entrée → adaptateurs par couche → routeur de profondeur), avec **cinq portes
@@ -308,7 +315,26 @@ qui dit lequel** : l'état profond est prédictible à **R² 0,65** depuis l'ét
 **linéaire**, mais les pas élémentaires le sont mieux (0,78 et 0,75) → la composition n'est pas
 linéaire, **~35 % de la variance profonde est CRÉÉE par les couches intermédiaires**
 (`tools/predictibilite_etats.py`) : c'est le dessin **B** (adaptateurs par couche) qui l'attaque,
-pas le A. Fiche :
+pas le A.
+
+**Et le dessin B est mesuré (14/10) : il paie, et d'autant plus qu'on sort tôt.** À profondeur 8,
+sur les deux morceaux réellement jamais vus et **deux graines** : **203,32 / 210,44**
+(`lora+adaptateur`) contre **268,13 / 249,79** (adaptateur seul sur couches gelées) sur m32, soit
+**÷1,19 à ÷1,32** — et **rien** sur m20 (163,26 / 172,53 contre 165,65 / 160,56 : ÷1,01 et ×1,07,
+dans le bruit de graine). À profondeur 4 : **283,67 contre 520,28** (÷1,83) sur m32 et **187,98
+contre 307,88** (÷1,64) sur m20 — le gain **grandit quand on sort tôt**, ce que la prédictibilité
+des états annonçait. Le LoRA **seul**, à tête gelée, ne suffit pas (×1,33 et ×1,45 sur m20), sauf à
+profondeur 4 où l'état entraîné redevient lisible par la tête du modèle (÷1,84 / ÷1,13, une graine).
+Fiche : [`rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md). **Deux corrections de mesure
+y sont établies** : le m20 publié à **17,35** était mesuré avec **m20 dans la liste
+d'entraînement** (la fuite vaut **×8,0** à profondeur 8 et **×14,4** à profondeur 4 ; la commande
+du 13/10 — `seq 0 29` pour `--train` **et** `--test m20` — est retrouvée), et **14,2342 est un
+chiffre de CORPUS** (moyenne géométrique des 33 morceaux : 14,4283 mesuré ici), pas un chiffre de
+morceau — sur m32 le modèle complet vaut **7,42**, donc les rapports « ×N du modèle complet » des
+fiches C8 sont deux fois trop optimistes. **Ce qui reste** : porter ce modèle entraîné dans le
+**moteur** (`tools/exporter_gguf.py` ne fait que la famille MoE de Qwen3 — écrire un GGUF dense
+Qwen2 est le prochain pas), et trancher ÷1,2-1,9 contre le bruit de graine sur plus de morceaux de
+test. Fiche :
 [`rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md). *(Historique, gardé pour la
 comparaison : la tête entraînée généralise — ÷540 même texte, ×5,7 du modèle sur un texte neuf avec
 30 morceaux.)* Décodabilité mesurée à 4, 8, 12, 16,
@@ -329,7 +355,8 @@ l'UDHR **parallèle**, donc les morceaux ne sont pas indépendants, et le chiffr
 qui semblait donner raison à la tête est une **recopie de contenu**. Le protocole propre reste à
 faire : découper **par langue** au lieu de découper en morceaux consécutifs. Les autres questions :
 la **régularisation**, et **qualité × vitesse par profondeur**. Outils : `tools/c8_entrainer_tete.py`, `tools/c8_corpus.sh`,
-`tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`.
+`tools/c8_carte_profondeur.sh`, `tools/c8_sonde_lineaire.py`, `tools/n4_dessin_b.py` (dessin B,
+14/10 : LoRA sur les couches basses + adaptateur de sortie, portes de concordance torch ↔ moteur).
 
 **Ce qui a changé dans le moteur (12/10, nuit) — les mesures sont dans trois fiches.** La
 **prélecture parallèle** des experts (calcul d'une passe : 7,70 s → 3,65 s), la **lecture

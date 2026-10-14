@@ -31,6 +31,28 @@ fabriquer ces 35 % ; il ne peut que mieux *cadrer* ce qui existe déjà. C'est l
 (adaptateurs par couche) qui attaque la partie créée. A reste utile comme **contrôle** (il chiffre ce
 que « mieux cadrer » vaut), mais il ne peut pas être la réponse.
 
+## 1ter. Le dessin B est mesuré (2026-10-14) — et il paie, d'autant plus qu'on sort tôt
+
+Résultat, pas projet : `tools/n4_dessin_b.py`, protocole **propre** (m20 **retiré** de
+l'entraînement — voir `reports/rapport-n4-dessin-b.md` § 4 pour la fuite que cela a corrigée),
+29 morceaux d'entraînement, validation m30+m31, deux morceaux jamais vus, deux graines :
+
+| profondeur | `adaptateur` seul (dessin A) | `lora+adaptateur` | gain |
+|---:|---|---|---|
+| 8 (m32) | 268,13 / 249,79 | **203,32 / 210,44** | **÷1,19 à ÷1,32** |
+| 8 (m20) | 165,65 / 160,56 | 163,26 / 172,53 | ÷1,01 à ×1,07 (rien) |
+| 4 (m32) | 520,28 | **283,67** | **÷1,83** |
+| 4 (m20) | 307,88 | **187,98** | **÷1,64** |
+
+* la **direction** est celle que le § 1bis annonçait : plus on sort tôt, plus les couches basses
+  ont à apprendre, et plus le dessin B paie ;
+* mais le **LoRA seul, à tête gelée**, ne suffit pas (×1,33 et ×1,45 sur m20 à profondeur 8) : le
+  dessin B ne rend pas l'état nativement lisible, il le rend **exploitable par un lecteur
+  entraîné**. Exception mesurée : à profondeur **4**, le LoRA seul est bon (÷1,84 / ÷1,13) ;
+* **l'ordre proposé change donc** : A → B n'était pas le bon ordre d'attaque *pour la question de
+  la lisibilité*, mais B sans lecteur entraîné ne se mesure pas — les deux se mesurent **ensemble**,
+  ce que ce banc fait.
+
 ## 2. Trois dessins possibles (du moins cher au plus cher)
 
 | # | dessin | ce qu'on entraîne | coût | ce que ça teste |

@@ -73,6 +73,20 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
   `data/wikitext2_test.txt.ids` vient d'un **autre** tokenizer que Qwen2.5 — le modèle complet y
   rend **7 379** de perplexité au lieu de 16,6. Une mesure qui s'y appuie est absurde **sans que
   rien ne le signale** ⇒ tokeniser soi-même (`--tokenize --fichier TEXTE --sortie F`) ;
+- **un GGUF ne dit pas dans son NOM d'où il vient** : `models/Qwen2.5-0.5B-Q8_0.gguf` est
+  **l'Instruct**, pas le base — et le cache HF local `models--Qwen--Qwen2.5-0.5B` est le **base**.
+  Preuve : les normes (stockées en **f32** dans le GGUF) sont **identiques au bit** à celles de
+  l'Instruct et diffèrent de **1,5 à 2,5 %** de celles du base ; une différence f32 ne peut pas
+  être de la quantification. Le métadata du GGUF le dit (`finetune = Instruct`), le nom du fichier
+  non. Vérifier **avant** de comparer des états : la première sonde rendait cos 0,94 contre le
+  mauvais modèle ([`reports/rapport-n4-dessin-b.md`](reports/rapport-n4-dessin-b.md) § 1) ;
+- **un morceau de test se vérifie en COMPTANT** : `--train "$(seq 0 29 …)"` **contient** m20, donc
+  `--test m20` n'était pas un test — la fuite valait **×8** sur la perplexité, et trois énoncés
+  publiés en découlaient (`reports/rapport-c8-echelle.md`, rectification du 14/10). Le banc
+  `tools/n4_dessin_b.py` le dit maintenant lui-même (`⚠ FUITE`) ;
+- **un repère de CORPUS n'est pas un repère de morceau** : le « modèle complet 14,2342 » des fiches
+  C8 est la moyenne géométrique des 33 morceaux ; sur m32 le modèle complet rend **7,42**. Diviser
+  une perplexité **par morceau** par un chiffre de **corpus** double le rapport annoncé ;
 - **`--etat-sortie PREFIXE` écrit `PREFIXE.<position>`** : c'est un **préfixe de fichier**, pas un
   dossier. Donner un dossier fait écrire `dossier.4`, `dossier.5`… et la relecture répond « aucun
   état lu » — la capture, elle, a bien eu lieu ;

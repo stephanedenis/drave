@@ -16,6 +16,21 @@
 > **premiers** morceaux, **validation** sur m30+m31, **test** sur **m32** (jamais vu), 20 époques,
 > graine 0, GPU (`gpu-env`, torch 2.11)
 
+> **Rectification du 2026-10-14** — deux chiffres de cette fiche sont faux, et l'ancien est gardé à
+> côté du nouveau (règle du dépôt). **(1) m20 n'était pas « jamais vu »** : aux runs à k = 30, la
+> liste d'entraînement était construite par `seq 0 29`, donc `etat-m20` figurait **dans `--train`
+> et dans `--test`** (commande du 13/10 retrouvée dans le journal de session). La fuite vaut
+> **×8,0** à profondeur 8 et **×14,4** à profondeur 4 (mesuré le 14/10, même morceau, même
+> protocole, même validation, avec et sans le morceau dans la liste). Conséquences : le « **×10**
+> du morceau de test » (§ 2ter), la « **falaise ÷22,8** » de 15 à 30 morceaux (§ 2quinquies) et le
+> rapport 8/16 « **×1,17** » mesuré sur m20 (§ 2quater) tombent ; **m32 est propre** (absent de
+> toutes les listes) et la courbe de profondeur du § 2bis reste debout. **(2) « modèle complet
+> (14,2342) » est un chiffre de CORPUS**, pas un chiffre de morceau : la moyenne géométrique des 33
+> morceaux vaut 14,4283 (torch, fp32) et sur m32 le modèle complet rend **7,4242** (moteur) —
+> l'écart du § 2bis est donc **×24,2**, pas ×12,6, et tous les rapports « ×N du modèle complet » de
+> cette fiche sont deux fois trop optimistes. Détail et mesures :
+> [`rapport-n4-dessin-b.md`](rapport-n4-dessin-b.md) § 4 et § 4bis.
+
 ## 1. La courbe
 
 | morceaux d'entraînement (k) | meilleure époque (validation) | perplexité **TEST** (morceau jamais vu) | écart au modèle complet (14,2342) |
