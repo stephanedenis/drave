@@ -44,12 +44,15 @@ import json
 import math
 import pathlib
 import re
+import subprocess
 import time
 
 import numpy as np
 import torch
 import torch.nn as nn
 
+IDS_DEFAUT = "/tmp/campagne24/ids_0.5B-Q8.txt"
+GGUF_DEFAUT = "models/Qwen2.5-0.5B-Q8_0.gguf"
 SNAPSHOT_DEFAUT = ("/home/stephane/IA/cache/huggingface/hub/"
                    "models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/"
                    "7ae557604adf67be50417f59c2c2f167def9a775")
@@ -348,7 +351,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--modele", default=SNAPSHOT_DEFAUT)
-    ap.add_argument("--ids", default="/tmp/campagne24/ids_0.5B-Q8.txt")
+    ap.add_argument("--ids", default=IDS_DEFAUT)
     ap.add_argument("--morceaux", type=int, default=33)
     ap.add_argument("--taille", type=int, default=1024)
     ap.add_argument("--profondeur", type=int, default=8)
@@ -380,6 +383,19 @@ def main() -> int:
                     help="sauter les portes de concordance (déjà mesurées)")
     a = ap.parse_args()
 
+    # UN PRÉREQUIS DANS /tmp EST RÉGÉNÉRÉ, JAMAIS SUPPOSÉ (règle du 12/10, `tools/_corpus.sh`) :
+    # le corpus est `data/wikitext2_test.txt` tokenisé par le modèle — identique au bit près.
+    if not pathlib.Path(a.ids).exists():
+        if a.ids != IDS_DEFAUT:
+            raise SystemExit(f"{a.ids} absent (seul le chemin par défaut est régénérable)")
+        moteur = pathlib.Path("drave-core/target/release/drave")
+        if not (moteur.exists() and pathlib.Path(GGUF_DEFAUT).exists()):
+            raise SystemExit(f"{a.ids} absent ET non régénérable ({moteur} ou {GGUF_DEFAUT} "
+                             f"manquant) — lancer depuis la racine du dépôt")
+        print(f"corpus {a.ids} absent — régénéré depuis data/wikitext2_test.txt (comme les portes)")
+        pathlib.Path(a.ids).parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([str(moteur), GGUF_DEFAUT, "--tokenize",
+                        "--fichier", "data/wikitext2_test.txt", "--sortie", a.ids], check=True)
     ids = lire_ids(a.ids)
     morceaux = decouper(ids, a.morceaux, a.taille)
     idx_val = [int(x) for x in a.val.split(",")]
