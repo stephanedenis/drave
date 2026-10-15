@@ -159,6 +159,34 @@ morceaux les plus répétitifs contre cinq des plus variés, mêmes budgets, tes
   transférer un corpus hétérogène). C'est cohérent avec toute la nuit : **le corpus décide si l'on
   peut consolider, le lot décide seulement de l'ordre**.
 
+## 1sexies. Et la SÉLECTION PAR SIMILARITÉ (l'idée de la boucle C6 → C7) n'aide pas non plus
+
+Le plan décrit une boucle : le jour, la mémoire épisodique **retrouve** des passages ; la nuit, on
+**consolide ce qui a été retrouvé**. C'est une sélection **par pertinence**, et elle se teste sans le
+magasin : il suffit de choisir les morceaux dont le **profil de jetons** est le plus proche du texte
+que l'on voudra prédire (cosinus sur un hachage des jetons — quelques millisecondes, sans le modèle).
+
+| lot rejoué (5 morceaux) | choisi parce que… | m32 | m20 | m30 |
+|---|---|---|---:|---:|---:|
+| m3, m5, m6, m9, m15 | les plus **proches de m32** (0,795–0,826) | **−7,46 %** | −13,92 % | −6,76 % |
+| m4, m16, m17, m18, m19 | les plus **proches de m20** | −6,65 % | **−10,68 %** | −6,25 % |
+| *(référence)* m5, m12, m17 | **au hasard** | −7,21 % | −10,3 % | — |
+| *(référence)* m0, m5, m15, m18, m3 | les plus **répétitifs** | **−7,85 %** | **−14,54 %** | — |
+
+* **la similarité n'apporte rien** : sur m32, le lot « proche de m32 » fait −7,46 %, c'est-à-dire
+  **au niveau du tirage au hasard** (−7,21 %) et **sous** le lot répétitif (−7,85 %) ; sur m20, le
+  lot « proche de m20 » fait **−10,68 %**, c'est-à-dire **pire** que le hasard (−10,3 %) et
+  **nettement pire** que le lot répétitif (−14,54 %) ;
+* **c'est cohérent avec tout le reste de la nuit** : ce qui transfère est la **structure partagée du
+  corpus**, pas la ressemblance du lot avec le texte à venir. Choisir « ce qui ressemble à la
+  question » suppose que le transfert soit **local**, et il ne l'est pas ;
+* **et c'est cohérent avec ce que le magasin épisodique sait faire** : sa **récupération** par indice
+  extérieur est déjà mesurée comme **faible** (`porte-indice` est rouge depuis le 13/10 : 482 jetons
+  contre 459 pour le témoin) — la boucle C6 → C7 cumulerait donc deux maillons faibles ;
+* **la réserve est nommée** : ce test mesure la sélection **par similarité de contenu**, pas la
+  boucle **exécutée à travers le magasin** de l'moteur (qui rend un *index d'épisode*). Le principe
+  est mesuré ; le montage ne l'est pas — et vu le résultat, il n'est pas prioritaire.
+
 ## 2. Ce que ça change pour le protocole de sommeil
 
 1. **rejouer court et divers** — 3 morceaux répartis donnent −6,5 % en domaine pour un coût hors
@@ -170,7 +198,12 @@ morceaux les plus répétitifs contre cinq des plus variés, mêmes budgets, tes
    variés** (> 0,9 trigramme distinct par jeton : −7,9 % contre −11 à −14 % sur m20) — au-dessous du
    seuil, tous les lots se valent (§ 1quater). C'est le premier critère de la nuit qui départage
    quoi que ce soit, et il est **négatif** : il dit quoi éviter, pas quoi choisir ;
-5. et **la question qui reste** : un rejeu *répété* (plusieurs nuits sur les mêmes morceaux) ou un
+5. **et ce qui ne marche PAS, en une liste** (cinq critères essayés, un seul tient) : la
+   **surprise** (−4,86 %, pire que le hasard), la **proximité temporelle** (aucun effet), la
+   **dispersion du lot** (aucun effet), la **similarité au texte à prédire** (§ 1sexies : au niveau
+   du hasard, sous le lot répétitif) — et le seul qui tient est le **seuil de diversité**
+   (« éviter les lots les plus variés »), qui **classe sans sauver** ;
+6. et **la question qui reste** : un rejeu *répété* (plusieurs nuits sur les mêmes morceaux) ou un
    rejeu *séquentiel* (les morceaux dans l'ordre du texte) ne sont pas mesurés — le plan de sommeil
    les demanderait.
 
