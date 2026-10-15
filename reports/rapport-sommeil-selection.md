@@ -167,7 +167,7 @@ magasin : il suffit de choisir les morceaux dont le **profil de jetons** est le 
 que l'on voudra prédire (cosinus sur un hachage des jetons — quelques millisecondes, sans le modèle).
 
 | lot rejoué (5 morceaux) | choisi parce que… | m32 | m20 | m30 |
-|---|---|---|---:|---:|---:|
+|---|---|---:|---:|---:|
 | m3, m5, m6, m9, m15 | les plus **proches de m32** (0,795–0,826) | **−7,46 %** | −13,92 % | −6,76 % |
 | m4, m16, m17, m18, m19 | les plus **proches de m20** | −6,65 % | **−10,68 %** | −6,25 % |
 | *(référence)* m5, m12, m17 | **au hasard** | −7,21 % | −10,3 % | — |

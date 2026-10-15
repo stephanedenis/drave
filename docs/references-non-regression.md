@@ -21,6 +21,16 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 09 h 38** (**44 portes, 42 vertes, 2 rouges** *après correction*,
+> ~70 min) : après les changements de moteur pour la **vision** (MLP à deux matrices, fenêtre
+> locale conditionnelle, biais des LayerNorm, écriture des jetons d'image, `DRAVE_VISION_COUCHES`).
+> **Un troisième rouge est apparu, et il était de MA faute** : `porte-tableaux` refusait un tableau
+> de `reports/rapport-sommeil-selection.md` (séparateur à **6** cellules pour un en-tête à **5**) —
+> corrigé dans la minute, porte repassée **verte** (`✅ 460 fichier(s)`). **Le piège, et il est noté
+> ici : j'avais lancé la porte en la pipant dans `tail`, et je lisais « 460 fichier(s) examiné(s) »
+> comme un succès — c'était la ligne qui SUIT l'échec, et le code de sortie était celui de `tail`.**
+> Une porte ne se lit pas par sa dernière ligne, ni à travers un tuyau.
+>
 > **Passe du 2026-10-15 à 06 h 27** (**44 portes, 42 vertes, 2 rouges**, ~75 min) — **le meilleur
 > état du dépôt** : après la correction de **reproductibilité du harnais** (la graine était posée
 > après le tirage des LoRA : deux exécutions identiques rendent maintenant le même nombre **au bit
@@ -130,7 +140,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **42 vertes sur 44** (15/10 06 h 27), ≈75 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) |
+| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **42 vertes sur 44** (15/10 09 h 38), ≈70 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
