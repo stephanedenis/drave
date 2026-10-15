@@ -165,6 +165,36 @@
 > `/tmp/campagne24` et sa disparition avait rendu trois portes « code 2 » le 12/10.
 > Détail : `REPRISE.md` § 2.
 
+**0 bis. ▶ INDEX DE LA NUIT (27 commits, 16 fiches, 13 outils).** Les fiches, dans l'ordre de
+lecture conseillé : [`cerveau-facultes.md`](cerveau-facultes.md) (**la carte**, § 5 « l'architecture
+qui suit ») · [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) (−16,4 % en
+domaine, +1,3 % hors domaine) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md)
+(la courbe du rejeu) · [`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md)
+(combien bat quoi) · [`rapport-sommeil-deux-nuits.md`](../reports/rapport-sommeil-deux-nuits.md) ·
+[`rapport-consolidation-structure-partagee.md`](../reports/rapport-consolidation-structure-partagee.md)
+(ce qui se consolide est la structure partagée ; fusion de deux expériences) ·
+[`rapport-consolidation-balayage.md`](../reports/rapport-consolidation-balayage.md) (rang 4 :
+0,035 % des poids) · [`rapport-vie-quatre-jours.md`](../reports/rapport-vie-quatre-jours.md) ·
+[`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) ·
+[`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md) (4 objectifs, aucun ne
+converge) · [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) ·
+[`rapport-habituation.md`](../reports/rapport-habituation.md) ·
+[`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) ·
+[`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) ·
+[`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md) ·
+[`rapport-politique-budget-attention.md`](../reports/rapport-politique-budget-attention.md) ·
+[`rapport-budget-decision.md`](../reports/rapport-budget-decision.md).
+Outils : `carte-facultes.sh` (la carte exécutable) · `boucle-cerveau.sh` (la chaîne complète) ·
+`porte-cerveau.sh` (les facultés **composent**-elles ?) · `porte-consolidation.sh` ·
+`porte-cycle-c2.sh` · `porte-speculatif.sh` · `speculatif_drave.py` (le réflexe propose, le cerveau
+vérifie) · `politique-budget.sh` · `derouler.py` (le pilote de cycle) · `memoire_travail.py` ·
+`cycle_entraine.py`.
+**Et ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
+×1,5 d'accord, deux tentatives ont échoué) ; (2) le cycle — aucun objectif ne le fait converger ;
+(3) le **critère de choix du rejeu** (la dispersion et la surprise ont échoué, la proximité non
+plus) ; (4) la **vision**, bloquée par un modèle absent ; (5) la modulation **par jeton** (la
+politique par texte marche, mais elle exige deux passes).
+
 **0. ▶ LA NUIT DU 14 AU 15/10 — LE CERVEAU, FACULTÉ PAR FACULTÉ.** Huit rounds mesurés, tous avec
 leur fiche, et une carte : [`docs/cerveau-facultes.md`](cerveau-facultes.md) (chaque faculté, le
 mécanisme le plus efficient, son coût). En un paragraphe : **C7** la consolidation met l'expérience
