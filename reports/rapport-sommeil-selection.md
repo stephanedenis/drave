@@ -46,6 +46,27 @@ Ce que ça dit :
   faciles », qui coûte **+2,07 %** : rejouer ce que le modèle sait déjà est le seul choix qui
   **dégrade ailleurs**, ce qui est cohérent avec « on ne consolide pas ce qu'on sait ».
 
+## 1bis. La PROXIMITÉ temporelle ne compte pas non plus
+
+Dernière règle de sélection essayée, et la plus « cognitive » : rejouer ce qui **précède
+immédiatement** ce qu'on veut prédire. Le rejeu des **vingt derniers** morceaux (m12..m31, dont m31
+est le voisin direct de m32) contre les **vingt premiers** (m0..m19) :
+
+| rejeu (20 morceaux, 12 époques, graine 0) | m32 (jamais rejoué) | écart | hors domaine |
+|---|---:|---:|---:|
+| les **vingt premiers** (m0..m19) | 6,4622 | −9,98 % | +3,30 % |
+| les **vingt derniers** (m12..**m31** — le voisin immédiat de m32) | **6,4097** | **−10,71 %** | +1,91 % |
+
+* **0,7 point de mieux** pour le rejeu **adjacent** : c'est **dans le bruit** de ces bras (la graine
+  pèse 0,14 point, le morceau de test ×10 sur les valeurs absolues). La proximité temporelle
+  **n'apporte rien de mesurable** à ce volume — vingt morceaux du même corpus valent vingt morceaux,
+  qu'ils précèdent ou non le texte mesuré ;
+* c'est **cohérent avec les deux autres règles** : le hasard bat les premiers (−6,49 % contre
+  −5,51 % sur 3 morceaux), la surprise perd (−4,82 %), et la proximité ne se distingue pas. Ce qui
+  décide, c'est **le volume** — et le corpus, pas la position ;
+* **et le hors-domaine confirme l'absence de tendance** : +3,30 % (premiers) contre +1,91 %
+  (derniers) — deux mesures du même ordre, sans direction.
+
 ## 2. Ce que ça change pour le protocole de sommeil
 
 1. **rejouer court et divers** — 3 morceaux répartis donnent −6,5 % en domaine pour un coût hors

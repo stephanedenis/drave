@@ -4,20 +4,22 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15.md](2026-10-15.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 01:41 | `4123006b` | Le budget d'attention a-t-il une bonne taille par texte ? Le cout de la moitie varie de x180, un budget uniforme CASSE la tolerance sur 5 textes sur 8, et la politique par texte la tient pour -14,1 % de cles | `cerveau-facultes.md`, `references-non-regression.md`, `2026-10-15.md` (+5) |
+| 01:42 | `db89e8be` | Le budget d'une DECISION : la profondeur est le seul levier lineaire (357,8 -> 119,3 -> 59,6 M paires pour 24/8/4 couches), et la fenetre d'attention ne deplace PAS cette metrique — deux monnaies, le plan n'en comptait qu'une | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_attention.md` (+3) |
 
 ## Chiffres du jour
 
-`-14,1 %`
+`4 couches` · `-14,1 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-budget-decision.md](../reports/rapport-budget-decision.md)
 - [reports/rapport-politique-budget-attention.md](../reports/rapport-politique-budget-attention.md)
 
 <!-- notes -->
