@@ -149,7 +149,7 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | faculté | fiche |
 |---|---|
 | réflexes, chemin court | [`rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · [`rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) |
-| consolidation, budget, sélection, structure partagée | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) · [`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) · [`rapport-consolidation-structure-partagee.md`](../reports/rapport-consolidation-structure-partagee.md) |
+| consolidation, budget, sélection, structure partagée, quatre jours | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) · [`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) · [`rapport-consolidation-structure-partagee.md`](../reports/rapport-consolidation-structure-partagee.md) · [`rapport-vie-quatre-jours.md`](../reports/rapport-vie-quatre-jours.md) |
 | cycle C2 (capacité, puis entraîné) | [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) · [`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md) |
 | récurrence locale | [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | mémoire de travail, périphérie | [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) · [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · [`note-peripherie-c8.md`](note-peripherie-c8.md) |
