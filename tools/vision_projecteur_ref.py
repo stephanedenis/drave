@@ -11,9 +11,13 @@ C'est ce que fait ce script : il prend l'état post-tour écrit par le moteur (`
 donne au **merger de la référence** (`transformers`, `Qwen2VisionTransformerPretrainedModel.merger`,
 qui fait `mlp(ln_q(x).view(-1, hidden))`), puis compare aux jetons du moteur (`<banc>.jetons`).
 
-CE QU'IL A TROUVÉ (15/10, avant correctif) : **cosinus +0,7804, écart 66,6 %** — le moteur normalisait
-**par patch** (LayerNorm sur 1280) **avant** de fusionner, la référence **fusionne** (5120) **puis**
-normalise. Les normes concordaient (249,49 contre 246,92 : l'échelle était bonne), les valeurs non.
+CE QU'IL A TROUVÉ (15/10) : d'abord **cosinus +0,7804, écart 66,6 %** — et c'était **ma** faute : la
+première version nourrissait la référence en **ordre de lecture**, alors que `merger` regroupe les
+quatre entrées **consécutives** de la séquence qu'on lui donne (elle groupait donc les quatre patchs
+d'une LIGNE). Remise dans l'ordre **groupé** du processeur : **cosinus +0,99997509, écart 0,71 %** —
+la quantification Q8_0. **Le projecteur du moteur est celui de la référence.**
+*(Trois « explications » de l'écart ont été essayées et contredites avant celle-là, dont un
+« correctif » du moteur qui était faux — l'exécution l'a démasqué par un panic.)*
 
 Usage :
   python tools/vision_projecteur_ref.py --banc /tmp/tour.bin --hf <dossier safetensors>
@@ -43,6 +47,18 @@ def main() -> int:
 
     etat = lire(a.etat or f"{a.banc}.couche31")
     eng = lire(f"{a.banc}.jetons")
+    # ⚠ L'ÉTAT DU MOTEUR EST EN ORDRE DE LECTURE, LA RÉFÉRENCE ATTEND L'ORDRE GROUPÉ. `merger`
+    # applique `ln_q(x).view(-1, 5120)` : il regroupe les QUATRE ENTRÉES CONSÉCUTIVES de la séquence
+    # qu'on lui donne. Nourrie en ordre de lecture (ce que faisait la première version), elle groupe
+    # les quatre patchs d'une LIGNE — et l'écart mesuré (66,6 %) était celui de **ma** comparaison,
+    # pas du moteur. Remis dans l'ordre groupé (blocs en raster, puis (dy, dx)) :
+    # **cosinus +0,99997509, écart 0,71 %** — la quantification Q8_0.
+    n_cote = int(round(np.sqrt(etat.shape[0])))
+    fusion = 2
+    ordre = [(by * fusion + dy, bx * fusion + dx)
+             for by in range(n_cote // fusion) for bx in range(n_cote // fusion)
+             for dy in range(fusion) for dx in range(fusion)]
+    etat = np.stack([etat[py * n_cote + px] for (py, px) in ordre])
     import torch
     from transformers import AutoModelForImageTextToText
     m = AutoModelForImageTextToText.from_pretrained(a.hf, dtype=torch.float32)
@@ -62,7 +78,8 @@ def main() -> int:
     if cos < 0.999:
         print("  ❌ le projecteur s'écarte de la référence (ordre des opérations, ou fusion)")
         return 1
-    print("  ✅ le projecteur reproduit la référence (fusion → LayerNorm → mm.0 → GELU → mm.2)")
+    print(f"  ✅ le projecteur reproduit la référence (ln_q PAR PATCH → regroupement → mm.0 → GELU →")
+    print(f"     mm.2) · l'écart restant ({ecart * 100:.2f} %) est la quantification Q8_0 des poids")
     return 0
 
 

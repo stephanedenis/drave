@@ -491,6 +491,43 @@ d'origine) comparé au `merger` de la référence **sur le même état d'entrée
   de la passe en cours**, et c'est écrit ici pour que personne (moi compris) ne mesure sur ce
   binaire en croyant lire le source.
 
+## 2quaterdecies. LE PROJECTEUR EST VÉRIFIÉ — et l'écart de 66,6 % était **ma** comparaison
+
+Après trois explications essayées et contredites (et un « correctif » du moteur qui était faux), la
+cause est trouvée, et elle est **dans le script de comparaison** ✗ :
+
+> `merger` applique `ln_q(x).view(-1, 5120)` : il regroupe les **quatre entrées CONSÉCUTIVES** de la
+> séquence **qu'on lui donne**. La première version du script nourrissait la référence avec l'état du
+> moteur **en ordre de lecture** — elle regroupait donc les quatre patchs d'une **ligne**, pas d'un
+> bloc 2 × 2. L'écart de 66,6 % mesurait **l'ordre de mes entrées**, pas le projecteur.
+
+Remis dans l'**ordre groupé** du processeur (blocs en raster, puis `(dy, dx)` dans chaque bloc) :
+
+| | jetons | norme |
+|---|---:|---:|
+| **moteur** | 64 × 1536 | 249,485 |
+| **référence** (`merger`, même état, bon ordre) | 64 × 1536 | 249,481 |
+
+**cosinus +0,99997509 · écart relatif 0,71 %** — c'est-à-dire **la quantification Q8_0** des poids ✓.
+
+**Ce qui est donc établi, et c'est la fin du chemin image** :
+
+| étape du chemin de vision | état |
+|---|---|
+| embedding de patchs | ✅ **exact** (0,00 % sur 256 patchs, contre numpy **et** contre la référence) |
+| les **31 couches** de la tour | ✅ **écart max 7,58e-06**, vérifiées **en isolation** (la seule méthode qui survit à l'effondrement de l'attention) |
+| `v.post_ln` (LayerNorm **par patch**, 1280 poids, avec biais) | ✅ conforme à `ln_q` — **cosinus +1,00000012** sur le vecteur fusionné |
+| le **projecteur** (`mm.0` → GELU exact → `mm.2`) | ✅ **cosinus +0,99998, 0,71 %** (la quantification) |
+| l'**injection** dans le modèle de texte | ❌ non vérifiée (le chemin image → jetons du modèle) |
+
+**Et la porte les vérifie désormais** (`porte-vision.sh`, étapes 5 **et** 6) : couches 1, 15 et 31 en
+isolation (**6,3e-06**) et projecteur (**0,71 %**) — au dernier passage, `porte tenue` ✓.
+
+**La leçon, deux fois dans la même journée** : mesurer sur le même état d'entrée était la bonne
+méthode ✓, mais **deux fois** j'en ai tiré une conclusion fausse sur le *code* alors que le défaut
+était dans **ma mesure** — un « correctif » du moteur démenti par un panic, puis un écart de 66,6 %
+qui venait de l'ordre de mes entrées. *L'instrument se vérifie avant la conclusion.*
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 16 h 35 HAE.**
+**Mis à jour : 2026-10-15, 18 h 05 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -21,8 +21,9 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | les 32 couches à poids égaux | **justes sur les 8 premières** (1e-5 : les conventions sont bonnes) ; au-delà, l'écart croît (1e-3 → 0,75) — la tour **amplifie les arrondis**, et c'est mesuré **sur deux images** (une synthétique qui explose à 33 273, une naturelle qui reste à 249) |
 | pourquoi les couches profondes ne se comparent pas | **trouvé** : l'attention **s'effondre** (entropie 3,36 → **0,16** entre les couches 1 et 15) et **bascule** d'un patch à l'autre — l'écart est **discret** (variation totale 0,94), aucune tolérance ne peut le résorber |
 | **la tour est VÉRIFIÉE** | couche par couche, **en isolation** (même état d'entrée aux deux implémentations, comparaison de la couche seule) : **écart max 7,58e-06 sur les 31 couches** — les conventions du moteur sont justes dans toute la tour |
-| le **PROJECTEUR** | ⚠️ **écart de 66,6 % (cosinus +0,7804)** avec la référence, **sur le même état d'entrée** — cause **non trouvée**. Ce qui est conforme : la LayerNorm **par patch** (1280 poids, avec biais), le **GELU exact**, les formes et l'échelle. Pistes nommées : l'**ordre de fusion** des quatre patchs d'un groupe, ou la **disposition** des matrices `mm.0`/`mm.2` |
-| et une leçon pour moi | j'avais déduit un « correctif » de ce chiffre **sans lire la forme des tenseurs** : il était faux, et **l'exécution l'a démasqué en trois secondes** (panic : `post_ln` fait 1280 poids). Le code est revenu à l'original |
+| le **PROJECTEUR** | ✅ **VÉRIFIÉ** : cosinus **+0,99997509**, écart **0,71 %** (= la quantification Q8_0). L'écart de 66,6 % d'avant venait de **MA comparaison** — je nourrissais la référence avec l'état en **ordre de lecture** alors que son `view` regroupe les quatre entrées **consécutives** (donc une ligne, pas un bloc) |
+| le chemin image, complet | embedding **exact** · 31 couches **isolées à 7,58e-06** · `post_ln` conforme (**+1,00000012**) · projecteur **0,71 %** — la porte vérifie désormais les étapes 5 **et** 6 |
+| et une leçon pour moi, deux fois | j'ai tiré **deux** conclusions fausses sur le *code* alors que le défaut était dans **ma mesure** : un « correctif » démenti par un panic (`post_ln` fait 1280 poids), puis un écart de 66,6 % qui venait de l'**ordre de mes entrées**. *L'instrument se vérifie avant la conclusion.* |
 | ⚠️ **avertissement** | le **binaire** en place a été construit pendant cette investigation, quand le source portait ce correctif faux : **source et binaire ne sont pas le même programme** jusqu'à la reconstruction, qui aura lieu **dès la fin de la passe en cours** (on ne reconstruit pas pendant une passe). La reconstruction numpy du projecteur ne reproduit pas non plus les jetons du moteur (cosinus +0,8388) : il reste une différence **dans ce que le moteur fusionne**, et l'étape suivante est de le lui **faire écrire** |
 | ce qui reste | l'**injection** (le chemin image → jetons du modèle de texte) et la **vision multimodale de bout en bout** (une question sur une image) |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |

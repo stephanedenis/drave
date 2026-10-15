@@ -39,6 +39,8 @@ cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
 P=${P:-python3}
 MMPROJ=${MMPROJ:-models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf}
+HF=${HF:-/home/stephane/IA/cache/huggingface/qwen2vl-ref}
+HFPY=${HFPY:-/home/stephane/gpu-env/bin/python}
 TEXTE=${TEXTE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 T=${T:-/tmp/porte-vision}
 [ -x "$D" ] || { echo "  ❌ binaire du moteur absent : $D"; exit 2; }
@@ -67,12 +69,13 @@ fi
 # attentes de FORMAT ont dérivé depuis (elle lit un fichier `.poids` que le banc n'écrit plus de la
 # même façon). Une porte ne cache pas un outil cassé : elle tente, et elle **dit** quand elle n'a pas
 # pu comparer. Le jour où la référence suivra le format, la comparaison redeviendra un critère.
-timeout 2400 env DRAVE_VISION_POIDS=all DRAVE_VISION_COUCHES=32 \
+timeout 2400 env DRAVE_VISION_POIDS=all DRAVE_VISION_COUCHES=32 DRAVE_VISION_FUSION=1 \
     ${NOYAU:+DRAVE_VISION_NOYAU=$NOYAU} "$D" "$MMPROJ" --banc-vision "$T/tour.bin" > "$T/banc.log" 2>&1 \
     || { echo "  ❌ le banc de vision a échoué :"; tail -3 "$T/banc.log"; exit 1; }
 grep -q "v.patch_embd.weight : sortie 1280 · entrée 3 · noyau 14×14" "$T/banc.log" \
     || { echo "  ❌ la tour de vision n'a pas les dimensions attendues :"; grep "patch_embd" "$T/banc.log"; exit 1; }
 EMBEDING="embedding non mesuré"
+PROJ="projecteur non mesuré"
 ISOLE="couches isolées non mesurées"
 NOYAU=${NOYAU:-/tmp/vision-noyau-somme.f32}
 DRAVE_VISION_COTE=28 timeout 900 "$D" "$MMPROJ" --banc-vision "$T/tour28.bin" >> "$T/banc.log" 2>&1
@@ -137,5 +140,22 @@ else
     echo "     vérifiées ici (DRAVE_VISION_POIDS=all et le noyau sommé, voir la fiche)"
     ISOLE="couches isolées NON vérifiées"
 fi
-echo "  ✅ porte tenue (refus dit · $EMBEDING · formes du modèle · $ISOLE)"
+# ---- 6. LE PROJECTEUR, sur le MÊME état d'entrée (et dans l'ORDRE GROUPÉ)
+if [ -s "$T/tour.bin.couche31" ] && [ -s "$T/tour.bin.jetons" ]; then
+    HFPY=${HFPY:-/home/stephane/gpu-env/bin/python}
+    $HFPY tools/vision_projecteur_ref.py --banc "$T/tour.bin" --hf "$HF" > "$T/proj.log" 2>&1
+    if [ "$?" -eq 0 ] && grep -q "reproduit la référence" "$T/proj.log"; then
+        ECART_P=$(grep -oE "écart relatif [0-9.]+" "$T/proj.log" | grep -oE "[0-9.]+$")
+        echo "  ✅ 6. le PROJECTEUR reproduit la référence (écart $ECART_P % = la quantification)"
+        PROJ="projecteur juste"
+    else
+        echo "  ⚠️ 6. le projecteur n'a pas pu être comparé (référence absente, ou écart) :"
+        tail -3 "$T/proj.log"
+        PROJ="projecteur NON comparé"
+    fi
+else
+    echo "  ⚠️ 6. jetons ou état absents : le projecteur n'est pas comparé"
+    PROJ="projecteur NON comparé"
+fi
+echo "  ✅ porte tenue (refus dit · $EMBEDING · formes · $ISOLE · $PROJ)"
 exit 0

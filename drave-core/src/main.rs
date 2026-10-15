@@ -2296,6 +2296,20 @@ fn run_banc_vision(sortie: &str) {
             }
         }
 
+        // LA NORMALISATION FINALE DE LA TOUR, PAR PATCH — REMISE À SA PLACE après avoir été perdue
+        // par une série d'édits (le commentaire du projecteur affirmait qu'elle tournait « juste
+        // avant », alors qu'elle n'existait plus). La référence (`PatchMerger.forward`) applique
+        // `ln_q` à `x` (256 × 1280, donc PAR PATCH) avant le `view` qui regroupe les quatre patchs
+        // d'un groupe. Sans elle, le projecteur reçoit un état BRUT et rend une norme de 40 830 au
+        // lieu de 249 — exactement ce que la reconstruction numpy « sans normalisation » donnait.
+        {
+            let post_ln = g.dequant("v.post_ln.weight");
+            let post_lnb = g.dequant("v.post_ln.bias");
+            for pi in 0..n_patch {
+                norme_ln(&x[pi * e..(pi + 1) * e], &post_ln, &post_lnb, &mut xn);
+                x[pi * e..(pi + 1) * e].copy_from_slice(&xn);
+            }
+        }
         {
             let mut fb = std::io::BufWriter::new(
                 std::fs::File::create(format!("{sortie}.bloc")).expect("création"));
@@ -2343,6 +2357,12 @@ fn run_banc_vision(sortie: &str) {
         // (celle du banc 28 × 28) ne veut plus rien dire.
         let n_cote_p = (n_patch as f64).sqrt().round() as usize;
         let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
+        let fusion_dump = std::env::var("DRAVE_VISION_FUSION").is_ok();
+        let mut ffu = std::io::BufWriter::new(
+            std::fs::File::create(format!("{sortie}.fusion")).expect("création de la fusion"));
+        if fusion_dump {
+            for v in [(n_groupe as i32), (n1 as i32)] { ffu.write_all(&v.to_le_bytes()).unwrap(); }
+        }
         let mut y = vec![0f32; n_groupe * n2];
         // `tour` EST DÉJÀ NORMALISÉ (la boucle `post_ln` tourne sur `x` juste avant que `tour` en
         // soit le clone) : ne pas le normaliser une seconde fois. Un premier « correctif » a
@@ -2362,6 +2382,13 @@ fn run_banc_vision(sortie: &str) {
             }
             // La fusion est faite de patchs DÉJÀ normalisés (la référence : `ln_q` puis `view`).
             let fusionn = fusion.clone();
+            // CE QUE LE PROJECTEUR CONSOMME VRAIMENT, ÉCRIT TEL QUEL (`DRAVE_VISION_FUSION=1`) : trois
+            // explications de l'écart de 66,6 % avec la référence ont été essayées et contredites
+            // (ordre de normalisation, état non normalisé, double normalisation) — la seule façon de
+            // sortir de la déduction est de faire ÉCRIRE le vecteur que le moteur fusionne.
+            if fusion_dump {
+                for v in fusionn.iter() { ffu.write_all(&v.to_le_bytes()).unwrap(); }
+            }
             let mut h = vec![0f32; n0];
             for o in 0..n0 {
                 let mut acc = b0[o];
