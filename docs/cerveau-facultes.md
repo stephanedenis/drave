@@ -49,7 +49,7 @@ différents — c'est le choix de conception le plus net de la carte :
 |---|---|---|---|---|
 | **de travail** (quelques pas) | les K derniers pas d'un signal | **tampon exact** (`--memoire K`), lu directement | **0 paire** | ne généralise pas : elle rend ce qui est entré |
 | **épisodique** (la journée) | des épisodes entiers, adressables par contenu | magasin clé/valeur, hachage/LSH, écriture en **une passe** | 11 jetons sur 2 048 lus | **n'écrit rien dans les poids** — donc n'apprend pas |
-| **sémantique** (les poids) | ce qui se répète | **consolidation** : rejeu → LoRA → poids | **0,035 %** des poids au point efficient (rang 4 : −7,92 % ; rang 32, huit fois plus gros : −5,01 %) | **spécialise** : +1,3 % hors domaine |
+| **sémantique** (les poids) | ce qui se répète | **consolidation** : rejeu → LoRA → poids | **0,035 %** des poids au point efficient (rang 4, pas 1e-3 : −7,92 % ; rang 2 : 0,018 % pour −7,06 % ; rang 32, huit fois plus gros : −5,01 %) | **spécialise** : +1,3 % hors domaine |
 
 **Le classement d'efficience est net** : à court terme, un **tampon** bat tout (R² 1,000 pour
 zéro paire) ; à moyen terme, un **magasin épisodique** bat la consolidation (aucun oubli, coût

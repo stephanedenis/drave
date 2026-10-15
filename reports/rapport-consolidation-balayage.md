@@ -93,6 +93,43 @@ La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le ran
 * **le point retenu pour la nuit est donc (rang 4, pas 1e-3)** — et c'est celui qui a été mesuré le
   plus finement ici.
 
+## 3bis. La GRILLE rang × pas : le pas optimal DÉPEND du rang (l'interaction est mesurée)
+
+Neuf points, harnais **exact** (donc comparables au chiffre près), mêmes morceaux, mêmes époques.
+
+**Gain sur m32** (jamais rejoué) :
+
+| rang \ pas | 1e-4 | 3e-4 | 1e-3 |
+|---:|---:|---:|---:|
+| 2 | −7,33 % | −7,62 % | −7,06 % |
+| **4** | −7,10 % | −7,76 % | **−7,92 %** |
+| 8 | −6,67 % | **−7,37 %** | −6,93 % |
+
+**Gain sur m20** :
+
+| rang \ pas | 1e-4 | 3e-4 | 1e-3 |
+|---:|---:|---:|---:|
+| **2** | −13,48 % | −15,39 % | **−16,00 %** |
+| 4 | −15,32 % | −15,48 % | −15,99 % |
+| 8 | −15,68 % | −15,71 % | −15,61 % |
+
+Ce que la surface dit :
+
+* **le pas optimal n'est pas une constante, il dépend du rang** : à rang 4 c'est **1e-3**, à rangs 2
+  et 8 c'est **3e-4**. C'est **l'explication** de la « non-composition » du § 3 : les deux optima à
+  une dimension étaient pris sur **deux tranches différentes** de la surface, et ils ne pouvaient
+  donc pas composer. L'interaction est **réelle et mesurée**, pas un artefact ;
+* **le meilleur point est (rang 4, pas 1e-3) : −7,92 %** sur m32 — et il tient sur m20 (−15,99 %).
+  Juste derrière, **rang 2 à 1e-3** : **−16,00 %** sur m20 (le meilleur de cette colonne) pour
+  **90 112 paramètres, soit moitié moins** (0,018 % du modèle) — c'est l'option « encore plus sobre »
+  et elle ne coûte que 0,9 point sur m32 ;
+* **la surface est plate autour de l'optimum** (7,9 ± 0,3 % sur m32 pour les six meilleurs points) :
+  le choix rang 2-4 / pas 3e-4-1e-3 est robuste, et **tout ce qui est plus gros ou plus petit perd**
+  — c'est la même conclusion que le balayage à une dimension, mais elle ne dépend plus d'une tranche ;
+* **ce que ça change pour la carte** : le point efficient reste **rang 4** (0,035 % des poids) ; le
+  **rang 2** (0,018 %) est une variante défendable selon que l'on regarde m32 ou m20 — et les deux
+  sont à **un ordre de grandeur sous** le rang 32 qui, lui, perd 2,9 points.
+
 ## 4. Ce que ça change pour le cerveau
 
 * **« le plus efficient » a maintenant un chiffre** : une consolidation qui apprend 0,035 % des
@@ -101,8 +138,9 @@ La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le ran
 * **la règle « la donnée est la limite » a sa réciproque** : la capacité **au-delà** de la donnée
   est un coût, pas une réserve. Un cerveau qui dors sur peu d'expérience n'a pas besoin de beaucoup
   de synapses nouvelles — et en ajouter **dégrade** ;
-* **et la méthode est écrite** : les deux optima ne composent pas ⇒ tout nouveau réglage de
-  consolidation doit être **mesuré**, pas déduit d'un balayage précédent.
+* **et la méthode est écrite, avec sa raison** : les deux optima à une dimension ne composaient pas
+  **parce que le pas optimal dépend du rang** (§ 3bis) — une interaction mesurée, et la leçon tient :
+  un réglage ne se déduit pas d'un balayage pris sur une autre tranche, il se **mesure**.
 
 ## 4bis. LA REPRODUCTIBILITÉ DU HARNAIS — un DÉFAUT trouvé, nommé et CORRIGÉ (pas du bruit)
 
