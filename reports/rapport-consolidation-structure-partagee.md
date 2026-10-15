@@ -111,13 +111,35 @@ complet sur vingt morceaux de 1 024 jetons de chaque corpus :
   c'est exactement ce qui explique qu'une adaptation sur vingt morceaux ne transfère à aucun autre ;
 * **ce qui se consolide est donc bien ce que les textes ont en commun** : là où il n'y a pas de
   structure partagée, il ne reste que la mémorisation (−22,5 % sur le morceau rejoué) ;
-* **et c'est un critère PRATIQUE** : avant de dormir sur un rejeu, mesurer la **dispersion** du lot
-  (vingt perplexités) dit s'il y a quelque chose à consolider. C'est une mesure bon marché, et elle
-  est plus informative que la difficulté moyenne — la même leçon que la politique de budget
-  d'attention, où la difficulté ne prédisait rien (corrélation −0,019) ;
+* **ce qui en sortait comme critère est retiré** : « mesurer la dispersion du lot avant de dormir »
+  a été testé au § 2quater, et il est **contredit** (le lot dispersé transfère autant, et plutôt
+  mieux). La dispersion explique le **corpus**, pas le **lot** ;
 * *(mesure faite dans le harnais PyTorch, comme les chiffres du § 1 avant export ; les valeurs du
   moteur sur trois de ces morceaux — 25,07 · 4,81 · 17,11 — tombent dans la même étendue, et le
   reste de la fiche est mesuré au moteur.)*
+
+## 2quater. Et le critère que j'en ai tiré n'est PAS confirmé (test à volume égal)
+
+Le § 2ter proposait un critère pratique : « mesurer la **dispersion** du lot avant de dormir dit
+s'il y a quelque chose à consolider ». Il fallait le tester, et le test **le contredit** :
+
+| rejeu (5 morceaux de `corpus_en`, 10 époques, graine 0, même volume) | dispersion du lot | test m0 (jamais rejoué, perplexité de base 24,75) | écart |
+|---|---:|---:|---:|
+| **homogène** (m5, m15, m16, m18, m19 — autour de la médiane) | **CV 22,5 %** | 24,5350 | **−0,82 %** |
+| **dispersé** (m3, m4, m8, m10, m19 — les quintiles) | **CV 91,0 %** | 24,5024 | **−0,95 %** |
+
+* **le lot dispersé transfère légèrement MIEUX** (−0,95 % contre −0,82 %) : l'effet prédit est
+  **inversé**, et il est de **0,13 point** — c'est-à-dire **dans le bruit** de ces bras (la graine
+  pèse 0,14 point) ;
+* **les deux effets sont minuscules** : −0,8 % et −1,0 % sur un morceau difficile (24,7), à comparer
+  aux −7,4 % de wikitext2. Autrement dit, sur `corpus_en`, **aucun des deux lots ne transfère
+  vraiment** — ce qui est cohérent avec le § 2ter (le corpus est hétérogène) mais **ne confirme pas
+  la dispersion comme critère de choix** ;
+* **ce que ça laisse** : la dispersion explique **le corpus** (75 % contre 26 %), pas **le lot**.
+  Choisir cinq morceaux homogènes dans un corpus hétérogène ne crée pas la structure partagée qui
+  manque — et c'est la différence entre une **explication** et un **critère** ;
+* **et la leçon de méthode est celle du dépôt** : un critère proposé dans une fiche doit être
+  **testé par la fiche suivante**. Celui-ci a été testé le soir même, et il est **retiré**.
 
 ## 3. Ce que ça change pour le cerveau
 
