@@ -1923,11 +1923,15 @@ fn run_banc_vision(sortie: &str) {
             .and_then(|m| m.as_f64()).unwrap_or(1e-6) as f32;
         let n_layer = g.cfg("vision.block_count")
             .and_then(|m| m.as_u64()).unwrap_or(0) as usize;
-        let norme_ln = |v: &[f32], w: &[f32], dst: &mut [f32]| {
+        // ⚠ LE BIAIS COMPTE. La première version de ce banc n'appliquait que le POIDS de la
+        // LayerNorm — le mmproj de Qwen2-VL déclare `ln1.bias` et `ln2.bias`, et les ignorer
+        // décale toute la tour dès la PREMIÈRE couche. C'est ce que la comparaison couche par
+        // couche a désigné : cosinus −0,50 à la couche 0, norme 1073 contre 335.
+        let norme_ln = |v: &[f32], w: &[f32], b: &[f32], dst: &mut [f32]| {
             let moy: f32 = v.iter().sum::<f32>() / v.len() as f32;
             let var: f32 = v.iter().map(|a| (a - moy) * (a - moy)).sum::<f32>() / v.len() as f32;
             let inv = 1.0 / (var + eps).sqrt();
-            for i in 0..v.len() { dst[i] = (v[i] - moy) * inv * w[i]; }
+            for i in 0..v.len() { dst[i] = (v[i] - moy) * inv * w[i] + b[i]; }
         };
         let proj_l = |x: &[f32], w: &[f32], b: &[f32], n_in: usize, n_out: usize| {
             let mut y = vec![0f32; n_out];
@@ -1940,6 +1944,12 @@ fn run_banc_vision(sortie: &str) {
         };
         // 0 = le modèle ne déclare aucune fenêtre locale (Qwen2-VL) ; 8 = une couche complète
         // toutes les huit (Qwen2.5-VL).
+        // DIAGNOSTIC COUCHE PAR COUCHE : `DRAVE_VISION_COUCHES=8` écrit la sortie des huit
+        // premières couches dans `<sortie>.couche0` … `couche7`. Sans cela, la seule chose
+        // comparable à une référence est la FIN de la pile — et comparer des normes de fin ne dit
+        // pas OÙ l'écart commence (c'est ce qui a coûté une conclusion fausse le 15/10 à 09 h).
+        let couches_dump: usize = std::env::var("DRAVE_VISION_COUCHES").ok()
+            .and_then(|v| v.parse().ok()).unwrap_or(0);
         let fenetre_tour = g.cfg("vision.attention.window_size")
             .and_then(|m| m.as_u64()).unwrap_or(0) as usize;
         println!("[vision] fenêtre locale : {}", if fenetre_tour == 0 {
@@ -1951,7 +1961,9 @@ fn run_banc_vision(sortie: &str) {
         for l in 0..n_layer {
             let p = |n: &str| format!("v.blk.{l}.{n}");
             let ln1 = g.dequant(&p("ln1.weight"));
+            let ln1b = g.dequant(&p("ln1.bias"));
             let ln2 = g.dequant(&p("ln2.weight"));
+            let ln2b = g.dequant(&p("ln2.bias"));
             let wq = g.dequant(&p("attn_q.weight"));
             let bq = g.dequant(&p("attn_q.bias"));
             let wk = g.dequant(&p("attn_k.weight"));
@@ -1990,7 +2002,7 @@ fn run_banc_vision(sortie: &str) {
             }
             let (mut qq, mut kk, mut vv) = (Vec::new(), Vec::new(), Vec::new());
             for pi in 0..n_patch {
-                norme_ln(&x[pi * e..(pi + 1) * e], &ln1, &mut xn);
+                norme_ln(&x[pi * e..(pi + 1) * e], &ln1, &ln1b, &mut xn);
                 qq.extend(proj_l(&xn, &wq, &bq, e, e));
                 kk.extend(proj_l(&xn, &wk, &bk, e, e));
                 vv.extend(proj_l(&xn, &wv, &bv, e, e));
@@ -2093,7 +2105,7 @@ fn run_banc_vision(sortie: &str) {
             for pi in 0..n_patch {
                 let o = proj_l(&att[pi * e..(pi + 1) * e], &wo, &bo, e, e);
                 for i in 0..e { x[pi * e + i] += o[i]; }
-                norme_ln(&x[pi * e..(pi + 1) * e], &ln2, &mut xn);
+                norme_ln(&x[pi * e..(pi + 1) * e], &ln2, &ln2b, &mut xn);
                 let mut act = vec![0f32; nff];
                 if a_gate {
                     // SwiGLU : deux projections en parallèle, multipliées après activation.
@@ -2120,12 +2132,19 @@ fn run_banc_vision(sortie: &str) {
                     for i in 0..e { x[pi * e + i] += d_t[i]; }
                 }
             }
-            if l == 0 { poids_bloc = vec![ln1, ln2, wq, bq, wk, bk, wv, bv, wo, bo,
+            if l < couches_dump {
+                let mut fc = std::io::BufWriter::new(
+                    std::fs::File::create(format!("{sortie}.couche{l}")).expect("création"));
+                for v in [(n_patch as i32), (e as i32)] { fc.write_all(&v.to_le_bytes()).unwrap(); }
+                for v in x.iter() { fc.write_all(&v.to_le_bytes()).unwrap(); }
+            }
+            if l == 0 { poids_bloc = vec![ln1, ln1b, ln2, ln2b, wq, bq, wk, bk, wv, bv, wo, bo,
                                          w1, b1, w2, b2]; }
         }
         let post_ln = g.dequant("v.post_ln.weight");
+        let post_lnb = g.dequant("v.post_ln.bias");
         for pi in 0..n_patch {
-            norme_ln(&x[pi * e..(pi + 1) * e], &post_ln, &mut xn);
+            norme_ln(&x[pi * e..(pi + 1) * e], &post_ln, &post_lnb, &mut xn);
             x[pi * e..(pi + 1) * e].copy_from_slice(&xn);
         }
         {

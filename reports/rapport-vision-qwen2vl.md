@@ -78,6 +78,43 @@ relisant le patch, avant de mesurer quoi que ce soit.
   l'**ordre des têtes** (`nh_t = 16` en dur), et la **norme finale** (`v.post_ln`) dont le moteur
   applique l'epsilon lu dans `clip.vision.attention.layer_norm_epsilon`.
 
+## 2bis. La comparaison COUCHE PAR COUCHE a trouvé un VRAI bug — et fait passer le cosinus de −0,50 à +0,69
+
+La comparaison de fin ne disait pas *où* l'écart commençait ; le banc sait maintenant écrire la
+sortie de chaque couche (`DRAVE_VISION_COUCHES=N` → `<sortie>.couche0…`), et la référence sait
+rendre les mêmes (un crochet par bloc). Premier verdict, **avant** correction :
+
+| couche | moteur | référence | cosinus |
+|---|---:|---:|---:|
+| 0 | 1 073,3 | 335,1 | **−0,5035** |
+| 1 | 25 645,4 | 346,0 | +0,0830 |
+| 2 | 28 994,1 | 434,8 | −0,0632 |
+
+**La divergence commence à la COUCHE 0** — donc dans le premier bloc, pas à la fin. Et le coupable
+était lisible dans le code : **la LayerNorm n'appliquait que son POIDS, jamais son BIAIS** — le
+mmproj de Qwen2-VL déclare `ln1.bias` et `ln2.bias`, et les ignorer décale la tour **dès la première
+couche** (le banc avait été écrit pour une architecture dont les normes n'ont pas de biais).
+
+**Après correction du biais** (et de l'échelle d'attention, ramenée à `1/√dim_tête` — elle divisait
+par `√1280` au lieu de `√80`) :
+
+| couche | moteur | référence | cosinus | écart relatif |
+|---|---:|---:|---:|---:|
+| 0 | 327,6 | 335,1 | **+0,6867** | 78,3 % |
+| 1 | 370,5 | 346,0 | **+0,7676** | 70,9 % |
+| 2 | 412,6 | 434,8 | **+0,7996** | 61,9 % |
+
+* **les normes concordent maintenant à ~10 %** (327,6 contre 335,1 ; 370,5 contre 346,0) là où elles
+  différaient de 3,2× puis de 74× — la tour est **qualitativement la bonne** ;
+* **le cosinus est passé de −0,50 à +0,69** : le signe et la direction sont désormais corrects ;
+* **mais l'écart relatif reste de 60 à 78 %** — très au-dessus de la quantification (~1 %) : **il
+  reste une différence structurelle**, et les suspects sont maintenant précis : la **convention de
+  rotation 2-D** (le banc tourne les paires consécutives avec un secteur `(i/2) % sect_dims`), et
+  l'**ordre des têtes** (`nh_t = 16` écrit en dur, alors qu'il vient du modèle) ;
+* **et la leçon vaut pour tout le dépôt** : trois bugs d'architecture ont été trouvés en une heure
+  **parce qu'une seconde implémentation existait**. Sans la référence, le banc aurait continué de
+  « tourner » — c'est exactement ce que la fiche reprochait à l'état d'avant.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
