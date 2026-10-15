@@ -20,7 +20,7 @@
 | **attention sélective** | **fenêtre + puits** (moitié des clés) | +0,4 % à +3,0 % selon le texte ; **÷2,67** de clés à 512 jetons | clés ÷2, paires ÷2 | ✅ |
 | **mémoire de travail** | **tampon exact** `--memoire K` — et le réseau **ne l'apprend pas** (R² −1,09 → **−2,77** entraîné) | R² **1,000**, erreur nulle, poursuite de `v[t−8]` ; avec le tampon en entrée, le modèle gelé lit **+0,879** et l'entraîné **+0,964** | **0 paire de plus** | ✅ |
 | **mémoire épisodique** | magasin adressable par contenu (hachage/LSH) | élagué **83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact** | **11 jetons sur 2 048** | ✅ |
-| **consolidation** (sommeil) | rejeu → LoRA rang 8 sur 8 couches | **−16,4 %** en domaine sur des textes **jamais rejoués** ; **+1,3 %** hors domaine | 0,07 % des poids, 2 époques | ✅ |
+| **consolidation** (sommeil) | rejeu → LoRA rang 8 sur 8 couches | **−16,4 %** en domaine sur des textes **jamais rejoués** ; **+1,3 %** hors domaine ; courbe : −5,6 % (3 morceaux) → **−10,0 %** (20), coût hors domaine **bruité** (−0,4 à +3,3 %) | 0,07 % des poids, 2 époques | ✅ |
 | **modulation / arousal** | bus multi-canaux (statique, fichier, réseau) | canal neutre ⇒ empreintes **identiques** ; **aucun** signal scalaire n'améliore (négatif mesuré) | ~0 | 🟡 mécanique faite, signal non trouvé |
 | **inhibition / E-I** | gain par couche (côté amplification) | gain 0,75 ⇒ **−11,5 %** ; l'**inhibition dégrade** ; le ratio cortical de signes coûte **+4,9 à +10,8 %** à l'entraînement | 0 | ✅ |
 | **latéralité / corps calleux** | deux jumeaux, échange par couche | échange **exact**, gain **NUL** (36,1307 = 36,1307 : c'est une moyenne) | ÷2 de calcul | ✅ (résultat négatif) |
@@ -80,15 +80,25 @@ compte : on cherche naturellement la mémoire **dans** le réseau (récurrence, 
 les trois mesures de ce dépôt disent qu'elle est **à côté** — dans un tampon, dans un magasin, ou
 dans une consolidation séparée.
 
+## 3bis. Les facultés COMPOSENT-ELLES ? (mesuré le 14/10)
+
+Une carte ne vaut que si les facultés tiennent **ensemble**. `tools/porte-cerveau.sh` exécute
+**quatre facultés dans une seule commande** (`--entree` + `--entree-memoire 3` + `--delai 2` +
+`--recurrence 0,5`) et vérifie que **chacune agit encore** quand les autres sont allumées :
+déterminisme au bit près, la mémoire muette ? non, le délai muet ? non, la récurrence muette ?
+non — et **les quatre configurations donnent quatre sorties distinctes** (aucun drapeau inerte).
+C'est la seule chose que cette porte vérifie : la **coexistence**, pas les facultés (chacune a la
+sienne).
+
 ## 4. Où chaque chiffre se vérifie
 
 | faculté | fiche |
 |---|---|
 | réflexes, chemin court | [`rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · [`rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) |
-| consolidation | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) |
+| consolidation, budget du sommeil | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) |
 | cycle C2 | [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) |
 | récurrence locale | [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
-| mémoire de travail, périphérie | [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md), [`note-peripherie-c8.md`](note-peripherie-c8.md) |
+| mémoire de travail, périphérie | [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) · [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · [`note-peripherie-c8.md`](note-peripherie-c8.md) |
 | mémoire épisodique | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh` |
 | fenêtre et puits d'attention | [`rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) · [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md) |
 | bus de modulation | `porte-bus.sh`, `porte-bus-socket.sh` |
