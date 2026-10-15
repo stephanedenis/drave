@@ -96,6 +96,39 @@ La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le ran
 * **et la méthode est écrite** : les deux optima ne composent pas ⇒ tout nouveau réglage de
   consolidation doit être **mesuré**, pas déduit d'un balayage précédent.
 
+## 4bis. LA REPRODUCTIBILITÉ DU HARNAIS — 0,4 point à graine ÉGALE (et ce que ça recalibre)
+
+Trouvé en fin de nuit, en vérifiant qu'un chiffre de la **boucle du cerveau** ne bougeait pas entre
+deux exécutions : **il bouge.** Deux exécutions **identiques** (mêmes morceaux, mêmes époques, même
+graine 0, même époque retenue — la 3ᵉ) :
+
+| exécution | m4 (modèle complet) | écart |
+|---|---:|---:|
+| 1 | 12,6829 | −6,11 % |
+| 2 | 12,7362 | −5,72 % |
+
+**0,4 point d'écart pour la MÊME configuration** — c'est-à-dire **plus** que le « bruit de graine »
+de 0,14 point que les fiches de la nuit citaient (celui-là mesurait deux **graines différentes** ;
+celui-ci mesure la **même**, et il est trois fois plus grand). La cause est le harnais PyTorch :
+`torch.manual_seed` ne rend pas déterministes les **noyaux cuDNN/cuBLAS** (une réduction qui change
+d'ordre d'une exécution à l'autre suffit), et l'outil ne demande pas le mode déterministe.
+
+**Ce que ça recalibre, dans les deux sens** :
+
+* **au-dessus du bruit (conclusions tenues)** : le balayage de rang (**2,35 points** entre rang 4 et
+  rang 32), le seuil de diversité (**6,6 points** sur m20), la distillation (22,1 % contre 51,0 %
+  d'accord), la courbe du rejeu (4,4 points entre 3 et 20 morceaux), les deux nuits (−7,85 % puis
+  −0,30 %) ;
+* **dans le bruit (conclusions à lire comme « rien de démontré »)** : **les deux optima qui ne
+  composent pas** (0,32 point — écrit comme « pas de composition démontrée », et c'est encore plus
+  juste maintenant), **le rang 2 contre le rang 8** (−6,61 % contre −6,93 %), **le pas 1e-3 contre
+  1e-4** (−6,93 % contre −6,41 %... hmm, 0,52 point, à la limite), et **l'ordre des règles de
+  sélection** (−5,51 % contre −4,82 %, soit 0,7 point — au-dessus du bruit, mais pas de beaucoup) ;
+* **et la leçon pour la suite** : toute comparaison de moins d'un point, dans ce harnais, doit être
+  **répétée** (deux exécutions au minimum) avant d'être publiée comme un classement. Le balayage de
+  la fiche porte sur des écarts de 2 points et plus ; ses **points individuels** ne sont pas
+  reproductibles au dixième, et c'est dit.
+
 ## 5. Ce que cette fiche ne dit pas
 
 * **huit configurations, une graine, un jeu de morceaux** : l'optimum de rang (4) et de pas (3e-4)

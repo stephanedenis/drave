@@ -141,9 +141,10 @@ La suite annoncée au § 1ter (« les deux lots sur quatre morceaux de test, et 
 
 * **trois morceaux, une graine, un seul corpus** : la « règle au hasard » est **un tirage** (m5,
   m12, m17), pas une espérance — il faudrait plusieurs tirages pour dire que le hasard *bat* les
-  premiers, et l'écart (1 point) est du même ordre que le bruit de graine de ces bras (±10 % sur
-  les valeurs absolues, `rapport-n4-porte-execution.md` § 4). **Ce qui est solide, c'est que la
-  surprise ne gagne pas** ;
+  premiers, et l'écart (1 point) est du même ordre que le **bruit du harnais à graine égale**
+  (**0,4 point**, mesuré en fin de nuit : `rapport-consolidation-balayage.md` § 4bis). **Ce qui est
+  solide, c'est que la surprise ne gagne pas**, et que l'ordre des règles du milieu (0,7 point) est
+  à la limite du mesurable ;
 * **rien sur la sélection par nouveauté au sens du dépôt** (la règle hebbienne mesurée en E7, qui
   *empire* la règle locale) : les deux « nouveautés » ne sont pas la même chose et ne sont pas
   comparées ;
