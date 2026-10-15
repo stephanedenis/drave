@@ -24,7 +24,7 @@
 
 | # | capacité | état | le chiffre qui le prouve | où |
 |---|---|---|---|---|
-| **C1** | graphe de régions | ✅ fait | la topologie **pilote** le découpage : même perplexité, écart **0,00e0** ; relais 3 régions / 3 instances : **0,00e0** | `tools/porte-topologie.sh` · fiche 34 |
+| **C1** | graphe de régions · **et la perception VISUELLE** | ✅ fait | la topologie **pilote** le découpage : même perplexité, écart **0,00e0** ; relais 3 régions / 3 instances : **0,00e0** | `tools/porte-topologie.sh` · fiche 34 |
 | **C2 (cycle 2 régions)** | la validation du plan | ✅ **FAIT le 14/10 — et le cycle non entraîné DIVERGE** | le validateur accepte un cycle **si et seulement si** un de ses liens est `recurrent` avec `delai_ms` > 0 ; le pilote `tools/derouler.py` **déroule** les pas de temps (état brut transporté par `DRAVE_ETAT_ENTREE`, format REFD). Mesuré : deux régions enchaînées = le modèle d'un seul tenant (**14,6496 = 14,6496**, écart **0,00e0**), le **pas 1** du graphe récurrent = cette même référence (**0,00e0**), puis la boucle amplifie : **275,52 → 940,22 → 2 988,46** en 4 pas ; trajectoire **déterministe** (`cmp`), coût publié (**N pas × régions** exécutions), refus en **code 3** (cycle nu, récurrent sans délai) et **code 2** (pilote : `--pas-temps 0`, région distante, entrées multiples) | `porte-cycle-c2.sh` · [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) · [`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md) · [`note-cycle-c2.md`](note-cycle-c2.md) |
 | **C2 (récurrence)** | boucle sur soi (`--recurrence α`) | 🟡 **implémentée, bornée… et NUISIBLE** | le zéro est exact au bit près, la boucle est déterministe et ne coûte aucune paire ; mais la lecture du signal **présent** tombe de R² **0,906** à **0,112** (α = 0,5) et celle du passé de −0,35 à **−4,87** : la boucle réinjecte la **transformation** du réseau, pas son entrée ⇒ un écho, pas une mémoire | `tools/porte-recurrence.sh` · [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | **C2** | deux entrées, une règle | ✅ fait | deux entrées se **somment**, la somme **arbitre** (7/7) ; bascule à **α = 0,60** contre **0,509** prédit | fiche 03 |
@@ -204,6 +204,15 @@ conditionnelle** (Qwen2-VL n'en a pas), écriture des jetons d'image, et surtout
 LayerNorm, ignorés** (couche 0 : cosinus **−0,50 → +0,69**). Il reste un écart structurel de 60 à
 78 % (la quantification vaut 1 %), avec deux suspects nommés : la rotation 2-D et l'ordre des têtes.
 Fiche : [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md).
+
+**La VISION (15/10, après-midi)** : modèle téléchargé (Qwen2-VL-2B + `mmproj`), **cinq bugs
+d'architecture corrigés** (MLP deux matrices/quick-GELU · fenêtre locale **conditionnelle** · jetons
+d'image écrits · **biais des LayerNorm ignorés** · **convention de rotation 2-D** lue dans la source),
+la cause de l'écart trouvée (**le `mmproj` a perdu une tranche temporelle** du noyau de patchs), et le
+chemin image **vérifié** : embedding **exact** (0,00 %) · **31 couches en isolation à 7,58e-06** ·
+`post_ln` conforme (**+1,00000012**) · projecteur **0,71 %** (la quantification). `porte-vision.sh`
+(45ᵉ) vérifie les couches isolées **et** le projecteur. **Reste** : l'**injection** (image → modèle de
+texte) — c'est-à-dire la vision **multimodale** de bout en bout, qui est un projet, pas une mesure.
 
 **Ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
 ×1,5 d'accord, deux tentatives ont échoué) ; (2) le cycle — aucun objectif ne le fait converger ;
