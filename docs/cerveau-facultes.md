@@ -90,6 +90,24 @@ non — et **les quatre configurations donnent quatre sorties distinctes** (aucu
 C'est la seule chose que cette porte vérifie : la **coexistence**, pas les facultés (chacune a la
 sienne).
 
+## 3ter. La BOUCLE complète, en une commande (mesurée le 15/10 à 00 h 30)
+
+`tools/boucle-cerveau.sh` exécute **la chaîne entière** sur un texte et la mesure au moteur à chaque
+maillon — c'est la démonstration que les facultés **s'enchaînent** (les cartes montrent qu'elles
+existent, la porte-cerveau qu'elles **coexistent**, celle-ci qu'elles **s'enchaînent**) :
+
+| maillon | ce qu'il fait | ce qu'il a rendu (wikitext2, Qwen2.5-0.5B) |
+|---|---|---|
+| **percevoir** | `--tokenize` | **85 626** jetons, texte reconstruit **identique** |
+| **retenir** | `--entree-memoire 8 --recurent` | déterministe au bit près, sortie **différente** sans la mémoire |
+| **se souvenir** | `--episodique-essai` | round-trip **300/300 au bit près** |
+| **consolider** | 3 morceaux rejoués, 8 époques, LoRA rang 8 sur 8 couches, export, **mesure moteur** | **17,0197 → 16,3429 (−3,98 %)** sur un morceau **jamais rejoué** (jeton 20 000) |
+| **agir** | `--infer` (complet contre chemin court) | le réflexe produit **16 jetons différents** — un autre agent, comme mesuré |
+
+*(La première version mesurait la perplexité sur les **1 024 premiers jetons** — c'est-à-dire le
+**premier morceau rejoué** : elle annonçait −26 % de « consolidation » qui était de la récitation.
+Attrapé en relisant le script, pas par un chiffre — et corrigé par `--depuis 20000`.)*
+
 ## 4. Où chaque chiffre se vérifie
 
 | faculté | fiche |
@@ -107,6 +125,7 @@ sienne).
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | distillation (E5) | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) |
+| la chaîne complète | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
 
 **Ce que cette carte ne dit pas** : elle ne dit pas qu'un tel cerveau **bat** un transformeur sur

@@ -637,9 +637,13 @@ def main() -> int:
         if a.sauver:
             import torch as _t
             chemin = f"{a.sauver}-{bras.replace('+', '_')}.pt"
+            # les morceaux de test sont nommés par leur INDICE (m0, m4, m32…) : le bloc de
+            # sauvegarde ne doit pas supposer m32/m20 (attrapé par la boucle du cerveau, qui
+            # teste m4).
             _t.save({"bras": bras, "graine": a.graine, "profondeur": a.profondeur,
                      "rang": a.rang, "alpha": a.alpha, "epoque": r["epoque"],
-                     "val": r["val"], "m32": r["m32"], "m20": r["m20"],
+                     "val": r["val"],
+                     "tests": {k: r[k] for k in r if k.startswith("m") and isinstance(r[k], float)},
                      "adaptateur": r["tenseurs"]["adaptateur"], "lora": r["tenseurs"]["lora"]},
                     chemin)
             print(f"    poids écrits : {chemin}")
