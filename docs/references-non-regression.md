@@ -148,6 +148,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
+| le serveur de documentation | `tools/serveur-doc.py` (port 8787) | `tools/serveur-doc.py` · [`docs/en-cours.md`](../docs/en-cours.md) — il **ne juge rien** : il rend les documents et affiche « en ce moment », écrit à la main à chaque round |
 | toutes les portes | `tools/toutes-les-portes.sh` | **45 portes** ; dernière passe : **43 vertes sur 45** (15/10 11 h 21), ≈80 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 

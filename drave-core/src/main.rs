@@ -2178,8 +2178,33 @@ fn run_banc_vision(sortie: &str) {
                 for v in [(n_patch as i32), (e as i32)] { fc.write_all(&v.to_le_bytes()).unwrap(); }
                 for v in x.iter() { fc.write_all(&v.to_le_bytes()).unwrap(); }
             }
-            if l == 0 { poids_bloc = vec![ln1, ln1b, ln2, ln2b, wq, bq, wk, bk, wv, bv, wo, bo,
-                                         w1, b1, w2, b2]; }
+            // La couche dont on décharge les poids : `DRAVE_VISION_POIDS=N` (défaut 0). Un NUMÉRO
+            // plutôt qu'un drapeau, parce que vérifier une couche PROFONDE à poids égaux est le
+            // seul moyen de savoir si les conventions tiennent au bout de la pile — et pas
+            // seulement dans la première couche.
+            let couche_poids: usize = std::env::var("DRAVE_VISION_POIDS").ok()
+                .and_then(|v| v.parse().ok()).unwrap_or(usize::MAX);
+            if l == couche_poids {
+                poids_bloc = vec![ln1.clone(), ln1b.clone(), ln2.clone(), ln2b.clone(),
+                                  wq.clone(), bq.clone(), wk.clone(), bk.clone(),
+                                  wv.clone(), bv.clone(), wo.clone(), bo.clone(),
+                                  w1.clone(), b1.clone(), w2.clone(), b2.clone()];
+                // LES POIDS DÉQUANTIFIÉS SONT ÉCRITS quand on le demande : c'est le seul moyen de
+                // comparer le moteur à une formule indépendante **à poids égaux** — sans quoi un
+                // écart mêle la quantification (Q8_0 contre f32) et les conventions, et on ne peut
+                // pas savoir laquelle des deux on mesure.
+                {
+                    let mut fp = std::io::BufWriter::new(
+                        std::fs::File::create(format!("{sortie}.poidsbloc")).expect("création"));
+                    for v in [(e as i32), (nff as i32), (nh_t as i32), (l as i32)] {
+                        fp.write_all(&v.to_le_bytes()).unwrap();
+                    }
+                    for tenseur in poids_bloc.iter() {
+                        for v in tenseur.iter() { fp.write_all(&v.to_le_bytes()).unwrap(); }
+                    }
+                    println!("[vision] poids de la COUCHE {l} écrits ({nff} cachés, {nh_t} têtes)");
+                }
+            }
         }
         let post_ln = g.dequant("v.post_ln.weight");
         let post_lnb = g.dequant("v.post_ln.bias");
