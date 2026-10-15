@@ -21,6 +21,14 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 11 h 21** (**45 portes, 43 vertes, 2 rouges**, ~80 min) — **la 45ᵉ porte
+> (`porte-vision`) y est verte du premier coup** : elle vérifie le **refus** d'un modèle sans tour
+> de vision, les **formes** du modèle (256 × 1280 et 64 × 1536) et **mesure** la tour **sans la
+> juger** — en **disant** que l'embedding de patchs n'a **pas** pu être comparé (la référence
+> numpy n'accepte que l'image 28 × 28 et ses attentes de format ont dérivé). Les deux rouges
+> restent les structurels (`porte-indice`, `porte-melange`), et **aucune valeur de porte n'a
+> bougé**.
+>
 > **Passe du 2026-10-15 à 09 h 38** (**44 portes, 42 vertes, 2 rouges** *après correction*,
 > ~70 min) : après les changements de moteur pour la **vision** (MLP à deux matrices, fenêtre
 > locale conditionnelle, biais des LayerNorm, écriture des jetons d'image, `DRAVE_VISION_COUCHES`).
@@ -140,7 +148,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **45 portes** (la 45ᵉ, `porte-vision`, vérifie le refus, les formes et **mesure** la tour sans la juger) ; dernière passe : **42 vertes sur 44** (15/10 09 h 38), ≈70 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **45 portes** ; dernière passe : **43 vertes sur 45** (15/10 11 h 21), ≈80 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
