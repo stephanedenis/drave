@@ -94,6 +94,31 @@ mêmes budgets.
   apprise »). La somme est le cas le plus simple, et il est mesuré **négatif** au-delà d'un
   spécialiste.
 
+## 2ter. L'hypothèse « corpus_en est hétérogène » est VÉRIFIÉE (dispersion ×2,9)
+
+Le § 1 expliquait le +1,2 % par une **hypothèse** : `corpus_en` ne serait pas un domaine mais
+plusieurs. Elle est maintenant mesurée — la **dispersion des morceaux**, perplexité du modèle
+complet sur vingt morceaux de 1 024 jetons de chaque corpus :
+
+| corpus | médiane | min | max | écart-type | **coefficient de variation** | max/min |
+|---|---:|---:|---:|---:|---:|---:|
+| **wikitext2** | 15,95 | 7,38 | 25,91 | 4,02 | **26,1 %** | 3,5 |
+| **corpus_en** | 9,21 | **2,65** | **35,89** | 8,95 | **75,4 %** | **13,5** |
+
+* **corpus_en est 2,9 fois plus dispersé** que wikitext2 : ses morceaux vont de **2,65** à **35,89**
+  de perplexité (un facteur **13,5**), là où ceux de wikitext2 tiennent dans un facteur 3,5. Ce n'est
+  pas « plus dur » (sa médiane est **plus basse** : 9,21 contre 15,95) — c'est **plus varié**, et
+  c'est exactement ce qui explique qu'une adaptation sur vingt morceaux ne transfère à aucun autre ;
+* **ce qui se consolide est donc bien ce que les textes ont en commun** : là où il n'y a pas de
+  structure partagée, il ne reste que la mémorisation (−22,5 % sur le morceau rejoué) ;
+* **et c'est un critère PRATIQUE** : avant de dormir sur un rejeu, mesurer la **dispersion** du lot
+  (vingt perplexités) dit s'il y a quelque chose à consolider. C'est une mesure bon marché, et elle
+  est plus informative que la difficulté moyenne — la même leçon que la politique de budget
+  d'attention, où la difficulté ne prédisait rien (corrélation −0,019) ;
+* *(mesure faite dans le harnais PyTorch, comme les chiffres du § 1 avant export ; les valeurs du
+  moteur sur trois de ces morceaux — 25,07 · 4,81 · 17,11 — tombent dans la même étendue, et le
+  reste de la fiche est mesuré au moteur.)*
+
 ## 3. Ce que ça change pour le cerveau
 
 * **la consolidation n'est pas une faculté uniforme** : elle vaut ce que vaut la **structure
@@ -121,6 +146,6 @@ mêmes budgets.
 * **la somme des déplacements n'est pas la seule fusion possible** : moyenne, concaténation,
   routage par entrée (un vrai corps calleux) ne sont pas essayés ;
 * **rien sur la génération** : toutes les mesures sont des perplexités ;
-* **le corpus_en n'est pas décrit** : « hétérogène » est une **hypothèse** qui explique le +1,2 %,
-  et elle n'est pas mesurée (il faudrait mesurer la dispersion des morceaux, p. ex. la distance
-  entre leurs distributions).
+* **l'hétérogénéité est mesurée par la dispersion des perplexités** (§ 2ter), pas par une distance
+  entre distributions : c'est un **indice**, pas une preuve — deux corpus également dispersés
+  pourraient transférer différemment.
