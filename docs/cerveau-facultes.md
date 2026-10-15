@@ -17,7 +17,7 @@
 |---|---|---|---|---|
 | **perception** (entrées) | région frontière `--entree signal:F`, canal, gain, jeton | entrée constante ⇒ sortie constante, **au bit près** | **0 paire** | ✅ |
 | **réflexes** | chemin court **entraîné** (LoRA couches basses + lecteur de sortie) | **÷1,47** (m32) et **÷1,24** (m20) à 8 couches, lus par le moteur | 0,07 % des poids | ✅ |
-| **attention sélective** | **fenêtre + puits** (moitié des clés) | +0,4 % à +3,0 % selon le texte ; **÷2,67** de clés à 512 jetons | clés ÷2, paires ÷2 | ✅ |
+| **attention sélective** | **fenêtre + puits** (moitié des clés) — et **où** dépenser est un levier de second ordre | +0,4 % à +3,0 % selon le texte ; **÷2,67** de clés à 512 jetons ; à clés égales, uniforme et alterné se disputent le point (−0,41 % sur m32, +1,51 % sur m20) | clés ÷2, paires ÷2 | ✅ |
 | **mémoire de travail** | **tampon exact** `--memoire K` — et le réseau **ne l'apprend pas** (R² −1,09 → **−2,77** entraîné) | R² **1,000**, erreur nulle, poursuite de `v[t−8]` ; avec le tampon en entrée, le modèle gelé lit **+0,879** et l'entraîné **+0,964** | **0 paire de plus** | ✅ |
 | **mémoire épisodique** | magasin adressable par contenu (hachage/LSH) | élagué **83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact** | **11 jetons sur 2 048** | ✅ |
 | **consolidation** (sommeil) | rejeu → LoRA rang 8 sur 8 couches | **−16,4 %** en domaine sur des textes **jamais rejoués** ; **+1,3 %** hors domaine ; courbe : −5,6 % (3 morceaux) → **−10,0 %** (20), coût hors domaine **bruité** (−0,4 à +3,3 %) | 0,07 % des poids, 2 époques | ✅ |
@@ -95,12 +95,12 @@ sienne).
 | faculté | fiche |
 |---|---|
 | réflexes, chemin court | [`rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · [`rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) |
-| consolidation, budget du sommeil | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) |
+| consolidation, budget et sélection du sommeil | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) · [`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) |
 | cycle C2 (capacité, puis entraîné) | [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) · [`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md) |
 | récurrence locale | [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | mémoire de travail, périphérie | [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) · [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · [`note-peripherie-c8.md`](note-peripherie-c8.md) |
 | mémoire épisodique | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh` |
-| fenêtre et puits d'attention | [`rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) · [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md) |
+| fenêtre et puits d'attention | [`rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) · [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md) · [`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md) |
 | bus de modulation | `porte-bus.sh`, `porte-bus-socket.sh` |
 | E/I et gains | [`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md) |
 | latéralité | [`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) · [`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md) |

@@ -414,6 +414,9 @@ def main() -> int:
     ap.add_argument("--profondeur", type=int, default=8)
     ap.add_argument("--train", type=int, default=30,
                     help="nombre de morceaux d'entraînement (les premiers : m0..m{k-1})")
+    ap.add_argument("--rejeu", default="",
+                    help="LISTE explicite des morceaux rejoués (ex. « 0,1,2 ») : c'est le protocole "
+                         "de SOMMEIL — à volume égal, ce qu'on rejoue compte-t-il ?")
     ap.add_argument("--exclure", default="",
                     help="morceaux à RETIRER de l'entraînement (ex. 20) : un morceau de test qui "
                          "tombe dans la plage d'entraînement n'est PAS « jamais vu » — c'est le "
@@ -480,9 +483,12 @@ def main() -> int:
     idx_val = [int(x) for x in a.val.split(",")]
     idx_test = [(f"m{int(x)}", [int(x)]) for x in a.test.split(",")]
     exclus = {int(x) for x in a.exclure.split(",") if x.strip()}
-    train_idx = [i for i in range(a.train) if i not in exclus]
+    if a.rejeu:
+        train_idx = [int(x) for x in a.rejeu.split(",") if x.strip()]
+    else:
+        train_idx = [i for i in range(a.train) if i not in exclus]
     print(f"corpus {len(ids)} jetons · {a.morceaux} morceaux de {a.taille} · "
-          f"entraînement m0..m{a.train - 1}"
+          f"entraînement {'m' + ',m'.join(str(i) for i in train_idx) if a.rejeu else f'm0..m{a.train - 1}'}"
           + (f" MOINS {sorted(exclus)}" if exclus else "")
           + f" ({len(train_idx)} morceaux) · validation {a.val} · test "
           f"{', '.join(n for n, _ in idx_test)} (jamais vus)")
