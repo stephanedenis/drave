@@ -292,6 +292,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         opt = torch.optim.Adam([adaptateur], lr=a.pas_adaptateur)
         ppl_depart_val = ppl_etats(Xva, yva)
         ppl_depart = ppl_etats(*Xte[tests[0][0]])
+        # CONSOLIDATION (C7) : le modèle COMPLET, avant tout pas — c'est le « avant » du rejeu, et il
+        # ne dépend pas du bras (mêmes poids de départ).
+        plein_avant = ({n: banc.ppl(ms, banc._complet) for n, ms in tests}
+                                   if getattr(a, "eval_plein", False) else None)
         meilleur = (ppl_depart_val, 0, instantane())
         journal = []
         for e in range(a.epoques):
@@ -322,10 +326,23 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
                "journal": journal, "train": ppl_etats(Xtr, ytr), "tenseurs": tenseurs()}
         for nom, (X, y) in Xte.items():
             res[nom] = ppl_etats(X, y)
+        if plein_avant is not None:
+            res["plein_avant"] = plein_avant
+            res["plein_apres"] = {n: banc.ppl(ms, banc._complet) for n, ms in tests}
         return res
 
     # ========================= dessins B et A+B : à travers les couches =========================
+    plein_obj = getattr(a, "objectif", "tronque") == "plein"
+
     def logits_chemin(ids, grad=False):
+        if plein_obj:
+            # Consolidation : l'objectif est le MODÈLE COMPLET — la perte du cerveau entier, et la
+            # rétropropagation traverse les 24 couches (l'adaptateur de sortie, lui, ne joue pas :
+            # il n'existe que sur un chemin tronqué).
+            if grad:
+                banc.m.model.layers = banc.liste_pleine
+                return banc.m(ids, use_cache=False).logits
+            return banc._complet(ids)
         if grad:
             return tete_logits(banc._brut(ids))
         with torch.no_grad():
@@ -345,6 +362,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
 
     ppl_depart_val = banc.ppl(val, lambda ids: logits_chemin(ids, False))
     ppl_depart = banc.ppl(tests[0][1], lambda ids: logits_chemin(ids, False))
+    # CONSOLIDATION (C7) : le modèle COMPLET, avant tout pas — c'est le « avant » du rejeu, et il
+    # ne dépend pas du bras (mêmes poids de départ).
+    plein_avant = ({n: banc.ppl(ms, banc._complet) for n, ms in tests}
+                   if getattr(a, "eval_plein", False) else None)
     meilleur = (ppl_depart_val, 0, instantane())
     journal = []
     for e in range(a.epoques):
@@ -378,6 +399,9 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
            "train": banc.ppl(train, lambda ids: logits_chemin(ids, False))}
     for nom, morceaux in tests:
         res[nom] = banc.ppl(morceaux, lambda ids: logits_chemin(ids, False))
+    if plein_avant is not None:
+        res["plein_avant"] = plein_avant
+        res["plein_apres"] = {n: banc.ppl(ms, banc._complet) for n, ms in tests}
     return res
 
 
@@ -415,6 +439,25 @@ def main() -> int:
     ap.add_argument("--etat-moteur", default=None,
                     help="préfixe d'états capturés par le moteur (--etat-sortie) pour vérifier "
                          "que l'état BRUT de la chaîne torch est celui du moteur")
+    ap.add_argument("--hors", default=None,
+                    help="fichier d'identifiants d'un AUTRE corpus : un morceau de `--taille` "
+                         "jetons y est pris à `--hors-debut` et sert de test HORS DOMAINE "
+                         "(la consolidation en domaine ne dit pas ce qu'elle fait ailleurs)")
+    ap.add_argument("--hors-debut", type=int, default=0)
+    ap.add_argument("--hors-nom", default="hors")
+    ap.add_argument("--melanger-rejeu", action="store_true",
+                    help="CONTRÔLE : mélanger l'ordre des jetons des morceaux REJOUÉS (même "
+                         "volume, même vocabulaire, plus de séquence) — si la consolidation "
+                         "améliore encore, ce n'est pas de l'apprentissage")
+    ap.add_argument("--objectif", choices=["tronque", "plein"], default="tronque",
+                    help="sur quoi le LoRA apprend : le chemin TRONQUÉ (défaut, c'est N4) ou le "
+                         "MODÈLE COMPLET (c'est la consolidation C7 : on consolide le cerveau "
+                         "entier, pas un réflexe)")
+    ap.add_argument("--eval-plein", action="store_true",
+                    help="mesurer aussi la perplexité du MODÈLE COMPLET (avant et après chaque "
+                         "bras) sur les morceaux de test et de validation : c'est la mesure de "
+                         "CONSOLIDATION (plan cerveau, C7 : « la perplexité baisse-t-elle sur un "
+                         "jeu NON rejoué ? »)")
     ap.add_argument("--sans-portes", action="store_true",
                     help="sauter les portes de concordance (déjà mesurées)")
     a = ap.parse_args()
@@ -446,9 +489,24 @@ def main() -> int:
 
     banc = Banc(a)
     T = lambda l: [torch.tensor([m], device=banc.dev) for m in l]      # noqa: E731
-    train = T([morceaux[i] for i in train_idx])
+    if a.melanger_rejeu:
+        g = np.random.default_rng(a.graine)
+        melanges = [list(g.permutation(morceaux[i])) for i in train_idx]
+        print("  ⚠ rejeu MÉLANGÉ (contrôle) : l'ordre des jetons des morceaux rejoués est détruit")
+    else:
+        melanges = [morceaux[i] for i in train_idx]
+    train = T(melanges)
     val = T([morceaux[i] for i in idx_val])
     tests = [(nom, T([morceaux[i] for i in idxs])) for nom, idxs in idx_test]
+    if a.hors:
+        ids_hors = lire_ids(a.hors)
+        debut = a.hors_debut
+        if debut + a.taille > len(ids_hors):
+            raise SystemExit(f"{a.hors} : {len(ids_hors)} jetons, il en faut {a.taille} à partir "
+                             f"de {debut}")
+        morceau_hors = ids_hors[debut:debut + a.taille]
+        tests.append((a.hors_nom, T([morceau_hors])))
+        print(f"  test HORS DOMAINE « {a.hors_nom} » : {a.hors} jetons {debut}..{debut + a.taille}")
 
     for nom, idxs in idx_test:
         if idxs[0] in train_idx:
@@ -538,6 +596,15 @@ def main() -> int:
     print(ligne("chemin tronqué, tête **empruntée**", "—", "—", ppl_empruntee))
     for bras, r in resultats["bras"].items():
         print(ligne(f"`{bras}`", str(r["epoque"]), f"{r['val']:,.4f}", r))
+    if a.eval_plein:
+        print("\n| modèle COMPLET (consolidation) | avant | — | " +
+              " | ".join(f"{r['plein_avant'][k]:,.4f}" for k in noms) + " |")
+        for bras, r in resultats["bras"].items():
+            cellules = []
+            for k in noms:
+                av, ap = r["plein_avant"][k], r["plein_apres"][k]
+                cellules.append(f"{ap:,.4f} ({100 * (ap - av) / av:+.2f} %)")
+            print(f"| après `{bras}` | — | — | " + " | ".join(cellules) + " |")
 
     if a.json:
         pathlib.Path(a.json).parent.mkdir(parents=True, exist_ok=True)

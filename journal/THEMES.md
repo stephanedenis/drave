@@ -105,6 +105,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-11](2026-10-11_portes.md) | `8 s` · `25 %` · `78 %` · `÷3,8` · `1 %` · `÷7,9` |
 | [2026-10-12](2026-10-12_portes.md) | `3995 Mo` |
 | [2026-10-13](2026-10-13_portes.md) | — |
+| [2026-10-14](2026-10-14_portes.md) | — |
 
 ### `docs` — Documentation, état, conventions
 
