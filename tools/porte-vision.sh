@@ -22,6 +22,13 @@
 #      critère, et la porte devra être resserrée (c'est écrit ici pour que ce soit un choix, pas un
 #      oubli).
 #
+#   5. **LES COUCHES PROFONDES EN ISOLATION** *(c'est la vérification de la tour)* : comparer des
+#      SORTIES ne dit rien au-delà de la couche ~8 (l'attention s'effondre — entropie 0,16 à la
+#      couche 15 — et bascule d'un patch à l'autre : variation totale 0,94). On donne donc aux deux
+#      implémentations **le même état d'entrée** et on compare la couche **seule**
+#      (`tools/vision_isole.py`). Mesuré le 15/10 : 4,5e-07 à 7,6e-06 sur les couches 1, 8, 15, 23
+#      et 31 — les conventions du moteur sont **justes** dans toute la tour.
+#
 # ⚠ Ce que cette porte ne peut PAS faire : vérifier la tour. La référence numpy de bloc 0
 # (`vision_ref.py`) **reprend les hypothèses du moteur** (mêmes conventions de rotation, mêmes
 # LayerNorm sans biais) : elle ne pouvait pas les mettre en défaut — c'est la référence
@@ -60,11 +67,14 @@ fi
 # attentes de FORMAT ont dérivé depuis (elle lit un fichier `.poids` que le banc n'écrit plus de la
 # même façon). Une porte ne cache pas un outil cassé : elle tente, et elle **dit** quand elle n'a pas
 # pu comparer. Le jour où la référence suivra le format, la comparaison redeviendra un critère.
-timeout 1800 "$D" "$MMPROJ" --banc-vision "$T/tour.bin" > "$T/banc.log" 2>&1 \
+timeout 2400 env DRAVE_VISION_POIDS=all DRAVE_VISION_COUCHES=32 \
+    ${NOYAU:+DRAVE_VISION_NOYAU=$NOYAU} "$D" "$MMPROJ" --banc-vision "$T/tour.bin" > "$T/banc.log" 2>&1 \
     || { echo "  ❌ le banc de vision a échoué :"; tail -3 "$T/banc.log"; exit 1; }
 grep -q "v.patch_embd.weight : sortie 1280 · entrée 3 · noyau 14×14" "$T/banc.log" \
     || { echo "  ❌ la tour de vision n'a pas les dimensions attendues :"; grep "patch_embd" "$T/banc.log"; exit 1; }
 EMBEDING="embedding non mesuré"
+ISOLE="couches isolées non mesurées"
+NOYAU=${NOYAU:-/tmp/vision-noyau-somme.f32}
 DRAVE_VISION_COTE=28 timeout 900 "$D" "$MMPROJ" --banc-vision "$T/tour28.bin" >> "$T/banc.log" 2>&1
 if $P tools/vision_ref.py "$T/tour28.bin" > "$T/ref.log" 2>&1; then
     grep -q "accord (bruit de virgule flottante)" "$T/ref.log" \
@@ -100,13 +110,32 @@ echo "  ✅ 3. les formes sont celles du modèle : tour $TAILLE · jetons d'imag
 NORMES=$(grep -oE "tour : [0-9]+ couches × 256 patchs × [0-9]+ · \|sortie\| = [0-9.]+" "$T/banc.log" | tail -1)
 echo "  ⚠️ 4. $NORMES"
 if [ -s /home/stephane/IA/cache/huggingface/qwen2vl-ref/config.json ]; then
-    echo "     référence indépendante présente : l'écart publié est dans"
-    echo "     reports/rapport-vision-qwen2vl.md (55 à 79 % au 15/10) — il n'est PAS un critère"
-    echo "     ici : le jour où il tombera à quelques pour cent, cette porte devra être resserrée."
+    echo "     la comparaison de SORTIES n'est pas un critère, et c'est MESURÉ : l'attention"
+    echo "     s'effondre (entropie 0,16 à la couche 15) et bascule d'un patch à l'autre (variation"
+    echo "     totale 0,94) — c'est pourquoi la vérification se fait EN ISOLATION (étape 5)."
 else
     echo "     référence indépendante absente : la tour n'est pas comparable, et elle n'est pas vérifiée"
 fi
 # LE RÉSUMÉ DIT CE QUI A ÉTÉ VÉRIFIÉ, PAS CE QU'ON AURAIT VOULU : la première version de cette
 # porte annonçait « embedding exact » alors que la comparaison n'avait pas pu tourner.
-echo "  ✅ porte tenue (refus dit · $EMBEDING · formes du modèle · tour mesurée, non jugée)"
+# ---- 5. les couches profondes EN ISOLATION (la vérification de la tour)
+NOYAU=${NOYAU:-/tmp/vision-noyau-somme.f32}
+if [ -s "$T/tour.bin.poids32" ] && [ -s "$NOYAU" ]; then
+    $P tools/vision_isole.py --banc "$T/tour.bin" --poids "$T/tour.bin.poids32" \
+        --mmproj "$MMPROJ" --moteur "$D" --noyau "$NOYAU" --couches 1,15,31 > "$T/isole.log" 2>&1
+    if [ "$?" -eq 0 ]; then
+        PIRES=$(grep -oE "écart max sur les couches vérifiées : [0-9.e+-]+" "$T/isole.log" | grep -oE "[0-9.e+-]+$")
+        echo "  ✅ 5. les couches 1, 15 et 31 EN ISOLATION : écart max $PIRES (les conventions sont"
+        echo "     celles de la formule, même là où l'attention bascule)"
+        ISOLE="couches isolées justes"
+    else
+        echo "  ❌ 5. une couche EN ISOLATION s'écarte des conventions :"; tail -4 "$T/isole.log"
+        exit 1
+    fi
+else
+    echo "  ⚠️ 5. déchargement des poids ou noyau réparé absent : les couches isolées ne sont pas"
+    echo "     vérifiées ici (DRAVE_VISION_POIDS=all et le noyau sommé, voir la fiche)"
+    ISOLE="couches isolées NON vérifiées"
+fi
+echo "  ✅ porte tenue (refus dit · $EMBEDING · formes du modèle · $ISOLE)"
 exit 0

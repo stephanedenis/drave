@@ -1894,6 +1894,21 @@ fn run_banc_vision(sortie: &str) {
         println!("[vision] image FOURNIE : {f} ({cin} × {cote} × {cote}, f32)");
         v
     });
+    // VÉRIFIER UNE COUCHE PROFONDE EN ISOLATION. Comparer des sorties de couche au-delà de la
+    // couche ~8 ne peut rien établir (l'attention s'effondre et bascule : variation totale 0,94 à
+    // la couche 15). La seule méthode qui reste : donner aux DEUX implémentations le MÊME état
+    // d'entrée et comparer la sortie de la couche SEULE.
+    //   DRAVE_VISION_ENTREE=<f32>  l'état d'entrée (n_patch × e, f32)
+    //   DRAVE_VISION_ETAT=L        n'exécuter QUE la couche L
+    let etat_entree: Option<Vec<f32>> = std::env::var("DRAVE_VISION_ENTREE").ok().map(|f| {
+        let b = std::fs::read(&f).expect("état illisible");
+        let v: Vec<f32> = b.chunks_exact(4)
+            .map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]])).collect();
+        println!("[vision] état d'entrée FOURNI : {f} ({} valeurs)", v.len());
+        v
+    });
+    let couche_isolee: Option<usize> = std::env::var("DRAVE_VISION_ETAT").ok()
+        .and_then(|v| v.parse().ok());
     let img: Vec<f32> = match image_fournie {
         Some(v) => v,
         None => {
@@ -2006,10 +2021,19 @@ fn run_banc_vision(sortie: &str) {
         // ce que le compilateur a refusé (et il avait raison).
         let att_demande: Option<usize> = std::env::var("DRAVE_VISION_ATTENTION").ok()
             .and_then(|v| v.parse().ok());
-        let mut x = out.clone();
+        let mut x = match etat_entree.clone() {
+            Some(v) => {
+                assert_eq!(v.len(), n_patch * e, "état d'entrée de taille inattendue");
+                v
+            }
+            None => out.clone(),
+        };
         let mut xn = vec![0f32; e];
         let mut poids_bloc: Vec<Vec<f32>> = Vec::new();
         for l in 0..n_layer {
+            if let Some(lc) = couche_isolee {
+                if l != lc { continue; }
+            }
             let p = |n: &str| format!("v.blk.{l}.{n}");
             let ln1 = g.dequant(&p("ln1.weight"));
             let ln1b = g.dequant(&p("ln1.bias"));

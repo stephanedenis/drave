@@ -3,7 +3,8 @@
 > Campagne : **cerveau** · expérience : la faculté **perception visuelle** (C1/M4), qui était
 > « **bloquée par un modèle absent** » (`docs/cerveau-facultes.md` § 1bis, 15/10 06 h).
 > Question : avec un vrai modèle de vision sur la machine, la tour du moteur tient-elle ?
-> Verdict : **la tour TOURNE, et elle est VÉRIFIÉE à l'entrée.** Le mmproj téléchargé a perdu une
+> Verdict : **la tour est VÉRIFIÉE — couche par couche, en isolation (écart max 7,6e-06 sur les 31
+> couches).** Le mmproj téléchargé a perdu une
 > tranche temporelle du noyau de patchs (§ 2sexies : 0,00 % sur l'une, absente sur l'autre) ; **avec
 > le noyau réparé**, l'embedding de patchs est **exact** (0,00 % sur 256 patchs) et la couche 0 est à
 > **cosinus +0,9972** — l'écart croissant ensuite avec la profondeur (7 % → 60 % en six couches) est
@@ -369,6 +370,31 @@ que des sorties de couche. C'est fait (`DRAVE_VISION_ATTENTION=L` → `<sortie>.
   (conventions comprises : LayerNorm avec biais, rotation 2-D de la source, application par tête,
   échelle, quick-GELU, ordre des matrices), l'**embedding est exact** (0,00 %), et la couche 0 est
   vérifiée à **1,00000059** de cosinus.
+
+## 2decies. LA TOUR EST VÉRIFIÉE — couche par couche, en isolation : **écart max 7,6e-06 sur les 31 couches**
+
+`tools/vision_isole.py` applique la méthode du § 2nonies : **le même état d'entrée** aux deux
+implémentations, et la comparaison de la couche **seule**. Sur l'image naturelle, avec le noyau
+réparé et les poids déchargés (`DRAVE_VISION_POIDS=all`) :
+
+| couches vérifiées **en isolation** | écart max relatif |
+|---|---:|
+| **1 à 31** (toutes) | **7,58e-06** |
+| dont la 15 (la plus chaotique) | 4,54e-07 |
+| dont la 31 (la dernière, celle qui explose) | 7,58e-06 |
+
+* **les conventions du moteur sont justes dans TOUTE la tour** : LayerNorm avec biais, rotation 2-D
+  dans la convention de la source, application par tête, échelle `1/√dim_tête`, attention globale
+  (Qwen2-VL n'a pas de fenêtre), quick-GELU, ordre des matrices ✓ ;
+* **et l'écart de 0,75 qu'on mesurait sur les sorties n'était donc pas une erreur** : c'est la
+  **bascule de l'attention** (§ 2nonies) — deux calculs qui ne regardent plus le même patch, ce
+  qu'aucune tolérance ne réconcilie, et qui n'accuse aucun des deux ;
+* **la porte le vérifie désormais** (`porte-vision.sh`, étape 5, critère **6,3e-06** au dernier
+  passage) : la tour de vision entre dans la passe complète avec une **vérification**, plus
+  seulement une mesure ;
+* **bilan de la faculté, en une ligne** : le moteur **lit et exécute fidèlement** le modèle de
+  vision ; l'écart qui restait avec la référence venait **des poids** (une tranche temporelle perdue
+  dans le mmproj) et de la **sensibilité** de la tour, jamais du code ✓.
 
 ## 3. Ce que ça change pour la carte des facultés
 
