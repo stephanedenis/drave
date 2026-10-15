@@ -31,7 +31,7 @@
 | **budget / câblage minimisé** | budgets **octets, latence, paires** par lien | trois refus distincts : codes **6**, **8**, **9** | — | ✅ |
 | **plasticité structurelle** | croissance locale des connexions | 8,1550 (croissance) contre 8,1827 (masque statique à densité égale) : **+0,3 %**, dans le bruit | — | 🟡 |
 | **apprentissage local (Hebb)** | 5 variantes mesurées | la meilleure est **ne rien faire** (négatif) | — | ❌ |
-| **langage / décodage** | le modèle + décodage spéculatif ; et le **réflexe distillé** comme effecteur | brouillon minuscule **×1,52** ; réflexe : **×2,0** de débit et TTFT **÷3,1**, mais accord avec le maître **51 %** par position et **5/96** jetons en génération | — | 🟡 (M5) |
+| **langage / décodage** | le modèle + **le réflexe qui PROPOSE, le cerveau qui VÉRIFIE** (`tools/speculatif_drave.py`) | réflexe : **×2,0** de débit, TTFT **÷3,1** ; **taux d'acceptation 2,4 à 30 %** (K = 4) et **75 %** (K = 1) pour le distillé, **0 %** pour la tête non entraînée ; gain net **0,95** au mieux — **sous 1** | — | 🟡 (mécanisme exécutable, rentabilité non atteinte : il manque ~×1,5) |
 | **motricité / effecteurs** | `--sortie F` + réflexes ; le moteur **écrit** ce que le réflexe produit | le signal **courant** est dans la sortie (R² 0,992) ; le réflexe distillé génère **×2,0** plus vite mais **différemment** du cerveau | 357,8 M paires/décision (complet) | 🟡 |
 | **observabilité** | trace globale (`--trace-globale`) | **126 croisements**, aucune divergence ; 1 bit changé ⇒ **DIVERGENT** (code 3) | — | ✅ |
 | **robustesse aux pannes** | registre de régions, refus nommés | panne de lien : **code 7**, jamais de résultat partiel | — | ✅ |
@@ -160,7 +160,7 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | latéralité | [`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) · [`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md) |
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
-| distillation (E5) | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) |
+| distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
 | adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
 | la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
