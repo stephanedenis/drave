@@ -161,6 +161,19 @@ class Banc:
               f"({sum(p.numel() for p in self.lora_params):,} paramètres) · {self.dev} "
               f"· chargé en {time.time() - t0:.1f} s")
         self.initial_lora = [p.detach().clone() for p in self.lora_params]
+        if getattr(a, "lora_depart", None):
+            # DEUXIÈME NUIT : on repart du LoRA de la veille (mêmes noms, même ordre — c'est
+            # l'ordre de `poser_lora`, et il est stable).
+            veille = torch.load(a.lora_depart, map_location="cpu", weights_only=False)
+            specs = veille.get("lora", [])
+            noms = [f["nom"] for f in specs]
+            for i, spec in enumerate(specs):
+                A, B = spec["A"].to(self.dev), spec["B"].to(self.dev)
+                self.lora_params[2 * i].data.copy_(A)
+                self.lora_params[2 * i + 1].data.copy_(B)
+            self.initial_lora = [p.detach().clone() for p in self.lora_params]
+            print(f"  deuxième nuit : LoRA repris de {a.lora_depart} ({len(noms)} projections, "
+                  f"échelle {specs[0]['echelle']:.2f})")
         # L'ÉTAT BRUT, CAPTURÉ PAR UN CROCHET. `output_hidden_states` ne le donne PAS pour un
         # modèle tronqué : la liste se termine par l'état **après la norme finale** (la norme est
         # appliquée en fin de boucle, et un modèle à L couches a L+1 entrées dont la dernière est
@@ -481,6 +494,10 @@ def main() -> int:
                     help="pas de l'adaptateur quand il apprend EN MÊME TEMPS que les couches")
     ap.add_argument("--bras", default="adaptateur,lora,lora+adaptateur")
     ap.add_argument("--json", default=None)
+    ap.add_argument("--lora-depart", default=None,
+                    help="reprendre un LoRA déjà appris (.pt de --sauver) : c'est la DEUXIÈME NUIT "
+                         "— et la question du dépôt : une expérience nouvelle EFFACE-t-elle "
+                         "l'ancienne (oubli catastrophique) ou s'y ajoute-t-elle ?")
     ap.add_argument("--sauver", default=None,
                     help="préfixe : écrire les poids APPRIS de chaque bras (PREFIXE-<bras>.pt) "
                          "pour que l'exporteur GGUF les fusionne")

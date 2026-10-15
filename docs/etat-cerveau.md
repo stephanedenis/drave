@@ -165,6 +165,19 @@
 > `/tmp/campagne24` et sa disparition avait rendu trois portes « code 2 » le 12/10.
 > Détail : `REPRISE.md` § 2.
 
+**0. ▶ LA NUIT DU 14 AU 15/10 — LE CERVEAU, FACULTÉ PAR FACULTÉ.** Huit rounds mesurés, tous avec
+leur fiche, et une carte : [`docs/cerveau-facultes.md`](cerveau-facultes.md) (chaque faculté, le
+mécanisme le plus efficient, son coût). En un paragraphe : **C7** la consolidation met l'expérience
+dans les poids (−16,4 % en domaine sur des textes jamais rejoués, **+1,3 %** hors domaine) et sa
+**courbe** dit que le rejeu **court** est le plus efficient (3 morceaux : −5,6 % pour un coût
+indétectable) ; **C2** le cycle est accepté, exact au pas 1, **divergent** ensuite, et **entraîné**
+il dompte la divergence (**×228** au pas 4) sans jamais battre une passe — trois objectifs essayés ;
+**N5** la mémoire de travail est une **structure** (le réseau ne l'apprend pas : −1,09 → **−2,77**
+entraîné, +0,964 avec le tampon) ; **E5** distiller le cerveau dans le réflexe **double l'accord**
+(28 % → 51 %) et **coûte ×3,2** de perplexité, le mélange KL + λ·CE étant **pire des deux côtés** ;
+et la **boucle complète** tourne en une commande (`tools/boucle-cerveau.sh`). Trois portes de plus :
+`porte-consolidation`, `porte-cycle-c2`, `porte-cerveau` (les facultés **composent**-elles ?).
+
 **1. Passe complète des portes — QUATRE passes les 12 et 13/10, la dernière à 35 vertes sur 37**
 (§ 5). Les deux rouges sont **instruits** : le critère d'indice extérieur de `porte-indice` et
 `porte-melange` est **marginal par construction** (2 fenêtres sur 5 passent,

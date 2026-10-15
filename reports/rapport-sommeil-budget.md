@@ -46,6 +46,26 @@ Ce que ça dit :
   retenir pour un protocole de sommeil : *rejouer peu, souvent* — et c'est aussi ce que la biologie
   suggère (le sommeil rejoue des **extraits**, pas la journée entière).
 
+## 1bis. Le rejeu court est limité par la DONNÉE, pas par l'entraînement
+
+Troisième question, la plus simple : les 3 morceaux sont-ils sous-entraînés ? Réponse mesurée —
+**doubler les époques ne change rien** :
+
+| réglage | m32 (jamais rejoué) | écart |
+|---|---:|---:|
+| 3 morceaux, **12** époques, graine 0 | 6,7829 | −5,51 % |
+| 3 morceaux, **24** époques, graine 0 | 6,7797 | **−5,56 %** |
+| 3 morceaux, 12 époques, **graine 1** | 6,7935 | −5,37 % |
+
+* **+0,05 point** pour deux fois plus d'entraînement : c'est **la donnée** qui limite, pas le
+  nombre de pas — et c'est bien ce que la fiche du 13/10 disait de l'adaptateur (« la capacité n'est
+  pas la limite, la donnée l'est »), retrouvé ici sur la consolidation ;
+* **le protocole le dit lui-même** : l'époque se choisit sur la validation, et sur 24 époques la
+  meilleure reste précoce — les époques supplémentaires sont **écartées**, pas publiées. Un
+  entraînement qui ne vaut rien ne se publie pas ici, c'est la règle de sélection qui le garantit ;
+* **la graine pèse 0,14 point** (−5,51 % contre −5,37 %) sur ce bras : les écarts de la courbe du
+  § 1 (4,4 points entre 3 et 20 morceaux) sont donc **trente fois** au-dessus de ce bruit.
+
 ## 2. Comment le lire pour le cerveau
 
 * **la consolidation est un mécanisme à rendements décroissants** : le premier morceau rejoué
