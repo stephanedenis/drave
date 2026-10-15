@@ -36,6 +36,24 @@
 * **et c'est le plus petit adaptateur entraîné du dépôt** : 180 224 paramètres, **0,035 %** du
   modèle, pour −7,6 % en domaine et −15,9 % sur un autre morceau jamais vu.
 
+## 1bis. Le MOTEUR confirme le point retenu (et il est même meilleur sur m20)
+
+La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le rang 4 exporté
+(`exporter_gguf_dense.py`) et relu par `drave` :
+
+| modèle | m32 (moteur) | m20 (moteur) |
+|---|---:|---:|
+| base (`models/Qwen2.5-0.5B-Q8_0.gguf`) | 7,4242 | 19,1237 |
+| **rang 4 consolidé** | **6,8697 (−7,47 %)** | **16,0434 (−16,11 %)** |
+| *(harnais, pour mémoire)* | −7,63 % | −15,93 % |
+
+* **l'accord est à 0,2 point** (−7,47 % au moteur contre −7,63 % au harnais), et le moteur est
+  **meilleur** sur m20 (−16,11 % contre −15,93 %) : la quantification Q8_0 n'a pas coûté le gain de
+  la consolidation, elle l'a légèrement servi ici ;
+* **c'est le point efficient du dépôt, vérifié des deux côtés** : **180 224 paramètres (0,035 %)**,
+  10 époques, 10 240 jetons rejoués → **÷1,08** de perplexité en domaine et **÷1,19** sur un autre
+  morceau jamais vu.
+
 ## 2. Le pas d'apprentissage — optimum intérieur aussi
 
 | pas (rang 8) | m32 | écart |
