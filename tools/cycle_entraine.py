@@ -86,6 +86,12 @@ class Cycle:
         b = self.brut["x"]                     # résidu brut après la dernière couche
         return a, b
 
+    def etat_maitre(self, ids):
+        """L'état BRUT après les 24 couches, sans boucle : la cible d'un point fixe explicite."""
+        with torch.no_grad():
+            self.m.model(inputs_embeds=self.m.model.embed_tokens(ids), use_cache=False)
+            return self.brut["x"].clone()
+
     def trajectoire(self, ids, grad=True):
         """Rend [(logits_1, b_1), …]. Les logits sont calculés sur le résidu brut de B."""
         ctx = torch.enable_grad() if grad else torch.no_grad()
@@ -115,11 +121,13 @@ def main() -> int:
     ap.add_argument("--alpha", type=float, default=16.0)
     ap.add_argument("--couches-lora", type=int, default=24)
     ap.add_argument("--pas-lora", type=float, default=1e-3)
-    ap.add_argument("--objectif", choices=["somme", "dernier", "point-fixe"], default="somme",
+    ap.add_argument("--objectif", choices=["somme", "dernier", "point-fixe", "cible"], default="somme",
                     help="somme = les T pertes (le réglage de la fiche C2 bis) · dernier = le "
                          "dernier pas seul · point-fixe = somme + pénalité de CONVERGENCE "
                          "(la boucle doit se poser, pas seulement prédire)")
-    ap.add_argument("--beta", type=float, default=1.0, help="poids de la pénalité de point fixe")
+    ap.add_argument("--beta", type=float, default=1.0,
+                    help="poids de la pénalité (point fixe : déplacement ; cible : écart à l'état "
+                         "du maître)")
     ap.add_argument("--graine", type=int, default=0)
     ap.add_argument("--json", default=None)
     ap.add_argument("--sauver", default=None)
@@ -185,6 +193,12 @@ def main() -> int:
                     perte_tot = ce if j == a.pas_temps - 1 else perte_tot
                 else:
                     perte_tot = perte_tot + ce
+                if a.objectif == "cible":
+                    # LE POINT FIXE AU SENS FORT : la boucle doit rejoindre l'ÉTAT DU MAÎTRE (le
+                    # modèle complet, 24 couches, sur le même texte) — pas seulement se poser.
+                    # C'est la piste que la fiche C2 bis nommait et n'avait pas mesurée.
+                    cible = cyc.etat_maitre(t)
+                    perte_tot = perte_tot + a.beta * nn.functional.mse_loss(b, cible)
                 if a.objectif == "point-fixe" and precedent is not None:
                     # LA BOUCLE DOIT SE POSER : on pénalise le DÉPLACEMENT de l'état entre deux
                     # pas, en relatif (un état qui change de 1 % d'un pas à l'autre est un point

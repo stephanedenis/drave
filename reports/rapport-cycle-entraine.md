@@ -70,6 +70,7 @@ LoRA rang 8 sur 24 couches) :
 | **somme** des 4 pertes | 18,40 | 22,61 | 32,56 | 52,24 | la trajectoire entière |
 | **dernier** pas seul | 22,65 | 33,59 | 33,46 | **43,55** | la qualité à l'arrivée |
 | **point fixe** (somme + pénalité de convergence) | **19,42** | **22,05** | **32,02** | 52,35 | que la boucle se **pose** |
+| **cible** (rejoindre l'état du **maître**) | 35,28 | 70,67 | 221,64 | **789,73** | le point fixe **au sens fort** |
 
 Ce que ça dit :
 
@@ -82,7 +83,18 @@ Ce que ça dit :
   pas d'objectif dominant — il y a une **trajectoire à choisir** ;
 * **et le chiffre à battre ne bouge pas** : une passe vaut **15,42 à 18,40** selon l'entraînement,
   quand le meilleur pas 4 entraîné vaut **43,55** pour **quatre fois le calcul**. La conclusion de
-  la fiche tient, et elle est maintenant vérifiée sur **trois** objectifs au lieu d'un.
+  la fiche tient, et elle est vérifiée sur **quatre** objectifs au lieu d'un ;
+* **le point fixe « au sens fort » est le PIRE des quatre** : entraîner la boucle à **rejoindre
+  l'état du maître** (les 24 couches du même texte, sans boucle — la cible que la fiche nommait)
+  donne **35,28 → 70,67 → 221,64 → 789,73** : la boucle **diverge encore** (×2 à ×3,5 par pas),
+  et elle **sacrifie la prédiction** au passage (35,28 au pas 1 contre 15,42 pour le modèle non
+  entraîné). Vouloir que la boucle *ressemble* au cerveau est donc **plus nuisible** que vouloir
+  qu'elle *prédise* — un résultat qui va contre l'intuition « distiller l'état est plus riche que
+  distiller la sortie » (et c'est la distillation de **sortie** qui avait, elle, doublé l'accord
+  dans `rapport-e5-distillation.md`) ;
+* **les quatre objectifs, classés par ce qu'ils optimisent** : « dernier » gagne l'arrivée
+  (**43,55**), « point fixe » l'amorce (22,05 au pas 2), « somme » l'équilibre (52,24), « cible »
+  perd sur les deux tableaux (35,28 et 789,73). Aucun ne fait converger.
 
 ## 3. Ce que cette fiche ne dit pas
 
