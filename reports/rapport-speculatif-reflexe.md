@@ -127,6 +127,40 @@ essayés le soir même, à la même mesure (**l'accord par position avec le maî
   dès que la KL dépasse ~709 en exponentielle — c'est un débordement d'affichage, pas une mesure ;
   la validation, elle, reste finie et c'est elle qui choisit l'époque.)*
 
+## 2quater. La condition de rentabilité est EXACTEMENT `p > c` — et les deux brouillons sont juste dessous
+
+Le § 2 concluait « il manque un facteur 1,5 » à partir du gain `(acceptés + 1) / (1 + K·c)`. Cette
+formule se simplifie, et la simplification est le vrai résultat : avec `acceptés = p·K` (p = taux
+d'acceptation),
+
+  **gain = (p·K + 1) / (1 + K·c) > 1 ⟺ p·K > K·c ⟺ p > c**
+
+c'est-à-dire : **le gain dépasse 1 si et seulement si le taux d'acceptation dépasse le coût du
+brouillon rapporté au cerveau** — et **K disparaît**. Le décodage spéculatif ne se juge donc pas sur
+la profondeur du brouillon ni sur K, mais sur **une seule inégalité**.
+
+Deux brouillons mesurés, deux distillations, deux coûts :
+
+| brouillon | coût relatif `c` | seuil `p > c` | taux mesuré `p` (K = 4) | gain `(pK+1)/(1+Kc)` | verdict |
+|---|---:|---:|---:|---:|---|
+| **8 couches** distillé (E5) | 8/24 = **0,333** | p > **33,3 %** | **30,0 %** (2,00 jetons/vérif.) | **0,94** | ✗ **juste dessous** |
+| **4 couches** distillé (ce round) | 4/24 = **0,167** | p > **16,7 %** | **14,3 %** (1,50) | **0,94** | ✗ **juste dessous** |
+
+* **les deux sont à 0,94 — le même gain, pour des coûts et des accords différents** : réduire le
+  brouillon de moitié divise son coût **et** son accord, et les deux effets s'annulent exactement
+  dans l'inégalité. **Ce n'est donc pas la taille du brouillon qu'il faut optimiser, c'est l'accord
+  par unité de coût** ;
+* **et l'écart à combler est petit et chiffré** : il faut **33,3 %** d'acceptation au lieu de 30,0 %
+  (8 couches), ou **16,7 %** au lieu de 14,3 % (4 couches) — soit **+10 % en relatif** dans les deux
+  cas. Deux tentatives ont échoué (§ 2ter : la température et le rang) ; la piste qui reste est
+  nommée : **plus de données de distillation**, ou un brouillon **de la même famille mais plus
+  proche** de la cible (un 12 couches sur 24 coûterait 0,5 et demanderait p > 50 % — mesuré nulle
+  part, et c'est la prochaine mesure à faire) ;
+* **la fiche du 8 octobre** (`tools/speculatif.py`, deux modèles HuggingFace) donnait la même
+  formule avec `c` supposé ; ici **les deux `c` sont mesurés** (4 et 8 couches sur 24) et l'inégalité
+  est **testée** — la question de M5 n'est plus « est-ce que ça paie ? » mais « de combien manque
+  l'accord ? », et la réponse est **10 %**.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * **trois invites (dont deux à K = 1) et 12 à 16 jetons** : les taux sont des points, pas des
@@ -139,8 +173,9 @@ essayés le soir même, à la même mesure (**l'accord par position avec le maî
 * **la vérification n'est pas par lots** : le cerveau régénère K jetons **séquentiellement**
   (`--n K`) au lieu d'une passe en parallèle sur les K positions ; le taux d'acceptation est le
   même, le **gain de temps** non (et il n'est donc pas mesuré) ;
-* **une seule paire brouillon/cible** (8 couches contre 24, même modèle) : d'autres profondeurs, un
-  brouillon d'une autre famille, ou un Eagle3 (qui s'attache aux états cachés de sa cible) ne sont
-  pas mesurés ;
+* **deux profondeurs** (4 et 8 couches sur 24, même modèle) : la **12 couches** manque, et c'est
+  précisément celle qui départagerait « p > c » d'une autre loi (elle demanderait p > 50 %) ; un
+  brouillon d'une autre famille, ou un Eagle3 (qui s'attache aux états cachés de sa cible), ne sont
+  pas mesurés non plus ;
 * **rien sur l'échantillonnage** (`--temp > 0`) : le décodage spéculatif échantillonné (avec
   correction) est un autre algorithme, et il n'est pas ici.

@@ -184,7 +184,7 @@ que l'on voudra prédire (cosinus sur un hachage des jetons — quelques millise
   extérieur est déjà mesurée comme **faible** (`porte-indice` est rouge depuis le 13/10 : 482 jetons
   contre 459 pour le témoin) — la boucle C6 → C7 cumulerait donc deux maillons faibles ;
 * **la réserve est nommée** : ce test mesure la sélection **par similarité de contenu**, pas la
-  boucle **exécutée à travers le magasin** de l'moteur (qui rend un *index d'épisode*). Le principe
+  boucle **exécutée à travers le magasin** du moteur (qui rend un *index d'épisode*). Le principe
   est mesuré ; le montage ne l'est pas — et vu le résultat, il n'est pas prioritaire.
 
 ## 2. Ce que ça change pour le protocole de sommeil
