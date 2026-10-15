@@ -131,6 +131,34 @@ La suite annoncée au § 1ter (« les deux lots sur quatre morceaux de test, et 
   toute la nuit (« la quantité domine le placement »), avec **une exception** : le bruit ne
   s'apprend pas.
 
+## 1quinquies. Le critère sur un SECOND corpus : la direction tient, l'utilité non
+
+Le § 1quater a établi un **seuil** sur wikitext2. Le même test a été fait sur `corpus_en`, dont
+l'étendue de diversité est **beaucoup plus large** (0,345 à 0,945 contre 0,662 à 0,954) — cinq
+morceaux les plus répétitifs contre cinq des plus variés, mêmes budgets, tests en-32 et en-30
+(jamais rejoués) :
+
+| corpus | lot rejoué (5 morceaux) | test en-32 | test en-30 |
+|---|---|---:|---:|
+| wikitext2 | les plus **répétitifs** (0,662–0,812) | **−7,85 %** | — |
+| wikitext2 | les plus **variés** (0,917–0,954) | −6,78 % | — |
+| wikitext2 | les plus **répétitifs** | — | *(m20 :* **−14,54 %** *)* |
+| wikitext2 | les plus **variés** | — | *(m20 : −10,31 %)* |
+| **corpus_en** | les plus **répétitifs** (0,345–0,480) | **+0,76 %** | +0,22 % |
+| **corpus_en** | les plus **variés** (0,827–0,945) | +2,15 % | +0,06 % |
+
+* **sur `corpus_en`, AUCUN des deux lots ne transfère** : +0,76 % et +2,15 % (le modèle *perd* sur
+  en-32), +0,22 % et +0,06 % (rien sur en-30). Même les morceaux **très** répétitifs (0,345 : du
+  texte presque formulaire) ne sauvent pas un corpus qui n'a pas de structure partagée ;
+* **la direction, elle, tient** : dans **trois comparaisons sur quatre**, le lot répétitif fait
+  mieux (ou moins mal) que le lot varié — −7,85 contre −6,78, −14,54 contre −10,31, +0,76 contre
+  +2,15. La quatrième (en-30 : +0,22 contre +0,06) est un écart de **0,16 point** entre deux
+  non-transferts ;
+* **la conclusion est donc double, et les deux moitiés comptent** : le critère **classe** (le
+  répétitif est le bon choix quand il y a un choix à faire), et il **ne sauve rien** (il ne fait pas
+  transférer un corpus hétérogène). C'est cohérent avec toute la nuit : **le corpus décide si l'on
+  peut consolider, le lot décide seulement de l'ordre**.
+
 ## 2. Ce que ça change pour le protocole de sommeil
 
 1. **rejouer court et divers** — 3 morceaux répartis donnent −6,5 % en domaine pour un coût hors
