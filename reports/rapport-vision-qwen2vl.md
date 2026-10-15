@@ -115,6 +115,30 @@ par `√1280` au lieu de `√80`) :
   **parce qu'une seconde implémentation existait**. Sans la référence, le banc aurait continué de
   « tourner » — c'est exactement ce que la fiche reprochait à l'état d'avant.
 
+## 2ter. La convention de rotation, tranchée par la SOURCE — et un quatrième écart qui reste
+
+La rotation 2-D était le premier suspect nommé. Elle a été **lue dans la référence**, pas devinée
+(`transformers`, `apply_rotary_pos_emb_vision` + `VisionRotaryEmbedding`) :
+
+| point | ce que faisait le banc | ce que dit la référence |
+|---|---|---|
+| appariement des dimensions | `(2i, 2i+1)` — paires **consécutives** | **`(i, i + hd/2)`** (`rotate_half`) |
+| disposition des fréquences | moitié de tête par secteur (convention **Qwen2.5-VL**) | 20 fréquences **ligne**, puis 20 **colonne**, répétées telles quelles |
+| exposant des fréquences | indice de paire **global** | `10000^(−j/20)` avec `j = 0..19` |
+
+**Corrigé** (le banc suit maintenant la source), et l'accord progresse encore : cosinus **+0,6896 ·
++0,7838 · +0,8400** aux couches 0-2 (contre +0,6867 · +0,7676 · +0,7996), normes 328,5/365,9/407,3
+contre 335,1/346,0/434,8.
+
+**Mais l'écart relatif reste de 55 à 78 %** — la quantification vaut ~1 % : **il reste une
+différence structurelle**, et le suspect suivant est nommé, avec sa preuve :
+
+> `get_vision_position_ids` (la référence) attribue au patch d'indice **16** la position **(0, 8)**,
+> alors que ce patch est la **ligne 1, colonne 0** dans l'ordre du banc. Les deux implémentations
+> n'attribuent donc pas les positions aux mêmes emplacements de la séquence : l'une travaille dans
+> l'ordre de lecture des patchs, l'autre dans l'ordre **groupé par blocs de fusion 2 × 2**. C'est la
+> prochaine chose à trancher — et elle se tranche en comparant **un patch isolé**, pas une norme.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration

@@ -2025,16 +2025,29 @@ fn run_banc_vision(sortie: &str) {
             let hd_t = e / nh_t;
             let n_cote = (cote - kx) / kx + 1;
             let base_rot = 10000.0f32;
+            // ⚠ LA CONVENTION DE ROTATION, LUE DANS LA RÉFÉRENCE (`transformers`,
+            // `apply_rotary_pos_emb_vision` + `VisionRotaryEmbedding`) ET NON SUPPOSÉE :
+            //   · `rotate_half` apparie la dimension i avec i + hd/2 — PAS (2i, 2i+1) comme le
+            //     faisait ce banc ;
+            //   · l'embedding fait hd/2 = 40 valeurs : 20 fréquences pour la LIGNE puis 20 pour la
+            //     COLONNE, chacune répétée **telle quelle** (`cat((r, r))`) — la disposition du banc
+            //     (« moitié de tête par secteur ») était celle de Qwen2.5-VL, pas de Qwen2-VL ;
+            //   · les fréquences sont `1/10000^(2j/dim)` avec j = 0..19 et dim = 40, donc
+            //     `10000^(-j/20)` — l'exposant du banc suivait l'indice de paire GLOBAL.
             let tourner = |v: &mut [f32], ligne: f32, colonne: f32| {
-                let paires = hd_t / 2;
-                for i in 0..paires {
-                    let pos = if i < paires / 2 { ligne } else { colonne };
-                    let theta = pos * base_rot.powf(-2.0 * i as f32 / hd_t as f32);
-                    let (c, sn) = (theta.cos(), theta.sin());
-                    let a = v[2 * i];
-                    let b = v[2 * i + 1];
-                    v[2 * i] = a * c - b * sn;
-                    v[2 * i + 1] = a * sn + b * c;
+                let demi = hd_t / 2;                    // 40
+                let n_freq = demi / 2;                  // 20
+                for j in 0..n_freq {
+                    let theta_l = ligne * 10000f32.powf(-(j as f32) / n_freq as f32);
+                    let theta_c = colonne * 10000f32.powf(-(j as f32) / n_freq as f32);
+                    let (cl, sl) = (theta_l.cos(), theta_l.sin());
+                    let (cc, sc) = (theta_c.cos(), theta_c.sin());
+                    let (a0, b0) = (v[j], v[j + demi]);
+                    v[j] = a0 * cl - b0 * sl;
+                    v[j + demi] = a0 * sl + b0 * cl;
+                    let (a1, b1) = (v[n_freq + j], v[n_freq + j + demi]);
+                    v[n_freq + j] = a1 * cc - b1 * sc;
+                    v[n_freq + j + demi] = a1 * sc + b1 * cc;
                 }
             };
             // Permutation « colonne-majeur » des couches FENÊTRÉES : clip.cpp
