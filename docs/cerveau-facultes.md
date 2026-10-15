@@ -88,6 +88,7 @@ et rend la main au lieu d'inventer.
 | **mémoire de travail du MODÈLE** | le tampon est dans le **moteur** ; le modèle ne retient pas **et ne l'apprend pas** (−2,77 après 8 époques, `rapport-memoire-travail-n5.md`) | toute tâche qui demande de retenir *dans* le réseau — sauf à lui donner la structure, qu'il sait alors **lire** (+0,964) |
 | **un signal de modulation qui améliore** | cinq règles locales et cinq modulateurs mesurés ; le meilleur est **ne rien faire** | la valeur, la récompense, l'attention apprise |
 | **un cycle qui serve** | le cycle est exact au pas 1 ; **entraîné**, il dompte la divergence (**×228** au pas 4, `rapport-cycle-entraine.md`) mais **dégrade encore** (~×1,4 par pas) et ne bat pas une passe | les boucles cortico-thalamiques *utiles* — la piste nommée est un objectif de **point fixe**, pas de prédiction |
+| **perception visuelle (Qwen2-VL)** | le modèle et sa tour sont là ; `porte-vision.sh` entre dans la passe (refus, formes, tour mesurée) ; **la tour n'est pas vérifiée** (écart 55 à 79 % contre la référence, trois suspects nommés) | toute capacité multimodale — il reste à trancher la rotation par tête, la disposition q/k/v et l'ordre du MLP |
 | **perception riche (vision, audio)** | les encodeurs (`bge-m3`) sont lisibles et **inexécutables** — manque **M4** ; **la vision a une tranche vérifiée (5,4e-7) mais AUCUN modèle de vision sur la machine** (cf. § 1bis) | toute la famille multimodal — et le prochain pas est un **téléchargement**, pas du code |
 | **un sommeil structuré** | la consolidation marche, mais **hors** du moteur et sans protocole de sommeil (quoi rejouer, quand s'arrêter) | un cycle veille/sommeil automatique |
 | **la latéralité qui apporte** | l'échange est exact et le gain **nul** (mesuré deux fois : couches et experts) | une raison de dupliquer un hémisphère, à part la robustesse |
@@ -164,7 +165,7 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | latéralité | [`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) · [`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md) |
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
-| vision (Qwen2-VL, la tour et son écart) | [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) |
+| vision (Qwen2-VL, la tour et son écart) | [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) · `porte-vision.sh` (45ᵉ porte : refus · formes · tour **mesurée**, non jugée) |
 | distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
 | adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
 | le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
