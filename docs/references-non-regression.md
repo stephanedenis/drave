@@ -21,6 +21,15 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-14 à 21 h 43** (**42 portes, 40 vertes, 2 rouges**, ~64 min) : après le **cycle C2**
+> (validateur qui accepte un cycle si un lien est `recurrent` et retardé ; pilote `tools/derouler.py` ;
+> capture d'état sur un nœud intermédiaire) et la **consolidation** (LoRA fusionné, `porte-consolidation`).
+> Les deux nouvelles portes y sont **vertes** : `porte-cycle-c2` (chaîne de régions exacte 0,00e0, pas 1
+> exact, borné, coût dit, trajectoire déterministe) et `porte-consolidation` (LoRA nul ⇒ GGUF identique
+> au bit, aléatoire ⇒ visible, lecteur ⇒ hors fichier). Les deux rouges sont les mêmes qu'avant
+> (`porte-indice` : 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne rend pas le code).
+> **Aucune valeur de porte n'a bougé** (`porte-flux` : 61,9920 / 60,8135).
+>
 > **Passe du 2026-10-14 à 14 h 55** (**40 portes, 38 vertes, 2 rouges**, ~75 min) : après la
 > **porte d'exécution de N4** (le moteur applique un adaptateur de sortie appris :
 > `--adaptateur-sortie`, quatre fins de plage ; et `tools/exporter_gguf_dense.py` écrit un GGUF
@@ -84,7 +93,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **40 portes** ; dernière passe : **38 vertes sur 40** (14/10 14 h 55), ≈75 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **42 portes** ; dernière passe : **40 vertes sur 42** (14/10 21 h 43), ≈64 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte

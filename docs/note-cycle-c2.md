@@ -64,6 +64,19 @@ fonction pure du graphe, c'est une **trajectoire**.
   le contraire *non entraînée*. La conception doit donc permettre de mesurer **les deux issues**, et
   la porte ne doit pas supposer un gain.
 
+## 5bis. ÉTAT AU 2026-10-14 : les cinq portes sont tenues
+
+L'ordre de travail du § 6 a été suivi, et les cinq portes du § 4 rendent : chaîne de deux régions
+**exacte** (14,6496 = 14,6496, écart 0,00e0), **pas 1** du cycle égal à cette référence (0,00e0),
+**borné** (`--pas-temps` obligatoire ; cycle nu et récurrent sans délai refusés en **code 3** ;
+pilote en **code 2**), **coût publié** (N pas × régions exécutions) et **trajectoire
+déterministe** — avec la **divergence publiée** : 14,65 → 275,52 → 940,22 → **2 988,46** en quatre
+pas. Une correction de la note, à garder : le § 4 annonçait « code 2 » pour les refus de
+topologie, le moteur sort en **code 3**. Deux ajouts que la note n'avait pas prévus : la capture
+d'état ne fonctionnait **pas** sur un nœud intermédiaire (corrigé), et le pilote refuse
+explicitement le multi-instance et les entrées multiples. Fiche :
+[`reports/rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md).
+
 ## 6. Ordre de travail proposé
 
 1. le **validateur** : accepter un cycle **si et seulement si** chaque lien du cycle porte un délai

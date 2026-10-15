@@ -77,6 +77,11 @@ pub struct Lien {
     /// par ms de RTT** (campagne). Un lien déclaré à 5 ms qui en met 50 n'est pas le lien
     /// qu'on croit, et le savoir AU PREMIER PAS vaut mieux qu'à la fin.
     pub budget_ms: Option<u64>,
+    /// **Lien RÉCURRENT (C2)** : ce lien ferme un CYCLE, et il transporte donc l'état du pas de
+    /// temps PRÉCÉDENT. Un cycle n'est exécutable que si **chaque** lien du cycle est récurrent
+    /// ET porte un délai > 0 : un cycle sans délai n'a pas de solution à un pas de temps donné.
+    /// Défaut : `false` — c'est la porte de non-régression (tout l'existant est acyclique).
+    pub recurrent: bool,
     /// Budget de PAIRES par pas sur ce lien (C10, troisième volet). `None` = aucun.
     ///
     /// Ce sont les paires du NŒUD, et elles n'ont pu être bornées qu'une fois TRANSPORTÉES
@@ -155,6 +160,14 @@ impl<'a> Analyseur<'a> {
         if self.i == debut { return self.erreur("entier attendu"); }
         std::str::from_utf8(&self.s[debut..self.i]).unwrap().parse()
             .map_err(|_| ErreurTopologie(format!("entier illisible à l'octet {debut}")))
+    }
+
+    /// Un booléen JSON (`true` / `false`) — pour `recurrent` (C2).
+    fn bool_(&mut self) -> Result<bool, ErreurTopologie> {
+        self.espaces();
+        if self.s[self.i..].starts_with(b"true") { self.i += 4; return Ok(true); }
+        if self.s[self.i..].starts_with(b"false") { self.i += 5; return Ok(false); }
+        self.erreur("booléen attendu (true ou false)")
     }
 
     /// Un objet dont les clés sont des chaînes et les valeurs ce que `valeur`
@@ -236,6 +249,7 @@ pub fn lire_json(texte: &str) -> Result<Topologie, ErreurTopologie> {
             let mut budget: Option<u64> = None;
             let mut budget_ms: Option<u64> = None;
             let mut budget_paires: Option<u64> = None;
+            let mut recurrent = false;
             a.objet(|a, cle| match cle {
                 "de" => { de = Some(a.chaine()?); Ok(()) }
                 "vers" => { vers = Some(a.chaine()?); Ok(()) }
@@ -244,6 +258,7 @@ pub fn lire_json(texte: &str) -> Result<Topologie, ErreurTopologie> {
                 "budget_octets" => { budget = Some(a.entier()?); Ok(()) }
                 "budget_ms" => { budget_ms = Some(a.entier()?); Ok(()) }
                 "budget_paires" => { budget_paires = Some(a.entier()?); Ok(()) }
+                "recurrent" => { recurrent = a.bool_()?; Ok(()) }
                 autre => Err(ErreurTopologie(format!("clé inconnue dans un lien : « {autre} »"))),
             })?;
             let (de, vers) = match (de, vers) {
@@ -258,7 +273,7 @@ pub fn lire_json(texte: &str) -> Result<Topologie, ErreurTopologie> {
                     "mode de lien inconnu : « {autre} » (f32, listes, blocs, lot, lot_listes)"))),
             }
             liens.push(Lien { de, vers, mode, delai_ms: delai, budget_octets: budget,
-                              budget_ms, budget_paires });
+                              budget_ms, budget_paires, recurrent });
             Ok(())
         }),
         autre => Err(ErreurTopologie(format!("clé inconnue à la racine : « {autre} »"))),
@@ -321,12 +336,45 @@ impl Topologie {
                 return Err(ErreurTopologie(format!("lien d'une région vers elle-même : « {} »", l.de)));
             }
         }
-        // Tri topologique (Kahn). Un cycle n'est pas une erreur en soi dans un
-        // cerveau — mais il l'est ICI, tant que la récurrence (C2) n'est pas
-        // implémentée : mieux vaut refuser que boucler.
+        // ---- C2 : LES CYCLES SONT ACCEPTÉS, SOUS UNE CONDITION EXACTE.
+        //
+        // Un cycle entre régions n'est pas « une boucle de plus » : il demande un ordonnancement
+        // PAR PAS DE TEMPS (chaque région lit l'état des autres du pas précédent). Il n'est donc
+        // exécutable que si **chaque lien qui se trouve sur un cycle** est déclaré `recurrent` et
+        // porte un **délai > 0** — sans délai, il n'y a pas de solution à un pas de temps donné.
+        //
+        // La règle est vérifiée sur les liens EUX-MÊMES (un lien `u → v` est sur un cycle si `v`
+        // peut revenir à `u`), pas sur le graphe : c'est ce qui permet de refuser un cycle dont
+        // UN SEUL lien n'est pas déclaré, au lieu de refuser « un cycle » en bloc.
+        let atteint = self.fermeture_transitive();
+        let idx: BTreeMap<&str, usize> =
+            self.regions.iter().enumerate().map(|(i, r)| (r.id.as_str(), i)).collect();
+        // La règle est MINIMALE, et c'est important : il suffit qu'UN lien du cycle porte le
+        // délai pour que le graphe soit déroulable (A produit, B consomme au pas t, A consomme
+        // B au pas t−1). Exiger que TOUS les liens du cycle soient récurrents refuserait des
+        // graphes parfaitement ordonnançables — c'est le tri de Kahn sur le graphe privé des
+        // liens récurrents qui tranche, plus bas, et lui seul.
+        for l in &self.liens {
+            let (u, v) = (idx[l.de.as_str()], idx[l.vers.as_str()]);
+            let sur_un_cycle = atteint[v][u];
+            if l.recurrent {
+                if !sur_un_cycle {
+                    return Err(ErreurTopologie(format!(
+                        "le lien {} → {} est déclaré récurrent mais ne ferme AUCUN cycle — un \
+délai qui ne sert à rien est une erreur de déclaration, pas un réglage", l.de, l.vers)));
+                }
+                if l.delai_ms == 0 {
+                    return Err(ErreurTopologie(format!(
+                        "le lien récurrent {} → {} n'a pas de délai : c'est le DÉLAI qui rend le \
+graphe déroulable (déclarer `delai_ms` > 0)", l.de, l.vers)));
+                }
+            }
+        }
+        // Tri topologique (Kahn) du graphe PRIVÉ de ses liens récurrents : c'est l'ORDRE D'UN PAS
+        // DE TEMPS. Les liens récurrents, eux, sont satisfaits par l'état du pas précédent.
         let mut entrants: BTreeMap<&str, usize> = self.regions.iter().map(|r| (r.id.as_str(), 0)).collect();
         let mut sortants: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
-        for l in &self.liens {
+        for l in self.liens.iter().filter(|l| !l.recurrent) {
             *entrants.get_mut(l.vers.as_str()).unwrap() += 1;
             sortants.entry(l.de.as_str()).or_default().push(l.vers.as_str());
         }
@@ -345,15 +393,37 @@ impl Topologie {
         if ordre.len() != self.regions.len() {
             let restantes: Vec<&str> = entrants.iter().filter(|(_, &n)| n > 0).map(|(&id, _)| id).collect();
             return Err(ErreurTopologie(format!(
-                "cycle détecté (la récurrence n'est pas implémentée) : régions en attente {:?}", restantes)));
+                "cycle SANS lien récurrent : les régions {restantes:?} s'attendent l'une l'autre \
+dans le même pas de temps. Un cycle n'est déroulable que si l'un de ses liens porte \
+`\"recurrent\": true` avec un `delai_ms` > 0 (C2)")));
         }
         Ok(ordre)
+    }
+
+    /// Fermeture transitive : `atteint[i][j]` est vrai s'il existe un CHEMIN de `i` vers `j`.
+    /// Sert à savoir si un lien est SUR UN CYCLE (`atteint[vers][de]`), c'est-à-dire si le pont
+    /// qu'il jette revient — c'est la règle exacte de C2, au lien près et non au graphe près.
+    fn fermeture_transitive(&self) -> Vec<Vec<bool>> {
+        let n = self.regions.len();
+        let idx: BTreeMap<&str, usize> =
+            self.regions.iter().enumerate().map(|(i, r)| (r.id.as_str(), i)).collect();
+        let mut m = vec![vec![false; n]; n];
+        for l in &self.liens { m[idx[l.de.as_str()]][idx[l.vers.as_str()]] = true; }
+        for k in 0..n { for i in 0..n { for j in 0..n {
+            if m[i][k] && m[k][j] { m[i][j] = true; }
+        } } }
+        m
     }
 
     /// Vrai si la topologie est une chaîne simple (chaque région a au plus une
     /// entrée et une sortie). C'est le cas de NON-RÉGRESSION : une chaîne doit se
     /// comporter exactement comme le découpage d'aujourd'hui.
+    ///
+    /// Un graphe RÉCURRENT n'est jamais une chaîne : il n'a pas « une passe = un résultat », et
+    /// l'annoncer comme chaîne ferait croire à la non-régression ce qui est un changement de
+    /// nature (trouvé en testant le cycle : le plan disait « CHAÎNE » pour un graphe cyclique).
     pub fn est_une_chaine(&self) -> bool {
+        if self.liens.iter().any(|l| l.recurrent) { return false; }
         let mut sorties: BTreeMap<&str, usize> = BTreeMap::new();
         let mut entrees: BTreeMap<&str, usize> = BTreeMap::new();
         for l in &self.liens {
@@ -420,6 +490,16 @@ pilote ne sait exécuter qu'une chaîne (les entrées multiples sont la capacit�
                                 if sorties.is_empty() { "(sortie du graphe)".to_string() }
                                 else { sorties.join(", ") }));
         }
+        // LIGNE MACHINE-LISIBLE : l'ordre d'UN PAS DE TEMPS, tel que le validateur l'a calculé.
+        // Le pilote de cycle (`tools/derouler.py`) la lit au lieu de refaire le tri — une seule
+        // implémentation de la règle, donc pas de divergence possible entre le moteur et le pilote.
+        s.push_str(&format!("ordre: {}\n", ordre.join(" ")));
+        if self.liens.iter().any(|l| l.recurrent) {
+            s.push_str("liens récurrents (état du pas PRÉCÉDENT) :\n");
+            for l in self.liens.iter().filter(|l| l.recurrent) {
+                s.push_str(&format!("  {} → {} (délai {} ms)\n", l.de, l.vers, l.delai_ms));
+            }
+        }
         if self.liens.iter().any(|l| l.delai_ms > 0) {
             s.push_str("délais déclarés :\n");
             for l in self.liens.iter().filter(|l| l.delai_ms > 0) {
@@ -441,7 +521,7 @@ pilote ne sait exécuter qu'une chaîne (les entrées multiples sont la capacit�
         ];
         let liens = vec![Lien { de: "local".into(), vers: "distant".into(),
                                 mode: "listes".into(), delai_ms: 0, budget_octets: None,
-                                budget_ms: None, budget_paires: None }];
+                                budget_ms: None, budget_paires: None, recurrent: false }];
         Topologie { regions, liens }
     }
 }

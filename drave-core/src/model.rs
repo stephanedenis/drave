@@ -5649,6 +5649,34 @@ PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go 
     /// Lit un état d'entrée : le fichier de llama.cpp (`REFD`, dimensions,
     /// f32 — la position `pos` est extraite) ou un fichier plat de f32 (celui
     /// que Drave écrit, une position par fichier).
+    /// **La capture d'état brut** (`--etat-sortie`), appelée juste AVANT la norme finale — et
+    /// aussi sur un **nœud intermédiaire**, qui rend le flux brut.
+    ///
+    /// POURQUOI ELLE EST DEVENUE UNE MÉTHODE (14/10, C2). Elle vivait après le retour anticipé du
+    /// nœud intermédiaire, donc `--etat-sortie` n'écrivait **rien** sur une plage tronquée sans
+    /// `--tete-partielle` — les portes ne le voyaient pas parce qu'elles passent toutes
+    /// `--tete-partielle`. Le pilote de cycle (`tools/derouler.py`) a besoin exactement de
+    /// l'inverse : l'état BRUT d'une région intermédiaire, pour l'injecter dans la suivante. Une
+    /// capture est une capture, et elle ne doit pas dépendre de ce qu'on fait du flux ensuite.
+    fn capturer_etat(etat_sortie: &Option<(String, Vec<usize>)>, pos: usize, x: &[f32]) {
+        let Some((chemin, positions)) = etat_sortie.as_ref() else { return };
+        if !positions.contains(&pos) { return; }
+        use std::io::Write;
+        let chemin = &format!("{chemin}.{pos}");
+        match std::fs::File::create(chemin) {
+            Ok(mut f) => {
+                let mut octets = Vec::with_capacity(x.len() * 4);
+                for v in x.iter() { octets.extend_from_slice(&v.to_le_bytes()); }
+                match f.write_all(&octets) {
+                    Ok(()) => eprintln!("[etat] {} valeurs écrites dans {chemin} (position {pos})",
+                                        x.len()),
+                    Err(e) => eprintln!("[etat] écriture de {chemin} impossible : {e}"),
+                }
+            }
+            Err(e) => eprintln!("[etat] création de {chemin} impossible : {e}"),
+        }
+    }
+
     fn lire_etat(chemin: &str, pos: usize) -> Vec<f32> {
         let b = std::fs::read(chemin).unwrap_or_else(|e|
             panic!("état d'entrée {chemin} : {e}"));
@@ -7399,7 +7427,8 @@ sur un ensemble plus large que la référence donnerait un autre choix", m.candi
         let debug_mla = std::env::var("DRAVE_DEBUG_MLA").is_ok();
         self.profil_jetons += 1;
         let Model { g, cfg, layers, out_norm, pool, kv, events, attn_events, kv_gpu,
-                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, .. } = self;
+                    attn_gpu_part, emb_imposee, paires, clamp_exp, clamp_shexp, etat_sortie, .. }
+            = self;
         // Borne du clamp SwiGLU de la couche : celle des experts, ou celle de
         // l'expert partagé (qui retombe sur la première si le modèle ne déclare
         // que `swiglu_clamp_exp` — c'est le cas de V4-Flash).
@@ -8565,6 +8594,8 @@ dynamique de {dyn_:.3e} (relatif {:.2e})", mx / dyn_.max(1e-9));
             // valeur au lieu de la copie 0. 16 octets par jeton, sur les 65 615
             // que coûte déjà un état en `hc` copies — 0,02 %.
             if self.hc_retarde { self.hc_porte_flux = hc_porte.clone(); }
+            // l'état brut d'un pont se capture comme les autres
+            Self::capturer_etat(etat_sortie, pos, &x);
             return x;                       // nœud intermédiaire : flux brut
         }
         // Mélange de TÊTE : les `hc` copies redeviennent un seul état, qui voit
@@ -8614,28 +8645,7 @@ le dernier raccord FFN n'a pas été exécuté (plage de couches vide ?)"),
             }
             x = z;
         }
-        // ---- C2/C6 : l'état BRUT, capturé ou augmenté, juste AVANT la norme finale.
-        // La position du prélèvement est celle du texte : un état prélevé à la
-        // position p d'un contexte peut être injecté à n'importe quelle position d'un
-        // autre — c'est tout l'intérêt, et c'est ce que la mesure doit montrer.
-        if let Some((chemin, positions)) = self.etat_sortie.as_ref() {
-            if positions.contains(&pos) {
-                use std::io::Write;
-                let chemin = &format!("{chemin}.{pos}");
-                match std::fs::File::create(chemin) {
-                    Ok(mut f) => {
-                        let mut octets = Vec::with_capacity(x.len() * 4);
-                        for v in x.iter() { octets.extend_from_slice(&v.to_le_bytes()); }
-                        match f.write_all(&octets) {
-                            Ok(()) => eprintln!("[etat] {} valeurs écrites dans {chemin} \
-(position {pos})", x.len()),
-                            Err(e) => eprintln!("[etat] écriture de {chemin} impossible : {e}"),
-                        }
-                    }
-                    Err(e) => eprintln!("[etat] création de {chemin} impossible : {e}"),
-                }
-            }
-        }
+        Self::capturer_etat(etat_sortie, pos, &x);
         // La position est un CHOIX, et il compte : injecter à chaque jeton de la
         // question perturbe aussi la question. On rappelle un souvenir au moment de
         // répondre, et c'est ce que `--fusion-pos` permet de dire.
