@@ -16,7 +16,7 @@
 | faculté | le mécanisme le plus efficient | le chiffre | coût | état |
 |---|---|---|---|---|
 | **perception** (entrées) | région frontière `--entree signal:F`, canal, gain, jeton | entrée constante ⇒ sortie constante, **au bit près** | **0 paire** | ✅ (texte et signal) |
-| **réflexes** | chemin court **entraîné** (LoRA couches basses + lecteur de sortie) | **÷1,47** (m32) et **÷1,24** (m20) à 8 couches, lus par le moteur | 0,07 % des poids | ✅ |
+| **réflexes** | chemin court **entraîné** (LoRA couches basses + lecteur de sortie) | **÷1,47** (m32) et **÷1,24** (m20) à 8 couches, lus par le moteur | 0,07 % des poids (rang 8) · **0,035 %** au point efficient (rang 4) | ✅ |
 | **attention sélective** | **fenêtre + puits** (moitié des clés), et une **politique par texte** quand la sensibilité est mesurable | le coût de la moitié va de **+0,04 % à +7,39 %** selon le texte (**×180**) ⇒ un budget uniforme **casse** la tolérance de +1 % sur **5 textes sur 8** ; la politique par texte la tient partout pour **−14,1 % de clés** | clés ÷2, paires ÷2 | ✅ |
 | **mémoire de travail** | **tampon exact** `--memoire K` — et le réseau **ne l'apprend pas** (R² −1,09 → **−2,77** entraîné) | R² **1,000**, erreur nulle, poursuite de `v[t−8]` ; avec le tampon en entrée, le modèle gelé lit **+0,879** et l'entraîné **+0,964** | **0 paire de plus** | ✅ |
 | **mémoire épisodique** | magasin adressable par contenu (hachage/LSH) | élagué **83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact** | **11 jetons sur 2 048** | ✅ |
@@ -49,7 +49,7 @@ différents — c'est le choix de conception le plus net de la carte :
 |---|---|---|---|---|
 | **de travail** (quelques pas) | les K derniers pas d'un signal | **tampon exact** (`--memoire K`), lu directement | **0 paire** | ne généralise pas : elle rend ce qui est entré |
 | **épisodique** (la journée) | des épisodes entiers, adressables par contenu | magasin clé/valeur, hachage/LSH, écriture en **une passe** | 11 jetons sur 2 048 lus | **n'écrit rien dans les poids** — donc n'apprend pas |
-| **sémantique** (les poids) | ce qui se répète | **consolidation** : rejeu → LoRA → poids | 0,07 % des poids | **spécialise** : +1,3 % hors domaine |
+| **sémantique** (les poids) | ce qui se répète | **consolidation** : rejeu → LoRA → poids | **0,035 %** des poids au point efficient (rang 4 : −7,92 % ; rang 32, huit fois plus gros : −5,01 %) | **spécialise** : +1,3 % hors domaine |
 
 **Le classement d'efficience est net** : à court terme, un **tampon** bat tout (R² 1,000 pour
 zéro paire) ; à moyen terme, un **magasin épisodique** bat la consolidation (aucun oubli, coût
@@ -92,7 +92,7 @@ et rend la main au lieu d'inventer.
 
 > **Ce qui doit être retenu exactement demande une STRUCTURE (un tampon : 0 paire). Ce qui doit
 > être retrouvé demande un MAGASIN (épisodique : 11 jetons sur 2 048). Ce qui doit être su
-> demande des POIDS (consolidation : 0,07 % des poids, et une perte de généralité). Et ce qui
+> demande des POIDS (consolidation : 0,035 % des poids au point efficient, et une perte de généralité). Et ce qui
 > doit être amplifié par le temps demande un CYCLE — qui, non entraîné, diverge.**
 
 C'est la leçon que les mesures de ce dépôt donnent, et elle est contre-intuitive là où elle
