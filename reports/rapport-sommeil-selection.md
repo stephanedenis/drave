@@ -93,6 +93,35 @@ essayée, et elle **départage** — sur un des deux morceaux de test :
   n'est pas établi — il est **prometteur**. La suite est simple et chiffrée : les deux lots sur
   **quatre** morceaux de test, et la courbe « diversité du lot → transfert ».
 
+## 1quater. La COURBE « diversité du lot → transfert » : un SEUIL, pas un gradient
+
+La suite annoncée au § 1ter (« les deux lots sur quatre morceaux de test, et la courbe ») est faite :
+**cinq lots de quatre morceaux** couvrant toute l'étendue de diversité, trois morceaux de test
+(m20, m32, m30), rang 4, dix époques, graine 0.
+
+| lot | diversité (trigrammes distincts / jetons) | m20 | m32 | m30 |
+|---|---|---:|---:|---:|
+| **Q1** plus répétitif | 0,662 – 0,829 | −11,20 % | −6,29 % | −6,11 % |
+| **Q2** | 0,833 – 0,857 | −11,15 % | **−7,25 %** | −5,98 % |
+| **Q3** médian | 0,859 – 0,874 | **−14,42 %** | −7,10 % | −3,71 % |
+| **Q4** | 0,874 – 0,891 | −12,87 % | −7,05 % | **−6,60 %** |
+| **Q5** plus varié | **0,917 – 0,954** | **−7,85 %** | **−4,96 %** | −5,41 % |
+
+* **le lot le plus VARIÉ est le pire, et sur deux tests sur trois** : −7,85 % sur m20 (contre −11,2
+  à −14,4 pour les quatre autres) et −4,96 % sur m32 (contre −6,3 à −7,3). L'écart avec le médian
+  est de **6,6 points** sur m20 — bien au-dessus de toute dispersion mesurée cette nuit ;
+* **mais entre Q1 et Q4, il n'y a AUCUN ordre** : Q3 est le meilleur sur m20, Q4 sur m30, Q2 sur
+  m32. Ce n'est donc **pas un gradient** (« plus répétitif = mieux ») mais un **seuil** :
+  **au-delà d'environ 0,9 trigramme distinct par jeton, le rejeu ne trouve plus rien à consolider** ;
+* **le critère final est donc plus faible et plus honnête que celui du § 1ter** : il ne dit pas
+  « rejouer les plus répétitifs » (Q1 n'est pas meilleur que Q3), il dit **« éviter les plus
+  variés »** — et c'est un tri qui coûte des millisecondes, sans le modèle ;
+* **l'hypothèse reste la même** et elle explique le seuil : un texte très varié ressemble à du bruit
+  (peu de régularité par jeton), donc il n'y a rien à extraire ; en dessous du seuil, tout texte
+  ordinaire porte assez de structure, et le volume redevient le seul levier — c'est la conclusion de
+  toute la nuit (« la quantité domine le placement »), avec **une exception** : le bruit ne
+  s'apprend pas.
+
 ## 2. Ce que ça change pour le protocole de sommeil
 
 1. **rejouer court et divers** — 3 morceaux répartis donnent −6,5 % en domaine pour un coût hors
@@ -100,9 +129,10 @@ essayée, et elle **départage** — sur un des deux morceaux de test :
 2. **ne pas trier par difficulté** : le tri par surprise est mesuré **sous** le hasard, et il coûte
    une passe de mesure préalable (20 morceaux × 1 024 jetons) pour un résultat négatif ;
 3. **ne pas rejouer ce qui est déjà su** : c'est la seule règle qui **coûte** ailleurs (+2,07 %) ;
-4. **et un critère qui commence à tenir** : rejouer les morceaux **répétitifs** plutôt que variés
-   (§ 1ter) — 3,6 points sur m20, à trois graines, pour un tri qui coûte des millisecondes. C'est le
-   premier de la nuit qui départage quoi que ce soit ;
+4. **et le seul critère qui tient est un SEUIL, pas un tri** : **éviter les morceaux les plus
+   variés** (> 0,9 trigramme distinct par jeton : −7,9 % contre −11 à −14 % sur m20) — au-dessous du
+   seuil, tous les lots se valent (§ 1quater). C'est le premier critère de la nuit qui départage
+   quoi que ce soit, et il est **négatif** : il dit quoi éviter, pas quoi choisir ;
 5. et **la question qui reste** : un rejeu *répété* (plusieurs nuits sur les mêmes morceaux) ou un
    rejeu *séquentiel* (les morceaux dans l'ordre du texte) ne sont pas mesurés — le plan de sommeil
    les demanderait.
