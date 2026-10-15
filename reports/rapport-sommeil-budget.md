@@ -53,12 +53,17 @@ Troisième question, la plus simple : les 3 morceaux sont-ils sous-entraînés ?
 
 | réglage | m32 (jamais rejoué) | écart |
 |---|---:|---:|
-| 3 morceaux, **12** époques, graine 0 | 6,7829 | −5,51 % |
-| 3 morceaux, **24** époques, graine 0 | 6,7797 | **−5,56 %** |
+| 3 morceaux, **12** époques, graine 0 | **6,7487** | −5,99 % |
+| 3 morceaux, **24** époques, graine 0 | **6,7487** | −5,99 % *(identique au chiffre près)* |
 | 3 morceaux, 12 époques, **graine 1** | 6,7935 | −5,37 % |
 
-* **+0,05 point** pour deux fois plus d'entraînement : c'est **la donnée** qui limite, pas le
-  nombre de pas — et c'est bien ce que la fiche du 13/10 disait de l'adaptateur (« la capacité n'est
+*(les deux premières lignes sont **refaites** avec le harnais reproductible —
+`rapport-consolidation-balayage.md` § 4bis ; elles donnaient −5,51 % et −5,56 % avant la correction,
+et elles rendent maintenant **le même nombre**, pas « presque » : l'époque retenue est la même et
+les époques supplémentaires ne changent rien du tout.)*
+
+* **ZÉRO point** pour deux fois plus d'entraînement (6,7487 dans les deux cas, au chiffre près) :
+  c'est **la donnée** qui limite, pas le nombre de pas — et c'est bien ce que la fiche du 13/10 disait de l'adaptateur (« la capacité n'est
   pas la limite, la donnée l'est »), retrouvé ici sur la consolidation ;
 * **le protocole le dit lui-même** : l'époque se choisit sur la validation, et sur 24 époques la
   meilleure reste précoce — les époques supplémentaires sont **écartées**, pas publiées. Un

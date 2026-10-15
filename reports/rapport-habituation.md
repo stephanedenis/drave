@@ -28,6 +28,11 @@
 | oui | **+1** | 1 | **+0,921** | +0,853 | +0,962 |
 | oui | **−1** | 1 | **+0,817** | +0,850 | +0,888 |
 
+*(les deux lignes du retard 1 ont été **refaites** après la correction de reproductibilité du
+harnais — `rapport-consolidation-balayage.md` § 4bis — et elles rendent **exactement** les mêmes
+valeurs : +0,921 et +0,817. Le bras gelé ne dépend d'aucun entraînement, et les noyaux
+déterministes le confirment.)*
+
 Ce que ça dit :
 
 * **le retard est ce qui décide, pas le signe** : à retard 1, le changement est lisible (**+0,921**)
