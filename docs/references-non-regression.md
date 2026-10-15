@@ -140,7 +140,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **42 vertes sur 44** (15/10 09 h 38), ≈70 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **45 portes** (la 45ᵉ, `porte-vision`, vérifie le refus, les formes et **mesure** la tour sans la juger) ; dernière passe : **42 vertes sur 44** (15/10 09 h 38), ≈70 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte

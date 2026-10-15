@@ -1862,7 +1862,14 @@ fn run_banc_vision(sortie: &str) {
     assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
     // Image 28 × 28 déterministe : dégradé + carré central, pour que la
     // référence numpy puisse la reconstruire sans lire de fichier.
-    let (cote, cotes) = (224usize, 8usize);
+    // LA TAILLE DE L'IMAGE EST RÉGLABLE (`DRAVE_VISION_COTE`), et ce n'est pas un confort : la
+    // référence numpy (`tools/vision_ref.py`) reconstruit l'image du banc et n'a été VALIDÉE qu'à
+    // 28 × 28 (écart 5,4e-7, la mesure publiée). Sans ce réglage, la porte de vision ne pouvait
+    // comparer que des formes, jamais l'arithmétique de l'embedding — le banc restait sur son
+    // image 224 × 224 et la référence sautait la comparaison en le disant.
+    let cote: usize = std::env::var("DRAVE_VISION_COTE").ok()
+        .and_then(|v| v.parse().ok()).unwrap_or(224);
+    let cotes = 8usize;
     let mut img = vec![0f32; cin * cote * cote];
     for y in 0..cote {
         for x in 0..cote {

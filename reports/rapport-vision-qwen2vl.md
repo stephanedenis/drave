@@ -176,6 +176,28 @@ champ des hypothèses est passé de « on ne sait pas » à **trois suspects pr�
 isolément — et la méthode qui les a produits (comparer couche par couche, éliminer par expérience,
 écrire ce qui est éliminé) est celle qui a déjà trouvé les deux vrais bugs.
 
+## 2quinquies. La 45ᵉ PORTE : ce qui est vérifié est vérifié, ce qui ne l'est pas est DIT
+
+`tools/porte-vision.sh` entre dans la passe complète (**45 portes**) et vérifie **ce qui est
+établi**, en refusant de juger ce qui ne l'est pas :
+
+| vérification | ce qui est exigé | rendu |
+|---|---|---|
+| **1. le refus** | un modèle **sans** tour de vision est refusé **en le disant** (pas de panique) | ✅ |
+| **2. l'embedding** *(conditionnel)* | la comparaison à la référence numpy, **si elle peut tourner** | ⚠️ **non comparé** : la référence n'accepte que l'image 28 × 28 et **ses attentes de format ont dérivé** (elle lit un `.poids` que le banc n'écrit plus pareil) |
+| **3. les formes** | tour **256 × 1280**, jetons d'image **64 × 1536** | ✅ |
+| **4. la tour** | **mesurée, pas jugée** : sa norme est publiée, l'écart à la référence est renvoyé à la fiche | ⚠️ |
+
+* **le résumé de la porte dit ce qui a été vérifié**, et il a fallu le corriger : la première
+  version annonçait « embedding **exact** » alors que la comparaison **n'avait pas tourné** — une
+  porte qui résume au-delà de ce qu'elle a mesuré est exactement le défaut que ce dépôt traque ;
+* **et la raison du « non comparé » est un fait, pas une excuse** : `tools/vision_ref.py` a été
+  validé à **28 × 28** (5,4e-7) et le banc est passé à **224 × 224** (16 × 16 patchs) depuis ; la
+  taille est maintenant réglable (`DRAVE_VISION_COTE`) pour que la comparaison **puisse** être
+  refaite, mais le format des fichiers intermédiaires a dérivé entre-temps. **La référence d'abord
+  écrite d'après les hypothèses du moteur ne pouvait pas les mettre en défaut** — c'est la référence
+  **indépendante** (`transformers`) qui l'a fait, et c'est écrit dans l'en-tête de la porte.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
