@@ -3,7 +3,9 @@
 > Campagne : **cerveau** · expérience : la faculté **perception visuelle** (C1/M4), qui était
 > « **bloquée par un modèle absent** » (`docs/cerveau-facultes.md` § 1bis, 15/10 06 h).
 > Question : avec un vrai modèle de vision sur la machine, la tour du moteur tient-elle ?
-> Verdict : **la tour TOURNE, et elle n'est PAS vérifiée.** Le modèle est là (Qwen2-VL-2B + son
+> Verdict : **la tour TOURNE ; l'écart avec la référence est un écart de POIDS, pas de code**
+> (§ 2sexies : le noyau de patchs du mmproj ne porte qu'une des deux tranches temporelles — 0,00 %
+> sur l'une, absente sur l'autre). Le modèle est là (Qwen2-VL-2B + son
 > `mmproj`), `--banc-vision` déroule maintenant **les 32 couches, la rotation 2-D, la norme finale,
 > le projecteur `mm.0`/`mm.2` et l'injection** — mais la comparaison à une seconde implémentation
 > (`transformers`) **ne conclut pas** : mêmes formes (256 × 1280), normes **862,9** contre **116 651**
@@ -169,7 +171,8 @@ ce qu'on demande à une expérience bien posée.
 | la fenêtre locale | ✅ **désactivée** (Qwen2-VL n'en déclare pas) |
 | la convention de rotation 2-D | ✅ **corrigée d'après la source** (`i` ↔ `i + hd/2`) |
 | l'ordre des patchs | ✅ **éliminé** (équivalence démontrée ci-dessus) |
-| **l'application de la rotation PAR TÊTE** · **la disposition q/k/v** · **l'ordre du MLP** | ❌ **restent** — et c'est là que la prochaine heure doit aller |
+| **l'application de la rotation PAR TÊTE** · **la disposition q/k/v** · **l'ordre du MLP** | ⏸️ **suspendus** : ils n'ont jamais été comparés **à poids égaux**, et le MLP est **confirmé conforme** par la source (`QuickGELUActivation`, `fc1` 1280 → 5120) |
+| **les POIDS eux-mêmes** (mmproj contre `safetensors`) | ❌ **C'EST LA CAUSE PRINCIPALE** : le noyau de patchs du mmproj = la **1ʳᵉ tranche temporelle seule** (0,00 %), la 2ᵉ (même norme) est absente |
 
 **La tour reste donc « non vérifiée »** (55 à 79 % d'écart pour une quantification de ~1 %), mais le
 champ des hypothèses est passé de « on ne sait pas » à **trois suspects précis**, chacun testable
@@ -197,6 +200,46 @@ isolément — et la méthode qui les a produits (comparer couche par couche, é
   refaite, mais le format des fichiers intermédiaires a dérivé entre-temps. **La référence d'abord
   écrite d'après les hypothèses du moteur ne pouvait pas les mettre en défaut** — c'est la référence
   **indépendante** (`transformers`) qui l'a fait, et c'est écrit dans l'en-tête de la porte.
+
+## 2sexies. LA CAUSE PRINCIPALE EST TROUVÉE — et ce n'est PAS le moteur : le mmproj a perdu une tranche temporelle
+
+La comparaison de l'**entrée** de la tour (l'embedding de patchs) a été faite séparément
+(`DRAVE_VISION_EMBED=1` → `<sortie>.embed`) : **elle diffère déjà** (normes **70,34** contre **40,94**,
+cosinus **+0,273**) ✗. L'erreur n'est donc pas dans les blocs : elle est **avant**.
+
+Les **noyaux** ont alors été comparés directement :
+
+| noyau | forme | norme | écart au noyau du moteur |
+|---|---|---:|---:|
+| **moteur** (`v.patch_embd.weight` du mmproj) | (1280, 3, 14, 14) | 7,81 | — |
+| référence, **1ʳᵉ tranche temporelle** | (1280, 3, 14, 14) | 7,81 | **0,00 %** |
+| référence, 2ᵉ tranche temporelle | (1280, 3, 14, 14) | 7,78 | 18,38 % |
+| référence, **somme des deux** | (1280, 3, 14, 14) | 15,53 | 50,13 % |
+
+**Le noyau du mmproj est EXACTEMENT la première tranche temporelle** (0,00 % d'écart) — et la
+seconde, qui a la **même norme** (7,78 contre 7,81), **n'y est pas**.
+
+Or Qwen2-VL traite une **image fixe** en **dupliquant la trame** (`temporal_patch_size = 2`) : sa
+convolution 3-D additionne donc **les deux** tranches, et l'embedding du modèle est
+`(w₀ + w₁) ⊛ x`, quand le moteur calcule `w₀ ⊛ x` ✗. **Tout l'écart de la tour vient de là** — et il
+n'est **pas** dans le code du moteur : il est dans **la conversion** qui a produit le mmproj.
+
+**Conséquences, et elles sont importantes pour la faculté** :
+
+* **aucune implémentation indépendante du modèle ne peut concorder avec une tour bâtie sur ce
+  mmproj** : la référence et le moteur ne calculent pas la même fonction, et les 55 à 79 % d'écart
+  sont **au moins en grande partie** l'écart entre **deux poids**, pas entre deux codes ;
+* **le moteur lit fidèlement ses poids** (0,00 % sur le noyau, et l'embedding de patchs reproduit sa
+  propre référence numpy à 5,4e-7) — ce qui était la question posée au départ ;
+* **les trois suspects précédents tombent du même coup** : rien ne dit que la rotation par tête, la
+  disposition q/k/v ou l'ordre du MLP soient faux — ils n'ont jamais été comparés **à poids égaux** ;
+  et l'un d'eux est **confirmé conforme** par la source (le MLP : `QuickGELUActivation`,
+  `fc1` 1280 → 5120, exactement le choix du moteur) ;
+* **la suite est un choix, et il est écrit** : (a) **reconstruire le noyau sommé** depuis les
+  `safetensors` (ils sont téléchargés ✓) et le donner au moteur — c'est la voie « fidélité au
+  modèle » ; ou (b) **prendre le mmproj pour référence** et se comparer à **llama.cpp**, qui utilise
+  la même conversion — c'est la voie « fidélité à l'écosystème ». Les deux sont défendables ; ce qui
+  ne l'est pas, c'est de continuer à comparer **l'un à l'autre** sans le dire.
 
 ## 3. Ce que ça change pour la carte des facultés
 

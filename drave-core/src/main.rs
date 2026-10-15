@@ -1903,6 +1903,15 @@ fn run_banc_vision(sortie: &str) {
         }
     }
 
+    // L'EMBEDDING BRUT EST ÉCRIT À PART quand on le demande : sans lui, on ne peut pas distinguer
+    // une erreur d'ENTRÉE (l'embedding de patchs) d'une erreur de BLOC — et c'est la première
+    // question à trancher quand une tour ne concorde pas avec sa référence.
+    if std::env::var("DRAVE_VISION_EMBED").is_ok() {
+        let mut fe = std::io::BufWriter::new(
+            std::fs::File::create(format!("{sortie}.embed")).expect("création de l'embedding"));
+        for v in [(n_patch as i32), (cout as i32)] { fe.write_all(&v.to_le_bytes()).unwrap(); }
+        for v in out.iter() { fe.write_all(&v.to_le_bytes()).unwrap(); }
+    }
     let mut f = std::io::BufWriter::new(std::fs::File::create(sortie).expect("création"));
     f.write_all(&(n_patch as i32).to_le_bytes()).unwrap();
     f.write_all(&(cout as i32).to_le_bytes()).unwrap();
