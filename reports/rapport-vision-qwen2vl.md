@@ -139,6 +139,43 @@ différence structurelle**, et le suspect suivant est nommé, avec sa preuve :
 > l'ordre de lecture des patchs, l'autre dans l'ordre **groupé par blocs de fusion 2 × 2**. C'est la
 > prochaine chose à trancher — et elle se tranche en comparant **un patch isolé**, pas une norme.
 
+## 2quater. L'hypothèse « ordre des patchs » est ÉLIMINÉE — et l'équivalence est confirmée
+
+Le § 2ter laissait un suspect : `get_vision_position_ids` donne au patch 16 la position **(0, 8)**,
+et non (1, 0) comme dans l'ordre de lecture du banc. Mesuré sur une grille **4 × 4** (seize patchs,
+fusion 2 × 2), la correspondance de la référence est :
+
+| indice | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| position | (0,0) | (0,1) | **(1,0)** | (1,1) | **(0,2)** | (0,3) | (1,2) | (1,3) |
+
+— c'est-à-dire l'ordre **par blocs de fusion** (quatre patchs consécutifs par bloc 2 × 2), pas
+l'ordre de lecture. La référence a donc été nourrie dans **cet** ordre, et sa sortie **ramenée** dans
+l'ordre du banc avant comparaison.
+
+**Résultat : rien ne change.** Cosinus **+0,6825 · +0,7805 · +0,8405 · +0,8087** aux couches 0-3
+(contre +0,6896 · +0,7838 · +0,8400 avant), écart de **55 à 79 %**. Et c'est **attendu** : les deux
+ordres sont **équivalents** dès lors que chaque patch porte **sa** position (l'attention est une
+somme sur un ensemble, et la position voyage avec le patch). L'expérience ne valide donc pas une
+correction — elle **élimine une hypothèse** et **confirme une équivalence**, ce qui est exactement
+ce qu'on demande à une expérience bien posée.
+
+**Ce qui est éliminé à ce stade, et ce qui reste** :
+
+| hypothèse | état |
+|---|---|
+| l'embedding de patchs | ✅ **exact** (5,4e-7 contre la référence numpy, mêmes poids) |
+| les biais des LayerNorm | ✅ **corrigés** (couche 0 : cosinus −0,50 → +0,69) |
+| la fenêtre locale | ✅ **désactivée** (Qwen2-VL n'en déclare pas) |
+| la convention de rotation 2-D | ✅ **corrigée d'après la source** (`i` ↔ `i + hd/2`) |
+| l'ordre des patchs | ✅ **éliminé** (équivalence démontrée ci-dessus) |
+| **l'application de la rotation PAR TÊTE** · **la disposition q/k/v** · **l'ordre du MLP** | ❌ **restent** — et c'est là que la prochaine heure doit aller |
+
+**La tour reste donc « non vérifiée »** (55 à 79 % d'écart pour une quantification de ~1 %), mais le
+champ des hypothèses est passé de « on ne sait pas » à **trois suspects précis**, chacun testable
+isolément — et la méthode qui les a produits (comparer couche par couche, éliminer par expérience,
+écrire ce qui est éliminé) est celle qui a déjà trouvé les deux vrais bugs.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration

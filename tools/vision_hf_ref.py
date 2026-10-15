@@ -81,15 +81,26 @@ def main() -> int:
     # (128) must match b (256) ») — l'erreur venait du format, pas de la tour.
     n_cote = a.cote // 14
     cadre = 2                                                   # temporal_patch_size de Qwen2-VL
+    fusion = 2                                                  # spatial_merge_size
+    # ⚠ L'ORDRE DES PATCHS N'EST PAS L'ORDRE DE LECTURE. `get_vision_position_ids` attribue à
+    # l'indice 2 la position (1, 0) et à l'indice 4 la position (0, 2) — mesuré sur une grille
+    # 4 × 4 : la séquence est ordonnée par BLOCS de fusion 2 × 2 (quatre patchs consécutifs par
+    # bloc), pas ligne par ligne. Nourrir la référence en ordre de lecture (ce que faisait la
+    # première version) décale donc TOUTES les positions dès le troisième patch — de quoi
+    # expliquer à elle seule l'essentiel de l'écart de 55 à 78 %.
+    ordre = []                                                  # indice de séquence → (ligne, colonne)
+    for by in range(n_cote // fusion):
+        for bx in range(n_cote // fusion):
+            for dy in range(fusion):
+                for dx in range(fusion):
+                    ordre.append((by * fusion + dy, bx * fusion + dx))
     patchs = np.zeros((n_cote * n_cote, 3 * cadre * 14 * 14), dtype=np.float32)
-    for py in range(n_cote):
-        for px_ in range(n_cote):
-            k = py * n_cote + px_
-            bloc = img[:, py * 14:(py + 1) * 14, px_ * 14:(px_ + 1) * 14]      # [3, 14, 14]
-            for c in range(3):
-                for t_ in range(cadre):                                        # image fixe : 2 fois
-                    deb = (c * cadre + t_) * 196
-                    patchs[k, deb:deb + 196] = bloc[c].reshape(-1)
+    for k, (py, px_) in enumerate(ordre):
+        bloc = img[:, py * 14:(py + 1) * 14, px_ * 14:(px_ + 1) * 14]          # [3, 14, 14]
+        for c in range(3):
+            for t_ in range(cadre):                                            # image fixe : 2 fois
+                deb = (c * cadre + t_) * 196
+                patchs[k, deb:deb + 196] = bloc[c].reshape(-1)
     px = torch.tensor(patchs, dtype=torch.float32)               # [n_patch, C·t·14·14]
     grille = torch.tensor([[1, n_cote, n_cote]], dtype=torch.long)
     with torch.no_grad():
@@ -101,6 +112,13 @@ def main() -> int:
     print(f"référence: {sortie.shape[0]} jetons × {sortie.shape[1]} canaux · "
           f"|sortie| = {np.linalg.norm(sortie):.4f}")
 
+    # Le moteur écrit ses patchs dans l'ORDRE DE LECTURE : on ramène la sortie de la référence
+    # (ordre par blocs) dans ce même ordre avant de comparer quoi que ce soit.
+    if sortie.shape[0] == len(ordre):
+        inverse = np.empty(len(ordre), dtype=int)
+        for k, (py, px_) in enumerate(ordre):
+            inverse[k] = py * n_cote + px_
+        sortie = sortie[inverse]
     if sortie.shape != ref.shape:
         print(f"  ❌ FORMES DIFFÉRENTES : moteur {ref.shape} contre référence {sortie.shape}")
         return 1
