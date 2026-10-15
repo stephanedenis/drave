@@ -198,6 +198,19 @@ class Banc:
         with torch.no_grad():
             return self._brut(ids)
 
+    @torch.no_grad()
+    def accord(self, morceaux, logits_fn) -> float:
+        """L'ACCORD avec le maître : la fraction de positions où le chemin court choisit le MÊME
+        jeton que le modèle complet. C'est la mesure qui manquait — un étudiant peut être bon en
+        perplexité et répondre autre chose (mesuré : 0 jeton sur 96 en génération)."""
+        justes, n = 0, 0
+        for ids in morceaux:
+            etudiant = logits_fn(ids)[:, 4:-1].argmax(-1)
+            maitre = self._complet(ids)[:, 4:-1].argmax(-1)
+            justes += int((etudiant == maitre).sum())
+            n += etudiant.numel()
+        return justes / max(n, 1)
+
     # ---- perplexité sur les positions 4.. : la convention du moteur (--etat-pos commence à 4) ----
     # La perte se calcule LIGNE PAR LIGNE : un lot de k morceaux concaténés n'est pas une seule
     # séquence — la dernière position d'un morceau ne prédit pas la première du suivant, et
@@ -324,6 +337,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         res = {"bras": bras, "epoque": meilleur[1], "val": meilleur[0],
                "val_depart": ppl_depart_val, "test_depart_premier": ppl_depart,
                "journal": journal, "train": ppl_etats(Xtr, ytr), "tenseurs": tenseurs()}
+        if accord_avant is not None:
+            res["accord_avant"] = accord_avant
+            res["accord"] = {n: banc.accord(ms, lambda ids: logits_chemin(ids, False))
+                             for n, ms in tests}
         for nom, (X, y) in Xte.items():
             res[nom] = ppl_etats(X, y)
         if plein_avant is not None:
@@ -333,6 +350,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
 
     # ========================= dessins B et A+B : à travers les couches =========================
     plein_obj = getattr(a, "objectif", "tronque") == "plein"
+    distiller = getattr(a, "distiller", False)
 
     def logits_chemin(ids, grad=False):
         if plein_obj:
@@ -350,6 +368,17 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
 
     def perte_morceaux(lot):
         logits = logits_chemin(lot, grad=True)
+        if distiller:
+            # E5 — DISTILLATION : la cible n'est plus le jeton suivant, c'est la DISTRIBUTION du
+            # maître (le modèle complet, gelé). Sans cela, un étudiant peut être excellent en
+            # perplexité et répondre autre chose : mesuré le 15/10, **0 jeton sur 96** partagé
+            # avec le maître en génération.
+            with torch.no_grad():
+                logits_maitre = banc._complet(lot)[:, 4:-1].float() / a.temperature
+            etudiant = logits[:, 4:-1].float() / a.temperature
+            return nn.functional.kl_div(
+                nn.functional.log_softmax(etudiant, dim=-1),
+                nn.functional.softmax(logits_maitre, dim=-1), reduction="batchmean")
         cibles = lot[:, 5:].reshape(-1)
         return nn.functional.cross_entropy(
             logits[:, 4:-1].reshape(-1, logits.shape[-1]).float(), cibles)
@@ -362,6 +391,8 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
 
     ppl_depart_val = banc.ppl(val, lambda ids: logits_chemin(ids, False))
     ppl_depart = banc.ppl(tests[0][1], lambda ids: logits_chemin(ids, False))
+    accord_avant = ({n: banc.accord(ms, lambda ids: logits_chemin(ids, False))
+                     for n, ms in tests} if a.accord else None)
     # CONSOLIDATION (C7) : le modèle COMPLET, avant tout pas — c'est le « avant » du rejeu, et il
     # ne dépend pas du bras (mêmes poids de départ).
     plein_avant = ({n: banc.ppl(ms, banc._complet) for n, ms in tests}
@@ -397,6 +428,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
            "val_depart": ppl_depart_val, "test_depart_premier": ppl_depart,
            "journal": journal, "tenseurs": tenseurs(),
            "train": banc.ppl(train, lambda ids: logits_chemin(ids, False))}
+    if accord_avant is not None:
+        res["accord_avant"] = accord_avant
+        res["accord"] = {n: banc.accord(ms, lambda ids: logits_chemin(ids, False))
+                         for n, ms in tests}
     for nom, morceaux in tests:
         res[nom] = banc.ppl(morceaux, lambda ids: logits_chemin(ids, False))
     if plein_avant is not None:
@@ -456,6 +491,15 @@ def main() -> int:
                     help="sur quoi le LoRA apprend : le chemin TRONQUÉ (défaut, c'est N4) ou le "
                          "MODÈLE COMPLET (c'est la consolidation C7 : on consolide le cerveau "
                          "entier, pas un réflexe)")
+    ap.add_argument("--distiller", action="store_true",
+                    help="E5 : l'objectif devient la DISTILLATION — le chemin court doit reproduire la "
+                         "distribution du MODÈLE COMPLET (KL), pas prédire le texte. C'est la "
+                         "réponse au constat du 15/10 : entraîné à la perplexité, le réflexe ne "
+                         "partage AUCUN jeton avec le cerveau (0/96 en génération)")
+    ap.add_argument("--temperature", type=float, default=1.0, help="température de distillation")
+    ap.add_argument("--accord", action="store_true",
+                    help="mesurer l'ACCORD avec le maître (fraction de positions où le chemin "
+                         "court choisit le même jeton que le modèle complet), avant et après")
     ap.add_argument("--eval-plein", action="store_true",
                     help="mesurer aussi la perplexité du MODÈLE COMPLET (avant et après chaque "
                          "bras) sur les morceaux de test et de validation : c'est la mesure de "
@@ -602,6 +646,14 @@ def main() -> int:
     print(ligne("chemin tronqué, tête **empruntée**", "—", "—", ppl_empruntee))
     for bras, r in resultats["bras"].items():
         print(ligne(f"`{bras}`", str(r["epoque"]), f"{r['val']:,.4f}", r))
+    if a.accord:
+        print("\n| accord avec le maître (positions 4..) | " + " | ".join(noms) + " |")
+        print("|---|" + "---:|" * len(noms))
+        for bras, r in resultats["bras"].items():
+            if "accord" in r:
+                print(f"| après `{bras}` | " + " | ".join(
+                    f"**{r['accord'][k] * 100:.1f} %** (avant {r['accord_avant'][k] * 100:.1f} %)"
+                    for k in noms) + " |")
     if a.eval_plein:
         print("\n| modèle COMPLET (consolidation) | avant | — | " +
               " | ".join(f"{r['plein_avant'][k]:,.4f}" for k in noms) + " |")
