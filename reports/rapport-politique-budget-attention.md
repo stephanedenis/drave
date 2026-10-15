@@ -69,6 +69,29 @@ passe. Deux candidats évidents, et ils ne marchent pas — corrélations sur le
   manquait depuis le 10/10 n'est pas *introuvable par hasard* — il **n'existe pas** dans les deux
   statistiques les plus naturelles. La métacognition utile ici est une **mesure**, pas un signal.
 
+**Un troisième proxy, mieux motivé, a été essayé : la SONDE COURTE.** Puisque la sensibilité se
+mesure en comparant deux budgets, on peut l'estimer sur un **préfixe** du texte (128 jetons, budget
+réduit à 62,5 % des clés — exactement le ratio du texte entier) et décider pour la suite. Résultat
+sur les huit mêmes textes :
+
+| texte | sonde (128 jetons) | vraie sensibilité (512 jetons) |
+|---|---:|---:|
+| m5 | +3,29 % | +1,87 % |
+| m10 | −1,71 % | +0,04 % |
+| m15 | +2,08 % | **+7,39 %** |
+| m20 | +2,26 % | +3,85 % |
+| m25 | +1,56 % | +0,93 % |
+| m30 | **+13,34 %** | +3,63 % |
+| m31 | −0,45 % | +1,78 % |
+| m32 | +3,68 % | +0,50 % |
+
+**Corrélation : +0,274** — c'est le **meilleur** des trois proxys (les deux autres : −0,019 et
++0,096), le signe est bon, et il reste **insuffisant** : il explique ~7 % de la variance, et il rate
+le texte le plus sensible (m15 : la sonde dit +2,08 %, la vérité +7,39 %) comme le plus trompeur
+(m30 : +13,34 % contre +3,63 %). **Et il coûte 25 % du texte** pour économiser 14 % de clés : le
+rapport est défavorable **sauf** si la ressource rare est la bande passante — la même conclusion,
+avec un proxy de plus.
+
 ## 2. Ce que ça change pour le cerveau
 
 * **la modulation a enfin un signal qui paie** : non pas un scalaire abstrait (les cinq modulateurs
@@ -81,7 +104,10 @@ passe. Deux candidats évidents, et ils ne marchent pas — corrélations sur le
 * **et le coût de la politique est nommé** : mesurer la sensibilité demande **deux exécutions** par
   texte (une complète, une à la moitié) — soit 2× le calcul avant de savoir. La politique n'est donc
   rentable que si le texte est **long** (le coût de mesure s'amortit sur les jetons qui suivent), et
-  c'est un calcul qui n'est pas fait ici.
+  c'est un calcul qui n'est pas fait ici ;
+* **et la sonde courte ne sauve pas la mise** (corrélation +0,274) : elle divise le coût de la mesure
+  par 4 (128 jetons au lieu de 512) mais elle ne **prédit** pas assez pour qu'on s'y fie — la
+  politique reste une **mesure**, pas une estimation.
 
 ## 3. Ce que cette fiche ne dit pas
 
