@@ -2001,6 +2001,11 @@ fn run_banc_vision(sortie: &str) {
         println!("[vision] fenêtre locale : {}", if fenetre_tour == 0 {
             "aucune (le modèle n'en déclare pas — Qwen2-VL)".to_string()
         } else { format!("une couche complète toutes les {fenetre_tour}") });
+        // La couche dont on veut les POIDS D'ATTENTION (bornés, comparables) : lue une fois, avant
+        // la boucle — la première version la relisait DANS la boucle, après la ligne qui s'en sert,
+        // ce que le compilateur a refusé (et il avait raison).
+        let att_demande: Option<usize> = std::env::var("DRAVE_VISION_ATTENTION").ok()
+            .and_then(|v| v.parse().ok());
         let mut x = out.clone();
         let mut xn = vec![0f32; e];
         let mut poids_bloc: Vec<Vec<f32>> = Vec::new();
@@ -2132,6 +2137,13 @@ fn run_banc_vision(sortie: &str) {
             let scale = 1.0 / (hd_t as f32).sqrt();
             let mut att = vec![0f32; n_patch * e];
             let mut sc = vec![0f32; n_patch];
+            let mut poids_att = vec![0f32; if att_demande == Some(l) { n_patch * n_patch } else { 0 }];
+            // LES POIDS D'ATTENTION SONT BORNÉS (0 à 1, somme 1 par ligne) : les comparer à une
+            // formule indépendante est le seul moyen de vérifier les CONVENTIONS d'une couche
+            // profonde sans être noyé par l'amplification des arrondis qui affecte les sorties
+            // (mesurée le 15/10 : 1e-5 à la couche 8, 0,75 à la couche 31). `DRAVE_VISION_ATTENTION=L`
+            // écrit la matrice de la couche L dans `<sortie>.attentionL`.
+
             // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit
             // (indices 7, 15, 23, 31) et des couches LOCALES ailleurs ; la
             // fenêtre est un bloc de 4 × 4 jetons fusionnés, soit 8 × 8 patchs.
@@ -2158,8 +2170,20 @@ fn run_banc_vision(sortie: &str) {
                 for v in sc.iter_mut() { let z = (*v - mx).exp(); *v = z; somme += z; }
                 for t in 0..n_patch {
                     let w = sc[t] / somme;
+                    // LES POIDS SONT GARDÉS quand on les demande : bornés (0 à 1, somme 1 par
+                    // ligne), ils sont comparables à une formule indépendante là où les SORTIES de
+                    // couche ne le sont plus (l'amplification des arrondis y atteint 0,75 à la
+                    // couche 31). `DRAVE_VISION_ATTENTION=L` → `<sortie>.attentionL` (256 × 256).
+                    if att_demande == Some(l) { poids_att[pi * n_patch + t] = w; }
                     for i in 0..e { att[pi * e + i] += w * vv[t * e + i]; }
                 }
+            }
+            if att_demande == Some(l) {
+                let mut fa = std::io::BufWriter::new(
+                    std::fs::File::create(format!("{sortie}.attentionL")).expect("création"));
+                for v in [(n_patch as i32), (n_patch as i32)] { fa.write_all(&v.to_le_bytes()).unwrap(); }
+                for v in poids_att.iter() { fa.write_all(&v.to_le_bytes()).unwrap(); }
+                println!("[vision] POIDS d'attention de la couche {l} écrits ({n_patch} × {n_patch})");
             }
             for pi in 0..n_patch {
                 let o = proj_l(&att[pi * e..(pi + 1) * e], &wo, &bo, e, e);

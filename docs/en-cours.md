@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 13 h 55 HAE.**
+**Mis à jour : 2026-10-15, 14 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -19,7 +19,8 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | embedding de patchs, noyau réparé | **EXACT** — 0,00 % sur les 256 patchs |
 | couche 0 **à poids égaux** | **cosinus +1,00000059**, écart **5,9e-06** (l'arrondi f32) |
 | les 32 couches à poids égaux | **justes sur les 8 premières** (1e-5 : les conventions sont bonnes) ; au-delà, l'écart croît (1e-3 → 0,75) — la tour **amplifie les arrondis**, et c'est mesuré **sur deux images** (une synthétique qui explose à 33 273, une naturelle qui reste à 249) |
-| ce qui reste | comparer des quantités **bornées** (poids d'attention, états avant LayerNorm) : au-delà de la couche 8, une sortie de couche ne distingue plus une convention fausse d'un arrondi amplifié |
+| pourquoi les couches profondes ne se comparent pas | **trouvé** : l'attention **s'effondre** (entropie 3,36 → **0,16** entre les couches 1 et 15) et **bascule** d'un patch à l'autre — l'écart est **discret** (variation totale 0,94), aucune tolérance ne peut le résorber |
+| ce qui reste | vérifier **couche par couche, en isolation** : donner aux deux implémentations le **même état d'entrée** et comparer la sortie de la couche seule |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |
 
 ## Où en est le dépôt

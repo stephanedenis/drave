@@ -338,6 +338,38 @@ que la version float32 à 1e-4 près — et **les deux explosent à la dernière
   par cette méthode — il faudrait comparer des **quantités intermédiaires bornées** (les poids
   d'attention après softmax, les états AVANT chaque LayerNorm) plutôt que des sorties de couche.
 
+## 2nonies. POURQUOI les couches profondes ne se comparent pas : l'attention s'EFFONDRE et bascule
+
+La fiche proposait de comparer des quantités **bornées** (les poids d'attention après softmax) plutôt
+que des sorties de couche. C'est fait (`DRAVE_VISION_ATTENTION=L` → `<sortie>.attentionL`, la matrice
+256 × 256), sur l'image naturelle, à poids égaux :
+
+| couche | écart max sur les poids | variation totale max | **entropie moyenne** de l'attention |
+|---:|---:|---:|---:|
+| 1 | 2,8e-05 | **3,3e-05** | **3,36** (large : ~29 patchs effectifs) |
+| 15 | 8,9e-01 | **0,94** | **0,16** (quasi un seul patch) |
+| 31 | 1,0e+00 | 1,00 | 0,52 |
+
+* **à la couche 1, les deux implémentations calculent la MÊME attention** (variation totale 3,3e-05 —
+  deux distributions de probabilité identiques à l'arrondi près) : la vérification par quantité
+  bornée **fonctionne** là où la tour est stable ;
+* **à la couche 15, l'attention est devenue quasi ponctuelle** (entropie **0,16** : la softmax a
+  écrasé la distribution sur un patch) — et une softmax écrasée **bascule** : un écart d'arrondi
+  infime sur les scores suffit à changer **quel patch** est regardé, et la variation totale saute à
+  0,94 ✗ ;
+* **l'écart des couches profondes n'est donc pas une « amplification continue »** comme la fiche
+  l'écrivait : c'est un **phénomène discret** — les deux implémentations ne regardent plus le même
+  endroit ✗. Aucune tolérance ne peut les réconcilier, et ce n'est la faute d'aucune des deux ;
+* **conséquence de méthode, et elle est nette** : comparer **des sorties** (ou même des attentions)
+  au-delà de la couche ~8 ne peut rien établir ✗. Pour vérifier les conventions d'une couche
+  profonde, il faut lui donner **le même état d'entrée** aux deux implémentations et comparer **sa**
+  sortie — c'est-à-dire vérifier **couche par couche, en isolation**, ce qui est la prochaine étape
+  (décharger l'état avant la couche L, le donner à la formule, comparer la sortie de L) ;
+* **et ce qui est déjà établi n'est pas rien** : les **huit premières couches** sont exactes à 1e-5
+  (conventions comprises : LayerNorm avec biais, rotation 2-D de la source, application par tête,
+  échelle, quick-GELU, ordre des matrices), l'**embedding est exact** (0,00 %), et la couche 0 est
+  vérifiée à **1,00000059** de cosinus.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
