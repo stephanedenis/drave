@@ -67,6 +67,32 @@ est le voisin direct de m32) contre les **vingt premiers** (m0..m19) :
 * **et le hors-domaine confirme l'absence de tendance** : +3,30 % (premiers) contre +1,91 %
   (derniers) — deux mesures du même ordre, sans direction.
 
+## 1ter. Le PREMIER critère qui tient : rejouer les morceaux RÉPÉTITIFS (sur un test, trois graines)
+
+Les trois règles du § 1 et la proximité du § 1bis ne départageaient rien. Une quatrième a été
+essayée, et elle **départage** — sur un des deux morceaux de test :
+
+| lot de 5 morceaux (rang 4, 10 époques) | m32 (trois graines) | m20 (trois graines) |
+|---|---|---|
+| les plus **VARIÉS** (trigrammes distincts / jetons : 0,917 à 0,954) | −6,19 / −6,57 / −6,22 % | −9,70 / −10,97 / −10,94 % |
+| les plus **RÉPÉTITIFS** (0,662 à 0,812) | −6,53 / −6,37 / −6,50 % | **−14,46 / −14,64 / −14,47 %** |
+
+* **sur m20, l'écart est net et reproductible** : **−14,5 %** contre **−10,9 %**, soit **3,6 points**,
+  avec une dispersion de graine de 1,3 point **à l'intérieur** de chaque bras — l'écart est **trois
+  fois** la dispersion ;
+* **sur m32, les deux lots sont ÉQUIVALENTS** (−6,2 à −6,6 % partout) : le critère ne se voit pas
+  sur tous les textes, et c'est écrit plutôt que moyenné ;
+* **le critère est bon marché** : compter les trigrammes distincts d'un morceau coûte **quelques
+  millisecondes**, sans le modèle — à comparer au tri par surprise, qui exigeait une passe complète
+  sur les vingt morceaux… pour perdre ;
+* **et le mécanisme est cohérent avec la fiche « structure partagée »** : un texte répétitif porte
+  **plus de régularité par jeton** — il y a donc plus à consolider. Un texte très varié ressemble
+  davantage à du bruit, et le rejeu n'y trouve rien de transférable. C'est une **hypothèse**, et
+  elle est nommée comme telle ;
+* **ce que ça ne prouve pas** : un critère qui gagne sur **un** morceau de test et pas sur l'autre
+  n'est pas établi — il est **prometteur**. La suite est simple et chiffrée : les deux lots sur
+  **quatre** morceaux de test, et la courbe « diversité du lot → transfert ».
+
 ## 2. Ce que ça change pour le protocole de sommeil
 
 1. **rejouer court et divers** — 3 morceaux répartis donnent −6,5 % en domaine pour un coût hors
@@ -74,7 +100,10 @@ est le voisin direct de m32) contre les **vingt premiers** (m0..m19) :
 2. **ne pas trier par difficulté** : le tri par surprise est mesuré **sous** le hasard, et il coûte
    une passe de mesure préalable (20 morceaux × 1 024 jetons) pour un résultat négatif ;
 3. **ne pas rejouer ce qui est déjà su** : c'est la seule règle qui **coûte** ailleurs (+2,07 %) ;
-4. et **la question qui reste** : un rejeu *répété* (plusieurs nuits sur les mêmes morceaux) ou un
+4. **et un critère qui commence à tenir** : rejouer les morceaux **répétitifs** plutôt que variés
+   (§ 1ter) — 3,6 points sur m20, à trois graines, pour un tri qui coûte des millisecondes. C'est le
+   premier de la nuit qui départage quoi que ce soit ;
+5. et **la question qui reste** : un rejeu *répété* (plusieurs nuits sur les mêmes morceaux) ou un
    rejeu *séquentiel* (les morceaux dans l'ordre du texte) ne sont pas mesurés — le plan de sommeil
    les demanderait.
 
