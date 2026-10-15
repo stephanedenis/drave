@@ -197,6 +197,14 @@ corpus mais **ne sauve rien** (sur `corpus_en`, aucun lot ne transfère, même l
 la **sonde courte** (128 jetons) est le meilleur proxy essayé pour la politique de budget
 (**+0,274**) — et toujours insuffisant.
 
+**Après 9 h — la VISION** : le seul ❌ déblocable de la carte a été traité (Qwen2-VL-2B + son
+`mmproj`, 520 tenseurs téléchargés) ; `--banc-vision` déroule **toute la tour** et **quatre bugs
+d'architecture** y ont été corrigés — MLP à deux matrices/quick-GELU, **fenêtre locale
+conditionnelle** (Qwen2-VL n'en a pas), écriture des jetons d'image, et surtout **les biais des
+LayerNorm, ignorés** (couche 0 : cosinus **−0,50 → +0,69**). Il reste un écart structurel de 60 à
+78 % (la quantification vaut 1 %), avec deux suspects nommés : la rotation 2-D et l'ordre des têtes.
+Fiche : [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md).
+
 **Ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
 ×1,5 d'accord, deux tentatives ont échoué) ; (2) le cycle — aucun objectif ne le fait converger ;
 (3) le **critère de choix du rejeu** (la dispersion et la surprise ont échoué, la proximité non
