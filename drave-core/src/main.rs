@@ -1881,17 +1881,36 @@ fn run_banc_vision(sortie: &str) {
     let cote: usize = std::env::var("DRAVE_VISION_COTE").ok()
         .and_then(|v| v.parse().ok()).unwrap_or(224);
     let cotes = 8usize;
-    let mut img = vec![0f32; cin * cote * cote];
-    for y in 0..cote {
-        for x in 0..cote {
-            let carre = x >= 10 && x < 18 && y >= 10 && y < 18;
-            for ic in 0..cin {
-                let v = if carre { 1.0 }
-                        else { (x as f32 + y as f32 + ic as f32) / (2.0 * cote as f32) };
-                img[(ic * cote + y) * cote + x] = v;
+    // `DRAVE_VISION_IMAGE=<f32>` : une image FOURNIE (3 × cote × cote, canaux d'abord, [0, 1]),
+    // au lieu de l'image synthétique. C'est ce qui permet de mesurer si une instabilité de la tour
+    // est propre à l'entrée : un dégradé avec un carré n'est pas une image naturelle, et la tour
+    // EXPLOSE sur la première (norme ×41 à la dernière couche). Pas de décodeur d'image dans le
+    // moteur : l'appelant écrit du f32 brut, et la conversion se fait une fois, dehors.
+    let image_fournie: Option<Vec<f32>> = std::env::var("DRAVE_VISION_IMAGE").ok().map(|f| {
+        let b = std::fs::read(&f).expect("image illisible");
+        let v: Vec<f32> = b.chunks_exact(4)
+            .map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]])).collect();
+        assert_eq!(v.len(), cin * cote * cote, "image de taille inattendue");
+        println!("[vision] image FOURNIE : {f} ({cin} × {cote} × {cote}, f32)");
+        v
+    });
+    let img: Vec<f32> = match image_fournie {
+        Some(v) => v,
+        None => {
+            let mut img = vec![0f32; cin * cote * cote];
+            for y in 0..cote {
+                for x in 0..cote {
+                    let carre = x >= 10 && x < 18 && y >= 10 && y < 18;
+                    for ic in 0..cin {
+                        let v = if carre { 1.0 }
+                                else { (x as f32 + y as f32 + ic as f32) / (2.0 * cote as f32) };
+                        img[(ic * cote + y) * cote + x] = v;
+                    }
+                }
             }
+            img
         }
-    }
+    };
     // Convolution : une sortie par position de patch, sans rembourrage.
     let n_patch_cote = (cote - ky) / kx + 1;
     let n_patch = n_patch_cote * n_patch_cote;

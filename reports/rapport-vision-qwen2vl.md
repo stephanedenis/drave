@@ -318,14 +318,25 @@ que la version float32 à 1e-4 près — et **les deux explosent à la dernière
   rotation 2-D dans la convention de la source, application par tête, échelle `1/√dim_tête`,
   quick-GELU, ordre des matrices) reproduisent une formule indépendante **à 1e-5 sur les huit
   premières couches** — les seules où la tour est encore stable ;
-* **et une observation qui vaut d'être écrite** : les couches 23-31 étant explosives **sur cette
-  image** (un dégradé synthétique avec un carré — rien d'une image naturelle), toute comparaison
-  d'implémentations sur **cette** image mesure surtout de la sensibilité ✗. La prochaine mesure
-  utile est de refaire la chaîne sur une **image naturelle** (l'instabilité est propre à l'entrée) ;
-* **ce que ça laisse ouvert, nommément** : une erreur de convention qui ne se verrait **qu'après** la
-  couche 8 ne peut pas être exclue par cette méthode — elle est **masquée** par l'instabilité. Le
-  seul moyen de trancher serait de comparer couche par couche **avant** l'explosion avec une
-  tolérance adaptée, ce qui est fait (1e-5 sur huit couches) — au-delà, il faut changer d'image.
+* **et l'expérience qui devait trancher a été faite — elle tranche CONTRE mon hypothèse** ✗. Le
+  banc lit maintenant une **image fournie** (`DRAVE_VISION_IMAGE=<f32>`, 3 × 224 × 224, sans décodeur
+  dans le moteur : l'appelant écrit du f32 brut) et la chaîne a été refaite sur une **image
+  naturelle** (`/usr/share/wallpapers/default.png`, recadrée et réduite) :
+
+| image | norme finale (couche 31) | écart couche 2 | couche 7 | couche 15 | couche 23 | couche 31 |
+|---|---:|---:|---:|---:|---:|---:|
+| synthétique (dégradé + carré) | **33 273** (explose) | 3,3e-06 | 3,1e-05 | 7,9e-02 | 1,0e+00 | 1,1e+00 |
+| **naturelle** (fond d'écran) | **249** (n'explose pas) | 5,1e-06 | 1,1e-03 | 1,1e-01 | 2,9e-01 | 7,5e-01 |
+
+* **l'explosion était bien propre à l'image** (33 273 contre 249 ✓) — mais **l'écart entre les deux
+  implémentations croît quand même avec la profondeur** (1e-5 → 1e-3 → 0,1 → 0,3 → 0,75) ✗ : la tour
+  **amplifie les différences d'arrondi**, quelle que soit l'entrée. Mon hypothèse (« l'instabilité
+  est propre à l'image ») était donc **à moitié fausse**, et c'est écrit ;
+* **ce que ça laisse ouvert, et c'est net** : **toute** comparaison d'implémentations de cette tour
+  au-delà de la couche ~8 mesure surtout de la **sensibilité numérique** ✗. Une erreur de convention
+  qui ne se verrait qu'après la couche 8 ne peut pas être distinguée d'un écart d'arrondi amplifié
+  par cette méthode — il faudrait comparer des **quantités intermédiaires bornées** (les poids
+  d'attention après softmax, les états AVANT chaque LayerNorm) plutôt que des sorties de couche.
 
 ## 3. Ce que ça change pour la carte des facultés
 

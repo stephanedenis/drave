@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 13 h 15 HAE.**
+**Mis à jour : 2026-10-15, 13 h 55 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -18,7 +18,9 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | cause de l'écart avec la référence | **le mmproj a perdu une tranche temporelle** du noyau de patchs (0,00 % sur l'une, absente sur l'autre) |
 | embedding de patchs, noyau réparé | **EXACT** — 0,00 % sur les 256 patchs |
 | couche 0 **à poids égaux** | **cosinus +1,00000059**, écart **5,9e-06** (l'arrondi f32) |
-| ce qui reste | vérifier les couches **profondes** à poids égaux (il faut décharger leurs poids : `DRAVE_VISION_POIDS=<l>`) |
+| les 32 couches à poids égaux | **justes sur les 8 premières** (1e-5 : les conventions sont bonnes) ; au-delà, l'écart croît (1e-3 → 0,75) — la tour **amplifie les arrondis**, et c'est mesuré **sur deux images** (une synthétique qui explose à 33 273, une naturelle qui reste à 249) |
+| ce qui reste | comparer des quantités **bornées** (poids d'attention, états avant LayerNorm) : au-delà de la couche 8, une sortie de couche ne distingue plus une convention fausse d'un arrondi amplifié |
+| lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |
 
 ## Où en est le dépôt
 
