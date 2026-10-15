@@ -2052,7 +2052,13 @@ fn run_banc_vision(sortie: &str) {
                     tourner(vk, ligne, colonne);
                 }
             }
-            let scale = 1.0 / (e as f32).sqrt();
+            // ⚠ L'ÉCHELLE D'ATTENTION EST CELLE D'UNE TÊTE, PAS CELLE DU MODÈLE : le banc
+            // divisait par sqrt(1280) au lieu de sqrt(80) — un facteur 4 sur les scores, donc une
+            // attention bien plus plate que celle du modèle. C'est le premier suspect que la
+            // comparaison à la référence a désigné (norme de sortie 135 fois trop petite), et il
+            // était écrit en clair dans le code depuis le 10/10 : le banc n'avait jamais tourné
+            // sur un vrai modèle.
+            let scale = 1.0 / (hd_t as f32).sqrt();
             let mut att = vec![0f32; n_patch * e];
             let mut sc = vec![0f32; n_patch];
             // Fenêtre locale : Qwen2.5-VL a une couche COMPLÈTE toutes les huit

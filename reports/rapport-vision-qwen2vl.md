@@ -3,12 +3,13 @@
 > Campagne : **cerveau** · expérience : la faculté **perception visuelle** (C1/M4), qui était
 > « **bloquée par un modèle absent** » (`docs/cerveau-facultes.md` § 1bis, 15/10 06 h).
 > Question : avec un vrai modèle de vision sur la machine, la tour du moteur tient-elle ?
-> Verdict : **la tour TOURNE, et elle NE CONCORDE PAS.** Le modèle est là (Qwen2-VL-2B + son
+> Verdict : **la tour TOURNE, et elle n'est PAS vérifiée.** Le modèle est là (Qwen2-VL-2B + son
 > `mmproj`), `--banc-vision` déroule maintenant **les 32 couches, la rotation 2-D, la norme finale,
-> le projecteur `mm.0`/`mm.2` et l'injection** — et la comparaison à une **seconde implémentation**
-> (`transformers`) donne un **désaccord massif** : mêmes formes (256 × 1280), normes **862,9** contre
-> **116 651** (facteur **135**). Une implémentation qui tourne n'est pas une implémentation qui a
-> raison : **la vérification est faite, elle échoue, et c'est écrit.**
+> le projecteur `mm.0`/`mm.2` et l'injection** — mais la comparaison à une seconde implémentation
+> (`transformers`) **ne conclut pas** : mêmes formes (256 × 1280), normes **862,9** contre **116 651**
+> (facteur 135) — et le § 2 montre que **la référence explose elle-même à sa dernière couche**
+> (×71,7). Une implémentation qui tourne n'est pas une implémentation qui a raison ; **une référence
+> non plus**, et les deux sont désormais mesurées.
 > Date réelle : **2026-10-15 09 h 00-09 h 40 HAE** (heure lue sur la machine)
 > Protocole : `models/vision/Qwen2-VL-2B-Instruct-Q4_K_M.gguf` (986 Mo) et
 > `models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf` (710 Mo, **520 tenseurs**, téléchargés ce
@@ -29,7 +30,30 @@
 appliquait la matrice `up` **deux fois** dans le chemin SwiGLU (au lieu de `down`) — attrapé en
 relisant le patch, avant de mesurer quoi que ce soit.
 
-## 2. La comparaison, et son écart
+## 2. La comparaison, et son écart — **et la correction qui suit**
+
+> **⚠️ CORRECTION DU 15/10 À 10 h — l'écart n'est PAS attribuable au moteur.** En cherchant à
+> localiser l'erreur, la référence elle-même a été instrumentée (un crochet sur chacune de ses
+> 32 couches, norme de sortie) :
+>
+> | couche | 0 | 7 | 15 | 23 | 29 | 30 | **31** |
+> |---|---:|---:|---:|---:|---:|---:|---:|
+> | norme (`transformers`, f32) | 335 | 568 | 834 | 850 | 1 038 | 1 628 | **116 650** |
+>
+> **La dernière couche de la référence explose d'un facteur 71,7** (1 628 → 116 650), et cela **avec
+> les deux conventions d'entrée** (image brute `[0, 1]` : 116 650 ; image normalisée par
+> `image_mean`/`image_std` : 118 215). Une pile qui rend 863 après 24 couches et 116 650 après 32
+> n'est pas une pile saine : **c'est la RÉFÉRENCE qui est suspecte**, pas nécessairement le moteur —
+> et le facteur 135 annoncé plus bas est donc celui de **deux nombres dont l'un n'est pas fiable**.
+>
+> **Ce qui reste vrai** : les formes concordent (256 × 1280), le banc tourne, trois corrections
+> d'architecture ont été faites, et **l'accord n'est pas établi** — mais l'état honnête est
+> « **non vérifié** », pas « **faux** ». La leçon est celle de toute la nuit, retournée contre
+> l'auteur de la fiche : *une référence qui « tourne » n'est pas une référence qui « a raison »*.
+> La prochaine étape est de comparer **couche par couche, valeur par valeur**, en s'arrêtant là où
+> la référence est encore saine (couche 23, norme 850).
+
+
 
 | | jetons | canaux | norme |
 |---|---:|---:|---:|
@@ -39,9 +63,10 @@ relisant le patch, avant de mesurer quoi que ce soit.
 
 * **les formes du modèle de vision sont les bonnes** (256 patchs de 1280 canaux, 64 jetons fusionnés
   de 1536) : la **plomberie** est en place, et c'est déjà un progrès mesurable sur « bloqué » ;
-* **les valeurs, non** : la tour brute du moteur (862,9) et celle de la référence (116 651,3)
-  diffèrent d'un facteur **135** — très au-delà de la quantification Q8_0 (qui vaut ~1 %), et très
-  au-delà de ce qu'une erreur d'activation expliquerait. **Quelque chose de structurel est faux** ;
+* **les valeurs, non — mais voir la correction ci-dessus** : la tour brute du moteur (862,9) et
+  celle de la référence (116 651,3) diffèrent d'un facteur **135**, et la référence **explose à sa
+  dernière couche**. L'écart mesure donc **au moins autant la référence que le moteur** ; il faut
+  redescendre d'une couche et comparer des valeurs, pas des normes ;
 * **ce que la comparaison élimine déjà** : l'embedding de patchs (vérifié à **5,4e-7** contre la
   référence numpy dès le 10/10), la **fenêtre locale** (désactivée — le modèle n'en déclare pas), le
   **format des entrées** (les patchs aplatis au format Qwen2-VL : le premier essai a été rejeté par
@@ -55,7 +80,7 @@ relisant le patch, avant de mesurer quoi que ce soit.
 
 ## 3. Ce que ça change pour la carte des facultés
 
-* **la perception visuelle passe de « bloquée » à « mesurée, et fausse »** — c'est une amélioration
+* **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
   *de méthode* : il y a désormais un **modèle**, un **banc qui tourne**, une **référence
   indépendante** et un **écart chiffré**. La prochaine action n'est plus « trouver un modèle » mais
   « corriger la tour, jusqu'à ce que l'écart tombe à quelques pour cent (la quantification) » ;
