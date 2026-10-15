@@ -19,10 +19,15 @@
 
 | règle de sélection | morceaux rejoués | m32 (jamais rejoué) | écart | hors domaine | écart |
 |---|---|---:|---:|---:|---:|
-| **au hasard** (graine fixée) | m5, m12, m17 | 6,7126 | **−6,49 %** | 16,6747 | −0,35 % |
-| **les premiers** (le défaut) | m0, m1, m2 | 6,7829 | −5,51 % | 16,7654 | +0,20 % |
-| **par surprise** (les plus durs) | m13, m2, m7 | 6,8328 | −4,82 % | 16,6439 | −0,53 % |
-| **les plus faciles** | m16, m0, m5 | 6,8733 | −4,26 % | 17,0787 | **+2,07 %** |
+| **au hasard** (graine fixée) | m5, m12, m17 | 6,6611 | **−7,21 %** | 16,6747 | −0,35 % |
+| **les premiers** (le défaut) | m0, m1, m2 | 6,7487 | −5,99 % | 16,7654 | +0,20 % |
+| **par surprise** (les plus durs) | m13, m2, m7 | 6,8301 | −4,86 % | 16,6439 | −0,53 % |
+| **les plus faciles** | m16, m0, m5 | 6,8869 | −4,06 % | 17,0787 | **+2,07 %** |
+
+*(chiffres **refaits** avec le harnais reproductible — `rapport-consolidation-balayage.md` § 4bis :
+les premiers, tirés avec un RNG non semé, donnaient −6,49 / −5,51 / −4,82 / −4,26 %. **L'ordre est
+le même**, l'étendue passe de 2,2 à **3,15 points**, et l'écart hasard ↔ premiers de 1,0 à
+**1,2 point**.)*
 
 *la « surprise » est mesurée, pas supposée : la perplexité du modèle complet sur les vingt premiers
 morceaux va de **7,38** (m5) à **25,91** (m13) — les trois plus durs sont m13, m2, m7, les trois
@@ -72,16 +77,19 @@ est le voisin direct de m32) contre les **vingt premiers** (m0..m19) :
 Les trois règles du § 1 et la proximité du § 1bis ne départageaient rien. Une quatrième a été
 essayée, et elle **départage** — sur un des deux morceaux de test :
 
-| lot de 5 morceaux (rang 4, 10 époques) | m32 (trois graines) | m20 (trois graines) |
+| lot de 5 morceaux (rang 4, 10 époques) | m32 | m20 |
 |---|---|---|
-| les plus **VARIÉS** (trigrammes distincts / jetons : 0,917 à 0,954) | −6,19 / −6,57 / −6,22 % | −9,70 / −10,97 / −10,94 % |
+| les plus **VARIÉS** (trigrammes distincts / jetons : 0,917 à 0,954) | −6,19 / −6,57 / −6,22 % *(graines 0/1/2, harnais d'avant)* | −9,70 / −10,97 / −10,94 % |
 | les plus **RÉPÉTITIFS** (0,662 à 0,812) | −6,53 / −6,37 / −6,50 % | **−14,46 / −14,64 / −14,47 %** |
+| **refaits avec le harnais EXACT** (§ 4bis) | variés **−6,78 %** · répétitifs **−7,85 %** | variés **−10,31 %** · répétitifs **−14,54 %** |
 
 * **sur m20, l'écart est net et reproductible** : **−14,5 %** contre **−10,9 %**, soit **3,6 points**,
   avec une dispersion de graine de 1,3 point **à l'intérieur** de chaque bras — l'écart est **trois
   fois** la dispersion ;
-* **sur m32, les deux lots sont ÉQUIVALENTS** (−6,2 à −6,6 % partout) : le critère ne se voit pas
-  sur tous les textes, et c'est écrit plutôt que moyenné ;
+* **sur m32, les deux lots étaient équivalents** (−6,2 à −6,6 %) — mais **refaits avec le harnais
+  reproductible, les répétitifs y gagnent aussi** (−7,85 % contre −6,78 %, soit 1,1 point) : le
+  critère se voit donc **sur les deux morceaux de test**, et plus fort qu'annoncé (4,2 points sur
+  m20) ;
 * **le critère est bon marché** : compter les trigrammes distincts d'un morceau coûte **quelques
   millisecondes**, sans le modèle — à comparer au tri par surprise, qui exigeait une passe complète
   sur les vingt morceaux… pour perdre ;
@@ -89,9 +97,10 @@ essayée, et elle **départage** — sur un des deux morceaux de test :
   **plus de régularité par jeton** — il y a donc plus à consolider. Un texte très varié ressemble
   davantage à du bruit, et le rejeu n'y trouve rien de transférable. C'est une **hypothèse**, et
   elle est nommée comme telle ;
-* **ce que ça ne prouve pas** : un critère qui gagne sur **un** morceau de test et pas sur l'autre
-  n'est pas établi — il est **prometteur**. La suite est simple et chiffrée : les deux lots sur
-  **quatre** morceaux de test, et la courbe « diversité du lot → transfert ».
+* **ce que ça ne prouve pas** : que le critère soit un **gradient**. La courbe du § 1quater (cinq
+  lots, trois tests) montre un **seuil** : au-delà d'environ 0,9 trigramme distinct par jeton, le
+  rejeu ne trouve plus rien ; en dessous, les lots se valent — et c'est le seuil, pas le tri, qui
+  est établi.
 
 ## 1quater. La COURBE « diversité du lot → transfert » : un SEUIL, pas un gradient
 
