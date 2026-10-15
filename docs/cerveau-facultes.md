@@ -15,13 +15,13 @@
 
 | faculté | le mécanisme le plus efficient | le chiffre | coût | état |
 |---|---|---|---|---|
-| **perception** (entrées) | région frontière `--entree signal:F`, canal, gain, jeton | entrée constante ⇒ sortie constante, **au bit près** | **0 paire** | ✅ |
+| **perception** (entrées) | région frontière `--entree signal:F`, canal, gain, jeton | entrée constante ⇒ sortie constante, **au bit près** | **0 paire** | ✅ (texte et signal) |
 | **réflexes** | chemin court **entraîné** (LoRA couches basses + lecteur de sortie) | **÷1,47** (m32) et **÷1,24** (m20) à 8 couches, lus par le moteur | 0,07 % des poids | ✅ |
-| **attention sélective** | **fenêtre + puits** (moitié des clés) — et **où** dépenser est un levier de second ordre | +0,4 % à +3,0 % selon le texte ; **÷2,67** de clés à 512 jetons ; à clés égales, uniforme et alterné se disputent le point (−0,41 % sur m32, +1,51 % sur m20) | clés ÷2, paires ÷2 | ✅ |
+| **attention sélective** | **fenêtre + puits** (moitié des clés), et une **politique par texte** quand la sensibilité est mesurable | le coût de la moitié va de **+0,04 % à +7,39 %** selon le texte (**×180**) ⇒ un budget uniforme **casse** la tolérance de +1 % sur **5 textes sur 8** ; la politique par texte la tient partout pour **−14,1 % de clés** | clés ÷2, paires ÷2 | ✅ |
 | **mémoire de travail** | **tampon exact** `--memoire K` — et le réseau **ne l'apprend pas** (R² −1,09 → **−2,77** entraîné) | R² **1,000**, erreur nulle, poursuite de `v[t−8]` ; avec le tampon en entrée, le modèle gelé lit **+0,879** et l'entraîné **+0,964** | **0 paire de plus** | ✅ |
 | **mémoire épisodique** | magasin adressable par contenu (hachage/LSH) | élagué **83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact** | **11 jetons sur 2 048** | ✅ |
 | **consolidation** (sommeil) | rejeu → LoRA rang 8 sur 8 couches | **−16,4 %** en domaine sur des textes **jamais rejoués** ; **+1,3 %** hors domaine ; courbe : −5,6 % (3 morceaux) → **−10,0 %** (20), coût hors domaine **bruité** (−0,4 à +3,3 %) | 0,07 % des poids, 2 époques | ✅ |
-| **modulation / arousal** | bus multi-canaux (statique, fichier, réseau) | canal neutre ⇒ empreintes **identiques** ; **aucun** signal scalaire n'améliore (négatif mesuré) | ~0 | 🟡 mécanique faite, signal non trouvé |
+| **modulation / arousal** | bus multi-canaux, **et une décision par texte** (métacognition : « ce texte supporte-t-il la moitié des clés ? ») | canal neutre ⇒ empreintes **identiques** ; aucun signal **scalaire** n'améliore ; mais la politique **par texte** tient la qualité pour **−14,1 % de clés** | ~0 | 🟡 mécanique faite, signal scalaire non trouvé — **la décision par contenu, si** |
 | **inhibition / E-I** | gain par couche (côté amplification) | gain 0,75 ⇒ **−11,5 %** ; l'**inhibition dégrade** ; le ratio cortical de signes coûte **+4,9 à +10,8 %** à l'entraînement | 0 | ✅ |
 | **latéralité / corps calleux** | deux jumeaux, échange par couche | échange **exact**, gain **NUL** (36,1307 = 36,1307 : c'est une moyenne) | ÷2 de calcul | ✅ (résultat négatif) |
 | **timing / conduction** | délai par lien (`delai_ms`) | 50 ms × 64 pas = **+3,1 s**, perplexité **inchangée** | loi **3,4 ms/token par ms** | ✅ |
@@ -56,6 +56,25 @@ local) ; à long terme, seule la **consolidation** met l'expérience dans les po
 paie en généralité. La récurrence, elle, **ne retient pas** : mesurée deux fois (locale :
 R² 0,906 → 0,112 ; et le cycle : divergence), elle **amplifie**.
 
+## 1bis. La perception VISUELLE : une tranche sur six, et elle est BLOQUÉE par un modèle absent
+
+La vision n'est pas un oubli : c'est une tranche **vérifiée** et cinq qui manquent — et depuis le
+15/10, un **empêchement mesuré**. État exact, tel que le plan (`docs/plan-mla-vision.md` § « détail
+de la première tranche ») et la machine le donnent :
+
+| tranche | état |
+|---|---|
+| **embedding de patchs** (`--banc-vision`, convolution 14 × 14 sur une image 28 × 28) | ✅ **vérifiée** contre la référence numpy (`tools/vision_ref.py`) : écart max **5,4e-7** — le bruit de virgule flottante |
+| rotation 2-D des patchs (mRoPE) · 32 couches à attention locale une sur huit · norme finale · projecteur `mm.0`/`mm.2` · **injection des embeddings d'image dans le flux de jetons** | ❌ (l'injection est **le point d'architecture** qui manque au moteur) |
+| **le modèle de vision** | ❌ **absent de la machine** — `models/` ne porte que Qwen2.5-0.5B (Q4_0, Q8_0), `~/IA/modeles` que Qwen3-30B et DeepSeek V4.1. La tranche vérifiée lit `v.patch_embd.weight`, que **aucun** fichier présent ne contient |
+
+**Conséquence, et c'est écrit plutôt que contourné** : la perception visuelle **ne peut pas être
+mesurée** aujourd'hui — pas parce que le moteur ne sait rien faire, mais parce que **les poids qui
+la portent ne sont pas là**. La prochaine action est donc un **téléchargement** (un GGUF de vision,
+p. ex. un Qwen2-VL), pas une ligne de code — et c'est exactement le genre de dépendance que le
+dépôt refuse de supposer : `--banc-vision` **dit** « pas de `v.patch_embd.weight` dans ce fichier »
+et rend la main au lieu d'inventer.
+
 ## 2. Ce qui manque, faculté par faculté
 
 | faculté manquante ou partielle | ce qui l'établit | ce que ça bloque |
@@ -64,7 +83,7 @@ R² 0,906 → 0,112 ; et le cycle : divergence), elle **amplifie**.
 | **mémoire de travail du MODÈLE** | le tampon est dans le **moteur** ; le modèle ne retient pas **et ne l'apprend pas** (−2,77 après 8 époques, `rapport-memoire-travail-n5.md`) | toute tâche qui demande de retenir *dans* le réseau — sauf à lui donner la structure, qu'il sait alors **lire** (+0,964) |
 | **un signal de modulation qui améliore** | cinq règles locales et cinq modulateurs mesurés ; le meilleur est **ne rien faire** | la valeur, la récompense, l'attention apprise |
 | **un cycle qui serve** | le cycle est exact au pas 1 ; **entraîné**, il dompte la divergence (**×228** au pas 4, `rapport-cycle-entraine.md`) mais **dégrade encore** (~×1,4 par pas) et ne bat pas une passe | les boucles cortico-thalamiques *utiles* — la piste nommée est un objectif de **point fixe**, pas de prédiction |
-| **perception riche (vision, audio)** | les encodeurs (`bge-m3`) sont lisibles et **inexécutables** — manque **M4** | toute la famille multimodal |
+| **perception riche (vision, audio)** | les encodeurs (`bge-m3`) sont lisibles et **inexécutables** — manque **M4** ; **la vision a une tranche vérifiée (5,4e-7) mais AUCUN modèle de vision sur la machine** (cf. § 1bis) | toute la famille multimodal — et le prochain pas est un **téléchargement**, pas du code |
 | **un sommeil structuré** | la consolidation marche, mais **hors** du moteur et sans protocole de sommeil (quoi rejouer, quand s'arrêter) | un cycle veille/sommeil automatique |
 | **la latéralité qui apporte** | l'échange est exact et le gain **nul** (mesuré deux fois : couches et experts) | une raison de dupliquer un hémisphère, à part la robustesse |
 
@@ -118,7 +137,7 @@ Attrapé en relisant le script, pas par un chiffre — et corrigé par `--depuis
 | récurrence locale | [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | mémoire de travail, périphérie | [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) · [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · [`note-peripherie-c8.md`](note-peripherie-c8.md) |
 | mémoire épisodique | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh` |
-| fenêtre et puits d'attention | [`rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) · [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md) · [`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md) |
+| fenêtre, puits et **politique** de budget | [`rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) · [`rapport-loi-frontiere-fenetre.md`](../reports/rapport-loi-frontiere-fenetre.md) · [`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md) · [`rapport-politique-budget-attention.md`](../reports/rapport-politique-budget-attention.md) |
 | bus de modulation | `porte-bus.sh`, `porte-bus-socket.sh` |
 | E/I et gains | [`rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md) |
 | latéralité | [`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) · [`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md) |
