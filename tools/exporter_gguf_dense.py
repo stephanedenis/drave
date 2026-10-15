@@ -197,11 +197,20 @@ def tenseurs_depuis_hf(dossier: str, lora: dict | None, couches_lora: int, adapt
     poids = {k: v.to(torch.float32).numpy()
              for k, v in load_file(os.path.join(dossier, "model.safetensors")).items()}
     n_couches = 1 + max(int(k.split(".")[2]) for k in poids if k.startswith("model.layers."))
-    fusion = {}
+    # LA FUSION SOMME LES DÉPLACEMENTS, ELLE N'ÉCRASE PAS. La première version rangeait les
+    # adaptateurs dans un DICTIONNAIRE indexé par nom : le second fichier écrasait le premier, et
+    # « A+B » sortait **exactement** égal à B — l'égalité des deux chiffres a dénoncé le bug
+    # (perplexité 7,1461 et 17,1692 pour B et pour AB). Ici on accumule `echelle · B·A`, ce qui est
+    # exact même si les deux expériences n'ont pas la même échelle.
+    deltas: dict = {}
     if lora:
+        import numpy as _np
         for t in lora["lora"]:
-            fusion[t["nom"]] = (t["A"], t["B"], t["echelle"])
-        print(f"  fusion LoRA : {len(fusion)} projections sur les {couches_lora} premières couches")
+            d = (_np.asarray(t["B"], dtype=_np.float32) @ _np.asarray(t["A"], dtype=_np.float32)) \
+                * float(t["echelle"])
+            deltas[t["nom"]] = deltas[t["nom"]] + d if t["nom"] in deltas else d
+        print(f"  fusion LoRA : {len(lora['lora'])} adaptateurs sur {len(deltas)} projections, "
+              f"SOMMÉS (pas écrasés)")
     sortie = []
     for nom_hf, nom_gguf in CORRESPONDANCE:
         sortie.append((nom_gguf, poids[nom_hf].astype(np.float32)))
@@ -211,10 +220,8 @@ def tenseurs_depuis_hf(dossier: str, lora: dict | None, couches_lora: int, adapt
             if nom_hf not in poids:
                 continue
             w = poids[nom_hf].astype(np.float32)
-            if nom_hf in fusion and i < couches_lora:
-                A, B, echelle = fusion[nom_hf]
-                w = w + (np.asarray(B, dtype=np.float32) @ np.asarray(A, dtype=np.float32)) \
-                    * float(echelle)
+            if nom_hf in deltas and i < couches_lora:
+                w = w + deltas[nom_hf]
             sortie.append((f"blk.{i}.{suf_gguf}", w))
     if adapter is not None:
         print(f"  adaptateur de sortie : {adapter.shape} (appliqué par le moteur, pas dans le GGUF)")
@@ -231,7 +238,10 @@ def main() -> int:
     ap.add_argument("--format", choices=["q8", "f16", "f32"], default="q8",
                     help="q8 (défaut) : matrices en Q8_0, normes et biais en f32 — c'est le "
                          "format que `--ppl` exige ; f16/f32 : tout dans ce type")
-    ap.add_argument("--lora", default=None, help="fichier .pt des adaptateurs (n4_dessin_b --sauver)")
+    ap.add_argument("--lora", default=None,
+                    help="fichier .pt des adaptateurs (n4_dessin_b --sauver) — ou PLUSIEURS, "
+                         "séparés par des virgules : c'est la FUSION de deux expériences "
+                         "(latéralité : deux spécialistes, un corps calleux)")
     ap.add_argument("--couches-lora", type=int, default=8)
     ap.add_argument("--adapter-sortie", default=None,
                     help="écrire la matrice de sortie en f32 brut (pour --adaptateur-sortie)")
@@ -251,7 +261,16 @@ def main() -> int:
         lora = None
         if a.lora:
             import torch
-            lora = torch.load(a.lora, map_location="cpu", weights_only=False)
+            # PLUSIEURS LoRA : on CONCATÈNE leurs listes — et c'est la somme des déplacements
+            # (W + ΔA + ΔB). Deux expériences dans un seul modèle, sans réentraînement.
+            fichiers = [f for f in a.lora.split(",") if f.strip()]
+            morceaux = [torch.load(f, map_location="cpu", weights_only=False) for f in fichiers]
+            lora = {"lora": [t for m in morceaux for t in m.get("lora", [])],
+                    "adaptateur": next((m.get("adaptateur") for m in morceaux
+                                        if m.get("adaptateur") is not None), None)}
+            if len(fichiers) > 1:
+                print(f"  FUSION de {len(fichiers)} expériences : "
+                      f"{sum(len(m.get('lora', [])) for m in morceaux)} projections")
             adapter = lora.get("adaptateur")
         tenseurs = tenseurs_depuis_hf(a.hf, lora, a.couches_lora, adapter)
         print(f"source PyTorch {a.hf} : {len(tenseurs)} tenseurs")
