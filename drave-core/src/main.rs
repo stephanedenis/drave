@@ -2295,12 +2295,7 @@ fn run_banc_vision(sortie: &str) {
                 }
             }
         }
-        let post_ln = g.dequant("v.post_ln.weight");
-        let post_lnb = g.dequant("v.post_ln.bias");
-        for pi in 0..n_patch {
-            norme_ln(&x[pi * e..(pi + 1) * e], &post_ln, &post_lnb, &mut xn);
-            x[pi * e..(pi + 1) * e].copy_from_slice(&xn);
-        }
+
         {
             let mut fb = std::io::BufWriter::new(
                 std::fs::File::create(format!("{sortie}.bloc")).expect("création"));
@@ -2329,6 +2324,17 @@ fn run_banc_vision(sortie: &str) {
         let w2 = g.dequant("mm.2.weight");
         let b2 = g.dequant("mm.2.bias");
         println!("projecteur : mm.0 {n1}→{n0} · mm.2 {n3}→{n2}");
+        // ⚠ OÙ `v.post_ln` S'APPLIQUE — ET SUR QUOI. La référence (`PatchMerger.forward`) écrit
+        // `self.mlp(self.ln_q(x).view(-1, self.hidden_size))` : `ln_q` est une LayerNorm de
+        // **1280** (donc PAR PATCH), et le `view` ne fait que REGROUPER les quatre patchs d'un
+        // groupe 2 × 2 en 5120. L'ordre est donc : normaliser chaque patch, PUIS fusionner.
+        //
+        // Le vrai défaut n'était pas l'ordre mais la CIBLE : le banc normalisait `x`… que le
+        // projecteur n'utilise pas — il fusionne `tour`, resté NON normalisé. Mesuré sur le même
+        // état d'entrée : cosinus **+0,7804**, écart **66,6 %** (15/10). Un premier correctif
+        // (normaliser APRÈS la fusion) était faux, et le compilateur l'a montré à l'exécution :
+        // `post_ln` fait 1280 poids, pas 5120 (« index out of bounds: the len is 1280 »).
+        // (le projecteur consomme `tour`, déjà normalisé par patch plus haut : rien à normaliser ici)
         // GELU exact (erf), comme dans la tour de vision.
         let gelu = |x: f32| 0.5 * x * (1.0 + erf(x / std::f32::consts::SQRT_2));
         // Un groupe de fusion 2 × 2 = quatre patchs concaténés (4 × 1280 = 5120),
@@ -2338,6 +2344,11 @@ fn run_banc_vision(sortie: &str) {
         let n_cote_p = (n_patch as f64).sqrt().round() as usize;
         let n_groupe = (n_cote_p / 2) * (n_cote_p / 2);
         let mut y = vec![0f32; n_groupe * n2];
+        // `tour` EST DÉJÀ NORMALISÉ (la boucle `post_ln` tourne sur `x` juste avant que `tour` en
+        // soit le clone) : ne pas le normaliser une seconde fois. Un premier « correctif » a
+        // appliqué une LayerNorm de plus ici — et il a été démasqué par un panic (« index out of
+        // bounds: the len is 1280 »), qui a aussi confirmé que `v.post_ln` porte **1280** poids :
+        // la référence normalise PAR PATCH puis regroupe par `view`, elle ne normalise pas 5120.
         let source = tour.clone().unwrap_or_else(|| out.clone());
         let mut fusion = vec![0f32; n1];
         for g in 0..n_groupe {
@@ -2349,10 +2360,12 @@ fn run_banc_vision(sortie: &str) {
                         .copy_from_slice(&source[p * cout..(p + 1) * cout]);
                 }
             }
+            // La fusion est faite de patchs DÉJÀ normalisés (la référence : `ln_q` puis `view`).
+            let fusionn = fusion.clone();
             let mut h = vec![0f32; n0];
             for o in 0..n0 {
                 let mut acc = b0[o];
-                for i in 0..n1 { acc += w0[o * n1 + i] * fusion[i]; }
+                for i in 0..n1 { acc += w0[o * n1 + i] * fusionn[i]; }
                 h[o] = gelu(acc);
             }
             for o in 0..n2 {

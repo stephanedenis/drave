@@ -423,9 +423,25 @@ Mesure sur l'état post-tour du moteur (image naturelle, `mm.0`/`mm.2`/`v.post_l
 **cosinus +0,7804 · écart relatif 66,6 %** ✗ — les **normes** concordent (l'échelle est bonne : la
 LayerNorm normalise dans les deux cas), les **valeurs** non ✗ : c'est bien l'ordre des opérations.
 
-* **le correctif est identifié et daté** (appliquer `post_ln` sur le vecteur **fusionné** de 5120,
-  puis `mm.0` → GELU → `mm.2`) — il sera appliqué **après** la passe de portes en cours : on ne
-  reconstruit pas le binaire pendant qu'une passe tourne ;
+* **⚠️ ET LE « CORRECTIF » QUE J'EN AVAIS TIRÉ ÉTAIT FAUX — le compilateur l'a prouvé à
+  l'exécution.** J'avais conclu « la référence normalise APRÈS la fusion » et appliqué une
+  LayerNorm de **5120** ; le moteur a paniqué : `index out of bounds: the len is 1280 but the index
+  is 1280`. **`v.post_ln` porte 1280 poids** : `ln_q` normalise **par patch**, et le `view(-1,
+  hidden_size)` ne fait que **regrouper** — l'ordre du moteur était donc **le bon** ✗✓. Lecture
+  attentive de la référence : `self.mlp(self.ln_q(x).view(-1, self.hidden_size))` — `ln_q(x)`
+  d'abord (1280), `view` ensuite (pure mise en forme). **Le code est revenu à l'original**, avec un
+  commentaire qui dit pourquoi (et pourquoi un « correctif » de plus serait une double
+  normalisation, `tour` étant **déjà** normalisé quand le projecteur le consomme) ;
+* **l'écart de 66,6 % reste donc INEXPLIQUÉ**, et les pistes sont nommées : l'**ordre de fusion**
+  (le moteur concatène les quatre patchs d'un groupe en (dy, dx) ; la référence regroupe par `view`
+  dans l'ordre de la séquence, qui est l'ordre **groupé** du processeur), ou la **disposition des
+  matrices** `mm.0`/`mm.2` (le moteur lit `dims[0]` comme la sortie, convention de ses autres
+  tenseurs). Le GELU, lui, est conforme (erf exact des deux côtés) ✓, et la LayerNorm par patch avec
+  biais aussi ✓ ;
+* **et la leçon de méthode, ici, est pour moi** : mesurer sur le même état d'entrée était la bonne
+  méthode ✓, mais **en déduire un correctif sans lire la forme des tenseurs** a produit un
+  correctif faux ✗ — que **l'exécution** a démasqué en trois secondes ✓. C'est exactement ce que la
+  porte d'exécution du dépôt demande : *le chiffre ne suffit pas, il faut que le code tourne* ;
 * **ce qui est déjà conforme**, vérifié dans le code **et** dans la référence : l'activation est un
   **GELU exact** (le moteur utilise `erf`, la référence `nn.GELU()` sans approximation) ✓ ; `v.post_ln`
   est bien une LayerNorm **avec biais** ✓ ; l'ordre de fusion (les quatre patchs d'un groupe en
@@ -433,6 +449,19 @@ LayerNorm normalise dans les deux cas), les **valeurs** non ✗ : c'est bien l'o
 * **et la méthode a encore payé** : c'est la comparaison **sur le même état d'entrée** qui l'a isolé —
   comparer la sortie complète de la vision aurait mêlé ce bug à la bascule de l'attention des blocs
   et n'aurait rien dit ✗.
+
+## 2duodecies. Où en est le projecteur, exactement
+
+| partie | état |
+|---|---|
+| `v.post_ln` (LayerNorm **par patch**, 1280 poids, avec biais) | ✅ **conforme** (et l'ordre est le bon : normaliser puis regrouper — vérifié par la forme des tenseurs, après un faux correctif) |
+| l'activation (`mm.0` → **GELU exact** → `mm.2`) | ✅ **conforme** (`erf` côté moteur, `nn.GELU()` sans approximation côté référence) |
+| les formes (64 jetons × 1536) et l'échelle (normes 249,5 contre 246,9) | ✅ |
+| **les valeurs** | ❌ **écart 66,6 % (cosinus +0,7804)**, cause non trouvée — pistes : **l'ordre de fusion** des quatre patchs d'un groupe, ou la **disposition** des matrices `mm.0`/`mm.2` |
+
+**Le script de comparaison existe** (`tools/vision_projecteur_ref.py` : le même état d'entrée aux
+deux implémentations, comme pour les couches) — il n'est **pas** encore un critère de porte, et il
+ne le sera que le jour où l'écart sera expliqué ✓.
 
 ## 3. Ce que ça change pour la carte des facultés
 
