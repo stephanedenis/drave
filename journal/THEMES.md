@@ -47,7 +47,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-12](2026-10-12_memoire.md) | `3 couches` |
 | [2026-10-13](2026-10-13_memoire.md) | — |
 | [2026-10-14](2026-10-14_memoire.md) | `-16,4 %` · `+1,3 %` |
-| [2026-10-15](2026-10-15_memoire.md) | — |
+| [2026-10-15](2026-10-15_memoire.md) | `-22,5 %` · `-7,4 %` · `+1,2 %` |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 

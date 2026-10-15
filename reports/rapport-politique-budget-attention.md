@@ -47,6 +47,28 @@ Ce que ça dit :
   plus perplexe (m10) est le moins sensible**. On ne peut donc pas allouer par la difficulté
   générale : il faut **mesurer la sensibilité**, ce que le script fait (deux passes, une par budget).
 
+## 1bis. Aucun signal BON MARCHÉ ne prédit la sensibilité — la politique exige deux passes
+
+Une politique n'est utile **en ligne** que si l'on peut décider **sans payer** : s'il existait un
+signal peu coûteux qui prédise « ce texte a besoin de ses clés », la décision se prendrait en une
+passe. Deux candidats évidents, et ils ne marchent pas — corrélations sur les **huit** textes :
+
+| signal (disponible avant de décider) | corrélation avec la sensibilité au budget |
+|---|---:|
+| **perplexité du texte au budget complet** (sa difficulté) | **−0,019** |
+| **perplexité au budget réduit** (ce qu'on paie de toute façon) | **+0,096** |
+
+* **aucune des deux n'est corrélée** : ni la difficulté du texte, ni ce qu'il rend à budget réduit ne
+  dit s'il **supporterait** la réduction. Le texte le plus perplexe (m10, 17,99) est le **moins**
+  sensible (+0,04 %) et le plus sensible (m15, +7,39 %) a une perplexité **plus basse** (14,18) ;
+* **conséquence nette** : la politique par texte **ne peut pas** se décider en une passe. Elle exige
+  de **payer deux fois** (mesurer la sensibilité, puis servir le texte au budget choisi) — et c'est
+  le coût qui borne son intérêt : **2× le calcul** pour **−14,1 % de clés**. Elle n'est donc
+  rentable que si la ressource rare est la **bande passante** (réparti) et non le calcul local ;
+* **et c'est une réponse au 🟡 « modulation » de la carte des facultés** : le signal scalaire qui
+  manquait depuis le 10/10 n'est pas *introuvable par hasard* — il **n'existe pas** dans les deux
+  statistiques les plus naturelles. La métacognition utile ici est une **mesure**, pas un signal.
+
 ## 2. Ce que ça change pour le cerveau
 
 * **la modulation a enfin un signal qui paie** : non pas un scalaire abstrait (les cinq modulateurs
