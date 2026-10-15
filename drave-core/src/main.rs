@@ -1857,7 +1857,18 @@ fn run_banc_vision(sortie: &str) {
                                t.dims[2] as usize, t.dims[3] as usize);
     let mut proj: Option<(Vec<f32>, Vec<f32>)> = None;
     println!("v.patch_embd.weight : sortie {cout} · entrée {cin} · noyau {ky}×{kx}");
-    let w = g.dequant("v.patch_embd.weight");
+    // DIAGNOSTIC DE FIDÉLITÉ DES POIDS : `DRAVE_VISION_NOYAU=<fichier.f32>` remplace le noyau de
+    // patchs par un noyau fourni (1280 × 3 × 14 × 14, f32). C'est ce qui permet de trancher entre
+    // « le moteur calcule mal » et « le poids n'est pas le même » — les deux donnent le même écart,
+    // et sans ce levier on ne peut pas les distinguer.
+    let w = if let Ok(f) = std::env::var("DRAVE_VISION_NOYAU") {
+        let brut = std::fs::read(&f).expect("noyau illisible");
+        let v: Vec<f32> = brut.chunks_exact(4)
+            .map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]])).collect();
+        assert_eq!(v.len(), cout * cin * ky * kx, "noyau de taille inattendue");
+        println!("[vision] noyau de patchs REMPLACÉ par {f} ({} valeurs)", v.len());
+        v
+    } else { g.dequant("v.patch_embd.weight") };
     let mut tour: Option<Vec<f32>> = None;
     assert_eq!(w.len(), cout * cin * ky * kx, "poids de patch inattendus");
     // Image 28 × 28 déterministe : dégradé + carré central, pour que la

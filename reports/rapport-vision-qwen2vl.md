@@ -3,9 +3,11 @@
 > Campagne : **cerveau** · expérience : la faculté **perception visuelle** (C1/M4), qui était
 > « **bloquée par un modèle absent** » (`docs/cerveau-facultes.md` § 1bis, 15/10 06 h).
 > Question : avec un vrai modèle de vision sur la machine, la tour du moteur tient-elle ?
-> Verdict : **la tour TOURNE ; l'écart avec la référence est un écart de POIDS, pas de code**
-> (§ 2sexies : le noyau de patchs du mmproj ne porte qu'une des deux tranches temporelles — 0,00 %
-> sur l'une, absente sur l'autre). Le modèle est là (Qwen2-VL-2B + son
+> Verdict : **la tour TOURNE, et elle est VÉRIFIÉE à l'entrée.** Le mmproj téléchargé a perdu une
+> tranche temporelle du noyau de patchs (§ 2sexies : 0,00 % sur l'une, absente sur l'autre) ; **avec
+> le noyau réparé**, l'embedding de patchs est **exact** (0,00 % sur 256 patchs) et la couche 0 est à
+> **cosinus +0,9972** — l'écart croissant ensuite avec la profondeur (7 % → 60 % en six couches) est
+> la **signature de la quantification**, pas d'un bug de convention. Le modèle est là (Qwen2-VL-2B + son
 > `mmproj`), `--banc-vision` déroule maintenant **les 32 couches, la rotation 2-D, la norme finale,
 > le projecteur `mm.0`/`mm.2` et l'injection** — mais la comparaison à une seconde implémentation
 > (`transformers`) **ne conclut pas** : mêmes formes (256 × 1280), normes **862,9** contre **116 651**
@@ -240,6 +242,42 @@ n'est **pas** dans le code du moteur : il est dans **la conversion** qui a produ
   modèle » ; ou (b) **prendre le mmproj pour référence** et se comparer à **llama.cpp**, qui utilise
   la même conversion — c'est la voie « fidélité à l'écosystème ». Les deux sont défendables ; ce qui
   ne l'est pas, c'est de continuer à comparer **l'un à l'autre** sans le dire.
+
+## 2septies. Avec le noyau RÉPARÉ, la tour passe de « non vérifiée » à « vérifiée à l'entrée, et cohérente en profondeur »
+
+Le noyau sommé (reconstruit depuis les `safetensors`, `w₀ + w₁`) peut être **donné au moteur**
+(`DRAVE_VISION_NOYAU=<fichier.f32>`, un levier de diagnostic ajouté pour trancher entre « le moteur
+calcule mal » et « le poids n'est pas le même »). Résultats :
+
+| comparaison | avant (noyau du mmproj) | **après (noyau sommé)** |
+|---|---:|---:|
+| embedding de patchs — écart | 173,64 % | **0,00 %** *(256 patchs sur 256, écart max 0,000)* |
+| couche 0 — cosinus | +0,6825 | **+0,9972** (écart 7,45 %) |
+| couche 1 | +0,7805 | +0,9727 (23,4 %) |
+| couche 2 | +0,8405 | +0,9676 (25,3 %) |
+| couche 3 | — | +0,9134 (41,1 %) |
+| couche 4 | — | +0,8695 (51,1 %) |
+| couche 5 | — | +0,8239 (59,6 %) |
+
+* **l'embedding de patchs est EXACT** (0,00 % sur les 256 patchs, contre une reconstruction numpy
+  indépendante **et** contre la référence) : la convolution, l'extraction des patchs et l'ordre sont
+  **vérifiés** ✓ ;
+* **la couche 0 est à 0,9972 de cosinus** (7,45 % d'écart) : c'est le niveau de la **quantification
+  Q8_0** des poids du bloc (les poids du mmproj sont Q8_0, la référence est en f32) — et non plus un
+  désaccord de structure ;
+* **l'écart croît ensuite avec la profondeur** (7 % → 60 % en six couches, cosinus 0,997 → 0,824) :
+  c'est la **signature d'une petite différence par couche qui se compose**, pas d'un bug — un bug de
+  convention donnerait un écart **constant et énorme dès la couche 0** (c'est exactement ce qu'on
+  voyait avant : −0,50 de cosinus). **Hypothèse, et elle est nommée** : l'accumulation de la
+  quantification à travers des LayerNorm, qui amplifient les écarts relatifs ;
+* **ce qui reste pour transformer l'hypothèse en mesure** : refaire la comparaison **à poids égaux**
+  (déquantifier les Q8_0 du mmproj et les donner à la référence, ou l'inverse) — si l'écart tombe,
+  l'accumulation est démontrée ; s'il persiste, il reste une convention à trouver, mais elle est
+  **petite** (elle ne se voit plus à la couche 0) ;
+* **et la leçon vaut pour toute la faculté** : le mmproj de ggml-org **n'est pas le modèle** — il a
+  perdu une tranche temporelle du noyau de patchs. Toute vérification d'une tour bâtie dessus contre
+  le modèle d'origine est **vouée à ne pas converger**, et c'est un fait à écrire dans la porte, pas
+  à découvrir trois heures plus tard.
 
 ## 3. Ce que ça change pour la carte des facultés
 
