@@ -127,6 +127,22 @@ existent, la porte-cerveau qu'elles **coexistent**, celle-ci qu'elles **s'encha�
 **premier morceau rejoué** : elle annonçait −26 % de « consolidation » qui était de la récitation.
 Attrapé en relisant le script, pas par un chiffre — et corrigé par `--depuis 20000`.)*
 
+## 3quater. Ce qu'une DÉCISION coûte : deux monnaies, et la métrique du plan n'en voit qu'une
+
+| configuration | paires par décision | écart |
+|---|---:|---:|
+| complet (24 couches, toutes les clés) | **357,8 M** | — |
+| chemin court **8 couches** (réflexe) | **119,3 M** | **−66,7 %** |
+| 8 couches **+ fenêtre 128 + 64 puits** | 119,3 M | −66,7 % |
+| **4 couches** | **59,6 M** | **−83,3 %** |
+
+**La profondeur est le seul levier de cette table, et il est exactement linéaire en couches.** La
+**fenêtre d'attention ne déplace pas les paires** (119,3 M avec toutes les clés comme avec le
+quart) : la métrique compte les **projections**, pas les **scores d'attention**. Un budget de
+cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur, experts) et les
+**clés/octets** (fenêtre, puits) — et le plan n'en comptait qu'une. Détail :
+[`rapport-budget-decision.md`](../reports/rapport-budget-decision.md).
+
 ## 4. Où chaque chiffre se vérifie
 
 | faculté | fiche |
@@ -144,7 +160,7 @@ Attrapé en relisant le script, pas par un chiffre — et corrigé par `--depuis
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | distillation (E5) | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) |
-| la chaîne complète | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` |
+| la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
 
 **Ce que cette carte ne dit pas** : elle ne dit pas qu'un tel cerveau **bat** un transformeur sur
