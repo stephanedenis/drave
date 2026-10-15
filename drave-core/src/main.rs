@@ -1938,6 +1938,13 @@ fn run_banc_vision(sortie: &str) {
             }
             y
         };
+        // 0 = le modèle ne déclare aucune fenêtre locale (Qwen2-VL) ; 8 = une couche complète
+        // toutes les huit (Qwen2.5-VL).
+        let fenetre_tour = g.cfg("vision.attention.window_size")
+            .and_then(|m| m.as_u64()).unwrap_or(0) as usize;
+        println!("[vision] fenêtre locale : {}", if fenetre_tour == 0 {
+            "aucune (le modèle n'en déclare pas — Qwen2-VL)".to_string()
+        } else { format!("une couche complète toutes les {fenetre_tour}") });
         let mut x = out.clone();
         let mut xn = vec![0f32; e];
         let mut poids_bloc: Vec<Vec<f32>> = Vec::new();
@@ -1953,13 +1960,34 @@ fn run_banc_vision(sortie: &str) {
             let bv = g.dequant(&p("attn_v.bias"));
             let wo = g.dequant(&p("attn_out.weight"));
             let bo = g.dequant(&p("attn_out.bias"));
-            let wg = g.dequant(&p("ffn_gate.weight"));
-            let bg = g.dequant(&p("ffn_gate.bias"));
+            // LE MLP DE LA TOUR DÉPEND DE L'ARCHITECTURE, et le banc le DIT au lieu de le
+            // supposer : gpt-oss (le modèle pour lequel la tranche a été écrite) a un MLP à
+            // TROIS matrices (SwiGLU), Qwen2-VL en a DEUX (une projection, une activation, une
+            // projection). Le mmproj de Qwen2-VL n'a pas de `ffn_gate` du tout — le banc
+            // paniquait sur « tenseur v.blk.0.ffn_gate.weight absent », ce qui est une erreur
+            // d'architecture, pas de poids. Les FORMES tranchent le reste : la première matrice
+            // est celle dont le biais a la longueur de sa SORTIE (1280 → 5120, donc `ffn_down`
+            // dans le mmproj, `ffn_up` étant 5120 → 1280).
+            let a_gate = g.tensor(&p("ffn_gate.weight")).is_some();
+            let (wg, bg) = if a_gate {
+                (g.dequant(&p("ffn_gate.weight")), g.dequant(&p("ffn_gate.bias")))
+            } else { (Vec::new(), Vec::new()) };
             let wu = g.dequant(&p("ffn_up.weight"));
             let bu = g.dequant(&p("ffn_up.bias"));
             let wd = g.dequant(&p("ffn_down.weight"));
             let bd = g.dequant(&p("ffn_down.bias"));
-            let nff = wg.len() / e;
+            // La PREMIÈRE matrice : `ffn_down` (biais 5120) si son biais fait la taille cachée,
+            // sinon `ffn_up`. On ne devine pas, on mesure les longueurs.
+            let (w1, b1, w2, b2, nff) = if !a_gate && bd.len() != e && bu.len() == e {
+                (wd.clone(), bd.clone(), wu.clone(), bu.clone(), bd.len())
+            } else {
+                (wu.clone(), bu.clone(), wd.clone(), bd.clone(), wg.len() / e)
+            };
+            if l == 0 {
+                println!("[vision] MLP : {} ({} matrices) · première projection {} → {} ·                          activation {}", if a_gate { "SwiGLU" } else { "quick-GELU" },
+                         if a_gate { 3 } else { 2 }, e, nff,
+                         if a_gate { "silu(gate)·up" } else { "x·σ(1,702x)" });
+            }
             let (mut qq, mut kk, mut vv) = (Vec::new(), Vec::new(), Vec::new());
             for pi in 0..n_patch {
                 norme_ln(&x[pi * e..(pi + 1) * e], &ln1, &mut xn);
@@ -2002,7 +2030,14 @@ fn run_banc_vision(sortie: &str) {
             // positions (`idx_col[u_col] = u_row`), si bien qu'un patch (r, c)
             // reçoit les positions de (c, r). Ce n'est donc pas qu'un masque :
             // la fenêtre change aussi l'ordre des positions.
-            let complete_rot = (l + 1) % 8 == 0;
+            // LA FENÊTRE LOCALE EST DÉCLARÉE PAR LE MODÈLE, PAS SUPPOSÉE. Qwen2.5-VL a une couche
+            // complète toutes les huit et des fenêtres ailleurs ; **Qwen2-VL n'en a AUCUNE** — et
+            // le banc les appliquait quand même, avec la permutation colonne-majeur qui va avec.
+            // C'est la première chose que la comparaison à la référence a désignée (la tour rendait
+            // une norme 135 fois trop grande). Le mmproj de Qwen2-VL ne déclare aucune fenêtre :
+            // `fenetre_tour` vaut alors 0, toutes les couches sont complètes, et la permutation
+            // disparaît avec elles.
+            let complete_rot = fenetre_tour == 0 || (l + 1) % fenetre_tour == 0;
             for pi in 0..n_patch {
                 let (ligne, colonne) = if complete_rot {
                     ((pi / n_cote) as f32, (pi % n_cote) as f32)
@@ -2053,18 +2088,34 @@ fn run_banc_vision(sortie: &str) {
                 let o = proj_l(&att[pi * e..(pi + 1) * e], &wo, &bo, e, e);
                 for i in 0..e { x[pi * e + i] += o[i]; }
                 norme_ln(&x[pi * e..(pi + 1) * e], &ln2, &mut xn);
-                let g_t = proj_l(&xn, &wg, &bg, e, nff);
-                let u_t = proj_l(&xn, &wu, &bu, e, nff);
                 let mut act = vec![0f32; nff];
-                for i in 0..nff {
-                    let z = g_t[i];
-                    act[i] = (z / (1.0 + (-z).exp())) * u_t[i];
+                if a_gate {
+                    // SwiGLU : deux projections en parallèle, multipliées après activation.
+                    let g_t = proj_l(&xn, &w1, &b1, e, nff);
+                    let u_t = proj_l(&xn, &w2, &b2, e, nff);
+                    for i in 0..nff {
+                        let z = g_t[i];
+                        act[i] = (z / (1.0 + (-z).exp())) * u_t[i];
+                    }
+                    // ⚠ la TROISIÈME matrice est `wd`/`bd`, pas `w2` (qui est la porte « up »
+                    // dans ce chemin) : la première version de cette refonte appliquait `up`
+                    // deux fois — attrapé en relisant le patch avant de mesurer quoi que ce soit.
+                    let d_t = proj_l(&act, &wd, &bd, nff, e);
+                    for i in 0..e { x[pi * e + i] += d_t[i]; }
+                } else {
+                    // Qwen2-VL : fc1 → quick-GELU → fc2 (l'activation de la tour de vision
+                    // Qwen2-VL est `quick_gelu`, pas GELU exact : x·σ(1,702x)).
+                    let h_t = proj_l(&xn, &w1, &b1, e, nff);
+                    for i in 0..nff {
+                        let z = h_t[i];
+                        act[i] = z / (1.0 + (-1.702 * z).exp());
+                    }
+                    let d_t = proj_l(&act, &w2, &b2, nff, e);
+                    for i in 0..e { x[pi * e + i] += d_t[i]; }
                 }
-                let d_t = proj_l(&act, &wd, &bd, nff, e);
-                for i in 0..e { x[pi * e + i] += d_t[i]; }
             }
             if l == 0 { poids_bloc = vec![ln1, ln2, wq, bq, wk, bk, wv, bv, wo, bo,
-                                         wg, bg, wu, bu, wd, bd]; }
+                                         w1, b1, w2, b2]; }
         }
         let post_ln = g.dequant("v.post_ln.weight");
         for pi in 0..n_patch {
@@ -2140,6 +2191,17 @@ fn run_banc_vision(sortie: &str) {
             for v in w0.iter().chain(b0.iter()).chain(w2.iter()).chain(b2.iter()) {
                 f2.write_all(&v.to_le_bytes()).unwrap();
             }
+        }
+        // LES JETONS D'IMAGE SONT ÉCRITS : sans ce fichier, la seule chose que la tour produisait
+        // était une ligne de statistiques — et une implémentation qu'on ne peut pas comparer à une
+        // seconde est une implémentation qu'on ne peut pas vérifier (le fichier `.projecteur` ne
+        // contient que les POIDS, pas les sorties).
+        {
+            let mut fj = std::io::BufWriter::new(
+                std::fs::File::create(format!("{sortie}.jetons")).expect("création des jetons"));
+            fj.write_all(&(n_groupe as i32).to_le_bytes()).unwrap();
+            fj.write_all(&(n2 as i32).to_le_bytes()).unwrap();
+            for v in y.iter() { fj.write_all(&v.to_le_bytes()).unwrap(); }
         }
         println!("projecteur : {n_groupe} groupes × {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
                  y.iter().map(|v| v * v).sum::<f32>().sqrt(),

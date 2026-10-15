@@ -67,11 +67,15 @@ de la première tranche ») et la machine le donnent :
 |---|---|
 | **embedding de patchs** (`--banc-vision`, convolution 14 × 14 sur une image 28 × 28) | ✅ **vérifiée** contre la référence numpy (`tools/vision_ref.py`) : écart max **5,4e-7** — le bruit de virgule flottante |
 | rotation 2-D des patchs (mRoPE) · 32 couches à attention locale une sur huit · norme finale · projecteur `mm.0`/`mm.2` · **injection des embeddings d'image dans le flux de jetons** | ❌ (l'injection est **le point d'architecture** qui manque au moteur) |
-| **le modèle de vision** | ❌ **absent de la machine** — `models/` ne porte que Qwen2.5-0.5B (Q4_0, Q8_0), `~/IA/modeles` que Qwen3-30B et DeepSeek V4.1. La tranche vérifiée lit `v.patch_embd.weight`, que **aucun** fichier présent ne contient |
+| **le modèle de vision** | ✅ **PRÉSENT depuis le 15/10 09 h** : `models/vision/Qwen2-VL-2B-Instruct-Q4_K_M.gguf` (986 Mo) **et** son `mmproj` (710 Mo, 520 tenseurs — c'est lui qui porte `v.patch_embd.weight` et **toute la tour**) |
+| **la tour entière** (MLP, rotation 2-D, `v.post_ln`, projecteur, injection) | ⚠️ **ELLE TOURNE, ET ELLE A TORT** : `--banc-vision` déroule les 32 couches et le projecteur, mais la comparaison à `transformers` donne **862,9 contre 116 651,3** de norme (facteur **135**) — trois corrections d'architecture ont été faites (MLP à deux matrices + quick-GELU, fenêtre locale **conditionnelle** — Qwen2-VL n'en a pas —, écriture des jetons d'image), et **l'accord n'est pas là**. Fiche : [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) |
 
-**Conséquence, et c'est écrit plutôt que contourné** : la perception visuelle **ne peut pas être
-mesurée** aujourd'hui — pas parce que le moteur ne sait rien faire, mais parce que **les poids qui
-la portent ne sont pas là**. La prochaine action est donc un **téléchargement** (un GGUF de vision,
+**Conséquence, et elle a changé le 15/10 à 09 h** : le modèle est arrivé, la tour **tourne**, et
+elle **ne concorde pas** avec la référence (facteur 135 sur la norme de sortie). La perception
+visuelle est donc passée de « **bloquée par un manque de poids** » à « **mesurée, et fausse** » —
+ce qui est un progrès de méthode : il y a un modèle, un banc, une référence indépendante et un écart
+chiffré. Tant que l'écart tient, une éventuelle `porte-vision.sh` doit être **rouge**.
+*(Ce qui suit est l'état d'avant le téléchargement, gardé pour la trace :*) La prochaine action est donc un **téléchargement** (un GGUF de vision,
 p. ex. un Qwen2-VL), pas une ligne de code — et c'est exactement le genre de dépendance que le
 dépôt refuse de supposer : `--banc-vision` **dit** « pas de `v.patch_embd.weight` dans ce fichier »
 et rend la main au lieu d'inventer.
@@ -160,6 +164,7 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | latéralité | [`rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md) · [`rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md) |
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
+| vision (Qwen2-VL, la tour et son écart) | [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) |
 | distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
 | adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
 | le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
