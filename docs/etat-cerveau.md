@@ -189,7 +189,15 @@ Outils : `carte-facultes.sh` (la carte exécutable) · `boucle-cerveau.sh` (la c
 `porte-cycle-c2.sh` · `porte-speculatif.sh` · `speculatif_drave.py` (le réflexe propose, le cerveau
 vérifie) · `politique-budget.sh` · `derouler.py` (le pilote de cycle) · `memoire_travail.py` ·
 `cycle_entraine.py`.
-**Et ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
+**Et les trois derniers rounds (après 8 h)** : la **grille rang × pas** (9 points, harnais exact)
+montre que **le pas optimal dépend du rang** — c'est l'explication de la « non-composition », et le
+point efficient reste **(rang 4, pas 1e-3) : −7,92 %** avec, à côté, un **rang 2** à 0,018 % des
+poids qui donne −16,00 % sur m20 ; le **critère de diversité** tient sa direction sur un second
+corpus mais **ne sauve rien** (sur `corpus_en`, aucun lot ne transfère, même le plus répétitif) ; et
+la **sonde courte** (128 jetons) est le meilleur proxy essayé pour la politique de budget
+(**+0,274**) — et toujours insuffisant.
+
+**Ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
 ×1,5 d'accord, deux tentatives ont échoué) ; (2) le cycle — aucun objectif ne le fait converger ;
 (3) le **critère de choix du rejeu** (la dispersion et la surprise ont échoué, la proximité non
 plus) ; (4) la **vision**, bloquée par un modèle absent ; (5) la modulation **par jeton** (la
