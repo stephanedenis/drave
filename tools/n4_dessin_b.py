@@ -376,9 +376,18 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
             with torch.no_grad():
                 logits_maitre = banc._complet(lot)[:, 4:-1].float() / a.temperature
             etudiant = logits[:, 4:-1].float() / a.temperature
-            return nn.functional.kl_div(
+            kl = nn.functional.kl_div(
                 nn.functional.log_softmax(etudiant, dim=-1),
                 nn.functional.softmax(logits_maitre, dim=-1), reduction="batchmean")
+            if a.melange <= 0.0:
+                return kl
+            # E5 bis — le MÉLANGE : garder la cible dure (le jeton) en plus de la distribution du
+            # maître. La fiche E5 a montré que la distillation pure fait ×1,8 sur l'accord et coûte
+            # ×3,2 de perplexité ; le mélange est la façon classique de payer les deux.
+            logits_bruts = logits[:, 4:-1].float()
+            ce = nn.functional.cross_entropy(
+                logits_bruts.reshape(-1, logits_bruts.shape[-1]), lot[:, 5:].reshape(-1))
+            return kl + a.melange * ce
         cibles = lot[:, 5:].reshape(-1)
         return nn.functional.cross_entropy(
             logits[:, 4:-1].reshape(-1, logits.shape[-1]).float(), cibles)
@@ -420,7 +429,8 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         journal.append({"epoque": e + 1, "perte_train": float(np.exp(tot / max(n, 1))),
                         "val": ppl_val})
         if e == 0 or (e + 1) % max(1, a.epoques // 10) == 0 or marque:
-            print(f"    époque {e + 1:>3}/{a.epoques} · train {np.exp(tot / max(n, 1)):>12,.2f} "
+            print(f"    époque {e + 1:>3}/{a.epoques} · train (perplexité équivalente) "
+                  f"{np.exp(tot / max(n, 1)):>12,.2f} "
                   f"· validation {ppl_val:>12,.2f}{marque}")
 
     restaurer(meilleur[2])
@@ -497,6 +507,9 @@ def main() -> int:
                          "réponse au constat du 15/10 : entraîné à la perplexité, le réflexe ne "
                          "partage AUCUN jeton avec le cerveau (0/96 en génération)")
     ap.add_argument("--temperature", type=float, default=1.0, help="température de distillation")
+    ap.add_argument("--melange", type=float, default=0.0,
+                    help="E5 bis : perte = KL + melange × CE. La question ouverte de la fiche E5 : "
+                         "gagner l'ACCORD (distillation) sans perdre la PERPLEXITÉ (texte)")
     ap.add_argument("--accord", action="store_true",
                     help="mesurer l'ACCORD avec le maître (fraction de positions où le chemin "
                          "court choisit le même jeton que le modèle complet), avant et après")

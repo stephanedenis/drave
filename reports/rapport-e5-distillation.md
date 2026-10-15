@@ -64,11 +64,40 @@ Mesuré par le moteur, invite de 8 jetons, 64 jetons générés (`--couches 0:8 
   bout (le moteur **écrit** ce que le réflexe produit), et elle dit ce qu'elle vaut : **un agent
   différent, deux fois plus rapide**.
 
+## 2bis. E5 bis — le MÉLANGE (KL + λ·CE) est PIRE sur les DEUX axes
+
+La question ouverte la plus évidente après le § 1 : peut-on **garder la perplexité** (l'objectif
+dur, le jeton) **en gagnant l'accord** (la distribution du maître) ? C'est le mélange classique
+`KL + λ·CE`, essayé à deux valeurs :
+
+| objectif | perplexité m32 | perplexité m20 | accord m32 | accord m20 |
+|---|---:|---:|---:|---:|
+| perplexité seule (CE) | **181,54** | **153,98** | 28,0 % | 40,5 % |
+| distillation seule (KL) | 574,70 | 715,02 | **51,0 %** | **68,1 %** |
+| KL + **1,0** × CE | 1 475,96 | 967,82 | 46,8 % | 47,0 % |
+| KL + **4,0** × CE | 880,74 | 1 752,44 | 36,9 % | 25,9 % |
+
+**Le mélange ne prend pas le meilleur des deux : il prend le pire des deux.** À λ = 1 la perplexité
+est **2,6 fois pire** que la distillation seule (1 476 contre 575) et l'accord est **plus bas**
+(46,8 % contre 51,0 %) ; à λ = 4 l'accord s'effondre à 36,9 % / 25,9 % — **sous** le modèle entraîné
+au texte seul sur m20 (40,5 %).
+
+* la cause **n'est pas instruite**, et deux hypothèses sont nommées : (1) le mélange **double
+  l'échelle du gradient** sans retoucher le pas d'apprentissage (1e-3 pour tous les bras) — un
+  λ > 0 change le réglage effectif, et les deux objectifs purs ont, eux, été laissés à leurs
+  meilleures époques sur la même validation ; (2) la KL et la CE **ne tirent pas dans la même
+  direction** ici : la CE veut un pic sur le bon jeton, la KL veut la forme entière d'une
+  distribution qu'un étudiant de 8 couches ne peut pas atteindre, et la somme des deux
+  compromis peut être pire que chaque terme ;
+* **ce qui est établi, c'est le fait** : *à ce budget et à ce pas*, le mélange est dominé par les
+  deux objectifs purs **sur leur propre axe**. La recette « on peut avoir les deux » n'est pas
+  confirmée — et elle demanderait un balayage du pas d'apprentissage, qui n'est pas fait.
+
 ## 3. Ce que cette fiche ne dit pas
 
-* **une seule température de distillation** (T = 1) et un seul poids relatif (pas de mélange
-  KL + CE) : le réglage classique (T = 2 à 4, ou KL + λ·CE) n'est pas essayé — et il pourrait
-  rendre l'accord **sans** perdre la perplexité, ce qui est exactement la question ouverte ;
+* **une seule température de distillation** (T = 1) : le réglage classique (T = 2 à 4) n'est pas
+  essayé ; et le mélange KL + λ·CE, essayé au § 2bis, **n'a pas retouché le pas d'apprentissage** —
+  c'est la première chose à faire avant de conclure sur lui ;
 * **pas de distillation des états** (les couches intermédiaires du maître ne sont pas imitées) :
   seule la distribution de sortie l'est ;
 * **une seule architecture d'étudiant** (8 couches + 896² + LoRA rang 8) : la capacité de
