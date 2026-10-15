@@ -21,6 +21,7 @@
 | **mémoire de travail** | **tampon exact** `--memoire K` — et le réseau **ne l'apprend pas** (R² −1,09 → **−2,77** entraîné) | R² **1,000**, erreur nulle, poursuite de `v[t−8]` ; avec le tampon en entrée, le modèle gelé lit **+0,879** et l'entraîné **+0,964** | **0 paire de plus** | ✅ |
 | **mémoire épisodique** | magasin adressable par contenu (hachage/LSH) | élagué **83 %**, rappel **96,3 %** à 50 % de dégradation, round-trip **exact** | **11 jetons sur 2 048** | ✅ |
 | **consolidation** (sommeil) | rejeu → LoRA rang 8 sur 8 couches — **ce qui se consolide est la structure PARTAGÉE** | **−16,4 %** en domaine ; **+1,3 %** hors domaine ; courbe −5,6 % (3) → **−10,0 %** (20) ; et sur un corpus **hétérogène**, mémorisation **−22,5 %** mais transfert **+1,2 %** | 0,07 % des poids, 2 époques | ✅ |
+| **adaptation / habituation** | **RIEN** — le réseau calcule la différence lui-même | à retard 1, le changement `v[t]−v[t−1]` est lisible à **+0,921** avec le tampon **brut** ; le gain **négatif** (soustraire le passé) le **dégrade** à +0,817 (et la valeur avec) | 0 | ✅ (résultat négatif : la fenêtre suffit) |
 | **modulation / arousal** | bus multi-canaux, **et une décision par texte** (métacognition : « ce texte supporte-t-il la moitié des clés ? ») | canal neutre ⇒ empreintes **identiques** ; aucun signal **scalaire** n'améliore ; mais la politique **par texte** tient la qualité pour **−14,1 % de clés** | ~0 | 🟡 mécanique faite, signal scalaire non trouvé — **la décision par contenu, si** |
 | **inhibition / E-I** | gain par couche (côté amplification) | gain 0,75 ⇒ **−11,5 %** ; l'**inhibition dégrade** ; le ratio cortical de signes coûte **+4,9 à +10,8 %** à l'entraînement | 0 | ✅ |
 | **latéralité / corps calleux** | deux jumeaux (échange **exact**, gain **nul**) — **et la FUSION de deux expériences** (`W + ΔA + ΔB`) | la somme **conserve le gain du spécialiste fort** (−7,3 % contre −7,4 %) et **accumule les coûts** (+1,2 % sur l'autre corpus) : pas d'interférence destructrice | ÷2 de calcul | ✅ (échange : négatif ; fusion : positive) |
@@ -160,8 +161,54 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | délais, horloges, budgets | fiches 43, 44, 32, 42 · `porte-delais.sh`, `porte-horloge.sh`, `porte-budget.sh` |
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | distillation (E5) | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) |
+| adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
 | la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
+
+## 5. L'architecture qui suit — l'assemblage que les mesures IMPOSENT
+
+Ce n'est pas un plan : c'est ce que les chiffres de cette carte laissent debout. Chaque ligne est
+un choix que le dépôt a **mesuré**, et l'ordre est celui d'une décision.
+
+**Ce qu'on allume, dans cet ordre, et pourquoi** :
+
+1. **la profondeur d'abord** — c'est le seul levier qui déplace la métrique du plan (**×3** pour
+   24 → 8 couches, **357,8 → 119,3 M paires**, exactement linéaire), et le chemin court est le seul
+   endroit où la qualité tient encore (÷1,47 entraîné, `rapport-n4-porte-execution.md`) ;
+2. **la fenêtre ensuite** — moitié des clés pour **+0,04 % à +7,39 %** selon le texte : elle ne
+   déplace pas les paires mais divise les **clés**, donc c'est un levier de **réparti**, pas de
+   calcul local (mesuré : 17,1 → 19,1 tok/s, `rapport-fenetre-puits-attention.md`) ;
+3. **la mémoire de travail par TAMPON, jamais par entraînement** — R² **1,000**, **zéro paire**, et
+   l'entraînement du réseau pour la retenir **échoue** (−1,09 → −2,77, `rapport-memoire-travail-n5.md`) ;
+   le réseau sait seulement **lire** ce qu'une structure lui donne (+0,879 → +0,964) ;
+4. **l'épisodique pour se souvenir, les poids pour savoir** — l'exemplaire bat la moyenne (**87 %**
+   contre 7 % pour 11 jetons sur 2 048), et la consolidation ne transfère que la **structure
+   partagée** du rejeu (mémorisation −22,5 % dans les deux cas, transfert **−7,4 %** ou **+1,2 %**) ;
+5. **peu de sommeil, souvent** — 3 morceaux rejoués donnent **56 %** du gain maximal pour un coût
+   indétectable, une deuxième nuit n'ajoute presque rien (−0,30 %), et doubler les époques non plus
+   (+0,05 point) : **la donnée est la limite**, pas l'entraînement ;
+6. **une décision par CONTENU quand la ressource rare est la bande passante** — la politique par
+   texte tient la tolérance **partout** pour **−14,1 % de clés**, mais elle exige **deux passes**
+   (aucun signal bon marché ne prédit la sensibilité : corrélations −0,019 et +0,096) ;
+7. **et une agrégation DÉCLARÉE, jamais une somme** — deux spécialistes forts fusionnés par somme
+   donnent **moins** que chacun (−4,0 % contre −7,4 % et −8,7 %).
+
+**Ce qu'on n'allume PAS, et c'est mesuré** :
+
+| mécanisme | ce qu'il donne | pourquoi on ne l'allume pas |
+|---|---|---|
+| **cycle** (boucle cortico-thalamique) | une trajectoire bornée, déterministe, ×228 plus proche après entraînement | **aucun** des quatre objectifs ne le fait converger, et le meilleur pas 4 (43,55) est **×2,4 pire qu'une passe** (18,40) pour **4× le calcul** |
+| **récurrence locale** | un écho | « un écho, pas une mémoire » ; R² plafonné à **+0,104** |
+| **échange d'activations entre jumeaux** | exact | gain **nul** entre jumeaux identiques (36,1307 = 36,1307), transfert nul entre experts |
+| **apprentissage local** (règle hebbienne) | — | **négatif mesuré** (E7) : la règle locale *empire* l'état |
+| **latéralité par duplication** | ÷2 de calcul | aucun gain mesuré (C9) |
+| **effacement de l'état** | — | coûte **+41 %** (36,1307 → 51,1715) |
+| **délai sur toute la pile** | — | détruit la sortie (E→E) ; le délai est bon **sur un lien**, pas partout |
+
+**Et la chaîne complète tourne en une commande** (`tools/boucle-cerveau.sh`) : percevoir → retenir →
+se souvenir → consolider → agir, chaque maillon mesuré par le moteur, avec ses chiffres publiés —
+y compris celui qui dérange (le réflexe est **un autre agent** : 28 à 51 % d'accord par position,
+0 à 5 jetons sur 96 en génération).
 
 **Ce que cette carte ne dit pas** : elle ne dit pas qu'un tel cerveau **bat** un transformeur sur
 une tâche — aucune mesure de ce dépôt ne le dit, et le plan le dit lui-même (§ 5). Elle dit ce

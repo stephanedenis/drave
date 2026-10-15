@@ -123,6 +123,9 @@ def main() -> int:
     ap.add_argument("--pas-sonde", type=float, default=1e-2)
     ap.add_argument("--cachee-sonde", type=int, default=0, help="0 = sonde linéaire")
     ap.add_argument("--iterations-sonde", type=int, default=600)
+    ap.add_argument("--changement", action="store_true",
+                    help="mesurer aussi la cible v[t] − v[t−1] : l'HABITUATION (gain négatif) "
+                         "rend-elle le CHANGEMENT plus lisible que la valeur ?")
     ap.add_argument("--tampon", action="store_true",
                     help="donner le passé au réseau (canal `canal+retard` : c'est "
                          "`--entree-memoire`) — la référence haute, R² 1,000 pour 0 paire")
@@ -169,19 +172,23 @@ def main() -> int:
         with torch.no_grad():
             return m.model(inputs_embeds=emb, use_cache=False).last_hidden_state[0], v
 
-    def tranche(st, v, debut, fin):
-        """Les lignes [debut, fin) et leurs trois cibles alignées.
+    def tranche(st, v, debut, fin, changement=False):
+        """Les lignes [debut, fin) et leurs cibles alignées.
 
-        `mémoire` = v[t−k], `présent` = v[t], `avenir` = v[t+1] — la dernière ligne de `avenir`
-        sort de la séquence, donc on s'arrête un pas avant pour elle seule.
+        `mémoire` = v[t−k], `présent` = v[t], `avenir` = v[t+1] — et, si `changement`,
+        `v[t] − v[t−1]` : ce que l'HABITUATION (gain négatif sur le tampon) devrait rendre lisible.
+        La dernière ligne de `avenir` sort de la séquence, donc on s'arrête un pas avant.
         """
         # LA DERNIÈRE LIGNE N'A PAS D'AVENIR : on la retire pour TOUTES les cibles, sinon les
         # quatre tenseurs n'ont plus la même longueur (attrapé au premier essai).
         fin = min(fin, len(v) - 1)
-        return (st[debut:fin],
-                torch.tensor(v[debut - k:fin - k], device=dev),
-                torch.tensor(v[debut:fin], device=dev),
-                torch.tensor(v[debut + 1:fin + 1], device=dev))
+        out = (st[debut:fin],
+               torch.tensor(v[debut - k:fin - k], device=dev),
+               torch.tensor(v[debut:fin], device=dev),
+               torch.tensor(v[debut + 1:fin + 1], device=dev))
+        if changement:
+            out = out + (torch.tensor(v[debut:fin] - v[debut - 1:fin - 1], device=dev),)
+        return out
 
     # ---------------------------------------------------------------- bras GELÉ
     # LE PROTOCOLE DE LA CAMPAGNE : la sonde apprend sur la PREMIÈRE moitié d'une séquence et se
@@ -190,15 +197,23 @@ def main() -> int:
     # premier essai de cet outil rendait −3,6 au lieu de −0,68 pour cette seule raison.)
     st_te, v_te = sequence(a.pas, grad=False)
     dem = a.pas // 2
-    Xa, ya, pa, aa = tranche(st_te, v_te, k, dem)
-    Xb, yb, pb, ab = tranche(st_te, v_te, dem, a.pas)
+    ta = tranche(st_te, v_te, k, dem, a.changement)
+    tb = tranche(st_te, v_te, dem, a.pas, a.changement)
+    Xa, ya, pa, aa = ta[0], ta[1], ta[2], ta[3]
+    Xb, yb, pb, ab = tb[0], tb[1], tb[2], tb[3]
     # UNE SONDE PAR CIBLE. Le premier essai n'en ajustait qu'une (sur la mémoire) et la mesurait
     # aussi contre le PRÉSENT : elle rendait alors −0,93 pour le présent, là où la campagne publie
     # +0,992. On ajuste donc trois sondes, comme la campagne.
     Xa_np, Xb_np = Xa.cpu().numpy(), Xb.cpu().numpy()
     r2_gele_pres = r2(ridge(Xa_np, pa.cpu().numpy(), Xb_np), pb.cpu().numpy())
     r2_gele_mem = r2(ridge(Xa_np, ya.cpu().numpy(), Xb_np), yb.cpu().numpy())
+    # L'HABITUATION : la cible « changement » (v[t] − v[t−1]). Si le gain négatif sert à quelque
+    # chose, c'est ici que ça se voit — et nulle part ailleurs (le passé, lui, reste lisible).
+    r2_gele_chg = (r2(ridge(Xa_np, ta[4].cpu().numpy(), Xb_np), tb[4].cpu().numpy())
+                   if a.changement else float("nan"))
     r2_gele_av = r2(ridge(Xa_np, aa.cpu().numpy(), Xb_np), ab.cpu().numpy())
+    if a.changement:
+        print(f"  gelé    : CHANGEMENT R² {r2_gele_chg:+.3f} (la cible de l'habituation)")
     print(f"  gelé    : mémoire R² {r2_gele_mem:+.3f} · présent R² {r2_gele_pres:+.3f} "
           f"(chiffres publiés : −0,681 / +0,992)")
 
@@ -271,6 +286,7 @@ def main() -> int:
         pathlib.Path(a.json).write_text(json.dumps(
             {"retard": k, "canal": a.canal, "gain": a.gain, "tampon": a.tampon,
              "gele_memoire": r2_gele_mem, "gele_present": r2_gele_pres,
+             "gele_changement": r2_gele_chg,
              "entraine_memoire": r2_ent_mem, "entraine_present": r2_ent_pres,
              "entraine_avenir": r2_ent_av, "melange": r2_mel}, indent=1, ensure_ascii=False))
     return 0
