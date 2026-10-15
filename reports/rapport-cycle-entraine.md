@@ -58,11 +58,37 @@ Ce que ça dit :
   **point fixe** (le pas N doit rejoindre une cible, pas prédire), ou avec un objectif **pondéré**
   (le dernier pas seul) — la fiche ne les a pas essayés, et le § 4 le dit.
 
+## 2bis. Trois objectifs d'entraînement, et aucun ne fait converger la boucle
+
+La fiche annonçait la piste : « entraîner la boucle avec un objectif de **point fixe** ». C'est
+fait, et deux autres objectifs avec lui, à budget identique (8 morceaux de 512 jetons, 10 époques,
+LoRA rang 8 sur 24 couches) :
+
+| objectif | pas 1 | pas 2 | pas 3 | pas 4 | ce qu'il optimise |
+|---|---:|---:|---:|---:|---|
+| *(aucun — non entraîné)* | 15,42 | 355,03 | 4 057,04 | 15 868,54 | — |
+| **somme** des 4 pertes | 18,40 | 22,61 | 32,56 | 52,24 | la trajectoire entière |
+| **dernier** pas seul | 22,65 | 33,59 | 33,46 | **43,55** | la qualité à l'arrivée |
+| **point fixe** (somme + pénalité de convergence) | **19,42** | **22,05** | **32,02** | 52,35 | que la boucle se **pose** |
+
+Ce que ça dit :
+
+* **aucun objectif ne fait converger la boucle** : les trois dégradent à chaque pas (ratios 1,2 à
+  1,6). La pénalité de point fixe (`β = 1`, déplacement relatif de l'état entre deux pas) **ne
+  stabilise rien** — elle donne la meilleure amorce (pas 2 et 3 les plus bas : 22,05 et 32,02) et
+  **la même arrivée** que la somme (52,35 contre 52,24) ;
+* **l'objectif déplace *où* la dégradation mord** : « dernier » sacrifie le début (22,65 au pas 1)
+  et gagne l'arrivée (**43,55**, soit −17 % sur la somme) ; « point fixe » fait l'inverse. Il n'y a
+  pas d'objectif dominant — il y a une **trajectoire à choisir** ;
+* **et le chiffre à battre ne bouge pas** : une passe vaut **15,42 à 18,40** selon l'entraînement,
+  quand le meilleur pas 4 entraîné vaut **43,55** pour **quatre fois le calcul**. La conclusion de
+  la fiche tient, et elle est maintenant vérifiée sur **trois** objectifs au lieu d'un.
+
 ## 3. Ce que cette fiche ne dit pas
 
-* **un seul objectif d'entraînement** (somme des pertes des quatre pas) : le dernier pas seul, ou
-  une pondération décroissante, n'est pas mesuré — c'est la variable la plus prometteuse, et elle
-  est facile à essayer ;
+* **la pénalité de point fixe n'a qu'un poids** (β = 1) et une seule forme (déplacement relatif de
+  l'état) : ni β plus grand, ni une cible de point fixe **explicite** (l'état du modèle complet au
+  même texte) ne sont essayés — c'est pourtant ce que « point fixe » veut dire au sens fort ;
 * **un seul budget** (10 époques, 8 morceaux de 512 jetons) : la courbe « plus d'entraînement »
   n'est pas faite — au fil des époques, la validation descend (56,7 → 49,8) puis remonte (66,7,
   77,8, 87,5) : le meilleur est **milieu de courbe**, et c'est le surapprentissage qui parle ;

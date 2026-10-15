@@ -115,6 +115,11 @@ def main() -> int:
     ap.add_argument("--alpha", type=float, default=16.0)
     ap.add_argument("--couches-lora", type=int, default=24)
     ap.add_argument("--pas-lora", type=float, default=1e-3)
+    ap.add_argument("--objectif", choices=["somme", "dernier", "point-fixe"], default="somme",
+                    help="somme = les T pertes (le réglage de la fiche C2 bis) · dernier = le "
+                         "dernier pas seul · point-fixe = somme + pénalité de CONVERGENCE "
+                         "(la boucle doit se poser, pas seulement prédire)")
+    ap.add_argument("--beta", type=float, default=1.0, help="poids de la pénalité de point fixe")
     ap.add_argument("--graine", type=int, default=0)
     ap.add_argument("--json", default=None)
     ap.add_argument("--sauver", default=None)
@@ -173,9 +178,21 @@ def main() -> int:
             t = torch.tensor([ids_m], device=dev)
             opt.zero_grad()
             perte_tot = 0.0
-            for logits, _ in cyc.trajectoire(t, grad=True):
-                perte_tot = perte_tot + nn.functional.cross_entropy(logits[0, 4:-1].float(),
-                                                                    t[0, 5:])
+            precedent = None
+            for j, (logits, b) in enumerate(cyc.trajectoire(t, grad=True)):
+                ce = nn.functional.cross_entropy(logits[0, 4:-1].float(), t[0, 5:])
+                if a.objectif == "dernier":
+                    perte_tot = ce if j == a.pas_temps - 1 else perte_tot
+                else:
+                    perte_tot = perte_tot + ce
+                if a.objectif == "point-fixe" and precedent is not None:
+                    # LA BOUCLE DOIT SE POSER : on pénalise le DÉPLACEMENT de l'état entre deux
+                    # pas, en relatif (un état qui change de 1 % d'un pas à l'autre est un point
+                    # fixe ; un état qui double diverge). C'est la piste nommée par la fiche C2 bis.
+                    num = (b - precedent).pow(2).mean()
+                    den = precedent.pow(2).mean() + 1e-6
+                    perte_tot = perte_tot + a.beta * (num / den)
+                precedent = b.detach()
             perte_tot.backward(); opt.step()
             tot += float(perte_tot.detach()); cnt += 1
         pv = ppl_trajectoire([va])[-1]        # l'époque se choisit sur le DERNIER pas, en validation
