@@ -463,6 +463,34 @@ LayerNorm normalise dans les deux cas), les **valeurs** non ✗ : c'est bien l'o
 deux implémentations, comme pour les couches) — il n'est **pas** encore un critère de porte, et il
 ne le sera que le jour où l'écart sera expliqué ✓.
 
+## 2terdecies. ÉTAT HONNÊTE DU PROJECTEUR, ET UN AVERTISSEMENT SUR LE BINAIRE
+
+**Ce qui est mesuré, et qui ne bouge pas** : le projecteur du moteur (binaire de 14 h 30, code
+d'origine) comparé au `merger` de la référence **sur le même état d'entrée** → **cosinus +0,7804,
+écart 66,6 %**. La cause **n'est pas trouvée**, et trois explications ont été essayées puis
+**contredites** :
+
+| explication essayée | ce qui l'a contredite |
+|---|---|
+| « la référence normalise APRÈS la fusion (LayerNorm 5120) » | **panic** : `post_ln` porte **1280** poids → la référence normalise **par patch** |
+| « le moteur fusionne un état NON normalisé » | la reconstruction numpy de cette variante donne une norme de **40 831** (moteur : 249) ✗ |
+| « le moteur normalise deux fois » | la reconstruction « normaliser par patch » donne **449** (moteur : 249) ✗ |
+
+* **aucune des trois ne tient**, et la reconstruction numpy du projecteur (avec les poids écrits par
+  le moteur lui-même, `mm.0`/`mm.2`/`post_ln`) **ne reproduit pas** les jetons du moteur (cosinus
+  +0,8388, écart 110 %) : il reste donc une différence **dans ce que le moteur fait réellement**,
+  entre l'état qu'il fusionne et celui que j'écris ;
+* **l'étape suivante est claire et bornée** : faire écrire au banc **l'état exact qu'il fusionne**
+  (le vecteur de 5120 par groupe, avant `mm.0`) — c'est la seule façon de savoir ce qu'il consomme,
+  au lieu de le déduire ✗ ;
+* **⚠️ ET UN AVERTISSEMENT SUR L'ÉTAT DU DÉPÔT, à lire avant toute mesure** : le **binaire** en place
+  a été construit pendant cette investigation, à un moment où le source portait un correctif
+  **faux** (normalisation après fusion, depuis **revenu en arrière** ✗). Autrement dit : **le source
+  et le binaire ne sont pas le même programme** tant qu'une reconstruction n'a pas eu lieu — et
+  **on ne reconstruit pas pendant une passe de portes**. La reconstruction est à faire **dès la fin
+  de la passe en cours**, et c'est écrit ici pour que personne (moi compris) ne mesure sur ce
+  binaire en croyant lire le source.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
