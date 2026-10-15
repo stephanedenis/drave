@@ -26,7 +26,7 @@
 | **latéralité / corps calleux** | deux jumeaux, échange par couche | échange **exact**, gain **NUL** (36,1307 = 36,1307 : c'est une moyenne) | ÷2 de calcul | ✅ (résultat négatif) |
 | **timing / conduction** | délai par lien (`delai_ms`) | 50 ms × 64 pas = **+3,1 s**, perplexité **inchangée** | loi **3,4 ms/token par ms** | ✅ |
 | **horloges / asynchronie** | pas par région, `--pas-max` borné | un pas de retard coûte **×633** ⇒ on **ne réutilise jamais** un état ; gigue 40 % (local), 49 % (5 ms) | — | 🟡 premier pas |
-| **cycles (boucles cortico-thalamiques)** | graphe récurrent déroulé, `recurrent` + délai | pas 1 **exact** (14,6496), puis **divergence** : 275,52 → 940,22 → **2 988,46** | **N pas × régions** exécutions | ✅ (capacité) / ❌ (utilité) |
+| **cycles (boucles cortico-thalamiques)** | graphe récurrent déroulé, `recurrent` + délai — **entraîné**, il dompte la divergence | pas 1 **exact** (14,6496), puis **divergence** 275,52 → **2 988,46** ; entraîné : 18,40 → 22,61 → 32,56 → **52,24** (**×228** au pas 4) mais **jamais mieux qu'une passe** | **N pas × régions** exécutions (4 pas = 4 passes) | ✅ (capacité) / ❌ (utilité : la boucle coûte 4× et perd) |
 | **budget / câblage minimisé** | budgets **octets, latence, paires** par lien | trois refus distincts : codes **6**, **8**, **9** | — | ✅ |
 | **plasticité structurelle** | croissance locale des connexions | 8,1550 (croissance) contre 8,1827 (masque statique à densité égale) : **+0,3 %**, dans le bruit | — | 🟡 |
 | **apprentissage local (Hebb)** | 5 variantes mesurées | la meilleure est **ne rien faire** (négatif) | — | ❌ |
@@ -63,7 +63,7 @@ R² 0,906 → 0,112 ; et le cycle : divergence), elle **amplifie**.
 | **apprentissage DANS le moteur** | la boucle est rejeu (moteur) → mise à jour (**torch**) → mesure (moteur) : manque **M6** | l'adaptation en ligne, et un cerveau qui se consolide sans nous |
 | **mémoire de travail du MODÈLE** | le tampon est dans le **moteur** ; le modèle ne retient pas **et ne l'apprend pas** (−2,77 après 8 époques, `rapport-memoire-travail-n5.md`) | toute tâche qui demande de retenir *dans* le réseau — sauf à lui donner la structure, qu'il sait alors **lire** (+0,964) |
 | **un signal de modulation qui améliore** | cinq règles locales et cinq modulateurs mesurés ; le meilleur est **ne rien faire** | la valeur, la récompense, l'attention apprise |
-| **un cycle qui serve** | le cycle est exact au pas 1 et **diverge** ensuite, non entraîné | les boucles cortico-thalamiques *utiles* |
+| **un cycle qui serve** | le cycle est exact au pas 1 ; **entraîné**, il dompte la divergence (**×228** au pas 4, `rapport-cycle-entraine.md`) mais **dégrade encore** (~×1,4 par pas) et ne bat pas une passe | les boucles cortico-thalamiques *utiles* — la piste nommée est un objectif de **point fixe**, pas de prédiction |
 | **perception riche (vision, audio)** | les encodeurs (`bge-m3`) sont lisibles et **inexécutables** — manque **M4** | toute la famille multimodal |
 | **un sommeil structuré** | la consolidation marche, mais **hors** du moteur et sans protocole de sommeil (quoi rejouer, quand s'arrêter) | un cycle veille/sommeil automatique |
 | **la latéralité qui apporte** | l'échange est exact et le gain **nul** (mesuré deux fois : couches et experts) | une raison de dupliquer un hémisphère, à part la robustesse |
@@ -96,7 +96,7 @@ sienne).
 |---|---|
 | réflexes, chemin court | [`rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · [`rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) |
 | consolidation, budget du sommeil | [`rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md) · [`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) |
-| cycle C2 | [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) |
+| cycle C2 (capacité, puis entraîné) | [`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) · [`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md) |
 | récurrence locale | [`rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md) |
 | mémoire de travail, périphérie | [`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md) · [`rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · [`note-peripherie-c8.md`](note-peripherie-c8.md) |
 | mémoire épisodique | fiches 24, 29, 30, 31 · `porte-episodique.sh`, `porte-indice.sh` |
