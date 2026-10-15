@@ -38,7 +38,14 @@ CTX=${CTX:-512}
 # chargement par défaut contre **7,77 s** avec `--dense`, perplexité IDENTIQUE (6449,7333).
 # Sans cette option, la porte mesurerait surtout le chargement, identique dans les trois bras.
 THREADS=${THREADS:-16}
-REPETITIONS=${REPETITIONS:-2}
+# TROIS répétitions, et pas deux : la comparaison porte sur la MÉDIANE, et avec deux
+# échantillons la médiane est leur moyenne — un seul chargement lent (cache de pages écrasé par
+# une passe complète de 44 portes) suffit alors à faire basculer le verdict. Mesuré le 15/10 :
+# pendant la passe, `tampons` = 14,92 s puis 10,04 s (médiane 12,48) contre `fils` = 11,11 puis
+# 10,79 (médiane 10,95) ⇒ PORTE ROUGE ; relancée seule : `tampons` 10,45 s contre `fils` 13,06 s
+# ⇒ PORTE TENUE. Le second échantillon des tampons était le PLUS RAPIDE des quatre. Avec trois
+# répétitions, la médiane est le point du milieu et un échantillon aberrant ne décide plus.
+REPETITIONS=${REPETITIONS:-3}
 [ "${1:-}" = "--vite" ] && { JETONS=4; REPETITIONS=1; }
 
 for f in "$D" "$M" "$IDS"; do

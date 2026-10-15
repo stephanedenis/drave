@@ -21,6 +21,19 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 04 h 30** (**44 portes, 41 vertes, 3 rouges**, ~74 min) : la 44ᵉ porte
+> (`porte-speculatif`, l'invariant du décodage spéculatif) y est **verte du premier coup** (8 jetons
+> identiques au cerveau seul, témoin à 0 %, réflexe distillé ratifié à 30,0 %). Les deux rouges
+> structurels sont les mêmes (`porte-indice`, `porte-melange`). **Le troisième rouge était une
+> INSTABILITÉ de mesure, et elle est corrigée** : `porte-prechargement` a rendu « tampons plus
+> lents que fils » (12,48 s contre 10,95 s) pendant la passe, puis **PORTE TENUE relancée seule**
+> (10,45 s contre 13,06 s, puis 10,36 s contre 11,15 s). La cause est nommée : la comparaison
+> porte sur la **médiane de DEUX** répétitions, donc un seul chargement lent (cache de pages
+> écrasé par 44 portes qui lisent des modèles) décide — le second échantillon des tampons était
+> le plus rapide des quatre. La porte prend maintenant **trois** répétitions (la médiane est le
+> point du milieu) et elle est repassée **verte**. Ce n'est pas la porte qui a été affaiblie,
+> c'est la mesure qui a été renforcée.
+>
 > **Passe du 2026-10-15 à 02 h 20** (**43 portes, 41 vertes, 2 rouges**, ~70 min) : après les
 > outils de la nuit (distillation E5, `--lora-depart`, fusion **sommaire** de plusieurs LoRA,
 > cible de changement, `politique-budget.sh`). Les deux rouges sont **les mêmes** (`porte-indice` :
@@ -108,7 +121,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **43 portes** ; dernière passe : **41 vertes sur 43** (15/10 02 h 20), ≈70 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **41 vertes sur 44** (15/10 04 h 30), ≈74 min, aucune sautée — dont un rouge d'**instabilité** (`porte-prechargement`), corrigé depuis (3 répétitions au lieu de 2, revérifié vert) |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
