@@ -21,6 +21,12 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 16 h 19** (**45 portes, 43 vertes, 2 rouges**, ~86 min) : les deux rouges
+> sont les structurels, et `porte-vision` y est verte (étapes 1 à 5). L'étape 6 — le **projecteur**
+> — a été ajoutée **après** cette passe et elle est verte au premier passage (**0,71 %**, la
+> quantification) : la porte vérifie maintenant les **couches profondes en isolation** (6,3e-06)
+> ET le projecteur.
+>
 > **Passe du 2026-10-15 à 11 h 21** (**45 portes, 43 vertes, 2 rouges**, ~80 min) — **la 45ᵉ porte
 > (`porte-vision`) y est verte du premier coup** : elle vérifie le **refus** d'un modèle sans tour
 > de vision, les **formes** du modèle (256 × 1280 et 64 × 1536) et **mesure** la tour **sans la
