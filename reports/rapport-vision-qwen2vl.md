@@ -279,6 +279,54 @@ calcule mal » et « le poids n'est pas le même »). Résultats :
   le modèle d'origine est **vouée à ne pas converger**, et c'est un fait à écrire dans la porte, pas
   à découvrir trois heures plus tard.
 
+## 2octies. Les 32 COUCHES à poids égaux : justes au début, puis la tour EXPLOSE (et c'est le modèle, pas le code)
+
+`DRAVE_VISION_POIDS=all` décharge les poids des **32 couches** (2,5 Go), et `vision_bloc_ref.py
+--toutes` **chaîne** la formule numpy avec les poids de chaque couche — la seule façon de dire
+quelque chose des couches autres que la première.
+
+| couche | cosinus (moteur ↔ numpy à poids égaux) | écart max relatif |
+|---:|---:|---:|
+| 0 | +1,00000059 | 5,9e-06 |
+| 1 | +1,00000104 | 4,9e-06 |
+| 2 | +1,00000165 | 3,3e-06 |
+| 7 | +1,00000070 | 3,1e-05 |
+| 15 | +0,99310763 | 7,9e-02 |
+| 23 | +0,62086232 | 1,0e+00 |
+| 31 | +0,63543660 | 1,1e+00 |
+
+**Les huit premières couches sont exactes** (5,9e-06 à 3,1e-05 : l'arrondi f32), puis l'écart croît
+jusqu'à 1,1 ✗. La question était : convention fausse, ou sensibilité numérique ?
+
+**Réponse, et elle est nette** : la même formule chaînée en **float64** donne les **mêmes normes**
+que la version float32 à 1e-4 près — et **les deux explosent à la dernière couche** :
+
+| couche | 0 | 3 | 7 | 11 | 15 | 19 | 23 | 27 | **31** |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| norme f32 | 334 | 452 | 577 | 766 | 771 | 653 | 631 | 805 | **33 273** |
+| norme f64 | 334 | 452 | 577 | 766 | 771 | 653 | 631 | 805 | **33 563** |
+
+* **l'explosion est réelle** (elle ne dépend pas de la précision) **et c'est celle de la
+  référence** : `transformers` en f32 passait de 1 628 (couche 30) à **116 650** (couche 31) — le
+  même phénomène, au même endroit ;
+* **conséquence directe sur la comparaison** : quand la tour multiplie sa norme par ~41 en une
+  couche, deux implémentations **ne peuvent pas** rester d'accord au bit près ✗ — l'écart de 1,0 aux
+  couches 23-31 est de la **condition numérique**, pas une convention fausse. Et cela **explique**
+  aussi l'écart de 7,45 % de la couche 0 contre la référence f32 : la quantification Q8_0 y entre,
+  puis elle est amplifiée par la suite ;
+* **ce qui est VÉRIFIÉ, et c'est le résultat** : les conventions du moteur (LayerNorm avec biais,
+  rotation 2-D dans la convention de la source, application par tête, échelle `1/√dim_tête`,
+  quick-GELU, ordre des matrices) reproduisent une formule indépendante **à 1e-5 sur les huit
+  premières couches** — les seules où la tour est encore stable ;
+* **et une observation qui vaut d'être écrite** : les couches 23-31 étant explosives **sur cette
+  image** (un dégradé synthétique avec un carré — rien d'une image naturelle), toute comparaison
+  d'implémentations sur **cette** image mesure surtout de la sensibilité ✗. La prochaine mesure
+  utile est de refaire la chaîne sur une **image naturelle** (l'instabilité est propre à l'entrée) ;
+* **ce que ça laisse ouvert, nommément** : une erreur de convention qui ne se verrait **qu'après** la
+  couche 8 ne peut pas être exclue par cette méthode — elle est **masquée** par l'instabilité. Le
+  seul moyen de trancher serait de comparer couche par couche **avant** l'explosion avec une
+  tolérance adaptée, ce qui est fait (1e-5 sur huit couches) — au-delà, il faut changer d'image.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration

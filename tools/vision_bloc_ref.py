@@ -62,6 +62,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tour", required=True, help="fichier .bin du banc (embedding + sortie)")
     ap.add_argument("--poids", required=True, help="fichier .poidsbloc (DRAVE_VISION_POIDS=1)")
+    ap.add_argument("--toutes", action="store_true",
+                    help="chaîner les 32 couches avec LEURS poids (DRAVE_VISION_POIDS=all)")
     ap.add_argument("--couches", type=int, default=1,
                     help="nombre de couches à refaire (⚠ le fichier de poids ne porte QUE la couche "
                          "déchargée par DRAVE_VISION_POIDS : au-delà de 1, la formule rejouerait la "
@@ -89,6 +91,57 @@ def main() -> int:
     w1, b1 = pr(nff * e).reshape(nff, e), pr(nff)
     w2, b2 = pr(e * nff).reshape(e, nff), pr(e)
 
+    if a.toutes:
+        # CHAÎNER LA PILE ENTIÈRE, avec les poids de CHAQUE couche : c'est la seule façon de dire
+        # quelque chose des 31 couches autres que la première. Une comparaison à poids égaux couche
+        # par couche dit si les CONVENTIONS tiennent jusqu'au bout (l'écart restant contre une
+        # référence f32 est alors de la quantification, et rien d'autre).
+        fichier32 = a.poids.replace(".poidsbloc", ".poids32")
+        if not pathlib.Path(fichier32).exists():
+            print(f"  ⚠️ {fichier32} absent : lancer le banc avec DRAVE_VISION_POIDS=all")
+            return 1
+        brut32 = pathlib.Path(fichier32).read_bytes()
+        e32, nff32, nh32, nl32 = struct.unpack_from("<iiii", brut32, 0)
+        cur = [16]
+        def pr32(n: int) -> np.ndarray:
+            deb = cur[0]; cur[0] = deb + 4 * n
+            return np.frombuffer(brut32, dtype="<f4", offset=deb, count=n).copy()
+        x = lire_entete(a.tour)
+        hd32 = e32 // nh32; nc32 = int(round(np.sqrt(x.shape[0])))
+        pires = 0.0
+        for couche in range(nl32):
+            ln1, ln1b, ln2, ln2b = pr32(e32), pr32(e32), pr32(e32), pr32(e32)
+            wq, bq = pr32(e32 * e32).reshape(e32, e32), pr32(e32)
+            wk, bk = pr32(e32 * e32).reshape(e32, e32), pr32(e32)
+            wv, bv = pr32(e32 * e32).reshape(e32, e32), pr32(e32)
+            wo, bo = pr32(e32 * e32).reshape(e32, e32), pr32(e32)
+            w1, b1 = pr32(nff32 * e32).reshape(nff32, e32), pr32(nff32)
+            w2, b2 = pr32(e32 * nff32).reshape(e32, nff32), pr32(e32)
+            xn = ln(x, ln1, ln1b)
+            qq, kk, vv = xn @ wq.T + bq, xn @ wk.T + bk, xn @ wv.T + bv
+            for pi in range(x.shape[0]):
+                ligne, colonne = pi // nc32, pi % nc32
+                for h in range(nh32):
+                    tourner(qq[pi, h * hd32:(h + 1) * hd32], ligne, colonne, hd32)
+                    tourner(kk[pi, h * hd32:(h + 1) * hd32], ligne, colonne, hd32)
+            sc = (qq @ kk.T) / np.sqrt(hd32)
+            sc -= sc.max(-1, keepdims=True)
+            att = np.exp(sc); att /= att.sum(-1, keepdims=True)
+            x = x + (att @ vv) @ wo.T + bo
+            xn2 = ln(x, ln2, ln2b)
+            act = xn2 @ w1.T + b1
+            act = act / (1.0 + np.exp(-1.702 * act))
+            x = x + act @ w2.T + b2
+            eng = lire_entete(f"{a.tour}.couche{couche}")
+            cos = float((x.ravel() @ eng.ravel()) / (np.linalg.norm(x) * np.linalg.norm(eng) + 1e-12))
+            ecart = float(np.abs(x - eng).max() / max(1e-9, np.abs(x).max()))
+            pires = max(pires, ecart)
+            if couche < 3 or couche in (7, 15, 23, 31):
+                print(f"  couche {couche:>2} : cosinus {cos:+.8f} · écart max relatif {ecart:.3e}")
+        print(f"\n  écart max sur les {nl32} couches : {pires:.3e}")
+        print("  ✅ les conventions tiennent jusqu'au bout" if pires < 1e-4 else
+              "  ❌ au moins une couche s'écarte des conventions")
+        return 0 if pires < 1e-4 else 1
     if a.couches > 1:
         print(f"  ⚠️ --couches {a.couches} : le fichier de poids ne porte que la COUCHE "
               f"{couche_poids} — au-delà d'une couche, la formule rejouerait la même. Vérifier une "

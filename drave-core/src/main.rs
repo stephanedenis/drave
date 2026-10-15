@@ -2182,9 +2182,25 @@ fn run_banc_vision(sortie: &str) {
             // plutôt qu'un drapeau, parce que vérifier une couche PROFONDE à poids égaux est le
             // seul moyen de savoir si les conventions tiennent au bout de la pile — et pas
             // seulement dans la première couche.
-            let couche_poids: usize = std::env::var("DRAVE_VISION_POIDS").ok()
-                .and_then(|v| v.parse().ok()).unwrap_or(usize::MAX);
-            if l == couche_poids {
+            // « all » décharge TOUTES les couches dans un seul fichier : sans les poids de chaque
+            // couche, une formule indépendante ne peut pas CHAÎNER la pile — elle ne peut vérifier
+            // que la première couche (c'est ce qu'on faisait, et cela ne dit rien des 31 autres).
+            let poids_demande = std::env::var("DRAVE_VISION_POIDS").ok();
+            let toutes = poids_demande.as_deref() == Some("all");
+            if toutes && l == 0 {
+                let mut fp = std::io::BufWriter::new(
+                    std::fs::File::create(format!("{sortie}.poids32")).expect("création"));
+                for v in [(e as i32), (nff as i32), (nh_t as i32), (n_layer as i32)] {
+                    fp.write_all(&v.to_le_bytes()).unwrap();
+                }
+                println!("[vision] déchargement de TOUTES les couches ({n_layer}) dans {sortie}.poids32");
+            }
+            let couche_poids: usize = match poids_demande.as_deref() {
+                Some("all") => usize::MAX,
+                Some(x) => x.parse().unwrap_or(usize::MAX),
+                None => usize::MAX,
+            };
+            if toutes || l == couche_poids {
                 poids_bloc = vec![ln1.clone(), ln1b.clone(), ln2.clone(), ln2b.clone(),
                                   wq.clone(), bq.clone(), wk.clone(), bk.clone(),
                                   wv.clone(), bv.clone(), wo.clone(), bo.clone(),
@@ -2193,7 +2209,13 @@ fn run_banc_vision(sortie: &str) {
                 // comparer le moteur à une formule indépendante **à poids égaux** — sans quoi un
                 // écart mêle la quantification (Q8_0 contre f32) et les conventions, et on ne peut
                 // pas savoir laquelle des deux on mesure.
-                {
+                if toutes {
+                    let mut fp = std::fs::OpenOptions::new().append(true)
+                        .open(format!("{sortie}.poids32")).expect("ouverture");
+                    for tenseur in poids_bloc.iter() {
+                        for v in tenseur.iter() { fp.write_all(&v.to_le_bytes()).unwrap(); }
+                    }
+                } else {
                     let mut fp = std::io::BufWriter::new(
                         std::fs::File::create(format!("{sortie}.poidsbloc")).expect("création"));
                     for v in [(e as i32), (nff as i32), (nh_t as i32), (l as i32)] {
