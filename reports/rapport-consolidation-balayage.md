@@ -22,11 +22,16 @@
 
 | rang | paramètres | part du modèle | m32 | écart | m20 | écart |
 |---:|---:|---:|---:|---:|---:|---:|
-| 2 | 90 112 | 0,018 % | 6,7039 | −6,61 % | 15,5413 | −15,81 % |
-| **4** | **180 224** | **0,035 %** | **6,6310** | **−7,63 %** | **15,5195** | **−15,93 %** |
-| 8 | 360 448 | 0,071 % | 6,6812 | −6,93 % | 15,5950 | −15,52 % |
-| 16 | 720 896 | 0,141 % | 6,7427 | −6,07 % | 15,7507 | −14,68 % |
-| 32 | 1 441 792 | 0,283 % | 6,7998 | −5,28 % | 15,9583 | −13,56 % |
+| 2 | 90 112 | 0,018 % | 6,6721 | −7,06 % | 15,5063 | **−16,00 %** |
+| **4** | **180 224** | **0,035 %** | **6,6102** | **−7,92 %** | **15,5082** | −15,99 % |
+| 8 | 360 448 | 0,071 % | 6,6810 | −6,93 % | 15,5791 | −15,61 % |
+| 16 | 720 896 | 0,141 % | 6,7127 | −6,49 % | 15,8781 | −13,99 % |
+| 32 | 1 441 792 | 0,283 % | 6,8189 | **−5,01 %** | 15,7716 | −14,57 % |
+
+*(chiffres **refaits** après la correction de reproductibilité du § 4bis : les premiers, tirés avec
+un RNG non semé, donnaient −6,61 / −7,63 / −6,93 / −6,07 / −5,28 %. **L'ordre est le même** et
+l'optimum intérieur est confirmé ; les valeurs, elles, ont bougé jusqu'à 0,5 point — c'est
+exactement ce que le défaut coûtait.)*
 
 * **le rang 4 est le meilleur, et le rang 32 est le pire** : 2,35 points d'écart sur m32 pour
   **huit fois moins** de paramètres. Le classement est **monotone** au-delà de 4 (8 > 16 > 32) ;
@@ -74,14 +79,17 @@ La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le ran
 
 | réglage | m32 | écart | m20 | écart |
 |---|---:|---:|---:|---:|
-| rang **4**, pas 1e-3 | 6,6310 | **−7,63 %** | 15,5195 | **−15,93 %** |
+| rang **4**, pas 1e-3 *(exact)* | **6,6102** | **−7,92 %** | 15,5082 | **−15,99 %** |
 | rang 8, pas **3e-4** | 6,6352 | −7,57 % | 15,6152 | −15,41 % |
-| rang **4** + pas **3e-4** | 6,6541 | **−7,31 %** | 15,5754 | −15,63 % |
+| rang **4** + pas **3e-4** *(exact)* | 6,6219 | **−7,76 %** | 15,6023 | −15,48 % |
 
 * **la combinaison des deux optima est MOINS bonne que chacun** (−7,31 % contre −7,63 % et
   −7,57 %) : les deux réglages **interagissent**, et un balayage à une dimension ne se compose pas ;
-* l'écart (0,32 point) est au-dessus du bruit de graine (0,14) mais petit : la conclusion honnête
-  est « **pas de composition démontrée** », pas « la combinaison nuit » ;
+* **et depuis la correction du § 4bis, c'est MESURÉ EXACTEMENT** : les deux points refaits avec le
+  harnais reproductible donnent **−7,92 %** (rang 4, pas 1e-3) contre **−7,76 %** (rang 4 + 3e-4) —
+  la combinaison est **moins bonne**, et l'écart n'est plus attribuable à l'irreproductibilité : il
+  est **réel pour ces deux exécutions**. Reste qu'une paire de configurations ne fait pas une
+  surface : la grille (rang × pas) reste à faire, et elle est maintenant **faisable à l'identique** ;
 * **le point retenu pour la nuit est donc (rang 4, pas 1e-3)** — et c'est celui qui a été mesuré le
   plus finement ici.
 
