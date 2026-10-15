@@ -38,6 +38,8 @@ import json
 import math
 import pathlib
 
+import os
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -134,6 +136,14 @@ def main() -> int:
     ap.add_argument("--sauver", default=None, help="écrire le LoRA appris (.pt) pour l'export")
     a = ap.parse_args()
 
+    # Reproductibilité : mêmes précautions que `n4_dessin_b.py` — graine posée AVANT toute
+    # construction de paramètres (c'est l'ordre qui compte : semer après avoir tiré ne seme rien,
+    # défaut trouvé et corrigé le 15/10), et noyaux déterministes pour que deux exécutions
+    # identiques rendent le MÊME chiffre.
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
     torch.manual_seed(a.graine); np.random.seed(a.graine)
     dev = "cuda"
     from transformers import AutoModelForCausalLM

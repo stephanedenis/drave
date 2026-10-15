@@ -60,6 +60,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import pathlib
 import re
 import subprocess
@@ -258,6 +259,14 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
       **diverger** (4,48 M → 2,9e13 en deux pas, mesuré le 14/10) : son pas est celui du protocole
       publié quand il est seul, plus petit quand il apprend en même temps que les couches.
     """
+    # REPRODUCTIBILITÉ : `torch.manual_seed` ne suffit PAS — les noyaux cuDNN/cuBLAS choisissent
+    # leurs réductions à l'exécution, et deux exécutions identiques rendaient 12,6829 puis 12,7362
+    # (0,4 point, mesuré le 15/10 à 06 h). Ces lignes forcent des noyaux déterministes ; `warn_only`
+    # évite de faire échouer l'entraînement sur une opération qui n'en a pas.
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
     torch.manual_seed(a.graine)
     np.random.seed(a.graine)
     dev = banc.dev
@@ -567,6 +576,20 @@ def main() -> int:
           + f" ({len(train_idx)} morceaux) · validation {a.val} · test "
           f"{', '.join(n for n, _ in idx_test)} (jamais vus)")
 
+    # ⚠ LA GRAINE EST POSÉE AVANT DE CONSTRUIRE LE BANC, ET C'EST LA CORRECTION D'UN VRAI DÉFAUT :
+    # elle l'était dans `entrainer`, c'est-à-dire APRÈS l'initialisation des matrices LoRA — dont le
+    # tirage consommait donc un RNG **non semé**, différent à chaque processus. Deux exécutions
+    # identiques (mêmes morceaux, mêmes époques, graine 0, même époque retenue) rendaient 12,6829
+    # puis 12,7362 sur m4 : **0,4 point d'écart pour la même configuration**, et les fiches de la
+    # nuit citaient 0,14 point comme « bruit de graine ». Le mode déterministe de PyTorch ne
+    # suffisait pas (diagnostic : aucune opération sans noyau déterministe) — le défaut était dans
+    # l'ORDRE : semer après avoir tiré ne seme rien.
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
+    torch.manual_seed(a.graine)
+    np.random.seed(a.graine)
     banc = Banc(a)
     T = lambda l: [torch.tensor([m], device=banc.dev) for m in l]      # noqa: E731
     if a.melanger_rejeu:

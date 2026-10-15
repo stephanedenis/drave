@@ -96,7 +96,7 @@ La discipline du dépôt : un chiffre de tête se vérifie **au moteur**. Le ran
 * **et la méthode est écrite** : les deux optima ne composent pas ⇒ tout nouveau réglage de
   consolidation doit être **mesuré**, pas déduit d'un balayage précédent.
 
-## 4bis. LA REPRODUCTIBILITÉ DU HARNAIS — 0,4 point à graine ÉGALE (et ce que ça recalibre)
+## 4bis. LA REPRODUCTIBILITÉ DU HARNAIS — un DÉFAUT trouvé, nommé et CORRIGÉ (pas du bruit)
 
 Trouvé en fin de nuit, en vérifiant qu'un chiffre de la **boucle du cerveau** ne bougeait pas entre
 deux exécutions : **il bouge.** Deux exécutions **identiques** (mêmes morceaux, mêmes époques, même
@@ -108,10 +108,20 @@ graine 0, même époque retenue — la 3ᵉ) :
 | 2 | 12,7362 | −5,72 % |
 
 **0,4 point d'écart pour la MÊME configuration** — c'est-à-dire **plus** que le « bruit de graine »
-de 0,14 point que les fiches de la nuit citaient (celui-là mesurait deux **graines différentes** ;
-celui-ci mesure la **même**, et il est trois fois plus grand). La cause est le harnais PyTorch :
-`torch.manual_seed` ne rend pas déterministes les **noyaux cuDNN/cuBLAS** (une réduction qui change
-d'ordre d'une exécution à l'autre suffit), et l'outil ne demande pas le mode déterministe.
+de 0,14 point que les fiches de la nuit citaient (celui-là mesurait deux **graines différentes**).
+
+**La cause a été trouvée, et ce n'était pas du bruit** : `torch.manual_seed` était appelé **dans
+`entrainer`**, c'est-à-dire **APRÈS** la construction du banc — donc après le tirage aléatoire des
+matrices LoRA, qui consommait un RNG **non semé**, différent à chaque processus. *Semer après avoir
+tiré ne seme rien.* Le diagnostic a écarté l'autre suspect (le mode déterministe de PyTorch : avec
+`use_deterministic_algorithms(True)` **strict**, l'entraînement passe sans erreur — toutes les
+opérations ont un noyau déterministe).
+
+**Corrigé** : la graine (et les trois réglages de déterminisme) sont posés **avant** `Banc(a)`. Deux
+exécutions identiques rendent désormais **le même nombre, au bit près** — mesuré :
+`12,732836173028936` deux fois (m4), là où l'outil rendait 12,6829 puis 12,7362. Et les deux autres
+outils d'entraînement (`cycle_entraine.py`, `memoire_travail.py`) étaient **déjà** dans le bon ordre :
+le défaut ne concernait que le banc de consolidation.
 
 **Ce que ça recalibre, dans les deux sens** :
 
@@ -124,10 +134,12 @@ d'ordre d'une exécution à l'autre suffit), et l'outil ne demande pas le mode d
   juste maintenant), **le rang 2 contre le rang 8** (−6,61 % contre −6,93 %), **le pas 1e-3 contre
   1e-4** (−6,93 % contre −6,41 %... hmm, 0,52 point, à la limite), et **l'ordre des règles de
   sélection** (−5,51 % contre −4,82 %, soit 0,7 point — au-dessus du bruit, mais pas de beaucoup) ;
-* **et la leçon pour la suite** : toute comparaison de moins d'un point, dans ce harnais, doit être
-  **répétée** (deux exécutions au minimum) avant d'être publiée comme un classement. Le balayage de
-  la fiche porte sur des écarts de 2 points et plus ; ses **points individuels** ne sont pas
-  reproductibles au dixième, et c'est dit.
+* **et la leçon pour la suite** : un écart qu'on n'explique pas n'est pas une « mesure bruitée » —
+  c'est une **question ouverte**. Ici, 0,4 point inexpliqué est devenu un **défaut corrigé** en une
+  heure, et le harnais est maintenant **exact**. Les comparaisons de moins d'un point qui ont été
+  publiées **avant** la correction (les deux optima qui ne composent pas, rang 2 contre rang 8)
+  gardent leur formulation prudente — elles peuvent maintenant être **refaites à l'identique**, ce
+  qui n'était pas possible avant.
 
 ## 5. Ce que cette fiche ne dit pas
 
