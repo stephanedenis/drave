@@ -76,6 +76,29 @@ Ce que ça dit :
   porte de M5, et elle a maintenant sa spécification mesurée : **taux d'acceptation ≥ 3/4 à K = 4**,
   sans quoi la porte doit rester rouge.
 
+## 2bis. La PORTE (44ᵉ) : l'invariant est vérifié, pas espéré
+
+`tools/porte-speculatif.sh` exécute le mécanisme et vérifie ce qui doit être vrai **à chaque fois** :
+
+| vérification | ce qui est exigé | ce qui a été rendu |
+|---|---|---|
+| **1. l'invariant** | la suite du pilote est **identique, jeton pour jeton**, à celle du cerveau seul | ✅ **8 jetons identiques** (`[512, 13309, 321, 1788, 12422, 84, 13, 356]` des deux côtés) |
+| **2. le taux est rendu** | un taux dans [0, 1] et ≥ 1 jeton par vérification | ✅ 0,0 % et 1,00 (brouillon non entraîné) |
+| **3. le témoin** | la tête **non entraînée** n'est **jamais** ratifiée | ✅ 0 sur 20 propositions |
+| **4. le réflexe entraîné** *(conditionnel)* | s'il est présent, il doit être ratifié **au moins une fois** | ✅ **30,0 %** (6/20), 2,00 jetons par vérification |
+| **5. un brouillon invalide** | échoue **en le disant**, sans rendre de suite | ✅ (chemin inexistant ⇒ échec avec message) |
+
+* **l'invariant est la propriété qui rend le mécanisme acceptable** : un brouillon qui se trompe
+  **ne peut pas** faire dériver la sortie — le vérificateur corrige, et la porte le **vérifie** au
+  lieu de l'espérer. C'est ce qui distingue ce mécanisme de tout ce que la nuit a mesuré de
+  négatif (le cycle, la récurrence, l'échange d'activations : eux **changent** la sortie, et ils
+  n'apportent rien) ;
+* **la vérification 4 est conditionnelle, et c'est dit** : le réflexe distillé vient d'un
+  entraînement **hors porte** (10 min de GPU) ; si le fichier n'est pas là, la porte **le dit** au
+  lieu de juger (le précédent du dépôt : `--banc-vision` annonce « pas de `v.patch_embd.weight` ») ;
+* **et la porte est rapide** (~1 min) : elle ne mesure ni la qualité ni le temps, seulement ce qui
+  doit être **exact**.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * **trois invites (dont deux à K = 1) et 12 à 16 jetons** : les taux sont des points, pas des

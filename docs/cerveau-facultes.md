@@ -162,7 +162,7 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
 | adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
-| la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) |
+| le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
 
 ## 5. L'architecture qui suit — l'assemblage que les mesures IMPOSENT
