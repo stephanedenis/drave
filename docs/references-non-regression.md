@@ -21,6 +21,12 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 02 h 20** (**43 portes, 41 vertes, 2 rouges**, ~70 min) : après les
+> outils de la nuit (distillation E5, `--lora-depart`, fusion **sommaire** de plusieurs LoRA,
+> cible de changement, `politique-budget.sh`). Les deux rouges sont **les mêmes** (`porte-indice` :
+> 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne rend pas le code) et **aucune
+> valeur de porte n'a bougé** (`porte-flux` : 61,9920 / 60,8135).
+>
 > **Passe du 2026-10-15 à 00 h 01** (**43 portes, 41 vertes, 2 rouges**, ~64 min) : après la
 > **nuit du cerveau** (C2, C7, N5, E5, la boucle complète). Les **trois nouvelles portes** y sont
 > vertes : `porte-cerveau` (les quatre facultés **composent** : chacune agit encore quand les
@@ -102,7 +108,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **43 portes** ; dernière passe : **41 vertes sur 43** (15/10 00 h 01), ≈64 min, aucune sautée |
+| toutes les portes | `tools/toutes-les-portes.sh` | **43 portes** ; dernière passe : **41 vertes sur 43** (15/10 02 h 20), ≈70 min, aucune sautée |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
