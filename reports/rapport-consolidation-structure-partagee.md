@@ -66,6 +66,34 @@ Les deux spécialistes fusionnés en **sommant leurs déplacements** (`W + ΔA +
   **somme** désormais les déplacements (`echelle · B·A`), ce qui est exact même à échelles
   différentes.
 
+## 2bis. Deux spécialistes FORTS ne s'additionnent PAS (la fusion dilue)
+
+La question laissée ouverte au § 2 (« et si les deux étaient forts ? ») est maintenant mesurée :
+deux spécialistes du **même** corpus, sur deux blocs différents (A : m0..m9 ; A2 : m10..m19),
+mêmes budgets.
+
+| modèle | m32 (moteur) | écart | m20 (moteur) | écart |
+|---|---:|---:|---:|---:|
+| base | 7,4250 | — | 19,1247 | — |
+| **A** (m0..m9) | **6,8767** | **−7,4 %** | 16,1087 | −15,8 % |
+| **A2** (m10..m19) | **6,7787** | **−8,7 %** | 16,2488 | −15,0 % |
+| **A + A2** (somme) | 7,1276 | **−4,0 %** | **16,0643** | −16,0 % |
+
+* **la somme est PIRE que chacun sur m32** (−4,0 % contre −7,4 % et −8,7 %) : deux expériences
+  fortes **ne s'additionnent pas**, elles se **diluent**. Le résultat est net (7,1276 contre 6,8767
+  et 6,7787 — bien au-delà du bruit de graine de 0,14 point) ;
+* **sur m20, elle est au niveau du meilleur** (−16,0 % contre −15,8 % / −15,0 %), c'est-à-dire
+  **sans gain** non plus ;
+* **ce qui explique la différence avec le § 2** : avec un spécialiste faible (B), la somme gardait
+  le gain du fort parce que le déplacement ajouté était petit ; avec **deux** déplacements de même
+  amplitude, ils se contrarient là où ils se recouvrent (les deux adaptent les **mêmes** 32
+  projections, dans des directions voisines mais différentes) ;
+* **conséquence pour C9** : un « corps calleux » qui **somme** ne passe pas l'échelle — il faut une
+  agrégation **déclarée** (moyenne, porte apprise, routage par entrée), ce que le plan C2 demandait
+  déjà pour les entrées multiples (« l'agrégation est déclarée : somme, concaténation, porte
+  apprise »). La somme est le cas le plus simple, et il est mesuré **négatif** au-delà d'un
+  spécialiste.
+
 ## 3. Ce que ça change pour le cerveau
 
 * **la consolidation n'est pas une faculté uniforme** : elle vaut ce que vaut la **structure
@@ -78,8 +106,9 @@ Les deux spécialistes fusionnés en **sommant leurs déplacements** (`W + ΔA +
   survit à l'ajout de B) : c'est une **latéralité de fait**, obtenue par somme et non par échange
   d'activations — et elle vient après deux résultats négatifs sur l'échange (couches : gain nul ;
   experts : transfert nul) ;
-* **ce qui reste ouvert** : fusionner deux spécialistes **forts** (ici B était faible) — la
-  question « deux bons hémisphères valent-ils mieux qu'un ? » n'est pas tranchée par cette mesure.
+* **et la question est tranchée depuis** (§ 2bis) : deux spécialistes **forts** fusionnés par somme
+  donnent **moins** que chacun sur m32 (−4,0 % contre −7,4 % et −8,7 %). La somme ne passe pas
+  l'échelle — l'agrégation doit être **déclarée**, pas additionnée.
 
 ## 4. Ce que cette fiche ne dit pas
 
