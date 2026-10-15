@@ -99,6 +99,34 @@ Ce que ça dit :
 * **et la porte est rapide** (~1 min) : elle ne mesure ni la qualité ni le temps, seulement ce qui
   doit être **exact**.
 
+## 2ter. Deux tentatives pour combler le facteur 1,5 — deux échecs, et c'est écrit
+
+Le § 2 nommait les deux chemins possibles (« une distillation plus fidèle »). Les deux ont été
+essayés le soir même, à la même mesure (**l'accord par position avec le maître**, sur m32 et m20) :
+
+| distillation (8 couches + lecteur + LoRA) | accord m32 | accord m20 | verdict |
+|---|---:|---:|---|
+| **E5** : T = 1, rang 8, 30 morceaux, 20 époques | **51,0 %** | **68,1 %** | la référence |
+| **T = 2** (rang 8 puis rang 4, pas 1e-3 puis 3e-4) | 22,1 % | 30,6 % | **pire**, et l'entraînement **diverge** (validation 13 995 → 2 032) |
+| **T = 4** | — | — | **diverge** (validation 72 017) |
+| **rang 4**, 26 morceaux (le levier qui gagne en perplexité) | 47,3 % | 60,7 % | **légèrement pire** |
+
+* **la température, qui est la recette classique de la distillation, NUIT ici** : à T = 2 l'accord
+  tombe de 51,0 % à 22,1 % (et à T = 4 l'entraînement explose). Deux hypothèses, aucune instruite :
+  (a) l'échelle du gradient de la KL change avec T alors que le pas reste celui du balayage en
+  perplexité ; (b) l'étudiant **tronqué** (8 couches sur 24) ne peut pas atteindre la distribution
+  aplatie d'un maître de 24 couches, et l'aplatissement ne fait qu'éloigner la cible ;
+* **le rang 4, qui gagne 2,35 points en perplexité, perd ici 3,7 points d'accord** : les deux
+  objectifs n'ont pas le même optimum de capacité — **ce qui rend « bon petit modèle » ne rend pas
+  « bon imitateur »**, et c'est la seconde fois que la nuit le mesure (la première : l'objectif
+  lui-même, § 1 de `rapport-e5-distillation.md`) ;
+* **le facteur 1,5 manquant n'est donc PAS comblé** : le meilleur réflexe reste celui de E5
+  (51 % d'accord, 30 % d'acceptation à K = 4). La porte de M5 garde sa spécification
+  (**≥ 3/4 à K = 4**) et **reste rouge** pour la rentabilité — ce qui est un résultat, pas un oubli ;
+* *(et un détail d'instrument est noté : la colonne « train (perplexité équivalente) » affiche `inf`
+  dès que la KL dépasse ~709 en exponentielle — c'est un débordement d'affichage, pas une mesure ;
+  la validation, elle, reste finie et c'est elle qui choisit l'époque.)*
+
 ## 3. Ce que cette fiche ne dit pas
 
 * **trois invites (dont deux à K = 1) et 12 à 16 jetons** : les taux sont des points, pas des
