@@ -21,6 +21,15 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-15 à 06 h 27** (**44 portes, 42 vertes, 2 rouges**, ~75 min) — **le meilleur
+> état du dépôt** : après la correction de **reproductibilité du harnais** (la graine était posée
+> après le tirage des LoRA : deux exécutions identiques rendent maintenant le même nombre **au bit
+> près**). `porte-prechargement`, qui avait rendu un rouge d'**instabilité** à 04 h 30, est **verte**
+> en passe complète avec ses **trois** répétitions (tampons 10,60 s contre fils 11,55 s).
+> `porte-consolidation` et `porte-speculatif` sont vertes aussi. Il ne reste que **les deux rouges
+> structurels** (`porte-indice` : 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne
+> rend pas le code).
+>
 > **Passe du 2026-10-15 à 04 h 30** (**44 portes, 41 vertes, 3 rouges**, ~74 min) : la 44ᵉ porte
 > (`porte-speculatif`, l'invariant du décodage spéculatif) y est **verte du premier coup** (8 jetons
 > identiques au cerveau seul, témoin à 0 %, réflexe distillé ratifié à 30,0 %). Les deux rouges
@@ -121,7 +130,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
-| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **41 vertes sur 44** (15/10 04 h 30), ≈74 min, aucune sautée — dont un rouge d'**instabilité** (`porte-prechargement`), corrigé depuis (3 répétitions au lieu de 2, revérifié vert) |
+| toutes les portes | `tools/toutes-les-portes.sh` | **44 portes** ; dernière passe : **42 vertes sur 44** (15/10 06 h 27), ≈75 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
