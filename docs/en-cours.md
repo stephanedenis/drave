@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 14 h 40 HAE.**
+**Mis à jour : 2026-10-15, 14 h 50 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -21,7 +21,8 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | les 32 couches à poids égaux | **justes sur les 8 premières** (1e-5 : les conventions sont bonnes) ; au-delà, l'écart croît (1e-3 → 0,75) — la tour **amplifie les arrondis**, et c'est mesuré **sur deux images** (une synthétique qui explose à 33 273, une naturelle qui reste à 249) |
 | pourquoi les couches profondes ne se comparent pas | **trouvé** : l'attention **s'effondre** (entropie 3,36 → **0,16** entre les couches 1 et 15) et **bascule** d'un patch à l'autre — l'écart est **discret** (variation totale 0,94), aucune tolérance ne peut le résorber |
 | **la tour est VÉRIFIÉE** | couche par couche, **en isolation** (même état d'entrée aux deux implémentations, comparaison de la couche seule) : **écart max 7,58e-06 sur les 31 couches** — les conventions du moteur sont justes dans toute la tour |
-| ce qui reste | le **projecteur** et l'**injection** (les 64 jetons × 1536 ne sont pas encore vérifiés) ; et la **vision multimodale** de bout en bout (une question sur une image) |
+| le **PROJECTEUR** | ⚠️ **un bug de structure trouvé** : le moteur normalise **par patch** (LayerNorm 1280) **avant** de fusionner, la référence **fusionne** (5120) **puis** normalise — cosinus **+0,7804**, écart **66,6 %** sur le même état d'entrée. Correctif identifié (appliquer `post_ln` sur le vecteur fusionné), **à appliquer après la passe en cours** : on ne reconstruit pas le binaire pendant qu'une passe tourne |
+| ce qui reste | l'**injection** (le chemin image → jetons du modèle de texte) et la **vision multimodale de bout en bout** (une question sur une image) |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |
 
 ## Où en est le dépôt

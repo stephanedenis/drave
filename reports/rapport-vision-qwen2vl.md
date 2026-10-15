@@ -396,6 +396,44 @@ réparé et les poids déchargés (`DRAVE_VISION_POIDS=all`) :
   vision ; l'écart qui restait avec la référence venait **des poids** (une tranche temporelle perdue
   dans le mmproj) et de la **sensibilité** de la tour, jamais du code ✓.
 
+## 2undecies. LE PROJECTEUR : un bug de STRUCTURE, trouvé en comparant sur le MÊME état d'entrée
+
+La tour étant vérifiée (§ 2decies), le projecteur restait — et il se vérifie de la même façon qu'une
+couche : **le même état d'entrée aux deux implémentations**. La référence
+(`PatchMerger.forward`) dit :
+
+```python
+x = self.mlp(self.ln_q(x).view(-1, self.hidden_size))
+```
+
+c'est-à-dire : **fusion d'abord** (le `view` regroupe les quatre patchs d'un groupe 2 × 2 = 5120),
+**puis** `ln_q` — une **LayerNorm sur 5120** — puis `mlp` (`mm.0` → GELU → `mm.2`).
+
+Le moteur fait l'inverse : il applique `v.post_ln` **par patch** (LayerNorm sur **1280**), *puis*
+fusionne. **Normaliser 256 vecteurs de 1280 puis fusionner** n'est pas **fusionner 64 vecteurs de
+5120 puis normaliser** — ce n'est pas un arrondi, c'est une autre opération.
+
+Mesure sur l'état post-tour du moteur (image naturelle, `mm.0`/`mm.2`/`v.post_ln` du mmproj) :
+
+| | jetons | norme | 4 premiers canaux du 1ᵉʳ jeton |
+|---|---:|---:|---|
+| **moteur** | 64 × 1536 | **249,49** | 0,3959 · −0,2981 · 1,2074 · −0,5895 |
+| **référence** (`merger` sur le **même** état) | 64 × 1536 | **246,92** | −0,2760 · −0,4358 · 0,4097 · −0,0850 |
+
+**cosinus +0,7804 · écart relatif 66,6 %** ✗ — les **normes** concordent (l'échelle est bonne : la
+LayerNorm normalise dans les deux cas), les **valeurs** non ✗ : c'est bien l'ordre des opérations.
+
+* **le correctif est identifié et daté** (appliquer `post_ln` sur le vecteur **fusionné** de 5120,
+  puis `mm.0` → GELU → `mm.2`) — il sera appliqué **après** la passe de portes en cours : on ne
+  reconstruit pas le binaire pendant qu'une passe tourne ;
+* **ce qui est déjà conforme**, vérifié dans le code **et** dans la référence : l'activation est un
+  **GELU exact** (le moteur utilise `erf`, la référence `nn.GELU()` sans approximation) ✓ ; `v.post_ln`
+  est bien une LayerNorm **avec biais** ✓ ; l'ordre de fusion (les quatre patchs d'un groupe en
+  raster) reste à confirmer par la comparaison après correctif ✓ ;
+* **et la méthode a encore payé** : c'est la comparaison **sur le même état d'entrée** qui l'a isolé —
+  comparer la sortie complète de la vision aurait mêlé ce bug à la bascule de l'attention des blocs
+  et n'aurait rien dit ✗.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
