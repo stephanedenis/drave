@@ -4,13 +4,20 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16.md](2026-10-16.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 01:10 | `f357525b` | E5 : DEUXIEME MUR documente — a volume reduit la distillation n'est JAMAIS retenue, parce que l'epoque est choisie sur la perplexite qu'elle degrade par construction | `en-cours.md`, `2026-10-16.md`, `2026-10-16_outils.md` (+3) |
 | 01:32 | `8435ee72` | Le GARDE-FOU de l'objectif est en place : le tableau de resultats avertit quand un bras distille a une epoque retenue de 0 (le modele NON ENTRAINE) | `en-cours.md`, `2026-10-16.md`, `2026-10-16_memoire.md` (+2) |
 | 01:34 | `23170e12` | E5 : le FOND du deuxieme mur — a 10 morceaux la distillation DIVERGE (3 epoques portent la perplexite a 2,7e12) ; l'epoque 0 retenue etait le MOINDRE MAL, pas un artefact | `en-cours.md`, `2026-10-16.md`, `2026-10-16_apprentissage.md` (+2) |
+| 02:26 | `e6bca27c` | E5 : LA MESURE EST FAITE — le TEMOIN est reproduit (25,7 % contre 28,0 % publie) mais la DISTILLATION le RENVERSE (17,1 % contre 25,7 % a m32, 13,8 % contre 38,1 % a m20) | `en-cours.md`, `etat-cerveau.md`, `2026-10-16.md` (+2) |
+
+## Chiffres du jour
+
+`25,7 %` · `28,0 %` · `17,1 %` · `13,8 %` · `38,1 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Mesures et rapports touchés
 

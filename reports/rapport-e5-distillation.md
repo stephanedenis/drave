@@ -465,3 +465,36 @@ test 32 et 20), graine 1, rang 4 :
   écrites côte à côte ✓. Le prochain pas, nommément : **tester la distillation à taux intermédiaire**
   (3e-4 ou 1e-3 avec le KL **plein** ✓) — ce qui demande de **faire tenir 29 morceaux en mémoire** ✗
   (gradient accumulé, ou `--lots` plus fin ✗) : le mur 1 est redevenu le seul obstacle ✓.
+
+## 16. LA DIRECTION D'E5 EST REPRODUITE — et la largeur du KL décide du signe
+
+Le § 15 avait inversé E5 avec un KL tronqué à **64** classes. La suite était nommée : « tester à taux
+intermédiaire ». Deux réglages ont été essayés, et **l'un des deux reproduit E5** ✓✓ :
+
+| bras (29 morceaux, graine 1) | perplexité m32 | m20 | **accord m32** | **accord m20** |
+|---|---:|---:|---:|---:|
+| **témoin** (objectif perplexité) | 192,69 | **132,69** | 25,7 % | 38,1 % |
+| distillé **K=64**, taux 1e-4 | 1 809,17 | 5 131,44 | 17,1 % ✗ | 13,8 % ✗ |
+| distillé **K=64**, taux 3e-4 | 11 076 | 7 861 | **12,1 %** ✗✗ | 14,4 % ✗ |
+| **distillé K=512, taux 1e-4** | 478,94 | 404,98 | **30,3 %** ✓ | **51,4 %** ✓✓ |
+| *rappel — E5 publié, bras distillé (graine 0 ✗)* | *574,70* | *715,02* | *51,0 %* | *68,1 %* |
+
+* **avec K=512, la distillation GAGNE** ✓✓ : **30,3 % contre 25,7 %** (m32 ✓) et **51,4 % contre
+  38,1 %** (m20 ✓) — **la direction du résultat publié est reproduite** ✓, et c'est la **première
+  confirmation indépendante** de sa conclusion ✓ (une autre graine, une autre configuration, la même
+  conclusion ✓) ;
+* **et ce n'est pas « apprendre plus » qui suffit** ✗ : monter le taux à 3e-4 **à K=64** fait **pire**
+  (12,1 % ✗✗) — l'époque retenue est 1, le modèle est déjà très dégradé (11 076 ✗). Ce qui compte est
+  **la largeur du KL** ✓ : à **64** classes la distribution du maître est **renormalisée sur 64
+  classes** ✓, donc **beaucoup plus pointue** ✗, et l'étudiant apprend une cible **déformée** ✗ ;
+  à **512** classes elle reste proche de la vraie distribution ✓, et l'étudiant apprend la bonne chose ✓ ;
+* **la lecture d'ensemble, et elle est nette** : la distillation d'E5 **fonctionne** ✓, mais elle est
+  **sensible à deux réglages** que la fiche d'origine ne mentionnait pas ✗ — le **taux** (elle diverge
+  au taux par défaut à petit volume ✓) et la **largeur du KL** (tronquer trop déforme la cible ✓). Le
+  protocole publié tombait juste sans le dire ✓ ; il le dit maintenant ✓ ;
+* **ce qui reste à faire, nommément** : (a) **graine 2** pour la configuration gagnante ✓ (une
+  confirmation sur une graine ne suffit pas — c'est la leçon du § 6bis de
+  `rapport-sommeil-selection.md` ✗) ; (b) le **mélange** KL + λ·CE ✓ (§ « E5 bis »), qui n'a pas été
+  testé dans cette configuration gagnante ✗ ; (c) et **pourquoi** K=64 déforme ✗ — la mesure de la
+  divergence KL entre la cible tronquée et la vraie distribution ✗, qui rendrait la sensibilité
+  **prévisible** au lieu d'observée ✓.
