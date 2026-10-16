@@ -225,8 +225,12 @@ avaient changé** :
 2. **la rentabilité du décodage spéculatif** : il manque **~10 % d'accord**, et la loi est exacte —
    le gain est `> 1` **si et seulement si** `p > c` (taux d'acceptation contre coût relatif du
    brouillon) ✗ ;
-3. **le cycle** : aucun des **quatre** objectifs (somme, dernier, point fixe, cible) ne le fait
-   converger ✗ — l'entraîné dompte la divergence (×228 au pas 4) sans jamais battre une passe ✗ ;
+3. **le cycle** : **la cause est trouvée et elle tient en un nombre** — le pas de temps **amplifie**
+   (λ = **206** non entraîné, **136** entraîné : l'entraînement réduit λ de 34 % **sans le soumettre**
+   ✗). Une itération sur une application expansive n'a pas de point fixe stable : c'est pourquoi
+   **aucun des quatre objectifs** ne converge ✗✓. L'hypothèse de l'échelle a été **réfutée** (renormer
+   l'état rend la divergence ~1000× pire ✗). **La cible de C2 est maintenant chiffrée : amener λ sous
+   1** — et λ est mesurable à chaque tentative (`tools/cycle_sensibilite.py`) ;
 4. **le critère de choix du rejeu** — état exact : la **diversité** tient (un **seuil** vers 0,9
    trigramme distinct par jeton, **validé sur trois graines** ✓), l'**étalement** **ne tient pas**
    (effet du même ordre que le bruit de graine ✗, et il perd à 10 morceaux ✗), et la surprise, le

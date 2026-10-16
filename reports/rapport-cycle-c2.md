@@ -129,3 +129,43 @@ d'E9 (`rapport-e9-homeostasie.md`), appliquée non plus au **poids** mais à l'*
 * **et une note d'honnêteté sur la mesure** : `--renorme` reste dans l'outil, **désactivé par défaut**
   (`aucune`) — non pas comme un mécanisme, mais comme **la trace d'une hypothèse réfutée** qu'on doit
   pouvoir **refaire** ✗✓. La porte `porte-cycle-c2.sh` n'est pas touchée ✓.
+
+## 7. LA CAUSE EST TROUVÉE, ET ELLE TIENT EN UN NOMBRE : le pas de temps AMPLIFIE (λ ≈ 206)
+
+Le § 6 avait réfuté l'hypothèse de l'échelle et laissé la bonne question : **le pas de temps est-il
+contractant ?** Elle se mesure — `tools/cycle_sensibilite.py` fait passer **le même état** par un pas
+complet du cycle, puis recommence avec une perturbation infime (ε = 1e-3, δ aléatoire de norme 1,
+graine fixée) et rapporte
+
+    λ = ‖F(x + ε·δ) − F(x)‖ / ‖ε·δ‖ .
+
+| modèle | état d'entrée | λ sur **un** pas | perplexité de x | perplexité de x + ε·δ |
+|---|---|---:|---:|---:|
+| **cycle non entraîné** | état réel du cycle | **206,01** | 289,67 | 289,70 (0,0098 %) |
+| **cycle entraîné** (LoRA rang 8, 24 couches, objectif « somme ») | même état | **136,20** | 58,95 | 58,95 (0,0024 %) |
+
+**Ce que ces deux nombres disent, et c'est beaucoup :**
+
+* **λ ≫ 1 dans les deux cas** : le pas de temps **amplifie** une perturbation infime de **deux ordres de
+  grandeur** ✓. Une itération sur une application **expansive** n'a **pas** de point fixe stable ✗ —
+  c'est **la** raison pour laquelle **aucun des quatre objectifs** (somme, dernier, point fixe, cible)
+  ne fait converger la boucle ✗✓ : ils ne changent pas λ, ils changent la **cible** ✗ ;
+* **et l'entraînement RÉDUIT λ sans le soumettre** : **206 → 136**, soit **−34 %** ✓ — ce qui explique
+  exactement le résultat du § 2 (« entraîné, il dompte la divergence : ×228 au pas 4 » ✓) : dompter
+  n'est pas contracter ✗✓. **Le chiffre manquant de toute la campagne C2 est ce λ**, et il est
+  maintenant mesurable à chaque tentative ✓ ;
+* **l'observable est robuste alors que l'état est chaotique** : une perturbation de **1e-3** déplace
+  l'état d'un facteur 206 ✓ mais la **perplexité de 0,0098 %** ✓✓. Autrement dit, la divergence de la
+  boucle **ne vient pas** de l'amplification du bruit ✗ — elle vient du fait que chaque pas **pousse
+  l'état dans la même direction** (une **dérive** ✓) et que rien ne l'arrête (λ > 1 ✓). C'est cohérent
+  avec le § 6 : renormer détruit cette dérive porteuse de signal, donc **aggrave** ✗ ;
+* **la cible de la faculté C2 est donc maintenant chiffrée** : amener **λ sous 1** ✓. Trois pistes,
+  toutes mesurables avec cet outil : (a) une **pénalité de contraction** dans l'objectif
+  d'entraînement ✗ (λ est dérivable par différences finies ✓) ; (b) une **normalisation par couche**
+  dans le cycle ✗ ; (c) **plus de pas d'entraînement** ✗ (la pente mesurée est de −34 % pour
+  10 époques et un objectif : combien de pas pour atteindre 1 ? — c'est une extrapolation qu'il faut
+  mesurer, pas supposer ✗) ;
+* **ce que cette fiche ne dit pas** : λ est mesuré **en un point** de l'espace d'états (et sur la
+  composition de deux pas, où il vaut 444, soit **21 par pas** en moyenne géométrique — le régime n'est
+  donc **pas linéaire** ✗, la sensibilité dépend de l'endroit ✓) ; un λ « global » demanderait un
+  balayage de points ✗. Et la mesure porte sur des fenêtres de 64 jetons ✗.
