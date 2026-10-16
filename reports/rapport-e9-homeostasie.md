@@ -75,6 +75,29 @@ C'était la première réserve de la fiche (« un seul volume de rejeu ✗ : l'o
   **levée pour les volumes testés** — 3, 10 et 20 morceaux — et reste ouverte pour les autres
   (d'autres corpus, d'autres rangs, d'autres époques ✗).
 
+## 1ter. Par COUCHE ou globalement ? — amortir les couches HAUTES est le meilleur profil, mais l'écart est petit
+
+La deuxième réserve (« une homéostasie par couche plutôt que globale ✗ ») a été essayée : deux profils
+à **effet total égal** (moyenne 0,6, comme le réglage uniforme), l'un préservant les couches basses,
+l'autre les hautes :
+
+| profil (LoRA sur 8 couches) | m32 | écart | m20 | écart | hors domaine | écart |
+|---|---|---:|---:|---:|---:|---:|
+| **uniforme ×0,6** | **6,7751** | **−8,75 %** | **16,2096** | **−15,24 %** | 17,1671 | −0,58 % |
+| **couches 0-3 ×0,9 · 4-7 ×0,3** (on **garde** les basses, on **amortit** les hautes) | 6,8233 | −8,09 % | 16,2546 | −14,99 % | **17,1553** | **−0,65 %** |
+| **couches 0-3 ×0,3 · 4-7 ×0,9** (l'inverse) | 6,7945 | −8,48 % | 16,2725 | −14,91 % | 17,2608 | **−0,04 %** |
+
+* **le profil le meilleur est celui qui AMORTIT LES COUCHES HAUTES** et garde les basses (−0,65 % hors
+  domaine, contre −0,04 % pour l'inverse) — cohérent avec ce que les couches font : les basses portent
+  des traits généraux, les hautes **la spécialisation** qu'on cherche justement à limiter ✓ ;
+* **mais l'écart est PETIT** : 0,6 point de hors-domaine entre les deux profils, et **le réglage
+  uniforme reste le meilleur sur les deux textes en domaine** ✗✓. Autrement dit : **une seule échelle
+  suffit**, et le raffinement par couche n'apporte pas ce qu'il coûte en complexité ;
+* **et cela n'infirme pas E9, cela le borne** : ce qui compte est **l'amplitude globale** ; **où** on
+  l'applique est un levier de second ordre — la même conclusion que pour l'allocation du budget
+  d'attention (`rapport-budget-attention-allocation.md` : « où dépenser est un levier de second
+  ordre »), et la deuxième fois que la nuit la retrouve ✓.
+
 ## 2. Ce que ça change pour le cerveau
 
 * **E9 existe, et il est un RÉGLAGE, pas un mécanisme de plus** : la consolidation n'a pas besoin
