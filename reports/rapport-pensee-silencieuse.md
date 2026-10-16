@@ -135,3 +135,40 @@ l'injection ✓) :
   que si son évolution est **stable** ✗ — donc il faut apprendre **le pas** (état → état ✓), pas
   seulement **le pont** (état → entrée ✗). Le pont, lui, est **acquis** : il existe, il est linéaire, et
   il bat le jeton ✓✓.
+
+## 7. LE PAS LATENT : `h_p → h_{p+1}` n'est PAS un pas de pensée — et la fenêtre est vide
+
+La question qui restait ✗ : existe-t-il un **pas latent** (état → état ✓) **contractant** (λ ≤ 1 ✓)
+**et** qui **conserve le contenu** ✓ ? `tools/pas_latent.py` apprend le pas linéaire `S : h_p ↦ h_{p+1}`
+(couche 18, ridge, 3 000 positions ✓) et balaie l'amortissement `h ← h + α(S h − h)` ✓ :
+
+| α | λ (norme d'opérateur du pas amorti) | contenu après **4** pas | contenu après **16** pas |
+|---:|---:|---:|---:|
+| *(rien — état non itéré)* | — | **64,5 %** *(la référence)* | 64,5 % |
+| 1,0 | **119,9** ✗ | 65,9 | 84,6 ✗ |
+| 0,5 | 62,4 ✗ | 65,2 | 80,8 ✗ |
+| 0,25 | 38,2 ✗ | **64,5** ✓ | 69,3 |
+| 0,1 | **30,0** ✗ | 64,5 ✓ | **64,5** ✓ |
+
+*(« contenu » = ce que l'état dit du jeton à venir ✓, écart relatif du même mapping linéaire qu'au § 5 ✓ —
+plus bas est mieux ✓.)*
+
+* **AUCUN α NE FAIT LES DEUX** ✗✓ : les quatre sont **expansifs** (λ de 30 à 120 ✗), et celui qui
+  **conserve** le contenu (α = 0,1 ✓) le conserve **parce qu'il ne fait rien** ✗✓ (64,5 % exactement,
+  à 4 comme à 16 pas ✓) ;
+* **et cela a une raison, qui est le vrai résultat** ✓✓ : le pas appris est `h_p → h_{p+1}` — c'est le
+  passage d'un jeton **au suivant** ✗, c'est-à-dire **« lire un jeton de plus »** ✓, pas « penser » ✗.
+  Il **apporte de l'information nouvelle** à chaque pas ✓, donc il **amplifie** : c'est sa fonction ✓✓.
+  Un pas de pensée devrait au contraire **retenir** (converger vers un point fixe ✗) — et **le modèle
+  n'en contient aucun** ✗✓ : il n'y a pas d'opérateur « penser » dans les poids ✓ ;
+* **conséquence, et c'est un programme précis** ✓ : la dynamique latente ne se **trouve** pas ✗, elle
+  s'**apprend** ✓✓ — un petit module récurrent sur l'état (896 dimensions ✓), entraîné avec **deux**
+  objectifs : (i) **conserver le contenu** (prédire les embeddings à venir ✓) et (ii) une **pénalité de
+  contraction** (λ < 1 ✓, estimée par différences finies ✓). C'est **exactement** la pénalité que la
+  fiche du cycle nommait de son côté (`rapport-cycle-c2.md` § 7 : « amener λ sous 1 » ✗) — **les deux
+  fils se rejoignent** ✓✓ : le cycle et la pensée silencieuse demandent **le même objet**, une
+  dynamique contractante apprise ✓ ;
+* **ce que cette fiche ne dit pas** ✗ : λ est ici la **norme d'opérateur** du pas amorti ✓ (donc la
+  pire direction ✗), tandis que `cycle_sensibilite.py` mesure une **sonde aléatoire** ✓ (6,31 pour le
+  même S ✓ contre 110,7 de valeur singulière maximale ✗). Les deux mesures sont justes ✓ et ne
+  répondent pas à la même question ✗✓ — c'est écrit ici pour qu'on ne les compare pas ✓.

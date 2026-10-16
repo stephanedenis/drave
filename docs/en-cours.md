@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 14 h 20 HAE.**
+**Mis à jour : 2026-10-16, 14 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -128,6 +128,16 @@ d'avance** encore (84,6-84,9 % ✓)* ; et **toutes les couches se valent** (couc
 pas un **inverse** ✗ — et le cycle, mesuré la même nuit, dit pourquoi (λ ≥ 3,7e4, le pas **amplifie** ✗).
 *Lire la pensée est facile ; la faire tourner sur elle-même exige une dynamique contractante.* C'est la
 cible, et elle est chiffrée ✓.
+
+**Et le PAS LATENT a été appris et balayé** ✓ (`tools/pas_latent.py` ✓) : `h_p → h_{p+1}` est
+**expansif** (λ de 30 à 120 selon l'amortissement ✗) et **aucun** amortissement ne donne à la fois
+contraction et contenu ✗ — celui qui conserve le contenu (α = 0,1 ✓) le conserve **parce qu'il ne fait
+rien** ✗✓. **La raison est le vrai résultat** ✓✓ : `h_p → h_{p+1}` est « **lire un jeton de plus** » ✗,
+pas « penser » ✗ — il apporte de l'information neuve, donc il amplifie ✓. **Un pas de pensée devrait
+retenir, et le modèle n'en contient aucun** ✗. La dynamique latente ne se **trouve** donc pas, elle
+s'**apprend** ✓ : un module récurrent sur l'état, entraîné à **conserver le contenu** *et* à
+**contracter** (λ < 1 ✓) — **exactement la pénalité que la fiche du cycle réclamait de son côté** ✓✓ :
+les deux fils demandent **le même objet**.
 
 Ouvre quatre mesures, dans l'ordre de ce qu'elles coûtent : le **pont entraîné** (un adaptateur
 état → entrée ✓), le **contrôle apparié** de C (verbaliser **sans** garder les jetons ✓), le même
