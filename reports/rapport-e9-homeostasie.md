@@ -45,6 +45,36 @@ Ce que la courbe dit :
   mesurés sont de 1 à 10 points), mais **le point publié était en dehors de l'optimum** ✗, et c'est
   écrit ici plutôt que corrigé en silence.
 
+## 1bis. Le réglage se RÉPLIQUE sur trois volumes de rejeu (3, 10 et 20 morceaux)
+
+C'était la première réserve de la fiche (« un seul volume de rejeu ✗ : l'optimum est peut-être propre
+à ce volume »). Trois volumes, même protocole (rang 4, 10 époques, graine 0), trois amplitudes :
+
+| rejeu | échelle | m32 | écart | m20 | écart | hors domaine | écart |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| *(base)* | — | 7,4242 | — | 19,1237 | — | 17,2673 | — |
+| **3 morceaux** | **×0,6** | **6,9777** | −6,02 % | 17,2485 | −9,81 % | **17,1949** | **−0,42 %** |
+| | ×0,75 | 6,9737 | −6,07 % | 17,1838 | −10,14 % | 17,2292 | −0,22 % |
+| | ×1,0 | 6,9902 | −5,84 % | 17,1763 | −10,18 % | 17,3160 | **+0,28 %** |
+| **20 morceaux** | **×0,6** | **6,7240** | −9,43 % | 16,0874 | −15,88 % | **17,2436** | **−0,14 %** |
+| | ×0,75 | 6,7100 | −9,62 % | 15,9223 | −16,74 % | 17,3085 | +0,24 % |
+| | ×1,0 | 6,7353 | −9,29 % | 15,8276 | **−17,24 %** | 17,4908 | **+1,29 %** |
+
+* **la dominance se réplique** : à **chaque** volume, ×0,6 fait **mieux en domaine** que ×1,0
+  (−6,02 % contre −5,84 % à 3 morceaux ; −9,43 % contre −9,29 % à 20) **et** coûte **moins cher hors
+  domaine** (−0,42 % contre +0,28 % ; −0,14 % contre +1,29 %) ✓✓ ;
+* **le coût hors domaine reste monotone en l'amplitude**, dans les deux volumes (×0,6 < ×0,75 < ×1,0,
+  ordre parfait ✗✓) ;
+* **et le bénéfice de l'homéostasie GRANDIT avec le rejeu** : 0,7 point de hors-domaine gagné à
+  3 morceaux, 1,4 point à 20 ✗✓ — c'est cohérent : plus la consolidation est forte, plus il y a à
+  amortir ;
+* **le seul désaccord, constant lui aussi** : m20 préfère ×1,0 (−17,24 % contre −15,88 % à 20
+  morceaux ✗). Le réglage n'est donc pas « ×0,6 partout » mais **un compromis**, et il penche du côté
+  de l'homéostasie dès qu'on regarde **deux** textes sur trois ;
+* **ce que cela change pour la porte** : sa réserve (« l'optimum n'est peut-être pas universel ») est
+  **levée pour les volumes testés** — 3, 10 et 20 morceaux — et reste ouverte pour les autres
+  (d'autres corpus, d'autres rangs, d'autres époques ✗).
+
 ## 2. Ce que ça change pour le cerveau
 
 * **E9 existe, et il est un RÉGLAGE, pas un mécanisme de plus** : la consolidation n'a pas besoin

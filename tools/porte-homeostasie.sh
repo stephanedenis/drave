@@ -21,9 +21,11 @@
 #      **neutre** tombe dans la bande ×0,6-0,9 (l'oracle disait ×0,6-0,75) — la règle n'utilise que
 #      l'activité du modèle, pas le domaine visé.
 #
-# ⚠ Ce qu'elle ne vérifie PAS : que ×0,6 soit l'optimum **universel**. La fiche dit que le balayage
-# a été fait sur **un** volume de rejeu (10 morceaux, rang 4) et que d'autres volumes ne sont pas
-# mesurés. Cette porte vérifie le RÉGLAGE et sa RÈGLE, pas leur universalité.
+# ⚠ Ce qu'elle ne vérifie PAS : que ×0,6 soit l'optimum **universel**. Le balayage a été REFait sur
+# **trois** volumes de rejeu (3, 10 et 20 morceaux — `rapport-e9-homeostasie.md` § 1bis) et la
+# dominance s'y réplique à chaque fois, avec un bénéfice hors-domaine qui GRANDIT avec le rejeu
+# (0,7 point à 3 morceaux, 1,4 point à 20). Restent non mesurés : d'autres corpus, d'autres rangs,
+# d'autres époques. Cette porte vérifie le RÉGLAGE et sa RÈGLE, pas leur universalité.
 set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
