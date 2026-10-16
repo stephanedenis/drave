@@ -169,3 +169,40 @@ graine fixée) et rapporte
   composition de deux pas, où il vaut 444, soit **21 par pas** en moyenne géométrique — le régime n'est
   donc **pas linéaire** ✗, la sensibilité dépend de l'endroit ✓) ; un λ « global » demanderait un
   balayage de points ✗. Et la mesure porte sur des fenêtres de 64 jetons ✗.
+
+## 7bis. CORRECTION DE MON PROPRE CHIFFRE : λ local est de l'ordre de 10⁴ — le 206 était le régime SATURÉ
+
+Le § 7 annonçait « λ ≈ 206 ». C'est le chiffre **d'un seul ε** ✗ — et λ **dépend de ε**, ce qui change
+la lecture. La même mesure à six perturbations :
+
+| ε (écart d'entrée) | écart de **sortie** | λ = sortie/entrée |
+|---:|---:|---:|
+| 1e-2 | 0,2240 | 22,4 |
+| 1e-3 | 0,2060 | 206,0 |
+| 1e-4 | 0,1958 | **1 950** |
+| 1e-5 | 0,1881 | **19 592** |
+| 1e-6 | 0,0140 | **37 393** |
+
+* **l'écart de sortie stagne autour de 0,2** tant que l'entrée descend de 1e-2 à 1e-5 ✗✓ : la réponse
+  **sature** (un plancher non linéaire, du type `tanh` ✓) — donc **le rapport explose** quand ε
+  diminue, sans que la sortie bouge ✓ ;
+* **λ est donc une fonction de ε, et « le » λ n'existe pas** ✗ : ce qui caractérise le pas de temps au
+  voisinage d'un point est la limite ε → 0, et elle est **au moins 3,7e4** ✓ (le plancher de précision
+  f32 — 1e-7 relatif — empêche de descendre plus bas : à ε = 1e-7, l'écart d'entrée serait noyé dans
+  l'arrondi du modèle quantifié ✗) ;
+* **le 206 du § 7 était donc mesuré en régime saturé** ✗, et il décrit la **réponse observable**, pas
+  la sensibilité locale ✓. Les deux nombres sont justes, mais **ils ne répondent pas à la même
+  question** — et c'est écrit ici plutôt que corrigé en silence ;
+* **ce que cela change pour la cible de C2, et c'est important** : « amener λ sous 1 » est
+  **inatteignable par l'entraînement seul** ✗✗ — réduire 206 → 136 (§ 7) est un progrès **dans le
+  régime saturé** ✓, qui ne dit rien de la limite locale ✗. Pour contracter, il faudrait changer la
+  **forme** du pas (une normalisation, un terme de contraction **dans** la fonction ✓), pas son
+  réglage ✗ ;
+* **et la cible réaliste, du coup, se reformule** : ce que l'entraînement peut viser, c'est la
+  **BORNITUDE** (la sortie reste dans une plage ✓, ce que la saturation assure déjà partiellement ✓),
+  pas la **contraction** ✗. Autrement dit : une boucle qui **ne converge pas** mais qui **ne s'emballe
+  pas** — et c'est exactement ce que le § 2 avait mesuré sans le nommer (« il dompte la divergence :
+  ×228 au pas 4 » ✓) ;
+* **ce que cette correction ne dit pas** : λ local n'est mesuré qu'**en un point** et par différences
+  finies ✗ ; un λ **global** (la plus grande valeur propre de la jacobienne, ou une moyenne sur des
+  points ✓) demanderait un autre instrument ✗ — c'est nommé comme la suite.

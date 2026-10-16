@@ -226,11 +226,14 @@ avaient changé** :
    le gain est `> 1` **si et seulement si** `p > c` (taux d'acceptation contre coût relatif du
    brouillon) ✗ ;
 3. **le cycle** : **la cause est trouvée et elle tient en un nombre** — le pas de temps **amplifie**
-   (λ = **206** non entraîné, **136** entraîné : l'entraînement réduit λ de 34 % **sans le soumettre**
-   ✗). Une itération sur une application expansive n'a pas de point fixe stable : c'est pourquoi
-   **aucun des quatre objectifs** ne converge ✗✓. L'hypothèse de l'échelle a été **réfutée** (renormer
-   l'état rend la divergence ~1000× pire ✗). **La cible de C2 est maintenant chiffrée : amener λ sous
-   1** — et λ est mesurable à chaque tentative (`tools/cycle_sensibilite.py`) ;
+   l'amplification **dépend de ε** : la réponse **sature** vers 0,2, donc le rapport explose quand ε
+   diminue — **λ local ≥ 3,7e4** (le 206 était le régime **saturé**, et les deux nombres répondent à
+   des questions différentes ✗✓). **Conséquence : « amener λ sous 1 » est inatteignable par
+   l'entraînement seul** ✗ — il faudrait changer la **forme** du pas (normalisation, terme de
+   contraction dans la fonction), pas son réglage ✗. La cible réaliste de C2 se reformule donc :
+   **la BORNITUDE** (la sortie reste dans une plage ✓), pas la contraction — et c'est ce que « dompter
+   la divergence » mesurait sans le nommer ✓. L'hypothèse de l'échelle a été **réfutée** (renormer
+   l'état rend la divergence ~1000× pire ✗) ;
 4. **le critère de choix du rejeu** — état exact : la **diversité** tient (un **seuil** vers 0,9
    trigramme distinct par jeton, **validé sur trois graines** ✓), l'**étalement** **ne tient pas**
    (effet du même ordre que le bruit de graine ✗, et il perd à 10 morceaux ✗), et la surprise, le
