@@ -186,12 +186,16 @@ voisinage. La même mesure sur les trois graines :
 
 | graine | ×0,5 | ×0,6 | **×0,75** | ×1,0 | où est le minimum |
 |---:|---:|---:|---:|---:|---|
+| *(base, aucune consolidation)* | 9,6706 | | | | — |
 | 0 | 9,0815 | 9,0591 | **9,0372** | 9,0420 | **×0,75** |
 | 1 | 9,0982 | 9,0716 | **9,0516** | 9,0866 | **×0,75** |
 | 2 | 9,0523 | 9,0201 | **9,0052** | 9,0687 | **×0,75** |
 
 * **le minimum est au même endroit sur les trois graines** ✓✓ — et la courbe est un **U** net : ×0,5 et
   ×1,0 sont **toujours** au-dessus ✓ (l'amplitude la plus faible est donc aussi une erreur ✗) ;
+* **et toutes les variantes battent le modèle de base sur ce texte** (9,00-9,10 contre **9,6706** ✓) :
+  consolider aide **aussi** sur un texte neutre ✗✓ — ce que la règle cherche, c'est le **meilleur**
+  point de cette aide, pas le seul point où elle existe ✓ ;
 * **ce que la règle rend possible, et c'est son intérêt** : elle **ne demande pas le domaine visé** ✗ ✓
   — elle ne demande que **l'activité du modèle lui-même**. Un cerveau a son activité d'hier ; il n'a pas
   le domaine de demain ✓. C'est ce qui la distingue d'un oracle : **le même chiffre, sans l'information
