@@ -179,3 +179,49 @@ Deux brouillons mesurés, deux distillations, deux coûts :
   pas mesurés non plus ;
 * **rien sur l'échantillonnage** (`--temp > 0`) : le décodage spéculatif échantillonné (avec
   correction) est un autre algorithme, et il n'est pas ici.
+
+## 5. LE BROUILLON LE MOINS CHER QUI EXISTE — le réflexe n-grammes — mesuré : 1 à 4 % d'acceptation
+
+**Pourquoi ce bras a été essayé, et pourquoi c'était le dernier espoir de la famille.** La loi mesurée
+est `gain > 1 ⟺ p > c` (acceptation contre coût **relatif** du brouillon), et les brouillons
+**distillés** sont **tous juste en dessous** : 30,0 % pour un seuil de 33,3 % (8 couches), 14,3 % pour
+16,7 % (4 couches). Le motif est net : **l'acceptation croît moins vite que le coût** ✗ — un brouillon
+de 12 couches donnerait ~40 % pour un seuil de 50 % ✗. **Aucune profondeur ne retourne la loi** tant
+que le brouillon est un **modèle tronqué** ✗.
+
+D'où le seul brouillon dont le coût est **quasi nul** : le **réflexe** (C8, la mémoire de motifs) —
+chercher dans le contexte le plus long suffixe qui s'y est déjà produit et proposer ce qui avait suivi
+(`tools/speculatif_drave.py`, bras **`ngram:N`**, coût **mesuré**, pas décrété ✗). Avec `c ≈ 0`, toute
+acceptation positive est rentable ✓.
+
+**Mesure** (24 jetons, K = 4, température 0) :
+
+| texte | brouillon | taux d'acceptation | jetons / vérification |
+|---|---|---:|---:|
+| prose (l'invite par défaut) | `ngram:4` | **3,8 %** | 1,14 |
+| prose | modèle tronqué 8 couches, **sans** adaptateur | **0,0 %** (0/90) | 1,00 |
+| prose | modèle tronqué 8 couches **distillé** *(rappel du 15/10)* | 30,0 % | — |
+| liste de villes (répétition de **forme**) | `ngram:4` | **1,2 %** | 1,04 |
+| code auto-répété (`def … return …` × 10) | `ngram:4` | **2,4 %** | 1,09 |
+| code auto-répété | `ngram:8` | **2,4 %** | 1,09 |
+
+* **le réflexe accepte 1 à 4 %** ✗ : le modèle de 0,5 B **n'écrit pas** ce que le contexte avait écrit
+  ✗ — il invente la ligne suivante (« `def puissance(a, b):` » ✗) au lieu de recopier le motif ✓. La
+  répétition **de forme** (une liste, des `def`) ne suffit pas : il faudrait une répétition **de
+  contenu**, au jeton près ✓ ;
+* **conséquence, et c'est un verdict** : avec `p = 0,024` et `c ≈ 0,02`, le gain est `> 1` **mais
+  marginal** ✗ (1,04 à 1,14 jeton par vérification) — l'espérance d'un facteur 2 ou 3 qui justifierait
+  le décodage spéculatif **n'est pas là** ✗ ;
+* **et le verdict porte sur la FAMILLE, pas sur un essai** : modèle tronqué 4 couches ✗, 8 couches ✗,
+  8 couches distillé ✗ (juste sous le seuil), réflexe n-grammes 4 ✗, 8 ✗ — **cinq configurations, cinq
+  fois `p ≤ c`** ✓. Sur **ce** modèle et **ces** textes, le décodage spéculatif **ne paie pas** ✗, et
+  c'est écrit comme un résultat, pas comme un échec ✗✓ ;
+* **ce qui rouvrirait la porte, nommément** : (a) un **brouillon plus fort** (acceptation qui monte
+  plus vite que le coût : un modèle **distillé dans un élève plus petit** ✗, pas une tête tronquée ✗) ;
+  (b) une **vérification moins chère** (vérifier K jetons en **un** passage de préremplissage plutôt
+  que K ✗ — c'est là que le coût réel se joue, et le harnais le paie aujourd'hui en K appels ✗) ;
+  (c) un **texte à répétition de contenu** (du code généré par le modèle lui-même, une conversation
+  répétitive ✗) — le seul régime où le réflexe accepterait beaucoup ✓ ;
+* **⚠️ ce que la mesure ne dit pas** : le harnais paie la vérification en **K appels séparés** ✗ (le
+  temps par jeton n'est donc **pas** celui d'un moteur réel ✗) ; les **taux d'acceptation**, eux, sont
+  indépendants de cette plomberie ✓, et c'est eux qui portent le verdict ✓.

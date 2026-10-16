@@ -54,6 +54,31 @@ def generer(moteur: str, modele: str, drapeaux: list[str], seq: list[int], k: in
     return [int(x) for x in re.findall(r"[0-9]+", m.group(1))], dt
 
 
+def proposer_ngram(seq: list[int], n: int, k: int) -> list[int]:
+    """LE RÉFLEXE LE MOINS CHER QUI EXISTE : recopier ce qui a déjà suivi le même contexte.
+
+    POURQUOI CE BRAS EXISTE. La loi mesurée du décodage spéculatif est `gain > 1 ⟺ p > c` (taux
+    d'acceptation contre coût RELATIF du brouillon) — et les brouillons **distillés** mesurés le 15/10
+    sont **tous juste en dessous** : 30,0 % d'acceptation pour un seuil de 33,3 % (8 couches), 14,3 %
+    pour 16,7 % (4 couches). Le motif est net : l'acceptation croît **moins vite** que le coût ✗ —
+    un brouillon de 12 couches donnerait ~40 % pour un seuil de 50 % ✗. **Aucune profondeur ne
+    retourne la loi** ✗ tant que le brouillon est un modèle tronqué.
+
+    Reste la seule porte de sortie : un brouillon de coût **quasi nul**, où **toute** acceptation
+    positive est rentable ✓. C'est le **réflexe** du dépôt (C8, la mémoire de motifs) : chercher dans
+    le contexte le plus long suffixe qui s'y est déjà produit, et proposer ce qui avait suivi —
+    quelques dizaines de microsecondes, pas un modèle ✗.
+    """
+    for longueur in range(min(n, len(seq) - 1), 0, -1):
+        motif = seq[-longueur:]
+        for i in range(len(seq) - longueur - 1, -1, -1):
+            if seq[i:i + longueur] == motif:
+                suite = seq[i + longueur:i + longueur + k]
+                if suite:
+                    return list(suite)
+    return [seq[-1]] * k          # rien à recopier : on répète le dernier jeton (le pire cas)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--moteur", default="./drave-core/target/release/drave")
@@ -87,7 +112,13 @@ def main() -> int:
         seq, generes, proposes, acceptes, tours, secondes = list(depart), [], 0, 0, 0, 0.0
         while len(generes) < a.n:
             k = min(a.K, a.n - len(generes))
-            prop, t1 = generer(a.moteur, modele, drapeaux, seq, k, travail)
+            if modele.startswith("ngram:"):
+                # le coût du réflexe est MESURÉ (il est petit, pas nul par décret)
+                t1 = time.time()
+                prop = proposer_ngram(seq, int(modele.split(":")[1]) if ":" in modele[6:] else 4, k)
+                t1 = time.time() - t1
+            else:
+                prop, t1 = generer(a.moteur, modele, drapeaux, seq, k, travail)
             vrai, t2 = generer(a.moteur, a.verifieur, [], seq, k, travail)
             secondes += t1 + t2
             accord = 0

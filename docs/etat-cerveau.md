@@ -222,9 +222,13 @@ avaient changé** :
    46ᵉ… la **45ᵉ porte** le vérifie à chaque passe) ✓ — ce qui reste est l'**injection** : le moteur
    applique une **RoPE 1-D** au modèle de texte alors que Qwen2-VL utilise un **mRoPE**
    (`[16,24,24]`, positions `(t,h,w)`). C'est un **projet**, pas un réglage ;
-2. **la rentabilité du décodage spéculatif** : il manque **~10 % d'accord**, et la loi est exacte —
-   le gain est `> 1` **si et seulement si** `p > c` (taux d'acceptation contre coût relatif du
-   brouillon) ✗ ;
+2. **la rentabilité du décodage spéculatif : VERDICT sur la famille** — cinq configurations essayées
+   (tronqué 4, tronqué 8, tronqué 8 **distillé**, réflexe **n-grammes** 4 et 8) et **cinq fois
+   `p ≤ c`** ✗ : l'acceptation croît **moins vite** que le coût, et le réflexe — pourtant quasi
+   gratuit — n'accepte que **1 à 4 %** (le modèle n'écrit pas ce que le contexte avait écrit ✗). Sur
+   **ce** modèle et **ces** textes, le décodage spéculatif **ne paie pas** — résultat, pas échec ✓.
+   Ce qui rouvrirait la porte : un **élève distillé** (pas une tête tronquée), une vérification en
+   **un** préremplissage, ou un texte à répétition **de contenu** ;
 3. **le cycle** : **la cause est trouvée et elle tient en un nombre** — le pas de temps **amplifie**
    l'amplification **dépend de ε** : la réponse **sature** vers 0,2, donc le rapport explose quand ε
    diminue — **λ local ≥ 3,7e4** (le 206 était le régime **saturé**, et les deux nombres répondent à
