@@ -605,11 +605,25 @@ d'image se posent aux positions 0..63 ✓), mais le moteur applique au modèle d
 
 1. **extraire les valeurs d'or** ✗ — les positions que la référence calcule pour une séquence **connue**
    (4 jetons de texte, une image 4 × 4 fusionnée en 4 jetons, 3 jetons de texte ✓). ⚠️ **C'est le pas
-   qui a résisté ce soir** ✗ : le `get_rope_index` **installé** appelle un `self.get_vision_position_ids`
-   dont la signature a **changé** avec la version de `transformers` ✗ (trois adaptations essayées, trois
-   refus ✓ : `device=`, `spatial_merge_size` scalaire, `spatial_merge_size` 2-D ✗). Il faut lire **la
-   source de la version installée** et écrire l'adaptateur **contre elle** ✗ — pas contre la mémoire
-   d'une autre version ✓ ;
+   qui a résisté, et la cause est maintenant écrite** ✗ : en lisant **la source installée** (au lieu de
+   la mémoire d'une autre version ✓), trois défauts s'enchaînent —
+   (a) `get_rope_index` appelle `self.get_vision_position_ids(current_pos, grid_thw, 1, merge, device=…)`
+   alors que le helper **installé** a la signature `(grid_thw, spatial_merge_size, include_temporal,
+   kwargs)` ✗ — un adaptateur est nécessaire ✓ j'ai dû l'écrire ✓ ;
+   (b) il lui passe la **ligne 1-D** de son itérateur ✗ alors que le helper attend un tenseur **2-D**
+   (`(n, 3)`) ✗ → « cannot unpack non-iterable int » ✓ (un `reshape(1, 3)` répare ✓) ;
+   (c) **et une fois réparé, il rend 16 positions pour une image qui produit 4 jetons** ✗✗ : le helper
+   numérote les **patchs** (`t × h × w` ✗) tandis que la séquence du modèle porte les jetons **fusionnés**
+   (`t × h/2 × w/2` ✓), et `current_pos += max(h, w) // merge` avance de **2** là où il faudrait **4** ✗.
+   Autrement dit, dans cette version, **`get_rope_index` et son helper ne s'accordent pas** ✗✓ — le
+   premier attend une grille **fusionnée** (1, 2, 2 ✓), le second la décompte en patchs ✓ ;
+   **conséquence, et c'est un changement de plan** : les valeurs d'or ne s'extraient pas en **appelant**
+   la référence ✗, mais en la **faisant parler** ✓ — nourrir le modèle avec des `position_ids` explicites
+   et chercher ceux qui reproduisent **sa propre sortie par défaut** ✓✓ (une vérification
+   **comportementale** ✓, plus forte qu'une lecture de code ✗, et qui ne dépend pas d'une version ✓).
+   Ce que la nuit a déjà **mesuré** de la convention, et qui sert de point de départ : l'ordre des jetons
+   d'image est **block-major** ✓ (indice 0 → (0,0), 1 → (0,1), 2 → (1,0), 3 → (1,1) ✓), le texte porte
+   `(p, p, p)` ✓ et les sections de tête sont `[16, 24, 24]` sur 64 ✓ ;
 2. **implémenter les positions en Rust** ✗ — le même algorithme que la référence, vérifié **pas à pas**
    contre les valeurs d'or du pas 1 ✓ (c'est la partie facile : un parcours de grille ✓) ;
 3. **étendre `rope`** ✗ — prendre **trois** positions et découper `n_rot` en **trois sections** ✓

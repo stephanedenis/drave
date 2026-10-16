@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 06 h 45 HAE.**
+**Mis à jour : 2026-10-16, 07 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -110,7 +110,7 @@ non (mémoire ✗, volume ✗).
 
 ## Les questions ouvertes (réécrites le 15/10 au soir)
 
-1. **La vision multimodale** : le **chemin image est vérifié** (embedding exact, 31 couches à 7,58e-06, projecteur à 0,71 %) — il reste le **mRoPE** du modèle de langue, et le projet est maintenant **cadré en quatre pas mesurables** (valeurs d'or → positions en Rust → `rope` à trois sections → vérification de bout en bout ✓). Le seul pas incertain est le premier ✗ (la signature de `get_rope_index` a changé avec la version de `transformers` : trois adaptations essayées, trois refus ✓) — **lire la source installée**, pas la mémoire d'une autre version ✓.
+1. **La vision multimodale** : le **chemin image est vérifié** (embedding exact, 31 couches à 7,58e-06, projecteur à 0,71 %) — il reste le **mRoPE** du modèle de langue, et le projet est maintenant **cadré en quatre pas mesurables** (valeurs d'or → positions en Rust → `rope` à trois sections → vérification de bout en bout ✓). Le seul pas incertain est le premier ✗ — **et sa cause est maintenant écrite** : dans la version installée, `get_rope_index` et son helper **ne s'accordent pas** ✗ (l'un attend une grille **fusionnée**, l'autre décompte en **patchs** : 16 positions rendues pour 4 jetons ✓). **Changement de plan** : les valeurs d'or ne s'extraient pas en *appelant* la référence ✗ mais en la **faisant parler** ✓ — chercher les `position_ids` explicites qui reproduisent **sa propre sortie par défaut** ✓✓ (une vérification **comportementale**, indépendante de la version ✓).
 2. **Le décodage spéculatif — verdict sur la famille** : cinq configurations, **cinq fois `p ≤ c`** ✗ (tronqué 4/8, distillé 8, réflexe n-grammes 4/8 : 1 à 4 % d'acceptation). Sur ce modèle et ces textes, **il ne paie pas** — un résultat, pas un échec. Rouvriraient la porte : un **élève distillé**, une vérification en **un** préremplissage, ou un texte à répétition **de contenu**.
 3. **Le cycle** : **la cause est trouvée** — le pas de temps **amplifie**, et l'amplification **dépend de ε** : la réponse **sature** vers 0,2, donc **λ local ≥ 3,7e4** (mon premier chiffre, 206, était le régime **saturé** ✗ — corrigé dans la fiche). Une application expansive n'a pas de point fixe stable : d'où l'échec des **quatre** objectifs. **« Amener λ sous 1 » est inatteignable par l'entraînement seul** : il faudrait changer la **forme** du pas, pas son réglage. La cible réaliste de C2 devient la **BORNITUDE** — une boucle qui ne converge pas mais qui ne s'emballe pas.
 4. **Le critère de rejeu** : la **diversité** tient (un seuil, validé sur trois graines) ; l'**étalement** ne tient **pas** (effet ≈ bruit, et il perd à 10 morceaux) ; le reste = des ordres de grandeur.
