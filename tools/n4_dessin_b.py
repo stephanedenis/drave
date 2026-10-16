@@ -246,6 +246,13 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
     """Entraîne UN bras et rend ses perplexités. Chaque bras part du même modèle, de la même
     graine et de la même validation : la comparaison est appariée.
 
+    ⚠️ LES DEUX VARIABLES DE RÉFÉRENCE SONT INITIALISÉES ICI. Elles ne l'étaient pas, et le corps
+    les LIT (ligne « if accord_avant is not None ») avant que l'appelant ne les ait posées : avec
+    certaines combinaisons de drapeaux (essai à blanc du 16/10 : sans `--bras`, sans `--accord`),
+    l'outil sortait en `UnboundLocalError: cannot access local variable 'accord_avant'` ✗ — un
+    plantage qui ne dépendait pas de ce qu'on mesurait ✗. Les poser à `None` rend le défaut
+    impossible, et c'est ce que dit le nom : « pas mesuré » n'est pas « zéro ».
+
     DEUX BOUCLES, PARCE QUE LES DEUX DESSINS N'ONT PAS LES MÊMES GRADIENTS.
 
     * **dessin A** (adaptateur seul, couches gelées) : les états ne bougent pas — ils sont donc
@@ -259,6 +266,9 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
       **diverger** (4,48 M → 2,9e13 en deux pas, mesuré le 14/10) : son pas est celui du protocole
       publié quand il est seul, plus petit quand il apprend en même temps que les couches.
     """
+    accord_avant = None
+    plein_avant = None
+
     # REPRODUCTIBILITÉ : `torch.manual_seed` ne suffit PAS — les noyaux cuDNN/cuBLAS choisissent
     # leurs réductions à l'exécution, et deux exécutions identiques rendaient 12,6829 puis 12,7362
     # (0,4 point, mesuré le 15/10 à 06 h). Ces lignes forcent des noyaux déterministes ; `warn_only`
@@ -479,6 +489,10 @@ def main() -> int:
     ap.add_argument("--morceaux", type=int, default=33)
     ap.add_argument("--taille", type=int, default=1024)
     ap.add_argument("--profondeur", type=int, default=8)
+    # ⚠️ MÉMOIRE : le protocole d'E5 (`--train 29 --exclure 20 --val 30,31 --test 32,20`, branche
+    # `lora+adaptateur --distiller`) demande ~15,3 Go sur une carte de 15,55 Go et échoue dans
+    # `kl_div` (mesuré le 16/10). Pour le rejouer : un lot plus petit, un gradient accumulé, ou une
+    # carte plus grande — et `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` en secours.
     ap.add_argument("--train", type=int, default=30,
                     help="nombre de morceaux d'entraînement (les premiers : m0..m{k-1})")
     ap.add_argument("--rejeu", default="",
@@ -538,7 +552,14 @@ def main() -> int:
                          "gagner l'ACCORD (distillation) sans perdre la PERPLEXITÉ (texte)")
     ap.add_argument("--accord", action="store_true",
                     help="mesurer l'ACCORD avec le maître (fraction de positions où le chemin "
-                         "court choisit le même jeton que le modèle complet), avant et après")
+                         "court choisit le même jeton que le modèle complet), avant et après. "
+                         "⚠️ CE QUE CE DRAPEAU MESURE, ET CE QU'IL NE MESURE PAS : il compare le "
+                         "MODÈLE CHARGÉ au maître — donc, si le LoRA n'est pas tronqué, il mesure le "
+                         "chemin COMPLET et rend 100,0 %%, ce qui n'est pas un bon résultat mais un "
+                         "MAUVAIS OBJET MESURÉ (arrivé le 16/10, deux tours perdus). Un réflexe "
+                         "TRONQUÉ (le bras `lora+adaptateur` d'E5) ne se mesure PAS ici : il "
+                         "s'exporte (`exporter_gguf_dense.py --couches-lora 8 --adapter-sortie`) et "
+                         "s'évalue par son TAUX D'ACCEPTATION (`tools/speculatif_drave.py`).")
     ap.add_argument("--eval-plein", action="store_true",
                     help="mesurer aussi la perplexité du MODÈLE COMPLET (avant et après chaque "
                          "bras) sur les morceaux de test et de validation : c'est la mesure de "
