@@ -173,3 +173,32 @@ raison est instructive :
 * **ce qui reste à faire, nommément** : (a) `--epoque-forcee` (garder une époque choisie ✗) pour
   **mesurer** ce que la distillation a appris au lieu de seulement **avertir** qu'on ne le mesure pas ✗ ;
   (b) la sélection d'époque **par l'objectif** (l'accord avec le maître ✓) plutôt que par la perplexité ✗.
+
+## 8. LE FOND DU DEUXIÈME MUR : à 10 morceaux, la distillation **DIVERGE** (3 époques suffisent)
+
+Le § 7 concluait que l'outil « exportait un modèle non entraîné sans le dire » ✗. Avec
+`--epoque-forcee` (ajouté au § 7, en éditions séparées et vérifiées ✓), on peut enfin **regarder** ce
+que l'entraînement avait produit, au lieu de le déduire :
+
+| bras, 3 époques, 10 morceaux, graine 1 | époque retenue | validation 29 | TEST m32 |
+|---|---:|---:|---:|
+| `lora+adaptateur`, objectif **distillation**, époque **forcée à 3** | 3 | **2 749 968 874 085** | **508 065 569 169** |
+
+* **la distillation ne « stagne » pas : elle EXPLOSE** ✗✗ — trois époques de KL sur 151 936 logits
+  suffisent à porter la perplexité de validation à **2,7e12** et le test à **5,1e11** ✓. Autrement
+  dit, l'époque 0 retenue par l'outil n'était pas un **artefact** ✗ mais **le moindre mal** ✓✓ : c'est
+  le **seul** point où le modèle n'était pas détruit ✓ ;
+* **et cela corrige la lecture du § 7** : le défaut d'outil (sélectionner sur la perplexité ✗) est
+  **réel** — il ne dit pas *pourquoi* il retient l'époque 0 ✗ — mais la sélection elle-même était
+  **juste** ✗✓. Les deux constats tiennent, et le second explique le premier ;
+* **conséquence pour E5** : sa mesure publiée (perplexité **574,70** pour le bras distillé, contre
+  181,54 pour le bras perplexité ✗) décrit un régime **dégradé mais stable** ✓ — qui n'existe **qu'au
+  volume de son protocole** (29 morceaux ✗). À 10 morceaux, il n'y a **pas de régime stable** ✗ : la
+  distillation y diverge avant d'apprendre quoi que ce soit ✓ ;
+* **ce que cela dit du mécanisme, et c'est le plus intéressant** : le KL sur la distribution complète
+  est **instable aux petits volumes** ✗ — il n'y a pas assez de données pour contrebalancer un
+  gradient qui pousse 151 936 logits à la fois ✓. **E5 n'est donc pas un mécanisme « scalable vers le
+  bas »** ✗ : il demande du volume, et c'est une propriété à écrire à côté de son résultat ✓ ;
+* **ce qui reste ouvert** : à quel volume la distillation cesse-t-elle de diverger ✗ (entre 10 et 29 ✗) ;
+  et le remède classique — **température**, **taux d'apprentissage plus bas**, ou **KL tronqué aux
+  k premiers logits** ✗ — n'est pas essayé ici ✓.

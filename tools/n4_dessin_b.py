@@ -342,6 +342,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
         plein_avant = ({n: banc.ppl(ms, banc._complet) for n, ms in tests}
                                    if getattr(a, "eval_plein", False) else None)
         meilleur = (ppl_depart_val, 0, instantane())
+        force = getattr(a, "epoque_forcee", 0) or 0
         journal = []
         for e in range(a.epoques):
             perm = torch.randperm(len(ytr), device=dev)
@@ -357,7 +358,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
                 n += len(idx)
             ppl_val = ppl_etats(Xva, yva)
             marque = ""
-            if ppl_val < meilleur[0]:
+            if force and e + 1 == force:
+                meilleur = (ppl_val, e + 1, instantane())
+                marque = "  ← ÉPOQUE FORCÉE"
+            elif ppl_val < meilleur[0]:
                 meilleur = (ppl_val, e + 1, instantane())
                 marque = "  ← meilleur (validation)"
             journal.append({"epoque": e + 1, "perte_train": float(np.exp(tot / max(n, 1))),
@@ -439,6 +443,7 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
     plein_avant = ({n: banc.ppl(ms, banc._complet) for n, ms in tests}
                    if getattr(a, "eval_plein", False) else None)
     meilleur = (ppl_depart_val, 0, instantane())
+    force = getattr(a, "epoque_forcee", 0) or 0
     journal = []
     for e in range(a.epoques):
         ordre = torch.randperm(len(train), device=dev)
@@ -455,7 +460,10 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
             n += ntok
         ppl_val = banc.ppl(val, lambda ids: logits_chemin(ids, False))
         marque = ""
-        if ppl_val < meilleur[0]:
+        if force and e + 1 == force:
+            meilleur = (ppl_val, e + 1, instantane())
+            marque = "  ← ÉPOQUE FORCÉE"
+        elif ppl_val < meilleur[0]:
             meilleur = (ppl_val, e + 1, instantane())
             marque = "  ← meilleur (validation)"
         journal.append({"epoque": e + 1, "perte_train": float(np.exp(tot / max(n, 1))),
@@ -550,6 +558,13 @@ def main() -> int:
     ap.add_argument("--melange", type=float, default=0.0,
                     help="E5 bis : perte = KL + melange × CE. La question ouverte de la fiche E5 : "
                          "gagner l'ACCORD (distillation) sans perdre la PERPLEXITÉ (texte)")
+    ap.add_argument("--epoque-forcee", type=int, default=0,
+                    help="garder CETTE époque au lieu de la meilleure validation (0 = choix "
+                         "habituel). POURQUOI : l'époque retenue est choisie sur la PERPLEXITÉ, or "
+                         "la distillation la DÉGRADE par construction — avec --distiller, la "
+                         "« meilleure » époque est donc souvent 0, le modèle NON ENTRAÎNÉ (le "
+                         "tableau le dit déjà). Forcer l'époque permet de MESURER ce que "
+                         "l'entraînement a appris au lieu de seulement le constater.")
     ap.add_argument("--accord", action="store_true",
                     help="mesurer l'ACCORD avec le maître (fraction de positions où le chemin "
                          "court choisit le même jeton que le modèle complet), avant et après. "

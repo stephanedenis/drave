@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 01 h 45 HAE.**
+**Mis à jour : 2026-10-16, 02 h 05 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -63,8 +63,11 @@ entraîné**, exporté sans un mot ✗). Sa table se lit donc comme les autres t
 **ordre de grandeur** ✗ ; le chiffre publié n'est ni confirmé ni infirmé. La correction du défaut est
 **faite** : un **garde-fou** avertit maintenant, dans le tableau de résultats, quand un bras distillé a
 une époque retenue de 0 (le modèle **non entraîné**) — écrit en **une** édition, vérifié par un essai à
-blanc. Restent à faire : `--epoque-forcee` (pour **mesurer** au lieu d'avertir) et la sélection
-d'époque **par l'objectif**.
+blanc. `--epoque-forcee` est **fait** ✓ et il a permis de voir le fond du mur : à 10 morceaux, la
+distillation **DIVERGE** ✗✗ — trois époques suffisent à porter la perplexité à **2,7e12**. L'époque 0
+retenue par l'outil n'était donc pas un artefact mais **le moindre mal** ✓✓ (le défaut d'outil est
+réel : il ne dit pas *pourquoi* ✗). Conséquence : **E5 n'est pas scalable vers le bas** ✗ — son
+résultat (574,70, dégradé mais stable) n'existe **qu'à son volume** (29 morceaux).
 
 ## Où en est le dépôt
 
