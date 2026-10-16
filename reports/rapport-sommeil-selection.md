@@ -223,3 +223,54 @@ que l'on voudra prédire (cosinus sur un hachage des jetons — quelques millise
 * **le budget d'époque n'est pas ajusté par règle** : 12 époques pour les quatre, alors que la
   « surprise » demanderait peut-être un autre pas d'apprentissage — c'est une faiblesse assumée du
   protocole, et elle est écrite.
+
+## 6. UN CRITÈRE DE LOT QUI BAT TOUS LES CRITÈRES DE MORCEAU : l'ÉTALEMENT des pertes
+
+> Ajouté le **15/10 au soir**. La leçon des sections précédentes était déjà là, mais je ne l'avais
+> pas appliquée jusqu'au bout : **les critères qui portent sur le MORCEAU perdent tous**, et le seul
+> qui tenait (**le seuil de diversité**) porte sur **le LOT**. D'où le critère essayé ici : choisir le
+> lot qui **ÉTALE** le plus les pertes — le plus facile, la médiane, le plus dur.
+
+Les pertes des 33 morceaux, mesurées par le moteur sur le modèle de base, **s'étalent d'un facteur
+4,1** : de **6,8809** (m30) à **28,3217** (m23), médiane **15,3457** (m28). Le lot d'étalement est donc
+**{m30, m28, m23}** — pas un morceau « dur » ✗, pas un morceau « facile » ✗, **les deux extrêmes et le
+milieu** ✓.
+
+**Comparaison à volume ÉGAL** (3 morceaux, rang 4, 10 époques, graine 0) — chiffres du **harnais
+torch**, ceux de la table publiée, pour que la comparaison soit honnête :
+
+| critère (3 morceaux) | morceaux | m32 | écart |
+|---|---|---:|---:|
+| au hasard | m5, m12, m17 | 6,8914 | −7,21 % |
+| les premiers | m0, m1, m2 | 6,7487 | −5,99 % |
+| par surprise (les plus durs) | m13, m2, m7 | 6,8301 | −4,86 % |
+| les plus faciles | m16, m0, m5 | 6,8869 | −4,06 % |
+| **PAR ÉTALEMENT** | **m30, m28, m23** | **6,6228** | **−10,80 %** |
+
+* **l'étalement bat le hasard de 3,6 points et le meilleur des quatre autres critères de 6,7 points**
+  ✓✓ — c'est le meilleur résultat de sélection mesuré jusqu'ici, et il **confirme la loi** : ce qui
+  compte n'est pas **quels** morceaux on prend, mais **comment le lot est composé** ;
+* **et il a un coût, mesuré par le moteur** (mêmes textes, autre harnais) : à ×1,0, l'étalement donne
+  m32 **6,8370 (−7,91 %)** et m20 **16,8363 (−11,96 %)** — mais **hors domaine +1,94 %** ✗ (le
+  hasard, lui, coûtait −0,35 %) : il **spécialise** plus fort, dans les deux sens ;
+* **la composition avec E9 (`rapport-e9-homeostasie.md`) règle exactement ce problème** :
+
+| réglage (moteur) | m32 | m20 | hors domaine |
+|---|---:|---:|---:|
+| base | 7,4242 | 19,1237 | 17,2673 |
+| étalement ×1,0 | 6,8370 (−7,91 %) | 16,8363 (−11,96 %) | **17,6031 (+1,94 %)** |
+| **étalement ×0,6** | 6,8297 (−7,99 %) | 17,0167 (−11,02 %) | **17,2587 (−0,05 %)** |
+| **étalement ×0,75** | **6,7977 (−8,43 %)** | **16,8664 (−11,80 %)** | 17,3547 (+0,51 %) |
+
+* **×0,6 annule le coût hors domaine** (+1,94 % → **−0,05 %**, soit deux points gagnés ✓✓) **sans
+  perdre le gain en domaine** (−7,99 % contre −7,91 %) — les deux mécanismes **se composent** ✓ ;
+* **le meilleur point mesuré de toute la campagne de consolidation** est **étalement ×0,75** :
+  m32 **−8,43 %**, m20 **−11,80 %**, hors domaine **+0,51 %** — contre −7,21 % / −0,35 % pour le
+  meilleur critère publié (hasard) ✓ ;
+* **⚠️ deux harnais, et il ne faut pas les mélanger** : la comparaison entre **critères** est en
+  **torch** (la table publiée) ; les chiffres d'**étalement × amplitude** sont du **moteur**. Les deux
+  séries ne se comparent pas ligne à ligne (le harnais torch donne 6,6228 là où le moteur donne
+  6,8370 pour le même modèle ✗) — c'est écrit ici pour que personne ne le fasse ;
+* **ce qui reste ouvert** : le critère d'étalement est essayé sur **un** lot (les deux extrêmes et la
+  médiane) et **un** volume (3) ✗ ; sa définition même (**quelle** étendue ? l'écart-type des pertes
+  du lot ? l'entropie de leur distribution ?) n'est pas balayée ✗ — c'est la suite naturelle.

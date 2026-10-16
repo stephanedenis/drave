@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 22 h 05 HAE.**
+**Mis à jour : 2026-10-15, 22 h 25 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -35,6 +35,15 @@ globale du changement plastique**. Résultat : **le coût hors domaine est monot
 (−0,58 % à ×0,6 → +1,64 % à ×1,25), et l'**optimum ×0,6-0,75 domine le delta entier** —
 m32 **−8,75 %** contre −7,47 %, hors domaine **−0,58 %** contre **+0,33 %**. Le réglage publié
 jusqu'ici (delta entier) était donc **hors de l'optimum** ✗. Et l'échelle n'a pas besoin d'un oracle : **minimiser la perplexité du modèle sur un texte NEUTRE** (sa propre activité récente, ni rejouée ni visée) désigne **×0,75** ✓ — une règle qu'un cerveau peut appliquer, lui qui a son activité d'hier et pas le domaine de demain. **Et le réglage se RÉPLIQUE** sur trois volumes de rejeu (3, 10, 20 morceaux) : à chaque fois ×0,6 fait mieux en domaine **et** coûte moins cher hors domaine, avec un bénéfice qui **grandit** avec le rejeu (0,7 point à 3 morceaux, 1,4 point à 20). Un essai **par couche** (§ 1ter) montre que **amortir les couches hautes** est le meilleur profil (−0,65 % hors domaine contre −0,04 % pour l'inverse) — mais l'écart est **petit** et le réglage **uniforme** reste le meilleur en domaine : **une seule échelle suffit**. Fiche : [`reports/rapport-e9-homeostasie.md`](../reports/rapport-e9-homeostasie.md). **Et une porte** (`porte-homeostasie.sh`, la 46ᵉ) vérifie désormais le réglage : ×0 rend le modèle, l'activité croît avec l'amplitude, et la domination de ×0,6 est **reproduite** à chaque passe.
+
+## Nouveau : un critère de sélection qui bat tous les autres — l'ÉTALEMENT
+
+Les critères qui portent sur le **morceau** perdent tous ; le seul qui tenait portait sur le **lot**.
+D'où : choisir le lot qui **étale** le plus les pertes (le plus facile, la médiane, le plus dur). À
+volume égal (3 morceaux), il donne **−10,80 %** là où le hasard donne −7,21 % et le meilleur des
+quatre autres −4,06 % — **le meilleur résultat de sélection mesuré**. Et il **se compose avec E9** :
+×0,6 annule son coût hors domaine (+1,94 % → **−0,05 %**) sans perdre le gain en domaine. Fiche :
+[`reports/rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) § 6.
 
 ## Où en est le dépôt
 
