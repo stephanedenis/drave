@@ -104,3 +104,56 @@ vérifier » ✓).
 | 2 | bloc de pensée contractant ✓ | après ✓ |
 | 3 | pont de région appris ✓ | après ✓ |
 | 4 | échelle ✓ | après ✓ |
+
+## 7. L'OBJECTIF D'IDENTITÉ (directive du 16/10) — mesuré : les deux espaces sont à un facteur **648**
+
+La directive de Stéphane ✓ : *« l'idéal est d'arriver à avoir un modèle post-linguistique et
+prélinguistique IDENTIQUE afin de pouvoir coupler directement pendant les itérations d'inférence. Il faut
+donc travailler sur les modèles linguistiques d'entrée et de sortie afin d'arriver à une abstraction
+parfaite. »* — c'est-à-dire : **ne pas apprendre un pont** ✗, **rendre les deux espaces le même** ✓✓.
+
+Mesure faite immédiatement sur le modèle disponible (Qwen2.5-0.5B ✓, 4 095 couples état → embedding du
+jeton suivant ✓) :
+
+| | valeur |
+|---|---:|
+| norme moyenne de l'**état** (prélinguistique, avant la norme finale) | **285,533** |
+| norme moyenne de l'**embedding** (postlinguistique, entrée) | **0,440** |
+| **rapport des deux** | **648,7** ✗✗ |
+| **cosinus direct** état ↔ embedding du jeton suivant | **+0,1387** ✗ |
+| identité **brute** (l'état tel quel) | écart **64 830 %** ✗✗ |
+| identité à **une** échelle globale | 99,10 % ✗ |
+| identité + une échelle + un décalage globaux | 127,52 % ✗ |
+| témoin bête (embedding moyen) | 97,05 % |
+
+* **les deux espaces ne sont PAS le même** ✗✓ — et de deux façons **indépendantes** : un **facteur
+  d'échelle de ~650** ✗ (l'état vit à 285 ✓, l'embedding à 0,44 ✓) **et** des **directions presque
+  étrangères** ✗ (cosinus **+0,14** ✓ — *sous* le témoin de l'embedding moyen, 0,24 ✗✓) ;
+* **c'est la raison de tous les échecs de la journée** ✓✓ : la boucle silencieuse éclatait (×30 000 ✓)
+  **parce que** l'état n'est pas une entrée ✗ — normer n'y changeait rien ✓ **parce que l'échelle n'est
+  que la moitié du problème** ✗✓, et la direction est l'autre moitié ✓ ;
+* **et l'identité, dans ses formes les plus pauvres, est PIRE que le témoin bête** ✗ (99 % et 127 %
+  contre 97 % ✓) : il n'y a **rien à espérer** d'un alignement a posteriori ✗ — ni d'une échelle ✗, ni
+  d'un décalage ✗, ni d'un ridge (69 % ✓, mais c'est un **lecteur**, pas un **inverse** ✗) ;
+* **donc la seule voie est celle que la directive indique** ✓✓ : **entraîner** le modèle pour que les
+  deux espaces **coïncident**, au lieu de les raccorder après coup ✗.
+
+### L'objectif d'entraînement qui en découle (pour le modèle natif ✓)
+
+L'entraîneur du dépôt a **déjà** la moitié de la réponse ✓ : `tie_word_embeddings=True` ✓ — la matrice
+d'entrée **est** la matrice de sortie ✓. Il manque **deux** choses, et elles sont petites ✓ :
+
+1. **une norme finale CALIBRÉE** ✗ : la couche qui précède la tête doit sortir des vecteurs **à l'échelle
+   des embeddings** ✓ (aujourd'hui ×650 ✗) — c'est une contrainte sur l'initialisation et sur la
+   normalisation ✓, pas une couche de plus ✓ ;
+2. **une perte d'ALIGNEMENT** ✗✓ : ajouter à la perte de langue un terme `‖norme(état_p) − e_{p+1}‖` ✓ —
+   le modèle apprend alors que **son état final EST une entrée** ✓✓, et la boucle devient **directe**
+   (aucun pont ✗) : `état → (entrée) → état → …` ✓✓.
+
+**Ce qui se mesure ensuite, et dans cet ordre** ✓ : (a) le **cosinus** état ↔ embedding (0,14 today ✗ →
+viser >0,9 ✓) et le **rapport d'échelle** (648 ✗ → viser 1 ✓) ; (b) l'erreur de l'**identité** (64 830 %
+✗ → viser moins que le témoin bête ✓, puis moins que le jeton ✓) ; (c) **λ du pas direct** ✓
+(`cycle_sensibilite.py` ✓) — la boucle n'est utile que si elle **ne diverge pas** ✓ ; (d) et alors
+seulement, la **perplexité de la suite** après k pas silencieux ✓ (`pensee_silencieuse.py` ✓).
+
+*C'est la différence entre raccorder deux langues ✗ et n'en parler qu'une ✓✓.*

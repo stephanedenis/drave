@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 16 h 00 HAE.**
+**Mis à jour : 2026-10-16, 16 h 25 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -113,6 +113,16 @@ n'a d'opérateur de pensée** ✗ ; la contrainte **sans multiplieur** est déj�
 (le réflexe ✓), un **bloc de pensée contractant** ✓, un **pont de région appris** ✓, signes figés + k-WTA
 ✓. Tout est **déjà constructible** avec `tools/entrainer_moteur.py` ✓ (Qwen3 de zéro ✓ — son aide,
 cassée par un `%` non échappé, a été réparée aujourd'hui ✓).
+**Et la directive d'IDENTITÉ (16/10) a été mesurée tout de suite** ✓✓ : rendre les espaces d'entrée et
+de sortie **identiques** (pour coupler **directement** pendant les itérations ✓) suppose de savoir de
+combien ils diffèrent ✗ — or ils diffèrent **d'un facteur 648** (état 285,5 · embedding 0,440 ✓) **et**
+par la direction (**cosinus +0,1387** ✗, *sous* le témoin de l'embedding moyen, 0,24 ✗✓). L'identité,
+même avec une échelle et un décalage, fait **pire que le témoin bête** (99 % et 127 % contre 97 % ✗).
+→ **Aucun raccord a posteriori ne peut marcher** ✗ : la seule voie est **d'entraîner** le modèle pour que
+les deux espaces **coïncident** ✓✓ — l'entraîneur a déjà `tie_word_embeddings` ✓ ; il manque une **norme
+finale calibrée** et une **perte d'alignement** (`‖état − e_{p+1}‖` ✓). C'est **la** modification à faire
+au modèle natif, et elle est petite ✓.
+
 **⚠️ Et l'essai immédiat a trouvé l'étape 0** ✗✓ : l'entraîneur **tourne** (4 M paramètres, val 4,8948
 bits/octet, k-WTA 25 % sur 17 projections ✓) mais il écrit du **format HuggingFace** ✗ — alors que le
 **moteur ne lit que du GGUF** ✗. **L'aller-retour entraîneur → moteur n'est pas câblé** pour un modèle
