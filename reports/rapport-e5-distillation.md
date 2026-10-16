@@ -427,3 +427,41 @@ mur 4 ✓).
 pendant **cinq rounds** ✗ alors que la cause était **mon propre choix de drapeau** ✗, écrit dans un
 commentaire du code que je n'avais pas lu ✓. *Lire le code qui décide, avant de suspecter celui qui
 exécute.*
+
+## 15. LA MESURE EST ENFIN FAITE — ET ELLE CONTREDIT E5 (à graine 1, dans la configuration stable)
+
+Le fil est dénoué : la mesure d'E5 est **celle de l'outil** (`--accord`, fraction de positions où
+l'argmax du chemin **tronqué** égale celui du maître ✓), et le **harnais spéculatif** mesure autre
+chose ✗ (une **génération libre** ✗, qui rend 0 % même pour un bras à 26 % d'accord ✓ — un brouillon à
+26 % d'accord dérape en quelques jetons ✓). Avec `--objectif tronque` — **et lui seul** ✗ — l'adaptateur
+et la tête jouent ✓, et l'accord devient mesurable ✓.
+
+**Le témoin est REPRODUIT** ✓ : objectif perplexité, 29 morceaux (`--exclude 20`, validation 30-31,
+test 32 et 20), graine 1, rang 4 :
+
+| bras (29 morceaux, graine 1) | perplexité m32 | perplexité m20 | **accord m32** | **accord m20** |
+|---|---:|---:|---:|---:|
+| `lora+adaptateur`, objectif **perplexité** (témoin) | **192,69** | **132,69** | **25,7 %** | **38,1 %** |
+| `lora+adaptateur`, objectif **distillation** (KL tronqué K=64, taux 1e-4) | 1 809,17 | 5 131,44 | **17,1 %** ✗ | **13,8 %** ✗ |
+| *(rappel, E5 publié le 15/10, graine 0 ✗)* | *181,54* | *153,98* | *28,0 %* | *40,5 %* |
+| *(rappel, E5 publié, bras distillé)* | *574,70* | *715,02* | *51,0 %* | *68,1 %* |
+
+* **le témoin tombe à 2 points des chiffres publiés** (192,69 contre 181,54 ; 25,7 % contre 28,0 % ✓✓) :
+  **l'entraînement et la mesure sont donc les bons** ✓ — c'est la première fois ce soir que la chaîne
+  complète est vérifiée de bout en bout ✓ ;
+* **et le bras distillé fait MOINS BIEN que le témoin** ✗ : **17,1 %** contre 25,7 % (m32) et **13,8 %**
+  contre 38,1 % (m20 ✗). C'est **l'inverse** du résultat publié (51,0 % contre 28,0 % ✓) ✗✗ ;
+* **ce que cela ne dit PAS** : que le résultat publié est faux ✗ — il a été obtenu avec une **autre
+  configuration** (KL **plein**, taux par défaut 1e-3 ✓), celle qui **ne tient pas dans 16 Go** ✗✓
+  (c'est le mur 1 ✗). Ce que cela dit : **la conclusion d'E5 dépend de sa configuration** ✗✓, et la
+  configuration **stable** (KL tronqué, taux bas ✓ — la seule que cette machine puisse exécuter au
+  volume voulu ✗) **inverse son signe** ✗ ;
+* **et l'explication est lisible dans la perplexité** ✓ : le bras distillé stable a une perplexité de
+  **1 809** (contre 192 pour le témoin ✗) — il est **beaucoup plus dégradé** ✗, et un étudiant dégradé
+  **imite mal** ✓. La troncature à 64 classes et le taux 1e-4 apprennent **trop peu** ✗ : la stabilité
+  a été achetée au prix de l'apprentissage ✗ ;
+* **la conséquence pour la carte des facultés** : **E5 n'est ni confirmé ni infirmé** ✓ — il est
+  **reproductible dans son témoin** ✓ et **renversé dans sa distillation** ✗, et les deux mesures sont
+  écrites côte à côte ✓. Le prochain pas, nommément : **tester la distillation à taux intermédiaire**
+  (3e-4 ou 1e-3 avec le KL **plein** ✓) — ce qui demande de **faire tenir 29 morceaux en mémoire** ✗
+  (gradient accumulé, ou `--lots` plus fin ✗) : le mur 1 est redevenu le seul obstacle ✓.
