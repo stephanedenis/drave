@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 15 h 10 HAE.**
+**Mis à jour : 2026-10-16, 15 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -98,6 +98,26 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## Nouveau : l'étude « un modèle natif Drave » (16/10)
+
+Demande : *développer un modèle optimisé pour Drave*. L'étude est écrite —
+[`reports/rapport-modele-drave.md`](../reports/rapport-modele-drave.md) — et elle **découle des mesures
+du dépôt**, pas d'intuitions : **8 coupes sans perte** (113,0068 ✓) mais un pont **30× plus cher** tôt
+que tard ✓ ; le **réflexe** tombe d'accord **0 %** jusqu'à 16 couches ✗ (une tête empruntée plafonne à
+267,98 ✓, distillé il atteint 30 % ✓) ; le **pas de pensée** amplifie (λ ≥ 3,7e4 ✗) et **aucun modèle
+n'a d'opérateur de pensée** ✗ ; la contrainte **sans multiplieur** est déjà satisfaite (signes figés ✓) ;
+**k-WTA 25 %** divise les paires par **3,97** sans toucher la perplexité ✓.
+
+**Le modèle proposé (v0)** : octets (vocab 256 ✓), `dim 512 · 8-12 couches · MoE` ✓, **3 têtes précoces**
+(le réflexe ✓), un **bloc de pensée contractant** ✓, un **pont de région appris** ✓, signes figés + k-WTA
+✓. Tout est **déjà constructible** avec `tools/entrainer_moteur.py` ✓ (Qwen3 de zéro ✓ — son aide,
+cassée par un `%` non échappé, a été réparée aujourd'hui ✓).
+**Quatre étapes, chacune mesurable avec un outil existant** : têtes précoces (`--accord` ✓) → bloc de
+pensée (`cycle_sensibilite.py` ✓, `pas_latent.py` ✓) → pont de région (`porte-coupe.sh` ✓) → échelle ✓.
+Et ses **risques sont écrits d'avance** ✗ : un 2 M en octets ne parle pas ✓ (c'est un banc ✓), la
+qualité peut ne pas suivre la taille ✗, et l'objectif de **décomposition** (pertes par région ✓) n'a
+été tenté par personne — c'est la partie originale, et la plus risquée ✓.
 
 ## Nouveau (16/10, après-midi) : « penser sans verbaliser » — première mesure
 

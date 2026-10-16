@@ -764,7 +764,7 @@ def main():
                    help="avec --poids-lognormaux : les signes deviennent un parametre CONTINU "
                         "(tanh(psi), initialise sur les signes de naissance) au lieu d'etre "
                         "figes. Separe la LOI des magnitudes du PRINCIPE DE DALE : c'est le "
-                        "controle qui dit laquelle des deux explique la robustesse d'E6 a 25 %.")
+                        "controle qui dit laquelle des deux explique la robustesse d'E6 a 25 %%.")
     p.add_argument("--croissance", type=float, default=0.0,
                    help="E2 : fraction des connexions ABSENTES ajoutée à chaque étape de "
                         "croissance, choisies par le |gradient| accumulé (règle locale). "
