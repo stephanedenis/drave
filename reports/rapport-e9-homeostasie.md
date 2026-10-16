@@ -178,6 +178,32 @@ l'autre corpus) :
 * **la courbe neutre est un U**, comme la courbe hors domaine : trop amortir **et** trop laisser
   passer dégradent ✓ — c'est la même forme, sur une statistique que le système peut mesurer seul ✓.
 
+## 2quater. La RÈGLE tient sur trois graines : le minimum du texte neutre tombe sur ×0,75 à chaque fois
+
+Le § 2bis avait montré, **sur une graine**, qu'une règle **auto-contenue** — choisir l'amplitude qui
+minimise la perplexité du modèle sur un texte **neutre** (sa propre activité récente) — désigne le bon
+voisinage. La même mesure sur les trois graines :
+
+| graine | ×0,5 | ×0,6 | **×0,75** | ×1,0 | où est le minimum |
+|---:|---:|---:|---:|---:|---|
+| 0 | 9,0815 | 9,0591 | **9,0372** | 9,0420 | **×0,75** |
+| 1 | 9,0982 | 9,0716 | **9,0516** | 9,0866 | **×0,75** |
+| 2 | 9,0523 | 9,0201 | **9,0052** | 9,0687 | **×0,75** |
+
+* **le minimum est au même endroit sur les trois graines** ✓✓ — et la courbe est un **U** net : ×0,5 et
+  ×1,0 sont **toujours** au-dessus ✓ (l'amplitude la plus faible est donc aussi une erreur ✗) ;
+* **ce que la règle rend possible, et c'est son intérêt** : elle **ne demande pas le domaine visé** ✗ ✓
+  — elle ne demande que **l'activité du modèle lui-même**. Un cerveau a son activité d'hier ; il n'a pas
+  le domaine de demain ✓. C'est ce qui la distingue d'un oracle : **le même chiffre, sans l'information
+  privilégiée** ;
+* **et une autre vérification de la nuit se lit dans cette table** : le critère de **diversité** du
+  rejeu, lui, **était déjà** validé sur trois graines (`rapport-sommeil-selection.md`, ligne du lot le
+  plus varié : −6,19 / −6,57 / −6,22 %) ✓ — la loi « les critères de lot tiennent mieux » a donc, elle
+  aussi, passé l'épreuve ✓ ;
+* **ce qui reste ouvert** : la règle demande un texte **neutre étiqueté comme neutre** ✗ (le système
+  doit savoir ce qu'il n'a pas rejoué), et elle suppose qu'on **puisse** balayer l'amplitude ✗ (un
+  cerveau la règle en continu, pas par balayage ✗).
+
 ## 2ter. La porte (46ᵉ) : le réglage devient un INVARIANT
 
 `tools/porte-homeostasie.sh` entre dans la passe complète et vérifie **le réglage**, pas seulement la
