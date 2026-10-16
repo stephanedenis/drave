@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 02 h 50 HAE.**
+**Mis à jour : 2026-10-16, 03 h 05 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -83,8 +83,11 @@ couches avec une **tête empruntée**, qui rend des jetons **incohérents** (le 
 320…]` ; le réflexe : `[43850, 71112, 145375…]`, **identique avec et sans adaptateur** ✗). Le 0,0 %
 mesure donc **le modèle**, pas la mesure ✓. **Sa raison n'est pas trouvée** ✗ (l'adaptateur est pourtant
 dans l'optimiseur à 1e-3 et appliqué dans la passe avant ✗) : pistes nommées — le **snapshot** de la
-meilleure validation, ou le **chemin de gradient**. Le contrôle d'une seconde à faire désormais :
-**l'adaptateur exporté ne doit pas être l'identité**.
+meilleure validation, ou le **chemin de gradient**. **Le diagnostic est fermé** : à l'époque **forcée 10** (LoRA entraîné, norme 6,57), l'adaptateur est
+**exactement** l'identité (écart **0,0**) → **il ne reçoit aucun gradient** ✗, et `Adam` **ignore
+silencieusement** un paramètre sans gradient — la même famille de défaut que les trois autres de la
+nuit (*un calcul qui n'a pas lieu et qui ne le dit pas*). La sonde à écrire tient en **une ligne** :
+`adaptateur.grad is None` après un pas.
 
 ## Où en est le dépôt
 

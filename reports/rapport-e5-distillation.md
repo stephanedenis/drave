@@ -324,3 +324,35 @@ fait, et il a payé ✓ — la chaîne est maintenant établie, fait par fait :
   s'entraîne pas ✓ ; et le **contrôle qui doit précéder toute nouvelle tentative** est maintenant
   écrit, avec sa valeur attendue : **l'adaptateur exporté ne doit PAS être l'identité** ✗ (norme
   29,93326 = √896 ✗ ⇒ il n'a pas appris ✓). C'est un contrôle d'une seconde ✓, et il manquait ✓.
+
+## 12. LE DIAGNOSTIC EST FERMÉ : l'adaptateur ne reçoit AUCUN gradient (piste (a) éliminée, piste (b) confirmée)
+
+Le § 11 laissait deux pistes. Une seule commande les sépare : **forcer l'époque** (10 ✓, donc un modèle
+réellement entraîné ✓) et relire l'adaptateur **dans le `.pt`**, sans passer par l'export ✓.
+
+| mesure, bras `lora+adaptateur`, distillation tronquée K=64, taux 1e-4, **époque forcée 10** | valeur |
+|---|---:|
+| LoRA (32 tenseurs) — norme totale | **6,568121** ✓ *(il a bien appris ✓)* |
+| adaptateur — norme | **29,93326** = √896 |
+| adaptateur — écart à l'identité, `max(abs(a − I))` | **0,0** ✗✗ |
+| perplexité (validation 29 · test m32) | 19,0939 · 7,6786 ✓ |
+
+* **piste (a) — le snapshot de la meilleure validation — est ÉLIMINÉE** ✗ : même à l'époque **10**
+  forcée, l'adaptateur est **exactement** l'identité ✓ (écart **0,0**, pas « petit » : **nul** ✗) ;
+* **piste (b) est donc confirmée** ✓ : l'adaptateur **ne reçoit aucun gradient** dans le dessin joint ✗.
+  Or `Adam` **ignore silencieusement** un paramètre dont `grad` est `None` ✗ — c'est très exactement
+  la famille de défaut nommée trois fois cette nuit : *un calcul qui n'a pas lieu et qui ne le dit
+  pas* ✗. Ici, la conséquence est une **expérience entière** (E5 sur d'autres graines ✗) et **quatre
+  rounds** de diagnostic ✓ ;
+* **ce qui est éliminé par la même mesure** : ce n'est ni l'optimiseur (le groupe est bien construit
+  avec `lr = pas_adaptateur_joint = 1e-3` ✓), ni la passe avant (le code applique bien
+  `x @ adaptateur.T` ✓), ni l'enregistrement (l'époque forcée est bien celle qui est sauvée ✓). Reste
+  **le lien entre les deux** ✗ — un `Parameter` recréé après l'optimiseur ✗, ou une passe avant de
+  mesure qui n'utilise pas la même fermeture ✗ ;
+* **la sonde à écrire, et elle tient en une ligne** ✗ : après un pas d'entraînement, **imprimer
+  `adaptateur.grad is None`** (et `adaptateur.grad.norm()` s'il existe ✓). Une ligne, et le doute
+  tombe ✓ — mais elle doit être ajoutée **à l'outil** ✗, et c'est la prochaine édition propre à faire ✓ ;
+* **et ce que la nuit laisse à E5, en une phrase** : la **stabilité** est résolue ✓ (`--kl-tronque 64
+  --pas-lora 1e-4` tient à 10 morceaux ✓), la **chaîne d'export** est vérifiée ✓ (le moteur refuse
+  plutôt que d'ignorer ✓), et il manque **un gradient** ✗ pour que l'**accord** — la seule mesure qui
+  compte pour ce mécanisme ✗ — redevienne possible ✓.
