@@ -617,8 +617,15 @@ d'image se posent aux positions 0..63 ✓), mais le moteur applique au modèle d
    (`t × h/2 × w/2` ✓), et `current_pos += max(h, w) // merge` avance de **2** là où il faudrait **4** ✗.
    Autrement dit, dans cette version, **`get_rope_index` et son helper ne s'accordent pas** ✗✓ — le
    premier attend une grille **fusionnée** (1, 2, 2 ✓), le second la décompte en patchs ✓ ;
-   **conséquence, et c'est un changement de plan** : les valeurs d'or ne s'extraient pas en **appelant**
-   la référence ✗, mais en la **faisant parler** ✓ — nourrir le modèle avec des `position_ids` explicites
+   **conséquence, et c'est un changement de plan** — et il est **outillé** ✓ : `tools/mrope_valeurs_or.py`
+   fait parler le modèle (logits **par défaut** contre logits avec des `position_ids` **explicites** ✓)
+   et compare **trois** conventions candidates ✓ : **par blocs 2 × 2** (l'ordre que la nuit a mesuré ✓),
+   **en raster**, et **dégénérée** ✓ (laquelle, si elle gagnait, dirait que cette version n'applique
+   pas le mRoPE sur cette entrée ✓). ⚠️ L'outil **doit** tourner grille ≥ 8 × 8 : sur une grille
+   **2 × 2**, « par blocs » et « raster » donnent **le même** ordre ✗✓ (le premier jet sortait deux
+   candidats identiques ✓). Et il demande ~4,4 Go de carte ✗ : **pas pendant une passe de portes** ✓
+   (les portes mesurent des latences ✓) — c'est écrit dans son en-tête ✓ ;
+   les valeurs d'or ne s'extraient pas en **appelant** la référence ✗, mais en la **faisant parler** ✓ — nourrir le modèle avec des `position_ids` explicites
    et chercher ceux qui reproduisent **sa propre sortie par défaut** ✓✓ (une vérification
    **comportementale** ✓, plus forte qu'une lecture de code ✗, et qui ne dépend pas d'une version ✓).
    Ce que la nuit a déjà **mesuré** de la convention, et qui sert de point de départ : l'ordre des jetons
