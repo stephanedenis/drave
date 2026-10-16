@@ -59,13 +59,15 @@ ne mesure pas un critère**. Fiche : [`reports/rapport-sommeil-selection.md`](..
 * **La chaîne complète** tourne en une commande : `tools/boucle-cerveau.sh` (percevoir → retenir →
   se souvenir → consolider → agir).
 
-## Les cinq questions ouvertes, dans l'ordre
+## Les questions ouvertes (réécrites le 15/10 au soir)
 
-1. **La vision** : les couches profondes à poids égaux (couche par couche, avec leurs poids).
-2. **Le décodage spéculatif** : il manque **10 % d'accord** (la rentabilité est exactement `p > c`).
-3. **Le cycle** : aucun des quatre objectifs ne le fait converger.
-4. **Le critère de choix du rejeu** : cinq essayés, un seul tient (un **seuil** de diversité).
-5. **La modulation par jeton** : la politique par texte marche mais exige deux passes.
+1. **La vision multimodale** : le **chemin image est vérifié** (embedding exact, 31 couches à 7,58e-06, projecteur à 0,71 %) — il reste l'**injection**, c'est-à-dire le **mRoPE** du modèle de langue (un projet).
+2. **Le décodage spéculatif** : il manque **~10 % d'accord** ; la loi est `gain > 1 ⟺ p > c`.
+3. **Le cycle** : aucun des **quatre** objectifs ne le fait converger.
+4. **Le critère de rejeu** : la **diversité** tient (un seuil, validé sur trois graines) ; l'**étalement** ne tient **pas** (effet ≈ bruit, et il perd à 10 morceaux) ; le reste = des ordres de grandeur.
+5. **L'homéostasie en ligne (E9)** : l'amplitude est un réglage mesuré (×0,6-0,75, trois volumes, trois graines) et une règle auto-contenue la désigne ; reste une règle qui **mesure en continu**.
+6. **La modulation par jeton** : la politique par texte marche, mais exige **deux passes**.
+
 
 ## Comment lire le reste
 

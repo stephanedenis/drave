@@ -214,11 +214,30 @@ chemin image **vérifié** : embedding **exact** (0,00 %) · **31 couches en iso
 (45ᵉ) vérifie les couches isolées **et** le projecteur. **Reste** : l'**injection** (image → modèle de
 texte) — c'est-à-dire la vision **multimodale** de bout en bout, qui est un projet, pas une mesure.
 
-**Ce qui reste ouvert, dans l'ordre** : (1) la rentabilité du décodage spéculatif (il manque
-×1,5 d'accord, deux tentatives ont échoué) ; (2) le cycle — aucun objectif ne le fait converger ;
-(3) le **critère de choix du rejeu** (la dispersion et la surprise ont échoué, la proximité non
-plus) ; (4) la **vision**, bloquée par un modèle absent ; (5) la modulation **par jeton** (la
-politique par texte marche, mais elle exige deux passes).
+**Ce qui reste ouvert, dans l'ordre — RÉÉCRIT le 15/10 au soir, parce que trois des cinq entrées
+avaient changé** :
+
+1. **la vision multimodale de bout en bout** : le **chemin image est vérifié** (embedding **exact**,
+   31 couches à **7,58e-06** en isolation, `post_ln` à +1,00000012, projecteur à **0,71 %**, et la
+   46ᵉ… la **45ᵉ porte** le vérifie à chaque passe) ✓ — ce qui reste est l'**injection** : le moteur
+   applique une **RoPE 1-D** au modèle de texte alors que Qwen2-VL utilise un **mRoPE**
+   (`[16,24,24]`, positions `(t,h,w)`). C'est un **projet**, pas un réglage ;
+2. **la rentabilité du décodage spéculatif** : il manque **~10 % d'accord**, et la loi est exacte —
+   le gain est `> 1` **si et seulement si** `p > c` (taux d'acceptation contre coût relatif du
+   brouillon) ✗ ;
+3. **le cycle** : aucun des **quatre** objectifs (somme, dernier, point fixe, cible) ne le fait
+   converger ✗ — l'entraîné dompte la divergence (×228 au pas 4) sans jamais battre une passe ✗ ;
+4. **le critère de choix du rejeu** — état exact : la **diversité** tient (un **seuil** vers 0,9
+   trigramme distinct par jeton, **validé sur trois graines** ✓), l'**étalement** **ne tient pas**
+   (effet du même ordre que le bruit de graine ✗, et il perd à 10 morceaux ✗), et la surprise, le
+   hasard, les premiers et les faciles sont des **ordres de grandeur**, pas des classements ✗ ;
+5. **l'homéostasie EN LIGNE (E9)** : l'**amplitude** du changement plastique est un réglage
+   **mesuré** (×0,6-0,75 domine le delta entier ✓, sur **trois volumes et trois graines** ✓) et une
+   **règle auto-contenue** le désigne (le minimum de perplexité sur un texte **neutre** tombe sur
+   ×0,75 à chaque graine ✓). Ce qui reste : une règle qui **mesure en continu** au lieu de balayer ✗,
+   et qui sache ce qu'elle n'a **pas** rejoué ✗ ;
+6. **la modulation par jeton** : la politique **par texte** marche (÷2,7 sur les clés), mais elle
+   exige **deux passes** ✗.
 
 **0. ▶ LA NUIT DU 14 AU 15/10 — LE CERVEAU, FACULTÉ PAR FACULTÉ.** Huit rounds mesurés, tous avec
 leur fiche, et une carte : [`docs/cerveau-facultes.md`](cerveau-facultes.md) (chaque faculté, le
