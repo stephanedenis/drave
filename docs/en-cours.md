@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 00 h 45 HAE.**
+**Mis à jour : 2026-10-16, 01 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -48,6 +48,16 @@ choisir, et les critères de **lot** tiennent mieux que ceux de **morceau**). Et
 ne mesure pas un critère**. Fiche : [`reports/rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) § 6 et 6bis.
 **Ce qui se compose quand même** : étalement ×0,6 (E9) — le coût hors domaine passe de +1,94 % à **−0,05 %** ✓.
 **Et la règle d'E9 tient sur trois graines** : minimiser la perplexité sur un texte **neutre** désigne **×0,75** à chaque fois (courbe en U), sans rien savoir du domaine visé ✓ — c'est ce qui la distingue d'un oracle. (Le critère de **diversité**, lui, était déjà validé sur trois graines : la loi « les critères de lot tiennent mieux » a passé l'épreuve ✓.)
+
+## Une reproduction qui n'a pas abouti, et c'est écrit
+
+Vouloir tester **E5 sur d'autres graines** (la leçon « une graine ne mesure pas un critère ») a buté
+sur trois obstacles : un **mauvais drapeau** (`--couches-lora` appartient à l'exporteur ✗ — et je
+l'avais **masqué avec `>/dev/null`**, ce qui a coûté deux tours ✗), un **mauvais bras** (`--bras lora`
+au lieu de `lora+adaptateur` : l'accord tombait à 100 %, c'est-à-dire mesurait le chemin **complet** ✗),
+et la **mémoire** (15,3 Go demandés pour 15,55 Go : le protocole de la fiche **ne rejoue pas** dans
+16 Go ✗). **E5 n'est donc PAS testé sur plusieurs graines** — sa table se lit comme les autres tables
+à graine unique : un ordre de grandeur ✗. Le chiffre publié n'est ni confirmé ni infirmé.
 
 ## Où en est le dépôt
 

@@ -106,3 +106,25 @@ au texte seul sur m20 (40,5 %).
   plus, et n'est pas reporté ;
 * **rien sur l'échantillonnage** (`--temp`, `--top-p`) : la dégénérescence observée en greedy peut
   disparaître en échantillonnant — ou pas ; ce n'est pas mesuré.
+
+## 6. REPRODUCTIBILITÉ : le protocole de cette fiche ne tient pas dans 16 Go (16/10, 01 h)
+
+En voulant **tester E5 sur d'autres graines** — la leçon de la nuit (« une graine ne mesure pas un
+critère ») appliquée à cette fiche ✗ — la reproduction a buté sur trois obstacles, tous instructifs :
+
+| obstacle | ce qui s'est passé | ce que ça apprend |
+|---|---|---|
+| **mauvais drapeau** | `--couches-lora` n'existe **pas** dans `n4_dessin_b.py` (c'est un drapeau de l'**exporteur**) : l'entraînement sortait **immédiatement** en erreur | ⚠️ **je l'avais masqué avec `>/dev/null 2>&1`** ✗ — la sortie silencieuse a coûté **deux tours** de diagnostic. *Ne jamais faire taire une commande qu'on n'a pas encore vue réussir* |
+| **mauvais bras** | `--bras lora` ✗ au lieu de `--bras lora+adaptateur` : l'accord mesuré tombait à **100 %** | 100 % n'était pas un bon résultat mais un **mauvais objet mesuré** (le chemin **complet**, pas le tronqué) — la fiche dit « chemin tronqué à 8 couches », et le réflexe E5 est le bras **`lora+adaptateur`** |
+| **mémoire** | `torch.OutOfMemoryError` : **15,3 Go** demandés pour **15,55 Go** de carte, à l'étape `kl_div` | le protocole de cette fiche (**29 morceaux d'entraînement**, `--train 29 --exclure 20 --val 30,31 --test 32,20`) **ne rejoue pas** sur cette machine dans l'état actuel ✗ — il faudrait un lot plus petit ou un gradient accumulé ✗ |
+
+* **conséquence honnête** : **E5 n'est PAS testé sur plusieurs graines** ✗ — sa table (§ 1) doit donc
+  être lue comme les autres tables à graine unique du dépôt : un **ordre de grandeur**, pas un
+  classement ✗ (c'est la règle écrite dans `rapport-sommeil-selection.md` § 6bis) ;
+* **et la reproduction est maintenant documentée** : qui veut refaire E5 sait qu'il lui faut
+  (a) `--bras lora+adaptateur --distiller`, (b) l'export par `exporter_gguf_dense.py --couches-lora 8
+  --adapter-sortie`, (c) la mesure de l'**accord** par `speculatif_drave.py` (le **taux
+  d'acceptation**), et (d) **plus de 16 Go** — ou un lot plus petit ✗ ;
+* **ce qui n'est pas en cause** : le chiffre publié (51,0 % contre 28,0 % ✗) reste ce qu'il était —
+  mesuré, écrit, et **non reproduit** ce soir ✗. Il n'est ni confirmé ni infirmé : il est **en attente
+  d'une machine qui puisse le rejouer** ✓.
