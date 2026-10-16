@@ -21,6 +21,25 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-16 à 02 h 49** (**46 portes, 44 vertes, 2 rouges**, ~88 min) — **la première
+> passe où les portes peuvent ÉCHOUER** ✓✓ : `porte-tableaux` (son `sys.exit` n'était pas propagé ✓)
+> et `porte-prechargement` (un `rm -f` avalait le code ✓) ont été corrigées **pendant** cette passe,
+> par l'audit des 46 portes ✓ — le verdict est donc **significatif** ✓, là où les huit passes
+> précédentes auraient pu passer avec un document cassé sans le dire ✗. Ce qui est vérifié
+> **neuf** dans cette passe :
+>
+> * `porte-tableaux` : **473 fichiers** (tableaux ✓) **et 308 liens relatifs** ✓ (nouveau ✓) ;
+> * `porte-homeostasie` (E9) : ×0 rend le modèle ✓, activité monotone ✓, **dominance de ×0,6
+>   reproduite** ✓ ;
+> * `porte-cycle-c2` : la divergence est **bornée et de forme publiée** (14,65 → 275,52 → 940,22 →
+>   2 988,46 ✓) et **λ = 488,82 > 1 est MESURÉ** ✓ (nouveau ✓) ;
+> * `porte-reflexe` : l'**assemblage** est gardé (refus ✓, **invariant d'identité** ✓ — 
+>   « perplexité 11163272.0495 » identique avec et sans adaptateur ✓, accord mesuré ✓) ;
+> * `porte-vision` : les couches **1, 15 et 31 en isolation** et le **projecteur** ✓.
+>
+> Les deux rouges restent les **structurels** (`porte-indice`, `porte-melange`) et **aucune valeur
+> de porte n'a bougé** ✓.
+>
 > **Passe du 2026-10-15 à 22 h 40** (**46 portes, 44 vertes, 2 rouges**, ~96 min) — **la première
 > passe à 46 portes** : `porte-homeostasie` (E9 : ×0 rend le modèle, l'activité est monotone,
 > la dominance de ×0,6 est reproduite) entre dans la passe, et `porte-vision` y vérifie ses
@@ -167,7 +186,7 @@
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
 | le serveur de documentation | `tools/serveur-doc.py` (port 8787) | `tools/serveur-doc.py` · [`docs/en-cours.md`](../docs/en-cours.md) — il **ne juge rien** : il rend les documents et affiche « en ce moment », écrit à la main à chaque round |
-| toutes les portes | `tools/toutes-les-portes.sh` | **46 portes** (`porte-reflexe` garde en plus, depuis le 16/10, l'**assemblage** du réflexe : le refus de l'adaptateur sans tête partielle, l'**invariant d'identité** et la mesure de l'accord ; 46ᵉ : `porte-homeostasie`, E9 ; `porte-cycle-c2` garde en plus la **bornitude** du cycle et **mesure λ**) ; dernière passe : **43 vertes sur 45** (15/10 11 h 21), ≈80 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **46 portes** (`porte-reflexe` garde en plus, depuis le 16/10, l'**assemblage** du réflexe : le refus de l'adaptateur sans tête partielle, l'**invariant d'identité** et la mesure de l'accord ; 46ᵉ : `porte-homeostasie`, E9 ; `porte-cycle-c2` garde en plus la **bornitude** du cycle et **mesure λ**) ; dernière passe : **44 vertes sur 46** (16/10 02 h 49), ≈88 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE

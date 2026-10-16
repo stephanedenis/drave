@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 10 h 00 HAE.**
+**Mis à jour : 2026-10-16, 10 h 30 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -97,6 +97,23 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## La passe du 16/10 à 02 h 49 : 44 vertes sur 46 — et elle est SIGNIFICATIVE
+
+**46 portes, 44 vertes, 2 rouges** (les deux **structurels** connus : `porte-indice`, `porte-melange`),
+~88 min, aucune sautée. **Et c'est la première passe où les portes peuvent ÉCHOUER** ✓✓ : deux d'entre
+elles ne le pouvaient pas (`porte-tableaux`, dont le `sys.exit` n'était pas propagé, et
+`porte-prechargement`, où un `rm -f` avalait le code) — elles ont été **corrigées pendant cette passe**,
+par l'audit des 46 portes ✓. Les huit passes précédentes auraient donc pu passer **avec un document
+cassé sans le dire** ✗.
+
+Ce qui est vérifié **neuf** dans cette passe :
+* `porte-tableaux` : **473 fichiers** (tableaux) **et 308 liens relatifs** (nouveau) ;
+* `porte-homeostasie` (E9) : ×0 rend le modèle, activité **monotone**, **dominance de ×0,6 reproduite** ;
+* `porte-cycle-c2` : la divergence est **bornée et de forme publiée** (14,65 → 275,52 → 940,22 →
+  2 988,46 ✓) et **λ = 488,82 > 1 est MESURÉ** (nouveau) ;
+* `porte-reflexe` : l'**assemblage** (refus ✓, **invariant d'identité** ✓, accord mesuré avant/après ✓) ;
+* `porte-vision` : les couches **1, 15 et 31 en isolation** et le **projecteur** ✓.
 
 ## Où en est le dépôt
 
