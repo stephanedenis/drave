@@ -585,3 +585,44 @@ réponse du modèle : c'est un **projet** (le mRoPE côté langue), pas un régl
 * **`image_mean`/`image_std` ne sont pas appliqués** (le mmproj les déclare, le banc ne les lit
   pas) : la comparaison est « à entrée brute des deux côtés », ce qui est cohérent, mais un vrai
   pipeline les appliquerait.
+
+## 4. LE PROJET QUI RESTE : LE mRoPE DU MODÈLE DE LANGUE (cadré le 16/10)
+
+**Ce qui manque, en une phrase.** Le chemin image est **vérifié** (embedding exact, 31 couches à
+7,58e-06, `post_ln` à +1,00000012, projecteur à 0,71 % ✓) et le **splice** fonctionne (les 64 jetons
+d'image se posent aux positions 0..63 ✓), mais le moteur applique au modèle de langue une **RoPE 1-D**
+✗ alors que Qwen2-VL utilise un **mRoPE** ✗ : une position **par section de tête** (`[16, 24, 24]` sur
+64 ✓) et des positions `(t, h, w)` **distinctes** pour les jetons d'image ✓.
+
+**Les deux côtés, lus ce soir** :
+
+| côté | ce qu'il fait |
+|---|---|
+| **le moteur** | `fn rope(&mut [f32], n_head, head_dim, pos: usize, base, n_rot)` ✗ — **une seule** position pour toute la tête ✓ ; `rope_norm`, `rope_yarn` idem |
+| **la référence** | `get_rope_index(...)` rend **3 lignes** de positions ✓ : `(p, p, p)` pour le **texte** ✓ et `(t, h, w)` pour les jetons d'**image** ✓ (le texte après l'image reprend à `max+1` ✓), avec un **delta** par échantillon ✓ |
+
+**Le plan, en quatre pas, chacun mesurable** :
+
+1. **extraire les valeurs d'or** ✗ — les positions que la référence calcule pour une séquence **connue**
+   (4 jetons de texte, une image 4 × 4 fusionnée en 4 jetons, 3 jetons de texte ✓). ⚠️ **C'est le pas
+   qui a résisté ce soir** ✗ : le `get_rope_index` **installé** appelle un `self.get_vision_position_ids`
+   dont la signature a **changé** avec la version de `transformers` ✗ (trois adaptations essayées, trois
+   refus ✓ : `device=`, `spatial_merge_size` scalaire, `spatial_merge_size` 2-D ✗). Il faut lire **la
+   source de la version installée** et écrire l'adaptateur **contre elle** ✗ — pas contre la mémoire
+   d'une autre version ✓ ;
+2. **implémenter les positions en Rust** ✗ — le même algorithme que la référence, vérifié **pas à pas**
+   contre les valeurs d'or du pas 1 ✓ (c'est la partie facile : un parcours de grille ✓) ;
+3. **étendre `rope`** ✗ — prendre **trois** positions et découper `n_rot` en **trois sections** ✓
+   (`[16, 24, 24]` ✓), chaque section tournant avec **sa** position ✓. Le reste (le calcul des
+   fréquences ✓, la convention ✓) est déjà vérifié ✓ ;
+4. **vérifier de bout en bout** ✗ — la génération du modèle de langue sur une image, contre la
+   référence, **avec les positions mRoPE** ✓ (et non plus les positions dégénérées ✓ qui, elles,
+   ramènent au cas 1-D ✓ — c'est ce que la comparaison « dégénérée » du § 2quinquies a montré ✓).
+
+**Ce qui n'est PAS dans ce projet, et c'est important** : ni le décodeur d'image ✗ (le banc lit du f32
+fourni ✓, et cela suffit pour vérifier ✓), ni la qualité du projecteur ✗ (elle est mesurée à 0,71 % ✓),
+ni l'entraînement ✗. Le mRoPE est un **changement de positions** ✗, pas de poids ✗ — et c'est la
+dernière brique qui manque pour qu'une question sur une image ait un sens ✓.
+
+**Le budget, honnêtement** : le pas 1 est le seul incertain ✗ (il dépend d'une version de bibliothèque
+✗) ; les pas 2 à 4 sont du code borné et vérifiable ✓ (~2 h au total ✗, dont la moitié de vérification ✓).
