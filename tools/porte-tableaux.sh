@@ -126,3 +126,19 @@ PY
 # ---- ET LES LIENS : un document de ce dépôt EST fait de renvois, et un renvoi mort ne casse rien au
 # moment où on l'écrit — il casse six semaines plus tard. Deux secondes ici, à chaque passe.
 python3 tools/verifier_liens.py || exit 1
+
+# ---- ET LA PAGE VIVANTE DOIT SUIVRE LE TRAVAIL. `docs/en-cours.md` est la page que le serveur
+# affiche en premier, et c'est elle qui répond à « où en est le travail ? » ✓. Une page qui date d'hier
+# pendant qu'on commite aujourd'hui est **pire** qu'une page absente ✗ : elle affirme un état faux ✓.
+# Ce contrôle est donc **daté**, objectif, et il échoue en disant QUOI faire ✓.
+DERNIER=$(git log -1 --format=%ad --date=short 2>/dev/null || echo "")
+PAGE=$(grep -oE "Mis à jour : [0-9]{4}-[0-9]{2}-[0-9]{2}" docs/en-cours.md 2>/dev/null | head -1 | grep -oE "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+if [ -n "$DERNIER" ] && [ -n "$PAGE" ] && [ "$PAGE" != "$DERNIER" ]; then
+    echo "  ❌ LA PAGE VIVANTE EST EN RETARD : docs/en-cours.md dit « Mis à jour : $PAGE »,"
+    echo "     et le dernier commit date du $DERNIER."
+    echo "     → mettre à jour docs/en-cours.md (l'état du travail, les questions ouvertes, ce qui est"
+    echo "       nouveau), puis relancer cette porte. Un petit cycle sans page à jour est un cycle"
+    echo "       que personne ne peut lire."
+    exit 1
+fi
+echo "  ✅ la page vivante date du dernier commit ($PAGE)"
