@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 23 h 45 HAE.**
+**Mis à jour : 2026-10-16, 00 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -63,7 +63,7 @@ ne mesure pas un critère**. Fiche : [`reports/rapport-sommeil-selection.md`](..
 
 1. **La vision multimodale** : le **chemin image est vérifié** (embedding exact, 31 couches à 7,58e-06, projecteur à 0,71 %) — il reste l'**injection**, c'est-à-dire le **mRoPE** du modèle de langue (un projet).
 2. **Le décodage spéculatif** : il manque **~10 % d'accord** ; la loi est `gain > 1 ⟺ p > c`.
-3. **Le cycle** : aucun des **quatre** objectifs ne le fait converger.
+3. **Le cycle** : aucun des **quatre** objectifs ne le fait converger, et l'hypothèse de la **fuite d'échelle** est **réfutée** (renormer l'état rend la divergence **~1000× pire** ✗ : la norme porte du signal). Ce n'est pas l'**amplitude** qu'il faut brider mais la **sensibilité** — la question devient « le pas de temps est-il contractant ? ».
 4. **Le critère de rejeu** : la **diversité** tient (un seuil, validé sur trois graines) ; l'**étalement** ne tient **pas** (effet ≈ bruit, et il perd à 10 morceaux) ; le reste = des ordres de grandeur.
 5. **L'homéostasie en ligne (E9)** : l'amplitude est un réglage mesuré (×0,6-0,75, trois volumes, trois graines) et une règle auto-contenue la désigne ; reste une règle qui **mesure en continu**.
 6. **La modulation par jeton** : la politique par texte marche, mais exige **deux passes**.

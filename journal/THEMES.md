@@ -82,6 +82,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-13](2026-10-13_modele.md) | `19 %` · `16 couches` |
 | [2026-10-14](2026-10-14_modele.md) | `÷1,47` · `÷1,24` · `÷1,19` · `÷1,32` · `÷1,83` |
 | [2026-10-15](2026-10-15_modele.md) | `9,6706` · `-10,80 %` · `-7,21 %` · `-0,65 %` · `-0,04 %` · `0,71 %` · `32 couches` |
+| [2026-10-16](2026-10-16_modele.md) | `0,71 %` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 

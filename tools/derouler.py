@@ -77,6 +77,39 @@ def plan_du_moteur(moteur: str, modele: str, topologie: str):
     return ordre, recurrents
 
 
+# ---- LA RENORME (C2 × E9) : garder l'état dans la plage du premier pas ------------------------
+#
+# MESURÉ le 16/10 : le cycle non entraîné DIVERGE (perplexité 11,84 → 103,06 → 714,61 → 2 873,96 en
+# quatre pas) et **l'état croît avec lui** (norme moyenne par jeton 53,31 → 68,56 → 95,64 → 180,44,
+# soit ×1,29, ×1,40, ×1,89). D'où la question : si la croissance de l'état est la cause — ou une
+# cause —, la **ramener** à sa plage d'entrée à chaque pas doit borner la divergence. C'est
+# l'homéostasie (`rapport-e9-homeostasie.md`) appliquée non plus au POIDS mais à l'ÉTAT.
+#
+# `--renorme aucune` (défaut) : rien ne change, la porte `porte-cycle-c2.sh` est intacte.
+# `--renorme norme1` : chaque état transmis est mis à l'échelle pour que sa norme moyenne par jeton
+#   reste celle du PREMIER état transmis (une seule échelle par pas, aucune information du futur).
+RENORME = {"mode": "aucune", "cible": None}
+
+
+def appliquer_renorme(etats: list[np.ndarray]) -> list[np.ndarray]:
+    if RENORME["mode"] == "aucune":
+        return etats
+    h = etats[0].shape[0]
+    normes = [float(np.linalg.norm(e)) / h for e in etats]
+    if RENORME["cible"] is None:
+        RENORME["cible"] = sum(normes) / len(normes)
+        print(f"  renorme : cible fixée au premier état transmis ({RENORME['cible']:.3f} par jeton)")
+        return etats
+    cible = RENORME["cible"]
+    sortis = []
+    for e, n in zip(etats, normes):
+        if n <= 0:
+            sortis.append(e)
+            continue
+        sortis.append((e * (cible / n)).astype("<f4"))
+    return sortis
+
+
 def ecrire_refd(chemin: pathlib.Path, etats: list[np.ndarray]) -> None:
     """Un fichier REFD : 24 octets d'en-tête, puis UN BLOC DE h FLOTTANTS PAR POSITION.
 
@@ -115,7 +148,10 @@ def main() -> int:
     ap.add_argument("--modele", default="models/Qwen2.5-0.5B-Q8_0.gguf")
     ap.add_argument("--threads", type=int, default=8)
     ap.add_argument("--travail", default="/tmp/c2-travail")
+    ap.add_argument("--renorme", choices=["aucune", "norme1"], default="aucune",
+                    help="remet chaque état transmis dans la plage du premier (C2 × E9)")
     a = ap.parse_args()
+    RENORME["mode"] = a.renorme
 
     if a.pas_temps <= 0:
         refus("--pas-temps est obligatoire et doit être > 0 : un déroulé sans borne n'en est pas "
@@ -174,7 +210,7 @@ def main() -> int:
                           f"d'avant ⇒ la région tourne sur son entrée")
                 if source is not None:
                     refd = travail / f"entree-t{t}-{rid}.refd"
-                    ecrire_refd(refd, source)
+                    ecrire_refd(refd, appliquer_renorme(source))
                     env["DRAVE_ETAT_ENTREE"] = str(refd)
             prefixe = travail / f"etat-t{t}-{rid}"
             for f in prefixe.parent.glob(prefixe.name + ".*"):

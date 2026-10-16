@@ -86,3 +86,46 @@ la note, elle, reste telle qu'elle a été écrite.*
   sûrement des deux, et la courbe n'est pas faite ;
 * **le cycle n'est pas entraîné** : c'est le prochain round possible — consolider une trajectoire
   dans les poids du cycle, et regarder si la divergence se calme (ou si quelque chose s'apprend).
+
+## 6. POURQUOI LE CYCLE DIVERGE : l'hypothèse de l'échelle est RÉFUTÉE (16/10)
+
+L'hypothèse était simple et elle avait une allure biologique : **si l'état enfle à chaque pas, la
+divergence est une fuite d'échelle**, et il suffit de **ramener** l'état dans sa plage — l'homéostasie
+d'E9 (`rapport-e9-homeostasie.md`), appliquée non plus au **poids** mais à l'**état**.
+
+**Ce qui a été mesuré d'abord** (m32, 128 jetons, cycle `r0 → r1`) :
+
+| pas | 1 | 2 | 3 | 4 |
+|---|---:|---:|---:|---:|
+| perplexité | 11,84 | 103,06 | 714,61 | **2 873,96** |
+| norme moyenne de l'état par jeton | 53,31 | 68,56 | 95,64 | **180,44** |
+| croissance de l'état | — | ×1,29 | ×1,40 | ×1,89 |
+
+* **l'état croît bien** (×1,3 à ×1,9 par pas ✗✓) — mais **la perplexité croît 4 à 9 fois plus vite**
+  (×8,7, ×6,9, ×4,0) : l'échelle n'est donc **pas** le facteur dominant, et c'est déjà une première
+  alerte ✗ ;
+* **l'expérience décisive** : `tools/derouler.py --renorme norme1` remet chaque état transmis à la
+  norme moyenne du **premier** état transmis (une seule échelle par pas, aucune information du futur).
+  Résultat, six pas :
+
+| pas | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---:|---:|---:|---:|---:|---:|
+| **sans renorme** (4 pas mesurés) | 11,84 | 103,06 | 714,61 | 2 873,96 | — | — |
+| **avec renorme** | 11,84 | **78 685** | **344 541** | **158 778** | **1 308 597** | **1 301 994** |
+
+* **la renorme rend la divergence ~1 000 fois PIRE** ✗✗ (78 685 contre 103 au pas 2) — l'hypothèse est
+  **réfutée**, et proprement : le pas 1 est identique (la renorme ne touche rien avant la première
+  transmission ✓, donc l'instrument est bien celui qu'on croit ✓) ;
+* **et l'explication est instructive** : la **norme porte du signal** ✗. La forcer à rester constante
+  **injecte une perturbation** à chaque pas — et le cycle **amplifie toute perturbation**, quelle
+  qu'elle soit ✓. La divergence n'est donc pas une **fuite d'échelle** ✗ mais une **amplification de
+  contenu** ✓ : c'est la même signature que la tour de vision (`rapport-vision-qwen2vl.md` : l'attention
+  s'effondre et **bascule** — un écart minuscule change *quel* patch est regardé ✗) ;
+* **conséquence pour la suite, et elle est nette** : ce n'est pas l'**amplitude** qu'il faut brider
+  (essayé, réfuté ✗) mais **la sensibilité** — c'est-à-dire la **dérivée** de la fonction de cycle ✗.
+  La question devient : *le pas de temps est-il contractant ?* — et cela se mesure (la plus grande
+  valeur propre de la jacobienne, ou, moins cher, la **croissance d'une perturbation infime** sur un
+  pas ✓ : deux pas partant de deux états distants de ε ✓) ;
+* **et une note d'honnêteté sur la mesure** : `--renorme` reste dans l'outil, **désactivé par défaut**
+  (`aucune`) — non pas comme un mécanisme, mais comme **la trace d'une hypothèse réfutée** qu'on doit
+  pouvoir **refaire** ✗✓. La porte `porte-cycle-c2.sh` n'est pas touchée ✓.
