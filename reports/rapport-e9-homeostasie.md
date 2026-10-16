@@ -62,13 +62,45 @@ Ce que la courbe dit :
   question de fond : **comment un cerveau SAIT qu'il doit amortir** — ici l'échelle est choisie par
   balayage, alors qu'un mécanisme homéostatique réel la **mesure** (l'activité de sortie ✗).
 
+## 2bis. DE L'ORACLE À UNE RÈGLE : l'amplitude se choisit sur l'activité du modèle, pas sur le domaine visé
+
+La limite la plus gênante du § 2 était que l'échelle ×0,6-0,75 est trouvée **par balayage sur le
+domaine visé** — un oracle qu'aucun cerveau ne possède ✗. Une règle **auto-contenue** a donc été
+cherchée : peut-on choisir l'amplitude en ne regardant que le modèle **lui-même** ?
+
+Deux statistiques mesurées sur un texte **neutre** (jetons 40 000..41 024 : ni rejoué, ni testé, ni
+l'autre corpus) :
+
+| échelle | norme de l'état final | **perplexité du texte NEUTRE** |
+|---:|---:|---:|
+| *(modèle de base)* | **72,1312** | — |
+| ×0,5 | 73,6207 (+2,07 %) | 9,0815 |
+| ×0,6 | 73,6715 (+2,14 %) | 9,0591 |
+| **×0,75** | 73,8340 (+2,36 %) | **9,0372** ← minimum |
+| ×0,9 | 74,0828 (+2,71 %) | 9,0391 |
+| ×1,0 | 74,1796 (+2,84 %) | 9,0420 |
+| ×1,25 | 74,7319 (+3,61 %) | 9,0950 |
+
+* **la première règle essayée ne marche pas** : « garder l'activité dans ±1 % du modèle de base »
+  rejette **tout** ✗ — la consolidation elle-même déplace l'activité de **+2,07 %** dès ×0,5. Le
+  seuil serait donc un chiffre magique ✗ ;
+* **la seconde règle marche, et elle n'a besoin d'aucun oracle** : *choisir l'amplitude qui minimise
+  la perplexité du modèle sur sa PROPRE activité récente* — un texte neutre, que rien n'a rejoué et
+  qui n'est pas le domaine visé ✓. Elle désigne **×0,75**, c'est-à-dire **le voisinage de l'optimum
+  trouvé par l'oracle** (×0,6-0,75) ✓✓ ;
+* **et c'est biologiquement plausible** : un cerveau a « son activité de la veille » — il n'a pas le
+  domaine de demain. La règle n'utilise que ce qu'il a ✓ ;
+* **la courbe neutre est un U**, comme la courbe hors domaine : trop amortir **et** trop laisser
+  passer dégradent ✓ — c'est la même forme, sur une statistique que le système peut mesurer seul ✓.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * **un seul LoRA, un seul rejeu** (rang 4, m0..m9, 10 époques) : l'optimum à ×0,6-0,75 est peut-être
   propre à ce volume — c'est la première chose à vérifier avant de publier un réglage ;
-* **l'échelle est choisie par balayage**, pas apprise ni mesurée en ligne : un vrai mécanisme
-  homéostatique **réglerait** l'amplitude d'après l'activité — ici, c'est un oracle ✗, et c'est la
-  limite la plus importante de la fiche ;
+* **l'échelle de l'oracle est choisie par balayage sur le domaine visé** ✗ — mais le § 2bis montre
+  qu'une règle **auto-contenue** (minimiser la perplexité sur un texte **neutre**) désigne le même
+  point (×0,75) sans rien savoir du domaine ✓. Ce qui reste ouvert : cette règle demande un texte
+  neutre **étiqueté comme neutre** — le système doit savoir ce qu'il n'a pas rejoué ✗ ;
 * **trois textes** : le hors domaine est **un** texte d'un **autre** corpus (la dispersion d'un
   corpus est mesurée ailleurs : `rapport-consolidation-structure-partagee.md`) ;
 * **rien sur la génération** : la courbe est une courbe de perplexité ;
