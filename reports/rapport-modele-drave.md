@@ -157,3 +157,46 @@ viser >0,9 ✓) et le **rapport d'échelle** (648 ✗ → viser 1 ✓) ; (b) l'e
 seulement, la **perplexité de la suite** après k pas silencieux ✓ (`pensee_silencieuse.py` ✓).
 
 *C'est la différence entre raccorder deux langues ✗ et n'en parler qu'une ✓✓.*
+
+## 8. LE PLAN DE TRAVAIL DU « MODÈLE LINGUISTIQUE UNIFIÉ » (entrée = sortie)
+
+Parce que **la mesure a dit de combien** les deux espaces diffèrent (§ 7 : facteur **648** d'échelle,
+cosinus **+0,14** ✗), et parce que la plomberie existe déjà ✓, le plan tient en **quatre étapes**, chacune
+avec **son critère de réussite chiffré** ✓ et **son critère d'échec** ✗.
+
+### Ce qui est DÉJÀ en place (vérifié dans le code, pas supposé ✓)
+
+| pièce | état |
+|---|---|
+| **matrice d'entrée = matrice de sortie** | ✅ **déjà fait** ✗✓ : `tie_word_embeddings=True` ✓ et `lm_head.weight` **est** `model.embed_tokens.weight` ✓ (le même objet ✓, noté dans le code depuis le 10/10 ✓) |
+| **perte auxiliaire** | ✅ **le patron existe** ✓ : `--enseignant` + `--alpha-distill` ajoutent déjà un terme KL à la perte ✓ — l'alignement est **le même genre d'édition** ✓ |
+| **mesure de l'écart** | ✅ **écrite** ✓ : écart d'échelle, cosinus, erreur de l'identité ✓ (le script de ce soir ✓) |
+| **mesure de la boucle** | ✅ **écrite** ✓ : λ (`cycle_sensibilite.py` ✓), contenu après k pas (`pas_latent.py` ✓), perplexité de la suite (`pensee_silencieuse.py` ✓) |
+| **aller-retour entraîneur → moteur** | ❌ **absent** ✗ : l'entraîneur écrit du HuggingFace, le moteur lit du GGUF ✓ (étape 0 ci-dessous ✓) |
+
+### Les quatre étapes
+
+| # | ce qu'on fait | critère de **réussite** | critère d'**échec** ✗ | coût |
+|---|---|---|---|---|
+| **0** | **écrire le GGUF** d'un modèle routé en octets ✓, et vérifier que le moteur rend **la même perplexité** que l'entraîneur ✓ | la perplexité du moteur = celle de l'entraîneur ✓ (à l'arrondi de quantification près ✓) | un écart inexplicable ✗ → la lecture GGUF du routé est en cause ✓ | court ✓ |
+| **A** | **l'alignement**, sur le modèle **jouet** (2 M, octets ✓) : ajouter `--alignement λ_a` ✓ — la perte `λ_a · ‖n(h_p) − e_{p+1}‖²` **avec la cible DÉTACHÉE** ✗ (sinon les embeddings s'effondrent ✗✗ : on aligne l'état **vers** l'embedding, pas les deux l'un vers l'autre ✓) | **cosinus(n(h_p), e_{p+1}) > 0,9** ✓ et **rapport d'échelle ≈ 1** ✓ (aujourd'hui 0,14 et 648 ✗) | la langue se dégrade ✗ (bits/octet qui s'envolent ✓) → l'alignement **combat** la prédiction ✓, et il faut un poids plus faible ✓ | **minutes** ✓ (2 M ✓, une carte ✓) |
+| **B** | **la boucle directe** : itérer **sans aucun pont** ✓ (`h ← n(h)` réinjecté ✓) sur le modèle aligné ✓ | **λ ≤ 1** ✓ (la boucle ne diverge pas ✓) **et** le contenu survit après 4-16 pas ✓ | λ ≫ 1 ✗ → l'alignement n'a pas suffi ✗, et il faut **entraîner le pas** (pénalité de contraction ✓) | heures ✓ |
+| **C** | **l'échelle** : 20-50 M ✓ sur **deux cartes** ✓, puis décision **octets ou BPE** ✗ | les mêmes chiffres à l'échelle ✓ | les mécanismes cessent de payer en grandissant ✗ → ils restent des curiosités de banc ✓ | jours ✓ |
+
+### Le risque principal, nommé d'avance ✗✗
+
+**Aligner l'état sur l'embedding du jeton SUIVANT fait de l'état ≈ « l'embedding prédit »** ✗ — c'est-à-dire
+**exactement une information de jeton** ✓. Or toute la mesure du § 5 dit l'inverse de ce qu'on veut ✗✓ :
+l'état porte **une trajectoire** (16 jetons d'avance à 84,7 % ✓), le mot n'en est qu'un **résumé pauvre**
+(122,9 % ✗). **Le risque est donc un EFFONDREMENT vers le niveau du jeton** ✗✗ — et il se mesure ✓ : après
+alignement, refaire le **balayage par horizon** (`pont_abstrait.py --couches … --horizons 1,4,16` ✓) et
+vérifier que le **k=16 tient** ✓. S'il s'effondre ✗, la variante à essayer est un **alignement multi-pas** ✗
+(état ⇄ *moyenne pondérée des embeddings des k prochains jetons* ✓, ou un **vecteur de pensée** appris ✓)
+— c'est-à-dire : **unifier les espaces sans réduire la pensée au mot** ✓✓.
+
+### L'ordre que je propose, et pourquoi
+
+**0 puis A sur le jouet** ✓✓ : l'étape 0 débloque la mesure **dans le moteur** ✓ (la règle du dépôt ✗), et
+l'étape A se fait en **minutes** sur un modèle de 2 M ✓ — donc on sait **ce soir** si l'alignement tient
+sa promesse ✓ ou s'il effondre la représentation ✗. **B** n'a de sens qu'après ✓ (sans alignement, la
+boucle directe explose — c'est mesuré ✗✓). **C** ne se discute qu'avec A et B acquis ✓.
