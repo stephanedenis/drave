@@ -200,3 +200,36 @@ vérifier que le **k=16 tient** ✓. S'il s'effondre ✗, la variante à essayer
 l'étape A se fait en **minutes** sur un modèle de 2 M ✓ — donc on sait **ce soir** si l'alignement tient
 sa promesse ✓ ou s'il effondre la représentation ✗. **B** n'a de sens qu'après ✓ (sans alignement, la
 boucle directe explose — c'est mesuré ✗✓). **C** ne se discute qu'avec A et B acquis ✓.
+
+## 9. LA SONDE DE RECOPIE (question de Stéphane) : la prémisse est FAUSSE sur ce modèle — et ma mesure était dégénérée
+
+**La question** ✓ : *« peut-on demander à un LLM de présenter littéralement un texte soumis en entrée afin
+d'aller chercher des empreintes à reproduire ? »* — c'est-à-dire : utiliser la **recopie littérale** comme
+sonde ✓, puisqu'on est dans un régime **sens → texte** (Mel'čuk ✓, mais abstrait ✓) où l'entrée est
+**propre** ✓ (pas de bruit à gommer ✓), le problème étant de **boucler** sur l'entrée ✗.
+
+**Deux mesures, faites immédiatement** ✓ :
+
+| ce qui a été mesuré | résultat |
+|---|---|
+| **le modèle recopie-t-il ?** (128 jetons, consigne « Recopie exactement… puis Recopie : » ✓) | **0 / 128 jetons identiques** ✗✗ |
+| l'état dit-il le jeton qu'il **lit** (même position ✓) ? | **0,0 % d'écart, cosinus +1,000** ✗ — à toutes les couches ✓ |
+
+* **LA PRÉMISSE EST FAUSSE SUR CE MODÈLE** ✗✓ : « si un LLM peut répéter intégralement un énoncé » ✓
+  suppose qu'il **peut** ✗ — le 0,5 B disponible en est **incapable** (0 sur 128 ✓). Sa copie n'est pas
+  approximative : elle est **absente** ✓✗. La sonde de recopie **exige donc un modèle qui sait recopier** ✓
+  — soit **plus gros** ✗, soit **entraîné pour ça** ✓✓ (un LoRA sur des paires « recopie » se fait en
+  heures sur les deux cartes ✓ — et c'est **le préalable** à toute la suite ✓) ;
+* **ET MA MESURE D'EMPREINTE ÉTAIT DÉGÉNÉRÉE** ✗✓ — il faut le dire : j'ai ajusté `état_p → embedding du
+  jeton de la position p` ✓, or l'état à la position p **contient** son entrée **par construction** ✓✓
+  (c'est le flux résiduel ✗) → l'écart **0,0 %** et le cosinus **+1,000** ne mesurent **rien** ✓. Les
+  quatre contextes (lecture ✓, recopie ✓, relecture ✓, résumé ✓) donnent donc le **même chiffre trivial** ✗ ;
+* **la BONNE empreinte, celle que la question vise** ✓✓ : pendant la **génération** de la copie ✓, l'état à
+  la position **émise** `q` doit dire le **jeton source** correspondant ✓ (celui qu'on est en train de
+  reproduire ✓) — c'est cela, « l'empreinte à reproduire » ✓. Et elle se compare à un témoin : le même
+  état confronté à un **autre** jeton source ✗ (contre-épreuve obligatoire ✓, sinon on mesure encore une
+  trivialité ✓) ;
+* **ce que cela change dans le plan** (§ 8 ✓) : une **étape −1** s'ajoute ✗ — **obtenir un modèle qui
+  recopie** ✓ (LoRA de recopie ✓, ou modèle plus gros ✓), **puis** mesurer l'empreinte **pendant la
+  génération** ✓, **puis** seulement l'alignement entrée/sortie ✓. L'ordre s'impose de lui-même : *sans
+  copie, pas d'empreinte ; sans empreinte, rien à aligner* ✓✓.
