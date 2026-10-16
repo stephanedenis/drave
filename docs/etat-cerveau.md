@@ -20,6 +20,21 @@
 > `docs/roadmap-drave.md`, `docs/modele-pour-drave.md` § 3 (dessins H/I/J),
 > `docs/biologie-pour-drave.md` (expériences E1-E9), `docs/manques.md` (ce qui manque).
 
+> ### OÙ REGARDER, EN CINQ LIGNES *(ajouté le 16/10 : le fichier a beaucoup grandi cette nuit)*
+>
+> 1. **les douze capacités, une par ligne** → § 1 (et la **carte** complète, faculté par faculté avec
+>    le mécanisme le plus efficient : [`docs/cerveau-facultes.md`](cerveau-facultes.md)) ;
+> 2. **ce qui est ouvert, dans l'ordre** → la liste juste après le § 1 (**six entrées**, réécrite le
+>    15/10 au soir ✗) ;
+> 3. **les expériences de biologie E1-E9** → § 3 (**E9** — l'homéostasie synaptique — y est **défini
+>    et mesuré** depuis le 15/10, et gardé par `porte-homeostasie` ✓) ;
+> 4. **les instruments de mesure** et leur état → § 5, et `docs/references-non-regression.md` pour la
+>    **dernière passe des portes** (le chiffre qui fait foi) ;
+> 5. **le récit de ce qui a été fait, jour par jour** → `journal/` (chaque journée a ses notes, écrites
+>    à la main, et un journal automatique) — et la page **« où en est le travail »** est
+>    [`docs/en-cours.md`](en-cours.md), réécrite à chaque round et servie en HTML par
+>    `tools/serveur-doc.py` **port 8787** ✓.
+
 ## 1. Les douze capacités
 
 | # | capacité | état | le chiffre qui le prouve | où |
