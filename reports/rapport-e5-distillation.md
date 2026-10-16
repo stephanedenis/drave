@@ -155,7 +155,21 @@ raison est instructive :
   complet, où la validation **s'améliorait** assez pour retenir une époque entraînée ✓ — sinon les
   51,0 % d'accord n'existeraient pas ✗✓. Mais **personne ne peut le revérifier aujourd'hui** ✗, et
   c'est écrit ici ;
-* **la correction à faire, nommée** : quand `--distiller` est actif, la sélection d'époque doit se
-  faire sur une **mesure de l'objectif** (l'accord avec le maître ✓, déjà calculable par `--accord`
-  ✗) — ou, au minimum, **avertir** que l'époque retenue est 0 alors que l'objectif n'est pas la
-  perplexité ✗. C'est une ligne de garde, pas un projet ✓.
+* **la correction est FAITE (16/10, 01 h 40)** : le garde-fou **avertit** désormais, dans le tableau
+  de résultats, quand un bras a un objectif de **distillation** et une **époque retenue de 0** ✓ :
+
+```
+| `lora+adaptateur` | 0 | 17,5797 | 7,1787 |
+    ⚠️  ATTENTION : le bras `lora+adaptateur` a un objectif de DISTILLATION et une époque
+        retenue de 0 — le modèle rendu est celui du DÉPART, NON ENTRAÎNÉ. La
+        validation par perplexité ne peut pas guider un objectif qui la dégrade :
+        ce résultat mesure le point de départ, pas la distillation.
+```
+
+  Il a été écrit en **une seule édition** ✓, vérifié par compilation, l'aide, puis un **essai à blanc**
+  qui l'a vu se déclencher sur le cas pathologique ✓ — et l'option `--epoque-forcee` (qui aurait
+  demandé de toucher **deux** boucles ✗) est **laissée à faire** ✗, parce que deux tentatives l'ont
+  cassée ✗ : *une édition, un essai, un commit* ✓.
+* **ce qui reste à faire, nommément** : (a) `--epoque-forcee` (garder une époque choisie ✗) pour
+  **mesurer** ce que la distillation a appris au lieu de seulement **avertir** qu'on ne le mesure pas ✗ ;
+  (b) la sélection d'époque **par l'objectif** (l'accord avec le maître ✓) plutôt que par la perplexité ✗.

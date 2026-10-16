@@ -724,6 +724,19 @@ def main() -> int:
     print(ligne("chemin tronqué, tête **empruntée**", "—", "—", ppl_empruntee))
     for bras, r in resultats["bras"].items():
         print(ligne(f"`{bras}`", str(r["epoque"]), f"{r['val']:,.4f}", r))
+        # ⚠️ LE GARDE-FOU DE L'OBJECTIF (16/10). L'époque retenue est choisie sur la PERPLEXITÉ de
+        # validation, or la DISTILLATION la dégrade PAR CONSTRUCTION (c'est tout son compromis :
+        # « imite mieux, prédit moins bien »). Avec `--distiller`, la « meilleure » époque est donc
+        # souvent l'époque 0 — c'est-à-dire le modèle **non entraîné** — et c'est LUI qui est
+        # exporté, **sans aucune erreur** : un entraînement qui n'entraîne rien et le dit à voix
+        # basse (mesuré : m32 = 7,18 = la valeur de départ, pour un objectif de distillation).
+        # Même famille de défaut que le « 100 % » du `--accord` : *un chiffre plausible pour un
+        # calcul qui n'a pas eu lieu*. On le DIT, au lieu de le laisser passer.
+        if getattr(a, "distiller", False) and r.get("epoque", 0) == 0:
+            print(f"    ⚠️  ATTENTION : le bras `{bras}` a un objectif de DISTILLATION et une époque")
+            print("        retenue de 0 — le modèle rendu est celui du DÉPART, NON ENTRAÎNÉ. La")
+            print("        validation par perplexité ne peut pas guider un objectif qui la dégrade :")
+            print("        ce résultat mesure le point de départ, pas la distillation.")
     if a.accord:
         print("\n| accord avec le maître (positions 4..) | " + " | ".join(noms) + " |")
         print("|---|" + "---:|" * len(noms))

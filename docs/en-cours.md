@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 01 h 35 HAE.**
+**Mis à jour : 2026-10-16, 01 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -60,8 +60,11 @@ et la **mémoire** (15,3 Go demandés pour 15,55 Go : le protocole de la fiche *
 (10 morceaux), la **distillation n'est jamais retenue** ✗ — l'époque est choisie sur la **perplexité**,
 or la distillation la **dégrade par construction** → la meilleure époque est **0** (le modèle **non
 entraîné**, exporté sans un mot ✗). Sa table se lit donc comme les autres tables à graine unique : un
-**ordre de grandeur** ✗ ; le chiffre publié n'est ni confirmé ni infirmé. La correction à faire est
-**nommée** : sélectionner l'époque sur une **mesure de l'objectif** (l'accord), ou **avertir**.
+**ordre de grandeur** ✗ ; le chiffre publié n'est ni confirmé ni infirmé. La correction du défaut est
+**faite** : un **garde-fou** avertit maintenant, dans le tableau de résultats, quand un bras distillé a
+une époque retenue de 0 (le modèle **non entraîné**) — écrit en **une** édition, vérifié par un essai à
+blanc. Restent à faire : `--epoque-forcee` (pour **mesurer** au lieu d'avertir) et la sélection
+d'époque **par l'objectif**.
 
 ## Où en est le dépôt
 
