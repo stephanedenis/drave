@@ -561,3 +561,36 @@ La dernière promesse de la fiche (« E5 bis : gagner l'accord **sans** perdre l
   (c) **29 morceaux** (le volume ouvre la fenêtre ✓) — et il **paie** un accord **+4,7 points sur m32**
   (répliqué sur deux graines ✓) pour une perplexité **+145 %** (stable ✓), qu'**aucun mélange ne
   rachète** ✗. Sa **limite** est nette : **pas de version « petit volume »** ✗.
+
+## 19. LA CONFIGURATION PUBLIÉE NE REPRODUIT PAS — mais la variante stable, elle, BAT le témoin
+
+Le § 6 avait buté sur un mur de **mémoire** : le protocole d'E5 (**KL plein**, taux par défaut) demandait
+**15,3 Go pour 15,55 Go** et échouait dans `kl_div` ✗. **Stéphane a mis deux GPU à disposition** (deux
+Quadro RTX 5000, 16 Go chacune ✓) → le run bloqué est passé ✓✓, et voici les trois bras, tous à
+**29 morceaux, graine 1** ✓, mesurés par l'outil (`--accord` ✓) :
+
+| bras | perplexité m32 | m20 | **accord m32** | **accord m20** |
+|---|---:|---:|---:|---:|
+| **témoin** (objectif perplexité) | 192,69 | **132,69** | **25,7 %** | 38,1 % |
+| **distillé, KL PLEIN**, taux 1e-3 *(le réglage publié)* | 748,02 | 561,11 | **24,9 %** | **38,9 %** |
+| **distillé, KL TRONQUÉ 512**, taux 1e-4 *(la variante stable ✗)* | 478,94 | 404,98 | **30,3 %** ✓ | **51,4 %** ✓✓ |
+| *rappel : E5 publié le 15/10 (graine 0 ✗)* | *574,70* | *715,02* | *51,0 %* | *68,1 %* |
+
+* **la configuration PUBLIÉE ne reproduit pas** ✗✗ : à graine 1, le bras distillé en KL plein donne
+  **24,9 %** d'accord contre **25,7 %** pour le témoin — c'est-à-dire **rien** ✗ (et 38,9 % contre
+  38,1 % sur m20 ✓, un écart d'un demi-point ✗). Le « ×1,8 sur l'accord » de la fiche **n'apparaît pas**
+  ✗✓ ;
+* **et pourtant la distillation FONCTIONNE** ✓✓ — dans la **variante stable** : KL tronqué à **512**
+  classes, taux **1e-4** → **30,3 %** contre 25,7 % (m32 ✓) et **51,4 %** contre 38,1 % (m20 ✓✓). Le gain
+  est réel, il est **du bon côté**, et il est **plus fort** que ce que le protocole publié obtient ici ✓ ;
+* **ce que cela veut dire, en une phrase** : *la conclusion d'E5 dépend d'un réglage que sa fiche ne
+  mentionne pas* ✗✓ — le pire ennemi d'une distillation n'est pas l'objectif, c'est **la largeur du KL et
+  le taux** ✓ (§ 16 ✓ : à 64 classes la cible est **déformée** et le signe **s'inverse** ✗ ; à 512 elle
+  reste fidèle ✓) ;
+* **et ce que cela ne dit pas** ✗ : que la fiche publiée est fausse ✗ — elle a été mesurée à graine **0**
+  avec **son** pipeline ✓ ; mais **elle n'est pas reproductible à graine 1 dans sa propre
+  configuration** ✗✓, et c'est écrit ici, à côté de ses chiffres ✓ ;
+* **ce que la mise à disposition des deux GPU change pour la suite** ✓✓ : le mur de mémoire qui a coûté
+  trois rondées cette nuit **n'existe plus** ✗✓ — les protocoles « pleins » sont exécutables ✓, et deux
+  bras peuvent tourner **en parallèle** (un par carte ✓), ce qui divise par deux le temps de chaque
+  comparaison ✗✓.

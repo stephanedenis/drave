@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 16 h 25 HAE.**
+**Mis à jour : 2026-10-16, 17 h 00 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -98,6 +98,24 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## Le mur de mémoire est tombé (deux GPU), et E5 ne reproduit pas sa configuration publiée
+
+**Stéphane a mis deux GPU à disposition** (deux Quadro RTX 5000, 16 Go ✓) → le protocole d'E5 qui
+échouait à **15,3 Go pour 15,55** ✗ est passé ✓ :
+
+| bras (29 morceaux, graine 1) | accord m32 | m20 |
+|---|---:|---:|
+| témoin (perplexité) | **25,7 %** | 38,1 % |
+| **distillé, KL PLEIN, taux 1e-3** *(le réglage publié)* | **24,9 %** ✗ | 38,9 % |
+| **distillé, KL TRONQUÉ 512, taux 1e-4** *(la variante stable)* | **30,3 %** ✓ | **51,4 %** ✓✓ |
+| *rappel : E5 publié (graine 0)* | *51,0 %* | *68,1 %* |
+
+**La configuration publiée ne reproduit pas** ✗✓ (24,9 % contre 25,7 % pour le témoin : rien ✗) — **mais
+la distillation fonctionne** ✓✓ dans la **variante stable** (KL tronqué à 512, taux 1e-4 ✓) : **+4,6
+points** sur m32 et **+13,3** sur m20 ✓. Autrement dit : *la conclusion d'E5 dépend d'un réglage que sa
+fiche ne mentionne pas* ✗✓ — et ce réglage, on l'a trouvé ici ✓. **Et le mur de mémoire n'existe plus** :
+les protocoles « pleins » sont exécutables, et **deux bras peuvent tourner en parallèle** (un par carte ✓).
 
 ## Nouveau : l'étude « un modèle natif Drave » (16/10)
 
