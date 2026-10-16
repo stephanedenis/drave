@@ -93,6 +93,25 @@ l'autre corpus) :
 * **la courbe neutre est un U**, comme la courbe hors domaine : trop amortir **et** trop laisser
   passer dégradent ✓ — c'est la même forme, sur une statistique que le système peut mesurer seul ✓.
 
+## 2ter. La porte (46ᵉ) : le réglage devient un INVARIANT
+
+`tools/porte-homeostasie.sh` entre dans la passe complète et vérifie **le réglage**, pas seulement la
+mesure :
+
+| vérification | ce qui est exigé | rendu |
+|---|---|---|
+| **×0 = le modèle de départ** | un delta nul doit rendre le modèle — à la **re-quantification de l'export** près | ✅ norme 72,1293 contre 72,1312 (**écart 2,6e-05**) |
+| **l'activité est monotone** | la norme de l'état final croît avec l'amplitude (c'est la statistique qui porte la règle) | ✅ 72,13 ≤ 73,67 ≤ 74,18 |
+| **la dominance est reproduite** | ×0,6 fait au moins aussi bien en domaine **et** coûte moins cher hors domaine | ✅ m32 **−8,74 %** contre −7,47 % · hors **+0,07 %** contre +0,80 % |
+
+* **et un écart qui vaut d'être noté** : la porte **ré-exporte** le LoRA, et la re-quantification
+  déplace le hors-domaine de **~0,5 point** (×0,6 : **−0,58 %** au premier export, **+0,07 %** au
+  second ; ×1,0 : +0,33 % puis +0,80 %) ✗. **La direction est stable** (×0,6 coûte toujours moins
+  cher que ×1,0 ✓) mais **un chiffre de hors-domaine cité au dixième dépend de l'export** — c'est
+  écrit ici pour que personne ne compare deux exports en croyant comparer deux réglages ;
+* **ce que la porte ne vérifie pas** : que ×0,6 soit l'optimum **universel** ✗ — le balayage a été
+  fait sur **un** volume de rejeu (10 morceaux, rang 4). C'est dit dans l'en-tête de la porte.
+
 ## 3. Ce que cette fiche ne dit pas
 
 * **un seul LoRA, un seul rejeu** (rang 4, m0..m9, 10 époques) : l'optimum à ×0,6-0,75 est peut-être
