@@ -707,3 +707,52 @@ dernière brique qui manque pour qu'une question sur une image ait un sens ✓.
 
 **Le budget, honnêtement** : le pas 1 est le seul incertain ✗ (il dépend d'une version de bibliothèque
 ✗) ; les pas 2 à 4 sont du code borné et vérifiable ✓ (~2 h au total ✗, dont la moitié de vérification ✓).
+
+## 5. LE PLAN DE BRANCHEMENT, PRÉCIS (à exécuter APRÈS la passe, avec reconstruction)
+
+Ce qui reste du projet mRoPE tient en **un site d'appel** ✗ et **deux règles** ✓ — l'édition doit donc
+être unique et vérifiable ✓✓ (une leçon de la nuit : *un patch écrit en trois passes sur un fichier
+partagé se casse* ✗).
+
+**1. Où.** Les appels à la rotation dans `drave-core/src/model.rs` sont à **trois endroits** ✓, mais
+**un seul** concerne Qwen2-VL ✓ :
+
+| lignes | chemin | concerné ? |
+|---|---|---|
+| 6568 · 6574 | cache latent **MLA** (latent, `qkr`) | **non** ✗ — un autre dessin de modèle ✓ |
+| 7300 · 7307 | cache latent **MLA** (avec `kv_a`) | **non** ✗ |
+| **7872 · 7877** | **l'attention principale** (`q`/`k`, avec `rope_yarn` si le modèle le déclare ✓ sinon `rope` ✓) | **OUI** ✓✓ |
+
+**2. Ce qu'il faut y amener.** Les trois positions du jeton courant ✓ — aujourd'hui seul `pos: usize`
+est en portée ✗. Le plus petit chemin : un champ **`Option<Vec<[usize; 3]>>`** sur le modèle ✓ (la
+séquence de positions, calculée **une fois** par `mrope::positions` ✓✓ — qui est **écrit et testé** ✓),
+rempli par l'appelant qui fait le **splice** ✓ (le chemin de vision ✓), et **indexé par `pos`** au site
+d'appel ✓.
+
+**3. Les deux règles, et elles viennent d'une mesure** ✓ :
+
+* **REFUSER plutôt qu'ignorer** ✗ : demander le mRoPE **sans** fournir les positions doit être une
+  **erreur** ✓ — parce que le GGUF de Qwen2-VL **ne déclare rien** de sa rotation ✗✓ (§ 4 : `mrope`,
+  `rope_scaling`, `rope_theta` **absents** ✓) et que le moteur applique aujourd'hui une RoPE 1-D **en
+  silence** ✓✗. Un drapeau inerte est le pire défaut du dépôt ✓ ;
+* **ÉCHOIR ce qu'on applique** ✓ : la ligne de configuration doit dire **laquelle** des deux rotations
+  tourne ✓ (« rotation : mRoPE [16,24,24], trois positions » ✗ contre « rotation : RoPE simple » ✓),
+  pour qu'aucune mesure ne soit prise dans le doute ✓ — c'est ce que la ligne actuelle ne permet pas ✗.
+
+**4. Ce qui est déjà prêt, et ne demande aucune édition risquée** ✓ :
+
+| pièce | état |
+|---|---|
+| le calcul des **positions** (`mrope::positions`) | ✅ écrit, **3 essais** verts ✓ |
+| la **rotation** mRoPE (`mrope::appliquer_mrope`) | ✅ écrite, **2 essais** verts ✓ dont le **contrôle croisé** (positions égales ⇒ rotation 1-D ✓ contre des valeurs Python ✓) |
+| le **découpage** des fréquences (`ligne_de_frequence`, `SECTIONS`) | ✅ écrit et testé ✓ |
+| les **valeurs d'or** de la convention (blocs contre raster ✗) | ⏳ **outil prêt** (`tools/mrope_valeurs_or.py` ✓), à lancer **après la passe** (4,4 Go de carte ✓) |
+| le **branchement** dans `model.rs` | ⏳ ce plan ✓ — **une** édition, **après** la passe et **avec** reconstruction ✓ |
+| la **vérification de bout en bout** (pas 4 ✗) | ⏳ après le branchement ✓ |
+
+**5. Budget, et ce qui peut le faire déraper** ✗ : le branchement est **court** (~40 lignes ✓), la
+vérification est **longue** (comparer la génération sur une image, des deux côtés ✓). Ce qui peut le
+faire déraper est **nommé** ✓ : (a) la **convention d'ordre** ✗ si elle n'est pas celle mesurée ✓ — c'est
+le rôle des valeurs d'or ✓ ; (b) **l'injection** des jetons d'image ✗ (le splice existe ✓ mais il
+faudra le même des deux côtés ✓) ; (c) et la **mémoire** ✗ (la référence en f32 demande 4,4 Go ✓, la
+carte en a 16 ✓ — mais une passe de portes la prend déjà ✗✓, d'où la règle « pas pendant une passe » ✓).
