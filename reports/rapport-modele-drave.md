@@ -233,3 +233,32 @@ sonde ✓, puisqu'on est dans un régime **sens → texte** (Mel'čuk ✓, mais 
   recopie** ✓ (LoRA de recopie ✓, ou modèle plus gros ✓), **puis** mesurer l'empreinte **pendant la
   génération** ✓, **puis** seulement l'alignement entrée/sortie ✓. L'ordre s'impose de lui-même : *sans
   copie, pas d'empreinte ; sans empreinte, rien à aligner* ✓✓.
+
+## 10. L'ÉTAPE −1 EST LANCÉE : le LoRA de recopie (`tools/lora_recopie.py`)
+
+**Ce qu'il fait** ✓ : un LoRA (rang 8, **168 projections**, **4,40 M paramètres**, soit **0,88 %** du
+modèle ✓) sur des paires tirées du corpus —
+* **positive** : « Recopie exactement le texte suivant :\n<texte>\nRecopie :\n<texte> » ✓ (la cible
+  **est** la copie ✓) ;
+* **de contrôle** ✗ : « Résume en une phrase : … » avec une cible **différente** ✓ — sans elle, le modèle
+  apprendrait « répète toujours l'entrée » ✗✓, c'est-à-dire un **perroquet** ✓, ce qui **détruirait** la
+  mesure d'empreinte ✓ (on croirait lire une copie alors qu'on lirait un réflexe ✗).
+La perte ne porte **que sur les jetons de la cible** ✓, et l'évaluation se fait sur des textes **jamais
+vus** ✓.
+
+**L'essai à blanc, et il est déjà parlant** ✓✓ :
+
+| | recopie (plus long préfixe exact) | contrôle (résumé) |
+|---|---:|---:|
+| avant | **0,5 %** | 1,2 % |
+| **après UN seul pas** | **39,3 %** | **0,0 %** ✓ |
+
+* **la copie s'installe immédiatement** ✓✓ (0,5 % → **39,3 %** en un pas ✓) — la capacité est **latente**
+  dans le modèle ✓, elle ne demande qu'à être révélée ✓ ;
+* **et le contrôle reste à zéro** ✓✓ : le modèle **ne répète pas** quand on lui demande de résumer ✓ — donc
+  ce qui s'installe est **une copie commandée** ✓, pas un perroquet ✓✓. C'est exactement la condition pour
+  que l'**empreinte** soit mesurable ✓ (§ 9 ✓).
+
+**L'entraînement complet est en cours** ✓ (600 pas, évaluation tous les 100 ✓, une carte ✓, journal
+`/tmp/lora-recopie.log` ✓). Ce qu'on lira à la fin : **le taux de recopie** ✓ (viser > 90 % ✓) et **le
+contrôle** ✗ (qui doit **rester bas** ✓ — s'il monte, le LoRA est à jeter ✗).

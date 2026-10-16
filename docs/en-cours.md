@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 18 h 30 HAE.**
+**Mis à jour : 2026-10-16, 19 h 00 HAE.**
 
 ## Le travail du moment : la tour de vision
 
