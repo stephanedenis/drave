@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 01 h 10 HAE.**
+**Mis à jour : 2026-10-16, 01 h 35 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -56,8 +56,12 @@ sur trois obstacles : un **mauvais drapeau** (`--couches-lora` appartient à l'e
 l'avais **masqué avec `>/dev/null`**, ce qui a coûté deux tours ✗), un **mauvais bras** (`--bras lora`
 au lieu de `lora+adaptateur` : l'accord tombait à 100 %, c'est-à-dire mesurait le chemin **complet** ✗),
 et la **mémoire** (15,3 Go demandés pour 15,55 Go : le protocole de la fiche **ne rejoue pas** dans
-16 Go ✗). **E5 n'est donc PAS testé sur plusieurs graines** — sa table se lit comme les autres tables
-à graine unique : un ordre de grandeur ✗. Le chiffre publié n'est ni confirmé ni infirmé.
+16 Go ✗). **E5 n'est donc PAS testé sur plusieurs graines** — et un **deuxième mur** est apparu : à volume réduit
+(10 morceaux), la **distillation n'est jamais retenue** ✗ — l'époque est choisie sur la **perplexité**,
+or la distillation la **dégrade par construction** → la meilleure époque est **0** (le modèle **non
+entraîné**, exporté sans un mot ✗). Sa table se lit donc comme les autres tables à graine unique : un
+**ordre de grandeur** ✗ ; le chiffre publié n'est ni confirmé ni infirmé. La correction à faire est
+**nommée** : sélectionner l'époque sur une **mesure de l'objectif** (l'accord), ou **avertir**.
 
 ## Où en est le dépôt
 

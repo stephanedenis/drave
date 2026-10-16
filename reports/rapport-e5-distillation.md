@@ -128,3 +128,34 @@ critère ») appliquée à cette fiche ✗ — la reproduction a buté sur trois
 * **ce qui n'est pas en cause** : le chiffre publié (51,0 % contre 28,0 % ✗) reste ce qu'il était —
   mesuré, écrit, et **non reproduit** ce soir ✗. Il n'est ni confirmé ni infirmé : il est **en attente
   d'une machine qui puisse le rejouer** ✓.
+
+## 7. LE DEUXIÈME MUR : à volume réduit, la distillation n'est JAMAIS retenue (et c'est un défaut d'outil)
+
+Le § 6 avait trouvé le premier mur (la mémoire : 29 morceaux ⇒ ~15,3 Go pour 15,55 Go ✗). La
+contournement évident — **réduire le volume** (10 morceaux, qui tient ✓) — **ne marche pas**, et la
+raison est instructive :
+
+| bras (10 morceaux, graine 1) | époque retenue | validation 29 | TEST m32 |
+|---|---:|---:|---:|
+| `lora+adaptateur`, objectif **perplexité** | **2** | — | **6,67** ✓ (entraîné) |
+| `lora+adaptateur`, objectif **distillation** | **0** | 17,5797 | **7,18** = la valeur de DÉPART ✗ |
+
+* **l'époque retenue est choisie sur la PERPLEXITÉ de validation** ✗ — or la distillation **dégrade
+  la perplexité par construction** (c'est tout son compromis : « imite mieux, prédit moins bien »,
+  § 1 : 574,70 contre 181,54 ✗). Résultat : la meilleure époque est **l'époque 0**, c'est-à-dire le
+  modèle **non entraîné** ✗, et c'est **lui** qui est exporté ✓✗ ;
+* **le bras distillé rend donc exactement la valeur de départ** (7,18 = 7,1787 ✓) **sans aucune
+  erreur** ✗ — un entraînement qui n'entraîne rien et le dit à voix basse ✓. C'est la **même famille**
+  de défaut que le `--accord` du § 6 (« 100 % » qui mesurait le mauvais objet ✗) et que le drapeau
+  ignoré : *un outil qui rend un chiffre plausible pour un calcul qui n'a pas eu lieu* ✗ ;
+* **conséquence pour E5** : sa reproduction demande **le protocole complet** (29 morceaux ✗, mémoire
+  ✗) **et** une sélection d'époque **cohérente avec l'objectif** (la validation par l'**accord**, pas
+  par la perplexité ✗) — deux corrections d'outil, dont la seconde est un **vrai défaut** ✓ ;
+* **ce que cela ne remet pas en cause** : la conclusion d'E5 (§ 1) a été obtenue avec le protocole
+  complet, où la validation **s'améliorait** assez pour retenir une époque entraînée ✓ — sinon les
+  51,0 % d'accord n'existeraient pas ✗✓. Mais **personne ne peut le revérifier aujourd'hui** ✗, et
+  c'est écrit ici ;
+* **la correction à faire, nommée** : quand `--distiller` est actif, la sélection d'époque doit se
+  faire sur une **mesure de l'objectif** (l'accord avec le maître ✓, déjà calculable par `--accord`
+  ✗) — ou, au minimum, **avertir** que l'époque retenue est 0 alors que l'objectif n'est pas la
+  perplexité ✗. C'est une ligne de garde, pas un projet ✓.
