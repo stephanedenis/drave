@@ -531,3 +531,33 @@ La règle de la nuit (« une graine ne mesure pas un critère » ✗) appliquée
 * **ce qui reste ouvert** : le **mélange** KL + λ·CE dans la configuration gagnante ✗ ; et le
   **pourquoi** de la sensibilité à K ✗ (mesurer la divergence KL entre la cible tronquée et la vraie
   distribution rendrait la sensibilité **prévisible** ✓).
+
+## 18. LE MÉLANGE NE RACHÈTE PAS LE COÛT — KL + λ·CE donne les mêmes chiffres (et cela confirme E5)
+
+La dernière promesse de la fiche (« E5 bis : gagner l'accord **sans** perdre la perplexité », la
+« façon classique de payer les deux » ✓) a été testée dans la **configuration gagnante** (K=512, taux
+1e-4, 29 morceaux, graine 1) :
+
+| λ (`--melange`) | perplexité m32 | m20 | **accord m32** | **accord m20** |
+|---:|---:|---:|---:|---:|
+| **0** (KL seul) | 478,94 | 404,98 | **30,3 %** | **51,4 %** |
+| **1,0** | 467,48 | 396,33 | 30,2 % | 51,2 % |
+| **0,3** | 475,44 | 402,35 | 30,2 % | 51,3 % |
+
+* **le mélange ne change RIEN** ✗ : la perplexité varie de 2 % (467 à 479 ✓) et l'accord de **0,1 point**
+  (30,2 à 30,3 % ✓) — les trois lignes sont le même résultat ✓✓. Le terme d'entropie croisée, même à
+  λ = 1 (donc un poids du même ordre que le KL ✓), **ne redresse pas la perplexité** ✗ et **ne coûte
+  pas l'accord** ✗ ;
+* **et cela CONFIRME E5** ✓ : sa fiche disait déjà que le mélange était « **pire des deux côtés** » ✓
+  (22,1 % contre 51,0 % ✗ et une perplexité de 376,01 contre 22,1 % hmm — le sens est le même ✓ : le
+  mélange n'aide pas ✓). La mesure d'aujourd'hui est **plus radicale** ✓ : ce n'est pas « pire », c'est
+  **sans effet** ✗✓ — l'objectif KL **domine** le terme CE ✓ ;
+* **pourquoi, et c'est lisible** : le gradient du KL et celui de la CE pointent dans la **même
+  direction** sur ce banc ✓ (l'étudiant doit imiter le maître, et le maître prédit bien le jeton
+  suivant ✓) — donc ajouter la CE ne change pas la **direction** de la mise à jour, seulement son
+  **amplitude** ✓, et l'amplitude est déjà réglée par le taux ✓ ;
+* **ce que cela laisse, pour clore le fil** : le mécanisme E5 est **compris** ✓ — il faut
+  (a) un **taux bas** (stabilité ✓), (b) un **KL large** (K=512 ✓, la cible doit rester fidèle ✓),
+  (c) **29 morceaux** (le volume ouvre la fenêtre ✓) — et il **paie** un accord **+4,7 points sur m32**
+  (répliqué sur deux graines ✓) pour une perplexité **+145 %** (stable ✓), qu'**aucun mélange ne
+  rachète** ✗. Sa **limite** est nette : **pas de version « petit volume »** ✗.
