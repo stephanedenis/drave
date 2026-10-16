@@ -28,6 +28,19 @@
 > précédentes auraient pu passer avec un document cassé sans le dire ✗. Ce qui est vérifié
 > **neuf** dans cette passe :
 >
+> ⚠️ **ET LE COMPTE DE CETTE PASSE EST UNE RECONSTRUCTION, PAS UNE LECTURE** ✗ : la synthèse
+> (« *N vertes, M rouges* » ✓) part sur la **sortie standard** ✗ et la passe a été lancée avec
+> `| tail -3` ✗ — donc elle a été **coupée**, et les **codes de sortie** n'étaient écrits **nulle part**
+> ✗✓. Le « 44 / 2 » ci-dessus est reconstruit à partir des **marqueurs** des journaux ✓ — c'est-à-dire
+> exactement la méthode de lecture que l'audit du même jour a montrée **non fiable** ✗✓ (une porte peut
+> échouer sans `❌` dans son source, et un `❌` peut venir de l'outil qu'elle appelle ✓).
+>
+> **Corrigé dans la foulée** ✓ : `toutes-les-portes.sh` écrit désormais un **registre**
+> (`$JOURNAUX/registre.txt` ✓) avec, pour chaque porte, son **code de sortie** et sa durée ✓, et la
+> synthèse y est **ajoutée** (`tee -a` ✓). Le verdict de la prochaine passe sera donc **relisible**
+> ✓✓, quelle que soit la façon dont on l'a lancée ✓ — *une passe qui ne laisse pas son verdict est une
+> passe qu'on doit croire sur parole* ✗.
+>
 > * `porte-tableaux` : **473 fichiers** (tableaux ✓) **et 308 liens relatifs** ✓ (nouveau ✓) ;
 > * `porte-homeostasie` (E9) : ×0 rend le modèle ✓, activité monotone ✓, **dominance de ×0,6
 >   reproduite** ✓ ;

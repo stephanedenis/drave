@@ -62,9 +62,16 @@ for g in $portes; do
         [ "$code" = 124 ] && marque="⏱ (borne ${DELAI} s dépassée)" || marque="❌ code $code"
     fi
     printf '  %-22s %-26s %4d s  %s\n' "$nom" "$marque" "$dt" "$dernier"
+    # ⚠️ LE REGISTRE, ET POURQUOI IL EXISTE. La synthèse ci-dessous part sur la SORTIE STANDARD ✗ — et
+    # une passe lancée avec `| tail` (ou dont on ne garde que la fin ✓) la perd ✗✓ : il ne reste alors
+    # que les journaux par porte, où le verdict ne se lit qu'au MARQUEUR (❌ ✓) — or l'audit du 16/10 a
+    # montré que le marqueur n'est PAS le critère ✓ (une porte peut échouer sans ❌ dans son source ✓,
+    # et le marqueur peut venir de l'outil qu'elle appelle ✓). Écrire le CODE DE SORTIE dans le dossier
+    # des journaux rend le verdict **relisible** ✓, quelle que soit la façon dont la passe a été lancée ✓.
+    printf '%s %s %s\n' "$nom" "$code" "$dt" >> "$JOURNAUX/registre.txt"
 done
 
-echo "--- $vertes vertes, $rouges rouges ---"
+echo "--- $vertes vertes, $rouges rouges ---" | tee -a "$JOURNAUX/registre.txt"
 if [ "$rouges" != 0 ]; then
     echo "À RELIRE (les six dernières lignes de chaque rouge) :"
     for nom in $liste_rouges; do
