@@ -202,3 +202,38 @@ que l'entraînement avait produit, au lieu de le déduire :
 * **ce qui reste ouvert** : à quel volume la distillation cesse-t-elle de diverger ✗ (entre 10 et 29 ✗) ;
   et le remède classique — **température**, **taux d'apprentissage plus bas**, ou **KL tronqué aux
   k premiers logits** ✗ — n'est pas essayé ici ✓.
+
+## 9. LA FENÊTRE EST VIDE à 10 morceaux : la distillation diverge OU n'apprend rien
+
+Le § 8 avait trouvé la divergence (2,7e12 à trois époques ✗). Restait la question utile : **existe-t-il
+un taux d'apprentissage qui entraîne SANS détruire ?** Balayage, 10 morceaux, graine 1, époque forcée
+à 10 (pour regarder la fin, pas le meilleur point ✗) :
+
+| taux (`--pas-lora`) | validation 29 à la fin | TEST m32 | base (aucun entraînement) |
+|---:|---:|---:|---:|
+| 1e-3 *(défaut)* | 2,7e12 ✗✗ *(dès 3 époques)* | 5,1e11 ✗✗ | 17,58 · 7,1787 |
+| 3e-4 | 2,7e11 ✗✗ | 2,8e11 ✗✗ | |
+| 1e-4 | 6,96e4 ✗ | 2,66e4 ✗ | |
+| **1e-5** | **17,72** ✓ | **7,2333** ✓ | |
+
+* **à 1e-5, la distillation est STABLE** ✓ — la perplexité ne bouge presque pas (17,72 contre 17,58 ;
+  7,2333 contre 7,1787, soit **+0,8 %** ✓) — donc elle **n'apprend rien** ✗ : dix époques à 1e-5 ne
+  déplacent pas le modèle ✓ ;
+* **et la sélection naturelle d'époque retient quand même 0** ✓ — même à 1e-5, la perplexité se
+  **dégrade** légèrement, donc le meilleur point reste le **départ** ✗ (le garde-fou le dit ✓) ;
+* **la conclusion est donc une fenêtre VIDE** ✗✓ : à ce volume, il n'existe **pas** de taux qui
+  entraîne *et* survive — en dessous de 1e-4 le modèle **diverge** ✗, au-dessus de 1e-5 il
+  **n'apprend rien** ✗. Il n'y a pas de réglage à trouver, il y a un **manque de données** ✓ ;
+* **ce que cela explique, et qui était le vrai sujet** : E5 avait besoin de **29 morceaux** ✗ — non
+  par choix de protocole, mais parce que **le volume est ce qui ouvre la fenêtre** ✓. Le KL sur
+  151 936 logits pousse tout le vecteur à la fois : il faut assez d'exemples pour que la moyenne des
+  gradients ne soit pas un pas destructeur ✗ ;
+* **les remèdes, nommés et non essayés** : (a) **tronquer le KL** aux k premiers logits ✗ (le gradient
+  ne pousse plus 151 936 dimensions ✗) ; (b) une **température** plus haute ✗ (des distributions plus
+  douces, des gradients plus petits ✗) ; (c) un **échauffement** du taux ✗ ; (d) **plus de données** ✓
+  (ce que fait le protocole publié ✓). Le plus prometteur est (a) : c'est le seul qui change la
+  *forme* du gradient, pas son amplitude ✗ ;
+* **et une leçon de méthode, la troisième du même genre en deux jours** : « l'outil retient l'époque 0 »
+  ✗ était d'abord lu comme un **défaut d'outil** ✗, puis comme un **moindre mal** ✓, puis comme la
+  **conséquence d'une fenêtre vide** ✓✓. Trois lectures, chacune plus juste, obtenues en **regardant**
+  au lieu de déduire ✗.

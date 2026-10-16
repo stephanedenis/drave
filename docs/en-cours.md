@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 02 h 05 HAE.**
+**Mis à jour : 2026-10-16, 02 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -67,7 +67,11 @@ blanc. `--epoque-forcee` est **fait** ✓ et il a permis de voir le fond du mur 
 distillation **DIVERGE** ✗✗ — trois époques suffisent à porter la perplexité à **2,7e12**. L'époque 0
 retenue par l'outil n'était donc pas un artefact mais **le moindre mal** ✓✓ (le défaut d'outil est
 réel : il ne dit pas *pourquoi* ✗). Conséquence : **E5 n'est pas scalable vers le bas** ✗ — son
-résultat (574,70, dégradé mais stable) n'existe **qu'à son volume** (29 morceaux).
+résultat (574,70, dégradé mais stable) n'existe **qu'à son volume** (29 morceaux). Et le balayage du
+taux le confirme : à 10 morceaux **la fenêtre est VIDE** ✗ — 1e-3/3e-4/1e-4 **détruisent** le modèle
+(2,7e12 / 2,7e11 / 6,96e4) et **1e-5 n'apprend rien** (17,72 contre 17,58 de base). Il n'y a pas de
+réglage à trouver : il y a un **manque de données** — le KL sur 151 936 logits pousse tout le vecteur
+à la fois. Remède nommé : **tronquer le KL** aux k premiers logits (changer la *forme* du gradient).
 
 ## Où en est le dépôt
 
