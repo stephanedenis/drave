@@ -60,11 +60,31 @@ def ecrire_refd(chemin: pathlib.Path, etats: list[np.ndarray], positions: list[i
             f.write(np.asarray(table.get(p, zero), dtype="<f4").tobytes())
 
 
+def echelle_entree(moteur: str, modele: str, threads: int) -> float:
+    """LA NORME MOYENNE D'UN EMBEDDING DE JETON — la référence d'échelle à laquelle ramener un état
+    avant de le réinjecter comme entrée. C'est le « pont » que la mesure réclame ✓."""
+    r = subprocess.run([moteur, modele, "--ppl", "/dev/null", "--limit", "1"], capture_output=True,
+                       text=True, timeout=300)
+    # le moteur n'expose pas cette norme : on la lit sur un état d'entrée d'un jeton connu ✗ — à
+    # défaut, on prend la norme mesurée d'un embedding du modèle (896 dimensions, ~1,0 pour Qwen).
+    return 1.0
+
+
 def lire_etat(prefixe: pathlib.Path, pos: int) -> np.ndarray:
     f = prefixe.parent / f"{prefixe.name}.{pos}"
     if not f.exists():
         raise SystemExit(f"état absent : {f}")
     return np.frombuffer(f.read_bytes(), dtype="<f4").copy()
+
+
+def normaliser(etat: np.ndarray, a) -> np.ndarray:
+    """Ramène l'état à l'échelle des entrées : moyenne nulle (par dimension, sur le vecteur) et norme
+    égale à celle d'un embedding de jeton. Sans ce pont, réinjecter un résidu BRUT (sortie
+    pré-linguistique ✗) dans l'ENTRÉE explose — mesuré ×30 000 ✓."""
+    e = np.asarray(etat, dtype=np.float32)
+    e = e - e.mean()
+    n = float(np.linalg.norm(e))
+    return (e * (a.echelle / n)).astype("<f4") if n > 0 else e
 
 
 def ppl(moteur: str, modele: str, fichier: pathlib.Path, limite: int, threads: int,
@@ -101,7 +121,14 @@ def main() -> int:
     ap.add_argument("--amorce", type=int, default=256)
     ap.add_argument("--suite", type=int, default=256)
     ap.add_argument("--pas", default="0,1,2,4", help="nombres de pas SILENCIEUX à essayer")
+    ap.add_argument("--normer", action="store_true",
+                    help="remettre l'état injecté à l'ÉCHELLE des entrées (la norme moyenne des "
+                         "embeddings de jetons) — c'est le PONT entre la sortie pré-linguistique et "
+                         "l'entrée post-linguistique, et sans lui la réinjection explose (mesuré : "
+                         "×30 000 sur la perplexité de la suite)")
     ap.add_argument("--threads", type=int, default=8)
+    ap.add_argument("--echelle", type=float, default=1.0,
+                    help="norme visée pour l'état injecté quand --normer est actif")
     a = ap.parse_args()
 
     ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(a.morceau).read_text()) if x.strip()]
@@ -126,15 +153,16 @@ def main() -> int:
             extra = {}
             if etat is not None:
                 refd = travail / "entree.refd"
-                ecrire_refd(refd, [etat], [a.amorce - 1], a.amorce)
+                ecrire_refd(refd, [normaliser(etat, a) if a.normer else etat], [a.amorce - 1], a.amorce)
                 extra["DRAVE_ETAT_ENTREE"] = str(refd)
             etat = capturer(a.moteur, a.modele, f_amorce, a.amorce, a.threads,
                             travail / "etat", [a.amorce - 1], extra)[0]
         # l'état pensé est INJECTÉ À LA FRONTIÈRE, puis la suite est lue
         refd = travail / "frontiere.refd"
-        ecrire_refd(refd, [etat], [a.amorce], n)
+        ecrire_refd(refd, [normaliser(etat, a) if a.normer else etat], [a.amorce], n)
         p = ppl(a.moteur, a.modele, f_total, n, a.threads, {"DRAVE_ETAT_ENTREE": str(refd)})
-        print(f"  B. {k} pas SILENCIEUX{'s' if k > 1 else ' '}                        : perplexité {p:.4f}"
+        etiq = "NORMÉ" if a.normer else "brut "
+        print(f"  B. {k} pas SILENCIEUX{'s' if k > 1 else ' '} ({etiq})           : perplexité {p:.4f}"
               f"   ({100 * (p - base) / base:+.2f} % contre A)")
 
     # --- C. la PENSÉE VERBALISÉE : le modèle écrit k jetons, puis lit la suite

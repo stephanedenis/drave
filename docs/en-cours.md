@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 10 h 30 HAE.**
+**Mis à jour : 2026-10-16, 13 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -97,6 +97,31 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## Nouveau (16/10, après-midi) : « penser sans verbaliser » — première mesure
+
+L'idée de Stéphane : un LLM verbalise chaque pas de pensée, un cerveau d'expert **pense sans dialogue
+intérieur**. Drave sait écrire et relire un **état**, donc la question est exécutable ✓. Mesuré
+(`reports/rapport-pensee-silencieuse.md`, `tools/pensee_silencieuse.py`) :
+
+| réglage | perplexité de la suite | écart |
+|---|---:|---:|
+| A. lecture seule | **9,6503** | — |
+| B. 1 pas **silencieux** (état réinjecté) | **294 181** | **+3 048 315 %** ✗✗ |
+| B′. idem, état **normé** (échelle des entrées) | 292 935 | +3 035 398 % ✗✗ |
+| **C. 16 jetons VERBALISÉS** | **9,5003** | **−1,55 %** ✓✓ |
+
+**Deux résultats, dont un contre l'intuition** : (1) la **boucle d'état naïve détruit la prédiction** ✗✗
+(cinq ordres de grandeur) — **et ce n'est pas un problème d'échelle** ✗✓ (normer ne change rien : 292 935
+contre 294 181) → c'est une question de **sémantique** : le résidu **prélinguistique** n'est pas une
+**entrée** ✓, la correspondance n'est **pas l'identité** ✓ ; (2) **verbaliser n'est PAS du gaspillage** ✓✓
+— écrire 4 jetons améliore la suite de **0,40 %**, en écrire 16 de **1,55 %** (monotone ✓) : le jeton est
+le **pont** qui remet l'état dans un espace que le modèle sait relire ✓.
+
+Ouvre quatre mesures, dans l'ordre de ce qu'elles coûtent : le **pont entraîné** (un adaptateur
+état → entrée ✓), le **contrôle apparié** de C (verbaliser **sans** garder les jetons ✓), le même
+protocole sur le **cycle entraîné** ✓, et le **mode communication contre mode réflexion** (sonde
+linéaire sur les états ✓).
 
 ## La passe du 16/10 à 02 h 49 : 44 vertes sur 46 — et elle est SIGNIFICATIVE
 
