@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 14 h 45 HAE.**
+**Mis à jour : 2026-10-16, 15 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -26,6 +26,7 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | et une leçon pour moi, deux fois | j'ai tiré **deux** conclusions fausses sur le *code* alors que le défaut était dans **ma mesure** : un « correctif » démenti par un panic (`post_ln` fait 1280 poids), puis un écart de 66,6 % qui venait de l'**ordre de mes entrées**. *L'instrument se vérifie avant la conclusion.* |
 | ⚠️ **avertissement (levé)** | il y avait un écart entre le **source** et le **binaire** pendant l'investigation du projecteur ✓ ; **il est levé** — le binaire a été reconstruit depuis, et la passe de portes en cours tourne sur une construction propre ✓ |
 | ce qui reste | l'**injection** (le chemin image → jetons du modèle de texte) et la **vision multimodale de bout en bout** (une question sur une image) |
+| **comment s'en servir** | [`docs/utilisation.md`](utilisation.md) — écrit le 16/10 : le **chat** (`tools/chat.py` ✓), le serveur, la mesure, les portes, la vision, **et ce qui manque** (un plus gros modèle, le mRoPE, un serveur d'inférence, `--silence`) |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` (ou `http://192.168.1.101:8787/`) — **service `drave-doc`** (`systemd --user`, `Restart=always`, `linger` ✓), il **relit le disque à chaque requête** (aucun cache ✓) et **redémarre seul** (testé en le tuant ✓) |
 
 ## Nouveau : E9, l'homéostasie synaptique (défini et mesuré ce soir)
