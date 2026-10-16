@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 15 h 40 HAE.**
+**Mis à jour : 2026-10-16, 16 h 00 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -113,6 +113,13 @@ n'a d'opérateur de pensée** ✗ ; la contrainte **sans multiplieur** est déj�
 (le réflexe ✓), un **bloc de pensée contractant** ✓, un **pont de région appris** ✓, signes figés + k-WTA
 ✓. Tout est **déjà constructible** avec `tools/entrainer_moteur.py` ✓ (Qwen3 de zéro ✓ — son aide,
 cassée par un `%` non échappé, a été réparée aujourd'hui ✓).
+**⚠️ Et l'essai immédiat a trouvé l'étape 0** ✗✓ : l'entraîneur **tourne** (4 M paramètres, val 4,8948
+bits/octet, k-WTA 25 % sur 17 projections ✓) mais il écrit du **format HuggingFace** ✗ — alors que le
+**moteur ne lit que du GGUF** ✗. **L'aller-retour entraîneur → moteur n'est pas câblé** pour un modèle
+routé en octets ✓ (l'exporteur du dépôt est écrit pour du dense ✗) : c'est **le chaînon manquant**, il
+est **petit** (le format est déjà lu par le moteur ✓, il manque l'écriture ✗), et il doit précéder tout
+le reste — sinon rien n'est mesurable **dans le moteur** ✓.
+
 **Quatre étapes, chacune mesurable avec un outil existant** : têtes précoces (`--accord` ✓) → bloc de
 pensée (`cycle_sensibilite.py` ✓, `pas_latent.py` ✓) → pont de région (`porte-coupe.sh` ✓) → échelle ✓.
 Et ses **risques sont écrits d'avance** ✗ : un 2 M en octets ne parle pas ✓ (c'est un banc ✓), la

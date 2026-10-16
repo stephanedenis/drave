@@ -65,3 +65,42 @@ pour **une** chose : **le contenu** ✓ (la politique par texte ✓, la diversit
 trois-là sont exactement ce qu'**un modèle entraîné pour ça** ferait mieux qu'un modèle générique
 **adapté** ✗✓ : un modèle **natif** n'aurait pas besoin d'apprendre à être coupé ✓, à avoir un réflexe ✓,
 ni à être contractant ✓ — il le serait **par construction** ✓✓.
+
+## 6. L'ÉTAPE 0, TROUVÉE EN ESSAYANT : le aller-retour entraîneur → moteur n'est PAS câblé
+
+L'étude ne vaut que si elle est **exécutable** ✓ — alors l'essai a été fait **tout de suite** ✓, avec
+l'entraîneur existant ✓ :
+
+```bash
+python tools/entrainer_moteur.py --famille route --dim 256 --couches 4 --tetes 4 --cache 512 \
+    --cache-perle 256 --experts 4 --k 2 --seq 128 --lot 8 --pas 60 --kwta 0.25 \
+    --donnees data/wikitext2_test.txt --sortie /tmp/drave-v0.gguf
+```
+
+**Ce qui marche** ✓✓ : l'entraînement tourne (60 pas, **5 s**, perte 2,5741, validation **4,8948
+bits/octet** ✓), il applique **k-WTA 25 % sur 17 projections** ✓, et il annonce un modèle de **4,00 M
+paramètres** ✓.
+
+**Ce qui manque** ✗✓ : il **n'écrit pas un GGUF** ✗ — il écrit un **dossier au format HuggingFace**
+(`config.json`, `model.safetensors` de 15,3 Mo ✓), et le moteur **ne peut donc pas le lire** ✗ (essai
+fait : la commande de perplexité ne rend rien ✓). Autrement dit : **l'aller-retour
+entraîneur → moteur n'est pas câblé pour ce modèle** ✗✓ — un **modèle routé en octets** n'a pas
+d'exporteur ✓ (l'exporteur du dépôt, `exporter_gguf_dense.py` ✓, est écrit pour du **dense** ✗ et part
+d'un modèle HuggingFace ✓).
+
+**C'est donc l'étape 0 du plan** ✓ — et elle est **petite** : le format GGUF du moteur est **déjà lu par
+lui** ✓ (les modèles Qwen3-MoE de l'entraîneur ont la même architecture que ceux qu'il exécute ✓), il
+manque **l'écriture** ✗. Tant qu'elle n'est pas faite, aucun des quatre étapes du § 3 ne peut être
+mesurée **dans le moteur** ✗✓ — et mesurer **hors** du moteur, c'est renoncer à la règle du dépôt
+(« une implémentation qu'on ne peut pas comparer à une seconde est une implémentation qu'on ne peut pas
+vérifier » ✓).
+
+### Le plan corrigé
+
+| # | étape | état |
+|---|---|---|
+| **0** | **écrire le GGUF** d'un modèle routé en octets (et vérifier que le moteur rend la même perplexité que l'entraîneur ✓) | **à faire** ✗ — le chaînon manquant, trouvé en essayant ✓ |
+| 1 | têtes précoces ✓ | après l'étape 0 ✓ |
+| 2 | bloc de pensée contractant ✓ | après ✓ |
+| 3 | pont de région appris ✓ | après ✓ |
+| 4 | échelle ✓ | après ✓ |
