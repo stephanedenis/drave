@@ -168,6 +168,24 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | vision (Qwen2-VL, la tour et son écart) | [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) · `porte-vision.sh` (45ᵉ porte : refus · formes · tour **mesurée**, non jugée) |
 | distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
+
+> **E5, remesuré le 16/10 — et ses DEUX réglages critiques, que la fiche d'origine ne disait pas.**
+> La distillation **fonctionne** (témoin reproduit : **25,7 %** d'accord contre 28,0 % publié ✓ ;
+> direction **répliquée sur deux graines** ✓✓ : m32 **+4,6 et +4,8** points, quatre comparaisons dans le
+> même sens ✓) — **mais** :
+> * elle **diverge** au taux par défaut dès qu'on réduit le volume ✗ (2,7e12 en trois époques à
+>   10 morceaux) : la **fenêtre est vide** ✗✓ jusqu'à ce qu'on **tronque le KL** (`--kl-tronque`,
+>   fenêtre ×10 ✓) ;
+> * elle **s'inverse** si le KL est trop tronqué ✗ : à **64** classes l'accord tombe à **17,1 %**
+>   contre 25,7 % pour le témoin ✗✓, à **512** il monte à **30,3 %** ✓ — la cible tronquée est
+>   **déformée** (renormalisée sur K classes) ;
+> * le **prix est stable, le gain ne l'est pas** ✗✓ : perplexité **+148 % et +143 %** selon la graine ✓
+>   (certain), accord **+4,6/+4,8** sur m32 (stable ✓) mais **+1,3 à +13,3** sur m20 ✗ (instable ✗) ;
+> * le **mélange** KL + λ·CE **ne rachète rien** ✗ (chiffres identiques à λ = 0,3 et 1,0) ;
+> * **limite** : il n'existe **pas** de version « petit volume » ✗ (à 10 morceaux, la distillation
+>   détruit le modèle avant d'apprendre ✓).
+> Et `porte-reflexe` garde désormais l'**assemblage** ✗ (refus du moteur ✓, **invariant d'identité** ✓,
+> accord mesuré avant/après ✓) : les quatre pannes du fil n'étaient **pas** dans le modèle ✗✓.
 | adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
 | le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
 | trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
