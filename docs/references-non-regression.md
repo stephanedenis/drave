@@ -168,6 +168,27 @@
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **122 verts** |
 | le serveur de documentation | `tools/serveur-doc.py` (port 8787) | `tools/serveur-doc.py` · [`docs/en-cours.md`](../docs/en-cours.md) — il **ne juge rien** : il rend les documents et affiche « en ce moment », écrit à la main à chaque round |
 | toutes les portes | `tools/toutes-les-portes.sh` | **46 portes** (`porte-reflexe` garde en plus, depuis le 16/10, l'**assemblage** du réflexe : le refus de l'adaptateur sans tête partielle, l'**invariant d'identité** et la mesure de l'accord ; 46ᵉ : `porte-homeostasie`, E9 ; `porte-cycle-c2` garde en plus la **bornitude** du cycle et **mesure λ**) ; dernière passe : **43 vertes sur 45** (15/10 11 h 21), ≈80 min, aucune sautée — les deux rouges sont **structurels** et connus (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+
+> ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE
+>
+> **1. `porte-tableaux` NE POUVAIT PAS ÉCHOUER.** Elle imprimait ses défauts (❌) puis sortait en **0** ✗ :
+> le `sys.exit(...)` de son bloc Python n'arrêtait que **Python** ✗, et le script ne propageait pas le
+> code ✓. Une porte qui ne peut pas échouer est **pire** qu'une porte absente ✗ — et celle-ci
+> **documente** les tableaux depuis des semaines ✓. Corrigé : `[ $? -eq 0 ] || exit 1` juste après le
+> bloc ✓ (vérifié : elle sort maintenant en **1** sur un tableau cassé ✓✓).
+>
+> **2. ET JE L'AI LUE À TRAVERS `tail` PENDANT HUIT ROUNDS** ✗✗. Ce fichier le dit pourtant noir sur
+> blanc : « ne jamais lire une porte à travers un pipe — le code de sortie devient celui du pipe » ✓.
+> Résultat : **huit commits** sont passés avec un tableau **cassé** dans `docs/cerveau-facultes.md` ✗
+> (un bloc de citation inséré **au milieu** d'un tableau ✓) sans que je m'en aperçoive ✓✗. Corrigé ✓.
+>
+> **3. Et une porte de plus dans la foulée** : `tools/verifier_liens.py` (**308 liens** relatifs
+> vérifiés dans `docs/` et `reports/` ✓) est appelé par `porte-tableaux` ✓ — un document de ce dépôt
+> **est** fait de renvois, et un renvoi mort ne casse rien le jour où on l'écrit : il casse six semaines
+> plus tard ✓.
+>
+> *Trois défauts, trois leçons déjà écrites ici : une vérification doit pouvoir échouer ; on ne lit pas
+> une porte à travers un pipe ; et un renvoi se vérifie à la machine, pas à l'œil.*
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 ## 2. Les repères imprimés par chaque porte
