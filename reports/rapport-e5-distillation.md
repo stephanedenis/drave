@@ -292,3 +292,35 @@ spéculatif :
   **sait** qu'il doit être élevé — le protocole publié (29 morceaux, 51,0 %) ✗ — ou, à défaut, vérifier
   qu'un adaptateur **nul** rend exactement le chemin tronqué sans adaptateur ✓ (l'invariant d'identité
   du § 1 ✓). Sans ce témoin, « 0,0 % » ne dit pas si c'est le modèle ou la mesure ✗.
+
+## 11. LA CAUSE DU « 0,0 % » EST TROUVÉE (l'adaptateur est l'IDENTITÉ) — sa raison ne l'est pas
+
+Le § 10 laissait un contrôle à faire : « mesurer un bras dont on SAIT qu'il doit être élevé ». Il a été
+fait, et il a payé ✓ — la chaîne est maintenant établie, fait par fait :
+
+| fait mesuré | valeur | lecture |
+|---|---|---|
+| le **cerveau** (24 couches) sur une séquence de m32 | `[51667, 11042, 320, 5534, …]` | cohérent ✓ |
+| le **réflexe** (8 couches, tête partielle, adaptateur) | `[43850, 71112, 145375, …]` | **incohérent** ✗ |
+| le réflexe **sans** adaptateur | `[43850, 71112, 145375, …]` | **identique** ✗✗ |
+| l'adaptateur exporté | 896 × 896, **diagonale 1,0**, norme 29,93 = √896 | **l'IDENTITÉ** ✗✗✗ |
+| le moteur, sur `--adaptateur-sortie` sans `--tete-partielle` | *« Refusé plutôt qu'ignoré »* | le moteur a **raison** ✓ |
+
+* **la cause du 0,0 % est donc trouvée** ✓ : l'adaptateur exporté **n'a jamais été entraîné** ✗ — c'est
+  sa valeur d'initialisation (l'identité ✓), et un réflexe réduit aux 8 premières couches avec une
+  **tête empruntée** rend des jetons incohérents ✓ (la table d'E5 le disait : « tête empruntée →
+  4 476 128 » ✗). Le 0,0 % mesure donc **le modèle**, pas la mesure ✓✓ — la question du § 10 est
+  tranchée ✓ ;
+* **et sa raison n'est PAS trouvée** ✗ : l'adaptateur **est** dans l'optimiseur (lr **1e-3** par défaut,
+  groupe ajouté à la main ✓), il **est** appliqué dans la passe avant (`x @ adaptateur.T` ✓), et
+  l'époque retenue pour ce bras était **2** (entraînée ✓) — donc il *devrait* avoir bougé ✗. Les deux
+  pistes, nommées pour la prochaine séance : (a) le **snapshot** enregistré (`instantane()`) est celui
+  de la **meilleure validation**, et si cette époque est 0 pour le bras joint ✗, l'adaptateur
+  enregistré est l'identité ✓ — à vérifier en forçant l'époque ✓ ; (b) le **chemin de gradient** de
+  l'adaptateur dans le dessin joint ✗ (un paramètre sans gradient est silencieusement ignoré par
+  Adam ✗ — même famille de défaut que les précédents ✗) ;
+* **ce que cela laisse E5** : la **recette de stabilité** est acquise (`--kl-tronque 64 --pas-lora 1e-4`
+  tient à 10 morceaux ✓, § 10a ✓) ; l'**accord** reste **non mesuré** ✗ tant que l'adaptateur ne
+  s'entraîne pas ✓ ; et le **contrôle qui doit précéder toute nouvelle tentative** est maintenant
+  écrit, avec sa valeur attendue : **l'adaptateur exporté ne doit PAS être l'identité** ✗ (norme
+  29,93326 = √896 ✗ ⇒ il n'a pas appris ✓). C'est un contrôle d'une seconde ✓, et il manquait ✓.

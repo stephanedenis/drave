@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 02 h 35 HAE.**
+**Mis à jour : 2026-10-16, 02 h 50 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -77,8 +77,14 @@ réglage à trouver : il y a un **manque de données** — le KL sur 151 936 log
 moitié fausse ✗ : à taux égal, K=64 fait **pire** que le KL plein (la distribution renormalisée sur 64
 classes a un gradient **plus grand** par dimension) — il faut **les deux** (tronquer *et* baisser).
 **Recette qui tient à 10 morceaux** : `--distiller --kl-tronque 64 --pas-lora 1e-4`.
-⚠️ Et l'**accord n'a pas pu être mesuré** ✗ : **0,0 % pour les deux bras, dont un entraîné** — c'est
-l'**assemblage du réflexe** qui est en cause, pas l'entraînement ; le contrôle à faire est nommé.
+⚠️ Et l'**accord n'a pas pu être mesuré** ✗ — **cause trouvée** : l'**adaptateur exporté est
+l'IDENTITÉ** (diagonale 1,0, norme 29,93326 = √896 ✓), donc le réflexe est réduit aux 8 premières
+couches avec une **tête empruntée**, qui rend des jetons **incohérents** (le cerveau : `[51667, 11042,
+320…]` ; le réflexe : `[43850, 71112, 145375…]`, **identique avec et sans adaptateur** ✗). Le 0,0 %
+mesure donc **le modèle**, pas la mesure ✓. **Sa raison n'est pas trouvée** ✗ (l'adaptateur est pourtant
+dans l'optimiseur à 1e-3 et appliqué dans la passe avant ✗) : pistes nommées — le **snapshot** de la
+meilleure validation, ou le **chemin de gradient**. Le contrôle d'une seconde à faire désormais :
+**l'adaptateur exporté ne doit pas être l'identité**.
 
 ## Où en est le dépôt
 
