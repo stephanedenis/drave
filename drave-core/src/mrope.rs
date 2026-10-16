@@ -102,8 +102,13 @@ pub const SECTIONS: [usize; 3] = [16, 24, 24];
 /// En unités de **fréquence** (64 ✓), les sections `[16, 24, 24]` disent : ligne 0 pour `j < 16`,
 /// ligne 1 pour `16 ≤ j < 40`, ligne 2 au-delà ✓.
 pub fn ligne_de_frequence(j: usize) -> usize {
+    ligne_de_frequence_dans(j, SECTIONS)
+}
+
+/// La même chose, pour des sections **données** (le moteur les lira dans le GGUF ✓).
+pub fn ligne_de_frequence_dans(j: usize, sections: [usize; 3]) -> usize {
     let (mut borne, mut ligne) = (0usize, 0usize);
-    for (k, s) in SECTIONS.iter().enumerate() {
+    for (k, s) in sections.iter().enumerate() {
         borne += s;
         if j < borne {
             ligne = k;
@@ -112,6 +117,34 @@ pub fn ligne_de_frequence(j: usize) -> usize {
         ligne = k;
     }
     ligne
+}
+
+/// **LE PAS 3 : LA ROTATION mRoPE.** Exactement la rotation du moteur (`fn rope` de `model.rs` ✓ —
+/// paires `(i, i + n_rot/2)` ✓, fréquence `base^(-2i/head_dim)` ✓, seules les `n_rot` premières
+/// dimensions tournées ✓), **sauf que la position dépend de la fréquence** ✓ : la fréquence `i` prend
+/// la ligne que lui donnent les `sections` ✓ (`[16, 24, 24]` sur 64 ✓).
+///
+/// ⚠️ AVEC LES TROIS POSITIONS ÉGALES, CETTE FONCTION DOIT ÊTRE **EXACTEMENT** `rope` ✓ — c'est le
+/// contrôle croisé qui relie le mRoPE à ce qui est **déjà vérifié** dans le moteur ✓✓, et il est
+/// vérifié par un essai contre des valeurs calculées **hors du Rust** (en Python ✓) : sans lui, on
+/// pourrait écrire une variante plausible et fausse ✗ (c'est arrivé cette nuit, sur la tour de vision
+/// ✓).
+pub fn appliquer_mrope(v: &mut [f32], n_head: usize, head_dim: usize, positions: [usize; 3],
+                      base: f32, n_rot: usize, sections: [usize; 3]) {
+    let n_rot = if n_rot == 0 || n_rot > head_dim { head_dim } else { n_rot };
+    let half = n_rot / 2;
+    for h in 0..n_head {
+        let t = &mut v[h * head_dim..(h + 1) * head_dim];
+        for i in 0..half {
+            let freq = 1.0 / base.powf(2.0 * i as f32 / head_dim as f32);
+            let pos = positions[ligne_de_frequence_dans(i, sections)] as f32;
+            let (s, c) = (pos * freq).sin_cos();
+            let a = t[i];
+            let b = t[i + half];
+            t[i] = a * c - b * s;
+            t[i + half] = b * c + a * s;
+        }
+    }
 }
 
 #[cfg(test)]
@@ -145,6 +178,55 @@ mod tests {
         assert_eq!(&t[20..], &[4, 5, 6]);
         assert_eq!(&h[20..], &[4, 5, 6]);
         assert_eq!(&w[20..], &[4, 5, 6]);
+    }
+
+    /// **LE CONTRÔLE CROISÉ DU PAS 3** : avec les trois positions égales, le mRoPE doit rendre
+    /// **exactement** la rotation 1-D du moteur ✓. Les valeurs attendues ont été calculées **en
+    /// Python**, hors de ce fichier ✓ (une variante plausible et fausse passerait un essai écrit avec
+    /// ses propres conventions ✗ — c'est la leçon de la tour de vision ✓).
+    #[test]
+    fn positions_egales_egale_la_rotation_1d() {
+        let mut v = [1.0f32, 2.0, 3.0, 4.0, 0.5, -1.0, 0.25, -2.0];
+        appliquer_mrope(&mut v, 1, 8, [3, 3, 3], 10000.0, 8, SECTIONS);
+        let attendu = [-1.060552f32, 2.206193, 2.991151, 4.005982,
+                       -0.353876, -0.364296, 0.339874, -1.987991];
+        for (i, (a, b)) in v.iter().zip(attendu.iter()).enumerate() {
+            assert!((a - b).abs() < 1e-5, "dimension {i} : {a} contre {b}");
+        }
+    }
+
+    /// **ET AVEC DES POSITIONS DIFFÉRENTES, CHAQUE SECTION TOURNE DE SON CÔTÉ** ✓ : les 16 premières
+    /// fréquences (32 dimensions) ne dépendent que de `t` ✓, les 24 suivantes de `h` ✓, les 24
+    /// dernières de `w` ✓ — le cœur du mRoPE, et ce qu'aucune autre pièce du moteur ne fait ✗.
+    #[test]
+    fn chaque_section_tourne_avec_sa_position() {
+        let depart = [0.4f32; 128];
+        let mut a = depart;
+        let mut b = depart;
+        // seules les positions changent : t pour l'un, w pour l'autre
+        appliquer_mrope(&mut a, 1, 128, [1, 0, 0], 10000.0, 128, SECTIONS);
+        appliquer_mrope(&mut b, 1, 128, [0, 0, 1], 10000.0, 128, SECTIONS);
+        // les 32 premières dimensions (16 fréquences) suivent `t` : elles DIFFÈRENT
+        assert!((a[0] - b[0]).abs() > 1e-6, "la section de t n'a pas bougé");
+        // les 48 dernières (24 fréquences) suivent `w` : elles DIFFÈRENT aussi
+        assert!((a[127] - b[127]).abs() > 1e-6, "la section de w n'a pas bougé");
+        // et une position qui ne change PAS ne change rien : h est à 0 des deux côtés
+        let mut c = depart;
+        let mut d = depart;
+        appliquer_mrope(&mut c, 1, 128, [5, 0, 0], 10000.0, 128, SECTIONS);
+        appliquer_mrope(&mut d, 1, 128, [7, 0, 0], 10000.0, 128, SECTIONS);
+        // ⚠ AVEC `rotate_half`, UNE FRÉQUENCE OCCUPE **DEUX** DIMENSIONS : la fréquence `i` est sur
+        // `i` ET sur `i + half` ✓ — la section de `h` (fréquences 16..39) est donc sur `16..40` **et**
+        // sur `80..104`, pas sur `64..112` ✗. (Mon premier essai s'est trompé là-dessus, et c'est
+        // l'essai qui l'a dit ✓.)
+        for i in (16..40).chain(80..104) {
+            assert!((c[i] - d[i]).abs() < 1e-6, "la section de h a bougé alors que h est constant");
+        }
+        // et symétriquement, la section de `t` (fréquences 0..15 → dimensions 0..16 et 64..80) DOIT
+        // bouger : c'est ce qui prouve que le découpage est bien celui des SECTIONS et pas un hasard ✓
+        for i in (0..16).chain(64..80) {
+            assert!((c[i] - d[i]).abs() > 1e-6, "la section de t n'a pas bougé");
+        }
     }
 
     /// LE DÉCOUPAGE DES FRÉQUENCES : 16 pour `t`, 24 pour `h`, 24 pour `w` ✓ — et il couvre les 64

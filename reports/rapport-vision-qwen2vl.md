@@ -664,7 +664,19 @@ cos = torch.cat([m[i % 3] for i, m in enumerate(cos.split(mrope_section, dim=-1)
    Pour le **texte**, les trois lignes sont **égales** ✓ — donc la règle dégénère exactement en la
    RoPE 1-D du moteur ✓✓ : **le mRoPE est un sur-ensemble strict de ce qui est déjà vérifié** ✓, ce qui
    rend le pas 3 **mécanique** ✓ (découper `n_rot` selon ces bornes au lieu d'utiliser une seule
-   position ✓) ;
+   position ✓).
+   **Et le pas 3 est ÉCRIT ET TESTÉ** ✓ (toujours dans `drave-core/src/mrope.rs` ✗, sans toucher à
+   `main.rs` ✓) : `appliquer_mrope(v, n_head, head_dim, positions, base, n_rot, sections)` reprend la
+   rotation du moteur **à l'identique** ✓ (paires `(i, i + n_rot/2)` ✓, fréquence `base^(-2i/head_dim)` ✓
+   — lue dans `model.rs`, pas supposée ✓) et fait dépendre **la position de la fréquence** ✓.
+   **Cinq essais verts** ✓✓, dont le **contrôle croisé** : positions égales ⇒ **exactement** la rotation
+   1-D ✓, contre des valeurs **calculées en Python** ✓ (hors du Rust : une variante plausible et fausse
+   passerait un essai écrit avec ses propres conventions ✗ — c'est la leçon de la tour de vision ✓).
+   ⚠️ Et **un essai a attrapé une erreur de ma part** ✓ : avec `rotate_half`, une **fréquence occupe
+   deux dimensions** ✓ (la fréquence `i` est sur `i` **et** `i + half` ✓), donc la section de `h`
+   (fréquences 16..39) est sur les dimensions **16..40 ET 80..104**, pas « 64..112 » comme je l'avais
+   écrit ✗ ; le quatrième essai a été corrigé, et il vérifie maintenant **les deux sens** (ce qui doit
+   bouger bouge ✓, ce qui doit rester immobile reste immobile ✓) ;
 4. **vérifier de bout en bout** ✗ — la génération du modèle de langue sur une image, contre la
    référence, **avec les positions mRoPE** ✓ (et non plus les positions dégénérées ✓ qui, elles,
    ramènent au cas 1-D ✓ — c'est ce que la comparaison « dégénérée » du § 2quinquies a montré ✓).
