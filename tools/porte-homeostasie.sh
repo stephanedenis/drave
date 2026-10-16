@@ -7,6 +7,12 @@
 # devenir une **porte**, sinon la prochaine consolidation repartira du mauvais point sans que rien
 # ne le dise.
 #
+# ⚠ ET IL TIENT SUR TROIS GRAINES (vérifié le 15/10 au soir) : ×0,6 gagne m32 ET le hors domaine sur
+# les graines 0, 1 et 2, avec un écart de hors-domaine de 1,06 point en moyenne pour une dispersion de
+# graine de 0,2 — l'effet est cinq fois le bruit. C'est le contraste avec le critère d'étalement
+# (`rapport-sommeil-selection.md` § 6bis), testé le même soir de la même façon et qui, lui, ne tient
+# pas. L'optimum exact (×0,65 ? ×0,7 ?) n'est pas resserré : trois graines établissent la DIRECTION.
+#
 # Les quatre vérifications :
 #   1. **×0 rend le modèle de DÉPART, au bit près** : mettre l'amplitude à zéro, c'est ne rien
 #      consolider — et un delta multiplié par zéro doit disparaître **exactement** (le même invariant

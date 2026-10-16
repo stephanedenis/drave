@@ -75,6 +75,38 @@ C'était la première réserve de la fiche (« un seul volume de rejeu ✗ : l'o
   **levée pour les volumes testés** — 3, 10 et 20 morceaux — et reste ouverte pour les autres
   (d'autres corpus, d'autres rangs, d'autres époques ✗).
 
+## 1quater. E9 SUR TROIS GRAINES — et il tient (contrairement à un autre résultat de la même soirée)
+
+La même question que pour le critère d'étalement (`rapport-sommeil-selection.md` § 6bis, qui a **perdu**
+sa contre-épreuve ✗) se pose ici : le § 1 ne tient-il que pour **une** graine ✗ ? Trois entraînements
+identiques au protocole près de la graine (rang 4, 10 morceaux, 10 époques), deux amplitudes, mesurés
+par le **moteur** :
+
+| graine | échelle | m32 | écart | m20 | écart | hors domaine | écart |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | **×0,6** | 6,7751 | −8,75 % | 16,2096 | −15,24 % | 17,1671 | **−0,58 %** |
+| 0 | ×1,0 | 6,8697 | −7,47 % | 16,0434 | −16,11 % | 17,3238 | +0,33 % |
+| 1 | **×0,6** | 6,8203 | −8,13 % | 16,3756 | −14,37 % | 17,2011 | **−0,38 %** |
+| 1 | ×1,0 | 6,8888 | −7,21 % | 16,0695 | −15,97 % | 17,3937 | +0,73 % |
+| 2 | **×0,6** | 6,7699 | −8,81 % | 16,2774 | −14,89 % | 17,1409 | **−0,73 %** |
+| 2 | ×1,0 | 6,9429 | −7,03 % | 16,1742 | −15,36 % | 17,3416 | +0,43 % |
+| **moyenne** | **×0,6** | **6,7884** | **−8,56 %** | 16,2875 | −14,83 % | **17,1697** | **−0,56 %** |
+| **moyenne** | ×1,0 | 6,9005 | −7,24 % | **16,0957** | **−15,81 %** | 17,3530 | **+0,50 %** |
+
+* **×0,6 gagne sur les TROIS graines, sur m32 ET sur le hors domaine** ✓✓ — et ce n'est pas un effet
+  de bord : l'écart de hors-domaine est de **1,06 point en moyenne** (0,91 · 1,11 · 1,16 selon la
+  graine ✗✓), **toujours dans le même sens** ✓, alors que la dispersion de graine du hors-domaine est
+  de **0,2 point tout au plus** ✓✓. Autrement dit : l'effet est **cinq fois** le bruit ;
+* **le seul désaccord, lui aussi systématique** : m20 préfère ×1,0 sur les trois graines (−15,81 %
+  contre −14,83 % en moyenne ✗) — exactement comme dans le § 1bis, et c'est ce qui fait d'E9 **un
+  compromis** (deux textes sur trois) plutôt qu'une domination universelle ✓ ;
+* **et le contraste avec l'étalement vaut d'être écrit** : les deux résultats ont été testés le même
+  soir, de la même façon, avec le même nombre de graines — **l'un tient** (E9 : effet ≫ bruit ✓) et
+  **l'autre non** (étalement : effet ≈ bruit ✗). C'est à cela que sert une contre-épreuve ✓ ;
+* **ce que cela ne dit pas** : l'optimum exact (×0,6 ? ×0,65 ? ×0,7 ?) n'est pas resserré ✗ — trois
+  graines établissent la **direction**, pas la valeur ✗ ; et l'échelle reste choisie par la règle du
+  texte neutre (§ 2bis), qui n'est pas une mesure en ligne ✗.
+
 ## 1ter. Par COUCHE ou globalement ? — amortir les couches HAUTES est le meilleur profil, mais l'écart est petit
 
 La deuxième réserve (« une homéostasie par couche plutôt que globale ✗ ») a été essayée : deux profils

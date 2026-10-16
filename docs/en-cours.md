@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 22 h 55 HAE.**
+**Mis à jour : 2026-10-15, 23 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -43,7 +43,7 @@ contre −7,21 % pour le hasard, sur **une** graine. La contre-épreuve :
 **trois graines** à 3 morceaux → l'étalement gagne **les trois** (moyennes **−10,53 % contre −8,76 %**)
 mais de **1,8 point seulement**, du même ordre que le bruit de graine ✗ ; et à **10 morceaux**, il
 **perd** contre le hasard (6,5938 contre **6,5073**) ✗.
-→ **Le critère n'est pas établi** ✗ ; ce qui reste solide, c'est la **loi** (rejouer compte plus que
+→ **Le critère n'est pas établi** ✗ ; en revanche **E9 a passé la même épreuve** : sur trois graines, ×0,6 gagne m32 **et** le hors domaine **à chaque fois**, avec un écart de **1,06 point** pour une dispersion de graine de 0,2 — l'effet est **cinq fois le bruit** ✓. (Deux résultats testés le même soir de la même façon : l'un tient, l'autre non — c'est à cela que sert une contre-épreuve.) ce qui reste solide, c'est la **loi** (rejouer compte plus que
 choisir, et les critères de **lot** tiennent mieux que ceux de **morceau**). Et la leçon : **une graine
 ne mesure pas un critère**. Fiche : [`reports/rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md) § 6 et 6bis.
 **Ce qui se compose quand même** : étalement ×0,6 (E9) — le coût hors domaine passe de +1,94 % à **−0,05 %** ✓.
