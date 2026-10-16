@@ -626,9 +626,29 @@ d'image se posent aux positions 0..63 ✓), mais le moteur applique au modèle d
    `(p, p, p)` ✓ et les sections de tête sont `[16, 24, 24]` sur 64 ✓ ;
 2. **implémenter les positions en Rust** ✗ — le même algorithme que la référence, vérifié **pas à pas**
    contre les valeurs d'or du pas 1 ✓ (c'est la partie facile : un parcours de grille ✓) ;
-3. **étendre `rope`** ✗ — prendre **trois** positions et découper `n_rot` en **trois sections** ✓
-   (`[16, 24, 24]` ✓), chaque section tournant avec **sa** position ✓. Le reste (le calcul des
-   fréquences ✓, la convention ✓) est déjà vérifié ✓ ;
+3. **étendre `rope`** ✗ — prendre **trois** positions et découper les fréquences en **trois sections** ✓.
+   **La règle est maintenant lue dans la source installée** ✓✓ (`apply_multimodal_rotary_pos_emb`) :
+
+```python
+mrope_section = mrope_section * 2                                    # [16, 24, 24] -> [32, 48, 48]
+cos = torch.cat([m[i % 3] for i, m in enumerate(cos.split(mrope_section, dim=-1))], dim=-1)
+```
+
+   c'est-à-dire : les `cos`/`sin` ont la **dimension entière** de la tête (**128** ✓ — la convention
+   `rotate_half` apparie `i` et `i + 128/2` ✓, chacune des 64 fréquences apparaissant **deux fois** ✓),
+   les sections sont **doublées** pour retomber sur 128 ✓, et **le i-ème paquet prend la ligne `i % 3`**
+   des positions ✓. En **unités de fréquence** (64 ✓), la règle est donc :
+
+| fréquences | position utilisée |
+|---|---|
+| `0 .. 15` (**16**) | `t` (ligne 0) |
+| `16 .. 39` (**24**) | `h` (ligne 1) |
+| `40 .. 63` (**24**) | `w` (ligne 2) |
+
+   Pour le **texte**, les trois lignes sont **égales** ✓ — donc la règle dégénère exactement en la
+   RoPE 1-D du moteur ✓✓ : **le mRoPE est un sur-ensemble strict de ce qui est déjà vérifié** ✓, ce qui
+   rend le pas 3 **mécanique** ✓ (découper `n_rot` selon ces bornes au lieu d'utiliser une seule
+   position ✓) ;
 4. **vérifier de bout en bout** ✗ — la génération du modèle de langue sur une image, contre la
    référence, **avec les positions mRoPE** ✓ (et non plus les positions dégénérées ✓ qui, elles,
    ramènent au cas 1-D ✓ — c'est ce que la comparaison « dégénérée » du § 2quinquies a montré ✓).
