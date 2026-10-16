@@ -168,6 +168,10 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 | plasticité structurelle, règle locale | [`rapport-e1-e2-connectome-croissance.md`](../reports/rapport-e1-e2-connectome-croissance.md) |
 | vision (Qwen2-VL, la tour et son écart) | [`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md) · `porte-vision.sh` (45ᵉ porte : refus · formes · tour **mesurée**, non jugée) |
 | distillation (E5), et le réflexe qui propose | [`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md) · [`rapport-speculatif-reflexe.md`](../reports/rapport-speculatif-reflexe.md) |
+| adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
+| le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
+| trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
+
 
 > **E5, remesuré le 16/10 — et ses DEUX réglages critiques, que la fiche d'origine ne disait pas.**
 > La distillation **fonctionne** (témoin reproduit : **25,7 %** d'accord contre 28,0 % publié ✓ ;
@@ -186,9 +190,6 @@ cerveau s'exprime donc en **deux monnaies** — les paires (profondeur, largeur,
 >   détruit le modèle avant d'apprendre ✓).
 > Et `porte-reflexe` garde désormais l'**assemblage** ✗ (refus du moteur ✓, **invariant d'identité** ✓,
 > accord mesuré avant/après ✓) : les quatre pannes du fil n'étaient **pas** dans le modèle ✗✓.
-| adaptation / habituation | [`rapport-habituation.md`](../reports/rapport-habituation.md) |
-| le réflexe qui propose (et sa porte) · la chaîne complète, et le budget d'une décision | `tools/boucle-cerveau.sh` · `tools/carte-facultes.sh` · `tools/porte-cerveau.sh` · [`rapport-budget-decision.md`](../reports/rapport-budget-decision.md) · `porte-speculatif.sh` |
-| trace globale, pannes | `porte-trace.sh`, `porte-fusion.sh`, `porte-pannes.sh` |
 
 ## 5. L'architecture qui suit — l'assemblage que les mesures IMPOSENT
 

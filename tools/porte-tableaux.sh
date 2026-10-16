@@ -117,3 +117,12 @@ if defauts:
 print(f"  ✅ {len(fichiers)} fichier(s) : chaque tableau a le même nombre de cellules partout "
       f"(en-tête, séparateur, lignes), et aucun « \\| » ne s'affichera")
 PY
+# ⚠️ ET LE CODE DE SORTIE DE PYTHON DOIT ÊTRE CELUI DE LA PORTE. Sans cette ligne, `sys.exit(...)` du
+# bloc ci-dessus n'arrêtait que **Python** ✗ : la porte **imprimait** ses défauts et sortait en **0**
+# ✓✗ — une vérification qui ne peut pas échouer, exactement la famille de défaut que ce dépôt nomme la
+# pire. Découvert le 16/10, après huit rounds de commits passés avec un tableau cassé ✓✗.
+[ $? -eq 0 ] || exit 1
+
+# ---- ET LES LIENS : un document de ce dépôt EST fait de renvois, et un renvoi mort ne casse rien au
+# moment où on l'écrit — il casse six semaines plus tard. Deux secondes ici, à chaque passe.
+python3 tools/verifier_liens.py || exit 1
