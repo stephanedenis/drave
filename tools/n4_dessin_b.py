@@ -412,9 +412,28 @@ def entrainer(banc: Banc, bras: str, train, val, tests, a) -> dict:
             with torch.no_grad():
                 logits_maitre = banc._complet(lot)[:, 4:-1].float() / a.temperature
             etudiant = logits[:, 4:-1].float() / a.temperature
-            kl = nn.functional.kl_div(
-                nn.functional.log_softmax(etudiant, dim=-1),
-                nn.functional.softmax(logits_maitre, dim=-1), reduction="batchmean")
+            K = int(getattr(a, "kl_tronque", 0) or 0)
+            if K > 0:
+                # ⚠️ LE KL TRONQUÉ — CHANGER LA *FORME* DU GRADIENT, PAS SON AMPLITUDE.
+                # Mesuré le 16/10 : à 10 morceaux, la distillation à KL PLEIN diverge (2,7e12 en trois
+                # époques ✗) et la seule façon de la rendre stable est de descendre le taux à 1e-5 —
+                # où elle n'apprend plus rien (fenêtre VIDE ✗). Le KL plein pousse **151 936 logits à
+                # la fois** : sa moyenne de gradient est un pas destructeur quand les données sont
+                # rares. Tronquer aux **K premiers logits du maître** ne change pas l'amplitude du
+                # pas, il change **combien de dimensions il touche** ✗→✓ : les deux distributions
+                # (maître et étudiant) sont RESTREINTES au même ensemble, puis RENORMALISÉES — la
+                # consigne reste une distribution de probabilité, et l'étudiant n'est plus tiré vers
+                # zéro sur les 151 936 − K autres ✗.
+                idx = logits_maitre.topk(K, dim=-1).indices
+                lm = logits_maitre.gather(-1, idx)
+                le = etudiant.gather(-1, idx)
+                kl = nn.functional.kl_div(
+                    nn.functional.log_softmax(le, dim=-1),
+                    nn.functional.softmax(lm, dim=-1), reduction="batchmean")
+            else:
+                kl = nn.functional.kl_div(
+                    nn.functional.log_softmax(etudiant, dim=-1),
+                    nn.functional.softmax(logits_maitre, dim=-1), reduction="batchmean")
             if a.melange <= 0.0:
                 return kl
             # E5 bis — le MÉLANGE : garder la cible dure (le jeton) en plus de la distribution du
@@ -549,6 +568,11 @@ def main() -> int:
                     help="sur quoi le LoRA apprend : le chemin TRONQUÉ (défaut, c'est N4) ou le "
                          "MODÈLE COMPLET (c'est la consolidation C7 : on consolide le cerveau "
                          "entier, pas un réflexe)")
+    ap.add_argument("--kl-tronque", type=int, default=0,
+                    help="tronquer le KL de distillation aux K PREMIERS logits du maître (0 = KL "
+                         "plein). POURQUOI : à petit volume, le KL plein diverge (151 936 logits "
+                         "poussés à la fois) — la troncature change la FORME du gradient, pas son "
+                         "amplitude.")
     ap.add_argument("--distiller", action="store_true",
                     help="E5 : l'objectif devient la DISTILLATION — le chemin court doit reproduire la "
                          "distribution du MODÈLE COMPLET (KL), pas prédire le texte. C'est la "

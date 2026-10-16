@@ -237,3 +237,58 @@ un taux d'apprentissage qui entraîne SANS détruire ?** Balayage, 10 morceaux, 
   ✗ était d'abord lu comme un **défaut d'outil** ✗, puis comme un **moindre mal** ✓, puis comme la
   **conséquence d'une fenêtre vide** ✓✓. Trois lectures, chacune plus juste, obtenues en **regardant**
   au lieu de déduire ✗.
+
+## 10. LE KL TRONQUÉ ÉLARGIT LA FENÊTRE D'UN FACTEUR 10 — mais l'accord n'a pas pu être mesuré
+
+### a) Ce qui est solide : la troncature élargit la fenêtre de stabilité
+
+Le § 9 proposait de **tronquer le KL** aux K premiers logits du maître pour changer la *forme* du
+gradient ✗. C'est fait (`--kl-tronque K`), et le balayage donne :
+
+| réglage (10 morceaux, 10 époques, graine 1) | validation 29 | TEST m32 | verdict |
+|---|---:|---:|---|
+| KL **plein**, taux 1e-3 | 2,7e12 | 5,1e11 | ✗✗ détruit |
+| KL **plein**, taux 1e-4 | 6,96e4 | 2,66e4 | ✗ détruit |
+| KL **plein**, taux 1e-5 | 17,72 | 7,2333 | ✓ stable, n'apprend rien |
+| KL **tronqué K=512**, taux **1e-3** | 4,3e7 | 3,2e7 | ✗ détruit |
+| KL **tronqué K=64**, taux **1e-3** | 8,7e13 | 3,9e12 | ✗✗ **pire** que le KL plein |
+| **KL tronqué K=512, taux 1e-4** | **19,37** | 7,8230 | ✅ **stable** |
+| **KL tronqué K=64, taux 1e-4** | **19,09** | 7,6786 | ✅ **stable** |
+
+* **la fenêtre passe de {1e-5} à {1e-5 ; 1e-4}** ✓✓ : là où le KL plein **détruit** le modèle à 1e-4
+  (6,96e4 ✗), le KL tronqué **tient** (19,1-19,4 ✓) — un facteur **10** de taux en plus ✓, et à 1e-4 la
+  distillation **apprend vraiment quelque chose** (17,58 → 19,1, soit **+8,6 %** de perplexité, au lieu
+  de +216 % pour le protocole publié d'E5 ✓) ;
+* **mais mon hypothèse « c'est la FORME, pas l'amplitude » est à moitié fausse** ✗ : à taux **égal**
+  (1e-3), le KL tronqué à **K=64** fait **pire** que le KL plein (8,7e13 contre 2,7e12 ✗). Tronquer
+  **concentre** la distribution (elle est renormalisée sur 64 classes ✗), ce qui **augmente** le
+  gradient par dimension ✗. La troncature n'est donc pas un remède à l'amplitude : c'est un remède au
+  **nombre de dimensions poussées** ✓, et il faut **les deux** (tronquer **et** baisser le taux ✓) ;
+* **ce que cela donne à E5, concrètement** : une recette qui tient à **10 morceaux** — `--distiller
+  --kl-tronque 64 --pas-lora 1e-4` — au lieu d'exiger 29 ✓. C'est la première fois que ce mécanisme est
+  **scalable vers le bas** ✓.
+
+### b) Ce qui n'a PAS pu être mesuré : l'accord du réflexe
+
+La vraie question d'E5 n'est pas la perplexité mais l'**ACCORD** (l'argmax du chemin court contre celui
+du maître ✗). Les deux bras ont été exportés (`--couches-lora 8 --adapter-sortie`) et passés au harnais
+spéculatif :
+
+| bras (10 morceaux, graine 1) | accord mesuré |
+|---|---:|
+| `lora+adaptateur`, objectif **distillation tronquée** (K=64, 1e-4) | **0,0 %** ✗ |
+| `lora+adaptateur`, objectif **perplexité** *(pourtant entraîné : m32 6,67 ✓)* | **0,0 %** ✗ |
+
+* **0,0 % pour les DEUX bras, dont un entraîné** ✗ : c'est donc **l'assemblage du réflexe** qui est en
+  cause, pas l'entraînement ✓ — un chemin tronqué à 8 couches avec tête empruntée et adaptateur
+  **doit** pouvoir s'assembler (le protocole publié d'E5 l'a fait, 28 % et 51 % ✗) ;
+* **et c'est la troisième fois en deux jours** que ce fil se heurte à la **plomberie d'assemblage** ✗
+  (le drapeau masqué, le bras qui mesurait 100 % du mauvais objet, et maintenant 0 % du bon ✗) ;
+* **ce qui est donc établi, et rien de plus** : (a) le KL tronqué **élargit la fenêtre** ✓ (mesuré,
+  tableau ci-dessus ✓) ; (b) l'**accord** de ces bras n'est **pas mesuré** ✗ et **ne peut pas** être
+  cité tant que l'assemblage n'est pas vérifié sur un cas témoin ✓. **E5 reste non testé sur plusieurs
+  graines** ✗ ;
+* **le contrôle à faire, nommément, avant toute autre tentative** : mesurer l'accord d'un bras dont on
+  **sait** qu'il doit être élevé — le protocole publié (29 morceaux, 51,0 %) ✗ — ou, à défaut, vérifier
+  qu'un adaptateur **nul** rend exactement le chemin tronqué sans adaptateur ✓ (l'invariant d'identité
+  du § 1 ✓). Sans ce témoin, « 0,0 % » ne dit pas si c'est le modèle ou la mesure ✗.

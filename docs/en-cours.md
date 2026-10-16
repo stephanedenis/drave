@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 02 h 20 HAE.**
+**Mis à jour : 2026-10-16, 02 h 35 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -71,7 +71,14 @@ résultat (574,70, dégradé mais stable) n'existe **qu'à son volume** (29 morc
 taux le confirme : à 10 morceaux **la fenêtre est VIDE** ✗ — 1e-3/3e-4/1e-4 **détruisent** le modèle
 (2,7e12 / 2,7e11 / 6,96e4) et **1e-5 n'apprend rien** (17,72 contre 17,58 de base). Il n'y a pas de
 réglage à trouver : il y a un **manque de données** — le KL sur 151 936 logits pousse tout le vecteur
-à la fois. Remède nommé : **tronquer le KL** aux k premiers logits (changer la *forme* du gradient).
+à la fois. Remède **essayé** : **tronquer le KL** (`--kl-tronque K`) — il **élargit la fenêtre d'un facteur 10** ✓
+(KL tronqué K=64 ou 512 **stable à 1e-4**, où le KL plein **détruisait** le modèle) et il **apprend**
+(+8,6 % de perplexité au lieu de +216 %). Mais mon hypothèse « c'est la forme, pas l'amplitude » est à
+moitié fausse ✗ : à taux égal, K=64 fait **pire** que le KL plein (la distribution renormalisée sur 64
+classes a un gradient **plus grand** par dimension) — il faut **les deux** (tronquer *et* baisser).
+**Recette qui tient à 10 morceaux** : `--distiller --kl-tronque 64 --pas-lora 1e-4`.
+⚠️ Et l'**accord n'a pas pu être mesuré** ✗ : **0,0 % pour les deux bras, dont un entraîné** — c'est
+l'**assemblage du réflexe** qui est en cause, pas l'entraînement ; le contrôle à faire est nommé.
 
 ## Où en est le dépôt
 
