@@ -205,6 +205,21 @@
 > **Deux vrais défauts sur 46 portes**, tous deux **corrigés et vérifiés** ✓✓ — et les autres signaux
 > sont des **faux positifs documentés** ✗✓, ce qui vaut mieux qu'un audit muet ✓. *La leçon vaut pour
 > l'audit lui-même : une détection statique propose, la lecture dispose* ✓.
+>
+> **5. ET L'AUDIT A ÉTÉ POUSSÉ PLUS LOIN, LE MÊME JOUR : chaque porte A-T-ELLE UN CHEMIN D'ÉCHEC ?**
+> Une porte sans `exit 1` ne peut pas dire non ✗ — c'est la même famille, un cran plus haut ✓.
+>
+> | ce qui a été compté | résultat |
+> |---|---|
+> | portes **sans aucun `exit 1-9`** | **0 sur 46** ✓ (chemins d'échec : médiane **6**, min **2**, max **17** ✓✓) |
+> | portes **sans `❌` dans leur propre source** | **1** : `porte-mistral.sh` — **et c'est un faux positif** ✓ : son `exit 1` est précédé de la **dernière ligne** de `compare_logits.py`, qui porte le `❌` ✓✓ (« PORTE DE CORRECTION NON TENUE » ✓) |
+> | comment la passe **compte** | par **code de sortie** ✓ (`code=$?` → `✅` / `❌ code N` ✓✓), pas par marqueur ✗ — donc le récapitulatif est **fiable** ✓ |
+>
+> **Conclusion de l'audit** : la suite est **structurellement saine** ✓ — deux vrais défauts trouvés et
+> corrigés ✓✓, et tous les autres signaux sont des **faux positifs documentés** ✓. *Et une leçon de
+> plus sur ma façon de lire : je comptais les ❌ d'une porte **dans son source** ✗ alors que le marqueur
+> peut venir de l'outil qu'elle appelle ✓ — c'est le **code de sortie** qui fait foi, et la passe le
+> lisait déjà correctement ✓✓.*
 
 ## 2. Les repères imprimés par chaque porte
 
