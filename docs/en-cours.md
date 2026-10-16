@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 03 h 20 HAE.**
+**Mis à jour : 2026-10-16, 03 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -89,8 +89,14 @@ silencieusement** un paramètre sans gradient — la même famille de défaut qu
 nuit (*un calcul qui n'a pas lieu et qui ne le dit pas*). **Et le siège du défaut est localisé** : l'adaptateur **s'entraîne quand il est SEUL** (norme **34,49**
 contre 29,93 à l'initialisation, écart 0,199 ✓) et **pas quand il est JOINT** avec le LoRA (écart
 **exactement 0,0** ✗) — or c'est le bras **joint** qu'utilise E5 ✗. La recherche passe donc de
-« quelque part dans l'outil » à **une fonction** : la boucle jointe. La sonde à écrire reste **une
-ligne** (`adaptateur.grad is None` après le premier pas) et c'est la prochaine édition.
+« quelque part dans l'outil » à **une fonction** : la boucle jointe. **La cause était écrite dans le code** ✗✓ : avec `--objectif plein`,
+`logits_chemin` rend les logits du **modèle complet** et le commentaire dit « l'adaptateur **ne joue
+pas** : il n'existe que sur un chemin tronqué » ✓ — mes runs utilisaient `--objectif plein` ✗ : c'était
+**mon** erreur. Avec **`--objectif tronque`**, l'adaptateur s'entraîne ✓ (écart 0,057468) — mais
+l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une perplexité de **18 231**
+contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
+est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
+non (mémoire ✗, volume ✗).
 
 ## Où en est le dépôt
 

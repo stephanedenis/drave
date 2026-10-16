@@ -382,3 +382,48 @@ précalculés ✗) et relire sa norme.
   **siège** est localisé ✓ (le chemin joint ✓) ; (3) la sonde à écrire reste **une ligne** —
   `adaptateur.grad is None` juste après le premier pas de la boucle **jointe** ✗ — et c'est la
   prochaine édition ✓.
+
+## 14. SYNTHÈSE DU FIL : TROIS CAUSES, TOUTES MESURÉES — et la quatrième est une limite de machine
+
+Le § 13 localisait le défaut « dans le chemin joint ». En relisant **la fermeture qui construit les
+logits**, la cause était écrite **en toutes lettres dans le code** ✗✓ :
+
+```python
+def logits_chemin(ids, grad=False):
+    if plein_obj:
+        # « l'adaptateur de sortie, lui, NE JOUE PAS : il n'existe que sur un chemin tronqué »
+        return banc.m(ids, use_cache=False).logits      # ← le modèle COMPLET
+```
+
+* **avec `--objectif plein`, l'adaptateur n'est pas dans le graphe** ✗ — par conception ✓, et le
+  commentaire le dit ✓. Il ne peut donc **pas** recevoir de gradient ✗, et Adam l'ignore
+  silencieusement ✓✓. **Mes runs — et la reproduction d'E5 — utilisaient `--objectif plein`** ✗ :
+  c'était **mon** erreur, pas un défaut d'outil ✗✓ ;
+* **la vérification** : avec **`--objectif tronque`**, le même bras entraîne l'adaptateur ✓ (norme
+  **30,700783** contre 29,933 à l'initialisation, écart **0,057468** ✓) — et le LoRA aussi (6,64 ✓) ;
+* **mais l'accord reste 0,0 %** ✗ — et cette fois c'est **cohérent** ✓ : le réflexe obtenu a une
+  perplexité de **18 231** ✗, contre **181,54** pour le bras « perplexité » d'E5 et **574,70** pour son
+  bras distillé ✓. Mon réflexe est **100 fois pire** que celui d'E5 ✓, donc il propose des jetons
+  incohérents ✓, donc l'accord est nul ✓. Ce n'est pas un défaut : c'est **le volume** ✓ (10 morceaux
+  contre 29 ✓), et le volume est précisément ce qui **ne tient pas** dans 16 Go ✗.
+
+**Les quatre murs du fil, dans l'ordre où ils sont tombés** :
+
+| # | mur | état |
+|---|---|---|
+| 1 | **mémoire** : 29 morceaux ⇒ ~15,3 Go pour 15,55 Go ✗ | **non franchi** ✗ (limite de machine) |
+| 2 | **stabilité** : le KL plein diverge à petit volume ✗ (fenêtre vide ✗) | **franchi** ✓ — `--kl-tronque 64 --pas-lora 1e-4` (fenêtre ×10 ✓) |
+| 3 | **objectif** : `--objectif plein` ne fait pas jouer l'adaptateur ✗ | **compris** ✓ — c'est `--objectif tronque` qu'il faut pour un réflexe |
+| 4 | **volume** : à 10 morceaux le réflexe est 100× pire ✗ ⇒ accord 0 % | **non franchi** ✗ — dépend du mur 1 ✗ |
+
+**Ce qui reste vrai d'E5, et ce qui ne l'est plus** : son **résultat** (l'accord double sous
+distillation : 28 % → 51 % ✓) n'est **ni confirmé ni infirmé** ✗ — mais il est maintenant **crédible et
+cadré** ✓ : ses chiffres (181,54 et 574,70 de perplexité) correspondent à un réflexe **utilisable**,
+que je n'ai pas su reproduire **faute de mémoire** ✗, et sa conclusion exige le protocole complet ✓.
+Sa **limite** est en revanche établie ✓ : le mécanisme **n'est pas scalable vers le bas** ✗ (mur 2 et
+mur 4 ✓).
+
+**Et la leçon, qui est la cinquième du même genre en deux jours** : j'ai cherché un **bug d'outil**
+pendant **cinq rounds** ✗ alors que la cause était **mon propre choix de drapeau** ✗, écrit dans un
+commentaire du code que je n'avais pas lu ✓. *Lire le code qui décide, avant de suspecter celui qui
+exécute.*
