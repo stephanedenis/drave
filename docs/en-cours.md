@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 09 h 35 HAE.**
+**Mis à jour : 2026-10-16, 10 h 00 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -24,7 +24,7 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | le **PROJECTEUR** | ✅ **VÉRIFIÉ** : cosinus **+0,99997509**, écart **0,71 %** (= la quantification Q8_0). L'écart de 66,6 % d'avant venait de **MA comparaison** — je nourrissais la référence avec l'état en **ordre de lecture** alors que son `view` regroupe les quatre entrées **consécutives** (donc une ligne, pas un bloc) |
 | le chemin image, complet | embedding **exact** · 31 couches **isolées à 7,58e-06** · `post_ln` conforme (**+1,00000012**) · projecteur **0,71 %** — la porte vérifie désormais les étapes 5 **et** 6 |
 | et une leçon pour moi, deux fois | j'ai tiré **deux** conclusions fausses sur le *code* alors que le défaut était dans **ma mesure** : un « correctif » démenti par un panic (`post_ln` fait 1280 poids), puis un écart de 66,6 % qui venait de l'**ordre de mes entrées**. *L'instrument se vérifie avant la conclusion.* |
-| ⚠️ **avertissement** | le **binaire** en place a été construit pendant cette investigation, quand le source portait ce correctif faux : **source et binaire ne sont pas le même programme** jusqu'à la reconstruction, qui aura lieu **dès la fin de la passe en cours** (on ne reconstruit pas pendant une passe). La reconstruction numpy du projecteur ne reproduit pas non plus les jetons du moteur (cosinus +0,8388) : il reste une différence **dans ce que le moteur fusionne**, et l'étape suivante est de le lui **faire écrire** |
+| ⚠️ **avertissement (levé)** | il y avait un écart entre le **source** et le **binaire** pendant l'investigation du projecteur ✓ ; **il est levé** — le binaire a été reconstruit depuis, et la passe de portes en cours tourne sur une construction propre ✓ |
 | ce qui reste | l'**injection** (le chemin image → jetons du modèle de texte) et la **vision multimodale de bout en bout** (une question sur une image) |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |
 
