@@ -2425,7 +2425,10 @@ fn run_banc_vision(sortie: &str) {
         println!("projecteur : {n_groupe} groupes × {n2} valeurs, |sortie| = {:.4}, 4 premières {:?}",
                  y.iter().map(|v| v * v).sum::<f32>().sqrt(),
                  &y[..4].iter().map(|v| (v * 1e4).round() / 1e4).collect::<Vec<_>>());
-        proj = Some((Vec::new(), y));
+        // On transporte la DIMENSION des jetons avec eux : le bloc d'injection est HORS de la
+        // portée du projecteur (c'est ce qui a fait écrire `3584` en dur), et une dimension
+        // supposée est exactement ce qui produit un « 27 jetons × 3584 » faux.
+        proj = Some((vec![n2 as f32], y));
     }
 
     // ---- Injection : le moteur consomme-t-il un embedding d'image ?
@@ -2434,22 +2437,40 @@ fn run_banc_vision(sortie: &str) {
     // (« forward partait toujours de token_embd »). C'est un contrôle de
     // PLOMBERIE : le moteur ne panique pas, il rend des logits d'échelle
     // normale. La qualité, elle, demanderait la comparaison complète.
-    if let Some((_, y)) = proj.as_ref() {
-        let n_emb = 3584usize;
+    if let Some((dim, y)) = proj.as_ref() {
+        // ⚠ LA DIMENSION DES JETONS D'IMAGE EST CELLE DU MODÈLE DE TEXTE, ET ELLE SE LIT — PAS SE
+        // SUPPOSE : ce bloc portait `3584` en dur (la dimension d'un AUTRE modèle) et annonçait donc
+        // « 27 jetons × 3584 » pour une image qui en produit 64 × 1536 — une arithmétique fausse,
+        // affichée sans que rien ne le signale.
+        let n_emb = *dim.first().unwrap_or(&0.0) as usize;
+        if n_emb == 0 { println!("injection : dimension inconnue"); return; }
         let n_tok = y.len() / n_emb;
-        println!("injection : {n_tok} jetons × {n_emb} disponibles");
+        println!("injection : {n_tok} jetons × {n_emb} (la dimension du modèle de texte)");
         let chemin = std::env::var("DRAVE_VISION_TEXTE").unwrap_or_default();
         if !chemin.is_empty() {
             let mut mdl = model::Model::load(&chemin, 512, 16, true, 1.0, false, 0, 0);
-            mdl.emb_imposee = Some(y[..n_emb].to_vec());
-            let hn = mdl.forward(0, 0);
+            // LE SPLICE, POSITION PAR POSITION : `emb_imposee` est consommé par chaque `forward`,
+            // donc les jetons d'image se posent aux positions 0..n_tok-1 sans toucher au moteur.
+            for p in 0..n_tok {
+                mdl.emb_imposee = Some(y[p * n_emb..(p + 1) * n_emb].to_vec());
+                let _ = mdl.forward(0, p);
+            }
+            // Puis les jetons de TEXTE, fournis par l'appelant (`DRAVE_VISION_TEXTE_IDS`) : c'est le
+            // seul moyen de comparer à une référence sur la MÊME séquence.
+            let ids: Vec<u32> = std::env::var("DRAVE_VISION_TEXTE_IDS").ok()
+                .map(|s| s.split(',').filter_map(|x| x.trim().parse().ok()).collect())
+                .unwrap_or_default();
+            let mut hn = mdl.forward(ids.first().copied().unwrap_or(0), n_tok);
+            for (k, &tok) in ids.iter().enumerate() {
+                hn = mdl.forward(tok, n_tok + k);
+            }
             let lg = mdl.logits(&hn);
             let mut best = 0usize;
             for (i, &v) in lg.iter().enumerate() { if v > lg[best] { best = i; } }
             let moy: f32 = lg.iter().sum::<f32>() / lg.len() as f32;
             let var: f32 = lg.iter().map(|v| (v - moy) * (v - moy)).sum::<f32>() / lg.len() as f32;
-            println!("  moteur : {} logits · argmax {best} · moyenne {moy:.3} · écart-type {:.3}",
-                     lg.len(), var.sqrt());
+            println!("  moteur : {} jetons d'image + {} de texte · {} logits · argmax {best} · \
+                     moyenne {moy:.3} · écart-type {:.3}", n_tok, ids.len(), lg.len(), var.sqrt());
         }
     }
     let norme: f32 = out.iter().map(|v| v * v).sum::<f32>().sqrt();

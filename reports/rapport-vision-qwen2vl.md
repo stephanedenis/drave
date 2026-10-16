@@ -528,6 +528,32 @@ méthode ✓, mais **deux fois** j'en ai tiré une conclusion fausse sur le *cod
 était dans **ma mesure** — un « correctif » du moteur démenti par un panic, puis un écart de 66,6 %
 qui venait de l'ordre de mes entrées. *L'instrument se vérifie avant la conclusion.*
 
+## 2quinquies. L'INJECTION : le splice fonctionne, la comparaison ne conclut pas (et le vrai manque est nommé)
+
+**Ce qui a été corrigé, et c'était faux depuis le début** : le bloc d'injection portait `3584` **en
+dur** (la dimension d'un **autre** modèle) et annonçait donc « **27 jetons × 3584** » pour une image
+qui en produit **64 × 1536** — une arithmétique fausse, affichée sans que rien ne le signale ✗. La
+dimension voyage maintenant **avec les jetons** (elle se lit, elle ne se suppose pas ✓) : le bloc
+annonce « **64 jetons × 1536** (la dimension du modèle de texte) » ✓.
+
+**Ce qui marche** : le **splice**, position par position — `emb_imposee` est consommé par chaque
+`forward`, donc les 64 jetons d'image se posent aux positions **0..63** sans toucher au moteur ✓, puis
+les jetons de texte suivent ✓. Résultat mesuré (`DRAVE_VISION_TEXTE` + `DRAVE_VISION_TEXTE_IDS`) :
+**151 936 logits · argmax 15 · moyenne −5,654 · écart-type 2,119** — une distribution plausible, pas
+un NaN ✓.
+
+**Ce qui NE conclut PAS** : la comparaison à la référence échoue **sur l'API de `transformers`** ✗ —
+`mat1 and mat2 shapes cannot be multiplied (71x4608 and 1536x1536)` : la tour rend des features que
+la référence ne fusionne pas comme je l'attendais (4608 = 3 × 1536 au lieu de 1536). **L'injection
+n'est donc PAS vérifiée**, et la cause est **dans ma façon d'appeler la référence** — la même classe
+d'erreur que les deux précédentes du jour, et la troisième fois que l'instrument doit être mis en
+cause avant le code ✓.
+
+**Et le vrai manque est nommé, pour qu'il ne soit pas découvert plus tard** : le moteur applique au
+modèle de texte une **RoPE 1-D**, alors que le modèle de langue de Qwen2-VL utilise un **mRoPE**
+(sections `[16, 24, 24]`, positions `(t, h, w)`) ✗. Un splice réussi ne produirait donc **pas** la
+réponse du modèle : c'est un **projet** (le mRoPE côté langue), pas un réglage, et c'est écrit ici.
+
 ## 3. Ce que ça change pour la carte des facultés
 
 * **la perception visuelle passe de « bloquée » à « mesurée, et non vérifiée »** — c'est une amélioration
