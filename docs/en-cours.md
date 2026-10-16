@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-15, 20 h 35 HAE.**
+**Mis à jour : 2026-10-15, 21 h 05 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -27,6 +27,15 @@ La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par
 | ⚠️ **avertissement** | le **binaire** en place a été construit pendant cette investigation, quand le source portait ce correctif faux : **source et binaire ne sont pas le même programme** jusqu'à la reconstruction, qui aura lieu **dès la fin de la passe en cours** (on ne reconstruit pas pendant une passe). La reconstruction numpy du projecteur ne reproduit pas non plus les jetons du moteur (cosinus +0,8388) : il reste une différence **dans ce que le moteur fusionne**, et l'étape suivante est de le lui **faire écrire** |
 | ce qui reste | l'**injection** (le chemin image → jetons du modèle de texte) et la **vision multimodale de bout en bout** (une question sur une image) |
 | lecture du dépôt | un **serveur de documentation** est en ligne : `http://localhost:8787/` |
+
+## Nouveau : E9, l'homéostasie synaptique (défini et mesuré ce soir)
+
+Le seul emplacement vide de `docs/biologie-pour-drave.md` est **défini et mesuré** : **l'amplitude
+globale du changement plastique**. Résultat : **le coût hors domaine est monotone en l'amplitude**
+(−0,58 % à ×0,6 → +1,64 % à ×1,25), et l'**optimum ×0,6-0,75 domine le delta entier** —
+m32 **−8,75 %** contre −7,47 %, hors domaine **−0,58 %** contre **+0,33 %**. Le réglage publié
+jusqu'ici (delta entier) était donc **hors de l'optimum** ✗, et c'est écrit plutôt que corrigé en
+silence. Fiche : [`reports/rapport-e9-homeostasie.md`](../reports/rapport-e9-homeostasie.md).
 
 ## Où en est le dépôt
 
