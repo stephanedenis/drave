@@ -131,4 +131,8 @@ if "fils" in med and "demande" in med:
 print("  PORTE TENUE" if ok else "  PORTE ROUGE")
 sys.exit(0 if ok else 1)
 PY
+# ⚠️ LE CODE DE SORTIE DE PYTHON DOIT ÊTRE CELUI DE LA PORTE — et il était perdu : la ligne suivante
+# (`rm -f`) l'écrasait ✗, donc la porte imprimait « PORTE ROUGE » et sortait en **0** ✓✗. Même défaut
+# que `porte-tableaux` (trouvé le 16/10 par un audit statique des 46 portes ✓).
+[ $? -eq 0 ] || exit 1
 rm -f "$FICHE_MESURES"

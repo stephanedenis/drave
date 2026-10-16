@@ -191,6 +191,21 @@
 > *Trois défauts, trois leçons déjà écrites ici : une vérification doit pouvoir échouer ; on ne lit pas
 > une porte à travers un pipe ; et un renvoi se vérifie à la machine, pas à l'œil.*
 
+> **4. ET UN AUDIT DES 46 PORTES, LE MÊME JOUR** (analyse statique, sans les exécuter ✗) : la question
+> posée par `porte-tableaux` — *combien d'autres portes ne PEUVENT PAS échouer ?* ✗ — a une réponse, et
+> elle est précise ✓ :
+>
+> | famille cherchée | trouvée | verdict |
+> |---|---|---|
+> | heredoc Python avec `sys.exit` **non propagé** | **2** | ✅ **`porte-tableaux`** (corrigée) et **`porte-prechargement`** (corrigée : `rm -f` écrasait le code ✓✗ — elle imprimait « PORTE ROUGE » et sortait en **0** ✗) |
+> | heredoc Python avec `sys.exit` **propagé par l'appelant** | 1 | ✅ `porte-bus-socket` — son helper est appelé en `REP=$(moduler …) \|\| { …; exit 1; }` ✓ : **faux positif** ✓ |
+> | `\|\| true` | 3 | ✅ **légitimes** ✓ : ils portent sur des **extractions** dont le vide est un état valide ✓ (`grep -m1 …`, `mkdir -p`, un comptage ✓), et la vérification vient **après** ✓ |
+> | pipe vers `tail` **dans** une porte | 9 | ✅ **faux positifs** ✓ : ce sont des **extractions de valeur** (`grep … \| tail -1` ✓), pas des affichages de fin — le code de sortie du pipe n'est pas ce que la porte teste ✓ |
+>
+> **Deux vrais défauts sur 46 portes**, tous deux **corrigés et vérifiés** ✓✓ — et les autres signaux
+> sont des **faux positifs documentés** ✗✓, ce qui vaut mieux qu'un audit muet ✓. *La leçon vaut pour
+> l'audit lui-même : une détection statique propose, la lecture dispose* ✓.
+
 ## 2. Les repères imprimés par chaque porte
 
 | porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-10-11 06:30) |
