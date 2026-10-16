@@ -498,3 +498,36 @@ intermédiaire ». Deux réglages ont été essayés, et **l'un des deux reprodu
   testé dans cette configuration gagnante ✗ ; (c) et **pourquoi** K=64 déforme ✗ — la mesure de la
   divergence KL entre la cible tronquée et la vraie distribution ✗, qui rendrait la sensibilité
   **prévisible** au lieu d'observée ✓.
+
+## 17. E5 EST CONFIRMÉ SUR DEUX GRAINES — le mécanisme se réplique, sa variabilité est chiffrée
+
+La règle de la nuit (« une graine ne mesure pas un critère » ✗) appliquée à la configuration gagnante
+(K=512, taux 1e-4, 29 morceaux) :
+
+| graine | bras | perplexité m32 | m20 | **accord m32** | **accord m20** |
+|---:|---|---:|---:|---:|---:|
+| 1 | témoin | 192,69 | 132,69 | 25,7 % | 38,1 % |
+| 1 | **distillé** | 478,94 | 404,98 | **30,3 %** | **51,4 %** |
+| 2 | témoin | 228,90 | 146,74 | 24,8 % | 37,6 % |
+| 2 | **distillé** | 555,79 | 669,31 | **29,6 %** | **38,9 %** |
+| **moyenne** | témoin | 210,80 | 139,72 | **25,3 %** | **37,9 %** |
+| **moyenne** | **distillé** | 517,37 | 537,15 | **30,0 %** | **45,2 %** |
+
+* **la direction se réplique** ✓✓ : la distillation améliore l'accord **sur les deux graines** (m32 :
+  30,3 et 29,6 contre 25,7 et 24,8 ✓ ; m20 : 51,4 et 38,9 contre 38,1 et 37,6 ✓) — **quatre
+  comparaisons, quatre fois dans le même sens** ✓✓ ;
+* **et l'ampleur est très inégale selon le texte** ✗ : sur **m32**, le gain est **stable** (+4,6 et
+  +4,8 points ✓✓) ; sur **m20**, il va de **+1,3 à +13,3** ✗ — la même manipulation donne un gain
+  **dix fois plus grand** selon la graine ✓. La moyenne (+7,3) cache donc une dispersion qui la dépasse ✗ ;
+* **le coût, lui, est parfaitement stable** ✓ : la perplexité **double à triple** dans les deux cas
+  (192,69 → 478,94 soit **+148 %** ; 228,90 → 555,79 soit **+143 %** ✓✓). Autrement dit : *la
+  distillation paie un prix certain pour un gain incertain* ✓ — et c'est la formulation la plus juste
+  de son compromis, meilleure que « imite mieux, prédit moins bien » ✓ ;
+* **ce qui est donc établi, après le fil le plus long de la nuit** : (a) le **témoin est reproduit**
+  (25,7 % / 24,8 % contre 28,0 % publié ✓) ; (b) la **direction est répliquée** sur deux graines ✓ ;
+  (c) le mécanisme est **sensible au taux** (il diverge au taux par défaut à petit volume ✗) et à la
+  **largeur du KL** (64 classes déforment la cible et inversent le signe ✗, 512 non ✓) ; (d) et sa
+  **limite** : il **n'est pas scalable vers le bas** ✗ (fenêtre vide à 10 morceaux ✓, § 9 ✓) ;
+* **ce qui reste ouvert** : le **mélange** KL + λ·CE dans la configuration gagnante ✗ ; et le
+  **pourquoi** de la sensibilité à K ✗ (mesurer la divergence KL entre la cible tronquée et la vraie
+  distribution rendrait la sensibilité **prévisible** ✓).
