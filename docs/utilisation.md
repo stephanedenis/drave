@@ -21,11 +21,20 @@ gabarit n'est appliqué qu'avec `--prompt` ✓ — sans lui, le moteur lance un 
 il n'existe **aucun mode silencieux** ✗ (la télémétrie suit la réponse ✓) → le REPL construit le
 gabarit Qwen, tient l'historique, et **coupe l'instrumentation** ✓✓.
 
-### La documentation, en ligne
+### La documentation, en ligne — **DEUX serveurs, et ils ne servent pas la même chose**
 
-**http://localhost:8787/** (ou **http://192.168.1.101:8787/**) — service `drave-doc` (`systemd --user`,
-`Restart=always`, `linger` ✓). Il **relit le disque à chaque requête** ✓ (donc il sert toujours la
-version courante ✓) et **redémarre seul** ✓ (testé). N'importe quel document : `/<chemin>.md` ✓.
+| | **mdserve** | **`serveur-doc.py`** |
+|---|---|---|
+| adresse | **http://127.0.0.1:8771/** ✓ | **http://localhost:8787/** (et **192.168.1.101:8787** ✓) |
+| ce que c'est | **le navigateur de documents** ✓ : **arbre** de contenu ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓, comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`, `~/.config/mdserve/pins.json` ✓ — `docs`, `reports` et `etat-cerveau.md` y sont ✓), **changement de racine** ✓ (ne peut que **restreindre** la vue ✗), **filtrage** ✓ | **la page « où en est le travail »** ✓ : `docs/en-cours.md` en premier, puis les documents de tête, la dernière passe des portes, les fiches récentes, le journal du jour ✓ |
+| portée | **127.0.0.1 seulement** ✗ (garantie par construction ✓) | **0.0.0.0** ✓ — donc accessible **depuis une autre machine** ✓ |
+| service | `mdserve.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/mdserve.log` ✓) | `drave-doc.service` ✓ |
+| écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ | aucune ✓ |
+
+**Lequel ouvrir ?** Pour **parcourir** le dépôt (l'arbre, les épingles, le filtrage, le suivi des
+modifications ✓) : **mdserve, port 8771** ✓✓. Pour **savoir en une page où en est le travail** ✓ (et y
+accéder depuis une autre machine ✓) : **8787** ✓.
+*Les deux tournent en service, redémarrent seuls, et relisent le disque — aucun rechargement manuel ✓.*
 
 ### Mesurer un modèle
 
