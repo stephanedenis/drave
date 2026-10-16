@@ -681,6 +681,25 @@ cos = torch.cat([m[i % 3] for i, m in enumerate(cos.split(mrope_section, dim=-1)
    référence, **avec les positions mRoPE** ✓ (et non plus les positions dégénérées ✓ qui, elles,
    ramènent au cas 1-D ✓ — c'est ce que la comparaison « dégénérée » du § 2quinquies a montré ✓).
 
+**⚠️ ET UNE TROUVAILLE QUI CHANGE LE BRANCHEMENT (16/10)** : le GGUF de Qwen2-VL-2B **ne déclare
+rien** de sa rotation ✗ — `mrope`, `rope_scaling`, `rope_section` et même `rope_theta` sont **absents**
+de ses métadonnées ✓ (vérifié sur les 400 premiers kilo-octets ✓), alors que le `config.json` de la
+référence, lui, **déclare** `{"type": "mrope", "mrope_section": [16, 24, 24]}` ✓✓. Conséquence, et elle
+est mauvaise :
+
+* le moteur affiche « **rotation : RoPE simple** (le modèle ne déclare pas YaRN) » ✓ et applique donc
+  une **RoPE 1-D** ✗ sur un modèle qui **utilise le mRoPE** ✗ — **en silence** ✓✗. C'est exactement la
+  famille de défaut que ce dépôt refuse : *un réglage qui ne dit rien* ✗ ;
+* **donc le branchement ne peut pas se faire « tout seul »** ✗ : les sections doivent venir de
+  l'**appelant** ✓ (un drapeau ✗) — et un drapeau qui ne ferait rien si on l'oublie est pire que pas de
+  drapeau ✗✓, d'où la règle à écrire : **demander le mRoPE sans fournir les positions doit être
+  REFUSÉ** ✓, et **le moteur doit ÉCHOIR ce qu'il applique** ✓ (« rotation : mRoPE [16,24,24], trois
+  positions » ✗) pour qu'aucune mesure ne puisse être prise dans le doute ✓ ;
+* **et une troisième conséquence, pour la vérification** : le pas 4 (bout en bout ✗) devra comparer
+  **le même modèle** des deux côtés ✓ — le GGUF pour le moteur ✓, les `safetensors` pour la référence ✓
+  — en sachant que le GGUF **a perdu** l'information de rotation ✗ : c'est la **deuxième** fois qu'une
+  information manque dans ce `mmproj`/GGUF ✓ (la première : la tranche temporelle du noyau de patchs ✓).
+
 **Ce qui n'est PAS dans ce projet, et c'est important** : ni le décodeur d'image ✗ (le banc lit du f32
 fourni ✓, et cela suffit pour vérifier ✓), ni la qualité du projecteur ✗ (elle est mesurée à 0,71 % ✓),
 ni l'entraînement ✗. Le mRoPE est un **changement de positions** ✗, pas de poids ✗ — et c'est la
