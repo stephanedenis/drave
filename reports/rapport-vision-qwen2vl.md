@@ -631,8 +631,17 @@ d'image se posent aux positions 0..63 ✓), mais le moteur applique au modèle d
    Ce que la nuit a déjà **mesuré** de la convention, et qui sert de point de départ : l'ordre des jetons
    d'image est **block-major** ✓ (indice 0 → (0,0), 1 → (0,1), 2 → (1,0), 3 → (1,1) ✓), le texte porte
    `(p, p, p)` ✓ et les sections de tête sont `[16, 24, 24]` sur 64 ✓ ;
-2. **implémenter les positions en Rust** ✗ — le même algorithme que la référence, vérifié **pas à pas**
-   contre les valeurs d'or du pas 1 ✓ (c'est la partie facile : un parcours de grille ✓) ;
+2. **implémenter les positions en Rust** ✓ — **écrit et testé** : `drave-core/src/mrope.rs` ✓ (un
+   **fichier à part** ✓, qui ne touche pas à `main.rs` : il a donc pu être écrit **pendant** une passe de
+   portes ✓ sans que le binaire de la passe change ✗✓, et il a été **essayé par `rustc` seul** ✓ —
+   `rustc --test drave-core/src/mrope.rs` → **trois essais, trois verts** ✓✓, sans `cargo` et donc sans
+   reconstruire le binaire de la passe ✓). Les trois essais verrouillent exactement ce qui doit tenir :
+   **le texte pur dégénère en 1-D** ✓✓ (l'invariant qui fait du mRoPE un sur-ensemble de la RoPE déjà
+   vérifiée ✓), **le texte reprend au-dessus du maximum après une image** ✓ (sinon deux jetons
+   porteraient la même position ✗), et **les sections couvrent les 64 fréquences sans trou** ✓.
+   ⚠️ Ce qui **n'est pas encore** vérifié : la **convention d'ordre** des jetons d'image (par blocs ✓
+   contre raster ✗) et la **valeur exacte** de la reprise du texte ✓ — les deux se tranchent avec les
+   **valeurs d'or** du pas 1 ✓, et c'est écrit dans l'en-tête du fichier ✓ ;
 3. **étendre `rope`** ✗ — prendre **trois** positions et découper les fréquences en **trois sections** ✓.
    **La règle est maintenant lue dans la source installée** ✓✓ (`apply_multimodal_rotary_pos_emb`) :
 
