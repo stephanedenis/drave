@@ -247,9 +247,9 @@ torch**, ceux de la table publiée, pour que la comparaison soit honnête :
 | les plus faciles | m16, m0, m5 | 6,8869 | −4,06 % |
 | **PAR ÉTALEMENT** | **m30, m28, m23** | **6,6228** | **−10,80 %** |
 
-* **l'étalement bat le hasard de 3,6 points et le meilleur des quatre autres critères de 6,7 points**
-  ✓✓ — c'est le meilleur résultat de sélection mesuré jusqu'ici, et il **confirme la loi** : ce qui
-  compte n'est pas **quels** morceaux on prend, mais **comment le lot est composé** ;
+* **l'étalement bat le hasard de 3,6 points** ✓ — le meilleur résultat de sélection mesuré — **mais
+  une seule graine ne prouve rien** : le § 6bis ci-dessous refait la comparaison sur **trois** graines
+  et **change de volume**, et le verdict se **resserre puis se retourne** ✗✓ ;
 * **et il a un coût, mesuré par le moteur** (mêmes textes, autre harnais) : à ×1,0, l'étalement donne
   m32 **6,8370 (−7,91 %)** et m20 **16,8363 (−11,96 %)** — mais **hors domaine +1,94 %** ✗ (le
   hasard, lui, coûtait −0,35 %) : il **spécialise** plus fort, dans les deux sens ;
@@ -274,3 +274,48 @@ torch**, ceux de la table publiée, pour que la comparaison soit honnête :
 * **ce qui reste ouvert** : le critère d'étalement est essayé sur **un** lot (les deux extrêmes et la
   médiane) et **un** volume (3) ✗ ; sa définition même (**quelle** étendue ? l'écart-type des pertes
   du lot ? l'entropie de leur distribution ?) n'est pas balayée ✗ — c'est la suite naturelle.
+
+## 6bis. LA CONTRE-ÉPREUVE : trois graines, et un second volume — la revendication est TEMPÉRÉE
+
+Le § 6 annonçait « l'étalement bat tous les critères de morceau » **sur une seule graine** ✗. Deux
+contre-épreuves ont été faites, et elles obligent à écrire plus prudemment.
+
+### a) Trois graines, à 3 morceaux (le volume de la revendication)
+
+| graine | **étalement** {m30, m28, m23} | **hasard** {m5, m12, m17} | différence |
+|---:|---:|---:|---:|
+| 0 | 6,6228 | 6,8914 | **−0,269** |
+| 1 | 6,6891 | 6,7413 | −0,052 |
+| 2 | 6,6157 | 6,6900 | −0,074 |
+| **moyenne** | **6,6425 (−10,53 %)** | **6,7742 (−8,76 %)** | **−0,132** |
+
+* **l'étalement gagne sur les TROIS graines** ✓✓ — l'effet est donc **réel dans son signe** ;
+* **mais il est modeste** : 1,8 point de mieux en moyenne (et 0,05 à 0,27 selon la graine ✗), pour une
+  dispersion de graine de **0,07 à 0,27** ✗ — c'est-à-dire **du même ordre que l'effet** ✗✓. Le chiffre
+  du § 6 (−10,80 % contre −7,21 %, soit 3,6 points) était **la graine la plus favorable** ✗ ;
+* et la table publiée devient, en moyennes : **étalement −10,53 %**, **hasard −8,76 %**, premiers
+  −5,99 %, surprise −4,86 %, faciles −4,06 % — l'étalement reste **premier**, mais de 1,8 point ✗.
+
+### b) Dix morceaux : le critère PERD contre le hasard
+
+| rejeu (10 morceaux) | m32 | écart |
+|---|---:|---:|
+| **étalement** (un par décile : m0, m1, m2, m8, m10, m15, m21, m23, m25, m30) | 6,5938 | −11,19 % |
+| **hasard** (graine 0 : m2, m3, m4, m5, m6, m10, m12, m18, m22, m28) | **6,5073** | **−12,35 %** |
+
+* **à 10 morceaux, le hasard gagne** ✗ (1,2 point) — l'avantage de l'étalement **ne survit pas au
+  changement de volume** ✗ ;
+* et c'est peut-être explicable : **à 10 morceaux sur 31, n'importe quel lot est déjà étalé** ✓ — le
+  critère paie alors le prix de ses extrêmes (deux morceaux très durs, très différents) sans gagner la
+  diversité qu'il apportait à 3 ✗. Mais ce n'est qu'une hypothèse, et elle n'est pas mesurée ✗.
+
+### Verdict, écrit tel quel
+
+> **Le critère d'étalement n'est PAS établi comme une règle.** Il gagne **conséquemment à 3 morceaux**
+> (trois graines sur trois ✓) et **perd à 10** ✗ ; son effet est du même ordre que le bruit de graine
+> ✗✓. Ce qui reste solide de la nuit, c'est la **loi générale** (« rejouer compte plus que choisir »,
+> et les critères de **lot** tiennent mieux que ceux de **morceau**) — **pas** ce critère-ci.
+>
+> Et la leçon de méthode : **une graine ne mesure pas un critère** ✗. Les tables de cette fiche qui
+> portent sur une seule graine (les quatre critères du § 5 ✗) doivent être lues comme des **ordres de
+> grandeur**, pas comme des classements — c'est écrit ici une fois pour toutes.
