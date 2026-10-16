@@ -77,6 +77,26 @@ def lire_etat(prefixe: pathlib.Path, pos: int) -> np.ndarray:
     return np.frombuffer(f.read_bytes(), dtype="<f4").copy()
 
 
+def charger_pont(chemin: str | None):
+    """LE LANGAGE ABSTRAIT : (W, b) appris par `tools/pont_abstrait.py`, appliqué à l'état brut —
+    `entrée_post = (état − moy_h) @ W + moy_e` ✓. C'est ce qui rend la réinjection LÉGITIME : l'objet
+    produit vit dans l'espace des ENTRÉES ✓ (celui que le moteur sait relire ✓)."""
+    if not chemin:
+        return None
+    d = np.load(chemin)
+    W, b = d["W"].astype(np.float32), d["b"].astype(np.float32)
+    print(f"  pont abstrait chargé : W {W.shape} · écart appris {float(d['rel_pont']) * 100:.1f} % "
+          f"contre le jeton {float(d['rel_jeton']) * 100:.1f} % ✓")
+    return W, b
+
+
+def traduire(etat: np.ndarray, pont) -> np.ndarray:
+    if pont is None:
+        return etat
+    W, b = pont
+    return (np.asarray(etat, dtype=np.float32) @ W + b).astype("<f4")
+
+
 def normaliser(etat: np.ndarray, a) -> np.ndarray:
     """Ramène l'état à l'échelle des entrées : moyenne nulle (par dimension, sur le vecteur) et norme
     égale à celle d'un embedding de jeton. Sans ce pont, réinjecter un résidu BRUT (sortie
@@ -129,8 +149,15 @@ def main() -> int:
     ap.add_argument("--threads", type=int, default=8)
     ap.add_argument("--echelle", type=float, default=1.0,
                     help="norme visée pour l'état injecté quand --normer est actif")
+    ap.add_argument("--pont", default=None,
+                    help="mapping APPRIS (tools/pont_abstrait.py, un .npz) : il traduit la sortie "
+                         "PRÉ-LINGUISTIQUE en entrée POST-LINGUISTIQUE. C'est le « langage abstrait » "
+                         "que la réinjection brute ne fournit pas (mesuré : ×30 000 sans lui, et "
+                         "normer n'y change rien). Avec --pont, la boucle silencieuse passe par ce "
+                         "langage au lieu de retomber sur le jeton")
     a = ap.parse_args()
 
+    pont = charger_pont(a.pont)
     ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(a.morceau).read_text()) if x.strip()]
     n = a.amorce + a.suite
     if len(ids) < n:
@@ -153,15 +180,21 @@ def main() -> int:
             extra = {}
             if etat is not None:
                 refd = travail / "entree.refd"
-                ecrire_refd(refd, [normaliser(etat, a) if a.normer else etat], [a.amorce - 1], a.amorce)
+                etat_pret = traduire(etat, pont)
+                if a.normer:
+                    etat_pret = normaliser(etat_pret, a)
+                ecrire_refd(refd, [etat_pret], [a.amorce - 1], a.amorce)
                 extra["DRAVE_ETAT_ENTREE"] = str(refd)
             etat = capturer(a.moteur, a.modele, f_amorce, a.amorce, a.threads,
                             travail / "etat", [a.amorce - 1], extra)[0]
         # l'état pensé est INJECTÉ À LA FRONTIÈRE, puis la suite est lue
         refd = travail / "frontiere.refd"
-        ecrire_refd(refd, [normaliser(etat, a) if a.normer else etat], [a.amorce], n)
+        etat_pret = traduire(etat, pont)
+        if a.normer:
+            etat_pret = normaliser(etat_pret, a)
+        ecrire_refd(refd, [etat_pret], [a.amorce], n)
         p = ppl(a.moteur, a.modele, f_total, n, a.threads, {"DRAVE_ETAT_ENTREE": str(refd)})
-        etiq = "NORMÉ" if a.normer else "brut "
+        etiq = ("PONT " if a.pont else "brut ") + ("+ NORMÉ" if a.normer else "")
         print(f"  B. {k} pas SILENCIEUX{'s' if k > 1 else ' '} ({etiq})           : perplexité {p:.4f}"
               f"   ({100 * (p - base) / base:+.2f} % contre A)")
 

@@ -78,3 +78,60 @@
    **sonde linéaire** sur les états ✓ (`tools/c8_sonde_lineaire.py` existe ✓) : les deux modes sont-ils
    **séparables** dans le résidu ✗, et **où** (quelle couche ✗) ? C'est la mesure qui dirait si
    « verbaliser = se mettre en mode communication » est **vrai dans les poids** ✓✓.
+
+## 5. LE LANGAGE ABSTRAIT : appris, il bat le jeton — et l'état porte la suite bien au-delà du mot
+
+La phrase de Stéphane (« si un LLM peut répéter intégralement un énoncé, tu as ce qu'il te faut dans les
+couches intermédiaires » ✓) est **testable sans supposer** ✓ : on apprend, pour chaque **couche** L et
+chaque **horizon** k, un mapping `h_p^(L) → embedding(jeton p+k)` ✓ et on regarde ce que l'état sait ✓.
+`tools/pont_abstrait.py --couches … --horizons …` ✓ (ridge linéaire, 896 × 896, 4 000 positions ✓) :
+
+| couche | k = 1 | k = 4 | k = 16 | **témoin : le JETON choisi** (k = 1) |
+|---:|---:|---:|---:|---:|
+| 2 | 72,9 % | 82,8 % | 84,7 % | **122,9 %** |
+| 6 | 72,9 % | 82,9 % | 84,8 % | 122,9 % |
+| 12 | 73,0 % | 83,0 % | 84,6 % | 122,9 % |
+| 18 | **70,0 %** | 82,7 % | 84,7 % | 122,9 % |
+| 23 | **68,6 %** | **82,7 %** | 84,9 % | 122,9 % |
+
+*(écart relatif du mapping appris vers l'embedding du vrai jeton suivant ✓ ; le « témoin jeton » est
+l'embedding du jeton que le **modèle aurait choisi** ✗ — le repli sur le mode jeton ✗✓.)*
+
+* **LE LANGAGE ABSTRAIT EXISTE, ET IL BAT LE JETON** ✓✓ : l'état mappé prédit l'embedding du prochain
+  jeton avec **68,6 à 73 %** d'écart, quand **le mot que le modèle aurait dit** en est à **122,9 %** ✗✓
+  — c'est-à-dire **pire que l'embedding moyen** du corpus (97,1 % ✗, § mesuré plus haut ✓). Autrement
+  dit : *le mot est un très mauvais représentant de ce qui vient, et l'état en est un bien meilleur* ✓✓ ;
+* **ET L'ÉTAT PORTE LA SUITE BIEN AU-DELÀ DU PROCHAIN MOT** ✓✓ : à **16 jetons d'avance**, le mapping
+  garde **84,6 à 84,9 %** — à peine plus mauvais qu'à 1 jeton (68,6-73 % ✓) et **très** loin devant le
+  mot (122,9 % ✗). Ce que l'état contient n'est donc **pas** « le mot suivant » ✗ mais **une trajectoire**
+  ✓ — ce qui est exactement ce qu'il faut pour **penser sans verbaliser** ✓✓ ;
+* **et les couches intermédiaires suffisent** ✓ : de la couche **2** à la couche **23**, l'écart ne bouge
+  que de **4 points** (72,9 → 68,6 ✓). Le contenu est **là, à toutes les profondeurs** ✓✓ — la phrase de
+  Stéphane est **confirmée par la mesure** ✓ (et « couches intermédiaires » est même **optimiste** : la
+  couche 2 fait presque aussi bien que la dernière ✓).
+
+## 6. Et pourtant la boucle échoue encore — avec le pont appris
+
+Le pont **appris** a été branché dans la boucle silencieuse (`--pont` ✓, appliqué à l'état avant
+l'injection ✓) :
+
+| réglage (amorce 256, suite 256) | perplexité de la suite | écart |
+|---|---:|---:|
+| A. lecture seule | **9,6503** | — |
+| B. 1 pas silencieux, **PONT** appris | **453 609** | **+4 700 367 %** ✗✗ |
+| B. 4 pas, PONT appris | 368 834 | +3 821 897 % ✗✗ |
+| C. 16 jetons verbalisés | 9,5003 | **−1,55 %** ✓✓ |
+
+* **le pont appris ne sauve pas la boucle** ✗✓ (453 609 contre 294 181 sans pont : **pire** ✗) — et ce
+  n'est **pas** contradictoire avec le § 5 ✓ : le mapping est un **lecteur** ✓ (il *résume* l'état en
+  une entrée plausible ✓, avec 69 % d'écart ✗), pas un **inverse** ✗✓. Une boucle exige que l'erreur ne
+  s'accumule pas ✗ — or elle s'accumule ✓, et la mesure du **cycle** (§ `rapport-cycle-c2.md` : λ ≥ 3,7e4,
+  pas expansif **du tout** ✗) dit **pourquoi** : *le pas d'état amplifie* ✗✓ ;
+* **la conclusion des deux fiches se rejoint** ✓✓ : **lire** la pensée dans l'état est **facile** ✓
+  (linéaire, à toutes les couches, jusqu'à 16 jetons d'avance ✓✓) ; **la faire tourner sur elle-même**
+  est **difficile** ✗ (il faut une dynamique **contractante** ✗, et le modèle n'en a pas ✓). C'est
+  exactement la différence entre **lire** et **penser** ✓✓ ;
+* **la cible devient donc précise, et elle est chiffrée** ✓ : un langage abstrait n'est utile en boucle
+  que si son évolution est **stable** ✗ — donc il faut apprendre **le pas** (état → état ✓), pas
+  seulement **le pont** (état → entrée ✗). Le pont, lui, est **acquis** : il existe, il est linéaire, et
+  il bat le jeton ✓✓.

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 13 h 45 HAE.**
+**Mis à jour : 2026-10-16, 14 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -117,6 +117,17 @@ contre 294 181) → c'est une question de **sémantique** : le résidu **prélin
 **entrée** ✓, la correspondance n'est **pas l'identité** ✓ ; (2) **verbaliser n'est PAS du gaspillage** ✓✓
 — écrire 4 jetons améliore la suite de **0,40 %**, en écrire 16 de **1,55 %** (monotone ✓) : le jeton est
 le **pont** qui remet l'état dans un espace que le modèle sait relire ✓.
+
+**Et le LANGAGE ABSTRAIT a été construit et mesuré** ✓✓ (`tools/pont_abstrait.py` ✓) : un mapping
+**appris** (ridge linéaire 896 × 896 ✓) de la sortie **prélinguistique** vers l'**entrée** post-linguistique
+prédit l'embedding du jeton suivant avec **68,6 à 73 %** d'écart, quand **le mot que le modèle aurait
+choisi** en est à **122,9 %** ✗✓ (pire que l'embedding moyen ✓) — *l'état bat le jeton, et à **16 jetons
+d'avance** encore (84,6-84,9 % ✓)* ; et **toutes les couches se valent** (couche 2 : 72,9 % · couche 23 :
+68,6 % ✓✓), ce qui **confirme** la phrase de Stéphane sur les couches intermédiaires ✓. **Mais la boucle
+échoue encore avec ce pont** ✗ (453 609 contre 9,65 ✗) : le mapping est un **lecteur** (69 % d'erreur ✓),
+pas un **inverse** ✗ — et le cycle, mesuré la même nuit, dit pourquoi (λ ≥ 3,7e4, le pas **amplifie** ✗).
+*Lire la pensée est facile ; la faire tourner sur elle-même exige une dynamique contractante.* C'est la
+cible, et elle est chiffrée ✓.
 
 Ouvre quatre mesures, dans l'ordre de ce qu'elles coûtent : le **pont entraîné** (un adaptateur
 état → entrée ✓), le **contrôle apparié** de C (verbaliser **sans** garder les jetons ✓), le même
