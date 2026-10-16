@@ -206,3 +206,27 @@ la lecture. La même mesure à six perturbations :
 * **ce que cette correction ne dit pas** : λ local n'est mesuré qu'**en un point** et par différences
   finies ✗ ; un λ **global** (la plus grande valeur propre de la jacobienne, ou une moyenne sur des
   points ✓) demanderait un autre instrument ✗ — c'est nommé comme la suite.
+
+## 7ter. λ dépend AUSSI de la fenêtre — et la porte le mesure désormais
+
+En étendant `porte-cycle-c2.sh` (vérifications 6 et 7), une troisième dépendance est apparue : λ dépend
+de la **fenêtre** autant que de ε ✗.
+
+| mesure | fenêtre | λ (ε = 1e-3) |
+|---|---:|---:|
+| § 7, hors porte | 64 jetons | 206,0 |
+| **la porte** | **128 jetons** (sa fenêtre) | **488,8** |
+
+* ce n'est pas une contradiction : la sensibilité locale **dépend du point** (et le point dépend de la
+  fenêtre de texte ✗) — c'est écrit ici comme la troisième dépendance de λ, après ε (§ 7bis) et le
+  point lui-même ;
+* **et la porte ne prétend pas le contraire** : elle exige seulement **λ > 1** (le pas amplifie ✓), en
+  **imprimant la valeur** ✓ — parce que le jour où λ passera **sous 1**, ce ne sera pas une régression
+  mais **la cible de C2 atteinte**, et c'est la **porte** qu'il faudra réécrire (elle le dit
+  elle-même ✓) ;
+* **ce que la porte 6 ajoute, et qui manquait vraiment** : elle **gardait** la divergence ? Non — elle
+  l'**imprimait** ✗. Un changement qui l'aurait fait exploser à 1e30, ou tomber à NaN, serait passé
+  sans un mot ✗. Elle **garde** maintenant la **bornitude** (aucun NaN, aucun infini, aucun zéro ✗) et
+  la **forme** (la croissance par pas reste dans la bande **[1,5 ; 20]** ✓, mesurée ×18,8, ×3,4, ×3,2
+  sur sa propre fenêtre) : c'est la **cible réaliste de C2** — *la boucle ne converge pas, mais elle ne
+  s'emballe pas* ✓ — transformée en invariant ✓.

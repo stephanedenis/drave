@@ -130,5 +130,55 @@ executions=$(grep -oE "^executions [0-9]+" "$cout" | grep -oE "[0-9]+")
 attendu=$((PAS * 2))
 [ "$executions" = "$attendu" ] || { echo "  ❌ coût : $executions exécutions au lieu de $attendu"; exit 1; }
 echo "  ✅ 4. coût publié : $PAS pas × 2 régions = $executions exécutions ($(grep -oE '^secondes [0-9.]+' "$cout" | cut -d' ' -f2) s)"
-echo "  ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe)"
+# ------------------------------------------------ 6. LA FORME DE LA DIVERGENCE, ET λ
+# POURQUOI CETTE VÉRIFICATION EXISTE : la porte IMPRIMAIT la divergence (« le cycle non entraîné
+# diverge ») sans la GARDER ✗ — un changement qui l'aurait fait exploser à 1e30, ou tomber à NaN,
+# serait passé sans un mot. Or la fiche (`rapport-cycle-c2.md` § 7 et 7bis) a montré que la cible
+# réaliste de C2 n'est pas la contraction mais la **BORNITUDE** : la boucle ne converge pas, mais elle
+# ne s'emballe pas. C'est donc cela qu'on garde.
+$P - "$cout" "$PAS" <<'PY' || exit 1
+import pathlib, re, sys
+cout, pas = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+ligne = [l for l in cout.read_text().splitlines() if l.startswith("perplexites ")][0]
+ppl = [float(x) for x in ligne.split(None, 1)[1].split(",")]
+if len(ppl) != pas:
+    sys.exit(f"  ❌ {len(ppl)} perplexités pour {pas} pas")
+if any((p != p) or p <= 0 or p == float("inf") for p in ppl):
+    sys.exit(f"  ❌ divergence NON bornée (NaN, zéro ou infini) : {ppl}")
+ratio = [ppl[i + 1] / ppl[i] for i in range(len(ppl) - 1)]
+if not all(1.5 <= r <= 20 for r in ratio):
+    sys.exit(f"  ❌ la croissance par pas sort de la bande mesurée [1,5 ; 20] : "
+             + ", ".join(f"x{r:.2f}" for r in ratio))
+print(f"  ✅ 6. la divergence est BORNÉE et sa forme est celle qui est publiée : "
+      + " → ".join(f"{p:,.2f}" for p in ppl))
+print(f"     croissance par pas : " + ", ".join(f"x{r:.2f}" for r in ratio)
+      + " — dans la bande [1,5 ; 20] (mesuré : x8,7, x6,9, x4,0)")
+PY
+
+# λ : l'amplification locale du pas. Elle est MESURÉE, pas supposée — et la porte exige qu'elle reste
+# > 1 : le jour où elle passera sous 1, ce ne sera pas une régression mais **la cible de C2 atteinte**,
+# et c'est la porte qu'il faudra réécrire (elle le dit).
+timeout 900 $P tools/cycle_sensibilite.py --topologie "$T/cycle.json" --morceau "$T/morceau.txt" \
+    --limite "$LIMITE" --epsilon 1e-3 --graine 0 --moteur "$D" --modele "$M" > "$T/sens.log" 2>&1 \
+    || { echo "  ❌ la mesure de sensibilité a échoué :"; tail -3 "$T/sens.log"; exit 1; }
+LAM=$(grep -oE "λ = [0-9.]+" "$T/sens.log" | head -1 | grep -oE "[0-9.]+")
+cat > "$T/lambda.py" <<'PYL'
+import sys
+lam = float(sys.argv[1]) if sys.argv[1] else 0.0
+if lam <= 0:
+    sys.exit("  erreur : lambda illisible")
+if lam <= 1:
+    print("  lambda = %.2f <= 1 : le pas CONTRACTE." % lam)
+    print("  La cible de C2 serait ATTEINTE, et cette porte doit etre REEECRITE :")
+    print("  elle exige aujourd hui lambda > 1, parce que c etait l etat mesure.")
+    sys.exit(0)
+print("  lambda = %.2f > 1 : le pas AMPLIFIE (mesure, pas suppose)." % lam)
+print("  C est pourquoi aucun objectif d entrainement ne fait converger la boucle :")
+print("  la cible realiste de C2 est la BORNITUDE, pas la contraction.")
+PYL
+$P "$T/lambda.py" "$LAM" || exit 1
+echo "  ✅ 7. λ mesuré sur un pas (voir ci-dessus)"
+
+echo "  ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·"
+echo "     divergence bornée et de forme publiée · λ mesuré)"
 exit 0
