@@ -135,4 +135,59 @@ if j < 3 * r: sys.exit(f'  la sonde ne depasse pas 3x la reference : {j} % contr
 echo "  ✅ l'état de $PROF couches CONTIENT le prochain jeton : $JUSTE % contre $REF % pour la classe majoritaire"
 echo "     (c'est la TÊTE qui ne sait pas le lire — reports/rapport-c8-sonde-profondeur.md)"
 
+# ============================ L'ASSEMBLAGE DU RÉFLEXE (ajouté le 16/10) ============================
+# POURQUOI CES TROIS VÉRIFICATIONS ICI. Le fil E5 a coûté quinze rounds, et QUATRE de ses échecs
+# n'étaient pas dans le modèle mais dans l'ASSEMBLAGE : un drapeau qui n'existait pas et que
+# `>/dev/null` masquait, un `--accord` qui mesurait le chemin complet (100 % — un mauvais objet
+# mesuré), un adaptateur qui restait l'identité parce que `--objectif plein` ne le fait pas jouer, et
+# une mesure prise dans le mauvais harnais (0 % sur une génération libre au lieu de l'accord forcé).
+# AUCUN de ces défauts n'était visible dans un chiffre : ils l'étaient dans la PLOMBERIE. C'est donc
+# la plomberie qu'on verrouille ici, et c'est la même faculté (le réflexe) que cette porte garde.
+PYT=${PYT:-/home/stephane/gpu-env/bin/python}
+SNAP=${SNAP:-$HOME/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775}
+if [ -x "$PYT" ] && [ -d "$SNAP" ]; then
+    echo "=== l'assemblage du réflexe : refus · invariant d'identité · accord branché ==="
+    T3="$T/assemblage"; mkdir -p "$T3"
+    tail -c 40000 "$IDS" > "$T3/morceau.txt"
+    $PYT -c "
+import numpy as np
+np.eye(896, dtype='<f4').tofile('$T3/identite.f32')" 2>/dev/null
+    $PYT tools/exporter_gguf_dense.py --hf "$SNAP" --couches-lora 8 --sortie "$T3/tronque-8.gguf" \
+        > "$T3/export.log" 2>&1 || { echo "  ❌ export du chemin tronqué échoué :"; tail -2 "$T3/export.log"; exit 1; }
+    REF8=$("$D" "$T3/tronque-8.gguf" --ppl "$T3/morceau.txt" --limit 512 --ctx 512 --threads 8 \
+           --couches 0:8 --tete-partielle 2>&1 | grep -oE "perplexité [0-9.]+ sur" | head -1)
+    # 1. le moteur REFUSE un adaptateur sans tête partielle, et il le dit
+    "$D" "$T3/tronque-8.gguf" --ppl "$T3/morceau.txt" --limit 512 --ctx 512 --threads 8 \
+        --couches 0:8 --adaptateur-sortie "$T3/identite.f32" > "$T3/refus.log" 2>&1
+    grep -q "Refusé plutôt qu'ignoré" "$T3/refus.log" \
+        || { echo "  ❌ le moteur n'a pas refusé un adaptateur sans tête partielle :"; tail -2 "$T3/refus.log"; exit 1; }
+    echo "  ✅ 1. le moteur REFUSE l'adaptateur sans tête partielle — et il le dit (refusé plutôt qu'ignoré)"
+    # 2. l'invariant d'identité : un adaptateur NUL ne change RIEN
+    AVEC8=$("$D" "$T3/tronque-8.gguf" --ppl "$T3/morceau.txt" --limit 512 --ctx 512 --threads 8 \
+            --couches 0:8 --tete-partielle --adaptateur-sortie "$T3/identite.f32" 2>&1 \
+            | grep -oE "perplexité [0-9.]+ sur" | head -1)
+    [ "$REF8" = "$AVEC8" ] || {
+        echo "  ❌ l'adaptateur d'IDENTITÉ change le résultat : « $AVEC8 » contre « $REF8 »"
+        echo "     (l'adaptateur n'est donc pas appliqué — c'est exactement ce que le 16/10 a coûté"
+        echo "      quatre rounds à trouver : un adaptateur resté à l'identité sans que rien ne le dise)"; exit 1; }
+    echo "  ✅ 2. un adaptateur NUL ne change RIEN : « $AVEC8 » = « $REF8 »"
+    # 3. l'accord est branché : l'outil mesure AVANT et APRÈS
+    $PYT tools/n4_dessin_b.py --objectif tronque --train 1 --val 2 --test 3 --epoques 1 --graine 0 \
+        --rang 4 --alpha 8 --bras lora+adaptateur --lots 1 --accord --json "$T3/accord.json" \
+        --sans-portes > "$T3/accord.log" 2>&1
+    grep -q "accord avec le maître" "$T3/accord.log" \
+        || { echo "  ❌ l'outil n'imprime pas la table d'accord :"; tail -3 "$T3/accord.log"; exit 1; }
+    AAVANT=$(python3 -c "
+import json; d = json.load(open('$T3/accord.json'))['bras']['lora+adaptateur']
+a = d.get('accord_avant') or {}; print(round(list(a.values())[0] * 100, 1) if a else 'absent')")
+    [ "$AAVANT" != "absent" ] && [ -n "$AAVANT" ] \
+        || { echo "  ❌ l'accord AVANT n'est pas mesuré (l'outil ne donne pas le point de départ)"; exit 1; }
+    echo "  ✅ 3. l'accord est mesuré AVANT ($AAVANT %) et APRÈS — la mesure est branchée"
+    echo "     ⚠️ la VALEUR de l'accord (25,7 % témoin · 30,2 % distillé) demande 29 morceaux et deux"
+    echo "        entraînements ≈ 50 min : c'est une mesure de fiche (rapport-e5-distillation.md § 17),"
+    echo "        pas une porte — la porte garde la plomberie, la fiche garde le résultat."
+else
+    echo "  ⚠️ assemblage du réflexe NON vérifié (torch ou poids PyTorch absents : $PYT / $SNAP)"
+fi
+
 rm -rf "$T"
