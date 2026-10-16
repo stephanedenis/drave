@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-16, 03 h 05 HAE.**
+**Mis à jour : 2026-10-16, 03 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -86,8 +86,11 @@ dans l'optimiseur à 1e-3 et appliqué dans la passe avant ✗) : pistes nommée
 meilleure validation, ou le **chemin de gradient**. **Le diagnostic est fermé** : à l'époque **forcée 10** (LoRA entraîné, norme 6,57), l'adaptateur est
 **exactement** l'identité (écart **0,0**) → **il ne reçoit aucun gradient** ✗, et `Adam` **ignore
 silencieusement** un paramètre sans gradient — la même famille de défaut que les trois autres de la
-nuit (*un calcul qui n'a pas lieu et qui ne le dit pas*). La sonde à écrire tient en **une ligne** :
-`adaptateur.grad is None` après un pas.
+nuit (*un calcul qui n'a pas lieu et qui ne le dit pas*). **Et le siège du défaut est localisé** : l'adaptateur **s'entraîne quand il est SEUL** (norme **34,49**
+contre 29,93 à l'initialisation, écart 0,199 ✓) et **pas quand il est JOINT** avec le LoRA (écart
+**exactement 0,0** ✗) — or c'est le bras **joint** qu'utilise E5 ✗. La recherche passe donc de
+« quelque part dans l'outil » à **une fonction** : la boucle jointe. La sonde à écrire reste **une
+ligne** (`adaptateur.grad is None` après le premier pas) et c'est la prochaine édition.
 
 ## Où en est le dépôt
 

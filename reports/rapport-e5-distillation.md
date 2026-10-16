@@ -356,3 +356,29 @@ réellement entraîné ✓) et relire l'adaptateur **dans le `.pt`**, sans passe
   --pas-lora 1e-4` tient à 10 morceaux ✓), la **chaîne d'export** est vérifiée ✓ (le moteur refuse
   plutôt que d'ignorer ✓), et il manque **un gradient** ✗ pour que l'**accord** — la seule mesure qui
   compte pour ce mécanisme ✗ — redevienne possible ✓.
+
+## 13. LE DÉFAUT EST DANS LE CHEMIN **JOINT** — l'adaptateur seul s'entraîne, l'adaptateur joint non
+
+Une sonde **sans aucune édition** sépare « la machinerie est cassée » de « le chemin joint est cassé » :
+faire tourner **le même objectif** avec `--bras adaptateur` (l'adaptateur **seul**, sur des états
+précalculés ✗) et relire sa norme.
+
+| bras (10 morceaux, distillation tronquée K=64, époque forcée 10) | norme de l'adaptateur | écart à l'identité | verdict |
+|---|---:|---:|---|
+| **`adaptateur`** *(seul)* | **34,494156** | **0,198966** | ✅ **il s'entraîne** |
+| **`lora+adaptateur`** *(joint)* | 29,933260 | **0,0** | ❌ **il ne bouge pas d'un iota** |
+
+* **la machinerie est saine** ✓ : le `Parameter`, l'optimiseur, l'enregistrement et la passe avant
+  fonctionnent — l'adaptateur **apprend** quand il est seul (norme 34,49 contre 29,93 à
+  l'initialisation ✓, écart 0,199 ✓) ;
+* **le défaut est donc dans le chemin JOINT** ✗✓ — celui-là même qu'utilise **E5** ✗. La recherche
+  passe, en une mesure, de « quelque part dans l'outil » ✗ à **une fonction** : la boucle
+  d'entraînement jointe et le **lien entre son optimiseur et la fermeture qui applique l'adaptateur** ✓ ;
+* **et c'est la raison pour laquelle E5 n'a jamais pu être reproduit** ✗ : son bras est précisément
+  `lora+adaptateur` ✗ — l'adaptateur y reste l'identité ✓, donc le « réflexe » est une **tête
+  empruntée** ✓, donc l'accord est **0 %** ✓, donc il n'y a rien à comparer ✗ ;
+* **ce que la nuit laisse, en trois lignes** : (1) la **stabilité** est résolue ✓ (`--kl-tronque 64
+  --pas-lora 1e-4` ✓) ; (2) la **cause** du 0 % est trouvée ✓ (l'adaptateur = identité ✓) et son
+  **siège** est localisé ✓ (le chemin joint ✓) ; (3) la sonde à écrire reste **une ligne** —
+  `adaptateur.grad is None` juste après le premier pas de la boucle **jointe** ✗ — et c'est la
+  prochaine édition ✓.
