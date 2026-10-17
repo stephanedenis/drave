@@ -643,3 +643,26 @@ parvient pas** au second sous-shell ✓✗ : le run 512 a construit un **MoE de 
 comparables** ✓✗, et je les ai tués **par PID** ✓ (jamais par `pkill -f` ✓ — il a tué mon propre shell au
 round précédent ✓✗) avant de relancer avec des **drapeaux explicites** ✓✓. Les deux cartes tournent
 maintenant sur les bons modèles ✓ (654 Mio et 1 086 Mio ✓).
+
+## 22. LA CAMPAGNE A RÉPONDU — MAIS LA BORNE EST LE **CORPUS**, PAS LA TAILLE
+
+15 000 pas sur **352 Ko** de corpus ✗ (au lieu de 2 000 ✓), et les deux modèles **sur-apprennent** ✓✗ —
+la validation **monte** pendant que la perte d'entraînement **descend** ✓ :
+
+| taille | val au pas 1 000 | val au pas 15 000 | meilleur point |
+|---|---:|---:|---|
+| **dim 256** (2,43 M ✓) | **5,00** ✓ | 6,41 ✗ | pas 1 000 ✓ |
+| **dim 512** (9,57 M ✓) | **5,07** ✓ | **7,51** ✗✗ | pas 1 000 ✓ |
+
+* **LES DEUX SUR-APPRENNENT** ✓✗ : +1,4 et +2,4 bits/octet ✓ — et le plus **gros** sur-apprend **plus
+  vite** ✗✓ (il a plus de capacité à consacrer au corpus ✓). C'est net, c'est cohérent, et c'est **le fait
+  dominant** de la campagne ✓ ;
+* **ET À VALIDATION ÉGALE (pas 1 000) LE PLUS GROS N'EST PAS MEILLEUR** ✗✓ : 5,07 contre **5,00** ✓. La
+  réponse au § 19 est donc **non** — mais **pas** parce que la capacité serait inutile ✗✓ : parce que
+  **le corpus est le goulot** ✓✓ (352 Ko ✓ : 273 fois moins que ce que le dépôt possède ✓) ;
+* **la bonne campagne est donc sur `data/corpus_en.txt`** ✓✓ — **96 Mo** ✓ au lieu de 352 Ko ✓ — et elle
+  est lancée dans la foulée ✓ (mêmes deux tailles, mêmes 15 000 pas, `--eval-tous 500` ✓ ; le trainer
+  conserve le **meilleur** point ✓, donc un long run ne perd rien ✓✓). *La question de capacité n'est pas
+  une question de taille de modèle : c'est une question de taille de données* ✓✓ — et c'est la **troisième**
+  fois de la nuit qu'une mesure déplace la question au lieu d'y répondre ✓ (la falaise ✓, le point fixe ✓,
+  et maintenant le corpus ✓) — ce qui est exactement le signe qu'elle progresse ✓.
