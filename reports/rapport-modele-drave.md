@@ -621,3 +621,25 @@ Premier point mesuré ✓ — **dim 512, même recette, mêmes 2 000 pas** ✓ :
   **ouverte** ✓ et **précisément posée** ✓✓ : *à qualité de validation égale, un point fixe plus large
   est-il plus lisible ?*
 * et le run **dim 1024** a été **arrêté** pour la même raison (il aurait été sous-entraîné aussi ✓).
+
+## 21. LA CAMPAGNE DE NUIT : deux tailles, 15 000 pas, une carte chacune (lancée le 16/10 à 23 h 30)
+
+Le § 20 a montré qu'il faut **égaliser un budget d'entraînement** ✗, pas un budget de pas ✓. La campagne
+est donc lancée ✓ : **dim 256** (carte 0 ✓, 654 Mio ✓) et **dim 512** (carte 1 ✓, 1 086 Mio ✓), **15 000
+pas** chacune ✓ (contre 2 000 ✓), évaluation tous les 1 000 ✓ (le meilleur point est conservé ✓),
+`--partage --recurrence-max 4` ✓ — c'est-à-dire **la recette du § 17** ✓, seule la **taille** change ✓.
+
+**Ce qu'on lira à la fin** ✓ : la **validation** des deux (pour savoir si le 512 a **convergé** au niveau du
+256 ✓ — condition sans laquelle la courbe de capacité reste illisible ✗), puis le **contenu à t = 1 et t = 4**
+et le **déplacement** ✓✓. Si, **à validation comparable**, le 512 est plus **net** (contenu plus bas) sans
+être moins **plat** (déplacement plus petit ✓), alors la réponse à la question du § 19 est **oui** ✓✓ : *un
+point fixe plus large est plus lisible* — et la pensée itérative a **un budget**, pas seulement un
+principe ✓✓.
+
+**Et un défaut d'outillage corrigé en route** ✗✓ : le premier lancement passait les drapeaux par une
+**variable de shell** (`COMMON=…` ✓) — or l'affectation, dans une liste `&&` terminée par `&`, **ne
+parvient pas** au second sous-shell ✓✗ : le run 512 a construit un **MoE de 28,46 M** sur un corpus de
+**100 Mo** ✗✗ (les journaux le disaient : « route · 28,46 M » ✓✗). **Les deux runs n'étaient pas
+comparables** ✓✗, et je les ai tués **par PID** ✓ (jamais par `pkill -f` ✓ — il a tué mon propre shell au
+round précédent ✓✗) avant de relancer avec des **drapeaux explicites** ✓✓. Les deux cartes tournent
+maintenant sur les bons modèles ✓ (654 Mio et 1 086 Mio ✓).

@@ -73,7 +73,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-13](2026-10-13_distribue.md) | `16 couches` · `0,7 %` |
 | [2026-10-14](2026-10-14_distribue.md) | `-5,6 %` · `-10,0 %` |
 | [2026-10-15](2026-10-15_distribue.md) | `128 jetons` · `0,274` |
-| [2026-10-16](2026-10-16_distribue.md) | — |
+| [2026-10-16](2026-10-16_distribue.md) | `110,2 %` |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 
