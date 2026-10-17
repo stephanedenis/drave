@@ -31,6 +31,9 @@ import torch.nn as nn
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 
+COUCHES_CIBLES = ""
+
+
 def poser_lora(modele, rang: int, alpha: float = 16.0):
     """Un LoRA sur `q/k/v/o` et `gate/up/down` ✓ — le noyau reste gelé ✓."""
     class LoRA(nn.Module):
@@ -46,7 +49,10 @@ def poser_lora(modele, rang: int, alpha: float = 16.0):
             return self.base(x) + self.ech * ((x @ self.A.T) @ self.B.T)
 
     poses = []
-    for couche in modele.model.layers:
+    choisies = {int(x) for x in COUCHES_CIBLES.split(",") if x.strip()} or None
+    for i, couche in enumerate(modele.model.layers):
+        if choisies is not None and i not in choisies:
+            continue
         for nom, conteneur in (("q_proj", couche.self_attn), ("k_proj", couche.self_attn),
                                ("v_proj", couche.self_attn), ("o_proj", couche.self_attn),
                                ("gate_proj", couche.mlp), ("up_proj", couche.mlp), ("down_proj", couche.mlp)):
@@ -77,6 +83,9 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=2e-3)
     ap.add_argument("--seq", type=int, default=128)
     ap.add_argument("--lot", type=int, default=4)
+    ap.add_argument("--couches", default="",
+                    help="où poser l'adaptateur : indices de couches (ex. « 3 » = dernier étage) ; vide = "
+                         "partout. La question : la langue vit-elle à la SURFACE (dernier étage) ou partout ?")
     ap.add_argument("--sortie", default="/tmp/adaptateur-fr.pt")
     a = ap.parse_args()
 
@@ -97,6 +106,8 @@ def main() -> int:
     p_fr_avant, p_en_avant = perte_langue(fr), perte_langue(en)
     print(f"  AVANT : perte français {p_fr_avant:.4f} · perte anglais {p_en_avant:.4f}")
 
+    global COUCHES_CIBLES
+    COUCHES_CIBLES = a.couches
     params = poser_lora(m, a.rang)
     n = sum(p.numel() for p in params)
     total = sum(p.numel() for p in m.parameters())

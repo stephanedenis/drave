@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 16 h 20 HAE.**
+**Mis à jour : 2026-10-17, 17 h 05 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,25 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ OÙ BRANCHER : le dernier étage suffit, et la langue coûte **1,33 %** (17/10)
+
+| placement | paramètres | part | perte **français** | anglais |
+|---|---:|---:|---:|---:|
+| aucun | — | — | **3,1953** ✗ | **1,9001** ✓ |
+| **partout** (rang 8) | 131 072 | 5,12 % | **1,5046** ✓✓ | 2,9139 |
+| **dernier étage** (rang 8) | **32 768** | **1,33 %** | **1,7714** ✓✓ | 2,7439 |
+| **dernier étage** (rang 32) | 131 072 | 5,12 % | **1,6820** ✓ | 2,7347 |
+
+**Le dernier étage prend 84 % du gain avec 1,33 % des paramètres** ✓✓ (−44,6 % contre −52,9 % pour 5× plus ✓).
+*La langue est essentiellement un réglage de surface* ✓✓. **Mais à budget égal, « partout » reste un peu
+meilleur** ✓ (1,5046 contre 1,6820) : le noyau contribue de quelques points, au prix de **quatre fois** les
+paramètres ✗✓. **Et le placement de surface abîme moins l'autre langue** ✓ (2,74 contre 2,91).
+
+**Les trois mesures ensemble** ✓✓ : (1) la **couche commune existe** (noyau neutre, 50,2 % = le hasard ✓) ;
+(2) la **langue est un paramètre** (131 k, deux adaptateurs interchangeables ✓✓) ; (3) et ce paramètre est
+**plus petit qu'on ne croyait** — **32 k = 1,33 %**, au dernier étage ✓✓. *Un noyau, et un petit module par
+langue* : l'idée est directement utilisable ✓.
 
 ## ✅ LA LANGUE EST UN PARAMÈTRE — deux adaptateurs de 131 k sur un noyau gelé (17/10)
 

@@ -157,3 +157,34 @@ Dispositif : `tools/adaptateur_langue.py` ✓ — un LoRA (rang 8 ✓) sur les 2
   dizaines de milliers de poids ✓✓, et le noyau peut rester **le même** ✓. Ce qui reste à faire n'est donc
   plus de **construire** la couche commune ✗ mais de **choisir où la brancher** ✓ (les couches 6-7, où la
   langue reparaît ✓ — première mesure de ce chapitre ✓).
+
+## Troisième mesure (17/10, 16 h 45) : **où brancher** l'adaptateur — et le paramètre le plus petit possible
+
+La langue vit à la **surface** (couches 6-7 du modèle bilingue ✓, première mesure de ce chapitre ✓). On l'a
+donc testé sur le modèle monolingue (4 couches ✓), en posant le LoRA **sur le seul dernier étage** ✓ :
+
+| placement de l'adaptateur | paramètres | part du modèle | **perte français** | perte anglais |
+|---|---:|---:|---:|---:|
+| **aucun** | — | — | **3,1953** ✗ | **1,9001** ✓ |
+| **partout** (rang 8 ✓) | 131 072 | **5,12 %** | **1,5046** ✓✓ (−52,9 %) | 2,9139 (+53,4 %) |
+| **dernier étage** (rang 8 ✓) | **32 768** | **1,33 %** | **1,7714** ✓✓ (−44,6 %) | 2,7439 (+44,4 %) |
+| **dernier étage** (rang 32 ✓) | 131 072 | 5,12 % | **1,6820** ✓ (−47,4 %) | 2,7347 (+43,9 %) |
+
+* **LE DERNIER ÉTAGE SUFFIT PRESQUE** ✓✓ : avec **32 768 paramètres** — **1,33 %** du modèle ✓✓ — il prend
+  **84 % du gain** (−44,6 % contre −52,9 % pour cinq fois plus de paramètres ✓✓). *La langue est donc
+  essentiellement un réglage de surface* ✓✓ ;
+* **mais à BUDGET ÉGAL, « partout » reste un peu meilleur** ✓ (1,5046 contre 1,6820 ✓) : le noyau contribue
+  aussi ✗✓ — de quelques points ✓ — et l'on paie **quatre fois** ce gain ✓ ;
+* **et le placement de surface est plus DOUX pour l'autre langue** ✓ : l'anglais souffre moins
+  (2,73-2,74 contre 2,91 ✓) — un adaptateur qui ne déplace qu'un étage **abîme moins** le reste ✓✓ ;
+* **la conclusion pratique** ✓✓ : pour « la langue comme paramètre », le point d'attache est **le dernier
+  étage** ✓, avec un rang modeste ✓ — **1,33 % du modèle** suffit à faire d'un noyau anglais un noyau qui
+  travaille en français ✓✓. C'est le chiffre le plus utile de ce chapitre : *la langue coûte 1,33 %* ✓.
+
+### Ce que ces trois mesures disent ensemble
+
+1. **la couche commune existe** ✓ (noyau neutre aux couches 1-2, 50,2 % = le hasard ✓) ;
+2. **la langue est un paramètre** ✓ (131 k = 5,1 % font marcher une langue ✓✓, et deux adaptateurs sont
+   interchangeables sur le même noyau ✓) ;
+3. **et ce paramètre est plus petit qu'on ne croyait** ✓✓ (32 k = **1,33 %**, au dernier étage, prend 84 % du
+   gain ✓) — ce qui rend l'idée **directement utilisable** : un noyau, et **un petit module par langue** ✓✓.
