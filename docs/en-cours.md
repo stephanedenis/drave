@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 18 h 25 HAE.**
+**Mis à jour : 2026-10-17, 18 h 55 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,40 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LA NEUTRALITÉ SE RÉPLIQUE SUR LA LITTÉRATURE — et le signal croît avec le modèle (17/10, 18 h 45)
+
+**Le modèle littéraire** (4,79 M ✓, 11,7 Mo mixtes ✓ — Maupassant, Dumas, Flaubert, Verne ✓, validation
+**2,6846** ✓) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| **1** | **50,1 %** | 50,2 % | **le hasard** ✓✓ |
+| **2** | **52,3 %** | 50,2 % | quasi ✓✓ |
+| **3** | **50,4 %** | 50,8 % | **le hasard** ✓✓ |
+| 4 | 59,9 % | 50,6 % | ✗ |
+| **5** | **67,7 %** | 52,1 % | ✗✗ (le pic) |
+
+**La neutralité se réplique** ✓✓ (couches 1-3 au hasard, comme sur la prose et en dim 512 ✓) — **trois modèles,
+trois corpus, même résultat** ✓✓✓. **Mais la zone neutre est plus COURTE** ✗✓ : la langue revient dès la couche
+4 et culmine à **67,7 %** en couche 5 ✓✗, contre 6-7 sur la prose ✓. *Plus le texte est riche, plus tôt la langue
+réapparaît* ✓ — un texte littéraire porte **plus de signal de langue** (registre, style ✓) ✓✓.
+
+**Et le signal cross-lingue croît avec le modèle** ✓✓ — trois points, une tendance :
+
+| modèle | taille | **écart cross-lingue** | retrieval |
+|---|---:|---:|---|
+| octets, prose | 2,43 M | +0,022 | 0/24 |
+| octets, **littérature** | 4,79 M | **+0,034** | **2/32** ✓ |
+| **Qwen2.5-0.5B** | 494 M | **+0,083** ✓✓ | **3/32** ✓ |
+
+**Tendance monotone** ✓✓ (+0,022 → +0,034 → +0,083) : *le sens partagé n'est pas un miracle — c'est une
+propriété qui s'acquiert avec la capacité et les données* ✓✓. **Et le retrieval suit** ✓ (0/24 → 2/32 → 3/32 ✓)
+mais **reste loin** d'un alignement ✗✓ : même le meilleur n'atteint que **3× le hasard** ✓. *C'est un signal, pas
+une traduction* ✓.
+→ **Pour le projet** ✓✓ : la couche commune **n'est pas à construire** ✗ — elle **vient avec le modèle** ✓✓, et
+la seule chose à **ajouter** est le **paramètre de langue** (1,33 % ✓✓) pour la **sortie** ✓. *C'est la conclusion
+la plus économique du chapitre* ✓.
 
 ## ✅ SUR QWEN, LE SENS SE RETROUVE — et la structure du chapitre est CONFIRMÉE (17/10, 18 h 15)
 

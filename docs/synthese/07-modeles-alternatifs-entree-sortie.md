@@ -740,3 +740,48 @@ avec cette fois le **tokeniseur** du modèle ✓ (les octets n'auraient aucun se
 | garde-t-elle le sens ? | **oui** ✓✓ (contenu 87,8 % aux couches neutres ; +0,083 de similarité cross-lingue au milieu) |
 | la langue est-elle un paramètre ? | **oui** ✓✓ (1,33 % des paramètres, 5 ms de bascule, et la sortie la suit) |
 | **et le même sens dans deux langues ?** | **partiellement** ✓✗ : trois fois le hasard ✓, mais pas un alignement ✗ — *c'est la question qui reste ouverte* ✓ |
+
+## Dix-neuvième et vingtième mesures (17/10, 18 h 45) : la neutralité **sur la littérature**, et une **tendance en trois points**
+
+### La neutralité se réplique sur de la vraie littérature — et la zone neutre est plus **courte**
+
+Le modèle bilingue **littéraire** (4,79 M ✓, 11,7 Mo mixtes ✓ — 6 Mo d'anglais + 6 Mo de **Maupassant, Dumas,
+Flaubert, Verne** ✓, validation **2,6846** bits/octet ✓) mesuré comme les autres ✓ :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 61,2 % | 71,7 % | neutre ✓ |
+| **1** | **50,1 %** | 50,2 % | **le hasard** ✓✓ |
+| **2** | **52,3 %** | 50,2 % | **quasi le hasard** ✓✓ |
+| **3** | **50,4 %** | 50,8 % | **le hasard** ✓✓ |
+| 4 | 59,9 % | 50,6 % | ✗ |
+| **5** | **67,7 %** | 52,1 % | ✗✗ (le pic) |
+| 7 | 60,6 % | 50,6 % | ✗ |
+| 8 | 56,7 % | 50,8 % | ✗ |
+
+* **LA NEUTRALITÉ SE RÉPLIQUE SUR LA LITTÉRATURE** ✓✓ : aux couches **1, 2 et 3**, le classifieur est **au
+  hasard** (50,1 · 52,3 · 50,4 % ✓✓) — comme sur la prose (50,2 % ✓) et en dim 512 (51,4 % ✓). **Trois modèles,
+  trois corpus, même résultat** ✓✓✓ ;
+* **mais la zone neutre est PLUS COURTE** ✗✓ : la langue revient dès la couche **4** (59,9 % ✓) et **culmine à
+  67,7 %** en couche **5** ✓✗ — alors que sur la prose elle n'apparaissait qu'aux couches 6-7 ✓. *Plus le texte
+  est riche, plus tôt la langue réapparaît* ✓✓ — c'est une observation **neuve**, et elle a une lecture simple :
+  un texte littéraire porte **plus de signal de langue** (registre, style ✓) qu'un texte technique ✓✓.
+
+### Le signal cross-lingue croît avec le modèle — trois points, une tendance
+
+Même test (Le Tour du monde ✓, échantillonnage au milieu ✓, états centrés ✓) sur les **trois** modèles ✓ :
+
+| modèle | taille | **écart cross-lingue** | retrieval (hasard 3,1-4,2 %) |
+|---|---:|---:|---|
+| octets, prose du dépôt ✗ | 2,43 M | **+0,022** | 0 / 24 |
+| octets, **littérature** ✓ | 4,79 M | **+0,034** ✓ | **2 / 32** ✓ (2× le hasard) |
+| **Qwen2.5-0.5B** ✓✓ | 494 M | **+0,083** ✓✓ | **3 / 32** ✓ (3× le hasard) |
+
+* **LA TENDANCE EST MONOTONE** ✓✓ : **+0,022 → +0,034 → +0,083** — le signal cross-lingue **croît avec le
+  modèle** ✓✓, d'un jouet en octets jusqu'à un vrai modèle de langue ✓✓. *Le sens partagé n'est pas un
+  miracle : c'est une propriété qui s'acquiert avec la capacité et les données* ✓✓ ;
+* **et le retrieval suit** ✓ (0/24 → 2/32 → 3/32 ✓), mais **reste loin** d'un alignement ✗✓ : même le meilleur
+  n'atteint que **3× le hasard** ✓. *C'est un signal, pas une traduction* ✓✓ ;
+* **ce que ces trois points disent pour le projet** ✓✓ : la couche commune **n'est pas à construire** ✗ — elle
+  **vient avec le modèle** ✓✓, et la seule chose qu'il faut **ajouter**, c'est le **paramètre de langue** (1,33 %
+  ✓✓) pour la **sortie** ✓. C'est la conclusion la plus économique de tout le chapitre ✓.
