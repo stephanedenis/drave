@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 21 h 20 HAE.**
+**Mis à jour : 2026-10-17, 22 h 35 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,33 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ LA VARIATION DE 17× RESTE INEXPLIQUÉE — et c'est la réponse (17/10, 22 h 30)
+
+Trois candidats de plus, mesurables sans modèle :
+
+| livre | ratio de longueur | TTR (fr) | entropie (fr) | **écart** |
+|---|---:|---:|---:|---:|
+| **Candide** | 0,98 | **0,220** | 4,72 | **+0,1161** |
+| **Proust** | 0,92 | 0,125 | 4,61 | +0,0925 |
+| **Verne** | 1,19 | 0,185 | 4,72 | +0,0779 |
+| **Alice** | 1,22 | 0,199 | 4,70 | +0,0087 |
+| **Don Quijote** | 0,92 | **0,083** | 4,48 | +0,0068 |
+
+| corrélation avec l'écart | valeur |
+|---|---:|
+| ratio de longueur (fidélité ✓) | **−0,25** ✗ |
+| richesse lexicale (TTR ✓) | **+0,42** ✗ |
+| entropie des octets ✓ | **+0,51** ✗ |
+
+**Aucun candidat n'explique la variation** : les trois corrélations restent faibles (|r| ≤ 0,51) sur **cinq** points
+— et avec cinq points, **aucune** n'est significative.
+→ **C'est la réponse** ✓✓ : après le **genre** (mesure 31), la **part de dialogue** (mesures 32-33), l'**alignement**
+(mesure 22), la **taille** (mesure 31), la **fidélité**, la **richesse** et l'**entropie** — *la variation de 17× est
+une propriété de la **paire** texte-traduction, et la nuit s'arrête là* ✓✓.
+→ **Pour la suite** ✓✓ : pour **savoir** si un livre donnera un signal, il faut le **mesurer** — pas le prédire.
+*Une conclusion modeste, mais c'est une conclusion* ✓✓ : elle ferme la question, et elle dit ce qu'il faudrait pour
+aller plus loin (des **dizaines** de paires, un **vrai** alignement phrase à phrase, un modèle **plus grand**).
 
 ## ⚠️ LE MEILLEUR INDICATEUR RÉFUTE L'HYPOTHÈSE — la relation était SPURIEUSE (17/10, 21 h 15)
 

@@ -153,7 +153,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-13](2026-10-13_outils.md) | — |
 | [2026-10-15](2026-10-15_outils.md) | `-7,92 %` |
 | [2026-10-16](2026-10-16_outils.md) | — |
-| [2026-10-17](2026-10-17_outils.md) | — |
+| [2026-10-17](2026-10-17_outils.md) | `37 %` · `37,5 %` |
 
 ### `divers` — Ce qui ne rentre dans aucun thème
 

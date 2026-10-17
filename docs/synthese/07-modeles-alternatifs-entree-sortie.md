@@ -1255,3 +1255,33 @@ Un chapitre de trente-cinq mesures finit par un **bilan** ✓ — et le risque e
 * **et ce contrôle est exactement celui qui manquait** ✓✓ : plusieurs fois ce soir, un chiffre a dérivé entre sa
   mesure et sa citation ✗✓ (les erratums 9, 21, 32 ✓). *Un audit de traçabilité ne les aurait pas tous attrapés
   ✗, mais il aurait posé la question plus tôt* ✓✓.
+
+## Trente-cinquième mesure (17/10, 22 h 30) : la variation de 17× reste **inexpliquée** — et c'est la réponse
+
+La seule question ouverte que la nuit pouvait encore attaquer ✓ : **pourquoi le signal varie de 17×** entre des
+paires **bien alignées** ✗. Trois candidats de plus, tous **mesurables sans modèle** ✓ :
+
+| livre | ratio de longueur | TTR (fr) | entropie (fr) | **écart** |
+|---|---:|---:|---:|---:|
+| **Candide** | 0,98 | **0,220** | 4,72 | **+0,1161** |
+| **Proust** | 0,92 | 0,125 | 4,61 | +0,0925 |
+| **Verne** | 1,19 | 0,185 | 4,72 | +0,0779 |
+| **Alice** | 1,22 | 0,199 | 4,70 | +0,0087 |
+| **Don Quijote** | 0,92 | **0,083** | 4,48 | +0,0068 |
+
+| corrélation avec l'écart | valeur | verdict |
+|---|---:|---|
+| ratio de longueur (fidélité de la traduction ✓) | **−0,25** | ✗ |
+| richesse lexicale (TTR ✓) | **+0,42** | ✗ |
+| entropie des octets ✓ | **+0,51** | ✗ |
+
+* **AUCUN CANDIDAT N'EXPLIQUE LA VARIATION** ✗✓ : les trois corrélations restent **faibles** (|r| ≤ 0,51 ✓) sur
+  **cinq** points ✓ — et avec cinq points, **aucune** n'est significative ✓✓. *Il n'y a pas de relation simple* ✓ ;
+* **et c'est la réponse** ✓✓ : après le **genre** ✗ (mesure 31 ✓), la **part de dialogue** ✗ (mesures 32-33 ✓),
+  l'**alignement** ✗ (mesure 22 ✓), la **taille** ✗ (mesure 31 ✓), la **fidélité** ✗, la **richesse** ✗ et
+  l'**entropie** ✗ — *la variation de 17× est une propriété de la **paire** texte-traduction, et la nuit s'arrête
+  là* ✓✓ ;
+* **ce que cela veut dire pour la suite** ✓✓ : pour **savoir** si un livre donnera un signal, il faut le
+  **mesurer** ✗ — pas le prédire ✗. *C'est une conclusion modeste, mais c'est une conclusion* ✓✓ : elle ferme la
+  question au lieu de la laisser ouverte ✗✓, et elle dit exactement **ce qu'il faudrait** pour aller plus loin
+  (des **dizaines** de paires ✓, un **vrai** alignement au niveau des phrases ✓, et un modèle **plus grand** ✓).
