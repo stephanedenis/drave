@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 50 HAE.**
+**Mis à jour : 2026-10-17, 21 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,29 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ LE MEILLEUR INDICATEUR RÉFUTE L'HYPOTHÈSE — la relation était SPURIEUSE (17/10, 21 h 15)
+
+La vraie part de dialogue (fraction des **caractères** à l'intérieur des guillemets, `« … »` / `" … "`) :
+
+| livre | dialogue (fr / en) | moyenne | **écart** |
+|---|---:|---:|---:|
+| **Candide** | 0,4 / 0,1 % | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Don Quijote** | 2,0 / 0,2 % | **1,1 %** ✗ | **+0,0068** ✗✗ |
+| **Proust** | 11,8 / 0,0 % | 5,9 % | +0,0925 ✓✓ |
+| **Verne** | 19,6 / 0,0 % | **9,8 %** | +0,0779 ✓ |
+| **Alice** | 0,0 / 34,8 % | **17,4 %** | +0,0087 ✗ |
+
+**L'ordre est cassé** ✗✗ : **Proust** (5,9 %) et **Verne** (9,8 %) gardent un signal fort ; **Don Quijote** (1,1 %
+seulement) garde le plus faible. *La part de dialogue n'ordonne plus rien.*
+**Et la raison est visible** : les éditions n'ont pas les **mêmes conventions** — le Proust anglais n'a **aucun**
+`" … "`, l'Alice français **aucun** `« … »`. *L'indicateur mesure la **typographie de l'édition**, pas le dialogue
+du texte.*
+→ **La relation de la mesure 32 était SPURIEUSE** : le premier indicateur (4 livres sur 5) était un **hasard
+heureux** — et le meilleur indicateur le montre. *C'est ce qu'un bon instrument doit faire : tuer une relation qui
+n'en était pas une* ✓✓.
+→ **Ce qui reste** : le signal varie de **17×** sans que ni le genre, ni la taille, ni la part de dialogue ne
+l'expliquent — *une propriété de la **paire** texte-traduction*, et **rien de plus simple** n'est démontré.
 
 ## ✅ LA PART DE DIALOGUE PRÉDIT L'ÉCART — quatre livres sur cinq (17/10, 20 h 45)
 

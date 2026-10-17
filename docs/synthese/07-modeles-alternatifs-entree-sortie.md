@@ -1159,3 +1159,31 @@ guillemets ✓ — indicateur **identique** pour tous ✓✓) sur les **cinq** l
   pas dans le **dialogue*** ✓✓ — appuyée sur **quatre livres sur cinq** ✗✓, avec **un** exceptionnel et un
   indicateur grossier ✗. *C'est une piste, pas un résultat* ✓✓ — et elle demande **plus de livres** (ils sont là :
   les 1905 textes ✓) et un **vrai** indicateur de dialogue (les répliques **dans** les paragraphes ✓).
+
+## Trente-troisième mesure (17/10, 21 h 15) : le **meilleur** indicateur **réfute** l'hypothèse du dialogue
+
+La mesure 32 s'appuyait sur un indicateur **grossier** ✗ (les lignes **entièrement** dialoguées ✓). On mesure la
+**vraie** part de dialogue ✓✓ : la fraction des **caractères** qui sont **à l'intérieur** des guillemets ✓
+(`« … »` en français ✓, `" … "` en anglais ✓) :
+
+| livre | dialogue (caractères, fr / en) | moyenne | **écart** |
+|---|---:|---:|---:|
+| **Candide** ✓ | 0,4 / 0,1 % | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Don Quijote** ✗ | 2,0 / 0,2 % | **1,1 %** ✗ | **+0,0068** ✗✗ |
+| **Proust** ✓ | 11,8 / 0,0 % | 5,9 % | +0,0925 ✓✓ |
+| **Verne** ✓ | 19,6 / 0,0 % | **9,8 %** | +0,0779 ✓ |
+| **Alice** ✗ | 0,0 / 34,8 % | **17,4 %** | +0,0087 ✗ |
+
+* **L'ORDRE EST CASSÉ** ✗✗ : **Proust** (5,9 % de dialogue ✓) et **Verne** (9,8 % ✓) gardent un signal **fort**
+  (+0,093 et +0,078 ✓✓) ; **Don Quijote** (1,1 % seulement ✓) garde le **plus faible** ✗✗ (+0,007 ✓). *La part de
+  dialogue n'ordonne plus rien* ✗✓ ;
+* **et la raison est visible dans le tableau** ✗✓ : les éditions n'ont pas les **mêmes conventions** ✗ — le
+  Proust anglais n'a **aucun** `" … "` ✓✗ (son édition utilise d'autres marques ✓), et l'Alice français n'a
+  **aucun** `« … »` ✓✗ (peut-être des tirets ✓). *L'indicateur mesure la **typographie de l'édition**, pas le
+  dialogue du texte* ✗✓ ;
+* **donc la relation de la mesure 32 était SPURIEUSE** ✗✓ : le premier indicateur (4 livres sur 5 ✓) était un
+  **hasard heureux** ✗✓ — et le meilleur indicateur le montre ✓✓. *C'est exactement ce qu'un bon instrument doit
+  faire : tuer une relation qui n'en était pas une* ✓✓ ;
+* **ce qui reste** ✓✓ : le signal cross-lingue varie de **17×** (mesure 31 ✓) sans que ni le genre ✗, ni la taille
+  ✗, ni la part de dialogue ✗ ne l'expliquent — *c'est une propriété de la **paire** texte-traduction* ✓✓, et **rien
+  de plus simple** n'est démontré ✗. *La science de cette nuit aura beaucoup retiré* ✓✓.
