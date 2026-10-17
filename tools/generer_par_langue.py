@@ -70,7 +70,8 @@ def main() -> int:
     print("   -----------|------------|-------------------------------------------|--------")
     for nom_amorce, amorce in amorces.items():
         for nom_adapt, chemin in adaptateurs:
-            m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).to(device).eval()
             if chemin:
                 d = torch.load(chemin, map_location="cpu", weights_only=False)
                 poses = poser_lora(m, d["rang"])
@@ -83,9 +84,9 @@ def main() -> int:
             if a.tokeniseur:
                 from transformers import AutoTokenizer
                 tk = AutoTokenizer.from_pretrained(a.hf)
-                b = torch.tensor([tk(amorce, add_special_tokens=False).input_ids])
+                b = torch.tensor([tk(amorce, add_special_tokens=False).input_ids]).to(device)
             else:
-                b = torch.tensor([list(amorce.encode("utf-8"))])
+                b = torch.tensor([list(amorce.encode("utf-8"))]).to(device)
             with torch.no_grad():
                 g = m.generate(b, max_new_tokens=a.n, do_sample=True, temperature=a.temp,
                                top_k=20, pad_token_id=0)

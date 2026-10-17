@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 22 h 00 HAE.**
+**Mis à jour : 2026-10-17, 22 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,29 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ SUR QWEN, LA SORTIE SUIT L'AMORCE — PAS L'ADAPTATEUR (17/10, 22 h 30)
+
+La mesure 6 avait montré qu'un LoRA de langue **commande** la sortie d'un modèle-jouet (amorce anglaise +
+adaptateur français → **français**). La même expérience sur **Qwen** :
+
+| amorce | adaptateur | **sortie** | verdict |
+|---|---|---|---|
+| anglais | aucun | **en 20** · fr 0 | suit l'amorce ✓ |
+| **anglais** | **français** | **en 27** ✗ · fr 0 | **suit l'amorce, PAS l'adaptateur** ✗✓ |
+| français | aucun | **fr 16** ✓ | suit l'amorce ✓ |
+| français | français | **fr 19** ✓ | suit l'amorce ✓ |
+
+**Le résultat du jouet ne se transfère pas** ✗✓ : sur Qwen, l'adaptateur français **ne fait pas** écrire en
+français à une amorce anglaise ✗. *La « langue comme paramètre » qui **commande** la sortie est une propriété du
+noyau **monolingue**, pas du multilingue* ✗✓. Et la raison est claire : Qwen est un modèle **instruct
+multilingue** — son **suivi de l'amorce** est fort, et un LoRA de **0,9 %** ne peut pas le renverser ✗. Sur le
+jouet, l'adaptateur **était** le seul signal de langue ✓.
+→ **La conclusion juste est plus étroite** ✓✓ : le paramètre de langue **ajuste la qualité** (7,6 %) mais **ne
+choisit pas la langue** quand le modèle sait déjà les deux ✗✓. *Un modèle multilingue n'a pas besoin qu'on lui
+**dise** en quelle langue écrire — il lit l'amorce* ✓✓. Cohérent avec la mesure 24 (−7,6 %, peu à gagner) et la
+mesure 20 (le sens partagé vient avec le modèle) : *plus le noyau est riche, moins le paramètre de langue a de
+rôle* ✓ — il **rattrape** ce qui manque, il ne **dirige** pas ce qui existe ✓.
 
 ## ✅ LA LANGUE COMME PARAMÈTRE SUR UN VRAI MODÈLE — effet huit fois plus petit (17/10, 21 h 45)
 

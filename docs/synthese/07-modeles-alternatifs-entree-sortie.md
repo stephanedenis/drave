@@ -922,3 +922,42 @@ déplacé sur la carte ✓✗ (*un dispositif qui n'est pas là où l'on croit* 
 (taux **1e-3** ✓) a **divergé** ✗ (perte 7,89, français **+26 %** et anglais **+221 %** ✗✗) — sur un 0,5 B, le
 taux d'un modèle-jouet est **toxique** ✓✓. Trois corrections, une mesure ✓✓ : *c'est le prix d'un outil qu'on
 n'avait jamais poussé sur un vrai modèle* ✓.
+
+## Vingt-cinquième mesure (17/10, 22 h 30) : sur Qwen, la sortie suit l'**AMORCE**, pas l'adaptateur — l'inverse du jouet
+
+La mesure 6 avait montré qu'un LoRA de langue **commande la sortie** d'un modèle-jouet ✓✓ (amorce anglaise +
+adaptateur français → **français** ✓✓). La même expérience sur **Qwen** ✓ (avec le LoRA français de la mesure 24 ✓,
+rang 8, 0,9 % ✓, et 60 jetons générés ✓) :
+
+| amorce | adaptateur | **sortie** (mots-outils) | verdict |
+|---|---|---|---|
+| anglais | aucun | **en 20** · fr 0 | suit l'amorce ✓ |
+| **anglais** | **français** | **en 27** ✗ · fr 0 | **suit l'amorce, PAS l'adaptateur** ✗✓ |
+| français | aucun | **fr 16** ✓ · en 0 | suit l'amorce ✓ |
+| français | français | **fr 19** ✓ · en 0 | suit l'amorce ✓ |
+
+* **LE RÉSULTAT DU JOUET NE SE TRANSFÈRE PAS** ✗✓ : sur Qwen, l'adaptateur français **ne fait pas** écrire en
+  français à une amorce anglaise ✓✗ (en 27 · fr 0 ✓). *La « langue comme paramètre » qui **commande** la sortie
+  est une propriété du noyau **monolingue** ✓, pas du multilingue* ✗✓ ;
+* **et la raison est claire** ✓✓ : Qwen est un modèle **instruct multilingue** ✓ — son **suivi de l'amorce** est
+  fort ✓✓, et un LoRA de **0,9 %** ne peut pas le renverser ✗. Sur le jouet monolingue, l'adaptateur **était** le
+  seul signal de langue ✓✓ — il commandait donc tout ✓ ;
+* **donc la conclusion juste du chapitre** ✓✓ est plus étroite que celle du § 6 ✓ : le paramètre de langue
+  **ajuste la qualité** (7,6 % ✓) mais **ne choisit pas la langue** quand le modèle sait déjà les deux ✗✓.
+  *Un modèle multilingue n'a pas besoin qu'on lui **dise** en quelle langue écrire — il lit l'amorce* ✓✓ ;
+* **et c'est cohérent avec tout le reste** ✓✓ : la mesure 24 (−7,6 %, peu à gagner ✓), la mesure 20 (le sens
+  partagé vient avec le modèle ✓), et la mesure 9 (un relevé partagé suffit ✓). *Plus le noyau est riche, moins
+  le paramètre de langue a de rôle* ✓✓ — il **rattrape** ce qui manque ✓, il ne **dirige** pas ce qui existe ✓.
+
+### Fin de la chaîne, et ce qu'elle vaut
+
+| ce qu'on voulait | ce qui est mesuré | portée |
+|---|---|---|
+| une **couche commune** | noyau neutre ✓✓ (50,2 % ; trois modèles, trois corpus ✓) | solide ✓✓ |
+| qui **garde le sens** | contenu 87,8 % ✓✓ ; sens partagé +0,083 ✓ | solide ✓✓ |
+| avec la **langue en paramètre** | 1,33 % des poids, 5 ms ✓✓ | solide **pour un noyau monolingue** ✓✓ |
+| qui **commande la sortie** | jouet : oui ✓✓ · Qwen : **non** ✗✓ | **dépend du noyau** ✗✓ |
+| qui **améliore** la langue | +7,6 % sur Qwen ✓, −53 % sur un monolingue ✓✓ | solide ✓✓ |
+
+*Le chapitre a donc une réponse à la fois **forte** et **bornée** : la couche commune existe, elle garde le
+sens, et la langue y est un **petit paramètre** — mais son **rôle** dépend de ce que le noyau sait déjà* ✓✓.
