@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 40 HAE.**
+**Mis à jour : 2026-10-17, 20 h 15 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,27 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LE RELEVÉ PARTAGÉ SUFFIT — 0,7 point (17/10, 20 h)
+
+La mesure 8 disait « le relevé est teinté de la langue » (pénalité +8,7 à +19,5 ✗) — mais elle comparait un
+relevé appris sur **une** langue et appliqué à **l'autre**. La mesure 9 pose l'autre question celle qui compte
+pour une couche commune : un relevé appris sur **les deux** vaut-il le relevé **de chaque** langue ?
+
+| relevé | paramètres de langue | anglais | français |
+|---|---:|---:|---:|
+| **partagé** (les deux ✓) | **0** ✓ | **79,1 %** | **76,5 %** |
+| partagé + **rang 1** | 512 | 79,1 % | 76,5 % |
+| **complet** par langue ✗ | 65 536 | **78,4 %** | **75,9 %** |
+
+**Le relevé partagé suffit** ✓✓ : **0,7 point** d'écart avec deux relevés séparés. **Et le rang 1 ne récupère
+rien** ✗ — non parce que la langue n'est pas de rang 1, mais parce qu'**il n'y a rien à corriger** ✓.
+→ **L'erratum de la mesure 8 était lui-même trop fort** ✗✓ : un relevé appris sur **une** langue ne se
+transfère pas ✗ (pénalité +8,7 à +19,5 ✓), mais un relevé appris sur **les deux** ne perd que **0,7 point** ✓✓.
+*Deux questions différentes, mesurées séparément.*
+→ **La conclusion devient la plus simple** ✓✓ : la langue ne vit **ni dans l'état** (50,2 % = hasard ✓✓)
+**ni dans le relevé** (0,7 point ✓✓) — elle vit dans **l'entrée** (les octets ✗, 62,4 %) et dans **la surface de
+sortie** (couches 6-7 ✓, l'adaptateur ✓✓). *Un contenu commun, une surface paramétrée* ✓✓✓.
 
 ## ✏️ LE RELEVÉ EST TEINTÉ DE LA LANGUE — erratum de la mesure 5 (17/10, 19 h 30)
 

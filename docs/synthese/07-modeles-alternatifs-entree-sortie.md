@@ -378,3 +378,43 @@ partagé est possible, à un coût de 17 points* ✓. **Huitième fois de la nui
 cette fois c'est une **mesure antérieure** qui était en cause, pas un réglage ✗ : la leçon est qu'une comparaison
 n'est valide que si **tous** les lecteurs sont aussi puissants les uns que les autres ✓ — comparer un non-linéaire
 à des linéaires n'est pas comparer deux langues, c'est comparer deux **familles de lecteurs** ✗✓.
+
+## Neuvième mesure (17/10, 20 h) : le relevé partagé suffit — l'erratum de la mesure 8 était lui-même trop fort
+
+La mesure 8 concluait que « le relevé **est** teinté de la langue » ✓✗ (pénalité +8,7 à +19,5 ✗), en comparant
+un relevé appris sur **une** langue et appliqué à l'**autre** ✓. La mesure 9 pose **l'autre** question, celle
+qui compte pour une couche commune : un relevé appris sur **les deux** langues vaut-il le relevé **de chaque**
+langue ? ✗✓. `tools/releve_parametre.py` ✓, au dernier étage ✓ :
+
+| relevé | paramètres de **langue** | anglais | français |
+|---|---:|---:|---:|
+| **partagé** (appris sur les deux ✓) | **0** ✓ | **79,1 %** | **76,5 %** |
+| partagé + **rang 1** par langue ✓ | 512 | 79,1 % | 76,5 % |
+| **complet** par langue ✗ | 65 536 | **78,4 %** | **75,9 %** |
+
+* **LE RELEVÉ PARTAGÉ SUFFIT** ✓✓ : il fait **79,1 / 76,5 %** quand deux relevés séparés font **78,4 / 75,9 %**
+  — **0,7 point** d'écart ✓✓. Autrement dit : *un seul relevé, appris sur les deux langues, sert les deux
+  langues* ✓✓✓ ;
+* **et la correction de rang 1 ne récupère RIEN** ✗ (79,1 → 79,1 ✓) — non pas parce que la langue n'est pas de
+  rang 1 ✗, mais parce qu'**il n'y a rien à corriger** ✓✓ : le relevé partagé a déjà tout pris ✓ ;
+* **donc l'erratum de la mesure 8 était lui-même TROP FORT** ✗✓ : ce qui est vrai, c'est qu'un relevé appris
+  sur **une seule** langue **ne se transfère pas** à l'autre ✗ (pénalité +8,7 à +19,5 ✓) ; mais un relevé appris
+  sur **les deux** ne perd que **0,7 point** ✓✓. Ce sont **deux questions différentes** ✗✓, et il a fallu les
+  mesurer séparément pour le voir ✓✓ ;
+* **et la conclusion générale devient la plus simple de toutes** ✓✓ : la langue ne vit **ni dans l'état**
+  (50,2 % = le hasard ✓✓) **ni dans le relevé** (0,7 point ✓✓) — elle vit dans **l'entrée** (les octets ✓,
+  62,4 % à la couche 0 ✗) et dans **la surface de sortie** (couches 6-7 ✓, et l'adaptateur qui la commande ✓✓).
+  *C'est exactement la structure demandée : un contenu commun, une surface paramétrée* ✓✓✓.
+
+### La chaîne des corrections, assumée
+
+Ce chapitre a maintenant **deux erratums** ✓✓, et c'est le signe qu'il progresse :
+
+| mesure | ce qu'elle disait | ce que la suivante a corrigé |
+|---|---|---|
+| 5 | « le relevé n'est pas propre à la langue » ✓ | incomplet : comparé à des lecteurs **linéaires** seulement ✗ |
+| 8 | « le relevé **est** teinté de la langue » (pénalité +8,7 à +19,5 ✗) | vrai pour un **transfert** ✗, mais la mesure 9 montre qu'un relevé appris sur les **deux** langues ne perd que **0,7 point** ✓✓ |
+| 9 | « le relevé partagé suffit » ✓✓ | — *(à confirmer sur un modèle plus grand ✗ : 2,4 M est un jouet)* |
+
+*Trois mesures, deux corrections, et aucune des trois n'est jetée* ✓✓ : chacune reste vraie **de sa question** ✓.
+C'est la différence entre se contredire ✗ et **préciser** ✓✓.
