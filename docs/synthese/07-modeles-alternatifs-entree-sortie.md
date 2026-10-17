@@ -994,3 +994,39 @@ saines ✓ (Qwen, couche 8 ✓, 32 segments ✓) :
 | 24 | la langue comme paramètre sur un **vrai** modèle ? | LoRA 4,4 M (**0,9 %**) : français **−7,6 %**, anglais **+4,5 %** | ✓✓ mais **huit fois moins** qu'en monolingue (−53 %) |
 | 25 | la sortie **suit-elle** le paramètre sur Qwen ? | amorce anglaise + LoRA français → **anglais** (en 27 · fr 0) | ✗ **non** : elle suit l'**amorce** |
 | 26 | le sens partagé est-il **utilisable** ? | Verne : rang médian **9/32**, top-5 **28 %** · Alice : rang **17**, top-5 **12,5 %** | ✓ **un livre sur deux** |
+
+## Vingt-septième mesure (17/10, 23 h 30) : l'inventaire de la machine — **1905 textes**, 21 français, et un second fichier mal nommé
+
+Le corpus littéraire du § 14 avait été constitué sur un **premier scan** ✗ — limité à trois dossiers ✗✓. Un scan
+**complet** de `Panini/`, `Panini/research/data/`, `Panini-Research/data/` ✓ donne tout autre chose ✓✓ :
+
+| | premier scan ✗ | scan complet ✓ |
+|---|---:|---:|
+| textes > 100 Ko, uniques | 66 | **1905** ✓✓ |
+| français | 18 | **21** ✓ |
+| anglais | 47 | 1881 |
+| indéterminés | 1 | 3 (dont 2 **allemands** ✗✓) |
+
+**Les 21 textes français** ✓✓ — et ce sont de grands noms : **Proust** (*Du Côté de Chez Swann* ✓), **Stendhal**
+(*Le rouge et le noir* ✓), **Hugo** (*Les misérables*, Tome IV ✓), **Voltaire** (*Candide* ✓), **Baudelaire**
+(*Les Fleurs du Mal* ✓), **Chateaubriand** (*Mémoires d'Outre-Tombe* ✓), **George Sand** (*Histoire de ma Vie* ✓),
+**Diderot** (*Les bijoux indiscrets* ✓), **Montesquieu** (*Esprit des lois* ✓), **Corneille** ✓, **Verne** ✓,
+**Zola** (*Les trois villes : Lourdes* ✓).
+
+Le corpus reconstruit ✓ — en-têtes et pieds de page Gutenberg **retirés** ✗✓ :
+
+| | ancien (§ 14) | **nouveau** ✓ |
+|---|---:|---:|
+| textes | 18 | **21** |
+| taille | 13,2 Mo | **15,7 Mo** ✓ |
+| **formes** | 66 322 | **87 341** ✓✓ (+31 %) |
+| mots fréquents | `les, que, qui, des` ✓ | `que, les, qui, des, dans, vous` ✓✓ |
+
+*Et un **second fichier mal nommé** ✗✓ : `pg2000_en.txt` est un **Don Quijote en français** ✓✗ (le nom dit `_en` ✗).
+Après `dracula_fr.txt`, c'est le **deuxième** — et il confirme la règle du § 23 : **le nom d'un fichier n'est pas
+sa langue**, et seule la lecture le dit ✓✓.*
+
+**Ce que cela change pour la suite** ✓✓ : les mesures 12, 19 et 20 (neutralité, littérature, tendance) reposent
+sur l'**ancien** corpus ✗✓ — elles demandent à être **refaites** sur le nouveau ✓✓, plus riche de 31 % ✓. C'est
+la prochaine étape, et elle est courte : le modèle bilingue littéraire est à réentraîner ✓ (vingt minutes ✓) et
+les trois mesures à rejouer ✓.

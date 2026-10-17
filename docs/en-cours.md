@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 23 h 10 HAE.**
+**Mis à jour : 2026-10-17, 23 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,29 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ L'INVENTAIRE DE LA MACHINE : 1905 textes, 21 français, et un second fichier mal nommé (17/10, 23 h 30)
+
+Mon premier scan était **limité** ✗ — un scan complet de `Panini/`, `Panini/research/data/`, `Panini-Research/data/`
+donne **1905 textes** (> 100 Ko, uniques), dont **21 français** ✓✓ : **Proust** (*Du Côté de Chez Swann*),
+**Stendhal** (*Le rouge et le noir*), **Hugo** (*Les misérables*), **Voltaire** (*Candide*), **Baudelaire**
+(*Les Fleurs du Mal*), **Chateaubriand**, **George Sand**, **Diderot**, **Montesquieu**, **Corneille**, **Verne**,
+**Zola**.
+
+**Corpus reconstruit** ✗✓ (en-têtes Gutenberg retirés) :
+
+| | ancien | **nouveau** |
+|---|---:|---:|
+| textes | 18 | **21** |
+| taille | 13,2 Mo | **15,7 Mo** |
+| **formes** | 66 322 | **87 341** ✓✓ (+31 %) |
+
+**Et un second fichier mal nommé** ✗✓ : `pg2000_en.txt` est un **Don Quijote en français** ✓✗. Après
+`dracula_fr.txt`, c'est le deuxième — *le nom d'un fichier n'est pas sa langue, et seule la lecture le dit* ✓✓.
+
+**Ce que cela change** ✗✓ : les mesures 12, 19 et 20 (neutralité, littérature, tendance) reposent sur l'**ancien**
+corpus → elles demandent à être **refaites** sur le nouveau, plus riche de 31 %. C'est la prochaine étape, et elle
+est courte (le modèle littéraire à réentraîner, vingt minutes, et trois mesures à rejouer).
 
 ## ✅ LE SIGNAL CROSS-LINGUE EST UTILISABLE — sur un livre sur deux (17/10, 23 h)
 
