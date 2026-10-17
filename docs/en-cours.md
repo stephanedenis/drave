@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 40 HAE.**
+**Mis à jour : 2026-10-17, 20 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,27 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LE CRIBLE DU CORPUS : une paire cassée sur trois, dans les DEUX corpus (17/10, 20 h)
+
+`tools/cribler_corpus.py` ✓ — trois contrôles **sans modèle** (titre de l'en-tête Gutenberg ✓, rapport de
+longueur ✓, nom propre commun ✓) :
+
+| corpus | paires | verdict |
+|---|---:|---|
+| `gutenberg_multilingual_verified` | 3 | **2 OK ✓ · 1 CASSÉE ✗** |
+| `gutenberg_multilingual_corpus` | 2 | **1 OK ✓ · 1 CASSÉE ✗** |
+
+**La même paire est cassée dans les deux corpus** ✗✓ : `dracula` a **85 Ko** de français pour **850 Ko** d'anglais
+(rapport **0,101**) et le fichier français est **« Vocations Explained… »** ✗. *L'erreur a été copiée d'un corpus
+à l'autre* — elle ne se détecte pas en comparant les corpus, seulement en **vérifiant les fichiers** ✓.
+**Les autres paires sont saines** ✓✓ (Alice 179/147 et 160/147, Le Tour du monde 451/374 — rapports 1,20-1,22,
+plausibles pour une traduction ✓).
+**Et le crible a une limite** ✗✓ : l'extraction du **titre** ne marche que sur les en-têtes au format français ✗ —
+les fichiers anglais donnent « (titre absent) », donc ce contrôle est **partiel** (il n'a pas vu Dracula ✗ ;
+c'est le **rapport de longueur** qui l'a attrapé ✓✓).
+→ **Pour la suite** ✓✓ : les mesures cross-lingues du § 21 sont **deux fois valides** (Verne ✓, Alice ✓) et **une
+fois du bruit** (Dracula ✗). *Un crible de dix minutes a supprimé une mesure et confirmé deux autres* ✓.
 
 ## ⚠️ LE CONTRÔLE D'ALIGNEMENT — et un fichier MAL ÉTIQUETÉ dans le corpus (17/10, 19 h 30)
 

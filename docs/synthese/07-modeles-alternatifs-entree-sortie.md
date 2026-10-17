@@ -846,3 +846,28 @@ Le contrôle est fait ✓ — la **déviation de position relative** des noms pr
 **Douzième piège** ✓✓ : *vérifier l'appariement avant de mesurer l'appariement* ✓✓. Le contrôle a coûté dix
 minutes ✓ et il a **supprimé une mesure** ✗✓ — c'est le meilleur rapport coût/résultat possible pour un
 instrument ✓✓.
+
+## Vingt-troisième mesure (17/10, 20 h) : le crible du corpus — **une paire cassée sur trois**, propagée dans les deux corpus
+
+Le fichier mal étiqueté du § 22 méritait un **crible systématique** ✓, et il est fait ✓ — `tools/cribler_corpus.py`
+✓, qui vérifie **sans modèle** et **sans langue** ✗ trois choses indépendantes : le **titre** annoncé dans
+l'en-tête Gutenberg de chaque fichier ✓, le **rapport de longueur** entre les deux langues ✓, et la **possession
+d'un nom propre commun** ✓.
+
+| corpus | paires | verdict |
+|---|---:|---|
+| `gutenberg_multilingual_verified` | 3 | **2 OK ✓ · 1 CASSÉE ✗** |
+| `gutenberg_multilingual_corpus` | 2 | **1 OK ✓ · 1 CASSÉE ✗** |
+
+* **LA MÊME PAIRE EST CASSÉE DANS LES DEUX CORPUS** ✗✓ : `dracula` a **85 Ko** de français pour **850 Ko**
+  d'anglais (rapport **0,101** ✓✓) et le fichier français est **« Vocations Explained: Matrimony, Virginity… »**
+  ✓✗. *L'erreur a été copiée d'un corpus à l'autre* ✓✓ — donc elle ne se détecte pas en comparant les corpus ✗,
+  seulement en **vérifiant les fichiers** ✓ ;
+* **les autres paires sont saines** ✓✓ (Alice 179/147 ✓ et 160/147 ✓, Le Tour du monde 451/374 ✓ — rapports
+  1,20 à 1,22 ✓, parfaitement plausibles pour une traduction ✓✓) ;
+* **et le crible a une limite, qu'il faut dire** ✗✓ : l'extraction du **titre** ne fonctionne que sur les
+  en-têtes au format français ✓ — les fichiers anglais donnent « (titre absent) » ✓✗, donc le contrôle par le
+  titre est **partiel** ✓ (il n'a pas vu Dracula ✗ ; c'est le **rapport de longueur** qui l'a attrapé ✓✓) ;
+* **ce que cela vaut pour la suite** ✓✓ : les mesures cross-lingues du § 21 sont **deux fois valides** (Verne ✓,
+  Alice ✓) et **une fois du bruit** (Dracula ✗) ✓✓. *Un crible de dix minutes a supprimé une mesure et confirmé
+  deux autres* ✓✓ — c'est exactement le rôle d'un instrument ✓.
