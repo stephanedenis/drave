@@ -666,3 +666,32 @@ la validation **monte** pendant que la perte d'entraînement **descend** ✓ :
   une question de taille de modèle : c'est une question de taille de données* ✓✓ — et c'est la **troisième**
   fois de la nuit qu'une mesure déplace la question au lieu d'y répondre ✓ (la falaise ✓, le point fixe ✓,
   et maintenant le corpus ✓) — ce qui est exactement le signe qu'elle progresse ✓.
+
+## 23. LE MEILLEUR MODÈLE EST LE MOINS LISIBLE — et la métrique de la nuit est prise en défaut
+
+La campagne sur **96 Mo** a convergé ✓✓ (pas de sur-apprentissage ✓, validations encore en baisse ✓) :
+
+| taille | validation (15 000 pas) | contenu t=1 · t=2 · t=4 | déplacement |
+|---|---:|---|---:|
+| **dim 256** (2,43 M) | 2,8183 | **90,2** · 91,0 · 91,1 | 42,0 % |
+| **dim 512** (9,57 M) | **2,7297** ✓ | **104,3** ✗ · 103,7 · 102,8 | 42,7 % |
+
+* **LE CORPUS ÉTAIT BIEN LE GOULOT** ✓✓ : sur 96 Mo, les deux tailles **descendent** (3,59 → 2,82 et 3,58 →
+  2,73 ✓) au lieu de sur-apprendre ✓✓ — le § 22 est confirmé ✓ ;
+* **et le plus gros est meilleur** ✓ (2,7297 contre 2,8183 ✓, **3,1 %** de mieux ✓) — la capacité **compte**
+  quand les données suivent ✓✓ ;
+* **MAIS LE MEILLEUR EST LE MOINS LISIBLE** ✗✓ : le « contenu » du 512 est **104,3 %** — *pire que
+  l'embedding moyen* ✗✗ — alors que son modèle de langue est **meilleur** ✓. Et sa planéité est la même
+  (42,7 % contre 42,0 % ✓) ;
+* **donc la métrique centrale de la nuit est prise en défaut** ✗✓ : le « contenu » mesure la **lisibilité
+  linéaire** de l'état ✓, **pas** sa richesse ✗✓ — un état plus **distribué** (plus de paramètres ✓, plus de
+  données ✓) porte **plus** d'information mais la rend **moins récupérable par un ridge** ✗✓. Autrement dit :
+  *la linéarité était une commodité de mesure, pas une propriété de la pensée* ✗✓ ;
+* **ce que cela ne casse pas** ✓ : les comparaisons **à taille égale** tiennent ✓✓ (c'est ainsi que tous les
+  § 16-22 ont été lus ✓), et les conclusions **qualitatives** (falaise ✓, point fixe ✓, corpus ✓) reposent sur
+  des comparaisons appariées ✓. Ce que cela casse, c'est l'idée qu'un chiffre unique dirait « la pensée est
+  là » ✗✗ ;
+* **la mesure qu'il faudrait** ✗✓ : un **lecteur non linéaire** (le MLP de l'opérateur ✓, ou une sonde à
+  noyau ✓) sur les mêmes états ✓ — si le 512 redevient lisible avec un lecteur plus riche ✓✓, alors la
+  linéarité était le seul obstacle ✓ et la métrique est réparable ✓. C'est **la** prochaine mesure, et elle
+  est courte ✓ (l'opérateur de pensée est déjà écrit ✓).
