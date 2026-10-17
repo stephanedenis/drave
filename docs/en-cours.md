@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 11 h 15 HAE.**
+**Mis à jour : 2026-10-17, 15 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,33 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA COUCHE COMMUNE EXISTE DÉJÀ — et la langue n'est qu'à la SURFACE (17/10)
+
+Modèle **en octets** (8 couches, 4,79 M) entraîné sur un corpus **mixte** de **10,2 Mo** (6,0 anglais + 4,5
+français ✓), puis un classifieur **linéaire** de langue sur l'état **par couche** ✓ (`tools/langue_dans_etat.py`),
+avec un **témoin intra-langue** ✗ (deux moitiés de l'anglais : ce qu'on peut faire **sans** la langue ✓) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | **62,4 %** | 53,1 | la langue est dans l'**entrée** ✗ |
+| **1** | **50,2 %** | 50,7 | **le hasard** ✓✓ |
+| **2** | **50,3 %** | 51,8 | **le hasard** ✓✓ |
+| 4-5 | 53,8-53,9 % | ~50 | presque le hasard ✓ |
+| **6** | **59,4 %** | 50,1 | la langue **revient** ✗ (surface) |
+| **7** | **59,6 %** | 50,7 | la langue **revient** ✗ (surface) |
+| 8 | **51,0 %** | 50,9 | le hasard ✓ (prêt pour la tête) |
+
+**Le noyau est neutre** ✓✓ (couches 1-2 au **hasard** : l'état ne sait pas dans quelle langue le texte est
+écrit ✓) **et la langue ne revient qu'à la surface** ✗✓ (couches 6-7, ~59 % ✓) — c'est **exactement** la
+structure demandée : *un contenu neutre, une surface paramétrée par la langue* ✓✓✓.
+**Et l'entrée porte la langue** (62,4 % à la couche 0 ✓) : les octets anglais et français n'ont pas les mêmes
+statistiques ✓ — seul endroit où « la langue » est dans les données ✓.
+
+*Deux pièges traversés, et écrits* : le **corpus français** n'existait pas ✗ (constitué depuis le français
+réel du dépôt ✓, et **filtré** — sans quoi ses mots les plus fréquents étaient `stephane`, `home`, `bash` ✗✓) ;
+et le **signe** d'un classifieur linéaire est **arbitraire** ✗✓ (43,4 % = **56,6 %** avec l'autre orientation ✓)
+— **sixième** chiffre déguisé de la nuit, et la même règle l'a démasqué ✓.
 
 ## ✅ LE PRIX DE LA PLANÉITÉ, ET LA RÉPONSE AU § 19
 

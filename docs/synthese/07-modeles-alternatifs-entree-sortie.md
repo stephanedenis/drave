@@ -69,3 +69,60 @@ manque.
   pas vu de corpus français dans le dépôt — c'est la **première** chose à ajouter ;
 * **un classifieur de langue** ✗ : quelques lignes, mais il n'existe pas ;
 * et **le temps** de deux entraînements (≈ 20 min chacun sur les cartes ✓ — c'est faisable).
+
+## Première mesure (17/10, 15 h) : la couche commune EXISTE DÉJÀ — et la langue n'est qu'à la SURFACE
+
+Le chapitre ci-dessus proposait un critère ; il a été appliqué ✓✓. Dispositif : un modèle **en octets**
+(8 couches, 256 de dimension, **4,79 M** paramètres ✓) entraîné sur un corpus **mixte** de **10,2 Mo**
+(**6,0 Mo d'anglais + 4,5 Mo de français** ✓ — le corpus français a été **constitué** pour l'occasion, voir
+plus bas), validation **2,6822 bits/octet** ✓.
+
+Puis `tools/langue_dans_etat.py` ✓ : une régression **linéaire** prédisant la langue depuis l'état
+**normalisé** de chaque couche ✓, sur **300 fenêtres par langue** ✓, avec un **témoin intra-langue** ✗ (deux
+moitiés du corpus anglais : ce qu'un classifieur peut faire **sans** la langue ✓) :
+
+| couche | langue (en/fr) | témoin intra-langue | verdict |
+|---:|---:|---:|---|
+| **0** | **62,4 %** | 53,1 % | la langue est dans l'**entrée** (octets) ✗ |
+| **1** | **50,2 %** | 50,7 % | **le hasard** ✓✓ — la langue s'efface |
+| **2** | **50,3 %** | 51,8 % | **le hasard** ✓✓ |
+| 3 | 56,6 % | 50,6 % | la langue revient un peu |
+| 4 | 53,9 % | 50,2 % | presque le hasard ✓ |
+| 5 | 53,8 % | 51,0 % | presque le hasard ✓ |
+| **6** | **59,4 %** | 50,1 % | la langue **revient** ✗ (la surface) |
+| **7** | **59,6 %** | 50,7 % | la langue **revient** ✗ (la surface) |
+| 8 | **51,0 %** | 50,9 % | le hasard ✓✓ (état final, prêt pour la tête) |
+
+* **LE NOYAU EST NEUTRE** ✓✓ : aux couches **1 et 2**, un classifieur linéaire ne fait **pas mieux que le
+  hasard** (50,2 et 50,3 % ✓✓, contre un témoin à 50,7 et 51,8 ✓). *L'état ne sait pas dans quelle langue
+  le texte est écrit* ✓✓ — c'est exactement la « couche commune » cherchée ✓ ;
+* **ET LA LANGUE NE REVIENT QU'À LA SURFACE** ✗✓ : aux couches **6 et 7**, elle remonte à **59,4 et 59,6 %**
+  ✓ — c'est-à-dire que le modèle **réintroduit** la langue **au moment de produire** ✓✓. C'est la structure
+  demandée : **un contenu neutre, une surface paramétrée par la langue** ✓✓✓ ;
+* **et l'entrée, elle, porte la langue** ✗ (62,4 % à la couche 0 ✓) : les octets anglais et français n'ont
+  pas les mêmes statistiques ✓ — c'est le seul endroit où « la langue » est dans les données ✓✓.
+
+### Le corpus français, et la sixième fois qu'un chiffre s'est déguisé
+
+* **il n'y avait pas de corpus français** dans le dépôt ✗ : il a été **constitué** à partir du français
+  **réel** du dépôt (docs, fiches, journal ✓) → **4,45 Mo**, dont les mots les plus fréquents sont `les`,
+  `est`, `pas`, `sur`, `par`, `que` ✓✓. Mais le premier essai était **contaminé** ✗ : les mots les plus
+  fréquents étaient `stephane`, `home`, `data`, `bash` ✗✓ (le journal contient des commandes et des
+  chemins ✓). Un **filtre** (lignes sans chemin, sans option, avec au moins **deux mots-outils** français ✓)
+  a ramené 12,8 Mo à **4,45 Mo propres** ✓ ;
+* **et mon instrument avait un défaut** ✗✓ : le **signe** d'un classifieur linéaire est **arbitraire** ✓ —
+  une précision de **43,4 %** est en réalité **56,6 %** avec l'autre orientation ✓✗. Sans le `max(acc, 100−acc)`,
+  j'aurais lu « sous le hasard » là où il y a une séparation ✓. **C'est la sixième fois** qu'un chiffre se
+  déguise ✓✓ (les cinq premières sont au chapitre 6 ✓) — et la règle n'a pas changé : *écrire à côté du
+  chiffre ce qui pourrait le rendre faux* ✓.
+
+### Ce que cela dit pour la suite
+
+La couche commune **existe déjà** dans un modèle en octets entraîné sur deux langues ✓✓. Ce qui reste n'est
+donc **pas** à construire ✗ : c'est à **exploiter** ✓ — et les deux prochaines étapes sont nettes :
+
+1. **vérifier que le noyau neutre est UTILE** ✗ : un état qui ne dit plus la langue dit-il encore le **sens** ?
+   （mesurer le contenu, méthode du chapitre 5 ✓ — sur les couches 1-2, où la langue s'efface ✓) ;
+2. **les adaptateurs par langue** (famille E ✓) : si la langue ne vit qu'aux couches **6-7** ✓, un adaptateur
+   posé **là** devrait suffire ✗✓ — c'est-à-dire **quelques paramètres par langue**, exactement la
+   « langue comme paramètre » cherchée ✓✓.
