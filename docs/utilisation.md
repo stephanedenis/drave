@@ -63,6 +63,28 @@ DRAVE_VISION_IMAGE=image.f32 DRAVE_VISION_NOYAU=noyau.f32 \
 Le chemin image est **vérifié** ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à
 0,71 % ✓) — mais ce n'est **pas encore** une vision multimodale utilisable ✗ (§ 2).
 
+### Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)
+
+Tous sont dans `tools/`, documentés dans la fiche `reports/rapport-modele-drave.md`, et leurs pièges
+d'instrument y sont **écrits à côté des chiffres** ✗✓ :
+
+| outil | ce qu'il fait | la commande |
+|---|---|---|
+| `chat.py` ✓ | **parler** au modèle (REPL, historique, coupe la télémétrie) | `python3 tools/chat.py` |
+| `lora_recopie.py` ✓ | apprend au modèle à **recopier** (LoRA, 100,0 % avec contrôle à 0,0 % ✓) | `python3 tools/lora_recopie.py --hf <snapshot> --ids <corpus>` |
+| `empreinte.py` ✓ | l'**empreinte** du texte dans l'état, **avec contre-épreuve** ✓ | `python3 tools/empreinte.py --hf <snapshot> --ids <corpus> --lora /tmp/lora-recopie.pt` |
+| `pont_abstrait.py` ✓ | le **mapping** sortie prélinguistique → entrée postlinguistique (+ balayage par couche et horizon ✓) | `... --hf <snapshot> --ids <corpus> [--couches … --horizons …]` |
+| `pensee_silencieuse.py` ✓ | penser **sans verbaliser** (itération d'état) vs verbaliser | `... --morceau <ids> --amorces … [--pont …]` |
+| `pas_latent.py` ✓ | le **pas** `h_p → h_{p+1}` : contraction et contenu | `... --hf <snapshot> --ids <corpus>` |
+| `boucle_directe.py` ✓ | la boucle **sans pont** (λ, contenu) | `... --hf <modèle> --ids <corpus>` |
+| `operateur_pensee.py` ✓ | l'**opérateur post-hoc** (contractant, λ = 0,997 ✓) | `... --hf <modèle aligné> --ids <corpus>` |
+| `iterer_bloc.py` ✓ | **itérer** un bloc répété : contenu et déplacement ✓ | `... --partage <modèle> --distinct <témoin> --ids <corpus>` |
+| `serveur-doc.py` ✓ / **mdserve** ✓ | les deux serveurs de documentation (voir plus haut ✓) | services `drave-doc` et `mdserve` |
+
+Et l'entraîneur a gagné **quatre** options pour ce programme ✓ : `--alignement λ` (unifier entrée et
+sortie ✓), `--partage` (bloc répété ✓), `--recurrence-max T` (entraîner **sur** l'itération ✓), et
+`--kwta`/`--signes` (les contraintes biologiques ✓).
+
 ### Les facultés du « cerveau » (la recherche)
 
 Chaque faculté a **sa fiche** (`reports/`) et **sa porte** ✓ : consolidation et sommeil (C7 ✓),
