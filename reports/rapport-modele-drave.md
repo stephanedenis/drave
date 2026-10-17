@@ -695,3 +695,31 @@ La campagne sur **96 Mo** a convergé ✓✓ (pas de sur-apprentissage ✓, vali
   noyau ✓) sur les mêmes états ✓ — si le 512 redevient lisible avec un lecteur plus riche ✓✓, alors la
   linéarité était le seul obstacle ✓ et la métrique est réparable ✓. C'est **la** prochaine mesure, et elle
   est courte ✓ (l'opérateur de pensée est déjà écrit ✓).
+
+## 24. CORRECTION DU § 23 : le chiffre du 512 dépendait des RÉGLAGES — et mon lecteur non linéaire sur-apprend
+
+Le § 23 concluait que « le meilleur modèle est le moins lisible » ✓✗ (104,3 % contre 90,2 ✗). Deux
+vérifications ont été faites ✓, et **les deux corrigent la conclusion** ✓✓ :
+
+1. **le lecteur NON LINÉAIRE est pire que le linéaire** ✗✓ : un MLP (2 couches, 256 cachés ✓, 3 000 pas ✓)
+   donne **119,9 %** et **120,8 %** contre **85,2 %** et **87,0 %** pour le ridge ✓ — il **sur-apprend** ✗✓
+   (3 000 pas sur ~3 000 positions ✓). *Le test du § 23 était mal réglé, donc il ne tranche rien* ✗✓ ;
+2. **ET SURTOUT : LE CHIFFRE DU 512 DÉPENDAIT DES RÉGLAGES DE MESURE** ✗✓ — avec `longueur 128` et 60
+   amorces ✓ (au lieu de 64 et 40 ✓), le contenu passe de **104,3 % à 87,0 %** ✓✗ et l'écart avec le 256
+   tombe de **14 points à 2** ✓ (85,2 contre 87,0 ✓). **La conclusion du § 23 est donc affaiblie** ✓ :
+   le 512 n'est **pas** « le moins lisible » ✗✓ — il l'était dans **une** configuration de mesure ✓✗.
+
+| modèle | ridge, longueur 64 (§ 23) | ridge, longueur 128 (ici) | MLP (mal réglé ✓✗) |
+|---|---:|---:|---:|
+| dim 256 | 90,2 | **85,2** | 119,9 |
+| dim 512 | **104,3** ✗ | **87,0** | 120,8 |
+
+* **la leçon est la cinquième de la nuit** ✓✓ : *une métrique dont le chiffre dépend des réglages n'est pas
+  une mesure, c'est un réglage* ✗✓ — et le seul remède est celui qu'on a appliqué : **refaire la mesure dans
+  une autre configuration** et **regarder si la conclusion tient** ✓. Ici elle **ne tient pas** ✗✓ ;
+* **ce qui reste vrai du § 23** ✓ : le **corpus** était le goulot ✓✓ (96 Mo ✓, plus de sur-apprentissage ✓),
+  et la capacité **compte** ✓ (2,7297 contre 2,8183 ✓) — ces deux-là ne dépendent pas des réglages ✓✓ ;
+* **ce qu'il faudrait pour trancher vraiment** ✗ : un lecteur **régularisé** (poids décroissants ✓, arrêt
+  anticipé ✓) et une **batterie de réglages** (longueurs 32 · 64 · 128 · 256 ✓, amorces variées ✓) pour que
+  le chiffre soit une **mesure** et non un point ✓✓. C'est un travail de banc, pas de nuit ✗ — et il est
+  **écrit ici** pour ne pas être oublié ✓.
