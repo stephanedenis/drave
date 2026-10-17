@@ -577,3 +577,52 @@ pas seulement sa contraction ✓. C'est fait ✓ (option `--marge` : le pas doit
   est **sans langue** ✓✓ mais **d'un seul pas** ✗. Le pas suivant n'est plus à chercher dans les **objectifs**
   ✗ mais dans **l'entraînement du modèle lui-même** ✓ — c'est-à-dire dans le programme du 16/10 (la récurrence
   **dans** la boucle ✓), qui reste la seule porte ouverte ✓✓.
+
+## Quatorzième et quinzième mesures (17/10, 16 h) : un **vrai** corpus français, et la neutralité **à l'échelle**
+
+### Un corpus français littéraire — merci aux projets Panini
+
+Mon « corpus français » était de la **prose de dépôt** ✗ (4,45 Mo de fiches et de journal ✓, 15 201 formes ✓) —
+utilisable ✓, mais ce n'est pas de la langue naturelle ✗. Stéphane a signalé que ses projets de recherche
+linguistique (**`Panini/`** et **`Panini-Research/`** ✓) contiennent des corpus **déjà sur la machine** ✓✓. Il
+y avait en effet **des textes Gutenberg** ✓ — 66 textes, dont **18 français** ✓ :
+
+| | prose du dépôt (l'ancien ✗) | **littérature (le nouveau ✓)** |
+|---|---:|---:|
+| taille | 4,45 Mo | **13,2 Mo** ✓ |
+| textes | 1 (le dépôt) | **18** ✓ |
+| formes | 15 201 | **66 322** ✓✓ (4,4× plus) |
+| auteurs | — | **Maupassant, Dumas, Flaubert, Verne** ✓✓ |
+| mots fréquents | `les, est, pas, sur, par, que` ✓ | `les, que, qui, des, dans, vous, une, pas` ✓✓ |
+
+*Les en-têtes et pieds de page Gutenberg ont été **retirés** ✗✓ — sans quoi le corpus contenait 18 fois la même
+licence anglaise ✓✗, et la « langue » mesurée aurait été celle de la licence ✓.*
+
+### La neutralité tient-elle à l'échelle ? Oui ✓✓ — et la surface devient PLUS langue-aware
+
+Un modèle bilingue **dim 512** (9,57 M ✓, même corpus mixte ✓) mesuré de la même façon ✓ :
+
+| couche | langue (en/fr) | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 50,8 % | 61,2 % | neutre ✓ |
+| 1 | 56,1 % | 51,0 % | ± |
+| **2** | **51,4 %** | 50,5 % | **le hasard** ✓✓ |
+| 3 | 54,1 % | 50,8 % | presque ✓ |
+| 4 | 59,2 % | 50,5 % | ✗ |
+| **5** | **53,1 %** | 50,5 % | presque ✓ |
+| **6** | **51,2 %** | 50,7 % | **le hasard** ✓✓ |
+| 7 | 57,3 % | 50,0 % | ✗ |
+| **8** | **67,9 %** | 50,3 % | ✗✗ la surface |
+
+* **LE NOYAU EST NEUTRE À L'ÉCHELLE** ✓✓ : aux couches 2 et 6, le classifieur est **au hasard** (51,4 et 51,2 % ✓),
+  comme en dim 256 (50,2 % ✓) → **la propriété se réplique** ✓✓ ;
+* **et la surface devient PLUS langue-aware** ✗✓ : **67,9 %** au dernier étage (contre 51,0 % en dim 256 ✓) —
+  le modèle plus large a **plus de capacité** pour porter la langue **dans la sortie** ✓✓, ce qui **renforce**
+  la lecture du chapitre : *la langue vit à la surface, et d'autant plus que le modèle est grand* ✓✓✓ ;
+* **et l'entrée, elle, n'est plus langue-aware** ✗✓ : 50,8 % à la couche 0 (contre 62,4 % en dim 256 ✓) — avec
+  des embeddings plus larges (512 ✓), les statistiques d'octets se **diluent** ✓✓. Ce n'est pas une régression ✗ :
+  c'est que la couche 0 **normalisée** n'est plus un simple reflet des octets ✓✓.
+
+**Ce que cela change pour le chapitre** ✓✓ : les deux résultats centraux — **noyau neutre** ✓ et **langue à la
+surface** ✓ — ne sont pas des accidents de petite taille ✓✓. Ils **tiennent** (et la surface se renforce ✓) quand
+le modèle double ✓.

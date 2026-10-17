@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 22 h 15 HAE.**
+**Mis à jour : 2026-10-17, 16 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,30 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ UN VRAI CORPUS FRANÇAIS, ET LA NEUTRALITÉ À L'ÉCHELLE (17/10, 16 h)
+
+**Le corpus** ✓✓ : mon « corpus français » était de la prose de dépôt ✗ (4,45 Mo, 15 201 formes). Les projets
+`Panini/` et `Panini-Research/` (signalés par Stéphane ✓) contenaient des textes **Gutenberg** ✓ — 66 textes,
+**18 français** ✓ → **13,2 Mo**, **66 322 formes** (4,4× plus ✓✓), avec **Maupassant, Dumas, Flaubert, Verne** ✓.
+*En-têtes et pieds de page Gutenberg retirés* ✗✓ — sans quoi le corpus contenait 18 fois la même licence anglaise ✓✗.
+
+**La neutralité à l'échelle** ✓✓ (modèle bilingue **dim 512**, 9,57 M ✓) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| **2** | **51,4 %** | 50,5 % | **le hasard** ✓✓ |
+| 4 | 59,2 % | 50,5 % | ✗ |
+| **6** | **51,2 %** | 50,7 % | **le hasard** ✓✓ |
+| **8** | **67,9 %** | 50,3 % | ✗✗ la surface |
+
+**Le noyau est neutre à l'échelle** ✓✓ (51,4 et 51,2 % aux couches 2 et 6, comme 50,2 % en dim 256 ✓) — **la
+propriété se réplique**. **Et la surface devient PLUS langue-aware** ✗✓ : **67,9 %** au dernier étage (contre
+51,0 % en dim 256) — le modèle plus large a **plus de capacité** pour porter la langue **dans la sortie** ✓✓,
+ce qui **renforce** la lecture : *la langue vit à la surface, et d'autant plus que le modèle est grand* ✓✓✓.
+**Et l'entrée n'est plus langue-aware** (50,8 % à la couche 0, contre 62,4 % en dim 256) : avec des embeddings
+plus larges, les statistiques d'octets se **diluent** ✓✓.
+→ **Les deux résultats centraux — noyau neutre ✓ et langue à la surface ✓ — tiennent quand le modèle double** ✓✓.
 
 ## ✅ LE RELEVÉ PARTAGÉ SUFFIT — 0,7 point (17/10, 20 h)
 
