@@ -55,6 +55,9 @@ def main() -> int:
     ap.add_argument("--ids", required=True)
     ap.add_argument("--longueurs", default="32,64,128,256")
     ap.add_argument("--amorces", type=int, default=60)
+    ap.add_argument("--repetitions", default="",
+                    help="rejouer la comparaison de la FALAISE (§ 18) : on répète le bloc t fois, pour "
+                         "t dans cette liste (ex. « 1,4 ») — le modèle doit être un bloc partagé ✓")
     a = ap.parse_args()
 
     from transformers import AutoModelForCausalLM
@@ -65,21 +68,36 @@ def main() -> int:
     # les états sont récoltés À LA PLUS GRANDE LONGUEUR puis tronqués par position ✓ (c'est la même
     # distribution de positions, et une seule passe par modèle ✓)
     L = max(longueurs)
+    import copy
+    import torch.nn as tnn
+    repetitions = [int(x) for x in a.repetitions.split(",") if x.strip()] or [1]
     donnees = {}
     for chemin in chemins:
         m = AutoModelForCausalLM.from_pretrained(chemin, dtype=torch.float32).eval()
-        S, T = [], []
-        with torch.no_grad():
-            for i in range(a.amorces):
-                d = 1000 + i * 1200
-                b = torch.tensor([ids[d:d + L]])
-                hs = m(b, output_hidden_states=True).hidden_states[-1][0]
-                S.append(m.model.norm(hs).numpy().astype(np.float64))
-                T.append(m.get_input_embeddings()(torch.tensor([ids[d + 1:d + L + 1]]))[0]
-                         .numpy().astype(np.float64))
-        donnees[pathlib.Path(chemin).name] = (np.concatenate(S), np.concatenate(T))
+        base = [copy.deepcopy(c) for c in m.model.layers]
+        for tt in repetitions:
+            # ⚠️ LES DEUX BORNES DE LA BIBLIOTHÈQUE (leçon du § 16) : la boucle du forward est bornée par
+            # `config.num_hidden_layers` ✓ et `layer_types` est une liste PAR COUCHE ✓ — sans les deux, les
+            # couches ajoutées sont SILENCIEUSEMENT ignorées ✓✗.
+            m.model.layers = tnn.ModuleList([copy.deepcopy(c) for _ in range(tt) for c in base])
+            m.config.num_hidden_layers = len(m.model.layers)
+            m.config.layer_types = (list(m.config.layer_types[:len(base)]) * tt)[:len(m.model.layers)]
+            globals().setdefault("_etats", {})
+            S, T = [], []
+            with torch.no_grad():
+                for i in range(a.amorces):
+                    d = 1000 + i * 1200
+                    b = torch.tensor([ids[d:d + L]])
+                    hs = m(b, output_hidden_states=True).hidden_states[-1][0]
+                    S.append(m.model.norm(hs).numpy().astype(np.float64))
+                    T.append(m.get_input_embeddings()(torch.tensor([ids[d + 1:d + L + 1]]))[0]
+                             .numpy().astype(np.float64))
+            donnees[f"{pathlib.Path(chemin).name[:-4] if pathlib.Path(chemin).name.endswith('.bin') else pathlib.Path(chemin).name}·t{tt}"] = (
+                np.concatenate(S), np.concatenate(T))
         del m
-
+    chemins_ok = True
+    if False:
+        pass
     print()
     print("   le contenu (écart %) par LONGUEUR, avec un λ de ridge choisi par validation croisée :")
     entete = "   modèle " + "".join(f"| L={L:>3} " for L in longueurs) + "| λ retenus"

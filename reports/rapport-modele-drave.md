@@ -760,3 +760,32 @@ corpus ✓) et **deux** étaient des **artefacts de réglages** ✓✓ (le 104,3
 § 24 ✓). Les **sept** autres tiennent ✓ — et c'est précisément pourquoi le banc de ce paragraphe compte plus
 que le chiffre qu'il produit ✓✓ : *il rend les comparaisons futures mesurables, ce qu'aucune des douze
 mesures précédentes ne faisait* ✓.
+
+## 26. LA FALAISE SURVIT AU LECTEUR PROPRE — et le banc a donc **discriminé**
+
+Le § 25 a réparé le lecteur ✓ (λ par validation croisée ✓, batterie de longueurs ✓). La question qui suivait
+était la seule qui compte ✓ : *les conclusions de la nuit survivent-elles à l'instrument réparé ?* ✗. La
+première a été rejouée ✓ — la **falaise** (§ 18 ✓), avec un lecteur régularisé à **longueur 128** ✓ :
+
+| modèle | **t = 1** | **t = 4** | **étalement** |
+|---|---:|---:|---:|
+| **partage** (t_max = 1 ✗) | **79,3** ✓✓ | 83,5 | **+4,2** ✗ |
+| **rec2** (t_max = 2 ✓) | 84,9 | 85,5 | **+0,6** ✓ |
+| **rec** (t_max = 4 ✓) | 84,8 | **84,6** | **−0,2** ✓✓ |
+
+* **LA FALAISE EST LÀ, ET PLUS NETTE ENCORE** ✓✓ : le modèle **sans** récurrence est le plus **net** à un pas
+  (**79,3** ✓, le meilleur chiffre de la nuit ✓) et **dégrade** quand on itère (+4,2 ✗) ; les modèles
+  **avec** récurrence sont **plats** (+0,6 et **−0,2** ✓✓) mais **5 points plus émoussés** à t = 1 ✗✓. **La
+  conclusion du § 18 tient** ✓✓ — elle n'était pas un artefact de réglages ✗ ;
+* **ET LE BANC A DONC DISCRIMINÉ** ✓✓ : il a **tué** une conclusion fausse (l'alerte du § 23 ✓✗) et **gardé**
+  une conclusion vraie (la falaise ✓✓) — c'est exactement ce qu'on demande à un instrument ✓✓. Un banc qui
+  aurait tout confirmé ✗ ou tout cassé ✗ n'aurait rien valu ✓ ;
+* **et le chiffre de la falaise a même gagné en netteté** ✓ : l'écart de netteté passe de **5,5** points
+  (§ 18 : 82,9 contre 88,4 ✓) à **5,6** ✓ et l'étalement du modèle sans récurrence de **+3,8** à **+4,2** ✓ —
+  le lecteur régularisé **sépare mieux** les deux régimes ✓✓ (λ = 10 dans les six cellules ✓ : les états sont
+  colinéaires, et c'est en régularisant qu'on les distingue ✓).
+
+**Ce qui reste à rejouer** ✗ : les autres conclusions de la nuit — le **point fixe** (§ 19 ✓, qui n'utilise
+pas de ridge ✗ donc **non concerné** ✓✓), l'**empreinte** (§ 11 ✓, ridge non régularisé ✗ → **à rejouer** ✓),
+et le **contenu long** (§ 5 et § 13 ✓ → **à rejouer** ✓). C'est le programme des prochaines heures ✓ — et il
+est **borné** ✓ : trois mesures, un banc, une nuit ✓.
