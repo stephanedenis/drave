@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Les douze facultés (C1-C12) et la biologie (E1-E9)</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Ce que Drave cherche à donner à un modèle — chaque case a sa fiche et sa porte.</text>
+  <rect x="60" y="100" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="152.5" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C1 · topologie</text>
+  <text x="152.5" y="174" text-anchor="middle" font-size="11.5" fill="#475569">couper, répartir</text>
+  <rect x="265" y="100" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="357.5" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C2 · cycle</text>
+  <text x="357.5" y="174" text-anchor="middle" font-size="11.5" fill="#475569">boucler, penser</text>
+  <rect x="470" y="100" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="562.5" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C3 · horloges</text>
+  <text x="562.5" y="174" text-anchor="middle" font-size="11.5" fill="#475569">des rythmes</text>
+  <rect x="675" y="100" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="767.5" y="126" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C4 · délais</text>
+  <text x="767.5" y="174" text-anchor="middle" font-size="11.5" fill="#475569">et des retards</text>
+  <rect x="60" y="210" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="152.5" y="236" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C5 · bus</text>
+  <text x="152.5" y="284" text-anchor="middle" font-size="11.5" fill="#475569">un lien riche</text>
+  <rect x="265" y="210" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="357.5" y="236" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C6 · mémoire</text>
+  <text x="357.5" y="284" text-anchor="middle" font-size="11.5" fill="#475569">se souvenir</text>
+  <rect x="470" y="210" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="562.5" y="236" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C7 · sommeil</text>
+  <text x="562.5" y="284" text-anchor="middle" font-size="11.5" fill="#475569">consolider</text>
+  <rect x="675" y="210" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="767.5" y="236" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C8 · réflexe</text>
+  <text x="767.5" y="284" text-anchor="middle" font-size="11.5" fill="#475569">répondre vite</text>
+  <rect x="60" y="320" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="152.5" y="346" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C9 · ponts</text>
+  <text x="152.5" y="394" text-anchor="middle" font-size="11.5" fill="#475569">relier</text>
+  <rect x="265" y="320" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="357.5" y="346" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C10 · budgets</text>
+  <text x="357.5" y="394" text-anchor="middle" font-size="11.5" fill="#475569">dépenser peu</text>
+  <rect x="470" y="320" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="562.5" y="346" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C11 · pannes</text>
+  <text x="562.5" y="394" text-anchor="middle" font-size="11.5" fill="#475569">tenir debout</text>
+  <rect x="675" y="320" width="185" height="88" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="767.5" y="346" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">C12 · trace</text>
+  <text x="767.5" y="394" text-anchor="middle" font-size="11.5" fill="#475569">se regarder</text>
+  <text x="450" y="475" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#0f172a">Et neuf apports de biologie : E1 poids log-normaux · E2 croissance · E3 Dale · E4 équilibre · E5 distillation</text>
+  <text x="450" y="498" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#0f172a">E6 signes figés · E7 k-WTA · E8 topologie innée · E9 homéostasie</text>
+  <text x="450" y="530" text-anchor="middle" font-size="12.5" fill="#475569">Une faculté sans mesure n&#8217;entre pas dans le tableau : la règle du dépôt est « pas de fiche, pas de faculté ».</text>
+</svg>

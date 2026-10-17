@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="fleche" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#334155"/>
+    </marker>
+    <marker id="flecheR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/>
+    </marker>
+    <marker id="flecheV" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#15803d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="520" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Drave, en une image</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Un modèle ordinaire se lit d&#8217;un bout à l&#8217;autre, sur une seule machine. Drave le coupe, le répartit, et le pilote.</text>
+  <rect x="40" y="90" width="150" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="115.0" y="116" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">TEXTE</text>
+  <text x="115.0" y="146" text-anchor="middle" font-size="12" fill="#475569">ce qu&#8217;on donne</text>
+  <rect x="40" y="200" width="150" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="115.0" y="226" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">JETONS</text>
+  <text x="115.0" y="256" text-anchor="middle" font-size="12" fill="#475569">vocabulaire du modèle</text>
+  <line x1="115" y1="160" x2="115" y2="198" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <rect x="240" y="70" width="300" height="250" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text x="390.0" y="201.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">LE MODÈLE, DÉCOUPÉ</text>
+  <rect x="262" y="100" width="256" height="60" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="390.0" y="136.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région 0 · couches 0-7</text>
+  <rect x="262" y="175" width="256" height="60" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="390.0" y="211.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région 1 · couches 8-15</text>
+  <rect x="262" y="250" width="256" height="60" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="390.0" y="286.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région 2 · couches 16-23</text>
+  <text x="390" y="305" text-anchor="middle" font-size="11" fill="#64748b">chaque région lit, calcule, et passe</text>
+  <line x1="540" y1="200" x2="600" y2="200" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <rect x="600" y="160" width="150" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="675.0" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">LE BUS</text>
+  <text x="675.0" y="226" text-anchor="middle" font-size="12" fill="#475569">régions ↔ régions</text>
+  <line x1="750" y1="200" x2="800" y2="200" stroke="#334155" stroke-width="2.5" marker-end="url(#fleche)"/>
+  <rect x="800" y="160" width="80" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="840.0" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">SORTIE</text>
+  <text x="840.0" y="226" text-anchor="middle" font-size="12" fill="#475569">le texte</text>
+  <path d="M840,240 C840,330 600,350 540,320 C480,290 470,270 470,262" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#flecheR)"/>
+  <text x="660" y="352" text-anchor="middle" font-size="12.5" fill="#b91c1c">le « cerveau » : horloges, budgets, mémoire, sommeil</text>
+  <text x="660" y="372" text-anchor="middle" font-size="12" fill="#b91c1c">il ne calcule pas les couches, il les ORGANISE</text>
+  <text x="450" y="470" text-anchor="middle" font-size="12.5" fill="#475569">Le même modèle peut être joué entier (simple), ou coupé en régions communicantes (distribué).</text>
+  <text x="450" y="492" text-anchor="middle" font-size="12.5" fill="#475569">La perplexité ne bouge pas : 8 coupes, une seule perplexité — c&#8217;est la propriété fondatrice.</text>
+</svg>

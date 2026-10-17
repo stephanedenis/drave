@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Les modes d&#8217;exécution : le même modèle, six manières de s&#8217;en servir</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Chaque mode répond à une question différente — et se mesure avec ses propres instruments.</text>
+  <rect x="350" y="84" width="200" height="64" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text x="450.0" y="110" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">LE MODÈLE</text>
+  <text x="450.0" y="134" text-anchor="middle" font-size="11.5" fill="#475569">les mêmes poids</text>
+  <rect x="40" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="105.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="105" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">mesurer</text>
+  <text x="105" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">--ppl</text>
+  <text x="105" y="330" text-anchor="middle" font-size="10.5" fill="#475569">il prédit bien ?</text>
+  <line x1="105" y1="150" x2="105" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <rect x="185" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="250.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="250" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">générer</text>
+  <text x="250" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">--infer</text>
+  <text x="250" y="330" text-anchor="middle" font-size="10.5" fill="#475569">un texte, jeton à jeton</text>
+  <line x1="250" y1="150" x2="250" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <rect x="330" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="395.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="395" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">converser</text>
+  <text x="395" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">--chat</text>
+  <text x="395" y="330" text-anchor="middle" font-size="10.5" fill="#475569">un dialogue</text>
+  <line x1="395" y1="150" x2="395" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <rect x="475" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="540.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="540" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">court-circuiter</text>
+  <text x="540" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">--couches 0:L</text>
+  <text x="540" y="330" text-anchor="middle" font-size="10.5" fill="#475569">le réflexe</text>
+  <line x1="540" y1="150" x2="540" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <rect x="620" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="685.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="685" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">observer</text>
+  <text x="685" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">--etat-sortie</text>
+  <text x="685" y="330" text-anchor="middle" font-size="10.5" fill="#475569">ce que l&#8217;état contient</text>
+  <line x1="685" y1="150" x2="685" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <rect x="765" y="240" width="130" height="140" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="830.0" y="316.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <text x="830" y="272" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">itérer</text>
+  <text x="830" y="300" text-anchor="middle" font-size="10.5" font-family="monospace" fill="#1d4ed8">cycle</text>
+  <text x="830" y="330" text-anchor="middle" font-size="10.5" fill="#475569">boucler sur l&#8217;état</text>
+  <line x1="830" y1="150" x2="830" y2="236" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+  <text x="450" y="430" text-anchor="middle" font-size="12.5" fill="#475569">Les six modes partagent le même moteur : couches, attention, cache KV. Ce qui change est le chemin, pas le modèle.</text>
+  <text x="450" y="452" text-anchor="middle" font-size="12.5" fill="#475569">C&#8217;est pourquoi on peut comparer le réflexe au passage complet sur les mêmes poids — et c&#8217;est ainsi que Drave se mesure.</text>
+</svg>

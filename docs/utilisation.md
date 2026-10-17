@@ -63,6 +63,13 @@ DRAVE_VISION_IMAGE=image.f32 DRAVE_VISION_NOYAU=noyau.f32 \
 Le chemin image est **vérifié** ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à
 0,71 % ✓) — mais ce n'est **pas encore** une vision multimodale utilisable ✗ (§ 2).
 
+### La synthèse théorique (à lire en premier, ou en dernier)
+
+**`docs/synthese/`** ✓ — six chapitres **vulgarisés** et **six schémas SVG** : l'idée fondatrice, l'anatomie
+interne (régions, liens, bus, horloges), les modes d'exécution et les portes, les douze facultés et les neuf
+apports de biologie, la pensée sans verbaliser (le travail du 16/10), et la méthode avec ses cinq pièges.
+Entrée : **`docs/synthese/index.md`** ✓.
+
 ### Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)
 
 Tous sont dans `tools/`, documentés dans la fiche `reports/rapport-modele-drave.md`, et leurs pièges

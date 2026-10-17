@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="fleche" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#334155"/>
+    </marker>
+    <marker id="flecheR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/>
+    </marker>
+    <marker id="flecheV" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#15803d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="520" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">L&#8217;anatomie d&#8217;une coupe</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Où l&#8217;on coupe, et combien la couture coûte. Le même modèle, trois découpages.</text>
+  <rect x="60" y="100" width="220" height="330" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="170.0" y="271.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <rect x="76" y="116" width="188" height="120" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="170.0" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région BASSE</text>
+  <text x="170.0" y="222" text-anchor="middle" font-size="12" fill="#475569">0-3</text>
+  <rect x="76" y="286" width="188" height="120" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="170.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
+  <text x="170.0" y="392" text-anchor="middle" font-size="12" fill="#475569">4-23</text>
+  <line x1="170" y1="236" x2="170" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
+  <text x="178" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="170" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#b91c1c">coupe 0-3 | 4-23</text>
+  <text x="170" y="476" text-anchor="middle" font-size="14" fill="#b91c1c">coût du pont : +17,09 %</text>
+  <rect x="340" y="100" width="220" height="330" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="450.0" y="271.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <rect x="356" y="116" width="188" height="120" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="450.0" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région BASSE</text>
+  <text x="450.0" y="222" text-anchor="middle" font-size="12" fill="#475569">0-15</text>
+  <rect x="356" y="286" width="188" height="120" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="450.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
+  <text x="450.0" y="392" text-anchor="middle" font-size="12" fill="#475569">16-23</text>
+  <line x1="450" y1="236" x2="450" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
+  <text x="458" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="450" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#15803d">coupe 0-15 | 16-23</text>
+  <text x="450" y="476" text-anchor="middle" font-size="14" fill="#15803d">coût du pont : +0,52 %</text>
+  <rect x="620" y="100" width="220" height="330" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="730.0" y="271.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a"></text>
+  <rect x="636" y="116" width="188" height="120" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="730.0" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région BASSE</text>
+  <text x="730.0" y="222" text-anchor="middle" font-size="12" fill="#475569">0-19</text>
+  <rect x="636" y="286" width="188" height="120" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="730.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
+  <text x="730.0" y="392" text-anchor="middle" font-size="12" fill="#475569">20-23</text>
+  <line x1="730" y1="236" x2="730" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
+  <text x="738" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="730" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#15803d">coupe 0-19 | 20-23</text>
+  <text x="730" y="476" text-anchor="middle" font-size="14" fill="#15803d">coût du pont : +0,52 %</text>
+  <text x="450" y="510" text-anchor="middle" font-size="12.5" fill="#475569">Couper tôt coûte 30 fois plus cher que couper tard : la région haute a besoin d&#8217;un état riche, la basse en produit un pauvre.</text>
+</svg>

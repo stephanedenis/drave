@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker>
+    <marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker>
+  </defs>
+  <rect width="900" height="600" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Penser sans verbaliser : le langage abstrait</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Un modèle ordinaire « pense » en écrivant des jetons. On a cherché à le faire penser dans son état.</text>
+  <rect x="60" y="100" width="230" height="90" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="175.0" y="126" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">SORTIE PRÉ-LINGUISTIQUE</text>
+  <text x="175.0" y="176" text-anchor="middle" font-size="11.5" fill="#475569">le résidu, avant la norme finale</text>
+  <rect x="610" y="100" width="230" height="90" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="725.0" y="126" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">ENTRÉE POST-LINGUISTIQUE</text>
+  <text x="725.0" y="176" text-anchor="middle" font-size="11.5" fill="#475569">les embeddings de jetons</text>
+  <text x="450" y="128" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#b91c1c">écart mesuré : facteur 648 d&#8217;échelle</text>
+  <text x="450" y="150" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#b91c1c">et cosinus +0,14</text>
+  <text x="450" y="172" text-anchor="middle" font-size="12" fill="#475569">les deux espaces ne sont PAS le même</text>
+  <rect x="330" y="210" width="240" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="450.0" y="236" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">LE PONT</text>
+  <text x="450.0" y="276" text-anchor="middle" font-size="11.5" fill="#475569">ce qui les relie</text>
+  <line x1="290" y1="150" x2="328" y2="230" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <line x1="570" y1="230" x2="608" y2="152" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <text x="450" y="312" text-anchor="middle" font-size="12.5" fill="#15803d">appris (alignement) : cosinus 0,14 → 0,70 · échelle 648 → 1,015 · et la langue s&#8217;améliore</text>
+  <text x="450" y="334" text-anchor="middle" font-size="12.5" fill="#b91c1c">mais la boucle directe explose quand même : λ = 7 311</text>
+  <path d="M330,380 C200,380 200,300 240,250" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#fr)"/>
+  <text x="150" y="404" font-size="12" fill="#b91c1c">réinjecter l&#8217;état comme entrée : ×30 000</text>
+  <text x="450" y="440" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Alors on a cessé de passer par le modèle : un opérateur latent, entraîné.</text>
+  <text x="450" y="464" text-anchor="middle" font-size="12.5" fill="#15803d">contractant (λ = 0,997) et utile (+15 points sur un pas) — mais bon pour UN pas seulement.</text>
+  <text x="450" y="486" text-anchor="middle" font-size="12.5" fill="#15803d">Avec la récurrence dans l&#8217;entraînement, l&#8217;itération devient PLATE (88,4 · 88,2 · 88,5).</text>
+  <text x="450" y="508" text-anchor="middle" font-size="12.5" fill="#b91c1c">Prix : ≈ 5 points de lisibilité. La bascule se fait au premier pas — une falaise, pas un curseur.</text>
+  <text x="450" y="540" text-anchor="middle" font-size="13" fill="#0f172a">Et la raison est trouvée : les modèles plats ont appris un POINT FIXE (déplacement 44,8 % contre 77,5 %).</text>
+  <text x="450" y="566" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">Le modèle qui pense est aussi un meilleur lecteur (2,73 contre 2,76 bits/octet).</text>
+</svg>
