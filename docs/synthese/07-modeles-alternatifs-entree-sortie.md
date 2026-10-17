@@ -418,3 +418,31 @@ Ce chapitre a maintenant **deux erratums** ✓✓, et c'est le signe qu'il progr
 
 *Trois mesures, deux corrections, et aucune des trois n'est jetée* ✓✓ : chacune reste vraie **de sa question** ✓.
 C'est la différence entre se contredire ✗ et **préciser** ✓✓.
+
+## Dixième mesure (17/10, 20 h 30) : un noyau **bilingue** bat un noyau monolingue **+ adaptateur** — mais l'adaptateur rattrape les deux tiers
+
+La mesure qui compte pour l'ingénierie ✓ : pour obtenir une couche commune, vaut-il mieux entraîner un noyau
+**sur les deux langues** ✓ ou garder un noyau **monolingue** et ajouter un **adaptateur** ✓ (famille E ✓) ?
+`tools/comparer_noyaux.py` ✓, mêmes fenêtres ✓ :
+
+| dispositif | **perte français** | perte anglais |
+|---|---:|---:|
+| **noyau bilingue** ✓ (4,79 M, 10,2 Mo mixtes ✓) | **1,0737** ✓✓ | **1,6493** ✓ |
+| noyau monolingue ✗ (2,43 M, 96 Mo anglais ✓) | **3,2928** ✗ | **2,2786** ✓ |
+| monolingue + **adaptateur français** ✓ | **1,4546** ✓ | 3,1438 ✗ |
+
+* **LE NOYAU BILINGUE GAGNE** ✓✓ : **1,0737** contre **1,4546** pour le monolingue + adaptateur ✓ — soit
+  **35 %** de perte en plus pour le dispositif à adaptateur ✗ ;
+* **mais l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → **1,4546** ✓) — et il le fait pour
+  **131 072 paramètres** ✓✓ et vingt minutes d'entraînement ✓, quand le noyau bilingue a demandé **les deux
+  corpus** et un entraînement complet ✓ ;
+* **et l'adaptateur abîme l'anglais** ✗ (2,2786 → **3,1438** ✓) — le prix déjà vu ✓ ;
+* ⚠️ **ce que cette mesure ne peut PAS dire, et qui est écrit dans l'outil** ✗ : les deux noyaux n'ont **ni la
+  même taille** (2,43 M contre 4,79 M ✓) **ni les mêmes données** (96 Mo d'anglais contre 10,2 Mo mixtes ✓) —
+  ce n'est donc **pas** une comparaison à budget égal ✗✓, c'est une comparaison de **trois dispositifs réels** ✓.
+  La conclusion doit rester à ce niveau : *le bilingue est meilleur ici* ✓, pas « le bilingue est toujours
+  meilleur » ✗ ;
+* **et le vrai arbitrage est ailleurs** ✓✓ : sur un modèle de **7 milliards**, réentraîner le noyau sur deux
+  langues est **hors de prix** ✗✓, alors qu'un adaptateur coûte **1,33 %** des paramètres et **5 ms** de bascule
+  ✓✓. *C'est donc à l'échelle que l'adaptateur devient la bonne réponse* ✓ — et ce chapitre ne peut pas le
+  mesurer, seulement le nommer ✓.

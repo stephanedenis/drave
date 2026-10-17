@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 15 HAE.**
+**Mis à jour : 2026-10-17, 20 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,23 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ⚖️ NOYAU BILINGUE CONTRE MONOLINGUE + ADAPTATEUR (17/10, 20 h 30)
+
+| dispositif | **français** | anglais |
+|---|---:|---:|
+| **noyau bilingue** (4,79 M, 10,2 Mo mixtes) | **1,0737** ✓✓ | **1,6493** ✓ |
+| noyau monolingue (2,43 M, 96 Mo anglais) | **3,2928** ✗ | **2,2786** ✓ |
+| monolingue + **adaptateur français** | **1,4546** ✓ | 3,1438 ✗ |
+
+**Le noyau bilingue gagne** ✓✓ (1,0737 contre 1,4546 — **35 %** de perte en plus pour l'adaptateur ✗), **mais
+l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) pour **131 k paramètres** et vingt minutes ✓
+— quand le bilingue a demandé **les deux corpus** ✓.
+⚠️ **Ce que la mesure ne peut pas dire** ✗ : les deux noyaux n'ont **ni la même taille ni les mêmes données** ✗✓
+→ ce n'est **pas** une comparaison à budget égal, c'est une comparaison de **trois dispositifs réels** ✓. Et le
+vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
+tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
+réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
 
 ## ✅ LE RELEVÉ PARTAGÉ SUFFIT — 0,7 point (17/10, 20 h)
 
