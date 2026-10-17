@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 21 h 40 HAE.**
+**Mis à jour : 2026-10-17, 22 h 15 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,29 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ⚠️ TROIS OBJECTIFS, LE MÊME MUR — la limite est dans la représentation (17/10, 22 h)
+
+Le round précédent disait : « il faut un objectif différent » ✗ — récompenser le **déplacement informatif**.
+C'est fait ✓ (`--marge` : le pas doit **améliorer** le contenu d'au moins marge × 100 %, ce qui **exclut
+l'identité** ✓✗). Deux marges testées :
+
+| marge | k=0 | **k=1** | k=2 | k=4 | k=8 |
+|---|---:|---:|---:|---:|---:|
+| **sans** | 82,2 % | **79,9** ✓ | 93,8 ✗ | 101,3 ✗ | 97,4 ✗ |
+| **0,05** | 82,2 % | **80,3** ✓ | 93,7 ✗ | 103,1 ✗ | 99,9 ✗ |
+| **0,10** | 82,2 % | **80,4** ✓ | 93,3 ✗ | 103,7 ✗ | 95,3 ✗ |
+
+**La marge n'y change rien** ✗✓ : le contenu s'améliore toujours au **premier** pas et **se dégrade** ensuite,
+de la même façon ✗. Les **trois** objectifs — conservation, conservation + contraction, et **progrès exigé** —
+donnent **le même mur** ✗✗.
+→ **La limite n'est donc PAS dans l'objectif** ✗✓ : c'est la **représentation** qui ne porte pas de second pas ✓✓.
+*Il n'y a pas de second pas à trouver* ✓ — et c'est la **troisième** démonstration de la nuit (16/10 sur les
+opérateurs, 17/10 sur deux modèles et deux langues, et maintenant contre **trois** objectifs) ✓.
+→ **Et la langue reste au hasard** ✓✓ (50,4-61,3 %) : la neutralité **tient** sous toutes les variantes ✓✓ —
+c'est le résultat **positif** du chapitre : *la langue n'est pas dans la pensée* ✓✓, même quand la pensée bute.
+**Ouverture** ✓✓ : le pas suivant n'est plus à chercher dans les **objectifs** ✗ mais dans **l'entraînement du
+modèle lui-même** ✓ — la récurrence **dans** la boucle (programme du 16/10 ✓), la seule porte ouverte ✓.
 
 ## ⚠️ LE « SECOND PAS » NE S'OBTIENT PAS — et la recette du 16/10 se reproduit (17/10, 21 h 30)
 

@@ -515,3 +515,30 @@ l'œil sur la langue** ✓ : `--k-entrainement 4` ✓ (même opérateur, même m
   la dérive la fait remonter à 68 % ✓) ; (3) et le **second pas** reste hors d'atteinte avec cet objectif ✗✓
   — il faudra un **objectif différent** ✗ (par exemple contraindre le **déplacement** à être informatif, pas
   seulement contractant ✓).
+
+## Treizième mesure (17/10, 22 h) : trois objectifs, **le même mur** — la limite est dans la représentation
+
+Le § précédent concluait qu'il fallait « un objectif différent » ✗ : récompenser le **déplacement informatif**,
+pas seulement sa contraction ✓. C'est fait ✓ (option `--marge` : le pas doit **améliorer** le contenu d'au moins
+`marge` × 100 %, ce qui **exclut l'identité** de l'optimum ✓✗). Deux marges testées ✓ :
+
+| marge | k = 0 | **k = 1** | k = 2 | k = 3 | k = 4 | k = 8 |
+|---|---:|---:|---:|---:|---:|---:|
+| **sans** (mesure 11 ✓) | 82,2 % | **79,9** ✓ | 93,8 ✗ | 99,5 ✗ | 101,3 ✗ | 97,4 ✗ |
+| **0,05** | 82,2 % | **80,3** ✓ | 93,7 ✗ | 100,1 ✗ | 103,1 ✗ | 99,9 ✗ |
+| **0,10** | 82,2 % | **80,4** ✓ | 93,3 ✗ | 100,3 ✗ | 103,7 ✗ | 95,3 ✗ |
+
+* **LA MARGE N'Y CHANGE RIEN** ✗✓ : le contenu s'améliore toujours au **premier** pas (79,9 · 80,3 · 80,4 ✓)
+  et **se dégrade** ensuite, de la même façon ✓✗ (93-104 % ✓). Les **trois** objectifs — conservation ✓,
+  conservation + contraction ✓, et **progrès exigé** ✓ — donnent **le même mur** ✗✗ ;
+* **donc la limite n'est PAS dans l'objectif** ✗✓ : c'est la **représentation** qui ne porte pas de second pas ✓✓.
+  *Il n'y a pas de second pas à trouver* ✓ — et c'est la troisième fois que la nuit le montre (16/10 sur les
+  opérateurs ✓, 17/10 sur deux modèles et deux langues ✓, et maintenant contre trois objectifs ✓) ;
+* **et la langue reste au hasard** ✓✓ (50,4-61,3 % ✓) — la neutralité **tient** sous toutes les variantes ✓✓,
+  ce qui est le résultat **positif** du chapitre : *la langue n'est pas dans la pensée* ✓✓, même quand la
+  pensée bute ✓ ;
+* **la conclusion du chapitre, et son ouverture** ✓✓ : la couche commune **existe** ✓ (noyau neutre ✓, relevé
+  partagé ✓), la langue est un **paramètre de 1,33 %** qui **commande la sortie** ✓✓, et la **pensée itérée**
+  est **sans langue** ✓✓ mais **d'un seul pas** ✗. Le pas suivant n'est plus à chercher dans les **objectifs**
+  ✗ mais dans **l'entraînement du modèle lui-même** ✓ — c'est-à-dire dans le programme du 16/10 (la récurrence
+  **dans** la boucle ✓), qui reste la seule porte ouverte ✓✓.

@@ -31,6 +31,10 @@ def main() -> int:
     ap.add_argument("--longueur", type=int, default=128)
     ap.add_argument("--fenetres", type=int, default=150)
     ap.add_argument("--pas", type=int, default=3000)
+    ap.add_argument("--marge", type=float, default=0.0,
+                    help="EXIGER une AMÉLIORATION de marge × 100 % du contenu à chaque pas ✓ — sans quoi la "
+                         "solution triviale (ne pas bouger) gagne ✗✓ (mesure 12 : contenu exactement plat). "
+                         "Avec marge, l'opérateur immobile est EXCLU de l'optimum ✓")
     ap.add_argument("--k-entrainement", type=int, default=0,
                     help="entraîner sur k pas TIRÉS entre 1 et cette valeur ✓ (la recette du 16/10 qui rend "
                          "l'itération plate ✓) — et voir si la neutralité de langue SURVIT ✗✓")
@@ -75,12 +79,20 @@ def main() -> int:
     for pas in range(1, a.pas + 1):
         idx = torch.randperm(X.shape[0])[:512]
         z = X[idx]
+        base = float(((X[idx] - Y[idx]) ** 2).mean())    # le contenu SANS opérateur ✓ (la référence)
         # ⚠️ ENTRAÎNER SUR k PAS, PAS SUR UN SEUL ✓ (leçon du 16/10 : sans cela, l'opérateur ne vaut que
         # pour un pas ✗). k est TIRÉ entre 1 et k_max, et le contenu porte sur C^k(x) ✓.
         kk = int(torch.randint(1, a.k_entrainement + 1, (1,)).item()) if a.k_entrainement else 1
         for _ in range(kk):
             z = cel(z)
         perte = ((z - Y[idx]) ** 2).mean()
+        if a.marge > 0.0:
+            # ⚠️ LA MARGE, ET POURQUOI ELLE CHANGE TOUT ✗✓. Sans marge, l'opérateur immobile minimise la
+            # perte ✓✗ (mesure 12 : contenu EXACTEMENT plat à 82,2 % ✓). Avec marge, on n'accepte plus une
+            # conservation : il faut que le pas AMÉLIORE le contenu d'au moins `marge` × 100 % ✗✓ — et
+            # l'identité est alors **exclue** de l'optimum ✓✓. C'est le passage d'un objectif de
+            # CONSERVATION à un objectif de PROGRÈS ✓.
+            perte = perte + 5.0 * torch.clamp(perte - (1.0 - a.marge) * base, min=0.0)
         delta = torch.randn_like(X[idx]) * 1e-3
         lam = ((cel(X[idx] + delta) - z).norm(dim=-1) / delta.norm(dim=-1)).mean()
         perte = perte + 10.0 * torch.clamp(lam - 1.0, min=0.0) ** 2
