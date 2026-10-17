@@ -446,3 +446,40 @@ La mesure qui compte pour l'ingénierie ✓ : pour obtenir une couche commune, v
   langues est **hors de prix** ✗✓, alors qu'un adaptateur coûte **1,33 %** des paramètres et **5 ms** de bascule
   ✓✓. *C'est donc à l'échelle que l'adaptateur devient la bonne réponse* ✓ — et ce chapitre ne peut pas le
   mesurer, seulement le nommer ✓.
+
+## Onzième mesure (17/10, 21 h) : la pensée itérée est **SANS LANGUE** — mais elle ne tient qu'un pas
+
+La jonction des deux chapitres, jamais mesurée ✗ : l'état est **neutre** (chap. 7 ✓) et l'on peut **itérer**
+l'état (chap. 5 ✓) — mais **itérer préserve-t-il la neutralité ?** ✓ `tools/penser_sans_langue.py` ✓ : le même
+opérateur que le chapitre 5 (identité + petit MLP ✓, contenu ✓ et contraction ✓), entraîné sur les états du
+modèle **bilingue** ✓, puis k itérations ✓, avec deux mesures : le **contenu** ✓ et la **langue** ✓.
+
+| k | contenu (état → mot suivant) | **langue** (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | **56,2 %** |
+| **1** | **79,9 %** ✓ | 53,9 % |
+| 2 | 93,8 % ✗ | 52,8 % |
+| **3** | 99,5 % ✗✗ | **50,7 %** ✓✓ |
+| **4** | 101,3 % ✗✗ | **50,6 %** ✓✓ |
+| 8 | 97,4 % ✗ | 54,0 % |
+
+* **LA LANGUE NE REVIENT PAS** ✓✓✓ : sur **huit** itérations, le classifieur reste entre **50,6 et 56,2 %** —
+  c'est-à-dire **au hasard** ✓✓ (le minimum, **50,6 %**, est atteint à k = 4 ✓). *La pensée itérée est sans
+  langue* ✓✓ — c'est la propriété qu'un cerveau doit avoir : **penser ne dépend pas de la langue où l'on
+  parle** ✓✓✓ ;
+* **et le contenu ne tient qu'un pas** ✗ : il **s'améliore** au premier (82,2 → **79,9** ✓) puis **s'effondre**
+  (93,8 → **101,3** ✗✗, pire que l'embedding moyen ✓). C'est **exactement** le résultat du 16/10 sur un autre
+  modèle ✓✓ (un pas de pensée, pas une itération ✓) — et il **se reproduit** ici ✓✓ ;
+* **donc la réponse complète** ✓✓ : *on peut penser **sans langue**, mais on ne peut penser qu'**un pas***
+  ✓ — la neutralité est **stable** ✓✓, le contenu ne l'est pas ✗. Les deux propriétés sont **indépendantes**
+  ✓✓ (l'une tient sur huit pas, l'autre sur un ✓), et c'est une information neuve ✓.
+
+### Neuvième piège : quand c'est le CODE qui ment
+
+Mon premier essai donnait k = 0, 1, 2, 4 ✓ mais la boucle **accumulait** `Z = cel(Z)` ✗✓ : les lignes « 2 » et
+« 4 » montraient en réalité **2 et 3** pas ✓✗. **Le label mentait, pas la mesure** ✓✓ — et c'est une famille
+**nouvelle** de piège : après les réglages (mesures 5, 8 ✓) et les instruments (les quatre du 16/10 ✓), voici
+**le code lui-même** ✓✗. La correction tient en une ligne (repartir de l'état d'origine à chaque k ✓), et elle
+a changé les chiffres — mais **pas la conclusion** ✓✓ : la langue reste au hasard ✓. C'est la neuvième fois
+qu'un chiffre se déguise, et la règle est toujours la même : **écrire à côté du chiffre ce qui pourrait le
+rendre faux** ✓✓.

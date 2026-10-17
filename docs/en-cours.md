@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 40 HAE.**
+**Mis à jour : 2026-10-17, 21 h 15 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,31 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA PENSÉE ITÉRÉE EST SANS LANGUE — mais elle ne tient qu'un pas (17/10, 21 h)
+
+La jonction des chapitres 5 et 7, jamais mesurée : **itérer** l'état préserve-t-il sa **neutralité** ?
+
+| k | contenu (état → mot suivant) | **langue** (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | 56,2 % |
+| **1** | **79,9 %** ✓ | 53,9 % |
+| 2 | 93,8 % ✗ | 52,8 % |
+| **3** | 99,5 % ✗✗ | **50,7 %** ✓✓ |
+| **4** | 101,3 % ✗✗ | **50,6 %** ✓✓ |
+| 8 | 97,4 % ✗ | 54,0 % |
+
+**La langue ne revient pas** ✓✓✓ : sur **huit** itérations, le classifieur reste entre **50,6 et 56,2 %**, soit
+**au hasard** ✓✓ (minimum **50,6 %** à k=4 ✓). *La pensée itérée est sans langue* ✓✓ — **penser ne dépend pas de
+la langue où l'on parle** ✓✓✓.
+**Et le contenu ne tient qu'un pas** ✗ : il **s'améliore** au premier (82,2 → **79,9** ✓) puis **s'effondre**
+(93,8 → **101,3** ✗✗, pire que l'embedding moyen ✓) — **exactement** le résultat du 16/10 sur un autre modèle ✓✓.
+→ **La réponse complète** ✓✓ : *on peut penser **sans langue**, mais on ne peut penser qu'**un pas*** ✓ — la
+neutralité est **stable** ✓✓, le contenu ne l'est pas ✗. **Les deux propriétés sont indépendantes** ✓✓, et c'est
+une information neuve ✓.
+**Neuvième piège** ✗✓ : mon premier essai **accumulait** `Z = cel(Z)` — les lignes « 2 » et « 4 » montraient 2 et
+3 pas ✗✓. *Le label mentait, pas la mesure* ✓ — famille **nouvelle** : après les réglages et les instruments,
+**le code lui-même** ✓✗. Corrigé en une ligne ; la conclusion, elle, n'a pas changé ✓.
 
 ## ⚖️ NOYAU BILINGUE CONTRE MONOLINGUE + ADAPTATEUR (17/10, 20 h 30)
 
