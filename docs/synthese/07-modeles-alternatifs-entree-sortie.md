@@ -270,3 +270,47 @@ La question qui suivait : **est-ce le relevé, ou la linéarité du relevé ?** 
   accepte la non-linéarité ✓) → l'adaptateur reste utile **pour la génération** ✓ (il fait passer d'une
   perplexité de 3,19 à 1,50 ✓), pas pour la **lecture** ✓✓. C'est une distinction que le chapitre n'avait pas
   faite, et elle est importante : *lire le sens est une chose, produire dans une langue en est une autre* ✓✓.
+
+## Sixième mesure (17/10, 18 h 30) : la langue de SORTIE suit l'**adaptateur**, pas l'amorce
+
+La perplexité (3,19 → 1,50 ✓) ne dit pas dans quelle langue le modèle **écrit** ✗. Mesure :
+`tools/generer_par_langue.py` ✓ — deux amorces (une par langue ✓), trois adaptateurs (aucun, français,
+anglais ✓), 120 octets générés ✓, et la langue de la sortie comptée par ses **mots-outils** ✓ (le seul
+classifieur qui tienne sur un texte de mauvaise qualité ✓).
+
+| amorce | adaptateur | **sortie** (mots-outils) | ce qu'elle montre |
+|---|---|---|---|
+| anglais | **aucun** | fr 0 · **en 5** | le noyau seul écrit **anglais** ✓ |
+| **anglais** | **français** | **fr 6** · en 0 | **la sortie est FRANÇAISE** ✓✓ |
+| anglais | anglais | fr 0 · **en 6** | l'adaptateur anglais écrit anglais ✓ |
+| **français** | **aucun** | fr 0 · **en 13** | le noyau seul **ignore** l'amorce française ✗ |
+| français | français | **fr 12** · en 0 | l'adaptateur français écrit français ✓ |
+| **français** | **anglais** | fr 0 · **en 7** | **la sortie est ANGLAISE** ✓✓ |
+
+* **LA SORTIE SUIT L'ADAPTATEUR, PAS L'AMORCE** ✓✓✓ : une amorce **anglaise** avec l'adaptateur **français**
+  produit du **français** (fr 6 · en 0 ✓✓), et une amorce **française** avec l'adaptateur **anglais** produit de
+  l'**anglais** (en 7 · fr 0 ✓✓). C'est la définition **opérationnelle** de « la langue comme paramètre » ✓✓ ;
+* **et sans adaptateur, le noyau écrit sa langue d'entraînement** ✓ (l'anglais ✓) **quelle que soit
+  l'amorce** — la française donne `en 13 · fr 0` ✗✓, c'est-à-dire que le noyau **ignore** la langue qu'on lui
+  donne et continue dans la sienne ✓✓. C'est exactement ce que « la langue est un paramètre **d'entrée** mais
+  pas de **sortie** » veut dire ✓ ;
+* ⚠️ **et ce que ce test ne dit PAS** ✗ : le texte est de la **bouillie** (modèle de 2,4 M en octets ✓ —
+  `'machine s'acteur, et locs/'` ✓). La mesure porte sur **la langue**, pas sur la qualité ✗. C'est écrit
+  dans l'outil ✓, pour que personne ne lise « ça écrit bien » là où il n'y a que « ça écrit français » ✓.
+
+### La chaîne complète, et ce qu'elle vaut
+
+| ce qu'on veut | mesure | chiffre |
+|---|---|---|
+| l'entrée porte la langue | classifieur à la couche 0 | **62,4 %** ✗ |
+| le **noyau** l'abstrait | classifieur aux couches 1-2 | **50,2 %** = le hasard ✓✓ |
+| et il **garde le sens** | contenu aux couches 1-2 | **87,8 %** ✓✓ |
+| le **relevé** n'est pas propre à la langue | un seul relevé **non linéaire**, couche 8 | **71,5 %** (mieux que deux linéaires ✓✓) |
+| la **langue** est un paramètre **petit** | adaptateur au dernier étage | **32 768** poids = **1,33 %** ✓✓ |
+| et il **fait marcher** la langue | perplexité française | **3,19 → 1,50** (−53 %) ✓✓ |
+| et la **sortie** suit le paramètre | génération, amorce croisée | **français → anglais** et l'inverse ✓✓✓ |
+
+**Conclusion du chapitre** ✓✓ : la couche commune **existe** ✓, elle **garde le sens** ✓, et la langue y est un
+**paramètre de 1,33 %** qui **commande la sortie** ✓✓. Ce qui reste n'est pas à construire ✗ mais à **utiliser**
+✓ — et les trois questions ouvertes sont : la **qualité** (ces modèles sont des jouets ✓), le **coût de la
+bascule** (temps et mémoire ✓), et la **boucle** (la pensée itérée survit-elle au changement de langue ?) ✓.

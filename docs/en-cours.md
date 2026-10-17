@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 18 h 10 HAE.**
+**Mis à jour : 2026-10-17, 18 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,32 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA SORTIE SUIT L'ADAPTATEUR, PAS L'AMORCE (17/10, 18 h 30)
+
+`tools/generer_par_langue.py` ✓ : deux amorces (une par langue), trois adaptateurs, 120 octets générés, et la
+langue de la sortie comptée par ses **mots-outils** ✓ :
+
+| amorce | adaptateur | sortie (mots-outils) |
+|---|---|---|
+| anglais | aucun | fr 0 · **en 5** |
+| **anglais** | **français** | **fr 6** · en 0 ✓✓ |
+| **français** | **aucun** | fr 0 · **en 13** ✗ (le noyau ignore l'amorce) |
+| français | français | **fr 12** · en 0 |
+| **français** | **anglais** | fr 0 · **en 7** ✓✓ |
+
+**La sortie suit l'adaptateur, pas l'amorce** ✓✓✓ : amorce **anglaise** + adaptateur **français** → **français** ;
+amorce **française** + adaptateur **anglais** → **anglais**. C'est la définition **opérationnelle** de « la langue
+comme paramètre » ✓✓. Et **sans adaptateur**, le noyau écrit sa langue d'entraînement ✓ quelle que soit l'amorce
+(la française donne `en 13 · fr 0` ✗✓) — *la langue est un paramètre d'entrée mais pas de sortie* ✓.
+⚠️ **Ce que ce test ne dit pas** ✗ : le texte est de la **bouillie** (2,4 M en octets ✓) — la mesure porte sur
+**la langue**, pas la qualité ✓.
+
+**La chaîne complète** ✓✓ : l'entrée porte la langue (62,4 % ✗) → le noyau l'abstrait (50,2 % = hasard ✓✓) →
+il garde le sens (87,8 % ✓✓) → le relevé n'est pas propre à la langue (71,5 % non linéaire ✓✓) → la langue est
+un paramètre de **32 768 poids (1,33 %)** ✓✓ → qui **fait marcher** la langue (3,19 → 1,50 ✓) → et **commande
+la sortie** ✓✓✓. *La couche commune existe, elle garde le sens, et la langue y est un paramètre qui commande la
+sortie* ✓✓.
 
 ## ✅ LE « RELEVÉ PROPRE À LA LANGUE » ÉTAIT UN ARTEFACT DE LINÉARITÉ (17/10, 18 h)
 
