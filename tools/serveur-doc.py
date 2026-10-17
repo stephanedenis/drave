@@ -199,12 +199,29 @@ class Serveur(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(corps)
             return
         if cible.is_dir():
+            # ⚠️ LA LISTE D'UN DOSSIER DOIT MONTRER TOUT CE QU'IL CONTIENT ✗✓. Elle ne prenait que les
+            # `*.md` ✓✗ : le sous-dossier `schemas/` — et donc les SIX SVG de la synthèse — était
+            # **invisible** ✓✓ (c'est exactement ce que Stéphane a vu : « les fichiers svg semblent absents
+            # côté web »). On liste donc, dans cet ordre : les SOUS-DOSSIERS ✓, les documents `.md` ✓, et
+            # les fichiers servis (images, styles, pdf ✓).
+            sous_dossiers = sorted(d for d in cible.iterdir()
+                                   if d.is_dir() and not d.name.startswith("."))
             fichiers = sorted(cible.glob("*.md"), key=lambda p: -p.stat().st_mtime)
-            if fichiers and cible.name != "docs":
+            autres = sorted(f for f in cible.iterdir()
+                            if f.is_file() and f.suffix in TYPES_MIME and f.suffix != ".md")
+            if (fichiers or sous_dossiers or autres) and cible.name != "docs":
                 liens = "".join(
+                    f"<div class='carte'><h3><a href='{lier(d)}/'>{html.escape(d.name)}/</a></h3>"
+                    f"<p>dossier</p></div>"
+                    for d in sous_dossiers)
+                liens += "".join(
                     f"<div class='carte'><h3><a href='{lier(f)}'>{html.escape(f.stem)}</a></h3>"
                     f"<p>{dt.datetime.fromtimestamp(f.stat().st_mtime):%d/%m %H:%M}</p></div>"
                     for f in fichiers)
+                liens += "".join(
+                    f"<div class='carte'><h3><a href='{lier(f)}'>{html.escape(f.name)}</a></h3>"
+                    f"<p>fichier {f.suffix}</p></div>"
+                    for f in autres)
                 corps = rendre_page(cible.name, f"<h1>{cible.name}/</h1><div class='grille'>{liens}</div>")
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
