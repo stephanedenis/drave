@@ -812,3 +812,37 @@ dispositif sur les trois ✓ (Qwen, couche 8 ✓, 32 segments ✓, échantillonn
   **mieux que le hasard, de façon reproductible en signe** ✓✓, mais avec une amplitude **petite et variable** ✗✓
   — *c'est une piste, pas un acquis* ✓✓. Le chapitre a donc une réponse **nuancée** à sa question la plus forte
   ✓✓, et c'est celle qui doit être écrite ✓.
+
+## Vingt-deuxième mesure (17/10, 19 h 30) : le contrôle d'alignement — et **un fichier mal étiqueté** dans le corpus
+
+Le § précédent concluait « la variation peut venir de l'alignement, que je n'ai vérifié que pour un livre » ✗✓.
+Le contrôle est fait ✓ — la **déviation de position relative** des noms propres identiques aux deux langues ✓ :
+
+| livre | nom | occurrences (fr / en) | **écart** | verdict |
+|---|---|---:|---:|---|
+| **Le Tour du monde** | Fogg | 655 / 608 | **0,3 %** | ALIGNÉ ✓✓ |
+| | Passepartout | 423 / 398 | **0,1 %** | ALIGNÉ ✓✓ |
+| | Aouda | 136 / 136 | 1,6 % | ALIGNÉ ✓✓ |
+| **Alice** | Alice | 395 / 399 | **1,7 %** | ALIGNÉ ✓✓ |
+| **Dracula** | Dracula | **0** / 33 | — | ✗✗ |
+| | Mina | **0** / 233 | — | ✗✗ |
+| | Lucy | **0** / 298 | — | ✗✗ |
+
+* **ALICE ET VERNE SONT ALIGNÉS** ✓✓ (0,1 à 1,7 % ✓) — donc la **variation de huit fois** entre leurs signaux
+  (+0,009 et +0,078 ✓) **n'est PAS un défaut d'alignement** ✓✓ : elle vient du **contenu** (Alice est un dialogue
+  ✓, Verne un récit ✓) ou du modèle ✓. *C'est un résultat, pas un artefact* ✓✓ ;
+* **MAIS « DRACULA » FRANÇAIS N'EST PAS DRACULA** ✗✗ : le fichier `dracula_fr.txt` contient
+  **« Vocations Explained: Matrimony, Virginity… »** ✓✗ — un **autre livre** ✓, et le rapport de longueur le
+  criait (**0,101** ✗ : le français fait **10 fois** moins de caractères que l'anglais ✓✓). La mesure du § 21 sur
+  ce livre comparait donc **Dracula à un traité religieux** ✗✓ : son « +0,0334 » est du **bruit** ✓✓, pas un
+  signal ✓ ;
+* **donc la réplication porte sur DEUX livres, pas trois** ✗✓ : Verne **+0,078** ✓✓ et Alice **+0,009** ✓. Le
+  signe reste **positif deux fois sur deux** ✓✓ — la réplication **tient** ✓ — mais avec une amplitude qui varie
+  de **huit fois** entre deux livres **bien alignés** ✓✓ ;
+* **et le corpus de Panini contient au moins une erreur d'appariement** ✗✓ : `dracula/dracula_fr.txt` est un autre
+  texte ✓. *Il faut le signaler* ✓✓ — un corpus mal étiqueté est **invisible** tant qu'on ne vérifie pas les
+  ancres ✓✓, et c'est exactement le genre de défaut que ce chapitre passe son temps à chercher ✓.
+
+**Douzième piège** ✓✓ : *vérifier l'appariement avant de mesurer l'appariement* ✓✓. Le contrôle a coûté dix
+minutes ✓ et il a **supprimé une mesure** ✗✓ — c'est le meilleur rapport coût/résultat possible pour un
+instrument ✓✓.

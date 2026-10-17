@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 10 HAE.**
+**Mis à jour : 2026-10-17, 19 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,33 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ LE CONTRÔLE D'ALIGNEMENT — et un fichier MAL ÉTIQUETÉ dans le corpus (17/10, 19 h 30)
+
+Le contrôle (déviation de position relative des noms propres identiques dans les deux langues) :
+
+| livre | nom | occurrences (fr / en) | **écart** | verdict |
+|---|---|---:|---:|---|
+| **Le Tour du monde** | Fogg | 655 / 608 | **0,3 %** | ALIGNÉ ✓✓ |
+| | Passepartout | 423 / 398 | **0,1 %** | ALIGNÉ ✓✓ |
+| **Alice** | Alice | 395 / 399 | **1,7 %** | ALIGNÉ ✓✓ |
+| **Dracula** | Dracula | **0** / 33 | — | ✗✗ |
+| | Mina | **0** / 233 | — | ✗✗ |
+
+**Alice et Verne sont alignés** ✓✓ (0,1 à 1,7 % ✓) → la **variation de huit fois** entre leurs signaux (+0,009 et
++0,078) **n'est PAS un défaut d'alignement** ✓✓ : elle vient du **contenu** (Alice est un dialogue, Verne un
+récit ✓) ou du modèle ✓. *C'est un résultat, pas un artefact* ✓✓.
+**Mais « Dracula » français n'est pas Dracula** ✗✗ : le fichier contient **« Vocations Explained: Matrimony,
+Virginity… »** ✓✗ — un **autre livre** ✓, et le rapport de longueur le criait (**0,101** : 10× moins de
+caractères ✓✓). La mesure du § 21 comparait donc **Dracula à un traité religieux** ✗✓ : son « +0,0334 » est du
+**bruit** ✓✓.
+→ **La réplication porte sur DEUX livres, pas trois** ✗✓ : Verne **+0,078** ✓✓ et Alice **+0,009** ✓. Le signe
+reste **positif deux fois sur deux** ✓✓ — la réplication **tient** — mais l'amplitude varie de **huit fois**
+entre deux livres **bien alignés** ✓✓.
+→ **Et le corpus de Panini contient au moins une erreur d'appariement** ✗✓ : *il faut le signaler* ✓✓ — un corpus
+mal étiqueté est **invisible** tant qu'on ne vérifie pas les ancres ✓✓.
+**Douzième piège** ✓✓ : *vérifier l'appariement avant de mesurer l'appariement* ✓. Le contrôle a coûté dix minutes
+et il a **supprimé une mesure** ✗✓ — le meilleur rapport coût/résultat possible pour un instrument ✓✓.
 
 ## ✅ LE SIGNAL CROSS-LINGUE SE RÉPLIQUE EN SIGNE — pas en amplitude (17/10, 19 h)
 
