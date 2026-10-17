@@ -168,6 +168,18 @@ def page_accueil() -> bytes:
     return rendre_page("où en est", "".join(morceaux))
 
 
+# ⚠️ LE TYPE MIME, ET POURQUOI LES IMAGES NE S'AFFICHAIENT PAS ✗✓. Le serveur répondait
+# « Content-Type: text/html » pour TOUT ✓✗ : un SVG servi comme du HTML, le navigateur refuse de le rendre
+# (il l'affiche comme du texte, ou pas du tout ✓). C'était la cause exacte des images cassées du 17/10 ✓ —
+# l'URL était bonne (200 ✓), seul le TYPE était faux ✓✓.
+TYPES_MIME = {
+    ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+    ".gif": "image/gif", ".webp": "image/webp", ".css": "text/css; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8", ".json": "application/json",
+    ".txt": "text/plain; charset=utf-8", ".pdf": "application/pdf",
+}
+
+
 class Serveur(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=str(RACINE), **k)
@@ -200,6 +212,15 @@ class Serveur(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(corps)
                 return
+        if cible.suffix in TYPES_MIME and cible.exists() and cible.is_file():
+            # images, styles, scripts : servis TELS QUELS, avec LEUR type ✓ (et non text/html ✗)
+            corps = cible.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", TYPES_MIME[cible.suffix])
+            self.send_header("Content-Length", str(len(corps)))
+            self.end_headers()
+            self.wfile.write(corps)
+            return
         if cible.suffix == ".md" and cible.exists():
             corps = rendre_page(cible.stem, MD(cible.read_text()))
             self.send_response(200)

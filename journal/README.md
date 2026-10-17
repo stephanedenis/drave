@@ -9,7 +9,7 @@ est en heure locale de la machine (**HAE = EDT, UTC−4**).
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-10-17** | [2026-10-17.md](2026-10-17.md) | [distribue](2026-10-17_distribue.md) · [mesures](2026-10-17_mesures.md) · [modele](2026-10-17_modele.md) · [portes](2026-10-17_portes.md) |
+| **2026-10-17** | [2026-10-17.md](2026-10-17.md) | [distribue](2026-10-17_distribue.md) · [docs](2026-10-17_docs.md) · [mesures](2026-10-17_mesures.md) · [modele](2026-10-17_modele.md) · [portes](2026-10-17_portes.md) |
 | **2026-10-16** | [2026-10-16.md](2026-10-16.md) | [apprentissage](2026-10-16_apprentissage.md) · [attention](2026-10-16_attention.md) · [distribue](2026-10-16_distribue.md) · [docs](2026-10-16_docs.md) · [memoire](2026-10-16_memoire.md) · [mesures](2026-10-16_mesures.md) · [modele](2026-10-16_modele.md) · [moteur](2026-10-16_moteur.md) · [outils](2026-10-16_outils.md) · [portes](2026-10-16_portes.md) |
 | **2026-10-15** | [2026-10-15.md](2026-10-15.md) | [apprentissage](2026-10-15_apprentissage.md) · [attention](2026-10-15_attention.md) · [distribue](2026-10-15_distribue.md) · [docs](2026-10-15_docs.md) · [memoire](2026-10-15_memoire.md) · [mesures](2026-10-15_mesures.md) · [modele](2026-10-15_modele.md) · [moteur](2026-10-15_moteur.md) · [outils](2026-10-15_outils.md) · [portes](2026-10-15_portes.md) |
 | **2026-10-14** | [2026-10-14.md](2026-10-14.md) | [apprentissage](2026-10-14_apprentissage.md) · [attention](2026-10-14_attention.md) · [distribue](2026-10-14_distribue.md) · [docs](2026-10-14_docs.md) · [memoire](2026-10-14_memoire.md) · [mesures](2026-10-14_mesures.md) · [modele](2026-10-14_modele.md) · [moteur](2026-10-14_moteur.md) · [portes](2026-10-14_portes.md) |

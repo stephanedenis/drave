@@ -70,6 +70,12 @@ interne (régions, liens, bus, horloges), les modes d'exécution et les portes, 
 apports de biologie, la pensée sans verbaliser (le travail du 16/10), et la méthode avec ses cinq pièges.
 Entrée : **`docs/synthese/index.md`** ✓.
 
+⚠️ **Où les schémas s'affichent** ✓✗ : sur le serveur **8787** (`drave-doc`) ✓ — il sert désormais les
+`.svg` avec leur **type MIME** (`image/svg+xml` ✓) ; **pas sur mdserve** ✗, qui ne rend que le markdown et
+ne sert aucune fichier annexe (ses API sont `/root`, `/tree`, `/changed` ✓). Si une image reste cassée,
+c'est un **cache** ✗ : rechargez avec `Ctrl+Maj+R` ✓ — ou ouvrez directement le fichier
+`docs/synthese/schemas/vue-ensemble.svg` ✓ (les SVG sont autonomes ✓).
+
 ### Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)
 
 Tous sont dans `tools/`, documentés dans la fiche `reports/rapport-modele-drave.md`, et leurs pièges
