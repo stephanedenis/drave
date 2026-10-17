@@ -31,6 +31,9 @@ def main() -> int:
     ap.add_argument("--longueur", type=int, default=128)
     ap.add_argument("--fenetres", type=int, default=150)
     ap.add_argument("--pas", type=int, default=3000)
+    ap.add_argument("--k-entrainement", type=int, default=0,
+                    help="entraîner sur k pas TIRÉS entre 1 et cette valeur ✓ (la recette du 16/10 qui rend "
+                         "l'itération plate ✓) — et voir si la neutralité de langue SURVIT ✗✓")
     a = ap.parse_args()
     from transformers import AutoModelForCausalLM
     m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
@@ -71,7 +74,12 @@ def main() -> int:
     X = torch.tensor(S).cuda(); Y = torch.tensor(T).cuda()
     for pas in range(1, a.pas + 1):
         idx = torch.randperm(X.shape[0])[:512]
-        z = cel(X[idx])
+        z = X[idx]
+        # ⚠️ ENTRAÎNER SUR k PAS, PAS SUR UN SEUL ✓ (leçon du 16/10 : sans cela, l'opérateur ne vaut que
+        # pour un pas ✗). k est TIRÉ entre 1 et k_max, et le contenu porte sur C^k(x) ✓.
+        kk = int(torch.randint(1, a.k_entrainement + 1, (1,)).item()) if a.k_entrainement else 1
+        for _ in range(kk):
+            z = cel(z)
         perte = ((z - Y[idx]) ** 2).mean()
         delta = torch.randn_like(X[idx]) * 1e-3
         lam = ((cel(X[idx] + delta) - z).norm(dim=-1) / delta.norm(dim=-1)).mean()

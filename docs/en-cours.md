@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 21 h 15 HAE.**
+**Mis à jour : 2026-10-17, 21 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,32 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ⚠️ LE « SECOND PAS » NE S'OBTIENT PAS — et la recette du 16/10 se reproduit (17/10, 21 h 30)
+
+`--k-entrainement 4` ✓ (entraîner l'opérateur sur k pas tirés ✓), en gardant l'œil sur la langue :
+
+| k | contenu | langue (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | 56,2 % |
+| 1 | **82,2 %** | 68,2 % ✗ |
+| 2 | **82,2 %** | 67,6 % ✗ |
+| 4 | **82,2 %** | 51,4 % ✓ |
+| 8 | **82,2 %** | **50,0 %** ✓✓ |
+
+**Le contenu est exactement plat** (82,2 % à **tous** les k) → l'opérateur a appris **l'identité** ✗✓ : la seule
+façon de rester bon à k=8 est de **ne pas bouger** ✓✓ — la **solution triviale** du 16/10 (son § 15 ✓).
+**Le résultat se reproduit sur un autre modèle, une autre tâche, une autre langue** ✓✓ : c'est une
+**réplication**, et c'est la meilleure chose qu'un résultat négatif puisse être ✓.
+**Donc le second pas ne s'obtient pas par cette recette** ✗✓ : entraîner sur k **choisit** la solution triviale ✓
+— une propriété de **l'objectif**, pas de l'opérateur ✓✓.
+**Et la langue varie** ✗ (68,2 % à k=1, 50,0 % à k=8) alors que l'opérateur est quasi-immobile ✓✗ → la **petite
+dérive** suffit à changer la **séparabilité linéaire** de la langue ✓✓. *La neutralité de langue n'est pas une
+propriété robuste de l'état* ✗ : elle dépend de la position exacte dans l'espace ✓.
+→ **Conclusion** ✓✓ : (1) la neutralité **tient** avec un opérateur entraîné sur un pas ✓ (mesure 11) ; (2) elle
+**n'est pas** une propriété de l'état ✗ (la dérive la fait remonter à 68 %) ; (3) le **second pas** reste hors
+d'atteinte ✗✓ — il faudra un **objectif différent** ✗ (contraindre le **déplacement** à être informatif, pas
+seulement contractant ✓).
 
 ## ✅ LA PENSÉE ITÉRÉE EST SANS LANGUE — mais elle ne tient qu'un pas (17/10, 21 h)
 

@@ -483,3 +483,35 @@ Mon premier essai donnait k = 0, 1, 2, 4 ✓ mais la boucle **accumulait** `Z = 
 a changé les chiffres — mais **pas la conclusion** ✓✓ : la langue reste au hasard ✓. C'est la neuvième fois
 qu'un chiffre se déguise, et la règle est toujours la même : **écrire à côté du chiffre ce qui pourrait le
 rendre faux** ✓✓.
+
+## Douzième mesure (17/10, 21 h 30) : le « second pas » ne s'obtient pas — et la recette du 16/10 se **reproduit**
+
+La mesure 11 laissait une question ouverte ✓ : le contenu ne tient qu'un pas ✗, mais le 16/10 avait montré
+qu'entraîner l'opérateur **sur k pas** (k tiré ✓) rendait l'itération **plate** ✓. On refait ici, **en gardant
+l'œil sur la langue** ✓ : `--k-entrainement 4` ✓ (même opérateur, même modèle bilingue ✓) :
+
+| k | contenu | langue (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | 56,2 % |
+| 1 | **82,2 %** | 68,2 % ✗ |
+| 2 | **82,2 %** | 67,6 % ✗ |
+| 3 | **82,2 %** | 56,0 % |
+| 4 | **82,2 %** | 51,4 % ✓ |
+| 8 | **82,2 %** | **50,0 %** ✓✓ |
+
+* **LE CONTENU EST EXACTEMENT PLAT** ✓✓ (82,2 % à **tous** les k) — c'est-à-dire que l'opérateur a appris
+  **l'identité** ✗✓ : *la seule façon de rester bon à k = 8 est de ne pas bouger* ✓✓, exactement la **solution
+  triviale** du 16/10 (son § 15 ✓). **Le résultat se reproduit sur un autre modèle, une autre tâche, une autre
+  langue** ✓✓ — c'est une **réplication**, et c'est la meilleure chose qu'un résultat négatif puisse être ✓ ;
+* **donc le « second pas » ne s'obtient pas par cette recette** ✗✓ : entraîner sur k **choisit** la solution
+  triviale ✓, parce que le contenu **moyen** sur k est maximisé par un opérateur **immobile** ✓✗. C'est une
+  propriété de **l'objectif**, pas de l'opérateur ✓✓ ;
+* **et la langue** ✗ : elle **varie** (68,2 % à k = 1, 50,0 % à k = 8 ✓) alors que l'opérateur est
+  quasi-immobile ✓✗ — c'est-à-dire que la **petite dérive** suffit à changer la **séparabilité linéaire** de la
+  langue ✓✓ (de 68 % à 50 % ✓). Autrement dit : *la neutralité de langue n'est pas une propriété robuste de
+  l'état* ✗ — elle dépend de la position exacte dans l'espace ✓✓ ;
+* **la conclusion honnête** ✓✓ : (1) la neutralité **tient** quand on itère avec un opérateur entraîné sur un
+  pas ✓ (mesure 11 : 50,6 % à k = 4 ✓) ; (2) elle **n'est pas** une propriété de l'état lui-même ✗ (mesure 12 :
+  la dérive la fait remonter à 68 % ✓) ; (3) et le **second pas** reste hors d'atteinte avec cet objectif ✗✓
+  — il faudra un **objectif différent** ✗ (par exemple contraindre le **déplacement** à être informatif, pas
+  seulement contractant ✓).
