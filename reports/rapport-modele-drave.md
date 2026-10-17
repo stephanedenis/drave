@@ -462,3 +462,47 @@ doit rester bon **après l'itération** ✓. Résultat **sans ambiguïté** ✗ 
 (cosinus 0,14 → 0,70 ✓), on peut extraire une empreinte du texte (42 % contre 77 % ✓), on peut même
 trouver un pas contractant qui améliore la lecture (λ = 0,997 ✓) — mais **la pensée itérative ne
 s'ajoute pas** à un modèle qui ne l'a pas apprise : elle se **construit** dans son entraînement* ✗✓.
+
+## 16. LE BLOC RÉPÉTÉ : l'état devient **plus habitable**, pas encore habitable
+
+La conclusion du § 15 donnait le programme ✓ : **entraîner la récurrence dans la boucle** ✗✓.
+`--partage` a été ajouté à l'entraîneur ✓ (toutes les couches partagent les poids de la première ✓ → le
+modèle **est** un bloc unique appliqué 4 fois ✓). Deux jouets, **une carte chacun** ✓, 2 000 pas ✓ :
+
+| | validation | *(unique paramètres)* |
+|---|---:|---|
+| **partagé** (bloc répété ✓) | **4,74** bits/octet ✓ | **4× moins** ✓ |
+| distinct (témoin ✗) | 4,69 | — |
+
+**Qualité quasi identique avec quatre fois moins de poids uniques** ✓✓ — le partage ne coûte presque rien ✓.
+
+Puis le test décisif ✓ (`tools/iterer_bloc.py` ✓ : on applique le bloc **t fois** ✓ en dupliquant les
+couches ✓) — le **contenu** (ce que l'état dit du jeton à venir ✓) :
+
+| modèle | **t = 1** | **t = 2** | **t = 4** |
+|---|---:|---:|---:|
+| **partagé** (bloc répété ✓) | **82,9** ✓ | **84,2** ✓ | **86,7** ✓ |
+| distinct (témoin ✗) | 85,7 | 85,9 | 87,1 |
+
+* **LE BLOC RÉPÉTÉ EST MEILLEUR DÈS LE PREMIER PASSAGE** ✓✓ (82,9 contre 85,7 ✓) et il **dégrade le
+  moins** quand on itère ✓✓ (à t = 4 : **86,7** contre 87,1 ✓ — l'écart se réduit de 2,8 à 0,4 point ✓).
+  C'est **le meilleur résultat de la nuit** sur cet axe ✓ ;
+* **MAIS IL DÉGRADE QUAND MÊME** ✗ (82,9 → 84,2 → 86,7 ✓) : l'état est **plus habitable**, il n'est **pas
+  habitable** ✗✓. Le partage de poids **achète de la robustesse** ✓ sans donner l'itération ✓ ;
+* **et il y a deux raisons possibles, qui se départagent par une mesure** ✗ : soit l'entraînement est
+  **trop court** ✓ (2 000 pas ✓, un modèle de 4 couches ✓), soit il faudrait **entraîner explicitement sur
+  t** ✗ (tirer t entre 1 et 4 à chaque pas ✓, comme l'opérateur du § 15 ✓ — mais **dans le modèle** ✓✓,
+  où le partage de poids rend l'itération **gratuite** ✓). C'est la prochaine expérience, et elle est
+  petite ✓.
+
+### Et une leçon d'instrument, la quatrième de la soirée ✗✓
+
+Le premier essai a rendu **82,9 / 82,9 / 82,9** ✓ — constant au chiffre près ✗ — et j'ai failli y lire
+« *l'état est habitable : le contenu ne bouge pas* » ✓✗. La vérification a montré autre chose ✓✓ : la
+boucle de `Qwen3Model.forward` est **bornée par `config.num_hidden_layers`** ✓✗ (mes 8 couches étaient
+**silencieusement ignorées** ✓) et `config.layer_types` est une liste **par couche** ✓✗ (IndexError
+ensuite ✓). Les deux bornes corrigées, les chiffres ont **bougé** ✓✓ — et l'interprétation a changé du
+tout au tout ✓.
+
+*C'est la quatrième fois de la nuit qu'une mesure se déguise en résultat* ✓✓ — et la même règle a sauvé
+les quatre : **écrire à côté du chiffre ce qui pourrait le rendre faux** ✗✓.

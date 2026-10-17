@@ -726,6 +726,12 @@ def main():
                         "diffèrent. C'est le défaut M8 (« le fichier sauvé ne reproduit pas le "
                         "modèle entraîné ») transformé en vérification automatique.")
     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+    p.add_argument("--partage", action="store_true",
+                   help="BLOC RÉPÉTÉ : toutes les couches partagent les poids de la première ✓ — le modèle "
+                        "devient un bloc unique appliqué `--couches` fois ✓. C'est la réponse à la "
+                        "conclusion du 16/10 : l'état n'est itérable que si l'entraînement a mis la "
+                        "récurrence DANS la boucle ✗✗ (mesuré : un opérateur post-hoc ne trouve que "
+                        "l'identité ✓✗)")
     p.add_argument("--alignement", type=float, default=0.0,
                    help="poids du terme d'ALIGNEMENT entrée ↔ sortie (0 = aucun). Le modèle apprend que "
                         "son état final NORMALISÉ **est** l'embedding du jeton suivant : deux termes, le "
@@ -931,6 +937,16 @@ def main():
         perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
+        if a.partage:
+            # ⚠️ LE BLOC RÉPÉTÉ ✗✓. On force toutes les couches à être les MÊMES ✓ : le modèle n'est plus
+            # une pile de couches distinctes, c'est **un** bloc appliqué `a.couches` fois ✓✓. L'état qu'il
+            # produit est alors, par construction, celui d'une récurrence ✓ — c'est la différence entre
+            # « ajuster un opérateur après coup » (qui n'a trouvé que l'identité ✓✗) et « entraîner la
+            # récurrence dans la boucle » ✓✓.
+            with torch.no_grad():
+                ref = modele.model.layers[0].state_dict()
+                for couche in modele.model.layers[1:]:
+                    couche.load_state_dict(ref)
         if masques is not None:
             # E2 : on accumule le gradient AVANT d'appliquer le masque — l'accumuler après
             # aurait accumulé zéro sur les connexions interdites, c'est-à-dire précisément
