@@ -48,6 +48,26 @@ def charger_lora(modele, chemin: str, rang: int, alpha: float):
     return poses
 
 
+def _lambda_cv(H: np.ndarray, E: np.ndarray, k: int = 3) -> float:
+    """Le λ de ridge choisi par VALIDATION CROISÉE ✗✓ — leçon du § 25 : un λ fixé à 1e-3 rendait les chiffres
+    dépendants des réglages (le « 104,3 » du § 23 en était un artefact ✓). On choisit donc λ sur les
+    données, comme dans `tools/banc_lecteur.py` ✓."""
+    plis = np.array_split(np.arange(H.shape[0]), k)
+    meilleur, err_min = 1e-3, 1e30
+    for lam in (1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0):
+        err = 0.0
+        for i in range(k):
+            te = plis[i]
+            tr = np.concatenate([plis[j] for j in range(k) if j != i])
+            mh, me = H[tr].mean(0), E[tr].mean(0)
+            Hc, Ec = H[tr] - mh, E[tr] - me
+            W = np.linalg.solve(Hc.T @ Hc + lam * np.eye(Hc.shape[1]), Hc.T @ Ec)
+            err += float(np.linalg.norm((H[te] - mh) @ W + me - E[te]) ** 2)
+        if err < err_min:
+            meilleur, err_min = lam, err
+    return meilleur
+
+
 def ajuster(H: np.ndarray, E: np.ndarray) -> tuple[float, float]:
     """L'écart relatif et le cosinus du mapping appris `état → embedding` (ridge ✓).
 
@@ -59,7 +79,8 @@ def ajuster(H: np.ndarray, E: np.ndarray) -> tuple[float, float]:
     assert H.shape[0] > 3 * H.shape[1], f"trop peu de positions : {H.shape[0]} pour {H.shape[1]} coefficients ✗"
     mh, me = H.mean(0), E.mean(0)
     Hc, Ec = H - mh, E - me
-    W = np.linalg.solve(Hc.T @ Hc + 1e-3 * np.eye(Hc.shape[1]), Hc.T @ Ec)
+    lam = _lambda_cv(H, E) if H.shape[0] > 100 else 1e-3      # λ CHOISI, pas supposé ✓
+    W = np.linalg.solve(Hc.T @ Hc + lam * np.eye(Hc.shape[1]), Hc.T @ Ec)
     P = Hc @ W + me
     rel = 100 * float(np.linalg.norm(P - E) / np.linalg.norm(E))
     cos = float(np.mean(np.sum(P * E, axis=1) /

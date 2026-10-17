@@ -789,3 +789,27 @@ première a été rejouée ✓ — la **falaise** (§ 18 ✓), avec un lecteur r
 pas de ridge ✗ donc **non concerné** ✓✓), l'**empreinte** (§ 11 ✓, ridge non régularisé ✗ → **à rejouer** ✓),
 et le **contenu long** (§ 5 et § 13 ✓ → **à rejouer** ✓). C'est le programme des prochaines heures ✓ — et il
 est **borné** ✓ : trois mesures, un banc, une nuit ✓.
+
+## 27. L'EMPREINTE PASSE L'ÉPREUVE INTACTE — et c'est une bonne nouvelle sur l'instrument
+
+Deuxième conclusion rejouée avec le lecteur réparé ✓ (λ de ridge par **validation croisée** ✓, leçon du
+§ 25 ✓) : l'**empreinte** du § 11 ✓.
+
+| couche | régime | **k = 0** (contre ✗) | **k = 1** (contre ✗) | k = 4 (contre ✗) |
+|---:|---|---:|---:|---:|
+| 16 | COPIE | 53,6 (87,9) | 70,5 (88,3) | 86,3 (88,4) |
+| 16 | lecture | 54,0 (88,0) | **77,9** (88,2) | 87,1 (88,2) |
+| **23** | **COPIE** | 60,4 (87,7) | **49,3** (88,1) | 85,9 (88,0) |
+| 23 | lecture | 58,6 (88,0) | **76,9** (88,0) | 86,9 (88,1) |
+
+* **LES CHIFFRES SONT IDENTIQUES À CEUX DU § 11-12** ✓✓ (49,3 contre 76,9 à la couche 23 ✓ ; 60,4 / 58,6 ✓ ;
+  k = 4 ≈ 86 ✓) — et **la raison est instructive** ✓ : la validation croisée a choisi **λ = 1e-3**, c'est-à-dire
+  **exactement** la valeur que la mesure utilisait déjà ✓✓. *Cette mesure-là était donc bien réglée dès le
+  départ* ✓ — parce que ses états sont **nombreux** (5 365 positions ✓) et donc peu enclins à interpoler ✓ ;
+* **et la conclusion tient** ✓✓ : la copie **bat** la lecture de **27,6 points** à k = 1 (49,3 contre 76,9 ✓✓),
+  pour la **troisième** exécution consécutive ✓ (26 puis 27,6 puis 27,6 ✓) — et elle reste **locale** ✗ (à
+  k = 4, le vrai alignement rejoint la contre-épreuve ✓) ;
+* **le bilan des rejeux, à cette heure** ✓✓ : sur les conclusions qui dépendent d'un ridge, **deux passent**
+  (la falaise ✓, l'empreinte ✓) et **une tombe** (§ 23 ✓✗) ; une n'est **pas concernée** (le point fixe ✓) ;
+  et le corpus (§ 22 ✓) ne dépendait pas du lecteur ✓. *Le banc discrimine : il ne confirme pas tout, il ne
+  casse pas tout* ✓✓ — c'est la seule propriété qui compte pour un instrument ✓.
