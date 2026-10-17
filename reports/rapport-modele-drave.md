@@ -393,3 +393,38 @@ cycle réclamait de son côté ✓ — **les trois fils demandent le même objet
 
 C'est la prochaine étape, et elle est **précise** : la cellule, sa pénalité, et la même batterie de
 mesures (λ ✓, contenu ✓, et la perplexité de la suite après k pas ✓).
+
+## 14. L'OPÉRATEUR DE PENSÉE : il existe, il **contracte** (λ = 0,997 ✓✓), il **améliore** le contenu d'un pas (87 → 72 %) — et il ne vaut que pour **un** pas
+
+`tools/operateur_pensee.py` ✓. L'objet est **différent** de la boucle directe ✗ (qui repassait par le
+modèle à chaque pas ✓ et explosait : λ = 7 311 ✗) : ici, `C = I + f` ✓ (f un petit MLP, pas borné à 0,1 ✓)
+itère **sur l'état seul** ✓, sans aucun passage dans le modèle ✗ — c'est le « mode de fonctionnement
+complètement différent » que la question visait ✓. Entraîné sur le jouet **aligné** ✓, avec **deux**
+exigences qui ne se satisfont pas l'une sans l'autre ✓ :
+
+* **progresser** ✓ : après un pas, l'état doit dire le jeton à venir **mieux** qu'avant ✓ — sans quoi la
+  solution triviale `C = identité` (λ = 1 ✓, contenu intact ✓) gagnerait ✗✗ en ne pensant rien ✓ ;
+* **contracter** ✓ : λ(C) ≤ 1 (pénalité de différences finies ✓).
+
+| | résultat |
+|---|---|
+| **λ de l'opérateur** | **0,9972** ✓✓ — **le premier pas contractant de toute la nuit** ✓ (contre 7 311 en boucle directe ✗, 30-120 pour `h_p → h_{p+1}` ✗, 206-136 pour le cycle ✗) |
+| **contenu sans opérateur** (identité ✓) | 87,0 % d'écart |
+| **contenu après 1 pas** | **72,0 %** ✓✓ — **15 points de mieux** ✓ |
+| contenu après 2 · 4 · 8 pas | 75,1 · 85,7 · **97,2** ✗ (pire que l'identité dès 4 pas ✓✗) |
+
+* **CE QUI MARCHE** ✓✓ : un opérateur **contractant** qui **améliore** la lecture de l'état existe, et il
+  s'entraîne ✓. C'est la première fois que les trois exigences de la nuit (contracter ✓, progresser ✓,
+  itérer sans le modèle ✓) se rencontrent ✓✓ ;
+* **CE QUI NE MARCHE PAS** ✗ : l'itération **n'accumule pas** — 72,0 → 75,1 → 85,7 → 97,2 ✗. La raison est
+  **dans la conception** ✓ et il faut le dire : l'opérateur a été entraîné pour **un** pas ✓ (le terme de
+  contenu ne regarde que `C(x)` ✓). Rien ne l'oblige à ce que `C(C(x))` reste bon ✗✓ — et c'est
+  exactement ce que la mesure montre ✓ ;
+* **et la lecture honnête** ✓✓ : *le modèle a **un** pas de pensée, pas une itération* ✓ — l'opérateur
+  exploite ce pas (15 points ✓), puis la représentation **cesse d'être pensable** ✗. Ce n'est pas
+  l'opérateur qui est en cause ✗ : c'est la **structure de l'état** que l'entraînement du modèle a
+  laissée ✓ (un état « à un coup », pas un espace de travail itérable ✗) ;
+* **le pas suivant, précis** ✓ : entraîner l'opérateur **pour k pas** (le terme de contenu porte sur
+  `C^k(x)` ✓, pour k tiré aléatoirement entre 1 et 8 ✓ — c'est la technique des « états latents
+  récurrents » ✓), **et** laisser le modèle s'y adapter ✗ (l'état doit être **habitable** par
+  l'itération ✓ — c'est le pont entre « aligner les espaces » ✓ et « entraîner la dynamique » ✓✓).
