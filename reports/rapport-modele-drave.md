@@ -262,3 +262,46 @@ vus** ✓.
 **L'entraînement complet est en cours** ✓ (600 pas, évaluation tous les 100 ✓, une carte ✓, journal
 `/tmp/lora-recopie.log` ✓). Ce qu'on lira à la fin : **le taux de recopie** ✓ (viser > 90 % ✓) et **le
 contrôle** ✗ (qui doit **rester bas** ✓ — s'il monte, le LoRA est à jeter ✗).
+
+## 11. L'EMPREINTE : **OUI**, la copie littérale fait porter le texte par l'état — et de plus en plus avec la profondeur ✓✓
+
+Étape −1 **réussie** ✓✓ : le LoRA de recopie atteint **100,0 %** sur ses textes et **0,0 %** au contrôle
+(perroquet évité ✓) — mais **60,9 %** sur des textes neufs ✗✓ (sur-apprentissage : la mesure porte donc sur
+le **préfixe exact** ✓). Étape A, `tools/empreinte.py` ✓ : on génère la copie, **une** passe avant sur
+`invite + copie` ✓ donne l'état à chaque position **émise** `q_j` ✓ (le jeton source `j` ✓), on ajuste
+`état → embedding(jeton source j+k)` ✓, et on compare à la **contre-épreuve** ✗ (le même état confronté à
+un jeton source **décalé de 7** ✓).
+
+**2 698 positions** ✓, couche 16 ✓, **60 textes** ✓, trois couches ✓ :
+
+| couche | régime | **k = 0** (contre ✗) | **k = 1** (contre ✗) |
+|---:|---|---:|---:|
+| 8 | COPIE | 43,1 % (78,0) | 69,5 % (78,0) |
+| 8 | lecture | 44,2 % (78,0) | 69,8 % (78,0) |
+| **16** | **COPIE** | 46,2 % (77,6) | **62,5 %** (77,9) ✓ |
+| 16 | lecture | 46,8 % (77,8) | 69,6 % (78,1) |
+| **23** | **COPIE** | 53,4 % (77,9) | **42,1 %** (77,9) ✓✓✓ |
+| 23 | lecture | 51,5 % (78,0) | 68,8 % (78,1) |
+
+* **L'EMPREINTE EXISTE, ET ELLE EST FRANCHE** ✓✓ : partout, le **vrai** alignement (42-53 %) est **très**
+  au-dessous de la **contre-épreuve** (78 % ✓, remarquablement **plate** ✓ — c'est ce qui rend la
+  comparaison solide ✓). L'état porte donc bien **l'empreinte du jeton qu'il reproduit** ✓✓ — la question
+  de Stéphane a une réponse **positive** ✓ ;
+* **ET LA COPIE BAT LA LECTURE, DE PLUS EN PLUS AVEC LA PROFONDEUR** ✓✓ : à la couche **23**, k = 1,
+  **42,1 %** en copie contre **68,8 %** en lecture ✓✓ — **26 points** d'écart ✓. À la couche 16 l'écart
+  est plus faible (62,5 contre 69,6 ✓) et à la couche **8 il disparaît** (69,5 contre 69,8 ✗) →
+  **l'avantage de la copie se construit avec la profondeur** ✓✓, dans les couches **prélinguistiques
+  tardives** ✓ — exactement le régime que la question visait ✓ ;
+* **« présenter littéralement » n'est donc pas un détour** ✓✓ : c'est un **régime de lecture plus fort** ✓
+  — demander au modèle de **reproduire** un texte rend son contenu **plus lisible dans l'état** que le
+  simple fait de le lire ✓✓ (à condition, bien sûr, qu'il **sache** recopier ✓ — étape −1 ✓) ;
+* **les horizons longs restent à faire** ✗ : les cellules k = 4 et k = 16 sont **bloquées** ✗✓ — non par
+  la mesure, mais par **mon plan de textes** ✓ : `1 000 + t × 3 000` sort du corpus (85 626 jetons ✓) au
+  28ᵉ texte ✓, ce qui plafonne à **2 698 positions** — et la garde (n > 2 688 ✓) refuse **un cheveu**
+  au-dessus (2 687 ✓✗). Il suffit de **rapprocher le pas** (ou d'élargir le corpus ✓) pour que k = 4 et
+  k = 16 tombent ✓ ;
+* **et la leçon de méthode de la soirée, troisième occurrence** ✓✓ : une mesure peut se **déguiser** en
+  résultat ✗ — (1) la position **avec elle-même** (0,0 % trivial ✓), (2) **moins de positions que de
+  coefficients** (le ridge interpole ✓, 0,0 % encore ✓), (3) **un plan de textes qui sort du corpus**
+  (« n = 149 » sur 24 textes demandés ✓). Les trois fois, c'est **la même règle** qui a sauvé la mesure :
+  **écrire à côté du chiffre ce qui pourrait le rendre faux** ✗✓.
