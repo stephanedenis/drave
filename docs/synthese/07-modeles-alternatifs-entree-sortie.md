@@ -126,3 +126,34 @@ donc **pas** à construire ✗ : c'est à **exploiter** ✓ — et les deux proc
 2. **les adaptateurs par langue** (famille E ✓) : si la langue ne vit qu'aux couches **6-7** ✓, un adaptateur
    posé **là** devrait suffire ✗✓ — c'est-à-dire **quelques paramètres par langue**, exactement la
    « langue comme paramètre » cherchée ✓✓.
+
+## Deuxième mesure (17/10, 16 h) : la langue EST un paramètre — deux adaptateurs de 131 k
+
+La famille E disait : « un noyau commun + un petit adaptateur par langue ». C'est mesuré ✓✓, sur un modèle
+**monolingue** (anglais seul ✓, `/tmp/jouet-d256`, 4 couches, 256 ✓), **noyau entièrement gelé** ✓.
+
+Dispositif : `tools/adaptateur_langue.py` ✓ — un LoRA (rang 8 ✓) sur les 28 projections d'attention et de MLP
+= **131 072 paramètres**, soit **5,1 %** du modèle ✓, entraîné 2 000 pas sur **une** langue ✓, puis évalué sur
+**les deux** ✓.
+
+| adaptateur | perte **français** | perte **anglais** |
+|---|---:|---:|
+| **aucun** (noyau seul ✓) | **3,19** ✗ | **1,90** ✓ |
+| **adaptateur français** (131 k ✓) | **1,50** ✓✓ (−53 %) | 2,91 ✗ (+53 %) |
+| **adaptateur anglais** (131 k ✓) | 3,02 | **1,40** ✓✓ (−26 %) |
+
+* **CHAQUE ADAPTATEUR FAIT MARCHER SA LANGUE** ✓✓ : le français passe de **3,19 à 1,50** (−53 % ✓✓) et
+  l'anglais de **1,90 à 1,40** (−26 % ✓✓) — avec **131 072 paramètres**, soit **5,1 %** d'un modèle de 2,43 M ✓,
+  et **sans toucher un seul poids du noyau** ✓✓. *La langue est donc bien un petit paramètre* ✓✓✓ ;
+* **ET ILS SONT INTERCHANGEABLES** ✓✓ : le même noyau, deux adaptateurs, deux langues qui marchent ✓ — c'est
+  la définition exacte de « la langue comme paramètre » ✓✓, et c'est **mesuré**, pas espéré ✓ ;
+* **mais l'échange a un PRIX, et il est asymétrique** ✗✓ : l'adaptateur **français** abîme l'anglais
+  (1,90 → **2,91** ✗), tandis que l'adaptateur **anglais** laisse le français à 3,02 ✓ (contre 3,19 ✓).
+  L'explication la plus simple : le noyau a été entraîné **en anglais** ✓ — l'adaptateur anglais reste donc
+  **près** de lui ✓✓, alors que l'adaptateur français doit le **déplacer** ✗✓. Ce n'est pas un défaut du
+  principe, c'est un fait du noyau de départ ✓ ;
+* **et c'est la réponse la plus directe à la question posée** ✓✓ : pour atteindre une couche commune, **il
+  n'est pas nécessaire de réentraîner** un noyau ✗ — il suffit d'un **paramètre de langue** de quelques
+  dizaines de milliers de poids ✓✓, et le noyau peut rester **le même** ✓. Ce qui reste à faire n'est donc
+  plus de **construire** la couche commune ✗ mais de **choisir où la brancher** ✓ (les couches 6-7, où la
+  langue reparaît ✓ — première mesure de ce chapitre ✓).

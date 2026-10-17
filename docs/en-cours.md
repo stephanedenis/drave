@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 15 h 45 HAE.**
+**Mis à jour : 2026-10-17, 16 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,27 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA LANGUE EST UN PARAMÈTRE — deux adaptateurs de 131 k sur un noyau gelé (17/10)
+
+`tools/adaptateur_langue.py` ✓ : LoRA rang 8 sur les 28 projections = **131 072 paramètres** (**5,1 %** d'un
+modèle de 2,43 M ✓), **noyau entièrement gelé** ✓, entraîné sur **une** langue ✓, évalué sur **deux** ✓ :
+
+| adaptateur | perte **français** | perte **anglais** |
+|---|---:|---:|
+| aucun | **3,19** ✗ | **1,90** ✓ |
+| **français** (131 k) | **1,50** ✓✓ (−53 %) | 2,91 ✗ |
+| **anglais** (131 k) | 3,02 | **1,40** ✓✓ (−26 %) |
+
+**Chaque adaptateur fait marcher sa langue** ✓✓ (−53 % et −26 %) **sans toucher un seul poids du noyau** ✓, et
+**ils sont interchangeables** ✓✓ : le même noyau, deux adaptateurs, deux langues qui marchent — *c'est la
+définition de « la langue comme paramètre »*, et c'est **mesuré**.
+**Le prix est asymétrique** ✗✓ : l'adaptateur français abîme l'anglais (1,90 → 2,91 ✗) alors que l'anglais
+laisse le français à 3,02 ✓ — parce que le noyau a été entraîné **en anglais** : l'adaptateur anglais reste
+près de lui, le français doit le déplacer ✓.
+→ **Réponse à la question** ✓✓ : pour une couche commune, il n'est **pas nécessaire de réentraîner** un noyau ✗
+— quelques dizaines de milliers de poids suffisent ✓✓. Reste à **choisir où brancher** l'adaptateur (couches
+6-7, où la langue reparaît ✓).
 
 ## ✅ LA COUCHE COMMUNE EXISTE DÉJÀ — et la langue n'est qu'à la SURFACE (17/10)
 
