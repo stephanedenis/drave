@@ -48,6 +48,24 @@ def contenu(m, ids, L: int, amorces: int) -> float:
     return 100 * float(np.linalg.norm(P - T[n:]) / np.linalg.norm(T[n:]))
 
 
+def deplacement(m, ids, L: int, amorces: int) -> float:
+    """LE DÉPLACEMENT DE L'ÉTAT ENTRE t = 1 ET t = 4 ✓ — l'hypothèse à tester : un modèle PLAT a appris un
+    POINT FIXE (l'état bouge peu quand on itère ✓), et c'est pour cela qu'il est ÉMOUSSÉ ✗ (un point fixe
+    porte moins d'information qu'une passe unique ✓). Sans cette mesure, la falaise du § 18 est un fait
+    sans explication ✗."""
+    with torch.no_grad():
+        b = torch.tensor([ids[1000 + i * 400:1000 + i * 400 + L] for i in range(amorces)])
+        par_t = []
+        for t in (1, 4):
+            m.model.layers = nn.ModuleList([copy.deepcopy(c) for _ in range(t) for c in m.model.layers[:4]])
+            m.config.num_hidden_layers = len(m.model.layers)
+            m.config.layer_types = (list(m.config.layer_types[:4]) * t)[:len(m.model.layers)]
+            hs = m(b, output_hidden_states=True).hidden_states[-1][:, -1]
+            par_t.append(m.model.norm(hs).numpy().astype(np.float64))
+        a, z = par_t
+        return 100 * float(np.linalg.norm(z - a) / np.linalg.norm(a))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--partage", required=True)
@@ -82,8 +100,16 @@ def main() -> int:
             # liste ✓✗ (IndexError mesuré ✓).
             m.config.layer_types = (list(m.config.layer_types) * t)[:len(m.model.layers)]
             cellules.append(f"{contenu(m, ids, a.longueur, a.amorces):4.1f}")
+            if t == its[0]:
+                # le déplacement se mesure AVANT de libérer le modèle ✗✓ (le calculer dans le print, après
+                # `del m`, a levé un UnboundLocalError ✓✗)
+                m.model.layers = nn.ModuleList([copy.deepcopy(c) for c in base])
+                m.config.num_hidden_layers = len(m.model.layers)
+                m.config.layer_types = list(m.config.layer_types[:len(base)])
+                depl = deplacement(m, ids, a.longueur, a.amorces)
             del m
-        print(f"   {nom:9s} | " + " | ".join(cellules))
+        print(f"   {nom:9s} | " + " | ".join(cellules)
+              + f"   | déplacement t=1→4 : {depl:5.1f} %")
         del m0
     print()
     print("   lecture : si le modèle PARTAGÉ (bloc répété ✓) garde son contenu quand t grandit, alors son")

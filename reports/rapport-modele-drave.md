@@ -565,3 +565,36 @@ Le § 17 laissait un compromis ✓ et une question ✓ : où se règle-t-il ? Tr
   Pour une **pensée** qui itère, c'est le bon côté du prix ✓ ; pour une **lecture** unique, c'est le mauvais
   ✗. Les deux usages ne veulent donc **pas le même modèle** ✓✓ — et c'est la conclusion la plus utile de
   la nuit pour un système qui devrait faire les deux ✓.
+
+## 19. POURQUOI LA FALAISE : les modèles plats ont appris un **POINT FIXE**
+
+Le § 18 constatait la falaise ✓ sans l'expliquer ✗. L'hypothèse, écrite d'avance ✓ : *un modèle plat a
+appris à ce que **l'itération ne change presque rien** ✓ — un point fixe ✓ — et c'est **pour cela** qu'il
+est émoussé ✗ (un point fixe porte moins d'information qu'une passe unique ✓).* Elle se mesure en un
+chiffre : le **déplacement de l'état entre t = 1 et t = 4** ✓ (`iterer_bloc.py`, même batterie ✓).
+
+| modèle | contenu t=1 | t=4 | **déplacement de l'état (t1 → t4)** |
+|---|---:|---:|---:|
+| **partage** (t_max = 1 ✗) | 86,2 | 89,9 | **77,5 %** ✗ |
+| **rec2** (t_max = 2 ✓) | 92,7 | 93,2 | **49,0 %** ✓ |
+| **rec** (t_max = 4 ✓) | 93,4 | 93,5 | **44,8 %** ✓ |
+
+*(les valeurs absolues sont plus hautes que dans les § 16-18 : ici **40 amorces** au lieu de 60 ✓ — la
+comparaison **entre modèles** reste valable, c'est elle qui compte ✓.)*
+
+* **L'HYPOTHÈSE EST CONFIRMÉE** ✓✓ : plus le modèle est entraîné sur t, **moins son état bouge** sous
+  l'itération (77,5 → 49,0 → **44,8 %** ✓✓). Les modèles plats ont donc bien appris un **point fixe** ✓ ;
+* **et cela EXPLIQUE la falaise** ✓✓ : **habitabilité** (l'état ne bouge plus ✓) et **perte de netteté**
+  (un état immobile porte moins d'information ✓) sont **le même phénomène** ✓✓, vu de deux côtés ✓. La
+  falaise du § 18 n'est pas un défaut d'entraînement ✗ : c'est la **conséquence nécessaire** de la
+  convergence ✓ ;
+* **ce que cela change pour le projet** ✓✓ : vouloir un état **stable ET riche** revient à demander un
+  **point fixe informatif** ✓ — c'est possible en principe ✓ (un point fixe peut porter beaucoup ✓), mais
+  **pas avec ce budget** ✗ (2,4 M paramètres, une couche partagée ✓) : l'information n'a **nulle part** où
+  se loger ✗. La question devient donc **une question de capacité** ✓✓ (« combien de paramètres pour un
+  point fixe riche ? » ✓) — et elle est **mesurable** ✓ (reprendre les mêmes runs à 8, 16, 32 couches
+  partagées ✓, ou avec une dimension plus grande ✓) ;
+* **et c'est la première fois de la nuit que la question se pose en ces termes** ✓✓ : non pas « comment
+  forcer l'itération » ✗ (elle s'obtient ✓, on vient de le voir ✓) mais **« quelle capacité faut-il pour
+  qu'un point fixe reste lisible ? »** ✓ — une question de **taille**, donc une question à laquelle deux
+  GPU peuvent répondre ✓✓.
