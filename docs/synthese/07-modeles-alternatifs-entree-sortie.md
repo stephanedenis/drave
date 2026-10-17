@@ -785,3 +785,30 @@ Même test (Le Tour du monde ✓, échantillonnage au milieu ✓, états centré
 * **ce que ces trois points disent pour le projet** ✓✓ : la couche commune **n'est pas à construire** ✗ — elle
   **vient avec le modèle** ✓✓, et la seule chose qu'il faut **ajouter**, c'est le **paramètre de langue** (1,33 %
   ✓✓) pour la **sortie** ✓. C'est la conclusion la plus économique de tout le chapitre ✓.
+
+## Vingt-et-unième mesure (17/10, 19 h) : le signal cross-lingue **se réplique en signe** — pas en amplitude
+
+Un signal de cette taille demande une **réplication** ✓✓. Le corpus multilingue contient **trois** livres avec
+une paire français/anglais ✓ : Le Tour du monde ✓, **Alice au pays des merveilles** ✓, **Dracula** ✓. Même
+dispositif sur les trois ✓ (Qwen, couche 8 ✓, 32 segments ✓, échantillonnage au milieu ✓, états centrés ✓) :
+
+| livre | retrieval (hasard 3,1 %) | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **Le Tour du monde** ✓ | **3 / 32** (9,4 %) | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **Dracula** | 0 / 32 ✗ | −0,1432 | −0,1766 | **+0,0334** ✓ |
+| **Alice** | 2 / 32 (6,2 %) | −0,2839 | −0,2925 | **+0,0087** ✓ |
+
+* **LE SIGNE EST POSITIF DANS LES TROIS LIVRES** ✓✓ (+0,078 · +0,033 · +0,009 ✓) — *le signal cross-lingue se
+  **réplique*** ✓✓. Ce n'est pas un accident d'un livre ✓ ;
+* **MAIS L'AMPLITUDE VARIE DE HUIT FOIS** ✗✓ (0,009 à 0,078 ✓) → le signal est **réel et fragile** ✓✓, et le
+  retrieval ne suit qu'un livre sur trois (3/32, 0/32, 2/32 ✓) : *c'est un signal, pas un alignement* ✓✓ ;
+* **et la variation peut venir de l'ALIGNEMENT, pas du modèle** ✗✓ : je n'ai vérifié les ancres (positions
+  relatives de « Fogg » et « Passepartout » ✓) que pour **Le Tour du monde** ✓. Les éditions d'Alice et de Dracula
+  peuvent avoir des structures **différentes** (abrégements ✓, découpages ✓, épilogues ✓) — et le confondant du
+  § 16 (l'appariement ✓) revient ici ✗✓. *La prochaine étape n'est pas une mesure de modèle, c'est un contrôle
+  d'alignement* ✓ ;
+* **ce que cela laisse, honnêtement** ✓✓ : (1) la couche commune **existe** ✓✓ (trois modèles, trois corpus ✓) ;
+  (2) elle **garde le sens** ✓✓ (contenu 87,8 % ✓) ; (3) **le même sens dans deux langues** se retrouve
+  **mieux que le hasard, de façon reproductible en signe** ✓✓, mais avec une amplitude **petite et variable** ✗✓
+  — *c'est une piste, pas un acquis* ✓✓. Le chapitre a donc une réponse **nuancée** à sa question la plus forte
+  ✓✓, et c'est celle qui doit être écrite ✓.

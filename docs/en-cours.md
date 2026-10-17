@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 18 h 55 HAE.**
+**Mis à jour : 2026-10-17, 19 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,29 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LE SIGNAL CROSS-LINGUE SE RÉPLIQUE EN SIGNE — pas en amplitude (17/10, 19 h)
+
+Trois livres avec une paire fr/en (Le Tour du monde, Alice, Dracula), même dispositif (Qwen, couche 8, 32
+segments, milieu, centrés) :
+
+| livre | retrieval (hasard 3,1 %) | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **Le Tour du monde** | **3/32** (9,4 %) | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **Dracula** | 0/32 ✗ | −0,1432 | −0,1766 | **+0,0334** ✓ |
+| **Alice** | 2/32 (6,2 %) | −0,2839 | −0,2925 | **+0,0087** ✓ |
+
+**Le signe est positif dans les trois livres** ✓✓ (+0,078 · +0,033 · +0,009) — *le signal se **réplique*** ✓✓, ce
+n'est pas un accident d'un livre ✓.
+**Mais l'amplitude varie de huit fois** ✗✓ (0,009 à 0,078) → **réel et fragile** ✓✓ ; le retrieval ne suit qu'un
+livre sur trois ✓✗ : *c'est un signal, pas un alignement* ✓.
+**Et la variation peut venir de l'ALIGNEMENT** ✗✓ : je n'ai vérifié les ancres que pour **Le Tour du monde** ✓ —
+Alice et Dracula peuvent avoir des structures **différentes** (abrégements, découpages ✓), et le confondant du
+§ 16 revient ✗✓. *La prochaine étape n'est pas une mesure de modèle, c'est un contrôle d'alignement* ✓.
+→ **Ce qui reste, honnêtement** ✓✓ : la couche commune **existe** ✓✓ ; elle **garde le sens** ✓✓ ; **le même sens
+dans deux langues** se retrouve **mieux que le hasard, de façon reproductible en signe** ✓✓, mais avec une
+amplitude **petite et variable** ✗✓. *Une piste, pas un acquis* ✓✓ — et c'est la réponse **nuancée** qu'il faut
+écrire ✓.
 
 ## ✅ LA NEUTRALITÉ SE RÉPLIQUE SUR LA LITTÉRATURE — et le signal croît avec le modèle (17/10, 18 h 45)
 
