@@ -79,9 +79,10 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 
 | ce qui tient | les mesures | le chiffre |
 |---|---|---|
-| **le noyau est neutre** (la langue n'y est pas lisible) | **4 réplications** : prose, dim 512, littérature v1, littérature v2 ✓✓ | **50,1 à 51,8 %** = le hasard ✓✓ |
+| **le noyau est neutre** (la langue n'y est pas lisible) | **5 réplications** — plan **2×2** complet : prose et littérature, dim 256 et 512 ✓✓✓ | **50,1 à 53,6 %** = le hasard ✓✓ |
 | **le noyau garde le sens** | 4 et 30 ✓✓ | contenu **87,7 / 86,5 %**, à 9 points du meilleur ✓ |
 | **la langue vit aux extrémités** | 1, 15, 19, 24 ✓✓ | **58-68 %** en surface, 50 % au milieu ✓ |
+| **la neutralité a des ÎLOTS** ✗✓ | 36 ✓ | une couche à **69,0 %** au **milieu** du 512 littéraire, entre deux couches neutres ✓✗ |
 | **le sens partagé est au milieu** | 18 ✓✓ | **+0,083** aux couches 8-16, **+0,030** à la dernière ✓✓ |
 | **la langue est un petit paramètre** | 2, 3, 7, 24 ✓✓ | **1,33 %** des poids, **5 ms** de bascule ✓✓ |
 | **le paramètre améliore la langue** | 2, 24 ✓✓ | **−53 %** (monolingue), **−7,6 %** (Qwen) ✓ |
