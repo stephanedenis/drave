@@ -7,7 +7,42 @@
 
 ![Une couche commune, et la langue comme paramètre](schemas/couche-commune.svg)
 
+## La synthèse, en un tableau (à lire avant le reste)
+
+Treize mesures ont été faites les 17 et 18 octobre ✓. Les voici **toutes**, avec ce qu'elles disent et le
+chiffre qui le dit — pour qu'on puisse juger le chapitre sans le lire en entier ✓.
+
+| # | la question | la mesure | le chiffre | verdict |
+|---:|---|---|---|---|
+| 1 | l'état porte-t-il la langue ? | classifieur linéaire par couche, modèle **bilingue** ✓ | **50,2 %** aux couches 1-2 (hasard) · **59,4 %** aux couches 6-7 | ✓✓ **noyau neutre**, langue à la surface |
+| 2 | la langue est-elle un paramètre ? | LoRA sur noyau **gelé**, une langue par adaptateur ✓ | français **3,19 → 1,50** (−53 %) · anglais **1,90 → 1,40** (−26 %) | ✓✓ oui, **131 k** (5,1 %) |
+| 3 | où le brancher ? | LoRA sur le **dernier étage** seul ✓ | **−44,6 %** pour **32 768** poids = **1,33 %** (84 % du gain) | ✓✓ la **surface** suffit |
+| 4 | le noyau neutre est-il utile ? | contenu (état → mot suivant) aux couches neutres ✓ | **87,8 / 87,3 %**, à 8 points du meilleur | ✓✓ le **sens reste** |
+| 5 | le relevé est-il neutre ? | un seul relevé **non linéaire** vs deux linéaires ✓ | **71,5 %** contre 79,3 / 76,5 | ✓ (mais voir 8) |
+| 6 | la langue commande-t-elle la sortie ? | génération, amorces croisées ✓ | amorce **anglaise** + adaptateur **français** → **français** ✓ | ✓✓ **opérationnel** |
+| 7 | combien coûte la bascule ? | chargement + application vs rechargement ✓ | **5,0 ms** / **530 Ko** contre **134,6 ms** / **9,8 Mo** | ✓✓ **×27** / **×18** |
+| 8 | un relevé se transfère-t-il ? | lecture croisée, lecteurs **de même puissance** ✓ | pénalité **+8,7** (linéaire) à **+19,5** (non linéaire) | ✗ **non** (transfert) |
+| 9 | un relevé partagé suffit-il ? | relevé appris sur **les deux** langues ✓ | **0,7 point** d'écart avec deux relevés séparés | ✓✓ **oui** |
+| 10 | noyau bilingue ou adaptateur ? | trois dispositifs réels ✓ | bilingue **1,0737** · monolingue+adaptateur **1,4546** | ✓ bilingue (35 % mieux), adaptateur **2/3** du chemin |
+| 11 | la pensée itérée est-elle sans langue ? | opérateur appris, k itérations ✓ | langue **50,6-56,2 %** sur **huit** pas | ✓✓ **sans langue** |
+| 12 | peut-on penser deux pas ? | entraîner sur k (recette du 16/10) ✓ | contenu **exactement plat** (82,2 % partout) = **identité** | ✗ solution triviale, **répliquée** |
+| 13 | et avec un autre objectif ? | **marge** : exiger une amélioration ✓ | k=1 **80,3** · k=2 **93,7** — **comme sans marge** | ✗ **même mur** |
+
+### Ce qu'il faut en retenir, en cinq phrases
+
+1. **La langue n'est ni dans l'état ni dans le relevé partagé** ✓✓ — elle vit dans l'**entrée** (les octets ✓)
+   et dans la **surface de sortie** ✓ ; c'est **exactement** la structure d'une couche commune ✓.
+2. **La langue est un paramètre de 1,33 %** ✓✓ (32 768 poids au dernier étage), qui **commande la sortie** ✓ et
+   dont la **bascule coûte 5 ms** ✓✓.
+3. **Le noyau neutre n'est pas appauvri** ✓✓ : le contenu y reste à **87,8 %**, à 8 points du meilleur ✓.
+4. **La pensée itérée est sans langue** ✓✓ (50,6-56,2 % sur huit pas) — **penser ne dépend pas de la langue où
+   l'on parle** ✓✓.
+5. **Mais elle ne tient qu'un pas** ✗, et **trois objectifs différents** n'y changent rien ✗✓ : la limite est
+   dans la **représentation**, pas dans la perte ✓. Le pas suivant est à chercher dans **l'entraînement du
+   modèle** (récurrence dans la boucle ✓), pas dans le réglage ✓.
+
 ## Ce que la nuit du 16/10 a déjà établi, et qui oriente tout
+
 
 Trois faits mesurés, qu'aucune solution ne peut ignorer :
 
