@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 18 h 50 HAE.**
+**Mis à jour : 2026-10-17, 19 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,30 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LE CORPUS ENRICHI ÉLARGIT LA ZONE NEUTRE — quatrième réplication (17/10, 19 h 15)
+
+Corpus français passé de **66 322** à **87 341** formes ; modèle bilingue réentraîné (validation **2,6504** contre
+**2,6846** ✓✓ — le corpus enrichi aide aussi la langue) ; mesure de neutralité rejouée :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| **1** | **52,7 %** | 53,4 % | **le hasard** ✓✓ |
+| **2** | **51,8 %** | 51,4 % | **le hasard** ✓✓ |
+| **3** | **51,5 %** | 50,5 % | **le hasard** ✓✓ |
+| 4 | 58,5 % | 51,2 % | ✗ |
+| **5** | **51,5 %** | 50,1 % | **le hasard** ✓✓ |
+| 8 | 56,2 % | 50,8 % | ✗ (la surface) |
+
+**La neutralité tient, et elle s'élargit** ✓✓ : **quatre** couches au hasard (1, 2, 3 et **5**) contre **trois**
+avec l'ancien corpus → *plus le corpus est riche, plus le noyau devient abstrait* ✓✓, ce qui est cohérent avec la
+tendance du § 20 (le sens partagé vient avec les données ✓).
+**Et le modèle est meilleur** (2,6504 contre 2,6846) : un corpus plus varié **améliore** la langue **et**
+l'abstraction — *les deux ne s'opposent pas* ✓.
+**La surface reste langue-aware** (58 % aux couches 4 et 6, 56,2 % à la dernière) — comme dans **toutes** les
+mesures du chapitre : *la langue vit aux extrémités, pas au milieu* ✓✓.
+→ **Quatre réplications** ✓✓ : prose (50,2 %), dim 512 (51,4 %), littérature v1 (50,1 %), littérature v2
+(51,5 %) — **quatre modèles, quatre corpus, même résultat** ✓✓✓.
 
 ## ⚠️ LE CRIBLE ÉLARGI : cinq fichiers mentent sur leur langue — dont TROIS des quatre « allemands » (17/10, 18 h 45)
 

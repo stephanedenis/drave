@@ -1055,3 +1055,32 @@ langue **annoncée par le nom** (`_en`, `_fr`, `_de` ✓) à la langue **détect
 * **la conséquence pratique, et elle est nette** ✓✓ : **tout corpus de ce dépôt doit être re-vérifié par la langue
   détectée avant usage** ✗✓ — `tools/cribler_corpus.py` fait ce contrôle ✓, et il devrait passer sur **tout**
   corpus importé ✓✓. *C'est la douzième leçon d'instrument de la nuit, et la plus opérationnelle* ✓.
+
+## Vingt-neuvième mesure (17/10, 19 h 15) : le corpus enrichi **élargit** la zone neutre
+
+Le corpus français est passé de 18 textes / 66 322 formes à **21 textes / 87 341 formes** (§ 27 ✓). Le modèle
+bilingue est **réentraîné** ✓ (mêmes réglages, 20 000 pas ✓, validation **2,6504** bits/octet — mieux que l'ancien
+**2,6846** ✓✓ : le corpus enrichi aide aussi la langue ✓), et la mesure de neutralité rejouée ✓ :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 52,6 % | 64,4 % | neutre ✓ |
+| **1** | **52,7 %** | 53,4 % | **le hasard** ✓✓ |
+| **2** | **51,8 %** | 51,4 % | **le hasard** ✓✓ |
+| **3** | **51,5 %** | 50,5 % | **le hasard** ✓✓ |
+| 4 | 58,5 % | 51,2 % | ✗ |
+| **5** | **51,5 %** | 50,1 % | **le hasard** ✓✓ |
+| 6 | 58,3 % | 50,4 % | ✗ |
+| 8 | 56,2 % | 50,8 % | ✗ (la surface) |
+
+* **LA NEUTRALITÉ TIENT, ET ELLE S'ÉLARGIT** ✓✓ : **quatre** couches sont au hasard (1, 2, 3 et **5** ✓) contre
+  **trois** avec l'ancien corpus (1, 2, 3 ✓). *Plus le corpus est riche, plus le noyau devient abstrait* ✓✓ —
+  c'est une observation **neuve**, et elle est cohérente avec la tendance du § 20 (le sens partagé vient avec les
+  données et la capacité ✓✓) ;
+* **et le modèle est meilleur** ✓ (2,6504 contre 2,6846 ✓) : un corpus plus varié **améliore** la langue **et**
+  l'abstraction ✓✓ — *les deux ne s'opposent pas* ✓ ;
+* **la surface reste langue-aware** ✗✓ (58,3-58,5 % aux couches 4 et 6 ✓, 56,2 % à la dernière ✓) — comme dans
+  **toutes** les mesures du chapitre ✓✓ (mesures 1, 15, 19 ✓). C'est **la** régularité : *la langue vit aux
+  extrémités, pas au milieu* ✓✓ ;
+* **et cela fait QUATRE réplications** ✓✓ de la même structure : prose (50,2 % ✓), dim 512 (51,4 ✓), littérature
+  v1 (50,1 ✓), littérature v2 (51,5 ✓) — **quatre modèles, quatre corpus, même résultat** ✓✓✓.
