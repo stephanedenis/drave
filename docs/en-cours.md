@@ -100,6 +100,32 @@ contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux co
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
 
+## ✅ LE PRIX DE LA PLANÉITÉ, ET LA RÉPONSE AU § 19
+
+Il manquait le **non-récursif** à la taille du récursif ✓ — entraîné (96 Mo, 15 000 pas ✓) et tout mesuré au
+**lecteur régularisé** ✓ :
+
+| modèle | validation | **contenu t=1** | **prix de la planéité** |
+|---|---:|---:|---:|
+| **s256** — sans récurrence | 2,8911 | **81,9** ✓ | — |
+| **d256** — avec récurrence | **2,8183** ✓ | 85,1 | **+3,2** |
+| **s512** — sans récurrence | 2,7632 | **83,4** ✓ | — |
+| **d512** — avec récurrence | **2,7297** ✓ | 85,8 | **+2,4** |
+
+**Le prix de la planéité diminue avec la capacité** ✓✓ : **+3,2** points à 2,43 M, **+2,4** à 9,57 M (−25 %
+pour **4×** de paramètres ✗✓) → la réponse au § 19 est **oui, mais lentement** ✓ : un point fixe plus large est
+un peu plus lisible, et le prix baisse — sans disparaître ✗ (à ce rythme il faudrait ~40× la capacité, ce qui
+n'est pas la bonne voie ✗).
+**Et la récurrence AMÉLIORE la langue** ✓✓ : 2,8183 contre 2,8911 · 2,7297 contre 2,7632 — le **bloc partagé
+régularise** ✓ : *le modèle qui pense est aussi un meilleur lecteur* ✓✓. C'est le résultat le plus encourageant
+de la nuit pour la suite ✓.
+
+**La nuit répond en trois lignes** ✓✓ : (1) **l'état porte le sens** (80,3 % à 16 jetons, 38 points devant le
+mot ✓ ; empreinte 49,3 contre 76,9, trois exécutions ✓) ; (2) **l'itération s'obtient et se paie** (plate ✓
+contre +3,2 / +2,4 points de lisibilité ✗ — et le prix **baisse** avec la capacité ✓) ; (3) **la récurrence
+n'est pas qu'un coût** — elle améliore le modèle de langue ✓✓. *C'est sur cette phrase que la nuit se
+termine* ✓.
+
 ## ✅ LA PASSE DU 17/10 À 00 h 55 : 46 portes, **44 vertes, 2 rouges**, 97 min
 
 **La première passe dont le verdict se lit au REGISTRE** ✓✓ (le correctif de la nuit : chaque porte écrit son

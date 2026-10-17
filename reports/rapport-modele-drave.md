@@ -852,3 +852,36 @@ a fondé l'idée de « langage abstrait » ✓.
 **seul chiffre** dirait « la pensée est là » ✗✓ — et ce qui **reste à construire** est exactement ce que les
 § 14-19 ont nommé : une **dynamique apprise**, contractante **et** informative ✓, dont le prix (la falaise ✓)
 est maintenant **chiffré** ✓.
+
+## 29. LE PRIX DE LA PLANÉITÉ, À DEUX CAPACITÉS — et la réponse au § 19 (enfin)
+
+Il manquait **un** modèle pour répondre ✗ : le **non-récursif** à la taille du récursif ✓. Il est entraîné ✓
+(dim 256 et 512, **96 Mo**, 15 000 pas ✓), et tout est mesuré avec le **lecteur régularisé** ✓ (λ par
+validation croisée ✓, longueur 128 ✓, t = 1 ✓) :
+
+| modèle | validation | **contenu t = 1** | **prix de la planéité** |
+|---|---:|---:|---:|
+| **s256** — sans récurrence ✓ | 2,8911 | **81,9** ✓ | — |
+| **d256** — avec récurrence ✓ | **2,8183** ✓ | 85,1 | **+3,2** |
+| **s512** — sans récurrence ✓ | 2,7632 | **83,4** ✓ | — |
+| **d512** — avec récurrence ✓ | **2,7297** ✓ | 85,8 | **+2,4** |
+
+* **LE PRIX DE LA PLANÉITÉ DIMINUE AVEC LA CAPACITÉ** ✓✓ : **+3,2** points à 2,43 M, **+2,4** à 9,57 M ✓
+  (−25 % pour **4×** de paramètres ✗✓). La réponse au § 19 est donc **oui, mais lentement** ✓ : *un point fixe
+  plus large est un peu plus lisible, et le prix de la planéité baisse* ✓✓ — sans disparaître ✗ (à ce rythme,
+  il faudrait ~40× la capacité pour l'annuler ✗, ce qui n'est pas la bonne voie ✓) ;
+* **ET LA RÉCURRENCE AMÉLIORE LA LANGUE** ✓✓ : 2,8183 contre 2,8911 (dim 256 ✓) et 2,7297 contre 2,7632
+  (dim 512 ✓) — le **bloc partagé régularise** ✓, et c'est un **gain net** ✗✓ (le modèle qui « pense » est
+  aussi un **meilleur lecteur** ✓✓). C'est le résultat le plus encourageant de la nuit pour la suite ✓ ;
+* **et le petit reste plus lisible** ✓ (81,9 contre 83,4 ✓ ; 85,1 contre 85,8 ✓) — cohérent avec le § 25 ✓ :
+  les états des modèles plus larges sont **plus distribués**, donc moins récupérables par un lecteur ✓✓ (et le
+  lecteur régularisé **réduit** l'écart sans l'annuler ✓).
+
+### Ce que la nuit répond, en trois lignes
+
+1. **l'état porte le sens** ✓✓ : 16 jetons d'avance à **80,3 %** quand le mot est à 118,4 ✓ — et l'empreinte
+   de copie à **49,3 contre 76,9** ✓ (trois exécutions ✓) ;
+2. **l'itération s'obtient, et elle se paie** ✓✓ : plate (84,8 · 84,6 ✓) contre **+3,2** (2,4 M) ou **+2,4**
+   (9,6 M) points de lisibilité ✗ — *la planéité n'est pas gratuite, et son prix baisse avec la capacité* ;
+3. **et la récurrence n'est pas qu'un coût** ✓✓ : elle **améliore** le modèle de langue (2,73 contre 2,76 ✓) —
+   *le modèle qui pense est aussi un meilleur lecteur* ✓✓. C'est sur cette phrase que la nuit se termine ✓.
