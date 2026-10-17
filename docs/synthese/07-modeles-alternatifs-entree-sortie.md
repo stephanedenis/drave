@@ -1030,3 +1030,28 @@ sa langue**, et seule la lecture le dit ✓✓.*
 sur l'**ancien** corpus ✗✓ — elles demandent à être **refaites** sur le nouveau ✓✓, plus riche de 31 % ✓. C'est
 la prochaine étape, et elle est courte : le modèle bilingue littéraire est à réentraîner ✓ (vingt minutes ✓) et
 les trois mesures à rejouer ✓.
+
+## Vingt-huitième mesure (17/10, 18 h 45) : le crible élargi — **cinq fichiers mentent sur leur langue**, dont trois des quatre « allemands »
+
+Le crible du § 23 ne portait que sur les paires fr/en ✓. Étendu aux **1905** textes de la machine ✓, il compare la
+langue **annoncée par le nom** (`_en`, `_fr`, `_de` ✓) à la langue **détectée** par les mots-outils ✓ :
+
+| fichier | annoncé | **détecté** | taille |
+|---|---|---|---:|
+| `pg2000_en.txt` | anglais | **français** ✗ | 2173 Ko |
+| `pg21053_en.txt` | anglais | **allemand** ✗ | 838 Ko |
+| `metamorphosis_de.txt` | allemand | **anglais** ✗✗ | 790 Ko |
+| `pride_prejudice_de.txt` | allemand | **anglais** ✗✗ | 688 Ko |
+| `frankenstein_de.txt` | allemand | **anglais** ✗✗ | 332 Ko |
+
+* **CINQ FICHIERS SE TROMPENT DE LANGUE** ✗✓ sur 1905 ✓ — soit **0,26 %** ✓, ce qui est peu ✓ mais suffisant pour
+  ruiner une mesure ✓✓ (c'est exactement ce qui est arrivé avec Dracula ✓) ;
+* **et le corpus « multilingue vérifié » est le pire** ✗✗ : **trois** de ses quatre fichiers « allemands » sont
+  **anglais** ✓✗ (`metamorphosis`, `pride_prejudice`, `frankenstein` ✓) — le mot « verified » du nom **ne garantit
+  rien** ✗✓. *Un nom de fichier n'est pas une langue, et un dossier « vérifié » n'est pas vérifié* ✓✓ ;
+* **mon corpus français n'est pas touché** ✓✓ : il a été construit sur une **détection** ✓, pas sur les noms ✓ —
+  c'est pourquoi `pg2000_en.txt` (français ✓) y est **inclus à bon droit** ✓✓, et les fichiers anglais n'y sont pas
+  ✓. *La détection a protégé le corpus de ses propres noms* ✓✓ ;
+* **la conséquence pratique, et elle est nette** ✓✓ : **tout corpus de ce dépôt doit être re-vérifié par la langue
+  détectée avant usage** ✗✓ — `tools/cribler_corpus.py` fait ce contrôle ✓, et il devrait passer sur **tout**
+  corpus importé ✓✓. *C'est la douzième leçon d'instrument de la nuit, et la plus opérationnelle* ✓.

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 23 h 40 HAE.**
+**Mis à jour : 2026-10-17, 18 h 50 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,27 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ LE CRIBLE ÉLARGI : cinq fichiers mentent sur leur langue — dont TROIS des quatre « allemands » (17/10, 18 h 45)
+
+Crible des 1905 textes (langue **annoncée par le nom** contre langue **détectée**) :
+
+| fichier | annoncé | **détecté** | taille |
+|---|---|---|---:|
+| `pg2000_en.txt` | anglais | **français** | 2173 Ko |
+| `pg21053_en.txt` | anglais | **allemand** | 838 Ko |
+| `metamorphosis_de.txt` | allemand | **anglais** ✗✗ | 790 Ko |
+| `pride_prejudice_de.txt` | allemand | **anglais** ✗✗ | 688 Ko |
+| `frankenstein_de.txt` | allemand | **anglais** ✗✗ | 332 Ko |
+
+**Cinq fichiers se trompent de langue** (0,26 % des 1905 ✓) — peu ✓, mais assez pour ruiner une mesure ✓ (c'est ce
+qui est arrivé avec Dracula).
+**Et le corpus « multilingue vérifié » est le pire** ✗✗ : **trois** de ses quatre fichiers « allemands » sont
+**anglais**. *Un nom de fichier n'est pas une langue, et un dossier « vérifié » n'est pas vérifié* ✓✓.
+**Mon corpus français n'est pas touché** ✓✓ : il a été construit sur une **détection**, pas sur les noms — c'est
+pourquoi `pg2000_en.txt` (français) y est **inclus à bon droit** ✓✓.
+→ **Conséquence pratique** ✓✓ : tout corpus de ce dépôt doit être **re-vérifié par la langue détectée** avant
+usage ✓ — `tools/cribler_corpus.py` fait ce contrôle, et il devrait passer sur **tout** corpus importé.
 
 ## ✅ L'INVENTAIRE DE LA MACHINE : 1905 textes, 21 français, et un second fichier mal nommé (17/10, 23 h 30)
 
