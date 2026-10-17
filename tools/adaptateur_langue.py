@@ -41,8 +41,12 @@ def poser_lora(modele, rang: int, alpha: float = 16.0):
             super().__init__()
             self.base = base
             gen = torch.Generator().manual_seed(g)
-            self.A = nn.Parameter(torch.randn(r, base.in_features, generator=gen) * 0.01)
-            self.B = nn.Parameter(torch.zeros(base.out_features, r))
+            # ⚠️ LES PARAMÈTRES DU LoRA DOIVENT VIVRE SUR LE MÊME DISPOSITIF QUE LE NOYAU ✗✓. Créés sur CPU
+            # alors que le noyau est sur cuda:0, ils faisaient échouer la première multiplication ✓✓ (le
+            # quatorzième piège de la nuit : deux objets qui doivent être ensemble et ne le sont pas).
+            dev = base.weight.device
+            self.A = nn.Parameter((torch.randn(r, base.in_features, generator=gen) * 0.01).to(dev))
+            self.B = nn.Parameter(torch.zeros(base.out_features, r, device=dev))
             self.ech = a_ / r
 
         def forward(self, x):
@@ -93,7 +97,12 @@ def main() -> int:
     a = ap.parse_args()
 
     from transformers import AutoModelForCausalLM
-    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
+    # ⚠️ SUR LA CARTE, PAS SUR LE CPU ✗✗. Le modèle était chargé sans jamais être déplacé ✓✗ : sur les
+    # modèles-jouets (2,4 M ✓) le CPU suffisait à peine ✓, mais sur un 0,5 B il a tourné **8 heures de CPU en
+    # 32 minutes** ✓✗ sans finir. C'est la TREIZIÈME leçon d'instrument de la nuit, et la plus bête : un
+    # dispositif qui n'est pas là où l'on croit ✓✓.
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).to(device).eval()
     tok = None
     if a.tokeniseur:
         from transformers import AutoTokenizer
@@ -113,7 +122,7 @@ def main() -> int:
         with torch.no_grad():
             for i in range(n):
                 d = (i * 7919) % (len(tab) - a.seq - 1)
-                x = torch.tensor(tab[d:d + a.seq]).unsqueeze(0)
+                x = torch.tensor(tab[d:d + a.seq]).unsqueeze(0).to(device)
                 tot += float(m(x, labels=x).loss)
         return tot / n
 
@@ -131,7 +140,7 @@ def main() -> int:
     g = torch.Generator().manual_seed(0)
     for pas in range(1, a.pas + 1):
         idx = torch.randint(0, len(fr) - a.seq - 1, (a.lot,), generator=g)
-        x = torch.stack([torch.tensor(fr[i:i + a.seq]) for i in idx])
+        x = torch.stack([torch.tensor(fr[i:i + a.seq]) for i in idx]).to(device)
         perte = m(x, labels=x).loss
         opt.zero_grad(); perte.backward(); opt.step()
         if pas % 500 == 0 or pas == a.pas:

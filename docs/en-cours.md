@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 10 HAE.**
+**Mis à jour : 2026-10-17, 22 h 00 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,31 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LA LANGUE COMME PARAMÈTRE SUR UN VRAI MODÈLE — effet huit fois plus petit (17/10, 21 h 45)
+
+LoRA (rang 8, **4,4 M** paramètres = **0,9 %** des 494 M de Qwen) entraîné sur la littérature française, taux 1e-4 :
+
+| | perte **français** | perte **anglais** |
+|---|---:|---:|
+| Qwen seul | 3,0900 ✗ | **2,7238** ✓ |
+| **Qwen + LoRA français** | **2,8555** ✓ (−7,6 %) | 2,8466 (+4,5 %) ✓ |
+
+**La langue est bien un paramètre sur un vrai modèle** ✓✓ : le LoRA améliore le français de **7,6 %** et n'abîme
+l'anglais que de **4,5 %** (*un paramètre de 0,9 % des poids, et les deux langues marchent* ✓✓).
+**Mais l'effet est huit fois plus petit** ✗✓ (−7,6 % contre **−53 %** sur le jouet monolingue ✓) : **parce que
+Qwen est déjà multilingue** ✓✓ — il n'a **pas besoin** du patch ✗. *L'adaptateur est un rattrapage pour modèle
+monolingue, pas une nécessité pour un modèle multilingue* ✓✓, exactement la conclusion du § 20.
+→ **Le chiffre qui manquait** ✓✓ : sur un modèle **déjà** multilingue il y a **peu à gagner** (7,6 %) ; sur un
+modèle **monolingue** il y a **beaucoup à gagner** (−53 %) ✓✓. *Le paramètre de langue sert d'autant plus que le
+noyau en est dépourvu* ✓✓.
+
+**Trois pièges d'outillage de plus** ✗✓ : le premier essai a tourné **8 h de CPU en 32 min** (le modèle n'avait
+jamais été déplacé sur la carte ✓✗ — *un dispositif qui n'est pas là où l'on croit* ✗✓) ; le second a échoué sur
+`Expected all tensors to be on the same device` (les paramètres du LoRA sur CPU, le noyau sur `cuda:0` ✓✗ —
+*deux objets qui doivent être ensemble et ne le sont pas* ✓) ; et le taux **1e-3** a **divergé** ✗ (perte 7,89,
+français +26 % et anglais **+221 %** ✗✗ — *sur un 0,5 B, le taux d'un jouet est toxique* ✓✓). Trois corrections,
+une mesure ✓.
 
 ## ✅ LE CRIBLE DU CORPUS : une paire cassée sur trois, dans les DEUX corpus (17/10, 20 h)
 

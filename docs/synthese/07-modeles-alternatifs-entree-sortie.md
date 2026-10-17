@@ -891,3 +891,34 @@ d'un nom propre commun** ✓.
 * **ce que cela vaut pour la suite** ✓✓ : les mesures cross-lingues du § 21 sont **deux fois valides** (Verne ✓,
   Alice ✓) et **une fois du bruit** (Dracula ✗) ✓✓. *Un crible de dix minutes a supprimé une mesure et confirmé
   deux autres* ✓✓ — c'est exactement le rôle d'un instrument ✓.
+
+## Vingt-quatrième mesure (17/10, 21 h 45) : la langue comme paramètre **sur un vrai modèle** — et un effet huit fois plus petit
+
+Les mesures 2 et 3 avaient montré qu'un LoRA de langue fait passer un **modèle-jouet monolingue** de 3,19 à 1,50
+(−53 % ✓). Qu'en est-il sur un **vrai** modèle ✓ ? LoRA (rang 8 ✓, **4,4 M** paramètres, soit **0,9 %** des
+494 M de Qwen ✓) entraîné sur la **littérature française** ✓, taux **1e-4** ✓ :
+
+| | perte **français** | perte **anglais** |
+|---|---:|---:|
+| Qwen seul ✓ | 3,0900 ✗ | **2,7238** ✓ |
+| **Qwen + LoRA français** ✓ | **2,8555** ✓ (−7,6 %) | 2,8466 (+4,5 %) ✓ |
+
+* **LA LANGUE EST BIEN UN PARAMÈTRE SUR UN VRAI MODÈLE** ✓✓ : le LoRA améliore le français de **7,6 %** ✓ et
+  n'abîme l'anglais que de **4,5 %** ✓✓ — *un paramètre de 0,9 % des poids, et les deux langues marchent* ✓✓ ;
+* **MAIS L'EFFET EST HUIT FOIS PLUS PETIT** ✗✓ (−7,6 % contre −53 % sur le jouet ✓) : **parce que Qwen est déjà
+  multilingue** ✓✓ — il n'a **pas besoin** du patch ✗. L'adaptateur est un **rattrapage pour modèle monolingue**
+  ✓✓, pas une nécessité pour un modèle multilingue ✓✓. *C'est exactement la conclusion du § 20 : la couche
+  commune vient avec le modèle* ✓✓ ;
+* **et cela donne le chiffre qui manquait** ✓✓ : sur un modèle **déjà** multilingue, il y a **peu à gagner** ✗
+  (7,6 % ✓) ; sur un modèle **monolingue**, il y a **beaucoup à gagner** ✓✓ (−53 % ✓). *Le paramètre de langue
+  sert d'autant plus que le noyau en est dépourvu* ✓✓.
+
+### Deux pièges d'outillage de plus (13ᵉ et 14ᵉ)
+
+Le premier essai a tourné **huit heures de CPU en trente-deux minutes** ✗✓ — le modèle n'avait **jamais** été
+déplacé sur la carte ✓✗ (*un dispositif qui n'est pas là où l'on croit* ✗✓). Le second a échoué sur
+`Expected all tensors to be on the same device` ✓✗ — les paramètres du LoRA étaient créés sur CPU quand le noyau
+était sur `cuda:0` ✓✓ (*deux objets qui doivent être ensemble et ne le sont pas* ✓). Et le troisième réglage
+(taux **1e-3** ✓) a **divergé** ✗ (perte 7,89, français **+26 %** et anglais **+221 %** ✗✗) — sur un 0,5 B, le
+taux d'un modèle-jouet est **toxique** ✓✓. Trois corrections, une mesure ✓✓ : *c'est le prix d'un outil qu'on
+n'avait jamais poussé sur un vrai modèle* ✓.
