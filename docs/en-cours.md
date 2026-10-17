@@ -4,9 +4,42 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 22 h 35 HAE.**
+**Mis à jour : 2026-10-17, 22 h 45 HAE.**
 
-## Le travail du moment : la tour de vision
+## Le travail du moment : la couche commune entrée-sortie (chapitre 7)
+
+La question de la nuit : **une couche qui abstrait la langue** — l'état d'un modèle peut-il porter le **sens**
+sans porter la **langue**, et la langue redevenir un **paramètre** à la sortie ? **35 mesures**, 14 pièges,
+3 erratums. L'état, en un tableau :
+
+| ce qui **tient** | le chiffre | les mesures |
+|---|---|---|
+| le noyau est **neutre** (la langue n'y est pas lisible) | **50,1-51,8 %** = le hasard, **4 réplications** | 1, 15, 19, 29 |
+| le noyau **garde le sens** | contenu **87,7 / 86,5 %** | 4, 30 |
+| la langue vit **aux extrémités** | **58-68 %** en surface, 50 % au milieu | 1, 15, 19, 24 |
+| le **sens partagé** est au **milieu** | **+0,083** (couches 8-16), **+0,030** en surface | 18 |
+| la langue est un **petit paramètre** | **1,33 %** des poids, **5 ms** de bascule | 2, 3, 7, 24 |
+| on peut **penser sans langue** | **50,6-56,2 %** sur **huit** itérations | 11 |
+
+**Ce qui a été RETIRÉ** (et qu'il ne faut pas citer comme acquis) : « le relevé est teinté par la langue » (9) ·
+« la correction de rang 1 répare » (9) · « la langue comme paramètre **commande** la sortie » (25) · « le sens partagé
+vit dans le **récit** » (31) · « la **part de dialogue** l'explique » (32-33) · « l'**alignement** explique la
+variation » (22).
+
+**Ce qui reste OUVERT** : pourquoi le signal varie de **17×** entre paires bien alignées (le genre, la taille, le
+dialogue, la fidélité, la richesse et l'entropie ont tous échoué) · **peut-on penser deux pas** (trois objectifs, le
+même mur) · le signal est-il **utilisable** à l'échelle (un livre sur deux, top-5 37 % au mieux).
+
+**Le corpus français** : 21 textes classiques (**15,7 Mo**, **87 341 formes** — Proust, Stendhal, Hugo, Voltaire,
+Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola), trouvés dans les projets `Panini/` et
+`Panini-Research/` de Stéphane — et **cinq fichiers mal nommés** détectés au passage (dont trois des quatre
+« allemands » du corpus « vérifié », qui sont anglais).
+
+*La fiche complète : [docs/synthese/07-modeles-alternatifs-entree-sortie.md](synthese/07-modeles-alternatifs-entree-sortie.md)*
+· *les notes : [journal/2026-10-17.md](../journal/2026-10-17.md)* · *les chiffres dans
+[en-cours.md](en-cours.md)*.
+
+## Plus tôt : la tour de vision
 
 La faculté **perception visuelle** est passée aujourd'hui de « **bloquée par un modèle absent** » à
 « **vérifiée à l'entrée** » :
