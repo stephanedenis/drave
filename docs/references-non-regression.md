@@ -21,6 +21,21 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-17 à 00 h 55** (**46 portes, 44 vertes, 2 rouges**, **97 min**, aucune sautée) —
+> **et c'est la PREMIÈRE passe dont le verdict se lit au REGISTRE** ✓✓ (le correctif de la nuit :
+> `toutes-les-portes.sh` écrit désormais `$JOURNAUX/registre.txt` avec le **code de sortie** de
+> chaque porte et sa durée ✓, et la synthèse y est ajoutée ✓). Le verdict ne dépend donc plus des
+> **marqueurs** des journaux ✗✓ — la méthode que l'audit du 16/10 avait montrée **non fiable** ✗ :
+>
+> * **44 vertes, 2 rouges** ✓ — les **deux rouges sont les STRUCTURELS connus** (`porte-indice` ✓,
+>   `porte-melange` ✓), exactement ceux des passes précédentes ✓ : **aucun rouge nouveau** après une
+>   nuit où **sept outils** et **trois documents** ont été édités ✓✓ ;
+> * **97 min** pour 46 portes ✓ (contre 88 min la veille ✓ — même ordre ✓, les plus lourdes étant la
+>   vision, la distillation et le cycle ✓) ;
+> * et **la méthode de lecture a changé** ✓✓ : `awk '$2 != 0'` sur le registre ✓ au lieu d'un
+>   `grep` de marqueurs ✗ — *une passe qui écrit ses codes de sortie est une passe qu'on peut
+>   vérifier ; une passe qui n'écrit que ses journaux est une passe qu'on doit croire* ✓.
+>
 > **Passe du 2026-10-16 à 02 h 49** (**46 portes, 44 vertes, 2 rouges**, ~88 min) — **la première
 > passe où les portes peuvent ÉCHOUER** ✓✓ : `porte-tableaux` (son `sys.exit` n'était pas propagé ✓)
 > et `porte-prechargement` (un `rm -f` avalait le code ✓) ont été corrigées **pendant** cette passe,

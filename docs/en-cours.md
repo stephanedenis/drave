@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 0 h 14 HAE.**
+**Mis à jour : 2026-10-17, 2 h 55 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -99,6 +99,20 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA PASSE DU 17/10 À 00 h 55 : 46 portes, **44 vertes, 2 rouges**, 97 min
+
+**La première passe dont le verdict se lit au REGISTRE** ✓✓ (le correctif de la nuit : chaque porte écrit son
+**code de sortie** ✓ et la synthèse y est ajoutée ✓). Le compte ne dépend donc plus des **marqueurs** des
+journaux ✗✓ — la méthode que l'audit du 16/10 avait montrée **non fiable** ✗.
+
+* **46 portes · 44 vertes · 2 rouges** ✓ — et les **deux rouges sont les structurels connus**
+  (`porte-indice` ✓, `porte-melange` ✓), exactement ceux de la veille ✓ : **aucun rouge nouveau** après une
+  nuit où **sept outils** et **trois documents** ont été édités ✓✓ ;
+* **97 min** ✓ (contre 88 la veille ✓ — même ordre ✓) ;
+* **et la méthode de lecture a changé** ✓✓ : `awk '$2 != 0'` sur le registre ✓ au lieu d'un `grep` de
+  marqueurs ✗ — *une passe qui écrit ses codes de sortie est une passe qu'on peut vérifier ; une passe qui
+  n'écrit que ses journaux est une passe qu'on doit croire* ✓.
 
 ## Le mur de mémoire est tombé (deux GPU), et E5 ne reproduit pas sa configuration publiée
 
