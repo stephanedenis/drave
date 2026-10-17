@@ -428,3 +428,37 @@ exigences qui ne se satisfont pas l'une sans l'autre ✓ :
   `C^k(x)` ✓, pour k tiré aléatoirement entre 1 et 8 ✓ — c'est la technique des « états latents
   récurrents » ✓), **et** laisser le modèle s'y adapter ✗ (l'état doit être **habitable** par
   l'itération ✓ — c'est le pont entre « aligner les espaces » ✓ et « entraîner la dynamique » ✓✓).
+
+## 15. L'ITÉRATION EST IMPOSSIBLE SUR CET ÉTAT — la preuve par la solution triviale
+
+L'opérateur du § 14 ne valait que pour **un** pas (72,0 % ✓ puis 75,1 · 85,7 · 97,2 ✗). La correction
+évidente a été appliquée ✓ : entraîner le contenu sur `C^k(x)` ✓, k **tiré entre 1 et 8** ✓ — l'opérateur
+doit rester bon **après l'itération** ✓. Résultat **sans ambiguïté** ✗ :
+
+| | résultat |
+|---|---|
+| λ de l'opérateur | **0,9994** ✓ (contracte ✓) |
+| contenu après **1** pas | **87,0 %** = **exactement l'identité** ✗ |
+| contenu après 2 · 4 · 8 pas | 87,0 · 87,0 · **86,9** ✗ — identiques à l'identité ✓✗ |
+| *(rappel : l'opérateur d'un pas donnait 72,0 % à 1 pas ✓)* | |
+
+* **l'optimisation a trouvé la solution triviale** ✓✗ : `f ≈ 0` ✓, c'est-à-dire `C = identité` ✓ — et elle
+  est **la seule** qui reste bonne à k = 8 ✓✓, parce que **tout déplacement de l'état dégrade** sa
+  lisibilité ✓ ;
+* **donc « itérer aide » est FAUX sur cet état** ✗✓, et ce n'est pas une question d'entraînement de
+  l'opérateur ✗ : **c'est une propriété de l'état lui-même** ✓✓ — un état **à un coup** ✓ (un « one-shot
+  readout ») ✓, pas un espace de travail ✓ ;
+* **et cela referme la boucle de la nuit** ✓✓ : les quatre voies essayées (boucle directe ✗, pas
+  `h_p → h_{p+1}` ✗, cycle ✗, opérateur post-hoc ✗) échouent **toutes** pour la même raison ✓ — **aucune
+  ne rend l'état habitable par l'itération** ✗, parce qu'**aucun modèle entraîné ici n'a jamais eu
+  l'itération dans sa boucle** ✗✓ ;
+* **la conséquence est nette, et c'est le programme** ✓✓ : il ne suffit pas d'**aligner** les espaces ✓ ni
+  d'**ajuster** un opérateur après coup ✗ — il faut **entraîner le modèle avec la récurrence dans sa
+  boucle** ✓✓ (un bloc **répété** ✓, comme les « looped transformers » ✗✓) : l'état doit être **habitable**
+  par l'itération **parce qu'il a été entraîné à l'être** ✓. C'est la seule voie que la nuit n'a pas
+  essayée ✓ — et elle est **mesurable avec les outils déjà écrits** ✓✓ (λ ✓, contenu ✓, horizon ✓).
+
+**Ce que la nuit a établi, en une phrase** ✓ : *on peut unifier le vocabulaire d'entrée et de sortie
+(cosinus 0,14 → 0,70 ✓), on peut extraire une empreinte du texte (42 % contre 77 % ✓), on peut même
+trouver un pas contractant qui améliore la lecture (λ = 0,997 ✓) — mais **la pensée itérative ne
+s'ajoute pas** à un modèle qui ne l'a pas apprise : elle se **construit** dans son entraînement* ✗✓.

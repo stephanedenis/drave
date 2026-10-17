@@ -112,7 +112,14 @@ def main() -> int:
     for pas in range(1, a.pas + 1):
         idx = torch.randperm(S_tr.shape[0])[:512]
         x, y = S_tr[idx], T_tr[idx]
-        z = cel(x)
+        # ⚠️ ENTRAÎNER POUR k PAS, PAS POUR UN SEUL ✗. Le premier opérateur ne valait que pour un pas
+        # (72,0 % ✓ puis 75,1 · 85,7 · 97,2 ✗) parce que le contenu ne regardait que `C(x)` ✓. Ici k est
+        # TIRÉ entre 1 et 8 ✓ : l'opérateur doit rester bon **après l'itération**, et c'est la seule façon
+        # de le lui demander ✓✓.
+        k = int(torch.randint(1, 9, (1,)).item())
+        z = x
+        for _ in range(k):
+            z = cel(z)
         # 1. le contenu après UN pas doit être plus proche de la cible qu'avant ✓ (progrès, pas simple
         #    conservation ✗ : on demande à l'opérateur de FAIRE MIEUX, pas de ne rien faire ✓✓)
         perte_contenu = ((z - y) ** 2).mean()
