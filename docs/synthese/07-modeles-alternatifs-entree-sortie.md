@@ -48,6 +48,18 @@ neutralité ✓ (trois modèles, trois corpus ✓), le **sens partagé** qui se 
 qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **deux fichiers de corpus à ne pas croire** ✗✓
 (un test invalide, une paire mal étiquetée ✓). *La science avance aussi en retirant* ✓✓.
 
+### Fin du programme (mesures 27 à 33)
+
+| # | la question | le chiffre | verdict |
+|---:|---|---|---|
+| 27 | le paramètre de langue sur un **vrai** modèle ? | LoRA 4,4 M (0,9 %) : **−7,6 %** fr, **+4,5 %** en | ✓✓ mais 8× moins qu'en monolingue |
+| 28 | la sortie **suit-elle** le paramètre sur Qwen ? | amorce anglaise + LoRA fr → **anglais** (en 27 · fr 0) | ✗ suit l'**amorce** |
+| 29 | le corpus enrichi change-t-il la neutralité ? | **quatre** couches au hasard (1, 2, 3, **5**) | ✓✓ zone **élargie** |
+| 30 | le contenu tient-il ? | **87,7 / 86,5 %** aux couches neutres | ✓✓ à 9 points du meilleur |
+| 31 | le **genre** explique-t-il le signal ? | Candide (récit) **+0,116** · Don Quijote (récit) **+0,007** | ✗ **non** |
+| 32 | la **part de dialogue** ? | 4 livres sur 5 ordonnés ✓ (indicateur grossier) | ✗ **trompeur** |
+| 33 | et avec le **vrai** indicateur ? | Proust 5,9 % → +0,093 · Don Quijote 1,1 % → +0,007 | ✗ relation **spurieuse** |
+
 ### Ce qu'il faut en retenir, en cinq phrases
 
 1. **La langue n'est ni dans l'état ni dans le relevé partagé** ✓✓ — elle vit dans l'**entrée** (les octets ✓)
@@ -60,6 +72,41 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 5. **Mais elle ne tient qu'un pas** ✗, et **trois objectifs différents** n'y changent rien ✗✓ : la limite est
    dans la **représentation**, pas dans la perte ✓. Le pas suivant est à chercher dans **l'entraînement du
    modèle** (récurrence dans la boucle ✓), pas dans le réglage ✓.
+
+### Le bilan des certitudes (à lire si l'on ne lit qu'une page)
+
+**Ce qui TIENT**, avec le nombre de mesures qui le soutiennent ✓✓ :
+
+| ce qui tient | les mesures | le chiffre |
+|---|---|---|
+| **le noyau est neutre** (la langue n'y est pas lisible) | **4 réplications** : prose, dim 512, littérature v1, littérature v2 ✓✓ | **50,1 à 51,8 %** = le hasard ✓✓ |
+| **le noyau garde le sens** | 4 et 30 ✓✓ | contenu **87,7 / 86,5 %**, à 9 points du meilleur ✓ |
+| **la langue vit aux extrémités** | 1, 15, 19, 24 ✓✓ | **58-68 %** en surface, 50 % au milieu ✓ |
+| **le sens partagé est au milieu** | 18 ✓✓ | **+0,083** aux couches 8-16, **+0,030** à la dernière ✓✓ |
+| **la langue est un petit paramètre** | 2, 3, 7, 24 ✓✓ | **1,33 %** des poids, **5 ms** de bascule ✓✓ |
+| **le paramètre améliore la langue** | 2, 24 ✓✓ | **−53 %** (monolingue), **−7,6 %** (Qwen) ✓ |
+| **on peut penser sans langue** | 11 ✓✓ | **50,6-56,2 %** sur **huit** itérations ✓✓ |
+
+**Ce qui a été RETIRÉ**, et qu'il ne faut pas citer comme acquis ✗ :
+
+| ce qui a été retiré | la mesure qui l'a retiré |
+|---|---|
+| « le relevé est teinté par la langue » ✗ | **9** : un relevé partagé suffit (0,7 point) ✓ |
+| « la correction de rang 1 répare » ✗ | **9** : elle ne rapporte rien ✓ |
+| « la langue comme paramètre **commande** la sortie » ✗ | **25** : sur Qwen, c'est l'**amorce** qui commande ✓ |
+| « le sens partagé vit dans le **récit** » ✗ | **31** : Don Quijote (récit) fait aussi mal qu'Alice ✓ |
+| « la **part de dialogue** l'explique » ✗ | **32-33** : relation **spurieuse** (la typographie de l'édition) ✓ |
+| « l'**alignement** explique la variation » ✗ | **22** : les quatre livres sont alignés à 0,1-1,7 % ✓ |
+
+**Ce qui RESTE OUVERT**, et que la nuit n'a pas tranché ✗ :
+
+1. **pourquoi le signal varie de 17×** entre des paires texte-traduction **bien alignées** (+0,007 à +0,116 ✓) —
+   ni le genre, ni la taille, ni la part de dialogue, ni l'alignement ne l'expliquent ✓ ;
+2. **peut-on penser deux pas** ✗ — trois objectifs différents donnent le même mur ✓ (mesures 12-13 ✓) ; le pas
+   suivant est dans **l'entraînement du modèle** ✓, pas dans la perte ✓ ;
+3. **le signal est-il utilisable à l'échelle** ✗ — un livre sur deux ✓, top-5 37 % au mieux ✓ (mesure 26 ✓).
+
+*Un chapitre qui sait ce qu'il ne sait pas vaut mieux qu'un chapitre qui ne sait pas qu'il ne sait pas* ✓✓.
 
 ## Ce que la nuit du 16/10 a déjà établi, et qui oriente tout
 
