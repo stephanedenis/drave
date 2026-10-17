@@ -57,6 +57,9 @@ def main() -> int:
     ap.add_argument("--couches", default="",
                     help="couches à sonder (ex. « 2,8,16,23 ») : LA QUESTION « tu as ce qu'il te faut "
                          "dans les couches intermédiaires » se répond couche par couche")
+    ap.add_argument("--norme", action="store_true",
+                    help="prendre l'état APRÈS la norme finale (c'est celui que l'alignement entraîne ✓) "
+                         "au lieu du résidu brut avant la norme ✗")
     ap.add_argument("--horizons", default="1,4,16",
                     help="combien de jetons D'AVANCE le mapping doit prédire (1 = le suivant)")
     a = ap.parse_args()
@@ -79,6 +82,9 @@ def main() -> int:
             # `logits` après la tête ✗) : prendre l'un pour l'autre est l'erreur que cette ligne
             # évite, et elle a coûté une mesure ce soir (normer l'état ne changeait rien ✓✗).
             h = sortie.hidden_states[-1][0]                     # (L, 896) pré-linguistique
+            if a.norme:
+                with torch.no_grad():
+                    h = m.model.norm(h.unsqueeze(0))[0]          # l'état NORMALISÉ (celui de l'alignement ✓)
             e = emb(bloc)[0]                                    # (L, 896) post-linguistique
             H.append(h[:-1].numpy())                            # position p
             E.append(e[1:].numpy())                             # jeton p+1
@@ -101,7 +107,11 @@ def main() -> int:
                 bloc = torch.tensor([ids[debut:debut + a.longueur]])
                 sortie = m(bloc, output_hidden_states=True)
                 for L in couches:
-                    HS[L].append(sortie.hidden_states[L][0].numpy())
+                    hsL = sortie.hidden_states[L][0]
+                    if a.norme:
+                        with torch.no_grad():
+                            hsL = m.model.norm(hsL.unsqueeze(0))[0]
+                    HS[L].append(hsL.numpy())
                 ES.append(emb(bloc)[0].numpy())
                 debut += a.longueur
             ES = np.concatenate(ES)

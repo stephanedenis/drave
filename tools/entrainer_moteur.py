@@ -726,6 +726,12 @@ def main():
                         "diffèrent. C'est le défaut M8 (« le fichier sauvé ne reproduit pas le "
                         "modèle entraîné ») transformé en vérification automatique.")
     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+    p.add_argument("--alignement", type=float, default=0.0,
+                   help="poids du terme d'ALIGNEMENT entrée ↔ sortie (0 = aucun). Le modèle apprend que "
+                        "son état final NORMALISÉ **est** l'embedding du jeton suivant : deux termes, le "
+                        "COSINUS (la direction) et le RAPPORT D'ÉCHELLE (la norme) — sans le second, la "
+                        "norme reste libre, car la perte de langue est invariante d'échelle (mesuré : "
+                        "rapport état/embedding de 648 sur Qwen2.5-0.5B)")
     p.add_argument("--enseignant", default="", help="dossier d'un modèle gelé à imiter")
     p.add_argument("--alpha-distill", type=float, default=0.0,
                    help="poids de la KL d'enseignant ; 0 = apprentissage ordinaire")
@@ -881,7 +887,8 @@ def main():
         # partout à la fin, soit l'uniforme. Les bancs (`essai_decharge`,
         # `essai_blocs`) n'ont pas ce défaut : ils appellent `cross_entropy`
         # eux-mêmes sur des fenêtres décalées une seule fois.
-        sortie = modele(input_ids=x, labels=x)
+        sortie = modele(input_ids=x, labels=x,
+                        output_hidden_states=(a.alignement > 0.0))
         perte = sortie.loss
         if enseignant is not None and a.alpha_distill > 0.0:
             # KL(enseignant || eleve), température T : `T²` remet le gradient à
@@ -899,6 +906,27 @@ def main():
             # l'apprentissage au lieu de le guider.
             kl = torch.nn.functional.kl_div(logp_s, p_e, reduction="batchmean") / x.shape[1]
             perte = (1.0 - a.alpha_distill) * perte + a.alpha_distill * (a.temperature ** 2) * kl
+        if a.alignement > 0.0:
+            # ⚠️ LE TERME D'ALIGNEMENT, ET POURQUOI IL A DEUX PARTIES ✗. On veut que l'état final
+            # NORMALISÉ coïncide avec l'embedding du jeton SUIVANT ✓ — c'est ce qui rendra la boucle
+            # directe possible (aucun pont ✗). Mais un cosinus SEUL ne suffit pas ✗✓ : la perte de langue
+            # est invariante d'échelle (softmax ✓), donc RIEN ne fixe la norme de l'état — c'est
+            # exactement pourquoi elle dérive à 648× celle des embeddings sur Qwen2.5-0.5B ✓✓. Il faut
+            # donc un terme de NORME, et il doit être **relatif** (|log ratio| ✓) : un terme absolu
+            # écraserait l'état et tuerait la langue ✗.
+            # Et la CIBLE est DÉTACHÉE ✓ : on aligne l'état VERS l'embedding, pas les deux l'un vers
+            # l'autre — sinon les embeddings s'effondrent ✗✗.
+            hn = modele.model.norm(sortie.hidden_states[-1][:, :-1])       # état final normalisé ✓
+            with torch.no_grad():
+                cible = modele.model.embed_tokens(x[:, 1:])               # l'entrée du jeton suivant ✓
+            cos = torch.nn.functional.cosine_similarity(hn, cible, dim=-1).mean()
+            ratio = torch.log((hn.norm(dim=-1) + 1e-6) / (cible.norm(dim=-1) + 1e-6)).abs().mean()
+            alignement = (1.0 - cos) + ratio
+            perte = perte + a.alignement * alignement
+            if pas % a.eval_tous == 0 or pas == a.pas:
+                print(f"  [alignement] cosinus {float(cos):+.3f} · rapport d'échelle "
+                      f"{float(torch.exp(torch.log((hn.norm(dim=-1).mean() + 1e-6) / (cible.norm(dim=-1).mean() + 1e-6)))):.3f}"
+                      f" · terme {float(alignement):.4f}")
         opt.zero_grad(set_to_none=True)
         perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)

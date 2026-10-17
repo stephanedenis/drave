@@ -337,3 +337,59 @@ Les horizons longs sont maintenant débloqués (pas de textes resserré ✓, **5
   lecture pour **conserver** sa trajectoire ✓. Et l'alignement entrée = sortie (§ 8, étape A ✓) devra se
   faire **sur l'état de lecture**, pas sur celui de la copie ✗✓ — sinon on aligne un état **appauvri** en
   contenu long ✓.
+
+## 13. L'ALIGNEMENT RÉUSSIT (étape 3 ✓✓) MAIS LA BOUCLE DIRECTE ÉCHOUE ENCORE (étape 4 ✗) — il faut entraîner le PAS
+
+### 13.1 L'alignement, mesuré ✓✓
+
+`tools/entrainer_moteur.py --alignement λ` ✓ (deux termes : **cosinus** ✓ et **rapport d'échelle** ✓, cible
+**détachée** ✗). Deux jouets de **2,43 M paramètres** ✓ (dim 256, 4 couches, octets ✓), mêmes données, mêmes
+1 500 pas, **une carte chacun** ✓ :
+
+| | validation (bits/octet) | cosinus(état, embedding suivant) | rapport d'échelle |
+|---|---:|---:|---:|
+| **témoin** (λ = 0) | 4,69 | — | — |
+| **aligné** (λ = 1) | **4,30** ✓✓ | **+0,701** ✓✓ | **1,015** ✓✓ |
+| *rappel : Qwen2.5-0.5B, sans alignement* | — | *+0,14* ✗ | *648* ✗✗ |
+
+* **l'alignement fait ce qu'il promet** ✓✓ : cosinus **+0,14 → +0,70** et échelle **648 → 1,015** ✓ ;
+* **et il NE dégrade PAS la langue** ✓✓ — il l'**améliore** (4,30 contre 4,69 bits/octet ✓) : le terme
+  d'alignement agit comme un **régularisant** ✓, ce qui est connu mais se mesure ici ✓ ;
+* **et le contenu long survit** ✓✓ (`pont_abstrait.py --norme` ✓, horizons ✓) : à **k = 16**, l'aligné fait
+  **88,3 %** contre **89,0 %** pour le témoin ✓ — l'**effondrement au mot** ✗ que la fiche annonçait comme
+  risque principal **n'a pas eu lieu** ✓✓. Et à **tous** les horizons l'aligné est **meilleur** (69,9 vs
+  74,2 · 84,3 vs 85,3 · 88,3 vs 89,0 ✓) ✓.
+
+### 13.2 La boucle directe, et son échec ✗
+
+`tools/boucle_directe.py` ✓ : on **remplace l'embedding** du dernier jeton par `norm(h)` ✓ (aucun pont ✗),
+on itère, et on mesure λ (perturbation infime ✓) et le **contenu** (ce que l'état itéré dit du jeton à
+venir ✓, mapping appris sur une moitié et mesuré sur l'autre ✓) :
+
+| modèle | **λ** (un pas direct) | contenu à 1 pas | 2 pas | 4 pas | 8 pas |
+|---|---:|---:|---:|---:|---:|
+| **aligné** | **7 311** ✗✗ | 140,7 % | 144,8 % | 131,2 % | 124,5 % |
+| témoin (sans alignement) | 4 265 ✗✗ | 103,0 % | 107,3 % | 105,0 % | 107,4 % |
+
+* **λ reste énorme dans les deux cas** ✗✗ (7 311 et 4 265 ✓) : **un passage complet du réseau est
+  expansif** ✓ — c'est cohérent avec tout ce que la nuit a mesuré (cycle : λ ≥ 3,7e4 ✓ ; le pas
+  `h_p → h_{p+1}` : λ de 30 à 120 ✓) ;
+* **et le contenu se détruit** ✗ (le témoin est à ~105 %, c'est-à-dire **pire que l'embedding moyen** ✓✗ ;
+  l'aligné à 124-145 % ✗). Autrement dit : **l'état itéré ne dit plus rien** du jeton à venir ✓ ;
+* **pourquoi** ✓ : l'alignement garantit `norm(h_p) ≈ e_{p+1}` pour les états **produits par une passe
+  normale** ✓ — il ne dit **rien** de ce que devient un état **réinjecté comme entrée** ✗✓, un régime que
+  l'entraînement n'a **jamais vu** ✗. Et un passage de 4 couches **amplifie** la perturbation ✓✗.
+
+### 13.3 La conclusion, et le pas suivant qui est maintenant précis
+
+**L'alignement des espaces est NÉCESSAIRE mais PAS SUFFISANT** ✗✓ : il règle le **vocabulaire** (les deux
+espaces se ressemblent ✓) mais pas la **dynamique** (le pas amplifie ✗). C'est **exactement** ce que la
+fiche annonçait (§ 8, étape B : « il faut **entraîner le pas**, pénalité de contraction » ✓) et ce que le
+cycle réclamait de son côté ✓ — **les trois fils demandent le même objet** ✓✓ :
+
+> **un opérateur de pensée APPRIS** ✓ — une petite cellule récurrente sur l'état ✓, entraînée avec
+> **deux** objectifs : **conserver le contenu** (prédire l'embedding à venir ✓ — ce que l'alignement fait
+> déjà pour un pas ✓) **et contracter** (λ < 1 ✓, par pénalité de différences finies ✓).
+
+C'est la prochaine étape, et elle est **précise** : la cellule, sa pénalité, et la même batterie de
+mesures (λ ✓, contenu ✓, et la perplexité de la suite après k pas ✓).
