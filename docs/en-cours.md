@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 18 h 45 HAE.**
+**Mis à jour : 2026-10-17, 19 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,23 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LA BASCULE COÛTE 5 ms ET 530 Ko — l'idée est utilisable (17/10, 19 h)
+
+`tools/cout_bascule.py` ✓ — médiane sur cinq essais, comparaison avec un rechargement complet ✓ :
+
+| ce qu'on échange | taille | temps |
+|---|---:|---:|
+| **adaptateur** (chargement) | **530 Ko** | **4,82 ms** |
+| **adaptateur** (application) | — | **0,19 ms** |
+| **modèle entier** (rechargement ✗) | 9,8 Mo | **134,64 ms** |
+
+**La bascule de langue coûte 5,0 ms et 530 Ko** ✓✓ — contre **134,6 ms et 9,8 Mo** ✗ (rapport **×27** en temps,
+**×18** en mémoire ✓✓). Et **le rapport ne peut que s'améliorer** ✓ (raisonnement, pas mesure ✗) : un modèle de
+7 B pèse des milliers de fois plus qu'un adaptateur ✓, qui reste petit ✓. L'adaptateur de **surface**
+(32 768 poids ✓) pèserait **≈ 130 Ko** ✓✓ pour **84 % du gain** ✓.
+→ ***Un noyau, N adaptateurs de quelques centaines de Ko, une bascule en millisecondes*** ✓✓ — *la langue est un
+fichier, pas un modèle* ✓. C'est la réponse la plus utile du chapitre ✓.
 
 ## ✅ LA SORTIE SUIT L'ADAPTATEUR, PAS L'AMORCE (17/10, 18 h 30)
 

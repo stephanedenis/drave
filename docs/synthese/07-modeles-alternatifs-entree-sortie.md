@@ -314,3 +314,26 @@ classifieur qui tienne sur un texte de mauvaise qualité ✓).
 **paramètre de 1,33 %** qui **commande la sortie** ✓✓. Ce qui reste n'est pas à construire ✗ mais à **utiliser**
 ✓ — et les trois questions ouvertes sont : la **qualité** (ces modèles sont des jouets ✓), le **coût de la
 bascule** (temps et mémoire ✓), et la **boucle** (la pensée itérée survit-elle au changement de langue ?) ✓.
+
+## Septième mesure (17/10, 19 h) : la bascule coûte **5 ms** et **530 Ko** — l'idée est utilisable
+
+« La langue est un paramètre de 1,33 % » ✓✓ ne vaut que si changer de langue ne coûte pas le rechargement d'un
+modèle ✗. Mesure : `tools/cout_bascule.py` ✓ — adapter de tout le modèle (rang 8, 131 k ✓), médiane sur cinq
+essais ✓, comparaison avec un **rechargement complet** ✓ :
+
+| ce qu'on échange | taille | temps médian |
+|---|---:|---:|
+| **adaptateur** (chargement depuis le disque) | **530 Ko** | **4,82 ms** |
+| **adaptateur** (application au modèle ✓) | — | **0,19 ms** |
+| **modèle entier** (rechargement ✗) | 9,8 Mo | **134,64 ms** |
+
+* **la bascule de langue coûte 5,0 ms et 530 Ko** ✓✓ — contre **134,6 ms et 9,8 Mo** pour recharger un
+  modèle ✗ ✓ (rapport **×27** en temps, **×18** en mémoire ✓✓) ;
+* **et le rapport ne peut que s'améliorer** ✓ (raisonnement, pas mesure ✗) : un modèle de 7 milliards pèse
+  des **milliers** de fois plus qu'un adaptateur ✓, alors qu'un LoRA reste petit ✓✓ — le coût du paramètre
+  ne dépend pas de la taille du noyau ✓ ;
+* **et l'adaptateur de SURFACE** (le dernier étage, 32 768 poids ✓, mesuré au § « où brancher » ✓) pèserait
+  **≈ 130 Ko** ✓✓ — quatre fois moins ✓, pour **84 % du gain** ✓ ;
+* **la conclusion pratique** ✓✓ : *un noyau, N adaptateurs de quelques centaines de kilo-octets, et une
+  bascule en millisecondes* ✓✓ — c'est-à-dire une architecture où **la langue est un fichier** ✓, pas un
+  modèle ✗. C'est la réponse la plus utile de ce chapitre à la question posée ✓.
