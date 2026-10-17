@@ -1106,3 +1106,30 @@ le modèle **v2** ✓ (corpus enrichi ✓) :
 * **ce que cela clôt** ✓✓ : **toutes** les mesures qui reposaient sur l'ancien corpus sont **rejouées** ✓✓ — la
   neutralité (§ 29 ✓), le contenu (§ 29-30 ✓), et les deux livres du retrieval (§ 25 ✓, inchangés car ils ne
   dépendent pas du corpus d'entraînement ✗). *Le chapitre ne repose plus sur un corpus périmé* ✓✓.
+
+## Trente-et-unième mesure (17/10, 20 h 15) : l'hypothèse « récit contre dialogue » est **réfutée** — et le signal varie de dix-sept fois
+
+La mesure 26 laissait une hypothèse **non testée** ✗ : *le sens partagé vivrait dans le **récit** (Verne ✓) plutôt
+que dans le **dialogue** (Alice ✗)*. Il fallait plus de livres ✓ — et les 1905 textes en contiennent ✓✓ : en
+cherchant les **auteurs présents dans les deux langues** (les traductions gardent l'auteur, pas le titre ✓),
+**sept** apparaissent ✓, dont **trois** paires de la **même œuvre** ✓ : **Don Quijote** ✓, **Proust** (*Swann* ✓),
+**Candide** ✓. Deux ont été mesurées ✓ (la troisième, Proust, n'a pas été retrouvée dans le même dossier ✗✓) :
+
+| livre | genre | **rang médian** (16,5) | **top-5** (15,6 %) | **écart** |
+|---|---|---:|---:|---:|
+| **Candide** ✓ | conte (récit) ✓ | **13** ✓ | **31,2 %** ✓✓ | **+0,1161** ✓✓✓ |
+| **Le Tour du monde** ✓ | roman d'aventures ✓ | **9** ✓✓ | 28,1 % ✓ | +0,0779 ✓ |
+| **Alice** ✗ | dialogue ✓ | 17 ✗ | 12,5 % ✗ | +0,0087 ✗ |
+| **Don Quijote** ✗ | roman (récit) ✓ | 19 ✗ | 25,0 % ✓ | +0,0068 ✗ |
+
+* **L'HYPOTHÈSE EST RÉFUTÉE** ✗✓ : **Don Quijote** est un **récit** ✓ et il fait **aussi mal qu'Alice** ✗ (écart
+  +0,007 contre +0,009 ✓) ; et **Candide**, un autre récit, fait **le meilleur score de tout le chapitre** ✓✓
+  (+0,116 ✓✓✓, 7/32 en top-1 ✓, top-5 **31 %** ✓). *Le genre n'explique rien* ✗✓ ;
+* **et la taille non plus** ✗✓ : Candide fait **228 Ko** ✓ (le meilleur ✓) mais Alice **179 Ko** ✗ (le pire ✗✓) ;
+  Don Quijote **2080 Ko** ✗ (faible ✓) et Verne **451 Ko** ✓ (bon ✓). *Pas de relation* ✗ ;
+* **donc le signal varie de DIX-SEPT FOIS** ✗✓ (+0,007 à +0,116 ✓) entre **quatre livres bien alignés** ✓✓ (Sancho
+  2173/2207 ✓ pour Don Quijote, 0,1-1,7 % pour les autres ✓) — et **aucune variable simple ne l'explique** ✗✓ :
+  ni le genre ✗, ni la taille ✗, ni l'alignement ✗. *C'est une propriété de la PAIRE texte-traduction, pas d'une
+  catégorie* ✓✓ ;
+* **et c'est un résultat utile** ✓✓ : il dit qu'on **ne peut pas prédire** si un livre donnera un signal ✗ — il faut
+  le **mesurer** ✓✓. Un chapitre qui finit sur « ça dépend du livre, mesurez-le » est un chapitre honnête ✓.

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 45 HAE.**
+**Mis à jour : 2026-10-17, 20 h 20 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,27 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ L'HYPOTHÈSE RÉCIT/DIALOGUE EST RÉFUTÉE — le signal varie de dix-sept fois (17/10, 20 h 15)
+
+En cherchant les **auteurs présents dans les deux langues** (les traductions gardent l'auteur, pas le titre) :
+**sept** apparaissent, dont **trois** paires de la même œuvre (Don Quijote, Proust, Candide). Deux mesurées :
+
+| livre | genre | **rang médian** (16,5) | **top-5** (15,6 %) | **écart** |
+|---|---|---:|---:|---:|
+| **Candide** | conte (récit) | **13** | **31,2 %** ✓✓ | **+0,1161** ✓✓✓ |
+| **Le Tour du monde** | aventures | **9** ✓✓ | 28,1 % ✓ | +0,0779 ✓ |
+| **Alice** | dialogue | 17 ✗ | 12,5 % ✗ | +0,0087 ✗ |
+| **Don Quijote** | roman (récit) | 19 ✗ | 25,0 % ✓ | +0,0068 ✗ |
+
+**L'hypothèse est réfutée** ✗✓ : **Don Quijote** est un **récit** et fait **aussi mal qu'Alice** (+0,007 contre
++0,009) ; **Candide**, un autre récit, fait **le meilleur score du chapitre** (+0,116, 7/32 en top-1, top-5 31 %).
+*Le genre n'explique rien.* **Et la taille non plus** : Candide 228 Ko (meilleur) mais Alice 179 Ko (pire).
+→ **Le signal varie de DIX-SEPT FOIS** (+0,007 à +0,116) entre **quatre livres bien alignés** (Sancho 2173/2207
+pour Don Quijote, 0,1-1,7 % pour les autres) — **aucune variable simple ne l'explique** : ni le genre, ni la
+taille, ni l'alignement. *C'est une propriété de la PAIRE texte-traduction, pas d'une catégorie* ✓✓.
+→ **Résultat utile** ✓✓ : on **ne peut pas prédire** si un livre donnera un signal — il faut le **mesurer**. Un
+chapitre qui finit sur « ça dépend du livre, mesurez-le » est un chapitre honnête ✓.
 
 ## ✅ LE CONTENU SE RÉPLIQUE AUSSI — le noyau neutre n'est pas appauvri (17/10, 19 h 40)
 
