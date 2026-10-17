@@ -598,3 +598,26 @@ comparaison **entre modèles** reste valable, c'est elle qui compte ✓.)*
   forcer l'itération » ✗ (elle s'obtient ✓, on vient de le voir ✓) mais **« quelle capacité faut-il pour
   qu'un point fixe reste lisible ? »** ✓ — une question de **taille**, donc une question à laquelle deux
   GPU peuvent répondre ✓✓.
+
+## 20. LA COURBE DE CAPACITÉ N'EST PAS LISIBLE À BUDGET DE PAS ÉGAL
+
+Le § 19 posait la question juste ✓ : *quelle capacité faut-il pour qu'un point fixe reste lisible ?* ✗.
+Premier point mesuré ✓ — **dim 512, même recette, mêmes 2 000 pas** ✓ :
+
+| modèle | validation | contenu t=1 | t=4 | déplacement t1→t4 |
+|---|---:|---:|---:|---:|
+| **rec, dim 256** ✓ | **4,74** | 93,4 | 93,5 | 44,8 % |
+| **rec, dim 512** | **5,05** ✗ | **110,2** ✗✗ | 108,5 | **34,7 %** |
+| distinct (témoin, dim 256) | 4,69 | 90,6 | 91,5 | 46,5 % |
+
+* **le 512 est SOUS-ENTRAÎNÉ** ✗✓ : sa validation est **pire** à pas égal (5,05 contre 4,74 ✓) — un modèle
+  plus grand demande **plus** de pas ✓✗ ;
+* **et son contenu s'effondre** ✗ (110,2 %, **pire que l'embedding moyen** ✓✗) : conséquence directe du
+  sous-entraînement ✓, **pas** de la capacité ✗ ;
+* seul son déplacement est plus petit (34,7 % ✓ : il converge plus ✓, mais vers un point fixe **pauvre** ✗) ;
+* **donc la courbe capacité → netteté n'est PAS lisible à budget de pas égal** ✗✓ : c'est un **budget
+  d'entraînement** qu'il faut égaliser ✗, et cela demande d'entraîner **jusqu'à convergence** ✓ (heures par
+  point ✓) — faisable avec deux cartes ✓, **pas dans le temps de cette nuit** ✓. La question reste
+  **ouverte** ✓ et **précisément posée** ✓✓ : *à qualité de validation égale, un point fixe plus large
+  est-il plus lisible ?*
+* et le run **dim 1024** a été **arrêté** pour la même raison (il aurait été sous-entraîné aussi ✓).
