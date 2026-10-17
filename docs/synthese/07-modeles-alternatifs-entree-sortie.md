@@ -961,3 +961,36 @@ rang 8, 0,9 % ✓, et 60 jetons générés ✓) :
 
 *Le chapitre a donc une réponse à la fois **forte** et **bornée** : la couche commune existe, elle garde le
 sens, et la langue y est un **petit paramètre** — mais son **rôle** dépend de ce que le noyau sait déjà* ✓✓.
+
+## Vingt-sixième mesure (17/10, 23 h) : le signal cross-lingue est **utilisable** — sur un livre sur deux
+
+Le top-1 (3/32 ✗) ne dit pas si le signal **sert** : une recherche affiche plusieurs résultats ✓. Mesures
+ajoutées au même outil ✓ — le **rang médian** du vrai homologue ✓ et le **top-5** ✓, sur les **deux** paires
+saines ✓ (Qwen, couche 8 ✓, 32 segments ✓) :
+
+| livre | **rang médian** (hasard 16,5) | **top-5** (hasard 15,6 %) | top-1 |
+|---|---:|---:|---:|
+| **Le Tour du monde** ✓ | **9 / 32** ✓✓ | **28,1 %** ✓✓ | 3/32 (9,4 %) |
+| **Alice** ✗ | 17 / 32 ✗ | 12,5 % ✗ | 2/32 (6,2 %) |
+
+* **POUR VERNE, LE SIGNAL EST UTILISABLE** ✓✓ : le vrai homologue tombe à un **rang médian de 9 sur 32** (contre
+  16,5 au hasard ✓✓) et dans le **top-5 dans 28 %** des cas (contre 15,6 ✓✓) — *c'est une recherche cross-lingue
+  réelle, faible mais fonctionnelle* ✓✓ ;
+* **POUR ALICE, RIEN** ✗ : rang médian **17** (exactement le hasard ✓) et top-5 **sous** le hasard (12,5 contre
+  15,6 ✗✓). Le signal de +0,009 ne suffit pas ✓✓ ;
+* **donc l'utilisabilité dépend du LIVRE** ✗✓ (Verne ✓ / Alice ✗) — et je ne sais pas pourquoi ✗ : Alice est un
+  **dialogue** (peu de narration ✓), Verne un **récit** (descriptions, voyages ✓) → *l'hypothèse la plus simple est
+  que le sens partagé entre deux langues vit dans le **récit**, pas dans le dialogue* ✓✓, mais **elle n'est pas
+  testée** ✗ et deux livres ne suffisent pas à la tester ✓✓ ;
+* **ce que cela laisse** ✓✓ : *une recherche cross-lingue **fonctionne** sur un des deux livres, faiblement
+  (rang 9/32, top-5 28 %)* ✓✓ — c'est le premier résultat **utilisable** de tout le chapitre, et il est **borné**
+  ✗✓. Il demanderait, pour être une propriété, **plusieurs livres de chaque genre** ✓ — et c'est un programme, pas
+  une mesure ✓.
+
+### La synthèse complète (mesures 24-25, pour finir)
+
+| # | la question | le chiffre | verdict |
+|---:|---|---|---|
+| 24 | la langue comme paramètre sur un **vrai** modèle ? | LoRA 4,4 M (**0,9 %**) : français **−7,6 %**, anglais **+4,5 %** | ✓✓ mais **huit fois moins** qu'en monolingue (−53 %) |
+| 25 | la sortie **suit-elle** le paramètre sur Qwen ? | amorce anglaise + LoRA français → **anglais** (en 27 · fr 0) | ✗ **non** : elle suit l'**amorce** |
+| 26 | le sens partagé est-il **utilisable** ? | Verne : rang médian **9/32**, top-5 **28 %** · Alice : rang **17**, top-5 **12,5 %** | ✓ **un livre sur deux** |

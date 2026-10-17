@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 22 h 40 HAE.**
+**Mis à jour : 2026-10-17, 23 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,21 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LE SIGNAL CROSS-LINGUE EST UTILISABLE — sur un livre sur deux (17/10, 23 h)
+
+| livre | **rang médian** (hasard 16,5) | **top-5** (hasard 15,6 %) | top-1 |
+|---|---:|---:|---:|
+| **Le Tour du monde** ✓ | **9 / 32** ✓✓ | **28,1 %** ✓✓ | 3/32 |
+| **Alice** ✗ | 17 / 32 ✗ | 12,5 % ✗ | 2/32 |
+
+**Pour Verne, le signal est utilisable** ✓✓ : le vrai homologue tombe à un **rang médian de 9 sur 32** (contre 16,5
+au hasard) et dans le **top-5 dans 28 %** des cas (contre 15,6) — *une recherche cross-lingue réelle, faible mais
+fonctionnelle* ✓✓. **Pour Alice, rien** ✗ (rang 17 = le hasard ; top-5 **sous** le hasard ✓).
+→ **L'utilisabilité dépend du livre** ✗✓ — et je ne sais pas pourquoi ✗. L'hypothèse la plus simple : *le sens
+partagé vit dans le **récit** (Verne ✓) plutôt que dans le **dialogue** (Alice ✓)* ✓✓ — mais elle **n'est pas
+testée** ✗, et deux livres ne suffisent pas ✓.
+→ **C'est le premier résultat **utilisable** du chapitre, et il est **borné*** ✓✓.
 
 ## ⚠️ SUR QWEN, LA SORTIE SUIT L'AMORCE — PAS L'ADAPTATEUR (17/10, 22 h 30)
 

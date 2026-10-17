@@ -92,7 +92,14 @@ def main() -> int:
     B = E_en / np.linalg.norm(E_en, axis=1, keepdims=True)
     S = A @ B.T
     pred = S.argmax(axis=1)
+    # ⚠️ AU-DELÀ DU TOP-1 : le RANG du vrai homologue ✓✓ et le TOP-5 ✓. Un top-1 au hasard ne condamne pas
+    # l'usage : une recherche affiche plusieurs résultats ✓, et le rang médian dit où le bon se trouve ✓.
+    ordre = np.argsort(-S, axis=1)
+    rangs = np.array([int(np.where(ordre[i] == i)[0][0]) + 1 for i in range(n)])
     exact = 100 * float(np.mean(pred == np.arange(n)))
+    top5 = 100 * float(np.mean(rangs <= 5))
+    print(f"  rang médian du vrai homologue : {int(np.median(rangs))} / {n} (hasard : {(n + 1) / 2:.1f})")
+    print(f"  top-5 : {top5:5.1f} % (hasard : {100 * 5 / n:.1f} %)")
     tol1 = 100 * float(np.mean(np.abs(pred - np.arange(n)) <= 1))
     print(f"  {n} segments · dernier étage ({L}) · hasard = {100/n:.1f} %")
     print(f"  retrieval EXACT        : {exact:5.1f} %  ({int(exact*n/100)}/{n})")
