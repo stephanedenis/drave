@@ -723,3 +723,40 @@ vérifications ont été faites ✓, et **les deux corrigent la conclusion** ✓
   anticipé ✓) et une **batterie de réglages** (longueurs 32 · 64 · 128 · 256 ✓, amorces variées ✓) pour que
   le chiffre soit une **mesure** et non un point ✓✓. C'est un travail de banc, pas de nuit ✗ — et il est
   **écrit ici** pour ne pas être oublié ✓.
+
+## 25. LE BANC : le classement est **stable**, la comparaison est une **mesure** — et l'alerte du § 23 était un artefact
+
+`tools/banc_lecteur.py` ✓ fait les deux choses qui manquaient au § 24 : un **λ de ridge choisi par
+validation croisée** ✓ (et non fixé à 1e-3 ✗) et une **batterie de longueurs** ✓ (32 · 64 · 128 · 256 ✓).
+Résultat, sur les deux modèles de la campagne (96 Mo ✓) :
+
+| longueur | **dim 256** | **dim 512** | gagnant |
+|---:|---:|---:|---|
+| 32 | **91,8** | 93,0 | 256 ✓ |
+| 64 | **87,4** | 88,8 | 256 ✓ |
+| 128 | **85,1** | 85,8 | 256 ✓ |
+| 256 | **84,0** | 85,4 | 256 ✓ |
+
+* **LE CLASSEMENT EST STABLE SUR LES QUATRE LONGUEURS** ✓✓ — le 256 est **toujours** devant, et l'écart est
+  de **1 à 2 points** ✓ (et non **14** comme au § 23 ✗✓). *La comparaison est donc une mesure*, au sens où
+  aucun réglage de la batterie ne la renverse ✓✓ ;
+* **et l'alerte du § 23 était un ARTEFACT de mesure** ✓✓ : « le meilleur modèle est le moins lisible » ✗ était
+  vrai **dans une seule configuration** ✓✗ — avec un lecteur régularisé et quatre longueurs, les deux modèles
+  sont **presque aussi lisibles** (84,0 contre 85,4 ✓), le plus petit gardant **1,4 point** d'avance ✓. Ce
+  n'est pas « la linéarité n'est pas une propriété de la pensée » ✗ : c'est **« j'avais mal réglé le
+  lecteur »** ✓✓ — et la leçon du § 24 se retourne contre elle-même, ce qui est bon signe ✓ ;
+* **le contenu s'améliore avec la longueur** ✓ (91,8 → **84,0** ✓) : plus de contexte par fenêtre ✓ = meilleur
+  relevé ✓ — et **λ = 10** est retenu partout ✓, c'est-à-dire que les états sont **très colinéaires** ✓✓
+  (une propriété réelle de l'espace d'état ✓, et elle explique pourquoi un ridge non régularisé donnait des
+  chiffres instables ✗✓) ;
+* **ce qui reste à trancher** ✗ : le 256 est **plus lisible** et le 512 est un **meilleur modèle de langue**
+  (2,7297 contre 2,8183 ✓) — deux qualités **différentes** ✓, mesurées **séparément** ✓✓. La question « la
+  pensée est-elle là » n'a donc **pas** de réponse en un chiffre ✗✓ : elle en a **deux**, et ils ne disent pas
+  la même chose ✓.
+
+**Bilan de la méthode, après cinq leçons** ✓✓ : sur douze mesures de la nuit, **trois** ont dû être
+**corrigées** après coup ✗✓ (la position avec elle-même ✓, le ridge sous-déterminé ✓, le plan de textes hors
+corpus ✓) et **deux** étaient des **artefacts de réglages** ✓✓ (le 104,3 du § 23 ✓, et le MLP sur-appris du
+§ 24 ✓). Les **sept** autres tiennent ✓ — et c'est précisément pourquoi le banc de ce paragraphe compte plus
+que le chiffre qu'il produit ✓✓ : *il rend les comparaisons futures mesurables, ce qu'aucune des douze
+mesures précédentes ne faisait* ✓.
