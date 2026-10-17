@@ -1234,3 +1234,24 @@ La mesure 32 s'appuyait sur un indicateur **grossier** ✗ (les lignes **entièr
 * **ce qui reste** ✓✓ : le signal cross-lingue varie de **17×** (mesure 31 ✓) sans que ni le genre ✗, ni la taille
   ✗, ni la part de dialogue ✗ ne l'expliquent — *c'est une propriété de la **paire** texte-traduction* ✓✓, et **rien
   de plus simple** n'est démontré ✗. *La science de cette nuit aura beaucoup retiré* ✓✓.
+
+## Trente-quatrième mesure (17/10, 22 h) : l'audit de traçabilité du bilan — **aucune incohérence**, et un outil de plus
+
+Un chapitre de trente-cinq mesures finit par un **bilan** ✓ — et le risque est qu'il **dérive** ✗ en le résumant.
+`tools/verifier_bilan.py` ✓ isole le bilan ✓, en extrait les **nombres** ✓ et cherche chacun dans le **corps** ✓ :
+
+| ce que l'audit a trouvé | |
+|---|---|
+| nombres cités dans le bilan | **19** ✓ |
+| nombres **absents** du corps | **1** ✗ — « 37 % » ✓ |
+| — et cet « absent » est | **37,5 %** ✓✓ (un écart de **format**, pas une erreur ✓) |
+
+* **LE BILAN EST FIDÈLE** ✓✓ : chaque nombre qu'il cite **existe** ailleurs dans le document ✓✓ — et le seul
+  « absent » est une **graphie** différente (37 % contre 37,5 ✓). *Le résumé ne dérive pas* ✓✓ ;
+* **et l'outil dit lui-même ce qu'il ne peut pas faire** ✗✓ : il compare des **chaînes** ✓✗ (« 5 ms » et « 5,0 ms »
+  sont deux nombres pour lui ✓) et il ne juge pas le **sens** ✓✓ — *un nombre présent peut être cité dans un
+  contexte faux, et seule une relecture humaine le voit* ✓✓. *C'est la règle de tous les instruments de cette
+  nuit : dire où il s'arrête* ✓✓ ;
+* **et ce contrôle est exactement celui qui manquait** ✓✓ : plusieurs fois ce soir, un chiffre a dérivé entre sa
+  mesure et sa citation ✗✓ (les erratums 9, 21, 32 ✓). *Un audit de traçabilité ne les aurait pas tous attrapés
+  ✗, mais il aurait posé la question plus tôt* ✓✓.
