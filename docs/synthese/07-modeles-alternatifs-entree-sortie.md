@@ -1285,3 +1285,39 @@ paires **bien alignées** ✗. Trois candidats de plus, tous **mesurables sans m
   **mesurer** ✗ — pas le prédire ✗. *C'est une conclusion modeste, mais c'est une conclusion* ✓✓ : elle ferme la
   question au lieu de la laisser ouverte ✗✓, et elle dit exactement **ce qu'il faudrait** pour aller plus loin
   (des **dizaines** de paires ✓, un **vrai** alignement au niveau des phrases ✓, et un modèle **plus grand** ✓).
+
+## Trente-sixième mesure (17/10, 20 h) : la cinquième réplication — et le **plan 2×2** est complet
+
+Il manquait **une case** au plan 2×2 ✓ (taille × corpus ✓) : le modèle **dim 512 sur littérature** ✗. Le voici ✓
+(val **2,6097** bits/octet — le **meilleur** des cinq ✓✓, plus de capacité **et** un corpus plus riche ✓) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 61,3 % | 56,6 % | +4,7 ✓ |
+| **1** | **53,6 %** | 50,7 % | **le hasard** ✓ |
+| **2** | **53,5 %** | 50,5 % | **le hasard** ✓ |
+| **3** | **69,0 %** | 50,1 % | ✗✗ **une couche langue-spécifique AU MILIEU** |
+| **4** | **52,2 %** | 50,2 % | **le hasard** ✓✓ |
+| **5** | **52,1 %** | 50,8 % | **le hasard** ✓✓ |
+| **6** | **52,4 %** | 51,3 % | **le hasard** ✓✓ |
+| 7 | 66,2 % | 51,0 % | ✗ |
+| 8 | 63,9 % | 51,6 % | ✗ (la surface) |
+
+**Le plan 2×2, complet** ✓✓ :
+
+| corpus ▼ / taille ▶ | dim 256 | dim 512 |
+|---|---|---|
+| **prose du dépôt** ✗ | **50,2 %** (mesure 1 ✓) | **51,4 %** (mesure 15 ✓) |
+| **littérature** ✓ | **50,1 %** (mesure 19 ✓) puis **51,5 %** (mesure 29 ✓) | **52,1-53,6 %** (cette mesure ✓) |
+
+* **LA CINQUIÈME RÉPLICATION TIENT** ✓✓ : **cinq** couches sont au hasard (1, 2, 4, 5, **6** ✓ — 52,1 à 53,6 % ✓✓).
+  *Cinq modèles, deux tailles, deux corpus, même résultat* ✓✓✓ ;
+* **et la zone neutre est la PLUS LARGE** ✓✓ (cinq couches ✓ contre quatre pour le 256 littéraire v2 ✓ et trois
+  pour le v1 ✓) — cohérent avec la tendance : **plus de capacité et de données, plus d'abstraction** ✓✓ ;
+* **MAIS LA COUCHE 3 EST UNE EXCEPTION** ✗✗ : **69,0 %** ✗ — une couche **langue-spécifique au MILIEU** du réseau ✓✗,
+  entre deux couches neutres ✓✓. *La structure n'est pas monotone* ✗✓ : le noyau n'est pas « neutre partout sauf
+  aux extrémités » ✓, mais **neutre avec des îlots** ✓✗ — et c'est une nuance **neuve** ✓✓ que les quatre premiers
+  modèles ne montraient pas ✗ ;
+* **ce que cela dit du mécanisme** ✓✓ : le réseau peut **router la langue par une couche intermédiaire** ✓✗ (il en a
+  la capacité quand il est large ✓) tout en gardant le reste abstrait ✓✓. *La neutralité n'est pas une propriété
+  de **toutes** les couches, mais de **la plupart** — et la proportion augmente avec la capacité* ✓✓.

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 30 HAE.**
+**Mis à jour : 2026-10-17, 20 h 10 HAE.**
 
 ## Le travail du moment : la couche commune entrée-sortie (chapitre 7)
 
@@ -224,6 +224,37 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ CINQUIÈME RÉPLICATION — et le plan 2×2 est complet (17/10, 20 h)
+
+Il manquait une case : **dim 512 sur littérature** (val **2,6097**, le meilleur des cinq) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| **1** | **53,6 %** | 50,7 % | **le hasard** ✓ |
+| **2** | **53,5 %** | 50,5 % | **le hasard** ✓ |
+| **3** | **69,0 %** | 50,1 % | ✗✗ **couche langue-spécifique AU MILIEU** |
+| **4** | **52,2 %** | 50,2 % | **le hasard** ✓✓ |
+| **5** | **52,1 %** | 50,8 % | **le hasard** ✓✓ |
+| **6** | **52,4 %** | 51,3 % | **le hasard** ✓✓ |
+| 8 | 63,9 % | 51,6 % | ✗ (la surface) |
+
+**Le plan 2×2, complet** :
+
+| corpus ▼ / taille ▶ | dim 256 | dim 512 |
+|---|---|---|
+| **prose** | **50,2 %** | **51,4 %** |
+| **littérature** | **50,1 %** puis **51,5 %** | **52,1-53,6 %** |
+
+**La cinquième réplication tient** : cinq couches au hasard (1, 2, 4, 5, 6) — *cinq modèles, deux tailles, deux
+corpus, même résultat* ✓✓✓. Et la zone neutre est la **plus large** (cinq couches), cohérent avec : plus de capacité
+et de données, plus d'abstraction ✓✓.
+**Mais la couche 3 est une exception** : **69,0 %** — une couche **langue-spécifique au MILIEU**, entre deux couches
+neutres. *La structure n'est pas monotone* : le noyau est **neutre avec des îlots**, et c'est une nuance **neuve**
+que les quatre premiers modèles ne montraient pas.
+→ **Ce que cela dit du mécanisme** : le réseau peut **router la langue par une couche intermédiaire** quand il en a
+la capacité, tout en gardant le reste abstrait. *La neutralité n'est pas une propriété de **toutes** les couches,
+mais de **la plupart** — et la proportion augmente avec la capacité* ✓✓.
 
 ## ⚠️ LA VARIATION DE 17× RESTE INEXPLIQUÉE — et c'est la réponse (17/10, 22 h 30)
 
