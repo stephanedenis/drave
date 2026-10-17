@@ -46,6 +46,25 @@ import numpy as np
 import torch
 
 
+def _lambda_cv(H: np.ndarray, E: np.ndarray, k: int = 3) -> float:
+    """λ de ridge par VALIDATION CROISÉE ✗✓ (leçon du § 25 : un λ fixé rend les chiffres dépendants des
+    réglages). Même fonction que dans `banc_lecteur.py` et `empreinte.py` ✓."""
+    plis = np.array_split(np.arange(H.shape[0]), k)
+    meilleur, err_min = 1e-3, 1e30
+    for lam in (1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0):
+        err = 0.0
+        for i in range(k):
+            te = plis[i]
+            tr = np.concatenate([plis[j] for j in range(k) if j != i])
+            mh, me = H[tr].mean(0), E[tr].mean(0)
+            Hc, Ec = H[tr] - mh, E[tr] - me
+            W = np.linalg.solve(Hc.T @ Hc + lam * np.eye(Hc.shape[1]), Hc.T @ Ec)
+            err += float(np.linalg.norm((H[te] - mh) @ W + me - E[te]) ** 2)
+        if err < err_min:
+            meilleur, err_min = lam, err
+    return meilleur
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--hf", required=True, help="dossier des poids de référence (safetensors)")
@@ -129,7 +148,8 @@ def main() -> int:
                 Eb = ES[k:k + Hb.shape[0]].astype(np.float64)
                 mh, me = Hb.mean(0), Eb.mean(0)
                 Hc2, Ec2 = Hb - mh, Eb - me
-                W2 = np.linalg.solve(Hc2.T @ Hc2 + a.ridge * np.eye(Hc2.shape[1]), Hc2.T @ Ec2)
+                lam2 = _lambda_cv(Hc2, Ec2) if Hc2.shape[0] > 100 else a.ridge
+                W2 = np.linalg.solve(Hc2.T @ Hc2 + lam2 * np.eye(Hc2.shape[1]), Hc2.T @ Ec2)
                 P2 = Hc2 @ W2 + me
                 ligne.append(100 * float(np.linalg.norm(P2 - Eb) / np.linalg.norm(Eb)))
             # le témoin : le jeton que le MODÈLE aurait choisi, à l'horizon 1
@@ -153,7 +173,8 @@ def main() -> int:
     moy_h, moy_e = H.mean(0), E.mean(0)
     Hc, Ec = H - moy_h, E - moy_e
     d = H.shape[1]
-    W = np.linalg.solve(Hc.T @ Hc + a.ridge * np.eye(d), Hc.T @ Ec)      # (896, 896)
+    lam0 = _lambda_cv(Hc, Ec) if Hc.shape[0] > 100 else a.ridge
+    W = np.linalg.solve(Hc.T @ Hc + lam0 * np.eye(d), Hc.T @ Ec)      # (896, 896)
     pred = Hc @ W + moy_e
 
     def ecart(P, etiq):

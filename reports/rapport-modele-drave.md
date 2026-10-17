@@ -813,3 +813,42 @@ Deuxième conclusion rejouée avec le lecteur réparé ✓ (λ de ridge par **va
   (la falaise ✓, l'empreinte ✓) et **une tombe** (§ 23 ✓✗) ; une n'est **pas concernée** (le point fixe ✓) ;
   et le corpus (§ 22 ✓) ne dépendait pas du lecteur ✓. *Le banc discrimine : il ne confirme pas tout, il ne
   casse pas tout* ✓✓ — c'est la seule propriété qui compte pour un instrument ✓.
+
+## 28. LE CONTENU LONG SURVIT — et il s'AMÉLIORE : les TROIS piliers de la nuit tiennent
+
+Troisième et dernier rejeu ✓ (λ de ridge par validation croisée ✓) : le **contenu long** du § 5 ✓ — celui qui
+a fondé l'idée de « langage abstrait » ✓.
+
+| couche | **k = 1** | **k = 4** | **k = 16** | témoin : le **jeton** (k = 1) |
+|---:|---:|---:|---:|---:|
+| 12 | 68,7 | 79,2 | 81,1 | **118,4** ✗✗ |
+| **23** | **63,2** ✓✓ | **77,9** ✓ | **80,3** ✓✓ | **118,4** ✗✗ |
+| *rappel § 5 (λ fixé à 1e-3 ✗)* | *68,6* | *82,7* | *84,9* | *122,9* |
+
+* **TOUT S'AMÉLIORE DE ~5 POINTS** ✓✓ (68,6 → **63,2** ; 82,7 → **77,9** ; 84,9 → **80,3** ✓) — le lecteur
+  régularisé **lit mieux** les mêmes états ✓, et **la conclusion se renforce** ✓✓ ;
+* **l'état porte la suite à 16 jetons d'avance à 80,3 %** ✓✓, quand **le mot** que le modèle aurait dit en
+  est à **118,4 %** ✗✗ — soit **38 points** d'écart ✓✓. La « trajectoire » du § 5 n'est donc pas un artefact
+  de réglages ✗ : c'est **la** propriété la plus solide de la nuit ✓✓ ;
+* **et la profondeur compte un peu** ✓ : la couche 23 bat la couche 12 à **tous** les horizons ✓ (63,2 contre
+  68,7 · 77,9 contre 79,2 · 80,3 contre 81,1 ✓) → le § 5 disait « toutes les couches se valent » ✗✓ ; au
+  lecteur propre, **la dernière est la meilleure, de 4 à 5 points** ✓ — un **raffinement**, pas un
+  renversement ✓.
+
+### Le bilan des rejeux, et la fin du programme de la nuit
+
+| conclusion | verdict au lecteur propre |
+|---|---|
+| **le contenu long** (§ 5, § 13) | ✅ **survit et s'améliore** (84,9 → **80,3** à k = 16 ✓✓) |
+| **l'empreinte** (§ 11) | ✅ **survit** (chiffres identiques, trois exécutions ✓) |
+| **la falaise** (§ 18) | ✅ **survit et se nettoie** (79,3 à t = 1 ✓✓) |
+| **le corpus** (§ 22) | ✅ tient (indépendant du lecteur ✓) |
+| **le point fixe** (§ 19) | ⚪ non concerné (pas de ridge ✓) |
+| « le meilleur est le moins lisible » (§ 23) | ✗ **tombe** (artefact de réglages ✗✓) |
+
+**Les TROIS piliers de la nuit tiennent** ✓✓ : on peut **lire le contenu long** dans l'état (80,3 % à 16 jetons
+✓✓), on peut **extraire une empreinte** (49,3 contre 76,9 ✓✓), et on peut **rendre l'itération plate**
+(88,4 · 88,2 · 88,5 → rejoué : 84,8 · 84,6 avec récurrence ✓). Ce qui **ne tient pas**, c'est l'idée qu'un
+**seul chiffre** dirait « la pensée est là » ✗✓ — et ce qui **reste à construire** est exactement ce que les
+§ 14-19 ont nommé : une **dynamique apprise**, contractante **et** informative ✓, dont le prix (la falaise ✓)
+est maintenant **chiffré** ✓.
