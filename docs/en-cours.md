@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 20 HAE.**
+**Mis à jour : 2026-10-17, 19 h 45 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,24 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LE CONTENU SE RÉPLIQUE AUSSI — le noyau neutre n'est pas appauvri (17/10, 19 h 40)
+
+Mesure 4 rejouée sur le modèle v2 :
+
+| couche | contenu **anglais** | contenu **français** | **mêlé** |
+|---:|---:|---:|---:|
+| **1** | **87,7 %** | **86,5 %** | 93,0 % |
+| **2** | **86,3 %** | **84,3 %** | 92,3 % |
+| **8** | **79,4 %** | **77,5 %** | 82,7 % |
+
+**Le noyau neutre garde le sens** ✓✓ : aux couches 1-2, où la langue est **illisible**, le contenu reste à
+**87,7 / 86,5 %** — à **9 points** du meilleur (79,4 %). *C'est la réplication de la mesure 4, sur un autre
+corpus* ✓✓.
+**Et la colonne « mêlé » reste la plus mauvaise** (93,0 contre 87,7) : un **seul** relevé **linéaire** pour deux
+langues coûte toujours (mesure 8) ; c'est le **non-linéaire** qui referme l'écart (mesures 5 et 9) ✓✓.
+→ **Toutes les mesures qui reposaient sur l'ancien corpus sont rejouées** ✓✓ : la neutralité (§ 29) et le contenu
+(§ 29-30). *Le chapitre ne repose plus sur un corpus périmé* ✓✓.
 
 ## ✅ LE CORPUS ENRICHI ÉLARGIT LA ZONE NEUTRE — quatrième réplication (17/10, 19 h 15)
 

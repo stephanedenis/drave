@@ -1084,3 +1084,25 @@ bilingue est **réentraîné** ✓ (mêmes réglages, 20 000 pas ✓, validation
   extrémités, pas au milieu* ✓✓ ;
 * **et cela fait QUATRE réplications** ✓✓ de la même structure : prose (50,2 % ✓), dim 512 (51,4 ✓), littérature
   v1 (50,1 ✓), littérature v2 (51,5 ✓) — **quatre modèles, quatre corpus, même résultat** ✓✓✓.
+
+## Trentième mesure (17/10, 19 h 40) : le contenu se réplique aussi — le noyau neutre **n'est pas appauvri**
+
+La mesure 4 avait établi que le noyau neutre **garde le sens** ✓ (contenu 87,8 % aux couches 1-2 ✓). Rejouée sur
+le modèle **v2** ✓ (corpus enrichi ✓) :
+
+| couche | contenu **anglais** | contenu **français** | contenu **mêlé** |
+|---:|---:|---:|---:|
+| **1** | **87,7 %** | **86,5 %** | 93,0 % |
+| **2** | **86,3 %** | **84,3 %** | 92,3 % |
+| 4 | 84,5 % | 83,2 % | 91,7 % |
+| 6 | 82,0 % | 80,4 % | 86,8 % |
+| **8** | **79,4 %** | **77,5 %** | 82,7 % |
+
+* **LE NOYAU NEUTRE GARDE LE SENS** ✓✓ : aux couches 1-2 — celles où la langue est **illisible** ✓ — le contenu
+  reste à **87,7 %** et **86,5 %**, à **9 points** du meilleur (79,4 % ✓). *C'est la réplication de la mesure 4* ✓✓,
+  sur un autre corpus ✓ ;
+* **et la colonne « mêlé » reste la plus mauvaise** ✗✓ (93,0 contre 87,7 ✓) — un **seul** relevé **linéaire** pour
+  deux langues coûte toujours ✓ (mesure 8 ✓) ; c'est le **non-linéaire** qui referme l'écart ✓✓ (mesures 5 et 9 ✓) ;
+* **ce que cela clôt** ✓✓ : **toutes** les mesures qui reposaient sur l'ancien corpus sont **rejouées** ✓✓ — la
+  neutralité (§ 29 ✓), le contenu (§ 29-30 ✓), et les deux livres du retrieval (§ 25 ✓, inchangés car ils ne
+  dépendent pas du corpus d'entraînement ✗). *Le chapitre ne repose plus sur un corpus périmé* ✓✓.
