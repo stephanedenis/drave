@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 17 h 55 HAE.**
+**Mis à jour : 2026-10-17, 18 h 25 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,31 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ SUR QWEN, LE SENS SE RETROUVE — et la structure du chapitre est CONFIRMÉE (17/10, 18 h 15)
+
+Même dispositif (Le Tour du monde, 32 segments, milieu, états centrés), avec le **tokeniseur** de Qwen ✓ :
+
+| couche | retrieval | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **8** | **3/32** (9,4 %) ✓ | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **16** | **2/32** (6,2 %) ✓ | −0,1692 | −0,2522 | **+0,0830** ✓✓ |
+| 23 | 1/32 (3,1 %) ✗ | −0,6716 | −0,7011 | +0,0295 |
+
+*(hasard 3,1 % ; rappel : le modèle en octets de 2,4 M donnait **+0,022** et 0/24)*
+
+**Le sens se retrouve, et quatre fois mieux** ✓✓ : l'écart atteint **+0,083** aux couches moyennes (contre +0,022
+pour le petit modèle ✓) et le retrieval passe de **0/24** à **3/32** (trois fois le hasard ✓).
+**Et la structure du chapitre est confirmée** ✓✓✓ : l'écart est **maximal aux couches moyennes** (8 et 16 ✓) et
+**s'effondre à la dernière** (23 : +0,030 ✗) → *la couche profonde est **langue-spécifique*** ✗✓ et *le **sens
+partagé** vit dans les couches **intermédiaires*** ✓✓ — exactement ce que les mesures 1 à 9 disaient d'un
+modèle-jouet, et cette fois sur un **vrai modèle multilingue** ✓✓.
+**Mais le retrieval reste loin de 100 %** ✗ : 9,4 % pour un hasard de 3,1 % ✓ — trois fois le hasard, ce n'est pas
+un alignement ✗✓. **Un signal réel mais faible** ✓✓, à répliquer ✓ (32 segments, un seul livre, un état moyen,
+un seul modèle ✗).
+→ **Où en est la question** ✓✓ : la couche commune **existe** ✓✓ ; elle **garde le sens** ✓✓ ; la langue est un
+**paramètre de 1,33 %** qui commande la sortie ✓✓ ; et **le même sens dans deux langues se retrouve trois fois
+mieux que le hasard** ✓✗ — *c'est la question qui reste ouverte* ✓.
 
 ## ✏️ L'ALIGNEMENT ÉTAIT BON — c'était l'ÉCHANTILLON qui était mauvais (17/10, 17 h 45)
 

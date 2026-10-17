@@ -702,3 +702,41 @@ Avec un échantillonnage au **milieu** du segment ✓ (de la prose ✓) :
 **Onzième piège de la nuit** ✓✓ : j'ai accusé l'**alignement** ✗ alors que le coupable était mon **échantillon**
 ✓✓ — et l'accusation était **mesurable** (0,1 à 0,3 % d'écart ✓✓). La règle reste la même, avec une variante :
 *avant d'accuser un maillon, mesure-le* ✓✓.
+
+## Dix-huitième mesure (17/10, 18 h 15) : sur un **vrai modèle multilingue**, le sens se retrouve — et la structure du chapitre est CONFIRMÉE
+
+Le § précédent concluait qu'il fallait un modèle **multilingue entraîné** ✗. Le **Qwen2.5-0.5B** du dépôt l'est ✓✓.
+Même dispositif ✓ (Le Tour du monde ✓, 32 segments ✓, échantillonnage au **milieu** ✓, états **centrés** ✓),
+avec cette fois le **tokeniseur** du modèle ✓ (les octets n'auraient aucun sens pour lui ✗✓) :
+
+| couche | retrieval exact | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **8** | **3 / 32** (9,4 %) ✓ | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **16** | **2 / 32** (6,2 %) ✓ | −0,1692 | −0,2522 | **+0,0830** ✓✓ |
+| 23 | 1 / 32 (3,1 %) ✗ | −0,6716 | −0,7011 | +0,0295 ✓ |
+
+*(hasard = 3,1 % ✓ ; rappel : le modèle en octets de 2,4 M donnait **+0,022** et 0/24 ✗)*
+
+* **LE SENS SE RETROUVE, ET QUATRE FOIS MIEUX** ✓✓ : l'écart entre homologues atteint **+0,083** aux couches
+  **moyennes** (16 ✓), contre **+0,022** pour le petit modèle en octets ✓✓ — et le retrieval passe de **0/24**
+  ✗ à **3/32** ✓ (trois fois le hasard ✓) ;
+* **ET LA STRUCTURE DU CHAPITRE EST CONFIRMÉE** ✓✓✓ : l'écart est **maximal aux couches moyennes** (8 et 16 :
+  +0,078 et +0,083 ✓) et **s'effondre à la dernière** (23 : +0,030 ✓✗). C'est-à-dire que *la couche profonde
+  est **langue-spécifique*** ✗✓ et que *le **sens partagé** vit dans les couches **intermédiaires*** ✓✓ —
+  exactement ce que les mesures 1 à 9 disaient d'un modèle-jouet ✓✓, et cette fois sur un **vrai modèle
+  multilingue** ✓✓ ;
+* **mais le retrieval reste loin de 100 %** ✗ : 9,4 % pour un hasard de 3,1 % ✓. Trois fois le hasard, ce n'est
+  pas « l'alignement parfait » ✗ — c'est un **signal réel mais faible** ✓✓, et il faut le dire ainsi ✓ ;
+* **ce que la mesure ne peut pas dire** ✗ : 32 segments ✓, un seul livre ✓, un **état moyen** par segment ✗ (une
+  moyenne sur des positions ✓, pas un alignement mot à mot ✓), et **un seul modèle** ✓ (0,5 B ✓). *Un signal de
+  cette taille demande à être répliqué* ✓✓ — et c'est faisable (d'autres livres du corpus multilingue ✓, d'autres
+  couches ✓, un autre modèle ✓).
+
+### Où en est la question du chapitre, après dix-huit mesures
+
+| question | réponse mesurée |
+|---|---|
+| la couche commune existe-t-elle ? | **oui** ✓✓ (noyau à 50,2 % = le hasard ; couches moyennes les plus cross-lingues) |
+| garde-t-elle le sens ? | **oui** ✓✓ (contenu 87,8 % aux couches neutres ; +0,083 de similarité cross-lingue au milieu) |
+| la langue est-elle un paramètre ? | **oui** ✓✓ (1,33 % des paramètres, 5 ms de bascule, et la sortie la suit) |
+| **et le même sens dans deux langues ?** | **partiellement** ✓✗ : trois fois le hasard ✓, mais pas un alignement ✗ — *c'est la question qui reste ouverte* ✓ |

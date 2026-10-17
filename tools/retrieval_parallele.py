@@ -34,6 +34,9 @@ def main() -> int:
                     help="CENTRER les états avant la similarité ✓ — sans quoi une direction commune dominante "
                          "les rend tous à 0,87 de similarité ✗✓ et le retrieval est noyé ✓")
     ap.add_argument("--couche", type=int, default=-1, help="couche à lire (-1 = la dernière ✓)")
+    ap.add_argument("--tokeniseur", action="store_true",
+                    help="encoder avec le TOKENISEUR du modèle ✓ au lieu des octets ✗ — indispensable pour un "
+                         "modèle qui n'est pas en octets (Qwen ✓), qui sinon reçoit des identifiants invalides ✗✓")
     ap.add_argument("--longueur", type=int, default=400, help="octets par segment")
     a = ap.parse_args()
     from transformers import AutoModelForCausalLM
@@ -54,8 +57,17 @@ def main() -> int:
             out.append(seg[d:d + a.longueur])
         return out
 
+    tok = None
+    if a.tokeniseur:
+        from transformers import AutoTokenizer
+        tok = AutoTokenizer.from_pretrained(a.hf)
+
     def etat(txt):
-        b = np.frombuffer(txt.encode("utf-8", errors="ignore"), dtype=np.uint8).astype(np.int64)
+        if tok is not None:
+            ids = tok(txt, return_tensors="pt").input_ids[0].numpy().astype(np.int64)
+            b = ids
+        else:
+            b = np.frombuffer(txt.encode("utf-8", errors="ignore"), dtype=np.uint8).astype(np.int64)
         if len(b) < 8: return None
         with torch.no_grad():
             x = torch.tensor(b).unsqueeze(0)
