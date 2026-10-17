@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 16 h 40 HAE.**
+**Mis à jour : 2026-10-17, 17 h 15 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,32 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ LE RETRIEVAL CROISÉ ÉCHOUE — mais le test est INVALIDE, pas les états (17/10, 17 h)
+
+Question **forte** : le même contenu dans deux langues donne-t-il des états comparables ? Dispositif : un livre
+**parallèle** (Le Tour du monde en 80 jours ✓ — le français est l'original ✓), 24 segments, retrieval croisé
+(hasard 4,2 % ✓) :
+
+| essai | retrieval | homologues | autres |
+|---|---:|---:|---:|
+| dernière couche | **0/24** ✗ | +0,8695 | +0,8706 |
+| **centré** ✗ | 0/24 ✗ | −0,6564 | −0,6032 |
+| couche 6, centré | 0/24 ✗ | −0,6714 | −0,6311 |
+
+**Le retrieval échoue partout**, et les homologues sont **moins** similaires que les autres ✗✗.
+**MAIS LE TEST EST INVALIDE** ✗✓ — et le confondant est mesurable : les deux éditions n'ont pas la même longueur
+(**451 Ko** contre **375 Ko**, **20 %** d'écart ✗✗) → un découpage **proportionnel** **dérive** ✓✗ : après
+quelques chapitres, les segments ne couvrent plus le même passage ✗✓. *Le test ne mesure pas le sens : il mesure
+la dérive* ✓✓.
+**Et le premier essai le montrait** : toutes les similarités valaient **0,87** (une direction commune dominante
+✓✗) — le centrage la retire ✓ mais ne répare pas un **mauvais appariement** ✗.
+→ **Conclusion honnête** : *cette mesure ne tranche rien* ✗ — et elle apprend que le maillon faible est
+l'**alignement**, pas le modèle ✓✓. **Dixième chiffre déguisé de la nuit** (ici en verdict sur les états ✗✓).
+→ **Le dispositif qu'il faudrait** ✓✓ : un alignement **ancré sur le contenu** — les **noms propres**
+(« Phileas Fogg », « Passepartout » apparaissent aux **mêmes endroits de l'histoire** ✓✓) et les **chapitres**
+(37 dans chaque édition ✓, mais la version française numérote par **titres** ✗✓). *Aligner sur les noms, puis
+vérifier par les chapitres* — prochaine mesure, et elle est courte ✓.
 
 ## ✅ UN VRAI CORPUS FRANÇAIS, ET LA NEUTRALITÉ À L'ÉCHELLE (17/10, 16 h)
 

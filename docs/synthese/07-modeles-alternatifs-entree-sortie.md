@@ -626,3 +626,41 @@ Un modèle bilingue **dim 512** (9,57 M ✓, même corpus mixte ✓) mesuré de 
 **Ce que cela change pour le chapitre** ✓✓ : les deux résultats centraux — **noyau neutre** ✓ et **langue à la
 surface** ✓ — ne sont pas des accidents de petite taille ✓✓. Ils **tiennent** (et la surface se renforce ✓) quand
 le modèle double ✓.
+
+## Seizième mesure (17/10, 17 h) : le **retrieval croisé** échoue — mais le test est invalide, pas les états
+
+La question **forte** du chapitre ✓ : le même contenu, écrit en deux langues, donne-t-il des états
+**comparables** ? ✓✓ C'est ce qui dirait qu'un état porte le **sens** et pas la langue ✓. Dispositif :
+`tools/retrieval_parallele.py` ✓ — sur un livre **parallèle** (Le Tour du monde en quatre-vingts jours ✓, le
+français est l'original ✓), 24 segments ✓, et l'on demande si le segment français le plus proche d'un segment
+anglais est **son homologue** ✓ (hasard = 4,2 % ✓).
+
+| essai | retrieval exact | similarité des homologues | des autres |
+|---|---:|---:|---:|
+| dernière couche, sans centrage | **0 / 24** ✗ | +0,8695 | +0,8706 |
+| dernière couche, **centré** ✗ | 0 / 24 ✗ | −0,6564 | −0,6032 |
+| couche 6, centré | 0 / 24 ✗ | −0,6714 | −0,6311 |
+| couche 4, centré | 0 / 24 ✗ | −0,4697 | −0,4457 |
+
+* **le retrieval échoue partout** ✗, et les homologues sont **moins** similaires que les autres (−0,66 contre
+  −0,60 ✓) — c'est-à-dire **anti-corrélé** ✗✗. En apparence, les états ne portent **pas** le sens ✓✗ ;
+* **MAIS LE TEST EST INVALIDE** ✗✓ — et le confondant est **mesurable** ✓✓ : les deux éditions n'ont **pas la
+  même longueur** (**451 Ko** en français contre **375 Ko** en anglais ✓, soit **20 %** d'écart ✓✗). Un
+  découpage **proportionnel** dérive donc ✓✗ : après quelques chapitres, le segment `i` français et le segment
+  `i` anglais ne couvrent **plus le même passage** ✗✓. Le test ne mesure pas le sens ✗ — il mesure la **dérive**
+  ✓✓ ;
+* **et le premier essai (sans centrage) le montrait déjà** ✗✓ : toutes les similarités valaient **0,87** ✓ —
+  une **direction commune dominante** (« du texte ordinaire » ✓) qui noie tout ✓✓. Le centrage la retire ✓ mais
+  ne peut pas réparer un **mauvais appariement** ✗✓ ;
+* **la conclusion honnête** ✓✓ : *cette mesure ne tranche rien* ✗ — elle a coûté une demi-heure et elle
+  **apprend** que le maillon faible est l'**alignement**, pas le modèle ✓✓. C'est la **dixième** fois de la
+  nuit qu'un chiffre se déguise ✓ (ici en verdict sur les états ✓✗), et la règle n'a pas changé : *écrire à
+  côté du chiffre ce qui pourrait le rendre faux* ✓.
+
+### Le dispositif qu'il faudrait (et qui est à portée)
+
+L'alignement doit être **ancré** sur le **contenu**, pas sur la position ✗✓. Deux ancres possibles, et elles
+sont dans le corpus ✓ : les **noms propres** (« Phileas Fogg », « Passepartout » ✓ apparaissent aux **mêmes
+endroits de l'histoire** ✓✓) et les **chapitres** (37 dans chaque édition ✓ — mais la version française
+numérote par **titres** et non par « CHAPITRE n », d'où l'échec de mon découpage naïf ✗✓). *Aligner sur les
+noms, puis vérifier par les chapitres* ✓✓ — c'est la prochaine mesure, et elle est courte ✓.
