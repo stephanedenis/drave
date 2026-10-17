@@ -79,7 +79,16 @@ d'instrument y sont **écrits à côté des chiffres** ✗✓ :
 | `boucle_directe.py` ✓ | la boucle **sans pont** (λ, contenu) | `... --hf <modèle> --ids <corpus>` |
 | `operateur_pensee.py` ✓ | l'**opérateur post-hoc** (contractant, λ = 0,997 ✓) | `... --hf <modèle aligné> --ids <corpus>` |
 | `iterer_bloc.py` ✓ | **itérer** un bloc répété : contenu et déplacement ✓ | `... --partage <modèle> --distinct <témoin> --ids <corpus>` |
+| **`banc_lecteur.py`** ✓ | **le banc** : λ de ridge par **validation croisée** ✓ et **batterie de longueurs** ✓ — il transforme un chiffre en **mesure** ✓✓ | `python3 tools/banc_lecteur.py --modeles A,B --ids <corpus> --longueurs 32,64,128,256` |
+| **`lecteur_non_lineaire.py`** ✓ | le lecteur **MLP** (et sa leçon : mal réglé, il **sur-apprend** ✗ — 119,9 % contre 85,2 % pour le ridge ✓) | `... --modeles A,B --ids <corpus>` |
 | `serveur-doc.py` ✓ / **mdserve** ✓ | les deux serveurs de documentation (voir plus haut ✓) | services `drave-doc` et `mdserve` |
+
+⚠️ **Ce que les mesures de la nuit ont appris sur l'instrument** ✓✓ — à lire avant de refaire une mesure :
+un ridge **sous-déterminé** (moins de positions que de coefficients ✓) **interpole** et rend 0,0 % ✓✗ ;
+une cible qui contient **sa propre source** (même position ✓) rend aussi 0,0 % ✓✗ ; un plan de textes qui
+sort du corpus rend « n = 149 » sur 24 demandés ✓✗ ; et un **λ fixé** rend les chiffres dépendants des
+réglages (**104,3** à longueur 64, **87,0** à 128 ✓✗). Dans les quatre cas, la même règle sauve la mesure :
+**écrire à côté du chiffre ce qui pourrait le rendre faux** ✓✓.
 
 Et l'entraîneur a gagné **quatre** options pour ce programme ✓ : `--alignement λ` (unifier entrée et
 sortie ✓), `--partage` (bloc répété ✓), `--recurrence-max T` (entraîner **sur** l'itération ✓), et
