@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 19 h 10 HAE.**
+**Mis à jour : 2026-10-17, 19 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,33 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✏️ LE RELEVÉ EST TEINTÉ DE LA LANGUE — erratum de la mesure 5 (17/10, 19 h 30)
+
+La mesure 5 disait : « un seul relevé non linéaire mêlé (71,5 %) bat deux relevés linéaires par langue
+(79,3 / 76,5) ✓✓ ». Elle était vraie mais **incomplète** ✗ : il fallait comparer à des relevés **de même
+langue et aussi puissants** ✓. Mesure croisée (`tools/lecture_croisee.py` ✓, dernier étage ✓) :
+
+| relevé appris sur | état **anglais** | état **français** |
+|---|---|---|
+| **ANGLAIS** | **76,7 / 55,9** | 82,5 / 72,2 |
+| **FRANÇAIS** | 84,8 / 75,7 | **73,1 / 53,0** |
+
+| | diagonale | croisé | **pénalité** |
+|---|---:|---:|---:|
+| linéaire | 74,9 % | 83,7 % | **+8,7** ✗ |
+| **non linéaire** | **54,5 %** ✓✓ | 73,9 % | **+19,5** ✗✗ |
+
+**Le relevé EST teinté de la langue** ✗✓ (pénalité **+8,7** à **+19,5**) — et **le non-linéaire l'aggrave**
+✗✓ (un lecteur plus puissant se spécialise davantage : *plus de puissance, plus de langue*). Le relevé partagé
+fonctionne donc, mais **il coûte 17 points** ✗.
+→ **La conclusion se précise** ✓✓ : l'**état** est neutre ✓, mais le **lien état → mots** est langue-dépendant ✓
+— *c'est donc dans le relevé que la langue vit* ✓, et c'est **là** que l'adaptateur agit (1,33 % ✓). « Penser
+dans une langue et conclure dans une autre » **ne marche pas** avec le même relevé ✗✓ — il faut **changer de
+paramètre**, ce qui coûte **5 ms** ✓✓.
+**Erratum assumé** ✓ : une comparaison n'est valide que si **tous** les lecteurs sont aussi puissants ✓ —
+comparer un non-linéaire à des linéaires, c'est comparer deux **familles de lecteurs**, pas deux langues ✗✓.
+*Huitième chiffre déguisé de la nuit — et cette fois c'est une mesure antérieure qui était en cause.*
 
 ## ✅ LA BASCULE COÛTE 5 ms ET 530 Ko — l'idée est utilisable (17/10, 19 h)
 

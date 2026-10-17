@@ -337,3 +337,44 @@ essais ✓, comparaison avec un **rechargement complet** ✓ :
 * **la conclusion pratique** ✓✓ : *un noyau, N adaptateurs de quelques centaines de kilo-octets, et une
   bascule en millisecondes* ✓✓ — c'est-à-dire une architecture où **la langue est un fichier** ✓, pas un
   modèle ✗. C'est la réponse la plus utile de ce chapitre à la question posée ✓.
+
+## Huitième mesure (17/10, 19 h 30) : le relevé **est** teinté de la langue — et cela CORRIGE la cinquième mesure
+
+La cinquième mesure concluait qu'un **seul** relevé non linéaire « mêlé » battait les deux relevés linéaires
+par langue ✓ (71,5 % contre 79,3 et 76,5 ✓). Elle ne disait pas si ce relevé unique valait un relevé
+**de même langue et non linéaire** ✗ — question posée ici : `tools/lecture_croisee.py` ✓, **lecture croisée**
+(relevé appris sur une langue ✓, appliqué à l'autre ✓), au dernier étage ✓ :
+
+| relevé appris sur | état **anglais** | état **français** |
+|---|---|---|
+| **ANGLAIS** | **76,7 / 55,9** | 82,5 / 72,2 |
+| **FRANÇAIS** | 84,8 / 75,7 | **73,1 / 53,0** |
+
+*(linéaire / non linéaire ; les cases en gras sont la diagonale, c'est-à-dire le relevé de la **même** langue ✓)*
+
+| | diagonale | croisé | **pénalité de langue** |
+|---|---:|---:|---:|
+| **linéaire** | 74,9 % | 83,7 % | **+8,7** ✗ |
+| **non linéaire** | **54,5 %** ✓✓ | 73,9 % | **+19,5** ✗✗ |
+
+* **LE RELEVÉ EST TEINTÉ DE LA LANGUE** ✗✓ : la diagonale est **nettement** meilleure (54,5 contre 73,9 en non
+  linéaire ✓) — il y a une **pénalité de langue** de **+8,7** (linéaire) à **+19,5** (non linéaire) ✓ ;
+* **et le non-linéaire AGGRAVE la pénalité** ✗✓ (19,5 contre 8,7 ✓) : un lecteur plus puissant se **spécialise**
+  davantage ✓✓ — *plus de puissance, plus de langue* ✓. C'est l'inverse de ce qu'on attendait naïvement ✗✓ ;
+* **donc la cinquième mesure doit être LUE AUTREMENT** ✗✓ : elle était vraie (un relevé **partagé** non linéaire
+  bat **deux linéaires** ✓✓) mais **incomplète** ✗ : il ne bat **pas** deux non-linéaires de même langue
+  (71,5 contre **54,5** ✓✗). *Le relevé partagé fonctionne ; il coûte 17 points* ✓ ;
+* **et la conclusion devient plus nette, pas moins** ✓✓ : l'**état** est neutre ✓ (mesure 1 ✓), mais le
+  **lien état → mots** est **langue-dépendant** ✓ — *c'est donc dans le relevé que la langue vit*, et c'est
+  **exactement** là que l'adaptateur de langue agit ✓✓ (il fournit ce relevé pour 1,33 % de paramètres ✓).
+  « Penser dans une langue et conclure dans une autre » **ne marche pas** avec le même relevé ✗✓ — il faut
+  **changer de paramètre**, ce qui coûte 5 ms ✓✓.
+
+### Erratum assumé
+
+La cinquième mesure disait « le relevé n'est pas propre à la langue ✓✓ ». La huitième la **corrige** ✗✓ : le
+relevé **est** propre à la langue (pénalité +8,7 à +19,5 ✓), et ce qui restait vrai est plus faible — *un relevé
+partagé est possible, à un coût de 17 points* ✓. **Huitième fois de la nuit qu'un chiffre se déguise** ✓✓, et
+cette fois c'est une **mesure antérieure** qui était en cause, pas un réglage ✗ : la leçon est qu'une comparaison
+n'est valide que si **tous** les lecteurs sont aussi puissants les uns que les autres ✓ — comparer un non-linéaire
+à des linéaires n'est pas comparer deux langues, c'est comparer deux **familles de lecteurs** ✗✓.
