@@ -664,3 +664,41 @@ sont dans le corpus ✓ : les **noms propres** (« Phileas Fogg », « Passepart
 endroits de l'histoire** ✓✓) et les **chapitres** (37 dans chaque édition ✓ — mais la version française
 numérote par **titres** et non par « CHAPITRE n », d'où l'échec de mon découpage naïf ✗✓). *Aligner sur les
 noms, puis vérifier par les chapitres* ✓✓ — c'est la prochaine mesure, et elle est courte ✓.
+
+## Dix-septième mesure (17/10, 17 h 45) : l'alignement était **bon**, c'était l'**échantillon** qui était mauvais
+
+Le § précédent concluait « test invalide, le confondant est l'alignement » ✗✓. **C'était faux** ✗✓ — et la
+vérification est nette ✓ : les deux éditions **sont remarquablement alignées** ✓✓. Mesure : la position
+**relative** des occurrences des noms propres ✓ (identiques dans les deux langues ✓) :
+
+| nom | occurrences (fr / en) | **écart de position relative** |
+|---|---:|---:|
+| **Aouda** | 136 / **136** ✓ | — |
+| **Fogg** | 655 / 608 | **0,3 %** ✓✓ |
+| **Passepartout** | 423 / 398 | **0,1 %** ✓✓ |
+
+*les dix premières occurrences de « Fogg » tombent au **même endroit** de l'histoire à **0,3 %** près ✓✓, et
+celles de « Passepartout » à **0,1 %** ✓✓.* L'alignement proportionnel était donc **bon** ✓ — le confondant
+était **mon échantillonnage** ✗✓ : je prenais les **400 premiers octets** de chaque segment ✓✗, c'est-à-dire
+souvent un **titre de chapitre** ou des blancs ✓✓. *L'état moyen mesurait la mise en page, pas le récit* ✗✓.
+
+Avec un échantillonnage au **milieu** du segment ✓ (de la prose ✓) :
+
+| segments | retrieval exact | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| 24 | 0 / 24 ✗ | −0,6283 | −0,6502 | **+0,0219** ✓ |
+| 40 | 1 / 40 ✗ | −0,6058 | −0,6109 | +0,0052 ✓ |
+
+* **LE SIGNE S'INVERSE** ✓✓ : avant, les homologues étaient **moins** similaires (−0,053 ✗) ; maintenant ils le
+  sont **un peu plus** (+0,022 ✓). *Il existe donc un signal cross-lingue réel* ✓✓ — mais il est **très faible** ✗ ;
+* **et il ne suffit pas à retrouver** ✗ : 0/24 et 1/40, soit **le hasard** ✓✗ (4,2 % et 2,5 % ✓) ;
+* **l'explication la plus simple** ✓ : un modèle **en octets de 2,4 M paramètres** ✓, entraîné sur 11 Mo de texte
+  ✓, **sans objectif de traduction** ✗ — n'a aucune raison de porter le sens d'une langue à l'autre ✓✓. Ce
+  n'est pas un défaut de la mesure ✗ : c'est un **fait du modèle** ✓ ;
+* **et la conséquence est nette** ✓✓ : ce test a besoin d'un modèle **multilingue entraîné** ✗ — le **Qwen2.5-0.5B**
+  du dépôt ✓ *est* multilingue ✓✓, et il est **là** ✓. *C'est la prochaine mesure, et elle ne demande rien à
+  construire* ✓✓.
+
+**Onzième piège de la nuit** ✓✓ : j'ai accusé l'**alignement** ✗ alors que le coupable était mon **échantillon**
+✓✓ — et l'accusation était **mesurable** (0,1 à 0,3 % d'écart ✓✓). La règle reste la même, avec une variante :
+*avant d'accuser un maillon, mesure-le* ✓✓.

@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 17 h 15 HAE.**
+**Mis à jour : 2026-10-17, 17 h 55 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,38 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✏️ L'ALIGNEMENT ÉTAIT BON — c'était l'ÉCHANTILLON qui était mauvais (17/10, 17 h 45)
+
+La mesure précédente accusait l'**alignement** ✗. **C'était faux** ✗✓ : les deux éditions sont **remarquablement
+alignées** ✓✓ — écart de position relative des noms propres :
+
+| nom | occurrences (fr / en) | **écart** |
+|---|---:|---:|
+| **Aouda** | 136 / **136** ✓ | — |
+| **Fogg** | 655 / 608 | **0,3 %** ✓✓ |
+| **Passepartout** | 423 / 398 | **0,1 %** ✓✓ |
+
+Le confondant était mon **échantillonnage** ✗✓ : je prenais les **400 premiers octets** de chaque segment ✓✗ —
+souvent un **titre de chapitre** ou des blancs ✓✓. *L'état moyen mesurait la mise en page, pas le récit* ✗✓.
+
+Avec un échantillonnage au **milieu** (de la prose) :
+
+| segments | retrieval | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| 24 | 0/24 ✗ | −0,6283 | −0,6502 | **+0,0219** ✓ |
+| 40 | 1/40 ✗ | −0,6058 | −0,6109 | +0,0052 ✓ |
+
+**Le signe s'inverse** ✓✓ : les homologues sont maintenant **un peu plus** similaires (+0,022 contre −0,053 ✗) →
+**il existe un signal cross-lingue réel** ✓✓ — mais **très faible** ✗, et il ne suffit pas à retrouver (le hasard ✓).
+**L'explication** : un modèle **en octets de 2,4 M**, sans objectif de traduction ✗, n'a aucune raison de porter le
+sens d'une langue à l'autre ✓✓. **C'est un fait du modèle, pas un défaut de la mesure** ✓.
+→ **La conséquence est nette** ✓✓ : ce test a besoin d'un modèle **multilingue entraîné** — le **Qwen2.5-0.5B** du
+dépôt *est* multilingue ✓✓, et il est **là** ✓. *Prochaine mesure, et elle ne demande rien à construire* ✓✓.
+
+**Onzième piège** ✓✓ : j'ai accusé l'**alignement** alors que le coupable était mon **échantillon** ✓✓ — et
+l'accusation était **mesurable** (0,1 à 0,3 % d'écart ✓). Variante de la règle : *avant d'accuser un maillon,
+mesure-le* ✓.
 
 ## ⚠️ LE RETRIEVAL CROISÉ ÉCHOUE — mais le test est INVALIDE, pas les états (17/10, 17 h)
 
