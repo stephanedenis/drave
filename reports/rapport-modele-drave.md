@@ -540,3 +540,28 @@ l'entraînement ✓) ; (2) `safetensors` **refuse** les tenseurs partagés ✓�
 n'y change rien, la vérification est **antérieure** au choix du format ✓ ; (3) ma première édition a
 **cassé l'indentation** de l'entraîneur ✓✗ (un remplacement qui avalait un bloc imbriqué ✓) — réparé par
 `git checkout` **et refait en insertions** ✓. *Un outil qu'on modifie se relit avant qu'on l'exécute* ✓✓.
+
+## 18. LE CURSEUR EST UNE **FALAISE** : il n'y a pas de milieu entre « précis » et « itérable »
+
+Le § 17 laissait un compromis ✓ et une question ✓ : où se règle-t-il ? Troisième point mesuré ✓ —
+`--recurrence-max 2` ✓ — et il tranche ✓ :
+
+| t_max à l'entraînement | **t = 1** | t = 2 | t = 4 | **étalement** (t4 − t1) |
+|---|---:|---:|---:|---:|
+| **1** (aucune récurrence, § 16) | **82,9** ✓ | 84,2 | 86,7 | **+3,8** ✗ |
+| **2** | 88,0 | 87,9 | 88,3 | **+0,3** ✓ |
+| **4** | 88,4 | 88,2 | 88,5 | **+0,1** ✓ |
+
+* **DÈS t_max = 2, L'ITÉRATION EST PLATE** ✓✓ (+0,3 d'étalement ✓, presque autant que t_max = 4 avec +0,1 ✓) —
+  il n'en faut donc **pas plus** ✓ : la récurrence à l'entraînement est un **interrupteur**, pas un
+  dosage ✓ ;
+* **ET LA NETTETÉ NE REVIENT PAS** ✗✓ : à t_max = 2, le contenu à t = 1 est **88,0** ✓ — à peine mieux que
+  t_max = 4 (**88,4** ✓) et **très loin** du modèle sans récurrence (**82,9** ✓✗) ;
+* **donc le compromis du § 17 n'est pas un curseur, c'est une FALAISE** ✓✓ : d'un côté le modèle
+  **précis mais instable** (82,9 → 86,7 ✗), de l'autre le modèle **stable mais émoussé** (88 ✓✓), et **rien
+  entre les deux** ✗. La bascule se fait **au premier pas de récurrence** ✓, pas progressivement ✓ ;
+* **ce que cela veut dire pour le projet** ✓✓ : « rendre l'état habitable » se paie **d'un coup** ✗ — et le
+  prix (≈ 5 points de contenu ✓) doit être mis en face du **bénéfice** (une itération qui ne dérive plus ✓✓).
+  Pour une **pensée** qui itère, c'est le bon côté du prix ✓ ; pour une **lecture** unique, c'est le mauvais
+  ✗. Les deux usages ne veulent donc **pas le même modèle** ✓✓ — et c'est la conclusion la plus utile de
+  la nuit pour un système qui devrait faire les deux ✓.
