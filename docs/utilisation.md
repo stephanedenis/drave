@@ -31,6 +31,27 @@ gabarit Qwen, tient l'historique, et **coupe l'instrumentation** ✓✓.
 | service | `mdserve.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/mdserve.log` ✓) | `drave-doc.service` ✓ |
 | écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ | aucune ✓ |
 
+**Décision du 17/10 : mdserve est LE viewer** ✓✓ — il a l'arbre, le rechargement (3 s), les épingles, le
+filtrage **et désormais les images** ✓ (voir ci-dessous). `drave-doc` (8787) ne garde qu'un rôle : l'accès
+**depuis le réseau**, que mdserve refuse par construction (il n'écoute que sur 127.0.0.1 ✓).
+
+### Ce qui a été ajouté à mdserve pour qu'il devienne le viewer unique (17/10)
+
+mdserve ne servait que le **Markdown** ✗ : une image écrite en syntaxe Markdown était rendue en
+`<img src="schemas/x.svg">` ✓, que le navigateur demandait à la **racine du serveur** (et non au dossier du
+document ✓) → 404 ✗✓. Deux ajouts, faits **hors du dépôt** (`~/.local/bin/mdserve` ✗ — c'est un outil
+externe, sauvegardé en `mdserve.avant-assets` ✓) :
+
+* une route **`/asset?path=…`** qui sert un fichier de la racine **avec son type** ✓ (`image/svg+xml` pour un
+  SVG ✓, validée par `safe_path` ✓ — pas de sortie de la racine ✓) ;
+* une **réécriture des `src` relatifs** vers cette route, résolus contre le **dossier du document** ✓✓.
+
+Vérifié : `/render` sur `docs/synthese/index.md` renvoie **6 images** aux `src` réécrits ✓, et
+`/asset?path=…/vue-ensemble.svg` répond **200 `image/svg+xml`** ✓.
+
+⚠️ **Ce patch n'est pas dans le dépôt** ✗✓ : si `mdserve` est réinstallé, il sera perdu ✗. La sauvegarde
+`mdserve.avant-assets` permet de revenir en arrière ✓, et le patch est décrit ici pour être **refait** ✓.
+
 **Lequel ouvrir ?** Pour **parcourir** le dépôt (l'arbre, les épingles, le filtrage, le suivi des
 modifications ✓) : **mdserve, port 8771** ✓✓. Pour **savoir en une page où en est le travail** ✓ (et y
 accéder depuis une autre machine ✓) : **8787** ✓.
