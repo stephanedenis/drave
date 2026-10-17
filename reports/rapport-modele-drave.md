@@ -305,3 +305,35 @@ un jeton source **décalé de 7** ✓).
   coefficients** (le ridge interpole ✓, 0,0 % encore ✓), (3) **un plan de textes qui sort du corpus**
   (« n = 149 » sur 24 textes demandés ✓). Les trois fois, c'est **la même règle** qui a sauvé la mesure :
   **écrire à côté du chiffre ce qui pourrait le rendre faux** ✗✓.
+
+## 12. L'EMPREINTE EST **LOCALE** : nette à un jeton, nulle au-delà — et la copie **concentre** l'état
+
+Les horizons longs sont maintenant débloqués (pas de textes resserré ✓, **5 365 positions** ✓) :
+
+| couche | régime | **k = 0** (contre ✗) | **k = 1** (contre ✗) | k = 4 (contre ✗) | k = 16 (contre ✗) |
+|---:|---|---:|---:|---:|---:|
+| 8 | COPIE | 50,0 (87,8) | 77,5 (88,1) | 86,6 (88,2) | 88,1 (88,3) |
+| 8 | lecture | 51,2 (87,8) | 77,9 (88,1) | 86,7 (88,2) | 88,0 (88,2) |
+| **16** | **COPIE** | 53,1 (87,5) | **70,0** (87,8) | 85,8 (87,9) | 88,0 (88,0) |
+| 16 | lecture | 53,7 (87,8) | 77,7 (88,0) | 86,9 (87,9) | 88,1 (88,0) |
+| **23** | **COPIE** | 60,4 (87,7) | **49,3** (88,1) | 85,9 (88,0) | 88,1 (88,2) |
+| 23 | lecture | 58,6 (88,0) | 76,9 (88,0) | 86,9 (88,1) | 88,0 (88,1) |
+
+* **l'empreinte à un jeton est reproduite** ✓✓ : couche 23, k = 1 → **49,3 %** en copie contre **76,9 %** en
+  lecture ✓ (27,6 points ✓ ; la mesure précédente donnait 26 points ✓ — **deux exécutions, même
+  conclusion** ✓✓) ;
+* **ET ELLE EST LOCALE** ✗✓ : dès **k = 4**, le vrai alignement rejoint la contre-épreuve (85,8-86,9 contre
+  87,9-88,2 ✓, soit **2 points** ✗) — l'état, **pendant la copie**, ne porte **pas** le texte à quatre
+  jetons d'avance ✗. Ce n'est pas un défaut de mesure ✓ (la contre-épreuve est **stable à 88 %** ✓, la
+  mesure est donc bien déterminée ✓) : c'est **la nature de ce que la copie fait à l'état** ✓ ;
+* **et c'est un FAIT important, en contradiction apparente avec le § 5** ✓✓ : en **lecture simple**, le
+  même type de mapping portait la suite à **16 jetons** d'avance (84,7 % ✓). Ici, **la copie
+  CONCENTRE l'état sur le jeton qu'il émet** ✓✓ — elle **aiguise** l'empreinte locale (49 contre 77 ✓) et
+  **aplatit** la trajectoire longue (88 = rien ✗). *Copier, c'est braquer le projecteur sur le mot suivant ;
+  lire, c'est garder le champ large* ✓✓ ;
+* **conséquence pour le projet** ✓ : la copie est **le bon régime pour obtenir des empreintes à
+  reproduire** ✓✓ (c'est la question posée ✓), mais **pas** le régime d'une **pensée** qui garde la suite
+  ✗ — les deux sont **complémentaires** ✓✓ : la copie pour **extraire** l'empreinte d'un texte ✓, la
+  lecture pour **conserver** sa trajectoire ✓. Et l'alignement entrée = sortie (§ 8, étape A ✓) devra se
+  faire **sur l'état de lecture**, pas sur celui de la copie ✗✓ — sinon on aligne un état **appauvri** en
+  contenu long ✓.

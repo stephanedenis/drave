@@ -107,7 +107,7 @@ def main() -> int:
         # sur 24 textes demandés ✓). On avance par pas de 3 000 ✓, ce qui donne ~28 textes ✓ ET évite les
         # 21 tranches vues à l'entraînement (le LoRA a appris `i, i+4096, …` ✓ — aucun multiple de 3 000
         # ne tombe sur un multiple de 4 096 avant longtemps ✓).
-        d = 1_000 + t * 3_000
+        d = 1_000 + t * 1_200       # pas resserré : assez de positions pour k=16 (voir la garde ✗)
         src = ids[d:d + L]
         txt = tok.decode(src)
         if len(src) < 8 or not txt.strip():
