@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 20 HAE.**
+**Mis à jour : 2026-10-17, 20 h 50 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -191,6 +191,31 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ✅ LA PART DE DIALOGUE PRÉDIT L'ÉCART — quatre livres sur cinq (17/10, 20 h 45)
+
+Indicateur grossier (lignes commençant par un tiret de dialogue, ou majoritairement entre guillemets), **identique**
+pour tous :
+
+| livre | **part de dialogue** | **écart cross-lingue** |
+|---|---:|---:|
+| **Candide** | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Proust** (*Swann*) | 3,3 % | +0,0925 ✓✓ |
+| **Verne** | 13,1 % | +0,0779 ✓ |
+| **Don Quijote** | 9,4 % ✗ | +0,0068 ✗ |
+| **Alice** | **21,4 %** | +0,0087 ✗ |
+
+**La relation est forte et dans le bon sens** ✓✓ : **quatre** livres sur cinq s'ordonnent exactement par la part de
+dialogue — *plus un texte est **narratif**, plus le sens partagé entre les deux langues est retrouvable* ✓✓
+(Candide 0,3 % → +0,116 ; Alice 21,4 % → +0,009).
+**Et l'exception est instructive** ✗✓ : **Don Quijote** (9,4 % de dialogue) fait **aussi mal qu'Alice** — **9 %**
+suffisent à faire tomber le signal à +0,007 quand 13 % (Verne) le laissent à +0,078. *L'indicateur est grossier* ✗
+(il ne compte que les lignes **entièrement** de dialogue, pas les répliques **dans** les paragraphes) — et Don
+Quijote est **massivement** dialogué à l'intérieur.
+→ **Une relation plausible et testable** ✓✓ — *le sens partagé vit dans la **narration**, pas dans le **dialogue***
+✓✓ — appuyée sur **quatre livres sur cinq** ✗✓, avec une exception et un indicateur grossier. *Une piste, pas un
+résultat* ✓✓ : elle demande **plus de livres** (les 1905 textes sont là) et un **vrai** indicateur de dialogue (les
+répliques **dans** les paragraphes).
 
 ## ⚠️ L'HYPOTHÈSE RÉCIT/DIALOGUE EST RÉFUTÉE — le signal varie de dix-sept fois (17/10, 20 h 15)
 

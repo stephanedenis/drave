@@ -1133,3 +1133,29 @@ cherchant les **auteurs présents dans les deux langues** (les traductions garde
   catégorie* ✓✓ ;
 * **et c'est un résultat utile** ✓✓ : il dit qu'on **ne peut pas prédire** si un livre donnera un signal ✗ — il faut
   le **mesurer** ✓✓. Un chapitre qui finit sur « ça dépend du livre, mesurez-le » est un chapitre honnête ✓.
+
+## Trente-deuxième mesure (17/10, 20 h 45) : la **part de dialogue** prédit l'écart — quatre livres sur cinq
+
+La mesure 31 réfutait le **genre** ✗ mais laissait une variable plus simple ✓ : **la part de dialogue** ✓. On la
+mesure grossièrement ✓ (une ligne qui commence par un tiret de dialogue ou qui est majoritairement entre
+guillemets ✓ — indicateur **identique** pour tous ✓✓) sur les **cinq** livres mesurés ✓ :
+
+| livre | **part de dialogue** | **écart cross-lingue** |
+|---|---:|---:|
+| **Candide** ✓ | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Proust** (*Swann*) ✓ | 3,3 % | +0,0925 ✓✓ |
+| **Verne** ✓ | 13,1 % | +0,0779 ✓ |
+| **Don Quijote** ✗ | 9,4 % ✗ | +0,0068 ✗ |
+| **Alice** ✗ | **21,4 %** | +0,0087 ✗ |
+
+* **LA RELATION EST FORTE ET DANS LE BON SENS** ✓✓ : **quatre** livres sur cinq s'ordonnent exactement par la part
+  de dialogue ✓ — *plus un texte est **narratif**, plus le sens partagé entre les deux langues est retrouvable* ✓✓
+  (Candide 0,3 % → +0,116 ✓✓ ; Alice 21,4 % → +0,009 ✓) ;
+* **et l'exception est instructive** ✗✓ : **Don Quijote** (9,4 % de dialogue ✓) fait **aussi mal qu'Alice** ✗✓ —
+  c'est-à-dire que **9 %** de dialogue suffisent à faire tomber le signal à +0,007 quand 13 % (Verne ✓) le laissent
+  à +0,078 ✓. *L'indicateur est grossier* ✗ (il ne compte que les lignes **entièrement** de dialogue ✓, pas les
+  répliques **dans** le récit ✓✓) — et Don Quijote est **massivement** dialogué à l'intérieur des paragraphes ✓ ;
+* **ce que cela laisse** ✓✓ : une **relation plausible et testable** ✓ — *le sens partagé vit dans la **narration**,
+  pas dans le **dialogue*** ✓✓ — appuyée sur **quatre livres sur cinq** ✗✓, avec **un** exceptionnel et un
+  indicateur grossier ✗. *C'est une piste, pas un résultat* ✓✓ — et elle demande **plus de livres** (ils sont là :
+  les 1905 textes ✓) et un **vrai** indicateur de dialogue (les répliques **dans** les paragraphes ✓).
