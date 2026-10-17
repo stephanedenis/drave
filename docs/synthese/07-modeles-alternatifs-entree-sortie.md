@@ -28,6 +28,26 @@ chiffre qui le dit — pour qu'on puisse juger le chapitre sans le lire en entie
 | 12 | peut-on penser deux pas ? | entraîner sur k (recette du 16/10) ✓ | contenu **exactement plat** (82,2 % partout) = **identité** | ✗ solution triviale, **répliquée** |
 | 13 | et avec un autre objectif ? | **marge** : exiger une amélioration ✓ | k=1 **80,3** · k=2 **93,7** — **comme sans marge** | ✗ **même mur** |
 
+### La suite du programme (mesures 14 à 23)
+
+| # | la question | la mesure | le chiffre | verdict |
+|---:|---|---|---|---|
+| 14 | un **vrai** corpus français ? | Gutenberg de `Panini/` (le dépôt n'en avait pas ✗) | **13,2 Mo**, 18 textes, **66 322** formes (Maupassant, Dumas, Flaubert, Verne) | ✓✓ vrai corpus |
+| 15 | la neutralité **à l'échelle** ? | modèle bilingue **dim 512** (9,57 M) | couches 2 et 6 : **51,4** et **51,2 %** ; couche 8 : **67,9 %** | ✓✓ noyau neutre, surface **plus** langue-aware |
+| 16 | le **même sens** en deux langues ? | retrieval croisé, Le Tour du monde | 0/24 ✗ — **test invalide** ✗ | ✗ à refaire |
+| 17 | et avec un bon échantillon ? | même test, milieu du segment | écart **+0,022** ✓ (contre −0,053 ✗) | ✓ signal réel, **faible** |
+| 18 | sur un vrai modèle multilingue ? | **Qwen2.5-0.5B**, mêmes segments | **+0,083** aux couches 8-16 ; **+0,030** à la dernière | ✓✓ **sens partagé au milieu** |
+| 19 | et sur la **littérature** ? | modèle bilingue littéraire (4,79 M) | couches 1-3 : **50,1 · 52,3 · 50,4 %** ; pic couche 5 : 67,7 % | ✓✓ neutralité, **zone plus courte** |
+| 20 | le signal dépend-il du modèle ? | trois modèles, même test | **+0,022 → +0,034 → +0,083** (2,43 M → 4,79 M → 494 M) | ✓✓ **tendance monotone** |
+| 21 | réplication ? | **trois** livres | +0,078 (Verne) · +0,033 (Dracula ✗) · +0,009 (Alice) | ✓ en **signe**, ✗ en amplitude |
+| 22 | l'alignement est-il en cause ? | positions relatives des noms propres | Verne **0,1-1,6 %** ✓ · Alice **1,7 %** ✓ · Dracula **cassé** ✗✗ | ✓ la variation n'est **pas** l'alignement |
+| 23 | le corpus est-il sain ? | crible sans modèle (titre, longueur, noms) | **1 paire cassée sur 3**, **la même dans deux corpus** ✗ | ✗ mais **détectée** |
+
+**Et ce que cette seconde série ajoute à la première** ✓✓ : le corpus **réel** ✓, la **réplication** de la
+neutralité ✓ (trois modèles, trois corpus ✓), le **sens partagé** qui se retrouve **mieux que le hasard** ✓✓ et
+qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **deux fichiers de corpus à ne pas croire** ✗✓
+(un test invalide, une paire mal étiquetée ✓). *La science avance aussi en retirant* ✓✓.
+
 ### Ce qu'il faut en retenir, en cinq phrases
 
 1. **La langue n'est ni dans l'état ni dans le relevé partagé** ✓✓ — elle vit dans l'**entrée** (les octets ✓)

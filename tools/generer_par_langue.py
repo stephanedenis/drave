@@ -50,6 +50,8 @@ def main() -> int:
     ap.add_argument("--hf", required=True)
     ap.add_argument("--adaptateur-fr", default="/tmp/adaptateur-fr.pt")
     ap.add_argument("--adaptateur-en", default="/tmp/adaptateur-langue-en.pt")
+    ap.add_argument("--tokeniseur", action="store_true",
+                    help="générer avec le tokeniseur du modèle ✓ (au lieu des octets ✗)")
     ap.add_argument("--n", type=int, default=120)
     ap.add_argument("--temp", type=float, default=0.8)
     a = ap.parse_args()
@@ -78,11 +80,19 @@ def main() -> int:
                     for k, v in d["lora"].items():
                         if k in etat and etat[k].shape == v.shape:
                             etat[k].copy_(v)
-            b = torch.tensor([list(amorce.encode("utf-8"))])
+            if a.tokeniseur:
+                from transformers import AutoTokenizer
+                tk = AutoTokenizer.from_pretrained(a.hf)
+                b = torch.tensor([tk(amorce, add_special_tokens=False).input_ids])
+            else:
+                b = torch.tensor([list(amorce.encode("utf-8"))])
             with torch.no_grad():
                 g = m.generate(b, max_new_tokens=a.n, do_sample=True, temperature=a.temp,
                                top_k=20, pad_token_id=0)
-            sortie = bytes(g[0][b.shape[1]:].tolist()).decode("utf-8", errors="ignore")
+            if a.tokeniseur:
+                sortie = tk.decode(g[0][b.shape[1]:].tolist(), skip_special_tokens=True)
+            else:
+                sortie = bytes(g[0][b.shape[1]:].tolist()).decode("utf-8", errors="ignore")
             fr, en = langue(sortie)
             suivi = "suit l'amorce" if (nom_amorce == "français") == (fr > en) else "suit l'adaptateur" if nom_adapt != "aucun" else "—"
             print(f"   {nom_amorce:10s} | {nom_adapt:10s} | fr {fr:3d} · en {en:3d}  ({sortie[:26]!r}) | {suivi}")

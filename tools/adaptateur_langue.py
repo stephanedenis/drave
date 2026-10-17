@@ -86,13 +86,27 @@ def main() -> int:
     ap.add_argument("--couches", default="",
                     help="où poser l'adaptateur : indices de couches (ex. « 3 » = dernier étage) ; vide = "
                          "partout. La question : la langue vit-elle à la SURFACE (dernier étage) ou partout ?")
+    ap.add_argument("--tokeniseur", action="store_true",
+                    help="encoder avec le TOKENISEUR du modèle ✓ au lieu des octets ✗ — indispensable pour un "
+                         "modèle qui n'est pas en octets (Qwen ✓) : sinon il reçoit des identifiants invalides ✗✓")
     ap.add_argument("--sortie", default="/tmp/adaptateur-fr.pt")
     a = ap.parse_args()
 
     from transformers import AutoModelForCausalLM
     m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
-    fr = np.frombuffer(pathlib.Path(a.fr).read_text(errors="ignore").encode("utf-8"), dtype=np.uint8).astype(np.int64)
-    en = np.frombuffer(pathlib.Path(a.en).read_text(errors="ignore").encode("utf-8"), dtype=np.uint8).astype(np.int64)
+    tok = None
+    if a.tokeniseur:
+        from transformers import AutoTokenizer
+        tok = AutoTokenizer.from_pretrained(a.hf)
+
+    def encoder(chemin):
+        texte = pathlib.Path(chemin).read_text(errors="ignore")
+        if tok is not None:
+            return np.array(tok(texte, add_special_tokens=False).input_ids, dtype=np.int64)
+        return np.frombuffer(texte.encode("utf-8"), dtype=np.uint8).astype(np.int64)
+
+    fr = encoder(a.fr)
+    en = encoder(a.en)
 
     def perte_langue(tab, n=8):
         tot = 0.0
