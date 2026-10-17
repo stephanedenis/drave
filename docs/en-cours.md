@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 17 h 40 HAE.**
+**Mis à jour : 2026-10-17, 18 h 10 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,29 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LE « RELEVÉ PROPRE À LA LANGUE » ÉTAIT UN ARTEFACT DE LINÉARITÉ (17/10, 18 h)
+
+La mesure précédente concluait que le relevé *mêlé* était toujours pire ✗ — et se demandait si c'était le
+relevé ou sa **linéarité** ✗. Réponse avec un MLP **régularisé** (arrêt anticipé ✓) :
+
+| couche | linéaire mêlé | **MLP mêlé** | gain |
+|---:|---:|---:|---:|
+| 2 | 92,4 % | **86,3 %** | −6,1 |
+| 5 | 88,9 % | **80,5 %** | −8,4 |
+| 7 | 83,4 % | **73,9 %** | −9,5 |
+| **8** | 81,6 % | **71,5 %** | **−10,1** ✓✓ |
+
+**Le non-linéaire bat le linéaire partout** ✓✓ (dix points à la couche 8) → le « relevé propre à la langue »
+n'était **pas** une propriété de l'état ✗✓, c'était une limite du **lecteur** ✓✓. *Septième fois de la nuit
+qu'un chiffre se déguise — cette fois en propriété d'architecture.*
+**Et le résultat décisif** ✓✓✓ : à la couche 8, **un seul** relevé non linéaire **mêlé** (71,5 %) fait **mieux**
+que les **deux** relevés linéaires par langue (79,3 en anglais, 76,5 en français ✓✓). *Un relevé partagé
+suffit — s'il est non linéaire* ✓.
+→ La chaîne est complète ✓✓ : l'entrée porte la langue ✗ → le noyau ne la porte plus ✓✓ → le noyau garde le
+sens ✓✓ → la surface la fait revenir ✓ → **le relevé n'est PAS propre à la langue** ✓✓ → l'adaptateur reste
+utile **pour générer** ✓ (3,19 → 1,50 de perplexité ✓), pas pour **lire** ✓✓. *Lire le sens est une chose,
+produire dans une langue en est une autre* ✓.
 
 ## ✅ LE NOYAU NEUTRE PORTE LE SENS — mais le relevé reste propre à la langue (17/10)
 

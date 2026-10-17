@@ -52,6 +52,43 @@ def lambda_cv(H, E, plis=3):
     return meilleur
 
 
+def contenu_mlp(H, E, cachee=256, pas_max=3000, patience=300):
+    """Un lecteur NON LINÉAIRE, mais **régularisé** ✗✓ : leçon du 16/10, un MLP sans arrêt anticipé
+    sur-apprend (119,9 % contre 85,2 % pour le ridge ✓✗). Ici : découpe 60/20/20 ✓, arrêt anticipé sur la
+    validation ✓, poids décroissants ✓ — et on rend l'erreur sur le TEST ✓, jamais vue."""
+    import torch.nn as nn
+    n = H.shape[0]
+    n_tr, n_va = int(n * 0.6), int(n * 0.2)
+    Xtr = torch.tensor(H[:n_tr], dtype=torch.float32).cuda()
+    Ytr = torch.tensor(E[:n_tr], dtype=torch.float32).cuda()
+    Xva = torch.tensor(H[n_tr:n_tr + n_va], dtype=torch.float32).cuda()
+    Yva = torch.tensor(E[n_tr:n_tr + n_va], dtype=torch.float32).cuda()
+    Xte = torch.tensor(H[n_tr + n_va:], dtype=torch.float32).cuda()
+    Yte = torch.tensor(E[n_tr + n_va:], dtype=torch.float32).cuda()
+    torch.manual_seed(0)
+    reseau = nn.Sequential(nn.Linear(H.shape[1], cachee), nn.GELU(), nn.Linear(cachee, E.shape[1])).cuda()
+    opt = torch.optim.AdamW(reseau.parameters(), lr=1e-3, weight_decay=1e-2)
+    meilleur, meilleur_etat, sans_gain = 1e30, None, 0
+    for pas in range(1, pas_max + 1):
+        idx = torch.randperm(Xtr.shape[0])[:1024]
+        perte = ((reseau(Xtr[idx]) - Ytr[idx]) ** 2).mean()
+        opt.zero_grad(); perte.backward(); opt.step()
+        if pas % 50 == 0:
+            with torch.no_grad():
+                v = float(((reseau(Xva) - Yva) ** 2).mean())
+            if v < meilleur:
+                meilleur, meilleur_etat, sans_gain = v, {k: x.clone() for k, x in reseau.state_dict().items()}, 0
+            else:
+                sans_gain += 50
+                if sans_gain >= patience:
+                    break
+    if meilleur_etat:
+        reseau.load_state_dict(meilleur_etat)
+    with torch.no_grad():
+        P = reseau(Xte).cpu().numpy()
+    return 100 * float(np.linalg.norm(P - Yte.cpu().numpy()) / np.linalg.norm(Yte.cpu().numpy()))
+
+
 def contenu(H, E):
     """L'écart relatif du mapping, λ par validation croisée, mesuré sur une moitié tenue à l'écart ✓."""
     n = H.shape[0]
@@ -71,6 +108,10 @@ def main() -> int:
     ap.add_argument("--fr", default="data/corpus_fr.txt")
     ap.add_argument("--longueur", type=int, default=128)
     ap.add_argument("--fenetres", type=int, default=250)
+    ap.add_argument("--mlp", action="store_true",
+                    help="ajouter un lecteur NON LINÉAIRE (MLP avec ARRÊT ANTICIPÉ) à côté du ridge ✓ — "
+                         "la question du round 3 : le relevé « mêlé » est-il mauvais en soi, ou seulement "
+                         "pour un lecteur linéaire ?")
     a = ap.parse_args()
 
     from transformers import AutoModelForCausalLM
@@ -111,7 +152,8 @@ def main() -> int:
         T_mix = np.concatenate([T_en[:n], T_fr[:n]])
         c_mix = contenu(S_mix, T_mix)
         note = "NEUTRE (50 %)" if L in (1, 2) else ("la langue revient" if L in (6, 7) else "")
-        print(f"   {L:>6} |      {c_en:5.1f} %    |      {c_fr:5.1f} %     |    {c_mix:5.1f} %   | {note}")
+        extra = f" | MLP mêlé {contenu_mlp(S_mix, T_mix):5.1f} %" if a.mlp else ""
+        print(f"   {L:>6} |      {c_en:5.1f} %    |      {c_fr:5.1f} %     |    {c_mix:5.1f} %   | {note}{extra}")
     print()
     print("  lecture : ce qui compte est la comparaison entre les couches NEUTRES (1-2) et celles où la langue")
     print("  revient (6-7). Si le contenu y est comparable, le noyau abstrait la langue SANS perdre le sens ✓✓.")

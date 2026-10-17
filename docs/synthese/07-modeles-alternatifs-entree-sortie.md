@@ -234,3 +234,39 @@ La chaîne est maintenant complète, et chaque maillon est mesuré :
 | **la surface** la fait revenir | 59,4 % aux couches 6-7 | ✓ c'est là qu'elle sert |
 | **le relevé** en a besoin | « mêlé » toujours pire | ✗✓ à traiter |
 | **l'adaptateur** la fournit | −44,6 % pour 1,33 % | ✓✓ le paramètre |
+
+## Cinquième mesure (17/10, 18 h) : le « relevé propre à la langue » était un artefact de **LINÉARITÉ**
+
+La quatrième mesure concluait : *la couche commune est commune pour l'état, pas pour le relevé* ✗ — le
+mapping « mêlé » (un seul relevé pour les deux langues ✓) étant **systématiquement pire** ✓ (93,0 contre 87,8 ✓).
+La question qui suivait : **est-ce le relevé, ou la linéarité du relevé ?** ✗. Réponse mesurée ✓, avec un MLP
+**régularisé** (découpe 60/20/20 ✓, **arrêt anticipé** sur la validation ✓, poids décroissants ✓ — leçon du
+16/10 : un MLP sans arrêt anticipé sur-apprend ✓✗) :
+
+| couche | linéaire **mêlé** | **MLP mêlé** | gain |
+|---:|---:|---:|---:|
+| 0 | 93,0 % | **90,4 %** | −2,6 |
+| 1 | 93,0 % | **89,1 %** | −3,9 |
+| 2 | 92,4 % | **86,3 %** | −6,1 |
+| 3 | 91,7 % | **85,3 %** | −6,4 |
+| 4 | 91,1 % | **83,7 %** | −7,4 |
+| 5 | 88,9 % | **80,5 %** | −8,4 |
+| 6 | 86,0 % | **76,8 %** | −9,2 |
+| 7 | 83,4 % | **73,9 %** | −9,5 |
+| **8** | 81,6 % | **71,5 %** | **−10,1** ✓✓ |
+
+* **LE LECTEUR NON LINÉAIRE BAT LE LINÉAIRE PARTOUT** ✓✓ (à la couche 8 : **71,5 %** contre 81,6 % ✓ — dix
+  points ✓) : le « relevé propre à la langue » n'était donc **pas** une propriété de l'état ✗✓, c'était une
+  **limite du lecteur** ✓✓. *Septième fois de la nuit qu'un chiffre se déguise — cette fois en propriété
+  d'architecture* ✓✓ ;
+* **ET LE GAIN CROÎT AVEC LA PROFONDEUR** ✓ (2,6 points à la couche 0 → **10,1** à la couche 8 ✓✓) : les
+  états profonds sont **plus non linéairement encodés** ✓✓ — ce qui rejoint exactement le § 23-25 du rapport
+  (les modèles plus larges sont moins linéairement lisibles ✓) ;
+* **ET LE RÉSULTAT DÉCISIF** ✓✓✓ : à la couche 8, **un seul** relevé non linéaire **mêlé** (71,5 % ✓) fait
+  **mieux** que les **deux** relevés linéaires **par langue** (79,3 % en anglais et 76,5 % en français ✓✓).
+  *Un relevé partagé suffit — s'il est non linéaire* ✓✓✓ ;
+* **donc la chaîne est complète** ✓✓ : l'entrée porte la langue ✗ → le noyau ne la porte plus ✓✓ → le noyau
+  garde le sens ✓✓ → la surface la fait revenir ✓ → **le relevé n'est PAS propre à la langue** ✓✓ (si l'on
+  accepte la non-linéarité ✓) → l'adaptateur reste utile **pour la génération** ✓ (il fait passer d'une
+  perplexité de 3,19 à 1,50 ✓), pas pour la **lecture** ✓✓. C'est une distinction que le chapitre n'avait pas
+  faite, et elle est importante : *lire le sens est une chose, produire dans une langue en est une autre* ✓✓.
