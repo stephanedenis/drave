@@ -188,3 +188,49 @@ donc testé sur le modèle monolingue (4 couches ✓), en posant le LoRA **sur l
    interchangeables sur le même noyau ✓) ;
 3. **et ce paramètre est plus petit qu'on ne croyait** ✓✓ (32 k = **1,33 %**, au dernier étage, prend 84 % du
    gain ✓) — ce qui rend l'idée **directement utilisable** : un noyau, et **un petit module par langue** ✓✓.
+
+## Quatrième mesure (17/10, 17 h 30) : le noyau neutre **porte le sens** — mais le relevé reste propre à la langue
+
+La neutralité pourrait être une **perte** ✗ : une couche qui ne dit plus la langue pourrait ne plus rien dire
+✗✓. Mesure : `tools/contenu_par_couche.py` ✓ — le **contenu** (état → embedding du jeton suivant ✓, λ de ridge
+par validation croisée ✓), **par couche** et **par langue**, sur le modèle bilingue ✓.
+
+| couche | contenu **anglais** | contenu **français** | contenu **mêlé** | la langue ? |
+|---:|---:|---:|---:|---|
+| 0 | 89,5 % | 88,0 % | 93,0 % | — |
+| **1** | **87,8 %** | **87,3 %** | **93,0 %** | **NEUTRE (50 %)** ✓✓ |
+| **2** | **86,5 %** | **85,3 %** | 92,4 % | **NEUTRE (50 %)** ✓✓ |
+| 3 | 85,6 % | 84,5 % | 91,7 % | — |
+| 4 | 84,6 % | 83,8 % | 91,1 % | — |
+| 5 | 83,6 % | 82,5 % | 88,9 % | — |
+| **6** | 82,1 % | 80,6 % | 86,0 % | la langue revient ✗ |
+| **7** | 80,4 % | 78,5 % | 83,4 % | la langue revient ✗ |
+| 8 | **79,3 %** | **76,5 %** | **81,6 %** | — |
+
+* **LE NOYAU NEUTRE PORTE LE SENS** ✓✓ : aux couches 1-2, où la langue est illisible ✓, le contenu reste à
+  **87,8 %** et **87,3 %** — à **8 points seulement** du meilleur (79,3 % à la couche 8 ✓). *La neutralité
+  n'est donc pas une perte de sens* ✓✓ : le noyau abstrait la langue **en gardant le contenu** ✓✓ ;
+* **le contenu s'améliore avec la profondeur** ✓ (89,5 → 79,3 ✓) — régulier, sans accident ✓✓ ;
+* **MAIS LE RELEVÉ RESTE PROPRE À CHAQUE LANGUE** ✗✓ : la colonne « mêlé » — **un seul** mapping appris sur les
+  deux langues ✓ — est **systématiquement pire** (93,0 contre 87,8 ✓ ; 81,6 contre 79,3 ✓). Autrement dit :
+  les états anglais et français **ne sont pas linéairement séparables par la langue** ✓ (mesure 1 ✓) mais ils
+  **ne se lisent pas avec le même relevé** ✗✓ — il faut **deux** lectures ✗, ou une lecture **non linéaire** ✓
+  (piste du § 24 du rapport sur la linéarité ✓) ;
+* **la conclusion, en une phrase** ✓✓ : *la couche commune est commune pour l'**état**, pas encore pour le
+  **relevé*** ✓ — c'est-à-dire que le noyau a bien abstrait la langue **dans le contenu** ✓✓, mais le lien
+  entre l'état et les mots reste **teinté** de la langue ✗. Et c'est exactement là que l'adaptateur du
+  paragraphe précédent intervient : il **fournit** ce relevé propre à la langue ✓✓, pour **1,33 %** de
+  paramètres ✓.
+
+### Ce que cela change dans la lecture du chapitre
+
+La chaîne est maintenant complète, et chaque maillon est mesuré :
+
+| maillon | mesure | verdict |
+|---|---|---|
+| **l'entrée** porte la langue | classifieur 62,4 % à la couche 0 | ✗ oui, dans les octets |
+| **le noyau** ne la porte plus | 50,2 % aux couches 1-2 | ✓✓ neutre |
+| **le noyau** garde le sens | contenu 87,8 % aux couches 1-2 | ✓✓ utile |
+| **la surface** la fait revenir | 59,4 % aux couches 6-7 | ✓ c'est là qu'elle sert |
+| **le relevé** en a besoin | « mêlé » toujours pire | ✗✓ à traiter |
+| **l'adaptateur** la fournit | −44,6 % pour 1,33 % | ✓✓ le paramètre |

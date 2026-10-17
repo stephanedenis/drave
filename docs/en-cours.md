@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 17 h 05 HAE.**
+**Mis à jour : 2026-10-17, 17 h 40 HAE.**
 
 ## Le travail du moment : la tour de vision
 
@@ -100,6 +100,31 @@ l'accord reste **0 %** ✗, cette fois **cohéremment** : mon réflexe a une per
 contre **181,54** chez E5, soit **100× pire** → le **volume** (10 morceaux contre 29 ✗), et le volume
 est ce qui **ne tient pas** dans 16 Go. **Quatre murs, deux franchis** (stabilité ✓, objectif ✓), deux
 non (mémoire ✗, volume ✗).
+
+## ✅ LE NOYAU NEUTRE PORTE LE SENS — mais le relevé reste propre à la langue (17/10)
+
+`tools/contenu_par_couche.py` ✓ : le **contenu** (état → embedding suivant, λ par validation croisée ✓), par
+couche et par langue, sur le modèle bilingue ✓ :
+
+| couche | **anglais** | **français** | **mêlé** | la langue ? |
+|---:|---:|---:|---:|---|
+| **1** | **87,8 %** | **87,3 %** | **93,0 %** | **NEUTRE (50 %)** ✓✓ |
+| **2** | **86,5 %** | **85,3 %** | 92,4 % | **NEUTRE (50 %)** ✓✓ |
+| 6 | 82,1 % | 80,6 % | 86,0 % | la langue revient ✗ |
+| 7 | 80,4 % | 78,5 % | 83,4 % | la langue revient ✗ |
+| 8 | **79,3 %** | **76,5 %** | **81,6 %** | — |
+
+**Le noyau neutre porte le sens** ✓✓ : aux couches 1-2, où la langue est **illisible**, le contenu reste à
+**87,8 / 87,3 %** — à **8 points** du meilleur (79,3 % à la couche 8). *La neutralité n'est pas une perte* ✓✓.
+**Mais le relevé reste propre à chaque langue** ✗✓ : la colonne « mêlé » (un seul mapping pour les deux ✓) est
+**toujours pire** (93,0 contre 87,8 ✓) — les états ne sont pas séparables par la langue ✓ (mesure 1 ✓) mais
+**ne se lisent pas avec le même relevé** ✗✓.
+→ ***La couche commune est commune pour l'ÉTAT, pas encore pour le RELEVÉ*** ✓ — et c'est exactement là que
+l'adaptateur intervient : il **fournit** ce relevé propre à la langue ✓✓, pour **1,33 %** de paramètres ✓.
+
+**La chaîne complète, chaque maillon mesuré** ✓✓ : l'entrée porte la langue (62,4 % à la couche 0 ✗) → le
+noyau ne la porte plus (50,2 % ✓✓) → le noyau garde le sens (87,8 % ✓✓) → la surface la fait revenir
+(59,4 % ✓) → le relevé en a besoin (le « mêlé » est pire ✗✓) → l'adaptateur la fournit (−44,6 % pour 1,33 % ✓✓).
 
 ## ✅ OÙ BRANCHER : le dernier étage suffit, et la langue coûte **1,33 %** (17/10)
 
