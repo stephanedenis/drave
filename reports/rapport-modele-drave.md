@@ -506,3 +506,37 @@ tout au tout ✓.
 
 *C'est la quatrième fois de la nuit qu'une mesure se déguise en résultat* ✓✓ — et la même règle a sauvé
 les quatre : **écrire à côté du chiffre ce qui pourrait le rendre faux** ✗✓.
+
+## 17. L'ÉTAT DEVIENT **HABITABLE** — la première itération plate de la nuit, et son prix
+
+Le § 16 laissait deux explications ✓ ; la mesure les a départagées ✓. `--recurrence-max 4` ajouté à
+l'entraîneur ✓ : à chaque pas, le bloc partagé est appliqué **t fois**, **t tiré entre 1 et 4** ✓ (les
+poids sont liés **par construction** : la liste contient `t` fois le **même objet** couche 0 ✓✓).
+
+| modèle | **t = 1** | **t = 2** | **t = 4** |
+|---|---:|---:|---:|
+| **partagé + récurrence aléatoire** ✓ | **88,4** | **88,2** | **88,5** ✓✓ |
+| partagé (sans récurrence, § 16 ✗) | 82,9 | 84,2 | 86,7 |
+| distinct (témoin ✗) | 85,7 | 85,9 | 87,1 |
+
+* **L'ITÉRATION EST PLATE** ✓✓ — 88,4 · 88,2 · 88,5 : le contenu **ne dégrade plus** avec t, ce qui n'était
+  arrivé dans **aucune** des six configurations essayées cette nuit ✓✓. **La réponse à la question du
+  § 15 est donc OUI** ✓ : un état **peut** être rendu habitable par l'itération ✓ — à condition que
+  l'entraînement ait mis la récurrence **dans la boucle** ✓ et pas seulement dans les poids ✓ ;
+* **mais il y a un PRIX, et il est net** ✗ : à **t = 1**, le modèle entraîné sur t est **moins bon**
+  (88,4) que celui qui n'a vu qu'un pas (82,9) ✓✗ — **6 points de netteté** perdus ✓. Il a **moyenné** sur
+  t = 1..4 ✓ : il est **robuste** mais **émoussé** ✓ ;
+* **et le témoin `distinct` reste meilleur à t = 1** ✗ (85,7 contre 88,4 ✓) : la récurrence aléatoire
+  n'achète pas la netteté du modèle profond ✓, elle achète la **stabilité** ✓✓ ;
+* **le compromis, en une phrase** ✓✓ : *un état peut être **itérable** ou **précis**, et l'entraînement
+  choisit le point de ce curseur* ✓ — c'est la première fois que la nuit peut dire cela **avec des
+  chiffres** ✓✓.
+
+### Et le chemin de l'entraîneur, qu'il faut noter ✗
+
+Trois échecs successifs, tous d'**outillage**, avant que le run passe ✓ : (1) la **restauration** de la
+liste de couches était au mauvais endroit ✓✗ (le trainer sauvegarde le **meilleur point pendant**
+l'entraînement ✓) ; (2) `safetensors` **refuse** les tenseurs partagés ✓✗ — et `safe_serialization=False`
+n'y change rien, la vérification est **antérieure** au choix du format ✓ ; (3) ma première édition a
+**cassé l'indentation** de l'entraîneur ✓✗ (un remplacement qui avalait un bloc imbriqué ✓) — réparé par
+`git checkout` **et refait en insertions** ✓. *Un outil qu'on modifie se relit avant qu'on l'exécute* ✓✓.

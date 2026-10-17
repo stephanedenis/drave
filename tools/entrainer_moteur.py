@@ -23,6 +23,7 @@ Usage :
 """
 import collections
 import argparse
+import copy
 import math
 import os
 import sys
@@ -726,6 +727,11 @@ def main():
                         "diffèrent. C'est le défaut M8 (« le fichier sauvé ne reproduit pas le "
                         "modèle entraîné ») transformé en vérification automatique.")
     p.add_argument("--init", type=float, default=0.08, help="écart-type d'initialisation")
+    p.add_argument("--recurrence-max", type=int, default=0,
+                   help="BLOC RÉPÉTÉ ENTRAÎNÉ SUR t : à chaque pas, le bloc partagé est appliqué t fois, "
+                        "t TIRÉ entre 1 et cette valeur ✓ — l'état doit rester bon APRÈS l'itération ✗✓ "
+                        "(mesuré ailleurs : sans cela, le bloc répété est meilleur à t=1 (82,9 contre "
+                        "85,7 ✓) mais dégrade quand même (82,9 -> 86,7 ✓✗))")
     p.add_argument("--partage", action="store_true",
                    help="BLOC RÉPÉTÉ : toutes les couches partagent les poids de la première ✓ — le modèle "
                         "devient un bloc unique appliqué `--couches` fois ✓. C'est la réponse à la "
@@ -893,6 +899,15 @@ def main():
         # partout à la fin, soit l'uniforme. Les bancs (`essai_decharge`,
         # `essai_blocs`) n'ont pas ce défaut : ils appellent `cross_entropy`
         # eux-mêmes sur des fenêtres décalées une seule fois.
+        if a.recurrence_max > 1 and a.partage:
+            # ⚠️ RÉPéter LE MÊME MODULE, PAS COPIER LES POIDS ✗✓ : la liste contient `t` fois l'objet
+            # « couche 0 » ✓, donc les poids sont liés **par construction** ✓✓ et un pas d'optimisation met
+            # à jour le bloc unique ✓. Les deux bornes de la bibliothèque doivent suivre ✗ (leçon du 16/10 :
+            # `num_hidden_layers` borne la boucle du forward ✓, `layer_types` est une liste PAR COUCHE ✓).
+            tt = int(torch.randint(1, a.recurrence_max + 1, (1,)).item())
+            modele.model.layers = torch.nn.ModuleList([modele.model.layers[0]] * (tt * a.couches))
+            modele.config.num_hidden_layers = len(modele.model.layers)
+            modele.config.layer_types = list(modele.config.layer_types[:a.couches]) * tt
         sortie = modele(input_ids=x, labels=x,
                         output_hidden_states=(a.alignement > 0.0))
         perte = sortie.loss
@@ -947,6 +962,14 @@ def main():
                 ref = modele.model.layers[0].state_dict()
                 for couche in modele.model.layers[1:]:
                     couche.load_state_dict(ref)
+        if a.recurrence_max > 1 and a.partage:
+            # ⚠️ REMETTRE LA FORME DE BASE APRÈS CHAQUE PAS ✗✓ : le trainer sauvegarde le **meilleur point
+            # pendant** l'entraînement ✓✗, et un `state_dict` de 3t couches relu avec une config qui en
+            # attend `a.couches` échoue (« Missing key(s) … layers.8 » ✓). La liste n'est faite que de
+            # références ✓ : la remettre à `a.couches` copies de la couche 0 ne touche aucun poids ✓.
+            modele.model.layers = torch.nn.ModuleList([modele.model.layers[0]] * a.couches)
+            modele.config.num_hidden_layers = a.couches
+            modele.config.layer_types = list(modele.config.layer_types[:a.couches])
         if masques is not None:
             # E2 : on accumule le gradient AVANT d'appliquer le masque — l'accumuler après
             # aurait accumulé zéro sur les connexions interdites, c'est-à-dire précisément
@@ -1065,7 +1088,14 @@ def main():
             print("  #   aucun module ne diverge, mais les logits si : le calcul n'est pas en cause")
     modele.eval()
     os.makedirs(a.sortie, exist_ok=True)
-    modele.save_pretrained(a.sortie)
+    # ⚠️ DÉ-LIER AVANT D'ÉCRIRE ✗✓ : avec `--partage`, les couches sont **le même objet** ✓ (c'est ce qui
+    # fait le poids lié ✓), et la bibliothèque **refuse** de sauvegarder des tenseurs partagés ✓✗ — elle
+    # vérifie avant même de choisir le format ✓ (`save_pretrained(..., safe_serialization=False)` n'y
+    # change rien ✓). On les dédouble donc au dernier moment ✓ : les poids sont identiques ✓, et le fichier
+    # écrit est un modèle ordinaire ✓✓.
+    if a.partage:
+        modele.model.layers = torch.nn.ModuleList([copy.deepcopy(c) for c in modele.model.layers])
+    modele.save_pretrained(a.sortie, safe_serialization=False)   # tenseurs PARTAGÉS (poids liés ✓) : safetensors les refuse ✗
     print(f"\n  # meilleur point : pas {meilleur[2]} · val {meilleur[0]:.4f} bits/octet")
     print(f"  # écrit dans {a.sortie} · {n_params/1e6:.2f} M paramètres · "
           f"{lit/1e6:.2f} M poids lus/jeton/couche")
