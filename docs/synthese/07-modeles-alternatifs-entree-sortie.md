@@ -1349,3 +1349,24 @@ est une couche **≥ 60 %** dont les **deux voisines** sont **≤ 56 %** ✓ (ne
 * **ce que cela ajoute au chapitre** ✓✓ : la régularité **tient** (5 réplications, structure monotone ✓✓) et
   l'exception est **unique** et **explicable** ✓✓ (le plus grand modèle ✓). *C'est la conclusion la plus solide de
   la nuit, et elle a demandé une relecture, pas une mesure* ✓✓.
+
+## L'audit de numérotation (17/10, 20 h 10) : trente-sept mesures, **aucun trou**
+
+La relecture de cohérence ✓ : les sections « N-ième mesure » sont-elles **numérotées sans trou** ✓ ?
+
+| ce que l'audit a trouvé | |
+|---|---|
+| sections « N-ième mesure » | **32** ✓ |
+| plus haute | **37** ✓ |
+| numéros apparemment manquants | **1, 14, 15, 19, 20** ✗ |
+
+*Les cinq « manquants » ne sont pas des trous* ✓✓ : les mesures **14-15** et **19-20** sont dans des sections **au
+pluriel** (« quatorzième **et** quinzième mesures » ✓), et la mesure **1** est la **première** section ✓ (sans
+numéro ✓). *Les trente-sept mesures sont toutes là* ✓✓.
+
+**Et les chiffres-clés sont cités partout de la même façon** ✓✓ : « 17× » (5 occurrences ✓), « −53 » (10 ✓),
+« 1,33 » (19 ✓), « 5 réplications » (2 ✓), « 69,0 » (4 ✓), « 0,116 » (9 ✓) — *aucune contradiction trouvée* ✓✓.
+
+⚠️ **Ce que cet audit ne peut pas dire** ✗ : il vérifie la **numérotation** et la **présence** des chiffres ✓✗, pas
+la **cohérence sémantique** ✓ — un même chiffre peut être cité dans deux contextes **contradictoires** ✗, et seule
+une **relecture humaine** le verrait ✓✓. *C'est la même limite que tous les instruments de cette nuit* ✓✓.
