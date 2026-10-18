@@ -14,12 +14,13 @@ sans porter la **langue**, et la langue redevenir un **paramètre** à la sortie
 
 | ce qui **tient** | le chiffre | les mesures |
 |---|---|---|
-| le noyau est **neutre** (la langue n'y est pas lisible) | **50,1-51,8 %** = le hasard, **4 réplications** | 1, 15, 19, 29 |
+| le noyau est **neutre** (la langue n'y est pas lisible) | **50,1-53,6 %** = le hasard, **5 réplications** (plan **2×2** : prose/littérature × 256/512) | 1, 15, 19, 29, 36 |
 | le noyau **garde le sens** | contenu **87,7 / 86,5 %** | 4, 30 |
 | la langue vit **aux extrémités** | **58-68 %** en surface, 50 % au milieu | 1, 15, 19, 24 |
 | le **sens partagé** est au **milieu** | **+0,083** (couches 8-16), **+0,030** en surface | 18 |
 | la langue est un **petit paramètre** | **1,33 %** des poids, **5 ms** de bascule | 2, 3, 7, 24 |
 | on peut **penser sans langue** | **50,6-56,2 %** sur **huit** itérations | 11 |
+| **un** îlot langue-spécifique existe ✗✓ | couche 3 à **69,0 %** au milieu du 512 littéraire — le seul des cinq modèles | 36, 37 |
 
 **Ce qui a été RETIRÉ** (et qu'il ne faut pas citer comme acquis) : « le relevé est teinté par la langue » (9) ·
 « la correction de rang 1 répare » (9) · « la langue comme paramètre **commande** la sortie » (25) · « le sens partagé
