@@ -411,8 +411,16 @@ def perte_de_validation(modele, val, a, dev):
     """
     modele.eval()
     tot, n = 0.0, 0
+    # ⚠️ UNE VALIDATION PLUS COURTE QU'UN LOT DONNE 0,0000 ✗✗. `(len(val) - 1) // (a.seq * a.lot)` vaut alors
+    # ZÉRO : aucun lot n'est évalué, `tot / max(n, 1)` vaut 0 ✓✗, et le moteur croit avoir trouvé un point
+    # parfait au PREMIER pas ✓✗ — c'est ce qui est arrivé au modèle français seul (927 octets de validation pour
+    # 2 048 par lot ✓✓) : le fichier écrit est celui du pas 500, pas le meilleur ✓✗. On répète le texte pour
+    # avoir au moins un lot ✓✓.
+    if len(val) < a.seq * a.lot + a.seq:
+        manque = 2 * (a.seq * a.lot) // max(1, len(val)) + 2
+        val = np.concatenate([val] * manque)
     with torch.no_grad():
-        for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+        for k in range(max(1, min(8, (len(val) - 1) // (a.seq * a.lot)))):
             xv = torch.from_numpy(
                 np.stack([val[(k * a.lot + j) * a.seq:(k * a.lot + j) * a.seq + a.seq]
                           for j in range(a.lot)]).astype(np.int64)).to(dev)

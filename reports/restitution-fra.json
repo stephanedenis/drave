@@ -1,0 +1,16 @@
+[
+ {
+  "fichier": "udhr_fra.xml",
+  "iso3": "fra",
+  "nom": "French",
+  "script": "Latn",
+  "variante": "fra",
+  "bits_octet": 0.42782630806817357,
+  "articles": 30,
+  "articles_exacts": 0,
+  "taux_exact": 0.0,
+  "exactitude_octet": 94.06310995445673,
+  "exactitude_vue": 98.00034016370773,
+  "exactitude_jamais_vue": 47.64706194400787
+ }
+]

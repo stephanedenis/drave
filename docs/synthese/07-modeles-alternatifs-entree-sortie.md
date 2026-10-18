@@ -1589,29 +1589,33 @@ donc pas la longueur qui porte le score ✓✓ ; (2) **articles mélangés** : *
 retrouve à **96 %** — alors qu'il est **parfaitement lisible** comme langue (l'erratum ✓). Les deux propriétés
 coexistent* ✓✓.
 
-## Mesure 41 — la RESTITUTION : zéro article exact sur 13 222
+## Mesure 41 — la RESTITUTION : parfaite pour un modèle spécialisé, **détruite** quand il partage 448 langues
 
-`tools/restitution_udhr.py` ✓ — le régime inverse : le modèle doit **reproduire le texte qu'il a lu**, dans la
-**même** langue ✓ (modèle en octets à 448 langues, 19 M paramètres, validation **2,3372** bits/octet sur des
-articles jamais vus ✓).
+`tools/restitution_udhr.py` (v2) ✓ — le régime inverse : le modèle doit **reproduire le texte qu'il a lu**, dans la
+**même** langue ✓.
 
-| | |
-|---|---:|
-| **articles exacts** (tous les octets justes) | **0 / 13 222** ✗✗ |
-| exactitude **par octet**, articles vus (1-28) | **61,0 %** |
-| exactitude **par octet**, articles jamais vus (29-30) | **52,7 %** |
-| les 10 % de langues les mieux restituées | **79,8 %** |
-| bits/octet moyen | **1,880** |
+**D'abord, une correction de méthode** ✗✓ : la v1 encodait chaque article **isolé** ✗ — ses premiers octets n'ont
+**aucun contexte** ✓✗, donc aucun article ne peut être exact, même parfaitement mémorisé ✗. Le « 0 article exact
+sur 13 222 » de la v1 était **un artefact de mon outil**, pas du modèle ✓✓. La v2 évalue **en flux** ✓ : on donne
+les 256 octets qui précèdent l'article, et on mesure la fraction des **fragments de 32 octets** exactement
+reproduits ✓✓ — une granularité où la restitution **peut** exister ✓.
 
-* **LA RESTITUTION PARFAITE EST À ZÉRO** ✗✗ : le modèle **ne reproduit exactement aucun** des 13 222 articles ✓✗.
-  Un article de 200 octets exige 200 prédictions justes de suite ✓ ; à 61 % par octet, la probabilité est
-  infime ✓✓. *C'est la borne haute du régime : sans restitution exacte, aucune « traduction parfaite » n'est
-  possible* ✓✓ ;
-* **et la mémorisation est partielle** ✗✓ : 61 % (vus) contre 52,7 % (jamais vus) ✓ — le modèle a **un peu**
-  mémorisé, pas assez pour restituer ✓. Les dix pour cent de langues les mieux servies montent à **79,8 %** ✓ ;
-* **donc la comparaison des deux régimes** ✓✓ : *le même modèle **retrouve** le contenu d'une langue à l'autre à
-  96 % (Qwen) mais **ne reproduit** exactement **aucun** texte dans sa propre langue* ✗✓ — **le sens est mieux
-  porté que la lettre** ✓✓. C'est la phrase du chapitre ✓.
+| modèle | exactitude par octet (vu) | **fragments exacts (vus)** | jamais vu |
+|---|---:|---:|---:|
+| **français seul** (19 M, 9 KB de corpus ✓) | **99,4 %** ✓✓ | **85,1 %** ✓✓ | 47,8 % d'octets · **0,0 %** de fragments ✗ |
+| **448 langues** (19 M, 3,2 MB ✓) | 62,7 % | **0,6 %** ✗✗ | 53,8 % d'octets · 0,1 % |
+
+* **LA RESTITUTION PARFAITE EXISTE** ✓✓ — mais seulement pour un modèle **spécialisé** : entraîné sur **une** langue,
+  il reproduit **85,1 %** de ses fragments de 32 octets **exactement** ✓✓ (99,4 % d'octets) ;
+* **et elle est DÉTRUITE par le partage** ✗✗ : le même modèle, entraîné sur **448 langues**, tombe à **0,6 %** de
+  fragments exacts ✓✗ (62,7 % d'octets ✓). *La capacité se partage : 448 langues pour 19 M paramètres, c'est
+  7 langues par million de paramètres* ✓✓ ;
+* **et rien de tout cela n'est de la généralisation** ✗ : sur le **jamais vu**, les deux modèles s'effondrent
+  (47,8 % et 53,8 % d'octets, **0 %** et **0,1 %** de fragments ✓✗). *Ils restituent ce qu'ils ont mémorisé, et
+  seulement cela* ✓✓ ;
+* **le contraste avec la traduction** ✓✓✓ : le **même** modèle à 448 langues **retrouve** le contenu d'une langue à
+  l'autre (mesure 45 : 31 % sur les paires proches, 0-10 % sur les lointaines ✓) alors qu'il **ne reproduit
+  exactement presque rien** ✓✗ — *le sens est mieux porté que la lettre, y compris chez un petit modèle* ✓✓.
 
 ## Mesure 42 — les DIALECTES : les 7 variantes d'occitan sont lisibles à 100 %, et leur contenu se retrouve à 52 %
 

@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
-"""restitution_udhr.py — LA RESTITUTION : LE MODÈLE REPRODUIT-IL EXACTEMENT LE TEXTE, DANS CHAQUE LANGUE ?
+"""restitution_udhr.py (v2) — LA RESTITUTION, MESURÉE EN FLUX (avec du contexte).
 
-LE PREMIER DES DEUX RÉGIMES ✓✓. Avant de demander à une couche commune de **traduire** ✗, il faut lui demander de
-**restituer** ✓ : le texte qu'elle a lu doit pouvoir être **reproduit à l'identique**, dans la même langue ✓.
-C'est la borne haute : *si la restitution n'est pas parfaite sur du texte vu, la traduction ne peut rien garantir*
-✓✓.
+CE QUE LA v1 FAISAIT DE MAL ✗✗, et c'est un piège que je me suis tendu moi-même : elle encodait chaque article
+**isolé** ✓✗. Ses premiers octets n'ont alors **aucun contexte** ✓✗ — ils sont imprévisibles par construction ✓✓ —
+et un article ne peut **jamais** être exact, même parfaitement mémorisé ✗✗. Le « 0 article exact sur 13 222 » de la
+première version était donc **un artefact de mon propre outil** ✓✗, pas un fait du modèle ✓✓.
 
-CE QU'ON MESURE ✗, ET LES TROIS CHIFFRES QUI COMPTENT :
-  · **bits par octet** ✓ : la perte du modèle sur le texte (la mesure habituelle) ;
-  · **exactitude par octet** ✓ : la fraction des positions où l'octet le plus probable est le **bon** ✓ — c'est
-    la « restitution » au sens strict ✓ ;
-  · **articles exacts** ✓✓ : la fraction des articles où **TOUS** les octets sont justes ✓ — c'est la
-    « restitution **parfaite** » ✓✓ (le chiffre le plus dur, et le seul qui mérite le mot ✓).
+CE QUE LA v2 FAIT ✓ : elle évalue le texte **en flux** ✓✓ — on donne au modèle les 256 octets qui précèdent le
+fragment ✓, et on ne mesure que le fragment ✓. C'est la condition dans laquelle le modèle a été entraîné ✓ (le
+corpus est un flux continu ✓), et la seule où la restitution exacte **peut** exister ✓✓.
 
-⚠️ CE QU'IL NE DIT PAS ✗ : le modèle est entraîné sur **tout** le corpus ✓ — ces chiffres mesurent la
-**mémorisation** ✓✓ (capacité à stocker 448 langues sans se tromper ✓), pas la généralisation ✗. Et un article
-« exact » peut l'être par chance sur les passages répétitifs (la Déclaration répète « tous les êtres humains » ✓).
+TROIS CHIFFRES ✗ :
+  · **bits/octet** (vue / jamais vue ✓) ;
+  · **exactitude par octet** (vue / jamais vue ✓) ;
+  · **fragments exacts** ✓✓ : la fraction des **fenêtres de 32 octets** où **tous** les octets sont justes ✓ —
+    c'est la « restitution parfaite » à une granularité où elle est possible ✓✓.
+
+⚠️ CE QU'IL NE DIT PAS ✗ : un fragment exact de 32 octets n'est pas un article exact ✓ ; et « vu » / « jamais vu »
+sépare la mémorisation de la généralisation ✓✓ — la première peut être parfaite sans que la seconde existe ✓❌.
 """
 from __future__ import annotations
 import argparse, collections, json, math, pathlib, sys
@@ -26,70 +28,79 @@ from udhr_commun import charger_articles, charger_meta, charger_modele
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--hf", default="/tmp/jouet-udhr")
-    ap.add_argument("--longueur", type=int, default=256)
-    ap.add_argument("--max-langues", type=int, default=0, help="0 = toutes ✓")
-    ap.add_argument("--couche", type=int, default=-1)
+    ap.add_argument("--hf", default="/tmp/jouet-udhr2")
+    ap.add_argument("--contexte", type=int, default=256)
+    ap.add_argument("--fragment", type=int, default=32)
+    ap.add_argument("--iso", default="")
+    ap.add_argument("--max-langues", type=int, default=0)
     ap.add_argument("--tokeniseur", action="store_true")
     ap.add_argument("--sortie", default="reports/restitution-udhr.json")
     a = ap.parse_args()
     articles = charger_articles(); meta = charger_meta()
     fichiers = sorted(f for f in articles if len(articles[f]) >= 28)
+    if a.iso:
+        fichiers = [f for f in fichiers if meta[f]["iso3"] == a.iso]
     if a.max_langues:
         fichiers = fichiers[: a.max_langues]
     m, encoder, device = charger_modele(a.hf, tokeniseur=a.tokeniseur)
     resultats = []
     for f in fichiers:
-        bits, exacts, tot_pos, tot_art = [], 0, 0, 0
-        justes_tot, vus, jamais_vus = 0, [], []
-        for n in sorted(articles[f]):
-            ids = encoder(articles[f][n], a.longueur)
-            if len(ids) < 8: continue
+        # le flux, dans l'ordre d'entraînement ✓ (articles 1..30 séparés par un saut de ligne ✓)
+        nums = sorted(articles[f])
+        flux = "\n".join(articles[f][n] for n in nums)
+        b = np.frombuffer(flux.encode("utf-8"), dtype=np.uint8).astype(np.int64)
+        if a.tokeniseur:
+            b = np.array(encoder(flux, 100000).cpu().numpy(), dtype=np.int64)
+        acc_vue, acc_jamais, ex_vue, ex_jamais = [], [], [], []
+        # ⚠️ UN PASSAGE PAR ARTICLE, PAS PAR FRAGMENT ✗✓ : on donne le contexte précédent + l'article, et on
+        # ne lit que les positions de l'article ✓✓. 13 000 passages au lieu de 134 000 ✓✓.
+        pos = 0
+        for n in nums:
+            art = np.frombuffer(articles[f][n].encode("utf-8"), dtype=np.uint8).astype(np.int64)
+            ctx = b[max(0, pos - a.contexte):pos]
+            if len(ctx) == 0:
+                ctx = np.array([10], dtype=np.int64)      # un saut de ligne comme contexte minimal ✓
+            seq = np.concatenate([ctx, art])
+            if len(seq) < 8:
+                pos += len(art) + 1
+                continue
+            x = torch.tensor(seq).unsqueeze(0).to(device)
             with torch.no_grad():
-                x = ids.unsqueeze(0)
-                sortie = m(x, labels=x)
-                logits = sortie.logits[0, :-1]
-                cibles = ids[1:]
-                perte = float(sortie.loss)
-                pred = logits.argmax(-1)
-                justes = (pred == cibles)
-                bits.append(perte / math.log(2))
-                tot_pos += len(cibles)
-                justes_tot += int(justes.sum())
-                exacts += int(bool(justes.all()))
-                tot_art += 1
-                # ⚠️ VU ou JAMAIS VU ✗✓ : les articles 1-28 ont servi à l'entraînement ✓, les 29-30 sont la
-                # validation ✓✓ — et c'est la seule façon de séparer mémorisation et généralisation ✓.
-                (jamais_vus if n >= 29 else vus).append(float(justes.float().mean()))
-        if not bits: continue
+                logits = m(x, labels=x).logits[0]
+            # les logits qui prédisent l'article = positions len(ctx)-1 .. len(seq)-2 ✓
+            pred = logits[len(ctx) - 1:len(seq) - 1].argmax(-1).cpu().numpy()
+            justes = (pred == np.array(art))
+            vue = n <= 28
+            (acc_vue if vue else acc_jamais).append(float(justes.mean()))
+            # fragments exacts de `fragment` octets ✓ (on ne garde que les fragments complets ✓)
+            nfr = len(justes) // a.fragment
+            for k in range(nfr):
+                ok = bool(justes[k*a.fragment:(k+1)*a.fragment].all())
+                (ex_vue if vue else ex_jamais).append(float(ok))
+            pos += len(art) + 1
+        if not acc_vue: continue
         resultats.append({"fichier": f, "iso3": meta[f]["iso3"], "nom": meta[f]["nom"], "script": meta[f]["script"],
-                          "variante": meta[f]["variante"], "bits_octet": float(np.mean(bits)),
-                          "articles": tot_art, "articles_exacts": exacts,
-                          "taux_exact": 100 * exacts / max(1, tot_art),
-                          "exactitude_octet": 100 * justes_tot / max(1, tot_pos),
-                          "exactitude_vue": 100 * float(np.mean(vus)) if vus else 0.0,
-                          "exactitude_jamais_vue": 100 * float(np.mean(jamais_vus)) if jamais_vus else 0.0})
-    resultats.sort(key=lambda x: x["bits_octet"])
-    print(f"  {len(resultats)} langues · couche de sortie")
-    print(f"\n  meilleures restitutions (bits/octet bas ✓) :")
-    for r in resultats[:6]:
-        print(f"    {r['variante']:16s} {r['nom'][:24]:24s} {r['bits_octet']:5.3f} b/o · {r['articles_exacts']}/{r['articles']} articles EXACTS")
-    print(f"\n  les plus difficiles :")
-    for r in resultats[-6:]:
-        print(f"    {r['variante']:16s} {r['nom'][:24]:24s} {r['bits_octet']:5.3f} b/o · {r['articles_exacts']}/{r['articles']} articles EXACTS")
-    par_script = collections.defaultdict(list)
-    for r in resultats: par_script[r["script"]].append(r["bits_octet"])
-    print("\n  par écriture (bits/octet moyen · nombre de langues) :")
-    for s, v in sorted(par_script.items(), key=lambda kv: -len(kv[1])):
-        print(f"    {s:6s} {np.mean(v):5.3f} · {len(v):3d} langue(s)")
-    exacts_total = sum(r["articles_exacts"] for r in resultats)
-    arts_total = sum(r["articles"] for r in resultats)
-    print(f"\n  TOTAL : {exacts_total}/{arts_total} articles exacts ({100*exacts_total/max(1,arts_total):.1f} %) · "
-          f"{np.mean([r['bits_octet'] for r in resultats]):.3f} bits/octet moyen")
-    print(f"  exactitude PAR OCTET : vue {np.mean([r['exactitude_vue'] for r in resultats]):.1f} % · "
+                          "exactitude_vue": 100 * float(np.mean(acc_vue)),
+                          "exactitude_jamais_vue": 100 * float(np.mean(acc_jamais)) if acc_jamais else 0.0,
+                          "fragments_exacts_vus": 100 * float(np.mean(ex_vue)),
+                          "fragments_exacts_jamais_vus": 100 * float(np.mean(ex_jamais)) if ex_jamais else 0.0,
+                          "fragments": len(acc_vue) + len(acc_jamais)})
+    resultats.sort(key=lambda r: -r["exactitude_vue"])
+    print(f"  {len(resultats)} langues · contexte {a.contexte} octets · fragments de {a.fragment}")
+    print(f"\n   les 5 meilleures (exactitude vue) :")
+    for r in resultats[:5]:
+        print(f"     {r['variante'] if 'variante' in r else r['nom'][:22]:22s} {r['exactitude_vue']:5.1f} % · "
+              f"fragments exacts {r['fragments_exacts_vus']:5.1f} %")
+    print(f"\n   les 5 plus faibles :")
+    for r in resultats[-5:]:
+        print(f"     {r['nom'][:22]:22s} {r['exactitude_vue']:5.1f} % · fragments exacts {r['fragments_exacts_vus']:5.1f} %")
+    print(f"\n  MOYENNE : vue {np.mean([r['exactitude_vue'] for r in resultats]):.1f} % · "
           f"jamais vue {np.mean([r['exactitude_jamais_vue'] for r in resultats]):.1f} %")
-    print(f"  et 10 % des langues les mieux restituées (octet) : "
-          f"{np.mean(sorted(r['exactitude_octet'] for r in resultats)[-max(1,len(resultats)//10):]):.1f} %")
+    print(f"  FRAGMENTS EXACTS : vus {np.mean([r['fragments_exacts_vus'] for r in resultats]):.1f} % · "
+          f"jamais vus {np.mean([r['fragments_exacts_jamais_vus'] for r in resultats]):.1f} %")
+    par_script = collections.defaultdict(list)
+    for r in resultats: par_script[r["script"]].append(r["exactitude_vue"])
+    print("  par écriture (exactitude vue) :", {s: round(float(np.mean(v)), 1) for s, v in sorted(par_script.items(), key=lambda kv: -len(kv[1]))[:6]})
     if a.sortie:
         pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)
         pathlib.Path(a.sortie).write_text(json.dumps(resultats, ensure_ascii=False, indent=1))
