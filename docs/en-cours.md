@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 10 HAE.**
+**Mis à jour : 2026-10-17, 20 h 40 HAE.**
 
 ## Le travail du moment : la couche commune entrée-sortie (chapitre 7)
 
@@ -231,6 +231,26 @@ l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → 1,4546) po
 vrai arbitrage est ailleurs ✓✓ : sur un modèle de **7 milliards**, réentraîner sur deux langues est hors de prix ✗,
 tandis qu'un adaptateur coûte **1,33 %** et **5 ms** ✓✓ — *c'est à l'échelle que l'adaptateur devient la bonne
 réponse* ✓, et ce chapitre ne peut pas le mesurer, seulement le nommer ✓.
+
+## ⚠️ L'ADAPTATEUR SUR UN BON MODÈLE AJOUTE PEU ET ABÎME L'AUTRE LANGUE (17/10, 20 h 35)
+
+La mesure 2 (français **−53 %** ✓) avait été faite sur un modèle **faible** (prose 2,43 M). Refait sur le modèle
+**littéraire v2** (4,79 M, val **2,6504**, le meilleur des jouets) :
+
+| modèle | français | anglais | verdict |
+|---|---:|---:|---|
+| **prose 2,43 M** (mesure 2) | 3,19 → **1,50** (**−53 %**) | 1,90 → **1,40** (**−26 %**) | aide **les deux** ✓✓ |
+| **littéraire v2 4,79 M** | 1,24 (−4,7 %) | 1,36 **+10,8 %** ✗✗ | **ajoute peu, abîme l'anglais** ✗ |
+| **Qwen 494 M** (mesure 24) | — (**−7,6 %**) | **+4,5 %** | peu à gagner |
+
+**La loi se confirme, encore** : *plus le modèle est bon, moins l'adaptateur ajoute* (−53 % → −4,7 % → −7,6 %).
+**Mais sur le bon jouet, il abîme l'anglais** (**+10,8 %**) — alors que sur le modèle **faible** il l'**améliorait**
+(−26 %). *Un modèle bilingue qui marche déjà n'a pas besoin d'un adaptateur, et un adaptateur entraîné sur une langue
+le **déséquilibre**.*
+→ **Le paramètre de langue est un outil de RATTRAPAGE** : il sert quand le noyau ne sait pas, il **nuit** quand il
+sait déjà. C'est la conclusion de la mesure 25, chiffrée ici sur un jouet.
+→ **Pour le projet** : **construire un noyau bilingue** (le bilingue bat le monolingue + adaptateur, mesure 10) est
+**la bonne route** ; l'adaptateur est le **pansement**, pas le remède.
 
 ## ✅ CINQUIÈME RÉPLICATION — et le plan 2×2 est complet (17/10, 20 h)
 

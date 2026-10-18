@@ -1422,3 +1422,27 @@ le résultat est net ✓ :
 * **les trente autres sont vertes** ✓✓ (dont `porte-greffe` en 629 s ✓, `porte-homeostasie` en 669 s ✓,
   `porte-adaptateur-sortie` en 60 s ✓). *Le passage complet est la seule preuve globale* ✓✓ — le reste, ce sont des
   mesures ✓.
+
+## Trente-huitième mesure (17/10, 20 h 35) : l'adaptateur sur un **bon** modèle **ajoute peu et abîme** l'autre langue
+
+La mesure 2 (l'adaptateur absorbe la langue ✓, français **−53 %** ✓) avait été faite sur le modèle **prose** de
+2,43 M ✗ — un modèle **faible** ✓. Refaite sur le modèle **littéraire v2** ✓ (4,79 M, val **2,6504** ✓✓, le
+meilleur des jouets ✓) :
+
+| modèle | français | anglais | verdict |
+|---|---:|---:|---|
+| **prose 2,43 M** (mesure 2 ✓) | 3,19 → **1,50** ✓✓ (**−53 %**) | 1,90 → **1,40** ✓ (**−26 %** ✓✓) | l'adaptateur **aide les deux** ✓✓ |
+| **littéraire v2 4,79 M** (cette mesure ✓) | 1,24 ✗ (−4,7 % ✓) | 1,36 **+10,8 %** ✗✗ | **ajoute peu, abîme l'anglais** ✗ |
+| **Qwen 494 M** (mesure 24 ✓) | — (**−7,6 %** ✓) | **+4,5 %** ✓ | peu à gagner ✓✓ |
+
+* **LA LOI SE CONFIRME, ENCORE** ✓✓ : *plus le modèle est bon, moins l'adaptateur ajoute* ✓✓ — **−53 %** sur un
+  modèle faible ✓, **−4,7 %** sur un bon jouet ✓, **−7,6 %** sur Qwen ✓✓ ;
+* **MAIS sur le bon jouet, il ABÎME l'anglais** ✗✗ (**+10,8 %** ✓) — alors que sur le modèle **faible** il
+  l'**améliorait** (−26 % ✓✓). *Un modèle bilingue qui marche déjà n'a pas besoin d'un adaptateur, et un
+  adaptateur entraîné sur une langue le **déséquilibre*** ✗✓ ;
+* **donc le paramètre de langue est un outil de RATTRAPAGE** ✓✓ : il sert quand le noyau ne sait pas ✓, il **nuit**
+  quand il sait déjà ✓✗. *C'est exactement la conclusion de la mesure 25* ✓✓ (sur Qwen, la sortie suit l'amorce ✓)
+  — et cette mesure la **chiffre** sur un modèle-jouet ✓✓ ;
+* **ce que cela implique pour le projet** ✓✓ : **construire un noyau bilingue** ✓✓ (ce que la mesure 10 disait déjà :
+  le bilingue bat le monolingue + adaptateur ✓✓) est **la bonne route** ✓✓ ; l'adaptateur est le **pansement** ✓,
+  pas le remède ✓.
