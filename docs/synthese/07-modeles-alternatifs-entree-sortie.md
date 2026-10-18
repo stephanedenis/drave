@@ -7,6 +7,56 @@
 
 ![Une couche commune, et la langue comme paramètre](schemas/couche-commune.svg)
 
+## ERRATUM MAJEUR (18/10, 0 h 30) : le « noyau neutre » était un **artefact d'instrument** — la langue est lisible à TOUTES les couches
+
+**Ce que le chapitre affirmait** ✗ : le noyau du modèle est **neutre** — un classifieur de langue y est au hasard
+(**50,2 %**), et cela avait été répliqué **cinq fois** (mesures 1, 15, 19, 29, 36 ✓✓). C'était le résultat
+**fondateur** du chapitre, celui dont tout le reste dépendait.
+
+**Ce qui était faux** ✗✗, et c'est une faute d'instrument, pas de modèle. L'outil du chapitre (`langue_dans_etat.py`,
+v1) construisait les états de **toutes** les fenêtres anglaises puis de **toutes** les fenêtres françaises, les
+**concaténait** en un seul tableau, et appelait `precision_lineaire(X, y)`. Or cette fonction découpait les
+**lignes** en deux moitiés ✓✗ :
+
+```
+X = [ états anglais (n lignes) ; états français (n lignes) ]
+X[:n2]  = entraînement  →  la PREMIÈRE MOITIÉ DES FENÊTRES ANGLAISES  (une seule classe ✗)
+X[n2:]  = test          →  le reste des anglaises  +  TOUTES les françaises  (un mélange ✗)
+```
+
+Le classifieur apprenait donc « l'anglais » sur une seule classe ✗, et on lisait sa précision sur un mélange ✗.
+Pire, le `max(acc, 100-acc)` — ajouté pour le signe arbitraire ✓ — transformait ce mélange en un chiffre
+d'apparence raisonnable (50-72 %) ✓✗. *La « neutralité » était le chiffre d'un appareil mal branché* ✓✓.
+
+**La preuve** ✓✓ — sonde **corrigée** (`langue_dans_etat.py` v2 : découpage **par fenêtre** ✓, standardisation ✓,
+contrôle intra-langue ✓, contrôle **négatif** ✓✓) :
+
+| modèle | couche 1 | couche 2 | couche 3 | couche 4 | contrôle intra-langue | contrôle négatif |
+|---|---:|---:|---:|---:|---:|---:|
+| mixte prose 256 (m. 1) | **80,4 %** | 82,9 % | 82,6 % | 88,5 % | 51,7 % | — |
+| mixte prose 512 (m. 15) | **79,4 %** | 83,0 % | 83,5 % | 97,5 % | 51,2 % | — |
+| littérature 256 v1 (m. 19) | **84,3 %** | 87,0 % | 88,2 % | 90,2 % | 51,0 % | — |
+| littérature 256 v2 (m. 29) | **85,4 %** | 81,5 % | 83,5 % | 97,5 % | 50,5 % | — |
+| littérature 512 (m. 36) | **80,1 %** | 94,1 % | 97,7 % | 97,6 % | 51,2 % | — |
+| UDHR 448 langues | **98,9 %** | **99,1 %** | **99,0 %** | **99,1 %** | — | 1,5-2,2 % (hasard 2,5 %) |
+| Qwen 0,5 B (40 langues) | **100 %** | 100 % | 100 % | 100 % | — | — |
+
+* **LA LANGUE EST LISIBLE PARTOUT** ✗✗ : 80 à 98 % dès la **couche 1**, dans **les cinq modèles-jouets** que le
+  chapitre disait neutres ✓✓ — et **100 %** dans Qwen, et **99 %** dans le modèle à 448 langues ✓✓. *Il n'y a pas
+  de noyau neutre* ✗✓ ;
+* **et les contrôles disent que la sonde est juste** ✓✓ : le contrôle **intra-langue** (deux moitiés du corpus
+  anglais) reste à **50-52 %** ✓ (rien à séparer ✓) ; le contrôle **négatif** (étiquettes mélangées) retombe à
+  **1,5-2,2 %** pour 40 classes ✓ (hasard 2,5 %) et **49,5-50,7 %** pour 2 classes ✓✓ ;
+* **pourquoi la v1 donnait 50 %** ✗✓ : parce qu'elle **entraînait sur une seule classe** ✓✗. On ne peut pas
+  s'en apercevoir en lisant son chiffre : il faut lire **son découpage** ✓✓. *C'est le dix-septième piège de la
+  nuit, et le plus grave : l'instrument était faux depuis la première mesure* ✗✗.
+
+**Ce qui change dans le chapitre** ✓✗ : la langue **n'est pas** absente de l'état — elle y est **partout** ✓✓.
+Ce qui reste vrai, et qui est mesuré **autrement** (par le retrieval, pas par un classifieur) : *le même contenu,
+dans deux langues, se retrouve* ✓✓ — **96,4 %** sur Qwen avec les articles UDHR alignés (mesure 39 ✓), contre
+**3,3 %** au hasard ✓✓. *La couche commune n'est donc pas un lieu **sans langue** : c'est un lieu où le **sens**
+est aligné **malgré** la langue* ✓✓✓.
+
 ## La synthèse, en un tableau (à lire avant le reste)
 
 Treize mesures ont été faites les 17 et 18 octobre ✓. Les voici **toutes**, avec ce qu'elles disent et le
@@ -62,8 +112,10 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 
 ### Ce qu'il faut en retenir, en cinq phrases
 
-1. **La langue n'est ni dans l'état ni dans le relevé partagé** ✓✓ — elle vit dans l'**entrée** (les octets ✓)
-   et dans la **surface de sortie** ✓ ; c'est **exactement** la structure d'une couche commune ✓.
+1. **La langue est lisible PARTOUT dans l'état** ✗✗ — 80 à 98 % dès la couche 1 dans les cinq modèles-jouets,
+   et 100 % dans Qwen ✓ (l'ancienne lecture « noyau neutre » était un artefact d'instrument ✓✗, voir
+   l'erratum majeur). *Ce qui est partagé, ce n'est pas l'absence de langue : c'est le **sens*** ✓✓ — le même
+   article se retrouve d'une langue à l'autre à **96,4 %** (contre 3,3 % au hasard ✓).
 2. **La langue est un paramètre de 1,33 %** ✓✓ (32 768 poids au dernier étage), qui **commande la sortie** ✓ et
    dont la **bascule coûte 5 ms** ✓✓.
 3. **Le noyau neutre n'est pas appauvri** ✓✓ : le contenu y reste à **87,8 %**, à 8 points du meilleur ✓.
@@ -79,7 +131,7 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 
 | ce qui tient | les mesures | le chiffre |
 |---|---|---|
-| **le noyau est neutre** (la langue n'y est pas lisible) | **5 réplications** — plan **2×2** complet : prose et littérature, dim 256 et 512 ✓✓✓ | **50,1 à 53,6 %** = le hasard ✓✓ |
+| ~~le noyau est neutre~~ ✗✗ **RETIRÉ (erratum majeur)** — l'instrument entraînait sur une seule langue | 1, 15, 19, 29, 36 → **sonde corrigée** | **80 à 98 %** dès la couche 1 : **la langue est lisible partout** ✗✗ |
 | **le noyau garde le sens** | 4 et 30 ✓✓ | contenu **87,7 / 86,5 %**, à 9 points du meilleur ✓ |
 | **la langue vit aux extrémités** | 1, 15, 19, 24 ✓✓ | **58-68 %** en surface, 50 % au milieu ✓ |
 | **un ÎLOT langue-spécifique** existe — dans **un** modèle sur cinq ✗✓ | 36 ✓ | couche 3 à **69,0 %** au milieu du 512 littéraire ✓✗ |

@@ -14,7 +14,7 @@ sans porter la **langue**, et la langue redevenir un **paramètre** à la sortie
 
 | ce qui **tient** | le chiffre | les mesures |
 |---|---|---|
-| le noyau est **neutre** (la langue n'y est pas lisible) | **50,1-53,6 %** = le hasard, **5 réplications** (plan **2×2** : prose/littérature × 256/512) | 1, 15, 19, 29, 36 |
+| ~~le noyau est **neutre**~~ ✗✗ **RETIRÉ (erratum majeur)** : la langue est lisible **partout** | **80-98 %** dès la couche 1 (5 modèles), **100 %** dans Qwen, **99 %** dans le modèle à 448 langues | 1, 15, 19, 29, 36 → sonde corrigée |
 | le noyau **garde le sens** | contenu **87,7 / 86,5 %** | 4, 30 |
 | la langue vit **aux extrémités** | **58-68 %** en surface, 50 % au milieu | 1, 15, 19, 24 |
 | le **sens partagé** est au **milieu** | **+0,083** (couches 8-16), **+0,030** en surface | 18 |
@@ -36,11 +36,11 @@ Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola), trouv�
 `Panini-Research/` de Stéphane — et **cinq fichiers mal nommés** détectés au passage (dont trois des quatre
 « allemands » du corpus « vérifié », qui sont anglais).
 
-**En une phrase** ✓✓ : *la langue n'est **ni dans l'état** (le noyau est au hasard, cinq fois répliqué) **ni
-dans le relevé** (0,7 point) — elle vit à l'**entrée** et à la **surface**, et c'est exactement la structure d'une
-couche commune : un contenu partagé, une surface paramétrée par 1,33 % des poids.* Le même sens dans deux langues
-se retrouve **mieux que le hasard** (trois livres sur cinq) mais **reste faible**, et **la pensée itérée est sans
-langue** — elle ne tient simplement qu'**un pas**.
+**En une phrase** ✓✓ : *la langue est lisible **partout** dans l'état (80 à 98 % dès la couche 1, 100 % dans
+Qwen) — l'ancienne lecture « noyau neutre » était un **artefact d'instrument** (✗✗ erratum du 18/10) ; ce qui est
+partagé, ce n'est pas l'absence de langue, c'est le **sens** : le même article UDHR se retrouve d'une langue à
+l'autre à **96,4 %** contre 3,3 % au hasard ✓✓.* Et **la pensée itérée est sans langue** — elle ne tient
+simplement qu'**un pas**.
 
 *La fiche complète : [docs/synthese/07-modeles-alternatifs-entree-sortie.md](synthese/07-modeles-alternatifs-entree-sortie.md)*
 · *les notes : [journal/2026-10-17.md](../journal/2026-10-17.md)* · *les chiffres dans

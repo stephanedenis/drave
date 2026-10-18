@@ -16,7 +16,7 @@ en route**.
 
 | ce qui tient | le chiffre | les mesures |
 |---|---|---|
-| **le noyau est neutre** — un classifieur de langue y est au hasard | **50,1 à 53,6 %**, **cinq** réplications, plan **2×2** complet (prose/littérature × 256/512) | 1, 15, 19, 29, 36 |
+| ~~**le noyau est neutre**~~ ✗✗ **RETIRÉ** — l'instrument était faux (entraînement sur une seule langue) ; sonde corrigée | **80 à 98 %** dès la couche 1, **100 %** dans Qwen, **99 %** dans le modèle à 448 langues | 1, 15, 19, 29, 36 → corrigées |
 | **le noyau garde le sens** | contenu **87,7 / 86,5 %**, à **9 points** du meilleur | 4, 30 |
 | **la langue vit aux extrémités** | **58-68 %** en surface, 50 % au milieu | 1, 15, 19, 24 |
 | **le sens partagé est au milieu** | **+0,083** aux couches 8-16 de Qwen, **+0,030** à la dernière | 18 |

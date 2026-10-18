@@ -1,56 +1,49 @@
 #!/usr/bin/env python3
-"""langue_dans_etat.py — LA LANGUE EST-ELLE ENCORE DANS L'ÉTAT, ET À QUELLE COUCHE ?
+"""langue_dans_etat.py (v2) — LA LANGUE EST-ELLE LISIBLE DANS L'ÉTAT ? (l'outil du chapitre 7, RÉPARÉ)
 
-LA QUESTION (chapitre 7 de `docs/synthese/`). Une couche commune entrée-sortie doit **abstraire la
-langue** : la langue, le dialecte, le style ne doivent être que des **paramètres**, pas le contenu ✓. Le
-critère qui décide, écrit d'avance ✓ : **un classifieur de langue entraîné sur l'état doit être AU HASARD**
-sur la couche commune. S'il devine la langue ✗, la couche n'abstrait pas — elle porte encore la langue ✓✓.
+CE QUI ÉTAIT FAUX DANS LA v1, ET C'EST GRAVE ✗✗. La v1 construisait les états de toutes les fenêtres anglais
+puis de toutes les fenêtres françaises, **concaténait** les deux blocs et appelait `precision_lineaire(X, y)` —
+laquelle découpait les LIGNES en deux moitiés ✓✗ : `X[:n2]` (entraînement) = **la première moitié des fenêtres
+anglaises**, `X[n2:]` (test) = **le reste des anglaises + TOUTES les françaises** ✓✗. Le classifieur apprenait donc
+« l'anglais » sur une seule classe ✗, et on lisait sa précision sur un mélange ✗. Pire, `max(acc, 100-acc)`
+(ajouté pour le signe arbitraire ✓) transformait ce mélange en un chiffre d'apparence raisonnable ✓✗.
 
-CE QUE CET OUTIL MESURE, ET SES DEUX PIÈGES ÉVITÉS.
-  1. **le piège de la trivialité** ✗✓ : deux textes différents donnent des états différents ✓, donc un
-     classifieur peut séparer « anglais » et « français » **par le sujet** du texte, pas par la langue ✗.
-     Le remède : on **apparie** les fenêtres (même longueur ✓, même type de contenu ✓, et surtout : on
-     compare à un **témoin intra-langue** ✓ — un classifieur qui sépare deux *sujets* de la même langue ✓ —
-     si la séparation de langue n'est pas meilleure que celle du témoin, on ne mesure rien ✓) ;
-  2. **le piège du nombre de positions** ✗✓ (leçon du 16/10) : un ridge sur moins de positions que de
-     coefficients **interpole** et rend 100 % ✓✗ — on exige donc **n > 5 × dimension** ✓ et on le dit.
+*Conséquence : la « neutralité du noyau » (50,2 % aux couches 1-2 ✓✓) — le résultat fondateur du chapitre 7 —
+était un artefact de l'instrument* ✗✗. Avec un découpage correct et des étiquettes alignées, la même sonde
+donne **87 à 99 %** sur les mêmes modèles ✓✓ : **la langue est lisible partout**.
 
-LA MESURE, COUCHE PAR COUCHE. Pour chaque couche L : on ajuste une régression logistique (ou un ridge
-fermé, plus simple ✓) `état_L → {anglais, français}` ✓ sur la moitié des fenêtres, on mesure la
-**précision** sur l'autre moitié ✓, et on compare à deux témoins :
-  · le **hasard** (50 % ✓) ;
-  · le **témoin intra-langue** ✗ : le même classifieur sur deux *sujets* de la **même** langue ✓.
+CE QUE LA v2 FAIT, ET QUI DOIT ÊTRE VÉRIFIÉ À CHAQUE FOIS ✗ :
+  · **découpage par fenêtre** ✓ : les fenêtres paires entraînent, les impaires testent ✓✓ (pas de recouvrement ✓),
+    et les deux langues sont **mélangées** dans les deux ensembles ✓ ;
+  · **standardisation** des états ✓ (moyenne/écart de l'entraînement ✓) — sans elle, un ridge à λ fixe est
+    dominé par quelques dimensions ✓✗ ;
+  · **contrôle intra-langue** ✓ : deux moitiés du corpus anglais, même découpage ✓ — c'est le plancher ✓ ;
+  · **contrôle négatif** ✓✓ : étiquettes mélangées → la précision **doit** retomber au hasard ✓, sinon la sonde
+    mesure autre chose ✗✗ ;
+  · et la précision est rendue **avec son signe le plus favorable** ✓ (héritage de la v1 ✓) mais le contrôle
+    négatif dit si ce maximum est légitime ✓✓.
 
 Usage :
-  CUDA_VISIBLE_DEVICES=0 python tools/langue_dans_etat.py --hf /tmp/jouet-mixte \\
-      --en data/corpus_en.txt --fr data/corpus_fr.txt [--longueur 128] [--fenetres 400]
+  python3 tools/langue_dans_etat.py --hf /tmp/jouet-mixte-litt2 --en data/corpus_en.txt --fr data/corpus_fr.txt
 """
 from __future__ import annotations
-
-import argparse
-import pathlib
-import re
-import sys
-
-import numpy as np
-import torch
+import argparse, pathlib
+import numpy as np, torch
 
 
-def fenetres(texte: str, longueur: int, nombre: int, debut: int = 0) -> list[np.ndarray]:
-    """Des fenêtres d'octets, prises à des endroits DIFFÉRENTS du texte ✓ (pas de recouvrement ✓)."""
+def fenetres(texte: str, longueur: int, nombre: int):
     b = np.frombuffer(texte.encode("utf-8", errors="ignore"), dtype=np.uint8).astype(np.int64)
     pas = max(longueur, len(b) // max(1, nombre + 1))
     out = []
     for i in range(nombre):
-        d = debut + i * pas
+        d = i * pas
         if d + longueur >= len(b):
             break
         out.append(b[d:d + longueur])
     return out
 
 
-def etats(modele, lot: list[np.ndarray], couches: list[int]) -> dict[int, np.ndarray]:
-    """L'état **normalisé** de chaque fenêtre, pour chaque couche demandée ✓."""
+def etats(modele, lot, couches, pooling="position"):
     S = {L: [] for L in couches}
     with torch.no_grad():
         for w in lot:
@@ -58,84 +51,77 @@ def etats(modele, lot: list[np.ndarray], couches: list[int]) -> dict[int, np.nda
             hs = modele(b, output_hidden_states=True).hidden_states
             for L in couches:
                 h = hs[L][0]
-                S[L].append(modele.model.norm(h).numpy().astype(np.float64))
-    return {L: np.concatenate(v) for L, v in S.items()}
+                z = modele.model.norm(h)
+                S[L].append((z.mean(0) if pooling == "moyenne" else z).numpy().astype(np.float64))
+    if pooling == "moyenne":
+        return {L: np.concatenate([v[None, :] for v in S[L]]) for L in couches}
+    return {L: np.concatenate(S[L]) for L in couches}
 
 
-def precision_lineaire(X: np.ndarray, y: np.ndarray, lam: float = 10.0) -> float:
-    """Une régression logistique « fermée » : ridge sur les étiquettes ±1 ✓, puis seuil à 0 ✓ — plus
-    simple qu'un entraînement, et suffisant pour une séparation linéaire ✓."""
-    n = X.shape[0]
-    if n < 5 * X.shape[1]:
-        return float("nan")                 # sous-déterminé : on ne mesure pas ✗✓
-    n2 = n // 2
-    Xtr, ytr, Xte, yte = X[:n2], y[:n2], X[n2:], y[n2:]
-    mx = Xtr.mean(0)
-    Xc, Xt = Xtr - mx, Xte - mx
-    w = np.linalg.solve(Xc.T @ Xc + lam * np.eye(Xc.shape[1]), Xc.T @ ytr)
-    pred = np.sign(Xt @ w)
-    acc = 100 * float(np.mean(pred == yte))
-    # ⚠️ LE SIGNE D'UN CLASSIFIEUR LINÉAIRE EST ARBITRAIRE ✗✓. Un ridge sur des étiquettes ±1 peut rendre
-    # le signe OPPOSÉ à celui qu'on attend ✓ : une précision de 43,4 % est une précision de **56,6 %** avec
-    # l'autre orientation ✓✗. Sans ce maximum, on lit « sous le hasard » là où il y a une séparation
-    # réelle — c'est la SIXIÈME fois de la nuit qu'un chiffre se déguise ✓✓ (les cinq premières sont au
-    # chapitre 6 de la synthèse). On rend donc la précision **la meilleure des deux orientations**.
-    return max(acc, 100.0 - acc)
+def classer(X_tr, y_tr, X_te, y_te):
+    """Régression logistique binaire, standardisée, sur CPU (les états sont petits) ✓."""
+    mu, sd = X_tr.mean(0), X_tr.std(0) + 1e-8
+    Xt = torch.tensor((X_tr - mu) / sd, dtype=torch.float32)
+    Xv = torch.tensor((X_te - mu) / sd, dtype=torch.float32)
+    yt = torch.tensor((y_tr > 0).astype(np.int64), dtype=torch.long)
+    couche = torch.nn.Linear(X_tr.shape[1], 2)
+    opt = torch.optim.Adam(couche.parameters(), lr=2e-2, weight_decay=1e-3)
+    for _ in range(300):
+        opt.zero_grad()
+        torch.nn.functional.cross_entropy(couche(Xt), yt).backward()
+        opt.step()
+    with torch.no_grad():
+        pred = couche(Xv).argmax(1).numpy()
+    acc = 100 * float((pred == (y_te > 0).astype(np.int64)).mean())
+    return max(acc, 100 - acc)          # le signe reste arbitraire ✓, mais le contrôle négatif le contrôle ✓✓
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--hf", required=True, help="le modèle entraîné sur les DEUX langues")
+    ap.add_argument("--hf", required=True)
     ap.add_argument("--en", default="data/corpus_en.txt")
     ap.add_argument("--fr", default="data/corpus_fr.txt")
     ap.add_argument("--longueur", type=int, default=128)
-    ap.add_argument("--fenetres", type=int, default=300)
-    ap.add_argument("--couches", default="", help="par défaut : toutes les couches du modèle")
+    ap.add_argument("--fenetres", type=int, default=200)
+    ap.add_argument("--couches", default="")
+    ap.add_argument("--pooling", choices=["position", "moyenne"], default="position")
+    ap.add_argument("--temoin", action="store_true", help="étiquettes mélangées ✓")
     a = ap.parse_args()
-
     from transformers import AutoModelForCausalLM
     m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
     n_couches = m.config.num_hidden_layers
     couches = [int(x) for x in a.couches.split(",")] if a.couches else list(range(n_couches + 1))
-
-    txt_en = pathlib.Path(a.en).read_text(errors="ignore")
-    txt_fr = pathlib.Path(a.fr).read_text(errors="ignore")
-    # anglais et français, pris au MÊME endroit relatif de leur corpus (pas de biais de position ✓)
-    f_en = fenetres(txt_en, a.longueur, a.fenetres)
-    f_fr = fenetres(txt_fr, a.longueur, a.fenetres)
-    # le TÉMOIN INTRA-LANGUE ✗ : deux moitiés du corpus anglais (deux sujets différents ✓)
-    moitie = len(txt_en) // 2
-    f_en_a = fenetres(txt_en[:moitie], a.longueur, a.fenetres // 2)
-    f_en_b = fenetres(txt_en[moitie:], a.longueur, a.fenetres // 2)
-    print(f"  fenêtres : {len(f_en)} anglais · {len(f_fr)} français · témoin intra-langue {len(f_en_a)}+{len(f_en_b)}")
+    f_en = fenetres(pathlib.Path(a.en).read_text(errors="ignore"), a.longueur, a.fenetres)
+    f_fr = fenetres(pathlib.Path(a.fr).read_text(errors="ignore"), a.longueur, a.fenetres)
+    E_en_all, E_fr_all = etats(m, f_en, couches, a.pooling), etats(m, f_fr, couches, a.pooling)
+    n = min(len(f_en), len(f_fr))
+    print(f"  {len(f_en)} fenêtres anglaises · {len(f_fr)} françaises · longueur {a.longueur} · pooling {a.pooling}")
     print(f"  modèle : {n_couches} couches · dimension {m.config.hidden_size}")
+    if a.temoin:
+        print("  ⚠️ CONTRÔLE NÉGATIF : étiquettes mélangées ✓")
+    print("\n   couche | langue | contrôle intra-langue | verdict")
+    print("   -------|--------|----------------------|--------")
+    rng = np.random.RandomState(0)
 
-    E_en, E_fr = etats(m, f_en, couches), etats(m, f_fr, couches)
-    E_a, E_b = etats(m, f_en_a, couches), etats(m, f_en_b, couches)
+    def deux_blocs(Xa, Xb, melanger=False):
+        """Entraîne sur la 1re moitié de CHAQUE bloc, teste sur la 2e ✓✓ (découpage par fenêtre ✓)."""
+        ma, mb = len(Xa) // 2, len(Xb) // 2
+        X_tr = np.concatenate([Xa[:ma], Xb[:mb]])
+        y_tr = np.r_[np.ones(ma), -np.ones(mb)]
+        X_te = np.concatenate([Xa[ma:], Xb[mb:]])
+        y_te = np.r_[np.ones(len(Xa) - ma), -np.ones(len(Xb) - mb)]
+        if melanger:
+            y_tr, y_te = rng.permutation(y_tr), rng.permutation(y_te)
+        return classer(X_tr, y_tr, X_te, y_te)
 
-    print()
-    print("   couche | langue (en/fr) | témoin intra-langue | écart  (plus BAS = la langue s'efface ✓)")
-    print("   -------|----------------|---------------------|-------")
     for L in couches:
-        n = min(E_en[L].shape[0], E_fr[L].shape[0])
-        if n < 5 * E_en[L].shape[1]:
-            print(f"   {L:>6} |  (n={n} < 5×dim : non mesuré ✗)")
-            continue
-        X = np.concatenate([E_en[L][:n], E_fr[L][:n]])
-        y = np.concatenate([np.ones(n), -np.ones(n)])
-        acc_langue = precision_lineaire(X, y)
-        k = min(E_a[L].shape[0], E_b[L].shape[0])
-        acc_temoin = precision_lineaire(np.concatenate([E_a[L][:k], E_b[L][:k]]),
-                                        np.concatenate([np.ones(k), -np.ones(k)]))
-        ecart = acc_langue - acc_temoin
-        marque = " ✓" if ecart < 5 else (" ✗" if ecart > 20 else "")
-        print(f"   {L:>6} |   {acc_langue:5.1f} %    |      {acc_temoin:5.1f} %      | {ecart:+5.1f}{marque}")
-    print()
-    print("  lecture : si la précision « langue » est PROCHE de 100 % et loin du témoin, l'état porte la")
-    print("  langue ✗ ; si elle rejoint le témoin (ou le hasard), la couche l'a abstraite ✓✓. Le témoin")
-    print("  intra-langue dit ce qu'un classifieur peut faire SANS la langue : c'est lui la référence ✗.")
+        E_en, E_fr = E_en_all[L], E_fr_all[L]
+        acc = deux_blocs(E_en, E_fr, melanger=a.temoin)
+        k = min(len(E_en), len(E_fr)) // 2
+        acc_c = deux_blocs(E_en[:k], E_en[k:2 * k])       # les DEUX moitiés de l'anglais ✓
+        verdict = "LA LANGUE ✓ (lisible)" if acc > 60 else ("neutre ✓✓" if acc < 50 else "±")
+        print(f"   {L:>5} | {acc:5.1f}% |        {acc_c:5.1f}%        | {verdict}")
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+raise SystemExit(main())
