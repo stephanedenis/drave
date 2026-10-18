@@ -36,6 +36,12 @@ Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola), trouv�
 `Panini-Research/` de Stéphane — et **cinq fichiers mal nommés** détectés au passage (dont trois des quatre
 « allemands » du corpus « vérifié », qui sont anglais).
 
+**En une phrase** ✓✓ : *la langue n'est **ni dans l'état** (le noyau est au hasard, cinq fois répliqué) **ni
+dans le relevé** (0,7 point) — elle vit à l'**entrée** et à la **surface**, et c'est exactement la structure d'une
+couche commune : un contenu partagé, une surface paramétrée par 1,33 % des poids.* Le même sens dans deux langues
+se retrouve **mieux que le hasard** (trois livres sur cinq) mais **reste faible**, et **la pensée itérée est sans
+langue** — elle ne tient simplement qu'**un pas**.
+
 *La fiche complète : [docs/synthese/07-modeles-alternatifs-entree-sortie.md](synthese/07-modeles-alternatifs-entree-sortie.md)*
 · *les notes : [journal/2026-10-17.md](../journal/2026-10-17.md)* · *les chiffres dans
 [en-cours.md](en-cours.md)*.
