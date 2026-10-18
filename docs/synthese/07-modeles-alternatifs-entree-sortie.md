@@ -1729,3 +1729,25 @@ premières langues du corpus (triées ✓), en augmentant leur nombre : **1** (u
   qui n'est pas progressif : il est brutal* ✗✗ — et il est payé **dès la deuxième langue** ✓✗. C'est exactement
   l'arbitrage du chapitre, chiffré : **le sens partagé (traduction) et la lettre exacte (restitution) ne se
   paient pas au même prix** ✓✓✓.
+
+## Mesure 47 — le style se réplique sur un second couple, et le sens y résiste moins
+
+La mesure 43 avait trouvé **100 %** de style lisible et **24 %** de sens retrouvé sur l'Odyssée (Butler contre
+Pope ✓). Un **second couple** de traducteurs ✓ : *Vingt mille lieues sous les mers*, deux traductions anglaises
+(pg164, traducteur non dit ✓, et Frederick Paul Walter ✓), **32 chapitres** alignés ✓.
+
+| | Odyssée (25 chants ✓) | Vingt mille lieues (32 chapitres ✓) |
+|---|---:|---:|
+| identifier le **traducteur** | **100 %** ✓✓ | **87,5 %** ✓✓ |
+| retrouver la **section** d'une traduction à l'autre | **24,0 %** (6×) ✓✓ | **6,2 %** (2×) ✓ |
+| — rang médian | **6 / 25** ✓ | 9 / 32 ✓ |
+| contrôle (sections mélangées) | 8,0 % | 3,1 % |
+
+* **LE STYLE SE RÉPLIQUE** ✓✓ : **87,5 à 100 %** pour identifier le traducteur, contre 50 % au hasard ✓✓ — *deux
+  couples, deux langues sources (grec, français), même résultat* ✓✓ ;
+* **et le sens résiste moins bien** ✗✓ : 6,2 % contre 24 % ✓ — mais l'alignement par **chapitre** est ici
+  approximatif ✗✓ (46 chants détectés dans une édition, 47 dans l'autre ✓✗, et les deux traductions ne découpent
+  pas au même endroit ✓) : *le 6,2 % mesure autant la dérive de l'alignement que la difficulté du sens* ✗✓ ;
+* **ce que cela laisse** ✓✓ : la **surface** (langue, dialecte, style) est **toujours lisible** (80-100 % ✓✓) ;
+  le **sens** se retrouve d'autant mieux que la surface est proche : **96 %** (langues, paires choisies ✓), **52 %**
+  (dialectes ✓), **24 %** (styles, meilleur couple ✓) — *et toujours bien au-dessus du hasard* ✓✓.

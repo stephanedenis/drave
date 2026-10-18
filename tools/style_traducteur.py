@@ -49,6 +49,8 @@ def main() -> int:
     ap.add_argument("--longueur", type=int, default=300)
     ap.add_argument("--couche", type=int, default=16)
     ap.add_argument("--tokeniseur", action="store_true")
+    ap.add_argument("--motif", default=r"^\s*BOOK\s+[IVXLC]+\.?\s*$",
+                    help="le motif des sections ✓ (BOOK pour l'Odyssée ✓, CHAPTER pour Verne ✓)")
     ap.add_argument("--mode", choices=["proportionnel", "livres"], default="proportionnel",
                     help="« livres » : découper sur les CHANTS (BOOK I, II…) ✓✓ — indispensable quand les "
                          "traductions ne se correspondent pas au caractère près ✗ (vers contre prose ✓)")
@@ -58,7 +60,7 @@ def main() -> int:
     if a.mode == "livres":
         def livres(chemin):
             t = pathlib.Path(chemin).read_text(errors="ignore")
-            parts = re.split(r"(?im)^\s*BOOK\s+[IVXLC]+\.?\s*$", t)
+            parts = re.split(r"(?im)" + a.motif, t)
             parts = [x for x in parts[1:] if len(x) > 2000]
             out = []
             for x in parts:
