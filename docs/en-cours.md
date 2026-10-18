@@ -6,6 +6,15 @@
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
 > [`AGENTS.md`](../AGENTS.md).
 
+## La synthèse (lire si on ne lit qu'une page)
+
+**La couche entrée-sortie est mesurée, pas encore fiable.** Ce qui est établi : la langue est **lisible partout**
+dans l'état (80-100 %), le **sens traverse les langues** sur les paires couvertes (96 %), l'alignement **suit la
+généalogie** (37 / 28 / 11 % à écriture contrôlée), et la **restitution exacte** existe pour un modèle spécialisé
+(85 %) mais **meurt dès qu'il partage 10 langues** (4 %). Ce qui manque : la **qualité de traducteur** — sur le
+juridique, le petit modèle est **sous le plancher « ne rien traduire »** sur 2 paires sur 5 (mesure 50). *C'est ce
+chiffre-là qu'il faut faire monter avant le module de pensée abstraite.*
+
 ## Le tableau de bord des chantiers
 
 ### Dépendances
