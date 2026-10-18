@@ -50,10 +50,11 @@ est dit » de « la langue qui le dit ». Ce qu'il a montré :
 
 | le régime | la mesure | le résultat |
 |---|---|---|
-| **traduction** (Qwen) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** (12 paires, dont fra↔rus et fra↔cmn) · **3,3 %** au hasard · **0 %** articles mélangés ✓✓ |
+| **traduction** (Qwen) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** sur **12 paires choisies** (dont fra↔cmn) — mais **14,4 %** sur une **grille de 40 langues stratifiées** (780 paires) · **6,50 %** dans un vivier de 1 200 états (hasard 0,08 %) ✓✗ |
 | **restitution** (modèle en octets, 448 langues) | reproduit-il exactement le texte lu ? | **0 article exact sur 13 222** ✗✗ · **61 %** d'octets justes (vus), **52,7 %** (jamais vus) |
 | **dialectes** (7 variantes d'occitan) | lire la variante ? retrouver le contenu ? | **100 %** ✓✓ · **52,2 %** (16× le hasard) ✓✓ |
 | **styles** (Odyssée, Butler vs Pope) | lire le traducteur ? retrouver le chant ? | **100 %** ✓✓ · **24 %** (6× le hasard) ✓✓ |
+| **petit modèle** (octets, 448 langues, 19 M) | même test de traduction | **31 %** sur les paires choisies : il n'aligne que les langues **proches** (romanes 57-87 %) et échoue sur les lointaines (0-10 %) ✗ |
 
 **Et un erratum majeur** ✗✗ : le « noyau neutre » du chapitre était un **artefact d'instrument** (la sonde
 entraînait sur une seule langue et testait sur un mélange). Sonde corrigée, la langue est **lisible partout** :

@@ -1649,3 +1649,53 @@ Pope ✓ en vers), **25 chants** alignés ✓, Qwen, couche 16 ✓ :
 * **la hiérarchie des trois surfaces** ✓✓✓ : **langues 96 % > dialectes 52 % > styles 24 %**, toutes au-dessus du
   hasard ✓ — *et les trois sont **lues** à 100 % dans l'état* ✓✓. **La couche commune n'efface aucune surface ;
   elle en aligne le sens** ✓✓✓.
+
+## Mesure 44 — la grille : 14,4 % sur 40 langues stratifiées, et non 96 %
+
+La mesure 40 avait choisi **douze paires** de grandes langues ✓. Une **grille** de **40 langues stratifiées par
+écriture** (780 paires ✓, `--mode grille`) donne une image très différente ✗✓ :
+
+| | top-1 | hasard |
+|---|---:|---:|
+| **40 langues · 780 paires** | **14,4 %** (médiane 10,0 %) | 3,3 % |
+| même écriture (6 paires, surtout CJK) | **42,2 %** | 3,3 % |
+| écritures différentes (774 paires) | **14,2 %** | 3,3 % |
+| **test groupé** : le même article parmi **1 200** états d'autres langues | **6,50 %** | 0,08 % |
+| — contrôle (une permutation **différente** par langue) | **0,00 %** | — |
+
+* **LA TRADUCTION N'EST PAS UNIVERSELLE** ✗✓ : 14,4 % de moyenne sur un échantillon stratifié, contre **96,4 %**
+  sur les douze paires choisies ✓✗. *Les douze paires étaient les grandes langues de Qwen* ✓✓ — la traduction
+  dépend de la **couverture de la langue** par le modèle ✓✓ ;
+* **et le classement le dit** ✓✓ : les langues les mieux alignées sont **jpn, kor, cmn, cjy, yue** (~30 % ✓), les
+  moins bien **bod, mya, div, blt** (3-6 % ✓) — *les premières ont des écritures et des voisinages que Qwen
+  connaît, les secondes non* ✓✓ ;
+* **le test groupé reste très au-dessus du hasard** ✓✓ (6,50 % contre 0,08 %, soit **81 fois** ✓) — et son contrôle
+  (permutation différente par langue ✓) donne **0,00 %** ✓✓. *La sonde mesure donc bien quelque chose* ✓✓ ;
+* **la correction est importante** ✗✓ : la mesure 40 disait « 96 % » sans dire que c'était **douze** paires ✓ ; la
+  grille dit « **14 %** sur quarante langues, avec des extrêmes de 0 à 100 % » ✓✓. *C'est la vraie réponse* ✓✓.
+
+## Mesure 45 — le petit modèle n'aligne que ce qui se ressemble
+
+Le modèle **en octets à 448 langues** (19 M ✓, validation 2,3372 ✓) sur les **mêmes douze paires** ✓ :
+
+| paire | top-1 (couche 4 / 8) | hasard |
+|---|---:|---:|
+| espagnol ↔ portugais (ibérique) | **86,7 / 73,3 %** ✓✓ | 3,3 % |
+| français ↔ espagnol (romanes) | **76,7 / 66,7 %** ✓✓ | 3,3 % |
+| russe ↔ ukrainien (slave) | **73,3 / 66,7 %** ✓✓ | 3,3 % |
+| français ↔ italien (romanes) | **56,7 / 56,7 %** ✓✓ | 3,3 % |
+| français ↔ anglais | 36,7 / 33,3 % ✓ | 3,3 % |
+| français ↔ allemand | 3,3 / 6,7 % ✗ | 3,3 % |
+| français ↔ chinois | 6,7 / 6,7 % ✗ | 3,3 % |
+| anglais ↔ chinois | **0,0 / 3,3 %** ✗✗ | 3,3 % |
+| **moyenne** | **30,8 / 28,6 %** | 3,3 % |
+
+* **LE PETIT MODÈLE N'ALIGNE QUE LES LANGUES PROCHES** ✗✓ : 57 à 87 % entre langues **romanes** ou **slaves** ✓✓,
+  et **0 à 10 %** dès qu'on change de famille ou d'écriture ✗✗. *Ce n'est pas de la traduction : c'est de la
+  ressemblance de surface* ✓✓ — les cognates et l'orthographe suffisent à retrouver le même article ✓ ;
+* **et c'est exactement ce que le chapitre cherchait à distinguer** ✓✓ : le **sens** traverse les langues chez Qwen
+  (fra↔cmn 100 % ✓✓), pas chez un modèle de 19 M ✗ — *la couche commune **sémantique** n'est pas gratuite : elle
+  vient avec la capacité et la couverture* ✓✓ ;
+* **les deux résultats se répondent** ✓✓ : Qwen 96 % sur les paires choisies mais **14 %** sur la grille ✓✗ ;
+  le petit modèle **31 %** sur les paires choisies (et il ne peut pas faire mieux) ✗✓. *Aucun des deux n'a de
+  traduction universelle — et aucun ne l'a promis* ✓✓.

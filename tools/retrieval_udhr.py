@@ -75,7 +75,8 @@ def retrieval(A, B):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--hf", default="/tmp/jouet-udhr")
-    ap.add_argument("--mode", choices=["paires", "variantes", "temoin"], default="paires")
+    ap.add_argument("--mode", choices=["paires", "variantes", "temoin", "grille"], default="paires")
+    ap.add_argument("--n-langues", type=int, default=40, help="taille de la grille ✓ (mode grille ✓)")
     ap.add_argument("--couche", type=int, default=-1)
     ap.add_argument("--longueur", type=int, default=256)
     ap.add_argument("--tokeniseur", action="store_true")
@@ -104,6 +105,78 @@ def main() -> int:
         fichiers = sorted({f for p in paires for f in p[:2]})
         print(f"  mode {a.mode} · {len(fichiers)} langues · {len(paires)} paires")
 
+    if a.mode == "grille":
+        # échantillon stratifié par écriture ✓ : on veut toutes les écritures, pas 40 langues latines ✓✓
+        import collections as _c
+        par_script = _c.defaultdict(list)
+        for iso in sorted(par_iso):
+            # ⚠️ ON SÉLECTIONNE DES FICHIERS, PAS DES CODES ISO ✗✓ (par_iso est indexé par iso3 ✓, et
+            # etats_langue attend un nom de fichier ✓✓).
+            f = sorted(par_iso[iso])[0]
+            par_script[meta[f]["script"]].append(f)
+        choisies, i = [], 0
+        while len(choisies) < a.n_langues and i < 100:
+            for s in sorted(par_script, key=lambda x: -len(par_script[x])):
+                if i < len(par_script[s]) and len(choisies) < a.n_langues:
+                    choisies.append(par_script[s][i])
+            i += 1
+        fichiers = sorted(set(choisies))
+        paires = []
+        print(f"  mode grille · {len(fichiers)} langues · ")
+        m, encoder, device = charger_modele(a.hf, tokeniseur=a.tokeniseur)
+        cache = {}
+        for f in fichiers:
+            cache[f] = etats_langue(m, encoder, articles, f, [a.couche], a.longueur)
+        # 1) toutes les paires ✓
+        res = []
+        for i in range(len(fichiers)):
+            for j in range(i + 1, len(fichiers)):
+                A, _ = cache[fichiers[i]]; B, _ = cache[fichiers[j]]
+                t1, rk, n = retrieval(A[a.couche], B[a.couche])
+                res.append((t1, rk, fichiers[i], fichiers[j]))
+        print(f"\n  {len(res)} paires · top-1 moyen {np.mean([x[0] for x in res]):.1f} % · "
+              f"médian {np.median([x[0] for x in res]):.1f} % · hasard 3,3 %")
+        memes = [x[0] for x in res if meta[x[2]]["script"] == meta[x[3]]["script"]]
+        diff = [x[0] for x in res if meta[x[2]]["script"] != meta[x[3]]["script"]]
+        print(f"  même écriture : {np.mean(memes):.1f} % ({len(memes)} paires) · "
+              f"écritures différentes : {np.mean(diff):.1f} % ({len(diff)} paires)")
+        print("  les 4 meilleures paires :", [(f"{x[2][5:-4]}↔{x[3][5:-4]}", f"{x[0]:.0f}%") for x in sorted(res, key=lambda z: -z[0])[:4]])
+        print("  les 4 plus faibles :", [(f"{x[2][5:-4]}↔{x[3][5:-4]}", f"{x[0]:.0f}%") for x in sorted(res, key=lambda z: z[0])[:4]])
+        # moyenne par langue ✓✓ : le classement dit quelles langues Qwen aligne le mieux ✓
+        par_langue = {}
+        for t1, rk, fa, fb in res:
+            par_langue.setdefault(fa, []).append(t1)
+            par_langue.setdefault(fb, []).append(t1)
+        classement = sorted(((np.mean(v), k) for k, v in par_langue.items()), reverse=True)
+        print("  langues les MIEUX alignées :", [(k[5:-4], f"{m:.0f}%") for m, k in classement[:5]])
+        print("  langues les MOINS alignées :", [(k[5:-4], f"{m:.0f}%") for m, k in classement[-5:]])
+        # 2) le test le plus dur : le même article PARMI TOUS les états des autres langues ✓✓
+        #    (40 langues × 30 articles = 1 200 candidats, hasard 0,08 %)
+        A = np.concatenate([cache[f][0][a.couche] for f in fichiers], axis=0)
+        n_l = len(fichiers)
+        A = A - A.mean(0)
+        A = A / (np.linalg.norm(A, axis=1, keepdims=True) + 1e-9)
+        S = A @ A.T
+        np.fill_diagonal(S, -9)             # on exclut l'état lui-même ✓
+        pred = S.argmax(1)
+        vrais = np.arange(len(A))
+        # le bon voisin = le même article dans une AUTRE langue ✓ (n'importe laquelle ✓)
+        art = np.tile(np.arange(30), n_l)
+        lang = np.repeat(np.arange(n_l), 30)
+        ok = (art[pred] == art[vrais]) & (lang[pred] != lang[vrais])
+        print(f"\n  test groupé : même article parmi {n_l*30} états d'autres langues → {100*ok.mean():.2f} % "
+              f"(hasard {100/(n_l*30-1):.2f} %)")
+        # contrôle : mélanger les articles d'une langue ✓
+        # ⚠️ CONTRÔLE : une permutation DIFFÉRENTE par langue ✗✓. La même permutation pour toutes serait une
+        # bijection ✓✗ — elle laisserait la relation intacte et le contrôle vaudrait exactement la mesure ✓✓
+        # (c'est ce que le premier essai a fait : 6,50 % des deux côtés ✓✗).
+        rng = np.random.RandomState(0)
+        art_m = art.copy()
+        for k in range(n_l):
+            art_m[k*30:(k+1)*30] = rng.permutation(30)
+        ok_c = (art_m[pred] == art_m[vrais]) & (lang[pred] != lang[vrais])
+        print(f"  contrôle (articles mélangés) : {100*ok_c.mean():.2f} %")
+        return 0
     m, encoder, device = charger_modele(a.hf, tokeniseur=a.tokeniseur)
     cache = {}
     for f in fichiers:
