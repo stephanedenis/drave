@@ -51,3 +51,19 @@ Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `r
 `bash tools/toutes-les-portes.sh` écrit `registre.txt` ; on lit le verdict par `awk '$2 != 0'` — **jamais** par les
 marqueurs ni à travers un tube. Les deux rouges structurelles connues sont `porte-indice` et `porte-melange` ; toute
 **autre** rouge est une régression et se corrige avant de continuer.
+
+
+## 5. Étudier Panini et Nipada, régulièrement
+
+Les projets **`../Panini/`** et **`../Panini-Research/`** poursuivent le **même objectif par une approche
+complémentaire** : Panini décompose le texte en **14 atomes sémantiques**, Nipada le fait tourner comme un tissu
+computationnel — *algébrique, là où Drave est statistique*. Ils tiennent le **système linguistique** et généralisent
+une **généalogie des langues, dialectes et styles**.
+
+**Règle** : à chaque cycle, lire ce qui a bougé chez eux (docs, publications, journaux de bord) et confronter leurs
+résultats aux nôtres. Ce qui en sort va dans [`docs/genealogie-des-langues.md`](docs/genealogie-des-langues.md)
+(la théorie) — jamais les chiffres (ils vont dans `reports/`).
+
+**Leur avertissement, à ne pas oublier** ✗✓ : leur signature lexicale capte **l'époque** (β +0,138) bien plus que la
+**filiation** (β +0,049) — *la surface transmet les signifiants, pas la généalogie*. Tout test de style doit donc
+**contrôler la date**, et tout test de famille doit **contrôler la surface**.
