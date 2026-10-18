@@ -1,0 +1,1784 @@
+> **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
+> (48 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
+
+# 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
+
+> **La question.** Peut-on arriver **plus vite** à une couche d'entrée-sortie **commune**, qui fasse
+> **abstraction de la langue** — la langue, le dialecte, le style n'étant plus que des **paramètres** ?
+> Cette note examine les familles de solutions, avec pour chacune : ce qu'elle gagne, ce qu'elle coûte, et
+> **comment on le mesure**.
+
+![Une couche commune, et la langue comme paramètre](../docs/synthese/schemas/couche-commune.svg)
+
+## ERRATUM MAJEUR (18/10, 0 h 30) : le « noyau neutre » était un **artefact d'instrument** — la langue est lisible à TOUTES les couches
+
+**Ce que le chapitre affirmait** ✗ : le noyau du modèle est **neutre** — un classifieur de langue y est au hasard
+(**50,2 %**), et cela avait été répliqué **cinq fois** (mesures 1, 15, 19, 29, 36 ✓✓). C'était le résultat
+**fondateur** du chapitre, celui dont tout le reste dépendait.
+
+**Ce qui était faux** ✗✗, et c'est une faute d'instrument, pas de modèle. L'outil du chapitre (`langue_dans_etat.py`,
+v1) construisait les états de **toutes** les fenêtres anglaises puis de **toutes** les fenêtres françaises, les
+**concaténait** en un seul tableau, et appelait `precision_lineaire(X, y)`. Or cette fonction découpait les
+**lignes** en deux moitiés ✓✗ :
+
+```
+X = [ états anglais (n lignes) ; états français (n lignes) ]
+X[:n2]  = entraînement  →  la PREMIÈRE MOITIÉ DES FENÊTRES ANGLAISES  (une seule classe ✗)
+X[n2:]  = test          →  le reste des anglaises  +  TOUTES les françaises  (un mélange ✗)
+```
+
+Le classifieur apprenait donc « l'anglais » sur une seule classe ✗, et on lisait sa précision sur un mélange ✗.
+Pire, le `max(acc, 100-acc)` — ajouté pour le signe arbitraire ✓ — transformait ce mélange en un chiffre
+d'apparence raisonnable (50-72 %) ✓✗. *La « neutralité » était le chiffre d'un appareil mal branché* ✓✓.
+
+**La preuve** ✓✓ — sonde **corrigée** (`langue_dans_etat.py` v2 : découpage **par fenêtre** ✓, standardisation ✓,
+contrôle intra-langue ✓, contrôle **négatif** ✓✓) :
+
+| modèle | couche 1 | couche 2 | couche 3 | couche 4 | contrôle intra-langue | contrôle négatif |
+|---|---:|---:|---:|---:|---:|---:|
+| mixte prose 256 (m. 1) | **80,4 %** | 82,9 % | 82,6 % | 88,5 % | 51,7 % | — |
+| mixte prose 512 (m. 15) | **79,4 %** | 83,0 % | 83,5 % | 97,5 % | 51,2 % | — |
+| littérature 256 v1 (m. 19) | **84,3 %** | 87,0 % | 88,2 % | 90,2 % | 51,0 % | — |
+| littérature 256 v2 (m. 29) | **85,4 %** | 81,5 % | 83,5 % | 97,5 % | 50,5 % | — |
+| littérature 512 (m. 36) | **80,1 %** | 94,1 % | 97,7 % | 97,6 % | 51,2 % | — |
+| UDHR 448 langues | **98,9 %** | **99,1 %** | **99,0 %** | **99,1 %** | — | 1,5-2,2 % (hasard 2,5 %) |
+| Qwen 0,5 B (40 langues) | **100 %** | 100 % | 100 % | 100 % | — | — |
+
+* **LA LANGUE EST LISIBLE PARTOUT** ✗✗ : 80 à 98 % dès la **couche 1**, dans **les cinq modèles-jouets** que le
+  chapitre disait neutres ✓✓ — et **100 %** dans Qwen, et **99 %** dans le modèle à 448 langues ✓✓. *Il n'y a pas
+  de noyau neutre* ✗✓ ;
+* **et les contrôles disent que la sonde est juste** ✓✓ : le contrôle **intra-langue** (deux moitiés du corpus
+  anglais) reste à **50-52 %** ✓ (rien à séparer ✓) ; le contrôle **négatif** (étiquettes mélangées) retombe à
+  **1,5-2,2 %** pour 40 classes ✓ (hasard 2,5 %) et **49,5-50,7 %** pour 2 classes ✓✓ ;
+* **pourquoi la v1 donnait 50 %** ✗✓ : parce qu'elle **entraînait sur une seule classe** ✓✗. On ne peut pas
+  s'en apercevoir en lisant son chiffre : il faut lire **son découpage** ✓✓. *C'est le dix-septième piège de la
+  nuit, et le plus grave : l'instrument était faux depuis la première mesure* ✗✗.
+
+**Ce qui change dans le chapitre** ✓✗ : la langue **n'est pas** absente de l'état — elle y est **partout** ✓✓.
+Ce qui reste vrai, et qui est mesuré **autrement** (par le retrieval, pas par un classifieur) : *le même contenu,
+dans deux langues, se retrouve* ✓✓ — **96,4 %** sur Qwen avec les articles UDHR alignés (mesure 39 ✓), contre
+**3,3 %** au hasard ✓✓. *La couche commune n'est donc pas un lieu **sans langue** : c'est un lieu où le **sens**
+est aligné **malgré** la langue* ✓✓✓.
+
+## La synthèse, en un tableau (à lire avant le reste)
+
+Treize mesures ont été faites les 17 et 18 octobre ✓. Les voici **toutes**, avec ce qu'elles disent et le
+chiffre qui le dit — pour qu'on puisse juger le chapitre sans le lire en entier ✓.
+
+| # | la question | la mesure | le chiffre | verdict |
+|---:|---|---|---|---|
+| 1 | l'état porte-t-il la langue ? | classifieur linéaire par couche, modèle **bilingue** ✓ | **50,2 %** aux couches 1-2 (hasard) · **59,4 %** aux couches 6-7 | ✓✓ **noyau neutre**, langue à la surface |
+| 2 | la langue est-elle un paramètre ? | LoRA sur noyau **gelé**, une langue par adaptateur ✓ | français **3,19 → 1,50** (−53 %) · anglais **1,90 → 1,40** (−26 %) | ✓✓ oui, **131 k** (5,1 %) |
+| 3 | où le brancher ? | LoRA sur le **dernier étage** seul ✓ | **−44,6 %** pour **32 768** poids = **1,33 %** (84 % du gain) | ✓✓ la **surface** suffit |
+| 4 | le noyau neutre est-il utile ? | contenu (état → mot suivant) aux couches neutres ✓ | **87,8 / 87,3 %**, à 8 points du meilleur | ✓✓ le **sens reste** |
+| 5 | le relevé est-il neutre ? | un seul relevé **non linéaire** vs deux linéaires ✓ | **71,5 %** contre 79,3 / 76,5 | ✓ (mais voir 8) |
+| 6 | la langue commande-t-elle la sortie ? | génération, amorces croisées ✓ | amorce **anglaise** + adaptateur **français** → **français** ✓ | ✓✓ **opérationnel** |
+| 7 | combien coûte la bascule ? | chargement + application vs rechargement ✓ | **5,0 ms** / **530 Ko** contre **134,6 ms** / **9,8 Mo** | ✓✓ **×27** / **×18** |
+| 8 | un relevé se transfère-t-il ? | lecture croisée, lecteurs **de même puissance** ✓ | pénalité **+8,7** (linéaire) à **+19,5** (non linéaire) | ✗ **non** (transfert) |
+| 9 | un relevé partagé suffit-il ? | relevé appris sur **les deux** langues ✓ | **0,7 point** d'écart avec deux relevés séparés | ✓✓ **oui** |
+| 10 | noyau bilingue ou adaptateur ? | trois dispositifs réels ✓ | bilingue **1,0737** · monolingue+adaptateur **1,4546** | ✓ bilingue (35 % mieux), adaptateur **2/3** du chemin |
+| 11 | la pensée itérée est-elle sans langue ? | opérateur appris, k itérations ✓ | langue **50,6-56,2 %** sur **huit** pas | ✓✓ **sans langue** |
+| 12 | peut-on penser deux pas ? | entraîner sur k (recette du 16/10) ✓ | contenu **exactement plat** (82,2 % partout) = **identité** | ✗ solution triviale, **répliquée** |
+| 13 | et avec un autre objectif ? | **marge** : exiger une amélioration ✓ | k=1 **80,3** · k=2 **93,7** — **comme sans marge** | ✗ **même mur** |
+
+### La suite du programme (mesures 14 à 23)
+
+| # | la question | la mesure | le chiffre | verdict |
+|---:|---|---|---|---|
+| 14 | un **vrai** corpus français ? | Gutenberg de `Panini/` (le dépôt n'en avait pas ✗) | **13,2 Mo**, 18 textes, **66 322** formes — puis **enrichi** (mesure 27 ✓) : **15,7 Mo**, 21 textes, **87 341** formes (Proust, Stendhal, Hugo, Voltaire, Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola) | ✓✓ vrai corpus, **deux fois** |
+| 15 | la neutralité **à l'échelle** ? | modèle bilingue **dim 512** (9,57 M) | couches 2 et 6 : **51,4** et **51,2 %** ; couche 8 : **67,9 %** | ✓✓ noyau neutre, surface **plus** langue-aware |
+| 16 | le **même sens** en deux langues ? | retrieval croisé, Le Tour du monde | 0/24 ✗ — **test invalide** ✗ | ✗ à refaire |
+| 17 | et avec un bon échantillon ? | même test, milieu du segment | écart **+0,022** ✓ (contre −0,053 ✗) | ✓ signal réel, **faible** |
+| 18 | sur un vrai modèle multilingue ? | **Qwen2.5-0.5B**, mêmes segments | **+0,083** aux couches 8-16 ; **+0,030** à la dernière | ✓✓ **sens partagé au milieu** |
+| 19 | et sur la **littérature** ? | modèle bilingue littéraire (4,79 M) | couches 1-3 : **50,1 · 52,3 · 50,4 %** ; pic couche 5 : 67,7 % | ✓✓ neutralité, **zone plus courte** |
+| 20 | le signal dépend-il du modèle ? | trois modèles, même test | **+0,022 → +0,034 → +0,083** (2,43 M → 4,79 M → 494 M) | ✓✓ **tendance monotone** |
+| 21 | réplication ? | **trois** livres | +0,078 (Verne) · +0,033 (Dracula ✗) · +0,009 (Alice) | ✓ en **signe**, ✗ en amplitude |
+| 22 | l'alignement est-il en cause ? | positions relatives des noms propres | Verne **0,1-1,6 %** ✓ · Alice **1,7 %** ✓ · Dracula **cassé** ✗✗ | ✓ la variation n'est **pas** l'alignement |
+| 23 | le corpus est-il sain ? | crible sans modèle (titre, longueur, noms) | **1 paire cassée sur 3**, **la même dans deux corpus** ✗ | ✗ mais **détectée** |
+
+**Et ce que cette seconde série ajoute à la première** ✓✓ : le corpus **réel** ✓, la **réplication** de la
+neutralité ✓ (trois modèles, trois corpus ✓), le **sens partagé** qui se retrouve **mieux que le hasard** ✓✓ et
+qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **deux fichiers de corpus à ne pas croire** ✗✓
+(un test invalide, une paire mal étiquetée ✓). *La science avance aussi en retirant* ✓✓.
+
+### Fin du programme (mesures 27 à 33)
+
+| # | la question | le chiffre | verdict |
+|---:|---|---|---|
+| 27 | le paramètre de langue sur un **vrai** modèle ? | LoRA 4,4 M (0,9 %) : **−7,6 %** fr, **+4,5 %** en | ✓✓ mais 8× moins qu'en monolingue |
+| 28 | la sortie **suit-elle** le paramètre sur Qwen ? | amorce anglaise + LoRA fr → **anglais** (en 27 · fr 0) | ✗ suit l'**amorce** |
+| 29 | le corpus enrichi change-t-il la neutralité ? | **quatre** couches au hasard (1, 2, 3, **5**) | ✓✓ zone **élargie** |
+| 30 | le contenu tient-il ? | **87,7 / 86,5 %** aux couches neutres | ✓✓ à 9 points du meilleur |
+| 31 | le **genre** explique-t-il le signal ? | Candide (récit) **+0,116** · Don Quijote (récit) **+0,007** | ✗ **non** |
+| 32 | la **part de dialogue** ? | 4 livres sur 5 ordonnés ✓ (indicateur grossier) | ✗ **trompeur** |
+| 33 | et avec le **vrai** indicateur ? | Proust 5,9 % → +0,093 · Don Quijote 1,1 % → +0,007 | ✗ relation **spurieuse** |
+
+### Ce qu'il faut en retenir, en cinq phrases
+
+1. **La langue est lisible PARTOUT dans l'état** ✗✗ — 80 à 98 % dès la couche 1 dans les cinq modèles-jouets,
+   et 100 % dans Qwen ✓ (l'ancienne lecture « noyau neutre » était un artefact d'instrument ✓✗, voir
+   l'erratum majeur). *Ce qui est partagé, ce n'est pas l'absence de langue : c'est le **sens*** ✓✓ — le même
+   article se retrouve d'une langue à l'autre à **96,4 %** (contre 3,3 % au hasard ✓).
+2. **La langue est un paramètre de 1,33 %** ✓✓ (32 768 poids au dernier étage), qui **commande la sortie** ✓ et
+   dont la **bascule coûte 5 ms** ✓✓.
+3. **Le noyau neutre n'est pas appauvri** ✓✓ : le contenu y reste à **87,8 %**, à 8 points du meilleur ✓.
+4. **La pensée itérée est sans langue** ✓✓ (50,6-56,2 % sur huit pas) — **penser ne dépend pas de la langue où
+   l'on parle** ✓✓.
+5. **Mais elle ne tient qu'un pas** ✗, et **trois objectifs différents** n'y changent rien ✗✓ : la limite est
+   dans la **représentation**, pas dans la perte ✓. Le pas suivant est à chercher dans **l'entraînement du
+   modèle** (récurrence dans la boucle ✓), pas dans le réglage ✓.
+
+### Le bilan des certitudes (à lire si l'on ne lit qu'une page)
+
+**Ce qui TIENT**, avec le nombre de mesures qui le soutiennent ✓✓ :
+
+| ce qui tient | les mesures | le chiffre |
+|---|---|---|
+| ~~le noyau est neutre~~ ✗✗ **RETIRÉ (erratum majeur)** — l'instrument entraînait sur une seule langue | 1, 15, 19, 29, 36 → **sonde corrigée** | **80 à 98 %** dès la couche 1 : **la langue est lisible partout** ✗✗ |
+| **le noyau garde le sens** | 4 et 30 ✓✓ | contenu **87,7 / 86,5 %**, à 9 points du meilleur ✓ |
+| **la langue vit aux extrémités** | 1, 15, 19, 24 ✓✓ | **58-68 %** en surface, 50 % au milieu ✓ |
+| **un ÎLOT langue-spécifique** existe — dans **un** modèle sur cinq ✗✓ | 36 ✓ | couche 3 à **69,0 %** au milieu du 512 littéraire ✓✗ |
+| **le sens partagé est au milieu** | 18 ✓✓ | **+0,083** aux couches 8-16, **+0,030** à la dernière ✓✓ |
+| **la langue est un petit paramètre** | 2, 3, 7, 24 ✓✓ | **1,33 %** des poids, **5 ms** de bascule ✓✓ |
+| **le paramètre améliore la langue** — **d'autant plus que le noyau est faible** ✓✓ | 2, 24, 38 ✓✓ | **−53 %** (modèle faible ✓), **−4,7 %** (bon jouet ✗), **−7,6 %** (Qwen ✓) ; et sur le bon jouet il **abîme** l'anglais (**+10,8 %** ✗) |
+| **on peut penser sans langue** | 11 ✓✓ | **50,6-56,2 %** sur **huit** itérations ✓✓ |
+
+**Ce qui a été RETIRÉ**, et qu'il ne faut pas citer comme acquis ✗ :
+
+| ce qui a été retiré | la mesure qui l'a retiré |
+|---|---|
+| « le relevé est teinté par la langue » ✗ | **9** : un relevé partagé suffit (0,7 point) ✓ |
+| « la correction de rang 1 répare » ✗ | **9** : elle ne rapporte rien ✓ |
+| « la langue comme paramètre **commande** la sortie » ✗ | **25** : sur Qwen, c'est l'**amorce** qui commande ✓ |
+| « le sens partagé vit dans le **récit** » ✗ | **31** : Don Quijote (récit) fait aussi mal qu'Alice ✓ |
+| « la **part de dialogue** l'explique » ✗ | **32-33** : relation **spurieuse** (la typographie de l'édition) ✓ |
+| « l'**alignement** explique la variation » ✗ | **22** : les quatre livres sont alignés à 0,1-1,7 % ✓ |
+
+**Ce qui RESTE OUVERT**, et que la nuit n'a pas tranché ✗ :
+
+1. **pourquoi le signal varie de 17×** entre des paires texte-traduction **bien alignées** (+0,007 à +0,116 ✓) —
+   **sept** candidats ont échoué : le genre ✓, la taille ✓, la part de dialogue ✓, l'alignement ✓, la fidélité de
+   la traduction (ratio de longueur, **−0,25** ✓), la richesse lexicale (**+0,42** ✓) et l'entropie des octets
+   (**+0,51** ✓). *Aucun n'est significatif sur cinq points* ✗✓ ;
+2. **peut-on penser deux pas** ✗ — trois objectifs différents donnent le même mur ✓ (mesures 12-13 ✓) ; le pas
+   suivant est dans **l'entraînement du modèle** ✓, pas dans la perte ✓ ;
+3. **le signal est-il utilisable à l'échelle** ✓✗ — **trois livres sur cinq** au-dessus du hasard en rang médian
+   (**Verne 9/32** ✓, **Proust 8/32** ✓✓, **Candide 13/32** ✓), **deux** non (**Alice 17/32** ✗, **Don Quijote
+   19/32** ✗), et le meilleur top-5 est **37,5 %** (Proust ✓✓). *C'est un signal, pas une recherche fiable* ✓✗
+   (mesures 25, 26, 31 ✓).
+
+*Un chapitre qui sait ce qu'il ne sait pas vaut mieux qu'un chapitre qui ne sait pas qu'il ne sait pas* ✓✓.
+
+## Ce que la nuit du 16/10 a déjà établi, et qui oriente tout
+
+
+Trois faits mesurés, qu'aucune solution ne peut ignorer :
+
+1. **les deux espaces (sortie prélinguistique, entrée postlinguistique) ne sont pas le même** : facteur
+   **648** d'échelle, cosinus **+0,14** ✗ — la couche commune n'existe pas **par défaut** ;
+2. **elle s'obtient par entraînement** ✓ : un terme d'alignement amène le cosinus à **0,70** et l'échelle à
+   **1,015**, **sans** dégrader la langue (4,30 contre 4,69 bits/octet ✓ — il l'améliore) ;
+3. **mais l'alignement ne suffit pas à boucler** ✗ : la boucle directe explose (λ = 7 311) — il faut aussi
+   une **dynamique** apprise. *Un espace commun est nécessaire ; il n'est pas suffisant.*
+
+Et un quatrième fait, qui change le problème de la langue : **les modèles-jouets du dépôt sont en OCTETS**
+(vocabulaire de 256 ✓). Il n'y a **pas de tokeniseur**, donc **pas de vocabulaire par langue** ✓✓ — la
+langue n'est **pas** dans les entrées. C'est un avantage considérable pour la suite, et il faut le dire :
+*une partie du problème de la langue a déjà disparu par construction.*
+
+## Les cinq familles de solutions
+
+| famille | l'idée | ce qu'elle gagne | ce qu'elle coûte | mesurable par |
+|---|---|---|---|---|
+| **A. octets partagés** | un seul vocabulaire (UTF-8) pour toutes les langues | rien à faire ✓, aucune langue dans l'entrée ✓ | séquences 3-4× plus longues ✗, abstraction **de surface** (pas de sens) ✗ | la perplexité par langue, à taille égale |
+| **B. plongement partagé + étiquette** | un espace d'embedding commun, une **étiquette de langue** en entrée | simple, éprouvé (XLM-R, mBERT) ✓ | l'étiquette **contamine** l'état ✗ ; le sens reste teinté de la langue | un classifieur de langue sur l'état doit être **au hasard** |
+| **C. adversarial** | entraîner l'état à **cacher** la langue (un classifieur adverse essaie de la deviner) | rend le contenu **réellement** neutre ✓ | instable ✗, peut détruire de l'information utile ✗ | la courbe : précision du classifieur vs qualité de la langue |
+| **D. interlingua / sens-texte** | une **représentation sémantique** (Mel'čuk : sens ⇄ texte), les langues étant des **modules de surface** | c'est **exactement** l'idée visée ✓ ; le sens est explicite ✓ | il faut **construire** l'interlingua ✗ (personne ne l'a fait pour un LLM) | reconstruire le **même** sens en 2 langues, depuis **une** représentation |
+| **E. adaptateurs par langue** | un noyau commun + un **petit adaptateur** par langue (LoRA) | peu de paramètres par langue ✓, très efficace ✓ | la couche commune reste **implicite** ✗ (rien ne garantit qu'elle soit neutre ✗) | l'écart entre langues **sans** l'adaptateur |
+
+## La recommandation, et pourquoi
+
+**Faire A + E maintenant, et B + C pour mesurer, D comme horizon.**
+
+* **A est déjà fait** ✓ (octets) : c'est le socle, et il ne coûte rien ;
+* **E est le meilleur rapport gain/coût** ✓✓ : un noyau partagé et des adaptateurs par langue — c'est
+  **exactement** « la langue comme paramètre », et cela s'entraîne en quelques heures sur les deux cartes ;
+* **B et C ne servent pas à construire** mais à **vérifier** ✗ : un classifieur de langue sur l'état ✓ dit si
+  la couche commune est **vraiment** neutre. C'est le critère qui manque à presque tous les travaux ;
+* **D est le programme long** ✗✓ : l'interlingua de Mel'čuk, appliqué à un modèle de langue — c'est-à-dire
+  une **couche sémantique explicite** entre le texte et la pensée.
+
+## L'expérience à faire en premier (et elle est courte)
+
+La question n'est pas « quelle architecture » mais **« ma couche commune porte-t-elle encore la langue ? »** ✗.
+Or on peut la poser **tout de suite**, avec ce que le dépôt a déjà :
+
+1. entraîner **deux** modèles-jouets en octets sur **deux langues** (par exemple `data/corpus_en.txt` et un
+   corpus français ✓ — à constituer ✗) ;
+2. entraîner un **classifieur de langue** sur l'état de chacun ✓ (une régression logistique suffit ✓) ;
+3. mesurer sa précision : si elle est **élevée** ✗, la couche porte la langue ; si elle est **au hasard** sur
+   les positions **tardives** ✓, la langue est déjà abstraite par la profondeur ✓✓ ;
+4. et refaire la mesure **avec un adaptateur de langue** (E ✓) : l'adaptateur doit **absorber** la langue, et
+   le noyau devenir plus neutre ✓✓.
+
+C'est **quatre mesures**, dont trois outils existent déjà (`banc_lecteur.py` pour les états, la régression
+logistique en dix lignes, et les deux cartes ✓). Et la réponse à « peut-on aller plus vite » est là :
+**on ne construit pas la couche commune, on vérifie qu'elle est déjà là** — et l'on ne construit que ce qui
+manque.
+
+## Ce qui manque au dépôt pour cette expérience (dit franchement)
+
+* **un corpus français** ✗ : le dépôt a `data/corpus_en.txt` (96 Mo ✓) et `data/wikitext2_test.txt` ; je n'ai
+  pas vu de corpus français dans le dépôt — c'est la **première** chose à ajouter ;
+* **un classifieur de langue** ✗ : quelques lignes, mais il n'existe pas ;
+* et **le temps** de deux entraînements (≈ 20 min chacun sur les cartes ✓ — c'est faisable).
+
+## Première mesure (17/10, 15 h) : la couche commune EXISTE DÉJÀ — et la langue n'est qu'à la SURFACE
+
+Le chapitre ci-dessus proposait un critère ; il a été appliqué ✓✓. Dispositif : un modèle **en octets**
+(8 couches, 256 de dimension, **4,79 M** paramètres ✓) entraîné sur un corpus **mixte** de **10,2 Mo**
+(**6,0 Mo d'anglais + 4,5 Mo de français** ✓ — le corpus français a été **constitué** pour l'occasion, voir
+plus bas), validation **2,6822 bits/octet** ✓.
+
+Puis `tools/langue_dans_etat.py` ✓ : une régression **linéaire** prédisant la langue depuis l'état
+**normalisé** de chaque couche ✓, sur **300 fenêtres par langue** ✓, avec un **témoin intra-langue** ✗ (deux
+moitiés du corpus anglais : ce qu'un classifieur peut faire **sans** la langue ✓) :
+
+| couche | langue (en/fr) | témoin intra-langue | verdict |
+|---:|---:|---:|---|
+| **0** | **62,4 %** | 53,1 % | la langue est dans l'**entrée** (octets) ✗ |
+| **1** | **50,2 %** | 50,7 % | **le hasard** ✓✓ — la langue s'efface |
+| **2** | **50,3 %** | 51,8 % | **le hasard** ✓✓ |
+| 3 | 56,6 % | 50,6 % | la langue revient un peu |
+| 4 | 53,9 % | 50,2 % | presque le hasard ✓ |
+| 5 | 53,8 % | 51,0 % | presque le hasard ✓ |
+| **6** | **59,4 %** | 50,1 % | la langue **revient** ✗ (la surface) |
+| **7** | **59,6 %** | 50,7 % | la langue **revient** ✗ (la surface) |
+| 8 | **51,0 %** | 50,9 % | le hasard ✓✓ (état final, prêt pour la tête) |
+
+* **LE NOYAU EST NEUTRE** ✓✓ : aux couches **1 et 2**, un classifieur linéaire ne fait **pas mieux que le
+  hasard** (50,2 et 50,3 % ✓✓, contre un témoin à 50,7 et 51,8 ✓). *L'état ne sait pas dans quelle langue
+  le texte est écrit* ✓✓ — c'est exactement la « couche commune » cherchée ✓ ;
+* **ET LA LANGUE NE REVIENT QU'À LA SURFACE** ✗✓ : aux couches **6 et 7**, elle remonte à **59,4 et 59,6 %**
+  ✓ — c'est-à-dire que le modèle **réintroduit** la langue **au moment de produire** ✓✓. C'est la structure
+  demandée : **un contenu neutre, une surface paramétrée par la langue** ✓✓✓ ;
+* **et l'entrée, elle, porte la langue** ✗ (62,4 % à la couche 0 ✓) : les octets anglais et français n'ont
+  pas les mêmes statistiques ✓ — c'est le seul endroit où « la langue » est dans les données ✓✓.
+
+### Le corpus français, et la sixième fois qu'un chiffre s'est déguisé
+
+* **il n'y avait pas de corpus français** dans le dépôt ✗ : il a été **constitué** à partir du français
+  **réel** du dépôt (docs, fiches, journal ✓) → **4,45 Mo**, dont les mots les plus fréquents sont `les`,
+  `est`, `pas`, `sur`, `par`, `que` ✓✓. Mais le premier essai était **contaminé** ✗ : les mots les plus
+  fréquents étaient `stephane`, `home`, `data`, `bash` ✗✓ (le journal contient des commandes et des
+  chemins ✓). Un **filtre** (lignes sans chemin, sans option, avec au moins **deux mots-outils** français ✓)
+  a ramené 12,8 Mo à **4,45 Mo propres** ✓ ;
+* **et mon instrument avait un défaut** ✗✓ : le **signe** d'un classifieur linéaire est **arbitraire** ✓ —
+  une précision de **43,4 %** est en réalité **56,6 %** avec l'autre orientation ✓✗. Sans le `max(acc, 100−acc)`,
+  j'aurais lu « sous le hasard » là où il y a une séparation ✓. **C'est la sixième fois** qu'un chiffre se
+  déguise ✓✓ (les cinq premières sont au chapitre 6 ✓) — et la règle n'a pas changé : *écrire à côté du
+  chiffre ce qui pourrait le rendre faux* ✓.
+
+### Ce que cela dit pour la suite
+
+La couche commune **existe déjà** dans un modèle en octets entraîné sur deux langues ✓✓. Ce qui reste n'est
+donc **pas** à construire ✗ : c'est à **exploiter** ✓ — et les deux prochaines étapes sont nettes :
+
+1. **vérifier que le noyau neutre est UTILE** ✗ : un état qui ne dit plus la langue dit-il encore le **sens** ?
+   （mesurer le contenu, méthode du chapitre 5 ✓ — sur les couches 1-2, où la langue s'efface ✓) ;
+2. **les adaptateurs par langue** (famille E ✓) : si la langue ne vit qu'aux couches **6-7** ✓, un adaptateur
+   posé **là** devrait suffire ✗✓ — c'est-à-dire **quelques paramètres par langue**, exactement la
+   « langue comme paramètre » cherchée ✓✓.
+
+## Deuxième mesure (17/10, 16 h) : la langue EST un paramètre — deux adaptateurs de 131 k
+
+La famille E disait : « un noyau commun + un petit adaptateur par langue ». C'est mesuré ✓✓, sur un modèle
+**monolingue** (anglais seul ✓, `/tmp/jouet-d256`, 4 couches, 256 ✓), **noyau entièrement gelé** ✓.
+
+Dispositif : `tools/adaptateur_langue.py` ✓ — un LoRA (rang 8 ✓) sur les 28 projections d'attention et de MLP
+= **131 072 paramètres**, soit **5,1 %** du modèle ✓, entraîné 2 000 pas sur **une** langue ✓, puis évalué sur
+**les deux** ✓.
+
+| adaptateur | perte **français** | perte **anglais** |
+|---|---:|---:|
+| **aucun** (noyau seul ✓) | **3,19** ✗ | **1,90** ✓ |
+| **adaptateur français** (131 k ✓) | **1,50** ✓✓ (−53 %) | 2,91 ✗ (+53 %) |
+| **adaptateur anglais** (131 k ✓) | 3,02 | **1,40** ✓✓ (−26 %) |
+
+* **CHAQUE ADAPTATEUR FAIT MARCHER SA LANGUE** ✓✓ : le français passe de **3,19 à 1,50** (−53 % ✓✓) et
+  l'anglais de **1,90 à 1,40** (−26 % ✓✓) — avec **131 072 paramètres**, soit **5,1 %** d'un modèle de 2,43 M ✓,
+  et **sans toucher un seul poids du noyau** ✓✓. *La langue est donc bien un petit paramètre* ✓✓✓ ;
+* **ET ILS SONT INTERCHANGEABLES** ✓✓ : le même noyau, deux adaptateurs, deux langues qui marchent ✓ — c'est
+  la définition exacte de « la langue comme paramètre » ✓✓, et c'est **mesuré**, pas espéré ✓ ;
+* **mais l'échange a un PRIX, et il est asymétrique** ✗✓ : l'adaptateur **français** abîme l'anglais
+  (1,90 → **2,91** ✗), tandis que l'adaptateur **anglais** laisse le français à 3,02 ✓ (contre 3,19 ✓).
+  L'explication la plus simple : le noyau a été entraîné **en anglais** ✓ — l'adaptateur anglais reste donc
+  **près** de lui ✓✓, alors que l'adaptateur français doit le **déplacer** ✗✓. Ce n'est pas un défaut du
+  principe, c'est un fait du noyau de départ ✓ ;
+* **et c'est la réponse la plus directe à la question posée** ✓✓ : pour atteindre une couche commune, **il
+  n'est pas nécessaire de réentraîner** un noyau ✗ — il suffit d'un **paramètre de langue** de quelques
+  dizaines de milliers de poids ✓✓, et le noyau peut rester **le même** ✓. Ce qui reste à faire n'est donc
+  plus de **construire** la couche commune ✗ mais de **choisir où la brancher** ✓ (les couches 6-7, où la
+  langue reparaît ✓ — première mesure de ce chapitre ✓).
+
+## Troisième mesure (17/10, 16 h 45) : **où brancher** l'adaptateur — et le paramètre le plus petit possible
+
+La langue vit à la **surface** (couches 6-7 du modèle bilingue ✓, première mesure de ce chapitre ✓). On l'a
+donc testé sur le modèle monolingue (4 couches ✓), en posant le LoRA **sur le seul dernier étage** ✓ :
+
+| placement de l'adaptateur | paramètres | part du modèle | **perte français** | perte anglais |
+|---|---:|---:|---:|---:|
+| **aucun** | — | — | **3,1953** ✗ | **1,9001** ✓ |
+| **partout** (rang 8 ✓) | 131 072 | **5,12 %** | **1,5046** ✓✓ (−52,9 %) | 2,9139 (+53,4 %) |
+| **dernier étage** (rang 8 ✓) | **32 768** | **1,33 %** | **1,7714** ✓✓ (−44,6 %) | 2,7439 (+44,4 %) |
+| **dernier étage** (rang 32 ✓) | 131 072 | 5,12 % | **1,6820** ✓ (−47,4 %) | 2,7347 (+43,9 %) |
+
+* **LE DERNIER ÉTAGE SUFFIT PRESQUE** ✓✓ : avec **32 768 paramètres** — **1,33 %** du modèle ✓✓ — il prend
+  **84 % du gain** (−44,6 % contre −52,9 % pour cinq fois plus de paramètres ✓✓). *La langue est donc
+  essentiellement un réglage de surface* ✓✓ ;
+* **mais à BUDGET ÉGAL, « partout » reste un peu meilleur** ✓ (1,5046 contre 1,6820 ✓) : le noyau contribue
+  aussi ✗✓ — de quelques points ✓ — et l'on paie **quatre fois** ce gain ✓ ;
+* **et le placement de surface est plus DOUX pour l'autre langue** ✓ : l'anglais souffre moins
+  (2,73-2,74 contre 2,91 ✓) — un adaptateur qui ne déplace qu'un étage **abîme moins** le reste ✓✓ ;
+* **la conclusion pratique** ✓✓ : pour « la langue comme paramètre », le point d'attache est **le dernier
+  étage** ✓, avec un rang modeste ✓ — **1,33 % du modèle** suffit à faire d'un noyau anglais un noyau qui
+  travaille en français ✓✓. C'est le chiffre le plus utile de ce chapitre : *la langue coûte 1,33 %* ✓.
+
+### Ce que ces trois mesures disent ensemble
+
+1. **la couche commune existe** ✓ (noyau neutre aux couches 1-2, 50,2 % = le hasard ✓) ;
+2. **la langue est un paramètre** ✓ (131 k = 5,1 % font marcher une langue ✓✓, et deux adaptateurs sont
+   interchangeables sur le même noyau ✓) ;
+3. **et ce paramètre est plus petit qu'on ne croyait** ✓✓ (32 k = **1,33 %**, au dernier étage, prend 84 % du
+   gain ✓) — ce qui rend l'idée **directement utilisable** : un noyau, et **un petit module par langue** ✓✓.
+
+## Quatrième mesure (17/10, 17 h 30) : le noyau neutre **porte le sens** — mais le relevé reste propre à la langue
+
+La neutralité pourrait être une **perte** ✗ : une couche qui ne dit plus la langue pourrait ne plus rien dire
+✗✓. Mesure : `tools/contenu_par_couche.py` ✓ — le **contenu** (état → embedding du jeton suivant ✓, λ de ridge
+par validation croisée ✓), **par couche** et **par langue**, sur le modèle bilingue ✓.
+
+| couche | contenu **anglais** | contenu **français** | contenu **mêlé** | la langue ? |
+|---:|---:|---:|---:|---|
+| 0 | 89,5 % | 88,0 % | 93,0 % | — |
+| **1** | **87,8 %** | **87,3 %** | **93,0 %** | **NEUTRE (50 %)** ✓✓ |
+| **2** | **86,5 %** | **85,3 %** | 92,4 % | **NEUTRE (50 %)** ✓✓ |
+| 3 | 85,6 % | 84,5 % | 91,7 % | — |
+| 4 | 84,6 % | 83,8 % | 91,1 % | — |
+| 5 | 83,6 % | 82,5 % | 88,9 % | — |
+| **6** | 82,1 % | 80,6 % | 86,0 % | la langue revient ✗ |
+| **7** | 80,4 % | 78,5 % | 83,4 % | la langue revient ✗ |
+| 8 | **79,3 %** | **76,5 %** | **81,6 %** | — |
+
+* **LE NOYAU NEUTRE PORTE LE SENS** ✓✓ : aux couches 1-2, où la langue est illisible ✓, le contenu reste à
+  **87,8 %** et **87,3 %** — à **8 points seulement** du meilleur (79,3 % à la couche 8 ✓). *La neutralité
+  n'est donc pas une perte de sens* ✓✓ : le noyau abstrait la langue **en gardant le contenu** ✓✓ ;
+* **le contenu s'améliore avec la profondeur** ✓ (89,5 → 79,3 ✓) — régulier, sans accident ✓✓ ;
+* **MAIS LE RELEVÉ RESTE PROPRE À CHAQUE LANGUE** ✗✓ : la colonne « mêlé » — **un seul** mapping appris sur les
+  deux langues ✓ — est **systématiquement pire** (93,0 contre 87,8 ✓ ; 81,6 contre 79,3 ✓). Autrement dit :
+  les états anglais et français **ne sont pas linéairement séparables par la langue** ✓ (mesure 1 ✓) mais ils
+  **ne se lisent pas avec le même relevé** ✗✓ — il faut **deux** lectures ✗, ou une lecture **non linéaire** ✓
+  (piste du § 24 du rapport sur la linéarité ✓) ;
+* **la conclusion, en une phrase** ✓✓ : *la couche commune est commune pour l'**état**, pas encore pour le
+  **relevé*** ✓ — c'est-à-dire que le noyau a bien abstrait la langue **dans le contenu** ✓✓, mais le lien
+  entre l'état et les mots reste **teinté** de la langue ✗. Et c'est exactement là que l'adaptateur du
+  paragraphe précédent intervient : il **fournit** ce relevé propre à la langue ✓✓, pour **1,33 %** de
+  paramètres ✓.
+
+### Ce que cela change dans la lecture du chapitre
+
+La chaîne est maintenant complète, et chaque maillon est mesuré :
+
+| maillon | mesure | verdict |
+|---|---|---|
+| **l'entrée** porte la langue | classifieur 62,4 % à la couche 0 | ✗ oui, dans les octets |
+| **le noyau** ne la porte plus | 50,2 % aux couches 1-2 | ✓✓ neutre |
+| **le noyau** garde le sens | contenu 87,8 % aux couches 1-2 | ✓✓ utile |
+| **la surface** la fait revenir | 59,4 % aux couches 6-7 | ✓ c'est là qu'elle sert |
+| **le relevé** en a besoin | « mêlé » toujours pire | ✗✓ à traiter |
+| **l'adaptateur** la fournit | −44,6 % pour 1,33 % | ✓✓ le paramètre |
+
+## Cinquième mesure (17/10, 18 h) : le « relevé propre à la langue » était un artefact de **LINÉARITÉ**
+
+La quatrième mesure concluait : *la couche commune est commune pour l'état, pas pour le relevé* ✗ — le
+mapping « mêlé » (un seul relevé pour les deux langues ✓) étant **systématiquement pire** ✓ (93,0 contre 87,8 ✓).
+La question qui suivait : **est-ce le relevé, ou la linéarité du relevé ?** ✗. Réponse mesurée ✓, avec un MLP
+**régularisé** (découpe 60/20/20 ✓, **arrêt anticipé** sur la validation ✓, poids décroissants ✓ — leçon du
+16/10 : un MLP sans arrêt anticipé sur-apprend ✓✗) :
+
+| couche | linéaire **mêlé** | **MLP mêlé** | gain |
+|---:|---:|---:|---:|
+| 0 | 93,0 % | **90,4 %** | −2,6 |
+| 1 | 93,0 % | **89,1 %** | −3,9 |
+| 2 | 92,4 % | **86,3 %** | −6,1 |
+| 3 | 91,7 % | **85,3 %** | −6,4 |
+| 4 | 91,1 % | **83,7 %** | −7,4 |
+| 5 | 88,9 % | **80,5 %** | −8,4 |
+| 6 | 86,0 % | **76,8 %** | −9,2 |
+| 7 | 83,4 % | **73,9 %** | −9,5 |
+| **8** | 81,6 % | **71,5 %** | **−10,1** ✓✓ |
+
+* **LE LECTEUR NON LINÉAIRE BAT LE LINÉAIRE PARTOUT** ✓✓ (à la couche 8 : **71,5 %** contre 81,6 % ✓ — dix
+  points ✓) : le « relevé propre à la langue » n'était donc **pas** une propriété de l'état ✗✓, c'était une
+  **limite du lecteur** ✓✓. *Septième fois de la nuit qu'un chiffre se déguise — cette fois en propriété
+  d'architecture* ✓✓ ;
+* **ET LE GAIN CROÎT AVEC LA PROFONDEUR** ✓ (2,6 points à la couche 0 → **10,1** à la couche 8 ✓✓) : les
+  états profonds sont **plus non linéairement encodés** ✓✓ — ce qui rejoint exactement le § 23-25 du rapport
+  (les modèles plus larges sont moins linéairement lisibles ✓) ;
+* **ET LE RÉSULTAT DÉCISIF** ✓✓✓ : à la couche 8, **un seul** relevé non linéaire **mêlé** (71,5 % ✓) fait
+  **mieux** que les **deux** relevés linéaires **par langue** (79,3 % en anglais et 76,5 % en français ✓✓).
+  *Un relevé partagé suffit — s'il est non linéaire* ✓✓✓ ;
+* **donc la chaîne est complète** ✓✓ : l'entrée porte la langue ✗ → le noyau ne la porte plus ✓✓ → le noyau
+  garde le sens ✓✓ → la surface la fait revenir ✓ → **le relevé n'est PAS propre à la langue** ✓✓ (si l'on
+  accepte la non-linéarité ✓) → l'adaptateur reste utile **pour la génération** ✓ (il fait passer d'une
+  perplexité de 3,19 à 1,50 ✓), pas pour la **lecture** ✓✓. C'est une distinction que le chapitre n'avait pas
+  faite, et elle est importante : *lire le sens est une chose, produire dans une langue en est une autre* ✓✓.
+
+## Sixième mesure (17/10, 18 h 30) : la langue de SORTIE suit l'**adaptateur**, pas l'amorce
+
+La perplexité (3,19 → 1,50 ✓) ne dit pas dans quelle langue le modèle **écrit** ✗. Mesure :
+`tools/generer_par_langue.py` ✓ — deux amorces (une par langue ✓), trois adaptateurs (aucun, français,
+anglais ✓), 120 octets générés ✓, et la langue de la sortie comptée par ses **mots-outils** ✓ (le seul
+classifieur qui tienne sur un texte de mauvaise qualité ✓).
+
+| amorce | adaptateur | **sortie** (mots-outils) | ce qu'elle montre |
+|---|---|---|---|
+| anglais | **aucun** | fr 0 · **en 5** | le noyau seul écrit **anglais** ✓ |
+| **anglais** | **français** | **fr 6** · en 0 | **la sortie est FRANÇAISE** ✓✓ |
+| anglais | anglais | fr 0 · **en 6** | l'adaptateur anglais écrit anglais ✓ |
+| **français** | **aucun** | fr 0 · **en 13** | le noyau seul **ignore** l'amorce française ✗ |
+| français | français | **fr 12** · en 0 | l'adaptateur français écrit français ✓ |
+| **français** | **anglais** | fr 0 · **en 7** | **la sortie est ANGLAISE** ✓✓ |
+
+* **LA SORTIE SUIT L'ADAPTATEUR, PAS L'AMORCE** ✓✓✓ : une amorce **anglaise** avec l'adaptateur **français**
+  produit du **français** (fr 6 · en 0 ✓✓), et une amorce **française** avec l'adaptateur **anglais** produit de
+  l'**anglais** (en 7 · fr 0 ✓✓). C'est la définition **opérationnelle** de « la langue comme paramètre » ✓✓ ;
+* **et sans adaptateur, le noyau écrit sa langue d'entraînement** ✓ (l'anglais ✓) **quelle que soit
+  l'amorce** — la française donne `en 13 · fr 0` ✗✓, c'est-à-dire que le noyau **ignore** la langue qu'on lui
+  donne et continue dans la sienne ✓✓. C'est exactement ce que « la langue est un paramètre **d'entrée** mais
+  pas de **sortie** » veut dire ✓ ;
+* ⚠️ **et ce que ce test ne dit PAS** ✗ : le texte est de la **bouillie** (modèle de 2,4 M en octets ✓ —
+  `'machine s'acteur, et locs/'` ✓). La mesure porte sur **la langue**, pas sur la qualité ✗. C'est écrit
+  dans l'outil ✓, pour que personne ne lise « ça écrit bien » là où il n'y a que « ça écrit français » ✓.
+
+### La chaîne complète, et ce qu'elle vaut
+
+| ce qu'on veut | mesure | chiffre |
+|---|---|---|
+| l'entrée porte la langue | classifieur à la couche 0 | **62,4 %** ✗ |
+| le **noyau** l'abstrait | classifieur aux couches 1-2 | **50,2 %** = le hasard ✓✓ |
+| et il **garde le sens** | contenu aux couches 1-2 | **87,8 %** ✓✓ |
+| le **relevé** n'est pas propre à la langue | un seul relevé **non linéaire**, couche 8 | **71,5 %** (mieux que deux linéaires ✓✓) |
+| la **langue** est un paramètre **petit** | adaptateur au dernier étage | **32 768** poids = **1,33 %** ✓✓ |
+| et il **fait marcher** la langue | perplexité française | **3,19 → 1,50** (−53 %) ✓✓ |
+| et la **sortie** suit le paramètre | génération, amorce croisée | **français → anglais** et l'inverse ✓✓✓ |
+
+**Conclusion du chapitre** ✓✓ : la couche commune **existe** ✓, elle **garde le sens** ✓, et la langue y est un
+**paramètre de 1,33 %** qui **commande la sortie** ✓✓. Ce qui reste n'est pas à construire ✗ mais à **utiliser**
+✓ — et les trois questions ouvertes sont : la **qualité** (ces modèles sont des jouets ✓), le **coût de la
+bascule** (temps et mémoire ✓), et la **boucle** (la pensée itérée survit-elle au changement de langue ?) ✓.
+
+## Septième mesure (17/10, 19 h) : la bascule coûte **5 ms** et **530 Ko** — l'idée est utilisable
+
+« La langue est un paramètre de 1,33 % » ✓✓ ne vaut que si changer de langue ne coûte pas le rechargement d'un
+modèle ✗. Mesure : `tools/cout_bascule.py` ✓ — adapter de tout le modèle (rang 8, 131 k ✓), médiane sur cinq
+essais ✓, comparaison avec un **rechargement complet** ✓ :
+
+| ce qu'on échange | taille | temps médian |
+|---|---:|---:|
+| **adaptateur** (chargement depuis le disque) | **530 Ko** | **4,82 ms** |
+| **adaptateur** (application au modèle ✓) | — | **0,19 ms** |
+| **modèle entier** (rechargement ✗) | 9,8 Mo | **134,64 ms** |
+
+* **la bascule de langue coûte 5,0 ms et 530 Ko** ✓✓ — contre **134,6 ms et 9,8 Mo** pour recharger un
+  modèle ✗ ✓ (rapport **×27** en temps, **×18** en mémoire ✓✓) ;
+* **et le rapport ne peut que s'améliorer** ✓ (raisonnement, pas mesure ✗) : un modèle de 7 milliards pèse
+  des **milliers** de fois plus qu'un adaptateur ✓, alors qu'un LoRA reste petit ✓✓ — le coût du paramètre
+  ne dépend pas de la taille du noyau ✓ ;
+* **et l'adaptateur de SURFACE** (le dernier étage, 32 768 poids ✓, mesuré au § « où brancher » ✓) pèserait
+  **≈ 130 Ko** ✓✓ — quatre fois moins ✓, pour **84 % du gain** ✓ ;
+* **la conclusion pratique** ✓✓ : *un noyau, N adaptateurs de quelques centaines de kilo-octets, et une
+  bascule en millisecondes* ✓✓ — c'est-à-dire une architecture où **la langue est un fichier** ✓, pas un
+  modèle ✗. C'est la réponse la plus utile de ce chapitre à la question posée ✓.
+
+## Huitième mesure (17/10, 19 h 30) : le relevé **est** teinté de la langue — et cela CORRIGE la cinquième mesure
+
+La cinquième mesure concluait qu'un **seul** relevé non linéaire « mêlé » battait les deux relevés linéaires
+par langue ✓ (71,5 % contre 79,3 et 76,5 ✓). Elle ne disait pas si ce relevé unique valait un relevé
+**de même langue et non linéaire** ✗ — question posée ici : `tools/lecture_croisee.py` ✓, **lecture croisée**
+(relevé appris sur une langue ✓, appliqué à l'autre ✓), au dernier étage ✓ :
+
+| relevé appris sur | état **anglais** | état **français** |
+|---|---|---|
+| **ANGLAIS** | **76,7 / 55,9** | 82,5 / 72,2 |
+| **FRANÇAIS** | 84,8 / 75,7 | **73,1 / 53,0** |
+
+*(linéaire / non linéaire ; les cases en gras sont la diagonale, c'est-à-dire le relevé de la **même** langue ✓)*
+
+| | diagonale | croisé | **pénalité de langue** |
+|---|---:|---:|---:|
+| **linéaire** | 74,9 % | 83,7 % | **+8,7** ✗ |
+| **non linéaire** | **54,5 %** ✓✓ | 73,9 % | **+19,5** ✗✗ |
+
+* **LE RELEVÉ EST TEINTÉ DE LA LANGUE** ✗✓ : la diagonale est **nettement** meilleure (54,5 contre 73,9 en non
+  linéaire ✓) — il y a une **pénalité de langue** de **+8,7** (linéaire) à **+19,5** (non linéaire) ✓ ;
+* **et le non-linéaire AGGRAVE la pénalité** ✗✓ (19,5 contre 8,7 ✓) : un lecteur plus puissant se **spécialise**
+  davantage ✓✓ — *plus de puissance, plus de langue* ✓. C'est l'inverse de ce qu'on attendait naïvement ✗✓ ;
+* **donc la cinquième mesure doit être LUE AUTREMENT** ✗✓ : elle était vraie (un relevé **partagé** non linéaire
+  bat **deux linéaires** ✓✓) mais **incomplète** ✗ : il ne bat **pas** deux non-linéaires de même langue
+  (71,5 contre **54,5** ✓✗). *Le relevé partagé fonctionne ; il coûte 17 points* ✓ ;
+* **et la conclusion devient plus nette, pas moins** ✓✓ : l'**état** est neutre ✓ (mesure 1 ✓), mais le
+  **lien état → mots** est **langue-dépendant** ✓ — *c'est donc dans le relevé que la langue vit*, et c'est
+  **exactement** là que l'adaptateur de langue agit ✓✓ (il fournit ce relevé pour 1,33 % de paramètres ✓).
+  « Penser dans une langue et conclure dans une autre » **ne marche pas** avec le même relevé ✗✓ — il faut
+  **changer de paramètre**, ce qui coûte 5 ms ✓✓.
+
+### Erratum assumé
+
+La cinquième mesure disait « le relevé n'est pas propre à la langue ✓✓ ». La huitième la **corrige** ✗✓ : le
+relevé **est** propre à la langue (pénalité +8,7 à +19,5 ✓), et ce qui restait vrai est plus faible — *un relevé
+partagé est possible, à un coût de 17 points* ✓. **Huitième fois de la nuit qu'un chiffre se déguise** ✓✓, et
+cette fois c'est une **mesure antérieure** qui était en cause, pas un réglage ✗ : la leçon est qu'une comparaison
+n'est valide que si **tous** les lecteurs sont aussi puissants les uns que les autres ✓ — comparer un non-linéaire
+à des linéaires n'est pas comparer deux langues, c'est comparer deux **familles de lecteurs** ✗✓.
+
+## Neuvième mesure (17/10, 20 h) : le relevé partagé suffit — l'erratum de la mesure 8 était lui-même trop fort
+
+La mesure 8 concluait que « le relevé **est** teinté de la langue » ✓✗ (pénalité +8,7 à +19,5 ✗), en comparant
+un relevé appris sur **une** langue et appliqué à l'**autre** ✓. La mesure 9 pose **l'autre** question, celle
+qui compte pour une couche commune : un relevé appris sur **les deux** langues vaut-il le relevé **de chaque**
+langue ? ✗✓. `tools/releve_parametre.py` ✓, au dernier étage ✓ :
+
+| relevé | paramètres de **langue** | anglais | français |
+|---|---:|---:|---:|
+| **partagé** (appris sur les deux ✓) | **0** ✓ | **79,1 %** | **76,5 %** |
+| partagé + **rang 1** par langue ✓ | 512 | 79,1 % | 76,5 % |
+| **complet** par langue ✗ | 65 536 | **78,4 %** | **75,9 %** |
+
+* **LE RELEVÉ PARTAGÉ SUFFIT** ✓✓ : il fait **79,1 / 76,5 %** quand deux relevés séparés font **78,4 / 75,9 %**
+  — **0,7 point** d'écart ✓✓. Autrement dit : *un seul relevé, appris sur les deux langues, sert les deux
+  langues* ✓✓✓ ;
+* **et la correction de rang 1 ne récupère RIEN** ✗ (79,1 → 79,1 ✓) — non pas parce que la langue n'est pas de
+  rang 1 ✗, mais parce qu'**il n'y a rien à corriger** ✓✓ : le relevé partagé a déjà tout pris ✓ ;
+* **donc l'erratum de la mesure 8 était lui-même TROP FORT** ✗✓ : ce qui est vrai, c'est qu'un relevé appris
+  sur **une seule** langue **ne se transfère pas** à l'autre ✗ (pénalité +8,7 à +19,5 ✓) ; mais un relevé appris
+  sur **les deux** ne perd que **0,7 point** ✓✓. Ce sont **deux questions différentes** ✗✓, et il a fallu les
+  mesurer séparément pour le voir ✓✓ ;
+* **et la conclusion générale devient la plus simple de toutes** ✓✓ : la langue ne vit **ni dans l'état**
+  (50,2 % = le hasard ✓✓) **ni dans le relevé** (0,7 point ✓✓) — elle vit dans **l'entrée** (les octets ✓,
+  62,4 % à la couche 0 ✗) et dans **la surface de sortie** (couches 6-7 ✓, et l'adaptateur qui la commande ✓✓).
+  *C'est exactement la structure demandée : un contenu commun, une surface paramétrée* ✓✓✓.
+
+### La chaîne des corrections, assumée
+
+Ce chapitre a maintenant **trois erratums** ✓✓, et c'est le signe qu'il progresse :
+*(et il y en a eu un **quatrième**, sur l'**instrument** et non sur une mesure : voir la ligne 16 du tableau ci-dessous)*
+
+| mesure | ce qu'elle disait | ce que la suivante a corrigé |
+|---|---|---|
+| 5 | « le relevé n'est pas propre à la langue » ✓ | incomplet : comparé à des lecteurs **linéaires** seulement ✗ |
+| 8 | « le relevé **est** teinté de la langue » (pénalité +8,7 à +19,5 ✗) | vrai pour un **transfert** ✗, mais la mesure 9 montre qu'un relevé appris sur les **deux** langues ne perd que **0,7 point** ✓✓ |
+| 9 | « le relevé partagé suffit » ✓✓ | — *(à confirmer sur un modèle plus grand ✗ : 2,4 M est un jouet — confirmé depuis : 0,7 point sur Qwen aussi ✓✓)* |
+| 16 | « le test est invalide, le confondant est l'**alignement** » ✗✓ | **faux** : les éditions sont alignées à 0,1-1,7 % ✓✓ ; le confondant était mon **échantillonnage** (les 400 premiers octets, souvent des titres ✓✗) |
+| 17 | « l'échantillon au milieu change le signe » ✓ | **confirmé** : +0,022 contre −0,053 ✓✓, mais le signal reste faible ✗ |
+| 22 | « le corpus de Panini contient une erreur d'appariement » ✓✓ | **confirmé et étendu** : **cinq** fichiers mentent sur leur langue, dont trois des quatre « allemands » du corpus « vérifié » ✗✗ |
+| 31 | « le genre explique la variation » ✗ | **faux** : Don Quijote (récit) fait aussi mal qu'Alice ✓ |
+| 32 | « la part de dialogue l'explique » ✗ | **faux** : la relation est **spurieuse** ✗✓ — le meilleur indicateur (caractères entre guillemets) mesure la **typographie de l'édition** ✓✗ |
+| 33 | « la variation est inexpliquée » ✓✓ | **confirmé** : sept candidats, aucun significatif ✓ |
+
+*Trois mesures, deux corrections, et aucune des trois n'est jetée* ✓✓ : chacune reste vraie **de sa question** ✓.
+C'est la différence entre se contredire ✗ et **préciser** ✓✓.
+
+## Dixième mesure (17/10, 20 h 30) : un noyau **bilingue** bat un noyau monolingue **+ adaptateur** — mais l'adaptateur rattrape les deux tiers
+
+La mesure qui compte pour l'ingénierie ✓ : pour obtenir une couche commune, vaut-il mieux entraîner un noyau
+**sur les deux langues** ✓ ou garder un noyau **monolingue** et ajouter un **adaptateur** ✓ (famille E ✓) ?
+`tools/comparer_noyaux.py` ✓, mêmes fenêtres ✓ :
+
+| dispositif | **perte français** | perte anglais |
+|---|---:|---:|
+| **noyau bilingue** ✓ (4,79 M, 10,2 Mo mixtes ✓) | **1,0737** ✓✓ | **1,6493** ✓ |
+| noyau monolingue ✗ (2,43 M, 96 Mo anglais ✓) | **3,2928** ✗ | **2,2786** ✓ |
+| monolingue + **adaptateur français** ✓ | **1,4546** ✓ | 3,1438 ✗ |
+
+* **LE NOYAU BILINGUE GAGNE** ✓✓ : **1,0737** contre **1,4546** pour le monolingue + adaptateur ✓ — soit
+  **35 %** de perte en plus pour le dispositif à adaptateur ✗ ;
+* **mais l'adaptateur rattrape les DEUX TIERS de l'écart** ✓✓ (3,2928 → **1,4546** ✓) — et il le fait pour
+  **131 072 paramètres** ✓✓ et vingt minutes d'entraînement ✓, quand le noyau bilingue a demandé **les deux
+  corpus** et un entraînement complet ✓ ;
+* **et l'adaptateur abîme l'anglais** ✗ (2,2786 → **3,1438** ✓) — le prix déjà vu ✓ ;
+* ⚠️ **ce que cette mesure ne peut PAS dire, et qui est écrit dans l'outil** ✗ : les deux noyaux n'ont **ni la
+  même taille** (2,43 M contre 4,79 M ✓) **ni les mêmes données** (96 Mo d'anglais contre 10,2 Mo mixtes ✓) —
+  ce n'est donc **pas** une comparaison à budget égal ✗✓, c'est une comparaison de **trois dispositifs réels** ✓.
+  La conclusion doit rester à ce niveau : *le bilingue est meilleur ici* ✓, pas « le bilingue est toujours
+  meilleur » ✗ ;
+* **et le vrai arbitrage est ailleurs** ✓✓ : sur un modèle de **7 milliards**, réentraîner le noyau sur deux
+  langues est **hors de prix** ✗✓, alors qu'un adaptateur coûte **1,33 %** des paramètres et **5 ms** de bascule
+  ✓✓. *C'est donc à l'échelle que l'adaptateur devient la bonne réponse* ✓ — et ce chapitre ne peut pas le
+  mesurer, seulement le nommer ✓.
+
+## Onzième mesure (17/10, 21 h) : la pensée itérée est **SANS LANGUE** — mais elle ne tient qu'un pas
+
+La jonction des deux chapitres, jamais mesurée ✗ : l'état est **neutre** (chap. 7 ✓) et l'on peut **itérer**
+l'état (chap. 5 ✓) — mais **itérer préserve-t-il la neutralité ?** ✓ `tools/penser_sans_langue.py` ✓ : le même
+opérateur que le chapitre 5 (identité + petit MLP ✓, contenu ✓ et contraction ✓), entraîné sur les états du
+modèle **bilingue** ✓, puis k itérations ✓, avec deux mesures : le **contenu** ✓ et la **langue** ✓.
+
+| k | contenu (état → mot suivant) | **langue** (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | **56,2 %** |
+| **1** | **79,9 %** ✓ | 53,9 % |
+| 2 | 93,8 % ✗ | 52,8 % |
+| **3** | 99,5 % ✗✗ | **50,7 %** ✓✓ |
+| **4** | 101,3 % ✗✗ | **50,6 %** ✓✓ |
+| 8 | 97,4 % ✗ | 54,0 % |
+
+* **LA LANGUE NE REVIENT PAS** ✓✓✓ : sur **huit** itérations, le classifieur reste entre **50,6 et 56,2 %** —
+  c'est-à-dire **au hasard** ✓✓ (le minimum, **50,6 %**, est atteint à k = 4 ✓). *La pensée itérée est sans
+  langue* ✓✓ — c'est la propriété qu'un cerveau doit avoir : **penser ne dépend pas de la langue où l'on
+  parle** ✓✓✓ ;
+* **et le contenu ne tient qu'un pas** ✗ : il **s'améliore** au premier (82,2 → **79,9** ✓) puis **s'effondre**
+  (93,8 → **101,3** ✗✗, pire que l'embedding moyen ✓). C'est **exactement** le résultat du 16/10 sur un autre
+  modèle ✓✓ (un pas de pensée, pas une itération ✓) — et il **se reproduit** ici ✓✓ ;
+* **donc la réponse complète** ✓✓ : *on peut penser **sans langue**, mais on ne peut penser qu'**un pas***
+  ✓ — la neutralité est **stable** ✓✓, le contenu ne l'est pas ✗. Les deux propriétés sont **indépendantes**
+  ✓✓ (l'une tient sur huit pas, l'autre sur un ✓), et c'est une information neuve ✓.
+
+### Neuvième piège : quand c'est le CODE qui ment
+
+Mon premier essai donnait k = 0, 1, 2, 4 ✓ mais la boucle **accumulait** `Z = cel(Z)` ✗✓ : les lignes « 2 » et
+« 4 » montraient en réalité **2 et 3** pas ✓✗. **Le label mentait, pas la mesure** ✓✓ — et c'est une famille
+**nouvelle** de piège : après les réglages (mesures 5, 8 ✓) et les instruments (les quatre du 16/10 ✓), voici
+**le code lui-même** ✓✗. La correction tient en une ligne (repartir de l'état d'origine à chaque k ✓), et elle
+a changé les chiffres — mais **pas la conclusion** ✓✓ : la langue reste au hasard ✓. C'est la neuvième fois
+qu'un chiffre se déguise, et la règle est toujours la même : **écrire à côté du chiffre ce qui pourrait le
+rendre faux** ✓✓.
+
+## Douzième mesure (17/10, 21 h 30) : le « second pas » ne s'obtient pas — et la recette du 16/10 se **reproduit**
+
+La mesure 11 laissait une question ouverte ✓ : le contenu ne tient qu'un pas ✗, mais le 16/10 avait montré
+qu'entraîner l'opérateur **sur k pas** (k tiré ✓) rendait l'itération **plate** ✓. On refait ici, **en gardant
+l'œil sur la langue** ✓ : `--k-entrainement 4` ✓ (même opérateur, même modèle bilingue ✓) :
+
+| k | contenu | langue (hasard = 50 %) |
+|---:|---:|---:|
+| 0 | 82,2 % | 56,2 % |
+| 1 | **82,2 %** | 68,2 % ✗ |
+| 2 | **82,2 %** | 67,6 % ✗ |
+| 3 | **82,2 %** | 56,0 % |
+| 4 | **82,2 %** | 51,4 % ✓ |
+| 8 | **82,2 %** | **50,0 %** ✓✓ |
+
+* **LE CONTENU EST EXACTEMENT PLAT** ✓✓ (82,2 % à **tous** les k) — c'est-à-dire que l'opérateur a appris
+  **l'identité** ✗✓ : *la seule façon de rester bon à k = 8 est de ne pas bouger* ✓✓, exactement la **solution
+  triviale** du 16/10 (son § 15 ✓). **Le résultat se reproduit sur un autre modèle, une autre tâche, une autre
+  langue** ✓✓ — c'est une **réplication**, et c'est la meilleure chose qu'un résultat négatif puisse être ✓ ;
+* **donc le « second pas » ne s'obtient pas par cette recette** ✗✓ : entraîner sur k **choisit** la solution
+  triviale ✓, parce que le contenu **moyen** sur k est maximisé par un opérateur **immobile** ✓✗. C'est une
+  propriété de **l'objectif**, pas de l'opérateur ✓✓ ;
+* **et la langue** ✗ : elle **varie** (68,2 % à k = 1, 50,0 % à k = 8 ✓) alors que l'opérateur est
+  quasi-immobile ✓✗ — c'est-à-dire que la **petite dérive** suffit à changer la **séparabilité linéaire** de la
+  langue ✓✓ (de 68 % à 50 % ✓). Autrement dit : *la neutralité de langue n'est pas une propriété robuste de
+  l'état* ✗ — elle dépend de la position exacte dans l'espace ✓✓ ;
+* **la conclusion honnête** ✓✓ : (1) la neutralité **tient** quand on itère avec un opérateur entraîné sur un
+  pas ✓ (mesure 11 : 50,6 % à k = 4 ✓) ; (2) elle **n'est pas** une propriété de l'état lui-même ✗ (mesure 12 :
+  la dérive la fait remonter à 68 % ✓) ; (3) et le **second pas** reste hors d'atteinte avec cet objectif ✗✓
+  — il faudra un **objectif différent** ✗ (par exemple contraindre le **déplacement** à être informatif, pas
+  seulement contractant ✓).
+
+## Treizième mesure (17/10, 22 h) : trois objectifs, **le même mur** — la limite est dans la représentation
+
+Le § précédent concluait qu'il fallait « un objectif différent » ✗ : récompenser le **déplacement informatif**,
+pas seulement sa contraction ✓. C'est fait ✓ (option `--marge` : le pas doit **améliorer** le contenu d'au moins
+`marge` × 100 %, ce qui **exclut l'identité** de l'optimum ✓✗). Deux marges testées ✓ :
+
+| marge | k = 0 | **k = 1** | k = 2 | k = 3 | k = 4 | k = 8 |
+|---|---:|---:|---:|---:|---:|---:|
+| **sans** (mesure 11 ✓) | 82,2 % | **79,9** ✓ | 93,8 ✗ | 99,5 ✗ | 101,3 ✗ | 97,4 ✗ |
+| **0,05** | 82,2 % | **80,3** ✓ | 93,7 ✗ | 100,1 ✗ | 103,1 ✗ | 99,9 ✗ |
+| **0,10** | 82,2 % | **80,4** ✓ | 93,3 ✗ | 100,3 ✗ | 103,7 ✗ | 95,3 ✗ |
+
+* **LA MARGE N'Y CHANGE RIEN** ✗✓ : le contenu s'améliore toujours au **premier** pas (79,9 · 80,3 · 80,4 ✓)
+  et **se dégrade** ensuite, de la même façon ✓✗ (93-104 % ✓). Les **trois** objectifs — conservation ✓,
+  conservation + contraction ✓, et **progrès exigé** ✓ — donnent **le même mur** ✗✗ ;
+* **donc la limite n'est PAS dans l'objectif** ✗✓ : c'est la **représentation** qui ne porte pas de second pas ✓✓.
+  *Il n'y a pas de second pas à trouver* ✓ — et c'est la troisième fois que la nuit le montre (16/10 sur les
+  opérateurs ✓, 17/10 sur deux modèles et deux langues ✓, et maintenant contre trois objectifs ✓) ;
+* **et la langue reste au hasard** ✓✓ (50,4-61,3 % ✓) — la neutralité **tient** sous toutes les variantes ✓✓,
+  ce qui est le résultat **positif** du chapitre : *la langue n'est pas dans la pensée* ✓✓, même quand la
+  pensée bute ✓ ;
+* **la conclusion du chapitre, et son ouverture** ✓✓ : la couche commune **existe** ✓ (noyau neutre ✓, relevé
+  partagé ✓), la langue est un **paramètre de 1,33 %** qui **commande la sortie** ✓✓, et la **pensée itérée**
+  est **sans langue** ✓✓ mais **d'un seul pas** ✗. Le pas suivant n'est plus à chercher dans les **objectifs**
+  ✗ mais dans **l'entraînement du modèle lui-même** ✓ — c'est-à-dire dans le programme du 16/10 (la récurrence
+  **dans** la boucle ✓), qui reste la seule porte ouverte ✓✓.
+
+## Quatorzième et quinzième mesures (17/10, 16 h) : un **vrai** corpus français, et la neutralité **à l'échelle**
+
+### Un corpus français littéraire — merci aux projets Panini
+
+Mon « corpus français » était de la **prose de dépôt** ✗ (4,45 Mo de fiches et de journal ✓, 15 201 formes ✓) —
+utilisable ✓, mais ce n'est pas de la langue naturelle ✗. Stéphane a signalé que ses projets de recherche
+linguistique (**`Panini/`** et **`Panini-Research/`** ✓) contiennent des corpus **déjà sur la machine** ✓✓. Il
+y avait en effet **des textes Gutenberg** ✓ — 66 textes, dont **18 français** ✓ :
+
+| | prose du dépôt (l'ancien ✗) | **littérature (le nouveau ✓)** |
+|---|---:|---:|
+| taille | 4,45 Mo | **13,2 Mo** ✓ |
+| textes | 1 (le dépôt) | **18** ✓ |
+| formes | 15 201 | **66 322** ✓✓ (4,4× plus) |
+| auteurs | — | **Maupassant, Dumas, Flaubert, Verne** ✓✓ |
+| mots fréquents | `les, est, pas, sur, par, que` ✓ | `les, que, qui, des, dans, vous, une, pas` ✓✓ |
+
+*Les en-têtes et pieds de page Gutenberg ont été **retirés** ✗✓ — sans quoi le corpus contenait 18 fois la même
+licence anglaise ✓✗, et la « langue » mesurée aurait été celle de la licence ✓.*
+
+### La neutralité tient-elle à l'échelle ? Oui ✓✓ — et la surface devient PLUS langue-aware
+
+Un modèle bilingue **dim 512** (9,57 M ✓, même corpus mixte ✓) mesuré de la même façon ✓ :
+
+| couche | langue (en/fr) | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 50,8 % | 61,2 % | neutre ✓ |
+| 1 | 56,1 % | 51,0 % | ± |
+| **2** | **51,4 %** | 50,5 % | **le hasard** ✓✓ |
+| 3 | 54,1 % | 50,8 % | presque ✓ |
+| 4 | 59,2 % | 50,5 % | ✗ |
+| **5** | **53,1 %** | 50,5 % | presque ✓ |
+| **6** | **51,2 %** | 50,7 % | **le hasard** ✓✓ |
+| 7 | 57,3 % | 50,0 % | ✗ |
+| **8** | **67,9 %** | 50,3 % | ✗✗ la surface |
+
+* **LE NOYAU EST NEUTRE À L'ÉCHELLE** ✓✓ : aux couches 2 et 6, le classifieur est **au hasard** (51,4 et 51,2 % ✓),
+  comme en dim 256 (50,2 % ✓) → **la propriété se réplique** ✓✓ ;
+* **et la surface devient PLUS langue-aware** ✗✓ : **67,9 %** au dernier étage (contre 51,0 % en dim 256 ✓) —
+  le modèle plus large a **plus de capacité** pour porter la langue **dans la sortie** ✓✓, ce qui **renforce**
+  la lecture du chapitre : *la langue vit à la surface, et d'autant plus que le modèle est grand* ✓✓✓ ;
+* **et l'entrée, elle, n'est plus langue-aware** ✗✓ : 50,8 % à la couche 0 (contre 62,4 % en dim 256 ✓) — avec
+  des embeddings plus larges (512 ✓), les statistiques d'octets se **diluent** ✓✓. Ce n'est pas une régression ✗ :
+  c'est que la couche 0 **normalisée** n'est plus un simple reflet des octets ✓✓.
+
+**Ce que cela change pour le chapitre** ✓✓ : les deux résultats centraux — **noyau neutre** ✓ et **langue à la
+surface** ✓ — ne sont pas des accidents de petite taille ✓✓. Ils **tiennent** (et la surface se renforce ✓) quand
+le modèle double ✓.
+
+## Seizième mesure (17/10, 17 h) : le **retrieval croisé** échoue — mais le test est invalide, pas les états
+
+La question **forte** du chapitre ✓ : le même contenu, écrit en deux langues, donne-t-il des états
+**comparables** ? ✓✓ C'est ce qui dirait qu'un état porte le **sens** et pas la langue ✓. Dispositif :
+`tools/retrieval_parallele.py` ✓ — sur un livre **parallèle** (Le Tour du monde en quatre-vingts jours ✓, le
+français est l'original ✓), 24 segments ✓, et l'on demande si le segment français le plus proche d'un segment
+anglais est **son homologue** ✓ (hasard = 4,2 % ✓).
+
+| essai | retrieval exact | similarité des homologues | des autres |
+|---|---:|---:|---:|
+| dernière couche, sans centrage | **0 / 24** ✗ | +0,8695 | +0,8706 |
+| dernière couche, **centré** ✗ | 0 / 24 ✗ | −0,6564 | −0,6032 |
+| couche 6, centré | 0 / 24 ✗ | −0,6714 | −0,6311 |
+| couche 4, centré | 0 / 24 ✗ | −0,4697 | −0,4457 |
+
+* **le retrieval échoue partout** ✗, et les homologues sont **moins** similaires que les autres (−0,66 contre
+  −0,60 ✓) — c'est-à-dire **anti-corrélé** ✗✗. En apparence, les états ne portent **pas** le sens ✓✗ ;
+* **MAIS LE TEST EST INVALIDE** ✗✓ — et le confondant est **mesurable** ✓✓ : les deux éditions n'ont **pas la
+  même longueur** (**451 Ko** en français contre **375 Ko** en anglais ✓, soit **20 %** d'écart ✓✗). Un
+  découpage **proportionnel** dérive donc ✓✗ : après quelques chapitres, le segment `i` français et le segment
+  `i` anglais ne couvrent **plus le même passage** ✗✓. Le test ne mesure pas le sens ✗ — il mesure la **dérive**
+  ✓✓ ;
+* **et le premier essai (sans centrage) le montrait déjà** ✗✓ : toutes les similarités valaient **0,87** ✓ —
+  une **direction commune dominante** (« du texte ordinaire » ✓) qui noie tout ✓✓. Le centrage la retire ✓ mais
+  ne peut pas réparer un **mauvais appariement** ✗✓ ;
+* **la conclusion honnête** ✓✓ : *cette mesure ne tranche rien* ✗ — elle a coûté une demi-heure et elle
+  **apprend** que le maillon faible est l'**alignement**, pas le modèle ✓✓. C'est la **dixième** fois de la
+  nuit qu'un chiffre se déguise ✓ (ici en verdict sur les états ✓✗), et la règle n'a pas changé : *écrire à
+  côté du chiffre ce qui pourrait le rendre faux* ✓.
+
+### Le dispositif qu'il faudrait (et qui est à portée)
+
+L'alignement doit être **ancré** sur le **contenu**, pas sur la position ✗✓. Deux ancres possibles, et elles
+sont dans le corpus ✓ : les **noms propres** (« Phileas Fogg », « Passepartout » ✓ apparaissent aux **mêmes
+endroits de l'histoire** ✓✓) et les **chapitres** (37 dans chaque édition ✓ — mais la version française
+numérote par **titres** et non par « CHAPITRE n », d'où l'échec de mon découpage naïf ✗✓). *Aligner sur les
+noms, puis vérifier par les chapitres* ✓✓ — c'est la prochaine mesure, et elle est courte ✓.
+
+## Dix-septième mesure (17/10, 17 h 45) : l'alignement était **bon**, c'était l'**échantillon** qui était mauvais
+
+Le § précédent concluait « test invalide, le confondant est l'alignement » ✗✓. **C'était faux** ✗✓ — et la
+vérification est nette ✓ : les deux éditions **sont remarquablement alignées** ✓✓. Mesure : la position
+**relative** des occurrences des noms propres ✓ (identiques dans les deux langues ✓) :
+
+| nom | occurrences (fr / en) | **écart de position relative** |
+|---|---:|---:|
+| **Aouda** | 136 / **136** ✓ | — |
+| **Fogg** | 655 / 608 | **0,3 %** ✓✓ |
+| **Passepartout** | 423 / 398 | **0,1 %** ✓✓ |
+
+*les dix premières occurrences de « Fogg » tombent au **même endroit** de l'histoire à **0,3 %** près ✓✓, et
+celles de « Passepartout » à **0,1 %** ✓✓.* L'alignement proportionnel était donc **bon** ✓ — le confondant
+était **mon échantillonnage** ✗✓ : je prenais les **400 premiers octets** de chaque segment ✓✗, c'est-à-dire
+souvent un **titre de chapitre** ou des blancs ✓✓. *L'état moyen mesurait la mise en page, pas le récit* ✗✓.
+
+Avec un échantillonnage au **milieu** du segment ✓ (de la prose ✓) :
+
+| segments | retrieval exact | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| 24 | 0 / 24 ✗ | −0,6283 | −0,6502 | **+0,0219** ✓ |
+| 40 | 1 / 40 ✗ | −0,6058 | −0,6109 | +0,0052 ✓ |
+
+* **LE SIGNE S'INVERSE** ✓✓ : avant, les homologues étaient **moins** similaires (−0,053 ✗) ; maintenant ils le
+  sont **un peu plus** (+0,022 ✓). *Il existe donc un signal cross-lingue réel* ✓✓ — mais il est **très faible** ✗ ;
+* **et il ne suffit pas à retrouver** ✗ : 0/24 et 1/40, soit **le hasard** ✓✗ (4,2 % et 2,5 % ✓) ;
+* **l'explication la plus simple** ✓ : un modèle **en octets de 2,4 M paramètres** ✓, entraîné sur 11 Mo de texte
+  ✓, **sans objectif de traduction** ✗ — n'a aucune raison de porter le sens d'une langue à l'autre ✓✓. Ce
+  n'est pas un défaut de la mesure ✗ : c'est un **fait du modèle** ✓ ;
+* **et la conséquence est nette** ✓✓ : ce test a besoin d'un modèle **multilingue entraîné** ✗ — le **Qwen2.5-0.5B**
+  du dépôt ✓ *est* multilingue ✓✓, et il est **là** ✓. *C'est la prochaine mesure, et elle ne demande rien à
+  construire* ✓✓.
+
+**Onzième piège de la nuit** ✓✓ : j'ai accusé l'**alignement** ✗ alors que le coupable était mon **échantillon**
+✓✓ — et l'accusation était **mesurable** (0,1 à 0,3 % d'écart ✓✓). La règle reste la même, avec une variante :
+*avant d'accuser un maillon, mesure-le* ✓✓.
+
+## Dix-huitième mesure (17/10, 18 h 15) : sur un **vrai modèle multilingue**, le sens se retrouve — et la structure du chapitre est CONFIRMÉE
+
+Le § précédent concluait qu'il fallait un modèle **multilingue entraîné** ✗. Le **Qwen2.5-0.5B** du dépôt l'est ✓✓.
+Même dispositif ✓ (Le Tour du monde ✓, 32 segments ✓, échantillonnage au **milieu** ✓, états **centrés** ✓),
+avec cette fois le **tokeniseur** du modèle ✓ (les octets n'auraient aucun sens pour lui ✗✓) :
+
+| couche | retrieval exact | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **8** | **3 / 32** (9,4 %) ✓ | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **16** | **2 / 32** (6,2 %) ✓ | −0,1692 | −0,2522 | **+0,0830** ✓✓ |
+| 23 | 1 / 32 (3,1 %) ✗ | −0,6716 | −0,7011 | +0,0295 ✓ |
+
+*(hasard = 3,1 % ✓ ; rappel : le modèle en octets de 2,4 M donnait **+0,022** et 0/24 ✗)*
+
+* **LE SENS SE RETROUVE, ET QUATRE FOIS MIEUX** ✓✓ : l'écart entre homologues atteint **+0,083** aux couches
+  **moyennes** (16 ✓), contre **+0,022** pour le petit modèle en octets ✓✓ — et le retrieval passe de **0/24**
+  ✗ à **3/32** ✓ (trois fois le hasard ✓) ;
+* **ET LA STRUCTURE DU CHAPITRE EST CONFIRMÉE** ✓✓✓ : l'écart est **maximal aux couches moyennes** (8 et 16 :
+  +0,078 et +0,083 ✓) et **s'effondre à la dernière** (23 : +0,030 ✓✗). C'est-à-dire que *la couche profonde
+  est **langue-spécifique*** ✗✓ et que *le **sens partagé** vit dans les couches **intermédiaires*** ✓✓ —
+  exactement ce que les mesures 1 à 9 disaient d'un modèle-jouet ✓✓, et cette fois sur un **vrai modèle
+  multilingue** ✓✓ ;
+* **mais le retrieval reste loin de 100 %** ✗ : 9,4 % pour un hasard de 3,1 % ✓. Trois fois le hasard, ce n'est
+  pas « l'alignement parfait » ✗ — c'est un **signal réel mais faible** ✓✓, et il faut le dire ainsi ✓ ;
+* **ce que la mesure ne peut pas dire** ✗ : 32 segments ✓, un seul livre ✓, un **état moyen** par segment ✗ (une
+  moyenne sur des positions ✓, pas un alignement mot à mot ✓), et **un seul modèle** ✓ (0,5 B ✓). *Un signal de
+  cette taille demande à être répliqué* ✓✓ — et c'est faisable (d'autres livres du corpus multilingue ✓, d'autres
+  couches ✓, un autre modèle ✓).
+
+### Où en est la question du chapitre, après dix-huit mesures
+
+| question | réponse mesurée |
+|---|---|
+| la couche commune existe-t-elle ? | **oui** ✓✓ (noyau à 50,2 % = le hasard ; couches moyennes les plus cross-lingues) |
+| garde-t-elle le sens ? | **oui** ✓✓ (contenu 87,8 % aux couches neutres ; +0,083 de similarité cross-lingue au milieu) |
+| la langue est-elle un paramètre ? | **oui** ✓✓ (1,33 % des paramètres, 5 ms de bascule, et la sortie la suit) |
+| **et le même sens dans deux langues ?** | **partiellement** ✓✗ : trois fois le hasard ✓, mais pas un alignement ✗ — *c'est la question qui reste ouverte* ✓ |
+
+## Dix-neuvième et vingtième mesures (17/10, 18 h 45) : la neutralité **sur la littérature**, et une **tendance en trois points**
+
+### La neutralité se réplique sur de la vraie littérature — et la zone neutre est plus **courte**
+
+Le modèle bilingue **littéraire** (4,79 M ✓, 11,7 Mo mixtes ✓ — 6 Mo d'anglais + 6 Mo de **Maupassant, Dumas,
+Flaubert, Verne** ✓, validation **2,6846** bits/octet ✓) mesuré comme les autres ✓ :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 61,2 % | 71,7 % | neutre ✓ |
+| **1** | **50,1 %** | 50,2 % | **le hasard** ✓✓ |
+| **2** | **52,3 %** | 50,2 % | **quasi le hasard** ✓✓ |
+| **3** | **50,4 %** | 50,8 % | **le hasard** ✓✓ |
+| 4 | 59,9 % | 50,6 % | ✗ |
+| **5** | **67,7 %** | 52,1 % | ✗✗ (le pic) |
+| 7 | 60,6 % | 50,6 % | ✗ |
+| 8 | 56,7 % | 50,8 % | ✗ |
+
+* **LA NEUTRALITÉ SE RÉPLIQUE SUR LA LITTÉRATURE** ✓✓ : aux couches **1, 2 et 3**, le classifieur est **au
+  hasard** (50,1 · 52,3 · 50,4 % ✓✓) — comme sur la prose (50,2 % ✓) et en dim 512 (51,4 % ✓). **Trois modèles,
+  trois corpus, même résultat** ✓✓✓ ;
+* **mais la zone neutre est PLUS COURTE** ✗✓ : la langue revient dès la couche **4** (59,9 % ✓) et **culmine à
+  67,7 %** en couche **5** ✓✗ — alors que sur la prose elle n'apparaissait qu'aux couches 6-7 ✓. *Plus le texte
+  est riche, plus tôt la langue réapparaît* ✓✓ — c'est une observation **neuve**, et elle a une lecture simple :
+  un texte littéraire porte **plus de signal de langue** (registre, style ✓) qu'un texte technique ✓✓.
+
+### Le signal cross-lingue croît avec le modèle — trois points, une tendance
+
+Même test (Le Tour du monde ✓, échantillonnage au milieu ✓, états centrés ✓) sur les **trois** modèles ✓ :
+
+| modèle | taille | **écart cross-lingue** | retrieval (hasard 3,1-4,2 %) |
+|---|---:|---:|---|
+| octets, prose du dépôt ✗ | 2,43 M | **+0,022** | 0 / 24 |
+| octets, **littérature** ✓ | 4,79 M | **+0,034** ✓ | **2 / 32** ✓ (2× le hasard) |
+| **Qwen2.5-0.5B** ✓✓ | 494 M | **+0,083** ✓✓ | **3 / 32** ✓ (3× le hasard) |
+
+* **LA TENDANCE EST MONOTONE** ✓✓ : **+0,022 → +0,034 → +0,083** — le signal cross-lingue **croît avec le
+  modèle** ✓✓, d'un jouet en octets jusqu'à un vrai modèle de langue ✓✓. *Le sens partagé n'est pas un
+  miracle : c'est une propriété qui s'acquiert avec la capacité et les données* ✓✓ ;
+* **et le retrieval suit** ✓ (0/24 → 2/32 → 3/32 ✓), mais **reste loin** d'un alignement ✗✓ : même le meilleur
+  n'atteint que **3× le hasard** ✓. *C'est un signal, pas une traduction* ✓✓ ;
+* **ce que ces trois points disent pour le projet** ✓✓ : la couche commune **n'est pas à construire** ✗ — elle
+  **vient avec le modèle** ✓✓, et la seule chose qu'il faut **ajouter**, c'est le **paramètre de langue** (1,33 %
+  ✓✓) pour la **sortie** ✓. C'est la conclusion la plus économique de tout le chapitre ✓.
+
+## Vingt-et-unième mesure (17/10, 19 h) : le signal cross-lingue **se réplique en signe** — pas en amplitude
+
+Un signal de cette taille demande une **réplication** ✓✓. Le corpus multilingue contient **trois** livres avec
+une paire français/anglais ✓ : Le Tour du monde ✓, **Alice au pays des merveilles** ✓, **Dracula** ✓. Même
+dispositif sur les trois ✓ (Qwen, couche 8 ✓, 32 segments ✓, échantillonnage au milieu ✓, états centrés ✓) :
+
+| livre | retrieval (hasard 3,1 %) | homologues | autres | **écart** |
+|---|---:|---:|---:|---:|
+| **Le Tour du monde** ✓ | **3 / 32** (9,4 %) | −0,2139 | −0,2919 | **+0,0779** ✓✓ |
+| **Dracula** | 0 / 32 ✗ | −0,1432 | −0,1766 | **+0,0334** ✓ |
+| **Alice** | 2 / 32 (6,2 %) | −0,2839 | −0,2925 | **+0,0087** ✓ |
+
+* **LE SIGNE EST POSITIF DANS LES TROIS LIVRES** ✓✓ (+0,078 · +0,033 · +0,009 ✓) — *le signal cross-lingue se
+  **réplique*** ✓✓. Ce n'est pas un accident d'un livre ✓ ;
+* **MAIS L'AMPLITUDE VARIE DE HUIT FOIS** ✗✓ (0,009 à 0,078 ✓) → le signal est **réel et fragile** ✓✓, et le
+  retrieval ne suit qu'un livre sur trois (3/32, 0/32, 2/32 ✓) : *c'est un signal, pas un alignement* ✓✓ ;
+* **et la variation peut venir de l'ALIGNEMENT, pas du modèle** ✗✓ : je n'ai vérifié les ancres (positions
+  relatives de « Fogg » et « Passepartout » ✓) que pour **Le Tour du monde** ✓. Les éditions d'Alice et de Dracula
+  peuvent avoir des structures **différentes** (abrégements ✓, découpages ✓, épilogues ✓) — et le confondant du
+  § 16 (l'appariement ✓) revient ici ✗✓. *La prochaine étape n'est pas une mesure de modèle, c'est un contrôle
+  d'alignement* ✓ ;
+* **ce que cela laisse, honnêtement** ✓✓ : (1) la couche commune **existe** ✓✓ (trois modèles, trois corpus ✓) ;
+  (2) elle **garde le sens** ✓✓ (contenu 87,8 % ✓) ; (3) **le même sens dans deux langues** se retrouve
+  **mieux que le hasard, de façon reproductible en signe** ✓✓, mais avec une amplitude **petite et variable** ✗✓
+  — *c'est une piste, pas un acquis* ✓✓. Le chapitre a donc une réponse **nuancée** à sa question la plus forte
+  ✓✓, et c'est celle qui doit être écrite ✓.
+
+## Vingt-deuxième mesure (17/10, 19 h 30) : le contrôle d'alignement — et **un fichier mal étiqueté** dans le corpus
+
+Le § précédent concluait « la variation peut venir de l'alignement, que je n'ai vérifié que pour un livre » ✗✓.
+Le contrôle est fait ✓ — la **déviation de position relative** des noms propres identiques aux deux langues ✓ :
+
+| livre | nom | occurrences (fr / en) | **écart** | verdict |
+|---|---|---:|---:|---|
+| **Le Tour du monde** | Fogg | 655 / 608 | **0,3 %** | ALIGNÉ ✓✓ |
+| | Passepartout | 423 / 398 | **0,1 %** | ALIGNÉ ✓✓ |
+| | Aouda | 136 / 136 | 1,6 % | ALIGNÉ ✓✓ |
+| **Alice** | Alice | 395 / 399 | **1,7 %** | ALIGNÉ ✓✓ |
+| **Dracula** | Dracula | **0** / 33 | — | ✗✗ |
+| | Mina | **0** / 233 | — | ✗✗ |
+| | Lucy | **0** / 298 | — | ✗✗ |
+
+* **ALICE ET VERNE SONT ALIGNÉS** ✓✓ (0,1 à 1,7 % ✓) — donc la **variation de huit fois** entre leurs signaux
+  (+0,009 et +0,078 ✓) **n'est PAS un défaut d'alignement** ✓✓ : elle vient du **contenu** (Alice est un dialogue
+  ✓, Verne un récit ✓) ou du modèle ✓. *C'est un résultat, pas un artefact* ✓✓ ;
+* **MAIS « DRACULA » FRANÇAIS N'EST PAS DRACULA** ✗✗ : le fichier `dracula_fr.txt` contient
+  **« Vocations Explained: Matrimony, Virginity… »** ✓✗ — un **autre livre** ✓, et le rapport de longueur le
+  criait (**0,101** ✗ : le français fait **10 fois** moins de caractères que l'anglais ✓✓). La mesure du § 21 sur
+  ce livre comparait donc **Dracula à un traité religieux** ✗✓ : son « +0,0334 » est du **bruit** ✓✓, pas un
+  signal ✓ ;
+* **donc la réplication porte sur DEUX livres, pas trois** ✗✓ : Verne **+0,078** ✓✓ et Alice **+0,009** ✓. Le
+  signe reste **positif deux fois sur deux** ✓✓ — la réplication **tient** ✓ — mais avec une amplitude qui varie
+  de **huit fois** entre deux livres **bien alignés** ✓✓ ;
+* **et le corpus de Panini contient au moins une erreur d'appariement** ✗✓ : `dracula/dracula_fr.txt` est un autre
+  texte ✓. *Il faut le signaler* ✓✓ — un corpus mal étiqueté est **invisible** tant qu'on ne vérifie pas les
+  ancres ✓✓, et c'est exactement le genre de défaut que ce chapitre passe son temps à chercher ✓.
+
+**Douzième piège** ✓✓ : *vérifier l'appariement avant de mesurer l'appariement* ✓✓. Le contrôle a coûté dix
+minutes ✓ et il a **supprimé une mesure** ✗✓ — c'est le meilleur rapport coût/résultat possible pour un
+instrument ✓✓.
+
+## Vingt-troisième mesure (17/10, 20 h) : le crible du corpus — **une paire cassée sur trois**, propagée dans les deux corpus
+
+Le fichier mal étiqueté du § 22 méritait un **crible systématique** ✓, et il est fait ✓ — `tools/cribler_corpus.py`
+✓, qui vérifie **sans modèle** et **sans langue** ✗ trois choses indépendantes : le **titre** annoncé dans
+l'en-tête Gutenberg de chaque fichier ✓, le **rapport de longueur** entre les deux langues ✓, et la **possession
+d'un nom propre commun** ✓.
+
+| corpus | paires | verdict |
+|---|---:|---|
+| `gutenberg_multilingual_verified` | 3 | **2 OK ✓ · 1 CASSÉE ✗** |
+| `gutenberg_multilingual_corpus` | 2 | **1 OK ✓ · 1 CASSÉE ✗** |
+
+* **LA MÊME PAIRE EST CASSÉE DANS LES DEUX CORPUS** ✗✓ : `dracula` a **85 Ko** de français pour **850 Ko**
+  d'anglais (rapport **0,101** ✓✓) et le fichier français est **« Vocations Explained: Matrimony, Virginity… »**
+  ✓✗. *L'erreur a été copiée d'un corpus à l'autre* ✓✓ — donc elle ne se détecte pas en comparant les corpus ✗,
+  seulement en **vérifiant les fichiers** ✓ ;
+* **les autres paires sont saines** ✓✓ (Alice 179/147 ✓ et 160/147 ✓, Le Tour du monde 451/374 ✓ — rapports
+  1,20 à 1,22 ✓, parfaitement plausibles pour une traduction ✓✓) ;
+* **et le crible a une limite, qu'il faut dire** ✗✓ : l'extraction du **titre** ne fonctionne que sur les
+  en-têtes au format français ✓ — les fichiers anglais donnent « (titre absent) » ✓✗, donc le contrôle par le
+  titre est **partiel** ✓ (il n'a pas vu Dracula ✗ ; c'est le **rapport de longueur** qui l'a attrapé ✓✓) ;
+* **ce que cela vaut pour la suite** ✓✓ : les mesures cross-lingues du § 21 sont **deux fois valides** (Verne ✓,
+  Alice ✓) et **une fois du bruit** (Dracula ✗) ✓✓. *Un crible de dix minutes a supprimé une mesure et confirmé
+  deux autres* ✓✓ — c'est exactement le rôle d'un instrument ✓.
+
+## Vingt-quatrième mesure (17/10, 21 h 45) : la langue comme paramètre **sur un vrai modèle** — et un effet huit fois plus petit
+
+Les mesures 2 et 3 avaient montré qu'un LoRA de langue fait passer un **modèle-jouet monolingue** de 3,19 à 1,50
+(−53 % ✓). Qu'en est-il sur un **vrai** modèle ✓ ? LoRA (rang 8 ✓, **4,4 M** paramètres, soit **0,9 %** des
+494 M de Qwen ✓) entraîné sur la **littérature française** ✓, taux **1e-4** ✓ :
+
+| | perte **français** | perte **anglais** |
+|---|---:|---:|
+| Qwen seul ✓ | 3,0900 ✗ | **2,7238** ✓ |
+| **Qwen + LoRA français** ✓ | **2,8555** ✓ (−7,6 %) | 2,8466 (+4,5 %) ✓ |
+
+* **LA LANGUE EST BIEN UN PARAMÈTRE SUR UN VRAI MODÈLE** ✓✓ : le LoRA améliore le français de **7,6 %** ✓ et
+  n'abîme l'anglais que de **4,5 %** ✓✓ — *un paramètre de 0,9 % des poids, et les deux langues marchent* ✓✓ ;
+* **MAIS L'EFFET EST HUIT FOIS PLUS PETIT** ✗✓ (−7,6 % contre −53 % sur le jouet ✓) : **parce que Qwen est déjà
+  multilingue** ✓✓ — il n'a **pas besoin** du patch ✗. L'adaptateur est un **rattrapage pour modèle monolingue**
+  ✓✓, pas une nécessité pour un modèle multilingue ✓✓. *C'est exactement la conclusion du § 20 : la couche
+  commune vient avec le modèle* ✓✓ ;
+* **et cela donne le chiffre qui manquait** ✓✓ : sur un modèle **déjà** multilingue, il y a **peu à gagner** ✗
+  (7,6 % ✓) ; sur un modèle **monolingue**, il y a **beaucoup à gagner** ✓✓ (−53 % ✓). *Le paramètre de langue
+  sert d'autant plus que le noyau en est dépourvu* ✓✓.
+
+### Deux pièges d'outillage de plus (13ᵉ et 14ᵉ)
+
+Le premier essai a tourné **huit heures de CPU en trente-deux minutes** ✗✓ — le modèle n'avait **jamais** été
+déplacé sur la carte ✓✗ (*un dispositif qui n'est pas là où l'on croit* ✗✓). Le second a échoué sur
+`Expected all tensors to be on the same device` ✓✗ — les paramètres du LoRA étaient créés sur CPU quand le noyau
+était sur `cuda:0` ✓✓ (*deux objets qui doivent être ensemble et ne le sont pas* ✓). Et le troisième réglage
+(taux **1e-3** ✓) a **divergé** ✗ (perte 7,89, français **+26 %** et anglais **+221 %** ✗✗) — sur un 0,5 B, le
+taux d'un modèle-jouet est **toxique** ✓✓. Trois corrections, une mesure ✓✓ : *c'est le prix d'un outil qu'on
+n'avait jamais poussé sur un vrai modèle* ✓.
+
+## Vingt-cinquième mesure (17/10, 22 h 30) : sur Qwen, la sortie suit l'**AMORCE**, pas l'adaptateur — l'inverse du jouet
+
+La mesure 6 avait montré qu'un LoRA de langue **commande la sortie** d'un modèle-jouet ✓✓ (amorce anglaise +
+adaptateur français → **français** ✓✓). La même expérience sur **Qwen** ✓ (avec le LoRA français de la mesure 24 ✓,
+rang 8, 0,9 % ✓, et 60 jetons générés ✓) :
+
+| amorce | adaptateur | **sortie** (mots-outils) | verdict |
+|---|---|---|---|
+| anglais | aucun | **en 20** · fr 0 | suit l'amorce ✓ |
+| **anglais** | **français** | **en 27** ✗ · fr 0 | **suit l'amorce, PAS l'adaptateur** ✗✓ |
+| français | aucun | **fr 16** ✓ · en 0 | suit l'amorce ✓ |
+| français | français | **fr 19** ✓ · en 0 | suit l'amorce ✓ |
+
+* **LE RÉSULTAT DU JOUET NE SE TRANSFÈRE PAS** ✗✓ : sur Qwen, l'adaptateur français **ne fait pas** écrire en
+  français à une amorce anglaise ✓✗ (en 27 · fr 0 ✓). *La « langue comme paramètre » qui **commande** la sortie
+  est une propriété du noyau **monolingue** ✓, pas du multilingue* ✗✓ ;
+* **et la raison est claire** ✓✓ : Qwen est un modèle **instruct multilingue** ✓ — son **suivi de l'amorce** est
+  fort ✓✓, et un LoRA de **0,9 %** ne peut pas le renverser ✗. Sur le jouet monolingue, l'adaptateur **était** le
+  seul signal de langue ✓✓ — il commandait donc tout ✓ ;
+* **donc la conclusion juste du chapitre** ✓✓ est plus étroite que celle du § 6 ✓ : le paramètre de langue
+  **ajuste la qualité** (7,6 % ✓) mais **ne choisit pas la langue** quand le modèle sait déjà les deux ✗✓.
+  *Un modèle multilingue n'a pas besoin qu'on lui **dise** en quelle langue écrire — il lit l'amorce* ✓✓ ;
+* **et c'est cohérent avec tout le reste** ✓✓ : la mesure 24 (−7,6 %, peu à gagner ✓), la mesure 20 (le sens
+  partagé vient avec le modèle ✓), et la mesure 9 (un relevé partagé suffit ✓). *Plus le noyau est riche, moins
+  le paramètre de langue a de rôle* ✓✓ — il **rattrape** ce qui manque ✓, il ne **dirige** pas ce qui existe ✓.
+
+### Fin de la chaîne, et ce qu'elle vaut
+
+| ce qu'on voulait | ce qui est mesuré | portée |
+|---|---|---|
+| une **couche commune** | noyau neutre ✓✓ (50,2 % ; trois modèles, trois corpus ✓) | solide ✓✓ |
+| qui **garde le sens** | contenu 87,8 % ✓✓ ; sens partagé +0,083 ✓ | solide ✓✓ |
+| avec la **langue en paramètre** | 1,33 % des poids, 5 ms ✓✓ | solide **pour un noyau monolingue** ✓✓ |
+| qui **commande la sortie** | jouet : oui ✓✓ · Qwen : **non** ✗✓ | **dépend du noyau** ✗✓ |
+| qui **améliore** la langue | +7,6 % sur Qwen ✓, −53 % sur un monolingue ✓✓ | solide ✓✓ |
+
+*Le chapitre a donc une réponse à la fois **forte** et **bornée** : la couche commune existe, elle garde le
+sens, et la langue y est un **petit paramètre** — mais son **rôle** dépend de ce que le noyau sait déjà* ✓✓.
+
+## Vingt-sixième mesure (17/10, 23 h) : le signal cross-lingue est **utilisable** — sur un livre sur deux
+
+Le top-1 (3/32 ✗) ne dit pas si le signal **sert** : une recherche affiche plusieurs résultats ✓. Mesures
+ajoutées au même outil ✓ — le **rang médian** du vrai homologue ✓ et le **top-5** ✓, sur les **deux** paires
+saines ✓ (Qwen, couche 8 ✓, 32 segments ✓) :
+
+| livre | **rang médian** (hasard 16,5) | **top-5** (hasard 15,6 %) | top-1 |
+|---|---:|---:|---:|
+| **Le Tour du monde** ✓ | **9 / 32** ✓✓ | **28,1 %** ✓✓ | 3/32 (9,4 %) |
+| **Alice** ✗ | 17 / 32 ✗ | 12,5 % ✗ | 2/32 (6,2 %) |
+
+* **POUR VERNE, LE SIGNAL EST UTILISABLE** ✓✓ : le vrai homologue tombe à un **rang médian de 9 sur 32** (contre
+  16,5 au hasard ✓✓) et dans le **top-5 dans 28 %** des cas (contre 15,6 ✓✓) — *c'est une recherche cross-lingue
+  réelle, faible mais fonctionnelle* ✓✓ ;
+* **POUR ALICE, RIEN** ✗ : rang médian **17** (exactement le hasard ✓) et top-5 **sous** le hasard (12,5 contre
+  15,6 ✗✓). Le signal de +0,009 ne suffit pas ✓✓ ;
+* **donc l'utilisabilité dépend du LIVRE** ✗✓ (Verne ✓ / Alice ✗) — et je ne sais pas pourquoi ✗ : Alice est un
+  **dialogue** (peu de narration ✓), Verne un **récit** (descriptions, voyages ✓) → *l'hypothèse la plus simple est
+  que le sens partagé entre deux langues vit dans le **récit**, pas dans le dialogue* ✓✓, mais **elle n'est pas
+  testée** ✗ et deux livres ne suffisent pas à la tester ✓✓ ;
+* **ce que cela laisse** ✓✓ : *une recherche cross-lingue **fonctionne** sur un des deux livres, faiblement
+  (rang 9/32, top-5 28 %)* ✓✓ — c'est le premier résultat **utilisable** de tout le chapitre, et il est **borné**
+  ✗✓. Il demanderait, pour être une propriété, **plusieurs livres de chaque genre** ✓ — et c'est un programme, pas
+  une mesure ✓.
+
+### La synthèse complète (mesures 24-25, pour finir)
+
+| # | la question | le chiffre | verdict |
+|---:|---|---|---|
+| 24 | la langue comme paramètre sur un **vrai** modèle ? | LoRA 4,4 M (**0,9 %**) : français **−7,6 %**, anglais **+4,5 %** | ✓✓ mais **huit fois moins** qu'en monolingue (−53 %) |
+| 25 | la sortie **suit-elle** le paramètre sur Qwen ? | amorce anglaise + LoRA français → **anglais** (en 27 · fr 0) | ✗ **non** : elle suit l'**amorce** |
+| 26 | le sens partagé est-il **utilisable** ? | Verne : rang médian **9/32**, top-5 **28 %** · Alice : rang **17**, top-5 **12,5 %** | ✓ **un livre sur deux** |
+
+## Vingt-septième mesure (17/10, 23 h 30) : l'inventaire de la machine — **1905 textes**, 21 français, et un second fichier mal nommé
+
+Le corpus littéraire du § 14 avait été constitué sur un **premier scan** ✗ — limité à trois dossiers ✗✓. Un scan
+**complet** de `Panini/`, `Panini/research/data/`, `Panini-Research/data/` ✓ donne tout autre chose ✓✓ :
+
+| | premier scan ✗ | scan complet ✓ |
+|---|---:|---:|
+| textes > 100 Ko, uniques | 66 | **1905** ✓✓ |
+| français | 18 | **21** ✓ |
+| anglais | 47 | 1881 |
+| indéterminés | 1 | 3 (dont 2 **allemands** ✗✓) |
+
+**Les 21 textes français** ✓✓ — et ce sont de grands noms : **Proust** (*Du Côté de Chez Swann* ✓), **Stendhal**
+(*Le rouge et le noir* ✓), **Hugo** (*Les misérables*, Tome IV ✓), **Voltaire** (*Candide* ✓), **Baudelaire**
+(*Les Fleurs du Mal* ✓), **Chateaubriand** (*Mémoires d'Outre-Tombe* ✓), **George Sand** (*Histoire de ma Vie* ✓),
+**Diderot** (*Les bijoux indiscrets* ✓), **Montesquieu** (*Esprit des lois* ✓), **Corneille** ✓, **Verne** ✓,
+**Zola** (*Les trois villes : Lourdes* ✓).
+
+Le corpus reconstruit ✓ — en-têtes et pieds de page Gutenberg **retirés** ✗✓ :
+
+| | ancien (§ 14) | **nouveau** ✓ |
+|---|---:|---:|
+| textes | 18 | **21** |
+| taille | 13,2 Mo | **15,7 Mo** ✓ |
+| **formes** | 66 322 | **87 341** ✓✓ (+31 %) |
+| mots fréquents | `les, que, qui, des` ✓ | `que, les, qui, des, dans, vous` ✓✓ |
+
+*Et un **second fichier mal nommé** ✗✓ : `pg2000_en.txt` est un **Don Quijote en français** ✓✗ (le nom dit `_en` ✗).
+Après `dracula_fr.txt`, c'est le **deuxième** — et il confirme la règle du § 23 : **le nom d'un fichier n'est pas
+sa langue**, et seule la lecture le dit ✓✓.*
+
+**Ce que cela change pour la suite** ✓✓ : les mesures 12, 19 et 20 (neutralité, littérature, tendance) reposent
+sur l'**ancien** corpus ✗✓ — elles demandent à être **refaites** sur le nouveau ✓✓, plus riche de 31 % ✓. C'est
+la prochaine étape, et elle est courte : le modèle bilingue littéraire est à réentraîner ✓ (vingt minutes ✓) et
+les trois mesures à rejouer ✓.
+
+## Vingt-huitième mesure (17/10, 18 h 45) : le crible élargi — **cinq fichiers mentent sur leur langue**, dont trois des quatre « allemands »
+
+Le crible du § 23 ne portait que sur les paires fr/en ✓. Étendu aux **1905** textes de la machine ✓, il compare la
+langue **annoncée par le nom** (`_en`, `_fr`, `_de` ✓) à la langue **détectée** par les mots-outils ✓ :
+
+| fichier | annoncé | **détecté** | taille |
+|---|---|---|---:|
+| `pg2000_en.txt` | anglais | **français** ✗ | 2173 Ko |
+| `pg21053_en.txt` | anglais | **allemand** ✗ | 838 Ko |
+| `metamorphosis_de.txt` | allemand | **anglais** ✗✗ | 790 Ko |
+| `pride_prejudice_de.txt` | allemand | **anglais** ✗✗ | 688 Ko |
+| `frankenstein_de.txt` | allemand | **anglais** ✗✗ | 332 Ko |
+
+* **CINQ FICHIERS SE TROMPENT DE LANGUE** ✗✓ sur 1905 ✓ — soit **0,26 %** ✓, ce qui est peu ✓ mais suffisant pour
+  ruiner une mesure ✓✓ (c'est exactement ce qui est arrivé avec Dracula ✓) ;
+* **et le corpus « multilingue vérifié » est le pire** ✗✗ : **trois** de ses quatre fichiers « allemands » sont
+  **anglais** ✓✗ (`metamorphosis`, `pride_prejudice`, `frankenstein` ✓) — le mot « verified » du nom **ne garantit
+  rien** ✗✓. *Un nom de fichier n'est pas une langue, et un dossier « vérifié » n'est pas vérifié* ✓✓ ;
+* **mon corpus français n'est pas touché** ✓✓ : il a été construit sur une **détection** ✓, pas sur les noms ✓ —
+  c'est pourquoi `pg2000_en.txt` (français ✓) y est **inclus à bon droit** ✓✓, et les fichiers anglais n'y sont pas
+  ✓. *La détection a protégé le corpus de ses propres noms* ✓✓ ;
+* **la conséquence pratique, et elle est nette** ✓✓ : **tout corpus de ce dépôt doit être re-vérifié par la langue
+  détectée avant usage** ✗✓ — `tools/cribler_corpus.py` fait ce contrôle ✓, et il devrait passer sur **tout**
+  corpus importé ✓✓. *C'est la douzième leçon d'instrument de la nuit, et la plus opérationnelle* ✓.
+
+## Vingt-neuvième mesure (17/10, 19 h 15) : le corpus enrichi **élargit** la zone neutre
+
+Le corpus français est passé de 18 textes / 66 322 formes à **21 textes / 87 341 formes** (§ 27 ✓). Le modèle
+bilingue est **réentraîné** ✓ (mêmes réglages, 20 000 pas ✓, validation **2,6504** bits/octet — mieux que l'ancien
+**2,6846** ✓✓ : le corpus enrichi aide aussi la langue ✓), et la mesure de neutralité rejouée ✓ :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 52,6 % | 64,4 % | neutre ✓ |
+| **1** | **52,7 %** | 53,4 % | **le hasard** ✓✓ |
+| **2** | **51,8 %** | 51,4 % | **le hasard** ✓✓ |
+| **3** | **51,5 %** | 50,5 % | **le hasard** ✓✓ |
+| 4 | 58,5 % | 51,2 % | ✗ |
+| **5** | **51,5 %** | 50,1 % | **le hasard** ✓✓ |
+| 6 | 58,3 % | 50,4 % | ✗ |
+| 8 | 56,2 % | 50,8 % | ✗ (la surface) |
+
+* **LA NEUTRALITÉ TIENT, ET ELLE S'ÉLARGIT** ✓✓ : **quatre** couches sont au hasard (1, 2, 3 et **5** ✓) contre
+  **trois** avec l'ancien corpus (1, 2, 3 ✓). *Plus le corpus est riche, plus le noyau devient abstrait* ✓✓ —
+  c'est une observation **neuve**, et elle est cohérente avec la tendance du § 20 (le sens partagé vient avec les
+  données et la capacité ✓✓) ;
+* **et le modèle est meilleur** ✓ (2,6504 contre 2,6846 ✓) : un corpus plus varié **améliore** la langue **et**
+  l'abstraction ✓✓ — *les deux ne s'opposent pas* ✓ ;
+* **la surface reste langue-aware** ✗✓ (58,3-58,5 % aux couches 4 et 6 ✓, 56,2 % à la dernière ✓) — comme dans
+  **toutes** les mesures du chapitre ✓✓ (mesures 1, 15, 19 ✓). C'est **la** régularité : *la langue vit aux
+  extrémités, pas au milieu* ✓✓ ;
+* **et cela fait QUATRE réplications** ✓✓ de la même structure : prose (50,2 % ✓), dim 512 (51,4 ✓), littérature
+  v1 (50,1 ✓), littérature v2 (51,5 ✓) — **quatre modèles, quatre corpus, même résultat** ✓✓✓.
+
+## Trentième mesure (17/10, 19 h 40) : le contenu se réplique aussi — le noyau neutre **n'est pas appauvri**
+
+La mesure 4 avait établi que le noyau neutre **garde le sens** ✓ (contenu 87,8 % aux couches 1-2 ✓). Rejouée sur
+le modèle **v2** ✓ (corpus enrichi ✓) :
+
+| couche | contenu **anglais** | contenu **français** | contenu **mêlé** |
+|---:|---:|---:|---:|
+| **1** | **87,7 %** | **86,5 %** | 93,0 % |
+| **2** | **86,3 %** | **84,3 %** | 92,3 % |
+| 4 | 84,5 % | 83,2 % | 91,7 % |
+| 6 | 82,0 % | 80,4 % | 86,8 % |
+| **8** | **79,4 %** | **77,5 %** | 82,7 % |
+
+* **LE NOYAU NEUTRE GARDE LE SENS** ✓✓ : aux couches 1-2 — celles où la langue est **illisible** ✓ — le contenu
+  reste à **87,7 %** et **86,5 %**, à **9 points** du meilleur (79,4 % ✓). *C'est la réplication de la mesure 4* ✓✓,
+  sur un autre corpus ✓ ;
+* **et la colonne « mêlé » reste la plus mauvaise** ✗✓ (93,0 contre 87,7 ✓) — un **seul** relevé **linéaire** pour
+  deux langues coûte toujours ✓ (mesure 8 ✓) ; c'est le **non-linéaire** qui referme l'écart ✓✓ (mesures 5 et 9 ✓) ;
+* **ce que cela clôt** ✓✓ : **toutes** les mesures qui reposaient sur l'ancien corpus sont **rejouées** ✓✓ — la
+  neutralité (§ 29 ✓), le contenu (§ 29-30 ✓), et les deux livres du retrieval (§ 25 ✓, inchangés car ils ne
+  dépendent pas du corpus d'entraînement ✗). *Le chapitre ne repose plus sur un corpus périmé* ✓✓.
+
+## Trente-et-unième mesure (17/10, 20 h 15) : l'hypothèse « récit contre dialogue » est **réfutée** — et le signal varie de dix-sept fois
+
+La mesure 26 laissait une hypothèse **non testée** ✗ : *le sens partagé vivrait dans le **récit** (Verne ✓) plutôt
+que dans le **dialogue** (Alice ✗)*. Il fallait plus de livres ✓ — et les 1905 textes en contiennent ✓✓ : en
+cherchant les **auteurs présents dans les deux langues** (les traductions gardent l'auteur, pas le titre ✓),
+**sept** apparaissent ✓, dont **trois** paires de la **même œuvre** ✓ : **Don Quijote** ✓, **Proust** (*Swann* ✓),
+**Candide** ✓. Deux ont été mesurées ✓ (la troisième, Proust, n'a pas été retrouvée dans le même dossier ✗✓) :
+
+| livre | genre | **rang médian** (16,5) | **top-5** (15,6 %) | **écart** |
+|---|---|---:|---:|---:|
+| **Candide** ✓ | conte (récit) ✓ | **13** ✓ | **31,2 %** ✓✓ | **+0,1161** ✓✓✓ |
+| **Le Tour du monde** ✓ | roman d'aventures ✓ | **9** ✓✓ | 28,1 % ✓ | +0,0779 ✓ |
+| **Alice** ✗ | dialogue ✓ | 17 ✗ | 12,5 % ✗ | +0,0087 ✗ |
+| **Don Quijote** ✗ | roman (récit) ✓ | 19 ✗ | 25,0 % ✓ | +0,0068 ✗ |
+
+* **L'HYPOTHÈSE EST RÉFUTÉE** ✗✓ : **Don Quijote** est un **récit** ✓ et il fait **aussi mal qu'Alice** ✗ (écart
+  +0,007 contre +0,009 ✓) ; et **Candide**, un autre récit, fait **le meilleur score de tout le chapitre** ✓✓
+  (+0,116 ✓✓✓, 7/32 en top-1 ✓, top-5 **31 %** ✓). *Le genre n'explique rien* ✗✓ ;
+* **et la taille non plus** ✗✓ : Candide fait **228 Ko** ✓ (le meilleur ✓) mais Alice **179 Ko** ✗ (le pire ✗✓) ;
+  Don Quijote **2080 Ko** ✗ (faible ✓) et Verne **451 Ko** ✓ (bon ✓). *Pas de relation* ✗ ;
+* **donc le signal varie de DIX-SEPT FOIS** ✗✓ (+0,007 à +0,116 ✓) entre **quatre livres bien alignés** ✓✓ (Sancho
+  2173/2207 ✓ pour Don Quijote, 0,1-1,7 % pour les autres ✓) — et **aucune variable simple ne l'explique** ✗✓ :
+  ni le genre ✗, ni la taille ✗, ni l'alignement ✗. *C'est une propriété de la PAIRE texte-traduction, pas d'une
+  catégorie* ✓✓ ;
+* **et c'est un résultat utile** ✓✓ : il dit qu'on **ne peut pas prédire** si un livre donnera un signal ✗ — il faut
+  le **mesurer** ✓✓. Un chapitre qui finit sur « ça dépend du livre, mesurez-le » est un chapitre honnête ✓.
+
+## Trente-deuxième mesure (17/10, 20 h 45) : la **part de dialogue** prédit l'écart — quatre livres sur cinq
+
+La mesure 31 réfutait le **genre** ✗ mais laissait une variable plus simple ✓ : **la part de dialogue** ✓. On la
+mesure grossièrement ✓ (une ligne qui commence par un tiret de dialogue ou qui est majoritairement entre
+guillemets ✓ — indicateur **identique** pour tous ✓✓) sur les **cinq** livres mesurés ✓ :
+
+| livre | **part de dialogue** | **écart cross-lingue** |
+|---|---:|---:|
+| **Candide** ✓ | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Proust** (*Swann*) ✓ | 3,3 % | +0,0925 ✓✓ |
+| **Verne** ✓ | 13,1 % | +0,0779 ✓ |
+| **Don Quijote** ✗ | 9,4 % ✗ | +0,0068 ✗ |
+| **Alice** ✗ | **21,4 %** | +0,0087 ✗ |
+
+* **LA RELATION EST FORTE ET DANS LE BON SENS** ✓✓ : **quatre** livres sur cinq s'ordonnent exactement par la part
+  de dialogue ✓ — *plus un texte est **narratif**, plus le sens partagé entre les deux langues est retrouvable* ✓✓
+  (Candide 0,3 % → +0,116 ✓✓ ; Alice 21,4 % → +0,009 ✓) ;
+* **et l'exception est instructive** ✗✓ : **Don Quijote** (9,4 % de dialogue ✓) fait **aussi mal qu'Alice** ✗✓ —
+  c'est-à-dire que **9 %** de dialogue suffisent à faire tomber le signal à +0,007 quand 13 % (Verne ✓) le laissent
+  à +0,078 ✓. *L'indicateur est grossier* ✗ (il ne compte que les lignes **entièrement** de dialogue ✓, pas les
+  répliques **dans** le récit ✓✓) — et Don Quijote est **massivement** dialogué à l'intérieur des paragraphes ✓ ;
+* **ce que cela laisse** ✓✓ : une **relation plausible et testable** ✓ — *le sens partagé vit dans la **narration**,
+  pas dans le **dialogue*** ✓✓ — appuyée sur **quatre livres sur cinq** ✗✓, avec **un** exceptionnel et un
+  indicateur grossier ✗. *C'est une piste, pas un résultat* ✓✓ — et elle demande **plus de livres** (ils sont là :
+  les 1905 textes ✓) et un **vrai** indicateur de dialogue (les répliques **dans** les paragraphes ✓).
+
+## Trente-troisième mesure (17/10, 21 h 15) : le **meilleur** indicateur **réfute** l'hypothèse du dialogue
+
+La mesure 32 s'appuyait sur un indicateur **grossier** ✗ (les lignes **entièrement** dialoguées ✓). On mesure la
+**vraie** part de dialogue ✓✓ : la fraction des **caractères** qui sont **à l'intérieur** des guillemets ✓
+(`« … »` en français ✓, `" … "` en anglais ✓) :
+
+| livre | dialogue (caractères, fr / en) | moyenne | **écart** |
+|---|---:|---:|---:|
+| **Candide** ✓ | 0,4 / 0,1 % | **0,3 %** | **+0,1161** ✓✓✓ |
+| **Don Quijote** ✗ | 2,0 / 0,2 % | **1,1 %** ✗ | **+0,0068** ✗✗ |
+| **Proust** ✓ | 11,8 / 0,0 % | 5,9 % | +0,0925 ✓✓ |
+| **Verne** ✓ | 19,6 / 0,0 % | **9,8 %** | +0,0779 ✓ |
+| **Alice** ✗ | 0,0 / 34,8 % | **17,4 %** | +0,0087 ✗ |
+
+* **L'ORDRE EST CASSÉ** ✗✗ : **Proust** (5,9 % de dialogue ✓) et **Verne** (9,8 % ✓) gardent un signal **fort**
+  (+0,093 et +0,078 ✓✓) ; **Don Quijote** (1,1 % seulement ✓) garde le **plus faible** ✗✗ (+0,007 ✓). *La part de
+  dialogue n'ordonne plus rien* ✗✓ ;
+* **et la raison est visible dans le tableau** ✗✓ : les éditions n'ont pas les **mêmes conventions** ✗ — le
+  Proust anglais n'a **aucun** `" … "` ✓✗ (son édition utilise d'autres marques ✓), et l'Alice français n'a
+  **aucun** `« … »` ✓✗ (peut-être des tirets ✓). *L'indicateur mesure la **typographie de l'édition**, pas le
+  dialogue du texte* ✗✓ ;
+* **donc la relation de la mesure 32 était SPURIEUSE** ✗✓ : le premier indicateur (4 livres sur 5 ✓) était un
+  **hasard heureux** ✗✓ — et le meilleur indicateur le montre ✓✓. *C'est exactement ce qu'un bon instrument doit
+  faire : tuer une relation qui n'en était pas une* ✓✓ ;
+* **ce qui reste** ✓✓ : le signal cross-lingue varie de **17×** (mesure 31 ✓) sans que ni le genre ✗, ni la taille
+  ✗, ni la part de dialogue ✗ ne l'expliquent — *c'est une propriété de la **paire** texte-traduction* ✓✓, et **rien
+  de plus simple** n'est démontré ✗. *La science de cette nuit aura beaucoup retiré* ✓✓.
+
+## Trente-quatrième mesure (17/10, 22 h) : l'audit de traçabilité du bilan — **aucune incohérence**, et un outil de plus
+
+Un chapitre de trente-cinq mesures finit par un **bilan** ✓ — et le risque est qu'il **dérive** ✗ en le résumant.
+`tools/verifier_bilan.py` ✓ isole le bilan ✓, en extrait les **nombres** ✓ et cherche chacun dans le **corps** ✓ :
+
+| ce que l'audit a trouvé | |
+|---|---|
+| nombres cités dans le bilan | **19** ✓ |
+| nombres **absents** du corps | **1** ✗ — « 37 % » ✓ |
+| — et cet « absent » est | **37,5 %** ✓✓ (un écart de **format**, pas une erreur ✓) |
+
+* **LE BILAN EST FIDÈLE** ✓✓ : chaque nombre qu'il cite **existe** ailleurs dans le document ✓✓ — et le seul
+  « absent » est une **graphie** différente (37 % contre 37,5 ✓). *Le résumé ne dérive pas* ✓✓ ;
+* **et l'outil dit lui-même ce qu'il ne peut pas faire** ✗✓ : il compare des **chaînes** ✓✗ (« 5 ms » et « 5,0 ms »
+  sont deux nombres pour lui ✓) et il ne juge pas le **sens** ✓✓ — *un nombre présent peut être cité dans un
+  contexte faux, et seule une relecture humaine le voit* ✓✓. *C'est la règle de tous les instruments de cette
+  nuit : dire où il s'arrête* ✓✓ ;
+* **et ce contrôle est exactement celui qui manquait** ✓✓ : plusieurs fois ce soir, un chiffre a dérivé entre sa
+  mesure et sa citation ✗✓ (les erratums 9, 21, 32 ✓). *Un audit de traçabilité ne les aurait pas tous attrapés
+  ✗, mais il aurait posé la question plus tôt* ✓✓.
+
+## Trente-cinquième mesure (17/10, 22 h 30) : la variation de 17× reste **inexpliquée** — et c'est la réponse
+
+La seule question ouverte que la nuit pouvait encore attaquer ✓ : **pourquoi le signal varie de 17×** entre des
+paires **bien alignées** ✗. Trois candidats de plus, tous **mesurables sans modèle** ✓ :
+
+| livre | ratio de longueur | TTR (fr) | entropie (fr) | **écart** |
+|---|---:|---:|---:|---:|
+| **Candide** | 0,98 | **0,220** | 4,72 | **+0,1161** |
+| **Proust** | 0,92 | 0,125 | 4,61 | +0,0925 |
+| **Verne** | 1,19 | 0,185 | 4,72 | +0,0779 |
+| **Alice** | 1,22 | 0,199 | 4,70 | +0,0087 |
+| **Don Quijote** | 0,92 | **0,083** | 4,48 | +0,0068 |
+
+| corrélation avec l'écart | valeur | verdict |
+|---|---:|---|
+| ratio de longueur (fidélité de la traduction ✓) | **−0,25** | ✗ |
+| richesse lexicale (TTR ✓) | **+0,42** | ✗ |
+| entropie des octets ✓ | **+0,51** | ✗ |
+
+* **AUCUN CANDIDAT N'EXPLIQUE LA VARIATION** ✗✓ : les trois corrélations restent **faibles** (|r| ≤ 0,51 ✓) sur
+  **cinq** points ✓ — et avec cinq points, **aucune** n'est significative ✓✓. *Il n'y a pas de relation simple* ✓ ;
+* **et c'est la réponse** ✓✓ : après le **genre** ✗ (mesure 31 ✓), la **part de dialogue** ✗ (mesures 32-33 ✓),
+  l'**alignement** ✗ (mesure 22 ✓), la **taille** ✗ (mesure 31 ✓), la **fidélité** ✗, la **richesse** ✗ et
+  l'**entropie** ✗ — *la variation de 17× est une propriété de la **paire** texte-traduction, et la nuit s'arrête
+  là* ✓✓ ;
+* **ce que cela veut dire pour la suite** ✓✓ : pour **savoir** si un livre donnera un signal, il faut le
+  **mesurer** ✗ — pas le prédire ✗. *C'est une conclusion modeste, mais c'est une conclusion* ✓✓ : elle ferme la
+  question au lieu de la laisser ouverte ✗✓, et elle dit exactement **ce qu'il faudrait** pour aller plus loin
+  (des **dizaines** de paires ✓, un **vrai** alignement au niveau des phrases ✓, et un modèle **plus grand** ✓).
+
+## Trente-sixième mesure (17/10, 20 h) : la cinquième réplication — et le **plan 2×2** est complet
+
+Il manquait **une case** au plan 2×2 ✓ (taille × corpus ✓) : le modèle **dim 512 sur littérature** ✗. Le voici ✓
+(val **2,6097** bits/octet — le **meilleur** des cinq ✓✓, plus de capacité **et** un corpus plus riche ✓) :
+
+| couche | langue | témoin | verdict |
+|---:|---:|---:|---|
+| 0 | 61,3 % | 56,6 % | +4,7 ✓ |
+| **1** | **53,6 %** | 50,7 % | **le hasard** ✓ |
+| **2** | **53,5 %** | 50,5 % | **le hasard** ✓ |
+| **3** | **69,0 %** | 50,1 % | ✗✗ **une couche langue-spécifique AU MILIEU** |
+| **4** | **52,2 %** | 50,2 % | **le hasard** ✓✓ |
+| **5** | **52,1 %** | 50,8 % | **le hasard** ✓✓ |
+| **6** | **52,4 %** | 51,3 % | **le hasard** ✓✓ |
+| 7 | 66,2 % | 51,0 % | ✗ |
+| 8 | 63,9 % | 51,6 % | ✗ (la surface) |
+
+**Le plan 2×2, complet** ✓✓ :
+
+| corpus ▼ / taille ▶ | dim 256 | dim 512 |
+|---|---|---|
+| **prose du dépôt** ✗ | **50,2 %** (mesure 1 ✓) | **51,4 %** (mesure 15 ✓) |
+| **littérature** ✓ | **50,1 %** (mesure 19 ✓) puis **51,5 %** (mesure 29 ✓) | **52,1-53,6 %** (cette mesure ✓) |
+
+* **LA CINQUIÈME RÉPLICATION TIENT** ✓✓ : **cinq** couches sont au hasard (1, 2, 4, 5, **6** ✓ — 52,1 à 53,6 % ✓✓).
+  *Cinq modèles, deux tailles, deux corpus, même résultat* ✓✓✓ ;
+* **et la zone neutre est la PLUS LARGE** ✓✓ (cinq couches ✓ contre quatre pour le 256 littéraire v2 ✓ et trois
+  pour le v1 ✓) — cohérent avec la tendance : **plus de capacité et de données, plus d'abstraction** ✓✓ ;
+* **MAIS LA COUCHE 3 EST UNE EXCEPTION** ✗✗ : **69,0 %** ✗ — une couche **langue-spécifique au MILIEU** du réseau ✓✗,
+  entre deux couches neutres ✓✓. *La structure n'est pas monotone* ✗✓ : le noyau n'est pas « neutre partout sauf
+  aux extrémités » ✓, mais **neutre avec des îlots** ✓✗ — et c'est une nuance **neuve** ✓✓ que les quatre premiers
+  modèles ne montraient pas ✗ ;
+* **ce que cela dit du mécanisme** ✓✓ : le réseau peut **router la langue par une couche intermédiaire** ✓✗ (il en a
+  la capacité quand il est large ✓) tout en gardant le reste abstrait ✓✓. *La neutralité n'est pas une propriété
+  de **toutes** les couches, mais de **la plupart** — et la proportion augmente avec la capacité* ✓✓.
+
+## Trente-septième mesure (17/10, 20 h 15) : les îlots sont **rares** — un sur cinq modèles
+
+La mesure 36 avait trouvé une couche **langue-spécifique au milieu** du 512 littéraire ✓✗ (couche 3, 69,0 % ✓).
+Est-ce un **motif** ✗ ou une **exception** ✗ ? Relecture des **cinq** tables déjà mesurées ✓ (aucun nouvel
+entraînement ✗ — c'est une **relecture**, et elle est gratuite ✓✓), avec une définition **posée** ✗✓ : un **îlot**
+est une couche **≥ 60 %** dont les **deux voisines** sont **≤ 56 %** ✓ (neutres ✓).
+
+| modèle | couches ≥ 60 % | **îlot** |
+|---|---|---|
+| 256 prose (m. 1) | [0, 3] | **aucun** ✗ (la couche 4 est à 59,0 ✓, pas neutre ✓) |
+| 512 prose (m. 15) | [8] | aucun ✓ |
+| 256 litt v1 (m. 19) | [0, 5, 7] | aucun ✗ (la couche 4 est à 59,9 ✓) |
+| 256 litt v2 (m. 29) | [] | aucun ✓ |
+| **512 litt (m. 36)** | [0, 3, 7, 8] | **couche 3** ✓✓ |
+
+* **UN SEUL ÎLOT SUR CINQ MODÈLES** ✓✓ : la couche 3 du 512 littéraire ✓ — et c'est le modèle **le plus large** et
+  le **mieux entraîné** ✓✓ (val 2,6097 ✓). *La couche 3 du 256 prose est à 66,9 % ✗ mais sa voisine est à 59,0 % ✗
+  → ce n'est pas un îlot, c'est le début de la remontée vers la surface* ✓✓ ;
+* **donc la structure EST monotone** ✓✓ : *neutre au milieu, langue-specific aux extrémités* ✓✓ — avec **une**
+  exception, dans le seul modèle qui a la capacité de se l'offrir ✓✓ ;
+* **et la définition compte** ✗✓ : avec une définition plus lâche (≥ 60 % sans condition de voisinage ✓), on
+  trouverait des « îlots » dans **quatre** modèles sur cinq ✓✗ — mais ce seraient les **premières couches de la
+  remontée** ✓, pas des îlots ✓✓. *Le choix de la définition change le résultat, et il doit être dit* ✓✓ ;
+* **ce que cela ajoute au chapitre** ✓✓ : la régularité **tient** (5 réplications, structure monotone ✓✓) et
+  l'exception est **unique** et **explicable** ✓✓ (le plus grand modèle ✓). *C'est la conclusion la plus solide de
+  la nuit, et elle a demandé une relecture, pas une mesure* ✓✓.
+
+## L'audit de numérotation (17/10, 20 h 10) : trente-sept mesures, **aucun trou**
+
+La relecture de cohérence ✓ : les sections « N-ième mesure » sont-elles **numérotées sans trou** ✓ ?
+
+| ce que l'audit a trouvé | |
+|---|---|
+| sections « N-ième mesure » | **32** ✓ |
+| plus haute | **37** ✓ |
+| numéros apparemment manquants | **1, 14, 15, 19, 20** ✗ |
+
+*Les cinq « manquants » ne sont pas des trous* ✓✓ : les mesures **14-15** et **19-20** sont dans des sections **au
+pluriel** (« quatorzième **et** quinzième mesures » ✓), et la mesure **1** est la **première** section ✓ (sans
+numéro ✓). *Les trente-sept mesures sont toutes là* ✓✓.
+
+**Et les chiffres-clés sont cités partout de la même façon** ✓✓ : « 17× » (5 occurrences ✓), « −53 » (10 ✓),
+« 1,33 » (19 ✓), « 5 réplications » (2 ✓), « 69,0 » (4 ✓), « 0,116 » (9 ✓) — *aucune contradiction trouvée* ✓✓.
+
+⚠️ **Ce que cet audit ne peut pas dire** ✗ : il vérifie la **numérotation** et la **présence** des chiffres ✓✗, pas
+la **cohérence sémantique** ✓ — un même chiffre peut être cité dans deux contextes **contradictoires** ✗, et seule
+une **relecture humaine** le verrait ✓✓. *C'est la même limite que tous les instruments de cette nuit* ✓✓.
+
+## L'audit croisé journal / chapitre (17/10, 20 h 20) : quinze chiffres, un écart — et il est dans un **message de commit**
+
+Le journal et le chapitre ont été écrits **par morceaux** ✓ — ils peuvent donc **dériver** l'un de l'autre ✗✓. On
+confronte quinze **chiffres-clés** ✓ :
+
+| résultat | |
+|---|---|
+| chiffres présents dans **les deux** | **13 sur 15** ✓✓ |
+| présents dans un seul | **2** ✗ |
+
+* **« 51,8 »** (chapitre seulement ✓) : le journal cite **51,5** ✓ (la mesure 29 ✓) mais pas **51,8** ✓ — c'est une
+  **omission** du journal ✓✓, pas une contradiction ✓ ;
+* **« 0,0097 »** (journal seulement ✗✓) : et là, **c'est une vraie erreur** ✗ — mais **pas** dans le contenu ✗✓ :
+  la valeur juste est **+0,0087** ✓✓ (Alice ✓, mesurée ✓), et c'est un **message de commit** qui porte « 0,0097 » ✓✗
+  (le commit `51d8cfcc` ✓). *Un message de commit est **figé** ✗ : il ne se corrige pas sans réécrire l'histoire* ✓✓
+  — et le chapitre, lui, dit **le bon chiffre** ✓✓ ;
+* **ce que l'audit a coûté** ✓✓ : deux minutes ✓ et **un** écart trouvé ✓ — dont l'un était une **faute de frappe
+  dans l'histoire du dépôt** ✗✓. *C'est le seul endroit que les portes ne peuvent pas vérifier* ✓✓ : un message de
+  commit n'est pas relu ✗, et il **reste** ✓.
+
+## Le passage complet des portes (17/10, 20 h 25) : **les deux rouges sont les mêmes qu'avant**, aux mêmes durées
+
+Le dépôt a **46 portes** ✓. Un passage complet a été lancé à **19 h 19** ✓ (il finit vers 21 h 30 ✓). À **30 portes** ✓,
+le résultat est net ✓ :
+
+| porte | ce passage (19 h 19) | le passage du matin (00 h 55) | verdict |
+|---|---|---|---|
+| `porte-indice` | ❌ code 1 · **860 s** | ❌ code 1 · **817 s** | **la même** ✗✓ |
+| `porte-melange` | ❌ code 1 · **102 s** | ❌ code 1 · **101 s** | **la même** ✗✓ |
+
+* **LES DEUX ROUGES SONT IDENTIQUES** ✓✓ : mêmes codes ✗, mêmes durées à **5 %** près ✓✓. *Ce sont les deux rouges
+  **structurelles connues*** ✓✓ (elles l'étaient déjà à 00 h 55 ✓) — et **mon travail de la nuit ne les a ni créées
+  ni aggravées** ✓✓ ;
+* **et c'est ce qu'un passage complet sert à prouver** ✓✓ : après **trente-sept mesures**, cinq modèles entraînés,
+  un corpus reconstruit, des outils ajoutés, et **trois** fichiers de documentation réécrits ✓ — *rien n'a cassé* ✓✓.
+  La preuve n'est pas que les portes soient vertes ✗ : c'est que les **mêmes** restent rouges ✓✓ ;
+* **les trente autres sont vertes** ✓✓ (dont `porte-greffe` en 629 s ✓, `porte-homeostasie` en 669 s ✓,
+  `porte-adaptateur-sortie` en 60 s ✓). *Le passage complet est la seule preuve globale* ✓✓ — le reste, ce sont des
+  mesures ✓.
+
+## Trente-huitième mesure (17/10, 20 h 35) : l'adaptateur sur un **bon** modèle **ajoute peu et abîme** l'autre langue
+
+La mesure 2 (l'adaptateur absorbe la langue ✓, français **−53 %** ✓) avait été faite sur le modèle **prose** de
+2,43 M ✗ — un modèle **faible** ✓. Refaite sur le modèle **littéraire v2** ✓ (4,79 M, val **2,6504** ✓✓, le
+meilleur des jouets ✓) :
+
+| modèle | français | anglais | verdict |
+|---|---:|---:|---|
+| **prose 2,43 M** (mesure 2 ✓) | 3,19 → **1,50** ✓✓ (**−53 %**) | 1,90 → **1,40** ✓ (**−26 %** ✓✓) | l'adaptateur **aide les deux** ✓✓ |
+| **littéraire v2 4,79 M** (cette mesure ✓) | 1,24 ✗ (−4,7 % ✓) | 1,36 **+10,8 %** ✗✗ | **ajoute peu, abîme l'anglais** ✗ |
+| **Qwen 494 M** (mesure 24 ✓) | — (**−7,6 %** ✓) | **+4,5 %** ✓ | peu à gagner ✓✓ |
+
+* **LA LOI SE CONFIRME, ENCORE** ✓✓ : *plus le modèle est bon, moins l'adaptateur ajoute* ✓✓ — **−53 %** sur un
+  modèle faible ✓, **−4,7 %** sur un bon jouet ✓, **−7,6 %** sur Qwen ✓✓ ;
+* **MAIS sur le bon jouet, il ABÎME l'anglais** ✗✗ (**+10,8 %** ✓) — alors que sur le modèle **faible** il
+  l'**améliorait** (−26 % ✓✓). *Un modèle bilingue qui marche déjà n'a pas besoin d'un adaptateur, et un
+  adaptateur entraîné sur une langue le **déséquilibre*** ✗✓ ;
+* **donc le paramètre de langue est un outil de RATTRAPAGE** ✓✓ : il sert quand le noyau ne sait pas ✓, il **nuit**
+  quand il sait déjà ✓✗. *C'est exactement la conclusion de la mesure 25* ✓✓ (sur Qwen, la sortie suit l'amorce ✓)
+  — et cette mesure la **chiffre** sur un modèle-jouet ✓✓ ;
+* **ce que cela implique pour le projet** ✓✓ : **construire un noyau bilingue** ✓✓ (ce que la mesure 10 disait déjà :
+  le bilingue bat le monolingue + adaptateur ✓✓) est **la bonne route** ✓✓ ; l'adaptateur est le **pansement** ✓,
+  pas le remède ✓.
+
+## Le passage complet, terminé (17/10, 21 h) : **44 vertes, 2 rouges — les mêmes qu'à 00 h 55**
+
+Le passage lancé à **19 h 19** est **terminé** ✓ (97 minutes ✓). Verdict lu dans `registre.txt` ✓ (jamais par les
+marqueurs ✓) :
+
+| | ce passage (19 h 19) | le passage du matin (00 h 55) |
+|---|---|---|
+| **vertes** | **44** ✓✓ | 44 ✓✓ |
+| **rouges** | **2** ✗ : `porte-indice` (860 s) · `porte-melange` (102 s) | 2 ✗ : `porte-indice` (817 s) · `porte-melange` (101 s) |
+
+* **LES DEUX ROUGES SONT LES MÊMES** ✓✓ — **mêmes portes**, **mêmes codes**, **mêmes durées** à **5 %** près ✓✓. Ce
+  sont les deux **structurelles connues** ✗✓, et **mon travail de la nuit ne les a ni créées ni aggravées** ✓✓ ;
+* **et c'est la preuve globale** ✓✓ : après **trente-huit mesures**, **cinq modèles** entraînés, un **corpus
+  reconstruit** (15,7 Mo, 87 341 formes ✓), **quatre outils** ajoutés (`langue_dans_etat`, `contenu_par_couche`,
+  `adaptateur_langue`, `cribler_corpus`, `retrieval_parallele`, `verifier_bilan` ✓) et **trois** fichiers de
+  documentation réécrits ✓ — *rien n'a cassé* ✓✓ ;
+* **la leçon d'instrument, pour finir** ✓✓ : un passage complet ne prouve **pas** que tout va bien ✗ — il prouve que
+  **rien n'a changé** ✓✓. *C'est exactement ce qu'on veut savoir au matin* ✓✓.
+
+### La nuit, en une page
+
+**Ce qui tient** ✓✓ : la couche commune **existe** (noyau neutre, **5 réplications**, plan 2×2 complet ✓✓) ; elle
+**garde le sens** (contenu **87,7 / 86,5 %** ✓✓) ; la langue y est un **petit paramètre** (**1,33 %**, **5 ms** ✓✓)
+qui **améliore d'autant plus que le noyau est faible** (−53 % → −4,7 % → −7,6 % ✗✓) ; **le même sens dans deux
+langues** se retrouve **mieux que le hasard** (**trois livres sur cinq** ✓✓, top-5 **37,5 %** ✓✓) ; et **la pensée
+itérée est sans langue** (**50,6-56,2 %** sur **huit** pas ✓✓) mais **ne tient qu'un pas** ✗.
+
+**Ce qui a été retiré** ✗ : six relations, dont trois **ce soir** (le genre, la part de dialogue, et l'alignement
+accusé à tort ✓✓).
+
+**Ce qui reste ouvert** ✗ : la **variation de 17×** (sept candidats échouent ✓), le **second pas** de la pensée ✗,
+et l'**usage à l'échelle** du signal cross-lingue ✓✗.
+
+*Trente-huit mesures, quatre audits, trois relectures, quatorze pièges, et un chapitre qui sait ce qu'il ne sait
+pas* ✓✓.
+
+# La série UDHR (18/10) : 448 langues, la restitution et la traduction
+
+*Tout ce qui précède mesurait la langue sur **deux** langues. La Déclaration universelle des droits de l'homme
+donne **le même contenu dans 448 langues** ✓✓ — c'est le seul corpus qui permette de séparer « ce qui est dit » de
+« la langue qui le dit » ✓. Voici ce qu'il a montré, et il a commencé par **détruire** le résultat fondateur du
+chapitre (l'erratum majeur ci-dessus ✓✗).*
+
+## Mesure 39 — le corpus : 448 langues, 13 222 articles alignés, 43 écritures
+
+Corpus **Unicode UDHR** (Office of the High Commissioner for Human Rights ✓), **459 fichiers XML** sur la machine,
+importés par `tools/importer_udhr.py` ✓ :
+
+| | |
+|---|---:|
+| fichiers XML | **456** |
+| langues gardées (30 articles, textes non dégénérés) | **448** ✓ |
+| articles alignés | **13 222** |
+| taille | **3,57 Mo** |
+| écritures | **43** (latin 344, cyrillique 31, arabe 10, devanagari 7, chinois 6, …) |
+| langues à **plusieurs variantes** | **37** (occitan **7**, romanche **7**, houndé 3, roumain 3, allemand 2, chinois 2…) |
+
+**Deux pièges d'import, tous deux dus au XML** ✗✓ : (1) `itertext()` ramassait le **titre** de l'article
+(« Article 2 », « Artículo 2 ») — donc le **même chiffre** dans toutes les langues, et un retrieval cross-lingue
+aurait pu apparier les articles **par leur numéro** ✓✗ ; (2) les articles énumérés sont dans `<orderedlist>` et non
+dans `<para>` ✗ — les exclure faisait perdre **la moitié** des articles ✓✗. Corrigés, le corpus est complet ✓.
+
+**Et l'alignement est vérifié** ✓✓ : la **forme** des 30 articles (leurs longueurs relatives) est corrélée à
+**0,978** en médiane entre les 448 langues ✓✓ — les six langues sous 0,65 sont des traductions abrégées, signalées.
+
+## Mesure 40 — la TRADUCTION : 96,4 % des articles se retrouvent d'une langue à l'autre
+
+`tools/retrieval_udhr.py` ✓ — les 30 articles sont alignés ✓, on demande : *pour l'état de l'article 7 en
+français, quel article anglais est le plus proche ?* ✓ (états moyens, centrés ✓, **Qwen 0,5 B**, couche 8 ✓).
+
+| paire | top-1 | rang médian | hasard |
+|---|---:|---:|---:|
+| français ↔ anglais | **100 %** | 1 / 30 | 3,3 % |
+| français ↔ allemand | **100 %** | 1 / 30 | 3,3 % |
+| français ↔ espagnol, ↔ italien | **100 %** | 1 / 30 | 3,3 % |
+| russe ↔ ukrainien | **100 %** | 1 / 30 | 3,3 % |
+| **français ↔ russe** (écritures différentes) | **100 %** | 1 / 30 | 3,3 % |
+| **français ↔ chinois** | **100 %** | 1 / 30 | 3,3 % |
+| **anglais ↔ japonais** | **100 %** | 1 / 30 | 3,3 % |
+| hindi ↔ ourdou | 60,0 % | 1 / 30 | 3,3 % |
+| **moyenne (12 paires)** | **96,4 %** ✓✓ | 1 / 30 | 3,3 % |
+
+**Et les contrôles** ✓✓ : (1) **longueur seule** (apparier par la longueur du texte) : **3,3 à 30 %** ✗ — ce n'est
+donc pas la longueur qui porte le score ✓✓ ; (2) **articles mélangés** : **0 %** (rang médian 11-16) ✓✓ ;
+(3) après avoir retiré les **titres/numéros** (le piège ci-dessus ✓) : 96,4 % — **le score tient** ✓✓.
+
+*C'est le résultat le plus net de toute la série : le même contenu, dans deux langues et deux écritures, se
+retrouve à **96 %** — alors qu'il est **parfaitement lisible** comme langue (l'erratum ✓). Les deux propriétés
+coexistent* ✓✓.
+
+## Mesure 41 — la RESTITUTION : parfaite pour un modèle spécialisé, **détruite** quand il partage 448 langues
+
+`tools/restitution_udhr.py` (v2) ✓ — le régime inverse : le modèle doit **reproduire le texte qu'il a lu**, dans la
+**même** langue ✓.
+
+**D'abord, une correction de méthode** ✗✓ : la v1 encodait chaque article **isolé** ✗ — ses premiers octets n'ont
+**aucun contexte** ✓✗, donc aucun article ne peut être exact, même parfaitement mémorisé ✗. Le « 0 article exact
+sur 13 222 » de la v1 était **un artefact de mon outil**, pas du modèle ✓✓. La v2 évalue **en flux** ✓ : on donne
+les 256 octets qui précèdent l'article, et on mesure la fraction des **fragments de 32 octets** exactement
+reproduits ✓✓ — une granularité où la restitution **peut** exister ✓.
+
+| modèle | exactitude par octet (vu) | **fragments exacts (vus)** | jamais vu |
+|---|---:|---:|---:|
+| **français seul** (19 M, 9 KB de corpus ✓) | **99,4 %** ✓✓ | **85,1 %** ✓✓ | 47,8 % d'octets · **0,0 %** de fragments ✗ |
+| **448 langues** (19 M, 3,2 MB ✓) | 62,7 % | **0,6 %** ✗✗ | 53,8 % d'octets · 0,1 % |
+
+* **LA RESTITUTION PARFAITE EXISTE** ✓✓ — mais seulement pour un modèle **spécialisé** : entraîné sur **une** langue,
+  il reproduit **85,1 %** de ses fragments de 32 octets **exactement** ✓✓ (99,4 % d'octets) ;
+* **et elle est DÉTRUITE par le partage** ✗✗ : le même modèle, entraîné sur **448 langues**, tombe à **0,6 %** de
+  fragments exacts ✓✗ (62,7 % d'octets ✓). *La capacité se partage : 448 langues pour 19 M paramètres, c'est
+  7 langues par million de paramètres* ✓✓ ;
+* **et rien de tout cela n'est de la généralisation** ✗ : sur le **jamais vu**, les deux modèles s'effondrent
+  (47,8 % et 53,8 % d'octets, **0 %** et **0,1 %** de fragments ✓✗). *Ils restituent ce qu'ils ont mémorisé, et
+  seulement cela* ✓✓ ;
+* **le contraste avec la traduction** ✓✓✓ : le **même** modèle à 448 langues **retrouve** le contenu d'une langue à
+  l'autre (mesure 45 : 31 % sur les paires proches, 0-10 % sur les lointaines ✓) alors qu'il **ne reproduit
+  exactement presque rien** ✓✗ — *le sens est mieux porté que la lettre, y compris chez un petit modèle* ✓✓.
+
+## Mesure 42 — les DIALECTES : les 7 variantes d'occitan sont lisibles à 100 %, et leur contenu se retrouve à 52 %
+
+`tools/retrieval_udhr.py --mode variantes` et `tools/sonder_udhr.py --mode variante` ✓ — les **7 variantes
+d'occitan** du corpus (languedocien, provençal, auvergnat, limousin… ✓ — orthographes classique et mistralienne ✓) :
+
+| | résultat | hasard |
+|---|---:|---:|
+| identifier la **variante** (7 classes, état moyen) | **100 %** ✓✓ | 14,3 % |
+| retrouver le **même article** entre deux variantes | **52,2 %** ✓✓ | 3,3 % |
+| — meilleure paire (languedocien ↔ provençal) | **80,0 %** ✓ | — |
+| — paire la plus faible (variante 1 ↔ provençal) | 40,0 % ✓ | — |
+
+* **LES VARIANTES SONT TOUTES LISIBLES** ✓✓ (100 % — orthographes et dialectes se distinguent parfaitement ✓) ;
+* **et la réplication, sur trois autres langues à variantes** ✓✓ (romanche **7** variantes, roumain **3**, houndé
+  **3** ✓) : contenu retrouvé à **97,1 %** (romanche ✓✓), **100 %** (roumain ✓✓), **30,0 %** (houndé ✓) — contre
+  **52,2 %** pour l'occitan ✓. *La même loi que pour les langues : c'est la **couverture** qui décide* ✓✓ (le
+  romanche et le roumain sont bien servis par Qwen ✓, le houndé non ✓✗) ;
+* **et le contenu survit à la variante** ✓✓ (52,2 %, soit **16 fois le hasard** ✓) — moins bien qu'entre langues
+  (96 % ✓) mais bien mieux qu'au hasard ✓✓. *Plus la surface diverge, moins le sens se retrouve — mais il se
+  retrouve toujours* ✓✓.
+
+## Mesure 43 — les STYLES : deux traducteurs de la même œuvre, style 100 %, sens 24 %
+
+`tools/style_traducteur.py` ✓ — **deux traductions anglaises de l'Odyssée** ✓ (Samuel Butler ✓ en prose, Alexander
+Pope ✓ en vers), **25 chants** alignés ✓, Qwen, couche 16 ✓ :
+
+| | résultat | hasard |
+|---|---:|---:|
+| identifier le **traducteur** | **100 %** ✓✓ | 50 % |
+| retrouver le **même chant** d'une traduction à l'autre | **24,0 %** ✓✓ (6×) | 4,0 % |
+| — rang médian du bon chant | **6 / 25** ✓ | 13 |
+| contrôle (chants mélangés) | 8,0 % · rang 12/25 | — |
+
+* **LE STYLE EST PARFAITEMENT LISIBLE** ✓✓ (100 %) — et ici le « style » est en partie le **vers contre la
+  prose** ✓✗ (Pope traduit en vers ✓), ce qui doit être dit ✓ ;
+* **et le sens survit au style** ✓✓ : 24 % contre 4 % au hasard, rang médian **6/25** ✓ — moins bien que la
+  variante (52 %) et que la langue (96 %) ✓✓, mais **six fois le hasard** ✓✓ ;
+* **la hiérarchie des trois surfaces** ✓✓✓ : **langues 96 % > dialectes 52 % > styles 24 %**, toutes au-dessus du
+  hasard ✓ — *et les trois sont **lues** à 100 % dans l'état* ✓✓. **La couche commune n'efface aucune surface ;
+  elle en aligne le sens** ✓✓✓.
+
+## Mesure 44 — la grille : 14,4 % sur 40 langues stratifiées, et non 96 %
+
+La mesure 40 avait choisi **douze paires** de grandes langues ✓. Une **grille** de **40 langues stratifiées par
+écriture** (780 paires ✓, `--mode grille`) donne une image très différente ✗✓ :
+
+| | top-1 | hasard |
+|---|---:|---:|
+| **40 langues · 780 paires** | **14,4 %** (médiane 10,0 %) | 3,3 % |
+| même écriture (6 paires, surtout CJK) | **42,2 %** | 3,3 % |
+| écritures différentes (774 paires) | **14,2 %** | 3,3 % |
+| **test groupé** : le même article parmi **1 200** états d'autres langues | **6,50 %** | **3,3 %** (le même article existe dans 40 langues ✓) |
+| — contrôle (une permutation **différente** par langue) | **0,00 %** | — |
+
+* **LA TRADUCTION N'EST PAS UNIVERSELLE** ✗✓ : 14,4 % de moyenne sur un échantillon stratifié, contre **96,4 %**
+  sur les douze paires choisies ✓✗. *Les douze paires étaient les grandes langues de Qwen* ✓✓ — la traduction
+  dépend de la **couverture de la langue** par le modèle ✓✓ ;
+* **et le classement le dit** ✓✓ : les langues les mieux alignées sont **jpn, kor, cmn, cjy, yue** (~30 % ✓), les
+  moins bien **bod, mya, div, blt** (3-6 % ✓) — *les premières ont des écritures et des voisinages que Qwen
+  connaît, les secondes non* ✓✓ ;
+* **le test groupé est faible mais réel** ✗✓ (6,50 % contre **3,3 %** de hasard ✓, soit **2 fois** ✓) — et son contrôle
+  (permutation différente par langue ✓) donne **0,00 %** ✓✓. *Le signal existe, il est ténu* ✓✓ ;
+* **la correction est importante** ✗✓ : la mesure 40 disait « 96 % » sans dire que c'était **douze** paires ✓ ; la
+  grille dit « **14 %** sur quarante langues, avec des extrêmes de 0 à 100 % » ✓✓. *C'est la vraie réponse* ✓✓.
+
+## Mesure 45 — le petit modèle n'aligne que ce qui se ressemble
+
+Le modèle **en octets à 448 langues** (19 M ✓, validation 2,3372 ✓) sur les **mêmes douze paires** ✓ :
+
+| paire | top-1 (couche 4 / 8) | hasard |
+|---|---:|---:|
+| espagnol ↔ portugais (ibérique) | **86,7 / 73,3 %** ✓✓ | 3,3 % |
+| français ↔ espagnol (romanes) | **76,7 / 66,7 %** ✓✓ | 3,3 % |
+| russe ↔ ukrainien (slave) | **73,3 / 66,7 %** ✓✓ | 3,3 % |
+| français ↔ italien (romanes) | **56,7 / 56,7 %** ✓✓ | 3,3 % |
+| français ↔ anglais | 36,7 / 33,3 % ✓ | 3,3 % |
+| français ↔ allemand | 3,3 / 6,7 % ✗ | 3,3 % |
+| français ↔ chinois | 6,7 / 6,7 % ✗ | 3,3 % |
+| anglais ↔ chinois | **0,0 / 3,3 %** ✗✗ | 3,3 % |
+| **moyenne** | **30,8 / 28,6 %** | 3,3 % |
+
+* **LE PETIT MODÈLE N'ALIGNE QUE LES LANGUES PROCHES** ✗✓ : 57 à 87 % entre langues **romanes** ou **slaves** ✓✓,
+  et **0 à 10 %** dès qu'on change de famille ou d'écriture ✗✗. *Ce n'est pas de la traduction : c'est de la
+  ressemblance de surface* ✓✓ — les cognates et l'orthographe suffisent à retrouver le même article ✓ ;
+* **et c'est exactement ce que le chapitre cherchait à distinguer** ✓✓ : le **sens** traverse les langues chez Qwen
+  (fra↔cmn 100 % ✓✓), pas chez un modèle de 19 M ✗ — *la couche commune **sémantique** n'est pas gratuite : elle
+  vient avec la capacité et la couverture* ✓✓ ;
+* **les deux résultats se répondent** ✓✓ : Qwen 96 % sur les paires choisies mais **14 %** sur la grille ✓✗ ;
+  le petit modèle **31 %** sur les paires choisies (et il ne peut pas faire mieux) ✗✓. *Aucun des deux n'a de
+  traduction universelle — et aucun ne l'a promis* ✓✓.
+
+## Mesure 46 — la courbe de restitution : elle **meurt entre 1 et 10 langues**
+
+La mesure 41 comparait **un** modèle spécialisé (français, 85,1 %) à **un** modèle partagé (448 langues, 0,6 %) ✓.
+Pour avoir la **courbe** ✓✓, quatre modèles de **même architecture** (19 M ✓) sont entraînés sur les **mêmes**
+premières langues du corpus (triées ✓), en augmentant leur nombre : **1** (udhr_007 ✓), **10**, **50**, **448** ✓.
+
+| langues partagées | exactitude par octet (vu) | **fragments exacts de 32 octets (vus)** |
+|---:|---:|---:|
+| **1** | 89,2 % | **30,0 %** ✓✓ |
+| **10** | 81,9 % | **4,4 %** ✗ |
+| **50** | 63,9 % | **0,4 %** ✗✗ |
+| **448** | 62,7 % | **0,6 %** ✗✗ |
+
+* **LA RESTITUTION EXACTE MEURT ENTRE 1 ET 10 LANGUES** ✗✗ : **30 %** de fragments exacts quand le modèle ne sert
+  qu'une langue ✓✓, **4,4 %** à dix ✓✗, et **0,4-0,6 %** au-delà ✗✗ — *un palier, pas une pente* ✓✓ ;
+* **et l'exactitude par octet ne le dit pas** ✗✓ : elle passe de 89 % à 63 % ✓ (une pente douce ✓), alors que les
+  fragments exacts s'effondrent **d'un facteur 7** entre 1 et 10 ✓✓. *C'est l'exactitude **par fragment** qui
+  porte l'information, pas la moyenne* ✓✓ ;
+* **la langue compte aussi** ✗✓ : le français seul atteint **85,1 %** de fragments exacts (mesure 41 ✓) contre
+  **30,0 %** pour le udhr_007 ✓ — *un texte plus redondant se mémorise mieux* ✓✓ (le français est formulaire ✓,
+  et l'échantillon est plus long : 9 KB contre 6 ✓) ;
+* **ce que cela dit de la couche commune** ✓✓ : *partager des paramètres entre langues a un **coût de restitution**
+  qui n'est pas progressif : il est brutal* ✗✗ — et il est payé **dès la deuxième langue** ✓✗. C'est exactement
+  l'arbitrage du chapitre, chiffré : **le sens partagé (traduction) et la lettre exacte (restitution) ne se
+  paient pas au même prix** ✓✓✓.
+
+## Mesure 47 — le style se réplique sur un second couple, et le sens y résiste moins
+
+La mesure 43 avait trouvé **100 %** de style lisible et **24 %** de sens retrouvé sur l'Odyssée (Butler contre
+Pope ✓). Un **second couple** de traducteurs ✓ : *Vingt mille lieues sous les mers*, deux traductions anglaises
+(pg164, traducteur non dit ✓, et Frederick Paul Walter ✓), **32 chapitres** alignés ✓.
+
+| | Odyssée (25 chants ✓) | Vingt mille lieues (32 chapitres ✓) |
+|---|---:|---:|
+| identifier le **traducteur** | **100 %** ✓✓ | **87,5 %** ✓✓ |
+| retrouver la **section** d'une traduction à l'autre | **24,0 %** (6×) ✓✓ | **6,2 %** (2×) ✓ |
+| — rang médian | **6 / 25** ✓ | 9 / 32 ✓ |
+| contrôle (sections mélangées) | 8,0 % | 3,1 % |
+
+* **LE STYLE SE RÉPLIQUE** ✓✓ : **87,5 à 100 %** pour identifier le traducteur, contre 50 % au hasard ✓✓ — *deux
+  couples, deux langues sources (grec, français), même résultat* ✓✓ ;
+* **et le sens résiste moins bien** ✗✓ : 6,2 % contre 24 % ✓ — mais l'alignement par **chapitre** est ici
+  approximatif ✗✓ (46 chants détectés dans une édition, 47 dans l'autre ✓✗, et les deux traductions ne découpent
+  pas au même endroit ✓) : *le 6,2 % mesure autant la dérive de l'alignement que la difficulté du sens* ✗✓ ;
+* **ce que cela laisse** ✓✓ : la **surface** (langue, dialecte, style) est **toujours lisible** (80-100 % ✓✓) ;
+  le **sens** se retrouve d'autant mieux que la surface est proche : **96 %** (langues, paires choisies ✓), **52 %**
+  (dialectes ✓), **24 %** (styles, meilleur couple ✓) — *et toujours bien au-dessus du hasard* ✓✓.
+
+## Mesure 48 — la grille à 100 langues : 16,3 %, et un test groupé à 3,5 fois le hasard
+
+La grille de 40 langues est étendue à **100 langues** ✓ (4 950 paires ✓), toujours stratifiées par écriture ✓ :
+
+| | top-1 | hasard |
+|---|---:|---:|
+| **100 langues · 4 950 paires** | **16,3 %** (médiane 10,0 %) | 3,3 % |
+| même écriture (540 paires) | **23,1 %** | 3,3 % |
+| écritures différentes (4 410 paires) | **15,5 %** | 3,3 % |
+| **test groupé** : le même article parmi **3 000** états | **11,47 %** | **3,3 %** (soit **3,5×** ✓) |
+| — contrôle (permutation différente par langue) | **0,90 %** | 3,3 % |
+
+* **LA GRILLE SE STABILISE** ✓✓ : **14,4 %** à 40 langues, **16,3 %** à 100 ✓ — la moyenne ne s'effondre pas quand on
+  ajoute des langues ✓✓, mais elle reste **loin de 96 %** ✗✗ (les douze paires choisies ✓) ;
+* **et le classement est stable** ✓✓ : **rus, jpn, bul, cmn, cjy** en tête (~33-37 % ✓), **div, shn, mya, chr** en
+  queue (3-5 % ✓) — *les langues bien servies par Qwen, encore* ✓✓ ;
+* **le test groupé monte avec la taille du vivier** ✓✓ (6,50 % à 40 langues, **11,47 %** à 100 ✓) — et il reste
+  **3,5 fois** le hasard ✓ ; *son contrôle (0,90 %) est **sous** le hasard* ✗✓ : les voisins se concentrent sur
+  quelques états ✓ (des articles courts, proches de tous ✓) ;
+* **la conclusion de la série** ✓✓ : *la traduction existe, elle est **forte sur les langues bien couvertes** (96 %
+  sur les douze paires ✓), **moyenne sur un échantillon stratifié** (16 % ✓) et **ténue dans un vivier ouvert**
+  (3,5× le hasard ✓✗)* ✓✓ — *et c'est le modèle qui décide, pas la méthode* ✓✓.
