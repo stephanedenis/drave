@@ -1382,3 +1382,23 @@ numéro ✓). *Les trente-sept mesures sont toutes là* ✓✓.
 ⚠️ **Ce que cet audit ne peut pas dire** ✗ : il vérifie la **numérotation** et la **présence** des chiffres ✓✗, pas
 la **cohérence sémantique** ✓ — un même chiffre peut être cité dans deux contextes **contradictoires** ✗, et seule
 une **relecture humaine** le verrait ✓✓. *C'est la même limite que tous les instruments de cette nuit* ✓✓.
+
+## L'audit croisé journal / chapitre (17/10, 20 h 20) : quinze chiffres, un écart — et il est dans un **message de commit**
+
+Le journal et le chapitre ont été écrits **par morceaux** ✓ — ils peuvent donc **dériver** l'un de l'autre ✗✓. On
+confronte quinze **chiffres-clés** ✓ :
+
+| résultat | |
+|---|---|
+| chiffres présents dans **les deux** | **13 sur 15** ✓✓ |
+| présents dans un seul | **2** ✗ |
+
+* **« 51,8 »** (chapitre seulement ✓) : le journal cite **51,5** ✓ (la mesure 29 ✓) mais pas **51,8** ✓ — c'est une
+  **omission** du journal ✓✓, pas une contradiction ✓ ;
+* **« 0,0097 »** (journal seulement ✗✓) : et là, **c'est une vraie erreur** ✗ — mais **pas** dans le contenu ✗✓ :
+  la valeur juste est **+0,0087** ✓✓ (Alice ✓, mesurée ✓), et c'est un **message de commit** qui porte « 0,0097 » ✓✗
+  (le commit `51d8cfcc` ✓). *Un message de commit est **figé** ✗ : il ne se corrige pas sans réécrire l'histoire* ✓✓
+  — et le chapitre, lui, dit **le bon chiffre** ✓✓ ;
+* **ce que l'audit a coûté** ✓✓ : deux minutes ✓ et **un** écart trouvé ✓ — dont l'un était une **faute de frappe
+  dans l'histoire du dépôt** ✗✓. *C'est le seul endroit que les portes ne peuvent pas vérifier* ✓✓ : un message de
+  commit n'est pas relu ✗, et il **reste** ✓.
