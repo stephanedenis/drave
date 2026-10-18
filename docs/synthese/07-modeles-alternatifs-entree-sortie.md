@@ -85,7 +85,7 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 | **un ÎLOT langue-spécifique** existe — dans **un** modèle sur cinq ✗✓ | 36 ✓ | couche 3 à **69,0 %** au milieu du 512 littéraire ✓✗ |
 | **le sens partagé est au milieu** | 18 ✓✓ | **+0,083** aux couches 8-16, **+0,030** à la dernière ✓✓ |
 | **la langue est un petit paramètre** | 2, 3, 7, 24 ✓✓ | **1,33 %** des poids, **5 ms** de bascule ✓✓ |
-| **le paramètre améliore la langue** | 2, 24 ✓✓ | **−53 %** (monolingue), **−7,6 %** (Qwen) ✓ |
+| **le paramètre améliore la langue** — **d'autant plus que le noyau est faible** ✓✓ | 2, 24, 38 ✓✓ | **−53 %** (modèle faible ✓), **−4,7 %** (bon jouet ✗), **−7,6 %** (Qwen ✓) ; et sur le bon jouet il **abîme** l'anglais (**+10,8 %** ✗) |
 | **on peut penser sans langue** | 11 ✓✓ | **50,6-56,2 %** sur **huit** itérations ✓✓ |
 
 **Ce qui a été RETIRÉ**, et qu'il ne faut pas citer comme acquis ✗ :
