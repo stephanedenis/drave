@@ -1,7 +1,7 @@
 # Synthèse théorique de Drave
 
 > **Ce que ce dossier est.** Une explication **complète et vulgarisée** de ce que Drave sait faire, de
-> son fonctionnement interne, et des idées qui le gouvernent. Six chapitres, six schémas, et à la fin de
+> son fonctionnement interne, et des idées qui le gouvernent. Sept chapitres, sept schémas, et à la fin de
 > chacun la même question : *« comment sait-on que c'est vrai ? »* — parce que dans ce dépôt, une idée
 > qui n'est pas mesurée n'est pas une idée, c'est une intention.
 
@@ -14,7 +14,7 @@
 | savoir **ce qui marche et ce qui ne marche pas** | [chapitre 5 — la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) |
 | **utiliser** le dépôt ce soir | [`docs/utilisation.md`](../utilisation.md) |
 
-## Les six chapitres
+## Les sept chapitres
 
 | # | chapitre | ce qu'il explique | schéma |
 |---|---|---|---|
@@ -24,7 +24,7 @@
 | 4 | [les douze facultés](04-les-facultes-et-la-biologie.md) | C1-C12 : ce qu'on cherche à donner à un modèle, et à quoi on le reconnaît | ![facultés](schemas/facultes.svg) |
 | 5 | [la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) | le travail de la nuit du 16/10 : lire le sens, itérer, et le prix | ![pensée](schemas/pensee.svg) |
 | 6 | [comment savoir qu'on a raison](06-comment-savoir.md) | les portes, le registre, et les cinq pièges d'instrument | ![portes](schemas/portes.svg) |
-| 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | la couche commune qui abstrait la langue : cinq familles, et le critère qui décide | ![couche commune](schemas/couche-commune.svg) |
+| 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | la couche commune qui abstrait la langue : **38 mesures** — un **noyau neutre** (cinq réplications), la langue en **1,33 %** des poids, **six relations retirées** et ce qui reste ouvert | ![couche commune](schemas/couche-commune.svg) |
 
 ## Trois principes, qui reviennent partout
 
