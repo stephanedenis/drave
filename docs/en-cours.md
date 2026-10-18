@@ -4,7 +4,7 @@
 > documentation affiche en premier. Il dit l'état **courant**, pas l'histoire (l'histoire est dans
 > `journal/` et dans les fiches).
 
-**Mis à jour : 2026-10-17, 20 h 40 HAE.**
+**Mis à jour : 2026-10-18, 0 h 20 HAE.**
 
 ## Le travail du moment : la couche commune entrée-sortie (chapitre 7)
 
