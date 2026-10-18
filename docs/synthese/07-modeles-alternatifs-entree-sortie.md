@@ -511,13 +511,20 @@ langue ? ✗✓. `tools/releve_parametre.py` ✓, au dernier étage ✓ :
 
 ### La chaîne des corrections, assumée
 
-Ce chapitre a maintenant **deux erratums** ✓✓, et c'est le signe qu'il progresse :
+Ce chapitre a maintenant **trois erratums** ✓✓, et c'est le signe qu'il progresse :
+*(et il y en a eu un **quatrième**, sur l'**instrument** et non sur une mesure : voir la ligne 16 du tableau ci-dessous)*
 
 | mesure | ce qu'elle disait | ce que la suivante a corrigé |
 |---|---|---|
 | 5 | « le relevé n'est pas propre à la langue » ✓ | incomplet : comparé à des lecteurs **linéaires** seulement ✗ |
 | 8 | « le relevé **est** teinté de la langue » (pénalité +8,7 à +19,5 ✗) | vrai pour un **transfert** ✗, mais la mesure 9 montre qu'un relevé appris sur les **deux** langues ne perd que **0,7 point** ✓✓ |
-| 9 | « le relevé partagé suffit » ✓✓ | — *(à confirmer sur un modèle plus grand ✗ : 2,4 M est un jouet)* |
+| 9 | « le relevé partagé suffit » ✓✓ | — *(à confirmer sur un modèle plus grand ✗ : 2,4 M est un jouet — confirmé depuis : 0,7 point sur Qwen aussi ✓✓)* |
+| 16 | « le test est invalide, le confondant est l'**alignement** » ✗✓ | **faux** : les éditions sont alignées à 0,1-1,7 % ✓✓ ; le confondant était mon **échantillonnage** (les 400 premiers octets, souvent des titres ✓✗) |
+| 17 | « l'échantillon au milieu change le signe » ✓ | **confirmé** : +0,022 contre −0,053 ✓✓, mais le signal reste faible ✗ |
+| 22 | « le corpus de Panini contient une erreur d'appariement » ✓✓ | **confirmé et étendu** : **cinq** fichiers mentent sur leur langue, dont trois des quatre « allemands » du corpus « vérifié » ✗✗ |
+| 31 | « le genre explique la variation » ✗ | **faux** : Don Quijote (récit) fait aussi mal qu'Alice ✓ |
+| 32 | « la part de dialogue l'explique » ✗ | **faux** : la relation est **spurieuse** ✗✓ — le meilleur indicateur (caractères entre guillemets) mesure la **typographie de l'édition** ✓✗ |
+| 33 | « la variation est inexpliquée » ✓✓ | **confirmé** : sept candidats, aucun significatif ✓ |
 
 *Trois mesures, deux corrections, et aucune des trois n'est jetée* ✓✓ : chacune reste vraie **de sa question** ✓.
 C'est la différence entre se contredire ✗ et **préciser** ✓✓.
