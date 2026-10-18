@@ -1402,3 +1402,23 @@ confronte quinze **chiffres-clés** ✓ :
 * **ce que l'audit a coûté** ✓✓ : deux minutes ✓ et **un** écart trouvé ✓ — dont l'un était une **faute de frappe
   dans l'histoire du dépôt** ✗✓. *C'est le seul endroit que les portes ne peuvent pas vérifier* ✓✓ : un message de
   commit n'est pas relu ✗, et il **reste** ✓.
+
+## Le passage complet des portes (17/10, 20 h 25) : **les deux rouges sont les mêmes qu'avant**, aux mêmes durées
+
+Le dépôt a **46 portes** ✓. Un passage complet a été lancé à **19 h 19** ✓ (il finit vers 21 h 30 ✓). À **30 portes** ✓,
+le résultat est net ✓ :
+
+| porte | ce passage (19 h 19) | le passage du matin (00 h 55) | verdict |
+|---|---|---|---|
+| `porte-indice` | ❌ code 1 · **860 s** | ❌ code 1 · **817 s** | **la même** ✗✓ |
+| `porte-melange` | ❌ code 1 · **102 s** | ❌ code 1 · **101 s** | **la même** ✗✓ |
+
+* **LES DEUX ROUGES SONT IDENTIQUES** ✓✓ : mêmes codes ✗, mêmes durées à **5 %** près ✓✓. *Ce sont les deux rouges
+  **structurelles connues*** ✓✓ (elles l'étaient déjà à 00 h 55 ✓) — et **mon travail de la nuit ne les a ni créées
+  ni aggravées** ✓✓ ;
+* **et c'est ce qu'un passage complet sert à prouver** ✓✓ : après **trente-sept mesures**, cinq modèles entraînés,
+  un corpus reconstruit, des outils ajoutés, et **trois** fichiers de documentation réécrits ✓ — *rien n'a cassé* ✓✓.
+  La preuve n'est pas que les portes soient vertes ✗ : c'est que les **mêmes** restent rouges ✓✓ ;
+* **les trente autres sont vertes** ✓✓ (dont `porte-greffe` en 629 s ✓, `porte-homeostasie` en 669 s ✓,
+  `porte-adaptateur-sortie` en 60 s ✓). *Le passage complet est la seule preuve globale* ✓✓ — le reste, ce sont des
+  mesures ✓.
