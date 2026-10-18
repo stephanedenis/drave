@@ -1,0 +1,31 @@
+# La documentation de Drave Natif — état, mission, vision
+
+> **Ce dossier n'est pas un dépôt de résultats.** Les chiffres, les séries de mesures et les comptes rendus vivent
+> dans [`reports/`](../reports/). Ici : ce qui **reste vrai** quand les chiffres changent — la mission, l'état
+> actuel, l'architecture, les concepts, et les modes d'emploi.
+
+## La mission, en un paragraphe
+
+Drave Natif se construit **couche par couche**. La première — et la priorité absolue — est la **couche commune
+entrée-sortie** : un module qui **lit et produit toutes les langues, dialectes et styles**, dans tous les registres,
+et qu'on juge sur sa **qualité de traducteur** (restitution à l'identique, et traduction du sens d'une langue à
+l'autre). La seconde — seulement quand la première est fiable — est un **module de pensée abstraite indépendant de
+la langue**. On ne passe pas à la suivante tant que la précédente est perfectible.
+
+## Par où commencer
+
+| si vous voulez… | lisez |
+|---|---|
+| **l'état actuel**, en quelques lignes | [en-cours.md](en-cours.md) |
+| la **mission** et l'ordre des priorités | [AGENTS.md](../AGENTS.md) (racine du dépôt) |
+| la **synthèse théorique** (7 chapitres, 7 schémas) | [synthese/index.md](synthese/index.md) |
+| **utiliser** le dépôt | [utilisation.md](utilisation.md) |
+| les **chiffres mesurés** | [`reports/`](../reports/) |
+| le **récit** des journées | [`journal/`](../journal/) |
+
+## La règle de rangement
+
+`docs/` dit l'**état**, la **mission**, la **vision** ; `reports/` porte les **résultats** ; `journal/` porte le
+**récit daté**. Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `reports/` — il reste ici
+un résumé de l'état et le lien vers la fiche. *C'est la règle que ce dépôt a le plus souvent violée ; elle est
+maintenant écrite.*
