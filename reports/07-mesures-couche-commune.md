@@ -1782,3 +1782,28 @@ La grille de 40 langues est étendue à **100 langues** ✓ (4 950 paires ✓), 
 * **la conclusion de la série** ✓✓ : *la traduction existe, elle est **forte sur les langues bien couvertes** (96 %
   sur les douze paires ✓), **moyenne sur un échantillon stratifié** (16 % ✓) et **ténue dans un vivier ouvert**
   (3,5× le hasard ✓✗)* ✓✓ — *et c'est le modèle qui décide, pas la méthode* ✓✓.
+
+## Mesure 49 — l'alignement suit la GÉNÉALOGIE des langues
+
+La grille de 60 langues (1 770 paires ✓, Qwen, couche 8 ✓) est maintenant **regroupée par niveau généalogique** ✓✓,
+grâce à la classification **Glottolog** (`tools/genealogie_udhr.py` ✓ : 441 langues UDHR → **55 familles** ✓,
+branche = les 3 premiers niveaux du chemin ✓) :
+
+| niveau | top-1 | paires |
+|---|---:|---:|
+| **même branche** (3 niveaux) | **30,7 %** ✓✓ | 141 |
+| **même famille, autre branche** | **22,0 %** ✓ | 121 |
+| **familles différentes** | **15,2 %** | 1 508 |
+| hasard | 3,3 % | — |
+
+* **L'ALIGNEMENT SUIT LA GÉNÉALOGIE** ✓✓ : 30,7 % entre langues de la même branche, 22,0 % dans la même famille,
+  15,2 % entre familles ✓✓ — **monotone**, et **2 fois** le hasard entre familles différentes ✓. *Le modèle encode
+  donc une structure qui ressemble à la généalogie* ✓✓ ;
+* **mais le confondant de l'écriture reste** ✗✓ : les paires « même branche » sont largement **CJK** (cjy↔cmn,
+  cjy↔gan, cjy↔hak : 100 % ✓), et l'écriture partage y contribue ✓. *Le test devrait contrôler l'écriture* ✗✓ —
+  c'est la réplication à faire ;
+* **et le test groupé (1 800 états) monte à 15,02 %** ✓✓ (4,5× le hasard, contrôle 0,44 % ✓) — plus le vivier est
+  grand, plus le même article se retrouve ✓ ;
+* **ce que cela change pour la couche** ✓✓ : il faut **organiser les tests par niveau** (famille, branche, langue,
+  dialecte, style) et **annoncer le hasard de chaque niveau** ✓✓ — c'est la règle de
+  `docs/genealogie-des-langues.md` ✓, et elle est maintenant outillée ✓.

@@ -54,7 +54,14 @@ les atomes, pour supprimer le confondant langue/époque.
    Drave) ne dit **rien** de la **généalogie** — Panini a montré qu'une signature de surface peut être dominée par
    l'époque.
 
-## 4. Où en est Drave (état au 18/10)
+## 4. La preuve que la structure compte (18/10)
+
+La grille de 60 langues, regroupée par niveau Glottolog, donne un ordre **monotone** : **même branche 30,7 %** >
+**même famille 22,0 %** > **familles différentes 15,2 %** (hasard 3,3 %) — *l'alignement du modèle suit la
+généalogie* (fiche : `reports/07-mesures-couche-commune.md`, mesure 49). ⚠️ Le confondant de l'**écriture** reste ✗✓
+(les paires « même branche » sont surtout CJK) : la réplication doit contrôler l'écriture.
+
+## 5. Où en est Drave (état au 18/10)
 
 - **langues** : 448 langues UDHR ; la surface est **lue à 80-100 %** ; le **sens** se retrouve à **96 %** sur les
   paires bien couvertes, **16 %** sur 100 langues stratifiées, **3,5×** le hasard dans un vivier ouvert ;

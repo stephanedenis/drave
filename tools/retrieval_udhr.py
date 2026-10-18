@@ -82,6 +82,7 @@ def main() -> int:
     ap.add_argument("--tokeniseur", action="store_true")
     ap.add_argument("--max-variantes", type=int, default=7)
     ap.add_argument("--iso-variante", default="", help="la langue dont on compare les variantes ✓ (oci, roh, ron, hus…)")
+    ap.add_argument("--genealogie", default="", help="data/udhr/genealogie.json ✓ : regroupe les paires par FAMILLE et par BRANCHE ✓✓")
     a = ap.parse_args()
     articles = charger_articles(); meta = charger_meta()
     par_iso = collections.defaultdict(list)
@@ -139,6 +140,24 @@ def main() -> int:
                 res.append((t1, rk, fichiers[i], fichiers[j]))
         print(f"\n  {len(res)} paires · top-1 moyen {np.mean([x[0] for x in res]):.1f} % · "
               f"médian {np.median([x[0] for x in res]):.1f} % · hasard 3,3 %")
+        if a.genealogie and pathlib.Path(a.genealogie).exists():
+            g = json.loads(pathlib.Path(a.genealogie).read_text())
+            def fam(f): return g.get(pathlib.Path(f).name, {}).get("famille", "(inconnue)")
+            def br(f):
+                # la « branche » = les 3 premiers niveaux du chemin Glottolog ✓ (famille + 2 sous-niveaux ✓) :
+                # le chemin complet ne coïncide que pour des dialectes d'une même langue ✓✗.
+                return "/".join(g.get(pathlib.Path(f).name, {}).get("branche", "").split("/")[:3])
+            groupes = {"même branche": [], "même famille, autre branche": [], "familles différentes": []}
+            for t1, rk, fa, fb in res:
+                if br(fa) and br(fa) == br(fb):
+                    groupes["même branche"].append(t1)
+                elif fam(fa) == fam(fb) and fam(fa) != "(inconnue)":
+                    groupes["même famille, autre branche"].append(t1)
+                else:
+                    groupes["familles différentes"].append(t1)
+            print("\n  PAR NIVEAU GÉNÉALOGIQUE (Glottolog ✓) :")
+            for k, v in groupes.items():
+                if v: print(f"    {k:28s} {np.mean(v):5.1f} % · {len(v):4d} paires")
         memes = [x[0] for x in res if meta[x[2]]["script"] == meta[x[3]]["script"]]
         diff = [x[0] for x in res if meta[x[2]]["script"] != meta[x[3]]["script"]]
         print(f"  même écriture : {np.mean(memes):.1f} % ({len(memes)} paires) · "
