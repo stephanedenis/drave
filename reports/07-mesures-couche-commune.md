@@ -1854,3 +1854,27 @@ articles UDHR ✓), Qwen 0,5 B, 8 articles par paire ✓ :
 * **conséquence pour la couche** ✗✓ : la couche entrée-sortie **n'est pas encore un traducteur** ✓✗ — c'est
   exactement ce que `AGENTS.md` exige de mesurer avant de passer à la pensée abstraite ✓✓. *Le chantier 5 est
   ouvert, et son premier chiffre est un échec* ✓✓.
+
+## Mesure 51 — le miroir de sortie : la boucle ne valide pas encore l'entrée
+
+Le principe (AGENTS.md §7) : la sortie (**sens → texte**) est plus fiable que l'entrée (**texte → sens**), et sert
+de **miroir** — ce que l'entrée a compris doit pouvoir être **redît** par la sortie ✓✓. `tools/miroir_boucle.py`
+traduit, puis **revient** : entrée A → sortie B → entrée A ✓. Domaine juridique, Qwen 0,5 B, 6 articles, fra:eng :
+
+| | chrF |
+|---|---:|
+| **direct** (A→B contre référence humaine) | **35,8** |
+| **boucle** (A→B→A contre la source) | **24,9** |
+| plancher (source contre elle-même) | 100 |
+
+* **LE MIROIR NE VALIDE PAS L'ENTRÉE** ✗✗ : la boucle ne récupère que **24,9** de chrF contre la source ✓✗ — le
+  modèle **perd les trois quarts** du texte en faisant l'aller-retour ✓✓. *Ce que l'entrée a compris, la sortie ne
+  sait pas le redire* ✗✗ ;
+* **et les deux chiffres se lisent ensemble** ✓✓ : direct **35,8** (faible) **et** boucle **24,9** (faible) — *le
+  modèle n'est ni bon ni cohérent* ✗✓ ; une boucle haute **seule** aurait dit « cohérent avec ses propres erreurs »
+  ✓✓ (le piège est écrit dans l'outil) ;
+* **conséquence pour la couche** ✓✓ : le miroir est l'instrument qui **manquait** — il transforme « le modèle
+  traduit mal » en « le modèle ne peut pas garantir ce qu'il a compris » ✗✓, ce qui est exactement la propriété
+  qu'exige `AGENTS.md` §7 avant la pensée abstraite ✓✓ ;
+* **la suite** ✓✓ : la boucle doit être mesurée **par domaine et par langue** (elle est le juge de l'entrée), et le
+  **marqueur de bruit** (confiance par token) doit être ajouté à l'interface post-linguistique ✓✓.

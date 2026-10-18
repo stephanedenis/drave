@@ -94,3 +94,21 @@ résultats aux nôtres. Ce qui en sort va dans [`docs/genealogie-des-langues.md`
 
 *Une documentation qui n'est pas revue à la fin d'un sous-chantier est une documentation qui mentira au cycle
 suivant* ✗✓.
+
+## 7. Le miroir de sortie renforce le modèle d'entrée
+
+**Le principe** : notre **sens → texte** (la sortie) sera toujours **plus léger et plus fiable** que notre
+**texte → sens** (l'entrée) ✓✓ — parce que l'entrée doit gérer les **imperfections** du réel (bruit, orthographes
+multiples, langues mêlées, coquilles), alors que la sortie part d'un sens **propre** ✓. On s'en sert donc comme
+d'un **miroir** :
+
+1. **valider l'entrée par la sortie** ✓✓ : ce que l'entrée a compris doit pouvoir être **reproduit** par la sortie
+   (restitution, ou **boucle** entrée → sortie → entrée ✓). *Si la sortie ne peut pas le redire, l'entrée a inventé
+   ou perdu quelque chose* ✗✓ ;
+2. **découpler le signal du bruit** ✓✓ : la sortie, plus fiable, sert de **référence** pour juger l'entrée — on
+   mesure l'écart entre ce que l'entrée a extrait et ce que la sortie sait reconstruire ;
+3. **garder des marqueurs de bruit dans l'interface post-linguistique** ✓✓ : le sens extrait porte **où** et
+   **combien** l'entrée est incertaine (confiance par token, ambiguïtés non résolues, langues détectées avec leur
+   probabilité). *Le module de pensée abstraite doit recevoir un sens **annoté de son bruit**, pas un sens lissé* ✓✓ ;
+4. **conséquence pour les tests** : toute mesure d'entrée (traduction, contenu, langue) se double d'une mesure de
+   **sortie** (restitution, boucle) — c'est le **juge de paix** de la couche ✓✓.

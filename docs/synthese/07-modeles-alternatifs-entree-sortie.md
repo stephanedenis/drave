@@ -43,3 +43,20 @@ surface, et le contenu un **espace commun** ?*
 
 *Tant que ces trois questions ne sont pas tranchées, le module de **pensée abstraite** attend : il ne peut pas être
 bâti sur une entrée-sortie qui n'est pas fiable.*
+
+## Le miroir de sortie : pourquoi la sortie est plus fiable que l'entrée
+
+La couche entrée-sortie n'est pas symétrique ✓✓. **Texte → sens** doit absorber les imperfections du réel (bruit,
+orthographes multiples, langues mêlées, coquilles) ; **sens → texte** part d'un sens **propre** ✓. Il en découle
+trois règles d'architecture :
+
+1. **la sortie valide l'entrée** ✓✓ : ce que l'entrée a compris doit pouvoir être **reproduit** par la sortie —
+   restitution à l'identique, ou **boucle** entrée → sortie → entrée ✓. *Si la sortie ne peut pas le redire,
+   l'entrée a inventé ou perdu quelque chose* ✗✓ ;
+2. **le signal se découple du bruit** ✓✓ : la sortie sert de **référence** ; on mesure l'écart entre ce que
+   l'entrée a extrait et ce que la sortie sait reconstruire ✓ ;
+3. **l'interface post-linguistique porte ses marqueurs de bruit** ✓✓ : confiance par token, ambiguïtés non résolues,
+   langues détectées avec leur probabilité — *le module de pensée abstraite reçoit un sens **annoté de son bruit*** ✓✓.
+
+**Conséquence pour la mesure** : toute mesure d'entrée se double d'une mesure de sortie ✓✓. Les séries précédentes
+(restitution en flux, boucle de traduction) sont les deux faces du même miroir.
