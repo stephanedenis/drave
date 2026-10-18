@@ -1446,3 +1446,39 @@ meilleur des jouets ✓) :
 * **ce que cela implique pour le projet** ✓✓ : **construire un noyau bilingue** ✓✓ (ce que la mesure 10 disait déjà :
   le bilingue bat le monolingue + adaptateur ✓✓) est **la bonne route** ✓✓ ; l'adaptateur est le **pansement** ✓,
   pas le remède ✓.
+
+## Le passage complet, terminé (17/10, 21 h) : **44 vertes, 2 rouges — les mêmes qu'à 00 h 55**
+
+Le passage lancé à **19 h 19** est **terminé** ✓ (97 minutes ✓). Verdict lu dans `registre.txt` ✓ (jamais par les
+marqueurs ✓) :
+
+| | ce passage (19 h 19) | le passage du matin (00 h 55) |
+|---|---|---|
+| **vertes** | **44** ✓✓ | 44 ✓✓ |
+| **rouges** | **2** ✗ : `porte-indice` (860 s) · `porte-melange` (102 s) | 2 ✗ : `porte-indice` (817 s) · `porte-melange` (101 s) |
+
+* **LES DEUX ROUGES SONT LES MÊMES** ✓✓ — **mêmes portes**, **mêmes codes**, **mêmes durées** à **5 %** près ✓✓. Ce
+  sont les deux **structurelles connues** ✗✓, et **mon travail de la nuit ne les a ni créées ni aggravées** ✓✓ ;
+* **et c'est la preuve globale** ✓✓ : après **trente-huit mesures**, **cinq modèles** entraînés, un **corpus
+  reconstruit** (15,7 Mo, 87 341 formes ✓), **quatre outils** ajoutés (`langue_dans_etat`, `contenu_par_couche`,
+  `adaptateur_langue`, `cribler_corpus`, `retrieval_parallele`, `verifier_bilan` ✓) et **trois** fichiers de
+  documentation réécrits ✓ — *rien n'a cassé* ✓✓ ;
+* **la leçon d'instrument, pour finir** ✓✓ : un passage complet ne prouve **pas** que tout va bien ✗ — il prouve que
+  **rien n'a changé** ✓✓. *C'est exactement ce qu'on veut savoir au matin* ✓✓.
+
+### La nuit, en une page
+
+**Ce qui tient** ✓✓ : la couche commune **existe** (noyau neutre, **5 réplications**, plan 2×2 complet ✓✓) ; elle
+**garde le sens** (contenu **87,7 / 86,5 %** ✓✓) ; la langue y est un **petit paramètre** (**1,33 %**, **5 ms** ✓✓)
+qui **améliore d'autant plus que le noyau est faible** (−53 % → −4,7 % → −7,6 % ✗✓) ; **le même sens dans deux
+langues** se retrouve **mieux que le hasard** (**trois livres sur cinq** ✓✓, top-5 **37,5 %** ✓✓) ; et **la pensée
+itérée est sans langue** (**50,6-56,2 %** sur **huit** pas ✓✓) mais **ne tient qu'un pas** ✗.
+
+**Ce qui a été retiré** ✗ : six relations, dont trois **ce soir** (le genre, la part de dialogue, et l'alignement
+accusé à tort ✓✓).
+
+**Ce qui reste ouvert** ✗ : la **variation de 17×** (sept candidats échouent ✓), le **second pas** de la pensée ✗,
+et l'**usage à l'échelle** du signal cross-lingue ✓✗.
+
+*Trente-huit mesures, quatre audits, trois relectures, quatorze pièges, et un chapitre qui sait ce qu'il ne sait
+pas* ✓✓.
