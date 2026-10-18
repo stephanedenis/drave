@@ -50,7 +50,7 @@ est dit » de « la langue qui le dit ». Ce qu'il a montré :
 
 | le régime | la mesure | le résultat |
 |---|---|---|
-| **traduction** (Qwen) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** sur **12 paires choisies** (dont fra↔cmn) — mais **14,4 %** sur une **grille de 40 langues stratifiées** (780 paires) · **6,50 %** dans un vivier de 1 200 états (hasard 0,08 %) ✓✗ |
+| **traduction** (Qwen) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** sur **12 paires choisies** (dont fra↔cmn) — mais **14,4 %** sur une **grille de 40 langues** (780 paires) et **16,3 %** sur **100 langues** (4 950 paires) · test groupé **3,5×** le hasard ✓✗ |
 | **restitution** (en flux, avec contexte) | reproduit-il exactement le texte lu ? | **français seul : 85,1 %** de fragments exacts ✓✓ · **448 langues : 0,6 %** ✗✗ — et **0 %** sur le jamais-vu dans les deux cas |
 | **dialectes** (7 variantes d'occitan) | lire la variante ? retrouver le contenu ? | **100 %** ✓✓ · **52,2 %** (16× le hasard) ✓✓ |
 | **styles** (Odyssée, Butler vs Pope) | lire le traducteur ? retrouver le chant ? | **100 %** ✓✓ · **24 %** (6× le hasard) ✓✓ |

@@ -1668,7 +1668,7 @@ La mesure 40 avait choisi **douze paires** de grandes langues ✓. Une **grille*
 | **40 langues · 780 paires** | **14,4 %** (médiane 10,0 %) | 3,3 % |
 | même écriture (6 paires, surtout CJK) | **42,2 %** | 3,3 % |
 | écritures différentes (774 paires) | **14,2 %** | 3,3 % |
-| **test groupé** : le même article parmi **1 200** états d'autres langues | **6,50 %** | 0,08 % |
+| **test groupé** : le même article parmi **1 200** états d'autres langues | **6,50 %** | **3,3 %** (le même article existe dans 40 langues ✓) |
 | — contrôle (une permutation **différente** par langue) | **0,00 %** | — |
 
 * **LA TRADUCTION N'EST PAS UNIVERSELLE** ✗✓ : 14,4 % de moyenne sur un échantillon stratifié, contre **96,4 %**
@@ -1677,8 +1677,8 @@ La mesure 40 avait choisi **douze paires** de grandes langues ✓. Une **grille*
 * **et le classement le dit** ✓✓ : les langues les mieux alignées sont **jpn, kor, cmn, cjy, yue** (~30 % ✓), les
   moins bien **bod, mya, div, blt** (3-6 % ✓) — *les premières ont des écritures et des voisinages que Qwen
   connaît, les secondes non* ✓✓ ;
-* **le test groupé reste très au-dessus du hasard** ✓✓ (6,50 % contre 0,08 %, soit **81 fois** ✓) — et son contrôle
-  (permutation différente par langue ✓) donne **0,00 %** ✓✓. *La sonde mesure donc bien quelque chose* ✓✓ ;
+* **le test groupé est faible mais réel** ✗✓ (6,50 % contre **3,3 %** de hasard ✓, soit **2 fois** ✓) — et son contrôle
+  (permutation différente par langue ✓) donne **0,00 %** ✓✓. *Le signal existe, il est ténu* ✓✓ ;
 * **la correction est importante** ✗✓ : la mesure 40 disait « 96 % » sans dire que c'était **douze** paires ✓ ; la
   grille dit « **14 %** sur quarante langues, avec des extrêmes de 0 à 100 % » ✓✓. *C'est la vraie réponse* ✓✓.
 
@@ -1755,3 +1755,26 @@ Pope ✓). Un **second couple** de traducteurs ✓ : *Vingt mille lieues sous le
 * **ce que cela laisse** ✓✓ : la **surface** (langue, dialecte, style) est **toujours lisible** (80-100 % ✓✓) ;
   le **sens** se retrouve d'autant mieux que la surface est proche : **96 %** (langues, paires choisies ✓), **52 %**
   (dialectes ✓), **24 %** (styles, meilleur couple ✓) — *et toujours bien au-dessus du hasard* ✓✓.
+
+## Mesure 48 — la grille à 100 langues : 16,3 %, et un test groupé à 3,5 fois le hasard
+
+La grille de 40 langues est étendue à **100 langues** ✓ (4 950 paires ✓), toujours stratifiées par écriture ✓ :
+
+| | top-1 | hasard |
+|---|---:|---:|
+| **100 langues · 4 950 paires** | **16,3 %** (médiane 10,0 %) | 3,3 % |
+| même écriture (540 paires) | **23,1 %** | 3,3 % |
+| écritures différentes (4 410 paires) | **15,5 %** | 3,3 % |
+| **test groupé** : le même article parmi **3 000** états | **11,47 %** | **3,3 %** (soit **3,5×** ✓) |
+| — contrôle (permutation différente par langue) | **0,90 %** | 3,3 % |
+
+* **LA GRILLE SE STABILISE** ✓✓ : **14,4 %** à 40 langues, **16,3 %** à 100 ✓ — la moyenne ne s'effondre pas quand on
+  ajoute des langues ✓✓, mais elle reste **loin de 96 %** ✗✗ (les douze paires choisies ✓) ;
+* **et le classement est stable** ✓✓ : **rus, jpn, bul, cmn, cjy** en tête (~33-37 % ✓), **div, shn, mya, chr** en
+  queue (3-5 % ✓) — *les langues bien servies par Qwen, encore* ✓✓ ;
+* **le test groupé monte avec la taille du vivier** ✓✓ (6,50 % à 40 langues, **11,47 %** à 100 ✓) — et il reste
+  **3,5 fois** le hasard ✓ ; *son contrôle (0,90 %) est **sous** le hasard* ✗✓ : les voisins se concentrent sur
+  quelques états ✓ (des articles courts, proches de tous ✓) ;
+* **la conclusion de la série** ✓✓ : *la traduction existe, elle est **forte sur les langues bien couvertes** (96 %
+  sur les douze paires ✓), **moyenne sur un échantillon stratifié** (16 % ✓) et **ténue dans un vivier ouvert**
+  (3,5× le hasard ✓✗)* ✓✓ — *et c'est le modèle qui décide, pas la méthode* ✓✓.

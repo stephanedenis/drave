@@ -45,7 +45,8 @@ corrélation **0,978** de la forme des 30 articles entre langues. Importeurs : `
 | le régime | la mesure | le résultat |
 |---|---|---|
 | **traduction** (Qwen, 12 paires choisies) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** · hasard 3,3 % · longueur seule 3-30 % · articles mélangés 0 % ✓✓ |
-| **traduction** (Qwen, grille de 40 langues stratifiées) | idem, 780 paires | **14,4 %** (médiane 10 %) · test groupé **6,50 %** contre 0,08 % (contrôle 0,00 %) ✓✗ |
+| **traduction** (Qwen, grille de 40 langues stratifiées) | idem, 780 paires | **14,4 %** (médiane 10 %) · test groupé **6,50 %** contre **3,3 %** de hasard (2×) · contrôle 0,00 % ✓✗ |
+| **traduction** (Qwen, grille de **100** langues) | idem, 4 950 paires | **16,3 %** (médiane 10 %) · test groupé **11,47 %** contre 3,3 % (3,5×) ✓✗ |
 | **traduction** (petit modèle octets, 448 langues, 19 M) | idem | **31 %** sur les paires choisies : il n'aligne que les langues **proches** (romanes 57-87 %), 0-10 % sur les lointaines ✗ |
 | **restitution** (modèle spécialisé, 1 langue) | reproduit-il exactement le texte lu ? | **85,1 %** de fragments de 32 octets exacts (français), **99,4 %** d'octets ✓✓ |
 | **restitution** (448 langues partagées) | idem | **0,6 %** de fragments exacts, 62,7 % d'octets ✗✗ |
