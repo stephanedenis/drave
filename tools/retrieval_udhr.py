@@ -81,6 +81,7 @@ def main() -> int:
     ap.add_argument("--longueur", type=int, default=256)
     ap.add_argument("--tokeniseur", action="store_true")
     ap.add_argument("--max-variantes", type=int, default=7)
+    ap.add_argument("--iso-variante", default="", help="la langue dont on compare les variantes ✓ (oci, roh, ron, hus…)")
     a = ap.parse_args()
     articles = charger_articles(); meta = charger_meta()
     par_iso = collections.defaultdict(list)
@@ -90,7 +91,9 @@ def main() -> int:
 
     if a.mode == "variantes":
         multi = {k: v for k, v in par_iso.items() if len(v) >= 2}
-        iso = max(multi, key=lambda k: len(multi[k]))
+        # ⚠️ LA LANGUE SE CHOISIT ✗✓ : par défaut celle qui a le plus de variantes ✓, mais on peut imposer
+        # n'importe quelle langue à variantes ✓✓ (la réplication demande de changer de langue ✓).
+        iso = a.iso_variante if a.iso_variante in multi else max(multi, key=lambda k: len(multi[k]))
         fichiers = sorted(multi[iso])[: a.max_variantes]
         print(f"  mode variantes · langue {iso} ({meta[fichiers[0]]['nom']}) · {len(fichiers)} variantes")
         for f in fichiers: print(f"    {meta[f]['variante']:20s} {len(articles[f])} articles")

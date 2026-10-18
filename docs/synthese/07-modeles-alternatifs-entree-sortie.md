@@ -1630,6 +1630,10 @@ d'occitan** du corpus (languedocien, provençal, auvergnat, limousin… ✓ — 
 | — paire la plus faible (variante 1 ↔ provençal) | 40,0 % ✓ | — |
 
 * **LES VARIANTES SONT TOUTES LISIBLES** ✓✓ (100 % — orthographes et dialectes se distinguent parfaitement ✓) ;
+* **et la réplication, sur trois autres langues à variantes** ✓✓ (romanche **7** variantes, roumain **3**, houndé
+  **3** ✓) : contenu retrouvé à **97,1 %** (romanche ✓✓), **100 %** (roumain ✓✓), **30,0 %** (houndé ✓) — contre
+  **52,2 %** pour l'occitan ✓. *La même loi que pour les langues : c'est la **couverture** qui décide* ✓✓ (le
+  romanche et le roumain sont bien servis par Qwen ✓, le houndé non ✓✗) ;
 * **et le contenu survit à la variante** ✓✓ (52,2 %, soit **16 fois le hasard** ✓) — moins bien qu'entre langues
   (96 % ✓) mais bien mieux qu'au hasard ✓✓. *Plus la surface diverge, moins le sens se retrouve — mais il se
   retrouve toujours* ✓✓.
