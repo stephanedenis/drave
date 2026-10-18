@@ -6,17 +6,46 @@
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
 > [`AGENTS.md`](../AGENTS.md).
 
-## Les chantiers, et où ils en sont
+## Le tableau de bord des chantiers
 
-| chantier | état | la fiche |
-|---|---|---|
-| **1. Couche entrée-sortie — corpus et généalogie** | **fait** : 448 langues UDHR, 13 222 articles, 55 familles Glottolog | [07](../reports/07-mesures-couche-commune.md) |
-| **2. Couche entrée-sortie — traduction** | **mesuré** : 96 % (paires couvertes) · 16 % (100 langues) · suit la généalogie (30,7 / 22,0 / 15,2 %) | [07](../reports/07-mesures-couche-commune.md) |
-| **3. Couche entrée-sortie — restitution** | **mesuré** : 85 % (1 langue) → 0,6 % (448) ; la courbe meurt entre 1 et 10 | [07](../reports/07-mesures-couche-commune.md) |
-| **4. Couche entrée-sortie — styles et dialectes** | **mesuré** : dialectes 30-100 %, styles 6-24 % ; **confondant époque** à contrôler | [07](../reports/07-mesures-couche-commune.md) |
-| **5. Couche entrée-sortie — qualité par domaine** | **ouvert** : juridique mesuré — le petit modèle **ne traduit pas** (2 paires sur 5 sous le plancher « ne rien traduire », chinois 0,8 chrF) ✗✗ | [07](../reports/07-mesures-couche-commune.md) |
-| **6. Documentation et rangement** | **fait** : `AGENTS.md`, `docs/README.md`, mesures dans `reports/` | [AGENTS.md](../AGENTS.md) |
-| **7. Module de pensée abstraite** | **en attente** : il ne commence pas avant que 1-5 soient fiables | [AGENTS.md](../AGENTS.md) |
+### Dépendances
+
+```
+C1 corpus/généalogie ──► C2 traduction ──► C5 qualité par domaine ──► C7 pensée abstraite
+        │                     ▲                    ▲
+        └──► C3 restitution ──┘                    │
+        └──► C4 dialectes/styles ──────────────────┘
+C6 documentation (transverse, ne bloque rien)
+```
+
+| chantier | dépend de | bloque | état |
+|---|---|---|---|
+| **C1** corpus et généalogie | — | C2, C3, C4 | **fait** |
+| **C2** traduction (retrieval) | C1 | C5 | **mesuré** |
+| **C3** restitution | C1 | — | **mesuré** |
+| **C4** dialectes et styles | C1 | C5 (styles) | **mesuré**, époque à contrôler |
+| **C5** qualité par domaine | C2, C4 | C7 | **ouvert** (juridique mesuré) |
+| **C6** documentation et rangement | — | — | **fait** |
+| **C7** pensée abstraite | C5 | — | **en attente** |
+
+### Sous-chantiers : ce qui peut tourner en parallèle
+
+| id | sous-chantier | indépendant ? | état | outil / fichier |
+|---|---|---|---|---|
+| **C5.1** | banc juridique (UDHR, chrF vs humain) | ✅ | **fait** (mesure 50 : le petit modèle ne traduit pas) | `tools/traduire_bench.py`, `reports/traduction-legal.json` |
+| **C5.2** | banc **littéraire** (Verne, 2 références ; Alice) | ✅ **parallèle** | à faire | `tools/traduire_bench.py` (mode chapitres) |
+| **C5.3** | banc **modèle plus grand** (gemma-3-1b, Qwen3) | ✅ **parallèle** | à lancer | `llama-cli` (GGUF en cache) |
+| **C5.4** | corpus **technique** parallèle | ✅ **parallèle** | à construire | Gutenberg/`Panini` |
+| **C5.5** | corpus **quotidien** parallèle | ✅ (avec C5.4) | à construire | Gutenberg (théâtre) |
+| **C2.1** | répliquer la généalogie **par domaine** | dépend de C5.2-C5.5 | à faire | `retrieval_udhr.py --genealogie` |
+| **C4.1** | styles **à époque contrôlée** (couples contemporains) | ✅ **parallèle** | à faire | `style_traducteur.py` + dates |
+| **C3.1** | restitution **par famille** (modules spécialisés) | ✅ **parallèle** | à faire | `restitution_udhr.py` |
+| **C1.1** | familles **manquantes** (11 langues sans Glottolog) | ✅ **parallèle** | à faire | `genealogie_udhr.py` |
+
+**Règle de parallélisation** : on lance **en même temps** tous les sous-chantiers marqués ✅ dont les entrées
+existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**, pas sa documentation.
+
+## La priorité : la couche commune entrée-sortie
 
 ## La priorité : la couche commune entrée-sortie
 
