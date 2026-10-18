@@ -32,7 +32,7 @@ chiffre qui le dit — pour qu'on puisse juger le chapitre sans le lire en entie
 
 | # | la question | la mesure | le chiffre | verdict |
 |---:|---|---|---|---|
-| 14 | un **vrai** corpus français ? | Gutenberg de `Panini/` (le dépôt n'en avait pas ✗) | **13,2 Mo**, 18 textes, **66 322** formes (Maupassant, Dumas, Flaubert, Verne) | ✓✓ vrai corpus |
+| 14 | un **vrai** corpus français ? | Gutenberg de `Panini/` (le dépôt n'en avait pas ✗) | **13,2 Mo**, 18 textes, **66 322** formes — puis **enrichi** (mesure 27 ✓) : **15,7 Mo**, 21 textes, **87 341** formes (Proust, Stendhal, Hugo, Voltaire, Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola) | ✓✓ vrai corpus, **deux fois** |
 | 15 | la neutralité **à l'échelle** ? | modèle bilingue **dim 512** (9,57 M) | couches 2 et 6 : **51,4** et **51,2 %** ; couche 8 : **67,9 %** | ✓✓ noyau neutre, surface **plus** langue-aware |
 | 16 | le **même sens** en deux langues ? | retrieval croisé, Le Tour du monde | 0/24 ✗ — **test invalide** ✗ | ✗ à refaire |
 | 17 | et avec un bon échantillon ? | même test, milieu du segment | écart **+0,022** ✓ (contre −0,053 ✗) | ✓ signal réel, **faible** |
