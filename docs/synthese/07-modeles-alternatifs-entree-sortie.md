@@ -82,7 +82,7 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 | **le noyau est neutre** (la langue n'y est pas lisible) | **5 réplications** — plan **2×2** complet : prose et littérature, dim 256 et 512 ✓✓✓ | **50,1 à 53,6 %** = le hasard ✓✓ |
 | **le noyau garde le sens** | 4 et 30 ✓✓ | contenu **87,7 / 86,5 %**, à 9 points du meilleur ✓ |
 | **la langue vit aux extrémités** | 1, 15, 19, 24 ✓✓ | **58-68 %** en surface, 50 % au milieu ✓ |
-| **la neutralité a des ÎLOTS** ✗✓ | 36 ✓ | une couche à **69,0 %** au **milieu** du 512 littéraire, entre deux couches neutres ✓✗ |
+| **un ÎLOT langue-spécifique** existe — dans **un** modèle sur cinq ✗✓ | 36 ✓ | couche 3 à **69,0 %** au milieu du 512 littéraire ✓✗ |
 | **le sens partagé est au milieu** | 18 ✓✓ | **+0,083** aux couches 8-16, **+0,030** à la dernière ✓✓ |
 | **la langue est un petit paramètre** | 2, 3, 7, 24 ✓✓ | **1,33 %** des poids, **5 ms** de bascule ✓✓ |
 | **le paramètre améliore la langue** | 2, 24 ✓✓ | **−53 %** (monolingue), **−7,6 %** (Qwen) ✓ |
@@ -1322,3 +1322,30 @@ Il manquait **une case** au plan 2×2 ✓ (taille × corpus ✓) : le modèle **
 * **ce que cela dit du mécanisme** ✓✓ : le réseau peut **router la langue par une couche intermédiaire** ✓✗ (il en a
   la capacité quand il est large ✓) tout en gardant le reste abstrait ✓✓. *La neutralité n'est pas une propriété
   de **toutes** les couches, mais de **la plupart** — et la proportion augmente avec la capacité* ✓✓.
+
+## Trente-septième mesure (17/10, 20 h 15) : les îlots sont **rares** — un sur cinq modèles
+
+La mesure 36 avait trouvé une couche **langue-spécifique au milieu** du 512 littéraire ✓✗ (couche 3, 69,0 % ✓).
+Est-ce un **motif** ✗ ou une **exception** ✗ ? Relecture des **cinq** tables déjà mesurées ✓ (aucun nouvel
+entraînement ✗ — c'est une **relecture**, et elle est gratuite ✓✓), avec une définition **posée** ✗✓ : un **îlot**
+est une couche **≥ 60 %** dont les **deux voisines** sont **≤ 56 %** ✓ (neutres ✓).
+
+| modèle | couches ≥ 60 % | **îlot** |
+|---|---|---|
+| 256 prose (m. 1) | [0, 3] | **aucun** ✗ (la couche 4 est à 59,0 ✓, pas neutre ✓) |
+| 512 prose (m. 15) | [8] | aucun ✓ |
+| 256 litt v1 (m. 19) | [0, 5, 7] | aucun ✗ (la couche 4 est à 59,9 ✓) |
+| 256 litt v2 (m. 29) | [] | aucun ✓ |
+| **512 litt (m. 36)** | [0, 3, 7, 8] | **couche 3** ✓✓ |
+
+* **UN SEUL ÎLOT SUR CINQ MODÈLES** ✓✓ : la couche 3 du 512 littéraire ✓ — et c'est le modèle **le plus large** et
+  le **mieux entraîné** ✓✓ (val 2,6097 ✓). *La couche 3 du 256 prose est à 66,9 % ✗ mais sa voisine est à 59,0 % ✗
+  → ce n'est pas un îlot, c'est le début de la remontée vers la surface* ✓✓ ;
+* **donc la structure EST monotone** ✓✓ : *neutre au milieu, langue-specific aux extrémités* ✓✓ — avec **une**
+  exception, dans le seul modèle qui a la capacité de se l'offrir ✓✓ ;
+* **et la définition compte** ✗✓ : avec une définition plus lâche (≥ 60 % sans condition de voisinage ✓), on
+  trouverait des « îlots » dans **quatre** modèles sur cinq ✓✗ — mais ce seraient les **premières couches de la
+  remontée** ✓, pas des îlots ✓✓. *Le choix de la définition change le résultat, et il doit être dit* ✓✓ ;
+* **ce que cela ajoute au chapitre** ✓✓ : la régularité **tient** (5 réplications, structure monotone ✓✓) et
+  l'exception est **unique** et **explicable** ✓✓ (le plus grand modèle ✓). *C'est la conclusion la plus solide de
+  la nuit, et elle a demandé une relecture, pas une mesure* ✓✓.
