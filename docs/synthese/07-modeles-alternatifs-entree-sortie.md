@@ -102,10 +102,15 @@ qui **croît avec le modèle** ✓✓, et — du côté de l'instrument — **de
 **Ce qui RESTE OUVERT**, et que la nuit n'a pas tranché ✗ :
 
 1. **pourquoi le signal varie de 17×** entre des paires texte-traduction **bien alignées** (+0,007 à +0,116 ✓) —
-   ni le genre, ni la taille, ni la part de dialogue, ni l'alignement ne l'expliquent ✓ ;
+   **sept** candidats ont échoué : le genre ✓, la taille ✓, la part de dialogue ✓, l'alignement ✓, la fidélité de
+   la traduction (ratio de longueur, **−0,25** ✓), la richesse lexicale (**+0,42** ✓) et l'entropie des octets
+   (**+0,51** ✓). *Aucun n'est significatif sur cinq points* ✗✓ ;
 2. **peut-on penser deux pas** ✗ — trois objectifs différents donnent le même mur ✓ (mesures 12-13 ✓) ; le pas
    suivant est dans **l'entraînement du modèle** ✓, pas dans la perte ✓ ;
-3. **le signal est-il utilisable à l'échelle** ✗ — un livre sur deux ✓, top-5 37 % au mieux ✓ (mesure 26 ✓).
+3. **le signal est-il utilisable à l'échelle** ✓✗ — **trois livres sur cinq** au-dessus du hasard en rang médian
+   (**Verne 9/32** ✓, **Proust 8/32** ✓✓, **Candide 13/32** ✓), **deux** non (**Alice 17/32** ✗, **Don Quijote
+   19/32** ✗), et le meilleur top-5 est **37,5 %** (Proust ✓✓). *C'est un signal, pas une recherche fiable* ✓✗
+   (mesures 25, 26, 31 ✓).
 
 *Un chapitre qui sait ce qu'il ne sait pas vaut mieux qu'un chapitre qui ne sait pas qu'il ne sait pas* ✓✓.
 
