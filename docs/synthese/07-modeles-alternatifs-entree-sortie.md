@@ -1703,3 +1703,29 @@ Le modèle **en octets à 448 langues** (19 M ✓, validation 2,3372 ✓) sur le
 * **les deux résultats se répondent** ✓✓ : Qwen 96 % sur les paires choisies mais **14 %** sur la grille ✓✗ ;
   le petit modèle **31 %** sur les paires choisies (et il ne peut pas faire mieux) ✗✓. *Aucun des deux n'a de
   traduction universelle — et aucun ne l'a promis* ✓✓.
+
+## Mesure 46 — la courbe de restitution : elle **meurt entre 1 et 10 langues**
+
+La mesure 41 comparait **un** modèle spécialisé (français, 85,1 %) à **un** modèle partagé (448 langues, 0,6 %) ✓.
+Pour avoir la **courbe** ✓✓, quatre modèles de **même architecture** (19 M ✓) sont entraînés sur les **mêmes**
+premières langues du corpus (triées ✓), en augmentant leur nombre : **1** (udhr_007 ✓), **10**, **50**, **448** ✓.
+
+| langues partagées | exactitude par octet (vu) | **fragments exacts de 32 octets (vus)** |
+|---:|---:|---:|
+| **1** | 89,2 % | **30,0 %** ✓✓ |
+| **10** | 81,9 % | **4,4 %** ✗ |
+| **50** | 63,9 % | **0,4 %** ✗✗ |
+| **448** | 62,7 % | **0,6 %** ✗✗ |
+
+* **LA RESTITUTION EXACTE MEURT ENTRE 1 ET 10 LANGUES** ✗✗ : **30 %** de fragments exacts quand le modèle ne sert
+  qu'une langue ✓✓, **4,4 %** à dix ✓✗, et **0,4-0,6 %** au-delà ✗✗ — *un palier, pas une pente* ✓✓ ;
+* **et l'exactitude par octet ne le dit pas** ✗✓ : elle passe de 89 % à 63 % ✓ (une pente douce ✓), alors que les
+  fragments exacts s'effondrent **d'un facteur 7** entre 1 et 10 ✓✓. *C'est l'exactitude **par fragment** qui
+  porte l'information, pas la moyenne* ✓✓ ;
+* **la langue compte aussi** ✗✓ : le français seul atteint **85,1 %** de fragments exacts (mesure 41 ✓) contre
+  **30,0 %** pour le udhr_007 ✓ — *un texte plus redondant se mémorise mieux* ✓✓ (le français est formulaire ✓,
+  et l'échantillon est plus long : 9 KB contre 6 ✓) ;
+* **ce que cela dit de la couche commune** ✓✓ : *partager des paramètres entre langues a un **coût de restitution**
+  qui n'est pas progressif : il est brutal* ✗✗ — et il est payé **dès la deuxième langue** ✓✗. C'est exactement
+  l'arbitrage du chapitre, chiffré : **le sens partagé (traduction) et la lettre exacte (restitution) ne se
+  paient pas au même prix** ✓✓✓.
