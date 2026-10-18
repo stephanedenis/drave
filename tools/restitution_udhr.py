@@ -41,6 +41,7 @@ def main() -> int:
     resultats = []
     for f in fichiers:
         bits, exacts, tot_pos, tot_art = [], 0, 0, 0
+        justes_tot, vus, jamais_vus = 0, [], []
         for n in sorted(articles[f]):
             ids = encoder(articles[f][n], a.longueur)
             if len(ids) < 8: continue
@@ -54,13 +55,20 @@ def main() -> int:
                 justes = (pred == cibles)
                 bits.append(perte / math.log(2))
                 tot_pos += len(cibles)
+                justes_tot += int(justes.sum())
                 exacts += int(bool(justes.all()))
                 tot_art += 1
+                # ⚠️ VU ou JAMAIS VU ✗✓ : les articles 1-28 ont servi à l'entraînement ✓, les 29-30 sont la
+                # validation ✓✓ — et c'est la seule façon de séparer mémorisation et généralisation ✓.
+                (jamais_vus if n >= 29 else vus).append(float(justes.float().mean()))
         if not bits: continue
         resultats.append({"fichier": f, "iso3": meta[f]["iso3"], "nom": meta[f]["nom"], "script": meta[f]["script"],
                           "variante": meta[f]["variante"], "bits_octet": float(np.mean(bits)),
                           "articles": tot_art, "articles_exacts": exacts,
-                          "taux_exact": 100 * exacts / max(1, tot_art)})
+                          "taux_exact": 100 * exacts / max(1, tot_art),
+                          "exactitude_octet": 100 * justes_tot / max(1, tot_pos),
+                          "exactitude_vue": 100 * float(np.mean(vus)) if vus else 0.0,
+                          "exactitude_jamais_vue": 100 * float(np.mean(jamais_vus)) if jamais_vus else 0.0})
     resultats.sort(key=lambda x: x["bits_octet"])
     print(f"  {len(resultats)} langues · couche de sortie")
     print(f"\n  meilleures restitutions (bits/octet bas ✓) :")
@@ -78,6 +86,10 @@ def main() -> int:
     arts_total = sum(r["articles"] for r in resultats)
     print(f"\n  TOTAL : {exacts_total}/{arts_total} articles exacts ({100*exacts_total/max(1,arts_total):.1f} %) · "
           f"{np.mean([r['bits_octet'] for r in resultats]):.3f} bits/octet moyen")
+    print(f"  exactitude PAR OCTET : vue {np.mean([r['exactitude_vue'] for r in resultats]):.1f} % · "
+          f"jamais vue {np.mean([r['exactitude_jamais_vue'] for r in resultats]):.1f} %")
+    print(f"  et 10 % des langues les mieux restituées (octet) : "
+          f"{np.mean(sorted(r['exactitude_octet'] for r in resultats)[-max(1,len(resultats)//10):]):.1f} %")
     if a.sortie:
         pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)
         pathlib.Path(a.sortie).write_text(json.dumps(resultats, ensure_ascii=False, indent=1))
@@ -85,4 +97,5 @@ def main() -> int:
     return 0
 
 
-raise SystemExit(main())
+if __name__ == "__main__":
+    raise SystemExit(main())

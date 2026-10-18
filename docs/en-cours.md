@@ -42,6 +42,24 @@ partagé, ce n'est pas l'absence de langue, c'est le **sens** : le même article
 l'autre à **96,4 %** contre 3,3 % au hasard ✓✓.* Et **la pensée itérée est sans langue** — elle ne tient
 simplement qu'**un pas**.
 
+## La série UDHR (18/10) : 448 langues, la restitution et la traduction
+
+La **Déclaration universelle des droits de l'homme** donne le *même contenu* dans **448 langues** (corpus Unicode
+UDHR, 13 222 articles alignés, 43 écritures, 37 langues à plusieurs variantes) — le seul corpus qui sépare « ce qui
+est dit » de « la langue qui le dit ». Ce qu'il a montré :
+
+| le régime | la mesure | le résultat |
+|---|---|---|
+| **traduction** (Qwen) | le même article se retrouve-t-il d'une langue à l'autre ? | **96,4 %** (12 paires, dont fra↔rus et fra↔cmn) · **3,3 %** au hasard · **0 %** articles mélangés ✓✓ |
+| **restitution** (modèle en octets, 448 langues) | reproduit-il exactement le texte lu ? | **0 article exact sur 13 222** ✗✗ · **61 %** d'octets justes (vus), **52,7 %** (jamais vus) |
+| **dialectes** (7 variantes d'occitan) | lire la variante ? retrouver le contenu ? | **100 %** ✓✓ · **52,2 %** (16× le hasard) ✓✓ |
+| **styles** (Odyssée, Butler vs Pope) | lire le traducteur ? retrouver le chant ? | **100 %** ✓✓ · **24 %** (6× le hasard) ✓✓ |
+
+**Et un erratum majeur** ✗✗ : le « noyau neutre » du chapitre était un **artefact d'instrument** (la sonde
+entraînait sur une seule langue et testait sur un mélange). Sonde corrigée, la langue est **lisible partout** :
+**80-98 %** dès la couche 1 dans les cinq modèles-jouets, **100 %** dans Qwen, **99 %** dans le modèle à 448
+langues. *La couche commune n'est pas un lieu sans langue : c'est un lieu où le sens est aligné malgré la langue.*
+
 *La fiche complète : [docs/synthese/07-modeles-alternatifs-entree-sortie.md](synthese/07-modeles-alternatifs-entree-sortie.md)*
 · *les notes : [journal/2026-10-17.md](../journal/2026-10-17.md)* · *les chiffres dans
 [en-cours.md](en-cours.md)*.

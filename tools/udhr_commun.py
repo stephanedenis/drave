@@ -80,3 +80,25 @@ def etats_par_couche(modele, ids, couches: list[int], pooling: str = "moyenne") 
 
 def accuracy(y_pred, y_vrai) -> float:
     return float((np.asarray(y_pred) == np.asarray(y_vrai)).mean())
+
+
+def entrainer(X_train, y_train, X_test, n_classes, epochs=400, lr=2e-2):
+    """Une régression logistique multiclasse, standardisée, sur GPU si possible ✓."""
+    import torch
+    torch.manual_seed(0)
+    dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    mu, sd = X_train.mean(0), X_train.std(0) + 1e-8
+    Xt = torch.tensor((X_train - mu) / sd, dtype=torch.float32, device=dev)
+    yt = torch.tensor(y_train, dtype=torch.long, device=dev)
+    Xv = torch.tensor((X_test - mu) / sd, dtype=torch.float32, device=dev)
+    couche = torch.nn.Linear(X_train.shape[1], n_classes).to(dev)
+    opt = torch.optim.Adam(couche.parameters(), lr=lr, weight_decay=1e-3)
+    for _ in range(epochs):
+        opt.zero_grad()
+        torch.nn.functional.cross_entropy(couche(Xt), yt).backward()
+        opt.step()
+    with torch.no_grad():
+        logits = couche(Xv)
+        pred = logits.argmax(1).cpu().numpy()
+        top5 = logits.topk(min(5, n_classes), dim=1).indices.cpu().numpy()
+    return pred, top5, couche

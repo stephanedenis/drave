@@ -30,7 +30,7 @@ from __future__ import annotations
 import argparse, collections, json, pathlib, sys
 import numpy as np
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from udhr_commun import charger_articles, charger_meta, charger_modele, etats_par_couche
+from udhr_commun import charger_articles, charger_meta, charger_modele, etats_par_couche, entrainer
 
 
 def choisir_langues(meta, articles, mode, n_langues, script_filtre="", iso=""):
@@ -55,7 +55,9 @@ def choisir_langues(meta, articles, mode, n_langues, script_filtre="", iso=""):
             return {}
         # on garde la langue qui a le PLUS de variantes ✓ (l'occitan ou le romanche, 7 chacune ✓)
         iso = max(multi, key=lambda k: len(multi[k]))
-        return {f: (iso, meta[f]["variante"]) for f in multi[iso]}
+        # ⚠️ L'ÉTIQUETTE EST LA VARIANTE, PAS LA LANGUE ✗✓ : avec l'iso3, les 7 variantes d'occitan
+        # formaient UNE seule classe ✓✗ et le classifieur trouvait 100 % sans rien faire ✓✓.
+        return {f: (meta[f]["variante"], meta[f]["nom"]) for f in multi[iso]}
     # mode langue : échantillon stratifié par écriture ✓
     par_script = collections.defaultdict(list)
     for f in sorted(dispo):
@@ -71,29 +73,6 @@ def choisir_langues(meta, articles, mode, n_langues, script_filtre="", iso=""):
                 choisis[f] = (meta[f]["iso3"], meta[f]["nom"])
         i += 1
     return choisis
-
-
-def entrainer(X_train, y_train, X_test, n_classes, epochs=400, lr=2e-2):
-    """Entraîne sur X_train, PRÉDIT sur X_test ✓✓ (le premier essai prédisait sur l'entraînement et
-    indexait ensuite avec le masque de test ✗ — 800 contre 1 200, IndexError ✓✗)."""
-    import torch
-    torch.manual_seed(0)
-    dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    Xt = torch.tensor(X_train, dtype=torch.float32, device=dev)
-    yt = torch.tensor(y_train, dtype=torch.long, device=dev)
-    Xv = torch.tensor(X_test, dtype=torch.float32, device=dev)
-    couche = torch.nn.Linear(X_train.shape[1], n_classes).to(dev)
-    opt = torch.optim.Adam(couche.parameters(), lr=lr, weight_decay=1e-3)
-    for _ in range(epochs):
-        opt.zero_grad()
-        perte = torch.nn.functional.cross_entropy(couche(Xt), yt)
-        perte.backward()
-        opt.step()
-    with torch.no_grad():
-        logits = couche(Xv)
-        pred = logits.argmax(1).cpu().numpy()
-        top5 = logits.topk(min(5, n_classes), dim=1).indices.cpu().numpy()
-    return pred, top5, couche
 
 
 def main() -> int:
