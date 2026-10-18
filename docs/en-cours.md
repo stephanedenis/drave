@@ -14,7 +14,7 @@
 | **2. Couche entrée-sortie — traduction** | **mesuré** : 96 % (paires couvertes) · 16 % (100 langues) · suit la généalogie (30,7 / 22,0 / 15,2 %) | [07](../reports/07-mesures-couche-commune.md) |
 | **3. Couche entrée-sortie — restitution** | **mesuré** : 85 % (1 langue) → 0,6 % (448) ; la courbe meurt entre 1 et 10 | [07](../reports/07-mesures-couche-commune.md) |
 | **4. Couche entrée-sortie — styles et dialectes** | **mesuré** : dialectes 30-100 %, styles 6-24 % ; **confondant époque** à contrôler | [07](../reports/07-mesures-couche-commune.md) |
-| **5. Couche entrée-sortie — qualité par domaine** | **à faire** : juridique (UDHR) fait, technique, littéraire, quotidien à construire | — |
+| **5. Couche entrée-sortie — qualité par domaine** | **ouvert** : juridique mesuré — le petit modèle **ne traduit pas** (2 paires sur 5 sous le plancher « ne rien traduire », chinois 0,8 chrF) ✗✗ | [07](../reports/07-mesures-couche-commune.md) |
 | **6. Documentation et rangement** | **fait** : `AGENTS.md`, `docs/README.md`, mesures dans `reports/` | [AGENTS.md](../AGENTS.md) |
 | **7. Module de pensée abstraite** | **en attente** : il ne commence pas avant que 1-5 soient fiables | [AGENTS.md](../AGENTS.md) |
 

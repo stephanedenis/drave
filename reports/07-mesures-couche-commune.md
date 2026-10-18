@@ -1828,3 +1828,29 @@ grille **en ne gardant que l'écriture latine** ✓✓ (70 langues, 2 415 paires
   langues ✓) — **sous** le hasard, parce que le plus proche voisin est presque toujours une **langue parente**
   (même famille), pas le même article ✓✗. *Le test groupé mesure la proximité des langues, pas l'identité du
   contenu* ✓✓ — il sort du protocole ✓.
+
+## Mesure 50 — la qualité de traducteur : le petit modèle **ne traduit pas encore** (domaine juridique)
+
+Les mesures précédentes testaient le **retrieval** (retrouver le même article) ✓ — une propriété de l'état, pas une
+qualité de **traduction** ✗. `tools/traduire_bench.py` demande au modèle de **traduire** ✓ et compare sa sortie à la
+**traduction humaine de référence** ✓✓ (chrF, n-grammes de caractères n=1..6, β=2 ✓). Domaine **juridique** (les 30
+articles UDHR ✓), Qwen 0,5 B, 8 articles par paire ✓ :
+
+| paire | **chrF** | « ne rien traduire » (plancher) | référence mélangée (hasard) | verdict |
+|---|---:|---:|---:|---|
+| français → anglais | **38,3** | 30,9 | 32,3 | +7,4 au-dessus du plancher ✓ |
+| anglais → français | **20,9** | 29,2 | 19,7 | **sous le plancher** ✗✗ |
+| français → allemand | **26,9** | 18,5 | 21,6 | +8,4 ✓ |
+| français → espagnol | **29,8** | **36,4** | 25,4 | **sous le plancher** ✗✗ |
+| français → chinois | **0,8** | 0,0 | 0,4 | **quasi nul** ✗✗ |
+
+* **LE PETIT MODÈLE NE TRADUIT PAS** ✗✗ : sur cinq paires, **deux** sont **sous** le plancher « ne rien traduire »
+  ✓✗ (eng→fra, fra→spa), et le chinois est à **0,8** de chrF ✓✗. *Copier la source bat la traduction* ✓✓ ;
+* **et le plancher n'est pas zéro** ✓✓ : pour des langues **proches**, la source non traduite obtient déjà **30 à
+  36** de chrF ✓✗ — c'est le **dix-neuvième piège** : *une métrique de traduction sans plancher « source » se lit
+  mal* ✓✓. Toute mesure de traduction doit être comparée au **plancher**, pas à zéro ✓✓ ;
+* **la seule paire où le modèle gagne vraiment** ✓ : français → anglais (**+7,4**) et français → allemand
+  (**+8,4**) ✓ — *les directions où la sortie anglaise est abondante dans ses données* ✓✓ ;
+* **conséquence pour la couche** ✗✓ : la couche entrée-sortie **n'est pas encore un traducteur** ✓✗ — c'est
+  exactement ce que `AGENTS.md` exige de mesurer avant de passer à la pensée abstraite ✓✓. *Le chantier 5 est
+  ouvert, et son premier chiffre est un échec* ✓✓.
