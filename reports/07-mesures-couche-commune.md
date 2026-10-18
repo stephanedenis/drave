@@ -1807,3 +1807,24 @@ branche = les 3 premiers niveaux du chemin ✓) :
 * **ce que cela change pour la couche** ✓✓ : il faut **organiser les tests par niveau** (famille, branche, langue,
   dialecte, style) et **annoncer le hasard de chaque niveau** ✓✓ — c'est la règle de
   `docs/genealogie-des-langues.md` ✓, et elle est maintenant outillée ✓.
+
+
+## Mesure 49b — la généalogie tient **à écriture contrôlée** (et le test groupé ne sert à rien)
+
+La mesure 49 était confondue avec l'**écriture** (les paires « même branche » étaient surtout CJK ✓). On refait la
+grille **en ne gardant que l'écriture latine** ✓✓ (70 langues, 2 415 paires, Qwen, couche 8 ✓) :
+
+| niveau | top-1 | paires |
+|---|---:|---:|
+| **même branche** (3 niveaux) | **37,2 %** ✓✓ | 51 |
+| **même famille, autre branche** | **27,8 %** ✓✓ | 171 |
+| **familles différentes** | **10,8 %** | 2 193 |
+| hasard | 3,3 % | — |
+
+* **L'EFFET GÉNÉALOGIQUE N'EST PAS UN EFFET D'ALPHABET** ✓✓ : à écriture **contrôlée** (latin), l'ordre reste
+  **37,2 > 27,8 > 10,8** ✓✓, et l'écart entre même branche et familles différentes est de **3,4×** ✓✓ — *la
+  structure que le modèle encode ressemble bien à la généalogie* ✓✓ ;
+* **et le test groupé est à jeter** ✗✓ : 2,05 % pour un hasard de **3,3 %** (le même article existe dans les 70
+  langues ✓) — **sous** le hasard, parce que le plus proche voisin est presque toujours une **langue parente**
+  (même famille), pas le même article ✓✗. *Le test groupé mesure la proximité des langues, pas l'identité du
+  contenu* ✓✓ — il sort du protocole ✓.

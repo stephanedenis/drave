@@ -82,6 +82,8 @@ def main() -> int:
     ap.add_argument("--tokeniseur", action="store_true")
     ap.add_argument("--max-variantes", type=int, default=7)
     ap.add_argument("--iso-variante", default="", help="la langue dont on compare les variantes ✓ (oci, roh, ron, hus…)")
+    ap.add_argument("--script", default="", help="ne garder qu'une écriture dans la grille ✓✓ (Latn pour contrôler "
+                    "le confondant de l'alphabet ✓)")
     ap.add_argument("--genealogie", default="", help="data/udhr/genealogie.json ✓ : regroupe les paires par FAMILLE et par BRANCHE ✓✓")
     a = ap.parse_args()
     articles = charger_articles(); meta = charger_meta()
@@ -119,6 +121,8 @@ def main() -> int:
             f = sorted(par_iso[iso])[0]
             par_script[meta[f]["script"]].append(f)
         choisies, i = [], 0
+        if a.script:
+            par_script = {a.script: par_script.get(a.script, [])}
         while len(choisies) < a.n_langues and i < 100:
             for s in sorted(par_script, key=lambda x: -len(par_script[x])):
                 if i < len(par_script[s]) and len(choisies) < a.n_langues:
@@ -187,7 +191,7 @@ def main() -> int:
         lang = np.repeat(np.arange(n_l), 30)
         ok = (art[pred] == art[vrais]) & (lang[pred] != lang[vrais])
         print(f"\n  test groupé : même article parmi {n_l*30} états d'autres langues → {100*ok.mean():.2f} % "
-              f"(hasard {100/(n_l*30-1):.2f} %)")
+              f"(hasard 3,3 % — le même article existe dans les {n_l} langues)")
         # contrôle : mélanger les articles d'une langue ✓
         # ⚠️ CONTRÔLE : une permutation DIFFÉRENTE par langue ✗✓. La même permutation pour toutes serait une
         # bijection ✓✗ — elle laisserait la relation intacte et le contrôle vaudrait exactement la mesure ✓✓
