@@ -55,11 +55,14 @@ def main() -> int:
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--max-jetons", type=int, default=160)
     ap.add_argument("--sortie", default="reports/traduction-legal.json")
+    ap.add_argument("--dtype", default="float32", choices=["float32", "bfloat16", "float16"],
+                    help="bfloat16 pour un modele qui ne tient pas en fp32 ✓ (7 B : 14 Go en bf16)")
     a = ap.parse_args()
     from transformers import AutoModelForCausalLM, AutoTokenizer
     import torch
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).to(device).eval()
+    import torch as _t
+    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(_t, a.dtype)).to(device).eval()
     tok = AutoTokenizer.from_pretrained(a.hf)
     par = charger_udhr()
     noms = {"fra": "French", "eng": "English", "deu": "German", "spa": "Spanish", "ita": "Italian",

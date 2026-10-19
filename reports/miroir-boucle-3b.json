@@ -1,0 +1,43 @@
+{
+ "paire": "fra:eng",
+ "direct": 69.97634021188273,
+ "boucle": 51.15688613137502,
+ "detail": [
+  {
+   "article": 1,
+   "chrf_direct": 90.89306236085011,
+   "chrf_boucle": 76.51770008593309,
+   "plancher_source": 100.0
+  },
+  {
+   "article": 2,
+   "chrf_direct": 66.37293944501329,
+   "chrf_boucle": 61.02921176683691,
+   "plancher_source": 100.0
+  },
+  {
+   "article": 3,
+   "chrf_direct": 35.458840989093495,
+   "chrf_boucle": 10.202958593836195,
+   "plancher_source": 100.0
+  },
+  {
+   "article": 4,
+   "chrf_direct": 88.34451527198826,
+   "chrf_boucle": 70.53055030222801,
+   "plancher_source": 100.0
+  },
+  {
+   "article": 5,
+   "chrf_direct": 86.76645340783841,
+   "chrf_boucle": 61.96882555387974,
+   "plancher_source": 100.0
+  },
+  {
+   "article": 6,
+   "chrf_direct": 52.0222297965128,
+   "chrf_boucle": 26.69207048553612,
+   "plancher_source": 100.0
+  }
+ ]
+}

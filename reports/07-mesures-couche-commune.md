@@ -1974,3 +1974,38 @@ Même banc, **mêmes 6 articles** ✓✓, juridique, trois modèles Qwen2.5 inst
 * **ce que cela change pour la couche** ✓✓ : *la couche entrée-sortie n'est pas un problème de méthode, c'est un
   problème de **taille*** ✓✓ — à 3 B, elle traduit ; à 0,5 B, elle copie ✗✓. **Le chantier 5 a maintenant sa pente**
   ✓✓, et la question devient : **où est le coude ?** (7 B ? 14 B ?) et **quel coût** ✓✓.
+
+## Mesure 56 — le miroir s'améliore avec la taille : la boucle passe de 24,9 à 51,2
+
+`tools/miroir_boucle.py` sur le **3 B** (même dispositif : fra→eng→fra, 6 articles ✓) :
+
+| modèle | chrF direct | **chrF boucle** |
+|---|---:|---:|
+| 0,5 B | 35,8 | **24,9** |
+| **3 B** | **70,0** | **51,2** ✓✓ |
+
+* **LE MIROIR S'AMÉLIORE AVEC LA TAILLE** ✓✓ : la boucle passe de **24,9** à **51,2** ✓✓ — *le modèle peut redire
+  la moitié de ce qu'il a compris, contre un quart* ✓✓ ;
+* **mais il reste loin de 100** ✗✓ : la boucle n'est pas un aller-retour fidèle ✓ — *la sortie valide l'entrée
+  **mieux** à 3 B, pas **parfaitement*** ✓✓. Et les deux chiffres se lisent ensemble (direct 70,0 ✓ + boucle 51,2 ✓)
+  : *le modèle est bon et cohérent* ✓✓ — c'est le premier modèle de la série dans ce cas ✓✓ ;
+* **ce que cela donne à l'interface** ✓✓ : la confiance de l'entrée peut être **calibrée** par la boucle ✓ — un
+  texte dont la boucle remonte bien est un texte que le modèle a **vraiment** compris ✓✓.
+
+## Mesure 57 — la courbe complète : le coude est à 3 B
+
+Même banc, mêmes 6 articles, quatre tailles (0,5 · 1,5 · 3 · **7 B** ✓) :
+
+| paire | 0,5 B | 1,5 B | 3 B | **7 B** |
+|---|---:|---:|---:|---:|
+| français → anglais | 35,8 | 32,0 | 70,0 | **77,8** ✓ |
+| anglais → français | 20,1 | 32,0 | 62,8 | **69,2** ✓ |
+| français → espagnol | 27,0 | 32,1 | 50,4 | **58,4** ✓ |
+| français → chinois | 1,0 | 6,4 | 11,6 | **15,9** ✓ |
+
+* **LA COURBE CONTINUE, AVEC UN COUDE À 3 B** ✓✓ : de 3 à 7 B, **+6 à +8 points** sur chaque direction ✓✓ — *la
+  moitié du gain total de 0,5 à 7 B est déjà acquise à 3 B* ✓✓ (fra→eng : 70 sur 77,8 ✓) ;
+* **et le chinois suit la même pente** ✗✓ : **15,9** à 7 B contre 11,6 à 3 B ✓✓ — *la direction la plus difficile
+  ne se débloque pas avec la taille seule* ✗✓ ;
+* **ce que cela commande** ✓✓ : **3 B est le meilleur rapport qualité/coût de la série** ✓✓ (70,0 de chrF pour moins
+  de la moitié des paramètres du 7 B ✓) ; au-delà, chaque point de chrF coûte de plus en plus cher ✓✓.
