@@ -1,6 +1,6 @@
 # La généalogie des langues, des dialectes et des styles
 
-> **Ce que cette page est.** La **théorie** de la structure généalogique qui doit organiser la couche commune
+> **Ce que cette page est.** La **théorie** de la structure généalogique qui doit organiser l'**étage entrée-sortie** (nom historique : « couche commune »)
 > entrée-sortie de Drave, et ce que les projets complémentaires **Panini** et **Nipada** ont établi sur elle. Les
 > mesures de Drave sont dans [`reports/07-mesures-couche-commune.md`](../reports/07-mesures-couche-commune.md).
 > *À relire et à mettre à jour à chaque cycle : Panini et Nipada sont des sources vivantes.*
