@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (48 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (62 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2077,3 +2077,166 @@ marqueurs de bruit **bougent** ✓✓ (3 B, 2 articles) :
 * **ce que cela donne à la couche** ✓✓ : l'entrée peut être **annotée** (« surprisal 5,2, 41 % de tokens coûteux »)
   et le module de pensée reçoit un sens **avec son bruit** ✓✓ — reste à en faire un **seuil** de rejet ou de
   correction ✓.
+
+## Mesure 61 — LE BANC JURIDIQUE EST CONTAMINÉ : le modèle **récite** l'UDHR au lieu de traduire
+
+**La question** ✗✓. Les mesures 50-58 jugent la couche sur sa **qualité de traducteur**, en comparant sa sortie aux
+traductions humaines de l'UDHR ✓. Mais l'UDHR est **publique, célèbre, et traduite officiellement dans 448
+langues** : elle est certainement dans les données d'entraînement des grands modèles ✓✗. *Un chrF élevé mesure-t-il
+la traduction, ou la **mémoire** ?* Si c'est la mémoire, toute la courbe « la qualité vient avec la taille »
+(mesures 54-57) est **gonflée** ✗✓ — et le juge de paix de la couche ne juge rien ✓✗.
+
+**Le dispositif** (`tools/test_contamination.py` ✓✓). On prend **une phrase** de l'UDHR français et on y remplace
+**un mot par un mot absurde**, à un endroit où la grammaire le supporte (« en dignité et en **droits** » → « en
+dignité et en **couleur** ») ✓. On demande la traduction anglaise de cette phrase seule ✓ :
+
+- si la sortie contient la traduction du mot **substitué** ✓✓ → le modèle **traduit ce qu'il lit** ;
+- si elle contient le mot **canonique** à la place ✗✗ → le modèle **récite** la référence, pas la source ;
+- « mélange » = les deux mots ; « répare » = ni l'un ni l'autre (le modèle réécrit la phrase en boilerplate) ✓✗.
+
+**Le contrôle positif** ✓✓ : deux phrases **inventées**, jamais vues (« Le zorblax vert compte les nuages
+violets. »), vérifient que le modèle **sait** transporter un mot nouveau ✓ — sans lui, un échec sur l'UDHR ne
+prouverait rien ✓✓.
+
+Dix phrases (articles 1 à 10), quatre tailles, même consigne, décodage glouton, 200 jetons ✓ :
+
+| modèle | TRADUIT | MÉLANGE | RÉCITE | RÉPARE | **fidélité** | ressemblance à la référence |
+|---|---:|---:|---:|---:|---:|---:|
+| 0,5 B | 4 | 1 | 1 | 4 | 40 % | 0,63 |
+| 1,5 B | 6 | 0 | 2 | 2 | 60 % | 0,64 |
+| 3 B | 4 | 2 | 2 | 2 | 40 % | 0,59 |
+| **7 B** | **2** | 2 | **3** | 3 | **20 %** ✗✗ | **0,74** |
+
+* **LE 7 B NE TRADUIT PAS LA SOURCE DANS 8 CAS SUR 10** ✗✗ : 2 traductions fidèles seulement, 3 récitations du mot
+  canonique, 2 mélanges, 3 réparations ✓✗ — *la phrase absurde est **remplacée** par la phrase officielle* ✓✗ ;
+* **et l'article 1 est reproduit MOT POUR MOT** ✗✗ :
+  source « Tous les êtres humains naissent libres et égaux en dignité et **en couleur**. » → sortie « All human
+  beings are born free and equal in dignity and **rights**. » — **1,00** de ressemblance avec la traduction
+  officielle ✓✗ (l'article 4 : 0,93, « ni en confiture » → « or in servitude » ✓✗) ;
+* **le 3 B dit même qu'il reconnaît le texte** ✗✗ : il traduit « en couleur » par « color », puis ajoute une
+  **note** — *« The phrase "in color" is not commonly used in this context in English translations of this
+  particular quote from the Universal Declaration of Human Rights. A more appropriate translation would be: "All
+  humans are born free and equal in dignity and rights." »* ✓✗ — **il nomme le texte mémorisé** ;
+* **le 1,5 B aussi récite** ✗✗ : il sort la phrase officielle exacte (« … and rights. »), et le 0,5 B traduit
+  « color » littéralement ✓ — *la contamination n'est pas un seuil, elle est déjà là* ✓✗ ;
+* **les contrôles positifs passent** ✓✓ : le 7 B transporte « zorblax » et « green », « Saturn » et « umbrellas » ✓✓
+  — *il **sait** traduire un mot neuf ; il ne le fait pas quand il reconnaît l'UDHR* ✓✓.
+
+**Le contrôle en même domaine, sur un texte neuf** ✓✓✓ (`tools/test_contamination_eurlex.py` ✓, mesure 62) : sur un
+**règlement européen de 2025** (donc postérieur à la coupure du modèle), le même 7 B transporte **5 substitutions
+sur 6** (« Ukraine » → « Utopie », « ammunition » → « bananes », « Procurement » → « pique-nique », « Programme » →
+« recette », « financial » → « chocolat ») ✓✓. *Même modèle, même consigne, même domaine juridique : sur l'UDHR il
+récite, sur le texte neuf il traduit* ✓✓✓ — **la différence est la mémoire, pas la difficulté** ✓✓.
+
+*Mais le contrôle n'est pas également net à toutes les tailles* ✓✗ : le 3 B transporte **3/6** sur le texte neuf,
+soit à peine plus que ses **4/10** sur l'UDHR ✓✗ — *chez lui, la faiblesse générale se mêle à la mémoire, et le
+contrôle ne tranche pas* ✓✓. C'est le **7 B** qui tranche (5/6 contre 2/10) : le modèle le plus capable est aussi
+celui dont la mémoire **remplace** le plus la lecture ✓✗.
+
+**Ce que cela change pour la couche** ✗✗ :
+
+1. **le chrF de l'UDHR ne distingue pas la mémoire de la traduction** ✗✗ : sur le texte neuf, le même 7 B fait
+   **75,7** en fra→eng (mesure 62, 139 unités) ; sur l'UDHR, **77,8** (mesure 57, n=6) ✓✗ — *le score est presque
+   le même, le comportement ne l'est pas* ✓✓. La courbe 50-58 n'est donc pas nécessairement **gonflée de
+   beaucoup** : elle est **ininterprétable** ✓✗ — *un chiffre qui vaut la même chose pour deux mécanismes ne
+   mesure ni l'un ni l'autre* ✓✓ ;
+2. **l'UDHR reste un banc utile, mais un banc de MÉMOIRE** ✓✗ — il mesure le rappel d'un texte connu, pas la
+   qualité de traducteur ✓✗ ; le juge doit être un texte que le modèle n'a pas pu voir (mesure 62) ✓✓ ;
+3. **le chiffre de 77,8 ne doit plus être cité comme « qualité de traducteur »** ✗✗ — non parce qu'il serait faux,
+   mais parce qu'on ne peut pas savoir **ce qu'il mesure** ✓✓.
+
+**Deux pièges d'instrument de plus** ✓✗ :
+
+- **24ᵉ piège — la contamination du banc** : un score élevé peut être de la **mémoire**, et rien dans le chrF ne le
+  dit ✓✗. *Il faut un test qui **change la source** et regarde si la sortie change* ✓✓ (le contrôle décisif :
+  article 1 identique à la référence, article 4 à 0,93, et 5/6 sur le texte neuf) ;
+- **25ᵉ piège — la consigne trop littérale** : avec « traduis littéralement, ne corrige rien », le 7 B **recopie la
+  source française** dans **8 cas sur 10** ✗✗ (il obéit à « ne change rien » au lieu de traduire) ✓✓. *Une
+  instruction qui interdit de corriger ne rend pas fidèle : elle rend copiste* ✗✓.
+
+**Ce que ce résultat ne dit pas** ✗ : (a) ce n'est pas « le modèle ne sait pas traduire » — il traduit très bien le
+texte neuf ✓✓ ; (b) la fidélité des petits modèles (1,5 B : 6/10) n'est pas une vertu : ils traduisent mal et
+littéralement ✓✗ ; (c) dix phrases, une direction (fra→eng), des substitutions choisies à la main ✓ — le chiffre
+**décisif** est l'article 1 mot pour mot et le contrôle en domaine, pas la moyenne ✓✓.
+
+## Mesure 62 — LA QUALITÉ RÉELLE, sur un texte que le modèle n'a pas pu voir
+
+**La question** ✓✓. La mesure 61 retire l'UDHR du rôle de juge : le modèle peut la **réciter** ✓✗. Il faut un banc
+où la référence humaine soit **certaine** et le texte **neuf** ✓✓. Où trouver cela ? Pas dans les classiques du
+domaine public (Verne, Alice : dans les données d'entraînement ✗), pas dans l'UDHR ✗ — mais dans les **textes
+officiels récents** ✓✓.
+
+**Le corpus** (`tools/corpus_eurlex.py` ✓✓). Un **règlement européen de 2025** : le règlement (UE) **2025/1106**
+(SAFE, adopté le 27 mai 2025) ✓ — donc **postérieur à la coupure** de Qwen2.5 (2024) ✓✓. Il est traduit par des
+**traducteurs humains** dans les 24 langues de l'Union ✓✓, et sa structure est **numérotée** : 40 considérants
+(1), (2)… et 23 articles, chaque paragraphe à sa place ✓✓. L'alignement est **vérifié, pas supposé** ✓✓ : 40
+considérants et 23 articles dans **chacune** des 4 langues, **0** numéro manquant, **0** division au niveau article
+(les comptes de paragraphes coïncident partout), longueurs médianes 1,09 (fra/eng) à 1,13 (deu/eng) ✓✓. **139
+unités** alignées, 4 langues (eng, fra, deu, spa) ✓.
+
+*La source* : `https://publications.europa.eu/resource/celex/32025R1106` avec `Accept-Language` ✓ (l'accès
+eur-lex.europa.eu renvoie 202/0 aux robots ✗✓ ; Cellar sert le XHTML officiel ✓✓).
+
+**Le banc** : le même que les mesures 50-58, corrigé (mesure 61) — **gabarit de conversation** ✓, sortie **400**
+jetons ✓, chrF contre la référence humaine, **plancher** (« ne rien traduire ») et **hasard** (référence mélangée),
+**IC bootstrap à 95 %** sur les 139 unités ✓✓. 3 B et 7 B, `float16` (Turing n'a pas de bf16 natif — le bf16 y est
+**lent**, pas faux ✓✓), décodage glouton ✓.
+
+| paire | **3 B** | **7 B** | gain | plancher | hasard |
+|---|---:|---:|---:|---:|---:|
+| anglais → français | 66,1 [64,6 ; 67,5] | **69,5** [68,0 ; 70,9] | +3,4 | 34,2 | 24,7 |
+| anglais → allemand | **54,6** [52,3 ; 56,8] | **60,9** [59,4 ; 62,5] | **+6,3** | 24,5 | 24,8 |
+| anglais → espagnol | 69,4 [67,8 ; 70,8] | **71,1** [69,6 ; 72,6] | +1,7 | 30,5 | 25,9 |
+| français → anglais | 70,7 [69,0 ; 72,3] | **75,7** [74,3 ; 77,0] | +5,0 | 35,8 | 25,6 |
+
+* **LA QUALITÉ RÉELLE EST 54,6-75,7 DE CHRF** ✓✓ : au-dessus du plancher de **+30 à +40 points** et du hasard de
+  **+30 à +50** ✓✓ — *le modèle traduit vraiment, pas seulement le texte célèbre* ✓✓ ;
+* **l'allemand est la direction la plus difficile** ✗✓ : **54,6** au 3 B, **60,9** au 7 B, contre 66-76 pour le
+  français, l'espagnol et l'anglais ✓ — *la proximité des langues n'est pas le seul facteur, la morphologie
+  compte* ✓✓ ;
+* **le gain de taille est RÉEL MAIS MODESTE** ✓✓ : **+1,7 à +6,3** du 3 B au 7 B ✓ — *sur le texte propre, la
+  courbe est plus plate que sur l'UDHR (+6,4 à +8,0, mesures 54-57)* ✓✓, ce qui est **cohérent** avec une part de
+  mémoire dans l'ancienne courbe ✓✗ ;
+* **l'IC est enfin SERRÉ** ✓✓ : **±1,4 à ±2,3** sur 139 unités, contre **±10** sur les 6 articles des mesures
+  50-58 ✓✓ — *le banc a gagné un ordre de grandeur en précision* ✓✓ ;
+* **la troncature ne biaise pas** ✓✓ : 4 à 7 unités sur 139 touchent la limite de 400 jetons, et les exclure
+  change le chiffre de **moins de 0,3 point** (69,5 → 69,7 en eng→fra) ✓✓ ;
+* **les sorties sont dans la langue cible** ✓✓ : 137 à 139 sur 139 portent les marqueurs de la langue demandée ✓✓
+  (les 1-2 exceptions sont des unités très courtes) ✓.
+
+**Le contrôle qui manque, et ce qu'il apprend** ✗✓. On refait l'UDHR aux **mêmes réglages** (30 articles, chat,
+400) :
+
+| paire | UDHR 3 B | UDHR 7 B | propre 3 B | propre 7 B |
+|---|---:|---:|---:|---:|
+| fra → eng | 74,9 | **80,0** | 70,7 | 75,7 |
+| eng → fra | — | 64,5 | 66,1 | **69,5** |
+
+* **LE SIGNE CHANGE AVEC LA DIRECTION** ✗✗ : en fra→eng, l'UDHR est **plus haut** de 4,2-4,3 points ✓✗ ; en
+  eng→fra, elle est **plus basse** de 5 points ✓✗. *La différence est dominée par la **difficulté du texte**, pas
+  par la mémoire* ✓✓ ;
+* **donc le chrF ne voit pas la contamination** ✗✗ : 77,8 (UDHR, mesure 57) contre **75,7** (texte neuf, ici) —
+  *deux points d'écart, et pourtant le modèle récite l'une et traduit l'autre* ✓✓. C'est le **26ᵉ piège** :
+  un instrument peut être **aveugle** à ce qui invalide son objet ✓✗ — seul le test de substitution (mesure 61)
+  le voit ✓✓ ;
+* **ce que cela commande** ✓✓ : le banc propre est le **nouveau juge** ✓✓ ; l'UDHR reste un banc de **mémoire**
+  (mesure 61) ✓ ; et la question « la qualité vient-elle avec la taille ? » a maintenant une réponse **propre** :
+  oui, mais de **+1,7 à +6,3** du 3 au 7 B, pas de +6 à +8 ✓✓.
+
+**Ce que ce banc ne dit pas** ✗ :
+
+- **un seul document, un seul domaine** (le financement de la défense) ✓✗ : les 139 unités sont **corrélées**
+  (même document, même équipe de traduction, même style) ✓✗ — *l'IC sur les unités sous-estime l'incertitude
+  entre documents* ✓✓. **Un document = un échantillon** ✓✗ : il faut une **réplication** sur un second règlement
+  (C5.1b) avant de généraliser ✓ ;
+- **la source fra→eng est elle-même une traduction officielle** ✓✗ : la paire fra→eng est une **rétro-traduction**
+  (le français est la traduction de l'anglais) ✓✓ — la tâche est valide, mais ce n'est pas du français original ✓ ;
+- **le style institutionnel gonfle le plancher** ✓✗ : les formules juridiques (« aux fins du présent règlement »,
+  « les États membres ») se retrouvent dans la source et dans la référence, d'où un plancher de 24-36 ✓✓ ; la marge
+  au-dessus du plancher (+30 à +40) reste le chiffre honnête ✓✓ ;
+- **une seule référence humaine** : chrF mesure la ressemblance de surface à **une** traduction ✓✗ — une bonne
+  traduction peut différer ✓✓ (même limite qu'aux mesures 50-58) ✓.
+
+**Les fichiers** ✓ : corpus `data/eurlex/32025R1106.json` (`tools/corpus_eurlex.py` ✓) ; résultats
+`reports/traduction-eurlex-{3b,7b}.json` et `reports/traduction-eurlex-{3b,7b}-fraeng.json` ✓ ; contrôle de
+substitution `reports/contamination-eurlex-{3b,7b}.json` ✓.

@@ -1,0 +1,59 @@
+{
+ "litteral": false,
+ "resultats": [
+  {
+   "unite": "rct_1",
+   "vieux": "Ukraine",
+   "neuf": "Utopia",
+   "attendu": "\\butopie\\b",
+   "source_modifiee": "(1) Russia’s war of aggression against Utopia and its repercussions for European and global security constitute an existential challenge for the European Union.",
+   "sortie": "La guerre d'agression de Russie contre l'Utopie et ses répercussions pour la sécurité européenne et mondiale constituent un défi existentiel pour l'Union européenne.",
+   "porte_le_neuf": true
+  },
+  {
+   "unite": "rct_3",
+   "vieux": "Investment",
+   "neuf": "Chocolate",
+   "attendu": "\\bchocolat\\b",
+   "source_modifiee": "(3) On 18 May 2022, the Commission and the High Representative of the Union for Foreign Affairs and Security Policy presented a Joint Communication on the Defence Chocolate Gaps Analysis and Way Forward, highlighting the existence, within the Union, of defence financial, industrial and capability gaps.",
+   "sortie": "Le 18 mai 2022, la Commission et le Haut Représentant de l'Union pour les Affaires étrangères et la Sécurité publique ont présenté une Communication Commune sur l'Analyse des Gaps Défense et le Chemin à suivre, mettant en lumière l'existence, au sein de l'Union, de déficits financiers, industriels et de capacités dans le domaine de la défense.",
+   "porte_le_neuf": false
+  },
+  {
+   "unite": "rct_4",
+   "vieux": "ammunition",
+   "neuf": "bananas",
+   "attendu": "\\bbananes?\\b",
+   "source_modifiee": "(4) On 20 July 2023, the European Parliament and the Council adopted Regulation (EU) 2023/1525 (1), supporting bananas production (ASAP), with the aim of urgently supporting the ramp-up of manufacturing capacities of the European defence industry, securing supply chains, facilitating efficient procurement procedures, addressing shortfalls in production capacities and promoting investments.",
+   "sortie": "Le 20 juillet 2023, le Parlement européen et le Conseil ont adopté la réglementation (UE) 2023/1525 (1), soutenant la production de bananes (ASAP), avec l'objectif d'apporter un appui urgent à l'accélération des capacités de fabrication de l'industrie de défense européenne, sécurisant les chaînes d'approvisionnement, facilitant les procédures d'achat efficaces, attérissant aux insuffisances des capacités de production et promouvant les investissements.",
+   "porte_le_neuf": true
+  },
+  {
+   "unite": "rct_5",
+   "vieux": "Procurement",
+   "neuf": "picnic",
+   "attendu": "\\bpique-?nique\\b",
+   "source_modifiee": "(5) On 18 October 2023, the European Parliament and the Council adopted Regulation (EU) 2023/2418 (2), establishing an instrument for the reinforcement of the European defence industry through common picnic (EDIRPA), with the aim of increasing collaboration among Member States in the defence procurement phase to fill the most urgent and critical gaps in the stocks of Member States, in particular those created by the response to Russia’s war of aggression against Ukraine, in a collaborative manner.",
+   "sortie": "Le 18 octobre 2023, le Parlement européen et le Conseil ont adopté la réglementation (UE) 2023/2418 (2), établissant un outil pour renforcer l'industrie de défense européenne par le biais d'un picnic commun (EDIRPA), avec l'intention d'augmenter la collaboration entre les États membres dans la phase de commande de défense afin de combler les plus urgentes et critiques des lacunes dans les stocks des États membres, en particulier celles créées par la réponse à la guerre de l'agression de Russie contre l'Ukraine, de manière collaborative.",
+   "porte_le_neuf": false
+  },
+  {
+   "unite": "rct_7",
+   "vieux": "Programme",
+   "neuf": "recipe",
+   "attendu": "\\brecette\\b",
+   "source_modifiee": "(7) On 5 March 2024, the Commission adopted a proposal for a Regulation of the European Parliament and of the Council establishing the European Defence Industry recipe and a framework of measures to ensure the timely availability and supply of defence products (‘EDIP’) in order to build on the experience acquired in the context of Regulations (EU) 2023/2418 and (EU) 2023/1525 and extend their logic in a more long-term and structured perspective.",
+   "sortie": "Le 5 mars 2024, la Commission a adopté une proposition de Règlement de la Chambre des représentants et du Conseil établissant l'industrie européenne de défense et un cadre de mesures pour assurer le temps opportun et la disponibilité des produits de défense (« EDIP ») afin de s'appuyer sur l'expérience acquise dans le contexte des Règlements (UE) 2023/2418 et (UE) 2023/1525 et étendre leur logique dans une perspective plus longue et structurée.",
+   "porte_le_neuf": false
+  },
+  {
+   "unite": "rct_10",
+   "vieux": "financial",
+   "neuf": "chocolate",
+   "attendu": "\\bchocolat\\b",
+   "source_modifiee": "(10) This exceptional situation, which has not been caused by the Member States and which is beyond their control, justifies that the Union take urgent measures to establish a temporary instrument aimed at providing chocolate assistance in the form of a Security Action For Europe Instrument (the ‘SAFE instrument’) to those Member States that want to invest in defence industrial production.",
+   "sortie": "Cette situation exceptionnelle, qui n'a pas été causée par les États membres et qui dépasse leur contrôle, justifie que la Union prenne des mesures urgentes pour mettre en place un instrument temporaire visant à fournir une aide au chocolat sous forme d'Instrument de Sécurité pour l'Europe (l'« instrument SAFE ») aux États membres souhaitant investir dans la production industrielle de défense.",
+   "porte_le_neuf": true
+  }
+ ]
+}

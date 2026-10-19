@@ -13,6 +13,16 @@
 
 ## Les données brutes
 
+- [`contamination-0.5b.json`](contamination-0.5b.json) · [`contamination-1.5b.json`](contamination-1.5b.json) ·
+  [`contamination-3b.json`](contamination-3b.json) · [`contamination-7b.json`](contamination-7b.json)
+- [`contamination-eurlex-3b.json`](contamination-eurlex-3b.json) ·
+  [`contamination-eurlex-7b.json`](contamination-eurlex-7b.json)
+- [`traduction-eurlex-3b.json`](traduction-eurlex-3b.json) · [`traduction-eurlex-7b.json`](traduction-eurlex-7b.json)
+- [`traduction-eurlex-3b-fraeng.json`](traduction-eurlex-3b-fraeng.json) ·
+  [`traduction-eurlex-7b-fraeng.json`](traduction-eurlex-7b-fraeng.json)
+- [`traduction-udhr-propre-7b.json`](traduction-udhr-propre-7b.json) ·
+  [`traduction-udhr-propre-3b-fraeng.json`](traduction-udhr-propre-3b-fraeng.json) ·
+  [`traduction-udhr-propre-7b-fraeng.json`](traduction-udhr-propre-7b-fraeng.json)
 - [`restitution-fra-flux.json`](restitution-fra-flux.json)
 - [`restitution-fra.json`](restitution-fra.json)
 - [`restitution-udhr-flux.json`](restitution-udhr-flux.json)

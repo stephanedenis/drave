@@ -1,0 +1,350 @@
+[
+ {
+  "paire": "fra:eng",
+  "n": 30,
+  "chrf": 74.86252485757261,
+  "ic95": [
+   71.6,
+   78.2
+  ],
+  "plancher_source": 31.577068379460247,
+  "hasard": 27.569498654412648,
+  "tronque": 0,
+  "recopie": 19,
+  "ratio_longueur": 1.04,
+  "chat": true,
+  "max_jetons": 400,
+  "details": [
+   {
+    "article": 1,
+    "chrf": 82.83,
+    "plancher": 26.62,
+    "hasard": 16.16,
+    "sortie": "All humans are born free and equal in dignity and rights. They are endowed with reason and conscience and must act towards one another in the spirit of fraternity.",
+    "longueur_sortie": 163,
+    "longueur_ref": 170,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 2,
+    "chrf": 73.57,
+    "plancher": 39.21,
+    "hasard": 37.32,
+    "sortie": "Everyone may claim all the rights and freedoms proclaimed in the present Declaration, without any distinction, notably as regards race, color, sex, language, religion, political or other opinion, national or social origin, property, birth, or any other status. Furthermore, no one shall be subjected to discrimination based on the political, legal, or international status of the country or territory of which a person is a national, whether that country or territory is independent, under trusteeship, non-autonomous, or subject to any restriction on its sovereignty.",
+    "longueur_sortie": 568,
+    "longueur_ref": 516,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 3,
+    "chrf": 88.02,
+    "plancher": 25.45,
+    "hasard": 6.99,
+    "sortie": "Everyone has the right to life, liberty, and security of person.",
+    "longueur_sortie": 64,
+    "longueur_ref": 67,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 4,
+    "chrf": 92.36,
+    "plancher": 27.05,
+    "hasard": 17.17,
+    "sortie": "No one shall be held in slavery or servitude; slavery and the slave trade are prohibited in all their forms.",
+    "longueur_sortie": 108,
+    "longueur_ref": 113,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 5,
+    "chrf": 97.05,
+    "plancher": 31.57,
+    "hasard": 24.18,
+    "sortie": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment.",
+    "longueur_sortie": 96,
+    "longueur_ref": 95,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 6,
+    "chrf": 63.41,
+    "plancher": 23.04,
+    "hasard": 11.12,
+    "sortie": "Everyone has the right to be recognized everywhere in all respects of their legal personality.",
+    "longueur_sortie": 94,
+    "longueur_ref": 76,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 7,
+    "chrf": 75.21,
+    "plancher": 38.63,
+    "hasard": 38.4,
+    "sortie": "Everyone is equal before the law and has the right to an equal protection of the law without any discrimination. Everyone has the right to equal protection against any discrimination that would violate this Declaration and against any provocation to such discrimination.",
+    "longueur_sortie": 270,
+    "longueur_ref": 252,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 8,
+    "chrf": 76.48,
+    "plancher": 35.34,
+    "hasard": 26.72,
+    "sortie": "Everyone has the right to an effective remedy before national competent courts against acts violating fundamental rights recognized either by the constitution or by law.",
+    "longueur_sortie": 169,
+    "longueur_ref": 166,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 9,
+    "chrf": 57.48,
+    "plancher": 26.52,
+    "hasard": 26.16,
+    "sortie": "No one shall be arbitrarily arrested, detained, or exiled.",
+    "longueur_sortie": 58,
+    "longueur_ref": 66,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 10,
+    "chrf": 67.41,
+    "plancher": 32.62,
+    "hasard": 34.29,
+    "sortie": "Everyone has the right, in full equality, to have their case heard fairly and publicly by an independent and impartial tribunal, which will decide either on their rights and obligations or on the merit of any criminal charges brought against them.",
+    "longueur_sortie": 247,
+    "longueur_ref": 199,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 11,
+    "chrf": 60.85,
+    "plancher": 31.49,
+    "hasard": 32.59,
+    "sortie": "Any person accused of a criminal act is presumed innocent until their guilt has been legally established in a public trial where all necessary guarantees for their defense have been provided. No one shall be convicted for acts or omissions committed at the time when they did not constitute a criminal act under either national or international law. Moreover, no punishment shall be imposed that exceeds the penalty that was applicable at the time the criminal act was committed.",
+    "longueur_sortie": 479,
+    "longueur_ref": 510,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 12,
+    "chrf": 69.7,
+    "plancher": 33.29,
+    "hasard": 31.78,
+    "sortie": "No one will be subjected to arbitrary intrusions into their private life, family, home, or correspondence, nor will they be subjected to attacks on their honor and reputation. Every person has the right to legal protection against such intrusions or attacks.",
+    "longueur_sortie": 258,
+    "longueur_ref": 238,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 13,
+    "chrf": 74.8,
+    "plancher": 23.42,
+    "hasard": 25.63,
+    "sortie": "Everyone has the right to move freely and choose their residence within a state. Everyone has the right to leave any country, including their own, and to return to their country.",
+    "longueur_sortie": 178,
+    "longueur_ref": 187,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 14,
+    "chrf": 69.04,
+    "plancher": 29.88,
+    "hasard": 34.96,
+    "sortie": "Before persecution, every person has the right to seek asylum and benefit from it in other countries. This right cannot be invoked in cases of genuinely founded criminal proceedings or acts contrary to the purposes and principles of the United Nations.",
+    "longueur_sortie": 252,
+    "longueur_ref": 265,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 15,
+    "chrf": 80.22,
+    "plancher": 38.72,
+    "hasard": 31.12,
+    "sortie": "Everyone has the right to a nationality. No one can be arbitrarily deprived of their nationality or the right to change their nationality.",
+    "longueur_sortie": 138,
+    "longueur_ref": 144,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 16,
+    "chrf": 73.64,
+    "plancher": 35.97,
+    "hasard": 30.69,
+    "sortie": "From the age of majority, men and women, without any restrictions regarding race, nationality, or religion, have the right to marry and establish a family. They have equal rights in marriage, during marriage, and upon its dissolution. A marriage can only be entered into with the free and full consent of the future spouses. The family is the natural and fundamental element of society and has the right to protection from society and the state.",
+    "longueur_sortie": 445,
+    "longueur_ref": 437,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 17,
+    "chrf": 56.71,
+    "plancher": 24.21,
+    "hasard": 22.43,
+    "sortie": "Everyone, whether individually or collectively, has the right to property. No one can be arbitrarily deprived of their property.",
+    "longueur_sortie": 128,
+    "longueur_ref": 137,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 18,
+    "chrf": 86.83,
+    "plancher": 34.07,
+    "hasard": 26.87,
+    "sortie": "Everyone has the right to freedom of thought, conscience, and religion; this right includes the freedom to change one's religion or belief as well as the freedom to manifest one's religion or belief, either alone or in community with others, in public or private, by worship, teaching, practice, and observance.",
+    "longueur_sortie": 311,
+    "longueur_ref": 294,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 19,
+    "chrf": 68.43,
+    "plancher": 32.32,
+    "hasard": 35.56,
+    "sortie": "Everyone has the right to freedom of opinion and expression, which includes the right not to be persecuted for one's opinions and the right to seek, receive, and disseminate, without regard to borders, information and ideas through any means of expression.",
+    "longueur_sortie": 256,
+    "longueur_ref": 227,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 20,
+    "chrf": 77.98,
+    "plancher": 29.81,
+    "hasard": 24.12,
+    "sortie": "Everyone has the right to peaceful assembly and association. No one can be compelled to join an association.",
+    "longueur_sortie": 108,
+    "longueur_ref": 124,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 21,
+    "chrf": 66.75,
+    "plancher": 30.84,
+    "hasard": 34.88,
+    "sortie": "Everyone has the right to participate in the governance of their country, either directly or through freely chosen representatives. Everyone has the right to access public functions of their country on equal terms. The will of the people is the foundation of the authority of the public authorities; this will must be expressed through fair elections that occur periodically, by universal, equal suffrage, and secret ballot, or according to an equivalent procedure ensuring the freedom of voting.",
+    "longueur_sortie": 496,
+    "longueur_ref": 451,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 22,
+    "chrf": 79.71,
+    "plancher": 39.62,
+    "hasard": 23.11,
+    "sortie": "Every person, as a member of society, has the right to social security; she is entitled to obtain the satisfaction of the economic, social, and cultural rights indispensable to her dignity and the free development of her personality, through the national effort and international cooperation, taking into account the organization and resources of each country.",
+    "longueur_sortie": 360,
+    "longueur_ref": 341,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 23,
+    "chrf": 72.73,
+    "plancher": 32.54,
+    "hasard": 36.56,
+    "sortie": "Everyone has the right to work, to choose their work freely, to fair and satisfactory working conditions, and to protection against unemployment. Everyone is entitled, without any discrimination, to equal pay for equal work. Anyone who works has the right to an equitable and satisfactory remuneration ensuring, in turn, that their family can live a life consistent with human dignity, and supplemented, if necessary, by other means of social protection. Every person has the right to found trade unions with others and to affiliate to trade unions for the defense of their interests.",
+    "longueur_sortie": 584,
+    "longueur_ref": 529,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 24,
+    "chrf": 73.61,
+    "plancher": 28.94,
+    "hasard": 23.86,
+    "sortie": "Everyone has the right to rest and leisure, and in particular, to the limitation of the working hour to a reasonable duration and to periodic paid holidays.",
+    "longueur_sortie": 156,
+    "longueur_ref": 124,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 25,
+    "chrf": 81.8,
+    "plancher": 29.28,
+    "hasard": 30.17,
+    "sortie": "Everyone has the right to a standard of living adequate for the health and well-being of himself and of his family, including food, clothing, housing and medical care and necessary social services; everyone has the right to security in case of unemployment, illness, disability, widowhood, old age or other circumstances which have rendered them unable to maintain their standard of living and economic resources. Maternity and childhood have the right to special protection. All children, whether born in or out of wedlock, shall enjoy the same social protection.",
+    "longueur_sortie": 564,
+    "longueur_ref": 518,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 26,
+    "chrf": 73.34,
+    "plancher": 34.19,
+    "hasard": 38.8,
+    "sortie": "Everyone has the right to education. Education must be free, at least concerning elementary and basic education. Elementary education is compulsory. Vocational and technical education should be universal; access to higher education should be open in full equality for all based on merit. Education should aim at the full development of human personality and the strengthening of respect for human rights and fundamental freedoms. It should foster understanding, tolerance, and friendship among all nations and all racial or religious groups, as well as the activities of the United Nations for maintaining international peace. Parents have, by priority, the right to choose the type of education to be given to their children.",
+    "longueur_sortie": 726,
+    "longueur_ref": 747,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 27,
+    "chrf": 80.42,
+    "plancher": 35.97,
+    "hasard": 20.8,
+    "sortie": "Everyone has the right to participate freely in the cultural life of the community, to enjoy the arts, and to share in the progress of science and its resultant benefits. Each person has the right to the protection of their moral and material interests resulting from any scientific, literary, or artistic work they have authored.",
+    "longueur_sortie": 330,
+    "longueur_ref": 325,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 28,
+    "chrf": 66.75,
+    "plancher": 33.12,
+    "hasard": 29.06,
+    "sortie": "Everyone has the right that, on both the social and international levels, an order exists such that the rights and freedoms set forth in the present Declaration can find full effect.",
+    "longueur_sortie": 182,
+    "longueur_ref": 142,
+    "tronque": false,
+    "recopie": false
+   },
+   {
+    "article": 29,
+    "chrf": 79.75,
+    "plancher": 33.28,
+    "hasard": 37.62,
+    "sortie": "The individual has duties towards the community in which only the free and full development of his personality is possible. In exercising his rights and enjoying his freedoms, each person is subject only to limitations established by law exclusively for the purpose of ensuring the recognition and respect of the rights and freedoms of others, and to meet the just demands of morality, public order, and the general welfare in a democratic society. These rights and freedoms shall never be exercised contrary to the purposes and principles of the United Nations.",
+    "longueur_sortie": 562,
+    "longueur_ref": 563,
+    "tronque": false,
+    "recopie": true
+   },
+   {
+    "article": 30,
+    "chrf": 79.01,
+    "plancher": 30.3,
+    "hasard": 18.0,
+    "sortie": "None of the provisions of this Declaration can be interpreted as implying for any State, group, or individual any right to engage in an activity or to perform an act aimed at destroying the rights and freedoms set forth therein.",
+    "longueur_sortie": 228,
+    "longueur_ref": 224,
+    "tronque": false,
+    "recopie": false
+   }
+  ]
+ }
+]
