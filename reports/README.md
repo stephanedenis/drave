@@ -18,7 +18,10 @@
   [`contamination-3b.json`](contamination-3b.json) · [`contamination-7b.json`](contamination-7b.json)
 - [`contamination-eurlex-3b.json`](contamination-eurlex-3b.json) ·
   [`contamination-eurlex-7b.json`](contamination-eurlex-7b.json)
-- [`traduction-eurlex-3b.json`](traduction-eurlex-3b.json) · [`traduction-eurlex-7b.json`](traduction-eurlex-7b.json)
+- [`traduction-eurlex-3b.json`](traduction-eurlex-3b.json) · [`traduction-eurlex-7b.json`](traduction-eurlex-7b.json) ·
+  [`traduction-eurlex-14b.json`](traduction-eurlex-14b.json)
+- [`traduction-eurlex2509-3b.json`](traduction-eurlex2509-3b.json) ·
+  [`traduction-eurlex2509-7b.json`](traduction-eurlex2509-7b.json) *(réplication, règlement 2025/2509)*
 - [`traduction-eurlex-3b-fraeng.json`](traduction-eurlex-3b-fraeng.json) ·
   [`traduction-eurlex-7b-fraeng.json`](traduction-eurlex-7b-fraeng.json)
 - [`traduction-eurlex-0.5b.json`](traduction-eurlex-0.5b.json) · [`traduction-eurlex-1.5b.json`](traduction-eurlex-1.5b.json)

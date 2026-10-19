@@ -32,11 +32,22 @@ surface, et le contenu un **espace commun** ?*
   gratuitement ;
 - **la hiérarchie des surfaces** : langues **96 %** > dialectes **52-97 %** > styles (traducteurs) **24 %** — et les
   trois sont **lues à 100 %**. *La couche commune n'efface aucune surface : elle en aligne le sens.*
+- **un banc peut mesurer la MÉMOIRE au lieu de la traduction** : sur un texte célèbre (l'UDHR), le modèle **récite**
+  la traduction officielle au lieu de traduire ce qu'il lit — et le chrF **ne le voit pas** (77,8 sur l'UDHR contre
+  75,7 sur un texte neuf) ✗✗. *Un score de surface ne distingue pas la mémoire de la traduction* : il faut un texte
+  que le modèle n'a pas pu voir, et un test qui **change la source** ;
+- **la qualité réelle de traducteur** (règlement européen postérieur à la coupure) : **54,7 → 75,7 de chrF** du 0,5
+  au 7 B, **courbe lisse et monotone** ; le **littéraire** est le plus dur (47,7-49,8) et la **taille n'y aide
+  presque pas** — *le levier est le domaine, pas les paramètres* ;
+- **le bruit d'entrée est signalable** (fautes et langues mêlées : détection 100 %, AUC 1,00) **mais pas
+  corrigeable** : la correction automatique **empire** le texte 8 fois sur 9, et la correction la plus **fluide**
+  est la plus **fausse** ✗✗. *Le miroir doit valider le **sens**, pas la fluidité.*
 
 ## Ce qui reste ouvert (et qui commande la suite)
 
-1. **la qualité de traduction** du module entrée-sortie : la retrouver sur des **domaines** (technique, juridique,
-   littéraire) et des **langues peu dotées** — c'est le juge de paix de la couche ;
+1. **la qualité de traduction** du module entrée-sortie : le **juridique** et le **littéraire** sont mesurés sur des
+   textes non mémorisables ; il reste le **technique**, le **quotidien** et les **langues peu dotées** — c'est le
+   juge de paix de la couche ;
 2. **la restitution exacte à l'échelle** : au-delà de 10 langues partagées, elle meurt ; faut-il des modules
    spécialisés par famille, ou un modèle beaucoup plus grand ?
 3. **le style** : il est lisible, mais le sens ne le traverse qu'à 24 % — comment l'augmenter sans perdre le style ?

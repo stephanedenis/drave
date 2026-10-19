@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (65 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (67 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2386,3 +2386,69 @@ donnaient exactement le même chiffre ✓✗. Corrigé en puisant dans le vocabu
 le CER est **aveugle au sens** (une correction peut avoir un CER élevé et garder le sens, ou l'inverse) ✓✗ ; le
 seuil est un 95ᵉ centile sur **8** textes propres (fragile) ✓✓ ; et la langue mêlée est un **saladier de mots**, pas
 un vrai bilinguisme ✓✗ — le résultat vaut pour ce bruit-là ✓.
+
+## Mesure 66 — LE 14 B PROLONGE LA COURBE : +3,8 en eng→fra, mais seulement +0,9 en fra→eng — le premier aplatissement
+
+**La question** ✓✓. La mesure 63 s'arrêtait à 7 B en annonçant « le gain ne s'arrête pas » ; le 14 B le vérifie-t-il,
+et où la courbe s'aplatit-elle ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus (règlement 2025/1106, 139 unités), les mêmes réglages (chat, 400, glouton),
+**Qwen2.5-14B-Instruct en `float16` réparti sur les deux cartes** (28 Go de poids, 14,4 Go par carte, **sans
+quantification** ✗✓ — c'est une comparaison à précision égale ✓✓).
+
+| modèle | eng → fra | fra → eng | gain eng→fra | gain fra→eng |
+|---|---:|---:|---:|---:|
+| 0,5 B | 54,7 | 63,1 | — | — |
+| 1,5 B | 62,5 | 68,5 | +7,8 | +5,4 |
+| 3 B | 66,1 | 70,7 | +3,6 | +2,2 |
+| 7 B | 69,5 | 75,7 | +3,4 | +5,0 |
+| **14 B** | **73,3** [72,0 ; 74,7] | **76,6** [75,5 ; 77,7] | **+3,8** | **+0,9** |
+
+* **LE 14 B EST LE MEILLEUR DES CINQ** ✓✓ : **73,3** et **76,6**, à **+39 / +41** du plancher ✓✓ — *la qualité
+  continue de monter avec la taille* ✓✓ ;
+* **mais l'aplatissement est là, dans une direction** ✗✓ : en **eng→fra**, +3,8 (pas d'arrêt) ✓ ; en **fra→eng**,
+  **+0,9 seulement** (7 B → 14 B) ✓✗ — *doubler les paramètres pour moins d'un point, c'est le début du coude* ✓✓ ;
+* **le rapport qualité/prix se dégrade** ✗✗ : le 14 B coûte **2×** le 7 B en mémoire et en calcul, pour **+0,9 à
+  +3,8** points ✓✗ — *la taille reste un levier, mais un levier de plus en plus cher* ✓✓ ;
+* **et il reste loin de 100** ✗✓ : 73-77 de chrF, comme le 7 B sur l'UDHR (mesure 57) ✓✗ — *la mémoire de l'UDHR
+  donnait l'illusion d'un modèle presque parfait ; le texte neuf montre le vrai niveau* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : deux directions, un seul document, `float16` ✓✗ ; les écarts < 1 point ne sont
+pas interprétables (IC ±1,3) ✓✓ ; et « plus de taille » n'est pas « plus de domaine » — la mesure 64 le montre assez
+(le littéraire ne gagne que +2,1 du 3 au 7 B) ✓✓.
+
+## Mesure 67 — LA QUALITÉ SE RÉPLIQUE SUR UN SECOND DOCUMENT : +1,1 à +2,5 points d'écart, et le même gain de taille
+
+**La question** ✗✓. La mesure 62 reposait sur **un seul règlement** — 139 unités **corrélées** (même document, même
+équipe de traduction) ✓✗, et sa propre fiche le disait : *un document = un échantillon* ✓✓. Le chiffre tient-il sur
+un **second** texte ? ✓✓
+
+**Le corpus** ✓✓ (`tools/corpus_eurlex.py --celex 32025R2509` ✓) : le règlement (UE) **2025/2509** sur la **sécurité
+des jouets** (novembre 2025, postérieur à la coupure) ✓✓ — **90 considérants + 59 articles = 535 unités** alignées
+par structure dans les **4 mêmes langues** (0 numéro manquant, comptes de paragraphes identiques partout, longueurs
+médianes 1,08-1,10) ✓✓. On échantillonne **139 unités étalées sur tout le corpus** (une sur trois) ✓✓ — même taille,
+même banc, mêmes réglages que la mesure 62 ✓.
+
+| paire | corpus 1 (défense) | **corpus 2 (jouets)** | écart | plancher | hasard |
+|---|---:|---:|---:|---:|---:|
+| 3 B eng → fra | 66,1 [64,6 ; 67,5] | **68,4** [66,6 ; 70,1] | +2,3 | 31,8 | 23,2 |
+| 7 B eng → fra | 69,5 [68,0 ; 70,9] | **72,0** [70,5 ; 73,5] | +2,5 | 31,8 | 23,1 |
+| 3 B fra → eng | 70,7 [69,0 ; 72,3] | **71,8** [70,0 ; 73,6] | +1,1 | 33,4 | 23,1 |
+| 7 B fra → eng | 75,7 [74,3 ; 77,0] | **76,4** [74,8 ; 78,0] | +0,7 | 33,4 | 23,2 |
+
+* **LA QUALITÉ SE RÉPLIQUE** ✓✓ : sur un **second** règlement, le même modèle donne **68,4-76,4** (contre
+  66,1-75,7) ✓✓ — *l'écart est de **+1,1 à +2,5 points**, dans l'IC ou juste à côté* ✓✓. Le banc propre n'est
+  **pas** un artefact d'un document ✓✓ ;
+* **LE GAIN DE TAILLE SE RÉPLIQUE AUSSI** ✓✓ : +3,6 (eng→fra) et +4,6 (fra→eng) du 3 B au 7 B, contre +3,4 et +5,0
+  sur le corpus 1 ✓✓ — *le même ordre, la même pente* ✓✓ ;
+* **le second corpus est un peu plus facile** ✗✓ : +1 à +2,5 points, cohérent avec un texte plus concret (des
+  jouets, des matériaux, des essais) qu'un texte de financement de la défense ✓✓ — *la difficulté du document
+  déplace le niveau, pas la conclusion* ✓✓ ;
+* **ce que cela achète** ✓✓ : la réplication **ferme** la réserve « un document = un échantillon » de la mesure
+  62 ✓✓ ; les 535 unités du corpus 2 sont disponibles pour les mesures suivantes (domaines, langues) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : deux documents, **un seul genre** (règlement européen), **quatre langues**,
+deux directions ✓✗ ; l'écart de +1 à +2,5 points est **réel mais petit** — il ne prouve pas que le niveau est
+stable **entre genres** (le littéraire, mesure 64, est 23 points en dessous) ✓✗ ; et les deux corpus partagent la
+même **équipe de traduction** et le même **style institutionnel** ✓✗ — *deux règlements de la même maison, ce n'est
+pas deux domaines* ✓✓.
