@@ -1931,3 +1931,24 @@ fallu trois corrections pour le voir :
 * **la leçon d'instrument (21ᵉ)** ✓✓ : *une unité non comparable entre écritures fabrique une conclusion fausse* ✓✓.
   Toute mesure multilingue doit dire **par quoi elle divise** — et préférer des unités **totales** (bits par phrase)
   aux unités **par caractère** ✓✓.
+
+## Mesure 54 — la qualité vient-elle avec la taille ? À moitié (et le plancher reste roi)
+
+Même banc, **mêmes 6 articles** ✓✓ (la comparaison précédente était confondue : 8 articles contre 6 ✗✓), domaine
+juridique, deux modèles Qwen2.5 **instruct** :
+
+| paire | 0,5 B | **1,5 B** | plancher « ne rien traduire » |
+|---|---:|---:|---:|
+| français → anglais | **35,8** | 32,0 | 28,8 |
+| anglais → français | 20,1 | **32,0** ✓ (+11,9) | 27,1 |
+| français → espagnol | 27,0 | **32,1** (+5,1) | **35,5** ✗ |
+| français → chinois | 1,0 | **6,4** (+5,4) | 0,0 |
+
+* **LA TAILLE AIDE, MAIS PAS PARTOUT** ✗✓ : le 1,5 B gagne **+11,9** en anglais→français ✓✓, +5,1 en espagnol ✓,
+  +5,4 en chinois ✓ — et **perd 3,8** en français→anglais ✗✓ (n = 6 articles, l'écart est fragile ✓✗) ;
+* **le plancher reste roi** ✗✗ : même à 1,5 B, **français → espagnol (32,1)** reste **sous** « ne rien traduire »
+  (35,5) ✓✗ — *la similarité des langues rend le plancher très haut, et le modèle ne le franchit pas* ✓✓ ;
+* **et le chinois reste faible** ✗✗ (6,4 contre 1,0) : la taille ne compense pas la direction ✗✓ — *le chinois est
+  dense (mesure 53 ✓) et la sortie chinoise du 1,5 B est encore pauvre* ✓✓ ;
+* **ce que cela commande** ✓✓ : avant de « déclarer » la couche traductrice, il faut **le plancher** battu sur
+  **chaque** direction ✓✓, et un modèle **beaucoup** plus grand (ou spécialisé) pour l'espagnol et le chinois ✓.
