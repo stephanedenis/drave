@@ -3,6 +3,10 @@
 > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
 > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
 > [`docs/en-cours.md`](../docs/en-cours.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) fait 67 mesures et
+> ~150 Ko — la lire **par section**, jamais en entier : `grep -n '^## Mesure' reports/07-mesures-couche-commune.md`.
+> Un résultat se cite par sa section et son JSON, pas par la fiche complète.
 
 ## Les fiches courantes
 
