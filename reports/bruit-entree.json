@@ -1,0 +1,66 @@
+[
+ {
+  "article": 1,
+  "version": "propre",
+  "surprisal_moyenne": 0.9322512149810791,
+  "bits_total": 45.6803092956543,
+  "tokens_couteux": 0.061224489795918366,
+  "langue": "french"
+ },
+ {
+  "article": 1,
+  "version": "fautes 10%",
+  "surprisal_moyenne": 5.208515167236328,
+  "bits_total": 302.0938720703125,
+  "tokens_couteux": 0.41379310344827586,
+  "langue": "french"
+ },
+ {
+  "article": 1,
+  "version": "langue mêlée 30%",
+  "surprisal_moyenne": 3.1828951835632324,
+  "bits_total": 155.9618682861328,
+  "tokens_couteux": 0.22448979591836735,
+  "langue": "french"
+ },
+ {
+  "article": 1,
+  "version": "accents perdus",
+  "surprisal_moyenne": 1.351237416267395,
+  "bits_total": 66.21063232421875,
+  "tokens_couteux": 0.12244897959183673,
+  "langue": "french"
+ },
+ {
+  "article": 2,
+  "version": "propre",
+  "surprisal_moyenne": 1.7236897945404053,
+  "bits_total": 268.8955993652344,
+  "tokens_couteux": 0.11538461538461539,
+  "langue": "french"
+ },
+ {
+  "article": 2,
+  "version": "fautes 10%",
+  "surprisal_moyenne": 5.094979763031006,
+  "bits_total": 947.6661987304688,
+  "tokens_couteux": 0.41935483870967744,
+  "langue": "french"
+ },
+ {
+  "article": 2,
+  "version": "langue mêlée 30%",
+  "surprisal_moyenne": 2.4765071868896484,
+  "bits_total": 371.47607421875,
+  "tokens_couteux": 0.18666666666666668,
+  "langue": "french"
+ },
+ {
+  "article": 2,
+  "version": "accents perdus",
+  "surprisal_moyenne": 2.187861204147339,
+  "bits_total": 330.3670349121094,
+  "tokens_couteux": 0.16556291390728478,
+  "langue": "french"
+ }
+]

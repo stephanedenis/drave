@@ -2052,3 +2052,28 @@ Trois tentatives sur Le Tour du monde (français original ↔ traduction anglais
   ✓✓ — c'est un **sous-chantier à part entière** (C5.2), pas une extension ✓✗ ;
 * **ce qui reste valide** ✓✓ : le domaine **juridique** (mesures 50-58) ✓ ; le **littéraire** est **ouvert** ✗ et son
   chiffre ne doit pas être cité avant un alignement vérifié **aux ancres** (noms propres, comme au chapitre 7 ✓✓).
+
+## Mesure 60 — les marqueurs **voient** le bruit d'entrée (mais la langue ne le voit pas)
+
+`tools/bruit_entree.py` ✓ : on abîme des articles propres (UDHR français ✓) de quatre façons, et on regarde si les
+marqueurs de bruit **bougent** ✓✓ (3 B, 2 articles) :
+
+| version | bits/token | bits par phrase | tokens coûteux | langue |
+|---|---:|---:|---:|---|
+| **propre** | **0,93-1,72** | 46-269 | 6-12 % | french |
+| **fautes 10 %** | **5,09-5,21** ✓✓ (×3-5) | 302-948 | **41-42 %** ✓✓ | french ✗ |
+| **langue mêlée 30 %** | **2,48-3,18** ✓ (×1,5-3) | 156-371 | 19-22 % ✓ | french ✗✗ |
+| **accents perdus** | 1,35-2,19 ✓ (×1,3-1,5) | 66-330 | 12-17 % ✓ | french ✗ |
+
+* **LE BRUIT EST VU** ✓✓ : les fautes multiplient la surprisal par **3 à 5** ✓✓ et la fraction de tokens coûteux par
+  **4 à 7** ✓✓ ; la langue mêlée par **1,5 à 3** ✓✓ ; les accents perdus par **1,3 à 1,5** ✓✓. *L'interface peut donc
+  **signaler** que l'entrée est abîmée* ✓✓ — c'est la règle 3 d'`AGENTS.md` §7, démontrée ✓✓ ;
+* **MAIS LA LANGUE NE LE VOIT PAS** ✗✗ : elle répond « french » dans **les quatre** cas ✓✗, y compris avec **30 % de
+  texte anglais** ✓✗. *Le marqueur de langue n'est pas un détecteur de bruit — la surprisal l'est* ✓✓ (23ᵉ piège :
+  un marqueur peut être fiable **et** aveugle à ce qu'on croit qu'il mesure ✓✓) ;
+* **et l'ordre des sensibilités est celui du réel** ✓✓ : fautes **5,2** > langue mêlée **3,2** > accents **1,4** ✓✓
+  — *un accent perdu est un petit bruit, une faute est un grand bruit* ✓✓, et l'interface les hiérarchise
+  correctement ✓✓ ;
+* **ce que cela donne à la couche** ✓✓ : l'entrée peut être **annotée** (« surprisal 5,2, 41 % de tokens coûteux »)
+  et le module de pensée reçoit un sens **avec son bruit** ✓✓ — reste à en faire un **seuil** de rejet ou de
+  correction ✓.
