@@ -2033,3 +2033,22 @@ marqueur de bruit sur le **3 B** ✓✓ (mêmes articles, mêmes textes) :
   la détection de langue sur textes courts est une **décision à seuil**, pas une mesure ✓✓) ;
 * **ce que cela donne à l'interface** ✓✓ : à 3 B, les marqueurs de bruit sont **fiables** (langue ✓, surprisal ✓) sauf
   sur les textes très courts ✓✗ — *l'interface doit donc marquer la **longueur** comme facteur de confiance* ✓✓.
+
+## Mesure 59 — le banc littéraire est **invalide** : l'alignement n'est pas résolu
+
+Trois tentatives sur Le Tour du monde (français original ↔ traduction anglaise) pour un deuxième domaine ✗✗ :
+
+| tentative | ce qui a été fait | résultat |
+|---|---|---|
+| 1 | découpage par titres de chapitres | **84 sections françaises** contre 37 anglaises ✗✗ (table des matières comptée deux fois) → chrF 17,7 = hasard |
+| 2 | grille anglaise + français **proportionnel**, sortie 400 tokens | chrF 21,4 · plancher 21,7 · **hasard 22,8** ✗✗ |
+| 3 | découpage du **corps** par titres (longueur > 2000) | **60 sections** contre 37 ✗✗ → chrF 24,4 · plancher 21,9 · **hasard 25,2** ✗✗ |
+
+* **LE BANC LITTÉRAIRE N'EST PAS VALIDE** ✗✗ : dans les trois cas, la traduction mesurée est **au niveau du hasard**
+  (chrF ≈ hasard) ✓✗ — et *ce n'est pas le modèle, c'est l'**appariement*** ✓✓ : les segments comparés ne disent pas
+  la même chose ✓✗ ;
+* **la leçon** ✓✓ : le **juridique** (UDHR) est le seul corpus de la machine où l'alignement est **garanti par la
+  structure** (30 articles numérotés dans 448 langues ✓✓) ; le littéraire demande un **aligneur phrase à phrase**
+  ✓✓ — c'est un **sous-chantier à part entière** (C5.2), pas une extension ✓✗ ;
+* **ce qui reste valide** ✓✓ : le domaine **juridique** (mesures 50-58) ✓ ; le **littéraire** est **ouvert** ✗ et son
+  chiffre ne doit pas être cité avant un alignement vérifié **aux ancres** (noms propres, comme au chapitre 7 ✓✓).

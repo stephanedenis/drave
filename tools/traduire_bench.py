@@ -55,6 +55,9 @@ def main() -> int:
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--max-jetons", type=int, default=160)
     ap.add_argument("--sortie", default="reports/traduction-legal.json")
+    ap.add_argument("--corpus", choices=["udhr", "verne"], default="udhr",
+                    help="udhr : le domaine juridique ✓ ; verne : le domaine litteraire ✓✓ (Le Tour du monde, "
+                         "chapitres francais/anglais alignes) ✓")
     ap.add_argument("--dtype", default="float32", choices=["float32", "bfloat16", "float16"],
                     help="bfloat16 pour un modele qui ne tient pas en fp32 ✓ (7 B : 14 Go en bf16)")
     a = ap.parse_args()
@@ -64,7 +67,27 @@ def main() -> int:
     import torch as _t
     m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(_t, a.dtype)).to(device).eval()
     tok = AutoTokenizer.from_pretrained(a.hf)
-    par = charger_udhr()
+    if a.corpus == "verne":
+        # le domaine LITTERAIRE : les chapitres du Tour du monde, francais (original) et anglais (traduction) ✓
+        import re
+        base = pathlib.Path("/home/stephane/Data13TB/stephane/GitHub/Panini/data/gutenberg_multilingual_verified/around_world_80_days")
+        fr = (base / "around_world_80_days_fr.txt").read_text(errors="ignore")
+        en = (base / "around_world_80_days_en.txt").read_text(errors="ignore")
+        # ⚠️ LA TABLE DES MATIÈRES FAIT DOUBLON ✗✗ : 84 sections françaises contre 37 anglaises ✓✗. On écarte les
+        # entrées de TOC par leur LONGUEUR ✓✓ (une entrée de TOC est suivie d'une autre entrée, donc son segment
+        # est minuscule ✓ ; un chapitre du corps fait des milliers de caractères ✓).
+        en_c = [p.strip() for p in re.split(r"(?im)^\s*CHAPTER\s+[IVXLC0-9]+\.?", en)[1:] if len(p.strip()) > 2000]
+        fr_c = [p.strip() for p in re.split(r"(?im)^\s*[IVXLC]+\s+[A-ZÀ-Ý]", fr)[1:] if len(p.strip()) > 2000]
+        n = min(len(en_c), len(fr_c))
+        # on lit le même endroit RELATIF dans chaque chapitre ✓ (20 % du chapitre, 400 caractères ✓)
+        def extrait(x):
+            d = max(0, len(x) // 5)
+            return x[d:d + 400]
+        par = {"fra": {i + 1: extrait(fr_c[i]) for i in range(n)},
+               "eng": {i + 1: extrait(en_c[i]) for i in range(n)}}
+        print(f"  litteraire : {len(fr_c)} chapitres français · {len(en_c)} anglais · {n} appariés")
+    else:
+        par = charger_udhr()
     noms = {"fra": "French", "eng": "English", "deu": "German", "spa": "Spanish", "ita": "Italian",
             "cmn": "Chinese", "rus": "Russian", "jpn": "Japanese"}
     resultats = []
