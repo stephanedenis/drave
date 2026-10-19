@@ -1952,3 +1952,25 @@ juridique, deux modèles Qwen2.5 **instruct** :
   dense (mesure 53 ✓) et la sortie chinoise du 1,5 B est encore pauvre* ✓✓ ;
 * **ce que cela commande** ✓✓ : avant de « déclarer » la couche traductrice, il faut **le plancher** battu sur
   **chaque** direction ✓✓, et un modèle **beaucoup** plus grand (ou spécialisé) pour l'espagnol et le chinois ✓.
+
+## Mesure 55 — la qualité de traducteur vient avec la taille, et le plancher est enfin battu partout
+
+Même banc, **mêmes 6 articles** ✓✓, juridique, trois modèles Qwen2.5 instruct (0,5 · 1,5 · **3 B** ✓) :
+
+| paire | 0,5 B | 1,5 B | **3 B** | plancher |
+|---|---:|---:|---:|---:|
+| français → anglais | 35,8 | 32,0 | **70,0** ✓✓ | 28,8 |
+| anglais → français | 20,1 | 32,0 | **62,8** ✓✓ | 27,1 |
+| français → espagnol | 27,0 | 32,1 | **50,4** ✓✓ | 35,5 |
+| français → chinois | 1,0 | 6,4 | **11,6** ✓ | 0,0 |
+
+* **LE SAUT EST MASSIF** ✓✓ : français → anglais **35,8 → 32,0 → 70,0** ✓✓ ; anglais → français **20,1 → 32,0 →
+  62,8** ✓✓. *La qualité de traducteur **vient avec la taille*** ✓✓ — et la non-monotonie du 1,5 B (32,0 contre
+  35,8) est probablement un effet de **6 articles** ✗✓ (à répliquer sur plus d'articles ✓) ;
+* **ET LE PLANCHER EST BATTU PARTOUT** ✓✓ : français → espagnol **50,4** contre 35,5 ✓✓ — c'est la **première fois**
+  qu'un modèle dépasse « ne rien traduire » sur cette direction ✗✓ (mesures 50 et 54 étaient dessous ✓) ;
+* **le chinois reste le plus faible** ✗✓ (11,6 contre 70,0) mais **progresse de 11×** depuis le 0,5 B ✓✓ — *la
+  direction la plus difficile reste la plus difficile, mais elle suit la même pente* ✓✓ ;
+* **ce que cela change pour la couche** ✓✓ : *la couche entrée-sortie n'est pas un problème de méthode, c'est un
+  problème de **taille*** ✓✓ — à 3 B, elle traduit ; à 0,5 B, elle copie ✗✓. **Le chantier 5 a maintenant sa pente**
+  ✓✓, et la question devient : **où est le coude ?** (7 B ? 14 B ?) et **quel coût** ✓✓.

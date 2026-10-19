@@ -54,6 +54,17 @@ C6 documentation (transverse, ne bloque rien)
 **Règle de parallélisation** : on lance **en même temps** tous les sous-chantiers marqués ✅ dont les entrées
 existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**, pas sa documentation.
 
+## Questions en attente (consolidées ici, jamais bloquantes)
+
+| question | qui peut y répondre | état |
+|---|---|---|
+| la qualité de traduction vient-elle avec la taille ? | **moi** (courbe 0,5 → 1,5 → 3 B en cours) | en cours |
+| le plancher « ne rien traduire » est-il battu sur **chaque** direction ? | **moi** | non (fra→spa encore dessous) |
+| quel domaine après le juridique ? | **moi** (littéraire via Verne, deux références) | à lancer |
+| faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
+| les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
+| la vision de la couche (ce qu'elle **doit** être) | **Stéphane** | en attente, ne bloque rien |
+
 ## La priorité : la couche commune entrée-sortie
 
 ## La priorité : la couche commune entrée-sortie

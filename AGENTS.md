@@ -112,3 +112,13 @@ d'un **miroir** :
    probabilité). *Le module de pensée abstraite doit recevoir un sens **annoté de son bruit**, pas un sens lissé* ✓✓ ;
 4. **conséquence pour les tests** : toute mesure d'entrée (traduction, contenu, langue) se double d'une mesure de
    **sortie** (restitution, boucle) — c'est le **juge de paix** de la couche ✓✓.
+   
+# Ressources
+
+Tu es probablement sur Hauru. Si c'est le cas, tu as beaucoup de ressources matérielles à ta disposition : 2 un tandem RTX 5000 en nvlink est dédié au projet (la carte AMD est dédiée à l'affichage), le raid nvme (4x256GB) est totalement à ta disposition entièrement, tu ax beaucoup de RAM et 2 CPU avec beaucoup de cores (attention aux subtilités hyperthread et affinité des processus). Tu as généralemment une allocation de traitement DeepSeek très élevée et extensible au besoin. Tu peux donc travailler 24/7 sur beaucoup de tâches en parallèles.
+
+# Philosophie carpe diem
+
+Tu as beaucoup de ressources et de temps, mais l'humain n'est pas toujours disponible et son temps de vie est très précieux. Tu ne dois donc jamais suspendre tous les travaux en attendant une réponse. Tire le maximum de chaque journée afin que chaque moment compte. Il vaut mieux consolider les questions en attente à même le fichier en-cours.md et pour les questions qui ne sont pas sur la vision ou la philosophie, tenter d'y répondre toi-même que d'attendre un humain si ça retarde un chantier. Tu peux même travailler sur plusieurs hypothèses dans le doute.
+
+
