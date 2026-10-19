@@ -2009,3 +2009,27 @@ Même banc, mêmes 6 articles, quatre tailles (0,5 · 1,5 · 3 · **7 B** ✓) :
   ne se débloque pas avec la taille seule* ✗✓ ;
 * **ce que cela commande** ✓✓ : **3 B est le meilleur rapport qualité/coût de la série** ✓✓ (70,0 de chrF pour moins
   de la moitié des paramètres du 7 B ✓) ; au-delà, chaque point de chrF coûte de plus en plus cher ✓✓.
+
+## Mesure 58 — à 3 B, le chinois est la langue la **mieux servie** : détecté « 中文 » et le moins coûteux
+
+La mesure 52 (0,5 B) disait « le chinois est incertain et détecté comme anglais » ✗✗ — puis la mesure 53 a montré
+que l'unité était fausse (bits par caractère) ✗✓. Restait la **détection de langue**, qui échouait ✗. On refait le
+marqueur de bruit sur le **3 B** ✓✓ (mêmes articles, mêmes textes) :
+
+| langue | bits/token | **bits par phrase** | langue répondue |
+|---|---:|---:|---|
+| anglais | 0,59-0,60 | **19-60** | english 1,00 (art. 2) · **french 1,00** (art. 1 ✗) |
+| français | 0,93-1,72 | **46-269** | french 1,00 ✓ |
+| russe | 1,16-1,82 | **56-352** | russian 1,00 ✓ |
+| **chinois** | **1,94-2,53** | **73-99** ✓✓ | **« 中文 » 0,95-0,98** ✓✓ |
+
+* **LE CHINOIS EST DÉTECTÉ CORRECTEMENT À 3 B** ✓✓ (« 中文 », 0,95-0,98 ✓) — *l'échec du 0,5 B était une question
+  de **taille**, pas de langue* ✓✓ ;
+* **et c'est la langue la MOINS coûteuse en bits par phrase** ✓✓ : **73-99 bits** contre 46-269 pour le français et
+  56-352 pour le russe ✓✓ — *le chinois est le mieux servi par le modèle, et le plus **dense*** ✓✓. **Votre
+  intuition était juste** ✓✓ : dans un modèle chinois, le chinois est parmi les langues les mieux supportées ✓✓ ;
+* **mais le marqueur a encore un défaut** ✗✓ : l'**article 1 anglais** (le plus court) est détecté « french » 1,00
+  ✗✗ — *sur un texte court, la langue de la consigne ou du contexte pèse plus que le texte* ✓✓ (le 22ᵉ piège :
+  la détection de langue sur textes courts est une **décision à seuil**, pas une mesure ✓✓) ;
+* **ce que cela donne à l'interface** ✓✓ : à 3 B, les marqueurs de bruit sont **fiables** (langue ✓, surprisal ✓) sauf
+  sur les textes très courts ✓✗ — *l'interface doit donc marquer la **longueur** comme facteur de confiance* ✓✓.

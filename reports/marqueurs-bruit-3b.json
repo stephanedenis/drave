@@ -1,0 +1,82 @@
+[
+ {
+  "iso3": "fra",
+  "article": 1,
+  "tokens": 49,
+  "bits_par_token": 0.9322512149810791,
+  "bits_total": 45.6803092956543,
+  "tokens_couteux": 0.061224489795918366,
+  "langue_repondue": "french",
+  "proba_reponse": 0.9999744296073914
+ },
+ {
+  "iso3": "fra",
+  "article": 2,
+  "tokens": 156,
+  "bits_par_token": 1.7236897945404053,
+  "bits_total": 268.8955993652344,
+  "tokens_couteux": 0.11538461538461539,
+  "langue_repondue": "french",
+  "proba_reponse": 0.9999761581420898
+ },
+ {
+  "iso3": "eng",
+  "article": 1,
+  "tokens": 32,
+  "bits_par_token": 0.5969560146331787,
+  "bits_total": 19.10259246826172,
+  "tokens_couteux": 0.03125,
+  "langue_repondue": "french",
+  "proba_reponse": 0.9999815225601196
+ },
+ {
+  "iso3": "eng",
+  "article": 2,
+  "tokens": 101,
+  "bits_par_token": 0.5893531441688538,
+  "bits_total": 59.5246696472168,
+  "tokens_couteux": 0.0297029702970297,
+  "langue_repondue": "english",
+  "proba_reponse": 0.9989089965820312
+ },
+ {
+  "iso3": "cmn",
+  "article": 1,
+  "tokens": 29,
+  "bits_par_token": 2.5252034664154053,
+  "bits_total": 73.23090362548828,
+  "tokens_couteux": 0.20689655172413793,
+  "langue_repondue": "中文",
+  "proba_reponse": 0.975281298160553
+ },
+ {
+  "iso3": "cmn",
+  "article": 2,
+  "tokens": 51,
+  "bits_par_token": 1.9362374544143677,
+  "bits_total": 98.74810791015625,
+  "tokens_couteux": 0.1568627450980392,
+  "langue_repondue": "中文",
+  "proba_reponse": 0.9505932331085205
+ },
+ {
+  "iso3": "rus",
+  "article": 1,
+  "tokens": 48,
+  "bits_par_token": 1.1634572744369507,
+  "bits_total": 55.845947265625,
+  "tokens_couteux": 0.0625,
+  "langue_repondue": "russian",
+  "proba_reponse": 0.9998465776443481
+ },
+ {
+  "iso3": "rus",
+  "article": 2,
+  "tokens": 193,
+  "bits_par_token": 1.8220875263214111,
+  "bits_total": 351.66290283203125,
+  "tokens_couteux": 0.17098445595854922,
+  "langue_repondue": "russian",
+  "proba_reponse": 0.9998606443405151
+ }
+]
