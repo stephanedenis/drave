@@ -17,11 +17,27 @@ la langue**. On ne passe pas à la suivante tant que la précédente est perfect
 | si vous voulez… | lisez |
 |---|---|
 | **l'état actuel**, en quelques lignes | [en-cours.md](en-cours.md) |
-| la **mission** et l'ordre des priorités | [AGENTS.md](../AGENTS.md) (racine du dépôt) |
+| les **directives de l'agent** (courtes), et le routage par tâche | [AGENTS.md](../AGENTS.md) (racine du dépôt) |
+| le **détail d'une tâche** (résultat, portes, rangement, Panini, miroir…) | [`docs/agent/`](agent/) |
 | la **synthèse théorique** (7 chapitres, 7 schémas) | [synthese/index.md](synthese/index.md) |
 | **utiliser** le dépôt | [utilisation.md](utilisation.md) |
 | les **chiffres mesurés** | [`reports/`](../reports/) |
 | le **récit** des journées | [`journal/`](../journal/) |
+
+## Les documents de tâche de l'agent
+
+`AGENTS.md` est volontairement **court** : il porte la mission, les règles non négociables et le routage. Le détail
+est chargé **à la demande**, un document par tâche :
+
+| document | pour quoi |
+|---|---|
+| [agent/mission.md](agent/mission.md) | la mission, l'ordre des priorités, ce que « perfectible » veut dire |
+| [agent/resultats.md](agent/resultats.md) | ce qu'un résultat doit porter, le commit, la fiche, le récit, l'état |
+| [agent/rangement.md](agent/rangement.md) | `docs/` vs `reports/` vs `journal/` vs `data/`, la revue de documentation |
+| [agent/portes.md](agent/portes.md) | lancer les portes, lire le registre, les rouges connues |
+| [agent/panini-nipada.md](agent/panini-nipada.md) | étudier Panini/Nipada, l'avertissement époque/filiation |
+| [agent/miroir.md](agent/miroir.md) | le miroir entrée/sortie et ses quatre règles |
+| [agent/ressources.md](agent/ressources.md) | le matériel, les GPU, la philosophie carpe diem |
 
 ## La règle de rangement
 
