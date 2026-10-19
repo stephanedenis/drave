@@ -1878,3 +1878,27 @@ traduit, puis **revient** : entrée A → sortie B → entrée A ✓. Domaine ju
   qu'exige `AGENTS.md` §7 avant la pensée abstraite ✓✓ ;
 * **la suite** ✓✓ : la boucle doit être mesurée **par domaine et par langue** (elle est le juge de l'entrée), et le
   **marqueur de bruit** (confiance par token) doit être ajouté à l'interface post-linguistique ✓✓.
+
+## Mesure 52 — le sens extrait porte son bruit : entropie, ambiguïtés, langue probable
+
+`tools/marqueur_bruit.py` ✓ implémente la règle 3 d'`AGENTS.md` §7 : l'interface post-linguistique doit porter des
+**marqueurs de bruit** ✓✓. Trois marqueurs par texte : **entropie moyenne** normalisée par token ✓, **fraction de
+tokens ambigus** (entropie > 0,5 ✓), et **langue probable** avec sa probabilité ✓ (distribution sur les noms
+candidats, au premier token de la réponse ✓). UDHR, Qwen 0,5 B, 2 articles par langue :
+
+| langue | entropie moyenne | tokens ambigus | langue détectée |
+|---|---:|---:|---|
+| français | 0,18-0,22 | 0,6-2,0 % | **fra 0,77-0,85** ✓ |
+| anglais | 0,13-0,14 | 1,0-3,0 % | **eng 0,72-0,91** ✓ |
+| **chinois** | **0,28-0,32** ✗ | **11,5-16,7 %** ✗✗ | **eng 0,60-0,73** ✗✗ |
+
+* **LE MARQUEUR FONCTIONNE, ET IL RÉVÈLE DEUX CHOSES** ✓✓ : le chinois est **deux fois plus incertain** que le
+  français et l'anglais ✗✓ (entropie 0,28-0,32 contre 0,13-0,22 ✓, 11-17 % de tokens ambigus contre 1-2 % ✓✓), et
+  le détecteur de langue se **trompe** sur lui ✗✗ ;
+* **mais le détecteur est confondu par la langue de la consigne** ✗✓ : « What language is this text? » est en
+  anglais ✓✗, et le modèle peut répondre « English » par imitation ✓. *Le marqueur de langue doit être testé avec
+  une consigne neutre (ou sans consigne), sinon il mesure la langue de la question* ✓✓ — c'est le **vingtième
+  piège**, et il est dans mon propre outil ✓✓ ;
+* **ce que cela apporte à la couche** ✓✓ : le module de pensée abstraite recevra, avec chaque sens, **sa confiance**
+  (entropie ✓), **ses ambiguïtés** (tokens ✓) et **sa langue probable** (avec la probabilité ✓) — *et non un sens
+  lissé* ✓✓. C'est la première pièce de l'**interface annotée** ✓✓.
