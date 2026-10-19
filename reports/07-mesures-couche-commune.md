@@ -1902,3 +1902,32 @@ candidats, au premier token de la réponse ✓). UDHR, Qwen 0,5 B, 2 articles pa
 * **ce que cela apporte à la couche** ✓✓ : le module de pensée abstraite recevra, avec chaque sens, **sa confiance**
   (entropie ✓), **ses ambiguïtés** (tokens ✓) et **sa langue probable** (avec la probabilité ✓) — *et non un sens
   lissé* ✓✓. C'est la première pièce de l'**interface annotée** ✓✓.
+
+## Mesure 53 — le marqueur de bruit, corrigé : l'unité faisait mentir le chinois
+
+La mesure 52 concluait « le chinois est deux fois plus incertain » ✗✗. **C'était un artefact d'unité** ✓✓, et il a
+fallu trois corrections pour le voir :
+
+1. je mesurais l'**entropie** de la distribution, pas la **surprisal du token réel** ✗✓ → corrigé en
+   −log₂ p(w_t) ✓ ;
+2. je la lisais **par token** puis **par caractère** ✗✗ — or un caractère chinois porte un **mot**, une lettre latine
+   un morceau de mot ✓✗ : les deux unités ne sont pas comparables ✓✓ ;
+3. la bonne unité est le **total de bits par phrase** ✓✓ (ou bits/token, la tokenisation étant adaptée à chaque
+   écriture ✓).
+
+| langue | bits/token | **bits par phrase** | langue répondue |
+|---|---:|---:|---|
+| anglais | 1,25-2,09 | **40-211** ✓✓ | english 0,93-0,96 ✓ |
+| français | 3,28-3,56 | **174-512** | french 0,97 ✓ |
+| russe | 3,02-3,21 | **154-582** | russian 0,81-0,92 ✓ |
+| **chinois** | **4,78-6,53** ✗ | **189-244** ✓✓ | **« 法 » / « 英文 »** ✗✗ |
+
+* **EN BITS PAR PHRASE, LE CHINOIS EST NORMAL** ✓✓ : 189-244 bits, **au même niveau** que le français (174-512) ✓✓
+  et le russe (154-582) ✓ — *le chinois n'est pas plus incertain : il est plus **dense*** ✓✓. Le chiffre par
+  caractère le faisait paraître trois fois pire ✓✗ ;
+* **mais le modèle répond « français » ou « anglais » pour du chinois** ✗✗ : ce n'est plus une question d'unité ✓✗,
+  c'est le **petit modèle** (0,5 B) qui ne suit pas la consigne de langue sur un texte court ✓✓. *À retester sur un
+  modèle plus grand* ✓ — c'est le sous-chantier C5.3 ;
+* **la leçon d'instrument (21ᵉ)** ✓✓ : *une unité non comparable entre écritures fabrique une conclusion fausse* ✓✓.
+  Toute mesure multilingue doit dire **par quoi elle divise** — et préférer des unités **totales** (bits par phrase)
+  aux unités **par caractère** ✓✓.
