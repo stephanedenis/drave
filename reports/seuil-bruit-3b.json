@@ -1,0 +1,865 @@
+{
+ "hf": "Qwen/Qwen2.5-3B-Instruct",
+ "seuil": 3.2330499999999995,
+ "synthese": [
+  {
+   "version": "fautes 2%",
+   "detection": 0.75,
+   "auc": 0.883,
+   "surprisal_moyenne": 4.56,
+   "cer_avant": 2.07,
+   "cer_apres": 2.99,
+   "surprisal_apres": 2.452
+  },
+  {
+   "version": "fautes 5%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 5.94,
+   "cer_avant": 3.98,
+   "cer_apres": 4.74,
+   "surprisal_apres": 3.058
+  },
+  {
+   "version": "fautes 10%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 7.187,
+   "cer_avant": 6.41,
+   "cer_apres": 10.88,
+   "surprisal_apres": 3.405
+  },
+  {
+   "version": "fautes 20%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 10.331,
+   "cer_avant": 17.71,
+   "cer_apres": 37.63,
+   "surprisal_apres": 4.845
+  },
+  {
+   "version": "accents perdus",
+   "detection": 0.25,
+   "auc": 0.695,
+   "surprisal_moyenne": 2.756,
+   "cer_avant": 2.74,
+   "cer_apres": 1.01,
+   "surprisal_apres": 2.336
+  },
+  {
+   "version": "melange 10%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 4.536,
+   "cer_avant": 8.89,
+   "cer_apres": 10.58,
+   "surprisal_apres": 3.04
+  },
+  {
+   "version": "melange 30%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 8.025,
+   "cer_avant": 25.38,
+   "cer_apres": 47.82,
+   "surprisal_apres": 4.405
+  },
+  {
+   "version": "melange 50%",
+   "detection": 1.0,
+   "auc": 1.0,
+   "surprisal_moyenne": 10.273,
+   "cer_avant": 43.7,
+   "cer_apres": 55.9,
+   "surprisal_apres": 5.64
+  },
+  {
+   "version": "suppression 10%",
+   "detection": 0.625,
+   "auc": 0.805,
+   "surprisal_moyenne": 3.644,
+   "cer_avant": 9.37,
+   "cer_apres": 11.24,
+   "surprisal_apres": 3.151
+  }
+ ],
+ "details": [
+  {
+   "article": 1,
+   "version": "propre",
+   "texte": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir les uns envers les autres dans un esprit de fraternité.",
+   "cer_avant": 0.0,
+   "surprisal": 0.933
+  },
+  {
+   "article": 1,
+   "version": "fautes 2%",
+   "texte": "Tous les êtres humains naissent libres et xgaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent igir les uns envers les autres dans un esprit de fraternité.",
+   "cer_avant": 1.08,
+   "surprisal": 2.803,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent interagir les uns envers les autres dans un esprit de fraternité.",
+   "cer_apres": 2.69,
+   "surprisal_apres": 1.221
+  },
+  {
+   "article": 1,
+   "version": "fautes 5%",
+   "texte": "Tous les êtres humaixs naissent libres et égaux en èignoté et en broits. Ils sont doués ée raison et de àonscience bt doivent agir les uns enveri les autref dans un esprit de kraternité.",
+   "cer_avant": 5.38,
+   "surprisal": 6.223,
+   "correction": "Tous les êtres humains naissent libres et égaux en éducation et en biens. Ils sont doués de raison et de conscience ; ils doivent agir les uns envers les autres dans un esprit de fraternité.",
+   "cer_apres": 9.14,
+   "surprisal_apres": 2.111
+  },
+  {
+   "article": 1,
+   "version": "fautes 10%",
+   "texte": "Tars les êtres humèiqs naisçent libres et égaux en digwité et en droits. Iea sont doués ce raison et de conscifnce et doivent agir les wns envprt les autres dans un esprit de fraternitb.",
+   "cer_avant": 7.53,
+   "surprisal": 6.82,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir envers les autres dans l'esprit de fraternité.",
+   "cer_apres": 5.91,
+   "surprisal_apres": 1.165
+  },
+  {
+   "article": 1,
+   "version": "fautes 20%",
+   "texte": "Tius les étres huêains yçossent liwlés eê agaua en diolitg et en drcsts. els sont eouéj de naison et çe conscience et doiveot ygwr leu uns epvers lês mutris dacz un èspnit qe fraternitw.",
+   "cer_avant": 19.35,
+   "surprisal": 10.305,
+   "correction": "Tous les êtres humains sont égaux en droits et en dignité et doivent vivre ensemble dans une union pour un esprit de fraternité.",
+   "cer_apres": 46.77,
+   "surprisal_apres": 2.684
+  },
+  {
+   "article": 1,
+   "version": "accents perdus",
+   "texte": "Tous les etres humains naissent libres et egaux en dignite et en droits. Ils sont doues de raison et de conscience et doivent agir les uns envers les autres dans un esprit de fraternite.",
+   "cer_avant": 2.69,
+   "surprisal": 1.351,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir les uns envers les autres dans un esprit de fraternité.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 0.933
+  },
+  {
+   "article": 1,
+   "version": "melange 10%",
+   "texte": "Tous les êtres humains naissent libres et in en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir adequate offence envers les autres dans un esprit de fraternité.",
+   "cer_avant": 9.68,
+   "surprisal": 4.027,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir en consistance avec l’offense envers les autres dans un esprit de fraternité.",
+   "cer_apres": 13.44,
+   "surprisal_apres": 2.316
+  },
+  {
+   "article": 1,
+   "version": "melange 30%",
+   "texte": "Tous les êtres humains naissent libres the égaux en dignité et en droits. means sont innocent recognition raison et or conscience et are be les uns envers and autres dans any esprit sovereignty. fraternité.",
+   "cer_avant": 27.96,
+   "surprisal": 8.125,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont réciproquement respectés et ne se connaissent pas dans aucun esprit de souveraineté. Fraternité.",
+   "cer_apres": 37.63,
+   "surprisal_apres": 2.777
+  },
+  {
+   "article": 1,
+   "version": "melange 50%",
+   "texte": "in due benefits. humains naissent libres et égaux en dignité et or to one sont be right raison et de conscience has equal agir effective his envers without in hours un and at fraternité.",
+   "cer_avant": 38.71,
+   "surprisal": 9.703,
+   "correction": "In due benefits. Humains naissent libres et égaux en dignité et ou à un sont brefs raisons et de conscience hâtes égales agir efficace lui envers sans en heures un et à fraternité.",
+   "cer_apres": 39.25,
+   "surprisal_apres": 7.547
+  },
+  {
+   "article": 1,
+   "version": "suppression 10%",
+   "texte": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et conscience et doivent agir les uns envers autres dans un esprit de",
+   "cer_avant": 10.22,
+   "surprisal": 1.603,
+   "correction": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et conscience et doivent agir les uns envers autres dans un esprit de liberté et de fraternité.",
+   "cer_apres": 11.29,
+   "surprisal_apres": 1.78
+  },
+  {
+   "article": 2,
+   "version": "propre",
+   "texte": "Chacun peut se prévaloir de tous les droits et de toutes les libertés proclamés dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d’opinion politique ou de toute autre opinion, d’origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou soumis à une limitation quelconque de souveraineté.",
+   "cer_avant": 0.0,
+   "surprisal": 1.723
+  },
+  {
+   "article": 2,
+   "version": "fautes 2%",
+   "texte": "Chacun peut se prcvaloir de tous les droits et de toutes les libertés proclamés dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, he sexe, de langue, de religion, d’spinion politique ou de toute autre opieion, d’origine nationale ou sociale, de fortunq, de naissance ou de toute autre situation. De péus, il ne sera faix aucune distinction fondée sur le statut politique, quridixue ou international du pays oi du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, soys tutelle, non aêtonome ou soumis à une limitation quelconque de souverainetk.",
+   "cer_avant": 2.09,
+   "surprisal": 4.121,
+   "correction": "Chacun peut se prévaloir de tous les droits et de toutes les libertés proclamés dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d'opinion politique ou de toute autre opinion, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, racial ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou soumis à une limitation quelconque de souveraineté.",
+   "cer_apres": 1.44,
+   "surprisal_apres": 1.797
+  },
+  {
+   "article": 2,
+   "version": "fautes 5%",
+   "texte": "Chacun peut se phévaloir de tous les kryits et de toutes les libertés proclamés dans la présente Déclaration, sans distirction aucune, notamment de race, de couleur, de sexe, de langue, dt religion, d’opindon politique ou de toute autre opinion, d’ortgine nationale ou sociale, de foètune, de naissancl ou de toute autre situation. De plus, il ne sera fait aucune distinction condée çmr le statut politiqge, juridique ou international du pays ou du terrxtoire dont une personne est ressorçissante, que ce pays ou terretoire soit indépendant, sous tutelme, non auvonome ou snumiz à uèe limitation quklconque ne souweiaineté.",
+   "cer_avant": 4.01,
+   "surprisal": 5.316,
+   "correction": "Chacun peut se féliciter de tous les droits et de toutes les libertés proclamés dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langage, de religion, d'opinion politique ou de toute autre opinion, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont une personne est résidente, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou soumis à une limitation quelconque de souveraineté.",
+   "cer_apres": 3.21,
+   "surprisal_apres": 1.893
+  },
+  {
+   "article": 2,
+   "version": "fautes 10%",
+   "texte": "Cqacuè peur se srsvéloir de tous les droits et dé toutas les libertos procéèmés danw la prmsente Déclaration, says distinction aucune, notamment de race, do cofleur, de sexx, de langue, de reèzoion, d’opinion polztique ou de toute autre opinion, d’origine xatitnalè ou sociale, àe fortune, de narssance ou de toune uutje situation. De plzs, il ne sera fait aucune distinctyon fonuém sur le szatut polétique, jupidiuue ou internaéionll du paos ou dh territuire dont une persmnne sdt reqslltissaute, que ce pays ou terriooire soit indépendant, sous tutelle, non autpnome ou goumiq à une limàtftion quelconqae de sosvdrasneté.",
+   "cer_avant": 9.47,
+   "surprisal": 7.578,
+   "correction": "Ceux qui se soucient de se réaliser de tous les droits et libertés procédées dans la présente Déclaration, dit distinction aucune, notamment de race, de couleur, de sexe, de langage, de religion, d'opinion politique ou de toute autre opinion, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre condition. De plus, il ne sera fait aucune distinction fondamentale sur le statut politique, judiciaire ou international du pays ou du territoire dont une personne est résidente, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou soumis à une limitation quelconque de souveraineté.",
+   "cer_apres": 11.72,
+   "surprisal_apres": 2.809
+  },
+  {
+   "article": 2,
+   "version": "fautes 20%",
+   "texte": "Chacuf peht st pêévasrir de xous lee droirk et de toutep les limsrèès proclcmés éans wa présente Dmvlahation, saàs distinction aucung, nothmient de rade, de èàuleèr, dq seêe, je lanoue, de religfàn, d’bpilipn èolétiquu éu de touee autre opdnion, d’orokine natxènali ou sociale, de fortune, dy naissaéde oê de poute autre sinuulion. De plus, il çe sera fait iucuek diltinotdon fonrée sur li statmd colitique, juridique ou intêrnational du pmys on du tegeitoire aont uje persobme est ressortvssante, que ce pays ou terrkéoirt uoqt indépepêdnt, sous tuyelle, non auàanbmt ou exumcs à upe wimidltiun êuzlconque de mouveraxneté.",
+   "cer_avant": 16.69,
+   "surprisal": 9.164,
+   "correction": "Chaque personne est libre de penser aux choses du cœur et de toutes les libertés proclamées dans cette Déclaration, sans distinction aucune, ni race, ni couleur, ni sexe, ni religion, ni opinion politique, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, cela sera fait en conformité avec la discrimination fondée sur le statut collectif, juridique ou international du pays ou territoire où la personne est concernée, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou exonéré de toute forme de discrimination en matière de mouvement.",
+   "cer_apres": 31.46,
+   "surprisal_apres": 3.148
+  },
+  {
+   "article": 2,
+   "version": "accents perdus",
+   "texte": "Chacun peut se prevaloir de tous les droits et de toutes les libertes proclames dans la presente Declaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d’opinion politique ou de toute autre opinion, d’origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondee sur le statut politique, juridique ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit independant, sous tutelle, non autonome ou soumis a une limitation quelconque de souverainete.",
+   "cer_avant": 1.44,
+   "surprisal": 2.188,
+   "correction": "Chacun peut se prévaloir de tous les droits et de toutes les libertés proclamées dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d'opinion politique ou de toute autre opinion, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, sous tutelle, non autonome ou soumis à une limitation quelconque de souveraineté.",
+   "cer_apres": 0.48,
+   "surprisal_apres": 1.722
+  },
+  {
+   "article": 2,
+   "version": "melange 10%",
+   "texte": "Chacun peut se prévaloir de care les droits et de toutes les libertés proclamés dans la attacks. the sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d’opinion against ou welfare toute autre opinion, d’origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée to shall statut politique, juridique ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, right tutelle, non autonome ou soumis à une limitation perform de souveraineté.",
+   "cer_avant": 8.99,
+   "surprisal": 3.895,
+   "correction": "Chacun peut se prévaloir des droits et de toutes les libertés proclamées dans la Constitution. Sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d'opinion, d'origine nationale ou sociale, de fortune, de naissance ou de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont une personne est ressortissante, que ce pays ou territoire soit indépendant, sous tutelle, non-autonome ou soumis à une limitation de sa souveraineté.",
+   "cer_apres": 12.04,
+   "surprisal_apres": 2.086
+  },
+  {
+   "article": 2,
+   "version": "melange 30%",
+   "texte": "Chacun peut se prévaloir to is les droits et de toutes les libertés democratic in la présente Déclaration, recognition distinction and notamment de race, with couleur, de sexe, de freedoms de any implying or right constitution toute autre opinion, d’origine nationale of rights de fortune, of naissance ou de committed. inhuman on De society il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international country pays ou whether offence dont une personne est ressortissante, que or and marriage territoire soit indépendant, the or non autonome his soumis à une limitation quelconque de souveraineté.",
+   "cer_avant": 23.76,
+   "surprisal": 6.941,
+   "correction": "Chacun peut se prévaloir des droits et de toutes les libertés démocratiques en la présente Déclaration, reconnaître la distinction et notamment de race, de couleur, de sexe, de opinions, d'origine nationale, de fortune, de naissance ou de condition sociale. Dans la société, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international, quelle que soit l'origine nationale, le territoire, l'autonomie ou l'indépendance de son pays, ou la nature de sa situation matrimoniale.",
+   "cer_apres": 43.34,
+   "surprisal_apres": 3.303
+  },
+  {
+   "article": 2,
+   "version": "melange 50%",
+   "texte": "Chacun be of prévaloir that tous les droits et de has les libertés is women la colour, Déclaration, sans freedom same notamment born without equally and de with rights arbitrary de religion, d’opinion politique ou de toute autre opinion, d’origine nationale kind arts protection has de or without de the be to Declaration or il ne sera worship Nothing distinction fondée by le of politique, juridique made international to religion, No du territoire dont and shall est ressortissante, have any pays are co‐operation law indépendant, sous any and autonome national soumis à to and quelconque de his",
+   "cer_avant": 41.41,
+   "surprisal": 8.562,
+   "correction": "Chacun doit prévaloir que tous les droits et devoirs des femmes sont garanties, Déclaration, sans discrimination fondée sur la liberté, la naissance, l'égalité et la religion, d'opinion politique ou de toute autre opinion, d'origine nationale, culturelle ou de tout autre statut. Aucune personne ne sera soumise à discrimination en raison de son sexe, de sa nationalité, de sa race, de sa langue, de sa religion ou de toute autre condition ou circonstance liée à son état de droit.",
+   "cer_apres": 52.65,
+   "surprisal_apres": 2.842
+  },
+  {
+   "article": 2,
+   "version": "suppression 10%",
+   "texte": "Chacun peut se prévaloir de tous les droits et toutes les dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d’opinion politique de toute autre opinion, d’origine ou sociale, fortune, de naissance de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont personne est ressortissante, que ce pays ou territoire soit indépendant, tutelle, non autonome soumis à une limitation quelconque de souveraineté.",
+   "cer_avant": 8.51,
+   "surprisal": 2.781,
+   "correction": "Chacun peut se prévaloir de tous les droits et toutes les libertés dans la présente Déclaration, sans distinction aucune, notamment de race, de couleur, de sexe, de langue, de religion, d'opinion politique, d'origine ou sociale, fortune, de naissance, de toute autre situation. De plus, il ne sera fait aucune distinction fondée sur le statut politique, juridique ou international du pays ou du territoire dont personne est ressortissante, que ce pays ou territoire soit indépendant, sous tutelle, non-autonome, soumis à une limitation quelconque de souveraineté.",
+   "cer_apres": 10.43,
+   "surprisal_apres": 2.477
+  },
+  {
+   "article": 3,
+   "version": "propre",
+   "texte": "Tout individu a droit à la vie, à la liberté et à la sûreté de sa personne.",
+   "cer_avant": 0.0,
+   "surprisal": 2.104
+  },
+  {
+   "article": 3,
+   "version": "fautes 2%",
+   "texte": "Tout individu a droit à la vie, à la liberté et à la sûreté de sa personne.",
+   "cer_avant": 0.0,
+   "surprisal": 2.104,
+   "correction": "Tout individu a droit à la vie, à la liberté et à la sûreté de sa personne.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.104
+  },
+  {
+   "article": 3,
+   "version": "fautes 5%",
+   "texte": "Tout individu a droit à la vie, à la qiberté et à la sûreté de sa pershnne.",
+   "cer_avant": 2.67,
+   "surprisal": 4.914,
+   "correction": "Tout individu a droit à la vie, à la qualité et à la sécurité de sa personne.",
+   "cer_apres": 12.0,
+   "surprisal_apres": 3.291
+  },
+  {
+   "article": 3,
+   "version": "fautes 10%",
+   "texte": "Tout indxvodu a uroit à la vie, à la liberté et à la sûreté de sa personne.",
+   "cer_avant": 4.0,
+   "surprisal": 6.535,
+   "correction": "Tout indénuodu à la vie, à la liberté et à la sûreté de sa personne.",
+   "cer_apres": 14.67,
+   "surprisal_apres": 5.254
+  },
+  {
+   "article": 3,
+   "version": "fautes 20%",
+   "texte": "éout indivgdu p sroit à lé viw, à la lwbcrké et à ca sûrkcé dz se personne.",
+   "cer_avant": 18.67,
+   "surprisal": 10.281,
+   "correction": "éout individu peut être à la vue, au travail et à la sécurité pour se personnaliser.",
+   "cer_apres": 46.67,
+   "surprisal_apres": 6.824
+  },
+  {
+   "article": 3,
+   "version": "accents perdus",
+   "texte": "Tout individu a droit a la vie, a la liberte et a la surete de sa personne.",
+   "cer_avant": 8.0,
+   "surprisal": 3.223,
+   "correction": "Tout individu a droit à la vie, à la liberté et à la sécurité de sa personne.",
+   "cer_apres": 5.33,
+   "surprisal_apres": 2.299
+  },
+  {
+   "article": 3,
+   "version": "melange 10%",
+   "texte": "Tout individu a droit à la vie, à adequate liberté et à la sûreté de sa personne.",
+   "cer_avant": 9.33,
+   "surprisal": 4.273,
+   "correction": "Tout individu a droit à la vie, à la liberté suffisante et à la sûreté de sa personne.",
+   "cer_apres": 14.67,
+   "surprisal_apres": 2.869
+  },
+  {
+   "article": 3,
+   "version": "melange 30%",
+   "texte": "rights individu a droit à la his à la right et à la right de hold personne.",
+   "cer_avant": 29.33,
+   "surprisal": 8.922,
+   "correction": "Règles individus ont droit à la hiérarchie et à la hiérarchie de tenir personne.",
+   "cer_apres": 50.67,
+   "surprisal_apres": 5.262
+  },
+  {
+   "article": 3,
+   "version": "melange 50%",
+   "texte": "the individu a droit to right vie, language, la shall et à property. sûreté the sa guilty",
+   "cer_avant": 61.33,
+   "surprisal": 11.078,
+   "correction": "Le individu a droit à la vie, la liberté et à la propriété. Sa sécurité est garantie.",
+   "cer_apres": 42.67,
+   "surprisal_apres": 4.668
+  },
+  {
+   "article": 3,
+   "version": "suppression 10%",
+   "texte": "Tout individu a droit à la vie, à la liberté et à la sûreté sa personne.",
+   "cer_avant": 4.0,
+   "surprisal": 3.561,
+   "correction": "Tout individu a droit à la vie, à la liberté et à la sécurité de sa personne.",
+   "cer_apres": 5.33,
+   "surprisal_apres": 2.299
+  },
+  {
+   "article": 4,
+   "version": "propre",
+   "texte": "Nul ne sera tenu en esclavage ni en servitude ; l’esclavage et la traite des esclaves sont interdits sous toutes leurs formes.",
+   "cer_avant": 0.0,
+   "surprisal": 2.871
+  },
+  {
+   "article": 4,
+   "version": "fautes 2%",
+   "texte": "Nul ne sera tenu en esclavage ni en servitude ; l’esclavage et la traite des escbaves sont interdits sous toutus lhurs wormbs.",
+   "cer_avant": 3.97,
+   "surprisal": 6.719,
+   "correction": "Nul ne sera tenu en esclavage ni en servitude ; l'esclavage et la traite des esclaves sont interdits sous tous les temps worms.",
+   "cer_apres": 7.14,
+   "surprisal_apres": 4.223
+  },
+  {
+   "article": 4,
+   "version": "fautes 5%",
+   "texte": "Nul ne bera tenu en esclavage nd en servitude ; l’esclavage et la traite des esclzvgs sont interdits sous toutes leurs formes.",
+   "cer_avant": 3.17,
+   "surprisal": 5.629,
+   "correction": "Nul ne sera tenu en esclavage ni en servitude ; l'esclavage et la traite des esclaves sont interdits sous toutes leurs formes.",
+   "cer_apres": 0.79,
+   "surprisal_apres": 2.859
+  },
+  {
+   "article": 4,
+   "version": "fautes 10%",
+   "texte": "Nul ne sera tenu en esclavage ni en servitude ; l’esclavage et ba traite des esclaves sent interdits sous toutes leués formes.",
+   "cer_avant": 2.38,
+   "surprisal": 5.551,
+   "correction": "Nul ne sera tenu en esclavage ni en servitude ; l'esclavage et traite des esclaves sont interdits sous toutes leurs formes.",
+   "cer_apres": 3.17,
+   "surprisal_apres": 3.201
+  },
+  {
+   "article": 4,
+   "version": "fautes 20%",
+   "texte": "Nul ne sera çenu en esceàvage nh en seovituda ; v’eyhlavage et la treitd rés esctaves sjnt interdits sous tsutns leurs formej.",
+   "cer_avant": 14.29,
+   "surprisal": 10.578,
+   "correction": "Nul ne sera censé en esclavage ni en séviture ; l'exploitation et la torture sont interdits sous tous leurs formes.",
+   "cer_apres": 26.98,
+   "surprisal_apres": 5.418
+  },
+  {
+   "article": 4,
+   "version": "accents perdus",
+   "texte": "Nul ne sera tenu en esclavage ni en servitude ; l’esclavage et la traite des esclaves sont interdits sous toutes leurs formes.",
+   "cer_avant": 0.0,
+   "surprisal": 2.871,
+   "correction": "Nul ne sera tenu en esclavage ni en servitude ; l'esclavage et la traite des esclaves sont interdits sous toutes leurs formes.",
+   "cer_apres": 0.79,
+   "surprisal_apres": 2.859
+  },
+  {
+   "article": 4,
+   "version": "melange 10%",
+   "texte": "Nul ne sera forth en esclavage ni en servitude ; l’esclavage et la traite shall esclaves sont interdits sous toutes leurs formes.",
+   "cer_avant": 7.94,
+   "surprisal": 4.891,
+   "correction": "Nul ne sera en esclavage ni en servitude ; l'esclavage et la traite sont interdits sous toutes leurs formes.",
+   "cer_apres": 15.08,
+   "surprisal_apres": 3.443
+  },
+  {
+   "article": 4,
+   "version": "melange 30%",
+   "texte": "Nul ne sera tenu en esclavage ni resources free care l’esclavage et la traite des has the interdits sous change leurs formes.",
+   "cer_avant": 25.4,
+   "surprisal": 7.941,
+   "correction": "Nul ne sera tenu en esclavage ni ressources libres de care l'esclavage et la traite des êtres humains étant interdits sous toutes ses formes.",
+   "cer_apres": 27.78,
+   "surprisal_apres": 4.496
+  },
+  {
+   "article": 4,
+   "version": "melange 50%",
+   "texte": "the ne Everyone shall equal esclavage marry and servitude other association. et la traite des standard sont interdits freedoms toutes leurs peace.",
+   "cer_avant": 46.83,
+   "surprisal": 10.242,
+   "correction": "The Everyone shall be equal to slavery, marriage, and servitude in other associations. And the trafficking of standards are prohibited, freedoms for all their peace.",
+   "cer_apres": 88.1,
+   "surprisal_apres": 8.195
+  },
+  {
+   "article": 4,
+   "version": "suppression 10%",
+   "texte": "ne sera en esclavage ni servitude ; l’esclavage et la traite des esclaves sont sous toutes leurs formes.",
+   "cer_avant": 17.46,
+   "surprisal": 4.973,
+   "correction": "ne sera en esclavage ni servitude ; l'esclavage et la traite des esclaves sont sous toutes leurs formes.",
+   "cer_apres": 18.25,
+   "surprisal_apres": 4.918
+  },
+  {
+   "article": 5,
+   "version": "propre",
+   "texte": "Nul ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_avant": 0.0,
+   "surprisal": 2.311
+  },
+  {
+   "article": 5,
+   "version": "fautes 2%",
+   "texte": "Nul nf sera soumis ç la torturn, ni à des peineé ou traitements cruels, inhèmains ou dégradants.",
+   "cer_avant": 5.21,
+   "surprisal": 7.176,
+   "correction": "Nul ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.311
+  },
+  {
+   "article": 5,
+   "version": "fautes 5%",
+   "texte": "Nsl ne sera soumis à la torture, ni à des peines ou traitemeens cruels, inhumains ou dégradanês.",
+   "cer_avant": 4.17,
+   "surprisal": 5.512,
+   "correction": "Nsl ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 1.04,
+   "surprisal_apres": 3.512
+  },
+  {
+   "article": 5,
+   "version": "fautes 10%",
+   "texte": "Nul ne sera joumès à la torture, ni à des ptines ou traitemenàs cruels, inhumaens ou dégradants.",
+   "cer_avant": 5.21,
+   "surprisal": 6.309,
+   "correction": "Nul ne sera jugé à la torture, ni aux tortures ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 15.62,
+   "surprisal_apres": 3.342
+  },
+  {
+   "article": 5,
+   "version": "fautes 20%",
+   "texte": "Nkl ne sera sèumis à ea tzrture, ni t des pêbnes og txahteàentq cruels, inhumains ou dkjrèdamts.",
+   "cer_avant": 16.67,
+   "surprisal": 11.156,
+   "correction": "Nkl ne sera soumis à l'extermination, ni à des persécutions ou aux cruels, inhumains ou atroces.",
+   "cer_apres": 38.54,
+   "surprisal_apres": 5.445
+  },
+  {
+   "article": 5,
+   "version": "accents perdus",
+   "texte": "Nul ne sera soumis a la torture, ni a des peines ou traitements cruels, inhumains ou degradants.",
+   "cer_avant": 3.12,
+   "surprisal": 2.973,
+   "correction": "Nul ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.311
+  },
+  {
+   "article": 5,
+   "version": "melange 10%",
+   "texte": "Nul ne sera soumis à la torture, determination à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_avant": 11.46,
+   "surprisal": 3.941,
+   "correction": "Nul ne sera soumis à la torture, détermination à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 11.46,
+   "surprisal_apres": 3.764
+  },
+  {
+   "article": 5,
+   "version": "melange 30%",
+   "texte": "care ne sera soumis living la torture, the à have peines of traitements cruels, inhumains ou dégradants.",
+   "cer_avant": 18.75,
+   "surprisal": 6.605,
+   "correction": "C'est bien sûr, voici le texte corrigé avec les accents restaurés :\n\n\"C'est ce qui ne sera pas subi : la torture, les peines de traitements cruels, inhumains ou dégradants.\"",
+   "cer_apres": 98.96,
+   "surprisal_apres": 4.176
+  },
+  {
+   "article": 5,
+   "version": "melange 50%",
+   "texte": "Nul for sera and à and torture, imposed à right peines ou traitements one unions discrimination. dégradants.",
+   "cer_avant": 45.83,
+   "surprisal": 10.992,
+   "correction": "Nul mal sera et à torture, imposé aux peines ou traitements dégradants de discrimination.",
+   "cer_apres": 50.0,
+   "surprisal_apres": 7.969
+  },
+  {
+   "article": 5,
+   "version": "suppression 10%",
+   "texte": "Nul ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_avant": 0.0,
+   "surprisal": 2.311,
+   "correction": "Nul ne sera soumis à la torture, ni à des peines ou traitements cruels, inhumains ou dégradants.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.311
+  },
+  {
+   "article": 6,
+   "version": "propre",
+   "texte": "Chacun a le droit à la reconnaissance en tous lieux de sa personnalité juridique.",
+   "cer_avant": 0.0,
+   "surprisal": 3.428
+  },
+  {
+   "article": 6,
+   "version": "fautes 2%",
+   "texte": "Chacun a le droit à la reconnaissance un tous lieux de sa personnalité juridique.",
+   "cer_avant": 1.23,
+   "surprisal": 4.77,
+   "correction": "Chacun a le droit à la reconnaissance universelle de sa personnalité juridique.",
+   "cer_apres": 11.11,
+   "surprisal_apres": 2.656
+  },
+  {
+   "article": 6,
+   "version": "fautes 5%",
+   "texte": "Chacun a le droit à la reconnaissance en tous lieux de sa mersonnaàité jçridique.",
+   "cer_avant": 3.7,
+   "surprisal": 7.137,
+   "correction": "Chacun a le droit à la reconnaissance en tous lieux de sa mésonnauté juridique.",
+   "cer_apres": 6.17,
+   "surprisal_apres": 5.414
+  },
+  {
+   "article": 6,
+   "version": "fautes 10%",
+   "texte": "Chacun w ie droit u la reconnaièsance en tous lieçx dw sa perlonqalité jurihyque.",
+   "cer_avant": 12.35,
+   "surprisal": 10.359,
+   "correction": "Chacun a droit à la reconnaissance en tous lieux de sa personnalité juridique.",
+   "cer_apres": 3.7,
+   "surprisal_apres": 3.545
+  },
+  {
+   "article": 6,
+   "version": "fautes 20%",
+   "texte": "Chacun u lx enoit à la revonéaidsaxèe nn uous lveuh de sr gersonnglitn jufidique.",
+   "cer_avant": 22.22,
+   "surprisal": 10.578,
+   "correction": "Chacun veut être à la révolution nationale nous voulons de la justice sociale.",
+   "cer_apres": 61.73,
+   "surprisal_apres": 5.152
+  },
+  {
+   "article": 6,
+   "version": "accents perdus",
+   "texte": "Chacun a le droit a la reconnaissance en tous lieux de sa personnalite juridique.",
+   "cer_avant": 2.47,
+   "surprisal": 3.521,
+   "correction": "Chacun a le droit à la reconnaissance en tous lieux de sa personnalité juridique.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 3.428
+  },
+  {
+   "article": 6,
+   "version": "melange 10%",
+   "texte": "Chacun a le droit à la reconnaissance en tous shall de sa personnalité juridique.",
+   "cer_avant": 6.17,
+   "surprisal": 5.562,
+   "correction": "Chacun a le droit à la reconnaissance en tous cas de sa personnalité juridique.",
+   "cer_apres": 6.17,
+   "surprisal_apres": 3.857
+  },
+  {
+   "article": 6,
+   "version": "melange 30%",
+   "texte": "Chacun of le genuine à is reconnaissance en tous lieux de herein. personnalité juridique.",
+   "cer_avant": 20.99,
+   "surprisal": 8.922,
+   "correction": "Chacun des vrais est reconnu dans tous les lieux de ce qui est juridiquement personnel.",
+   "cer_apres": 62.96,
+   "surprisal_apres": 4.957
+  },
+  {
+   "article": 6,
+   "version": "melange 50%",
+   "texte": "for a le unit the within reconnaissance or act lieux de to personnalité juridique.",
+   "cer_avant": 32.1,
+   "surprisal": 10.531,
+   "correction": "Pour une unité la reconnaissance ou acte lieux de personnalité juridique.",
+   "cer_apres": 27.16,
+   "surprisal_apres": 6.629
+  },
+  {
+   "article": 6,
+   "version": "suppression 10%",
+   "texte": "a le droit à la reconnaissance en tous de sa personnalité juridique.",
+   "cer_avant": 16.05,
+   "surprisal": 6.035,
+   "correction": "a droit à la reconnaissance en tous points de sa personnalité juridique.",
+   "cer_apres": 18.52,
+   "surprisal_apres": 5.332
+  },
+  {
+   "article": 7,
+   "version": "propre",
+   "texte": "Tous sont égaux devant la loi et ont droit sans distinction à une égale protection de la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_avant": 0.0,
+   "surprisal": 2.758
+  },
+  {
+   "article": 7,
+   "version": "fautes 2%",
+   "texte": "Tous sont égaèx devant la loi et ont droit sans distinction à une égale protection de la lou. Tous ont droit à pne protection égale contre ioute discrimination qui violerait la préàente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_avant": 1.98,
+   "surprisal": 5.133,
+   "correction": "Tous sont égaux devant la loi et ont droit sans distinction à une égale protection de la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.758
+  },
+  {
+   "article": 7,
+   "version": "fautes 5%",
+   "texte": "Tous sont égaux devant la loi et ont droit sans dêstinction à une égale prowection de la loi. Tous hnt droit à une protectqon égale contre toute xiscrimination qui violerait la présente Déàlaration et conure toute provocatién à une telle discrimination.",
+   "cer_avant": 3.16,
+   "surprisal": 6.367,
+   "correction": "Tous sont égaux devant la loi et ont droit sans distinction à une égale protection de la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et concrétiserait toute provocation à une telle discrimination.",
+   "cer_apres": 3.56,
+   "surprisal_apres": 2.992
+  },
+  {
+   "article": 7,
+   "version": "fautes 10%",
+   "texte": "Tous sont égaux devant la yoi et onj droit saks distinction à une égale protection de la wol. oous ont droit à une proteccion égale contrg toute discrimination êui viooerait la présznte Déclarasion rt contre toute provocation à une tellg èdscrimination.",
+   "cer_avant": 6.32,
+   "surprisal": 8.25,
+   "correction": "Tous sont égaux devant la loi et onj droit s'accompagne d'une égale protection de la loi. Vous avez droit à une protection égale contre toute discrimination qui violerait la présente Déclaration contre toute provocation à une telle discrimination.",
+   "cer_apres": 9.88,
+   "surprisal_apres": 4.219
+  },
+  {
+   "article": 7,
+   "version": "fautes 20%",
+   "texte": "Tddr scàà égaux devaxt àa eoi ef odt dàogo sans listinctèoh h une égmle paocectiof de la loi. Tows ont droit à une proyectgon égane csntre toute dincriminétizn qui violdrait la prasenbe Dcclaration et contre toute provocamiot o uhe telle discrimination.",
+   "cer_avant": 15.02,
+   "surprisal": 10.086,
+   "correction": "Tout d'égale valeur devrait être égal devant la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et contre toute provocation ou telle discrimination.",
+   "cer_apres": 24.51,
+   "surprisal_apres": 4.055
+  },
+  {
+   "article": 7,
+   "version": "accents perdus",
+   "texte": "Tous sont egaux devant la loi et ont droit sans distinction a une egale protection de la loi. Tous ont droit a une protection egale contre toute discrimination qui violerait la presente Declaration et contre toute provocation a une telle discrimination.",
+   "cer_avant": 3.16,
+   "surprisal": 3.26,
+   "correction": "Tous sont égaux devant la loi et ont droit sans distinction à une égale protection de la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_apres": 0.0,
+   "surprisal_apres": 2.758
+  },
+  {
+   "article": 7,
+   "version": "melange 10%",
+   "texte": "Tous sont égaux devant has loi et ont droit sans distinction group government; égale protection de la loi. Tous ont droit à une protection égale contre full discrimination qui violerait la présente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_avant": 7.91,
+   "surprisal": 5.285,
+   "correction": "Tous sont égaux devant la loi et ont droit sans distinction à la protection de la loi. Tous ont droit à une protection égale contre toute discrimination qui violerait la présente Déclaration et contre toute provocation à une telle discrimination.",
+   "cer_apres": 3.16,
+   "surprisal_apres": 2.695
+  },
+  {
+   "article": 7,
+   "version": "melange 30%",
+   "texte": "Tous sont égaux devant la loi against ont droit sans distinction à une property, protection social la loi. Tous worship droit to une protection égale contre distinction discrimination entitled violerait la présente Déclaration freedom, to toute any à the effective discrimination.",
+   "cer_avant": 28.46,
+   "surprisal": 8.398,
+   "correction": "Tous sont égaux devant la loi et ont droit, sans distinction, à une propriété, protection sociale et la loi. Tous ont droit à une protection égale contre toute discrimination ; cette affirmation violerait la présente Déclaration des droits humains.",
+   "cer_apres": 32.81,
+   "surprisal_apres": 4.418
+  },
+  {
+   "article": 7,
+   "version": "melange 50%",
+   "texte": "Tous penal égaux violating which Men a impartial droit sans distinction à une égale crimes presumed la rest in voting work, vote une choice égale contre toute discrimination qui entitled rights no Déclaration may contre toute provocation basis media telle discrimination.",
+   "cer_avant": 38.74,
+   "surprisal": 10.102,
+   "correction": "Tous égaux devant la loi, violant quoi qui assurent un droit impératif sans distinction à une égalité des peines, la participation au vote reste garantie. Le vote offre une égalité de choix contre toute discrimination, qui entrent dans le champ des droits, sans que la Déclaration ne puisse être utilisée pour justifier une provocation basée sur cette discrimination.",
+   "cer_apres": 72.73,
+   "surprisal_apres": 4.664
+  },
+  {
+   "article": 7,
+   "version": "suppression 10%",
+   "texte": "Tous sont égaux devant la loi et ont sans distinction à une égale protection de la loi. ont droit à une protection égale contre toute discrimination qui violerait la et contre toute provocation à une telle discrimination.",
+   "cer_avant": 12.65,
+   "surprisal": 3.84,
+   "correction": "Tous sont égaux devant la loi et ont, sans distinction, droit à une égale protection de la loi. Ils ont droit à une protection égale contre toute discrimination qui violerait la Constitution et contre toute provocation à une telle discrimination.",
+   "cer_apres": 11.86,
+   "surprisal_apres": 3.049
+  },
+  {
+   "article": 8,
+   "version": "propre",
+   "texte": "Toute personne a droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconnus par la constitution ou par la loi.",
+   "cer_avant": 0.0,
+   "surprisal": 2.307
+  },
+  {
+   "article": 8,
+   "version": "fautes 2%",
+   "texte": "Toute personne a droit à un recours effectif devant lis juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconrus par la constitution ou par la loi.",
+   "cer_avant": 1.02,
+   "surprisal": 3.654,
+   "correction": "Toute personne a droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconquis par la Constitution ou par la loi.",
+   "cer_apres": 1.52,
+   "surprisal_apres": 2.543
+  },
+  {
+   "article": 8,
+   "version": "fautes 5%",
+   "texte": "Toute personne a droit à un recours effectif devant lêt juridictions natisnahes compétentes contre les actes vioêant les droits fondamentxux qui lui sont recongus pnr la constitetiod ou phr la loi.",
+   "cer_avant": 5.58,
+   "surprisal": 6.422,
+   "correction": "Toute personne a droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconnus par la constitution ou la loi.",
+   "cer_apres": 2.03,
+   "surprisal_apres": 2.391
+  },
+  {
+   "article": 8,
+   "version": "fautes 10%",
+   "texte": "Toute personne a droit à un recours effwctif xevant les fèridicyions nationales comjétentes contre les actds violant les droits fondamentaul qui lui sont reconnus par la constitution ou par la loi.",
+   "cer_avant": 4.06,
+   "surprisal": 6.094,
+   "correction": "Toute personne a droit à un recours efficace devant les faits de fraude contre les actes violant les droits fondamentaux qu'elle est reconnue par la constitution ou la loi.",
+   "cer_apres": 22.34,
+   "surprisal_apres": 3.707
+  },
+  {
+   "article": 8,
+   "version": "fautes 20%",
+   "texte": "Tzçte persçjoe a droio à un reèours effeçhif devayt les wurificywjns natioualls compétanbzj coitre les acoef çiodcnt les diottb fêvàamentyux qui lui sont reconnss çar la constitutvon ou par la loi.",
+   "cer_avant": 18.78,
+   "surprisal": 10.5,
+   "correction": "Cette persjoe a droit à un ressource efficace devayt les wurificjons nationaux compétentes traiter les affaires concernant les droits fondamentaux qui lui sont reconnaissables par la constitution ou par la loi.",
+   "cer_apres": 24.37,
+   "surprisal_apres": 6.031
+  },
+  {
+   "article": 8,
+   "version": "accents perdus",
+   "texte": "Toute personne a droit a un recours effectif devant les juridictions nationales competentes contre les actes violant les droits fondamentaux qui lui sont reconnus par la constitution ou par la loi.",
+   "cer_avant": 1.02,
+   "surprisal": 2.66,
+   "correction": "Toute personne a droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconnaits par la constitution ou par la loi.",
+   "cer_apres": 1.52,
+   "surprisal_apres": 2.375
+  },
+  {
+   "article": 8,
+   "version": "melange 10%",
+   "texte": "Toute shall in droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconnus par la to ou par la loi.",
+   "cer_avant": 9.64,
+   "surprisal": 4.414,
+   "correction": "Toute personne aura droit à un recours effectif devant les juridictions nationales compétentes contre les actes violant les droits fondamentaux qui lui sont reconnaits par la To ou par la loi.",
+   "cer_apres": 8.63,
+   "surprisal_apres": 3.293
+  },
+  {
+   "article": 8,
+   "version": "melange 30%",
+   "texte": "Toute personne elementary the à un freedoms or and les juridictions nationales compétentes contre les actes violant les or fondamentaux qui equal sont and par la constitution ou Furthermore, la loi.",
+   "cer_avant": 28.43,
+   "surprisal": 8.344,
+   "correction": "Toute personne élémentaire dispose des libertés et les juridictions nationales compétentes contre les actes violant les fondements qui égaux sont et par la constitution ou la loi.",
+   "cer_apres": 28.43,
+   "surprisal_apres": 5.852
+  },
+  {
+   "article": 8,
+   "version": "melange 50%",
+   "texte": "Toute personne at droit the un the from devant les juridictions Men compétentes pay. les age violant les free periodic qui to leisure, community, par la offence includes par penal loi.",
+   "cer_avant": 44.67,
+   "surprisal": 10.977,
+   "correction": "Toute personne a droit à un certain niveau de protection devant les juridictions compétentes. L'atteinte à l'intégrité physique ou à la liberté d'une personne, quelle que soit la nature de la violation (sexuelle, familiale, etc.), est punie par la loi pénale.",
+   "cer_apres": 74.62,
+   "surprisal_apres": 2.604
+  },
+  {
+   "article": 8,
+   "version": "suppression 10%",
+   "texte": "Toute personne droit à un recours effectif devant juridictions nationales compétentes contre les violant les droits fondamentaux qui lui sont reconnus par la constitution ou par la loi.",
+   "cer_avant": 6.09,
+   "surprisal": 4.051,
+   "correction": "Toute personne a droit à un recours effectif devant juridictions nationales compétentes contre ceux qui la violent dans ses droits fondamentaux qui lui sont reconnaits par la Constitution ou la loi.",
+   "cer_apres": 14.21,
+   "surprisal_apres": 3.041
+  }
+ ]
+}

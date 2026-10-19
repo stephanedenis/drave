@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-19, 14 h 50 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-19, 15 h 35 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -17,7 +17,9 @@ traduire) ; sur un **règlement européen de 2025**, non mémorisable, la qualit
 (3 B/7 B, 4 paires, mesure 62) — **au-dessus du plancher de +30 à +40**, mais **loin de 100**. La **courbe
 propre** est **lisse et monotone** (54,7 → 69,5 en eng→fra, 63,1 → 75,7 en fra→eng, du 0,5 au 7 B, mesure 63) :
 *le « coude à 3 B » de l'UDHR était un artefact*. Et le **littéraire**, enfin aligné (93,2 % d'ancres à ±2,
-mesure 64), est le **plus dur** : **47,7-49,8**, où la taille n'aide presque pas (+2,1). *C'est la qualité de
+mesure 64), est le **plus dur** : **47,7-49,8**, où la taille n'aide presque pas (+2,1). Et l'entrée sait
+**signaler** son bruit (seuil à 3,23 bits/token : fautes et langues mêlées détectées à 100 %, AUC 1,00) mais
+**pas le corriger** : la correction automatique **empire** le texte 8 fois sur 9 (mesure 65). *C'est la qualité de
 traducteur qu'il faut faire monter avant le module de pensée abstraite.*
 
 ## Le tableau de bord des chantiers
@@ -48,6 +50,7 @@ C6 documentation (transverse, ne bloque rien)
 |---|---|---|---|---|
 | **C5.1** | banc juridique **UDHR** | ✅ | **contaminé** (mesure 61 : le modèle récite l'UDHR) — banc de **mémoire**, plus juge | `tools/test_contamination.py`, `reports/contamination-*.json` |
 | **C5.1b** | banc juridique **post-cutoff** (EUR-Lex 2025) | ✅ **parallèle** | **fait** (mesure 62 : qualité réelle 54,6-75,7) | `tools/corpus_eurlex.py`, `data/eurlex/`, `reports/traduction-eurlex-*.json` |
+| **C2.2** | **seuil de bruit** et correction de l'entrée | ✅ **parallèle** | **fait** (mesure 65 : détection AUC 1,00 ; correction 8/9 empirent) | `tools/seuil_bruit.py`, `reports/seuil-bruit-3b.json` |
 | **C5.2** | banc **littéraire** (Verne) | ✅ **parallèle** | **fait** (mesure 64 : alignement validé 93,2 %, littéraire 47,7-49,8) | `tools/aligneur_litteraire.py`, `tools/traduire_bench.py --corpus verne_align` |
 | **C5.3** | banc **modèle plus grand** (Qwen2.5 0,5 · 1,5 · 3 · 7 · 14 B) | ✅ **parallèle** | **fait** de 0,5 à 7 B (mesure 63) ; 14 B en cours | `tools/traduire_bench.py` |
 | **C5.4** | corpus **technique** parallèle | ✅ **parallèle** | à construire | Gutenberg/`Panini` |
@@ -67,6 +70,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | la qualité de traduction vient-elle avec la taille ? | **moi** (mesure 62) | **oui, mais +1,7 à +6,3** du 3 au 7 B sur texte propre |
 | le plancher « ne rien traduire » est-il battu sur **chaque** direction ? | **moi** (mesure 62) | **oui** : +30 à +40 points sur les 4 paires |
 | l'UDHR est-elle utilisable comme juge ? | **moi** (mesure 61) | **non** : le modèle la récite — banc de mémoire |
+| peut-on **corriger** automatiquement l'entrée abîmée ? | **moi** (mesure 65) | **non** : 8/9 des corrections empirent ; seule la restauration des accents gagne |
 | quel domaine après le juridique ? | **moi** (mesure 64) | **littéraire mesuré** : 47,7-49,8, le plus dur |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
 | les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
@@ -85,6 +89,7 @@ qu'elle soit fiable.
 |---|---|---|
 | **la qualité de traducteur, sur texte non mémorisable** (règlement UE 2025) | **54,7 → 69,5** (eng→fra) et **63,1 → 75,7** (fra→eng) du 0,5 au 7 B · courbe lisse | [07](../reports/07-mesures-couche-commune.md) |
 | **le littéraire** (Verne, alignement validé) | **47,7-49,8** (3 B/7 B) · +24 à +26 sur le plancher · la taille n'aide presque pas (+2,1) | [07](../reports/07-mesures-couche-commune.md) · [alignement](../reports/alignement-verne.md) |
+| **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
 | **le sens traverse les langues** — sur les paires bien couvertes | **96,4 %** (12 paires, dont fra↔cmn) · hasard 3,3 % | [07](../reports/07-mesures-couche-commune.md) |

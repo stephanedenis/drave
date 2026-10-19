@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (64 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (65 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2310,3 +2310,79 @@ donc 47,7-49,8 est un **plancher** de la qualité ✓✓ ; (b) un seul livre, un
 paires **1:1** sont évaluées (81 % des 3 397 paires ; les 1:2, 2:1… sortent du cadre phrase à phrase) ✓✓ ;
 (d) **55 %** des phrases n'ont **aucune ancre** : pour elles, l'alignement n'est validé que par la longueur et la
 position ✓✗ — c'est la zone aveugle de la validation ✓✓ ; (e) `chrF` contre **une** référence, comme partout ✓.
+
+## Mesure 65 — DU MARQUEUR AU SEUIL, ET LA CORRECTION QUI MENT : elle empire le texte 8 fois sur 9, et la surprisal l'accepte
+
+**La question** ✓✓. La mesure 60 a montré que les marqueurs **voient** le bruit (fautes ×3-5 de surprisal) ✓✓,
+mais un marqueur qui voit ne **décide** rien ✗✓. Deux questions, donc : **à quel seuil** rejeter ou corriger ? Et
+la **correction** marche-t-elle ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/seuil_bruit.py` ✓). Sur 8 articles de l'UDHR français, on fabrique neuf corruptions à
+taux **contrôlé** : fautes (2, 5, 10, 20 % des caractères), accents perdus, langue mêlée (10, 30, 50 % des mots
+remplacés par des mots anglais), suppression (10 % des mots) ✓. Pour chacune : la **surprisal par token** ✓, puis
+la **correction** demandée au modèle (« corrige les fautes et restaure les accents ») ✓, et le **taux d'erreur
+caractère** (CER) **avant** et **après** ✓✓.
+
+*Un bug d'instrument corrigé avant de conclure* ✗✓ : la première version de la langue mêlée ne remplaçait rien
+(l'anglais a moins de mots que le français, et le garde-fou renvoyait le texte intact) ✗✗ — les trois taux
+donnaient exactement le même chiffre ✓✗. Corrigé en puisant dans le vocabulaire anglais de tout le corpus ✓✓.
+
+**1. Le seuil** : on prend le **95ᵉ centile** des textes propres — **3,23 bits/token** (moyenne des propres : 2,30)
+✓, donc **5 % de fausses alertes** par construction ✓ :
+
+| corruption | détection | AUC | surprisal moyenne |
+|---|---:|---:|---:|
+| fautes 2 % | 75 % | 0,88 | 4,56 |
+| fautes 5 % | **100 %** | **1,00** | 5,94 |
+| fautes 10 % | **100 %** | **1,00** | 7,19 |
+| fautes 20 % | **100 %** | **1,00** | 10,33 |
+| accents perdus | **25 %** ✗ | **0,69** ✗ | 2,76 |
+| langue mêlée 10 % | **100 %** | **1,00** | 4,54 |
+| langue mêlée 30 % | **100 %** | **1,00** | 8,03 |
+| langue mêlée 50 % | **100 %** | **1,00** | 10,27 |
+| suppression 10 % | 62 % | 0,81 | 3,64 |
+
+* **LES FAUTES ET LES LANGUES MÊLÉES SONT DÉTECTÉES PARFAITEMENT** ✓✓ : AUC **1,00**, détection **100 %** dès 5 % de
+  fautes et dès 10 % de mélange ✓✓ — *le seuil peut les signaler* ✓✓ ;
+* **LES ACCENTS PERDUS PASSENT SOUS LE SEUIL** ✗✗ : détection **25 %**, AUC **0,69** ✓✗ — *le bruit le plus
+  courant du réel est celui que le marqueur voit le moins* ✓✓ (24ᵉ piège de la mesure 61, confirmé) ;
+* **la suppression de mots est à moitié vue** ✗✓ : 62 %, AUC 0,81 ✓.
+
+**2. La correction** (3 B, même consigne pour tous) :
+
+| corruption | CER avant | CER après | surprisal après |
+|---|---:|---:|---:|
+| fautes 2 % | 2,1 % | **3,0 %** ✗ | 2,45 |
+| fautes 5 % | 4,0 % | **4,7 %** ✗ | 3,06 |
+| fautes 10 % | 6,4 % | **10,9 %** ✗✗ | 3,40 |
+| fautes 20 % | 17,7 % | **37,6 %** ✗✗ | 4,85 |
+| **accents perdus** | **2,7 %** | **1,0 %** ✓✓ | 2,34 |
+| langue mêlée 10 % | 8,9 % | **10,6 %** ✗ | 3,04 |
+| langue mêlée 30 % | 25,4 % | **47,8 %** ✗✗ | 4,41 |
+| langue mêlée 50 % | 43,7 % | **55,9 %** ✗✗ | 5,64 |
+| suppression 10 % | 9,4 % | **11,2 %** ✗ | 3,15 |
+
+* **LA CORRECTION EMPIRE LE TEXTE DANS 8 CAS SUR 9** ✗✗ : seul le rétablissement des **accents** gagne
+  (2,7 → **1,0 %**) ✓✓ ; partout ailleurs le CER **monte**, parfois du simple au double (fautes 20 % : 17,7 →
+  37,6 %) ✓✗ ;
+* **et elle ne se contente pas d'échouer : elle RÉÉCRIT** ✗✗ — « en **dignité et droits** » (bruité) devient « en
+  **éducation et en biens** » ✓✗ : le sens est **changé**, pas corrigé ✓✗ ;
+* **LE PIÈGE EST LÀ** ✗✗ : après cette correction fausse, la **surprisal tombe à 2,11** — **sous** la moyenne des
+  textes propres (2,30) et sous le seuil (3,23) ✓✗. *Le contrôle de fluidité **accepte** une correction qui a
+  changé le sens* ✓✗ — **26ᵉ piège : la correction la plus fluide est la plus fausse** ✓✓ ;
+* **ce que cela dit du miroir** (AGENTS.md §7) ✓✓ : la sortie peut valider l'entrée **à condition de vérifier le
+  SENS**, pas la fluidité ✓✓ — *une perplexité basse prouve qu'un texte est plausible, pas qu'il est fidèle* ✓✓.
+
+**Ce que cela commande** ✓✓ :
+
+1. **signaler, pas corriger** ✓✓ : le seuil détecte les fautes et les mélanges (AUC 1,00) ✓✓ ; l'interface doit
+   **annoter** (« 41 % de tokens coûteux ») et **laisser l'humain ou une boucle** corriger ✓✗ ;
+2. **corriger seulement les accents** ✓✓ : c'est le seul cas où la correction est **mesurablement** bonne (CER
+   2,7 → 1,0) ✓✓ — et c'est un bruit déterministe, réparable par dictionnaire ✓ ;
+3. **toute correction doit repasser par le miroir** ✓✓ : traduire, revenir, comparer au sens extrait ✓✓ — *la
+   fluidité seule ne vaut pas validation* ✗✗.
+
+**Ce que ce résultat ne dit pas** ✗ : 8 articles, un modèle (3 B), **une** consigne de correction, un seul tour ✓ ;
+le CER est **aveugle au sens** (une correction peut avoir un CER élevé et garder le sens, ou l'inverse) ✓✗ ; le
+seuil est un 95ᵉ centile sur **8** textes propres (fragile) ✓✓ ; et la langue mêlée est un **saladier de mots**, pas
+un vrai bilinguisme ✓✗ — le résultat vaut pour ce bruit-là ✓.
