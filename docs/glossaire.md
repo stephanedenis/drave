@@ -414,9 +414,10 @@ dite. C'est « le flux le plus intéressant du modèle : il décide de ce que
 l'attention voit » (`docs/plan-deepseek41-complet.md:267-285`,
 `reports/rapport-v4-hca.md:96`).
 
-**Jeton (token)** — Unité de texte traitée par le modèle : un mot court, un
-fragment de mot ou un signe. Le moteur raisonne en jetons, jamais en caractères
-(`docs/format-flux.md:29`). **Où** : `--tokenize`, `src/tokenizer.rs`.
+**Jeton (token)** — Le découpage **technique** du modèle : un mot court, un fragment de mot ou un signe. Le moteur
+raisonne en jetons, jamais en caractères (`docs/format-flux.md:29`). **Où** : `--tokenize`, `src/tokenizer.rs`.
+**Vocabulaire** : voir § 1 (« Jeton », « Représentation sémantique neutre ») — le jeton ne désigne **jamais** la
+RSN.
 
 **k-WTA (k-Winners Take All ; les k gagnants emportent tout)** — Parcimonie
 imposée : ne garder que les k plus grandes activations d'un vecteur, les autres
