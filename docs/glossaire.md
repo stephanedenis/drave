@@ -124,6 +124,19 @@ pleine même si c'est presque fini, et ce qui reste va au planning suivant.
 Lire le contexte avant de traduire. **Réf.** : pour le second sens, voir la
 documentation Intel « Stratix V Device Handbook », section Clocking.
 
+**Couche / Étage** *(polysémie volontairement levée)* — Dans Drave, **deux mots pour deux choses** :
+1. **couche** = **couche de neurones** d'un réseau (couche 1, 2, …) : une unité de calcul traversée par l'état.
+   C'est le sens des mesures « la langue est lisible dès la couche 1 »
+   (`reports/07-mesures-couche-commune.md`) ;
+2. **étage** = **niveau d'architecture** du projet : l'**étage 1** est la couche commune entrée-sortie (lire et
+   produire toutes les langues, dialectes, styles), l'**étage 2** est le module de pensée abstraite
+   (`docs/agent/mission.md`, `AGENTS.md`).
+
+Le nom historique « **couche commune entrée-sortie** » (et le fichier
+`reports/07-mesures-couche-commune.md`) désigne l'**étage 1** : le lire comme « étage », jamais comme une couche de
+neurones. **Règle** : dans `docs/`, on écrit « **étage** » pour l'architecture et « **couche** » pour les neurones ;
+dans `reports/`, les textes anciens gardent « couche commune », à traduire par « étage entrée-sortie » à la lecture.
+
 **Créneau long** — Unité de travail de 3 h, entre le sprint (2 h) et la journée
 (8 h) ; produit deux à trois chantiers (`docs/sprints.md:58-63`).
 

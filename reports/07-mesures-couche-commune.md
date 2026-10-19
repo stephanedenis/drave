@@ -4,6 +4,10 @@
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
 
+> **Vocabulaire** : « couche commune » est le **nom historique** de l'**étage entrée-sortie** (voir le
+> [glossaire](../docs/glossaire.md)) ; « couche 1 » désigne, lui, une **couche de neurones**. Les deux ne se
+> confondent pas.
+
 > **La question.** Peut-on arriver **plus vite** à une couche d'entrée-sortie **commune**, qui fasse
 > **abstraction de la langue** — la langue, le dialecte, le style n'étant plus que des **paramètres** ?
 > Cette note examine les familles de solutions, avec pour chacune : ce qu'elle gagne, ce qu'elle coûte, et

@@ -6,11 +6,11 @@
 
 ## La mission, en un paragraphe
 
-Drave Natif se construit **couche par couche**. La première — et la priorité absolue — est la **couche commune
-entrée-sortie** : un module qui **lit et produit toutes les langues, dialectes et styles**, dans tous les registres,
+Drave Natif se construit **étage par étage**. Le premier — et la priorité absolue — est l'**étage entrée-sortie**
+(nom historique : « couche commune ») : un module qui **lit et produit toutes les langues, dialectes et styles**, dans tous les registres,
 et qu'on juge sur sa **qualité de traducteur** (restitution à l'identique, et traduction du sens d'une langue à
-l'autre). La seconde — seulement quand la première est fiable — est un **module de pensée abstraite indépendant de
-la langue**. On ne passe pas à la suivante tant que la précédente est perfectible.
+l'autre). Le second — seulement quand le premier est fiable — est un **module de pensée abstraite indépendant de
+la langue**. On ne passe pas au suivant tant que le précédent est perfectible.
 
 ## Par où commencer
 

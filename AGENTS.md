@@ -7,7 +7,7 @@
 
 ## 1. La mission (l'essentiel)
 
-Deux couches, dans cet ordre, et **on ne passe pas à la suivante tant que la précédente est perfectible** :
+Deux **étages** d'architecture, dans cet ordre, et **on ne passe pas au suivant tant que le précédent est perfectible** :
 
 1. **Les modules d'ENTRÉE et de SORTIE linguistiques** — priorité absolue. Ils doivent lire et produire **toutes**
    les langues, dialectes et styles, dans les registres **techniques, littéraires, juridiques, quotidiens**. On les
@@ -16,8 +16,12 @@ Deux couches, dans cet ordre, et **on ne passe pas à la suivante tant que la pr
 2. **Le module de pensée abstraite, indépendant de la langue** — **seulement après**. Il ne peut pas être bâti sur
    une entrée-sortie qui n'est pas fiable.
 
-**Le temps est un plancher, pas un plafond** (*carpe diem*) : on s'arrête quand la couche est **faite, mesurée et
-écrite**, pas quand une échéance passe. Détail : [`docs/agent/mission.md`](docs/agent/mission.md).
+**Le temps est un plancher, pas un plafond** (*carpe diem*) : on s'arrête quand l'étage est **fait, mesuré et
+écrit**, pas quand une échéance passe. Détail : [`docs/agent/mission.md`](docs/agent/mission.md).
+
+**Vocabulaire** : *couche* = **couche de neurones** (couche 1, 2…, un réseau) ; *étage* = **niveau d'architecture**
+(étage 1 entrée-sortie, étage 2 pensée). Le nom historique « couche commune entrée-sortie » se lit « étage
+entrée-sortie ». Voir [`docs/glossaire.md`](docs/glossaire.md).
 
 ## 2. Les règles non négociables
 
@@ -55,6 +59,7 @@ Deux couches, dans cet ordre, et **on ne passe pas à la suivante tant que la pr
 | concevoir un test d'entrée/sortie, corriger | [`docs/agent/miroir.md`](docs/agent/miroir.md) |
 | planifier une campagne, le matériel, carpe diem | [`docs/agent/ressources.md`](docs/agent/ressources.md) |
 | **l'état courant** (synthèse + chantiers + questions) | [`docs/en-cours.md`](docs/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/glossaire.md`](docs/glossaire.md) |
 | la carte de la documentation | [`docs/README.md`](docs/README.md) |
 
 ## 4. Le minimum avant de conclure

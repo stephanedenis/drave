@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-19, 16 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-19, 16 h 55 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -8,7 +8,7 @@
 
 ## La synthèse (lire si on ne lit qu'une page)
 
-**La couche entrée-sortie est mesurée, pas encore fiable.** Ce qui est établi : la langue est **lisible partout**
+**L'étage entrée-sortie est mesuré, pas encore fiable.** Ce qui est établi : la langue est **lisible partout**
 dans l'état (80-100 %), le **sens traverse les langues** sur les paires couvertes (96 %), l'alignement **suit la
 généalogie** (37 / 28 / 11 % à écriture contrôlée), et la **restitution exacte** existe pour un modèle spécialisé
 (85 %) mais **meurt dès qu'il partage 10 langues** (4 %). Ce qui manque : la **qualité de traducteur**. Le banc
@@ -76,16 +76,16 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
 | les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
-| la vision de la couche (ce qu'elle **doit** être) | **Stéphane** | en attente, ne bloque rien |
+| la vision de l'étage (ce qu'il **doit** être) | **Stéphane** | en attente, ne bloque rien |
 
-## La priorité : la couche commune entrée-sortie
+## La priorité : l'étage entrée-sortie
 
-Drave Natif se construit couche par couche. La première est la **couche commune entrée-sortie** : lire et produire
+Drave Natif se construit **étage par étage**. Le premier est l'**étage entrée-sortie** : lire et produire
 **toutes les langues, dialectes et styles**, dans tous les registres, et être jugée sur sa **qualité de traducteur**
 (restitution à l'identique, et traduction du sens d'une langue à l'autre). Le **module de pensée abstraite** attend
 qu'elle soit fiable.
 
-## Où en est cette couche (état au 19/10)
+## Où en est cet étage (état au 19/10)
 
 | ce qui est établi | le chiffre | la fiche |
 |---|---|---|

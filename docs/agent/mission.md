@@ -2,10 +2,13 @@
 
 > Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). Il développe **la mission** ; les règles
 > opérationnelles restent dans `AGENTS.md`, les résultats dans [`reports/`](../../reports/).
+>
+> **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture**. Voir le
+> [glossaire](../glossaire.md).
 
 ## La mission
 
-Drave Natif se construit **couche par couche**, et on ne passe pas à la suivante tant que la précédente est
+Drave Natif se construit **étage par étage**, et on ne passe pas au suivant tant que le précédent est
 **perfectible**.
 
 ### 1. Les modules d'ENTRÉE et de SORTIE linguistiques — priorité absolue
@@ -21,18 +24,18 @@ langues, dialectes et styles, dans les registres **techniques, littéraires, jur
 
 ### 2. Le module de pensée abstraite, indépendant de la langue — seulement après
 
-Il ne peut pas être conçu sur une entrée-sortie qui n'est pas fiable. Tant que la couche 1 a des trous mesurés, la
-couche 2 attend.
+Il ne peut pas être conçu sur une entrée-sortie qui n'est pas fiable. Tant que l'**étage 1** a des trous mesurés,
+l'**étage 2** attend.
 
 ## Le temps est un plancher, pas un plafond
 
 *Carpe diem* ([`relations-humaines.md`](../relations-humaines.md) § Addendum) : on ne s'arrête pas parce qu'une
-échéance est passée ; on s'arrête quand **la couche est faite, mesurée et écrite**. Une journée sans mesure ni
+échéance est passée ; on s'arrête quand l'**étage est fait, mesuré et écrit**. Une journée sans mesure ni
 commit est une journée perdue — et une mesure sans fiche est une mesure qui sera refaite.
 
 ## Ce que « perfectible » veut dire
 
-Une couche est perfectible tant qu'un **chiffre reproductible** montre qu'elle peut mieux faire — sur une langue, un
+Un **étage** est perfectible tant qu'un **chiffre reproductible** montre qu'il peut mieux faire — sur une langue, un
 domaine, un style, un bruit d'entrée, une taille de modèle. « Perfectible » n'est pas une impression : c'est un
 **écart mesuré** entre ce qu'on sait faire et ce que la mission demande.
 

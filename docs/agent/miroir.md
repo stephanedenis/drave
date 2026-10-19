@@ -20,7 +20,7 @@ coquilles), alors que la sortie part d'un sens **propre** ✓. On s'en sert donc
    **combien** l'entrée est incertaine (confiance par token, ambiguïtés non résolues, langues détectées avec leur
    probabilité). *Le module de pensée abstraite doit recevoir un sens **annoté de son bruit**, pas un sens lissé* ✓✓.
 4. **Conséquence pour les tests** : toute mesure d'entrée (traduction, contenu, langue) se double d'une mesure de
-   **sortie** (restitution, boucle) — c'est le **juge de paix** de la couche ✓✓.
+   **sortie** (restitution, boucle) — c'est le **juge de paix** de l'**étage** ✓✓.
 
 ## Ce que les mesures ont ajouté (à ne pas oublier)
 

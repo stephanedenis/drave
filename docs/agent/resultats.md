@@ -9,8 +9,8 @@
    porte) ;
 2. **La mesure qui le produit** — le calcul exact, la métrique (chrF, précision, rappel, AUC…), et ce qu'elle ne
    mesure pas ;
-3. **Le dispositif** — quel corpus (et sa provenance), quel modèle (taille, quantification, date de coupure), quelle
-   couche, quel découpage, quels réglages (prompt, gabarit, longueur de sortie, graine) ;
+3. **Le dispositif** — quel corpus (et sa provenance), quel modèle (taille, quantification, date de coupure),
+   quelles **couches de neurones** sondées, quel découpage, quels réglages (prompt, gabarit, longueur de sortie, graine) ;
 4. **Le contrôle négatif** — hasard, étiquettes mélangées, corpus mélangé, chapitres permutés, source changée. *Sans
    contrôle négatif, le chiffre n'est pas un résultat* ✗✓ ;
 5. **Ce qui pourrait le rendre faux** — les pièges d'instrument, les biais du corpus, les artefacts de taille, les

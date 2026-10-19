@@ -36,5 +36,5 @@ très précieux**. Tu ne dois donc **jamais suspendre tous les travaux en attend
 
 ## Ce qui reste à l'humain
 
-La **vision** de la couche, la **philosophie** du projet, et les arbitrages qui engagent le sens de la mission. Ils
+La **vision** de l'**étage**, la **philosophie** du projet, et les arbitrages qui engagent le sens de la mission. Ils
 vont dans `en-cours.md` (section « Questions en attente ») et n'empêchent pas de continuer.

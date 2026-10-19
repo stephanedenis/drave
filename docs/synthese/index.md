@@ -24,12 +24,12 @@
 | 4 | [les douze facultés](04-les-facultes-et-la-biologie.md) | C1-C12 : ce qu'on cherche à donner à un modèle, et à quoi on le reconnaît | ![facultés](schemas/facultes.svg) |
 | 5 | [la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) | le travail de la nuit du 16/10 : lire le sens, itérer, et le prix | ![pensée](schemas/pensee.svg) |
 | 6 | [comment savoir qu'on a raison](06-comment-savoir.md) | les portes, le registre, et les cinq pièges d'instrument | ![portes](schemas/portes.svg) |
-| 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | **la théorie** de la couche commune : cinq familles, ce qu'on sait, ce qui reste ouvert — les **mesures** sont dans [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md) | ![couche commune](schemas/couche-commune.svg) |
+| 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | **la théorie** de l'étage entrée-sortie (nom historique : couche commune) : cinq familles, ce qu'on sait, ce qui reste ouvert — les **mesures** sont dans [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md) | ![couche commune](schemas/couche-commune.svg) |
 
 ## Trois principes, qui reviennent partout
 
 1. **Le modèle n'est pas le cerveau.** Le modèle calcule des couches ; le cerveau **organise** : il décide
-   qui parle à qui, quand, avec quel budget, et ce qu'on garde en mémoire. Drave est cette couche-là.
+   qui parle à qui, quand, avec quel budget, et ce qu'on garde en mémoire. Drave est cet **étage**-là.
 2. **Couper un modèle ne le casse pas** — à condition de couper **tard** : c'est mesuré, huit coupes
    donnent la même perplexité. Tout le reste (répartir, réveiller une région, court-circuiter) découle de
    cette propriété.

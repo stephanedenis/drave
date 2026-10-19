@@ -1,7 +1,7 @@
 # 7 — Les modèles alternatifs pour l'entrée et la sortie
 
-> **Ce que ce chapitre est.** La **théorie** de la couche commune entrée-sortie : ce qu'elle doit être, ce qu'on
-> sait d'elle, ce qui reste à prouver. Les **mesures** (48, avec leurs erratums et leurs pièges) sont dans
+> **Ce que ce chapitre est.** La **théorie** de l'étage entrée-sortie (nom historique : couche commune) : ce qu'il doit être, ce qu'on
+> en sait, ce qui reste à prouver. Les **mesures** (67, avec leurs erratums et leurs pièges) sont dans
 > [`reports/07-mesures-couche-commune.md`](../../reports/07-mesures-couche-commune.md).
 
 ## Le problème
@@ -31,7 +31,7 @@ surface, et le contenu un **espace commun** ?*
   fragments exacts) et **s'effondre quand il partage 448 langues** (0,6 %) : la capacité ne se partage pas
   gratuitement ;
 - **la hiérarchie des surfaces** : langues **96 %** > dialectes **52-97 %** > styles (traducteurs) **24 %** — et les
-  trois sont **lues à 100 %**. *La couche commune n'efface aucune surface : elle en aligne le sens.*
+  trois sont **lues à 100 %**. *L'étage entrée-sortie n'efface aucune surface : il en aligne le sens.*
 - **un banc peut mesurer la MÉMOIRE au lieu de la traduction** : sur un texte célèbre (l'UDHR), le modèle **récite**
   la traduction officielle au lieu de traduire ce qu'il lit — et le chrF **ne le voit pas** (77,8 sur l'UDHR contre
   75,7 sur un texte neuf) ✗✗. *Un score de surface ne distingue pas la mémoire de la traduction* : il faut un texte
@@ -47,7 +47,7 @@ surface, et le contenu un **espace commun** ?*
 
 1. **la qualité de traduction** du module entrée-sortie : le **juridique** et le **littéraire** sont mesurés sur des
    textes non mémorisables ; il reste le **technique**, le **quotidien** et les **langues peu dotées** — c'est le
-   juge de paix de la couche ;
+   juge de paix de l'étage ;
 2. **la restitution exacte à l'échelle** : au-delà de 10 langues partagées, elle meurt ; faut-il des modules
    spécialisés par famille, ou un modèle beaucoup plus grand ?
 3. **le style** : il est lisible, mais le sens ne le traverse qu'à 24 % — comment l'augmenter sans perdre le style ?
@@ -57,7 +57,7 @@ bâti sur une entrée-sortie qui n'est pas fiable.*
 
 ## Le miroir de sortie : pourquoi la sortie est plus fiable que l'entrée
 
-La couche entrée-sortie n'est pas symétrique ✓✓. **Texte → sens** doit absorber les imperfections du réel (bruit,
+L'étage entrée-sortie n'est pas symétrique ✓✓. **Texte → sens** doit absorber les imperfections du réel (bruit,
 orthographes multiples, langues mêlées, coquilles) ; **sens → texte** part d'un sens **propre** ✓. Il en découle
 trois règles d'architecture :
 
