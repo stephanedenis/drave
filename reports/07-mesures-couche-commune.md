@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (62 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (64 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2240,3 +2240,73 @@ jetons ✓, chrF contre la référence humaine, **plancher** (« ne rien traduir
 **Les fichiers** ✓ : corpus `data/eurlex/32025R1106.json` (`tools/corpus_eurlex.py` ✓) ; résultats
 `reports/traduction-eurlex-{3b,7b}.json` et `reports/traduction-eurlex-{3b,7b}-fraeng.json` ✓ ; contrôle de
 substitution `reports/contamination-eurlex-{3b,7b}.json` ✓.
+
+## Mesure 63 — LA COURBE PROPRE est LISSE et MONOTONE : le « coude à 3 B » de l'UDHR n'existe pas
+
+**La question** ✗✓. La mesure 57 annonçait un **coude à 3 B** sur l'UDHR : 35,8 → **32,0** → **70,0** → 77,8 (0,5 /
+1,5 / 3 / 7 B) — *un trou à 1,5 B, puis un saut de +38 points à 3 B* ✓✗. Cette forme est suspecte : elle reposait
+sur **6 articles** et sur un banc **contaminé** (mesure 61) ✓✗. Sur le texte **propre** (mesure 62), quelle est la
+forme de la courbe ? ✓✓
+
+**Le dispositif** ✓✓ : mêmes 139 unités du règlement 2025/1106, mêmes réglages (chat, 400, `float16`, glouton),
+deux directions (eng→fra et fra→eng), **quatre tailles** (0,5 / 1,5 / 3 / 7 B) ✓.
+
+| modèle | eng → fra | fra → eng | gain eng→fra | gain fra→eng |
+|---|---:|---:|---:|---:|
+| 0,5 B | 54,7 [53,2 ; 56,0] | 63,1 [61,6 ; 64,6] | — | — |
+| 1,5 B | 62,5 [61,1 ; 64,1] | 68,5 [67,2 ; 69,7] | **+7,8** | **+5,4** |
+| 3 B | 66,1 [64,6 ; 67,5] | 70,7 [69,0 ; 72,3] | +3,6 | +2,2 |
+| 7 B | **69,5** [68,0 ; 70,9] | **75,7** [74,3 ; 77,0] | +3,4 | +5,0 |
+
+* **LA COURBE EST LISSE ET MONOTONE** ✓✓ : chaque taille fait mieux que la précédente, dans les deux directions ✓✓
+  — *pas de trou, pas de saut* ✓✓ ;
+* **LE COUDE À 3 B N'EXISTE PAS** ✗✗ : le gain par doublement **décroît** (+7,8 puis +3,6 puis +3,4 en eng→fra ✓)
+  mais **ne s'arrête pas** ✓✓ — *c'est une courbe de rendements décroissants, pas une marche* ✓✓. Le « trou à
+  1,5 B puis saut à 3 B » de l'UDHR était un **artefact de n=6** (et de la mémoire) ✓✗ ;
+* **le petit modèle est déjà bon sur ce banc** ✓✓ : 0,5 B = **54,7 / 63,1**, à +20,5 / +27,3 du plancher ✓✓ — *le
+  texte juridique court et formulaire est à sa portée* ✓✓ ;
+* **le 14 B est en cours** ✓ : la question « où la courbe s'aplatit-elle ? » reste ouverte au-delà de 7 B ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : deux directions, un seul document, `float16` (les écarts < 1 point ne sont pas
+interprétables) ✓✗ ; et *une courbe lisse ne dit pas **pourquoi** elle monte* — capacité, couverture des langues,
+ou mémoire résiduelle ✓✓.
+
+## Mesure 64 — LE BANC LITTÉRAIRE EXISTE ENFIN, et c'est le plus dur : 47,7-49,8 de chrF
+
+**Le problème** ✗✗. La mesure 59 avait laissé le banc littéraire **invalide** : 84 sections françaises contre 37
+anglaises, puis 60 contre 37, et un chrF au niveau du hasard ✓✗. Le sous-chantier C5.2 a construit un **aligneur
+phrase à phrase** et, surtout, l'a **validé** ✓✓.
+
+**L'alignement** ✓✓ (`tools/aligneur_litteraire.py` ✓, CPU, aucun modèle) : 37 chapitres par langue (les tables des
+matières comptent double : 74 candidates, filtrées par longueur ✓✓), 4 275 phrases françaises / 3 526 anglaises,
+**3 397 paires alignées** dont **2 570 paires 1:1 strictes** ✓✓ ; couverture 98,6 % / 99,8 % ✓✓.
+
+**La validation par ancres** ✓✓✓ (indépendantes de l'appariement) : **93,2 %** des occurrences d'ancres
+**distinctives** se retrouvent à **±2** (83,6 % à distance 0) ✓✓, contre **0,3 %** quand les chapitres sont
+permutés ✓✗ — **×272,5** ; la matrice chapitres × chapitres place le bon chapitre en **n° 1 pour 37/37** ✓✓. Les
+contrôles plus durs restent loin : chapitre voisin **9,2 %**, phrases mélangées **29-31 %**, hasard phrase contre
+phrase **15,6 %** ✓✓. *(La fiche : [`alignement-verne.md`](alignement-verne.md) ✓.)*
+
+**Le banc** ✓ : 200 paires **1:1** échantillonnées sur tout le livre (pas les 200 premières : le chapitre 1 ✗),
+français → anglais, chat, 400 jetons, chrF, plancher (source française contre référence anglaise) et hasard
+(phrase anglaise au hasard) ✓.
+
+| modèle | chrF | IC 95 % | plancher | hasard |
+|---|---:|---|---:|---:|
+| 3 B | **47,7** | [45,2 ; 50,1] | 23,9 | 14,3 |
+| 7 B | **49,8** | [47,3 ; 52,3] | 23,9 | 14,3 |
+
+* **LE LITTÉRAIRE EST LE DOMAINE LE PLUS DUR** ✗✓ : **47,7-49,8** contre **70,7-75,7** pour le juridique dans la
+  **même** direction (fra→eng) ✓✗ — *−23 à −26 points* ✓✗ ;
+* **ET LA TAILLE N'AIDE PRESQUE PAS** ✗✗ : **+2,1** du 3 B au 7 B, contre **+5,0** en juridique fra→eng ✓✗ —
+  *doubler les paramètres ne rend pas le style* ✓✓ ;
+* **mais le modèle traduit** ✓✓ : +23,8 / +25,9 au-dessus du plancher, +33,4 / +35,5 au-dessus du hasard ✓✓ ;
+* **ce que cela commande** ✓✓ : pour le littéraire, le levier n'est **pas la taille** (mesure 63 dit la même chose
+  pour le juridique, en plus doux) ✓✗ — c'est le **domaine** (données, style, époque) ✓✓.
+
+**Ce que ce banc ne dit pas** ✗ : (a) la référence est la traduction de **Towle (1873)** ✓✗ — archaïque, avec une
+orthographe et une syntaxe qui ne sont pas celles du modèle ✓✓ : *le chrF **pénalise** une modernisation légitime*,
+donc 47,7-49,8 est un **plancher** de la qualité ✓✓ ; (b) un seul livre, un seul traducteur ✓✗ ; (c) seules les
+paires **1:1** sont évaluées (81 % des 3 397 paires ; les 1:2, 2:1… sortent du cadre phrase à phrase) ✓✓ ;
+(d) **55 %** des phrases n'ont **aucune ancre** : pour elles, l'alignement n'est validé que par la longueur et la
+position ✓✗ — c'est la zone aveugle de la validation ✓✓ ; (e) `chrF` contre **une** référence, comme partout ✓.

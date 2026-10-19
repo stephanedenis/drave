@@ -106,10 +106,11 @@ def main() -> int:
                     help="400 par défaut ✓ ; 160 était le réglage des mesures 50-58, qui TRONQUAIT les articles "
                          "longs ✗✗ (mesure 61)")
     ap.add_argument("--sortie", default="reports/traduction-legal.json")
-    ap.add_argument("--corpus", choices=["udhr", "verne", "eurlex"], default="udhr",
+    ap.add_argument("--corpus", choices=["udhr", "verne", "verne_align", "eurlex"], default="udhr",
                     help="udhr : le domaine juridique, MAIS CONTAMINE (mesure 61) ✗✗ ; eurlex : un reglement "
-                         "europeen POST-CUTOFF, aligne par structure, non memorisable ✓✓ ; verne : litteraire "
-                         "(alignement non resolu, mesure 59) ✗")
+                         "europeen POST-CUTOFF, aligne par structure, non memorisable ✓✓ ; verne_align : le "
+                         "litteraire ALIGNE ET VALIDE (mesure 63, 3397 paires) ✓✓ ; verne : l'ancien mode "
+                         "invalide (mesure 59) ✗")
     ap.add_argument("--celex", default="32025R1106", help="le reglement EUR-Lex (corpus_eurlex.py) ✓")
     ap.add_argument("--dtype", default="float32", choices=["float32", "bfloat16", "float16"],
                     help="bfloat16 pour un modele qui ne tient pas en fp32 ✓ (7 B : 14 Go en bf16)")
@@ -150,6 +151,17 @@ def main() -> int:
         par = {"fra": {i + 1: extrait(fr_c[i]) for i in range(n)},
                "eng": {i + 1: extrait(en_c[i]) for i in range(n)}}
         print(f"  litteraire : {len(fr_c)} chapitres français · {len(en_c)} anglais · {n} appariés")
+    elif a.corpus == "verne_align":
+        # LE LITTÉRAIRE, ALIGNÉ ET VALIDÉ (tools/aligneur_litteraire.py, 93,2 % des ancres à ±2 contre 0,3 % au
+        # contrôle négatif) : on ne garde que les paires 1:1 STRICTES ✓✓ (2570 paires), pour que la phrase source
+        # et la phrase cible disent exactement la même chose ✓.
+        import json as _json
+        data = _json.loads(pathlib.Path("data/alignement/verne_fr_en.json").read_text())
+        pp = [p for p in data["paires"] if p.get("n_fr") == 1 and p.get("n_en") == 1]
+        par = {"fra": {i: p["fr"] for i, p in enumerate(pp)},
+               "eng": {i: p["en"] for i, p in enumerate(pp)}}
+        ordre = list(range(len(pp)))
+        print(f"  litteraire aligne : {len(pp)} paires 1:1 strictes ({len(data['paires'])} paires au total)")
     elif a.corpus == "eurlex":
         # le corpus POST-CUTOFF : les règlements publiés après la coupure du modèle ✓✓, alignés par structure ✓
         import json as _json
@@ -173,8 +185,14 @@ def main() -> int:
             print(f"  ✗ {paire} : langue absente"); continue
         communes = set(par[src]) & set(par[dst])
         # l'ordre du corpus (eurlex) ou l'ordre numérique (udhr) ✓ ; --n 0 = tout ✓
-        arts = ([x for x in ordre if x in communes] if a.corpus == "eurlex" else sorted(communes))
-        arts = arts[: a.n] if a.n > 0 else arts
+        if a.corpus in ("eurlex", "verne_align"):
+            arts = [x for x in ordre if x in communes]
+            if a.n > 0:
+                # on ÉTALE l'échantillon sur tout le corpus ✓✓ (les 200 premiers paires = le chapitre 1 ✗)
+                pas = max(1, len(arts) // a.n)
+                arts = arts[::pas][: a.n]
+        else:
+            arts = sorted(communes)[: a.n] if a.n > 0 else sorted(communes)
         scores, plancher, hasard, tronque, recopies, ratios, details = [], [], [], [], [], [], []
         rng = random.Random(a.graine)
         for n in arts:

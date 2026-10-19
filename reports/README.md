@@ -10,6 +10,7 @@
 |---|---|
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
+| [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |
 
 ## Les données brutes
 
@@ -20,6 +21,9 @@
 - [`traduction-eurlex-3b.json`](traduction-eurlex-3b.json) · [`traduction-eurlex-7b.json`](traduction-eurlex-7b.json)
 - [`traduction-eurlex-3b-fraeng.json`](traduction-eurlex-3b-fraeng.json) ·
   [`traduction-eurlex-7b-fraeng.json`](traduction-eurlex-7b-fraeng.json)
+- [`traduction-eurlex-0.5b.json`](traduction-eurlex-0.5b.json) · [`traduction-eurlex-1.5b.json`](traduction-eurlex-1.5b.json)
+- [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
+  [`traduction-litteraire-7b.json`](traduction-litteraire-7b.json)
 - [`traduction-udhr-propre-7b.json`](traduction-udhr-propre-7b.json) ·
   [`traduction-udhr-propre-3b-fraeng.json`](traduction-udhr-propre-3b-fraeng.json) ·
   [`traduction-udhr-propre-7b-fraeng.json`](traduction-udhr-propre-7b-fraeng.json)
