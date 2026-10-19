@@ -11,6 +11,11 @@ boucle naïve détruit la prédiction de cinq ordres de grandeur, et **normer n'
 
 et ce langage, il faut l'**apprendre** ✓ — pas l'espérer ✓.
 
+⚠️ CE PONT EST UN BANC TECHNIQUE, PAS LA RSN ✗✓. Il relie des états à des **embeddings de jetons** — le
+**transport** du modèle actuel — et mesure si ce transport porte plus que le mot. La **représentation sémantique
+neutre (RSN)** visée est autre chose : une structure **multi-niveaux** en **unités de sens** (voir
+`docs/glossaire.md`). Le pont teste le transport ; il ne définit pas le contrat.
+
 CE QUE CET OUTIL FAIT, EN TROIS TEMPS.
   1. **Récolter des couples** ✓ : sur un texte, pour chaque position `p`, on prend
      `h_p` = l'état caché **après la dernière couche et AVANT la norme** ✓ (la sortie pré-linguistique ✓)

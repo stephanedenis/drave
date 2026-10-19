@@ -17,8 +17,10 @@ coquilles), alors que la sortie part d'un sens **propre** ✓. On s'en sert donc
 2. **Découpler le signal du bruit** ✓✓ : la sortie, plus fiable, sert de **référence** pour juger l'entrée — on
    mesure l'écart entre ce que l'entrée a extrait et ce que la sortie sait reconstruire.
 3. **Garder des marqueurs de bruit dans l'interface post-linguistique** ✓✓ : le sens extrait porte **où** et
-   **combien** l'entrée est incertaine (confiance par token, ambiguïtés non résolues, langues détectées avec leur
-   probabilité). *Le module de pensée abstraite doit recevoir un sens **annoté de son bruit**, pas un sens lissé* ✓✓.
+   **combien** l'entrée est incertaine (confiance par unité de sens, ambiguïtés non résolues, langues détectées
+   avec leur probabilité). *Le module de pensée abstraite doit recevoir un sens **annoté de son bruit**, pas un sens
+   lissé* ✓✓. La **RSN** est faite d'**unités de sens**, **jamais de jetons** : le jeton n'est que le porteur
+   technique du modèle.
 4. **Conséquence pour les tests** : toute mesure d'entrée (traduction, contenu, langue) se double d'une mesure de
    **sortie** (restitution, boucle) — c'est le **juge de paix** de l'**étage** ✓✓.
 

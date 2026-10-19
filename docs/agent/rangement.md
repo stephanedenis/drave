@@ -28,7 +28,9 @@ Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `r
    (Glottolog, Gutenberg, Unicode UDHR, Cellar/EUR-Lex, Panini/Nipada) sont citées avec leur URL ou leur chemin ;
 4. **fraîcheur** : la date de `en-cours.md` est l'**heure locale** du dernier commit (jamais une estimation) ;
 5. **cohérence** : la synthèse ([`docs/synthese/index.md`](../synthese/index.md)) et le tableau de bord disent la
-   même chose.
+   même chose ;
+6. **vocabulaire** : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) — elle est en
+   **unités de sens**, le jeton est l'unité technique du tokeniseur (voir le [glossaire](../glossaire.md)) ✓✓.
 
 Les portes [`porte-tableaux`](../../tools/porte-tableaux.sh) (cellules des tableaux, liens) et
 [`porte-registre`](../../tools/porte-registre.sh) complètent la revue.

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-19, 16 h 55 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-19, 17 h 40 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -72,6 +72,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | le plancher « ne rien traduire » est-il battu sur **chaque** direction ? | **moi** (mesure 62) | **oui** : +30 à +40 points sur les 4 paires |
 | l'UDHR est-elle utilisable comme juge ? | **moi** (mesure 61) | **non** : le modèle la récite — banc de mémoire |
 | peut-on **corriger** automatiquement l'entrée abîmée ? | **moi** (mesure 65) | **non** : 8/9 des corrections empirent ; seule la restauration des accents gagne |
+| quelle **unité de mesure** à l'entrée et à la sortie ? | **moi** (RSN en unités de sens ; jeton = technique) | en cours : la RSN est en unités de sens ; les métriques par jeton sont des diagnostics |
 | quel domaine après le juridique ? | **moi** (mesure 64) | **littéraire mesuré** : 47,7-49,8, le plus dur |
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
@@ -81,9 +82,11 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 ## La priorité : l'étage entrée-sortie
 
 Drave Natif se construit **étage par étage**. Le premier est l'**étage entrée-sortie** : lire et produire
-**toutes les langues, dialectes et styles**, dans tous les registres, et être jugée sur sa **qualité de traducteur**
-(restitution à l'identique, et traduction du sens d'une langue à l'autre). Le **module de pensée abstraite** attend
-qu'elle soit fiable.
+**toutes les langues, dialectes et styles**, dans tous les registres, et être **jugé** sur sa **qualité de
+traducteur** (restitution à l'identique, et traduction du sens d'une langue à l'autre). Entre le module
+pré-linguistique et le module post-linguistique circule une **représentation sémantique neutre (RSN)** : une
+structure multi-niveaux, faite d'**unités de sens** — **jamais de jetons** (le jeton est l'unité technique du
+tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que cet étage soit fiable.
 
 ## Où en est cet étage (état au 19/10)
 
@@ -110,10 +113,14 @@ qu'elle soit fiable.
 1. **qualité de traduction par domaine** : le **juridique** a un banc **propre** (mesure 62) et le **littéraire**
    est **mesuré** (mesure 64 : 47,7-49,8, le plus dur) ; il reste le **technique**, le **quotidien**, et les
    **langues peu dotées** — chaque domaine avec un corpus **post-cutoff**, sinon on mesure la mémoire (mesure 61) ;
-2. **restitution exacte à l'échelle** : au-delà de 10 langues partagées, elle meurt ; modules par famille, ou modèle
+2. **l'unité de mesure de l'entrée et de la sortie** : passer des métriques par **jeton** (techniques, dépendantes
+   du tokeniseur) aux **unités grammaticales multi-niveaux** (morphème, mot, syntagme, proposition, énoncé), à
+   mesure que les modules s'approchent de **grammaires formelles** représentant les entrées et sorties en
+   **compréhension totale** ; les métriques par jeton restent des **diagnostics d'instrument** ;
+3. **restitution exacte à l'échelle** : au-delà de 10 langues partagées, elle meurt ; modules par famille, ou modèle
    beaucoup plus grand ?
-3. **le style** : lisible, mais le sens ne le traverse qu'à 24 % ;
-4. **seulement ensuite** : le module de pensée abstraite, indépendant de la langue.
+4. **le style** : lisible, mais le sens ne le traverse qu'à 24 % ;
+5. **seulement ensuite** : le module de pensée abstraite, indépendant de la langue.
 
 ## La carte de la documentation
 

@@ -10,6 +10,31 @@ Un modèle qui **lit et écrit** doit traiter **toutes les langues, dialectes et
 manipule dépende de la langue de surface. La question du chapitre : *la langue est-elle un **paramètre** de la
 surface, et le contenu un **espace commun** ?*
 
+## La représentation neutre n'est pas un jeton
+
+L'architecture a trois pièces : un **module pré-linguistique** (texte → sens), une **représentation sémantique
+neutre (RSN)**, et un **module post-linguistique** (sens → texte). La RSN est le **contrat** entre les deux.
+
+**Ce que la RSN est** : une **structure multi-niveaux** — graphémique/phonologique, morphologique, syntaxique,
+sémantique, discursif/pragmatique — **indépendante de la langue de surface**, et annotée de son bruit (confiance,
+ambiguïtés non résolues, langues probables). Ses éléments sont des **unités de sens**, pas des fragments de chaîne.
+
+**Ce qu'un jeton est** : l'unité de **tokenisation** d'un modèle, un découpage **technique** qui varie selon le
+modèle et l'écriture. Il porte le calcul, pas le sens. Écrire « jeton » pour la RSN confondrait le **contrat** (le
+sens) avec le **transport** (le tokeniseur) — et ferait croire que l'unité de sens est un fragment de chaîne de
+caractères.
+
+**Conséquence pour la mesure** : les métriques par jeton (bits/token, tokens coûteux, perplexité) sont des
+**diagnostics d'instrument** ; elles dépendent du tokeniseur et ne sont **pas comparables entre écritures** (mesure
+53). La mesure de la couche doit se faire par **unité grammaticale** (morphème, mot, syntagme, proposition, énoncé)
+et par **niveau** de la RSN.
+
+**La direction** : à mesure que les modules linguistiques s'approcheront de **grammaires formelles multi-niveaux**
+représentant les entrées et les sorties en **compréhension totale**, l'unité de mesure à l'entrée et à la sortie
+devra **s'éloigner du jeton traditionnel** : l'unité sera le **constituant grammatical** (et sa structure), pas le
+fragment de tokeniseur. Le jeton restera un détail d'implémentation des modèles actuels, **pas l'unité du sens** ni
+la cible de la mesure.
+
 ## Les cinq familles de solutions
 
 | famille | l'idée | ce qu'elle gagne | ce qu'elle coûte |

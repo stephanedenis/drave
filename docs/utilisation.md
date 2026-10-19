@@ -107,7 +107,7 @@ d'instrument y sont **écrits à côté des chiffres** ✗✓ :
 | `chat.py` ✓ | **parler** au modèle (REPL, historique, coupe la télémétrie) | `python3 tools/chat.py` |
 | `lora_recopie.py` ✓ | apprend au modèle à **recopier** (LoRA, 100,0 % avec contrôle à 0,0 % ✓) | `python3 tools/lora_recopie.py --hf <snapshot> --ids <corpus>` |
 | `empreinte.py` ✓ | l'**empreinte** du texte dans l'état, **avec contre-épreuve** ✓ | `python3 tools/empreinte.py --hf <snapshot> --ids <corpus> --lora /tmp/lora-recopie.pt` |
-| `pont_abstrait.py` ✓ | le **mapping** sortie prélinguistique → entrée postlinguistique (+ balayage par couche et horizon ✓) | `... --hf <snapshot> --ids <corpus> [--couches … --horizons …]` |
+| `pont_abstrait.py` ✓ | le **mapping** sortie prélinguistique → entrée postlinguistique (le pont actuel ; la **RSN** visée) (+ balayage par couche et horizon ✓) | `... --hf <snapshot> --ids <corpus> [--couches … --horizons …]` |
 | `pensee_silencieuse.py` ✓ | penser **sans verbaliser** (itération d'état) vs verbaliser | `... --morceau <ids> --amorces … [--pont …]` |
 | `pas_latent.py` ✓ | le **pas** `h_p → h_{p+1}` : contraction et contenu | `... --hf <snapshot> --ids <corpus>` |
 | `boucle_directe.py` ✓ | la boucle **sans pont** (λ, contenu) | `... --hf <modèle> --ids <corpus>` |

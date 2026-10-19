@@ -3,7 +3,8 @@
 > Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). Il développe **la mission** ; les règles
 > opérationnelles restent dans `AGENTS.md`, les résultats dans [`reports/`](../../reports/).
 >
-> **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture**. Voir le
+> **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** ; *jeton* = unité du
+> **tokeniseur**, jamais la **représentation sémantique neutre (RSN)**, faite d'**unités de sens**. Voir le
 > [glossaire](../glossaire.md).
 
 ## La mission

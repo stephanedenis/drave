@@ -173,6 +173,13 @@ horaire). Le journal est la mémoire brute : il n'est **pas** réécrit lors des
 renommages (`docs/histoire.md:38-43`, `docs/programme-recherche.md:206-208`).
 **Où** : `journal/`.
 
+**Jeton** *(token)* — Unité de **tokenisation** d'un modèle : le découpage technique (octets, caractères, morceaux
+de mots) que le modèle calcule. C'est une unité **propre au tokeniseur**, variable d'un modèle et d'une écriture à
+l'autre, et **elle ne porte pas le sens** à elle seule. **Ne jamais** l'employer pour la représentation sémantique
+neutre (voir **RSN**) : on n'écrit pas « jeton sémantique », « jeton de sens », « jeton neutre ». Les mesures qui
+comptent des jetons (bits/token, tokens coûteux, perplexité) sont des **diagnostics d'instrument**, pas des mesures
+de sens. **Où** : `tools/marqueur_bruit.py`, `tools/seuil_bruit.py`, toute mesure de perplexité.
+
 **Mesure entrelacée · machine au calme** — Protocole : mesurer les configurations
 comparées en alternance, parce que la charge de fond (bureau, autres projets) fait
 varier le temps mural de 30 % ; et préférer les mesures déterministes (perplexité,
@@ -237,6 +244,14 @@ La relecture *adverse* cherche activement à casser une affirmation ; la relectu
 *déléguée* est confiée à un autre agent et compte comme une tâche du sprint.
 « Trois relectures adversariales ont trouvé 28 défauts sur un créneau, presque tous
 par lecture » (`docs/sprints.md:69-73`, `reports/rapport-coherence-vision.md:3-6`).
+
+**Représentation sémantique neutre (RSN)** — L'objet échangé entre le **module pré-linguistique** (texte → sens)
+et le **module post-linguistique** (sens → texte) : une **structure multi-niveaux** (graphémique/phonologique,
+morphologique, syntaxique, sémantique, discursif/pragmatique), **indépendante de la langue de surface**, annotée de
+son bruit (confiance, ambiguïtés, langues probables). Ses éléments sont des **unités de sens**, jamais des **jetons**
+(voir **Jeton**) : le jeton est le porteur technique du modèle, la RSN est ce que l'architecture vise. **Où** :
+`tools/pont_abstrait.py` (le pont actuel), `docs/synthese/07-modeles-alternatifs-entree-sortie.md` § « La
+représentation neutre n'est pas un jeton ».
 
 **Rétrospective** — Partie de la cérémonie de fin de sprint : *garder* / *changer* /
 *doute*. « Une rétro qui ne change rien n'est pas une rétro : chaque "changer" doit

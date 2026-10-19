@@ -20,8 +20,9 @@ Deux **étages** d'architecture, dans cet ordre, et **on ne passe pas au suivant
 écrit**, pas quand une échéance passe. Détail : [`docs/agent/mission.md`](docs/agent/mission.md).
 
 **Vocabulaire** : *couche* = **couche de neurones** (couche 1, 2…, un réseau) ; *étage* = **niveau d'architecture**
-(étage 1 entrée-sortie, étage 2 pensée). Le nom historique « couche commune entrée-sortie » se lit « étage
-entrée-sortie ». Voir [`docs/glossaire.md`](docs/glossaire.md).
+(étage 1 entrée-sortie, étage 2 pensée) ; *jeton* = **unité du tokeniseur** d'un modèle, **jamais** la
+**représentation sémantique neutre (RSN)**, dont les éléments sont des **unités de sens**. Le nom historique
+« couche commune entrée-sortie » se lit « étage entrée-sortie ». Voir [`docs/glossaire.md`](docs/glossaire.md).
 
 ## 2. Les règles non négociables
 

@@ -6,7 +6,9 @@ Ce qu'elle vérifie, et qu'il faut corriger AVANT le commit de clôture :
   2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
   3. annotation : les liens relatifs des docs/ et reports/ résolvent ; les sources externes sont citées ;
   4. fraîcheur  : en-cours.md porte une date (heure locale) ;
-  5. cohérence  : la synthèse (index.md) liste les sept chapitres et le chantier 7.
+  5. cohérence  : la synthèse (index.md) liste les sept chapitres et le chantier 7 ;
+  6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) — elle est en
+     **unités de sens**, le jeton est l'unité technique du tokeniseur.
 Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (utilisable comme porte).
 """
 from __future__ import annotations
@@ -52,6 +54,14 @@ def main() -> int:
                 p = (f.parent / cible).resolve()
                 if not p.exists():
                     alertes.append(f"annotation : {f.relative_to(RACINE)} → {cible} (cassé)")
+    # 6. vocabulaire : « jeton » ne désigne jamais la RSN ✓✓
+    for f in (RACINE / "docs").rglob("*.md"):
+        if f.name == "glossaire.md":      # le glossaire cite les formes interdites pour les définir ✓
+            continue
+        for m in re.finditer(r"jeton[s]?\s+(sémantique|de sens|neutre)", f.read_text(), re.I):
+            alertes.append(f"vocabulaire : {f.relative_to(RACINE)} → « {m.group(0)} » "
+                           f"(la RSN est en unités de sens ; le jeton est technique)")
+
     # 5. cohérence : l'index liste sept chapitres ✓
     idx = RACINE / "docs/synthese/index.md"
     if idx.exists():
@@ -62,7 +72,7 @@ def main() -> int:
             alertes.append("cohérence : l'index ne liste pas le chapitre 7")
     print(f"  revue de documentation · {len(list((RACINE / "reports").glob("*.md")))} fiche(s) dans reports/ · {len(ids)} chantier(s)")
     if not alertes:
-        print("  ✅ tout passe : classement, structure, annotation, fraîcheur, cohérence")
+        print("  ✅ tout passe : classement, structure, annotation, fraîcheur, cohérence, vocabulaire")
         return 0
     print(f"  ❌ {len(alertes)} anomalie(s) :")
     for a in alertes:
