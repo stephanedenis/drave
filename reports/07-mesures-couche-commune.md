@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (71 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (72 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2663,3 +2663,39 @@ sur 29 langues n'en sert vraiment que ~20 ✓✗, et les 10 non annoncées paien
 est celle de Qwen2.5, approximative ✓ ; le chrF est sensible à la **morphologie** (finnois, hongrois, estonien) ✓✗ ;
 13 sorties grecques sont **tronquées** (le chiffre grec sans elles est +27,4, pas +22,5) ✓✓ ; et le **hasard** est
 script-matché mais pas **sens-matché** ✓✗ — il contrôle le format et l'écriture, pas le sens ✓.
+
+## Mesure 72 — LA TAILLE NE COMBLE PAS LA COUVERTURE : +4,5 pour les langues annoncées, +5,9 pour les autres — l'écart reste à 14 points
+
+**La question** ✓✓. La mesure 71 a montré que la **couverture** prédit la marge : +35,8 (annoncées) contre +21,5
+(non annoncées) au 7 B ✓✗. Mais la mesure 69 avait montré que la **taille** comble le déficit du polonais (+10,1)
+✓✓. Alors, la taille **comble-t-elle la couverture** ? ✓✓ *Si le 3 B a un écart plus grand que le 7 B, la taille
+aide la couverture ; si l'écart ne bouge pas, la couverture est une limite dure* ✓✓.
+
+**Le dispositif** ✓✓ : la même carte de 24 langues (règlement 2025/1106, 139 unités, **les mêmes 40 sources** pour
+les 23 cibles ✓), le même banc (chat, 400, fp16), au **3 B** ✓ — deux lots, mêmes langues que la mesure 71 ✓.
+
+| groupe | 3 B | 7 B | gain |
+|---|---:|---:|---:|
+| **13 langues annoncées** (marge sur le hasard) | +31,3 | +35,8 | **+4,5** |
+| **10 langues non annoncées** | +15,6 | +21,5 | **+5,9** |
+| **écart de couverture** | **15,6** | **14,2** | **−1,4** ✗ |
+
+* **LA TAILLE LÈVE LES DEUX GROUPES, PAS L'ÉCART** ✗✗ : +4,5 pour les annoncées, +5,9 pour les autres ✓✗ ; l'écart
+  passe de **15,6 à 14,2** — **1,4 point** de moins ✓✗. *Doubler les paramètres ne ferme pas le trou de
+  couverture* ✓✓ ;
+* **les langues les moins servies gagnent le plus** ✓✓ : croate **+8,1**, slovaque **+8,0**, grec **+7,8**,
+  lituanien **+7,6**, allemand **+7,5**, polonais **+7,0** ✓✓ — *la taille agit comme un **plancher qui monte**, pas
+  comme un **pont*** ✓✓ ;
+* **l'irlandais ne bouge presque pas** ✗✗ : **+7,1 → +8,0** (+0,9) ✓✗ — *la langue la moins servie est un
+  **mur**, pas une pente* ✓✓ ; le maltais, lui, passe de **+5,1** à **+10,8** (+5,7) mais reste le deuxième trou ✓✗ ;
+* **le maltais est sous le plancher au 3 B** ✗✗ : marge sur le plancher **−4,2** (chrF 20,3), et **17 sorties sur 40
+  tronquées** ✓✗ — *le petit modèle produit pire que « ne rien faire » dans cette langue* ✓✗.
+
+**Ce que cela change** ✓✓ : le levier n'est **pas la taille**. À 3 B comme à 7 B, l'écart de couverture reste
+**14-16 points** ✓✗ ; il faudra des **données** (ou des modules par famille, C3.1) pour l'irlandais, le maltais et
+le groupe baltes/ouraliennes ✓✓. *La carte de 24 langues est un **plan de données**, pas un plan de calcul* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 40 unités, un document, **deux** tailles (3 et 7 B) ✓✗ — le 14 B pourrait
+encore déplacer l'écart (mais la mesure 66 montre des rendements décroissants) ✓✓ ; les sorties tronquées gonflent
+le déficit des langues faibles (maltais 17/40, grec 13/40) ✓✗ ; le chrF est sensible à la morphologie ✓ ; et
+« annoncée » est une liste approximative ✓.

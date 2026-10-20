@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-20, 11 h 50 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-20, 12 h 25 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -28,7 +28,8 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
 - **La couverture des langues est le facteur** : sur les **24 langues officielles de l'UE**, **+35,8** de marge sur
   le hasard pour les **13 langues annoncées** par le modèle, **+21,5** pour les **10 autres** ; les trous sont
   l'**irlandais (+8,0)** et le **maltais (+10,8)** (mesure 71). *L'écart brut entre langues est surtout la
-  distance* (mesure 69), et le plancher **dépend de l'écriture** (28ᵉ piège).
+  distance* (mesure 69), et le plancher **dépend de l'écriture** (28ᵉ piège). **La taille ne comble pas cet écart** :
+  il passe de 15,6 (3 B) à 14,2 (7 B), soit −1,4 (mesure 72).
 - **L'entrée sait signaler son bruit** (fautes et langues mêlées : **AUC 1,00**), **pas le corriger** : 8/9 des
   corrections empirent, et la plus fluide est la plus fausse (mesure 65).
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
@@ -41,7 +42,8 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
    conversation) et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
 2. **Compléter les langues** : 24 langues UE mesurées ; reste les **langues peu dotées hors UE** (UDHR, avec
    contrôle de contamination) et la **direction inverse** (X→eng).
-3. **Choisir le levier** : la taille donne des rendements décroissants ; le prochain levier est la **couverture**
+3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**
+   (mesure 72) ; le prochain levier est la **couverture**
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
 4. **Seulement ensuite** : l'**étage 2**, la pensée abstraite.
@@ -124,7 +126,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **le littéraire** (Verne, alignement validé) | **47,7-49,8** (3 B/7 B) · **noms 96 %**, 0,5 % d'omissions : le chrF bas est un écart de **style** (mesure 68) | [07](../reports/07-mesures-couche-commune.md) · [alignement](../reports/alignement-verne.md) |
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
-| **la carte des 24 langues** (marge sur le hasard, 7 B) | **13 langues annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** (mesure 71) | [07](../reports/07-mesures-couche-commune.md) |
+| **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |

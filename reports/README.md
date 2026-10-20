@@ -32,7 +32,8 @@
 - [`traduction-langues-3b.json`](traduction-langues-3b.json) · [`traduction-langues-7b.json`](traduction-langues-7b.json)
 - [`traduction-presse-3b.json`](traduction-presse-3b.json) · [`traduction-presse-7b.json`](traduction-presse-7b.json)
 - [`traduction-24langues-A.json`](traduction-24langues-A.json) · [`traduction-24langues-B.json`](traduction-24langues-B.json)
-- [`carte-24langues.json`](carte-24langues.json)
+- [`traduction-24langues-3b-A.json`](traduction-24langues-3b-A.json) · [`traduction-24langues-3b-B.json`](traduction-24langues-3b-B.json)
+- [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
   [`traduction-litteraire-7b.json`](traduction-litteraire-7b.json)

@@ -1,0 +1,398 @@
+{
+ "langues": [
+  {
+   "langue": "bul",
+   "nom": "bulgare",
+   "famille": "slave",
+   "annoncee": false,
+   "chrf": 46.5,
+   "ic95": [
+    44.2,
+    48.8
+   ],
+   "plancher": 4.1,
+   "marge": 42.4,
+   "hasard": 24.4,
+   "marge_hasard": 22.1,
+   "tronque": 3,
+   "chrf_sans_tronques": 47.3
+  },
+  {
+   "langue": "spa",
+   "nom": "espagnol",
+   "famille": "romane",
+   "annoncee": true,
+   "chrf": 71.0,
+   "ic95": [
+    68.3,
+    73.9
+   ],
+   "plancher": 30.9,
+   "marge": 40.1,
+   "hasard": 26.9,
+   "marge_hasard": 44.0,
+   "tronque": 2,
+   "chrf_sans_tronques": 71.2
+  },
+  {
+   "langue": "por",
+   "nom": "portugais",
+   "famille": "romane",
+   "annoncee": true,
+   "chrf": 66.2,
+   "ic95": [
+    62.7,
+    69.1
+   ],
+   "plancher": 29.9,
+   "marge": 36.3,
+   "hasard": 26.2,
+   "marge_hasard": 40.0,
+   "tronque": 2,
+   "chrf_sans_tronques": 66.2
+  },
+  {
+   "langue": "ell",
+   "nom": "grec",
+   "famille": "hellénique",
+   "annoncee": true,
+   "chrf": 38.0,
+   "ic95": [
+    35.3,
+    40.5
+   ],
+   "plancher": 4.0,
+   "marge": 34.0,
+   "hasard": 23.3,
+   "marge_hasard": 14.7,
+   "tronque": 13,
+   "chrf_sans_tronques": 41.0
+  },
+  {
+   "langue": "ita",
+   "nom": "italien",
+   "famille": "romane",
+   "annoncee": true,
+   "chrf": 63.9,
+   "ic95": [
+    61.7,
+    66.0
+   ],
+   "plancher": 31.4,
+   "marge": 32.5,
+   "hasard": 28.0,
+   "marge_hasard": 36.0,
+   "tronque": 3,
+   "chrf_sans_tronques": 64.0
+  },
+  {
+   "langue": "nld",
+   "nom": "néerlandais",
+   "famille": "germanique",
+   "annoncee": true,
+   "chrf": 59.8,
+   "ic95": [
+    57.4,
+    62.1
+   ],
+   "plancher": 27.8,
+   "marge": 32.0,
+   "hasard": 27.7,
+   "marge_hasard": 32.1,
+   "tronque": 3,
+   "chrf_sans_tronques": 60.1
+  },
+  {
+   "langue": "fra",
+   "nom": "français",
+   "famille": "romane",
+   "annoncee": true,
+   "chrf": 66.9,
+   "ic95": [
+    64.4,
+    69.4
+   ],
+   "plancher": 35.3,
+   "marge": 31.5,
+   "hasard": 26.0,
+   "marge_hasard": 40.9,
+   "tronque": 3,
+   "chrf_sans_tronques": 66.9
+  },
+  {
+   "langue": "ron",
+   "nom": "roumain",
+   "famille": "romane",
+   "annoncee": true,
+   "chrf": 61.6,
+   "ic95": [
+    59.2,
+    64.2
+   ],
+   "plancher": 30.4,
+   "marge": 31.3,
+   "hasard": 25.8,
+   "marge_hasard": 35.9,
+   "tronque": 3,
+   "chrf_sans_tronques": 62.2
+  },
+  {
+   "langue": "ces",
+   "nom": "tchèque",
+   "famille": "slave",
+   "annoncee": true,
+   "chrf": 51.1,
+   "ic95": [
+    47.9,
+    54.3
+   ],
+   "plancher": 19.9,
+   "marge": 31.2,
+   "hasard": 20.9,
+   "marge_hasard": 30.2,
+   "tronque": 3,
+   "chrf_sans_tronques": 52.0
+  },
+  {
+   "langue": "swe",
+   "nom": "suédois",
+   "famille": "germanique",
+   "annoncee": true,
+   "chrf": 56.0,
+   "ic95": [
+    54.0,
+    58.2
+   ],
+   "plancher": 27.0,
+   "marge": 29.0,
+   "hasard": 24.8,
+   "marge_hasard": 31.2,
+   "tronque": 3,
+   "chrf_sans_tronques": 56.2
+  },
+  {
+   "langue": "deu",
+   "nom": "allemand",
+   "famille": "germanique",
+   "annoncee": true,
+   "chrf": 52.8,
+   "ic95": [
+    47.3,
+    57.8
+   ],
+   "plancher": 24.6,
+   "marge": 28.1,
+   "hasard": 23.6,
+   "marge_hasard": 29.2,
+   "tronque": 2,
+   "chrf_sans_tronques": 52.5
+  },
+  {
+   "langue": "dan",
+   "nom": "danois",
+   "famille": "germanique",
+   "annoncee": true,
+   "chrf": 53.7,
+   "ic95": [
+    50.6,
+    56.7
+   ],
+   "plancher": 28.5,
+   "marge": 25.2,
+   "hasard": 25.2,
+   "marge_hasard": 28.5,
+   "tronque": 3,
+   "chrf_sans_tronques": 53.8
+  },
+  {
+   "langue": "fin",
+   "nom": "finnois",
+   "famille": "ouralienne",
+   "annoncee": true,
+   "chrf": 43.8,
+   "ic95": [
+    41.7,
+    45.8
+   ],
+   "plancher": 19.8,
+   "marge": 24.0,
+   "hasard": 24.5,
+   "marge_hasard": 19.2,
+   "tronque": 3,
+   "chrf_sans_tronques": 44.1
+  },
+  {
+   "langue": "pol",
+   "nom": "polonais",
+   "famille": "slave",
+   "annoncee": true,
+   "chrf": 44.8,
+   "ic95": [
+    39.8,
+    49.3
+   ],
+   "plancher": 20.9,
+   "marge": 24.0,
+   "hasard": 20.3,
+   "marge_hasard": 24.5,
+   "tronque": 4,
+   "chrf_sans_tronques": 47.2
+  },
+  {
+   "langue": "slk",
+   "nom": "slovaque",
+   "famille": "slave",
+   "annoncee": false,
+   "chrf": 42.9,
+   "ic95": [
+    39.6,
+    45.9
+   ],
+   "plancher": 20.5,
+   "marge": 22.4,
+   "hasard": 21.0,
+   "marge_hasard": 21.9,
+   "tronque": 4,
+   "chrf_sans_tronques": 44.3
+  },
+  {
+   "langue": "hrv",
+   "nom": "croate",
+   "famille": "slave",
+   "annoncee": false,
+   "chrf": 43.1,
+   "ic95": [
+    40.1,
+    45.8
+   ],
+   "plancher": 23.0,
+   "marge": 20.2,
+   "hasard": 22.1,
+   "marge_hasard": 21.0,
+   "tronque": 3,
+   "chrf_sans_tronques": 43.3
+  },
+  {
+   "langue": "slv",
+   "nom": "slovène",
+   "famille": "slave",
+   "annoncee": false,
+   "chrf": 41.6,
+   "ic95": [
+    38.3,
+    44.8
+   ],
+   "plancher": 22.6,
+   "marge": 19.1,
+   "hasard": 21.1,
+   "marge_hasard": 20.5,
+   "tronque": 2,
+   "chrf_sans_tronques": 41.8
+  },
+  {
+   "langue": "hun",
+   "nom": "hongrois",
+   "famille": "ouralienne",
+   "annoncee": false,
+   "chrf": 37.5,
+   "ic95": [
+    35.5,
+    39.4
+   ],
+   "plancher": 18.5,
+   "marge": 19.0,
+   "hasard": 22.7,
+   "marge_hasard": 14.8,
+   "tronque": 3,
+   "chrf_sans_tronques": 38.0
+  },
+  {
+   "langue": "lav",
+   "nom": "letton",
+   "famille": "balte",
+   "annoncee": false,
+   "chrf": 37.6,
+   "ic95": [
+    34.7,
+    40.4
+   ],
+   "plancher": 21.2,
+   "marge": 16.4,
+   "hasard": 21.6,
+   "marge_hasard": 16.0,
+   "tronque": 6,
+   "chrf_sans_tronques": 38.9
+  },
+  {
+   "langue": "est",
+   "nom": "estonien",
+   "famille": "ouralienne",
+   "annoncee": false,
+   "chrf": 35.9,
+   "ic95": [
+    33.5,
+    38.2
+   ],
+   "plancher": 21.4,
+   "marge": 14.6,
+   "hasard": 22.4,
+   "marge_hasard": 13.6,
+   "tronque": 4,
+   "chrf_sans_tronques": 36.0
+  },
+  {
+   "langue": "lit",
+   "nom": "lituanien",
+   "famille": "balte",
+   "annoncee": false,
+   "chrf": 35.5,
+   "ic95": [
+    33.1,
+    37.8
+   ],
+   "plancher": 21.1,
+   "marge": 14.4,
+   "hasard": 21.4,
+   "marge_hasard": 14.1,
+   "tronque": 4,
+   "chrf_sans_tronques": 36.6
+  },
+  {
+   "langue": "gle",
+   "nom": "irlandais",
+   "famille": "celtique",
+   "annoncee": false,
+   "chrf": 29.7,
+   "ic95": [
+    28.3,
+    31.0
+   ],
+   "plancher": 21.0,
+   "marge": 8.7,
+   "hasard": 22.6,
+   "marge_hasard": 7.1,
+   "tronque": 10,
+   "chrf_sans_tronques": 30.5
+  },
+  {
+   "langue": "mlt",
+   "nom": "maltais",
+   "famille": "sémitique",
+   "annoncee": false,
+   "chrf": 20.3,
+   "ic95": [
+    17.3,
+    23.2
+   ],
+   "plancher": 24.5,
+   "marge": -4.2,
+   "hasard": 15.2,
+   "marge_hasard": 5.1,
+   "tronque": 17,
+   "chrf_sans_tronques": 22.2
+  }
+ ],
+ "moyenne_annoncees": 30.70769230769231,
+ "moyenne_non_annoncees": 17.3,
+ "correlation_chrf_plancher": 0.5775106095127498
+}
