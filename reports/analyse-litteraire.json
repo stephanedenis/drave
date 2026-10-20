@@ -1,0 +1,32 @@
+[
+ {
+  "modele": "traduction-litteraire-3b",
+  "n": 200,
+  "rappel_noms": 0.925,
+  "occurrences_noms": 106,
+  "paires_avec_nom": 82,
+  "paires_noms_tous_gardes": 0.902,
+  "controle_rappel_noms": 0.088,
+  "omissions_ratio_lt_0.5": 0.005,
+  "expansions_ratio_gt_2": 0.02,
+  "chrf_avec_nom": 50.3,
+  "chrf_sans_nom": 45.8,
+  "n_avec_nom": 82,
+  "n_sans_nom": 118
+ },
+ {
+  "modele": "traduction-litteraire-7b",
+  "n": 200,
+  "rappel_noms": 0.962,
+  "occurrences_noms": 106,
+  "paires_avec_nom": 82,
+  "paires_noms_tous_gardes": 0.951,
+  "controle_rappel_noms": 0.088,
+  "omissions_ratio_lt_0.5": 0.005,
+  "expansions_ratio_gt_2": 0.02,
+  "chrf_avec_nom": 52.6,
+  "chrf_sans_nom": 47.9,
+  "n_avec_nom": 82,
+  "n_sans_nom": 118
+ }
+]

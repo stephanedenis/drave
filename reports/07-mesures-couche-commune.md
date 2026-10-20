@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (67 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (68 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2456,3 +2456,46 @@ deux directions ✓✗ ; l'écart de +1 à +2,5 points est **réel mais petit** 
 stable **entre genres** (le littéraire, mesure 64, est 23 points en dessous) ✓✗ ; et les deux corpus partagent la
 même **équipe de traduction** et le même **style institutionnel** ✓✗ — *deux règlements de la même maison, ce n'est
 pas deux domaines* ✓✓.
+
+## Mesure 68 — LE LITTÉRAIRE NE PERD PAS LES NOMS (96 %) : le chrF bas est un écart de STYLE, pas de fidélité
+
+**La question** ✓✓. La mesure 64 a donné **47,7-49,8** au littéraire, le domaine le plus dur — mais un chrF moyen ne
+dit pas **ce qui manque** ✓✗. Est-ce le **contenu** (le modèle omet, invente, perd les personnages) ou le **style**
+(la référence de 1873 ne dit pas la même chose avec les mêmes mots) ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/analyse_litteraire.py` ✓, CPU, sur les **sorties déjà produites** de la mesure 64 ✓) :
+
+- **les noms propres** : le dictionnaire d'ancres de l'aligneur (81 groupes, `tools/aligneur_litteraire.py`) est
+  appliqué à la **source française** ; on compte les occurrences dont les formes anglaises se retrouvent dans la
+  **sortie** ✓✓ — occurrence par occurrence, frontières de mot, casse et accents contrôlés ✓ ;
+- **le contrôle négatif** : le même dictionnaire appliqué à la sortie d'une **autre** paire ✓✓ — *si le taux réel
+  n'est pas très au-dessus, le rappel ne veut rien dire* ✓✓ ;
+- **les omissions / expansions** : une sortie deux fois plus courte (ou plus longue) que la référence ✓ ;
+- **le chrF par sous-groupe** : paires **avec** nom contre paires **sans** nom ✓✓.
+
+200 paires 1:1, 106 occurrences de noms, 82 paires avec nom ✓ :
+
+| modèle | rappel des noms | contrôle | paires 100 % | omissions | expansions | chrF avec nom | chrF sans nom |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 3 B | **92,5 %** | 8,8 % | 90,2 % | 0,5 % | 2,0 % | 50,3 | 45,8 |
+| 7 B | **96,2 %** | 8,8 % | 95,1 % | 0,5 % | 2,0 % | 52,6 | 47,9 |
+
+* **LES NOMS SONT PRESQUE TOUS GARDÉS** ✓✓ : **92,5 %** (3 B) et **96,2 %** (7 B), contre **8,8 %** au contrôle
+  négatif ✓✓ — *×10,5 et ×10,9* ✓✓. *Le modèle ne perd pas les personnages : il les nomme* ✓✓ ;
+* **il n'omet presque rien** ✓✓ : **0,5 %** des sorties font moins de la moitié de la référence, **2,0 %** font plus
+  du double ✓✓ — *le contenu n'est pas tronqué* ✓✓ ;
+* **le chrF bas n'est donc PAS un problème d'entités** ✗✓ : les paires **avec** noms font **mieux** (50,3 / 52,6)
+  que celles **sans** (45,8 / 47,9) ✓✓ — *les noms sont des chaînes partagées, ils **aident** le chrF ; le cœur
+  difficile est le sous-groupe sans nom, **45,8-47,9*** ✓✓ ;
+* **la conclusion est un écart de STYLE** ✓✓ : la référence de **Towle (1873)** emploie une orthographe et une
+  syntaxe que le modèle ne produit pas (il modernise) ✓✗ — *le chrF **pénalise** une modernisation légitime* ✓✓.
+  **47,7-49,8 est donc un plancher**, pas une note absolue ✓✓.
+
+**Ce que cela change** ✓✓ : le littéraire n'a pas besoin d'un **module d'entités** ; il a besoin d'une **métrique
+sensible au sens** (ou d'une seconde référence, moderne) pour séparer le style de la fidélité ✓✓. C'est la prochaine
+mesure du domaine : *un juge qui ne confond pas « autrement dit » et « mal dit »* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : le dictionnaire couvre les **noms connus** du livre, pas les descriptions ✓✗ ;
+200 paires, deux modèles ✓ ; on ne vérifie **pas le sens** des mots communs (seulement les noms et la longueur) ✓✗ ;
+et un nom conservé peut être un **cognate** recopié (Fogg, Passepartout) — c'est légitime, mais ce n'est pas une
+preuve de compréhension ✓✓.
