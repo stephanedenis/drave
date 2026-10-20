@@ -31,6 +31,8 @@
 - [`traduction-eurlex-0.5b.json`](traduction-eurlex-0.5b.json) · [`traduction-eurlex-1.5b.json`](traduction-eurlex-1.5b.json)
 - [`traduction-langues-3b.json`](traduction-langues-3b.json) · [`traduction-langues-7b.json`](traduction-langues-7b.json)
 - [`traduction-presse-3b.json`](traduction-presse-3b.json) · [`traduction-presse-7b.json`](traduction-presse-7b.json)
+- [`traduction-24langues-A.json`](traduction-24langues-A.json) · [`traduction-24langues-B.json`](traduction-24langues-B.json)
+- [`carte-24langues.json`](carte-24langues.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
   [`traduction-litteraire-7b.json`](traduction-litteraire-7b.json)

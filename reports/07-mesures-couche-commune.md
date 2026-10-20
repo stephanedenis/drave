@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (70 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (71 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2593,3 +2593,73 @@ registre de la mission qui n'a pas encore de banc ✓✗.
 **Ce que ce résultat ne dit pas** ✗ : les communiqués sont **institutionnels** (langue de presse de la Commission),
 pas de la conversation quotidienne ✓✗ ; 15 documents, une seule institution, trois langues ✓ ; le plancher est un
 contrôle de **surface** ✓✗ ; et l'IC de la presse est large (±3,7) parce que les unités sont courtes et variées ✓✓.
+
+## Mesure 71 — LA CARTE DES 24 LANGUES : la **couverture** du modèle est le facteur (+35,8 contre +21,5), et le plancher dépend de l'**écriture**
+
+**La question** ✓✓. La mesure 69 avait montré, sur 8 langues, que la marge sur le plancher était presque uniforme
+✓✓. Reste la question de la **couverture** : Qwen2.5 annonce **29 langues** ; parmi les **24 langues officielles de
+l'Union**, **13 mesurables** y sont (anglais exclu) et **10** n'y sont pas ✓✓. *La marge tient-elle là où le modèle
+n'est pas annoncé ?* ✓✓
+
+**Le corpus** ✓✓ : le même règlement 2025/1106, construit dans les **24 langues officielles**
+(`data/eurlex/32025R1106-24.json` ✓) — 40 considérants + 23 articles = **139 unités**, **0** numéro manquant,
+textes non vides partout ✓✓. On échantillonne **40 unités** (linspace), **les mêmes 40 sources anglaises** pour les
+23 cibles ✓✓ ; 7 B, chat, 400, fp16, en deux lots ✓.
+
+**Deux contrôles, deux usages** ✓✓✓ — et c'est le cœur de la mesure :
+
+- le **plancher** (source anglaise contre référence) contrôle la **distance des langues** *dans la même écriture* ✓ ;
+  mais il **s'effondre entre écritures** (anglais contre bulgare : **4,1** ; contre grec : **4,0**) ✗✗ — la marge
+  devient alors presque égale au chrF, et paraît excellente ✓✗ ;
+- le **hasard** (référence au hasard, **même langue**) est **script-matché** : c'est lui qui permet la comparaison
+  **entre écritures** ✓✓. On rapporte les deux, et on **classe par la marge sur le hasard** ✓✓.
+
+| langue | famille | annoncée | chrF | plancher | marge/plancher | hasard | **marge/hasard** | tronqués |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| espagnol | romane | oui | 72,1 | 30,9 | +41,2 | 26,7 | **+45,4** | 2 |
+| français | romane | oui | 69,8 | 35,3 | +34,4 | 26,3 | **+43,5** | 3 |
+| portugais | romane | oui | 69,2 | 29,9 | +39,3 | 25,8 | **+43,3** | 2 |
+| roumain | romane | oui | 66,2 | 30,4 | +35,8 | 26,1 | **+40,0** | 3 |
+| italien | romane | oui | 68,0 | 31,4 | +36,6 | 28,1 | **+39,8** | 3 |
+| allemand | germanique | oui | 62,7 | 24,6 | +38,0 | 25,9 | **+36,7** | 3 |
+| suédois | germanique | oui | 59,6 | 27,0 | +32,6 | 24,5 | **+35,1** | 3 |
+| tchèque | slave | oui | 56,0 | 19,9 | +36,1 | 21,2 | **+34,8** | 4 |
+| néerlandais | germanique | oui | 62,0 | 27,8 | +34,2 | 28,2 | **+33,8** | 3 |
+| danois | germanique | oui | 58,9 | 28,5 | +30,4 | 25,6 | **+33,3** | 3 |
+| polonais | slave | oui | 54,1 | 20,9 | +33,2 | 22,5 | **+31,5** | 3 |
+| slovaque | slave | NON | 51,4 | 20,5 | +31,0 | 21,6 | **+29,9** | 3 |
+| croate | slave | NON | 51,0 | 23,0 | +28,0 | 21,9 | **+29,1** | 3 |
+| bulgare | slave | NON | 51,7 | **4,1** | **+47,5** ✗ | 24,7 | **+27,0** | 2 |
+| slovène | slave | NON | 48,7 | 22,6 | +26,1 | 22,5 | **+26,2** | 3 |
+| finnois | ouralienne | oui | 50,7 | 19,8 | +30,9 | 25,5 | **+25,2** | 3 |
+| grec | hellénique | oui | 46,5 | **4,0** | **+42,5** ✗ | 24,0 | **+22,5** | **13** |
+| letton | balte | NON | 45,0 | 21,2 | +23,8 | 23,0 | **+22,0** | 4 |
+| lituanien | balte | NON | 43,9 | 21,1 | +22,8 | 22,2 | **+21,7** | 4 |
+| hongrois | ouralienne | NON | 44,5 | 18,5 | +25,9 | 23,0 | **+21,4** | 4 |
+| estonien | ouralienne | NON | 41,7 | 21,4 | +20,4 | 22,6 | **+19,1** | 3 |
+| maltais | sémitique | NON | 32,2 | 24,5 | +7,7 | 21,5 | **+10,8** | 6 |
+| irlandais | celtique | NON | 33,0 | 21,0 | +12,0 | 25,0 | **+8,0** | 7 |
+
+* **LA COUVERTURE DU MODÈLE EST LE FACTEUR** ✓✓ : les **13 langues annoncées** ont une marge sur le hasard de
+  **+35,8** en moyenne, les **10 non annoncées** de **+21,5** ✓✗ — **+14,2 points d'écart** ✓✓. *Ce n'est pas la
+  distance seule : la couverture compte* ✓✓ ;
+* **LES TROUS SONT L'IRLANDAIS ET LE MALTAIS** ✗✗ : **+8,0** et **+10,8** au-dessus du hasard ✓✗ — *les deux
+  langues non annoncées et les moins dotées* ✓✓ ; le modèle **produit** du maltais et de l'irlandais, mais il ne
+  traduit pas : les sorties sont courtes et peu fidèles ✓✗ ;
+* **LE PLANCHER MENT ENTRE ÉCRITURES** ✗✗ : le bulgare paraît **le meilleur** par la marge sur le plancher
+  (**+47,5**) ✓✗ ; au hasard, il est **au milieu** (**+27,0**) ✓✓. Le grec, **+42,5** au plancher, tombe à
+  **+22,5** au hasard — et **13 sorties sur 40 sont tronquées** (sans elles : **51,4** de chrF, soit **+27,4** au
+  hasard) ✓✗. **28ᵉ piège : le plancher est script-dépendant ; la comparaison entre écritures se fait sur le
+  hasard** ✓✓ ;
+* **l'ordre des familles est net** ✓✓ : romanes (**+39,8 à +45,4**) > germaniques (**+33,3 à +36,7**) > slaves
+  (**+26,2 à +34,8**) > baltes/ouraliennes (**+19,1 à +25,2**) > grec (**+22,5**) > maltais/irlandais (**+10,8 /
+  +8,0**) ✓✓ — *un dégradé de couverture, pas un oui/non* ✓✓.
+
+**Ce que cela change** ✓✓ : la couche a une **carte** de 24 langues, avec deux trous nommés (irlandais, maltais) et
+un dégradé chiffré ✓✓. Le levier n'est pas la taille seule (mesure 69) : c'est la **couverture** — un modèle annoncé
+sur 29 langues n'en sert vraiment que ~20 ✓✗, et les 10 non annoncées paient **14 points de marge** ✓✗.
+
+**Ce que ce résultat ne dit pas** ✗ : 40 unités, **un** document, un seul modèle (7 B) ✓✗ ; la liste « annoncée »
+est celle de Qwen2.5, approximative ✓ ; le chrF est sensible à la **morphologie** (finnois, hongrois, estonien) ✓✗ ;
+13 sorties grecques sont **tronquées** (le chiffre grec sans elles est +27,4, pas +22,5) ✓✓ ; et le **hasard** est
+script-matché mais pas **sens-matché** ✓✗ — il contrôle le format et l'écriture, pas le sens ✓.

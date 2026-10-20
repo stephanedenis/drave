@@ -21,7 +21,11 @@ from __future__ import annotations
 import argparse, json, pathlib, re, urllib.request
 
 LANGUES_CELLAR = {"fra": "fra", "eng": "eng", "deu": "deu", "spa": "spa", "ita": "ita",
-                  "pol": "pol", "nld": "nld", "por": "por"}
+                  "pol": "pol", "nld": "nld", "por": "por",
+                  # les 24 langues officielles de l'Union ✓✓ (codes Cellar à trois lettres)
+                  "bul": "bul", "ces": "ces", "dan": "dan", "ell": "ell", "est": "est", "fin": "fin",
+                  "gle": "gle", "hrv": "hrv", "hun": "hun", "lav": "lav", "lit": "lit", "mlt": "mlt",
+                  "ron": "ron", "slk": "slk", "slv": "slv", "swe": "swe"}
 
 
 def telecharge(celex: str, langue: str, cache: pathlib.Path) -> str:
