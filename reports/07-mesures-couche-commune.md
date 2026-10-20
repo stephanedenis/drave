@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (72 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (73 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2699,3 +2699,68 @@ le groupe baltes/ouraliennes ✓✓. *La carte de 24 langues est un **plan de do
 encore déplacer l'écart (mais la mesure 66 montre des rendements décroissants) ✓✓ ; les sorties tronquées gonflent
 le déficit des langues faibles (maltais 17/40, grec 13/40) ✓✗ ; le chrF est sensible à la morphologie ✓ ; et
 « annoncée » est une liste approximative ✓.
+
+## Mesure 73 — LES GRANDES LANGUES HORS UE : chinois 35,3 et russe 52,3 sur l'ONU 2026 — et la couverture démographique n'est que de **7/20**
+
+**La question** ✓✓. La mesure 71 couvrait les langues de l'**Union** ; les **grandes langues du monde** — le
+chinois (2ᵉ par le total de locuteurs), le russe (11ᵉ), l'hindi, l'arabe, le bengali, l'indonésien, l'urdu, le
+japonais… — n'avaient **aucun banc propre** ✗✓. *Le critère de passage à l'étage 2 (« les langues les plus
+populaires sont couvertes ») est-il atteint ?* ✓✓
+
+**Le corpus** ✓✓ (`tools/corpus_onu.py` ✓) : **5 résolutions de la 80ᵉ session de l'Assemblée générale**
+(A/RES/80/1, 2, 4, 5, 10), publiées en 2025-2026 ✓ (postérieures à la coupure), **traduites par des humains** dans
+les six langues officielles ✓✓, et dont les **paragraphes du dispositif sont numérotés** — **61 paragraphes
+alignés par la structure** dans **5 langues** (EN, FR, ES, RU, ZH) ✓✓, 0 numéro manquant, comptes identiques ✓✓.
+
+*L'arabe est écarté* ✗✗ : `pdftotext` rend le texte arabe **déchiqueté** (droite à gauche, ligatures) et les numéros
+en fin de ligne ✓✗ — il faudra une autre source ou un autre extracteur ✓✓.
+
+**Les résultats** (3 B et 7 B, chat, 400, fp16) ✓ :
+
+| paire | 3 B | 7 B | plancher | hasard | marge/hasard 7 B | 7 B sans tronqués | tronqués 7 B |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| eng → **chinois** | 32,3 | **35,3** | 4,1 | **4,2** | +31,1 | 36,4 | 8/61 |
+| eng → **russe** | 47,5 | **52,3** | 4,0 | 21,1 | +31,2 | 57,2 | 13/61 |
+| eng → français | 61,0 | 62,2 | 33,8 | 26,0 | **+36,2** | 67,6 | 14/61 |
+| eng → espagnol | 65,1 | 68,2 | 32,4 | 26,3 | **+42,0** | 73,9 | 13/61 |
+
+* **LE CHINOIS ET LE RUSSE SONT MESURABLES, ET AU-DESSUS DU HASARD** ✓✓ : **+31,1** et **+31,2** de marge sur le
+  hasard au 7 B ✓✓ — *le modèle traduit ces langues, il ne les ignore pas* ✓✓ ;
+* **MAIS LE CHRF N'EST PAS COMPARABLE ENTRE ÉCRITURES** ✗✗ : le **hasard** vaut **4,2** en chinois, **21,1** en
+  russe et **26** en latin ✓✗ — *le même chrF ne veut pas dire la même chose* ✓✓. **29ᵉ piège** : la marge sur un
+  hasard quasi nul (chinois) n'est pas la même échelle que sur un hasard de 26 (latin) ✓✗ ; il faut un **plafond
+  humain** (deux traductions humaines comparées entre elles) pour calibrer ✓✓ ;
+* **le registre ONU est plus dur que le règlement** ✗✓ : en français, **62,2** (67,6 sans tronqués) contre **69,5**
+  sur l'EUR-Lex ✓✓ — *des paragraphes longs, un style de résolution* ✓✓ ;
+* **la taille aide peu ici** ✗✓ : +3,0 (chinois), +4,8 (russe), +1,2 (français), +3,1 (espagnol) du 3 B au 7 B ✓✓
+  — *le chinois ne se débloque pas par la taille, comme le polonais de la mesure 69* ✓✓.
+
+**La couverture démographique** (Ethnologue 2026, total L1+L2 ; source :
+`https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers`, consultée le 20/10/2026 ✓) :
+
+| # | langue | locuteurs (M) | mesure propre | # | langue | locuteurs (M) | mesure propre |
+|---:|---|---:|---|---:|---|---:|---|
+| 1 | anglais | 1 493 | ✅ source | 11 | **russe** | 210 | ✅ **mesure 73** |
+| 2 | **mandarin** | 1 183 | ✅ **mesure 73** | 12 | allemand | 133 | ✅ mesure 71 |
+| 3 | hindi | 611 | ✗ à faire | 13 | japonais | 126 | ✗ à faire |
+| 4 | espagnol | 561 | ✅ mesures 69-71 | 14 | pidgin nigérian | 121 | ✗ à faire |
+| 5 | arabe standard | 335 | ✗ à faire | 15 | arabe égyptien | 118 | ✗ à faire |
+| 6 | français | 334 | ✅ mesures 69-71 | 16 | marathi | 99 | ✗ à faire |
+| 7 | bengali | 274 | ✗ à faire | 17 | vietnamien | 97 | ✗ à faire |
+| 8 | portugais | 269 | ✅ mesure 71 | 18 | télougou | 96 | ✗ à faire |
+| 9 | indonésien | 255 | ✗ à faire | 19 | swahili | 95 | ✗ à faire |
+| 10 | urdu | 246 | ✗ à faire | 20 | haoussa | 94 | ✗ à faire |
+
+* **7 LANGUES SUR 20 SONT MESURÉES SUR UN TEXTE NEUF** ✓✓ : anglais (source), espagnol, français, portugais,
+  allemand, **chinois**, **russe** ✓✓ — soit **7/20** ✗✓ ;
+* **LE CRITÈRE DE PASSAGE À L'ÉTAGE 2 N'EST DONC PAS ATTEINT** ✗✗ : il reste **13 langues**, dont **5 des 10
+  premières** (hindi, arabe, bengali, indonésien, urdu) ✓✗ — et l'arabe, 5ᵉ langue du monde, est justement celle
+  que l'extraction PDF refuse ✓✗ ;
+* **ce que cela commande** ✓✓ : (1) réparer l'**arabe** (autre source/extracteur) ; (2) mesurer les 12 autres sur
+  l'**UDHR** avec un **test de contamination** (5 articles par langue, insertion d'un jeton rare) ; (3) là où la
+  contamination est forte, construire un corpus **post-cutoff** (ONU, gouvernemental, presse) ✓✓ ; (4) un **plafond
+  humain** par écriture pour calibrer le chrF ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 61 paragraphes, **5 résolutions**, un registre (ONU) ✓✗ ; 8 à 14 sorties sur
+61 sont **tronquées** (les chiffres sans elles sont 36,4 / 57,2 / 67,6 / 73,9) ✓✓ ; le chrF est **sensible à
+l'écriture** et il n'y a **pas de plafond humain** ✓✗ ; et l'arabe manque ✓✗.
