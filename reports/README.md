@@ -29,6 +29,7 @@
 - [`traduction-eurlex-3b-fraeng.json`](traduction-eurlex-3b-fraeng.json) ·
   [`traduction-eurlex-7b-fraeng.json`](traduction-eurlex-7b-fraeng.json)
 - [`traduction-eurlex-0.5b.json`](traduction-eurlex-0.5b.json) · [`traduction-eurlex-1.5b.json`](traduction-eurlex-1.5b.json)
+- [`traduction-langues-3b.json`](traduction-langues-3b.json) · [`traduction-langues-7b.json`](traduction-langues-7b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
   [`traduction-litteraire-7b.json`](traduction-litteraire-7b.json)

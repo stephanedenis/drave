@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (68 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (69 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2499,3 +2499,50 @@ mesure du domaine : *un juge qui ne confond pas « autrement dit » et « mal di
 200 paires, deux modèles ✓ ; on ne vérifie **pas le sens** des mots communs (seulement les noms et la longueur) ✓✗ ;
 et un nom conservé peut être un **cognate** recopié (Fogg, Passepartout) — c'est légitime, mais ce n'est pas une
 preuve de compréhension ✓✓.
+
+## Mesure 69 — LA QUALITÉ PAR LANGUE : le brut va de 45 à 69, mais la **marge sur le plancher** est presque uniforme — et le 7 B comble le polonais
+
+**La question** ✓✓. La couche doit lire et produire **toutes** les langues ✓ ; la mesure 62 n'en testait que quatre
+✓✗. Sur un texte **non mémorisable**, quelles langues sont **bien servies**, et l'écart entre langues est-il un écart
+de **qualité** ou de **distance** ? ✓✓
+
+**Le dispositif** ✓✓ : le règlement 2025/1106 en **huit langues** (`data/eurlex/32025R1106-8.json` ✓) — 40
+considérants + 23 articles = 139 unités, **0** numéro manquant, comptes de paragraphes identiques partout ✓✓,
+longueurs médianes 1,00-1,13 ✓. On échantillonne **80 unités** (linspace sur tout le corpus ✓), **les mêmes 80
+sources anglaises** pour les sept cibles ✓✓ — *la difficulté de la source est donc contrôlée* ✓✓. 3 B et 7 B,
+chat, 400, fp16 ✓. Pour chaque langue, on rapporte le **chrF**, le **plancher** (« ne rien traduire » : la source
+anglaise contre la référence de la langue ✓) et la **marge** = chrF − plancher ✓✓.
+
+| cible | famille | 3 B | 7 B | plancher | marge 3 B | marge 7 B | gain 3→7 B |
+|---|---|---:|---:|---:|---:|---:|---:|
+| espagnol | romane | 68,9 | **70,6** | 30,3 | 38,5 | 40,3 | +1,8 |
+| portugais | romane | 66,5 | **68,8** | 29,5 | 37,0 | 39,3 | +2,3 |
+| français | romane | 66,0 | **69,7** | 34,3 | 31,7 | 35,4 | +3,7 |
+| italien | romane | 63,3 | **66,4** | 30,9 | 32,5 | 35,5 | +3,0 |
+| néerlandais | germanique | 57,0 | **60,4** | 27,6 | 29,3 | 32,8 | +3,5 |
+| allemand | germanique | 53,8 | **60,5** | 24,5 | 29,2 | 36,0 | **+6,8** |
+| polonais | slave | 44,9 | **55,0** | 20,9 | **24,0** | 34,1 | **+10,1** |
+
+* **LE CHRF BRUT CLASSE LES LANGUES COMME LEUR DISTANCE** ✗✓ : 63-69 (romanes) > 54-60 (germaniques) > **45**
+  (polonais) au 3 B ✓ — mais le **plancher** suit le même ordre (34,3 en français contre **20,9** en polonais) ✓✗ :
+  *une partie de l'écart brut est la distance des langues, pas la qualité* ✓✓ ;
+* **LA MARGE EST LA VRAIE COMPARAISON** ✓✓ : au 7 B, elle va de **32,8** (néerlandais) à **40,3** (espagnol) — un
+  écart de **7,5 points**, contre **24 points** de chrF brut ✓✓ ; *le modèle est presque également bon partout
+  au-dessus du plancher* ✓✓ ;
+* **LE 7 B COMBLE LE POLONAIS** ✓✓ : la marge polonaise passe de **24,0** à **34,1** (+10,1), le **plus grand gain**
+  de la série ✓✓, et l'allemand +6,8 ✓ — *la taille aide surtout là où la langue est la moins servie* ✓✓ ; au 7 B,
+  le polonais n'est plus le parent pauvre (34,1, au milieu) ✓✓ ;
+* **le français n'est pas la langue la mieux servie** ✗✓ : marge 35,4, derrière l'espagnol (40,3), le portugais
+  (39,3) et l'allemand (36,0) ✓✓ — *le français a un plancher élevé, pas une qualité supérieure* ✓✗.
+
+**Le 27ᵉ piège** ✓✗ : comparer le chrF **entre langues** sans **plancher par langue** confond la **distance** des
+langues avec la **qualité** du modèle ✓✗. *Le plancher n'est pas un détail de banc : c'est le zéro de l'échelle* ✓✓.
+
+**Ce que cela change** ✓✓ : la couche n'a pas de « langues préférées » au 7 B — elle a des **distances** et un
+**déficit de couverture** que la taille comble en partie ✓✓. La prochaine mesure doit tester les **langues peu
+dotées** (où le plancher et la couverture se séparent) et la **direction inverse** (X→eng) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : **un** document, **sept** cibles, une seule famille de modèles ✓✗ ; le chrF
+est sensible à la **morphologie** (le polonais fléchit : une traduction juste peut partager moins de n-grammes) ✓✗
+— le plancher en corrige une partie, pas tout ✓✓ ; 80 unités, IC ±2 à ±3 ✓ ; et la marge sur un plancher de
+**surface** n'est pas une mesure de **sens** ✓✗.
