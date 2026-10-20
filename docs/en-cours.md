@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-20, 11 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-20, 11 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -8,26 +8,46 @@
 
 ## La synthèse (lire si on ne lit qu'une page)
 
-**L'étage entrée-sortie est mesuré, pas encore fiable.** Ce qui est établi : la langue est **lisible partout**
-dans l'état (80-100 %), le **sens traverse les langues** sur les paires couvertes (96 %), l'alignement **suit la
-généalogie** (37 / 28 / 11 % à écriture contrôlée), et la **restitution exacte** existe pour un modèle spécialisé
-(85 %) mais **meurt dès qu'il partage 10 langues** (4 %). Ce qui manque : la **qualité de traducteur**. Le banc
-juridique de l'UDHR était **contaminé** (mesure 61 : le 7 B **récite** l'article 1 mot pour mot au lieu de
-traduire) ; sur un **règlement européen de 2025**, non mémorisable, la qualité réelle est **54,7-76,6 de chrF**
-(0,5-14 B, 4 paires, mesures 62-63-66) — **au-dessus du plancher de +30 à +40**, mais **loin de 100**. La **courbe
-propre** est **lisse et monotone** (54,7 → 73,3 en eng→fra, 63,1 → 76,6 en fra→eng, du 0,5 au 14 B, mesures 63 et
-66) : *le « coude à 3 B » de l'UDHR était un artefact ; le premier aplatissement est à 7 B en fra→eng (+0,9)*. Et le **littéraire**, enfin aligné (93,2 % d'ancres à ±2,
-mesure 64), est le **plus dur** : **47,7-49,8**, où la taille n'aide presque pas (+2,1) — et où les **noms** sont pourtant gardés à **96 %** (mesure 68) : *l'écart est de style, pas de contenu*. Et la **presse** (15 communiqués 2026) est **au niveau du juridique**
-(marge +38,6 contre +35,3, mesure 70) : la hiérarchie est **institutionnel ≈ presse > littéraire**. Sur les **24 langues officielles de l'UE**, la
-**couverture** du modèle est le facteur : **+35,8** de marge sur le hasard pour les **13 langues annoncées**,
-**+21,5** pour les **10 non annoncées** — les trous sont l'**irlandais (+8,0)** et le **maltais (+10,8)**
-(mesure 71). Et l'entrée sait
-**signaler** son bruit (seuil à 3,23 bits/token : fautes et langues mêlées détectées à 100 %, AUC 1,00) mais
-**pas le corriger** : la correction automatique **empire** le texte 8 fois sur 9 (mesure 65). La qualité se
-**réplique** sur un second règlement (+1,1 à +2,5 points, mesure 67). Sur **huit langues**, le chrF brut va de
-**45 à 71**, mais la **marge sur le plancher** est presque uniforme (**33-40**) : *l'écart brut est la distance des
-langues, pas la qualité* — et le 7 B comble le polonais (+10,1, mesure 69). *C'est la qualité de traducteur qu'il faut
-faire monter avant le module de pensée abstraite.*
+**La cible.** Un **étage entrée-sortie** qui lit et produit **toutes les langues, dialectes et styles**, dans tous
+les registres, et qu'on juge en **qualité de traducteur** — restitution à l'identique et traduction du sens. Quand il
+sera **fiable**, l'**étage 2** (pensée abstraite, indépendante de la langue) pourra commencer : on n'y passe pas
+avant ([AGENTS.md](../AGENTS.md) § 1).
+
+**Les résultats du moment (20 octobre).**
+
+- **Le juge a changé** : le banc UDHR était **contaminé** (le 7 B **récite** l'article 1 au lieu de traduire,
+  mesure 61). Le juge est désormais un **texte neuf** : un règlement européen de 2025, 139 unités alignées par
+  structure, traductions humaines.
+- **La qualité réelle** y est de **55-76 de chrF** (0,5-14 B, mesures 62-63-66) — **+30 à +40** au-dessus du
+  plancher, **loin de 100**. Elle **se réplique** sur un second règlement (+1,1 à +2,5, mesure 67).
+- **La taille aide, mais de moins en moins** : 54,7 → 73,3 (eng→fra) du 0,5 au 14 B ; le gain par doublement tombe
+  à **+0,9** (7 → 14 B, fra→eng) — mesures 63 et 66. *Le levier n'est pas la taille seule.*
+- **Trois registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9) — le
+  littéraire est le plus dur, mais **pas par le contenu** : **96 %** des noms, **0,5 %** d'omissions ; l'écart est
+  de **style** (mesures 64 et 68).
+- **La couverture des langues est le facteur** : sur les **24 langues officielles de l'UE**, **+35,8** de marge sur
+  le hasard pour les **13 langues annoncées** par le modèle, **+21,5** pour les **10 autres** ; les trous sont
+  l'**irlandais (+8,0)** et le **maltais (+10,8)** (mesure 71). *L'écart brut entre langues est surtout la
+  distance* (mesure 69), et le plancher **dépend de l'écriture** (28ᵉ piège).
+- **L'entrée sait signaler son bruit** (fautes et langues mêlées : **AUC 1,00**), **pas le corriger** : 8/9 des
+  corrections empirent, et la plus fluide est la plus fausse (mesure 65).
+- **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
+  les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
+  un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
+
+**Le plan de match, en relation avec la cible.**
+
+1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **quotidien parlé** (dialogue,
+   conversation) et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
+2. **Compléter les langues** : 24 langues UE mesurées ; reste les **langues peu dotées hors UE** (UDHR, avec
+   contrôle de contamination) et la **direction inverse** (X→eng).
+3. **Choisir le levier** : la taille donne des rendements décroissants ; le prochain levier est la **couverture**
+   (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
+   jamais en jetons.
+4. **Seulement ensuite** : l'**étage 2**, la pensée abstraite.
+
+**Ce qui bloque encore le passage à l'étage 2** : la qualité sur les **langues peu dotées**, le **registre parlé**,
+et une mesure du **sens** qui ne soit pas de surface (le chrF est un **plancher**, pas une note absolue).
 
 ## Le tableau de bord des chantiers
 
