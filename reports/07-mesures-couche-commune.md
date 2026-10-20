@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (69 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (70 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2546,3 +2546,50 @@ dotées** (où le plancher et la couverture se séparent) et la **direction inve
 est sensible à la **morphologie** (le polonais fléchit : une traduction juste peut partager moins de n-grammes) ✓✗
 — le plancher en corrige une partie, pas tout ✓✓ ; 80 unités, IC ±2 à ±3 ✓ ; et la marge sur un plancher de
 **surface** n'est pas une mesure de **sens** ✓✗.
+
+## Mesure 70 — LE REGISTRE PRESSE EST AU NIVEAU DU JURIDIQUE : marge +38,6 / +35,9 ; le littéraire reste 10 points en dessous
+
+**La question** ✓✓. Après le juridique (mesures 62-63) et le littéraire (64, 68), le troisième registre de la
+mission — le **quotidien**, l'actualité, la langue de tous les jours — est-il plus facile ou plus dur ? ✓✓
+
+**Le corpus** ✓✓ (`tools/corpus_presse.py` ✓) : **15 communiqués de presse** de la Commission européenne, publiés de
+juillet à octobre 2026 ✓ (postérieurs à la coupure), **traduits par des humains** en français et en allemand ✓✓.
+L'API de la presse sert le corps en HTML ; **on vérifie la langue et l'égalité du nombre de paragraphes** avant
+d'accepter ✓✓ (une version du jour peut ne pas être encore traduite ✗✓ — l'API rend alors l'anglais). **15 documents,
+253 unités** (titres + paragraphes), 3 langues, longueurs médianes 1,15-1,20 ✓✓. *L'alignement est garanti par la
+structure, comme pour les règlements* ✓✓.
+
+**Le banc** ✓ : 80 unités étalées (linspace), eng→fra et eng→deu, 3 B et 7 B, chat, 400, fp16 ✓ ; plancher et hasard
+comme partout ✓.
+
+| modèle | eng → fra | marge | eng → deu | marge | plancher (fra / deu) |
+|---|---|---:|---:|---:|---:|
+| 3 B | 68,2 [64,8 ; 71,4] | +36,3 | 59,1 [56,0 ; 62,4] | +30,5 | 31,9 / 28,6 |
+| 7 B | **70,5** [66,7 ; 74,2] | **+38,6** | **64,6** [60,8 ; 68,3] | **+35,9** | 31,9 / 28,6 |
+
+**La carte des domaines** (7 B, marge sur le plancher, même direction quand c'est possible) ✓✓ :
+
+| domaine | eng → fra | marge | eng → deu | marge |
+|---|---:|---:|---:|---:|
+| **juridique** (règlement 2025) | 69,5 | +35,3 | 60,9 | +36,4 |
+| **presse** (communiqués 2026) | 70,5 | **+38,6** | 64,6 | **+35,9** |
+| **littéraire** (Verne, fra→eng) | — | — | 49,8 (fra→eng) | **+25,9** |
+
+* **LA PRESSE EST AU NIVEAU DU JURIDIQUE** ✓✓ : +38,6 contre +35,3 en français, +35,9 contre +36,4 en allemand ✓✓
+  — *les deux écarts sont dans l'IC* ✓✓. *Le registre institutionnel/actualité n'est pas plus dur que le
+  juridique* ✓✓ ;
+* **LE LITTÉRAIRE EST LE SEUL OUTLIER** ✗✗ : **+25,9** de marge, soit **10 points** sous les deux autres ✓✗ — et
+  la mesure 68 a montré que ce n'est **pas** une perte de contenu (noms 96 %, omissions 0,5 %) mais un écart de
+  **style** ✓✓ ;
+* **le gain de taille est du même ordre** ✓✓ : +2,3 / +5,5 en presse, +3,4 / +5,0 en juridique ✓✓ — *la presse
+  suit la même pente* ✓✓ ;
+* **aucune troncature** ✓✓ : 0/80 en presse (unités courtes) ✓ ; le rapport de longueur est 1,00-1,01 ✓✓.
+
+**Ce que cela change** ✓✓ : la couche a maintenant **trois registres mesurés** — juridique, presse, littéraire — et
+la hiérarchie est claire : *institutionnel ≈ presse > littéraire* ✓✓. Le **prochain corpus** doit être un vrai
+**quotidien parlé** (dialogue, sous-titres, conversation), pas un communiqué institutionnel ✓✓ : c'est le seul
+registre de la mission qui n'a pas encore de banc ✓✗.
+
+**Ce que ce résultat ne dit pas** ✗ : les communiqués sont **institutionnels** (langue de presse de la Commission),
+pas de la conversation quotidienne ✓✗ ; 15 documents, une seule institution, trois langues ✓ ; le plancher est un
+contrôle de **surface** ✓✗ ; et l'IC de la presse est large (±3,7) parce que les unités sont courtes et variées ✓✓.

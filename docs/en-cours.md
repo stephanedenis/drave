@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-20, 10 h 05 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-20, 10 h 20 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -17,7 +17,8 @@ traduire) ; sur un **règlement européen de 2025**, non mémorisable, la qualit
 (0,5-14 B, 4 paires, mesures 62-63-66) — **au-dessus du plancher de +30 à +40**, mais **loin de 100**. La **courbe
 propre** est **lisse et monotone** (54,7 → 73,3 en eng→fra, 63,1 → 76,6 en fra→eng, du 0,5 au 14 B, mesures 63 et
 66) : *le « coude à 3 B » de l'UDHR était un artefact ; le premier aplatissement est à 7 B en fra→eng (+0,9)*. Et le **littéraire**, enfin aligné (93,2 % d'ancres à ±2,
-mesure 64), est le **plus dur** : **47,7-49,8**, où la taille n'aide presque pas (+2,1) — et où les **noms** sont pourtant gardés à **96 %** (mesure 68) : *l'écart est de style, pas de contenu*. Et l'entrée sait
+mesure 64), est le **plus dur** : **47,7-49,8**, où la taille n'aide presque pas (+2,1) — et où les **noms** sont pourtant gardés à **96 %** (mesure 68) : *l'écart est de style, pas de contenu*. Et la **presse** (15 communiqués 2026) est **au niveau du juridique**
+(marge +38,6 contre +35,3, mesure 70) : la hiérarchie est **institutionnel ≈ presse > littéraire**. Et l'entrée sait
 **signaler** son bruit (seuil à 3,23 bits/token : fautes et langues mêlées détectées à 100 %, AUC 1,00) mais
 **pas le corriger** : la correction automatique **empire** le texte 8 fois sur 9 (mesure 65). La qualité se
 **réplique** sur un second règlement (+1,1 à +2,5 points, mesure 67). Sur **huit langues**, le chrF brut va de
@@ -57,7 +58,7 @@ C6 documentation (transverse, ne bloque rien)
 | **C5.2** | banc **littéraire** (Verne) | ✅ **parallèle** | **fait** (mesure 64 : 47,7-49,8) ; **noms 96 %** (mesure 68 : le chrF bas est stylistique) | `tools/aligneur_litteraire.py`, `tools/analyse_litteraire.py` |
 | **C5.3** | banc **modèle plus grand** (Qwen2.5 0,5 · 1,5 · 3 · 7 · 14 B) | ✅ **parallèle** | **fait** de 0,5 à 14 B (mesures 63 et 66) : le coude apparaît à 7 B en fra→eng (+0,9) | `tools/traduire_bench.py` |
 | **C5.4** | corpus **technique** parallèle | ✅ **parallèle** | à construire | Gutenberg/`Panini` |
-| **C5.5** | corpus **quotidien** parallèle | ✅ (avec C5.4) | à construire | Gutenberg (théâtre) |
+| **C5.5** | corpus **presse / actualité** parallèle | ✅ **parallèle** | **fait** (mesure 70 : marge +36 à +39) ; le **quotidien parlé** reste à construire | `tools/corpus_presse.py`, `data/presse/` |
 | **C2.1** | répliquer la généalogie **par domaine** | dépend de C5.2-C5.5 | à faire | `retrieval_udhr.py --genealogie` |
 | **C4.1** | styles **à époque contrôlée** (couples contemporains) | ✅ **parallèle** | à faire | `style_traducteur.py` + dates |
 | **C3.1** | restitution **par famille** (modules spécialisés) | ✅ **parallèle** | à faire | `restitution_udhr.py` |
@@ -75,7 +76,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | l'UDHR est-elle utilisable comme juge ? | **moi** (mesure 61) | **non** : le modèle la récite — banc de mémoire |
 | peut-on **corriger** automatiquement l'entrée abîmée ? | **moi** (mesure 65) | **non** : 8/9 des corrections empirent ; seule la restauration des accents gagne |
 | quelle **unité de mesure** à l'entrée et à la sortie ? | **moi** (RSN en unités de sens ; jeton = technique) | en cours : la RSN est en unités de sens ; les métriques par jeton sont des diagnostics |
-| quel domaine après le juridique ? | **moi** (mesure 64) | **littéraire mesuré** : 47,7-49,8, le plus dur |
+| quel domaine après le juridique ? | **moi** (mesures 64 et 70) | **presse mesurée** (au niveau du juridique) ; le **littéraire** reste 10 points en dessous ; le **quotidien parlé** reste à construire |
 | la qualité dépend-elle de la **langue** ? | **moi** (mesure 69) | surtout de la **distance** (plancher) ; marge presque uniforme au 7 B (33-40) |
 | le littéraire perd-il le **contenu** (noms, omissions) ? | **moi** (mesure 68) | **non** : 96,2 % des noms, 0,5 % d'omissions — l'écart est **stylistique** |
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
@@ -99,6 +100,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la qualité de traducteur, sur texte non mémorisable** (règlements UE 2025) | **54,7 → 73,3** (eng→fra) et **63,1 → 76,6** (fra→eng) du 0,5 au 14 B · **répliqué** sur un 2ᵉ règlement (+1,1 à +2,5) | [07](../reports/07-mesures-couche-commune.md) |
 | **le littéraire** (Verne, alignement validé) | **47,7-49,8** (3 B/7 B) · **noms 96 %**, 0,5 % d'omissions : le chrF bas est un écart de **style** (mesure 68) | [07](../reports/07-mesures-couche-commune.md) · [alignement](../reports/alignement-verne.md) |
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
+| **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
@@ -116,8 +118,8 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 ## Ce qui reste à faire, dans l'ordre
 
 1. **qualité de traduction par domaine** : le **juridique** a un banc **propre** (mesure 62) et le **littéraire**
-   est **mesuré** (mesure 64 : 47,7-49,8, le plus dur) ; il reste le **technique**, le **quotidien**, et les
-   **langues peu dotées** — chaque domaine avec un corpus **post-cutoff**, sinon on mesure la mémoire (mesure 61) ;
+   est **mesuré** (mesure 64 : 47,7-49,8, le plus dur) ; il reste le **technique** et le **quotidien parlé** (la presse est faite), et les **langues peu dotées** — chaque
+domaine avec un corpus **post-cutoff**, sinon on mesure la mémoire (mesure 61) ;
 2. **l'unité de mesure de l'entrée et de la sortie** : passer des métriques par **jeton** (techniques, dépendantes
    du tokeniseur) aux **unités grammaticales multi-niveaux** (morphème, mot, syntagme, proposition, énoncé), à
    mesure que les modules s'approchent de **grammaires formelles** représentant les entrées et sorties en
