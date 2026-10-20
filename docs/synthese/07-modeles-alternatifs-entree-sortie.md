@@ -68,6 +68,39 @@ la cible de la mesure.
   corrigeable** : la correction automatique **empire** le texte 8 fois sur 9, et la correction la plus **fluide**
   est la plus **fausse** ✗✗. *Le miroir doit valider le **sens**, pas la fluidité.*
 
+## Découper par langue (principe MoE) : ce que les mesures autorisent
+
+**La question.** Peut-on alléger l'étage entrée-sortie en découpant le modèle **par langue** (principe
+*mixture-of-experts*) et ne charger que le pertinent ? Quatre faits mesurés répondent.
+
+- **La langue est un petit paramètre** : **1,33 %** des poids (32 768 au dernier étage), bascule **5 ms**,
+  **530 Ko** (mesures 3 et 7). Un module de langue peut donc être **petit** et **chargé à la demande**.
+- **Le partage détruit la restitution** : **85 %** de fragments exacts pour un modèle spécialisé, **4 %** quand il
+  partage **10 langues** (mesure 46). *La capacité ne se partage pas gratuitement* : la spécialisation par langue
+  (ou par famille) est ce qui restaure la restitution.
+- **Mais l'espace sémantique est partagé** : **96 %** de retrieval croisé sur les paires couvertes (mesure 39) ; le
+  sens traverse les langues. *Découper le **noyau** détruirait ce qui marche.*
+- **Et la couverture est une limite de données** : **+35,8** de marge pour les 13 langues annoncées, **+21,5** pour
+  les 10 autres, et **la taille ne comble pas l'écart** (mesures 71-72). Un module par langue n'invente pas la
+  donnée qui manque — il l'exploite mieux.
+
+**Ce que cela autorise** : un **noyau partagé** (le sens, 96 %) + des **modules de surface par langue** (entrée et
+sortie : embeddings, tête, adaptateurs), **routés par segment** et **chargés à la demande** (5 ms / 530 Ko). C'est
+le principe MoE, mais appliqué à la **surface**, pas au noyau.
+
+**Ce que cela n'autorise pas** : des **modèles entièrement séparés** par langue — on perd l'espace partagé, on n'a
+pas les données pour les langues peu dotées, et le routage sur texte **court** ou **mêlé** est fragile (mesures 58
+et 60) ; ni un **routage par document** (une entrée bilingue existe) : le routeur doit être **par segment**, avec
+une **confiance** et un **repli** sur le noyau partagé.
+
+**Le plan d'expérience** : (0) **d'abord un corpus d'entraînement par langue** — les 139 unités du banc sont pour
+l'**évaluation**, pas pour l'entraînement (30 articles d'UDHR ou 139 paragraphes d'un règlement ne suffisent pas à
+apprendre une langue) ; (1) noyau 3 B gelé + **adaptateur par langue** sur les 10 langues non couvertes, mesuré
+sur le banc propre 24 langues ; (2) **adaptateur par famille** contre par langue (le transfert paie-t-il ?) ;
+(3) **routeur par segment** (langue détectée + confiance) contre un routage par document, sur du texte mêlé ;
+(4) **coût** : experts résidents contre *offload* (VRAM, latence, qualité) ; (5) **restitution** : modules par
+langue contre modèle partagé 448 langues, pour répliquer 85 % → 4 %.
+
 ## Ce qui reste ouvert (et qui commande la suite)
 
 1. **la qualité de traduction** du module entrée-sortie : le **juridique** et le **littéraire** sont mesurés sur des

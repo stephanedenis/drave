@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-20, 12 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-20, 12 h 55 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -43,7 +43,8 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
 2. **Compléter les langues** : 24 langues UE mesurées ; reste les **langues peu dotées hors UE** (UDHR, avec
    contrôle de contamination) et la **direction inverse** (X→eng).
 3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**
-   (mesure 72) ; le prochain levier est la **couverture**
+   (mesure 72) ; le prochain levier est la **couverture** — et un **découpage de surface** par langue/famille
+   (MoE d'adaptateurs, C5.6), pas un noyau séparé —
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
 4. **Seulement ensuite** : l'**étage 2**, la pensée abstraite.
@@ -84,6 +85,7 @@ C6 documentation (transverse, ne bloque rien)
 | **C5.3** | banc **modèle plus grand** (Qwen2.5 0,5 · 1,5 · 3 · 7 · 14 B) | ✅ **parallèle** | **fait** de 0,5 à 14 B (mesures 63 et 66) : le coude apparaît à 7 B en fra→eng (+0,9) | `tools/traduire_bench.py` |
 | **C5.4** | corpus **technique** parallèle | ✅ **parallèle** | à construire | Gutenberg/`Panini` |
 | **C5.5** | corpus **presse / actualité** parallèle | ✅ **parallèle** | **fait** (mesure 70 : marge +36 à +39) ; le **quotidien parlé** reste à construire | `tools/corpus_presse.py`, `data/presse/` |
+| **C5.6** | **modules par langue / famille** (MoE de surface : adaptateurs, tête, routeur) | ✅ **parallèle** | **à mesurer** — il faut d'abord un **corpus d'entraînement par langue** (les 139 unités du banc sont pour l'évaluation) | `tools/adaptateur_langue.py`, banc 24 langues |
 | **C2.1** | répliquer la généalogie **par domaine** | dépend de C5.2-C5.5 | à faire | `retrieval_udhr.py --genealogie` |
 | **C4.1** | styles **à époque contrôlée** (couples contemporains) | ✅ **parallèle** | à faire | `style_traducteur.py` + dates |
 | **C3.1** | restitution **par famille** (modules spécialisés) | ✅ **parallèle** | à faire | `restitution_udhr.py` |
@@ -103,6 +105,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | quelle **unité de mesure** à l'entrée et à la sortie ? | **moi** (RSN en unités de sens ; jeton = technique) | en cours : la RSN est en unités de sens ; les métriques par jeton sont des diagnostics |
 | quel domaine après le juridique ? | **moi** (mesures 64 et 70) | **presse mesurée** (au niveau du juridique) ; le **littéraire** reste 10 points en dessous ; le **quotidien parlé** reste à construire |
 | la qualité dépend-elle de la **langue** ? | **moi** (mesures 69, 71) | la **couverture** du modèle : +35,8 (annoncées) contre +21,5 (non annoncées) ; trous irlandais/maltais |
+| peut-on **découper par langue** (MoE) pour alléger ? | **moi** (C5.6 ; synthèse 07) | **oui en surface**, non en noyau : adaptateurs/têtes par langue, routage par segment, 1,33 % de poids et 5 ms de bascule |
 | le littéraire perd-il le **contenu** (noms, omissions) ? | **moi** (mesure 68) | **non** : 96,2 % des noms, 0,5 % d'omissions — l'écart est **stylistique** |
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
