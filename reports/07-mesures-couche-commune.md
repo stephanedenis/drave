@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (93 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (94 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3570,3 +3570,33 @@ de **données**, pas d'incapacité* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 50 pages, 400 pas, un LoRA de 12 couches ✓✗ ; les paires manquent (la BBC
 n'est pas alignée) ✓✗ ; et le corpus n'est pas post-cutoff ✓✗.
+
+## Mesure 94 — LA VALIDATION CROISÉE **DÉMENT** LE GAIN : sur les 5 contes, la marge poolée est **−2,3** [−5,5 ; +1,0] — le +1,2 de la mesure 92 était une fluctuation
+
+**La question** ✓✓. La mesure 92 a amélioré l'écriture (+1,2) sur **11 pages** (un seul conte) ✗✓. *Le gain
+tient-il quand on **change de conte** ?* ✓✓ On fait une **validation croisée par conte** : pour chacun des
+**5 contes**, un LoRA **mélangé** est entraîné sur BBC + les **4 autres contes** + anglais, puis testé sur le conte
+**tenu à part** ✓✓ — **50 pages**, chacune vue par un modèle qui ne l'a jamais vue ✓✓.
+
+| conte (test) | n | marge | pages au-dessus |
+|---|---:|---:|---:|
+| 0001 | 11 | −6,9 | 4/11 |
+| 0004 | 8 | +2,0 | 5/8 |
+| 0089 | 8 | −0,7 | 4/8 |
+| 0095 | 12 | −3,3 | 3/12 |
+| 0210 | 11 | −0,9 | 4/11 |
+| **poolé** | **50** | **−2,3** [−5,5 ; +1,0] | **20/50** |
+
+* **LE GAIN NE TIENT PAS** ✗✗ : la marge poolée est **−2,3** (IC [−5,5 ; +1,0]) ✓✗ — *le **+1,2** de la mesure 92
+  était une **fluctuation d'un conte** (0210), pas un apprentissage* ✓✓ ;
+* **un seul conte passe** ✗✓ : 0004 (+2,0) ; les quatre autres sont **négatifs** (−0,7 à −6,9) ✓✗ ;
+* **20 pages sur 50** seulement sont au-dessus du plancher ✗✗ — *le modèle reste **sous** le « ne rien faire »* ✓✗ ;
+* **la lecture et la traduction générale** ne sont pas mesurées ici (la validation croisée porte sur l'écriture) ✓✓.
+
+**Ce que cela change** ✗✗ : la couverture reste **19/20** ; l'écriture du pidgin **n'est pas apprise** par les
+1 840 articles BBC + 39 paires ✓✗. *Le gain apparent était un **artefact de test** : il faut le **démentir** pour
+ne pas conclure trop vite* ✓✓. Le chemin reste le même : **beaucoup plus de paires** (des milliers), pas seulement
+du monolingue ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 5 contes, 300 pas, un LoRA de 12 couches ✓✗ ; un entraînement plus long, plus
+de paires ou un modèle plus grand pourraient passer ✓✓ ; et le corpus n'est **pas post-cutoff** ✓✗.
