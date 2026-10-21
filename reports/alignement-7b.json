@@ -1,0 +1,248 @@
+{
+ "n": 139,
+ "couches": [
+  0,
+  4,
+  9,
+  14,
+  18,
+  23,
+  28
+ ],
+ "langues": [
+  "arz",
+  "ben",
+  "eng",
+  "hau",
+  "hin",
+  "ind",
+  "jpn",
+  "mar",
+  "swh",
+  "tel",
+  "urd",
+  "vie"
+ ],
+ "resultats": [
+  {
+   "langue": "arz",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.4872,
+   "cosinus_pont": 0.8397,
+   "retrieval_pont": 0.5128,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "arz",
+   "sens": "ecrire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.5641,
+   "cosinus_pont": 0.8244,
+   "retrieval_pont": 0.5128,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "ben",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.3846,
+   "cosinus_pont": 0.8144,
+   "retrieval_pont": 0.3077,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "ben",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.2051,
+   "cosinus_pont": 0.5843,
+   "retrieval_pont": 0.3333,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "hau",
+   "sens": "lire",
+   "couche": 4,
+   "lambda": 1.0,
+   "retrieval_brut": 0.6154,
+   "cosinus_pont": 0.8833,
+   "retrieval_pont": 0.5641,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "hau",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.6923,
+   "cosinus_pont": 0.9059,
+   "retrieval_pont": 0.4872,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "hin",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.4103,
+   "cosinus_pont": 0.829,
+   "retrieval_pont": 0.3333,
+   "retrieval_negatif": 0.0
+  },
+  {
+   "langue": "hin",
+   "sens": "ecrire",
+   "couche": 14,
+   "lambda": 100.0,
+   "retrieval_brut": 0.5385,
+   "cosinus_pont": 0.6259,
+   "retrieval_pont": 0.2821,
+   "retrieval_negatif": 0.0
+  },
+  {
+   "langue": "ind",
+   "sens": "lire",
+   "couche": 28,
+   "lambda": 0.1,
+   "retrieval_brut": 0.3077,
+   "cosinus_pont": 0.8889,
+   "retrieval_pont": 0.5641,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "ind",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.8205,
+   "cosinus_pont": 0.8949,
+   "retrieval_pont": 0.5897,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "jpn",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.4872,
+   "cosinus_pont": 0.8456,
+   "retrieval_pont": 0.3846,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "jpn",
+   "sens": "ecrire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.5385,
+   "cosinus_pont": 0.8826,
+   "retrieval_pont": 0.5128,
+   "retrieval_negatif": 0.0769
+  },
+  {
+   "langue": "mar",
+   "sens": "lire",
+   "couche": 14,
+   "lambda": 0.1,
+   "retrieval_brut": 0.4359,
+   "cosinus_pont": 0.7714,
+   "retrieval_pont": 0.2821,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "mar",
+   "sens": "ecrire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.4359,
+   "cosinus_pont": 0.7336,
+   "retrieval_pont": 0.2821,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "swh",
+   "sens": "lire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.6154,
+   "cosinus_pont": 0.8874,
+   "retrieval_pont": 0.5897,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "swh",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 10.0,
+   "retrieval_brut": 0.7692,
+   "cosinus_pont": 0.9159,
+   "retrieval_pont": 0.5385,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "tel",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.2564,
+   "cosinus_pont": 0.8087,
+   "retrieval_pont": 0.2821,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "tel",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.2051,
+   "cosinus_pont": 0.5705,
+   "retrieval_pont": 0.2821,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "urd",
+   "sens": "lire",
+   "couche": 23,
+   "lambda": 0.1,
+   "retrieval_brut": 0.0769,
+   "cosinus_pont": 0.8234,
+   "retrieval_pont": 0.3077,
+   "retrieval_negatif": 0.0256
+  },
+  {
+   "langue": "urd",
+   "sens": "ecrire",
+   "couche": 23,
+   "lambda": 1000.0,
+   "retrieval_brut": 0.2564,
+   "cosinus_pont": 0.8004,
+   "retrieval_pont": 0.3846,
+   "retrieval_negatif": 0.0
+  },
+  {
+   "langue": "vie",
+   "sens": "lire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.9487,
+   "cosinus_pont": 0.8958,
+   "retrieval_pont": 0.6923,
+   "retrieval_negatif": 0.0513
+  },
+  {
+   "langue": "vie",
+   "sens": "ecrire",
+   "couche": 4,
+   "lambda": 0.1,
+   "retrieval_brut": 0.8462,
+   "cosinus_pont": 0.9055,
+   "retrieval_pont": 0.6667,
+   "retrieval_negatif": 0.0
+  }
+ ]
+}

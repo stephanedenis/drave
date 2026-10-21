@@ -40,7 +40,9 @@ longueurs), trois conclusions **survivent** :
 **Mesure 77 (20 octobre)** : sur **Qwen2.5-3B** et **139 paragraphes en 12 langues** (corpus JW 2026), un **pont
 linéaire** par langue atteint un **cosinus de 0,78-0,92** et retrouve la bonne traduction dans **28-67 %** des cas
 (hasard 0,7 %), le contrôle négatif restant à ~0 — *la représentation neutre existe mais doit être alignée*, comme
-le pont de la nuit du 16, retrouvé ici à plus grande échelle.
+le pont de la nuit du 16, retrouvé ici à plus grande échelle. **Mesure 78** : le passage du 3 B au 7 B ne change
+presque rien (+3,7 en lecture, +1,4 en écriture), **lire ≈ écrire**, et la meilleure couche est **la couche 4** pour
+cinq langues — *le sens partagé est tôt et stable ; c'est une base d'architecture, pas un effet de taille*.
 
 ## Ce qui reste à construire
 

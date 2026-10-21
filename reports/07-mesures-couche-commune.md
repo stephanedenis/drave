@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (77 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (78 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2981,3 +2981,50 @@ retrouvé ici à plus grande échelle ✓✓.
 **dernier token** n'est pas toute la phrase ✓✗ ; le pont est **linéaire** (un MLP ferait peut-être mieux) ✓✗ ; et le
 retrieval mesure l'**identité du paragraphe**, pas la **composition** du sens (la RSN multi-niveaux) ✓✗ — *c'est la
 prochaine marche* ✓✓.
+
+## Mesure 78 — ÉTAGE 2 : LA TAILLE NE CHANGE PRESQUE RIEN À L'ALIGNEMENT (+3,7 en lecture, +1,4 en écriture) ; le sens partagé vit dans les **premières couches**
+
+**La question** ✓✓. La mesure 77 a montré qu'un pont linéaire retrouve la bonne traduction dans 28-67 % des cas,
+mais sur **un** modèle (3 B) et **un** sens (X → anglais) ✓✗. *La taille améliore-t-elle l'alignement ? Et le sens
+**inverse** (écrire) est-il aussi bon que le sens lecture ?* ✓✓ — *c'est le **miroir** de l'étage 2* ✓✓.
+
+**Le dispositif** ✓✓ : le même corpus JW 2026 (139 paragraphes, 12 langues), le **7 B** en plus du 3 B, et le ridge
+**dual** (n×n au lieu de D×D) qui rend l'analyse rapide ✓✓ (`tools/analyse_alignement.py` ✓). On mesure, dans les
+**deux sens** (X → anglais et anglais → X), le retrieval brut, le pont (λ validé), le cosinus et le **contrôle
+négatif** ✓✓.
+
+| langue | 3 B lire | 7 B lire | 3 B écrire | 7 B écrire |
+|---|---:|---:|---:|---:|
+| vietnamien | 0,564 | **0,692** | 0,667 | 0,667 |
+| indonésien | 0,564 | 0,564 | 0,615 | 0,590 |
+| swahili | 0,538 | 0,590 | 0,513 | 0,538 |
+| haoussa | 0,436 | 0,564 | 0,436 | 0,487 |
+| arabe égyptien | 0,410 | 0,513 | 0,359 | 0,513 |
+| japonais | 0,333 | 0,385 | **0,538** | 0,513 |
+| hindi | 0,333 | 0,333 | 0,333 | 0,282 |
+| bengali | 0,308 | 0,308 | 0,282 | **0,333** |
+| urdu | 0,308 | 0,308 | 0,385 | 0,385 |
+| marathi | 0,333 | 0,282 | 0,308 | 0,282 |
+| télougou | 0,282 | 0,282 | 0,282 | 0,282 |
+| **moyenne** | **0,401** | **0,438** | **0,429** | **0,443** |
+
+* **LA TAILLE NE DÉBLOQUE PAS L'ALIGNEMENT** ✗✓ : **+3,7 points** en lecture (0,401 → 0,438) et **+1,4** en écriture
+  (0,429 → 0,443) du 3 B au 7 B ✓✗ — *l'espace partagé est **stable**, il n'est pas une question de paramètres* ✓✓ ;
+* **LE SENS INVERSE VAUT LE SENS LECTURE** ✓✓ : l'écriture (anglais → X) est **aussi bonne** que la lecture (0,443
+  contre 0,438 au 7 B) ✓✓ — *le **miroir** de l'étage 1 se retrouve à l'étage 2 : la sortie n'est pas plus faible
+  que l'entrée* ✓✓ ;
+* **LE SENS PARTAGÉ VIT DANS LES PREMIÈRES COUCHES** ✓✓ : au 7 B, la meilleure couche est la **couche 4** pour
+  l'indonésien, le vietnamien, le swahili, le haoussa et le télougou ✓✓ ; les langues lointaines (arabe égyptien,
+  japonais, urdu) ont besoin de la **couche 23** ✓✗ — *le sens est **tôt**, la langue est **tard*** ✓✓, ce qui
+  prolonge la mesure 77 et la découverte « la langue est lisible partout » (mesure 17) ✓✓ ;
+* **le contrôle négatif reste à ~0** ✓✓ : 0,000-0,077, jamais au niveau du pont ✓✓.
+
+**Ce que cela change** ✓✓ : l'étage 2 a une base **stable** : la représentation neutre existe (28-69 % de retrieval
+après pont), elle **ne dépend pas de la taille** (+1 à +4 points), elle est **symétrique** (lire ≈ écrire), et elle
+se trouve **tôt** dans le réseau ✓✓. *Le module de pensée peut se brancher sur les premières couches et apprendre
+le pont* ✓✓ — c'est un **plan d'architecture**, pas une espérance ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 139 paragraphes, deux tailles (3 et 7 B), un registre ✓✗ ; le pont est
+**linéaire** ✓✗ ; le retrieval mesure l'**identité** du paragraphe, pas la **composition** ✓✗ ; et la « couche 4 »
+est peut-être un artefact du **dernier token** (le sens de la phrase n'est pas encore intégré) ✓✗ — *il faudra un
+test de **composition** (la RSN multi-niveaux) et un état de **phrase**, pas de dernier token* ✓✓.

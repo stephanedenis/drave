@@ -31,10 +31,11 @@ import numpy as np
 def extraire(model, tok, textes, couches, batch=8, max_len=512):
     """États du dernier token, par couche : {couche: (n, D)} ✓."""
     import torch
+    dev = next(model.parameters()).device
     sorties = {L: [] for L in couches}
     for i in range(0, len(textes), batch):
         lot = textes[i:i + batch]
-        enc = tok(lot, return_tensors="pt", padding=True, truncation=True, max_length=max_len).to(model.device)
+        enc = tok(lot, return_tensors="pt", padding=True, truncation=True, max_length=max_len).to(dev)
         with torch.no_grad():
             hs = model(**enc, output_hidden_states=True).hidden_states
         idx = enc["attention_mask"].sum(1) - 1
@@ -70,6 +71,7 @@ def main() -> int:
     ap.add_argument("--sortie", default="reports/pensee-multilingue.json")
     ap.add_argument("--etats", default="reports/pensee-multilingue-etats.npz")
     ap.add_argument("--max", type=int, default=139)
+    ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les deux cartes (7 B)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -80,7 +82,12 @@ def main() -> int:
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype)).to("cuda").eval()
+    if a.repartir:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype),
+                                                     device_map="auto").eval()
+    else:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype)).to("cuda").eval()
+    dev = next(model.parameters()).device
     n_layers = model.config.num_hidden_layers
     couches = sorted(set([0, n_layers // 6, n_layers // 3, n_layers // 2, 2 * n_layers // 3,
                           5 * n_layers // 6, n_layers]))
