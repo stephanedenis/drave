@@ -38,6 +38,7 @@ def main() -> int:
     ap.add_argument("--pas", type=int, default=300)
     ap.add_argument("--lr", type=float, default=1e-5)
     ap.add_argument("--sortie", default="reports/kfold-pidgin.json")
+    ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les deux cartes (7 B)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -58,7 +59,11 @@ def main() -> int:
     for test_h in histoires:
         train = [u for u in d["unites"] if u["histoire"] != test_h]
         test = [u for u in d["unites"] if u["histoire"] == test_h]
-        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
+        if a.repartir:
+            model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16,
+                                                         device_map="auto").eval()
+        else:
+            model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
         config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM",
                             target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
                             layers_to_transform=list(range(24, 36)), layers_pattern="layers")

@@ -121,8 +121,9 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | quelle **unité de mesure** à l'entrée et à la sortie ? | **moi** (RSN en unités de sens ; jeton = technique) | en cours : la RSN est en unités de sens ; les métriques par jeton sont des diagnostics |
 | quel domaine après le juridique ? | **moi** (mesures 64 et 70) | **presse mesurée** (au niveau du juridique) ; le **littéraire** reste 10 points en dessous ; le **quotidien parlé** reste à construire |
 | la qualité dépend-elle de la **langue** ? | **moi** (mesures 69, 71) | la **couverture** du modèle : +35,8 (annoncées) contre +21,5 (non annoncées) ; trous irlandais/maltais |
+| le **7 B** peut-il faire mieux que le 3 B pour le pidgin ? | **moi** (round 7) | **OOM** sur 2×16 Go (logits plein vocabulaire) ; à refaire en batch 1 + gradient checkpointing |
 | peut-on **découper par langue** (MoE) pour alléger ? | **moi** (C5.6 ; synthèse 07) | **oui en surface**, non en noyau : adaptateurs/têtes par langue, routage par segment, 1,33 % de poids et 5 ms de bascule |
-| le **critère démographique** de passage à l'étage 2 est-il atteint ? | **moi** (mesure 73) | **non : 7/20** (Ethnologue 2026) ; reste 13 langues, dont 5 des 10 premières |
+| le **critère démographique** de passage à l'étage 2 est-il atteint ? | **moi** (mesures 73-98) | **non : 19/20** ; le pidgin est couvert en lecture, l'écriture est au seuil (+0,9) | (Ethnologue 2026) ; reste 13 langues, dont 5 des 10 premières |
 | le littéraire perd-il le **contenu** (noms, omissions) ? | **moi** (mesure 68) | **non** : 96,2 % des noms, 0,5 % d'omissions — l'écart est **stylistique** |
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
