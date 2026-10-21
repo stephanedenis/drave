@@ -48,7 +48,8 @@ def main() -> int:
     tw_en = pathlib.Path("data/pidgin/translatewiki_en.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw_pcm = pathlib.Path("data/pidgin/translatewiki_pcm.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
-    print(f"  {len(tw)} paires translatewiki")
+    bible = json.loads(pathlib.Path("data/pidgin/bible.json").read_text())
+    print(f"  {len(tw)} paires translatewiki · {len(bible)} paires bibliques")
     histoires = sorted({u["histoire"] for u in d["unites"]})
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
@@ -70,9 +71,13 @@ def main() -> int:
             if r < 0.35:
                 # paires translatewiki : la MÊME consigne de traduction, cible pidgin ✓✓
                 lot, labels = [], []
-                for src_tw, tgt_tw in [rng.choice(tw), rng.choice(tw)]:
-                    p = tok(p_pcm(src_tw), add_special_tokens=False)["input_ids"]
-                    t = tok(" " + tgt_tw + tok.eos_token, add_special_tokens=False)["input_ids"]
+                for _ in range(2):
+                    if rng.random() < 0.7:
+                        paire = rng.choice(bible)
+                    else:
+                        a_, b_ = rng.choice(tw); paire = {"en": a_, "pcm": b_}
+                    p = tok(p_pcm(paire["en"]), add_special_tokens=False)["input_ids"]
+                    t = tok(" " + paire["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"]
                     lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])
             elif r < 0.6:
                 lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:256] for _ in range(2)]

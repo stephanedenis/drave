@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (95 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (96 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3635,3 +3635,36 @@ maintenant une question de **volume de paires*** ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 2 814 paires (UI), 5 contes, 300 pas ✓✗ ; les paires sont **courtes et
 techniques** (translatewiki), pas narratives ✓✗ ; et l'IC large ne permet pas de conclure ✓✓.
+
+## Mesure 96 — LES PAIRES BIBLIQUES **DÉGRADENT** L'ÉCRITURE : marge −4,6 [−7,9 ; −1,1] — le **registre** compte plus que le **volume**
+
+**La question** ✓✓. La mesure 95 a montré que **2 832 paires** translatewiki (modernes, courtes) améliorent
+l'écriture (+1,3) ✗✓ ; il en fallait « plus » ✓✓. *Et si l'on ajoutait **30 950 paires bibliques** (PCMWBT 2019,
+alignées verset par verset avec le KJV) ?* ✓✓
+
+**Le dispositif** ✓✓ (`tools/corpus_pidgin_bible.py` ✓) : la Bible pidgin (PCMWBT, 2019) et le KJV en **USFM**,
+alignés par **(livre, chapitre, verset)** — **30 950 paires** ✓✓ ; même validation croisée (5 contes, 50 pages),
+mélange **35 % paires (70 % Bible, 30 % translatewiki) / 25 % BBC / 25 % contes / 15 % anglais** ✓✓.
+
+| entraînement | marge poolée (50 pages) |
+|---|---:|
+| sans paires (mesure 94) | −2,3 [−5,5 ; +1,0] |
+| BBC seul (mesure 93) | −0,5 [−3,3 ; +2,2] |
+| **translatewiki (mesure 95)** | **+1,3** [−0,9 ; +3,5] |
+| **Bible (mesure 96)** | **−4,6** [−7,9 ; −1,1] |
+
+* **LES PAIRES BIBLIQUES DÉGRADENT** ✗✗ : **−4,6** [−7,9 ; −1,1], **significativement négatif**, et 14/50 pages
+  seulement ✓✗ — *pire que **sans** paires (−2,3) et que translatewiki (+1,3)* ✓✗ ;
+* **LE REGISTRE COMPTE PLUS QUE LE VOLUME** ✓✓ : 30 950 paires **archaïques/religieuses** font moins bien que
+  2 832 paires **modernes** ✓✗ — *le modèle apprend la **langue de la Bible**, pas celle des contes* ✓✓ ;
+* **l'alignement par verset est trompeur** ✗✗ : le KJV est **terse** (« Adam, Sheth, Enosh ») et le pidgin
+  **développe** (« Na Adam born Seth… ») ✓✗ — *la correspondance mot à mot est faible* ✓✓ ;
+* **la leçon est claire** ✓✓ : il ne faut pas « plus de paires » en général, mais des paires **du bon registre**
+  (modernes, narratives) ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture reste **19/20** ; le 20/20 n'est pas une question de **volume** mais de
+**paires au bon registre** ✓✓. *Le meilleur résultat reste translatewiki (+1,3, marginal) ; il faut des paires
+**modernes et narratives** — contes, actualités, sous-titres* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 30 950 paires, 300 pas, 5 contes ✓✗ ; une **traduction biblique moderne**
+(au lieu du KJV) ou un **mélange plus fin** feraient peut-être mieux ✓✓ ; et le corpus reste **non post-cutoff** ✓✗.
