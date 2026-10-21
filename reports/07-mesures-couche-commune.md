@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (78 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (79 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3028,3 +3028,54 @@ le pont* ✓✓ — c'est un **plan d'architecture**, pas une espérance ✓✓.
 **linéaire** ✓✗ ; le retrieval mesure l'**identité** du paragraphe, pas la **composition** ✓✗ ; et la « couche 4 »
 est peut-être un artefact du **dernier token** (le sens de la phrase n'est pas encore intégré) ✓✗ — *il faudra un
 test de **composition** (la RSN multi-niveaux) et un état de **phrase**, pas de dernier token* ✓✓.
+
+## Mesure 79 — ÉTAGE 2 : LA COMPOSITION N'EST PAS DÉMONTRÉE — seuls les paragraphes **complets** s'alignent, les préfixes non
+
+**La question** ✓✓. Les mesures 77-78 ont montré qu'un pont linéaire retrouve la **traduction d'un paragraphe**
+dans 28-69 % des cas ✓✓. Mais un état de **dernier token** peut n'être qu'un **résumé** (sac de mots) ✓✗ : si c'est
+le cas, l'alignement ne dit rien de la **composition** du sens — or c'est elle que la RSN multi-niveaux doit
+représenter ✓✓.
+
+**Le test** ✓✓ (`tools/composition_multilingue.py` ✓) : on coupe chaque paragraphe en **préfixes proportionnels**
+(25 %, 50 %, 75 %, 100 % des **caractères**, pas des phrases : les traductions ne découpent pas pareil) ✓✓. On fait
+lire chaque préfixe au **3 B** et on garde l'état du dernier token ✓. Trois mesures :
+  · **retrieval par niveau** : pour un préfixe (p, q) en X, l'état anglais le plus proche parmi les 40 paragraphes
+    est-il le **même** (p, q) ? hasard = 1/40 = **2,5 %** ✓✓ ;
+  · **niveau exact** : pour un préfixe, le plus proche parmi les **quatre niveaux** du même paragraphe est-il le
+    **bon** ? hasard = **25 %** ✓✓ ;
+  · **trajectoire** : le **changement** d'état entre deux niveaux (q₂ − q₁) est-il partagé entre X et l'anglais ?
+    cosinus de la différence ✓✓.
+
+**Les résultats** (meilleure couche par langue) ✓ :
+
+| langue | couche | 25 % | 50 % | 75 % | **100 %** | niveau exact | trajectoire |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| indonésien | 30 | 0,150 | 0,075 | 0,200 | **0,775** | 0,575 | +0,182 |
+| vietnamien | 30 | 0,125 | 0,150 | 0,125 | **0,775** | 0,525 | +0,150 |
+| swahili | 6 | 0,075 | 0,000 | 0,050 | **0,650** | 0,431 | +0,081 |
+| haoussa | 6 | 0,000 | 0,025 | 0,025 | **0,625** | 0,412 | +0,065 |
+| japonais | 30 | 0,050 | 0,075 | 0,100 | **0,450** | 0,450 | +0,086 |
+| arabe égyptien | 30 | 0,175 | 0,150 | 0,125 | **0,425** | 0,525 | +0,104 |
+| hindi | 6 | 0,050 | 0,100 | 0,075 | **0,225** | 0,306 | +0,025 |
+| marathi | 6 | 0,075 | 0,050 | 0,000 | **0,200** | 0,287 | +0,024 |
+| bengali | 18 | 0,075 | 0,100 | 0,150 | 0,100 | 0,369 | +0,048 |
+| urdu | 6 | 0,025 | 0,075 | 0,050 | 0,050 | 0,331 | +0,018 |
+| télougou | 24 | 0,075 | 0,025 | 0,050 | 0,025 | 0,287 | +0,019 |
+
+* **SEUL LE PARAGRAPHE COMPLET S'ALIGNE** ✗✗ : le retrieval passe de **0,0-0,18** sur les préfixes à **0,2-0,78**
+  sur le paragraphe entier ✓✗ — *l'état a besoin de la **phrase complète** pour être neutre* ✓✓ ;
+* **LA TRAJECTOIRE EST PLATE** ✗✗ : le cosinus des différences entre niveaux va de **+0,02 à +0,18** ✓✗ — *le
+  **changement** de sens n'est pas partagé entre les langues* ✓✗ ;
+* **MAIS LE TEST EST CONFONDU** ✗✓ : les préfixes à 25/50/75 % des **caractères** ne sont pas des **unités de
+  sens** équivalentes dans les différentes langues (une traduction ne coupe pas au même endroit) ✓✗ — *on ne peut
+  donc pas conclure à l'absence de composition ; on conclut que **ce test ne la démontre pas*** ✓✓.
+
+**Ce que cela change** ✗✓ : la représentation partagée est, sous cet instrument, un **résumé de paragraphe**, pas
+un **code compositionnel** ✓✗. La RSN multi-niveaux ne peut pas se contenter de préfixes de caractères : il faut
+aligner des **unités de sens** (phrase, proposition, morphème) ✓✓ — *c'est la prochaine marche, et elle est
+instrumentale avant d'être théorique* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 40 paragraphes, un modèle (3 B), des préfixes de **caractères** ✓✗ ; le
+**niveau exact** (0,29-0,58) est au-dessus du hasard mais faible ✓✗ ; et l'alignement du paragraphe complet
+(0,2-0,78) est **cohérent** avec la mesure 77 ✓✓ — *ce n'est pas la représentation qui est faible, c'est l'unité de
+comparaison qui est mauvaise* ✓✓.

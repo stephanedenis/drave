@@ -1,0 +1,1397 @@
+{
+ "n_paragraphes": 40,
+ "niveaux": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "resultats": [
+  {
+   "couche": 0,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.05,
+    0.075,
+    0.025,
+    0.025
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.2188,
+   "cosinus_trajectoire": [
+    -0.0442,
+    0.0159,
+    -0.0083
+   ],
+   "cosinus_trajectoire_moyen": -0.0122
+  },
+  {
+   "couche": 0,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.025,
+    0.025,
+    0.05,
+    0.05
+   ],
+   "retrieval_moyen": 0.0375,
+   "niveau_exact": 0.25,
+   "cosinus_trajectoire": [
+    -0.0472,
+    0.0235,
+    0.0926
+   ],
+   "cosinus_trajectoire_moyen": 0.023
+  },
+  {
+   "couche": 0,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.025,
+    0.075,
+    0.075
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.4062,
+   "cosinus_trajectoire": [
+    -0.1082,
+    -0.0459,
+    0.4304
+   ],
+   "cosinus_trajectoire_moyen": 0.0921
+  },
+  {
+   "couche": 0,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.0,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.3063,
+   "cosinus_trajectoire": [
+    -0.0277,
+    -0.0124,
+    0.0818
+   ],
+   "cosinus_trajectoire_moyen": 0.0139
+  },
+  {
+   "couche": 0,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.075,
+    0.0,
+    0.05,
+    0.075
+   ],
+   "retrieval_moyen": 0.05,
+   "niveau_exact": 0.4437,
+   "cosinus_trajectoire": [
+    0.075,
+    0.0394,
+    0.451
+   ],
+   "cosinus_trajectoire_moyen": 0.1885
+  },
+  {
+   "couche": 0,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.025,
+    0.025,
+    0.025,
+    0.075
+   ],
+   "retrieval_moyen": 0.0375,
+   "niveau_exact": 0.3812,
+   "cosinus_trajectoire": [
+    0.0049,
+    0.0011,
+    0.1431
+   ],
+   "cosinus_trajectoire_moyen": 0.0497
+  },
+  {
+   "couche": 0,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.0,
+    0.075,
+    0.025,
+    0.05
+   ],
+   "retrieval_moyen": 0.0375,
+   "niveau_exact": 0.3438,
+   "cosinus_trajectoire": [
+    -0.0189,
+    0.015,
+    0.1656
+   ],
+   "cosinus_trajectoire_moyen": 0.0539
+  },
+  {
+   "couche": 0,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.075,
+    0.075
+   ],
+   "retrieval_moyen": 0.0563,
+   "niveau_exact": 0.4688,
+   "cosinus_trajectoire": [
+    0.0324,
+    -0.0067,
+    0.4407
+   ],
+   "cosinus_trajectoire_moyen": 0.1555
+  },
+  {
+   "couche": 0,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.0,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.275,
+   "cosinus_trajectoire": [
+    0.0086,
+    0.0096,
+    0.0314
+   ],
+   "cosinus_trajectoire_moyen": 0.0165
+  },
+  {
+   "couche": 0,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.025,
+    0.05,
+    0.0
+   ],
+   "retrieval_moyen": 0.025,
+   "niveau_exact": 0.2313,
+   "cosinus_trajectoire": [
+    -0.003,
+    -0.0028,
+    -0.0254
+   ],
+   "cosinus_trajectoire_moyen": -0.0104
+  },
+  {
+   "couche": 0,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.025,
+    0.075
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.3812,
+   "cosinus_trajectoire": [
+    -0.0466,
+    -0.0485,
+    0.373
+   ],
+   "cosinus_trajectoire_moyen": 0.0926
+  },
+  {
+   "couche": 6,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.05,
+    0.1
+   ],
+   "retrieval_moyen": 0.0563,
+   "niveau_exact": 0.4,
+   "cosinus_trajectoire": [
+    -0.0043,
+    0.0072,
+    0.0667
+   ],
+   "cosinus_trajectoire_moyen": 0.0232
+  },
+  {
+   "couche": 6,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.1,
+    0.0,
+    0.025,
+    0.2
+   ],
+   "retrieval_moyen": 0.0813,
+   "niveau_exact": 0.3187,
+   "cosinus_trajectoire": [
+    0.0131,
+    0.0214,
+    0.0532
+   ],
+   "cosinus_trajectoire_moyen": 0.0293
+  },
+  {
+   "couche": 6,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.025,
+    0.025,
+    0.625
+   ],
+   "retrieval_moyen": 0.1688,
+   "niveau_exact": 0.4125,
+   "cosinus_trajectoire": [
+    -0.0238,
+    -0.0215,
+    0.2396
+   ],
+   "cosinus_trajectoire_moyen": 0.0648
+  },
+  {
+   "couche": 6,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.05,
+    0.1,
+    0.075,
+    0.225
+   ],
+   "retrieval_moyen": 0.1125,
+   "niveau_exact": 0.3063,
+   "cosinus_trajectoire": [
+    0.0043,
+    0.0002,
+    0.07
+   ],
+   "cosinus_trajectoire_moyen": 0.0248
+  },
+  {
+   "couche": 6,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.125,
+    0.0,
+    0.075,
+    0.725
+   ],
+   "retrieval_moyen": 0.2313,
+   "niveau_exact": 0.5,
+   "cosinus_trajectoire": [
+    0.0482,
+    0.0354,
+    0.3035
+   ],
+   "cosinus_trajectoire_moyen": 0.129
+  },
+  {
+   "couche": 6,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.075,
+    0.025,
+    0.125,
+    0.175
+   ],
+   "retrieval_moyen": 0.1,
+   "niveau_exact": 0.4125,
+   "cosinus_trajectoire": [
+    0.0009,
+    0.0035,
+    0.1544
+   ],
+   "cosinus_trajectoire_moyen": 0.0529
+  },
+  {
+   "couche": 6,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.075,
+    0.05,
+    0.0,
+    0.2
+   ],
+   "retrieval_moyen": 0.0813,
+   "niveau_exact": 0.2875,
+   "cosinus_trajectoire": [
+    0.0006,
+    -0.0031,
+    0.0736
+   ],
+   "cosinus_trajectoire_moyen": 0.0237
+  },
+  {
+   "couche": 6,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.075,
+    0.0,
+    0.05,
+    0.65
+   ],
+   "retrieval_moyen": 0.1938,
+   "niveau_exact": 0.4313,
+   "cosinus_trajectoire": [
+    0.0047,
+    -0.0122,
+    0.2514
+   ],
+   "cosinus_trajectoire_moyen": 0.0813
+  },
+  {
+   "couche": 6,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.05,
+    0.0,
+    0.025,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.2562,
+   "cosinus_trajectoire": [
+    -0.0098,
+    0.0081,
+    0.014
+   ],
+   "cosinus_trajectoire_moyen": 0.0041
+  },
+  {
+   "couche": 6,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.075,
+    0.05,
+    0.05
+   ],
+   "retrieval_moyen": 0.05,
+   "niveau_exact": 0.3312,
+   "cosinus_trajectoire": [
+    0.0043,
+    0.0098,
+    0.0406
+   ],
+   "cosinus_trajectoire_moyen": 0.0182
+  },
+  {
+   "couche": 6,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.1,
+    0.1,
+    0.025,
+    0.875
+   ],
+   "retrieval_moyen": 0.275,
+   "niveau_exact": 0.45,
+   "cosinus_trajectoire": [
+    -0.0062,
+    0.0202,
+    0.258
+   ],
+   "cosinus_trajectoire_moyen": 0.0907
+  },
+  {
+   "couche": 12,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.125,
+    0.15,
+    0.075,
+    0.125
+   ],
+   "retrieval_moyen": 0.1188,
+   "niveau_exact": 0.4437,
+   "cosinus_trajectoire": [
+    0.016,
+    0.0349,
+    0.1217
+   ],
+   "cosinus_trajectoire_moyen": 0.0575
+  },
+  {
+   "couche": 12,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.075,
+    0.075,
+    0.075,
+    0.075
+   ],
+   "retrieval_moyen": 0.075,
+   "niveau_exact": 0.3688,
+   "cosinus_trajectoire": [
+    0.0218,
+    0.0262,
+    0.0558
+   ],
+   "cosinus_trajectoire_moyen": 0.0346
+  },
+  {
+   "couche": 12,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.05,
+    0.025,
+    0.375
+   ],
+   "retrieval_moyen": 0.1125,
+   "niveau_exact": 0.4375,
+   "cosinus_trajectoire": [
+    -0.0154,
+    -0.0094,
+    0.2641
+   ],
+   "cosinus_trajectoire_moyen": 0.0798
+  },
+  {
+   "couche": 12,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.075,
+    0.025,
+    0.05,
+    0.175
+   ],
+   "retrieval_moyen": 0.0813,
+   "niveau_exact": 0.3,
+   "cosinus_trajectoire": [
+    0.0115,
+    -0.006,
+    0.0874
+   ],
+   "cosinus_trajectoire_moyen": 0.031
+  },
+  {
+   "couche": 12,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.2,
+    0.025,
+    0.15,
+    0.775
+   ],
+   "retrieval_moyen": 0.2875,
+   "niveau_exact": 0.5188,
+   "cosinus_trajectoire": [
+    0.0656,
+    0.0391,
+    0.3459
+   ],
+   "cosinus_trajectoire_moyen": 0.1502
+  },
+  {
+   "couche": 12,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.025,
+    0.075,
+    0.125,
+    0.3
+   ],
+   "retrieval_moyen": 0.1313,
+   "niveau_exact": 0.4313,
+   "cosinus_trajectoire": [
+    -0.0096,
+    0.0098,
+    0.2042
+   ],
+   "cosinus_trajectoire_moyen": 0.0681
+  },
+  {
+   "couche": 12,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.05,
+    0.05,
+    0.025,
+    0.15
+   ],
+   "retrieval_moyen": 0.0688,
+   "niveau_exact": 0.2875,
+   "cosinus_trajectoire": [
+    0.0017,
+    0.0017,
+    0.0807
+   ],
+   "cosinus_trajectoire_moyen": 0.028
+  },
+  {
+   "couche": 12,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.1,
+    0.0,
+    0.0,
+    0.5
+   ],
+   "retrieval_moyen": 0.15,
+   "niveau_exact": 0.4688,
+   "cosinus_trajectoire": [
+    0.0135,
+    -0.0009,
+    0.2607
+   ],
+   "cosinus_trajectoire_moyen": 0.0911
+  },
+  {
+   "couche": 12,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.025,
+    0.025,
+    0.025,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.2687,
+   "cosinus_trajectoire": [
+    -0.0094,
+    0.0176,
+    0.017
+   ],
+   "cosinus_trajectoire_moyen": 0.0084
+  },
+  {
+   "couche": 12,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.0,
+    0.05,
+    0.025
+   ],
+   "retrieval_moyen": 0.025,
+   "niveau_exact": 0.3563,
+   "cosinus_trajectoire": [
+    -0.0017,
+    0.0069,
+    0.0509
+   ],
+   "cosinus_trajectoire_moyen": 0.0187
+  },
+  {
+   "couche": 12,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.075,
+    0.175,
+    0.1,
+    0.75
+   ],
+   "retrieval_moyen": 0.275,
+   "niveau_exact": 0.45,
+   "cosinus_trajectoire": [
+    0.0132,
+    0.0253,
+    0.326
+   ],
+   "cosinus_trajectoire_moyen": 0.1215
+  },
+  {
+   "couche": 18,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.125,
+    0.125,
+    0.075,
+    0.225
+   ],
+   "retrieval_moyen": 0.1375,
+   "niveau_exact": 0.4875,
+   "cosinus_trajectoire": [
+    0.0336,
+    0.0501,
+    0.212
+   ],
+   "cosinus_trajectoire_moyen": 0.0986
+  },
+  {
+   "couche": 18,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.075,
+    0.1,
+    0.15,
+    0.1
+   ],
+   "retrieval_moyen": 0.1062,
+   "niveau_exact": 0.3688,
+   "cosinus_trajectoire": [
+    0.036,
+    0.0318,
+    0.0749
+   ],
+   "cosinus_trajectoire_moyen": 0.0476
+  },
+  {
+   "couche": 18,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.075,
+    0.0,
+    0.275
+   ],
+   "retrieval_moyen": 0.0875,
+   "niveau_exact": 0.4875,
+   "cosinus_trajectoire": [
+    0.0038,
+    0.0015,
+    0.3161
+   ],
+   "cosinus_trajectoire_moyen": 0.1072
+  },
+  {
+   "couche": 18,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.1,
+    0.075,
+    0.1,
+    0.15
+   ],
+   "retrieval_moyen": 0.1063,
+   "niveau_exact": 0.3375,
+   "cosinus_trajectoire": [
+    0.0122,
+    -0.0004,
+    0.1204
+   ],
+   "cosinus_trajectoire_moyen": 0.0441
+  },
+  {
+   "couche": 18,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.175,
+    0.025,
+    0.275,
+    0.55
+   ],
+   "retrieval_moyen": 0.2562,
+   "niveau_exact": 0.6125,
+   "cosinus_trajectoire": [
+    0.0662,
+    0.0641,
+    0.4424
+   ],
+   "cosinus_trajectoire_moyen": 0.1909
+  },
+  {
+   "couche": 18,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.125,
+    0.25
+   ],
+   "retrieval_moyen": 0.1125,
+   "niveau_exact": 0.4313,
+   "cosinus_trajectoire": [
+    -0.014,
+    0.016,
+    0.2765
+   ],
+   "cosinus_trajectoire_moyen": 0.0928
+  },
+  {
+   "couche": 18,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.025,
+    0.075
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.3438,
+   "cosinus_trajectoire": [
+    0.001,
+    -0.0012,
+    0.1044
+   ],
+   "cosinus_trajectoire_moyen": 0.0347
+  },
+  {
+   "couche": 18,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.05,
+    0.075,
+    0.0,
+    0.475
+   ],
+   "retrieval_moyen": 0.15,
+   "niveau_exact": 0.5437,
+   "cosinus_trajectoire": [
+    0.0262,
+    0.0094,
+    0.3413
+   ],
+   "cosinus_trajectoire_moyen": 0.1256
+  },
+  {
+   "couche": 18,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.075,
+    0.0,
+    0.05,
+    0.05
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.3,
+   "cosinus_trajectoire": [
+    0.005,
+    0.0226,
+    0.0198
+   ],
+   "cosinus_trajectoire_moyen": 0.0158
+  },
+  {
+   "couche": 18,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.075,
+    0.075,
+    0.025
+   ],
+   "retrieval_moyen": 0.05,
+   "niveau_exact": 0.3688,
+   "cosinus_trajectoire": [
+    0.004,
+    0.021,
+    0.0949
+   ],
+   "cosinus_trajectoire_moyen": 0.04
+  },
+  {
+   "couche": 18,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.125,
+    0.15,
+    0.125,
+    0.575
+   ],
+   "retrieval_moyen": 0.2437,
+   "niveau_exact": 0.5312,
+   "cosinus_trajectoire": [
+    0.0291,
+    0.0544,
+    0.4308
+   ],
+   "cosinus_trajectoire_moyen": 0.1715
+  },
+  {
+   "couche": 24,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.175,
+    0.125,
+    0.15,
+    0.35
+   ],
+   "retrieval_moyen": 0.2,
+   "niveau_exact": 0.475,
+   "cosinus_trajectoire": [
+    0.0392,
+    0.0633,
+    0.2308
+   ],
+   "cosinus_trajectoire_moyen": 0.1111
+  },
+  {
+   "couche": 24,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.1,
+    0.125,
+    0.075,
+    0.125
+   ],
+   "retrieval_moyen": 0.1062,
+   "niveau_exact": 0.3937,
+   "cosinus_trajectoire": [
+    0.0445,
+    0.0288,
+    0.0877
+   ],
+   "cosinus_trajectoire_moyen": 0.0537
+  },
+  {
+   "couche": 24,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.025,
+    0.075,
+    0.0,
+    0.325
+   ],
+   "retrieval_moyen": 0.1063,
+   "niveau_exact": 0.45,
+   "cosinus_trajectoire": [
+    0.0071,
+    0.0007,
+    0.3226
+   ],
+   "cosinus_trajectoire_moyen": 0.1101
+  },
+  {
+   "couche": 24,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.075,
+    0.1,
+    0.05,
+    0.225
+   ],
+   "retrieval_moyen": 0.1125,
+   "niveau_exact": 0.3625,
+   "cosinus_trajectoire": [
+    0.0252,
+    0.0055,
+    0.1285
+   ],
+   "cosinus_trajectoire_moyen": 0.0531
+  },
+  {
+   "couche": 24,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.175,
+    0.05,
+    0.3,
+    0.6
+   ],
+   "retrieval_moyen": 0.2812,
+   "niveau_exact": 0.6062,
+   "cosinus_trajectoire": [
+    0.0728,
+    0.0742,
+    0.4525
+   ],
+   "cosinus_trajectoire_moyen": 0.1999
+  },
+  {
+   "couche": 24,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.025,
+    0.025,
+    0.15,
+    0.375
+   ],
+   "retrieval_moyen": 0.1437,
+   "niveau_exact": 0.425,
+   "cosinus_trajectoire": [
+    -0.017,
+    0.0137,
+    0.2963
+   ],
+   "cosinus_trajectoire_moyen": 0.0977
+  },
+  {
+   "couche": 24,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.1,
+    0.075,
+    0.025,
+    0.125
+   ],
+   "retrieval_moyen": 0.0812,
+   "niveau_exact": 0.375,
+   "cosinus_trajectoire": [
+    0.0073,
+    0.0009,
+    0.1141
+   ],
+   "cosinus_trajectoire_moyen": 0.0408
+  },
+  {
+   "couche": 24,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.125,
+    0.1,
+    0.05,
+    0.5
+   ],
+   "retrieval_moyen": 0.1938,
+   "niveau_exact": 0.525,
+   "cosinus_trajectoire": [
+    0.0354,
+    0.0238,
+    0.3536
+   ],
+   "cosinus_trajectoire_moyen": 0.1376
+  },
+  {
+   "couche": 24,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.075,
+    0.025,
+    0.05,
+    0.025
+   ],
+   "retrieval_moyen": 0.0438,
+   "niveau_exact": 0.2875,
+   "cosinus_trajectoire": [
+    0.0083,
+    0.0258,
+    0.0227
+   ],
+   "cosinus_trajectoire_moyen": 0.0189
+  },
+  {
+   "couche": 24,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.1,
+    0.025
+   ],
+   "retrieval_moyen": 0.05,
+   "niveau_exact": 0.4062,
+   "cosinus_trajectoire": [
+    0.0066,
+    0.0331,
+    0.107
+   ],
+   "cosinus_trajectoire_moyen": 0.0489
+  },
+  {
+   "couche": 24,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.1,
+    0.15,
+    0.15,
+    0.625
+   ],
+   "retrieval_moyen": 0.2562,
+   "niveau_exact": 0.5125,
+   "cosinus_trajectoire": [
+    0.0346,
+    0.0644,
+    0.4282
+   ],
+   "cosinus_trajectoire_moyen": 0.1758
+  },
+  {
+   "couche": 30,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.175,
+    0.15,
+    0.125,
+    0.425
+   ],
+   "retrieval_moyen": 0.2188,
+   "niveau_exact": 0.525,
+   "cosinus_trajectoire": [
+    0.0327,
+    0.0509,
+    0.2281
+   ],
+   "cosinus_trajectoire_moyen": 0.1039
+  },
+  {
+   "couche": 30,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.05,
+    0.125,
+    0.05,
+    0.075
+   ],
+   "retrieval_moyen": 0.075,
+   "niveau_exact": 0.3563,
+   "cosinus_trajectoire": [
+    0.0191,
+    0.019,
+    0.0741
+   ],
+   "cosinus_trajectoire_moyen": 0.0374
+  },
+  {
+   "couche": 30,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.05,
+    0.05,
+    0.225
+   ],
+   "retrieval_moyen": 0.0813,
+   "niveau_exact": 0.4,
+   "cosinus_trajectoire": [
+    0.0049,
+    -0.0059,
+    0.2737
+   ],
+   "cosinus_trajectoire_moyen": 0.0909
+  },
+  {
+   "couche": 30,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.1,
+    0.225
+   ],
+   "retrieval_moyen": 0.1,
+   "niveau_exact": 0.35,
+   "cosinus_trajectoire": [
+    0.0241,
+    0.0002,
+    0.1068
+   ],
+   "cosinus_trajectoire_moyen": 0.0437
+  },
+  {
+   "couche": 30,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.15,
+    0.075,
+    0.2,
+    0.775
+   ],
+   "retrieval_moyen": 0.3,
+   "niveau_exact": 0.575,
+   "cosinus_trajectoire": [
+    0.0776,
+    0.068,
+    0.3992
+   ],
+   "cosinus_trajectoire_moyen": 0.1816
+  },
+  {
+   "couche": 30,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.05,
+    0.075,
+    0.1,
+    0.45
+   ],
+   "retrieval_moyen": 0.1688,
+   "niveau_exact": 0.45,
+   "cosinus_trajectoire": [
+    -0.0086,
+    0.0236,
+    0.2432
+   ],
+   "cosinus_trajectoire_moyen": 0.0861
+  },
+  {
+   "couche": 30,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.1,
+    0.025,
+    0.025,
+    0.125
+   ],
+   "retrieval_moyen": 0.0688,
+   "niveau_exact": 0.2875,
+   "cosinus_trajectoire": [
+    0.0119,
+    -0.0018,
+    0.0975
+   ],
+   "cosinus_trajectoire_moyen": 0.0359
+  },
+  {
+   "couche": 30,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.1,
+    0.025,
+    0.025,
+    0.3
+   ],
+   "retrieval_moyen": 0.1125,
+   "niveau_exact": 0.4875,
+   "cosinus_trajectoire": [
+    0.033,
+    0.0156,
+    0.2959
+   ],
+   "cosinus_trajectoire_moyen": 0.1148
+  },
+  {
+   "couche": 30,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.0,
+    0.025,
+    0.025,
+    0.025
+   ],
+   "retrieval_moyen": 0.0188,
+   "niveau_exact": 0.3187,
+   "cosinus_trajectoire": [
+    0.0021,
+    0.0146,
+    0.0153
+   ],
+   "cosinus_trajectoire_moyen": 0.0107
+  },
+  {
+   "couche": 30,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.0,
+    0.05,
+    0.025,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.4,
+   "cosinus_trajectoire": [
+    0.0062,
+    0.0282,
+    0.1132
+   ],
+   "cosinus_trajectoire_moyen": 0.0492
+  },
+  {
+   "couche": 30,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.125,
+    0.15,
+    0.125,
+    0.775
+   ],
+   "retrieval_moyen": 0.2938,
+   "niveau_exact": 0.525,
+   "cosinus_trajectoire": [
+    0.0378,
+    0.0506,
+    0.363
+   ],
+   "cosinus_trajectoire_moyen": 0.1505
+  },
+  {
+   "couche": 36,
+   "langue": "arz",
+   "retrieval_par_niveau": [
+    0.075,
+    0.0,
+    0.075,
+    0.025
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.3,
+   "cosinus_trajectoire": [
+    0.0204,
+    0.0145,
+    0.078
+   ],
+   "cosinus_trajectoire_moyen": 0.0376
+  },
+  {
+   "couche": 36,
+   "langue": "ben",
+   "retrieval_par_niveau": [
+    0.05,
+    0.075,
+    0.075,
+    0.1
+   ],
+   "retrieval_moyen": 0.075,
+   "niveau_exact": 0.325,
+   "cosinus_trajectoire": [
+    -0.0075,
+    0.0438,
+    0.0793
+   ],
+   "cosinus_trajectoire_moyen": 0.0385
+  },
+  {
+   "couche": 36,
+   "langue": "hau",
+   "retrieval_par_niveau": [
+    0.0,
+    0.025,
+    0.0,
+    0.125
+   ],
+   "retrieval_moyen": 0.0375,
+   "niveau_exact": 0.4125,
+   "cosinus_trajectoire": [
+    0.0106,
+    -0.0154,
+    0.362
+   ],
+   "cosinus_trajectoire_moyen": 0.1191
+  },
+  {
+   "couche": 36,
+   "langue": "hin",
+   "retrieval_par_niveau": [
+    0.05,
+    0.025,
+    0.05,
+    0.05
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.3063,
+   "cosinus_trajectoire": [
+    -0.0049,
+    -0.0062,
+    0.1043
+   ],
+   "cosinus_trajectoire_moyen": 0.0311
+  },
+  {
+   "couche": 36,
+   "langue": "ind",
+   "retrieval_par_niveau": [
+    0.1,
+    0.025,
+    0.125,
+    0.25
+   ],
+   "retrieval_moyen": 0.125,
+   "niveau_exact": 0.4938,
+   "cosinus_trajectoire": [
+    0.0613,
+    0.0632,
+    0.4145
+   ],
+   "cosinus_trajectoire_moyen": 0.1797
+  },
+  {
+   "couche": 36,
+   "langue": "jpn",
+   "retrieval_par_niveau": [
+    0.05,
+    0.05,
+    0.0,
+    0.075
+   ],
+   "retrieval_moyen": 0.0437,
+   "niveau_exact": 0.2625,
+   "cosinus_trajectoire": [
+    -0.0007,
+    0.0004,
+    0.0655
+   ],
+   "cosinus_trajectoire_moyen": 0.0217
+  },
+  {
+   "couche": 36,
+   "langue": "mar",
+   "retrieval_par_niveau": [
+    0.0,
+    0.0,
+    0.025,
+    0.1
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.2812,
+   "cosinus_trajectoire": [
+    0.018,
+    0.0006,
+    0.1027
+   ],
+   "cosinus_trajectoire_moyen": 0.0404
+  },
+  {
+   "couche": 36,
+   "langue": "swh",
+   "retrieval_par_niveau": [
+    0.05,
+    0.0,
+    0.0,
+    0.15
+   ],
+   "retrieval_moyen": 0.05,
+   "niveau_exact": 0.4938,
+   "cosinus_trajectoire": [
+    0.0153,
+    0.038,
+    0.373
+   ],
+   "cosinus_trajectoire_moyen": 0.1421
+  },
+  {
+   "couche": 36,
+   "langue": "tel",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.025,
+    0.0
+   ],
+   "retrieval_moyen": 0.025,
+   "niveau_exact": 0.2437,
+   "cosinus_trajectoire": [
+    -0.0167,
+    -0.0005,
+    0.0159
+   ],
+   "cosinus_trajectoire_moyen": -0.0004
+  },
+  {
+   "couche": 36,
+   "langue": "urd",
+   "retrieval_par_niveau": [
+    0.025,
+    0.05,
+    0.0,
+    0.05
+   ],
+   "retrieval_moyen": 0.0312,
+   "niveau_exact": 0.2188,
+   "cosinus_trajectoire": [
+    -0.0086,
+    -0.0075,
+    0.0733
+   ],
+   "cosinus_trajectoire_moyen": 0.0191
+  },
+  {
+   "couche": 36,
+   "langue": "vie",
+   "retrieval_par_niveau": [
+    0.025,
+    0.1,
+    0.025,
+    0.15
+   ],
+   "retrieval_moyen": 0.075,
+   "niveau_exact": 0.4125,
+   "cosinus_trajectoire": [
+    -0.0009,
+    0.03,
+    0.292
+   ],
+   "cosinus_trajectoire_moyen": 0.107
+  }
+ ]
+}

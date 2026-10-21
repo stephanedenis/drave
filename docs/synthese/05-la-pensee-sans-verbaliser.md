@@ -43,6 +43,9 @@ linéaire** par langue atteint un **cosinus de 0,78-0,92** et retrouve la bonne 
 le pont de la nuit du 16, retrouvé ici à plus grande échelle. **Mesure 78** : le passage du 3 B au 7 B ne change
 presque rien (+3,7 en lecture, +1,4 en écriture), **lire ≈ écrire**, et la meilleure couche est **la couche 4** pour
 cinq langues — *le sens partagé est tôt et stable ; c'est une base d'architecture, pas un effet de taille*.
+**Mesure 79** : la **composition** n'est pas démontrée — seuls les paragraphes **complets** s'alignent (0,2-0,78),
+les préfixes de caractères restent près du hasard et la trajectoire est plate ; le test est **confondu** (les
+préfixes ne sont pas des unités de sens). Il faut aligner des **unités de sens**, pas des caractères.
 
 ## Ce qui reste à construire
 

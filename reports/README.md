@@ -39,6 +39,7 @@
 - [`traduction-jw-A.json`](traduction-jw-A.json) · [`traduction-jw-B.json`](traduction-jw-B.json)
 - [`pensee-multilingue.json`](pensee-multilingue.json)
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
+- [`composition-multilingue.json`](composition-multilingue.json)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
