@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (89 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (90 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3447,3 +3447,32 @@ pas un trou **total** : la **lecture** est mesurée et couverte ✓✓. Le verro
 **Ce que ce résultat ne dit pas** ✗ : 50 pages, 5 contes, un corpus **non post-cutoff** ✓✗ ; le 14 B est **réparti**
 ✓✗ ; le few-shot n'a que 11 pages de test ✓✗ ; et la marge de lecture reste **faible** (+3 à +4) ✓✓ — *le pidgin
 est couvert, pas maîtrisé* ✓✓.
+
+## Mesure 90 — L'ÉCRITURE DU PIDGIN N'EST PAS APPRENABLE SUR 39 PAGES : le LoRA mémorise (perte 0,003) et ne transfère pas (marge −4,2)
+
+**La question** ✓✓. La mesure 89 a montré que le modèle **lit** le pidgin mais ne l'**écrit** pas ✗✗ ; le few-shot
+n'aide pas l'écriture ✗✗. *Est-ce un manque de **données** ?* ✓✓ On entraîne un **LoRA** (r = 16, 7,4 M paramètres,
+0,24 %) sur **4 contes** (39 pages) et on teste sur le **5ᵉ conte** (11 pages), tenu à part ✓✓.
+
+**Le dispositif** ✓✓ (`tools/lora_pidgin.py` ✓) : Qwen2.5-3B gelé + LoRA sur `q/k/v/o`, prompt de traduction, perte
+sur la **cible pidgin** seulement ✓✓ ; 30 époques, lr 1e-4 ; la marge appariée (bootstrap) sur le conte tenu à
+part ✓✓.
+
+| état | chrF | plancher | **marge appariée** | IC 95 % | pages au-dessus |
+|---|---:|---:|---:|---|---:|
+| avant LoRA | 40,8 | 44,9 | **−4,1** | [−12,8 ; +4,7] | 4/11 |
+| **après LoRA** | 40,7 | 44,9 | **−4,2** | [−10,1 ; +1,8] | 4/11 |
+
+* **LE LORA MÉMORISE PARFAITEMENT** ✗✗ : la perte d'entraînement tombe à **0,003** (les 39 pages sont apprises par
+  cœur) ✓✗ ;
+* **ET NE TRANSFÈRE RIEN** ✗✗ : la marge sur le conte tenu à part reste **−4,2** (avant : −4,1) ✓✗ — *l'adaptateur
+  apprend les **pages**, pas la **langue*** ✓✓ ;
+* **le plancher du conte de test est très haut** (44,9) : le conte 0210 partage beaucoup de mots avec l'anglais ✓✗ ;
+* **la conclusion est un manque de données** ✗✗ : 39 pages ne suffisent pas à apprendre l'écriture du pidgin ✓✗ —
+  c'est le **corpus** (7 contes au total) qui est le verrou, pas l'adaptateur ✓✓.
+
+**Ce que cela change** ✗✗ : le pidgin reste **19/20** ✓✗ ; l'écriture est un **trou de données**, pas de méthode ✓✓.
+*Il faudra un corpus pidgin **plus grand** (BBC Pidgin, JW, gouvernements) ou un modèle entraîné sur le pidgin* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 39 pages d'entraînement, 11 de test, un conte ✓✗ ; un LoRA plus petit ou un
+modèle plus grand pourraient transférer mieux ✓✓ ; et le corpus n'est **pas post-cutoff** ✓✗.

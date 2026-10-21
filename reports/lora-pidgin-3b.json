@@ -1,0 +1,34 @@
+{
+ "hf": "Qwen/Qwen2.5-3B-Instruct",
+ "rang": 16,
+ "epoques": 30,
+ "train": [
+  "0001",
+  "0004",
+  "0089",
+  "0095"
+ ],
+ "test": "0210",
+ "avant": {
+  "chrf": 40.8,
+  "plancher": 44.9,
+  "marge": -4.1,
+  "ic95": [
+   -12.8,
+   4.7
+  ],
+  "positives": 4,
+  "n": 11
+ },
+ "apres": {
+  "chrf": 40.7,
+  "plancher": 44.9,
+  "marge": -4.2,
+  "ic95": [
+   -10.1,
+   1.8
+  ],
+  "positives": 4,
+  "n": 11
+ }
+}
