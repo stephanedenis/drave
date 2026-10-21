@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (107 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (108 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3984,3 +3984,37 @@ textes neufs, et le pidgin nigérian **lu** (+3,2 au 7 B, +4,4 au 14 B) et **éc
 **Ce que ce résultat ne dit pas** ✗ : 71 pages, 300 pas, un LoRA ✓✗ ; l'écriture du pidgin **dépend de l'adaptateur**
 (les 19 autres langues sont zéro-shot), et la couverture du pidgin est **mesurée sur des contes** (le registre testé) ✓✗ ;
 0089 reste négatif, et 300 pas ne sont pas un optimum ✓✓.
+
+## Mesure 108 — L'OPÉRATEUR APPRIS **PAR RÉCURRENCE** NE TIENT PAS PLUS DE PAS : 0,73/0,27/0,27 — le pas 2 retombe au hasard
+
+**La question** ✓✓. Le linéaire F tient **deux pas** puis s'effondre (0,73/0,53/0,13, mesure 82) ✗✗ ; la taille ne
+repousse pas la falaise (mesure 83) ; la contraction par mélange dégrade (mesure 87) ; le MLP naïf sur-apprend
+(mesure 88) ✗✗. La suite logique : un opérateur **appris par récurrence** — les **mêmes poids** appliqués K fois,
+entraînés de bout en bout sur les cibles multi-pas ✓✓.
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee_recurrent.py` ✓) : les états Verne (200 phrases, 50 séries de 4, 3 B) ;
+`F(x) = x + MLP(x)` (la couche cachée 256, le GELU), **partagé** ; l'entraînement sur les **transitions** (le pas 1)
+**et** les cibles F¹/F²/F³ depuis la phrase 0 ; 400 époques, l'AdamW ; le test sur les séries tenues à part ✓✓.
+
+| méthode | ret pas 1 | ret pas 2 | ret pas 3 |
+|---|---:|---:|---:|
+| linéaire (mesure 82) | 0,73 | **0,53** | 0,13 |
+| contraction α = 0,75 (mesure 87) | 0,40 | 0,07 | 0,33 |
+| MLP naïf (mesure 88) | 0,40 | 0,07 | 0,07 |
+| **récurrence partagée** (couche 30) | **0,73** | **0,27** | **0,27** |
+
+* **LA RÉCURRENCE NE REPOUSSE PAS LA FALAISE** ✗✗ : le meilleur (couche 30) donne **0,73/0,27/0,27** ✓✗ — *le pas 2
+  retombe au **hasard** (0,25), là où le linéaire tenait **0,53*** ✓✗ ;
+* **elle échange le pas 2 contre le pas 3** ✓✓ : le pas 3 passe de 0,13 à 0,27 (mieux), mais le pas 2 s'effondre
+  (0,53 → 0,27) ✓✗ — *le total des trois pas n'est pas meilleur* ✓✓ ;
+* **les poids partagés ne suffisent pas** ✗✗ : la récurrence **apprise** n'étend pas la dynamique ; *la falaise n'est
+  ni un défaut de contraction, ni un défaut de capacité du bloc* ✓✓ ;
+* **le « penser sans verbaliser » reste à un-deux pas** ✓✗ : toutes les méthodes testées (linéaire, contraction,
+  MLP, récurrence) plafonnent ✓✗.
+
+**Ce que cela change** ✗✓ : l'étage 2 garde sa **dynamique bornée** ✓✓ ; *la piste « apprendre l'opérateur par
+récurrence » est **close** — il faut autre chose (un état latent entraîné avec la tâche, une mémoire, ou un
+objectif de prédiction multi-pas plus riche)* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 3 B, 50 séries, 400 époques, un MLP 256 ✓✗ ; un état latent **entraîné avec
+le modèle** (pas des états figés) pourrait tenir plus de pas ✓✓ ; et le retrieval à 4 candidats est un test dur ✓✓.

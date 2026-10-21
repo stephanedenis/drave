@@ -211,3 +211,5 @@
 - [`toutes-langues.md`](toutes-langues.md)
 
 - [`sources-pidgin.json`](sources-pidgin.json) — inventaire des sources parallèles pidgin-anglais (8 testées, 3 utilisées, 1 écartée, 2 inaccessibles/absentes).
+
+- [`pas-de-pensee-recurrent.json`](pas-de-pensee-recurrent.json) — l'opérateur appris par récurrence (mesure 108 : la falaise tient).

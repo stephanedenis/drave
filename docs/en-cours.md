@@ -36,7 +36,8 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
   pont linéaire retrouve la bonne traduction dans **28-69 %**, mesure 77), elle **ne dépend presque pas de la taille**
   (+3,7, mesure 78) ; la **composition** est démontrée sur des phrases alignées (**0,61 / 0,84**, mesure 80) et
   **profite de la taille** (**0,76 / 0,865** au 7 B, mesure 81) ; mais le **pas de pensée** appris ne tient que **deux
-  pas** (mesures 82-83) — *la dynamique reste à construire*.
+  pas** (mesures 82-83), et **aucune** des suites ne le prolonge : contraction (87), MLP (88), **récurrence
+  partagée** (108, 0,73/0,27/0,27 — le pas 2 au hasard) — *la dynamique reste à construire*.
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
