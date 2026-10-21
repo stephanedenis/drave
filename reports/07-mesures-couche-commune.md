@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (80 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (81 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3128,3 +3128,36 @@ autres que littéraire ✓✓.
 ✓✗ ; l'état du **dernier token** n'est pas toute la phrase ✓✗ ; le test d'ordre à 4 phrases a un hasard de 25 %
 (une série plus longue serait plus stricte) ✓✗ ; et la « composition » mesurée est l'**identité positionnée**, pas
 la **structure syntaxique** (la RSN multi-niveaux reste à construire) ✓✓.
+
+## Mesure 81 — LA COMPOSITION PROFITE DE LA TAILLE : 0,76 / 0,865 au 7 B (couche 14) contre 0,61 / 0,84 au 3 B — +15 points de retrieval
+
+**La question** ✓✓. La mesure 80 a montré la composition sur 200 phrases alignées au 3 B (0,61 de retrieval,
+0,84 d'ordre) ✓✓. La mesure 78 avait montré que la **taille ne change presque rien** à l'alignement des
+**paragraphes** (+3,7) ✗✓. *La composition, elle, profite-t-elle de la taille ?* ✓✓
+
+**Le dispositif** ✓✓ : le même banc Verne (200 phrases, 50 séries de 4), le **7 B** en plus du 3 B, même protocole
+(retrieval global, ordre dans la série, pont, contrôle négatif) ✓✓.
+
+| modèle | meilleure couche | retrieval global | ordre dans la série | pont | négatif |
+|---|---|---:|---:|---:|---:|
+| 3 B (36 couches) | 18 (50 %) | 0,610 | 0,840 | 0,417 | 0,017 |
+| **7 B** (28 couches) | **14 (50 %)** | **0,760** | **0,865** | 0,467 | 0,033 |
+
+* **LA COMPOSITION PROFITE DE LA TAILLE** ✓✓ : **+15 points** de retrieval (0,61 → 0,76) et **+2,5** d'ordre
+  (0,84 → 0,865) ✓✓ — *contrairement à l'alignement des paragraphes (mesure 78 : +3,7)* ✓✓. Le passage du 3 B au
+  7 B **améliore la composition** ; c'est un levier, pas un plafond ✓✓ ;
+* **LE SENS EST TOUJOURS À MI-PROFONDEUR** ✓✓ : la meilleure couche est **14 sur 28** (50 %) au 7 B, **18 sur 36**
+  (50 %) au 3 B ✓✓ — *la même **proportion** de profondeur, indépendamment de la taille* ✓✓, ce qui est un
+  résultat d'architecture : le sens neutre vit au **milieu** du réseau, pas à la fin ✓✓ ;
+* **LA FIN S'EFFONDRE ENCORE PLUS** ✗✗ : la couche 28 du 7 B tombe à **0,125** (contre 0,09 à la couche 36 du
+  3 B) ✓✗ — *la surface linguistique prend le dessus à la fin, et la taille ne l'empêche pas* ✓✓ ;
+* **le pont reste inutile** ✗✓ (0,467 contre 0,760 brut) et le **contrôle négatif** reste à ~0,03 ✓✓.
+
+**Ce que cela change** ✓✓ : l'étage 2 a une **courbe** : la composition s'améliore avec la taille (+15 points du 3
+au 7 B), à **mi-profondeur** (50 % du réseau), avec un pont inutile pour les langues proches ✓✓. *Le levier de la
+pensée abstraite n'est donc pas le même que celui de la couverture des langues : la couverture est une question de
+données (mesure 72), la composition une question de **profondeur et de taille*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : FR/EN seulement, 200 phrases, un livre ✓✗ ; le 7 B est **réparti** sur deux
+cartes (le résultat pourrait dépendre du placement) ✓✓ ; le test d'ordre à 4 phrases a un hasard de 25 % ✓✗ ; et
+la composition mesurée reste l'**identité positionnée**, pas la **structure syntaxique** ✓✓.

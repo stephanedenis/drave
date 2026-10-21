@@ -48,6 +48,7 @@ def main() -> int:
     ap.add_argument("--par-serie", type=int, default=4)
     ap.add_argument("--sortie", default="reports/composition-verne.json")
     ap.add_argument("--etats", default="data/composition-verne-etats.npz")
+    ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les deux cartes (7 B)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -73,7 +74,11 @@ def main() -> int:
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype)).to("cuda").eval()
+    if a.repartir:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype),
+                                                     device_map="auto").eval()
+    else:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=getattr(torch, a.dtype)).to("cuda").eval()
     n_layers = model.config.num_hidden_layers
     couches = sorted(set([0, n_layers // 6, n_layers // 3, n_layers // 2, 2 * n_layers // 3,
                           5 * n_layers // 6, n_layers]))
