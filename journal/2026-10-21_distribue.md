@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21.md](2026-10-21.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 06:38 | `14521b49` | DOCUMENTATION — LA LECON DU REGISTRE entre dans la synthese : 30 950 paires bibliques DEGRADENT la traduction du pidgin (-4,6 avec le KJV, -6,2 avec le WEB moderne), quand 2 832 paires modernes l'ameliorent (+1,3). Le registre compte plus que le volume et que la modernite (mesures 96-97) | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21.md` (+1) |
 | 06:51 | `f7f9069e` | MESURE 98 — LA VALIDATION CROISEE A 7 CONTES (71 pages) CONFIRME LE SEUIL : marge +0,9 [-0,9 ; +2,9], 36/71 pages — positive, pas significative. Les deux contes manquants (0066 : +3,1 ; 0327 : +0,0) ont ete recuperes dans le depot GitHub (pages en level3-txt) ; l'ecriture reste au seuil et demande plus de paires narratives | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+5) |
 | 07:04 | `4f062d44` | OUTIL — k-fold : option --repartir pour le 7 B ; le 7 B OOM sur 2x16 Go avec les logits plein vocabulaire (batch 2, 256 jetons). Le 3 B reste le modele mesure ; un 7 B batch 1 + gradient checkpointing est a essayer | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+1) |
+| 09:07 | `f0fbcac4` | MESURE 101 — LE 7 B RESTE CASSE MEME AVEC LA RECETTE CORRIGEE : couches 16-27, sans checkpointing, lr 5e-6 -> chrF 26,0, marge -19,0 (3/11). Le probleme n'est ni les couches, ni le checkpointing, ni le lr : c'est la pile 7 B fp16 reparti + LoRA (device_map + PEFT + generation). Le 3 B, meme pli, fait 51,8 (+6,9) | `en-cours.md`, `2026-10-21.md`, `2026-10-21_modele.md` (+4) |
 
 ## Chiffres du jour
 

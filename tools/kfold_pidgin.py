@@ -43,6 +43,7 @@ def main() -> int:
     ap.add_argument("--max-jetons", type=int, default=256)
     ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
     ap.add_argument("--test", default=None, help="ne faire qu'un pli (conte de test)")
+    ap.add_argument("--bible", default=None, help="paires bibliques à mélanger (50/50 avec translatewiki)")
     ap.add_argument("--sans-checkpointing", action="store_true", help="désactiver le gradient checkpointing")
     a = ap.parse_args()
     import torch
@@ -54,7 +55,7 @@ def main() -> int:
     tw_en = pathlib.Path("data/pidgin/translatewiki_en.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw_pcm = pathlib.Path("data/pidgin/translatewiki_pcm.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
-    bible = json.loads(pathlib.Path("data/pidgin/bible_web.json").read_text())
+    bible = json.loads(pathlib.Path(a.bible).read_text()) if a.bible else []
     print(f"  {len(tw)} paires translatewiki · {len(bible)} paires bibliques")
     histoires = ([a.test] if a.test else sorted({u["histoire"] for u in d["unites"]}))
     tok = AutoTokenizer.from_pretrained(a.hf)
@@ -93,9 +94,12 @@ def main() -> int:
                 # paires translatewiki : la MÊME consigne de traduction, cible pidgin ✓✓
                 lot, labels = [], []
                 for _ in range(a.batch):
-                    a_, b_ = rng.choice(tw)
-                    p = tok(p_pcm(a_), add_special_tokens=False)["input_ids"][:128]
-                    t = tok(" " + b_ + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
+                    if bible and rng.random() < 0.5:
+                        paire = rng.choice(bible); src_, tgt_ = paire["en"], paire["pcm"]
+                    else:
+                        src_, tgt_ = rng.choice(tw)
+                    p = tok(p_pcm(src_), add_special_tokens=False)["input_ids"][:128]
+                    t = tok(" " + tgt_ + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
                     lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             elif r < 0.6:
                 lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:a.max_jetons] for _ in range(a.batch)]

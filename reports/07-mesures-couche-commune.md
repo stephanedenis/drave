@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (101 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (102 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3809,3 +3809,29 @@ LoRA r = 16 sur les couches **16-27** (les 12 dernières), **sans** checkpointin
 
 **Ce que ce résultat ne dit pas** ✗ : un pli, 150 pas, une pile ✓✗ ; un 7 B sur une carte unique ou avec FSDP
 pourrait fonctionner ✓✓ ; et l'échec ne dit **rien** de la capacité du 7 B ✓✓.
+
+## Mesure 102 — LA BIBLE **NARRATIVE** ÉCHOUE AUSSI (−20,3) : le domaine biblique est **toxique** pour ce corpus, pas seulement son archaïsme
+
+**La question** ✓✓. Les mesures 96-97 ont montré que la Bible (KJV, puis WEB moderne) **dégrade** l'écriture
+(−4,6, −6,2) ✗✗. *Est-ce la **forme** (versets, généalogies, lois) ou le **domaine** ?* ✓✓ On ne garde que les
+**livres narratifs** (Genèse, Exode, Matthieu, Marc, Luc, Jean, Actes) avec le **WEB moderne** : **7 526 paires** ✓✓.
+
+| configuration (pli 0210) | chrF | plancher | marge |
+|---|---:|---:|---:|
+| 3 B **sans** Bible (mesure 98) | **51,8** | 44,9 | **+6,9** |
+| 3 B + Bible **narrative** (7 526 paires) | **24,6** | 44,9 | **−20,3** [−33,2 ; −8,8] |
+
+* **LA BIBLE NARRATIVE ÉCHOUE AUSSI** ✗✗ : chrF **24,6** (contre 51,8 sans Bible), marge **−20,3**, 1/11 page ✓✗ —
+  *le problème n'est donc **pas** la forme (récit vs liste), c'est le **domaine biblique*** ✓✓ ;
+* **les paires bibliques sont TOXIQUES pour ce corpus** ✗✗ : même modernes et narratives, elles **effondrent** la
+  génération sur les contes ✓✗ — *le modèle apprend un mapping religieux qui **écrase** le mapping des contes* ✓✓ ;
+* **le translatewiki reste le seul levier positif** ✓✓ (+1,3 sans Bible, mesure 95) ✓✓ ;
+* **la leçon est complète** ✓✓ : pour le pidgin, il faut des paires **modernes, narratives ET non religieuses** —
+  le domaine compte autant que le registre ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture reste **19/20** ✓✓ ; la piste biblique est **close** (toutes versions,
+toutes formes) ✓✗. *Le corpus à construire est celui des **contes, actualités, sous-titres** — pas des textes
+sacrés* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un pli, 300 pas, 7 526 paires ✓✗ ; un mélange plus fin (10 % de biblique)
+pourrait ne pas nuire ✓✓ ; et le translatewiki reste la référence positive ✓✓.
