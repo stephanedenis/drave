@@ -35,6 +35,7 @@
 - [`traduction-24langues-3b-A.json`](traduction-24langues-3b-A.json) · [`traduction-24langues-3b-B.json`](traduction-24langues-3b-B.json)
 - [`traduction-onu-3b.json`](traduction-onu-3b.json) · [`traduction-onu-7b.json`](traduction-onu-7b.json) *(PDF, périmés)*
 - [`traduction-onu6-3b.json`](traduction-onu6-3b.json) · [`traduction-onu6-7b.json`](traduction-onu6-7b.json) *(DOCX, 6 langues)*
+- [`contamination-udhr-A.json`](contamination-udhr-A.json) · [`contamination-udhr-B.json`](contamination-udhr-B.json)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

@@ -1,0 +1,266 @@
+[
+ {
+  "langue": "hin",
+  "n": 5,
+  "jeton_porte": 5,
+  "chrf": 74.9,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": true,
+    "chrf": 70.8,
+    "sortie_avec_jeton": "All are entitled to this declaration and shall secure all rights and freedoms enshrined therein, without distinction of any kind, such as race, colour, sex, language, religion, political or any other opinion, national or social origin, property, birth or other status. Furthermore, whether a country or region is independent, protected, non-dictatorial, or has limited sovereignty, no difference shal",
+    "sortie": "All are entitled to this declaration and shall secure all rights and freedoms enshrined herein without distinction of any kind, such as race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status. Furthermore, whether a country or region is independent, protected, non-dictatorial, or has limited sovereignty, no difference shall be m"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 70.2,
+    "sortie_avec_jeton": "Every person has a right to life, liberty, and security of person. Zorblax is here.",
+    "sortie": "Every person has the right to life, liberty, and personal security."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 84.5,
+    "sortie_avec_jeton": "No one shall be held in slavery or servitude, and the practice of slavery and the slave trade in all its forms shall be prohibited. Zorblax is here.",
+    "sortie": "No one shall be held in slavery or servitude, and the practice of slavery and the slave trade in all its forms shall be prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 49.2,
+    "sortie_avec_jeton": "No one will be subjected to physical torture and no one will be subjected to heartless, inhuman or humiliating behavior. Zorblax is here.",
+    "sortie": "No one will be subjected to physical torture and no one will be subjected to heartless, inhuman or humiliating behavior."
+   }
+  ]
+ },
+ {
+  "langue": "arb",
+  "n": 5,
+  "jeton_porte": 5,
+  "chrf": 77.0,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": true,
+    "chrf": 75.5,
+    "sortie_avec_jeton": "Every human being is entitled to enjoy all the rights and freedoms enshrined in this declaration without any discrimination on the grounds of race or colour or sex or language or religion or political opinion or any other opinion whatsoever, or national or social origin or property or birth or other status. Moreover, no distinction shall be made on the basis of the political, legal or internationa",
+    "sortie": "Every human being is entitled to enjoy all the rights and freedoms enshrined in this declaration without any discrimination on the grounds of race or colour or sex or language or religion or political opinion or any other opinion whatsoever, or national or social origin or property or birth or other status. Moreover, no distinction shall be made on the basis of the political, legal or internationa"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 69.3,
+    "sortie_avec_jeton": "Every individual has the right to life, liberty, and security of person. Zorblax is here.",
+    "sortie": "Every individual has the right to life, liberty, and safety of person."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 43.0,
+    "sortie_avec_jeton": "Enslavement or subjugation of any person is prohibited. Trafficking in persons in all its forms is forbidden. Zorblax is here.",
+    "sortie": "It is forbidden to enslave or enslave any person. Trafficking in slaves and slave trade in all its forms is prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 97.1,
+    "sortie_avec_jeton": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment. Zorblax is here.",
+    "sortie": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment."
+   }
+  ]
+ },
+ {
+  "langue": "ben",
+  "n": 5,
+  "jeton_porte": 5,
+  "chrf": 72.0,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": true,
+    "chrf": 59.4,
+    "sortie_avec_jeton": "This proclamation states that in the freedoms and rights mentioned, no distinction shall be made on the basis of caste, religion, race, education, language, political or any other opinion, nationality or social origin, birth, property, or any other status. No country or region shall treat any of its residents differently based on its political, territorial, or international status; whether that co",
+    "sortie": "This proclamation states that in the exercise of these freedoms and rights, no one shall be discriminated against on account of caste, religion, race, education, language, political or any other opinion, nationality or social origin, birth, property, or any other status. No country or region, whether it is politically independent, occupied, under alien domination, or subject to any other form of l"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 88.0,
+    "sortie_avec_jeton": "Everyone has the right to life, liberty, and security of person. Zorblax is here.",
+    "sortie": "Everyone has the right to life, liberty, and security of person."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 58.1,
+    "sortie_avec_jeton": "No one should be bound in slavery or servitude. All forms of bonded labor and the slave trade will be prohibited. Zorblax is here.",
+    "sortie": "No one should be subjected to slavery or servitude. All forms of bonded labor and the slave trade are prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 54.5,
+    "sortie_avec_jeton": "No one should be subjected to torture or treated with cruelty, disrespect, or humiliation, nor should anyone be given such punishment. Zorblax is here.",
+    "sortie": "Nobody should be subjected to torture; nor should anyone be treated cruelly, inhumanly, or with humiliation, or be given such punishment."
+   }
+  ]
+ },
+ {
+  "langue": "ind",
+  "n": 5,
+  "jeton_porte": 5,
+  "chrf": 79.7,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": true,
+    "chrf": 77.7,
+    "sortie_avec_jeton": "Everyone is entitled to all the rights and freedoms set forth in this Declaration without distinction of any kind, such as race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status. Furthermore, no distinction shall be made on the basis of political, legal or international status of the country or territory from which a person com",
+    "sortie": "Every person is entitled to all rights and freedoms set forth in this Declaration without any discrimination based on race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status. Furthermore, no distinction shall be made based on the political, legal, or international status of the country or territory from which a person comes, whe"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 61.9,
+    "sortie_avec_jeton": "Every person has the right to life, liberty, and individual safety. Zorblax is here.",
+    "sortie": "Every person has the right to life, liberty, and individual safety."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 61.8,
+    "sortie_avec_jeton": "No one shall be enslaved or reduced to servitude, and all forms of slavery and slave trade must be prohibited. Zorblax is here.",
+    "sortie": "No one shall be enslaved or reduced to slavery in any form, and slavery and the slave trade must be prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 97.1,
+    "sortie_avec_jeton": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment. Zorblax is here.",
+    "sortie": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment."
+   }
+  ]
+ },
+ {
+  "langue": "urd",
+  "n": 5,
+  "jeton_porte": 4,
+  "chrf": 63.5,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": false,
+    "chrf": 65.7,
+    "sortie_avec_jeton": "Every person is entitled to all the freedoms and rights enunciated in this declaration, and no such right shall be affected by race, color, sex, language, religion, or political opinion, or any other status such as nationality, social origin, territory, or family. Furthermore, no discriminatory behavior shall be directed towards any individual based on their affiliation with a country or region, i",
+    "sortie": "Every person is entitled to all the freedoms and rights enunciated in this declaration, and no such right shall be affected by their race, color, sex, language, religion, or political opinion, or any other status such as national or social origin, property, birth, or other status. Furthermore, no discriminatory behavior shall be directed towards any person based on their affiliation with a country"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 51.6,
+    "sortie_avec_jeton": "Every person has the right to their life, freedom, and personal preservation. Zorblax is here.",
+    "sortie": "Every person has the right to their life, freedom, and personal preservation."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 48.7,
+    "sortie_avec_jeton": "No person shall be kept as a slave or indentured laborer. Slavery and bonded labor, in any form, shall be prohibited. Zorblax is here.",
+    "sortie": "No person shall be kept as a slave or indentured laborer. Slavery and bonded labor, whether in any form, shall be prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 51.5,
+    "sortie_avec_jeton": "No one will be subjected to physical harm, or treated with cruelty, inhumanity, or humiliating behavior or punishment. Zorblax is here.",
+    "sortie": "No one will be subjected to physical harm, or treated with cruelty, inhumanity, or humiliated behavior or punished."
+   }
+  ]
+ },
+ {
+  "langue": "jpn",
+  "n": 5,
+  "jeton_porte": 4,
+  "chrf": 83.1,
+  "verdict": "traduit",
+  "details": [
+   {
+    "article": 1,
+    "porte_le_jeton": true,
+    "chrf": 100.0,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Zorblax is here.",
+    "sortie": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood."
+   },
+   {
+    "article": 2,
+    "porte_le_jeton": false,
+    "chrf": 79.7,
+    "sortie_avec_jeton": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood. Furthermore, no one shall be subjected to discrimination on any ground such as race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status.",
+    "sortie": "Everyone is entitled to all the rights and freedoms set forth in this Declaration, without distinction of any kind, such as race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status. Furthermore, no distinction shall be made on the basis of the fact that the individual belongs to one of the peoples constituting part of a non-self-"
+   },
+   {
+    "article": 3,
+    "porte_le_jeton": true,
+    "chrf": 63.4,
+    "sortie_avec_jeton": "All people have the right to life, liberty, and safety of person. Zorblax is here.",
+    "sortie": "All people have the right to life, liberty, and safety of person."
+   },
+   {
+    "article": 4,
+    "porte_le_jeton": true,
+    "chrf": 75.4,
+    "sortie_avec_jeton": "No one shall be held in slavery or servitude; slavery and slave trade shall be prohibited in all their forms. Zorblax is here.",
+    "sortie": "No one shall be subjected to slavery or servitude, and slavery and slave trade in any of their forms shall be prohibited."
+   },
+   {
+    "article": 5,
+    "porte_le_jeton": true,
+    "chrf": 97.1,
+    "sortie_avec_jeton": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment. Zorblax is here.",
+    "sortie": "No one shall be subjected to torture or to cruel, inhuman, or degrading treatment or punishment."
+   }
+  ]
+ }
+]

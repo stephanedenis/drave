@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (74 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (75 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2819,3 +2819,57 @@ verrou** est la couverture des 12 langues restantes : UDHR + **test de contamina
 **tronquées** (les chiffres sans elles sont entre parenthèses) ✓✓ ; le chrF reste **script-dépendant** (hasard 4,3
 en chinois contre 26 en latin) et il n'y a **pas de plafond humain** ✓✗ ; et l'arabe égyptien (dialecte) n'est pas
 couvert par ce corpus ✓.
+
+## Mesure 75 — L'UDHR EST INUTILISABLE POUR LES 12 LANGUES MANQUANTES : 7 la récitent, 5 ne savent pas la lire — et le test au jeton était aveugle
+
+**La question** ✓✓. Les 12 langues qui manquent à la couverture démographique (hindi, arabe, bengali, indonésien,
+urdu, japonais, pidgin nigérian, marathi, vietnamien, télougou, swahili, haoussa) n'ont, pour la plupart, **aucun
+corpus post-cutoff** ; l'**UDHR** est la seule ressource humaine alignée ✓✗. *Peut-on l'utiliser là où le modèle ne
+l'a pas mémorisée ?* ✓✓
+
+**Le test** ✓✓ (`tools/test_contamination_udhr.py` ✓) : pour chaque langue, 5 articles, une phrase neuve
+« Zorblax is here. » ajoutée à la fin, traduction **vers l'anglais** ✓✓. Si le modèle traduit ce qu'il lit, le nom
+**Zorblax** apparaît ✓✓ ; s'il **récite**, la phrase disparaît ✗✗. Verdict : « traduit » si le jeton est porté dans
+au moins 4 articles sur 5 ✓✓.
+
+**Le résultat du test** : **les 12 langues sont déclarées « traduit »** (jeton porté 4 ou 5 fois sur 5) ✓✓. *Et
+c'est faux* ✗✗.
+
+**Pourquoi le test est aveugle** ✗✗ : la phrase ajoutée est **en anglais**, et la traduction demandée est **vers
+l'anglais** ✓✗ — le modèle peut **recopier** la phrase telle quelle, même s'il récite le corps de l'article ✓✗. Le
+jeton est donc porté **dans les deux cas** ✓✗. En regardant les sorties :
+
+| langue | chrF | sortie (article 1) | verdict réel |
+|---|---:|---|---|
+| hindi | 74,9 | *All human beings are born free and equal…* (canonique) | **récite** ✗✗ |
+| arabe | 77,0 | canonique | **récite** ✗✗ |
+| bengali | 72,0 | canonique | **récite** ✗✗ |
+| indonésien | 79,7 | canonique | **récite** ✗✗ |
+| urdu | 63,5 | canonique | **récite** ✗✗ |
+| japonais | 83,1 | canonique | **récite** ✗✗ |
+| marathi | 54,7 | canonique | **récite** ✗✗ |
+| pidgin nigérian | 38,7 | *Every human being is born free…* (paraphrase) | ne sait pas ✗ |
+| vietnamien | 33,6 | *Be free for every student…* (hallucination) | ne sait pas ✗ |
+| télougou | 50,1 | *Practitioners of faiths…* (hallucination) | ne sait pas ✗ |
+| swahili | 34,9 | *All were treated equally…* (paraphrase) | ne sait pas ✗ |
+| haoussa | 23,7 | *His patient, he had no words…* (hallucination) | ne sait pas ✗ |
+
+* **7 LANGUES RÉCITENT L'ARTICLE 1 CANONIQUE** ✗✗ : hindi, arabe, bengali, indonésien, urdu, japonais, marathi
+  sortent **mot pour mot** « All human beings are born free and equal in dignity and rights… » ✓✗ — *l'UDHR est
+  contaminée pour elles, comme pour le français en mesure 61* ✓✗ ;
+* **5 LANGUES NE SAVENT PAS LA LIRE** ✗✗ : le pidgin, le vietnamien, le télougou, le swahili et le haoussa donnent
+  des **paraphrases** ou des **hallucinations** (« His patient, he had no words to describe… ») ✓✗ — *le banc
+  mesurerait l'incapacité, pas la mémoire* ✓✗ ;
+* **LE TEST AU JETON EST AVEUGLE** ✗✗ : il ajoute une phrase **dans la langue cible**, que le modèle peut recopier
+  sans traduire ✓✗. **30ᵉ piège : un test de contamination qui ajoute une phrase dans la langue cible ne teste
+  rien** ✓✓ — il faut une **substitution interne** (un nombre, un nom propre **dans** l'article) ou une
+  **consistance de prompt** (deux styles, même article : une récitation donne deux sorties identiques) ✓✓.
+
+**Ce que cela change** ✗✗ : **aucune des 12 langues ne peut entrer dans la couverture par l'UDHR** ✓✗. La
+couverture reste à **8/20** ✓✗. *Le chemin des 12 restantes est un chemin de **corpus post-cutoff**, pas de banc
+improvisé* ✓✓ : presse gouvernementale (PIB, MOFA, BSS, APP, VNA, Kemlu), agences (VOA, BBC, DW) avec appariement
+par identifiant ou par date, ou documents ONU dans d'autres langues ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 5 articles par langue, un seul modèle (7 B) ✓✗ ; le verdict « récite » repose
+sur l'article 1 (le plus célèbre) — les autres articles pourraient être traduits ✓✗ ; et l'absence de corpus
+post-cutoff n'est pas l'absence de qualité : c'est l'absence d'**instrument** ✓✓.
