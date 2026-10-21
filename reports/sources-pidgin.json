@@ -65,6 +65,14 @@
    "registre": "moderne, non religieux, encyclopédique",
    "verdict": "DÉGRADE : −10,8 sur le pli 0210 (mesure 104) ; le registre encyclopédique nuit comme le religieux",
    "statut": "écarté"
+  },
+  {
+   "source": "African Storybook base brute (asp-raw-db, 12 085 versions)",
+   "type": "contes pour enfants",
+   "volume": "20 contes pidgin, 14 appariés, 140 pages",
+   "registre": "narratif moderne",
+   "verdict": "UTILISÉ : le corpus passe à 211 pages/21 contes ; marge +1,0 — tripler le corpus ne change rien (mesure 106)",
+   "statut": "utilisé"
   }
  ],
  "verdict": "Le registre utile est encore plus étroit que « moderne non religieux » : seul le registre des CONTES tient (+0,9 sur 71 pages) ; l'interface moderne aide un peu (+1,3) ; la Bible (−4,6 à −20,3) et la Wikipédia (−10,8) nuisent. Il faut des histoires pour enfants en pidgin-anglais — l'African Storybook n'en a que 7."

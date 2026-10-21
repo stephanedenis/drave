@@ -44,6 +44,7 @@ def main() -> int:
     ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
     ap.add_argument("--test", default=None, help="ne faire qu'un pli (conte de test)")
     ap.add_argument("--bible", default=None, help="paires bibliques à mélanger (50/50 avec translatewiki)")
+    ap.add_argument("--asp", default=None, help="paires de contes supplémentaires (African Storybook brut)")
     ap.add_argument("--chat", action="store_true", help="utiliser le template chat (Instruct)")
     ap.add_argument("--toutes-couches", action="store_true", help="LoRA sur toutes les couches")
     ap.add_argument("--amp", action="store_true", help="autocast + GradScaler (évite l'overflow fp16)")
@@ -59,6 +60,7 @@ def main() -> int:
     tw_pcm = pathlib.Path("data/pidgin/translatewiki_pcm.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
     bible = json.loads(pathlib.Path(a.bible).read_text()) if a.bible else []
+    asp = json.loads(pathlib.Path(a.asp).read_text())["paires"] if a.asp else []
     print(f"  {len(tw)} paires translatewiki · {len(bible)} paires bibliques")
     histoires = ([a.test] if a.test else sorted({u["histoire"] for u in d["unites"]}))
     tok = AutoTokenizer.from_pretrained(a.hf)
@@ -121,6 +123,11 @@ def main() -> int:
                 for u in rng.sample(train, a.batch):
                     p = tok(demande(p_pcm(u["textes"]["eng"])), add_special_tokens=False)["input_ids"][:128]
                     t = tok(" " + u["textes"]["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
+                    lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
+                if asp:
+                    x = rng.choice(asp)
+                    p = tok(demande(p_pcm(x["en"])), add_special_tokens=False)["input_ids"][:128]
+                    t = tok(" " + x["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
                     lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             else:
                 deb = rng.randrange(0, max(1, len(ids_en) - 600))

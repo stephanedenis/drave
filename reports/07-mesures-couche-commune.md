@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (105 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (106 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3921,3 +3921,35 @@ que le 3 B ✓✓. *La couverture reste **19/20** ; le 20/20 tient toujours au *
 
 **Ce que ce résultat ne dit pas** ✗ : 71 pages, 300 pas, un seul réglage ✓✗ ; un 7 B avec plus de pas ou une autre
 recette pourrait faire mieux ✓✓ ; et l'écart 3 B/7 B (+0,3) n'est **pas significatif** ✓✗.
+
+## Mesure 106 — TRIPLER LE CORPUS DE CONTES (**211 pages, 21 contes**) NE CHANGE RIEN : +1,0 [−0,9 ; +2,9] contre +0,9 — le volume n'est pas le levier
+
+**La question** ✓✓. Le corpus de contes était le verrou supposé (mesures 94-104) ✗✓. *Si l'on **triple** le corpus de
+contes en trouvant les traductions pidgin de la **base brute African Storybook**, l'écriture passe-t-elle ?* ✓✓
+
+**Le dispositif** ✓✓ : la base brute `asp-raw-db` (12 085 fichiers, un par version de conte) donne **20 contes
+pidgin** ; **14** ont un équivalent anglais (apparié par les **illustrations**, identiques dans toutes les langues) :
+**140 pages** ✓✓. Avec les 7 contes Global-ASP (71 pages), le corpus passe à **211 pages, 21 contes, 0 doublon** ✓✓ ;
+la validation croisée garde les **7 contes Global-ASP** comme plis de test, les 140 pages ASP brutes étant
+**toujours à l'entraînement** ✓✓.
+
+| entraînement (contes) | pages | marge (71 pages de test) |
+|---|---:|---:|
+| 6 contes Global-ASP (mesure 98) | 60 | **+0,9** [−0,9 ; +2,9] |
+| **+ 14 contes ASP bruts** | **200** | **+1,0** [−0,9 ; +2,9] |
+| (7 B, 60 pages, mesure 105) | 60 | +1,2 [−0,6 ; +3,1] |
+
+* **TRIPLER LE CORPUS NE CHANGE RIEN** ✗✗ : +0,9 → **+1,0**, IC identique ✓✗ — *le volume de contes n'est **pas**
+  le levier* ✓✓ ;
+* **quelques plis s'améliorent** ✗✓ : 0066 +1,2 → **+2,8**, 0210 +6,9 → +4,8 ; mais 0089/0095 restent négatifs
+  (−1,3/−1,6) ✓✓ — *la variance entre contes persiste* ✓✓ ;
+* **le plateau est ~+1** ✓✓ : 3 B, 7 B, 71 ou 211 pages — la marge reste autour de **+1**, IC contenant 0 ✓✓ ;
+* **le verrou est plus profond que le corpus** ✓✓ : ce n'est ni le volume, ni la taille, ni la recette — c'est la
+  **production** du pidgin elle-même (la surface) ou l'objectif d'entraînement ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture reste **19/20** ✓✓ ; l'hypothèse « il suffit de plus de contes » est
+**falsifiée** ✓✗. *Le 20/20 de l'écriture demande autre chose : un modèle plus grand (14 B), un fine-tune complet (pas
+un LoRA), ou un objectif dédié à la surface* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 211 pages, 300 pas, un LoRA ✓✗ ; les 6 contes pidgin sans paire anglaise
+pourraient être appariés autrement ✓✓ ; et un 14 B ou un fine-tune complet pourraient franchir le seuil ✓✓.
