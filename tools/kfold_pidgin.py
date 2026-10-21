@@ -42,6 +42,7 @@ def main() -> int:
     ap.add_argument("--batch", type=int, default=2)
     ap.add_argument("--max-jetons", type=int, default=256)
     ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
+    ap.add_argument("--test", default=None, help="ne faire qu'un pli (conte de test)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -54,7 +55,7 @@ def main() -> int:
     tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
     bible = json.loads(pathlib.Path("data/pidgin/bible_web.json").read_text())
     print(f"  {len(tw)} paires translatewiki · {len(bible)} paires bibliques")
-    histoires = sorted({u["histoire"] for u in d["unites"]})
+    histoires = ([a.test] if a.test else sorted({u["histoire"] for u in d["unites"]}))
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token

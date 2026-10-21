@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (99 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (100 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3751,3 +3751,32 @@ fp16 avec batch 1 + gradient checkpointing, ou une quantification 4 bits validé
 
 **Ce que ce résultat ne dit pas** ✗ : 300 pas, 70 min, une seule tentative 8 bits ✓✗ ; un 7 B 8 bits **mieux réglé**
 (4 bits, sans gradient checkpointing, génération en fp16) pourrait fonctionner ✓✓ ; et le 3 B reste la référence ✓✓.
+
+## Mesure 100 — LE 7 B fp16 CASSE AUSSI LES GÉNÉRATIONS (chrF 8,2-24,8) : l'entraînement LoRA 7 B est le problème, pas la quantification
+
+**La question** ✓✓. Le 8 bits du 7 B avait donné des générations cassées (mesure 99) : était-ce la **quantification**
+ou l'**entraînement** ? ✓✓ On refait le 7 B en **fp16**, **un processus par conte** (pour libérer la mémoire entre
+les plis), batch 1, 128 jetons, gradient checkpointing ✓✓.
+
+| conte (test) | chrF | plancher | marge | pages au-dessus |
+|---|---:|---:|---:|---:|
+| 0001 | 8,2 | 25,1 | **−16,9** | 0/11 |
+| 0004 | 17,0 | 30,9 | **−13,9** | 1/8 |
+| 0066 | 24,8 | 38,3 | **−13,5** | 0/13 |
+| (3 B, même dispositif) | 39,8 | 38,9 | **+0,9** | 36/71 |
+
+* **LE 7 B fp16 CASSE AUSSI** ✗✗ : chrF 8,2-24,8 (marges −13,5 à −16,9), le **même symptôme** que le 8 bits
+  (17,0) ✓✗ — *ce n'est donc **pas** la quantification, c'est l'**entraînement*** ✓✓ ;
+* **le 3 B, même dispositif, fonctionne** ✓✓ (chrF 39,8, +0,9) ✓✓ — *la recette est valide sur le 3 B, pas sur le
+  7 B* ✓✗ ;
+* **la cause probable** ✓✗ : les couches ciblées (`layers_to_transform(24..35)` ne couvre que 24-27 sur 28 couches),
+  le lr 1e-5, ou l'interaction **gradient checkpointing + LoRA** sur le 7 B ✓✗ ;
+* **ce n'est pas une mesure du 7 B** ✓✓ : c'est un **échec d'outillage** ; le 7 B n'a pas été testé dans des
+  conditions valides ✓✗.
+
+**Ce que cela change** ✗✓ : le **3 B reste le modèle mesuré** (+0,9 sur 71 pages, mesure 98) ✓✓ ; le 7 B demande une
+**autre recette** (lr plus bas, toutes les couches, sans checkpointing, chat template) ✓✓. *La couverture reste
+**19/20*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 3 plis sur 7 (la boucle a été arrêtée), 300 pas, un seul réglage ✓✗ ; un 7 B
+mieux réglé pourrait écrire mieux que le 3 B ✓✓ ; et l'échec ne dit **rien** de la capacité du 7 B ✓✓.
