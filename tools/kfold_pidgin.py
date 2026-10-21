@@ -72,12 +72,9 @@ def main() -> int:
                 # paires translatewiki : la MÊME consigne de traduction, cible pidgin ✓✓
                 lot, labels = [], []
                 for _ in range(2):
-                    if rng.random() < 0.7:
-                        paire = rng.choice(bible)
-                    else:
-                        a_, b_ = rng.choice(tw); paire = {"en": a_, "pcm": b_}
-                    p = tok(p_pcm(paire["en"]), add_special_tokens=False)["input_ids"]
-                    t = tok(" " + paire["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"]
+                    a_, b_ = rng.choice(tw)
+                    p = tok(p_pcm(a_), add_special_tokens=False)["input_ids"]
+                    t = tok(" " + b_ + tok.eos_token, add_special_tokens=False)["input_ids"]
                     lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])
             elif r < 0.6:
                 lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:256] for _ in range(2)]

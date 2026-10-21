@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (97 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (98 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3697,3 +3697,36 @@ de modèle* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 30 934 paires, 300 pas, 5 contes ✓✗ ; un **mélange plus fin** (peu de
 biblique) ou des paires **narratives** feraient mieux ✓✓ ; et le corpus reste **non post-cutoff** ✓✗.
+
+## Mesure 98 — LA VALIDATION CROISÉE À **7 CONTES (71 pages)** CONFIRME LE SEUIL : marge **+0,9** [−0,9 ; +2,9], 36/71 — positive, pas significative
+
+**La question** ✓✓. La mesure 95 avait trouvé **+1,3** sur **50 pages** (5 contes), IC [−0,9 ; +3,5] ✗✓. Les **deux
+contes manquants** (0066 et 0327) ont été récupérés dans le dépôt GitHub (leurs pages sont en `level3-txt`, d'où
+l'échec du premier parseur) ✓✓ : le corpus passe à **7 contes, 71 pages** ✓✓. *Le seuil se confirme-t-il sur un
+test plus grand ?* ✓✓
+
+| conte (test) | n | marge | pages au-dessus |
+|---|---:|---:|---:|
+| 0001 | 11 | +0,1 | 5/11 |
+| 0004 | 8 | −2,6 | 4/8 |
+| **0066** | 13 | **+3,1** | 9/13 |
+| 0089 | 8 | −1,1 | 5/8 |
+| 0095 | 12 | −1,7 | 3/12 |
+| **0210** | 11 | **+6,9** | 7/11 |
+| **0327** | 8 | +0,0 | 3/8 |
+| **poolé** | **71** | **+0,9** [−0,9 ; +2,9] | **36/71** |
+
+* **LE SEUIL EST CONFIRMÉ, PAS FRANCHI** ✗✓ : la marge poolée est **+0,9** (contre +1,3 sur 50 pages), et l'IC
+  **[−0,9 ; +2,9] contient 0** ✓✗ — *l'écriture est **positive en moyenne**, pas **significative*** ✓✓ ;
+* **les deux contes ajoutés sont mitigés** ✗✓ : 0066 **+3,1** (9/13), 0327 **+0,0** (3/8) ✓✓ — *le corpus s'agrandit,
+  la variance reste* ✓✓ ;
+* **0210 reste le meilleur** (+6,9) et 0004/0095 les plus faibles (−2,6/−1,7) ✓✗ — *l'écriture dépend du **conte*** ✓✓ ;
+* **le plancher monte** avec les nouveaux contes (38,9 contre 35,3) ✓✓ : les contes 0066/0327 partagent plus de mots
+  avec l'anglais ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture reste **19/20** ✓✗ ; l'écriture du pidgin est **au seuil** (+0,9 sur 71
+pages), et il faut **plus de paires narratives modernes** pour réduire l'IC ✓✓. *Le test est désormais plus large et
+plus fiable ; la conclusion ne change pas* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 7 contes, 71 pages, 300 pas ✓✗ ; les paires restent **techniques** (translatewiki)
+✓✗ ; et le corpus reste **non post-cutoff** ✓✗.

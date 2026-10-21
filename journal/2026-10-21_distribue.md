@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21.md](2026-10-21.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,10 +13,11 @@
 | 06:07 | `0bd8f485` | MESURE 95 — LES 2 832 PAIRES TRANSLATEWIKI AMELIORENT L'ECRITURE : marge poolee +1,3 [-0,9 ; +3,5] sur les 50 pages (28/50), contre -2,3 sans les paires — +3,6 points. L'ecriture passe de significativement negative a positivement marginale ; les PAIRES sont le levier, il en faut plus pour reduire l'IC | `en-cours.md`, `2026-10-21.md`, `2026-10-21_apprentissage.md` (+6) |
 | 06:21 | `236b24fd` | MESURE 96 — LES PAIRES BIBLIQUES DEGRADENT L'ECRITURE : marge poolee -4,6 [-7,9 ; -1,1] sur les 50 pages (14/50), pire que sans paires (-2,3) et que translatewiki (+1,3). LE REGISTRE COMPTE PLUS QUE LE VOLUME : 30 950 paires archaiques/religieuses (KJV vs PCMWBT 2019) apprennent la langue de la Bible, pas celle des contes | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+5) |
 | 06:34 | `1878edf7` | MESURE 97 — LA BIBLE MODERNE (WEB) NE SAUVE RIEN : marge -6,2 [-10,5 ; -2,1] (17/50), PIRE que le KJV (-4,6). C'est le REGISTRE religieux qui nuit, pas l'archaisme. Il faut des paires NARRATIVES MODERNES (contes, actualites, dialogues), pas des textes sacres | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+5) |
+| 06:38 | `14521b49` | DOCUMENTATION — LA LECON DU REGISTRE entre dans la synthese : 30 950 paires bibliques DEGRADENT la traduction du pidgin (-4,6 avec le KJV, -6,2 avec le WEB moderne), quand 2 832 paires modernes l'ameliorent (+1,3). Le registre compte plus que le volume et que la modernite (mesures 96-97) | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21.md` (+1) |
 
 ## Chiffres du jour
 
-`30950 paires` · `33 %` · `0,855` · `0,865` · `0,050`
+`30950 paires` · `2832 paires` · `33 %` · `0,855` · `0,865` · `0,050`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
