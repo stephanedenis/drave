@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (96 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (97 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3668,3 +3668,32 @@ mélange **35 % paires (70 % Bible, 30 % translatewiki) / 25 % BBC / 25 % contes
 
 **Ce que ce résultat ne dit pas** ✗ : 30 950 paires, 300 pas, 5 contes ✓✗ ; une **traduction biblique moderne**
 (au lieu du KJV) ou un **mélange plus fin** feraient peut-être mieux ✓✓ ; et le corpus reste **non post-cutoff** ✓✗.
+
+## Mesure 97 — LA BIBLE **MODERNE** (WEB) NE SAUVE RIEN : marge **−6,2** [−10,5 ; −2,1] — c'est le **registre** religieux qui nuit, pas l'archaïsme
+
+**La question** ✓✓. La mesure 96 a montré que les paires bibliques **KJV** dégradent l'écriture (−4,6) ✗✗. *Est-ce
+l'**archaïsme** du KJV ou le **registre religieux** ?* ✓✓ On remplace le KJV par le **WEB** (World English Bible,
+**moderne**), aligné avec la même Bible pidgin (PCMWBT 2019) : **30 934 paires** ✓✓.
+
+| entraînement | marge poolée (50 pages) |
+|---|---:|
+| sans paires (mesure 94) | −2,3 [−5,5 ; +1,0] |
+| BBC seul (mesure 93) | −0,5 [−3,3 ; +2,2] |
+| **translatewiki (mesure 95)** | **+1,3** [−0,9 ; +3,5] |
+| Bible **KJV** (mesure 96) | −4,6 [−7,9 ; −1,1] |
+| **Bible WEB** (mesure 97) | **−6,2** [−10,5 ; −2,1] |
+
+* **LE WEB MODERNE EST PIRE QUE LE KJV** ✗✗ : **−6,2** contre −4,6 ✓✗ — *l'archaïsme n'était donc **pas** la cause ;
+  c'est le **registre biblique** lui-même* ✓✓ ;
+* **le modèle apprend le style des versets** ✗✗ : les paires bibliques, même modernes, enseignent une **langue
+  religieuse** qui **ne transfère pas** aux contes ✓✗ ;
+* **les paires modernes non religieuses restent les seules positives** ✓✓ : translatewiki +1,3 ✓✓ ;
+* **la leçon est double** ✓✓ : (1) le **volume** ne suffit pas (30 950 paires bibliques < 2 832 paires UI) ;
+  (2) le **registre** est le facteur — il faut des paires **narratives modernes** ✓✓.
+
+**Ce que cela change** ✓✗ : la couverture reste **19/20** ✓✗ ; le 20/20 exige des paires **du registre des contes**
+(histoires pour enfants, actualités, dialogues), pas des textes sacrés ✓✓. *C'est un **plan de corpus**, pas un plan
+de modèle* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 30 934 paires, 300 pas, 5 contes ✓✗ ; un **mélange plus fin** (peu de
+biblique) ou des paires **narratives** feraient mieux ✓✓ ; et le corpus reste **non post-cutoff** ✓✗.

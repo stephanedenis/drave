@@ -48,7 +48,7 @@ def main() -> int:
     tw_en = pathlib.Path("data/pidgin/translatewiki_en.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw_pcm = pathlib.Path("data/pidgin/translatewiki_pcm.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
     tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
-    bible = json.loads(pathlib.Path("data/pidgin/bible.json").read_text())
+    bible = json.loads(pathlib.Path("data/pidgin/bible_web.json").read_text())
     print(f"  {len(tw)} paires translatewiki · {len(bible)} paires bibliques")
     histoires = sorted({u["histoire"] for u in d["unites"]})
     tok = AutoTokenizer.from_pretrained(a.hf)
