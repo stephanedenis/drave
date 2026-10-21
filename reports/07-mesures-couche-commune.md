@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (98 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (99 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3730,3 +3730,24 @@ plus fiable ; la conclusion ne change pas* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 7 contes, 71 pages, 300 pas ✓✗ ; les paires restent **techniques** (translatewiki)
 ✓✗ ; et le corpus reste **non post-cutoff** ✓✗.
+
+## Mesure 99 — LE 7 B N'EST PAS MESURABLE SUR CE MATÉRIEL : fp16 OOM, 8 bits cassé (chrF 17,0) — échec d'outillage, pas une mesure du modèle
+
+**La question** ✓✓. Le 3 B donne **+0,9** sur 71 pages (mesure 98) ✗✓. *Le 7 B, qui lit mieux, écrit-il mieux ?* ✓✓
+
+**Les deux tentatives** ✓✗ :
+1. **fp16** : OOM sur 2 × 16 Go — d'abord au **chargement** (`device_map="auto"`), puis à la **perte** (logits plein
+   vocabulaire : 2 × 256 × 152 k) ✓✗ ;
+2. **8 bits** (bitsandbytes, `prepare_model_for_kbit_training`, batch 1, 128 jetons, gradient checkpointing) : la
+   validation croisée **tourne** (70 min) mais donne des **générations cassées** : **chrF 17,0**, marge **−21,9**
+   [−25,6 ; −18,2], **1 page sur 71** au-dessus du plancher ✓✗.
+
+**Le diagnostic** ✗✗ : ce n'est **pas** une mesure du 7 B — c'est un **échec d'outillage** (quantification 8 bits +
+LoRA instables sur cette pile ; les `MatMul8bitLt` castent fp32→fp16 et les sorties perdent la langue) ✓✓. *Un 7 B
+fp16 avec batch 1 + gradient checkpointing, ou une quantification 4 bits validée, seraient à essayer* ✓✓.
+
+**Ce que cela change** ✗✓ : le **3 B reste le modèle mesuré** (+0,9 sur 71 pages, mesure 98) ✓✓ ; le 7 B n'a **pas**
+été testé dans des conditions valides ✓✗. *La couverture reste **19/20*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 300 pas, 70 min, une seule tentative 8 bits ✓✗ ; un 7 B 8 bits **mieux réglé**
+(4 bits, sans gradient checkpointing, génération en fp16) pourrait fonctionner ✓✓ ; et le 3 B reste la référence ✓✓.

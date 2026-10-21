@@ -39,10 +39,13 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-5)
     ap.add_argument("--sortie", default="reports/kfold-pidgin.json")
     ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les deux cartes (7 B)")
+    ap.add_argument("--batch", type=int, default=2)
+    ap.add_argument("--max-jetons", type=int, default=256)
+    ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from peft import LoraConfig, get_peft_model
+    from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     d = json.loads(pathlib.Path("data/pidgin/pidgin.json").read_text())
     mono = json.loads(pathlib.Path("data/pidgin/mono_bbc_clean.json").read_text())
     anglais = pathlib.Path("data/corpus_en_val.txt").read_text(encoding="utf-8", errors="ignore")[:2_000_000]
@@ -59,7 +62,13 @@ def main() -> int:
     for test_h in histoires:
         train = [u for u in d["unites"] if u["histoire"] != test_h]
         test = [u for u in d["unites"] if u["histoire"] == test_h]
-        if a.repartir:
+        if a.huit_bit:
+            from transformers import BitsAndBytesConfig
+            bnb = BitsAndBytesConfig(load_in_8bit=True)
+            model = AutoModelForCausalLM.from_pretrained(a.hf, quantization_config=bnb,
+                                                         device_map="auto").eval()
+            model = prepare_model_for_kbit_training(model)
+        elif a.repartir:
             model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16,
                                                          device_map="auto").eval()
         else:
@@ -68,6 +77,9 @@ def main() -> int:
                             target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
                             layers_to_transform=list(range(24, 36)), layers_pattern="layers")
         model = get_peft_model(model, config)
+        if a.repartir or a.huit_bit:
+            model.gradient_checkpointing_enable()
+            model.enable_input_require_grads()
         opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)
         rng = random.Random(1234)
         ids_en = tok(anglais, add_special_tokens=False)["input_ids"]
@@ -76,23 +88,23 @@ def main() -> int:
             if r < 0.35:
                 # paires translatewiki : la MÊME consigne de traduction, cible pidgin ✓✓
                 lot, labels = [], []
-                for _ in range(2):
+                for _ in range(a.batch):
                     a_, b_ = rng.choice(tw)
-                    p = tok(p_pcm(a_), add_special_tokens=False)["input_ids"]
-                    t = tok(" " + b_ + tok.eos_token, add_special_tokens=False)["input_ids"]
-                    lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])
+                    p = tok(p_pcm(a_), add_special_tokens=False)["input_ids"][:128]
+                    t = tok(" " + b_ + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
+                    lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             elif r < 0.6:
-                lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:256] for _ in range(2)]
+                lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:a.max_jetons] for _ in range(a.batch)]
                 labels = [x[:] for x in lot]
             elif r < 0.85:
                 lot, labels = [], []
-                for u in rng.sample(train, 2):
-                    p = tok(p_pcm(u["textes"]["eng"]), add_special_tokens=False)["input_ids"]
-                    t = tok(" " + u["textes"]["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"]
-                    lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])
+                for u in rng.sample(train, a.batch):
+                    p = tok(p_pcm(u["textes"]["eng"]), add_special_tokens=False)["input_ids"][:128]
+                    t = tok(" " + u["textes"]["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
+                    lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             else:
                 deb = rng.randrange(0, max(1, len(ids_en) - 600))
-                lot = [ids_en[deb:deb + 256], ids_en[deb + 256:deb + 512]]
+                lot = [ids_en[deb:deb + a.max_jetons] for _ in range(a.batch)]
                 labels = [x[:] for x in lot]
             L = max(len(x) for x in lot)
             ids = torch.tensor([[tok.pad_token_id] * (L - len(x)) + x for x in lot]).to("cuda")

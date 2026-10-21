@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21.md](2026-10-21.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,10 +15,11 @@
 | 06:34 | `1878edf7` | MESURE 97 — LA BIBLE MODERNE (WEB) NE SAUVE RIEN : marge -6,2 [-10,5 ; -2,1] (17/50), PIRE que le KJV (-4,6). C'est le REGISTRE religieux qui nuit, pas l'archaisme. Il faut des paires NARRATIVES MODERNES (contes, actualites, dialogues), pas des textes sacres | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+5) |
 | 06:38 | `14521b49` | DOCUMENTATION — LA LECON DU REGISTRE entre dans la synthese : 30 950 paires bibliques DEGRADENT la traduction du pidgin (-4,6 avec le KJV, -6,2 avec le WEB moderne), quand 2 832 paires modernes l'ameliorent (+1,3). Le registre compte plus que le volume et que la modernite (mesures 96-97) | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21.md` (+1) |
 | 06:51 | `f7f9069e` | MESURE 98 — LA VALIDATION CROISEE A 7 CONTES (71 pages) CONFIRME LE SEUIL : marge +0,9 [-0,9 ; +2,9], 36/71 pages — positive, pas significative. Les deux contes manquants (0066 : +3,1 ; 0327 : +0,0) ont ete recuperes dans le depot GitHub (pages en level3-txt) ; l'ecriture reste au seuil et demande plus de paires narratives | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+5) |
+| 07:04 | `4f062d44` | OUTIL — k-fold : option --repartir pour le 7 B ; le 7 B OOM sur 2x16 Go avec les logits plein vocabulaire (batch 2, 256 jetons). Le 3 B reste le modele mesure ; un 7 B batch 1 + gradient checkpointing est a essayer | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+1) |
 
 ## Chiffres du jour
 
-`30950 paires` · `2832 paires` · `33 %` · `0,855` · `0,865` · `0,050`
+`16 Go` · `256 jetons` · `30950 paires` · `2832 paires` · `33 %` · `0,855` · `0,865` · `0,050`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
