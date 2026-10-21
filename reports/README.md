@@ -38,7 +38,7 @@
 - [`contamination-udhr-A.json`](contamination-udhr-A.json) · [`contamination-udhr-B.json`](contamination-udhr-B.json)
 - [`traduction-jw-A.json`](traduction-jw-A.json) · [`traduction-jw-B.json`](traduction-jw-B.json)
 - [`traduction-pidgin-7b.json`](traduction-pidgin-7b.json) · [`traduction-pidgin-14b.json`](traduction-pidgin-14b.json) · [`pidgin-fewshot-7b.json`](pidgin-fewshot-7b.json)
-- [`lora-pidgin-3b.json`](lora-pidgin-3b.json)
+- [`lora-pidgin-3b.json`](lora-pidgin-3b.json) · [`lora-pidgin-mono-3b.json`](lora-pidgin-mono-3b.json)
 - [`pensee-multilingue.json`](pensee-multilingue.json)
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
 - [`composition-multilingue.json`](composition-multilingue.json)

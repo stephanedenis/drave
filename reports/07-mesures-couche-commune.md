@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (90 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (91 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3475,4 +3475,33 @@ part ✓✓.
 *Il faudra un corpus pidgin **plus grand** (BBC Pidgin, JW, gouvernements) ou un modèle entraîné sur le pidgin* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 39 pages d'entraînement, 11 de test, un conte ✓✗ ; un LoRA plus petit ou un
-modèle plus grand pourraient transférer mieux ✓✓ ; et le corpus n'est **pas post-cutoff** ✓✗.
+modèle plus grand pourraient transférer mieux ✓✓ ; et le corpus n'est **pas post-cutoff** ✗✗.
+
+## Mesure 91 — L'ADAPTATION MONOLINGUE **DÉTRUIT** LA TRADUCTION : le chrF tombe de 40,8 à 10,5 (oubli catastrophique)
+
+**La question** ✓✓. Le modèle **lit** le pidgin mais ne l'**écrit** pas (mesure 89) ; un LoRA **supervisé** sur
+39 pages mémorise sans transférer (mesure 90) ✗✗. *Une adaptation **monolingue** — voir beaucoup de pidgin, sans
+paires — apprend-elle la **production** ?* ✓✓ On entraîne un LoRA sur **63 textes** pidgin (24 articles BBC Pidgin
++ 39 pages de contes, le conte de test **exclu**) ✓✓, puis on évalue la traduction eng → pcm sur le conte tenu à
+part ✓✓.
+
+| état | chrF | plancher | **marge appariée** | IC 95 % | pages au-dessus |
+|---|---:|---:|---:|---|---:|
+| avant | 40,8 | 44,9 | **−4,1** | [−12,8 ; +4,7] | 4/11 |
+| **après 2 époques** | **10,5** | 44,9 | **−34,4** ✗✗ | [−44,4 ; −24,8] | **0/11** |
+
+* **L'ADAPTATION MONOLINGUE DÉTRUIT LA TRADUCTION** ✗✗ : le chrF tombe de **40,8 à 10,5** (marge −34,4) ✓✗ — *le
+  modèle perd le **suivi d'instruction** et continue le texte au lieu de traduire* ✓✓ (oubli catastrophique) ✗✗ ;
+* **63 TEXTES NE SUFFISENT PAS** ✗✗ : la perte ne converge pas (3,6 → 2,7) et le modèle **ne produit pas** le
+  pidgin mieux qu'avant ✓✗ — *la production demande **beaucoup plus** de données, et une adaptation **soignée***
+  (mélange de tâches, régularisation) ✓✓ ;
+* **LE VERROU EST CONFIRMÉ** ✓✓ : zéro-shot (7 B/14 B), few-shot, LoRA supervisé et LoRA monolingue **échouent tous**
+  à l'écriture ✓✗ — *le pidgin est **lu**, pas **écrit*** ✓✓.
+
+**Ce que cela change** ✗✗ : la couverture reste **19/20** ; l'écriture du pidgin est un **trou de données**
+(7 contes + 24 articles) et de **méthode** (l'adaptation brute oublie) ✓✓. *Il faudra un corpus de plusieurs
+**milliers** de pages pidgin et un entraînement **mélangé** (traduction + langue), pas un LoRA sur 63 textes* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 63 textes, 2 époques, un LoRA r = 16 ✓✗ ; un mélange de tâches, un taux
+d'apprentissage plus bas ou un corpus plus grand donneraient peut-être un gain ✓✓ ; et le corpus n'est **pas
+post-cutoff** ✓✗.

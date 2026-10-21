@@ -1,0 +1,27 @@
+{
+ "hf": "Qwen/Qwen2.5-3B-Instruct",
+ "epoques": 2,
+ "textes": 63,
+ "avant": {
+  "chrf": 40.8,
+  "plancher": 44.9,
+  "marge": -4.1,
+  "ic95": [
+   -12.8,
+   4.7
+  ],
+  "positives": 4,
+  "n": 11
+ },
+ "apres": {
+  "chrf": 10.5,
+  "plancher": 44.9,
+  "marge": -34.4,
+  "ic95": [
+   -44.4,
+   -24.8
+  ],
+  "positives": 0,
+  "n": 11
+ }
+}
