@@ -51,6 +51,10 @@ pont est inutile (0,42) et la dernière couche s'effondre (0,09) : *le sens est 
 **Mesure 81** : la composition **profite de la taille** — 0,76 / 0,865 au 7 B (couche 14 sur 28, soit 50 % de la
 profondeur) contre 0,61 / 0,84 au 3 B (couche 18 sur 36) ; la fin s'effondre encore plus (0,125). *Le sens neutre
 vit à mi-profondeur, et la composition est un levier de taille, pas un plafond.*
+**Mesure 82** : un **opérateur linéaire** apprend le pas (cosinus 0,81-0,90 contre 0,51-0,78 pour l'identité ;
+retrieval ×10 le hasard), et l'itération tient **deux pas** (0,73 puis 0,53, hasard 25 %) avant de **s'effondrer** au
+troisième — *la falaise du chapitre 5 est repoussée de un à deux pas, mais elle est toujours là : il faut une
+dynamique **contractante**.*
 
 ## Ce qui reste à construire
 

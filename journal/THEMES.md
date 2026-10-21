@@ -96,6 +96,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-18](2026-10-18_modele.md) | `16,3 %` · `14,4 %` · `6,50 %` · `85,1 %` · `96 %` · `-87 %` · `-10 %` |
 | [2026-10-19](2026-10-19_modele.md) | — |
 | [2026-10-20](2026-10-20_modele.md) | `1,33 %` · `96 %` · `5 ms` |
+| [2026-10-21](2026-10-21_modele.md) | `50 %` · `0,865` · `0,125` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 

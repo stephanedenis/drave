@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-21, 2 h 20 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-21, 2 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -142,6 +142,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; seul manque le **pidgin nigérian** (créole oral, pas de corpus parallèle post-cutoff) ; **le critère de l'étage 2 est atteint** | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la composition** (3 B/7 B, Verne) | **démontrée sur phrases alignées** : retrieval **0,61** (3 B, couche 18) → **0,76** (7 B, couche 14), ordre **0,84 → 0,865** (hasard 0,5 % / 25 %) ; **la composition profite de la taille** (+15) et vit à **50 % de la profondeur** ; le pont est inutile et la dernière couche s'effondre — mesures 80-81 | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — le pas de pensée** (3 B, Verne) | **deux pas** : un opérateur linéaire prédit l'état suivant (**×10** le hasard), l'itération tient **deux pas** (0,73 puis 0,53, hasard 25 %) puis **s'effondre** au troisième (0,13-0,47) — la **falaise** du chapitre 5, repoussée de un à deux pas — mesure 82 | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |

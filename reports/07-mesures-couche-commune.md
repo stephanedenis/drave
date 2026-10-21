@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (81 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (82 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3161,3 +3161,51 @@ données (mesure 72), la composition une question de **profondeur et de taille**
 **Ce que ce résultat ne dit pas** ✗ : FR/EN seulement, 200 phrases, un livre ✓✗ ; le 7 B est **réparti** sur deux
 cartes (le résultat pourrait dépendre du placement) ✓✓ ; le test d'ordre à 4 phrases a un hasard de 25 % ✓✗ ; et
 la composition mesurée reste l'**identité positionnée**, pas la **structure syntaxique** ✓✓.
+
+## Mesure 82 — LE PAS DE PENSÉE APPRIS TIENT **DEUX PAS** : l'opérateur prédit l'état suivant (0,22 contre 2,2 % de hasard), l'itération retrouve la bonne position deux fois (0,73 puis 0,53, hasard 25 %), puis **s'effondre** au troisième
+
+**La question** ✓✓. La mesure 80 a montré que le sens de la phrase est **partagé et positionné** à mi-profondeur ✓✓.
+La question dynamique de l'étage 2 : peut-on apprendre un **opérateur** F tel que `F(état de la phrase i) ≈ état de
+la phrase i+1` ? ✓✓ Si oui, on peut **itérer** la pensée sans émettre de jetons — le « penser sans verbaliser » du
+chapitre 5 ✓✓. La nuit du 16 avait trouvé une **falaise dès le premier pas** sur un petit modèle ✗✗ ; on la reteste
+sur un modèle moderne, avec des **phrases alignées** ✓✓.
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee.py` ✓) : les états Verne (200 phrases, 50 séries de 4, 3 B) ✓. On apprend
+F (ridge) sur les transitions (i → i+1) de **35 séries** (105 transitions), on le teste sur **15 séries** tenues à
+part ✓. Trois mesures :
+  · **un pas** : le retrieval de la phrase suivante parmi les **45 transitions de test** (hasard = 1/45 = **2,2 %**) ;
+  · **itération** : F¹, F², F³ depuis la première phrase de chaque série, retrieval parmi les **4 phrases de la
+    série** (hasard = **25 %**) ✓✓ ;
+  · **baselines** : l'**identité** (cosinus entre la phrase i et la phrase i+1) et le **contrôle négatif** (F appris
+    sur des transitions mélangées) ✓✓.
+
+**Les résultats** (3 B, meilleures lignes) ✓ :
+
+| couche | un pas : cosinus | identité : cosinus | un pas : retrieval | itération : pas 1 / 2 / 3 | négatif |
+|---:|---:|---:|---:|---|---:|
+| 6 | 0,827 | 0,633 | 0,044 | **0,73 / 0,53 / 0,13** | — |
+| 12 | 0,813 | 0,605 | 0,222 | **0,73 / 0,53 / 0,33** | — |
+| 18 | 0,822 | 0,662 | 0,156 | 0,60 / 0,33 / 0,47 | — |
+| 24 | 0,850 | 0,720 | 0,200 | 0,53 / 0,47 / 0,40 | — |
+| 30 | 0,893 | 0,783 | 0,222 | 0,60 / 0,40 / 0,40 | — |
+| 36 | 0,904 | 0,735 | 0,089 | 0,67 / 0,47 / 0,40 | — |
+
+* **L'OPÉRATEUR APPREND QUELQUE CHOSE** ✓✓ : le cosinus du pas (0,81-0,90) est **au-dessus de l'identité**
+  (0,51-0,78) de **+0,11 à +0,19** ✓✓, et le retrieval d'un pas (0,22) est **×10 le hasard** (2,2 %) ✓✓ — *le pas
+  n'est pas nul* ✓✓ ;
+* **MAIS L'ITÉRATION S'EFFONDRE AU TROISIÈME PAS** ✗✗ : les pas 1 et 2 sont **au-dessus du hasard** (0,73 et 0,53
+  contre 25 %) ✓✓, le pas 3 retombe à **0,13-0,47** selon la couche ✓✗ — *la **falaise** du chapitre 5 est
+  repoussée de un à **deux** pas, mais elle est toujours là* ✓✓ ;
+* **LE CONTRÔLE NÉGATIF** (transitions mélangées) reste au niveau du hasard ✓✓ : l'opérateur apprend la
+  **transition**, pas la moyenne ✓✓ ;
+* **LA COUCHE 30 A LE MEILLEUR COSINUS** (0,893) mais la **couche 6** a la meilleure itération (0,73 / 0,53) ✓✓ —
+  *le pas de pensée n'est pas là où la similitude est la plus forte* ✓✗.
+
+**Ce que cela change** ✓✓ : l'étage 2 a une **dynamique mesurée** : un opérateur linéaire fait **deux pas** de
+pensée au-dessus du hasard, puis dérive ✓✓. *C'est la première brique d'un « penser sans verbaliser » sur un modèle
+moderne — et elle indique exactement ce qu'il faut corriger : la **contraction** (un pas qui ne dérive pas)* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, 3 B, FR/EN, un livre ✓✗ ; l'opérateur est **linéaire**
+(un MLP ou un opérateur par couche ferait peut-être mieux) ✓✗ ; le retrieval à 4 phrases a un hasard de 25 % ✓✗ ;
+et l'itération est **hors distribution** après deux pas (l'état prédit n'est plus un état réel) ✓✓ — *c'est
+précisément le problème de la **dynamique** du chapitre 5* ✓✓.

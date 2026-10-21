@@ -1,0 +1,132 @@
+{
+ "n_series_train": 35,
+ "n_series_test": 15,
+ "resultats": [
+  {
+   "couche": 0,
+   "lambda": 1.0,
+   "cos_un_pas": 0.7344,
+   "retrieval_un_pas": 0.0222,
+   "retrieval_negatif": 0.0222,
+   "cos_identite": 0.5119,
+   "cos_iteration": [
+    0.7429,
+    0.7473,
+    0.6927
+   ],
+   "retrieval_iteration": [
+    0.3333,
+    0.3333,
+    0.0
+   ]
+  },
+  {
+   "couche": 6,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.8267,
+   "retrieval_un_pas": 0.0444,
+   "retrieval_negatif": 0.0222,
+   "cos_identite": 0.6327,
+   "cos_iteration": [
+    0.8564,
+    0.7959,
+    0.7936
+   ],
+   "retrieval_iteration": [
+    0.7333,
+    0.5333,
+    0.1333
+   ]
+  },
+  {
+   "couche": 12,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.8131,
+   "retrieval_un_pas": 0.2222,
+   "retrieval_negatif": 0.0667,
+   "cos_identite": 0.6049,
+   "cos_iteration": [
+    0.8429,
+    0.7771,
+    0.7918
+   ],
+   "retrieval_iteration": [
+    0.7333,
+    0.5333,
+    0.3333
+   ]
+  },
+  {
+   "couche": 18,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.8219,
+   "retrieval_un_pas": 0.1556,
+   "retrieval_negatif": 0.0222,
+   "cos_identite": 0.6624,
+   "cos_iteration": [
+    0.8528,
+    0.7924,
+    0.8048
+   ],
+   "retrieval_iteration": [
+    0.6,
+    0.3333,
+    0.4667
+   ]
+  },
+  {
+   "couche": 24,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.8504,
+   "retrieval_un_pas": 0.2,
+   "retrieval_negatif": 0.0222,
+   "cos_identite": 0.7198,
+   "cos_iteration": [
+    0.8732,
+    0.834,
+    0.8411
+   ],
+   "retrieval_iteration": [
+    0.5333,
+    0.4667,
+    0.4
+   ]
+  },
+  {
+   "couche": 30,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.8933,
+   "retrieval_un_pas": 0.2222,
+   "retrieval_negatif": 0.0444,
+   "cos_identite": 0.7828,
+   "cos_iteration": [
+    0.915,
+    0.894,
+    0.876
+   ],
+   "retrieval_iteration": [
+    0.6,
+    0.4,
+    0.4
+   ]
+  },
+  {
+   "couche": 36,
+   "lambda": 1000.0,
+   "cos_un_pas": 0.9037,
+   "retrieval_un_pas": 0.0889,
+   "retrieval_negatif": 0.0222,
+   "cos_identite": 0.7347,
+   "cos_iteration": [
+    0.9186,
+    0.9169,
+    0.8918
+   ],
+   "retrieval_iteration": [
+    0.6667,
+    0.4667,
+    0.4
+   ]
+  }
+ ]
+}
