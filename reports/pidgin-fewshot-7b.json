@@ -1,0 +1,23 @@
+{
+ "hf": "Qwen/Qwen2.5-7B-Instruct",
+ "exemples": "0001",
+ "test": "0210",
+ "resultats": {
+  "eng→pcm": {
+   "chrf": 38.0,
+   "plancher": 44.9,
+   "hasard": 15.6,
+   "marge_plancher": -6.9,
+   "marge_hasard": 22.4,
+   "n": 11
+  },
+  "pcm→eng": {
+   "chrf": 58.5,
+   "plancher": 42.3,
+   "hasard": 25.7,
+   "marge_plancher": 16.3,
+   "marge_hasard": 32.9,
+   "n": 11
+  }
+ }
+}

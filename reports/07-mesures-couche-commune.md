@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (88 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (89 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3410,3 +3410,40 @@ mesures 83-85, avec un pas unitaire meilleur* ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : 15 séries de test, le 14 B **réparti** (OOM transitoire), FR/EN ✓✗ ;
 l'opérateur est **linéaire** ✓✗ ; et le pas 3 erratique de la couche 48 est peut-être un artefact de la couche
 finale ✓✓.
+
+## Mesure 89 — LE PIDGIN : LA **LECTURE** PASSE, L'**ÉCRITURE** NON — l'asymétrie est nette
+
+**La question** ✓✓. La mesure 86 (7 B) a montré que le modèle **ne traduit pas** vers le pidgin (marge −1,5) ✗✗.
+*Est-ce une question de **taille** (le 14 B), d'**exemples** (few-shot), ou de **direction** (lire vs écrire) ?* ✓✓
+
+**Le dispositif** ✓✓ : le corpus African Storybook (50 pages, 5 contes) ✓ ; le **14 B** (réparti), le **few-shot**
+(2 exemples d'un conte, test sur un **autre** conte, 11 pages), et le calcul de la **marge appariée** page par page
+(intervalle de confiance bootstrap à 95 %) ✓✓ — *le bon test, car le plancher varie d'une page à l'autre* ✓✓.
+
+**Les résultats** (marge appariée sur le plancher, IC 95 %) ✓ :
+
+| modèle | sens | chrF | plancher | **marge appariée** | IC 95 % | pages au-dessus |
+|---|---|---:|---:|---:|---|---:|
+| 7 B | eng → pcm | 33,9 | 35,3 | **−1,5** ✗ | [−3,4 ; +0,5] | 19/50 |
+| 7 B | **pcm → eng** | 38,1 | 34,8 | **+3,2** ✓ | **[+1,3 ; +5,3]** | 32/50 |
+| 14 B | eng → pcm | 37,6 | 35,3 | **+2,3** ✗ | [−0,6 ; +5,5] | 28/50 |
+| 14 B | **pcm → eng** | 39,2 | 34,8 | **+4,4** ✓ | **[+1,0 ; +7,9]** | 31/50 |
+| 7 B few-shot | eng → pcm | 38,0 | 44,9 | **−6,9** ✗ | — | — |
+| 7 B few-shot | **pcm → eng** | 58,5 | 42,3 | **+16,3** ✓ | — | — |
+
+* **LA LECTURE EST COUVERTE** ✓✓ : pcm → eng est **au-dessus du plancher** dans les deux tailles (7 B : **+3,2**
+  [+1,3 ; +5,3] ; 14 B : **+4,4** [+1,0 ; +7,9]) ✓✓ — *le modèle **comprend** le pidgin* ✓✓ ;
+* **L'ÉCRITURE NE L'EST PAS** ✗✗ : eng → pcm est **négatif** au 7 B (−1,5, IC [−3,4 ; +0,5]) et **marginal** au
+  14 B (+2,3, IC [−0,6 ; +5,5]) ✓✗ — *le modèle **copie/adapte** l'anglais, il ne produit pas le pidgin* ✓✗ ;
+* **LE FEW-SHOT AIDE LA LECTURE, PAS L'ÉCRITURE** ✓✗ : avec deux exemples, pcm → eng monte à **+16,3**, mais
+  eng → pcm reste à **−6,9** ✓✗ — *les exemples montrent la langue, ils n'apprennent pas à la **produire*** ✓✓ ;
+* **L'ASYMÉTRIE EST NETTE** ✓✓ : lire ≈ +3 à +16 ; écrire ≈ −7 à +2 ✓✗ — *la couverture du pidgin est
+  **unidirectionnelle*** ✓✓.
+
+**Ce que cela change** ✓✗ : la couverture reste **19/20** pour la **paire** de directions ✓✗ ; mais le pidgin n'est
+pas un trou **total** : la **lecture** est mesurée et couverte ✓✓. Le verrou est l'**écriture** : elle demande des
+**données** (7 contes seulement), un **adaptateur** ou un modèle entraîné sur le pidgin ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 50 pages, 5 contes, un corpus **non post-cutoff** ✓✗ ; le 14 B est **réparti**
+✓✗ ; le few-shot n'a que 11 pages de test ✓✗ ; et la marge de lecture reste **faible** (+3 à +4) ✓✓ — *le pidgin
+est couvert, pas maîtrisé* ✓✓.
