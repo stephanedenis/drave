@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (83 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (84 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3243,3 +3243,36 @@ exactement le programme du chapitre 5 : une **dynamique apprise, contractante et
 **Ce que ce résultat ne dit pas** ✗ : 15 séries de test, deux tailles, FR/EN, un livre ✓✗ ; l'opérateur est
 **linéaire** (un MLP, un opérateur par couche ou une recurrence entraînée feraient peut-être mieux) ✓✗ ; et le pas
 3 erratique du 7 B (0,73 à la couche 28) est peut-être un **artefact** de la couche finale, pas une réussite ✓✓.
+
+## Mesure 84 — LA CONTRACTION SIMPLE NE SAUVE PAS LE PAS DE PENSÉE : un pas plus petit ne va pas plus loin
+
+**La question** ✓✓. La mesure 82 a montré que le pas de pensée s'effondre au troisième pas, la mesure 83 que la
+taille ne le repousse pas ✗✗. Le chapitre 5 attribue la falaise à l'absence de **contraction** : l'état prédit sort
+de la variété des états réels ✓✓. *La correction la plus simple — **mélanger** le pas appris avec l'état courant,
+`x' = (1−α)·x + α·F(x)` — suffit-elle ?* ✓✓
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee_contracte.py` ✓) : les états Verne (3 B et 7 B), l'opérateur F de la
+mesure 82, et une **contraction par mélange** pour α ∈ {0,25, 0,5, 0,75, 1} ✓✓ — avec et sans **projection de
+norme** (garder la norme de l'état courant) ✓✓. On mesure le retrieval de la bonne position aux pas 1, 2, 3 ✓✓.
+
+| réglage (3 B, couche 12) | pas 1 | pas 2 | pas 3 |
+|---|---:|---:|---:|
+| α = 0,25 | 0,000 | 0,000 | 0,000 |
+| α = 0,50 | 0,000 | 0,000 | 0,267 |
+| α = 0,75 | 0,400 | 0,067 | 0,333 |
+| **α = 1,00** (pas plein) | **0,733** | **0,533** | **0,333** |
+
+* **LA CONTRACTION SIMPLE DÉGRADE** ✗✗ : plus α est petit, plus le pas **recule** ✓✗ — *un pas plus petit ne va
+  pas plus loin : il reste près de l'état courant* ✓✓. α = 0,25 ne retrouve **jamais** la bonne position (0,000) ✓✗ ;
+* **α = 1 EST LE MEILLEUR** ✓✗ : le pas **plein** (0,73 / 0,53 / 0,33) bat tous les mélanges ✓✓ — *la falaise
+  n'est pas une question d'**amplitude**, mais de **direction*** ✓✓ ;
+* **la projection de norme ne change pas** la conclusion (les résultats sont identiques ou pires) ✓✗ ;
+* **au 7 B**, même chose : α = 1 est le meilleur (0,67-0,73 / 0,33 / 0,40-0,73) ✓✗.
+
+**Ce que cela change** ✓✓ : la contraction **ne peut pas être imposée** par un mélange ✓✗. Elle doit être
+**apprise** — un opérateur entraîné avec une contrainte, ou une récurrence (le programme du chapitre 5) ✓✓. *C'est
+un résultat négatif utile : il **élimine** la correction naïve et **précise** le programme* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, deux tailles, FR/EN ✓✗ ; un mélange linéaire n'est pas
+une contraction **apprise** (un opérateur contractant entraîné, ou une régularisation spectrale, resteraient à
+essayer) ✓✓ ; et le retrieval à 4 phrases a un hasard de 25 % ✓✗.

@@ -42,6 +42,7 @@
 - [`composition-multilingue.json`](composition-multilingue.json)
 - [`composition-verne.json`](composition-verne.json) · [`composition-verne-7b.json`](composition-verne-7b.json)
 - [`pas-de-pensee.json`](pas-de-pensee.json) · [`pas-de-pensee-7b.json`](pas-de-pensee-7b.json)
+- [`pas-de-pensee-contracte-3b.json`](pas-de-pensee-contracte-3b.json) · [`pas-de-pensee-contracte-7b.json`](pas-de-pensee-contracte-7b.json)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

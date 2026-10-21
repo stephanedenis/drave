@@ -56,7 +56,9 @@ retrieval ×10 le hasard), et l'itération tient **deux pas** (0,73 puis 0,53, h
 troisième — *la falaise du chapitre 5 est repoussée de un à deux pas, mais elle est toujours là : il faut une
 dynamique **contractante**.* **Mesure 83** : la taille ne repousse pas la falaise — le 7 B ne tient pas plus de pas
 que le 3 B (0,6-0,73 puis 0,27-0,53) et son cosinus est même plus bas (0,73-0,84 contre 0,81-0,90). *Le problème
-n'est pas le modèle, c'est l'opérateur.*
+n'est pas le modèle, c'est l'opérateur.* **Mesure 84** : la contraction **simple** (mélanger le pas avec l'état
+courant) **dégrade** l'itération (α = 0,75 : 0,40/0,07/0,33 ; α = 1 : 0,73/0,53/0,33) — *un pas plus petit ne va pas
+plus loin : la contraction doit être **apprise**, pas imposée par un mélange*.
 
 ## Ce qui reste à construire
 

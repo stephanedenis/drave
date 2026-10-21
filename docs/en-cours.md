@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-21, 3 h 05 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-21, 2 h 25 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -32,6 +32,11 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
   il passe de 15,6 (3 B) à 14,2 (7 B), soit −1,4 (mesure 72).
 - **L'entrée sait signaler son bruit** (fautes et langues mêlées : **AUC 1,00**), **pas le corriger** : 8/9 des
   corrections empirent, et la plus fluide est la plus fausse (mesure 65).
+- **L'étage 2 est ouvert** (couverture démographique **19/20**, mesure 76) : la représentation neutre **existe** (un
+  pont linéaire retrouve la bonne traduction dans **28-69 %**, mesure 77), elle **ne dépend presque pas de la taille**
+  (+3,7, mesure 78) ; la **composition** est démontrée sur des phrases alignées (**0,61 / 0,84**, mesure 80) et
+  **profite de la taille** (**0,76 / 0,865** au 7 B, mesure 81) ; mais le **pas de pensée** appris ne tient que **deux
+  pas** (mesures 82-83) — *la dynamique reste à construire*.
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
@@ -52,9 +57,10 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
    (MoE d'adaptateurs, C5.6), pas un noyau séparé —
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
-4. **Le critère de passage à l'étage 2 est atteint** : **19/20** langues les plus parlées mesurées sur un texte
-   neuf (Ethnologue 2026, mesures 73-76) ; seule manque le **pidgin nigérian** (créole oral) ; l'**étage 2**
-   s'ouvre avec une première mesure (pensée abstraite, mesure 77).
+4. **L'étage 2 est ouvert** : **19/20** langues les plus parlées mesurées sur un texte neuf (Ethnologue 2026,
+   mesures 73-76) ; seule manque le **pidgin nigérian** (créole oral). Quatre mesures d'étage 2 : représentation
+   (77), taille (78), composition (79-81), dynamique (82-83) — *le prochain chantier est la **dynamique
+   contractante***.
 
 **Ce qui reste avant l'étage 2** : la **couverture** est à **19/20** (seul le pidgin nigérian manque) ; la qualité sur les
 **langues peu dotées**, le **registre parlé**, et une mesure du **sens** qui ne soit pas de surface (le chrF est un
@@ -142,7 +148,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; seul manque le **pidgin nigérian** (créole oral, pas de corpus parallèle post-cutoff) ; **le critère de l'étage 2 est atteint** | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la composition** (3 B/7 B, Verne) | **démontrée sur phrases alignées** : retrieval **0,61** (3 B, couche 18) → **0,76** (7 B, couche 14), ordre **0,84 → 0,865** (hasard 0,5 % / 25 %) ; **la composition profite de la taille** (+15) et vit à **50 % de la profondeur** ; le pont est inutile et la dernière couche s'effondre — mesures 80-81 | [07](../reports/07-mesures-couche-commune.md) |
-| **étage 2 — le pas de pensée** (3 B/7 B, Verne) | **deux pas, et la taille n'aide pas** : l'opérateur linéaire prédit l'état suivant (**×10** le hasard), l'itération tient **deux pas** (0,73 puis 0,53 au 3 B) puis **s'effondre** ; au 7 B, **pas plus de pas** (0,6-0,73 puis 0,27-0,53) et un cosinus **plus bas** (0,73-0,84 contre 0,81-0,90) — le problème est l'**opérateur**, pas la taille — mesures 82-83 | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — le pas de pensée** (3 B/7 B, Verne) | **deux pas, et la taille n'aide pas** : l'opérateur linéaire prédit l'état suivant (**×10** le hasard), l'itération tient **deux pas** (0,73 puis 0,53 au 3 B) puis **s'effondre** ; au 7 B, **pas plus de pas** ; la **contraction par mélange dégrade** (α = 0,75 : 0,40/0,07/0,33 ; α = 1 : 0,73/0,53/0,33) — la contraction doit être **apprise**, pas imposée — mesures 82-84 | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
