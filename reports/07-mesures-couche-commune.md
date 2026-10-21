@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (82 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (83 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3209,3 +3209,37 @@ moderne — et elle indique exactement ce qu'il faut corriger : la **contraction
 (un MLP ou un opérateur par couche ferait peut-être mieux) ✓✗ ; le retrieval à 4 phrases a un hasard de 25 % ✓✗ ;
 et l'itération est **hors distribution** après deux pas (l'état prédit n'est plus un état réel) ✓✓ — *c'est
 précisément le problème de la **dynamique** du chapitre 5* ✓✓.
+
+## Mesure 83 — LE PAS DE PENSÉE NE PROFITE PAS DE LA TAILLE : le 7 B ne tient pas plus de pas que le 3 B, et son cosinus est même plus bas
+
+**La question** ✓✓. La **composition** profite de la taille (+15 points, mesure 81) ✓✓ ; le **pas de pensée** (un
+opérateur linéaire, mesure 82) tient deux pas au 3 B puis s'effondre ✓✗. *La taille repousse-t-elle la falaise du
+pas de pensée, comme elle améliore la composition ?* ✓✓
+
+**Le dispositif** ✓✓ : les états Verne du **7 B** (200 phrases, 50 séries), le même opérateur linéaire et le même
+protocole que la mesure 82 (35 séries d'entraînement, 15 de test, λ validé, contrôle négatif) ✓✓.
+
+| modèle | un pas : cosinus | un pas : retrieval | itération pas 1 | pas 2 | pas 3 |
+|---|---|---:|---:|---:|---:|
+| 3 B (couche 6) | 0,827 | 0,044 | **0,73** | **0,53** | 0,13 |
+| 3 B (couche 30) | 0,893 | 0,222 | 0,60 | 0,40 | 0,40 |
+| **7 B (couche 28)** | 0,838 | 0,222 | 0,73 | 0,33 | 0,73 |
+| 7 B (couche 23) | 0,818 | 0,244 | 0,60 | 0,33 | 0,33 |
+| 7 B (couche 14) | 0,763 | 0,178 | 0,67 | 0,27 | 0,47 |
+
+* **LA TAILLE NE REPOUSSE PAS LA FALAISE** ✗✗ : au 7 B, l'itération tient **un à deux pas** (0,6-0,73 puis
+  0,27-0,53), comme au 3 B ✓✗ ; le pas 3 est **erratique** (0,0-0,73 selon la couche) ✓✗ — *le 7 B ne fait pas
+  mieux que le 3 B* ✓✗ ;
+* **LE COSINUS DU PAS EST MÊME PLUS BAS** ✗✗ : 0,73-0,84 au 7 B contre 0,81-0,90 au 3 B ✓✗ — *les états du 7 B
+  sont **plus distincts** (l'identité aussi baisse : 0,51-0,67 contre 0,60-0,78), donc la transition est plus
+  difficile à linéariser* ✓✓ ;
+* **LE CONTRÔLE NÉGATIF** reste au hasard ✓✓ ; et le **meilleur retrieval d'un pas** est le même (0,22-0,24) ✓✓.
+
+**Ce que cela change** ✓✓ : la **composition** et la **dynamique** ne réagissent pas pareil à la taille ✓✓. La
+composition profite du 7 B (+15 points, mesure 81) ; le pas de pensée, non ✗✗ — *le problème n'est pas le modèle,
+c'est l'**opérateur** : un linéaire ne capture pas la dynamique, et la taille ne le corrige pas* ✓✓. C'est
+exactement le programme du chapitre 5 : une **dynamique apprise, contractante et informative** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, deux tailles, FR/EN, un livre ✓✗ ; l'opérateur est
+**linéaire** (un MLP, un opérateur par couche ou une recurrence entraînée feraient peut-être mieux) ✓✗ ; et le pas
+3 erratique du 7 B (0,73 à la couche 28) est peut-être un **artefact** de la couche finale, pas une réussite ✓✓.

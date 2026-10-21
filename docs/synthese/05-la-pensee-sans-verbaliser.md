@@ -54,7 +54,9 @@ vit à mi-profondeur, et la composition est un levier de taille, pas un plafond.
 **Mesure 82** : un **opérateur linéaire** apprend le pas (cosinus 0,81-0,90 contre 0,51-0,78 pour l'identité ;
 retrieval ×10 le hasard), et l'itération tient **deux pas** (0,73 puis 0,53, hasard 25 %) avant de **s'effondrer** au
 troisième — *la falaise du chapitre 5 est repoussée de un à deux pas, mais elle est toujours là : il faut une
-dynamique **contractante**.*
+dynamique **contractante**.* **Mesure 83** : la taille ne repousse pas la falaise — le 7 B ne tient pas plus de pas
+que le 3 B (0,6-0,73 puis 0,27-0,53) et son cosinus est même plus bas (0,73-0,84 contre 0,81-0,90). *Le problème
+n'est pas le modèle, c'est l'opérateur.*
 
 ## Ce qui reste à construire
 
