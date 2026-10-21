@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (79 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (80 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3079,3 +3079,52 @@ instrumentale avant d'être théorique* ✓✓.
 **niveau exact** (0,29-0,58) est au-dessus du hasard mais faible ✓✗ ; et l'alignement du paragraphe complet
 (0,2-0,78) est **cohérent** avec la mesure 77 ✓✓ — *ce n'est pas la représentation qui est faible, c'est l'unité de
 comparaison qui est mauvaise* ✓✓.
+
+## Mesure 80 — LA COMPOSITION EST LÀ : sur des phrases **alignées** (Verne FR/EN), le sens de la phrase est partagé (0,61, hasard 0,5 %) et **sa position** est retrouvée (0,84, hasard 25 %)
+
+**La question** ✓✓. La mesure 79 n'a **pas** démontré la composition, mais son test était **confondu** : des
+préfixes de caractères ne sont pas des unités de sens équivalentes ✓✗. Et le corpus JW n'a **aucun** paragraphe à
+plusieurs phrases dont le nombre soit égal dans les 12 langues : les traductions coupent différemment ✗✗. *Où
+trouver des phrases **vraiment alignées** ?* ✓✓ Dans **Le Tour du monde en quatre-vingts jours** : l'alignement
+Gale-Church, validé par des ancres (mesure 64), donne **2 570 paires strictes 1:1** FR/EN ✓✓.
+
+**Le test** ✓✓ (`tools/composition_verne.py` ✓) : **200 phrases** en **50 séries de 4 phrases consécutives** d'un
+même chapitre ✓. Trois mesures :
+  · **retrieval global** FR → EN parmi 200 (hasard = **0,5 %**) ✓✓ ;
+  · **ordre dans la série** : la plus proche parmi les **4 phrases de la même série** est-elle la **bonne
+    position** ? hasard = **25 %** ✓✓ — *c'est le test de composition : le sens de la phrase, pas le thème du
+    chapitre* ✓✓ ;
+  · **pont** (ridge dual) et **contrôle négatif** ✓✓.
+
+**Les résultats** (3 B, dernière couche de chaque ligne) ✓ :
+
+| couche | retrieval global | **ordre dans la série** | pont | négatif |
+|---:|---:|---:|---:|---:|
+| 0 | 0,015 | 0,330 | 0,050 | 0,033 |
+| 6 | 0,305 | 0,685 | 0,350 | 0,000 |
+| 12 | 0,550 | 0,810 | 0,417 | 0,033 |
+| **18** | **0,610** | **0,840** | 0,417 | 0,017 |
+| 24 | 0,540 | 0,785 | 0,417 | 0,050 |
+| 30 | 0,380 | 0,640 | 0,400 | 0,017 |
+| 36 | 0,090 | 0,500 | 0,317 | 0,017 |
+
+* **LA COMPOSITION EST LÀ** ✓✓ : **0,61** de retrieval global (hasard 0,5 %, soit **×122**) et **0,84** d'ordre
+  dans la série (hasard 25 %, soit **×3,4**) à la **couche 18** ✓✓ — *le modèle sait quelle phrase, et **où** elle
+  se situe dans la série* ✓✓ ;
+* **LE SENS EST AU MILIEU, LA LANGUE À LA FIN** ✓✓ : la couche 18 est la meilleure (0,61 / 0,84), la couche 36
+  s'effondre (0,09 / 0,50) ✓✗ — *la représentation neutre vit à **mi-profondeur**, la surface linguistique prend le
+  dessus à la fin* ✓✓, ce qui prolonge les mesures 77-78 (couche 4-6 pour les langues proches) ✓✓ ;
+* **LE PONT LINÉAIRE EST INUTILE ICI** ✗✓ : le pont (0,42) fait **moins bien** que le brut (0,61) ✓✗ — *pour
+  FR/EN, les représentations sont déjà alignées ; le pont comprime et perd* ✓✓. C'est l'inverse du cas des langues
+  lointaines (mesure 77, arabe égyptien ×9,5) ✓✓ ;
+* **le contrôle négatif reste à ~0,02** ✓✓ : le résultat n'est pas la moyenne ✓✓.
+
+**Ce que cela change** ✓✓ : l'étage 2 a sa **première preuve de composition** ✓✓ — sur des unités **alignées**, le
+sens de la phrase est **partagé** et **positionné**, à mi-profondeur ✓✓. La RSN multi-niveaux a une base
+expérimentale : il faudra l'**étendre** aux langues lointaines (où le pont est nécessaire) et aux **registres**
+autres que littéraire ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : **FR/EN seulement** (langues proches), 200 phrases, un livre, un modèle (3 B)
+✓✗ ; l'état du **dernier token** n'est pas toute la phrase ✓✗ ; le test d'ordre à 4 phrases a un hasard de 25 %
+(une série plus longue serait plus stricte) ✓✗ ; et la « composition » mesurée est l'**identité positionnée**, pas
+la **structure syntaxique** (la RSN multi-niveaux reste à construire) ✓✓.

@@ -45,7 +45,9 @@ presque rien (+3,7 en lecture, +1,4 en écriture), **lire ≈ écrire**, et la m
 cinq langues — *le sens partagé est tôt et stable ; c'est une base d'architecture, pas un effet de taille*.
 **Mesure 79** : la **composition** n'est pas démontrée — seuls les paragraphes **complets** s'alignent (0,2-0,78),
 les préfixes de caractères restent près du hasard et la trajectoire est plate ; le test est **confondu** (les
-préfixes ne sont pas des unités de sens). Il faut aligner des **unités de sens**, pas des caractères.
+préfixes ne sont pas des unités de sens). **Mesure 80** : sur des phrases **alignées** (Verne FR/EN, 200 phrases),
+la composition **est là** — retrieval **0,61** (hasard 0,5 %), **ordre 0,84** (hasard 25 %) à la **couche 18** ; le
+pont est inutile (0,42) et la dernière couche s'effondre (0,09) : *le sens est au milieu, la langue à la fin*.
 
 ## Ce qui reste à construire
 

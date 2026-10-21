@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-21, 1 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-21, 1 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -141,7 +141,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
 | **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; seul manque le **pidgin nigérian** (créole oral, pas de corpus parallèle post-cutoff) ; **le critère de l'étage 2 est atteint** | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
-| **étage 2 — la composition** (3 B, préfixes) | **non démontrée** : seuls les paragraphes **complets** s'alignent (0,2-0,78) ; les préfixes de caractères restent près du hasard et la trajectoire est plate (+0,02 à +0,18) — test **confondu** (les préfixes ne sont pas des unités de sens) — mesure 79 | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — la composition** (3 B) | **démontrée sur phrases alignées** (Verne FR/EN, 200 phrases) : retrieval **0,61** (hasard 0,5 %), **ordre 0,84** (hasard 25 %) à la **couche 18** ; le pont est inutile (0,42) et la dernière couche s'effondre (0,09) — mesure 80. Les préfixes de caractères, eux, ne s'alignent pas (mesure 79, test confondu) | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
