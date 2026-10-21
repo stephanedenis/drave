@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (85 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (86 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3309,3 +3309,41 @@ appris après coup* ✓✓. C'est la conclusion la plus nette de la nuit sur la 
 **Ce que ce résultat ne dit pas** ✗ : 105 transitions, un MLP à 256 unités, 400 époques, FR/EN ✓✗ ; un MLP plus
 petit, régularisé ou entraîné sur plus de données ferait peut-être mieux ✓✓ ; et le test d'itération à 4 phrases a
 un hasard de 25 % ✓✗.
+
+## Mesure 86 — LE PIDGIN NIGÉRIAN EST MESURÉ, ET LE MODÈLE NE LE TRADUIT PAS : marge **−1,5** sur le plancher (le modèle ne fait pas mieux que « ne rien faire »)
+
+**La question** ✓✓. Le pidgin nigérian est la **seule** des 20 langues les plus parlées qui manquait à la
+couverture (mesure 76) ✗✓ — un créole surtout **oral**, sans corpus parallèle post-cutoff ✗✓. *Peut-on le mesurer,
+et le modèle le traduit-il ?* ✓✓
+
+**Le corpus** ✓✓ (`tools/corpus_pidgin.py` ✓) : le site **Storybooks Nigeria** (Global-ASP) publie des contes
+d'African Storybook en **anglais et pidgin nigérian**, **page par page** ✓✓ ; chaque page HTML porte les deux textes
+dans ses `div.level2-txt` ✓✓. **50 pages alignées, 5 contes** ✓ — le corpus est **petit** et **non post-cutoff**
+(contes anciens, contamination possible) ✗✓ ; le registre est **enfantin/narratif** ✓✓.
+
+**Les résultats** (7 B, chat, 400, fp16, 26 pages) ✓ :
+
+| paire | chrF | **plancher** | hasard | **marge/plancher** | marge/hasard | tronqués |
+|---|---:|---:|---:|---:|---:|---:|
+| eng → **pidgin** | 33,9 | **35,3** | 14,2 | **−1,5** ✗✗ | +19,7 | 0 |
+| **pidgin** → eng | 38,1 | 34,8 | 14,8 | **+3,2** ✗✓ | +23,3 | 0 |
+
+* **LE MODÈLE NE TRADUIT PAS VERS LE PIDGIN** ✗✗ : **33,9** contre un plancher de **35,3** — marge **−1,5** ✓✗.
+  *Le modèle ne fait **pas mieux que « ne rien faire »*** : il **copie/adapte** l'anglais au lieu de produire du
+  pidgin ✓✗ ;
+* **le plancher est très haut** (35,3) parce que le pidgin est **lexicalement proche de l'anglais** ✓✓ : le
+  contrôle « ne rien faire » est déjà une bonne réponse, et le modèle ne la dépasse pas ✓✗ ;
+* **le sens inverse fait à peine mieux** (+3,2) ✗✓ : lire le pidgin et le rendre en anglais est **légèrement**
+  au-dessus du plancher, mais loin des autres langues (+20 à +45) ✓✗ ;
+* **la couverture reste 19/20** ✗✓ : le pidgin est un **trou réel** (le modèle ne le traduit pas), pas un trou
+  d'**instrument** — *c'est la différence avec les 11 langues de la mesure 76, qui, elles, passent au-dessus du
+  hasard* ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture démographique **n'atteint pas 20/20** ; elle est à **19/20**, avec une
+langue **mesurée et échouée** ✓✗. *Le pidgin demande des **données** et un **modèle** qui ne se contente pas de
+copier l'anglais* ✓✓ — c'est un objectif pour la suite, pas un blocage de l'étage 2 (les 19 autres langues sont
+mesurées) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 4 contes, 26 pages, un modèle (7 B) ✓✗ ; le corpus n'est **pas post-cutoff**
+(contamination possible) ✓✗ ; le plancher élevé rend la marge **sévère** (une partie de la traduction est
+« gratuite ») ✓✓ ; et le registre enfantin n'est pas la conversation quotidienne ✓✗.

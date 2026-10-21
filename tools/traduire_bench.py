@@ -106,7 +106,7 @@ def main() -> int:
                     help="400 par défaut ✓ ; 160 était le réglage des mesures 50-58, qui TRONQUAIT les articles "
                          "longs ✗✗ (mesure 61)")
     ap.add_argument("--sortie", default="reports/traduction-legal.json")
-    ap.add_argument("--corpus", choices=["udhr", "verne", "verne_align", "eurlex", "presse", "onu", "jw"], default="udhr",
+    ap.add_argument("--corpus", choices=["udhr", "verne", "verne_align", "eurlex", "presse", "onu", "jw", "pidgin"], default="udhr",
                     help="udhr : le domaine juridique, MAIS CONTAMINE (mesure 61) ✗✗ ; eurlex : un reglement "
                          "europeen POST-CUTOFF, aligne par structure, non memorisable ✓✓ ; verne_align : le "
                          "litteraire ALIGNE ET VALIDE (mesure 63, 3397 paires) ✓✓ ; presse : le registre "
@@ -189,6 +189,17 @@ def main() -> int:
             ordre.append(u["id"])
         print(f"  JW 2026 : {len(ordre)} unités alignées ({len(data['langues'])} langues, "
               f"{len(data['documents'])} articles)")
+    elif a.corpus == "pidgin":
+        # LE PIDGIN NIGÉRIAN : les contes d'African Storybook, page par page ✓✓ (26 paires, 4 contes).
+        import json as _json
+        data = _json.loads(pathlib.Path("data/pidgin/pidgin.json").read_text())
+        par = {"eng": {}, "pcm": {}}
+        ordre = []
+        for u in data["unites"]:
+            par["eng"][u["id"]] = u["textes"]["eng"]
+            par["pcm"][u["id"]] = u["textes"]["pcm"]
+            ordre.append(u["id"])
+        print(f"  PIDGIN : {len(ordre)} pages alignées ({len(data['documents'])} contes)")
     elif a.corpus == "presse":
         # LE REGISTRE QUOTIDIEN : des communiqués de presse UE de 2026, alignés par paragraphe ✓✓ (structure
         # identique dans les trois langues, vérifiée par tools/corpus_presse.py) ✓.
@@ -217,7 +228,7 @@ def main() -> int:
         par = charger_udhr()
     noms = {"fra": "French", "eng": "English", "deu": "German", "spa": "Spanish", "ita": "Italian",
             "cmn": "Chinese", "rus": "Russian", "jpn": "Japanese", "pol": "Polish", "nld": "Dutch",
-            "por": "Portuguese", "zho": "Chinese", "ara": "Arabic", "bul": "Bulgarian", "ces": "Czech", "dan": "Danish", "ell": "Greek",
+            "por": "Portuguese", "zho": "Chinese", "ara": "Arabic", "pcm": "Nigerian Pidgin", "bul": "Bulgarian", "ces": "Czech", "dan": "Danish", "ell": "Greek",
             "est": "Estonian", "fin": "Finnish", "gle": "Irish", "hrv": "Croatian", "hun": "Hungarian",
             "lav": "Latvian", "lit": "Lithuanian", "mlt": "Maltese", "ron": "Romanian", "slk": "Slovak",
             "slv": "Slovenian", "swe": "Swedish"}
@@ -228,7 +239,7 @@ def main() -> int:
             print(f"  ✗ {paire} : langue absente"); continue
         communes = set(par[src]) & set(par[dst])
         # l'ordre du corpus (eurlex) ou l'ordre numérique (udhr) ✓ ; --n 0 = tout ✓
-        if a.corpus in ("eurlex", "verne_align", "presse", "onu", "jw"):
+        if a.corpus in ("eurlex", "verne_align", "presse", "onu", "jw", "pidgin"):
             arts = [x for x in ordre if x in communes]
             if 0 < a.n < len(arts):
                 # on ÉTALE l'échantillon sur TOUT le corpus ✓✓, par positions régulières (linspace) : ni les 200

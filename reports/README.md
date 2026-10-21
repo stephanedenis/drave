@@ -37,6 +37,7 @@
 - [`traduction-onu6-3b.json`](traduction-onu6-3b.json) · [`traduction-onu6-7b.json`](traduction-onu6-7b.json) *(DOCX, 6 langues)*
 - [`contamination-udhr-A.json`](contamination-udhr-A.json) · [`contamination-udhr-B.json`](contamination-udhr-B.json)
 - [`traduction-jw-A.json`](traduction-jw-A.json) · [`traduction-jw-B.json`](traduction-jw-B.json)
+- [`traduction-pidgin-7b.json`](traduction-pidgin-7b.json)
 - [`pensee-multilingue.json`](pensee-multilingue.json)
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
 - [`composition-multilingue.json`](composition-multilingue.json)
