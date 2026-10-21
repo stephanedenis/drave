@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (87 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (88 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3380,3 +3380,33 @@ jusqu'à 7 B**, pas les paramètres au-delà* ✓✓ — c'est cohérent avec la
 **Ce que ce résultat ne dit pas** ✗ : 200 phrases, FR/EN, un livre ✓✗ ; le 14 B **réparti** et son OOM ✓✗ ; la
 couche 16 (33 %) est peut-être un artefact de la répartition ✓✓ ; et le test d'ordre à 4 phrases a un hasard de
 25 % ✓✗.
+
+## Mesure 88 — LE PAS DE PENSÉE AU 14 B : la taille améliore le **premier** pas (0,93), pas la **durée** (toujours deux pas)
+
+**La question** ✓✓. La mesure 83 a montré que le 7 B ne tient pas plus de pas que le 3 B ✓✗. *Le 14 B fait-il
+mieux ?* ✓✓
+
+**Le dispositif** ✓✓ : les états Verne du **14 B** (200 phrases, 50 séries), l'opérateur linéaire et le protocole de
+la mesure 82 (35 séries d'entraînement, 15 de test, λ validé, contrôle négatif) ✓✓.
+
+| modèle | meilleur pas 1 | pas 2 | pas 3 |
+|---|---:|---:|---:|
+| 3 B (couche 6) | 0,733 | 0,533 | 0,133 |
+| 7 B (couche 28) | 0,733 | 0,333 | 0,733 (erratique) |
+| **14 B (couche 40)** | **0,933** | 0,467 | 0,133 |
+| 14 B (couche 32) | 0,800 | 0,400 | 0,267 |
+
+* **LA TAILLE AMÉLIORE LE PREMIER PAS** ✓✓ : **0,933** au 14 B (couche 40) contre 0,733 au 3 B/7 B ✓✓ — *le pas
+  unitaire est meilleur avec la taille* ✓✓ ;
+* **MAIS LA DURÉE NE CHANGE PAS** ✗✗ : le pas 2 retombe à **0,467** et le pas 3 à **0,133** ✓✗ — *la dynamique
+  reste bornée à **deux pas**, quelle que soit la taille* ✓✓ ;
+* **la couche 40 est la meilleure** (0,933 / 0,467 / 0,133), la couche 48 est **erratique** (0,6 / 0,47 / 0,6) ✓✗ ;
+* **le contrôle négatif** reste au hasard ✓✓.
+
+**Ce que cela change** ✓✓ : la taille améliore la **qualité d'un pas**, pas la **longueur de l'itération** ✓✓. *La
+falaise n'est donc pas une question de capacité du modèle, mais de **dynamique** : c'est le même diagnostic que les
+mesures 83-85, avec un pas unitaire meilleur* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, le 14 B **réparti** (OOM transitoire), FR/EN ✓✗ ;
+l'opérateur est **linéaire** ✓✗ ; et le pas 3 erratique de la couche 48 est peut-être un artefact de la couche
+finale ✓✓.

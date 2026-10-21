@@ -9,7 +9,7 @@ est en heure locale de la machine (**HAE = EDT, UTC−4**).
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-10-21** | [2026-10-21.md](2026-10-21.md) | [memoire](2026-10-21_memoire.md) · [mesures](2026-10-21_mesures.md) · [modele](2026-10-21_modele.md) |
+| **2026-10-21** | [2026-10-21.md](2026-10-21.md) | [distribue](2026-10-21_distribue.md) · [memoire](2026-10-21_memoire.md) · [mesures](2026-10-21_mesures.md) · [modele](2026-10-21_modele.md) |
 | **2026-10-20** | [2026-10-20.md](2026-10-20.md) | [distribue](2026-10-20_distribue.md) · [mesures](2026-10-20_mesures.md) · [modele](2026-10-20_modele.md) |
 | **2026-10-19** | [2026-10-19.md](2026-10-19.md) | [docs](2026-10-19_docs.md) · [memoire](2026-10-19_memoire.md) · [mesures](2026-10-19_mesures.md) · [modele](2026-10-19_modele.md) |
 | **2026-10-18** | [2026-10-18.md](2026-10-18.md) | [docs](2026-10-18_docs.md) · [memoire](2026-10-18_memoire.md) · [mesures](2026-10-18_mesures.md) · [modele](2026-10-18_modele.md) · [moteur](2026-10-18_moteur.md) |

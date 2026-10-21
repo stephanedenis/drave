@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-21, 4 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-21, 4 h 20 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -148,7 +148,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; le **pidgin nigérian** est **mesuré et échoué** : marge **−1,5** sur le plancher (le modèle copie l'anglais au lieu de traduire, mesure 86) — le critère de l'étage 2 est atteint pour **19 langues** | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la composition** (3 B/7 B/14 B, Verne) | **démontrée sur phrases alignées** : retrieval **0,61** (3 B) → **0,76** (7 B) → **0,68** (14 B, réparti, OOM) ; ordre **0,84 → 0,865 → 0,855** ; **la courbe plafonne entre 7 et 14 B**, et le sens vit à **mi-profondeur** (50 %, 33 % au 14 B) — mesures 80-81, 87 | [07](../reports/07-mesures-couche-commune.md) |
-| **étage 2 — le pas de pensée** (3 B/7 B, Verne) | **deux pas, et la taille n'aide pas** : l'opérateur linéaire tient **deux pas** (0,73 puis 0,53 au 3 B) puis s'effondre ; au 7 B, pas plus de pas ; la **contraction par mélange dégrade** ; un **MLP résiduel sur-apprend** (0,40/0,07/0,07 contre 0,73/0,53/0,33) — **la limite est la donnée** (105 transitions) : il faut une **récurrence entraînée** — mesures 82-85 | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — le pas de pensée** (3 B/7 B/14 B, Verne) | **deux pas, et la taille n'aide pas** : l'opérateur linéaire tient **deux pas** (0,73 puis 0,53 au 3 B) puis s'effondre ; au 7 B, pas plus de pas ; au 14 B, le **premier pas** monte à **0,933** mais le **pas 3** reste à 0,133 ; la **contraction par mélange dégrade** ; un **MLP sur-apprend** — la limite est la **donnée** et la **dynamique**, pas la taille — mesures 82-85, 88 | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
