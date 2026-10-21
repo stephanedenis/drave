@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (91 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (92 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3505,3 +3505,37 @@ part ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : 63 textes, 2 époques, un LoRA r = 16 ✓✗ ; un mélange de tâches, un taux
 d'apprentissage plus bas ou un corpus plus grand donneraient peut-être un gain ✓✓ ; et le corpus n'est **pas
 post-cutoff** ✓✗.
+
+## Mesure 92 — L'ENTRAÎNEMENT MÉLANGÉ AMÉLIORE L'ÉCRITURE DU PIDGIN : marge −4,1 → **+1,2**, sans catastrophe
+
+**La question** ✓✓. La mesure 91 a montré qu'un LoRA **monolingue** détruit la traduction (chrF 40,8 → 10,5) ✗✗ ;
+la mesure 90 qu'un LoRA **supervisé** sur 39 pages mémorise sans transférer ✗✗. *Un entraînement **mélangé** —
+pidgin + traduction + anglais — apprend-il l'écriture **sans oublier** ?* ✓✓
+
+**Le corpus** ✓✓ (`tools/corpus_pidgin_bbc.py` ✓) : **1 840 articles BBC Pidgin** (10,2 M caractères), collectés
+par **sujets paginés** ✓✓, nettoyés (1 840 textes, 9,85 M caractères) ✓ — le vrai levier de **données** qui manquait.
+
+**Le dispositif** ✓✓ (`tools/lora_pidgin_mixte.py` ✓) : LoRA sur les **12 dernières couches** (r = 16, 2,46 M
+paramètres, 0,08 %), lr **1e-5** (doux), 300 pas, mélange **50 % pidgin / 25 % traduction (39 pages) / 25 % anglais
+(replay)** ✓✓. Évaluation sur le conte **tenu à part** (0210, 11 pages), plus la lecture (pcm → eng) et une
+traduction **générale** (eng → fra, 10 phrases de Verne) pour détecter l'oubli ✓✓.
+
+| tâche | avant | après | écart |
+|---|---:|---:|---:|
+| **eng → pcm** (écriture) | 40,8 / **−4,1** | **46,1 / +1,2** | **+5,3** ✓✓ |
+| pcm → eng (lecture) | 51,6 / +9,3 | 51,3 / +9,0 | −0,3 ✓✓ |
+| eng → fra (générale) | 26,4 / −1,0 | 25,5 / −1,9 | −0,9 ✓✓ |
+
+* **L'ÉCRITURE S'AMÉLIORE** ✓✓ : le chrF passe de **40,8 à 46,1** et la marge de **−4,1 à +1,2** (+5,3 points) ✓✓ —
+  *la production du pidgin **s'apprend** avec des données* ✓✓ ;
+* **SANS CATASTROPHE** ✓✓ : la lecture est **préservée** (+9,3 → +9,0) et la traduction générale ne perd que
+  **0,9 point** (−1,0 → −1,9) ✓✓ — *le mélange et le replay anglais évitent l'oubli du LoRA monolingue* ✓✓ ;
+* **L'IC RESTE LARGE** ✗✗ : [+−6,1 ; +9,4] sur **11 pages** ✓✗ — *le signal est positif, pas encore significatif* ✓✓ ;
+  il faut un test plus grand (les **50 pages**).
+
+**Ce que cela change** ✓✓ : le pidgin n'est **pas** un mur : avec **1 840 articles** et un entraînement **mélangé**,
+l'écriture passe **au-dessus du plancher** (+1,2) sans oublier ✓✓. *La couverture 20/20 devient une question de
+**données et de test**, pas d'incapacité du modèle* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 11 pages de test, un LoRA de 300 pas, un conte ✓✗ ; l'IC large ne permet pas
+encore de conclure à la significativité ✓✗ ; et le corpus BBC n'est pas aligné (pas de paires) ✓✓.
