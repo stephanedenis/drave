@@ -121,7 +121,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | la qualité dépend-elle de la **langue** ? | **moi** (mesures 69, 71) | la **couverture** du modèle : +35,8 (annoncées) contre +21,5 (non annoncées) ; trous irlandais/maltais |
 | le **7 B** peut-il faire mieux que le 3 B pour le pidgin ? | **moi** (mesure 105) | **oui, un peu** : réparé par **autocast + GradScaler** (l'overflow fp16 était la cause) ; **+1,2** [−0,6 ; +3,1] contre +0,9 au 3 B, IC qui se recouvrent — la taille n'est pas le levier, le corpus reste la limite |
 | peut-on **découper par langue** (MoE) pour alléger ? | **moi** (C5.6 ; synthèse 07) | **oui en surface**, non en noyau : adaptateurs/têtes par langue, routage par segment, 1,33 % de poids et 5 ms de bascule |
-| le **critère démographique** de passage à l'étage 2 est-il atteint ? | **moi** (mesures 73-98) | **non : 19/20** ; le pidgin est couvert en lecture, l'écriture est au seuil (+0,9) | (Ethnologue 2026) ; reste 13 langues, dont 5 des 10 premières |
+| le **critère démographique** de passage à l'étage 2 est-il atteint ? | **moi** (mesures 73-76, 107) | **oui : 20/20** ; le pidgin est **lu** (+4,4 au 14 B) et **écrit** avec un adaptateur 14 B (+4,6 [+2,4 ; +7,0], mesure 107) |
 | le littéraire perd-il le **contenu** (noms, omissions) ? | **moi** (mesure 68) | **non** : 96,2 % des noms, 0,5 % d'omissions — l'écart est **stylistique** |
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
