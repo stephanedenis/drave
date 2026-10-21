@@ -194,6 +194,13 @@ impl Gpu {
 
     pub fn ouvrir(ordinal: c_int) -> Option<Gpu> {
         unsafe {
+            // Piège courant : `CUDA_VISIBLE_DEVICES=` (vide) masque TOUS les
+            // GPU pour CUDA, alors que nvidia-smi les montre. On l'ignore en
+            // le disant, plutôt que de se limiter au CPU sans raison.
+            if std::env::var("CUDA_VISIBLE_DEVICES").map(|v| v.trim().is_empty()).unwrap_or(false) {
+                std::env::remove_var("CUDA_VISIBLE_DEVICES");
+                eprintln!("[gpu] CUDA_VISIBLE_DEVICES vide : ignoré (les GPU redeviennent visibles)");
+            }
             let rc = cuInit(0);
             if rc != 0 { eprintln!("{}", erreur(rc, "cuInit")); return None; }
             let mut dev: c_int = 0;
@@ -1574,7 +1581,11 @@ pub fn machines() -> &'static [&'static Gpu] {
 
 pub fn instance() -> Option<&'static Gpu> {
     INSTANCE.get_or_init(|| {
-        if std::env::var("DRAVE_GPU").is_err() { return None; }
+        // AUTO : le GPU est essayé par défaut, le CPU reste le repli.
+        // `DRAVE_GPU=0` force le CPU ; `DRAVE_GPU=1` force la tentative GPU.
+        if std::env::var("DRAVE_GPU").map(|v| v.trim() == "0").unwrap_or(false) {
+            return None;
+        }
         Gpu::ouvrir_auto()
     }).as_ref()
 }
