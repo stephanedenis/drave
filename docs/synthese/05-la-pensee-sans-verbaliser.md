@@ -58,7 +58,10 @@ dynamique **contractante**.* **Mesure 83** : la taille ne repousse pas la falais
 que le 3 B (0,6-0,73 puis 0,27-0,53) et son cosinus est même plus bas (0,73-0,84 contre 0,81-0,90). *Le problème
 n'est pas le modèle, c'est l'opérateur.* **Mesure 84** : la contraction **simple** (mélanger le pas avec l'état
 courant) **dégrade** l'itération (α = 0,75 : 0,40/0,07/0,33 ; α = 1 : 0,73/0,53/0,33) — *un pas plus petit ne va pas
-plus loin : la contraction doit être **apprise**, pas imposée par un mélange*.
+plus loin : la contraction doit être **apprise**, pas imposée par un mélange*. **Mesure 85** : un **MLP résiduel**
+sur-apprend (perte 0,0001 sur 105 transitions) et généralise **moins bien** que le linéaire (0,40/0,07/0,07 contre
+0,73/0,53/0,33) — *la limite est la **donnée**, pas la forme de l'opérateur : il faut une récurrence entraînée sur
+beaucoup plus de phrases.*
 
 ## Ce qui reste à construire
 

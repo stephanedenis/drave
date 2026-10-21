@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (84 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (85 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3276,3 +3276,36 @@ un résultat négatif utile : il **élimine** la correction naïve et **précise
 **Ce que ce résultat ne dit pas** ✗ : 15 séries de test, deux tailles, FR/EN ✓✗ ; un mélange linéaire n'est pas
 une contraction **apprise** (un opérateur contractant entraîné, ou une régularisation spectrale, resteraient à
 essayer) ✓✓ ; et le retrieval à 4 phrases a un hasard de 25 % ✓✗.
+
+## Mesure 85 — UN MLP RÉSIDUEL NE FAIT PAS MIEUX : il sur-apprend et généralise moins bien que le linéaire — la limite est la **donnée**, pas la forme
+
+**La question** ✓✓. La mesure 84 a montré que la contraction par mélange **dégrade** et que la contraction doit être
+**apprise** ✓✓. *Un opérateur **non linéaire** — un petit MLP résiduel — apprend-il mieux la dynamique qu'un
+linéaire ?* ✓✓ C'est le test le plus simple de l'hypothèse « le problème est la **forme** de l'opérateur » ✓✓.
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee_mlp.py` ✓) : les états Verne (3 B), les mêmes transitions que la mesure
+82 (105 pour l'entraînement, 45 pour le test) ✓. L'opérateur `F(x) = x + MLP(x)` (résiduel : il apprend le
+**changement**), MLP 2048 → 256 → 2048, ReLU, dropout 0,1, weight decay ✓✓. 400 époques ✓.
+
+| opérateur | couche | pas 1 | pas 2 | pas 3 |
+|---|---:|---:|---:|---:|
+| linéaire (mesure 82) | 6 | **0,733** | **0,533** | 0,133 |
+| **MLP résiduel** | 6 | 0,400 | 0,067 | 0,067 |
+| linéaire (mesure 82) | 18 | **0,600** | **0,333** | **0,467** |
+| **MLP résiduel** | 18 | 0,067 | 0,000 | 0,000 |
+
+* **LE MLP SUR-APPREND** ✗✗ : la perte d'entraînement tombe à **0,0001** sur 105 transitions ✓✗ ; sur le test, il
+  fait **moins bien** que le linéaire (0,40 contre 0,73 au pas 1, couche 6) ✓✗ — *un modèle plus expressif avec
+  aussi peu de données **mémorise** au lieu d'apprendre la dynamique* ✓✓ ;
+* **LA LIMITE EST LA DONNÉE, PAS LA FORME** ✓✓ : 105 transitions ne suffisent ni pour un linéaire (2 pas) ni pour
+  un MLP (1 pas) ✓✗ — *le problème n'est pas l'opérateur post-hoc, c'est le **corpus** de transitions* ✓✓ ;
+* **la couche 18 est la plus sensible au sur-apprentissage** ✗✗ : 0,067 au pas 1 (contre 0,60 pour le linéaire) ✓✗ —
+  *l'état y est plus **structuré**, et le MLP y apprend du bruit* ✓✓.
+
+**Ce que cela change** ✓✓ : la voie de l'**opérateur post-hoc** (linéaire ou MLP) est **bornée par la donnée** ✓✗.
+*Il faut une **récurrence entraînée** — le programme du chapitre 5 — sur beaucoup plus de phrases, pas un opérateur
+appris après coup* ✓✓. C'est la conclusion la plus nette de la nuit sur la dynamique ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 105 transitions, un MLP à 256 unités, 400 époques, FR/EN ✓✗ ; un MLP plus
+petit, régularisé ou entraîné sur plus de données ferait peut-être mieux ✓✓ ; et le test d'itération à 4 phrases a
+un hasard de 25 % ✓✗.

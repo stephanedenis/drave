@@ -1,0 +1,9 @@
+{
+ "couche": 18,
+ "epoques": 400,
+ "retrieval_pas": [
+  0.0667,
+  0.0,
+  0.0
+ ]
+}
