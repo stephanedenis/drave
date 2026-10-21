@@ -206,3 +206,5 @@
 - [`rapport-vitesse-v41.md`](rapport-vitesse-v41.md)
 - [`rapport-vram-transfert.md`](rapport-vram-transfert.md)
 - [`toutes-langues.md`](toutes-langues.md)
+
+- [`sources-pidgin.json`](sources-pidgin.json) — inventaire des sources parallèles pidgin-anglais (8 testées, 3 utilisées, 1 écartée, 2 inaccessibles/absentes).

@@ -1,0 +1,14 @@
+{
+ "date": "2026-10-21",
+ "question": "Où trouver des paires pidgin-anglais modernes, narratives et non religieuses ?",
+ "sources": [
+  {"source": "African Storybook / Global-ASP", "type": "contes pour enfants", "volume": "7 contes, 71 pages", "registre": "narratif moderne", "verdict": "UTILISÉ ; +0,9 sur 71 pages (mesure 98)", "statut": "utilisé"},
+  {"source": "translatewiki (OPUS v2026-07-01)", "type": "interface logicielle", "volume": "2 832 paires", "registre": "moderne, court", "verdict": "UTILISÉ ; +1,3 sur 50 pages (mesure 95)", "statut": "utilisé"},
+  {"source": "BBC Pidgin", "type": "monolingue", "volume": "1 840 articles, 9,85 M caractères", "registre": "actualité moderne", "verdict": "UTILISÉ ; −0,5 en écriture (mesure 93)", "statut": "utilisé (monolingue)"},
+  {"source": "Bible PCMWBT 2019 (eBible)", "type": "religieux", "volume": "30 950 versets", "registre": "archaïque (KJV) / moderne (WEB) / narratif", "verdict": "TOXIQUE : −4,6 (KJV, mesure 96), −6,2 (WEB, mesure 97), −20,3 (narratif, mesure 102)", "statut": "écarté"},
+  {"source": "JW Pidgin", "type": "publications modernes", "volume": "inconnu", "registre": "moderne", "verdict": "INACCESSIBLE : /pcm/ redirige vers le filtre, hreflang pcm absent des numéros, WOL /pcm/ 404", "statut": "inaccessible"},
+  {"source": "OPUS NLLB, ParaCrawl, WikiMatrix, CCMatrix, Tatoeba", "type": "web miné", "volume": "0 paire en-pcm", "registre": "—", "verdict": "ABSENT : les URLs moses en-pcm renvoient 404 ; l'API OPUS ne liste que translatewiki", "statut": "absent"},
+  {"source": "Tatoeba (site)", "type": "phrases", "volume": "0", "registre": "—", "verdict": "ABSENT : pas de langue pcm", "statut": "absent"}
+ ],
+ "verdict": "Le seul levier positif est translatewiki (+1,3) ; les contes donnent +0,9 sur 71 pages ; le reste est toxique ou inaccessible. La couverture reste 19/20. La reprise exige un corpus parallèle narratif moderne non religieux (JW Pidgin, sous-titres, actualités alignées), pas un autre modèle."
+}
