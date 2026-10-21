@@ -1,0 +1,65 @@
+{
+ "hf": "Qwen/Qwen2.5-3B-Instruct",
+ "pas": 400,
+ "textes": 1840,
+ "avant": {
+  "eng→pcm": {
+   "chrf": 31.2,
+   "plancher": 35.3,
+   "marge": -4.1,
+   "ic95": [
+    -6.7,
+    -1.5
+   ],
+   "positives": 13,
+   "n": 50
+  },
+  "pcm→eng": {
+   "chrf": 35.1,
+   "plancher": 34.8,
+   "marge": 0.2,
+   "ic95": [
+    -3.6,
+    4.4
+   ],
+   "positives": 25,
+   "n": 50
+  },
+  "eng→fra": {
+   "chrf": 26.4,
+   "plancher": 27.4,
+   "marge": -1.0,
+   "n": 10
+  }
+ },
+ "apres": {
+  "eng→pcm": {
+   "chrf": 34.8,
+   "plancher": 35.3,
+   "marge": -0.5,
+   "ic95": [
+    -3.3,
+    2.2
+   ],
+   "positives": 21,
+   "n": 50
+  },
+  "pcm→eng": {
+   "chrf": 35.8,
+   "plancher": 34.8,
+   "marge": 1.0,
+   "ic95": [
+    -2.2,
+    4.5
+   ],
+   "positives": 30,
+   "n": 50
+  },
+  "eng→fra": {
+   "chrf": 25.2,
+   "plancher": 27.4,
+   "marge": -2.2,
+   "n": 10
+  }
+ }
+}

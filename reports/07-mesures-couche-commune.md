@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (92 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (93 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3539,3 +3539,34 @@ l'écriture passe **au-dessus du plancher** (+1,2) sans oublier ✓✓. *La couv
 
 **Ce que ce résultat ne dit pas** ✗ : 11 pages de test, un LoRA de 300 pas, un conte ✓✗ ; l'IC large ne permet pas
 encore de conclure à la significativité ✓✗ ; et le corpus BBC n'est pas aligné (pas de paires) ✓✓.
+
+## Mesure 93 — BBC SEUL : L'ÉCRITURE MONTE DE −4,1 À **−0,5** (+3,6) MAIS NE PASSE PAS LE PLANCHER
+
+**La question** ✓✓. La mesure 92 a amélioré l'écriture (+1,2) avec un mélange qui contenait **25 % de paires de
+traduction** ✗✓. *La production s'apprend-elle sur le **corpus monolingue seul** (1 840 articles BBC), et le gain
+tient-il sur les **50 pages** ?* ✓✓
+
+**Le dispositif** ✓✓ (`tools/lora_pidgin_bbc.py` ✓) : **BBC Pidgin seul** (70 %) + **replay anglais** (30 %), LoRA
+sur les 12 dernières couches, lr 1e-5, 400 pas ✓✓ ; test sur **les 50 pages** des contes, **jamais vues** ✓✓ ;
+marge appariée (bootstrap) ✓✓.
+
+| tâche | avant | après | écart |
+|---|---:|---:|---:|
+| **eng → pcm** (écriture) | 31,2 / **−4,1** [−6,7 ; −1,5] | 34,8 / **−0,5** [−3,3 ; +2,2] | **+3,6** ✓✓ |
+| pcm → eng (lecture) | 35,1 / +0,2 | 35,8 / +1,0 | +0,8 ✓✓ |
+| eng → fra (générale) | 26,4 / −1,0 | 25,2 / −2,2 | −1,2 ✓✓ |
+
+* **LE CORPUS MONOLINGUE AMÉLIORE L'ÉCRITURE** ✓✓ : +3,6 points (31,2 → 34,8), la marge passe de **−4,1** (significativement
+  négative : IC [−6,7 ; −1,5]) à **−0,5** (IC [−3,3 ; +2,2]) ✓✓ — *la production s'apprend avec des données* ✓✓ ;
+* **MAIS LE PLANCHER N'EST PAS PASSÉ** ✗✗ : −0,5, et l'IC **contient 0** ✓✗ — *le corpus seul ne suffit pas ; il
+  manque les **paires*** ✓✓ ;
+* **le mélange avec les paires fait mieux** ✓✓ : +1,2 (mesure 92, 11 pages) contre −0,5 ici ✓✓ — *les paires de
+  traduction sont le **complément** nécessaire* ✓✓ ;
+* **lecture et traduction générale préservées** ✓✓ : +0,8 et −1,2, pas de catastrophe ✓✓.
+
+**Ce que cela change** ✓✗ : la couverture reste **19/20** ; mais l'écriture est **au seuil** (de −4,1 à −0,5) ✓✓.
+*Le chemin est net : **plus de paires** (pas seulement du monolingue) et un entraînement mélangé — c'est un travail
+de **données**, pas d'incapacité* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 50 pages, 400 pas, un LoRA de 12 couches ✓✗ ; les paires manquent (la BBC
+n'est pas alignée) ✓✗ ; et le corpus n'est pas post-cutoff ✓✗.
