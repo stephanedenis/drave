@@ -45,6 +45,10 @@ def main() -> int:
     d = json.loads(pathlib.Path("data/pidgin/pidgin.json").read_text())
     mono = json.loads(pathlib.Path("data/pidgin/mono_bbc_clean.json").read_text())
     anglais = pathlib.Path("data/corpus_en_val.txt").read_text(encoding="utf-8", errors="ignore")[:2_000_000]
+    tw_en = pathlib.Path("data/pidgin/translatewiki_en.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
+    tw_pcm = pathlib.Path("data/pidgin/translatewiki_pcm.txt").read_text(encoding="utf-8", errors="ignore").splitlines()
+    tw = [(a.strip(), b.strip()) for a, b in zip(tw_en, tw_pcm) if len(a.strip()) > 2 and len(b.strip()) > 2]
+    print(f"  {len(tw)} paires translatewiki")
     histoires = sorted({u["histoire"] for u in d["unites"]})
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
@@ -63,13 +67,19 @@ def main() -> int:
         ids_en = tok(anglais, add_special_tokens=False)["input_ids"]
         for step in range(a.pas):
             r = rng.random()
-            if r < 0.4:
+            if r < 0.35:
+                # paires translatewiki : la MÊME consigne de traduction, cible pidgin ✓✓
+                lot, labels = [], []
+                for src_tw, tgt_tw in [rng.choice(tw), rng.choice(tw)]:
+                    p = tok(p_pcm(src_tw), add_special_tokens=False)["input_ids"]
+                    t = tok(" " + tgt_tw + tok.eos_token, add_special_tokens=False)["input_ids"]
+                    lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])
+            elif r < 0.6:
                 lot = [tok(rng.choice(mono), add_special_tokens=False)["input_ids"][:256] for _ in range(2)]
                 labels = [x[:] for x in lot]
-            elif r < 0.8:
+            elif r < 0.85:
                 lot, labels = [], []
-                import random as _r
-                for u in _r.sample(train, 2):
+                for u in rng.sample(train, 2):
                     p = tok(p_pcm(u["textes"]["eng"]), add_special_tokens=False)["input_ids"]
                     t = tok(" " + u["textes"]["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"]
                     lot.append((p + t)[:256]); labels.append(([-100] * len(p) + t)[:256])

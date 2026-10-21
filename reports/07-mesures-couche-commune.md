@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (94 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (95 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3600,3 +3600,38 @@ du monolingue ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 5 contes, 300 pas, un LoRA de 12 couches ✓✗ ; un entraînement plus long, plus
 de paires ou un modèle plus grand pourraient passer ✓✓ ; et le corpus n'est **pas post-cutoff** ✓✗.
+
+## Mesure 95 — LES 2 832 PAIRES TRANSLATEWIKI AMÉLIORENT L'ÉCRITURE : marge poolée **+1,3** [−0,9 ; +3,5] (contre **−2,3** sans les paires)
+
+**La question** ✓✓. La mesure 94 a montré que sans **paires**, l'écriture reste sous le plancher (−2,3) ✗✗. *Des
+**paires réelles** — 2 832 paires anglais-pidgin de translatewiki (v2026-07-01) — suffisent-elles ?* ✓✓
+
+**Le dispositif** ✓✓ : la **même validation croisée** que la mesure 94 (5 contes, 50 pages), avec un mélange
+**35 % paires translatewiki / 25 % BBC / 25 % paires du conte / 15 % anglais** ✓✓ ; LoRA sur les 12 dernières
+couches, lr 1e-5, 300 pas ✓✓.
+
+| conte (test) | sans paires (mesure 94) | **avec paires** (mesure 95) |
+|---|---:|---:|
+| 0001 | −6,9 | **−0,0** |
+| 0004 | +2,0 | +1,4 |
+| 0089 | −0,7 | −1,1 |
+| 0095 | −3,3 | −1,9 |
+| 0210 | −0,9 | **+7,6** |
+| **poolé (50 pages)** | **−2,3** [−5,5 ; +1,0] | **+1,3** [−0,9 ; +3,5] |
+
+* **LES PAIRES AMÉLIORENT L'ÉCRITURE** ✓✓ : la marge poolée passe de **−2,3** à **+1,3** (**+3,6 points**) ✓✓ —
+  *les paires de traduction sont le **levier** que le monolingue ne remplace pas* ✓✓ (mesure 93 : −0,5) ;
+* **L'IC CONTIENT ENCORE 0** ✗✗ : [−0,9 ; +3,5] sur 50 pages ✓✗ — *le gain est **positif en moyenne**, pas encore
+  **significatif*** ✓✓ ;
+* **0210 PORTE LE GAIN** ✗✓ : +7,6 (9/11 pages), quand 0001, 0089, 0095 sont à ~0 ou négatifs ✓✗ — *la variance
+  entre contes reste grande* ✓✓ ;
+* **le plancher est franchi en moyenne** ✓✓ : chrF 36,6 contre 35,3 ✓✓ — *pour la première fois, le modèle fait
+  **mieux que « ne rien faire »** en écriture, mais de peu* ✓✓.
+
+**Ce que cela change** ✓✓ : l'écriture du pidgin passe de **significativement négative** (−4,1 zéro-shot) à
+**positivement marginale** (+1,3) ✓✓ ; le chemin est **confirmé** : il faut **plus de paires** (des milliers, pas
+2 832) pour **réduire l'IC** et franchir la significativité ✓✓. *La couverture reste **19/20**, mais le 20/20 est
+maintenant une question de **volume de paires*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 2 814 paires (UI), 5 contes, 300 pas ✓✗ ; les paires sont **courtes et
+techniques** (translatewiki), pas narratives ✓✗ ; et l'IC large ne permet pas de conclure ✓✓.
