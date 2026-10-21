@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (103 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (104 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3858,3 +3858,36 @@ chercher d'autres hyperparamètres : il faut des paires* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : un pli (0210), 300 pas ✓✗ ; d'autres réglages (rang 32, lr 2e-5, plus de pas)
 pourraient être testés ✓✓ ; mais les trois ablations vont dans le même sens ✓✓.
+
+## Mesure 104 — LA WIKIPÉDIA PIDGIN (1 186 paires **locales**) DÉGRADE AUSSI L'ÉCRITURE : −10,8 sur le pli 0210 — le registre des **contes** est le seul qui aide
+
+**La question** ✓✓. La leçon 96-102 demandait des paires **modernes et non religieuses** ✗✓. *La Wikipédia pidgin
+(1 902 articles, moderne, non religieuse) est-elle ce corpus ?* ✓✓ Le contenu est **local** : le dump
+`pcmwiki-latest` (2,3 Mo) + les **langlinks** + l'**index local** des 4 218 781 titres anglais des 28 126
+morceaux Nipada (34 Go) + le `backlog_wikipedia_en.db` de Panini (20 935 textes) ✓✓ — **sans API** ✓✓.
+
+**Les vérifications demandées** ✓✓ :
+- le corpus local Nipada : **6 langues** (de, en, es, fr, it, ru), **81 Go**, morceaux JSON de 150 articles,
+  créés le **2026-06-08** — le pidgin n'y était **pas** : dump téléchargé aujourd'hui ✓✓ ;
+- l'index anglais : **4 218 781 titres**, **4 218 781 uniques, 0 doublon** ✓✓ — le local est **propre** ;
+- les paires : **1 186** paires pidgin-anglais (les 1 716 articles avec texte ; 1 238 titres anglais trouvés ;
+  les leads de 2 phrases appariés) ✓✓.
+
+| configuration (pli 0210) | chrF | plancher | marge |
+|---|---:|---:|---:|
+| **sans wiki** (référence, mesure 98) | **51,8** | 44,9 | **+6,9** |
+| **avec 1 186 paires Wikipédia** | **34,1** | 44,9 | **−10,8** [−20,1 ; −1,4] |
+
+* **LA WIKIPÉDIA DÉGRADE AUSSI** ✗✗ : chrF 34,1 contre 51,8, marge **−10,8** (2/11 pages) ✓✗ — *même moderne, même
+  non religieuse, la prose **encyclopédique** nuit comme la prose **religieuse*** ✓✓ ;
+* **le registre est encore plus étroit que « moderne non religieux »** ✓✓ : c'est le registre des **contes** qui
+  aide (les 7 histoires, +0,9) ✓✓ — *les paires doivent être des **histoires pour enfants**, pas des encyclopédies* ✓✓ ;
+* **le contenu local est propre** ✓✓ : 0 doublon sur 4,2 M de titres ; le pidgin manquait, il est là ✓✓ ;
+* **le corpus reste le verrou** ✓✓ : après l'interface (+1,3), la Bible (−4,6 à −20,3) et la Wikipédia (−10,8),
+  seul le registre narratif **des contes** tient ✓✓.
+
+**Ce que cela change** ✗✓ : la couverture reste **19/20** ✓✓ ; la piste encyclopédique est **close** ✓✗. *Le corpus à
+construire est celui des **histoires pour enfants** en pidgin-anglais — l'African Storybook n'en a que 7* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un pli, 300 pas, 1 186 paires ✓✗ ; la Wikipédia est un **domaine** différent des
+contes, pas un mauvais corpus en soi ✓✓ ; et un mélange plus fin (10-20 %) pourrait ne pas nuire ✓✓.
