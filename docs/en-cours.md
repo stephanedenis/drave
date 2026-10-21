@@ -58,11 +58,13 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
 4. **L'étage 2 est ouvert** : **19/20** langues les plus parlées mesurées sur un texte neuf (Ethnologue 2026,
-   mesures 73-76) ; seule manque le **pidgin nigérian** (créole oral). Quatre mesures d'étage 2 : représentation
+   mesures 73-76) ; seule manque l'**écriture du pidgin** (la lecture passe ; il faut des paires narratives modernes,
+mesures 94-97). Quatre mesures d'étage 2 : représentation
    (77), taille (78), composition (79-81), dynamique (82-83) — *le prochain chantier est la **dynamique
    contractante***.
 
-**Ce qui reste avant l'étage 2** : la **couverture** est à **19/20** (seul le pidgin nigérian manque) ; la qualité sur les
+**Ce qui reste avant l'étage 2** : la **couverture** est à **19/20** — seul le **pidgin nigérian** manque, et son
+écriture demande des paires du **bon registre** (les paires bibliques dégradent, mesures 96-97) ; la qualité sur les
 **langues peu dotées**, le **registre parlé**, et une mesure du **sens** qui ne soit pas de surface (le chrF est un
 **plancher**, pas une note absolue ; il n'est même **pas comparable entre écritures**, 29ᵉ piège).
 
