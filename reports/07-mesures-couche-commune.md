@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (75 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (76 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2873,3 +2873,56 @@ par identifiant ou par date, ou documents ONU dans d'autres langues ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : 5 articles par langue, un seul modèle (7 B) ✓✗ ; le verdict « récite » repose
 sur l'article 1 (le plus célèbre) — les autres articles pourraient être traduits ✓✗ ; et l'absence de corpus
 post-cutoff n'est pas l'absence de qualité : c'est l'absence d'**instrument** ✓✓.
+
+## Mesure 76 — JW.ORG 2026 : 11 LANGUES, 139 UNITÉS ALIGNÉES PAR `data-pid` — la couverture atteint **19/20**
+
+**La question** ✓✓. La mesure 75 a fermé la porte de l'UDHR : **aucune** des 12 langues manquantes ne peut y être
+mesurée, ni par récitation (7) ni par incapacité (5) ✗✗. *Où trouver un corpus **post-cutoff**, **humain** et
+**aligné** pour ces langues ?* ✓✓
+
+**La source** ✓✓ (`tools/corpus_jw.py` ✓) : le site **jw.org** publie les **mêmes articles** — les études de *La
+Tour de garde* d'**août 2026** — dans des centaines de langues ✓✓, avec des **traductions humaines** ✓✓ et des URL
+localisées données par les liens **hreflang** de la page anglaise ✓✓. Le contenu est **postérieur à la coupure**
+(2024) : le modèle n'a pas pu le mémoriser ✓✓.
+
+**L'alignement** ✓✓ : chaque paragraphe porte un identifiant `data-pid`, **le même dans toutes les langues** ✓✓ ;
+on aligne par `data-pid`, pas par index — les langues ajoutent ou retirent des légendes, mais le corps partage les
+mêmes identifiants ✓✓. Résultat : **5 articles, 139 paragraphes**, **12 langues** (eng + hin, ben, ind, urd, jpn,
+mar, tel, vie, swh, hau, arz), 0 paragraphe manquant ✓✓.
+
+**Les résultats** (X → anglais, 40 unités étalées, 7 B, chat, 400, fp16) ✓ :
+
+| langue | chrF | plancher | hasard | **marge/hasard** | tronqués |
+|---|---:|---:|---:|---:|---:|
+| vietnamien | 61,4 | 15,5 | 18,4 | **+43,1** | 0 |
+| arabe égyptien | 63,6 | 2,7 | 18,9 | **+44,7** | 0 |
+| indonésien | 53,3 | 21,0 | 18,2 | **+35,1** | 0 |
+| bengali | 50,0 | 3,5 | 19,2 | **+30,8** | 0 |
+| hindi | 48,9 | 6,0 | 19,0 | **+29,9** | 0 |
+| urdu | 45,8 | 4,0 | 19,0 | **+26,8** | 0 |
+| swahili | 43,2 | 19,7 | 18,1 | **+25,1** | 0 |
+| japonais | 43,0 | 1,9 | 19,0 | **+24,0** | 0 |
+| marathi | 40,3 | 3,6 | 18,1 | **+22,2** | 0 |
+| télougou | 38,5 | 5,5 | 18,0 | **+20,5** | 0 |
+| haoussa | 29,6 | 18,7 | 17,1 | **+12,5** | 1/40 |
+
+* **LES 11 LANGUES SONT AU-DESSUS DU HASARD** ✓✓ : marge de **+12,5** (haoussa) à **+44,7** (arabe égyptien) ✓✓ ;
+  *le modèle traduit ces langues, il ne les ignore pas* ✓✓ — contrairement au verdict « ne sait pas » de l'UDHR
+  (mesure 75) ✓✗ ;
+* **LE HAOUSSA EST LE PLUS FAIBLE** ✗✓ : **+12,5** de marge (chrF 29,6) ✓✗ — *la langue la moins servie du
+  groupe* ✓✓ ; le vietnamien et l'arabe égyptien sont les plus forts (+43/+45) ✓✓ ;
+* **LE REGISTRE EST RELIGIEUX** ✓✗ : ces 11 langues sont mesurées sur un texte **religieux/dévotionnel**, pas
+  juridique, presse ou littéraire ✓✗ — *la couverture des langues progresse, la carte des registres reste à
+  compléter* ✓✓ ;
+* **LA COUVERTURE DÉMOGRAPHIQUE PASSE À 19/20** ✓✓ : anglais, chinois, hindi, espagnol, arabe, français, bengali,
+  portugais, indonésien, urdu, russe, allemand, japonais, **arabe égyptien**, marathi, vietnamien, télougou,
+  swahili, haoussa ✓✓. *Il ne manque que le **pidgin nigérian** (14ᵉ), une langue essentiellement orale sans corpus
+  parallèle propre* ✗✓.
+
+**Ce que cela change** ✓✓ : le **critère démographique de passage à l'étage 2 est atteint à 19/20** ✓✓ — la
+dernière langue (pidgin nigérian) est un **cas documenté** (créole oral, pas de corpus parallèle post-cutoff) ✓✗.
+*L'étage 2 peut s'ouvrir* ✓✓, tout en continuant à chercher un corpus pidgin (BBC Pidgin, VOA, gouvernements) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 40 unités sur 139, 5 articles, un seul modèle (7 B) ✓✗ ; le registre
+religieux n'est pas la conversation quotidienne ✓✗ ; le haoussa reste faible (+12,5) ✓✗ ; et le pidgin nigérian
+n'est **pas** mesuré ✗✓.
