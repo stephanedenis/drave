@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (100 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (101 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3780,3 +3780,32 @@ les plis), batch 1, 128 jetons, gradient checkpointing ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 3 plis sur 7 (la boucle a été arrêtée), 300 pas, un seul réglage ✓✗ ; un 7 B
 mieux réglé pourrait écrire mieux que le 3 B ✓✓ ; et l'échec ne dit **rien** de la capacité du 7 B ✓✓.
+
+## Mesure 101 — LE 7 B RESTE CASSÉ MÊME AVEC LA RECETTE CORRIGÉE : couches 16-27, sans checkpointing, lr 5e-6 — chrF 26,0, marge −19,0
+
+**La question** ✓✓. La mesure 100 attribuait l'échec du 7 B à la **recette** (couches ciblées, checkpointing, lr) ✓✗.
+*En corrigeant les trois — `layers_to_transform` sur les 12 **dernières** couches (16-27), **sans** gradient
+checkpointing, lr **5e-6** — le 7 B redevient-il valide ?* ✓✓
+
+**Le dispositif** ✓✓ : un seul pli (0210, 11 pages) ; 7 B fp16 réparti, batch 1, 128 jetons, 150 pas, lr 5e-6,
+LoRA r = 16 sur les couches **16-27** (les 12 dernières), **sans** checkpointing ✓✓.
+
+| réglage | chrF | plancher | marge |
+|---|---:|---:|---:|
+| 7 B, recette initiale (mesure 100) | 8,2-24,8 | 25-38 | −13,5 à −16,9 |
+| **7 B, recette corrigée** | **26,0** | 44,9 | **−19,0** [−35,4 ; −4,1] |
+| 3 B, même pli (0210) | **51,8** | 44,9 | **+6,9** |
+
+* **LA RECETTE CORRIGÉE NE SAUVE PAS LE 7 B** ✗✗ : chrF 26,0, marge −19,0 (3/11 pages) ✓✗ — *le problème n'est
+  ni les couches, ni le checkpointing, ni le lr* ✓✓ ;
+* **le 3 B, même pli, fait 51,8 de chrF (+6,9)** ✓✓ — *la même pile (transformers/peft) fonctionne sur le 3 B* ✓✓ ;
+* **le 7 B fp16 réparti + LoRA est donc cassé sur cette pile** ✗✗ : probablement l'interaction **device_map +
+  PEFT + génération** (les adaptateurs sur un modèle réparti) ✓✗ ;
+* **ce n'est pas une mesure du 7 B** ✓✓ : c'est un **échec d'outillage** ; il faudrait un 7 B sur **une seule
+  carte** (impossible en fp16 ici) ou une pile d'entraînement dédiée (DeepSpeed, FSDP) ✓✓.
+
+**Ce que cela change** ✗✓ : le **3 B reste le modèle mesuré** (+0,9 sur 71 pages, mesure 98) ✓✓ ; le 7 B n'est
+**pas testable** sur ce matériel avec cette pile ✓✗. *La couverture reste **19/20*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un pli, 150 pas, une pile ✓✗ ; un 7 B sur une carte unique ou avec FSDP
+pourrait fonctionner ✓✓ ; et l'échec ne dit **rien** de la capacité du 7 B ✓✓.

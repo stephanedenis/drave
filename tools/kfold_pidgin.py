@@ -43,6 +43,7 @@ def main() -> int:
     ap.add_argument("--max-jetons", type=int, default=256)
     ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
     ap.add_argument("--test", default=None, help="ne faire qu'un pli (conte de test)")
+    ap.add_argument("--sans-checkpointing", action="store_true", help="désactiver le gradient checkpointing")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -74,11 +75,13 @@ def main() -> int:
                                                          device_map="auto").eval()
         else:
             model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
+        n_couches = model.config.num_hidden_layers
+        debut = max(0, n_couches - 12)
         config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM",
                             target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-                            layers_to_transform=list(range(24, 36)), layers_pattern="layers")
+                            layers_to_transform=list(range(debut, n_couches)), layers_pattern="layers")
         model = get_peft_model(model, config)
-        if a.repartir or a.huit_bit:
+        if (a.repartir or a.huit_bit) and not a.sans_checkpointing:
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
         opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)

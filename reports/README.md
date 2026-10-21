@@ -39,7 +39,7 @@
 - [`traduction-jw-A.json`](traduction-jw-A.json) · [`traduction-jw-B.json`](traduction-jw-B.json)
 - [`traduction-pidgin-7b.json`](traduction-pidgin-7b.json) · [`traduction-pidgin-14b.json`](traduction-pidgin-14b.json) · [`pidgin-fewshot-7b.json`](pidgin-fewshot-7b.json)
 - [`lora-pidgin-3b.json`](lora-pidgin-3b.json) · [`lora-pidgin-mono-3b.json`](lora-pidgin-mono-3b.json) · [`lora-pidgin-mixte-3b.json`](lora-pidgin-mixte-3b.json) · [`lora-pidgin-bbc-3b.json`](lora-pidgin-bbc-3b.json) · [`kfold-pidgin.json`](kfold-pidgin.json) · [`kfold-pidgin-tw.json`](kfold-pidgin-tw.json) · [`kfold-pidgin-bible.json`](kfold-pidgin-bible.json) · [`kfold-pidgin-web.json`](kfold-pidgin-web.json) · [`kfold-pidgin-7.json`](kfold-pidgin-7.json) · [`kfold-pidgin-7b-8bit.json`](kfold-pidgin-7b-8bit.json)
-- [`kfold-7b-0001.json`](kfold-7b-0001.json) · [`kfold-7b-0004.json`](kfold-7b-0004.json) · [`kfold-7b-0066.json`](kfold-7b-0066.json)
+- [`kfold-7b-0001.json`](kfold-7b-0001.json) · [`kfold-7b-0004.json`](kfold-7b-0004.json) · [`kfold-7b-0066.json`](kfold-7b-0066.json) · [`kfold-7b-fix-0210.json`](kfold-7b-fix-0210.json)
 - [`pensee-multilingue.json`](pensee-multilingue.json)
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
 - [`composition-multilingue.json`](composition-multilingue.json)
