@@ -41,7 +41,7 @@
 - [`pensee-multilingue.json`](pensee-multilingue.json)
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
 - [`composition-multilingue.json`](composition-multilingue.json)
-- [`composition-verne.json`](composition-verne.json) · [`composition-verne-7b.json`](composition-verne-7b.json)
+- [`composition-verne.json`](composition-verne.json) · [`composition-verne-7b.json`](composition-verne-7b.json) · [`composition-verne-14b.json`](composition-verne-14b.json)
 - [`pas-de-pensee.json`](pas-de-pensee.json) · [`pas-de-pensee-7b.json`](pas-de-pensee-7b.json)
 - [`pas-de-pensee-contracte-3b.json`](pas-de-pensee-contracte-3b.json) · [`pas-de-pensee-contracte-7b.json`](pas-de-pensee-contracte-7b.json)
 - [`pas-de-pensee-mlp-6.json`](pas-de-pensee-mlp-6.json) · [`pas-de-pensee-mlp-18.json`](pas-de-pensee-mlp-18.json)

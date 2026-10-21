@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (86 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (87 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3321,7 +3321,7 @@ d'African Storybook en **anglais et pidgin nigérian**, **page par page** ✓✓
 dans ses `div.level2-txt` ✓✓. **50 pages alignées, 5 contes** ✓ — le corpus est **petit** et **non post-cutoff**
 (contes anciens, contamination possible) ✗✓ ; le registre est **enfantin/narratif** ✓✓.
 
-**Les résultats** (7 B, chat, 400, fp16, 26 pages) ✓ :
+**Les résultats** (7 B, chat, 400, fp16, 50 pages) ✓ :
 
 | paire | chrF | **plancher** | hasard | **marge/plancher** | marge/hasard | tronqués |
 |---|---:|---:|---:|---:|---:|---:|
@@ -3344,6 +3344,39 @@ langue **mesurée et échouée** ✓✗. *Le pidgin demande des **données** et 
 copier l'anglais* ✓✓ — c'est un objectif pour la suite, pas un blocage de l'étage 2 (les 19 autres langues sont
 mesurées) ✓✓.
 
-**Ce que ce résultat ne dit pas** ✗ : 4 contes, 26 pages, un modèle (7 B) ✓✗ ; le corpus n'est **pas post-cutoff**
+**Ce que ce résultat ne dit pas** ✗ : 5 contes, 50 pages, un modèle (7 B) ✓✗ ; le corpus n'est **pas post-cutoff**
 (contamination possible) ✓✗ ; le plancher élevé rend la marge **sévère** (une partie de la traduction est
 « gratuite ») ✓✓ ; et le registre enfantin n'est pas la conversation quotidienne ✓✗.
+
+## Mesure 87 — LA COMPOSITION PLAFONNE ENTRE 7 ET 14 B : 0,68 / 0,855 au 14 B contre 0,76 / 0,865 au 7 B — le gain de taille s'arrête
+
+**La question** ✓✓. La composition **profite de la taille** du 3 B au 7 B (+15 points, mesure 81) ✓✓. *Continue-t-elle
+au 14 B ?* ✓✓
+
+**Le dispositif** ✓✓ : le même banc Verne (200 phrases, 50 séries de 4), le **14 B** (Qwen2.5-14B-Instruct, réparti sur
+les deux cartes), même protocole (retrieval global, ordre, pont dual, contrôle négatif) ✓✓.
+
+| modèle | meilleure couche | retrieval global | ordre dans la série | pont | négatif |
+|---|---|---:|---:|---:|---:|
+| 3 B (36 couches) | 18 (50 %) | 0,610 | 0,840 | 0,417 | 0,017 |
+| **7 B** (28 couches) | 14 (50 %) | **0,760** | **0,865** | 0,467 | 0,033 |
+| 14 B (48 couches) | 16 (33 %) | 0,680 | 0,855 | 0,417 | 0,033 |
+| 14 B (couche 24) | 24 (50 %) | 0,685 | 0,840 | 0,400 | 0,033 |
+
+* **LA COURBE PLAFONNE** ✗✗ : le 14 B fait **moins bien** que le 7 B (0,68 contre 0,76) et **à peine mieux** que le
+  3 B (0,61) ✓✗ — *le gain de taille s'arrête entre 7 et 14 B* ✓✓ ;
+* **LE SENS RESTE À MI-PROFONDEUR** ✓✓ : la meilleure couche est **16 sur 48** (33 %) ou 24 (50 %) au 14 B, 14 sur
+  28 (50 %) au 7 B, 18 sur 36 (50 %) au 3 B ✓✓ — *le sens neutre vit au **milieu** du réseau, quelle que soit la
+  taille* ✓✓ ;
+* **LA DERNIÈRE COUCHE S'EFFONDRE TOUJOURS** ✗✗ : 0,050 à la couche 48 (contre 0,09 au 3 B, 0,125 au 7 B) ✓✗ ;
+* **⚠️ L'OOM DE LA RÉPARTITION** ✗✓ : le 14 B a été **réparti** sur deux cartes et a subi un **OOM transitoire**
+  pendant l'extraction ✓✗ — *le résultat du 14 B est donc à prendre avec prudence* ✓✓.
+
+**Ce que cela change** ✓✓ : la composition a un **optimum** autour du **7 B** (0,76 / 0,865) ✓✓ ; au-delà, la
+taille n'aide plus ✗✗. *Le levier de la composition est donc la **profondeur** (le sens à mi-réseau) et la **taille
+jusqu'à 7 B**, pas les paramètres au-delà* ✓✓ — c'est cohérent avec la mesure 66 (rendements décroissants du 7 au
+14 B en traduction) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 200 phrases, FR/EN, un livre ✓✗ ; le 14 B **réparti** et son OOM ✓✗ ; la
+couche 16 (33 %) est peut-être un artefact de la répartition ✓✓ ; et le test d'ordre à 4 phrases a un hasard de
+25 % ✓✗.
