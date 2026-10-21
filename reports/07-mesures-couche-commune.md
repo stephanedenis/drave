@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (106 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (107 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3953,3 +3953,34 @@ un LoRA), ou un objectif dédié à la surface* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 211 pages, 300 pas, un LoRA ✓✗ ; les 6 contes pidgin sans paire anglaise
 pourraient être appariés autrement ✓✓ ; et un 14 B ou un fine-tune complet pourraient franchir le seuil ✓✓.
+
+## Mesure 107 — **LE 14 B FRANCHIT LE SEUIL : +4,6 [+2,4 ; +7,0] sur 71 pages (50/71)** — l'écriture du pidgin est établie, la **couverture passe à 20/20**
+
+**La question** ✓✓. Le 3 B (+0,9) et le 7 B (+1,2) plafonnent ✗✗ ; le 14 B **lit** le mieux le pidgin (+4,4) ✓✓.
+*Écrit-il mieux, avec les paires et le scaler ?* ✓✓
+
+**Le dispositif** ✓✓ : la **même validation croisée** à 7 contes (71 pages), le même mélange, la même recette
+(last-12, r = 16, lr 1e-5, 300 pas, autocast + GradScaler) — seul le modèle change : **Qwen2.5-14B-Instruct**,
+réparti sur les deux cartes ✓✓.
+
+| modèle | marge poolée (71 pages) | IC 95 % | pages > 0 |
+|---|---:|---|---:|
+| 3 B (mesure 98) | +0,9 | [−0,9 ; +2,9] | 36/71 |
+| 7 B (mesure 105) | +1,2 | [−0,6 ; +3,1] | 39/71 |
+| **14 B** | **+4,6** | **[+2,4 ; +7,0]** | **50/71** |
+
+* **LE SEUIL EST FRANCHI** ✓✓ : **+4,6**, et l'IC **[+2,4 ; +7,0] exclut 0** ✓✓ — *l'écriture du pidgin est
+  **significativement** au-dessus du plancher, pour la première fois* ✓✓ ;
+* **LA TAILLE EST LE LEVIER** ✓✓ : +0,9 → +1,2 → **+4,6** (3 B → 7 B → 14 B) ✓✓ — *avec les paires et le scaler,
+  le 14 B débloque ce que les petits modèles ne pouvaient pas* ✓✓ ;
+* **quatre plis sur sept sont significatifs** ✓✓ : 0001 +3,9 [1,9 ; 6,2], 0004 +5,4 [2,5 ; 8,8], 0066 +4,0
+  [1,0 ; 7,0], 0210 **+14,4** [6,1 ; 23,2] ✓✓ ; seul 0089 reste négatif (−1,9) ✓✗ ;
+* **50 pages sur 71** au-dessus du plancher ✓✓ (36 au 3 B, 39 au 7 B) ✓✓.
+
+**Ce que cela change** ✓✓ : la **couverture démographique passe à 20/20** ✓✓ — les 19 langues mesurées sur des
+textes neufs, et le pidgin nigérian **lu** (+3,2 au 7 B, +4,4 au 14 B) et **écrit** (+4,6 au 14 B, IC excluant 0) ✓✓.
+*Le 20/20 est atteint avec un **adaptateur 14 B** pour le pidgin ; la lecture, elle, est acquise sans adaptateur* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 71 pages, 300 pas, un LoRA ✓✗ ; l'écriture du pidgin **dépend de l'adaptateur**
+(les 19 autres langues sont zéro-shot), et la couverture du pidgin est **mesurée sur des contes** (le registre testé) ✓✗ ;
+0089 reste négatif, et 300 pas ne sont pas un optimum ✓✓.

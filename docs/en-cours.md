@@ -32,7 +32,7 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
   il passe de 15,6 (3 B) à 14,2 (7 B), soit −1,4 (mesure 72).
 - **L'entrée sait signaler son bruit** (fautes et langues mêlées : **AUC 1,00**), **pas le corriger** : 8/9 des
   corrections empirent, et la plus fluide est la plus fausse (mesure 65).
-- **L'étage 2 est ouvert** (couverture démographique **19/20**, mesure 76) : la représentation neutre **existe** (un
+- **L'étage 2 est ouvert** (couverture démographique **20/20**, mesure 107) : la représentation neutre **existe** (un
   pont linéaire retrouve la bonne traduction dans **28-69 %**, mesure 77), elle **ne dépend presque pas de la taille**
   (+3,7, mesure 78) ; la **composition** est démontrée sur des phrases alignées (**0,61 / 0,84**, mesure 80) et
   **profite de la taille** (**0,76 / 0,865** au 7 B, mesure 81) ; mais le **pas de pensée** appris ne tient que **deux
@@ -40,32 +40,29 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
-- **La couverture démographique est de 19/20** (Ethnologue 2026, mesures 73-76) : les 20 langues les plus parlées
-  sauf le **pidgin nigérian**, **mesuré et échoué** (marge −1,5 sur le plancher : le modèle copie l'anglais,
-  mesure 86) ; **le critère de passage à l'étage 2 est atteint pour 19 langues** — l'étage 2 est ouvert (mesure 77).
+- **La couverture démographique est de 20/20** (Ethnologue 2026, mesures 73-76 et 107) : les 20 langues les plus
+  parlées ; le **pidgin nigérian** est **lu** (+4,4 au 14 B) et **écrit** avec un **adaptateur 14 B** (+4,6
+  [+2,4 ; +7,0] sur 71 pages, mesure 107) ; l'étage 2 est ouvert (mesure 77).
 
 **Le plan de match, en relation avec la cible.**
 
 1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **quotidien parlé** (dialogue,
    conversation) et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
-2. **Compléter les langues** : 24 langues UE + **chinois et russe** (mesure 73) ; reste **13 des 20 langues les
-   plus parlées** (hindi, arabe, bengali, indonésien, urdu, japonais, pidgin nigérian, arabe égyptien, marathi,
-   vietnamien, télougou, swahili, haoussa) — UDHR + contrôle de contamination, puis corpus post-cutoff — et la
-   **direction inverse** (X→eng).
+2. **Compléter les langues** : les **20 langues** les plus parlées sont couvertes (mesures 73-76, 107) ; reste la
+   **direction inverse** (X→eng) et le **registre parlé** — UDHR + contrôle de contamination, puis corpus post-cutoff.
 3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**
    (mesure 72) ; le prochain levier est la **couverture** — et un **découpage de surface** par langue/famille
    (MoE d'adaptateurs, C5.6), pas un noyau séparé —
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
-4. **L'étage 2 est ouvert** : **19/20** langues les plus parlées mesurées sur un texte neuf (Ethnologue 2026,
-   mesures 73-76) ; seule manque l'**écriture du pidgin** (la lecture passe ; il faut des paires narratives modernes,
-mesures 94-97). Quatre mesures d'étage 2 : représentation
+4. **L'étage 2 est ouvert** : **20/20** langues les plus parlées mesurées sur un texte neuf (Ethnologue 2026,
+   mesures 73-76 et 107) — le pidgin lu et écrit avec un adaptateur 14 B. Quatre mesures d'étage 2 : représentation
    (77), taille (78), composition (79-81), dynamique (82-83) — *le prochain chantier est la **dynamique
    contractante***.
 
-**Ce qui reste avant l'étage 2** : la **couverture** est à **19/20** — seul le **pidgin nigérian** manque, et son
-écriture demande des paires du **bon registre** (les paires bibliques dégradent, mesures 96-97) ; la qualité sur les
-**langues peu dotées**, le **registre parlé**, et une mesure du **sens** qui ne soit pas de surface (le chrF est un
+**Ce qui reste** : la **couverture** est à **20/20**, mais l'écriture du pidgin **dépend d'un adaptateur 14 B** (les
+19 autres langues sont zéro-shot) et n'est mesurée que sur le **registre des contes** ; la qualité sur les **langues
+peu dotées**, le **registre parlé**, et une mesure du **sens** qui ne soit pas de surface (le chrF est un
 **plancher**, pas une note absolue ; il n'est même **pas comparable entre écritures**, 29ᵉ piège).
 
 ## Le tableau de bord des chantiers
@@ -148,7 +145,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
-| **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; le **pidgin nigérian** est **couvert en lecture** (+3,2 au 7 B, +4,4 au 14 B) ; l'**écriture** au seuil : translatewiki **+1,3** (95), **+0,9** (71 pages, 98), **+1,0** avec **211 pages/21 contes** (106) — **tripler le corpus ne change rien** ; la Bible (−4,6 à −20,3) et la Wikipédia (−10,8) nuisent ; le verrou est la **production** du pidgin | [07](../reports/07-mesures-couche-commune.md) |
+| **la couverture démographique** (Ethnologue 2026, top 20) | **20/20** ✓ : les 19 langues mesurées sur des textes neufs (mesures 73-76) ; le **pidgin nigérian** est **lu** (+3,2 au 7 B, +4,4 au 14 B) et **écrit** avec un **adaptateur 14 B** : **+4,6 [+2,4 ; +7,0]** sur 71 pages de contes tenus à part (mesure 107) — l'écriture est **significativement** au-dessus du plancher ; les 3 B/7 B plafonnaient (+0,9/+1,2) | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la composition** (3 B/7 B/14 B, Verne) | **démontrée sur phrases alignées** : retrieval **0,61** (3 B) → **0,76** (7 B) → **0,68** (14 B, réparti, OOM) ; ordre **0,84 → 0,865 → 0,855** ; **la courbe plafonne entre 7 et 14 B**, et le sens vit à **mi-profondeur** (50 %, 33 % au 14 B) — mesures 80-81, 87 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — le pas de pensée** (3 B/7 B/14 B, Verne) | **deux pas, et la taille n'aide pas** : l'opérateur linéaire tient **deux pas** (0,73 puis 0,53 au 3 B) puis s'effondre ; au 7 B, pas plus de pas ; au 14 B, le **premier pas** monte à **0,933** mais le **pas 3** reste à 0,133 ; la **contraction par mélange dégrade** ; un **MLP sur-apprend** — la limite est la **donnée** et la **dynamique**, pas la taille — mesures 82-85, 88 | [07](../reports/07-mesures-couche-commune.md) |
