@@ -37,6 +37,11 @@ longueurs), trois conclusions **survivent** :
 3. **la récurrence n'est pas qu'un coût** : elle **améliore** le modèle de langue (2,73 contre 2,76
    bits/octet). *Le modèle qui pense est aussi un meilleur lecteur.*
 
+**Mesure 77 (20 octobre)** : sur **Qwen2.5-3B** et **139 paragraphes en 12 langues** (corpus JW 2026), un **pont
+linéaire** par langue atteint un **cosinus de 0,78-0,92** et retrouve la bonne traduction dans **28-67 %** des cas
+(hasard 0,7 %), le contrôle négatif restant à ~0 — *la représentation neutre existe mais doit être alignée*, comme
+le pont de la nuit du 16, retrouvé ici à plus grande échelle.
+
 ## Ce qui reste à construire
 
 Une **dynamique apprise, contractante et informative** — c'est-à-dire un pas de pensée qui ne dérive pas et

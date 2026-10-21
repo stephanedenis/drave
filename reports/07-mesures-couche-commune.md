@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (76 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (77 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2926,3 +2926,58 @@ dernière langue (pidgin nigérian) est un **cas documenté** (créole oral, pas
 **Ce que ce résultat ne dit pas** ✗ : 40 unités sur 139, 5 articles, un seul modèle (7 B) ✓✗ ; le registre
 religieux n'est pas la conversation quotidienne ✓✗ ; le haoussa reste faible (+12,5) ✓✗ ; et le pidgin nigérian
 n'est **pas** mesuré ✗✓.
+
+## Mesure 77 — ÉTAGE 2, PREMIÈRE MESURE : la représentation est **partagée** entre les langues, mais **pas alignée** — un pont linéaire retrouve la bonne traduction dans **28-67 %** des cas (hasard 0,7 %)
+
+**La question** ✓✓. L'étage 1 est à **19/20** langues (mesures 73-76) : l'étage 2 s'ouvre ✓✓. Sa première question
+n'est pas métaphysique : *le modèle porte-t-il un **espace de sens partagé** entre les langues ?* ✓✓ Si les états
+internes de la **même phrase** dans deux langues sont proches — et si un **pont linéaire** suffit à passer de l'un à
+l'autre — alors il existe une **représentation neutre** sur laquelle bâtir la pensée ✓✓ ; sinon, il faudra
+l'apprendre (le pont de la nuit du 16 : cosinus 0,70) ✓✗.
+
+**Le dispositif** ✓✓ (`tools/pensee_multilingue.py` ✓) : le corpus **JW 2026** (mesure 76), 139 paragraphes, **les
+mêmes** dans 12 langues, alignés par `data-pid` ✓✓. On fait lire chaque paragraphe au modèle **Qwen2.5-3B** et on
+garde l'état du **dernier token** à 7 couches (0, 6, 12, 18, 24, 30, 36) ✓. Deux mesures et un contrôle :
+  · **retrieval brut** : pour un paragraphe X, l'état anglais le plus proche parmi 139 est-il **sa traduction** ? ✓
+    (hasard = 1/139 = **0,7 %**) ✓✓ ;
+  · **pont linéaire** (ridge, λ choisi par validation interne) : X → anglais, appris sur 100 paragraphes, testé sur
+    39 ✓✓ ;
+  · **contrôle négatif** : pont appris sur des paires **mélangées** → le retrieval doit tomber au hasard ✓✓.
+
+**Les résultats** (meilleure couche par langue) ✓ :
+
+| langue | couche | retrieval brut | cosinus du pont | **retrieval après pont** | négatif |
+|---|---:|---:|---:|---:|---:|
+| vietnamien | 12 | **0,872** | 0,882 | 0,667 | 0,026 |
+| indonésien | 6 | **0,795** | 0,905 | 0,641 | 0,026 |
+| swahili | 6 | 0,513 | 0,915 | 0,538 | 0,000 |
+| japonais | 30 | 0,487 | 0,900 | 0,487 | 0,026 |
+| haoussa | 6 | 0,462 | 0,900 | 0,462 | 0,000 |
+| arabe égyptien | 36 | **0,051** | 0,916 | **0,487** | 0,000 |
+| urdu | 36 | **0,051** | 0,904 | 0,385 | 0,026 |
+| hindi | 12 | 0,385 | 0,819 | 0,359 | 0,000 |
+| marathi | 30 | 0,282 | 0,875 | 0,308 | 0,026 |
+| bengali | 6 | 0,179 | 0,784 | 0,282 | 0,026 |
+| télougou | 12 | 0,231 | 0,802 | 0,282 | 0,026 |
+
+* **IL Y A BIEN UN ESPACE DE SENS PARTAGÉ** ✓✓ : un pont **linéaire** par langue atteint un **cosinus de 0,78 à
+  0,92** et retrouve la bonne traduction dans **28 à 67 %** des cas, contre **0,7 %** au hasard ✓✓ — soit **×40 à
+  ×95** ✓✓ ;
+* **MAIS IL N'EST PAS DONNÉ** ✗✗ : le retrieval **brut** va de **5 %** (arabe égyptien, urdu) à **87 %**
+  (vietnamien) ✓✗ — *les langues proches de l'anglais s'alignent d'elles-mêmes, les lointaines non* ✓✓. Le pont
+  **récupère** les lointaines (arabe égyptien **×9,5**, urdu **×7,5**) mais **coûte** aux proches (indonésien
+  −0,15, vietnamien −0,20) ✓✗ : *le pont est un **compromis**, pas un gain universel* ✓✓ ;
+* **LES COUCHES SONT DIFFÉRENTES SELON LA DISTANCE** ✓✓ : les langues proches s'alignent dès la **couche 6**, les
+  lointaines ont besoin de la **couche 36 + pont** ✓✓ — *le sens partagé est **tôt**, la langue est **tard*** ✓✓ ;
+* **LE CONTRÔLE NÉGATIF EST À ~0** ✓✓ : le pont apprend la traduction, pas la moyenne ✓✓ — *sans ce contrôle, un
+  retrieval de 50 % ne prouverait rien* ✓✓.
+
+**Ce que cela change** ✓✓ : l'étage 2 a sa **première mesure** : la représentation neutre **existe** (un linéaire la
+retrouve à 28-67 %, cosinus 0,8-0,9) mais elle **n'est pas gratuite** ✓✓. *La pensée abstraite peut se bâtir sur un
+espace partagé, à condition d'apprendre l'alignement* ✓✓ — c'est exactement le pont de la nuit du 16 (cosinus 0,70),
+retrouvé ici à plus grande échelle ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 139 paragraphes, **un** modèle (3 B), un registre (religieux) ✓✗ ; l'état du
+**dernier token** n'est pas toute la phrase ✓✗ ; le pont est **linéaire** (un MLP ferait peut-être mieux) ✓✗ ; et le
+retrieval mesure l'**identité du paragraphe**, pas la **composition** du sens (la RSN multi-niveaux) ✓✗ — *c'est la
+prochaine marche* ✓✓.

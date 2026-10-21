@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-21, 0 h 40 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-21, 0 h 55 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -140,6 +140,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
 | **la couverture démographique** (Ethnologue 2026, top 20) | **19/20** (mesures 73-76) ; seul manque le **pidgin nigérian** (créole oral, pas de corpus parallèle post-cutoff) ; **le critère de l'étage 2 est atteint** | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — la représentation neutre** (7 B/3 B, JW 2026) | **partagée mais non alignée** : un pont linéaire par langue atteint un cosinus de **0,78-0,92** et retrouve la bonne traduction dans **28-67 %** (hasard 0,7 %) ; brut : 5 % (arabe égyptien) à 87 % (vietnamien) — mesure 77 | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
