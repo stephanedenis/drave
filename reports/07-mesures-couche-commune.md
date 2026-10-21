@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (73 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (74 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -2764,3 +2764,58 @@ en fin de ligne ✓✗ — il faudra une autre source ou un autre extracteur ✓
 **Ce que ce résultat ne dit pas** ✗ : 61 paragraphes, **5 résolutions**, un registre (ONU) ✓✗ ; 8 à 14 sorties sur
 61 sont **tronquées** (les chiffres sans elles sont 36,4 / 57,2 / 67,6 / 73,9) ✓✓ ; le chrF est **sensible à
 l'écriture** et il n'y a **pas de plafond humain** ✓✗ ; et l'arabe manque ✓✗.
+
+## Mesure 74 — ERRATUM DE LA MESURE 73 : le PDF faussait les références ; le DOCX corrige (+6,5 en chinois) et l'arabe entre
+
+**Ce qui était faux** ✗✗. La mesure 73 construisait le corpus ONU en extrayant le texte des **PDF** (`pdftotext`) ✗✓.
+Or le PDF est un **mauvais instrument** pour ce corpus : il rend les notes de bas de page, les en-têtes et les
+coupures de page **dans le texte des paragraphes** ✓✗, et il **déchiquette l'arabe** (droite à gauche, ligatures) ✗✗.
+Les références humaines étaient donc **polluées** — et le chrF sous-estimait le modèle ✓✗.
+
+**Le bon instrument** ✓✓ : l'API des documents de l'ONU sert un **DOCX** (format Word) quand on demande `t=docx` ✓✓ —
+texte **propre**, Unicode, **arabe lisible** ✓✓. On lit le DOCX avec `python-docx` ; les paragraphes numérotés sont
+« 1.\t » (latin, cyrillique, chinois) ou « 1 -\t » (arabe) ✓✓. **Le corpus est reconstruit avec 6 langues**
+(EN, FR, ES, RU, ZH, **AR**) : 5 résolutions, **61 paragraphes**, 0 numéro manquant ✓✓ (`tools/corpus_onu.py` ✓).
+
+**L'effet de l'instrument** (7 B, mêmes résolutions, mêmes paragraphes) ✓✗ :
+
+| langue | **PDF** (mesure 73) | **DOCX** (ici) | écart |
+|---|---:|---:|---:|
+| chinois | 35,3 | **41,8** | **+6,5** ✗✗ |
+| russe | 52,3 | **54,3** | +2,0 |
+| français | 62,2 | **64,7** | +2,5 |
+| espagnol | 68,2 | **71,5** | +3,3 |
+| **arabe** | — | **47,4** | — |
+
+* **LE PDF SOUS-ESTIMAIT DE 2 À 6,5 POINTS** ✗✗ : le chinois perdait **6,5 points** parce que les notes et les
+  coupures de page entraient dans la référence ✓✗ — *on aurait conclu « le chinois est mauvais » alors que
+  l'instrument était sale* ✓✓ ;
+* **L'ARABE EST ENFIN MESURÉ** ✓✓ : **47,4** au 7 B (39,4 au 3 B), marge **+27,6** sur le hasard (19,8) ✓✓ — *la
+  5ᵉ langue du monde entre dans la carte* ✓✓ ;
+* **le chinois reste le plus bas en absolu** ✗✓ (41,8) mais sa marge sur le hasard est **+37,5** (hasard 4,3) ✓✗ :
+  *le chrF chinois n'est pas sur la même échelle que le latin* ✓✓ — le **29ᵉ piège** de la mesure 73 tient ✓✓.
+
+**Les chiffres corrigés** (3 B / 7 B, chat, 400, fp16 ; sans tronqués entre parenthèses) ✓ :
+
+| paire | 3 B | 7 B | hasard | marge/hasard 7 B | tronqués 7 B |
+|---|---:|---:|---:|---:|---:|
+| eng → arabe | 39,4 | **47,4** (50,7) | 19,8 | **+27,6** | 9/61 |
+| eng → chinois | 39,0 | **41,8** (43,2) | 4,3 | **+37,5** | 8/61 |
+| eng → russe | 48,5 | **54,3** (59,2) | 21,8 | **+32,4** | 13/61 |
+| eng → français | 62,9 | **64,7** (70,5) | 26,1 | **+38,5** | 12/61 |
+| eng → espagnol | 68,3 | **71,5** (77,6) | 26,6 | **+44,8** | 12/61 |
+
+* **la couverture passe à 8/20** ✓✓ : anglais, espagnol, français, portugais, allemand, **chinois**, **russe**,
+  **arabe** (Ethnologue 2026) ✓✓ — *il reste 12 langues, dont 4 des 10 premières (hindi, bengali, indonésien,
+  urdu)* ✓✗ ;
+* **le gain de taille est le plus fort en arabe** ✓✓ : **+8,0** du 3 B au 7 B (39,4 → 47,4), comme le polonais de la
+  mesure 69 ✓✓ — *la taille aide là où la couverture manque* ✓✓ ; le chinois ne gagne que **+2,8** ✓✗.
+
+**Ce que cela change** ✓✓ : la mesure 73 est **corrigée** (les chiffres PDF sont périmés) ✓✗ ; le corpus ONU en DOCX
+est le **banc propre** des grandes langues hors UE ✓✓ ; et l'arabe, qui manquait, est mesuré ✓✓. Le **prochain
+verrou** est la couverture des 12 langues restantes : UDHR + **test de contamination** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 61 paragraphes, 5 résolutions, un registre ✓✗ ; 9 à 13 sorties sur 61 sont
+**tronquées** (les chiffres sans elles sont entre parenthèses) ✓✓ ; le chrF reste **script-dépendant** (hasard 4,3
+en chinois contre 26 en latin) et il n'y a **pas de plafond humain** ✓✗ ; et l'arabe égyptien (dialecte) n'est pas
+couvert par ce corpus ✓.

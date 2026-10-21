@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-20, 14 h 35 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-20, 23 h 40 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -35,9 +35,9 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
-- **La couverture démographique est de 7/20** (Ethnologue 2026) : anglais, espagnol, français, portugais,
-  allemand, **chinois**, **russe** (mesure 73) ; il reste **13 langues**, dont 5 des 10 premières — **le critère de
-  passage à l'étage 2 n'est pas atteint**.
+- **La couverture démographique est de 8/20** (Ethnologue 2026) : anglais, espagnol, français, portugais,
+  allemand, **chinois**, **russe**, **arabe** (mesures 73-74) ; il reste **12 langues**, dont 4 des 10 premières
+  (hindi, bengali, indonésien, urdu) — **le critère de passage à l'étage 2 n'est pas atteint**.
 
 **Le plan de match, en relation avec la cible.**
 
@@ -52,11 +52,11 @@ avant ([AGENTS.md](../AGENTS.md) § 1).
    (MoE d'adaptateurs, C5.6), pas un noyau séparé —
    (données par langue et par domaine) et la **représentation** — la **RSN multi-niveaux**, en **unités de sens**,
    jamais en jetons.
-4. **Le critère de passage à l'étage 2** : **7/20** langues les plus parlées mesurées sur un texte neuf
-   (Ethnologue 2026, mesure 73) — il en reste **13**, dont hindi, arabe, bengali, indonésien, urdu ; puis, seulement
+4. **Le critère de passage à l'étage 2** : **8/20** langues les plus parlées mesurées sur un texte neuf
+   (Ethnologue 2026, mesures 73-74) — il en reste **12**, dont hindi, bengali, indonésien, urdu ; puis, seulement
    ensuite, l'**étage 2**, la pensée abstraite.
 
-**Ce qui bloque encore le passage à l'étage 2** : la **couverture démographique** (**7/20**), la qualité sur les
+**Ce qui bloque encore le passage à l'étage 2** : la **couverture démographique** (**8/20**), la qualité sur les
 **langues peu dotées**, le **registre parlé**, et une mesure du **sens** qui ne soit pas de surface (le chrF est un
 **plancher**, pas une note absolue ; il n'est même **pas comparable entre écritures**, 29ᵉ piège).
 
@@ -139,7 +139,7 @@ tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
-| **la couverture démographique** (Ethnologue 2026, top 20) | **7/20** : anglais, espagnol, français, portugais, allemand, **chinois**, **russe** — il reste **13 langues**, dont hindi, arabe, bengali, indonésien, urdu (mesure 73) | [07](../reports/07-mesures-couche-commune.md) |
+| **la couverture démographique** (Ethnologue 2026, top 20) | **8/20** : anglais, espagnol, français, portugais, allemand, **chinois**, **russe**, **arabe** (mesures 73-74) — il reste **12 langues**, dont hindi, bengali, indonésien, urdu | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |

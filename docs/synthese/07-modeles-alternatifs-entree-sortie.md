@@ -107,7 +107,7 @@ langue contre modèle partagé 448 langues, pour répliquer 85 % → 4 %.
    mesurés sur des textes non mémorisables ; il reste le **technique**, le **quotidien parlé** et les **langues peu
    dotées** — c'est le juge de paix de l'étage. **Le passage à l'étage 2 exige les 20 langues les plus parlées**
    (Ethnologue 2026) **mesurées sur un texte neuf**, avec un **plafond humain** par écriture (le chrF n'est pas
-   comparable entre écritures, 29ᵉ piège) : **aujourd'hui 7/20** (mesure 73) ;
+   comparable entre écritures, 29ᵉ piège) : **aujourd'hui 8/20** (mesures 73-74) ;
 2. **la restitution exacte à l'échelle** : au-delà de 10 langues partagées, elle meurt ; faut-il des modules
    spécialisés par famille, ou un modèle beaucoup plus grand ?
 3. **le style** : il est lisible, mais le sens ne le traverse qu'à 24 % — comment l'augmenter sans perdre le style ?

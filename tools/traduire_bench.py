@@ -205,7 +205,7 @@ def main() -> int:
         par = charger_udhr()
     noms = {"fra": "French", "eng": "English", "deu": "German", "spa": "Spanish", "ita": "Italian",
             "cmn": "Chinese", "rus": "Russian", "jpn": "Japanese", "pol": "Polish", "nld": "Dutch",
-            "por": "Portuguese", "zho": "Chinese", "bul": "Bulgarian", "ces": "Czech", "dan": "Danish", "ell": "Greek",
+            "por": "Portuguese", "zho": "Chinese", "ara": "Arabic", "bul": "Bulgarian", "ces": "Czech", "dan": "Danish", "ell": "Greek",
             "est": "Estonian", "fin": "Finnish", "gle": "Irish", "hrv": "Croatian", "hun": "Hungarian",
             "lav": "Latvian", "lit": "Lithuanian", "mlt": "Maltese", "ron": "Romanian", "slk": "Slovak",
             "slv": "Slovenian", "swe": "Swedish"}
