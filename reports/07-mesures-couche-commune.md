@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (104 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (105 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3891,3 +3891,33 @@ construire est celui des **histoires pour enfants** en pidgin-anglais — l'Afri
 
 **Ce que ce résultat ne dit pas** ✗ : un pli, 300 pas, 1 186 paires ✓✗ ; la Wikipédia est un **domaine** différent des
 contes, pas un mauvais corpus en soi ✓✓ ; et un mélange plus fin (10-20 %) pourrait ne pas nuire ✓✓.
+
+## Mesure 105 — LE 7 B RÉPARÉ (SCALER fp16) DONNE **+1,2** [−0,6 ; +3,1] SUR 71 PAGES — mieux que le 3 B (+0,9), mais pas significatif
+
+**La question** ✓✓. Le 7 B était **cassé** par l'entraînement (mesures 99-101) ✗✗. *Pourquoi ?* ✓✓ Le diagnostic :
+l'entraînement **fp16 sans scaler** → **overflow des gradients** (les poids partent en NaN, la génération se casse) ✓✓.
+On refait le 7 B avec **autocast fp16 + GradScaler**, batch 1, 128 jetons, réparti sur les deux cartes ✓✓.
+
+**Le dispositif** ✓✓ : la **même validation croisée** à 7 contes (71 pages), le même mélange (translatewiki + BBC +
+contes + anglais), la même recette (last-12, r = 16, lr 1e-5, 300 pas) — seul le scaler change ✓✓.
+
+| modèle | marge poolée (71 pages) | IC 95 % | pages > 0 |
+|---|---:|---|---:|
+| 3 B (mesure 98) | **+0,9** | [−0,9 ; +2,9] | 36/71 |
+| **7 B (autocast + GradScaler)** | **+1,2** | [−0,6 ; +3,1] | **39/71** |
+
+* **LE 7 B EST RÉPARÉ** ✓✓ : les générations sont **valides** (0210 : chrF 51,0, marge +6,0) ✓✓ — *le bug était
+  l'**overflow fp16**, pas la capacité du modèle ni la pile PEFT* ✓✓ ;
+* **LA TAILLE N'EST PAS LE LEVIER** ✗✓ : +1,2 contre +0,9, les IC se recouvrent ✓✗ — *le 7 B fait **à peine mieux**
+  que le 3 B sur l'écriture* ✓✓ ;
+* **le seuil n'est toujours pas franchi** ✗✗ : IC [−0,6 ; +3,1] contient 0, 39/71 pages ✓✗ — *l'écriture reste
+  **au seuil**, comme le 3 B* ✓✓ ;
+* **le corpus reste la limite** ✓✓ : ce n'est ni la taille, ni la recette, ni la quantification — c'est la **donnée**
+  (les contes, 71 pages) ✓✓.
+
+**Ce que cela change** ✓✓ : le 7 B, **longtemps cru cassé**, est en fait **mesurable** ; il donne +1,2, un peu mieux
+que le 3 B ✓✓. *La couverture reste **19/20** ; le 20/20 tient toujours au **corpus*** ✓✓. La correction du scaler est
+**durable** (le 7 B pourra être utilisé dans les prochaines campagnes) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 71 pages, 300 pas, un seul réglage ✓✗ ; un 7 B avec plus de pas ou une autre
+recette pourrait faire mieux ✓✓ ; et l'écart 3 B/7 B (+0,3) n'est **pas significatif** ✓✗.

@@ -46,6 +46,7 @@ def main() -> int:
     ap.add_argument("--bible", default=None, help="paires bibliques à mélanger (50/50 avec translatewiki)")
     ap.add_argument("--chat", action="store_true", help="utiliser le template chat (Instruct)")
     ap.add_argument("--toutes-couches", action="store_true", help="LoRA sur toutes les couches")
+    ap.add_argument("--amp", action="store_true", help="autocast + GradScaler (évite l'overflow fp16)")
     ap.add_argument("--sans-checkpointing", action="store_true", help="désactiver le gradient checkpointing")
     a = ap.parse_args()
     import torch
@@ -96,6 +97,7 @@ def main() -> int:
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
         opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)
+        scaler = torch.amp.GradScaler("cuda") if a.amp else None
         rng = random.Random(1234)
         ids_en = tok(anglais, add_special_tokens=False)["input_ids"]
         for step in range(a.pas):
@@ -128,8 +130,14 @@ def main() -> int:
             ids = torch.tensor([[tok.pad_token_id] * (L - len(x)) + x for x in lot]).to("cuda")
             lab = torch.tensor([[-100] * (L - len(y)) + y for y in labels]).to("cuda")
             att = (ids != tok.pad_token_id).long()
-            s = model(input_ids=ids, attention_mask=att, labels=lab)
-            s.loss.backward(); opt.step(); opt.zero_grad()
+            if a.amp:
+                with torch.autocast("cuda", dtype=torch.float16):
+                    sortie_ = model(input_ids=ids, attention_mask=att, labels=lab)
+                scaler.scale(sortie_.loss).backward()
+                scaler.step(opt); scaler.update(); opt.zero_grad()
+            else:
+                sortie_ = model(input_ids=ids, attention_mask=att, labels=lab)
+                sortie_.loss.backward(); opt.step(); opt.zero_grad()
         model.eval()
         for u in test:
             ids = tok(demande(p_pcm(u["textes"]["eng"])), return_tensors="pt").to(model.device)
