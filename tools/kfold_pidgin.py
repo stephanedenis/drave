@@ -44,6 +44,8 @@ def main() -> int:
     ap.add_argument("--huit-bit", action="store_true", help="charger le modèle en 8 bits (bitsandbytes)")
     ap.add_argument("--test", default=None, help="ne faire qu'un pli (conte de test)")
     ap.add_argument("--bible", default=None, help="paires bibliques à mélanger (50/50 avec translatewiki)")
+    ap.add_argument("--chat", action="store_true", help="utiliser le template chat (Instruct)")
+    ap.add_argument("--toutes-couches", action="store_true", help="LoRA sur toutes les couches")
     ap.add_argument("--sans-checkpointing", action="store_true", help="désactiver le gradient checkpointing")
     a = ap.parse_args()
     import torch
@@ -61,6 +63,12 @@ def main() -> int:
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
+
+    def demande(p: str) -> str:
+        if not a.chat:
+            return p
+        return tok.apply_chat_template([{"role": "user", "content": p}], tokenize=False,
+                                       add_generation_prompt=True)
     resultats = []
     for test_h in histoires:
         train = [u for u in d["unites"] if u["histoire"] != test_h]
@@ -80,7 +88,9 @@ def main() -> int:
         debut = max(0, n_couches - 12)
         config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM",
                             target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-                            layers_to_transform=list(range(debut, n_couches)), layers_pattern="layers")
+                            layers_to_transform=(None if a.toutes_couches
+                                                 else list(range(debut, n_couches))),
+                            layers_pattern=(None if a.toutes_couches else "layers"))
         model = get_peft_model(model, config)
         if (a.repartir or a.huit_bit) and not a.sans_checkpointing:
             model.gradient_checkpointing_enable()
@@ -98,7 +108,7 @@ def main() -> int:
                         paire = rng.choice(bible); src_, tgt_ = paire["en"], paire["pcm"]
                     else:
                         src_, tgt_ = rng.choice(tw)
-                    p = tok(p_pcm(src_), add_special_tokens=False)["input_ids"][:128]
+                    p = tok(demande(p_pcm(src_)), add_special_tokens=False)["input_ids"][:128]
                     t = tok(" " + tgt_ + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
                     lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             elif r < 0.6:
@@ -107,7 +117,7 @@ def main() -> int:
             elif r < 0.85:
                 lot, labels = [], []
                 for u in rng.sample(train, a.batch):
-                    p = tok(p_pcm(u["textes"]["eng"]), add_special_tokens=False)["input_ids"][:128]
+                    p = tok(demande(p_pcm(u["textes"]["eng"])), add_special_tokens=False)["input_ids"][:128]
                     t = tok(" " + u["textes"]["pcm"] + tok.eos_token, add_special_tokens=False)["input_ids"][:a.max_jetons]
                     lot.append((p + t)[:a.max_jetons]); labels.append(([-100] * len(p) + t)[:a.max_jetons])
             else:
@@ -122,7 +132,7 @@ def main() -> int:
             s.loss.backward(); opt.step(); opt.zero_grad()
         model.eval()
         for u in test:
-            ids = tok(p_pcm(u["textes"]["eng"]), return_tensors="pt").to(model.device)
+            ids = tok(demande(p_pcm(u["textes"]["eng"])), return_tensors="pt").to(model.device)
             with torch.no_grad():
                 g = model.generate(**ids, max_new_tokens=200, do_sample=False, pad_token_id=tok.eos_token_id)
             sortie = tok.decode(g[0][ids["input_ids"].shape[1]:], skip_special_tokens=True).strip()

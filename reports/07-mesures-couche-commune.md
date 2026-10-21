@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (102 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (103 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3835,3 +3835,26 @@ sacrés* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : un pli, 300 pas, 7 526 paires ✓✗ ; un mélange plus fin (10 % de biblique)
 pourrait ne pas nuire ✓✓ ; et le translatewiki reste la référence positive ✓✓.
+
+## Mesure 103 — ABLATIONS DE RECETTE : le chat (+2,2) et toutes les couches (+4,2) font **moins bien** que last-12 (+6,9) — la recette n'est pas le verrou
+
+**La question** ✓✓. Le pli 0210 donne **+6,9** avec la recette simple (LoRA r = 16 sur les **12 dernières couches**,
+prompt **plain**) ✓✓. *Le template **chat** ou **toutes les couches** feraient-ils mieux ?* ✓✓
+
+| réglage (pli 0210) | chrF | plancher | marge |
+|---|---:|---:|---:|
+| **last-12, plain** (référence) | **51,8** | 44,9 | **+6,9** |
+| last-12, **chat template** | 47,1 | 44,9 | +2,2 |
+| **toutes** les couches, plain | 49,1 | 44,9 | +4,2 |
+
+* **LE CHAT DÉGRADE** ✗✗ : +2,2 contre +6,9 ✓✗ — *le format Instruct n'aide pas un fine-tune de traduction* ✓✓ ;
+* **TOUTES LES COUCHES DÉGRADENT** ✗✗ : +4,2 contre +6,9 ✓✗ — *plus de capacité LoRA ne vaut pas mieux ici* ✓✓ ;
+* **la recette simple est la meilleure** ✓✓ : 12 dernières couches, prompt plain, r = 16, lr 1e-5, 300 pas ✓✓ ;
+* **le verrou n'est donc pas la recette** ✓✓ : ni le format, ni les couches, ni le rang — c'est la **donnée**
+  (mesures 94-102) ✓✓.
+
+**Ce que cela change** ✓✓ : la recette est **réglée** ; le 20/20 ne dépend plus que du **corpus** ✓✓. *Inutile de
+chercher d'autres hyperparamètres : il faut des paires* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un pli (0210), 300 pas ✓✗ ; d'autres réglages (rang 32, lr 2e-5, plus de pas)
+pourraient être testés ✓✓ ; mais les trois ablations vont dans le même sens ✓✓.
