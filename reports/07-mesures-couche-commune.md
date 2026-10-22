@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (145 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (146 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5270,3 +5270,32 @@ n'est pas une traduction humaine.* ✗✓
 **Ce que ce résultat ne dit pas** ✗ : WikiMatrix est **miné** (paires bruitées ou partielles) ✓✗ ; le chrF élevé peut
 être **gonflé** par les entités et les termes partagés ✓✗ ; et Wikipédia est **général**, pas spécifiquement
 technique ✓✗.
+
+---
+
+## Mesure 146 — LA PERTE **CONTRASTIVE** FR/EN N'ALIGNE TOUJOURS PAS : sonde FR→EN **0,042** (hasard 5 %), pont **0,466**
+
+**La question** ✓✓. La mesure 144 a montré que la supervision bilingue n'aligne pas ; une perte **explicitement
+contrastive** (InfoNCE entre les états FR et EN de la même chaîne) aligne-t-elle ? ✓✓
+
+**Le dispositif** ✓✓ : LoRA + tête, **500 pas** (100 d'échauffement tête seule) ✓ ; classification **alternée FR/EN**
++ **InfoNCE FR↔EN** (τ = 0,07, poids 0,5) ✓ ; lr LoRA 5e-5 ✓ ; évaluation FR/EN, sonde, pont ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| mesure | contrastif | multilingue (144) | figé |
+|---|---:|---:|---:|
+| sonde FR→FR | **0,985** | (0,989) | (0,987) |
+| sonde FR→EN | **0,042** | (0,042) | (0,058) |
+| pont EN→FR | **0,466** | (0,451) | (0,810) |
+
+* **LA PERTE CONTRASTIVE N'ALIGNE PAS** ✗✗ : 0,042, exactement comme le multilingue sans contraste ✓✗ ;
+* **LE PONT RESTE DÉGRADÉ** ✗✗ : 0,466 (0,81 figé) ✓✗ ;
+* **LA TÊTE TOUJOURS AU HASARD** ✗ : 0,078 / 0,075 ✓✗.
+
+**Ce que cela change** ✗✓ : l'alignement ne s'obtient pas par une perte contrastive **sur le LoRA** en 500 pas ✓✗ ; le
+pont externe reste la structure qui marche ✓✓. *L'alignement **appris** demanderait plus de pas, un batch plus grand
+(ici 4 : peu de négatifs) ou une tête de projection dédiée.* ✓✗
+
+**Ce que ce résultat ne dit pas** ✗ : batch 4 (peu de négatifs), 400 pas effectifs, poids 0,5 ✓✗ ; un LoRA d'attention
+✓✗ ; et une projection dédiée entraînée — c'est déjà le pont ✓✗.

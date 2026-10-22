@@ -50,7 +50,12 @@ def principal() -> int:
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--accum", type=int, default=2)
     ap.add_argument("--lr", type=float, default=2e-4)
-    ap.add_argument("--lr-tete", type=float, default=1e-3)
+    ap.add_argument("--lr-tete", type=float, default=1e-2)
+    ap.add_argument("--echauffement", type=int, default=100, help="pas de tête seule avant le LoRA")
+    ap.add_argument("--multilingue", action="store_true", help="alterner FR et EN à chaque pas")
+    ap.add_argument("--contrastif", action="store_true", help="ajouter une perte InfoNCE entre les états FR et EN de la même chaîne")
+    ap.add_argument("--tau", type=float, default=0.07)
+    ap.add_argument("--poids", type=float, default=1.0)
     ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--sortie", default="reports/raisonnement-entrainement-3b.json")
     a = ap.parse_args()
@@ -74,7 +79,7 @@ def principal() -> int:
     model.train()
     head = nn.Sequential(nn.LayerNorm(model.config.hidden_size), nn.Linear(model.config.hidden_size, len(noms))).to("cuda")
     opt = torch.optim.AdamW([
-        {"params": [p for p in model.parameters() if p.requires_grad], "lr": a.lr},
+        {"params": [p for p in model.parameters() if p.requires_grad], "lr": 0.0},
         {"params": list(head.parameters()), "lr": a.lr_tete},
     ])
     scaler = torch.amp.GradScaler("cuda")
@@ -87,14 +92,28 @@ def principal() -> int:
         return enc, y
 
     for pas in range(1, a.pas + 1):
+        if pas == a.echauffement:
+            opt.param_groups[0]["lr"] = a.lr
+        langue = ("fr", "en")[pas % 2] if a.multilingue else "fr"
         items = random.sample(tr, a.batch)
-        enc, y = lot(items, "fr")
+        enc, y = lot(items, langue)
         with torch.autocast("cuda", dtype=torch.float16):
             hs = model(**enc, output_hidden_states=True, use_cache=False).hidden_states
         idx = enc["attention_mask"].sum(1) - 1
         z = hs[a.couche][torch.arange(len(idx)), idx].float()
         logits = head(z)
         perte = nn.functional.cross_entropy(logits, y)
+        if a.contrastif:
+            enc_en, _ = lot(items, "en")
+            with torch.autocast("cuda", dtype=torch.float16):
+                hs_en = model(**enc_en, output_hidden_states=True, use_cache=False).hidden_states
+            ide = enc_en["attention_mask"].sum(1) - 1
+            z_en = hs_en[a.couche][torch.arange(len(ide)), ide].float()
+            zn = nn.functional.normalize(z, dim=1); zen = nn.functional.normalize(z_en, dim=1)
+            lc = zn @ zen.T / a.tau
+            cible = torch.arange(len(items), device="cuda")
+            perte = perte + a.poids * 0.5 * (nn.functional.cross_entropy(lc, cible)
+                                             + nn.functional.cross_entropy(lc.T, cible))
         scaler.scale(perte / a.accum).backward()
         if pas % a.accum == 0:
             scaler.step(opt); scaler.update(); opt.zero_grad()

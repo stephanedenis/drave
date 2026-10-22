@@ -177,6 +177,11 @@ seulement réussir en français.*
 0,989, mais la sonde FR→EN reste à **0,042** et le pont baisse à **0,451** : la supervision de la tâche, même
 bilingue, **n'apprend pas l'alignement**. *Il faut un objectif explicitement contrastif entre les paires FR/EN.*
 
+**Mesure 146 — le contraste explicite ne suffit pas non plus.** Un entraînement avec **InfoNCE FR↔EN** (500 pas,
+τ = 0,07) garde une sonde FR à 0,985, mais la sonde FR→EN reste à **0,042** et le pont à **0,466** : en 500 pas,
+sur un LoRA d'attention, l'alignement **appris** n'émerge pas. *Le pont externe reste la structure qui marche ;
+l'alignement appris demanderait plus de pas, de négatifs, ou une projection dédiée.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
