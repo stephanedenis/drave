@@ -42,6 +42,29 @@ def appliquer(X, W):
     return np.hstack([X, np.ones((len(X), 1), np.float32)]) @ W
 
 
+def pont_mlp(Xe, Xf, epochs=200, cache=512, graine=1234, lot=128):
+    """Pont non linéaire EN → FR (MLP), entraîné sur les paires."""
+    import torch
+    import torch.nn as nn
+    torch.manual_seed(graine)
+    X = torch.from_numpy(Xe); Y = torch.from_numpy(Xf)
+    m = nn.Sequential(nn.Linear(X.shape[1], cache), nn.GELU(), nn.Linear(cache, X.shape[1]))
+    opt = torch.optim.AdamW(m.parameters(), lr=1e-3, weight_decay=1e-4)
+    for _ in range(epochs):
+        perm = torch.randperm(len(X))
+        for i in range(0, len(X), lot):
+            idx = perm[i:i + lot]
+            perte = torch.nn.functional.mse_loss(m(X[idx]), Y[idx])
+            opt.zero_grad(); perte.backward(); opt.step()
+    return m
+
+
+def appliquer_mlp(m, X):
+    import torch
+    with torch.no_grad():
+        return m(torch.from_numpy(X)).numpy()
+
+
 def cos(A, B):
     A = A / np.maximum(1e-9, np.linalg.norm(A, axis=1, keepdims=True))
     B = B / np.maximum(1e-9, np.linalg.norm(B, axis=1, keepdims=True))
@@ -52,6 +75,7 @@ def principal() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", default="data/raisonnement/transitif_paires.json")
     ap.add_argument("--source", default="en", help="langue source à ponter vers le FR")
+    ap.add_argument("--pont", choices=["lineaire", "mlp"], default="lineaire")
     ap.add_argument("--hf", default="Qwen/Qwen2.5-3B-Instruct")
     ap.add_argument("--couche", type=int, default=18)
     ap.add_argument("--sortie", default="reports/pont-raisonnement-3b.json")
@@ -97,14 +121,20 @@ def principal() -> int:
         idx = np.where(m_tr)[0]
         nv = max(10, len(idx) // 10)
         trn, val = idx[:-nv], idx[-nv:]
-        lam = max((0.1, 1.0, 10.0, 100.0, 1000.0),
-                  key=lambda l: cos(appliquer(Een[val], pont(Een[trn], Efr[trn], l)), Efr[val]))
-        W = pont(Een[trn], Efr[trn], lam)
-        pred_pont = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], W), len(noms))
-        # contrôle : pont appris sur des paires mélangées
         mel = np.random.default_rng(7).permutation(trn)
-        Wn = pont(Een[mel], Efr[trn], lam)
-        pred_neg = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], Wn), len(noms))
+        if a.pont == "mlp":
+            m = pont_mlp(Een[trn], Efr[trn])
+            pred_pont = sonde(Efr[m_tr], y[m_tr], appliquer_mlp(m, Een[m_te]), len(noms))
+            mn = pont_mlp(Een[mel], Efr[trn])
+            pred_neg = sonde(Efr[m_tr], y[m_tr], appliquer_mlp(mn, Een[m_te]), len(noms))
+            lam = None
+        else:
+            lam = max((0.1, 1.0, 10.0, 100.0, 1000.0),
+                      key=lambda l: cos(appliquer(Een[val], pont(Een[trn], Efr[trn], l)), Efr[val]))
+            W = pont(Een[trn], Efr[trn], lam)
+            pred_pont = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], W), len(noms))
+            Wn = pont(Een[mel], Efr[trn], lam)
+            pred_neg = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], Wn), len(noms))
         r = {"longueur": L, "n_train": int(m_tr.sum()), "n_test": int(m_te.sum()),
              "fr_fr": round(float(np.mean(pred_fr == y[m_te])), 4),
              "en_en": round(float(np.mean(pred_en == y[m_te])), 4),

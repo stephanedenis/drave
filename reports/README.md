@@ -66,6 +66,7 @@
 - [`pont-raisonnement-3b.json`](pont-raisonnement-3b.json) — le pont EN→FR du raisonnement (mesure 126 : 1,00 / 0,91 / 0,68 / 0,52 / 0,46)
 - [`pont-raisonnement-taille-3b.json`](pont-raisonnement-taille-3b.json) — le pont avec une autre relation (mesure 127 : 1,00 / 0,85 / 0,67 / 0,56 / 0,44)
 - [`pont-raisonnement-es-3b.json`](pont-raisonnement-es-3b.json) — le pont FR/ES (mesure 128 : 1,00 / 0,92 / 0,72 / 0,56 / 0,50)
+- [`pont-mlp-3b.json`](pont-mlp-3b.json) — le pont non linéaire (mesure 129 : échec, 0,04-0,17)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

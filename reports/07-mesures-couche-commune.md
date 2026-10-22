@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (128 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (129 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4729,3 +4729,33 @@ spécifique à une paire ✓✓. *La « tête bien faite » est portable : un é
 **Ce que ce résultat ne dit pas** ✗ : trois langues **indo-européennes** (FR, EN, ES), un corpus synthétique, un 3 B
 ✓✗ ; une langue **lointaine** (arabe, mandarin) pourrait résister au pont linéaire ✓✗ ; et la perte aux longues
 chaînes persiste (0,50-0,56) ✓✗.
+
+---
+
+## Mesure 129 — LE PONT NON LINÉAIRE **ÉCHOUE** : un MLP EN→FR ne dépasse pas le hasard (0,04-0,17), contre 0,46-1,00 pour le pont linéaire
+
+**La question** ✓✓. La perte aux longues chaînes (mesure 126) vient-elle de la **linéarité** du pont ? Un MLP la
+comble-t-il ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié (source EN), pont **MLP** (2048 → 512 → 2048, GELU, MSE, 200 époques,
+lot 128) ✓ ; même sonde FR, même contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| longueur | pont linéaire | **pont MLP** | MLP mélangé |
+|---|---:|---:|---:|
+| 2 | 1,000 | **0,168** | 0,069 |
+| 3 | 0,911 | **0,057** | 0,049 |
+| 4 | 0,681 | **0,035** | 0,035 |
+| 5 | 0,520 | **0,063** | 0,039 |
+| 6 | 0,463 | **0,074** | 0,058 |
+
+* **LE MLP ÉCHOUE** ✗✗ : 0,04-0,17 contre 0,46-1,00 pour le linéaire ✓✗ ;
+* **LE CONTRÔLE RESTE AU HASARD** ✓✓ (0,04-0,07) ✓✓ ;
+* **LE MLP SUR-APPREND** ✗✗ : ~250 paires par longueur pour 2048 dimensions ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement est **linéaire** — la petite structure est la bonne ✓✓. *Ce n'est pas la
+capacité qui manque, c'est la **régularisation** : avec si peu de paires, un MLP détruit le transfert* ✗✗.
+
+**Ce que ce résultat ne dit pas** ✗ : un MLP régularisé, avec 10× plus de paires ou un arrêt précoce, pourrait faire
+mieux ✓✗ ; une **sonde non linéaire** sur l'état ponté linéairement n'a pas été testée ✓✗.

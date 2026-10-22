@@ -109,6 +109,10 @@ pas des mots, il aligne la **structure** du raisonnement. *Un même pont sert de
 
 **Mesure 128 — le pont n'est pas propre à une langue.** FR/ES donne **1,00 / 0,92 / 0,72 / 0,56 / 0,50**,
 superposable à FR/EN : l'alignement est **langue-général** (au moins pour trois langues indo-européennes). *La tête
-bien faite est portable : un état qui compose, un pont par langue.* L'outillage est en place :
+bien faite est portable : un état qui compose, un pont par langue.*
+
+**Mesure 129 — le pont doit rester linéaire.** Un MLP EN→FR (2048 → 512 → 2048) ne dépasse pas le hasard
+(0,04-0,17) : avec ~250 paires par longueur, la capacité non linéaire **sur-apprend**. *La petite structure linéaire
+est la bonne — ce n'est pas la capacité qui manque, c'est la régularisation.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
