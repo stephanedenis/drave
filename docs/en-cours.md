@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-22, 17 h 0 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-22, 17 h 40 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -28,9 +28,9 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
   plancher, **loin de 100**. Elle **se réplique** sur un second règlement (+1,1 à +2,5, mesure 67).
 - **La taille aide, mais de moins en moins** : 54,7 → 73,3 (eng→fra) du 0,5 au 14 B ; le gain par doublement tombe
   à **+0,9** (7 → 14 B, fra→eng) — mesures 63 et 66. *Le levier n'est pas la taille seule.*
-- **Trois registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9) — le
-  littéraire est le plus dur, mais **pas par le contenu** : **96 %** des noms, **0,5 %** d'omissions ; l'écart est
-  de **style** (mesures 64 et 68).
+- **Quatre registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9) et
+  **parlé préparé** (TED2020 : +39,8 / +40,7, mesure 143) — le littéraire est le plus dur, mais **pas par le
+  contenu** : **96 %** des noms, **0,5 %** d'omissions ; l'écart est de **style** (mesures 64 et 68).
 - **La couverture des langues est le facteur** : sur les **24 langues officielles de l'UE**, **+35,8** de marge sur
   le hasard pour les **13 langues annoncées** par le modèle, **+21,5** pour les **10 autres** ; les trous sont
   l'**irlandais (+8,0)** et le **maltais (+10,8)** (mesure 71). *L'écart brut entre langues est surtout la
@@ -72,10 +72,9 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 
 **Le plan de match, en relation avec la cible.**
 
-1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **quotidien parlé** (dialogue,
-   conversation) et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
+1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **dialogue spontané** et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
 2. **Les langues sont closes au périmètre** : les langues jusqu'au **français inclus** sont couvertes ; les 20 le sont
-   aussi (marges). La **direction inverse** (X→eng) et le **registre parlé** restent des **marges**, pas des portes.
+   aussi (marges). La **direction inverse** (X→eng) et le **dialogue spontané** restent des **marges**, pas des portes.
 3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**
    (mesure 72) ; le prochain levier est la **couverture** — et un **découpage de surface** par langue/famille
    (MoE d'adaptateurs, C5.6), pas un noyau séparé —
@@ -87,7 +86,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
    la phrase*.
 
 **Ce qui reste** : sur le périmètre, la **qualité** (le chrF est un **plancher**, pas une note absolue ; il n'est
-même **pas comparable entre écritures**, 29ᵉ piège), le **registre parlé** et le **technique**, les **langues peu
+même **pas comparable entre écritures**, 29ᵉ piège), le **dialogue spontané** et le **technique**, les **langues peu
 dotées** ; à l'étage 2, le **plan** — un état qui porte la série, puis la dynamique (mesures 113-115).
 
 ## Le tableau de bord des chantiers
@@ -122,7 +121,7 @@ C6 documentation (transverse, ne bloque rien)
 | **C5.2** | banc **littéraire** (Verne) | ✅ **parallèle** | **fait** (mesure 64 : 47,7-49,8) ; **noms 96 %** (mesure 68 : le chrF bas est stylistique) | `tools/aligneur_litteraire.py`, `tools/analyse_litteraire.py` |
 | **C5.3** | banc **modèle plus grand** (Qwen2.5 0,5 · 1,5 · 3 · 7 · 14 B) | ✅ **parallèle** | **fait** de 0,5 à 14 B (mesures 63 et 66) : le coude apparaît à 7 B en fra→eng (+0,9) | `tools/traduire_bench.py` |
 | **C5.4** | corpus **technique** parallèle | ✅ **parallèle** | à construire | Gutenberg/`Panini` |
-| **C5.5** | corpus **presse / actualité** parallèle | ✅ **parallèle** | **fait** (mesure 70 : marge +36 à +39) ; le **quotidien parlé** reste à construire | `tools/corpus_presse.py`, `data/presse/` |
+| **C5.5** | corpus **presse / actualité** parallèle | ✅ **parallèle** | **fait** (mesure 70 : marge +36 à +39) ; le **parlé préparé** est mesuré (TED2020, mesure 143) ; le **dialogue spontané** reste à construire | `tools/corpus_presse.py`, `data/presse/` |
 | **C5.6** | **modules par langue / famille** (MoE de surface : adaptateurs, tête, routeur) | ✅ **parallèle** | **à mesurer** — il faut d'abord un **corpus d'entraînement par langue** (les 139 unités du banc sont pour l'évaluation) | `tools/adaptateur_langue.py`, banc 24 langues |
 | **C2.1** | répliquer la généalogie **par domaine** | dépend de C5.2-C5.5 | à faire | `retrieval_udhr.py --genealogie` |
 | **C4.1** | styles **à époque contrôlée** (couples contemporains) | ✅ **parallèle** | à faire | `style_traducteur.py` + dates |
@@ -141,7 +140,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | l'UDHR est-elle utilisable comme juge ? | **moi** (mesure 61) | **non** : le modèle la récite — banc de mémoire |
 | peut-on **corriger** automatiquement l'entrée abîmée ? | **moi** (mesure 65) | **non** : 8/9 des corrections empirent ; seule la restauration des accents gagne |
 | quelle **unité de mesure** à l'entrée et à la sortie ? | **moi** (RSN en unités de sens ; jeton = technique) | en cours : la RSN est en unités de sens ; les métriques par jeton sont des diagnostics |
-| quel domaine après le juridique ? | **moi** (mesures 64 et 70) | **presse mesurée** (au niveau du juridique) ; le **littéraire** reste 10 points en dessous ; le **quotidien parlé** reste à construire |
+| quel domaine après le juridique ? | **moi** (mesures 64 et 70) | **presse mesurée** (au niveau du juridique) ; le **littéraire** reste 10 points en dessous ; le **parlé préparé** est mesuré (TED2020, mesure 143) ; le **dialogue spontané** reste à construire |
 | la qualité dépend-elle de la **langue** ? | **moi** (mesures 69, 71) | la **couverture** du modèle : +35,8 (annoncées) contre +21,5 (non annoncées) ; trous irlandais/maltais |
 | le **7 B** peut-il faire mieux que le 3 B pour le pidgin ? | **moi** (mesure 105) | **oui, un peu** : réparé par **autocast + GradScaler** (l'overflow fp16 était la cause) ; **+1,2** [−0,6 ; +3,1] contre +0,9 au 3 B, IC qui se recouvrent — la taille n'est pas le levier, le corpus reste la limite |
 | peut-on **découper par langue** (MoE) pour alléger ? | **moi** (C5.6 ; synthèse 07) | **oui en surface**, non en noyau : adaptateurs/têtes par langue, routage par segment, 1,33 % de poids et 5 ms de bascule |
@@ -169,7 +168,7 @@ maintenant le chantier principal** (décision du 21/10 au soir), les registres r
 | **la qualité de traducteur, sur texte non mémorisable** (règlements UE 2025) | **54,7 → 73,3** (eng→fra) et **63,1 → 76,6** (fra→eng) du 0,5 au 14 B · **répliqué** sur un 2ᵉ règlement (+1,1 à +2,5) | [07](../reports/07-mesures-couche-commune.md) |
 | **le littéraire** (Verne, alignement validé) | **47,7-49,8** (3 B/7 B) · **noms 96 %**, 0,5 % d'omissions : le chrF bas est un écart de **style** (mesure 68) | [07](../reports/07-mesures-couche-commune.md) · [alignement](../reports/alignement-verne.md) |
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
-| **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** : l'institutionnel et la presse se valent, le littéraire est 10 points en dessous (mesures 62, 68, 70) | [07](../reports/07-mesures-couche-commune.md) |
+| **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** · **parlé préparé +39,8 / +40,7** : le parlé préparé passe au-dessus de la presse, le littéraire reste 10 points en dessous (mesures 62, 68, 70, 143) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
 | **le périmètre démographique** (Ethnologue 2026) | **arrêté au français inclus** : les langues jusqu'au **français** sont couvertes ✓ ; les **20** aussi, comme **marge** ✓ : les 19 sur des textes neufs (mesures 73-76) ; le **pidgin nigérian** est **lu** (+3,2 au 7 B, +4,4 au 14 B) et **écrit** avec un **adaptateur 14 B** : **+5,8 [+4,1 ; +7,6]** sur 71 pages de contes tenus à part, **7 plis positifs** (1000 pas, mesure 112) | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |

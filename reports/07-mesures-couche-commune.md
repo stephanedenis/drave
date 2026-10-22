@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (142 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (143 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5178,3 +5178,35 @@ entraîner avec un objectif **multilingue** (les paires FR/EN) pour aligner, pas
 
 **Ce que ce résultat ne dit pas** ✗ : 500 pas, un LoRA d'attention, une tête non convergée ✓✗ ; un entraînement plus
 long ou une tête standardisée pourrait changer ✓✗ ; et le corpus reste synthétique ✓✗.
+
+---
+
+## Mesure 143 — LE REGISTRE PARLÉ (TED2020) : marge **+39,8** (EN→FR) et **+40,7** (FR→EN) au **7 B**, au-dessus de la presse
+
+**La question** ✓✓. Le registre **parlé** manquait ; TED2020 (discours réels, **traductions humaines**) le mesure ✓✓.
+
+**Le dispositif** ✓✓ : **400 paires TED** (segments de 30-300 caractères) ✓ ; Qwen2.5-**7B** (le modèle des autres
+registres) et **3B** (contrôle d'échelle) ✓ ; traduction dans les **deux sens** (le miroir entrée/sortie) ✓ ;
+**chrF + plancher** (« ne rien traduire ») + **marge** + **IC bootstrap** (1 000 rééchantillonnages appariés) ✓✓.
+
+**Les résultats** ✓ (le plancher est la référence ; pas de hasard ici) :
+
+| modèle | sens | chrF | plancher | **marge** | IC 95 % |
+|---|---|---:|---:|---:|---:|
+| 7 B | EN→FR | 63,6 | 23,7 | **+39,8** | [38,2 ; 41,4] |
+| 7 B | FR→EN | 65,9 | 25,1 | **+40,7** | [39,2 ; 42,2] |
+| 3 B | EN→FR | 61,4 | 23,7 | +37,7 | [36,1 ; 39,2] |
+| 3 B | FR→EN | 63,5 | 25,1 | +38,3 | [37,0 ; 39,7] |
+
+* **LE PARLÉ EST AU-DESSUS DE LA PRESSE** ✓✓ : +39,8 / +40,7 au 7 B, contre juridique +35,3, presse +38,6,
+  littéraire +25,9 (mesures 64/68) ✓✓ ;
+* **LE 7 B FAIT MIEUX QUE LE 3 B** ✓✓ : +2,1 / +2,4 points ✓✓ ;
+* **LES DEUX SENS SONT COHÉRENTS** ✓✓ : pas de biais de direction ✓✓.
+
+**Ce que cela change** ✓✓ : le **parlé préparé** est mesuré ; la carte des registres couvre désormais **juridique,
+presse, littéraire et parlé préparé**, et le parlé est le plus **facile** des quatre ✓✓. *Le dialogue spontané reste
+à couvrir (TED = conférences, pas conversation).* ✗✓
+
+**Ce que ce résultat ne dit pas** ✗ : TED est du parlé **préparé**, pas de la conversation ✓✗ ; 400 paires, deux
+modèles ✓✗ ; les références TED sont des traductions bénévoles ✓✗ ; et la comparaison entre registres est
+**indicative** (les planchers diffèrent : 23,7-25,1 ici) ✓✗.
