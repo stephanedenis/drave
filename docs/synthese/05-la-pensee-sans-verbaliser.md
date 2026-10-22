@@ -88,6 +88,13 @@ transférable*. **La correction marche** (mesure 124) : entraîné **contre des 
 **0,324 / 0,273 / 0,216** en moyenne de deux graines (hasard 0,125 ; avant 0,205 / 0,216 / 0,165), même signe aux
 deux découpages ; mais seul **h1** est solide (z ≈ 2,0), h2/h3 restent dans le bruit de 88 items. *Ce n'était pas
 l'information qui manquait, c'était la cible qui bougeait.* La suite : plus de séries de test, horizons au-delà de 3,
-et un état de plan **récurrent**. L'outillage est en place :
+et un état de plan **récurrent**.
+
+**Mesure 125 — le raisonnement transitif est dans l'état, pas dans une géométrie commune.** Sur un corpus contrôlé
+(chaînes d'ordre, prémisses mélangées, FR/EN), une sonde linéaire retrouve la conclusion dans l'état : **1,00 / 0,92 /
+0,84 / 0,78 / 0,51** (FR) et **1,00 / 0,98 / 0,85 / 0,52 / 0,53** (EN) pour 2 à 6 entités, contre **5 %** de hasard ;
+le contrôle à étiquettes mélangées est au hasard. Mais le **transfert FR→EN est au hasard** (0,02-0,09) : le
+raisonnement est là, sa **géométrie** ne l'est pas — il faut un pont d'alignement. *La tête bien faite n'est pas la
+grosse tête : c'est un état qui compose, et un pont qui le rend indépendant de la langue.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

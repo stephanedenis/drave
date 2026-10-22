@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (124 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (125 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4588,3 +4588,44 @@ retrouve plusieurs pas dans la représentation figée* ✓✓.
 est **déjà au-dessus du hasard** avant entraînement (similarité lexicale de la même série), et le contrôle à cibles
 mélangées n'a **pas** été fait avec des cibles figées ✓✗ ; l'objectif direct peut encore déformer l'**invite** (pas
 seulement le plan) ✓✗ ; et les horizons au-delà de 3, à cette échelle, restent à mesurer ✓✗.
+
+---
+
+## Mesure 125 — LE RAISONNEMENT TRANSITIF EST **DANS L'ÉTAT**, MAIS PAS DANS UNE GÉOMÉTRIE COMMUNE : 1,00 → 0,51 en français, 1,00 → 0,53 en anglais (hasard 5 %), et un transfert FR→EN **au hasard**
+
+**La question** ✓✓. La « tête bien faite » ne se mesure pas à la taille : elle se mesure à la **composition**.
+L'état caché porte-t-il la conclusion d'une chaîne transitive — et le même état la porte-t-il dans les deux
+langues ? ✓✓
+
+**Le dispositif** ✓✓ : un corpus **contrôlé** (`tools/corpus_raisonnement.py` ✓) de chaînes d'ordre (2 à 6 entités,
+prémisses **mélangées**), en FR et EN, 300 exemples par (langue, longueur), réponse = le maximum ✓ ; Qwen2.5-3B,
+état du dernier jeton de la couche 18 ✓ ; une **sonde linéaire** (ridge, 20 noms) entraînée sur 70 % des chaînes,
+testée sur 30 % ✓ ; contrôles : étiquettes mélangées, chaînes **incohérentes** (cycle) et **sans relation** ✓✓.
+
+**Les résultats** ✓ (hasard **5 %**) :
+
+| longueur | FR (sonde) | EN (sonde) | contrôle (étiquettes mélangées) |
+|---|---:|---:|---:|
+| 2 entités | **1,000** | **1,000** | ~0,03 |
+| 3 | 0,923 | 0,978 | ~0,05 |
+| 4 | 0,835 | 0,847 | ~0,06 |
+| 5 | 0,776 | 0,524 | ~0,04 |
+| 6 | 0,505 | 0,525 | ~0,05 |
+
+* **LA CONCLUSION EST DANS L'ÉTAT** ✓✓ : 1,00 à 0,51 selon la longueur, contre 5 % de hasard — *le modèle compose
+  sans écrire* ✓✓ ;
+* **LA LIMITE EST LA LONGUEUR** ✓✗ : la sonde décroît de 1,00 (1 pas) à 0,51 (5 pas) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ : étiquettes mélangées 0,02-0,07 ; cycles et paires sans relation 0,06-0,26
+  (le label y est l'une des entités des prémisses, donc le hasard pertinent est **1/3** pour une stratégie de copie ;
+  le FR reste sous ce seuil) ✓✗ ;
+* **LE TRANSFERT FR→EN EST AU HASARD** ✗✗ : 0,02-0,09, et EN→FR 0,02-0,08 — *la même conclusion n'est pas dans la
+  même géométrie selon la langue* ✗✗.
+
+**Ce que cela change** ✓✓ : le raisonnement transitif **existe dans l'état** (pas seulement dans la génération) ✓✓ ;
+mais il n'est **pas indépendant de la langue** : la sonde FR ne lit pas l'état EN ✗✗. *Ce n'est pas la capacité qui
+manque, c'est l'**alignement*** ✓✓ — un pont linéaire (la mesure 77 le fait pour la traduction) est la brique
+suivante ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un corpus **synthétique** (20 noms, une seule relation), un 3 B, une couche
+(18) ✓✗ ; la sonde est linéaire (un pont non linéaire pourrait transférer) ✓✗ ; et la précision in-langue peut
+s'appuyer sur les noms présents dans les prémisses — c'est la **sélection du maximum** qui est mesurée ✓✗.

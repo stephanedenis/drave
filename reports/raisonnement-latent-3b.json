@@ -1,0 +1,181 @@
+{
+ "couche": 18,
+ "n_exemples": 4200,
+ "hasard": 0.05,
+ "par_groupe": [
+  {
+   "langue": "fr",
+   "longueur": 2,
+   "condition": "coherent",
+   "n_train": 210,
+   "n_test": 90,
+   "accuracy": 1.0,
+   "negatif": 0.0222
+  },
+  {
+   "langue": "fr",
+   "longueur": 3,
+   "condition": "coherent",
+   "n_train": 222,
+   "n_test": 78,
+   "accuracy": 0.9231,
+   "negatif": 0.0513
+  },
+  {
+   "langue": "fr",
+   "longueur": 4,
+   "condition": "coherent",
+   "n_train": 203,
+   "n_test": 97,
+   "accuracy": 0.8351,
+   "negatif": 0.0619
+  },
+  {
+   "langue": "fr",
+   "longueur": 5,
+   "condition": "coherent",
+   "n_train": 224,
+   "n_test": 76,
+   "accuracy": 0.7763,
+   "negatif": 0.0658
+  },
+  {
+   "langue": "fr",
+   "longueur": 6,
+   "condition": "coherent",
+   "n_train": 205,
+   "n_test": 95,
+   "accuracy": 0.5053,
+   "negatif": 0.0421
+  },
+  {
+   "langue": "en",
+   "longueur": 2,
+   "condition": "coherent",
+   "n_train": 208,
+   "n_test": 92,
+   "accuracy": 1.0,
+   "negatif": 0.0435
+  },
+  {
+   "langue": "en",
+   "longueur": 3,
+   "condition": "coherent",
+   "n_train": 207,
+   "n_test": 93,
+   "accuracy": 0.9785,
+   "negatif": 0.0645
+  },
+  {
+   "langue": "en",
+   "longueur": 4,
+   "condition": "coherent",
+   "n_train": 202,
+   "n_test": 98,
+   "accuracy": 0.8469,
+   "negatif": 0.0612
+  },
+  {
+   "langue": "en",
+   "longueur": 5,
+   "condition": "coherent",
+   "n_train": 216,
+   "n_test": 84,
+   "accuracy": 0.5238,
+   "negatif": 0.0119
+  },
+  {
+   "langue": "en",
+   "longueur": 6,
+   "condition": "coherent",
+   "n_train": 201,
+   "n_test": 99,
+   "accuracy": 0.5253,
+   "negatif": 0.0505
+  }
+ ],
+ "transfert": [
+  {
+   "de": "fr",
+   "vers": "en",
+   "longueur": 2,
+   "accuracy": 0.0543
+  },
+  {
+   "de": "fr",
+   "vers": "en",
+   "longueur": 3,
+   "accuracy": 0.043
+  },
+  {
+   "de": "fr",
+   "vers": "en",
+   "longueur": 4,
+   "accuracy": 0.0918
+  },
+  {
+   "de": "fr",
+   "vers": "en",
+   "longueur": 5,
+   "accuracy": 0.0595
+  },
+  {
+   "de": "fr",
+   "vers": "en",
+   "longueur": 6,
+   "accuracy": 0.0606
+  },
+  {
+   "de": "en",
+   "vers": "fr",
+   "longueur": 2,
+   "accuracy": 0.0778
+  },
+  {
+   "de": "en",
+   "vers": "fr",
+   "longueur": 3,
+   "accuracy": 0.0513
+  },
+  {
+   "de": "en",
+   "vers": "fr",
+   "longueur": 4,
+   "accuracy": 0.0206
+  },
+  {
+   "de": "en",
+   "vers": "fr",
+   "longueur": 5,
+   "accuracy": 0.0789
+  },
+  {
+   "de": "en",
+   "vers": "fr",
+   "longueur": 6,
+   "accuracy": 0.0737
+  }
+ ],
+ "controles": [
+  {
+   "langue": "fr",
+   "condition": "cycle",
+   "accuracy": 0.2235
+  },
+  {
+   "langue": "en",
+   "condition": "cycle",
+   "accuracy": 0.1031
+  },
+  {
+   "langue": "fr",
+   "condition": "sans_relation",
+   "accuracy": 0.2588
+  },
+  {
+   "langue": "en",
+   "condition": "sans_relation",
+   "accuracy": 0.0612
+  }
+ ]
+}
