@@ -1,0 +1,63 @@
+{
+ "couche": 24,
+ "source": "en",
+ "n_paires": 2000,
+ "hasard": 0.05,
+ "resultats": [
+  {
+   "longueur": 2,
+   "n_train": 299,
+   "n_test": 101,
+   "fr_fr": 1.0,
+   "en_en": 1.0,
+   "pont": 1.0,
+   "pont_melange": 0.0198,
+   "lambda": 0.1,
+   "fr_sur_en_sans_pont": 0.0495
+  },
+  {
+   "longueur": 3,
+   "n_train": 277,
+   "n_test": 123,
+   "fr_fr": 1.0,
+   "en_en": 1.0,
+   "pont": 1.0,
+   "pont_melange": 0.0488,
+   "lambda": 0.1,
+   "fr_sur_en_sans_pont": 0.0976
+  },
+  {
+   "longueur": 4,
+   "n_train": 256,
+   "n_test": 144,
+   "fr_fr": 0.8403,
+   "en_en": 0.7708,
+   "pont": 0.6319,
+   "pont_melange": 0.0556,
+   "lambda": 1.0,
+   "fr_sur_en_sans_pont": 0.0764
+  },
+  {
+   "longueur": 5,
+   "n_train": 273,
+   "n_test": 127,
+   "fr_fr": 0.685,
+   "en_en": 0.5354,
+   "pont": 0.4882,
+   "pont_melange": 0.063,
+   "lambda": 1.0,
+   "fr_sur_en_sans_pont": 0.0236
+  },
+  {
+   "longueur": 6,
+   "n_train": 279,
+   "n_test": 121,
+   "fr_fr": 0.4959,
+   "en_en": 0.3967,
+   "pont": 0.3802,
+   "pont_melange": 0.0496,
+   "lambda": 1.0,
+   "fr_sur_en_sans_pont": 0.0992
+  }
+ ]
+}

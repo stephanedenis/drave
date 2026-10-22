@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (129 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (130 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4759,3 +4759,35 @@ capacité qui manque, c'est la **régularisation** : avec si peu de paires, un M
 
 **Ce que ce résultat ne dit pas** ✗ : un MLP régularisé, avec 10× plus de paires ou un arrêt précoce, pourrait faire
 mieux ✓✗ ; une **sonde non linéaire** sur l'état ponté linéairement n'a pas été testée ✓✗.
+
+---
+
+## Mesure 130 — LE PONT N'EST PAS UNE COUCHE : il marche à **12, 18 et 24**, et la couche 12 est la meilleure aux longues chaînes (0,74 / 0,64 / 0,48)
+
+**La question** ✓✓. L'alignement de la mesure 126 est-il propre à la couche 18, ou une propriété de la
+représentation à mi-profondeur ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié (source EN), le pont linéaire EN→FR aux **couches 12, 18 et 24** ✓ ;
+même sonde FR, même contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; pont, et entre parenthèses le FR→FR de la même couche) :
+
+| longueur | couche 12 | couche 18 (mesure 126) | couche 24 |
+|---|---:|---:|---:|
+| 2 | **1,000** (1,000) | 1,000 (1,000) | **1,000** (1,000) |
+| 3 | **0,886** (1,000) | 0,911 (1,000) | **1,000** (1,000) |
+| 4 | **0,743** (0,986) | 0,681 (0,944) | **0,632** (0,840) |
+| 5 | **0,638** (0,921) | 0,520 (0,827) | **0,488** (0,685) |
+| 6 | **0,479** (0,802) | 0,463 (0,653) | **0,380** (0,496) |
+
+* **LE PONT MARCHE AUX TROIS COUCHES** ✓✓ : 0,38-1,00 ; *ce n'est pas une couche chanceuse* ✓✓ ;
+* **LA COUCHE 12 EST LA MEILLEURE AUX LONGUES CHAÎNES** ✓✗ : 0,74 / 0,64 / 0,48 contre 0,68 / 0,52 / 0,46 (18) et
+  0,63 / 0,49 / 0,38 (24) ✓✗ ; et **in-langue aussi** (0,99 / 0,92 / 0,80 contre 0,94 / 0,83 / 0,65) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD PARTOUT** ✓✓ (0,02-0,08) ✓✓.
+
+**Ce que cela change** ✓✓ : l'alignement est une **propriété de la représentation à mi-profondeur**, pas d'une
+couche ; la **couche 12** est le meilleur compromis (raisonnement in-langue et pont) ✓✓. *La « tête bien faite » a
+une profondeur : le milieu du réseau.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : trois couches, un modèle, un corpus synthétique ✓✗ ; et la couche 12 n'a pas
+été testée sur les autres relations/langues ✓✗.
