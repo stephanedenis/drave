@@ -1,0 +1,15 @@
+{
+ "hf": "Qwen/Qwen2.5-3B-Instruct",
+ "n_series": 307,
+ "n_train": 214,
+ "n_test": 93,
+ "couche": 18,
+ "prompt": 4,
+ "pas": 300,
+ "batch": 3,
+ "accum": 3,
+ "lr": 0.0001,
+ "avant": 0.2386,
+ "apres": 0.4432,
+ "hasard": 0.125
+}

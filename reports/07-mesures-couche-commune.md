@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (118 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (119 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4381,3 +4381,36 @@ langue** ; contrôle 0,114-0,126 ; **langue 0,999-1,000** ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : la position dans un **bloc arbitraire de 8** n'a pas de sens propre (les blocs
 sont des fenêtres, pas des unités) ✓✗ ; une structure **relative** (avant/après) ou un état de contexte pourraient
 être codés ✓✗ ; la sonde est linéaire ✓✗.
+
+---
+
+## Mesure 119 — LE PLAN **S'ENTRAÎNE** : le retrieval de contenu passe de **0,239** à **0,443** (hasard 0,125) après 300 pas de LoRA contrastif — le premier résultat positif de l'étage 2
+
+**La question** ✓✓. Les mesures 113-118 ont montré que le plan n'est pas dans les états **figés** ✗✗. Peut-on
+l'**entraîner** dans le modèle — donner les 4 premières phrases et demander un état de plan qui retrouve la 5ᵉ
+parmi 8 candidats non vus ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/plan_entrainement.py` ✓) : les 307 séries Verne FR, 214/93 ✓ ; Qwen2.5-3B + LoRA
+(r = 16, toutes les couches), état de plan = dernier état caché de la **couche 18** sur l'invite des 4 premières
+phrases, cible = état de la 5ᵉ phrase ✓ ; InfoNCE (τ = 0,05), 300 pas, lot 3 × accumulation 3, lr 1e-4 ✓ ;
+retrieval 8-way (hasard **12,5 %**) avant et après ✓ ; **contrôle** : mêmes 300 pas avec des **cibles mélangées** ✓✓.
+
+**Les résultats** ✓ :
+
+| entraînement | avant | après |
+|---|---:|---:|
+| objectif de plan | 0,239 | **0,443** |
+| contrôle (cibles mélangées) | 0,239 | 0,227 |
+
+* **LE PLAN S'ENTRAÎNE** ✓✓ : **+0,20** de retrieval de contenu sur des séries tenues à part (×3,5 le hasard) ✓✓ ;
+* **LE CONTRÔLE NE BOUGE PAS** ✓✓ : 0,227 — *le gain vient de l'objectif, pas du LoRA* ✓✓ ;
+* **LE MODÈLE FIGÉ EN AVAIT DÉJÀ UN PEU** ✓✗ : 0,239 contre 0,125 — *l'état contextuel de l'invite porte un signal
+  que la moyenne des états (mesure 116 : 0,14) ne captait pas* ✓✗.
+
+**Ce que cela change** ✓✓ : c'est le **premier résultat positif** de l'étage 2 depuis l'erratum 6 ✓✓. *Le plan n'est
+pas un objet à lire dans les états figés : c'est un objet à **entraîner*** — la phase 2 a sa première brique ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 88 échantillons de test, un seul modèle, une seule graine, un objectif à un
+pas ✓✗ ; la cible est calculée par le **même** modèle fine-tuné (un effondrement de l'espace cible faciliterait le
+retrieval — le contrôle mélangé l'écarte en partie, pas totalement) ✓✗ ; le plan **multi-pas** (t+2, t+3), c'est-à-dire
+la **dynamique**, n'est pas encore mesuré ✓✗.

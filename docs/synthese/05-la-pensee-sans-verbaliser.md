@@ -78,9 +78,10 @@ trajectoire à 0,86-0,89, à peine au-dessus de la **moyenne** (0,83-0,88) : le 
 ✗✗. Une **dissociation** le résume (mesure 118) : la **langue** est parfaitement décodable (1,00) alors que la
 **position** dans la série ne l'est pas (0,13 contre 0,125) — *l'état porte la langue, pas la structure*. *Le plan
 n'est pas extractible des états figés — il n'y est même pas un objet de faible dimension : il faut l'entraîner dans
-le modèle.* Trois chantiers, dans l'ordre : **(1)** entraîner un **objectif de plan** (prédire la
-trajectoire, pas la phrase suivante) dans le modèle ; **(2)** mesurer s'il rend la **trajectoire** prédictible, en
-prenant le **gain sur la moyenne** comme critère ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas,
-reconstruction, variété). L'outillage est en place :
-`tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py` et
-`tools/composition_latente.py`.
+le modèle.* C'est fait (mesure 119) : un LoRA contrastif entraîné à retrouver la 5ᵉ phrase depuis les 4 premières
+monte le retrieval de contenu de **0,239 à 0,443** (hasard 0,125 ; contrôle à cibles mélangées : 0,227) — **le plan
+s'entraîne**, premier résultat positif de l'étage 2. Deux chantiers, dans l'ordre : **(1)** le plan **multi-pas**
+(t+2, t+3) — c'est la **dynamique** ; **(2)** le passage à l'échelle (plus de séries, plusieurs romans, un modèle
+plus grand) avec le **gain sur la moyenne** comme critère. L'outillage est en place :
+`tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
+`tools/plan_entrainement.py` et `tools/composition_latente.py`.
