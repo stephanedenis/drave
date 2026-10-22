@@ -88,7 +88,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 
 **Ce qui reste** : sur le périmètre, la **qualité** (le chrF est un **plancher**, pas une note absolue ; il n'est
 même **pas comparable entre écritures**, 29ᵉ piège), le **technique miné**, les **langues peu
-dotées** ; à l'étage 2, le **plan** — un état qui porte la série, puis la dynamique (mesures 113-115).
+dotées** ; à l'étage 2, le **plan** — un état qui porte la série (113-115), qui **s'aligne par son propre entraînement bilingue** (0,364, mesure 154) ; reste la **dynamique**.
 
 ## Le tableau de bord des chantiers
 

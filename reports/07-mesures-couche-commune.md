@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (153 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (154 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5512,3 +5512,34 @@ multi-tâches), pas espérer l'héritage.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items, un adaptateur de **raisonnement**, un 3 B ✓✗ ; un entraînement
 **bilingue sur le plan** pourrait l'aligner ✓✗ ; et la mesure est peu sensible (le plan figé est à ~0,2) ✓✗.
+
+---
+
+## Mesure 154 — L'ENTRAÎNEMENT BILINGUE **ALIGNE LE PLAN** : EN→FR passe de 0,250 (figé) à **0,364**, presque le FR→FR (0,398)
+
+**La question** ✓✓. Entraîner le **plan lui-même** en bilingue (son objectif : le prompt de 4 phrases doit retrouver
+la 5ᵉ parmi 8) aligne-t-il sa géométrie ? ✓✓
+
+**Le dispositif** ✓✓ : LoRA (attention) + objectif du plan, **alterné FR/EN**, 800 pas, batch 8 ✓ ; évaluation
+FR→FR, EN→EN, **EN→FR** ✓ ; comparaison au **figé** (mesure 132) et à l'**adaptateur du raisonnement** (mesure 153) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 % ; entre parenthèses le figé, puis l'adaptateur du raisonnement) :
+
+| condition | figé (132) | raisonnement (153) | **plan bilingue (154)** |
+|---|---:|---:|---:|
+| FR→FR | 0,204 | 0,216 | **0,398** |
+| EN→EN | 0,216 | 0,193 | **0,466** |
+| **EN→FR** | 0,250 | 0,273 | **0,364** |
+
+* **L'EN→FR MONTE** ✓✓ : **0,364** contre 0,250 (figé) et 0,273 (raisonnement) — **+11 points** ✓✓ ;
+* **L'IN-LANGUE MONTE AUSSI** ✓✓ : 0,398 / 0,466 (figé : 0,204 / 0,216) — *la tâche s'apprend, et avec elle
+  l'alignement* ✓✓ ;
+* **LE TRANSFERT EST PRESQUE L'IN-LANGUE** ✓✗ : 0,364 contre 0,398 (91 %) ✓✗.
+
+**Ce que cela change** ✓✓ : le plan **s'aligne par son propre entraînement bilingue** — le pont n'était pas la bonne
+structure, c'est l'entraînement de la **tâche** qui aligne ✓✓. *Chaque tâche a sa géométrie, mais chacune peut
+s'aligner par son entraînement bilingue.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, 800 pas, un corpus Verne ✓✗ ; l'in-langue monte aussi (une part du
+gain est la **tâche**, pas l'alignement) ✓✗ ; et le contrôle **FR seul** (même entraînement, une langue) manque —
+*c'est la mesure suivante* ✓✓.

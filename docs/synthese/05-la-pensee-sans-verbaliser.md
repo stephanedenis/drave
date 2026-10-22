@@ -207,6 +207,11 @@ transfert, ~0,83 en in-langue.*
 plan reste à **0,273** (figé : 0,250 ; hasard 0,125) : l'alignement est **local à la tâche**. *Il faut entraîner le
 plan lui-même, pas espérer l'héritage.*
 
+**Mesure 154 — le plan s'aligne par son entraînement.** Un LoRA entraîné sur l'objectif du plan (prompt 4 phrases →
+5ᵉ parmi 8), **alterné FR/EN**, améliore l'**EN→FR** de 0,250 (figé) à **0,364**, presque le FR→FR (0,398) ; l'in-langue
+monte aussi (0,398 / 0,466). *Chaque tâche a sa géométrie, mais chacune peut s'aligner par son entraînement bilingue —
+le pont n'était pas la bonne structure.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
