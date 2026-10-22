@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (143 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (144 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5210,3 +5210,33 @@ presse, littéraire et parlé préparé**, et le parlé est le plus **facile** d
 **Ce que ce résultat ne dit pas** ✗ : TED est du parlé **préparé**, pas de la conversation ✓✗ ; 400 paires, deux
 modèles ✓✗ ; les références TED sont des traductions bénévoles ✓✗ ; et la comparaison entre registres est
 **indicative** (les planchers diffèrent : 23,7-25,1 ici) ✓✗.
+
+---
+
+## Mesure 144 — L'ENTRAÎNEMENT **MULTILINGUE** N'ALIGNE PAS NON PLUS : sonde FR→EN **0,042** (hasard 5 %), pont **0,451** (0,81 figé)
+
+**La question** ✓✓. La mesure 142 a montré qu'un entraînement **FR seul** n'aligne pas ; un entraînement **alterné
+FR/EN** (le même modèle, la même tête) aligne-t-il ? ✓✓
+
+**Le dispositif** ✓✓ : LoRA + tête, **500 pas alternés FR/EN**, **100 pas d'échauffement** (tête seule) ✓ ; lr LoRA
+5e-5, tête 1e-2 ✓ ; évaluation FR/EN, sonde neuve, pont EN→FR ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; entre parenthèses le FR seul de la mesure 142, puis le modèle figé) :
+
+| mesure | multilingue | FR seul (142) | figé |
+|---|---:|---:|---:|
+| sonde FR→FR | **0,989** | (0,974) | (0,987) |
+| sonde FR→EN | **0,042** | (0,092) | (0,058) |
+| pont EN→FR | **0,451** | (0,513) | (0,810) |
+
+* **LA SONDE FR RESTE FORTE** ✓✓ : 0,989 ✓✓ ;
+* **LE TRANSFERT EN RESTE AU HASARD** ✗✗ : 0,042 — *entraîner sur les deux langues ne suffit pas* ✗✗ ;
+* **LE PONT BAISSE** ✗✗ : 0,451, encore plus bas que le FR seul (0,513) ✓✗ ;
+* **LA TÊTE N'A TOUJOURS PAS CONVERGÉ** ✗ : 0,081 / 0,075 — un problème d'optimisation connu ✓✗.
+
+**Ce que cela change** ✗✓ : la supervision de la tâche (même bilingue) **n'apprend pas l'alignement** ✓✗ ; il faut un
+objectif **explicitement contrastif entre les paires FR/EN** (rapprocher les états de la même chaîne), pas seulement
+la classification ✓✓. *C'est la prochaine piste : une perte de type InfoNCE entre FR et EN.*
+
+**Ce que ce résultat ne dit pas** ✗ : la tête n'a pas convergé (le signal de classification est faible) ✓✗ ; 500 pas,
+un LoRA d'attention ✓✗ ; et un objectif contrastif n'a pas été testé ✓✗.

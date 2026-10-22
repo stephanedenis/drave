@@ -173,6 +173,10 @@ une sonde FR forte (0,974), mais la sonde FR→EN reste à **0,092** (hasard 5 %
 figé) : le fine-tuning monolingue n'aligne pas, il **dégrade** l'alignement. *Il faut un objectif **multilingue**, pas
 seulement réussir en français.*
 
+**Mesure 144 — le multilingue ne suffit pas.** Un entraînement **alterné FR/EN** (500 pas) garde une sonde FR à
+0,989, mais la sonde FR→EN reste à **0,042** et le pont baisse à **0,451** : la supervision de la tâche, même
+bilingue, **n'apprend pas l'alignement**. *Il faut un objectif explicitement contrastif entre les paires FR/EN.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
