@@ -56,6 +56,7 @@
 - [`composition-verne-large.json`](composition-verne-large.json) — la composition sur 630 séries (contrôle de la mesure 115 : 0,53 / 0,867 à la couche 18)
 - [`pas-de-plan-3b.json`](pas-de-plan-3b.json) · [`composition-verne-plan.json`](composition-verne-plan.json) — le contexte sur 8 phrases (mesure 116 : le contenu reste à 0,14 contre 0,125)
 - [`pas-de-plan-code-3b.json`](pas-de-plan-code-3b.json) — le code de plan (mesure 117 : 0,86-0,89, à peine au-dessus de la moyenne)
+- [`position-multilingue.json`](position-multilingue.json) — la position dans la série (mesure 118 : 0,13 contre 0,125 ; la langue est à 1,00)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

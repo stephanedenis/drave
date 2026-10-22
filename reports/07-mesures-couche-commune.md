@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (117 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (118 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4354,3 +4354,30 @@ reconstruction absolue* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : un code plus grand, un décodeur plus riche, un autre corpus ✓✗ ; mais les
 mesures 113-116 (pas, contenu) et 117 (compression) **convergent** : les états figés portent la phrase, pas le plan ✓✗.
+
+---
+
+## Mesure 118 — LA LANGUE EST PARFAITEMENT LISIBLE, LA POSITION NE L'EST PAS : 1,00 contre 0,13 (hasard 0,125)
+
+**La question** ✓✓. L'« ordre 0,84 » de la mesure 80 est-il un **code de position** dans l'état — et ce code
+traverse-t-il les langues ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/position_multilingue.py` ✓) : les **307 séries** de 8 phrases FR/EN (3 B), 214/93 ✓ ;
+une sonde **ridge** de position (8 classes) entraînée sur le **FR**, testée sur le FR et sur l'**EN** (et
+réciproquement), sans re-calibrer la langue cible ✓ ; contrôle négatif (étiquettes mélangées) et sonde de **langue**
+(FR vs EN) ✓✓.
+
+**Les résultats** ✓ (5 couches) : position **0,105-0,144** partout (hasard **0,125**), y compris **dans la même
+langue** ; contrôle 0,114-0,126 ; **langue 0,999-1,000** ✓✓.
+
+* **AUCUN CODE DE POSITION** ✗✗ : la position dans la série n'est pas décodable, même en FR ✓✗ ;
+* **LA LANGUE EST PARFAITEMENT LISIBLE** ✓✓ : 1,00 — *l'état porte la langue, pas la structure* ✓✗ ;
+* **L'« ORDRE 0,84 » ÉTAIT UN APPARIEMENT** ✓✗ : le bon EN est le plus proche du FR, ce n'est pas une position
+  décodable ✓✗.
+
+**Ce que cela change** ✓✓ : la structure de la série n'est pas dans l'état d'une phrase — cohérent avec les mesures
+113-117 ✓✓. *Ce n'est pas la langue qui manque au niveau abstrait, c'est la **structure*** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : la position dans un **bloc arbitraire de 8** n'a pas de sens propre (les blocs
+sont des fenêtres, pas des unités) ✓✗ ; une structure **relative** (avant/après) ou un état de contexte pourraient
+être codés ✓✗ ; la sonde est linéaire ✓✗.

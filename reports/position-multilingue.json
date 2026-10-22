@@ -1,0 +1,55 @@
+{
+ "etats": "data/composition-verne-plan-etats.npz",
+ "n_series": 307,
+ "n_series_train": 214,
+ "n_series_test": 93,
+ "par_serie": 8,
+ "hasard_position": 0.125,
+ "resultats": [
+  {
+   "couche": 6,
+   "fr_fr": 0.1277,
+   "fr_en": 0.1142,
+   "en_en": 0.125,
+   "en_fr": 0.121,
+   "negatif": 0.1263,
+   "langue": 1.0
+  },
+  {
+   "couche": 12,
+   "fr_fr": 0.1358,
+   "fr_en": 0.1398,
+   "en_en": 0.1223,
+   "en_fr": 0.1304,
+   "negatif": 0.1183,
+   "langue": 0.9993
+  },
+  {
+   "couche": 18,
+   "fr_fr": 0.1317,
+   "fr_en": 0.1398,
+   "en_en": 0.1344,
+   "en_fr": 0.1371,
+   "negatif": 0.1142,
+   "langue": 0.9993
+  },
+  {
+   "couche": 24,
+   "fr_fr": 0.1089,
+   "fr_en": 0.1304,
+   "en_en": 0.1438,
+   "en_fr": 0.1048,
+   "negatif": 0.1196,
+   "langue": 0.9987
+  },
+  {
+   "couche": 30,
+   "fr_fr": 0.1344,
+   "fr_en": 0.1277,
+   "en_en": 0.1223,
+   "en_fr": 0.121,
+   "negatif": 0.1142,
+   "langue": 0.9987
+  }
+ ]
+}
