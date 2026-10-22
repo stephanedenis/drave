@@ -125,6 +125,10 @@ n'est pas un artefact du couple FR/EN.*
 
 **Mesure 132 — le pont ne se transpose pas au plan.** Sur les 307 séries Verne appariées, le pont EN→FR des prompts
 donne **0,148**, contre **0,250** sans pont (hasard 0,125) : il aligne le **raisonnement**, pas l'**état de plan**.
-*Le plan reste à entraîner dans le modèle (mesures 119-124) ; le pont n'est pas un mécanisme universel.* L'outillage est en place :
+*Le plan reste à entraîner dans le modèle (mesures 119-124) ; le pont n'est pas un mécanisme universel.*
+
+**Mesure 133 — l'arabe.** Le pont tient pour une langue **non indo-européenne** et d'une autre écriture :
+**1,00 / 0,90 / 0,73 / 0,48 / 0,41** (pont AR→FR), contre 0,04-0,08 sans pont. *L'alignement n'est pas un effet de
+voisinage.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

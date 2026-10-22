@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (132 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (133 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4857,3 +4857,35 @@ l'entraîner dans le modèle — c'est ce que faisaient les mesures 119-124* ✓
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont entraîné sur les **cibles**
 (ou sur prompts **et** cibles) pourrait marcher ✓✗ ; et le retrieval du plan figé (0,2) limite la sensibilité ✓✗.
+
+---
+
+## Mesure 133 — LE PONT TIENT POUR L'**ARABE** (NON INDO-EUROPÉEN) : 1,00 / 0,90 / 0,73 / 0,48 / 0,41, contre 0,04-0,08 sans pont
+
+**La question** ✓✓. L'alignement est-il propre aux langues européennes proches, ou tient-il pour une langue **non
+indo-européenne** et d'une **autre écriture** ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié (2000 chaînes, mêmes entités et ordre), avec l'**arabe** comme source
+✓ ; pont **AR→FR**, sonde FR, contrôle (paires mélangées) ✓✓. *Caveat : les noms restent en écriture latine dans un
+texte arabe.* ✓✗
+
+**Les résultats** ✓ (hasard 5 % ; pont par langue source) :
+
+| longueur | FR→FR | **AR→FR** | EN→FR (126) | DE→FR (131) |
+|---|---:|---:|---:|---:|
+| 2 | 1,000 | **1,000** | 1,000 | 1,000 |
+| 3 | 1,000 | **0,902** | 0,911 | 0,935 |
+| 4 | 0,944 | **0,729** | 0,681 | 0,736 |
+| 5 | 0,827 | **0,480** | 0,520 | 0,646 |
+| 6 | 0,653 | **0,405** | 0,463 | 0,521 |
+
+* **LE PONT TIENT POUR L'ARABE** ✓✓ : 1,00 à 0,41, sans pont 0,04-0,08 ✓✓ ;
+* **L'ARABE EST UN PEU PLUS FAIBLE** ✓✗ : 0,48 / 0,41 aux longues chaînes, cohérent avec un in-langue plus faible
+  (0,72 / 0,50) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,03-0,08) ✓✓.
+
+**Ce que cela change** ✓✓ : l'alignement **n'est pas propre aux langues proches** : il tient pour une langue d'une
+autre famille et d'une autre écriture ✓✓. *Le pont est un mécanisme général, pas un effet de voisinage.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : les **noms** restent en écriture latine (mélange d'écritures) ✓✗ ; un corpus
+synthétique, un 3 B, une relation ✓✗ ; et le **mandarin** reste à tester ✓✗.

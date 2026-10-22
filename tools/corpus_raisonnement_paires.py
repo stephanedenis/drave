@@ -40,6 +40,10 @@ RELATIONS["ordre"]["de"] = {"lien": "ist vor", "question": "Frage: Wer ist vor a
                             "titre": "Fakten:", "consigne": "Antworte mit einem einzigen Namen."}
 RELATIONS["taille"]["de"] = {"lien": "ist größer als", "question": "Frage: Wer ist am größten?",
                              "titre": "Fakten:", "consigne": "Antworte mit einem einzigen Namen."}
+RELATIONS["ordre"]["ar"] = {"lien": "أمام", "question": "السؤال: من هو أمام الجميع؟",
+                            "titre": "الحقائق:", "consigne": "أجب باسم واحد فقط."}
+RELATIONS["taille"]["ar"] = {"lien": "أطول من", "question": "السؤال: من هو الأطول؟",
+                             "titre": "الحقائق:", "consigne": "أجب باسم واحد فقط."}
 
 
 def texte(langue, premisses, relation):
