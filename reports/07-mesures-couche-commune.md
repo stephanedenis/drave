@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (150 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (151 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5425,3 +5425,32 @@ pas), pas du contraste ; le contraste correct **affine** (+9) mais **coûte** en
 
 **Ce que ce résultat ne dit pas** ✗ : la mesure 144 (batch 4, 500 pas, bilingue) donnait 0,042 — le **batch et le
 nombre de pas** sont décisifs ✓✗ ; il faut une **courbe** (batch 4/8, 400/800/1 600 pas) pour situer le seuil ✓✗.
+
+---
+
+## Mesure 151 — LA COURBE DE L'ALIGNEMENT : il **émerge entre 400 et 800 pas** (0,13 → 0,66) ; à 800 pas, le **batch 8** fait 0,656 contre 0,404 (batch 4)
+
+**La question** ✓✓. Le seuil de l'alignement dépend-il du **nombre de pas** ou du **batch** ? ✓✓
+
+**Le dispositif** ✓✓ : le même entraînement **bilingue sans contraste**, quatre points : (batch 4, 500 pas) = mesure
+144, (batch 8, 400 pas), (batch 4, 800 pas), (batch 8, 800 pas) = mesure 150 ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; sonde FR→EN) :
+
+| pas | batch 4 | batch 8 |
+|---|---:|---:|
+| 400-500 | 0,042 (144) | **0,132** |
+| 800 | **0,404** | **0,656** |
+
+* **LE SEUIL EST ENTRE 400 ET 800 PAS** ✓✓ : 0,04-0,13 à 400-500 pas, 0,40-0,66 à 800 ✓✓ ;
+* **LE BATCH AMPLIFIE** ✓✓ : à 800 pas, 0,656 (batch 8) contre 0,404 (batch 4) ✓✓ ;
+* **LES EXEMPLES NE SUFFISENT PAS** ✓✗ : b8/400 et b4/800 voient tous deux ~3 200 exemples, mais donnent 0,13 et
+  0,40 — *c'est le nombre de **pas** qui compte, pas seulement les exemples* ✓✗ ;
+* **L'IN-LANGUE PAIE** ✓✗ : 0,969 (400 pas) → 0,826 (800 pas, b8) ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement **émerge tard** dans l'entraînement (600-800 pas) ; le batch l'amplifie ; et
+le coût en français suit la montée ✓✓. *Il faut donc entraîner assez longtemps — pas seulement voir beaucoup
+d'exemples.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : quatre points seulement, un corpus synthétique, un 3 B ✓✗ ; la saturation au-delà
+de 800 pas (1 600) n'est pas mesurée ✓✗.

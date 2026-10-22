@@ -195,6 +195,10 @@ ajoute **+24 points**. *Le contraste correct n'est pas la cause unique de l'alig
 contraste **correct** ajoute +9 (0,742), le **mélangé** coûte −15 (0,505). *L'alignement est une conséquence de la
 supervision bilingue avec assez de batch et de pas ; le contraste correct affine, le mauvais dégrade.*
 
+**Mesure 151 — la courbe.** L'alignement **émerge entre 400 et 800 pas** (0,13 → 0,66) ; à 800, le **batch 8** fait
+0,656 contre 0,404 (batch 4) ; à nombre d'exemples égal, c'est le nombre de **pas** qui compte. *Il faut entraîner
+assez longtemps, pas seulement voir beaucoup d'exemples.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
