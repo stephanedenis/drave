@@ -117,7 +117,7 @@ def principal() -> int:
     longueur = np.array([p["longueur"] for p in paires])
     split = np.array([p["split"] for p in paires])
     res = {"couche": a.couche, "source": a.source, "n_paires": len(paires), "hasard": 1.0 / len(noms), "resultats": []}
-    for L in (2, 3, 4, 5, 6):
+    for L in sorted(set(int(x) for x in longueur)):
         m_tr = (longueur == L) & (split == "train")
         m_te = (longueur == L) & (split == "test")
         if m_tr.sum() < 30 or m_te.sum() < 10:

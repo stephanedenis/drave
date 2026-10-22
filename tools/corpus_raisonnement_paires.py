@@ -56,13 +56,14 @@ def main() -> int:
     ap.add_argument("--chaines", type=int, default=400, help="chaînes par longueur")
     ap.add_argument("--relation", choices=sorted(RELATIONS), default="ordre")
     ap.add_argument("--langues", default="fr,en")
+    ap.add_argument("--longueurs", default="2,3,4,5,6")
     ap.add_argument("--sortie", default=None)
     a = ap.parse_args()
     sortie = a.sortie or f"data/raisonnement/transitif_paires_{a.relation}.json"
     langues = [l.strip() for l in a.langues.split(",") if l.strip()]
     rng = random.Random(1234)
     paires = []
-    for longueur in (2, 3, 4, 5, 6):
+    for longueur in [int(x) for x in a.longueurs.split(",")]:
         for i in range(a.chaines):
             noms = rng.sample(NOMS, longueur)
             ordre = rng.random() < 0.5

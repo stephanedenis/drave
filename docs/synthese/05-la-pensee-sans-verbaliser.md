@@ -220,6 +220,9 @@ bilinguisme. *Le plan ne s'aligne pas ; son transfert apparent est un effet **c�
 la géométrie du plan est **ancrée dans la langue** ; son transfert apparent vient de la tâche, pas d'un partage.
 *C'est le seul endroit de l'étage 2 où l'alignement échoue à toutes les méthodes testées.*
 
+**Mesure 157 — la profondeur.** Au 3 B, le pont tient jusqu'à **12 entités** (0,95 à 4 → **0,47** à 12) : pas de
+mur, une **pente** qui suit l'in-langue. *La pente, pas la falaise.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

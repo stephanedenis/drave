@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (156 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (157 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5604,3 +5604,32 @@ l'alignement échoue à toutes les méthodes testées.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items (peu sensible), 800 pas, batch 4 (quatre négatifs) ✓✗ ; un contraste
 plus fort, un corpus plus grand ou une autre couche pourraient ajouter ✓✗.
+
+---
+
+## Mesure 157 — LA PROFONDEUR DU RAISONNEMENT AU **3 B** : le pont tient jusqu'à **12 entités** mais décroît (0,95 → 0,47)
+
+**La question** ✓✓. Au-delà de 6 entités, le pont tient-il — ou y a-t-il un **mur de profondeur** ? ✓✓
+
+**Le dispositif** ✓✓ : un corpus de **profondeur** (4, 6, 8, 10, 12 entités ; 400 chaînes par longueur) ✓ ; 3 B,
+pont et sonde **poolés** ✓ ; contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| entités | FR→FR | **pont** | contrôle |
+|---|---:|---:|---:|
+| 4 | 1,000 | **0,950** | 0,033 |
+| 6 | 0,950 | **0,793** | 0,017 |
+| 8 | 0,916 | **0,622** | 0,050 |
+| 10 | 0,846 | **0,561** | 0,054 |
+| 12 | 0,711 | **0,469** | 0,062 |
+
+* **LE PONT TIENT JUSQU'À 12 ENTITÉS** ✓✓ : 0,469 (contre 0,03-0,06 au hasard) ✓✓ ;
+* **LA DÉCROISSANCE SUIT L'IN-LANGUE** ✓✗ : 1,00 → 0,71 in-langue, 0,95 → 0,47 pont — *pas de mur, une pente* ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,02-0,06) ✓✓.
+
+**Ce que cela change** ✓✓ : le raisonnement latent n'a pas de **limite dure** à 6 entités ; il **décroît** avec la
+profondeur, et le pont suit ✓✓. *La pente, pas la falaise.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 3 B, une relation, 400 chaînes par longueur ✓✗ ; et le 14 B est **en cours**
+pour voir si la pente s'aplatit ✓✓.
