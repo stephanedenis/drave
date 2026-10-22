@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (158 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (159 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5664,3 +5664,34 @@ donne la profondeur.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 14 B, une relation, 400 chaînes par longueur ✓✗ ; au-delà de 12 entités, et le
 32 B, restent à tester ✓✗.
+
+---
+
+## Mesure 159 — LE TECHNIQUE À RÉFÉRENCE **HUMAINE** (JRC-ACQUIS) : marge **+36,4** (EN→FR) et **+34,9** (FR→EN) — la WikiMatrix **gonflait**
+
+**La question** ✓✓. Le technique mesuré sur **WikiMatrix** (paires **minées**) donnait +41,0 / +46,0 ; une référence
+**humaine** donne-t-elle la même marge ? ✓✓
+
+**Le dispositif** ✓✓ : JRC-Acquis (législation européenne **traduite par des humains**), **sous-corpus technique**
+(chimie, énergie, environnement, santé : ≥ 2 mots-clés), 800 paires filtrées, 400 échantillonnées ✓ ; 7 B, deux sens,
+chrF + plancher + marge + IC ✓✓.
+
+**Les résultats** ✓ (le plancher est la référence) :
+
+| référence | sens | chrF | plancher | **marge** | IC 95 % |
+|---|---|---:|---:|---:|---:|
+| **JRC humain** | EN→FR | 68,0 | 31,6 | **+36,4** | [35,2 ; 37,4] |
+| **JRC humain** | FR→EN | 68,6 | 33,7 | **+34,9** | [33,8 ; 36,0] |
+| WikiMatrix miné | EN→FR | 73,1 | 32,1 | +41,0 | [39,3 ; 42,6] |
+| WikiMatrix miné | FR→EN | 80,2 | 34,2 | +46,0 | [44,7 ; 47,3] |
+
+* **LA MARGE HUMAINE EST AU NIVEAU DU JURIDIQUE** ✓✗ : +36,4 / +34,9, contre +35,3 (juridique), **pas** +41 / +46 ✓✗ ;
+* **LE MINÉ GONFLAIT** ✗✗ : la référence minée partage les termes et les entités, le chrF monte ✓✗ ;
+* **LES DEUX PLANCHERS SONT HAUTS** ✓✗ : 31,6-34,2 — le vocabulaire partagé ✓✗.
+
+**Ce que cela change** ✓✓ : le **technique humain** se situe au niveau du **juridique** (~+35), pas au-dessus ✓✓ ; la
+marge du miné (+41 / +46) était un **artefact de référence** ✓✗. *La carte des registres a désormais une référence
+**humaine** pour le technique.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : le sous-corpus est **juridico-technique** (législation), pas de la prose
+technique (articles scientifiques) ✓✗ ; 400 paires, un modèle ✓✗.
