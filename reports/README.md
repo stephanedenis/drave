@@ -72,6 +72,7 @@
 - [`pont-plan-3b.json`](pont-plan-3b.json) — le pont de l'état de plan (mesure 132 : il dégrade, 0,148 contre 0,250)
 - [`pont-raisonnement-ar-3b.json`](pont-raisonnement-ar-3b.json) — le pont FR/AR (mesure 133 : 1,00 / 0,90 / 0,73 / 0,48 / 0,41)
 - [`pont-croise-3b.json`](pont-croise-3b.json) — le pont croisé raisonnement → plan (mesure 134 : 0,125, le hasard)
+- [`pont-longueur2-3b.json`](pont-longueur2-3b.json) · [`pont-pool-pont-3b.json`](pont-pool-pont-3b.json) · [`pont-pool-3b.json`](pont-pool-3b.json) — le pont par longueur, poolé, et tout poolé (mesure 135 : un seul pont suffit, 0,94 / 0,91 / 0,81)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

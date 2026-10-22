@@ -135,6 +135,11 @@ voisinage.*
 **0,125** (le hasard) sur le **plan** : les tâches de l'étage 2 ont des géométries **locales** ; il faut un pont par
 tâche, ou un plan entraîné dans le modèle.
 
+**Mesure 135 — un seul pont pour toutes les longueurs.** Pont et sonde **poolés** sur toutes les longueurs :
+**0,94 / 0,91 / 0,81** pour 4 à 6 entités (contre 0,46-0,68 avec un pont par longueur) ; un pont appris sur les
+chaînes de 2 entités **seul** échoue (0,03-0,12). *Une seule carte linéaire, calculée une fois sur toutes les
+longueurs, suffit : c'est la version la plus économique de la tête bien faite.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (134 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (135 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4922,3 +4922,37 @@ plan entraîné dans le modèle (mesures 119-124) ✓✗. *La « tête bien fait
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont **multi-tâches** (entraîné sur
 les deux) pourrait fonctionner ✓✗ ; et le plan a un retrieval faible (0,2), ce qui limite la sensibilité ✓✗.
+
+---
+
+## Mesure 135 — UN SEUL PONT POUR TOUTES LES LONGUEURS : **0,94 / 0,91 / 0,81** (pont et sonde poolés), contre 0,46-0,68 (pont par longueur) — mais un pont appris sur L2 seul échoue (0,03-0,12)
+
+**La question** ✓✓. Le pont est-il spécifique à chaque **longueur** de chaîne, ou une seule carte entraînée sur
+toutes les longueurs suffit-elle ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié (source EN, 2000 chaînes) ✓ ; quatre variantes : **(a)** pont et sonde
+par longueur (mesure 126) ; **(b)** pont **poolé**, sonde par longueur ; **(c)** pont **et** sonde poolés ; **(d)**
+pont appris sur la **longueur 2 seulement**, testé partout ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| longueur | (a) par longueur | (b) pont poolé | (c) tout poolé | (d) L2 seul |
+|---|---:|---:|---:|---:|
+| 2 | 1,000 | 1,000 | **1,000** | 1,000 |
+| 3 | 0,911 | 0,968 | **1,000** | 0,122 |
+| 4 | 0,681 | 0,819 | **0,938** | 0,097 |
+| 5 | 0,520 | 0,653 | **0,913** | 0,039 |
+| 6 | 0,463 | 0,529 | **0,810** | 0,033 |
+
+* **LE PONT POOLÉ EST MEILLEUR** ✓✓ : 0,819 / 0,653 / 0,529 (b) contre 0,681 / 0,520 / 0,463 (a) ✓✓ ;
+* **TOUT POOLÉ EST EXCELLENT** ✓✓ : 0,938 / 0,913 / 0,810 (c), proche de l'in-langue (0,944 / 0,827 / 0,653) ✓✓ ;
+* **UN PONT APPRIS SUR L2 SEUL ÉCHOUE** ✗✗ : 0,03-0,12 (d) ✓✗ — *la géométrie dépend de la longueur, mais un pont
+  poolé la couvre* ✓✓.
+
+**Ce que cela change** ✓✓ : **un seul pont et une seule sonde** par paire de langues suffisent ; pas besoin d'un pont
+par longueur ✓✓. *C'est la version la plus économique de la « tête bien faite » : une carte linéaire, calculée une
+fois sur toutes les longueurs.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; le pool **mélange les longueurs** (le
+gain vient en partie de la sonde, qui voit plus de données) ✓✗ ; et le pont reste **local à la tâche** (mesure 134)
+✓✗.

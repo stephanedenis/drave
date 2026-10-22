@@ -76,6 +76,9 @@ def principal() -> int:
     ap.add_argument("--corpus", default="data/raisonnement/transitif_paires.json")
     ap.add_argument("--source", default="en", help="langue source à ponter vers le FR")
     ap.add_argument("--pont", choices=["lineaire", "mlp"], default="lineaire")
+    ap.add_argument("--pont-train-longueur", type=int, default=0, help="entraîner le pont sur cette longueur seulement (0 = même longueur)")
+    ap.add_argument("--pool", action="store_true", help="pont et sonde entraînés sur toutes les longueurs")
+    ap.add_argument("--pool-pont", action="store_true", help="pont seul entraîné sur toutes les longueurs (sonde par longueur)")
     ap.add_argument("--hf", default="Qwen/Qwen2.5-3B-Instruct")
     ap.add_argument("--couche", type=int, default=18)
     ap.add_argument("--sortie", default="reports/pont-raisonnement-3b.json")
@@ -115,33 +118,38 @@ def principal() -> int:
         m_te = (longueur == L) & (split == "test")
         if m_tr.sum() < 30 or m_te.sum() < 10:
             continue
-        pred_fr = sonde(Efr[m_tr], y[m_tr], Efr[m_te], len(noms))
-        pred_en = sonde(Een[m_tr], y[m_tr], Een[m_te], len(noms))
         # pont EN→FR, λ choisi sur 10 % des paires d'entraînement (cosinus)
-        idx = np.where(m_tr)[0]
+        m_tr_p = (split == "train") if a.pool else m_tr
+        m_tr_b = (split == "train") if (a.pool or a.pool_pont) else m_tr
+        pred_fr = sonde(Efr[m_tr_p], y[m_tr_p], Efr[m_te], len(noms))
+        pred_en = sonde(Een[m_tr_p], y[m_tr_p], Een[m_te], len(noms))
+        if a.pont_train_longueur:
+            idx = np.where((longueur == a.pont_train_longueur) & (split == "train"))[0]
+        else:
+            idx = np.where(m_tr_b)[0]
         nv = max(10, len(idx) // 10)
         trn, val = idx[:-nv], idx[-nv:]
         mel = np.random.default_rng(7).permutation(trn)
         if a.pont == "mlp":
             m = pont_mlp(Een[trn], Efr[trn])
-            pred_pont = sonde(Efr[m_tr], y[m_tr], appliquer_mlp(m, Een[m_te]), len(noms))
+            pred_pont = sonde(Efr[m_tr_p], y[m_tr_p], appliquer_mlp(m, Een[m_te]), len(noms))
             mn = pont_mlp(Een[mel], Efr[trn])
-            pred_neg = sonde(Efr[m_tr], y[m_tr], appliquer_mlp(mn, Een[m_te]), len(noms))
+            pred_neg = sonde(Efr[m_tr_p], y[m_tr_p], appliquer_mlp(mn, Een[m_te]), len(noms))
             lam = None
         else:
             lam = max((0.1, 1.0, 10.0, 100.0, 1000.0),
                       key=lambda l: cos(appliquer(Een[val], pont(Een[trn], Efr[trn], l)), Efr[val]))
             W = pont(Een[trn], Efr[trn], lam)
-            pred_pont = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], W), len(noms))
+            pred_pont = sonde(Efr[m_tr_p], y[m_tr_p], appliquer(Een[m_te], W), len(noms))
             Wn = pont(Een[mel], Efr[trn], lam)
-            pred_neg = sonde(Efr[m_tr], y[m_tr], appliquer(Een[m_te], Wn), len(noms))
+            pred_neg = sonde(Efr[m_tr_p], y[m_tr_p], appliquer(Een[m_te], Wn), len(noms))
         r = {"longueur": L, "n_train": int(m_tr.sum()), "n_test": int(m_te.sum()),
              "fr_fr": round(float(np.mean(pred_fr == y[m_te])), 4),
              "en_en": round(float(np.mean(pred_en == y[m_te])), 4),
              "pont": round(float(np.mean(pred_pont == y[m_te])), 4),
              "pont_melange": round(float(np.mean(pred_neg == y[m_te])), 4), "lambda": lam}
         # sans pont : la sonde FR appliquée directement à l'état EN
-        pred_sans = sonde(Efr[m_tr], y[m_tr], Een[m_te], len(noms))
+        pred_sans = sonde(Efr[m_tr_p], y[m_tr_p], Een[m_te], len(noms))
         r["fr_sur_en_sans_pont"] = round(float(np.mean(pred_sans == y[m_te])), 4)
         res["resultats"].append(r)
         print(f"  L{L} · FR→FR {r['fr_fr']:.3f} · EN→EN {r['en_en']:.3f} · FR sur EN sans pont "
