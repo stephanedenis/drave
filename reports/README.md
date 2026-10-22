@@ -213,3 +213,6 @@
 - [`sources-pidgin.json`](sources-pidgin.json) — inventaire des sources parallèles pidgin-anglais (8 testées, 3 utilisées, 1 écartée, 2 inaccessibles/absentes).
 
 - [`pas-de-pensee-recurrent.json`](pas-de-pensee-recurrent.json) — l'opérateur appris par récurrence (mesure 108 : la falaise tient).
+
+- [`composition-latente-3b.json`](composition-latente-3b.json) · [`composition-latente-7b.json`](composition-latente-7b.json) · [`composition-latente-14b.json`](composition-latente-14b.json) — l'état latent entraîné avec la tâche (mesure 109 : collapse au point fixe).
+- [`composition-penalite-3b.json`](composition-penalite-3b.json) · [`composition-penalite-7b.json`](composition-penalite-7b.json) — la pénalité de point fixe (mesure 110 : le pas 1 reste à 0,00).
