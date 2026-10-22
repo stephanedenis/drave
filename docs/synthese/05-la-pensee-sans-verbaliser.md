@@ -117,6 +117,10 @@ est la bonne — ce n'est pas la capacité qui manque, c'est la régularisation.
 
 **Mesure 130 — le pont n'est pas une couche.** Il marche aux couches **12, 18 et 24** ; la **couche 12** est la
 meilleure aux longues chaînes (0,74 / 0,64 / 0,48) et in-langue. *La tête bien faite a une profondeur : le milieu du
-réseau.* L'outillage est en place :
+réseau.*
+
+**Mesure 131 — quatre langues.** FR/DE donne **1,00 / 0,94 / 0,74 / 0,65 / 0,52**, comme FR/EN et FR/ES :
+l'alignement est **langue-général** sur quatre langues indo-européennes, dont une à ordre des mots différent. *Le pont
+n'est pas un artefact du couple FR/EN.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

@@ -36,6 +36,10 @@ RELATIONS["ordre"]["es"] = {"lien": "está delante de", "question": "Pregunta: �
                             "titre": "Hechos:", "consigne": "Responde con un solo nombre."}
 RELATIONS["taille"]["es"] = {"lien": "es más alto que", "question": "Pregunta: ¿quién tiene la mayor altura?",
                              "titre": "Hechos:", "consigne": "Responde con un solo nombre."}
+RELATIONS["ordre"]["de"] = {"lien": "ist vor", "question": "Frage: Wer ist vor allen?",
+                            "titre": "Fakten:", "consigne": "Antworte mit einem einzigen Namen."}
+RELATIONS["taille"]["de"] = {"lien": "ist größer als", "question": "Frage: Wer ist am größten?",
+                             "titre": "Fakten:", "consigne": "Antworte mit einem einzigen Namen."}
 
 
 def texte(langue, premisses, relation):

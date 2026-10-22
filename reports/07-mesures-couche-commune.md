@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (130 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (131 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4791,3 +4791,34 @@ une profondeur : le milieu du réseau.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : trois couches, un modèle, un corpus synthétique ✓✗ ; et la couche 12 n'a pas
 été testée sur les autres relations/langues ✓✗.
+
+---
+
+## Mesure 131 — LE PONT EST **LANGUE-GÉNÉRAL** (4 LANGUES) : FR/DE donne **1,00 / 0,94 / 0,74 / 0,65 / 0,52**, comme FR/EN et FR/ES
+
+**La question** ✓✓. Le pont tient-il pour une **quatrième** langue, l'allemand, plus éloigné du français que
+l'anglais et l'espagnol ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié (2000 chaînes, mêmes entités, même ordre), avec l'**allemand** comme
+source, pont **DE→FR**, sonde FR, contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; pont par langue source) :
+
+| longueur | FR→FR | **DE→FR** | EN→FR (126) | ES→FR (128) |
+|---|---:|---:|---:|---:|
+| 2 | 1,000 | **1,000** | 1,000 | 1,000 |
+| 3 | 1,000 | **0,935** | 0,911 | 0,919 |
+| 4 | 0,944 | **0,736** | 0,681 | 0,715 |
+| 5 | 0,827 | **0,646** | 0,520 | 0,559 |
+| 6 | 0,653 | **0,521** | 0,463 | 0,504 |
+
+* **LE PONT MARCHE POUR UNE QUATRIÈME LANGUE** ✓✓ : 1,00 à 0,52 ; sans pont 0,06-0,12 ✓✓ ;
+* **L'ALLEMAND FAIT AUSSI BIEN, VOIRE MIEUX** ✓✗ : 0,74 / 0,65 / 0,52 aux longues chaînes, contre 0,68 / 0,52 /
+  0,46 (EN) et 0,72 / 0,56 / 0,50 (ES) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,02-0,07) ✓✓.
+
+**Ce que cela change** ✓✓ : l'alignement est **langue-général** sur quatre langues, dont une à ordre des mots
+différent (l'allemand) ✓✓ — *le pont n'est pas un artefact du couple FR/EN* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : quatre langues **indo-européennes**, un corpus synthétique, un 3 B ✓✗ ; une
+langue **lointaine** (arabe, mandarin) reste à tester ✓✗.

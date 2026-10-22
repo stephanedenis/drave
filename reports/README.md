@@ -68,6 +68,7 @@
 - [`pont-raisonnement-es-3b.json`](pont-raisonnement-es-3b.json) — le pont FR/ES (mesure 128 : 1,00 / 0,92 / 0,72 / 0,56 / 0,50)
 - [`pont-mlp-3b.json`](pont-mlp-3b.json) — le pont non linéaire (mesure 129 : échec, 0,04-0,17)
 - [`pont-raisonnement-l12-3b.json`](pont-raisonnement-l12-3b.json) · [`pont-raisonnement-l24-3b.json`](pont-raisonnement-l24-3b.json) — le pont aux couches 12 et 24 (mesure 130 : la couche 12 est la meilleure aux longues chaînes)
+- [`pont-raisonnement-de-3b.json`](pont-raisonnement-de-3b.json) — le pont FR/DE (mesure 131 : 1,00 / 0,94 / 0,74 / 0,65 / 0,52)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
