@@ -241,6 +241,28 @@ l'inférence naturelle, il faut entraîner le modèle, pas changer le readout.*
 et **0,610** (EN, zéro-ressource), et le pont monte à **0,751** (figé : 0,592). *L'inférence naturelle se travaille
 par l'entraînement ; le modèle apprend une représentation plus partageable.*
 
+### La carte du raisonnement (mesures 125-163)
+
+| question | mesures | réponse |
+|---|---|---|
+| le raisonnement synthétique est-il dans l'état ? | 125 | oui : 1,00 → 0,51 (FR), 1,00 → 0,53 (EN), hasard 5 % |
+| un pont linéaire l'aligne-t-il ? | 126 | oui : 1,00 / 0,91 / 0,68 / 0,52 / 0,46 (2-6 entités) |
+| est-ce structurel et langue-général ? | 127-128, 131, 133 | oui : « taille », FR/ES, FR/DE, **arabe** |
+| le pont doit-il rester linéaire ? | 129 | oui : le MLP échoue (0,04-0,17) |
+| à quelle couche ? | 130 | 12, 18 et 24 ; la 12 est la meilleure aux longues chaînes |
+| un seul pont pour toutes les longueurs ? | 135 | oui, poolé : 0,94 / 0,91 / 0,81 |
+| jusqu'à quelle profondeur ? | 157-158 | 12 entités : 0,47 (3 B), **0,70** (14 B) |
+| à quelle échelle ? | 137, 141 | 3 B, 7 B, 14 B : 0,81-0,97 |
+| l'alignement s'apprend-il ? | 142-152 | oui : bilingue **0,656**, + contraste **0,742**, sature **0,753** |
+| le plan s'aligne-t-il ? | 132, 134, 153, 155-156 | **non** : ponts, bilinguisme et contraste échouent |
+| le raisonnement naturel ? | 160-163 | oui : inférence 0,50-0,58, pont 0,59 → **0,75** (fine-tuning) |
+
+**Les trois leçons.** 1. L'état porte le raisonnement — synthétique et naturel — **sans verbaliser**. 2. Un petit
+pont **linéaire** l'aligne, à toutes les échelles et sur les deux tâches ; l'alignement **s'apprend** par
+l'entraînement bilingue, et **sature** autour de 0,75. 3. Le **plan** est le contre-exemple : sa géométrie est
+**ancrée dans la langue** ; ni les ponts, ni le bilinguisme, ni le contraste ne l'alignent — il faut l'entraîner
+autrement.
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
