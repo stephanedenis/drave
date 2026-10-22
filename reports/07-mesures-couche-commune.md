@@ -4040,13 +4040,14 @@ pas à **1e-3** ✓✓.
 | récurrence partagée (mesure 108) | **0,73** | 0,27 | 0,27 |
 | **latent entraîné, 3 B** | **0,00** | 0,13 | **0,60** |
 | **latent entraîné, 7 B** | **0,00** | 0,13 | **0,67** |
+| **latent entraîné, 14 B** | **0,00** | 0,40 | 0,40 |
 
 * **LE PAS 3 EST LE MEILLEUR** ✓✓ : 0,60 (3 B) et 0,67 (7 B), contre 0,13 (linéaire) et 0,27 (récurrence) ✓✓ — *le
   latent entraîné **atteint** le troisième état* ✓✓ ;
 * **MAIS LE PAS 1 TOMBE À 0,00** ✗✗ : le pas F **saute au dernier état** ; le retrieval du pas 1 choisit la mauvaise
   position (0/15) ✓✗ — *ce n'est **pas** une dynamique, c'est un **raccourci** vers le point fixe* ✓✓ ;
-* **le même motif au 3 B et au 7 B** ✓✓ : 0,00/0,13/0,60 et 0,00/0,13/0,67 ✓✗ — *la taille ne change pas le
-  comportement, elle amplifie le saut* ✓✓ ;
+* **le même motif au 3 B, 7 B et 14 B** ✓✓ : 0,00/0,13/0,60, 0,00/0,13/0,67 et 0,00/0,40/0,40 ✓✗ — *la taille ne
+  change pas le comportement, elle module le saut* ✓✓ ;
 * **le latent entraîné ne prolonge pas la pensée, il la fige** ✓✗ : l'opérateur apprend à **sauter** au dernier état
   plutôt qu'à **avancer** d'un pas ✓✗.
 
