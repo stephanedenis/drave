@@ -32,6 +32,11 @@ RELATIONS = {
     },
 }
 
+RELATIONS["ordre"]["es"] = {"lien": "está delante de", "question": "Pregunta: ¿quién está delante de todos?",
+                            "titre": "Hechos:", "consigne": "Responde con un solo nombre."}
+RELATIONS["taille"]["es"] = {"lien": "es más alto que", "question": "Pregunta: ¿quién tiene la mayor altura?",
+                             "titre": "Hechos:", "consigne": "Responde con un solo nombre."}
+
 
 def texte(langue, premisses, relation):
     t = RELATIONS[relation][langue]
@@ -42,9 +47,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chaines", type=int, default=400, help="chaînes par longueur")
     ap.add_argument("--relation", choices=sorted(RELATIONS), default="ordre")
+    ap.add_argument("--langues", default="fr,en")
     ap.add_argument("--sortie", default=None)
     a = ap.parse_args()
     sortie = a.sortie or f"data/raisonnement/transitif_paires_{a.relation}.json"
+    langues = [l.strip() for l in a.langues.split(",") if l.strip()]
     rng = random.Random(1234)
     paires = []
     for longueur in (2, 3, 4, 5, 6):
@@ -53,15 +60,13 @@ def main() -> int:
             ordre = rng.random() < 0.5
             suite = noms if ordre else list(reversed(noms))
             premisses = {lang: [f"{suite[j]} {RELATIONS[a.relation][lang]['lien']} {suite[j + 1]}."
-                                for j in range(longueur - 1)] for lang in ("fr", "en")}
+                                for j in range(longueur - 1)] for lang in langues}
             melange = list(range(longueur - 1)); rng.shuffle(melange)
-            paires.append({
-                "id": f"{longueur}-{i}", "longueur": longueur, "relation": a.relation,
-                "reponse": suite[0],
-                "fr": texte("fr", [premisses["fr"][j] for j in melange], a.relation),
-                "en": texte("en", [premisses["en"][j] for j in melange], a.relation),
-                "split": "test" if rng.random() < 0.3 else "train",
-            })
+            exemple = {"id": f"{longueur}-{i}", "longueur": longueur, "relation": a.relation,
+                       "reponse": suite[0], "split": "test" if rng.random() < 0.3 else "train"}
+            for lang in langues:
+                exemple[lang] = texte(lang, [premisses[lang][j] for j in melange], a.relation)
+            paires.append(exemple)
     chemin = pathlib.Path(sortie)
     chemin.parent.mkdir(parents=True, exist_ok=True)
     chemin.write_text(json.dumps({"noms": NOMS, "relation": a.relation, "paires": paires},

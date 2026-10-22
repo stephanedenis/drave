@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (127 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (128 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4697,3 +4697,35 @@ lexique appris.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : deux relations, deux langues, un 3 B, un corpus synthétique ✓✗ ; et la perte
 aux longues chaînes persiste (0,44-0,56) ✓✗.
+
+---
+
+## Mesure 128 — LE PONT N'EST PAS PROPRE À UNE LANGUE : FR/ES donne **1,00 / 0,92 / 0,72 / 0,56 / 0,50**, superposable à FR/EN (1,00 / 0,91 / 0,68 / 0,52 / 0,46)
+
+**La question** ✓✓. Le pont linéaire de la mesure 126 est-il propre au couple FR/EN, ou aligne-t-il une langue
+nouvelle ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié, avec l'**espagnol** comme source (2000 chaînes, mêmes entités, même
+ordre, même mélange), pont **ES→FR**, sonde FR, contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; la colonne « pont ES→FR » vaut pour l'espagnol, entre parenthèses l'EN de la
+mesure 126) :
+
+| longueur | FR→FR | sans pont | **pont ES→FR** | pont EN→FR |
+|---|---:|---:|---:|---:|
+| 2 | 1,000 | 0,079 | **1,000** | (1,000) |
+| 3 | 1,000 | 0,065 | **0,919** | (0,911) |
+| 4 | 0,944 | 0,076 | **0,715** | (0,681) |
+| 5 | 0,827 | 0,079 | **0,559** | (0,520) |
+| 6 | 0,653 | 0,091 | **0,504** | (0,463) |
+
+* **LE PONT MARCHE POUR UNE TROISIÈME LANGUE** ✓✓ : 1,00 à 0,50, sans pont 0,06-0,09 ✓✓ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ : 0,03-0,06 ✓✓ ;
+* **L'ALIGNEMENT EST LANGUE-GÉNÉRAL** ✓✗ : l'ES fait aussi bien que l'EN à chaque longueur ✓✗.
+
+**Ce que cela change** ✓✓ : le pont est une **petite structure qui se calcule par paire de langues** — il n'est pas
+spécifique à une paire ✓✓. *La « tête bien faite » est portable : un état qui compose, un pont par langue.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : trois langues **indo-européennes** (FR, EN, ES), un corpus synthétique, un 3 B
+✓✗ ; une langue **lointaine** (arabe, mandarin) pourrait résister au pont linéaire ✓✗ ; et la perte aux longues
+chaînes persiste (0,50-0,56) ✓✗.

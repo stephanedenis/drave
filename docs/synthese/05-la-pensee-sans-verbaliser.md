@@ -105,6 +105,10 @@ le rend commun.*
 
 **Mesure 127 — l'alignement est structurel.** La même expérience avec une **autre relation** (la taille) donne
 **1,00 / 0,85 / 0,67 / 0,56 / 0,44**, superposable à l'ordre (1,00 / 0,91 / 0,68 / 0,52 / 0,46) : le pont n'aligne
-pas des mots, il aligne la **structure** du raisonnement. *Un même pont sert deux relations.* L'outillage est en place :
+pas des mots, il aligne la **structure** du raisonnement. *Un même pont sert deux relations.*
+
+**Mesure 128 — le pont n'est pas propre à une langue.** FR/ES donne **1,00 / 0,92 / 0,72 / 0,56 / 0,50**,
+superposable à FR/EN : l'alignement est **langue-général** (au moins pour trois langues indo-européennes). *La tête
+bien faite est portable : un état qui compose, un pont par langue.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

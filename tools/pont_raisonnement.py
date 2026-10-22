@@ -51,6 +51,7 @@ def cos(A, B):
 def principal() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", default="data/raisonnement/transitif_paires.json")
+    ap.add_argument("--source", default="en", help="langue source à ponter vers le FR")
     ap.add_argument("--hf", default="Qwen/Qwen2.5-3B-Instruct")
     ap.add_argument("--couche", type=int, default=18)
     ap.add_argument("--sortie", default="reports/pont-raisonnement-3b.json")
@@ -60,7 +61,7 @@ def principal() -> int:
     from transformers import AutoModelForCausalLM, AutoTokenizer
     d = json.loads(pathlib.Path(a.corpus).read_text())
     noms = d["noms"]; index = {n: i for i, n in enumerate(noms)}
-    paires = [p for p in d["paires"] if p["reponse"] in index]
+    paires = [p for p in d["paires"] if p["reponse"] in index and a.source in p and "fr" in p]
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
@@ -80,11 +81,11 @@ def principal() -> int:
         return np.concatenate(sorties, 0)
 
     Efr = etats([p["fr"] for p in paires])
-    Een = etats([p["en"] for p in paires])
+    Een = etats([p[a.source] for p in paires])
     y = np.array([index[p["reponse"]] for p in paires])
     longueur = np.array([p["longueur"] for p in paires])
     split = np.array([p["split"] for p in paires])
-    res = {"couche": a.couche, "n_paires": len(paires), "hasard": 1.0 / len(noms), "resultats": []}
+    res = {"couche": a.couche, "source": a.source, "n_paires": len(paires), "hasard": 1.0 / len(noms), "resultats": []}
     for L in (2, 3, 4, 5, 6):
         m_tr = (longueur == L) & (split == "train")
         m_te = (longueur == L) & (split == "test")
