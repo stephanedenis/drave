@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (163 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (164 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5820,3 +5820,36 @@ par l'entraînement, comme le raisonnement synthétique.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 498 test, 400 pas, le dev (pas le train complet de 392 k) ✓✗ ; la sonde
 FR→EN reste à 0,41 (le partage n'est pas complet) ✓✗.
+
+---
+
+## Mesure 164 — LE TRAIN COMPLET (13 394 paires) : la sonde reste à **0,586**, le pont monte à **0,773** — plus de données **hors domaine** ne changent pas l'inférence
+
+**La question** ✓✓. Sept fois plus de données (le **train MultiNLI**, hors domaine du dev) améliorent-ils l'inférence
+du dev ? ✓✓
+
+**Le dispositif** ✓✓ : **13 394 paires** du train complet (FR/EN ligne à ligne), LoRA + tête, **1 000 pas**
+bilingues, batch 4 ✓ ; évaluation sur le **même dev** (498) que la mesure 163 ✓✓.
+
+**Les résultats** ✓ (hasard 33,3 % ; entre parenthèses la mesure 163, 1 992 paires du dev) :
+
+| condition | 163 (dev, 1 992) | **164 (train, 13 394)** |
+|---|---:|---:|
+| tête FR | 0,592 | **0,456** |
+| tête EN | 0,610 | **0,534** |
+| sonde FR | 0,592 | **0,586** |
+| sonde FR→EN | 0,406 | 0,410 |
+| **pont EN→FR** | 0,751 | **0,773** |
+
+* **LA SONDE NE BOUGE PAS** ✓✗ : 0,586 contre 0,592 — *plus de données hors domaine n'améliorent pas l'inférence
+  in-domain* ✓✗ ;
+* **LE PONT MONTE** ✓✗ : 0,773 (163 : 0,751) — l'alignabilité gagne un peu ✓✗ ;
+* **LA TÊTE BAISSE** ✗✗ : 0,456 / 0,534 — le train (genres MultiNLI) est **hors domaine** du dev ✓✗.
+
+**Ce que cela change** ✗✓ : **le domaine compte plus que le volume** ✓✗ ; plus de données hors domaine améliorent un
+peu l'**alignabilité** (pont 0,77) mais pas l'inférence in-domain ✓✗. *Pour progresser, il faut des données du même
+domaine, pas plus de données d'ailleurs.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : le train est MultiNLI (genres différents du dev) ✓✗ ; un train **du même
+domaine** (les traductions XNLI du dev, 392 k) pourrait améliorer ✓✗ ; et la tête (0,456) est un readout, pas la
+représentation (la sonde 0,586) ✓✗.

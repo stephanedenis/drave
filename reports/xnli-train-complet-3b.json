@@ -1,0 +1,13 @@
+{
+ "couche": 18,
+ "pas": 1000,
+ "langue": "both",
+ "n_train": 13394,
+ "n_test": 498,
+ "hasard": 0.3333333333333333,
+ "tete_fr": 0.4558,
+ "tete_en": 0.5341,
+ "sonde_fr": 0.5863,
+ "sonde_en": 0.4096,
+ "pont": 0.7731
+}

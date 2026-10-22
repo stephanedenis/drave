@@ -255,13 +255,17 @@ par l'entraînement ; le modèle apprend une représentation plus partageable.*
 | à quelle échelle ? | 137, 141 | 3 B, 7 B, 14 B : 0,81-0,97 |
 | l'alignement s'apprend-il ? | 142-152 | oui : bilingue **0,656**, + contraste **0,742**, sature **0,753** |
 | le plan s'aligne-t-il ? | 132, 134, 153, 155-156 | **non** : ponts, bilinguisme et contraste échouent |
-| le raisonnement naturel ? | 160-163 | oui : inférence 0,50-0,58, pont 0,59 → **0,75** (fine-tuning) |
+| le raisonnement naturel ? | 160-164 | oui : inférence 0,50-0,59, pont 0,59 → **0,77** (fine-tuning) |
 
 **Les trois leçons.** 1. L'état porte le raisonnement — synthétique et naturel — **sans verbaliser**. 2. Un petit
 pont **linéaire** l'aligne, à toutes les échelles et sur les deux tâches ; l'alignement **s'apprend** par
 l'entraînement bilingue, et **sature** autour de 0,75. 3. Le **plan** est le contre-exemple : sa géométrie est
 **ancrée dans la langue** ; ni les ponts, ni le bilinguisme, ni le contraste ne l'alignent — il faut l'entraîner
 autrement.
+
+**Mesure 164 — le train complet.** 13 394 paires du train MultiNLI (**hors domaine** du dev) : la sonde reste à
+**0,586**, le pont monte à **0,773**, mais la tête baisse (0,456 / 0,534). *Le domaine compte plus que le volume ;
+pour progresser sur l'inférence, il faut des données du même domaine.*
 
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
