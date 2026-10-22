@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (131 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (132 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4822,3 +4822,38 @@ différent (l'allemand) ✓✓ — *le pont n'est pas un artefact du couple FR/E
 
 **Ce que ce résultat ne dit pas** ✗ : quatre langues **indo-européennes**, un corpus synthétique, un 3 B ✓✗ ; une
 langue **lointaine** (arabe, mandarin) reste à tester ✓✗.
+
+---
+
+## Mesure 132 — LE PONT N'ALIGNE PAS L'ÉTAT DE **PLAN** : avec pont **0,148**, sans pont **0,250** (hasard 0,125) — le pont du raisonnement ne se transpose pas au plan
+
+**La question** ✓✓. Le pont qui aligne le raisonnement (mesures 126-131) aligne-t-il aussi l'**état de plan** (les
+4 premières phrases d'une série → la 5ᵉ) ? ✓✓
+
+**Le dispositif** ✓✓ : les **307 séries Verne FR/EN appariées** (8 phrases) ✓ ; prompt = 4 phrases, cible = la 5ᵉ ;
+états de la couche 18 ✓ ; pont EN→FR appris sur les **prompts** appariés ✓ ; retrieval parmi les **8 cibles de la
+série** (hasard **12,5 %**) ✓ ; contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (88 items) :
+
+| condition | accuracy |
+|---|---:|
+| FR→FR | 0,204 |
+| EN→EN | 0,216 |
+| EN→FR **sans pont** | **0,250** |
+| EN→FR **avec pont** | **0,148** |
+| pont mélangé | 0,114 |
+
+* **LE PONT DÉGRADE** ✗✗ : 0,148 avec pont contre 0,250 sans pont ✓✗ — *le pont aligne les prompts, pas la
+  prédiction* ✗✗ ;
+* **UNE PARTIE DE L'ALIGNEMENT EST DÉJÀ LÀ** ✓✗ : l'EN→FR sans pont est au-dessus du hasard (0,250) ✓✗ — sans doute
+  un effet de **série** (les 8 cibles viennent du même bloc, le thème suffit parfois) ✓✗ ;
+* **LE PLAN FIGÉ EST FAIBLE** ✓✗ : 0,20-0,22 in-langue, cohérent avec les mesures 116/119 (~0,2) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,114) ✓✓.
+
+**Ce que cela change** ✗✓ : le pont n'est **pas un mécanisme universel** de l'étage 2 : il aligne le **raisonnement**
+(un état de question), pas le **plan** (un état de contexte) ✓✗. *Pour le plan, il faut aligner les **cibles**, ou
+l'entraîner dans le modèle — c'est ce que faisaient les mesures 119-124* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont entraîné sur les **cibles**
+(ou sur prompts **et** cibles) pourrait marcher ✓✗ ; et le retrieval du plan figé (0,2) limite la sensibilité ✓✗.
