@@ -140,6 +140,10 @@ tâche, ou un plan entraîné dans le modèle.
 chaînes de 2 entités **seul** échoue (0,03-0,12). *Une seule carte linéaire, calculée une fois sur toutes les
 longueurs, suffit : c'est la version la plus économique de la tête bien faite.*
 
+**Mesure 136 — le multi-tâches ne suffit pas.** Un pont appris sur le raisonnement **et** les paires de plan donne
+**0,136** (hasard 0,125) sur le plan : ajouter des paires de plan ne l'aligne pas ; il faut aligner les **cibles**, ou
+entraîner le plan dans le modèle.
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

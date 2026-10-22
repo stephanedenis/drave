@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (135 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (136 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4956,3 +4956,35 @@ fois sur toutes les longueurs.* ✓✓
 **Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; le pool **mélange les longueurs** (le
 gain vient en partie de la sonde, qui voit plus de données) ✓✗ ; et le pont reste **local à la tâche** (mesure 134)
 ✓✗.
+
+---
+
+## Mesure 136 — LE PONT **MULTI-TÂCHES** N'ALIGNE TOUJOURS PAS LE PLAN : **0,136** (hasard 0,125), malgré les paires de plan dans l'entraînement
+
+**La question** ✓✓. La mesure 134 a montré qu'un pont appris sur le raisonnement **seul** donne 0,125 (le hasard)
+sur le plan ; un pont **multi-tâches** (raisonnement + paires de plan) aligne-t-il le plan ? ✓✓
+
+**Le dispositif** ✓✓ : pont EN→FR appris sur **1400 paires de raisonnement + 215 paires de prompts de plan** ✓ ;
+évaluation du plan (307 séries, 88 items, hasard **12,5 %**) ✓ ; contrôle : paires de plan **mélangées** dans
+l'entraînement ✓✓.
+
+**Les résultats** ✓ (88 items) :
+
+| condition | accuracy |
+|---|---:|
+| FR→FR | 0,204 |
+| EN→EN | 0,216 |
+| EN→FR sans pont | 0,250 |
+| EN→FR **pont multi-tâches** | **0,136** |
+| pont multi, plan mélangé | 0,125 |
+
+* **LE MULTI NE RÉCUPÈRE PAS LE PLAN** ✗✗ : 0,136 ≈ le hasard (0,125) ; mieux que le pont raisonnement seul (0,125),
+  mais loin du sans-pont (0,250) ✓✗ ;
+* **LE PONT ALIGNE LES PROMPTS, PAS LA PRÉDICTION** ✗✗ : cohérent avec la mesure 132 ✓✗.
+
+**Ce que cela change** ✗✓ : ajouter des paires de plan ne suffit pas ; il faut aligner les **cibles** (ou entraîner
+le plan dans le modèle, mesures 119-124) ✓✗. *Le plan n'est pas un état de question : c'est un état de contexte, et
+sa géométrie ne se laisse pas aligner par les prompts.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont appris sur les **cibles** n'a
+pas été testé ✓✗ ; et le retrieval du plan (0,2) limite la sensibilité ✓✗.

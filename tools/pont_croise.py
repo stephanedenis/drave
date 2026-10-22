@@ -38,6 +38,7 @@ def principal() -> int:
     ap.add_argument("--hf", default="Qwen/Qwen2.5-3B-Instruct")
     ap.add_argument("--couche", type=int, default=18)
     ap.add_argument("--sortie", default="reports/pont-croise-3b.json")
+    ap.add_argument("--pont", choices=["raisonnement", "multi"], default="raisonnement")
     ap.add_argument("--batch", type=int, default=16)
     a = ap.parse_args()
     import torch
@@ -63,10 +64,7 @@ def principal() -> int:
     rap = [p for p in d["paires"] if "fr" in p and "en" in p]
     print(f"  raisonnement : {len(rap)} paires")
     Rfr = etats([p["fr"] for p in rap]); Ren = etats([p["en"] for p in rap])
-    tr = np.array([p["split"] == "train" for p in rap])
-    W = pont(norm(Ren[tr]), norm(Rfr[tr]))
-    mel = np.random.default_rng(7).permutation(np.where(tr)[0])
-    Wn = pont(norm(Ren[mel]), norm(Rfr[tr]))
+    tr_rap = np.array([p["split"] == "train" for p in rap])
 
     # --- plan : séries Verne appariées
     v = json.loads(pathlib.Path("data/alignement/verne_fr_en.json").read_text())
@@ -85,25 +83,35 @@ def principal() -> int:
     series = series[::pas][:315]
     rng = np.random.default_rng(1234)
     cles = np.arange(len(series)); rng.shuffle(cles)
-    n_tr = int(0.7 * len(cles)); te = cles[n_tr:]
+    n_tr = int(0.7 * len(cles)); tr_plan, te = cles[:n_tr], cles[n_tr:]
     Pfr = norm(etats([" ".join(series[k][0][:4]) for k in range(len(series))]))
     Pen = norm(etats([" ".join(series[k][1][:4]) for k in range(len(series))]))
     Cfr = norm(etats([series[k][0][4] for k in range(len(series))], 128))
     Cen = norm(etats([series[k][1][4] for k in range(len(series))], 128))
-    justes = {k: 0 for k in ("fr_fr", "en_en", "en_fr_sans_pont", "en_fr_pont_croise", "en_fr_pont_melange")}
+    if a.pont == "multi":
+        X = np.vstack([norm(Ren[tr_rap]), Pen[tr_plan]])
+        Y = np.vstack([norm(Rfr[tr_rap]), Pfr[tr_plan]])
+        W = pont(X, Y)
+        ml = np.random.default_rng(7).permutation(tr_plan)
+        Wn = pont(np.vstack([norm(Ren[tr_rap]), Pen[ml]]), Y)
+    else:
+        W = pont(norm(Ren[tr_rap]), norm(Rfr[tr_rap]))
+        mel = np.random.default_rng(7).permutation(np.where(tr_rap)[0])
+        Wn = pont(norm(Ren[mel]), norm(Rfr[tr_rap]))
+    justes = {k: 0 for k in ("fr_fr", "en_en", "en_fr_sans_pont", "en_fr_pont", "en_fr_pont_melange")}
     tot = 0
     for i in range(0, len(te) - 7, 8):
         groupe = te[i:i + 8]; c = np.arange(8)
         justes["fr_fr"] += int(np.sum(np.argmax(Pfr[groupe] @ Cfr[groupe].T, 1) == c))
         justes["en_en"] += int(np.sum(np.argmax(Pen[groupe] @ Cen[groupe].T, 1) == c))
         justes["en_fr_sans_pont"] += int(np.sum(np.argmax(Pen[groupe] @ Cfr[groupe].T, 1) == c))
-        justes["en_fr_pont_croise"] += int(np.sum(np.argmax(appliquer(Pen[groupe], W) @ Cfr[groupe].T, 1) == c))
+        justes["en_fr_pont"] += int(np.sum(np.argmax(appliquer(Pen[groupe], W) @ Cfr[groupe].T, 1) == c))
         justes["en_fr_pont_melange"] += int(np.sum(np.argmax(appliquer(Pen[groupe], Wn) @ Cfr[groupe].T, 1) == c))
         tot += 8
     res = {"couche": a.couche, "n_series": len(series), "n_test": tot, "hasard": 0.125,
            "resultats": {k: round(v / max(1, tot), 4) for k, v in justes.items()}}
     print(f"  FR→FR {res['resultats']['fr_fr']:.3f} · EN→EN {res['resultats']['en_en']:.3f} · EN→FR sans pont "
-          f"{res['resultats']['en_fr_sans_pont']:.3f} · **pont croisé {res['resultats']['en_fr_pont_croise']:.3f}** · "
+          f"{res['resultats']['en_fr_sans_pont']:.3f} · **pont croisé {res['resultats']['en_fr_pont']:.3f}** · "
           f"mélangé {res['resultats']['en_fr_pont_melange']:.3f} (hasard 0,125)")
     pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)
     pathlib.Path(a.sortie).write_text(json.dumps(res, ensure_ascii=False, indent=1))

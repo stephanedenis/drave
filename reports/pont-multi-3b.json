@@ -1,0 +1,13 @@
+{
+ "couche": 18,
+ "n_series": 307,
+ "n_test": 88,
+ "hasard": 0.125,
+ "resultats": {
+  "fr_fr": 0.2045,
+  "en_en": 0.2159,
+  "en_fr_sans_pont": 0.25,
+  "en_fr_pont": 0.1364,
+  "en_fr_pont_melange": 0.125
+ }
+}
