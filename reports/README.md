@@ -218,3 +218,5 @@
 - [`composition-penalite-3b.json`](composition-penalite-3b.json) · [`composition-penalite-7b.json`](composition-penalite-7b.json) — la pénalité de point fixe (mesure 110 : le pas 1 reste à 0,00).
 
 - [`kfold-14b600-0001.json`](kfold-14b600-0001.json) · [`kfold-14b600-0004.json`](kfold-14b600-0004.json) · [`kfold-14b600-0066.json`](kfold-14b600-0066.json) · [`kfold-14b600-0089.json`](kfold-14b600-0089.json) · [`kfold-14b600-0095.json`](kfold-14b600-0095.json) · [`kfold-14b600-0210.json`](kfold-14b600-0210.json) · [`kfold-14b600-0327.json`](kfold-14b600-0327.json) — le Pidgin a 600 pas (mesure 111 : +5,0, 59/71).
+
+- [`kfold-14b1000-0001.json`](kfold-14b1000-0001.json) · [`kfold-14b1000-0004.json`](kfold-14b1000-0004.json) · [`kfold-14b1000-0066.json`](kfold-14b1000-0066.json) · [`kfold-14b1000-0089.json`](kfold-14b1000-0089.json) · [`kfold-14b1000-0095.json`](kfold-14b1000-0095.json) · [`kfold-14b1000-0210.json`](kfold-14b1000-0210.json) · [`kfold-14b1000-0327.json`](kfold-14b1000-0327.json) — le Pidgin a 1000 pas (mesure 112 : +5,8, 59/71, 7 plis positifs).

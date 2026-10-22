@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (111 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (112 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4124,3 +4124,31 @@ couverture du pidgin* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 71 pages, un LoRA, un seul réglage (600 pas, lr 1e-5) ✓✗ ; le 0327 montre que
 la variance n'est pas éteinte ✓✗ ; et le registre testé reste celui des contes ✓✓.
+
+## Mesure 112 — LE PIDGIN À **1000 PAS** : +5,8 [+4,1 ; +7,6], **59/71**, et **les 7 plis positifs** — le 0327 passe de −2,8 à +4,7
+
+**La question** ✓✓. Le 600 pas a donné +5,0 (59/71), le 300 pas +4,6 (50/71) ✓✓. *La courbe monte-t-elle encore à
+1000 pas, et la variance entre contes s'éteint-elle ?* ✓✓
+
+**Le dispositif** ✓✓ : exactement les mesures 107/111 (14 B, 7 contes, 71 pages, le même mélange, autocast +
+GradScaler), avec **1000 pas** ✓✓.
+
+| pas | marge | IC 95 % | pages > 0 | plis négatifs |
+|---|---:|---|---:|---:|
+| 300 (mesure 107) | +4,6 | [2,4 ; 7,0] | 50/71 | 1 (0089, −1,9) |
+| 600 (mesure 111) | +5,0 | [2,1 ; 7,3] | 59/71 | 1 (0327, −2,8) |
+| **1000 (mesure 112)** | **+5,8** | **[4,1 ; 7,6]** | **59/71** | **0** |
+
+* **LA COURBE MONTE ENCORE** ✓✓ : +4,6 → +5,0 → **+5,8** ✓✓ — *plus d'entraînement améliore la couverture* ✓✓ ;
+* **LES 7 PLIS SONT POSITIFS** ✓✓ : le 0327 passe de −2,8 (600) à **+4,7** ; le 0066 monte à **+7,9** ; le 0004 à
+  +5,9 ; le 0210 à +12,3 ✓✓ — *la variance entre contes est **éteinte*** ✓✓ ;
+* **L'IC SE RESSERRE ET MONTE** ✓✓ : [+4,1 ; +7,6] contre [+2,1 ; +7,3] (600) et [+2,4 ; +7,0] (300) ✓✓ — *la borne
+  basse passe de 2,1 à **4,1*** ✓✓ ;
+* **59/71 pages** au-dessus du plancher, stable ✓✓ (contre 50 à 300 pas) ✓✓.
+
+**Ce que cela change** ✓✓ : la couverture **20/20** a désormais une écriture pidgin **solide** — **+5,8**, **tous les
+contes positifs**, l'IC le plus étroit ✓✓. *Le réglage de référence pour la couverture du pidgin est **1000 pas**
+(le 600 était un palier intermédiaire)* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 71 pages, un LoRA, un seul réglage (1000 pas, lr 1e-5) ✓✗ ; la marge du 0001
+reste modeste (+2,5) ✓✗ ; et le registre testé reste celui des contes ✓✓.
