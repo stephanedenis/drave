@@ -1,0 +1,70 @@
+{
+ "n_series": 307,
+ "par_serie": 8,
+ "n_phrases": 2456,
+ "resultats": [
+  {
+   "couche": 0,
+   "retrieval_global": 0.0012,
+   "ordre_serie": 0.1877,
+   "cosinus_pont": 0.8481,
+   "retrieval_pont": 0.0054,
+   "retrieval_negatif": 0.0,
+   "lambda": 0.1
+  },
+  {
+   "couche": 6,
+   "retrieval_global": 0.1612,
+   "ordre_serie": 0.6287,
+   "cosinus_pont": 0.8931,
+   "retrieval_pont": 0.2877,
+   "retrieval_negatif": 0.0014,
+   "lambda": 10.0
+  },
+  {
+   "couche": 12,
+   "retrieval_global": 0.3819,
+   "ordre_serie": 0.7679,
+   "cosinus_pont": 0.8789,
+   "retrieval_pont": 0.3976,
+   "retrieval_negatif": 0.0014,
+   "lambda": 100.0
+  },
+  {
+   "couche": 18,
+   "retrieval_global": 0.5277,
+   "ordre_serie": 0.8196,
+   "cosinus_pont": 0.8802,
+   "retrieval_pont": 0.502,
+   "retrieval_negatif": 0.0027,
+   "lambda": 100.0
+  },
+  {
+   "couche": 24,
+   "retrieval_global": 0.4923,
+   "ordre_serie": 0.7724,
+   "cosinus_pont": 0.8937,
+   "retrieval_pont": 0.4749,
+   "retrieval_negatif": 0.0,
+   "lambda": 100.0
+  },
+  {
+   "couche": 30,
+   "retrieval_global": 0.2386,
+   "ordre_serie": 0.5981,
+   "cosinus_pont": 0.9138,
+   "retrieval_pont": 0.3609,
+   "retrieval_negatif": 0.0,
+   "lambda": 100.0
+  },
+  {
+   "couche": 36,
+   "retrieval_global": 0.0159,
+   "ordre_serie": 0.3742,
+   "cosinus_pont": 0.9328,
+   "retrieval_pont": 0.2144,
+   "retrieval_negatif": 0.0,
+   "lambda": 100.0
+  }
+ ]
+}

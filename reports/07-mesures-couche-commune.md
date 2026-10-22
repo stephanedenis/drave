@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (115 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (116 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4287,3 +4287,38 @@ pas un opérateur sur l'état d'une phrase ; il faut un état qui porte le **pla
 **Ce que ce résultat ne dit pas** ✗ : un seul roman, un horizon de trois phrases, des phrases consécutives dont la
 dépendance est faible ✓✗ ; un état de **contexte** (les k phrases précédentes) ou un état **récurrent** mis à jour
 phrase par phrase pourraient porter plus d'information ✓✗ ; et le retrieval reste une tâche dure ✓✗.
+
+---
+
+## Mesure 116 — LE CONTEXTE NE PORTE PAS LE **CONTENU** DE LA SUITE : le retrieval dans la série monte à 0,40, mais le test de contenu reste à 0,14 (hasard 0,125)
+
+**La question** ✓✓. Après l'échec de l'état d'une **phrase** (mesures 113-115), un état de **contexte** — la série lue
+jusqu'ici — porte-t-il la suite ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/etat_de_plan.py` ✓) : **307 séries de 8 phrases** consécutives (Verne FR, 3 B ;
+`composition_verne.py --par-serie 8`), 214 séries d'entraînement, 93 de test ✓ ; deux contextes : la **moyenne** du
+préfixe + carte **ridge**, et un **GRU** (256) entraîné par InfoNCE ✓ ; deux évaluations : le retrieval **dans la
+série** (8 candidats, hasard **12,5 %**) et le **test de contenu** — 8 candidats **non vus** d'autres séries au même
+pas (hasard **12,5 %**) ✓✓ ; contrôle négatif (cibles mélangées) ✓✓.
+
+**Les résultats** (moyennes sur les 7 couches et les 7 positions ; le détail est dans
+[`reports/pas-de-plan-3b.json`](../reports/pas-de-plan-3b.json)) ✓ :
+
+| contexte | dans la série | contenu (8 non vus) | négatif |
+|---|---:|---:|---:|
+| moyenne + ridge | 0,00-0,40 (moy. 0,21) | 0,08-0,23 (moy. **0,14**) | 0,13 |
+| GRU 256 | 0,00-0,24 (moy. 0,15) | 0,10-0,18 (moy. **0,14**) | 0,13 |
+
+* **LE RETRIEVAL DANS LA SÉRIE MONTE** ✓✗ : jusqu'à **0,40** (couche 18, dernier pas) contre 12,5 % de hasard ✓✗ ;
+* **MAIS LE CONTENU RESTE AU HASARD** ✗✗ : 0,14 contre 0,125 — **1,1×**, dans le bruit ✓✗ ; *le gain dans la série
+  est un effet de **position** (le préfixe contient les phrases déjà vues, la suivante est la seule « nouvelle »)* ✗✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,13) ✓✓ ;
+* **LA COUCHE 0 EST AU HASARD** ✓✗ (0,125 partout) : rien à lire dans l'entrée ✓✗.
+
+**Ce que cela change** ✗✗ : le **plan** n'est pas extractible des états **figés** — ni d'une phrase (mesures 113-115),
+ni du contexte (mesure 116) ✓✗. *Il faut l'**entraîner dans le modèle** : un objectif de plan (prédire la trajectoire,
+pas la phrase suivante), et non une carte apprise après coup* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un seul roman, 8 phrases, un GRU de 256 ✓✗ ; un objectif **multi-pas** ou un
+état entraîné **avec la tâche** pourraient mieux faire — mais la mesure 109 (latent entraîné avec la tâche) **collapse**
+déjà en point fixe ✓✗ ; et le test de contenu à 8 candidats reste dur ✓✗.

@@ -54,6 +54,7 @@
 - [`pas-de-pensee-non-lineaire-3b.json`](pas-de-pensee-non-lineaire-3b.json) — MLP contrastif (mesure 114 : mémorise, ne généralise pas)
 - [`pas-de-pensee-corrige-large.json`](pas-de-pensee-corrige-large.json) · [`pas-de-pensee-non-lineaire-large.json`](pas-de-pensee-non-lineaire-large.json) — 630 séries (mesure 115 : l'état d'une phrase ne porte pas la suivante)
 - [`composition-verne-large.json`](composition-verne-large.json) — la composition sur 630 séries (contrôle de la mesure 115 : 0,53 / 0,867 à la couche 18)
+- [`pas-de-plan-3b.json`](pas-de-plan-3b.json) · [`composition-verne-plan.json`](composition-verne-plan.json) — le contexte sur 8 phrases (mesure 116 : le contenu reste à 0,14 contre 0,125)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

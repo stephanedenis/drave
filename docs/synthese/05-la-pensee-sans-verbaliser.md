@@ -71,9 +71,12 @@ de la série.*
 ## Ce qui reste à construire
 
 Une **dynamique qui avance d'un pas à la fois** suppose un état qui porte le **plan** de la série, pas seulement la
-phrase courante — et la mesure 115 a tranché la question de l'**information** : l'état d'une phrase ne porte pas la
-suivante, même avec **1 323 transitions** et un MLP. Trois chantiers, dans l'ordre : **(1)** construire un état de
-**plan** (ce que la série doit faire, pas ce que la phrase dit) ; **(2)** mesurer s'il rend la **trajectoire**
-prédictible (pas la phrase suivante) ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas, reconstruction,
-variété). L'outillage est en place : `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py` et
+phrase courante. Deux mesures l'ont tranché : l'état d'une **phrase** ne porte pas la suivante, même avec
+**1 323 transitions** et un MLP (mesure 115) ; et le **contexte** (moyenne du préfixe + ridge, GRU) ne porte pas le
+**contenu** de la suite — le retrieval dans la série monte à 0,40, mais le test de contenu reste à **0,14** contre
+0,125 (mesure 116) ✓✗. *Le plan n'est pas extractible des états figés : il faut l'entraîner dans le modèle.* Trois
+chantiers, dans l'ordre : **(1)** entraîner un **objectif de plan** (prédire la trajectoire, pas la phrase suivante)
+dans le modèle ; **(2)** mesurer s'il rend la **trajectoire** prédictible ; **(3)** seulement ensuite, la
+**dynamique** (perte multi-pas, reconstruction, variété). L'outillage est en place :
+`tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py` et
 `tools/composition_latente.py`.
