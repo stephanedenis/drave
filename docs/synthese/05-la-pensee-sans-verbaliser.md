@@ -154,6 +154,11 @@ pont donne **0,14-0,98** (64) et **0,34-1,00** (256), contre **0,46-1,00** pour 
 compression non supervisée perd l'information de raisonnement. *La tête bien faite n'est pas une réduction de
 dimension, c'est une carte alignée.*
 
+**Mesure 139 — la CCA aligne, mais 64 dimensions perdent l'information.** Un code CCA de 64 dimensions (sur une
+ACP 256) porte le raisonnement d'une langue à l'autre au niveau de son **in-langue** (0,281 contre 0,306 à 6 entités,
+92 %), mais ce code est plus faible que l'espace plein (0,306 contre 0,653) : *l'alignement est supervisé et réel ;
+le problème est la **capacité**, pas l'alignement.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

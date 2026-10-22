@@ -1,0 +1,39 @@
+{
+ "couche": 18,
+ "k": 64,
+ "pca": 256,
+ "hasard": 0.05,
+ "pooled": [
+  {
+   "longueur": 2,
+   "fr_fr": 1.0,
+   "cca": 1.0,
+   "cca_melange": 0.0594
+  },
+  {
+   "longueur": 3,
+   "fr_fr": 0.6016,
+   "cca": 0.5041,
+   "cca_melange": 0.065
+  },
+  {
+   "longueur": 4,
+   "fr_fr": 0.5069,
+   "cca": 0.4097,
+   "cca_melange": 0.0694
+  },
+  {
+   "longueur": 5,
+   "fr_fr": 0.4331,
+   "cca": 0.3386,
+   "cca_melange": 0.0315
+  },
+  {
+   "longueur": 6,
+   "fr_fr": 0.3058,
+   "cca": 0.281,
+   "cca_melange": 0.0744
+  }
+ ],
+ "par_longueur": []
+}

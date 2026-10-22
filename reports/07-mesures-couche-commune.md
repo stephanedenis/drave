@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (138 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (139 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5050,3 +5050,36 @@ pas une réduction de dimension : c'est une carte alignée.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : l'ACP est **non supervisée** ✓✗ ; une CCA ou un code entraîné pourrait marcher
 à petite dimension ✓✗ ; un seul corpus, un 3 B, une couche ✓✗.
+
+---
+
+## Mesure 139 — LA CCA **ALIGNE** (le transfert rejoint l'in-langue du code) MAIS LE CODE DE **64 DIMS** PERD L'INFORMATION : 0,28-1,00, contre 0,46-1,00 pour le pont plein
+
+**La question** ✓✓. La mesure 138 a montré qu'une ACP **non supervisée** ne suffit pas ; un code partagé
+**supervisé par les paires** (CCA) porte-t-il le raisonnement à petite dimension ? ✓✓
+
+**Le dispositif** ✓✓ : ACP poolée de 256 dims, puis **CCA k = 64** ajustée sur les paires FR/EN d'entraînement ✓ ;
+sonde FR sur le code CCA, test sur le code EN ✓ ; le code CCA **aligne** par construction (pas besoin de pont) ✓ ;
+contrôle : CCA ajustée sur des paires **mélangées** ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; in-langue = sonde FR testée sur le code FR) :
+
+| longueur | FR→FR (code CCA) | **EN→FR (CCA)** | CCA mélangée |
+|---|---:|---:|---:|
+| 2 | 1,000 | **1,000** | 0,059 |
+| 3 | 0,602 | **0,504** | 0,065 |
+| 4 | 0,507 | **0,410** | 0,069 |
+| 5 | 0,433 | **0,339** | 0,032 |
+| 6 | 0,306 | **0,281** | 0,074 |
+
+* **LE TRANSFERT REJOINT L'IN-LANGUE DU CODE** ✓✓ : 0,281 contre 0,306 (L6, 92 %), 0,410 contre 0,507 (L4, 81 %)
+  ✓✓ — *l'alignement CCA est réel* ✓✓ ;
+* **MAIS LE CODE PERD L'INFORMATION** ✗✗ : l'in-langue du code (0,306 à L6) est loin du plein (0,653) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,03-0,07) ✓✓.
+
+**Ce que cela change** ✓✓ : l'alignement est **possible et supervisé** ; le problème du code de 64 dims n'est pas
+l'alignement mais la **capacité** ✓✓. *Le pont pleine dimension reste la structure minimale qui garde la
+performance ; un code plus grand (k = 256) ou une CCA pleine dimension reste à tester.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : CCA sur une ACP 256 (pas la pleine dimension), k = 64 ✓✗ ; un corpus, un 3 B,
+une couche ✓✗ ; et le code CCA n'a pas été testé avec le pont (il n'en a pas besoin par construction) ✓✗.
