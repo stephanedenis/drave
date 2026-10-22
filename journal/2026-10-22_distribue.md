@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22.md](2026-10-22.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 10:52 | `d8d1a681` | MESURE 131 — LE PONT EST LANGUE-GENERAL (4 LANGUES) : FR/DE donne 1,00/0,94/0,74/0,65/0,52, comme FR/EN et FR/ES ; controle a paires melangees au hasard. L'alignement tient sur quatre langues indo-europeennes, dont une a ordre des mots different | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 | 11:10 | `2ac0c08a` | MESURE 136 — LE PONT MULTI-TACHES N'ALIGNE TOUJOURS PAS LE PLAN : 0,136 (hasard 0,125) malgre les paires de plan dans l'entrainement ; sans pont 0,250. Ajouter des paires de plan ne suffit pas : il faut aligner les cibles, ou entrainer le plan dans le modele | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 | 16:39 | `f36d4c3a` | MESURE 143 — LE REGISTRE PARLE (TED2020) : marge +39,8 (EN->FR) et +40,7 (FR->EN) au 7 B, +37,7/+38,3 au 3 B, plancher 23,7-25,1. Le parle prepare passe au-dessus de la presse (+38,6) ; seul le dialogue spontane reste a couvrir | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
+| 16:45 | `52cf7041` | MESURE 144 — L'ENTRAINEMENT MULTILINGUE N'ALIGNE PAS NON PLUS : sonde FR->EN 0,042 (hasard 5%), pont 0,451 contre 0,810 fige ; la supervision de la tache, meme bilingue, n'apprend pas l'alignement. Il faut un objectif contrastif entre paires FR/EN | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+5) |
 
 ## Chiffres du jour
 
-`0,136` · `0,125` · `0,250` · `250 paires` · `0,324` · `0,273` · `0,216` · `0,205` · `0,165`
+`5%` · `0,042` · `0,451` · `0,810` · `0,136` · `0,125` · `0,250` · `250 paires` · `0,324` · `0,273` · `0,216` · `0,205`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

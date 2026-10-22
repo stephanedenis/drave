@@ -49,12 +49,13 @@ def principal() -> int:
     ap.add_argument("--hf", default="Qwen/Qwen2.5-7B-Instruct")
     ap.add_argument("--n", type=int, default=400)
     ap.add_argument("--sens", choices=["en-fr", "fr-en", "both"], default="both")
+    ap.add_argument("--corpus", default="data/ted2020/ted_fr_en.json")
     ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--sortie", default="reports/registre-parle-7b.json")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    pairs = json.loads(pathlib.Path("data/ted2020/ted_fr_en.json").read_text())
+    pairs = json.loads(pathlib.Path(a.corpus).read_text())
     rng = random.Random(a.graine); rng.shuffle(pairs)
     pairs = pairs[:a.n]
     tok = AutoTokenizer.from_pretrained(a.hf)

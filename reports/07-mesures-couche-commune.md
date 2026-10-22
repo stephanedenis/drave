@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (144 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (145 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5240,3 +5240,33 @@ la classification ✓✓. *C'est la prochaine piste : une perte de type InfoNCE 
 
 **Ce que ce résultat ne dit pas** ✗ : la tête n'a pas convergé (le signal de classification est faible) ✓✗ ; 500 pas,
 un LoRA d'attention ✓✗ ; et un objectif contrastif n'a pas été testé ✓✗.
+
+---
+
+## Mesure 145 — LE REGISTRE TECHNIQUE (WIKIMATRIX MINÉ) : marge **+41,0** (EN→FR) et **+46,0** (FR→EN), les plus hautes — mais la référence est **minée**
+
+**La question** ✓✓. Le registre **technique** manquait ; WikiMatrix (paires Wikipédia **minées**) le mesure ✓✓.
+
+**Le dispositif** ✓✓ : **1000 paires** WikiMatrix filtrées (langue FR/EN, similarité < 0,4, ratio 0,5-2) ✓, 400
+échantillonnées ✓ ; Qwen2.5-7B, deux sens, chrF + plancher + marge + IC bootstrap ✓✓.
+
+**Les résultats** ✓ (le plancher est la référence ; pas de hasard) :
+
+| sens | chrF | plancher | **marge** | IC 95 % |
+|---|---:|---:|---:|---:|
+| EN→FR | 73,1 | 32,1 | **+41,0** | [39,3 ; 42,6] |
+| FR→EN | 80,2 | 34,2 | **+46,0** | [44,7 ; 47,3] |
+
+* **LA MARGE EST LA PLUS HAUTE DES CINQ REGISTRES** ✓✓ : +41,0 / +46,0, contre parlé +39,8 / +40,7, presse +38,6,
+  juridique +35,3, littéraire +25,9 ✓✓ ;
+* **MAIS LE PLANCHER AUSSI** ✓✗ : 32,1 / 34,2, contre 23,7 / 25,1 pour TED — *la source et la référence partagent des
+  termes et des entités* ✓✗ ;
+* **LES DEUX SENS SONT COHÉRENTS** ✓✓ : pas de biais de direction ✓✓.
+
+**Ce que cela change** ✓✓ : le **technique** a une première mesure ; la carte des registres couvre désormais
+**juridique, presse, littéraire, parlé préparé et technique** ✓✓. *Mais c'est du technique **miné** : la référence
+n'est pas une traduction humaine.* ✗✓
+
+**Ce que ce résultat ne dit pas** ✗ : WikiMatrix est **miné** (paires bruitées ou partielles) ✓✗ ; le chrF élevé peut
+être **gonflé** par les entités et les termes partagés ✓✗ ; et Wikipédia est **général**, pas spécifiquement
+technique ✓✗.

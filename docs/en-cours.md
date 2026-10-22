@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-22, 18 h 0 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-22, 18 h 20 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -28,8 +28,9 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
   plancher, **loin de 100**. Elle **se réplique** sur un second règlement (+1,1 à +2,5, mesure 67).
 - **La taille aide, mais de moins en moins** : 54,7 → 73,3 (eng→fra) du 0,5 au 14 B ; le gain par doublement tombe
   à **+0,9** (7 → 14 B, fra→eng) — mesures 63 et 66. *Le levier n'est pas la taille seule.*
-- **Quatre registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9) et
-  **parlé préparé** (TED2020 : +39,8 / +40,7, mesure 143) — le littéraire est le plus dur, mais **pas par le
+- **Cinq registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9),
+  **parlé préparé** (TED2020 : +39,8 / +40,7, mesure 143) et **technique** (WikiMatrix **miné** : +41,0 / +46,0,
+  mesure 145) — le littéraire est le plus dur, mais **pas par le
   contenu** : **96 %** des noms, **0,5 %** d'omissions ; l'écart est de **style** (mesures 64 et 68).
 - **La couverture des langues est le facteur** : sur les **24 langues officielles de l'UE**, **+35,8** de marge sur
   le hasard pour les **13 langues annoncées** par le modèle, **+21,5** pour les **10 autres** ; les trous sont
@@ -72,7 +73,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 
 **Le plan de match, en relation avec la cible.**
 
-1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **dialogue spontané** et le **technique** — chacun avec un corpus **post-cutoff** et un **contrôle de mémoire**.
+1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; reste le **dialogue spontané** (le technique est mesuré, mais sur un corpus **miné**).
 2. **Les langues sont closes au périmètre** : les langues jusqu'au **français inclus** sont couvertes ; les 20 le sont
    aussi (marges). La **direction inverse** (X→eng) et le **dialogue spontané** restent des **marges**, pas des portes.
 3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**
@@ -86,7 +87,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
    la phrase*.
 
 **Ce qui reste** : sur le périmètre, la **qualité** (le chrF est un **plancher**, pas une note absolue ; il n'est
-même **pas comparable entre écritures**, 29ᵉ piège), le **dialogue spontané** et le **technique**, les **langues peu
+même **pas comparable entre écritures**, 29ᵉ piège), le **dialogue spontané**, le **technique miné**, les **langues peu
 dotées** ; à l'étage 2, le **plan** — un état qui porte la série, puis la dynamique (mesures 113-115).
 
 ## Le tableau de bord des chantiers
@@ -168,7 +169,7 @@ maintenant le chantier principal** (décision du 21/10 au soir), les registres r
 | **la qualité de traducteur, sur texte non mémorisable** (règlements UE 2025) | **54,7 → 73,3** (eng→fra) et **63,1 → 76,6** (fra→eng) du 0,5 au 14 B · **répliqué** sur un 2ᵉ règlement (+1,1 à +2,5) | [07](../reports/07-mesures-couche-commune.md) |
 | **le littéraire** (Verne, alignement validé) | **47,7-49,8** (3 B/7 B) · **noms 96 %**, 0,5 % d'omissions : le chrF bas est un écart de **style** (mesure 68) | [07](../reports/07-mesures-couche-commune.md) · [alignement](../reports/alignement-verne.md) |
 | **la qualité par langue** (8 langues, mêmes 80 sources) | **45-71** de chrF brut mais **marge 33-40** sur le plancher ; le 7 B **comble le polonais** (+10,1) — l'écart brut est surtout la **distance** (mesure 69) | [07](../reports/07-mesures-couche-commune.md) |
-| **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** · **parlé préparé +39,8 / +40,7** : le parlé préparé passe au-dessus de la presse, le littéraire reste 10 points en dessous (mesures 62, 68, 70, 143) | [07](../reports/07-mesures-couche-commune.md) |
+| **la carte des registres** (marge sur le plancher, 7 B) | **juridique +35,3** · **presse +38,6** · **littéraire +25,9** · **parlé préparé +39,8 / +40,7** · **technique miné +41,0 / +46,0** : le parlé préparé et le technique miné passent au-dessus de la presse, le littéraire reste 10 points en dessous (mesures 62, 68, 70, 143, 145) | [07](../reports/07-mesures-couche-commune.md) |
 | **la carte des 24 langues** (marge sur le hasard) | **13 annoncées +35,8** · **10 non annoncées +21,5** (écart +14,2) · trous : **irlandais +8,0**, **maltais +10,8** · **la taille ne comble pas l'écart** : 15,6 (3 B) → 14,2 (7 B), −1,4 (mesures 71-72) | [07](../reports/07-mesures-couche-commune.md) |
 | **le périmètre démographique** (Ethnologue 2026) | **arrêté au français inclus** : les langues jusqu'au **français** sont couvertes ✓ ; les **20** aussi, comme **marge** ✓ : les 19 sur des textes neufs (mesures 73-76) ; le **pidgin nigérian** est **lu** (+3,2 au 7 B, +4,4 au 14 B) et **écrit** avec un **adaptateur 14 B** : **+5,8 [+4,1 ; +7,6]** sur 71 pages de contes tenus à part, **7 plis positifs** (1000 pas, mesure 112) | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |

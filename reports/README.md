@@ -82,6 +82,7 @@
 - [`raisonnement-entrainement-3b.json`](raisonnement-entrainement-3b.json) — l'entraînement du raisonnement en FR (mesure 142 : la sonde EN reste à 0,092, le pont baisse à 0,513)
 - [`registre-parle-7b.json`](registre-parle-7b.json) · [`registre-parle-3b.json`](registre-parle-3b.json) — le registre parlé (mesure 143 : +39,8 / +40,7 au 7 B)
 - [`raisonnement-multilingue-3b.json`](raisonnement-multilingue-3b.json) — l'entraînement multilingue (mesure 144 : la sonde EN reste à 0,042, le pont baisse à 0,451)
+- [`registre-technique-7b.json`](registre-technique-7b.json) — le registre technique miné (mesure 145 : +41,0 / +46,0, référence WikiMatrix)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
