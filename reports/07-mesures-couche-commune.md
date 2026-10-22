@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (162 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (163 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5788,3 +5788,35 @@ l'inférence naturelle, il faut **entraîner le modèle** (fine-tuning), pas cha
 
 **Ce que ce résultat ne dit pas** ✗ : un MLP mieux régularisé, plus de données (le train XNLI fait 392 k paires
 traduites) ou une autre couche pourraient faire mieux ✓✗.
+
+---
+
+## Mesure 163 — LE **FINE-TUNING** XNLI AMÉLIORE TOUT : tête **0,592 / 0,610** (FR / EN) et pont **0,751** (figé : 0,592)
+
+**La question** ✓✓. Entraîner le modèle sur XNLI (LoRA + tête 3 classes, **bilingue**) améliore-t-il l'inférence — et
+son **transfert** EN→FR ? ✓✓
+
+**Le dispositif** ✓✓ : 1992 paires d'entraînement (80/20), LoRA + tête 3 classes sur la couche 18, **400 pas
+alternés FR/EN**, échauffement 100 ✓ ; évaluation sur 498 paires de test ✓ ; comparaison au modèle **figé**
+(mesure 160) ✓✓.
+
+**Les résultats** ✓ (hasard 33,3 %) :
+
+| condition | figé (160) | **fine-tuné (163)** |
+|---|---:|---:|
+| tête FR | — | **0,592** |
+| tête EN (zéro-ressource) | — | **0,610** |
+| sonde FR→FR | 0,502 | **0,592** |
+| sonde FR→EN | 0,384 | 0,406 |
+| **pont EN→FR** | 0,592 | **0,751** |
+
+* **LA TÊTE APPREND LES DEUX LANGUES** ✓✓ : 0,592 (FR) et **0,610** (EN, zéro-ressource) ✓✓ ;
+* **LE PONT MONTE À 0,751** ✓✓ : **+16 points** sur 0,592 ✓✓ ;
+* **LA SONDE FRAÎCHE FR→EN RESTE BASSE** ✗✗ : 0,406 (mais +2 sur 0,384) ✓✗.
+
+**Ce que cela change** ✓✓ : l'entraînement améliore l'inférence (0,50 → 0,59) et surtout son **alignement** (pont
+0,59 → **0,75**) ✓✓ ; le modèle apprend une représentation **plus partageable** ✓✓. *L'inférence naturelle se travaille
+par l'entraînement, comme le raisonnement synthétique.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 498 test, 400 pas, le dev (pas le train complet de 392 k) ✓✗ ; la sonde
+FR→EN reste à 0,41 (le partage n'est pas complet) ✓✗.

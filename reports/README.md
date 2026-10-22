@@ -100,6 +100,7 @@
 - [`xnli-3b.json`](xnli-3b.json) — le raisonnement naturel XNLI (mesure 160 : inférence 0,502/0,576, pont 0,592)
 - [`xnli-14b.json`](xnli-14b.json) — XNLI au 14 B (mesure 161 : pas de gain, 0,481/0,589, pont 0,627)
 - [`xnli-mlp-3b.json`](xnli-mlp-3b.json) — XNLI avec sonde MLP (mesure 162 : 0,453 contre 0,502 au linéaire, ce n'est pas la sonde qui limite)
+- [`xnli-entrainement-3b.json`](xnli-entrainement-3b.json) — le fine-tuning XNLI (mesure 163 : tête 0,592/0,610, pont 0,751)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

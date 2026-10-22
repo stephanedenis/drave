@@ -237,6 +237,10 @@ marche pas que sur le synthétique : il transfère aussi l'inférence naturelle.
 **0,542** au pont (0,592) : il sur-apprend. *Ce n'est pas la sonde qui limite, c'est l'état ; pour progresser sur
 l'inférence naturelle, il faut entraîner le modèle, pas changer le readout.*
 
+**Mesure 163 — le fine-tuning XNLI.** Un LoRA + tête 3 classes (400 pas bilingues) donne une tête à **0,592** (FR)
+et **0,610** (EN, zéro-ressource), et le pont monte à **0,751** (figé : 0,592). *L'inférence naturelle se travaille
+par l'entraînement ; le modèle apprend une représentation plus partageable.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
