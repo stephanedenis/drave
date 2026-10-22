@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (146 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (147 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5299,3 +5299,36 @@ pont externe reste la structure qui marche ✓✓. *L'alignement **appris** dema
 
 **Ce que ce résultat ne dit pas** ✗ : batch 4 (peu de négatifs), 400 pas effectifs, poids 0,5 ✓✗ ; un LoRA d'attention
 ✓✗ ; et une projection dédiée entraînée — c'est déjà le pont ✓✗.
+
+---
+
+## Mesure 147 — UN CONTRASTE PLUS **FORT** APPREND L'ALIGNEMENT : la sonde FR→EN passe de 0,058 (figé) à **0,742**, et la tête à **0,734** en EN (hasard 5 %)
+
+**La question** ✓✓. La mesure 146 (batch 4, poids 0,5, 500 pas) n'alignait pas ; avec **plus de négatifs** (batch 8),
+un **poids 2** et **800 pas**, l'alignement émerge-t-il ? ✓✓
+
+**Le dispositif** ✓✓ : LoRA + tête, **800 pas**, **batch 8**, InfoNCE FR↔EN **poids 2**, τ = 0,07, lr 5e-5 ✓ ;
+échauffement 100 pas (tête seule) ✓ ; évaluation FR/EN, sonde neuve, pont ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| mesure | figé | contraste faible (146) | **contraste fort (147)** |
+|---|---:|---:|---:|
+| sonde FR→FR | 0,987 | 0,985 | **0,776** |
+| sonde FR→EN | 0,058 | 0,042 | **0,742** |
+| pont EN→FR | 0,810 | 0,466 | **0,779** |
+| tête FR / EN | — | 0,078 / 0,075 | **0,737 / 0,734** |
+
+* **LA SONDE TRANSFÈRE ENFIN** ✓✓ : **0,742** contre 0,058 figé et 0,042 au contraste faible — *+68 points* ✓✓ ;
+* **LA TÊTE APPREND DANS LES DEUX LANGUES** ✓✓ : 0,737 / 0,734 ✓✓ ;
+* **LE PONT RESTE** ✓✓ : 0,779, proche du figé (0,810) ✓✓ ;
+* **LE PRIX EST L'IN-LANGUE** ✓✗ : la sonde FR baisse de 0,987 à 0,776 — *l'alignement compresse l'information
+  spécifique à la langue* ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement **s'apprend** ; il faut des **négatifs** (batch 8) et un **poids suffisant**
+(2) ✓✓. *Le raisonnement devient indépendant de la langue **dans le modèle** — sans pont — au prix de 21 points
+d'in-langue.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 800 pas, un LoRA d'attention, un corpus synthétique ✓✗ ; la sonde (74 %) reste
+sous le FR (78 %) et sous le figé ponté (81 %) ✓✗ ; et le coût (une passe FR + une passe EN par pas) n'est pas
+compté ✓✗.

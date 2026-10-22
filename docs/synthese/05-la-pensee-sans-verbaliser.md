@@ -182,6 +182,11 @@ bilingue, **n'apprend pas l'alignement**. *Il faut un objectif explicitement con
 sur un LoRA d'attention, l'alignement **appris** n'émerge pas. *Le pont externe reste la structure qui marche ;
 l'alignement appris demanderait plus de pas, de négatifs, ou une projection dédiée.*
 
+**Mesure 147 — l'alignement s'apprend.** Avec un contraste plus fort (**batch 8, poids 2, 800 pas**), la sonde
+FR→EN passe de 0,058 (figé) à **0,742**, la tête à **0,734** en EN, et le pont à 0,779 ; le prix est l'in-langue
+(0,776 contre 0,987). *Le raisonnement devient indépendant de la langue **dans le modèle**, sans pont — à condition
+de fournir des négatifs et un poids suffisant.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
