@@ -60,6 +60,8 @@
 - [`plan-entrainement-3b.json`](plan-entrainement-3b.json) · [`plan-entrainement-melange.json`](plan-entrainement-melange.json) — le plan entraîné (mesure 119 : 0,239 → 0,443 ; contrôle mélangé 0,227)
 - [`plan-multi-3b.json`](plan-multi-3b.json) — le plan multi-pas (mesure 120 : 0,443 / 0,295 / 0,341 à trois horizons)
 - [`plan-controle-3b.json`](plan-controle-3b.json) — le contrôle des cibles figées (mesure 121 : 0,318 / 0,250 / 0,216 ; moitié du gain)
+- [`plan-16.json`](plan-16.json) — l'échelle 16 phrases, horizons 1-7 (mesure 122 : transfert figé nul)
+- [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

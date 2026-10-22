@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (121 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (123 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4480,3 +4480,72 @@ l'espace cible autant que le plan ✓✗.
 
 **Ce que ce résultat ne dit pas** ✗ : 88 échantillons, une graine (la graine 5678 tourne) ✓✗ ; le cache est celui d'un
 seul modèle figé ✓✗ ; et le transfert est mesuré à la couche 18 seulement ✓✗.
+
+---
+
+## Mesure 122 — À **16 PHRASES**, LE TRANSFERT DISPARAÎT : 0,254 de moyenne sur 7 horizons avec les cibles du modèle entraîné, mais **0,193 contre 0,189** sur les cibles figées
+
+**La question** ✓✓. Le plan entraîné (mesures 119-121) tient-il sur des séries **plus longues**, et jusqu'à quel
+horizon ? ✓✓
+
+**Le dispositif** ✓✓ : les séries Verne de **16 phrases** (144 séries : 100 entraînement / 44 test, soit **40 items
+par horizon**, bruit binomial ±5,2 pts à 1σ) ✓ ; horizons **1 à 7**, 300 pas, graine 1234 ✓ ; même retrieval 8-way
+(hasard **12,5 %**) et mêmes cibles figées mises en cache ✓✓.
+
+**Les résultats** ✓ (moyenne des 7 horizons entre parenthèses) :
+
+| horizon | avant | après | après, cibles figées |
+|---|---:|---:|---:|
+| h1 | 0,250 | 0,350 | 0,250 |
+| h2 | 0,200 | 0,375 | 0,225 |
+| h3 | 0,250 | 0,275 | 0,200 |
+| h4 | 0,100 | 0,250 | 0,100 |
+| h5 | 0,225 | 0,275 | 0,150 |
+| h6 | 0,150 | 0,100 | 0,250 |
+| h7 | 0,150 | 0,150 | 0,175 |
+| **moyenne** | **0,189** | **0,254** | **0,193** |
+
+* **LE GAIN APPARENT EST LÀ** ✓✗ : 0,189 → 0,254 (1,51× → 2,03× le hasard) ✓✗ ;
+* **AUCUN TRANSFERT** ✗✗ : 0,193 contre 0,189 sur les cibles **figées** ✓✗ — *à 16 phrases, le plan appris ne
+  dépasse pas le modèle figé* ✗✗ ;
+* **LA DÉRIVE DE LA CIBLE EST VISIBLE** ✗✗ : h6 vaut 0,250 en cibles figées mais 0,100 en cibles réentraînées ✓✗ ;
+* **PAS DE DÉCROISSANCE PROPRE** ✓✗ : h1-h5 au-dessus du hasard, h6-h7 au hasard, sans pente nette ✓✗.
+
+**Ce que cela change** ✗✗ : à 16 phrases, le gain de la mesure 120 **ne se reproduit pas** sur les cibles figées ✓✗ ;
+l'effet est donc **fragile**, et la part « plan transférable » des mesures 119-120 est au mieux **modeste** ✓✗.
+
+**Ce que ce résultat ne dit pas** ✗ : 40 items par horizon (±5,2 pts), 100 séries d'entraînement, une graine ✓✗ — *ce
+test ne **réfute** pas les 8 phrases, il ne les **reproduit** pas* ✓✗.
+
+---
+
+## Mesure 123 — GRAINE 5678 : LE GAIN SE REPRODUIT, LE CONTRÔLE RESTE AU HASARD, MAIS LE TRANSFERT FIGÉ EST **INCONSTANT**
+
+**La question** ✓✓. Le gain de la mesure 120 est-il robuste à un **autre découpage** (graine 5678), et le contrôle à
+cibles mélangées le reproduit-il ? ✓✓
+
+**Le dispositif** ✓✓ : exactement la mesure 120 (8 phrases, horizons 1-3, 300 pas, lot 3 × accumulation 3), avec la
+**graine 5678** (214/93 séries, 88 items) et un second run à **cibles mélangées** ✓✓.
+
+**Les résultats** ✓ :
+
+| horizon | avant | après | après, cibles figées | contrôle (cibles mélangées) |
+|---|---:|---:|---:|---:|
+| h1 | 0,170 | **0,409** | 0,250 | 0,227 |
+| h2 | 0,227 | **0,330** | 0,227 | 0,205 |
+| h3 | 0,159 | **0,352** | 0,227 | 0,170 |
+
+* **LE GAIN SE REPRODUIT** ✓✓ : 0,409 / 0,330 / 0,352 (contre 0,409 / 0,284 / 0,330 à la graine 1234) ✓✓ ;
+* **LE CONTRÔLE RESTE AU HASARD** ✓✓ : 0,227 / 0,205 / 0,170, perte bloquée à ≈ log 3 ✓✓ ;
+* **LE TRANSFERT FIGÉ EST INCONSTANT** ✗✗ : +0,080 / **0,000** / +0,068 (0,250 / 0,227 / 0,227) ✓✗ — *une graine sur
+  deux ne transfère rien au h2* ✗✗ ;
+* **LE CONTRÔLE À h1 EST À 20/88** ✓✗ (+2,9σ au-dessus du hasard) : avec un lot de 3, une permutation aléatoire est
+  l'identité avec p = 1/6 ; la comparaison utile reste **36/88 contre 20/88** ✓✗.
+
+**Ce que cela change** ✗✓ : le gain sur les cibles du modèle entraîné est **robuste** (deux graines), mais le
+**transfert figé** est **faible et inconstant** (0 à +0,08) ✓✗ — *le plan appris est donc, pour une large part, une
+adaptation de l'espace cible, pas un état transférable* ✗✗.
+
+**Ce que ce résultat ne dit pas** ✗ : les découpages diffèrent, donc les colonnes « avant » ne sont pas comparables
+entre graines ✓✗ ; 88 items, une couche ✓✗ ; et le contrôle à cibles mélangées garde 1/6 de paires correctes par
+construction ✓✗.

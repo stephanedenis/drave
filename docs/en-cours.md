@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-22, 8 h 20 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-22, 8 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -50,8 +50,9 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
   tâche** collapse en point fixe (mesures 109-110) — *le plan est un mince résidu : il faut l'**entraîner** dans le
   modèle* ; c'est fait : un LoRA contrastif fait passer le retrieval de contenu de **0,239 à 0,443** (hasard 0,125 ;
   contrôle à cibles mélangées **0,227**) — **le plan s'entraîne** (mesure 119) et le **même** état porte **trois
-  pas** (0,443 / 0,295 / 0,341, mesure 120) ; mais le contrôle des **cibles figées** ramène le transfert réel à
-  **0,318 / 0,250 / 0,216** (mesure 121) : la moitié du gain est un vrai plan, l'autre est l'adaptation de la cible.
+  pas** (0,443 / 0,295 / 0,341, mesure 120) ; mais les contrôles **tempèrent** : le transfert aux cibles figées est
+  de +0,05 à +0,08 (mesures 121, 123) et **nul à 16 phrases** (0,193 contre 0,189, mesure 122) — le gain est surtout
+  l'adaptation de l'espace cible ; la suite est d'**entraîner contre des cibles figées**.
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
@@ -164,7 +165,7 @@ maintenant le chantier principal** (décision du 21/10 au soir), les registres r
 | **le périmètre démographique** (Ethnologue 2026) | **arrêté au français inclus** : les langues jusqu'au **français** sont couvertes ✓ ; les **20** aussi, comme **marge** ✓ : les 19 sur des textes neufs (mesures 73-76) ; le **pidgin nigérian** est **lu** (+3,2 au 7 B, +4,4 au 14 B) et **écrit** avec un **adaptateur 14 B** : **+5,8 [+4,1 ; +7,6]** sur 71 pages de contes tenus à part, **7 plis positifs** (1000 pas, mesure 112) | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la représentation neutre** (3 B/7 B, JW 2026) | **partagée mais non alignée** : un pont linéaire retrouve la bonne traduction dans **28-69 %** (hasard 0,7 %), cosinus 0,78-0,92 ; **la taille ne change presque rien** (+3,7 en lecture, +1,4 en écriture) ; **lire ≈ écrire** ; le sens partagé vit dans les **premières couches** (4-6) — mesures 77-78 | [07](../reports/07-mesures-couche-commune.md) |
 | **étage 2 — la composition** (3 B/7 B/14 B, Verne) | **démontrée sur phrases alignées** : retrieval **0,61** (3 B) → **0,76** (7 B) → **0,68** (14 B, réparti, OOM) ; ordre **0,84 → 0,865 → 0,855** ; **la courbe plafonne entre 7 et 14 B**, et le sens vit à **mi-profondeur** (50 %, 33 % au 14 B) — mesures 80-81, 87 | [07](../reports/07-mesures-couche-commune.md) |
-| **étage 2 — le pas de pensée** (3 B/7 B/14 B, Verne) | **ni la phrase ni le contexte figé ne portent la suite** (erratum 6 + mesures 113-116) : l'opérateur linéaire prédit la **moyenne** (effondrement 0,89-0,99, retrieval 0-8,9 % contre 2,2 %) ; le **contrastif** reste au hasard ; sur **630 séries / 1 323 transitions**, linéaire et MLP restent au hasard (0-1,15 %) ; le **contexte** (8 phrases, GRU) reste à **0,14** de contenu contre 0,125 ; un **code de plan** de 32 dimensions ne dépasse la moyenne que de **+0,02** (mesure 117) ; la **langue** est décodable à 1,00, la **position** à 0,13 (mesure 118) ; l'**état latent** entraîné avec la tâche **collapse** (pas 1 à 0,00) ; le plan **s'entraîne** — 0,239 → **0,443**, contrôle 0,227 (mesure 119) — et porte **trois pas** (0,443 / 0,295 / 0,341, mesure 120) ; le transfert **réel** (cibles figées) est de **0,318 / 0,250 / 0,216** (mesure 121) | [07](../reports/07-mesures-couche-commune.md) |
+| **étage 2 — le pas de pensée** (3 B/7 B/14 B, Verne) | **ni la phrase ni le contexte figé ne portent la suite** (erratum 6 + mesures 113-116) : l'opérateur linéaire prédit la **moyenne** (effondrement 0,89-0,99, retrieval 0-8,9 % contre 2,2 %) ; le **contrastif** reste au hasard ; sur **630 séries / 1 323 transitions**, linéaire et MLP restent au hasard (0-1,15 %) ; le **contexte** (8 phrases, GRU) reste à **0,14** de contenu contre 0,125 ; un **code de plan** de 32 dimensions ne dépasse la moyenne que de **+0,02** (mesure 117) ; la **langue** est décodable à 1,00, la **position** à 0,13 (mesure 118) ; l'**état latent** entraîné avec la tâche **collapse** (pas 1 à 0,00) ; le plan **s'entraîne** — 0,239 → **0,443**, contrôle 0,227 (mesure 119) — et porte **trois pas** (0,443 / 0,295 / 0,341, mesure 120) ; le transfert **réel** (cibles figées) est faible (+0,05 à +0,08, mesures 121 et 123) et **nul à 16 phrases** (mesure 122) | [07](../reports/07-mesures-couche-commune.md) |
 | **le bruit d'entrée est signalable** (seuil 3,23 bits/token) | fautes et langues mêlées : **100 %** détectées, AUC **1,00** · accents : **25 %**, AUC 0,69 | [07](../reports/07-mesures-couche-commune.md) |
 | **le banc UDHR est contaminé** — le modèle récite, il ne traduit pas | article 1 reproduit **mot pour mot** (7 B) | [07](../reports/07-mesures-couche-commune.md) |
 | **la langue est lisible partout** dans l'état d'un modèle (pas de noyau neutre spontané) | 80-100 % dès la couche 1 (5 modèles d'octets, Qwen) | [07](../reports/07-mesures-couche-commune.md) |
