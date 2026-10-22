@@ -83,8 +83,11 @@ def main() -> int:
     couches = sorted(set([0, n_layers // 6, n_layers // 3, n_layers // 2, 2 * n_layers // 3,
                           5 * n_layers // 6, n_layers]))
     etats = extraction(model, tok, textes, couches)
+    # une ligne par état, deux états par phrase (FR puis EN) : le nom doit suivre la ligne, pas la phrase
+    noms = [f"{k}|{j}|{langue}" for k, j in meta for langue in ("fr", "en")]
+    assert len(noms) == len(etats[couches[0]]), (len(noms), len(etats[couches[0]]))
     np.savez_compressed(a.etats, **{f"L{L}": etats[L] for L in couches},
-                        couches=np.array(couches), noms=np.array([f"{k}|{j}" for k, j in meta]))
+                        couches=np.array(couches), noms=np.array(noms))
     rng = np.random.default_rng(1234)
     n = len(series) * a.par_serie
     idx = rng.permutation(n); tr, te = idx[: int(0.7 * n)], idx[int(0.7 * n):]

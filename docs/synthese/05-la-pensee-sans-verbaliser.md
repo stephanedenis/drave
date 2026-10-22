@@ -22,7 +22,7 @@ on peut faire évoluer la pensée **sans qu'aucun jeton ne soit émis**.
 | **boucler quand même** | λ = **7 311**, contenu détruit | aligner les espaces ne suffit pas : il faut la **dynamique** |
 | **opérateur post-hoc** | λ = **0,997** (le premier pas contractant) et +15 points… sur **un** pas | l'itération n'accumule pas |
 | **récurrence à l'entraînement** | itération **plate** (88,4 · 88,2 · 88,5) | l'état devient **habitable** — au prix de 5 points |
-| **la falaise** | au **troisième** pas (le pas tient deux pas) | le pas partagé dégénère en **point fixe** ; il faut une perte qui l'empêche |
+| **la falaise** | **pas de premier pas linéaire** : l'opérateur prédit la **moyenne** (mesure 113) | l'état d'une phrase ne porte pas la suivante ; il faut un état qui porte le **plan** |
 | **la cause** | déplacement 44,8 % contre 77,5 % | les modèles plats ont appris un **point fixe** |
 
 ## Les trois piliers, et ce qu'ils valent
@@ -53,16 +53,24 @@ profondeur) contre 0,61 / 0,84 au 3 B (couche 18 sur 36) ; la fin s'effondre enc
 vit à mi-profondeur, et la composition est un levier de taille, pas un plafond.* **Mesure 87** : la courbe **plafonne** entre 7 et 14 B
 (0,68 / 0,855 au 14 B contre 0,76 / 0,865 au 7 B, avec un OOM de répartition) — *le levier de la composition est la
 profondeur et la taille **jusqu'à 7 B**, pas les paramètres au-delà*.
-**Le pas de pensée tient deux pas** (le linéaire, la mesure 82 : 0,73 puis 0,53, hasard 25 %) et **s'effondre au
-troisième** (0,13). La taille ne l'étend pas (la mesure 83), et **aucun** des opérateurs testés ne l'étend : la
-contraction (la mesure 87), le MLP (la mesure 88), la récurrence partagée (la mesure 108), l'**état latent entraîné
-avec la tâche** (la mesure 109) — ce dernier **collapse** : le pas 3 monte à 0,60-0,67, mais le pas 1 tombe à 0,00,
-parce que le pas partagé **saute au dernier état** (point fixe). *Le problème n'est ni le modèle ni la forme de
-l'opérateur : c'est le **pas** qui dégénère en raccourci.*
+**Le pas de pensée linéaire n'existe pas** (mesure 113, après l'**erratum 6**) : les mesures 82-85, 88 et 108
+lisaient les états Verne avec 200 noms pour 400 lignes — les « séries de quatre phrases » étaient en réalité
+`fr0, en0, fr1, en1`, des paires de **traduction** ✗✗. Sur la carte correcte, l'opérateur ridge **prédit la moyenne** :
+son cosinus est celui du prédicteur constant à ±0,03 près, ses sorties sont **effondrées** (cosinus moyen 0,89-0,99),
+et le retrieval de la phrase suivante reste au **hasard** (0-8,9 % contre 2,2 %), aux trois tailles ; un opérateur
+**contrastif** (InfoNCE) ne fait pas mieux (2,2-11,1 %) — *l'objectif n'est pas la cause* ✗✓. Un MLP contrastif
+**mémorise** les 105 transitions (perte 0,03) mais ne **généralise** pas (mesure 114) : avec ce corpus, l'échec est
+aussi celui de l'**échantillon** ✓✗. **En revanche**, l'**état latent entraîné avec la tâche** (mesure 109) **collapse**
+bel et bien en **point fixe** : le pas 3 monte à 0,60-0,67, mais le pas 1 tombe à 0,00 ; la pénalité de point fixe
+(mesure 110) ne le débloque pas ✗✗. *Ce n'est donc pas le modèle ni la forme de l'opérateur : c'est le **pas** qui
+n'est pas une fonction de l'état d'une phrase — il manque le **plan** de la série.*
 
 ## Ce qui reste à construire
 
-Une **dynamique qui avance d'un pas à la fois sans se figer** : une perte qui **pénalise le point fixe** (les pas
-1/2/3 à égalité), une **reconstruction** de l'état, ou une **variété contrôlée**. Le prix (la falaise) et le gain
-(la récurrence améliore la langue) sont connus ; la mesure est outillée (`tools/banc_lecteur.py`,
-`tools/operateur_pensee.py`, `tools/composition_latente.py`).
+Une **dynamique qui avance d'un pas à la fois** suppose un état qui porte le **plan** de la série, pas seulement la
+phrase courante. Trois chantiers, dans l'ordre : **(1)** trancher la question de l'**information** — augmenter les
+transitions (plus de séries, plusieurs romans, états de contexte) et refaire le test contrastif (mesure 114) ;
+**(2)** construire un état de **plan** (ce que la série doit faire, pas ce que la phrase dit) et mesurer s'il rend le
+pas prédictible ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas, reconstruction, variété). L'outillage
+est en place : `tools/pas_de_pensee_corrige.py` et `tools/pas_de_pensee_non_lineaire.py` pour l'information,
+`tools/composition_latente.py` pour l'état latent.

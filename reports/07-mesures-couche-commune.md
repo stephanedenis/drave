@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (112 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (114 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -3164,6 +3164,8 @@ la composition mesurée reste l'**identité positionnée**, pas la **structure s
 
 ## Mesure 82 — LE PAS DE PENSÉE APPRIS TIENT **DEUX PAS** : l'opérateur prédit l'état suivant (0,22 contre 2,2 % de hasard), l'itération retrouve la bonne position deux fois (0,73 puis 0,53, hasard 25 %), puis **s'effondre** au troisième
 
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
+
 **La question** ✓✓. La mesure 80 a montré que le sens de la phrase est **partagé et positionné** à mi-profondeur ✓✓.
 La question dynamique de l'étage 2 : peut-on apprendre un **opérateur** F tel que `F(état de la phrase i) ≈ état de
 la phrase i+1` ? ✓✓ Si oui, on peut **itérer** la pensée sans émettre de jetons — le « penser sans verbaliser » du
@@ -3212,6 +3214,8 @@ précisément le problème de la **dynamique** du chapitre 5* ✓✓.
 
 ## Mesure 83 — LE PAS DE PENSÉE NE PROFITE PAS DE LA TAILLE : le 7 B ne tient pas plus de pas que le 3 B, et son cosinus est même plus bas
 
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
+
 **La question** ✓✓. La **composition** profite de la taille (+15 points, mesure 81) ✓✓ ; le **pas de pensée** (un
 opérateur linéaire, mesure 82) tient deux pas au 3 B puis s'effondre ✓✗. *La taille repousse-t-elle la falaise du
 pas de pensée, comme elle améliore la composition ?* ✓✓
@@ -3246,6 +3250,8 @@ exactement le programme du chapitre 5 : une **dynamique apprise, contractante et
 
 ## Mesure 84 — LA CONTRACTION SIMPLE NE SAUVE PAS LE PAS DE PENSÉE : un pas plus petit ne va pas plus loin
 
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
+
 **La question** ✓✓. La mesure 82 a montré que le pas de pensée s'effondre au troisième pas, la mesure 83 que la
 taille ne le repousse pas ✗✗. Le chapitre 5 attribue la falaise à l'absence de **contraction** : l'état prédit sort
 de la variété des états réels ✓✓. *La correction la plus simple — **mélanger** le pas appris avec l'état courant,
@@ -3278,6 +3284,8 @@ une contraction **apprise** (un opérateur contractant entraîné, ou une régul
 essayer) ✓✓ ; et le retrieval à 4 phrases a un hasard de 25 % ✓✗.
 
 ## Mesure 85 — UN MLP RÉSIDUEL NE FAIT PAS MIEUX : il sur-apprend et généralise moins bien que le linéaire — la limite est la **donnée**, pas la forme
+
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
 
 **La question** ✓✓. La mesure 84 a montré que la contraction par mélange **dégrade** et que la contraction doit être
 **apprise** ✓✓. *Un opérateur **non linéaire** — un petit MLP résiduel — apprend-il mieux la dynamique qu'un
@@ -3382,6 +3390,8 @@ couche 16 (33 %) est peut-être un artefact de la répartition ✓✓ ; et le te
 25 % ✓✗.
 
 ## Mesure 88 — LE PAS DE PENSÉE AU 14 B : la taille améliore le **premier** pas (0,93), pas la **durée** (toujours deux pas)
+
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
 
 **La question** ✓✓. La mesure 83 a montré que le 7 B ne tient pas plus de pas que le 3 B ✓✗. *Le 14 B fait-il
 mieux ?* ✓✓
@@ -3987,6 +3997,8 @@ textes neufs, et le pidgin nigérian **lu** (+3,2 au 7 B, +4,4 au 14 B) et **éc
 
 ## Mesure 108 — L'OPÉRATEUR APPRIS **PAR RÉCURRENCE** NE TIENT PAS PLUS DE PAS : 0,73/0,27/0,27 — le pas 2 retombe au hasard
 
+> **Retirée (erratum 6)** — la carte des lignes était cassée (200 noms pour 400 lignes) ; voir la mesure 113.
+
 **La question** ✓✓. Le linéaire F tient **deux pas** puis s'effondre (0,73/0,53/0,13, mesure 82) ✗✗ ; la taille ne
 repousse pas la falaise (mesure 83) ; la contraction par mélange dégrade (mesure 87) ; le MLP naïf sur-apprend
 (mesure 88) ✗✗. La suite logique : un opérateur **appris par récurrence** — les **mêmes poids** appliqués K fois,
@@ -4152,3 +4164,91 @@ contes positifs**, l'IC le plus étroit ✓✓. *Le réglage de référence pour
 
 **Ce que ce résultat ne dit pas** ✗ : 71 pages, un LoRA, un seul réglage (1000 pas, lr 1e-5) ✓✗ ; la marge du 0001
 reste modeste (+2,5) ✓✗ ; et le registre testé reste celui des contes ✓✓.
+
+---
+
+## ERRATUM 6 — LA CARTE DES LIGNES DES ÉTATS VERNE : les mesures 82-85, 88 et 108 sont **retirées**
+
+**Ce qui est faux** ✗✗. Les mesures de **dynamique** (82, 83, 84, 85, 88, 108) ont lu les états Verne avec
+`z["noms"]` : **200 noms pour 400 lignes** ✗✗. `composition_verne.py` écrit **deux** états par phrase (FR puis EN) et
+n'en nommait qu'**un** ✗✗. Les « séries de quatre phrases » de la mesure 82 étaient donc, en réalité,
+`fr0, en0, fr1, en1` — deux paires de **traduction**, pas quatre phrases consécutives ✗✗. L'opérateur appris était un
+opérateur de **traduction**, et « deux pas puis la falaise » un artefact de l'alternance des langues ✗✗.
+
+**La preuve** ✓✓. Les lignes paires et impaires sont des paires FR/EN : un pont ridge appris sur `E[0::2] → E[1::2]`
+retrouve la bonne traduction dans **44-48 %** des cas parmi 50 paires tenues à part (hasard 0,5 %, couches 6/12/18) ✓✓.
+Et sur la carte **correcte** (phrase i → ligne 2i), le même protocole ne donne plus 0,73 / 0,53 / 0,13 mais
+**0,13 / 0,33 / 0,47** à la couche 6 ✓✓ — le « pas 1 » tombe au hasard, et la suite ne décroît plus ✓✓.
+
+**Les mesures retirées** ✗✗ : 82 (deux pas), 83 (taille), 84 (contraction), 85 (MLP résiduel), 88 (14 B), 108
+(récurrence) — toutes indexaient les lignes par `noms` ✗✗. **Ne sont pas touchées** ✓✓ : 79-81 et 87 (la composition
+utilise `E[0::2]`/`E[1::2]`, correctement) et 109-110 (le latent **ré-extrait** ses propres séries depuis le JSON,
+sans `noms`) ✓✓.
+
+**La correction** ✓✓ : la source est corrigée (`composition_verne.py` nomme désormais les **400** lignes, avec la
+langue), les quatre outils périmés **refusent de tourner** sur un fichier mal nommé, et l'outil de référence est
+`tools/pas_de_pensee_corrige.py` (mesure 113) ✓✓.
+
+---
+
+## Mesure 113 — LE PAS DE PENSÉE LINÉAIRE **N'EXISTE PAS** : sur la carte correcte, l'opérateur prédit la moyenne (effondrement 0,89-0,99, retrieval au hasard), aux trois tailles
+
+**La question** ✓✓. Une fois la carte des lignes corrigée, l'opérateur linéaire apprend-il vraiment la transition
+d'une phrase à la suivante — ou ne fait-il que prédire la moyenne des états suivants ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee_corrige.py` ✓) : les états Verne (200 phrases FR, 50 séries de 4, trois
+modèles) ✓ ; phrase i → ligne **2i** ; 35 séries d'entraînement, 15 de test, mêmes graines que la mesure 82 ✓ ; F
+ridge (λ validé sur 20 % des transitions), **identité** et **moyenne** en baselines, contrôle négatif (transitions
+mélangées), et un F **contrastif** (InfoNCE) pour séparer « l'objectif MSE écrase » de « l'information est absente » ✓✓.
+
+**Les résultats** (7 couches par modèle ; hasard global 2,2 %, dans la série 25 %) ✓ :
+
+| modèle | cos F | cos moyenne | cos identité | effondrement | retrieval global | retrieval série | négatif | contrastif |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 3 B | 0,784-0,921 | 0,797-0,927 | 0,598-0,865 | **0,933-0,992** | 0-6,7 % | 6,7-33,3 % | 0-2,2 % | 2,2-11,1 % |
+| 7 B | 0,689-0,853 | 0,708-0,888 | 0,539-0,820 | **0,885-0,990** | 2,2-8,9 % | 13,3-33,3 % | 0-4,4 % | 2,2-6,7 % |
+| 14 B | 0,706-0,867 | 0,702-0,894 | 0,468-0,822 | **0,890-0,993** | 0-4,4 % | 6,7-26,7 % | 0-4,4 % | 2,2-8,9 % |
+
+* **L'OPÉRATEUR EST LA MOYENNE** ✗✗ : le cosinus de F est celui du **prédicteur constant** à ±0,03 près, et
+  l'**effondrement** (cosinus moyen entre les sorties de F) est de **0,89-0,99** — *F envoie tous les états au même
+  point* ✗✗ ;
+* **LE RETRIEVAL EST AU HASARD** ✗✗ : 0-8,9 % contre 2,2 % ✓✗ ; dans la série 6,7-33,3 % contre 25 % ✓✗ ;
+  l'itération ne suit aucune pente (0-66,7 %, le pas 3 est parfois le meilleur) ✗✗ ;
+* **LE CONTRÔLE NÉGATIF EST AU HASARD** ✓✓ (0-4,4 %) : l'outil ne fabrique pas de signal ✓✓ ;
+* **L'OBJECTIF N'EST PAS LA CAUSE** ✗✓ : un F **contrastif** (InfoNCE) reste à 2,2-11,1 % — *même en cherchant à
+  discriminer, le linéaire ne retrouve pas la phrase suivante* ✓✗ ;
+* **LA TAILLE NE CHANGE RIEN** ✓✗ : le même effondrement au 3 B, 7 B et 14 B ✓✗ — *le « premier pas à 0,93 » de la
+  mesure 88 était la traduction, pas la pensée* ✗✗.
+
+**Ce que cela change** ✗✗ : il n'y a **pas** de pas de pensée linéaire mesuré sur ces états ; la falaise au troisième
+pas **n'existe pas** — il n'y a pas de premier pas ✓✗. *L'état d'une phrase prédit la phrase suivante en moyenne
+(les romans se ressemblent) mais pas **laquelle*** ✗✗.
+
+**Ce que ce résultat ne dit pas** ✗ : 200 phrases d'un seul roman, une seule découpe 35/15 ✓✗ ; le retrieval est une
+tâche dure (la phrase suivante n'est pas déterminée par la précédente) ✓✗ ; un MLP pourrait trouver une fonction non
+linéaire (mesure 114) ✓✗ ; et le **plan** de la série n'est peut-être pas dans l'état d'une phrase — c'est
+précisément la question suivante ✓✓.
+
+---
+
+## Mesure 114 — UN MLP CONTRASTIF MÉMORISE MAIS NE GÉNÉRALISE PAS : le retrieval de test reste au hasard
+
+**La question** ✓✓. L'échec du linéaire vient-il de la **forme** (linéaire) ou de l'**information** (la phrase
+suivante n'est pas dans l'état) ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/pas_de_pensee_non_lineaire.py` ✓) : les mêmes 105 transitions ; un MLP
+2048 → 512 → 2048, GELU, entraîné par InfoNCE (τ = 0,05, 600 époques, 3 graines), évalué hors entraînement ; contrôle
+négatif (cibles mélangées) ✓✓.
+
+**Les résultats** (3 B, 7 couches, 3 graines) ✓ : retrieval global **2,2-11,1 %** (hasard 2,2 %), dans la série
+**20-33 %** (hasard 25 %), négatif 1,5-3,0 % ; la **perte d'entraînement** tombe à **0,03** aux couches 12-18
+(mémorisation parfaite des 105 paires) ✓✗.
+
+* **LE MLP MÉMORISE SANS GÉNÉRALISER** ✗✗ : perte 0,03 sur les transitions d'entraînement, retrieval de test au
+  hasard ✓✗ — *105 transitions ne suffisent pas à apprendre une fonction de 2048 dimensions* ✓✗ ;
+* **LE CONTRÔLE NÉGATIF RESTE AU HASARD** ✓✓ ;
+* **RIEN NE PROUVE QUE L'INFORMATION EST ABSENTE** ✗✓ : avec 105 paires, l'échec est aussi celui de
+  l'**échantillon** ✓✗ — *la question reste ouverte, mais elle ne se tranche pas sur ce corpus* ✓✓.
+
+**Ce que cela change** ✓✓ : la prochaine mesure doit **augmenter les transitions** (plus de séries, plusieurs
+romans, ou des états de contexte) avant de conclure sur l'information ✓✓.

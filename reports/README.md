@@ -47,9 +47,11 @@
 - [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
 - [`composition-multilingue.json`](composition-multilingue.json)
 - [`composition-verne.json`](composition-verne.json) · [`composition-verne-7b.json`](composition-verne-7b.json) · [`composition-verne-14b.json`](composition-verne-14b.json)
-- [`pas-de-pensee.json`](pas-de-pensee.json) · [`pas-de-pensee-7b.json`](pas-de-pensee-7b.json) · [`pas-de-pensee-14b.json`](pas-de-pensee-14b.json)
-- [`pas-de-pensee-contracte-3b.json`](pas-de-pensee-contracte-3b.json) · [`pas-de-pensee-contracte-7b.json`](pas-de-pensee-contracte-7b.json)
-- [`pas-de-pensee-mlp-6.json`](pas-de-pensee-mlp-6.json) · [`pas-de-pensee-mlp-18.json`](pas-de-pensee-mlp-18.json)
+- [`pas-de-pensee.json`](pas-de-pensee.json) · [`pas-de-pensee-7b.json`](pas-de-pensee-7b.json) · [`pas-de-pensee-14b.json`](pas-de-pensee-14b.json) — **retirés (erratum 6)** : carte des lignes cassée
+- [`pas-de-pensee-contracte-3b.json`](pas-de-pensee-contracte-3b.json) · [`pas-de-pensee-contracte-7b.json`](pas-de-pensee-contracte-7b.json) — **retirés (erratum 6)**
+- [`pas-de-pensee-mlp-6.json`](pas-de-pensee-mlp-6.json) · [`pas-de-pensee-mlp-18.json`](pas-de-pensee-mlp-18.json) — **retirés (erratum 6)**
+- [`pas-de-pensee-corrige-3b.json`](pas-de-pensee-corrige-3b.json) · [`pas-de-pensee-corrige-7b.json`](pas-de-pensee-corrige-7b.json) · [`pas-de-pensee-corrige-14b.json`](pas-de-pensee-corrige-14b.json) — le pas de pensée sur la **carte correcte** (mesure 113 : l'opérateur prédit la moyenne)
+- [`pas-de-pensee-non-lineaire-3b.json`](pas-de-pensee-non-lineaire-3b.json) — MLP contrastif (mesure 114 : mémorise, ne généralise pas)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
@@ -212,7 +214,7 @@
 
 - [`sources-pidgin.json`](sources-pidgin.json) — inventaire des sources parallèles pidgin-anglais (8 testées, 3 utilisées, 1 écartée, 2 inaccessibles/absentes).
 
-- [`pas-de-pensee-recurrent.json`](pas-de-pensee-recurrent.json) — l'opérateur appris par récurrence (mesure 108 : la falaise tient).
+- [`pas-de-pensee-recurrent.json`](pas-de-pensee-recurrent.json) — l'opérateur appris par récurrence (mesure 108) : **retiré (erratum 6)**, carte des lignes cassée.
 
 - [`composition-latente-3b.json`](composition-latente-3b.json) · [`composition-latente-7b.json`](composition-latente-7b.json) · [`composition-latente-14b.json`](composition-latente-14b.json) — l'état latent entraîné avec la tâche (mesure 109 : collapse au point fixe).
 - [`composition-penalite-3b.json`](composition-penalite-3b.json) · [`composition-penalite-7b.json`](composition-penalite-7b.json) — la pénalité de point fixe (mesure 110 : le pas 1 reste à 0,00).

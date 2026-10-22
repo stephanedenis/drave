@@ -33,6 +33,8 @@ def main() -> int:
     import torch.nn as nn
     z = np.load(a.etats, allow_pickle=False)
     noms = [str(s) for s in z["noms"]]
+    if len(noms) != len(z[f"L{a.couche}"]) or any(len(s.split("|")) != 2 for s in noms):
+        raise SystemExit("carte des lignes cassée (noms ≠ lignes) : mesure 113 — utiliser tools/pas_de_pensee_corrige.py")
     series = {}
     for i, s in enumerate(noms):
         k, j = s.split("|")

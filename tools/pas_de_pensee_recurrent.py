@@ -45,10 +45,13 @@ def main() -> int:
     ap.add_argument("--sortie", default="reports/pas-de-pensee-recurrent.json")
     ap.add_argument("--pas", type=int, default=3)
     ap.add_argument("--epochs", type=int, default=400)
+    ap.add_argument("--variete", action="store_true", help="contrainte de variété + décorrélation sur les états produits")
     a = ap.parse_args()
     z = np.load(a.etats, allow_pickle=False)
     couches = [int(c) for c in z["couches"]]
     noms = [str(s) for s in z["noms"]]
+    if len(noms) != len(z[f"L{couches[0]}"]) or any(len(s.split("|")) != 2 for s in noms):
+        raise SystemExit("carte des lignes cassée (noms ≠ lignes) : mesure 113 — utiliser tools/pas_de_pensee_corrige.py")
     series = {}
     for i, s in enumerate(noms):
         k, j = s.split("|")
@@ -59,7 +62,7 @@ def main() -> int:
     train_s, test_s = cles[:n_tr], cles[n_tr:]
     res = []
     for L in couches:
-        E = torch.tensor(z[f"L{L}"].astype(np.float32))
+        E = torch.from_numpy(np.asarray(z[f"L{L}"], dtype=np.float32))
         d = E.shape[1]
         torch.manual_seed(1234)
         modele = Bloc(d)
@@ -81,9 +84,19 @@ def main() -> int:
             # multi-pas partagé : F¹ = état 1, F² = état 2, F³ = état 3
             h = s0
             perte = 0.0
+            zs = []
             for cible in (s1, t2, t3):
                 h = modele(h)
                 perte = perte + (1 - torch.sum(tnorm(h) * tnorm(cible), -1)).mean()
+                zs.append(h)
+            if a.variete and ep % 10 == 0:
+                z = zs[0]
+                std = z.std(dim=0).mean()
+                perte = perte + 0.1 * torch.relu(1.0 - std)
+                zc = z - z.mean(0)
+                cov = (zc.T @ zc) / max(1, len(zc) - 1)
+                off = cov - torch.diag(torch.diag(cov))
+                perte = perte + 0.01 * (off ** 2).mean()
             # un pas sur les transitions
             p1 = modele(X)
             perte = perte + 0.5 * (1 - torch.sum(tnorm(p1) * tnorm(Y1), -1)).mean()

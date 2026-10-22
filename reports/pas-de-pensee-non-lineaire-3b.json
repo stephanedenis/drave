@@ -1,0 +1,161 @@
+{
+ "etats": "data/composition-verne-etats.npz",
+ "n_series": 50,
+ "n_series_train": 35,
+ "n_series_test": 15,
+ "n_phrases": 200,
+ "hasard_global": 0.0222,
+ "hasard_serie": 0.25,
+ "graines": 3,
+ "epochs": 600,
+ "cache": 512,
+ "resultats": [
+  {
+   "couche": 0,
+   "moyenne": {
+    "juste": 0.0296,
+    "serie": 0.2667,
+    "cos": 0.1325,
+    "eff": 0.5682,
+    "neg": 0.0222,
+    "neg_serie": 0.2,
+    "perte": 4.5312
+   },
+   "ecart_type": {
+    "juste": 0.0105,
+    "serie": 0.0,
+    "cos": 0.0092,
+    "eff": 0.0106,
+    "neg": 0.0,
+    "neg_serie": 0.0544,
+    "perte": 0.0
+   }
+  },
+  {
+   "couche": 6,
+   "moyenne": {
+    "juste": 0.037,
+    "serie": 0.3333,
+    "cos": 0.026,
+    "eff": 0.0318,
+    "neg": 0.0222,
+    "neg_serie": 0.3778,
+    "perte": 0.2376
+   },
+   "ecart_type": {
+    "juste": 0.0105,
+    "serie": 0.0,
+    "cos": 0.0033,
+    "eff": 0.0012,
+    "neg": 0.0,
+    "neg_serie": 0.0831,
+    "perte": 0.0002
+   }
+  },
+  {
+   "couche": 12,
+   "moyenne": {
+    "juste": 0.0222,
+    "serie": 0.2889,
+    "cos": 0.0242,
+    "eff": 0.0326,
+    "neg": 0.0148,
+    "neg_serie": 0.3111,
+    "perte": 0.0263
+   },
+   "ecart_type": {
+    "juste": 0.0181,
+    "serie": 0.0629,
+    "cos": 0.0071,
+    "eff": 0.0035,
+    "neg": 0.0105,
+    "neg_serie": 0.0831,
+    "perte": 0.0
+   }
+  },
+  {
+   "couche": 18,
+   "moyenne": {
+    "juste": 0.1111,
+    "serie": 0.2,
+    "cos": 0.0517,
+    "eff": 0.0326,
+    "neg": 0.0296,
+    "neg_serie": 0.2222,
+    "perte": 0.028
+   },
+   "ecart_type": {
+    "juste": 0.0181,
+    "serie": 0.0,
+    "cos": 0.0074,
+    "eff": 0.0009,
+    "neg": 0.0105,
+    "neg_serie": 0.0314,
+    "perte": 0.0
+   }
+  },
+  {
+   "couche": 24,
+   "moyenne": {
+    "juste": 0.1111,
+    "serie": 0.2444,
+    "cos": 0.047,
+    "eff": 0.0292,
+    "neg": 0.0148,
+    "neg_serie": 0.2,
+    "perte": 0.0499
+   },
+   "ecart_type": {
+    "juste": 0.0181,
+    "serie": 0.0831,
+    "cos": 0.0024,
+    "eff": 0.0033,
+    "neg": 0.0105,
+    "neg_serie": 0.0544,
+    "perte": 0.0
+   }
+  },
+  {
+   "couche": 30,
+   "moyenne": {
+    "juste": 0.0593,
+    "serie": 0.2,
+    "cos": 0.0424,
+    "eff": 0.0225,
+    "neg": 0.0222,
+    "neg_serie": 0.2222,
+    "perte": 0.2194
+   },
+   "ecart_type": {
+    "juste": 0.021,
+    "serie": 0.0,
+    "cos": 0.0062,
+    "eff": 0.004,
+    "neg": 0.0,
+    "neg_serie": 0.0629,
+    "perte": 0.0001
+   }
+  },
+  {
+   "couche": 36,
+   "moyenne": {
+    "juste": 0.0741,
+    "serie": 0.2,
+    "cos": 0.0762,
+    "eff": 0.0378,
+    "neg": 0.0296,
+    "neg_serie": 0.2222,
+    "perte": 0.5475
+   },
+   "ecart_type": {
+    "juste": 0.0378,
+    "serie": 0.0544,
+    "cos": 0.0051,
+    "eff": 0.0032,
+    "neg": 0.0105,
+    "neg_serie": 0.0629,
+    "perte": 0.0001
+   }
+  }
+ ]
+}
