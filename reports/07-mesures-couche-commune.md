@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (110 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (111 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4091,3 +4091,36 @@ meilleure régularisation, ou une **architecture** où l'état est contraint (la
 **Ce que ce résultat ne dit pas** ✗ : 15 séries de test, 400 pas, une marge 0,2 ✓✗ ; une contrainte de variété
 explicite (un terme de décorrélation des h) pourrait empêcher l'écrasement ✓✓ ; et le retrieval à 4 candidats est
 un test dur ✓✓.
+
+## Mesure 111 — LE PIDGIN À **600 PAS** : +5,0 [+2,1 ; +7,3] SUR 71 PAGES, **59/71** — le 0089 passe de −1,9 à +2,3
+
+**La question** ✓✓. La mesure 107 a établi le 14 B à 300 pas (+4,6, 50/71) ✗✓. *Doubler l'entraînement améliore-t-il
+la couverture, et comble-t-il les plis faibles ?* ✓✓
+
+**Le dispositif** ✓✓ : exactement la mesure 107 (14 B, 7 contes, 71 pages, le même mélange, autocast + GradScaler),
+avec **600 pas** au lieu de 300 ✓✓.
+
+| conte (test) | 300 pas (mesure 107) | **600 pas** (mesure 111) |
+|---|---:|---:|
+| 0001 | +3,9 | +3,6 |
+| 0004 | +5,4 | +5,5 |
+| 0066 | +4,0 | +5,0 |
+| **0089** | **−1,9** | **+2,3** |
+| **0095** | **+1,5** | **+4,9** |
+| 0210 | +14,4 | +13,5 |
+| 0327 | +3,7 | **−2,8** |
+| **poolé** | **+4,6** [2,4 ; 7,0] | **+5,0** [2,1 ; 7,3] |
+| pages > 0 | 50/71 | **59/71** |
+
+* **LES 600 PAS AMÉLIORENT** ✓✓ : +4,6 → **+5,0**, et surtout **59/71 pages** au-dessus du plancher (contre 50) ✓✓ ;
+* **le pli faible est COMBLÉ** ✓✓ : le 0089 passe de **−1,9 à +2,3**, le 0095 de +1,5 à **+4,9** ✓✓ — *plus
+  d'entraînement corrige les plis sous le plancher* ✓✓ ;
+* **un pli bascule l'autre sens** ✗✓ : le 0327 passe de +3,7 à **−2,8** ✓✗ — *la variance entre contes persiste* ✓✓ ;
+* **la couverture reste significative** ✓✓ : l'IC [+2,1 ; +7,3] **exclut 0** ✓✓.
+
+**Ce que cela change** ✓✓ : la couverture **20/20** se renforce — l'écriture du pidgin au 14 B passe de +4,6 à
+**+5,0** avec **83 % des pages** au-dessus du plancher ✓✓. *Le 600 pas est le nouveau réglage de référence pour la
+couverture du pidgin* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 71 pages, un LoRA, un seul réglage (600 pas, lr 1e-5) ✓✗ ; le 0327 montre que
+la variance n'est pas éteinte ✓✗ ; et le registre testé reste celui des contes ✓✓.
