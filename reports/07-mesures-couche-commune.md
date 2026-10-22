@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (116 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (117 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4322,3 +4322,35 @@ pas la phrase suivante), et non une carte apprise après coup* ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : un seul roman, 8 phrases, un GRU de 256 ✓✗ ; un objectif **multi-pas** ou un
 état entraîné **avec la tâche** pourraient mieux faire — mais la mesure 109 (latent entraîné avec la tâche) **collapse**
 déjà en point fixe ✓✗ ; et le test de contenu à 8 candidats reste dur ✓✗.
+
+---
+
+## Mesure 117 — LE PLAN EST UN **MINCE RÉSIDU** : un code de 32 dimensions reconstruit la trajectoire à 0,86-0,89, contre 0,83-0,88 pour la **moyenne**
+
+**La question** ✓✓. La trajectoire d'une série (8 états) vit-elle dans un **espace de faible dimension** partagé —
+autrement dit, un **code de plan** existe-t-il, avant même de savoir le prédire ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/plan_code.py` ✓) : les **307 séries** de 8 phrases (Verne FR, 3 B), 214/93 ✓ ; un
+auto-encodeur **GRU** (8 états → code de **32** → décodeur positionnel), 2 graines, 300 époques ✓ ; reconstruction
+par **cosinus** sur les séries **tenues à part**, baseline = la **moyenne** des états, contrôle = **code mélangé**
+entre séries ✓✓.
+
+**Les résultats** ✓ :
+
+| couche | reconstruction | code mélangé | baseline moyenne |
+|---|---:|---:|---:|
+| 12 | 0,853-0,859 | 0,769-0,773 | 0,827 |
+| 18 | 0,860-0,864 | 0,799-0,801 | 0,838 |
+| 24 | 0,893-0,894 | 0,851-0,852 | 0,875 |
+
+* **LE CODE PORTE UN SIGNAL PROPRE** ✓✗ : +0,06 à +0,09 au-dessus du **code mélangé** ✓✗ ;
+* **MAIS IL NE DÉPASSE PRESQUE PAS LA MOYENNE** ✗✗ : +0,02 à +0,03 seulement ✓✗ — *la trajectoire est dominée par
+  l'état moyen ; le plan est un **résidu*** ✗✗ ;
+* **LE CODE NE COLLAPSE PAS** ✓✗ (écart-type 1,04-1,27) : le décodeur l'utilise, mais pour peu de chose ✓✗.
+
+**Ce que cela change** ✗✗ : le plan n'est pas un **objet de faible dimension** lisible dans les états figés ✓✗ ;
+*il faut l'entraîner dans le modèle — et le critère de succès devra être le **gain sur la moyenne**, pas la
+reconstruction absolue* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un code plus grand, un décodeur plus riche, un autre corpus ✓✗ ; mais les
+mesures 113-116 (pas, contenu) et 117 (compression) **convergent** : les états figés portent la phrase, pas le plan ✓✗.

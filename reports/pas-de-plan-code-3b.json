@@ -1,0 +1,54 @@
+{
+ "etats": "data/composition-verne-plan-etats.npz",
+ "n_series": 307,
+ "n_series_train": 214,
+ "n_series_test": 93,
+ "par_serie": 8,
+ "code": 32,
+ "graines": 2,
+ "epochs": 300,
+ "resultats": [
+  {
+   "couche": 12,
+   "reconstruction": [
+    0.8525,
+    0.8594
+   ],
+   "reconstruction_moyenne": 0.8559,
+   "reconstruction_melangee": [
+    0.7686,
+    0.7725
+   ],
+   "cos_moyenne_baseline": 0.8272,
+   "code_std": 1.04
+  },
+  {
+   "couche": 18,
+   "reconstruction": [
+    0.8603,
+    0.8641
+   ],
+   "reconstruction_moyenne": 0.8622,
+   "reconstruction_melangee": [
+    0.8007,
+    0.7986
+   ],
+   "cos_moyenne_baseline": 0.8375,
+   "code_std": 1.1374
+  },
+  {
+   "couche": 24,
+   "reconstruction": [
+    0.8927,
+    0.8935
+   ],
+   "reconstruction_moyenne": 0.8931,
+   "reconstruction_melangee": [
+    0.8508,
+    0.8517
+   ],
+   "cos_moyenne_baseline": 0.8751,
+   "code_std": 1.2661
+  }
+ ]
+}

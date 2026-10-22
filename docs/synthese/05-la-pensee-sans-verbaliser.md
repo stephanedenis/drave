@@ -71,12 +71,14 @@ de la série.*
 ## Ce qui reste à construire
 
 Une **dynamique qui avance d'un pas à la fois** suppose un état qui porte le **plan** de la série, pas seulement la
-phrase courante. Deux mesures l'ont tranché : l'état d'une **phrase** ne porte pas la suivante, même avec
-**1 323 transitions** et un MLP (mesure 115) ; et le **contexte** (moyenne du préfixe + ridge, GRU) ne porte pas le
-**contenu** de la suite — le retrieval dans la série monte à 0,40, mais le test de contenu reste à **0,14** contre
-0,125 (mesure 116) ✓✗. *Le plan n'est pas extractible des états figés : il faut l'entraîner dans le modèle.* Trois
-chantiers, dans l'ordre : **(1)** entraîner un **objectif de plan** (prédire la trajectoire, pas la phrase suivante)
-dans le modèle ; **(2)** mesurer s'il rend la **trajectoire** prédictible ; **(3)** seulement ensuite, la
-**dynamique** (perte multi-pas, reconstruction, variété). L'outillage est en place :
+phrase courante. Trois mesures l'ont tranché : l'état d'une **phrase** ne porte pas la suivante, même avec
+**1 323 transitions** et un MLP (mesure 115) ; le **contexte** (moyenne du préfixe + ridge, GRU) ne porte pas le
+**contenu** de la suite — 0,14 contre 0,125 (mesure 116) ✓✗ ; et un **code de 32 dimensions** reconstruit la
+trajectoire à 0,86-0,89, à peine au-dessus de la **moyenne** (0,83-0,88) : le plan est un **mince résidu** (mesure 117)
+✗✗. *Le plan n'est pas extractible des états figés — il n'y est même pas un objet de faible dimension : il faut
+l'entraîner dans le modèle.* Trois chantiers, dans l'ordre : **(1)** entraîner un **objectif de plan** (prédire la
+trajectoire, pas la phrase suivante) dans le modèle ; **(2)** mesurer s'il rend la **trajectoire** prédictible, en
+prenant le **gain sur la moyenne** comme critère ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas,
+reconstruction, variété). L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py` et
 `tools/composition_latente.py`.
