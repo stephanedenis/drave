@@ -44,6 +44,7 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-5)
     ap.add_argument("--sortie", default="reports/composition-latente.json")
     ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les deux cartes (14 B)")
+    ap.add_argument("--penalite", action="store_true", help="pénalité de point fixe : le pas 1 préfère h_1 à h_2/h_3")
     a = ap.parse_args()
     from transformers import AutoModelForCausalLM, AutoTokenizer
     # données : les mêmes séries que la mesure 82 (Verne FR/EN, 1:1)
@@ -104,6 +105,11 @@ def main() -> int:
         for k in (1, 2, 3):
             z = modele_pas(z)
             perte = perte + (1 - (norm(z) * norm(cibles[k:k+1])).sum()).mean()
+        if a.penalite:
+            z1 = modele_pas(h[0:1])
+            for k in (2, 3):
+                perte = perte + torch.relu(0.2 + (norm(z1) * norm(cibles[k:k+1])).sum()
+                                           - (norm(z1) * norm(cibles[1:2])).sum())
         opt.zero_grad(); perte.backward()
         torch.nn.utils.clip_grad_norm_(list(model.parameters()) + list(modele_pas.parameters()), 1.0)
         opt.step()

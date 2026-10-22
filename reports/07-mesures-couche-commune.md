@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (109 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (110 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4058,3 +4058,36 @@ fixe* ✓✓. Les suites possibles : une perte qui **pénalise le point fixe** (
 
 **Ce que ce résultat ne dit pas** ✗ : 15 séries de test, 400 pas, un LoRA, deux modèles ✓✗ ; une autre perte ou une
 contrainte de variété pourraient empêcher le raccourci ✓✓ ; et le retrieval à 4 candidats est un test dur ✓✓.
+
+## Mesure 110 — LA PÉNALITÉ DE POINT FIXE NE DÉBLOQUE PAS LE PAS 1 (0,00) : l'entraînement joint **collapse les états**, le pas reste trivial
+
+**La question** ✓✓. La mesure 109 a montré que le latent entraîné **collapse** (le pas 3 monte, le pas 1 tombe à
+0,00) ✗✗. *Une perte qui **pénalise le point fixe** — le pas 1 doit préférer h₁ à h₂/h₃ — casse-t-elle le
+raccourci ?* ✓✓
+
+**Le dispositif** ✓✓ : la perte contrastive (la marge 0,2 : cos(z₁, h₁) ≥ cos(z₁, h₂/h₃) + 0,2) ajoutée à la perte
+multi-pas ; les 3 B (couche 18) et 7 B (couche 14) ; 400 pas ; le même test ✓✓.
+
+| modèle (400 pas) | ret pas 1 | ret pas 2 | ret pas 3 |
+|---|---:|---:|---:|
+| 3 B, sans pénalité (mesure 109) | 0,00 | 0,13 | **0,60** |
+| **3 B, avec pénalité** | **0,00** | 0,20 | 0,47 |
+| 7 B, sans pénalité | 0,00 | 0,13 | **0,67** |
+| **7 B, avec pénalité** | **0,00** | 0,13 | 0,67 |
+
+* **LE PAS 1 RESTE À 0,00** ✗✗ : la pénalité contrastive ne suffit pas ✓✗ — *le pas F **saute toujours** au dernier
+  état* ✓✗ ;
+* **le pas 3 perd même au 3 B** ✗✗ : 0,60 → 0,47 ✓✗ — *la pénalité **dégrade** le seul pas qui marchait* ✓✗ ;
+* **le diagnostic est le vrai résultat** ✓✓ : l'entraînement **joint** (le LoRA + le F) laisse le modèle
+  **rapprocher les états** (le LoRA peut écraser la variété des h) ; le F devient **trivial** ✓✓ — *le problème
+  n'est pas la perte, c'est la **liberation du modèle*** ✓✓ ;
+* **les états FIGÉS restent la meilleure base** ✓✓ : la récurrence sur les états figés (mesure 108) donne
+  **0,73/0,27/0,27**, le meilleur profil ✓✓.
+
+**Ce que cela change** ✗✓ : l'étage 2 garde sa dynamique **bornée** ✓✓ ; *la piste « état latent entraîné avec la
+tâche » est **close** : le modèle libre collapse les états* ✓✓. Les suites : un F **sur les états figés** avec une
+meilleure régularisation, ou une **architecture** où l'état est contraint (la variété) ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, 400 pas, une marge 0,2 ✓✗ ; une contrainte de variété
+explicite (un terme de décorrélation des h) pourrait empêcher l'écrasement ✓✓ ; et le retrieval à 4 candidats est
+un test dur ✓✓.
