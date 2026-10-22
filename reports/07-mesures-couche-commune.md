@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (147 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (148 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5332,3 +5332,33 @@ d'in-langue.* ✓✓
 **Ce que ce résultat ne dit pas** ✗ : 800 pas, un LoRA d'attention, un corpus synthétique ✓✗ ; la sonde (74 %) reste
 sous le FR (78 %) et sous le figé ponté (81 %) ✓✗ ; et le coût (une passe FR + une passe EN par pas) n'est pas
 compté ✓✗.
+
+---
+
+## Mesure 148 — LE DIALOGUE SPONTANÉ (OPENSUBTITLES) : marge **+32,3** (EN→FR) et **+33,6** (FR→EN) — le plus dur après le littéraire
+
+**La question** ✓✓. Le registre **dialogue spontané** manquait ; OpenSubtitles (sous-titres de films, **traductions
+humaines**) le mesure ✓✓.
+
+**Le dispositif** ✓✓ : **1000 paires** filtrées (20-200 caractères, marqueurs de langue parlée, similarité < 0,4,
+sans annotations) ✓, 400 échantillonnées ✓ ; Qwen2.5-**7B**, deux sens, chrF + plancher + marge + IC bootstrap ✓✓.
+
+**Les résultats** ✓ (le plancher est la référence ; pas de hasard) :
+
+| sens | chrF | plancher | **marge** | IC 95 % |
+|---|---:|---:|---:|---:|
+| EN→FR | 49,5 | 17,2 | **+32,3** | [30,4 ; 34,2] |
+| FR→EN | 50,8 | 17,2 | **+33,6** | [31,7 ; 35,4] |
+
+* **LE DIALOGUE EST LE PLUS DUR APRÈS LE LITTÉRAIRE** ✓✗ : +32,3 / +33,6, contre littéraire +25,9, juridique +35,3,
+  presse +38,6, parlé préparé +39,8 / +40,7, technique miné +41,0 / +46,0 ✓✗ ;
+* **LE PLANCHER EST LE PLUS BAS** ✓✗ : 17,2 — *les sous-titres sont libres et idiomatiques* ✓✗ ;
+* **LES DEUX SENS SONT COHÉRENTS** ✓✓ : +32,3 / +33,6 ✓✓.
+
+**Ce que cela change** ✓✓ : la carte des **six registres** est complète : juridique, presse, littéraire, parlé
+préparé, technique (miné) et **dialogue** ✓✓. *Le dialogue est le plus dur après le littéraire, et de loin le plus
+libre.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : les sous-titres sont du parlé **écrit et contraint** (longueur, synchronisation),
+pas de la conversation réelle ✓✗ ; 400 paires, un modèle ✓✗ ; et les traductions de sous-titres sont parfois très
+libres ✓✗.
