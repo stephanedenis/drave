@@ -159,6 +159,11 @@ ACP 256) porte le raisonnement d'une langue à l'autre au niveau de son **in-lan
 92 %), mais ce code est plus faible que l'espace plein (0,306 contre 0,653) : *l'alignement est supervisé et réel ;
 le problème est la **capacité**, pas l'alignement.*
 
+**Mesure 140 — la CCA à 256 dims récupère.** Le code CCA de 256 dimensions donne **0,57-1,00** (contre 0,28-1,00
+à 64 dims) : la capacité était le problème ; le transfert reste à 68-76 % de l'in-langue, et le pont poolé garde
+l'avantage à 6 entités (0,81). *Deux petites structures, deux compromis : le pont garde la performance, la CCA donne
+un code commun.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

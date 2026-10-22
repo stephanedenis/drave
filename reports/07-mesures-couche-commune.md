@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (139 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (140 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5083,3 +5083,34 @@ performance ; un code plus grand (k = 256) ou une CCA pleine dimension reste à 
 
 **Ce que ce résultat ne dit pas** ✗ : CCA sur une ACP 256 (pas la pleine dimension), k = 64 ✓✗ ; un corpus, un 3 B,
 une couche ✓✗ ; et le code CCA n'a pas été testé avec le pont (il n'en a pas besoin par construction) ✓✗.
+
+---
+
+## Mesure 140 — LA CCA À **256 DIMS** RÉCUPÈRE : **0,57-1,00**, contre 0,28-1,00 à 64 dims — la capacité était le problème
+
+**La question** ✓✓. La mesure 139 a montré qu'un code CCA de **64 dims** perd l'information ; à **256 dims**, le
+transfert retrouve-t-il le niveau du pont ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus, ACP 256, **CCA k = 256** (le code complet de l'ACP) ✓ ; sonde FR, test EN ✓ ;
+contrôle : CCA sur paires mélangées ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; in-langue = sonde FR testée sur le code FR) :
+
+| longueur | FR→FR (code 256) | **CCA 256** | CCA 64 (mesure 139) |
+|---|---:|---:|---:|
+| 2 | 1,000 | **1,000** | 1,000 |
+| 3 | 1,000 | **0,984** | 0,504 |
+| 4 | 0,979 | **0,743** | 0,410 |
+| 5 | 0,945 | **0,693** | 0,339 |
+| 6 | 0,843 | **0,570** | 0,281 |
+
+* **LA CAPACITÉ ÉTAIT LE PROBLÈME** ✓✓ : 0,743 / 0,693 / 0,570 (L4-L6) contre 0,410 / 0,339 / 0,281 à 64 dims ✓✓ ;
+* **LE TRANSFERT RESTE À 68-76 % DE L'IN-LANGUE** ✓✗ : 0,570 contre 0,843 (L6), 0,743 contre 0,979 (L4) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,04-0,06) ✓✓.
+
+**Ce que cela change** ✓✓ : un code partagé **CCA de 256 dims** est une alternative au pont (0,57-1,00) ✓✓ ; mais le
+**pont poolé** reste meilleur à 6 entités (0,810) ✓✗, et la CCA perd 25-30 % de l'in-langue ✓✗. *Deux petites
+structures, deux compromis : le pont garde la performance, la CCA donne un code commun.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : CCA sur l'ACP 256 (pas la pleine dimension) ✓✗ ; un corpus, un 3 B, une couche
+✓✗ ; et le pont et la CCA n'ont pas été **combinés** ✓✗.

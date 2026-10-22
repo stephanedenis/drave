@@ -77,6 +77,7 @@
 - [`pont-raisonnement-7b.json`](pont-raisonnement-7b.json) — le pont au 7 B (mesure 137 : 1,00 / 1,00 / 0,95 / 0,87 / 0,81)
 - [`code-partage-64-3b.json`](code-partage-64-3b.json) · [`code-partage-256-3b.json`](code-partage-256-3b.json) — le code partagé non supervisé (mesure 138 : 64 dims 0,14-0,98 ; 256 dims 0,34-1,00)
 - [`cca-raisonnement-3b.json`](cca-raisonnement-3b.json) — le code partagé CCA (mesure 139 : 0,28-1,00 ; le transfert rejoint l'in-langue du code)
+- [`cca-256-3b.json`](cca-256-3b.json) — la CCA à 256 dims (mesure 140 : 0,57-1,00 ; la capacité était le problème)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
