@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (125 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (126 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4629,3 +4629,39 @@ suivante ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : un corpus **synthétique** (20 noms, une seule relation), un 3 B, une couche
 (18) ✓✗ ; la sonde est linéaire (un pont non linéaire pourrait transférer) ✓✗ ; et la précision in-langue peut
 s'appuyer sur les noms présents dans les prémisses — c'est la **sélection du maximum** qui est mesurée ✓✗.
+
+---
+
+## Mesure 126 — UN PONT LINÉAIRE REND LE RAISONNEMENT INDÉPENDANT DE LA LANGUE : la sonde FR lit l'état EN ponté à **1,00 / 0,91 / 0,68 / 0,52 / 0,46** (2 à 6 entités), contre 0,04-0,08 sans pont
+
+**La question** ✓✓. Le raisonnement transitif est dans l'état (mesure 125), mais la géométrie n'est pas partagée
+(sonde FR sur état EN : au hasard). Un **pont linéaire** EN→FR appris sur des chaînes **appariées** partage-t-il
+cette géométrie ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/corpus_raisonnement_paires.py`, `tools/pont_raisonnement.py` ✓) : **2000 chaînes
+appariées** FR/EN (mêmes entités, même ordre, même mélange), 70/30 **par chaîne** ✓ ; états de la couche 18 ✓ ; pont
+ridge EN→FR (λ validé sur 10 % des paires) ✓ ; sonde FR (mesure 125) appliquée aux états EN pontés ✓ ; **contrôle** :
+pont appris sur des paires mélangées ✓✓.
+
+**Les résultats** ✓ (hasard **5 %**) :
+
+| longueur | FR→FR | EN→EN | FR sur EN **sans pont** | FR sur EN **ponté** | pont mélangé |
+|---|---:|---:|---:|---:|---:|
+| 2 | 1,000 | 1,000 | 0,069 | **1,000** | 0,050 |
+| 3 | 1,000 | 1,000 | 0,057 | **0,911** | 0,065 |
+| 4 | 0,944 | 0,965 | 0,049 | **0,681** | 0,062 |
+| 5 | 0,827 | 0,827 | 0,079 | **0,520** | 0,047 |
+| 6 | 0,653 | 0,711 | 0,041 | **0,463** | 0,083 |
+
+* **LE PONT RÉCUPÈRE LE RAISONNEMENT** ✓✓ : de 1,00 à 0,46 selon la longueur, contre 0,04-0,08 sans pont ✓✓ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ : 0,05-0,08 — *l'alignement est réel, pas un effet du pont en soi* ✓✓ ;
+* **LA PERTE CROÎT AVEC LA LONGUEUR** ✓✗ : 100 %, 91 %, **72 %**, **63 %**, **71 %** du niveau in-langue ✓✗.
+
+**Ce que cela change** ✓✓ : la géométrie du raisonnement est **alignable par une petite structure** — un pont
+linéaire — et non par un modèle plus gros ✓✓. *La tête bien faite : un état qui compose (mesure 125) + un pont qui
+le rend commun (mesure 126).* Le raisonnement devient **indépendant de la langue** à 2-3 entités, et le reste à
+63-72 % au-delà ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un corpus **synthétique** (une relation, 20 noms), deux langues, un 3 B ✓✗ ;
+le pont est **linéaire** (un pont non linéaire, ou une sonde non linéaire, pourrait fermer la perte aux longues
+chaînes) ✓✗ ; et le pont est appris **avec les mêmes chaînes** que la sonde (même découpage) ✓✗.

@@ -95,6 +95,12 @@ et un état de plan **récurrent**.
 0,84 / 0,78 / 0,51** (FR) et **1,00 / 0,98 / 0,85 / 0,52 / 0,53** (EN) pour 2 à 6 entités, contre **5 %** de hasard ;
 le contrôle à étiquettes mélangées est au hasard. Mais le **transfert FR→EN est au hasard** (0,02-0,09) : le
 raisonnement est là, sa **géométrie** ne l'est pas — il faut un pont d'alignement. *La tête bien faite n'est pas la
-grosse tête : c'est un état qui compose, et un pont qui le rend indépendant de la langue.* L'outillage est en place :
+grosse tête : c'est un état qui compose, et un pont qui le rend indépendant de la langue.*
+
+**Mesure 126 — un pont linéaire rend le raisonnement indépendant de la langue.** Sur **2000 chaînes appariées**
+FR/EN, un pont ridge EN→FR appris sur les états permet à la sonde FR de lire l'état EN : **1,00 / 0,91 / 0,68 /
+0,52 / 0,46** pour 2 à 6 entités, contre **0,04-0,08** sans pont ; le contrôle (paires mélangées) reste au hasard.
+*La géométrie est alignable par une petite structure — la tête bien faite, c'est un état qui compose + un pont qui
+le rend commun.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
