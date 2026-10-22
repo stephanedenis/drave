@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (133 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (134 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4889,3 +4889,36 @@ autre famille et d'une autre écriture ✓✓. *Le pont est un mécanisme géné
 
 **Ce que ce résultat ne dit pas** ✗ : les **noms** restent en écriture latine (mélange d'écritures) ✓✗ ; un corpus
 synthétique, un 3 B, une relation ✓✗ ; et le **mandarin** reste à tester ✓✗.
+
+---
+
+## Mesure 134 — LA GÉOMÉTRIE N'EST PAS **PARTAGÉE ENTRE TÂCHES** : un pont appris sur le raisonnement donne **0,125** (le hasard) sur le plan
+
+**La question** ✓✓. Le pont EN→FR qui aligne le **raisonnement** (mesures 126-133) aligne-t-il aussi l'**état de
+plan** — ou chaque tâche a-t-elle sa géométrie ? ✓✓
+
+**Le dispositif** ✓✓ : un pont EN→FR appris sur les **2000 paires de raisonnement** (texte brut, couche 18) ✓ ;
+appliqué aux **prompts de plan** (307 séries Verne, 4 phrases) ✓ ; retrieval de la 5ᵉ phrase parmi les 8 de la série
+(hasard **12,5 %**) ✓ ; contrôle : pont appris sur des paires de raisonnement **mélangées** ✓✓.
+
+**Les résultats** ✓ (88 items) :
+
+| condition | accuracy |
+|---|---:|
+| FR→FR | 0,204 |
+| EN→EN | 0,216 |
+| EN→FR sans pont | 0,250 |
+| EN→FR **pont croisé** (raisonnement) | **0,125** |
+| pont mélangé | 0,125 |
+
+* **LE PONT CROISÉ EST AU HASARD** ✗✗ : 0,125 exactement — *la géométrie du raisonnement ne couvre pas le plan* ✗✗ ;
+* **CE N'EST PAS LE PONT QUI EST MAUVAIS** ✓✗ : le même pont récupère 0,46-1,00 sur le raisonnement (mesures
+  126-133) ✓✗ ;
+* **LE PLAN A SA PROPRE GÉOMÉTRIE** ✗✗ — *et un pont appris sur le plan dégrade aussi (mesure 132)* ✗✗.
+
+**Ce que cela change** ✗✓ : les tâches de l'étage 2 **n'ont pas une géométrie commune** : un pont par tâche, ou un
+plan entraîné dans le modèle (mesures 119-124) ✓✗. *La « tête bien faite » n'est pas un espace unique : c'est un
+état qui compose, plus **des ponts locaux**.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont **multi-tâches** (entraîné sur
+les deux) pourrait fonctionner ✓✗ ; et le plan a un retrieval faible (0,2), ce qui limite la sensibilité ✓✗.

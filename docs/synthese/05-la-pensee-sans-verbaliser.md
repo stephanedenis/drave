@@ -129,6 +129,12 @@ donne **0,148**, contre **0,250** sans pont (hasard 0,125) : il aligne le **rais
 
 **Mesure 133 — l'arabe.** Le pont tient pour une langue **non indo-européenne** et d'une autre écriture :
 **1,00 / 0,90 / 0,73 / 0,48 / 0,41** (pont AR→FR), contre 0,04-0,08 sans pont. *L'alignement n'est pas un effet de
-voisinage.* L'outillage est en place :
+voisinage.*
+
+**Mesure 134 — la géométrie n'est pas partagée entre tâches.** Un pont appris sur le **raisonnement** donne
+**0,125** (le hasard) sur le **plan** : les tâches de l'étage 2 ont des géométries **locales** ; il faut un pont par
+tâche, ou un plan entraîné dans le modèle.
+
+L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
