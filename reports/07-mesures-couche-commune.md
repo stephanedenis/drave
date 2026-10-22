@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (157 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (158 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5633,3 +5633,34 @@ profondeur, et le pont suit ✓✓. *La pente, pas la falaise.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 3 B, une relation, 400 chaînes par longueur ✓✗ ; et le 14 B est **en cours**
 pour voir si la pente s'aplatit ✓✓.
+
+---
+
+## Mesure 158 — LA PROFONDEUR AU **14 B** : la pente s'aplatit — **0,966 à 8**, **0,862 à 10**, **0,695 à 12** (3 B : 0,622 / 0,561 / 0,469)
+
+**La question** ✓✓. Le 14 B tient-il la profondeur mieux que le 3 B ? ✓✓
+
+**Le dispositif** ✓✓ : le corpus de profondeur (4 à 12 entités, 400 chaînes par longueur), **14 B** réparti sur les
+deux GPU, pont et sonde poolés, contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; pont) :
+
+| entités | 3 B (157) | **14 B (158)** | in-langue 14 B |
+|---|---:|---:|---:|
+| 4 | 0,950 | **1,000** | 1,000 |
+| 6 | 0,793 | **0,992** | 0,992 |
+| 8 | 0,622 | **0,966** | 0,958 |
+| 10 | 0,561 | **0,862** | 0,954 |
+| 12 | 0,469 | **0,695** | 0,836 |
+
+* **LE 14 B TIENT MIEUX** ✓✓ : 0,695 à 12 entités (3 B : 0,469) ✓✓ ;
+* **L'IN-LANGUE AUSSI** ✓✓ : 0,836 (3 B : 0,711) ✓✓ ;
+* **LA PENTE S'APLATIT** ✓✗ : 1,00 → 0,84 in-langue (3 B : 1,00 → 0,71) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,03-0,07) ✓✓.
+
+**Ce que cela change** ✓✓ : la **profondeur** dépend de la taille : le 14 B tient presque parfaitement jusqu'à
+10 entités et reste à 0,70 à 12 ✓✓. *La petite structure (le pont) suit, mais c'est la représentation du modèle qui
+donne la profondeur.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 14 B, une relation, 400 chaînes par longueur ✓✗ ; au-delà de 12 entités, et le
+32 B, restent à tester ✓✗.

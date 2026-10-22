@@ -95,6 +95,7 @@
 - [`plan-fr-seul-3b.json`](plan-fr-seul-3b.json) — le contrôle FR seul (mesure 155 : EN→FR 0,364 identique, le bilinguisme n'ajoute rien)
 - [`plan-contraste-3b.json`](plan-contraste-3b.json) — le plan avec contraste explicite (mesure 156 : EN→FR 0,386, +2 points, la géométrie résiste)
 - [`pont-profondeur-3b.json`](pont-profondeur-3b.json) — la profondeur au 3 B (mesure 157 : 0,95 à 4 entités → 0,47 à 12, une pente)
+- [`pont-profondeur-14b.json`](pont-profondeur-14b.json) — la profondeur au 14 B (mesure 158 : 0,966 à 8, 0,862 à 10, 0,695 à 12, la pente s'aplatit)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

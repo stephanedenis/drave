@@ -223,6 +223,9 @@ la géométrie du plan est **ancrée dans la langue** ; son transfert apparent v
 **Mesure 157 — la profondeur.** Au 3 B, le pont tient jusqu'à **12 entités** (0,95 à 4 → **0,47** à 12) : pas de
 mur, une **pente** qui suit l'in-langue. *La pente, pas la falaise.*
 
+**Mesure 158 — la profondeur au 14 B.** La pente **s'aplatit** : 0,966 à 8, 0,862 à 10, **0,695 à 12** (3 B :
+0,622 / 0,561 / 0,469) ; l'in-langue 0,836. *La profondeur dépend de la taille ; la petite structure (le pont) suit.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
