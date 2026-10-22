@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (148 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (149 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5362,3 +5362,34 @@ libre.* ✓✓
 **Ce que ce résultat ne dit pas** ✗ : les sous-titres sont du parlé **écrit et contraint** (longueur, synchronisation),
 pas de la conversation réelle ✓✗ ; 400 paires, un modèle ✓✗ ; et les traductions de sous-titres sont parfois très
 libres ✓✗.
+
+---
+
+## Mesure 149 — LE CONTRÔLE DU CONTRASTE : avec des paires **mélangées**, la sonde FR→EN monte quand même à **0,505** (paires correctes : 0,742) — l'alignement vient surtout de l'entraînement **bilingue**
+
+**La question** ✓✓. Le **0,742** de la mesure 147 vient-il de l'**appariement correct** FR↔EN, ou de l'entraînement
+**bilingue** en général ? ✓✓
+
+**Le dispositif** ✓✓ : le **même** entraînement que 147 (batch 8, poids 2, 800 pas, InfoNCE) ✓, mais l'InfoNCE
+apparie des chaînes **différentes** (contrôle négatif) ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| mesure | figé | paires mélangées (149) | paires correctes (147) |
+|---|---:|---:|---:|
+| sonde FR→EN | 0,058 | **0,505** | **0,742** |
+| sonde FR→FR | 0,987 | 0,834 | 0,776 |
+| tête FR / EN | — | 0,781 / 0,787 | 0,737 / 0,734 |
+| pont EN→FR | 0,810 | 0,821 | 0,779 |
+
+* **LE CONTRÔLE ALIGNE AUSSI** ✓✗ : **0,505** (contre 0,058 figé) — *la supervision bilingue suffit en grande
+  partie* ✓✗ ;
+* **LE BON APPARIEMENT AJOUTE +24 POINTS** ✓✓ : 0,742 contre 0,505 ✓✓ ;
+* **L'IN-LANGUE EST MEILLEURE AVEC LE CONTRÔLE** ✓✗ : 0,834 contre 0,776 — le contraste correct **coûte** en FR ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement n'est pas un effet du **seul** contraste : l'entraînement **bilingue** (même
+avec des paires fausses) aligne déjà à 0,505, et le **bon appariement améliore** à 0,742 ✓✓. *La conclusion de 147
+doit se lire ainsi : le contraste correct ajoute, mais il n'est pas la cause unique.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : le contrôle n'est pas au hasard ; il manque un contrôle **sans contraste**
+(classification bilingue seule, batch 8, 800 pas) pour séparer les deux effets ✓✗ — *c'est la mesure suivante* ✓✓.

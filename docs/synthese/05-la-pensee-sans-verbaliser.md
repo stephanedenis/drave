@@ -187,6 +187,10 @@ FR→EN passe de 0,058 (figé) à **0,742**, la tête à **0,734** en EN, et le 
 (0,776 contre 0,987). *Le raisonnement devient indépendant de la langue **dans le modèle**, sans pont — à condition
 de fournir des négatifs et un poids suffisant.*
 
+**Mesure 149 — le contrôle du contraste.** Avec des paires **mélangées**, la sonde FR→EN monte quand même à
+**0,505** (paires correctes : 0,742) : l'entraînement **bilingue** aligne déjà en grande partie, et le bon appariement
+ajoute **+24 points**. *Le contraste correct n'est pas la cause unique de l'alignement.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

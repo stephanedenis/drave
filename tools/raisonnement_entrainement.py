@@ -54,6 +54,7 @@ def principal() -> int:
     ap.add_argument("--echauffement", type=int, default=100, help="pas de tête seule avant le LoRA")
     ap.add_argument("--multilingue", action="store_true", help="alterner FR et EN à chaque pas")
     ap.add_argument("--contrastif", action="store_true", help="ajouter une perte InfoNCE entre les états FR et EN de la même chaîne")
+    ap.add_argument("--melange-contrastif", action="store_true", help="contrôle : apparier des chaînes différentes dans l InfoNCE")
     ap.add_argument("--tau", type=float, default=0.07)
     ap.add_argument("--poids", type=float, default=1.0)
     ap.add_argument("--graine", type=int, default=1234)
@@ -109,6 +110,8 @@ def principal() -> int:
                 hs_en = model(**enc_en, output_hidden_states=True, use_cache=False).hidden_states
             ide = enc_en["attention_mask"].sum(1) - 1
             z_en = hs_en[a.couche][torch.arange(len(ide)), ide].float()
+            if a.melange_contrastif:
+                z_en = z_en[torch.randperm(len(items), device="cuda")]
             zn = nn.functional.normalize(z, dim=1); zen = nn.functional.normalize(z_en, dim=1)
             lc = zn @ zen.T / a.tau
             cible = torch.arange(len(items), device="cuda")

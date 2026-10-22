@@ -86,6 +86,7 @@
 - [`raisonnement-contrastif-3b.json`](raisonnement-contrastif-3b.json) — l'entraînement contrastif FR/EN (mesure 146 : la sonde EN reste à 0,042, le pont à 0,466)
 - [`raisonnement-contrastif-fort-3b.json`](raisonnement-contrastif-fort-3b.json) — le contraste fort (mesure 147 : sonde FR→EN 0,742, tête 0,734, pont 0,779)
 - [`registre-dialogue-7b.json`](registre-dialogue-7b.json) — le dialogue spontané (mesure 148 : +32,3 / +33,6)
+- [`raisonnement-contrastif-melange-3b.json`](raisonnement-contrastif-melange-3b.json) — le contrôle du contraste (mesure 149 : paires mélangées, sonde EN 0,505 contre 0,742)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

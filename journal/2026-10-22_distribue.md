@@ -18,7 +18,7 @@
 | 16:39 | `f36d4c3a` | MESURE 143 — LE REGISTRE PARLE (TED2020) : marge +39,8 (EN->FR) et +40,7 (FR->EN) au 7 B, +37,7/+38,3 au 3 B, plancher 23,7-25,1. Le parle prepare passe au-dessus de la presse (+38,6) ; seul le dialogue spontane reste a couvrir | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
 | 16:45 | `52cf7041` | MESURE 144 — L'ENTRAINEMENT MULTILINGUE N'ALIGNE PAS NON PLUS : sonde FR->EN 0,042 (hasard 5%), pont 0,451 contre 0,810 fige ; la supervision de la tache, meme bilingue, n'apprend pas l'alignement. Il faut un objectif contrastif entre paires FR/EN | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+5) |
 | 17:00 | `3ecb5f11` | MESURE 145 — LE REGISTRE TECHNIQUE (WIKIMATRIX MINE) : marge +41,0 (EN->FR) et +46,0 (FR->EN) au 7 B, plancher 32,1/34,2 ; les plus hautes des cinq registres, mais la reference est minee (plancher haut, chrF possiblement gonfle). La carte couvre juridique, presse, litteraire, parle prepare et technique | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
-| 17:26 | `e1f444f0` | MESURE 148 — LE DIALOGUE SPONTANE (OPENSUBTITLES) : marge +32,3 (EN->FR) et +33,6 (FR->EN) au 7 B, plancher 17,2 (le plus bas) ; le dialogue est le plus dur apres le litteraire. La carte des six registres est complete | `2026-10-22.md`, `2026-10-22_modele.md`, `THEMES.md` (+4) |
+| 17:26 | `2d10c895` | MESURE 148 — LE DIALOGUE SPONTANE (OPENSUBTITLES) : marge +32,3 (EN->FR) et +33,6 (FR->EN) au 7 B, plancher 17,2 (le plus bas) ; le dialogue est le plus dur apres le litteraire. La carte des six registres est complete | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
 
 ## Chiffres du jour
 
