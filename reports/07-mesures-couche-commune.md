@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (151 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (153 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5454,3 +5454,61 @@ d'exemples.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : quatre points seulement, un corpus synthétique, un 3 B ✓✗ ; la saturation au-delà
 de 800 pas (1 600) n'est pas mesurée ✓✗.
+
+---
+
+## Mesure 152 — LA SATURATION : à **1 600 pas**, la sonde FR→EN atteint **0,753** (800 : 0,656) — le gain ralentit et l'in-langue plafonne
+
+**La question** ✓✓. L'alignement continue-t-il de monter au-delà de 800 pas, ou **sature-t-il** ? ✓✓
+
+**Le dispositif** ✓✓ : le même entraînement bilingue, **1 600 pas**, batch 8, **adaptateur sauvegardé** ✓ ; comparaison
+avec 800 pas (mesure 150) ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| pas | sonde FR→EN | sonde FR→FR | tête FR / EN |
+|---|---:|---:|---:|
+| 400 | 0,132 | 0,969 | 0,080 / 0,156 |
+| 800 | 0,656 | 0,826 | 0,810 / 0,805 |
+| **1 600** | **0,753** | **0,826** | 0,805 / 0,796 |
+
+* **L'ALIGNEMENT MONTE ENCORE** ✓✓ : 0,753 (800 : 0,656) — **+10 points** pour 800 pas de plus ✓✓ ;
+* **LE GAIN RALENTIT** ✓✗ : +0,52 de 400 à 800, **+0,10** de 800 à 1 600 ✓✗ ;
+* **L'IN-LANGUE PLAFONNE** ✓✗ : 0,826, comme à 800 (contre 0,987 figé) ✓✗ ;
+* **LE PONT RESTE** ✓✓ : 0,830 ✓✓.
+
+**Ce que cela change** ✓✓ : l'alignement **sature** autour de 0,75-0,8 ; le coût en français **plafonne** à 0,826
+(contre 0,987 figé) ✓✓. *Le compromis se stabilise : ~0,75 en transfert, ~0,83 en in-langue.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 1 600 pas, un corpus synthétique, un 3 B ✓✗ ; 3 200 pas pourrait encore monter
+✓✗ ; et l'adaptateur sauvegardé (`data/adaptateurs/bilingue-1600`, non versionné) permet le test du **plan** (mesure suivante) ✓✓.
+
+---
+
+## Mesure 153 — L'ALIGNEMENT DU RAISONNEMENT **NE TRANSFÈRE PAS AU PLAN** : avec l'adaptateur aligné, l'EN→FR du plan reste à **0,273** (figé : 0,250 ; hasard 0,125)
+
+**La question** ✓✓. L'adaptateur qui aligne le raisonnement (mesure 152) aligne-t-il aussi l'**état de plan** ? ✓✓
+
+**Le dispositif** ✓✓ : le modèle + **LoRA** (bilingue, 1 600 pas) ✓ ; test du plan (307 séries, 4 phrases → la 5ᵉ
+parmi 8) **sans pont** ✓ ; comparaison au modèle **figé** (mesure 132) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | figé (132) | **adaptateur aligné** |
+|---|---:|---:|
+| FR→FR | 0,204 | 0,216 |
+| EN→EN | 0,216 | 0,193 |
+| **EN→FR sans pont** | 0,250 | **0,273** |
+| pont EN→FR | 0,148 | 0,159 |
+
+* **L'EN→FR DU PLAN NE BOUGE PAS** ✗✗ : 0,273 contre 0,250 (hasard 0,125) — *l'alignement du raisonnement ne
+  transfère pas* ✗✗ ;
+* **LE PONT APPRIS SUR LE PLAN RESTE PIRE** ✗✗ : 0,159 contre 0,148 ✓✗ ;
+* **LE PLAN RESTE FAIBLE** ✓✗ : 0,19-0,27 in-langue ✓✗.
+
+**Ce que cela change** ✗✓ : l'alignement est **local à la tâche** ; le raisonnement et le plan ont des géométries
+**distinctes** ✓✗ — cohérent avec les mesures 132 et 134 ✓✓. *Il faut entraîner le **plan** lui-même (ou un adaptateur
+multi-tâches), pas espérer l'héritage.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, un adaptateur de **raisonnement**, un 3 B ✓✗ ; un entraînement
+**bilingue sur le plan** pourrait l'aligner ✓✗ ; et la mesure est peu sensible (le plan figé est à ~0,2) ✓✗.

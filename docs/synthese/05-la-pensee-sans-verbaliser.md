@@ -199,6 +199,14 @@ supervision bilingue avec assez de batch et de pas ; le contraste correct affine
 0,656 contre 0,404 (batch 4) ; à nombre d'exemples égal, c'est le nombre de **pas** qui compte. *Il faut entraîner
 assez longtemps, pas seulement voir beaucoup d'exemples.*
 
+**Mesure 152 — la saturation.** À **1 600 pas**, la sonde FR→EN atteint **0,753** (800 : 0,656) : le gain ralentit
+(+10 points pour 800 pas de plus) et l'in-langue **plafonne** à 0,826. *Le compromis se stabilise : ~0,75 en
+transfert, ~0,83 en in-langue.*
+
+**Mesure 153 — l'alignement ne transfère pas au plan.** Avec l'adaptateur aligné sur le raisonnement, l'EN→FR du
+plan reste à **0,273** (figé : 0,250 ; hasard 0,125) : l'alignement est **local à la tâche**. *Il faut entraîner le
+plan lui-même, pas espérer l'héritage.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

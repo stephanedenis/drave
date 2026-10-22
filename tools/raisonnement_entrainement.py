@@ -59,6 +59,7 @@ def principal() -> int:
     ap.add_argument("--poids", type=float, default=1.0)
     ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--sortie", default="reports/raisonnement-entrainement-3b.json")
+    ap.add_argument("--sauver", default="", help="dossier où sauver l adaptateur LoRA et la tête")
     a = ap.parse_args()
     import torch
     import torch.nn as nn
@@ -157,6 +158,11 @@ def principal() -> int:
            "sonde_fr": round(float(np.mean(pred_fr == y_te)), 4),
            "sonde_en": round(float(np.mean(pred_en == y_te)), 4),
            "pont_en_fr": round(float(np.mean(pred_pont == y_te)), 4)}
+    if a.sauver:
+        d = pathlib.Path(a.sauver); d.mkdir(parents=True, exist_ok=True)
+        model.save_pretrained(d)
+        torch.save(head.state_dict(), d / "tete.pt")
+        print(f"  adaptateur sauvegardé → {d}")
     for k, v in res.items():
         print(f"  {k}: {v}")
     pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)

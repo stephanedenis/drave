@@ -44,6 +44,7 @@ def principal() -> int:
     ap.add_argument("--series", type=int, default=315)
     ap.add_argument("--prompt", type=int, default=4)
     ap.add_argument("--sortie", default="reports/pont-plan-3b.json")
+    ap.add_argument("--adaptateur", default="", help="adaptateur LoRA à charger (modèle entraîné)")
     ap.add_argument("--batch", type=int, default=16)
     a = ap.parse_args()
     import torch
@@ -74,6 +75,10 @@ def principal() -> int:
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
     model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
+    if a.adaptateur:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, a.adaptateur).eval()
+        print(f"  adaptateur chargé : {a.adaptateur}")
 
     def etats(textes, max_len):
         out = []
