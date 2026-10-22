@@ -164,6 +164,10 @@ le problème est la **capacité**, pas l'alignement.*
 l'avantage à 6 entités (0,81). *Deux petites structures, deux compromis : le pont garde la performance, la CCA donne
 un code commun.*
 
+**Mesure 141 — le 14 B est quasi parfait.** Au 14 B, pont et sonde poolés donnent **1,00 / 1,00 / 1,00 / 1,00 /
+0,975** (sans pont 0,03-0,08) : le raisonnement est parfait in-langue et le pont le transfère quasi sans perte. *La
+petite structure linéaire suffit à toutes les échelles testées (3, 7 et 14 B).*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

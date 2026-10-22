@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (140 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (141 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5114,3 +5114,33 @@ structures, deux compromis : le pont garde la performance, la CCA donne un code 
 
 **Ce que ce résultat ne dit pas** ✗ : CCA sur l'ACP 256 (pas la pleine dimension) ✓✗ ; un corpus, un 3 B, une couche
 ✓✗ ; et le pont et la CCA n'ont pas été **combinés** ✓✗.
+
+---
+
+## Mesure 141 — AU **14 B**, LE PONT EST QUASI PARFAIT : **1,00 / 1,00 / 1,00 / 1,00 / 0,975**, contre 0,03-0,08 sans pont
+
+**La question** ✓✓. Le pont tient-il à une **troisième échelle** (14 B), après le 3 B et le 7 B ? ✓✓
+
+**Le dispositif** ✓✓ : **Qwen2.5-14B-Instruct**, réparti sur les deux GPU (28,6 Go) ✓ ; le même corpus apparié
+(source EN), pont et sonde **poolés**, couche 18 ✓ ; même contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; pont poolé, par longueur) :
+
+| longueur | FR→FR | EN→EN | sans pont | **pont 14 B** | pont 3 B (135) | pont 7 B (137) |
+|---|---:|---:|---:|---:|---:|---:|
+| 2 | 1,000 | 1,000 | 0,059 | **1,000** | 1,000 | 1,000 |
+| 3 | 1,000 | 1,000 | 0,073 | **1,000** | 1,000 | 1,000 |
+| 4 | 1,000 | 1,000 | 0,076 | **1,000** | 0,938 | 0,951 |
+| 5 | 1,000 | 1,000 | 0,032 | **1,000** | 0,913 | 0,874 |
+| 6 | 1,000 | 1,000 | 0,041 | **0,975** | 0,810 | 0,810 |
+
+* **LE 14 B EST QUASI PARFAIT** ✓✓ : 1,000 jusqu'à 5 entités, 0,975 à 6, sans pont 0,03-0,08 ✓✓ ;
+* **LA TAILLE AMÉLIORE LE RAISONNEMENT ET L'ALIGNEMENT** ✓✓ : in-langue 1,000 partout (3 B : 0,653 à L6) ; pont
+  0,975 contre 0,810 (3 B/7 B) ✓✓ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,04-0,08) ✓✓.
+
+**Ce que cela change** ✓✓ : à 14 B, le raisonnement transitif est **parfait in-langue** et le pont le transfère
+**quasi sans perte** ✓✓. *La petite structure linéaire suffit à toutes les échelles testées (3, 7, 14 B).* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : un corpus synthétique (6 entités au maximum), une couche (18), un modèle par
+échelle ✓✗ ; au-delà de 6 entités, le 14 B décrocherait peut-être ✓✗.
