@@ -64,6 +64,7 @@
 - [`plan-fige-1234.json`](plan-fige-1234.json) · [`plan-fige-5678.json`](plan-fige-5678.json) — l'objectif contre cibles figées (mesure 124 : 0,324 / 0,273 / 0,216 en moyenne ; h1 solide)
 - [`raisonnement-latent-3b.json`](raisonnement-latent-3b.json) — le raisonnement transitif dans l'état (mesure 125 : 1,00 → 0,51 en FR, transfert FR→EN au hasard)
 - [`pont-raisonnement-3b.json`](pont-raisonnement-3b.json) — le pont EN→FR du raisonnement (mesure 126 : 1,00 / 0,91 / 0,68 / 0,52 / 0,46)
+- [`pont-raisonnement-taille-3b.json`](pont-raisonnement-taille-3b.json) — le pont avec une autre relation (mesure 127 : 1,00 / 0,85 / 0,67 / 0,56 / 0,44)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

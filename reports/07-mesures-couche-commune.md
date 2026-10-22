@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (126 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (127 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4665,3 +4665,35 @@ le rend commun (mesure 126).* Le raisonnement devient **indépendant de la langu
 **Ce que ce résultat ne dit pas** ✗ : un corpus **synthétique** (une relation, 20 noms), deux langues, un 3 B ✓✗ ;
 le pont est **linéaire** (un pont non linéaire, ou une sonde non linéaire, pourrait fermer la perte aux longues
 chaînes) ✓✗ ; et le pont est appris **avec les mêmes chaînes** que la sonde (même découpage) ✓✗.
+
+---
+
+## Mesure 127 — LE PONT EST **STRUCTUREL**, PAS LEXICAL : la relation « taille » donne **1,00 / 0,85 / 0,67 / 0,56 / 0,44**, superposable à l'ordre (1,00 / 0,91 / 0,68 / 0,52 / 0,46)
+
+**La question** ✓✓. Le pont de la mesure 126 aligne-t-il la relation « ordre » par sa **surface lexicale**, ou la
+**structure** du raisonnement ? ✓✓
+
+**Le dispositif** ✓✓ : le même corpus apparié FR/EN, avec une **autre relation** (« a une taille supérieure à » /
+« is taller than »), 2000 chaînes ✓ ; même pont ridge EN→FR, même sonde FR, même contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; entre parenthèses, la mesure 126 pour l'ordre) :
+
+| longueur | FR→FR | sans pont | **pont (taille)** | pont (ordre) | pont mélangé |
+|---|---:|---:|---:|---:|---:|
+| 2 | 1,000 | 0,059 | **1,000** | (1,000) | 0,050 |
+| 3 | 1,000 | 0,041 | **0,854** | (0,911) | 0,049 |
+| 4 | 0,944 | 0,076 | **0,674** | (0,681) | 0,035 |
+| 5 | 0,843 | 0,039 | **0,559** | (0,520) | 0,071 |
+| 6 | 0,669 | 0,033 | **0,438** | (0,463) | 0,033 |
+
+* **LES DEUX RELATIONS SE SUPERPOSENT** ✓✓ : 1,00 / 0,85 / 0,67 / 0,56 / 0,44 contre 1,00 / 0,91 / 0,68 / 0,52 /
+  0,46 ✓✓ ;
+* **LE CONTRÔLE RESTE AU HASARD** ✓✓ : 0,03-0,07 ✓✓ ;
+* **LA MÊME PENTE** ✓✗ : la perte avec la longueur est la même pour les deux relations ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement est **structurel** — le pont ne dépend pas des mots de la relation, mais de
+la **structure d'ordre** partagée ✓✓. *Un même pont sert deux relations : c'est la « tête bien faite », pas un
+lexique appris.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : deux relations, deux langues, un 3 B, un corpus synthétique ✓✗ ; et la perte
+aux longues chaînes persiste (0,44-0,56) ✓✗.

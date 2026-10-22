@@ -101,6 +101,10 @@ grosse tête : c'est un état qui compose, et un pont qui le rend indépendant d
 FR/EN, un pont ridge EN→FR appris sur les états permet à la sonde FR de lire l'état EN : **1,00 / 0,91 / 0,68 /
 0,52 / 0,46** pour 2 à 6 entités, contre **0,04-0,08** sans pont ; le contrôle (paires mélangées) reste au hasard.
 *La géométrie est alignable par une petite structure — la tête bien faite, c'est un état qui compose + un pont qui
-le rend commun.* L'outillage est en place :
+le rend commun.*
+
+**Mesure 127 — l'alignement est structurel.** La même expérience avec une **autre relation** (la taille) donne
+**1,00 / 0,85 / 0,67 / 0,56 / 0,44**, superposable à l'ordre (1,00 / 0,91 / 0,68 / 0,52 / 0,46) : le pont n'aligne
+pas des mots, il aligne la **structure** du raisonnement. *Un même pont sert deux relations.* L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
