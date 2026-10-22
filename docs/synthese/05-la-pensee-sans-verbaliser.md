@@ -168,6 +168,11 @@ un code commun.*
 0,975** (sans pont 0,03-0,08) : le raisonnement est parfait in-langue et le pont le transfère quasi sans perte. *La
 petite structure linéaire suffit à toutes les échelles testées (3, 7 et 14 B).*
 
+**Mesure 142 — entraîner en français ne suffit pas.** Un LoRA + tête entraîné 500 pas sur les chaînes **FR** garde
+une sonde FR forte (0,974), mais la sonde FR→EN reste à **0,092** (hasard 5 %) et le pont **baisse à 0,513** (0,81
+figé) : le fine-tuning monolingue n'aligne pas, il **dégrade** l'alignement. *Il faut un objectif **multilingue**, pas
+seulement réussir en français.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

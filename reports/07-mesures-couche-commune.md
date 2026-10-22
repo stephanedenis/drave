@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (141 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (142 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5144,3 +5144,37 @@ structures, deux compromis : le pont garde la performance, la CCA donne un code 
 
 **Ce que ce résultat ne dit pas** ✗ : un corpus synthétique (6 entités au maximum), une couche (18), un modèle par
 échelle ✓✗ ; au-delà de 6 entités, le 14 B décrocherait peut-être ✓✗.
+
+---
+
+## Mesure 142 — ENTRAÎNER LE RAISONNEMENT **EN FRANÇAIS** NE LE REND PAS INDÉPENDANT DE LA LANGUE : sonde FR→EN **0,092** (hasard 5 %), pont **0,513** (0,81 figé)
+
+**La question** ✓✓. Si on **entraîne** le modèle (LoRA + tête) à répondre en français, l'anglais en hérite-t-il
+**sans pont** ? ✓✓
+
+**Le dispositif** ✓✓ : Qwen2.5-3B + **LoRA** (attention, toutes couches) et une **tête** 20 classes sur la couche 18
+✓ ; **500 pas** sur les chaînes **FR seulement** (batch 4, accumulation 2) ✓ ; évaluation en FR et en EN ✓ ; sonde
+**neuve** (ridge) sur les états FR, testée en EN ✓ ; pont EN→FR sur les paires du modèle entraîné ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; entre parenthèses le modèle figé) :
+
+| mesure | modèle entraîné | modèle figé |
+|---|---:|---:|
+| sonde FR→FR | **0,974** | (0,987) |
+| sonde FR→EN | **0,092** | (0,058) |
+| pont EN→FR | **0,513** | (0,810) |
+| tête FR | 0,054 | — |
+
+* **LA SONDE FR RESTE FORTE** ✓✓ : 0,974 — le LoRA n'a pas détruit la représentation FR ✓✓ ;
+* **LE TRANSFERT EN RESTE AU HASARD** ✗✗ : 0,092, à peine au-dessus du hasard (0,05) ✓✗ ;
+* **LE PONT BAISSE** ✗✗ : 0,513 contre 0,810 figé — *l'entraînement monolingue rend la géométrie **moins alignable***
+  ✗✗ ;
+* **LA TÊTE N'A PAS CONVERGÉ** ✗ : 0,054, un problème d'optimisation (norme des états), pas le résultat scientifique
+  ✓✗.
+
+**Ce que cela change** ✗✓ : entraîner la tâche **dans une langue** ne suffit pas à rendre le raisonnement indépendant
+de la langue ✓✗ ; le pont reste nécessaire, et le fine-tuning monolingue peut **dégrader** l'alignement ✓✗. *Il faut
+entraîner avec un objectif **multilingue** (les paires FR/EN) pour aligner, pas seulement pour réussir en FR.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 500 pas, un LoRA d'attention, une tête non convergée ✓✗ ; un entraînement plus
+long ou une tête standardisée pourrait changer ✓✗ ; et le corpus reste synthétique ✓✗.
