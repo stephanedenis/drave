@@ -49,9 +49,12 @@ def main() -> int:
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--accum", type=int, default=2, help="accumulation de gradient (batch effectif = batch × accum)")
     ap.add_argument("--lr", type=float, default=1e-4)
+    ap.add_argument("--horizons", default="1", help="pas de plan à prédire (ex. 1,2,3)")
     ap.add_argument("--melange", action="store_true", help="contrôle : cibles mélangées dans le lot")
     ap.add_argument("--sortie", default="reports/plan-entrainement.json")
     a = ap.parse_args()
+    horizons = [int(h) for h in a.horizons.split(",")]
+    assert a.prompt + max(horizons) <= a.par_serie, (a.prompt, horizons)
     import torch
     from transformers import AutoModel, AutoTokenizer
     from peft import LoraConfig, get_peft_model
@@ -85,21 +88,22 @@ def main() -> int:
         return hs[a.couche][torch.arange(len(textes)), idxs].float()
 
     def retrieval(ids):
-        """8 candidats non vus (séries différentes, même position), hasard 12,5 %."""
-        justes = tot = 0
+        """8 candidats non vus (séries différentes, même position), hasard 12,5 %, par horizon."""
+        justes = {h: 0 for h in horizons}; tot = 0
         for i in range(0, len(ids) - 7, 8):
             groupe = ids[i:i + 8]
             invites = [" ".join(series[k][:a.prompt]) for k in groupe]
-            cibles = [series[k][a.prompt] for k in groupe]
             with torch.no_grad():
-                z = etats(invites, 256); y = etats(cibles, 128)
-            z = torch.nn.functional.normalize(z, dim=1); y = torch.nn.functional.normalize(y, dim=1)
-            justes += int((torch.argmax(z @ y.T, 1) == torch.arange(8, device=z.device)).sum())
+                z = torch.nn.functional.normalize(etats(invites, 256), dim=1)
+                for h in horizons:
+                    cibles = [series[k][a.prompt + h - 1] for k in groupe]
+                    y = torch.nn.functional.normalize(etats(cibles, 128), dim=1)
+                    justes[h] += int((torch.argmax(z @ y.T, 1) == torch.arange(8, device=z.device)).sum())
             tot += 8
-        return justes / max(1, tot)
+        return {h: justes[h] / max(1, tot) for h in horizons}
 
     avant = retrieval(te)
-    print(f"  AVANT entraînement : contenu 8-way {avant:.3f} (hasard 0,125)")
+    print("  AVANT : " + " · ".join(f"h{h} {v:.3f}" for h, v in avant.items()))
 
     opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)
     ordre = list(tr); rng.shuffle(ordre)
@@ -110,27 +114,30 @@ def main() -> int:
             rng.shuffle(ordre); pos = 0
         groupe = ordre[pos:pos + a.batch]; pos += a.batch
         invites = [" ".join(series[k][:a.prompt]) for k in groupe]
-        cibles = [series[k][a.prompt] for k in groupe]
         with torch.autocast("cuda", dtype=torch.float16):
             z = torch.nn.functional.normalize(etats(invites, 256), dim=1)
-            y = torch.nn.functional.normalize(etats(cibles, 128), dim=1)
-        if a.melange:
-            y = y[torch.randperm(len(y), device=y.device)]
-        logits = (z @ y.T) / 0.05
-        perte = torch.nn.functional.cross_entropy(logits, torch.arange(len(groupe), device=logits.device))
+            pertes = []
+            for h in horizons:
+                cibles = [series[k][a.prompt + h - 1] for k in groupe]
+                y = torch.nn.functional.normalize(etats(cibles, 128), dim=1)
+                if a.melange:
+                    y = y[torch.randperm(len(y), device=y.device)]
+                logits = (z @ y.T) / 0.05
+                pertes.append(torch.nn.functional.cross_entropy(logits, torch.arange(len(groupe), device=logits.device)))
+            perte = torch.stack(pertes).mean()
         scaler.scale(perte / a.accum).backward()
         if (pas + 1) % a.accum == 0:
             scaler.step(opt); scaler.update(); opt.zero_grad()
         if pas % 50 == 0:
             print(f"    pas {pas:4d} · perte {float(perte.detach()):.3f}")
     apres = retrieval(te)
-    print(f"  APRÈS entraînement : contenu 8-way {apres:.3f} (hasard 0,125)")
+    print("  APRÈS : " + " · ".join(f"h{h} {v:.3f}" for h, v in apres.items()))
 
     pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)
     pathlib.Path(a.sortie).write_text(json.dumps({
         "hf": a.hf, "n_series": len(series), "n_train": len(tr), "n_test": len(te),
-        "couche": a.couche, "prompt": a.prompt, "pas": a.pas, "batch": a.batch, "accum": a.accum, "lr": a.lr,
-        "avant": round(avant, 4), "apres": round(apres, 4), "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
+        "couche": a.couche, "prompt": a.prompt, "horizons": horizons, "pas": a.pas, "batch": a.batch, "accum": a.accum, "lr": a.lr,
+        "avant": {str(h): round(v, 4) for h, v in avant.items()}, "apres": {str(h): round(v, 4) for h, v in apres.items()}, "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
     print(f"  → {a.sortie}")
     return 0
 

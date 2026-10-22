@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (119 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (120 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4414,3 +4414,36 @@ pas un objet à lire dans les états figés : c'est un objet à **entraîner*** 
 pas ✓✗ ; la cible est calculée par le **même** modèle fine-tuné (un effondrement de l'espace cible faciliterait le
 retrieval — le contrôle mélangé l'écarte en partie, pas totalement) ✓✗ ; le plan **multi-pas** (t+2, t+3), c'est-à-dire
 la **dynamique**, n'est pas encore mesuré ✓✗.
+
+---
+
+## Mesure 120 — LE PLAN PORTE **TROIS PAS** : le même état de plan retrouve la 5ᵉ, la 6ᵉ et la 7ᵉ phrase à **0,443 / 0,295 / 0,341** (hasard 0,125)
+
+**La question** ✓✓. Le plan entraîné (mesure 119) porte-t-il **plusieurs pas** — c'est-à-dire une **dynamique**, et
+non un seul pas ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/plan_entrainement.py --horizons 1,2,3` ✓) : les mêmes 307 séries, 4 phrases d'invite,
+214/93 ✓ ; Qwen2.5-3B + LoRA, un **même** état de plan z (dernier état de la couche 18 sur l'invite) et **trois**
+cibles (5ᵉ, 6ᵉ, 7ᵉ phrases), InfoNCE sur chaque horizon ✓ ; 300 pas, lot 3 × accumulation 3 ✓ ; retrieval 8-way par
+horizon (hasard **12,5 %**) ✓✓.
+
+**Les résultats** ✓ :
+
+| horizon | avant | après |
+|---|---:|---:|
+| h1 — 5ᵉ phrase | 0,239 | **0,443** |
+| h2 — 6ᵉ phrase | 0,205 | **0,295** |
+| h3 — 7ᵉ phrase | 0,170 | **0,341** |
+
+* **LE MÊME z PORTE TROIS PAS** ✓✓ : 0,295-0,443 contre 0,125 — *le plan n'est plus un pas isolé* ✓✓ ;
+* **LE SIGNAL FIGÉ DÉCROÎT AVEC L'HORIZON** ✓✗ : 0,239 → 0,205 → 0,170 avant entraînement ✓✗ ;
+* **L'ENTRAÎNEMENT RELÈVE LES TROIS** ✓✓ : +0,20, +0,09, +0,17 ✓✓ — *la courbe n'est pas monotone (h2 < h3),
+  ce qui est dans le bruit de 88 échantillons* ✓✗.
+
+**Ce que cela change** ✓✓ : la **dynamique** n'est plus bloquée à un pas : un état de plan entraîné porte **trois**
+pas au-dessus du hasard ✓✓. *C'est la première brique d'une pensée multi-pas, et le premier résultat de l'étage 2 qui
+dépasse le pas unique* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 88 échantillons, une graine, un seul modèle ✓✗ ; les cibles sont calculées par
+le **même** modèle fine-tuné ✓✗ ; le contrôle à cibles mélangées n'a été fait que pour h1 (0,227, mesure 119) ✓✗ ; et
+les horizons au-delà de 3 (8 phrases au total) ne sont pas testés ✓✗.

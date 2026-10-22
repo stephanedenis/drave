@@ -80,8 +80,9 @@ trajectoire à 0,86-0,89, à peine au-dessus de la **moyenne** (0,83-0,88) : le 
 n'est pas extractible des états figés — il n'y est même pas un objet de faible dimension : il faut l'entraîner dans
 le modèle.* C'est fait (mesure 119) : un LoRA contrastif entraîné à retrouver la 5ᵉ phrase depuis les 4 premières
 monte le retrieval de contenu de **0,239 à 0,443** (hasard 0,125 ; contrôle à cibles mélangées : 0,227) — **le plan
-s'entraîne**, premier résultat positif de l'étage 2. Deux chantiers, dans l'ordre : **(1)** le plan **multi-pas**
-(t+2, t+3) — c'est la **dynamique** ; **(2)** le passage à l'échelle (plus de séries, plusieurs romans, un modèle
-plus grand) avec le **gain sur la moyenne** comme critère. L'outillage est en place :
+s'entraîne**, premier résultat positif de l'étage 2. Mieux : le **même** état de plan porte **trois pas** (mesure 120 :
+0,443 / 0,295 / 0,341 pour les 5ᵉ, 6ᵉ et 7ᵉ phrases) — *la dynamique n'est plus bloquée à un pas*. Le chantier
+suivant est le **passage à l'échelle** (plus de séries, plusieurs romans, un modèle plus grand) et les horizons au-delà
+de 3, avec le **gain sur la moyenne** comme critère. L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
