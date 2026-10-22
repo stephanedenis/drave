@@ -1,0 +1,12 @@
+{
+ "couche": 18,
+ "pas": 800,
+ "batch": 8,
+ "hasard": 0.125,
+ "n_test": 88,
+ "resultats": {
+  "fr_fr": 0.4318,
+  "en_en": 0.3977,
+  "en_fr": 0.3636
+ }
+}

@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (154 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (155 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5543,3 +5543,33 @@ s'aligner par son entraînement bilingue.* ✓✓
 **Ce que ce résultat ne dit pas** ✗ : 88 items, 800 pas, un corpus Verne ✓✗ ; l'in-langue monte aussi (une part du
 gain est la **tâche**, pas l'alignement) ✓✗ ; et le contrôle **FR seul** (même entraînement, une langue) manque —
 *c'est la mesure suivante* ✓✓.
+
+---
+
+## Mesure 155 — LE CONTRÔLE **FR SEUL** : l'EN→FR est **identique** (0,364) — le gain de la mesure 154 venait de l'entraînement de la **tâche**, pas du bilinguisme
+
+**La question** ✓✓. Le **0,364** de la mesure 154 vient-il de l'alternance FR/EN, ou de l'entraînement de la tâche
+(qui améliore les cibles FR) ? ✓✓
+
+**Le dispositif** ✓✓ : le **même** entraînement (objectif du plan, 800 pas, batch 8), **FR seul** ✓ ; évaluation
+FR→FR, EN→EN, EN→FR ✓ ; comparaison à 154 et au figé ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | figé | **FR seul (155)** | bilingue (154) |
+|---|---:|---:|---:|
+| FR→FR | 0,204 | **0,432** | 0,398 |
+| EN→EN | 0,216 | 0,398 | 0,466 |
+| **EN→FR** | 0,250 | **0,364** | 0,364 |
+
+* **L'EN→FR EST IDENTIQUE** ✗✗ : 0,364 dans les deux — *l'alternance bilingue n'ajoute rien* ✗✗ ;
+* **L'IN-LANGUE DIFFÈRE** ✓✗ : FR→FR 0,432 (FR seul) contre 0,398 (bilingue) ; EN→EN 0,398 contre 0,466 ✓✗ ;
+* **LE GAIN VIENT DES CIBLES** ✓✗ : l'entraînement rend les cibles FR plus discriminables, et le prompt EN en profite
+  — sans que les langues soient alignées ✓✗.
+
+**Ce que cela change** ✗✓ : le plan **ne s'aligne pas** par le bilinguisme ; le 0,364 de 154 est un effet **côté
+cible** ✓✗. *La conclusion de 154 doit se lire : l'entraînement de la tâche améliore la représentation des cibles, pas
+l'alignement des langues.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, 800 pas ✓✗ ; une sonde **croisée** (FR prompt → EN target) ou une
+mesure du prompt seul manque ✓✗ ; et le plan reste faible (0,36-0,47) ✓✗.

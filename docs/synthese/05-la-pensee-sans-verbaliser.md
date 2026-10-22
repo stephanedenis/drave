@@ -212,6 +212,10 @@ plan lui-même, pas espérer l'héritage.*
 monte aussi (0,398 / 0,466). *Chaque tâche a sa géométrie, mais chacune peut s'aligner par son entraînement bilingue —
 le pont n'était pas la bonne structure.*
 
+**Mesure 155 — le contrôle FR seul.** L'**EN→FR est identique** (0,364) avec le français seul : le gain de la
+mesure 154 vient de l'entraînement de la **tâche** (les cibles FR deviennent plus discriminables), **pas** du
+bilinguisme. *Le plan ne s'aligne pas ; son transfert apparent est un effet **côté cible**.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
