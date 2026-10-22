@@ -35,6 +35,8 @@ def principal() -> int:
     ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--sortie", default="reports/plan-bilingue-3b.json")
     ap.add_argument("--langue", choices=["both", "fr", "en"], default="both")
+    ap.add_argument("--contraste", action="store_true", help="un pas sur deux : InfoNCE entre les prompts FR et EN de la même série")
+    ap.add_argument("--tau-plan", type=float, default=0.07)
     ap.add_argument("--sauver", default="")
     a = ap.parse_args()
     import torch
@@ -85,14 +87,23 @@ def principal() -> int:
     for pas in range(1, a.pas + 1):
         langue = ("fr", "en")[pas % 2] if a.langue == "both" else a.langue
         k = random.sample(list(tr), a.batch)
-        textes_p = [" ".join(series[int(j)][0 if langue == "fr" else 1][:4]) for j in k]
-        textes_t = [series[int(j)][0 if langue == "fr" else 1][4] for j in k]
-        with torch.autocast("cuda", dtype=torch.float16):
-            zp = etats(textes_p, 256)
-            zt = etats(textes_t, 128)
-        logits = nn.functional.normalize(zp, dim=1) @ nn.functional.normalize(zt, dim=1).T / a.tau
         cible = torch.arange(len(k), device="cuda")
-        perte = nn.functional.cross_entropy(logits, cible)
+        if a.contraste and pas % 2 == 0:
+            pf = [" ".join(series[int(j)][0][:4]) for j in k]
+            pe = [" ".join(series[int(j)][1][:4]) for j in k]
+            with torch.autocast("cuda", dtype=torch.float16):
+                zpf = etats(pf, 256)
+                zpe = etats(pe, 256)
+            logits = nn.functional.normalize(zpf, dim=1) @ nn.functional.normalize(zpe, dim=1).T / a.tau_plan
+            perte = nn.functional.cross_entropy(logits, cible)
+        else:
+            textes_p = [" ".join(series[int(j)][0 if langue == "fr" else 1][:4]) for j in k]
+            textes_t = [series[int(j)][0 if langue == "fr" else 1][4] for j in k]
+            with torch.autocast("cuda", dtype=torch.float16):
+                zp = etats(textes_p, 256)
+                zt = etats(textes_t, 128)
+            logits = nn.functional.normalize(zp, dim=1) @ nn.functional.normalize(zt, dim=1).T / a.tau
+            perte = nn.functional.cross_entropy(logits, cible)
         scaler.scale(perte / a.accum).backward()
         if pas % a.accum == 0:
             scaler.step(opt); scaler.update(); opt.zero_grad()

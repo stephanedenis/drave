@@ -216,6 +216,10 @@ le pont n'était pas la bonne structure.*
 mesure 154 vient de l'entraînement de la **tâche** (les cibles FR deviennent plus discriminables), **pas** du
 bilinguisme. *Le plan ne s'aligne pas ; son transfert apparent est un effet **côté cible**.*
 
+**Mesure 156 — le plan résiste.** Un InfoNCE **explicite** FR↔EN n'ajoute que **+2 points** (0,386 contre 0,364) :
+la géométrie du plan est **ancrée dans la langue** ; son transfert apparent vient de la tâche, pas d'un partage.
+*C'est le seul endroit de l'étage 2 où l'alignement échoue à toutes les méthodes testées.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

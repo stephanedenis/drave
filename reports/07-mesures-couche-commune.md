@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (155 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (156 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5573,3 +5573,34 @@ l'alignement des langues.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items, 800 pas ✓✗ ; une sonde **croisée** (FR prompt → EN target) ou une
 mesure du prompt seul manque ✓✗ ; et le plan reste faible (0,36-0,47) ✓✗.
+
+---
+
+## Mesure 156 — L'OBJECTIF CROSS-LINGUE N'AJOUTE QUE **+2 POINTS** AU PLAN (0,364 → 0,386) : sa géométrie résiste
+
+**La question** ✓✓. Un **InfoNCE explicite** entre les prompts FR et EN de la même série aligne-t-il le plan
+**au-delà** de l'effet côté cible (0,364) ? ✓✓
+
+**Le dispositif** ✓✓ : plan bilingue + **un pas sur deux** d'InfoNCE FR↔EN (τ = 0,07), batch 4, 800 pas ✓ ;
+évaluation EN→FR (hasard 12,5 %) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | figé | tâche seule (154/155) | **+ contraste (156)** |
+|---|---:|---:|---:|
+| FR→FR | 0,204 | 0,398-0,432 | **0,330** |
+| EN→EN | 0,216 | 0,398-0,466 | **0,534** |
+| **EN→FR** | 0,250 | **0,364** | **0,386** |
+
+* **L'EN→FR MONTE À 0,386** ✓✗ : **+2,2 points** sur 0,364 — *dans le bruit de 88 items (±5)* ✓✗ ;
+* **L'EN→EN MONTE, LE FR→FR BAISSE** ✓✗ : 0,534 et 0,330 — le contraste **déplace** la représentation vers l'anglais
+  plutôt que de partager ✓✗ ;
+* **LE PLAN RÉSISTE** ✗✗ : ni les ponts (132, 134), ni le bilinguisme (155), ni un contraste explicite (156) ne
+  l'alignent au-delà de l'effet côté cible ✓✗.
+
+**Ce que cela change** ✗✓ : la géométrie du plan est **ancrée dans la langue** ; son transfert apparent (0,36) vient
+de la **tâche** (cibles plus discriminables), pas d'un partage ✓✗. *C'est le seul endroit de l'étage 2 où
+l'alignement échoue à toutes les méthodes testées.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items (peu sensible), 800 pas, batch 4 (quatre négatifs) ✓✗ ; un contraste
+plus fort, un corpus plus grand ou une autre couche pourraient ajouter ✓✗.
