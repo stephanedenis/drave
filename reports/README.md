@@ -98,6 +98,7 @@
 - [`pont-profondeur-14b.json`](pont-profondeur-14b.json) — la profondeur au 14 B (mesure 158 : 0,966 à 8, 0,862 à 10, 0,695 à 12, la pente s'aplatit)
 - [`registre-technique-humain-7b.json`](registre-technique-humain-7b.json) — le technique à référence humaine (mesure 159 : +36,4 / +34,9 ; la WikiMatrix gonflait)
 - [`xnli-3b.json`](xnli-3b.json) — le raisonnement naturel XNLI (mesure 160 : inférence 0,502/0,576, pont 0,592)
+- [`xnli-14b.json`](xnli-14b.json) — XNLI au 14 B (mesure 161 : pas de gain, 0,481/0,589, pont 0,627)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

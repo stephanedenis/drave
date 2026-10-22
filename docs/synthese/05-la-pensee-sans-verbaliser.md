@@ -230,6 +230,9 @@ mur, une **pente** qui suit l'in-langue. *La pente, pas la falaise.*
 (FR **0,502**, EN **0,576** contre 1/3) et le pont la transfère à **0,592** — au-dessus du FR in-langue. *Le pont ne
 marche pas que sur le synthétique : il transfère aussi l'inférence naturelle.*
 
+**Mesure 161 — le naturel au 14 B.** Pas de gain : FR 0,481, EN 0,589, pont 0,627 (3 B : 0,502 / 0,576 / 0,592).
+*La taille ne change presque rien : la limite est la **sonde linéaire**, pas le modèle.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

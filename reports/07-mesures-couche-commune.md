@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (160 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (161 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5728,3 +5728,34 @@ meilleur des deux.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 3 B, une couche (18), XNLI dev (2490 paires) ✓✗ ; 50-59 % restent loin d'un
 solveur (la sonde **linéaire** limite) ✓✗ ; et l'accord FR/EN n'est pas mesuré ✓✗.
+
+---
+
+## Mesure 161 — LE RAISONNEMENT NATUREL AU **14 B** : **pas de gain** (FR 0,481, EN 0,589, pont **0,627**) — la sonde linéaire est la limite
+
+**La question** ✓✓. La **taille** améliore-t-elle le raisonnement naturel, comme elle améliore la profondeur du
+synthétique (mesures 157-158) ? ✓✓
+
+**Le dispositif** ✓✓ : XNLI (2490 paires FR/EN), **14 B** réparti sur les deux GPU, même sonde linéaire et même pont
+✓ ; comparaison au 3 B (mesure 160) ✓✓.
+
+**Les résultats** ✓ (hasard 33,3 %) :
+
+| condition | 3 B (160) | **14 B (161)** |
+|---|---:|---:|
+| FR→FR | 0,502 | **0,481** |
+| EN→EN | 0,576 | **0,589** |
+| FR→EN sans pont | 0,384 | 0,335 |
+| **pont EN→FR** | 0,592 | **0,627** |
+| étiquettes mélangées | 0,308 | 0,328 |
+
+* **PAS DE GAIN IN-LANGUE** ✗✗ : 0,481 / 0,589 (3 B : 0,502 / 0,576) — *la taille ne change presque rien* ✓✗ ;
+* **LE PONT GAGNE UN PEU** ✓✗ : 62,7 % contre 59,2 % (+3,5) ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (0,328) ✓✓.
+
+**Ce que cela change** ✓✓ : le raisonnement **naturel** ne profite **pas** de la taille — contrairement à la
+profondeur du synthétique ✓✗. *La limite n'est pas le modèle, c'est la **sonde linéaire** sur l'état brut : pour
+l'inférence naturelle, il faudra une sonde non linéaire ou un fine-tuning.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 14 B, XNLI dev, une couche (18) ✓✗ ; une sonde **non linéaire** ou un
+entraînement de la tâche pourrait révéler ce que la sonde linéaire ne lit pas ✓✗.
