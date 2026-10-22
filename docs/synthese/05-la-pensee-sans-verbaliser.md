@@ -191,6 +191,10 @@ de fournir des négatifs et un poids suffisant.*
 **0,505** (paires correctes : 0,742) : l'entraînement **bilingue** aligne déjà en grande partie, et le bon appariement
 ajoute **+24 points**. *Le contraste correct n'est pas la cause unique de l'alignement.*
 
+**Mesure 150 — le bilinguisme est la cause principale.** Sans contraste, la sonde FR→EN monte à **0,656** ; le
+contraste **correct** ajoute +9 (0,742), le **mélangé** coûte −15 (0,505). *L'alignement est une conséquence de la
+supervision bilingue avec assez de batch et de pas ; le contraste correct affine, le mauvais dégrade.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

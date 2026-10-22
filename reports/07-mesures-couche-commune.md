@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (149 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (150 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5393,3 +5393,35 @@ doit se lire ainsi : le contraste correct ajoute, mais il n'est pas la cause uni
 
 **Ce que ce résultat ne dit pas** ✗ : le contrôle n'est pas au hasard ; il manque un contrôle **sans contraste**
 (classification bilingue seule, batch 8, 800 pas) pour séparer les deux effets ✓✗ — *c'est la mesure suivante* ✓✓.
+
+---
+
+## Mesure 150 — L'ALIGNEMENT VIENT DU **BILINGUISME**, PAS DU CONTRASTE : sans contraste, la sonde FR→EN monte à **0,656** ; le contraste correct ajoute +9, le mélangé coûte −15
+
+**La question** ✓✓. Séparer l'effet de la **supervision bilingue** de celui du **contraste** : que donne le même
+entraînement (batch 8, 800 pas) **sans** InfoNCE ? ✓✓
+
+**Le dispositif** ✓✓ : le même LoRA + tête, **800 pas**, **batch 8**, classification **alternée FR/EN**, **sans
+contraste** ✓ ; évaluation FR/EN, sonde, pont ✓✓.
+
+**Les résultats** ✓ (hasard 5 %) :
+
+| entraînement | sonde FR→EN | sonde FR→FR | tête FR / EN |
+|---|---:|---:|---:|
+| figé | 0,058 | 0,987 | — |
+| **bilingue seul (150)** | **0,656** | 0,826 | 0,810 / 0,805 |
+| + contraste mélangé (149) | 0,505 | 0,834 | 0,781 / 0,787 |
+| + contraste correct (147) | **0,742** | 0,776 | 0,737 / 0,734 |
+
+* **LE BILINGUISME ALIGNE** ✓✓ : 0,656 sans contraste (contre 0,058 figé) — *c'est la supervision bilingue qui fait
+  l'essentiel* ✓✓ ;
+* **LE CONTRASTE CORRECT AJOUTE +9** ✓✓ : 0,742 contre 0,656 ✓✓ ;
+* **LE CONTRASTE MÉLANGÉ COÛTE −15** ✗✗ : 0,505 contre 0,656 — *un mauvais appariement dégrade l'alignement* ✗✗ ;
+* **L'IN-LANGUE EST MEILLEURE SANS CONTRASTE** ✓✗ : 0,826 (et 0,834 avec le mélangé) contre 0,776 (correct) ✓✗.
+
+**Ce que cela change** ✓✓ : l'alignement est **une conséquence de l'entraînement bilingue** (avec assez de batch et de
+pas), pas du contraste ; le contraste correct **affine** (+9) mais **coûte** en français, et le mauvais **dégrade** ✓✓.
+*La conclusion de 147 se précise : le contraste correct n'est ni la cause unique, ni nécessaire, mais il aide.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : la mesure 144 (batch 4, 500 pas, bilingue) donnait 0,042 — le **batch et le
+nombre de pas** sont décisifs ✓✗ ; il faut une **courbe** (batch 4/8, 400/800/1 600 pas) pour situer le seuil ✓✗.

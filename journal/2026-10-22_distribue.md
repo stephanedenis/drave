@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22.md](2026-10-22.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,10 +19,11 @@
 | 16:45 | `52cf7041` | MESURE 144 — L'ENTRAINEMENT MULTILINGUE N'ALIGNE PAS NON PLUS : sonde FR->EN 0,042 (hasard 5%), pont 0,451 contre 0,810 fige ; la supervision de la tache, meme bilingue, n'apprend pas l'alignement. Il faut un objectif contrastif entre paires FR/EN | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+5) |
 | 17:00 | `3ecb5f11` | MESURE 145 — LE REGISTRE TECHNIQUE (WIKIMATRIX MINE) : marge +41,0 (EN->FR) et +46,0 (FR->EN) au 7 B, plancher 32,1/34,2 ; les plus hautes des cinq registres, mais la reference est minee (plancher haut, chrF possiblement gonfle). La carte couvre juridique, presse, litteraire, parle prepare et technique | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
 | 17:26 | `2d10c895` | MESURE 148 — LE DIALOGUE SPONTANE (OPENSUBTITLES) : marge +32,3 (EN->FR) et +33,6 (FR->EN) au 7 B, plancher 17,2 (le plus bas) ; le dialogue est le plus dur apres le litteraire. La carte des six registres est complete | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
+| 17:33 | `7c1c2d0d` | MESURE 149 — LE CONTROLE DU CONTRASTE : avec des paires melangees, la sonde FR->EN monte quand meme a 0,505 (correct : 0,742) ; l'entrainement bilingue aligne deja en grande partie, le bon appariement ajoute +24. Le contraste correct n'est pas la cause unique | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 
 ## Chiffres du jour
 
-`5%` · `0,042` · `0,451` · `0,810` · `0,136` · `0,125` · `0,250` · `250 paires` · `0,324` · `0,273` · `0,216` · `0,205`
+`0,505` · `0,742` · `5%` · `0,042` · `0,451` · `0,810` · `0,136` · `0,125` · `0,250` · `250 paires` · `0,324` · `0,273`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
