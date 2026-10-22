@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (159 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (160 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5695,3 +5695,36 @@ marge du miné (+41 / +46) était un **artefact de référence** ✓✗. *La car
 
 **Ce que ce résultat ne dit pas** ✗ : le sous-corpus est **juridico-technique** (législation), pas de la prose
 technique (articles scientifiques) ✓✗ ; 400 paires, un modèle ✓✗.
+
+---
+
+## Mesure 160 — LE RAISONNEMENT **NATUREL** (XNLI) : l'inférence est dans l'état (**50-58 %** contre 33 % de hasard) et le pont la transfère (**59,2 %**)
+
+**La question** ✓✓. Le raisonnement **naturel** (inférence XNLI : prémisse, hypothèse → impliqué / neutre /
+contradictoire) est-il dans l'état — et le pont le transfère-t-il, comme pour le synthétique ? ✓✓
+
+**Le dispositif** ✓✓ : **2490 paires XNLI** (français et anglais **traduits**, mêmes paires), 3 B, état de la couche
+18 ✓ ; sonde 3 classes (hasard **1/3**) ✓ ; pont EN→FR sur les paires appariées ✓ ; contrôle (étiquettes mélangées)
+✓✓.
+
+**Les résultats** ✓ (hasard 33,3 %) :
+
+| condition | accuracy |
+|---|---:|
+| FR→FR | **0,502** |
+| EN→EN | **0,576** |
+| FR→EN sans pont | 0,384 |
+| **pont EN→FR** | **0,592** |
+| étiquettes mélangées | 0,308 |
+
+* **L'INFÉRENCE EST DANS L'ÉTAT** ✓✓ : 50,2 % (FR) et 57,6 % (EN), contre 33,3 % ✓✓ ;
+* **LE PONT LA TRANSFÈRE** ✓✓ : **59,2 %** — au-dessus du FR in-langue (50,2 %) ✓✓ ;
+* **SANS PONT, LE TRANSFERT EST PARTIEL** ✓✗ : 38,4 % ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ : 30,8 % ✓✓.
+
+**Ce que cela change** ✓✓ : le pont ne marche pas que sur le **synthétique** : il transfère aussi l'inférence
+**naturelle** (0,59) ✓✓. *L'anglais est plus informatif que le français (0,58 contre 0,50) — le pont exploite le
+meilleur des deux.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 3 B, une couche (18), XNLI dev (2490 paires) ✓✗ ; 50-59 % restent loin d'un
+solveur (la sonde **linéaire** limite) ✓✗ ; et l'accord FR/EN n'est pas mesuré ✓✗.
