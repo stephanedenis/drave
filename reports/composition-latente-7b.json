@@ -1,0 +1,12 @@
+{
+ "hf": "Qwen/Qwen2.5-7B-Instruct",
+ "couche": 14,
+ "pas": 400,
+ "retrieval": [
+  0.0,
+  0.1333,
+  0.6667
+ ],
+ "n_train": 35,
+ "n_test": 15
+}

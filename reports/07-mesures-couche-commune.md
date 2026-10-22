@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (108 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (109 mesures, 5 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4018,3 +4018,42 @@ objectif de prédiction multi-pas plus riche)* ✓✓.
 
 **Ce que ce résultat ne dit pas** ✗ : 3 B, 50 séries, 400 époques, un MLP 256 ✓✗ ; un état latent **entraîné avec
 le modèle** (pas des états figés) pourrait tenir plus de pas ✓✓ ; et le retrieval à 4 candidats est un test dur ✓✓.
+
+## Mesure 109 — L'ÉTAT LATENT ENTRAÎNÉ AVEC LA TÂCHE **COLLAPSE** : le pas 3 monte à 0,60-0,67, mais le pas 1 tombe à 0,00
+
+**La question** ✓✓. Toutes les mesures de dynamique (82, 83, 87, 88, 108) utilisaient des états **figés** et un
+opérateur appris **après coup** : le linéaire tient deux pas, la contraction dégrade, le MLP sur-apprend, la
+récurrence partagée ne tient pas ✗✗. *En entraînant **ensemble** l'état (un LoRA sur le modèle) et le pas partagé
+F — pour que l'état soit optimisé **pour** la dynamique — tient-on plus de pas ?* ✓✓
+
+**Le dispositif** ✓✓ (`tools/composition_latente.py` ✓) : les 200 phrases anglaises des 50 séries de 4 (Verne,
+paires 1:1) ; un LoRA sur les 12 dernières couches ; `F(x) = x + MLP(x)` **partagé** ; la perte multi-pas F¹/F²/F³
+depuis la phrase 0 + les transitions, cibles **détachées** ; 400 pas ; le même test de retrieval (hasard 0,25) ✓✓.
+
+**L'erreur de parcours** ✗✗ : le premier essai a donné **0,00 / 0,00 / 0,00** — le pas F était à **lr 1e-5** (celui du
+modèle) et n'apprenait **rien** (la perte restait à 1,3-2,0). Corrigé par deux groupes de lr : le modèle à 1e-5, le
+pas à **1e-3** ✓✓.
+
+| méthode | ret pas 1 | ret pas 2 | ret pas 3 |
+|---|---:|---:|---:|
+| linéaire (mesure 82) | **0,73** | **0,53** | 0,13 |
+| récurrence partagée (mesure 108) | **0,73** | 0,27 | 0,27 |
+| **latent entraîné, 3 B** | **0,00** | 0,13 | **0,60** |
+| **latent entraîné, 7 B** | **0,00** | 0,13 | **0,67** |
+
+* **LE PAS 3 EST LE MEILLEUR** ✓✓ : 0,60 (3 B) et 0,67 (7 B), contre 0,13 (linéaire) et 0,27 (récurrence) ✓✓ — *le
+  latent entraîné **atteint** le troisième état* ✓✓ ;
+* **MAIS LE PAS 1 TOMBE À 0,00** ✗✗ : le pas F **saute au dernier état** ; le retrieval du pas 1 choisit la mauvaise
+  position (0/15) ✓✗ — *ce n'est **pas** une dynamique, c'est un **raccourci** vers le point fixe* ✓✓ ;
+* **le même motif au 3 B et au 7 B** ✓✓ : 0,00/0,13/0,60 et 0,00/0,13/0,67 ✓✗ — *la taille ne change pas le
+  comportement, elle amplifie le saut* ✓✓ ;
+* **le latent entraîné ne prolonge pas la pensée, il la fige** ✓✗ : l'opérateur apprend à **sauter** au dernier état
+  plutôt qu'à **avancer** d'un pas ✓✗.
+
+**Ce que cela change** ✗✓ : l'étage 2 garde sa dynamique **bornée** ✓✓ ; *la piste « état latent entraîné avec la
+tâche » est **close elle aussi** — le problème n'est pas l'état, c'est le **pas partagé** qui dégénère en point
+fixe* ✓✓. Les suites possibles : une perte qui **pénalise le point fixe** (les pas 1/2/3 à égalité), une
+**reconstruction** de l'état (pas seulement la prédiction), ou un **état latent à variété contrôlée** ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 15 séries de test, 400 pas, un LoRA, deux modèles ✓✗ ; une autre perte ou une
+contrainte de variété pourraient empêcher le raccourci ✓✓ ; et le retrieval à 4 candidats est un test dur ✓✓.

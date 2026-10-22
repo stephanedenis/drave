@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21.md](2026-10-21.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 07:04 | `4f062d44` | OUTIL — k-fold : option --repartir pour le 7 B ; le 7 B OOM sur 2x16 Go avec les logits plein vocabulaire (batch 2, 256 jetons). Le 3 B reste le modele mesure ; un 7 B batch 1 + gradient checkpointing est a essayer | `en-cours.md`, `2026-10-21.md`, `2026-10-21_distribue.md` (+1) |
 | 09:07 | `f0fbcac4` | MESURE 101 — LE 7 B RESTE CASSE MEME AVEC LA RECETTE CORRIGEE : couches 16-27, sans checkpointing, lr 5e-6 -> chrF 26,0, marge -19,0 (3/11). Le probleme n'est ni les couches, ni le checkpointing, ni le lr : c'est la pile 7 B fp16 reparti + LoRA (device_map + PEFT + generation). Le 3 B, meme pli, fait 51,8 (+6,9) | `en-cours.md`, `2026-10-21.md`, `2026-10-21_modele.md` (+4) |
 | 13:49 | `832b776e` | MESURE 104 — LA WIKIPEDIA PIDGIN (1 186 paires LOCALES) DEGRADE AUSSI L'ECRITURE : -10,8 sur le pli 0210 (chrF 34,1 contre 51,8 sans wiki). Le registre utile est encore plus etroit que « moderne non religieux » : seul le registre des CONTES tient. Verification du contenu local : 6 langues Nipada (81 Go, 2026-06-08), index anglais 4 218 781 titres, 0 doublon ; le pidgin manquait, dump telecharge, 1 186 paires construites sans API | `en-cours.md`, `2026-10-21.md`, `2026-10-21_memoire.md` (+7) |
+| 20:29 | `65548bf6` | DOC — les docs disent la verite actuelle, pas l'historique : l'etage 2 tient deux pas et ne s'etend pas par les operateurs testes (la piste active est l'etat latent) ; les paires doivent etre du bon registre ET du bon domaine. Les details des echecs restent dans reports/ | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21.md` (+1) |
 
 ## Chiffres du jour
 
