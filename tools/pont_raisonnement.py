@@ -83,6 +83,7 @@ def principal() -> int:
     ap.add_argument("--couche", type=int, default=18)
     ap.add_argument("--sortie", default="reports/pont-raisonnement-3b.json")
     ap.add_argument("--batch", type=int, default=16)
+    ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les GPU (device_map=auto)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -92,7 +93,10 @@ def principal() -> int:
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
+    if a.repartir:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16, device_map="auto").eval()
+    else:
+        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
 
     def etats(textes):
         prompts = [tok.apply_chat_template([{"role": "user", "content": t}], tokenize=False,

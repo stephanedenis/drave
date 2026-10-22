@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (136 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (137 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4988,3 +4988,33 @@ sa géométrie ne se laisse pas aligner par les prompts.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 88 items, une couche (18), un 3 B ✓✗ ; un pont appris sur les **cibles** n'a
 pas été testé ✓✗ ; et le retrieval du plan (0,2) limite la sensibilité ✓✗.
+
+---
+
+## Mesure 137 — LE PONT MARCHE AU **7 B** : **1,00 / 1,00 / 0,95 / 0,87 / 0,81** (poolé), contre 0,04-0,10 sans pont — la taille aide l'in-langue, pas l'alignement
+
+**La question** ✓✓. Le pont est-il une propriété du 3 B, ou tient-il à une autre **échelle** ? ✓✓
+
+**Le dispositif** ✓✓ : **Qwen2.5-7B-Instruct**, réparti sur les deux GPU ✓ ; le même corpus apparié (source EN),
+pont et sonde **poolés**, couche 18 ✓ ; même contrôle (paires mélangées) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; 7 B, et entre parenthèses le 3 B poolé de la mesure 135) :
+
+| longueur | FR→FR (7 B) | sans pont | **pont (7 B)** | pont (3 B) |
+|---|---:|---:|---:|---:|
+| 2 | 1,000 | 0,059 | **1,000** | (1,000) |
+| 3 | 1,000 | 0,098 | **1,000** | (1,000) |
+| 4 | 0,993 | 0,090 | **0,951** | (0,938) |
+| 5 | 1,000 | 0,095 | **0,874** | (0,913) |
+| 6 | 0,926 | 0,066 | **0,810** | (0,810) |
+
+* **LE PONT MARCHE AU 7 B** ✓✓ : 0,81-1,00, sans pont 0,06-0,10 ✓✓ ;
+* **LE 7 B EST MEILLEUR IN-LANGUE** ✓✓ : FR 0,926 à L6 (3 B : 0,653), EN 0,818 (3 B : 0,711) ✓✓ ;
+* **LE PONT RESTE LA PETITE STRUCTURE** ✓✓ : la récupération relative est la même (0,81-0,95) qu'au 3 B ✓✓.
+
+**Ce que cela change** ✓✓ : le pont **n'est pas un artefact d'échelle** : la taille améliore le raisonnement in-langue,
+mais l'alignement reste une **carte linéaire** ✓✓. *La tête bien faite ne remplace pas la grosse tête : elle la rend
+utilisable dans toutes les langues.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : un seul modèle de plus, une couche (18), un corpus synthétique ✓✗ ; le 14 B et
+au-delà restent à tester ✓✗.

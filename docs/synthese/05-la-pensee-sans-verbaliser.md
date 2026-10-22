@@ -144,6 +144,11 @@ longueurs, suffit : c'est la version la plus économique de la tête bien faite.
 **0,136** (hasard 0,125) sur le plan : ajouter des paires de plan ne l'aligne pas ; il faut aligner les **cibles**, ou
 entraîner le plan dans le modèle.
 
+**Mesure 137 — le pont marche au 7 B.** Au 7 B, pont et sonde poolés donnent **0,95 / 0,87 / 0,81** pour 4 à
+6 entités (sans pont 0,06-0,10) : la taille améliore le raisonnement in-langue, mais l'alignement reste la même
+**carte linéaire**. *La tête bien faite ne remplace pas la grosse tête : elle la rend utilisable dans toutes les
+langues.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
