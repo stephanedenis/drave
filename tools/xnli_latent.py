@@ -35,6 +35,26 @@ def appliquer(X, W):
     return np.hstack([X, np.ones((len(X), 1), np.float32)]) @ W
 
 
+def mlp_sonde(Xtr, ytr, Xte, classes, cache=512, epochs=30, graine=1234):
+    import torch
+    import torch.nn as nn
+    torch.manual_seed(graine); torch.set_num_threads(8)
+    X = torch.from_numpy(Xtr.astype(np.float32)); Y = torch.from_numpy(ytr.astype(np.int64))
+    T = torch.from_numpy(Xte.astype(np.float32))
+    moy = X.mean(0, keepdim=True); ect = X.std(0, keepdim=True) + 1e-6
+    X = (X - moy) / ect; T = (T - moy) / ect
+    m = nn.Sequential(nn.Linear(X.shape[1], cache), nn.GELU(), nn.Dropout(0.2), nn.Linear(cache, classes))
+    opt = torch.optim.AdamW(m.parameters(), lr=1e-3, weight_decay=1e-4)
+    for _ in range(epochs):
+        perm = torch.randperm(len(X))
+        for i in range(0, len(X), 128):
+            idx = perm[i:i + 128]
+            perte = nn.functional.cross_entropy(m(X[idx]), Y[idx])
+            opt.zero_grad(); perte.backward(); opt.step()
+    with torch.no_grad():
+        return m(T).argmax(1).numpy()
+
+
 def principal() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tsv", default="data/xnli/XNLI-1.0/xnli.dev.tsv")
@@ -104,12 +124,20 @@ def principal() -> int:
     pred_pont = sonde(Efr_tr, y_tr, appliquer(Een_te, W), 3)
     rng2 = np.random.default_rng(7)
     pred_neg = sonde(Efr_tr, rng2.permutation(y_tr), Efr_te, 3)
+    pred_fr_m = mlp_sonde(Efr_tr, y_tr, Efr_te, 3)
+    pred_en_m = mlp_sonde(Efr_tr, y_tr, Een_te, 3)
+    pred_pont_m = mlp_sonde(Efr_tr, y_tr, appliquer(Een_te, W), 3)
+    pred_neg_m = mlp_sonde(Efr_tr, rng2.permutation(y_tr), Efr_te, 3)
     res = {"couche": a.couche, "n_train": len(tr), "n_test": len(te), "hasard": 1 / 3,
            "fr_fr": round(float(np.mean(pred_fr == y_te)), 4),
            "fr_en": round(float(np.mean(pred_en == y_te)), 4),
            "en_en": round(float(np.mean(pred_en_en == y_te)), 4),
            "pont_en_fr": round(float(np.mean(pred_pont == y_te)), 4),
-           "negatif": round(float(np.mean(pred_neg == y_te)), 4)}
+           "negatif": round(float(np.mean(pred_neg == y_te)), 4),
+           "fr_fr_mlp": round(float(np.mean(pred_fr_m == y_te)), 4),
+           "fr_en_mlp": round(float(np.mean(pred_en_m == y_te)), 4),
+           "pont_mlp": round(float(np.mean(pred_pont_m == y_te)), 4),
+           "negatif_mlp": round(float(np.mean(pred_neg_m == y_te)), 4)}
     for k, v in res.items():
         print(f"  {k}: {v}")
     pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)

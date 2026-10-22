@@ -233,6 +233,10 @@ marche pas que sur le synthétique : il transfère aussi l'inférence naturelle.
 **Mesure 161 — le naturel au 14 B.** Pas de gain : FR 0,481, EN 0,589, pont 0,627 (3 B : 0,502 / 0,576 / 0,592).
 *La taille ne change presque rien : la limite est la **sonde linéaire**, pas le modèle.*
 
+**Mesure 162 — la sonde non linéaire ne fait pas mieux.** Le MLP donne **0,453** (contre 0,502 au linéaire) et
+**0,542** au pont (0,592) : il sur-apprend. *Ce n'est pas la sonde qui limite, c'est l'état ; pour progresser sur
+l'inférence naturelle, il faut entraîner le modèle, pas changer le readout.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

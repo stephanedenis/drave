@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (161 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (162 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5759,3 +5759,32 @@ l'inférence naturelle, il faudra une sonde non linéaire ou un fine-tuning.* �
 
 **Ce que ce résultat ne dit pas** ✗ : 14 B, XNLI dev, une couche (18) ✓✗ ; une sonde **non linéaire** ou un
 entraînement de la tâche pourrait révéler ce que la sonde linéaire ne lit pas ✓✗.
+
+---
+
+## Mesure 162 — LA SONDE **NON LINÉAIRE** NE FAIT PAS MIEUX (0,453 contre 0,502) : ce n'est pas la sonde qui limite, c'est l'**état**
+
+**La question** ✓✓. La sonde **linéaire** est-elle le facteur limitant du raisonnement naturel (mesure 161) ? ✓✓
+
+**Le dispositif** ✓✓ : XNLI, 3 B, **sonde MLP** (512 unités, GELU, dropout 0,2, 30 époques) sur les **mêmes états**
+✓ ; comparaison à la sonde linéaire (mesure 160) ✓✓.
+
+**Les résultats** ✓ (hasard 33,3 %) :
+
+| condition | linéaire (160) | **MLP (162)** |
+|---|---:|---:|
+| FR→FR | **0,502** | 0,453 |
+| FR→EN | **0,384** | 0,368 |
+| pont EN→FR | **0,592** | 0,542 |
+| étiquettes mélangées | 0,308 | 0,336 |
+
+* **LE MLP EST PIRE** ✗✗ : 0,453 contre 0,502 (FR), 0,542 contre 0,592 (pont) — *il sur-apprend* ✓✗ ;
+* **LE CONTRÔLE RESTE AU HASARD** ✓✓ : 0,336 ✓✓ ;
+* **CE N'EST PAS LA SONDE QUI LIMITE** ✗✓ : l'état ne porte que **50-60 %** de l'inférence naturelle, et un readout
+  plus riche n'en extrait pas plus ✓✗.
+
+**Ce que cela change** ✗✓ : l'hypothèse « la sonde linéaire limite » est **réfutée** ✓✗. *Pour aller plus loin sur
+l'inférence naturelle, il faut **entraîner le modèle** (fine-tuning), pas changer la sonde.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : un MLP mieux régularisé, plus de données (le train XNLI fait 392 k paires
+traduites) ou une autre couche pourraient faire mieux ✓✗.

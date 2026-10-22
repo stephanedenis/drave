@@ -1,0 +1,15 @@
+{
+ "couche": 18,
+ "n_train": 1743,
+ "n_test": 747,
+ "hasard": 0.3333333333333333,
+ "fr_fr": 0.502,
+ "fr_en": 0.3842,
+ "en_en": 0.5756,
+ "pont_en_fr": 0.5917,
+ "negatif": 0.3079,
+ "fr_fr_mlp": 0.4525,
+ "fr_en_mlp": 0.3681,
+ "pont_mlp": 0.5422,
+ "negatif_mlp": 0.336
+}
