@@ -57,9 +57,9 @@ la cible de la mesure.
   gratuitement ;
 - **la hiérarchie des surfaces** : langues **96 %** > dialectes **52-97 %** > styles (traducteurs) **24 %** — et les
   trois sont **lues à 100 %**. *L'étage entrée-sortie n'efface aucune surface : il en aligne le sens.*
-- **les paires doivent être du bon REGISTRE** : **30 950 paires bibliques dégradent** la traduction du pidgin
-  (**−4,6** avec le KJV, **−6,2** avec le WEB moderne), quand **2 832 paires modernes** l'améliorent (**+1,3**) —
-  *le registre compte plus que le **volume** et que la **modernité*** (mesures 96-97).
+- **les paires doivent être du bon REGISTRE et du bon DOMAINE** : les paires **savantes ou sacrées** (Bible,
+  encyclopédie) **dégradent** la traduction du pidgin, les paires **quotidiennes et narratives** (interface, contes)
+  aident — *le registre et le domaine comptent plus que le **volume** et que la **modernité*** (mesures 95-106).
 - **un banc peut mesurer la MÉMOIRE au lieu de la traduction** : sur un texte célèbre (l'UDHR), le modèle **récite**
   la traduction officielle au lieu de traduire ce qu'il lit — et le chrF **ne le voit pas** (77,8 sur l'UDHR contre
   75,7 sur un texte neuf) ✗✗. *Un score de surface ne distingue pas la mémoire de la traduction* : il faut un texte
