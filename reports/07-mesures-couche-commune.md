@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (120 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (121 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4447,3 +4447,36 @@ dépasse le pas unique* ✓✓.
 **Ce que ce résultat ne dit pas** ✗ : 88 échantillons, une graine, un seul modèle ✓✗ ; les cibles sont calculées par
 le **même** modèle fine-tuné ✓✗ ; le contrôle à cibles mélangées n'a été fait que pour h1 (0,227, mesure 119) ✓✗ ; et
 les horizons au-delà de 3 (8 phrases au total) ne sont pas testés ✓✗.
+
+---
+
+## Mesure 121 — LE PLAN TRANSFÈRE **EN PARTIE** À L'ESPACE FIGÉ : **0,318 / 0,250 / 0,216** sur les cibles du modèle figé (hasard 0,125), contre 0,409 / 0,284 / 0,330 sur les cibles du modèle entraîné
+
+**La question** ✓✓. Le gain de la mesure 120 vient-il d'un **plan réel**, ou de l'**adaptation de l'espace cible** —
+le même modèle fine-tuné rendant ses propres cibles plus séparables ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/plan_entrainement.py --controle` implicite ✓) : le même entraînement que la mesure 120
+(300 pas, horizons 1-3, graine 1234) ✓ ; les cibles de test sont **mises en cache avant l'entraînement** (modèle
+figé), et l'état de plan final est évalué **deux fois** : contre les cibles figées et contre les cibles du modèle
+fine-tuné ✓✓ ; même retrieval 8-way (hasard **12,5 %**) ✓✓.
+
+**Les résultats** ✓ :
+
+| horizon | avant (figé) | après, cibles figées | après, cibles fine-tunées |
+|---|---:|---:|---:|
+| h1 — 5ᵉ | 0,239 | **0,318** | 0,409 |
+| h2 — 6ᵉ | 0,205 | **0,250** | 0,284 |
+| h3 — 7ᵉ | 0,170 | **0,216** | 0,330 |
+
+* **LE PLAN TRANSFÈRE** ✓✓ : +0,080 / +0,045 / +0,045 contre l'espace figé ✓✗ — *le plan n'est pas qu'une
+  adaptation de la cible* ✓✓ ;
+* **MAIS L'ADAPTATION DE LA CIBLE COMPTE POUR LE RESTE** ✗✗ : +0,091 / +0,034 / +0,114 ✓✗ — *environ **la moitié**
+  du gain de la mesure 120 est un vrai transfert, l'autre moitié est le modèle qui rend ses cibles plus séparables* ✓✗ ;
+* **LE TRANSFERT EST POSITIF AUX TROIS HORIZONS** ✓✗, mais **modeste** (0,216-0,318 contre 0,125) ✓✗.
+
+**Ce que cela change** ✗✓ : le résultat de la mesure 120 **tient**, mais il est **plus modeste** qu'il n'y paraissait ✓✗ ;
+*le critère de la suite doit être le retrieval **contre les cibles figées*** ✓✓ — sinon on mesure l'adaptation de
+l'espace cible autant que le plan ✓✗.
+
+**Ce que ce résultat ne dit pas** ✗ : 88 échantillons, une graine (la graine 5678 tourne) ✓✗ ; le cache est celui d'un
+seul modèle figé ✓✗ ; et le transfert est mesuré à la couche 18 seulement ✓✗.

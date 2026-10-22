@@ -50,6 +50,7 @@ def main() -> int:
     ap.add_argument("--accum", type=int, default=2, help="accumulation de gradient (batch effectif = batch × accum)")
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--horizons", default="1", help="pas de plan à prédire (ex. 1,2,3)")
+    ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--melange", action="store_true", help="contrôle : cibles mélangées dans le lot")
     ap.add_argument("--sortie", default="reports/plan-entrainement.json")
     a = ap.parse_args()
@@ -60,7 +61,7 @@ def main() -> int:
     from peft import LoraConfig, get_peft_model
 
     series = series_verne(a.par_serie, a.series)
-    rng = random.Random(1234)
+    rng = random.Random(a.graine)
     idx = list(range(len(series))); rng.shuffle(idx)
     n_tr = int(0.7 * len(idx))
     tr, te = idx[:n_tr], idx[n_tr:]
@@ -102,7 +103,30 @@ def main() -> int:
             tot += 8
         return {h: justes[h] / max(1, tot) for h in horizons}
 
-    avant = retrieval(te)
+    def cache_cibles(ids):
+        """Cibles du modèle FIGÉ (avant entraînement), gardées pour le contrôle."""
+        cache = []
+        for i in range(0, len(ids) - 7, 8):
+            groupe = ids[i:i + 8]
+            with torch.no_grad():
+                ys = {h: torch.nn.functional.normalize(etats([series[k][a.prompt + h - 1] for k in groupe], 128), dim=1)
+                      for h in horizons}
+            cache.append((groupe, ys))
+        return cache
+
+    def retrieval_avec(ids, cache):
+        justes = {h: 0 for h in horizons}; tot = 0
+        for groupe, ys in cache:
+            invites = [" ".join(series[k][:a.prompt]) for k in groupe]
+            with torch.no_grad():
+                z = torch.nn.functional.normalize(etats(invites, 256), dim=1)
+                for h in horizons:
+                    justes[h] += int((torch.argmax(z @ ys[h].T, 1) == torch.arange(8, device=z.device)).sum())
+            tot += 8
+        return {h: justes[h] / max(1, tot) for h in horizons}
+
+    cache_base = cache_cibles(te)
+    avant = retrieval_avec(te, cache_base)
     print("  AVANT : " + " · ".join(f"h{h} {v:.3f}" for h, v in avant.items()))
 
     opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)
@@ -131,13 +155,15 @@ def main() -> int:
         if pas % 50 == 0:
             print(f"    pas {pas:4d} · perte {float(perte.detach()):.3f}")
     apres = retrieval(te)
+    apres_base = retrieval_avec(te, cache_base)
     print("  APRÈS : " + " · ".join(f"h{h} {v:.3f}" for h, v in apres.items()))
+    print("  APRÈS (cibles du modèle figé) : " + " · ".join(f"h{h} {v:.3f}" for h, v in apres_base.items()))
 
     pathlib.Path(a.sortie).parent.mkdir(parents=True, exist_ok=True)
     pathlib.Path(a.sortie).write_text(json.dumps({
         "hf": a.hf, "n_series": len(series), "n_train": len(tr), "n_test": len(te),
         "couche": a.couche, "prompt": a.prompt, "horizons": horizons, "pas": a.pas, "batch": a.batch, "accum": a.accum, "lr": a.lr,
-        "avant": {str(h): round(v, 4) for h, v in avant.items()}, "apres": {str(h): round(v, 4) for h, v in apres.items()}, "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
+        "graine": a.graine, "avant": {str(h): round(v, 4) for h, v in avant.items()}, "apres": {str(h): round(v, 4) for h, v in apres.items()}, "apres_base": {str(h): round(v, 4) for h, v in apres_base.items()}, "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
     print(f"  → {a.sortie}")
     return 0
 

@@ -81,8 +81,10 @@ n'est pas extractible des états figés — il n'y est même pas un objet de fai
 le modèle.* C'est fait (mesure 119) : un LoRA contrastif entraîné à retrouver la 5ᵉ phrase depuis les 4 premières
 monte le retrieval de contenu de **0,239 à 0,443** (hasard 0,125 ; contrôle à cibles mélangées : 0,227) — **le plan
 s'entraîne**, premier résultat positif de l'étage 2. Mieux : le **même** état de plan porte **trois pas** (mesure 120 :
-0,443 / 0,295 / 0,341 pour les 5ᵉ, 6ᵉ et 7ᵉ phrases) — *la dynamique n'est plus bloquée à un pas*. Le chantier
-suivant est le **passage à l'échelle** (plus de séries, plusieurs romans, un modèle plus grand) et les horizons au-delà
-de 3, avec le **gain sur la moyenne** comme critère. L'outillage est en place :
+0,443 / 0,295 / 0,341 pour les 5ᵉ, 6ᵉ et 7ᵉ phrases) — *la dynamique n'est plus bloquée à un pas*. Mais le contrôle
+des **cibles figées** (mesure 121) ramène le transfert réel à **0,318 / 0,250 / 0,216** : environ la moitié du gain
+est un vrai plan, l'autre est l'adaptation de l'espace cible. Le critère de la suite est donc le retrieval **contre les
+cibles figées** ; le chantier suivant est le **passage à l'échelle** (plus de séries, plusieurs romans, un modèle plus
+grand) et les horizons au-delà de 3. L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
