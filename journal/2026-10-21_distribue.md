@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21.md](2026-10-21.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,10 +19,11 @@
 | 09:07 | `f0fbcac4` | MESURE 101 — LE 7 B RESTE CASSE MEME AVEC LA RECETTE CORRIGEE : couches 16-27, sans checkpointing, lr 5e-6 -> chrF 26,0, marge -19,0 (3/11). Le probleme n'est ni les couches, ni le checkpointing, ni le lr : c'est la pile 7 B fp16 reparti + LoRA (device_map + PEFT + generation). Le 3 B, meme pli, fait 51,8 (+6,9) | `en-cours.md`, `2026-10-21.md`, `2026-10-21_modele.md` (+4) |
 | 13:49 | `832b776e` | MESURE 104 — LA WIKIPEDIA PIDGIN (1 186 paires LOCALES) DEGRADE AUSSI L'ECRITURE : -10,8 sur le pli 0210 (chrF 34,1 contre 51,8 sans wiki). Le registre utile est encore plus etroit que « moderne non religieux » : seul le registre des CONTES tient. Verification du contenu local : 6 langues Nipada (81 Go, 2026-06-08), index anglais 4 218 781 titres, 0 doublon ; le pidgin manquait, dump telecharge, 1 186 paires construites sans API | `en-cours.md`, `2026-10-21.md`, `2026-10-21_memoire.md` (+7) |
 | 20:29 | `65548bf6` | DOC — les docs disent la verite actuelle, pas l'historique : l'etage 2 tient deux pas et ne s'etend pas par les operateurs testes (la piste active est l'etat latent) ; les paires doivent etre du bon registre ET du bon domaine. Les details des echecs restent dans reports/ | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21.md` (+1) |
+| 23:27 | `07e4be7d` | ERRATUM 6 + MESURES 113-114 — LA « FALAISE » DU PAS DE PENSEE ETAIT UNE CARTE DES LIGNES CASSEE : 200 noms pour 400 lignes, les « series de 4 phrases » etaient fr0/en0/fr1/en1, des paires de traduction. Sur la carte correcte, l'operateur lineaire PREDIT LA MOYENNE (effondrement 0,89-0,99, retrieval 0-8,9 % contre 2,2 %), aux 3 B/7 B/14 B ; le contrastif reste au hasard (2,2-11,1 %) et un MLP memorise sans generaliser. Mesures 82-85, 88 et 108 RETIREES. Le perimetre des langues s'arrete au francais inclus et l'etage 2 devient le chantier principal | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+14) |
 
 ## Chiffres du jour
 
-`81 Go` · `1186 paires` · `16 Go` · `256 jetons` · `30950 paires` · `2832 paires` · `33 %` · `0,855` · `0,865` · `0,050`
+`-8,9 %` · `2,2 %` · `-11,1 %` · `81 Go` · `1186 paires` · `16 Go` · `256 jetons` · `30950 paires` · `2832 paires` · `33 %` · `0,855` · `0,865`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

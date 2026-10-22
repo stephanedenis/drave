@@ -56,7 +56,7 @@ def effondrement(A):
     return float(S[m].mean())
 
 
-def contraste(Xtr, Ytr, Xte, Yte, epochs=400, lr=1e-3, tau=0.05, graine=1234):
+def contraste(Xtr, Ytr, Xte, Yte, epochs=400, lr=1e-3, tau=0.05, graine=1234, lot=0):
     """F linéaire entraîné par InfoNCE : discriminer la bonne suite parmi les paires du lot."""
     import torch
     torch.manual_seed(graine)
@@ -67,11 +67,22 @@ def contraste(Xtr, Ytr, Xte, Yte, epochs=400, lr=1e-3, tau=0.05, graine=1234):
     b = torch.zeros(d, requires_grad=True)
     opt = torch.optim.Adam([W, b], lr=lr)
     n = len(Xt)
+    generateur = torch.Generator().manual_seed(graine)
+    perte = torch.tensor(0.0)
     for _ in range(epochs):
-        F = Xt @ W + b
-        logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Yt, dim=1).T) / tau
-        perte = torch.nn.functional.cross_entropy(logits, torch.arange(n))
-        opt.zero_grad(); perte.backward(); opt.step()
+        if lot and lot < n:
+            ordre = torch.randperm(n, generator=generateur)
+            for deb in range(0, n, lot):
+                idx = ordre[deb:deb + lot]
+                F = Xt[idx] @ W + b
+                logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Yt[idx], dim=1).T) / tau
+                perte = torch.nn.functional.cross_entropy(logits, torch.arange(len(idx)))
+                opt.zero_grad(); perte.backward(); opt.step()
+        else:
+            F = Xt @ W + b
+            logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Yt, dim=1).T) / tau
+            perte = torch.nn.functional.cross_entropy(logits, torch.arange(n))
+            opt.zero_grad(); perte.backward(); opt.step()
     with torch.no_grad():
         pred = (Xe @ W + b).numpy()
     return pred, float(perte.detach())
@@ -83,6 +94,7 @@ def principal() -> int:
     ap.add_argument("--sortie", required=True)
     ap.add_argument("--par-serie", type=int, default=4)
     ap.add_argument("--epochs", type=int, default=400, help="époques du contraste linéaire")
+    ap.add_argument("--lot", type=int, default=0, help="paires par lot du contraste (0 = lot complet)")
     a = ap.parse_args()
     z = np.load(a.etats, allow_pickle=False)
     couches = [int(c) for c in z["couches"]]
@@ -92,7 +104,7 @@ def principal() -> int:
     n_phrases = n_lignes // 2
     n_series = n_phrases // a.par_serie
     assert n_lignes % 2 == 0 and n_phrases % a.par_serie == 0, (n_lignes, n_phrases)
-    assert len(noms) == n_phrases, f"noms {len(noms)} ≠ phrases {n_phrases} : la carte des lignes est cassée"
+    assert len(noms) in (n_phrases, n_lignes), f"noms {len(noms)} ≠ phrases {n_phrases} : la carte des lignes est cassée"
     rng = np.random.default_rng(1234)
     cles = list(range(n_series)); rng.shuffle(cles)
     n_tr = int(0.7 * n_series)
@@ -133,7 +145,7 @@ def principal() -> int:
             justes += int(np.argmax(norm(pred1[idx:idx + 1]) @ norm(cand).T) == 1)
         ret_serie = justes / len(te)
         # contrastif
-        predc, perte = contraste(Xtr, Ytr, Xte, Yte, epochs=a.epochs)
+        predc, perte = contraste(Xtr, Ytr, Xte, Yte, epochs=a.epochs, lot=a.lot)
         res.append({
             "couche": int(L), "lambda": lam,
             "cos_un_pas": round(cos(pred1, Yte), 4),

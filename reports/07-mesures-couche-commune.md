@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (114 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (115 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4252,3 +4252,38 @@ négatif (cibles mélangées) ✓✓.
 
 **Ce que cela change** ✓✓ : la prochaine mesure doit **augmenter les transitions** (plus de séries, plusieurs
 romans, ou des états de contexte) avant de conclure sur l'information ✓✓.
+
+---
+
+## Mesure 115 — L'INFORMATION N'EST PAS DANS L'ÉTAT D'UNE PHRASE : **630 séries** et **1 323 transitions** ne changent rien — le linéaire reste la moyenne, le MLP mémorise sans généraliser
+
+**La question** ✓✓. L'échec des mesures 113-114 vient-il de l'**échantillon** (105 transitions, 200 phrases) ou de
+l'**information** (la phrase suivante n'est pas dans l'état de la phrase courante) ? ✓✓
+
+**Le dispositif** ✓✓ : **630 séries** Verne (2 520 phrases FR, 3 B, `composition_verne.py --series 640`) ✓ ;
+441 séries d'entraînement, 189 de test, soit **1 323 transitions** d'entraînement et **567** de test ✓ ; le ridge
+corrigé (mesure 113) et le MLP contrastif (mesure 114), avec mini-lots (128 pour le linéaire, 256 pour le MLP) et
+2 graines pour le MLP ✓ ; hasard global **0,18 %** (1/567), dans la série **25 %** ✓✓.
+
+**Les résultats** ✓ :
+
+| modèle | retrieval global | retrieval dans la série | négatif | perte d'entraînement |
+|---|---:|---:|---:|---:|
+| ridge corrigé | 0-0,88 % | 14,3-27,5 % | 0-0,35 % | — |
+| MLP contrastif | 0-1,15 % | 14,3-27,0 % | 0-0,26 % | 0,03-3,76 |
+
+* **LE LINÉAIRE EST ENCORE LA MOYENNE** ✗✗ : son cosinus égale celui du prédicteur constant à ±0,01 près
+  (0,827-0,940 contre 0,821-0,939), et l'**effondrement** reste à **0,933-0,995** ✓✗ — *8× plus de données ne
+  changent rien* ✗✗ ;
+* **LE MLP MÉMORISE TOUJOURS SANS GÉNÉRALISER** ✗✗ : la perte d'entraînement tombe à **0,03**, mais le retrieval de
+  test reste à **0-1,15 %** et celui de la série à **14-27 %** (hasard 25 %) ✓✗ ;
+* **LES CONTRÔLES NÉGATIFS RESTENT AU HASARD** ✓✓ (0-0,35 %) : l'outil ne fabrique pas de signal ✓✓ ;
+* **LE RETRIEVAL GLOBAL EST À 0-6× LE HASARD** ✓✗ : le maximum (1,15 % à la couche 18) reste **dérisoire** ✓✗.
+
+**Ce que cela change** ✗✗ : ce n'est ni l'**échantillon** (8× plus de transitions), ni la **forme** (MLP), ni
+l'**objectif** (InfoNCE) : **l'état d'une phrase ne porte pas la phrase suivante** ✓✗. *Le « pas de pensée » n'est
+pas un opérateur sur l'état d'une phrase ; il faut un état qui porte le **plan** de la série* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : un seul roman, un horizon de trois phrases, des phrases consécutives dont la
+dépendance est faible ✓✗ ; un état de **contexte** (les k phrases précédentes) ou un état **récurrent** mis à jour
+phrase par phrase pourraient porter plus d'information ✓✗ ; et le retrieval reste une tâche dure ✓✗.

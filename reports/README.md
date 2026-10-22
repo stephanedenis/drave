@@ -52,6 +52,8 @@
 - [`pas-de-pensee-mlp-6.json`](pas-de-pensee-mlp-6.json) · [`pas-de-pensee-mlp-18.json`](pas-de-pensee-mlp-18.json) — **retirés (erratum 6)**
 - [`pas-de-pensee-corrige-3b.json`](pas-de-pensee-corrige-3b.json) · [`pas-de-pensee-corrige-7b.json`](pas-de-pensee-corrige-7b.json) · [`pas-de-pensee-corrige-14b.json`](pas-de-pensee-corrige-14b.json) — le pas de pensée sur la **carte correcte** (mesure 113 : l'opérateur prédit la moyenne)
 - [`pas-de-pensee-non-lineaire-3b.json`](pas-de-pensee-non-lineaire-3b.json) — MLP contrastif (mesure 114 : mémorise, ne généralise pas)
+- [`pas-de-pensee-corrige-large.json`](pas-de-pensee-corrige-large.json) · [`pas-de-pensee-non-lineaire-large.json`](pas-de-pensee-non-lineaire-large.json) — 630 séries (mesure 115 : l'état d'une phrase ne porte pas la suivante)
+- [`composition-verne-large.json`](composition-verne-large.json) — la composition sur 630 séries (contrôle de la mesure 115 : 0,53 / 0,867 à la couche 18)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)
 - [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·

@@ -59,18 +59,21 @@ lisaient les états Verne avec 200 noms pour 400 lignes — les « séries de qu
 son cosinus est celui du prédicteur constant à ±0,03 près, ses sorties sont **effondrées** (cosinus moyen 0,89-0,99),
 et le retrieval de la phrase suivante reste au **hasard** (0-8,9 % contre 2,2 %), aux trois tailles ; un opérateur
 **contrastif** (InfoNCE) ne fait pas mieux (2,2-11,1 %) — *l'objectif n'est pas la cause* ✗✓. Un MLP contrastif
-**mémorise** les 105 transitions (perte 0,03) mais ne **généralise** pas (mesure 114) : avec ce corpus, l'échec est
-aussi celui de l'**échantillon** ✓✗. **En revanche**, l'**état latent entraîné avec la tâche** (mesure 109) **collapse**
-bel et bien en **point fixe** : le pas 3 monte à 0,60-0,67, mais le pas 1 tombe à 0,00 ; la pénalité de point fixe
-(mesure 110) ne le débloque pas ✗✗. *Ce n'est donc pas le modèle ni la forme de l'opérateur : c'est le **pas** qui
-n'est pas une fonction de l'état d'une phrase — il manque le **plan** de la série.*
+**mémorise** les transitions (perte 0,03) mais ne **généralise** pas (mesures 114-115) ; avec **630 séries** et
+**1 323 transitions** (mesure 115), ni le linéaire — qui reste la moyenne (cos 0,827-0,940 contre 0,821-0,939,
+effondrement 0,933-0,995) — ni le MLP (retrieval 0-1,15 %, dans la série 14-27 % contre 25 %) ne retrouvent la
+phrase suivante : *ce n'est ni l'échantillon, ni la forme, ni l'objectif* ✗✗. **En revanche**, l'**état latent
+entraîné avec la tâche** (mesure 109) **collapse** bel et bien en **point fixe** : le pas 3 monte à 0,60-0,67, mais
+le pas 1 tombe à 0,00 ; la pénalité de point fixe (mesure 110) ne le débloque pas ✗✗. *Ce n'est donc pas le modèle ni
+la forme de l'opérateur : c'est le **pas** qui n'est pas une fonction de l'état d'une phrase — il manque le **plan**
+de la série.*
 
 ## Ce qui reste à construire
 
 Une **dynamique qui avance d'un pas à la fois** suppose un état qui porte le **plan** de la série, pas seulement la
-phrase courante. Trois chantiers, dans l'ordre : **(1)** trancher la question de l'**information** — augmenter les
-transitions (plus de séries, plusieurs romans, états de contexte) et refaire le test contrastif (mesure 114) ;
-**(2)** construire un état de **plan** (ce que la série doit faire, pas ce que la phrase dit) et mesurer s'il rend le
-pas prédictible ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas, reconstruction, variété). L'outillage
-est en place : `tools/pas_de_pensee_corrige.py` et `tools/pas_de_pensee_non_lineaire.py` pour l'information,
-`tools/composition_latente.py` pour l'état latent.
+phrase courante — et la mesure 115 a tranché la question de l'**information** : l'état d'une phrase ne porte pas la
+suivante, même avec **1 323 transitions** et un MLP. Trois chantiers, dans l'ordre : **(1)** construire un état de
+**plan** (ce que la série doit faire, pas ce que la phrase dit) ; **(2)** mesurer s'il rend la **trajectoire**
+prédictible (pas la phrase suivante) ; **(3)** seulement ensuite, la **dynamique** (perte multi-pas, reconstruction,
+variété). L'outillage est en place : `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py` et
+`tools/composition_latente.py`.

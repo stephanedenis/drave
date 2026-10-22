@@ -51,17 +51,28 @@ class MLP(nn.Module):
         return self.reseau(x)
 
 
-def entrainer(Xtr, Ytr, cache, epochs, lr, graine, tau=0.05):
+def entrainer(Xtr, Ytr, cache, epochs, lr, graine, tau=0.05, lot=0):
     torch.manual_seed(graine)
     X = torch.from_numpy(Xtr); Y = torch.from_numpy(Ytr)
     m = MLP(X.shape[1], cache)
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=1e-4)
     n = len(X)
+    generateur = torch.Generator().manual_seed(graine)
+    perte = torch.tensor(0.0)
     for _ in range(epochs):
-        F = m(X)
-        logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Y, dim=1).T) / tau
-        perte = torch.nn.functional.cross_entropy(logits, torch.arange(n))
-        opt.zero_grad(); perte.backward(); opt.step()
+        if lot and lot < n:
+            ordre = torch.randperm(n, generator=generateur)
+            for deb in range(0, n, lot):
+                idx = ordre[deb:deb + lot]
+                F = m(X[idx])
+                logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Y[idx], dim=1).T) / tau
+                perte = torch.nn.functional.cross_entropy(logits, torch.arange(len(idx)))
+                opt.zero_grad(); perte.backward(); opt.step()
+        else:
+            F = m(X)
+            logits = (torch.nn.functional.normalize(F, dim=1) @ torch.nn.functional.normalize(Y, dim=1).T) / tau
+            perte = torch.nn.functional.cross_entropy(logits, torch.arange(n))
+            opt.zero_grad(); perte.backward(); opt.step()
     return m, float(perte.detach())
 
 
@@ -71,6 +82,7 @@ def principal() -> int:
     ap.add_argument("--sortie", required=True)
     ap.add_argument("--cache", type=int, default=512)
     ap.add_argument("--epochs", type=int, default=600)
+    ap.add_argument("--lot", type=int, default=0, help="paires par lot (0 = lot complet)")
     ap.add_argument("--graines", type=int, default=3)
     ap.add_argument("--par-serie", type=int, default=4)
     a = ap.parse_args()
@@ -96,7 +108,7 @@ def principal() -> int:
         cibles = [np.stack([F[k * a.par_serie + j] for j in range(a.par_serie)]) for k in te]
         mesures = {"juste": [], "serie": [], "cos": [], "eff": [], "neg": [], "neg_serie": [], "perte": []}
         for g in range(a.graines):
-            m, perte = entrainer(Xtr, Ytr, a.cache, a.epochs, 1e-3, graine=1000 + g)
+            m, perte = entrainer(Xtr, Ytr, a.cache, a.epochs, 1e-3, graine=1000 + g, lot=a.lot)
             with torch.no_grad():
                 pred = m(torch.from_numpy(Xte)).numpy()
             justes = sum(int(np.argmax(norm(pred[idx:idx + 1]) @ norm(c).T) == 1)
@@ -107,7 +119,7 @@ def principal() -> int:
             mesures["eff"].append(effondrement(pred))
             mesures["perte"].append(perte)
             mel = rng.permutation(len(Ytr))
-            mn, _ = entrainer(Xtr, Ytr[mel], a.cache, a.epochs, 1e-3, graine=2000 + g)
+            mn, _ = entrainer(Xtr, Ytr[mel], a.cache, a.epochs, 1e-3, graine=2000 + g, lot=a.lot)
             with torch.no_grad():
                 predn = mn(torch.from_numpy(Xte)).numpy()
             mesures["neg"].append(retrieval(predn, Yte))
