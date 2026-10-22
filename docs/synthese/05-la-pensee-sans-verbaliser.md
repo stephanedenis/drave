@@ -149,6 +149,11 @@ entraîner le plan dans le modèle.
 **carte linéaire**. *La tête bien faite ne remplace pas la grosse tête : elle la rend utilisable dans toutes les
 langues.*
 
+**Mesure 138 — un code partagé non supervisé ne suffit pas.** Une ACP commune FR+EN (64 ou 256 dims) suivie du
+pont donne **0,14-0,98** (64) et **0,34-1,00** (256), contre **0,46-1,00** pour le pont pleine dimension : la
+compression non supervisée perd l'information de raisonnement. *La tête bien faite n'est pas une réduction de
+dimension, c'est une carte alignée.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

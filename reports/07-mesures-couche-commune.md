@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (137 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (138 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5018,3 +5018,35 @@ utilisable dans toutes les langues.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : un seul modèle de plus, une couche (18), un corpus synthétique ✓✗ ; le 14 B et
 au-delà restent à tester ✓✗.
+
+---
+
+## Mesure 138 — UN CODE PARTAGÉ NON SUPERVISÉ NE SUFFIT PAS : 64 dims → **0,14-0,98**, 256 dims → **0,34-1,00**, contre 0,46-1,00 (pont pleine dimension)
+
+**La question** ✓✓. Le pont linéaire a besoin des 2048 dimensions ; un **code partagé** de petite dimension (ACP
+commune FR+EN) suffit-il ? ✓✓
+
+**Le dispositif** ✓✓ : ACP ajustée sur les états **FR+EN d'entraînement** (k = 64 et 256) ✓ ; pont EN→FR **dans le
+code** ; sonde FR ; retrieval (hasard **5 %**) ✓ ; contrôles (pont mélangé, sans pont) ✓✓.
+
+**Les résultats** ✓ (hasard 5 % ; pont par longueur) :
+
+| longueur | code 64 | code 256 | pont plein (mesure 126) |
+|---|---:|---:|---:|
+| 2 | 0,980 | 1,000 | 1,000 |
+| 3 | 0,415 | 0,740 | 0,911 |
+| 4 | 0,208 | 0,465 | 0,681 |
+| 5 | 0,228 | 0,425 | 0,520 |
+| 6 | 0,141 | 0,339 | 0,463 |
+
+* **LE CODE 64 EST TROP PETIT** ✗✗ : 0,14-0,98 ; l'in-langue tombe à 0,21-1,00 ✓✗ ;
+* **LE CODE 256 RESTE EN DESSOUS** ✗✗ : 0,34-1,00 contre 0,46-1,00 (plein) ✓✗ ;
+* **L'ACP NON SUPERVISÉE PERD L'INFORMATION** ✗✗ : les directions de la réponse ne sont pas dans les premiers
+  composants ✓✗.
+
+**Ce que cela change** ✗✓ : le pont **pleine dimension** reste la petite structure qui marche ✓✓ ; un code partagé
+doit être **appris pour la tâche** (CCA, supervisé), pas seulement **compressé** ✓✗. *La « tête bien faite » n'est
+pas une réduction de dimension : c'est une carte alignée.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : l'ACP est **non supervisée** ✓✗ ; une CCA ou un code entraîné pourrait marcher
+à petite dimension ✓✗ ; un seul corpus, un 3 B, une couche ✓✗.

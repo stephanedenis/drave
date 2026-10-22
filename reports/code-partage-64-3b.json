@@ -1,0 +1,47 @@
+{
+ "couche": 18,
+ "k": 64,
+ "hasard": 0.05,
+ "resultats": [
+  {
+   "longueur": 2,
+   "k": 64,
+   "fr_fr": 1.0,
+   "sans_pont": 0.0594,
+   "pont": 0.9802,
+   "pont_melange": 0.0792
+  },
+  {
+   "longueur": 3,
+   "k": 64,
+   "fr_fr": 0.6911,
+   "sans_pont": 0.0732,
+   "pont": 0.4146,
+   "pont_melange": 0.0244
+  },
+  {
+   "longueur": 4,
+   "k": 64,
+   "fr_fr": 0.4514,
+   "sans_pont": 0.0486,
+   "pont": 0.2083,
+   "pont_melange": 0.0694
+  },
+  {
+   "longueur": 5,
+   "k": 64,
+   "fr_fr": 0.3307,
+   "sans_pont": 0.0472,
+   "pont": 0.2283,
+   "pont_melange": 0.0315
+  },
+  {
+   "longueur": 6,
+   "k": 64,
+   "fr_fr": 0.2066,
+   "sans_pont": 0.0661,
+   "pont": 0.1405,
+   "pont_melange": 0.0331
+  }
+ ]
+}
