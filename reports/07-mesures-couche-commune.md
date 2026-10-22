@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (123 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (124 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -4549,3 +4549,42 @@ adaptation de l'espace cible, pas un état transférable* ✗✗.
 **Ce que ce résultat ne dit pas** ✗ : les découpages diffèrent, donc les colonnes « avant » ne sont pas comparables
 entre graines ✓✗ ; 88 items, une couche ✓✗ ; et le contrôle à cibles mélangées garde 1/6 de paires correctes par
 construction ✓✗.
+
+---
+
+## Mesure 124 — ENTRAÎNÉ **CONTRE LES CIBLES FIGÉES**, LE PLAN **TRANSFÈRE** : 0,324 / 0,273 / 0,216 (moyenne de deux graines ; hasard 0,125), contre 0,205 / 0,216 / 0,165 avant
+
+**La question** ✓✓. Le plan peut-il être rendu **transférable** en entraînant directement contre les cibles du
+modèle **figé** — au lieu de cibles recalculées par le modèle en cours d'entraînement ? ✓✓
+
+**Le dispositif** ✓✓ (`tools/plan_entrainement.py --cibles-figees` ✓) : les cibles d'entraînement (5ᵉ, 6ᵉ, 7ᵉ
+phrases) sont calculées **une fois** par le modèle figé et mises en cache ✓ ; le LoRA est entraîné par InfoNCE
+**contre ces cibles fixes** ✓ ; l'évaluation se fait contre les **mêmes** cibles figées, sur 93 séries tenues à
+part ✓ ; deux graines (1234 et 5678) ✓✓.
+
+**Les résultats** ✓ :
+
+| graine | avant (h1/h2/h3) | après, cibles figées |
+|---|---|---|
+| 1234 | 0,239 / 0,205 / 0,170 | **0,352 / 0,239 / 0,239** |
+| 5678 | 0,170 / 0,227 / 0,159 | **0,296 / 0,307 / 0,193** |
+| **moyenne** | **0,205 / 0,216 / 0,165** | **0,324 / 0,273 / 0,216** |
+
+* **LE PLAN TRANSFÈRE, EN DIRECTION** ✓✓ : **+0,119 / +0,057 / +0,051** en moyenne, et le **même signe aux deux
+  graines** ✓✓ ;
+* **SEUL h1 EST SOLIDE** ✗✓ : **+11,4 et +12,5 points** (z ≈ 2,0) ; h2 (+3,4 / +7,9, z 0,5-1,2) et h3 (+6,8 /
+  +3,4, z 0,6-1,1) restent dans le bruit de 88 items ✓✗ — *l'amplitude est incertaine, h2/h3 s'inversent d'une
+  graine à l'autre* ✓✗ ;
+* **LE PROBLÈME ÉTAIT L'OBJECTIF** ✓✓ : avec des cibles **mouvantes** (mesures 120-123), le transfert figé plafonnait
+  à +0,05-0,08, avec un zéro ; avec des cibles **fixes**, il est systématique en direction ✓✓ — *ce n'était pas
+  l'information qui manquait, c'était la cible qui bougeait* ✓✓ ;
+* **LE NIVEAU RESTE MODESTE** ✓✗ : 0,216-0,324 contre 0,125 (1,7× à 2,6× le hasard) ✓✗.
+
+**Ce que cela change** ✓✓ : le plan **s'entraîne et transfère** ; le critère des cibles figées est le bon, et
+l'objectif direct est la bonne méthode ✓✓. *La phase 2 a une brique **mesurée** : un état de plan entraînable, qui
+retrouve plusieurs pas dans la représentation figée* ✓✓.
+
+**Ce que ce résultat ne dit pas** ✗ : 88 items, deux graines, une couche (18), un seul modèle ✓✗ ; le modèle figé
+est **déjà au-dessus du hasard** avant entraînement (similarité lexicale de la même série), et le contrôle à cibles
+mélangées n'a **pas** été fait avec des cibles figées ✓✗ ; l'objectif direct peut encore déformer l'**invite** (pas
+seulement le plan) ✓✗ ; et les horizons au-delà de 3, à cette échelle, restent à mesurer ✓✗.

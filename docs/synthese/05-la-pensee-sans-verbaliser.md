@@ -84,7 +84,10 @@ s'entraîne**, premier résultat positif de l'étage 2. Mieux : le **même** ét
 0,443 / 0,295 / 0,341 pour les 5ᵉ, 6ᵉ et 7ᵉ phrases) — *la dynamique n'est plus bloquée à un pas*. Mais les contrôles **tempèrent** : le
 transfert aux cibles figées est de +0,05 à +0,08 selon la graine (mesures 121 et 123), et **nul à 16 phrases**
 (0,193 contre 0,189, mesure 122) ; *le gain principal est donc l'adaptation de l'espace cible, pas un plan
-transférable*. Le critère de la suite est le retrieval **contre les cibles figées** ; le chantier suivant est
-d'**entraîner contre des cibles figées** (pour forcer un plan transférable), puis le passage à l'échelle. L'outillage est en place :
+transférable*. **La correction marche** (mesure 124) : entraîné **contre des cibles figées**, le plan transfère —
+**0,324 / 0,273 / 0,216** en moyenne de deux graines (hasard 0,125 ; avant 0,205 / 0,216 / 0,165), même signe aux
+deux découpages ; mais seul **h1** est solide (z ≈ 2,0), h2/h3 restent dans le bruit de 88 items. *Ce n'était pas
+l'information qui manquait, c'était la cible qui bougeait.* La suite : plus de séries de test, horizons au-delà de 3,
+et un état de plan **récurrent**. L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

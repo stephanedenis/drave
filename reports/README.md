@@ -61,6 +61,7 @@
 - [`plan-multi-3b.json`](plan-multi-3b.json) — le plan multi-pas (mesure 120 : 0,443 / 0,295 / 0,341 à trois horizons)
 - [`plan-controle-3b.json`](plan-controle-3b.json) — le contrôle des cibles figées (mesure 121 : 0,318 / 0,250 / 0,216 ; moitié du gain)
 - [`plan-16.json`](plan-16.json) — l'échelle 16 phrases, horizons 1-7 (mesure 122 : transfert figé nul)
+- [`plan-fige-1234.json`](plan-fige-1234.json) · [`plan-fige-5678.json`](plan-fige-5678.json) — l'objectif contre cibles figées (mesure 124 : 0,324 / 0,273 / 0,216 en moyenne ; h1 solide)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

@@ -51,6 +51,7 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--horizons", default="1", help="pas de plan à prédire (ex. 1,2,3)")
     ap.add_argument("--graine", type=int, default=1234)
+    ap.add_argument("--cibles-figees", action="store_true", help="entraîner contre les cibles du modèle FIGÉ (plan transférable)")
     ap.add_argument("--melange", action="store_true", help="contrôle : cibles mélangées dans le lot")
     ap.add_argument("--sortie", default="reports/plan-entrainement.json")
     a = ap.parse_args()
@@ -127,6 +128,16 @@ def main() -> int:
 
     cache_base = cache_cibles(te)
     avant = retrieval_avec(te, cache_base)
+    y_tr = {}
+    if a.cibles_figees:
+        with torch.no_grad():
+            for h in horizons:
+                for i in range(0, len(tr), 32):
+                    groupe = tr[i:i + 32]
+                    ys = torch.nn.functional.normalize(etats([series[k][a.prompt + h - 1] for k in groupe], 128), dim=1)
+                    for j, k in enumerate(groupe):
+                        y_tr.setdefault(k, {})[h] = ys[j]
+        print(f"  cibles figées : {len(y_tr)} séries × {len(horizons)} horizons mises en cache")
     print("  AVANT : " + " · ".join(f"h{h} {v:.3f}" for h, v in avant.items()))
 
     opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=a.lr)
@@ -142,8 +153,11 @@ def main() -> int:
             z = torch.nn.functional.normalize(etats(invites, 256), dim=1)
             pertes = []
             for h in horizons:
-                cibles = [series[k][a.prompt + h - 1] for k in groupe]
-                y = torch.nn.functional.normalize(etats(cibles, 128), dim=1)
+                if a.cibles_figees:
+                    y = torch.stack([y_tr[k][h] for k in groupe])
+                else:
+                    cibles = [series[k][a.prompt + h - 1] for k in groupe]
+                    y = torch.nn.functional.normalize(etats(cibles, 128), dim=1)
                 if a.melange:
                     y = y[torch.randperm(len(y), device=y.device)]
                 logits = (z @ y.T) / 0.05
@@ -163,7 +177,7 @@ def main() -> int:
     pathlib.Path(a.sortie).write_text(json.dumps({
         "hf": a.hf, "n_series": len(series), "n_train": len(tr), "n_test": len(te),
         "couche": a.couche, "prompt": a.prompt, "horizons": horizons, "pas": a.pas, "batch": a.batch, "accum": a.accum, "lr": a.lr,
-        "graine": a.graine, "avant": {str(h): round(v, 4) for h, v in avant.items()}, "apres": {str(h): round(v, 4) for h, v in apres.items()}, "apres_base": {str(h): round(v, 4) for h, v in apres_base.items()}, "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
+        "graine": a.graine, "cibles_figees": a.cibles_figees, "avant": {str(h): round(v, 4) for h, v in avant.items()}, "apres": {str(h): round(v, 4) for h, v in apres.items()}, "apres_base": {str(h): round(v, 4) for h, v in apres_base.items()}, "melange": a.melange, "hasard": 0.125}, ensure_ascii=False, indent=1))
     print(f"  → {a.sortie}")
     return 0
 
