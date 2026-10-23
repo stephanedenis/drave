@@ -96,6 +96,10 @@ et un plan qui résiste.
 
 ## Le tableau de bord des chantiers
 
+**La roadmap** (les deux programmes, l'ordre du jour, la file « jamais en attente ») est dans
+[`docs/roadmap.md`](roadmap.md). L'ordre actuel : **B2.6** (le plan multi-tâches), **A2.5** (le top-k GPU),
+**A4.3** (le diff par couche), **A1.5/A5.3** (la décision par couche).
+
 ### Dépendances
 
 ```

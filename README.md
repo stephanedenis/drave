@@ -165,6 +165,7 @@ La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md
 |---|---|
 | **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/en-cours.md`](docs/en-cours.md) |
 | **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/vision.md`](docs/vision.md) |
+| **la roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/roadmap.md`](docs/roadmap.md) |
 | **les résultats**, mesure par mesure, avec les contrôles | [`reports/07-mesures-couche-commune.md`](reports/07-mesures-couche-commune.md) · [`reports/`](reports/) |
 | **la théorie** (7 chapitres) et la carte du raisonnement | [`docs/synthese/index.md`](docs/synthese/index.md) · [chap. 5](docs/synthese/05-la-pensee-sans-verbaliser.md) |
 | **la méthode** et ses pièges | [`docs/synthese/06-comment-savoir.md`](docs/synthese/06-comment-savoir.md) |

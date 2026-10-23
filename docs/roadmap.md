@@ -1,311 +1,178 @@
-# Roadmap
+# La roadmap de Drave — deux programmes, un ordre, aucune date
 
-> Suite de [`docs/vision.md`](vision.md). Six phases, de ce qui se fait **tout de
-> suite sur cette machine** à ce qui demande une infra (Colab, FPGA). Chaque
-> phase a un critère de succès **mesurable**, et l'état de chaque chantier est
-> marqué : ✅ fait · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+> Suite de [`docs/vision.md`](vision.md). Le projet a **deux programmes** : le **moteur** (les flux de données, les
+> cinq axes) et l'**intelligence** (les deux étages). Ils avancent **en parallèle** ; l'ordre se décide par la
+> **valeur** et les **dépendances**, jamais par une date.
 
-## Phase 0 — La drave observable (aucune infra)
+## Comment lire cette roadmap
 
-**Objectif** : faire du flux de listes un objet de première classe, qu'on
-enregistre et qu'on compare. Sans cela, tout le reste se débugue à l'aveugle.
+- **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+- **Le carpe diem** : pas d'échéance. Un chantier est **fait** quand il est **mesuré**, **écrit** (fiche + docs) et
+  **committé** ; tant qu'il ne l'est pas, il reste dans la liste — et on ne l'annonce pas avant.
+- **DSH ne reste jamais en attente** : chaque ligne a une **prochaine action** ; si elle est bloquée, on prend la
+  suivante dans l'ordre. La file d'attente n'existe pas : il y a toujours un chantier non bloqué à faire avancer.
+- **Un chiffre sans contrôle négatif n'est pas un résultat** : chaque critère de succès nomme son contrôle (le
+  plancher, les paires mélangées, les étiquettes mélangées).
 
-| # | chantier | état | critère de succès |
-|---|---|---|---|
-| 0.1 | **Format de trace du flux** : par (couche, position), la liste des neurones actifs (indice + valeur), l'échelle, le nombre | ✅ | écrit et relu sans perte ; **132 Mo pour 512 jetons** (258 ko/jeton), **+8 % de temps** — mesuré |
-| 0.2 | **Diff par couche** (`tools/diff_flux.py`) : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | démontré : KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de la dynamique ; couche la plus touchée : **FFN 2** |
-| 0.3 | **Le format EST le contrat d'échange** (phase 3) : versionné, en-tête + paires | ✅ | codec de référence (`tools/flux_codec.py`) : aller-retour **identique** sur 132 Mo ; **et le rejeu dans le moteur redonne les mêmes logits** (`--flux-forcer`) |
-| 0.4 | **Profilage par neurone généralisé** : trace exploitable par couche et par expert, pas seulement des compteurs | ✅ | `tools/profil_flux.py` : densité par couche, part des 10 % les plus forts, neurones dominants, export CSV |
+---
 
-## Phase 1 — La drave mesurée (aucune infra)
+## Programme A — Le moteur (la drave, les flux)
 
-**Objectif** : que chaque décision d'exécution soit *choisie par la mesure*, et
-plus aucun repli silencieux.
+### A1 — Observer et régler, neurone par neurone
 
-| # | chantier | état | critère de succès |
-|---|---|---|---|
-| 1.1 | **Top-k dans le noyau d'attention GPU** — `--attn-topk 256` améliore la perplexité (gpt-oss, 234,88 contre 298,56 à 2 048 — `docs/contexte-long.md` §6 ; valeur absolue non reproduite depuis, cf. `docs/plan-gpu-topk.md`) mais retombe sur le CPU | ⏳ | plus aucun repli CPU dans le chemin long contexte |
-| 1.2 | **Quantification choisie par la mesure** : par couche, par tenseur, plutôt qu'un réglage global | 🔬 | la densité par couche varie de **20 % à 56 %** (`reports/rapport-analyse-flux.md`) : la décision push/pull est une propriété de la COUCHE, pas du modèle |
-| 1.3 | **Purge des seuils codés en dur** : le placement (KV, experts, tête) décidé par une règle explicite, pas par un `if` | ⏳ | une table de décision documentée, réglée par des mesures |
-| 1.4 | **Écart int8 résiduel** (+3,0 % contre +0,8 % chez llama.cpp à 8 192) | ✅ | **attribué** : tout l'écart est dans les CLÉS (clés f32 + valeurs int8 = +0,023 % ; l'inverse = +3,01 %) ; **courbe du placement des bits faite** (`reports/rapport-placement-bits-kv.md`) — à taille égale, mettre les bits sur les clés change l'erreur d'un facteur 130 à 840. Suite FAITE : **clés f16 = +0,018 % pour 39 % de la taille f32** — le meilleur réglage mesuré (`DRAVE_KV_BITS=8 DRAVE_KV_K_F16=1`) |
-
-## Phase 2 — La drave répartie localement (aucune infra)
-
-**Objectif** : la machine entière comme un seul flux — deux GPU, 40 cœurs, et le
-disque quand la mémoire ne suffit plus.
+Un flux de listes est observable par construction : on peut compter, tracer, comparer, sans rien reconstruire.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 2.1 | **Ordonnanceur de flux** : placer chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | ⏳ | prefill à 8 k mesuré, placement décidé par la règle |
-| 2.2 | **Streaming des poids depuis le NVMe** (3,5 Go/s) pour ce qui ne tient pas en RAM — c'est la même idée : ne lire que ce qui parle | ⏳ | un modèle > RAM exécuté, débit mesuré |
-| 2.3 | **Cache d'experts rentable** : +6 % aujourd'hui ; grouper les trois projections par expert et supprimer les copies | ⏳ | ≥ +30 %, sinon abandonné (et écrit) |
-| 2.4 | **KV sur deux cartes, politique de page** (le KV est paginé, la politique ne l'est pas) | ⏳ | 1 M de jetons tenus avec une politique d'éviction mesurée |
+| A1.1 | **Format de trace** (DRVF v2/v3) : par couche et position, les neurones actifs (indice + valeur) | ✅ | 132 Mo pour 512 jetons (258 ko/jeton) et +8 % de temps ; la v3 (i8, échelle par bloc de 32) fait 45,1 Mo contre 66,4, au prix de +0,074 % de perplexité au rejeu |
+| A1.2 | **Diff par couche** : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de dynamique ; couche la plus touchée : FFN 2 |
+| A1.3 | **Le format EST le contrat d'échange** (A3) : versionné, en-tête + paires | ✅ | codec de référence : aller-retour identique sur 132 Mo ; le rejeu redonne les mêmes logits |
+| A1.4 | **Profilage par neurone** : densité par couche, part des 10 % les plus forts, neurones dominants | ✅ | densité **20 à 56 %** selon la couche ; top 10 % → **33,1 %** de la magnitude ; **0,08 %** de neurones chauds > 90 % du temps |
+| A1.5 | **La décision par couche** : la quantification et le chemin (push/pull) choisis par la mesure, couche par couche | 🔬 | une table de décision par couche, vérifiée par la perplexité |
 
-## Phase 3 — La drave distribuée (Colab, hors infra locale)
+**Prochaine action** : A1.5 (la table par couche), puis A1.1-A1.2 dans les portes (voir A4).
 
-**Objectif** : deux machines qui se passent des listes, pas des matrices.
-
-Le prototype se fera **avec Colab** : un *nœud moteur* (un bloc de couches) sur le
-runtime Colab, un *nœud pilote* (embeddings, tête, échantillonnage) en local, et
-entre les deux **le format de la phase 0** — c'est précisément pour cela qu'il est
-défini avant.
+### A2 — Répartir sur les composants d'une machine
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 3.1 | **Contrat d'échange** (protocole v5) : tranche de liste = en-tête (couche, source, échelle, bits) + paires (destination, valeur) | ✅ | format écrit, relu, rejoué sans perte (phase 0.3/0.3bis) ; **transport TCP en place et FIDÈLE** (`--flux-serveur`, `--ppl-reparti`) — écart local/réparti **0,00e0** sur 40 et 200 jetons (39 et 199 flux : le dernier n'a rien à prédire), après correction de deux défauts (plage de couches ignorée par `forward`, norme finale appliquée deux fois) |
-| 3.2 | **Granularité** : par couche, par bloc de canaux, par expert | ✅ | listes i16, **échelles par bloc (i8)** et **indices par écarts** (1 608 octets par flux à 256 jetons) ; **mode 4 « lot en listes »** : 1,5 ko par jeton contre 3,5 en dense (÷2,3) pour 3,03e-2 d'écart ; reste le cas MoE |
-| 3.3 | **Seuil de rentabilité** : à partir de quel débit réseau le découpage gagne | 🔬 | mesuré jusqu'à 20 ms de latence par message (`tools/proxy_latence.py`) : **attente ≈ calcul distant + 3,2 × latence**, soit 1,01× le calcul local à 0 ms, 1,99× à 5 ms, 4,89× à 20 ms — le débit ne compte pas (0,25 Mbit/s), la latence compte quatre fois |
-| 3.4 | **Démonstration Colab** : préremplissage réparti (le décodage reste séquentiel — c'est écrit dans la vision) | 🔬 | **le préremplissage par lots sur le fil est FAIT et fidèle** (mode 3 : 256 jetons en 4 lots, écart **0,00e0** ; en 1 lot de 917 ko, **0,00e0**) — reste à le faire tourner sur le runtime Colab, recette dans `docs/colab-reparti.md` |
-| 3.5 | **Sûreté** : version du format, refus des flux incompatibles, pas de silence | ✅ | version dans chaque en-tête ; un pair en version 99 est refusé avec un message qui nomme les deux versions — vérifié avec un faux client |
+| A2.1 | **Cache KV sur deux cartes** (paginé) | ✅ | attention à 1 M de clés : 968 → **13,2 ms** |
+| A2.2 | **Attention complète sur GPU** (décodage et préremplissage) | ✅ | 22,16 → **3,29 ms/jeton** (÷6,7) |
+| A2.3 | **Projections Q8_0 et tête Q6_K sur GPU** (opt-in) | ✅ | 15,6 → 6,2 ms/jeton ; tête : 7,58 → **3,60** |
+| A2.4 | **Cache d'experts MXFP4** | ✅ mesuré, **verdict : non** | +6 % — on ne l'active pas tel quel, et c'est écrit |
+| A2.5 | **Top-k dans le noyau d'attention GPU** — le dernier chemin qui retombe sur le CPU | ⏳ | plus aucun repli CPU dans le long contexte ; `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048, valeur absolue non reproduite) |
+| A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | ⏳ | une règle explicite, pas un `if` codé en dur ; prefill à 8 k mesuré |
 
-## Phase 4 — La drave apprenante (recherche)
+**Prochaine action** : A2.5 (aucune infra, le dernier repli CPU), puis A2.6.
 
-**Objectif** : le flux n'est pas qu'une exécution, c'est une donnée.
-
-| # | chantier | état | critère de succès |
-|---|---|---|---|
-| 4.1 | **Capteur hebbien généralisé** : apprendre des journaux d'activation, déjà amorcé | ⏳ | une couche améliorée par apprentissage sur ses propres logs |
-| 4.2 | **Routage appris** (MoE) : les experts choisis par les logs plutôt que par un routeur dense | ⏳ | qualité égale, coût de routage ÷10 |
-| 4.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ⏳ | modèle plus petit, perplexité égale |
-
-## Phase 5 — La drave sur matériel (FPGA)
-
-**Objectif** : le flux est natif sur du matériel événementiel — le premier âge du
-projet avait raison, au mauvais moment.
+### A3 — Répartir sur plusieurs machines
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| 5.1 | **PE événementiel** (Stratix V) : existe et synthétisé | ✅ | — |
-| 5.2 | **Lecteur DDR3** : vérifié de bout en bout | ✅ | — |
-| 5.3 | **Un opérateur complet sur FPGA** : une couche, alimentée par le même format de flux | 🧱 | dépend d'un accès matériel |
-| 5.4 | **Comparaison énergie/jeton** CPU / GPU / FPGA | 🧱 | dépend d'un accès matériel |
+| A3.1 | **Contrat d'échange** (protocole v5) : en-tête (couche, source, échelle, bits) + paires | ✅ | 79 octets d'en-tête, cinq modes (dense, listes, blocs, lot dense, lot en listes) ; transport TCP fidèle, écart local/réparti **0,00e0** |
+| A3.2 | **Granularité** : par couche, par bloc, par expert | ✅ | listes i16, échelles par bloc, indices par écarts : **1 608 octets par flux** à 256 jetons ; le mode « lot en listes » : 1,5 ko/jeton contre 3,5 en dense (÷2,3) |
+| A3.3 | **Seuil de rentabilité** : à quel débit/latence le découpage gagne | 🔬 | attente ≈ calcul distant + **3,2 × latence** : 1,01× à 0 ms, 1,99× à 5 ms, 4,89× à 20 ms ; le débit ne compte pas (0,25 Mbit/s) |
+| A3.4 | **Démonstration Colab** : préremplissage réparti | 🔬 | le préremplissage par lots est **fait et fidèle** (0,00e0) ; reste le runtime Colab ([`docs/colab-reparti.md`](colab-reparti.md)) |
+| A3.5 | **Sûreté** : version dans chaque en-tête, refus des flux incompatibles | ✅ | un pair en version 99 est refusé avec un message qui nomme les deux versions |
 
-## Ce qui commence maintenant
+**Prochaine action** : A3.4 (la démo distante) — bloquée par le compte Colab ; en attendant, A3.2 (la granularité
+par bloc et le cas MoE).
 
-Phase 0, chantier 0.1 et 0.2 : **la trace du flux et le diff par couche**. Aucune
-infra, et c'est le préalable à tout le reste — y compris à la phase 3, dont le
-format d'échange n'est autre que le format de trace.
+### A4 — Rejouer, comparer, ne pas régresser
 
-### Le format de trace (et donc d'échange)
+Un flux est un journal, et un journal se rejoue.
 
-Le format est spécifié dans **`docs/format-flux.md`** (source unique, avec ses
-invariants vérifiés) : fichier DRVF en **version 2** par défaut — indices par
-écarts, **sans perte**, 3,01 octets par neurone actif — et **version 3** sur
-`DRAVE_TRACE_BLOCS=1` (valeurs i8, échelle f16 par bloc de 32 : 45 079 930 octets
-contre 66 370 408, au prix de +0,074 % de perplexité au rejeu). Le protocole
-d'échange réseau est en **version 5** (79 octets d'en-tête, cinq modes : dense,
-listes, blocs, lot dense, lot en listes).
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| A4.1 | **Portes de non-régression** : deux chemins d'exécution rendent le même résultat | ✅ | Qwen ctx 256 = **19,3885** ; gpt-oss ctx 256 = **15,6017** |
+| A4.2 | **Références indépendantes** : une seconde implémentation de la même formule | ✅ | MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp ; patchs 5,4e-7 ; projecteur 1,7e-6 |
+| A4.3 | **Diff par couche dans les portes** : après un changement de quantification ou de noyau, savoir *où* le calcul diverge | 🔬 | un diff automatique dans la porte, avec la couche et le jeton nommés |
 
-C'est **exactement** ce qu'un nœud distant reçoit pour continuer le calcul : la
-raison pour laquelle la phase 0 sert la phase 3, et la phase 3 le vérifie (écart
-**0,00e0** sur 40, 200 et 1 024 jetons, en flux simple comme en lots).
+**Prochaine action** : A4.3 (le diff dans la porte) — aucune infra.
 
+### A5 — Formats, matériels, énergie
 
-## Journal des mesures de la phase 0
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| A5.1 | **Trois matériels** : SIMD x86, PTX sur Quadro, logique FPGA | ✅ | noyaux écrits et vérifiés |
+| A5.2 | **Quantification du KV choisie par la mesure** | ✅ | l'écart int8 (+3,0 % à 8 192) est **attribué aux clés** ; clés f16 = **+0,018 %** pour 39 % de la taille ; l'int4 coûte +364 % — le débat n'est pas « combien de bits » mais **où sont les échelles** |
+| A5.3 | **Quantification par bloc, par couche** | 🔬 | la politique choisie par la mesure, pas par défaut |
+| A5.4 | **Le FPGA** : un opérateur complet, alimenté par le même format de flux | 🧱 | dépend d'un accès matériel (le PE événementiel et le lecteur DDR3 existent et sont vérifiés) |
 
-| date | mesure | valeur |
+**Prochaine action** : A5.3 (la politique par bloc) — aucune infra ; A5.4 est bloquée par le matériel.
+
+### A6 — Apprendre des flux
+
+Le flux n'est pas qu'une exécution, c'est une donnée.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| A6.1 | **Capteur hebbien** : apprendre des journaux d'activation | 🔬 | une couche améliorée par apprentissage sur ses propres logs |
+| A6.2 | **Routage appris** (MoE) : les experts choisis par les logs | ⏳ | qualité égale, coût de routage ÷10 |
+| A6.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ⏳ | modèle plus petit, perplexité égale |
+
+**Prochaine action** : A6.1 (le capteur, déjà amorcé).
+
+---
+
+## Programme B — L'intelligence (les deux étages)
+
+### B1 — L'entrée-sortie linguistique (étage 1)
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B1.1 | **Le juge post-cutoff** : un texte neuf, jamais vu à l'entraînement | ✅ | le règlement 2025 (139 unités) ; l'UDHR contaminée (le 7 B récite) ; toutes les mesures refaites |
+| B1.2 | **La qualité de traducteur** : chrF + plancher + marge + intervalle | ✅ | **55-76**, marge **+30 à +40**, répliquée sur un second règlement |
+| B1.3 | **Les six registres** : juridique, presse, littéraire, parlé préparé, technique (JRC et prose), dialogue | ✅ | marges de +25,9 (littéraire) à +40,7 (parlé) ; la référence minée démasquée |
+| B1.4 | **Les langues et la couverture** : 24 langues UE, les 20, le pidgin, le critère au français inclus | ✅ | +35,8 / +21,5 ; le pidgin écrit +5,8 (7 plis) ; le critère démographique tenu |
+| B1.5 | **La prose scientifique** (articles) | 🧱 corpus | un corpus parallèle **humain** d'articles ; le MultiUN couvre la prose technique institutionnelle |
+| B1.6 | **Le dialogue réel** : la conversation spontanée | 🧱 corpus | des transcriptions de conversation **réelles** avec traductions ; les sous-titres sont du parlé écrit et contraint |
+
+**Prochaine action** : B1.5/B1.6 — la recherche de corpus. Si aucun corpus humain n'est trouvé, **la ligne se
+déclare bloquée** et on passe à B2 ; la carte des registres reste celle de six registres + deux marges nommées.
+
+### B2 — La représentation et le raisonnement (étage 2)
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B2.1 | **La RSN** : une représentation partagée, mais non alignée | ✅ | pont 28-69 %, cos 0,78-0,92, insensible à la taille |
+| B2.2 | **La composition** | ✅ | 0,61 / 0,84 → **0,76 / 0,865** au 7 B |
+| B2.3 | **Le raisonnement synthétique** : dans l'état, aligné par un pont linéaire | ✅ | 1,00 → 0,51 ; pont 0,46-1,00 ; quatre langues, douze personnes, trois échelles |
+| B2.4 | **L'alignement appris** : bilingue, contraste, saturation | ✅ | 0,656 → 0,742 → **0,753** ; le prix (in-langue 98,7 → 77,6) |
+| B2.5 | **Le raisonnement naturel** (XNLI) | ✅ | 0,50-0,59 ; pont 0,59 → **0,77** (fine-tuning) ; le domaine compte plus que le volume |
+| B2.6 | **Le plan multi-tâches** : entraîner le plan **et** le raisonnement ensemble | ⏳ | l'EN→FR du plan au-dessus de 0,40 (le contexte joint est à 0,36) ; sinon, la ligne plan reste close |
+| B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ⏳ | la même expérience à 32 B (quantifié si la mémoire l'exige) ; le pont tient-il ? |
+| B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | ⏳ | la sonde et le pont au 14 B (fait : 0,481/0,589/0,627) ; un corpus **hors XNLI** |
+
+**Prochaine action** : **B2.6** (le plan multi-tâches — aucune infra, la seule variante non testée), puis B2.7/B2.8.
+
+### B3 — Le plan et la dynamique
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B3.1 | **L'état de plan** : le contexte joint des 4 phrases | ✅ | 0,43 (FR→FR) ; c'est la meilleure représentation du plan |
+| B3.2 | **La résistance** : ponts, bilinguisme, contraste, récurrence | ✅ | tous échouent (0,25-0,39) ; l'apparent transfert est un effet côté cible |
+| B3.3 | **La dynamique** : un état qui porte plusieurs pas | ✅ mesuré | le pas n'existe pas au-delà du contexte (mesures 113-115) ; le plan s'entraîne (119-124) |
+
+**Prochaine action** : aucune — la ligne est close ; B2.6 est la seule réouverture possible.
+
+---
+
+## L'ordre d'aujourd'hui (carpe diem)
+
+L'ordre est **la valeur / le coût**, pas la date. Les quatre premiers ne dépendent d'aucune infra ; ils peuvent
+tourner en parallèle sur deux GPU.
+
+1. **B2.6 — le plan multi-tâches** (2 h, 1 GPU) : la dernière variante de l'étage 2.
+2. **A2.5 — le top-k GPU** (2-3 h, 1 GPU) : le dernier repli CPU du moteur.
+3. **A4.3 — le diff par couche dans la porte** (1 h, CPU) : la condition du rejeu utile.
+4. **A1.5 / A5.3 — la décision par couche** (2 h, CPU + 1 GPU) : la quantification et le chemin choisis par la mesure.
+5. **B2.7 — le 32 B** (si la mémoire le permet : quantifié) : l'échelle au-delà du 14 B.
+6. **A3.4 — la démo Colab** (le compte Colab) : la répartition réseau.
+7. **B1.5/B1.6 — la prose scientifique et le dialogue réel** (la recherche de corpus) : en parallèle, sans bloquer.
+8. **A5.4 — le FPGA** (le matériel) : bloqué, nommé, pas oublié.
+
+## La file « jamais en attente »
+
+Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
+
+- **toujours faisable** : B2.6, B2.7, B2.8, A2.5, A2.6, A4.3, A1.5, A5.3, A6.1-A6.3 ;
+- **bloqué, nommé** : B1.5 (corpus d'articles), B1.6 (corpus de conversation), A3.4 (compte Colab), A5.4 (FPGA) ;
+- **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est
+  fidèle).
+
+## Ce qui est bloqué, et par quoi
+
+| ligne | bloque par | ce qu'il faudrait |
 |---|---|---|
-| 2026-09-30 | trace du flux, Qwen2.5-0.5B, 512 jetons, 24 couches, 2 points par couche | 24 576 listes · **132 Mo** en v1 · 6 octets par neurone actif · **+8 % de temps** (aujourd'hui : 66 Mo en v2 sans perte, 45 Mo en v3) |
-| 2026-09-30 | calcul réparti sur deux processus (12 couches chacun), 40 jetons | écart local/réparti **0,00e0** (144,8289 = 144,8289) après correction de deux défauts ; avant : ×11,2 |
-| 2026-09-30 | diff KV f32 contre KV int8 (perplexité 19,3885 contre 19,8059) | première divergence couche 1 jeton 0 · couche la plus touchée FFN 2 (3,9 × la dynamique) · 229 000 neurones changés sur 24 couches |
-| 2026-09-30 | attribution du cache KV int8, 8 191 jetons, ctx 8 192 | f32 **14,2339** · int8 **14,6667** (+3,0 %) · **clés f32** + valeurs int8 **14,2372** (+0,023 %) · clés int8 + **valeurs f32** 14,6622 (+3,01 %) → **tout l'écart est dans les clés** |
-| 2026-09-30 | protocole de flux, deux processus, localhost | en-tête de **39 octets** à l'époque (79 aujourd'hui : les top-k voyagent) · dense f32 **3 623 octets/flux** · listes i16 2 159 · **blocs + indices par écarts 1 568 (÷2,3)** pour 2,7 % d'écart à 256 jetons de vrai texte · **lots** : 256 jetons en 4 lots, **0,00e0** |
-| 2026-09-30 | `TCP_NODELAY` sur le banc réparti, 200 jetons | attente du pair **97,6 → 16,1 ms** par jeton (calcul local : 15,9 ms) · banc complet 24,5 → **8,3 s**, soit le temps du calcul local (8,2 s), à logits identiques |
-| 2026-09-30 | écart du transport selon la longueur, blocs à seuil 0,01 | **1,37e-1** à 64 jetons · 6,37e-2 à 128 · **2,74e-2** à 256 — il DÉCROÎT (l'erreur est stationnaire par jeton, la perplexité se moyenne) |
-| 2026-09-30 | hypothèse « transmettre l'entrée normée », mode dense | écart **5,61e0** au lieu de 0,00e0 : RÉFUTÉE — la connexion résiduelle a besoin du résidu, pas de sa version normée |
-| 2026-09-30 | où mettre les bits du cache KV, 8 191 jetons, ctx 8 192 | à taille ÉGALE : clés f32 + valeurs int8 **+0,023 %** contre clés int8 + valeurs f32 **+3,01 %** (facteur 130) ; à 4,625 octets : **+0,46 %** contre **+385 %** (facteur 840) · int4/int4 **+364 %** — `reports/rapport-placement-bits-kv.md` |
-| 2026-09-30 | préremplissage par lots sur un lien à 20 ms par message | **2,6 s** en un lot de 64 contre **47,6 s** en un flux par jeton — 18×, écart 0,00e0 des deux côtés |
-| 2026-09-30 | mode 4 : lot en LISTES, 256 jetons par lots de 16 | **1,5 ko par jeton** (dense : 3,5) pour **3,03e-2** d'écart, contre 2,74e-2 pour le mode 2 par jeton |
-| 2026-09-30 | coût du découpage selon la latence (relais retardateur, 256 jetons) | attente **16,8 ms** à 0 ms · **33,0** à 5 ms · **81,8** à 20 ms → `attente ≈ calcul distant + 3,2 × latence`, écart 0,00e0 partout |
-| 2026-09-30 | découpage fidèle à **1 024 jetons** (1 023 flux, texte réel) | perplexité **9,5146** des deux côtés, écart **0,00e0** · 19,4 ms en local contre 19,7 ms à attendre le pair |
+| B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
+| B1.6 dialogue réel | aucun corpus de conversation spontanée FR/EN aligné | des transcriptions avec traductions |
+| A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/colab-reparti.md`) |
+| A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
 
-Le second point est exactement ce que la vision promettait : **la divergence est
-localisée**, pas seulement constatée. La première version de l'outil comparait les
-entiers bruts de deux exécutions dont les échelles diffèrent et affichait des
-écarts de 1e8 : c'est en le lisant qu'on l'a vu — le flux se compare
-**déquantifié**, jamais brut.
+## Journal des décisions
 
-
-### Phase 0.4 — le profilage par neurone, mesuré
-
-`tools/profil_flux.py` lit une trace et rend, **par couche** : la densité
-d'activation, la part de magnitude portée par les 10 % de neurones les plus
-forts, les neurones dominants, et un export CSV.
-
-Deux exécutions du même modèle, 512 jetons, 896 cachés par couche :
-
-| réglage | densité par couche | taille de trace | top 10 % portent |
-|---|---|---|---|
-| `--abits 16` (défaut) | 99-100 % (rien n'est seuillé) | 132 Mo | 25 à 42 % |
-| `--abits 8 --act-thresh 0.05` | **26 à 56 %** | **53 Mo** | 26 à 56 % |
-
-Deux choses en sortent, et la seconde est le cœur de la vision :
-
-1. la **part des 10 % les plus forts** (25-42 % selon les couches) reproduit, par
-   couche, le chiffre global du projet (33,1 %) — le même phénomène, localisé ;
-2. **la taille de la trace suit l'activité** : densité ÷2,3, trace ÷2,5. C'est
-   l'argument de la vision, rendu mesurable sur un fichier : *le coût est
-   proportionnel à ce qui parle*, et ce sera vrai du format d'échange de la
-   phase 3 comme il l'est ici.
-
-Réserve écrite : la ligne « seuil 0,05 » a une perplexité de 2 445 — c'est un
-relevé de COÛT, pas de qualité ; le seuil est volontairement brutal.
-
-
-### Phase 1.4 — l'attribution de l'écart int8 : FAITE
-
-L'écart avec llama.cpp à 8 192 (+3,0 % contre +0,8 %) est attribué. Les deux
-drapeaux annoncés (`DRAVE_KV_V_F32`, `DRAVE_KV_K_F32`) ont été terminés, et
-l'expérience tournée sur 8 191 jetons :
-
-| configuration | perplexité | écart au f32 | part de l'écart |
-|---|---|---|---|
-| cache f32 (référence) | **14,2339** | — | — |
-| cache int8 complet | 14,6667 | +3,04 % | 100 % |
-| **clés f32** · valeurs int8 | **14,2372** | **+0,023 %** | **99,2 % expliqué** |
-| clés int8 · **valeurs f32** | 14,6622 | +3,01 % | 1,0 % seulement |
-
-**Tout l'écart est dans les clés.** C'est cohérent avec leur rôle : une clé entre
-dans le score, donc dans le softmax — une erreur de clé déplace le poids relatif
-d'une position entière ; une valeur ne fait que pondérer la sortie, son erreur se
-moyenne.
-
-Conséquence utilisable tout de suite : `DRAVE_KV_BITS=8 DRAVE_KV_K_F32=1` donne un
-cache à **64 % de la taille f32** pour +0,023 % de perplexité, là où l'int8 complet
-(28 %) coûte +3,04 %. Puis les clés en f16 ont pris sa place : **39 % pour
-+0,018 %**. Notre quantificateur de VALEURS est donc bon ; c'est celui
-des CLÉS qui est le maillon faible.
-
-La **courbe complète du placement des bits** est faite depuis
-(`reports/rapport-placement-bits-kv.md`) : à taille ÉGALE, clés f32 + valeurs int8
-coûte +0,023 % là où clés int8 + valeurs f32 coûte +3,01 % (facteur 130), et le
-4 bits des clés coûte +385 % contre +0,46 % pour celui des valeurs (facteur 840).
-Les **clés en f16** sont mesurées : clés f16 + valeurs int8 = **+0,018 %** à
-8 192 jetons pour **39 % de la taille f32** — le meilleur réglage de la courbe
-(les clés f32, à 64 % de la taille, font +0,023 % ; l'int8 complet, à 28 %, +3,04 %).
-Clés f16 + valeurs int4 : **+0,61 %** à 33 % de la taille f32
-(`reports/rapport-placement-bits-kv.md`).
-
-Deux suites, écrites avec leur critère de succès : **clés f32 · valeurs int4**
-(62,5 % de la taille f32 — si les valeurs tolèrent 4 bits, ce réglage bat l'int8
-complet en taille ET en qualité), et **un meilleur quantificateur de clés**
-(échelle par tête, ou rotation orthogonale avant quantification) pour ramener
-l'écart des clés sous les +0,8 % de llama.cpp. Détail :
-`reports/rapport-attribution-kv.md`.
-
-### Phase 0.3bis — le REJEU, et ce qu'il démontre pour la phase 3
-
-`--flux-forcer <trace>` relit une trace et **remplace les activations calculées
-par celles qui sont enregistrées** (déquantifiées). Si le rejeu redonne les mêmes
-logits, alors **une liste suffit à continuer le calcul** — c'est exactement le
-contrat qu'un nœud distant devra honorer, et il est donc déjà démontré
-localement.
-
-Mesuré, Qwen2.5-0.5B, 512 jetons, deux fenêtres de contexte, trace de 132 Mo :
-
-```
-sans rejeu  : perplexité 19.3885 sur 510 tokens
-avec rejeu  : perplexité 19.3885 sur 510 tokens
-```
-
-Identique. Et le diagnostic (`DRAVE_FLUX_VERIF=1`) chiffre la fidélité de
-l'encodage : écart relatif **1,5e-5** entre l'activation calculée et celle que la
-trace impose — soit la quantification 16 bits, rien de plus.
-
-**Le défaut trouvé en chemin, et corrigé** : la clé d'une liste était
-`(couche, position DANS la fenêtre)`. Une exécution à plusieurs fenêtres
-réécrivait donc les mêmes clés, et le rejeu rejouait la mauvaise : perplexité
-**356 694** au lieu de 17,43. La clé est maintenant `(couche, compteur de jeton
-global)` — même format sur le disque, sémantique non ambiguë. C'est le genre de
-défaut qu'un rejeu attrape et qu'un diff ne voit pas.
-
-
-### Phase 3 — ce qui tourne déjà, et ce qui ne tourne pas encore
-
-Le transport existe : `--flux-serveur <port>` fait tourner un **nœud moteur** qui
-charge le modèle, écoute, applique SA plage de couches au flux reçu et renvoie le
-flux résultant ; `--ppl-reparti <hôte:port> --couches-locales N` fait tourner le
-**pilote** qui garde les N premières couches, envoie le flux, reçoit l'état final
-et note la perplexité.
-
-Mesuré, deux processus, localhost, 12 couches de chaque côté : le calcul coupé
-redonne **exactement** le calcul local — écart **0,00e0**, perplexité 144,8289 des
-deux côtés, sur 40 jetons puis sur 200 (199 flux servis : le dernier jeton n'est
-pas envoyé).
-
-Il a fallu **deux corrections** pour y arriver, et la première ne suffisait pas :
-
-1. **`forward` ignorait la plage de couches.** La boucle partait de `0` au lieu de
-   `couche_debut..couche_fin` : le pilote calculait les 24 couches, envoyait
-   l'état FINAL, et le nœud moteur recalculait les 24 couches par-dessus. C'était
-   la cause principale. `forward_lot` et `forward_mla` respectaient déjà la plage ;
-   `forward` était l'exception — exactement le genre d'asymétrie que le mode
-   d'échec « analysé mais jamais appliqué » du dépôt produit.
-2. **La norme finale était appliquée deux fois.** Le nœud moteur recevait
-   `fin = n_layer`, donc son `forward` normait (`couche_fin >= n_layer`), et le
-   pilote normait ensuite avec `norme_finale()`. La règle est maintenant portée
-   par un drapeau explicite, `flux_brut` : un nœud intermédiaire rend TOUJOURS un
-   flux résiduel brut, et la norme appartient au nœud qui possède la tête de
-   sortie — une seule fois.
-
-Le protocole, lui, n'a pas changé **pour cette correction** (l'en-tête, lui, est
-passé de 39 à 79 octets en v4) : c'est le moteur qui était faux.
-
-**Puis le transport lui-même** : `--flux-liste` fait voyager la LISTE (indice
-u16, valeur i16, une échelle), c'est-à-dire le format du disque, au lieu du
-vecteur dense f32. Mesuré à 40 jetons, par flux (aller) :
-
-| mode | octets | écart de perplexité |
-|---|---|---|
-| dense f32 | 3 623 | **0,00e0** |
-| listes, seuil 0,00 | 3 622 | 2,6e-2 |
-| listes, seuil 0,02 | 2 203 | 4,9e-2 |
-| listes, seuil 0,05 | 897 | 8,1e-1 |
-
-Avec `--flux-blocs` (échelle par bloc de 32 canaux, valeurs i8), le régime creux
-s'améliore : à sparsité égale (seuil 0,02, 59 % d'activité) les blocs font
-**1 745 octets contre 2 159** pour la liste i16, et 14 % d'écart contre 16 % —
-l'échelle par bloc borne l'erreur *relative*, l'échelle unique borne l'erreur
-*absolue*. Les indices, eux, se rangent par **écarts** (un octet par neurone actif, 255 en
-échappement) : 2 268 → **1 568 octets** à écart et perplexité IDENTIQUES — du
-rangement, pas de la perte. Sur 256 jetons de vrai texte, le réglage recommandé
-est donc le seuil **0,01** : **÷2,3 sur le fil pour 2,7 %** d'écart — et l'écart DÉCROÎT avec la
-longueur (13,7 % à 64 jetons, 6,4 % à 128, 2,7 % à 256, **1,3 % à 1 024**) : la perturbation est
-stationnaire par jeton, donc elle se dilue dans une perplexité moyennée. Ce qui
-change d'un banc à l'autre, c'est le corpus, pas la longueur. Le rapport porte la
-courbe et les deux formulations que la mesure a corrigées (« ÷2 pour 0,2 % »,
-puis « ça empire avec la longueur »).
-
-Et le coût réel du découpage, mesuré à 200 jetons sur localhost : le calcul local
-de 12 couches prend 15,9 ms par jeton, l'attente du pair 16,1 ms — soit **1,01×**.
-Le banc réparti entier (8,3 s) prend le temps du calcul local (8,2 s), à logits
-identiques. Avant `TCP_NODELAY`, cette attente était de 97,6 ms (6,26×) : le
-protocole payait Nagle et l'ACK différé, pas le réseau.
-
-La leçon est écrite noir sur blanc : **le gain ne vient que de la sparsité**
-(la valeur fait 16 bits sur le fil, donc une liste pleine coûte le dense), et
-**jeter des canaux coûte cher** — l'écart est déjà de 2,6 % à 16 bits pleins,
-alors que le rejeu d'une trace quantifiée 16 bits redonnait la perplexité exacte.
-Ce n'est pas la précision qui diffère, c'est ce qu'on quantifie : le résidu brut
-a une dynamique bien plus large que l'entrée normée qu'encode la trace.
-
-La suite logique — transmettre l'entrée NORMÉE au lieu du résidu — a été essayée
-et **réfutée** : en mode dense, où le transport est exact, l'écart passait de
-0,00e0 à **5,61e0**. La norme d'entrée n'est pas seulement l'entrée de
-l'attention : la connexion résiduelle a besoin du résidu lui-même. Le drapeau a
-été retiré. Ce qui marche, c'est l'**échelle par bloc** (faite, `--flux-blocs`).
-Détail et chiffres : `reports/rapport-transport-liste.md`.
-Chiffres des trois états, mesurés sur le même banc de 40 jetons :
-
-| état | perplexité locale | perplexité répartie | écart |
-|---|---|---|---|
-| avant correction | 144,8289 | 1 621,7239 | ×11,2 |
-| après la norme seule | 144,8289 | 693,4492 | ×4,8 |
-| après la plage de couches | 144,8289 | **144,8289** | **0,00e0** |
-
-Ce qui est donc ACQUIS : le cadriciel d'échange, la séparation en deux nœuds, la
-plage de couches par nœud, la norme finale appliquée par le seul nœud qui a la
-tête — et la preuve que le découpage ne change pas un chiffre, **y compris par
-lots** (mode 3 : 256 jetons en 4 lots, écart 0,00e0). Ce qui reste :
-l'ordonnanceur de placement, et la démonstration sur Colab, dont la recette est
-prête (`colab/`). Le **mode 4 « lot en listes »** est fait et mesuré (§ 3.2).
+- **30/09** — le renommage Qtrinet → Drave ; le moteur Rust *est* l'architecture par listes.
+- **07/10** — la passe K3 est liée au **disque** (133 Mio/s, 87,6 % d'occupation) ; le levier est la taille du lot.
+- **22/10** — le périmètre entrée-sortie est **arrêté au français inclus** ; l'étage 2 devient le chantier principal.
+- **23/10** — la vision est **recentrée sur les flots** (ce document) ; les deux programmes avancent en parallèle.
