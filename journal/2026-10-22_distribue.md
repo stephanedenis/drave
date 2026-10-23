@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22.md](2026-10-22.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 20:17 | `a0b348e7` | MESURE 165 — LA PROSE TECHNIQUE (MULTIUN) : marge +33,2 (EN->FR) et +32,9 (FR->EN), plancher 30,4-33,0 ; plus dure que le juridico-technique (JRC +36,4/+34,9) et que le juridique (+35,3). La WikiMatrix minee (+41/+46) reste le cas du gonflement ; la carte des registres est complete | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+5) |
 | 20:22 | `940f54e5` | DOC — en-cours resserre : le bilan de la session (40 mesures, 125-165) et le bullet du raisonnement (synthese 05) ; les six registres, la carte du raisonnement et les sept lecons de methode | `en-cours.md`, `2026-10-22.md`, `2026-10-22_mesures.md` |
 | 21:44 | `8348a31d` | DOC — README recentre sur la vision : Drave est une vision de l'IA axee sur les flots de donnees (des listes, pas des matrices), nee du besoin de faire tourner des modeles divers sur du materiel limite, de les combiner et de les decomposer en couches et grappes distribuees, de les diagnostiquer et rejouer ; les cinq axes (observer, repartir sur la machine, repartir en reseau, rejouer, formats/materiaux/energie) et l'intelligence a deux etages par-dessus | `README.md`, `2026-10-22.md`, `2026-10-22_moteur.md` |
+| 21:58 | `1caf947c` | DOC — roadmap refondue en deux programmes : le moteur (les cinq axes des flux, avec l'etat mesure) et l'intelligence (les deux etages, avec les 167 mesures) ; un ordre du jour sans dates (B2.6, A2.5, A4.3, A1.5/A5.3), la file jamais en attente, les blocages nommes (corpus, Colab, FPGA) et le journal des decisions | `README.md`, `en-cours.md`, `roadmap.md` (+2) |
 
 ## Chiffres du jour
 

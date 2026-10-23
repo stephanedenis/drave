@@ -113,35 +113,101 @@ là que la recherche sur l'intelligence intervient. Deux étages :
 demande pas au modèle d'écrire sa réponse ; on la lit dans son état, avec une sonde — un classifieur linéaire aussi
 simple que possible.*
 
-## Ce qu'on a trouvé
+## Ce qu'on a trouvé (expliqué sans jargon)
 
-**Traduire : correct, jamais parfait.** Sur un texte neuf (un règlement européen de 2025, jamais vu à
-l'entraînement), la qualité est de **55 à 76 sur 100**, soit une **marge de +30 à +40** au-dessus de « recopier la
-source ». Les registres ne se valent pas : le littéraire est le plus dur (+25,9), la presse et le parlé préparé les
-plus faciles (+38,6 / +39,8). La taille aide, mais de moins en moins (+0,9 entre 7 et 14 milliards). Le critère
-démographique est tenu jusqu'au **français inclus** (20 langues), pidgin nigérian compris.
+Six résultats. Les mots techniques sont définis en passant ; les chiffres sont là pour être vérifiés, pas pour
+impressionner.
 
-**Le raisonnement est déjà dans l'état.** « Alice est devant Bob. Bob est devant Carl. Qui est devant tout le
-monde ? » — une sonde linéaire lit la réponse : **100 %** pour deux personnes, **51 %** pour six, contre 5 % de
-hasard. **Le modèle compose sans écrire.**
+### 1. Traduire : correct, jamais parfait
 
-**Mais les langues ne sont pas dans le même espace.** La sonde française ne lit pas l'état anglais (5,8 %). Un
-**pont** — une simple carte linéaire apprise sur des phrases appariées — l'y ramène : **100 / 91 / 68 / 52 / 46 %**
-pour 2 à 6 personnes. Ce pont marche pour d'autres relations, d'autres langues (dont l'**arabe**), à plusieurs
-couches, jusqu'à **12 personnes**, et à **toutes les échelles** (0,81 à 0,975 de 3 à 14 milliards). Il doit rester
-**linéaire** : un réseau plus puissant échoue.
+**Le test.** Un vrai règlement européen de 2025, que le modèle n'a jamais vu, avec sa traduction humaine officielle.
+On lui fait traduire le texte, puis on compare sa sortie à la traduction humaine **caractère par caractère** — une
+note de 0 à 100, comme une dictée corrigée lettre par lettre.
 
-**L'alignement peut s'apprendre.** Entraîné sur les deux langues, le modèle fait lire l'état anglais à **65,6 %** ;
-avec un objectif contrastif, **74,2 %**, puis **saturation** (75,3 %). Le prix : l'in-langue baisse (98,7 % →
-77,6 %). *La tête bien faite a un coût, et il est mesurable.*
+**Le repère qui compte.** Si on se contente de **recopier la phrase source sans traduire**, on obtient déjà **20 à 35
+sur 100** (le français et l'anglais partagent des mots et des lettres). Le modèle obtient **55 à 76** : il traduit
+donc vraiment, avec une avance de **30 à 40 points** sur la simple copie.
 
-**Le plan résiste.** Un état qui résume un contexte plus long (les 4 premières phrases d'une série) ne s'aligne pas :
-ni les ponts, ni le bilinguisme, ni le contraste, ni la récurrence. Son transfert apparent venait d'un **effet côté
-cible** — la tâche rend les cibles françaises plus faciles à retrouver, sans aligner les langues. *C'est le
-contre-exemple qui donne sa valeur au pont.*
+**Ce que ça dit.** Le modèle est meilleur sur la presse et les discours préparés, plus faible sur la **littérature**
+(le style, les images) et la **prose technique** (longue et dense). Et **doubler la taille** (de 7 à 14 milliards de
+paramètres) n'apporte qu'**un point de plus** : la taille n'est pas le levier principal.
 
-**Le naturel confirme.** Sur XNLI (2 490 paires traduites FR/EN), l'inférence est dans l'état (50 % / 58 % contre
-33 %), le pont la transfère à **59 %**, et un fine-tuning à **75-77 %**.
+### 2. Le raisonnement est déjà dans la tête du modèle
+
+**La devinette.** « Alice est devant Bob. Bob est devant Carl. Qui est devant tout le monde ? » Les phrases sont
+mélangées : il faut les remettre en ordre pour répondre.
+
+**Le tour de passe-passe.** On ne demande **pas** au modèle d'écrire sa réponse. On lit directement **les nombres
+internes** qu'il calcule après avoir lu (son « état »), avec un détecteur volontairement simple : une règle de calcul
+linéaire, comme une balance à plusieurs plateaux.
+
+**Pourquoi c'est étonnant.** Ce détecteur retrouve la bonne réponse **100 fois sur 100** pour deux personnes, **51
+fois sur 100** pour six — alors que le hasard est à **5**. Autrement dit : **l'information est déjà là, avant
+l'écriture**. Le modèle a « compris » la chaîne, même s'il ne l'a pas encore dite. C'est tout le sens de « penser
+sans verbaliser ».
+
+### 3. Le français et l'anglais sont rangés dans deux espaces différents
+
+**L'expérience.** On entraîne le détecteur en français, puis on le fait lire **l'anglais** : il tombe à **5,8 %**,
+c'est-à-dire le hasard. Ce n'est pas que l'anglais manque d'information : c'est que les nombres internes sont
+**organisés autrement**. Image : deux bibliothèques qui possèdent les mêmes livres, mais les rangent selon deux
+systèmes incompatibles — le catalogue de l'une ne sert pas dans l'autre.
+
+**La solution.** Un **pont** : une **grille de conversion** (une simple règle linéaire, apprise sur des phrases dont
+on possède la version française et anglaise). Cette grille transforme les nombres anglais en nombres « à la
+française » ; le détecteur français lit alors l'anglais : **100 %** pour 2 personnes, **91 %** pour 3, **68 %** pour
+4, **52 %** pour 5, **46 %** pour 6.
+
+**Ce que le pont n'est pas.** Une baguette magique. Il **marche** pour d'autres relations (comparer des tailles),
+pour d'autres langues (l'espagnol, l'allemand, et même l'**arabe** — autre famille, autre écriture), à d'autres
+couches du réseau, jusqu'à **12 personnes**, et à toutes les échelles testées (3, 7 et 14 milliards de paramètres).
+Il **doit rester simple** : un réseau de neurones plus puissant fait **moins bien** — la grille linéaire suffit, et
+c'est ce qui rend l'idée élégante.
+
+### 4. On peut apprendre au modèle à ranger ses deux langues ensemble
+
+**L'expérience.** Le pont est une pièce rapportée. On a donc **entraîné le modèle lui-même** sur les deux langues à
+la fois : le détecteur français lit alors l'anglais à **65,6 %**. Mieux : en montrant au modèle la phrase française
+et son équivalent anglais **côte à côte**, en lui demandant de rapprocher leurs nombres internes (l'« objectif
+contrastif »), on monte à **74,2 %**. Au-delà, plus de progrès : **75,3 %**, c'est le plafond de cette méthode.
+
+**Le prix.** Le modèle devient un peu moins bon **dans sa propre langue** (le détecteur français passe de 98,7 % à
+77,6 %). Comme un bilingue qui mélange un peu ses deux langues : l'alignement a un coût, et il est mesurable.
+
+### 5. Mais le fil d'une histoire, lui, ne se traduit pas
+
+**L'expérience.** On donne au modèle les **quatre premières phrases** d'une histoire et on lui demande de **deviner
+la cinquième** parmi huit candidates (une sur huit au hasard). Pour réussir, il doit garder le **fil** du récit —
+ce qu'on appelle le « plan ».
+
+**Le résultat.** En français, le fil est là (43 % de réussite). Mais **aucune** des méthodes qui ont marché pour le
+raisonnement ne le transfère à l'anglais : ni le pont, ni l'apprentissage bilingue, ni le contraste, ni une mémoire
+récurrente. L'apparent transfert qu'on avait cru voir était un **artefact** : l'entraînement rendait simplement les
+bonnes réponses françaises plus faciles à retrouver, sans aligner les langues.
+
+**Pourquoi c'est important.** C'est le **contre-exemple** qui donne sa valeur au pont. Toutes les capacités ne se
+rangent pas de la même façon ; le pont n'est pas une clé universelle, et le dire est plus utile que de le croire.
+
+### 6. Sur de vraies phrases, le même schéma
+
+**Le test.** Les énigmes précédentes sont fabriquées. On a donc refait le travail sur **XNLI**, un corpus de **vraies
+phrases** (2 490 paires français/anglais) : on donne une affirmation et une conséquence possible, et il faut dire si
+elle est **vraie, fausse ou indécidable**.
+
+**Le résultat.** Le détecteur lit la réponse dans l'état : **50 % en français, 58 % en anglais**, contre **33 %** au
+hasard (trois réponses possibles). Le pont transfère cette lecture à **59 %**, et un **petit entraînement
+supplémentaire** monte à **75-77 %**.
+
+**Ce que ça dit.** Le schéma du pont n'est pas un artefact des énigmes : il tient sur du langage réel. Et le même
+enseignement que la traduction : **c'est le domaine qui compte, pas le volume** — 13 394 paires d'entraînement
+prises ailleurs n'ont pas amélioré la lecture, alors que des données du bon domaine, si.
+
+### En une phrase
+
+L'intelligence d'un modèle est **dans ses nombres internes**, pas seulement dans ce qu'il écrit ; ces nombres sont
+**rangés différemment selon la langue**, mais une **grille de conversion simple** — qu'on peut apprendre — relie les
+deux ; et certaines capacités, comme le fil d'une histoire, restent **collées à la langue**. La taille n'est pas le
+levier : la structure, si.
 
 ## Comment on le sait (et pourquoi on peut nous croire)
 
