@@ -1,5 +1,9 @@
 # Note — la règle contrastive : ce qu'il faut construire, et pourquoi c'est elle
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 06/10. Suite directe des trois négatifs mesurés (`rapport-plateau-semantique.md`
 > et `note-cancellation-evenementielle.md` §9). Ce document dit **quoi faire**, pas
 > ce qui a été fait.

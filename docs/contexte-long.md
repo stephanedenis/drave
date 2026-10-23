@@ -1,5 +1,9 @@
 # Contexte long : ce que 1 M veut dire, et par où ça casse
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > Tous les chiffres de budget viennent de `drave-core <modele> --plan --ctx N`,
 > qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont
 > celles mesurées sur cette machine (deux Quadro RTX 5000 16 Go, 125 Go de RAM,

@@ -1,5 +1,9 @@
 # Note — la périphérie de C8 : entrées, sorties, réflexes
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-10 13:48 HAE**, **mise à jour à 14:19 : la conception est IMPLÉMENTÉE** et mesurée —
 > `--entree signal:F`, `--entree-canal`, `--entree-gain`, `--entree-jeton`, `--delai`,
 > `--recurent`, `--sortie F`, avec la porte `tools/porte-peripherie.sh` (déterminisme, entrée

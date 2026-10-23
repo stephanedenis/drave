@@ -1,5 +1,7 @@
 # 4. Les douze facultés et la biologie
 
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## Ce que Drave cherche à donner à un modèle
 
 ![Les facultés](schemas/facultes.svg)

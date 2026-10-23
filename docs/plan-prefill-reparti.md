@@ -1,5 +1,9 @@
 # Plan — le préremplissage par lots sur le fil (phase 3.4)
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
 > le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
 > un seul lot) et `reports/rapport-prefill-reparti.md` consigne les mesures. Trois

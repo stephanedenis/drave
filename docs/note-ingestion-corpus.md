@@ -1,5 +1,9 @@
 # Note — l'ingestion des corpus, dans l'ordre demandé
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 06/10. Ordre fixé par Stéphane : **l'UDHR d'abord**, puis **Wikipedia**, puis
 > **la littérature multilingue de Gutenberg**, en commençant par les œuvres au
 > plus grand nombre de traductions.

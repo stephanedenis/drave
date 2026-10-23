@@ -1,5 +1,9 @@
 # Plan : MLA et vision (chantier 5)
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 Ces deux-là n'étaient pas « à moitié faits », ils n'étaient pas commencés quand
 ce document a été écrit ; **ils ont été menés depuis**, et ce document consigne
 maintenant ce qui a été fait (les sections d'état portent leurs mesures) et ce

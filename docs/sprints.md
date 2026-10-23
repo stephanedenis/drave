@@ -1,5 +1,9 @@
 # Les sprints de 2 h — charte
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 Ce document dit **comment on travaille**, pas ce qu'on fait (ça, c'est
 `docs/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).
 

@@ -1,5 +1,9 @@
 # Répétition Colab — la phase 3.4, pas à pas
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
 runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
 

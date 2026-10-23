@@ -1,5 +1,9 @@
 # Note — la voie événementielle : prédire une couche pour ne transporter que l'imprévu
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > Note de conception, 06/10. Elle part d'une objection de Stéphane : arrêter de
 > retomber sur les solutions d'entraînement classiques, et traiter le problème
 > par des **flux de données légers, en mode événements**, sans rétropropagation.

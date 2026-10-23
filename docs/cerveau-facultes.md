@@ -1,5 +1,9 @@
 # Le cerveau Drave, faculté par faculté — et le modèle le plus efficient pour chacune
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-14, 22 h 00 HAE** (heure lue sur la machine). Ce document est une **carte**, pas un
 > plan : pour chaque faculté d'un cerveau, **le mécanisme que Drave emploie aujourd'hui**, **le
 > chiffre qui le prouve**, et **son coût** — parce que « le plus efficient » veut dire : *à

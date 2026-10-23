@@ -1,5 +1,9 @@
 # Plan — le top-k de l'attention dans le noyau GPU (phase 1.1)
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 **En une ligne** : l'attention creuse (`--attn-topk`) ne peut pas se servir du KV
 déporté en VRAM — le code l'interdit explicitement — donc à long contexte elle
 retombe sur le CPU et coûte **~70 fois** le chemin GPU complet. Ce plan

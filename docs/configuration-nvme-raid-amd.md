@@ -1,5 +1,9 @@
 # Nouvelle configuration : array NVMe sur le nœud 1, AMD pour le bureau
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-12 — l'intervention a eu lieu, et le pari est mesuré.** L'array existe (4 NVMe,
 > raid0, 938 Go, monté `/home/stephane/IA`) et la fiche
 > [`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) répond au protocole du § 7 :

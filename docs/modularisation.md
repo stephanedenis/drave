@@ -1,5 +1,9 @@
 # Modularisation et parallélisme — ce que la mesure dit de faire
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 9 octobre 2026. Réponse à « faut-il diviser en submodules et paralléliser sur
 > plusieurs cœurs ? ». La réponse est **oui pour paralléliser, non pour les
 > submodules** — et les deux moitiés sont chiffrées ci-dessous.

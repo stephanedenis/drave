@@ -1,5 +1,7 @@
 # 3. Les modes et les portes — ce que le moteur fait vraiment
 
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## Six façons de faire tourner le même modèle
 
 ![Les modes d'exécution](schemas/modes.svg)

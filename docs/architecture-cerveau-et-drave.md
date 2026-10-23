@@ -1,5 +1,9 @@
 # L'architecture du cerveau — et ce qui manque à Drave pour la porter
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 9 octobre 2026. `docs/biologie-pour-drave.md` traitait de la **brique** (le
 > neurone, la synapse, l'énergie). Ce document traite de l'**édifice** : les régions,
 > les fibres, les noyaux, les organes — et fait l'inventaire de ce que Drave possède

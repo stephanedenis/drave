@@ -1,5 +1,9 @@
 # Vérifier Kimi-K3, étage par étage — le protocole
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > Écrit le 03/10 (bloc 30) **avant** d'écrire l'architecture, pour que chaque
 > morceau de code ait son point de comparaison le jour où il naît. La règle du
 > dépôt est constante : on compare les **tenseurs intermédiaires avant** de

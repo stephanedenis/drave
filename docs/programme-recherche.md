@@ -1,5 +1,9 @@
 # Programme de recherche — vers une intelligence locale
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 **Objet.** Définir une feuille de route vérifiable vers un système capable
 d'apprendre et d'évoluer *localement*, sur du matériel qu'une personne possède,
 sans centre de données. Ce document ne promet pas l'AGI : il définit des paliers

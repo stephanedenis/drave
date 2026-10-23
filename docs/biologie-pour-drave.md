@@ -1,5 +1,9 @@
 # Ce que la biologie a à nous apprendre — avant d'écrire notre modèle
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 9 octobre 2026. Exploration demandée : les connectomes sont maintenant assez bien
 > documentés pour inspirer un modèle où **l'énergie et les ressources sont
 > limitées**, et où l'on fait **croître** à partir d'un connectome de base (inné)

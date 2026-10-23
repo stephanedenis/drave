@@ -1,5 +1,7 @@
 # 5. La pensée sans verbaliser — le travail de la nuit du 16 octobre
 
+> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## La question, et pourquoi elle n'est pas abstraite
 
 Un modèle de langue « réfléchit » en **écrivant** : chaque pas de pensée est un jeton, qu'il relit ensuite.

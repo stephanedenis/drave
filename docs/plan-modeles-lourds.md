@@ -1,5 +1,9 @@
 # Plan — les modèles lourds : les télécharger, les analyser, découper leurs MoE
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 **En une ligne** : la bibliothèque brute vit sur le disque mécanique (4,7 To
 libres), le NVMe ne sert plus qu'aux fichiers que NOUS produisons ; une file de
 **1,14 To** de modèles lourds est en téléchargement, et le même protocole de mesure

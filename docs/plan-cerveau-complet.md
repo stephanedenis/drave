@@ -1,5 +1,9 @@
 # Plan détaillé — les capacités manquantes à Drave pour simuler un cerveau
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 9 octobre 2026. Complète `docs/architecture-cerveau-et-drave.md` (qui établit *ce
 > qui* manque et *pourquoi*) par un plan d'ingénierie : douze capacités, leur
 > conception, leur interface, l'invariant qui les rend vérifiables, la mesure qui les

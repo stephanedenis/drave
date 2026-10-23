@@ -1,5 +1,9 @@
 # Où Drave est à son meilleur — le roadmap, et pourquoi c'est cette niche-là
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > Écrit après la mesure du 05/10. Chaque chiffre de ce document vient d'un relevé
 > du dépôt ; ceux qui viennent d'ailleurs sont marqués.
 >

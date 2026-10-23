@@ -1,5 +1,9 @@
 # Campagne 24 h — où Drave est à son meilleur, tâche par tâche
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 08/10, 21 h. Le matériel suivant n'est pas encore là ; cette campagne occupe
 > la machine à mesurer ce que l'architecture par listes vaut **pour chaque
 > famille de tâches**, au lieu du seul couple (Qwen2.5-0.5B, perplexité) sur

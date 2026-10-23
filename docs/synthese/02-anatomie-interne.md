@@ -1,5 +1,7 @@
 # 2. L'anatomie interne — ce qui circule, et où
 
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## Les quatre pièces
 
 | pièce | ce que c'est | en une phrase |

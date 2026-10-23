@@ -1,5 +1,9 @@
 # Note — C9, latéralité : deux instances jumelles et leur corps calleux
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-10 16:15 HAE**, **mise à jour à 17:09 : les portes 1, 2, 3 et 5 sont MESURÉES**
 > (`tools/porte-jumeaux.sh`, verte) et la porte 4 (le gain) a sa réponse : **nul**, la fusion de
 > deux vues ne bat pas la meilleure des deux — `reports/rapport-c9-lateralite.md`. Note de

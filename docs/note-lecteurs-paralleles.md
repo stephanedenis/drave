@@ -1,5 +1,9 @@
 # Les lecteurs parallèles — lire dans nos tampons au lieu du mapping
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-12, 20 h 50 HAE** (heure lue sur la machine). Note de conception : ce qui est
 > **mesuré**, ce qui existe déjà, ce qui reste à trancher, et les **portes à tenir** (§ 5) —
 > écrite avant le code, comme `docs/note-cycle-c2.md` § 4 et `docs/note-peripherie-c8.md` § 6.

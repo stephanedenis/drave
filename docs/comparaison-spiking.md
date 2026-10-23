@@ -1,5 +1,9 @@
 # SpikeGPT, Spikformer, Spikingformer — ce qu'ils nous apprennent
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
 et inventaire des astuces transposables.
 

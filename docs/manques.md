@@ -1,5 +1,9 @@
 # Registre des manques
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 9 octobre 2026. Ce que le dépôt **ne sait pas faire**, consigné comme manque — pas
 > comme résultat. Chaque ligne porte la mesure qui l'établit, ce qu'elle bloque, et
 > où c'est documenté. Rien ici n'est une feuille de route : la feuille de route est

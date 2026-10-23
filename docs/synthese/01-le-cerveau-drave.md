@@ -1,5 +1,7 @@
 # 1. Le cerveau Drave — l'idée, en cinq minutes
 
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## Le problème de départ
 
 Un grand modèle de langue est **un seul bloc** : 24, 32, 80 couches, l'une après l'autre, sur une seule

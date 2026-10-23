@@ -1,5 +1,9 @@
 # Architecture Kimi-K3 — spécification tirée de la référence
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > Écrite le 03/10 (bloc 28) pour préparer l'exécution locale du premier modèle de
 > la classe « trop gros pour le local » (1 508,7 Go en Q4). **Tout ce qui suit
 > vient de deux sources vérifiables** : les métadonnées du GGUF (lues avec

@@ -1,5 +1,9 @@
 # Spécification — mode 4 : le **lot en listes** (protocole v5)
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
 > reste la référence de conception, et les écarts constatés à la mise en œuvre sont
 > consignés dans ce rapport (version 5, borne des actifs, garde cumulatif).

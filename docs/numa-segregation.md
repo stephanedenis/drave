@@ -1,5 +1,9 @@
 # Ségrégation NUMA : ce que la machine répond
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > 08/10. Réponse à une proposition de configuration : *station bi-processeur
 > Xeon E5-2687W v3, topologie NUMA asymétrique stricte — nœud 0 pour l'OS et
 > l'affichage (CPU 0, 32 Go, NVMe système, GPU AMD), nœud 1 pour le calcul

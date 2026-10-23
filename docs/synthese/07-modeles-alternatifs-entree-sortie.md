@@ -1,5 +1,7 @@
 # 7 — Les modèles alternatifs pour l'entrée et la sortie
 
+> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 > **Ce que ce chapitre est.** La **théorie** de l'étage entrée-sortie (nom historique : couche commune) : ce qu'il doit être, ce qu'on
 > en sait, ce qui reste à prouver. Les **mesures** (67, avec leurs erratums et leurs pièges) sont dans
 > [`reports/07-mesures-couche-commune.md`](../../reports/07-mesures-couche-commune.md).

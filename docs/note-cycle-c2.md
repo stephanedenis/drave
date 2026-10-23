@@ -1,5 +1,9 @@
 # Note — C2, le cycle à deux régions : ce qui manque, et comment le mesurer
 
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **2026-10-10 20:09 HAE** (heure lue sur la machine). Note de conception : `docs/` porte les
 > hypothèses et les plans ; les mesures vivent dans `reports/`. Ce qui est **déjà mesuré** est
 > renvoyé aux fiches ; ce qui reste est écrit comme une **porte à tenir**.

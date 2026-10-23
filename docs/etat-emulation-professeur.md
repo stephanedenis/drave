@@ -1,3 +1,8 @@
+
+> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+> [`en-cours.md`](en-cours.md).
+
 > **État du module « émulation d'un professeur »** — déplacé de `reports/recapitulatif.md` vers
 > `docs/` le **2026-10-10 10:30 HAE**, parce que ce document est un **état** (méthode appliquée,
 > résultats, corrections, ce qui est solide et ce qui ne l'est pas) et non un rapport

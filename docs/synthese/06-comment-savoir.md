@@ -1,5 +1,7 @@
 # 6. Comment savoir qu'on a raison — la méthode, et ses pièges
 
+> **Périmètre** : ce chapitre relève du programme **méthode** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+
 ## Le problème
 
 Un dépôt de recherche produit beaucoup de chiffres. Le danger n'est pas de se tromper : c'est de **croire**
