@@ -13,6 +13,7 @@
 | comprendre **ce que le moteur fait vraiment** | [chapitre 3 — les modes et les portes](03-les-modes-et-les-portes.md) |
 | savoir **ce qui marche et ce qui ne marche pas** | [chapitre 5 — la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) |
 | **utiliser** le dépôt ce soir | [`docs/utilisation.md`](../utilisation.md) |
+| la **vision** et la **roadmap** | [`docs/vision.md`](../vision.md) · [`docs/roadmap.md`](../roadmap.md) |
 
 ## Les sept chapitres
 

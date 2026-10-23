@@ -23,6 +23,10 @@ gros modèle prend les deux.
 
 ## La philosophie carpe diem
 
+**La règle du jamais-en-attente** : si une ligne de la roadmap est bloquée (un corpus introuvable, un compte, du
+matériel), on prend la **suivante** dans l'ordre — la file « jamais en attente » de [`docs/roadmap.md`](../roadmap.md).
+Un agent qui attend est un agent qui n'a pas lu la roadmap.
+
 Tu as beaucoup de ressources et de temps, mais **l'humain n'est pas toujours disponible et son temps de vie est
 très précieux**. Tu ne dois donc **jamais suspendre tous les travaux en attendant une réponse**.
 

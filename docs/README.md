@@ -6,17 +6,21 @@
 
 ## La mission, en un paragraphe
 
-Drave Natif se construit **étage par étage**. Le premier — et la priorité absolue — est l'**étage entrée-sortie**
-(nom historique : « couche commune ») : un module qui **lit et produit toutes les langues, dialectes et styles**, dans tous les registres,
-et qu'on juge sur sa **qualité de traducteur** (restitution à l'identique, et traduction du sens d'une langue à
-l'autre). Le second — seulement quand le premier est fiable — est un **module de pensée abstraite indépendant de
-la langue**. On ne passe pas au suivant tant que le précédent est perfectible.
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut** : les activations sont
+des **faits** poussés vers leurs lecteurs, le coût suit l'**activité**, et le modèle devient **décomposable**,
+**répartissable** et **observable** — né du besoin de faire tourner des modèles **de types différents** sur des
+machines **limitées**, de les **combiner**, de les **décomposer** sur du matériel divers, voire **distribué en
+réseau**, de les **diagnostiquer** et **rejouer**. Deux **programmes** avancent en parallèle : le **moteur** (les
+flux, les cinq axes) et l'**intelligence** (les deux étages : l'entrée-sortie linguistique, jugée en qualité de
+traducteur, puis la pensée abstraite indépendante de la langue). La thèse : **la structure bat la taille**.
 
 ## Par où commencer
 
 | si vous voulez… | lisez |
 |---|---|
 | **l'état actuel**, en quelques lignes | [en-cours.md](en-cours.md) |
+| la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [vision.md](vision.md) |
+| la **roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [roadmap.md](roadmap.md) |
 | les **directives de l'agent** (courtes), et le routage par tâche | [AGENTS.md](../AGENTS.md) (racine du dépôt) |
 | le **détail d'une tâche** (résultat, portes, rangement, Panini, miroir…) | [`docs/agent/`](agent/) |
 | la **synthèse théorique** (7 chapitres, 7 schémas) | [synthese/index.md](synthese/index.md) |
@@ -31,7 +35,7 @@ est chargé **à la demande**, un document par tâche :
 
 | document | pour quoi |
 |---|---|
-| [agent/mission.md](agent/mission.md) | la mission, l'ordre des priorités, ce que « perfectible » veut dire |
+| [agent/mission.md](agent/mission.md) | la vision, les deux programmes, l'ordre des priorités, ce que « perfectible » veut dire |
 | [agent/resultats.md](agent/resultats.md) | ce qu'un résultat doit porter, le commit, la fiche, le récit, l'état |
 | [agent/rangement.md](agent/rangement.md) | `docs/` vs `reports/` vs `journal/` vs `data/`, la revue de documentation |
 | [agent/portes.md](agent/portes.md) | lancer les portes, lire le registre, les rouges connues |

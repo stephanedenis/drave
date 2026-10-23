@@ -1,46 +1,84 @@
-# La mission et l'ordre des priorités
+# La vision, la mission et l'ordre des priorités
 
-> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). Il développe **la mission** ; les règles
-> opérationnelles restent dans `AGENTS.md`, les résultats dans [`reports/`](../../reports/).
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). Il développe **la vision et la mission** ; les
+> règles opérationnelles restent dans `AGENTS.md`, les résultats dans [`reports/`](../../reports/), la feuille de
+> route dans [`roadmap.md`](../roadmap.md).
 >
-> **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** ; *jeton* = unité du
-> **tokeniseur**, jamais la **représentation sémantique neutre (RSN)**, faite d'**unités de sens**. Voir le
-> [glossaire](../glossaire.md).
+> **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
+> étage 2 pensée) ; *jeton* = unité du **tokeniseur**, jamais la **représentation sémantique neutre (RSN)**, faite
+> d'**unités de sens**. Voir le [glossaire](../glossaire.md).
 
-## La mission
+## La vision
 
-Drave Natif se construit **étage par étage**, et on ne passe pas au suivant tant que le précédent est
-**perfectible**.
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Un moteur qui traite les
+activations d'un réseau comme des **faits** — « le neurone 2 539 de la couche 23 a valu 27,8 » —, regroupés en
+**listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, pas à la
+taille du modèle ; le modèle devient **décomposable**, **répartissable** et **observable** — on peut le tracer, le
+rejouer, le comparer.
 
-### 1. Les modules d'ENTRÉE et de SORTIE linguistiques — priorité absolue
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements. L'ambition : des modèles **plus légers, plus flexibles, plus puissants**, **très flexibles
+sur le matériel** qui les supporte.
 
-Ils doivent être **parfaits** et **très riches en langues et en domaines** : lire et produire **toutes** les
-langues, dialectes et styles, dans les registres **techniques, littéraires, juridiques, quotidiens**.
+**La thèse, en une phrase** : la **structure** bat la taille — un pont linéaire, une grille de conversion, une carte
+des flux valent mieux que des paramètres ajoutés. Toute la mesure du projet est là pour éprouver cette thèse, et
+pour **écrire** où elle tient et où elle ne tient pas.
 
-- On les teste en **qualité de traducteur** — c'est le juge de paix : *restitution* (même langue, à l'identique) et
-  *traduction* (même sens, autre langue, autre style).
-- **On continue tant qu'ils sont perfectibles**, et on ne « déclare complet » que sur des **chiffres** qui couvrent
-  les **langues**, les **dialectes**, les **styles** et les **domaines**.
-- Un chiffre qui ne couvre qu'une langue, un domaine ou un modèle ne clôt **rien** : il indique la prochaine mesure.
+## Deux programmes, un seul projet
 
-### 2. Le module de pensée abstraite, indépendant de la langue — seulement après
+### Le programme du moteur (les flux)
 
-Il ne peut pas être conçu sur une entrée-sortie qui n'est pas fiable. Tant que l'**étage 1** a des trous mesurés,
-l'**étage 2** attend.
+L'origine et le cœur. Cinq **axes**, chacun mesuré par ses propres chiffres :
+
+1. **Observer et régler**, neurone par neurone (le flux comme objet de première classe, le diff par couche) ;
+2. **Répartir sur la machine** (KV paginé, attention GPU, tête, experts) ;
+3. **Répartir en réseau** (le transport fidèle, les listes comme unités de travail, le placement) ;
+4. **Rejouer et comparer** (les portes, les références indépendantes, le diff) ;
+5. **Formats, matériels, énergie** (les trois matériels, la quantification choisie par la mesure).
+
+Il avance **par ses propres mesures** et ne dépend pas de l'avancement de l'intelligence.
+
+### Le programme de l'intelligence (les deux étages)
+
+L'application, par-dessus les flux. **Deux étages, dans cet ordre** :
+
+1. **L'entrée-sortie linguistique** — lire et produire **toutes** les langues, dialectes et styles, dans les
+   registres **techniques, littéraires, juridiques, quotidiens**. On la juge en **qualité de traducteur**
+   (*restitution* à l'identique, *traduction* du sens). On ne « déclare complet » que sur des **chiffres** qui
+   couvrent langues, dialectes, styles et domaines.
+2. **La pensée abstraite, indépendante de la langue** — **seulement après** une entrée-sortie fiable. On la juge
+   sur des **opérations** : représenter, composer, inférer, planifier. C'est le sens de « penser sans verbaliser » :
+   lire la réponse dans l'**état**, avant et sans la génération.
+
+**Dans l'intelligence, l'ordre est strict** : l'étage 2 ne se bâtit pas sur une entrée-sortie qui n'est pas fiable.
+Mais le **moteur** est indépendant : il avance en parallèle, et c'est lui qui rend l'intelligence **observable**.
+
+## L'ordre des priorités
+
+L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date — la feuille de route vivante est
+[`docs/roadmap.md`](../roadmap.md) :
+
+- **les deux programmes en parallèle** : le moteur et l'intelligence ne se bloquent pas l'un l'autre ;
+- **dans l'intelligence, l'étage 1 d'abord** (tant qu'il a des trous mesurés, l'étage 2 attend) ; chaque mesure de
+  l'étage 2 qui touche à la langue se double d'une mesure de l'étage 1 ;
+- **la file « jamais en attente »** : si une ligne est bloquée (corpus, compte, matériel), on prend la suivante.
 
 ## Le temps est un plancher, pas un plafond
 
 *Carpe diem* ([`relations-humaines.md`](../relations-humaines.md) § Addendum) : on ne s'arrête pas parce qu'une
-échéance est passée ; on s'arrête quand l'**étage est fait, mesuré et écrit**. Une journée sans mesure ni
-commit est une journée perdue — et une mesure sans fiche est une mesure qui sera refaite.
+échéance est passée ; on s'arrête quand c'est **fait, mesuré et écrit**. Une journée sans mesure ni commit est une
+journée perdue — et une mesure sans fiche est une mesure qui sera refaite.
 
 ## Ce que « perfectible » veut dire
 
 Un **étage** est perfectible tant qu'un **chiffre reproductible** montre qu'il peut mieux faire — sur une langue, un
-domaine, un style, un bruit d'entrée, une taille de modèle. « Perfectible » n'est pas une impression : c'est un
-**écart mesuré** entre ce qu'on sait faire et ce que la mission demande.
+domaine, un style, un bruit d'entrée, une taille de modèle. Un **axe du moteur** est perfectible tant qu'un chiffre
+montre un coût évitable : un repli CPU, un seuil codé en dur, une allocation qui ne paie pas. « Perfectible » n'est
+pas une impression : c'est un **écart mesuré** entre ce qu'on sait faire et ce que la vision demande.
 
 ## Où est l'état courant
 
-[`docs/en-cours.md`](../en-cours.md) — la synthèse en tête, puis le tableau de bord des sept chantiers. C'est la
-page qu'on lit si on ne lit qu'une page.
+[`docs/en-cours.md`](../en-cours.md) — la synthèse en tête, puis le tableau de bord ; la feuille de route vivante
+est [`docs/roadmap.md`](../roadmap.md). C'est la page qu'on lit si on ne lit qu'une page.

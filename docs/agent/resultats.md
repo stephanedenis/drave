@@ -27,6 +27,7 @@ Un **commit par résultat mesuré** (ou par paire de mesures liées), avec :
 | `reports/` | la **fiche** : chiffres, dispositif, contrôles, pièges, limites ; les JSON de résultats bruts |
 | `journal/` | le **récit daté** : ce qui a été fait, quand, et ce qu'on en a appris (généré par `tools/journal_auto.py`, notes à la main entre les marqueurs) |
 | `docs/en-cours.md` | l'**état** : la synthèse, la ligne du chantier, les questions ouvertes |
+| `docs/roadmap.md` | la **ligne de roadmap** (A… / B…) que le résultat fait avancer : son état y est mis à jour |
 
 Le message de commit suit la convention du dépôt : **une phrase-titre en majuscules** qui porte le chiffre et le
 verdict, puis le corps qui donne le dispositif et les contrôles. Il est lu par le journal : il doit rester vrai sans
