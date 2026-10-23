@@ -271,6 +271,11 @@ pour progresser sur l'inférence, il faut des données du même domaine.*
 **0,318** et le FR→FR à 0,284 (alterné : 0,386 ; tâche seule : 0,364). *Le plan a besoin de sa tâche ; le contraste
 n'est pas un levier — la récurrence de bout en bout reste la seule voie.*
 
+**Mesure 167 — la récurrence ne sauve pas le plan.** Le GRU sur les 4 phrases (entraîné avec le LoRA) donne
+**0,273** (FR→FR) et **0,273** (EN→FR), contre 0,43 et 0,36 pour le **contexte joint** : les états par phrase sont
+plus faibles, et le GRU sur-apprend. *La ligne plan est **close** : le contexte joint et sa tâche, rien d'autre
+n'améliore ni n'aligne sa géométrie.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

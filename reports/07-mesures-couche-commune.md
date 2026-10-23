@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (166 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (167 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5912,3 +5912,32 @@ objectif multi-tâches.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : le contraste **avec** la tâche à chaque pas n'a pas été testé (la mémoire du
 batch 4 ne le permet pas) ✓✗ ; 88 items, 800 pas ✓✗.
+
+---
+
+## Mesure 167 — LA RÉCURRENCE DE BOUT EN BOUT NE SAUVE PAS LE PLAN : FR→FR **0,273**, EN→FR **0,273** (le contexte joint : 0,43 / 0,36)
+
+**La question** ✓✓. Un état **récurrent** (GRU sur les 4 phrases) entraîné **avec** le LoRA améliore-t-il le plan — là
+où les états figés échouaient (mesure 116 : 0,14) ? ✓✓
+
+**Le dispositif** ✓✓ : le plan récurrent (une passe par phrase, le GRU, la projection, le LoRA à travers), 800 pas,
+batch 4 ✓ ; évaluation FR→FR, EN→EN, EN→FR (hasard 12,5 %) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | contexte joint (154/155) | **récurrent (167)** |
+|---|---:|---:|
+| FR→FR | 0,398-0,432 | **0,273** |
+| EN→EN | 0,398-0,466 | **0,318** |
+| **EN→FR** | 0,364 | **0,273** |
+
+* **LA RÉCURRENCE EST PIRE** ✗✗ : 0,273 / 0,318 (FR / EN), 0,273 (EN→FR) — contre 0,398-0,432 et 0,364 ✓✗ ;
+* **LE GRU PERD L'INFORMATION** ✗✗ : les états **par phrase** sont plus faibles que le **contexte joint** des 4
+  phrases ; la perte d'entraînement (0,012) montre le sur-apprentissage du train ✓✗.
+
+**Ce que cela change** ✗✓ : le plan n'a pas besoin de **récurrence** ; son **contexte joint** (la dernière phrase des
+4) est sa meilleure représentation ✓✗. *La ligne plan est **close** : le contexte joint et sa tâche, rien d'autre
+n'améliore ni n'aligne sa géométrie.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : 800 pas, batch 4, une graine ✓✗ ; une autre agrégation (attention, moyenne
+pondérée) ou un GRU plus grand n'ont pas été testés ✓✗.
