@@ -33,4 +33,20 @@ Sur **douze** mesures, **trois** ont été corrigées après coup, **deux** éta
 et **sept** tiennent. C'est un **bon** bilan — pas parce que sept sur douze, mais parce que les cinq autres
 ont été **trouvées** avant d'être publiées.
 
+## Les leçons des 165 mesures
+
+Sept leçons ont émergé, chacune payée par une erreur trouvée à temps :
+
+| leçon | l'erreur qui l'a payée | la règle |
+|---|---|---|
+| **le juge doit être post-cutoff** | l'UDHR récitée (mesure 61) | un texte neuf, jamais vu à l'entraînement |
+| **le plancher est obligatoire** | des « marges » sans plancher | la marge = traduction − source, jamais le chrF seul |
+| **une référence minée gonfle** | WikiMatrix +41 / +46 contre +33-36 humain | vérifier que la référence est une **traduction**, pas un parallèle miné |
+| **le domaine avant le volume** | XNLI : 13 394 paires hors domaine = 1 992 du dev (mesure 164) | mesurer le domaine, pas la taille du train |
+| **les contrôles négatifs** | le pont qui « marchait » sans contrôle | paires mélangées, étiquettes mélangées, à chaque fois |
+| **les petits tests mentent** | 88 items, h2/h3 « dans le bruit » | IC, et ≥ 200-300 items pour un effet de 0,05-0,10 |
+| **la carte des lignes** | l'erratum 6 : 40 mesures sur une fausse carte | assertir l'invariant à la source |
+
+*Ce qui vaut n'est pas le chiffre : c'est la chaîne qui le rend falsifiable.*
+
 *Une nuit de recherche ne vaut pas par ce qu'elle affirme : elle vaut par ce qu'elle refuse d'affirmer.*

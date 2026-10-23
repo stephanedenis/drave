@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22.md](2026-10-22.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,6 +22,7 @@
 | 17:33 | `7c1c2d0d` | MESURE 149 — LE CONTROLE DU CONTRASTE : avec des paires melangees, la sonde FR->EN monte quand meme a 0,505 (correct : 0,742) ; l'entrainement bilingue aligne deja en grande partie, le bon appariement ajoute +24. Le contraste correct n'est pas la cause unique | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 | 19:12 | `8dd24946` | MESURE 159 — LE TECHNIQUE A REFERENCE HUMAINE (JRC-ACQUIS) : marge +36,4 (EN->FR) et +34,9 (FR->EN), au niveau du juridique (~+35) et non du mine (+41/+46) ; la WikiMatrix gonflait par sa reference minee. La carte des registres a une reference humaine pour le technique | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+6) |
 | 19:47 | `4aff99b9` | MESURE 164 — LE TRAIN COMPLET XNLI : 13 394 paires hors domaine, sonde 0,586 (163 : 0,592), pont 0,773 (163 : 0,751), tete 0,456/0,534. Le domaine compte plus que le volume : plus de donnees d'ailleurs n'ameliorent pas l'inference in-domain | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
+| 20:17 | `a0b348e7` | MESURE 165 — LA PROSE TECHNIQUE (MULTIUN) : marge +33,2 (EN->FR) et +32,9 (FR->EN), plancher 30,4-33,0 ; plus dure que le juridico-technique (JRC +36,4/+34,9) et que le juridique (+35,3). La WikiMatrix minee (+41/+46) reste le cas du gonflement ; la carte des registres est complete | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+5) |
 
 ## Chiffres du jour
 
