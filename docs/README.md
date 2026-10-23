@@ -1,4 +1,4 @@
-# La documentation de Drave Natif — état, mission, vision
+# La documentation de Drave — vision, état, mission
 
 > **Ce dossier n'est pas un dépôt de résultats.** Les chiffres, les séries de mesures et les comptes rendus vivent
 > dans [`reports/`](../reports/). Ici : ce qui **reste vrai** quand les chiffres changent — la mission, l'état

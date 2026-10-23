@@ -160,15 +160,17 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
 | la vision de l'étage (ce qu'il **doit** être) | **Stéphane** | en attente, ne bloque rien |
 
-## La priorité : l'étage entrée-sortie
+## La priorité : l'intelligence, et son étage entrée-sortie
 
-Drave Natif se construit **étage par étage**. Le premier est l'**étage entrée-sortie** : lire et produire
-**toutes les langues, dialectes et styles**, dans tous les registres, et être **jugé** sur sa **qualité de
-traducteur** (restitution à l'identique, et traduction du sens d'une langue à l'autre). Entre le module
-pré-linguistique et le module post-linguistique circule une **représentation sémantique neutre (RSN)** : une
-structure multi-niveaux, faite d'**unités de sens** — **jamais de jetons** (le jeton est l'unité technique du
-tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** attend que cet étage soit fiable — **c'est
-maintenant le chantier principal** (décision du 21/10 au soir), les registres restants tournant en parallèle.
+La vision de Drave a **deux programmes** (voir [`roadmap.md`](roadmap.md)) : le **moteur** (les flux) et
+l'**intelligence** (les deux étages). **Dans l'intelligence, l'ordre est strict** : le premier étage est
+l'**entrée-sortie** — lire et produire **toutes les langues, dialectes et styles**, dans tous les registres, et être
+**jugé** sur sa **qualité de traducteur** (restitution à l'identique, et traduction du sens d'une langue à
+l'autre). Entre le module pré-linguistique et le module post-linguistique circule une **représentation sémantique
+neutre (RSN)** : une structure multi-niveaux, faite d'**unités de sens** — **jamais de jetons** (le jeton est
+l'unité technique du tokeniseur, pas l'unité du sens). Le **module de pensée abstraite** (l'étage 2) attend que cet
+étage soit fiable — et depuis le 21/10 au soir, **c'est lui le chantier principal** de l'intelligence, les registres
+restants de l'étage 1 tournant en parallèle ; le **moteur**, lui, avance de son côté, par ses propres mesures.
 
 ## Où en est cet étage (état au 21/10)
 
