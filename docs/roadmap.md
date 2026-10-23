@@ -120,7 +120,7 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 | B2.3 | **Le raisonnement synthétique** : dans l'état, aligné par un pont linéaire | ✅ | 1,00 → 0,51 ; pont 0,46-1,00 ; quatre langues, douze personnes, trois échelles |
 | B2.4 | **L'alignement appris** : bilingue, contraste, saturation | ✅ | 0,656 → 0,742 → **0,753** ; le prix (in-langue 98,7 → 77,6) |
 | B2.5 | **Le raisonnement naturel** (XNLI) | ✅ | 0,50-0,59 ; pont 0,59 → **0,77** (fine-tuning) ; le domaine compte plus que le volume |
-| B2.6 | **Le plan multi-tâches** : entraîner le plan **et** le raisonnement ensemble | ⏳ | l'EN→FR du plan au-dessus de 0,40 (le contexte joint est à 0,36) ; sinon, la ligne plan reste close |
+| B2.6 | **Le plan multi-tâches** : entraîner le plan **et** le raisonnement ensemble | ✅ mesuré — **0,364** | l'EN→FR reste au chiffre de la tâche seule (0,364) ; l'in-langue baisse (0,375), l'EN monte (0,511) — **la ligne plan est définitivement close** |
 | B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ⏳ | la même expérience à 32 B (quantifié si la mémoire l'exige) ; le pont tient-il ? |
 | B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | ⏳ | la sonde et le pont au 14 B (fait : 0,481/0,589/0,627) ; un corpus **hors XNLI** |
 
@@ -134,7 +134,7 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 | B3.2 | **La résistance** : ponts, bilinguisme, contraste, récurrence | ✅ | tous échouent (0,25-0,39) ; l'apparent transfert est un effet côté cible |
 | B3.3 | **La dynamique** : un état qui porte plusieurs pas | ✅ mesuré | le pas n'existe pas au-delà du contexte (mesures 113-115) ; le plan s'entraîne (119-124) |
 
-**Prochaine action** : aucune — la ligne est close ; B2.6 est la seule réouverture possible.
+**Prochaine action** : aucune — la ligne est **définitivement** close (B2.6 testé, mesure 168).
 
 ---
 
@@ -143,7 +143,7 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 L'ordre est **la valeur / le coût**, pas la date. Les quatre premiers ne dépendent d'aucune infra ; ils peuvent
 tourner en parallèle sur deux GPU.
 
-1. **B2.6 — le plan multi-tâches** (2 h, 1 GPU) : la dernière variante de l'étage 2.
+1. ~~B2.6 — le plan multi-tâches~~ **fait** (mesure 168 : 0,364, la ligne plan est close) ; le premier item est **A2.5**.
 2. **A2.5 — le top-k GPU** (2-3 h, 1 GPU) : le dernier repli CPU du moteur.
 3. **A4.3 — le diff par couche dans la porte** (1 h, CPU) : la condition du rejeu utile.
 4. **A1.5 / A5.3 — la décision par couche** (2 h, CPU + 1 GPU) : la quantification et le chemin choisis par la mesure.

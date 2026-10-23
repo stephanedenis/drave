@@ -276,6 +276,10 @@ n'est pas un levier — la récurrence de bout en bout reste la seule voie.*
 plus faibles, et le GRU sur-apprend. *La ligne plan est **close** : le contexte joint et sa tâche, rien d'autre
 n'améliore ni n'aligne sa géométrie.*
 
+**Mesure 168 — le multi-tâches ne l'aligne pas non plus.** Le plan entraîné avec le raisonnement donne **0,364**
+(EN→FR) — exactement le chiffre de la tâche seule — tandis que le FR→FR baisse (0,375) et l'EN→EN monte (0,511).
+*La ligne plan est **définitivement close** : six variantes ont échoué ; le plan est ancré dans la langue.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.

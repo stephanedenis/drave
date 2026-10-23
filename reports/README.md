@@ -105,6 +105,7 @@
 - [`registre-technique-prose-7b.json`](registre-technique-prose-7b.json) — la prose technique MultiUN (mesure 165 : +33,2 / +32,9, plus dure que le juridico-technique)
 - [`plan-contraste-plein-3b.json`](plan-contraste-plein-3b.json) — le contraste plein du plan (mesure 166 : 0,318, il dégrade sans la tâche)
 - [`plan-recurrent-3b.json`](plan-recurrent-3b.json) — le plan récurrent de bout en bout (mesure 167 : 0,273, la récurrence est pire que le contexte joint)
+- [`plan-multi-tache-3b.json`](plan-multi-tache-3b.json) — le plan multi-tâches (mesure 168 : 0,364, la ligne plan est définitivement close)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

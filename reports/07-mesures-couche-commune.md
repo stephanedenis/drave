@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (167 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (168 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5941,3 +5941,32 @@ n'améliore ni n'aligne sa géométrie.* ✓✓
 
 **Ce que ce résultat ne dit pas** ✗ : 800 pas, batch 4, une graine ✓✗ ; une autre agrégation (attention, moyenne
 pondérée) ou un GRU plus grand n'ont pas été testés ✓✗.
+
+---
+
+## Mesure 168 — LE PLAN MULTI-TÂCHES NE L'ALIGNE PAS NON PLUS : EN→FR **0,364** (le même chiffre que la tâche seule)
+
+**La question** ✓✓. Entraîner le plan **et** le raisonnement ensemble — le contraste FR↔EN du raisonnement comme
+régularisateur — transfère-t-il l'alignement au plan ? ✓✓
+
+**Le dispositif** ✓✓ : le plan multi-tâches, **un pas sur deux** (le plan, puis le contraste FR↔EN des paires
+transitives du raisonnement), 800 pas, batch 4 ✓ ; évaluation FR→FR, EN→EN, EN→FR (hasard 12,5 %) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | tâche seule (155) | alterné (156) | contraste seul (166) | récurrent (167) | **multi-tâches (168)** |
+|---|---:|---:|---:|---:|---:|
+| FR→FR | **0,432** | 0,330 | 0,284 | 0,273 | 0,375 |
+| EN→EN | 0,398 | 0,534 | 0,398 | 0,318 | **0,511** |
+| **EN→FR** | 0,364 | 0,386 | 0,318 | 0,273 | **0,364** |
+
+* **LE MULTI-TÂCHES NE CHANGE RIEN À L'EN→FR** ✓✓ : **0,364** — exactement le chiffre de la tâche seule (155) ✓✗ ;
+* **L'IN-LANGUE BAISSE** ✓✗ : 0,375 (155 : 0,432) — le contraste du raisonnement **dilue** l'entraînement du plan ;
+* **L'ANGLAIS MONTE** ✓✗ : 0,511 (155 : 0,398) — le raisonnement tire la partie anglaise ✓✗.
+
+**Ce que cela change** ✗✓ : la ligne plan est **définitivement close** — six variantes (ponts, bilinguisme, contraste,
+récurrence, multi-tâches) échouent ✓✓. *Le plan est ancré dans la langue : sa représentation n'est pas alignée par un
+objectif qui ne le concerne pas.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : le multi-tâches avec une **tête partagée** ou un objectif de plan **explicite**
+en anglais n'a pas été testé ✓✗ ; 88 items, 800 pas, une graine ✓✗.

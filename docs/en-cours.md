@@ -86,7 +86,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 
 **Ce qui reste** : sur le périmètre, la **qualité** (le chrF est un **plancher**, pas une note absolue ; il n'est
 même **pas comparable entre écritures**, 29ᵉ piège), le **technique miné**, les **langues peu
-dotées** ; à l'étage 2, le **plan** — un état qui porte la série (113-115) ; son EN→FR monte à 0,364 **par l'entraînement de la tâche** (FR seul : 0,364 — le bilinguisme n'ajoute rien, mesure 155), pas par alignement ; un **contraste explicite** n'ajoute que +2 (0,386, mesure 156) le contraste **seul** la dégrade (0,318, mesure 166) et la **récurrence** ne le sauve pas (0,273, mesure 167) — *la ligne plan est close : contexte joint + tâche*.
+dotées** ; à l'étage 2, le **plan** — un état qui porte la série (113-115) ; son EN→FR monte à 0,364 **par l'entraînement de la tâche** (FR seul : 0,364 — le bilinguisme n'ajoute rien, mesure 155), pas par alignement ; un **contraste explicite** n'ajoute que +2 (0,386, mesure 156) le contraste **seul** la dégrade (0,318, mesure 166) et la **récurrence** (0,273, mesure 167) ni le **multi-tâches** (0,364, mesure 168) ne le sauvent — *la ligne plan est définitivement close : six variantes ont échoué*.
 
 **Le bilan de la session (22-23 octobre)** : **quarante mesures** nouvelles (125-165) — les six registres mesurés
 (juridique, presse, littéraire, parlé, technique, dialogue), la **carte du raisonnement**
