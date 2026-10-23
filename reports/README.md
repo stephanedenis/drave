@@ -103,6 +103,7 @@
 - [`xnli-entrainement-3b.json`](xnli-entrainement-3b.json) — le fine-tuning XNLI (mesure 163 : tête 0,592/0,610, pont 0,751)
 - [`xnli-train-complet-3b.json`](xnli-train-complet-3b.json) — le train complet hors domaine (mesure 164 : sonde 0,586, pont 0,773, le domaine compte plus que le volume)
 - [`registre-technique-prose-7b.json`](registre-technique-prose-7b.json) — la prose technique MultiUN (mesure 165 : +33,2 / +32,9, plus dure que le juridico-technique)
+- [`plan-contraste-plein-3b.json`](plan-contraste-plein-3b.json) — le contraste plein du plan (mesure 166 : 0,318, il dégrade sans la tâche)
 - [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
 - [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
 - [`analyse-litteraire.json`](analyse-litteraire.json)

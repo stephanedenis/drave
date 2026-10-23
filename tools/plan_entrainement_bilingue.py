@@ -35,7 +35,8 @@ def principal() -> int:
     ap.add_argument("--graine", type=int, default=1234)
     ap.add_argument("--sortie", default="reports/plan-bilingue-3b.json")
     ap.add_argument("--langue", choices=["both", "fr", "en"], default="both")
-    ap.add_argument("--contraste", action="store_true", help="un pas sur deux : InfoNCE entre les prompts FR et EN de la même série")
+    ap.add_argument("--contraste", action="store_true", help="InfoNCE entre les prompts FR et EN de la même série")
+    ap.add_argument("--contraste-tout", action="store_true", help="contraste à chaque pas (pas seulement un sur deux)")
     ap.add_argument("--tau-plan", type=float, default=0.07)
     ap.add_argument("--sauver", default="")
     a = ap.parse_args()
@@ -88,7 +89,7 @@ def principal() -> int:
         langue = ("fr", "en")[pas % 2] if a.langue == "both" else a.langue
         k = random.sample(list(tr), a.batch)
         cible = torch.arange(len(k), device="cuda")
-        if a.contraste and pas % 2 == 0:
+        if a.contraste and (a.contraste_tout or pas % 2 == 0):
             pf = [" ".join(series[int(j)][0][:4]) for j in k]
             pe = [" ".join(series[int(j)][1][:4]) for j in k]
             with torch.autocast("cuda", dtype=torch.float16):

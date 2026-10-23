@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (165 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (166 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5881,3 +5881,34 @@ santé…), 800 paires filtrées, 400 échantillonnées ✓ ; 7 B, deux sens, ch
 
 **Ce que ce résultat ne dit pas** ✗ : les documents ONU sont techniques **et institutionnels** ✓✗ ; la prose
 scientifique (articles) reste différente ✓✗ ; 400 paires, un modèle ✓✗.
+
+---
+
+## Mesure 166 — LE CONTRASTE **PLEIN** (SANS TÂCHE) **DÉGRADE** LE PLAN : EN→FR **0,318** (156 : 0,386 ; tâche seule : 0,364)
+
+**La question** ✓✓. Doubler le contraste (FR↔EN à **chaque** pas) améliore-t-il l'alignement du plan — ou le plan
+a-t-il besoin de sa **tâche** ? ✓✓
+
+**Le dispositif** ✓✓ : le plan, **contraste FR↔EN à chaque pas** (la tâche n'est plus entraînée), batch 4, 800 pas ✓ ;
+évaluation FR→FR, EN→EN, EN→FR (hasard 12,5 %) ✓✓.
+
+**Les résultats** ✓ (hasard 12,5 %) :
+
+| condition | tâche seule (155) | alterné (156) | **contraste seul (166)** |
+|---|---:|---:|---:|
+| FR→FR | 0,432 | 0,330 | **0,284** |
+| EN→EN | 0,398 | 0,534 | **0,398** |
+| **EN→FR** | 0,364 | **0,386** | **0,318** |
+
+* **LE CONTRASTE SEUL DÉGRADE** ✗✗ : 0,318 (EN→FR), 0,284 (FR→FR) — moins que l'alterné (0,386) et que la tâche
+  seule (0,364) ✓✗ ;
+* **LE PLAN A BESOIN DE SA TÂCHE** ✓✗ : le contraste aligne les contextes mais **perd le contenu** qui fait la
+  prédiction ✓✗ ;
+* **LE CONTRÔLE EST AU HASARD** ✓✓ (les cellules restent au-dessus de 0,125 mais aucune n'est forte) ✓✓.
+
+**Ce que cela change** ✗✓ : le contraste n'est **pas un levier** pour le plan ; il **casse** l'état quand il remplace
+la tâche ✓✗. *Le plan reste ancré dans la langue ; la seule voie restante est la **récurrence de bout en bout** ou un
+objectif multi-tâches.* ✓✓
+
+**Ce que ce résultat ne dit pas** ✗ : le contraste **avec** la tâche à chaque pas n'a pas été testé (la mémoire du
+batch 4 ne le permet pas) ✓✗ ; 88 items, 800 pas ✓✗.

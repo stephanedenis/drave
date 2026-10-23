@@ -267,6 +267,10 @@ autrement.
 **0,586**, le pont monte à **0,773**, mais la tête baisse (0,456 / 0,534). *Le domaine compte plus que le volume ;
 pour progresser sur l'inférence, il faut des données du même domaine.*
 
+**Mesure 166 — le contraste seul dégrade le plan.** À chaque pas de contraste (sans la tâche), l'EN→FR tombe à
+**0,318** et le FR→FR à 0,284 (alterné : 0,386 ; tâche seule : 0,364). *Le plan a besoin de sa tâche ; le contraste
+n'est pas un levier — la récurrence de bout en bout reste la seule voie.*
+
 L'outillage est en place :
 `tools/pas_de_pensee_corrige.py`, `tools/pas_de_pensee_non_lineaire.py`, `tools/etat_de_plan.py`,
 `tools/plan_entrainement.py` et `tools/composition_latente.py`.
