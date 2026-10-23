@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22.md](2026-10-22.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,10 +21,11 @@
 | 17:26 | `2d10c895` | MESURE 148 — LE DIALOGUE SPONTANE (OPENSUBTITLES) : marge +32,3 (EN->FR) et +33,6 (FR->EN) au 7 B, plancher 17,2 (le plus bas) ; le dialogue est le plus dur apres le litteraire. La carte des six registres est complete | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+7) |
 | 17:33 | `7c1c2d0d` | MESURE 149 — LE CONTROLE DU CONTRASTE : avec des paires melangees, la sonde FR->EN monte quand meme a 0,505 (correct : 0,742) ; l'entrainement bilingue aligne deja en grande partie, le bon appariement ajoute +24. Le contraste correct n'est pas la cause unique | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 | 19:12 | `8dd24946` | MESURE 159 — LE TECHNIQUE A REFERENCE HUMAINE (JRC-ACQUIS) : marge +36,4 (EN->FR) et +34,9 (FR->EN), au niveau du juridique (~+35) et non du mine (+41/+46) ; la WikiMatrix gonflait par sa reference minee. La carte des registres a une reference humaine pour le technique | `en-cours.md`, `2026-10-21.md`, `2026-10-22.md` (+6) |
+| 19:47 | `4aff99b9` | MESURE 164 — LE TRAIN COMPLET XNLI : 13 394 paires hors domaine, sonde 0,586 (163 : 0,592), pont 0,773 (163 : 0,751), tete 0,456/0,534. Le domaine compte plus que le volume : plus de donnees d'ailleurs n'ameliorent pas l'inference in-domain | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 
 ## Chiffres du jour
 
-`0,505` · `0,742` · `5%` · `0,042` · `0,451` · `0,810` · `0,136` · `0,125` · `0,250` · `250 paires` · `0,324` · `0,273`
+`13394 paires` · `0,586` · `0,592` · `0,773` · `0,751` · `0,456` · `0,534` · `0,505` · `0,742` · `5%` · `0,042` · `0,451`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

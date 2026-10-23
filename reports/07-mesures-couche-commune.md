@@ -1,5 +1,5 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
-> (164 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> (165 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
 > [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
@@ -5853,3 +5853,31 @@ domaine, pas plus de données d'ailleurs.* ✓✓
 **Ce que ce résultat ne dit pas** ✗ : le train est MultiNLI (genres différents du dev) ✓✗ ; un train **du même
 domaine** (les traductions XNLI du dev, 392 k) pourrait améliorer ✓✗ ; et la tête (0,456) est un readout, pas la
 représentation (la sonde 0,586) ✓✗.
+
+---
+
+## Mesure 165 — LA PROSE TECHNIQUE (MULTIUN) : marge **+33,2** (EN→FR) et **+32,9** (FR→EN) — plus dure que le juridico-technique
+
+**La question** ✓✓. La **prose technique** (documents de l'ONU, traductions **humaines**) se traduit-elle mieux
+que le juridico-technique (JRC) ou que le miné ? ✓✓
+
+**Le dispositif** ✓✓ : MultiUN, **sous-corpus technique** (≥ 2 mots-clés : eau, énergie, produits chimiques,
+santé…), 800 paires filtrées, 400 échantillonnées ✓ ; 7 B, deux sens, chrF + plancher + marge + IC ✓✓.
+
+**Les résultats** ✓ (le plancher est la référence) :
+
+| sens | chrF | plancher | **marge** | IC 95 % |
+|---|---:|---:|---:|---:|
+| EN→FR | 63,6 | 30,4 | **+33,2** | [32,0 ; 34,3] |
+| FR→EN | 65,9 | 33,0 | **+32,9** | [31,9 ; 33,9] |
+
+* **LA PROSE TECHNIQUE EST PLUS DURE** ✓✗ : +33,2 / +32,9, contre JRC +36,4 / +34,9 et juridique +35,3 ✓✗ ;
+* **LE PLANCHER EST HAUT** ✓✗ : 30,4-33,0 — le vocabulaire technique est partagé ✓✗ ;
+* **LA CARTE EST COMPLÈTE** ✓✓ : juridique, presse, littéraire, parlé, technique (juridico-technique **et** prose) et
+  dialogue ✓✓.
+
+**Ce que cela change** ✓✓ : la **prose technique humaine** est le registre le plus dur après le littéraire
+(+32,9-33,2) ✓✗ ; la WikiMatrix minée (+41 / +46) reste l'exemple du **gonflement** ✓✗.
+
+**Ce que ce résultat ne dit pas** ✗ : les documents ONU sont techniques **et institutionnels** ✓✗ ; la prose
+scientifique (articles) reste différente ✓✗ ; 400 paires, un modèle ✓✗.
