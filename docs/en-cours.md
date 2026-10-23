@@ -56,13 +56,11 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
   pas** (0,443 / 0,295 / 0,341, mesure 120) ; mais les contrôles **tempèrent** : le transfert aux cibles figées est
   de +0,05 à +0,08 (mesures 121, 123) et **nul à 16 phrases** (0,193 contre 0,189, mesure 122) — le gain est surtout
   l'adaptation de l'espace cible ; c'est fait : **contre des cibles figées**, le plan transfère (0,324 / 0,273 / 0,216 en moyenne de deux graines, mesure 124), mais seul h1 est solide.
-- **Le raisonnement transitif est dans l'état** (mesure 125) : une sonde linéaire retrouve la conclusion de chaînes
-  d'ordre (2 à 6 entités, prémisses mélangées) à **1,00 → 0,51** (FR) et **1,00 → 0,53** (EN), contre 5 % de hasard.
-  Un **pont linéaire** EN→FR rend le raisonnement indépendant de la langue (**1,00 / 0,91 / 0,68 / 0,52 / 0,46**,
-  mesure 126) ; il est **structurel** (relation « taille », mesure 127), **langue-général** (FR/ES, FR/DE et **arabe**,
-  mesures 128, 131, 133), **linéaire** (un MLP échoue, mesure 129) et **multi-couches** (12/18/24, mesure 130). En
-  revanche, il **n'aligne pas l'état de plan** (mesure 132) et ne se transfère pas d'une tâche à l'autre (mesure 134) :
-  les tâches de l'étage 2 ont des géométries **locales** ; un **seul pont poolé** couvre toutes les longueurs (0,94 / 0,91 / 0,81, mesure 135) ; il marche au **7 B** (0,95 / 0,87 / 0,81, mesure 137), le pont **multi-tâches** ne récupère pas le plan (0,136, mesure 136) un **code partagé** non supervisé ne suffit pas (0,34-1,00 à 256 dims, mesure 138) ; la **CCA** aligne mais un code de 64 dims perd l'information (mesure 139) ; à **256 dims**, elle récupère (0,57-1,00, mesure 140) ; au **14 B**, le pont est quasi parfait (0,975-1,00, mesure 141) ; mais **entraîner en FR** ne l'aligne pas (sonde EN 0,092, pont 0,513, mesure 142) le **multilingue** non plus (0,042, pont 0,451, mesure 144) ni la perte **contrastive** faible (0,042, pont 0,466, mesure 146) ; mais l'entraînement **bilingue** l'apprend : sans contraste, la sonde EN monte à **0,656** ; le contraste correct ajoute +9 (0,742), le **mélangé** coûte −15 (0,505) (mesures 147, 149, 150) ; l'alignement **émerge entre 400 et 800 pas** (0,13 → 0,66 ; batch 8, mesure 151) **sature** à 1 600 pas (0,753 pour 0,826 in-langue, mesure 152) ; il **décroît avec la profondeur** (0,95 à 4 entités → 0,47 à 12 au 3 B, **0,70 au 14 B** ; mesures 157-158) ; il tient aussi sur le **naturel** (XNLI : 0,502/0,576, pont 0,592, mesure 160 ; **pas de gain au 14 B** : 0,481/0,589, pont 0,627, mesure 161 ; le **MLP** ne fait pas mieux : 0,453, mesure 162 ; le **fine-tuning** améliore : tête 0,592/0,610, pont 0,751, mesure 163 ; le **train complet hors domaine** ne change pas la sonde (0,586) mais pousse le pont à **0,773** (mesure 164) ; mais l'alignement du raisonnement **ne transfère pas au plan** (0,273 contre 0,250, mesure 153).
+- **Le raisonnement est dans l'état** (mesures 125-164 ; la carte complète est dans
+  [05](synthese/05-la-pensee-sans-verbaliser.md)) : synthétique **1,00 → 0,51**, naturel **0,50-0,59** ; un **pont
+  linéaire** l'aligne (**0,81-0,97** synthétique, **0,59-0,77** naturel), à 3/7/14 B, jusqu'à **12 entités** ;
+  l'alignement **s'apprend** par l'entraînement bilingue (**0,656**) et **sature** (**0,753**) ; le **plan
+  résiste** (ponts, bilinguisme, contraste : 0,25-0,39, effet côté cible).
 - **Ce qui tient déjà** : la langue est **lisible partout** (80-100 %), le **sens traverse les langues** (96 % sur
   les paires couvertes), l'alignement **suit la généalogie** (37/28/11 %), et la **restitution exacte** existe pour
   un modèle spécialisé (85 %) mais **meurt à 10 langues** (4 %).
@@ -89,6 +87,12 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 **Ce qui reste** : sur le périmètre, la **qualité** (le chrF est un **plancher**, pas une note absolue ; il n'est
 même **pas comparable entre écritures**, 29ᵉ piège), le **technique miné**, les **langues peu
 dotées** ; à l'étage 2, le **plan** — un état qui porte la série (113-115) ; son EN→FR monte à 0,364 **par l'entraînement de la tâche** (FR seul : 0,364 — le bilinguisme n'ajoute rien, mesure 155), pas par alignement ; un **contraste explicite** n'ajoute que +2 (0,386, mesure 156) — *sa géométrie résiste* ; reste la **dynamique**.
+
+**Le bilan de la session (22-23 octobre)** : **quarante mesures** nouvelles (125-165) — les six registres mesurés
+(juridique, presse, littéraire, parlé, technique, dialogue), la **carte du raisonnement**
+([05](synthese/05-la-pensee-sans-verbaliser.md)) et les **sept leçons de méthode**
+([06](synthese/06-comment-savoir.md)) ; l'étage 2 a sa structure : un état qui compose, un pont linéaire qui l'aligne,
+et un plan qui résiste.
 
 ## Le tableau de bord des chantiers
 
