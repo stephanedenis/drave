@@ -80,9 +80,11 @@ def principal() -> int:
     te = [paires[i] for i in ordre[n_tr:]]
     # Les paires niées : même prémisse, hypothèse niée, étiquette basculée.
     te_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in te]
+    tr_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in tr]
     Etr = etats(tr)
     Ete = etats(te)
     Ete_neg = etats(te_neg)
+    Etr_neg = etats(tr_neg)
     ytr = np.array([p[2] for p in tr])
     yte = np.array([p[2] for p in te])
 
@@ -100,6 +102,10 @@ def principal() -> int:
         "flip_mlp": round(float(np.mean(pred_flip_m == 1 - yte)), 4),
         "garde_mlp": round(float(np.mean(pred_flip_m == yte)), 4),
         "negatif_flip": round(float(np.mean(pred_ctrl == 1 - yte)), 4),
+        # B4.2 — la négation APPRISE : une sonde entraînée sur les paires niées (étiquette basculée)
+        "appris_negatif": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete_neg, 2) == 1 - yte)), 4),
+        "appris_original": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete, 2) == yte)), 4),
+        "negatif_appris": round(float(np.mean(sonde(Etr_neg, rng2.permutation(np.array([p[2] for p in tr_neg])), Ete_neg, 2) == 1 - yte)), 4),
     }
     for k, v in res.items():
         print(f"  {k}: {v}")

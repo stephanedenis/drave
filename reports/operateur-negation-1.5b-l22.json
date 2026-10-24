@@ -10,5 +10,8 @@
  "garde_sonde": 0.5852,
  "flip_mlp": 0.3698,
  "garde_mlp": 0.6302,
- "negatif_flip": 0.4566
+ "negatif_flip": 0.4566,
+ "appris_negatif": 0.7042,
+ "appris_original": 0.3312,
+ "negatif_appris": 0.4952
 }

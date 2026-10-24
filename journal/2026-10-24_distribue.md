@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,6 +21,7 @@
 | 15:32 | `976d55e4` | A7.2 + A8.2 — LE RELAIS A CHIFFRE EGAL, ET LA PERTE ENTRE DANS LA REGLE. A7.2 etabli : porte-topologie (92 s, 42.5477) — une couche executee ailleurs rend la meme sortie, le flux coute 1 608 octets/flux, 0,25 Mbit/s, latence <= 20 ms ; reste la grappe intra-couche (A7.3). A8.2 code : choisir_avec_perte + 3 tests — l'int8 tardif (+0,03 %) passe a 1 %, l'int4 tardif (+2,7 %) exige 5 %, la tete 4 bits (+10 %) est refusee a 5 %, l'int4 global (+364 %) jamais : la lecon de la tete devient une regle testee | `en-cours.md`, `roadmap.md`, `placement.rs` (+4) |
 | 15:42 | `d116a6f6` | B4.1 — LA NEGATION N'EST PAS PORTEE PAR L'ETAT : l'operateur « Il est faux que : H » sur 1034 paires DACCORD (1,5 B, couche 22) donne un flip de 0,4148 (SOUS le hasard 0,5) et une garde de 0,5852 (au-dessus), quand la reference tient (0,8103). La sonde relit l'etiquette originale sur les paires niees : elle lit la relation de surface, pas l'operation. Controle au hasard propre (0,4566). Premier resultat de B4, NEGATIF — B4.2 devient l'operateur appris | `en-cours.md`, `roadmap.md`, `2026-10-24.md` (+6) |
 | 15:56 | `12e5a053` | DOC — LA NAVIGATION PAR FICHIERS : une carte des sujets (docs/carte.md, 83 liens — concepts, chantiers, phases, activites, schemas), le chapitre 7 decompose en 10 parties (5 972 lignes, 179 sections) avec son index qui garde les 26 liens, le glossaire en 11 familles (2 274 lignes), la revue etendue au dossier glossaire, le serveur du site pointe la carte. Verifie : mdserve et le site rendent les tableaux, les liens et les SVG | `AGENTS.md`, `README.md`, `README.md` (+31) |
+| 15:57 | `cae7bd41` | DOC — LES TROIS DOSSIERS SE POINTENT : reports/README.md et journal/README.md portent la ligne de navigation (la carte des sujets, l'etat du moment, l'inventaire, l'index des resultats, le journal). docs, reports et journal se lisent maintenant l'un l'autre par des liens de fichiers | `2026-10-24.md`, `2026-10-24_distribue.md`, `README.md` |
 
 ## Chiffres du jour
 

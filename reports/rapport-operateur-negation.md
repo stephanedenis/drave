@@ -31,6 +31,24 @@
   *opérer sur le sens* (échoue).
 - Le contrôle au hasard est propre (0,4566) : rien de parasitaire.
 
+## B4.2 — la négation est APPRENABLE (mais pas par transfert)
+
+| | |
+|---|---:|
+| sonde entraînée sur le nié → le nié | **0,7042** |
+| sonde entraînée sur le nié → l'original | 0,3312 (sous le hasard : les géométries sont opposées) |
+| contrôle (étiquettes mélangées) | 0,4952 |
+
+**La négation est dans l'état** : une sonde **réentraînée** sur les paires niées lit la relation basculée à
+**0,7042** (hasard 0,5), avec un contrôle propre. Mais elle **ne se transfère pas** : la sonde de l'original ne lit
+pas le nié (0,4148) et réciproquement (0,3312). *L'opérateur n'est pas une direction : c'est une **géométrie
+locale** — exactement la leçon du plan (« les géométries sont locales aux tâches », synthèse 05).*
+
+**Ce que ça change pour B4** : l'opération n'est **pas** un vecteur à ajouter, c'est un **réapprentissage**. C'est
+cohérent avec tout le reste : le plan avait dû être entraîné (mesure 119) ; la composition est alignée par un pont
+(0,76/0,865) mais le plan résiste. **B4.3** : un opérateur appris sur une **paire** d'opérations transfère-t-il à une
+autre, ou faut-il un réapprentissage par opération ?
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation
