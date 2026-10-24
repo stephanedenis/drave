@@ -11,7 +11,9 @@ la forme du flux, pas la qualité du modèle).
 
 ## Densité : où le push paie, où le pull paie
 
-Le croisement push/pull du projet est mesuré à **~10 % de densité**. Ce qui
+Le croisement push/pull du projet est mesuré à **~22 % de densité** — corrigé le 27/09 dans
+[`rapport-croisement-push-pull.md`](rapport-croisement-push-pull.md) §1 (ce rapport disait 10 %, c'était
+l'ancien chiffre, mesuré sur un banc défectueux). Ce qui
 manquait était la densité **par couche** — or elle varie du simple au triple :
 
 | couche | densité | couche | densité |

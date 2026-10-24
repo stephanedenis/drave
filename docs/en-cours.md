@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 08 h 9 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 08 h 13 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -178,6 +178,8 @@ conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/ra
 La **porte du diff par couche** (A4.3) est en place : deux exécutions identiques donnent un flux **identique**
 (reproductibilité), et le KV en 8 bits produit une divergence **nommée** — couche 1, jeton 1, 857 neurones,
 9,3e-5 — `tools/porte-diff-couche.sh` ; `diff_flux.py` lit désormais la **v2** (indices par écarts).
+La **décision par couche** (A1.5) est mesurée : à 20-56 % de densité, le **dense** gagne de 2 % (9,2 contre 9,4 s)
+et la perplexité est **identique** (28,4015) — la table prédit le dense pour 23 couches sur 24, la mesure suit.
 
 ## Où en est cet étage (état au 21/10)
 

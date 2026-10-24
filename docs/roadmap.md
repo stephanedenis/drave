@@ -28,7 +28,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A1.2 | **Diff par couche** : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de dynamique ; couche la plus touchée : FFN 2 |
 | A1.3 | **Le format EST le contrat d'échange** (A3) : versionné, en-tête + paires | ✅ | codec de référence : aller-retour identique sur 132 Mo ; le rejeu redonne les mêmes logits |
 | A1.4 | **Profilage par neurone** : densité par couche, part des 10 % les plus forts, neurones dominants | ✅ | densité **20 à 56 %** selon la couche ; top 10 % → **33,1 %** de la magnitude ; **0,08 %** de neurones chauds > 90 % du temps |
-| A1.5 | **La décision par couche** : la quantification et le chemin (push/pull) choisis par la mesure, couche par couche | 🔬 | une table de décision par couche, vérifiée par la perplexité |
+| A1.5 | **La décision par couche** : la quantification et le chemin (push/pull) choisis par la mesure, couche par couche | ✅ | la **table** (la densité par couche + le croisement 22 %) et la **vérification** : PPL **identique** (28,4015) entre le push et le dense, le dense **2 %** plus rapide (9,2 contre 9,4 s à 255 jetons) — [`reports/rapport-decision-par-couche.md`](../reports/rapport-decision-par-couche.md) |
 
 **Prochaine action** : A1.5 (la table par couche), puis A1.1-A1.2 dans les portes (voir A4).
 
