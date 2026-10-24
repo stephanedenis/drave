@@ -257,13 +257,22 @@ par l'entraînement ; le modèle apprend une représentation plus partageable.*
 | à quelle échelle ? | 137, 141 | 3 B, 7 B, 14 B : 0,81-0,97 |
 | l'alignement s'apprend-il ? | 142-152 | oui : bilingue **0,656**, + contraste **0,742**, sature **0,753** |
 | le plan s'aligne-t-il ? | 132, 134, 153, 155-156 | **non** : ponts, bilinguisme et contraste échouent |
-| le raisonnement naturel ? | 160-164 | oui : inférence 0,50-0,59, pont 0,59 → **0,77** (fine-tuning) |
+| le raisonnement naturel ? | 160-168 | oui : inférence 0,41-0,69, pont 0,49 → **0,77** (fine-tuning) — **confondu par la couche** entre tailles ; à profondeur fixe, en cours |
 
 **Les trois leçons.** 1. L'état porte le raisonnement — synthétique et naturel — **sans verbaliser**. 2. Un petit
 pont **linéaire** l'aligne, à toutes les échelles et sur les deux tâches ; l'alignement **s'apprend** par
 l'entraînement bilingue, et **sature** autour de 0,75. 3. Le **plan** est le contre-exemple : sa géométrie est
 **ancrée dans la langue** ; ni les ponts, ni le bilinguisme, ni le contraste ne l'alignent — il faut l'entraîner
 autrement.
+
+**Mesures 165-168 (24/10) — l'échelle et le confondant.** Le XNLI au **1,5 B** donne 0,692 (sonde) et **0,83**
+(pont) — mieux que le 3 B (0,502/0,592) et le 14 B (0,481/0,627) ; au **32 B** (nf4), 0,410 et 0,49. Mais **la
+couche 18 n'a pas la même profondeur relative** (64 % au 1,5 B, 28 % au 32 B) : la décroissance n'est **pas**
+attribuable à la taille. Le premier point à profondeur fixe (le 1,5 B à 50 %, sa couche 14) donne 0,578/0,703 —
+*moins* que sa couche 18 : chaque modèle a **sa** meilleure couche. La comparaison scalaire est **suspendue** jusqu'à
+la mesure à profondeur relative fixe (les couches 14/18/24/32).
+Le **NLI français plus dur** (DACCORD, GQNLI-FR) est lisible au 1,5 B (+26,9 et +56,7 de marge, contrôles au
+hasard) : le jeu « plus dur que XNLI » perd sa marge, pas sa lisibilité.
 
 **Mesure 164 — le train complet.** 13 394 paires du train MultiNLI (**hors domaine** du dev) : la sonde reste à
 **0,586**, le pont monte à **0,773**, mais la tête baisse (0,456 / 0,534). *Le domaine compte plus que le volume ;
