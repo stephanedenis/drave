@@ -116,6 +116,19 @@ Sept portes ont dépassé les 180 s : `porte-indice` (827), `porte-homeostasie` 
 `model.rs` avec la tête revertée, la nouvelle porte — **ne cassent aucune porte**. La seule différence avec la passe
 du 17/10 (46 portes, 44 vertes, 2 rouges) est **la 47ᵉ porte, verte**.
 
+## 2 sexies. La passe du 24/10 à 16 h 59 (47 portes, 1 h 47 min) — le contrôle du soir
+
+**Verdict : 45 vertes, 2 rouges** — les deux structurels connus (`porte-indice` 846 s, `porte-melange` 103 s),
+**aucun rouge nouveau**. C'est la **passe de contrôle** après les changements de la journée : la règle place+perte
+**opt-in**, les deux tests de `placement.rs`, le chapitre 08 de la synthèse, la navigation par fichiers.
+
+**Toutes les références sont stables** : `porte-flux` 60,8135 · `porte-pont` +2,81 % / +25,35 % · `porte-coupe`
++0,52 % → +17,09 % · `porte-gain` 29,0206 → 1297,5437 · `porte-topologie` 42,5477 · `porte-greffe` branchée.
+
+**Ce que la passe a appris** : le passage **par défaut** de la règle place+perte avait décalé `porte-coupe`
+(5,9-11,6 %, échec) ; la règle a été rendue **opt-in**, et la passe le confirme — *un changement de défaut qui
+déplace les chiffres des portes ne se fait pas sans les épingler d'abord*.
+
 ## 3. Ce que la passe a trouvé : une porte qui ne pouvait pas échouer
 
 `porte-tokenizer-kimi.sh` **lisait ses textes sur `stdin`** — que personne ne lui fournissait.

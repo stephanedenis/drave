@@ -21,6 +21,15 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-24 à 16 h 59** (**47 portes, 45 vertes, 2 rouges**, **1 h 47 min**, aucune sautée) —
+> **la passe de contrôle du soir**, après les changements de la journée (la règle place+perte **opt-in**, les deux
+> tests de `placement.rs`, le chapitre 08, la navigation par fichiers). Le verdict au registre : **deux rouges, et
+> ce sont les STRUCTURELS connus** (`porte-indice` 846 s, `porte-melange` 103 s) — **aucun rouge nouveau**, et
+> **toutes les références sont stables** : `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**,
+> `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 → 1297,5437**, `porte-topologie` **42,5477**,
+> `porte-greffe` **branchée**. *Le passage du défaut du KV à la règle avait décalé `porte-coupe` (5,9-11,6 % et un
+> échec) : la règle est devenue opt-in, et la passe le confirme.*
+>
 > **Passe du 2026-10-24 à 10 h 53** (**47 portes, 45 vertes, 2 rouges**, **1 h 48 min**, aucune sautée) —
 > **la première passe à 47 portes**, avec `porte-diff-couche` (18 s, **verte**) : le contrat de flux tient.
 > Le verdict se lit **au registre** (`awk '$2 != 0'`) : **deux rouges, et ce sont les STRUCTURELS connus**
