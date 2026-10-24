@@ -34,14 +34,28 @@ même mesure que les sous-titres, dont la référence est humaine et indépendan
 
 - Le corpus du **dialogue réel** existe (144 dialogues, 5 700+ phrases, l'informel écrit) : la ligne B1.6 n'est plus
   bloquée ;
-- **on ne l'ajoute pas** à la carte des six registres tant que la référence n'est pas indépendante : la case
-  « dialogue » reste tenue par les sous-titres (+32,3/+33,6 au 7 B), et DiaBLa est une **borne haute** documentée ;
+- avec les **références indépendantes**, la mesure est propre : le **dialogue spontané** est plus facile que les
+  sous-titres (+5 à +9 au même modèle), et la case « dialogue » gagne deux niveaux — les sous-titres (écrit et
+  contraint) et le spontané (DiaBLa) ;
 - la prochaine étape est la récupération des références du GitHub, puis la mesure au **7 B** (le modèle des six
   registres).
 
-**Mise à jour (même jour)** : les références indépendantes ont été récupérées (`raw-corpus/*.ref`, alignées par le
-`eval-filter` : **4 981 paires**, vérifiées sur les premières lignes) et la mesure au même 1,5 B est **en cours** —
-elle dira si l'écart de +13 à +14 avec les sous-titres était le registre ou le biais de la post-édition.
+**Mise à jour (même jour) — les références indépendantes.** Les `.ref` du GitHub (4 981 paires alignées par le
+`eval-filter`) donnent, au même 1,5 B :
+
+| référence de DiaBLa | EN→FR | FR→EN |
+|---|---:|---:|
+| **indépendantes** (les `.ref`) | **+35,0** [32,9 ; 37,1] | **+39,3** [37,2 ; 41,5] |
+| post-édition (la version HF) | +40,3 | +44,2 |
+| (rappel) OpenSubtitles | +27,0 | +30,4 |
+
+- **Le biais de la post-édition est réel mais petit** : **+5,3** et **+4,9** points — pas les +13 que la comparaison
+  aux sous-titres laissait craindre.
+- **Le dialogue spontané reste plus facile que les sous-titres** : +35/+39 contre +27/+30 **au même modèle** — la
+  distinction tient ; le dialogue réel a son propre niveau, entre la post-édition et les sous-titres.
+- **La carte peut gagner sa ligne « dialogue spontané »** (+35,0/+39,3 au 1,5 B), à côté du « dialogue écrit et
+  contraint » des sous-titres ; la réserve restante est le **modèle** (1,5 B ici, 7 B pour la carte des six
+  registres).
 
 ## Ce que ce résultat ne dit pas
 
