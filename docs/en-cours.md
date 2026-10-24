@@ -172,15 +172,15 @@ l'unité technique du tokeniseur, pas l'unité du sens). Le **module de pensée 
 étage soit fiable — et depuis le 21/10 au soir, **c'est lui le chantier principal** de l'intelligence, les registres
 restants de l'étage 1 tournant en parallèle ; le **moteur**, lui, avance de son côté, par ses propres mesures.
 
-**Le moteur, en ce moment** : le top-k GPU est **mesuré** — le noyau fusionné (1 lancement) gagne
-jusqu'à ~64 k clés, la chaîne séparée au-delà (×1,43 à 1 M) ; le seuil `SEUIL_NOYAU4 = 131_072` est mesuré,
-conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md).
-La **porte du diff par couche** (A4.3) est en place : deux exécutions identiques donnent un flux **identique**
-(reproductibilité), et le KV en 8 bits produit une divergence **nommée** — couche 1, jeton 1, 857 neurones,
-9,3e-5 — `tools/porte-diff-couche.sh` ; `diff_flux.py` lit désormais la **v2** (indices par écarts).
-Le **NLI français plus dur** (B2.8) est mesuré au 1,5 B : **DACCORD +26,9**, **GQNLI +56,7**, XNLI +35,9 de marge
-(les contrôles au hasard) — le jeu dur est lisible mais sa marge est la plus faible ; et le **1,5 B bat le 3 B et
-le 14 B** sur la sonde (0,692 contre 0,502 et 0,481) et le pont (**0,83** contre 0,592 et 0,627).
+**Le moteur, en ce moment** : le top-k GPU est **mesuré** (le noyau fusionné gagne jusqu'à ~64 k clés, la chaîne
+séparée au-delà ; le seuil 131 072 est mesuré) ; la **porte du diff par couche** (A4.3) est en place (deux exécutions
+identiques → flux identique ; le KV 8 bits → divergence nommée) ; la **quantification du KV par couche** (A5.3) :
+l'int8 sur les couches 0-11 coûte **+2,28 %**, sur les 12-23 **+0,03 %** ; le **placement** (A2.6) a sa règle
+générale (`choisir`, 4 tests) et le KV y passe ; **A6.1 et A6.3** ont rendu leurs négatifs (les produits n'ajoutent
+que +0,0045 de R² ; aucun neurone ne reste à zéro).
+Le **NLI français plus dur** (B2.8) est mesuré au 1,5 B : **DACCORD +26,9**, **GQNLI +56,7**, XNLI +35,9 de marge ;
+à **profondeur relative fixe**, le **32 B est le meilleur** (0,600/0,772) et le 3 B le moins lisible (0,502) — la
+lisibilité n'est pas la taille.
 
 La **décision par couche** (A1.5) est mesurée : à 20-56 % de densité, le **dense** gagne de 2 % (9,2 contre 9,4 s)
 et la perplexité est **identique** (28,4015) — la table prédit le dense pour 23 couches sur 24, la mesure suit.
