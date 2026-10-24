@@ -45,6 +45,7 @@ conclusion honnête est celle-ci :
 | modèle | couche (50 %) | sonde FR | pont EN→FR |
 |---|---:|---:|---:|
 | 1,5 B | 14 | 0,5783 | 0,7028 |
+| **14 B** | **18** | **0,4833** | **0,6225** |
 | 3 B | 18 | 0,5020 | 0,5920 |
 | **32 B** | **32** | **0,5997** | **0,7724** |
 | **14 B** | **24** | **0,6305** | **0,8153** |
@@ -56,6 +57,10 @@ conclusion honnête est celle-ci :
 des quatre points**, devant le 32 B (0,60 / 0,77) ; le 1,5 B fait 0,58 / 0,70 et le 3 B 0,50 / 0,59. Le 32 B reste le
 meilleur de *sa* série (0,41 → 0,60 de la couche 18 à la 32), mais **la taille ne garantit pas la lisibilité** —
 c'est la même leçon que les pics du 1,5 B et du 3 B, un étage plus haut.
+
+**Et à la moitié exacte (couche 18), le 14 B est le moins lisible des quatre** : 0,4833/0,6225 — **sous le 3 B**
+(0,502/0,592) et loin du 32 B (0,600/0,772). *La taille ne garantit rien, même au même endroit* : le 14 B est meilleur
+à 67 % (0,6305/0,8153) et à 83 % (0,7189/0,8701) qu'à 50 %.
 
 **Le 14 B à la couche 24 a été mesuré** : 0,6305 de sonde et **0,8153** de pont. Le fichier (`xnli-14b-l24.json`)
 datait du **09:54** et l'analyse l'avait manqué — *l'ancienne note disait « n'a pas pu être mesuré », l'OOM ayant été
