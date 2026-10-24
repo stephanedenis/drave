@@ -121,6 +121,12 @@ doit montrer l'effet cherché : **968 ms → quelques dizaines de ms par couche*
 
 ## La prochaine étape n'est pas un noyau de plus, c'est une fusion
 
+> **État au 24/10 — FAITE et MESURÉE.** Le noyau `attn_topk_tout` existe, est branché en opt-in, et le banc le
+> compare à la chaîne : il **gagne jusqu'à ~64 k clés** (×1,1 à ×1,9) et **perd au-delà** (×1,43 à 1 M) — le
+> croisement est entre 65 k et 131 k, d'où le seuil **`SEUIL_NOYAU4 = 131_072`** dans `model.rs`. La fusion ne
+> remplace pas la chaîne séparée : elle la **complète** en dessous de ~100 k. Résultats :
+> [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md).
+
 Mesuré à 16 384 clés : la chaîne déportée gagne (attention 19,58 → 7,59 ms/jeton,
 balayage −24 %), mais elle coûte **8 lancements et 17 transferts par couche et par
 jeton**, dont 8 copies DtoH bloquantes — d'où un croisement entre 8 k et 16 k au

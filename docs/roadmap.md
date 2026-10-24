@@ -40,7 +40,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A2.2 | **Attention complète sur GPU** (décodage et préremplissage) | ✅ | 22,16 → **3,29 ms/jeton** (÷6,7) |
 | A2.3 | **Projections Q8_0 et tête Q6_K sur GPU** (opt-in) | ✅ | 15,6 → 6,2 ms/jeton ; tête : 7,58 → **3,60** |
 | A2.4 | **Cache d'experts MXFP4** | ✅ mesuré, **verdict : non** | +6 % — on ne l'active pas tel quel, et c'est écrit |
-| A2.5 | **Top-k dans le noyau d'attention GPU** — le dernier chemin qui retombe sur le CPU | ⏳ | plus aucun repli CPU dans le long contexte ; `--attn-topk 256` améliore la perplexité (234,88 contre 298,56 à 2 048, valeur absolue non reproduite) |
+| A2.5 | **Top-k dans le noyau d'attention GPU** — le dernier chemin qui retombe sur le CPU | ✅ mesuré — opt-in (`DRAVE_GPU_TOPK=1`) | le noyau fusionné (**1 lancement**) gagne jusqu'à ~64 k, la chaîne séparée au-delà (×1,43 à 1 M) ; le croisement **65 k-131 k** et le seuil `SEUIL_NOYAU4 = 131_072` sont **mesurés** ; conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md) |
 | A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | ⏳ | une règle explicite, pas un `if` codé en dur ; prefill à 8 k mesuré |
 
 **Prochaine action** : A2.5 (aucune infra, le dernier repli CPU), puis A2.6.

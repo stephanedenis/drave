@@ -188,6 +188,7 @@
 - [`rapport-gpu-scores.md`](rapport-gpu-scores.md)
 - [`rapport-gpu-tandem-nvlink.md`](rapport-gpu-tandem-nvlink.md)
 - [`rapport-gpu-topk-selection.md`](rapport-gpu-topk-selection.md)
+- [`rapport-gpu-topk-tout.md`](rapport-gpu-topk-tout.md)
 - [`rapport-granularite-flux.md`](rapport-granularite-flux.md)
 - [`rapport-grappes.md`](rapport-grappes.md)
 - [`rapport-greffon.md`](rapport-greffon.md)
