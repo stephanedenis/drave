@@ -30,7 +30,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
   à **+0,9** (7 → 14 B, fra→eng) — mesures 63 et 66. *Le levier n'est pas la taille seule.*
 - **Six registres mesurés** : juridique (+35,3 de marge), **presse** (+38,6), **littéraire** (+25,9),
   **parlé préparé** (TED2020 : +39,8 / +40,7, mesure 143), **technique** (**JRC juridico-technique : +36,4 /
-  +34,9, mesure 159** ; **prose MultiUN : +33,2 / +32,9, mesure 165** ; WikiMatrix miné : +41 / +46, gonflé) et **dialogue** (OpenSubtitles : +32,3 / +33,6, mesure 148) — le littéraire est le plus dur, mais **pas par le
+  +34,9, mesure 159** ; **prose MultiUN : +33,2 / +32,9, mesure 165** ; WikiMatrix miné : +41 / +46, gonflé) et **dialogue** (OpenSubtitles : +32,3 / +33,6, mesure 148) ; le **dialogue réel** (DiaBLa) donne **+40,3 / +44,2** au 1,5 B, mais sa référence est une **post-édition** — une **borne haute**, pas un septième registre — le littéraire est le plus dur, mais **pas par le
   contenu** : **96 %** des noms, **0,5 %** d'omissions ; l'écart est de **style** (mesures 64 et 68).
 - **La couverture des langues est le facteur** : sur les **24 langues officielles de l'UE**, **+35,8** de marge sur
   le hasard pour les **13 langues annoncées** par le modèle, **+21,5** pour les **10 autres** ; les trous sont
