@@ -94,6 +94,10 @@ du raisonnement** ([05](synthese/05-la-pensee-sans-verbaliser.md)) et les **huit
 ([06](synthese/06-comment-savoir.md)) ; l'étage 2 a sa structure : un état qui compose, un pont linéaire qui l'aligne
 et un plan qui résiste — et la carte se lit désormais **par modèle, à son pic**.
 
+**La passe complète du 24/10** : **47 portes, 45 vertes, 2 rouges** (les deux structurels connus), **1 h 48 min** — la
+47ᵉ porte (`porte-diff-couche`) est **verte en 18 s** : le contrat de flux tient, et rien de ce qui a été écrit
+aujourd'hui n'a cassé une porte.
+
 ## Le tableau de bord des chantiers
 
 **La roadmap** (les deux programmes, l'ordre du jour, la file « jamais en attente ») est dans
