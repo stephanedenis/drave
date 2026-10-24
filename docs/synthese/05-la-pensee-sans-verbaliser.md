@@ -271,6 +271,11 @@ la comparaison entre tailles dépend du **point de mesure** : sur DACCORD, le 1,
 79 %) et le 3 B à **0,865** (couche 30, 83 %) — **le 3 B est meilleur à son pic**. Deux « décroissances » ont été
 corrigées le même jour (la couche 18, puis la profondeur 50 %) : c'étaient des effets du **point de mesure**.
 *La carte se lit par modèle, à son pic (ou avec les deux bornes : la couche fixe et le pic).*
+
+**Et la sonde sature dès le 1,5 B** (mesures du 24/10) : à son pic, le **1,5 B** donne **0,7256**, le **3 B**
+**0,7269** et le **14 B** **0,7189** — **dix fois la taille pour +0,001**. Le **pont**, lui, monte encore (0,826 →
+0,857 → 0,870) mais **sature à 0,87**. *Deux axes : la lecture sature tout de suite, le transfert s'améliore un peu
+puis plafonne — et c'est la forme la plus forte de la thèse : la structure bat la taille.*
 Le **NLI français plus dur** (DACCORD, GQNLI-FR) est lisible au 1,5 B (+26,9 et +56,7 de marge, contrôles au
 hasard) : le jeu « plus dur que XNLI » perd sa marge, pas sa lisibilité.
 
