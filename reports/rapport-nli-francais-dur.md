@@ -25,18 +25,31 @@ encore la réponse dans l'état sur ces jeux — ou le 0,50 de XNLI était-il d�
   très linéairement séparable.
 - **Les contrôles sont propres partout** : les étiquettes mélangées ramènent au hasard (0,325 ; 0,550 ; 0,400).
 
-## Le 3 B à profondeur fixe (50 %) : il décroche sur les trois jeux
+## Le 3 B à travers ses couches : il décolle à la fin — la « décroissance » était le point de mesure
 
-| jeu | 1,5 B (couche 14) | 3 B (couche 18) | écart |
+Mesure du 24/10 sur DACCORD, couche par couche (le même protocole) :
+
+| couche | profondeur | sonde FR | MLP |
 |---|---:|---:|---:|
-| XNLI | 0,578 | 0,502 | **−0,076** |
-| DACCORD | **0,701** | 0,592 | **−0,109** |
-| GQNLI | **0,900** | 0,800 | **−0,100** |
+| 12 | 33 % | 0,511 | 0,489 |
+| 18 | 50 % | 0,592 | 0,543 |
+| 24 | 67 % | 0,836 | 0,868 |
+| **30** | **83 %** | **0,865** | **0,894** |
 
-Le 3 B est **moins lisible** que le 1,5 B sur les trois jeux, à profondeur relative égale (50 %) — et son MLP tombe
-au hasard sur le DACCORD (0,543). Ce n'est pas la tâche, c'est le modèle : le 3 B a les représentations les **moins
-linéairement accessibles** de la série mesurée. La leçon pour la carte : **la lisibilité n'est pas monotone avec la
-taille** — elle dépend de la géométrie interne, pas du nombre de paramètres.
+- **La couche 18 était un mauvais point, pas le modèle** : à la couche 30, le 3 B lit **0,865** — le **meilleur de
+  la série**, devant le 1,5 B (0,692 à sa couche 18) et le 32 B (0,600 à sa couche 32).
+- **Le confondant n'était pas la profondeur mais le point de mesure** : comparer à la même profondeur relative (50 %)
+  est aussi arbitraire que comparer à la couche 18 — chaque modèle a **sa** couche, et elle est **tardive** (64 % pour
+  le 1,5 B, 83 % pour le 3 B).
+- **La leçon se corrige** : « la lisibilité n'est pas monotone avec la taille » était **l'effet du point de mesure** ;
+  à leur meilleure couche, **le 3 B bat le 1,5 B** (0,865 contre 0,692) — la taille aide, à condition de regarder au
+  bon endroit.
+
+## Ce que ça change pour la carte
+
+La carte du raisonnement doit être lue **par modèle, à sa meilleure couche** — ou avec **les deux bornes** (la
+profondeur fixe et la meilleure couche). C'est la seule comparaison qui ne confond pas la taille avec le point de
+mesure ; l'erreur a été faite deux fois aujourd'hui (la couche 18, puis la profondeur 50 %), et corrigée deux fois.
 
 ## Le pont au 1,5 B : 0,83, le meilleur mesuré
 
