@@ -157,6 +157,22 @@ pub fn choisir_avec_perte(
     meilleur.map(|(s, p, _)| (s, p))
 }
 
+/// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :
+/// **+2,28 %** sur les premières, **+0,03 %** sur les dernières. La frontière mesurée
+/// est la moitié du réseau (les couches 0-11 contre 12-23 sur 24).
+pub fn perte_kv_int8(couche: usize, n_layer: usize) -> f64 {
+    if n_layer == 0 || couche * 2 < n_layer { 2.28 } else { 0.03 }
+}
+
+/// La précision du KV choisie par la règle **place et perte** : l'int8 si sa perte
+/// mesurée tient dans le budget (`budget_pct` en %), le f32 sinon. C'est
+/// `DRAVE_KV_BITS_COUCHES="12-23:8"` **calculé** au lieu d'être écrit — la leçon de
+/// la tête (le 4 bits « qui tient » coûte +10 % de PPL) appliquée au KV.
+pub fn kv_precision(couche: usize, n_layer: usize, budget_pct: f64) -> (u32, f64) {
+    let perte = perte_kv_int8(couche, n_layer);
+    if perte <= budget_pct { (8, perte) } else { (32, 0.0) }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -213,6 +229,19 @@ mod tests {
         // Et l'int4 global (+364 %) ne passe aucun budget raisonnable.
         let encore = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 10.0).unwrap();
         assert_ne!(encore.1.nom, "int4 global");
+    }
+
+    #[test]
+    fn la_regle_place_perte_choisit_le_kv_par_couche() {
+        // 24 couches : l'int8 passe sur les 12-23 (+0,03 %), pas sur les 0-11 (+2,28 %).
+        assert_eq!(kv_precision(0, 24, 1.0).0, 32);
+        assert_eq!(kv_precision(11, 24, 1.0).0, 32);
+        assert_eq!(kv_precision(12, 24, 1.0).0, 8);
+        assert_eq!(kv_precision(23, 24, 1.0).0, 8);
+        // Un budget de 3 % laisse passer les deux.
+        assert_eq!(kv_precision(0, 24, 3.0).0, 8);
+        // Un budget nul interdit tout.
+        assert_eq!(kv_precision(23, 24, 0.0).0, 32);
     }
 
     #[test]

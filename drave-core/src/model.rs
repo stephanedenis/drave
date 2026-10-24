@@ -4668,7 +4668,7 @@ soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
         // La quantification PAR COUCHE (A5.3) : `DRAVE_KV_BITS_COUCHES="0-11:32,12-23:8"`
         // l'emporte sur le global pour les couches citées. Le but est de MESURER la
         // sensibilité de chaque couche — la décision par bloc viendra ensuite.
-        let par_couche: Vec<Option<u32>> = {
+        let mut par_couche: Vec<Option<u32>> = {
             let mut v = vec![None; cfg.n_layer];
             if let Ok(spec) = std::env::var("DRAVE_KV_BITS_COUCHES") {
                 for morceau in spec.split(',') {
@@ -4697,6 +4697,22 @@ soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
             }
             v
         };
+        // A8.3 — la règle PLACE **ET** PERTE (le terme de perte mesuré, A8.2) choisit la
+        // précision par couche quand rien n'est forcé : l'int8 coûte +2,28 % sur les
+        // premières couches, +0,03 % sur les dernières (A5.3) — le budget `DRAVE_PERTE_MAX`
+        // (en %, défaut 1,0) décide. C'est `DRAVE_KV_BITS_COUCHES="12-23:8"`, calculé.
+        if par_couche.iter().all(|x| x.is_none()) && std::env::var("DRAVE_KV_BITS").is_err() {
+            let budget_pct: f64 = std::env::var("DRAVE_PERTE_MAX").ok()
+                .and_then(|v| v.parse().ok()).unwrap_or(1.0);
+            let mut choisis = 0;
+            for l in 0..cfg.n_layer {
+                let (bits, _) = crate::placement::kv_precision(l, cfg.n_layer, budget_pct);
+                if bits != 32 { choisis += 1; }
+                par_couche[l] = Some(bits);
+            }
+            println!("[config] KV par la règle place+perte : budget {budget_pct:.1} % → {choisis} couche(s) en int8 \
+                      (l'int8 coûte +2,28 % sur les premières, +0,03 % sur les dernières)");
+        }
         let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
             .map(|l| KvCache::new(par_couche[l].unwrap_or(kv_bits), cfg.n_kv_head, ctx, cfg.head_dim))
             .collect();

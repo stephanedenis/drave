@@ -115,9 +115,10 @@ une mauvaise décision.**
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | A8.1 | **La règle de place** | ✅ `placement::choisir`, 4 tests | mesuré |
+| A8.3 | **La règle branchée** : la précision du KV choisie par le budget de perte | ✅ mesuré | la règle rend **exactement** le choix de la main (`12-23:8`) : **30,7286** des deux côtés, contre 30,7660 en f32 — [`reports/rapport-regle-placement-perte.md`](../reports/rapport-regle-placement-perte.md) |
 | A8.2 | **Le terme de perte** : chaque précision a son coût mesuré (PPL) | ✅ `choisir_avec_perte` + **3 tests** | l'int8 tardif (+0,03 %) passe un budget de **1 %**, l'int4 tardif (+2,7 %) exige **5 %**, la tête 4 bits (+10 %) est **refusée** à 5 %, l'int4 global (+364 %) jamais — la leçon de la tête est devenue une règle |
 
-**Prochaine action** : brancher `choisir_avec_perte` dans `model.rs` (le KV et la tête) — la règle est prête, l'appel reste.
+**Prochaine action** : aucune — la règle est **branchée** (A8.3 : la règle rend le choix de la main, 30,7286 des deux côtés) ; la place reste à appliquer aux experts (A6.2, bloqué faute de MoE local).
 
 ---
 
