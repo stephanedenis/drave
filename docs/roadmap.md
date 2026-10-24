@@ -30,7 +30,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A1.4 | **Profilage par neurone** : densité par couche, part des 10 % les plus forts, neurones dominants | ✅ | densité **20 à 56 %** selon la couche ; top 10 % → **33,1 %** de la magnitude ; **0,08 %** de neurones chauds > 90 % du temps |
 | A1.5 | **La décision par couche** : la quantification et le chemin (push/pull) choisis par la mesure, couche par couche | ✅ | la **table** (la densité par couche + le croisement 22 %) et la **vérification** : PPL **identique** (28,4015) entre le push et le dense, le dense **2 %** plus rapide (9,2 contre 9,4 s à 255 jetons) — [`reports/rapport-decision-par-couche.md`](../reports/rapport-decision-par-couche.md) |
 
-**Prochaine action** : A1.5 (la table par couche), puis A1.1-A1.2 dans les portes (voir A4).
+**Prochaine action** : aucune — la table est faite, la quantification testée en 4 et 8 bits (un curseur).
 
 ### A2 — Répartir sur les composants d'une machine
 
@@ -43,7 +43,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A2.5 | **Top-k dans le noyau d'attention GPU** — le dernier chemin qui retombe sur le CPU | ✅ mesuré — opt-in (`DRAVE_GPU_TOPK=1`) | le noyau fusionné (**1 lancement**) gagne jusqu'à ~64 k, la chaîne séparée au-delà (×1,43 à 1 M) ; le croisement **65 k-131 k** et le seuil `SEUIL_NOYAU4 = 131_072` sont **mesurés** ; conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md) |
 | A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | 🔬 — la règle écrite **et appliquée** | le module [`placement.rs`](../drave-core/src/placement.rs) (les bandes mesurées, `cout`, `classement`, `kv_en_vram`, et la **règle générale `choisir`** — le moins cher **où ça tient**, **4 tests verts**) ; la décision du **KV** y passe ; la **tête** a été essayée par la règle puis **revertée** (le 4 bits coûte +10 % de PPL : la place n'est pas la qualité) ; la mesure à 8 k : **×1,93** / **×5,8** — [`reports/rapport-placement-kv-8k.md`](../reports/rapport-placement-kv-8k.md) ; reste l'ordonnanceur complet (experts, tête) |
 
-**Prochaine action** : A2.5 (aucune infra, le dernier repli CPU), puis A2.6.
+**Prochaine action** : aucune — le noyau fusionné et la règle `choisir` sont faits ; la tête a été essayée puis revertée.
 
 ### A3 — Répartir sur plusieurs machines
 
@@ -68,7 +68,7 @@ Un flux est un journal, et un journal se rejoue.
 | A4.2 | **Références indépendantes** : une seconde implémentation de la même formule | ✅ | MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp ; patchs 5,4e-7 ; projecteur 1,7e-6 |
 | A4.3 | **Diff par couche dans les portes** : après un changement de quantification ou de noyau, savoir *où* le calcul diverge | ✅ | la porte `porte-diff-couche.sh` : deux exécutions identiques → **flux identique** (reproductibilité) ; KV 8 bits → divergence **nommée** (couche 1, jeton 1, 857 neurones, 9,3e-5) ; `diff_flux.py` lit la **v2** (indices par écarts) |
 
-**Prochaine action** : A4.3 (le diff dans la porte) — aucune infra.
+**Prochaine action** : aucune — `porte-diff-couche` est verte dans la passe (18 s).
 
 ### A5 — Formats, matériels, énergie
 
@@ -79,7 +79,7 @@ Un flux est un journal, et un journal se rejoue.
 | A5.3 | **Quantification par bloc, par couche** | ✅ — la sensibilité mesurée, la politique écrite | le coût de l'int8 est **tout** dans les premières couches : 8 bits sur 0-11 → **+2,28 %**, sur 12-23 → **+0,03 %** (0,5 B, 255 jetons) ; la politique : les tardives peuvent passer en 8 bits sans perte mesurable — [`reports/rapport-kv-par-couche.md`](../reports/rapport-kv-par-couche.md) ; le 4 bits sur les tardives coûte **+2,7 %** (elles tolèrent le 8, pas le 4) |
 | A5.4 | **Le FPGA** : un opérateur complet, alimenté par le même format de flux | 🧱 | dépend d'un accès matériel (le PE événementiel et le lecteur DDR3 existent et sont vérifiés) |
 
-**Prochaine action** : A5.3 (la politique par bloc) — aucune infra ; A5.4 est bloquée par le matériel.
+**Prochaine action** : aucune — le 8 bits tardif est gratuit (+0,03 %), le 4 bits +2,7 % ; A5.4 est bloquée par le matériel.
 
 ### A6 — Apprendre des flux
 
@@ -91,7 +91,7 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 | A6.2 | **Routage appris** (MoE) : les experts choisis par les logs | ⏳ | qualité égale, coût de routage ÷10 |
 | A6.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ✅ mesuré — le critère est **vide** | **0 neurone mort** sur 116 736 (255 jetons) ; **63 %** s'allument à moins de 0,1 % (les rares, pas les morts) ; le top 10 % porte **19 %** de la masse — l'élagage exige un corpus de calibration plus large et la perplexité après masque — [`reports/rapport-elagage-logs.md`](../reports/rapport-elagage-logs.md) |
 
-**Prochaine action** : A6.1 (le capteur, déjà amorcé).
+**Prochaine action** : aucune — A6.1 et A6.3 ont rendu leurs négatifs (les produits +0,0045 ; aucun neurone mort).
 
 ---
 
@@ -108,8 +108,7 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 | B1.5 | **La prose scientifique** (articles) | 🧱 corpus — la recherche du 24/10 ne trouve que des **comparables** (LIMSI/BUCC) ou du juridique (ACL-SIGLEX) | un corpus parallèle **humain** d'articles ; le MultiUN couvre la prose technique institutionnelle |
 | B1.6 | **Le dialogue réel** : la conversation spontanée | ✅ mesuré au 1,5 B, **références indépendantes** | **DiaBLa +35,0/+39,3** (les `.ref`, 4 981 paires) contre **+40,3/+44,2** (post-édition) et **+27,0/+30,4** (OpenSubtitles) au même 1,5 B : le biais de la post-édition est de **+5**, et le **dialogue spontané reste plus facile que les sous-titres** — la carte gagne sa ligne, le 3 B gagne **+2 à +3 points** (+38,1/+41,3 contre +35,0/+39,3) : la traduction profite de la taille quand la lisibilité y perd ; le 7 B n'a pas pu être mesuré (15,2 Go de poids sur 15,55) — [`reports/rapport-dialogue-diabla.md`](../reports/rapport-dialogue-diabla.md) |
 
-**Prochaine action** : B1.5/B1.6 — la recherche de corpus. Si aucun corpus humain n'est trouvé, **la ligne se
-déclare bloquée** et on passe à B2 ; la carte des registres reste celle de six registres + deux marges nommées.
+**Prochaine action** : B1.5 seule — **bloquée** (pas de corpus scientifique humain) ; B1.6 est **mesuré** (DiaBLa).
 
 ### B2 — La représentation et le raisonnement (étage 2)
 
@@ -124,7 +123,7 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 | B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ✅ mesuré — **le confondant tranché** | à profondeur relative fixe (50 %), le 32 B donne **0,600 / 0,772** — **le meilleur des points mesurés** : la « décroissance avec la taille » (0,410/0,49 à la couche 18, précoce) était **l'effet de la couche** ; le 1,5 B (0,578/0,703) et le 3 B (0,502/0,592) suivent ; le 14 B à la couche 24 est **bloqué par la VRAM** (28 Go fp16 + les activations > 30 Go sur 2 × 16 ; le 4 bits OOM aussi) — la chaîne tient sur trois points, le quatrième est nommé — [`reports/rapport-32b-couche-confondant.md`](../reports/rapport-32b-couche-confondant.md) |
 | B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | 🔬 — la première mesure faite | **DACCORD +26,9, GQNLI +56,7, XNLI +35,9** de marge (1,5 B, contrôles au hasard) : *le jeu dur est lisible, sa marge est la plus faible* ; et **chaque modèle a son pic tardif** : 1,5 B **0,810** (c. 22, 79 %), 3 B **0,865** (c. 30, 83 %) — **le 3 B y est meilleur** : la taille aide, au bon endroit ; les deux « décroissances » du jour (couche 18, profondeur 50 %) étaient des effets du **point de mesure** — [`reports/rapport-nli-francais-dur.md`](../reports/rapport-nli-francais-dur.md) |
 
-**Prochaine action** : **B2.6** (le plan multi-tâches — aucune infra, la seule variante non testée), puis B2.7/B2.8.
+**Prochaine action** : aucune — le plan résiste, l'échelle est tracée (les pics), DiaBLa est mesuré.
 
 ### B3 — Le plan et la dynamique
 
