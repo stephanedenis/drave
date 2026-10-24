@@ -112,6 +112,24 @@ qu'elle combine.
 compositionnelles gratuitement — et la composition s'apprend à un **coût**. C'est la carte la plus précise que le
 projet ait du « penser sans verbaliser » : *l'état porte les opérations, mais il ne les calcule pas.*
 
+## B4, suite — le LoRA de la négation (la conception)
+
+**La question** : B4.2 a montré que la négation est **apprenable par une sonde réentraînée** (0,7042) ; B4.5, que la
+composition s'apprend **faiblement** (0,6174). La question suivante est celle du **poids** : peut-on apprendre
+l'opération **dans le modèle** (un LoRA), pour que l'état la porte **sans sonde** ?
+
+**Le dispositif** : le LoRA (`poser_lora` de `tools/adaptateur_langue.py`, rang 8) sur le 1,5 B ; l'entraînement sur
+les paires **niées** (le même corpus que B4.2, les étiquettes basculées) ; puis **les cinq tests de B4** refaits sur
+le modèle adapté — la sonde de l'original lit-elle le nié ? C'est le transfert que B4.1 avait refusé (0,4148).
+
+**Le critère** : le flip **passe le hasard** sur le modèle adapté, avec le contrôle au hasard.
+
+**Le coût** : ~1-2 h de GPU (le 1,5 B, le rang 8, les 723 paires) ; à lancer **après la passe** (elle occupe le GPU).
+
+**Ce qui pourrait le rendre faux** : le LoRA peut **apprendre la surface** (« il est faux que ») sans apprendre
+l'opération — c'est le risque de tous les adaptateurs. Le contrôle est de tester sur une **négation différente**
+(« ce n'est pas le cas que »).
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation

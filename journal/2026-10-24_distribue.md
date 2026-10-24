@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,10 +25,11 @@
 | 16:03 | `dd585b60` | B4.2 — LA NEGATION EST APPRENABLE, PAS TRANSFERABLE : une sonde reentrainee sur les paires niees lit la relation basculee a 0,7042 (hasard 0,5 ; controle 0,4952), mais la sonde de l'original ne lit pas le nie (0,4148) et reciproquement (0,3312). L'operateur n'est pas une direction : c'est une GEOMETRIE LOCALE — la lecon du plan (mesure 119). B4.3 : un operateur appris sur une paire d'operations transfere-t-il a une autre ? | `2026-10-24.md`, `2026-10-24_distribue.md`, `operateur-negation-1.5b-l22.json` (+2) |
 | 16:31 | `b22b7097` | A8.3 — LA REGLE PLACE ET PERTE EST BRANCHEE : placement::kv_precision choisit la precision du KV par couche selon le budget DRAVE_PERTE_MAX (defaut 1 %) — l'int8 si sa perte mesuree tient (+2,28 % sur les premieres, +0,03 % sur les dernieres), le f32 sinon. La regle rend EXACTEMENT le choix de la main : 30,7286 des deux cotes (contre 30,7660 en f32), memes couches en int8. Deux tests ajoutes (8/8). La lecon de la tete devient la regle du KV | `roadmap.md`, `model.rs`, `placement.rs` (+4) |
 | 18:50 | `a4377f9b` | DOC — LE BILAN DU JOUR EN ENTIER : la page vivante dit ce que la journee a etabli — la carte close, B4 close (les cinq chiffres de l'operateur), A7 complete (le relais 42,5477, la grappe exacte a 21 %), A8 opt-in, les DEUX passes 45/47 (toutes les references stables le soir), DiaBLa au 3 B, le 14 B l24. L'heure passe a 19 h | `en-cours.md`, `2026-10-24.md`, `2026-10-24_memoire.md` (+1) |
+| 19:03 | `d9547ca3` | A7.4 — LA GRAPPE DEPORTEE : le format du relais passe en version 2 (un masque d'un bit par canal + les valeurs non nulles). Le flux de la grappe coute 4,22x moins que le dense (1 704 o contre 7 196 o), la porte du flux rend les MEMES chiffres (60,8135 / 60,8135), et la version 1 reste lisible. A7 est complete : la couche deportee, la grappe, sa taille, et son transport | `en-cours.md`, `roadmap.md`, `kimi_k3.rs` (+6) |
 
 ## Chiffres du jour
 
-`21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148` · `0,3312` · `1034 paires`
+`60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148` · `0,3312`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -49,6 +50,7 @@
 - [reports/rapport-analyse-flux.md](../reports/rapport-analyse-flux.md)
 - [reports/rapport-decision-par-couche.md](../reports/rapport-decision-par-couche.md)
 - [reports/rapport-dialogue-diabla.md](../reports/rapport-dialogue-diabla.md)
+- [reports/rapport-grappe-deportee.md](../reports/rapport-grappe-deportee.md)
 - [reports/rapport-operateur-negation.md](../reports/rapport-operateur-negation.md)
 - [reports/rapport-regle-placement-perte.md](../reports/rapport-regle-placement-perte.md)
 
