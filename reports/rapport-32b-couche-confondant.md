@@ -40,19 +40,23 @@ conclusion honnête est celle-ci :
 > *Le protocole « couche 18 » ne compare pas des couches comparables ; la carte du raisonnement naturel, du 1,5 B au
 > 32 B, n'est pas encore tracée.*
 
-## Premier point à profondeur relative fixe — et il complique la règle
+## Les points à profondeur relative fixe (50 %)
 
-Le 1,5 B à la couche **14** (50 % de sa profondeur) :
-
-| couche | profondeur | sonde FR | pont EN→FR |
+| modèle | couche (50 %) | sonde FR | pont EN→FR |
 |---|---:|---:|---:|
-| 14 | 50 % | **0,5783** | **0,7028** |
-| 18 | 64 % | 0,6921 | 0,8300 |
+| 1,5 B | 14 | 0,5783 | 0,7028 |
+| 3 B | 18 | 0,5020 | 0,5920 |
+| **32 B** | **32** | **0,5997** | **0,7724** |
+| 14 B | 24 | en cours | en cours |
 
-**La couche relative ne suffit pas** : à 50 % de profondeur, le 1,5 B lit *moins* bien qu'à 64 %. Chaque modèle a
-donc **sa** meilleure couche, et la comparaison honnête doit fixer la profondeur relative **et** rapporter que la
-couche choisie n'est pas la meilleure de chaque modèle. Le 32 B à la couche 32 (50 %) tourne ; le 14 B à la
-couche 24 suivra.
+**À profondeur relative fixe, l'échelle AIDE** : le 32 B (0,60 / 0,77) est le meilleur des trois points, et son pont
+remonte de **0,49** (couche 18, 28 %) à **0,77** (couche 32, 50 %). La « décroissance avec la taille » de la
+première lecture était **l'effet de la couche** — la couche 18 est précoce au 32 B, et le même modèle à 50 % est le
+meilleur mesuré.
+
+**Et la couche absolue ne suffit pas non plus** : le 1,5 B lit mieux à sa couche 18 (64 % : 0,692/0,83) qu'à la 14
+(50 % : 0,578/0,703). Chaque modèle a **sa** meilleure couche — la comparaison entre tailles doit fixer la profondeur
+relative, et la comparaison entre couches doit le dire.
 
 ## Ce que ça ne dit pas, et ce que ça ne retire pas
 

@@ -269,8 +269,10 @@ autrement.
 (pont) — mieux que le 3 B (0,502/0,592) et le 14 B (0,481/0,627) ; au **32 B** (nf4), 0,410 et 0,49. Mais **la
 couche 18 n'a pas la même profondeur relative** (64 % au 1,5 B, 28 % au 32 B) : la décroissance n'est **pas**
 attribuable à la taille. Le premier point à profondeur fixe (le 1,5 B à 50 %, sa couche 14) donne 0,578/0,703 —
-*moins* que sa couche 18 : chaque modèle a **sa** meilleure couche. La comparaison scalaire est **suspendue** jusqu'à
-la mesure à profondeur relative fixe (les couches 14/18/24/32).
+*moins* que sa couche 18 : chaque modèle a **sa** meilleure couche. La comparaison scalaire est **tranchée** : à
+profondeur relative fixe (50 %), le **32 B donne 0,600/0,772** — le meilleur des points mesurés, devant le 1,5 B
+(0,578/0,703) et le 3 B (0,502/0,592) ; la « décroissance avec la taille » était l'effet de la couche. Le 14 B à la
+couche 24 est en cours.
 Le **NLI français plus dur** (DACCORD, GQNLI-FR) est lisible au 1,5 B (+26,9 et +56,7 de marge, contrôles au
 hasard) : le jeu « plus dur que XNLI » perd sa marge, pas sa lisibilité.
 
