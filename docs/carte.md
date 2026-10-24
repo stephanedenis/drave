@@ -82,7 +82,8 @@
 - **la synthèse** : [l'index](synthese/index.md) · [01 le cerveau](synthese/01-le-cerveau-drave.md) ·
   [02 l'anatomie](synthese/02-anatomie-interne.md) · [03 les modes](synthese/03-les-modes-et-les-portes.md) ·
   [04 les facultés](synthese/04-les-facultes-et-la-biologie.md) · [05 la pensée](synthese/05-la-pensee-sans-verbaliser.md) ·
-  [06 savoir](synthese/06-comment-savoir.md) · [07 les modèles alternatifs](synthese/07-modeles-alternatifs-entree-sortie.md) ;
+  [06 savoir](synthese/06-comment-savoir.md) · [07 les modèles alternatifs](synthese/07-modeles-alternatifs-entree-sortie.md) ·
+  [08 les opérations](synthese/08-les-operations.md) ;
 - **les plans techniques** : [le cerveau complet](plan-cerveau-complet.md) · [le top-k GPU](plan-gpu-topk.md) ·
   [le mode 4](plan-mode4-lot-listes.md) · [le préremplissage réparti](plan-prefill-reparti.md) ·
   [MLA](plan-mla-vision.md) · [les modèles lourds](plan-modeles-lourds.md) · [DeepSeek 4.1](plan-deepseek41-complet.md) ·

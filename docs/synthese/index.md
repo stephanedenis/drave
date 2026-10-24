@@ -1,7 +1,7 @@
 # Synthèse théorique de Drave
 
 > **Ce que ce dossier est.** Une explication **complète et vulgarisée** de ce que Drave sait faire, de
-> son fonctionnement interne, et des idées qui le gouvernent. Sept chapitres, sept schémas, et à la fin de
+> son fonctionnement interne, et des idées qui le gouvernent. Huit chapitres, sept schémas, et à la fin de
 > chacun la même question : *« comment sait-on que c'est vrai ? »* — parce que dans ce dépôt, une idée
 > qui n'est pas mesurée n'est pas une idée, c'est une intention.
 
@@ -12,10 +12,11 @@
 | comprendre **l'idée** en cinq minutes | [chapitre 1 — le cerveau Drave](01-le-cerveau-drave.md) |
 | comprendre **ce que le moteur fait vraiment** | [chapitre 3 — les modes et les portes](03-les-modes-et-les-portes.md) |
 | savoir **ce qui marche et ce qui ne marche pas** | [chapitre 5 — la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) |
+| comprendre **les opérations** de l'étage 2 (la négation, la composition) | [chapitre 8 — les opérations](08-les-operations.md) |
 | **utiliser** le dépôt ce soir | [`docs/utilisation.md`](../utilisation.md) |
 | la **vision** et la **roadmap** | [`docs/vision.md`](../vision.md) · [`docs/roadmap.md`](../roadmap.md) |
 
-## Les sept chapitres
+## Les huit chapitres
 
 | # | chapitre | ce qu'il explique | schéma |
 |---|---|---|---|
@@ -26,6 +27,7 @@
 | 5 | [la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) | le travail de la nuit du 16/10 : lire le sens, itérer, et le prix | ![pensée](schemas/pensee.svg) |
 | 6 | [comment savoir qu'on a raison](06-comment-savoir.md) | les portes, le registre, et les cinq pièges d'instrument | ![portes](schemas/portes.svg) |
 | 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | **la théorie** de l'étage entrée-sortie (nom historique : couche commune) : cinq familles, ce qu'on sait, ce qui reste ouvert — les **mesures** sont dans [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md) | ![couche commune](schemas/couche-commune.svg) |
+| 8 | [les opérations : ce que l'état porte, et ce qu'il ne calcule pas](08-les-operations.md) | les **cinq mesures** de B4 (la négation : pas une direction, apprenable, un sous-espace, pas une algèbre, une composition apprise à 0,62) et la **grappe** du moteur (le top-1024 exact à 21 %) | — |
 
 ## Trois principes, qui reviennent partout
 
