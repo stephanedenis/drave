@@ -50,6 +50,7 @@ conclusion honnête est celle-ci :
 | **14 B** | **24** | **0,6305** | **0,8153** |
 | **14 B** | **30** | **0,7189** | **0,8701** |
 | **3 B** | **30** | **0,7269** | **0,8568** |
+| **14 B** | **36** | **0,7376** | **0,8715** |
 
 **À profondeur relative fixe, l'échelle n'aide pas de façon monotone** : le **14 B** (0,63 / 0,82) est le **meilleur
 des quatre points**, devant le 32 B (0,60 / 0,77) ; le 1,5 B fait 0,58 / 0,70 et le 3 B 0,50 / 0,59. Le 32 B reste le
@@ -68,6 +69,10 @@ autres.
 **0,013** de pont). *La structure gagne* : quatre fois plus de paramètres n'achètent presque rien au-delà du 3 B, à
 profondeur égale. (Le 0,865 du 3 B sur **DACCORD** n'est **pas** comparable — 2 classes, hasard 0,50 contre 0,33 :
 la comparaison honnête se fait à dataset égal, et c'est celle-ci.)
+
+**À sa couche 36 (100 %), le 14 B plafonne** : 0,7376 de sonde et **0,8715** de pont — la sonde gagne **0,019** depuis
+la 30, le pont **0,001**. Sa courbe : 0,63 (l24) → 0,72 (l30) → 0,74 (l36) ; **le pont ne bouge plus après la 30** :
+le transfert sature avant la lecture.
 
 **Et la couche absolue ne suffit pas non plus** : le 1,5 B lit mieux à sa couche 18 (64 % : 0,692/0,83) qu'à la 14
 (50 % : 0,578/0,703). Chaque modèle a **sa** meilleure couche — la comparaison entre tailles doit fixer la profondeur
