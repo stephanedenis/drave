@@ -102,6 +102,20 @@ Dernière passe en date, et la première qui contient les **deux portes ajoutée
 réutiliser). **25 vertes sur 25**, détail dans
 `docs/references-non-regression.md` (régénéré depuis ce journal).
 
+## 2 quinquies. La passe du 24/10 (47 portes, 1 h 48 min) — la première à 47, et la nouvelle porte est verte
+
+**Verdict : 45 vertes, 2 rouges** — les deux structurels connus (`porte-indice` 827 s, `porte-melange` 104 s),
+**aucun rouge nouveau**. La 47ᵉ porte, `porte-diff-couche`, est **verte en 18 s** : le contrat de flux tient (deux
+exécutions identiques → flux identique ; le KV 8 bits → divergence nommée, couche 1, jeton 1).
+
+Sept portes ont dépassé les 180 s : `porte-indice` (827), `porte-homeostasie` (653), `porte-greffe` (648),
+`porte-profondeur-routee` (516), `porte-poids-creux` (316), `porte-gain` (221), `porte-prechargement` (189) — et
+`porte-harnais-invariants` (111), `porte-bus` (81), `porte-consolidation` (75).
+
+**Ce que la passe établit** : les changements du jour — `placement.rs` et ses quatre tests, `diff_flux.py` en v2,
+`model.rs` avec la tête revertée, la nouvelle porte — **ne cassent aucune porte**. La seule différence avec la passe
+du 17/10 (46 portes, 44 vertes, 2 rouges) est **la 47ᵉ porte, verte**.
+
 ## 3. Ce que la passe a trouvé : une porte qui ne pouvait pas échouer
 
 `porte-tokenizer-kimi.sh` **lisait ses textes sur `stdin`** — que personne ne lui fournissait.

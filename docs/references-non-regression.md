@@ -21,6 +21,17 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-24 à 10 h 53** (**47 portes, 45 vertes, 2 rouges**, **1 h 48 min**, aucune sautée) —
+> **la première passe à 47 portes**, avec `porte-diff-couche` (18 s, **verte**) : le contrat de flux tient.
+> Le verdict se lit **au registre** (`awk '$2 != 0'`) : **deux rouges, et ce sont les STRUCTURELS connus**
+> (`porte-indice` 827 s, `porte-melange` 104 s — le critère d'indice marginal, cf.
+> [`rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md)) : **aucun rouge nouveau** après une journée
+> où `placement.rs` (4 tests), `diff_flux.py` (v2), `model.rs` (la tête revertée) et la nouvelle porte ont été
+> écrits. Les plus lourdes : `porte-indice` (827 s), `porte-homeostasie` (653 s), `porte-greffe` (648 s),
+> `porte-profondeur-routee` (516 s), `porte-poids-creux` (316 s), `porte-gain` (221 s), `porte-prechargement`
+> (189 s). Détail : [`reports/rapport-passe-complete-portes.md`](../reports/rapport-passe-complete-portes.md) § 2
+> quinquies.
+>
 > **Passe du 2026-10-17 à 00 h 55** (**46 portes, 44 vertes, 2 rouges**, **97 min**, aucune sautée) —
 > **et c'est la PREMIÈRE passe dont le verdict se lit au REGISTRE** ✓✓ (le correctif de la nuit :
 > `toutes-les-portes.sh` écrit désormais `$JOURNAUX/registre.txt` avec le **code de sortie** de
