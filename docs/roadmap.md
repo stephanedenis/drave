@@ -41,7 +41,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A2.3 | **Projections Q8_0 et tête Q6_K sur GPU** (opt-in) | ✅ | 15,6 → 6,2 ms/jeton ; tête : 7,58 → **3,60** |
 | A2.4 | **Cache d'experts MXFP4** | ✅ mesuré, **verdict : non** | +6 % — on ne l'active pas tel quel, et c'est écrit |
 | A2.5 | **Top-k dans le noyau d'attention GPU** — le dernier chemin qui retombe sur le CPU | ✅ mesuré — opt-in (`DRAVE_GPU_TOPK=1`) | le noyau fusionné (**1 lancement**) gagne jusqu'à ~64 k, la chaîne séparée au-delà (×1,43 à 1 M) ; le croisement **65 k-131 k** et le seuil `SEUIL_NOYAU4 = 131_072` sont **mesurés** ; conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md) |
-| A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | ⏳ | une règle explicite, pas un `if` codé en dur ; prefill à 8 k mesuré |
+| A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | 🔬 — la règle et la mesure faites | le **modèle de coût** écrit (VRAM **84,9 Go/s**, RAM **22,5**, NVMe **3,5**, réseau 0,25 Mbit/s) et **le préremplissage à 8 k mesuré** : KV en VRAM → **×1,93** (297 → 154 s) sur le préremplissage, **×5,8** sur l'attention (32,3 → 5,6 ms/jeton) — [`reports/rapport-placement-kv-8k.md`](../reports/rapport-placement-kv-8k.md) ; reste l'ordonnanceur qui applique la table |
 
 **Prochaine action** : A2.5 (aucune infra, le dernier repli CPU), puis A2.6.
 

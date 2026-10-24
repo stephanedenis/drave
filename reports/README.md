@@ -190,6 +190,7 @@
 - [`rapport-gpu-topk-selection.md`](rapport-gpu-topk-selection.md)
 - [`rapport-gpu-topk-tout.md`](rapport-gpu-topk-tout.md)
 - [`rapport-decision-par-couche.md`](rapport-decision-par-couche.md)
+- [`rapport-placement-kv-8k.md`](rapport-placement-kv-8k.md)
 - [`rapport-granularite-flux.md`](rapport-granularite-flux.md)
 - [`rapport-grappes.md`](rapport-grappes.md)
 - [`rapport-greffon.md`](rapport-greffon.md)

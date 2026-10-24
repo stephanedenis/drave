@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 08 h 13 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 08 h 24 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -180,6 +180,9 @@ La **porte du diff par couche** (A4.3) est en place : deux exécutions identique
 9,3e-5 — `tools/porte-diff-couche.sh` ; `diff_flux.py` lit désormais la **v2** (indices par écarts).
 La **décision par couche** (A1.5) est mesurée : à 20-56 % de densité, le **dense** gagne de 2 % (9,2 contre 9,4 s)
 et la perplexité est **identique** (28,4015) — la table prédit le dense pour 23 couches sur 24, la mesure suit.
+Le **placement du KV** (A2.6) est mesuré à 8 k : en VRAM, le préremplissage passe de **297 à 154 s** (×1,93) et
+l'attention de **32,3 à 5,6 ms/jeton** (×5,8) — le modèle de coût (les octets par jeton / la bande passante) est
+écrit ; l'ordonnanceur qui l'applique reste à coder.
 
 ## Où en est cet étage (état au 21/10)
 
