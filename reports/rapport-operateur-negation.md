@@ -49,6 +49,23 @@ cohérent avec tout le reste : le plan avait dû être entraîné (mesure 119) ;
 (0,76/0,865) mais le plan résiste. **B4.3** : un opérateur appris sur une **paire** d'opérations transfère-t-il à une
 autre, ou faut-il un réapprentissage par opération ?
 
+## B4.3 — les deux opérations tiennent dans **un seul** opérateur
+
+| | |
+|---|---:|
+| le mélange (l'original + le nié) → l'original | **0,7749** |
+| le mélange → le nié | **0,6977** |
+| contrôle (le mélange, étiquettes mélangées) | 0,4791 |
+
+**Les deux opérations coexistent** dans un seul opérateur linéaire : entraîné sur le **mélange**, il lit l'original
+à **0,7749** et le nié à **0,6977** — le coût de la jointure est faible (l'original perd 0,035 par rapport à la
+sonde seule, le nié 0,006). *L'opérateur n'est ni une direction ni deux géométries séparées : c'est un
+**sous-espace** — une relation et une polarité — que la sonde du mélange sépare.*
+
+**Ce que ça dit sur l'étage 2** : une opération n'est pas un vecteur, c'est un **sous-espace appris**, et deux
+opérations y tiennent ensemble. C'est la première brique d'un opérateur compositionnel ; la question suivante est la
+**composition** : le nié du nié revient-il à l'original ?
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation

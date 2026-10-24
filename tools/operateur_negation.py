@@ -106,6 +106,10 @@ def principal() -> int:
         "appris_negatif": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete_neg, 2) == 1 - yte)), 4),
         "appris_original": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete, 2) == yte)), 4),
         "negatif_appris": round(float(np.mean(sonde(Etr_neg, rng2.permutation(np.array([p[2] for p in tr_neg])), Ete_neg, 2) == 1 - yte)), 4),
+        # B4.3 — les DEUX opérations dans UN seul opérateur : on entraîne sur le mélange (l'original + le nié)
+        "mixte_negatif": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), np.concatenate([ytr, 1 - ytr]), Ete_neg, 2) == 1 - yte)), 4),
+        "mixte_original": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), np.concatenate([ytr, 1 - ytr]), Ete, 2) == yte)), 4),
+        "mixte_controle": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), rng2.permutation(np.concatenate([ytr, 1 - ytr])), Ete_neg, 2) == 1 - yte)), 4),
     }
     for k, v in res.items():
         print(f"  {k}: {v}")

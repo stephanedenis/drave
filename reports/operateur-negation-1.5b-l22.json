@@ -13,5 +13,8 @@
  "negatif_flip": 0.4566,
  "appris_negatif": 0.7042,
  "appris_original": 0.3312,
- "negatif_appris": 0.4952
+ "negatif_appris": 0.4952,
+ "mixte_negatif": 0.6977,
+ "mixte_original": 0.7749,
+ "mixte_controle": 0.4791
 }
