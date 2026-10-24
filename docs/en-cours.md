@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 08 h 24 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 15 h 00 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
