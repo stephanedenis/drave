@@ -26,9 +26,31 @@ def lire(chemin):
                 break
             pos, n, echelle = struct.unpack("<IIf", f.read(12))
             actifs = {}
-            for _ in range(n):
-                i, v = struct.unpack("<Ih", f.read(6))
-                actifs[i] = v
+            if version == 2:
+                # v2 : écart u8 + valeur i16 ; l'écart de 255 annonce l'indice
+                # ABSOLU sur les deux octets suivants (le petit-boutiste du u32),
+                # et le premier écart se compte depuis 0. C'est le format par
+                # défaut des traces depuis le 03/10 — l'ancienne lecture en
+                # 6 octets ne voyait que la v1 et se désalignait aussitôt.
+                prev = 0
+                for _ in range(n):
+                    e = f.read(1)
+                    if len(e) < 1:
+                        raise SystemExit("trace v2 tronquée : écart manquant")
+                    if e[0] == 255:
+                        i, = struct.unpack("<H", f.read(2))
+                    else:
+                        i = prev + e[0]
+                    v, = struct.unpack("<h", f.read(2))
+                    actifs[i] = v
+                    prev = i
+            elif version == 1:
+                for _ in range(n):
+                    i, v = struct.unpack("<Ih", f.read(6))
+                    actifs[i] = v
+            else:
+                raise SystemExit(f"trace version {version} non gérée par ce diff "
+                                 "(v1 et v2 seulement ; la v3 a des échelles par bloc)")
             listes[(couche, pos)] = (echelle, actifs)
     return version, n_layer, hidden, listes
 

@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 08 h 2 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 08 h 9 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -175,6 +175,9 @@ restants de l'étage 1 tournant en parallèle ; le **moteur**, lui, avance de so
 **Le moteur, en ce moment** : le top-k GPU est **mesuré** — le noyau fusionné (1 lancement) gagne
 jusqu'à ~64 k clés, la chaîne séparée au-delà (×1,43 à 1 M) ; le seuil `SEUIL_NOYAU4 = 131_072` est mesuré,
 conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/rapport-gpu-topk-tout.md).
+La **porte du diff par couche** (A4.3) est en place : deux exécutions identiques donnent un flux **identique**
+(reproductibilité), et le KV en 8 bits produit une divergence **nommée** — couche 1, jeton 1, 857 neurones,
+9,3e-5 — `tools/porte-diff-couche.sh` ; `diff_flux.py` lit désormais la **v2** (indices par écarts).
 
 ## Où en est cet étage (état au 21/10)
 

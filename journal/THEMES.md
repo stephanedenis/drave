@@ -55,6 +55,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-18](2026-10-18_memoire.md) | `37,2 %` · `27,8 %` · `10,8 %` · `2,05 %` · `3,3 %` · `2415 paires` · `0,138` · `0,049` · `6,50 %` · `16,3 %` · `85,1 %` · `0,6 %` |
 | [2026-10-19](2026-10-19_memoire.md) | `93,2 %` · `0,3 %` · `3397 paires` · `4 paires` |
 | [2026-10-21](2026-10-21_memoire.md) | `2832 paires` |
+| [2026-10-24](2026-10-24_memoire.md) | — |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 

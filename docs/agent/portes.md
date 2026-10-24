@@ -10,7 +10,7 @@ bash tools/toutes-les-portes.sh
 
 Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
 tableau, pas la première tuile), et borne **chaque** porte à `DELAI=1800` s. Durée observée d'une passe complète :
-**1 h 30 – 2 h** sur Hauru (46 portes ; certaines entraînent de petits modèles, d'autres utilisent les GPU).
+**1 h 30 – 2 h** sur Hauru (47 portes ; certaines entraînent de petits modèles, d'autres utilisent les GPU).
 
 ## Où est le registre (et comment lire le verdict)
 

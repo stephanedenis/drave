@@ -66,7 +66,7 @@ Un flux est un journal, et un journal se rejoue.
 |---|---|---|---|
 | A4.1 | **Portes de non-régression** : deux chemins d'exécution rendent le même résultat | ✅ | Qwen ctx 256 = **19,3885** ; gpt-oss ctx 256 = **15,6017** |
 | A4.2 | **Références indépendantes** : une seconde implémentation de la même formule | ✅ | MLA à **5,2e-7** contre numpy et **0,999024** contre llama.cpp ; patchs 5,4e-7 ; projecteur 1,7e-6 |
-| A4.3 | **Diff par couche dans les portes** : après un changement de quantification ou de noyau, savoir *où* le calcul diverge | 🔬 | un diff automatique dans la porte, avec la couche et le jeton nommés |
+| A4.3 | **Diff par couche dans les portes** : après un changement de quantification ou de noyau, savoir *où* le calcul diverge | ✅ | la porte `porte-diff-couche.sh` : deux exécutions identiques → **flux identique** (reproductibilité) ; KV 8 bits → divergence **nommée** (couche 1, jeton 1, 857 neurones, 9,3e-5) ; `diff_flux.py` lit la **v2** (indices par écarts) |
 
 **Prochaine action** : A4.3 (le diff dans la porte) — aucune infra.
 
