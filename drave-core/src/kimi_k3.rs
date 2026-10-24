@@ -1610,12 +1610,26 @@ impl Relais {
         let mut o = std::io::BufWriter::new(std::fs::File::create(chemin)?);
         let (ntok, h) = (self.flux.len(), self.flux.first().map(|v| v.len()).unwrap_or(0));
         o.write_all(b"K3RL")?;
-        o.write_all(&1u32.to_le_bytes())?;
+        o.write_all(&2u32.to_le_bytes())?; // la version 2 : le flux est SPARSE
         o.write_all(&(self.debut as u64).to_le_bytes())?;
         o.write_all(&(ntok as u32).to_le_bytes())?;
         o.write_all(&(h as u32).to_le_bytes())?;
+        // Le flux de la GRAPPE (A7.4) : à 21 % de valeurs utiles, un masque d'un bit
+        // par canal plus les valeurs non nulles coûtent 1 bit + 4 octets par canal
+        // non nul au lieu de 4 octets par canal — le transport ne paie plus les zéros.
+        let nbytes = (h + 7) / 8;
         for v in &self.flux {
-            for &x in v { o.write_all(&x.to_le_bytes())?; }
+            let mut masque = vec![0u8; nbytes];
+            let mut vals: Vec<f32> = Vec::new();
+            for (j, &x) in v.iter().enumerate() {
+                if x != 0.0 {
+                    masque[j / 8] |= 1 << (j % 8);
+                    vals.push(x);
+                }
+            }
+            o.write_all(&masque)?;
+            o.write_all(&(vals.len() as u32).to_le_bytes())?;
+            for &x in &vals { o.write_all(&x.to_le_bytes())?; }
         }
         o.write_all(&(self.pile.len() as u32).to_le_bytes())?;
         for ck in &self.pile {
@@ -1636,14 +1650,32 @@ impl Relais {
         let u64a = |o: usize| -> usize {
             let mut t = [0u8; 8]; t.copy_from_slice(&b[o..o+8]); u64::from_le_bytes(t) as usize
         };
-        let (debut, ntok, h) = (u64a(8), u32a(16), u32a(20));
+        let (version, debut, ntok, h) = (u32a(4), u64a(8), u32a(16), u32a(20));
         let mut off = 24;
         let f32a = |o: usize| f32::from_le_bytes([b[o], b[o+1], b[o+2], b[o+3]]);
         let mut flux = Vec::with_capacity(ntok);
-        for _ in 0..ntok {
-            let mut v = Vec::with_capacity(h);
-            for _ in 0..h { v.push(f32a(off)); off += 4; }
-            flux.push(v);
+        if version == 2 {
+            // La version 2 : le masque (1 bit par canal) puis les valeurs non nulles.
+            let nbytes = (h + 7) / 8;
+            for _ in 0..ntok {
+                let masque = b[off..off + nbytes].to_vec(); off += nbytes;
+                let nx = u32a(off); off += 4;
+                let mut vals = Vec::with_capacity(nx);
+                for _ in 0..nx { vals.push(f32a(off)); off += 4; }
+                let mut v = vec![0.0f32; h];
+                let mut it = vals.into_iter();
+                for j in 0..h {
+                    if masque[j / 8] & (1 << (j % 8)) != 0 { v[j] = it.next().unwrap_or(0.0); }
+                }
+                flux.push(v);
+            }
+        } else {
+            // La version 1 (dense) reste lisible : le format ne casse pas les fichiers.
+            for _ in 0..ntok {
+                let mut v = Vec::with_capacity(h);
+                for _ in 0..h { v.push(f32a(off)); off += 4; }
+                flux.push(v);
+            }
         }
         let npile = u32a(off); off += 4;
         let mut pile = Vec::with_capacity(npile);
@@ -1863,4 +1895,32 @@ pub fn passe_complete(g: &Gguf, ids: &[u32], n: usize, verbeux: bool, tete: bool
                       -> Result<Vec<Vec<f32>>, String> {
     let (sortie, _) = passe_plage(g, ids, 0, n, verbeux, tete, pos0, etats, None)?;
     Ok(sortie)
+}
+
+#[cfg(test)]
+mod tests_relais {
+    use super::*;
+
+    #[test]
+    fn le_flux_de_la_grappe_coute_moins_que_le_flux_plein() {
+        // Un flux de 4 jetons × 448 canaux dont ~20 % de valeurs non nulles : la
+        // version 2 (masque + valeurs) doit coûter ~4× moins que la version 1 dense.
+        let (h, ntok) = (448usize, 4usize);
+        let flux: Vec<Vec<f32>> = (0..ntok)
+            .map(|t| (0..h).map(|j| if j % 5 == 0 { (t * 100 + j) as f32 } else { 0.0 }).collect())
+            .collect();
+        let r = Relais { debut: 3, flux: flux.clone(), pile: vec![] };
+        let p = std::env::temp_dir().join(format!("relais-v2-{}.bin", std::process::id()));
+        r.ecrire(p.to_str().unwrap()).unwrap();
+        let lu = Relais::lire(p.to_str().unwrap()).unwrap();
+        assert_eq!(lu.debut, 3);
+        assert_eq!(lu.flux, flux); // le round-trip est EXACT
+        let octets = std::fs::metadata(&p).unwrap().len();
+        let plein = 24 + (ntok * h * 4) as u64 + 4; // l'en-tête + le flux dense
+        eprintln!("relais v2 : {octets} o pour le flux de la grappe, {plein} o pour le dense — \
+                   {:.2}× moins", plein as f64 / octets as f64);
+        assert!(octets < plein,
+                "le flux de la grappe ({octets} o) doit coûter moins que le dense ({plein} o)");
+        let _ = std::fs::remove_file(&p);
+    }
 }

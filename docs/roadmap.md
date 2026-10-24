@@ -104,6 +104,7 @@ ailleurs*.
 | A7.1 | **La greffe** : injecter un état prélevé là où le calcul se fait | ✅ la **porte de la greffe** (648 s) : l'injection est **branchée**, la greffe porte tout le contenu | mesuré |
 | A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ✅ | le **relais ne change pas un chiffre** (`porte-topologie`, 92 s, 42.5477) ; le coût du flux : **1 608 octets/flux**, **0,25 Mbit/s**, latence ≤ 20 ms — [`rapport-mode4-lot-listes.md`](../reports/rapport-mode4-lot-listes.md) |
 | A7.3 | **La grappe intra-couche** : un sous-ensemble de neurones, pas une frontière de couche | ✅ mesuré | le **top-1024** (21 % des 4 864 neurones FFN) rend la **même perplexité** (30,7286 à quatre décimales) ; 64 et 256 l'effondrent — la grappe a une **taille minimale** mesurable — [`reports/rapport-grappe-intra-couche.md`](../reports/rapport-grappe-intra-couche.md) |
+| A7.4 | **La grappe déportée** : le flux ne transporte que les valeurs utiles | ✅ mesuré | le format v2 (masque + valeurs) coûte **4,22× moins** que le dense (1 704 o contre 7 196 o) et la porte du flux rend **60,8135 / 60,8135** — les mêmes chiffres | [`reports/rapport-grappe-deportee.md`](../reports/rapport-grappe-deportee.md) |
 
 **Prochaine action** : aucune — la grappe est **mesurée** (le top-1024 exact à 21 %) ; sa **déportation en réseau** (le transport de la grappe) est la suite hors plan.
 

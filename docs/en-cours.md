@@ -25,7 +25,8 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
 
 1. **A7 la grappe déportée** : la couche exécutée ailleurs rend **le même chiffre** (`porte-topologie`, 92 s,
    42.5477), le flux coûte **1 608 octets/flux**, et la **grappe intra-couche** (le top-1024, 21 % des neurones FFN)
-   rend la **même perplexité** — **A7 est complète**.
+   rend la **même perplexité** ; et la **grappe déportée** (A7.4 : le flux v2 coûte **4,22× moins**, les chiffres
+   identiques) — **A7 est complète**.
 2. **B4 les opérateurs abstraits** : **B4.1** (la négation n'est pas une direction : flip 0,4148) ; **B4.2** (elle
    est **apprenable** — 0,7042 en réentraînant — mais **pas transférable**) ; **B4.3** (les deux opérations — l'identité
    et la négation — **coexistent** dans un seul opérateur : 0,7749/0,6977 — un **sous-espace**, pas une direction) ;
