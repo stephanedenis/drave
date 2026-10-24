@@ -112,6 +112,7 @@
 - [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
 - [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md) — le 32 B et le confondant de la couche relative
 - [`registre-dialogue-diabla-1.5b.json`](registre-dialogue-diabla-1.5b.json) — DiaBLa au 1,5 B (+40,3/+44,2, **post-éditions** : une borne haute)
+- [`registre-dialogue-diabla-refs-3b.json`](registre-dialogue-diabla-refs-3b.json) — DiaBLa au 3 B, références indépendantes (+38,1/+41,3 : la traduction profite de la taille)
 - [`registre-dialogue-opensubs-1.5b.json`](registre-dialogue-opensubs-1.5b.json) — OpenSubtitles au 1,5 B (+27,0/+30,4, les sous-titres humains)
 - [`rapport-dialogue-diabla.md`](rapport-dialogue-diabla.md) — le dialogue réel : DiaBLa, et pourquoi sa référence n'est pas comparable
 - [`rapport-kv-par-couche.md`](rapport-kv-par-couche.md) — la quantification du KV par couche (le coût de l'int8 est dans les premières couches)

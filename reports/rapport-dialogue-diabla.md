@@ -30,6 +30,18 @@ même mesure que les sous-titres, dont la référence est humaine et indépendan
   le corpus annonce (« reference translations produced a posteriori ») — elles sont dans le dépôt GitHub du corpus
   (`rbawden/DiaBLa-dataset`), pas dans la version HuggingFace utilisée ici.
 
+### Le 3 B, même corpus, mêmes références
+
+| modèle | EN→FR | FR→EN |
+|---|---:|---:|
+| 1,5 B | +35,0 [32,9 ; 37,1] | +39,3 [37,2 ; 41,5] |
+| **3 B** | **+38,1** [36,1 ; 40,0] | **+41,3** [39,3 ; 43,2] |
+
+Le 3 B gagne **+2 à +3 points** sur le dialogue — la **traduction profite de la taille**. C'est l'inverse de la
+**lisibilité de l'état** (B2.8 : le 3 B y perd 0,10) : deux axes différents, et c'est cohérent avec la carte — la
+sonde et le pont mesurent l'**accès** à l'état, pas la **qualité** de la sortie. Un modèle peut mieux traduire en
+étant moins lisible.
+
 ## Ce que ça change pour la carte des registres
 
 - Le corpus du **dialogue réel** existe (144 dialogues, 5 700+ phrases, l'informel écrit) : la ligne B1.6 n'est plus
