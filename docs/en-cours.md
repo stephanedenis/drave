@@ -25,8 +25,8 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
 
 1. **A7 la grappe déportée** : la couche exécutée ailleurs rend **le même chiffre** (`porte-topologie`, 92 s,
    42.5477) et le flux coûte **1 608 octets/flux** ; reste la **grappe intra-couche** (A7.3).
-2. **B4 les opérateurs abstraits** : la carte de l'étage 2 est faite ; **B4.1 a rendu un négatif net** (la négation
-   n'est pas portée par l'état : flip 0,4148, garde 0,5852) — B4.2 est l'**opérateur appris**, à entraîner dans l'état.
+2. **B4 les opérateurs abstraits** : **B4.1** (la négation n'est pas une direction : flip 0,4148) ; **B4.2** (elle
+   est **apprenable** — 0,7042 en réentraînant — mais **pas transférable** : une **géométrie locale**, comme le plan).
 3. **A8 l'ordonnanceur place et perte** : le terme de perte est **codé et testé** (`choisir_avec_perte`, 3 tests) ;
    reste à le brancher dans `model.rs`.
 
