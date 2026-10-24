@@ -71,7 +71,7 @@ mesurées ; les autres restent des **marges**, pas le critère. *L'étage 2 devi
 
 **Le plan de match, en relation avec la cible.**
 
-1. **Compléter les registres** : juridique ✅, presse ✅, littéraire ✅ ; les six registres sont mesurés ; restent un **technique à référence humaine** et de la conversation **réelle**.
+1. **Compléter les registres** : les **six** sont mesurés, le **dialogue spontané** (DiaBLa, références indépendantes) aussi ; reste la **prose scientifique** — bloquée, pas de corpus parallèle humain.
 2. **Les langues sont closes au périmètre** : les langues jusqu'au **français inclus** sont couvertes ; les 20 le sont
    aussi (marges). La **direction inverse** (X→eng) et le **dialogue spontané** restent des **marges**, pas des portes.
 3. **Choisir le levier** : la taille donne des rendements décroissants et **ne comble pas la couverture**

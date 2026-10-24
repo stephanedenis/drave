@@ -269,7 +269,7 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 | axe | état | prochain pas |
 |---|---|---|
 | **1. Observer/régler par neurone** | outils en place, mesures faites | format de trace stable + diff par couche |
-| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) | top-k dans le noyau GPU ; politique de placement réglée par la mesure |
+| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) ; **la règle de placement est écrite** (`placement.rs`, `choisir`, 4 tests) et le KV l'applique | l'ordonnanceur **complet** : porter la place **et** la perte — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de PPL |
 | **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | ordonnanceur de placement ; granularité par bloc ; démonstration distante |
 | **4. Rejouer/comparer** | portes de non-régression + références indépendantes | enregistrement du flux, diff |
 | **5. Formats/matériels/énergie** | trois matériels, formats au point | politique de quantification par bloc *choisie* par la mesure, pas par défaut |
