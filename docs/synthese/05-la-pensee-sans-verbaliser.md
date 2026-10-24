@@ -246,7 +246,7 @@ par l'entraînement ; le modèle apprend une représentation plus partageable.*
 ### La carte du raisonnement (mesures 125-168)
 
 *La **synthèse** de ces mesures — quatre mesures, trois courbes, deux axes, quatre limites — est dans
-[`rapport-carte-raisonnement-naturel.md`](../reports/rapport-carte-raisonnement-naturel.md).*
+[`rapport-carte-raisonnement-naturel.md`](../../reports/rapport-carte-raisonnement-naturel.md).*
 
 | question | mesures | réponse |
 |---|---|---|
