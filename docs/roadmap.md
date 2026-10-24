@@ -169,10 +169,11 @@ que la carte ne mesure pas encore.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| B4.1 | **L'opérateur** : une transformation de l'état, indépendante de la langue et de la surface | ⏳ | appliquer l'opérateur à l'état change la réponse dans le sens attendu, avec contrôle au hasard |
-| B4.2 | **La composition d'opérateurs** | ⏳ | deux opérateurs composés = la composition mesurée (0,76/0,865) |
+| B4.1 | **L'opérateur** : une transformation de l'état, indépendante de la langue et de la surface | ✅ mesuré — **négatif** | la **négation** n'est **pas** portée par l'état : le flip est à **0,4148** (sous le hasard 0,5) et la garde à **0,5852** (au-dessus) — la sonde lit la **relation de surface**, pas l'**opération** ; la référence (0,8103) tient — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
+| B4.2 | **L'opérateur appris** : la négation entraînée dans l'état (comme le plan, mesure 119), pas lue par la sonde | ⏳ | le flip passe le hasard **après** entraînement, contrôle au hasard |
+| B4.3 | **La composition d'opérateurs** | ⏳ | deux opérateurs composés = la composition mesurée (0,76/0,865) |
 
-**Prochaine action** : B4.1 — le premier opérateur, sur le 1,5 B.
+**Prochaine action** : B4.2 — l'opérateur **appris** (la négation entraînée dans l'état, avec contrôle au hasard) : B4.1 a montré que la sonde ne le lit pas.
 
 ---
 

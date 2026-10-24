@@ -1,0 +1,14 @@
+{
+ "jeu": "daccord",
+ "modele": "Qwen/Qwen2.5-1.5B-Instruct",
+ "couche": 22,
+ "n_train": 723,
+ "n_test": 311,
+ "hasard": 0.5,
+ "reference_orig": 0.8103,
+ "flip_sonde": 0.4148,
+ "garde_sonde": 0.5852,
+ "flip_mlp": 0.3698,
+ "garde_mlp": 0.6302,
+ "negatif_flip": 0.4566
+}
