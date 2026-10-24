@@ -172,9 +172,10 @@ que la carte ne mesure pas encore.
 | B4.1 | **L'opérateur** : une transformation de l'état, indépendante de la langue et de la surface | ✅ mesuré — **négatif** | la **négation** n'est **pas** portée par l'état : le flip est à **0,4148** (sous le hasard 0,5) et la garde à **0,5852** (au-dessus) — la sonde lit la **relation de surface**, pas l'**opération** ; la référence (0,8103) tient — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
 | B4.2 | **L'opérateur appris** : la négation entraînée dans l'état (comme le plan, mesure 119), pas lue par la sonde | ✅ mesuré — **apprenable, pas transférable** | une sonde **réentraînée** sur le nié lit la relation basculée à **0,7042** (hasard 0,5, contrôle 0,4952) ; mais la sonde de l'original ne lit pas le nié (0,4148) et réciproquement (0,3312) — **l'opérateur est une géométrie locale, pas une direction** — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
 | B4.3 | **Les deux opérations dans un seul opérateur** : l'identité et la négation, apprises ensemble | ✅ mesuré — **elles coexistent** | le mélange (l'original + le nié) lit l'original à **0,7749** et le nié à **0,6977** (contrôle 0,4791) : l'opérateur est un **sous-espace** (une relation + une polarité), pas une direction — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
-| B4.4 | **La composition** : le nié du nié revient-il à l'original ? | ⏳ | la double négation est lue comme l'originale, contrôle au hasard |
+| B4.4 | **La composition** : le nié du nié revient-il à l'original ? | ✅ mesuré — **négatif** | le double nié n'est pas lu comme l'original : **0,5691** (contre 0,8103 de référence), et le mélange est **sous** le hasard (0,3601) — l'opérateur n'est pas une **algèbre**, les opérations sont des sous-espaces appris (B4.3) — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
+| B4.5 | **La composition apprise** : le nié du nié entraîné comme une tâche (le LoRA de la mesure 119) | ⏳ | le double nié est lu comme l'original **après** entraînement, contrôle au hasard |
 
-**Prochaine action** : B4.4 — la **composition** : le nié du nié revient-il à l'original ? (B4.1 : pas de transfert ; B4.2 : apprenable à 0,7042 ; B4.3 : les deux opérations tiennent ensemble à 0,7749/0,6977.)
+**Prochaine action** : B4.5 — la **composition apprise** (le nié du nié entraîné comme une tâche) : B4.4 a montré que rien ne se compose gratuitement.
 
 ---
 

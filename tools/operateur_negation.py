@@ -85,6 +85,8 @@ def principal() -> int:
     Ete = etats(te)
     Ete_neg = etats(te_neg)
     Etr_neg = etats(tr_neg)
+    te_double = [(s1, f"Il est faux que : il est faux que : {s2}", y) for s1, s2, y in te]
+    Ete_double = etats(te_double)
     ytr = np.array([p[2] for p in tr])
     yte = np.array([p[2] for p in te])
 
@@ -92,6 +94,8 @@ def principal() -> int:
     pred_flip = sonde(Etr, ytr, Ete_neg, 2)            # entraînée sur l'original, lit le nié
     pred_flip_m = mlp_sonde(Etr, ytr, Ete_neg, 2)
     rng2 = np.random.default_rng(7)
+    E_mix = np.vstack([Etr, Etr_neg])
+    y_mix = np.concatenate([ytr, 1 - ytr])
     pred_ctrl = sonde(Etr, rng2.permutation(ytr), Ete_neg, 2)
     res = {
         "jeu": "daccord", "modele": a.hf, "couche": a.couche,
@@ -107,9 +111,14 @@ def principal() -> int:
         "appris_original": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete, 2) == yte)), 4),
         "negatif_appris": round(float(np.mean(sonde(Etr_neg, rng2.permutation(np.array([p[2] for p in tr_neg])), Ete_neg, 2) == 1 - yte)), 4),
         # B4.3 — les DEUX opérations dans UN seul opérateur : on entraîne sur le mélange (l'original + le nié)
-        "mixte_negatif": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), np.concatenate([ytr, 1 - ytr]), Ete_neg, 2) == 1 - yte)), 4),
-        "mixte_original": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), np.concatenate([ytr, 1 - ytr]), Ete, 2) == yte)), 4),
-        "mixte_controle": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg]), rng2.permutation(np.concatenate([ytr, 1 - ytr])), Ete_neg, 2) == 1 - yte)), 4),
+        "mixte_negatif": round(float(np.mean(sonde(E_mix, y_mix, Ete_neg, 2) == 1 - yte)), 4),
+        "mixte_original": round(float(np.mean(sonde(E_mix, y_mix, Ete, 2) == yte)), 4),
+        "mixte_controle": round(float(np.mean(sonde(E_mix, rng2.permutation(y_mix), Ete_neg, 2) == 1 - yte)), 4),
+        # B4.4 — la COMPOSITION : le nié du nié doit revenir à l'original (la cible est yte)
+        "double_original": round(float(np.mean(sonde(Etr, ytr, Ete_double, 2) == yte)), 4),
+        "double_mixte": round(float(np.mean(sonde(E_mix, y_mix, Ete_double, 2) == yte)), 4),
+        "double_negatif": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete_double, 2) == yte)), 4),
+        "double_controle": round(float(np.mean(sonde(E_mix, rng2.permutation(y_mix), Ete_double, 2) == yte)), 4),
     }
     for k, v in res.items():
         print(f"  {k}: {v}")

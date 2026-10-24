@@ -66,6 +66,26 @@ sonde seule, le nié 0,006). *L'opérateur n'est ni une direction ni deux géom�
 opérations y tiennent ensemble. C'est la première brique d'un opérateur compositionnel ; la question suivante est la
 **composition** : le nié du nié revient-il à l'original ?
 
+## B4.4 — la composition n'est **pas algébrique** : le nié du nié ne revient pas
+
+| | |
+|---|---:|
+| la sonde de l'original → le double nié (cible : l'original) | **0,5691** |
+| le mélange → le double nié | 0,3601 |
+| la sonde du nié → le double nié | 0,3344 |
+| contrôle | 0,5080 |
+
+**La composition échoue** : le nié du nié n'est pas lu comme l'original (0,5691 contre 0,8103 de référence), et le
+mélange est **sous** le hasard (0,3601). *L'opérateur n'est pas une **algèbre** : deux négations ne s'annulent pas
+dans l'état.* Les opérations sont des **sous-espaces appris** (B4.3), pas les générateurs d'un groupe.
+
+**Ce que ça dit pour l'étage 2** : « penser sans verbaliser » ne consiste pas à appliquer des opérateurs algébriques
+à l'état — **la composition doit être apprise** comme une tâche, pas déduite. C'est cohérent avec tout le reste : le
+plan s'entraîne (mesure 119), la composition est alignée par un pont, mais rien ne se compose gratuitement.
+
+**Ce que ça ne dit pas** : « Il est faux que » une fois ou deux est une négation de **surface** ; la négation
+grammaticale et une négation **apprise** (LoRA) restent à tester. Et une seule couche (la 22).
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation

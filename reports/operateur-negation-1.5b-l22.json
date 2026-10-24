@@ -16,5 +16,9 @@
  "negatif_appris": 0.4952,
  "mixte_negatif": 0.6977,
  "mixte_original": 0.7749,
- "mixte_controle": 0.4791
+ "mixte_controle": 0.4791,
+ "double_original": 0.5691,
+ "double_mixte": 0.3601,
+ "double_negatif": 0.3344,
+ "double_controle": 0.508
 }
