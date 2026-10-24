@@ -73,6 +73,7 @@ mod list;
 mod materiel;
 mod model;
 mod gpu;
+mod placement;
 mod tokenizer;
 mod topologie;
 mod trace_globale;

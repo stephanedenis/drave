@@ -4815,7 +4815,18 @@ forcent l'un ou l'autre partout",
         // les couches tiennent — sinon on le dit et on garde le CPU.
         let kv_gpu = if std::env::var("DRAVE_GPU_KV").is_ok() {
             let machines = crate::gpu::machines();
-            if machines.is_empty() { None } else {
+            // La RÈGLE de placement (A2.6) : le KV va en VRAM s'il y tient avec
+            // la réserve ; sinon il reste en RAM. Les constantes (les bandes) sont
+            // mesurées, la mesure du 24/10 valide cette ligne (×1,93 au prefill).
+            let octets_kv: u64 = caches_kv.iter().map(|c| c.octets() as u64).sum();
+            let libre_vram: u64 = machines.iter().map(|m| m.memoire_libre as u64).sum();
+            if !machines.is_empty() && !crate::placement::kv_en_vram(octets_kv, libre_vram) {
+                println!("[gpu] KV déporté REFUSÉ par la règle de placement : {:.2} Go de cache, \
+{:.2} Go de VRAM libre (réserve {} Mo) — le KV reste en RAM, l'attention suivra la RAM",
+                         octets_kv as f64 / 1e9, libre_vram as f64 / 1e9,
+                         crate::placement::RESERVE_VRAM >> 20);
+                None
+            } else if machines.is_empty() { None } else {
                 // Les couches sont réparties EN TOURNANT sur les périphériques :
                 // à deux cartes, chacune porte la moitié du cache — c'est ce qui
                 // fait tenir un contexte très long sans rien évincer.
