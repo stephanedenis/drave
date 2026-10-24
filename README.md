@@ -194,9 +194,9 @@ rangent pas de la même façon ; le pont n'est pas une clé universelle, et le d
 phrases** (2 490 paires français/anglais) : on donne une affirmation et une conséquence possible, et il faut dire si
 elle est **vraie, fausse ou indécidable**.
 
-**Le résultat.** Le détecteur lit la réponse dans l'état : **50 % en français, 58 % en anglais**, contre **33 %** au
-hasard (trois réponses possibles). Le pont transfère cette lecture à **59 %**, et un **petit entraînement
-supplémentaire** monte à **75-77 %**.
+**Le résultat.** Le détecteur lit la réponse dans l'état : **69 % en français, 78 % en anglais** (le 1,5 B), contre
+**33 %** au hasard ; le **pont** transfère à **83 %**. Et le 32 B, à sa meilleure couche, lit **60 %** : un plus gros
+modèle ne lit pas toujours mieux. *La sonde mesure l'accès à l'état, pas la qualité du modèle.*
 
 **Ce que ça dit.** Le schéma du pont n'est pas un artefact des énigmes : il tient sur du langage réel. Et le même
 enseignement que la traduction : **c'est le domaine qui compte, pas le volume** — 13 394 paires d'entraînement
