@@ -54,9 +54,11 @@ parcourt les supports par coût croissant et rend le premier qui a la place — 
 tête l'utiliseront par la même fonction. Quatre tests la couvrent (le gros KV → RAM, le petit → VRAM, le trop-gros →
 NVMe, la réserve).
 
-**La tête aussi passe par la règle** : son placement était un drapeau (`-q 4`). `placement::choisir` dit ce qui
-décide vraiment — la tête quantifiée tient-elle en VRAM ? — et la place dessus sans drapeau (110 Mo pour le 0,5 B,
-4,04 ms par jeton mesurés). Le drapeau reste pour forcer.
+**La tête : la règle de place a été essayée, puis revertée — et c'est une leçon.** La tête quantifiée tient en VRAM
+(110 Mo), donc `choisir` la plaçait en 4 bits « parce qu'elle tient ». Mesure : la perplexité passe de **30,7660 à
+33,8230** — **+10 %**. La règle de **place** ne dit rien de la **qualité** : le 4 bits de la tête est un choix de
+**précision**, pas de placement, et il reste un drapeau. *Un ordonnanceur doit porter les deux contraintes — la place
+et la perte — ou ne pas décider seul.*
 
 ## Ce que ce résultat ne dit pas
 

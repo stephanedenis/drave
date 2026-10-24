@@ -4953,9 +4953,14 @@ forcent l'un ou l'autre partout",
             let m = crate::materiel::Materiel::detecter();
             m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum()
         };
-        let tete_en_vram = crate::placement::choisir(octets_tete, octets_tete, libre_vram, 64 << 30)
+        // MESURÉ PUIS REVERTÉ (24/10) : placer la tête en 4 bits « parce qu'elle tient »
+        // coûte +10 % de perplexité (30,7660 → 33,8230). La règle de PLACE ne dit rien
+        // de la QUALITÉ : le 4 bits de la tête est un choix de précision, pas de
+        // placement — il reste un drapeau. Le calcul des octets et de la place est
+        // gardé pour le message, pas pour décider.
+        let _tete_tient = crate::placement::choisir(octets_tete, octets_tete, libre_vram, 64 << 30)
             == crate::placement::Support::Vram;
-        let head4 = if q4 & 4 != 0 || tete_quantifiee || tete_en_vram {
+        let head4 = if q4 & 4 != 0 || tete_quantifiee {
             let t0 = Instant::now();
             let v = cfg.vocab;
             let h = cfg.hidden;
