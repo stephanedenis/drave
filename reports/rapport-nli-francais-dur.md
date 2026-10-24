@@ -25,31 +25,33 @@ encore la réponse dans l'état sur ces jeux — ou le 0,50 de XNLI était-il d�
   très linéairement séparable.
 - **Les contrôles sont propres partout** : les étiquettes mélangées ramènent au hasard (0,325 ; 0,550 ; 0,400).
 
-## Le 3 B à travers ses couches : il décolle à la fin — la « décroissance » était le point de mesure
+## Les deux modèles à travers leurs couches : la taille aide, au bon endroit
 
 Mesure du 24/10 sur DACCORD, couche par couche (le même protocole) :
 
-| couche | profondeur | sonde FR | MLP |
+| modèle | couche | profondeur | sonde FR |
 |---|---:|---:|---:|
-| 12 | 33 % | 0,511 | 0,489 |
-| 18 | 50 % | 0,592 | 0,543 |
-| 24 | 67 % | 0,836 | 0,868 |
-| **30** | **83 %** | **0,865** | **0,894** |
+| 1,5 B | 14 | 50 % | 0,578 |
+| 1,5 B | 18 | 64 % | 0,692 |
+| **1,5 B** | **22** | **79 %** | **0,810** |
+| 1,5 B | 26 | 93 % | 0,801 |
+| 3 B | 12 | 33 % | 0,511 |
+| 3 B | 18 | 50 % | 0,592 |
+| 3 B | 24 | 67 % | 0,836 |
+| **3 B** | **30** | **83 %** | **0,865** |
 
-- **La couche 18 était un mauvais point, pas le modèle** : à la couche 30, le 3 B lit **0,865** — le **meilleur de
-  la série**, devant le 1,5 B (0,692 à sa couche 18) et le 32 B (0,600 à sa couche 32).
-- **Le confondant n'était pas la profondeur mais le point de mesure** : comparer à la même profondeur relative (50 %)
-  est aussi arbitraire que comparer à la couche 18 — chaque modèle a **sa** couche, et elle est **tardive** (64 % pour
-  le 1,5 B, 83 % pour le 3 B).
-- **La leçon se corrige** : « la lisibilité n'est pas monotone avec la taille » était **l'effet du point de mesure** ;
-  à leur meilleure couche, **le 3 B bat le 1,5 B** (0,865 contre 0,692) — la taille aide, à condition de regarder au
-  bon endroit.
+- **Chaque modèle a son pic tardif** (79 % pour le 1,5 B, 83 % pour le 3 B), et **le 3 B y est meilleur** (0,865
+  contre 0,810) : **la taille aide**, à condition de lire au bon endroit.
+- Les deux « décroissances » observées aujourd'hui — la couche 18, puis la profondeur 50 % — étaient **des effets du
+  point de mesure** : le petit modèle n'est pas plus lisible, il a simplement son pic **plus tôt**.
+- **La règle finale** : comparer les modèles **à leur meilleure couche**, ou donner **les deux bornes** (la couche
+  fixe et le pic) — c'est la seule lecture qui ne mélange pas la taille et le point de mesure.
 
 ## Ce que ça change pour la carte
 
-La carte du raisonnement doit être lue **par modèle, à sa meilleure couche** — ou avec **les deux bornes** (la
-profondeur fixe et la meilleure couche). C'est la seule comparaison qui ne confond pas la taille avec le point de
-mesure ; l'erreur a été faite deux fois aujourd'hui (la couche 18, puis la profondeur 50 %), et corrigée deux fois.
+La carte du raisonnement se lit désormais **par modèle, à son pic** — pour le NLI dur : 1,5 B 0,810 (c. 22), 3 B
+0,865 (c. 30), 32 B 0,600 (c. 32, son pic non cherché). L'erreur a été faite deux fois aujourd'hui (la couche 18,
+puis la profondeur 50 %) et corrigée deux fois : *le protocole était le vrai sujet, pas les modèles.*
 
 ## Le pont au 1,5 B : 0,83, le meilleur mesuré
 

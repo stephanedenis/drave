@@ -195,8 +195,8 @@ phrases** (2 490 paires français/anglais) : on donne une affirmation et une con
 elle est **vraie, fausse ou indécidable**.
 
 **Le résultat.** Le détecteur lit la réponse dans l'état : **69 % en français, 78 % en anglais** (le 1,5 B), contre
-**33 %** au hasard ; le **pont** transfère à **83 %**. Et le 3 B, à sa meilleure couche, lit **87 %** — mieux que le 1,5 B : *la lecture dépend du point de mesure autant
-que du modèle ; la sonde mesure l'accès à l'état, pas la qualité.*
+**33 %** au hasard ; le **pont** transfère à **83 %**. Et le 3 B, à sa meilleure couche, lit **87 %** (le 1,5 B 81 % à la sienne) : *la lecture dépend du point de mesure
+autant que du modèle ; la sonde mesure l'accès à l'état, pas la qualité.*
 
 **Ce que ça dit.** Le schéma du pont n'est pas un artefact des énigmes : il tient sur du langage réel. Et le même
 enseignement que la traduction : **c'est le domaine qui compte, pas le volume** — 13 394 paires d'entraînement
