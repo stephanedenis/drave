@@ -105,8 +105,8 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 | B1.2 | **La qualité de traducteur** : chrF + plancher + marge + intervalle | ✅ | **55-76**, marge **+30 à +40**, répliquée sur un second règlement |
 | B1.3 | **Les six registres** : juridique, presse, littéraire, parlé préparé, technique (JRC et prose), dialogue | ✅ | marges de +25,9 (littéraire) à +40,7 (parlé) ; la référence minée démasquée |
 | B1.4 | **Les langues et la couverture** : 24 langues UE, les 20, le pidgin, le critère au français inclus | ✅ | +35,8 / +21,5 ; le pidgin écrit +5,8 (7 plis) ; le critère démographique tenu |
-| B1.5 | **La prose scientifique** (articles) | 🧱 corpus | un corpus parallèle **humain** d'articles ; le MultiUN couvre la prose technique institutionnelle |
-| B1.6 | **Le dialogue réel** : la conversation spontanée | 🧱 corpus | des transcriptions de conversation **réelles** avec traductions ; les sous-titres sont du parlé écrit et contraint |
+| B1.5 | **La prose scientifique** (articles) | 🧱 corpus — la recherche du 24/10 ne trouve que des **comparables** (LIMSI/BUCC) ou du juridique (ACL-SIGLEX) | un corpus parallèle **humain** d'articles ; le MultiUN couvre la prose technique institutionnelle |
+| B1.6 | **Le dialogue réel** : la conversation spontanée | 🔬 — le corpus **trouvé** | **DiaBLa** (Bawden et al. 2021) : 144 dialogues spontanés, **4 910 paires** FR/EN, post-éditions humaines ; extraction [`tools/corpus_diabla.py`](../tools/corpus_diabla.py) ; la mesure au 7 B est **en file** (le GPU est occupé par le 32 B de B2.7) |
 
 **Prochaine action** : B1.5/B1.6 — la recherche de corpus. Si aucun corpus humain n'est trouvé, **la ligne se
 déclare bloquée** et on passe à B2 ; la carte des registres reste celle de six registres + deux marges nommées.
