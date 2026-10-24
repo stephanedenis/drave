@@ -59,7 +59,9 @@ même mesure que les sous-titres, dont la référence est humaine et indépendan
 
 ## Ce que ce résultat ne dit pas
 
-- Un seul modèle (1,5 B), 400 paires par sens — les six registres sont mesurés au 7 B.
+- Un seul modèle (1,5 B), 400 paires par sens — les six registres sont mesurés au 7 B. **Le 7 B n'a pas pu être
+  mesuré** ici : 15,2 Go de poids sur 15,55 Go de carte, la marge des activations manque (OOM mesuré, même avec
+  l'allocateur extensible) — c'est une limite de la machine, pas du corpus.
 - La post-édition peut aussi **aider** le post-éditeur à produire une référence plus fluide que la traduction
   humaine : le biais n'est pas seulement « vers la machine », il est **inconnu** — c'est pourquoi le chiffre ne peut
   pas être comparé, pas seulement « corriger » d'un facteur.
