@@ -49,6 +49,11 @@ transfert` :
 *C'est la table que l'ordonnanceur (A2.6) doit appliquer au lieu des `if` codés en dur — le chiffre du jour lui
 donne sa première ligne validée.*
 
+**La règle est désormais générale** : `placement::choisir(octets_par_jeton, octets_total, libre_vram, libre_ram)`
+parcourt les supports par coût croissant et rend le premier qui a la place — le KV (mesuré ici), les experts et la
+tête l'utiliseront par la même fonction. Quatre tests la couvrent (le gros KV → RAM, le petit → VRAM, le trop-gros →
+NVMe, la réserve).
+
 ## Ce que ce résultat ne dit pas
 
 - **Un seul modèle** (0,5 B) et **un seul prompt** ; le 3 B et le 14 B ont des poids et des têtes plus gros, et le

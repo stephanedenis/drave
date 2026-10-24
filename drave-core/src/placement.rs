@@ -80,6 +80,28 @@ pub fn kv_en_vram(octets_kv: u64, vram_libre: u64) -> bool {
     octets_kv.saturating_add(RESERVE_VRAM) <= vram_libre
 }
 
+/// Le support choisi pour un opérateur : le **moins cher où il tient**.
+///
+/// C'est la règle de l'axe 2 appliquée à un opérateur quelconque (le KV, les
+/// experts, la tête) : on parcourt les supports par coût croissant et on prend
+/// le premier qui a la place. `octets_par_jeton` est la lecture par jeton (ce
+/// qui décide du coût), `octets_total` ce qu'il faut loger (ce qui décide de la
+/// place).
+pub fn choisir(octets_par_jeton: u64, octets_total: u64,
+               libre_vram: u64, libre_ram: u64) -> Support {
+    for s in classement(octets_par_jeton) {
+        let tient = match s {
+            Support::Vram => octets_total.saturating_add(RESERVE_VRAM) <= libre_vram,
+            Support::Ram => octets_total <= libre_ram,
+            Support::Nvme | Support::Reseau => true,
+        };
+        if tient {
+            return s;
+        }
+    }
+    Support::Nvme
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -100,6 +122,16 @@ mod tests {
         assert!(kv_en_vram(7 << 30, 8 << 30));      // 7 + 1 = 8 : la réserve tient juste
         assert!(!kv_en_vram(8 << 30, 8 << 30));     // 8 + 1 > 8
         assert!(!kv_en_vram((7 << 30) + 1, 8 << 30));
+    }
+
+    #[test]
+    fn choisir_respecte_la_place() {
+        // Le KV d'un contexte de 1 M (~25 Go) ne tient pas en VRAM (16 Go) : RAM.
+        assert_eq!(choisir(25 << 30, 25 << 30, 16 << 30, 64 << 30), Support::Ram);
+        // Un petit KV (100 Mo) va en VRAM.
+        assert_eq!(choisir(100 << 20, 100 << 20, 4 << 30, 64 << 30), Support::Vram);
+        // Rien ne tient (200 Go pour 64 Go de RAM) : le NVMe.
+        assert_eq!(choisir(1 << 30, 200 << 30, 16 << 30, 64 << 30), Support::Nvme);
     }
 
     #[test]
