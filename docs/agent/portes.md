@@ -53,6 +53,9 @@ la passe complète reste la règle de fin de cycle.
 - **Les portes de temps** (`porte-delais`, `porte-flux`, `porte-topologie`) mesurent des latences : les lancer
   seules si un chiffre de temps doit être **interprété**. La passe complète est faite pour le **verdict**, pas pour
   le chronomètre.
+- **Les portes de données** (`porte-diff-couche`) vérifient un **contrat**, pas un temps : deux exécutions
+  identiques doivent donner un flux **identique** (la reproductibilité), et une divergence doit être **nommée**
+  (couche, jeton, neurones). Elles sont rapides (~30 s), sans GPU dédié — les lancer même pendant une mesure.
 - Le journal de chaque porte est conservé dans `$JOURNAUX/<porte>.log` : en cas de rouge, `tail -15` sur ce fichier
   donne la raison, pas le marqueur.
 
