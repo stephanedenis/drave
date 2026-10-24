@@ -138,19 +138,19 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 
 ---
 
-## L'ordre d'aujourd'hui (carpe diem)
+## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. Les quatre premiers ne dépendent d'aucune infra ; ils peuvent
-tourner en parallèle sur deux GPU.
+L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloquées sont mesurées** (24/10) :
 
-1. ~~B2.6 — le plan multi-tâches~~ **fait** (mesure 168 : 0,364, la ligne plan est close) ; le premier item est **A2.5**.
-2. **A2.5 — le top-k GPU** (2-3 h, 1 GPU) : le dernier repli CPU du moteur.
-3. **A4.3 — le diff par couche dans la porte** (1 h, CPU) : la condition du rejeu utile.
-4. **A1.5 / A5.3 — la décision par couche** (2 h, CPU + 1 GPU) : la quantification et le chemin choisis par la mesure.
-5. **B2.7 — le 32 B** (si la mémoire le permet : quantifié) : l'échelle au-delà du 14 B.
-6. **A3.4 — la démo Colab** (le compte Colab) : la répartition réseau.
-7. **B1.5/B1.6 — la prose scientifique et le dialogue réel** (la recherche de corpus) : en parallèle, sans bloquer.
-8. **A5.4 — le FPGA** (le matériel) : bloqué, nommé, pas oublié.
+1. ~~B2.6 — le plan multi-tâches~~ **fait** (168 : 0,364, la ligne plan est close).
+2. ~~A2.5 — le top-k GPU~~ **fait** (le noyau fusionné, le seuil 131 072 mesuré).
+3. ~~A4.3 — le diff par couche dans la porte~~ **fait** (`porte-diff-couche`, 18 s, **verte dans la passe**).
+4. ~~A1.5 / A5.3 — la décision par couche~~ **fait** (l'int8 sur les tardives +0,03 %, le 4 bits +2,7 % — un curseur).
+5. ~~A2.6 — l'ordonnanceur~~ **partiel** (la règle `choisir`, 4 tests ; le KV l'applique ; la tête essayée puis **revertée**).
+6. ~~A6.1 / A6.3~~ **faits et négatifs** (les produits +0,0045 ; aucun neurone mort sur 116 736).
+7. ~~B2.7 / B2.8 / B1.6~~ **faits** (le 32 B, les pics par modèle, DiaBLa).
+8. **Ce qui reste, nommé** : le pic du 32 B et le 14 B l24 (**OOM**, la VRAM de 16 Go), la prose scientifique
+   (**corpus absent**), A6.2 (**pas de MoE local**), A3.4 (**compte Colab**), A5.4 (**FPGA**).
 
 ## La file « jamais en attente »
 
