@@ -106,6 +106,8 @@
 - [`nli-daccord-1.5b.json`](nli-daccord-1.5b.json) — DACCORD au 1,5 B (marge +26,9, contrôle 0,550)
 - [`nli-gqnli-1.5b.json`](nli-gqnli-1.5b.json) — GQNLI-FR au 1,5 B (marge +56,7, les quantificateurs)
 - [`rapport-nli-francais-dur.md`](rapport-nli-francais-dur.md) — le NLI français plus dur que XNLI (le rapport)
+- [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
+- [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md) — le 32 B et le confondant de la couche relative
 - [`registre-technique-prose-7b.json`](registre-technique-prose-7b.json) — la prose technique MultiUN (mesure 165 : +33,2 / +32,9, plus dure que le juridico-technique)
 - [`plan-contraste-plein-3b.json`](plan-contraste-plein-3b.json) — le contraste plein du plan (mesure 166 : 0,318, il dégrade sans la tâche)
 - [`plan-recurrent-3b.json`](plan-recurrent-3b.json) — le plan récurrent de bout en bout (mesure 167 : 0,273, la récurrence est pire que le contexte joint)

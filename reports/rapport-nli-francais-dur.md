@@ -40,6 +40,12 @@ encore la réponse dans l'état sur ces jeux — ou le 0,50 de XNLI était-il d�
 - Le renversement n'invalide pas la carte du raisonnement (le synthétique tient au 3/7/14 B) : il dit que la
   **sonde linéaire** n'est pas une mesure monotone de la qualité.
 
+> **Correction du 24/10 (le soir).** Les chiffres de cette fiche sont lus à la **couche 18**, dont la profondeur
+> relative varie (64 % au 1,5 B, 50 % au 3 B, 37 % au 14 B) : le « renversement » **confond la taille et la
+> profondeur**. La comparaison à profondeur relative fixe (les couches 14/18/24/32) est en file — voir
+> [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md). Le constat « la lisibilité linéaire n'est
+> pas monotone avec la taille » reste une **hypothèse**, pas un résultat, tant que la profondeur n'est pas contrôlée.
+
 ## Ce que ce résultat ne dit pas
 
 - **Un seul modèle** (1,5 B) pour les trois jeux ; le 3 B, le 7 B et le 32 B (l'extraction du 32 B tourne) diront si
