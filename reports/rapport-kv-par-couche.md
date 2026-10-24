@@ -31,6 +31,20 @@ Quatre exécutions, même texte, même contexte, même graine — seule la **pr�
   la refaire sur le 3 B et le 7 B, et **couche par couche** (laquelle des premières est la plus sensible ?).
 - À **contexte long** (8 192), l'écart de l'int8 monte à +3,0 % (mesure A5.2) : la perte par couche y est
   probablement plus forte, et la frontière peut se déplacer.
-- L'int8 n'est pas l'int4 (+364 % global) : la même expérience en 4 bits par couche dirait si les couches tardives
-  tolèrent aussi le 4 bits — c'est le vrai gain de mémoire.
 - Le temps ne bouge pas (9,1-9,5 s) : la quantification ne paie pas en vitesse ici, seulement en mémoire.
+
+## Le 4 bits par couche : les tardives le tolèrent mal, malgré tout
+
+| variante | PPL | écart |
+|---|---:|---:|
+| f32 (baseline) | 30,7660 | — |
+| 8 bits partout | 31,6576 | +2,90 % |
+| 8 bits sur 0-11, **4 bits sur 12-23** | **32,4788** | **+5,57 %** |
+
+- **Le 8 bits sur les tardives est quasi gratuit** (+0,03 %), mais **le 4 bits y coûte +2,7 %** : la précision se
+  paie, même là où la couche est tolérante. La quantification par couche est un **curseur**, pas un interrupteur.
+- Les deux variantes (0-11 en 8 + 12-23 en 4, et tout en 8 + 12-23 en 4) donnent **le même chiffre** — cohérent :
+  ce sont les tardives qui portent le 4 bits, les premières ne changent rien.
+- **Le gain de mémoire du 4 bits** (le KV divisé par 2 de plus) se paie **+2,7 %** de perplexité — à mettre en
+  face des +364 % du 4 bits global : la couche tardive est le seul endroit où le 4 bits est **défendable**, et il
+  n'est pas gratuit.
