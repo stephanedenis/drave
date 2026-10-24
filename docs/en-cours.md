@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 15 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 16 h 00 HAE (heure locale, EDT).**
 
 > Cette page dit l'**état courant**, pas l'histoire. Les résultats mesurés sont dans
 > [`reports/`](../reports/), le récit daté dans [`journal/`](../journal/), la mission et l'ordre des priorités dans
@@ -164,7 +164,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
 | la vision de l'étage (ce qu'il **doit** être) | **Stéphane** | **répondue** (le README et `docs/vision.md`, 24/10) : une vision des **flots**, **deux programmes**, deux étages **ordonnés** dans l'intelligence |
 
-## La priorité : l'intelligence, et son étage entrée-sortie
+## La priorité : la nouvelle phase (24/10)
 
 La vision de Drave a **deux programmes** (voir [`roadmap.md`](roadmap.md)) : le **moteur** (les flux) et
 l'**intelligence** (les deux étages). **Dans l'intelligence, l'ordre est strict** : le premier étage est
@@ -176,12 +176,22 @@ l'unité technique du tokeniseur, pas l'unité du sens). Le **module de pensée 
 étage soit fiable — et depuis le 21/10 au soir, **c'est lui le chantier principal** de l'intelligence, les registres
 restants de l'étage 1 tournant en parallèle ; le **moteur**, lui, avance de son côté, par ses propres mesures.
 
+**La nouvelle phase (24/10)** — les 173 mesures ont déplacé le centre de gravité (voir
+[`mission.md`](agent/mission.md) § « La stratégie révisée ») :
+
+1. **A7 — la grappe déportée** : exécuter une **couche** sur une autre ressource, pilotée par les flux. La greffe est
+   **branchée** (`porte-greffe`, 648 s) ; la couche déportée est le pas suivant — c'est **le cœur de la vision**.
+2. **B4 — les opérateurs abstraits** : l'étage 2 a sa carte (l'état porte le raisonnement, le pont l'aligne à 0,87,
+   le plan résiste) ; il lui manque les **opérations** (composer, inférer, ordonner) — le plus neuf scientifiquement.
+3. **A8 — l'ordonnanceur place et perte** : la règle `choisir` porte la place ; le terme de **perte** manque (la
+   tête l'a montré : le 4 bits « qui tient » coûte +10 % de PPL).
+
 **Le moteur, en ce moment** : le top-k GPU est **mesuré** (le noyau fusionné gagne jusqu'à ~64 k clés, la chaîne
 séparée au-delà ; le seuil 131 072 est mesuré) ; la **porte du diff par couche** (A4.3) est en place (deux exécutions
 identiques → flux identique ; le KV 8 bits → divergence nommée) ; la **quantification du KV par couche** (A5.3) :
 l'int8 sur les couches 0-11 coûte **+2,28 %**, sur les 12-23 **+0,03 %** ; le **placement** (A2.6) a sa règle
 générale (`choisir`, 4 tests) et le KV y passe ; **A6.1 et A6.3** ont rendu leurs négatifs (les produits n'ajoutent
-que +0,0045 de R² ; aucun neurone ne reste à zéro).
+que +0,0045 de R² ; aucun neurone ne reste à zéro). La **greffe** (A7.1) est **branchée** ; l'**ordonnanceur** (A8.2) attend son terme de perte.
 Le **NLI français plus dur** (B2.8) est mesuré au 1,5 B : **DACCORD +26,9**, **GQNLI +56,7**, XNLI +35,9 de marge ;
 à **profondeur relative fixe**, le **32 B est le meilleur** (0,600/0,772) et le 3 B le moins lisible (0,502) — la
 lisibilité n'est pas la taille.

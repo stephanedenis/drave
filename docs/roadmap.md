@@ -93,6 +93,31 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 
 **Prochaine action** : aucune — A6.1 et A6.3 ont rendu leurs négatifs (les produits +0,0045 ; aucun neurone mort).
 
+### A7 — La grappe déportée
+
+**Le cœur de la vision, et le pas qui n'est pas encore fait** : exécuter une **couche** (ou une grappe de neurones)
+sur une **autre ressource**, pilotée par les flux — pas seulement transporter le flux, mais *faire le calcul
+ailleurs*.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| A7.1 | **La greffe** : injecter un état prélevé là où le calcul se fait | ✅ la **porte de la greffe** (648 s) : l'injection est **branchée**, la greffe porte tout le contenu | mesuré |
+| A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ⏳ | la sortie est **identique** (au bit près ou nommée), le coût (octets/jeton) est mesuré |
+
+**Prochaine action** : A7.2 — la première couche déportée, mesurée contre la couche locale.
+
+### A8 — L'ordonnanceur place **et** perte
+
+La leçon de la tête (le 4 bits « qui tient » coûte +10 % de PPL) : **un ordonnanceur qui ne porte que la place prend
+une mauvaise décision.**
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| A8.1 | **La règle de place** | ✅ `placement::choisir`, 4 tests | mesuré |
+| A8.2 | **Le terme de perte** : chaque précision a son coût mesuré (PPL) | ⏳ | la politique choisit par (place, perte) — un budget de PPL explicite |
+
+**Prochaine action** : A8.2 — le terme de perte dans `placement.rs`.
+
 ---
 
 ## Programme B — L'intelligence (les deux étages)
@@ -135,6 +160,19 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 
 **Prochaine action** : aucune — la ligne est **définitivement** close (B2.6 testé, mesure 168).
 
+### B4 — Les opérateurs abstraits
+
+La carte de l'étage 2 est faite : l'état **porte** le raisonnement (la sonde), le pont l'**aligne** (0,87), le plan
+**résiste**. Ce qui manque, ce sont les **opérations** : les transformations abstraites (composer, inférer, ordonner)
+que la carte ne mesure pas encore.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B4.1 | **L'opérateur** : une transformation de l'état, indépendante de la langue et de la surface | ⏳ | appliquer l'opérateur à l'état change la réponse dans le sens attendu, avec contrôle au hasard |
+| B4.2 | **La composition d'opérateurs** | ⏳ | deux opérateurs composés = la composition mesurée (0,76/0,865) |
+
+**Prochaine action** : B4.1 — le premier opérateur, sur le 1,5 B.
+
 ---
 
 ## L'ordre du jour (carpe diem)
@@ -150,12 +188,15 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
 7. ~~B2.7 / B2.8 / B1.6~~ **faits** (le 32 B, les pics par modèle, DiaBLa).
 8. **Ce qui reste, nommé** : le pic du 32 B (**OOM**, la VRAM de 16 Go ; la cause est documentée), la prose scientifique
    (**corpus absent**), A6.2 (**pas de MoE local**), A3.4 (**compte Colab**), A5.4 (**FPGA**).
+9. **La nouvelle phase (24/10)** : **A7 la grappe déportée** (la plus proche de la vision), **B4 les opérateurs
+   abstraits** (le plus neuf scientifiquement), **A8 l'ordonnanceur place et perte** (le plus ingénieur).
 
 ## La file « jamais en attente »
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
 - **fait, mesuré** : B2.6, B2.7, B2.8, A2.5, A2.6 (la règle ; la tête **revertée**), A4.3, A1.5, A5.3, A6.1, A6.3 ;
+- **la nouvelle phase** : A7 (la grappe), B4 (les opérateurs), A8 (l'ordonnanceur place et perte) ;
 - **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
   (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est

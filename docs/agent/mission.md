@@ -23,8 +23,10 @@ volonté** des événements. L'ambition : des modèles **plus légers, plus flex
 sur le matériel** qui les supporte.
 
 **La thèse, en une phrase** : la **structure** bat la taille — un pont linéaire, une grille de conversion, une carte
-des flux valent mieux que des paramètres ajoutés. Toute la mesure du projet est là pour éprouver cette thèse, et
-pour **écrire** où elle tient et où elle ne tient pas.
+des flux valent mieux que des paramètres ajoutés. **Elle est désormais mesurée** : la sonde est plate dès le 1,5 B
+(0,7256 / 0,7269 / 0,7189 / 0,7376), le pont plafonne à 0,87, et à profondeur fixe le 14 B est **dernier** (0,4833) —
+dix fois la taille pour +0,001. Ce qui reste à éprouver, c'est **où** elle tient : par tâche, par opération, par
+registre.
 
 ## Deux programmes, un seul projet
 
@@ -54,6 +56,24 @@ L'application, par-dessus les flux. **Deux étages, dans cet ordre** :
 
 **Dans l'intelligence, l'ordre est strict** : l'étage 2 ne se bâtit pas sur une entrée-sortie qui n'est pas fiable.
 Mais le **moteur** est indépendant : il avance en parallèle, et c'est lui qui rend l'intelligence **observable**.
+
+## La stratégie révisée (24/10)
+
+Les 173 mesures ont déplacé le centre de gravité du projet. **Trois constats, trois décisions :**
+
+1. **L'échelle a rendu son verdict** : la sonde sature dès le 1,5 B, le pont plafonne à 0,87, et le pic du 32 B
+   coûte 10-20 h pour un point que trois courbes ont déjà tranché. → **On arrête de courir après l'échelle** : le pic
+   du 32 B reste **nommé**, pas planifié.
+2. **L'étage 1 est tenu** (six registres, 24 langues, le dialogue spontané) ; l'étage 2 a sa **carte** (l'état porte
+   le raisonnement, le pont l'aligne, le plan résiste). Ce qui manque à l'étage 2, ce sont les **opérateurs** : les
+   opérations abstraites (composer, inférer, ordonner) que la carte ne mesure pas encore. → **B4, les opérateurs
+   abstraits.**
+3. **Le moteur a sa règle de placement et sa porte de greffe** (l'injection d'état est branchée) — mais il n'exécute
+   encore **aucune couche ailleurs**. C'est pourtant le cœur de la vision : la **grappe déportée**, et l'ordonnanceur
+   qui porte la place **et** la perte. → **A7 et A8.**
+
+**L'ordre de la nouvelle phase** : **A7** (la grappe, la plus proche de la vision), **B4** (les opérateurs, le plus
+neuf scientifiquement), **A8** (l'ordonnanceur, le plus ingénieur). Tout le reste est **nommé** ou bloqué.
 
 ## L'ordre des priorités
 

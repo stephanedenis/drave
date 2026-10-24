@@ -32,6 +32,11 @@ mieux que des paramètres ajoutés. **Le temps est un plancher, pas un plafond**
 c'est **fait, mesuré et écrit**, pas quand une échéance passe. Détail :
 [`docs/agent/mission.md`](docs/agent/mission.md).
 
+**La thèse est désormais mesurée** : la sonde est **plate dès le 1,5 B** (0,7256 / 0,7269 / 0,7189), le pont
+**plafonne à 0,87** — dix fois la taille pour +0,001, et à profondeur fixe le 14 B est **dernier** (0,4833). La
+**nouvelle phase** (24/10) : **A7 la grappe déportée**, **B4 les opérateurs abstraits**, **A8 l'ordonnanceur place
+et perte** ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont
 les éléments sont des **unités de sens**. Voir [`docs/glossaire.md`](docs/glossaire.md).

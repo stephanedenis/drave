@@ -16,6 +16,31 @@ d'inférence ternaire sur un cluster de cartes Stratix V
 (`Qtrinet-bootstrap.md`). Ce cahier des charges reste l'acte de naissance ; le
 nom, lui, ne dit plus ce que le projet est devenu. **Drave** le dit.
 
+## La raison d'être — et ce que 173 mesures en ont fait
+
+**Drave existe pour démontrer que la structure bat la taille, et pour construire le moteur qui rend cette structure
+observable, décomposable, répartissable et rejouable.**
+
+Ce n'est plus une hypothèse de travail : c'est un **résultat mesuré**. Sur le raisonnement naturel, **la sonde est
+plate dès le 1,5 B** (0,7256 / 0,7269 / 0,7189 / 0,7376 à leurs pics : **dix fois la taille pour +0,001**) et **le
+pont plafonne à 0,87** ; à profondeur fixe (50 %), le 32 B mène (0,5997) mais le 14 B est **dernier** (0,4833) — et
+le même 14 B, à 67 %, devient le meilleur (0,6305). **La taille ne garantit pas la lisibilité ; la profondeur décide
+autant que le modèle**, et ce qui reste est la **structure**.
+
+Le projet s'est donné trois moyens, et il les a mesurés :
+
+1. **la représentation** — des listes valuées, pas des matrices : le coût suit l'activité (le top-k fusionné, le
+   diff par couche, la trace rejouable) ;
+2. **l'alignement** — un pont linéaire transfère l'état d'une langue à l'autre (0,826 → 0,857 → 0,870) sans
+   entraîner le modèle ;
+3. **la répartition** — la règle `choisir` place le KV (4 tests), et la porte de la greffe montre que l'injection
+   d'état est **branchée**.
+
+**Ce que les mesures ont refusé** — et c'est aussi la raison d'être : apprendre des flux (les produits hebbiens
+**+0,0045** de R², aucun neurone mort à élaguer), le 4 bits de la tête (**+10 %** de PPL), la course à l'échelle (le
+pic du 32 B coûte 10-20 h et ne tranche plus rien). *Le projet n'est pas « plus de paramètres » : il est **plus de
+structure, mesurée**.*
+
 ---
 
 ## 1. Le cœur : des listes, pas des matrices
@@ -264,6 +289,13 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
   restera séquentiel ;
 * **ce n'est pas une réécriture** : le moteur Rust actuel *est* cette
   architecture — Drave est le nom de ce qu'il fait déjà, pas un projet parallèle.
+* **ce n'est pas « apprendre des flux »** : le capteur hebbien n'ajoute que
+  **+0,0045** de R² sur la couche 6 (la trace linéaire explique déjà 92 %), et
+  **aucun** des 116 736 neurones ne reste muet — l'élagage par le zéro est vide.
+  Les flux servent à **observer**, pas (encore) à apprendre ;
+* **ce n'est pas « plus gros = mieux lire »** : la sonde est **plate dès le
+  1,5 B** et le 14 B est **dernier** à profondeur fixe (0,4833) — la mesure a
+  corrigé **quatre fois** dans la même journée la même erreur de point de mesure.
 
 ---
 
@@ -271,11 +303,11 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 
 | axe | état | prochain pas |
 |---|---|---|
-| **1. Observer/régler par neurone** | outils en place, mesures faites | format de trace stable + diff par couche |
-| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) ; **la règle de placement est écrite** (`placement.rs`, `choisir`, 4 tests) et le KV l'applique | l'ordonnanceur **complet** : porter la place **et** la perte — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de PPL |
-| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | ordonnanceur de placement ; granularité par bloc ; démonstration distante |
-| **4. Rejouer/comparer** | portes de non-régression + références indépendantes | enregistrement du flux, diff |
-| **5. Formats/matériels/énergie** | trois matériels, formats au point | politique de quantification par bloc *choisie* par la mesure, pas par défaut |
+| **1. Observer/régler par neurone** | ✅ le format de trace **v2**, le diff par couche **dans la porte** (18 s) | — |
+| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) ; **la règle de placement est écrite** (`placement.rs`, `choisir`, 4 tests) et le KV l'applique | l'ordonnanceur **complet** : porter la place **et** la perte — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de PPL → **A8** |
+| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | la **grappe déportée** : exécuter une couche sur une autre ressource, pilotée par les flux — la greffe est **branchée** (648 s) → **A7** ; la démonstration distante reste bloquée par le compte Colab |
+| **4. Rejouer/comparer** | ✅ portes, références indépendantes, **diff par couche**, rejeu | — |
+| **5. Formats/matériels/énergie** | trois matériels, formats au point | ✅ la quantification par couche est un **curseur** (l'int8 tardif +0,03 %, le 4 bits +2,7 %) — mesuré, appliqué |
 
 ---
 
