@@ -125,9 +125,12 @@ FPGA : le projecteur événementiel sur Stratix V existe et a été synthétisé
 (../../FPGA-Stratix-V/docs/rapport-pe-evenementiel.md), et le bilan multi-matériel
 (`reports/bilan-multi-materiel.md`) donne le cadre CPU / FPGA / GPU.
 
-Ce qui reste ouvert : la **politique** de placement (aujourd'hui : des seuils
-codés en dur, réglés à la main par la mesure) et le **déport du top-k** dans le
-noyau d'attention — le dernier chemin qui retombe sur le CPU.
+**Ce qui est fait, et ce qui reste ouvert.** Le **déport du top-k** dans le noyau
+d'attention est **fait** : le noyau fusionné tient un lancement par ligne et le
+seuil de bascule (131 072 clés) est mesuré — le dernier repli CPU est levé en
+opt-in. La **politique de placement** a sa règle (`placement.rs`, `choisir`, 4
+tests) ; reste l'**ordonnanceur complet**, qui doit porter **la place et la
+perte** — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de perplexité.
 
 ---
 
