@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,10 +26,11 @@
 | 16:31 | `b22b7097` | A8.3 — LA REGLE PLACE ET PERTE EST BRANCHEE : placement::kv_precision choisit la precision du KV par couche selon le budget DRAVE_PERTE_MAX (defaut 1 %) — l'int8 si sa perte mesuree tient (+2,28 % sur les premieres, +0,03 % sur les dernieres), le f32 sinon. La regle rend EXACTEMENT le choix de la main : 30,7286 des deux cotes (contre 30,7660 en f32), memes couches en int8. Deux tests ajoutes (8/8). La lecon de la tete devient la regle du KV | `roadmap.md`, `model.rs`, `placement.rs` (+4) |
 | 18:50 | `a4377f9b` | DOC — LE BILAN DU JOUR EN ENTIER : la page vivante dit ce que la journee a etabli — la carte close, B4 close (les cinq chiffres de l'operateur), A7 complete (le relais 42,5477, la grappe exacte a 21 %), A8 opt-in, les DEUX passes 45/47 (toutes les references stables le soir), DiaBLa au 3 B, le 14 B l24. L'heure passe a 19 h | `en-cours.md`, `2026-10-24.md`, `2026-10-24_memoire.md` (+1) |
 | 19:03 | `d9547ca3` | A7.4 — LA GRAPPE DEPORTEE : le format du relais passe en version 2 (un masque d'un bit par canal + les valeurs non nulles). Le flux de la grappe coute 4,22x moins que le dense (1 704 o contre 7 196 o), la porte du flux rend les MEMES chiffres (60,8135 / 60,8135), et la version 1 reste lisible. A7 est complete : la couche deportee, la grappe, sa taille, et son transport | `en-cours.md`, `roadmap.md`, `kimi_k3.rs` (+6) |
+| 19:07 | `2f2f6be6` | B4 (SUITE) — LA CONCEPTION DU LORA DE LA NEGATION : la question (l'operation dans le poids, pour que l'etat la porte sans sonde), le dispositif (le LoRA rang 8 sur le 1,5 B, les 723 paires niees, les cinq tests de B refaits), le critere (le flip passe le hasard), le cout (1-2 h de GPU, apres la passe) et le risque (le LoRA peut apprendre la surface sans l'operation — controle : une negation differente) | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 
 ## Chiffres du jour
 
-`60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148` · `0,3312`
+`723 paires` · `60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

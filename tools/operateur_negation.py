@@ -81,6 +81,30 @@ def principal() -> int:
     # Les paires niées : même prémisse, hypothèse niée, étiquette basculée.
     te_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in te]
     tr_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in tr]
+    # B4 (suite) — le LoRA : apprendre l'opération DANS les poids, puis refaire les cinq
+    # tests. Le modèle est gelé sauf le LoRA ; l'entraînement porte sur les paires NIÉES.
+    if a.lora:
+        import sys
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+        from adaptateur_langue import poser_lora
+        model = poser_lora(model, rang=8)
+        model.train()
+        opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=1e-4)
+        oui = tok(" oui", add_special_tokens=False).input_ids[0]
+        non = tok(" non", add_special_tokens=False).input_ids[0]
+        perdre = torch.nn.CrossEntropyLoss()
+        for _ in range(1):
+            for s1, s2, y in tr_neg:
+                txt = tok.apply_chat_template(
+                    [{"role": "user", "content": f"Prémisse : {s1}\nHypothèse : {s2}\n{consigne}"}],
+                    tokenize=False, add_generation_prompt=True)
+                enc = tok(txt, return_tensors="pt", truncation=True, max_length=256).to("cuda")
+                logits = model(**enc).logits[0, -1][[oui, non]]
+                cible = torch.tensor([0 if y == 1 else 1], device="cuda")
+                perte = perdre(logits.unsqueeze(0), cible)
+                opt.zero_grad(); perte.backward(); opt.step()
+        model.eval()
+        print(f"  [lora] {len(tr_neg)} paires niées, rang 8, 1 époque — le modèle est adapté")
     Etr = etats(tr)
     Ete = etats(te)
     Ete_neg = etats(te_neg)
