@@ -25,6 +25,19 @@ encore la réponse dans l'état sur ces jeux — ou le 0,50 de XNLI était-il d�
   très linéairement séparable.
 - **Les contrôles sont propres partout** : les étiquettes mélangées ramènent au hasard (0,325 ; 0,550 ; 0,400).
 
+## Le 3 B à profondeur fixe (50 %) : il décroche sur les trois jeux
+
+| jeu | 1,5 B (couche 14) | 3 B (couche 18) | écart |
+|---|---:|---:|---:|
+| XNLI | 0,578 | 0,502 | **−0,076** |
+| DACCORD | **0,701** | 0,592 | **−0,109** |
+| GQNLI | **0,900** | 0,800 | **−0,100** |
+
+Le 3 B est **moins lisible** que le 1,5 B sur les trois jeux, à profondeur relative égale (50 %) — et son MLP tombe
+au hasard sur le DACCORD (0,543). Ce n'est pas la tâche, c'est le modèle : le 3 B a les représentations les **moins
+linéairement accessibles** de la série mesurée. La leçon pour la carte : **la lisibilité n'est pas monotone avec la
+taille** — elle dépend de la géométrie interne, pas du nombre de paramètres.
+
 ## Le pont au 1,5 B : 0,83, le meilleur mesuré
 
 | modèle | sonde FR (XNLI) | pont EN→FR |

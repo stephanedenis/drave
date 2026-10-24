@@ -105,6 +105,9 @@
 - [`xnli-1.5b.json`](xnli-1.5b.json) — la baseline XNLI au 1,5 B (le 1,5 B bat le 3 B : 0,692 contre 0,502 ; pont 0,83)
 - [`nli-daccord-1.5b.json`](nli-daccord-1.5b.json) — DACCORD au 1,5 B (marge +26,9, contrôle 0,550)
 - [`nli-gqnli-1.5b.json`](nli-gqnli-1.5b.json) — GQNLI-FR au 1,5 B (marge +56,7, les quantificateurs)
+- [`nli-daccord-1.5b-l14.json`](nli-daccord-1.5b-l14.json) — DACCORD au 1,5 B, couche 14 (50 % : 0,701)
+- [`nli-daccord-3b.json`](nli-daccord-3b.json) — DACCORD au 3 B, couche 18 (50 % : 0,592)
+- [`nli-gqnli-3b.json`](nli-gqnli-3b.json) — GQNLI-FR au 3 B (0,80, le 3 B décroche)
 - [`rapport-nli-francais-dur.md`](rapport-nli-francais-dur.md) — le NLI français plus dur que XNLI (le rapport)
 - [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
 - [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md) — le 32 B et le confondant de la couche relative

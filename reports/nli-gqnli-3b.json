@@ -1,0 +1,13 @@
+{
+ "jeu": "gqnli_fr",
+ "modele": "Qwen/Qwen2.5-3B-Instruct",
+ "couche": 18,
+ "n_train": 210,
+ "n_test": 90,
+ "classes": 3,
+ "hasard": 0.3333333333333333,
+ "fr_fr": 0.8,
+ "negatif": 0.3556,
+ "fr_fr_mlp": 0.8444,
+ "negatif_mlp": 0.2889
+}
