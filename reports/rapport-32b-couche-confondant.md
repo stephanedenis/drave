@@ -49,6 +49,7 @@ conclusion honnête est celle-ci :
 | **32 B** | **32** | **0,5997** | **0,7724** |
 | **14 B** | **24** | **0,6305** | **0,8153** |
 | **14 B** | **30** | **0,7189** | **0,8701** |
+| **3 B** | **30** | **0,7269** | **0,8568** |
 
 **À profondeur relative fixe, l'échelle n'aide pas de façon monotone** : le **14 B** (0,63 / 0,82) est le **meilleur
 des quatre points**, devant le 32 B (0,60 / 0,77) ; le 1,5 B fait 0,58 / 0,70 et le 3 B 0,50 / 0,59. Le 32 B reste le
@@ -61,6 +62,12 @@ corrigé entre-temps par le `device_map="auto"`*. La chaîne à profondeur fixe 
 c'est le 14 B qui les domine. **À sa couche 30, il monte encore** : 0,7189 de sonde et **0,8701** de pont — le
 **meilleur pont de toute la série** (devant le 1,5 B à 0,83 et le 32 B à 0,7724) : son pic est tardif, comme les
 autres.
+
+**Et à 83 %, la taille sature** : sur le **même jeu** (XNLI, 3 classes, hasard 0,33), le **3 B** à sa couche 30 donne
+**0,7269/0,8568** et le **14 B** **0,7189/0,8701** — une **quasi-égalité** (le 3 B gagne **0,008** de sonde, le 14 B
+**0,013** de pont). *La structure gagne* : quatre fois plus de paramètres n'achètent presque rien au-delà du 3 B, à
+profondeur égale. (Le 0,865 du 3 B sur **DACCORD** n'est **pas** comparable — 2 classes, hasard 0,50 contre 0,33 :
+la comparaison honnête se fait à dataset égal, et c'est celle-ci.)
 
 **Et la couche absolue ne suffit pas non plus** : le 1,5 B lit mieux à sa couche 18 (64 % : 0,692/0,83) qu'à la 14
 (50 % : 0,578/0,703). Chaque modèle a **sa** meilleure couche — la comparaison entre tailles doit fixer la profondeur
