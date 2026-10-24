@@ -47,12 +47,17 @@ conclusion honnête est celle-ci :
 | 1,5 B | 14 | 0,5783 | 0,7028 |
 | 3 B | 18 | 0,5020 | 0,5920 |
 | **32 B** | **32** | **0,5997** | **0,7724** |
-| 14 B | 24 | en cours | en cours |
+| 14 B | 24 | **non mesuré** | — |
 
 **À profondeur relative fixe, l'échelle AIDE** : le 32 B (0,60 / 0,77) est le meilleur des trois points, et son pont
 remonte de **0,49** (couche 18, 28 %) à **0,77** (couche 32, 50 %). La « décroissance avec la taille » de la
 première lecture était **l'effet de la couche** — la couche 18 est précoce au 32 B, et le même modèle à 50 % est le
 meilleur mesuré.
+
+**Le 14 B à la couche 24 n'a pas pu être mesuré** : en fp16 (28 Go de poids), la carte 0 reçoit 15,3 Go sur 15,55
+et l'extraction OOM ; `balanced` et `max_memory` n'y changent rien (mesuré) ; en 4 bits, les 9 Go de poids tiennent
+mais les activations de l'extraction (batch 8, puis 2) font OOM à 15,5 Go. Le point manque, et il est **nommé** : la
+chaîne à profondeur fixe tient sur trois points (1,5 B, 3 B, 32 B), pas quatre.
 
 **Et la couche absolue ne suffit pas non plus** : le 1,5 B lit mieux à sa couche 18 (64 % : 0,692/0,83) qu'à la 14
 (50 % : 0,578/0,703). Chaque modèle a **sa** meilleure couche — la comparaison entre tailles doit fixer la profondeur

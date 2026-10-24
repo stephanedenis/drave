@@ -63,6 +63,7 @@ def principal() -> int:
     ap.add_argument("--sortie", default="reports/xnli-3b.json")
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--repartir", action="store_true", help="répartir le modèle sur les GPU (device_map=auto)")
+    ap.add_argument("--quatre-bits", action="store_true", help="charger en 4 bits nf4 (le 32 B sur 2 × 16 Go)")
     a = ap.parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -88,8 +89,28 @@ def principal() -> int:
     tok = AutoTokenizer.from_pretrained(a.hf)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    if a.repartir:
-        model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16, device_map="auto").eval()
+    if a.quatre_bits:
+        # Le 32 B en fp16 (~64 Go) ne tient pas sur 2 × 16 Go : le nf4 le ramène à
+        # ~18-20 Go, réparti par `device_map`. Le calcul reste en fp16 (le dtype
+        # des états lus par les sondes ne change pas).
+        from transformers import BitsAndBytesConfig
+        bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
+                                 bnb_4bit_compute_dtype=torch.float16,
+                                 bnb_4bit_use_double_quant=True)
+        # `auto` a mélangé CPU et GPU sur le 14 B (des couches sur le CPU, l'entrée sur
+        # le cuda → « index is on cuda:0, different from other tensors on cpu »). En 4
+        # bits le modèle tient sur UNE carte : `{"": 0}` force tout dessus. Le 32 B,
+        # lui, a besoin des deux — ses mesures sont faites avec `auto`.
+        model = AutoModelForCausalLM.from_pretrained(a.hf, quantization_config=bnb,
+                                                     device_map={"": 0}).eval()
+    elif a.repartir:
+        # `auto` charge le 14 B à 15,28 Go sur la carte 0 (15,55) — OOM mesuré le 24/10,
+        # et `balanced` (14+14) OOM aussi (la tête et les activations retombent sur la 0).
+        # On plafonne à 13 Go par carte et on laisse déborder sur le CPU : le 14 B tient,
+        # lentement, mais il tient.
+        model = AutoModelForCausalLM.from_pretrained(
+            a.hf, dtype=torch.float16, device_map="auto",
+            max_memory={0: "13GiB", 1: "13GiB", "cpu": "40GiB"}).eval()
     else:
         model = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float16).to("cuda").eval()
 
