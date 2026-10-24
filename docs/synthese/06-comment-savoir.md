@@ -35,9 +35,9 @@ Sur **douze** mesures, **trois** ont été corrigées après coup, **deux** éta
 et **sept** tiennent. C'est un **bon** bilan — pas parce que sept sur douze, mais parce que les cinq autres
 ont été **trouvées** avant d'être publiées.
 
-## Les leçons des 165 mesures
+## Les leçons des 168 mesures
 
-Sept leçons ont émergé, chacune payée par une erreur trouvée à temps :
+Huit leçons ont émergé, chacune payée par une erreur trouvée à temps :
 
 | leçon | l'erreur qui l'a payée | la règle |
 |---|---|---|
@@ -48,6 +48,7 @@ Sept leçons ont émergé, chacune payée par une erreur trouvée à temps :
 | **les contrôles négatifs** | le pont qui « marchait » sans contrôle | paires mélangées, étiquettes mélangées, à chaque fois |
 | **les petits tests mentent** | 88 items, h2/h3 « dans le bruit » | IC, et ≥ 200-300 items pour un effet de 0,05-0,10 |
 | **la carte des lignes** | l'erratum 6 : 40 mesures sur une fausse carte | assertir l'invariant à la source |
+| **le point de mesure** | la « décroissance » du 3 B — la couche 18, puis la profondeur 50 % — **deux fois le même jour** | comparer les modèles **à leur pic** (ou donner les deux bornes) : chaque modèle a sa couche, et elle est **tardive** |
 
 *Ce qui vaut n'est pas le chiffre : c'est la chaîne qui le rend falsifiable.*
 
