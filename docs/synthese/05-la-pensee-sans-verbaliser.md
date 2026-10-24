@@ -257,7 +257,7 @@ par l'entraînement ; le modèle apprend une représentation plus partageable.*
 | à quelle échelle ? | 137, 141 | 3 B, 7 B, 14 B : 0,81-0,97 |
 | l'alignement s'apprend-il ? | 142-152 | oui : bilingue **0,656**, + contraste **0,742**, sature **0,753** |
 | le plan s'aligne-t-il ? | 132, 134, 153, 155-156 | **non** : ponts, bilinguisme et contraste échouent |
-| le raisonnement naturel ? | 160-168 | oui : inférence 0,41-0,69, pont 0,49 → **0,77** (fine-tuning) — **confondu par la couche** entre tailles ; à profondeur fixe, en cours |
+| le raisonnement naturel ? | 160-168 | oui : inférence 0,41-0,87 selon le point de mesure, pont 0,49 → **0,83** ; **pics tardifs** (1,5 B 0,810, 3 B 0,865 — le 3 B meilleur à son pic) |
 
 **Les trois leçons.** 1. L'état porte le raisonnement — synthétique et naturel — **sans verbaliser**. 2. Un petit
 pont **linéaire** l'aligne, à toutes les échelles et sur les deux tâches ; l'alignement **s'apprend** par
@@ -265,15 +265,12 @@ l'entraînement bilingue, et **sature** autour de 0,75. 3. Le **plan** est le co
 **ancrée dans la langue** ; ni les ponts, ni le bilinguisme, ni le contraste ne l'alignent — il faut l'entraîner
 autrement.
 
-**Mesures 165-168 (24/10) — l'échelle et le confondant.** Le XNLI au **1,5 B** donne 0,692 (sonde) et **0,83**
-(pont) — mieux que le 3 B (0,502/0,592) et le 14 B (0,481/0,627) ; au **32 B** (nf4), 0,410 et 0,49. Mais **la
-couche 18 n'a pas la même profondeur relative** (64 % au 1,5 B, 28 % au 32 B) : la décroissance n'est **pas**
-attribuable à la taille. Le premier point à profondeur fixe (le 1,5 B à 50 %, sa couche 14) donne 0,578/0,703 —
-*moins* que sa couche 18 : chaque modèle a **sa** meilleure couche. La comparaison scalaire est **tranchée** : à
-profondeur relative fixe (50 %), le **32 B donne 0,600/0,772**, devant le 1,5 B (0,578/0,703) et le 3 B
-(0,502/0,592) ; chaque modèle a son **pic tardif** (1,5 B 0,810 à 79 %, 3 B **0,865** à 83 %) : **la taille aide, au bon
-endroit** — les deux « décroissances » du jour étaient des effets du **point de mesure**. Le 14 B à la
-couche 24 est en cours.
+**Mesures 165-168 (24/10) — l'échelle, et le point de mesure.** Le XNLI au **1,5 B** donne 0,692 (sonde) et
+**0,83** (pont) ; au **32 B** (nf4), 0,410 à la couche 18 (précoce) et **0,600/0,772** à la couche 32 (50 %). Mais
+la comparaison entre tailles dépend du **point de mesure** : sur DACCORD, le 1,5 B culmine à **0,810** (couche 22,
+79 %) et le 3 B à **0,865** (couche 30, 83 %) — **le 3 B est meilleur à son pic**. Deux « décroissances » ont été
+corrigées le même jour (la couche 18, puis la profondeur 50 %) : c'étaient des effets du **point de mesure**.
+*La carte se lit par modèle, à son pic (ou avec les deux bornes : la couche fixe et le pic).*
 Le **NLI français plus dur** (DACCORD, GQNLI-FR) est lisible au 1,5 B (+26,9 et +56,7 de marge, contrôles au
 hasard) : le jeu « plus dur que XNLI » perd sa marge, pas sa lisibilité.
 
