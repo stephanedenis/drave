@@ -178,6 +178,10 @@ conforme à 9,7e-7 à 1 M — [`reports/rapport-gpu-topk-tout.md`](../reports/ra
 La **porte du diff par couche** (A4.3) est en place : deux exécutions identiques donnent un flux **identique**
 (reproductibilité), et le KV en 8 bits produit une divergence **nommée** — couche 1, jeton 1, 857 neurones,
 9,3e-5 — `tools/porte-diff-couche.sh` ; `diff_flux.py` lit désormais la **v2** (indices par écarts).
+Le **NLI français plus dur** (B2.8) est mesuré au 1,5 B : **DACCORD +26,9**, **GQNLI +56,7**, XNLI +35,9 de marge
+(les contrôles au hasard) — le jeu dur est lisible mais sa marge est la plus faible ; et le **1,5 B bat le 3 B et
+le 14 B** sur la sonde (0,692 contre 0,502 et 0,481) et le pont (**0,83** contre 0,592 et 0,627).
+
 La **décision par couche** (A1.5) est mesurée : à 20-56 % de densité, le **dense** gagne de 2 % (9,2 contre 9,4 s)
 et la perplexité est **identique** (28,4015) — la table prédit le dense pour 23 couches sur 24, la mesure suit.
 Le **placement du KV** (A2.6) est mesuré à 8 k : en VRAM, le préremplissage passe de **297 à 154 s** (×1,93) et
