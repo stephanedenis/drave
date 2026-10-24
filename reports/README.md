@@ -120,6 +120,8 @@
 - [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
 - [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md)
 - [`rapport-carte-raisonnement-naturel.md`](rapport-carte-raisonnement-naturel.md) — **la synthèse** : quatre mesures, trois courbes, deux axes, quatre leçons
+- [`rapport-regle-placement-perte.md`](rapport-regle-placement-perte.md) — A8.3 : la règle place+perte rend le choix de la main (30,7286 des deux côtés)
+- [`rapport-grappe-intra-couche.md`](rapport-grappe-intra-couche.md) — A7.3 : le top-1024 (21 %) rend la même perplexité
 - [`rapport-operateur-negation.md`](rapport-operateur-negation.md) — B4.1 : la négation n'est pas portée par l'état (flip 0,4148, garde 0,5852)
 - [`operateur-negation-1.5b-l22.json`](operateur-negation-1.5b-l22.json) — le JSON de l'opérateur de négation (1,5 B, couche 22) — le 32 B et le confondant de la couche relative
 - [`registre-dialogue-diabla-1.5b.json`](registre-dialogue-diabla-1.5b.json) — DiaBLa au 1,5 B (+40,3/+44,2, **post-éditions** : une borne haute)
