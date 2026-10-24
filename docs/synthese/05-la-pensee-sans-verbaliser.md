@@ -243,7 +243,7 @@ l'inférence naturelle, il faut entraîner le modèle, pas changer le readout.*
 et **0,610** (EN, zéro-ressource), et le pont monte à **0,751** (figé : 0,592). *L'inférence naturelle se travaille
 par l'entraînement ; le modèle apprend une représentation plus partageable.*
 
-### La carte du raisonnement (mesures 125-168)
+### La carte du raisonnement (mesures 125-173)
 
 *La **synthèse** de ces mesures — quatre mesures, trois courbes, deux axes, quatre limites — est dans
 [`rapport-carte-raisonnement-naturel.md`](../../reports/rapport-carte-raisonnement-naturel.md).*
