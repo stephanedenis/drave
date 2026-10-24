@@ -118,6 +118,7 @@ traducteur, puis la pensée abstraite indépendante de la langue). La thèse : *
 | [synthese/07](synthese/07-modeles-alternatifs-entree-sortie.md) | **la théorie de l'étage entrée-sortie** : cinq familles |
 | [genealogie-des-langues.md](genealogie-des-langues.md) | la **généalogie** des langues : la surface capte l'époque, la filiation, non |
 | [`reports/07`](../reports/07-mesures-couche-commune.md) | les **mesures** (167), une fiche par expérience |
+| [`rapport-carte-raisonnement-naturel.md`](../reports/rapport-carte-raisonnement-naturel.md) | **la carte du raisonnement naturel** — la synthèse des mesures 160-168 : quatre mesures, trois courbes, deux axes, quatre limites |
 | [relations-humaines.md](relations-humaines.md) | le **carpe diem**, des deux côtés |
 
 ### Les références

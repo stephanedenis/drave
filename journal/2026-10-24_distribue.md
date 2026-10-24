@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 09:39 | `8e77f0f6` | B1.6 TRANCHE — LE DIALOGUE SPONTANE AVEC SES REFERENCES INDEPENDANTES : DiaBLa +35,0/+39,3 (4 981 paires alignees par l'eval-filter) contre +40,3/+44,2 en post-edition et +27,0/+30,4 pour les sous-titres, au meme 1,5 B. Le biais de la post-edition est de +5, pas +13 ; le dialogue spontane reste plus facile que les sous-titres et la carte gagne sa ligne | `en-cours.md`, `roadmap.md`, `2026-10-22_moteur.md` (+5) |
 | 09:55 | `87f58e8a` | B1.6/B2.7 — LES DEUX BLOCAGES GPU NOMMES : le 7 B sur DiaBLa (15,2 Go de poids sur 15,55, la marge des activations manque) et le 14 B a la couche 24 (quatre tentatives) buttent sur la VRAM de 16 Go, pas sur le protocole. Les trois points a profondeur fixe et les deux references du dialogue suffisent aux conclusions | `roadmap.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+3) |
 | 10:33 | `39a74aeb` | DOC — LA VISION ET LA PAGE VIVANTE ACTUALISEES : la politique de placement existe (placement.rs, choisir, 4 tests) et le KV l'applique, la tete a montre sa limite (le 4 bits qui tient coute +10 % de PPL) ; les six registres et le dialogue spontane sont mesures, reste la prose scientifique (bloquee) | `en-cours.md`, `vision.md`, `2026-10-22_moteur.md` (+3) |
+| 15:00 | `1d70ecb7` | FIX — LE LIEN VERS LA CARTE ETAIT CASSE : depuis docs/synthese/, le chemin est ../../reports/ (deux niveaux), pas ../reports/ (un niveau). La revue de documentation l'a signale et c'est corrige | `05-la-pensee-sans-verbaliser.md`, `2026-10-24.md`, `2026-10-24_mesures.md` |
 
 ## Chiffres du jour
 
