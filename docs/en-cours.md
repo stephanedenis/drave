@@ -32,7 +32,7 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    **B4.4** (la **composition échoue** : le nié du nié ne revient pas, 0,5691 — ce n'est pas une **algèbre**) ;
    **B4.5** (elle **s'apprend**, faiblement : 0,6174 — *rien ne se compose gratuitement*). **B4 est close.**
 3. **A8 l'ordonnanceur place et perte** : le terme de perte est **codé et testé** (`choisir_avec_perte`, 3 tests)
-   et la **règle est branchée** (A8.3 : elle rend le choix de la main, 30,7286 des deux côtés).
+   et la **règle est branchée** (A8.3, **opt-in** `DRAVE_PERTE_MAX` : elle rend le choix de la main, 30,7286 des deux côtés).
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; la **passe complète** est **45/47** (les deux structurels connus,

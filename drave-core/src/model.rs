@@ -4701,7 +4701,11 @@ soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
         // précision par couche quand rien n'est forcé : l'int8 coûte +2,28 % sur les
         // premières couches, +0,03 % sur les dernières (A5.3) — le budget `DRAVE_PERTE_MAX`
         // (en %, défaut 1,0) décide. C'est `DRAVE_KV_BITS_COUCHES="12-23:8"`, calculé.
-        if par_couche.iter().all(|x| x.is_none()) && std::env::var("DRAVE_KV_BITS").is_err() {
+        // La règle s'active **explicitement** (`DRAVE_PERTE_MAX`) : un changement de défaut
+        // décale les chiffres des portes (mesuré le 24/10 : porte-coupe passe de +0,5-17 % à
+        // 5,9-11,6 % et échoue) — on ne change pas un défaut sans épingler les portes d'abord.
+        if par_couche.iter().all(|x| x.is_none()) && std::env::var("DRAVE_KV_BITS").is_err()
+            && std::env::var("DRAVE_PERTE_MAX").is_ok() {
             let budget_pct: f64 = std::env::var("DRAVE_PERTE_MAX").ok()
                 .and_then(|v| v.parse().ok()).unwrap_or(1.0);
             let mut choisis = 0;

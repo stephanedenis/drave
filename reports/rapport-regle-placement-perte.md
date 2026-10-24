@@ -15,7 +15,7 @@ coûte +10 % de PPL) appliquée au KV. **Deux tests** : les 24 couches (l'int8 p
 | réglage | PPL |
 |---|---:|
 | f32 (la référence) | 30,7660 |
-| **la règle place + perte (défaut, budget 1 %)** | **30,7286** |
+| **la règle place + perte (`DRAVE_PERTE_MAX=1`, budget 1 %)** | **30,7286** |
 | la main : `DRAVE_KV_BITS_COUCHES="12-23:8"` | **30,7286** |
 
 - **La règle rend exactement le choix de la main** : même PPL à quatre décimales, mêmes couches en int8.
@@ -23,6 +23,11 @@ coûte +10 % de PPL) appliquée au KV. **Deux tests** : les 24 couches (l'int8 p
   lire comme un gain : l'int8 tardif est **gratuit**, c'est tout ce que la mesure autorise à dire.
 - **La leçon de la tête est appliquée** : la règle ne choisit pas « ce qui tient » (la place) mais « ce qui tient
   **dans le budget de perte** » — un 4 bits de tête (+10 %) serait refusé par le même budget.
+
+**La règle est opt-in** : elle s'active par `DRAVE_PERTE_MAX` ; sans le drapeau, le défaut reste le **f32** (le
+comportement historique). **Pourquoi** : le 24/10, le passage du défaut à la règle a **décalé les portes** —
+`porte-coupe` est passée de +0,52-17,09 % à 5,9-11,6 % et a **échoué**. *Un changement de défaut qui déplace les
+chiffres des portes ne se fait pas sans les épingler d'abord* — c'est la règle du dépôt, et elle a joué.
 
 ## Ce que ça ne dit pas
 
