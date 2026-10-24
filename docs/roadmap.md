@@ -120,7 +120,7 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 | B2.4 | **L'alignement appris** : bilingue, contraste, saturation | ✅ | 0,656 → 0,742 → **0,753** ; le prix (in-langue 98,7 → 77,6) |
 | B2.5 | **Le raisonnement naturel** (XNLI) | ✅ | 0,50-0,59 ; pont 0,59 → **0,77** (fine-tuning) ; le domaine compte plus que le volume |
 | B2.6 | **Le plan multi-tâches** : entraîner le plan **et** le raisonnement ensemble | ✅ mesuré — **0,364** | l'EN→FR reste au chiffre de la tâche seule (0,364) ; l'in-langue baisse (0,375), l'EN monte (0,511) — **la ligne plan est définitivement close** |
-| B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ✅ mesuré — **le confondant tranché** | à profondeur relative fixe (50 %), le 32 B donne **0,600 / 0,772** — **le meilleur des points mesurés** : la « décroissance avec la taille » (0,410/0,49 à la couche 18, précoce) était **l'effet de la couche** ; le 1,5 B (0,578/0,703) et le 3 B (0,502/0,592) suivent ; le 14 B à la couche 24 est **bloqué par la VRAM** (28 Go fp16 + les activations > 30 Go sur 2 × 16 ; le 4 bits OOM aussi) — la chaîne tient sur trois points, le quatrième est nommé — [`reports/rapport-32b-couche-confondant.md`](../reports/rapport-32b-couche-confondant.md) |
+| B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ✅ mesuré — **le confondant tranché** | à profondeur relative fixe (50 %), le 32 B donne **0,600 / 0,772** — **le meilleur des points mesurés** : la « décroissance avec la taille » (0,410/0,49 à la couche 18, précoce) était **l'effet de la couche** ; le 1,5 B (0,578/0,703) et le 3 B (0,502/0,592) suivent — mais **le 14 B à la couche 24 donne 0,6305/0,815, le meilleur des quatre** : l'échelle n'aide pas de façon monotone — [`reports/rapport-32b-couche-confondant.md`](../reports/rapport-32b-couche-confondant.md) |
 | B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | 🔬 — la première mesure faite | **DACCORD +26,9, GQNLI +56,7, XNLI +35,9** de marge (1,5 B, contrôles au hasard) : *le jeu dur est lisible, sa marge est la plus faible* ; et **chaque modèle a son pic tardif** : 1,5 B **0,810** (c. 22, 79 %), 3 B **0,865** (c. 30, 83 %) — **le 3 B y est meilleur** : la taille aide, au bon endroit ; les deux « décroissances » du jour (couche 18, profondeur 50 %) étaient des effets du **point de mesure** — [`reports/rapport-nli-francais-dur.md`](../reports/rapport-nli-francais-dur.md) |
 
 **Prochaine action** : aucune — le plan résiste, l'échelle est tracée (les pics), DiaBLa est mesuré.
@@ -148,7 +148,7 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
 5. ~~A2.6 — l'ordonnanceur~~ **partiel** (la règle `choisir`, 4 tests ; le KV l'applique ; la tête essayée puis **revertée**).
 6. ~~A6.1 / A6.3~~ **faits et négatifs** (les produits +0,0045 ; aucun neurone mort sur 116 736).
 7. ~~B2.7 / B2.8 / B1.6~~ **faits** (le 32 B, les pics par modèle, DiaBLa).
-8. **Ce qui reste, nommé** : le pic du 32 B et le 14 B l24 (**OOM**, la VRAM de 16 Go), la prose scientifique
+8. **Ce qui reste, nommé** : le pic du 32 B (**OOM**, la VRAM de 16 Go ; la cause est documentée), la prose scientifique
    (**corpus absent**), A6.2 (**pas de MoE local**), A3.4 (**compte Colab**), A5.4 (**FPGA**).
 
 ## La file « jamais en attente »

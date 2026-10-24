@@ -47,17 +47,17 @@ conclusion honnête est celle-ci :
 | 1,5 B | 14 | 0,5783 | 0,7028 |
 | 3 B | 18 | 0,5020 | 0,5920 |
 | **32 B** | **32** | **0,5997** | **0,7724** |
-| 14 B | 24 | **non mesuré** | — |
+| **14 B** | **24** | **0,6305** | **0,8153** |
 
-**À profondeur relative fixe, l'échelle AIDE** : le 32 B (0,60 / 0,77) est le meilleur des trois points, et son pont
-remonte de **0,49** (couche 18, 28 %) à **0,77** (couche 32, 50 %). La « décroissance avec la taille » de la
-première lecture était **l'effet de la couche** — la couche 18 est précoce au 32 B, et le même modèle à 50 % est le
-meilleur mesuré.
+**À profondeur relative fixe, l'échelle n'aide pas de façon monotone** : le **14 B** (0,63 / 0,82) est le **meilleur
+des quatre points**, devant le 32 B (0,60 / 0,77) ; le 1,5 B fait 0,58 / 0,70 et le 3 B 0,50 / 0,59. Le 32 B reste le
+meilleur de *sa* série (0,41 → 0,60 de la couche 18 à la 32), mais **la taille ne garantit pas la lisibilité** —
+c'est la même leçon que les pics du 1,5 B et du 3 B, un étage plus haut.
 
-**Le 14 B à la couche 24 n'a pas pu être mesuré** : en fp16 (28 Go de poids), la carte 0 reçoit 15,3 Go sur 15,55
-et l'extraction OOM ; `balanced` et `max_memory` n'y changent rien (mesuré) ; en 4 bits, les 9 Go de poids tiennent
-mais les activations de l'extraction (batch 8, puis 2) font OOM à 15,5 Go. Le point manque, et il est **nommé** : la
-chaîne à profondeur fixe tient sur trois points (1,5 B, 3 B, 32 B), pas quatre.
+**Le 14 B à la couche 24 a été mesuré** : 0,6305 de sonde et **0,8153** de pont. Le fichier (`xnli-14b-l24.json`)
+datait du **09:54** et l'analyse l'avait manqué — *l'ancienne note disait « n'a pas pu être mesuré », l'OOM ayant été
+corrigé entre-temps par le `device_map="auto"`*. La chaîne à profondeur fixe tient donc sur **quatre** points, et
+c'est le 14 B qui les domine.
 
 **Et la couche absolue ne suffit pas non plus** : le 1,5 B lit mieux à sa couche 18 (64 % : 0,692/0,83) qu'à la 14
 (50 % : 0,578/0,703). Chaque modèle a **sa** meilleure couche — la comparaison entre tailles doit fixer la profondeur
