@@ -3,6 +3,9 @@
 > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
 > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
 > [`docs/en-cours.md`](../docs/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/carte.md) · [l'état du moment](../docs/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
 >
 > **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) fait 67 mesures et
 > ~150 Ko — la lire **par section**, jamais en entier : `grep -n '^## Mesure' reports/07-mesures-couche-commune.md`.
