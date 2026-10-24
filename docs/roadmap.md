@@ -89,7 +89,7 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 |---|---|---|---|
 | A6.1 | **Capteur hebbien** : apprendre des journaux d'activation | ✅ mesuré — **négatif** | le capteur coûte +3,0 % ; la création de nœuds par Hebb n'ajoute rien sur 69 % des poids ; et les **produits** n'ajoutent que **+0,0045** de R² sur la couche 6 (la trace linéaire explique déjà 92 %) — [`reports/rapport-hebbien-produits.md`](../reports/rapport-hebbien-produits.md) ; la piste restante : les couches creuses, et le classement par la trace |
 | A6.2 | **Routage appris** (MoE) : les experts choisis par les logs | ⏳ | qualité égale, coût de routage ÷10 |
-| A6.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ⏳ | modèle plus petit, perplexité égale |
+| A6.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ✅ mesuré — le critère est **vide** | **0 neurone mort** sur 116 736 (255 jetons) ; **63 %** s'allument à moins de 0,1 % (les rares, pas les morts) ; le top 10 % porte **19 %** de la masse — l'élagage exige un corpus de calibration plus large et la perplexité après masque — [`reports/rapport-elagage-logs.md`](../reports/rapport-elagage-logs.md) |
 
 **Prochaine action** : A6.1 (le capteur, déjà amorcé).
 

@@ -117,6 +117,7 @@
 - [`rapport-dialogue-diabla.md`](rapport-dialogue-diabla.md) — le dialogue réel : DiaBLa, et pourquoi sa référence n'est pas comparable
 - [`rapport-kv-par-couche.md`](rapport-kv-par-couche.md) — la quantification du KV par couche (le coût de l'int8 est dans les premières couches)
 - [`rapport-hebbien-produits.md`](rapport-hebbien-produits.md) — A6.1 : les produits hebbiens (+0,0045 de R², la trace linéaire explique déjà 92 %)
+- [`rapport-elagage-logs.md`](rapport-elagage-logs.md) — A6.3 : aucun neurone mort sur 116 736, mais 63 % s'allument à peine
 - [`registre-technique-prose-7b.json`](registre-technique-prose-7b.json) — la prose technique MultiUN (mesure 165 : +33,2 / +32,9, plus dure que le juridico-technique)
 - [`plan-contraste-plein-3b.json`](plan-contraste-plein-3b.json) — le contraste plein du plan (mesure 166 : 0,318, il dégrade sans la tâche)
 - [`plan-recurrent-3b.json`](plan-recurrent-3b.json) — le plan récurrent de bout en bout (mesure 167 : 0,273, la récurrence est pire que le contexte joint)

@@ -69,6 +69,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-15](2026-10-15_apprentissage.md) | `30 %` · `75 %` · `0 %` |
 | [2026-10-16](2026-10-16_apprentissage.md) | `+148 %` · `+143 %` · `30,3 %` · `25,7 %` · `51,4 %` · `38,1 %` · `28,0 %` · `17,1 %` · `13,8 %` |
 | [2026-10-21](2026-10-21_apprentissage.md) | — |
+| [2026-10-24](2026-10-24_apprentissage.md) | `92,14 %` · `0,0045` |
 
 ### `distribue` — Régions, flux, protocoles, budgets, pannes
 
