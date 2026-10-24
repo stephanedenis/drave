@@ -4944,7 +4944,18 @@ forcent l'un ou l'autre partout",
                      go);
             Some(CacheExperts::nouveau(budget))
         } else { None };
-        let head4 = if q4 & 4 != 0 || tete_quantifiee {
+        // La TÊTE à 4 bits (A2.6) : c'était un drapeau (`-q 4`). La règle de placement
+        // dit ce qui décide vraiment : la tête quantifiée tient-elle en VRAM ? Oui sur
+        // cette machine (110 Mo pour le 0,5 B) — et la tête s'y place sans drapeau.
+        // Le drapeau reste pour forcer quand la règle hésite.
+        let octets_tete = (cfg.vocab as u64 * cfg.hidden as u64) * 5 / 8;
+        let libre_vram: u64 = {
+            let m = crate::materiel::Materiel::detecter();
+            m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum()
+        };
+        let tete_en_vram = crate::placement::choisir(octets_tete, octets_tete, libre_vram, 64 << 30)
+            == crate::placement::Support::Vram;
+        let head4 = if q4 & 4 != 0 || tete_quantifiee || tete_en_vram {
             let t0 = Instant::now();
             let v = cfg.vocab;
             let h = cfg.hidden;

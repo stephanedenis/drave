@@ -54,6 +54,10 @@ parcourt les supports par coût croissant et rend le premier qui a la place — 
 tête l'utiliseront par la même fonction. Quatre tests la couvrent (le gros KV → RAM, le petit → VRAM, le trop-gros →
 NVMe, la réserve).
 
+**La tête aussi passe par la règle** : son placement était un drapeau (`-q 4`). `placement::choisir` dit ce qui
+décide vraiment — la tête quantifiée tient-elle en VRAM ? — et la place dessus sans drapeau (110 Mo pour le 0,5 B,
+4,04 ms par jeton mesurés). Le drapeau reste pour forcer.
+
 ## Ce que ce résultat ne dit pas
 
 - **Un seul modèle** (0,5 B) et **un seul prompt** ; le 3 B et le 14 B ont des poids et des têtes plus gros, et le
