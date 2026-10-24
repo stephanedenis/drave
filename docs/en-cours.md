@@ -158,7 +158,7 @@ existent déjà ; un sous-chantier qui dépend d'un autre attend son **chiffre**
 | le banc propre tient-il sur un **autre document** ? | **moi** (mesure 67) | **oui** : +1,1 à +2,5 points sur le règlement 2025/2509 (jouets) |
 | faut-il des modules par **famille** pour la restitution ? | **moi** (C3.1) | à lancer |
 | les styles à **époque contrôlée** : quels couples contemporains ? | **moi** (chercher dans Gutenberg) | à lancer |
-| la vision de l'étage (ce qu'il **doit** être) | **Stéphane** | en attente, ne bloque rien |
+| la vision de l'étage (ce qu'il **doit** être) | **Stéphane** | **répondue** (le README et `docs/vision.md`, 24/10) : une vision des **flots**, **deux programmes**, deux étages **ordonnés** dans l'intelligence |
 
 ## La priorité : l'intelligence, et son étage entrée-sortie
 
