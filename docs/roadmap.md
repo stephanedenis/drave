@@ -87,7 +87,7 @@ Le flux n'est pas qu'une exécution, c'est une donnée.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
-| A6.1 | **Capteur hebbien** : apprendre des journaux d'activation | 🔬 | une couche améliorée par apprentissage sur ses propres logs |
+| A6.1 | **Capteur hebbien** : apprendre des journaux d'activation | ✅ mesuré — **négatif** | le capteur coûte +3,0 % ; la création de nœuds par Hebb n'ajoute rien sur 69 % des poids ; et les **produits** n'ajoutent que **+0,0045** de R² sur la couche 6 (la trace linéaire explique déjà 92 %) — [`reports/rapport-hebbien-produits.md`](../reports/rapport-hebbien-produits.md) ; la piste restante : les couches creuses, et le classement par la trace |
 | A6.2 | **Routage appris** (MoE) : les experts choisis par les logs | ⏳ | qualité égale, coût de routage ÷10 |
 | A6.3 | **Élagage guidé par les logs** : retirer les neurones qui ne s'allument jamais | ⏳ | modèle plus petit, perplexité égale |
 
