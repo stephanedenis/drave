@@ -40,6 +40,20 @@ conclusion honnête est celle-ci :
 > *Le protocole « couche 18 » ne compare pas des couches comparables ; la carte du raisonnement naturel, du 1,5 B au
 > 32 B, n'est pas encore tracée.*
 
+## Premier point à profondeur relative fixe — et il complique la règle
+
+Le 1,5 B à la couche **14** (50 % de sa profondeur) :
+
+| couche | profondeur | sonde FR | pont EN→FR |
+|---|---:|---:|---:|
+| 14 | 50 % | **0,5783** | **0,7028** |
+| 18 | 64 % | 0,6921 | 0,8300 |
+
+**La couche relative ne suffit pas** : à 50 % de profondeur, le 1,5 B lit *moins* bien qu'à 64 %. Chaque modèle a
+donc **sa** meilleure couche, et la comparaison honnête doit fixer la profondeur relative **et** rapporter que la
+couche choisie n'est pas la meilleure de chaque modèle. Le 32 B à la couche 32 (50 %) tourne ; le 14 B à la
+couche 24 suivra.
+
 ## Ce que ça ne dit pas, et ce que ça ne retire pas
 
 - Les résultats **synthétiques** (mesures 125-158) sont à couche fixe **par modèle** et avec la même relation : ils
