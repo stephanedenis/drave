@@ -175,3 +175,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **07/10** — la passe K3 est liée au **disque** (133 Mio/s, 87,6 % d'occupation) ; le levier est la taille du lot.
 - **22/10** — le périmètre entrée-sortie est **arrêté au français inclus** ; l'étage 2 devient le chantier principal.
 - **23/10** — la vision est **recentrée sur les flots** (ce document) ; les deux programmes avancent en parallèle.
+- **24/10** — le **moteur** et l'**intelligence** sont poussés jusqu'où le matériel le permet : la passe complète
+  est **45/47** (aucun rouge nouveau), la carte du raisonnement a **trois courbes complètes** et la sonde **sature dès
+  le 1,5 B** ; le pic du 32 B et le 14 B l24 sont **bloqués par la VRAM** (le premier coûte 10-20 h ; le second a été
+  mesuré depuis), la prose scientifique manque de **corpus**. Ce qui reste est **nommé**, pas oublié.
