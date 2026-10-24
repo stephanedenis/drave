@@ -65,12 +65,17 @@ relative, et la comparaison entre couches doit le dire.
 
 ## Le pic du 32 B n'est pas mesuré — et il est nommé
 
-La couche **48** en 4 bits (batch 4) fait **OOM** sur 15,5 Go. **La cause est trouvée le 24/10** : le mode 4 bits
-forçait `device_map={"": 0}` — les ~21 Go du 32 B sur la seule carte 0 (15,55) — alors que le commentaire du code
-disait « le 32 B a besoin des deux ». Corrigé en `auto` (13/13 + débordement sur le CPU) : la mesure redevient
-possible, lente (3-4 h par couche). Le point reste **nommé** plutôt que caché : *le pic du 32 B est une question
-ouverte, pas un chiffre manquant* — et la tendance (le 32 B à **0,600** à 50 %, le 3 B à **0,865** à son pic) suffit
-à la conclusion.
+La couche **48** en 4 bits fait **OOM** sur 15,5 Go. **La cause est trouvée le 24/10, en deux temps** :
+
+1. le mode 4 bits forçait `device_map={"": 0}` — les ~21 Go du 32 B sur la seule carte 0 (15,55) — alors que le
+   commentaire du code disait « le 32 B a besoin des deux » ; corrigé en `auto` ;
+2. `auto` refuse alors d'office : le débordement CPU exige `llm_int8_enable_fp32_cpu_offload=True` **et** un
+   `device_map` plafonné — les ~6 Go qui ne tiennent pas sur 2 × 14 Go retomberaient sur le CPU, à **10-20 h** la
+   passe.
+
+**La mesure n'est donc pas faite, et elle ne sera pas forcée** : le coût (10-20 h pour un point de tendance déjà
+établi par le 3 B à 0,865) ne le justifie pas. *Le pic du 32 B reste une question ouverte, pas un chiffre manquant* —
+et la cause de l'OOM est **documentée**, pas contournée.
 
 ## Ce que ça ne dit pas, et ce que ça ne retire pas
 
