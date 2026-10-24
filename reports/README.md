@@ -301,3 +301,12 @@
 - [`kfold-14b600-0001.json`](kfold-14b600-0001.json) · [`kfold-14b600-0004.json`](kfold-14b600-0004.json) · [`kfold-14b600-0066.json`](kfold-14b600-0066.json) · [`kfold-14b600-0089.json`](kfold-14b600-0089.json) · [`kfold-14b600-0095.json`](kfold-14b600-0095.json) · [`kfold-14b600-0210.json`](kfold-14b600-0210.json) · [`kfold-14b600-0327.json`](kfold-14b600-0327.json) — le Pidgin a 600 pas (mesure 111 : +5,0, 59/71).
 
 - [`kfold-14b1000-0001.json`](kfold-14b1000-0001.json) · [`kfold-14b1000-0004.json`](kfold-14b1000-0004.json) · [`kfold-14b1000-0066.json`](kfold-14b1000-0066.json) · [`kfold-14b1000-0089.json`](kfold-14b1000-0089.json) · [`kfold-14b1000-0095.json`](kfold-14b1000-0095.json) · [`kfold-14b1000-0210.json`](kfold-14b1000-0210.json) · [`kfold-14b1000-0327.json`](kfold-14b1000-0327.json) — le Pidgin a 1000 pas (mesure 112 : +5,8, 59/71, 7 plis positifs).
+
+## Les compléments (indexés après coup, le 24/10)
+
+- [`bruit-entree.json`](bruit-entree.json) · [`seuil-bruit-3b.json`](seuil-bruit-3b.json) · [`marqueurs-bruit.json`](marqueurs-bruit.json) · [`marqueurs-bruit-3b.json`](marqueurs-bruit-3b.json) — le bruit à l'entrée (mesures 79-84 : le seuil et les marqueurs).
+- [`contamination-7b-litteral.json`](contamination-7b-litteral.json) — la contamination du 7 B en littéral (mesure 92).
+- [`miroir-boucle.json`](miroir-boucle.json) · [`miroir-boucle-3b.json`](miroir-boucle-3b.json) — le miroir entrée/sortie en boucle (mesures 95-98).
+- [`registre-dialogue-diabla-refs-1.5b.json`](registre-dialogue-diabla-refs-1.5b.json) — DiaBLa au 1,5 B, références indépendantes (+35,0/+39,3).
+- [`traduction-legal-0.5b-6.json`](traduction-legal-0.5b-6.json) · [`traduction-legal-1.5b.json`](traduction-legal-1.5b.json) · [`traduction-legal-3b.json`](traduction-legal-3b.json) · [`traduction-legal-7b.json`](traduction-legal-7b.json) — la qualité par taille sur le juridique (mesure 62).
+- [`xnli-1.5b-l14.json`](xnli-1.5b-l14.json) · [`xnli-14b-l24.json`](xnli-14b-l24.json) · [`xnli-32b-l32.json`](xnli-32b-l32.json) — XNLI aux couches de référence (le 1,5 B l14, le 14 B l24, le 32 B l32).
