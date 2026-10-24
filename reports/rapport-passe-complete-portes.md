@@ -1,13 +1,15 @@
-# Passe COMPLÈTE des portes : 22 vertes sur 22 — et une porte qui était verte en ne mesurant RIEN
+# Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN
 
 > Campagne : **outillage** · expérience : la passe complète (`tools/toutes-les-portes.sh`)
 > Question : les portes du dépôt passent-elles **toutes**, quand on les lance **toutes** ?
-> Verdict : **oui** — **22 sur 22** au premier passage (11 h 07), puis **23 sur 23** le 2026-10-10 à **15 h 15** en
-> **58 minutes** après l'ajout de `porte-peripherie.sh` et des changements du moteur
-> (15 h 15) — et la passe a trouvé ce qu'une porte lancée
-> seule ne pouvait pas montrer : `porte-tokenizer-kimi` sortait **verte en comparant zéro jeton**
-> (elle lisait `stdin`, que personne ne lui fournissait). Corrigée, elle compare maintenant
-> **10 textes** en **7,5 s**.
+> Verdict : **oui, à chaque passe** — **22 sur 22** au premier passage (2026-10-10, 11 h 07), puis les passes
+> successives consignées ci-dessous, jusqu'à la **47ᵉ porte** (`porte-diff-couche`, ajoutée le 24/10 — elle vérifie
+> la reproductibilité du flux et nomme les divergences). Et la passe a trouvé ce qu'une porte lancée seule ne
+> pouvait pas montrer : `porte-tokenizer-kimi` sortait **verte en comparant zéro jeton** (elle lisait `stdin`, que
+> personne ne lui fournissait). Corrigée, elle compare maintenant **10 textes** en **7,5 s**.
+>
+> *Les sections 2 bis à 2 quater consignent les passes historiques ; la section 2 quinquies attend le verdict de
+> la passe du 24/10 (47 portes) — elle n'est pas écrite d'avance.*
 > Date réelle : **2026-10-10 11:10 HAE** (heure de la machine ; la passe a tourné de 09 h 57 à
 > 11 h 07).
 > Protocole : `DELAI=2400 tools/toutes-les-portes.sh` — chaque porte bornée dans le temps, son
