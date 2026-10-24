@@ -122,7 +122,7 @@ déclare bloquée** et on passe à B2 ; la carte des registres reste celle de si
 | B2.5 | **Le raisonnement naturel** (XNLI) | ✅ | 0,50-0,59 ; pont 0,59 → **0,77** (fine-tuning) ; le domaine compte plus que le volume |
 | B2.6 | **Le plan multi-tâches** : entraîner le plan **et** le raisonnement ensemble | ✅ mesuré — **0,364** | l'EN→FR reste au chiffre de la tâche seule (0,364) ; l'in-langue baisse (0,375), l'EN monte (0,511) — **la ligne plan est définitivement close** |
 | B2.7 | **Le 32 B** : la profondeur et l'alignement à une échelle de plus | ⏳ | la même expérience à 32 B (quantifié si la mémoire l'exige) ; le pont tient-il ? |
-| B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | ⏳ | la sonde et le pont au 14 B (fait : 0,481/0,589/0,627) ; un corpus **hors XNLI** |
+| B2.8 | **Le raisonnement naturel à l'échelle** : XNLI au 14 B/32 B, et un corpus naturel plus dur | 🔬 — le corpus trouvé | le 14 B est fait (0,481/0,589/0,627) ; le corpus **hors XNLI** est identifié : **DACCORD** (1 034 paires FR de contradictions) + **RTE3-FR** (2 × 800) + **GQNLI-FR** (300), *plus durs que XNLI* (Skandalis et al., LREC-COLING 2024) ; la mesure est en file (GPU occupé par le 32 B) |
 
 **Prochaine action** : **B2.6** (le plan multi-tâches — aucune infra, la seule variante non testée), puis B2.7/B2.8.
 
