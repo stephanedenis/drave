@@ -102,6 +102,61 @@ pub fn choisir(octets_par_jeton: u64, octets_total: u64,
     Support::Nvme
 }
 
+/// Une précision et **son coût mesuré** : les octets par valeur et la perte de
+/// perplexité observée (en %). Les trois chiffres viennent des mesures du 24/10.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Precision {
+    pub nom: &'static str,
+    pub octets_par_valeur: f64,
+    pub perte_ppl: f64,
+}
+
+/// Le f32 : la référence, aucune perte.
+pub const F32: Precision = Precision { nom: "f32", octets_par_valeur: 4.0, perte_ppl: 0.0 };
+/// L'int8 sur les couches **tardives** : **+0,03 %** (mesuré sur le 0,5 B, 255 jetons).
+pub const INT8_TARDIF: Precision = Precision { nom: "int8 tardif", octets_par_valeur: 1.0, perte_ppl: 0.03 };
+/// L'int4 sur les couches **tardives** : **+2,7 %** (elles tolèrent le 8, pas le 4).
+pub const INT4_TARDIF: Precision = Precision { nom: "int4 tardif", octets_par_valeur: 0.5, perte_ppl: 2.7 };
+/// La **tête** en 4 bits : **+10 %** de PPL — mesuré, puis **reverté**. Elle
+/// « tenait » en VRAM : la place n'est pas la qualité.
+pub const TETE_4BIT: Precision = Precision { nom: "tête 4 bits", octets_par_valeur: 0.5, perte_ppl: 10.0 };
+/// L'int4 **global** : **+364 %** — hors de tout budget raisonnable.
+pub const INT4_GLOBAL: Precision = Precision { nom: "int4 global", octets_par_valeur: 0.5, perte_ppl: 364.0 };
+
+/// Les précisions connues, de la plus chère (en octets) à la moins chère.
+pub const PRECISIONS: [Precision; 5] = [F32, INT8_TARDIF, INT4_TARDIF, TETE_4BIT, INT4_GLOBAL];
+
+/// Choisit **(support, précision)** : le moins cher **dont la perte tient dans
+/// le budget** et qui a la place.
+///
+/// C'est la leçon de la tête, en code : `choisir` seul répond à « où ça tient » ;
+/// ici on répond à « où ça tient **sans payer plus que `perte_max`** ». Un 4 bits
+/// qui tient en VRAM mais coûte +10 % de PPL est **refusé** si le budget est plus
+/// bas — c'est la décision que le 24/10 a dû prendre à la main, puis reverte.
+pub fn choisir_avec_perte(
+    octets_par_jeton_f32: u64,
+    octets_total_f32: u64,
+    libre_vram: u64,
+    libre_ram: u64,
+    perte_max: f64,
+) -> Option<(Support, Precision)> {
+    let mut meilleur: Option<(Support, Precision, f64)> = None;
+    for p in PRECISIONS {
+        if p.perte_ppl > perte_max {
+            continue;
+        }
+        let f = p.octets_par_valeur / 4.0;
+        let octets_par_jeton = (octets_par_jeton_f32 as f64 * f) as u64;
+        let octets_total = (octets_total_f32 as f64 * f) as u64;
+        let sup = choisir(octets_par_jeton, octets_total, libre_vram, libre_ram);
+        let c = cout(octets_par_jeton, sup);
+        if meilleur.map_or(true, |(_, _, cm)| c < cm) {
+            meilleur = Some((sup, p, c));
+        }
+    }
+    meilleur.map(|(s, p, _)| (s, p))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -132,6 +187,32 @@ mod tests {
         assert_eq!(choisir(100 << 20, 100 << 20, 4 << 30, 64 << 30), Support::Vram);
         // Rien ne tient (200 Go pour 64 Go de RAM) : le NVMe.
         assert_eq!(choisir(1 << 30, 200 << 30, 16 << 30, 64 << 30), Support::Nvme);
+    }
+
+    #[test]
+    fn la_perte_decide_aussi() {
+        // Le KV tardif : l'int8 (+0,03 %) passe un budget de 1 % ; l'int4 (+2,7 %) non.
+        let (_, p8) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 1.0).unwrap();
+        assert_eq!(p8.nom, "int8 tardif");
+        let (_, p4) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 5.0).unwrap();
+        assert_eq!(p4.nom, "int4 tardif");
+        assert!(p4.octets_par_valeur < p8.octets_par_valeur);
+    }
+
+    #[test]
+    fn un_budget_nul_interdit_toute_quantification() {
+        let (_, p0) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 0.0).unwrap();
+        assert_eq!(p0.nom, "f32");
+    }
+
+    #[test]
+    fn la_tete_en_4_bits_est_refusee_par_un_budget_de_5_pour_cent() {
+        // +10 % de PPL : elle « tient », mais la place n'est pas la qualité.
+        let choisi = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 5.0).unwrap();
+        assert_ne!(choisi.1.nom, "tête 4 bits");
+        // Et l'int4 global (+364 %) ne passe aucun budget raisonnable.
+        let encore = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 10.0).unwrap();
+        assert_ne!(encore.1.nom, "int4 global");
     }
 
     #[test]

@@ -191,7 +191,7 @@ séparée au-delà ; le seuil 131 072 est mesuré) ; la **porte du diff par couc
 identiques → flux identique ; le KV 8 bits → divergence nommée) ; la **quantification du KV par couche** (A5.3) :
 l'int8 sur les couches 0-11 coûte **+2,28 %**, sur les 12-23 **+0,03 %** ; le **placement** (A2.6) a sa règle
 générale (`choisir`, 4 tests) et le KV y passe ; **A6.1 et A6.3** ont rendu leurs négatifs (les produits n'ajoutent
-que +0,0045 de R² ; aucun neurone ne reste à zéro). La **greffe** (A7.1) est **branchée** ; l'**ordonnanceur** (A8.2) attend son terme de perte.
+que +0,0045 de R² ; aucun neurone ne reste à zéro). La **greffe** (A7.1) est **branchée** et le **relais ne change pas un chiffre** (A7.2, `porte-topologie`) ; l'**ordonnanceur** (A8.2) a son **terme de perte** (`choisir_avec_perte`, 3 tests).
 Le **NLI français plus dur** (B2.8) est mesuré au 1,5 B : **DACCORD +26,9**, **GQNLI +56,7**, XNLI +35,9 de marge ;
 à **profondeur relative fixe**, le **32 B est le meilleur** (0,600/0,772) et le 3 B le moins lisible (0,502) — la
 lisibilité n'est pas la taille.

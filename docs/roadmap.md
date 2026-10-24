@@ -102,9 +102,10 @@ ailleurs*.
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | A7.1 | **La greffe** : injecter un état prélevé là où le calcul se fait | ✅ la **porte de la greffe** (648 s) : l'injection est **branchée**, la greffe porte tout le contenu | mesuré |
-| A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ⏳ | la sortie est **identique** (au bit près ou nommée), le coût (octets/jeton) est mesuré |
+| A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ✅ | le **relais ne change pas un chiffre** (`porte-topologie`, 92 s, 42.5477) ; le coût du flux : **1 608 octets/flux**, **0,25 Mbit/s**, latence ≤ 20 ms — [`rapport-mode4-lot-listes.md`](../reports/rapport-mode4-lot-listes.md) |
+| A7.3 | **La grappe intra-couche** : un sous-ensemble de neurones, pas une frontière de couche | ⏳ | la même sortie, moins d'octets |
 
-**Prochaine action** : A7.2 — la première couche déportée, mesurée contre la couche locale.
+**Prochaine action** : A7.3 — la grappe intra-couche (la frontière de couche est déjà déportée, à chiffre égal).
 
 ### A8 — L'ordonnanceur place **et** perte
 
@@ -114,9 +115,9 @@ une mauvaise décision.**
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | A8.1 | **La règle de place** | ✅ `placement::choisir`, 4 tests | mesuré |
-| A8.2 | **Le terme de perte** : chaque précision a son coût mesuré (PPL) | ⏳ | la politique choisit par (place, perte) — un budget de PPL explicite |
+| A8.2 | **Le terme de perte** : chaque précision a son coût mesuré (PPL) | ✅ `choisir_avec_perte` + **3 tests** | l'int8 tardif (+0,03 %) passe un budget de **1 %**, l'int4 tardif (+2,7 %) exige **5 %**, la tête 4 bits (+10 %) est **refusée** à 5 %, l'int4 global (+364 %) jamais — la leçon de la tête est devenue une règle |
 
-**Prochaine action** : A8.2 — le terme de perte dans `placement.rs`.
+**Prochaine action** : brancher `choisir_avec_perte` dans `model.rs` (le KV et la tête) — la règle est prête, l'appel reste.
 
 ---
 
