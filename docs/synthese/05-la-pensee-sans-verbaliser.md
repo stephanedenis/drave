@@ -245,6 +245,9 @@ par l'entraînement ; le modèle apprend une représentation plus partageable.*
 
 ### La carte du raisonnement (mesures 125-168)
 
+*La **synthèse** de ces mesures — quatre mesures, trois courbes, deux axes, quatre limites — est dans
+[`rapport-carte-raisonnement-naturel.md`](../reports/rapport-carte-raisonnement-naturel.md).*
+
 | question | mesures | réponse |
 |---|---|---|
 | le raisonnement synthétique est-il dans l'état ? | 125 | oui : 1,00 → 0,51 (FR), 1,00 → 0,53 (EN), hasard 5 % |
