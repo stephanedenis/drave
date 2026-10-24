@@ -155,8 +155,9 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **toujours faisable** : B2.6, B2.7, B2.8, A2.5, A2.6, A4.3, A1.5, A5.3, A6.1-A6.3 ;
-- **bloqué, nommé** : B1.5 (corpus d'articles), B1.6 (corpus de conversation), A3.4 (compte Colab), A5.4 (FPGA) ;
+- **fait, mesuré** : B2.6, B2.7, B2.8, A2.5, A2.6 (la règle ; la tête **revertée**), A4.3, A1.5, A5.3, A6.1, A6.3 ;
+- **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
+  (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est
   fidèle).
 
@@ -165,7 +166,6 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | ligne | bloque par | ce qu'il faudrait |
 |---|---|---|
 | B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
-| B1.6 dialogue réel | aucun corpus de conversation spontanée FR/EN aligné | des transcriptions avec traductions |
 | A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/colab-reparti.md`) |
 | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
 
