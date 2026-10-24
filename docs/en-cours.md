@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 17 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 19 h 00 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -35,9 +35,11 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    et la **règle est branchée** (A8.3, **opt-in** `DRAVE_PERTE_MAX` : elle rend le choix de la main, 30,7286 des deux côtés).
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
-tardifs, la sonde qui sature dès le 1,5 B) ; la **passe complète** est **45/47** (les deux structurels connus,
-**aucun rouge nouveau**, la 47ᵉ porte verte en 18 s) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà
-mesuré (0,6305/0,8153 — le meilleur point à 50 %).
+tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
+(0,4148 → 0,7042 → 0,7749/0,6977 → 0,5691 → 0,6174) ; **A7** est complète (le relais 42,5477, le flux 1 608
+octets, la grappe exacte à 21 %) ; **A8** est branchée en **opt-in** (la règle rend le choix de la main) ; **les deux
+passes** du 24/10 sont **45/47** (les deux structurels connus, aucun rouge nouveau, **toutes les références stables**
+le soir) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153).
 
 ## Où l'on en est (les chiffres qui comptent)
 
