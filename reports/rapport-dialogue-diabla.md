@@ -39,6 +39,10 @@ même mesure que les sous-titres, dont la référence est humaine et indépendan
 - la prochaine étape est la récupération des références du GitHub, puis la mesure au **7 B** (le modèle des six
   registres).
 
+**Mise à jour (même jour)** : les références indépendantes ont été récupérées (`raw-corpus/*.ref`, alignées par le
+`eval-filter` : **4 981 paires**, vérifiées sur les premières lignes) et la mesure au même 1,5 B est **en cours** —
+elle dira si l'écart de +13 à +14 avec les sous-titres était le registre ou le biais de la post-édition.
+
 ## Ce que ce résultat ne dit pas
 
 - Un seul modèle (1,5 B), 400 paires par sens — les six registres sont mesurés au 7 B.

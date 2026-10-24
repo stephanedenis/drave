@@ -4,13 +4,14 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 08:13 | `3c9665f1` | A1.5 — LA DECISION PAR COUCHE : la table (densites 20,1 a 56,3 %, croisement 22 %) et la verification — PPL identique (28,4015) entre le push et le dense, le dense 2 % plus rapide (9,2 contre 9,4 s a 255 jetons) ; la table predit le dense pour 23 couches sur 24, la mesure suit. Correction du « ~10 % » perime dans l'analyse du flux | `en-cours.md`, `roadmap.md`, `2026-10-22_moteur.md` (+5) |
 | 08:43 | `7a956534` | B1.6 — LE CORPUS DIALOGUE TROUVE : DiaBLa (Bawden et al. 2021), 144 dialogues spontanes FR/EN, 4 910 paires avec les post-editions humaines ; extraction tools/corpus_diabla.py ; la mesure au 7 B est en file (GPU occupe par le 32 B). B1.5 (la prose scientifique) : la recherche ne trouve que des comparables, la ligne reste bloquee et nommee | `roadmap.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+4) |
 | 08:46 | `fcabe8e9` | B2.8 — LE CORPUS NATUREL PLUS DUR TROUVE : DACCORD (1 034 paires FR de contradictions), RTE3-FR (2 x 800) et GQNLI-FR (300), plus durs que XNLI (Skandalis et al., LREC-COLING 2024) ; la mesure est en file, le GPU etant occupe par le 32 B | `roadmap.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+2) |
+| 09:26 | `b3847e8b` | B1.6 MESURE — LE DIALOGUE REEL AVEC SA RESERVE : DiaBLa +40,3/+44,2 contre OpenSubtitles +27,0/+30,4 au meme 1,5 B — mais la reference DiaBLa est une post-edition (biais vers la machine) : c'est une borne haute, pas un septieme registre ; les references independantes sont a recuperer (le GitHub du corpus) | `en-cours.md`, `roadmap.md`, `2026-10-22_moteur.md` (+8) |
 
 ## Chiffres du jour
 
@@ -23,6 +24,7 @@
 - [reports/README.md](../reports/README.md)
 - [reports/rapport-analyse-flux.md](../reports/rapport-analyse-flux.md)
 - [reports/rapport-decision-par-couche.md](../reports/rapport-decision-par-couche.md)
+- [reports/rapport-dialogue-diabla.md](../reports/rapport-dialogue-diabla.md)
 
 <!-- notes -->
 
