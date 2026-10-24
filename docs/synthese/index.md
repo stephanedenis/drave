@@ -21,7 +21,7 @@
 |---|---|---|---|
 | 1 | [le cerveau Drave](01-le-cerveau-drave.md) | l'idée fondatrice, et pourquoi couper un modèle ne le casse pas | ![vue d'ensemble](schemas/vue-ensemble.svg) |
 | 2 | [l'anatomie interne](02-anatomie-interne.md) | régions, liens, bus, horloges : ce qui circule et où | ![coupe](schemas/anatomie-coupe.svg) |
-| 3 | [les modes et les portes](03-les-modes-et-les-portes.md) | les six façons de faire tourner le modèle, et les 46 vérifications | ![modes](schemas/modes.svg) |
+| 3 | [les modes et les portes](03-les-modes-et-les-portes.md) | les six façons de faire tourner le modèle, et les **47** vérifications | ![modes](schemas/modes.svg) |
 | 4 | [les douze facultés](04-les-facultes-et-la-biologie.md) | C1-C12 : ce qu'on cherche à donner à un modèle, et à quoi on le reconnaît | ![facultés](schemas/facultes.svg) |
 | 5 | [la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) | le travail de la nuit du 16/10 : lire le sens, itérer, et le prix | ![pensée](schemas/pensee.svg) |
 | 6 | [comment savoir qu'on a raison](06-comment-savoir.md) | les portes, le registre, et les cinq pièges d'instrument | ![portes](schemas/portes.svg) |
