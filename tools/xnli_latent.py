@@ -99,10 +99,13 @@ def principal() -> int:
                                  bnb_4bit_use_double_quant=True)
         # `auto` a mélangé CPU et GPU sur le 14 B (des couches sur le CPU, l'entrée sur
         # le cuda → « index is on cuda:0, different from other tensors on cpu »). En 4
-        # bits le modèle tient sur UNE carte : `{"": 0}` force tout dessus. Le 32 B,
-        # lui, a besoin des deux — ses mesures sont faites avec `auto`.
+        # bits le 14 B tient sur UNE carte : `{"": 0}` force tout dessus.
+        # CORRIGÉ le 24/10 : `{"": 0}` forçait AUSSI les ~21 Go du 32 B sur la seule
+        # carte 0 (15,55) → OOM sur la couche 48. Ce commentaire disait « le 32 B a
+        # besoin des deux » et le code faisait le contraire. `auto` répartit (13/13) et
+        # laisse déborder sur le CPU : lent, mais il tient.
         model = AutoModelForCausalLM.from_pretrained(a.hf, quantization_config=bnb,
-                                                     device_map={"": 0}).eval()
+                                                     device_map="auto").eval()
     elif a.repartir:
         # `auto` charge le 14 B à 15,28 Go sur la carte 0 (15,55) — OOM mesuré le 24/10,
         # et `balanced` (14+14) OOM aussi (la tête et les activations retombent sur la 0).

@@ -65,10 +65,12 @@ relative, et la comparaison entre couches doit le dire.
 
 ## Le pic du 32 B n'est pas mesuré — et il est nommé
 
-La couche **48** en 4 bits (batch 4) fait **OOM** sur 15,5 Go, comme la couche 32 est passée juste. Le point
-coûterait **3-4 h par couche** ; la tendance (le 32 B à **0,600** à 50 %, le 3 B à **0,865** à son pic) suffit à la
-conclusion, et le point est **nommé** plutôt que caché : *le pic du 32 B reste une question ouverte, pas un chiffre
-manquant.*
+La couche **48** en 4 bits (batch 4) fait **OOM** sur 15,5 Go. **La cause est trouvée le 24/10** : le mode 4 bits
+forçait `device_map={"": 0}` — les ~21 Go du 32 B sur la seule carte 0 (15,55) — alors que le commentaire du code
+disait « le 32 B a besoin des deux ». Corrigé en `auto` (13/13 + débordement sur le CPU) : la mesure redevient
+possible, lente (3-4 h par couche). Le point reste **nommé** plutôt que caché : *le pic du 32 B est une question
+ouverte, pas un chiffre manquant* — et la tendance (le 32 B à **0,600** à 50 %, le 3 B à **0,865** à son pic) suffit
+à la conclusion.
 
 ## Ce que ça ne dit pas, et ce que ça ne retire pas
 
