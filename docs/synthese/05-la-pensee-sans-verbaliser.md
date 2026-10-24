@@ -232,7 +232,7 @@ mur, une **pente** qui suit l'in-langue. *La pente, pas la falaise.*
 (FR **0,502**, EN **0,576** contre 1/3) et le pont la transfère à **0,592** — au-dessus du FR in-langue. *Le pont ne
 marche pas que sur le synthétique : il transfère aussi l'inférence naturelle.*
 
-**Mesure 161 — le naturel au 14 B.** Pas de gain : FR 0,481, EN 0,589, pont 0,627 (3 B : 0,502 / 0,576 / 0,592).
+**Mesure 161 — le naturel au 14 B.** À la couche 24 (37 %) : FR 0,481, EN 0,589, pont 0,627 (3 B : 0,502/0,576/0,592). **Mais à sa couche 30 (83 %), le 14 B décolle** : **0,7189/0,8701** — le **meilleur pont de la série** (et à la 36, 0,7376/0,8715 : le pont sature). *Le « pas de gain » était la couche, encore.*
 *La taille ne change presque rien : la limite est la **sonde linéaire**, pas le modèle.*
 
 **Mesure 162 — la sonde non linéaire ne fait pas mieux.** Le MLP donne **0,453** (contre 0,502 au linéaire) et
