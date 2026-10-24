@@ -4665,8 +4665,47 @@ soit plus du tiers de la RAM libre ({:.0} Go) — DRAVE_KV_BITS pour forcer",
                 } else { 32 }
             }
         };
+        // La quantification PAR COUCHE (A5.3) : `DRAVE_KV_BITS_COUCHES="0-11:32,12-23:8"`
+        // l'emporte sur le global pour les couches citées. Le but est de MESURER la
+        // sensibilité de chaque couche — la décision par bloc viendra ensuite.
+        let par_couche: Vec<Option<u32>> = {
+            let mut v = vec![None; cfg.n_layer];
+            if let Ok(spec) = std::env::var("DRAVE_KV_BITS_COUCHES") {
+                for morceau in spec.split(',') {
+                    let morceau = morceau.trim();
+                    if morceau.is_empty() { continue; }
+                    let (plage, bits) = match morceau.split_once(':') {
+                        Some((p, b)) => (p.trim(), b.trim().parse::<u32>().ok()),
+                        None => { println!("[config] KV par couche : « {morceau} » sans ':' — ignoré"); continue; }
+                    };
+                    let Some(bits) = bits else {
+                        println!("[config] KV par couche : bits illisibles dans « {morceau} » — ignoré");
+                        continue;
+                    };
+                    let (deb, fin) = match plage.split_once('-') {
+                        Some((d, f)) => (d.trim().parse::<usize>().ok(), f.trim().parse::<usize>().ok()),
+                        None => (plage.parse::<usize>().ok(), plage.parse::<usize>().ok()),
+                    };
+                    let (Some(deb), Some(fin)) = (deb, fin) else {
+                        println!("[config] KV par couche : plage illisible dans « {morceau} » — ignoré");
+                        continue;
+                    };
+                    for l in deb..=fin.min(cfg.n_layer.saturating_sub(1)) {
+                        v[l] = Some(bits);
+                    }
+                }
+            }
+            v
+        };
         let caches_kv: Vec<KvCache> = (0..cfg.n_layer)
-            .map(|_| KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim)).collect();
+            .map(|l| KvCache::new(par_couche[l].unwrap_or(kv_bits), cfg.n_kv_head, ctx, cfg.head_dim))
+            .collect();
+        if par_couche.iter().any(|x| x.is_some()) {
+            let cites: Vec<String> = par_couche.iter().enumerate()
+                .filter_map(|(l, b)| b.map(|b| format!("{l}:{b}"))).take(8).collect();
+            println!("[config] KV par couche : {} couches surchargées ({}…)", 
+                     par_couche.iter().filter(|x| x.is_some()).count(), cites.join(", "));
+        }
         let kv_octets = cfg.n_layer as u64
             * KvCache::new(kv_bits, cfg.n_kv_head, ctx, cfg.head_dim).octets();
         println!("[config] cache KV : {} bits, {:.2} Go pour {ctx} jetons",

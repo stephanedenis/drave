@@ -76,7 +76,7 @@ Un flux est un journal, et un journal se rejoue.
 |---|---|---|---|
 | A5.1 | **Trois matériels** : SIMD x86, PTX sur Quadro, logique FPGA | ✅ | noyaux écrits et vérifiés |
 | A5.2 | **Quantification du KV choisie par la mesure** | ✅ | l'écart int8 (+3,0 % à 8 192) est **attribué aux clés** ; clés f16 = **+0,018 %** pour 39 % de la taille ; l'int4 coûte +364 % — le débat n'est pas « combien de bits » mais **où sont les échelles** |
-| A5.3 | **Quantification par bloc, par couche** | 🔬 | la politique choisie par la mesure, pas par défaut |
+| A5.3 | **Quantification par bloc, par couche** | ✅ — la sensibilité mesurée, la politique écrite | le coût de l'int8 est **tout** dans les premières couches : 8 bits sur 0-11 → **+2,28 %**, sur 12-23 → **+0,03 %** (0,5 B, 255 jetons) ; la politique : les tardives peuvent passer en 8 bits sans perte mesurable — [`reports/rapport-kv-par-couche.md`](../reports/rapport-kv-par-couche.md) ; reste la finesse couche par couche et le 4 bits |
 | A5.4 | **Le FPGA** : un opérateur complet, alimenté par le même format de flux | 🧱 | dépend d'un accès matériel (le PE événementiel et le lecteur DDR3 existent et sont vérifiés) |
 
 **Prochaine action** : A5.3 (la politique par bloc) — aucune infra ; A5.4 est bloquée par le matériel.
