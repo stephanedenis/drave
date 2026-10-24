@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 10:33 | `39a74aeb` | DOC — LA VISION ET LA PAGE VIVANTE ACTUALISEES : la politique de placement existe (placement.rs, choisir, 4 tests) et le KV l'applique, la tete a montre sa limite (le 4 bits qui tient coute +10 % de PPL) ; les six registres et le dialogue spontane sont mesures, reste la prose scientifique (bloquee) | `en-cours.md`, `vision.md`, `2026-10-22_moteur.md` (+3) |
 | 15:00 | `1d70ecb7` | FIX — LE LIEN VERS LA CARTE ETAIT CASSE : depuis docs/synthese/, le chemin est ../../reports/ (deux niveaux), pas ../reports/ (un niveau). La revue de documentation l'a signale et c'est corrige | `05-la-pensee-sans-verbaliser.md`, `2026-10-24.md`, `2026-10-24_mesures.md` |
 | 15:26 | `36b91baa` | REVISION — LA RAISON D'ETRE, LA STRATEGIE ET LE PLAN. La structure bat la taille n'est plus une hypothese : la sonde est plate des le 1,5 B (0,7256/0,7269/0,7189), le pont plafonne a 0,87, le 14 B est dernier a 50 % (0,4833) — dix fois la taille pour +0,001. Les refus sont ecrits (apprendre des flux +0,0045, le 4 bits de la tete +10 %, la course a l'echelle). La strategie passe de « mesurer l'echelle » a « exploiter la structure » : A7 la grappe deportee, B4 les operateurs abstraits, A8 l'ordonnanceur place et perte. Vision, mission, roadmap, README, AGENTS et page vivante reecrits | `AGENTS.md`, `README.md`, `mission.md` (+6) |
+| 15:32 | `976d55e4` | A7.2 + A8.2 — LE RELAIS A CHIFFRE EGAL, ET LA PERTE ENTRE DANS LA REGLE. A7.2 etabli : porte-topologie (92 s, 42.5477) — une couche executee ailleurs rend la meme sortie, le flux coute 1 608 octets/flux, 0,25 Mbit/s, latence <= 20 ms ; reste la grappe intra-couche (A7.3). A8.2 code : choisir_avec_perte + 3 tests — l'int8 tardif (+0,03 %) passe a 1 %, l'int4 tardif (+2,7 %) exige 5 %, la tete 4 bits (+10 %) est refusee a 5 %, l'int4 global (+364 %) jamais : la lecon de la tete devient une regle testee | `en-cours.md`, `roadmap.md`, `placement.rs` (+4) |
 
 ## Chiffres du jour
 
-`50 %` · `+10 %` · `0,7256` · `0,7269` · `0,7189` · `0,4833` · `0,001` · `0,0045` · `15,2 Go` · `16 Go` · `4981 paires` · `1034 paires`
+`+0,03 %` · `1 %` · `+2,7 %` · `5 %` · `+10 %` · `+364 %` · `92 s` · `20 ms` · `42.5477` · `50 %` · `0,7256` · `0,7269`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
