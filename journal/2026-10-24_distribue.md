@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,10 +23,11 @@
 | 15:56 | `12e5a053` | DOC — LA NAVIGATION PAR FICHIERS : une carte des sujets (docs/carte.md, 83 liens — concepts, chantiers, phases, activites, schemas), le chapitre 7 decompose en 10 parties (5 972 lignes, 179 sections) avec son index qui garde les 26 liens, le glossaire en 11 familles (2 274 lignes), la revue etendue au dossier glossaire, le serveur du site pointe la carte. Verifie : mdserve et le site rendent les tableaux, les liens et les SVG | `AGENTS.md`, `README.md`, `README.md` (+31) |
 | 15:57 | `cae7bd41` | DOC — LES TROIS DOSSIERS SE POINTENT : reports/README.md et journal/README.md portent la ligne de navigation (la carte des sujets, l'etat du moment, l'inventaire, l'index des resultats, le journal). docs, reports et journal se lisent maintenant l'un l'autre par des liens de fichiers | `2026-10-24.md`, `2026-10-24_distribue.md`, `README.md` |
 | 16:03 | `dd585b60` | B4.2 — LA NEGATION EST APPRENABLE, PAS TRANSFERABLE : une sonde reentrainee sur les paires niees lit la relation basculee a 0,7042 (hasard 0,5 ; controle 0,4952), mais la sonde de l'original ne lit pas le nie (0,4148) et reciproquement (0,3312). L'operateur n'est pas une direction : c'est une GEOMETRIE LOCALE — la lecon du plan (mesure 119). B4.3 : un operateur appris sur une paire d'operations transfere-t-il a une autre ? | `2026-10-24.md`, `2026-10-24_distribue.md`, `operateur-negation-1.5b-l22.json` (+2) |
+| 16:31 | `b22b7097` | A8.3 — LA REGLE PLACE ET PERTE EST BRANCHEE : placement::kv_precision choisit la precision du KV par couche selon le budget DRAVE_PERTE_MAX (defaut 1 %) — l'int8 si sa perte mesuree tient (+2,28 % sur les premieres, +0,03 % sur les dernieres), le f32 sinon. La regle rend EXACTEMENT le choix de la main : 30,7286 des deux cotes (contre 30,7660 en f32), memes couches en int8. Deux tests ajoutes (8/8). La lecon de la tete devient la regle du KV | `roadmap.md`, `model.rs`, `placement.rs` (+4) |
 
 ## Chiffres du jour
 
-`0,7042` · `0,4952` · `0,4148` · `0,3312` · `1034 paires` · `0,5852` · `0,8103` · `0,4566` · `+0,03 %` · `1 %` · `+2,7 %` · `5 %`
+`1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148` · `0,3312` · `1034 paires` · `0,5852` · `0,8103`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -48,6 +49,7 @@
 - [reports/rapport-decision-par-couche.md](../reports/rapport-decision-par-couche.md)
 - [reports/rapport-dialogue-diabla.md](../reports/rapport-dialogue-diabla.md)
 - [reports/rapport-operateur-negation.md](../reports/rapport-operateur-negation.md)
+- [reports/rapport-regle-placement-perte.md](../reports/rapport-regle-placement-perte.md)
 
 <!-- notes -->
 
