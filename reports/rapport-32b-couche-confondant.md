@@ -45,6 +45,7 @@ conclusion honnête est celle-ci :
 | modèle | couche | profondeur | sonde FR | pont EN→FR |
 |---|---:|---:|---:|---:|
 | 1,5 B | 14 | 50 % | 0,5783 | 0,7028 |
+| **1,5 B** | **22** | **79 %** | **0,7256** | **0,8260** |
 | **14 B** | **18** | **50 %** | **0,4833** | **0,6225** |
 | 3 B | 18 | 50 % | 0,5020 | 0,5920 |
 | **32 B** | **32** | **50 %** | **0,5997** | **0,7724** |
@@ -58,7 +59,12 @@ conclusion honnête est celle-ci :
 (0,5020 / 0,5920) et — **dernier** — le **14 B** (0,4833 / 0,6225). Le 32 B est aussi le meilleur de *sa* série
 (0,41 → 0,60 de la couche 18 à la 32). Mais **la position du pic change tout** : le 14 B, dernier à 50 %, est le
 **premier à 67 %** (0,6305 / 0,8153) et à 83 % (0,7189 / 0,8701) ; le 3 B, dernier à 50 %, remonte à
-**0,7269 / 0,8568** à 83 %. *La taille ne garantit pas la lisibilité, et **la profondeur décide autant que le
+**0,7269 / 0,8568** à 83 %.
+
+**Et la sonde sature dès le 1,5 B** : à son pic (couche 22), il donne **0,7256/0,8260** — **0,0013 de moins** que le
+3 B à son pic (0,7269) et **0,0067 de plus** que le 14 B (0,7189). **Dix fois la taille n'achètent rien sur la
+sonde** ; le pont, lui, monte encore (0,826 → 0,857 → 0,870) mais sature à 0,87. *La structure bat la taille* — sous
+sa forme la plus forte : le petit modèle lit aussi bien. *La taille ne garantit pas la lisibilité, et **la profondeur décide autant que le
 modèle**.*
 
 **Et à la moitié exacte (couche 18), le 14 B est le moins lisible des quatre** : 0,4833/0,6225 — **sous le 3 B**
