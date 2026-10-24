@@ -75,6 +75,7 @@ def rendre_page(titre: str, corps: str) -> bytes:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(titre)} · Drave</title><style>{STYLE}</style></head><body>
 <header><b><a href="/">Drave</a></b>
+<a href="/docs/carte.md">la carte</a>
 <a href="/docs/en-cours.md">en ce moment</a>
 <a href="/docs/cerveau-facultes.md">carte des facultés</a>
 <a href="/docs/etat-cerveau.md">état du cerveau</a>

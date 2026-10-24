@@ -84,7 +84,8 @@ les éléments sont des **unités de sens**. Voir [`docs/glossaire.md`](docs/glo
 | planifier une campagne, le matériel, carpe diem | [`docs/agent/ressources.md`](docs/agent/ressources.md) |
 | **l'état courant** (synthèse + chantiers + questions) | [`docs/en-cours.md`](docs/en-cours.md) |
 | le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/glossaire.md`](docs/glossaire.md) |
-| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/carte.md`](docs/carte.md) |
+| la carte de la documentation (l'inventaire) | [`docs/README.md`](docs/README.md) |
 
 ## 4. Le minimum avant de conclure
 

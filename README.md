@@ -248,6 +248,8 @@ neutre (la « RSN »), jamais un « jeton » de tokeniseur. Le glossaire : [`doc
 
 ## Par où commencer
 
+0. [`docs/carte.md`](docs/carte.md) — **la carte** : trouver un sujet (un concept, un chantier, une phase)
+   directement, fichier par fichier ;
 1. [`docs/vision.md`](docs/vision.md) — la vision complète (le cœur et les cinq axes) ;
 2. [`AGENTS.md`](AGENTS.md) — la mission et les règles non négociables ;
 3. [`docs/en-cours.md`](docs/en-cours.md) — l'état courant, daté ;

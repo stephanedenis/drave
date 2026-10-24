@@ -91,6 +91,6 @@ Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbali
 
 ## La carte de la documentation
 
-[`AGENTS.md`](../AGENTS.md) — la mission et les règles ; [`docs/README.md`](README.md) — l'inventaire ;
+[`carte.md`](carte.md) — **la carte des sujets** : un lien par fichier ; [`AGENTS.md`](../AGENTS.md) — la mission et les règles ; [`docs/README.md`](README.md) — l'inventaire ;
 [`roadmap.md`](roadmap.md) — le plan et la file « jamais en attente » ; [`synthese/index.md`](synthese/index.md) — la
 théorie ; [`reports/`](../reports/) et [`journal/`](../journal/) — les résultats et le récit.

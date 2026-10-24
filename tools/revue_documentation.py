@@ -56,7 +56,7 @@ def main() -> int:
                     alertes.append(f"annotation : {f.relative_to(RACINE)} → {cible} (cassé)")
     # 6. vocabulaire : « jeton » ne désigne jamais la RSN ✓✓
     for f in (RACINE / "docs").rglob("*.md"):
-        if f.name == "glossaire.md":      # le glossaire cite les formes interdites pour les définir ✓
+        if f.name == "glossaire.md" or f.parent.name == "glossaire":      # le glossaire cite les formes interdites pour les définir ✓
             continue
         for m in re.finditer(r"jeton[s]?\s+(sémantique|de sens|neutre)", f.read_text(), re.I):
             alertes.append(f"vocabulaire : {f.relative_to(RACINE)} → « {m.group(0)} » "

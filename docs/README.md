@@ -4,6 +4,9 @@
 > dans [`reports/`](../reports/). Ici : ce qui **reste vrai** quand les chiffres changent — la vision, l'état,
 > l'architecture, les concepts, et les modes d'emploi.
 
+> **Chercher un sujet** (un concept, un chantier, une phase, une activité en cours) : la
+> [carte des sujets](carte.md) — un lien par fichier, pour ne pas se noyer dans un long document.
+
 ## La vision, en un paragraphe
 
 **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut** : les activations sont
