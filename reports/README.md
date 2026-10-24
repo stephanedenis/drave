@@ -115,7 +115,8 @@
 - [`nli-gqnli-3b.json`](nli-gqnli-3b.json) — GQNLI-FR au 3 B (0,80, le 3 B décroche)
 - [`rapport-nli-francais-dur.md`](rapport-nli-francais-dur.md) — le NLI français plus dur que XNLI (le rapport)
 - [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
-- [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md) — le 32 B et le confondant de la couche relative
+- [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md)
+- [`rapport-carte-raisonnement-naturel.md`](rapport-carte-raisonnement-naturel.md) — **la synthèse** : quatre mesures, trois courbes, deux axes, quatre leçons — le 32 B et le confondant de la couche relative
 - [`registre-dialogue-diabla-1.5b.json`](registre-dialogue-diabla-1.5b.json) — DiaBLa au 1,5 B (+40,3/+44,2, **post-éditions** : une borne haute)
 - [`registre-dialogue-diabla-refs-3b.json`](registre-dialogue-diabla-refs-3b.json) — DiaBLa au 3 B, références indépendantes (+38,1/+41,3 : la traduction profite de la taille)
 - [`registre-dialogue-opensubs-1.5b.json`](registre-dialogue-opensubs-1.5b.json) — OpenSubtitles au 1,5 B (+27,0/+30,4, les sous-titres humains)
