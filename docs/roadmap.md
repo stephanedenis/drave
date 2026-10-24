@@ -173,9 +173,14 @@ que la carte ne mesure pas encore.
 | B4.2 | **L'opérateur appris** : la négation entraînée dans l'état (comme le plan, mesure 119), pas lue par la sonde | ✅ mesuré — **apprenable, pas transférable** | une sonde **réentraînée** sur le nié lit la relation basculée à **0,7042** (hasard 0,5, contrôle 0,4952) ; mais la sonde de l'original ne lit pas le nié (0,4148) et réciproquement (0,3312) — **l'opérateur est une géométrie locale, pas une direction** — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
 | B4.3 | **Les deux opérations dans un seul opérateur** : l'identité et la négation, apprises ensemble | ✅ mesuré — **elles coexistent** | le mélange (l'original + le nié) lit l'original à **0,7749** et le nié à **0,6977** (contrôle 0,4791) : l'opérateur est un **sous-espace** (une relation + une polarité), pas une direction — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
 | B4.4 | **La composition** : le nié du nié revient-il à l'original ? | ✅ mesuré — **négatif** | le double nié n'est pas lu comme l'original : **0,5691** (contre 0,8103 de référence), et le mélange est **sous** le hasard (0,3601) — l'opérateur n'est pas une **algèbre**, les opérations sont des sous-espaces appris (B4.3) — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
-| B4.5 | **La composition apprise** : le nié du nié entraîné comme une tâche (le LoRA de la mesure 119) | ⏳ | le double nié est lu comme l'original **après** entraînement, contrôle au hasard |
+| B4.5 | **La composition apprise** : le nié du nié entraîné comme une tâche | ✅ mesuré — **apprenable, faiblement** | le triple (original, nié, double nié) lit le double à **0,6174** (contrôle 0,4598) — **+0,117** sur le hasard, contre 0,8103 pour l'original : *rien ne se compose gratuitement* — [`reports/rapport-operateur-negation.md`](../reports/rapport-operateur-negation.md) |
 
-**Prochaine action** : B4.5 — la **composition apprise** (le nié du nié entraîné comme une tâche) : B4.4 a montré que rien ne se compose gratuitement.
+**Bilan de B4** : les opérations sont des **géométries apprises**, locales, non compositionnelles gratuitement —
+et la composition s'apprend à un coût (0,6174). *L'état porte les opérations, mais il ne les calcule pas.*
+
+**Prochaine action** : aucune sur B4 — la ligne est close ; les suites sont **hors du plan** (le LoRA qui modifie
+l'état, mesure 119 ; une troisième opération). Le plan reprend à **A8.3** (brancher `choisir_avec_perte`) puis **A7.3**
+(la grappe intra-couche).
 
 ---
 

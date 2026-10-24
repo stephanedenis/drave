@@ -20,5 +20,7 @@
  "double_original": 0.5691,
  "double_mixte": 0.3601,
  "double_negatif": 0.3344,
- "double_controle": 0.508
+ "double_controle": 0.508,
+ "appris_double": 0.6174,
+ "appris_double_controle": 0.4598
 }

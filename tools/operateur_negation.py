@@ -87,6 +87,8 @@ def principal() -> int:
     Etr_neg = etats(tr_neg)
     te_double = [(s1, f"Il est faux que : il est faux que : {s2}", y) for s1, s2, y in te]
     Ete_double = etats(te_double)
+    tr_double = [(s1, f"Il est faux que : il est faux que : {s2}", y) for s1, s2, y in tr]
+    Etr_double = etats(tr_double)
     ytr = np.array([p[2] for p in tr])
     yte = np.array([p[2] for p in te])
 
@@ -119,6 +121,11 @@ def principal() -> int:
         "double_mixte": round(float(np.mean(sonde(E_mix, y_mix, Ete_double, 2) == yte)), 4),
         "double_negatif": round(float(np.mean(sonde(Etr_neg, np.array([p[2] for p in tr_neg]), Ete_double, 2) == yte)), 4),
         "double_controle": round(float(np.mean(sonde(E_mix, rng2.permutation(y_mix), Ete_double, 2) == yte)), 4),
+        # B4.5 — la composition APPRISE : le triple (original, nié, double nié) avec les cibles (y, 1−y, y)
+        "appris_double": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg, Etr_double]),
+                                                    np.concatenate([ytr, 1 - ytr, ytr]), Ete_double, 2) == yte)), 4),
+        "appris_double_controle": round(float(np.mean(sonde(np.vstack([Etr, Etr_neg, Etr_double]),
+                                                             rng2.permutation(np.concatenate([ytr, 1 - ytr, ytr])), Ete_double, 2) == yte)), 4),
     }
     for k, v in res.items():
         print(f"  {k}: {v}")

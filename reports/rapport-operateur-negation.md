@@ -86,6 +86,32 @@ plan s'entraîne (mesure 119), la composition est alignée par un pont, mais rie
 **Ce que ça ne dit pas** : « Il est faux que » une fois ou deux est une négation de **surface** ; la négation
 grammaticale et une négation **apprise** (LoRA) restent à tester. Et une seule couche (la 22).
 
+## B4.5 — la composition **s'apprend**, mais faiblement
+
+| | |
+|---|---:|
+| le triple (original, nié, double nié) → le double nié (cible : l'original) | **0,6174** |
+| contrôle (étiquettes mélangées) | 0,4598 |
+
+**La composition est apprenable, mais c'est la plus coûteuse des quatre tâches** : 0,6174 (soit **+0,117** sur le
+hasard) contre 0,8103 pour l'original, 0,7042 pour le nié seul et 0,7749/0,6977 pour le mélange. *Rien ne se compose
+gratuitement* : l'état porte la composition, mais il faut la lui **apprendre**, et elle coûte plus que les opérations
+qu'elle combine.
+
+## Le bilan de B4
+
+| mesure | la question | la réponse |
+|---|---|---|
+| **B4.1** | l'opérateur est-il une **direction** ? | **non** — 0,4148 (sous le hasard), la garde 0,5852 |
+| **B4.2** | est-il **apprenable** ? | **oui** — 0,7042 en réentraînant, mais **pas transférable** (0,3312) |
+| **B4.3** | deux opérations tiennent-elles ensemble ? | **oui** — 0,7749/0,6977, un **sous-espace** (relation + polarité) |
+| **B4.4** | la composition est-elle **algébrique** ? | **non** — le nié du nié ne revient pas (0,5691) |
+| **B4.5** | est-elle **apprenable** ? | **oui, faiblement** — 0,6174 |
+
+**La réponse de B4 à la question de l'étage 2** : les opérations sont des **géométries apprises**, locales, non
+compositionnelles gratuitement — et la composition s'apprend à un **coût**. C'est la carte la plus précise que le
+projet ait du « penser sans verbaliser » : *l'état porte les opérations, mais il ne les calcule pas.*
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation

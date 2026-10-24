@@ -28,7 +28,8 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
 2. **B4 les opérateurs abstraits** : **B4.1** (la négation n'est pas une direction : flip 0,4148) ; **B4.2** (elle
    est **apprenable** — 0,7042 en réentraînant — mais **pas transférable**) ; **B4.3** (les deux opérations — l'identité
    et la négation — **coexistent** dans un seul opérateur : 0,7749/0,6977 — un **sous-espace**, pas une direction) ;
-   **B4.4** (la **composition échoue** : le nié du nié ne revient pas, 0,5691 — ce n'est pas une **algèbre**).
+   **B4.4** (la **composition échoue** : le nié du nié ne revient pas, 0,5691 — ce n'est pas une **algèbre**) ;
+   **B4.5** (elle **s'apprend**, faiblement : 0,6174 — *rien ne se compose gratuitement*). **B4 est close.**
 3. **A8 l'ordonnanceur place et perte** : le terme de perte est **codé et testé** (`choisir_avec_perte`, 3 tests) ;
    reste à le brancher dans `model.rs`.
 
