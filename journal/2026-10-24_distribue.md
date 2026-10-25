@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (28)
+## Commits du jour (29)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -36,6 +36,7 @@
 | 23:27 | `358edaeb` | ROADMAP — LA FILE DIT LA NOUVELLE PHASE FAITE : A7 (le relais, la grappe a 21 %, la grappe deportee a 4,22x), B4 (les six mesures de l'operateur, jusqu'au LoRA qui inverse), A8 (la regle place+perte branchée en opt-in). Les trois lignes ne sont plus « a faire » — elles sont mesurees et closes | `roadmap.md`, `2026-10-24.md`, `2026-10-24_docs.md` |
 | 23:30 | `b17bee8c` | DOC — LA PORTE D'ENTREE ET LA MISSION DISENT LA PHASE FAITE : A7, B4, A8 ne sont plus « la nouvelle phase » a venir — elles sont faites, mesurees et closes (A7 : le relais, la grappe a 21 %, le transport a 4,22x ; B4 : les six mesures, jusqu'au LoRA qui inverse ; A8 : la regle branchée en opt-in). Le pic du 32 B et la prose scientifique restent nommes | `AGENTS.md`, `mission.md`, `2026-10-24.md` (+2) |
 | 23:31 | `13db82c5` | DOC — LA VISION DIT LES AXES 2 ET 3 FAITS : le tableau des cinq axes renvoyait a A8 et A7 comme a venir ; il dit maintenant A8, fait (la regle place+perte, opt-in) et A7, fait (le relais 42,5477, la grappe a 21 %, le transport a 4,22x). La demonstration distante reste bloquee par le compte Colab | `vision.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
+| 23:33 | `37f02537` | README — CE QUI EST FAIT, CE QUI RESTE OUVERT : le README disait qu'A7 « reste a faire », que B4 « n'est pas encore mesure », qu'A8 « manque » — c'etait perime. Il dit maintenant : fait, mesure (A7 : relais 42,5477, grappe 21 %, transport 4,22x ; B4 : les six mesures, jusqu'au LoRA qui inverse ; A8 : la regle en opt-in) et reste ouvert, bloque par le dehors (la prose, le 32 B, les langues/Colab/FPGA) | `README.md`, `2026-10-24.md`, `2026-10-24_distribue.md` (+1) |
 
 ## Chiffres du jour
 

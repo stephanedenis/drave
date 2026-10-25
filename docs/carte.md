@@ -31,7 +31,7 @@
 | **le pont linéaire** — l'alignement des langues | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) |
 | **la structure bat la taille** — la thèse, mesurée | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la carte du raisonnement](../reports/rapport-carte-raisonnement-naturel.md) |
 | **le point de mesure** — la huitième leçon | [la synthèse 06](synthese/06-comment-savoir.md) · [le NLI dur](../reports/rapport-nli-francais-dur.md) |
-| **les opérateurs abstraits** — l'étage 2 | [la négation, mesure B4.1](../reports/rapport-operateur-negation.md) · [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) |
+| **les opérateurs abstraits** — l'étage 2 | [la négation, les **six** mesures de B4](../reports/rapport-operateur-negation.md) · [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) |
 | **les négatifs** — ce que la mesure a refusé | [le capteur hebbien](../reports/rapport-hebbien-produits.md) · [l'élagage](../reports/rapport-elagage-logs.md) · [la tête 4 bits](../reports/rapport-placement-kv-8k.md) |
 
 ## Les sept chantiers
@@ -56,12 +56,12 @@
 | **A4** rejouer et comparer | [la vision § 5](vision.md) · [les portes](agent/portes.md) |
 | **A5** formats, matériels, énergie | [la vision § 6](vision.md) · [le format de flux](format-flux.md) · [le NUMA](numa-segregation.md) |
 | **A6** apprendre des flux | [le capteur hebbien](../reports/rapport-hebbien-produits.md) · [l'élagage](../reports/rapport-elagage-logs.md) · [l'heuristique](hebbien-differentiel-et-biologie.md) |
-| **A7** la grappe déportée | [la roadmap](roadmap.md) · [la greffe](../tools/porte-greffe.sh) |
-| **A8** l'ordonnanceur place et perte | [la roadmap](roadmap.md) · [le placement](../reports/rapport-placement-kv-8k.md) |
+| **A7** la grappe déportée — **fait** (42,5477, 21 %, 4,22×) | [la roadmap](roadmap.md) · [la greffe](../tools/porte-greffe.sh) |
+| **A8** l'ordonnanceur place et perte — **fait, opt-in** | [la roadmap](roadmap.md) · [le placement](../reports/rapport-placement-kv-8k.md) |
 | **B1** l'entrée-sortie | [la roadmap](roadmap.md) · [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) · [DiaBLa](../reports/rapport-dialogue-diabla.md) |
 | **B2** la représentation et le raisonnement | [la roadmap](roadmap.md) · [la carte du raisonnement](../reports/rapport-carte-raisonnement-naturel.md) |
 | **B3** le plan et la dynamique | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la roadmap](roadmap.md) |
-| **B4** les opérateurs abstraits | [la négation](../reports/rapport-operateur-negation.md) · [la roadmap](roadmap.md) |
+| **B4** les opérateurs abstraits — **close** (six mesures) | [la négation](../reports/rapport-operateur-negation.md) · [la roadmap](roadmap.md) |
 
 ## Les activités en cours
 
