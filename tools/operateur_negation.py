@@ -89,7 +89,7 @@ def principal() -> int:
         import sys
         sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
         from adaptateur_langue import poser_lora
-        model = poser_lora(model, rang=8)
+        poser_lora(model, rang=8)   # modifie le modèle EN PLACE ; il rend la liste des conteneurs
         model.train()
         opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=1e-4)
         oui = tok(" oui", add_special_tokens=False).input_ids[0]
