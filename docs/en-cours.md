@@ -64,7 +64,7 @@ Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbali
 |---|---|
 | **C1** corpus et généalogie | ✅ fait (UDHR 448 langues, Glottolog) |
 | **C2** traduction | ✅ mesuré (le juge post-cutoff, le plancher, la marge) |
-| **C3** restitution | ✅ mesuré (85 % pour un modèle spécialisé, détruite à 10 langues) |
+| **C3** restitution | ✅ mesuré (85 % pour un modèle spécialisé, détruite à 10 langues) ; **C3.2 fait** : un module par famille, **4 familles sur 5 au-dessus de la référence** (de 14,7 % à 100 %) |
 | **C4** dialectes et styles | ✅ mesuré (lisibles ; l'époque reste à contrôler) |
 | **C5** qualité par domaine | ✅ les **six registres** + le **dialogue spontané** (DiaBLa) |
 | **C6** documentation | ✅ fait (l'inventaire, la revue, les portes) |
@@ -95,8 +95,7 @@ Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbali
 
 - **Bloquées par une ressource** : **B1.5** (le corpus d'articles humain), **A3.4** (le compte Colab), **A5.4** (la
   carte Stratix V), **A6.2** (un MoE local).
-- **Ouvertes sans blocage** : les **modules par famille** pour la restitution (C3, la suite), le **pic du 32 B**
-  (10-20 h en 4 bits, nommé, non forcé — la décision est humaine).
+- **Ouvertes sans blocage** : le **pic du 32 B** (10-20 h en 4 bits, nommé, non forcé — la décision est humaine).
 - **Tranchée** : les **styles à époque contrôlée** — C4 est **mesuré** (les dialectes sont lisibles) ; ce qui reste est
   de **contrôler la date** dans tout test de style (la leçon Panini : la surface capte +0,138, la filiation +0,049),
   et c'est une **règle de méthode**, pas une ligne de plan.
