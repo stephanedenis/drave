@@ -210,7 +210,9 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
 - **fait, mesuré** : B2.6, B2.7, B2.8, A2.5, A2.6 (la règle ; la tête **revertée**), A4.3, A1.5, A5.3, A6.1, A6.3 ;
-- **la nouvelle phase** : A7 (la grappe), B4 (les opérateurs), A8 (l'ordonnanceur place et perte) ;
+- **la nouvelle phase (faite, mesurée)** : A7 (le relais, la grappe intra-couche à 21 %, la grappe déportée à
+  4,22×), B4 (les **six** mesures de l'opérateur : pas une direction, apprenable, un sous-espace, pas une algèbre, une
+  composition apprise, le LoRA qui **inverse**), A8 (la règle place+perte, **branchée en opt-in**) ;
 - **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
   (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est
