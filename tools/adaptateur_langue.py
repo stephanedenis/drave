@@ -45,14 +45,12 @@ def poser_lora(modele, rang: int, alpha: float = 16.0):
             # alors que le noyau est sur cuda:0, ils faisaient échouer la première multiplication ✓✓ (le
             # quatorzième piège de la nuit : deux objets qui doivent être ensemble et ne le sont pas).
             dev = base.weight.device
-            self.A = nn.Parameter((torch.randn(r, base.in_features, generator=gen,
-                                              dtype=base.weight.dtype) * 0.01).to(dev))
-            self.B = nn.Parameter(torch.zeros(base.out_features, r, device=dev,
-                                               dtype=base.weight.dtype))
+            self.A = nn.Parameter((torch.randn(r, base.in_features, generator=gen) * 0.01).to(device=dev, dtype=torch.float32))
+            self.B = nn.Parameter(torch.zeros(base.out_features, r, device=dev, dtype=torch.float32))
             self.ech = a_ / r
 
         def forward(self, x):
-            return self.base(x) + self.ech * ((x @ self.A.T) @ self.B.T)
+            return self.base(x) + (self.ech * ((x.float() @ self.A.T) @ self.B.T)).to(x.dtype)
 
     poses = []
     choisies = {int(x) for x in COUCHES_CIBLES.split(",") if x.strip()} or None
