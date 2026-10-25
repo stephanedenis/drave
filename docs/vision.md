@@ -304,8 +304,8 @@ Pour que le document serve à quelque chose, il doit aussi refuser des choses :
 | axe | état | prochain pas |
 |---|---|---|
 | **1. Observer/régler par neurone** | ✅ le format de trace **v2**, le diff par couche **dans la porte** (18 s) | — |
-| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) ; **la règle de placement est écrite** (`placement.rs`, `choisir`, 4 tests) et le KV l'applique | l'ordonnanceur **complet** : porter la place **et** la perte — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de PPL → **A8** |
-| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | la **grappe déportée** : exécuter une couche sur une autre ressource, pilotée par les flux — la greffe est **branchée** (648 s) → **A7** ; la démonstration distante reste bloquée par le compte Colab |
+| **2. Répartir sur composants** | mesuré (KV, attention, tête, experts) ; **la règle de placement est écrite** (`placement.rs`, `choisir`, 4 tests) et le KV l'applique | l'ordonnanceur **complet** : porter la place **et** la perte — la tête l'a montré, le 4 bits « qui tient » coûte +10 % de PPL → **A8, fait** (la règle place+perte, branchée en **opt-in**) |
+| **3. Répartir sur machines** | **transport en place et fidèle** (`0,00e0`, protocole v5, cinq modes) ; mesuré : 1 608 octets/flux, 0,25 Mbit/s, latence ≤ 20 ms | la **grappe déportée** : exécuter une couche sur une autre ressource, pilotée par les flux — la greffe est **branchée** (648 s), le relais rend **42,5477**, la grappe exacte est à **21 %**, le transport à **4,22×** → **A7, fait** ; la démonstration distante reste bloquée par le compte Colab |
 | **4. Rejouer/comparer** | ✅ portes, références indépendantes, **diff par couche**, rejeu | — |
 | **5. Formats/matériels/énergie** | trois matériels, formats au point | ✅ la quantification par couche est un **curseur** (l'int8 tardif +0,03 %, le 4 bits +2,7 %) — mesuré, appliqué |
 
