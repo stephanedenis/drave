@@ -42,7 +42,8 @@ tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte
 (0,4148 → 0,7042 → 0,7749/0,6977 → 0,5691 → 0,6174) ; **A7** est complète (le relais 42,5477, le flux 1 608
 octets, la grappe exacte à 21 %) ; **A8** est branchée en **opt-in** (la règle rend le choix de la main) ; **les trois
 passes** du 24/10 (10 h 53, 19 h 04, 21 h 35) sont **45/47** (les deux structurels seuls, aucun rouge nouveau,
-**toutes les références stables**) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153).
+**toutes les références stables**) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153) ; **C3.2 est fait** : un module de restitution **par famille**, et **4 familles sur 5
+au-dessus de la référence** (de 14,7 % à 100 %).
 
 ## Où l'on en est (les chiffres qui comptent)
 
