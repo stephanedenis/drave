@@ -41,8 +41,10 @@ class LoRA(nn.Module):
     def __init__(self, module: nn.Linear, rang: int, alpha: float, graine: int = 0):
         super().__init__()
         g = torch.Generator().manual_seed(graine)
-        self.A = nn.Parameter(torch.randn(rang, module.in_features, generator=g) * 0.01)
-        self.B = nn.Parameter(torch.zeros(module.out_features, rang))
+        # Les paramètres du LoRA doivent vivre sur le MÊME DISPOSITIF que le noyau (le piège du 14e jour).
+        self.A = nn.Parameter((torch.randn(rang, module.in_features, generator=g) * 0.01)
+                              .to(module.weight.device))
+        self.B = nn.Parameter(torch.zeros(module.out_features, rang, device=module.weight.device))
         self.echelle = alpha / rang
         self.base = module
 
