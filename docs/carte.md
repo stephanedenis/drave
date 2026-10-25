@@ -40,7 +40,7 @@
 |---|---|
 | **C1** corpus et généalogie | [la généalogie](genealogie-des-langues.md) · [le corpus Panini](note-corpus-panini.md) · [l'ingestion](note-ingestion-corpus.md) |
 | **C2** traduction | [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) · [les mesures 39-76](../reports/07-mesures-couche-commune.md) |
-| **C3** restitution | [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) · [la garde de tête](modele-pour-drave.md) |
+| **C3** restitution | [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) · [la garde de tête](modele-pour-drave.md) · [**C3.2 — les modules par famille**](../reports/rapport-modules-famille.md) (4 familles sur 5 au-dessus de la référence) |
 | **C4** dialectes et styles | [la généalogie](genealogie-des-langues.md) · [les mesures 42-47](../reports/07-mesures-couche-commune.md) |
 | **C5** qualité par domaine | [les six registres](../reports/07-mesures-couche-commune.md) · [le NLI dur](../reports/rapport-nli-francais-dur.md) |
 | **C6** documentation et rangement | [l'organisation](organisation-du-depot.md) · [l'inventaire](README.md) · [la présente carte](carte.md) |
