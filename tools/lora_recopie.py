@@ -127,10 +127,10 @@ def main() -> int:
             for t in textes:
                 for recopie in (True, False):
                     inv, cible = paire(t, recopie)
-                    b = tok(inv, return_tensors="pt").input_ids
+                    b = tok(inv, return_tensors="pt").input_ids.to("cuda")
                     g = modele.generate(b, max_new_tokens=L, do_sample=False,
                                         pad_token_id=tok.eos_token_id)
-                    sortie = tok.decode(g[0][b.shape[1]:])
+                    sortie = tok.decode(g[0][b.shape[1]:].cpu())
                     c = 0
                     for x, y in zip(sortie, cible):
                         if x != y: break
@@ -154,8 +154,8 @@ def main() -> int:
         pertes = []
         for t in lot:
             inv, cible = paire(t, True)                  # on n'entraîne QUE la recopie ✓
-            b = tok(inv, return_tensors="pt").input_ids[0]
-            c = tok(cible, return_tensors="pt").input_ids[0]
+            b = tok(inv, return_tensors="pt").input_ids[0].to("cuda")
+            c = tok(cible, return_tensors="pt").input_ids[0].to("cuda")
             seq = torch.cat([b, c]).unsqueeze(0)
             logits = m(seq).logits[0]
             # la perte ne porte QUE sur les jetons de la CIBLE ✓ (sinon on apprend l'invite ✗)
