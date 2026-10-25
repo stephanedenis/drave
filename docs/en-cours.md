@@ -95,8 +95,11 @@ Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbali
 
 - **Bloquées par une ressource** : **B1.5** (le corpus d'articles humain), **A3.4** (le compte Colab), **A5.4** (la
   carte Stratix V), **A6.2** (un MoE local).
-- **Ouvertes sans blocage** : les **styles à époque contrôlée** (les couples contemporains), les **modules par
-  famille** pour la restitution, le **pic du 32 B** (10-20 h en 4 bits, nommé, non forcé).
+- **Ouvertes sans blocage** : les **modules par famille** pour la restitution (C3, la suite), le **pic du 32 B**
+  (10-20 h en 4 bits, nommé, non forcé — la décision est humaine).
+- **Tranchée** : les **styles à époque contrôlée** — C4 est **mesuré** (les dialectes sont lisibles) ; ce qui reste est
+  de **contrôler la date** dans tout test de style (la leçon Panini : la surface capte +0,138, la filiation +0,049),
+  et c'est une **règle de méthode**, pas une ligne de plan.
 
 ## La carte de la documentation
 
