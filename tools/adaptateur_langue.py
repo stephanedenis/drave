@@ -45,8 +45,10 @@ def poser_lora(modele, rang: int, alpha: float = 16.0):
             # alors que le noyau est sur cuda:0, ils faisaient échouer la première multiplication ✓✓ (le
             # quatorzième piège de la nuit : deux objets qui doivent être ensemble et ne le sont pas).
             dev = base.weight.device
-            self.A = nn.Parameter((torch.randn(r, base.in_features, generator=gen) * 0.01).to(dev))
-            self.B = nn.Parameter(torch.zeros(base.out_features, r, device=dev))
+            self.A = nn.Parameter((torch.randn(r, base.in_features, generator=gen,
+                                              dtype=base.weight.dtype) * 0.01).to(dev))
+            self.B = nn.Parameter(torch.zeros(base.out_features, r, device=dev,
+                                               dtype=base.weight.dtype))
             self.ech = a_ / r
 
         def forward(self, x):
