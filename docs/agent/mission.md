@@ -72,8 +72,10 @@ Les 173 mesures ont déplacé le centre de gravité du projet. **Trois constats,
    encore **aucune couche ailleurs**. C'est pourtant le cœur de la vision : la **grappe déportée**, et l'ordonnanceur
    qui porte la place **et** la perte. → **A7 et A8.**
 
-**L'ordre de la nouvelle phase** : **A7** (la grappe, la plus proche de la vision), **B4** (les opérateurs, le plus
-neuf scientifiquement), **A8** (l'ordonnanceur, le plus ingénieur). Tout le reste est **nommé** ou bloqué.
+**L'ordre de la nouvelle phase (faite)** : **A7** (la grappe, la plus proche de la vision) — **close** : le relais,
+la grappe à 21 %, le transport à 4,22× ; **B4** (les opérateurs, le plus neuf scientifiquement) — **close** : les six
+mesures, jusqu'au LoRA qui **inverse** ; **A8** (l'ordonnanceur, le plus ingénieur) — **branché** en **opt-in**.
+Tout le reste est **nommé** ou bloqué.
 
 ## L'ordre des priorités
 

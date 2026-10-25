@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (25)
+## Commits du jour (26)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -33,10 +33,11 @@
 | 21:24 | `ccf47752` | B4.6 — LE LORA DE LA NEGATION INVERSE LA LECTURE : l'entrainement converge (perte 0,0022) et le modele reste intact (0,8135), mais le flip_sonde est 0,2283 = 1 - garde_sonde (0,7717) — le LoRA apprend la SURFACE (« il est faux que ») comme un marqueur d'inversion, pas l'operation. Negatif de B4.6, coherent avec B4.2 (la geometrie). La reserve est ecrite (le 1 - p peut etre un artefact de la sonde, le controle est le LoRA sur les paires originales) | `en-cours.md`, `roadmap.md`, `2026-10-24.md` (+3) |
 | 21:26 | `8dfeb5a5` | B4.6 — LE CONTROLE --lora-original : entrainer le LoRA sur les paires ORIGINALES (sans nier). Si le flip_sonde reste a ~0,41 (le B4.1), le LoRA a appris quelque chose de specifique ; s'il tombe a ~0,23 comme le LoRA nie, c'est la sonde qui rend le complement — la reserve de la fiche est tranchee par ce run | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 | 21:34 | `7fdabd19` | B4.6 — LE CONTROLE TRANCHE : le LoRA entraine sur les paires ORIGINALES donne flip_sonde 0,4662 (proche du 0,41 du B4.1), contre 0,2283 pour le LoRA nie — le LoRA nie a bien appris quelque chose de specifique, ce n'est pas la sonde seule. Mais flip_sonde + garde_sonde = 1,0000 dans les DEUX cas : le LoRA retourne la reponse, il ne transfere pas l'operation. Le negatif de B4.6 tient | `2026-10-24.md`, `2026-10-24_distribue.md`, `rapport-operateur-negation.md` |
+| 23:27 | `358edaeb` | ROADMAP — LA FILE DIT LA NOUVELLE PHASE FAITE : A7 (le relais, la grappe a 21 %, la grappe deportee a 4,22x), B4 (les six mesures de l'operateur, jusqu'au LoRA qui inverse), A8 (la regle place+perte branchée en opt-in). Les trois lignes ne sont plus « a faire » — elles sont mesurees et closes | `roadmap.md`, `2026-10-24.md`, `2026-10-24_docs.md` |
 
 ## Chiffres du jour
 
-`0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135` · `0,7717` · `723 paires` · `60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %`
+`21 %` · `0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135` · `0,7717` · `723 paires` · `60,8135` · `42,5477` · `1 %` · `+2,28 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
