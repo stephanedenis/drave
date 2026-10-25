@@ -49,7 +49,9 @@ L'application, par-dessus les flux. **Deux étages, dans cet ordre** :
 1. **L'entrée-sortie linguistique** — lire et produire **toutes** les langues, dialectes et styles, dans les
    registres **techniques, littéraires, juridiques, quotidiens**. On la juge en **qualité de traducteur**
    (*restitution* à l'identique, *traduction* du sens). On ne « déclare complet » que sur des **chiffres** qui
-   couvrent langues, dialectes, styles et domaines.
+   couvrent langues, dialectes, styles et domaines. **C3.2** a mesuré la restitution **par famille** : 4 familles
+   sur 5 au-dessus de la référence (de 14,7 % à 100 %), le contrôle à 0 % — et la cinquième (l'indo-européen, la plus
+   grande) dit où le travail reste.
 2. **La pensée abstraite, indépendante de la langue** — **seulement après** une entrée-sortie fiable. On la juge
    sur des **opérations** : représenter, composer, inférer, planifier. C'est le sens de « penser sans verbaliser » :
    lire la réponse dans l'**état**, avant et sans la génération.
