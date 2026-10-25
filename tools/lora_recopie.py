@@ -159,7 +159,7 @@ def main() -> int:
             pertes.append(nn.functional.cross_entropy(lg, c))
         perte = torch.stack(pertes).mean()
         opt.zero_grad(); perte.backward(); opt.step()
-        if pas % a.eval_tous == 0 or pas == a.pas:
+        if a.eval_tous > 0 and (pas % a.eval_tous == 0 or pas == a.pas):
             t = taux_recopie(m, eval_txt)
             print(f"  pas {pas:>5} · perte {float(perte):.4f} · recopie {t[0]:5.1f} % · contrôle {t[1]:5.1f} %"
                   f" · {time.time() - t0:.0f} s")
