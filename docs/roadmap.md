@@ -189,6 +189,26 @@ l'état, mesure 119 ; une troisième opération). Le plan reprend à **A8.3** (b
 
 ---
 
+## La suite de C3 — les modules par famille
+
+Le chantier C3 (la restitution) est **mesuré** : 85,1 % de fragments exacts à une langue, puis 30 % → 4,4 % → 0,4 % →
+0,6 % à 1/10/50/448 langues — **la restitution exacte meurt entre 1 et 10 langues**. La suite est de donner à chaque
+**famille** son module, au lieu d'un module unique.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| C3.2a | **Le découpage par famille** : la généalogie (`data/udhr/genealogie.json`, 441 langues, 55 familles) donne les textes de chaque famille | ⏳ à faire | les 10 familles de plus de 9 langues ont leur corpus d'identifiants |
+| C3.2b | **Un module par famille** : `tools/lora_recopie.py --ids <famille>` | ⏳ à faire | le taux de recopie par famille, mesuré |
+| C3.2c | **La comparaison à la courbe** : le module par famille doit **casser la chute entre 1 et 10 langues** | ⏳ à faire | le taux à 10 langues **dépasse** le 4,4 % de la référence |
+
+**Prochaine action** : C3.2a — découper le corpus par famille (les 10 familles de plus de 9 langues) et produire les
+`--ids` par famille.
+
+**Ce qui pourrait le rendre faux** : le corpus UDHR est **parallèle** (les mêmes articles dans toutes les langues) —
+un module par famille peut apprendre la **surface** de la famille sans apprendre la restitution. Le contrôle : la
+**même mesure** à 1 langue (le 85,1 % de référence) doit tenir par famille, et la courbe doit être **comparée** à
+celle du module unique.
+
 ## L'ordre du jour (carpe diem)
 
 L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloquées sont mesurées** (24/10) :
