@@ -1,7 +1,7 @@
 # 8. Les opérations : ce que l'état porte, et ce qu'il ne calcule pas
 
 > Chapitre de synthèse, 24/10/2026 — il relie deux choses mesurées le même jour : les **opérations** de l'étage 2
-> (B4, cinq mesures) et la **grappe** du moteur (A7.3). Les fiches :
+> (B4, six mesures) et la **grappe** du moteur (A7.3). Les fiches :
 > [`rapport-operateur-negation.md`](../../reports/rapport-operateur-negation.md) et
 > [`rapport-grappe-intra-couche.md`](../../reports/rapport-grappe-intra-couche.md). Index de la synthèse :
 > [`index.md`](index.md).
@@ -13,7 +13,7 @@ raisonnement (chapitre 5) a montré que **l'état porte** le raisonnement (la so
 **pont linéaire l'aligne** (0,87) et que le **plan résiste**. La question de ce chapitre est celle des
 **opérations** : que devient une opération — la négation — dans l'état ?
 
-## Les cinq mesures de B4
+## Les six mesures de B4
 
 | la question | la réponse | le chiffre |
 |---|---|---|
@@ -22,6 +22,7 @@ raisonnement (chapitre 5) a montré que **l'état porte** le raisonnement (la so
 | deux opérations **ensemble** ? | **oui** | 0,7749 / 0,6977 — un **sous-espace** |
 | la composition est-elle **algébrique** ? | **non** | 0,5691 (le double nié ne revient pas) |
 | est-elle **apprenable** ? | **oui, faiblement** | 0,6174 |
+| l'opération apprise dans les **poids** se transfère-t-elle ? | **non — elle s'inverse** | 0,2283 = `1 − 0,7717` |
 
 **La phrase du chapitre** : *l'état porte les opérations, mais il ne les calcule pas.* Les opérations sont des
 **géométries apprises**, locales, non compositionnelles gratuitement — la même leçon que le plan (mesure 119) et que
@@ -39,6 +40,14 @@ Le moteur sait ne calculer que les **k** neurones les plus actifs d'une projecti
 
 **La grappe exacte existe à 21 %** : 79 % des neurones FFN ne changent rien sur ce corpus. C'est la **densité
 naturelle** des activations (SwiGLU) que la grappe épouse, pas une approximation choisie.
+
+## La sixième mesure : le LoRA, et l'inversion
+
+Le LoRA de la négation (B4.6) entraîne le modèle sur les paires niées. Le résultat : le modèle reste intact
+(`reference_orig` 0,8135), l'entraînement converge (la perte 0,0022), et le `flip_sonde` tombe à **0,2283** =
+`1 − garde_sonde` (0,7717). Le contrôle (le LoRA entraîné sur les paires **originales**) donne 0,4662 : le LoRA nié a
+donc bien appris **quelque chose de spécifique** — mais ce quelque chose est **l'inverse** de la lecture, pas
+l'opération. *L'entraînement ne transfère pas l'opération : il retourne la réponse.*
 
 ## Ce que les deux disent ensemble
 
