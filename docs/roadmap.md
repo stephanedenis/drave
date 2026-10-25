@@ -201,13 +201,14 @@ Le chantier C3 (la restitution) est **mesuré** : 85,1 % de fragments exacts à 
 | C3.2b | **Un module par famille** : `tools/lora_recopie.py --famille <famille>` | ✅ **mesuré** | l'indo-européen (98 langues, 3 688 articles) recopie à **100 %** après 200 pas (0 % avant), le **contrôle 0 %** — [`reports/rapport-modules-famille.md`](../reports/rapport-modules-famille.md) |
 | C3.2c | **La comparaison à la courbe** : le module par famille doit **casser la chute entre 1 et 10 langues** | ✅ **mesuré** — 5 familles | **indo-européen 14,7 % · atlantic-congo 94,0 % · austronesian 61,0 % · sino-tibetan 100,0 % · turkic 96,1 %** (8 textes, contrôle 0 %) : **4 familles sur 5 dépassent les 30 %** de la référence — la difficulté est l'**hétérogénéité interne** (l'indo-européen, 98 langues), pas la taille — [`reports/rapport-modules-famille.md`](../reports/rapport-modules-famille.md) |
 
-**Prochaine action** : C3.2c — la même mesure avec **plus de textes** et sur les **9 familles** de 9 langues ou
-plus, contre la courbe de référence : le module par famille **casse-t-il la chute entre 1 et 10 langues** ?
+**Prochaine action** : aucune — la ligne C3.2 est **close** (les trois sous-lignes mesurées). La suite éventuelle
+(la courbe sur les **9 familles** au lieu de 5, et comprendre l'**indo-européen** à 14,7 %) est **hors du plan**.
 
 **Ce qui pourrait le rendre faux** : le corpus UDHR est **parallèle** (les mêmes articles dans toutes les langues) —
 un module par famille peut apprendre la **surface** de la famille sans apprendre la restitution. Le contrôle : la
 **même mesure** à 1 langue (le 85,1 % de référence) doit tenir par famille, et la courbe doit être **comparée** à
-celle du module unique.
+celle du module unique. Le `sino-tibetan` partait de **40,5 %** avant l'entraînement (le modèle connaissait déjà une
+partie des textes) : sa progression (59,5 points) est **moins parlante** que les autres — c'est écrit dans la fiche.
 
 ## L'ordre du jour (carpe diem)
 
