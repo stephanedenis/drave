@@ -40,9 +40,9 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
 (0,4148 → 0,7042 → 0,7749/0,6977 → 0,5691 → 0,6174) ; **A7** est complète (le relais 42,5477, le flux 1 608
-octets, la grappe exacte à 21 %) ; **A8** est branchée en **opt-in** (la règle rend le choix de la main) ; **les deux
-passes** du 24/10 sont **45/47** (les deux structurels connus, aucun rouge nouveau, **toutes les références stables**
-le soir) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153).
+octets, la grappe exacte à 21 %) ; **A8** est branchée en **opt-in** (la règle rend le choix de la main) ; **les trois
+passes** du 24/10 (10 h 53, 19 h 04, 21 h 35) sont **45/47** (les deux structurels seuls, aucun rouge nouveau,
+**toutes les références stables**) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153).
 
 ## Où l'on en est (les chiffres qui comptent)
 
