@@ -359,3 +359,25 @@
 - **état des capacités** : `docs/etat-cerveau.md` et `docs/etat.md` ;
 - **ce qui manque** : `docs/manques.md` (avec la mesure qui l'établit) ;
 - **journal des événements** : `journal/AAAA-MM-JJ.md` (index du jour) et ses fichiers de thème.
+
+## La passe du 25/10 à 04 h 51 — 44 vertes, 2 rouges
+
+**Ce que cette passe devait vérifier** : les instruments de C3.2 ont tous changé (le modèle sur GPU, le LoRA sur le
+même dispositif, les entrées qui suivent, `--famille`, l'évaluation optionnelle et son nombre de textes). Une porte
+verte qui ne dit rien de ces changements n'est pas une porte.
+
+| la porte | le chiffre | ce qu'elle dit |
+|---|---|---|
+| `porte-flux` | **60,8135** | la référence du relais, tenue |
+| `porte-pont` | **+2,81 % / +25,35 %** | 448 / 392 fibres |
+| `porte-topologie` | **42,5477** | le relais ne change pas un chiffre |
+| `porte-gain` | **29,0206 → 1297,5** | le drapeau vivant |
+| `porte-indice`, `porte-melange` | **rouges** | les deux **structurelles connues**, pas des régressions |
+
+**Le verdict** : `awk '$2 != 0'` sur le registre (`/tmp/portes-1025-04h51/registre.txt`) donne **exactement deux
+lignes** — `porte-indice` et `porte-melange`. Les **44 autres portes sont vertes**. La passe a duré **1 h 45**, sur
+**46 entrées** au registre.
+
+**Ce que ça dit** : les instruments de C3.2 **n'ont cassé aucune porte**. Le GPU, les entrées déplacées, le mode
+`--famille` et l'évaluation optionnelle sont **compatibles avec toutes les mesures de non-régression** — c'est ce que
+la passe devait établir, et c'est établi.
