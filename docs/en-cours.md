@@ -50,7 +50,7 @@ passes** du 24/10 (10 h 53, 19 h 04, 21 h 35) sont **45/47** (les deux structure
 |---|---:|
 | mesures de la fiche principale | **173** |
 | portes (passe complète) | **47** — 45 vertes, 2 structurels |
-| fiches / JSON de résultats | 156 / 228 |
+| fiches / JSON de résultats | **160** / **230** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |
 | le KV int8 tardif / le 4 bits de la tête | **+0,03 %** / **+10 %** (reverté) |
