@@ -198,11 +198,11 @@ Le chantier C3 (la restitution) est **mesuré** : 85,1 % de fragments exacts à 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | C3.2a | **Le découpage par famille** : `tools/decoupage_familles.py` groupe les articles par `famille` (la généalogie : 441 langues, 55 familles) | ✅ **fait** | **28 familles**, 362 langues, **12 383 articles** découpés ; **9 familles de 9 langues ou plus** (Indo-European 98, Atlantic-Congo 74, Austronesian 35, Sino-Tibetan 17, Turkic 14, Afro-Asiatic 12, Quechuan 11, Mayan 9, Uralic 9) — `data/udhr/familles/<slug>.jsonl` + `index.json` (reproductible, `data/` est gitignoré) |
-| C3.2b | **Un module par famille** : `tools/lora_recopie.py --ids <famille>` | ⏳ à faire | le taux de recopie par famille, mesuré |
+| C3.2b | **Un module par famille** : `tools/lora_recopie.py --famille <famille>` | ✅ **mesuré** | l'indo-européen (98 langues, 3 688 articles) recopie à **100 %** après 200 pas (0 % avant), le **contrôle 0 %** — [`reports/rapport-modules-famille.md`](../reports/rapport-modules-famille.md) |
 | C3.2c | **La comparaison à la courbe** : le module par famille doit **casser la chute entre 1 et 10 langues** | ⏳ à faire | le taux à 10 langues **dépasse** le 4,4 % de la référence |
 
-**Prochaine action** : C3.2b — un module par famille sur la plus grande (Indo-European, 98 langues), mesuré par
-`lora_recopie.py` ; puis C3.2c, la comparaison à la courbe (le taux à 10 langues doit **dépasser 4,4 %**).
+**Prochaine action** : C3.2c — la même mesure avec **plus de textes** et sur les **9 familles** de 9 langues ou
+plus, contre la courbe de référence : le module par famille **casse-t-il la chute entre 1 et 10 langues** ?
 
 **Ce qui pourrait le rendre faux** : le corpus UDHR est **parallèle** (les mêmes articles dans toutes les langues) —
 un module par famille peut apprendre la **surface** de la famille sans apprendre la restitution. Le contrôle : la
