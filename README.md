@@ -269,7 +269,9 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 
 **Fait, mesuré** : la **grappe déportée** (A7 : le relais **42,5477**, la grappe exacte à **21 %**, le transport à
 **4,22×**), les **opérateurs abstraits** (B4 : les **six** mesures, jusqu'au LoRA qui **inverse**), l'**ordonnanceur
-place et perte** (A8 : la règle branchée en **opt-in**).
+place et perte** (A8 : la règle branchée en **opt-in**), et la **restitution par famille** (C3.2 : 28 familles
+découpées, le module par famille, la courbe sur 5 familles — **4 sur 5 au-dessus de la référence**, de 14,7 % à
+100 %, le contrôle à 0 %).
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.
