@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (27)
+## Commits du jour (28)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -35,10 +35,11 @@
 | 21:34 | `7fdabd19` | B4.6 — LE CONTROLE TRANCHE : le LoRA entraine sur les paires ORIGINALES donne flip_sonde 0,4662 (proche du 0,41 du B4.1), contre 0,2283 pour le LoRA nie — le LoRA nie a bien appris quelque chose de specifique, ce n'est pas la sonde seule. Mais flip_sonde + garde_sonde = 1,0000 dans les DEUX cas : le LoRA retourne la reponse, il ne transfere pas l'operation. Le negatif de B4.6 tient | `2026-10-24.md`, `2026-10-24_distribue.md`, `rapport-operateur-negation.md` |
 | 23:27 | `358edaeb` | ROADMAP — LA FILE DIT LA NOUVELLE PHASE FAITE : A7 (le relais, la grappe a 21 %, la grappe deportee a 4,22x), B4 (les six mesures de l'operateur, jusqu'au LoRA qui inverse), A8 (la regle place+perte branchée en opt-in). Les trois lignes ne sont plus « a faire » — elles sont mesurees et closes | `roadmap.md`, `2026-10-24.md`, `2026-10-24_docs.md` |
 | 23:30 | `b17bee8c` | DOC — LA PORTE D'ENTREE ET LA MISSION DISENT LA PHASE FAITE : A7, B4, A8 ne sont plus « la nouvelle phase » a venir — elles sont faites, mesurees et closes (A7 : le relais, la grappe a 21 %, le transport a 4,22x ; B4 : les six mesures, jusqu'au LoRA qui inverse ; A8 : la regle branchée en opt-in). Le pic du 32 B et la prose scientifique restent nommes | `AGENTS.md`, `mission.md`, `2026-10-24.md` (+2) |
+| 23:31 | `13db82c5` | DOC — LA VISION DIT LES AXES 2 ET 3 FAITS : le tableau des cinq axes renvoyait a A8 et A7 comme a venir ; il dit maintenant A8, fait (la regle place+perte, opt-in) et A7, fait (le relais 42,5477, la grappe a 21 %, le transport a 4,22x). La demonstration distante reste bloquee par le compte Colab | `vision.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 
 ## Chiffres du jour
 
-`21 %` · `0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135` · `0,7717` · `723 paires` · `60,8135` · `42,5477` · `1 %` · `+2,28 %`
+`21 %` · `42,5477` · `0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135` · `0,7717` · `723 paires` · `60,8135` · `1 %` · `+2,28 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

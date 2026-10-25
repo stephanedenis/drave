@@ -265,13 +265,13 @@ bash tools/porte-tableaux.sh           # liens, tableaux, date de la page vivant
 bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 ```
 
-## Ce qui reste ouvert
+## Ce qui est fait, et ce qui reste ouvert
 
-- **La grappe déportée** (A7) : exécuter une couche sur une autre ressource, pilotée par les flux — la greffe est
-  branchée, la couche déportée reste à faire.
-- **Les opérateurs abstraits** (B4) : les transformations de l'état (composer, inférer, ordonner) que la carte ne
-  mesure pas encore.
-- **L'ordonnanceur place et perte** (A8) : la règle de place existe, le terme de perte manque.
+**Fait, mesuré** : la **grappe déportée** (A7 : le relais **42,5477**, la grappe exacte à **21 %**, le transport à
+**4,22×**), les **opérateurs abstraits** (B4 : les **six** mesures, jusqu'au LoRA qui **inverse**), l'**ordonnanceur
+place et perte** (A8 : la règle branchée en **opt-in**).
+
+**Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.
 - **Le pic du 32 B** : nommé, non mesuré (10-20 h en 4 bits) — la tendance est établie par trois courbes.
 - **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab) et le FPGA (le matériel).
