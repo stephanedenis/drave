@@ -35,6 +35,8 @@ def principal() -> int:
     ap.add_argument("--sortie", default="reports/operateur-negation.json")
     ap.add_argument("--lora", action="store_true",
                     help="B4 suite : apprendre la négation DANS les poids (LoRA rang 8) avant les tests")
+    ap.add_argument("--sans-entrainement", action="store_true",
+                    help="diagnostic : poser le LoRA SANS l'entraîner (la référence doit rester à ~0,81)")
     a = ap.parse_args()
     lignes = pathlib.Path(a.tsv).read_text(encoding="utf-8").splitlines()
     entete = lignes[0].split("\t")
@@ -90,23 +92,29 @@ def principal() -> int:
         sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
         from adaptateur_langue import poser_lora
         poser_lora(model, rang=8)   # modifie le modèle EN PLACE ; il rend la liste des conteneurs
-        model.train()
-        opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=1e-4)
-        oui = tok(" oui", add_special_tokens=False).input_ids[0]
-        non = tok(" non", add_special_tokens=False).input_ids[0]
-        perdre = torch.nn.CrossEntropyLoss()
-        for _ in range(1):
-            for s1, s2, y in tr_neg:
-                txt = tok.apply_chat_template(
-                    [{"role": "user", "content": f"Prémisse : {s1}\nHypothèse : {s2}\n{consigne}"}],
-                    tokenize=False, add_generation_prompt=True)
-                enc = tok(txt, return_tensors="pt", truncation=True, max_length=256).to("cuda")
-                logits = model(**enc).logits[0, -1][[oui, non]]
-                cible = torch.tensor([0 if y == 1 else 1], device="cuda")
-                perte = perdre(logits.unsqueeze(0), cible)
-                opt.zero_grad(); perte.backward(); opt.step()
-        model.eval()
-        print(f"  [lora] {len(tr_neg)} paires niées, rang 8, 1 époque — le modèle est adapté")
+        if a.sans_entrainement:
+            print("  [lora] posé SANS entraînement — la référence doit rester à ~0,81")
+        else:
+            model.train()
+            params = [p for p in model.parameters() if p.requires_grad]
+            opt = torch.optim.AdamW(params, lr=1e-5)   # 1e-4 faisait diverger (référence tombée à 0,48)
+            oui = tok(" oui", add_special_tokens=False).input_ids[0]
+            non = tok(" non", add_special_tokens=False).input_ids[0]
+            perdre = torch.nn.CrossEntropyLoss()
+            for _ in range(1):
+                for s1, s2, y in tr_neg:
+                    txt = tok.apply_chat_template(
+                        [{"role": "user", "content": f"Prémisse : {s1}\nHypothèse : {s2}\n{consigne}"}],
+                        tokenize=False, add_generation_prompt=True)
+                    enc = tok(txt, return_tensors="pt", truncation=True, max_length=256).to("cuda")
+                    logits = model(**enc).logits[0, -1][[oui, non]]
+                    cible = torch.tensor([0 if y == 1 else 1], device="cuda")
+                    perte = perdre(logits.unsqueeze(0), cible)
+                    opt.zero_grad(); perte.backward()
+                    torch.nn.utils.clip_grad_norm_(params, 1.0)
+                    opt.step()
+            model.eval()
+            print(f"  [lora] {len(tr_neg)} paires niées, rang 8, 1 époque, lr 1e-5 — perte finale {perte.item():.4f}")
     Etr = etats(tr)
     Ete = etats(te)
     Ete_neg = etats(te_neg)
