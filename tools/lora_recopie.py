@@ -24,6 +24,7 @@ Usage :
 from __future__ import annotations
 
 import argparse
+import json
 import pathlib
 import random
 import re
@@ -73,7 +74,9 @@ def poser_lora(modele, rang: int, alpha: float):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--hf", required=True)
-    ap.add_argument("--ids", required=True, help="corpus d'identifiants (le même que le moteur)")
+    ap.add_argument("--ids", default="", help="corpus d'identifiants (le même que le moteur)")
+    ap.add_argument("--famille", default="",
+                    help="C3.2b : un corpus découpé par famille (C3.2a) — data/udhr/familles/<slug>.jsonl")
     ap.add_argument("--pas", type=int, default=1500)
     ap.add_argument("--rang", type=int, default=8)
     ap.add_argument("--alpha", type=float, default=16.0)
@@ -89,7 +92,16 @@ def main() -> int:
     torch.manual_seed(a.graine)
     tok = AutoTokenizer.from_pretrained(a.hf)
     m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
-    ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(a.ids).read_text()) if x.strip()]
+    assert a.ids or a.famille, "il faut --ids (des identifiants) ou --famille (un corpus C3.2a)"
+    if a.famille:
+        # C3.2b : le corpus d'une FAMILLE — on encode ses « texte » avec le tokenizer du modèle.
+        arts = [json.loads(l) for l in pathlib.Path(a.famille).read_text(encoding="utf-8").splitlines()
+                if l.strip()]
+        ids = []
+        for art in arts:
+            ids.extend(tok(art["texte"], add_special_tokens=False).input_ids)
+    else:
+        ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(a.ids).read_text()) if x.strip()]
     L = a.longueur
 
     def morceaux(n, debut):
