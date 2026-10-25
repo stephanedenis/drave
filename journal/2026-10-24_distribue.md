@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (21)
+## Commits du jour (22)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -29,6 +29,7 @@
 | 19:07 | `2f2f6be6` | B4 (SUITE) — LA CONCEPTION DU LORA DE LA NEGATION : la question (l'operation dans le poids, pour que l'etat la porte sans sonde), le dispositif (le LoRA rang 8 sur le 1,5 B, les 723 paires niees, les cinq tests de B refaits), le critere (le flip passe le hasard), le cout (1-2 h de GPU, apres la passe) et le risque (le LoRA peut apprendre la surface sans l'operation — controle : une negation differente) | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 | 19:15 | `0ebdf5fd` | B4 (SUITE) — LE MODE LORA DANS L'OUTIL : --lora apprend la negation DANS les poids (le LoRA rang 8 du modele, entraine sur les paires niees, la tete oui/non) AVANT de refaire les cinq tests de B. Le modele est gele sauf le LoRA ; une epoque sur les 723 paires | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 | 19:18 | `5f9a227a` | B4.6 — LE LORA DE LA NEGATION EST DECLARE : la ligne existe dans la roadmap (le rang 8, les 723 paires niees, le critere : le flip passe le hasard avec le controle au hasard et sur une negation differente). Elle est codee, pas encore mesuree — le GPU est occupe par la passe | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
+| 20:38 | `58db87d5` | ROADMAP — LA LIGNE A7.4 AVAIT 5 CELLULES AU LIEU DE 4 : le lien du rapport etait dans une 5e cellule, et mistune refuse le tableau ENTIER ; la porte des tableaux l'a attrape (1 tableau ne rendait pas). Le lien passe dans la 4e cellule (une virgule au lieu d'une barre). La porte repasse : 583 fichiers, 1 105 liens, chaque tableau a le meme nombre de cellules partout | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 
 ## Chiffres du jour
 
