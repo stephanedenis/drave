@@ -33,6 +33,8 @@ def principal() -> int:
     ap.add_argument("--couche", type=int, default=22)
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--sortie", default="reports/operateur-negation.json")
+    ap.add_argument("--lora", action="store_true",
+                    help="B4 suite : apprendre la négation DANS les poids (LoRA rang 8) avant les tests")
     a = ap.parse_args()
     lignes = pathlib.Path(a.tsv).read_text(encoding="utf-8").splitlines()
     entete = lignes[0].split("\t")
