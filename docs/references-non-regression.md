@@ -21,6 +21,14 @@
 > [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
+> **Passe du 2026-10-24 à 21 h 35** (**47 portes, 45 vertes, 2 rouges**, **1 h 47 min**) — la passe de contrôle de la
+> **nuit**, après le **LoRA de la négation** (`adaptateur_langue.py` en float32, les trois flags de
+> `operateur_negation.py`) et le chapitre 08. Le verdict : **les deux rouges sont les seuls structurels**
+> (`porte-indice` 860 s, `porte-melange` 104 s) — **aucun rouge nouveau**. Toutes les références sont stables :
+> `porte-flux` **60,8135** · `porte-pont` **+2,81 % / +25,35 %** · `porte-coupe` **+0,52 % → +17,09 %** ·
+> `porte-gain` **29,0206 → 1297,5437** · `porte-topologie` **42,5477** · `porte-reparti-moteur` **0,0000 %**.
+> *Le code du LoRA ne touche aucune porte : la mesure B4.6 est sûre, son instrument est validé.*
+>
 > **Passe du 2026-10-24 à 19 h 04** (**47 portes, 44 vertes, 3 rouges**, **1 h 47 min**) — la passe de contrôle du
 > **soir**, après la v2 du relais (`kimi_k3.rs`) et les tests. **Deux rouges sont les structurels connus**
 > (`porte-indice` 857 s, `porte-melange` 105 s) ; **la troisième est un FAUX POSITIF** : `porte-tableaux` a lu
