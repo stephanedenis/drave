@@ -93,7 +93,7 @@ def main() -> int:
     from transformers import AutoModelForCausalLM, AutoTokenizer
     torch.manual_seed(a.graine)
     tok = AutoTokenizer.from_pretrained(a.hf)
-    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).eval()
+    m = AutoModelForCausalLM.from_pretrained(a.hf, dtype=torch.float32).to("cuda").eval()
     assert a.ids or a.famille, "il faut --ids (des identifiants) ou --famille (un corpus C3.2a)"
     if a.famille:
         # C3.2b : le corpus d'une FAMILLE — on encode ses « texte » avec le tokenizer du modèle.
