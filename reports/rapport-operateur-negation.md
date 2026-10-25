@@ -130,6 +130,33 @@ le modèle adapté — la sonde de l'original lit-elle le nié ? C'est le transf
 l'opération — c'est le risque de tous les adaptateurs. Le contrôle est de tester sur une **négation différente**
 (« ce n'est pas le cas que »).
 
+## B4.6 — le LoRA de la négation : l'entraînement **inverse** la lecture, il ne la transfère pas
+
+| | |
+|---|---:|
+| `reference_orig` (le modèle adapté, sur l'original) | **0,8135** — le modèle est intact |
+| `garde_sonde` (l'original) | **0,7717** |
+| **`flip_sonde` (le nié)** | **0,2283** — sous le hasard, et **exactement** `1 − 0,7717` |
+| la perte finale | 0,0022 |
+
+**L'entraînement converge** (0,0022), **le modèle reste intact** (0,8135) — et **la sonde de l'original lit le nié à
+0,2283**, l'**inverse** de ce qu'elle lit sur l'original (0,7717). *Le LoRA n'a pas appris le transfert : il a appris
+à **inverser** la lecture.* Le `flip_sonde + garde_sonde = 1,0000` exactement le dit : le LoRA a appris la **surface**
+(« il est faux que ») comme un **marqueur d'inversion**, pas l'opération.
+
+**C'est le négatif de B4.6**, cohérent avec toute la ligne : la négation apprise dans les poids ne rend pas l'état
+« négation-aware ». L'opération n'est pas un vecteur que l'entraînement transfère — c'est une **géométrie** que la
+sonde doit réapprendre (B4.2).
+
+**La réserve** : `flip_sonde = 1 − garde_sonde` peut être un **artefact de la sonde** (elle rend le complément), pas un
+fait du LoRA. **Le contrôle qui tranche** : entraîner le LoRA sur les paires **originales** ; si le `flip_sonde` reste
+à 0,41 (le B4.1), le LoRA a appris quelque chose de spécifique ; sinon, c'est la sonde.
+
+**Le trajet de la mesure** (trois instruments réparés) : le flag `--lora` manquait ; `poser_lora` rend la liste des
+conteneurs (pas le modèle) ; les paramètres du LoRA étaient en float32 contre un modèle float16 (la perte partait en
+NaN). Le diagnostic `--sans-entrainement` a tranché : le **forward** était propre (0,8103), c'était l'**entraînement**
+qui cassait le modèle.
+
 ## Ce que ça ne dit pas
 
 - **« Il est faux que : H »** est une négation de **surface** : le modèle peut ne pas la parser comme une négation

@@ -31,7 +31,9 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    est **apprenable** — 0,7042 en réentraînant — mais **pas transférable**) ; **B4.3** (les deux opérations — l'identité
    et la négation — **coexistent** dans un seul opérateur : 0,7749/0,6977 — un **sous-espace**, pas une direction) ;
    **B4.4** (la **composition échoue** : le nié du nié ne revient pas, 0,5691 — ce n'est pas une **algèbre**) ;
-   **B4.5** (elle **s'apprend**, faiblement : 0,6174 — *rien ne se compose gratuitement*). **B4 est close.**
+   **B4.5** (elle **s'apprend**, faiblement : 0,6174 — *rien ne se compose gratuitement*) ; **B4.6** (le LoRA de la
+   négation **inverse** la lecture : 0,2283 = 1 − 0,7717 — un **négatif** de plus, cohérent avec la géométrie de B4.2).
+   **B4 est close.**
 3. **A8 l'ordonnanceur place et perte** : le terme de perte est **codé et testé** (`choisir_avec_perte`, 3 tests)
    et la **règle est branchée** (A8.3, **opt-in** `DRAVE_PERTE_MAX` : elle rend le choix de la main, 30,7286 des deux côtés).
 
