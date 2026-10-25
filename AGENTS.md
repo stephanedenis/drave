@@ -36,7 +36,9 @@ c'est **fait, mesuré et écrit**, pas quand une échéance passe. Détail :
 **plafonne à 0,87** — dix fois la taille pour +0,001, et à profondeur fixe le 14 B est **dernier** (0,4833). La
 **nouvelle phase** (24/10) : **A7**, **B4**, **A8** — **les trois sont faites, mesurées et closes** (A7 : le
 relais, la grappe à 21 %, le transport à 4,22× ; B4 : les six mesures, jusqu'au LoRA qui **inverse** ; A8 : la règle
-branchée en **opt-in**) ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+branchée en **opt-in**) — et **C3.2** (la restitution **par famille**) est faite aussi : 28 familles découpées, le
+module par famille, la courbe sur 5 familles, **4 sur 5 au-dessus de la référence** (de 14,7 % à 100 %, contrôle
+0 %) ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont
