@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,10 +30,11 @@
 | 19:15 | `0ebdf5fd` | B4 (SUITE) — LE MODE LORA DANS L'OUTIL : --lora apprend la negation DANS les poids (le LoRA rang 8 du modele, entraine sur les paires niees, la tete oui/non) AVANT de refaire les cinq tests de B. Le modele est gele sauf le LoRA ; une epoque sur les 723 paires | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 | 19:18 | `5f9a227a` | B4.6 — LE LORA DE LA NEGATION EST DECLARE : la ligne existe dans la roadmap (le rang 8, les 723 paires niees, le critere : le flip passe le hasard avec le controle au hasard et sur une negation differente). Elle est codee, pas encore mesuree — le GPU est occupe par la passe | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 | 20:38 | `58db87d5` | ROADMAP — LA LIGNE A7.4 AVAIT 5 CELLULES AU LIEU DE 4 : le lien du rapport etait dans une 5e cellule, et mistune refuse le tableau ENTIER ; la porte des tableaux l'a attrape (1 tableau ne rendait pas). Le lien passe dans la 4e cellule (une virgule au lieu d'une barre). La porte repasse : 583 fichiers, 1 105 liens, chaque tableau a le meme nombre de cellules partout | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
+| 21:24 | `ccf47752` | B4.6 — LE LORA DE LA NEGATION INVERSE LA LECTURE : l'entrainement converge (perte 0,0022) et le modele reste intact (0,8135), mais le flip_sonde est 0,2283 = 1 - garde_sonde (0,7717) — le LoRA apprend la SURFACE (« il est faux que ») comme un marqueur d'inversion, pas l'operation. Negatif de B4.6, coherent avec B4.2 (la geometrie). La reserve est ecrite (le 1 - p peut etre un artefact de la sonde, le controle est le LoRA sur les paires originales) | `en-cours.md`, `roadmap.md`, `2026-10-24.md` (+3) |
 
 ## Chiffres du jour
 
-`723 paires` · `60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286` · `30,7660` · `0,7042` · `0,4952` · `0,4148`
+`0,0022` · `0,8135` · `0,2283` · `0,7717` · `723 paires` · `60,8135` · `21 %` · `42,5477` · `1 %` · `+2,28 %` · `+0,03 %` · `30,7286`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

@@ -35,6 +35,8 @@ def principal() -> int:
     ap.add_argument("--sortie", default="reports/operateur-negation.json")
     ap.add_argument("--lora", action="store_true",
                     help="B4 suite : apprendre la négation DANS les poids (LoRA rang 8) avant les tests")
+    ap.add_argument("--lora-original", action="store_true",
+                    help="le contrôle de B4.6 : entraîner le LoRA sur les paires ORIGINALES (le flip doit rester à ~0,41)")
     ap.add_argument("--sans-entrainement", action="store_true",
                     help="diagnostic : poser le LoRA SANS l'entraîner (la référence doit rester à ~0,81)")
     a = ap.parse_args()
@@ -85,6 +87,11 @@ def principal() -> int:
     # Les paires niées : même prémisse, hypothèse niée, étiquette basculée.
     te_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in te]
     tr_neg = [(s1, f"Il est faux que : {s2}", 1 - y) for s1, s2, y in tr]
+    if a.lora_original:
+        # Le CONTRÔLE de B4.6 : le LoRA apprend sur les paires ORIGINALES (sans nier). Si le
+        # flip_sonde reste à ~0,41 (le B4.1), le LoRA a appris quelque chose de spécifique ;
+        # s'il tombe à ~0,23 comme le LoRA nié, c'est la SONDE qui rend le complément.
+        tr_neg = tr
     # B4 (suite) — le LoRA : apprendre l'opération DANS les poids, puis refaire les cinq
     # tests. Le modèle est gelé sauf le LoRA ; l'entraînement porte sur les paires NIÉES.
     if a.lora:
