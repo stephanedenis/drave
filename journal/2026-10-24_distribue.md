@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,6 +28,7 @@
 | 19:03 | `d9547ca3` | A7.4 — LA GRAPPE DEPORTEE : le format du relais passe en version 2 (un masque d'un bit par canal + les valeurs non nulles). Le flux de la grappe coute 4,22x moins que le dense (1 704 o contre 7 196 o), la porte du flux rend les MEMES chiffres (60,8135 / 60,8135), et la version 1 reste lisible. A7 est complete : la couche deportee, la grappe, sa taille, et son transport | `en-cours.md`, `roadmap.md`, `kimi_k3.rs` (+6) |
 | 19:07 | `2f2f6be6` | B4 (SUITE) — LA CONCEPTION DU LORA DE LA NEGATION : la question (l'operation dans le poids, pour que l'etat la porte sans sonde), le dispositif (le LoRA rang 8 sur le 1,5 B, les 723 paires niees, les cinq tests de B refaits), le critere (le flip passe le hasard), le cout (1-2 h de GPU, apres la passe) et le risque (le LoRA peut apprendre la surface sans l'operation — controle : une negation differente) | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 | 19:15 | `0ebdf5fd` | B4 (SUITE) — LE MODE LORA DANS L'OUTIL : --lora apprend la negation DANS les poids (le LoRA rang 8 du modele, entraine sur les paires niees, la tete oui/non) AVANT de refaire les cinq tests de B. Le modele est gele sauf le LoRA ; une epoque sur les 723 paires | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
+| 19:18 | `5f9a227a` | B4.6 — LE LORA DE LA NEGATION EST DECLARE : la ligne existe dans la roadmap (le rang 8, les 723 paires niees, le critere : le flip passe le hasard avec le controle au hasard et sur une negation differente). Elle est codee, pas encore mesuree — le GPU est occupe par la passe | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 
 ## Chiffres du jour
 
