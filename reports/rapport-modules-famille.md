@@ -16,7 +16,8 @@
 |---|---:|---:|
 | avant | 0,0 % | 0,0 % |
 | **après, 3 textes** | **100,0 %** | **0,0 %** |
-| **après, 8 textes** | **14,7 %** | **0,0 %** |
+| après, 8 textes (indo-européen) | 14,7 % | 0,0 % |
+| **après, 8 textes (atlantic-congo)** | **94,0 %** | **0,0 %** |
 
 **La copie est acquise et le perroquet est évité.** Le module par famille recopie **exactement** le texte de sa
 famille, et le contrôle (une cible différente) reste à **0 %** — ce n'est pas de la génération qui singe, c'est de la
@@ -31,9 +32,13 @@ restitution.
 - **La leçon, et elle est importante** : le **100 %** de la première mesure était un **effet de la taille de
   l'échantillon** (3 textes) — sur 8, il tombe à **14,7 %**. C'est la cinquième fois que la leçon du point de mesure
   se paie : **le chiffre dépend de ce qu'on mesure, et un taux sur 3 textes ne dit rien de la restitution.**
-- **Le chiffre honnête** : **14,7 %** sur 8 textes, à comparer aux **30 %** de la référence à une langue et aux
-  **4,4 %** à dix langues — le module par famille est **au-dessus de la référence à dix langues** (3,3×), mais **sous**
-  la référence à une langue. C'est un pas, pas une solution.
+- **Le chiffre honnête** : **14,7 %** sur 8 textes (indo-européen), à comparer aux **30 %** de la référence à une langue
+  et aux **4,4 %** à dix langues — au-dessus de la référence à dix langues (3,3×), sous celle à une langue.
+- **Et le second point, décisif** : la famille **atlantic-congo** (74 langues, 2 458 articles) atteint **94,0 %** sur
+  les **mêmes 8 textes** — le module par famille **marche** (et très bien) sur une famille, **et beaucoup moins** sur
+  une autre. Le taux dépend de la **famille**, pas seulement du module : c'est la première mesure de la
+  **variabilité inter-familles** de C3.2 — et elle dit que la courbe par famille sera **hétérogène**, pas une
+  constante.
 
 ## La suite
 
