@@ -15,7 +15,8 @@
 | | la recopie | le contrôle |
 |---|---:|---:|
 | avant | 0,0 % | 0,0 % |
-| **après** | **100,0 %** | **0,0 %** |
+| **après, 3 textes** | **100,0 %** | **0,0 %** |
+| **après, 8 textes** | **14,7 %** | **0,0 %** |
 
 **La copie est acquise et le perroquet est évité.** Le module par famille recopie **exactement** le texte de sa
 famille, et le contrôle (une cible différente) reste à **0 %** — ce n'est pas de la génération qui singe, c'est de la
@@ -23,12 +24,16 @@ restitution.
 
 ## Ce que ça dit, et ce que ça ne dit pas
 
-- **Ça dit** : un module par famille **apprend la recopie exacte** de sa famille (100 %), sans le perroquet (0 %).
-  C'est la première brique de C3.2 — le module qui remplace le module unique.
-- **Ça ne dit pas** : que la **restitution à dix langues** est sauvée (c'est C3.2c) ; le corpus d'évaluation est de
-  **3 textes** (le taux a une granularité grossière) ; le modèle est le **0,5 B** et **200 pas** seulement.
-- **La réserve** : 100 % sur 3 textes n'est pas 100 % sur 3 000. Le chiffre qui compte sera celui de C3.2c : la
-  **courbe** du module par famille contre la courbe de référence (30 % → 4,4 % → 0,4 % → 0,6 %).
+- **Ça dit** : un module par famille **apprend à recopier** sa famille — **100 % sur 3 textes d'évaluation, 14,7 % sur
+  8**. Le contrôle reste à **0 %** dans les deux cas : ce n'est pas le perroquet.
+- **Ça ne dit pas** : que la **restitution à dix langues** est sauvée (c'est C3.2c) ; le modèle est le **0,5 B** et
+  **200 pas** seulement.
+- **La leçon, et elle est importante** : le **100 %** de la première mesure était un **effet de la taille de
+  l'échantillon** (3 textes) — sur 8, il tombe à **14,7 %**. C'est la cinquième fois que la leçon du point de mesure
+  se paie : **le chiffre dépend de ce qu'on mesure, et un taux sur 3 textes ne dit rien de la restitution.**
+- **Le chiffre honnête** : **14,7 %** sur 8 textes, à comparer aux **30 %** de la référence à une langue et aux
+  **4,4 %** à dix langues — le module par famille est **au-dessus de la référence à dix langues** (3,3×), mais **sous**
+  la référence à une langue. C'est un pas, pas une solution.
 
 ## La suite
 
