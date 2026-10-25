@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 19:18 | `5f9a227a` | B4.6 — LE LORA DE LA NEGATION EST DECLARE : la ligne existe dans la roadmap (le rang 8, les 723 paires niees, le critere : le flip passe le hasard avec le controle au hasard et sur une negation differente). Elle est codee, pas encore mesuree — le GPU est occupe par la passe | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 | 20:38 | `58db87d5` | ROADMAP — LA LIGNE A7.4 AVAIT 5 CELLULES AU LIEU DE 4 : le lien du rapport etait dans une 5e cellule, et mistune refuse le tableau ENTIER ; la porte des tableaux l'a attrape (1 tableau ne rendait pas). Le lien passe dans la 4e cellule (une virgule au lieu d'une barre). La porte repasse : 583 fichiers, 1 105 liens, chaque tableau a le meme nombre de cellules partout | `roadmap.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 | 21:24 | `ccf47752` | B4.6 — LE LORA DE LA NEGATION INVERSE LA LECTURE : l'entrainement converge (perte 0,0022) et le modele reste intact (0,8135), mais le flip_sonde est 0,2283 = 1 - garde_sonde (0,7717) — le LoRA apprend la SURFACE (« il est faux que ») comme un marqueur d'inversion, pas l'operation. Negatif de B4.6, coherent avec B4.2 (la geometrie). La reserve est ecrite (le 1 - p peut etre un artefact de la sonde, le controle est le LoRA sur les paires originales) | `en-cours.md`, `roadmap.md`, `2026-10-24.md` (+3) |
+| 21:26 | `8dfeb5a5` | B4.6 — LE CONTROLE --lora-original : entrainer le LoRA sur les paires ORIGINALES (sans nier). Si le flip_sonde reste a ~0,41 (le B4.1), le LoRA a appris quelque chose de specifique ; s'il tombe a ~0,23 comme le LoRA nie, c'est la sonde qui rend le complement — la reserve de la fiche est tranchee par ce run | `2026-10-24.md`, `2026-10-24_distribue.md`, `THEMES.md` (+1) |
 
 ## Chiffres du jour
 

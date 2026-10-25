@@ -148,9 +148,19 @@ l'opération — c'est le risque de tous les adaptateurs. Le contrôle est de te
 « négation-aware ». L'opération n'est pas un vecteur que l'entraînement transfère — c'est une **géométrie** que la
 sonde doit réapprendre (B4.2).
 
-**La réserve** : `flip_sonde = 1 − garde_sonde` peut être un **artefact de la sonde** (elle rend le complément), pas un
-fait du LoRA. **Le contrôle qui tranche** : entraîner le LoRA sur les paires **originales** ; si le `flip_sonde` reste
-à 0,41 (le B4.1), le LoRA a appris quelque chose de spécifique ; sinon, c'est la sonde.
+**La réserve, et le contrôle qui la tranche** : `flip_sonde = 1 − garde_sonde` pouvait être un **artefact de la
+sonde**. Le contrôle a été fait (`--lora-original`, le LoRA entraîné sur les paires **originales**) :
+
+| | le LoRA **nié** | le LoRA **original** |
+|---|---:|---:|
+| `reference_orig` | 0,8135 | 0,8071 |
+| `flip_sonde` | **0,2283** | **0,4662** |
+| `garde_sonde` | 0,7717 | 0,5338 |
+
+- **Le LoRA nié a bien appris quelque chose de spécifique** : le `flip_sonde` tombe à 0,2283, contre 0,4662 pour le
+  LoRA original (proche du 0,41 du B4.1) — ce n'est pas la sonde qui, seule, rendrait ce chiffre.
+- **Mais `flip_sonde + garde_sonde = 1,0000` dans les deux cas** : la sonde rend `p` sur l'original et `1 − p` sur le
+  nié. Le LoRA a appris à **retourner** la réponse, pas à **transférer** l'opération. *Le négatif tient.*
 
 **Le trajet de la mesure** (trois instruments réparés) : le flag `--lora` manquait ; `poser_lora` rend la liste des
 conteneurs (pas le modèle) ; les paramètres du LoRA étaient en float32 contre un modèle float16 (la perte partait en
