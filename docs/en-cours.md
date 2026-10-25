@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-24, 19 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-24, 23 h 30 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
