@@ -29,6 +29,12 @@
 | 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | **la théorie** de l'étage entrée-sortie (nom historique : couche commune) : cinq familles, ce qu'on sait, ce qui reste ouvert — les **mesures** sont dans [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md) | ![couche commune](schemas/couche-commune.svg) |
 | 8 | [les opérations : ce que l'état porte, et ce qu'il ne calcule pas](08-les-operations.md) | les **cinq mesures** de B4 (la négation : pas une direction, apprenable, un sous-espace, pas une algèbre, une composition apprise à 0,62) et la **grappe** du moteur (le top-1024 exact à 21 %) | — |
 
+## Hors chapitres — les jeux symboliques
+
+| le sujet | où il vit |
+|---|---|
+| **B5/B6 — la surface, la RSN-jeu, la pensée** : cinq jeux (morpion, échecs, dames, go, cartes), les couches 0→4, l'invariance, le perft et la logique | [le concept](../jeux-symboliques.md) · [la fiche](../../reports/rapport-jeux-symboliques.md) · [la porte](../../tools/porte-jeux.sh) |
+
 ## Trois principes, qui reviennent partout
 
 1. **Le modèle n'est pas le cerveau.** Le modèle calcule des couches ; le cerveau **organise** : il décide

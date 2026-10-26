@@ -184,8 +184,41 @@ que la carte ne mesure pas encore.
 et la composition s'apprend à un coût (0,6174). *L'état porte les opérations, mais il ne les calcule pas.*
 
 **Prochaine action** : aucune sur B4 — la ligne est close ; les suites sont **hors du plan** (le LoRA qui modifie
-l'état, mesure 119 ; une troisième opération). Le plan reprend à **A8.3** (brancher `choisir_avec_perte`) puis **A7.3**
-(la grappe intra-couche).
+l'état, mesure 119 ; une troisième opération). Le plan a repris à **A8.3** (branché), **A7.3** (mesuré), puis
+**B5/B6** (mesurés).
+
+### B5 — La sémantique des jeux symboliques
+
+La carte de l'étage 2 est faite, les opérateurs sont mesurés ; il manquait une **entrée-sortie symbolique** qui ne
+dépende ni de la langue ni de la notation. B5 est cette entrée-sortie, appliquée à cinq jeux (morpion, échecs,
+dames, go, cartes) et à deux langues. Le concept est dans [`docs/jeux-symboliques.md`](jeux-symboliques.md) ; la
+fiche et le JSON dans [`reports/rapport-jeux-symboliques.md`](../reports/rapport-jeux-symboliques.md).
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B5.1 | **Le contrat RSN-jeu** : jeu + nature + corps canonique + annotation hors empreinte, encodage binaire `RSNB` | ✅ mesuré | 41 objets distincts ; **128,93 o** de JSON → **71,10 o** de binaire (**0,5515**), aller-retour identique |
+| B5.2 | **Les cinq niveaux (0→4) et les cinq codecs** | ✅ mesuré | **112 items**, couverture **50 / 77 / 105 / 110 / 112** (niveaux 0→4) ; **33/33** paires invariantes au niveau 4 ; **0 collision** |
+| B5.3 | **La restitution et le bruit** | ✅ mesuré | restitution **112/112**, perturbation **112/112**, lexique permuté **112 → 92** (20 items perdus), étiquettes mélangées **7/112** |
+| B5.4 | **La détection et les ambiguïtés** | ✅ mesuré | **100/112** sans indice de jeu ; les **12** échecs sont des surfaces ambiguës **nommées** (`A1`, `E4`, `d4`, `b6-c5`…) |
+
+**Prochaine action** : aucune — la ligne est mesurée ; les suites (corpus externe, détection avec contexte,
+autres langues) sont **hors du plan**.
+
+### B6 — La logique dans la pensée
+
+L'étage 2 ne lit que la RSN ; B6 est sa **logique de jeu**, mesurée par les règles d'abord, par la force ensuite,
+et par l'**invariance de la décision** enfin.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B6.1 | **Les règles et le perft** | ✅ mesuré | échecs : six positions, profondeur 4, **197 281 · 4 085 603 · 43 238 · 422 333 · 2 103 487 · 3 894 594** (exacts) ; dames : **7 · 49 · 302 · 1 469 · 7 361 · 36 768** ; go : capture, suicide, ko, score |
+| B6.2 | **La recherche** | ✅ mesuré | morpion : valeur **0**, partie parfaite **nulle**, exact contre hasard **200/200** sans défaite ; échecs : **3/3** mats en un (statique **1/3**) ; dames : **20/20** contre le joueur sans recherche |
+| B6.3 | **La politique des cartes** | ✅ mesuré | **79,7 %** contre le hasard (1 000 donnes), **0 / 52 000** coup illégal ; hasard 48,6 %, sans partenaire 75,6 %, sans atout 73,5 % |
+| B6.4 | **L'invariance de la pensée** | ✅ mesuré | **5/5** jeux donnent la même décision sur deux surfaces du même état ; contrôle négatif **5/5** (le trait change l'empreinte) |
+
+**Prochaine action** : aucune — la ligne est mesurée. Le MCTS du go est un **négatif nommé** à 60 playouts
+(**1/3** contre le hasard) : les règles sont justes, la force n'est pas établie ; un budget plus grand et un
+corpus externe sont hors plan.
 
 ---
 
@@ -225,6 +258,8 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
    (**corpus absent**), A6.2 (**pas de MoE local**), A3.4 (**compte Colab**), A5.4 (**FPGA**).
 9. **La nouvelle phase (24/10)** : **A7 la grappe déportée** (la plus proche de la vision), **B4 les opérateurs
    abstraits** (le plus neuf scientifiquement), **A8 l'ordonnanceur place et perte** (le plus ingénieur).
+10. ~~B5 / B6 — la sémantique et la logique des jeux symboliques~~ **faites** (112 items, **100 %** au niveau 4,
+    **33/33** paires invariantes, perft échecs/dames, mats, dames 20/20, politique 79,7 %).
 
 ## La file « jamais en attente »
 
@@ -234,6 +269,8 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **la nouvelle phase (faite, mesurée)** : A7 (le relais, la grappe intra-couche à 21 %, la grappe déportée à
   4,22×), B4 (les **six** mesures de l'opérateur : pas une direction, apprenable, un sous-espace, pas une algèbre, une
   composition apprise, le LoRA qui **inverse**), A8 (la règle place+perte, **branchée en opt-in**) ;
+- **la phase jeux (faite, mesurée)** : B5 (112 items, **100 %** au niveau 4, **33/33** paires, **0 collision**) et B6
+  (perft échecs/dames, morpion exact, **3/3** mats, dames **20/20**, politique **79,7 %**, invariance **5/5**) ;
 - **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
   (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est
@@ -257,3 +294,6 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
   est **45/47** (aucun rouge nouveau), la carte du raisonnement a **trois courbes complètes** et la sonde **sature dès
   le 1,5 B** ; le pic du 32 B et le 14 B l24 sont **bloqués par la VRAM** (le premier coûte 10-20 h ; le second a été
   mesuré depuis), la prose scientifique manque de **corpus**. Ce qui reste est **nommé**, pas oublié.
+- **25/10** — les **jeux symboliques** : la **RSN-jeu** (112 items, **100 %** au niveau 4, **33/33** paires,
+  **0 collision**) et la **logique** (perft échecs/dames, morpion exact, mats, politique des cartes) ; la **pensée**
+  est invariante sur **5/5** jeux. Le MCTS du go est **faible à 60 playouts** (1/3) : négatif nommé, pas caché.

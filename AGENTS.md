@@ -38,7 +38,9 @@ c'est **fait, mesuré et écrit**, pas quand une échéance passe. Détail :
 relais, la grappe à 21 %, le transport à 4,22× ; B4 : les six mesures, jusqu'au LoRA qui **inverse** ; A8 : la règle
 branchée en **opt-in**) — et **C3.2** (la restitution **par famille**) est faite aussi : 28 familles découpées, le
 module par famille, la courbe sur 5 familles, **4 sur 5 au-dessus de la référence** (de 14,7 % à 100 %, contrôle
-0 %) ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+0 %) ; **B5/B6** (les jeux symboliques) sont faites aussi : **112 surfaces**, **100 % au niveau 4**, **33/33**
+paires invariantes, **0 collision**, perft échecs/dames, mats, politique **79,7 %**, pensée invariante **5/5** ; le
+pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont
@@ -85,6 +87,7 @@ les éléments sont des **unités de sens**. Voir [`docs/glossaire.md`](docs/glo
 | étudier Panini/Nipada, la généalogie | [`docs/agent/panini-nipada.md`](docs/agent/panini-nipada.md) |
 | concevoir un test d'entrée/sortie, corriger | [`docs/agent/miroir.md`](docs/agent/miroir.md) |
 | planifier une campagne, le matériel, carpe diem | [`docs/agent/ressources.md`](docs/agent/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée) | [`docs/jeux-symboliques.md`](docs/jeux-symboliques.md) |
 | **l'état courant** (synthèse + chantiers + questions) | [`docs/en-cours.md`](docs/en-cours.md) |
 | le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/glossaire.md`](docs/glossaire.md) |
 | **trouver un sujet** (un concept, un chantier, une phase) | [`docs/carte.md`](docs/carte.md) |

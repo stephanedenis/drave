@@ -160,6 +160,15 @@ son bruit (confiance, ambiguïtés, langues probables). Ses éléments sont des 
 `tools/pont_abstrait.py` (le pont actuel), `docs/synthese/07-modeles-alternatifs-entree-sortie.md` § « La
 représentation neutre n'est pas un jeton ».
 
+**RSN-jeu** — La **représentation sémantique neutre** appliquée à un jeu symbolique : un **jeu** (`morpion`,
+`echecs`, `dames`, `go`, `cartes`), une **nature** (`etat`, `coup`, `partie`, `main`, `resultat`), un **corps**
+canonique (les unités de sens du jeu : cases, trait, roques, chemin, point, carte…) et une **annotation** (langue,
+format, confiance, ambiguïtés, surface d'origine, niveau de lecture). L'annotation est **hors de l'empreinte** :
+le bruit est transporté, pas confondu avec le sens. Le corps ne contient **aucun flottant** (le komi du go est en
+dixièmes, `65` pour 6,5). **Où** : `tools/jeux/rsn.py` (le contrat, l'encodage binaire `RSNB`), les codecs dans
+`tools/jeux/codecs/`, la mesure dans [`docs/jeux-symboliques.md`](../jeux-symboliques.md) et
+[`reports/rapport-jeux-symboliques.md`](../../reports/rapport-jeux-symboliques.md).
+
 **Rétrospective** — Partie de la cérémonie de fin de sprint : *garder* / *changer* /
 *doute*. « Une rétro qui ne change rien n'est pas une rétro : chaque "changer" doit
 devenir une action du sprint suivant » (`docs/sprints.md:27-29`).

@@ -9,6 +9,17 @@
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 >
+> **Passe du 2026-10-25 à 22 h 18** (**48 portes, 46 vertes, 2 rouges**, **1 h 31 min**) — la passe de
+> clôture de **B5/B6**, avec la nouvelle **`porte-jeux`** (28 s, **verte** : 100 % au niveau 4, 33/33 paires
+> invariantes, 0 collision). Les **deux rouges** sont les **structurelles connues** (`porte-indice` 841 s,
+> `porte-melange` 104 s). Une **troisième rouge** est apparue : `porte-homeostasie` (code 2, 0 s), parce que
+> le **LoRA de référence temporaire** `/tmp/n4/rang4-lora.pt` avait été effacé ; **régénéré** par
+> `n4_dessin_b.py --objectif plein --train 10 --rang 4`, la porte **relancée seule passe** (`×0` exact,
+> activité monotone, dominance reproduite : m32 ×0,6 **−8,33 %** contre ×1,0 **−6,51 %**, m20 **−15,10 %**
+> contre **−15,74 %**). Les références sont stables : `porte-flux` **60,8135**, `porte-pont`
+> **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 → 1297,5437**,
+> `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**.
+>
 > **Passe du 2026-10-12 à 23 h 00** (**36 portes, 34 vertes, 2 rouges**, ~74 min) : les valeurs
 > ci-dessous **n'ont pas bougé** — les changements de la nuit (prélecture parallèle, lecture
 > séquentielle dans nos tampons, chargement paresseux) ne déplacent aucun chiffre, et

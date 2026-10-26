@@ -1,0 +1,1351 @@
+{
+  "date": "2026-10-25",
+  "rapide": false,
+  "couches": {
+    "corpus": {
+      "items": 112,
+      "par_jeu": {
+        "morpion": 32,
+        "echecs": 34,
+        "dames": 16,
+        "go": 14,
+        "cartes": 16
+      }
+    },
+    "couverture": {
+      "0": {
+        "niveau": 0,
+        "bons": 50,
+        "total": 112,
+        "taux": 0.4464,
+        "par_jeu": {
+          "cartes": {
+            "bons": 4,
+            "total": 16
+          },
+          "dames": {
+            "bons": 7,
+            "total": 16
+          },
+          "echecs": {
+            "bons": 13,
+            "total": 34
+          },
+          "go": {
+            "bons": 8,
+            "total": 14
+          },
+          "morpion": {
+            "bons": 18,
+            "total": 32
+          }
+        }
+      },
+      "1": {
+        "niveau": 1,
+        "bons": 77,
+        "total": 112,
+        "taux": 0.6875,
+        "par_jeu": {
+          "cartes": {
+            "bons": 8,
+            "total": 16
+          },
+          "dames": {
+            "bons": 16,
+            "total": 16
+          },
+          "echecs": {
+            "bons": 24,
+            "total": 34
+          },
+          "go": {
+            "bons": 9,
+            "total": 14
+          },
+          "morpion": {
+            "bons": 20,
+            "total": 32
+          }
+        }
+      },
+      "2": {
+        "niveau": 2,
+        "bons": 105,
+        "total": 112,
+        "taux": 0.9375,
+        "par_jeu": {
+          "cartes": {
+            "bons": 16,
+            "total": 16
+          },
+          "dames": {
+            "bons": 16,
+            "total": 16
+          },
+          "echecs": {
+            "bons": 27,
+            "total": 34
+          },
+          "go": {
+            "bons": 14,
+            "total": 14
+          },
+          "morpion": {
+            "bons": 32,
+            "total": 32
+          }
+        }
+      },
+      "3": {
+        "niveau": 3,
+        "bons": 110,
+        "total": 112,
+        "taux": 0.9821,
+        "par_jeu": {
+          "cartes": {
+            "bons": 16,
+            "total": 16
+          },
+          "dames": {
+            "bons": 16,
+            "total": 16
+          },
+          "echecs": {
+            "bons": 32,
+            "total": 34
+          },
+          "go": {
+            "bons": 14,
+            "total": 14
+          },
+          "morpion": {
+            "bons": 32,
+            "total": 32
+          }
+        }
+      },
+      "4": {
+        "niveau": 4,
+        "bons": 112,
+        "total": 112,
+        "taux": 1.0,
+        "par_jeu": {
+          "cartes": {
+            "bons": 16,
+            "total": 16
+          },
+          "dames": {
+            "bons": 16,
+            "total": 16
+          },
+          "echecs": {
+            "bons": 34,
+            "total": 34
+          },
+          "go": {
+            "bons": 14,
+            "total": 14
+          },
+          "morpion": {
+            "bons": 32,
+            "total": 32
+          }
+        }
+      }
+    },
+    "invariance": {
+      "0": {
+        "niveau": 0,
+        "bonnes": 9,
+        "total": 33,
+        "taux": 0.2727,
+        "detail": {
+          "cartes-carte-a": {
+            "ok": false,
+            "n": 4
+          },
+          "cartes-carte-b": {
+            "ok": false,
+            "n": 4
+          },
+          "cartes-donne-a": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-donne-b": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-main": {
+            "ok": false,
+            "n": 4
+          },
+          "dames-blanc": {
+            "ok": false,
+            "n": 1
+          },
+          "dames-depart": {
+            "ok": false,
+            "n": 2
+          },
+          "dames-prise-multiple": {
+            "ok": false,
+            "n": 3
+          },
+          "dames-prise-simple": {
+            "ok": false,
+            "n": 4
+          },
+          "dames-simple": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-simple-c5": {
+            "ok": false,
+            "n": 3
+          },
+          "echecs-depart": {
+            "ok": false,
+            "n": 3
+          },
+          "echecs-droits-impossibles": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-e4": {
+            "ok": false,
+            "n": 7
+          },
+          "echecs-ep": {
+            "ok": false,
+            "n": 1
+          },
+          "echecs-ep-inutile": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-grand-roque": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-nf3": {
+            "ok": false,
+            "n": 6
+          },
+          "echecs-petit-roque": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-pgn": {
+            "ok": false,
+            "n": 1
+          },
+          "echecs-promotion": {
+            "ok": false,
+            "n": 2
+          },
+          "go-5x5": {
+            "ok": true,
+            "n": 1
+          },
+          "go-d4": {
+            "ok": false,
+            "n": 5
+          },
+          "go-dd": {
+            "ok": true,
+            "n": 1
+          },
+          "go-partie": {
+            "ok": false,
+            "n": 1
+          },
+          "go-passe": {
+            "ok": false,
+            "n": 3
+          },
+          "go-vide": {
+            "ok": true,
+            "n": 1
+          },
+          "morpion-a1": {
+            "ok": false,
+            "n": 12
+          },
+          "morpion-centre": {
+            "ok": false,
+            "n": 6
+          },
+          "morpion-o-bas-droite": {
+            "ok": false,
+            "n": 2
+          },
+          "morpion-partie": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-vide": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-xox": {
+            "ok": true,
+            "n": 4
+          }
+        }
+      },
+      "1": {
+        "niveau": 1,
+        "bonnes": 19,
+        "total": 33,
+        "taux": 0.5758,
+        "detail": {
+          "cartes-carte-a": {
+            "ok": false,
+            "n": 4
+          },
+          "cartes-carte-b": {
+            "ok": false,
+            "n": 4
+          },
+          "cartes-donne-a": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-donne-b": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-main": {
+            "ok": false,
+            "n": 4
+          },
+          "dames-blanc": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-depart": {
+            "ok": true,
+            "n": 2
+          },
+          "dames-prise-multiple": {
+            "ok": true,
+            "n": 3
+          },
+          "dames-prise-simple": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-simple": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-simple-c5": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-depart": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-droits-impossibles": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-e4": {
+            "ok": false,
+            "n": 7
+          },
+          "echecs-ep": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-ep-inutile": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-grand-roque": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-nf3": {
+            "ok": false,
+            "n": 6
+          },
+          "echecs-petit-roque": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-pgn": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-promotion": {
+            "ok": true,
+            "n": 2
+          },
+          "go-5x5": {
+            "ok": true,
+            "n": 1
+          },
+          "go-d4": {
+            "ok": false,
+            "n": 5
+          },
+          "go-dd": {
+            "ok": true,
+            "n": 1
+          },
+          "go-partie": {
+            "ok": true,
+            "n": 1
+          },
+          "go-passe": {
+            "ok": false,
+            "n": 3
+          },
+          "go-vide": {
+            "ok": true,
+            "n": 1
+          },
+          "morpion-a1": {
+            "ok": false,
+            "n": 12
+          },
+          "morpion-centre": {
+            "ok": false,
+            "n": 6
+          },
+          "morpion-o-bas-droite": {
+            "ok": false,
+            "n": 2
+          },
+          "morpion-partie": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-vide": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-xox": {
+            "ok": true,
+            "n": 4
+          }
+        }
+      },
+      "2": {
+        "niveau": 2,
+        "bonnes": 29,
+        "total": 33,
+        "taux": 0.8788,
+        "detail": {
+          "cartes-carte-a": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-carte-b": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-donne-a": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-donne-b": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-main": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-blanc": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-depart": {
+            "ok": true,
+            "n": 2
+          },
+          "dames-prise-multiple": {
+            "ok": true,
+            "n": 3
+          },
+          "dames-prise-simple": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-simple": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-simple-c5": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-depart": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-droits-impossibles": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-e4": {
+            "ok": false,
+            "n": 7
+          },
+          "echecs-ep": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-ep-inutile": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-grand-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-nf3": {
+            "ok": false,
+            "n": 6
+          },
+          "echecs-petit-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-pgn": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-promotion": {
+            "ok": true,
+            "n": 2
+          },
+          "go-5x5": {
+            "ok": true,
+            "n": 1
+          },
+          "go-d4": {
+            "ok": true,
+            "n": 5
+          },
+          "go-dd": {
+            "ok": true,
+            "n": 1
+          },
+          "go-partie": {
+            "ok": true,
+            "n": 1
+          },
+          "go-passe": {
+            "ok": true,
+            "n": 3
+          },
+          "go-vide": {
+            "ok": true,
+            "n": 1
+          },
+          "morpion-a1": {
+            "ok": true,
+            "n": 12
+          },
+          "morpion-centre": {
+            "ok": true,
+            "n": 6
+          },
+          "morpion-o-bas-droite": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-partie": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-vide": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-xox": {
+            "ok": true,
+            "n": 4
+          }
+        }
+      },
+      "3": {
+        "niveau": 3,
+        "bonnes": 31,
+        "total": 33,
+        "taux": 0.9394,
+        "detail": {
+          "cartes-carte-a": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-carte-b": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-donne-a": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-donne-b": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-main": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-blanc": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-depart": {
+            "ok": true,
+            "n": 2
+          },
+          "dames-prise-multiple": {
+            "ok": true,
+            "n": 3
+          },
+          "dames-prise-simple": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-simple": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-simple-c5": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-depart": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-droits-impossibles": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-e4": {
+            "ok": true,
+            "n": 7
+          },
+          "echecs-ep": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-ep-inutile": {
+            "ok": false,
+            "n": 2
+          },
+          "echecs-grand-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-nf3": {
+            "ok": true,
+            "n": 6
+          },
+          "echecs-petit-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-pgn": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-promotion": {
+            "ok": true,
+            "n": 2
+          },
+          "go-5x5": {
+            "ok": true,
+            "n": 1
+          },
+          "go-d4": {
+            "ok": true,
+            "n": 5
+          },
+          "go-dd": {
+            "ok": true,
+            "n": 1
+          },
+          "go-partie": {
+            "ok": true,
+            "n": 1
+          },
+          "go-passe": {
+            "ok": true,
+            "n": 3
+          },
+          "go-vide": {
+            "ok": true,
+            "n": 1
+          },
+          "morpion-a1": {
+            "ok": true,
+            "n": 12
+          },
+          "morpion-centre": {
+            "ok": true,
+            "n": 6
+          },
+          "morpion-o-bas-droite": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-partie": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-vide": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-xox": {
+            "ok": true,
+            "n": 4
+          }
+        }
+      },
+      "4": {
+        "niveau": 4,
+        "bonnes": 33,
+        "total": 33,
+        "taux": 1.0,
+        "detail": {
+          "cartes-carte-a": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-carte-b": {
+            "ok": true,
+            "n": 4
+          },
+          "cartes-donne-a": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-donne-b": {
+            "ok": true,
+            "n": 1
+          },
+          "cartes-main": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-blanc": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-depart": {
+            "ok": true,
+            "n": 2
+          },
+          "dames-prise-multiple": {
+            "ok": true,
+            "n": 3
+          },
+          "dames-prise-simple": {
+            "ok": true,
+            "n": 4
+          },
+          "dames-simple": {
+            "ok": true,
+            "n": 1
+          },
+          "dames-simple-c5": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-depart": {
+            "ok": true,
+            "n": 3
+          },
+          "echecs-droits-impossibles": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-e4": {
+            "ok": true,
+            "n": 7
+          },
+          "echecs-ep": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-ep-inutile": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-grand-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-nf3": {
+            "ok": true,
+            "n": 6
+          },
+          "echecs-petit-roque": {
+            "ok": true,
+            "n": 2
+          },
+          "echecs-pgn": {
+            "ok": true,
+            "n": 1
+          },
+          "echecs-promotion": {
+            "ok": true,
+            "n": 2
+          },
+          "go-5x5": {
+            "ok": true,
+            "n": 1
+          },
+          "go-d4": {
+            "ok": true,
+            "n": 5
+          },
+          "go-dd": {
+            "ok": true,
+            "n": 1
+          },
+          "go-partie": {
+            "ok": true,
+            "n": 1
+          },
+          "go-passe": {
+            "ok": true,
+            "n": 3
+          },
+          "go-vide": {
+            "ok": true,
+            "n": 1
+          },
+          "morpion-a1": {
+            "ok": true,
+            "n": 12
+          },
+          "morpion-centre": {
+            "ok": true,
+            "n": 6
+          },
+          "morpion-o-bas-droite": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-partie": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-vide": {
+            "ok": true,
+            "n": 2
+          },
+          "morpion-xox": {
+            "ok": true,
+            "n": 4
+          }
+        }
+      }
+    },
+    "collisions": {
+      "niveau": 4,
+      "collisions": 0,
+      "total": 8,
+      "detail": {
+        "cartes-main-vs-autre": {
+          "collision": false,
+          "n": 2
+        },
+        "dames-9-13-vs-10-14": {
+          "collision": false,
+          "n": 2
+        },
+        "echecs-e4-vs-e3": {
+          "collision": false,
+          "n": 2
+        },
+        "echecs-nf3-vs-nc3": {
+          "collision": false,
+          "n": 2
+        },
+        "echecs-trait": {
+          "collision": false,
+          "n": 2
+        },
+        "go-d4-vs-d5": {
+          "collision": false,
+          "n": 2
+        },
+        "morpion-a1-vs-b1": {
+          "collision": false,
+          "n": 2
+        },
+        "morpion-xox-vs-oxx": {
+          "collision": false,
+          "n": 2
+        }
+      }
+    },
+    "controle_lexique": {
+      "base": 112,
+      "permute": 92,
+      "perdus": 20,
+      "taux_base": 1.0,
+      "taux_permute": 0.8214
+    },
+    "controle_etiquettes": {
+      "bons": 7,
+      "total": 112,
+      "taux": 0.0625
+    },
+    "restitution": {
+      "bons": 112,
+      "total": 112,
+      "taux": 1.0,
+      "echecs": []
+    },
+    "restitution_negative": {
+      "detectees": 112,
+      "total": 112,
+      "taux": 1.0
+    },
+    "compacite": {
+      "objets": 41,
+      "json_moyen": 128.93,
+      "binaire_moyen": 71.1,
+      "ratio": 0.5515
+    },
+    "vitesse": {
+      "niveau4": {
+        "niveau": 4,
+        "secondes": 0.0363,
+        "par_seconde": 3083.2
+      },
+      "niveau0": {
+        "niveau": 0,
+        "secondes": 0.0251,
+        "par_seconde": 4470.4
+      }
+    },
+    "detection": {
+      "bons": 100,
+      "total": 112,
+      "taux": 0.8929,
+      "echecs": [
+        {
+          "jeu": "morpion",
+          "detecte": "go",
+          "score": 0.35,
+          "texte": "A1"
+        },
+        {
+          "jeu": "morpion",
+          "detecte": "go",
+          "score": 0.35,
+          "texte": "A1"
+        },
+        {
+          "jeu": "morpion",
+          "detecte": "go",
+          "score": 0.35,
+          "texte": "B1"
+        },
+        {
+          "jeu": "echecs",
+          "detecte": "go",
+          "score": 0.35,
+          "texte": "E4"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.1,
+          "texte": "le pion b6 prend en d4"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.1,
+          "texte": "b6 prend d4"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.1,
+          "texte": "le pion b6 prend en d4 puis f2"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.45,
+          "texte": "b6-c5"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.1,
+          "texte": "le pion de b6 vers c5"
+        },
+        {
+          "jeu": "dames",
+          "detecte": "echecs",
+          "score": 0.45,
+          "texte": "c3-d4"
+        },
+        {
+          "jeu": "go",
+          "detecte": "echecs",
+          "score": 0.1,
+          "texte": "d4"
+        },
+        {
+          "jeu": "go",
+          "detecte": "morpion",
+          "score": 0.0,
+          "texte": "jouer en D4"
+        }
+      ]
+    }
+  },
+  "pensee": {
+    "morpion": {
+      "valeur_vide": 0.0,
+      "parfait": "N",
+      "exact_vs_hasard_non_perdues": 200,
+      "exact_vs_hasard_total": 200,
+      "gourmand_vs_exact_perdues": 0,
+      "gourmand_vs_exact_total": 200
+    },
+    "echecs": {
+      "perft": {
+        "positions": [
+          {
+            "position": "depart",
+            "profondeur": 4,
+            "valeurs": [
+              20,
+              400,
+              8902,
+              197281
+            ],
+            "attendus": [
+              20,
+              400,
+              8902,
+              197281
+            ],
+            "ok": true,
+            "secondes": 1.263
+          },
+          {
+            "position": "kiwipete",
+            "profondeur": 4,
+            "valeurs": [
+              48,
+              2039,
+              97862,
+              4085603
+            ],
+            "attendus": [
+              48,
+              2039,
+              97862,
+              4085603
+            ],
+            "ok": true,
+            "secondes": 25.877
+          },
+          {
+            "position": "p3",
+            "profondeur": 4,
+            "valeurs": [
+              14,
+              191,
+              2812,
+              43238
+            ],
+            "attendus": [
+              14,
+              191,
+              2812,
+              43238
+            ],
+            "ok": true,
+            "secondes": 0.306
+          },
+          {
+            "position": "p4",
+            "profondeur": 4,
+            "valeurs": [
+              6,
+              264,
+              9467,
+              422333
+            ],
+            "attendus": [
+              6,
+              264,
+              9467,
+              422333
+            ],
+            "ok": true,
+            "secondes": 2.84
+          },
+          {
+            "position": "p5",
+            "profondeur": 4,
+            "valeurs": [
+              44,
+              1486,
+              62379,
+              2103487
+            ],
+            "attendus": [
+              44,
+              1486,
+              62379,
+              2103487
+            ],
+            "ok": true,
+            "secondes": 13.155
+          },
+          {
+            "position": "p6",
+            "profondeur": 4,
+            "valeurs": [
+              46,
+              2079,
+              89890,
+              3894594
+            ],
+            "attendus": [
+              46,
+              2079,
+              89890,
+              3894594
+            ],
+            "ok": true,
+            "secondes": 22.049
+          }
+        ],
+        "ok": true
+      },
+      "mates": {
+        "positions": [
+          {
+            "fen": "6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1",
+            "trouve": true,
+            "statique": false,
+            "coup": {
+              "de": 56,
+              "promotion": null,
+              "roque": null,
+              "vers": 0
+            },
+            "noeuds": 20
+          },
+          {
+            "fen": "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1",
+            "trouve": true,
+            "statique": true,
+            "coup": {
+              "de": 13,
+              "promotion": null,
+              "roque": null,
+              "vers": 5
+            },
+            "noeuds": 26
+          },
+          {
+            "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+            "trouve": true,
+            "statique": false,
+            "coup": {
+              "de": 45,
+              "promotion": null,
+              "roque": null,
+              "vers": 13
+            },
+            "noeuds": 42
+          }
+        ],
+        "trouves": 3,
+        "total": 3,
+        "statiques": 1
+      },
+      "auto_partie": {
+        "plis": 30,
+        "noeuds": 7456,
+        "final": "5b1r/1qpkpp2/rpn2np1/pN1p1bNp/P4B1P/1PPPP1P1/3KBP2/R2Q3R w - - 5 16",
+        "ok": true
+      }
+    },
+    "dames": {
+      "regles": {
+        "perft": [
+          7,
+          49,
+          302,
+          1469,
+          7361,
+          36768
+        ],
+        "attendus": [
+          7,
+          49,
+          302,
+          1469,
+          7361,
+          36768
+        ],
+        "perft_ok": true,
+        "prise_ok": true,
+        "prise_multiple_ok": true,
+        "promotion_ok": true,
+        "ok": true
+      },
+      "force": {
+        "gagnees": 20,
+        "total": 20,
+        "taux": 1.0
+      }
+    },
+    "go": {
+      "regles": {
+        "vide_legaux": 25,
+        "vide_ok": true,
+        "capture_ok": true,
+        "suicide_ok": true,
+        "ko_ok": true,
+        "score_ok": true,
+        "ok": true
+      },
+      "force": {
+        "gagnees": 1,
+        "total": 3,
+        "taux": 0.3333,
+        "playouts": 60,
+        "secondes": 66.49,
+        "details": [
+          {
+            "graine": 0,
+            "difference": 110,
+            "resultat": null
+          },
+          {
+            "graine": 1,
+            "difference": -20,
+            "resultat": null
+          },
+          {
+            "graine": 2,
+            "difference": -20,
+            "resultat": null
+          }
+        ]
+      }
+    },
+    "cartes": {
+      "regles": {
+        "plus_haute_ok": true,
+        "atout_ok": true,
+        "ok": true
+      },
+      "force": {
+        "politique_vs_hasard": 0.797,
+        "hasard_vs_hasard": 0.486,
+        "sans_partenaire_vs_hasard": 0.756,
+        "sans_atout_vs_hasard": 0.735,
+        "illegales": 0,
+        "essais": 52000,
+        "parties": 1000
+      }
+    },
+    "invariance_pensee": {
+      "cas": [
+        {
+          "jeu": "morpion",
+          "identiques": true,
+          "decisions": [
+            "304cccf5aed2988faa242d60545eba369cdde90a6c234e1b6275a97e30b8b4e0",
+            "304cccf5aed2988faa242d60545eba369cdde90a6c234e1b6275a97e30b8b4e0"
+          ]
+        },
+        {
+          "jeu": "echecs",
+          "identiques": true,
+          "decisions": [
+            "105452c2d5459286d0884e1926c40c940ab3e82cf2ebc12fc12a564cbafdab94",
+            "105452c2d5459286d0884e1926c40c940ab3e82cf2ebc12fc12a564cbafdab94"
+          ]
+        },
+        {
+          "jeu": "dames",
+          "identiques": true,
+          "decisions": [
+            "8c805c82d07ed31e3505687bb8f04252973559e3a09bae5fdca5f89ed0c5ca0f",
+            "8c805c82d07ed31e3505687bb8f04252973559e3a09bae5fdca5f89ed0c5ca0f"
+          ]
+        },
+        {
+          "jeu": "go",
+          "identiques": true,
+          "decisions": [
+            "db9e6e44114ce8fa1931ec1b1b4b2c712a7a0b14b03b44dd78f7810a2fb1f4fa",
+            "db9e6e44114ce8fa1931ec1b1b4b2c712a7a0b14b03b44dd78f7810a2fb1f4fa"
+          ]
+        },
+        {
+          "jeu": "cartes",
+          "identiques": true,
+          "decisions": [
+            "e2989b8b89f68d9149c8d0c94022cb5f8ba7a1cb91d4cc0c390903f6e85eb36a",
+            "e2989b8b89f68d9149c8d0c94022cb5f8ba7a1cb91d4cc0c390903f6e85eb36a"
+          ]
+        }
+      ],
+      "identiques": 5,
+      "total": 5
+    },
+    "invariance_negative": {
+      "cas": [
+        {
+          "jeu": "morpion",
+          "etat_different": true
+        },
+        {
+          "jeu": "echecs",
+          "etat_different": true
+        },
+        {
+          "jeu": "dames",
+          "etat_different": true
+        },
+        {
+          "jeu": "go",
+          "etat_different": true
+        },
+        {
+          "jeu": "cartes",
+          "etat_different": true
+        }
+      ],
+      "differents": 5,
+      "total": 5
+    }
+  },
+  "secondes": 179.98,
+  "verdict": {
+    "ok": true,
+    "echecs": []
+  }
+}
