@@ -502,5 +502,45 @@
    "ourdou"
   ],
   "conclusion": "plus de langues et de donnees : l'ecart relatif de distillation croit"
+ },
+ "modele_600_448_8_1000": {
+  "parametres_approx": 26990000,
+  "donnees": {
+   "exemples": 610,
+   "train": 541,
+   "val": 69,
+   "langues": 20
+  },
+  "config": {
+   "famille": "route",
+   "dim": 448,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 1000,
+   "eval_tous": 500
+  },
+  "aligne": [
+   2.7705,
+   2.7158,
+   2.7867
+  ],
+  "melange": [
+   2.5977,
+   2.8334,
+   2.8018
+  ],
+  "moyennes": {
+   "aligne": 2.7577,
+   "melange": 2.7443,
+   "ecart": -0.0134,
+   "unite": "bits/octet",
+   "signe": "controle legerement meilleur, 2 graines sur 3 pour l'aligne"
+  },
+  "conclusion": "a 1 000 pas, l'effet 500 pas ne survit pas : quasi egal, controle +0,49 % ; la valeur absolue baisse mais le conditionnement n'est plus visible"
  }
 }

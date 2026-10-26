@@ -171,6 +171,12 @@ Même modèle **26,99 M** (dim 448, 8 couches), 500 pas, 3 graines : aligné **3
 2,8468**, mélangé **3,1974 / 3,0697 / 2,9582** ; moyennes **2,9611** contre **3,0751** :
 l'**aligné gagne 3/3**, **0,1140 bit/octet** (**3,71 %**).
 
+**À 1 000 pas, l'effet ne survit pas.** Même corpus, même modèle, 1 000 pas, 3 graines : aligné
+**2,7705 / 2,7158 / 2,7867**, mélangé **2,5977 / 2,8334 / 2,8018** ; moyennes **2,7577** contre
+**2,7443** — le **contrôle repasse** de 0,49 %, et les signes sont mitigés (2/3 aligné). La valeur
+absolue baisse (2,76 au lieu de 2,96), mais le **conditionnement n'est plus visible** : les 500 pas
+sont une **fenêtre**, pas un équilibre. C'est un négatif nommé : l'écart 3,71 % est **transitoire**.
+
 La **valeur absolue** n'est pas comparable au corpus 310 : la validation contient les **10 nouvelles
 langues**, plus difficiles pour un byte-level, et elle passe de 2,68 à 2,96. Mais **à l'intérieur du
 même corpus**, l'écart relatif **croît** de **2,93 %** (310, 10 langues) à **3,71 %** (610,
