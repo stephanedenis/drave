@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 09 h 45 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 11 h 25 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -59,7 +59,7 @@ tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte
 octets, la grappe exacte à 21 %) ; **A8** est branchée en **opt-in** (la règle rend le choix de la main) ; **les trois
 passes** du 24/10 (10 h 53, 19 h 04, 21 h 35) sont **45/47** (les deux structurels seuls, aucun rouge nouveau,
 **toutes les références stables**) ; celle du **25/10 à 04 h 51** est **44/2** (46 entrées, les **mêmes deux
-structurelles**, et **aucune porte cassée par les instruments de C3.2**) ; celle du **25/10 à 22 h 18** est **45/3** (48 entrées ; les deux structurelles et `porte-homeostasie`, dont le LoRA de référence **temporaire** manquait — régénéré, la porte **repasse** → **46/2**) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153) ; **C3.2 est fait** : un module de restitution **par famille**, et **4 familles sur 5
+structurelles**, et **aucune porte cassée par les instruments de C3.2**) ; celle du **25/10 à 22 h 18** est **45/3** (48 entrées ; les deux structurelles et `porte-homeostasie`, dont le LoRA de référence **temporaire** manquait — régénéré, la porte **repasse** → **46/2**) ; celle du **26/10 à 09 h 40** est **46/2** (48 entrées ; `porte-jeux` **étendue** verte, `porte-homeostasie` **verte**, seules les deux structurelles) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153) ; **C3.2 est fait** : un module de restitution **par famille**, et **4 familles sur 5
 au-dessus de la référence** (de 14,7 % à 100 %) ; **B5/B6** sont mesurés — **112 items**, **100 %** au niveau 4,
 **33/33** paires invariantes, **0 collision**, restitution **112/112**, perft des échecs et des dames exact,
 **3/3** mats, **20/20** dames, politique des cartes **79,7 %**, pensée invariante **5/5** ; **B7/B8** sont
@@ -72,7 +72,7 @@ maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent a
 | | |
 |---|---:|
 | mesures de la fiche principale | **173** |
-| portes (passe complète) | **48** — 46 vertes, 2 structurels (25/10 22 h 18 ; `porte-homeostasie` relancée) |
+| portes (passe complète) | **48** — 46 vertes, 2 structurels (26/10 09 h 40 ; `porte-jeux` étendue, `porte-homeostasie` verte) |
 | fiches / JSON de résultats | **163** / **233** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |

@@ -9,6 +9,17 @@
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 >
+> **Passe du 2026-10-26 à 09 h 40** (**48 portes, 46 vertes, 2 rouges**, **1 h 40 min**) — la passe de clôture
+> de **B7/B8**, avec la **`porte-jeux` étendue** aux **71 langues** et aux **maîtres** (103 s, **verte** :
+> 449/449 au niveau 4, 11/11 paires, permutation 12/275, livre 10/10, go 9×9 10/10 contre 3/10). Les **deux
+> rouges** sont les **structurelles connues** (`porte-indice` 849 s, `porte-melange` 104 s) ; `porte-homeostasie`
+> est **verte** (504 s, ×0 exact, activité monotone, dominance reproduite). Les références sont stables :
+> `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**,
+> `porte-gain` **29,0206 → 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**,
+> `porte-greffe` **branchée**, `porte-profondeur-routee` **521 s**. La nouvelle porte `porte-deepseek` est
+> **hors réseau** et **verte** (16 tests, dry-run) ; elle n'était pas dans cette passe, elle entre dans la
+> suivante.
+>
 > **Passe du 2026-10-25 à 22 h 18** (**48 portes, 46 vertes, 2 rouges**, **1 h 31 min**) — la passe de
 > clôture de **B5/B6**, avec la nouvelle **`porte-jeux`** (28 s, **verte** : 100 % au niveau 4, 33/33 paires
 > invariantes, 0 collision). Les **deux rouges** sont les **structurelles connues** (`porte-indice` 841 s,

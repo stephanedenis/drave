@@ -156,7 +156,7 @@ sources** du domaine public, **3 parties** validées jusqu'au mat, **28 position
 | jeu | ce que le principe déplace | contrôle |
 |---|---|---|
 | échecs | premier coup **d4** (sans : **Nc3**) ; livre **10/10** ; mats **3/3** | accord avec le coup du maître **42/101** avec les principes contre **41/101** sans — **+1, non significatif** |
-| dames | **10 victoires, 10 nulles, 0 défaite** en 20 parties | la base perd **20/20** avec les Blancs : le biais de couleur est nommé |
+| dames | **10 victoires, 10 nulles, 0 défaite** en 20 parties | la base ne gagne **aucune** des 20 parties avec les Blancs (**0 victoire**) : le biais de couleur est nommé |
 | go | 9×9 : **10/10** coups de 3e/4e ligne avec le prior contre **3/10** sans | 5×5 et capture : **10/10** des deux côtés, effet nul nommé |
 | cartes | **44,7 %** contre la base (51,0 %) ; contre le hasard 78,5 % contre 82,4 % | ablation : sans honneur 43,5 %, sans seconde 45,7 %, sans troisième 46,5 % — **aucune ne rattrape la base** |
 

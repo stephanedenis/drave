@@ -19,13 +19,13 @@ sont des **mots-clés** (pièce + cases, rang + enseigne, nom du jeu + coordonn�
 `si`, `yo`) n'ont aucun item ; la notation les couvre. `e4`/`E4` restent ambiguës entre échecs et go. C'est écrit
 dans la fiche, pas caché.
 
-**Les maîtres.** **17 principes**, **9 sources** du domaine public (Lasker 1925, Capablanca 1921, Nimzowitsch 1925,
-Tarrasch 1931, Payne 1756, Smith 1908, Cavendish 1884, les proverbes du go, le morpion résolu), **3 parties**
+**Les maîtres.** **17 principes**, **9 sources** (sept ouvrages du domaine public — Lasker 1925, Capablanca 1921, Nimzowitsch 1925,
+Tarrasch 1931, Payne 1756, Smith 1908, Cavendish 1884 —, les proverbes du go et le morpion résolu), **3 parties**
 (Opéra 1858, Immortelle 1851, Toujours verte 1852) validées jusqu'au mat, **28 positions** de livre.
 
 Ce que les principes **déplacent** : aux échecs, le premier coup passe de **Nc3** à **d4**, le livre tient
-**10/10**, les mats restent **3/3** ; aux dames, **10 victoires, 10 nulles, 0 défaite** en 20 parties (la base perd
-**20/20** avec les Blancs — biais de couleur nommé) ; au go 9×9, **10/10** coups de 3e/4e ligne avec le prior
+**10/10**, les mats restent **3/3** ; aux dames, **10 victoires, 10 nulles, 0 défaite** en 20 parties (la base ne gagne
+**aucune** des 20 parties avec les Blancs, **0/20** — biais de couleur nommé) ; au go 9×9, **10/10** coups de 3e/4e ligne avec le prior
 contre **3/10** sans. Ce qu'ils **ne déplacent pas** : l'accord avec le coup du maître aux échecs (**42/101** avec,
 **41/101** sans — **+1**, non significatif) ; sur 5×5, le bord et la capture sont déjà trouvés par la base
 (**10/10** des deux côtés) ; aux cartes, la politique du whist **perd** contre la base (**44,7 %** contre

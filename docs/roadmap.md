@@ -239,16 +239,16 @@ externe) sont **hors du plan** ; la notation est le recours qui n'attend pas ces
 
 ### B8 — Les maîtres : les principes encodés, mesurés, et leurs négatifs
 
-Les livres des maîtres sont une **connaissance** : B8 en tire **17 principes**, **9 sources** du domaine public
-(Lasker 1925, Capablanca 1921, Nimzowitsch 1925, Tarrasch 1931, Payne 1756, Smith 1908, Cavendish 1884, les
-proverbes du go, le morpion résolu), un **livre de 28 positions**, trois **parties** du domaine public (Opéra
-1858, Immortelle 1851, Toujours verte 1852), et les encode dans la pensée.
+Les livres des maîtres sont une **connaissance** : B8 en tire **17 principes**, **9 sources** (sept ouvrages du
+domaine public — Lasker 1925, Capablanca 1921, Nimzowitsch 1925, Tarrasch 1931, Payne 1756, Smith 1908,
+Cavendish 1884 —, les proverbes traditionnels du go et le morpion résolu), un **livre de 28 positions**, trois
+**parties** du domaine public (Opéra 1858, Immortelle 1851, Toujours verte 1852), et les encode dans la pensée.
 
 | # | chantier | état | critère de succès |
 |---|---|---|---|
 | B8.1 | **La base des maîtres** | ✅ mesuré | **17 principes**, **9 sources**, **3 parties** validées jusqu'au mat, **28 positions** de livre |
 | B8.2 | **Échecs** : évaluation, livre, accord avec les maîtres | ✅ mesuré — **positif et négatif** | premier coup **d4** (sans : **Nc3**) ; livre **10/10** ; mats **3/3** ; accord avec le coup du maître **42/101** avec les principes contre **41/101** sans — **+1, non significatif** |
-| B8.3 | **Dames** : évaluation augmentée contre l'évaluation du dépôt | ✅ mesuré — **positif avec biais nommé** | **10 victoires, 10 nulles, 0 défaite** en 20 parties (même profondeur 4) ; la base, elle, perd **20/20** avec les Blancs — le biais de couleur est **nommé** |
+| B8.3 | **Dames** : évaluation augmentée contre l'évaluation du dépôt | ✅ mesuré — **positif avec biais nommé** | **10 victoires, 10 nulles, 0 défaite** en 20 parties (même profondeur 4) ; la base, elle, ne gagne **aucune** des 20 parties avec les Blancs (**0 victoire**) — le biais de couleur est **nommé** |
 | B8.4 | **Go** : les proverbes comme prior de MCTS | ✅ mesuré — **positif sur 9×9, sans effet sur 5×5** | 9×9 : **10/10** coups de 3e/4e ligne avec le prior contre **3/10** sans ; 5×5 : premier coup **10/10** des deux côtés ; capture **10/10** des deux côtés |
 | B8.5 | **Cartes** : la politique du whist contre la politique du dépôt | ✅ mesuré — **négatif** | **44,7 %** contre la base (51,0 %) ; contre le hasard **78,5 %** contre **82,4 %** ; l'ablation (sans honneur **43,5 %**, sans seconde **45,7 %**, sans troisième **46,5 %**) ne rattrape pas la base |
 

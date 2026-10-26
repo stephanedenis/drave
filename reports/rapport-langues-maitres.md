@@ -2,8 +2,9 @@
 
 > Mesure du **26/10/2026**, sur `Hauru` (Python 3.13, sans GPU), `tools/jeux/` et
 > `tools/porte-jeux.sh`. Deux extensions de B5/B6 : un **lexique multilingue** de 35 concepts dans
-> **71 langues** (Wikidata, CC0) et une **base de 17 principes** tirés de neuf sources du domaine public,
-> avec leurs évaluations, leur livre, leurs parties et leurs politiques. JSON bruts :
+> **71 langues** (Wikidata, CC0) et une **base de 17 principes** tirés de neuf sources (sept ouvrages du
+> domaine public, les proverbes traditionnels du go, le morpion résolu), avec leurs évaluations, leur livre,
+> leurs parties et leurs politiques. JSON bruts :
 > [`jeux-langues-mesures.json`](jeux-langues-mesures.json) et
 > [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json). Concept :
 > [`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md). Durées : **3,1 s** (langues), **468,8 s**
@@ -132,9 +133,9 @@ recherche. Le moteur reste un moteur de profondeur 3.
 | victoires des Blancs avec la base seule | **0 / 20** |
 
 Les maîtres ne perdent jamais ; les 10 victoires sont avec les Noirs, les 10 nulles avec les Blancs. La base
-seule perd **20/20** avec les Blancs. Le **biais de couleur** de ce jeu (les Noirs gagnent toutes les parties de
-la base) est nommé : il ne permet pas de dire « les maîtres sont meilleurs » sans réserve ; il permet de dire
-qu'ils **ne perdent pas** et qu'ils **améliorent le côté défavorisé**.
+seule ne gagne **aucune** des 20 parties avec les Blancs (**0/20**). Le **biais de couleur** de ce jeu est nommé :
+il ne permet pas de dire « les maîtres sont meilleurs » sans réserve ; il permet de dire qu'ils **ne perdent pas**
+et qu'ils **améliorent le côté défavorisé**.
 
 ### Go
 
@@ -188,8 +189,8 @@ cartes du dépôt est simplifié (pas d'enchères, pas de signalisation), et la 
   profondeur 3, pas pour « les maîtres » en général.
 - **Le jeu de cartes est simplifié** : sans enchères ni signalisation, les règles du whist ne sont pas dans
   leur domaine de validité. Le négatif des cartes est donc un négatif **de ce jeu**, pas des livres.
-- **Le biais de couleur aux dames** : la base perd 20/20 avec les Blancs ; le résultat des maîtres (0 défaite)
-  est solide, mais l'effet propre des principes est confondu avec l'avantage des Noirs.
+- **Le biais de couleur aux dames** : la base ne gagne aucune des 20 parties avec les Blancs (0/20) ; le résultat
+  des maîtres (0 défaite) est solide, mais l'effet propre des principes est confondu avec l'avantage des Noirs.
 - **La vitesse a baissé** : 1 297 parses/s au niveau 4 contre 3 083 avant le multilingue (tokenisation Unicode
   et détection de langue). La couche reste sous la milliseconde par surface ; c'est le prix des 71 langues,
   pas une régression cachée.
