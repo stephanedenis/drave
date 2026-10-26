@@ -68,7 +68,7 @@
 | **B6** la logique dans la pensée — **faite** (perft, mats, recherche, politique) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-jeux-symboliques.md) |
 | **B7** les langues — **faites** (71 langues, 449 surfaces, 11/11) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
 | **B8** les maîtres — **faits** (17 principes, livre, go 9×9, négatifs nommés) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
-| **B9** le banc externe — **fait** (DeepSeek 310/310, chrF 82,82 ; natif GPU ; transition 9,23–9,96 M ; masque quasi égal) | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
+| **B9** le banc externe — **fait** (DeepSeek 310/310, chrF 82,82 ; natif GPU ; transition 9,23–9,96 M, fenêtre 610/20, négatif 910/30, masque quasi égal) | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 
 ## Les activités en cours
 
