@@ -274,24 +274,23 @@ partir des sorties. Concept : [`docs/llm-externe.md`](llm-externe.md) ; fiche :
 |---|---|---|---|
 | B9.1 | **L'adaptateur et la porte** : API compatible OpenAI, cache, dry-run, clé par fichier | ✅ mesuré | **20 tests** hors réseau ; `porte-deepseek` **verte** ; appel live de contrôle : **16 jetons**, **0,868 s** |
 | B9.2 | **Le corpus professeur** : 310 prompts publics (30 articles UDHR × 10 langues, 10 jeux) | ✅ mesuré | **310/310** réponses de `deepseek-flash` ; **34 112** tokens d'entrée, **32 436** de sortie, **511,1 s** ; chrF **82,82** contre un **plancher 15,64** (le pilote à 60 surestimait l'allemand et le chinois) |
-| B9.3 | **La distillation** : `route` sur GPU, contrôle par permutation des réponses | ✅ **mesuré — seuil entre 4,04 et 10,70 M** | 310 exemples, 500 pas, 3 graines : **4,04 M** négatif (contrôle 2,7510 contre 2,7709) ; **10,70 M** aligné 3/3 (**2,7166** contre 2,7622, 1,65 %) ; **16,02 M** 3/3 (2,7210 contre 2,7742, 1,92 %) ; **22,54 M** 3/3 (2,6915 contre 2,7393, 1,74 %). Perte **masquée** : à 4,04 M le contrôle gagne encore (2,7549 contre 2,7708) ; à 10,70 M le banc n'est pas calibré (2,85 contre 2,72) — **non concluant** |
+| B9.3 | **La distillation** : `route` sur GPU, contrôle par permutation des réponses | ✅ **mesuré — transition 9,23–9,96 M** | 310 exemples, 500 pas, 3 graines : **4,04 M** négatif (2,7510 contrôle contre 2,7709) ; **9,23 M** transitoire (moyenne +0,83 %, **1 graine/3**) ; **9,96 M** 3/3 (2,7389 contre 2,7881, 1,76 %) ; **10,70 M** 3/3 (1,65 %) ; **16,02 M** 3/3 (1,92 %) ; **22,54 M** 3/3 (1,74 %). Masque **calibré** : quasi égal à 4,04 M (2,7335 contre 2,7340, **0,02 %**) et à 10,70 M (2,7970 contre 2,7928, **0,15 %**) — pas de gain établi |
 | B9.4 | **La répartition** : DeepSeek pour le langage, GPU pour le natif | ✅ décidé | `route` **4,04 M** et **22,54 M** sur **`cuda`** ; le grand modèle fait **1,18 M** poids lus/jeton/couche, 500 pas en **52–56 s** ; Qwen 0.5B ne reste que **référence blanche** |
 
-**Prochaine action** : **resserrer le seuil** entre 4,04 M et 10,70 M (dim 224/6 ou 240/6), puis
-**calibrer le banc masqué** (warmup, clipping, même optimiseur que le trainer) avant de conclure
-sur le masque, et **augmenter les données**. Le signe change avec la **capacité**, pas avec la
-quantité de données (310 exemples dans les deux cas) ; c'est le résultat à expliquer. Le contrôle
-par permutation et le plancher chrF sont les garde-fous. Aucune ligne n'est bloquée : la clé est
-dans l'environnement, les GPU sont libres.
+**Prochaine action** : **resserrer la transition 9,23–9,96 M** (dim 232/6), **augmenter les
+données**, et **porter le masque dans le trainer** (même boucle, warmup/clipping) pour une
+comparaison propre. Le signe change avec la **capacité**, pas avec la quantité de données (310
+exemples dans les deux cas) ; c'est le résultat à expliquer. Le contrôle par permutation et le
+plancher chrF sont les garde-fous. Aucune ligne n'est bloquée : la clé est dans l'environnement,
+les GPU sont libres.
 
 **Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
 proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
-**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a un **seuil de capacité
-entre 4,04 M et 10,70 M** : **négative à 4,04 M** (2,7510 mélangé contre 2,7709 aligné),
-**positive à 10,70 M** (2,7166 contre 2,7622, **3/3**, 1,65 %), **16,02 M** (1,92 %) et **22,54 M**
-(1,74 %). La **perte masquée** ne sauve pas le 4,04 M et son banc à 10,70 M n'est pas calibré :
-**non concluant**. Le transfert existe, mais il demande de la capacité ; le seuil exact et le banc
-masqué sont les prochaines mesures.
+**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a une **transition entre
+9,23 M et 9,96 M** : **négative à 4,04 M**, **transitoire à 9,23 M** (1 graine/3), **positive 3/3
+à 9,96 M, 10,70 M, 16,02 M et 22,54 M** (1,76 %, 1,65 %, 1,92 %, 1,74 %). Le **masque calibré** à
+4,04 M est **quasi égal** (2,7335 contre 2,7340, 0,02 %) : pas de gain établi. Le transfert existe,
+mais il demande de la capacité ; le seuil est une **transition**, pas une marche.
 
 ---
 

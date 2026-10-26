@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 12 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 13 h 00 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -59,11 +59,12 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    français 96,58, italien 92,87, allemand 90,50 ; **hindi 58,45**, **swahili 54,83**). Le pilote à
    60 prompts surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait
    foi. Côté natif, `route` tourne sur **`cuda`** ; la distillation à **310 exemples** (271/39, 500 pas,
-   3 graines) a un **seuil de capacité entre 4,04 M et 10,70 M** : à **4,04 M**, le contrôle mélangé
-   bat l'aligné (**2,7510** contre **2,7709**) ; à **10,70 M**, l'**aligné gagne 3/3** (**2,7166**
-   contre **2,7622**, 1,65 %) ; **16,02 M** (1,92 %) et **22,54 M** (1,74 %) confirment. La **perte
-   masquée** ne sauve pas le 4,04 M et son banc à 10,70 M n'est pas calibré (2,85 contre 2,72) :
-   **non concluant**. La prochaine action est de resserrer le seuil et de calibrer ce banc.
+   3 graines) a une **transition entre 9,23 M et 9,96 M** : **4,04 M** négatif (contrôle 2,7510 contre
+   2,7709) ; **9,23 M** transitoire (moyenne +0,83 %, **1 graine/3**) ; **9,96 M** 3/3 (2,7389 contre
+   2,7881, 1,76 %) ; **10,70 M** (1,65 %), **16,02 M** (1,92 %) et **22,54 M** (1,74 %) confirment.
+   Le **masque calibré** est **quasi égal** à 4,04 M (2,7335 contre 2,7340, **0,02 %**) et à 10,70 M
+   (2,7970 contre 2,7928, **0,15 %**) : pas de gain établi. La prochaine action est de resserrer la
+   transition et de porter le masque dans le trainer.
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
@@ -79,8 +80,9 @@ mesurés — **71 langues**, **449/449**, **11/11**, permutation **12/275**, not
 maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent au go 9×9 (**10/10** contre
 **3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**) ; **B9**
 sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,64** ; la distillation native a
-un **seuil de capacité entre 4,04 et 10,70 M** — négative à **4,04 M**, positive **3/3** à **10,70 M** (1,65 %),
-**16,02 M** (1,92 %) et **22,54 M** (1,74 %) ; la perte masquée est **non concluante**.
+une **transition entre 9,23 et 9,96 M** — négative à **4,04 M**, transitoire à **9,23 M**, positive **3/3** à
+**9,96 M** (1,76 %), **10,70 M** (1,65 %), **16,02 M** (1,92 %) et **22,54 M** (1,74 %) ; la perte masquée
+calibrée est **quasi égale** à 4,04 M (0,02 %).
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -96,7 +98,7 @@ un **seuil de capacité entre 4,04 et 10,70 M** — négative à **4,04 M**, pos
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
 | la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
 | les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
-| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif cuda ; seuil entre 4,04 et 10,70 M ; positif 3/3 à 10,70/16,02/22,54 M ; masque non concluant** |
+| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif cuda ; transition 9,23–9,96 M ; positif 3/3 au-dessus ; masque quasi égal** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).

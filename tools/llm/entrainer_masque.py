@@ -88,6 +88,8 @@ def main() -> int:
     ap.add_argument("--graine", type=int, default=1)
     ap.add_argument("--init", type=float, default=0.08)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--warmup", type=int, default=50)
+    ap.add_argument("--clip", type=float, default=1.0)
     ap.add_argument("--sans-gpu", action="store_true")
     ap.add_argument("--sortie", default="")
     args = ap.parse_args()
@@ -101,6 +103,11 @@ def main() -> int:
     print(f"# route masque · {n_params/1e6:.2f} M parametres · {dev} · "
           f"{len(train)} train / {len(val)} val · seq {args.seq}")
     opt = torch.optim.AdamW(modele.parameters(), lr=args.lr)
+    if args.warmup > 0:
+        plan = torch.optim.lr_scheduler.LambdaLR(
+            opt, lambda pas: min(1.0, (pas + 1) / args.warmup))
+    else:
+        plan = None
     t0 = time.monotonic()
     for pas in range(1, args.pas + 1):
         xs, ms = [], []
@@ -114,7 +121,11 @@ def main() -> int:
         perte, _ = _perte(modele, x, m)
         opt.zero_grad()
         perte.backward()
+        if args.clip > 0:
+            torch.nn.utils.clip_grad_norm_(modele.parameters(), args.clip)
         opt.step()
+        if plan is not None:
+            plan.step()
         if pas % args.eval_tous == 0 or pas == args.pas:
             v, n = _validation(modele, val, args.seq, dev)
             print(f"  pas {pas:5d} · perte {float(perte.detach()):.4f} · val {v:.4f} bits/octet "

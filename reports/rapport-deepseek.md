@@ -117,21 +117,27 @@ bit/octet** (0,72 %), et il gagne **2 graines sur 3**. À **4,04 M**, la distill
 **n'est pas établie**. Le contrôle par permutation fait exactement son travail : il empêche de
 conclure sur une graine favorable.
 
-### Le seuil de capacité : entre 4,04 M et 10,70 M
+### Le seuil de capacité : une transition entre 9,23 M et 9,96 M
 
-Même corpus, même découpage, même perte ; seule change la taille de `route`. Quatre tailles,
+Même corpus, même découpage, même perte ; seule change la taille de `route`. Six tailles,
 trois graines à chaque fois.
 
 | modèle | paramètres | aligné (moyenne) | mélangé (contrôle) | écart | signe |
 |---|---:|---:|---:|---:|---|
 | dim 192, 4 couches | **4,04 M** | 2,7709 | **2,7510** | −0,0199 | **contrôle** (2/3) |
+| dim 224, 6 couches | **9,23 M** | **2,7565** | 2,7796 | +0,0231 | **transitoire** : moyenne +0,83 %, **1 graine/3** |
+| dim 232, 6 couches | **9,60 M** | 2,7103 | **2,7071** | −0,0032 | **bruité** : contrôle +0,12 %, **1 graine/3** |
+| dim 240, 6 couches | **9,96 M** | **2,7389** | 2,7881 | +0,0492 | **aligné 3/3** (1,76 %) |
 | dim 256, 6 couches | **10,70 M** | **2,7166** | 2,7622 | +0,0456 | **aligné 3/3** (1,65 %) |
 | dim 320, 7 couches | **16,02 M** | **2,7210** | 2,7742 | +0,0532 | **aligné 3/3** (1,92 %) |
 | dim 384, 8 couches | **22,54 M** | **2,6915** | 2,7393 | +0,0478 | **aligné 3/3** (1,74 %) |
 
-Le **seuil est entre 4,04 M et 10,70 M** : le premier point positif est **10,70 M**, et les deux
-suivants le confirment. Le grand modèle de 22,54 M fait **1,18 M** poids lus par jeton et par
-couche, **2,95 M** stockés, **`cuda`**, 500 pas en **52–56 s**.
+Le **seuil est une transition bruitée entre 9,23 M et 9,96 M** : à 9,23 M la moyenne penche pour
+l'aligné mais **une seule graine sur trois** ; à 9,60 M, le contrôle repasse de 0,12 % (1/3) ; à
+9,96 M, **3/3** ; et les trois tailles suivantes confirment. 4,04 M est le seul point franchement
+négatif, et **9,96 M est le premier point 3/3**. La transition n'est pas une marche : c'est une
+zone de bruit autour de 9,5 M. Le grand modèle de 22,54 M fait **1,18 M** poids lus
+par jeton et par couche, **2,95 M** stockés, **`cuda`**, 500 pas en **52–56 s**.
 
 | entraînement | graine | val (bits/octet) |
 |---|---:|---:|
@@ -143,23 +149,27 @@ couche, **2,95 M** stockés, **`cuda`**, 500 pas en **52–56 s**.
 | **22,54 M**, réponses mélangées | 3 | **2,7109** |
 
 Le facteur qui change le signe est la **capacité**, pas la quantité de données (310 exemples dans
-les deux cas). À 4,04 M, même la perte masquée ne renverse pas le contrôle ; à 10,70 M, le
-transfert existe. Le seuil exact (entre 4,04 et 10,70) reste à localiser.
+les deux cas). Le seuil est **une transition**, pas une marche : 9,23 M est mitigé, 9,96 M est net.
+La perte masquée, calibrée, ne déplace pas le 4,04 M.
 
-### La perte masquée : le prompt n'est pas le levier à 4,04 M
+### La perte masquée : le prompt n'est pas le levier
 
 Le prompt est **lu** mais sa perte est **masquée** (`tools/llm/masque.py`,
-`tools/llm/entrainer_masque.py`) : seule la réponse compte. Même corpus, même découpage, une graine.
+`tools/llm/entrainer_masque.py`) : seule la réponse compte. Le banc a été **calibré** (warmup 50,
+clipping 1,0) et testé sur **trois graines** à 4,04 M.
 
-| modèle | aligné | mélangé (contrôle) | écart | lecture |
+| modèle | aligné (moyenne) | mélangé (contrôle) | écart | lecture |
 |---|---:|---:|---:|---|
-| **4,04 M** | 2,7708 | **2,7549** | −0,0159 | **contrôle meilleur** : le masque ne sauve pas le petit modèle |
-| **10,70 M** | 2,8507 | 2,8486 | −0,0021 | **égal**, et les deux sont **au-dessus** du trainer (2,72) — banc non calibré |
+| **4,04 M**, masque **non calibré** (1 graine) | 2,7708 | **2,7549** | −0,0159 | contrôle meilleur |
+| **4,04 M**, masque **calibré** (3 graines) | 2,7335 | 2,7340 | −0,0005 | **quasi égal** (0,02 %), 2 graines/3 pour l'aligné |
+| **10,70 M**, masque **non calibré** (1 graine) | 2,8507 | 2,8486 | −0,0021 | égal, au-dessus du trainer (2,72) |
+| **10,70 M**, masque **calibré** (3 graines) | 2,7970 | 2,7928 | +0,0042 | **quasi égal** (0,15 %), 2 graines/3 pour l'aligné |
 
-À 4,04 M, la perte masquée **ne change pas la conclusion** : le contrôle reste meilleur. À 10,70 M,
-le banc masqué n'est pas au niveau du trainer (pas de warmup ni de clipping, boucle séparée) : il
-est **non concluant**, pas un négatif du principe. La prochaine étape est de calibrer ce banc avant
-de conclure sur le masque.
+La calibration **égalise** le petit modèle et le moyen, mais n'apporte **pas** de gain établi : à
+4,04 M l'écart est de 0,02 %, à 10,70 M de 0,15 %, avec des signes mitigés. Le banc masqué reste
+au-dessus du trainer (2,72), donc la comparaison n'est pas parfaite ; mais l'écart aligné/contrôle
+est **nul**. Le masque des prompts n'est donc ni réfuté ni établi : il est **hors de cause** pour
+expliquer le seuil, qui est une affaire de **capacité**.
 
 Le **modèle natif** a aussi été essayé sur le corpus public (`data/corpus_en.txt`, 20 pas) :
 **4,04 M paramètres**, **`cuda`**, val **4,4150** bits/octet. Ce n'est pas une mesure de qualité,
@@ -169,11 +179,12 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 - **plancher chrF** : source→référence, **15,64** à l'échelle ; sans lui, 82,82 ne veut rien dire ;
 - **permutation des réponses d'entraînement** : mêmes prompts, réponses mélangées, validation
-  **alignée**, trois graines ; à **4,04 M**, le contrôle **bat** l'aligné de 0,72 % ; à **10,70 M**,
-  **16,02 M** et **22,54 M**, l'aligné **gagne 3/3** (1,65 %, 1,92 %, 1,74 %) ;
-- **perte masquée** : à 4,04 M, le contrôle bat encore l'aligné (2,7549 contre 2,7708) ; à 10,70 M,
-  le banc masqué n'est pas calibré (2,85 contre 2,72 au trainer) — **non concluant**, pas un
-  négatif du masque ;
+  **alignée**, trois graines ; à **4,04 M**, le contrôle **bat** l'aligné de 0,72 % ; à **9,23 M**
+  la moyenne penche pour l'aligné mais **1 graine/3** ; à **9,96 M**, **10,70 M**, **16,02 M** et
+  **22,54 M**, l'aligné **gagne 3/3** (1,76 %, 1,65 %, 1,92 %, 1,74 %) ;
+- **perte masquée** : à 4,04 M, non calibrée le contrôle gagne (2,7549 contre 2,7708) ; calibrée sur
+  3 graines, quasi égal (2,7335 contre 2,7340, 0,02 %) ; à 10,70 M, calibrée sur 3 graines, quasi
+  égal (2,7970 contre 2,7928, 0,15 %) — **pas de gain établi**, signes mitigés ;
 - **correction d'un premier contrôle** : la première version mélangeait aussi la **validation** ;
   les deux pertes étaient **identiques**, ce qui l'a révélé. Corrigé, le contrôle garde la
   validation alignée et discrimine ;
@@ -190,8 +201,7 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 - **chrF n'est pas un juge** : il mesure des n-grammes de caractères, pas le sens ; une paraphrase
   correcte peut baisser, une traduction littérale peut monter.
 - **310 exemples de distillation** : le corpus reste petit ; 39 exemples de validation ; le seuil
-  de capacité est mesuré entre **4,04 M** (négatif) et **10,70 M** (positif), pas au-delà ; le
-  point exact n'est pas localisé.
+  est une **transition entre 9,23 M et 9,96 M**, pas une marche ; 9,23 M n'est pas établi.
 - **La perte inclut les prompts** : le modèle apprend surtout la **distribution des réponses** ;
   c'est peut-être pourquoi le contrôle mélangé fait aussi bien. Une perte **masquée sur les
   prompts** est la prochaine expérience, avec un modèle plus grand.
@@ -202,8 +212,9 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 ## 5. Ce que ça n'autorise pas à dire
 
 - que DeepSeek **remplace** les mesures d'états internes : il n'a ni poids ni activations ;
-- que la distillation **marche** en général : elle est **négative à 4,04 M**, **positive à 10,70 M,
-  16,02 M et 22,54 M** sur ce corpus ; le seuil est mesuré, pas expliqué ;
+- que la distillation **marche** en général : elle est **négative à 4,04 M**, **transitoire à
+  9,23 M**, **positive à 9,96 M, 10,70 M, 16,02 M et 22,54 M** sur ce corpus ; le seuil est mesuré,
+  pas expliqué ;
 - que la qualité de traduction est **uniforme** : hindi et swahili sont bas ;
 - que Qwen est **inutile** : il reste une **référence blanche** pour les portes historiques, tant
   que `route` ne les reprend pas.
@@ -231,6 +242,7 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 **B9** — le banc externe et l'élève natif ; voir [`docs/roadmap.md`](../docs/roadmap.md).
 B9.1 (adaptateur et porte) et B9.2 (corpus professeur, 310 prompts) sont mesurés ; B9.3
-(distillation) est **négatif à 4,04 M**, **positif à 10,70 M, 16,02 M et 22,54 M** (3/3 graines,
-1,65–1,92 %) et la perte masquée est **non concluante** ; B9.4 (répartition GPU/CPU) est **décidé** :
+(distillation) est **négatif à 4,04 M**, **transitoire à 9,23 M**, **positif à 9,96 M, 10,70 M,
+16,02 M et 22,54 M** (3/3 graines, 1,65–1,92 %) ; la perte masquée est **quasi égale** à 4,04 M
+**et** à 10,70 M (0,02 % / 0,15 %, signes mitigés) ; B9.4 (répartition GPU/CPU) est **décidé** :
 DeepSeek pour le langage, GPU pour `route` et les mesures blanches.

@@ -40,9 +40,10 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
   surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait foi.
 - **Élève natif** : `route` de **4,04 M** à **22,54 M** paramètres, `cuda`, 310 exemples (271/39),
   500 pas, trois graines. À 4,04 M, le contrôle mélangé bat l'aligné (**2,7510** contre **2,7709**) ;
-  à **10,70 M**, l'aligné gagne 3/3 (**2,7166** contre 2,7622), et **16,02 M** / **22,54 M**
-  confirment (1,92 % / 1,74 %). La distillation a un **seuil entre 4,04 M et 10,70 M**. La **perte
-  masquée** ne sauve pas le 4,04 M ; son banc à 10,70 M n'est pas calibré — **non concluant**.
+  à **9,23 M**, la moyenne penche pour l'aligné mais **1 graine/3** ; à **9,96 M**, **10,70 M**,
+  **16,02 M** et **22,54 M**, l'aligné gagne 3/3 (1,76 %, 1,65 %, 1,92 %, 1,74 %). La distillation a
+  une **transition entre 9,23 M et 9,96 M**. La **perte masquée calibrée** à 4,04 M est quasi égale
+  (2,7335 contre 2,7340) : pas de gain établi.
 
 ## Les secrets et le cache
 
@@ -55,8 +56,8 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 
 ## Ce qui reste ouvert
 
-- **le seuil de capacité** : entre 4,04 M et 10,70 M ; il faut le resserrer (dim 224/6, 240/6) et
-  **calibrer le banc masqué** avant de conclure sur le masque ;
+- **la transition** : entre 9,23 M et 9,96 M ; il faut la resserrer (dim 232/6) et porter le masque
+  dans le trainer pour une comparaison propre ;
 - **la qualité par langue** : hindi et swahili sont bas ; un juge humain ou un chrF par famille ne
   remplacent pas cinq articles ;
 - **le modèle** : `deepseek-flash` peut changer ; la mesure est datée ;
