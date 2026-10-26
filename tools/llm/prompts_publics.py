@@ -52,10 +52,10 @@ def _lire_articles() -> dict[tuple[str, int], str]:
     return out
 
 
-def construire() -> list[dict]:
+def construire(articles_max: int = 5) -> list[dict]:
     articles = _lire_articles()
     prompts = []
-    for art in range(1, 6):
+    for art in range(1, articles_max + 1):
         source = articles.get(("eng", art))
         if not source:
             continue
@@ -83,10 +83,16 @@ def construire() -> list[dict]:
 
 
 def main() -> int:
-    prompts = construire()
-    SORTIE.write_text("".join(json.dumps(p, ensure_ascii=False) + "\n" for p in prompts),
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--articles", type=int, default=5)
+    ap.add_argument("--sortie", default=str(SORTIE))
+    args = ap.parse_args()
+    prompts = construire(args.articles)
+    sortie = pathlib.Path(args.sortie)
+    sortie.write_text("".join(json.dumps(p, ensure_ascii=False) + "\n" for p in prompts),
                       encoding="utf-8")
-    print(f"écrit {SORTIE} : {len(prompts)} prompts")
+    print(f"écrit {sortie} : {len(prompts)} prompts")
     return 0
 
 

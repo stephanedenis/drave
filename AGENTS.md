@@ -43,9 +43,9 @@ paires invariantes, **0 collision**, perft échecs/dames, mats, politique **79,7
 **B7/B8** (les 71 langues et les maîtres) sont faits aussi : **449/449** au niveau 4, **11/11** paires,
 permutation **12/275**, notation **5 112/5 112**, livre **10/10**, go 9×9 **10/10** contre **3/10**, dames
 **0 défaite**, cartes **44,7 %** contre **51,0 %** — négatif nommé ; **B9** (le banc externe) est **mesuré** :
-DeepSeek `deepseek-flash` **60/60**, chrF **82,48** contre **15,29** de plancher ; `route` **4,04 M** sur **cuda** ;
-la distillation native **n'est pas établie** à 60 exemples — les GPU reviennent au natif, le langage sort des
-GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+DeepSeek `deepseek-flash` **310/310**, chrF **82,82** contre **15,64** de plancher ; `route` **4,04 M** sur **cuda** ;
+la distillation native **n'est pas établie** à 310 exemples (le contrôle mélangé bat l'aligné) — les GPU
+reviennent au natif, le langage sort des GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont

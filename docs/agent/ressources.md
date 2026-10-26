@@ -39,10 +39,11 @@ le langage (traduction, jugements, génération, évaluation) passe par l'API **
   d'erreur. Détail : [`docs/llm-externe.md`](../llm-externe.md) ; fiche :
   [`reports/rapport-deepseek.md`](../../reports/rapport-deepseek.md).
 
-**Ce que la première mesure dit** : DeepSeek `deepseek-flash` sert **60/60** prompts, chrF **82,48**
-contre **15,29** de plancher ; la distillation native à **60 exemples** n'est **pas établie**
-(3,8191 aligné contre 3,8361 mélangé, signes mitigés). La prochaine action est de **monter le
-corpus** (300+ prompts), pas de changer la répartition.
+**Ce que la mesure dit** : DeepSeek `deepseek-flash` sert **310/310** prompts, chrF **82,82** contre
+**15,64** de plancher ; la distillation native à **310 exemples** n'est **pas établie** — le
+**contrôle mélangé bat l'aligné** (2,7510 contre 2,7709 bits/octet, 2 graines sur 3). La prochaine
+action est un **modèle plus grand** et une **perte masquée sur les prompts**, pas un changement de
+répartition.
 
 ## La philosophie carpe diem
 

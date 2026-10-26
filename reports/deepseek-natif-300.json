@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-26",
+ "modele": "route",
+ "parametres_approx": 4040000,
+ "device": "cuda",
+ "corpus": {
+  "source": "data/deepseek/enseignant-300.jsonl",
+  "source_sha256": "33e54aa64d5e48dfefed19c4c30c7c00df4eac175893cf6df22536c807509f49",
+  "exemples": 310,
+  "train": 271,
+  "val": 39,
+  "caracteres_train": 231730,
+  "caracteres_val": 35897
+ },
+ "config": {
+  "famille": "route",
+  "dim": 192,
+  "couches": 4,
+  "tetes": 4,
+  "cache": 384,
+  "experts": 8,
+  "k": 2,
+  "seq": 128,
+  "lot": 8,
+  "pas": 500,
+  "eval_tous": 250
+ },
+ "aligne": [2.7690, 2.7370, 2.8066],
+ "melange": [2.7110, 2.7669, 2.7751],
+ "moyennes": {"aligne": 2.7709, "melange": 2.7510, "ecart": 0.0199,
+              "unite": "bits/octet", "signe": "melange meilleur sur 2 graines sur 3"},
+ "conclusion": "aucun effet de distillation etabli : le controle melange est meilleur en moyenne (2,7510 contre 2,7709 bits/octet, 0,72 %), et sur 2 graines sur 3"
+}

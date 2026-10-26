@@ -20,8 +20,8 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 
 ## Le pipeline
 
-1. **Prompts publics** : 50 traductions de cinq articles de l'UDHR vers dix langues, 10 questions de
-   jeux (`tools/llm/prompts_publics.jsonl`).
+1. **Prompts publics** : 300 traductions de 30 articles de l'UDHR vers dix langues, 10 questions de
+   jeux (`tools/llm/prompts_publics_300.jsonl`).
 2. **Corpus professeur** : les réponses de `deepseek-flash` (JSONL, cache, tokens, latence) ;
    `tools/llm/enseignant.py`.
 3. **Mesure** : chrF contre la traduction humaine officielle, avec le **plancher** source→référence ;
@@ -30,16 +30,18 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
    `entrainer_moteur.py` ; `tools/llm/distillation.py`.
 5. **Élève natif** : `route` sur GPU, export GGUF, PPL/flux par le moteur.
 
-## Ce que la première mesure donne
+## Ce que la mesure donne
 
-- **60/60** prompts servis par `deepseek-flash` ; 5 552 tokens d'entrée, 10 857 de sortie, 135,1 s,
-  2,252 s par requête.
-- **chrF 82,48** contre un **plancher de 15,29** sur 50 traductions ; l'espagnol, l'allemand, le
-  russe, le français et le chinois sont au-dessus de 87 ; le **hindi (56,17)** et le **swahili
-  (46,89)** sont les négatifs nommés.
-- **Élève natif** : `route` 4,04 M paramètres, `cuda`, 50 pas sur le corpus professeur ; aligné
-  **3,8191** bits/octet contre mélangé **3,8361** sur trois graines — **0,44 %**, signes mitigés. À
-  60 exemples, la distillation **n'est pas établie** : c'est un smoke test de pipeline.
+- **310/310** prompts servis par `deepseek-flash` ; 34 112 tokens d'entrée, 32 436 de sortie,
+  511,1 s, 1,649 s par requête (60 cache).
+- **chrF 82,82** contre un **plancher de 15,64** sur 300 traductions ; l'espagnol (99,28), le russe
+  (98,86), le français (96,58), l'italien (92,87) et l'allemand (90,50) sont au-dessus de 90 ; le
+  **hindi (58,45)** et le **swahili (54,83)** sont les négatifs nommés. Le pilote à 60 prompts
+  surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait foi.
+- **Élève natif** : `route` 4,04 M paramètres, `cuda`, 310 exemples (271/39), 500 pas, trois
+  graines ; aligné **2,7709** bits/octet contre mélangé **2,7510** — le **contrôle bat l'aligné**
+  (0,72 %, 2 graines sur 3). La distillation **n'est pas établie** ; c'est un pipeline qui tourne,
+  pas un transfert démontré.
 
 ## Les secrets et le cache
 
@@ -52,8 +54,8 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 
 ## Ce qui reste ouvert
 
-- **la distillation à l'échelle** : 60 exemples ne suffisent pas ; il faut 300+ prompts, plus de pas
-  et plusieurs graines ;
+- **la distillation à l'échelle** : 310 exemples ne suffisent pas ; le contrôle mélangé bat
+  l'aligné ; il faut un modèle plus grand et une perte masquée sur les prompts ;
 - **la qualité par langue** : hindi et swahili sont bas ; un juge humain ou un chrF par famille ne
   remplacent pas cinq articles ;
 - **le modèle** : `deepseek-flash` peut changer ; la mesure est datée ;
@@ -64,7 +66,7 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 | module | rôle |
 |---|---|
 | [`tools/llm/deepseek.py`](../tools/llm/deepseek.py) | client API, cache, dry-run, clé par fichier |
-| [`tools/llm/prompts_publics.jsonl`](../tools/llm/prompts_publics.jsonl) | 60 prompts publics |
+| [`tools/llm/prompts_publics.jsonl`](../tools/llm/prompts_publics.jsonl) | 60 prompts (pilote) et 310 (`prompts_publics_300.jsonl`) |
 | [`tools/llm/enseignant.py`](../tools/llm/enseignant.py) | corpus professeur |
 | [`tools/llm/mesure.py`](../tools/llm/mesure.py) | chrF, plancher, tokens, latence |
 | [`tools/llm/distillation.py`](../tools/llm/distillation.py) | train/val par identifiant, contrôle par permutation |

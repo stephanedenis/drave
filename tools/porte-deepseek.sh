@@ -31,15 +31,16 @@ print("     dry-run déterministe, aucune requête")
 PY
 
 echo "  === prompts publics ==="
-python3 - "$PWD/tools/llm/prompts_publics.jsonl" <<'PY'
+python3 - "$PWD/tools/llm/prompts_publics.jsonl" "$PWD/tools/llm/prompts_publics_300.jsonl" <<'PY'
 import json, sys
-lignes = [json.loads(l) for l in open(sys.argv[1], encoding="utf-8") if l.strip()]
-assert len(lignes) == 60, len(lignes)
-trad = sum(1 for p in lignes if p["meta"]["categorie"] == "traduction")
-jeux = sum(1 for p in lignes if p["meta"]["categorie"] == "jeu")
-assert (trad, jeux) == (50, 10), (trad, jeux)
-assert all(p.get("id") and p.get("prompt") and p.get("system") for p in lignes)
-print(f"     {len(lignes)} prompts : {trad} traductions UDHR, {jeux} jeux")
+for chemin, attendu, trad_attendu in ((sys.argv[1], 60, 50), (sys.argv[2], 310, 300)):
+    lignes = [json.loads(l) for l in open(chemin, encoding="utf-8") if l.strip()]
+    assert len(lignes) == attendu, (chemin, len(lignes))
+    trad = sum(1 for p in lignes if p["meta"]["categorie"] == "traduction")
+    jeux = sum(1 for p in lignes if p["meta"]["categorie"] == "jeu")
+    assert (trad, jeux) == (trad_attendu, 10), (chemin, trad, jeux)
+    assert all(p.get("id") and p.get("prompt") and p.get("system") for p in lignes)
+    print(f"     {len(lignes)} prompts : {trad} traductions UDHR, {jeux} jeux ({chemin.rsplit('/', 1)[-1]})")
 PY
 
 echo "  === dry-run du corpus professeur (ignoré par la distillation) ==="
