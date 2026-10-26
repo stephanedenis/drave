@@ -159,6 +159,24 @@ Le facteur qui change le signe est la **capacité**, pas la quantité de donnée
 les deux cas). Le seuil est **une transition**, pas une marche : 9,23 M est mitigé, 9,96 M est net.
 La perte masquée, calibrée, ne déplace pas le 4,04 M.
 
+### Plus de données : 610 exemples, 20 langues
+
+Le corpus passe de **310** à **610** exemples : les **10 langues** du banc (français, espagnol,
+allemand, italien, portugais, russe, arabe, chinois, hindi, swahili) plus **turc, vietnamien,
+polonais, néerlandais, grec, hébreu, thaï, indonésien, bengali, ourdou**. **610/610** requêtes
+réussies, **67 782** jetons d'entrée et **61 784** de sortie, **965,8 s**, **300** nouveaux et
+**310** cache. Découpage : **541 train / 69 val**, 445 147 / 60 808 caractères.
+
+Même modèle **26,99 M** (dim 448, 8 couches), 500 pas, 3 graines : aligné **3,0078 / 3,0287 /
+2,8468**, mélangé **3,1974 / 3,0697 / 2,9582** ; moyennes **2,9611** contre **3,0751** :
+l'**aligné gagne 3/3**, **0,1140 bit/octet** (**3,71 %**).
+
+La **valeur absolue** n'est pas comparable au corpus 310 : la validation contient les **10 nouvelles
+langues**, plus difficiles pour un byte-level, et elle passe de 2,68 à 2,96. Mais **à l'intérieur du
+même corpus**, l'écart relatif **croît** de **2,93 %** (310, 10 langues) à **3,71 %** (610,
+20 langues) : plus de données et plus de langues **renforcent** le conditionnement, pas seulement
+la distribution des réponses.
+
 ### La perte masquée : le prompt n'est pas le levier
 
 Le prompt est **lu** mais sa perte est **masquée** (`tools/llm/masque.py`,

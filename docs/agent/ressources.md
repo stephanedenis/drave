@@ -21,6 +21,22 @@ Les GPU ne se partagent pas bien : **une mesure qui charge 28 Go de VRAM bloque 
 Séquence : les portes d'abord, les mesures ensuite ; deux petits modèles peuvent cohabiter sur les deux cartes, un
 gros modèle prend les deux.
 
+## La composition mesurée (26/10)
+
+- **CPU** : 2 sockets × 10 cœurs × 2 SMT = **40 threads logiques** ; les frères SMT sont
+  `0/20 … 9/29` et `10/30 … 19/39`. Pour un travail CPU soutenu, viser **20 threads physiques**
+  (`0-9`, `10-19`) et éviter de saturer les deux frères d'un même cœur.
+- **GPU** : 2 × RTX 5000 16 Go. Deux petits `route` (10–32 M) entraînés **en parallèle**, un par
+  carte, avec `OMP_NUM_THREADS=4` chacun : **18–25 %** d'utilisation GPU, **560–680 Mo** par
+  carte, ~60 s pour 500 pas (31,63 M : 102 s pour 1 000 pas). Le goulot est le **CPU/la boucle**,
+  pas la VRAM.
+- **Portes** : une porte `drave` consomme ~**8,8 cœurs** ; la passe complète 49 portes dure **1 h 34**.
+  Pendant une porte CPU, les deux GPU sont **libres** : on peut y lancer **deux entraînements**, pas
+  plus, et garder le reste des cœurs pour la porte.
+- **Règle** : les portes d'abord ; ensuite deux entraînements GPU en parallèle, données et docs sur
+  les cœurs physiques restants. Ne pas lancer quatre gros travaux CPU « pour aller plus vite » : le
+  SMT et les verrous de `/tmp` se disputent.
+
 ## La répartition du 26/10 — le langage hors GPU
 
 Décision : **le langage sort des GPU**. Les 2 × RTX 5000 et les CPU servent au **modèle natif**

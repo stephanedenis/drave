@@ -435,5 +435,72 @@
    "signe": "aligne meilleur sur 3 graines sur 3"
   },
   "conclusion": "positif a 1 000 pas (1,41 %, 3/3), mais moins que le 27 M a 500 pas (2,93 %) ; meilleure valeur absolue (2,6724 contre 2,6796)"
+ },
+ "modele_600_448_8": {
+  "parametres_approx": 26990000,
+  "donnees": {
+   "exemples": 610,
+   "train": 541,
+   "val": 69,
+   "langues": 20,
+   "caracteres_train": 445147,
+   "caracteres_val": 60808,
+   "source_sha256": "ae0a272fe57f28c4e983ec35009b144f69111c60256b1ea3c382063eccc0fa60"
+  },
+  "config": {
+   "famille": "route",
+   "dim": 448,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   3.0078,
+   3.0287,
+   2.8468
+  ],
+  "melange": [
+   3.1974,
+   3.0697,
+   2.9582
+  ],
+  "moyennes": {
+   "aligne": 2.9611,
+   "melange": 3.0751,
+   "ecart": 0.114,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "plus de donnees et 10 langues de plus : 3,71 % 3/3 ; la valeur absolue n'est pas comparable au corpus 310 (validation plus difficile), mais l'ecart relatif croit de 2,93 % a 3,71 %"
+ },
+ "corpus_600": {
+  "professeur": {
+   "demandes": 610,
+   "reussies": 610,
+   "echecs": 0,
+   "tokens_entree": 67782,
+   "tokens_sortie": 61784,
+   "latence_s": 965.835,
+   "caches": 310
+  },
+  "langues_nouvelles": [
+   "turc",
+   "vietnamien",
+   "polonais",
+   "neerlandais",
+   "grec",
+   "hebreu",
+   "thai",
+   "indonesien",
+   "bengali",
+   "ourdou"
+  ],
+  "conclusion": "plus de langues et de donnees : l'ecart relatif de distillation croit"
  }
 }
