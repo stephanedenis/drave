@@ -32,22 +32,13 @@ mieux que des paramètres ajoutés. **Le temps est un plancher, pas un plafond**
 c'est **fait, mesuré et écrit**, pas quand une échéance passe. Détail :
 [`docs/agent/mission.md`](docs/agent/mission.md).
 
-**La thèse est désormais mesurée** : la sonde est **plate dès le 1,5 B** (0,7256 / 0,7269 / 0,7189), le pont
-**plafonne à 0,87** — dix fois la taille pour +0,001, et à profondeur fixe le 14 B est **dernier** (0,4833). La
-**nouvelle phase** (24/10) : **A7**, **B4**, **A8** — **les trois sont faites, mesurées et closes** (A7 : le
-relais, la grappe à 21 %, le transport à 4,22× ; B4 : les six mesures, jusqu'au LoRA qui **inverse** ; A8 : la règle
-branchée en **opt-in**) — et **C3.2** (la restitution **par famille**) est faite aussi : 28 familles découpées, le
-module par famille, la courbe sur 5 familles, **4 sur 5 au-dessus de la référence** (de 14,7 % à 100 %, contrôle
-0 %) ; **B5/B6** (les jeux symboliques) sont faites aussi : **112 surfaces**, **100 % au niveau 4**, **33/33**
-paires invariantes, **0 collision**, perft échecs/dames, mats, politique **79,7 %**, pensée invariante **5/5** ;
-**B7/B8** (les 71 langues et les maîtres) sont faits aussi : **449/449** au niveau 4, **11/11** paires,
-permutation **12/275**, notation **5 112/5 112**, livre **10/10**, go 9×9 **10/10** contre **3/10**, dames
-**0 défaite**, cartes **44,7 %** contre **51,0 %** — négatif nommé ; **B9** (le banc externe) est **mesuré** :
-DeepSeek `deepseek-flash` **310/310**, chrF **82,82** contre **15,64** de plancher ; `route` sur **cuda** ;
-la distillation native a une **transition entre 9,23 M et 9,96 M** — négative à **4,04 M**, transitoire à
-**9,23 M** (1 graine/3), positive 3/3 à **9,96 M** (1,76 %), **10,70 M** (1,65 %), **16,02 M** (1,92 %) et
-**22,54 M** (1,74 %) et **26,99 M** (**2,93 %**) ; **31,63 M**/500 pas ne paie pas (0,27 %), **31,63 M**/1 000 pas 1,41 % ; **610 exemples / 20 langues** : **3,71 %** à 500 pas, **1,29 % à 750**, **−0,49 % à 1 000** ; **910 / 30 langues** ne paient pas (contrôle +0,23 %) ; le masque calibré est **quasi égal** à 4,04 M (0,02 %) et à 10,70 M (0,15 %) —
-les GPU reviennent au natif, le langage sort des GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+**La thèse est mesurée.** Les chiffres, les contrôles et l'état vivent dans des fichiers **facultatifs**, à
+charger seulement pour la tâche en cours : [`docs/en-cours.md`](docs/en-cours.md) (l'actualité),
+[`docs/roadmap.md`](docs/roadmap.md) (le plan et les prochaines actions), [`reports/README.md`](reports/README.md)
+(les résultats, les fiches et les négatifs), [`journal/`](journal/) (le récit daté). En bref : la sonde est
+**plate dès 1,5 B**, le pont **plafonne à 0,87** ; **A7, B4, A8, C3.2, B5/B6, B7/B8 et B9** sont faits et
+mesurés. B9 a un **seuil de distillation 9,23–9,96 M**, une **fenêtre 610/20 à 500 pas** (3,71 %, transitoire)
+et un **négatif 910/30**. Le détail et les réserves sont dans les fiches — pas dans ce fichier.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont
@@ -99,6 +90,10 @@ les éléments sont des **unités de sens**. Voir [`docs/glossaire.md`](docs/glo
 | le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/glossaire.md`](docs/glossaire.md) |
 | **trouver un sujet** (un concept, un chantier, une phase) | [`docs/carte.md`](docs/carte.md) |
 | la carte de la documentation (l'inventaire) | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/en-cours.md`, `docs/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit le plus souvent. Ne pas les
+> charger « pour être complet » — c'est du contexte qui coûte et qui périme.
 
 ## 4. Le minimum avant de conclure
 

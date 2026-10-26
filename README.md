@@ -267,16 +267,11 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 
 ## Ce qui est fait, et ce qui reste ouvert
 
-**Fait, mesuré** : la **grappe déportée** (A7 : le relais **42,5477**, la grappe exacte à **21 %**, le transport à
-**4,22×**), les **opérateurs abstraits** (B4 : les **six** mesures, jusqu'au LoRA qui **inverse**), l'**ordonnanceur
-place et perte** (A8 : la règle branchée en **opt-in**), et la **restitution par famille** (C3.2 : 28 familles
-découpées, le module par famille, la courbe sur 5 familles — **4 sur 5 au-dessus de la référence**, de 14,7 % à
-100 %, le contrôle à 0 %), les **jeux symboliques** (B5/B6 : **112 surfaces**, **100 %** au niveau 4, **33/33**
-paires invariantes, **0 collision**, perft échecs/dames, **3/3** mats, politique des cartes **79,7 %**, pensée
-invariante **5/5**), les **langues et les maîtres** (B7/B8 : **71 langues**, **35 concepts**, **449/449** au niveau 4,
-**11/11** paires, livre **10/10**, go 9×9 **10/10** contre **3/10**, cartes **44,7 %** contre **51,0 %** — négatif
-nommé), le **banc externe** (B9 : DeepSeek **310/310**, chrF **82,82** contre **15,64** de plancher ; `route`
-**cuda** ; distillation native avec une **transition 9,23–9,96 M** (négative à 4,04 M, transitoire à 9,23 M, positive 3/3 au-dessus, **2,93 % à 27 M**, **31,63 M à 1 000 pas 1,41 %**, **610 ex./20 langues 3,71 % à 500 pas, 1,29 % à 750, -0,49 % à 1 000, 910/30 langues ne paie pas**), masque calibré quasi égal).
+**Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),
+les 71 langues et les maîtres (B7/B8), le banc externe (B9). Les **chiffres, les contrôles et les négatifs**
+— y compris le seuil de distillation 9,23–9,96 M, la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
+[`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/en-cours.md`](docs/en-cours.md) ; le **plan**
+dans [`docs/roadmap.md`](docs/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.
