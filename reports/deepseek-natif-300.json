@@ -542,5 +542,72 @@
    "signe": "controle legerement meilleur, 2 graines sur 3 pour l'aligne"
   },
   "conclusion": "a 1 000 pas, l'effet 500 pas ne survit pas : quasi egal, controle +0,49 % ; la valeur absolue baisse mais le conditionnement n'est plus visible"
+ },
+ "modele_910_448_8": {
+  "parametres_approx": 26990000,
+  "donnees": {
+   "exemples": 910,
+   "train": 817,
+   "val": 93,
+   "langues": 30,
+   "caracteres_train": 661061,
+   "caracteres_val": 77590,
+   "source_sha256": "07fc7eed66219ed1870d290917b6f45d9ebee94833df30078095ca3ad2f2064d"
+  },
+  "config": {
+   "famille": "route",
+   "dim": 448,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   3.0887,
+   3.1558,
+   3.2415
+  ],
+  "melange": [
+   3.1275,
+   3.0956,
+   3.2412
+  ],
+  "moyennes": {
+   "aligne": 3.162,
+   "melange": 3.1548,
+   "ecart": -0.0072,
+   "unite": "bits/octet",
+   "signe": "controle legerement meilleur, 1 graine sur 3 pour l'aligne"
+  },
+  "conclusion": "30 langues / 910 exemples : l'effet se dilue (controle +0,23 %, 1/3) ; la valeur absolue monte a 3,16 ; 27 M / 500 pas ne suffit pas pour 30 langues"
+ },
+ "corpus_910": {
+  "professeur": {
+   "demandes": 910,
+   "reussies": 910,
+   "echecs": 0,
+   "tokens_entree": 101542,
+   "tokens_sortie": 89758,
+   "latence_s": 1447.269,
+   "caches": 610
+  },
+  "langues_nouvelles": [
+   "japonais",
+   "coreen",
+   "ukrainien",
+   "tcheque",
+   "suedois",
+   "danois",
+   "finnois",
+   "norvegien",
+   "hongrois",
+   "roumain"
+  ],
+  "conclusion": "30 langues : l'effet se dilue a capacite et pas constants"
  }
 }

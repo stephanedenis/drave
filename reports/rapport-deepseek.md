@@ -177,6 +177,23 @@ l'**aligné gagne 3/3**, **0,1140 bit/octet** (**3,71 %**).
 absolue baisse (2,76 au lieu de 2,96), mais le **conditionnement n'est plus visible** : les 500 pas
 sont une **fenêtre**, pas un équilibre. C'est un négatif nommé : l'écart 3,71 % est **transitoire**.
 
+### 910 exemples, 30 langues : l'effet se dilue
+
+Le corpus passe à **910** exemples : les 20 langues précédentes plus **japonais, coréen, ukrainien,
+tchèque, suédois, danois, finnois, norvégien, hongrois, roumain** — **30 langues**. **910/910**
+requêtes, **101 542** jetons d'entrée / **89 758** de sortie, **1 447,3 s**, **300** nouveaux,
+**610** cache. Découpage **817 train / 93 val**, 661 061 / 77 590 caractères.
+
+Même modèle **26,99 M**, 500 pas, 3 graines : aligné **3,0887 / 3,1558 / 3,2415**, mélangé
+**3,1275 / 3,0956 / 3,2412** ; moyennes **3,1620** contre **3,1548** — le **contrôle repasse**
+de 0,23 %, et une seule graine sur trois est alignée. La valeur absolue monte à **3,16** (langues
+plus distantes : japonais, coréen, thaï…).
+
+**Conclusion négative** : à capacité et pas constants, **30 langues ne paient pas**. Le meilleur
+point reste **610 exemples / 20 langues** (3,71 % à 500 pas), et le **310 / 10 langues** (2,93 %)
+est le plus stable. Ajouter des langues sans ajouter de capacité ni de pas **dilue** le
+conditionnement ; ce n'est pas un problème de corpus, c'est un problème de **budget de modèle**.
+
 La **valeur absolue** n'est pas comparable au corpus 310 : la validation contient les **10 nouvelles
 langues**, plus difficiles pour un byte-level, et elle passe de 2,68 à 2,96. Mais **à l'intérieur du
 même corpus**, l'écart relatif **croît** de **2,93 %** (310, 10 langues) à **3,71 %** (610,
