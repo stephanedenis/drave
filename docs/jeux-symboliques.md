@@ -1,11 +1,12 @@
 # Les jeux symboliques — de la surface au sens, puis à la pensée
 
-> **Ce que ce document est.** Le **concept** de l'étage 1 et de l'étage 2 appliqués aux jeux : comment une
-> surface (une notation, une phrase, un diagramme) devient une **représentation sémantique neutre (RSN-jeu)**,
-> et comment la **pensée** raisonne ensuite sur cette RSN sans jamais relire la surface. Les **chiffres** et
-> les contrôles sont dans [`reports/rapport-jeux-symboliques.md`](../reports/rapport-jeux-symboliques.md) ;
-> la **théorie** de l'entrée-sortie est dans [`synthese/07`](synthese/07-modeles-alternatifs-entree-sortie.md),
-> et la théorie des opérations dans [`synthese/08`](synthese/08-les-operations.md).
+> **Ce que ce document est.** Le **bloc de langue et de jeux** du bus : comment une surface (une notation, une
+> phrase, un diagramme) devient une **représentation sémantique neutre (RSN-jeu)**, et comment la **pensée**
+> raisonne ensuite sur cette RSN sans relire la surface. Le bloc est **hybride** : la surface et la RSN sont des
+> opérations classiques, la pensée peut appeler un solveur exact ou un modèle selon le jeu. Les **chiffres** et les
+> contrôles sont dans [`rapport-jeux-symboliques.md`](../reports/rapport-jeux-symboliques.md) ;
+> la **théorie** dans [`synthese/07`](synthese/07-modeles-alternatifs-entree-sortie.md) et
+> [`synthese/08`](synthese/08-les-operations.md).
 
 ## Le problème
 
@@ -127,42 +128,17 @@ contrôles, eux, sont stables :
   dames gagne contre le joueur sans recherche, la politique des cartes bat le hasard, et les cinq jeux
   donnent la **même décision** sur des surfaces différentes.
 
-## Les 71 langues (B7)
+## Les langues et les maîtres (B7/B8)
 
-Le lexique multilingue est une **donnée** construite depuis Wikidata (CC0) : **35 concepts**, **71 langues**,
-**1 433 couples**, **32 langues fortes** (pièces N/P + un rang + une enseigne). Il ne porte pas de grammaire :
-les surfaces sont des **mots-clés** (pièce + cases, rang + enseigne, nom du jeu + coordonnée). C'est la couche
-lexicale, celle qui doit porter le sens avant qu'une phrase soit possible.
+Le **lexique multilingue** (35 concepts, 71 langues, construit depuis Wikidata CC0) et le **corpus de 449
+surfaces** sont mesurés : lecture au niveau 4, paires inter-langues invariantes, notation indépendante de la
+langue, noms de jeux détectés. Les **maîtres** (17 principes, 9 sources du domaine public, 3 parties) changent
+l'ouverture des échecs, tiennent le livre, gagnent au go 9×9 et ne perdent pas aux dames ; l'accord avec le coup
+du maître ne bouge pas et la politique du whist **perd** contre la base.
 
-| mesure | valeur |
-|---|---:|
-| corpus multilingue, niveau 4 | **449 / 449** |
-| paires inter-langues invariantes | **11 / 11** |
-| permutation des libellés (items forts) | **12 / 275** restants |
-| notation, 72 items × 71 langues | **5 112 / 5 112** |
-| détection des noms de jeux | **315 / 315** |
-| langue détectée | **343 / 449** (76,4 %) |
-
-La notation (FEN, SAN, UCI, GTP, SGF, binaire) est **indépendante de la langue** : c'est le recours des
-langues sans libellé. Les libellés Wikidata sont des **lemmes** ; les formes fléchies ne sont pas couvertes,
-et cinq langues (`ky`, `lo`, `mt`, `si`, `yo`) n'ont aucun item. La fiche donne les listes et les deux
-ambiguïtés restantes (`e4`/`E4`, échecs/go).
-
-## Les maîtres (B8)
-
-Les livres ne sont pas recopiés : ils sont **tirés en principes** et **encodés**. **17 principes**, **9
-sources** du domaine public, **3 parties** validées jusqu'au mat, **28 positions** de livre.
-
-| jeu | ce que le principe déplace | contrôle |
-|---|---|---|
-| échecs | premier coup **d4** (sans : **Nc3**) ; livre **10/10** ; mats **3/3** | accord avec le coup du maître **42/101** avec les principes contre **41/101** sans — **+1, non significatif** |
-| dames | **10 victoires, 10 nulles, 0 défaite** en 20 parties | la base ne gagne **aucune** des 20 parties avec les Blancs (**0 victoire**) : le biais de couleur est nommé |
-| go | 9×9 : **10/10** coups de 3e/4e ligne avec le prior contre **3/10** sans | 5×5 et capture : **10/10** des deux côtés, effet nul nommé |
-| cartes | **44,7 %** contre la base (51,0 %) ; contre le hasard 78,5 % contre 82,4 % | ablation : sans honneur 43,5 %, sans seconde 45,7 %, sans troisième 46,5 % — **aucune ne rattrape la base** |
-
-Ce que les principes **font** : ils changent l'ouverture, tiennent le livre, gagnent au go 9×9 et ne perdent
-pas aux dames. Ce qu'ils **ne font pas** : ils ne rapprochent pas du coup du maître aux échecs et ils
-**perdent** aux cartes. La connaissance des livres est une **entrée**, pas la force.
+Les chiffres, les listes de langues et les négatifs nommés sont dans
+[`rapport-langues-maitres.md`](../reports/rapport-langues-maitres.md). Le concept reste : la **langue est un
+bloc** (surface → RSN), les **maîtres sont une entrée** de la pensée, pas sa force.
 
 ## Ce qui reste ouvert
 

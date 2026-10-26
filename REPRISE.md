@@ -1,7 +1,7 @@
 # Reprise — démarrer une session de travail
 
 > **Check-list, pas un état.** L'état vit dans [`docs/etat.md`](docs/etat.md) (index des modules)
-> et [`docs/etat-cerveau.md`](docs/etat-cerveau.md) (les douze capacités, avec le chiffre qui
+> et [`docs/etat-cerveau.md`](docs/archive/etat-cerveau.md) (les douze capacités, avec le chiffre qui
 > prouve chacune). Ce fichier ne dit que : quoi lire, quoi vérifier, quels pièges éviter, et où
 > écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche par expérience**.
 > Version longue d'avant le 2026-10-10 : [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).

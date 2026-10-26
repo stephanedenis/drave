@@ -187,7 +187,7 @@ profondeur vers une autre, sur les mêmes 33 morceaux (30 d'entraînement, 3 de 
   surface, pas l'inverse ;
 * **conséquence pour N4** : entraîner le chemin court n'est pas un pis-aller, c'est le seul moyen
   d'obtenir les ~35 % que la profondeur fabrique. La note
-  [`docs/note-chemin-court-n4.md`](../docs/note-chemin-court-n4.md) propose trois dessins ; cette
+  [`docs/note-chemin-court-n4.md`](../docs/archive/note-chemin-court-n4.md) propose trois dessins ; cette
   mesure dit pourquoi le **B** (adaptateurs par couche) est le premier qui puisse marcher.
 
 ## 3. Ce que cette fiche ne dit pas

@@ -35,7 +35,7 @@
 |---|---|
 | **B5/B6 — la surface, la RSN-jeu, la pensée** : cinq jeux (morpion, échecs, dames, go, cartes), les couches 0→4, l'invariance, le perft et la logique | [le concept](../jeux-symboliques.md) · [la fiche](../../reports/rapport-jeux-symboliques.md) · [la porte](../../tools/porte-jeux.sh) |
 | **B7/B8 — les langues et les maîtres** : 71 langues, 449 surfaces, la permutation, la notation ; 17 principes, le livre, le go 9×9, les cartes | [le concept](../jeux-symboliques.md) · [la fiche](../../reports/rapport-langues-maitres.md) |
-| **B9 — le banc externe** : DeepSeek pour le langage, les GPU pour le natif ; 310 prompts, chrF, transition 9,23–9,96 M, fenêtre 610/20 (3,71 % à 500 pas), négatif 910/30 | [le concept](../llm-externe.md) · [la fiche](../../reports/rapport-deepseek.md) |
+| **B9 — le banc externe** : DeepSeek pour le langage, les GPU pour le natif ; 310/610/910 prompts, **31,63 M / 610 : 4,40 %**, fenêtre et négatif 910/30 | [le concept](../llm-externe.md) · [la fiche](../../reports/rapport-deepseek.md) |
 
 ## Trois principes, qui reviennent partout
 

@@ -8,41 +8,13 @@
 ## 1. La vision (l'essentiel)
 
 **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
-réseau sont des **faits** — « le neurone 2 539 de la couche 23 a valu 27,8 » —, regroupés en **listes valuées
-poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient
-**décomposable**, **répartissable** et **observable**.
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
 
 Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
 les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
 **distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
-volonté** des événements. L'ambition : des modèles **plus légers, plus flexibles, plus puissants**, **très flexibles
-sur le matériel** qui les supporte.
+volonté** des événements.
 
-**Deux programmes avancent en parallèle :**
-
-1. **Le moteur** (les flux, les cinq axes) — l'origine et le cœur : observer et régler par neurone, répartir sur la
-   machine, répartir en réseau, rejouer et comparer, formats/matériels/énergie. Il avance par ses propres mesures.
-2. **L'intelligence** (les deux étages) — l'application : l'**entrée-sortie linguistique** (toutes les langues, tous
-   les registres, jugée en **qualité de traducteur**), puis la **pensée abstraite indépendante de la langue** (jugée
-   sur des **opérations**). **Dans l'intelligence, l'étage 2 ne se bâtit pas sur une entrée-sortie qui n'est pas
-   fiable** : les deux étages restent ordonnés.
-
-**La thèse : la structure bat la taille** — un pont linéaire, une grille de conversion, une carte des flux valent
-mieux que des paramètres ajoutés. **Le temps est un plancher, pas un plafond** (*carpe diem*) : on s'arrête quand
-c'est **fait, mesuré et écrit**, pas quand une échéance passe. Détail :
-[`docs/agent/mission.md`](docs/agent/mission.md).
-
-**La thèse est mesurée.** Les chiffres, les contrôles et l'état vivent dans des fichiers **facultatifs**, à
-charger seulement pour la tâche en cours : [`docs/en-cours.md`](docs/en-cours.md) (l'actualité),
-[`docs/roadmap.md`](docs/roadmap.md) (le plan et les prochaines actions), [`reports/README.md`](reports/README.md)
-(les résultats, les fiches et les négatifs), [`journal/`](journal/) (le récit daté). En bref : la sonde est
-**plate dès 1,5 B**, le pont **plafonne à 0,87** ; **A7, B4, A8, C3.2, B5/B6, B7/B8 et B9** sont faits et
-mesurés. B9 a un **seuil de distillation 9,23–9,96 M**, un **meilleur écart 4,40 % à 31,63 M / 610 ex.**,
-une **fenêtre** (3,71 % à 500 pas, transitoire) et un **négatif 910/30**. Le détail et les réserves sont dans les fiches — pas dans ce fichier.
-
-**Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
-étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont
-les éléments sont des **unités de sens**. Voir [`docs/glossaire.md`](docs/glossaire.md).
 
 ## 2. Les règles non négociables
 

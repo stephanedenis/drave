@@ -239,7 +239,7 @@ La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md
 | les **instruments** (les expériences sont rejouables) | [`tools/`](tools/) |
 | les **corpus** | [`data/`](data/) (non versionné) |
 | le **moteur d'inférence** (Rust) | [`drave-core/`](drave-core/) |
-| l'**état des capacités du moteur** | [`docs/etat-cerveau.md`](docs/etat-cerveau.md) |
+| l'**état des capacités du moteur** | [`docs/etat-cerveau.md`](docs/archive/etat-cerveau.md) |
 | les **règles de travail** du dépôt | [`AGENTS.md`](AGENTS.md) |
 
 **Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un niveau

@@ -2,7 +2,7 @@
 
 Première brique de la boucle d'apprentissage : **charger un modèle augmenté de
 nœuds, sans réentraînement**, et mesurer la perplexité avant/après. C'est ce qui
-rend l'étape A du [programme de recherche](../docs/programme-recherche.md)
+rend l'étape A du [programme de recherche](../docs/archive/programme-recherche.md)
 exécutable.
 
 ---

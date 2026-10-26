@@ -7,7 +7,7 @@ tailles testées) et coûte **0,89 ms** là où le tri CPU en coûte **497 ms** 
 262 144 clés. Le **noyau 3** (softmax sur les k retenus + puits, puis Σ w·V) est
 écrit et vérifié à **2,7–4,8e-7** — sous le critère de 1e-6 du plan.
 
-Plan suivi : [`docs/plan-gpu-topk.md`](../docs/plan-gpu-topk.md), étape 2.
+Plan suivi : [`docs/plan-gpu-topk.md`](../docs/archive/plan-gpu-topk.md), étape 2.
 Noyau 1 (les scores) : [`reports/rapport-gpu-scores.md`](rapport-gpu-scores.md).
 
 ## Ce qui a été écrit
