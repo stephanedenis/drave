@@ -15,6 +15,7 @@ from __future__ import annotations
 import re
 
 from ..grammaire import naturel
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 from ..regles import go as G
 from .base import Arbre, Codec, Lecture
@@ -142,6 +143,7 @@ class CodecGo(Codec):
         lec = self.lecture(texte, niveau, langue)
         if not texte or not texte.strip():
             return self.echoue(lec, "surface vide")
+        texte = self.sans_nom_jeu(texte)
         n_ctx = _taille(contexte)
 
         # 1. SGF (état de partie, action ou partie)
@@ -193,7 +195,8 @@ class CodecGo(Codec):
 
         # 3. action : passe, abandon, ou un point
         t = naturel(texte)
-        if (niveau >= 2 and re.search(r"\b(passe|passer|je passe|pass|i pass|skip)\b", t)) or (
+        passe_ml = MULTI.cherche("go.passe", texte) if niveau >= 2 else []
+        if passe_ml or (niveau >= 2 and re.search(r"\b(passe|passer|je passe|pass|i pass|skip)\b", t)) or (
                 niveau < 2 and t.strip() == "pass"):
             lec.format = "gtp"
             return self.reussi(lec, RSN("go", "coup", {"taille": n_ctx, "passe": True}), "gtp", 0.95)
@@ -341,8 +344,10 @@ class CodecGo(Codec):
             return 0.8
         if re.search(r"(?:ligne|row)\s*(?:[4-9]|[12]\d)\b", texte, re.I):
             return 0.7
-        if re.fullmatch(r"\s*[A-HJ-T]\s*\d{1,2}\s*", texte):
+        if re.fullmatch(r"\s*[A-HJ-T]\s*\d{1,2}\s*", texte, re.I):
             return 0.35
+        if re.search(r"\b(jouer|joue|play|pose)\b", t) and _RE_GTP.search(texte):
+            return 0.5
         if re.search(r"\b(passe|pass|passer|je passe|resign|abandonne)\b", t):
             return 0.25
         return 0.0

@@ -16,6 +16,7 @@ import re
 
 from ..grammaire import naturel
 from ..lexique import LEX, plie
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 from ..regles import echecs as E
 from .base import Arbre, Codec, Lecture
@@ -174,6 +175,11 @@ def _piece_depuis_mots(t: str, langue: str | None) -> int | None:
         if cs:
             return {"K": E.ROI, "Q": E.DAME, "R": E.TOUR, "B": E.FOU,
                     "N": E.CAVALIER, "P": E.PION}[cs[0].concept]
+    # le lexique multilingue (53 langues) — les libellés sont des noms de pièces
+    ms = MULTI.cherche("echecs.piece", t)
+    if ms:
+        return {"K": E.ROI, "Q": E.DAME, "R": E.TOUR, "B": E.FOU,
+                "N": E.CAVALIER, "P": E.PION}[ms[0].valeur]
     # une lettre initiale française (C, D, T, F, R) ou anglaise
     m = re.match(r"\s*([KQRBNCDTFkqrbncdtf])\s*([a-h][1-8])", t)
     if m:

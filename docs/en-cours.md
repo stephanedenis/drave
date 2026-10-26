@@ -1,8 +1,8 @@
-2026-10-25
+2026-10-26
 
 # En ce moment
 
-**Mis à jour : 2026-10-25, 23 h 55 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 09 h 45 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -19,7 +19,7 @@ fiable). La thèse n'est plus une hypothèse : **la sonde est plate dès le 1,5 
 pont plafonne à 0,87**, et à profondeur fixe le 14 B est **dernier** (0,4833) — dix fois la taille pour +0,001.
 Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
 
-## Ce qui est en cours (l'actualité du 25/10)
+## Ce qui est en cours (l'actualité du 26/10)
 
 **La nouvelle phase**, après la révision de la raison d'être, de la stratégie et du plan :
 
@@ -43,6 +43,15 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    la recherche des dames gagne **20/20** contre le joueur sans recherche, la politique des cartes fait **79,7 %**
    contre le hasard, et la **pensée est invariante 5/5**. Le MCTS du go est **faible à 60 playouts (1/3)** : négatif
    nommé, pas caché.
+5. **B7/B8 les langues et les maîtres** : le **lexique multilingue** couvre **35 concepts** dans **71 langues**
+   (**1 433 couples**, **32 langues fortes**) ; le corpus multilingue de **449 surfaces** est lu à **100 %** au
+   niveau 4, les **11/11** paires sont invariantes, la permutation des libellés laisse **12/275** items forts
+   (le sens s'effondre), la notation est lue **5 112/5 112** dans les 71 langues et les noms de jeux sont
+   détectés **315/315**. Côté maîtres, **17 principes**, **9 sources**, **3 parties** : le premier coup des
+   échecs passe de **Nc3** à **d4**, le livre tient **10/10**, les mats restent **3/3** ; les dames font
+   **10 victoires, 10 nulles, 0 défaite** ; le go 9×9 passe de **3/10** à **10/10** coups de 3e/4e ligne. Deux
+   **négatifs nommés** : l'accord avec le coup du maître ne bouge pas (**42/101** contre **41/101**) et la
+   politique du whist **perd** contre la base (**44,7 %** contre **51,0 %**).
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
@@ -53,7 +62,10 @@ passes** du 24/10 (10 h 53, 19 h 04, 21 h 35) sont **45/47** (les deux structure
 structurelles**, et **aucune porte cassée par les instruments de C3.2**) ; celle du **25/10 à 22 h 18** est **45/3** (48 entrées ; les deux structurelles et `porte-homeostasie`, dont le LoRA de référence **temporaire** manquait — régénéré, la porte **repasse** → **46/2**) ; **DiaBLa** au 3 B (+38,1/+41,3) ; le **14 B l24** était déjà mesuré (0,6305/0,8153) ; **C3.2 est fait** : un module de restitution **par famille**, et **4 familles sur 5
 au-dessus de la référence** (de 14,7 % à 100 %) ; **B5/B6** sont mesurés — **112 items**, **100 %** au niveau 4,
 **33/33** paires invariantes, **0 collision**, restitution **112/112**, perft des échecs et des dames exact,
-**3/3** mats, **20/20** dames, politique des cartes **79,7 %**, pensée invariante **5/5**.
+**3/3** mats, **20/20** dames, politique des cartes **79,7 %**, pensée invariante **5/5** ; **B7/B8** sont
+mesurés — **71 langues**, **449/449**, **11/11**, permutation **12/275**, notation **5 112/5 112** ; les
+maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent au go 9×9 (**10/10** contre
+**3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**).
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -61,11 +73,13 @@ au-dessus de la référence** (de 14,7 % à 100 %) ; **B5/B6** sont mesurés —
 |---|---:|
 | mesures de la fiche principale | **173** |
 | portes (passe complète) | **48** — 46 vertes, 2 structurels (25/10 22 h 18 ; `porte-homeostasie` relancée) |
-| fiches / JSON de résultats | **162** / **231** |
+| fiches / JSON de résultats | **163** / **233** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |
 | le KV int8 tardif / le 4 bits de la tête | **+0,03 %** / **+10 %** (reverté) |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
+| la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
+| les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).

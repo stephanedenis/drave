@@ -1,9 +1,10 @@
 # B5/B6 — les jeux symboliques : 112 surfaces, 100 % au niveau 4, 33/33 paires invariantes
 
 > Mesure du **25/10/2026**, sur `Hauru` (Python 3.13, sans GPU), `tools/jeux/` et
-> `tools/porte-jeux.sh`. Corpus **construit par le code** (`tools/jeux/corpus.py`), cinq jeux, deux langues,
-> plusieurs notations ; dix contrôles. JSON brut : [`jeux-mesures.json`](jeux-mesures.json). Concept :
-> [`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md). Durée de la mesure complète : **180 s**.
+> `tools/porte-jeux.sh`. Corpus **construit par le code** (`tools/jeux/corpus.py`), cinq jeux, deux langues
+> (puis **71** dans [la fiche B7/B8](rapport-langues-maitres.md)), plusieurs notations ; dix contrôles. JSON brut :
+> [`jeux-mesures.json`](jeux-mesures.json). Concept : [`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md).
+> Durée de la mesure complète : **188,7 s** (chiffres régénérés le 26/10 avec la couche multilingue).
 
 ## Ce qui est mesuré
 
@@ -83,8 +84,12 @@ signe d'un lexique décoratif.
 | JSON canonique moyen | 128,93 octets |
 | binaire `RSNB` moyen | 71,10 octets |
 | **ratio binaire / JSON** | **0,5515** (45 % de moins) |
-| vitesse de lecture, niveau 4 | **3 083 parses/s** (0,0363 s pour 112) |
-| vitesse de lecture, niveau 0 | **4 470 parses/s** (0,0251 s pour 112) |
+| vitesse de lecture, niveau 4 | **1 297 parses/s** (0,0864 s pour 112) |
+| vitesse de lecture, niveau 0 | **1 523 parses/s** (0,0735 s pour 112) |
+
+La vitesse a baissé de 3 083 à 1 297 parses/s : la tokenisation Unicode et la détection de langue des 71
+langues coûtent ce facteur ~2,4. La couche reste sous la milliseconde par surface ; c'est le prix du
+multilingue, pas une régression cachée.
 
 Le binaire ne remplace pas le JSON : il mesure le **coût du contrat**. Il est plus petit et il se décode à
 l'identique (test de round-trip) ; il ne porte pas les annotations par défaut.
@@ -177,11 +182,11 @@ diffèrent, **5 / 5**. Une invariance qui ne serait qu'un cache de surface ne pa
 
 ## 7. La détection automatique du jeu
 
-**100 / 112** surfaces sont attribuées au bon jeu sans indication (89,3 %). Les 12 échecs sont des
-surfaces **ambiguës par nature** : `A1`, `B1`, `E4`, `d4`, `b6-c5`, `c3-d4` sont des cases valides dans
-plusieurs jeux, et « le pion b6 prend en d4 » ne dit pas s'il s'agit de dames ou d'échecs. Sans indice de
-jeu, la détection choisit le plus probable — et sur ces 12 surfaces, ce choix est faux. Pour une garantie,
-il faut passer le jeu explicitement, ou un contexte.
+**110 / 112** surfaces sont attribuées au bon jeu sans indication (**98,2 %**). Les deux échecs sont
+`e4` et `E4` : une case d'échecs **et** un point de go, sans aucun indice de jeu dans la surface. Les
+ambiguïtés numériques du morpion et les listes de cartes sont désormais tranchées par les scores des codecs
+(le nom multilingue « dame » ne renverse plus une liste de cartes). Pour une garantie, il faut passer le jeu
+explicitement, ou un contexte.
 
 ## Ce qui pourrait rendre ce résultat faux
 
@@ -228,6 +233,9 @@ contrat dans le moteur Rust.
 
 - code : [`tools/jeux/`](../tools/jeux/) (`rsn.py`, `lexique.py`, `grammaire.py`, `codecs/`, `regles/`,
   `pensee.py`, `corpus.py`, `mesure.py`) ;
-- tests : [`tools/jeux/tests/`](../tools/jeux/tests/) (54 tests) ;
+- tests : [`tools/jeux/tests/`](../tools/jeux/tests/) (65 tests) ;
 - porte : [`tools/porte-jeux.sh`](../tools/porte-jeux.sh) ;
-- JSON : [`jeux-mesures.json`](jeux-mesures.json).
+- JSON : [`jeux-mesures.json`](jeux-mesures.json) ; langues et maîtres :
+  [`jeux-langues-mesures.json`](jeux-langues-mesures.json),
+  [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json), fiche
+  [`rapport-langues-maitres.md`](rapport-langues-maitres.md).

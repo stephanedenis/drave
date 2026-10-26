@@ -19,10 +19,13 @@
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
+| [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 
 ## Les données brutes
 
 - [`jeux-mesures.json`](jeux-mesures.json) — le corpus des 112 surfaces, la couverture par niveau, les contrôles et la pensée
+- [`jeux-langues-mesures.json`](jeux-langues-mesures.json) — les 71 langues : couverture, corpus, invariance, permutation, notation
+- [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json) — les 17 principes : échecs, dames, go, cartes, ablation
 - [`contamination-0.5b.json`](contamination-0.5b.json) · [`contamination-1.5b.json`](contamination-1.5b.json) ·
   [`contamination-3b.json`](contamination-3b.json) · [`contamination-7b.json`](contamination-7b.json)
 - [`contamination-eurlex-3b.json`](contamination-eurlex-3b.json) ·

@@ -16,11 +16,14 @@ sémantique (légalité, désambiguïsation, canonicalisation). L'ablation de
 """
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, field
 from typing import Any, Iterable
 
 from ..grammaire import Jeton, jetons, naturel
 from ..lexique import langue_probable
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 
 NIVEAUX = {
@@ -117,9 +120,28 @@ class Codec:
         return 0.0
 
     # ---- aides communes ------------------------------------------------
+    def sans_nom_jeu(self, texte: str) -> str:
+        """Retire un nom de jeu en tête (« шахматы конь g1 f3 » → « конь g1 f3 »).
+
+        Les libellés viennent du lexique multilingue ; le retrait est fait sur la
+        forme normalisée du libellé, avec des séparateurs souples (tiret, espace,
+        apostrophe). On ne retire que si le reste n'est pas vide.
+        """
+        ms = MULTI.cherche("jeu.nom", texte)
+        if not ms:
+            return texte
+        m = max(ms, key=lambda x: len(x.forme))
+        motif = r"[\W_]+".join(re.escape(p) for p in m.forme.split())
+        nouveau = re.sub(motif, " ", texte, count=1, flags=re.I)
+        return nouveau if nouveau.strip() else texte
+
     def lecture(self, texte: str, niveau: int, langue: str | None = None,
                 format: str = "inconnu") -> Lecture:
         lang = langue or langue_probable(texte)[0]
+        if lang in ("inconnue", "notation"):
+            ml = MULTI.detecte_langue(texte)
+            if ml:
+                lang = ml
         return Lecture(self.jeu, texte, niveau, naturel(texte), jetons(texte),
                        format=format, langue=lang)
 
@@ -200,6 +222,12 @@ def rend(rsn: RSN, format: str = "canonique", langue: str = "fr",
 
 
 def detecte_jeu(texte: str) -> tuple[str, float]:
+    # Les codecs d'abord (notation, vocabulaire), puis les noms de jeux
+    # multilingues. Le nom d'un jeu ne doit pas écraser une notation plus
+    # spécifique : « dame de cœur » nomme une carte, pas les dames.
     scores = {j: c.detecte(texte) for j, c in tous_les_codecs().items()}
+    jeu = MULTI.jeu(texte)
+    if jeu is not None:
+        scores[jeu[0]] = max(scores.get(jeu[0], 0.0), jeu[1])
     j = max(scores, key=lambda k: scores[k])
     return j, scores[j]

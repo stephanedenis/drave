@@ -1,0 +1,647 @@
+{
+ "couverture": {
+  "langues": 71,
+  "concepts": 35,
+  "couples": 1433,
+  "par_concept": {
+   "jeu.morpion": 42,
+   "jeu.echecs": 69,
+   "jeu.dames": 60,
+   "jeu.go": 62,
+   "jeu.cartes": 59,
+   "jeu.whist": 27,
+   "echecs.piece.K": 62,
+   "echecs.piece.Q": 63,
+   "echecs.piece.R": 61,
+   "echecs.piece.B": 60,
+   "echecs.piece.N": 61,
+   "echecs.piece.P": 61,
+   "echecs.roque": 53,
+   "echecs.mat": 53,
+   "echecs.promotion": 35,
+   "echecs.nulle": 35,
+   "cartes.rang.14": 36,
+   "cartes.rang.13": 33,
+   "cartes.rang.12": 32,
+   "cartes.rang.11": 32,
+   "cartes.couleur.H": 36,
+   "cartes.couleur.D": 34,
+   "cartes.couleur.C": 35,
+   "cartes.couleur.S": 35,
+   "cartes.atout": 29,
+   "cartes.pli": 25,
+   "go.ko": 12,
+   "go.proverbe": 6,
+   "maitre.colonne": 16,
+   "maitre.poste": 16,
+   "maitre.tempo": 23,
+   "maitre.pions": 20,
+   "commun.blanc": 69,
+   "commun.noir": 67,
+   "go.passe": 14
+  },
+  "par_langue": {
+   "ar": 28,
+   "bn": 20,
+   "ca": 31,
+   "cs": 31,
+   "da": 27,
+   "de": 34,
+   "el": 22,
+   "en": 35,
+   "eo": 32,
+   "es": 33,
+   "et": 25,
+   "eu": 22,
+   "fa": 26,
+   "fi": 32,
+   "fr": 35,
+   "gl": 16,
+   "he": 24,
+   "hi": 16,
+   "hr": 15,
+   "hu": 26,
+   "id": 19,
+   "is": 14,
+   "it": 28,
+   "ja": 31,
+   "ka": 14,
+   "kk": 9,
+   "ko": 27,
+   "lt": 15,
+   "lv": 21,
+   "mk": 19,
+   "ms": 16,
+   "mt": 4,
+   "nb": 28,
+   "nl": 32,
+   "nn": 16,
+   "pl": 30,
+   "pt": 31,
+   "ro": 19,
+   "ru": 34,
+   "sk": 23,
+   "sl": 30,
+   "sq": 21,
+   "sr": 25,
+   "sv": 31,
+   "sw": 11,
+   "ta": 17,
+   "th": 18,
+   "tr": 27,
+   "uk": 32,
+   "ur": 14,
+   "vi": 26,
+   "zh": 32,
+   "af": 20,
+   "am": 4,
+   "az": 15,
+   "be": 23,
+   "bs": 18,
+   "cy": 14,
+   "ga": 12,
+   "hy": 16,
+   "km": 3,
+   "ky": 2,
+   "lo": 1,
+   "mn": 10,
+   "ne": 10,
+   "pa": 5,
+   "si": 4,
+   "so": 6,
+   "uz": 13,
+   "yo": 3,
+   "zu": 6
+  },
+  "moyenne_concepts_par_langue": 20.13,
+  "langues_fortes": [
+   "ar",
+   "bn",
+   "ca",
+   "cs",
+   "da",
+   "de",
+   "el",
+   "en",
+   "eo",
+   "es",
+   "et",
+   "eu",
+   "fa",
+   "fi",
+   "fr",
+   "hu",
+   "it",
+   "ja",
+   "lv",
+   "nb",
+   "nl",
+   "pl",
+   "pt",
+   "ru",
+   "sl",
+   "sq",
+   "sr",
+   "sv",
+   "uk",
+   "vi",
+   "zh",
+   "af"
+  ],
+  "n_langues_fortes": 32,
+  "pieces": {
+   "K": 62,
+   "Q": 63,
+   "R": 61,
+   "B": 60,
+   "N": 61,
+   "P": 61
+  },
+  "rangs": {
+   "14": 36,
+   "13": 33,
+   "12": 32,
+   "11": 32
+  },
+  "couleurs": {
+   "C": 35,
+   "D": 34,
+   "H": 36,
+   "S": 35
+  },
+  "jeux": {
+   "morpion": 42,
+   "echecs": 69,
+   "dames": 60,
+   "go": 62,
+   "cartes": 59,
+   "whist": 27
+  }
+ },
+ "corpus": {
+  "items": 449,
+  "bons": 449,
+  "langues_avec_items": 66,
+  "langues_avec_items_forts": 62,
+  "par_langue": {
+   "ar": {
+    "items": 8,
+    "bons": 8,
+    "forts": 4,
+    "forts_bons": 4
+   },
+   "bn": {
+    "items": 8,
+    "bons": 8,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "ca": {
+    "items": 8,
+    "bons": 8,
+    "forts": 5,
+    "forts_bons": 5
+   },
+   "cs": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "da": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "de": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "el": {
+    "items": 6,
+    "bons": 6,
+    "forts": 4,
+    "forts_bons": 4
+   },
+   "en": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "eo": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "es": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "et": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "eu": {
+    "items": 8,
+    "bons": 8,
+    "forts": 5,
+    "forts_bons": 5
+   },
+   "fa": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "fi": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "fr": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "gl": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "he": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "hi": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "hr": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "hu": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "id": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "is": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "it": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "ja": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "ka": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "kk": {
+    "items": 2,
+    "bons": 2,
+    "forts": 0,
+    "forts_bons": 0
+   },
+   "ko": {
+    "items": 6,
+    "bons": 6,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "lt": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "lv": {
+    "items": 7,
+    "bons": 7,
+    "forts": 4,
+    "forts_bons": 4
+   },
+   "mk": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ms": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "nb": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "nl": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "nn": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "pl": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "pt": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "ro": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ru": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "sk": {
+    "items": 6,
+    "bons": 6,
+    "forts": 3,
+    "forts_bons": 3
+   },
+   "sl": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "sq": {
+    "items": 9,
+    "bons": 9,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "sr": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "sv": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "sw": {
+    "items": 3,
+    "bons": 3,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ta": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "th": {
+    "items": 6,
+    "bons": 6,
+    "forts": 3,
+    "forts_bons": 3
+   },
+   "tr": {
+    "items": 7,
+    "bons": 7,
+    "forts": 3,
+    "forts_bons": 3
+   },
+   "uk": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "ur": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "vi": {
+    "items": 10,
+    "bons": 10,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "zh": {
+    "items": 11,
+    "bons": 11,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "af": {
+    "items": 8,
+    "bons": 8,
+    "forts": 7,
+    "forts_bons": 7
+   },
+   "am": {
+    "items": 1,
+    "bons": 1,
+    "forts": 0,
+    "forts_bons": 0
+   },
+   "az": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "be": {
+    "items": 8,
+    "bons": 8,
+    "forts": 5,
+    "forts_bons": 5
+   },
+   "bs": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "cy": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ga": {
+    "items": 3,
+    "bons": 3,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "hy": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "km": {
+    "items": 1,
+    "bons": 1,
+    "forts": 1,
+    "forts_bons": 1
+   },
+   "mn": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ne": {
+    "items": 2,
+    "bons": 2,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "pa": {
+    "items": 1,
+    "bons": 1,
+    "forts": 0,
+    "forts_bons": 0
+   },
+   "so": {
+    "items": 1,
+    "bons": 1,
+    "forts": 1,
+    "forts_bons": 1
+   },
+   "uz": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "zu": {
+    "items": 1,
+    "bons": 1,
+    "forts": 0,
+    "forts_bons": 0
+   }
+  },
+  "minimum": 1.0,
+  "maximum": 1.0
+ },
+ "invariance": {
+  "paires": 11,
+  "invariantes": 11,
+  "detail": {
+   "ml-cartes-10h": 1,
+   "ml-cartes-ah": 1,
+   "ml-cartes-jc": 1,
+   "ml-cartes-ks": 1,
+   "ml-cartes-qd": 1,
+   "ml-dames-b6c5": 1,
+   "ml-echecs-e4": 1,
+   "ml-echecs-nf3": 1,
+   "ml-go-d4": 1,
+   "ml-go-passe": 1,
+   "ml-morpion-a1": 1
+  }
+ },
+ "permutation": {
+  "items": 449,
+  "bons": 186,
+  "forts": 275,
+  "forts_bons": 12
+ },
+ "detection": {
+  "total": 315,
+  "bons": 315,
+  "par_jeu": {
+   "morpion": {
+    "total": 42,
+    "bons": 42
+   },
+   "echecs": {
+    "total": 69,
+    "bons": 69
+   },
+   "dames": {
+    "total": 56,
+    "bons": 56
+   },
+   "go": {
+    "total": 62,
+    "bons": 62
+   },
+   "cartes": {
+    "total": 86,
+    "bons": 86
+   }
+  }
+ },
+ "langue_detectee": {
+  "items": 449,
+  "exacts": 343
+ },
+ "notation": {
+  "items": 72,
+  "langues": 71,
+  "parses": 5112,
+  "bons": 5112
+ },
+ "duree_s": 3.136
+}

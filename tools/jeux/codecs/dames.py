@@ -16,6 +16,7 @@ import re
 
 from ..grammaire import naturel
 from ..lexique import LEX
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 from ..regles import dames as D
 from .base import Arbre, Codec, Lecture
@@ -135,6 +136,7 @@ class CodecDames(Codec):
         lec = self.lecture(texte, niveau, langue)
         if not texte or not texte.strip():
             return self.echoue(lec, "surface vide")
+        texte = self.sans_nom_jeu(texte)
 
         # 1. état compact
         if _est_compact(texte):
@@ -273,11 +275,13 @@ class CodecDames(Codec):
         if _est_diagramme(texte):
             return 0.9
         carres, forme = _carres(texte)
-        if len(carres) >= 2 and ("x" in t or "-" in t):
+        if len(carres) >= 2:
             if forme == "numerique" and all(1 <= c + 1 <= 32 for c in carres):
                 return 0.45
-            if forme == "algebrique":
-                return 0.2
+            if forme == "algebrique" and (
+                    "x" in t or "-" in t
+                    or re.search(r"\b(prend|capture|take|vers|to)\b", t)):
+                return 0.55
         return 0.0
 
 

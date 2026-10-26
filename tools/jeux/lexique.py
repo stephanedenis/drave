@@ -60,9 +60,9 @@ def normalise(texte: str) -> str:
 def plie(texte: str) -> str:
     """Casse pliée et accents retirés : la clé de recherche des mots."""
     t = unicodedata.normalize("NFD", normalise(texte).casefold())
-    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
+    t = sans_diacritiques(t)
     t = t.replace("'", "").replace("`", "")
-    return re.sub(r"\s+", " ", t).strip()
+    return unicodedata.normalize("NFC", re.sub(r"\s+", " ", t).strip())
 
 
 def sans_espaces(texte: str) -> str:
@@ -71,21 +71,93 @@ def sans_espaces(texte: str) -> str:
 
 # Un « mot » pour la couche lexicale : lettres/chiffres avec apostrophe interne,
 # ou un symbole de carte, ou un signe de ponctuation isolé.
-_UNITE = re.compile(
-    r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:['\u2019][A-Za-zÀ-ÖØ-öø-ÿ]+)?"
-    r"|[\u2660\u2665\u2666\u2663]"
-    r"|[^\sA-Za-zÀ-ÖØ-öø-ÿ0-9]"
-)
+def _garde_marque(base: str) -> bool:
+    """La marque combinante fait-elle partie de la lettre (indic, thaï) ?
+
+    Les accents latin/grec/cyrillique, les harakat arabes et les niqqud hébreux
+    sont des **diacritiques optionnels** : on les retire pour comparer. Les
+    voyelles dévanagaries, les signes thaïs, etc. sont **constitutifs** : on les
+    garde, sinon `राजा` deviendrait `र ज`.
+    """
+    cp = ord(base)
+    # On retire les diacritiques OPTIONNELS du latin, du grec, de l'arabe et de
+    # l'hébreu. On GARDE ceux du cyrillique (й, ё, ї sont des lettres), des
+    # écritures indiennes et du thaï (les voyelles en sont).
+    return not (0x0041 <= cp <= 0x024F or 0x0370 <= cp <= 0x03FF
+                or 0x1E00 <= cp <= 0x1EFF
+                or 0x0590 <= cp <= 0x05FF or 0x0600 <= cp <= 0x06FF
+                or 0x0750 <= cp <= 0x077F or 0x08A0 <= cp <= 0x08FF)
+
+
+def sans_diacritiques(texte: str) -> str:
+    if texte.isascii():
+        return texte
+    out: list[str] = []
+    base = None
+    for c in texte:
+        if unicodedata.category(c).startswith("M"):
+            if base is not None and not _garde_marque(base):
+                continue
+            out.append(c)
+        else:
+            out.append(c)
+            base = c
+    return "".join(out)
+
+def normalise_forme(texte: str) -> str:
+    """Forme de comparaison d'un libellé multilingue (même règle que le constructeur).
+
+    NFKC, casse pliée, diacritiques **optionnels** retirés (latin, grec,
+    cyrillique, arabe, hébreu), diacritiques **constitutifs** gardés (indic,
+    thaï), parenthèses de désambiguïsation retirées (« 馬 (國際象棋) » → « 馬 »),
+    espaces normalisés, ponctuation de bord ôtée.
+    """
+    t = unicodedata.normalize("NFD", normalise(texte).casefold())
+    t = sans_diacritiques(t)
+    t = re.sub(r"\s*\([^)]*\)\s*$", "", t)
+    t = t.replace("\u2019", "'").replace("`", "'")
+    t = re.sub(r"\s+", " ", t).strip(" .,;:!?«»\"'")
+    return unicodedata.normalize("NFC", t)
 
 
 def unites(texte: str) -> list[str]:
-    """Découpe une surface en unités : mots, nombres, symboles, ponctuation."""
-    return _UNITE.findall(normalise(texte))
+    """Découpe une surface en unités : mots, nombres, symboles, ponctuation.
 
+    Le découpage est **manuel** et non une regex ASCII : il groupe les lettres
+    Unicode, les chiffres et les **marques combinantes** (les voyelles
+    dévanagaries, les signes thaïs) avec leur base, sépare les symboles de
+    cartes, et laisse la ponctuation isolée. C'est ce qui permet `राजा`,
+    `ملك`, `王` et `король` d'être des unités entières.
+    """
+    t = normalise(texte)
+    if t.isascii():
+        # chemin rapide : la très grande majorité des surfaces du corpus
+        return re.findall(r"[A-Za-z0-9]+(?:['\u2019][A-Za-z0-9]+)?"
+                          r"|[\u2660-\u2667]|[^\w\s]", t)
+    out: list[str] = []
+    buf: list[str] = []
+
+    def vide():
+        if buf:
+            out.append("".join(buf))
+            buf.clear()
+
+    for c in t:
+        if c.isalnum() or unicodedata.category(c).startswith("M") or c in "'\u2019":
+            buf.append(c)
+        elif c in "\u2660\u2661\u2662\u2663\u2664\u2665\u2666\u2667":
+            vide()
+            out.append(c)
+        else:
+            vide()
+            if not c.isspace():
+                out.append(c)
+    vide()
+    return out
 
 def mots(texte: str) -> list[str]:
     """Les unités qui sont des mots/nombres, pliées (pour la détection de langue)."""
-    return [plie(u) for u in unites(texte) if re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:'.*)?", u)]
+    return [plie(u) for u in unites(texte) if re.fullmatch(r"[^\W_]+(?:'.*)?", u, re.UNICODE)]
 
 
 # ---------------------------------------------------------------------------

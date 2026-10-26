@@ -44,6 +44,8 @@ class Budget:
     temps_s: float = 5.0
     playouts: int = 400
     graine: int = 0
+    maitres: bool = False       # évaluations/priors/politique des maîtres
+    livre: bool = False         # livre d'ouvertures des échecs
 
 
 @dataclass
@@ -117,7 +119,8 @@ def _ordre_echecs(pos: E.Position, coups: list[E.Coup]) -> list[E.Coup]:
 
 
 def _negamax_echecs(pos: E.Position, profondeur: int, alpha: float, beta: float,
-                    ply: int, tt: dict, limite: float, stats: dict) -> float:
+                    ply: int, tt: dict, limite: float, stats: dict,
+                    eval_fn) -> float:
     stats["noeuds"] += 1
     if stats["noeuds"] % 2048 == 0 and time.monotonic() > limite:
         raise _TempsDepasse
@@ -138,7 +141,7 @@ def _negamax_echecs(pos: E.Position, profondeur: int, alpha: float, beta: float,
     if not coups:
         return -MATE + ply if pos.en_echec(pos.trait) else 0.0
     if profondeur <= 0:
-        return pos.heuristique()
+        return eval_fn(pos)
     alpha0 = alpha
     meilleur = -math.inf
     meilleur_coup = None
@@ -146,7 +149,7 @@ def _negamax_echecs(pos: E.Position, profondeur: int, alpha: float, beta: float,
         u = pos.joue(c)
         try:
             s = -_negamax_echecs(pos, profondeur - 1, -beta, -alpha, ply + 1,
-                                  tt, limite, stats)
+                                  tt, limite, stats, eval_fn)
         finally:
             pos.annule(u)
         if s > meilleur:
@@ -167,6 +170,17 @@ def decide_echecs(etat: RSN, budget: Budget | None = None) -> Decision:
     if not coups:
         return Decision("echecs", None, E.Position.utilite(pos), 0, 0,
                         time.monotonic() - t0, "terminal")
+    if budget.livre:
+        from .maitres import coup_livre
+        c = coup_livre(pos)
+        if c is not None:
+            return Decision("echecs", E.action_depuis_coup(c), 0.0, 0, 0,
+                            time.monotonic() - t0, "livre d'ouvertures",
+                            {"livre": True})
+    if budget.maitres:
+        from .maitres import eval_echecs_maitres as eval_fn
+    else:
+        eval_fn = lambda p: p.heuristique()  # noqa: E731
     tt: dict = {}
     stats = {"noeuds": 0}
     limite = t0 + budget.temps_s
@@ -181,7 +195,7 @@ def decide_echecs(etat: RSN, budget: Budget | None = None) -> Decision:
             for c in _ordre_echecs(pos, coups):
                 u = pos.joue(c)
                 try:
-                    s = -_negamax_echecs(pos, d - 1, -beta, -alpha, 1, tt, limite, stats)
+                    s = -_negamax_echecs(pos, d - 1, -beta, -alpha, 1, tt, limite, stats, eval_fn)
                 finally:
                     pos.annule(u)
                 if s > local:
@@ -213,7 +227,7 @@ def coup_echecs_sans_recherche(etat: RSN) -> RSN | None:
 # Dames : négamax alpha-bêta
 # ---------------------------------------------------------------------------
 def _negamax_dames(pos: D.Position, profondeur: int, alpha: float, beta: float,
-                   ply: int, tt: dict, limite: float, stats: dict) -> float:
+                   ply: int, tt: dict, limite: float, stats: dict, eval_fn) -> float:
     stats["noeuds"] += 1
     if stats["noeuds"] % 2048 == 0 and time.monotonic() > limite:
         raise _TempsDepasse
@@ -234,7 +248,7 @@ def _negamax_dames(pos: D.Position, profondeur: int, alpha: float, beta: float,
     if not coups:
         return -MATE + ply
     if profondeur <= 0:
-        return pos.heuristique()
+        return eval_fn(pos)
     if pos.demi >= 80:
         return 0.0
     alpha0 = alpha
@@ -243,7 +257,7 @@ def _negamax_dames(pos: D.Position, profondeur: int, alpha: float, beta: float,
     for c in ordonnes:
         enfant = pos._applique_direct(c)
         s = -_negamax_dames(enfant, profondeur - 1, -beta, -alpha, ply + 1,
-                            tt, limite, stats)
+                            tt, limite, stats, eval_fn)
         if s > meilleur:
             meilleur = s
         alpha = max(alpha, s)
@@ -262,6 +276,10 @@ def decide_dames(etat: RSN, budget: Budget | None = None) -> Decision:
     if not coups:
         return Decision("dames", None, pos.utilite(), 0, 0,
                         time.monotonic() - t0, "terminal")
+    if budget.maitres:
+        from .maitres import eval_dames_maitres as eval_fn
+    else:
+        eval_fn = lambda p: p.heuristique()  # noqa: E731
     tt: dict = {}
     stats = {"noeuds": 0}
     limite = t0 + budget.temps_s
@@ -274,7 +292,7 @@ def decide_dames(etat: RSN, budget: Budget | None = None) -> Decision:
             local, local_coup = -math.inf, None
             for c in sorted(coups, key=lambda c: (c.prise, len(c.chemin)), reverse=True):
                 enfant = pos._applique_direct(c)
-                s = -_negamax_dames(enfant, d - 1, -beta, -alpha, 1, tt, limite, stats)
+                s = -_negamax_dames(enfant, d - 1, -beta, -alpha, 1, tt, limite, stats, eval_fn)
                 if s > local:
                     local, local_coup = s, c
                 alpha = max(alpha, s)
@@ -300,10 +318,11 @@ def coup_dames_sans_recherche(etat: RSN) -> RSN | None:
 # Go : MCTS (UCT)
 # ---------------------------------------------------------------------------
 class _Noeud:
-    __slots__ = ("etat", "parent", "coup", "enfants", "visites", "valeur", "non_essayes")
+    __slots__ = ("etat", "parent", "coup", "enfants", "visites", "valeur",
+                 "non_essayes", "prior")
 
     def __init__(self, etat: G.Position, parent: "_Noeud | None" = None,
-                 coup: int | None = None) -> None:
+                 coup: int | None = None, prior: float = 0.0) -> None:
         self.etat = etat
         self.parent = parent
         self.coup = coup
@@ -311,6 +330,7 @@ class _Noeud:
         self.visites = 0
         self.valeur = 0.0
         self.non_essayes: list[int] | None = None
+        self.prior = prior
 
     def coups(self) -> list[int]:
         if self.non_essayes is None:
@@ -344,6 +364,10 @@ def decide_go(etat: RSN, budget: Budget | None = None) -> Decision:
         return Decision("go", None, pos.utilite(), 0, 0,
                         time.monotonic() - t0, "terminal")
     rng = random.Random(budget.graine)
+    if budget.maitres:
+        from .maitres import prior_go as prior_fn
+    else:
+        prior_fn = None
     racine = _Noeud(pos)
     limite = t0 + budget.temps_s
     noeuds = 0
@@ -358,7 +382,8 @@ def decide_go(etat: RSN, budget: Budget | None = None) -> Decision:
     # nombre de coups ne fait qu'essayer chaque coup une fois : aucune
     # exploitation. On donne un playout à chaque coup, puis UCT choisit.
     for c in racine.coups():
-        enfant = _Noeud(racine.etat.joue(None if c == -1 else c), racine, c)
+        enfant = _Noeud(racine.etat.joue(None if c == -1 else c), racine, c,
+                        prior_fn(racine.etat, c) if prior_fn else 0.0)
         racine.enfants[c] = enfant
         noeuds += 1
         retro(enfant, _simulation(enfant.etat.copie(), rng))
@@ -371,13 +396,15 @@ def decide_go(etat: RSN, budget: Budget | None = None) -> Decision:
         while not n.etat.terminal() and n.enfants and len(n.enfants) == len(n.coups()):
             n = max(n.enfants.values(),
                     key=lambda c: (-c.valeur / max(1, c.visites)
-                                   + 1.4 * math.sqrt(math.log(max(1, n.visites)) / max(1, c.visites))))
+                                   + 1.4 * math.sqrt(math.log(max(1, n.visites)) / max(1, c.visites))
+                                   + 2.0 * c.prior))
         # expansion
         if not n.etat.terminal():
             non = [c for c in n.coups() if c not in n.enfants]
             if non:
                 c = rng.choice(non)
-                enfant = _Noeud(n.etat.joue(None if c == -1 else c), n, c)
+                enfant = _Noeud(n.etat.joue(None if c == -1 else c), n, c,
+                                prior_fn(n.etat, c) if prior_fn else 0.0)
                 n.enfants[c] = enfant
                 n = enfant
                 noeuds += 1
@@ -407,7 +434,11 @@ def decide_cartes(etat: RSN, budget: Budget | None = None) -> Decision:
     if pos.terminal():
         return Decision("cartes", None, pos.utilite(), 0, 0,
                         time.monotonic() - t0, "terminal")
-    c = pos.politique()
+    if budget.maitres:
+        from .maitres import politique_cartes_maitres as politique
+    else:
+        politique = lambda p: p.politique()  # noqa: E731
+    c = politique(pos)
     return Decision("cartes", C.action_depuis_carte(c), pos.utilite(), 1,
                     len(pos.coups_legaux()), time.monotonic() - t0,
                     "politique (fournir, partenaire, plus bas gagnant)")

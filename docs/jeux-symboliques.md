@@ -67,7 +67,7 @@ Les niveaux sont **cumulatifs** ; l'ablation de la fiche vérifie que la couvert
 |---:|---|---|---|
 | **0** | surface | la forme canonique exacte d'un jeu | `e2e4`, `XOX/.../...`, `9-13`, `D4`, `A♥` |
 | **1** | normalisation | casse, accents, espaces, ponctuation | `E2-E4`, `e2 e4`, `b6-c5`, `d4` |
-| **2** | lexique | synonymes et langues (FR/EN) | `Cf3`, « cavalier de g1 vers f3 », « as de cœur » |
+| **2** | lexique | synonymes et langues (FR/EN, puis **71 langues** pour les mots-clés) | `Cf3`, « cavalier de g1 vers f3 », « as de cœur », `конь g1 f3`, `馬 g1 f3` |
 | **3** | grammaire | phrases, ordre libre, articles, verbes | « le cavalier g1 va en f3 », « je passe » |
 | **4** | sémantique | légalité, désambiguïsation, canonicalisation | une FEN avec un `ep` inutile devient la même position ; `R` est le roi français **ou** la tour anglaise, tranché par la légalité |
 
@@ -127,12 +127,55 @@ contrôles, eux, sont stables :
   dames gagne contre le joueur sans recherche, la politique des cartes bat le hasard, et les cinq jeux
   donnent la **même décision** sur des surfaces différentes.
 
+## Les 71 langues (B7)
+
+Le lexique multilingue est une **donnée** construite depuis Wikidata (CC0) : **35 concepts**, **71 langues**,
+**1 433 couples**, **32 langues fortes** (pièces N/P + un rang + une enseigne). Il ne porte pas de grammaire :
+les surfaces sont des **mots-clés** (pièce + cases, rang + enseigne, nom du jeu + coordonnée). C'est la couche
+lexicale, celle qui doit porter le sens avant qu'une phrase soit possible.
+
+| mesure | valeur |
+|---|---:|
+| corpus multilingue, niveau 4 | **449 / 449** |
+| paires inter-langues invariantes | **11 / 11** |
+| permutation des libellés (items forts) | **12 / 275** restants |
+| notation, 72 items × 71 langues | **5 112 / 5 112** |
+| détection des noms de jeux | **315 / 315** |
+| langue détectée | **343 / 449** (76,4 %) |
+
+La notation (FEN, SAN, UCI, GTP, SGF, binaire) est **indépendante de la langue** : c'est le recours des
+langues sans libellé. Les libellés Wikidata sont des **lemmes** ; les formes fléchies ne sont pas couvertes,
+et cinq langues (`ky`, `lo`, `mt`, `si`, `yo`) n'ont aucun item. La fiche donne les listes et les deux
+ambiguïtés restantes (`e4`/`E4`, échecs/go).
+
+## Les maîtres (B8)
+
+Les livres ne sont pas recopiés : ils sont **tirés en principes** et **encodés**. **17 principes**, **9
+sources** du domaine public, **3 parties** validées jusqu'au mat, **28 positions** de livre.
+
+| jeu | ce que le principe déplace | contrôle |
+|---|---|---|
+| échecs | premier coup **d4** (sans : **Nc3**) ; livre **10/10** ; mats **3/3** | accord avec le coup du maître **42/101** avec les principes contre **41/101** sans — **+1, non significatif** |
+| dames | **10 victoires, 10 nulles, 0 défaite** en 20 parties | la base perd **20/20** avec les Blancs : le biais de couleur est nommé |
+| go | 9×9 : **10/10** coups de 3e/4e ligne avec le prior contre **3/10** sans | 5×5 et capture : **10/10** des deux côtés, effet nul nommé |
+| cartes | **44,7 %** contre la base (51,0 %) ; contre le hasard 78,5 % contre 82,4 % | ablation : sans honneur 43,5 %, sans seconde 45,7 %, sans troisième 46,5 % — **aucune ne rattrape la base** |
+
+Ce que les principes **font** : ils changent l'ouverture, tiennent le livre, gagnent au go 9×9 et ne perdent
+pas aux dames. Ce qu'ils **ne font pas** : ils ne rapprochent pas du coup du maître aux échecs et ils
+**perdent** aux cartes. La connaissance des livres est une **entrée**, pas la force.
+
 ## Ce qui reste ouvert
 
 - **la détection automatique du jeu** n'est fiable que sur les surfaces **distinctives** (une FEN, un SGF,
   une grille 3×3, un compact 32 caractères). Une case seule (`D4`, `A1`) est ambiguë : la détection choisit le plus probable, et
   peut se tromper ; pour une garantie, il faut le jeu explicite, ou un contexte. La fiche donne le taux et
   nomme les cas ambigus.
+- **les langues** : le lexique multilingue est fait de **lemmes** Wikidata, pas de formes fléchies ; les
+  71 langues couvrent les **mots-clés**, pas la grammaire. Cinq langues n'ont aucun item naturel ; la notation
+  les couvre. `e4`/`E4` restent ambiguës entre échecs et go.
+- **les maîtres** : trois parties, une profondeur 3, un jeu de cartes simplifié. Les principes changent
+  l'ouverture et le livre, mais l'accord avec le coup du maître ne bouge pas (+1/101) et la politique du whist
+  **perd** contre la base (44,7 % contre 51,0 %). Ce sont des **négatifs nommés**, pas des preuves de force.
 - **le go** implémente le **ko simple**, pas le ko positionnel complet ; le score est Tromp-Taylor, sans
   retirer les pierres mortes. C'est le score des playouts, pas un arbitre de fin de partie réelle.
 - **les cartes** sont un whist à information imparfaite : la politique est lisible, mais elle n'est pas
@@ -148,12 +191,17 @@ contrôles, eux, sont stables :
 |---|---|
 | [`tools/jeux/rsn.py`](../tools/jeux/rsn.py) | le contrat : canonique, empreinte, binaire, différences |
 | [`tools/jeux/lexique.py`](../tools/jeux/lexique.py) | les tables FR/EN et la normalisation |
+| [`tools/jeux/lexique_multilingue.py`](../tools/jeux/lexique_multilingue.py) | le lexique 71 langues (Wikidata) et sa recherche |
+| [`tools/jeux/corpus_multilingue.py`](../tools/jeux/corpus_multilingue.py) | le corpus multilingue dérivé du lexique |
 | [`tools/jeux/grammaire.py`](../tools/jeux/grammaire.py) | les unités, les phrases, les motifs |
 | [`tools/jeux/codecs/`](../tools/jeux/codecs/) | un codec par jeu (surface → RSN, RSN → surface) |
 | [`tools/jeux/regles/`](../tools/jeux/regles/) | les règles internes et le perft |
 | [`tools/jeux/pensee.py`](../tools/jeux/pensee.py) | minimax, alpha-bêta, MCTS, politique |
 | [`tools/jeux/corpus.py`](../tools/jeux/corpus.py) | le corpus construit par le code, avec ses attendus |
+| [`tools/jeux/maitres.py`](../tools/jeux/maitres.py) | les principes, évaluations, livre, parties, politiques, priors |
 | [`tools/jeux/mesure.py`](../tools/jeux/mesure.py) | les séries et les contrôles |
+| [`tools/jeux/mesure_langues.py`](../tools/jeux/mesure_langues.py) | la couverture et les contrôles des 71 langues |
+| [`tools/jeux/mesure_maitres.py`](../tools/jeux/mesure_maitres.py) | les mesures des principes et leurs contrôles |
 | [`tools/porte-jeux.sh`](../tools/porte-jeux.sh) | la porte de non-régression |
 
 **Vocabulaire** : une RSN-jeu est faite d'**unités de sens** ; le **jeton** reste l'unité technique du

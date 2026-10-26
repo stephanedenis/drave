@@ -1,0 +1,4734 @@
+{
+ "version": 1,
+ "source": "Wikidata (CC0), wbgetentities props=labels ; pageprops Wikipédia pour les QID ; libellés normalisés (NFKC, casse pliée, accents retirés, parenthèses retirées)",
+ "date": "2026-10-26",
+ "langues": [
+  "ar",
+  "bn",
+  "ca",
+  "cs",
+  "da",
+  "de",
+  "el",
+  "en",
+  "eo",
+  "es",
+  "et",
+  "eu",
+  "fa",
+  "fi",
+  "fr",
+  "gl",
+  "he",
+  "hi",
+  "hr",
+  "hu",
+  "id",
+  "is",
+  "it",
+  "ja",
+  "ka",
+  "kk",
+  "ko",
+  "lt",
+  "lv",
+  "mk",
+  "ms",
+  "mt",
+  "nb",
+  "nl",
+  "nn",
+  "pl",
+  "pt",
+  "ro",
+  "ru",
+  "sk",
+  "sl",
+  "sq",
+  "sr",
+  "sv",
+  "sw",
+  "ta",
+  "th",
+  "tr",
+  "uk",
+  "ur",
+  "vi",
+  "zh",
+  "af",
+  "am",
+  "az",
+  "be",
+  "bs",
+  "cy",
+  "ga",
+  "hy",
+  "km",
+  "ky",
+  "lo",
+  "mn",
+  "ne",
+  "pa",
+  "si",
+  "so",
+  "uz",
+  "yo",
+  "zu"
+ ],
+ "variantes": {
+  "zh": [
+   "zh-hans",
+   "zh-cn",
+   "zh-sg",
+   "zh-hant"
+  ],
+  "pt": [
+   "pt-br"
+  ],
+  "sr": [
+   "sr-ec",
+   "sr-el"
+  ]
+ },
+ "concepts": {
+  "jeu.morpion": {
+   "qid": "Q210339",
+   "qids": [
+    "Q210339"
+   ],
+   "labels": {
+    "ar": [
+     "لعبة اكس-او"
+    ],
+    "ca": [
+     "tres en ratlla"
+    ],
+    "cs": [
+     "piskvorky"
+    ],
+    "da": [
+     "kryds og bolle"
+    ],
+    "de": [
+     "tic-tac-toe"
+    ],
+    "en": [
+     "tic-tac-toe"
+    ],
+    "eo": [
+     "tiktakto"
+    ],
+    "es": [
+     "tres en raya"
+    ],
+    "et": [
+     "trips-traps-trull"
+    ],
+    "eu": [
+     "hiruko artzain-joko"
+    ],
+    "fa": [
+     "ایکس او"
+    ],
+    "fi": [
+     "ristinolla"
+    ],
+    "fr": [
+     "tic-tac-toe"
+    ],
+    "gl": [
+     "pai fillo nai"
+    ],
+    "he": [
+     "איקס עיגול"
+    ],
+    "hr": [
+     "kruzic i krizic"
+    ],
+    "hu": [
+     "amoba"
+    ],
+    "id": [
+     "silang-bulat-silang"
+    ],
+    "it": [
+     "tris"
+    ],
+    "ja": [
+     "三目並べ"
+    ],
+    "ko": [
+     "틱택토"
+    ],
+    "lt": [
+     "kryziukai-nuliukai"
+    ],
+    "lv": [
+     "krustini un nulites"
+    ],
+    "ms": [
+     "tic-tac-toe"
+    ],
+    "nb": [
+     "tripp-trapp-tresko"
+    ],
+    "nl": [
+     "boter-kaas-en-eieren"
+    ],
+    "pl": [
+     "kołko i krzyzyk"
+    ],
+    "pt": [
+     "jogo do galo",
+     "jogo da velha"
+    ],
+    "ro": [
+     "x si 0"
+    ],
+    "ru": [
+     "крестики-нолики"
+    ],
+    "sk": [
+     "piskvorky"
+    ],
+    "sl": [
+     "krizci in krozci"
+    ],
+    "sr": [
+     "икс-окс",
+     "iks-oks"
+    ],
+    "sv": [
+     "tre-i-rad"
+    ],
+    "ta": [
+     "டிக் டேக் டோ"
+    ],
+    "th": [
+     "โอเอกซ์"
+    ],
+    "tr": [
+     "tic-tac-toe"
+    ],
+    "uk": [
+     "хрестики-нулики"
+    ],
+    "vi": [
+     "tic-tac-toe"
+    ],
+    "zh": [
+     "井字棋"
+    ],
+    "be": [
+     "крыжыкі-нулікі"
+    ],
+    "hy": [
+     "իքս-նոլիկ"
+    ]
+   }
+  },
+  "jeu.echecs": {
+   "qid": "Q718",
+   "qids": [
+    "Q718"
+   ],
+   "labels": {
+    "ar": [
+     "الشطرنج"
+    ],
+    "bn": [
+     "দাবা"
+    ],
+    "ca": [
+     "escacs"
+    ],
+    "cs": [
+     "sachy"
+    ],
+    "da": [
+     "skak"
+    ],
+    "de": [
+     "schach"
+    ],
+    "el": [
+     "σκακι"
+    ],
+    "en": [
+     "chess"
+    ],
+    "eo": [
+     "sako"
+    ],
+    "es": [
+     "ajedrez"
+    ],
+    "et": [
+     "male"
+    ],
+    "eu": [
+     "xake"
+    ],
+    "fa": [
+     "شطرنج"
+    ],
+    "fi": [
+     "shakki"
+    ],
+    "fr": [
+     "echecs"
+    ],
+    "gl": [
+     "xadrez"
+    ],
+    "he": [
+     "שחמט"
+    ],
+    "hi": [
+     "शतरंज"
+    ],
+    "hr": [
+     "sah"
+    ],
+    "hu": [
+     "sakk"
+    ],
+    "id": [
+     "catur"
+    ],
+    "is": [
+     "skak"
+    ],
+    "it": [
+     "scacchi"
+    ],
+    "ja": [
+     "チェス"
+    ],
+    "ka": [
+     "ჭადრაკი"
+    ],
+    "kk": [
+     "шахмат"
+    ],
+    "ko": [
+     "체스"
+    ],
+    "lt": [
+     "sachmatai"
+    ],
+    "lv": [
+     "sahs"
+    ],
+    "mk": [
+     "шах"
+    ],
+    "ms": [
+     "catur"
+    ],
+    "mt": [
+     "cess"
+    ],
+    "nb": [
+     "sjakk"
+    ],
+    "nl": [
+     "schaken"
+    ],
+    "nn": [
+     "sjakk"
+    ],
+    "pl": [
+     "szachy"
+    ],
+    "pt": [
+     "xadrez"
+    ],
+    "ro": [
+     "sah"
+    ],
+    "ru": [
+     "шахматы"
+    ],
+    "sk": [
+     "sach"
+    ],
+    "sl": [
+     "sah"
+    ],
+    "sq": [
+     "shahu"
+    ],
+    "sr": [
+     "шах",
+     "sah"
+    ],
+    "sv": [
+     "schack"
+    ],
+    "sw": [
+     "sataranji"
+    ],
+    "ta": [
+     "சதுரங்கம்"
+    ],
+    "th": [
+     "หมากรุกสากล"
+    ],
+    "tr": [
+     "satranc"
+    ],
+    "uk": [
+     "шахи"
+    ],
+    "ur": [
+     "شطرنج"
+    ],
+    "vi": [
+     "co vua"
+    ],
+    "zh": [
+     "國際象棋",
+     "国际象棋"
+    ],
+    "af": [
+     "skaak"
+    ],
+    "am": [
+     "ሰንጠረዥ"
+    ],
+    "az": [
+     "sahmat"
+    ],
+    "be": [
+     "шахматы"
+    ],
+    "bs": [
+     "sah"
+    ],
+    "cy": [
+     "gwyddbwyll"
+    ],
+    "ga": [
+     "ficheall"
+    ],
+    "hy": [
+     "շախմատ"
+    ],
+    "ky": [
+     "шахмат"
+    ],
+    "mn": [
+     "шатар"
+    ],
+    "ne": [
+     "बुद्धी चाल"
+    ],
+    "pa": [
+     "ਸ਼ਤਰੰਜ"
+    ],
+    "si": [
+     "චෙස්"
+    ],
+    "so": [
+     "shataranjiga"
+    ],
+    "uz": [
+     "shaxmat"
+    ],
+    "yo": [
+     "chess"
+    ],
+    "zu": [
+     "uthimba"
+    ]
+   }
+  },
+  "jeu.dames": {
+   "qid": "Q2180601",
+   "qids": [
+    "Q2180601",
+    "Q1293"
+   ],
+   "labels": {
+    "ar": [
+     "الضامة الانجليزية",
+     "الضامة"
+    ],
+    "de": [
+     "english draughts",
+     "dame"
+    ],
+    "en": [
+     "english draughts",
+     "checkers"
+    ],
+    "eo": [
+     "angla damludo",
+     "damludo"
+    ],
+    "es": [
+     "damas inglesas",
+     "damas"
+    ],
+    "fr": [
+     "dames anglaises",
+     "dames"
+    ],
+    "id": [
+     "dam inggris",
+     "dam"
+    ],
+    "it": [
+     "dama inglese",
+     "dama"
+    ],
+    "ko": [
+     "영미식 체커",
+     "체커"
+    ],
+    "nl": [
+     "checkers",
+     "dammen"
+    ],
+    "pl": [
+     "warcaby angielskie",
+     "warcaby"
+    ],
+    "ru": [
+     "английские шашки",
+     "шашки"
+    ],
+    "tr": [
+     "ingiliz daması",
+     "dama"
+    ],
+    "uk": [
+     "англійські шашки",
+     "шашки"
+    ],
+    "zh": [
+     "英國跳棋",
+     "西洋跳棋"
+    ],
+    "nb": [
+     "dam"
+    ],
+    "ca": [
+     "dames"
+    ],
+    "cs": [
+     "dama"
+    ],
+    "da": [
+     "dam"
+    ],
+    "et": [
+     "kabe"
+    ],
+    "eu": [
+     "dama-joko"
+    ],
+    "fa": [
+     "چکرز"
+    ],
+    "fi": [
+     "tammi"
+    ],
+    "gl": [
+     "xogo de damas"
+    ],
+    "he": [
+     "דמקה"
+    ],
+    "hr": [
+     "dama"
+    ],
+    "hu": [
+     "damajatek"
+    ],
+    "is": [
+     "damm"
+    ],
+    "ja": [
+     "チェッカー"
+    ],
+    "lt": [
+     "saskes"
+    ],
+    "lv": [
+     "dambrete"
+    ],
+    "ms": [
+     "dam"
+    ],
+    "nn": [
+     "spelet dam"
+    ],
+    "pt": [
+     "damas"
+    ],
+    "ro": [
+     "dame"
+    ],
+    "sk": [
+     "dama"
+    ],
+    "el": [
+     "vταμα"
+    ],
+    "hi": [
+     "गोटी"
+    ],
+    "kk": [
+     "дойбы"
+    ],
+    "mk": [
+     "дама"
+    ],
+    "ka": [
+     "შაში"
+    ],
+    "az": [
+     "dama"
+    ],
+    "be": [
+     "шашкі"
+    ],
+    "bs": [
+     "dama"
+    ],
+    "pt-br": [
+     "damas"
+    ],
+    "sl": [
+     "dama"
+    ],
+    "sr": [
+     "дама"
+    ],
+    "sv": [
+     "damspel"
+    ],
+    "ur": [
+     "ڈرافٹس"
+    ],
+    "mn": [
+     "зуун буудалт даам"
+    ],
+    "vi": [
+     "co đam"
+    ],
+    "th": [
+     "หมากฮอส"
+    ],
+    "zh-hans": [
+     "西洋跳棋"
+    ],
+    "zh-hant": [
+     "西洋跳棋"
+    ],
+    "hy": [
+     "շաշկի"
+    ],
+    "cy": [
+     "draffts"
+    ],
+    "uz": [
+     "shashka"
+    ],
+    "zu": [
+     "umxingovu"
+    ],
+    "sr-ec": [
+     "дама"
+    ],
+    "sq": [
+     "dame"
+    ]
+   }
+  },
+  "jeu.go": {
+   "qid": "Q11413",
+   "qids": [
+    "Q11413"
+   ],
+   "labels": {
+    "ar": [
+     "غو"
+    ],
+    "bn": [
+     "গো"
+    ],
+    "ca": [
+     "go"
+    ],
+    "cs": [
+     "go"
+    ],
+    "da": [
+     "go"
+    ],
+    "de": [
+     "go"
+    ],
+    "el": [
+     "γκο"
+    ],
+    "en": [
+     "go"
+    ],
+    "eo": [
+     "goo"
+    ],
+    "es": [
+     "go"
+    ],
+    "et": [
+     "go"
+    ],
+    "eu": [
+     "go"
+    ],
+    "fa": [
+     "گو"
+    ],
+    "fi": [
+     "go"
+    ],
+    "fr": [
+     "go"
+    ],
+    "gl": [
+     "go"
+    ],
+    "he": [
+     "גו"
+    ],
+    "hi": [
+     "गो"
+    ],
+    "hr": [
+     "go"
+    ],
+    "hu": [
+     "go"
+    ],
+    "id": [
+     "igo"
+    ],
+    "is": [
+     "go"
+    ],
+    "it": [
+     "go"
+    ],
+    "ja": [
+     "囲碁"
+    ],
+    "ka": [
+     "გო"
+    ],
+    "kk": [
+     "го"
+    ],
+    "ko": [
+     "바둑"
+    ],
+    "lt": [
+     "go"
+    ],
+    "lv": [
+     "go"
+    ],
+    "mk": [
+     "го"
+    ],
+    "ms": [
+     "go"
+    ],
+    "nb": [
+     "go"
+    ],
+    "nl": [
+     "go"
+    ],
+    "nn": [
+     "go"
+    ],
+    "pl": [
+     "go"
+    ],
+    "pt": [
+     "go"
+    ],
+    "ro": [
+     "go"
+    ],
+    "ru": [
+     "го"
+    ],
+    "sk": [
+     "go"
+    ],
+    "sl": [
+     "go"
+    ],
+    "sq": [
+     "go"
+    ],
+    "sr": [
+     "го",
+     "go"
+    ],
+    "sv": [
+     "go"
+    ],
+    "sw": [
+     "go"
+    ],
+    "ta": [
+     "வெய்ச்சி"
+    ],
+    "th": [
+     "หมากล้อม"
+    ],
+    "tr": [
+     "go"
+    ],
+    "uk": [
+     "го"
+    ],
+    "ur": [
+     "گو، لعبہ"
+    ],
+    "vi": [
+     "co vay"
+    ],
+    "zh": [
+     "圍棋",
+     "围棋"
+    ],
+    "af": [
+     "go"
+    ],
+    "am": [
+     "ጎ"
+    ],
+    "az": [
+     "qo"
+    ],
+    "be": [
+     "го"
+    ],
+    "bs": [
+     "go"
+    ],
+    "cy": [
+     "go"
+    ],
+    "ga": [
+     "go"
+    ],
+    "hy": [
+     "գո"
+    ],
+    "mn": [
+     "го"
+    ],
+    "pa": [
+     "ਗੋ"
+    ],
+    "uz": [
+     "go"
+    ]
+   }
+  },
+  "jeu.cartes": {
+   "qid": "Q47883",
+   "qids": [
+    "Q47883"
+   ],
+   "labels": {
+    "ar": [
+     "ورق لعب"
+    ],
+    "bn": [
+     "তাস"
+    ],
+    "ca": [
+     "cartes de joc"
+    ],
+    "cs": [
+     "hraci karta"
+    ],
+    "da": [
+     "spillekort"
+    ],
+    "de": [
+     "spielkarte"
+    ],
+    "el": [
+     "τραπουλα"
+    ],
+    "en": [
+     "playing card"
+    ],
+    "eo": [
+     "ludkarto"
+    ],
+    "es": [
+     "naipe"
+    ],
+    "et": [
+     "mangukaardid"
+    ],
+    "eu": [
+     "karta"
+    ],
+    "fa": [
+     "ورق‌های بازی"
+    ],
+    "fi": [
+     "pelikortti"
+    ],
+    "fr": [
+     "carte a jouer"
+    ],
+    "gl": [
+     "baralla de cartas"
+    ],
+    "he": [
+     "קלף משחק"
+    ],
+    "hi": [
+     "ताश"
+    ],
+    "hr": [
+     "igrace karte"
+    ],
+    "hu": [
+     "jatekkartya"
+    ],
+    "id": [
+     "kartu remi"
+    ],
+    "is": [
+     "spilastokkur"
+    ],
+    "it": [
+     "carta da gioco"
+    ],
+    "ja": [
+     "トランプ"
+    ],
+    "ka": [
+     "სათამაშო ბანქო"
+    ],
+    "ko": [
+     "플레잉 카드"
+    ],
+    "lt": [
+     "zaidimo korta"
+    ],
+    "lv": [
+     "spelu kartis"
+    ],
+    "mk": [
+     "карта за играње"
+    ],
+    "ms": [
+     "daun terup"
+    ],
+    "mt": [
+     "karta tal-logħob"
+    ],
+    "nb": [
+     "spillkort"
+    ],
+    "nl": [
+     "speelkaart"
+    ],
+    "pl": [
+     "karta do gry"
+    ],
+    "pt": [
+     "carta"
+    ],
+    "ro": [
+     "carte de joc"
+    ],
+    "ru": [
+     "игральные карты"
+    ],
+    "sk": [
+     "hracia karta"
+    ],
+    "sl": [
+     "igralna karta"
+    ],
+    "sr": [
+     "играчка карта",
+     "igracka karta"
+    ],
+    "sv": [
+     "spelkort"
+    ],
+    "sw": [
+     "kadi ya karata"
+    ],
+    "ta": [
+     "விளையாட்டுச் சீட்டுக்கட்டு"
+    ],
+    "th": [
+     "ไพ่ป๊อก"
+    ],
+    "tr": [
+     "iskambil kagıdı"
+    ],
+    "uk": [
+     "гральні карти"
+    ],
+    "ur": [
+     "برج"
+    ],
+    "vi": [
+     "bo bai tay"
+    ],
+    "zh": [
+     "扑克牌",
+     "撲克牌"
+    ],
+    "af": [
+     "speelkaart"
+    ],
+    "az": [
+     "oyun kartları"
+    ],
+    "be": [
+     "ігральныя карты"
+    ],
+    "bs": [
+     "igrace karte"
+    ],
+    "cy": [
+     "cerdyn chwarae"
+    ],
+    "ga": [
+     "carta imeartha"
+    ],
+    "hy": [
+     "խաղաքարտ"
+    ],
+    "mn": [
+     "хөзөр"
+    ],
+    "ne": [
+     "तास"
+    ],
+    "pa": [
+     "ਤਾਸ਼"
+    ]
+   }
+  },
+  "jeu.whist": {
+   "qid": "Q767979",
+   "qids": [
+    "Q767979"
+   ],
+   "labels": {
+    "ca": [
+     "whist"
+    ],
+    "cs": [
+     "whist"
+    ],
+    "da": [
+     "whist"
+    ],
+    "de": [
+     "whist"
+    ],
+    "en": [
+     "whist"
+    ],
+    "eo": [
+     "visto"
+    ],
+    "es": [
+     "whist"
+    ],
+    "fi": [
+     "visti"
+    ],
+    "fr": [
+     "whist"
+    ],
+    "he": [
+     "ויסט"
+    ],
+    "is": [
+     "vist"
+    ],
+    "it": [
+     "whist"
+    ],
+    "ja": [
+     "ホイスト"
+    ],
+    "ka": [
+     "ვისტი"
+    ],
+    "ko": [
+     "휘스트"
+    ],
+    "nb": [
+     "whist"
+    ],
+    "nl": [
+     "whist"
+    ],
+    "nn": [
+     "whist"
+    ],
+    "pl": [
+     "wist"
+    ],
+    "pt": [
+     "uiste"
+    ],
+    "ro": [
+     "whist"
+    ],
+    "ru": [
+     "вист"
+    ],
+    "sk": [
+     "whist"
+    ],
+    "sr": [
+     "вист"
+    ],
+    "sv": [
+     "whist"
+    ],
+    "tr": [
+     "whist"
+    ],
+    "zh": [
+     "惠斯特"
+    ]
+   }
+  },
+  "echecs.piece.K": {
+   "qid": "Q138",
+   "qids": [
+    "Q138"
+   ],
+   "labels": {
+    "ar": [
+     "ملك"
+    ],
+    "bn": [
+     "রাজা"
+    ],
+    "ca": [
+     "rei"
+    ],
+    "cs": [
+     "kral"
+    ],
+    "da": [
+     "konge"
+    ],
+    "de": [
+     "konig"
+    ],
+    "el": [
+     "βασιλιασ"
+    ],
+    "en": [
+     "king"
+    ],
+    "eo": [
+     "rego"
+    ],
+    "es": [
+     "rey"
+    ],
+    "et": [
+     "kuningas"
+    ],
+    "eu": [
+     "erregea"
+    ],
+    "fa": [
+     "شاه"
+    ],
+    "fi": [
+     "kuningas"
+    ],
+    "fr": [
+     "roi"
+    ],
+    "gl": [
+     "rei"
+    ],
+    "he": [
+     "מלך"
+    ],
+    "hi": [
+     "राजा"
+    ],
+    "hr": [
+     "kralj"
+    ],
+    "hu": [
+     "kiraly"
+    ],
+    "id": [
+     "raja"
+    ],
+    "is": [
+     "kongur"
+    ],
+    "it": [
+     "re"
+    ],
+    "ja": [
+     "キング"
+    ],
+    "ka": [
+     "მეფე"
+    ],
+    "ko": [
+     "킹"
+    ],
+    "lt": [
+     "karalius"
+    ],
+    "lv": [
+     "karalis"
+    ],
+    "mk": [
+     "крал"
+    ],
+    "ms": [
+     "raja"
+    ],
+    "nb": [
+     "konge"
+    ],
+    "nl": [
+     "koning"
+    ],
+    "nn": [
+     "sjakkbrikka konge"
+    ],
+    "pl": [
+     "krol"
+    ],
+    "pt": [
+     "rei"
+    ],
+    "ro": [
+     "rege"
+    ],
+    "ru": [
+     "король"
+    ],
+    "sk": [
+     "kral"
+    ],
+    "sl": [
+     "kralj"
+    ],
+    "sq": [
+     "mbreti"
+    ],
+    "sr": [
+     "краљ"
+    ],
+    "sv": [
+     "kung"
+    ],
+    "sw": [
+     "shaha"
+    ],
+    "ta": [
+     "அரசன்"
+    ],
+    "th": [
+     "ขุน"
+    ],
+    "tr": [
+     "sah"
+    ],
+    "uk": [
+     "король"
+    ],
+    "ur": [
+     "بادشاہ"
+    ],
+    "vi": [
+     "vua"
+    ],
+    "zh": [
+     "王"
+    ],
+    "af": [
+     "koning"
+    ],
+    "az": [
+     "sah"
+    ],
+    "be": [
+     "кароль"
+    ],
+    "bs": [
+     "kralj"
+    ],
+    "cy": [
+     "тeyrn"
+    ],
+    "ga": [
+     "ri"
+    ],
+    "hy": [
+     "արքա"
+    ],
+    "mn": [
+     "ноён"
+    ],
+    "ne": [
+     "राजा"
+    ],
+    "si": [
+     "රජු"
+    ],
+    "uz": [
+     "shoh"
+    ],
+    "zu": [
+     "inkosi"
+    ]
+   }
+  },
+  "echecs.piece.Q": {
+   "qid": "Q139",
+   "qids": [
+    "Q139"
+   ],
+   "labels": {
+    "ar": [
+     "وزير"
+    ],
+    "bn": [
+     "মন্ত্রী"
+    ],
+    "ca": [
+     "dama"
+    ],
+    "cs": [
+     "dama"
+    ],
+    "da": [
+     "dronning"
+    ],
+    "de": [
+     "dame"
+    ],
+    "el": [
+     "βασιλισσα"
+    ],
+    "en": [
+     "queen"
+    ],
+    "eo": [
+     "damo"
+    ],
+    "es": [
+     "dama"
+    ],
+    "et": [
+     "lipp"
+    ],
+    "eu": [
+     "dama"
+    ],
+    "fa": [
+     "وزیر"
+    ],
+    "fi": [
+     "kuningatar"
+    ],
+    "fr": [
+     "dame"
+    ],
+    "gl": [
+     "dama"
+    ],
+    "he": [
+     "מלכה"
+    ],
+    "hi": [
+     "वज़ीर"
+    ],
+    "hr": [
+     "kraljica"
+    ],
+    "hu": [
+     "vezer"
+    ],
+    "id": [
+     "menteri"
+    ],
+    "is": [
+     "drottning"
+    ],
+    "it": [
+     "donna"
+    ],
+    "ja": [
+     "クイーン"
+    ],
+    "ka": [
+     "ლაზიერი"
+    ],
+    "kk": [
+     "уәзір"
+    ],
+    "ko": [
+     "퀸"
+    ],
+    "lt": [
+     "valdove"
+    ],
+    "lv": [
+     "dama"
+    ],
+    "mk": [
+     "кралица"
+    ],
+    "ms": [
+     "menteri"
+    ],
+    "nb": [
+     "dronning"
+    ],
+    "nl": [
+     "dame"
+    ],
+    "nn": [
+     "sjakkbrikka dronning"
+    ],
+    "pl": [
+     "hetman"
+    ],
+    "pt": [
+     "dama"
+    ],
+    "ro": [
+     "dama"
+    ],
+    "ru": [
+     "ферзь"
+    ],
+    "sk": [
+     "dama"
+    ],
+    "sl": [
+     "dama"
+    ],
+    "sq": [
+     "mbreteresha"
+    ],
+    "sr": [
+     "краљица"
+    ],
+    "sv": [
+     "dam"
+    ],
+    "sw": [
+     "malkia"
+    ],
+    "ta": [
+     "அரசி"
+    ],
+    "th": [
+     "ควีน"
+    ],
+    "tr": [
+     "vezir"
+    ],
+    "uk": [
+     "ферзь"
+    ],
+    "ur": [
+     "ملکہ"
+    ],
+    "vi": [
+     "hau"
+    ],
+    "zh": [
+     "后"
+    ],
+    "af": [
+     "dame"
+    ],
+    "az": [
+     "vəzir"
+    ],
+    "be": [
+     "ферзь"
+    ],
+    "bs": [
+     "dama"
+    ],
+    "cy": [
+     "brenhines"
+    ],
+    "ga": [
+     "banrion"
+    ],
+    "hy": [
+     "թագուհի"
+    ],
+    "mn": [
+     "бэрс"
+    ],
+    "ne": [
+     "रानी"
+    ],
+    "si": [
+     "රැජිණ"
+    ],
+    "uz": [
+     "farzin"
+    ],
+    "zu": [
+     "inkosazana"
+    ]
+   }
+  },
+  "echecs.piece.R": {
+   "qid": "Q137",
+   "qids": [
+    "Q137"
+   ],
+   "labels": {
+    "ar": [
+     "رخ"
+    ],
+    "bn": [
+     "নৌকা"
+    ],
+    "ca": [
+     "torre"
+    ],
+    "cs": [
+     "vez"
+    ],
+    "da": [
+     "tarn"
+    ],
+    "de": [
+     "turm"
+    ],
+    "el": [
+     "πυργοσ"
+    ],
+    "en": [
+     "rook"
+    ],
+    "eo": [
+     "turo"
+    ],
+    "es": [
+     "torre"
+    ],
+    "et": [
+     "vanker"
+    ],
+    "eu": [
+     "gaztelua"
+    ],
+    "fa": [
+     "رخ"
+    ],
+    "fi": [
+     "torni"
+    ],
+    "fr": [
+     "tour"
+    ],
+    "gl": [
+     "torre"
+    ],
+    "he": [
+     "צריח"
+    ],
+    "hi": [
+     "हाथी"
+    ],
+    "hr": [
+     "top"
+    ],
+    "hu": [
+     "bastya"
+    ],
+    "id": [
+     "benteng"
+    ],
+    "is": [
+     "hrokur"
+    ],
+    "it": [
+     "torre"
+    ],
+    "ja": [
+     "ルーク"
+    ],
+    "ka": [
+     "ეტლი"
+    ],
+    "ko": [
+     "룩"
+    ],
+    "lt": [
+     "bokstas"
+    ],
+    "lv": [
+     "tornis"
+    ],
+    "mk": [
+     "топ"
+    ],
+    "ms": [
+     "benteng"
+    ],
+    "nb": [
+     "tarn"
+    ],
+    "nl": [
+     "toren"
+    ],
+    "nn": [
+     "tarn"
+    ],
+    "pl": [
+     "wieza"
+    ],
+    "pt": [
+     "torre"
+    ],
+    "ro": [
+     "turn"
+    ],
+    "ru": [
+     "ладья"
+    ],
+    "sk": [
+     "veza"
+    ],
+    "sl": [
+     "trdnjava"
+    ],
+    "sq": [
+     "kulla"
+    ],
+    "sr": [
+     "топ"
+    ],
+    "sv": [
+     "torn"
+    ],
+    "sw": [
+     "ngome"
+    ],
+    "ta": [
+     "கோட்டை"
+    ],
+    "th": [
+     "เรือ"
+    ],
+    "tr": [
+     "kale"
+    ],
+    "uk": [
+     "тура"
+    ],
+    "ur": [
+     "رخ"
+    ],
+    "vi": [
+     "xe"
+    ],
+    "zh": [
+     "車",
+     "车"
+    ],
+    "af": [
+     "toring"
+    ],
+    "az": [
+     "top"
+    ],
+    "be": [
+     "ладдзя"
+    ],
+    "bs": [
+     "top"
+    ],
+    "cy": [
+     "castell"
+    ],
+    "ga": [
+     "caiseal"
+    ],
+    "hy": [
+     "նավակ"
+    ],
+    "mn": [
+     "тэрэг"
+    ],
+    "ne": [
+     "हात्ती"
+    ],
+    "so": [
+     "daar"
+    ],
+    "uz": [
+     "rux"
+    ]
+   }
+  },
+  "echecs.piece.B": {
+   "qid": "Q134",
+   "qids": [
+    "Q134"
+   ],
+   "labels": {
+    "ar": [
+     "فيل"
+    ],
+    "bn": [
+     "গজ"
+    ],
+    "ca": [
+     "alfil"
+    ],
+    "cs": [
+     "strelec"
+    ],
+    "da": [
+     "løber"
+    ],
+    "de": [
+     "laufer"
+    ],
+    "el": [
+     "αξιωματικοσ"
+    ],
+    "en": [
+     "bishop"
+    ],
+    "eo": [
+     "kuriero"
+    ],
+    "es": [
+     "alfil"
+    ],
+    "et": [
+     "oda"
+    ],
+    "eu": [
+     "alfil"
+    ],
+    "fa": [
+     "فیل"
+    ],
+    "fi": [
+     "lahetti"
+    ],
+    "fr": [
+     "fou"
+    ],
+    "he": [
+     "רץ"
+    ],
+    "hi": [
+     "ऊँट"
+    ],
+    "hr": [
+     "lovac"
+    ],
+    "hu": [
+     "futo"
+    ],
+    "id": [
+     "gajah"
+    ],
+    "is": [
+     "biskup"
+    ],
+    "it": [
+     "alfiere"
+    ],
+    "ja": [
+     "ビショップ"
+    ],
+    "ka": [
+     "კუ"
+    ],
+    "ko": [
+     "비숍"
+    ],
+    "lt": [
+     "rikis"
+    ],
+    "lv": [
+     "laidnis"
+    ],
+    "mk": [
+     "ловец"
+    ],
+    "ms": [
+     "gajah"
+    ],
+    "nb": [
+     "løper"
+    ],
+    "nl": [
+     "loper"
+    ],
+    "nn": [
+     "sjakkbrikka løpar"
+    ],
+    "pl": [
+     "goniec"
+    ],
+    "pt": [
+     "bispo"
+    ],
+    "ro": [
+     "nebun"
+    ],
+    "ru": [
+     "слон"
+    ],
+    "sk": [
+     "strelec"
+    ],
+    "sl": [
+     "lovec"
+    ],
+    "sq": [
+     "oficeri"
+    ],
+    "sr": [
+     "ловац"
+    ],
+    "sv": [
+     "lopare"
+    ],
+    "sw": [
+     "sataranja"
+    ],
+    "ta": [
+     "அமைச்சர்"
+    ],
+    "th": [
+     "บิชอป"
+    ],
+    "tr": [
+     "fil"
+    ],
+    "uk": [
+     "слон"
+    ],
+    "ur": [
+     "فیلہ"
+    ],
+    "vi": [
+     "tuong"
+    ],
+    "zh": [
+     "象"
+    ],
+    "af": [
+     "loper"
+    ],
+    "az": [
+     "fil"
+    ],
+    "be": [
+     "слон"
+    ],
+    "bs": [
+     "lovac"
+    ],
+    "cy": [
+     "esgob"
+    ],
+    "ga": [
+     "easpag"
+    ],
+    "hy": [
+     "փիղ"
+    ],
+    "mn": [
+     "тэмээ"
+    ],
+    "ne": [
+     "उँट"
+    ],
+    "so": [
+     "baadari"
+    ],
+    "uz": [
+     "fil"
+    ]
+   }
+  },
+  "echecs.piece.N": {
+   "qid": "Q136",
+   "qids": [
+    "Q136"
+   ],
+   "labels": {
+    "ar": [
+     "حصان"
+    ],
+    "bn": [
+     "ঘোড়া"
+    ],
+    "ca": [
+     "cavall"
+    ],
+    "cs": [
+     "jezdec"
+    ],
+    "da": [
+     "springer"
+    ],
+    "de": [
+     "springer"
+    ],
+    "el": [
+     "ιπποσ"
+    ],
+    "en": [
+     "knight"
+    ],
+    "eo": [
+     "cevalo"
+    ],
+    "es": [
+     "caballo"
+    ],
+    "et": [
+     "ratsu"
+    ],
+    "eu": [
+     "zalduna"
+    ],
+    "fa": [
+     "اسب"
+    ],
+    "fi": [
+     "ratsu"
+    ],
+    "fr": [
+     "cavalier"
+    ],
+    "gl": [
+     "cabalo"
+    ],
+    "he": [
+     "פרש"
+    ],
+    "hi": [
+     "घोड़ा"
+    ],
+    "hr": [
+     "skakac"
+    ],
+    "hu": [
+     "huszar"
+    ],
+    "id": [
+     "kuda"
+    ],
+    "is": [
+     "riddari"
+    ],
+    "it": [
+     "cavallo"
+    ],
+    "ja": [
+     "ナイト"
+    ],
+    "ka": [
+     "მხედარი"
+    ],
+    "ko": [
+     "나이트"
+    ],
+    "lt": [
+     "zirgas"
+    ],
+    "lv": [
+     "zirdzins"
+    ],
+    "mk": [
+     "коњ"
+    ],
+    "ms": [
+     "kuda"
+    ],
+    "nb": [
+     "springer"
+    ],
+    "nl": [
+     "paard"
+    ],
+    "nn": [
+     "sjakkbrikka springar"
+    ],
+    "pl": [
+     "skoczek"
+    ],
+    "pt": [
+     "cavalo"
+    ],
+    "ro": [
+     "cal"
+    ],
+    "ru": [
+     "конь"
+    ],
+    "sk": [
+     "jazdec"
+    ],
+    "sl": [
+     "skakac"
+    ],
+    "sq": [
+     "kali"
+    ],
+    "sr": [
+     "скакач"
+    ],
+    "sv": [
+     "springare"
+    ],
+    "sw": [
+     "farasi"
+    ],
+    "ta": [
+     "குதிரை"
+    ],
+    "th": [
+     "ม้า"
+    ],
+    "tr": [
+     "at"
+    ],
+    "uk": [
+     "кінь"
+    ],
+    "ur": [
+     "گھوڑا"
+    ],
+    "vi": [
+     "ma"
+    ],
+    "zh": [
+     "馬",
+     "马"
+    ],
+    "af": [
+     "ruiter"
+    ],
+    "az": [
+     "at"
+    ],
+    "be": [
+     "конь"
+    ],
+    "bs": [
+     "skakac"
+    ],
+    "cy": [
+     "marchog"
+    ],
+    "ga": [
+     "ridire"
+    ],
+    "hy": [
+     "ձի"
+    ],
+    "km": [
+     "សេះ"
+    ],
+    "mn": [
+     "морь"
+    ],
+    "ne": [
+     "घोडा"
+    ],
+    "uz": [
+     "ot"
+    ]
+   }
+  },
+  "echecs.piece.P": {
+   "qid": "Q135",
+   "qids": [
+    "Q135"
+   ],
+   "labels": {
+    "ar": [
+     "بيدق"
+    ],
+    "bn": [
+     "বোড়ে"
+    ],
+    "ca": [
+     "peo"
+    ],
+    "cs": [
+     "pesec"
+    ],
+    "da": [
+     "bonde"
+    ],
+    "de": [
+     "bauer"
+    ],
+    "el": [
+     "πιονι"
+    ],
+    "en": [
+     "pawn"
+    ],
+    "eo": [
+     "peono"
+    ],
+    "es": [
+     "peon"
+    ],
+    "et": [
+     "ettur"
+    ],
+    "eu": [
+     "peoi"
+    ],
+    "fa": [
+     "سرباز"
+    ],
+    "fi": [
+     "sotilas"
+    ],
+    "fr": [
+     "pion"
+    ],
+    "gl": [
+     "peon"
+    ],
+    "he": [
+     "רגלי"
+    ],
+    "hi": [
+     "प्यादा"
+    ],
+    "hr": [
+     "pjesak"
+    ],
+    "hu": [
+     "gyalog"
+    ],
+    "id": [
+     "pion"
+    ],
+    "is": [
+     "peð"
+    ],
+    "it": [
+     "pedone"
+    ],
+    "ja": [
+     "ポーン"
+    ],
+    "ka": [
+     "პაიკი"
+    ],
+    "ko": [
+     "폰"
+    ],
+    "lt": [
+     "pestininkas"
+    ],
+    "lv": [
+     "bandinieks"
+    ],
+    "mk": [
+     "пешак"
+    ],
+    "ms": [
+     "bidak"
+    ],
+    "nb": [
+     "bonde"
+    ],
+    "nl": [
+     "pion"
+    ],
+    "nn": [
+     "sjakkbrikka bonde"
+    ],
+    "pl": [
+     "pion"
+    ],
+    "pt": [
+     "peao"
+    ],
+    "ro": [
+     "pion"
+    ],
+    "ru": [
+     "пешка"
+    ],
+    "sk": [
+     "pesiak"
+    ],
+    "sl": [
+     "kmet"
+    ],
+    "sq": [
+     "ushtari"
+    ],
+    "sr": [
+     "пешак"
+    ],
+    "sv": [
+     "bonde"
+    ],
+    "sw": [
+     "kitunda"
+    ],
+    "ta": [
+     "காலாள்"
+    ],
+    "th": [
+     "เบี้ย"
+    ],
+    "tr": [
+     "piyon"
+    ],
+    "uk": [
+     "пішак"
+    ],
+    "ur": [
+     "پیادہ"
+    ],
+    "vi": [
+     "tot"
+    ],
+    "zh": [
+     "兵"
+    ],
+    "af": [
+     "pion"
+    ],
+    "az": [
+     "piyada"
+    ],
+    "be": [
+     "пешка"
+    ],
+    "bs": [
+     "pjesak"
+    ],
+    "cy": [
+     "gwerinwr"
+    ],
+    "ga": [
+     "fichillin"
+    ],
+    "hy": [
+     "զինվոր"
+    ],
+    "mn": [
+     "хүү"
+    ],
+    "ne": [
+     "सीपाही"
+    ],
+    "so": [
+     "hoosjooge"
+    ],
+    "uz": [
+     "piyoda"
+    ]
+   }
+  },
+  "echecs.roque": {
+   "qid": "Q102877",
+   "qids": [
+    "Q102877"
+   ],
+   "labels": {
+    "ar": [
+     "تبييت"
+    ],
+    "ca": [
+     "enroc"
+    ],
+    "cs": [
+     "rosada"
+    ],
+    "da": [
+     "rokade"
+    ],
+    "de": [
+     "rochade"
+    ],
+    "el": [
+     "ροκε"
+    ],
+    "en": [
+     "castling"
+    ],
+    "eo": [
+     "aroko"
+    ],
+    "es": [
+     "enroque"
+    ],
+    "et": [
+     "vangerdus"
+    ],
+    "eu": [
+     "endroke"
+    ],
+    "fa": [
+     "قلعه"
+    ],
+    "fi": [
+     "tornitus"
+    ],
+    "fr": [
+     "roque"
+    ],
+    "gl": [
+     "enroque"
+    ],
+    "he": [
+     "הצרחה"
+    ],
+    "hi": [
+     "क़िलाबंदी"
+    ],
+    "hr": [
+     "rokada"
+    ],
+    "hu": [
+     "sancolas"
+    ],
+    "id": [
+     "rokade"
+    ],
+    "it": [
+     "arrocco"
+    ],
+    "ja": [
+     "キャスリング"
+    ],
+    "kk": [
+     "рокировка"
+    ],
+    "ko": [
+     "캐슬링"
+    ],
+    "lt": [
+     "rokiruote"
+    ],
+    "lv": [
+     "rokade"
+    ],
+    "mk": [
+     "рокада"
+    ],
+    "ms": [
+     "castling"
+    ],
+    "nb": [
+     "rokade"
+    ],
+    "nl": [
+     "rokade"
+    ],
+    "nn": [
+     "rokade"
+    ],
+    "pl": [
+     "roszada"
+    ],
+    "pt": [
+     "roque"
+    ],
+    "ro": [
+     "rocada"
+    ],
+    "ru": [
+     "рокировка"
+    ],
+    "sk": [
+     "rosada"
+    ],
+    "sl": [
+     "rokada"
+    ],
+    "sq": [
+     "rrokada"
+    ],
+    "sr": [
+     "рокада",
+     "rokada"
+    ],
+    "sv": [
+     "rockad"
+    ],
+    "ta": [
+     "கோட்டை கட்டுதல்"
+    ],
+    "th": [
+     "การเข้าป้อม"
+    ],
+    "tr": [
+     "rok"
+    ],
+    "uk": [
+     "рокіровка"
+    ],
+    "ur": [
+     "قلعہ جانا"
+    ],
+    "vi": [
+     "nhap thanh"
+    ],
+    "zh": [
+     "王車易位",
+     "王车易位",
+     "國王入堡"
+    ],
+    "az": [
+     "qalaqurma"
+    ],
+    "be": [
+     "ракіроўка"
+    ],
+    "bs": [
+     "rokada"
+    ],
+    "cy": [
+     "castellu"
+    ],
+    "hy": [
+     "փոխատեղում"
+    ],
+    "uz": [
+     "rokirovka"
+    ]
+   }
+  },
+  "echecs.mat": {
+   "qid": "Q20819848",
+   "qids": [
+    "Q20819848"
+   ],
+   "labels": {
+    "ar": [
+     "كش مات"
+    ],
+    "bn": [
+     "কিস্তিমাৎ"
+    ],
+    "ca": [
+     "escac i mat"
+    ],
+    "cs": [
+     "mat"
+    ],
+    "da": [
+     "skakmat"
+    ],
+    "de": [
+     "schachmatt"
+    ],
+    "el": [
+     "ματ"
+    ],
+    "en": [
+     "checkmate"
+    ],
+    "eo": [
+     "sakmato"
+    ],
+    "es": [
+     "jaque mate"
+    ],
+    "et": [
+     "matt"
+    ],
+    "eu": [
+     "xake mate"
+    ],
+    "fa": [
+     "کیش مات"
+    ],
+    "fi": [
+     "shakkimatti"
+    ],
+    "fr": [
+     "echec et mat"
+    ],
+    "gl": [
+     "xaque mate"
+    ],
+    "he": [
+     "מט"
+    ],
+    "hi": [
+     "शहमात"
+    ],
+    "hu": [
+     "sakk-matt"
+    ],
+    "id": [
+     "sekakmat"
+    ],
+    "is": [
+     "skak og mat"
+    ],
+    "it": [
+     "scacco matto"
+    ],
+    "ja": [
+     "詰み"
+    ],
+    "ka": [
+     "შამათი"
+    ],
+    "kk": [
+     "мат"
+    ],
+    "ko": [
+     "외통수"
+    ],
+    "lt": [
+     "matas"
+    ],
+    "lv": [
+     "mats"
+    ],
+    "mk": [
+     "мат"
+    ],
+    "ms": [
+     "syahmat"
+    ],
+    "nb": [
+     "sjakkmatt"
+    ],
+    "nl": [
+     "schaakmat"
+    ],
+    "nn": [
+     "sjakkmatt"
+    ],
+    "pl": [
+     "mat"
+    ],
+    "pt": [
+     "xeque-mate"
+    ],
+    "ro": [
+     "sah-mat"
+    ],
+    "ru": [
+     "мат"
+    ],
+    "sk": [
+     "sachmat"
+    ],
+    "sl": [
+     "mat"
+    ],
+    "sv": [
+     "schackmatt"
+    ],
+    "ta": [
+     "இறுதி முற்றுகை"
+    ],
+    "tr": [
+     "mat"
+    ],
+    "uk": [
+     "мат"
+    ],
+    "ur": [
+     "شہ مات"
+    ],
+    "vi": [
+     "chieu"
+    ],
+    "zh": [
+     "將死",
+     "将死"
+    ],
+    "af": [
+     "skaakmat"
+    ],
+    "az": [
+     "mat"
+    ],
+    "be": [
+     "мат"
+    ],
+    "cy": [
+     "siachmat"
+    ],
+    "ga": [
+     "marbhshainn"
+    ],
+    "hy": [
+     "մատ"
+    ],
+    "si": [
+     "ස්තම්භනය"
+    ]
+   }
+  },
+  "echecs.promotion": {
+   "qid": "Q215599",
+   "qids": [
+    "Q215599"
+   ],
+   "labels": {
+    "ar": [
+     "ترقية"
+    ],
+    "ca": [
+     "promocio"
+    ],
+    "cs": [
+     "promena"
+    ],
+    "de": [
+     "umwandlung"
+    ],
+    "el": [
+     "προαγωγη"
+    ],
+    "en": [
+     "promotion"
+    ],
+    "eo": [
+     "promocio"
+    ],
+    "es": [
+     "promocion"
+    ],
+    "fi": [
+     "korotus"
+    ],
+    "fr": [
+     "promotion"
+    ],
+    "he": [
+     "הכתרה"
+    ],
+    "hu": [
+     "atalakulas"
+    ],
+    "id": [
+     "promosi"
+    ],
+    "it": [
+     "promozione"
+    ],
+    "ja": [
+     "成駒"
+    ],
+    "kk": [
+     "пешканың айналуы"
+    ],
+    "ko": [
+     "프로모션"
+    ],
+    "lv": [
+     "parversanas"
+    ],
+    "nb": [
+     "bondeforvandling"
+    ],
+    "nl": [
+     "promotie"
+    ],
+    "nn": [
+     "bondeforvandling"
+    ],
+    "pl": [
+     "promocja"
+    ],
+    "pt": [
+     "promocao"
+    ],
+    "ro": [
+     "promovare"
+    ],
+    "ru": [
+     "превращение пешки"
+    ],
+    "sl": [
+     "promocija"
+    ],
+    "sq": [
+     "gradimi"
+    ],
+    "sr": [
+     "промоција пешака",
+     "promocija pesaka"
+    ],
+    "sv": [
+     "promovering"
+    ],
+    "ta": [
+     "நிலை உயர்வு"
+    ],
+    "tr": [
+     "terfi"
+    ],
+    "uk": [
+     "заміна пішака"
+    ],
+    "vi": [
+     "phong cap"
+    ],
+    "zh": [
+     "升變",
+     "升变"
+    ],
+    "bs": [
+     "promocija"
+    ]
+   }
+  },
+  "echecs.nulle": {
+   "qid": "Q1137224",
+   "qids": [
+    "Q1137224"
+   ],
+   "labels": {
+    "ar": [
+     "تعادل"
+    ],
+    "ca": [
+     "taules"
+    ],
+    "cs": [
+     "remiza"
+    ],
+    "da": [
+     "remis"
+    ],
+    "de": [
+     "remis"
+    ],
+    "en": [
+     "draw"
+    ],
+    "eo": [
+     "vana partio"
+    ],
+    "es": [
+     "tablas"
+    ],
+    "eu": [
+     "berdinketa"
+    ],
+    "fa": [
+     "تساوی"
+    ],
+    "fi": [
+     "tasapeli"
+    ],
+    "fr": [
+     "nulle"
+    ],
+    "gl": [
+     "taboas"
+    ],
+    "he": [
+     "תיקו"
+    ],
+    "hi": [
+     "ड्रॉ"
+    ],
+    "id": [
+     "remis"
+    ],
+    "it": [
+     "patta"
+    ],
+    "ja": [
+     "引き分け"
+    ],
+    "ko": [
+     "무승부"
+    ],
+    "nb": [
+     "remis"
+    ],
+    "nl": [
+     "remise"
+    ],
+    "nn": [
+     "remis"
+    ],
+    "pl": [
+     "remis"
+    ],
+    "pt": [
+     "empate"
+    ],
+    "ro": [
+     "remiza"
+    ],
+    "ru": [
+     "ничья"
+    ],
+    "sk": [
+     "remiza"
+    ],
+    "sl": [
+     "remi"
+    ],
+    "sv": [
+     "remi"
+    ],
+    "ta": [
+     "சமநிலை"
+    ],
+    "tr": [
+     "beraberlik"
+    ],
+    "uk": [
+     "нічия"
+    ],
+    "vi": [
+     "hoa"
+    ],
+    "zh": [
+     "和局"
+    ],
+    "hy": [
+     "ոչ-ոքի"
+    ]
+   }
+  },
+  "cartes.rang.14": {
+   "qid": "Q378907",
+   "qids": [
+    "Q378907"
+   ],
+   "labels": {
+    "bn": [
+     "টেক্কা"
+    ],
+    "ca": [
+     "as"
+    ],
+    "cs": [
+     "eso"
+    ],
+    "da": [
+     "es"
+    ],
+    "de": [
+     "ass"
+    ],
+    "en": [
+     "ace"
+    ],
+    "eo": [
+     "aso"
+    ],
+    "es": [
+     "as"
+    ],
+    "et": [
+     "ass"
+    ],
+    "eu": [
+     "batekoa"
+    ],
+    "fa": [
+     "اس"
+    ],
+    "fi": [
+     "assa"
+    ],
+    "fr": [
+     "as"
+    ],
+    "he": [
+     "אס"
+    ],
+    "hi": [
+     "इक्का"
+    ],
+    "hr": [
+     "as"
+    ],
+    "hu": [
+     "asz"
+    ],
+    "id": [
+     "as"
+    ],
+    "it": [
+     "asso"
+    ],
+    "ja": [
+     "エース"
+    ],
+    "lv": [
+     "duzis"
+    ],
+    "ms": [
+     "sat"
+    ],
+    "nb": [
+     "ess"
+    ],
+    "nl": [
+     "aas"
+    ],
+    "pl": [
+     "as"
+    ],
+    "pt": [
+     "as"
+    ],
+    "ru": [
+     "туз"
+    ],
+    "sl": [
+     "as"
+    ],
+    "sq": [
+     "asi"
+    ],
+    "sr": [
+     "кец",
+     "kec"
+    ],
+    "sv": [
+     "ess"
+    ],
+    "uk": [
+     "туз"
+    ],
+    "vi": [
+     "a"
+    ],
+    "zh": [
+     "a"
+    ],
+    "af": [
+     "aas"
+    ],
+    "bs": [
+     "as"
+    ]
+   }
+  },
+  "cartes.rang.13": {
+   "qid": "Q516114",
+   "qids": [
+    "Q516114"
+   ],
+   "labels": {
+    "ar": [
+     "الملك"
+    ],
+    "bn": [
+     "সাহেব"
+    ],
+    "cs": [
+     "kral"
+    ],
+    "da": [
+     "konge"
+    ],
+    "de": [
+     "konig"
+    ],
+    "el": [
+     "ρηγασ"
+    ],
+    "en": [
+     "king"
+    ],
+    "eo": [
+     "rego"
+    ],
+    "es": [
+     "rey"
+    ],
+    "et": [
+     "kuningas"
+    ],
+    "eu": [
+     "errege"
+    ],
+    "fa": [
+     "شاه"
+    ],
+    "fi": [
+     "kuningas"
+    ],
+    "fr": [
+     "roi"
+    ],
+    "he": [
+     "מלך"
+    ],
+    "hu": [
+     "kiraly"
+    ],
+    "id": [
+     "raja"
+    ],
+    "it": [
+     "re"
+    ],
+    "ja": [
+     "キング"
+    ],
+    "nb": [
+     "konge"
+    ],
+    "nl": [
+     "koning"
+    ],
+    "pl": [
+     "krol"
+    ],
+    "pt": [
+     "rei"
+    ],
+    "ro": [
+     "popa"
+    ],
+    "ru": [
+     "король"
+    ],
+    "sl": [
+     "kralj"
+    ],
+    "sq": [
+     "mbreti"
+    ],
+    "sr": [
+     "краљ",
+     "kralj"
+    ],
+    "sv": [
+     "kung"
+    ],
+    "uk": [
+     "король"
+    ],
+    "vi": [
+     "gia"
+    ],
+    "zh": [
+     "k"
+    ],
+    "af": [
+     "heer"
+    ]
+   }
+  },
+  "cartes.rang.12": {
+   "qid": "Q505744",
+   "qids": [
+    "Q505744"
+   ],
+   "labels": {
+    "bn": [
+     "বিবি"
+    ],
+    "cs": [
+     "dama"
+    ],
+    "da": [
+     "dame"
+    ],
+    "de": [
+     "dame"
+    ],
+    "el": [
+     "βασιλισσα"
+    ],
+    "en": [
+     "queen"
+    ],
+    "eo": [
+     "damo"
+    ],
+    "es": [
+     "reina"
+    ],
+    "et": [
+     "emand"
+    ],
+    "eu": [
+     "erregina"
+    ],
+    "fa": [
+     "بی‌بی"
+    ],
+    "fi": [
+     "kuningatar"
+    ],
+    "fr": [
+     "dame"
+    ],
+    "he": [
+     "מלכה"
+    ],
+    "hu": [
+     "dama"
+    ],
+    "it": [
+     "regina"
+    ],
+    "ja": [
+     "クイーン"
+    ],
+    "mk": [
+     "βασιλισσα"
+    ],
+    "nb": [
+     "dame"
+    ],
+    "nl": [
+     "koningin"
+    ],
+    "pl": [
+     "dama"
+    ],
+    "pt": [
+     "dama"
+    ],
+    "ru": [
+     "дама"
+    ],
+    "sl": [
+     "dama"
+    ],
+    "sq": [
+     "mbreteresha"
+    ],
+    "sr": [
+     "дама",
+     "dama"
+    ],
+    "sv": [
+     "dam"
+    ],
+    "uk": [
+     "краля"
+    ],
+    "vi": [
+     "đam"
+    ],
+    "zh": [
+     "q"
+    ],
+    "af": [
+     "vrou"
+    ],
+    "be": [
+     "дама"
+    ]
+   }
+  },
+  "cartes.rang.11": {
+   "qid": "Q510474",
+   "qids": [
+    "Q510474"
+   ],
+   "labels": {
+    "bn": [
+     "গোলাম"
+    ],
+    "ca": [
+     "sota"
+    ],
+    "cs": [
+     "kluk"
+    ],
+    "da": [
+     "knaegt"
+    ],
+    "de": [
+     "bube"
+    ],
+    "el": [
+     "βαλεσ"
+    ],
+    "en": [
+     "jack"
+    ],
+    "eo": [
+     "fanto"
+    ],
+    "es": [
+     "jota"
+    ],
+    "et": [
+     "soldat"
+    ],
+    "eu": [
+     "txota"
+    ],
+    "fa": [
+     "سرباز"
+    ],
+    "fi": [
+     "sotamies"
+    ],
+    "fr": [
+     "valet"
+    ],
+    "he": [
+     "נסיך"
+    ],
+    "hu": [
+     "bubi"
+    ],
+    "it": [
+     "fante"
+    ],
+    "ja": [
+     "ジャック"
+    ],
+    "nb": [
+     "knekt"
+    ],
+    "nl": [
+     "boer"
+    ],
+    "pl": [
+     "walet"
+    ],
+    "pt": [
+     "valete"
+    ],
+    "ru": [
+     "валет"
+    ],
+    "sl": [
+     "fant"
+    ],
+    "sq": [
+     "fanti"
+    ],
+    "sr": [
+     "жандар",
+     "zandar"
+    ],
+    "sv": [
+     "knekt"
+    ],
+    "uk": [
+     "валет"
+    ],
+    "vi": [
+     "boi"
+    ],
+    "zh": [
+     "j"
+    ],
+    "af": [
+     "boer"
+    ],
+    "be": [
+     "валет"
+    ]
+   }
+  },
+  "cartes.couleur.H": {
+   "qid": "Q3419242",
+   "qids": [
+    "Q3419242"
+   ],
+   "labels": {
+    "ar": [
+     "كوبة"
+    ],
+    "bn": [
+     "হরতন"
+    ],
+    "ca": [
+     "cor"
+    ],
+    "cs": [
+     "srdce"
+    ],
+    "da": [
+     "hjerter"
+    ],
+    "de": [
+     "herz"
+    ],
+    "el": [
+     "κουπα"
+    ],
+    "en": [
+     "heart"
+    ],
+    "eo": [
+     "kero"
+    ],
+    "es": [
+     "corazon"
+    ],
+    "et": [
+     "artu"
+    ],
+    "eu": [
+     "bihotz"
+    ],
+    "fa": [
+     "دل"
+    ],
+    "fi": [
+     "hertta"
+    ],
+    "fr": [
+     "coeur"
+    ],
+    "hu": [
+     "kor"
+    ],
+    "it": [
+     "cuori"
+    ],
+    "ja": [
+     "ハート"
+    ],
+    "lv": [
+     "ercens"
+    ],
+    "nb": [
+     "hjerter"
+    ],
+    "nl": [
+     "harten"
+    ],
+    "pl": [
+     "kier"
+    ],
+    "pt": [
+     "copas"
+    ],
+    "ru": [
+     "черви"
+    ],
+    "sk": [
+     "srdce"
+    ],
+    "sl": [
+     "srce"
+    ],
+    "sq": [
+     "kupa"
+    ],
+    "sr": [
+     "срце",
+     "srce"
+    ],
+    "sv": [
+     "hjarter"
+    ],
+    "th": [
+     "โพแดง"
+    ],
+    "tr": [
+     "kupa"
+    ],
+    "uk": [
+     "чирва"
+    ],
+    "vi": [
+     "co"
+    ],
+    "zh": [
+     "紅桃",
+     "红桃"
+    ],
+    "af": [
+     "hartens"
+    ],
+    "be": [
+     "чырвы"
+    ]
+   }
+  },
+  "cartes.couleur.D": {
+   "qid": "Q513847",
+   "qids": [
+    "Q513847"
+   ],
+   "labels": {
+    "ar": [
+     "ديناري"
+    ],
+    "bn": [
+     "রুহিতন"
+    ],
+    "ca": [
+     "diamant"
+    ],
+    "cs": [
+     "kary"
+    ],
+    "da": [
+     "ruder"
+    ],
+    "de": [
+     "karo"
+    ],
+    "en": [
+     "diamond"
+    ],
+    "eo": [
+     "karoo"
+    ],
+    "es": [
+     "diamante"
+    ],
+    "et": [
+     "ruutu"
+    ],
+    "fa": [
+     "خشت"
+    ],
+    "fi": [
+     "ruutu"
+    ],
+    "fr": [
+     "carreau"
+    ],
+    "hu": [
+     "karo"
+    ],
+    "it": [
+     "quadri"
+    ],
+    "ja": [
+     "ダイヤ"
+    ],
+    "lv": [
+     "karavs"
+    ],
+    "nb": [
+     "ruter"
+    ],
+    "nl": [
+     "ruiten"
+    ],
+    "pl": [
+     "karo"
+    ],
+    "pt": [
+     "ouros"
+    ],
+    "ru": [
+     "бубны"
+    ],
+    "sk": [
+     "karo"
+    ],
+    "sl": [
+     "karo"
+    ],
+    "sq": [
+     "karoja"
+    ],
+    "sr": [
+     "каро",
+     "karo"
+    ],
+    "sv": [
+     "ruter"
+    ],
+    "th": [
+     "ข้าวหลามตัด"
+    ],
+    "tr": [
+     "karo"
+    ],
+    "uk": [
+     "бубна"
+    ],
+    "vi": [
+     "ro"
+    ],
+    "zh": [
+     "方塊",
+     "方块"
+    ],
+    "af": [
+     "ruitens"
+    ],
+    "be": [
+     "звонкі"
+    ]
+   }
+  },
+  "cartes.couleur.C": {
+   "qid": "Q1788166",
+   "qids": [
+    "Q1788166"
+   ],
+   "labels": {
+    "ar": [
+     "سباتي"
+    ],
+    "bn": [
+     "চিড়িতন"
+    ],
+    "ca": [
+     "trevol"
+    ],
+    "cs": [
+     "krize"
+    ],
+    "da": [
+     "klør"
+    ],
+    "de": [
+     "kreuz"
+    ],
+    "en": [
+     "clubs"
+    ],
+    "eo": [
+     "trefo"
+    ],
+    "es": [
+     "trebol"
+    ],
+    "et": [
+     "risti"
+    ],
+    "eu": [
+     "hirustak"
+    ],
+    "fa": [
+     "گشنیز"
+    ],
+    "fi": [
+     "risti"
+    ],
+    "fr": [
+     "trefle"
+    ],
+    "hu": [
+     "treff"
+    ],
+    "it": [
+     "fiori"
+    ],
+    "ja": [
+     "クラブ"
+    ],
+    "lv": [
+     "kreicis"
+    ],
+    "nb": [
+     "kløver"
+    ],
+    "nl": [
+     "klaveren"
+    ],
+    "pl": [
+     "trefl"
+    ],
+    "pt": [
+     "paus"
+    ],
+    "ru": [
+     "трефы"
+    ],
+    "sk": [
+     "tref"
+    ],
+    "sl": [
+     "kriz"
+    ],
+    "sq": [
+     "spathiu"
+    ],
+    "sr": [
+     "треф",
+     "tref"
+    ],
+    "sv": [
+     "klover"
+    ],
+    "th": [
+     "ดอกจิก"
+    ],
+    "tr": [
+     "sinek"
+    ],
+    "uk": [
+     "трефа"
+    ],
+    "vi": [
+     "tep"
+    ],
+    "zh": [
+     "梅花"
+    ],
+    "af": [
+     "klawers"
+    ],
+    "be": [
+     "трэфы"
+    ]
+   }
+  },
+  "cartes.couleur.S": {
+   "qid": "Q2094951",
+   "qids": [
+    "Q2094951"
+   ],
+   "labels": {
+    "ar": [
+     "بستوني"
+    ],
+    "bn": [
+     "ইশকাপন"
+    ],
+    "ca": [
+     "pica"
+    ],
+    "cs": [
+     "piky"
+    ],
+    "da": [
+     "spar"
+    ],
+    "de": [
+     "pik"
+    ],
+    "el": [
+     "μπαστουνι"
+    ],
+    "en": [
+     "spade"
+    ],
+    "eo": [
+     "piko"
+    ],
+    "es": [
+     "pica"
+    ],
+    "et": [
+     "poti"
+    ],
+    "fa": [
+     "پیک"
+    ],
+    "fi": [
+     "pata"
+    ],
+    "fr": [
+     "pique"
+    ],
+    "hu": [
+     "pikk"
+    ],
+    "it": [
+     "picche"
+    ],
+    "ja": [
+     "スペード"
+    ],
+    "lv": [
+     "pikis"
+    ],
+    "nb": [
+     "spar"
+    ],
+    "nl": [
+     "schoppen"
+    ],
+    "pl": [
+     "pik"
+    ],
+    "pt": [
+     "espadas"
+    ],
+    "ru": [
+     "пика"
+    ],
+    "sk": [
+     "pika"
+    ],
+    "sl": [
+     "pik"
+    ],
+    "sq": [
+     "maci"
+    ],
+    "sr": [
+     "пик",
+     "pik"
+    ],
+    "sv": [
+     "spader"
+    ],
+    "th": [
+     "โพดํา"
+    ],
+    "tr": [
+     "maca"
+    ],
+    "uk": [
+     "піка"
+    ],
+    "vi": [
+     "bich"
+    ],
+    "zh": [
+     "黑桃"
+    ],
+    "af": [
+     "skoppens"
+    ],
+    "be": [
+     "пікі"
+    ]
+   }
+  },
+  "cartes.atout": {
+   "qid": "Q727407",
+   "qids": [
+    "Q727407"
+   ],
+   "labels": {
+    "ca": [
+     "trumfo"
+    ],
+    "cs": [
+     "trumf"
+    ],
+    "da": [
+     "trumf"
+    ],
+    "de": [
+     "trumpf"
+    ],
+    "el": [
+     "ατου"
+    ],
+    "en": [
+     "trump"
+    ],
+    "eo": [
+     "atuto"
+    ],
+    "es": [
+     "palo de triunfo"
+    ],
+    "et": [
+     "trump"
+    ],
+    "fi": [
+     "valtti"
+    ],
+    "fr": [
+     "atout"
+    ],
+    "gl": [
+     "trunfo"
+    ],
+    "he": [
+     "שליט"
+    ],
+    "hu": [
+     "adu"
+    ],
+    "ja": [
+     "切り札"
+    ],
+    "ko": [
+     "으뜸패"
+    ],
+    "mk": [
+     "адут"
+    ],
+    "nb": [
+     "trumf"
+    ],
+    "nl": [
+     "troef"
+    ],
+    "pl": [
+     "atut"
+    ],
+    "pt": [
+     "trunfo"
+    ],
+    "ru": [
+     "козырь"
+    ],
+    "sk": [
+     "tromf"
+    ],
+    "sl": [
+     "adut"
+    ],
+    "sr": [
+     "адут"
+    ],
+    "sv": [
+     "trumf"
+    ],
+    "uk": [
+     "козир"
+    ],
+    "zh": [
+     "王牌",
+     "主牌"
+    ],
+    "be": [
+     "козыр"
+    ]
+   }
+  },
+  "cartes.pli": {
+   "qid": "Q1191150",
+   "qids": [
+    "Q1191150"
+   ],
+   "labels": {
+    "ar": [
+     "لعبة اخذ الخدع"
+    ],
+    "ca": [
+     "jocs per bases"
+    ],
+    "cs": [
+     "zdvihova karetni hra"
+    ],
+    "da": [
+     "stikspil"
+    ],
+    "de": [
+     "stichkartenspiel"
+    ],
+    "el": [
+     "χαρτωσια"
+    ],
+    "en": [
+     "trick-taking game"
+    ],
+    "eo": [
+     "prenludo"
+    ],
+    "es": [
+     "juego de bazas"
+    ],
+    "et": [
+     "tihi"
+    ],
+    "fi": [
+     "tikkipeli"
+    ],
+    "fr": [
+     "jeu de levees"
+    ],
+    "he": [
+     "משחק מבוסס לקיחות"
+    ],
+    "ja": [
+     "トリックテイキングゲーム"
+    ],
+    "ko": [
+     "트릭 테이킹 카드 게임"
+    ],
+    "mk": [
+     "игра со земање"
+    ],
+    "nb": [
+     "stikk"
+    ],
+    "nl": [
+     "slag"
+    ],
+    "pt": [
+     "vaza"
+    ],
+    "ru": [
+     "карточная игра со взятками"
+    ],
+    "sl": [
+     "igra z vzetki"
+    ],
+    "sv": [
+     "sticktagningsspel"
+    ],
+    "uk": [
+     "картярська гра на взятки"
+    ],
+    "zh": [
+     "吃磴遊戲",
+     "吃磴游戏"
+    ],
+    "be": [
+     "картачныя гульні з біткамі"
+    ]
+   }
+  },
+  "go.ko": {
+   "qid": "Q1121484",
+   "qids": [
+    "Q1121484"
+   ],
+   "labels": {
+    "ca": [
+     "ko"
+    ],
+    "de": [
+     "ko"
+    ],
+    "en": [
+     "ko fight"
+    ],
+    "eo": [
+     "ko"
+    ],
+    "fr": [
+     "ko"
+    ],
+    "ja": [
+     "コウ"
+    ],
+    "ko": [
+     "패"
+    ],
+    "pl": [
+     "ko"
+    ],
+    "ru": [
+     "правило ко"
+    ],
+    "sv": [
+     "ko"
+    ],
+    "uk": [
+     "ко"
+    ],
+    "zh": [
+     "劫"
+    ]
+   }
+  },
+  "go.proverbe": {
+   "qid": "Q859707",
+   "qids": [
+    "Q859707"
+   ],
+   "labels": {
+    "en": [
+     "go proverbs"
+    ],
+    "fr": [
+     "proverbes de go"
+    ],
+    "it": [
+     "proverbi del go"
+    ],
+    "ja": [
+     "囲碁の格言"
+    ],
+    "ko": [
+     "바둑 격언"
+    ],
+    "vi": [
+     "ky quyet co vay"
+    ]
+   }
+  },
+  "maitre.colonne": {
+   "qid": "Q1320746",
+   "qids": [
+    "Q1320746"
+   ],
+   "labels": {
+    "ar": [
+     "عمود مفتوح"
+    ],
+    "ca": [
+     "columna oberta"
+    ],
+    "cs": [
+     "volny sloupec"
+    ],
+    "de": [
+     "offene linie"
+    ],
+    "en": [
+     "open file"
+    ],
+    "eo": [
+     "malfermita vertikalo"
+    ],
+    "es": [
+     "columna abierta"
+    ],
+    "fi": [
+     "avoin linja"
+    ],
+    "fr": [
+     "ligne ouverte"
+    ],
+    "ko": [
+     "오픈 파일"
+    ],
+    "nl": [
+     "open lijn"
+    ],
+    "ru": [
+     "открытая линия"
+    ],
+    "ta": [
+     "திறந்த செங்குத்து வரிசை"
+    ],
+    "tr": [
+     "acık hat"
+    ],
+    "uk": [
+     "відкрита лінія"
+    ],
+    "bs": [
+     "otvorena linija"
+    ]
+   }
+  },
+  "maitre.poste": {
+   "qid": "Q3817711",
+   "qids": [
+    "Q3817711"
+   ],
+   "labels": {
+    "ar": [
+     "مركز"
+    ],
+    "ca": [
+     "casella forta"
+    ],
+    "de": [
+     "vorposten"
+    ],
+    "en": [
+     "outpost"
+    ],
+    "eo": [
+     "forta celo"
+    ],
+    "es": [
+     "casilla fuerte"
+    ],
+    "fa": [
+     "خانه متروکه"
+    ],
+    "fi": [
+     "tukikohta"
+    ],
+    "fr": [
+     "avant-poste"
+    ],
+    "ko": [
+     "전초기지"
+    ],
+    "ru": [
+     "форпост"
+    ],
+    "sl": [
+     "oporisce"
+    ],
+    "tr": [
+     "karakol"
+    ],
+    "uk": [
+     "форпост"
+    ],
+    "bs": [
+     "uporiste"
+    ],
+    "uz": [
+     "tayanch nuqta"
+    ]
+   }
+  },
+  "maitre.tempo": {
+   "qid": "Q1682303",
+   "qids": [
+    "Q1682303"
+   ],
+   "labels": {
+    "ar": [
+     "دور"
+    ],
+    "ca": [
+     "temps"
+    ],
+    "cs": [
+     "tempo"
+    ],
+    "de": [
+     "tempo"
+    ],
+    "en": [
+     "tempo"
+    ],
+    "es": [
+     "tempo"
+    ],
+    "fa": [
+     "تمپو"
+    ],
+    "fi": [
+     "tempo"
+    ],
+    "fr": [
+     "tempo"
+    ],
+    "ko": [
+     "템포"
+    ],
+    "mk": [
+     "темпо"
+    ],
+    "nl": [
+     "tempo"
+    ],
+    "pl": [
+     "tempo"
+    ],
+    "pt": [
+     "tempo"
+    ],
+    "ru": [
+     "темп"
+    ],
+    "sk": [
+     "tempo"
+    ],
+    "sl": [
+     "tempo"
+    ],
+    "sv": [
+     "tempo"
+    ],
+    "tr": [
+     "tempo"
+    ],
+    "uk": [
+     "темп"
+    ],
+    "zh": [
+     "先手"
+    ],
+    "az": [
+     "temp"
+    ],
+    "bs": [
+     "tempo"
+    ]
+   }
+  },
+  "maitre.pions": {
+   "qid": "Q544685",
+   "qids": [
+    "Q544685"
+   ],
+   "labels": {
+    "ar": [
+     "توزيع بيادق الشطرنج"
+    ],
+    "ca": [
+     "estructura de peons"
+    ],
+    "cs": [
+     "pescova struktura"
+    ],
+    "de": [
+     "bauernstruktur"
+    ],
+    "en": [
+     "pawn structure"
+    ],
+    "eo": [
+     "peonstrukturo"
+    ],
+    "es": [
+     "estructura de peones"
+    ],
+    "fi": [
+     "sotilasrakenne"
+    ],
+    "fr": [
+     "structure de pions"
+    ],
+    "hu": [
+     "gyalogstruktura"
+    ],
+    "ko": [
+     "폰 스트럭처"
+    ],
+    "mk": [
+     "пешачка структура"
+    ],
+    "nl": [
+     "formatie"
+    ],
+    "pt": [
+     "estrutura de peoes"
+    ],
+    "ru": [
+     "пешечная структура"
+    ],
+    "sl": [
+     "kmecka struktura"
+    ],
+    "sv": [
+     "bondestruktur"
+    ],
+    "tr": [
+     "piyon yapısı"
+    ],
+    "uk": [
+     "пішакова структура"
+    ],
+    "zh": [
+     "兵形"
+    ]
+   }
+  },
+  "commun.blanc": {
+   "qid": "Q23444",
+   "qids": [
+    "Q23444"
+   ],
+   "labels": {
+    "ar": [
+     "ابيض"
+    ],
+    "bn": [
+     "সাদা"
+    ],
+    "ca": [
+     "blanc"
+    ],
+    "cs": [
+     "bila"
+    ],
+    "da": [
+     "hvid"
+    ],
+    "de": [
+     "weiss"
+    ],
+    "el": [
+     "λευκο"
+    ],
+    "en": [
+     "white"
+    ],
+    "eo": [
+     "blanko"
+    ],
+    "es": [
+     "blanco"
+    ],
+    "et": [
+     "valge"
+    ],
+    "eu": [
+     "zuri"
+    ],
+    "fa": [
+     "سفید"
+    ],
+    "fi": [
+     "valkoinen"
+    ],
+    "fr": [
+     "blanc"
+    ],
+    "gl": [
+     "branco"
+    ],
+    "he": [
+     "לבן"
+    ],
+    "hi": [
+     "श्वेत"
+    ],
+    "hr": [
+     "bijela"
+    ],
+    "hu": [
+     "feher"
+    ],
+    "id": [
+     "putih"
+    ],
+    "is": [
+     "hvitur"
+    ],
+    "it": [
+     "bianco"
+    ],
+    "ja": [
+     "白"
+    ],
+    "ka": [
+     "თეთრი"
+    ],
+    "kk": [
+     "ақ түс"
+    ],
+    "ko": [
+     "하양"
+    ],
+    "lt": [
+     "balta"
+    ],
+    "lv": [
+     "balta krasa"
+    ],
+    "mk": [
+     "бела"
+    ],
+    "ms": [
+     "putih"
+    ],
+    "mt": [
+     "abjad"
+    ],
+    "nb": [
+     "hvit"
+    ],
+    "nl": [
+     "wit"
+    ],
+    "nn": [
+     "kvit"
+    ],
+    "pl": [
+     "biały"
+    ],
+    "pt": [
+     "branco"
+    ],
+    "ro": [
+     "alb"
+    ],
+    "ru": [
+     "белый"
+    ],
+    "sk": [
+     "biela"
+    ],
+    "sl": [
+     "bela"
+    ],
+    "sq": [
+     "ngjyra e bardhe"
+    ],
+    "sr": [
+     "бела",
+     "bela"
+    ],
+    "sv": [
+     "vit"
+    ],
+    "sw": [
+     "rangi nyeupe"
+    ],
+    "ta": [
+     "வெள்ளை"
+    ],
+    "th": [
+     "สีขาว"
+    ],
+    "tr": [
+     "beyaz"
+    ],
+    "uk": [
+     "білий"
+    ],
+    "ur": [
+     "سفید"
+    ],
+    "vi": [
+     "trang"
+    ],
+    "zh": [
+     "白色"
+    ],
+    "af": [
+     "wit"
+    ],
+    "am": [
+     "ነጭ"
+    ],
+    "az": [
+     "ag"
+    ],
+    "be": [
+     "белы колер"
+    ],
+    "bs": [
+     "bijela"
+    ],
+    "cy": [
+     "gwyn"
+    ],
+    "ga": [
+     "ban"
+    ],
+    "hy": [
+     "սպիտակ"
+    ],
+    "km": [
+     "ស"
+    ],
+    "ky": [
+     "ак"
+    ],
+    "lo": [
+     "ສີຂາວ"
+    ],
+    "ne": [
+     "सेतो"
+    ],
+    "pa": [
+     "ਚਿੱਟਾ"
+    ],
+    "so": [
+     "cad"
+    ],
+    "uz": [
+     "oq rang"
+    ],
+    "yo": [
+     "funfun"
+    ],
+    "zu": [
+     "emhlophe"
+    ]
+   }
+  },
+  "commun.noir": {
+   "qid": "Q23445",
+   "qids": [
+    "Q23445"
+   ],
+   "labels": {
+    "ar": [
+     "اسود"
+    ],
+    "bn": [
+     "কালো"
+    ],
+    "ca": [
+     "negre"
+    ],
+    "cs": [
+     "cerna"
+    ],
+    "da": [
+     "sort"
+    ],
+    "de": [
+     "schwarz"
+    ],
+    "el": [
+     "μαυρο"
+    ],
+    "en": [
+     "black"
+    ],
+    "eo": [
+     "nigro"
+    ],
+    "es": [
+     "negro"
+    ],
+    "et": [
+     "must"
+    ],
+    "eu": [
+     "beltz"
+    ],
+    "fa": [
+     "سیاه"
+    ],
+    "fi": [
+     "musta"
+    ],
+    "fr": [
+     "noir"
+    ],
+    "gl": [
+     "negro"
+    ],
+    "he": [
+     "שחור"
+    ],
+    "hi": [
+     "काला"
+    ],
+    "hr": [
+     "crna"
+    ],
+    "hu": [
+     "fekete"
+    ],
+    "id": [
+     "hitam"
+    ],
+    "is": [
+     "svartur"
+    ],
+    "it": [
+     "nero"
+    ],
+    "ja": [
+     "黒"
+    ],
+    "ka": [
+     "შავი"
+    ],
+    "kk": [
+     "қара түс"
+    ],
+    "ko": [
+     "검정"
+    ],
+    "lt": [
+     "juoda"
+    ],
+    "lv": [
+     "melna krasa"
+    ],
+    "mk": [
+     "црна"
+    ],
+    "ms": [
+     "hitam"
+    ],
+    "mt": [
+     "iswed"
+    ],
+    "nb": [
+     "svart"
+    ],
+    "nl": [
+     "zwart"
+    ],
+    "nn": [
+     "svart"
+    ],
+    "pl": [
+     "czarny"
+    ],
+    "pt": [
+     "preto"
+    ],
+    "ro": [
+     "negru"
+    ],
+    "ru": [
+     "чёрный"
+    ],
+    "sk": [
+     "cierna"
+    ],
+    "sl": [
+     "crna"
+    ],
+    "sq": [
+     "e zeze"
+    ],
+    "sr": [
+     "црна",
+     "crna"
+    ],
+    "sv": [
+     "svart"
+    ],
+    "sw": [
+     "nyeusi"
+    ],
+    "ta": [
+     "கருப்பு"
+    ],
+    "th": [
+     "สีดํา"
+    ],
+    "tr": [
+     "siyah"
+    ],
+    "uk": [
+     "чорний"
+    ],
+    "ur": [
+     "سیاہ"
+    ],
+    "vi": [
+     "đen"
+    ],
+    "zh": [
+     "黑色"
+    ],
+    "af": [
+     "swart"
+    ],
+    "am": [
+     "ጥቁር"
+    ],
+    "az": [
+     "qara"
+    ],
+    "be": [
+     "чорны"
+    ],
+    "bs": [
+     "crna"
+    ],
+    "cy": [
+     "du"
+    ],
+    "ga": [
+     "dubh"
+    ],
+    "hy": [
+     "սեւ"
+    ],
+    "km": [
+     "ខ្មៅ"
+    ],
+    "ne": [
+     "कालो"
+    ],
+    "pa": [
+     "ਕਾਲਾ"
+    ],
+    "so": [
+     "madaw"
+    ],
+    "uz": [
+     "qora"
+    ],
+    "yo": [
+     "dudu"
+    ],
+    "zu": [
+     "mnyama"
+    ]
+   }
+  },
+  "go.passe": {
+   "qid": null,
+   "labels": {
+    "fr": [
+     "passe",
+     "passer",
+     "je passe"
+    ],
+    "en": [
+     "pass",
+     "i pass"
+    ],
+    "de": [
+     "passen",
+     "ich passe"
+    ],
+    "es": [
+     "pasar",
+     "paso"
+    ],
+    "it": [
+     "passare",
+     "passo"
+    ],
+    "pt": [
+     "passar",
+     "passo"
+    ],
+    "nl": [
+     "passen",
+     "ik pas"
+    ],
+    "pl": [
+     "pas",
+     "pasuje"
+    ],
+    "ru": [
+     "пас",
+     "пропуск"
+    ],
+    "ar": [
+     "تمرير",
+     "امر"
+    ],
+    "ja": [
+     "パス"
+    ],
+    "ko": [
+     "패스"
+    ],
+    "zh": [
+     "停一手",
+     "虚着"
+    ],
+    "tr": [
+     "pas",
+     "gec"
+    ]
+   },
+   "manuel": true
+  }
+ },
+ "manuel": [
+  "go.passe"
+ ]
+}

@@ -273,7 +273,9 @@ place et perte** (A8 : la règle branchée en **opt-in**), et la **restitution p
 découpées, le module par famille, la courbe sur 5 familles — **4 sur 5 au-dessus de la référence**, de 14,7 % à
 100 %, le contrôle à 0 %), les **jeux symboliques** (B5/B6 : **112 surfaces**, **100 %** au niveau 4, **33/33**
 paires invariantes, **0 collision**, perft échecs/dames, **3/3** mats, politique des cartes **79,7 %**, pensée
-invariante **5/5**).
+invariante **5/5**), les **langues et les maîtres** (B7/B8 : **71 langues**, **35 concepts**, **449/449** au niveau 4,
+**11/11** paires, livre **10/10**, go 9×9 **10/10** contre **3/10**, cartes **44,7 %** contre **51,0 %** — négatif
+nommé).
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.

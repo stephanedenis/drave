@@ -125,6 +125,7 @@ traducteur, puis la pensée abstraite indépendante de la langue). La thèse : *
 | [`rapport-carte-raisonnement-naturel.md`](../reports/rapport-carte-raisonnement-naturel.md) | **la carte du raisonnement naturel** — la synthèse des mesures 160-168 : quatre mesures, trois courbes, deux axes, quatre limites |
 | [`rapport-modules-famille.md`](../reports/rapport-modules-famille.md) | **C3.2 — les modules par famille** : 28 familles découpées, le module qui recopie, la courbe sur 5 familles (4 sur 5 au-dessus de la référence) |
 | [`rapport-jeux-symboliques.md`](../reports/rapport-jeux-symboliques.md) | **B5/B6 — les jeux symboliques** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
+| [`rapport-langues-maitres.md`](../reports/rapport-langues-maitres.md) | **B7/B8 — les langues et les maîtres** : 71 langues, 449 surfaces, la permutation, la notation, les principes encodés et leurs négatifs |
 | [relations-humaines.md](relations-humaines.md) | le **carpe diem**, des deux côtés |
 
 ### Les références

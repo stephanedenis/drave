@@ -17,6 +17,7 @@ import re
 
 from ..grammaire import naturel
 from ..lexique import LEX
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 from ..regles import cartes as C
 from .base import Arbre, Codec, Lecture
@@ -70,8 +71,46 @@ def _toutes_les_cartes(texte: str) -> list[tuple[int, int]]:
         if any(abs(pos - p) <= 2 for p, _ in trouvees):
             continue
         trouvees.append((pos, _carte(r, c)))
+    # Le multilingue ne sert que s'il n'y a AUCUNE carte déjà lue : sur une
+    # liste, l'appariement rang/enseigne par proximité fabriquerait des cartes
+    # croisées. Les listes restent FR/EN (ou en notation) ; une carte isolée
+    # dans n'importe laquelle des 53 langues est couverte.
+    if not trouvees:
+        for pos, carte in _cartes_multilingues(t):
+            if carte not in [c for _, c in trouvees]:
+                trouvees.append((pos, carte))
     trouvees.sort()
     return trouvees
+
+
+def _cartes_multilingues(texte: str) -> list[tuple[int, int]]:
+    """Les cartes d'une surface multilingue (rang + enseigne), par proximité.
+
+    Les libellés Wikidata sont des **lemmes** : « tuз » (as), « черви » (cœurs).
+    On apparie chaque rang avec l'enseigne la plus proche ; les rangs 2-10 sont
+    acceptés en chiffres, ce qui rend les basses cartes couvertes dès qu'une
+    enseigne est connue.
+    """
+    rangs = [(m.position, m.valeur) for m in MULTI.cherche("cartes.rang", texte)]
+    for m in re.finditer(r"(?<!\d)(10|[2-9])(?!\d)", texte):
+        rangs.append((m.start(), m.group(1)))
+    couleurs = [(m.position, m.valeur) for m in MULTI.cherche("cartes.couleur", texte)]
+    if not rangs or not couleurs:
+        return []
+    rangs.sort()
+    couleurs.sort()
+    sortie: list[tuple[int, int]] = []
+    libres = list(couleurs)
+    for pos, r in rangs:
+        if not libres:
+            break
+        c = min(libres, key=lambda x: abs(x[0] - pos))
+        libres.remove(c)
+        try:
+            sortie.append((min(pos, c[0]), C.carte_id(int(r), "CDHS".index(c[1]))))
+        except (ValueError, IndexError):
+            continue
+    return sortie
 
 
 def _carte_unique(texte: str) -> int | None:
@@ -278,9 +317,9 @@ class CodecCartes(Codec):
             if any(c in "\u2660\u2665\u2666\u2663" for c in texte):
                 return 0.7
             if _RE_LONGUE.search(naturel(texte)):
-                return 0.6
+                return 0.95
             if len(cs) >= 2:
-                return 0.65
+                return 0.9
             return 0.35
         return 0.0
 

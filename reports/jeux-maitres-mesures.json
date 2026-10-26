@@ -1,0 +1,429 @@
+{
+ "principles": 17,
+ "sources": 9,
+ "livre": 28,
+ "parties": 3,
+ "echecs": {
+  "premier_coup": {
+   "sans": "b1c3",
+   "avec": "d2d4"
+  },
+  "premier_coup_maitre": {
+   "sans": false,
+   "avec": true
+  },
+  "livre": {
+   "suivis": 10,
+   "demandes": 10,
+   "positions_livre": 28,
+   "lignes": 5
+  },
+  "mats_en_un": {
+   "sans": 3,
+   "avec": 3
+  },
+  "accord_parties": {
+   "positions": 101,
+   "avec_maitres": 42,
+   "sans_maitres": 41,
+   "details": [
+    {
+     "nom": "La partie de l'Opéra",
+     "positions": 25,
+     "erreurs": []
+    },
+    {
+     "nom": "La partie immortelle",
+     "positions": 37,
+     "erreurs": []
+    },
+    {
+     "nom": "La partie toujours verte",
+     "positions": 39,
+     "erreurs": []
+    }
+   ]
+  }
+ },
+ "dames": {
+  "parties": 20,
+  "profondeur": 4,
+  "maitres_gagnent": 10,
+  "base_blanc_gagne": 0,
+  "resultats": [
+   {
+    "graine": 0,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 1,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 2,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 3,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 4,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 5,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 6,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 7,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 8,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 9,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 10,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 11,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 12,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 13,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 14,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 15,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 16,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 17,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   },
+   {
+    "graine": 18,
+    "maitre_blanc": true,
+    "materiel": 0,
+    "gagnant": "nulle",
+    "maitre_gagne": false
+   },
+   {
+    "graine": 19,
+    "maitre_blanc": false,
+    "materiel": -75,
+    "gagnant": "noir",
+    "maitre_gagne": true
+   }
+  ]
+ },
+ "go": {
+  "premier_sans": {
+   "graines": 10,
+   "bord": 10,
+   "points": [
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    }
+   ]
+  },
+  "premier_avec": {
+   "graines": 10,
+   "bord": 10,
+   "points": [
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    },
+    {
+     "point": 0,
+     "bord": true
+    }
+   ]
+  },
+  "premier_9_sans": {
+   "graines": 10,
+   "ligne_3_4": 3,
+   "points": [
+    {
+     "point": 8,
+     "ligne": 0
+    },
+    {
+     "point": 3,
+     "ligne": 0
+    },
+    {
+     "point": 13,
+     "ligne": 1
+    },
+    {
+     "point": 11,
+     "ligne": 1
+    },
+    {
+     "point": 2,
+     "ligne": 0
+    },
+    {
+     "point": 20,
+     "ligne": 2
+    },
+    {
+     "point": 23,
+     "ligne": 2
+    },
+    {
+     "point": 6,
+     "ligne": 0
+    },
+    {
+     "point": 50,
+     "ligne": 3
+    },
+    {
+     "point": 7,
+     "ligne": 0
+    }
+   ]
+  },
+  "premier_9_avec": {
+   "graines": 10,
+   "ligne_3_4": 10,
+   "points": [
+    {
+     "point": 31,
+     "ligne": 3
+    },
+    {
+     "point": 32,
+     "ligne": 3
+    },
+    {
+     "point": 20,
+     "ligne": 2
+    },
+    {
+     "point": 38,
+     "ligne": 2
+    },
+    {
+     "point": 22,
+     "ligne": 2
+    },
+    {
+     "point": 31,
+     "ligne": 3
+    },
+    {
+     "point": 23,
+     "ligne": 2
+    },
+    {
+     "point": 31,
+     "ligne": 3
+    },
+    {
+     "point": 24,
+     "ligne": 2
+    },
+    {
+     "point": 24,
+     "ligne": 2
+    }
+   ]
+  },
+  "capture_sans": {
+   "graines": 10,
+   "capture": 10,
+   "choix": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  "capture_avec": {
+   "graines": 10,
+   "capture": 10,
+   "choix": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ },
+ "cartes": {
+  "donnes": 1000,
+  "maitres_vs_base": 447,
+  "base_vs_base": 510,
+  "maitres_vs_hasard": 785,
+  "base_vs_hasard": 824,
+  "ablation": {
+   "complet": 447,
+   "sans_honneur": 435,
+   "sans_seconde": 457,
+   "sans_troisieme": 465,
+   "seconde_seule": 447
+  }
+ },
+ "duree_s": 468.815
+}

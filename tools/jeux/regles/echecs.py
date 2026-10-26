@@ -673,50 +673,72 @@ class Position:
             cands = [c for c in self.coups_legaux() if c.drapeau == ROQUE_Q]
             return (cands[0] if len(cands) == 1 else None), cands, ([] if cands else ["grand roque illégal"])
 
+        # Une capture de pion écrite en minuscules (`dxe5`, `bxc3`) commence
+        # par une lettre qui est AUSSI une lettre de pièce (`D`, `B`, `C`, `F`).
+        # On la traite comme un pion AVANT la lecture de pièce, sinon `dxe5`
+        # deviendrait une dame française. Le SAN de pièce est en majuscule.
+        m_pion = re.fullmatch(r"([a-h])x([a-h][1-8])(?:=?([QRBN]))?", t, flags=re.I)
+        if m_pion and t[:1].islower():
+            fich_p, dest_p, promo_p = m_pion.group(1), m_pion.group(2), m_pion.group(3)
+            promo = None
+            if promo_p:
+                promo = "NBRQ".index(promo_p.upper()) + CAVALIER
+            cands_p = [c for c in self.coups_legaux()
+                       if typ(self.plateau[c.de]) == PION and c.vers == case_vers_indice(dest_p)
+                       and c.de % 8 == FICHIERS.index(fich_p.lower())
+                       and (self.plateau[c.vers] or c.drapeau == EP)
+                       and (promo is None or c.promotion == promo)]
+            if len(cands_p) == 1:
+                return cands_p[0], cands_p, amb
+            if cands_p:
+                return None, cands_p, amb + ["capture de pion ambiguë"]
+
         m = re.fullmatch(r"([KQRBNCDTF])?([a-h])?([1-8])?x?([a-h][1-8])(?:=?([QRBNCDTF]))?", t,
                          flags=re.I)
         if not m:
             return None, [], [f"SAN illisible : {texte!r}"]
         lettre, fich, rang, dest_s, promo_s = m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
-        # Une lettre minuscule initiale peut être une pièce (b, c, d, f, k, n, q, r, t)
         lettre = lettre.upper() if lettre else None
         dest = case_vers_indice(dest_s)
-        types: list[int] = []
-        if lettre is None:
-            types = [PION]
-        else:
-            # anglais + français ; l'intersection est tranchée par la légalité
-            table = {"K": [ROI], "Q": [DAME], "R": [TOUR, ROI], "B": [FOU],
-                     "N": [CAVALIER], "C": [CAVALIER], "D": [DAME], "T": [TOUR],
-                     "F": [FOU]}
-            types = table.get(lettre, [])
-        if not types:
-            return None, [], [f"pièce inconnue dans {texte!r}"]
         prise = "x" in t.lower()
         promo = None
         if promo_s:
             promo = "NBRQ".index(promo_s.upper()) + CAVALIER if promo_s.upper() in "NBRQ" else None
             if promo is None:
                 return None, [], [f"promotion inconnue : {promo_s!r}"]
-        cands: list[Coup] = []
-        for c in self.coups_legaux():
-            p = self.plateau[c.de]
-            if typ(p) not in types or c.vers != dest:
-                continue
-            if fich and c.de % 8 != FICHIERS.index(fich.lower()):
-                continue
-            if rang and c.de // 8 != 8 - int(rang):
-                continue
-            if prise and not (self.plateau[c.vers] or c.drapeau == EP):
-                continue
-            if promo is not None and c.promotion != promo:
-                continue
-            if promo is None and c.promotion is not None:
-                # SAN sans promotion : on ne choisit pas à la place du joueur
-                continue
-            cands.append(c)
-        if len(types) > 1 and len(cands) > 1:
-            amb.append(f"lettre {lettre} ambiguë : roi/tour")
+
+        def filtre(types: list[int]) -> list[Coup]:
+            out = []
+            for c in self.coups_legaux():
+                p = self.plateau[c.de]
+                if typ(p) not in types or c.vers != dest:
+                    continue
+                if fich and c.de % 8 != FICHIERS.index(fich.lower()):
+                    continue
+                if rang and c.de // 8 != 8 - int(rang):
+                    continue
+                if prise and not (self.plateau[c.vers] or c.drapeau == EP):
+                    continue
+                if promo is not None and c.promotion != promo:
+                    continue
+                if promo is None and c.promotion is not None:
+                    continue
+                out.append(c)
+            return out
+
+        # L'anglais d'abord : `R` est la tour, `B` le fou, `N` le cavalier. Si
+        # aucune pièce anglaise ne peut jouer, on essaie les lettres françaises
+        # (`R` roi, `D` dame, `T` tour, `F` fou, `C` cavalier).
+        anglais = {"K": [ROI], "Q": [DAME], "R": [TOUR], "B": [FOU],
+                   "N": [CAVALIER], "P": [PION]}
+        francais = {"R": [ROI], "D": [DAME], "T": [TOUR], "F": [FOU],
+                    "C": [CAVALIER]}
+        if lettre is None:
+            cands = filtre([PION])
+        else:
+            cands = filtre(anglais.get(lettre, []))
+            if not cands:
+                cands = filtre(francais.get(lettre, []))
         if len(cands) == 1:
             return cands[0], cands, amb
         if not cands:

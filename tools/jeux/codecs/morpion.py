@@ -19,6 +19,7 @@ import re
 
 from ..grammaire import naturel, nombre, segmente
 from ..lexique import LEX, plie
+from ..lexique_multilingue import MULTI
 from ..rsn import Annotation, RSN
 from ..regles import morpion as regles
 from .base import Arbre, Codec, Lecture
@@ -222,6 +223,7 @@ class CodecMorpion(Codec):
         lec = self.lecture(texte, niveau, langue, format="inconnu")
         if not texte or not texte.strip():
             return self.echoue(lec, "surface vide")
+        texte = self.sans_nom_jeu(texte)
 
         # 1. une grille = un état
         cases, trait_exp, ambiguites = _cases_depuis_grille(texte, niveau)
@@ -380,7 +382,7 @@ class CodecMorpion(Codec):
             return 0.85
         # une case seule est ambiguë (échecs, dames, go) : confiance faible
         if _lit_case(texte, 2)[0] is not None and len(texte.split()) <= 4:
-            return 0.22
+            return 0.5
         return 0.0
 
 

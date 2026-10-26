@@ -185,7 +185,7 @@ et la composition s'apprend à un coût (0,6174). *L'état porte les opérations
 
 **Prochaine action** : aucune sur B4 — la ligne est close ; les suites sont **hors du plan** (le LoRA qui modifie
 l'état, mesure 119 ; une troisième opération). Le plan a repris à **A8.3** (branché), **A7.3** (mesuré), puis
-**B5/B6** (mesurés).
+**B5/B6** (mesurés), puis **B7/B8** (mesurés).
 
 ### B5 — La sémantique des jeux symboliques
 
@@ -219,6 +219,48 @@ et par l'**invariance de la décision** enfin.
 **Prochaine action** : aucune — la ligne est mesurée. Le MCTS du go est un **négatif nommé** à 60 playouts
 (**1/3** contre le hasard) : les règles sont justes, la force n'est pas établie ; un budget plus grand et un
 corpus externe sont hors plan.
+
+### B7 — Les langues : le même sens dans 71 langues
+
+La couche de B5 était FR/EN. B7 ajoute un **lexique multilingue** (35 concepts, **71 langues**, **1 433
+couples**) construit depuis Wikidata (CC0) et un **corpus multilingue** de **449 surfaces**. La notation (FEN,
+SAN, UCI, GTP, SGF, binaire) reste **indépendante de la langue** : c'est le recours de toutes les langues sans
+libellé.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B7.1 | **Le lexique multilingue** (pièces, rangs, enseignes, noms de jeux, notions de maîtres) | ✅ mesuré | **71 langues**, **35 concepts**, **1 433 couples** ; **32 langues fortes** (pièces N/P + un rang et une enseigne) ; source Wikidata, licences CC0 |
+| B7.2 | **Le corpus multilingue** (pièce + cases, rang + enseigne, nom du jeu + coordonnée) | ✅ mesuré | **449/449** au niveau 4 ; **66 langues** avec des items, **62** avec des items forts ; **11/11** paires invariantes |
+| B7.3 | **Les contrôles** : permutation des libellés, notation, détection | ✅ mesuré | permutation **12/275** items forts restants (**4,4 %**) ; notation **5 112/5 112** (72 items × 71 langues) ; détection des jeux **315/315** |
+| B7.4 | **La langue détectée** et les limites | ✅ mesuré | langue exacte **343/449** (**76,4 %**) ; libellés Wikidata = des **lemmes**, pas des formes fléchies ; **5 langues** sans item (`ky`, `lo`, `mt`, `si`, `yo`) ; `e4`/`E4` restent **ambiguës** échecs/go |
+
+**Prochaine action** : aucune — la ligne est mesurée. Les suites (grammaire multilingue, formes fléchies, corpus
+externe) sont **hors du plan** ; la notation est le recours qui n'attend pas ces suites.
+
+### B8 — Les maîtres : les principes encodés, mesurés, et leurs négatifs
+
+Les livres des maîtres sont une **connaissance** : B8 en tire **17 principes**, **9 sources** du domaine public
+(Lasker 1925, Capablanca 1921, Nimzowitsch 1925, Tarrasch 1931, Payne 1756, Smith 1908, Cavendish 1884, les
+proverbes du go, le morpion résolu), un **livre de 28 positions**, trois **parties** du domaine public (Opéra
+1858, Immortelle 1851, Toujours verte 1852), et les encode dans la pensée.
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B8.1 | **La base des maîtres** | ✅ mesuré | **17 principes**, **9 sources**, **3 parties** validées jusqu'au mat, **28 positions** de livre |
+| B8.2 | **Échecs** : évaluation, livre, accord avec les maîtres | ✅ mesuré — **positif et négatif** | premier coup **d4** (sans : **Nc3**) ; livre **10/10** ; mats **3/3** ; accord avec le coup du maître **42/101** avec les principes contre **41/101** sans — **+1, non significatif** |
+| B8.3 | **Dames** : évaluation augmentée contre l'évaluation du dépôt | ✅ mesuré — **positif avec biais nommé** | **10 victoires, 10 nulles, 0 défaite** en 20 parties (même profondeur 4) ; la base, elle, perd **20/20** avec les Blancs — le biais de couleur est **nommé** |
+| B8.4 | **Go** : les proverbes comme prior de MCTS | ✅ mesuré — **positif sur 9×9, sans effet sur 5×5** | 9×9 : **10/10** coups de 3e/4e ligne avec le prior contre **3/10** sans ; 5×5 : premier coup **10/10** des deux côtés ; capture **10/10** des deux côtés |
+| B8.5 | **Cartes** : la politique du whist contre la politique du dépôt | ✅ mesuré — **négatif** | **44,7 %** contre la base (51,0 %) ; contre le hasard **78,5 %** contre **82,4 %** ; l'ablation (sans honneur **43,5 %**, sans seconde **45,7 %**, sans troisième **46,5 %**) ne rattrape pas la base |
+
+**Prochaine action** : aucune — la ligne est mesurée. Les suites (un moteur plus profond, un corpus de parties
+plus large, une politique de cartes avec enchères) sont **hors du plan** ; le négatif des cartes est **nommé**,
+pas maquillé.
+
+**Bilan de B7/B8** : les langues **ne dépendent plus de deux lexiques** ; la notation reste le recours
+universel ; les principes **changent l'ouverture** (d4), **tiennent le livre** (10/10), **gagnent au go 9×9**
+(10/10 contre 3/10) et **ne perdent pas aux dames** (0 défaite), mais ils **ne battent pas la base aux cartes**
+(44,7 % contre 51,0 %) et **ne rapprochent pas du coup du maître** (42 contre 41 sur 101). *La connaissance des
+livres n'est pas la force ; elle est une entrée, et elle se mesure comme telle.*
 
 ---
 
@@ -269,8 +311,10 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **la nouvelle phase (faite, mesurée)** : A7 (le relais, la grappe intra-couche à 21 %, la grappe déportée à
   4,22×), B4 (les **six** mesures de l'opérateur : pas une direction, apprenable, un sous-espace, pas une algèbre, une
   composition apprise, le LoRA qui **inverse**), A8 (la règle place+perte, **branchée en opt-in**) ;
-- **la phase jeux (faite, mesurée)** : B5 (112 items, **100 %** au niveau 4, **33/33** paires, **0 collision**) et B6
-  (perft échecs/dames, morpion exact, **3/3** mats, dames **20/20**, politique **79,7 %**, invariance **5/5**) ;
+- **la phase jeux (faite, mesurée)** : B5 (112 items, **100 %** au niveau 4, **33/33** paires, **0 collision**), B6
+  (perft échecs/dames, morpion exact, **3/3** mats, dames **20/20**, politique **79,7 %**, invariance **5/5**), B7
+  (**71 langues**, 449/449, 11/11 paires, permutation 12/275) et B8 (livre 10/10, go 9×9 **10/10** contre 3/10,
+  dames 10 victoires/10 nulles/0 défaite, cartes **44,7 %** contre 51,0 % — négatif nommé) ;
 - **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
   (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est

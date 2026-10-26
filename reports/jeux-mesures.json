@@ -927,91 +927,31 @@
     "vitesse": {
       "niveau4": {
         "niveau": 4,
-        "secondes": 0.0363,
-        "par_seconde": 3083.2
+        "secondes": 0.0864,
+        "par_seconde": 1296.6
       },
       "niveau0": {
         "niveau": 0,
-        "secondes": 0.0251,
-        "par_seconde": 4470.4
+        "secondes": 0.0735,
+        "par_seconde": 1522.8
       }
     },
     "detection": {
-      "bons": 100,
+      "bons": 110,
       "total": 112,
-      "taux": 0.8929,
+      "taux": 0.9821,
       "echecs": [
         {
-          "jeu": "morpion",
+          "jeu": "echecs",
           "detecte": "go",
           "score": 0.35,
-          "texte": "A1"
-        },
-        {
-          "jeu": "morpion",
-          "detecte": "go",
-          "score": 0.35,
-          "texte": "A1"
-        },
-        {
-          "jeu": "morpion",
-          "detecte": "go",
-          "score": 0.35,
-          "texte": "B1"
+          "texte": "e4"
         },
         {
           "jeu": "echecs",
           "detecte": "go",
           "score": 0.35,
           "texte": "E4"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.1,
-          "texte": "le pion b6 prend en d4"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.1,
-          "texte": "b6 prend d4"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.1,
-          "texte": "le pion b6 prend en d4 puis f2"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.45,
-          "texte": "b6-c5"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.1,
-          "texte": "le pion de b6 vers c5"
-        },
-        {
-          "jeu": "dames",
-          "detecte": "echecs",
-          "score": 0.45,
-          "texte": "c3-d4"
-        },
-        {
-          "jeu": "go",
-          "detecte": "echecs",
-          "score": 0.1,
-          "texte": "d4"
-        },
-        {
-          "jeu": "go",
-          "detecte": "morpion",
-          "score": 0.0,
-          "texte": "jouer en D4"
         }
       ]
     }
@@ -1044,7 +984,7 @@
               197281
             ],
             "ok": true,
-            "secondes": 1.263
+            "secondes": 1.302
           },
           {
             "position": "kiwipete",
@@ -1062,7 +1002,7 @@
               4085603
             ],
             "ok": true,
-            "secondes": 25.877
+            "secondes": 26.712
           },
           {
             "position": "p3",
@@ -1080,7 +1020,7 @@
               43238
             ],
             "ok": true,
-            "secondes": 0.306
+            "secondes": 0.32
           },
           {
             "position": "p4",
@@ -1098,7 +1038,7 @@
               422333
             ],
             "ok": true,
-            "secondes": 2.84
+            "secondes": 2.948
           },
           {
             "position": "p5",
@@ -1116,7 +1056,7 @@
               2103487
             ],
             "ok": true,
-            "secondes": 13.155
+            "secondes": 13.641
           },
           {
             "position": "p6",
@@ -1134,7 +1074,7 @@
               3894594
             ],
             "ok": true,
-            "secondes": 22.049
+            "secondes": 23.099
           }
         ],
         "ok": true
@@ -1234,7 +1174,7 @@
         "total": 3,
         "taux": 0.3333,
         "playouts": 60,
-        "secondes": 66.49,
+        "secondes": 69.49,
         "details": [
           {
             "graine": 0,
@@ -1343,7 +1283,7 @@
       "total": 5
     }
   },
-  "secondes": 179.98,
+  "secondes": 188.65,
   "verdict": {
     "ok": true,
     "echecs": []

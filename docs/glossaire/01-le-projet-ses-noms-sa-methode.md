@@ -169,6 +169,20 @@ dixièmes, `65` pour 6,5). **Où** : `tools/jeux/rsn.py` (le contrat, l'encodage
 `tools/jeux/codecs/`, la mesure dans [`docs/jeux-symboliques.md`](../jeux-symboliques.md) et
 [`reports/rapport-jeux-symboliques.md`](../../reports/rapport-jeux-symboliques.md).
 
+**Lexique multilingue** — La table des **libellés** des jeux dans **71 langues** : 35 concepts (pièces, rangs,
+enseignes, noms de jeux, notions de maîtres), 1 433 couples concept-langue, construits depuis **Wikidata** (CC0).
+Ce sont des **lemmes**, pas des formes fléchies ; les surfaces multilingues sont des **mots-clés** (pièce + cases,
+rang + enseigne, nom du jeu + coordonnée), pas de la grammaire. La **notation** (FEN, SAN, UCI, GTP, SGF) reste le
+recours indépendant de la langue. **Où** : `tools/jeux/lexique_multilingue.json` (la donnée),
+`tools/jeux/lexique_multilingue.py` (la lecture), `tools/jeux/corpus_multilingue.py` (le corpus), la fiche
+[`reports/rapport-langues-maitres.md`](../../reports/rapport-langues-maitres.md).
+
+**Principe de maître** — Une **règle courte** tirée d'un ouvrage du domaine public (Lasker, Capablanca,
+Nimzowitsch, Tarrasch, Payne, Smith, Cavendish, les proverbes du go) et **encodée** dans la pensée : évaluation,
+livre d'ouvertures, prior de MCTS ou politique. Un principe n'est pas une citation : c'est une règle mesurable, avec
+son **contrôle** (la même recherche sans le principe). **Où** : `tools/jeux/maitres.py`, la mesure
+[`reports/rapport-langues-maitres.md`](../../reports/rapport-langues-maitres.md) § 4-6.
+
 **Rétrospective** — Partie de la cérémonie de fin de sprint : *garder* / *changer* /
 *doute*. « Une rétro qui ne change rien n'est pas une rétro : chaque "changer" doit
 devenir une action du sprint suivant » (`docs/sprints.md:27-29`).

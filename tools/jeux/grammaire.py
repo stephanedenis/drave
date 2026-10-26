@@ -72,9 +72,19 @@ def naturel(texte: str) -> str:
     `c3xe5`, `a1`, `10h` restent des unités.
     """
     t = unicodedata.normalize("NFD", normalise(texte).casefold())
-    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
-    t = re.sub(r"[^a-z0-9\u2660\u2665\u2666\u2663]+", " ", t)
-    return re.sub(r"\s+", " ", t).strip()
+    from .lexique import sans_diacritiques
+    t = sans_diacritiques(t)
+    if t.isascii():
+        return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\u2660\u2661\u2662\u2663\u2664\u2665\u2666\u2667]+", " ", t)).strip()
+    # on garde TOUTE lettre/chiffre Unicode (cyrillique, arabe, CJK, devanagari…)
+    # et les quatre symboles de cartes ; le reste devient un espace.
+    out = []
+    for c in t:
+        if c.isalnum() or unicodedata.category(c).startswith("M") or c in "\u2660\u2661\u2662\u2663\u2664\u2665\u2666\u2667":
+            out.append(c)
+        else:
+            out.append(" ")
+    return unicodedata.normalize("NFC", re.sub(r"\s+", " ", "".join(out)).strip())
 
 
 def nature_lots(texte: str) -> list[str]:
