@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 11 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 11 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -53,6 +53,14 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    **négatifs nommés** : l'accord avec le coup du maître ne bouge pas (**42/101** contre **41/101**) et la
    politique du whist **perd** contre la base (**44,7 %** contre **51,0 %**).
 
+6. **B9 le banc externe** : **DeepSeek** (`deepseek-flash`) sert **60/60** prompts publics (50
+   traductions UDHR, 10 jeux) ; **5 552** tokens d'entrée, **10 857** de sortie, **135,1 s** ; chrF
+   **82,48** contre un **plancher 15,29** (espagnol, allemand, russe, français, chinois > 87 ;
+   **hindi 56,17**, **swahili 46,89**). Côté natif, `route` **4,04 M** paramètres tourne sur
+   **`cuda`** ; la distillation à **60 exemples** n'est **pas établie** (aligné **3,8191** contre
+   mélangé **3,8361** bits/octet, 3 graines, signes mitigés). La licence autorise la distillation ;
+   le corpus doit monter à **300+ prompts** avant de conclure.
+
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
 (0,4148 → 0,7042 → 0,7749/0,6977 → 0,5691 → 0,6174) ; **A7** est complète (le relais 42,5477, le flux 1 608
@@ -65,7 +73,9 @@ au-dessus de la référence** (de 14,7 % à 100 %) ; **B5/B6** sont mesurés —
 **3/3** mats, **20/20** dames, politique des cartes **79,7 %**, pensée invariante **5/5** ; **B7/B8** sont
 mesurés — **71 langues**, **449/449**, **11/11**, permutation **12/275**, notation **5 112/5 112** ; les
 maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent au go 9×9 (**10/10** contre
-**3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**).
+**3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**) ; **B9**
+sort le langage des GPU : **DeepSeek** **60/60**, chrF **82,48** contre **15,29**, mais la distillation native
+**n'est pas établie** à 60 exemples (3,8191 contre 3,8361, signes mitigés).
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -73,13 +83,15 @@ maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent a
 |---|---:|
 | mesures de la fiche principale | **173** |
 | portes (passe complète) | **48** — 46 vertes, 2 structurels (26/10 09 h 40 ; `porte-jeux` étendue, `porte-homeostasie` verte) |
-| fiches / JSON de résultats | **163** / **233** |
+| porte-deepseek | **verte hors réseau** (16 tests, dry-run) ; 49e porte au prochain passage |
+| fiches / JSON de résultats | **164** / **234** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |
 | le KV int8 tardif / le 4 bits de la tête | **+0,03 %** / **+10 %** (reverté) |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
 | la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
 | les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
+| le banc externe (B9) | **DeepSeek 60/60, chrF 82,48 contre 15,29 ; natif 4,04 M cuda ; distillation non établie** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).

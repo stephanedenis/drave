@@ -1,0 +1,67 @@
+{
+ "source_sha256": "9989da0b121e4e4693b618dfeb12bd043e98d1f2e3152c0306f37d09db526bb0",
+ "exemples": 60,
+ "traductions": 50,
+ "jeux": 10,
+ "tokens_entree": 5552,
+ "tokens_sortie": 10857,
+ "latence_moyenne_s": 2.252,
+ "caches": 0,
+ "chrF_moyen": 82.48,
+ "chrF_plancher": 15.29,
+ "par_langue": {
+  "arb": {
+   "n": 5,
+   "chrF": 72.86,
+   "plancher": 2.69
+  },
+  "cmn": {
+   "n": 5,
+   "chrF": 87.7,
+   "plancher": 0.19
+  },
+  "deu": {
+   "n": 5,
+   "chrF": 99.42,
+   "plancher": 22.37
+  },
+  "fra": {
+   "n": 5,
+   "chrF": 98.49,
+   "plancher": 28.14
+  },
+  "hin": {
+   "n": 5,
+   "chrF": 56.17,
+   "plancher": 2.94
+  },
+  "ita": {
+   "n": 5,
+   "chrF": 81.92,
+   "plancher": 25.79
+  },
+  "por": {
+   "n": 5,
+   "chrF": 82.11,
+   "plancher": 25.67
+  },
+  "rus": {
+   "n": 5,
+   "chrF": 99.35,
+   "plancher": 2.85
+  },
+  "spa": {
+   "n": 5,
+   "chrF": 99.9,
+   "plancher": 28.11
+  },
+  "swh": {
+   "n": 5,
+   "chrF": 46.89,
+   "plancher": 14.18
+  }
+ },
+ "modeles": {
+  "deepseek-flash": 60
+ }
+}

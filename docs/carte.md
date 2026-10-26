@@ -29,6 +29,7 @@
 | **le cerveau, les facultés** — la carte | [la carte des facultés](cerveau-facultes.md) · [l'état du cerveau](etat-cerveau.md) · [la synthèse 04](synthese/04-les-facultes-et-la-biologie.md) |
 | **la RSN, les unités de sens** — jamais le jeton | [le glossaire, famille 1](glossaire/01-le-projet-ses-noms-sa-methode.md) · [la généalogie des langues](genealogie-des-langues.md) |
 | **les jeux symboliques** — la surface, la RSN-jeu, la pensée, les langues et les maîtres | [le concept](jeux-symboliques.md) · [la fiche B5/B6](../reports/rapport-jeux-symboliques.md) · [la fiche B7/B8](../reports/rapport-langues-maitres.md) |
+| **le banc externe** — DeepSeek pour le langage, GPU pour le natif | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **le pont linéaire** — l'alignement des langues | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la synthèse 07](synthese/07-modeles-alternatifs-entree-sortie.md) |
 | **la structure bat la taille** — la thèse, mesurée | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la carte du raisonnement](../reports/rapport-carte-raisonnement-naturel.md) |
 | **le point de mesure** — la huitième leçon | [la synthèse 06](synthese/06-comment-savoir.md) · [le NLI dur](../reports/rapport-nli-francais-dur.md) |
@@ -67,12 +68,13 @@
 | **B6** la logique dans la pensée — **faite** (perft, mats, recherche, politique) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-jeux-symboliques.md) |
 | **B7** les langues — **faites** (71 langues, 449 surfaces, 11/11) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
 | **B8** les maîtres — **faits** (17 principes, livre, go 9×9, négatifs nommés) | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
+| **B9** le banc externe — **fait** (DeepSeek 60/60, chrF 82,48 ; natif GPU ; distillation à l'échelle) | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 
 ## Les activités en cours
 
 - **[l'état du moment](en-cours.md)** — la page qu'on lit si on ne lit qu'une page ;
 - **[le journal du jour](../journal/2026-10-24.md)** et [l'index du journal](../journal/README.md) ;
-- **[les fiches les plus récentes](../reports/README.md)** — l'index des 163 fiches ;
+- **[les fiches les plus récentes](../reports/README.md)** — l'index des 164 fiches ;
 - **[la dernière passe de portes](references-non-regression.md)** — 48 portes, 46 vertes (la passe du 26/10 09 h 40, `porte-jeux` étendue aux langues et aux maîtres).
 
 ## Les schémas (les six SVG de la synthèse)

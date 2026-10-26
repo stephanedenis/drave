@@ -185,7 +185,7 @@ et la composition s'apprend à un coût (0,6174). *L'état porte les opérations
 
 **Prochaine action** : aucune sur B4 — la ligne est close ; les suites sont **hors du plan** (le LoRA qui modifie
 l'état, mesure 119 ; une troisième opération). Le plan a repris à **A8.3** (branché), **A7.3** (mesuré), puis
-**B5/B6** (mesurés), puis **B7/B8** (mesurés).
+**B5/B6** (mesurés), puis **B7/B8** (mesurés), puis **B9** (le banc externe).
 
 ### B5 — La sémantique des jeux symboliques
 
@@ -262,6 +262,32 @@ universel ; les principes **changent l'ouverture** (d4), **tiennent le livre** (
 (44,7 % contre 51,0 %) et **ne rapprochent pas du coup du maître** (42 contre 41 sur 101). *La connaissance des
 livres n'est pas la force ; elle est une entrée, et elle se mesure comme telle.*
 
+### B9 — Le banc externe et l'élève natif
+
+Le langage sort des GPU : **DeepSeek** sert de **professeur** (traduction, jugements, génération,
+évaluation), et les 2 × RTX 5000 restent au **modèle natif** `route` / `drave-core` et aux mesures
+**boîte blanche**. La licence autorise explicitement la **distillation** et l'**entraînement** à
+partir des sorties. Concept : [`docs/llm-externe.md`](llm-externe.md) ; fiche :
+[`reports/rapport-deepseek.md`](../reports/rapport-deepseek.md).
+
+| # | chantier | état | critère de succès |
+|---|---|---|---|
+| B9.1 | **L'adaptateur et la porte** : API compatible OpenAI, cache, dry-run, clé par fichier | ✅ mesuré | **16 tests** hors réseau ; `porte-deepseek` **verte** ; appel live de contrôle : **16 jetons**, **0,868 s** |
+| B9.2 | **Le corpus professeur** : 60 prompts publics (50 traductions UDHR, 10 jeux) | ✅ mesuré | **60/60** réponses de `deepseek-flash` ; **5 552** tokens d'entrée, **10 857** de sortie, **135,1 s** ; chrF **82,48** contre un **plancher 15,29** |
+| B9.3 | **La distillation** : `route` sur GPU, contrôle par permutation des réponses | ⏳ **smoke test — négatif à cette échelle** | 50/10 exemples, 50 pas, 3 graines : aligné **3,8191** contre mélangé **3,8361** bits/octet (**0,44 %**, signes mitigés) — **pas d'effet établi** |
+| B9.4 | **La répartition** : DeepSeek pour le langage, GPU pour le natif | ✅ décidé | `route` **4,04 M** paramètres sur **`cuda`** (20 pas, val 4,4150 ; 50 pas sur le corpus professeur, 3–4 s) ; Qwen 0.5B ne reste que **référence blanche** |
+
+**Prochaine action** : **monter le corpus professeur** (300+ prompts : 30 articles UDHR × 10
+langues + jeux), **500 pas**, **3 graines ou plus**, puis re-mesurer l'écart aligné/mélangé. La
+première mesure ne l'établit pas ; c'est écrit. Le contrôle par permutation et le plancher chrF
+sont les garde-fous. Aucune ligne n'est bloquée : la clé est disponible dans l'environnement, et
+les GPU sont libres.
+
+**Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
+proche** (espagnol, allemand, russe, français, chinois > 87 chrF) ; il est **faible en hindi et en
+swahili** (56,17 / 46,89). La distillation natif **n'est pas établie à 60 exemples** : le pipeline
+tourne, le transfert reste à mesurer à l'échelle.
+
 ---
 
 ## La suite de C3 — les modules par famille
@@ -314,7 +340,9 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **la phase jeux (faite, mesurée)** : B5 (112 items, **100 %** au niveau 4, **33/33** paires, **0 collision**), B6
   (perft échecs/dames, morpion exact, **3/3** mats, dames **20/20**, politique **79,7 %**, invariance **5/5**), B7
   (**71 langues**, 449/449, 11/11 paires, permutation 12/275) et B8 (livre 10/10, go 9×9 **10/10** contre 3/10,
-  dames 10 victoires/10 nulles/0 défaite, cartes **44,7 %** contre 51,0 % — négatif nommé) ;
+  dames 10 victoires/10 nulles/0 défaite, cartes **44,7 %** contre 51,0 % — négatif nommé), B9 (DeepSeek
+  **60/60**, chrF **82,48** contre **15,29** de plancher ; distillation native **non établie** à 60 exemples,
+  3,8191 contre 3,8361 bits/octet, signes mitigés) ;
 - **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
   (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est

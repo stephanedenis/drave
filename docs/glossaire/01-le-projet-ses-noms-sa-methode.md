@@ -183,6 +183,18 @@ livre d'ouvertures, prior de MCTS ou politique. Un principe n'est pas une citati
 son **contrôle** (la même recherche sans le principe). **Où** : `tools/jeux/maitres.py`, la mesure
 [`reports/rapport-langues-maitres.md`](../../reports/rapport-langues-maitres.md) § 4-6.
 
+**Banc externe** — Le dispositif qui sort le **langage** des GPU : **DeepSeek** (API) pour traduire,
+juger, générer et évaluer ; les GPU et CPU restent au **modèle natif** (`route`, `drave-core`) et aux
+mesures **boîte blanche** (perplexité, activations, flux, sondes). Une API ne donne ni les poids ni les
+activations : elle ne remplace pas ces mesures. **Où** : [`docs/llm-externe.md`](../llm-externe.md),
+`tools/llm/`, la fiche [`reports/rapport-deepseek.md`](../../reports/rapport-deepseek.md).
+
+**Professeur / élève** — Le **professeur** est le modèle externe (DeepSeek) dont on collecte les
+sorties ; l'**élève** est le modèle natif `route`. La **distillation** est au niveau des **séquences**
+(l'API ne donne pas les logits) ; le contrôle mélange les réponses d'entraînement et garde la
+validation alignée. **Où** : `tools/llm/enseignant.py`, `tools/llm/distillation.py`,
+[`reports/rapport-deepseek.md`](../../reports/rapport-deepseek.md).
+
 **Rétrospective** — Partie de la cérémonie de fin de sprint : *garder* / *changer* /
 *doute*. « Une rétro qui ne change rien n'est pas une rétro : chaque "changer" doit
 devenir une action du sprint suivant » (`docs/sprints.md:27-29`).

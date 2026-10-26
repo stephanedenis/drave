@@ -120,12 +120,14 @@ traducteur, puis la pensée abstraite indépendante de la langue). La thèse : *
 | [synthese/05](synthese/05-la-pensee-sans-verbaliser.md) | **la carte du raisonnement** : l'état, le pont, l'alignement, le plan |
 | [synthese/07](synthese/07-modeles-alternatifs-entree-sortie.md) | **la théorie de l'étage entrée-sortie** : cinq familles |
 | [jeux-symboliques.md](jeux-symboliques.md) | **les jeux symboliques** : la surface → la RSN-jeu → la pensée (morpion, échecs, dames, go, cartes) |
+| [llm-externe.md](llm-externe.md) | **le banc externe** : DeepSeek pour le langage, les GPU pour le modèle natif Drave |
 | [genealogie-des-langues.md](genealogie-des-langues.md) | la **généalogie** des langues : la surface capte l'époque, la filiation, non |
 | [`reports/07`](../reports/07-mesures-couche-commune.md) | les **mesures** (167), une fiche par expérience |
 | [`rapport-carte-raisonnement-naturel.md`](../reports/rapport-carte-raisonnement-naturel.md) | **la carte du raisonnement naturel** — la synthèse des mesures 160-168 : quatre mesures, trois courbes, deux axes, quatre limites |
 | [`rapport-modules-famille.md`](../reports/rapport-modules-famille.md) | **C3.2 — les modules par famille** : 28 familles découpées, le module qui recopie, la courbe sur 5 familles (4 sur 5 au-dessus de la référence) |
 | [`rapport-jeux-symboliques.md`](../reports/rapport-jeux-symboliques.md) | **B5/B6 — les jeux symboliques** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](../reports/rapport-langues-maitres.md) | **B7/B8 — les langues et les maîtres** : 71 langues, 449 surfaces, la permutation, la notation, les principes encodés et leurs négatifs |
+| [`rapport-deepseek.md`](../reports/rapport-deepseek.md) | **B9 — le banc externe** : 60 prompts, chrF, le natif sur GPU et le smoke test de distillation |
 | [relations-humaines.md](relations-humaines.md) | le **carpe diem**, des deux côtés |
 
 ### Les références

@@ -275,7 +275,8 @@ découpées, le module par famille, la courbe sur 5 familles — **4 sur 5 au-de
 paires invariantes, **0 collision**, perft échecs/dames, **3/3** mats, politique des cartes **79,7 %**, pensée
 invariante **5/5**), les **langues et les maîtres** (B7/B8 : **71 langues**, **35 concepts**, **449/449** au niveau 4,
 **11/11** paires, livre **10/10**, go 9×9 **10/10** contre **3/10**, cartes **44,7 %** contre **51,0 %** — négatif
-nommé).
+nommé), le **banc externe** (B9 : DeepSeek **60/60**, chrF **82,48** contre **15,29** de plancher ; `route` **4,04 M**
+sur **cuda** ; distillation native **non établie** à 60 exemples).
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.
