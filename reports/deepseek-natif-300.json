@@ -201,7 +201,7 @@
    16020000,
    22540000
   ],
-  "conclusion": "transition bruitee entre 9,23 M et 9,96 M : 9,23 M moyenne +0,83 % mais 1/3, 9,60 M controle +0,12 % mais 1/3, 9,96 M premier 3/3 ; 4,04 M negatif ; masque calibre quasi egal a 4,04 M et 10,70 M"
+  "conclusion": "transition bruitee entre 9,23 M et 9,96 M ; 9,96 M premier 3/3 ; au-dessus, l'ecart croit (1,76 %, 1,65 %, 1,92 %, 1,74 %, 2,93 % a 27 M) ; 4,04 M negatif"
  },
  "modele_224_6": {
   "parametres_approx": 9230000,
@@ -333,5 +333,39 @@
    "signe": "pratiquement egal"
   },
   "conclusion": "non concluant : le banc masque n'est pas au niveau du trainer (2,85 contre 2,72) ; a calibrer avant de conclure"
+ },
+ "modele_448_8": {
+  "parametres_approx": 26990000,
+  "config": {
+   "famille": "route",
+   "dim": 448,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.6649,
+   2.6968,
+   2.6771
+  ],
+  "melange": [
+   2.7809,
+   2.7743,
+   2.7265
+  ],
+  "moyennes": {
+   "aligne": 2.6796,
+   "melange": 2.7606,
+   "ecart": 0.081,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "positif ; 2,93 %, le meilleur ecart mesure"
  }
 }
