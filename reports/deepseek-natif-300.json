@@ -201,7 +201,7 @@
    16020000,
    22540000
   ],
-  "conclusion": "transition bruitee entre 9,23 et 9,96 M ; 9,96 M premier 3/3 ; le meilleur ecart relatif est 27 M/500 pas (2,93 %) ; 31,63 M/500 pas ne paie pas (0,27 %), 31,63 M/1 000 pas est positif (1,41 %) mais moins ; la taille n'est pas gratuite"
+  "conclusion": "transition 9,23-9,96 M ; le meilleur ecart relatif est 31,63 M / 610 ex. (4,40 %, 3/3), devant 27 M / 610 (3,71 %) ; 31,63 M / 310 ne donnait que 0,27 % : capacite et donnees se paient ensemble ; 910/30 ne paie pas"
  },
  "modele_224_6": {
   "parametres_approx": 9230000,
@@ -672,5 +672,45 @@
    }
   },
   "conclusion": "l'effet est une fenetre : 3,71 % a 500, 1,29 % a 750, -0,49 % a 1 000"
+ },
+ "modele_600_512_8": {
+  "parametres_approx": 31630000,
+  "donnees": {
+   "exemples": 610,
+   "train": 541,
+   "val": 69,
+   "langues": 20
+  },
+  "config": {
+   "famille": "route",
+   "dim": 512,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.9655,
+   2.9146,
+   2.9379
+  ],
+  "melange": [
+   3.0698,
+   3.1265,
+   3.0277
+  ],
+  "moyennes": {
+   "aligne": 2.9393,
+   "melange": 3.0747,
+   "ecart": 0.1354,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "meilleur ecart relatif : 4,40 % a 31,63 M avec 610 exemples ; a 310 exemples, 31,63 M/500 pas ne donnait que 0,27 % — la capacite ne paie qu'avec les donnees"
  }
 }

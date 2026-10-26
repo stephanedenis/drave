@@ -37,8 +37,8 @@ charger seulement pour la tâche en cours : [`docs/en-cours.md`](docs/en-cours.m
 [`docs/roadmap.md`](docs/roadmap.md) (le plan et les prochaines actions), [`reports/README.md`](reports/README.md)
 (les résultats, les fiches et les négatifs), [`journal/`](journal/) (le récit daté). En bref : la sonde est
 **plate dès 1,5 B**, le pont **plafonne à 0,87** ; **A7, B4, A8, C3.2, B5/B6, B7/B8 et B9** sont faits et
-mesurés. B9 a un **seuil de distillation 9,23–9,96 M**, une **fenêtre 610/20 à 500 pas** (3,71 %, transitoire)
-et un **négatif 910/30**. Le détail et les réserves sont dans les fiches — pas dans ce fichier.
+mesurés. B9 a un **seuil de distillation 9,23–9,96 M**, un **meilleur écart 4,40 % à 31,63 M / 610 ex.**,
+une **fenêtre** (3,71 % à 500 pas, transitoire) et un **négatif 910/30**. Le détail et les réserves sont dans les fiches — pas dans ce fichier.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont

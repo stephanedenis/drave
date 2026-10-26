@@ -269,7 +269,7 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 
 **Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),
 les 71 langues et les maîtres (B7/B8), le banc externe (B9). Les **chiffres, les contrôles et les négatifs**
-— y compris le seuil de distillation 9,23–9,96 M, la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
+— y compris le seuil de distillation 9,23–9,96 M, le meilleur écart 4,40 % (31,63 M / 610 ex.), la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
 [`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/en-cours.md`](docs/en-cours.md) ; le **plan**
 dans [`docs/roadmap.md`](docs/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
 

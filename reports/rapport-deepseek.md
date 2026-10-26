@@ -171,6 +171,13 @@ Même modèle **26,99 M** (dim 448, 8 couches), 500 pas, 3 graines : aligné **3
 2,8468**, mélangé **3,1974 / 3,0697 / 2,9582** ; moyennes **2,9611** contre **3,0751** :
 l'**aligné gagne 3/3**, **0,1140 bit/octet** (**3,71 %**).
 
+**Avec 31,63 M, la capacité paie enfin.** Même corpus 610/20, dim 512, 8 couches, **31,63 M**,
+500 pas, 3 graines : aligné **2,9655 / 2,9146 / 2,9379**, mélangé **3,0698 / 3,1265 / 3,0277** ;
+moyennes **2,9393** contre **3,0747** — **4,40 %**, **3/3**, le meilleur écart relatif mesuré.
+À **310 exemples**, le même 31,63 M à 500 pas ne donnait que **0,27 %** : la capacité ne paie
+**qu'avec les données**. Le couple 31,63 M / 610 ex. bat le 27 M / 610 (3,71 %) en relatif et en
+absolu (2,9393 contre 2,9611). C'est la synergie **capacité × données**, pas la taille seule.
+
 **La fenêtre.** Le même corpus, le même modèle, à trois longueurs :
 
 | pas | aligné | mélangé (contrôle) | écart | signe |
