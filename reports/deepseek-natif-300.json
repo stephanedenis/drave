@@ -609,5 +609,68 @@
    "roumain"
   ],
   "conclusion": "30 langues : l'effet se dilue a capacite et pas constants"
+ },
+ "modele_600_448_8_750": {
+  "parametres_approx": 26990000,
+  "donnees": {
+   "exemples": 610,
+   "train": 541,
+   "val": 69,
+   "langues": 20
+  },
+  "config": {
+   "famille": "route",
+   "dim": 448,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 750,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.7796,
+   2.789,
+   2.7849
+  ],
+  "melange": [
+   2.8174,
+   2.7192,
+   2.9257
+  ],
+  "moyennes": {
+   "aligne": 2.7845,
+   "melange": 2.8208,
+   "ecart": 0.0363,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur en moyenne, 2 graines sur 3"
+  },
+  "conclusion": "la fenetre se referme : 1,29 % a 750 pas (2/3), apres 3,71 % a 500 (3/3) ; a 1 000 le controle repasse"
+ },
+ "fenetre_610": {
+  "pas": {
+   "500": {
+    "aligne": 2.9611,
+    "melange": 3.0751,
+    "ecart": 0.114,
+    "signe": "3/3"
+   },
+   "750": {
+    "aligne": 2.7845,
+    "melange": 2.8208,
+    "ecart": 0.0363,
+    "signe": "2/3"
+   },
+   "1000": {
+    "aligne": 2.7577,
+    "melange": 2.7443,
+    "ecart": -0.0134,
+    "signe": "1/3"
+   }
+  },
+  "conclusion": "l'effet est une fenetre : 3,71 % a 500, 1,29 % a 750, -0,49 % a 1 000"
  }
 }

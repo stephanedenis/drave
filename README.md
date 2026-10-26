@@ -276,7 +276,7 @@ paires invariantes, **0 collision**, perft échecs/dames, **3/3** mats, politiqu
 invariante **5/5**), les **langues et les maîtres** (B7/B8 : **71 langues**, **35 concepts**, **449/449** au niveau 4,
 **11/11** paires, livre **10/10**, go 9×9 **10/10** contre **3/10**, cartes **44,7 %** contre **51,0 %** — négatif
 nommé), le **banc externe** (B9 : DeepSeek **310/310**, chrF **82,82** contre **15,64** de plancher ; `route`
-**cuda** ; distillation native avec une **transition 9,23–9,96 M** (négative à 4,04 M, transitoire à 9,23 M, positive 3/3 au-dessus, **2,93 % à 27 M**, **31,63 M à 1 000 pas 1,41 %**, **610 ex./20 langues 3,71 % à 500 pas, quasi égal à 1 000, 910/30 langues ne paie pas**), masque calibré quasi égal).
+**cuda** ; distillation native avec une **transition 9,23–9,96 M** (négative à 4,04 M, transitoire à 9,23 M, positive 3/3 au-dessus, **2,93 % à 27 M**, **31,63 M à 1 000 pas 1,41 %**, **610 ex./20 langues 3,71 % à 500 pas, 1,29 % à 750, -0,49 % à 1 000, 910/30 langues ne paie pas**), masque calibré quasi égal).
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.

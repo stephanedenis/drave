@@ -171,6 +171,19 @@ Même modèle **26,99 M** (dim 448, 8 couches), 500 pas, 3 graines : aligné **3
 2,8468**, mélangé **3,1974 / 3,0697 / 2,9582** ; moyennes **2,9611** contre **3,0751** :
 l'**aligné gagne 3/3**, **0,1140 bit/octet** (**3,71 %**).
 
+**La fenêtre.** Le même corpus, le même modèle, à trois longueurs :
+
+| pas | aligné | mélangé (contrôle) | écart | signe |
+|---:|---:|---:|---:|---|
+| **500** | **2,9611** | 3,0751 | +0,1140 | **aligné 3/3** (3,71 %) |
+| **750** | **2,7845** | 2,8208 | +0,0363 | **aligné 2/3** (1,29 %) |
+| **1 000** | 2,7577 | **2,7443** | −0,0134 | **contrôle** (1/3) |
+
+L'écart **décroît** avec les pas : 3,71 % → 1,29 % → −0,49 %. Le conditionnement est un
+**phénomène de fenêtre** : il se voit à 500 pas, s'affaiblit à 750, et le contrôle repasse à 1 000.
+La valeur absolue, elle, continue de baisser (2,96 → 2,78 → 2,76) : le modèle apprend, mais il
+apprend surtout la distribution des réponses au-delà de la fenêtre.
+
 **À 1 000 pas, l'effet ne survit pas.** Même corpus, même modèle, 1 000 pas, 3 graines : aligné
 **2,7705 / 2,7158 / 2,7867**, mélangé **2,5977 / 2,8334 / 2,8018** ; moyennes **2,7577** contre
 **2,7443** — le **contrôle repasse** de 0,49 %, et les signes sont mitigés (2/3 aligné). La valeur

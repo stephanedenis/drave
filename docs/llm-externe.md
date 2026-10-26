@@ -44,9 +44,9 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
   **16,02 M**, **22,54 M** et **26,99 M**, l'aligné gagne 3/3 (1,76 %, 1,65 %, 1,92 %, 1,74 %,
   **2,93 %**). À **31,63 M**, 500 pas ne paient pas (0,27 %), 1 000 pas donnent 1,41 % (3/3) mais
   moins que le 27 M. La distillation a une **transition entre 9,23 M et 9,96 M** ; l'écart **croît**
-  jusqu'à 27 M, puis la taille ne suffit plus. Le corpus **610 exemples / 20 langues** porte l'écart à **3,71 %** (3/3) à **500 pas**, mais il
-  **disparaît à 1 000 pas** (contrôle +0,49 %) ; **910 / 30 langues** ne paie pas (contrôle
-  +0,23 %, 1/3) : l'effet est **transitoire** et **dilué** sans budget supplémentaire. La **perte masquée calibrée** à 4,04 M est quasi égale
+  jusqu'à 27 M, puis la taille ne suffit plus. Le corpus **610 exemples / 20 langues** porte l'écart à **3,71 %** (3/3) à **500 pas**, **1,29 %**
+  à **750**, puis **−0,49 %** à **1 000** (contrôle) ; **910 / 30 langues** ne paie pas (contrôle
+  +0,23 %, 1/3) : l'effet est une **fenêtre**, et il se **dilue** sans budget supplémentaire. La **perte masquée calibrée** à 4,04 M est quasi égale
   (2,7335 contre 2,7340) : pas de gain établi.
 
 ## Les secrets et le cache
