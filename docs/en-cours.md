@@ -82,7 +82,8 @@ maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent a
 sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,64** ; la distillation native a
 une **transition entre 9,23 et 9,96 M** — négative à **4,04 M**, transitoire à **9,23 M**, positive **3/3** à
 **9,96 M** (1,76 %), **10,70 M** (1,65 %), **16,02 M** (1,92 %), **22,54 M** (1,74 %) et **26,99 M**
-(**2,93 %**) ; la perte masquée calibrée est **quasi égale** à 4,04 M (0,02 %) et 10,70 M (0,15 %).
+(**2,93 %**) ; **31,63 M**/500 pas quasi égal (0,27 %), **31,63 M**/1 000 pas 1,41 % ; la perte masquée
+calibrée est **quasi égale** à 4,04 M (0,02 %) et 10,70 M (0,15 %).
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -98,7 +99,7 @@ une **transition entre 9,23 et 9,96 M** — négative à **4,04 M**, transitoire
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
 | la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
 | les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
-| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif cuda ; transition 9,23–9,96 M ; positif 3/3 au-dessus, 2,93 % à 27 M ; masque quasi égal** |
+| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif cuda ; transition 9,23–9,96 M ; 27 M meilleur relatif (2,93 %) ; 31,63 M/1 000 pas 1,41 % ; masque quasi égal** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).

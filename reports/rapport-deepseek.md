@@ -132,13 +132,18 @@ trois graines à chaque fois.
 | dim 320, 7 couches | **16,02 M** | **2,7210** | 2,7742 | +0,0532 | **aligné 3/3** (1,92 %) |
 | dim 384, 8 couches | **22,54 M** | **2,6915** | 2,7393 | +0,0478 | **aligné 3/3** (1,74 %) |
 | dim 448, 8 couches | **26,99 M** | **2,6796** | 2,7606 | +0,0810 | **aligné 3/3** (2,93 %) |
+| dim 512, 8 couches, 500 pas | **31,63 M** | 2,7479 | **2,7554** | −0,0075 | **quasi égal** (0,27 %), 2/3 |
+| dim 512, 8 couches, 1 000 pas | **31,63 M** | **2,6724** | 2,7107 | +0,0383 | **aligné 3/3** (1,41 %) |
 
 Le **seuil est une transition bruitée entre 9,23 M et 9,96 M** : à 9,23 M la moyenne penche pour
 l'aligné mais **une seule graine sur trois** ; à 9,60 M, le contrôle repasse de 0,12 % (1/3) ; à
-9,96 M, **3/3** ; et les quatre tailles suivantes confirment. 4,04 M est le seul point franchement
+9,96 M, **3/3** ; et les tailles suivantes confirment. 4,04 M est le seul point franchement
 négatif, et **9,96 M est le premier point 3/3**. La transition n'est pas une marche : c'est une
-zone de bruit autour de 9,5 M. Au-dessus, l'écart **croît** avec la capacité : 1,74 % à 22,54 M,
-**2,93 % à 26,99 M** — le meilleur écart mesuré. Le grand modèle de 22,54 M fait **1,18 M** poids lus
+zone de bruit autour de 9,5 M. Au-dessus, l'écart **croît** jusqu'à 27 M : 1,74 % à 22,54 M,
+**2,93 % à 26,99 M** — le meilleur écart mesuré. Puis **la taille ne paie plus seule** : à 31,63 M
+et 500 pas, l'écart tombe à **0,27 %** (2/3) ; à **1 000 pas**, il remonte à **1,41 %** (3/3), mais
+reste **sous** le 27 M à 500 pas, tout en donnant la **meilleure valeur absolue** (2,6724 contre
+2,6796). La capacité n'est pas gratuite : il faut aussi les pas. Le grand modèle de 22,54 M fait **1,18 M** poids lus
 par jeton et par couche, **2,95 M** stockés, **`cuda`**, 500 pas en **52–56 s**.
 
 | entraînement | graine | val (bits/octet) |

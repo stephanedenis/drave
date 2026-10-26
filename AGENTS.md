@@ -46,7 +46,7 @@ permutation **12/275**, notation **5 112/5 112**, livre **10/10**, go 9×9 **10/
 DeepSeek `deepseek-flash` **310/310**, chrF **82,82** contre **15,64** de plancher ; `route` sur **cuda** ;
 la distillation native a une **transition entre 9,23 M et 9,96 M** — négative à **4,04 M**, transitoire à
 **9,23 M** (1 graine/3), positive 3/3 à **9,96 M** (1,76 %), **10,70 M** (1,65 %), **16,02 M** (1,92 %) et
-**22,54 M** (1,74 %) et **26,99 M** (**2,93 %**) ; le masque calibré est **quasi égal** à 4,04 M (0,02 %) et à 10,70 M (0,15 %) —
+**22,54 M** (1,74 %) et **26,99 M** (**2,93 %**) ; **31,63 M**/500 pas ne paie pas (0,27 %), **31,63 M**/1 000 pas 1,41 % ; le masque calibré est **quasi égal** à 4,04 M (0,02 %) et à 10,70 M (0,15 %) —
 les GPU reviennent au natif, le langage sort des GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,

@@ -201,7 +201,7 @@
    16020000,
    22540000
   ],
-  "conclusion": "transition bruitee entre 9,23 M et 9,96 M ; 9,96 M premier 3/3 ; au-dessus, l'ecart croit (1,76 %, 1,65 %, 1,92 %, 1,74 %, 2,93 % a 27 M) ; 4,04 M negatif"
+  "conclusion": "transition bruitee entre 9,23 et 9,96 M ; 9,96 M premier 3/3 ; le meilleur ecart relatif est 27 M/500 pas (2,93 %) ; 31,63 M/500 pas ne paie pas (0,27 %), 31,63 M/1 000 pas est positif (1,41 %) mais moins ; la taille n'est pas gratuite"
  },
  "modele_224_6": {
   "parametres_approx": 9230000,
@@ -367,5 +367,73 @@
    "signe": "aligne meilleur sur 3 graines sur 3"
   },
   "conclusion": "positif ; 2,93 %, le meilleur ecart mesure"
+ },
+ "modele_512_8_500": {
+  "parametres_approx": 31630000,
+  "config": {
+   "famille": "route",
+   "dim": 512,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.7528,
+   2.7174,
+   2.7735
+  ],
+  "melange": [
+   2.6978,
+   2.7529,
+   2.8156
+  ],
+  "moyennes": {
+   "aligne": 2.7479,
+   "melange": 2.7554,
+   "ecart": 0.0075,
+   "unite": "bits/octet",
+   "signe": "quasi egal, 2 graines sur 3 pour l'aligne"
+  },
+  "conclusion": "a 500 pas, la taille ne paie pas : 0,27 %, non etabli"
+ },
+ "modele_512_8_1000": {
+  "parametres_approx": 31630000,
+  "config": {
+   "famille": "route",
+   "dim": 512,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 1000,
+   "eval_tous": 500
+  },
+  "aligne": [
+   2.614,
+   2.7174,
+   2.6859
+  ],
+  "melange": [
+   2.6678,
+   2.7529,
+   2.7113
+  ],
+  "moyennes": {
+   "aligne": 2.6724,
+   "melange": 2.7107,
+   "ecart": 0.0383,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "positif a 1 000 pas (1,41 %, 3/3), mais moins que le 27 M a 500 pas (2,93 %) ; meilleure valeur absolue (2,6724 contre 2,6796)"
  }
 }
