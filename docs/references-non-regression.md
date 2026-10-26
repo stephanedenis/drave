@@ -17,7 +17,7 @@
 > `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**,
 > `porte-gain` **29,0206 → 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**,
 > `porte-greffe` **branchée**, `porte-profondeur-routee` **521 s**. La nouvelle porte `porte-deepseek` est
-> **hors réseau** et **verte** (16 tests, dry-run) ; elle n'était pas dans cette passe, elle entre dans la
+> **hors réseau** et **verte** (20 tests, dry-run) ; elle n'était pas dans cette passe, elle entre dans la
 > suivante.
 >
 > **Passe du 2026-10-25 à 22 h 18** (**48 portes, 46 vertes, 2 rouges**, **1 h 31 min**) — la passe de

@@ -42,7 +42,7 @@
   "unite": "bits/octet",
   "signe": "melange meilleur sur 2 graines sur 3"
  },
- "conclusion": "seuil de capacite : a 4,04 M le controle melange bat l'aligne (2,7510 contre 2,7709) ; a 22,54 M l'aligne bat le controle (2,6915 contre 2,7393, 3/3 graines)",
+ "conclusion": "le seuil est entre 4,04 M et 10,70 M ; les trois tailles au-dessus sont positives 3/3 ; la perte masquee ne deplace pas le 4,04 M",
  "modele_384": {
   "parametres_approx": 22540000,
   "poids_lus_par_jeton_couche": 1180000,
@@ -78,5 +78,113 @@
    "signe": "aligne meilleur sur 3 graines sur 3"
   },
   "conclusion": "effet de distillation etabli a 22,54 M : aligne 2,6915 contre melange 2,7393 (1,74 %), 3/3 graines"
+ },
+ "modele_256_6": {
+  "parametres_approx": 10700000,
+  "config": {
+   "famille": "route",
+   "dim": 256,
+   "couches": 6,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.7236,
+   2.7259,
+   2.7002
+  ],
+  "melange": [
+   2.7623,
+   2.7423,
+   2.7819
+  ],
+  "moyennes": {
+   "aligne": 2.7166,
+   "melange": 2.7622,
+   "ecart": 0.0456,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "positif au-dessus du seuil ; 1,65 %"
+ },
+ "modele_320_7": {
+  "parametres_approx": 16020000,
+  "config": {
+   "famille": "route",
+   "dim": 320,
+   "couches": 7,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.7501,
+   2.7206,
+   2.6923
+  ],
+  "melange": [
+   2.8102,
+   2.801,
+   2.7114
+  ],
+  "moyennes": {
+   "aligne": 2.721,
+   "melange": 2.7742,
+   "ecart": 0.0532,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "positif ; 1,92 %"
+ },
+ "masque_4m": {
+  "protocole": "perte masquee sur les prompts, boucle tools/llm/entrainer_masque.py",
+  "parametres_approx": 4040000,
+  "graine": 1,
+  "aligne": 2.7708,
+  "melange": 2.7549,
+  "moyennes": {
+   "aligne": 2.7708,
+   "melange": 2.7549,
+   "ecart": 0.0159,
+   "unite": "bits/octet",
+   "signe": "controle meilleur"
+  },
+  "conclusion": "le masque des prompts ne renverse PAS le controle a 4,04 M ; la capacite reste le facteur"
+ },
+ "masque_10_7m": {
+  "protocole": "perte masquee sur les prompts, boucle tools/llm/entrainer_masque.py",
+  "parametres_approx": 10700000,
+  "graine": 1,
+  "aligne": 2.8507,
+  "melange": 2.8486,
+  "moyennes": {
+   "aligne": 2.8507,
+   "melange": 2.8486,
+   "ecart": 0.0021,
+   "unite": "bits/octet",
+   "signe": "pratiquement egal"
+  },
+  "conclusion": "non concluant : le banc masque n'est pas au niveau du trainer (2,85 contre 2,72) ; a calibrer avant de conclure"
+ },
+ "seuil": {
+  "negatif_a": 4040000,
+  "positif_a": 10700000,
+  "positifs": [
+   10700000,
+   16020000,
+   22540000
+  ],
+  "conclusion": "le seuil est entre 4,04 M et 10,70 M ; les trois tailles au-dessus sont positives 3/3 ; la perte masquee ne deplace pas le 4,04 M"
  }
 }

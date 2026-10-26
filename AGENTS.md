@@ -43,9 +43,10 @@ paires invariantes, **0 collision**, perft échecs/dames, mats, politique **79,7
 **B7/B8** (les 71 langues et les maîtres) sont faits aussi : **449/449** au niveau 4, **11/11** paires,
 permutation **12/275**, notation **5 112/5 112**, livre **10/10**, go 9×9 **10/10** contre **3/10**, dames
 **0 défaite**, cartes **44,7 %** contre **51,0 %** — négatif nommé ; **B9** (le banc externe) est **mesuré** :
-DeepSeek `deepseek-flash` **310/310**, chrF **82,82** contre **15,64** de plancher ; `route` **22,54 M** sur **cuda** ;
-la distillation native a un **seuil de capacité** — négative à **4,04 M**, positive à **22,54 M** (3/3 graines,
-1,74 %) — les GPU reviennent au natif, le langage sort des GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
+DeepSeek `deepseek-flash` **310/310**, chrF **82,82** contre **15,64** de plancher ; `route` sur **cuda** ;
+la distillation native a un **seuil de capacité entre 4,04 M et 10,70 M** — négative à **4,04 M**, positive 3/3
+à **10,70 M** (1,65 %), **16,02 M** (1,92 %) et **22,54 M** (1,74 %) ; la perte masquée est **non concluante** —
+les GPU reviennent au natif, le langage sort des GPU ; le pic du 32 B et la prose scientifique restent **nommés**, pas planifiés.
 
 **Vocabulaire** : *couche* = **couche de neurones** ; *étage* = **niveau d'architecture** (étage 1 entrée-sortie,
 étage 2 pensée) ; *jeton* = **unité du tokeniseur**, **jamais** la **représentation sémantique neutre (RSN)**, dont

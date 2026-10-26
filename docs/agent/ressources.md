@@ -40,10 +40,11 @@ le langage (traduction, jugements, génération, évaluation) passe par l'API **
   [`reports/rapport-deepseek.md`](../../reports/rapport-deepseek.md).
 
 **Ce que la mesure dit** : DeepSeek `deepseek-flash` sert **310/310** prompts, chrF **82,82** contre
-**15,64** de plancher ; la distillation native a un **seuil de capacité** : négative à **4,04 M** (contrôle 2,7510 contre
-aligné 2,7709), positive à **22,54 M** (aligné 2,6915 contre contrôle 2,7393, 3/3 graines). La
-prochaine action est de **localiser le seuil** et de tester une **perte masquée sur les prompts**,
-pas de changer la répartition.
+**15,64** de plancher ; la distillation native a un **seuil de capacité entre 4,04 M et 10,70 M** : négative à **4,04 M**
+(contrôle 2,7510 contre aligné 2,7709), positive 3/3 à **10,70 M** (2,7166 contre 2,7622, 1,65 %),
+**16,02 M** (1,92 %) et **22,54 M** (1,74 %). La **perte masquée** ne sauve pas le 4,04 M et son
+banc à 10,70 M n'est pas calibré. La prochaine action est de **resserrer le seuil** et de
+**calibrer le banc masqué**, pas de changer la répartition.
 
 ## La philosophie carpe diem
 

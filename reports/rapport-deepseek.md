@@ -117,25 +117,49 @@ bit/octet** (0,72 %), et il gagne **2 graines sur 3**. À **4,04 M**, la distill
 **n'est pas établie**. Le contrôle par permutation fait exactement son travail : il empêche de
 conclure sur une graine favorable.
 
-### Le seuil de capacité : 22,54 M
+### Le seuil de capacité : entre 4,04 M et 10,70 M
 
-Même corpus, même découpage, même perte ; le modèle passe à **dim 384, 8 couches, 8 experts, k = 2**
-— **22,54 M paramètres**, **1,18 M** poids lus par jeton et par couche, **2,95 M** stockés,
-**`cuda`**, 500 pas en **52–56 s**.
+Même corpus, même découpage, même perte ; seule change la taille de `route`. Quatre tailles,
+trois graines à chaque fois.
+
+| modèle | paramètres | aligné (moyenne) | mélangé (contrôle) | écart | signe |
+|---|---:|---:|---:|---:|---|
+| dim 192, 4 couches | **4,04 M** | 2,7709 | **2,7510** | −0,0199 | **contrôle** (2/3) |
+| dim 256, 6 couches | **10,70 M** | **2,7166** | 2,7622 | +0,0456 | **aligné 3/3** (1,65 %) |
+| dim 320, 7 couches | **16,02 M** | **2,7210** | 2,7742 | +0,0532 | **aligné 3/3** (1,92 %) |
+| dim 384, 8 couches | **22,54 M** | **2,6915** | 2,7393 | +0,0478 | **aligné 3/3** (1,74 %) |
+
+Le **seuil est entre 4,04 M et 10,70 M** : le premier point positif est **10,70 M**, et les deux
+suivants le confirment. Le grand modèle de 22,54 M fait **1,18 M** poids lus par jeton et par
+couche, **2,95 M** stockés, **`cuda`**, 500 pas en **52–56 s**.
 
 | entraînement | graine | val (bits/octet) |
 |---|---:|---:|
-| réponses **alignées** | 1 | **2,7234** |
-| réponses **alignées** | 2 | **2,7030** |
-| réponses **alignées** | 3 | **2,6482** |
-| réponses **mélangées** (contrôle) | 1 | **2,7340** |
-| réponses **mélangées** (contrôle) | 2 | **2,7730** |
-| réponses **mélangées** (contrôle) | 3 | **2,7109** |
+| **22,54 M**, réponses alignées | 1 | **2,7234** |
+| **22,54 M**, réponses alignées | 2 | **2,7030** |
+| **22,54 M**, réponses alignées | 3 | **2,6482** |
+| **22,54 M**, réponses mélangées | 1 | **2,7340** |
+| **22,54 M**, réponses mélangées | 2 | **2,7730** |
+| **22,54 M**, réponses mélangées | 3 | **2,7109** |
 
-Moyennes : **aligné 2,6915**, **mélangé 2,7393** — l'**aligné gagne les 3 graines** et bat le
-contrôle de **0,0478 bit/octet** (**1,74 %**). À capacité égale de données, la distillation est
-**établie au-dessus du seuil**, et **pas à 4,04 M**. Le passage de 4,04 M à 22,54 M est le facteur
-qui change le signe ; ce n'est pas la quantité de données (310 exemples dans les deux cas).
+Le facteur qui change le signe est la **capacité**, pas la quantité de données (310 exemples dans
+les deux cas). À 4,04 M, même la perte masquée ne renverse pas le contrôle ; à 10,70 M, le
+transfert existe. Le seuil exact (entre 4,04 et 10,70) reste à localiser.
+
+### La perte masquée : le prompt n'est pas le levier à 4,04 M
+
+Le prompt est **lu** mais sa perte est **masquée** (`tools/llm/masque.py`,
+`tools/llm/entrainer_masque.py`) : seule la réponse compte. Même corpus, même découpage, une graine.
+
+| modèle | aligné | mélangé (contrôle) | écart | lecture |
+|---|---:|---:|---:|---|
+| **4,04 M** | 2,7708 | **2,7549** | −0,0159 | **contrôle meilleur** : le masque ne sauve pas le petit modèle |
+| **10,70 M** | 2,8507 | 2,8486 | −0,0021 | **égal**, et les deux sont **au-dessus** du trainer (2,72) — banc non calibré |
+
+À 4,04 M, la perte masquée **ne change pas la conclusion** : le contrôle reste meilleur. À 10,70 M,
+le banc masqué n'est pas au niveau du trainer (pas de warmup ni de clipping, boucle séparée) : il
+est **non concluant**, pas un négatif du principe. La prochaine étape est de calibrer ce banc avant
+de conclure sur le masque.
 
 Le **modèle natif** a aussi été essayé sur le corpus public (`data/corpus_en.txt`, 20 pas) :
 **4,04 M paramètres**, **`cuda`**, val **4,4150** bits/octet. Ce n'est pas une mesure de qualité,
@@ -145,13 +169,16 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 - **plancher chrF** : source→référence, **15,64** à l'échelle ; sans lui, 82,82 ne veut rien dire ;
 - **permutation des réponses d'entraînement** : mêmes prompts, réponses mélangées, validation
-  **alignée**, trois graines ; à **4,04 M**, le contrôle **bat** l'aligné de 0,72 % ; à **22,54 M**,
-  l'aligné **gagne 3/3** et bat le contrôle de 1,74 % ;
+  **alignée**, trois graines ; à **4,04 M**, le contrôle **bat** l'aligné de 0,72 % ; à **10,70 M**,
+  **16,02 M** et **22,54 M**, l'aligné **gagne 3/3** (1,65 %, 1,92 %, 1,74 %) ;
+- **perte masquée** : à 4,04 M, le contrôle bat encore l'aligné (2,7549 contre 2,7708) ; à 10,70 M,
+  le banc masqué n'est pas calibré (2,85 contre 2,72 au trainer) — **non concluant**, pas un
+  négatif du masque ;
 - **correction d'un premier contrôle** : la première version mélangeait aussi la **validation** ;
   les deux pertes étaient **identiques**, ce qui l'a révélé. Corrigé, le contrôle garde la
   validation alignée et discrimine ;
 - **dry-run** : l'adaptateur, le corpus professeur et la distillation ont un mode hors réseau ;
-  `porte-deepseek` est **verte hors réseau** (16 tests, dry-run, 60 et 310 prompts, distillation ignorée) ;
+  `porte-deepseek` est **verte hors réseau** (**20 tests**, dry-run, 60 et 310 prompts, distillation ignorée) ;
 - **secrets** : la clé n'est ni dans le dépôt, ni dans le cache, ni dans les erreurs ; elle est lue
   par `DEEPSEEK_API_KEY` / `DSH_API_KEY` ou un fichier `0600` (`*_KEY_FILE`).
 
@@ -163,7 +190,8 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 - **chrF n'est pas un juge** : il mesure des n-grammes de caractères, pas le sens ; une paraphrase
   correcte peut baisser, une traduction littérale peut monter.
 - **310 exemples de distillation** : le corpus reste petit ; 39 exemples de validation ; le seuil
-  de capacité est mesuré entre **4,04 M** (négatif) et **22,54 M** (positif), pas au-delà.
+  de capacité est mesuré entre **4,04 M** (négatif) et **10,70 M** (positif), pas au-delà ; le
+  point exact n'est pas localisé.
 - **La perte inclut les prompts** : le modèle apprend surtout la **distribution des réponses** ;
   c'est peut-être pourquoi le contrôle mélangé fait aussi bien. Une perte **masquée sur les
   prompts** est la prochaine expérience, avec un modèle plus grand.
@@ -174,8 +202,8 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 ## 5. Ce que ça n'autorise pas à dire
 
 - que DeepSeek **remplace** les mesures d'états internes : il n'a ni poids ni activations ;
-- que la distillation **marche** en général : elle est **négative à 4,04 M** et **positive à 22,54 M**
-  sur ce corpus ; le seuil est mesuré, pas expliqué ;
+- que la distillation **marche** en général : elle est **négative à 4,04 M**, **positive à 10,70 M,
+  16,02 M et 22,54 M** sur ce corpus ; le seuil est mesuré, pas expliqué ;
 - que la qualité de traduction est **uniforme** : hindi et swahili sont bas ;
 - que Qwen est **inutile** : il reste une **référence blanche** pour les portes historiques, tant
   que `route` ne les reprend pas.
@@ -187,9 +215,10 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
   [`prompts_publics_300.jsonl`](../tools/llm/prompts_publics_300.jsonl) (310), générés par
   [`prompts_publics.py`](../tools/llm/prompts_publics.py) ;
 - corpus professeur : [`enseignant.py`](../tools/llm/enseignant.py) ; distillation :
-  [`distillation.py`](../tools/llm/distillation.py) ; mesure :
-  [`mesure.py`](../tools/llm/mesure.py) ;
-- tests : [`tools/llm/tests/`](../tools/llm/tests/) (**16 tests**) ;
+  [`distillation.py`](../tools/llm/distillation.py) ; perte masquée :
+  [`masque.py`](../tools/llm/masque.py), [`entrainer_masque.py`](../tools/llm/entrainer_masque.py) ;
+  mesure : [`mesure.py`](../tools/llm/mesure.py) ;
+- tests : [`tools/llm/tests/`](../tools/llm/tests/) (**20 tests**) ;
 - porte : [`tools/porte-deepseek.sh`](../tools/porte-deepseek.sh) ;
 - JSON : [`deepseek-mesures.json`](deepseek-mesures.json),
   [`deepseek-mesures-300.json`](deepseek-mesures-300.json),
@@ -202,6 +231,6 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 **B9** — le banc externe et l'élève natif ; voir [`docs/roadmap.md`](../docs/roadmap.md).
 B9.1 (adaptateur et porte) et B9.2 (corpus professeur, 310 prompts) sont mesurés ; B9.3
-(distillation) est **négatif à 4,04 M** et **positif à 22,54 M** (3/3 graines, 1,74 %) ; B9.4
-(répartition GPU/CPU) est **décidé** : DeepSeek pour le langage, GPU pour `route` et les mesures
-blanches.
+(distillation) est **négatif à 4,04 M**, **positif à 10,70 M, 16,02 M et 22,54 M** (3/3 graines,
+1,65–1,92 %) et la perte masquée est **non concluante** ; B9.4 (répartition GPU/CPU) est **décidé** :
+DeepSeek pour le langage, GPU pour `route` et les mesures blanches.

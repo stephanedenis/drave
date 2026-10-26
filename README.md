@@ -276,7 +276,7 @@ paires invariantes, **0 collision**, perft échecs/dames, **3/3** mats, politiqu
 invariante **5/5**), les **langues et les maîtres** (B7/B8 : **71 langues**, **35 concepts**, **449/449** au niveau 4,
 **11/11** paires, livre **10/10**, go 9×9 **10/10** contre **3/10**, cartes **44,7 %** contre **51,0 %** — négatif
 nommé), le **banc externe** (B9 : DeepSeek **310/310**, chrF **82,82** contre **15,64** de plancher ; `route`
-**22,54 M** sur **cuda** ; distillation native **établie à 22,54 M** (3/3 graines, 1,74 %), **pas à 4,04 M**).
+**cuda** ; distillation native avec un **seuil entre 4,04 et 10,70 M** (négative à 4,04 M, positive 3/3 à 10,70/16,02/22,54 M), perte masquée non concluante).
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.

@@ -38,10 +38,11 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
   (98,86), le français (96,58), l'italien (92,87) et l'allemand (90,50) sont au-dessus de 90 ; le
   **hindi (58,45)** et le **swahili (54,83)** sont les négatifs nommés. Le pilote à 60 prompts
   surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait foi.
-- **Élève natif** : `route` 4,04 M puis **22,54 M** paramètres, `cuda`, 310 exemples (271/39),
+- **Élève natif** : `route` de **4,04 M** à **22,54 M** paramètres, `cuda`, 310 exemples (271/39),
   500 pas, trois graines. À 4,04 M, le contrôle mélangé bat l'aligné (**2,7510** contre **2,7709**) ;
-  à **22,54 M**, l'**aligné gagne 3/3** (**2,6915** contre **2,7393**, **1,74 %**). La distillation
-  a un **seuil de capacité** : établie au-dessus, pas en dessous.
+  à **10,70 M**, l'aligné gagne 3/3 (**2,7166** contre 2,7622), et **16,02 M** / **22,54 M**
+  confirment (1,92 % / 1,74 %). La distillation a un **seuil entre 4,04 M et 10,70 M**. La **perte
+  masquée** ne sauve pas le 4,04 M ; son banc à 10,70 M n'est pas calibré — **non concluant**.
 
 ## Les secrets et le cache
 
@@ -54,8 +55,8 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 
 ## Ce qui reste ouvert
 
-- **le seuil de capacité** : 4,04 M est négatif, 22,54 M positif ; il faut localiser le seuil
-  (dim 256, 6 couches) et tester une perte masquée sur les prompts ;
+- **le seuil de capacité** : entre 4,04 M et 10,70 M ; il faut le resserrer (dim 224/6, 240/6) et
+  **calibrer le banc masqué** avant de conclure sur le masque ;
 - **la qualité par langue** : hindi et swahili sont bas ; un juge humain ou un chrF par famille ne
   remplacent pas cinq articles ;
 - **le modèle** : `deepseek-flash` peut changer ; la mesure est datée ;
@@ -70,7 +71,7 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 | [`tools/llm/enseignant.py`](../tools/llm/enseignant.py) | corpus professeur |
 | [`tools/llm/mesure.py`](../tools/llm/mesure.py) | chrF, plancher, tokens, latence |
 | [`tools/llm/distillation.py`](../tools/llm/distillation.py) | train/val par identifiant, contrôle par permutation |
-| [`tools/porte-deepseek.sh`](../tools/porte-deepseek.sh) | la porte hors réseau (16 tests, dry-run) |
+| [`tools/porte-deepseek.sh`](../tools/porte-deepseek.sh) | la porte hors réseau (20 tests, dry-run) |
 
 **Vocabulaire** : le **professeur** est l'API ; l'**élève** est `route` ; la **distillation** est au
 niveau des séquences, puisque l'API ne donne pas les logits. Voir la roadmap **B9**.

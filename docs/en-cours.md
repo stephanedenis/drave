@@ -59,11 +59,11 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    français 96,58, italien 92,87, allemand 90,50 ; **hindi 58,45**, **swahili 54,83**). Le pilote à
    60 prompts surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait
    foi. Côté natif, `route` tourne sur **`cuda`** ; la distillation à **310 exemples** (271/39, 500 pas,
-   3 graines) a un **seuil de capacité** : à **4,04 M**, le contrôle mélangé bat l'aligné (**2,7510**
-   contre **2,7709**) ; à **22,54 M** (dim 384, 8 couches), l'**aligné gagne 3/3**, **2,6915** contre
-   **2,7393** bits/octet (**1,74 %**). La distillation est **établie au-dessus du seuil**, pas en
-   dessous ; le seuil exact (dim 256, 6 couches) et une **perte masquée sur les prompts** sont les
-   prochaines mesures.
+   3 graines) a un **seuil de capacité entre 4,04 M et 10,70 M** : à **4,04 M**, le contrôle mélangé
+   bat l'aligné (**2,7510** contre **2,7709**) ; à **10,70 M**, l'**aligné gagne 3/3** (**2,7166**
+   contre **2,7622**, 1,65 %) ; **16,02 M** (1,92 %) et **22,54 M** (1,74 %) confirment. La **perte
+   masquée** ne sauve pas le 4,04 M et son banc à 10,70 M n'est pas calibré (2,85 contre 2,72) :
+   **non concluant**. La prochaine action est de resserrer le seuil et de calibrer ce banc.
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
@@ -79,7 +79,8 @@ mesurés — **71 langues**, **449/449**, **11/11**, permutation **12/275**, not
 maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent au go 9×9 (**10/10** contre
 **3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**) ; **B9**
 sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,64** ; la distillation native a
-un **seuil de capacité** — négative à **4,04 M**, positive à **22,54 M** (3/3 graines, 1,74 %).
+un **seuil de capacité entre 4,04 et 10,70 M** — négative à **4,04 M**, positive **3/3** à **10,70 M** (1,65 %),
+**16,02 M** (1,92 %) et **22,54 M** (1,74 %) ; la perte masquée est **non concluante**.
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -87,7 +88,7 @@ un **seuil de capacité** — négative à **4,04 M**, positive à **22,54 M** (
 |---|---:|
 | mesures de la fiche principale | **173** |
 | portes (passe complète) | **48** — 46 vertes, 2 structurels (26/10 09 h 40 ; `porte-jeux` étendue, `porte-homeostasie` verte) |
-| porte-deepseek | **verte hors réseau** (16 tests, dry-run) ; 49e porte au prochain passage |
+| porte-deepseek | **verte hors réseau** (20 tests, dry-run) ; 49e porte au prochain passage |
 | fiches / JSON de résultats | **164** / **236** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |
@@ -95,7 +96,7 @@ un **seuil de capacité** — négative à **4,04 M**, positive à **22,54 M** (
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
 | la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
 | les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
-| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif 22,54 M cuda ; distillation établie à 22,54 M (3/3, 1,74 %), pas à 4,04 M** |
+| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif cuda ; seuil entre 4,04 et 10,70 M ; positif 3/3 à 10,70/16,02/22,54 M ; masque non concluant** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).
