@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 13 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 14 h 30 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -90,8 +90,8 @@ calibrée est **quasi égale** à 4,04 M (0,02 %) et 10,70 M (0,15 %).
 | | |
 |---|---:|
 | mesures de la fiche principale | **173** |
-| portes (passe complète) | **48** — 46 vertes, 2 structurels (26/10 09 h 40 ; `porte-jeux` étendue, `porte-homeostasie` verte) |
-| porte-deepseek | **verte hors réseau** (20 tests, dry-run) ; 49e porte au prochain passage |
+| portes (passe complète) | **49** — 47 vertes, 2 structurels (26/10 14 h 30 ; `porte-deepseek` incluse, `porte-jeux` verte) |
+| porte-deepseek | **verte hors réseau** (20 tests, dry-run), **incluse dans la passe** |
 | fiches / JSON de résultats | **164** / **236** |
 | la sonde, au pic du 1,5 B | **0,810** (DACCORD l22) · **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** (l36) — il plafonne à 0,87 |

@@ -11,8 +11,8 @@ bash tools/toutes-les-portes.sh
 Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
 tableau, pas la première tuile), et borne **chaque** porte à `DELAI=1800` s. Durée observée d'une passe complète :
 **1 h 30 – 2 h** sur Hauru (**49 portes** ; certaines entraînent de petits modèles, d'autres utilisent les GPU ;
-`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à 48 portes (26/10) a donné
-**46 vertes, 2 structurelles** ; `porte-deepseek` entre dans la suivante.
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **49 portes** (26/10 14 h 30) a donné
+**47 vertes, 2 structurelles** (`porte-indice`, `porte-melange`) ; `porte-deepseek` est **incluse** et verte.
 
 ## Où est le registre (et comment lire le verdict)
 

@@ -9,6 +9,18 @@
 > Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
 > expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
 >
+> **Passe du 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 34 min**) — la passe de clôture
+> de **B9**, avec `porte-deepseek` **incluse** (1 s, **verte** : 20 tests, dry-run, 60 et 310 prompts) et
+> `porte-jeux` **verte** (106 s : 449/449 au niveau 4, 11/11 paires, permutation 12/275, notation 5 112/5 112,
+> livre 10/10, go 9×9 10/10 contre 3/10, dames 0 défaite, cartes 44,7 % contre 51,0 %). Les **deux rouges**
+> sont les **structurelles connues** : `porte-indice` (861 s) et `porte-melange` (107 s), avec les mêmes
+> diagnostics (indice extérieur à 482 jetons, écart nul ou négatif ; état de A qui ne rend pas le code de A).
+> `porte-homeostasie` est **verte** (506 s). Les références sont stables : `porte-flux` **60,8135**,
+> `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 →
+> 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**,
+> `porte-vision` **559 s**, `porte-poids-creux` **319 s**, `porte-prechargement` **187 s**. Journaux :
+> `/tmp/portes-b9-1026-12h55`.
+>
 > **Passe du 2026-10-26 à 09 h 40** (**48 portes, 46 vertes, 2 rouges**, **1 h 40 min**) — la passe de clôture
 > de **B7/B8**, avec la **`porte-jeux` étendue** aux **71 langues** et aux **maîtres** (103 s, **verte** :
 > 449/449 au niveau 4, 11/11 paires, permutation 12/275, livre 10/10, go 9×9 10/10 contre 3/10). Les **deux

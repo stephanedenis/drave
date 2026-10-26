@@ -75,7 +75,7 @@
 - **[l'état du moment](en-cours.md)** — la page qu'on lit si on ne lit qu'une page ;
 - **[le journal du jour](../journal/2026-10-24.md)** et [l'index du journal](../journal/README.md) ;
 - **[les fiches les plus récentes](../reports/README.md)** — l'index des 164 fiches ;
-- **[la dernière passe de portes](references-non-regression.md)** — 48 portes, 46 vertes (la passe du 26/10 09 h 40, `porte-jeux` étendue aux langues et aux maîtres).
+- **[la dernière passe de portes](references-non-regression.md)** — **49 portes, 47 vertes** (la passe du 26/10 14 h 30, `porte-deepseek` incluse, `porte-jeux` étendue).
 
 ## Les schémas (les six SVG de la synthèse)
 
