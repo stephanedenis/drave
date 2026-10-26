@@ -40,10 +40,10 @@ le langage (traduction, jugements, génération, évaluation) passe par l'API **
   [`reports/rapport-deepseek.md`](../../reports/rapport-deepseek.md).
 
 **Ce que la mesure dit** : DeepSeek `deepseek-flash` sert **310/310** prompts, chrF **82,82** contre
-**15,64** de plancher ; la distillation native à **310 exemples** n'est **pas établie** — le
-**contrôle mélangé bat l'aligné** (2,7510 contre 2,7709 bits/octet, 2 graines sur 3). La prochaine
-action est un **modèle plus grand** et une **perte masquée sur les prompts**, pas un changement de
-répartition.
+**15,64** de plancher ; la distillation native a un **seuil de capacité** : négative à **4,04 M** (contrôle 2,7510 contre
+aligné 2,7709), positive à **22,54 M** (aligné 2,6915 contre contrôle 2,7393, 3/3 graines). La
+prochaine action est de **localiser le seuil** et de tester une **perte masquée sur les prompts**,
+pas de changer la répartition.
 
 ## La philosophie carpe diem
 

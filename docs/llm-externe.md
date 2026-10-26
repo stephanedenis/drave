@@ -38,10 +38,10 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
   (98,86), le français (96,58), l'italien (92,87) et l'allemand (90,50) sont au-dessus de 90 ; le
   **hindi (58,45)** et le **swahili (54,83)** sont les négatifs nommés. Le pilote à 60 prompts
   surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait foi.
-- **Élève natif** : `route` 4,04 M paramètres, `cuda`, 310 exemples (271/39), 500 pas, trois
-  graines ; aligné **2,7709** bits/octet contre mélangé **2,7510** — le **contrôle bat l'aligné**
-  (0,72 %, 2 graines sur 3). La distillation **n'est pas établie** ; c'est un pipeline qui tourne,
-  pas un transfert démontré.
+- **Élève natif** : `route` 4,04 M puis **22,54 M** paramètres, `cuda`, 310 exemples (271/39),
+  500 pas, trois graines. À 4,04 M, le contrôle mélangé bat l'aligné (**2,7510** contre **2,7709**) ;
+  à **22,54 M**, l'**aligné gagne 3/3** (**2,6915** contre **2,7393**, **1,74 %**). La distillation
+  a un **seuil de capacité** : établie au-dessus, pas en dessous.
 
 ## Les secrets et le cache
 
@@ -54,8 +54,8 @@ locales. DeepSeek est un **professeur** et un **juge**, pas un banc d'états.
 
 ## Ce qui reste ouvert
 
-- **la distillation à l'échelle** : 310 exemples ne suffisent pas ; le contrôle mélangé bat
-  l'aligné ; il faut un modèle plus grand et une perte masquée sur les prompts ;
+- **le seuil de capacité** : 4,04 M est négatif, 22,54 M positif ; il faut localiser le seuil
+  (dim 256, 6 couches) et tester une perte masquée sur les prompts ;
 - **la qualité par langue** : hindi et swahili sont bas ; un juge humain ou un chrF par famille ne
   remplacent pas cinq articles ;
 - **le modèle** : `deepseek-flash` peut changer ; la mesure est datée ;

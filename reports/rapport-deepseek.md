@@ -113,10 +113,29 @@ Moyennes : **aligné 3,8191**, **mélangé 3,8361** — **0,017 bit/octet** (0,4
 | réponses **mélangées** (contrôle) | 3 | **2,7751** |
 
 Moyennes : **aligné 2,7709**, **mélangé 2,7510** — le **contrôle est meilleur** de **0,0199
-bit/octet** (0,72 %), et il gagne **2 graines sur 3**. Le signe du pilote **s'inverse** avec
-l'échelle : la distillation par séquences, avec un modèle byte-level de 4,04 M et une perte qui
-inclut les prompts, **n'est pas établie**. Le contrôle par permutation fait exactement son travail :
-il empêche de conclure sur une graine favorable.
+bit/octet** (0,72 %), et il gagne **2 graines sur 3**. À **4,04 M**, la distillation par séquences
+**n'est pas établie**. Le contrôle par permutation fait exactement son travail : il empêche de
+conclure sur une graine favorable.
+
+### Le seuil de capacité : 22,54 M
+
+Même corpus, même découpage, même perte ; le modèle passe à **dim 384, 8 couches, 8 experts, k = 2**
+— **22,54 M paramètres**, **1,18 M** poids lus par jeton et par couche, **2,95 M** stockés,
+**`cuda`**, 500 pas en **52–56 s**.
+
+| entraînement | graine | val (bits/octet) |
+|---|---:|---:|
+| réponses **alignées** | 1 | **2,7234** |
+| réponses **alignées** | 2 | **2,7030** |
+| réponses **alignées** | 3 | **2,6482** |
+| réponses **mélangées** (contrôle) | 1 | **2,7340** |
+| réponses **mélangées** (contrôle) | 2 | **2,7730** |
+| réponses **mélangées** (contrôle) | 3 | **2,7109** |
+
+Moyennes : **aligné 2,6915**, **mélangé 2,7393** — l'**aligné gagne les 3 graines** et bat le
+contrôle de **0,0478 bit/octet** (**1,74 %**). À capacité égale de données, la distillation est
+**établie au-dessus du seuil**, et **pas à 4,04 M**. Le passage de 4,04 M à 22,54 M est le facteur
+qui change le signe ; ce n'est pas la quantité de données (310 exemples dans les deux cas).
 
 Le **modèle natif** a aussi été essayé sur le corpus public (`data/corpus_en.txt`, 20 pas) :
 **4,04 M paramètres**, **`cuda`**, val **4,4150** bits/octet. Ce n'est pas une mesure de qualité,
@@ -126,7 +145,8 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 - **plancher chrF** : source→référence, **15,64** à l'échelle ; sans lui, 82,82 ne veut rien dire ;
 - **permutation des réponses d'entraînement** : mêmes prompts, réponses mélangées, validation
-  **alignée**, trois graines ; à 310 exemples, le contrôle **bat** l'aligné de 0,72 % ;
+  **alignée**, trois graines ; à **4,04 M**, le contrôle **bat** l'aligné de 0,72 % ; à **22,54 M**,
+  l'aligné **gagne 3/3** et bat le contrôle de 1,74 % ;
 - **correction d'un premier contrôle** : la première version mélangeait aussi la **validation** ;
   les deux pertes étaient **identiques**, ce qui l'a révélé. Corrigé, le contrôle garde la
   validation alignée et discrimine ;
@@ -142,8 +162,8 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
   général ; le hindi et le swahili restent bas.
 - **chrF n'est pas un juge** : il mesure des n-grammes de caractères, pas le sens ; une paraphrase
   correcte peut baisser, une traduction littérale peut monter.
-- **310 exemples de distillation** : le corpus reste petit ; 39 exemples de validation ; le modèle
-  `route` fait **4,04 M** paramètres.
+- **310 exemples de distillation** : le corpus reste petit ; 39 exemples de validation ; le seuil
+  de capacité est mesuré entre **4,04 M** (négatif) et **22,54 M** (positif), pas au-delà.
 - **La perte inclut les prompts** : le modèle apprend surtout la **distribution des réponses** ;
   c'est peut-être pourquoi le contrôle mélangé fait aussi bien. Une perte **masquée sur les
   prompts** est la prochaine expérience, avec un modèle plus grand.
@@ -154,7 +174,8 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 ## 5. Ce que ça n'autorise pas à dire
 
 - que DeepSeek **remplace** les mesures d'états internes : il n'a ni poids ni activations ;
-- que la distillation **marche** : à 60 exemples elle est mitigée, à 310 le contrôle la bat ;
+- que la distillation **marche** en général : elle est **négative à 4,04 M** et **positive à 22,54 M**
+  sur ce corpus ; le seuil est mesuré, pas expliqué ;
 - que la qualité de traduction est **uniforme** : hindi et swahili sont bas ;
 - que Qwen est **inutile** : il reste une **référence blanche** pour les portes historiques, tant
   que `route` ne les reprend pas.
@@ -181,5 +202,6 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 **B9** — le banc externe et l'élève natif ; voir [`docs/roadmap.md`](../docs/roadmap.md).
 B9.1 (adaptateur et porte) et B9.2 (corpus professeur, 310 prompts) sont mesurés ; B9.3
-(distillation) est **négatif** aux deux échelles (le contrôle bat l'aligné à 310) ; B9.4 (répartition
-GPU/CPU) est **décidé** : DeepSeek pour le langage, GPU pour `route` et les mesures blanches.
+(distillation) est **négatif à 4,04 M** et **positif à 22,54 M** (3/3 graines, 1,74 %) ; B9.4
+(répartition GPU/CPU) est **décidé** : DeepSeek pour le langage, GPU pour `route` et les mesures
+blanches.

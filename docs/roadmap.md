@@ -274,20 +274,21 @@ partir des sorties. Concept : [`docs/llm-externe.md`](llm-externe.md) ; fiche :
 |---|---|---|---|
 | B9.1 | **L'adaptateur et la porte** : API compatible OpenAI, cache, dry-run, clé par fichier | ✅ mesuré | **16 tests** hors réseau ; `porte-deepseek` **verte** ; appel live de contrôle : **16 jetons**, **0,868 s** |
 | B9.2 | **Le corpus professeur** : 310 prompts publics (30 articles UDHR × 10 langues, 10 jeux) | ✅ mesuré | **310/310** réponses de `deepseek-flash` ; **34 112** tokens d'entrée, **32 436** de sortie, **511,1 s** ; chrF **82,82** contre un **plancher 15,64** (le pilote à 60 surestimait l'allemand et le chinois) |
-| B9.3 | **La distillation** : `route` sur GPU, contrôle par permutation des réponses | ⏳ **négatif aux deux échelles** | 310 exemples (271/39), 500 pas, 3 graines : aligné **2,7709** contre mélangé **2,7510** bits/octet — le **contrôle bat l'aligné** (**0,72 %**, 2 graines sur 3) ; au pilote 60, l'écart inverse était de 0,44 % — **pas d'effet établi** |
-| B9.4 | **La répartition** : DeepSeek pour le langage, GPU pour le natif | ✅ décidé | `route` **4,04 M** paramètres sur **`cuda`** (20 pas, val 4,4150 ; 50 pas sur le corpus professeur, 3–4 s) ; Qwen 0.5B ne reste que **référence blanche** |
+| B9.3 | **La distillation** : `route` sur GPU, contrôle par permutation des réponses | ✅ **mesuré — seuil de capacité** | 310 exemples, 500 pas, 3 graines : à **4,04 M**, le contrôle bat l'aligné (**2,7510** contre **2,7709**) ; à **22,54 M** (dim 384, 8 couches), l'**aligné gagne 3/3**, **2,6915** contre **2,7393** (**1,74 %**) — la distillation est **établie au-dessus du seuil**, pas en dessous |
+| B9.4 | **La répartition** : DeepSeek pour le langage, GPU pour le natif | ✅ décidé | `route` **4,04 M** et **22,54 M** sur **`cuda`** ; le grand modèle fait **1,18 M** poids lus/jeton/couche, 500 pas en **52–56 s** ; Qwen 0.5B ne reste que **référence blanche** |
 
-**Prochaine action** : **un modèle plus grand** et une **perte masquée sur les prompts** (le
-byte-level 4,04 M apprend surtout la distribution des réponses ; c'est peut-être pourquoi le
-contrôle mélangé fait aussi bien), puis **plus de données**. L'échelle 310 est faite ; elle ne
-change pas le signe. Le contrôle par permutation et le plancher chrF sont les garde-fous. Aucune
-ligne n'est bloquée : la clé est dans l'environnement, les GPU sont libres.
+**Prochaine action** : **localiser le seuil** entre 4,04 M et 22,54 M (dim 256, 6 couches), puis
+**une perte masquée sur les prompts** et **plus de données**. Le signe change avec la **capacité**,
+pas avec la quantité de données (310 exemples dans les deux cas) ; c'est le résultat à expliquer.
+Le contrôle par permutation et le plancher chrF sont les garde-fous. Aucune ligne n'est bloquée :
+la clé est dans l'environnement, les GPU sont libres.
 
 **Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
 proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
-**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif **n'est pas établie** :
-à 310 exemples, le **contrôle mélangé bat l'aligné** (2,7510 contre 2,7709). Le pipeline tourne,
-le transfert reste à obtenir avec un modèle plus grand et une perte masquée.
+**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a un **seuil de capacité** :
+**négative à 4,04 M** (2,7510 mélangé contre 2,7709 aligné), **positive à 22,54 M** (2,6915 aligné
+contre 2,7393 mélangé, **3/3 graines**, **1,74 %**). Le transfert existe, mais il demande de la
+capacité ; le seuil exact et la perte masquée sont les prochaines mesures.
 
 ---
 

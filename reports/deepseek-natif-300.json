@@ -25,9 +25,58 @@
   "pas": 500,
   "eval_tous": 250
  },
- "aligne": [2.7690, 2.7370, 2.8066],
- "melange": [2.7110, 2.7669, 2.7751],
- "moyennes": {"aligne": 2.7709, "melange": 2.7510, "ecart": 0.0199,
-              "unite": "bits/octet", "signe": "melange meilleur sur 2 graines sur 3"},
- "conclusion": "aucun effet de distillation etabli : le controle melange est meilleur en moyenne (2,7510 contre 2,7709 bits/octet, 0,72 %), et sur 2 graines sur 3"
+ "aligne": [
+  2.769,
+  2.737,
+  2.8066
+ ],
+ "melange": [
+  2.711,
+  2.7669,
+  2.7751
+ ],
+ "moyennes": {
+  "aligne": 2.7709,
+  "melange": 2.751,
+  "ecart": 0.0199,
+  "unite": "bits/octet",
+  "signe": "melange meilleur sur 2 graines sur 3"
+ },
+ "conclusion": "seuil de capacite : a 4,04 M le controle melange bat l'aligne (2,7510 contre 2,7709) ; a 22,54 M l'aligne bat le controle (2,6915 contre 2,7393, 3/3 graines)",
+ "modele_384": {
+  "parametres_approx": 22540000,
+  "poids_lus_par_jeton_couche": 1180000,
+  "poids_stockes": 2950000,
+  "config": {
+   "famille": "route",
+   "dim": 384,
+   "couches": 8,
+   "tetes": 8,
+   "cache": 512,
+   "experts": 8,
+   "k": 2,
+   "seq": 128,
+   "lot": 8,
+   "pas": 500,
+   "eval_tous": 250
+  },
+  "aligne": [
+   2.7234,
+   2.703,
+   2.6482
+  ],
+  "melange": [
+   2.734,
+   2.773,
+   2.7109
+  ],
+  "moyennes": {
+   "aligne": 2.6915,
+   "melange": 2.7393,
+   "ecart": 0.0478,
+   "unite": "bits/octet",
+   "signe": "aligne meilleur sur 3 graines sur 3"
+  },
+  "conclusion": "effet de distillation etabli a 22,54 M : aligne 2,6915 contre melange 2,7393 (1,74 %), 3/3 graines"
+ }
 }

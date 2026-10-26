@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 11 h 55 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 12 h 00 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste** aux trois horizons. Les
 > détails — chaque chiffre, chaque fiche — sont dans [`reports/`](../reports/), la théorie dans
@@ -58,12 +58,12 @@ Voir [`vision.md`](vision.md) et [`mission.md`](agent/mission.md).
    sortie, **511,1 s** ; chrF **82,82** contre un **plancher 15,64** (espagnol 99,28, russe 98,86,
    français 96,58, italien 92,87, allemand 90,50 ; **hindi 58,45**, **swahili 54,83**). Le pilote à
    60 prompts surestimait l'allemand (99,42) et le chinois (87,70) : c'est le 30 articles qui fait
-   foi. Côté natif, `route` **4,04 M** paramètres tourne sur **`cuda`** ; la distillation à **310
-   exemples** (271/39, 500 pas, 3 graines) donne **aligné 2,7709** contre **mélangé 2,7510**
-   bits/octet : le **contrôle bat l'aligné** (0,72 %, 2 graines sur 3), donc **aucun effet établi**.
-   Au pilote (60 exemples), l'écart était inverse et minuscule (3,8191 contre 3,8361) : le signe
-   s'inverse avec l'échelle. La licence autorise la distillation ; la prochaine expérience est un
-   **modèle plus grand** et une **perte masquée sur les prompts**.
+   foi. Côté natif, `route` tourne sur **`cuda`** ; la distillation à **310 exemples** (271/39, 500 pas,
+   3 graines) a un **seuil de capacité** : à **4,04 M**, le contrôle mélangé bat l'aligné (**2,7510**
+   contre **2,7709**) ; à **22,54 M** (dim 384, 8 couches), l'**aligné gagne 3/3**, **2,6915** contre
+   **2,7393** bits/octet (**1,74 %**). La distillation est **établie au-dessus du seuil**, pas en
+   dessous ; le seuil exact (dim 256, 6 couches) et une **perte masquée sur les prompts** sont les
+   prochaines mesures.
 
 **Ce que la journée a établi** : la **carte du raisonnement naturel** est close (trois courbes complètes, les pics
 tardifs, la sonde qui sature dès le 1,5 B) ; **B4** est close — l'état porte les opérations, il ne les calcule pas
@@ -78,8 +78,8 @@ au-dessus de la référence** (de 14,7 % à 100 %) ; **B5/B6** sont mesurés —
 mesurés — **71 langues**, **449/449**, **11/11**, permutation **12/275**, notation **5 112/5 112** ; les
 maîtres changent l'ouverture (**d4**), tiennent le livre (**10/10**), gagnent au go 9×9 (**10/10** contre
 **3/10**), ne perdent pas aux dames (**0 défaite**) et **perdent aux cartes** (**44,7 %** contre **51,0 %**) ; **B9**
-sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,64**, mais la distillation native
-**n'est pas établie** à 310 exemples (contrôle **2,7510** contre aligné **2,7709**).
+sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,64** ; la distillation native a
+un **seuil de capacité** — négative à **4,04 M**, positive à **22,54 M** (3/3 graines, 1,74 %).
 
 ## Où l'on en est (les chiffres qui comptent)
 
@@ -95,7 +95,7 @@ sort le langage des GPU : **DeepSeek** **310/310**, chrF **82,82** contre **15,6
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
 | la sémantique des jeux, 71 langues (B7) | **71 langues, 35 concepts, 449/449, 11/11** |
 | les principes des maîtres (B8) | **d4, livre 10/10, go 9×9 10/10, dames 0 défaite, cartes 44,7 % (négatif)** |
-| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif 4,04 M cuda ; distillation non établie (contrôle 2,7510 < aligné 2,7709)** |
+| le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; natif 22,54 M cuda ; distillation établie à 22,54 M (3/3, 1,74 %), pas à 4,04 M** |
 
 Le détail de la carte du raisonnement : [05](synthese/05-la-pensee-sans-verbaliser.md) et sa
 [synthèse](../reports/rapport-carte-raisonnement-naturel.md).
