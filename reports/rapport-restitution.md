@@ -1,55 +1,33 @@
-# Rapport — restitution du code (aller-retour RSN) et surface
+# B18 — restitution canonique : 528/528, mais pas un décodeur
 
-> **Objet.** Mesurer la **restitution du code** (nom historique : « restitution canonique ») : une RSN
-> correcte est rendue en surface canonique, puis relue ; la RSN relue doit être **identique**. C'est le
-> bloc classique, sans décodeur neuronal. La **surface originale** est mesurée à part : **33/79** (§ 3).
+> **Objet.** Le **miroir** de M1 : rendre un code typé en surface canonique et le relire. C'est le
+> codec, pas un décodeur neuronal ; B10 reste négatif.
 
-## 1. Résultats
+## Mesure
 
-Formats canoniques : `cellule` (morpion), `san` (échecs), `numerique` (dames), `gtp` (go), `carte` (cartes).
+| mesure | valeur |
+|---|---:|
+| items | **528** |
+| surfaces rendues | **528 / 528 = 100 %** |
+| relues sans perte | **528 / 528 = 100 %** |
+| échecs | **0** |
 
-| corpus | coups | rendus | aller-retour RSN exact | erreurs |
-|---|---:|---:|---:|---:|
-| **B5** | 79 | **79** | **79** | 0 |
-| **B7** | 449 | **449** | **449** | 0 |
+Le rendu utilise la **position RSN** du corpus réel (le SAN exige le contexte) ; la relecture
+reproduit le code exact. C'est une **involution du codec**, pas une génération de langage.
 
-**100 %** de rendu et **100 %** d'aller-retour sur les deux corpus. La surface canonique est **relue** en la
-même RSN : le contrat est stable, déterministe, reproductible.
+## Ce que ce n'est pas
 
-## 2. Ce que cela ne dit pas
+- Ce n'est **pas** le décodeur neuronal B10 (chrF 14,0/5,4 contre plancher 38,8).
+- Ce n'est **pas** une paraphrase ni une traduction : c'est la **forme canonique** du code.
+- La sortie est **déterministe** et **exacte** ; elle ne prouve pas la fidélité sémantique.
 
-- La **surface originale** n'est pas toujours reproduite : **33/79** formats B5 seulement. Le format de
-  sortie doit être **choisi** (canonique), pas deviné.
-- Le rendu est **par jeu** et **par format** ; ce n'est pas un traducteur de langues naturelles.
-- La **traduction sémantique** (surface → RSN → RSN cible) est exacte par construction ; la **traduction de
-  surface** en langue cible reste à faire.
+## Verdict
 
-## 3. Comparaison
+**M1 est un codec bidirectionnel exact** : 528/528 à l’aller et au retour. C'est le seul étage
+réellement solide du prototype. La génération libre reste un **négatif** (B10).
 
-| bloc | sens → texte | code exact | généralisation |
-|---|---|---:|---|
-| **codec canonique** | **79/79, 449/449** | **100 %** | corpus B5/B7 |
-| codec formats originaux | 33/79 B5 | — | corpus |
-| natif normalisé + contexte | — | 59,8 % | surfaces inconnues |
-| décodeur libre B10 | chrF 14,0 / 5,4 | — | négatif |
+## Fichiers
 
-## 4. Lecture
-
-Le **meilleur bloc de restitution** est le **codec canonique** : 100 % de rendu et d'aller-retour, sans
-réseau, sans échantillonnage, sans variabilité. Le natif reste nécessaire pour **lire des surfaces
-inconnues** (59,8 %), pas pour **rendre** une RSN déjà lue.
-
-C'est l'hybride demandé : **neuronal pour la surface inconnue**, **classique pour le contrat sémantique**.
-
-## 5. Contrôles
-
-- **Aller-retour** : la RSN relue est comparée à la RSN de départ, pas à la surface.
-- **Formats canoniques** déclarés par jeu ; aucune devinette.
-- **Corpus B5/B7** : 528 coups, aucun rejet.
-- **Déterminisme** : le codec n'échantillonne pas.
-
-## 6. Fichiers
-
-- Code : [`restitution.py`](../tools/semantique/restitution.py).
-- Mesures : [`restitution-mesures.json`](restitution-mesures.json).
-- Fiche B11 : [`rapport-universaux.md`](rapport-universaux.md).
+- Code : [`tools/cerveau/restitution.py`](../tools/cerveau/restitution.py).
+- Test : [`tools/cerveau/tests/test_restitution.py`](../tools/cerveau/tests/test_restitution.py).
+- JSON : [`restitution.json`](restitution.json).
