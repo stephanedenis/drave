@@ -1,0 +1,3 @@
+[submodule "tools/docwatch"]
+	path = tools/docwatch
+	url = https://github.com/stephanedenis/docwatch.git

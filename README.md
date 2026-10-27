@@ -241,10 +241,15 @@ La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md
 | **la méthode** et ses pièges | [`docs/synthese/06-comment-savoir.md`](docs/synthese/06-comment-savoir.md) |
 | le **récit daté** de la recherche | [`journal/`](journal/) |
 | les **instruments** (les expériences sont rejouables) | [`tools/`](tools/) |
+| le **serveur de documentation** (sous-module) | [`tools/docwatch/`](tools/docwatch/) · [dépôt public](https://github.com/stephanedenis/docwatch) |
 | les **corpus** | [`data/`](data/) (non versionné) |
 | le **moteur d'inférence** (Rust) | [`drave-core/`](drave-core/) |
 | l'**état des capacités du moteur** (archive) | [`docs/archive/etat-cerveau.md`](docs/archive/etat-cerveau.md) |
 | les **règles de travail** du dépôt | [`AGENTS.md`](AGENTS.md) |
+
+**Sous-module.** `tools/docwatch/` est un dépôt Git indépendant, épinglé comme sous-module. Après un clone :
+`git submodule update --init --recursive`. Les évolutions de l'outil se font dans ce dépôt, puis le pointeur est
+commité dans Drave.
 
 **Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un niveau
 d'architecture (étage 1 entrée-sortie, étage 2 pensée) ; une **unité de sens** est un élément de la représentation

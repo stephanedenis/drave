@@ -64,7 +64,29 @@ directement dans [`docs/en-cours.md`](en-cours.md) ✓ — c'est le document ép
 Le code reste dans l'historique Git et une sauvegarde hors dépôt ✓.
 
 **Ce qui change pour la suite** : toute évolution de la présentation (arbre, rendu, épingles, routes) va dans
-le dépôt public, pas dans `tools/`. Drave ne garde **aucun** serveur de documentation ✓.
+le dépôt public — il est épinglé dans **`tools/docwatch/`** comme sous-module ✓. Drave ne garde **aucun**
+serveur de documentation ✓.
+
+### Le code est un sous-module de Drave
+
+Après un clone :
+
+```bash
+git submodule update --init --recursive
+```
+
+Pour faire évoluer une fonctionnalité :
+
+```bash
+cd tools/docwatch
+pytest && ruff check .
+git add -A && git commit -m "…" && git push
+cd ../..
+git add tools/docwatch && git commit -m "DOCWATCH — …"   # pointeur du sous-module
+```
+
+Le service tourne sur une installation **éditable** du sous-module — `pipx install --editable tools/docwatch` —
+donc après une modification Python : `systemctl --user restart docwatch.service` ✓.
 
 ### Mesurer un modèle
 
