@@ -133,13 +133,24 @@ mêmes raisons. C'est un test d'intégration, pas un résultat sémantique.
 
 ## 11. Verdict
 
-- **M1** est le seul module **réellement solide** (codec exact, bus).
-- **M2** a une double dissociation **sur les surfaces vues** ; la généralisation est **55 % / 60 %**
-  sur les inédites, et `point`/`chemin` sont **sous la majorité**.
-- **M3, M4, M5, M6, M7, M8** sont **structurels ou négatifs** ; leurs anciens chiffres étaient
-  gonflés par les doublons, les constantes, les templates ou le plafond.
-- Le prototype n'est **pas** un cerveau du langage ; c'est un **échafaudage** dont seuls M1 et,
-  partiellement, M2 tiennent.
+- **M1** est **solide** : codec exact + bus, 528/528, 70,8 % sans contexte, 100 % canonique.
+- **M2** : double dissociation **sur les surfaces vues** ; généralisation **non démontrée** —
+  `de` 9,3–10,7/20, `vers` 11,7/20, `point` et `chemin` **sous la majorité**. Le split inédit
+  ne porte que 2–3 classes ; plus d'entraînement **dégrade** l'inédit.
+- **M3, M4** : **structurels** — tampon exact et lookup de 29 codes, pas de mémoire qui généralise.
+- **M5** : **sans contexte négatif** (action constante) ; **avec le plateau**, gain réel de
+  surprisal (`source` +0,626 nat, `cible` +0,411) et morpion à l'oracle. C'est un gain de
+  **contexte**, pas de sémantique du code.
+- **M6** : **sélecteur de tâche** à 94,95 % (base 50 %), mais **conflit 0** et **commutation 0** ;
+  la langue seule est à 88,6 %. Pas d'inhibition exécutive mesurée.
+- **M7** : **négatif** — 3,64 % = plafond 16/439 ; LFU +23 pts, aucun signal neuromodulateur.
+- **M8** : **marginal** — 96,48 % de champs, exact 65,1 %, baseline par jeu 96,10 %,
+  leave-one-code-out exact **0** ; coordonnées 0 % sur codes neufs.
+- **M9** : **réel** — `voies.py` action 98,6→12,3, de 91,8→2,05, déficits 86,3/89,7, sham 0.
+
+**Conclusion** : le prototype n'est **pas** un cerveau du langage. C'est un **échafaudage mesuré** :
+un module solide (M1), un gain de contexte (M5), une table de lésions réelle (M9), et des
+mécanismes structurels (M2, M3, M4, M6, M8) ou négatifs (M7) qui **nomment** ce qui manque.
 
 ## 12. Fichiers
 

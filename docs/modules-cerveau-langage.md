@@ -54,6 +54,10 @@ ne généralise pas, il retrouve les codes stockés.
 
 ## 4. Critique honnête (après stress)
 
+**Verdict final** : M1 solide ; M2 vu seulement ; M3/M4 structurels ; M5 négatif sans contexte,
+**positif avec contexte** ; M6 sélecteur ; M7 négatif ; M8 marginal ; M9 réel.
+
+
 > Les points ci-dessous remplacent les premières lectures ; voir
 > [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 
