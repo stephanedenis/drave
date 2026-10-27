@@ -360,6 +360,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B12.8 | **M8 sommeil** | ❌ **marginal** | 96,48 % de champs mais exact **65,1 %**, baseline par jeu **96,10 %** ; leave-one-code-out exact **0 % par construction**, non nuls 63,5 % ; coordonnées 0 % |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Pipeline M1 → M4 → M8** | ⚠️ **intégration** | **528/528**, 7 prototypes, 96,33 % de complétion — tautologique : M4 ne généralise pas, M8 est la marginale |
+| B15.1 | **M1 sur 66 langues** | ✅ **invariance** | **528/528** avec contexte, **70,8 %** sans ; **26/26** variantes et **15/15** interlangues invariantes ; contrôle permuté attendu **0 %**, donneur **90 %** ; 66/71 langues ; baseline surface **71,8 %** |
 | B13.1 | **Chaîne sémantique M1→M5→M6→M8** | ✅ **intégration** | M1 **528/528** ; M5 contexte **18,7 % vs 12,6 %** (surprise 2,423 vs 3,112) ; M6 **94,3 %** / switch **94,95 %** ; M8 **57,95 %** exact sur épisodes stockés (borne haute) ; M9 M1 **70,8 %** |
 | B12.11 | **Corrections** | ✅ **écrit** | [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md) : seul M1 est solide ; M2 vu seulement ; M3–M8 structurels/négatifs |
 
