@@ -68,7 +68,7 @@
   "base gelée 0 %",
   "déterminisme 1,000"
  ],
- "lecture": "codec 100 % ; natif synthétique 45,1 % (invariance 7,4 %) ; consistance 38,3 % (0) et adversaire 39,6 % (0) : deux négatifs ; le baseline reste le meilleur",
+ "lecture": "codec 100 % ; natif synthétique normalisé 55,7 % (invariance 37,0 %) contre 45,1 / 7,4 sans normalisation ; consistance/adversaire négatifs ; le codec reste le bloc fiable",
  "version": 1,
  "modele_natif_synth": {
   "train": 10556,
@@ -97,5 +97,20 @@
   "exact": 0.3958333333333333,
   "invariance_paires": 0.0,
   "lecture": "négatif"
+ },
+ "modele_natif_normalise": {
+  "train": 10556,
+  "test_reel": 528,
+  "exact": 0.5568181818181818,
+  "jeu": 0.9128787878787878,
+  "action": 0.9128787878787878,
+  "de": 0.9507575757575758,
+  "vers": 0.8787878787878788,
+  "carte": 0.6950757575757576,
+  "invariance_paires": 0.37037037037037035,
+  "determinisme": 1.0,
+  "rendu_classique": 0.3333333333333333,
+  "n_rendu": 21,
+  "meilleur_pas": 500
  }
 }

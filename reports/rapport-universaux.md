@@ -63,7 +63,31 @@ labels RSN exacts, puis on teste sur les **528 surfaces réelles** B5/B7.
 | déterminisme | **1,000** |
 | restitution (15 formats testés) | **40,0 %** |
 
-### 2.3 Cohérence inter-langues : deux négatifs
+### 2.3 Normalisation lexicale : le levier
+
+Les mots du lexique (jeux, pièces, rangs, enseignes, passe) sont remplacés par des **concepts canoniques**
+(`[jeu.morpion]`, `[echecs.piece.N]`, `[cartes.rang.13]`) avant le parseur ; les coordonnées et les nombres
+restent. L'enseigne de carte tranche l'ambiguïté « roi » (pièce d'échecs ou rang).
+
+Entraînement synthétique normalisé (10 556), test sur les **528 surfaces réelles normalisées**, aucune surface
+réelle à l'entraînement.
+
+| mesure | baseline synthétique | **normalisé** |
+|---|---:|---:|
+| code exact | 45,1 % | **55,7 %** |
+| `jeu` | 83,1 % | **91,3 %** |
+| `action` | 82,4 % | **91,3 %** |
+| `de` / `vers` | 90,0 / 89,4 % | **95,1 / 87,9 %** |
+| `carte` | 67,8 % | **69,5 %** |
+| **invariance par paire** | 7,4 % | **37,0 %** |
+| déterminisme | 1,000 | **1,000** |
+| restitution (formats testés) | 40,0 % | 33,3 % |
+
+**Lecture** : la normalisation est le **bon levier** — l'invariance passe de **7,4 % à 37,0 %** et le code
+exact de **45,1 % à 55,7 %**. Mais le codec reste à **100 %** : il reste des ambiguïtés de surface (symbole du
+morpion, chemin des dames, cartes), et le natif n'a pas encore la cohérence totale.
+
+### 2.4 Cohérence inter-langues : deux négatifs
 
 Deux régularisations ont été testées sur le même entraînement synthétique, avec le même test réel.
 

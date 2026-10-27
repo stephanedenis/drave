@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import dataclasses
 import json
 import pathlib
 import random
@@ -29,6 +30,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from jeux.codecs import codec  # noqa: E402
 from semantique.entrainer import pad  # noqa: E402
 from semantique.typed_corpus import decouper, items, lot, lot_par_paire  # noqa: E402
+from semantique.normalisation import normaliser  # noqa: E402
 from semantique.synth_corpus import items_synth  # noqa: E402
 from semantique.modele import RetourInverse  # noqa: E402
 from semantique.universaux import CHAMPS, code_rsn, index_code, rsn_depuis_code  # noqa: E402
@@ -126,6 +128,8 @@ def main() -> int:
     ap.add_argument("--par-paire", type=int, default=4)
     ap.add_argument("--adv-langue", type=float, default=0.0,
                     help="poids de l'adversaire de langue (gradient inversé)")
+    ap.add_argument("--normaliser", action="store_true",
+                    help="remplacer les mots du lexique par des concepts canoniques")
     ap.add_argument("--sortie", default="/tmp/semantique-type")
     args = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -145,6 +149,9 @@ def main() -> int:
         print(f"# synth · {len(train)} train synthétiques · {len(val)} surfaces réelles de test", flush=True)
     else:
         train, val = decouper(its, args.graine, 0.2)
+    if args.normaliser:
+        train = [dataclasses.replace(i, texte=normaliser(i.texte)) for i in train]
+        val = [dataclasses.replace(i, texte=normaliser(i.texte)) for i in val]
     print(f"# typé · {len(its)} items · {len(train)} train / {len(val)} val · "
           f"{len({i.paire for i in train})} paires train · {len({i.paire for i in val})} val · "
           f"{len(CHAMPS)} champs · {sum(len(v) for _, v in CHAMPS)} classes", flush=True)

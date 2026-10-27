@@ -38,9 +38,9 @@ La vision complète est dans [`vision.md`](vision.md).
   sortie déterministe ; le **codec classique** lit **100 %** des coups B5/B7 (79/79, 449/449) et restitue
   **33/79** formats canoniques ; le **parseur natif typé** surapprend en réel seul (**48,3 % train / 0 % validation**) mais la
   **distillation synthétique** le débloque : **45,1 %** de code exact sur les **528 surfaces réelles** jamais
-  vues, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** ; l'**invariance par paire** reste **7,4 %**. La **consistance softmax** (38,3 %, invariance 0) et
-  l'**adversaire de langue** (39,6 %, invariance 0) sont deux **négatifs** ; le baseline synthétique reste
-  **45,1 %**. Le codec reste à **100 %**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
+  vues, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** ; l'**invariance par paire** reste **7,4 %**. La **normalisation lexicale** (concepts canoniques) porte le natif à **55,7 %** de code exact et
+  **37,0 %** d'invariance, contre **45,1 % / 7,4 %** ; la **consistance softmax** (38,3 %, invariance 0) et
+  l'**adversaire de langue** (39,6 %, invariance 0) restent deux **négatifs**. Le codec reste à **100 %**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 ## Où l'on en est
