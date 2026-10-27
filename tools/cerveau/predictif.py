@@ -286,11 +286,13 @@ class Predictif:
             uniforme = 1.0 / len(cand)
             masque = {x: self.melange * hist[x] + (1.0 - self.melange) * uniforme
                       for x in cand}
-        # Le masque est une croyance, pas une certitude : une petite fuite vers
-        # la loi non masquée garde une probabilité finie à une cible que le
-        # plateau contredit (utile au contrôle par permutation des contextes).
+        # Le masque est une croyance, pas une certitude : une petite fuite
+        # uniforme garde une probabilité finie à une cible que le plateau
+        # contredit (utile au contrôle par permutation des contextes).
         fuite = 1e-6
-        return {x: (1.0 - fuite) * masque.get(x, 0.0) + fuite * dist.get(x, 0.0)
+        n_valeurs = len(dist)
+        return {x: (1.0 - fuite) * masque.get(x, 0.0)
+                + (fuite / n_valeurs if x in dist else 0.0)
                 for x in set(masque) | set(dist)}
 
     def _choix(self, dist, jeu: str, contexte=None):

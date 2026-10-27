@@ -233,6 +233,13 @@ def _m2_voies(pas: int = 300, graines=(1,), device: str | None = None,
     par_graine = []
     val = []
     for graine in graines:
+        # Les têtes sont initialisées par le RNG torch global : sans graine,
+        # deux exécutions du même protocole diffèrent de 1–2 items. On fixe la
+        # graine pour que la lésion soit reproductible (l'échantillonnage des
+        # données est déjà seedé par `entrainer`).
+        torch.manual_seed(int(graine))
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(int(graine))
         modele_base = AutoModelForCausalLM.from_pretrained(base, dtype=torch.float32)
         m, val = entrainer(modele_base, pas, 32, 64, graine, device, synth=True)
         intact = evaluer(m, val, device)
@@ -408,6 +415,24 @@ def _m4(taille: int = 32) -> dict:
                        "rappel_lese": rappel_lese,
                        "deficit": intacte_champ - rappel_lese}
     plus_faible = max(champs, key=lambda k: champs[k]["deficit"]) if champs else None
+    if plus_faible is not None and champs[plus_faible]["deficit"] <= 0.0:
+        # La requête partielle retrouve l'épisode stocké lui-même : le champ
+        # lésé n'est pas détectable. Ne pas publier un « champ nécessaire » nul.
+        plus_faible = None
+    deficit_max = champs[plus_faible]["deficit"] if plus_faible else 0.0
+    if plus_faible:
+        note = (f"échantillon stratifié par jeu ; le champ lésé est mis à None "
+                f"dans la requête. L'intacte par champ vaut 1,0 par construction "
+                f"(le code complet est dans le magasin). Les champs dont le "
+                f"retrait ne change pas le voisin (de, vers, case, symbole) ont "
+                f"un déficit nul : propriété du magasin (codes uniques), pas une "
+                f"lésion manquée. `{plus_faible}` est détectable "
+                f"({deficit_max:.4f}) : plusieurs valeurs partagent les autres "
+                f"champs, le voisin bascule.")
+    else:
+        note = ("échantillon stratifié par jeu ; aucun champ n'a de déficit "
+                "detectable : la requête partielle retrouve l'épisode stocké "
+                "lui-même (tautologie de récupération de M4).")
     return _entree(
         "stockage vide (M4 sans épisodes) ; puis lésion du champ d'adressage",
         {"rappel": intact, "completion": completion,
@@ -416,9 +441,9 @@ def _m4(taille: int = 32) -> dict:
         {"rappel": intact - sans, "completion": completion - completion_vide,
          "par_champ": champs,
          "champ_le_plus_necessaire": plus_faible,
-         "deficit_champ_max": champs[plus_faible]["deficit"] if plus_faible else 0.0},
-        len(echantillon), sham=0.0,
-        note="échantillon stratifié par jeu ; le champ lésé est mis à None dans la requête")
+         "deficit_champ_max": deficit_max,
+         "tautologie_recuperation": True},
+        len(echantillon), sham=0.0, note=note)
 
 
 # ---------------------------------------------------------------------------

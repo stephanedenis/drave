@@ -340,7 +340,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B12.1 | **Bus + hub M1** | ✅ **mesuré** | **528/528** exact avec contexte ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** ; 1 584 événements |
-| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu + règles** | `de` 93,6 % (300) / 92,7 % (1 000) / **95,2 % aug-formes**, inédit **13/20** ; `chemin_0` 81,0 → **88,1 %, inédit 6/14** ; `point` 96,7 % **< majorité 97,1 %** ; `vers` 93,8 %, inédit 11/20 ; double dissociation sur les vus |
+| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu + règles** | `aug-formes` : `de` **95,2 %, inédit 13/20**, `chemin_0` **88,1 %, 6/14** ; `aug-pos` : `vers` **95,4 %, 13,3/20**, mais `de` 92,2 % et `chemin` 86,7 % ; `point` **97,14 % = majorité** ; aucune variante ne domine ; double dissociation sur les vus |
 | B12.3 | **M3 mémoire de travail** | ❌ **tautologique** | span 12/12 même avec des codes aléatoires ; n-back contrôle construit sur 5 items de même code ; interférence purement FIFO |
 | B12.4 | **M4 mémoire épisodique** | ❌ **lookup** | 528 items, **29 codes** ; rappel 1,0 = doublons ; 0/6 codes non stockés, 0/10 complétions exactes, 0/7 valeurs inédites |
 | B12.5 | **M5 prédictif** | ⚠️ **contexte** | sans contexte : action 97,5 % = majoritaire ; avec plateau : source **3,224→2,598 nat** (+5,9 pts), cible **3,520→3,109** (+3,6 pts), morpion **2,20→1,52 = oracle** ; échecs cible faible |

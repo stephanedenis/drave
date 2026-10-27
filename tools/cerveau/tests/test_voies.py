@@ -13,7 +13,11 @@ except ImportError:
     _TORCH = False
 
 if _TORCH:
-    from cerveau.voies import Voies, entrainer, evaluer, evaluer_champs
+    from cerveau.voies import (
+        Voies, augmenter, entrainer, evaluer, evaluer_champs,
+        normaliser_coordonnees,
+    )
+from semantique.normalisation import normaliser
 from semantique.typed_corpus import ItemType
 
 
@@ -124,6 +128,69 @@ class TestVoies(unittest.TestCase):
         self.assertIn("vers", m.dorsaux)
         self.assertEqual(m.dim_entree, 8 * 2)
         self.assertGreater(len(val), 0)
+
+    def test_augmentation_familles_et_garde(self):
+        its = _items()
+        exclure = [i.texte for i in its]
+        echecs = augmenter(("de", "vers"), familles=("formes",),
+                           exclure_surfaces=exclure)
+        par_forme = {normaliser(i.texte): i.code for i in echecs}
+        # équivalence UCI tiret / collé / espacé, labels conservés
+        self.assertEqual(par_forme["a2 a3"], par_forme["a2a3"])
+        self.assertEqual(par_forme["a2-a3"]["de"], 48)   # a2
+        self.assertEqual(par_forme["a2-a3"]["vers"], 40)  # a3
+        # SAN et NLP
+        self.assertIn("a3", par_forme)
+        self.assertIn("[echecs.piece.P] from a2 to a3", par_forme)
+
+        # go : SGF et français spatial
+        go = augmenter(("point",), familles=("formes",), exclure_surfaces=exclure)
+        par_go = {normaliser(i.texte): i.code for i in go}
+        self.assertIn("b[aa]", par_go)
+        self.assertEqual(par_go["b[aa]"]["point"], 0)
+        self.assertIn("ligne 9 colonne 1", par_go)
+
+        # dames : numérique et algébrique
+        dames = augmenter(("chemin_0",), familles=("formes",),
+                          exclure_surfaces=exclure)
+        par_dames = {normaliser(i.texte): i.code for i in dames}
+        self.assertIn("9-13", par_dames)
+        self.assertEqual(par_dames["9-13"]["chemin_0"], 8)  # b6
+
+        # garde anti-fuite : une surface réelle exclue n'est jamais produite
+        garde = augmenter(("de", "vers", "point"), familles=("formes",),
+                          exclure_surfaces=("a2a3", "a2 a3", "a2-a3", "B[aa]"))
+        formes_garde = {normaliser(i.texte) for i in garde}
+        self.assertNotIn("a2 a3", formes_garde)
+        self.assertNotIn("b[aa]", formes_garde)
+
+        # positions variées : plus de surfaces et des contextes non vides
+        etendu = augmenter(("de", "chemin_0"),
+                           familles=("formes", "positions"), positions=2,
+                           graine=1)
+        self.assertGreater(len(etendu), len(echecs))
+        self.assertTrue(any(i.contexte for i in etendu))
+
+        # normalisation agressive : les séparateurs se rejoignent
+        self.assertEqual(normaliser_coordonnees("e2-e4"),
+                         normaliser_coordonnees("e2e4"))
+        self.assertEqual(normaliser_coordonnees("b6xd4"),
+                         normaliser_coordonnees("b6 x d4"))
+        self.assertEqual(normaliser_coordonnees("e2 e4"),
+                         normaliser_coordonnees(normaliser_coordonnees("e2e4")))
+
+    def test_entrainement_avec_augmentation_et_normalisation(self):
+        base = _Base(8)
+        its = _items()
+        m, _ = entrainer(base, pas=1, lot=2, seq=16, graine=1, device="cpu",
+                         synth=True, champs=("de", "vers"),
+                         augmentation=("formes",),
+                         exclure_surfaces=[i.texte for i in its])
+        self.assertIn("de", m.dorsaux)
+        m2, _ = entrainer(base, pas=1, lot=2, seq=16, graine=1, device="cpu",
+                          synth=True, champs=("de",),
+                          normaliseur=normaliser_coordonnees)
+        self.assertEqual(m2.dim_entree, 8 * 2)
 
 
 if __name__ == "__main__":
