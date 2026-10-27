@@ -185,6 +185,10 @@ def charger_surfaces() -> tuple[list[Surface], dict]:
             "langues": len({s.langue for s in par_jeu if s.langue != LANGUE_NOTATION}),
             "paires": len({s.paire for s in par_jeu if s.paire is not None}),
         }
+
+    compte_b7 = collections.Counter(s.langue for s in surfaces if s.source == "B7")
+    meta["n_max_par_langue_b7"] = max(compte_b7.values()) if compte_b7 else 0
+    meta["n_min_par_langue_b7"] = min(compte_b7.values()) if compte_b7 else 0
     return surfaces, meta
 
 
@@ -618,7 +622,8 @@ def mesurer(avec_controle: bool = True) -> dict:
     meta["paires_interlangues"] = global_["n_paires_interlangues"]
     meta["items_paires_multi"] = global_["baseline_surface"]["n_applicable"]
     meta["langues_n1"] = _langues_n1(records)
-    meta["langues_par_jeu"] = {j: v["langues"] for j, v in meta["par_jeu"].items()}
+    meta["n_langues_par_jeu"] = {j: v["langues"]
+                                 for j, v in meta["par_jeu"].items()}
 
     resultat = {
         "meta": meta,
@@ -679,10 +684,11 @@ def _autocritique(r: dict) -> list[str]:
     n1 = r["meta"].get("langues_n1", [])
     if n1:
         lignes.append(
-            f"n par langue de 1 à "
-            f"{max(x['n'] for x in r['par_langue'].values())} ; "
-            f"{len(n1)} langue(s) à n=1 ({', '.join(n1)}) : un taux de 0 ou "
-            f"100 % sur un seul item n'est pas une estimation.")
+            f"n par langue (B7) de {r['meta']['n_min_par_langue_b7']} à "
+            f"{r['meta']['n_max_par_langue_b7']} (fr cumule B5 et B7 : "
+            f"{r['par_langue']['fr']['n']} surfaces) ; {len(n1)} langue(s) à "
+            f"n=1 ({', '.join(n1)}) : un taux de 0 ou 100 % sur un seul item "
+            "n'est pas une estimation.")
     lignes.append(
         "Invariance n'est pas exactitude : sans contexte, les paires go et "
         "morpion restent souvent invariantes (même code pour toutes les "
@@ -781,13 +787,17 @@ def rendre_markdown(r: dict) -> str:
         f"canonique revient à **{_frac(g['canonique'])}**.",
         f"- **Sans contexte** : **{_frac(g['exact_sans_contexte'])}** ; c'est là "
         "que se voient les dépendances au contexte (go, morpion, notations "
-        "courtes).",
+        f"courtes). Sur B7 seul : {_frac(b7['exact_sans_contexte'])}.",
         f"- **Invariance interlangues** : **{_frac({'ok': inv['invariantes_contexte'], 'n': inv['n'], 'taux': inv['taux_contexte']})}** "
         f"des paires avec contexte et **{inv['invariantes_sans_contexte']} / "
-        f"{inv['n']}** sans contexte. Les variantes de langue d'une même paire "
-        "donnent bien le même code.",
+        f"{inv['n']}** sans contexte. **Sur B7 seul** : "
+        f"{_frac({'ok': b7['invariance_interlangues']['invariantes_contexte'], 'n': b7['invariance_interlangues']['n'], 'taux': b7['invariance_interlangues']['taux_contexte']})} "
+        "avec contexte et "
+        f"{_frac({'ok': b7['invariance_interlangues']['invariantes_sans_contexte'], 'n': b7['invariance_interlangues']['n'], 'taux': b7['invariance_interlangues']['taux_sans_contexte']})} "
+        "sans contexte. L'unique échec sans contexte est B5 `echecs-nf3` "
+        "(`Cf3`, notation française courte qui a besoin du contexte).",
         f"- **Mais invariance ≠ exactitude** : sans contexte, les paires go et "
-        "morpion peuvent être invariantes avec un code faux (voir § 5).",
+        "morpion restent invariantes avec un code faux (voir § 7).",
         f"- **Baseline surface** : {_frac(baseline['exact_sans_contexte'])} sans "
         f"contexte, contre "
         f"{_frac(baseline['m1_sur_applicables']['exact_sans_contexte'])} pour M1 "
@@ -914,7 +924,33 @@ def rendre_markdown(r: dict) -> str:
 
     lignes += [
         "",
-        "## 4. Par jeu",
+        "## 4. Par source",
+        "",
+    ]
+    lignes += _tableau(
+        ["source", "items", "langues", "paires", "exact ctx", "exact sans ctx",
+         "canonique", "inv. interlangues ctx", "inv. interlangues sans ctx"],
+        [[source,
+          str(v["n"]),
+          str(len(v["langues"])),
+          str(v["n_paires"]),
+          _pct(v["exact_contexte"]["taux"]),
+          _pct(v["exact_sans_contexte"]["taux"]),
+          _pct(v["canonique"]["taux"]),
+          _frac({"ok": v["invariance_interlangues"]["invariantes_contexte"],
+                 "n": v["invariance_interlangues"]["n"],
+                 "taux": v["invariance_interlangues"]["taux_contexte"]}),
+          _frac({"ok": v["invariance_interlangues"]["invariantes_sans_contexte"],
+                 "n": v["invariance_interlangues"]["n"],
+                 "taux": v["invariance_interlangues"]["taux_sans_contexte"]})]
+         for source, v in r["par_source"].items()])
+    lignes += [
+        "",
+        "B7 est le corpus multilingue à proprement parler : ses 11 paires sont "
+        "invariantes dans les deux conditions. B5 apporte les notations "
+        "canoniques et les phrases fr/en ; c'est lui qui contient `Cf3`.",
+        "",
+        "## 5. Par jeu",
         "",
     ]
     lignes += _tableau(
@@ -944,11 +980,46 @@ def rendre_markdown(r: dict) -> str:
         "bas, mais leurs paires restent invariantes. C'est le point "
         "« invariance ≠ exactitude ».",
         "",
-        "## 5. Invariance interlangues, paire par paire",
+        "## 6. Par langue",
+        "",
+        "`jeux` : c=cartes, e=echecs, d=dames, g=go, m=morpion. L'invariance "
+        "est celle des paires interlangues où la langue apparaît (ctx / sans "
+        "ctx, nombre de paires entre parenthèses) ; `notation` n'est pas une "
+        "langue et n'a pas d'invariance propre.",
         "",
     ]
-    paires_inter = [p for p in r["paires"].values() if p["n_langues"] >= 2]
-    paires_inter.sort(key=lambda p: (p["jeu"], p["n"], -p["n_langues"]))
+    lignes_langues = []
+    for langue, v in sorted(r["par_langue"].items(),
+                            key=lambda kv: (-kv[1]["n"], kv[0])):
+        inv_l = v["invariance_interlangues"]
+        if langue == LANGUE_NOTATION or not inv_l["n"]:
+            inv_cell = "—"
+        else:
+            inv_cell = (f"{_pct(inv_l['taux_contexte'])} / "
+                        f"{_pct(inv_l['taux_sans_contexte'])} "
+                        f"({inv_l['n']})")
+        lignes_langues.append([
+            langue, str(v["n"]), _jeux_compacts(v["jeux"]),
+            _pct(v["exact_contexte"]["taux"]),
+            _pct(v["exact_sans_contexte"]["taux"]),
+            _pct(v["canonique"]["taux"]),
+            inv_cell,
+            _frac(v["baseline_surface"]["exact_sans_contexte"]),
+        ])
+    lignes += _tableau(
+        ["langue", "n", "jeux", "exact ctx", "exact sans ctx", "canonique",
+         "invariance interlangues ctx / sans ctx (paires)",
+         "baseline sans ctx"], lignes_langues)
+    lignes += [
+        "",
+        "Les taux par langue sont descriptifs : la composition en jeux diffère "
+        "(une langue qui n'a que des cartes ou des dames fera 100 % sans "
+        "contexte ; une langue qui a du go fera baisser son taux). Le tableau "
+        "croisé langue × jeu est dans le JSON (`par_langue_jeu`).",
+        "",
+        "## 7. Invariance interlangues, paire par paire",
+        "",
+    ]
     lignes += _tableau(
         ["paire", "jeu", "variantes", "langues", "codes ctx", "codes sans ctx",
          "inv. ctx", "inv. sans ctx", "exact ctx", "exact sans ctx"],
@@ -963,11 +1034,15 @@ def rendre_markdown(r: dict) -> str:
          if p["n_langues"] >= 2])
     lignes += [
         "",
-        "Les paires B7 (`ml-…`) ont de 14 à 62 variantes de langue. Le détail "
-        "des codes uniques, des surfaces déviantes et des langues est dans le "
+        "Les paires B7 (`ml-…`) ont de 14 à 62 variantes de langue et sont "
+        "toutes invariantes dans les deux conditions. La seule paire "
+        "interlangue non invariante sans contexte est B5 `echecs-nf3` : `Cf3` "
+        "(notation SAN française) ne se résout pas sans la position, alors que "
+        "la phrase anglaise `knight from g1 to f3` se résout. Le détail des "
+        "codes uniques, des surfaces déviantes et des langues est dans le "
         "JSON (`paires`).",
         "",
-        "## 6. Baseline et contrôle permuté",
+        "## 8. Baseline et contrôle permuté",
         "",
         "Comparaison équitable : M1 et la baseline sont évalués sur les mêmes "
         "items (paires à au moins deux variantes).",
@@ -994,15 +1069,19 @@ def rendre_markdown(r: dict) -> str:
         "de notation dans les échecs, mais elle **cache** les erreurs du "
         "morpion en figeant un code faux. Le contrôle permuté, lui, vérifie "
         "que le code suit la surface donneuse : la lecture n'est pas un simple "
-        "effet de l'étiquette de paire.",
+        "effet de l'étiquette de paire. Sa couverture stricte est de 369 items "
+        "sur 528 ; les dames et le morpion hors fr/notation n'ont souvent "
+        "qu'une paire par (jeu, langue), donc pas de donneur : c'est pourquoi "
+        "le taux donneur y est bas (contextes différents), et pourquoi le "
+        "chiffre de référence est B7 (300 items, 99,3 %).",
         "",
-        "## 7. Autocritique — ce qui pourrait rendre ce résultat faux",
+        "## 9. Autocritique — ce qui pourrait rendre ce résultat faux",
         "",
     ]
     lignes += [f"- {phrase}" for phrase in r["autocritique"]]
     lignes += [
         "",
-        "## 8. Reproductibilité",
+        "## 10. Reproductibilité",
         "",
         "```bash",
         "PYTHONPATH=tools python3 tools/cerveau/multilingue.py",
