@@ -1,0 +1,297 @@
+# Historique des passes de portes
+
+> **Document daté — dernière vérification : 2026-10-27.** Ce fichier conserve les
+> passes complètes antérieures à la dernière (26/10 14 h 30). Les repères courants
+> sont dans [`docs/references-non-regression.md`](../docs/references-non-regression.md).
+> Il est **hors du chargement par défaut** : on y va pour retrouver une valeur ou une
+> durée ancienne, pas pour connaître l'état courant.
+
+> **2026-10-11 06 h 30 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
+> par la passe complète des portes** (`tools/toutes-les-portes.sh`, **34 vertes sur
+> 34**, 85 min 8 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la
+> passe. **Une modification du chemin d'exécution qui déplace l'un de ces chiffres a changé le
+> calcul** — il faut alors relancer la porte, comprendre, et écrire à côté de l'ancienne valeur
+> (jamais à sa place).
+>
+> Détail complet : `reports/rapport-passe-complete-portes.md`.
+> Les mesures de campagne (perplexités, budgets, latences) sont dans `reports/` — une fiche par
+> expérience — et non ici : ce fichier ne porte que ce qu'une **porte** vérifie.
+>
+> **Passe du 2026-10-26 à 09 h 40** (**48 portes, 46 vertes, 2 rouges**, **1 h 40 min**) — la passe de clôture
+> de **B7/B8**, avec la **`porte-jeux` étendue** aux **71 langues** et aux **maîtres** (103 s, **verte** :
+> 449/449 au niveau 4, 11/11 paires, permutation 12/275, livre 10/10, go 9×9 10/10 contre 3/10). Les **deux
+> rouges** sont les **structurelles connues** (`porte-indice` 849 s, `porte-melange` 104 s) ; `porte-homeostasie`
+> est **verte** (504 s, ×0 exact, activité monotone, dominance reproduite). Les références sont stables :
+> `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**,
+> `porte-gain` **29,0206 → 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**,
+> `porte-greffe` **branchée**, `porte-profondeur-routee` **521 s**. La nouvelle porte `porte-deepseek` est
+> **hors réseau** et **verte** (20 tests, dry-run) ; elle n'était pas dans cette passe, elle entre dans la
+> suivante.
+>
+> **Passe du 2026-10-25 à 22 h 18** (**48 portes, 46 vertes, 2 rouges**, **1 h 31 min**) — la passe de
+> clôture de **B5/B6**, avec la nouvelle **`porte-jeux`** (28 s, **verte** : 100 % au niveau 4, 33/33 paires
+> invariantes, 0 collision). Les **deux rouges** sont les **structurelles connues** (`porte-indice` 841 s,
+> `porte-melange` 104 s). Une **troisième rouge** est apparue : `porte-homeostasie` (code 2, 0 s), parce que
+> le **LoRA de référence temporaire** `/tmp/n4/rang4-lora.pt` avait été effacé ; **régénéré** par
+> `n4_dessin_b.py --objectif plein --train 10 --rang 4`, la porte **relancée seule passe** (`×0` exact,
+> activité monotone, dominance reproduite : m32 ×0,6 **−8,33 %** contre ×1,0 **−6,51 %**, m20 **−15,10 %**
+> contre **−15,74 %**). Les références sont stables : `porte-flux` **60,8135**, `porte-pont`
+> **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 → 1297,5437**,
+> `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**.
+>
+> **Passe du 2026-10-12 à 23 h 00** (**36 portes, 34 vertes, 2 rouges**, ~74 min) : les valeurs
+> ci-dessous **n'ont pas bougé** — les changements de la nuit (prélecture parallèle, lecture
+> séquentielle dans nos tampons, chargement paresseux) ne déplacent aucun chiffre, et
+> `porte-flux.sh` l'a vérifié après chacun. Les **deux rouges sont nommés et instruits** :
+> `porte-indice` et `porte-melange` lisent une botte de foin **régénérée** (celle de la campagne
+> n'a jamais été versionnée, `tools/niah_4096_0.5.txt` l'est désormais). Leur critère — un indice
+> extérieur qui tombe plus près de l'aiguille que le hasard — **ne survit pas à la
+> reconstruction** : mesuré sur **cinq fenêtres** du même corpus, **deux passent** (1,21× et 1,69×
+> mieux que le hasard) et **trois échouent** (jusqu'à 2,13× pire). Détail et recommandations :
+> [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
+> marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
+>
+> **Passe du 2026-10-24 à 21 h 35** (**47 portes, 45 vertes, 2 rouges**, **1 h 47 min**) — la passe de contrôle de la
+> **nuit**, après le **LoRA de la négation** (`adaptateur_langue.py` en float32, les trois flags de
+> `operateur_negation.py`) et le chapitre 08. Le verdict : **les deux rouges sont les seuls structurels**
+> (`porte-indice` 860 s, `porte-melange` 104 s) — **aucun rouge nouveau**. Toutes les références sont stables :
+> `porte-flux` **60,8135** · `porte-pont` **+2,81 % / +25,35 %** · `porte-coupe` **+0,52 % → +17,09 %** ·
+> `porte-gain` **29,0206 → 1297,5437** · `porte-topologie` **42,5477** · `porte-reparti-moteur` **0,0000 %**.
+> *Le code du LoRA ne touche aucune porte : la mesure B4.6 est sûre, son instrument est validé.*
+>
+> **Passe du 2026-10-24 à 19 h 04** (**47 portes, 44 vertes, 3 rouges**, **1 h 47 min**) — la passe de contrôle du
+> **soir**, après la v2 du relais (`kimi_k3.rs`) et les tests. **Deux rouges sont les structurels connus**
+> (`porte-indice` 857 s, `porte-melange` 105 s) ; **la troisième est un FAUX POSITIF** : `porte-tableaux` a lu
+> `docs/roadmap.md:107` (5 cellules) **deux minutes avant** le correctif `58db87d5` — relancée seule, la porte
+> **passe** (583 fichiers, 1 105 liens). **Aucun rouge nouveau réel** ; toutes les références sont stables
+> (`porte-flux` 60,8135 ; `porte-pont` +2,81 % / +25,35 % ; `porte-coupe` +0,52 % → +17,09 % ; `porte-gain`
+> 29,0206 → 1297,5437 ; `porte-topologie` 42,5477).
+>
+> **Passe du 2026-10-24 à 16 h 59** (**47 portes, 45 vertes, 2 rouges**, **1 h 47 min**, aucune sautée) —
+> **la passe de contrôle du soir**, après les changements de la journée (la règle place+perte **opt-in**, les deux
+> tests de `placement.rs`, le chapitre 08, la navigation par fichiers). Le verdict au registre : **deux rouges, et
+> ce sont les STRUCTURELS connus** (`porte-indice` 846 s, `porte-melange` 103 s) — **aucun rouge nouveau**, et
+> **toutes les références sont stables** : `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**,
+> `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 → 1297,5437**, `porte-topologie` **42,5477**,
+> `porte-greffe` **branchée**. *Le passage du défaut du KV à la règle avait décalé `porte-coupe` (5,9-11,6 % et un
+> échec) : la règle est devenue opt-in, et la passe le confirme.*
+>
+> **Passe du 2026-10-24 à 10 h 53** (**47 portes, 45 vertes, 2 rouges**, **1 h 48 min**, aucune sautée) —
+> **la première passe à 47 portes**, avec `porte-diff-couche` (18 s, **verte**) : le contrat de flux tient.
+> Le verdict se lit **au registre** (`awk '$2 != 0'`) : **deux rouges, et ce sont les STRUCTURELS connus**
+> (`porte-indice` 827 s, `porte-melange` 104 s — le critère d'indice marginal, cf.
+> [`rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md)) : **aucun rouge nouveau** après une journée
+> où `placement.rs` (4 tests), `diff_flux.py` (v2), `model.rs` (la tête revertée) et la nouvelle porte ont été
+> écrits. Les plus lourdes : `porte-indice` (827 s), `porte-homeostasie` (653 s), `porte-greffe` (648 s),
+> `porte-profondeur-routee` (516 s), `porte-poids-creux` (316 s), `porte-gain` (221 s), `porte-prechargement`
+> (189 s). Détail : [`reports/rapport-passe-complete-portes.md`](../reports/rapport-passe-complete-portes.md) § 2
+> quinquies.
+>
+> **Passe du 2026-10-17 à 00 h 55** (**46 portes, 44 vertes, 2 rouges**, **97 min**, aucune sautée) —
+> **et c'est la PREMIÈRE passe dont le verdict se lit au REGISTRE** ✓✓ (le correctif de la nuit :
+> `toutes-les-portes.sh` écrit désormais `$JOURNAUX/registre.txt` avec le **code de sortie** de
+> chaque porte et sa durée ✓, et la synthèse y est ajoutée ✓). Le verdict ne dépend donc plus des
+> **marqueurs** des journaux ✗✓ — la méthode que l'audit du 16/10 avait montrée **non fiable** ✗ :
+>
+> * **44 vertes, 2 rouges** ✓ — les **deux rouges sont les STRUCTURELS connus** (`porte-indice` ✓,
+>   `porte-melange` ✓), exactement ceux des passes précédentes ✓ : **aucun rouge nouveau** après une
+>   nuit où **sept outils** et **trois documents** ont été édités ✓✓ ;
+> * **97 min** pour 46 portes ✓ (contre 88 min la veille ✓ — même ordre ✓, les plus lourdes étant la
+>   vision, la distillation et le cycle ✓) ;
+> * et **la méthode de lecture a changé** ✓✓ : `awk '$2 != 0'` sur le registre ✓ au lieu d'un
+>   `grep` de marqueurs ✗ — *une passe qui écrit ses codes de sortie est une passe qu'on peut
+>   vérifier ; une passe qui n'écrit que ses journaux est une passe qu'on doit croire* ✓.
+>
+> **Passe du 2026-10-16 à 02 h 49** (**46 portes, 44 vertes, 2 rouges**, ~88 min) — **la première
+> passe où les portes peuvent ÉCHOUER** ✓✓ : `porte-tableaux` (son `sys.exit` n'était pas propagé ✓)
+> et `porte-prechargement` (un `rm -f` avalait le code ✓) ont été corrigées **pendant** cette passe,
+> par l'audit des 46 portes ✓ — le verdict est donc **significatif** ✓, là où les huit passes
+> précédentes auraient pu passer avec un document cassé sans le dire ✗. Ce qui est vérifié
+> **neuf** dans cette passe :
+>
+> ⚠️ **ET LE COMPTE DE CETTE PASSE EST UNE RECONSTRUCTION, PAS UNE LECTURE** ✗ : la synthèse
+> (« *N vertes, M rouges* » ✓) part sur la **sortie standard** ✗ et la passe a été lancée avec
+> `| tail -3` ✗ — donc elle a été **coupée**, et les **codes de sortie** n'étaient écrits **nulle part**
+> ✗✓. Le « 44 / 2 » ci-dessus est reconstruit à partir des **marqueurs** des journaux ✓ — c'est-à-dire
+> exactement la méthode de lecture que l'audit du même jour a montrée **non fiable** ✗✓ (une porte peut
+> échouer sans `❌` dans son source, et un `❌` peut venir de l'outil qu'elle appelle ✓).
+>
+> **Corrigé dans la foulée** ✓ : `toutes-les-portes.sh` écrit désormais un **registre**
+> (`$JOURNAUX/registre.txt` ✓) avec, pour chaque porte, son **code de sortie** et sa durée ✓, et la
+> synthèse y est **ajoutée** (`tee -a` ✓). Le verdict de la prochaine passe sera donc **relisible**
+> ✓✓, quelle que soit la façon dont on l'a lancée ✓ — *une passe qui ne laisse pas son verdict est une
+> passe qu'on doit croire sur parole* ✗.
+>
+> * `porte-tableaux` : **473 fichiers** (tableaux ✓) **et 308 liens relatifs** ✓ (nouveau ✓) ;
+> * `porte-homeostasie` (E9) : ×0 rend le modèle ✓, activité monotone ✓, **dominance de ×0,6
+>   reproduite** ✓ ;
+> * `porte-cycle-c2` : la divergence est **bornée et de forme publiée** (14,65 → 275,52 → 940,22 →
+>   2 988,46 ✓) et **λ = 488,82 > 1 est MESURÉ** ✓ (nouveau ✓) ;
+> * `porte-reflexe` : l'**assemblage** est gardé (refus ✓, **invariant d'identité** ✓ — 
+>   « perplexité 11163272.0495 » identique avec et sans adaptateur ✓, accord mesuré ✓) ;
+> * `porte-vision` : les couches **1, 15 et 31 en isolation** et le **projecteur** ✓.
+>
+> Les deux rouges restent les **structurels** (`porte-indice`, `porte-melange`) et **aucune valeur
+> de porte n'a bougé** ✓.
+>
+> **Passe du 2026-10-15 à 22 h 40** (**46 portes, 44 vertes, 2 rouges**, ~96 min) — **la première
+> passe à 46 portes** : `porte-homeostasie` (E9 : ×0 rend le modèle, l'activité est monotone,
+> la dominance de ×0,6 est reproduite) entre dans la passe, et `porte-vision` y vérifie ses
+> **deux** nouvelles étapes (couches 1, 15 et 31 **en isolation** à 6,3e-06, et le
+> **projecteur** à 0,71 %). Les deux rouges restent les structurels (`porte-indice`,
+> `porte-melange`), et **aucune valeur de porte n'a bougé**.
+>
+> **Passe du 2026-10-15 à 18 h 20** (**45 portes, 43 vertes, 2 rouges**, ~92 min) — **la première
+> passe où `porte-vision` vérifie les DEUX nouvelles étapes** : les couches 1, 15 et 31 **en
+> isolation** (6,3e-06) et le **projecteur** (0,71 %). Les deux rouges restent les structurels
+> (`porte-indice`, `porte-melange`).
+>
+> **Passe du 2026-10-15 à 16 h 19** (**45 portes, 43 vertes, 2 rouges**, ~86 min) : les deux rouges
+> sont les structurels, et `porte-vision` y est verte (étapes 1 à 5). L'étape 6 — le **projecteur**
+> — a été ajoutée **après** cette passe et elle est verte au premier passage (**0,71 %**, la
+> quantification) : la porte vérifie maintenant les **couches profondes en isolation** (6,3e-06)
+> ET le projecteur.
+>
+> **Passe du 2026-10-15 à 11 h 21** (**45 portes, 43 vertes, 2 rouges**, ~80 min) — **la 45ᵉ porte
+> (`porte-vision`) y est verte du premier coup** : elle vérifie le **refus** d'un modèle sans tour
+> de vision, les **formes** du modèle (256 × 1280 et 64 × 1536) et **mesure** la tour **sans la
+> juger** — en **disant** que l'embedding de patchs n'a **pas** pu être comparé (la référence
+> numpy n'accepte que l'image 28 × 28 et ses attentes de format ont dérivé). Les deux rouges
+> restent les structurels (`porte-indice`, `porte-melange`), et **aucune valeur de porte n'a
+> bougé**.
+>
+> **Passe du 2026-10-15 à 09 h 38** (**44 portes, 42 vertes, 2 rouges** *après correction*,
+> ~70 min) : après les changements de moteur pour la **vision** (MLP à deux matrices, fenêtre
+> locale conditionnelle, biais des LayerNorm, écriture des jetons d'image, `DRAVE_VISION_COUCHES`).
+> **Un troisième rouge est apparu, et il était de MA faute** : `porte-tableaux` refusait un tableau
+> de `reports/rapport-sommeil-selection.md` (séparateur à **6** cellules pour un en-tête à **5**) —
+> corrigé dans la minute, porte repassée **verte** (`✅ 460 fichier(s)`). **Le piège, et il est noté
+> ici : j'avais lancé la porte en la pipant dans `tail`, et je lisais « 460 fichier(s) examiné(s) »
+> comme un succès — c'était la ligne qui SUIT l'échec, et le code de sortie était celui de `tail`.**
+> Une porte ne se lit pas par sa dernière ligne, ni à travers un tuyau.
+>
+> **Passe du 2026-10-15 à 06 h 27** (**44 portes, 42 vertes, 2 rouges**, ~75 min) — **le meilleur
+> état du dépôt** : après la correction de **reproductibilité du harnais** (la graine était posée
+> après le tirage des LoRA : deux exécutions identiques rendent maintenant le même nombre **au bit
+> près**). `porte-prechargement`, qui avait rendu un rouge d'**instabilité** à 04 h 30, est **verte**
+> en passe complète avec ses **trois** répétitions (tampons 10,60 s contre fils 11,55 s).
+> `porte-consolidation` et `porte-speculatif` sont vertes aussi. Il ne reste que **les deux rouges
+> structurels** (`porte-indice` : 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne
+> rend pas le code).
+>
+> **Passe du 2026-10-15 à 04 h 30** (**44 portes, 41 vertes, 3 rouges**, ~74 min) : la 44ᵉ porte
+> (`porte-speculatif`, l'invariant du décodage spéculatif) y est **verte du premier coup** (8 jetons
+> identiques au cerveau seul, témoin à 0 %, réflexe distillé ratifié à 30,0 %). Les deux rouges
+> structurels sont les mêmes (`porte-indice`, `porte-melange`). **Le troisième rouge était une
+> INSTABILITÉ de mesure, et elle est corrigée** : `porte-prechargement` a rendu « tampons plus
+> lents que fils » (12,48 s contre 10,95 s) pendant la passe, puis **PORTE TENUE relancée seule**
+> (10,45 s contre 13,06 s, puis 10,36 s contre 11,15 s). La cause est nommée : la comparaison
+> porte sur la **médiane de DEUX** répétitions, donc un seul chargement lent (cache de pages
+> écrasé par 44 portes qui lisent des modèles) décide — le second échantillon des tampons était
+> le plus rapide des quatre. La porte prend maintenant **trois** répétitions (la médiane est le
+> point du milieu) et elle est repassée **verte**. Ce n'est pas la porte qui a été affaiblie,
+> c'est la mesure qui a été renforcée.
+>
+> **Passe du 2026-10-15 à 02 h 20** (**43 portes, 41 vertes, 2 rouges**, ~70 min) : après les
+> outils de la nuit (distillation E5, `--lora-depart`, fusion **sommaire** de plusieurs LoRA,
+> cible de changement, `politique-budget.sh`). Les deux rouges sont **les mêmes** (`porte-indice` :
+> 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne rend pas le code) et **aucune
+> valeur de porte n'a bougé** (`porte-flux` : 61,9920 / 60,8135).
+>
+> **Passe du 2026-10-15 à 00 h 01** (**43 portes, 41 vertes, 2 rouges**, ~64 min) : après la
+> **nuit du cerveau** (C2, C7, N5, E5, la boucle complète). Les **trois nouvelles portes** y sont
+> vertes : `porte-cerveau` (les quatre facultés **composent** : chacune agit encore quand les
+> autres sont allumées, quatre sorties distinctes, déterminisme au bit près), `porte-consolidation`
+> (LoRA nul ⇒ GGUF identique au bit) et `porte-cycle-c2` (chaîne de régions exacte 0,00e0, pas 1
+> exact, borné, coût dit, déterministe). Les deux rouges sont **les mêmes** (`porte-indice` : 482
+> contre 459 pour le témoin ; `porte-melange` : l'état de A ne rend pas le code), et **aucune valeur
+> de porte n'a bougé** (`porte-flux` : 61,9920 / 60,8135).
+>
+> **Passe du 2026-10-14 à 21 h 43** (**42 portes, 40 vertes, 2 rouges**, ~64 min) : après le **cycle C2**
+> (validateur qui accepte un cycle si un lien est `recurrent` et retardé ; pilote `tools/derouler.py` ;
+> capture d'état sur un nœud intermédiaire) et la **consolidation** (LoRA fusionné, `porte-consolidation`).
+> Les deux nouvelles portes y sont **vertes** : `porte-cycle-c2` (chaîne de régions exacte 0,00e0, pas 1
+> exact, borné, coût dit, trajectoire déterministe) et `porte-consolidation` (LoRA nul ⇒ GGUF identique
+> au bit, aléatoire ⇒ visible, lecteur ⇒ hors fichier). Les deux rouges sont les mêmes qu'avant
+> (`porte-indice` : 482 contre 459 pour le témoin ; `porte-melange` : l'état de A ne rend pas le code).
+> **Aucune valeur de porte n'a bougé** (`porte-flux` : 61,9920 / 60,8135).
+>
+> **Passe du 2026-10-14 à 14 h 55** (**40 portes, 38 vertes, 2 rouges**, ~75 min) : après la
+> **porte d'exécution de N4** (le moteur applique un adaptateur de sortie appris :
+> `--adaptateur-sortie`, quatre fins de plage ; et `tools/exporter_gguf_dense.py` écrit un GGUF
+> dense Qwen2). Les deux rouges sont **les mêmes qu'avant**, avec la même cause structurelle
+> (`porte-indice` : l'indice extérieur tombe à 482 jetons contre 459 pour le témoin ; `porte-melange`
+> : l'état de A ne rend pas le code de A). **Aucune valeur de porte n'a bougé** — `porte-flux`
+> rend ses cinq modes aux références (61,9920 / 60,8135). La **40ᵉ porte** y est verte du premier
+> coup (`porte-adaptateur-sortie`, 58 s) : elle vérifie que le fichier réécrit rend **les mêmes
+> chiffres** (7,4242 et 4 481 378,8799), que l'adaptateur = identité ne change **rien** (0,00e0),
+> qu'une demi-échelle — que la norme ne peut pas absorber — **change** le chiffre (×2,9), et que
+> les trois cas invalides rendent **code 2**. Fiche :
+> [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md).
+>
+> **Passe du 2026-10-13 à 13 h 44** (**39 portes, 37 vertes, 2 rouges**, ~82 min) : après l'échange
+> d'experts (C9) et le **nouveau critère** de `porte-indice` (contrôle apparié). Les deux rouges
+> sont les mêmes qu'avant, mais celui de `porte-indice` a **changé de cause** : il ne dit plus
+> « moins bien que le hasard » mais « pas mieux que le **témoin** » — une comparaison qui ne dépend
+> plus du texte. `porte-echange-experts` et `porte-tableaux` y sont **vertes**.
+>
+> **Porte ajoutée le 2026-10-13 à 13 h 20** : `porte-echange-experts.sh` (le routage imposé est
+> inerte par défaut, **exact** sur son propre routage — l'invariant qui fonde toute la mesure C9 —
+> et vivant sur un routage étranger). Vue **rouge** en retirant `DRAVE_TRACE_EXPERTS_ORDRE=1`
+> (54,4883 contre 54,5202). Fiche :
+> [`reports/rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md). Elle n'était
+> pas encore dans une passe complète au moment de ce relevé.
+>
+> **Porte ajoutée le 2026-10-13 à 08 h 40** : `porte-tableaux.sh` (vérifie que chaque tableau
+> Markdown du dépôt a le même nombre de cellules partout — une seule ligne fautive fait rendre tout
+> le tableau comme du texte, et le texte reste visible, donc le défaut est muet). Vue **rouge** sur
+> deux défauts volontaires. Fiche :
+> [`reports/rapport-tableaux-casses.md`](../reports/rapport-tableaux-casses.md). Elle n'était pas
+> encore dans une passe complète au moment de ce relevé.
+>
+> **Passe du 2026-10-13 à 06 h 19** (**37 portes, 35 vertes, 2 rouges**, ~71 min) : après le **pool
+> des tampons de lecture** (seul changement moteur depuis la précédente). Mêmes deux rouges, mêmes
+> valeurs ; `porte-prechargement` et `porte-push-paresseux` vertes. Le pool est **neutre en temps**
+> — c'est mesuré à part (`reports/rapport-pool-tampons.md`), pas déduit de cette passe.
+>
+> **Passe du 2026-10-13 à 03 h 59** (**37 portes, 35 vertes, 2 rouges**, ~72 min) : les deux rouges
+> sont **les mêmes** que ci-dessous (le critère d'indice extérieur, marginal par construction), et
+> **`porte-push-paresseux` y est verte** — c'est la passe précédente qui l'avait attrapée, et
+> celle-ci vérifie la correction **dans les conditions où le défaut était apparu**. Les valeurs
+> des portes n'ont pas bougé.
+>
+> **Passe du 2026-10-13 à 01 h 13** (**37 portes, 34 vertes, 3 rouges**, ~68 min) : les deux
+> premiers rouges sont ceux de la botte de foin (voir ci-dessus) ; le troisième était **la porte
+> elle-même** — `porte-push-paresseux` lisait `chargées en …s` alors que le moteur imprime `…ms`
+> quand le chargement descend sous la seconde : elle passait sur une machine lente et échouait sur
+> une machine rapide. **Corrigée à 02 h 25** (unité lue, refus de mesurer sur du vide) et revue
+> **verte** seule ; l'état réel de cette passe est donc **35 vertes sur 37**, les deux rouges
+> restants étant instruits. *C'est la passe qui l'a attrapée, pas une relecture.*
+>
+> **Passe du 10/10 à 22 h 27** (28 portes, 28 vertes, 73 min 21 s) : les six portes ajoutées
+> ensuite y sont **mesurées à part** — `porte-sauvegarde-modele`, `porte-occupation-elagage`,
+> `porte-harnais-invariants`, `porte-audit-drapeaux`, `porte-occupation-moteur`,
+> `porte-poids-creux` — et **toutes vertes**, chacune **vue ROUGE** avec son défaut rallumé.
+>
+
+## La passe du 25/10 à 04 h 51 — 44 vertes, 2 rouges
+
+**Ce que cette passe devait vérifier** : les instruments de C3.2 ont tous changé (le modèle sur GPU, le LoRA sur le
+même dispositif, les entrées qui suivent, `--famille`, l'évaluation optionnelle et son nombre de textes). Une porte
+verte qui ne dit rien de ces changements n'est pas une porte.
+
+| la porte | le chiffre | ce qu'elle dit |
+|---|---|---|
+| `porte-flux` | **60,8135** | la référence du relais, tenue |
+| `porte-pont` | **+2,81 % / +25,35 %** | 448 / 392 fibres |
+| `porte-topologie` | **42,5477** | le relais ne change pas un chiffre |
+| `porte-gain` | **29,0206 → 1297,5** | le drapeau vivant |
+| `porte-indice`, `porte-melange` | **rouges** | les deux **structurelles connues**, pas des régressions |
+
+**Le verdict** : `awk '$2 != 0'` sur le registre (`/tmp/portes-1025-04h51/registre.txt`) donne **exactement deux
+lignes** — `porte-indice` et `porte-melange`. Les **44 autres portes sont vertes**. La passe a duré **1 h 45**, sur
+**46 entrées** au registre.
+
+**Ce que ça dit** : les instruments de C3.2 **n'ont cassé aucune porte**. Le GPU, les entrées déplacées, le mode
+`--famille` et l'évaluation optionnelle sont **compatibles avec toutes les mesures de non-régression** — c'est ce que
+la passe devait établir, et c'est établi.

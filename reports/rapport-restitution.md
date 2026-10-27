@@ -1,8 +1,8 @@
-# Rapport — restitution canonique et aller-retour RSN
+# Rapport — restitution du code (aller-retour RSN) et surface
 
-> **Objet.** Mesurer la **restitution déterministe** : une RSN correcte est rendue en surface
-> canonique, puis relue ; la RSN relue doit être **identique**. C'est le bloc classique, sans décodeur
-> neuronal.
+> **Objet.** Mesurer la **restitution du code** (nom historique : « restitution canonique ») : une RSN
+> correcte est rendue en surface canonique, puis relue ; la RSN relue doit être **identique**. C'est le
+> bloc classique, sans décodeur neuronal. La **surface originale** est mesurée à part : **33/79** (§ 3).
 
 ## 1. Résultats
 

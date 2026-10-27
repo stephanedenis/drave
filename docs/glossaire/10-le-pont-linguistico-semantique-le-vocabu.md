@@ -7,7 +7,7 @@
 ## 10. Le pont linguistico-sémantique — le vocabulaire de l'émulation
 
 Cette section couvre le vocabulaire du **pont** (rapports
-`reports/rapport-toutes-langues.md`, `reports/rapport-pont-generatif.md`). Elle
+`reports/toutes-langues.md`, `reports/rapport-pont-generatif.md`). Elle
 manquait entièrement : avant ce rafraîchissement, le glossaire ne contenait
 **aucune** occurrence de *professeur*, *réservoir*, *oracle*, *invariance*,
 *attrition*, *fragmentation* ni *boîte noire* — c'est-à-dire aucun des mots qui
@@ -429,7 +429,7 @@ propre entrée. Ceux-ci apparaissaient au §10 sans en avoir.
 > émis quand le potentiel d'un neurone franchit un **seuil**, suivi d'une **remise à
 > zéro**. C'est un événement, pas une valeur continue : c'est ce qui rend un tel
 > réseau **parcimonieux par construction**. Le pont actuel n'en émet pas — sa
-> dynamique est continue et saturée. Voir §10.8 et `reports/rapport-toutes-langues.md`.
+> dynamique est continue et saturée. Voir §10.8 et `reports/toutes-langues.md`.
 
 > **Frame temporelle** *(time frame)* — dans un simulateur à impulsions, la tranche
 > de temps pendant laquelle on regroupe les événements avant de les traiter. Le

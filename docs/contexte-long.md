@@ -1,6 +1,6 @@
 # Contexte long : ce que 1 M veut dire, et par où ça casse
 
-> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
 
@@ -106,9 +106,9 @@ plus tôt : c'est le préremplissage (§3.a).
 | E2 | **KV int8** | **fait** (échelle **par bloc de 32**, dequantification à la lecture) | ÷4 sur le KV ; 128 k confortable | mesuré : **+1,5 %** à 512 jetons, **+3,0 %** à 8 192 (llama.cpp q8_0 : +0,8 %) |
 | E3 | **KV int4** | **fait** (nibbles empaquetés) | 1 M tient en RAM (9,7 Go) et en VRAM | mesuré : **+219 %** à 512 jetons, **+364 % à 8 192** — llama.cpp q4_0 : +411 % puis +494 % ; à réserver aux cas où la mémoire manque |
 | E4 | **KV déporté sur les 2 GPU** (pagination, préchargement) | **fait** : noyau `attn_kv_*` (tuiles de 32 clés en mémoire partagée, une passe par (tête KV, tranche), recombinaison + puits), miroir VRAM du cache (`DRAVE_GPU_KV=1`) — mesuré **×12 à ×73** sur l'attention selon le format, PPL identique ; voir §4.ter | décodage à 1 M borné par la VRAM et non par la RAM | moyen |
-| E5 | **Attention creuse** | **fait pour la mesure** — `--attn-topk 256` : 234,88 contre 298,56 (§6, valeurs du 30/09, **non reproduites depuis** : l'écart A/B fait foi, `docs/plan-gpu-topk.md`) ; le noyau GPU de top-k reste à écrire (phase 1.1) | casse le O(N) du décodage | moyen |
+| E5 | **Attention creuse** | **fait pour la mesure** — `--attn-topk 256` : 234,88 contre 298,56 (§6, valeurs du 30/09, **non reproduites depuis** : l'écart A/B fait foi, `docs/archive/plan-gpu-topk.md`) ; le noyau GPU de top-k reste à écrire (phase 1.1) | casse le O(N) du décodage | moyen |
 | E6 | **MLA** (DeepSeek) | **validée** contre llama.cpp (GLM-5.3, corrélation des logits **0,999024** à la position 0 ; l'écart croît ensuite, +4,070 nat à la position 3 ; Kimi-K2.7 calculable) — V4.1 encore bloquée (hyper-connexions, sortie à rang faible) ; `reports/rapport-mla-experts.md` | compression structurelle du KV | gros |
-| E7 | **Vision** | **faite** : chaîne image complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**, une couche 1,8e-6) — `docs/plan-mla-vision.md` | images | gros |
+| E7 | **Vision** | **faite** : chaîne image complète démontrée (patchs **5,4e-7**, projecteur **1,7e-6**, une couche 1,8e-6) — `docs/archive/plan-mla-vision.md` | images | gros |
 
 Ordre recommandé : **E1 d'abord** (sans lui, aucun contexte long n'est
 utilisable), puis E2+E3 ensemble (la qualité se mesure sur un petit modèle en
@@ -570,7 +570,7 @@ discrimine donc rien sur la rotation, et il reste à le refaire avec
 
 > Valeurs du **30/09** (gpt-oss, contexte 2 048, 512 jetons notés), **non
 > reproduites depuis** : les chiffres absolus de ce tableau ne sortent pas du
-> binaire courant — seul l'**écart A/B** fait foi (`docs/plan-gpu-topk.md`).
+> binaire courant — seul l'**écart A/B** fait foi (`docs/archive/plan-gpu-topk.md`).
 
 Deux enseignements opposés, et tous deux utiles :
 

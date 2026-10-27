@@ -1,6 +1,11 @@
 # 8. Points relevés, non corrigés
 
 > **Famille 8 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+>
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Cet audit est daté du
+> **2026-10-10** ; les chemins cités sont ceux de l'époque, corrigés vers `docs/archive/`
+> quand le fichier a été archivé depuis. Les compteurs courants sont dans
+> [`docs/en-cours.md`](../en-cours.md). **Dernière vérification : 2026-10-27.**
 
 ---
 
@@ -24,13 +29,13 @@ lecteur ne s'y trompe pas.
    est 6,5-7,4 ms.
 
 3. **Les phases P1 à P5 du plan V4.1 sont écrites deux fois.**
-   `docs/plan-deepseek41-complet.md` porte deux titres « P1 », deux « P2 », deux
+   `docs/archive/plan-deepseek41-complet.md` porte deux titres « P1 », deux « P2 », deux
    « P3 », deux « P4 », deux « P5 » : une version « **FAIT** (02/10) » (`:164-169`)
    suivie de la version « à faire » (`:171-186`). Le statut se contredit à la
    lecture linéaire.
 
 4. **Le mode 4 est dit « à écrire » alors qu'il est mesuré.**
-   `docs/plan-prefill-reparti.md:421` : « **Le lot en listes** : c'est le mode 4, à
+   `docs/archive/plan-prefill-reparti.md:421` : « **Le lot en listes** : c'est le mode 4, à
    écrire quand le débit gênera. » — contredit par `docs/format-flux.md:88-125` et
    `docs/plan-mode4-lot-listes.md:6` (« L'implémentation est faite »). Le préambule
    (`:3-11`) prévient que le corps du plan n'est pas réécrit, mais la phrase reste
@@ -40,16 +45,16 @@ lecteur ne s'y trompe pas.
    `docs/format-clusters.md:116` : « origine 15,2789 · clusters 15,2789 (mêmes
    63 jetons) » ; `docs/format-clusters.md:167-173` : « 8 | **799,8557** »
    (mêmes 7 jetons). 799,8557 est aussi la porte de non-régression citée partout
-   (`docs/sprints.md:39`) : le lecteur qui ne voit qu'un des deux chiffres croit à
+   (`docs/archive/sprints.md:39`) : le lecteur qui ne voit qu'un des deux chiffres croit à
    une contradiction.
 
 6. **Le bandeau de statut casse le tableau des modèles lourds.**
-   `docs/plan-modeles-lourds.md:23-29` insère un bloc « Où en est ce plan (02/10) »
+   `docs/archive/plan-modeles-lourds.md:23-29` insère un bloc « Où en est ce plan (02/10) »
    entre la ligne d'en-tête (`:20-21`) et les lignes de données (`:30-38`) : le
    tableau n'a plus d'en-tête, et les colonnes ne sont plus lisibles.
 
 7. **Trois durées par jeton pour le même modèle.**
-   `docs/plan-modeles-lourds.md:92` : « ~73 s/jeton » (Kimi-K2.7) ;
+   `docs/archive/plan-modeles-lourds.md:92` : « ~73 s/jeton » (Kimi-K2.7) ;
    `reports/rapport-mla-experts.md:110` : « **53 s par jeton** » ;
    `reports/rapport-mla-experts.md:236` : « le moteur met ~190 s par jeton ». Aucune
    datation ne permet de savoir laquelle fait foi.
@@ -86,7 +91,7 @@ lecteur ne s'y trompe pas.
     `docs/plan-gpu-topk.md:99`.
 
 13. **Un état « reste à faire » survit à l'état « fait » dans le plan MLA.**
-    `docs/plan-mla-vision.md:104-106` : « Ce qui reste : **le chemin MLA dans le
+    `docs/archive/plan-mla-vision.md:104-106` : « Ce qui reste : **le chemin MLA dans le
     moteur** » — alors que la section précédente (`:55-72`) annonce « MLA EST FAIT
     ET VALIDÉ ». Les sections d'états successifs cohabitent sans être datées.
 
@@ -104,17 +109,17 @@ lecteur ne s'y trompe pas.
     signale lui-même (`:62-65`) que ces chiffres ne sont pas exploitables.
 
 16. **Le coût de la journalisation est donné pour deux artefacts différents.**
-    `docs/programme-recherche.md:29` : « Journaliser les listes d'activations
+    `docs/archive/programme-recherche.md:29` : « Journaliser les listes d'activations
     (1,2 Mo/token, **+3,0 %**) » — le +3,0 % est celui du **capteur hebbien**
     (`reports/rapport-programme-evolutif.md:17`), tandis que la trace de flux coûte
     **+8 % de temps** et 258 ko/jeton (`docs/roadmap.md:15`). Les deux chiffres sont
     exacts séparément, mais la phrase les associe au même objet.
 
-17. **Le périmètre annoncé ne correspond pas au disque.**
-    La demande de glossaire décrit « une centaine de rapports » dans `reports/` ;
-    le dossier en contient **60** (plus 9 fichiers dans `sprints/`). Les 18
-    documents de `docs/` sont, eux, exacts (`reports/rapport-coherence-vision.md:3`
-    parle aussi de « 18 documents »).
+17. **Le périmètre annoncé ne correspond pas au disque (constat du 2026-10-10).**
+    À la date de l'audit, `reports/` contenait **60** rapports et `docs/` **18**
+    documents. Depuis, le dépôt a grandi : **172 fichiers, 241 JSON** et **52
+    documents** (2026-10-27). Le point reste consigné pour l'histoire ; les compteurs
+    courants sont dans [`docs/en-cours.md`](../en-cours.md).
 
 18. **Des termes attendus sont absents du corpus.**
     `Hadamard`, `MTP` (hors la mention `dspark_*`), `SparseVec` hors des rapports

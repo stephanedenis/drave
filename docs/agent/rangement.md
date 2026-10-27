@@ -1,7 +1,7 @@
 # Le rangement, et la revue de documentation
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** La revue va être étendue : fraîcheur
-> comparée au dernier commit, compteurs vérifiés (49 portes, 8 chapitres, 170/241), liens
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** La revue est étendue : fraîcheur
+> comparée au dernier commit, compteurs vérifiés (49 portes, 8 chapitres, 172/241), liens
 > dont le libellé diffère de la cible, chemins morts, documents orphelins. **Les règles de
 > rangement ne changent pas.** *Spécifique : « 7 chapitres » devient « 8 chapitres ».*
 
@@ -29,22 +29,40 @@ Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `r
 1. **classement** : un résultat qui traîne dans `docs/` est déplacé dans `reports/` ; une page de `docs/` qui n'a
    plus de « ce qui reste vrai » est supprimée ;
 2. **structure** : chaque chantier de `en-cours.md` a son entrée, son état, sa fiche, et ses sous-chantiers ;
-3. **annotation** : tous les **liens internes** résolvent (docs ↔ reports ↔ journal), et les **sources externes**
+3. **annotation** : tous les **liens internes** résolvent (docs ↔ reports ↔ journal), **leur libellé ne ment pas
+   sur la cible** (un lien qui annonce `docs/x` ne doit pas pointer `docs/archive/x`), et les **sources externes**
    (Glottolog, Gutenberg, Unicode UDHR, Cellar/EUR-Lex, Panini/Nipada) sont citées avec leur URL ou leur chemin ;
-4. **fraîcheur** : la date de `en-cours.md` est l'**heure locale** du dernier commit (jamais une estimation) ;
-5. **cohérence** : la synthèse ([`docs/synthese/index.md`](../synthese/index.md)) et le tableau de bord disent la
-   même chose ;
-6. **vocabulaire** : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) — elle est en
+4. **fraîcheur** : la date de `en-cours.md` est celle du **dernier commit** (comparaison réelle ; l'heure est
+   informative) ;
+5. **compteurs** : la page d'état est la **source unique** — **49 portes, 8 chapitres, 172 fichiers / 241 JSON,
+   52 documents** — et la revue les compare au disque (fichiers de `reports/`, `docs/`, `tools/porte-*.sh`) ;
+6. **cohérence** : la synthèse ([`docs/synthese/index.md`](../synthese/index.md)) et le tableau de bord disent la
+   même chose, et l'index liste **B10–B12** ;
+7. **navigation** : aucun document vivant n'est **orphelin**, et aucun **chemin en code inline** ne pointe vers un
+   fichier absent (hors gabarits `AAAA`, `<...>`, `*`) ;
+8. **vocabulaire** : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) — elle est en
    **unités de sens**, le jeton est l'unité technique du tokeniseur (voir le [glossaire](../glossaire.md)) ✓✓.
 
 Les portes [`porte-tableaux`](../../tools/porte-tableaux.sh) (cellules des tableaux, liens) et
-[`porte-registre`](../../tools/porte-registre.sh) complètent la revue.
+[`porte-registre`](../../tools/porte-registre.sh) complètent la revue. L'**index exhaustif** des fiches est
+régénéré par `python3 tools/index_reports.py` (→ [`reports/INDEX.md`](../../reports/INDEX.md)).
 
 > *Une documentation qui n'est pas revue à la fin d'un sous-chantier est une documentation qui mentira au cycle
 > suivant* ✗✓.
 
+## Les documents datés
+
+Un plan, une note ou un état **daté** porte en tête :
+
+```text
+> **Document daté — dernière vérification : AAAA-MM-JJ.**
+```
+
+La revue signale les documents datés de **plus de 90 jours** ; `docs/archive/` en est exclu. Un document qui
+reste vrai n'est **pas** daté : il reste dans `docs/`.
+
 ## La synthèse théorique
 
-[`docs/synthese/`](../synthese/) porte la **théorie** (7 chapitres, 7 schémas), et son `index.md` doit refléter les
+[`docs/synthese/`](../synthese/) porte la **théorie** (8 chapitres, 7 schémas), et son `index.md` doit refléter les
 **sept chantiers** et dire la même chose que `en-cours.md`. Les chiffres y sont cités comme état, jamais comme
 tableau de mesure.

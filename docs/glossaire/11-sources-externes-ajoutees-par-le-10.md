@@ -42,7 +42,7 @@ machine — règle du dépôt, on n'invente pas d'URL) :
 ### 11.1 Ce que ce rafraîchissement n'a pas fait
 
 - Il **n'a pas re-mesuré** les chiffres cités au §10.8 : ils viennent de
-  `reports/rapport-toutes-langues.md`, à sa date.
+  `reports/toutes-langues.md`, à sa date.
 - Il **n'a pas** couvert le vocabulaire du projet `neuronspikes` (réseau à impulsions,
   frames temporelles, LUT bit-reversal), qui est un dépôt distinct et dont la
   dynamique neuronale n'est pas encore définie à la date de ce document. Si le pont

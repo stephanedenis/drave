@@ -1,12 +1,12 @@
 # Organisation du dépôt — quel dossier pour quoi
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : les règles de rangement restent ; les exemples de nommage
-> et les compteurs (38ᵉ porte, 413 fichiers) seront actualisés.*
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
+> (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés corrigés
+> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
+> pas.** *Les règles de rangement restent ; les exemples de nommage et les compteurs sont
+> actualisés ci-dessous.*
 
-> Écrit le **2026-10-10 10:20 HAE** (EDT, UTC−4). Ce document est la **règle** : il dit ce qui va
+> Écrit le **2026-10-10 10:20 HAE** (EDT, UTC−4) ; **revu le 2026-10-27 09 h 30 HAE**. Ce document est la **règle** : il dit ce qui va
 > dans `docs/`, dans `reports/` et dans `journal/`, comment nommer, et comment horodater. Il
 > existe parce que les trois dossiers étaient utilisés **en désordre** : des suivis d'avancement
 > et des résultats de campagne dans `docs/`, des rapports de dizaines d'expériences dans un seul
@@ -17,12 +17,16 @@
 
 ## 0. Les points d'entrée (ce qu'on lit en arrivant)
 
-| fichier | rôle | taille visée |
+| fichier | rôle | remarque |
 |---|---|---|
-| `README.md` | ce qu'est Drave, trois commandes, **où est quoi** (tableau) | ~60 lignes |
-| `REPRISE.md` | la **check-list de démarrage** : quoi lire, quoi vérifier, les pièges, où écrire | ~90 lignes |
-| `docs/etat.md` | l'**index des modules** : roadmap → état → prochaine action | ~60 lignes |
-| `docs/references-non-regression.md` | les **repères chiffrés** (ce qui ne doit pas bouger) | ~60 lignes |
+| `README.md` | ce qu'est Drave, trois commandes, **où est quoi** | la vitrine, 283 lignes |
+| `REPRISE.md` | la **check-list de démarrage** : quoi lire, quoi vérifier, les pièges, où écrire | revu le 27/10 |
+| `docs/en-cours.md` | l'**état courant** (synthèse, chantiers, questions) | la page vivante |
+| `docs/roadmap.md` | le **plan** : les lignes A et B, la prochaine action | la feuille de route |
+| `docs/etat.md` | **redirection** vers `en-cours.md` ; l'ancien index est archivé | 10/10 → archive |
+| `docs/references-non-regression.md` | les **repères chiffrés** (ce qui ne doit pas bouger) | repères + historique |
+| `docs/README.md` | l'**inventaire** de `docs/` | la carte d'orientation |
+| `docs/carte.md` | l'**index des sujets** (un lien par fichier) | la carte des blocs |
 | `journal/AAAA-MM-JJ.md` | la **journée en cours**, par thème | — |
 
 **Règle** : ces fichiers **renvoient**, ils ne recopient pas. Un détail mesuré va dans
@@ -42,20 +46,16 @@ garde que la **conséquence** (« la capacité C6 est faite », avec le lien).
 
 Nommage :
 
-| préfixe | contenu | exemple |
+| préfixe | contenu | où |
 |---|---|---|
-| `plan-*.md` | ce qu'on projette de faire, avec ses portes mesurées | `plan-cerveau-complet.md` |
-| `roadmap*.md` | la trajectoire d'un module | `roadmap-drave.md` |
-| `etat-*.md` | **où on en est**, capacités faites / restantes, prochaine action | `etat-cerveau.md` |
-| `note-*.md` | une idée courte, une piste, une réfutation | `note-cancellation-evenementielle.md` |
-| `*-pour-drave.md` | un apport extérieur traduit pour le moteur | `biologie-pour-drave.md` |
-| (sans préfixe) | un domaine : architecture, format, glossaire, conventions | `format-flux.md`, `manques.md` |
+| `plan-*.md`, `roadmap*.md`, `etat-*.md`, `note-*.md`, `*-pour-drave.md` | un **plan, une note ou un état daté** : ce qui n'est plus vrai quand les chiffres changent | `docs/archive/` — **hors du chargement par défaut** |
+| (sans préfixe) | un **domaine vivant** : vision, format, glossaire, conventions, état courant, protocole | `docs/` |
 
 ### 1bis. Un tableau qui ne rend pas est un tableau qui n'existe pas
 
 Une **seule** ligne au mauvais nombre de cellules fait rendre **tout** le tableau comme du texte —
 et comme le texte reste visible, personne ne le voit. Trois règles, vérifiées par
-`tools/porte-tableaux.sh` (38ᵉ porte, 413 fichiers, ~1 s) :
+`tools/porte-tableaux.sh` (une des **49 portes**, **583 fichiers**, ~1 s) :
 
 1. l'en-tête, le séparateur et **chaque** ligne ont le **même nombre de cellules** ;
 2. une barre de valeur absolue **dans un espace de code** s'écrit `∣` (U+2223) : `\` + `|` s'y affiche
@@ -112,7 +112,7 @@ chemins touchés (liste dans le script : `tools/journal_auto.py --lister`). **To
 régénéré, donc on n'écrit pas en dehors du bloc.
 
 **Ce qui n'y va pas** : les résultats (un lien vers `reports/`), l'état consolidé (un lien vers
-`docs/etat-*.md`).
+`docs/en-cours.md`).
 
 ## 4. Le fuseau horaire — et l'erreur à ne pas refaire
 
@@ -142,5 +142,5 @@ APRÈS un appel à `date`, ou se prend dans git** ; si l'heure n'est pas disponi
 ## 5. Ce que ça change pour la suite
 
 À chaque round : (1) le fait et l'heure réelle dans le `journal/` du jour, avec liens ;
-(2) la mesure dans un fichier `reports/` ; (3) la conséquence dans `docs/etat-*.md` ;
+(2) la mesure dans un fichier `reports/` ; (3) la conséquence dans `docs/en-cours.md` ;
 (4) `date` — jamais une horloge supposée.

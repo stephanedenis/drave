@@ -1,11 +1,11 @@
-# La documentation de Drave — la carte
+# La documentation de Drave — l'inventaire
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
+> unifiés (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** Source de vérité pendant la passe : `docs/en-cours.md` (état) et
-> `docs/roadmap.md` (plan). *Spécifique : cette page devient l'**inventaire** ; `carte.md`
-> reste l'index des sujets, et les deux tableaux de blocs seront dédupliqués.*
+> ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
+> `docs/roadmap.md` (plan). *Spécifique : cette page est l'**inventaire** ; `carte.md`
+> est l'index des sujets, et le tableau des blocs y vit désormais.*
 
 > **`docs/` dit ce qui reste vrai** : la vision, les concepts, les contrats, l'état et les règles. Les **chiffres**,
 > les séries et les comptes rendus vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/).
@@ -25,17 +25,9 @@
 ## La carte des blocs
 
 La vision est un **bus d'événements** : chaque bloc a un contrat, une trace et un coût ; il peut être neuronal ou
-classique, et se remplacer sans toucher au bus. Les documents qui portent chaque bloc :
-
-| bloc | le concept | les preuves |
-|---|---|---|
-| **le bus et les flux** | [la vision](vision.md) · [le format de flux](format-flux.md) · [les clusters](format-clusters.md) | [les portes](references-non-regression.md) |
-| **le bloc neuronal** | [la vision](vision.md) · [le format de flux](format-flux.md) · [la modularisation](modularisation.md) | [`reports/`](../reports/README.md) |
-| **le bloc classique** | [la vision](vision.md) · [la modularisation](modularisation.md) | [les jeux](jeux-symboliques.md) · [les portes](references-non-regression.md) |
-| **la langue (surface → RSN)** | [le protocole sémantique](protocole-semantique.md) · [les jeux symboliques](jeux-symboliques.md) · [la généalogie](genealogie-des-langues.md) | [B7/B8](../reports/rapport-langues-maitres.md) |
-| **la pensée (étage 2)** | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la synthèse 08](synthese/08-les-operations.md) | [les opérations](../reports/rapport-operateur-negation.md) |
-| **le professeur externe** | [le banc externe](llm-externe.md) | [B9](../reports/rapport-deepseek.md) |
-| **la mesure** | [la synthèse 06](synthese/06-comment-savoir.md) · [l'organisation](organisation-du-depot.md) | [les portes](references-non-regression.md) |
+classique, et se remplacer sans toucher au bus. La **cartographie détaillée** — bus, bloc neuronal, bloc classique,
+langue, pensée, mesure, sémantique typée (B10/B11), cerveau-langage (B12) — vit dans
+[`carte.md`](carte.md#les-blocs) : cette page ne la duplique plus, pour éviter les deux copies qui divergent.
 
 ## Les documents de tâche
 
@@ -62,6 +54,12 @@ demande**, un document par tâche.
 | [histoire.md](histoire.md) | Qtrinet → Drave, les trois âges |
 | [references-non-regression.md](references-non-regression.md) | les repères des passes complètes |
 | [manques.md](manques.md) | le registre des manques mesurés |
+| [semantique-universaux.md](semantique-universaux.md) | la base typée (B11) : 15 champs, 502 classes, les écoles |
+| [modules-cerveau-langage.md](modules-cerveau-langage.md) | les modules M1–M9 (B12), le bus et les négatifs |
+| [contexte-long.md](contexte-long.md) | ce que 1 M de jetons de contexte veut dire, et par où ça casse |
+| [configuration-nvme-raid-amd.md](configuration-nvme-raid-amd.md) | l'array NVMe et le pari AMD (daté 12/10) |
+| [numa-segregation.md](numa-segregation.md) | la ségrégation NUMA mesurée |
+| [convertisseur.md](convertisseur.md) | le convertisseur et le chargement, ce que la mesure dit de faire |
 
 ## La règle de rangement
 

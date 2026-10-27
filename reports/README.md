@@ -1,10 +1,10 @@
 # Les rapports — données intermédiaires et références
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
+> unifiés (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : l'inventaire manuel sera complété par un index généré ;
-> le warning `07-mesures` (67 mesures / 150 Ko) est faux (168 mesures / 10 parties).*
+> ne changent pas.** *Spécifique : l'inventaire est complété par [`INDEX.md`](INDEX.md) (généré) ;
+> le warning `07-mesures` est corrigé (168 mesures / 10 parties).*
 
 > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
 > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
@@ -13,9 +13,9 @@
 > **Navigation** : [la carte des sujets](../docs/carte.md) · [l'état du moment](../docs/en-cours.md) ·
 > [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
 >
-> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) fait 67 mesures et
-> ~150 Ko — la lire **par section**, jamais en entier : `grep -n '^## Mesure' reports/07-mesures-couche-commune.md`.
-> Un résultat se cite par sa section et son JSON, pas par la fiche complète.
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
 
 ## Les fiches courantes
 
@@ -28,20 +28,20 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation (`action` 98,6 %, `de` 93,2 %), M8 généralise (96,48 % hors stock), M5/M6/M7 **négatifs** ; M9 lésions |
-| [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, canonique 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, raisonnement non branché) |
-| [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : restitution canonique **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; surface originale **33/79** ; sans décodeur neuronal |
+| [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, **restitution du code** 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, **surface 33/79**, raisonnement non branché) |
+| [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : **restitution du code** **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; **surface originale 33/79** ; sans décodeur neuronal |
 | [`rapport-hybride.md`](rapport-hybride.md) | **B11.6** : le codec avec contexte lit **528/528** (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire de traduction 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
-| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), restitution **33/79** ; natif réel seul 0 %, natif **synthétique normalisé 55,7 %** sur surfaces réelles, **contexte suffixé 59,8 %** (invariance 40,7 %), vecteur contexte 59,1 % / 40,7 %, préfixe 0,4 % / 88,9 % (collapse), cartes 69,3 %, baseline 45,1 %, consistance 38,3 %, adversaire 39,6 % |
-| [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 14,0/5,4 contre plancher 38,8, référence tronquée), NVLink |
+| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), **surface 33/79** ; natif réel seul 0 %, natif **synthétique normalisé 55,7 %** sur surfaces réelles, **contexte suffixé 59,8 %** (invariance 40,7 %), vecteur contexte 59,1 % / 40,7 %, préfixe 0,4 % / 88,9 % (collapse), cartes 69,3 %, baseline 45,1 %, consistance 38,3 %, adversaire 39,6 % |
+| [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 14,0/5,4 contre plancher 38,8 en **référence tronquée** ; 12,7/5,3 contre 39,6 en **référence complète**), NVLink |
 
 ## Les données brutes
 
 - [`jeux-mesures.json`](jeux-mesures.json) — le corpus des 112 surfaces, la couverture par niveau, les contrôles et la pensée
 - [`jeux-langues-mesures.json`](jeux-langues-mesures.json) — les 71 langues : couverture, corpus, invariance, permutation, notation
 - [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json) — les 17 principes : échecs, dames, go, cartes, ablation
-- [`deepseek-mesures.json`](deepseek-mesures.json) — le banc DeepSeek : 60 prompts, chrF, plancher, tokens, latence
+- [`deepseek-mesures.json`](deepseek-mesures.json) — le **premier** banc DeepSeek (60 prompts) ; le banc à l'échelle est `deepseek-mesures-300.json`
 - [`cerveau-mesures.json`](cerveau-mesures.json) — la batterie M1–M9 : hub, voies, mémoires, prédictif, gating, neuromodulation, sommeil, lésions
-- [`restitution-mesures.json`](restitution-mesures.json) — la restitution canonique et l'aller-retour RSN
+- [`restitution-mesures.json`](restitution-mesures.json) — la **restitution du code** et l'aller-retour RSN
 - [`hybride-mesures.json`](hybride-mesures.json) — le codec avec/sans contexte et la mémoire de traduction
 - [`universaux-mesures.json`](universaux-mesures.json) — la base typée : corpus, schéma, parseur natif et codec classique
 - [`semantique-mesures.json`](semantique-mesures.json) — le protocole sémantique : historiques étage A, étage B, diagnostic multilingue, ressources NVLink
@@ -178,7 +178,10 @@
 - [`sonde-octets-position.json`](sonde-octets-position.json)
 - [`traduction-legal.json`](traduction-legal.json)
 
-## Les autres rapports (historique)
+## Les autres rapports (index alphabétique — certains historiques)
+
+> L'index **exhaustif** et **généré** est [`INDEX.md`](INDEX.md) ; la liste ci-dessous est
+> alphabétique et conserve les descriptions historiques.
 
 - [`aiguille-30b.md`](aiguille-30b.md)
 - [`aiguille-gpt-oss.md`](aiguille-gpt-oss.md)

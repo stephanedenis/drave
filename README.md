@@ -232,14 +232,14 @@ La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md
 | **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/en-cours.md`](docs/en-cours.md) |
 | **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/vision.md`](docs/vision.md) |
 | **la roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/roadmap.md`](docs/roadmap.md) |
-| **les résultats**, mesure par mesure, avec les contrôles | [`reports/07-mesures-couche-commune.md`](reports/07-mesures-couche-commune.md) · [`reports/`](reports/) |
-| **la théorie** (7 chapitres) et la carte du raisonnement | [`docs/synthese/index.md`](docs/synthese/index.md) · [chap. 5](docs/synthese/05-la-pensee-sans-verbaliser.md) |
+| **les résultats**, mesure par mesure, avec les contrôles | [`reports/README.md`](reports/README.md) · [`reports/`](reports/) |
+| **la théorie** (8 chapitres) et la carte du raisonnement | [`docs/synthese/index.md`](docs/synthese/index.md) · [chap. 5](docs/synthese/05-la-pensee-sans-verbaliser.md) |
 | **la méthode** et ses pièges | [`docs/synthese/06-comment-savoir.md`](docs/synthese/06-comment-savoir.md) |
 | le **récit daté** de la recherche | [`journal/`](journal/) |
 | les **instruments** (les expériences sont rejouables) | [`tools/`](tools/) |
 | les **corpus** | [`data/`](data/) (non versionné) |
 | le **moteur d'inférence** (Rust) | [`drave-core/`](drave-core/) |
-| l'**état des capacités du moteur** | [`docs/etat-cerveau.md`](docs/archive/etat-cerveau.md) |
+| l'**état des capacités du moteur** (archive) | [`docs/archive/etat-cerveau.md`](docs/archive/etat-cerveau.md) |
 | les **règles de travail** du dépôt | [`AGENTS.md`](AGENTS.md) |
 
 **Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un niveau
@@ -268,7 +268,8 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 ## Ce qui est fait, et ce qui reste ouvert
 
 **Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),
-les 71 langues et les maîtres (B7/B8), le banc externe (B9). Les **chiffres, les contrôles et les négatifs**
+les 71 langues et les maîtres (B7/B8), le banc externe (B9), le protocole sémantique (B10), la base typée (B11)
+et les modules cerveau-langage (B12). Les **chiffres, les contrôles et les négatifs**
 — y compris le seuil de distillation 9,23–9,96 M, le meilleur écart 4,40 % (31,63 M / 610 ex.), la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
 [`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/en-cours.md`](docs/en-cours.md) ; le **plan**
 dans [`docs/roadmap.md`](docs/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.

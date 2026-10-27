@@ -1,12 +1,12 @@
 # UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : 46→49 portes, 6→8 chapitres, 6→7 schémas ; les chemins
-> `cerveau-facultes` et `etat-cerveau` iront à l'archive.*
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
+> (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés corrigés
+> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
+> pas.** *46→49 portes, 6→8 chapitres, 6→7 schémas ; les chemins `cerveau-facultes` et
+> `etat-cerveau` sont passés à l'archive.*
 
-> Écrit le **16/10** en réponse à une question simple : « que manque-t-il pour que je puisse utiliser
+> Écrit le **16/10**, **revu le 2026-10-27**. en réponse à une question simple : « que manque-t-il pour que je puisse utiliser
 > tout ça ? ». Ce document dit **ce qui s'utilise tout de suite** ✓, **la commande exacte** ✓, et
 > **ce qui n'existe pas encore** ✗ — avec ce que chaque manque coûterait ✓.
 > Règle de lecture : tout ce qui est ✅ a été **exécuté** le jour de l'écriture ✓ ; tout ce qui est ❌
@@ -32,7 +32,7 @@ gabarit Qwen, tient l'historique, et **coupe l'instrumentation** ✓✓.
 | | **mdserve** | **`serveur-doc.py`** |
 |---|---|---|
 | adresse | **http://127.0.0.1:8771/** ✓ | **http://localhost:8787/** (et **192.168.1.101:8787** ✓) |
-| ce que c'est | **le navigateur de documents** ✓ : **arbre** de contenu ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓, comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`, `~/.config/mdserve/pins.json` ✓ — `docs`, `reports` et `etat-cerveau.md` y sont ✓), **changement de racine** ✓ (ne peut que **restreindre** la vue ✗), **filtrage** ✓ | **la page « où en est le travail »** ✓ : `docs/en-cours.md` en premier, puis les documents de tête, la dernière passe des portes, les fiches récentes, le journal du jour ✓ |
+| ce que c'est | **le navigateur de documents** ✓ : **arbre** de contenu ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓, comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`, `~/.config/mdserve/pins.json` ✓ — `docs`, `reports` et `en-cours.md` y sont ✓), **changement de racine** ✓ (ne peut que **restreindre** la vue ✗), **filtrage** ✓ | **la page « où en est le travail »** ✓ : `docs/en-cours.md` en premier, puis les documents de tête, la dernière passe des portes, les fiches récentes, le journal du jour ✓ |
 | portée | **127.0.0.1 seulement** ✗ (garantie par construction ✓) | **0.0.0.0** ✓ — donc accessible **depuis une autre machine** ✓ |
 | service | `mdserve.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/mdserve.log` ✓) | `drave-doc.service` ✓ |
 | écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ | aucune ✓ |
@@ -71,12 +71,12 @@ accéder depuis une autre machine ✓) : **8787** ✓.
 Donne la **perplexité** ✓, le détail des paires poids × activation, les postes de temps ✓. C'est
 l'instrument de base de tout le dépôt ✓.
 
-### Les portes (les 46 vérifications)
+### Les portes (les 49 vérifications)
 
 ```bash
 bash tools/porte-tableaux.sh        # 2 s : tableaux + liens + fraîcheur de la page vivante
 bash tools/porte-vision.sh          # la tour de vision, en isolation et le projecteur
-bash tools/toutes-les-portes.sh     # la passe complète, ~90 min, écrit son REGISTRE
+bash tools/toutes-les-portes.sh     # la passe complète, ~1 h 34, écrit son REGISTRE
 ```
 ⚠️ **Ne jamais lire une porte à travers un `tail`** ✗ : le code de sortie devient celui du tuyau ✓
 (leçon payée le 16/10 ✓). La passe écrit désormais `registre.txt` avec chaque code de sortie ✓.
@@ -92,16 +92,15 @@ Le chemin image est **vérifié** ✓ (embedding exact, 31 couches à 7,58e-06 e
 
 ### La synthèse théorique (à lire en premier, ou en dernier)
 
-**`docs/synthese/`** ✓ — six chapitres **vulgarisés** et **six schémas SVG** : l'idée fondatrice, l'anatomie
+**`docs/synthese/`** ✓ — **huit chapitres** **vulgarisés** et **sept schémas SVG** : l'idée fondatrice, l'anatomie
 interne (régions, liens, bus, horloges), les modes d'exécution et les portes, les douze facultés et les neuf
-apports de biologie, la pensée sans verbaliser (le travail du 16/10), et la méthode avec ses cinq pièges.
+apports de biologie, la pensée sans verbaliser (le travail du 16/10), la méthode avec ses cinq pièges, les
+modèles alternatifs de l'entrée-sortie, et les opérations (la négation, la composition, la grappe).
 Entrée : **`docs/synthese/index.md`** ✓.
 
-⚠️ **Où les schémas s'affichent** ✓✗ : sur le serveur **8787** (`drave-doc`) ✓ — il sert désormais les
-`.svg` avec leur **type MIME** (`image/svg+xml` ✓) ; **pas sur mdserve** ✗, qui ne rend que le markdown et
-ne sert aucune fichier annexe (ses API sont `/root`, `/tree`, `/changed` ✓). Si une image reste cassée,
-c'est un **cache** ✗ : rechargez avec `Ctrl+Maj+R` ✓ — ou ouvrez directement le fichier
-`docs/synthese/schemas/vue-ensemble.svg` ✓ (les SVG sont autonomes ✓).
+⚠️ **Où les schémas s'affichent** ✓ : sur **mdserve** (patch du 17/10 : route `/asset` et réécriture des `src`)
+et sur **8787** ; si une image reste cassée, c'est un **cache** ✗ : rechargez avec `Ctrl+Maj+R` ✓ — ou ouvrez
+directement le fichier `docs/synthese/schemas/vue-ensemble.svg` ✓ (les SVG sont autonomes ✓).
 
 ### Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)
 
@@ -138,13 +137,16 @@ sortie ✓), `--partage` (bloc répété ✓), `--recurrence-max T` (entraîner 
 
 Chaque faculté a **sa fiche** (`reports/`) et **sa porte** ✓ : consolidation et sommeil (C7 ✓),
 homéostasie E9 ✓, cycle C2 ✓, mémoire épisodique C6 ✓, bus C5 ✓, budgets C10 ✓, topologie C1 ✓.
-Point d'entrée : `docs/cerveau-facultes.md` (la carte ✓), `tools/boucle-cerveau.sh` (la chaîne ✓).
+Point d'entrée : le chapitre 4 de la synthèse (`docs/synthese/04-les-facultes-et-la-biologie.md`) pour la
+carte courante, l'ancienne carte archivée (`docs/archive/cerveau-facultes.md`) pour l'historique, et
+`tools/boucle-cerveau.sh` pour la chaîne.
 
 ### Le journal et l'état
 
-`docs/en-cours.md` (**la page vivante** ✓, servie par le serveur ✓), `docs/etat-cerveau.md` (l'état
-complet ✓), `journal/AAAA-MM-JJ.md` (le récit du jour ✓). **Une porte vérifie que la page vivante date
-du dernier commit** ✓✓ : un cycle qui commite sans la mettre à jour **échoue** ✓.
+`docs/en-cours.md` (**la page vivante** ✓, servie par le serveur ✓) et `docs/roadmap.md` (le plan) ;
+l'ancien état complet est archivé (`docs/archive/etat-cerveau.md`) ; `journal/AAAA-MM-JJ.md` est le récit
+du jour ✓. **Une porte vérifie que la page vivante date du dernier commit** ✓✓ : un cycle qui commite sans
+la mettre à jour **échoue** ✓.
 
 ## 2. ❌ Ce qui manque, par ordre de ce que ça coûte
 

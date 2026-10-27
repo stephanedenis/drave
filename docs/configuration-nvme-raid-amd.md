@@ -1,6 +1,6 @@
 # Nouvelle configuration : array NVMe sur le nœud 1, AMD pour le bureau
 
-> **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+> **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
 

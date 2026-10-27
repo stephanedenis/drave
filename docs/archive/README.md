@@ -61,5 +61,6 @@
 
 | document | ce qu'il disait |
 |---|---|
+| [etat-modules-2026-10-10.md](etat-modules-2026-10-10.md) | l'index des modules du 10/10/2026 (remplacé par `en-cours.md`) |
 | [etat-cerveau.md](etat-cerveau.md) | l'état des capacités du moteur (ancien) |
 | [etat-emulation-professeur.md](etat-emulation-professeur.md) | l'état de l'émulation d'un professeur |

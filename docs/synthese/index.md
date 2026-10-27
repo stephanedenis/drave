@@ -1,8 +1,8 @@
 # Synthèse théorique de Drave
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours :
-> B10–B12 seront ajoutés aux « hors chapitres », et B4 passera de **cinq** à **six**
-> mesures (le LoRA). Les **huit chapitres** et les **sept schémas** sont exacts.
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** B10–B12 sont ajoutés aux
+> « hors chapitres », et B4 passe de **cinq** à **six** mesures (le LoRA). Les **huit
+> chapitres** et les **sept schémas** sont exacts.
 
 > **Ce que ce dossier est.** Une explication **complète et vulgarisée** de ce que Drave sait faire, de
 > son fonctionnement interne, et des idées qui le gouvernent. Huit chapitres, sept schémas, et à la fin de
@@ -26,12 +26,12 @@
 |---|---|---|---|
 | 1 | [le cerveau Drave](01-le-cerveau-drave.md) | l'idée fondatrice, et pourquoi couper un modèle ne le casse pas | ![vue d'ensemble](schemas/vue-ensemble.svg) |
 | 2 | [l'anatomie interne](02-anatomie-interne.md) | régions, liens, bus, horloges : ce qui circule et où | ![coupe](schemas/anatomie-coupe.svg) |
-| 3 | [les modes et les portes](03-les-modes-et-les-portes.md) | les six façons de faire tourner le modèle, et les **47** vérifications | ![modes](schemas/modes.svg) |
+| 3 | [les modes et les portes](03-les-modes-et-les-portes.md) | les six façons de faire tourner le modèle, et les **49** vérifications | ![modes](schemas/modes.svg) |
 | 4 | [les douze facultés](04-les-facultes-et-la-biologie.md) | C1-C12 : ce qu'on cherche à donner à un modèle, et à quoi on le reconnaît | ![facultés](schemas/facultes.svg) |
 | 5 | [la pensée sans verbaliser](05-la-pensee-sans-verbaliser.md) | le travail de la nuit du 16/10 : lire le sens, itérer, et le prix | ![pensée](schemas/pensee.svg) |
 | 6 | [comment savoir qu'on a raison](06-comment-savoir.md) | les portes, le registre, et les cinq pièges d'instrument | ![portes](schemas/portes.svg) |
 | 7 | [les modèles alternatifs pour l'entrée et la sortie](07-modeles-alternatifs-entree-sortie.md) | **la théorie** de l'étage entrée-sortie (nom historique : couche commune) : cinq familles, ce qu'on sait, ce qui reste ouvert — les **mesures** sont dans [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md) | ![couche commune](schemas/couche-commune.svg) |
-| 8 | [les opérations : ce que l'état porte, et ce qu'il ne calcule pas](08-les-operations.md) | les **cinq mesures** de B4 (la négation : pas une direction, apprenable, un sous-espace, pas une algèbre, une composition apprise à 0,62) et la **grappe** du moteur (le top-1024 exact à 21 %) | — |
+| 8 | [les opérations : ce que l'état porte, et ce qu'il ne calcule pas](08-les-operations.md) | les **six mesures** de B4 (la négation : pas une direction, apprenable, un sous-espace, pas une algèbre, une composition apprise à 0,62, le LoRA qui **inverse** à 0,2283) et la **grappe** du moteur (le top-1024 exact à 21 %) | — |
 
 ## Hors chapitres — les jeux symboliques
 
@@ -40,6 +40,14 @@
 | **B5/B6 — la surface, la RSN-jeu, la pensée** : cinq jeux (morpion, échecs, dames, go, cartes), les couches 0→4, l'invariance, le perft et la logique | [le concept](../jeux-symboliques.md) · [la fiche](../../reports/rapport-jeux-symboliques.md) · [la porte](../../tools/porte-jeux.sh) |
 | **B7/B8 — les langues et les maîtres** : 71 langues, 449 surfaces, la permutation, la notation ; 17 principes, le livre, le go 9×9, les cartes | [le concept](../jeux-symboliques.md) · [la fiche](../../reports/rapport-langues-maitres.md) |
 | **B9 — le banc externe** : DeepSeek pour le langage, les GPU pour le natif ; 310/610/910 prompts, **31,63 M / 610 : 4,40 %**, fenêtre et négatif 910/30 | [le concept](../llm-externe.md) · [la fiche](../../reports/rapport-deepseek.md) |
+
+## Hors chapitres — la sémantique et le cerveau (B10–B12)
+
+| le sujet | où il vit |
+|---|---|
+| **B10 — le protocole sémantique** : rejouer le sens en 10 langues, `z` partagé ; l'encodeur converge (0,426 contre 0,167), le décodeur est **négatif** (14,0 / 5,4 contre 38,8 en référence tronquée ; 12,7 / 5,3 contre 39,6 en référence complète) | [le protocole](../protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
+| **B11 — la base d'universaux typés** : 15 champs, 502 classes ; le codec lit **100 %** (79/79, 449/449) et la **restitution du code** fait **100 %** d'aller-retour, mais la **surface originale** reste à **33/79** ; le natif normalisé + contexte est à **59,8 % / 40,7 %** | [les universaux](../semantique-universaux.md) · [la fiche](../../reports/rapport-universaux.md) · [le bilan](../../reports/bilan-b11.md) |
+| **B12 — les modules cerveau-langage M1–M9** : bus réel, **M1 528/528**, **M2 98,6 / 93,2** (double dissociation), **M8 96,48 %** hors stock ; **M5/M6/M7** négatifs ou faibles ; **M9** table de lésions | [les modules](../modules-cerveau-langage.md) · [la fiche](../../reports/rapport-cerveau-modules.md) |
 
 ## Trois principes, qui reviennent partout
 

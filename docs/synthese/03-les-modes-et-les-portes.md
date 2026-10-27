@@ -1,6 +1,6 @@
 # 3. Les modes et les portes — ce que le moteur fait vraiment
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Les compteurs de ce chapitre seront
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Les compteurs de ce chapitre sont
 > alignés sur la dernière passe : **49 portes** (et non 46), **~1 h 34** (et non ~97 min).
 
 > **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
@@ -42,7 +42,7 @@ Le dépôt a mesuré trois choses, et elles se contredisent utilement :
 ![Les portes](schemas/portes.svg)
 
 Une **porte** est un script qui vérifie une affirmation et **sort en erreur** si elle est fausse. Il y en a
-**46**, et une passe complète dure ~97 minutes.
+**49**, et une passe complète dure **~1 h 34**.
 
 Les trois règles apprises à la dure :
 

@@ -22,7 +22,7 @@ donné 1,03e-7 au lieu de 1,60-2,25e-7 (`reports/rapport-gpu-scores.md:27-36`,
 classent chaque affirmation en OK / PÉRIMÉ / CONTRADICTOIRE / MANQUANT, avec
 `fichier:ligne` : `reports/rapport-coherence-docs.md` (80 affirmations, 38
 périmées), `reports/rapport-coherence-docs-2.md` (66 affirmations, 27 tiennent) et
-`reports/rapport-coherence-vision.md` (les 18 documents de `docs/`).
+`reports/rapport-coherence-vision.md` (les 18 documents de `docs/` **à l'époque**).
 **Où** : à lire avant de citer un chiffre ancien.
 
 **Corrélation · différence symétrique · accord top-1** — Trois façons de comparer

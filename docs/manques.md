@@ -1,17 +1,19 @@
 # Registre des manques
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Le registre daté reste ; les
-> affirmations de contexte seront corrigées : **49 portes** (et non 27/27), la feuille
-> de route est [`roadmap.md`](roadmap.md), et les plans cités sont dans `docs/archive/`.
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Le registre daté reste ; les
+> affirmations de contexte sont corrigées : **49 portes** (47 vertes, 2 structurelles), la
+> feuille de route est [`roadmap.md`](roadmap.md), et les plans cités sont dans `docs/archive/`.
+> **Dernière vérification : 2026-10-27.**
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
 
-> 9 octobre 2026. Ce que le dépôt **ne sait pas faire**, consigné comme manque — pas
-> comme résultat. Chaque ligne porte la mesure qui l'établit, ce qu'elle bloque, et
-> où c'est documenté. Rien ici n'est une feuille de route : la feuille de route est
-> `docs/plan-cerveau-complet.md`.
+> 9 octobre 2026 (**dernière vérification : 2026-10-27**). Ce que le dépôt **ne sait pas faire**,
+> consigné comme manque — pas comme résultat. Chaque ligne porte la mesure qui l'établit, ce
+> qu'elle bloque, et où c'est documenté. Rien ici n'est une feuille de route : la feuille de route
+> courante est [`roadmap.md`](roadmap.md) ; le plan d'origine est archivé
+> (`docs/archive/plan-cerveau-complet.md`).
 
 ---
 
@@ -66,14 +68,14 @@ pas avec un calcul plus court qu'elle), et le même remède côté **VRAM** — 
 | **N1** | **structure innée à l'échelle** — gratuite à 25 % à dim 384 (+1,0 %), coûteuse à 12,5 % (+13,7 %) **et à dim 512 (+6,7 %)** | E1 et m16, mesurés | un connectome inné viable demande un masque **choisi**, pas aléatoire |
 | **N2** | **deux axes appris à l'échelle** — ÷7,8 à dim 384 | m11 mesuré ; m17 (dim 512) en cours | savoir si la recette tient en grandissant |
 | **N3** | **règle d'apprentissage locale** — aucune ne transfère | 5 variantes mesurées (nue, nouveauté, valeur, valeur externe, décorrélation) ; la meilleure reste **ne rien faire** | tout apprentissage par impulsions |
-| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués ; le **chemin court entraîné** (dessin B) est mesuré depuis le 14/10 et **exécuté par le moteur** — ÷1,47 / ÷1,24 à profondeur 8 lus par `drave` (`reports/rapport-n4-porte-execution.md`), ÷1,32 à ÷1,83 selon la profondeur en torch (`reports/rapport-n4-dessin-b.md`) ; reste la variabilité entre exécutions (±10 %) et la génération libre — et pour H la **borne est maintenant mesurée** : un oracle **parfait** ne sortirait tôt que **30,93 %** des jetons (≈ **10,3 %** des paires), et **aucun seuil de confiance** n'atteint la qualité du chemin long (47,33 % contre 47,73 %) — le facteur limitant est le **chemin court** (adaptateur à 23,19 % contre 47,73 %), pas le routeur — `reports/rapport-design-H-profondeur-routee.md` | les trois leviers inédits de `docs/modele-pour-drave.md` § 3 (H, I, J) |
+| **N4** | **profondeur routée** (mixture-of-depths), **budget d'événements appris**, **quantification adaptée aux listes** | dessins évalués ; le **chemin court entraîné** (dessin B) est mesuré depuis le 14/10 et **exécuté par le moteur** — ÷1,47 / ÷1,24 à profondeur 8 lus par `drave` (`reports/rapport-n4-porte-execution.md`), ÷1,32 à ÷1,83 selon la profondeur en torch (`reports/rapport-n4-dessin-b.md`) ; reste la variabilité entre exécutions (±10 %) et la génération libre — et pour H la **borne est maintenant mesurée** : un oracle **parfait** ne sortirait tôt que **30,93 %** des jetons (≈ **10,3 %** des paires), et **aucun seuil de confiance** n'atteint la qualité du chemin long (47,33 % contre 47,73 %) — le facteur limitant est le **chemin court** (adaptateur à 23,19 % contre 47,73 %), pas le routeur — `reports/rapport-design-H-profondeur-routee.md` | les trois leviers inédits de `docs/archive/modele-pour-drave.md` § 3 (H, I, J) |
 | **N5** | **mémoire d'un signal injecté** — le modèle n'en a aucune, **et il ne l'APPREND pas** | sonde linéaire **et** non linéaire sur l'état de sortie : le signal **courant** est lisible (**R² 0,992**) mais celui d'il y a 8 pas **ne l'est pas** (−0,681). **Entraînement mesuré le 14/10** (`tools/memoire_travail.py`) : 8 époques de LoRA rang 8 sur les 24 couches, et la mémoire **recule** (−1,091 → **−2,773**, contrôle à cibles mélangées −2,855) — pendant qu'avec le **tampon** dans l'entrée le modèle **gelé** lit déjà (+0,879) et l'entraîné fait mieux (+0,964) ; le moteur confirme la direction (+0,766 non linéaire contre −0,493). `reports/rapport-memoire-travail-n5.md` | toute tâche qui demande de **retenir** (poursuite, mémoire de travail) côté modèle : **la structure est le mécanisme efficient** (tampon : R² 1,000, zéro paire) ; ce qui reste ouvert est de faire **servir** la mémoire par le réseau (une tâche, pas une sonde) |
 
 ---
 
 ## 3. Les manques d'ARCHITECTURE (pour porter un cerveau)
 
-Les **douze capacités** de `docs/plan-cerveau-complet.md` § 1 — graphe de régions,
+Les **douze capacités** de `docs/archive/plan-cerveau-complet.md` § 1 — graphe de régions,
 liens multiples et récurrence, délais, horloges, bus de modulation, mémoire
 épisodique, consolidation, périphérie, latéralité, budgets, instances concertées,
 traçage distribué : **zéro est implémentée**. Six phases, 5 à 7 mois, avec leurs
@@ -88,13 +90,15 @@ portes mesurées.
 - **Le découpage à deux nœuds est exact** : 0,00e0 (modes 0, 1, 3), et la perplexité
   ne bouge pas jusqu'à 50 ms de latence par message.
 - **Le rejeu est exact** : 0,00e0.
-- **Les portes du dépôt tournent TOUTES, et toutes passent** : `tools/toutes-les-portes.sh`,
-  **27 vertes sur 27, en 60 min 13 s** (mesuré le 2026-10-10 à 21:33 HAE ; détail et durées
-  dans `reports/rapport-passe-complete-portes.md`). La ligne qui était ici affirmait « les 23
-  portes sont vertes » alors que la suite n'avait **jamais tourné comme une suite** : une
-  porte était **rouge depuis le protocole v7** et une autre **verte en ne comparant rien**
-  (`porte-tokenizer-kimi`, corrigée). Une porte se lance **toutes ensemble**, sinon elle ne
-  vaut que ce que vaut la mémoire de celui qui l'a lancée.
+- **Les portes du dépôt tournent TOUTES, et les seules rouges sont les deux structurelles connues** :
+  `tools/toutes-les-portes.sh`, **49 portes (47 vertes, 2 structurelles), 1 h 34** (passe du
+  2026-10-26 14 h 30 ; détail dans [`references-non-regression.md`](references-non-regression.md)).
+  L'historique du 10/10 (27/27, 60 min 13 s) est conservé dans
+  [`reports/historique-passes-portes.md`](../reports/historique-passes-portes.md). La ligne qui
+  était ici affirmait « les 23 portes sont vertes » alors que la suite n'avait **jamais tourné
+  comme une suite** : une porte était **rouge depuis le protocole v7** et une autre **verte en ne
+  comparant rien** (`porte-tokenizer-kimi`, corrigée). Une porte se lance **toutes ensemble**,
+  sinon elle ne vaut que ce que vaut la mémoire de celui qui l'a lancée.
 - **La mémoire tient** : 18 aiguilles sur 18 jusqu'à 12 288 jetons.
 
 **La règle de lecture** : un manque est écrit ici avec la mesure qui l'établit ; une

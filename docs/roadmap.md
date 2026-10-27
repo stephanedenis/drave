@@ -1,10 +1,10 @@
 # La roadmap de Drave — deux programmes, un ordre, aucune date
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
+> unifiés (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) sera
-> remis à jour ; B12 sera replacé après B11.*
+> ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) est
+> remis à jour ; B11 précède B12.*
 
 > Suite de [`docs/vision.md`](vision.md). Le projet a **deux programmes** : le **moteur** (les flux de données, les
 > cinq axes) et l'**intelligence** (les deux étages). Ils avancent **en parallèle** ; l'ordre se décide par la
@@ -58,7 +58,7 @@ Un flux de listes est observable par construction : on peut compter, tracer, com
 | A3.1 | **Contrat d'échange** (protocole v5) : en-tête (couche, source, échelle, bits) + paires | ✅ | 79 octets d'en-tête, cinq modes (dense, listes, blocs, lot dense, lot en listes) ; transport TCP fidèle, écart local/réparti **0,00e0** |
 | A3.2 | **Granularité** : par couche, par bloc, par expert | ✅ | listes i16, échelles par bloc, indices par écarts : **1 608 octets par flux** à 256 jetons ; le mode « lot en listes » : 1,5 ko/jeton contre 3,5 en dense (÷2,3) |
 | A3.3 | **Seuil de rentabilité** : à quel débit/latence le découpage gagne | 🔬 | attente ≈ calcul distant + **3,2 × latence** : 1,01× à 0 ms, 1,99× à 5 ms, 4,89× à 20 ms ; le débit ne compte pas (0,25 Mbit/s) |
-| A3.4 | **Démonstration Colab** : préremplissage réparti | 🔬 | le préremplissage par lots est **fait et fidèle** (0,00e0) ; reste le runtime Colab ([`docs/colab-reparti.md`](archive/colab-reparti.md)) |
+| A3.4 | **Démonstration Colab** : préremplissage réparti | 🔬 | le préremplissage par lots est **fait et fidèle** (0,00e0) ; reste le runtime Colab ([`docs/archive/colab-reparti.md`](archive/colab-reparti.md)) |
 | A3.5 | **Sûreté** : version dans chaque en-tête, refus des flux incompatibles | ✅ | un pair en version 99 est refusé avec un message qui nomme les deux versions |
 
 **Prochaine action** : A3.4 (la démo distante) — bloquée par le compte Colab ; en attendant, A3.2 (la granularité
@@ -292,18 +292,48 @@ exemples dans les deux cas) ; c'est le résultat à expliquer. Le contrôle par 
 plancher chrF sont les garde-fous. Aucune ligne n'est bloquée : la clé est dans l'environnement,
 les GPU sont libres.
 
+**Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
+proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
+**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a une **transition entre
+9,23 M et 9,96 M** : **négative à 4,04 M**, **transitoire à 9,23 M** (1 graine/3), **positive 3/3
+à 9,96 M, 10,70 M, 16,02 M et 22,54 M** (1,76 %, 1,65 %, 1,92 %, 1,74 %). Le **masque calibré** à
+4,04 M est **quasi égal** (2,7335 contre 2,7340, 0,02 %) : pas de gain établi. Le transfert existe,
+mais il demande de la capacité ; le seuil est une **transition**, pas une marche.
+
+
 ### B10 — le protocole sémantique natif
 
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B10.1 | **L'encodeur** : rejouer les articles UDHR en 10 langues, `z` partagé, contrastive + adversaire, NVLink | ✅ **mesuré** | rappel parallèle **0,426** contre **0,167** de hasard ; mélangé **0,172** ; sonde de langue **0,100** ; 250 pas, 31,63 M, 2 GPU NVLink |
-| B10.2 | **Le décodeur sens → texte** : `z` gelé ou joint, décodeur séparé | ❌ **négatif** | chrF reconstruction **14,0**, traduction **5,4** contre un plancher **38,8** (référence tronquée) ; diagnostic sous le plancher ; ablations : `z` 512 → rappel **0,278**, préfixe 64 → **12,4/6,7**, joint → **12,9/8,4**, 8 unités linéaires → rappel **0,237** |
+| B10.2 | **Le décodeur sens → texte** : `z` gelé ou joint, décodeur séparé | ❌ **négatif** | chrF reconstruction **14,0**, traduction **5,4** contre un plancher **38,8** (référence tronquée ; **12,7 / 5,3 contre 39,6** en référence complète) ; diagnostic sous le plancher ; ablations : `z` 512 → rappel **0,278**, préfixe 64 → **12,4/6,7**, joint → **12,9/8,4**, 8 unités linéaires → rappel **0,237** |
 | B10.3 | **Le raisonnement** sur `z` gelé | ⏳ **non branché** | attend un décodeur au-dessus du plancher |
 
 **Ce que le premier passage a appris** : l'alignement seul collapse ; l'all-gather doit être différentiable ;
 les gradients du décodeur écrasent l'encodeur (étages séparés) ; les articles du lot global doivent être
 distincts. Prochaine action : décodeur à attention croisée, 20–30 articles, 3 graines, puis raisonnement.
 Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
+
+### B11 — la base d'universaux typés
+
+| ligne | objet | état | mesure |
+|---|---|---|---|
+| B11.1 | **Le schéma fixe** : 15 champs, 502 classes, one-hot déterministe ; NSM/Jackendoff/Sens-Texte/logique comme sources | ✅ **défini** | note [`semantique-universaux.md`](semantique-universaux.md) ; code [`universaux.py`](../tools/semantique/universaux.py) |
+| B11.2 | **Le parseur natif typé** : `route` 31,63 M, pooling moyen, 15 têtes | ⚠️ **partiel** | réel seul : **48,3 % train / 0 % validation** (surapprentissage) ; synthétique : **45,1 %** de code exact sur surfaces réelles, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** |
+| B11.3 | **Le codec classique** : lecture surface → RSN | ✅ **mesuré** | **79/79** et **449/449** RSN exactes (100 %) ; **surface originale 33/79** |
+| B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
+| B11.5 | **Cohérence inter-langues du natif** | ⚠️ **partiel** | normalisation lexicale : **55,7 %** de code exact et **37,0 %** d'invariance (contre 45,1 / 7,4) ; consistance softmax **38,3 %** (0) et adversaire **39,6 %** (0) restent deux négatifs |
+| B11.6 | **Codec + contexte, mémoire** | ✅ **mesuré** | codec **528/528** avec contexte (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
+| B11.7 | **Natif contextuel** | ⚠️ **partiel** | contexte **suffixé** : **59,8 %** de code exact et **40,7 %** d'invariance ; contexte **préfixé** : 0,4 % / 88,9 % (collapse) ; le codec reste à 100 % |
+| B11.8 | **Contexte séparé** | ❌ **sans gain** | vecteur de contexte 512 + MLP : **59,1 %** / **40,7 %**, contre **59,8 %** / **40,7 %** pour le suffixe ; le verrou est ailleurs |
+| B11.9 | **Restitution du code** | ✅ **mesuré** | **79/79** et **449/449** rendus, **aller-retour RSN 100 %** ; **surface originale 33/79** ; sans décodeur neuronal |
+| B11.10 | **Cartes et ambiguïtés** | ⏳ **suivant** | `carte` **69,3 %** ; symbole du morpion, chemin des dames ; le codec lit 100 % |
+| B11.11 | **Bilan** | ✅ **écrit** | [`bilan-b11.md`](../reports/bilan-b11.md) : objectif **non atteint**, raisonnement **non branché** |
+
+**Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
+le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il
+faut de la **donnée synthétique/compositionnelle** ou de la **distillation**, pas seulement une tête fixe.
+Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 ### B12 — les modules cerveau-langage M1–M9
 
@@ -324,34 +354,6 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 **négatifs** ou des résultats trop faibles. Le prototype est un
 **échafaudage mesuré**, pas un cerveau du langage. Détail : [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
 
-### B11 — la base d'universaux typés
-
-| ligne | objet | état | mesure |
-|---|---|---|---|
-| B11.1 | **Le schéma fixe** : 15 champs, 502 classes, one-hot déterministe ; NSM/Jackendoff/Sens-Texte/logique comme sources | ✅ **défini** | note [`semantique-universaux.md`](semantique-universaux.md) ; code [`universaux.py`](../tools/semantique/universaux.py) |
-| B11.2 | **Le parseur natif typé** : `route` 31,63 M, pooling moyen, 15 têtes | ⚠️ **partiel** | réel seul : **48,3 % train / 0 % validation** (surapprentissage) ; synthétique : **45,1 %** de code exact sur surfaces réelles, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** |
-| B11.3 | **Le codec classique** : lecture surface → RSN | ✅ **mesuré** | **79/79** et **449/449** RSN exactes (100 %) ; restitution **33/79** formats canoniques |
-| B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
-| B11.5 | **Cohérence inter-langues du natif** | ⚠️ **partiel** | normalisation lexicale : **55,7 %** de code exact et **37,0 %** d'invariance (contre 45,1 / 7,4) ; consistance softmax **38,3 %** (0) et adversaire **39,6 %** (0) restent deux négatifs |
-| B11.6 | **Codec + contexte, mémoire** | ✅ **mesuré** | codec **528/528** avec contexte (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
-| B11.7 | **Natif contextuel** | ⚠️ **partiel** | contexte **suffixé** : **59,8 %** de code exact et **40,7 %** d'invariance ; contexte **préfixé** : 0,4 % / 88,9 % (collapse) ; le codec reste à 100 % |
-| B11.8 | **Contexte séparé** | ❌ **sans gain** | vecteur de contexte 512 + MLP : **59,1 %** / **40,7 %**, contre **59,8 %** / **40,7 %** pour le suffixe ; le verrou est ailleurs |
-| B11.9 | **Restitution canonique** | ✅ **mesuré** | **79/79** et **449/449** rendus, **aller-retour RSN 100 %** ; surface originale seulement **33/79** ; sans décodeur neuronal |
-| B11.10 | **Cartes et ambiguïtés** | ⏳ **suivant** | `carte` **69,3 %** ; symbole du morpion, chemin des dames ; le codec lit 100 % |
-| B11.11 | **Bilan** | ✅ **écrit** | [`bilan-b11.md`](../reports/bilan-b11.md) : objectif **non atteint**, raisonnement **non branché** |
-
-**Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
-le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il
-faut de la **donnée synthétique/compositionnelle** ou de la **distillation**, pas seulement une tête fixe.
-Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
-
-**Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
-proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
-**faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a une **transition entre
-9,23 M et 9,96 M** : **négative à 4,04 M**, **transitoire à 9,23 M** (1 graine/3), **positive 3/3
-à 9,96 M, 10,70 M, 16,02 M et 22,54 M** (1,76 %, 1,65 %, 1,92 %, 1,74 %). Le **masque calibré** à
-4,04 M est **quasi égal** (2,7335 contre 2,7340, 0,02 %) : pas de gain établi. Le transfert existe,
-mais il demande de la capacité ; le seuil est une **transition**, pas une marche.
 
 ---
 
@@ -378,7 +380,8 @@ partie des textes) : sa progression (59,5 points) est **moins parlante** que les
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloquées sont mesurées** (24/10) :
+L'ordre est **la valeur / le coût**, pas la date. **Les lignes non bloquées sont mesurées au fil des
+phases** (dernière mise à jour : 27/10) :
 
 1. ~~B2.6 — le plan multi-tâches~~ **fait** (168 : 0,364, la ligne plan est close).
 2. ~~A2.5 — le top-k GPU~~ **fait** (le noyau fusionné, le seuil 131 072 mesuré).
@@ -393,6 +396,10 @@ L'ordre est **la valeur / le coût**, pas la date. **Toutes les lignes non bloqu
    abstraits** (le plus neuf scientifiquement), **A8 l'ordonnanceur place et perte** (le plus ingénieur).
 10. ~~B5 / B6 — la sémantique et la logique des jeux symboliques~~ **faites** (112 items, **100 %** au niveau 4,
     **33/33** paires invariantes, perft échecs/dames, mats, dames 20/20, politique 79,7 %).
+11. **B10–B12 (27/10)** : le protocole sémantique (encodeur **0,426** ; décodeur **négatif**), la base typée
+    (codec **100 %**, natif **59,8 / 40,7**, **surface 33/79**), les modules cerveau-langage (M1 **528/528**,
+    M2 **98,6 / 93,2**, M8 **96,48 %**, M5/M6/M7 **négatifs**) — **premiers passages mesurés** ; les suites
+    sont **B10.3** et **B12.10**.
 
 ## La file « jamais en attente »
 
@@ -408,8 +415,12 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
   dames 10 victoires/10 nulles/0 défaite, cartes **44,7 %** contre 51,0 % — négatif nommé), B9 (DeepSeek
   **310/310**, chrF **82,82** contre **15,64** de plancher ; distillation native **non établie** à 310 exemples,
   **2,7510** mélangé contre **2,7709** aligné — le contrôle bat l'aligné) ;
-- **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA) — B1.6 est **fait**
-  (DiaBLa, références indépendantes) ;
+- **la phase sémantique et cerveau (faite, mesurée)** : B10 (encodeur **0,426** ; décodeur **négatif**
+  14,0/5,4 contre 38,8 en référence tronquée ; 12,7/5,3 contre 39,6 en référence complète), B11 (codec
+  **100 %**, natif **59,8 / 40,7**, **surface 33/79**), B12 (M1 **528/528**, M2 **98,6 / 93,2**, M8
+  **96,48 %**, M5/M6/M7 **négatifs**) ; les suites sont **B10.3** et **B12.10** ;
+- **bloqué, nommé** : B1.5 (le corpus d'articles), A3.4 (le compte Colab), A5.4 (le FPGA), A6.2 (pas de MoE
+  local) — B1.6 est **fait** (DiaBLa, références indépendantes) ;
 - **clos** : B3 (le plan résiste), la falaise du raisonnement (erratum 6), la répartition réseau (le transport est
   fidèle).
 
@@ -418,8 +429,9 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | ligne | bloque par | ce qu'il faudrait |
 |---|---|---|
 | B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
-| A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/colab-reparti.md`) |
+| A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/archive/colab-reparti.md`) |
 | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
+| A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 
 ## Journal des décisions
 
@@ -434,3 +446,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **25/10** — les **jeux symboliques** : la **RSN-jeu** (112 items, **100 %** au niveau 4, **33/33** paires,
   **0 collision**) et la **logique** (perft échecs/dames, morpion exact, mats, politique des cartes) ; la **pensée**
   est invariante sur **5/5** jeux. Le MCTS du go est **faible à 60 playouts** (1/3) : négatif nommé, pas caché.
+- **27/10** — **B10–B12** : protocole sémantique (encodeur **0,426** ; décodeur **négatif**), base typée
+  (codec **100 %**, natif **59,8 / 40,7**, **surface 33/79**), modules cerveau-langage (M1 **528/528**, M2
+  **98,6 / 93,2**, M8 **96,48 %**). La **documentation** est remise en cohérence (compteurs
+  **49/8/172/241/52**, chemins archivés, revue étendue) : la théorie et l'état redescendent dans `docs/`.

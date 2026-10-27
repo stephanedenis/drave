@@ -1,16 +1,16 @@
 # Reprise — démarrer une session de travail
 
-> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
-> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : cette page sera réécrite/redirigée vers `en-cours.md` et
-> `roadmap.md` ; les pièges d'environnement du § 3 restent valides.*
+> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
+> (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés corrigés
+> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
+> pas.** *Cette page est mise à jour ; les pièges d'environnement du § 3 restent valides.*
 
-> **Check-list, pas un état.** L'état vit dans [`docs/etat.md`](docs/etat.md) (index des modules)
-> et [`docs/etat-cerveau.md`](docs/archive/etat-cerveau.md) (les douze capacités, avec le chiffre qui
-> prouve chacune). Ce fichier ne dit que : quoi lire, quoi vérifier, quels pièges éviter, et où
-> écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche par expérience**.
-> Version longue d'avant le 2026-10-10 : [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
+> **Check-list, pas un état.** L'état vit dans [`docs/en-cours.md`](docs/en-cours.md) ; le plan
+> dans [`docs/roadmap.md`](docs/roadmap.md) ; l'ancien index par module est archivé
+> ([`docs/etat.md`](docs/etat.md) redirige). Ce fichier ne dit que : quoi lire, quoi vérifier,
+> quels pièges éviter, et où écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche
+> par expérience**. Version longue d'avant le 2026-10-10 :
+> [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
 
 ## 1. Les cinq premières minutes
 
@@ -20,17 +20,18 @@ git log --oneline -5                   # ce qui vient d'être fait
 ls journal/ | tail -5                  # la journée en cours, par thème
 ```
 
-Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/etat.md`](docs/etat.md)
-(état par module et **prochaine action**) → la fiche `reports/` du chantier en cours.
+Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/en-cours.md`](docs/en-cours.md)
+(l'état) → [`docs/roadmap.md`](docs/roadmap.md) (la prochaine action) → la fiche `reports/` du
+chantier en cours.
 
 ## 2. Ce qui doit être vert
 
 | quoi | commande | attendu |
 |---|---|---|
-| tests | `cd drave-core && cargo test --release` | **122 verts** |
+| tests | `cd drave-core && cargo test --release` | **138 tests** (le compte est dans la sortie) |
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
-| toutes les portes | `tools/toutes-les-portes.sh` | **34 vertes**, ≈85 min, **aucune sautée** — le compte et les repères sont dans `docs/references-non-regression.md` (dernière passe : 11/10 06 h 30, 34/34, 85 min 8 s) |
-| les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 11/10 |
+| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (47 vertes, 2 structurelles), **1 h 34**, aucune sautée — le compte et les repères sont dans `docs/references-non-regression.md` (dernière passe : 26/10 14 h 30) |
+| les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 26/10 |
 
 **APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**
 leurs prérequis (`tools/_corpus.sh` : le corpus d'identifiants, qui est `data/wikitext2_test.txt`
@@ -154,7 +155,9 @@ avec liens (générés par `tools/journal_auto.py`, l'index du jour est `journal
 
 ## 7. Le premier pas, si rien n'est en cours
 
-`docs/etat.md` porte la **prochaine action par module**, et `docs/etat-cerveau.md` § 6 la liste
-courte des chantiers ouverts, chacun avec sa **première commande**. S'il n'y a plus de liste : la
-consigne du dépôt est de **choisir ce qui est mesurable maintenant**, de lui donner une porte, et
-de l'écrire — un round qui **corrige** une mesure fausse vaut un round qui en ajoute une.
+`docs/roadmap.md` porte la **prochaine action par ligne** ; `docs/en-cours.md` dit l'état **courant**.
+L'ancien index par module est archivé dans
+[`docs/archive/etat-modules-2026-10-10.md`](docs/archive/etat-modules-2026-10-10.md). S'il n'y a
+plus de liste : la consigne du dépôt est de **choisir ce qui est mesurable maintenant**, de lui
+donner une porte, et de l'écrire — un round qui **corrige** une mesure fausse vaut un round qui
+en ajoute une.
