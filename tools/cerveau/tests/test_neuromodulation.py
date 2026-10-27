@@ -137,6 +137,8 @@ class TestMemoireFrequence(unittest.TestCase):
         self.assertIn("contexte_jeu", r["verdict"]["contexte_bat_lfu"])
         self.assertIn("suf_surface",
                       r["verdict"]["lfu_recence_bat_lfu"]["surface"])
+        self.assertIn("ret_nouveaux_suffixe", r["resultats"]["lfu"])
+        self.assertIn("evictions", r["controles"])
         # reproductibilité à graine égale
         r2 = experience_m7_bis(ep, permutations=3, synthetique=False)
         self.assertEqual(r["resultats"], r2["resultats"])

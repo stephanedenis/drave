@@ -26,6 +26,7 @@ import json
 import pathlib
 import re
 import unicodedata
+from datetime import date
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 GLOSS = RACINE / "docs" / "glossaire"
@@ -183,6 +184,13 @@ def carte(e: dict) -> str:
 """
 
 
+def lien(e: dict) -> str:
+    cible = ENTREES / f"{e['slug']}.md"
+    if cible.exists():
+        return f"[{e['terme']}](entrees/{e['slug']}.md)"
+    return e['terme']
+
+
 def index(toutes: list[dict]) -> str:
     lignes = [
         "# L'index des entrées du glossaire",
@@ -193,6 +201,8 @@ def index(toutes: list[dict]) -> str:
         "> mdserve pour afficher une fiche en contexte.",
         "> **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.",
         "> **Pour mdserve.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche",
+        "> **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,",
+        "> l'index et le manifeste ; après une modification d'une famille, relancer le générateur.",
         "> `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.",
         "",
         f"**{len(toutes)} entrées.** Index général : [le glossaire](../glossaire.md).",
@@ -203,7 +213,7 @@ def index(toutes: list[dict]) -> str:
         familles.setdefault((e["famille"], e["fichier"]), []).append(e)
     for (famille, fichier), entrees in familles.items():
         lignes.append(f"### {famille} · [la famille]({fichier})")
-        liens = [f"[{e['terme']}](entrees/{e['slug']}.md)" for e in sorted(entrees, key=lambda x: x["terme"].casefold())]
+        liens = [lien(e) for e in sorted(entrees, key=lambda x: x["terme"].casefold())]
         lignes.append(" · ".join(liens))
         lignes.append("")
     lignes.append("## Les annexes")
@@ -215,14 +225,14 @@ def index(toutes: list[dict]) -> str:
 
 def manifeste(toutes: list[dict]) -> str:
     data = {
-        "genere": "2026-10-27",
+        "genere": date.today().isoformat(),
         "entrees": [
             {
                 "slug": e["slug"],
                 "terme": e["terme"],
                 "famille": e["famille"],
                 "fichier": e["fichier"],
-                "fiche": f"entrees/{e['slug']}.md",
+                "fiche": (f"entrees/{e['slug']}.md" if (ENTREES / f"{e['slug']}.md").exists() else None),
                 "resume": e["resume"],
             }
             for e in toutes
@@ -236,9 +246,28 @@ def main() -> int:
     ap.add_argument("--pilote", action="store_true", help="ne générer que les fiches du pilote")
     ap.add_argument("--force", action="store_true", help="réécrire même sans marqueur de génération")
     ap.add_argument("--seche", action="store_true", help="afficher le compte sans écrire")
+    ap.add_argument("--verifier", action="store_true", help="vérifier sans écrire")
     args = ap.parse_args()
 
     toutes = construire()
+    if args.verifier:
+        ecarts = []
+        for chemin, attendu in (
+            (GLOSS / "README.md", index(toutes)),
+            (GLOSS / "index.json", manifeste(toutes)),
+        ):
+            if not chemin.exists() or chemin.read_text(encoding="utf-8") != attendu:
+                ecarts.append(chemin.name)
+        for e in toutes:
+            cible = ENTREES / f"{e['slug']}.md"
+            if cible.exists() and cible.read_text(encoding="utf-8") != carte(e):
+                ecarts.append(cible.name)
+        if ecarts:
+            print(f"  ❌ {len(ecarts)} fichier(s) périmé(s) : {', '.join(ecarts[:12])}")
+            return 1
+        print(f"  ✅ {len(toutes)} entrées · fiches, index et manifeste à jour")
+        return 0
+
     if args.seche:
         print(f"{len(toutes)} entrées, {len({e['slug'] for e in toutes})} slugs")
         for e in toutes[:12]:

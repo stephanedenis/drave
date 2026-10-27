@@ -6,6 +6,8 @@
 > mdserve pour afficher une fiche en contexte.
 > **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.
 > **Pour mdserve.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche
+> **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,
+> l'index et le manifeste ; après une modification d'une famille, relancer le générateur.
 > `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.
 
 **289 entrées.** Index général : [le glossaire](../glossaire.md).
