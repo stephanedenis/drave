@@ -1,7 +1,7 @@
 # Directives de l'agent — Drave
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
 > ci-dessous ne changent pas.** Source de vérité : `docs/en-cours.md` (état)
 > et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.
@@ -59,6 +59,7 @@ volonté** des événements.
 | comprendre la mission, les priorités, la philosophie | [`docs/agent/mission.md`](docs/agent/mission.md) |
 | écrire un résultat (fiche, JSON, commit, journal) | [`docs/agent/resultats.md`](docs/agent/resultats.md) |
 | ranger un fichier, revue de documentation, synthèse | [`docs/agent/rangement.md`](docs/agent/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/agent/contexte.md`](docs/agent/contexte.md) |
 | lancer ou lire les portes | [`docs/agent/portes.md`](docs/agent/portes.md) |
 | étudier Panini/Nipada, la généalogie | [`docs/agent/panini-nipada.md`](docs/agent/panini-nipada.md) |
 | concevoir un test d'entrée/sortie, corriger | [`docs/agent/miroir.md`](docs/agent/miroir.md) |
@@ -74,6 +75,11 @@ volonté** des événements.
 > `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit le plus souvent. Ne pas les
 > charger « pour être complet » — c'est du contexte qui coûte et qui périme.
 
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/agent/contexte.md`](docs/agent/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
 ## 4. Le minimum avant de conclure
 
 - l'état est à jour dans [`docs/en-cours.md`](docs/en-cours.md) (synthèse, chantiers, questions en attente) ;
@@ -81,3 +87,4 @@ volonté** des événements.
 - la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
 - les portes sont vertes, **hors les deux rouges structurelles connues** ;
 - la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.

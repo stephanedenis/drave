@@ -1,5 +1,9 @@
 # Le format de flux (DRVF) — spécification
 
+> **Ce que ce document est.** La **spécification** du format de flux : une trace, un rejeu, un
+> transport et une analyse dans les mêmes octets. **Chargement :** T1 — lire ce résumé, puis la
+> section utile ; le protocole réseau est détaillé plus bas.
+
 Ce format sert **quatre choses à la fois**, et c'est délibéré :
 
 1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par

@@ -1,5 +1,9 @@
 # Drave
 
+> **Ce que ce document est.** La vitrine publique de Drave : la vision, les cinq axes, les deux
+> étages, six résultats et l'état du dépôt. Les chiffres sont cités comme état ; les fiches sont
+> dans [`reports/`](reports/). **Chargement :** T1 — ce résumé, puis la section utile.
+
 **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Un moteur qui traite les
 activations d'un réseau de neurones comme des **faits** — « le neurone 2 539 de la couche 23 a valu 27,8 » — et non
 comme des cases dans une matrice. Le coût du calcul devient proportionnel à l'**activité**, pas à la taille du

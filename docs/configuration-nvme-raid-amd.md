@@ -3,6 +3,10 @@
 > **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
+>
+> **Résumé —** L'**array NVMe raid0** (938 Go, 7,45 Go/s), le pari AMD et les réserves DRAM-less ; utile pour le stockage et le matériel.
+> **Chargement :** document daté ; **ne pas charger par défaut**. Lire ce résumé, puis la section
+> utile.
 
 > **2026-10-12 — l'intervention a eu lieu, et le pari est mesuré.** L'array existe (4 NVMe,
 > raid0, 938 Go, monté `/home/stephane/IA`) et la fiche

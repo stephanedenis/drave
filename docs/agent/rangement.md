@@ -61,6 +61,13 @@ Un plan, une note ou un état **daté** porte en tête :
 La revue signale les documents datés de **plus de 90 jours** ; `docs/archive/` en est exclu. Un document qui
 reste vrai n'est **pas** daté : il reste dans `docs/`.
 
+## La taille et la cohésion
+
+Un document **chargeable** a un **budget** (en mots) et une **cohésion** minimale : un sujet, un
+titre, un résumé de 3 à 6 lignes, une consigne de chargement. Le protocole et les budgets sont dans
+[`contexte.md`](contexte.md) ; `python3 tools/taille_documents.py` vérifie les budgets et les
+résumés, et signale les fiches de résultats de plus de 300 lignes (à lire par verdict + section).
+
 ## La synthèse théorique
 
 [`docs/synthese/`](../synthese/) porte la **théorie** (8 chapitres, 14 schémas), et son `index.md` doit refléter les

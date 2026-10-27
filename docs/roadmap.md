@@ -1,7 +1,7 @@
 # La roadmap de Drave — deux programmes, un ordre, aucune date
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) est
 > remis à jour ; B11 précède B12.*
@@ -19,6 +19,17 @@
   suivante dans l'ordre. La file d'attente n'existe pas : il y a toujours un chantier non bloqué à faire avancer.
 - **Un chiffre sans contrôle négatif n'est pas un résultat** : chaque critère de succès nomme son contrôle (le
   plancher, les paires mélangées, les étiquettes mélangées).
+
+## En un coup d'œil
+
+| programme | ce qui est mesuré | ce qui reste ouvert |
+|---|---|---|
+| **A — le moteur** | A1–A8 : les formats, le placement, le transport, le rejeu, les matériels | A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local) — **bloqués** |
+| **B — l'intelligence** | B1–B12 : la langue, la pensée, les jeux, les maîtres, le banc externe, la sémantique | B1.5 (corpus), B10.3 (décodeur), B12.10 (modules) |
+
+**Charger ce bloc, puis la section A ou B** ; le document entier (450 lignes) est une référence, pas un
+chargement par défaut. Le détail de chaque ligne est dans les tableaux ci-dessous.
+
 
 ---
 
@@ -434,20 +445,5 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 
-## Journal des décisions
-
-- **30/09** — le renommage Qtrinet → Drave ; le moteur Rust *est* l'architecture par listes.
-- **07/10** — la passe K3 est liée au **disque** (133 Mio/s, 87,6 % d'occupation) ; le levier est la taille du lot.
-- **22/10** — le périmètre entrée-sortie est **arrêté au français inclus** ; l'étage 2 devient le chantier principal.
-- **23/10** — la vision est **recentrée sur les flots** (ce document) ; les deux programmes avancent en parallèle.
-- **24/10** — le **moteur** et l'**intelligence** sont poussés jusqu'où le matériel le permet : la passe complète
-  est **45/47** (aucun rouge nouveau), la carte du raisonnement a **trois courbes complètes** et la sonde **sature dès
-  le 1,5 B** ; le pic du 32 B et le 14 B l24 sont **bloqués par la VRAM** (le premier coûte 10-20 h ; le second a été
-  mesuré depuis), la prose scientifique manque de **corpus**. Ce qui reste est **nommé**, pas oublié.
-- **25/10** — les **jeux symboliques** : la **RSN-jeu** (112 items, **100 %** au niveau 4, **33/33** paires,
-  **0 collision**) et la **logique** (perft échecs/dames, morpion exact, mats, politique des cartes) ; la **pensée**
-  est invariante sur **5/5** jeux. Le MCTS du go est **faible à 60 playouts** (1/3) : négatif nommé, pas caché.
-- **27/10** — **B10–B12** : protocole sémantique (encodeur **0,426** ; décodeur **négatif**), base typée
-  (codec **100 %**, natif **59,8 / 40,7**, **surface 33/79**), modules cerveau-langage (M1 **528/528**, M2
-  **98,6 / 93,2**, M8 **96,48 %**). La **documentation** est remise en cohérence (compteurs
-  **49/8/172/241/52**, chemins archivés, revue étendue) : la théorie et l'état redescendent dans `docs/`.
+> **Journal des décisions** : l'historique (30/09 → 27/10) est dans
+> [`journal/2026-10-27_decisions-roadmap.md`](../journal/2026-10-27_decisions-roadmap.md).

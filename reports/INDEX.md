@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **171 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **172 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -130,6 +130,7 @@
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |
 | [rapport-passe-complete-portes.md](rapport-passe-complete-portes.md) | Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN |
 | [rapport-passe-k3-disque.md](rapport-passe-k3-disque.md) | Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre |
+| [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-placement-bits-kv.md](rapport-placement-bits-kv.md) | Où mettre les bits du cache KV : la courbe complète |

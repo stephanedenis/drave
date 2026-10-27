@@ -1,7 +1,7 @@
 # La documentation de Drave — l'inventaire
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
 > `docs/roadmap.md` (plan). *Spécifique : cette page est l'**inventaire** ; `carte.md`
@@ -43,6 +43,7 @@ demande**, un document par tâche.
 | [agent/panini-nipada.md](agent/panini-nipada.md) | Panini/Nipada, l'avertissement époque/filiation |
 | [agent/miroir.md](agent/miroir.md) | le miroir entrée/sortie et ses quatre règles |
 | [agent/ressources.md](agent/ressources.md) | le matériel, les GPU, la composition mesurée |
+| [agent/contexte.md](agent/contexte.md) | le budget de contexte : ce qu'on charge, ce qu'on ne charge pas |
 
 ## Les références et les normes
 

@@ -1,5 +1,9 @@
 # Format — le modèle éclaté en clusters (un fichier par cluster)
 
+> **Ce que ce document est.** La **spécification** du découpage d'un GGUF en `commun.gguf` + un
+> fichier par cluster, avec le manifeste ; c'est le mécanisme de placement des grappes.
+> **Chargement :** T1 — lire ce résumé, puis la section utile.
+
 **En une ligne** : un GGUF est converti en `commun.gguf` + `cluster-XX.gguf`, un
 fichier **GGUF autonome par cluster d'experts**, avec un manifeste qui porte la
 correspondance ; un nœud n'ouvre que ce qu'il sert — mesuré **3,20 Go au lieu de

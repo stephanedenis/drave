@@ -3,6 +3,11 @@
 > **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
+>
+> **Résumé —** Faut-il diviser le dépôt en submodules et paralléliser ? La mesure répond **oui
+> pour paralléliser, non pour diviser** ; les deux moitiés sont chiffrées ci-dessous.
+> **Chargement :** document daté ; **ne pas charger par défaut**. Lire ce résumé, puis la section
+> utile.
 
 > 9 octobre 2026. Réponse à « faut-il diviser en submodules et paralléliser sur
 > plusieurs cœurs ? ». La réponse est **oui pour paralléliser, non pour les

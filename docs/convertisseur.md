@@ -3,6 +3,10 @@
 > **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
+>
+> **Résumé —** Le **convertisseur et le chargement** : zéros, clusters, MoE, tuning CPU/GPU ; ce que la mesure dit de faire.
+> **Chargement :** document daté ; **ne pas charger par défaut**. Lire ce résumé, puis la section
+> utile.
 
 > Directive : « un convertisseur de modèle haute fidélité afin d'avoir un
 > chargement optimal : abolition des zéros, identification des clusters et MoE,

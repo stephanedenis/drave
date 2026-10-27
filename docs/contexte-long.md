@@ -3,6 +3,10 @@
 > **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
+>
+> **Résumé —** Ce que **1 M de contexte** veut dire : budgets par poste, où ça casse (préremplissage, cache, rotation), mesures à 8 192 et 1 M.
+> **Chargement :** document daté ; **ne pas charger par défaut**. Lire ce résumé, puis la section
+> utile.
 
 > Tous les chiffres de budget viennent de `drave-core <modele> --plan --ctx N`,
 > qui les calcule depuis les métadonnées du GGUF. Les bandes passantes sont

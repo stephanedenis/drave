@@ -4,6 +4,10 @@
 > affirmations de contexte sont corrigées : **49 portes** (47 vertes, 2 structurelles), la
 > feuille de route est [`roadmap.md`](roadmap.md), et les plans cités sont dans `docs/archive/`.
 > **Dernière vérification : 2026-10-27.**
+>
+> **Résumé —** Le registre des manques mesurés (M1–M9, N1–N5, architecture) ; chaque ligne porte la
+> mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
+> défaut**. Lire ce résumé, puis la section utile.
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est

@@ -3,6 +3,10 @@
 > **Document daté — dernière vérification : 2026-10-27.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).
+>
+> **Résumé —** La topologie **NUMA** de la machine, les bandes passantes mesurées, la ségrégation CPU/GPU ; utile pour un placement matériel.
+> **Chargement :** document daté ; **ne pas charger par défaut**. Lire ce résumé, puis la section
+> utile.
 
 > 08/10. Réponse à une proposition de configuration : *station bi-processeur
 > Xeon E5-2687W v3, topologie NUMA asymétrique stricte — nœud 0 pour l'OS et
