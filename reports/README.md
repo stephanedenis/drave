@@ -21,7 +21,7 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
-| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), restitution **33/79**, parseur natif typé qui **surapprend** (48,3 % train / 0 % validation) |
+| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), restitution **33/79** ; natif réel seul 0 %, natif **synthétique 45,1 %** sur surfaces réelles (jeu 83 %, de/vers 90 %, invariance 7,4 %) |
 | [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 14,0/5,4 contre plancher 38,8, référence tronquée), NVLink |
 
 ## Les données brutes

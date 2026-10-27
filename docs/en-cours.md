@@ -36,9 +36,10 @@ La vision complète est dans [`vision.md`](vision.md).
 
 - **B11 la base d'universaux typés** — **premier passage** : schéma fixe de **15 champs / 502 classes**,
   sortie déterministe ; le **codec classique** lit **100 %** des coups B5/B7 (79/79, 449/449) et restitue
-  **33/79** formats canoniques ; le **parseur natif typé** surapprend (**48,3 % train / 0 % validation**,
-  base gelée 0 %, majoritaire 0 %). Le prochain levier est la **donnée synthétique** ou la **distillation du
-  codec**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
+  **33/79** formats canoniques ; le **parseur natif typé** surapprend en réel seul (**48,3 % train / 0 % validation**) mais la
+  **distillation synthétique** le débloque : **45,1 %** de code exact sur les **528 surfaces réelles** jamais
+  vues, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** ; l'**invariance par paire** reste **7,4 %**. Le
+  prochain levier est la **cohérence inter-langues** du natif ; le codec reste à **100 %**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 ## Où l'on en est

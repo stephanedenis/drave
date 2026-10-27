@@ -68,6 +68,22 @@
   "base gelée 0 %",
   "déterminisme 1,000"
  ],
- "lecture": "le codec lit 100 % ; le parseur natif typé surapprend (48,3 % train / 0 % val) ; restitution 33/79",
- "version": 1
+ "lecture": "codec 100 % ; natif réel seul 0 % ; natif synthétique 45,1 % (jeu 83 %, de/vers 90 %, invariance 7,4 %) ; le codec reste le bloc fiable",
+ "version": 1,
+ "modele_natif_synth": {
+  "train": 10556,
+  "test_reel": 528,
+  "train_exact": 0.9229821902235695,
+  "test_exact": 0.45075757575757575,
+  "jeu": 0.8314393939393939,
+  "action": 0.8238636363636364,
+  "de": 0.8996212121212122,
+  "vers": 0.8939393939393939,
+  "carte": 0.678030303030303,
+  "invariance_paires": 0.07407407407407407,
+  "determinisme": 1.0,
+  "rendu_classique": 0.4,
+  "n_rendu": 15,
+  "meilleur_pas": 400
+ }
 }

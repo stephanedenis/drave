@@ -29,6 +29,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from jeux.codecs import codec  # noqa: E402
 from semantique.entrainer import pad  # noqa: E402
 from semantique.typed_corpus import decouper, items, lot  # noqa: E402
+from semantique.synth_corpus import items_synth  # noqa: E402
 from semantique.universaux import CHAMPS, code_rsn, index_code, rsn_depuis_code  # noqa: E402
 
 
@@ -96,13 +97,28 @@ def main() -> int:
     ap.add_argument("--lr-tete", type=float, default=1e-3)
     ap.add_argument("--graine", type=int, default=1)
     ap.add_argument("--gele-base", action="store_true")
+    ap.add_argument("--synth", action="store_true",
+                    help="entraîner sur les surfaces synthétiques, tester sur les surfaces réelles")
+    ap.add_argument("--synth-max-par-jeu", type=int, default=4000)
     ap.add_argument("--sortie", default="/tmp/semantique-type")
     args = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.graine)
     rng = random.Random(args.graine)
     its = items()
-    train, val = decouper(its, args.graine, 0.2)
+    if args.synth:
+        synth = items_synth()
+        par_jeu = {}
+        for it in synth:
+            par_jeu.setdefault(it.jeu, []).append(it)
+        train = []
+        for jeu, lst in par_jeu.items():
+            rng.shuffle(lst)
+            train.extend(lst[:args.synth_max_par_jeu])
+        val = its
+        print(f"# synth · {len(train)} train synthétiques · {len(val)} surfaces réelles de test", flush=True)
+    else:
+        train, val = decouper(its, args.graine, 0.2)
     print(f"# typé · {len(its)} items · {len(train)} train / {len(val)} val · "
           f"{len({i.paire for i in train})} paires train · {len({i.paire for i in val})} val · "
           f"{len(CHAMPS)} champs · {sum(len(v) for _, v in CHAMPS)} classes", flush=True)

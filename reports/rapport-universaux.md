@@ -25,8 +25,11 @@ Le code est un **one-hot concaténé** sur 15 champs : `jeu`, `action`, `de`, `v
 
 ## 2. Le parseur natif typé
 
-`route` 31,63 M, pooling moyen, 15 têtes linéaires, 200 pas, lot 32, lr base 2e-4, lr têtes 1e-3. Le
-découpage est par paire, sans fuite.
+`route` 31,63 M, pooling moyen, 15 têtes linéaires, lot 32, lr base 2e-4, lr têtes 1e-3.
+
+### 2.1 Réel seul : surapprentissage
+
+Découpage par paire, 377 train / 151 validation, 200 pas.
 
 | mesure | valeur |
 |---|---:|
@@ -40,6 +43,31 @@ découpage est par paire, sans fuite.
 **Lecture** : le modèle **surapprend** les surfaces d'entraînement et ne généralise pas à des coups nouveaux.
 La base gelée ne fait pas mieux : ce n'est pas seulement un problème de capacité, c'est un problème de
 **données/compositionnalité**. Le code typé est déterministe, mais le parseur ne le remplit pas.
+
+### 2.2 Synthétique : la distillation débloque
+
+Les surfaces **réelles** ne sont **jamais** vues à l'entraînement. On génère 10 556 surfaces synthétiques
+multilingues (coups légaux d'échecs et de dames, 81 points de go, 52 cartes, cases de morpion, 71 langues),
+labels RSN exacts, puis on teste sur les **528 surfaces réelles** B5/B7.
+
+| mesure | valeur |
+|---|---:|
+| exactitude **train synthétique** | **92,3 %** |
+| exactitude **test réel** (code complet) | **45,1 %** |
+| `jeu` | **83,1 %** |
+| `action` | **82,4 %** |
+| `de` / `vers` | **90,0 % / 89,4 %** |
+| `carte` | **67,8 %** |
+| `case` / `symbole` | **88,3 % / 86,9 %** |
+| **invariance par paire** (même sens, langues différentes) | **7,4 %** |
+| déterminisme | **1,000** |
+| restitution (15 formats testés) | **40,0 %** |
+
+**Lecture** : la distillation synthétique **fonctionne** — le parseur natif passe de 0 % à **45,1 %** de code
+exact sur des surfaces réelles qu'il n'a jamais vues, avec **83 %** de jeu et **90 %** de source/cible. Mais
+il reste **loin du codec** (100 % de lecture exacte), et l'**invariance par paire est faible (7,4 %)** : les
+prédictions dépendent encore de la langue. Le codec reste le bloc fiable ; le natif est un **élève** qui doit
+être rendu cohérent entre langues.
 
 ## 3. Le codec classique
 
