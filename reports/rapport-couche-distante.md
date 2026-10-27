@@ -43,9 +43,17 @@ sur la couche réelle.
 
 ## Contrôles négatifs
 
-- **RoPE mise à zéro** : logits **diff max 5,08**, argmax **0,90**, PPL **+0,35** — la position est
-  bien nécessaire.
-- **Serveur CPU fp32** et **bfloat16** : non exécutés dans cette passe (`--sans-negatifs`).
+| contrôle | diff max logits | argmax min | PPL Δ |
+|---|---:|---:|---:|
+| **RoPE zéro** | **5,08** | 0,90 | **+0,351** |
+| **CPU fp32** (même dtype) | 5,6e-5 | 1,00 | −3e-6 |
+| **bf16** | 0,456 | 1,00 | −0,002 |
+| **eager sans masque** | 3,59 | 0,95 | **+0,124** |
+
+- **RoPE** est indispensable : sans elle, la couche n'est plus la même.
+- **CPU fp32** reste fidèle à **5,6e-5** et **argmax 1,0** : le device n'est pas le problème.
+- **bf16** est proche (diff 0,456, argmax 1,0) mais pas exact.
+- **eager sans masque causal** casse la fidélité : la masque est nécessaire.
 
 ## Verdict
 
