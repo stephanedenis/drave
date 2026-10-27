@@ -50,7 +50,7 @@ La vision complète est dans [`vision.md`](vision.md).
 
 - **B12 les modules cerveau-langage** — **premier passage** : bus réel, **M1 hub 528/528** (sans contexte
   70,8 %), **M4 mémoire épisodique 1,0** (complétion 97,9 %, séparation 1,0), **M3** tampon 12/12 et n-back contrôle 1,0 ;
-  **M2** voie dorsale à **6,2 %** (n=146), **M5** ne bat pas la majorité, **M6** 70 %, **M7** nul, **M8** dégrade
+  **M2** double dissociation (`de` **93,2 %**, lésion dorsale **1,4 %**), **M5** ne bat pas la majorité, **M6** 70 %, **M7** nul, **M8** dégrade
   (94,25 contre 97,25 %). **M9** table de lésions. Fiche :
   [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
 

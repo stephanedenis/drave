@@ -28,8 +28,8 @@ class Voies(nn.Module):
         super().__init__()
         self.base = base
         self.d_model = int(base.config.hidden_size)
-        self.ventral = nn.Linear(self.d_model, 5)      # jeu
-        self.dorsal = nn.Linear(self.d_model, 65)      # de (absent + 64 cases)
+        self.ventral = nn.Linear(2 * self.d_model, 5)      # jeu
+        self.dorsal = nn.Linear(2 * self.d_model, 65)      # de (absent + 64 cases)
         self._idx_jeu = {v: i for i, v in enumerate(CHAMPS[0][1])}
         self._idx_de = {v: i for i, v in enumerate(CHAMPS[2][1])}
 
@@ -37,7 +37,11 @@ class Voies(nn.Module):
         s = self.base(input_ids=ids, attention_mask=masque, output_hidden_states=True)
         h = s.hidden_states[-1]
         m = masque.unsqueeze(-1).to(h.dtype)
-        return (h * m).sum(1) / m.sum(1).clamp(min=1)
+        moyenne = (h * m).sum(1) / m.sum(1).clamp(min=1)
+        longueurs = masque.sum(1).clamp(min=1).long()
+        idx = torch.arange(h.shape[0], device=h.device)
+        dernier = h[idx, longueurs - 1]
+        return torch.cat([moyenne, dernier], dim=-1)
 
     def logits(self, ids, masque):
         h = self.encode(ids, masque)

@@ -304,14 +304,14 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B12.1 | **Bus + hub M1** | ✅ **mesuré** | **528/528** exact avec contexte ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** ; 1 584 événements |
-| B12.2 | **M2 voies ventrales/dorsales** | ❌ **négatif** | `jeu` **100 %** ; `de` **6,2 %** (n=146) ; lésion ventrale `jeu` **21,2 %** ; lésion dorsale `de` **2,7 %** ; **pas de double dissociation** |
+| B12.2 | **M2 voies ventrales/dorsales** | ✅ **double dissociation** | `jeu` **100 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `jeu` **19,2 %**, `de` **93,2 %** ; lésion dorsale `jeu` **100 %**, `de` **1,4 %** |
 | B12.3 | **M3 mémoire de travail** | ✅ **tampon** | span **12/12**, exact **1,0** ; n-back contrôle **1,0** ; n-back brut **0,06 %** (test invalide) |
 | B12.4 | **M4 mémoire épisodique** | ✅ **mesuré** | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** ; 29 codes uniques |
 | B12.5 | **M5 prédictif** | ❌ **négatif** | exact **98,9 %** = majoritaire **98,9 %** ; surprise **0,0096** ; aucun gain |
 | B12.6 | **M6 gating** | ❌ **faible** | exact **70,0 %** ; FP **1**, FN **20** ; coût **−0,15** |
 | B12.7 | **M7 neuromodulation** | ❌ **nul** | **29** nouveaux / 528 ; rappel **1,0** ; aucun effet mesuré |
 | B12.8 | **M8 sommeil** | ❌ **négatif** | prototypes **94,25 %** contre baseline **97,25 %** |
-| B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **21,2 %** ; M2 dorsale **2,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
+| B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **19,2 %** ; M2 dorsale **1,4 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Suite** | ⏳ **suivant** | M2 équilibré + contexte ; M3 répétitions ; M5 ordre 2 ; M6 conflit ; M7 capacité ; M8 rejeu |
 
 **Bilan B12** : le **bus** et **M1** sont réels ; **M4** est exact sur le corpus ; **M3** tient un tampon ;

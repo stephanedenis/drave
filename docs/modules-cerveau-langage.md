@@ -25,7 +25,7 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 | module | rôle | mesure | verdict |
 |---|---|---|---:|
 | **M1 hub** | surface → code RSN, retour canonique | **528/528** exact ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** | ✅ **tient** |
-| **M2 voies** | ventrale (`jeu`) / dorsale (`de`) | `jeu` **100 %** ; `de` **6,2 %** (n=146) ; lésion ventrale `jeu` **21,2 %** ; lésion dorsale `de` **2,7 %** | ❌ **pas de double dissociation** |
+| **M2 voies** | ventrale (`jeu`) / dorsale (`de`) | `jeu` **100 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `jeu` **19,2 %**, `de` **93,2 %** ; lésion dorsale `jeu` **100 %**, `de` **1,4 %** | ✅ **double dissociation** |
 | **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12**, exact **1,0** ; n-back contrôle (5 codes répétés) **1,0** ; n-back brut **0,06 %** (test invalide) | ✅ **tampon** |
 | **M4 épisodique** | rappel par contenu, complétion, séparation | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** | ✅ **tient** |
 | **M5 prédictif** | action suivante, surprise | exact **98,9 %** = majoritaire **98,9 %** | ❌ **aucun gain** |
@@ -37,8 +37,8 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 ## 3. Contrôles négatifs
 
 - **M1 sans contexte** : 70,8 % → le contexte est nécessaire.
-- **M2 lésion ventrale** : `jeu` 100 → 21,2 % ; **la tête porte bien la tâche**.
-- **M2 lésion dorsale** : `de` 6,2 % → 2,7 % ; **la tâche dorsale n'était déjà pas apprise**.
+- **M2 lésion ventrale** : `jeu` 100 → 19,2 % ; `de` reste 93,2 %.
+- **M2 lésion dorsale** : `de` 93,2 → 1,4 % ; `jeu` reste 100 %.
 - **M3 capacité zéro** : span 0.
 - **M4 sans stockage** : rappel 0.
 - **M5 sans transitions** : 1,1 %.
@@ -49,8 +49,9 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 
 1. **M1 n'est pas un hub neuronal** : c'est le codec classique avec un bus. Il est exact, mais il ne
    généralise pas ; le natif normalisé reste à **59,8 %**.
-2. **M2 ne réalise pas la double dissociation** : la voie ventrale apprend `jeu` (trivial sur 69 items
-   d'échecs), la voie dorsale reste au hasard. Le test est **invalide** pour conclure sur les voies.
+2. **M2 réalise la double dissociation** : la voie ventrale porte `jeu`, la voie dorsale porte `de` ; les
+   lésions croisées sont nettes. Le point qui a débloqué : **le dernier état caché** (coordonnée finale),
+   pas seulement la moyenne.
 3. **M3 mesure un tampon**, pas la mémoire du réseau. Le n-back brut est dominé par l'absence de
    répétitions ; le **n-back contrôle** (5 codes répétés) est à 1,0, mais il mesure le tampon, pas le réseau.
 4. **M4 est un plus proche voisin exact** : le rappel 1,0 est attendu ; la complétion 97,9 % est réelle,
@@ -64,8 +65,7 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 
 ## 5. Ce qui reste à faire
 
-- **M2** : équilibrer les classes, ajouter le contexte, entraîner `de`/`vers` séparément, puis refaire la
-  double dissociation.
+- **M2** : validé ; étendre à `vers`, `chemin`, `point` et à une ablation du **contexte**.
 - **M3** : construire des séquences avec répétitions contrôlées ; tester l'interférence.
 - **M5** : séquences stochastiques, ordre 2, comparaison à un modèle de langue.
 - **M6** : conflit langue/tâche, coût de commutation mesuré en pas, inhibition.

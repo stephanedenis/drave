@@ -18,19 +18,19 @@
 | module | mesure | verdict |
 |---|---|---:|
 | **M1** | exact **1,000** ; sans contexte **0,708** ; canonique **1,000** ; invariance **1,000** ; 1 584 événements | ✅ |
-| **M2** | `jeu` **1,000** ; `de` **0,0616** (n=146) ; lésion ventrale `jeu` **0,2123** ; lésion dorsale `de` **0,0274** | ❌ |
+| **M2** | `jeu` **1,000** ; `de` **0,9315** (n=146) ; lésion ventrale `jeu` **0,1918**, `de` **0,9315** ; lésion dorsale `jeu` **1,000**, `de` **0,0137** | ✅ double dissociation |
 | **M3** | span **12/12** ; exact **1,000** ; n-back contrôle **1,000** ; n-back brut **0,0006 / 0,0042** (invalide) | ✅ tampon |
 | **M4** | rappel **1,000** ; complétion **0,979** ; séparation **1,000** ; 29 codes uniques | ✅ |
 | **M5** | exact **0,989** = majoritaire **0,989** ; surprise **0,0096** | ❌ |
 | **M6** | exact **0,700** ; FP **1** ; FN **20** ; coût **−0,150** | ❌ |
 | **M7** | **29** nouveaux / 528 ; rappel **1,000** | ❌ |
 | **M8** | prototypes **0,9425** contre baseline **0,9725** | ❌ |
-| **M9** | contexte **0,292** ; M2 ventrale **0,212** ; M2 dorsale **0,027** ; M3 **0** ; M4 **0** ; M5 **0,011** ; M6 **0,300** ; M8 **0** | ✅ table |
+| **M9** | contexte **0,292** ; M2 ventrale **0,192** ; M2 dorsale **0,014** ; M3 **0** ; M4 **0** ; M5 **0,011** ; M6 **0,314** ; M8 **0** | ✅ table |
 
 ## 3. Contrôles
 
 - **M1** : avec/sans contexte (100 / 70,8).
-- **M2** : lésions des têtes ; la ventrale chute, la dorsale reste très faible (6,2 % contre 2,7 % lésée).
+- **M2** : lésions croisées des têtes ; ventrale 100 → 19,2 %, dorsale 93,2 → 1,4 %.
 - **M3** : capacité zéro → span 0.
 - **M4** : stockage vide → rappel 0.
 - **M5** : sans transitions → 1,1 %.
@@ -44,15 +44,16 @@
 2. **M4** est une **mémoire épisodique exacte** sur le corpus : rappel 1,0, complétion 97,9 %,
    séparation 1,0.
 3. **M3** tient un **tampon de 12 codes** ; le n-back n'est pas un test valide ici.
-4. **M2, M5, M6, M7, M8** sont **négatifs ou trop faibles** : la voie dorsale apprend **6,2 %** (au-dessus
-   du hasard 1,5 %, mais très loin d'une lecture fiable) ; le prédicteur
+4. **M5, M6, M7, M8** sont **négatifs ou trop faibles** : le prédicteur
    ne bat pas la majorité ; la porte est à 70 % ; la neuromodulation ne change rien ; le sommeil dégrade.
 5. **M9** montre les dépendances, pas une causalité biologique.
 
 ## 5. Critique
 
 - **M1 exact** ne veut pas dire **M1 neuronal** : c'est un bloc classique.
-- **M2** est **invalide** pour la double dissociation : `jeu` est trivial, `de` reste à **6,2 %** (hasard 1,5 %), très loin d'une lecture fiable.
+- **M2** est **valide** : la double dissociation est nette (`de` 93,2 %, lésion dorsale 1,4 %, lésion
+  ventrale `jeu` 19,2 %) ; le point qui a débloqué est le **dernier état caché**, pas seulement la moyenne.
+  Le `jeu` reste trivial.
 - **M3** n-back est dominé par l'absence de répétitions ; le span est un tampon.
 - **M4** est un plus proche voisin ; le rappel exact est une propriété du stockage, pas une généralisation.
 - **M5–M8** sont des négatifs utiles : ils disent ce qu'un module **ne fait pas**.
@@ -60,8 +61,7 @@
 
 ## 6. Suite
 
-- **M2** : classes équilibrées, contexte, entraînement séparé `de`/`vers`, double dissociation ; la
-  distillation synthétique n'a pas suffi (6,2 %).
+- **M2** : validé ; étendre à `vers`, `chemin`, `point` et à une ablation du contexte.
 - **M3** : séquences avec répétitions et interférence ; le tampon est validé, pas la mémoire du réseau.
 - **M5** : ordre 2, séquences stochastiques, comparaison à un modèle de langue.
 - **M6** : conflit langue/tâche, coût en pas, inhibition.
