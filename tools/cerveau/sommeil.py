@@ -38,7 +38,7 @@ reproductibles sur le corpus (29 codes, 528 items) :
   train. Ce n'est pas une mesure, c'est une preuve ;
 - la seule partie gagnée sur un code neuf est le **motif de ``None``** : la clé
   ``jeu`` porte les champs à 89,20 %, le backoff ``type→groupe→jeu→global`` à
-  90,11 %, mais les champs non nuls restent à 61,3 % puis 62,0 %, dont
+  90,11 %, mais les champs non nuls ne passent que de 61,26 % à 63,51 %, dont
   l'essentiel vient de ``jeu``/``action``/``taille`` (déjà connus par la clé) ;
   les coordonnées du coup (``de``, ``vers``, ``point``, ``carte``, ``case``,
   ``chemin``) sont à 0 % hors coïncidences de marginale ;

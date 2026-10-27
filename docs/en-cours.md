@@ -6,7 +6,7 @@
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
 
-**Mis à jour : 2026-10-27, 10 h 54 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-27, 11 h 50 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
@@ -98,7 +98,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | **C3** restitution | ✅ mesuré ; **C3.2** : un module par famille, **4/5** au-dessus de la référence |
 | **C4** dialectes et styles | ✅ mesuré ; la date reste à contrôler |
 | **C5** qualité par domaine | ✅ six registres + dialogue spontané |
-| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) |
+| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) ; l'outil de présentation [mdserve](https://github.com/stephanedenis/mdserve) est un dépôt public autonome |
 | **C7** pensée abstraite | ✅ mesuré — la carte, **B4** close, **B5/B6** faits, **B10–B12** premier passage |
 
 ## Ce qui reste
