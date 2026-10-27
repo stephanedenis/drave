@@ -109,6 +109,16 @@ concepts, carte des 11 familles, **14 schémas**). Les **170 liens internes** de
 **relatifs** et résolvent ; la revue vérifie la fiche, le lien glossaire, l'image, la date de l'index
 et l'usage de chaque schéma.
 
+### Le glossaire par entrée
+
+Le glossaire passe de **11 familles** à **11 familles + 289 fiches** : une **carte courte** par
+entrée dans [`docs/glossaire/entrees/`](../docs/glossaire/entrees/), un **index groupé** par famille
+dans [`docs/glossaire/README.md`](../docs/glossaire/README.md), et un **manifeste**
+[`docs/glossaire/index.json`](../docs/glossaire/index.json) pour mdserve. Le générateur est
+`tools/glossaire_cartes.py` ; les fiches sont **exclues du compteur de documents** (comme les
+README) et la revue vérifie que chaque fiche est listée dans l'index. Le lien direct évite
+l'ancrage dans une famille de 500 lignes.
+
 ## 4. L'outillage
 
 `tools/revue_documentation.py` vérifie maintenant :

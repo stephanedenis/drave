@@ -25,10 +25,18 @@
 | M5 `source` avec plateau | **18,70 %** (majoritaire 6,49 %) ; surprise **2,423** |
 | M5 `source` sans plateau | **12,60 %** ; surprise **3,112** |
 | M5 `source` sans transitions | 14,29 % |
-| M5 `source` M1 sans contexte | 28,03 % (n=396) |
+| M5 `source` M1 sans contexte | 28,03 % (n=396) — **artefact de couverture** |
 | M6 confluence | **94,32 %** |
 | M6 commutation | **94,95 %** |
 | M6 commutation coût | **0,000** |
+
+### Correction M5 : le 28,03 % est une perte de couverture
+
+Le « M1 sans contexte » de M5 ne lit que **396 pas sur 770** (couverture **51,4 %**) : seuls les
+pas de **dames** survivent ; les **374 pas d'échecs** sont perdus. Sur **ces mêmes 396 pas**, la
+référence fait exactement **28,03 %** : ce n'est pas un gain, c'est une **sélection**. Pour
+`cible`, le brut 13,10 % a une couverture de **74,5 %** ; `go` tombe à **0 %** avec une surprise
+de **18,21 nat**. Le chiffre honnête est donc **M5 sans contexte = 12,60 % sur 770**, pas 28,03 %.
 
 ## M9
 
