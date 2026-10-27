@@ -192,6 +192,8 @@ def index(toutes: list[dict]) -> str:
         "> complètes restent dans les 11 familles ; le manifeste [`index.json`](index.json) sert à",
         "> mdserve pour afficher une fiche en contexte.",
         "> **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.",
+        "> **Pour mdserve.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche",
+        "> `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.",
         "",
         f"**{len(toutes)} entrées.** Index général : [le glossaire](../glossaire.md).",
         "",
