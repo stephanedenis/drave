@@ -49,6 +49,11 @@ l'entraînement synthétique, **20 sont inédites**.
   **Aucune variante ne domine** : `aug-formes` gagne `de`/`chemin_0`, `aug-pos` gagne `vers` ;
   `point` ne se départage pas de la majorité. Ce n'est pas de la lecture sémantique : c'est la
   **couverture de formes et de classes** par les règles.
+- **Ce que `aug-pos` lit vraiment** : promotions `a8=Q`/`a7a8q` **0/3 → 3/3** sur `de` et `vers`
+  (surface exclue), `exd6` **2/3** sur `de`, dames `9x18`/`9-13`/`9-14`/`b6xd4` ; **roque 0/3**
+  (surface `O-O` unique et exclue), `9x18x27` 0. Sur `de`, `aug-pos` **désapprend** les raccourcis
+  `e4→52` / `Nf3→62` et retombe à 8,7/20 : le split de A3 récompense une **ambiguïté de surface**,
+  pas la généralisation.
 - **Plus d'entraînement dégrade l'inédit** : à 1 000 pas, `de` tombe à **9,3/20** (46,7 %)
   contre 10,7/20 à 300 pas ; les formes vues restent à 100 %. Le split inédit est un **priori de
   classe**, pas une lecture.
