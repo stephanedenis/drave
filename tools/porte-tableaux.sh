@@ -2,7 +2,7 @@
 # porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
 #
 # POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
-# comme du TEXTE dans mdserve : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
 # **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
 # puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
 # disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.

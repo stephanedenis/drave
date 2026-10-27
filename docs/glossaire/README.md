@@ -3,9 +3,9 @@
 > **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par
 > entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions
 > complètes restent dans les 11 familles ; le manifeste [`index.json`](index.json) sert à
-> mdserve pour afficher une fiche en contexte.
+> docwatch pour afficher une fiche en contexte.
 > **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.
-> **Pour mdserve.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche
+> **Pour docwatch.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche
 > **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,
 > l'index et le manifeste ; après une modification d'une famille, relancer le générateur.
 > `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.

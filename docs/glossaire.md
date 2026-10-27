@@ -127,5 +127,5 @@ directement. Les liens vers ce fichier continuent de fonctionner.
 
 > **Les fiches par entrée.** L'index complet est [`glossaire/README.md`](glossaire/README.md) :
 > **289 entrées**, une **fiche courte** par entrée dans [`glossaire/entrees/`](glossaire/entrees/), et
-> un manifeste [`glossaire/index.json`](glossaire/index.json) pour mdserve. Les définitions complètes
+> un manifeste [`glossaire/index.json`](glossaire/index.json) pour docwatch. Les définitions complètes
 > restent dans les 11 familles ci-dessus ; une fiche est une **carte**, pas une copie.

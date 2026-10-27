@@ -56,7 +56,7 @@ demande**, un document par tâche.
 | [references-non-regression.md](references-non-regression.md) | les repères des passes complètes |
 | [manques.md](manques.md) | le registre des manques mesurés |
 | [glossaire/README.md](glossaire/README.md) | l'index des 289 entrées et des fiches courtes |
-| [glossaire/entrees/](glossaire/entrees/) | les fiches glossaire par entrée (format carte pour mdserve) |
+| [glossaire/entrees/](glossaire/entrees/) | les fiches glossaire par entrée (format carte pour docwatch) |
 | [semantique-universaux.md](semantique-universaux.md) | la base typée (B11) : 15 champs, 502 classes, les écoles |
 | [modules-cerveau-langage.md](modules-cerveau-langage.md) | les modules M1–M9 (B12), le bus et les négatifs |
 | [contexte-long.md](contexte-long.md) | ce que 1 M de jetons de contexte veut dire, et par où ça casse |

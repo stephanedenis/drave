@@ -5,10 +5,10 @@ Le glossaire est découpé en **11 familles** (les définitions longues). Ce scr
 les **entrées** et génère :
 
   - `docs/glossaire/entrees/<slug>.md` : une **fiche courte** (titre, résumé, famille,
-    lien vers la définition complète) — c'est l'unité que mdserve peut afficher en contexte ;
+    lien vers la définition complète) — c'est l'unité que docwatch peut afficher en contexte ;
   - `docs/glossaire/README.md` : l'**index** groupé par famille, avec un lien direct par entrée ;
   - `docs/glossaire/index.json` : le **manifeste** (slug, terme, famille, fichier, fiche, résumé)
-    pour la résolution côté mdserve.
+    pour la résolution côté docwatch.
 
 Les familles restent la source des définitions : une fiche est une **carte**, pas une copie.
 Après une modification d'une famille, relancer :
@@ -198,9 +198,9 @@ def index(toutes: list[dict]) -> str:
         "> **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par",
         "> entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions",
         "> complètes restent dans les 11 familles ; le manifeste [`index.json`](index.json) sert à",
-        "> mdserve pour afficher une fiche en contexte.",
+        "> docwatch pour afficher une fiche en contexte.",
         "> **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.",
-        "> **Pour mdserve.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche",
+        "> **Pour docwatch.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche",
         "> **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,",
         "> l'index et le manifeste ; après une modification d'une famille, relancer le générateur.",
         "> `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.",
