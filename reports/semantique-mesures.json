@@ -335,5 +335,120 @@
   "stage_a_pas": 300,
   "stage_b_pas": 200
  },
- "conclusion": "encodeur convergent (rappel 0,426 vs 0,167 ; sonde 0,100) ; décodeur négatif (chrF 12,7 contre plancher 39,6) ; pas de raisonnement branché"
+ "conclusion": "encodeur convergent (0,426 vs 0,167 ; sonde 0,100) ; decodeur negatif (12,9 vs plancher 39,6) ; ablations : z 512 et prefixe 64 n'aident pas, z est un code d'identite ; prochain levier = unites semantiques multiples ou attention croisee",
+ "ablations": {
+  "z_512_stage_a": {
+   "meilleur_pas": 200,
+   "rappel": 0.28,
+   "sonde": 0.133,
+   "note": "512 dims degrade le rappel"
+  },
+  "prefixe_64_stage_b": {
+   "chrf_reconstruction": 12.4,
+   "chrf_traduction": 6.7,
+   "note": "pas de gain sur prefixe 16"
+  },
+  "ablation_z": {
+   "z": 5.84,
+   "zero": 2.52,
+   "random": 2.56,
+   "note": "le decodeur utilise z, mais z ne porte pas le detail"
+  },
+  "joint_fine_tune": {
+   "meilleur_pas": 300,
+   "historique": [
+    {
+     "alignement": 0.8225503642525938,
+     "rappel": 0.3888888888888889,
+     "rappel_melange": 0.1259259259259259,
+     "sonde_langue": 0.13333333333333333,
+     "chrf_reconstruction": 9.196247238844196,
+     "chrf_traduction": 4.281241473606884,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 50,
+     "perte": 19.71978187561035,
+     "contrastif": 0.9605469107627869,
+     "adversaire": 4.544886589050293,
+     "secondes": 48.910585608988185
+    },
+    {
+     "alignement": 0.793466900896143,
+     "rappel": 0.4148148148148148,
+     "rappel_melange": 0.1111111111111111,
+     "sonde_langue": 0.15,
+     "chrf_reconstruction": 12.955381123285513,
+     "chrf_traduction": 7.994322484125552,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 100,
+     "perte": 14.119488716125488,
+     "contrastif": 0.7520406246185303,
+     "adversaire": 4.645248889923096,
+     "secondes": 98.62254898498941
+    },
+    {
+     "alignement": 0.7846389552371369,
+     "rappel": 0.42777777777777776,
+     "rappel_melange": 0.10185185185185185,
+     "sonde_langue": 0.15,
+     "chrf_reconstruction": 12.900755256933484,
+     "chrf_traduction": 8.325634723019856,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 150,
+     "perte": 8.197038650512695,
+     "contrastif": 0.6830803751945496,
+     "adversaire": 4.6497883796691895,
+     "secondes": 148.10044840599585
+    },
+    {
+     "alignement": 0.7462634619877294,
+     "rappel": 0.42407407407407405,
+     "rappel_melange": 0.1037037037037037,
+     "sonde_langue": 0.13333333333333333,
+     "chrf_reconstruction": 13.146544378213065,
+     "chrf_traduction": 8.067468047928415,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 200,
+     "perte": 5.83538818359375,
+     "contrastif": 0.4607757329940796,
+     "adversaire": 4.595234394073486,
+     "secondes": 198.37508009599696
+    },
+    {
+     "alignement": 0.7346779996598208,
+     "rappel": 0.42962962962962964,
+     "rappel_melange": 0.11481481481481481,
+     "sonde_langue": 0.05,
+     "chrf_reconstruction": 12.971035922008946,
+     "chrf_traduction": 6.454192919126614,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 250,
+     "perte": 7.474782943725586,
+     "contrastif": 0.8958751559257507,
+     "adversaire": 4.603738784790039,
+     "secondes": 248.33878238199395
+    },
+    {
+     "alignement": 0.735103265568614,
+     "rappel": 0.43703703703703706,
+     "rappel_melange": 0.1037037037037037,
+     "sonde_langue": 0.1,
+     "chrf_reconstruction": 12.928177798213264,
+     "chrf_traduction": 8.400909335607524,
+     "chrf_plancher": 39.64867205749372,
+     "n_rappel": 60,
+     "pas": 300,
+     "perte": 4.123427867889404,
+     "contrastif": 0.5429295897483826,
+     "adversaire": 4.659579277038574,
+     "secondes": 298.45817548499326
+    }
+   ],
+   "note": "encodeur degèle lr 1e-5 ; rappel 0,437, chrF 12,9/8,4"
+  }
+ }
 }

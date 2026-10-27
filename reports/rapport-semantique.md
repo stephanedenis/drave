@@ -89,6 +89,23 @@ Le décodeur est **sous le plancher** dans les deux sens ; le consensus de 29,6 
 la sensibilité à la source (0,704) est haute : les sorties dépendent encore de la langue d'entrée. C'est
 exactement l'ambiguïté que le diagnostic devait révéler.
 
+### Ablations : ni le préfixe ni la dimension ne débloquent
+
+Trois variantes ont été testées après le premier passage.
+
+| variante | ce qui change | résultat |
+|---|---|---|
+| **goulot 512** | `z` de 512 dims au lieu de 128, même étage A | rappel **0,278** (contre 0,426) ; 30 articles ; la dimension supplémentaire **dégrade** la séparation |
+| **préfixe 64** | décodeur à 64 préfixes au lieu de 16, encodeur gelé | chrF **12,4 / 6,7** à 200 pas (contre 12,7 / 5,3) : pas de gain |
+| **joint** | encodeur dégelé à lr 1e-5, contraste 5, adversaire 0,2 | rappel **0,437**, sonde **0,100**, chrF **12,9 / 8,4** : le `z` garde l'identité, le décodeur ne décolle pas |
+| **ablation de `z`** | décoder avec `z` / `z=0` / `z` aléatoire | **5,84** / **2,52** / **2,56** : le décodeur **utilise** `z`, mais `z` ne porte pas le détail du texte |
+
+**Lecture** : un `z` unique de 128 dimensions est un **code d'identité** (il retrouve l'article, il ne le
+reconstruit pas). Agrandir le vecteur ne rend pas le texte ; allonger le préfixe ne rend pas le texte ;
+dégeler l'encodeur avec la reconstruction ne rend pas le texte. Le verrou est le **goulot** : il faut des
+**unités sémantiques multiples** (une séquence de `z`, comme la RSN) ou une **attention croisée** du
+décodeur sur les états, pas un seul vecteur moyenné.
+
 ## 4. Ressources et communication
 
 - **NVLink** : `nvidia-smi topo -m` donne **NV1**, `nvidia-smi nvlink --status` **25,781 GB/s** ; NCCL
@@ -119,13 +136,14 @@ exactement l'ambiguïté que le diagnostic devait révéler.
 3. **L'ordre des étages compte** : les gradients du décodeur écrasent l'encodeur ; il faut entraîner
    l'encodeur d'abord, puis le décodeur sur `z` gelé.
 4. **Le décodeur n'est pas réglé** : la perte baisse, le chrF non ; le diagnostic multilingue est sous le
-   plancher. Le raisonnement sur `z` gelé **n'est pas branché** — ce serait mesurer un décodeur, pas une
-   pensée.
+   plancher. Les ablations montrent que **la dimension de `z` et la longueur du préfixe ne sont pas le
+   levier** : un vecteur unique est un code d'identité, pas un code de contenu. Le raisonnement sur `z`
+   gelé **n'est pas branché** — ce serait mesurer un décodeur, pas une pensée.
 
 ## 7. Prochaine action
 
-- **Décodeur** : attention croisée (z comme mémoire, pas comme préfixe), plus de préfixes, plus de données,
-  décodage par recherche ; critère d'arrêt = chrF.
+- **Décodeur** : **unités sémantiques multiples** (une séquence de `z`, comme la RSN) ou **attention croisée**
+  (z comme mémoire, pas comme préfixe) ; plus de données, décodage par recherche ; critère d'arrêt = chrF.
 - **Validation** : 20–30 articles, 3 graines, split de langue (entraîner sans une langue, la tester).
 - **Diagnostic** : matrice complète 10×10 sur 6 articles ; la sensibilité à la source doit baisser.
 - **Raisonnement** : après un décodeur au-dessus du plancher seulement ; sinon, on ne mesure que la surface.
