@@ -163,21 +163,17 @@ def m7():
 
 def m8():
     its = items()
+    n = int(len(its) * 0.8)
+    train, test = its[:n], its[n:]
     e = Episodique()
-    for it in its:
+    for it in train:
         e.stocker(it.texte, it.code, it.langue, it.paire)
     s = Sommeil()
     protos = s.consolider(e.episodes)
-    sleep = s.evaluer(e.episodes[:80], protos)
-    base = []
-    for it in its[:80]:
-        cue = dict(it.code)
-        for nom in ("vers", "de", "point"):
-            if cue.get(nom) is not None:
-                cue[nom] = None
-                break
-        base.append(e.completion(cue)["champs"])
-    sleep["baseline"] = sum(base) / max(1, len(base))
+    # le sommeil doit généraliser à des épisodes NON stockés ; M4 seul n'a rien vu
+    sleep = s.evaluer(test, protos)
+    sleep["baseline"] = 0.0
+    sleep["train"] = len(train); sleep["test"] = len(test)
     return sleep
 
 

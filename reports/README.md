@@ -21,7 +21,7 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
-| [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation, M5/M6/M7/M8 **négatifs** ; M9 lésions |
+| [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation, M8 généralise (96,48 % hors stock), M5/M6/M7 **négatifs** ; M9 lésions |
 | [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, canonique 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, raisonnement non branché) |
 | [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : restitution canonique **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; surface originale **33/79** ; sans décodeur neuronal |
 | [`rapport-hybride.md`](rapport-hybride.md) | **B11.6** : le codec avec contexte lit **528/528** (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire de traduction 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
