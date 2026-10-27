@@ -48,6 +48,7 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **B22** M2 typos | **niche robuste** — M2 62–80 % contre M1 24–45 % sur 4 types de typos | [la fiche](../reports/rapport-m2-typo.md) |
 | **B21** M9 dose | **dose** — M3 0/4/8/12/12 tautologique ; M5 +4,25 pts de l'ordre 2 ; sham nul | [la fiche](../reports/rapport-m9-dose.md) |
 | **B19** M2 secours | **typos** — M2 71,2/76,7 sur typo contre M1 36,6 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général | [la fiche](../reports/rapport-m2-secours.md) |
 | **B18** restitution canonique | **involution** — 528/528 rendus et relus, 0 échec ; codec, pas décodeur | [la fiche](../reports/rapport-restitution.md) |
