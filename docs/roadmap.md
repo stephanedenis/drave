@@ -360,6 +360,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B12.8 | **M8 sommeil** | ❌ **marginal** | 96,48 % de champs mais exact **65,1 %**, baseline par jeu **96,10 %** ; leave-one-code-out exact **0 % par construction**, non nuls 63,5 % ; coordonnées 0 % |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Pipeline M1 → M4 → M8** | ⚠️ **intégration** | **528/528**, 7 prototypes, 96,33 % de complétion — tautologique : M4 ne généralise pas, M8 est la marginale |
+| B21.1 | **M9 par dose** | ✅ **dose** | M3 span **0/4/8/12/12** (linéaire, tautologique) ; M5 ordre 0/1/2 **13,81/15,70/18,06 %** (+4,25 pts, surprise +0,012 nat) ; sham **nul** ; double lésion **non additive** |
 | B19.1 | **M2 secours hors codec** | ⚠️ **typos seulement** | M1 original **100 %**, casse **98,7 %**, phrase **86,6 %** ; M1 espaces **34,8 %**, typo **36,6 %** ; M2 typo **71,2 / 76,7**, espaces **41,8 / 45,2**, phrase **0 / 0,7** ; niche réelle, pas un secours général |
 | B18.1 | **Restitution canonique** | ✅ **involution** | **528/528** rendus, **528/528** relus, **0** échec ; codec bidirectionnel exact, pas un décodeur neuronal (B10 reste négatif) |
 | B17.1 | **M7-bis dans la chaîne** | ✅ **filtre** | LFU **9,28 %** suffixe surface vs FIFO **5,03 %** ; suffixe code **74,69 vs 71,70 %** ; M8 couverture **70,75 %**, exact sur couverts **100 %** (lookup), généralisation **0 %** |

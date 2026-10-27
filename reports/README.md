@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-m9-dose.md`](rapport-m9-dose.md) | **B21** — M9 par dose : M3 0/4/8/12/12 tautologique, M5 +4,25 pts, sham nul, double non additive |
 | [`rapport-m2-secours.md`](rapport-m2-secours.md) | **B19** — M2 secours : typos 71,2/76,7 vs M1 36,6 ; espaces 41,8/45,2 vs 34,8 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général |
 | [`rapport-restitution.md`](rapport-restitution.md) | **B18** — restitution canonique : 528/528 rendus et relus, 0 échec ; codec bidirectionnel, pas un décodeur neuronal |
 | [`rapport-pipeline-memoire.md`](rapport-pipeline-memoire.md) | **B17** — LFU 9,28 % suffixe surface vs FIFO 5,03 % ; M8 couverture 70,75 %, exact sur couverts 100 % (lookup), généralisation 0 |

@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 182 fichiers / 249 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 183 fichiers / 250 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -53,6 +53,7 @@ La vision complète est dans [`vision.md`](vision.md).
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression.
+- **B21 M9 dose** — M3 span **0/4/8/12/12** (tautologique) ; M5 ordre 0/1/2 **13,81/15,70/18,06 %** (+4,25 pts) ; sham **nul** ; double lésion non additive.
 - **B19 M2 secours** — M1 **100 %** original, **98,7 %** casse, **86,6 %** phrase ; M1 espaces **34,8 %**, typo **36,6 %** ; M2 typo **71,2 / 76,7**, espaces **41,8 / 45,2**, phrase **0 / 0,7**. Niche typos, pas secours général.
 - **B18 restitution** — **528/528** rendus et relus, **0** échec ; c'est l'involution du codec, pas un décodeur neuronal (B10 négatif).
 - **B17 mémoire LFU** — LFU **9,28 %** suffixe surface vs FIFO **5,03 %**, suffixe code **74,69 vs 71,70 %** ; M8 couverture **70,75 %**, exact sur couverts **100 %** (lookup), généralisation **0 %**. LFU filtre, M8 ne généralise pas.
@@ -76,7 +77,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **182** / **249** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **183** / **250** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -86,7 +87,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **182** / **249** |
+| fichiers / JSON de résultats | **183** / **250** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
