@@ -24,7 +24,7 @@
   <text x="170.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
   <text x="170.0" y="392" text-anchor="middle" font-size="12" fill="#475569">4-23</text>
   <line x1="170" y1="236" x2="170" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
-  <text x="178" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="168" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
   <text x="170" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#b91c1c">coupe 0-3 | 4-23</text>
   <text x="170" y="476" text-anchor="middle" font-size="14" fill="#b91c1c">coût du pont : +17,09 %</text>
   <rect x="340" y="100" width="220" height="330" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
@@ -36,7 +36,7 @@
   <text x="450.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
   <text x="450.0" y="392" text-anchor="middle" font-size="12" fill="#475569">16-23</text>
   <line x1="450" y1="236" x2="450" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
-  <text x="458" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="448" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
   <text x="450" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#15803d">coupe 0-15 | 16-23</text>
   <text x="450" y="476" text-anchor="middle" font-size="14" fill="#15803d">coût du pont : +0,52 %</text>
   <rect x="620" y="100" width="220" height="330" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
@@ -48,7 +48,7 @@
   <text x="730.0" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">région HAUTE</text>
   <text x="730.0" y="392" text-anchor="middle" font-size="12" fill="#475569">20-23</text>
   <line x1="730" y1="236" x2="730" y2="284" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#flecheR)"/>
-  <text x="738" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
+  <text x="728" y="266" font-size="11.5" fill="#b91c1c">état (896 flottants)</text>
   <text x="730" y="452" text-anchor="middle" font-size="15" font-weight="bold" fill="#15803d">coupe 0-19 | 20-23</text>
   <text x="730" y="476" text-anchor="middle" font-size="14" fill="#15803d">coût du pont : +0,52 %</text>
   <text x="450" y="510" text-anchor="middle" font-size="12.5" fill="#475569">Couper tôt coûte 30 fois plus cher que couper tard : la région haute a besoin d&#8217;un état riche, la basse en produit un pauvre.</text>
