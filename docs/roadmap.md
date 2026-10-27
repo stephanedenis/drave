@@ -313,6 +313,7 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | B11.8 | **Contexte séparé** | ❌ **sans gain** | vecteur de contexte 512 + MLP : **59,1 %** / **40,7 %**, contre **59,8 %** / **40,7 %** pour le suffixe ; le verrou est ailleurs |
 | B11.9 | **Restitution canonique** | ✅ **mesuré** | **79/79** et **449/449** rendus, **aller-retour RSN 100 %** ; surface originale seulement **33/79** ; sans décodeur neuronal |
 | B11.10 | **Cartes et ambiguïtés** | ⏳ **suivant** | `carte` **69,3 %** ; symbole du morpion, chemin des dames ; le codec lit 100 % |
+| B11.11 | **Bilan** | ✅ **écrit** | [`bilan-b11.md`](../reports/bilan-b11.md) : objectif **non atteint**, raisonnement **non branché** |
 
 **Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
 le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il
