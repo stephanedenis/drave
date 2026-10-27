@@ -33,7 +33,9 @@ l'entraînement synthétique, **20 sont inédites**.
 | `chemin_0` | 84,3 % **< majorité 97,1 %** |
 
 - **Double dissociation** : valide sur les surfaces vues (lésion ventrale → action au hasard, lésion
-  dorsale → `de` au hasard), mais **elle ne prouve pas la généralisation**.
+  dorsale → `de` au hasard), mais **elle ne prouve pas la généralisation**. Sur le sous-ensemble
+  `de`, **l'action est constante** : 98,6 % = la majorité, donc la tête ventrale ne prouve rien ;
+  seule la tête `de` est informative.
 - **Dernier état** : le gain honnête à 1 000 pas est **+2,7 pts** sur `de`, **+3,4** sur `vers`,
   **+1,4** sur `point`, **−2,9** sur `chemin_0` ; `mean` seul atteint 89,7 % sur `de` à 1 000 pas.
   Le « 6,2 → 93,2 » était un **sous-entraînement** du mean à 300 pas, pas une propriété du dernier état.
@@ -118,6 +120,9 @@ contient pas le plateau, et le tirage est uniforme parmi les coups légaux.
 - Baseline **par jeu** : **96,10 %** de champs, exact **63,2 %** ; le groupe `(jeu, action)` n'apporte
   que **+0,38 pt**. La baseline annoncée « 0 » était fausse (elle mesurait une mémoire vide, pas un
   modèle trivial).
+- **106/106 codes de la queue sont dans le train** ; l'oracle par paire fait 100 % et le plafond
+  contextuel `(jeu, action)` vaut **57,95 %**, sous les 65,1 % publiés : la queue est un
+  sous-ensemble favorable, pas une généralisation.
 - Sur codes jamais vus : **leave-one-code-out**, exact **0 % par construction** ; champs **90,1 %**
   en backoff type→groupe→jeu→global, mais champs **non nuls 63,5 %** et les coordonnées
   (`de`, `vers`, `point`, `carte`, `case`, `chemin`) à **0 %** ; les prototypes ne peuvent pas produire
