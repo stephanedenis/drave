@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-couche-int8.md`](rapport-couche-int8.md) | **A7.7** — hidden int8 : 34,6 % du volume mais argmax 0,83–0,93, KL 0,12–0,37 ; bf16 meilleur |
 | [`rapport-couche-distante.md`](rapport-couche-distante.md) | **A7.6** — couche Qwen 0.5B à distance : logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× |
 | [`rapport-seuil-reseau.md`](rapport-seuil-reseau.md) | **A7.5b** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms |
 | [`rapport-grappe-reseau.md`](rapport-grappe-reseau.md) | **A7.5** — grappe sur réseau : 1 672 o contre 7 416 (4,44×), fidélité 1 792/1 792, 0,125 ms loopback |

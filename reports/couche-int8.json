@@ -1,0 +1,988 @@
+{
+  "experience": "A18 — une couche de modèle à distance (Qwen2.5-0.5B-Instruct)",
+  "date_utc": "2026-10-27T23:35:42.842522+00:00",
+  "commande": "/home/stephane/gpu-env/bin/python tools/couche_distante.py --device cuda:0 --repetitions 1 --sortie /tmp/a18-int8-token.json --sans-negatifs",
+  "environnement": {
+    "hostname": "Hauru",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.15.0",
+    "cuda_disponible": true,
+    "gpu": "Quadro RTX 5000",
+    "cuda_visible_devices": "0"
+  },
+  "modele": {
+    "id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "couche_distante": 12,
+    "n_couches": 24,
+    "hidden_size": 896,
+    "vocab_size": 151936,
+    "n_heads": 14,
+    "n_kv_heads": 2,
+    "head_dim": 64,
+    "dtype_client": "float32",
+    "device_client": "cuda:0"
+  },
+  "dispositif": {
+    "transport": "TCP IPv4 loopback 127.0.0.1, socket persistant",
+    "protocole": "en-tête binaire 38 o + hidden + position_ids i64 + cos/sin f32",
+    "encodage": "dense f32 ou sparse (masque 1 bit + valeurs f32), format A7.5",
+    "serveur": "processus séparé, une seule couche chargée depuis model.safetensors",
+    "client": "embeddings + couches 0..L-1 + couches L+1..23 + norm + lm_head",
+    "cache": "use_cache=False (prefill) ; aucun cache KV transféré",
+    "masque": "attention_mask=None (batch 1 sans padding), sdpa causal implicite",
+    "backend_principal": "sdpa",
+    "device_serveur_principal": "cuda:0",
+    "dtype_serveur_principal": "float32",
+    "serveur_duree_chargement_s": 0.5432064533233643
+  },
+  "poids": {
+    "hash_client": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+    "hash_serveur": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+    "identiques": true,
+    "methode": "sha256 des tenseurs fp32 triés par nom"
+  },
+  "memoire_client_mio": {
+    "avant": 1894.400390625,
+    "apres": 1837.51416015625,
+    "delta": 56.88623046875,
+    "note": "mesure torch.cuda.memory_allocated du processus client"
+  },
+  "invites": [
+    {
+      "indice": 0,
+      "texte": "La mesure est reine ; ce qui n'est pas compté n'existe pas.",
+      "ntokens": 18,
+      "fidelite": {
+        "forme": [
+          18,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 2734848,
+        "elements_total": 2734848,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 17,
+          "nll_moyenne": 4.024329317962501,
+          "perplexite": 55.94277638165075
+        },
+        "distant": {
+          "ntok": 17,
+          "nll_moyenne": 4.024329317962501,
+          "perplexite": 55.94277638165075
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 64512,
+          "n_pos": 144,
+          "n_cos": 4608,
+          "n_sin": 4608,
+          "nval": 16128,
+          "nmask": 0,
+          "octets_requete": 73910,
+          "octets_reponse": 64546,
+          "octets_total": 138456
+        },
+        "sparse": {
+          "n_x": 66528,
+          "n_pos": 144,
+          "n_cos": 4608,
+          "n_sin": 4608,
+          "nval": 16128,
+          "nmask": 2016,
+          "octets_requete": 75926,
+          "octets_reponse": 64546,
+          "octets_total": 140472
+        },
+        "ratio_octets_total": 1.0272764172642403,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.727641726424035,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 2734848,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 2734848,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 3.3104589965660125,
+        "latence_sparse_forward_ms": 50.35329100792296,
+        "quant": {
+          "n_x": 16200,
+          "n_pos": 144,
+          "n_cos": 4608,
+          "n_sin": 4608,
+          "nval": 16128,
+          "nmask": 0,
+          "octets_requete": 25598,
+          "octets_reponse": 64546,
+          "octets_total": 90144
+        },
+        "ratio_quant": 0.34634014341767017,
+        "codec_quant": {
+          "valeurs_identiques": false,
+          "bits_identiques": false,
+          "diff_max": 6.328460693359375
+        },
+        "fidelite_quant": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 1,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 3.65651034353646e-07,
+          "diff_max": 17.331497192382812,
+          "diff_moyenne": 0.4436877921144453,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.8333333333333334,
+          "top5_intersection": 0.9111111111111112,
+          "top1024_intersection": 0.8627387152777778,
+          "kl_moyenne": 0.37281254481640563
+        },
+        "dense_vs_quant": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 1,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 3.65651034353646e-07,
+          "diff_max": 17.331497192382812,
+          "diff_moyenne": 0.4436877921144453,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.8333333333333334,
+          "top5_intersection": 0.9111111111111112,
+          "top1024_intersection": 0.8627387152777778,
+          "kl_moyenne": 0.37281254481640563
+        },
+        "latence_quant_ms": 3.203320986358449,
+        "latence_quant_forward_ms": 44.45461102295667
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 1,
+          "min": 3.096392989391461,
+          "mediane": 3.096392989391461,
+          "moyenne": 3.096392989391461,
+          "max": 3.096392989391461,
+          "p95": 3.096392989391461
+        },
+        "rtt_couche_ms_valeurs": [
+          3.096392989391461
+        ],
+        "calcul_serveur_ms": {
+          "n": 1,
+          "min": 1.983,
+          "mediane": 1.983,
+          "moyenne": 1.983,
+          "max": 1.983,
+          "p95": 1.983
+        },
+        "calcul_serveur_ms_valeurs": [
+          1.983
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 1,
+          "min": 45.58417299995199,
+          "mediane": 45.58417299995199,
+          "moyenne": 45.58417299995199,
+          "max": 45.58417299995199,
+          "p95": 45.58417299995199
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          45.58417299995199
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.09673199383541942,
+          "mediane": 0.11971002095378935,
+          "moyenne": 0.1409190008416772,
+          "max": 0.2063149877358228,
+          "p95": 0.2063149877358228
+        },
+        "ping_ms_valeurs": [
+          0.2063149877358228,
+          0.11971002095378935,
+          0.09673199383541942
+        ],
+        "part_couche_distante": 0.06792693133633733,
+        "octets_requete_moyen": 73910.0,
+        "repetitions": 1,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4106.111111111111,
+        "Mio_par_s": 22.763928534613648,
+        "tokens_par_s": 5813.215590420765
+      }
+    },
+    {
+      "indice": 1,
+      "texte": "Un train part de Montréal à 8 h et roule à 90 km/h. Un second part de Québec à 9 h et roule à 110 km/h. À quelle heure se croisent-ils si la distance est de 250 km ?",
+      "ntokens": 60,
+      "fidelite": {
+        "forme": [
+          60,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 9116160,
+        "elements_total": 9116160,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 59,
+          "nll_moyenne": 2.0119297939306833,
+          "perplexite": 7.477733917869921
+        },
+        "distant": {
+          "ntok": 59,
+          "nll_moyenne": 2.0119297939306833,
+          "perplexite": 7.477733917869921
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 215040,
+          "n_pos": 480,
+          "n_cos": 15360,
+          "n_sin": 15360,
+          "nval": 53760,
+          "nmask": 0,
+          "octets_requete": 246278,
+          "octets_reponse": 215074,
+          "octets_total": 461352
+        },
+        "sparse": {
+          "n_x": 221760,
+          "n_pos": 480,
+          "n_cos": 15360,
+          "n_sin": 15360,
+          "nval": 53760,
+          "nmask": 6720,
+          "octets_requete": 252998,
+          "octets_reponse": 215074,
+          "octets_total": 468072
+        },
+        "ratio_octets_total": 1.0272862375039589,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.7286237503958866,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 9116160,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 9116160,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 5.361520015867427,
+        "latence_sparse_forward_ms": 50.05946400342509,
+        "quant": {
+          "n_x": 54000,
+          "n_pos": 480,
+          "n_cos": 15360,
+          "n_sin": 15360,
+          "nval": 53760,
+          "nmask": 0,
+          "octets_requete": 85238,
+          "octets_reponse": 215074,
+          "octets_total": 300312
+        },
+        "ratio_quant": 0.34610480838726965,
+        "codec_quant": {
+          "valeurs_identiques": false,
+          "bits_identiques": false,
+          "diff_max": 6.274216651916504
+        },
+        "fidelite_quant": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 9,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 9.87257792754844e-07,
+          "diff_max": 16.681200981140137,
+          "diff_moyenne": 0.30412699089946804,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.9333333333333333,
+          "top5_intersection": 0.8899999999999999,
+          "top1024_intersection": 0.89990234375,
+          "kl_moyenne": 0.11677743863796447
+        },
+        "dense_vs_quant": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 9,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 9.87257792754844e-07,
+          "diff_max": 16.681200981140137,
+          "diff_moyenne": 0.30412699089946804,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.9333333333333333,
+          "top5_intersection": 0.8899999999999999,
+          "top1024_intersection": 0.89990234375,
+          "kl_moyenne": 0.11677743863796447
+        },
+        "latence_quant_ms": 3.308643994387239,
+        "latence_quant_forward_ms": 50.89910901733674
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 1,
+          "min": 4.8731130082160234,
+          "mediane": 4.8731130082160234,
+          "moyenne": 4.8731130082160234,
+          "max": 4.8731130082160234,
+          "p95": 4.8731130082160234
+        },
+        "rtt_couche_ms_valeurs": [
+          4.8731130082160234
+        ],
+        "calcul_serveur_ms": {
+          "n": 1,
+          "min": 2.906,
+          "mediane": 2.906,
+          "moyenne": 2.906,
+          "max": 2.906,
+          "p95": 2.906
+        },
+        "calcul_serveur_ms_valeurs": [
+          2.906
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 1,
+          "min": 49.49562597903423,
+          "mediane": 49.49562597903423,
+          "moyenne": 49.49562597903423,
+          "max": 49.49562597903423,
+          "p95": 49.49562597903423
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          49.49562597903423
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.09673199383541942,
+          "mediane": 0.11971002095378935,
+          "moyenne": 0.1409190008416772,
+          "max": 0.2063149877358228,
+          "p95": 0.2063149877358228
+        },
+        "ping_ms_valeurs": [
+          0.2063149877358228,
+          0.11971002095378935,
+          0.09673199383541942
+        ],
+        "part_couche_distante": 0.09845542735998969,
+        "octets_requete_moyen": 246278.0,
+        "repetitions": 1,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4104.633333333333,
+        "Mio_par_s": 48.1969129178641,
+        "tokens_par_s": 12312.458155359942
+      }
+    },
+    {
+      "indice": 2,
+      "texte": "def fibonacci(n):\n    if n < 2:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n",
+      "ntokens": 28,
+      "fidelite": {
+        "forme": [
+          28,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 4254208,
+        "elements_total": 4254208,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 27,
+          "nll_moyenne": 0.5803258544257475,
+          "perplexite": 1.7866205141093572
+        },
+        "distant": {
+          "ntok": 27,
+          "nll_moyenne": 0.5803258544257475,
+          "perplexite": 1.7866205141093572
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 100352,
+          "n_pos": 224,
+          "n_cos": 7168,
+          "n_sin": 7168,
+          "nval": 25088,
+          "nmask": 0,
+          "octets_requete": 114950,
+          "octets_reponse": 100386,
+          "octets_total": 215336
+        },
+        "sparse": {
+          "n_x": 103488,
+          "n_pos": 224,
+          "n_cos": 7168,
+          "n_sin": 7168,
+          "nval": 25088,
+          "nmask": 3136,
+          "octets_requete": 118086,
+          "octets_reponse": 100386,
+          "octets_total": 218472
+        },
+        "ratio_octets_total": 1.027281426707264,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.728142670726408,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 4254208,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 4254208,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 5.742440989706665,
+        "latence_sparse_forward_ms": 47.81207599444315,
+        "quant": {
+          "n_x": 25200,
+          "n_pos": 224,
+          "n_cos": 7168,
+          "n_sin": 7168,
+          "nval": 25088,
+          "nmask": 0,
+          "octets_requete": 39798,
+          "octets_reponse": 100386,
+          "octets_total": 140184
+        },
+        "ratio_quant": 0.34622009569377993,
+        "codec_quant": {
+          "valeurs_identiques": false,
+          "bits_identiques": false,
+          "diff_max": 5.524945259094238
+        },
+        "fidelite_quant": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 0,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 0.0,
+          "diff_max": 17.966439723968506,
+          "diff_moyenne": 0.5939730067615084,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.8928571428571429,
+          "top5_intersection": 0.8785714285714287,
+          "top1024_intersection": 0.7957240513392857,
+          "kl_moyenne": 0.24527204646706552
+        },
+        "dense_vs_quant": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": false,
+          "valeurs_identiques": false,
+          "elements_bits_identiques": 0,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 0.0,
+          "diff_max": 17.966439723968506,
+          "diff_moyenne": 0.5939730067615084,
+          "allclose_1e-6": false,
+          "argmax_accord": 0.8928571428571429,
+          "top5_intersection": 0.8785714285714287,
+          "top1024_intersection": 0.7957240513392857,
+          "kl_moyenne": 0.24527204646706552
+        },
+        "latence_quant_ms": 5.581873992923647,
+        "latence_quant_forward_ms": 48.76353801228106
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 1,
+          "min": 6.333447992801666,
+          "mediane": 6.333447992801666,
+          "moyenne": 6.333447992801666,
+          "max": 6.333447992801666,
+          "p95": 6.333447992801666
+        },
+        "rtt_couche_ms_valeurs": [
+          6.333447992801666
+        ],
+        "calcul_serveur_ms": {
+          "n": 1,
+          "min": 4.805,
+          "mediane": 4.805,
+          "moyenne": 4.805,
+          "max": 4.805,
+          "p95": 4.805
+        },
+        "calcul_serveur_ms_valeurs": [
+          4.805
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 1,
+          "min": 50.156893994426355,
+          "mediane": 50.156893994426355,
+          "moyenne": 50.156893994426355,
+          "max": 50.156893994426355,
+          "p95": 50.156893994426355
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          50.156893994426355
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.09673199383541942,
+          "mediane": 0.11971002095378935,
+          "moyenne": 0.1409190008416772,
+          "max": 0.2063149877358228,
+          "p95": 0.2063149877358228
+        },
+        "ping_ms_valeurs": [
+          0.2063149877358228,
+          0.11971002095378935,
+          0.09673199383541942
+        ],
+        "part_couche_distante": 0.12627273119235544,
+        "octets_requete_moyen": 114950.0,
+        "repetitions": 1,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4105.357142857143,
+        "Mio_par_s": 17.308875480700795,
+        "tokens_par_s": 4420.972593731509
+      }
+    }
+  ],
+  "agregats": {
+    "fidelite": {
+      "bits_identiques_tous": true,
+      "valeurs_identiques_toutes": true,
+      "diff_max": 0.0,
+      "argmax_accord_min": 1.0,
+      "top1024_intersection_min": 1.0,
+      "kl_max": 0.0,
+      "repetitions_identiques_toutes": true
+    },
+    "perplexite": {
+      "local": {
+        "ntok": 103,
+        "nll_moyenne": 1.9687985855996895,
+        "perplexite": 7.162066707346595
+      },
+      "distant": {
+        "ntok": 103,
+        "nll_moyenne": 1.9687985855996895,
+        "perplexite": 7.162066707346595
+      },
+      "delta_perplexite": 0.0,
+      "delta_relatif": 0.0
+    },
+    "reseau": {
+      "octets_requete_total": 435138.0,
+      "octets_par_token": 4105.075471698113,
+      "rtt_couche_ms": {
+        "n": 3,
+        "min": 3.096392989391461,
+        "mediane": 4.8731130082160234,
+        "moyenne": 4.767651330136384,
+        "max": 6.333447992801666,
+        "p95": 6.333447992801666
+      },
+      "calcul_serveur_ms": {
+        "n": 3,
+        "min": 1.983,
+        "mediane": 2.906,
+        "moyenne": 3.231333333333333,
+        "max": 4.805,
+        "p95": 4.805
+      },
+      "forward_bout_en_bout_ms": {
+        "n": 3,
+        "min": 45.58417299995199,
+        "mediane": 49.49562597903423,
+        "moyenne": 48.41223099113753,
+        "max": 50.156893994426355,
+        "p95": 50.156893994426355
+      },
+      "rtt_ping_ms": {
+        "n": 9,
+        "min": 0.09673199383541942,
+        "mediane": 0.11971002095378935,
+        "moyenne": 0.1409190008416772,
+        "max": 0.2063149877358228,
+        "p95": 0.2063149877358228
+      },
+      "debit_Mio_s": 29.013582436932097,
+      "debit_tokens_s": 7411.05649022421
+    },
+    "flux": {
+      "dense_total": 435138,
+      "sparse_total": 447010,
+      "ratio_total": 1.0272832986316984,
+      "ratio_hidden": 1.03125,
+      "taux_zeros_moyen": 0.0
+    }
+  },
+  "negatifs": {
+    "position_zero": {
+      "description": "RoPE ignorée : cos=sin=0 envoyés au serveur (même poids, même device)",
+      "config": {
+        "device": "cuda:0",
+        "dtype": "float32",
+        "attn": "sdpa",
+        "zero_positions": true
+      },
+      "zero_positions": true,
+      "par_invite": [
+        {
+          "indice": 0,
+          "ntokens": 18,
+          "fidelite": {
+            "forme": [
+              18,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151938,
+            "elements_total": 2734848,
+            "taux_bits_identiques": 0.05555628685762426,
+            "diff_max": 2.347569465637207,
+            "diff_moyenne": 0.24526320918667005,
+            "allclose_1e-6": false,
+            "argmax_accord": 0.9444444444444444,
+            "top5_intersection": 0.9222222222222223,
+            "top1024_intersection": 0.9325086805555556,
+            "kl_moyenne": 0.025661345071183936
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 17,
+              "nll_moyenne": 4.024329317962501,
+              "perplexite": 55.94277638165075
+            },
+            "distant": {
+              "ntok": 17,
+              "nll_moyenne": 4.034741714954335,
+              "perplexite": 56.52831793344687
+            },
+            "delta_nll": 0.010412396991834605,
+            "delta_perplexite": 0.5855415517961191,
+            "delta_relatif": 0.010466794636745574
+          },
+          "latence_couche_ms": 5.361801013350487,
+          "forward_ms": 45.80766899744049
+        },
+        {
+          "indice": 1,
+          "ntokens": 60,
+          "fidelite": {
+            "forme": [
+              60,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151941,
+            "elements_total": 9116160,
+            "taux_bits_identiques": 0.016667215143218197,
+            "diff_max": 4.63380241394043,
+            "diff_moyenne": 0.33336243248313774,
+            "allclose_1e-6": false,
+            "argmax_accord": 0.9,
+            "top5_intersection": 0.866666666666666,
+            "top1024_intersection": 0.8853678385416667,
+            "kl_moyenne": 0.045733660583184704
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 59,
+              "nll_moyenne": 2.0119297939306833,
+              "perplexite": 7.477733917869921
+            },
+            "distant": {
+              "ntok": 59,
+              "nll_moyenne": 2.0965795203112845,
+              "perplexite": 8.138285410620027
+            },
+            "delta_nll": 0.0846497263806012,
+            "delta_perplexite": 0.6605514927501055,
+            "delta_relatif": 0.08833578461137163
+          },
+          "latence_couche_ms": 6.1325109854806215,
+          "forward_ms": 51.125258003594354
+        },
+        {
+          "indice": 2,
+          "ntokens": 28,
+          "fidelite": {
+            "forme": [
+              28,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151937,
+            "elements_total": 4254208,
+            "taux_bits_identiques": 0.03571452077566494,
+            "diff_max": 5.079658508300781,
+            "diff_moyenne": 0.45058951165015343,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.892857142857143,
+            "top1024_intersection": 0.8436453683035714,
+            "kl_moyenne": 0.019381314548362043
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803258544257475,
+              "perplexite": 1.7866205141093572
+            },
+            "distant": {
+              "ntok": 27,
+              "nll_moyenne": 0.5713237562883258,
+              "perplexite": 1.770609356040695
+            },
+            "delta_nll": -0.009002098137421699,
+            "delta_perplexite": -0.016011158068662157,
+            "delta_relatif": -0.008961700563840123
+          },
+          "latence_couche_ms": 4.139070020755753,
+          "forward_ms": 45.770861994242296
+        }
+      ],
+      "agregat": {
+        "bits_identiques_tous": false,
+        "diff_max": 5.079658508300781,
+        "argmax_accord_min": 0.9,
+        "top1024_intersection_min": 0.8436453683035714,
+        "kl_max": 0.045733660583184704,
+        "perplexite_locale": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687985855996895,
+          "perplexite": 7.162066707346595
+        },
+        "perplexite_distante": {
+          "ntok": 103,
+          "nll_moyenne": 2.016646041479362,
+          "perplexite": 7.513084056607954
+        },
+        "delta_perplexite": 0.3510173492613591,
+        "delta_nll": 0.04784745587967243,
+        "latence_couche_ms_moyenne": 5.211127339862287
+      }
+    }
+  },
+  "verdict": {
+    "fidelite": "logits identiques au bit près sur les 3 invites",
+    "exacte": true,
+    "ppl_identique": true,
+    "conclusion": "Couche 12 exécutée dans un second processus : logits identiques au bit près sur les 3 invites ; ΔPPL corpus = +0. RTT couche médian 4.873 ms, 4105 o/jeton, 7411.1 jetons/s. Sparse/dense = 1.027×.",
+    "causes": [
+      {
+        "controle": "position_zero",
+        "description": "RoPE ignorée : cos=sin=0 envoyés au serveur (même poids, même device)",
+        "diff_max_logits": 5.079658508300781,
+        "argmax_accord_min": 0.9,
+        "top1024_intersection_min": 0.8436453683035714,
+        "delta_perplexite": 0.3510173492613591
+      }
+    ]
+  },
+  "serveur_principal": {
+    "info": {
+      "port": 34099,
+      "pid": 373948,
+      "couche": 12,
+      "device": "cuda:0",
+      "dtype": "float32",
+      "attn": "sdpa",
+      "hash_poids_fp32": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+      "dossier_modele": "/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.15.0",
+      "duree_chargement_s": 0.5432064533233643
+    },
+    "arreter": {
+      "code": 0,
+      "stderr": ""
+    }
+  },
+  "duree_s": 20.86153793334961
+}

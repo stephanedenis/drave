@@ -81,6 +81,7 @@ OP_SHUTDOWN = 2
 
 FLAG_SPARSE = 1
 DTYPE_F32 = 0
+DTYPE_INT8 = 1
 
 # magic, version, op, flags, dtype, reserve,
 # ntok, h, n_x, n_pos, n_cos, n_sin, n_mask
@@ -108,8 +109,8 @@ def bits_masque(n: int) -> int:
     return (int(n) + 7) // 8
 
 
-def encoder_flux(flux, sparse: bool = False):
-    """Encode un flux (ntok × h) en float32 dense ou sparse.
+def encoder_flux(flux, sparse: bool = False, quant: bool = False):
+    """Encode un flux (ntok × h) en float32 dense, sparse ou int8.
 
     Retourne ``(payload, meta)``. En sparse, le payload est le masque
     (``np.packbits`` little-endian) suivi des valeurs non nulles en float32.
@@ -119,6 +120,15 @@ def encoder_flux(flux, sparse: bool = False):
     if x.ndim != 2:
         raise ValueError(f"flux attendu 2-D, reçu {x.shape}")
     ntok, h = int(x.shape[0]), int(x.shape[1])
+    if quant:
+        maximum = np.max(np.abs(x.astype(np.float32)), axis=1, keepdims=True)
+        echelles = np.where(maximum > 0, maximum / 127.0, 1.0).astype(np.float32)
+        q = np.clip(np.round(x.astype(np.float32) / echelles), -127, 127).astype(np.int8)
+        payload = np.ascontiguousarray(echelles, dtype="<f4").tobytes() + np.ascontiguousarray(q).tobytes()
+        meta = {"ntok": ntok, "h": h, "sparse": False, "quant": True,
+                "nval": ntok * h, "nmask": 0, "octets": len(payload),
+                "echelles": echelles.reshape(-1).tolist()}
+        return payload, meta
     if sparse:
         plat = x.reshape(-1)
         nz = plat != 0.0
@@ -146,12 +156,19 @@ def encoder_flux(flux, sparse: bool = False):
     return payload, meta
 
 
-def decoder_flux(payload: bytes, ntok: int, h: int, sparse: bool = False) -> np.ndarray:
+def decoder_flux(payload: bytes, ntok: int, h: int, sparse: bool = False,
+                 quant: bool = False) -> np.ndarray:
     """Décode un payload produit par :func:`encoder_flux` (validation stricte)."""
     ntok, h = int(ntok), int(h)
     n = ntok * h
     if n < 0:
         raise ValueError("ntok/h négatifs")
+    if quant:
+        if len(payload) != 4 * ntok + n:
+            raise ValueError(f"payload int8 de {len(payload)} octets, attendu {4*ntok+n}")
+        echelles = np.frombuffer(payload[:4 * ntok], dtype="<f4").reshape(ntok, 1)
+        q = np.frombuffer(payload[4 * ntok:], dtype=np.int8, count=n).reshape(ntok, h)
+        return q.astype(np.float32) * echelles
     if sparse:
         nmask = bits_masque(n)
         if len(payload) < nmask:
@@ -441,7 +458,8 @@ class Transport:
         except OSError:
             pass
 
-    def _echanger(self, op: int, flags: int, ntok: int, h: int, blobs: dict) -> dict:
+    def _echanger(self, op: int, flags: int, ntok: int, h: int, blobs: dict,
+                  dtype: int = DTYPE_F32) -> dict:
         nx = len(blobs.get("x", b""))
         npos = len(blobs.get("pos", b""))
         ncos = len(blobs.get("cos", b""))
@@ -452,7 +470,7 @@ class Transport:
             VERSION,
             int(op),
             int(flags),
-            DTYPE_F32,
+            int(dtype),
             0,
             int(ntok),
             int(h),
@@ -529,6 +547,7 @@ class Transport:
         sin,
         sparse: bool = False,
         zero_positions: bool = False,
+        quant: bool = False,
     ):
         """Envoie l'entrée de la couche, exécute la couche à distance, renvoie la sortie."""
         import torch
@@ -555,8 +574,8 @@ class Transport:
             .contiguous()
             .numpy()
         )
-        payload_x, meta = encoder_flux(x, sparse=sparse)
-        x_relu = decoder_flux(payload_x, ntok, h, sparse=sparse)
+        payload_x, meta = encoder_flux(x, sparse=sparse, quant=quant)
+        x_relu = decoder_flux(payload_x, ntok, h, sparse=sparse, quant=quant)
         codec_valeurs = bool(np.array_equal(x, x_relu))
         codec_bits = bool(np.array_equal(x.view(np.uint32), x_relu.view(np.uint32)))
         diff_codec = (
@@ -600,7 +619,8 @@ class Transport:
             "mask": b"",
         }
         r = self._echanger(
-            OP_FORWARD, FLAG_SPARSE if sparse else 0, ntok, h, blobs
+            OP_FORWARD, FLAG_SPARSE if sparse else 0, ntok, h, blobs,
+            dtype=DTYPE_INT8 if quant else DTYPE_F32,
         )
         t1 = time.perf_counter()
         if r["ntok"] != ntok or r["h"] != h:
@@ -648,7 +668,8 @@ class Transport:
         return out, mesure
 
 
-def creer_proxy(transport: Transport, sparse: bool = False, zero_positions: bool = False):
+def creer_proxy(transport: Transport, sparse: bool = False, zero_positions: bool = False,
+                quant: bool = False):
     """Crée un module qui remplace la couche locale par l'appel distant."""
     import torch
 
@@ -685,6 +706,7 @@ def creer_proxy(transport: Transport, sparse: bool = False, zero_positions: bool
                 sin,
                 sparse=sparse,
                 zero_positions=zero_positions,
+                quant=quant,
             )
             return sortie
 
@@ -782,7 +804,7 @@ def servir(args) -> None:
                 nsin,
                 nmask,
             ) = champs
-            if dtype_wire != DTYPE_F32:
+            if dtype_wire not in (DTYPE_F32, DTYPE_INT8):
                 try:
                     envoyer_reponse(
                         conn, status=1, message=b"dtype wire non supporte"
@@ -839,7 +861,8 @@ def servir(args) -> None:
                 i2 = i1 + npos
                 i3 = i2 + ncos
                 x_np = decoder_flux(
-                    payload[i0:i1], ntok, h, sparse=bool(flags & FLAG_SPARSE)
+                    payload[i0:i1], ntok, h, sparse=bool(flags & FLAG_SPARSE),
+                    quant=(dtype_wire == DTYPE_INT8),
                 )
                 pos_np = (
                     np.frombuffer(payload[i1:i2], dtype="<i8").copy().reshape(ntok)
@@ -1059,12 +1082,13 @@ def passe_split(
     couche: int,
     sparse: bool = False,
     zero_positions: bool = False,
+    quant: bool = False,
 ):
     """Remplace la couche par le proxy distant et exécute un forward complet."""
     import torch
 
     modele.model.layers[couche] = creer_proxy(
-        transport, sparse=sparse, zero_positions=zero_positions
+        transport, sparse=sparse, zero_positions=zero_positions, quant=quant
     )
     dev = next(modele.parameters()).device
     n_avant = len(transport.mesures)
@@ -1443,6 +1467,11 @@ def executer(args) -> dict:
         )
         fid_sparse = fidelite_np(refs[i], dist_sparse)
         fid_dense_sparse = fidelite_np(dist_dense, dist_sparse)
+        dist_quant, mes_quant, total_quant = passe_split(
+            modele, ids, serveur.transport, args.couche, quant=True
+        )
+        fid_quant = fidelite_np(refs[i], dist_quant)
+        fid_dense_quant = fidelite_np(dist_dense, dist_quant)
 
         rtts = [mes_dense["rtt_ms"]]
         calculs = [mes_dense["calcul_serveur_ms"]]
@@ -1509,6 +1538,26 @@ def executer(args) -> dict:
                 "dense_vs_sparse": fid_dense_sparse,
                 "latence_sparse_ms": mes_sparse["rtt_ms"],
                 "latence_sparse_forward_ms": total_sparse,
+                "quant": {
+                    k: mes_quant[k]
+                    for k in (
+                        "n_x",
+                        "n_pos",
+                        "n_cos",
+                        "n_sin",
+                        "nval",
+                        "nmask",
+                        "octets_requete",
+                        "octets_reponse",
+                        "octets_total",
+                    )
+                },
+                "ratio_quant": mes_quant["octets_requete"] / mes_dense["octets_requete"],
+                "codec_quant": mes_quant["codec"],
+                "fidelite_quant": fid_quant,
+                "dense_vs_quant": fid_dense_quant,
+                "latence_quant_ms": mes_quant["rtt_ms"],
+                "latence_quant_forward_ms": total_quant,
             },
             "latence": {
                 "rtt_couche_ms": statistiques(rtts),
@@ -1792,6 +1841,13 @@ def construire_md(res: dict) -> str:
             f"{_fmt(ppl.get('distant', {}).get('perplexite'), 8)}, Δ = "
             f"{_fmt(ppl.get('delta_perplexite'), 4)}.\n"
         )
+    lignes.append(
+        "\nLe top-1024 est ici l'intersection des 1024 plus grands logits par "
+        "position. Ce n'est **pas** le taux d'exactitude de la grappe top-1024 "
+        "d'A7.4 (21 %), qui portait sur une approximation de grappe : les logits "
+        "étant identiques au bit près, l'intersection vaut 1 par construction et "
+        "ne mesure pas la qualité d'une approximation.\n"
+    )
     lignes.append("\n## Réseau, octets et débit\n")
     lignes.append(
         _table(
@@ -1826,13 +1882,27 @@ def construire_md(res: dict) -> str:
     )
     reseau = res.get("agregats", {}).get("reseau", {})
     if reseau:
+        rtt_med = reseau.get("rtt_couche_ms", {}).get("mediane")
+        forward_med = reseau.get("forward_bout_en_bout_ms", {}).get("mediane")
+        part = (rtt_med / forward_med) if rtt_med and forward_med else None
         lignes.append(
             f"\nAgrégat : {_fmt(reseau.get('octets_requete_total'), 6)} octets "
             f"requête au total, {_fmt(reseau.get('octets_par_token'), 6)} o/jeton, "
-            f"RTT couche médian {_fmt(reseau.get('rtt_couche_ms', {}).get('mediane'), 4)} ms, "
+            f"RTT couche médian {_fmt(rtt_med, 4)} ms, "
             f"débit {_fmt(reseau.get('debit_tokens_s'), 6)} jetons/s "
             f"({_fmt(reseau.get('debit_Mio_s'), 4)} Mio/s), "
             f"ping médian {_fmt(reseau.get('rtt_ping_ms', {}).get('mediane'), 4)} ms.\n"
+        )
+        lignes.append(
+            f"\nDécomposition : le ping (transport seul) est "
+            f"{_fmt(reseau.get('rtt_ping_ms', {}).get('mediane'), 4)} ms, du même "
+            f"ordre que le 0,125 ms d'A7.5 ; le RTT de la couche est dominé par le "
+            f"calcul serveur "
+            f"({_fmt(reseau.get('calcul_serveur_ms', {}).get('mediane'), 4)} ms), "
+            f"pas par le réseau. La couche distante représente "
+            f"{_fmt(100 * part if part is not None else None, 4)} % du forward "
+            f"complet ({_fmt(forward_med, 4)} ms), le reste étant local (23 autres "
+            f"couches, embedding, norme et lm_head).\n"
         )
     lignes.append("\n## Dense vs sparse\n")
     lignes.append(
