@@ -39,6 +39,11 @@ l'entraînement synthétique, **20 sont inédites**.
   Le « 6,2 → 93,2 » était un **sous-entraînement** du mean à 300 pas, pas une propriété du dernier état.
 - **Contexte** : aucun gain mesuré ; le contexte synthétique est constant par jeu.
 - **Négatifs** : `point`, `chemin_0` sous la majorité.
+- **Piège du split inédit** : les 20 items inédits `de`/`vers` ne contiennent que **2 classes**
+  (`de` : 52 ×6, 62 ×6, 57 ×1) et **3** (`vers` : 36 ×6, 45 ×6, 42 ×1). Les 10,7/13 et 11,7/13
+  sont donc surtout un **priori de classe par famille de surface**, pas une lecture ; le plafond
+  honnête est **13/20**, avec ~2 items de gain possible pour `de` et ~1 pour `vers`. Ce split ne
+  mesure presque rien ; `point` et `chemin_0` sont les vrais gisements.
 
 ## 3. M3 — le 12/12 est tautologique
 
