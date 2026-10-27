@@ -1,0 +1,306 @@
+{
+ "M1": {
+  "exact": 1.0,
+  "n": 528
+ },
+ "M5": {
+  "avec_contexte": {
+   "exact": 0.18701298701298702,
+   "majoritaire": 0.06493506493506493,
+   "surprise": 2.4233681002594083,
+   "surprise_majoritaire": 3.5393789050764104,
+   "gain": 0.12207792207792209,
+   "gain_surprise": 1.116010804817002,
+   "n": 770,
+   "hors_vocabulaire": 0,
+   "cible": "source",
+   "ordre": 1
+  },
+  "sans_contexte": {
+   "exact": 0.12597402597402596,
+   "majoritaire": 0.06493506493506493,
+   "surprise": 3.1116004007138085,
+   "surprise_majoritaire": 3.5393789050764104,
+   "gain": 0.06103896103896103,
+   "gain_surprise": 0.4277785043626019,
+   "n": 770,
+   "hors_vocabulaire": 0,
+   "cible": "source",
+   "ordre": 1
+  },
+  "n_test": 160
+ },
+ "M6": {
+  "executer": {
+   "exact": 0.9431818181818182,
+   "n": 88,
+   "vrais_positifs": 17,
+   "faux_positifs": 0,
+   "faux_negatifs": 5,
+   "vrais_negatifs": 66,
+   "sensibilite": 0.7727272727272727,
+   "specificite": 1.0,
+   "exactitude_equilibree": 0.8863636363636364,
+   "mcc": 0.8475316272298808,
+   "sensibilite_ic95": [
+    0.5655964393704065,
+    0.8987710920517964
+   ],
+   "specificite_ic95": [
+    0.9449955327483907,
+    1.0
+   ],
+   "taux_base_tout_non": 0.75,
+   "par_condition": {
+    "go": {
+     "n": 22,
+     "corrects": 17,
+     "acceptes": 17,
+     "exact": 0.7727272727272727
+    },
+    "traduction": {
+     "n": 22,
+     "corrects": 22,
+     "acceptes": 0,
+     "exact": 1.0
+    },
+    "langue": {
+     "n": 22,
+     "corrects": 22,
+     "acceptes": 0,
+     "exact": 1.0
+    },
+    "ni": {
+     "n": 22,
+     "corrects": 22,
+     "acceptes": 0,
+     "exact": 1.0
+    }
+   },
+   "par_langue": {
+    "fr": {
+     "n": 44,
+     "corrects": 42,
+     "tp": 9,
+     "fn": 2,
+     "exact": 0.9545454545454546,
+     "sensibilite": 0.8181818181818182
+    },
+    "en": {
+     "n": 44,
+     "corrects": 41,
+     "tp": 8,
+     "fn": 3,
+     "exact": 0.9318181818181818,
+     "sensibilite": 0.7272727272727273
+    }
+   },
+   "politique": "conjonction",
+   "cibles": [
+    "fr",
+    "en"
+   ],
+   "cout_commutation": 0.0,
+   "cout_commutation_details": {
+    "cout": 0.0,
+    "n_commutations": 21,
+    "n_repetitions": 21,
+    "erreur_commutation": 0.05952380952380952,
+    "erreur_repetition": 0.05952380952380952
+   },
+   "controle_perseveration": 0.38095238095238093,
+   "politiques": {
+    "langue": {
+     "exact": 0.75,
+     "faux_positifs": 17,
+     "faux_negatifs": 5,
+     "sensibilite": 0.7727272727272727,
+     "specificite": 0.7424242424242424,
+     "exactitude_equilibree": 0.7575757575757576
+    },
+    "sens": {
+     "exact": 0.75,
+     "faux_positifs": 22,
+     "faux_negatifs": 0,
+     "sensibilite": 1.0,
+     "specificite": 0.6666666666666666,
+     "exactitude_equilibree": 0.8333333333333333
+    },
+    "tout_non": {
+     "exact": 0.75,
+     "faux_positifs": 0,
+     "faux_negatifs": 22,
+     "sensibilite": 0.0,
+     "specificite": 1.0,
+     "exactitude_equilibree": 0.5
+    }
+   },
+   "canaux": {
+    "langue_n": 22,
+    "langue_exact": 0.7727272727272727,
+    "lecture_n": 20,
+    "lecture_exact": 1.0,
+    "surfaces_ambigues": [
+     "go D4",
+     "tic-tac-toe A1"
+    ]
+   }
+  },
+  "switch": {
+   "exact": 0.9494949494949495,
+   "n": 792,
+   "acceptes": 356,
+   "positifs": 396,
+   "taux_base_tout_non": 0.5,
+   "par_tache": {
+    "sens": {
+     "n": 440,
+     "corrects": 440,
+     "acceptes": 220,
+     "exact": 1.0
+    },
+    "langue": {
+     "n": 352,
+     "corrects": 312,
+     "acceptes": 136,
+     "exact": 0.8863636363636364
+    }
+   },
+   "par_condition": {
+    "congruent": {
+     "n": 396,
+     "corrects": 376,
+     "exact": 0.9494949494949495
+    },
+    "incongruent": {
+     "n": 396,
+     "corrects": 376,
+     "exact": 0.9494949494949495
+    }
+   },
+   "par_transition": {
+    "initiale": {
+     "n": 88,
+     "corrects": 88,
+     "exact": 1.0
+    },
+    "repetition": {
+     "n": 352,
+     "corrects": 332,
+     "exact": 0.9431818181818182
+    },
+    "commutation": {
+     "n": 352,
+     "corrects": 332,
+     "exact": 0.9431818181818182
+    }
+   },
+   "par_croise": {
+    "congruent_initiale": {
+     "n": 44,
+     "corrects": 44,
+     "exact": 1.0
+    },
+    "congruent_repetition": {
+     "n": 176,
+     "corrects": 166,
+     "exact": 0.9431818181818182
+    },
+    "congruent_commutation": {
+     "n": 176,
+     "corrects": 166,
+     "exact": 0.9431818181818182
+    },
+    "incongruent_initiale": {
+     "n": 44,
+     "corrects": 44,
+     "exact": 1.0
+    },
+    "incongruent_repetition": {
+     "n": 176,
+     "corrects": 166,
+     "exact": 0.9431818181818182
+    },
+    "incongruent_commutation": {
+     "n": 176,
+     "corrects": 166,
+     "exact": 0.9431818181818182
+    }
+   },
+   "par_sonde": {
+    "sens": {
+     "n_sondes": 80,
+     "exact": 1.0
+    },
+    "langue": {
+     "n_sondes": 80,
+     "exact": 0.925
+    }
+   },
+   "effet_conflit": 0.0,
+   "effet_commutation": 0.0,
+   "effet_commutation_congruent": 0.0,
+   "effet_commutation_incongruent": 0.0,
+   "interaction_conflit_commutation": 0.0,
+   "effet_tache_langue": -0.11363636363636365,
+   "effet_tache_langue_macro": -0.07499999999999996,
+   "politique": "tache",
+   "cibles": [
+    "fr",
+    "en"
+   ],
+   "n_commutations": 352,
+   "n_repetitions": 352,
+   "politiques": {
+    "sens": {
+     "exact": 0.7777777777777778,
+     "effet_conflit": -0.4444444444444444,
+     "effet_commutation": 0.0
+    },
+    "langue": {
+     "exact": 0.6717171717171717,
+     "effet_conflit": -0.4292929292929293,
+     "effet_commutation": 0.0
+    },
+    "tache_inversee": {
+     "exact": 0.5,
+     "effet_conflit": -0.8737373737373737,
+     "effet_commutation": 0.0
+    },
+    "indice_aleatoire": {
+     "exact": 0.7348484848484849,
+     "effet_conflit": -0.41414141414141414,
+     "effet_commutation": 0.0
+    },
+    "tout_non": {
+     "exact": 0.5,
+     "effet_conflit": 0.0,
+     "effet_commutation": 0.0
+    }
+   },
+   "controles": {
+    "perseveration_tache": {
+     "exact": 0.7525252525252525,
+     "effet_conflit": -0.3939393939393939,
+     "effet_commutation": -0.44318181818181823,
+     "effet_commutation_congruent": 0.0,
+     "effet_commutation_incongruent": -0.8863636363636365,
+     "interaction_conflit_commutation": -0.8863636363636365
+    }
+   },
+   "controle_perseveration": -0.44318181818181823
+  }
+ },
+ "M8": {
+  "champs": 0.9613636363636363,
+  "exact": 0.5795454545454546,
+  "champs_non_nuls": 0.8438775510204082,
+  "n": 528,
+  "n_inconnus": 0,
+  "n_champs_non_nuls": 1960,
+  "prototypes": 7
+ },
+ "M9": {
+  "M1_sans_contexte": 0.7083333333333334
+ }
+}
