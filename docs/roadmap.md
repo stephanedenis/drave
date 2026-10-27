@@ -362,6 +362,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B12.8 | **M8 sommeil** | ❌ **marginal** | 96,48 % de champs mais exact **65,1 %**, baseline par jeu **96,10 %** ; leave-one-code-out exact **0 % par construction**, non nuls 63,5 % ; coordonnées 0 % |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Pipeline M1 → M4 → M8** | ⚠️ **intégration** | **528/528**, 7 prototypes, 96,33 % de complétion — tautologique : M4 ne généralise pas, M8 est la marginale |
+| B24.1 | **Routeur confiance** | ⚠️ **partiel** | typo **56,2→63,7 %** (+7,5) mais espaces **41,8→34,2 %** (−7,5) ; round-trip M1 ne détecte que **31 %** des typos ; oracle **79,45 %** sur la typo ; aucun score ne domine |
 | B23.1 | **Routeur M1→M2** | ⚠️ **partiel** | original **100 %**, casse **99,3 %**, phrase **92,5 %** = M1 ; espaces **41,8 %** vs M1 **11,6 %** ; typo **56,2 %** < M2 **68,3 %** (collision de lexique) ; pas un oracle |
 | B22.1 | **M2 et les typos** | ⚠️ **niche robuste** | M1 suppression **32,8 %**, substitution **27,1 %**, insertion **44,5 %**, transposition **24,1 %** ; M2 `de` **72,6 / 62,3 / 66,4 / 70,5 %**, `vers` **80,1 / 65,8 / 70,6 / 73,3 %** ; avantage +21,9 à +46,5 pts |
 | B21.1 | **M9 par dose** | ✅ **dose** | M3 span **0/4/8/12/12** (linéaire, tautologique) ; M5 ordre 0/1/2 **13,81/15,70/18,06 %** (+4,25 pts, surprise +0,012 nat) ; sham **nul** ; double lésion **non additive** |

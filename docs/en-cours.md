@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 187 fichiers / 254 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 188 fichiers / 255 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -55,6 +55,7 @@ La vision complète est dans [`vision.md`](vision.md).
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
 - **A7.5b seuil réseau** — sparse **1 672 o** vs **7 416**, encodage/décodage plus rapides, **1,94× à 0 ms**, **1,006× à 100 ms**, seuil **−0,60 ms** : gagne toujours sur ce lien.
 - **A7.5 grappe réseau** — flux sparse **1 672 o** contre **7 416** dense (**4,44×**), fidélité **1 792/1 792**, **5/5** messages identiques, **0,125 ms** loopback ; contrôle dense.
+- **B24 routeur confiance** — typo **56,2→63,7 %** (+7,5) mais espaces **41,8→34,2 %** (−7,5) ; round-trip ne détecte que **31 %** des typos ; oracle **79,45 %**.
 - **B23 routeur** — original **100 %**, casse **99,3 %**, phrase **92,5 %**, espaces **41,8 %** vs M1 **11,6 %**, typo **56,2 %** < M2 **68,3 %** ; collision de lexique, pas un oracle.
 - **B22 M2 typos** — M1 **24–45 %** sur suppression/substitution/insertion/transposition ; M2 `de` **62–73 %**, `vers` **66–80 %** ; avantage **+21,9 à +46,5 pts**. Niche robuste, pas un étage.
 - **B21 M9 dose** — M3 span **0/4/8/12/12** (tautologique) ; M5 ordre 0/1/2 **13,81/15,70/18,06 %** (+4,25 pts) ; sham **nul** ; double lésion non additive.
@@ -81,7 +82,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **187** / **254** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **188** / **255** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
@@ -91,7 +92,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **187** / **254** |
+| fichiers / JSON de résultats | **188** / **255** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

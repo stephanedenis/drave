@@ -50,6 +50,7 @@
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
 | **A7.5b** seuil réseau | **mesuré** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms | [la fiche](../reports/rapport-seuil-reseau.md) |
 | **A7.5** grappe réseau | **mesuré** — 4,44× moins d'octets, fidélité 100 %, 0,125 ms loopback | [la fiche](../reports/rapport-grappe-reseau.md) |
+| **B24** routeur confiance | **partiel** — typo 63,7 % (+7,5) mais espaces 34,2 % (−7,5) ; oracle 79,45 % | [la fiche](../reports/rapport-routeur-confiance.md) |
 | **B23** routeur M1→M2 | **partiel** — espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique | [la fiche](../reports/rapport-routeur-m1-m2.md) |
 | **B22** M2 typos | **niche robuste** — M2 62–80 % contre M1 24–45 % sur 4 types de typos | [la fiche](../reports/rapport-m2-typo.md) |
 | **B21** M9 dose | **dose** — M3 0/4/8/12/12 tautologique ; M5 +4,25 pts de l'ordre 2 ; sham nul | [la fiche](../reports/rapport-m9-dose.md) |
