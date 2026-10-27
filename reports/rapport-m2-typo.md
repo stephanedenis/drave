@@ -4,15 +4,15 @@
 > **suppression**, **substitution**, **insertion** et **transposition**, à code constant, sur
 > 528 surfaces, 300 pas, graine 1.
 
-## Résultats
+## Résultats (3 graines, 300 pas)
 
 | typo | M1 | M2 `de` | M2 `vers` | écart M2−M1 (`de`) |
 |---|---:|---:|---:|---:|
-| original | **100 %** | 93,15 % | 93,15 % | — |
-| suppression | 32,77 % | **72,60 %** | **80,14 %** | +39,8 pts |
-| substitution | 27,08 % | **62,33 %** | **65,75 %** | +35,3 pts |
-| insertion | 44,51 % | **66,44 %** | **70,55 %** | +21,9 pts |
-| transposition | 24,05 % | **70,55 %** | **73,29 %** | +46,5 pts |
+| original | **100 %** | 93,61 % | 93,61 % | — |
+| suppression | 35,35 % | **72,83 %** | **77,63 %** | +37,5 pts |
+| substitution | 27,79 % | **61,64 %** | **68,26 %** | +33,9 pts |
+| insertion | 43,31 % | **72,83 %** | **77,40 %** | +29,5 pts |
+| transposition | 24,72 % | **73,52 %** | **70,78 %** | +48,8 pts |
 
 **Lecture** :
 
@@ -29,7 +29,7 @@ contre 93 %), mais il est un **détecteur de notation bruitée** utilisable en s
 
 ## Limites
 
-- Une graine, 300 pas, pas d'intervalle de confiance.
+- **3 graines**, 300 pas ; les chiffres sont des moyennes.
 - Typos **synthétiques** : une seule position, alphabet restreint.
 - Le code attendu est inchangé ; on mesure la lecture de la forme, pas la compréhension.
 - M2 reste un **rameau** (B14) ; B22 ne le promeut pas en étage.
