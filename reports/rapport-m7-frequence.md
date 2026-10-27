@@ -15,10 +15,12 @@
 | contexte jeu | 0,091 | 0,008 | 0,706 | 0,040 |
 | contexte jeu + LFU | 0,229 | 0,039 | 0,463 | 0,039 |
 
-**Deltas vs FIFO** : LFU **+23,1 pts** de répétés (30/30), **+4,25 pts** de suffixe surface
+**Deltas vs FIFO** : LFU **+23,13 pts** de répétés (30/30), **+4,25 pts** de suffixe surface
 (27/30), **+8,73 pts** de nouveaux utiles (29/30), **+7,61 pts** de suffixe code (26/30,
-p=4,2e-7). **LFU+récence = LFU** (0 gain sur les trois métriques) ; le contexte **dégrade**
-(−8,5 pts de suffixe surface, −42,9 pts de répétés).
+p=4,2e-7), mais **−0,67 pt** sur les nouveaux du suffixe (0/30, p=0,5, non significatif).
+**LFU+récence = LFU** : 0,00 pt sur la clé surface (0/30), −0,06 pt sur la clé code ; sur
+**11 163 évictions**, **0 sans item de fréquence 1**, donc le départage ne s'exerce jamais.
+Le contexte **dégrade** (−8,5 pts de suffixe surface, −42,9 pts de répétés).
 
 ## Contrôle synthétique (Zipf, capacité 8, 15 permutations)
 
