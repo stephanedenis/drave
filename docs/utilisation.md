@@ -56,7 +56,7 @@ pipx reinstall docwatch        # après une évolution du dépôt
 ```
 
 Le service lance le paquet avec `--no-browser` ✓. Il n'y a **plus de patch hors dépôt** ✓ : les sauvegardes
-`mdserve.avant-assets` et `mdserve.orig-20261027` ne servent qu'au retour arrière ✓.
+`~/.local/share/docwatch-migration/mdserve.*` ne servent qu'au retour arrière ✓.
 
 **Le 27/10, l'ancien `serveur-doc.py` (port 8787, `drave-doc.service`) a été retiré** ✓ : il faisait double
 emploi avec docwatch et n'était pas versionnable indépendamment. La page « où en est » se lit désormais
