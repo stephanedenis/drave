@@ -6,7 +6,7 @@
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
 
-**Mis à jour : 2026-10-27, 10 h 52 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-27, 10 h 54 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
@@ -52,7 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
-- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `de` **93,6 % = 126/126 vus + 10,7/20 inédits**, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 action constante ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
+- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `de` **93,6 % = 126/126 vus + 10,7/20 inédits**, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 sans contexte action constante, avec plateau source dames **3,27→2,11 nat** ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 - **B12 pipeline** — **M1 → M4 → M8** : **528/528** surfaces, **7** prototypes, **96,33 %** de complétion
   sur 120 codes partiels ; test d'intégration, pas de généralisation M4.
 - **Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
@@ -98,7 +98,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | **C3** restitution | ✅ mesuré ; **C3.2** : un module par famille, **4/5** au-dessus de la référence |
 | **C4** dialectes et styles | ✅ mesuré ; la date reste à contrôler |
 | **C5** qualité par domaine | ✅ six registres + dialogue spontané |
-| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés (passe 2) |
+| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) |
 | **C7** pensée abstraite | ✅ mesuré — la carte, **B4** close, **B5/B6** faits, **B10–B12** premier passage |
 
 ## Ce qui reste
