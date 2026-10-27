@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="DejaVu Sans, Arial, sans-serif">
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Les douze faculte et la biologie</title>
+  <desc>C1-C12 et les neuf apports E1-E9 de la biologie.</desc>
   <defs>
     <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
   </defs>

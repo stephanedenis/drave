@@ -6,14 +6,8 @@
 
 ## 1. L'architecture
 
-```text
-surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voies
-                                      ├─► M3 mémoire de travail
-                                      ├─► M4 mémoire épisodique ──► M8 sommeil
-                                      ├─► M5 prédictif
-                                      ├─► M6 gating
-                                      └─► M7 neuromodulation
-```
+![Les modules M1–M9 sur le bus](schemas/modules-cerveau-langage.svg)
+
 
 - **Bus** : événements typés, horodatés, journalisés, rejouables. Aucun module ne parle directement à un
   autre : ils publient et lisent.

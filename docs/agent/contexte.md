@@ -41,6 +41,7 @@
 | `docs/glossaire.md` | 1 500 | **T1** — l'index des familles |
 | `docs/glossaire/0*.md` | 5 000 | **T1** — `grep` le terme, jamais les 11 |
 | `docs/glossaire/README.md` | 2 000 | **T1** — l'index des entrées |
+| `docs/schemas/README.md` | 1 500 | **T1** — l'index des schémas |
 | `docs/glossaire/entrees/*.md` | 150 | **T1** — une fiche, une carte |
 | `reports/README.md` | 2 800 | **T1** — les fiches courantes seulement |
 | `README.md` | 3 500 | **T1** — la vitrine publique |

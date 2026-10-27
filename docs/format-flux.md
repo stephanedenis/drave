@@ -91,41 +91,12 @@ spécification doit porter.
 
 ## Transport (phase 3, TCP) — protocole v6
 
-```
-en-tête (79 octets, identique à l'aller et au retour)
-          magie        u32          0x44525631 (« DRV1 »)
-          version      u8           6   (refusée si différente, en le disant)
-          corps (tous modes) : np u8, puis np × hc f32 — « la pre portée »
-          mode         u8           0 = f32 dense · 1 = liste quantifiée
-                                    2 = listes à échelle par bloc · 3 = LOT dense
-                                    4 = LOT en listes (mode 2 répété par état)
-          couche_debut u32
-          couche_fin   u32
-          position     u32
-          n            u32          dimension (mode 0) · actifs (modes 1 et 2)
-                                     · ÉTATS (modes 3 et 4)
-          échelle      f32          mode 1 uniquement
-          niveaux      f32          ┐
-          seuil        f32          │ le CONTRAT D'ACTIVATION : ces réglages
-          top-k        u32          │ changent les chiffres, donc ils voyagent —
-          renorm       u8           │ et le client impose les siens au serveur
-          7 × top-k    u32          │ (q, k, v, o, gate, up, down)
-          attn_top-k   u32          │
-          q·k top-k    u32          │
-          moe top-k    u32          ┘
-corps     TOUS modes, en tête : np (u8) puis np × hc f32
-          « la pre portée » : les coefficients du dernier raccord FFN du nœud
-          émetteur, pour la chaîne mHC **retardée** de V4.1. Sans elle, un nœud
-          qui reprend au milieu du modèle replierait son premier raccord avec la
-          copie 0 — faux, et muet. `np = 0` pour tout autre modèle : c'est le cas
-          ordinaire, et il coûte un octet.
-          mode 0 : n × f32
-          mode 1 : n × ( indice u16 · valeur i16 )
-          mode 2 : n_blocs u32 · n_blocs × f32 · longueur u32 · paires
-          mode 3 : n × dimension × f32   (n = nombre d'ÉTATS, pas de canaux)
-          mode 4 : n × [ a_j u32 · n_blocs_j u32 · longueur_j u32 ·
-                         n_blocs_j × f32 (échelles) · longueur_j octets de paires ]
-```
+![L'en-tête du format DRVF](schemas/format-flux.svg)
+
+Le champ `n` vaut la **dimension** (mode 0), le nombre d'**actifs** (modes 1 et 2) ou le nombre d'**ÉTATS**
+(modes 3 et 4). `np = 0` pour les modèles sans « pre portée ». Le corps suit : `np u8`, puis `np × hc f32`,
+puis le mode (0 f32 dense, 1 listes quantifiées, 2 listes à échelle par bloc, 3 LOT dense, 4 LOT en listes).
+
 
 **Corrigé le 02/10 (sprint 13) : les modes 3 et 4 n'écrivaient PAS ce préfixe.**
 Le chemin « un jeton » (modes 0-2) l'écrivait, les deux émetteurs de lots non —

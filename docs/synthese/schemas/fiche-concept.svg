@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="DejaVu Sans, Arial, sans-serif">
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>La fiche concept</title>
+  <desc>Nom, definition, liens vers le glossaire, illustration.</desc>
   <rect width="900" height="400" fill="#f8fafc"/>
   <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">La fiche concept : quatre lignes, trois liens</text>
   <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Une porte d'entrée, pas un chapitre. Elle dit le nom, le sens, où le vérifier, et où le voir.</text>

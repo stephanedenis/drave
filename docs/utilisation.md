@@ -1,7 +1,7 @@
 # UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 179 fichiers / 246 JSON, 53 documents**), chemins archivés corrigés
+> (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
 > pas.** *46→49 portes, 6→8 chapitres, 6→14 schémas ; les chemins `cerveau-facultes` et
 > `etat-cerveau` sont passés à l'archive.*
@@ -34,7 +34,8 @@ dépôt ✓. Il affiche une **collection de documents Markdown** pendant que d'a
 **arbre** de contenu ✓, **rendu** HTML ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓,
 comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`,
 `~/.config/docwatch/pins.json` ✓ — `docs`, `reports` et `en-cours.md` y sont ✓), **changement de racine** ✓
-(ne peut que **restreindre** la vue ✗), **filtrage** ✓, **images et annexes** ✓.
+(ne peut que **restreindre** la vue ✗), **filtrage** ✓, **images et annexes** ✓, **navigation par URL** ✓
+(`/docs/guide.md`, retour/avant, liens relatifs et ancres, sans rechargement de page).
 
 | quoi | valeur |
 |---|---|
@@ -44,7 +45,7 @@ comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`,
 | service | `docwatch.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/docwatch.log` ✓) |
 | écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ |
 
-**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **64 tests**, CI Python 3.9–3.13, README et licence MIT
+**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **69 tests**, CI Python 3.9–3.13, README et licence MIT
 dans [**stephanedenis/docwatch**](https://github.com/stephanedenis/docwatch). Ancien nom : `mdserve`
 (paquet `mdserve-local`) ; les commandes sont désormais `docwatch` et `docopen`.
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **176 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **178 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -136,6 +136,7 @@
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |
+| [rapport-pipeline-memoire.md](rapport-pipeline-memoire.md) | B17 — M7-bis dans la chaîne : LFU aide la mémoire, pas M8 |
 | [rapport-pipeline-semantique.md](rapport-pipeline-semantique.md) | B13 — chaîne sémantique M1 → M5 → M6 → M8 |
 | [rapport-placement-bits-kv.md](rapport-placement-bits-kv.md) | Où mettre les bits du cache KV : la courbe complète |
 | [rapport-placement-kv-8k.md](rapport-placement-kv-8k.md) | Le placement du KV à 8 k : ×1,93 sur le préremplissage, ×5,8 sur l'attention |
@@ -154,7 +155,7 @@
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
-| [rapport-restitution.md](rapport-restitution.md) | Rapport — restitution du code (aller-retour RSN) et surface |
+| [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-reutilisation-experts.md](rapport-reutilisation-experts.md) | La réutilisation des experts, mesurée |
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
@@ -164,6 +165,7 @@
 | [rapport-sommeil-deux-nuits.md](rapport-sommeil-deux-nuits.md) | Deux nuits, deux expériences — la première garde son gain, la seconde n'ajoute presque rien |
 | [rapport-sommeil-selection.md](rapport-sommeil-selection.md) | La sélection du rejeu — à volume égal, *ce qu'on rejoue* compte moins que *rejouer* |
 | [rapport-speculatif-reflexe.md](rapport-speculatif-reflexe.md) | Le réflexe propose, le cerveau vérifie — acceptation 2 à 30 % (le cerveau non entraîné : 0 %) |
+| [rapport-sprint-24h.md](rapport-sprint-24h.md) | Sprint 24 h — bilan B12 → B18 |
 | [rapport-tableaux-casses.md](rapport-tableaux-casses.md) | Un tableau qui ne rend pas est un tableau qui n'existe pas — 17 lignes, 9 fichiers, et une porte |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |

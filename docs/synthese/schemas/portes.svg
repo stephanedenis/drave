@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" font-family="DejaVu Sans, Arial, sans-serif">
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Les portes</title>
+  <desc>Une porte, les codes 0 et 1-9, le registre ; 49 portes, 47 vertes, 2 structurelles.</desc>
   <defs>
     <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
     <marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker>

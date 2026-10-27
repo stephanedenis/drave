@@ -26,12 +26,8 @@ Le protocole sémantique change l'objectif :
 
 ## Les trois étages
 
-```
-surface L1 ──► encodeur ──► z ──► décodeur + langue L2 ──► surface L2
-                  ▲                    ▲
-                  │                    │
-             même article          même z, autre langue
-```
+![Le protocole sémantique](schemas/protocole-semantique.svg)
+
 
 ### Étage 1 — rejouer et converger
 

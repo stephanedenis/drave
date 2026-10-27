@@ -1,7 +1,7 @@
 # Directives de l'agent — Drave
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 179 fichiers / 246 JSON, 53 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
 > ci-dessous ne changent pas.** Source de vérité : `docs/en-cours.md` (état)
 > et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.
@@ -49,6 +49,11 @@ volonté** des événements.
 8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans
    `docs/en-cours.md` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
    — la **file « jamais en attente »** de la roadmap. → [`docs/agent/ressources.md`](docs/agent/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** : pas de `┌─┬─┐`, pas de flèches `──►`
+   dans un bloc de code. Un schéma est un fichier **`.svg`** (directement, ou converti depuis
+   Mermaid/PlantUML), avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/agent/illustrations.md`](docs/agent/illustrations.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
@@ -60,6 +65,7 @@ volonté** des événements.
 | écrire un résultat (fiche, JSON, commit, journal) | [`docs/agent/resultats.md`](docs/agent/resultats.md) |
 | ranger un fichier, revue de documentation, synthèse | [`docs/agent/rangement.md`](docs/agent/rangement.md) |
 | **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/agent/contexte.md`](docs/agent/contexte.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/agent/illustrations.md`](docs/agent/illustrations.md) |
 | lancer ou lire les portes | [`docs/agent/portes.md`](docs/agent/portes.md) |
 | étudier Panini/Nipada, la généalogie | [`docs/agent/panini-nipada.md`](docs/agent/panini-nipada.md) |
 | concevoir un test d'entrée/sortie, corriger | [`docs/agent/miroir.md`](docs/agent/miroir.md) |
@@ -88,3 +94,4 @@ volonté** des événements.
 - les portes sont vertes, **hors les deux rouges structurelles connues** ;
 - la revue de documentation passe, et les liens résolvent.
 - le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.

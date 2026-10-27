@@ -44,7 +44,10 @@ Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `r
    **unités de sens**, le jeton est l'unité technique du tokeniseur (voir le [glossaire](../glossaire.md)) ✓✓.
 
 Les portes [`porte-tableaux`](../../tools/porte-tableaux.sh) (cellules des tableaux, liens) et
-[`porte-registre`](../../tools/porte-registre.sh) complètent la revue. L'**index exhaustif** des fiches est
+[`porte-registre`](../../tools/porte-registre.sh) complètent la revue.
+
+Les **schémas** sont vérifiés par `python3 tools/verifier_schemas.py` : SVG valides, `viewBox`,
+`title`/`desc`, liens relatifs, absence d'ASCII art. L'**index exhaustif** des fiches est
 régénéré par `python3 tools/index_reports.py` (→ [`reports/INDEX.md`](../../reports/INDEX.md)).
 
 > *Une documentation qui n'est pas revue à la fin d'un sous-chantier est une documentation qui mentira au cycle

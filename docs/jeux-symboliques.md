@@ -23,10 +23,8 @@ Un même état de jeu a **beaucoup de surfaces** :
 Si l'étage 2 lit la surface, il dépend de la langue et de la notation : deux écritures du même état peuvent
 produire deux décisions différentes. La règle de l'architecture est donc **ordonnée** :
 
-```
-surface ──(couches linguistiques)──► RSN-jeu ──(pensée)──► décision
-         étage 1                              étage 2
-```
+![Surface → RSN-jeu → pensée](schemas/jeux-symboliques.svg)
+
 
 **L'étage 2 ne voit jamais la surface.** Il reçoit une RSN, la convertit en état interne, cherche, et rend
 une RSN d'action. C'est ce contrat qui rend l'**invariance** mesurable : la même position écrite de cinq

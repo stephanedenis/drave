@@ -32,6 +32,7 @@ BUDGETS: list[tuple[str, str, int]] = [
     ("T1", "docs/glossaire.md", 1500),
     ("T1", "docs/glossaire/0*.md", 5000),
     ("T1", "docs/glossaire/README.md", 2000),
+    ("T1", "docs/schemas/README.md", 1500),
     ("CARTE", "docs/glossaire/entrees/*.md", 150),
     ("T1", "reports/README.md", 2800),
     ("T1", "README.md", 3500),

@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 53 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -75,7 +75,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
 | fichiers / JSON de résultats | **181** / **248** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **53** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
 ## Où l'on en est

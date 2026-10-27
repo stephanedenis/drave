@@ -1,0 +1,68 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>L'en-tête du format DRVF (79 octets)</title>
+  <desc>Champs de l'en-tête du protocole v6 : magie, version, mode, couches, position, n, échelle, puis le contrat d'activation.</desc>
+  <rect width="900" height="520" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">L'en-tête du format DRVF — 79 octets</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Le même en-tête à l'aller et au retour ; le contrat d'activation voyage avec les données.</text>
+
+  <text x="40" y="96" font-size="12.5" font-weight="bold" fill="#334155">En-tête</text>
+  <rect x="40" y="108" width="140" height="44" rx="6" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="110" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">magie</text>
+  <text x="110" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u32 · « DRV1 »</text>
+  <rect x="184" y="108" width="55" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="211" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">version</text>
+  <text x="211" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u8 · 6</text>
+  <rect x="243" y="108" width="55" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="270" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">mode</text>
+  <text x="270" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u8 · 0–4</text>
+  <rect x="302" y="108" width="110" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="357" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">couche_debut</text>
+  <text x="357" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="416" y="108" width="110" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="471" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">couche_fin</text>
+  <text x="471" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="530" y="108" width="100" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="580" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">position</text>
+  <text x="580" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="634" y="108" width="110" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="689" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">n</text>
+  <text x="689" y="144" text-anchor="middle" font-size="10.5" fill="#475569">u32 · dim ou actifs</text>
+  <rect x="748" y="108" width="110" height="44" rx="6" fill="#e2e8f0" stroke="#64748b"/>
+  <text x="803" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">échelle</text>
+  <text x="803" y="144" text-anchor="middle" font-size="10.5" fill="#475569">f32 · mode 1</text>
+
+  <text x="40" y="196" font-size="12.5" font-weight="bold" fill="#b45309">Le contrat d'activation (53 octets)</text>
+  <rect x="40" y="208" width="830" height="120" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <rect x="56" y="224" width="110" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="111" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">niveaux</text>
+  <text x="111" y="260" text-anchor="middle" font-size="10.5" fill="#475569">f32</text>
+  <rect x="172" y="224" width="90" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="217" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">seuil</text>
+  <text x="217" y="260" text-anchor="middle" font-size="10.5" fill="#475569">f32</text>
+  <rect x="268" y="224" width="90" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="313" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">top-k</text>
+  <text x="313" y="260" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="364" y="224" width="80" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="404" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">renorm</text>
+  <text x="404" y="260" text-anchor="middle" font-size="10.5" fill="#475569">u8</text>
+  <rect x="450" y="224" width="110" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="505" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">7 × top-k</text>
+  <text x="505" y="260" text-anchor="middle" font-size="10.5" fill="#475569">28 octets</text>
+  <rect x="566" y="224" width="95" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="613" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">attn_top-k</text>
+  <text x="613" y="260" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="667" y="224" width="90" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="712" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">q·k top-k</text>
+  <text x="712" y="260" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <rect x="763" y="224" width="90" height="44" rx="6" fill="#ffffff" stroke="#b45309"/>
+  <text x="808" y="243" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">moe top-k</text>
+  <text x="808" y="260" text-anchor="middle" font-size="10.5" fill="#475569">u32</text>
+  <text x="455" y="306" text-anchor="middle" font-size="11.5" fill="#b45309">q, k, v, o, gate, up, down — le client impose ses réglages au serveur</text>
+
+  <text x="40" y="370" font-size="12.5" font-weight="bold" fill="#334155">Corps (commun à tous les modes)</text>
+  <text x="40" y="394" font-size="12.5" fill="#334155">np u8, puis np × hc f32 — « la pre portée » du dernier raccord FFN ; np = 0 pour les autres modèles.</text>
+  <text x="40" y="418" font-size="12.5" fill="#334155">mode 0 : n × f32 · mode 1 : n × (indice u16 · valeur i16) · mode 2 : blocs + échelle + paires ·</text>
+  <text x="40" y="442" font-size="12.5" fill="#334155">mode 3 : n × dimension × f32 · mode 4 : le mode 2 répété par état.</text>
+
+  <text x="450" y="492" text-anchor="middle" font-size="12" fill="#475569">Un en-tête qui ne dit pas ses octets est un en-tête qui ne se relit pas.</text>
+</svg>

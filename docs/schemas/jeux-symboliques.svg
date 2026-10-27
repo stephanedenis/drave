@@ -1,0 +1,32 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Surface, RSN-jeu et pensée</title>
+  <desc>L'étage 1 transforme la surface en RSN-jeu ; l'étage 2 raisonne sur la RSN et ne voit jamais la surface.</desc>
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+  <rect width="900" height="340" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Surface → RSN-jeu → pensée</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Deux étages, un contrat : l'étage 2 ne voit jamais la surface.</text>
+
+  <rect x="30" y="115" width="200" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="130" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">surface</text>
+  <text x="130" y="168" text-anchor="middle" font-size="11.5" fill="#475569">D4 · B[dd] · « pierre noire en D4 »</text>
+
+  <rect x="350" y="115" width="200" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="450" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">RSN-jeu</text>
+  <text x="450" y="168" text-anchor="middle" font-size="11.5" fill="#475569">la position, la pièce, le coup</text>
+
+  <rect x="670" y="115" width="200" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="770" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">décision</text>
+  <text x="770" y="168" text-anchor="middle" font-size="11.5" fill="#475569">le coup choisi, la RSN d'action</text>
+
+  <line x1="232" y1="155" x2="348" y2="155" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <text x="290" y="102" text-anchor="middle" font-size="11.5" fill="#1d4ed8">couches linguistiques · étage 1</text>
+  <line x1="552" y1="155" x2="668" y2="155" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <text x="610" y="102" text-anchor="middle" font-size="11.5" fill="#15803d">pensée · étage 2</text>
+
+  <path d="M450,200 C450,250 770,250 770,200" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="610" y="270" text-anchor="middle" font-size="12" fill="#b91c1c">l'étage 2 ne voit jamais la surface</text>
+
+  <text x="450" y="312" text-anchor="middle" font-size="12" fill="#475569">La même position écrite de cinq façons doit donner la même empreinte, donc la même décision.</text>
+</svg>
