@@ -14,13 +14,13 @@
    "n": 146
   },
   "lese_ventrale": {
-   "jeu": 0.1780821917808219,
+   "jeu": 0.2465753424657534,
    "de": 0.9315068493150684,
    "n": 146
   },
   "lese_dorsale": {
    "jeu": 1.0,
-   "de": 0.0273972602739726,
+   "de": 0.02054794520547945,
    "n": 146
   }
  },
@@ -47,15 +47,17 @@
   "n": 281
  },
  "M6": {
-  "exact": 0.7,
-  "faux_positifs": 1,
-  "faux_negatifs": 20,
+  "exact": 0.7142857142857143,
+  "faux_positifs": 2,
+  "faux_negatifs": 18,
   "n": 70,
-  "cout_commutation": -0.1504524886877828
+  "cout_commutation": -0.13122171945701358
  },
  "M7": {
-  "nouveaux": 29,
-  "rappel": 1.0,
+  "nouveaux": 439,
+  "retention_fixe": 0.1366742596810934,
+  "retention_modulee": 0.13895216400911162,
+  "capacite": 64,
   "n": 528
  },
  "M8": {
@@ -68,13 +70,14 @@
  },
  "M9": {
   "M1_sans_contexte": 0.29166666666666663,
-  "M2_lese_ventrale_jeu": 0.1780821917808219,
-  "M2_lese_dorsale_de": 0.0273972602739726,
+  "M2_lese_ventrale_jeu": 0.2465753424657534,
+  "M2_lese_dorsale_de": 0.02054794520547945,
   "M3_capacite_zero": 0,
   "M4_sans_stockage": 0.0,
   "M5_sans_transitions": 0.010676156583629859,
-  "M6_sans_porte": 0.30000000000000004,
+  "M6_sans_porte": 0.2857142857142857,
+  "M7_sans_modulation": 0.1366742596810934,
   "M8_sans_sommeil": 0.0
  },
- "secondes": 74.61022847499407
+ "secondes": 51.218835184001364
 }

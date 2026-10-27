@@ -23,7 +23,7 @@ from cerveau.episodique import Episodique  # noqa: E402
 from cerveau.gating import Porte  # noqa: E402
 from cerveau.hub import Hub  # noqa: E402
 from cerveau.memoire_travail import MemoireTravail  # noqa: E402
-from cerveau.neuromodulation import Neuromodulation  # noqa: E402
+from cerveau.neuromodulation import MemoireLimitee, Neuromodulation  # noqa: E402
 from cerveau.predictif import Predictif  # noqa: E402
 from cerveau.sequences import corpus  # noqa: E402
 from cerveau.sommeil import Sommeil  # noqa: E402
@@ -150,15 +150,21 @@ def m6():
 
 def m7():
     its = items()
+    # même flux, deux politiques de rétention : FIFO (poids 1) et nouveauté
+    fixe = MemoireLimitee(64)
     mod = Neuromodulation()
-    e = Episodique()
-    nouveau = 0
+    module = MemoireLimitee(64)
+    vus = set()
+    nouveaux = []
     for it in its:
-        s = mod.signal(it.code)
-        nouveau += int(s["nouveaute"])
-        e.stocker(it.texte, it.code, it.langue, it.paire, poids=s["poids"])
-    rappel = sum(e.rappel(it.code)["exact"] for it in its) / max(1, len(its))
-    return {"nouveaux": nouveau, "rappel": rappel, "n": len(its)}
+        if it.texte not in vus:
+            vus.add(it.texte); nouveaux.append(it.texte)
+        fixe.stocker(it.texte, it.code, 1.0)
+        sig = mod.signal(it.code)
+        module.stocker(it.texte, it.code, sig["poids"])
+    retention = lambda m: sum(m.contient(s) for s in nouveaux) / max(1, len(nouveaux))
+    return {"nouveaux": len(nouveaux), "retention_fixe": retention(fixe),
+            "retention_modulee": retention(module), "capacite": 64, "n": len(its)}
 
 
 def m8():
@@ -177,7 +183,7 @@ def m8():
     return sleep
 
 
-def m9(m1r, m2r, m3r, m4r, m5r, m6r):
+def m9(m1r, m2r, m3r, m4r, m5r, m6r, m7r):
     # Les lésions sont des privations déclarées, pas des approximations.
     seqs0 = MemoireTravail(0)
     span0 = seqs0.span(corpus(0, 10, 8))["span"]
@@ -190,6 +196,7 @@ def m9(m1r, m2r, m3r, m4r, m5r, m6r):
         "M4_sans_stockage": 0.0 if not vide.episodes else 0.0,
         "M5_sans_transitions": 1.0 - m5r.get("majoritaire", 0.0),
         "M6_sans_porte": 1.0 - m6r.get("exact", 0.0),
+        "M7_sans_modulation": m7r.get("retention_fixe", 0.0),
         "M8_sans_sommeil": 0.0,
     }
 
@@ -206,7 +213,7 @@ def main() -> int:
     out["M6"] = m6()
     out["M7"] = m7()
     out["M8"] = m8()
-    out["M9"] = m9(out["M1"], out["M2"], out["M3"], out["M4"], out["M5"], out["M6"])
+    out["M9"] = m9(out["M1"], out["M2"], out["M3"], out["M4"], out["M5"], out["M6"], out["M7"])
     out["secondes"] = time.monotonic() - t0
     pathlib.Path("/tmp/cerveau-mesures.json").write_text(
         json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

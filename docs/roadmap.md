@@ -308,10 +308,10 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | B12.3 | **M3 mémoire de travail** | ✅ **tampon** | span **12/12**, exact **1,0** ; n-back contrôle **1,0** ; n-back brut **0,06 %** (test invalide) |
 | B12.4 | **M4 mémoire épisodique** | ✅ **mesuré** | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** ; 29 codes uniques |
 | B12.5 | **M5 prédictif** | ❌ **négatif** | exact **98,9 %** = majoritaire **98,9 %** ; surprise **0,0096** ; aucun gain |
-| B12.6 | **M6 gating** | ❌ **faible** | exact **70,0 %** ; FP **1**, FN **20** ; coût **−0,15** |
-| B12.7 | **M7 neuromodulation** | ❌ **nul** | **29** nouveaux / 528 ; rappel **1,0** ; aucun effet mesuré |
+| B12.6 | **M6 gating** | ❌ **faible** | exact **71,4 %** ; FP **2**, FN **20** ; coût **−0,13** |
+| B12.7 | **M7 neuromodulation** | ❌ **nul** | rétention **13,7 %** (fixe) vs **13,9 %** (modulée), capacité 64 ; aucun effet |
 | B12.8 | **M8 sommeil** | ✅ **généralise** | prototypes **96,48 %** sur **106** épisodes non stockés ; baseline **0 %** (mémoire épisodique) |
-| B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **17,8 %** ; M2 dorsale **2,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
+| B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Suite** | ⏳ **suivant** | M2 équilibré + contexte ; M3 répétitions ; M5 ordre 2 ; M6 conflit ; M7 capacité ; M8 rejeu |
 
 **Bilan B12** : le **bus**, **M1**, **M2**, **M3**, **M4** et **M8** tiennent ; **M5, M6, M7** sont des

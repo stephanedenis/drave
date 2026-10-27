@@ -26,3 +26,24 @@ class Neuromodulation:
         incertitude = max(0.0, 1.0 - marge)
         poids = 1.0 + self.alpha * nouveaute + self.beta * incertitude + 0.2 * recompense
         return {"nouveaute": nouveaute, "incertitude": incertitude, "poids": poids}
+
+
+class MemoireLimitee:
+    """Une mémoire bornée : la modulation doit décider quoi garder."""
+    nom = "M7-memoire-limitee"
+
+    def __init__(self, capacite: int = 64) -> None:
+        self.capacite = capacite
+        self.episodes: list[tuple[str, dict, float]] = []
+
+    def stocker(self, surface: str, code: dict, poids: float) -> None:
+        self.episodes.append((surface, dict(code), poids))
+        if len(self.episodes) > self.capacite:
+            self.episodes.sort(key=lambda e: e[2], reverse=True)
+            self.episodes = self.episodes[:self.capacite]
+
+    def contient(self, surface: str) -> bool:
+        return any(e[0] == surface for e in self.episodes)
+
+    def rappel(self, code: dict) -> bool:
+        return any(e[1] == code for e in self.episodes)
