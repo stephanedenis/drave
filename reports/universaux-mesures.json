@@ -1,0 +1,73 @@
+{
+ "corpus": {
+  "B5_coups": 79,
+  "B7_coups": 449,
+  "items": 528,
+  "train": 377,
+  "val": 151,
+  "paires_train": 25,
+  "paires_val": 6
+ },
+ "schema": {
+  "champs": 15,
+  "classes": 502,
+  "version": 1
+ },
+ "modele_natif": {
+  "train_exact": 0.4827586206896552,
+  "val_exact": 0.0,
+  "gele_base_exact": 0.0,
+  "majoritaire_exact": 0.0,
+  "determinisme": 1.0,
+  "invariance_paires": 0.0,
+  "meilleur_pas": 100,
+  "train_par_champ": {
+   "jeu": 0.8063660477453581,
+   "action": 0.8143236074270557,
+   "de": 0.946949602122016,
+   "vers": 0.9496021220159151,
+   "promotion": 0.9946949602122016,
+   "roque": 0.9946949602122016,
+   "case": 0.9416445623342176,
+   "symbole": 0.9416445623342176,
+   "carte": 0.7824933687002652,
+   "taille": 0.9204244031830239,
+   "point": 0.9310344827586207,
+   "passe": 0.986737400530504,
+   "chemin_0": 0.883289124668435,
+   "chemin_1": 0.8859416445623343,
+   "chemin_2": 0.9920424403183024
+  },
+  "val_par_champ": {
+   "jeu": 0.026490066225165563,
+   "action": 0.026490066225165563,
+   "de": 0.5231788079470199,
+   "vers": 0.5231788079470199,
+   "promotion": 1.0,
+   "roque": 0.9867549668874173,
+   "case": 0.7218543046357616,
+   "symbole": 0.7218543046357616,
+   "carte": 0.7086092715231788,
+   "taille": 0.9205298013245033,
+   "point": 0.9602649006622517,
+   "passe": 1.0,
+   "chemin_0": 0.9602649006622517,
+   "chemin_1": 0.9668874172185431,
+   "chemin_2": 1.0
+  }
+ },
+ "codec": {
+  "parse_B5": "79/79",
+  "parse_B7": "449/449",
+  "restitution_B5": "33/79",
+  "restitution_B7": "non mesurée (multilingue)"
+ },
+ "controles": [
+  "split par paire sans fuite",
+  "majoritaire 0 %",
+  "base gelée 0 %",
+  "déterminisme 1,000"
+ ],
+ "lecture": "le codec lit 100 % ; le parseur natif typé surapprend (48,3 % train / 0 % val) ; restitution 33/79",
+ "version": 1
+}

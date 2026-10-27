@@ -124,6 +124,13 @@ Le protocole est **parallèle par construction** :
 | [`tools/semantique/entrainer.py`](../tools/semantique/entrainer.py) | pertes, convergence, rappel, sonde, chrF, JSON |
 | [`tools/semantique/tests/`](../tools/semantique/tests/) | le corpus et le découpage |
 
+## La base typée (B11)
+
+Le protocole libre est complété par une **base fixe d'universaux** : 15 champs, 502 classes, sortie
+one-hot déterministe, codec classique pour la surface. Le codec lit **100 %** des coups B5/B7 ; le parseur
+natif typé **surapprend** (48,3 % train / 0 % validation). Fond : [`semantique-universaux.md`](semantique-universaux.md) ;
+fiche : [`rapport-universaux.md`](../reports/rapport-universaux.md).
+
 ## Le premier passage (26/10)
 
 Le protocole a été exécuté sur **10 langues**, deux GPU NVLink, `route` 31,63 M. Deux résultats :

@@ -299,6 +299,20 @@ les gradients du décodeur écrasent l'encodeur (étages séparés) ; les articl
 distincts. Prochaine action : décodeur à attention croisée, 20–30 articles, 3 graines, puis raisonnement.
 Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 
+### B11 — la base d'universaux typés
+
+| ligne | objet | état | mesure |
+|---|---|---|---|
+| B11.1 | **Le schéma fixe** : 15 champs, 502 classes, one-hot déterministe ; NSM/Jackendoff/Sens-Texte/logique comme sources | ✅ **défini** | note [`semantique-universaux.md`](semantique-universaux.md) ; code [`universaux.py`](../tools/semantique/universaux.py) |
+| B11.2 | **Le parseur natif typé** : `route` 31,63 M, pooling moyen, 15 têtes | ❌ **négatif** | exact **48,3 % train / 0 % validation** ; base gelée **0 %** ; majoritaire **0 %** ; déterminisme **1,000** ; surapprentissage |
+| B11.3 | **Le codec classique** : lecture surface → RSN | ✅ **mesuré** | **79/79** et **449/449** RSN exactes (100 %) ; restitution **33/79** formats canoniques |
+| B11.4 | **Données synthétiques / distillation du codec** | ⏳ **suivant** | le codec est le professeur exact ; augmenter les surfaces et équilibrer les champs |
+
+**Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
+le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il
+faut de la **donnée synthétique/compositionnelle** ou de la **distillation**, pas seulement une tête fixe.
+Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
+
 **Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
 proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
 **faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a une **transition entre
