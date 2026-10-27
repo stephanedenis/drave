@@ -15,9 +15,10 @@ from jeux.regles import cartes as C
 from jeux.regles import dames as D
 from jeux.regles import echecs as E
 from jeux.regles import go as G
+from jeux.regles import morpion as M
 from jeux.rsn import RSN
 from semantique.typed_corpus import ItemType
-from semantique.universaux import code_rsn
+from semantique.universaux import code_rsn, resume_contexte
 
 PIECES = ("P", "N", "B", "R", "Q", "K")
 LETTRES_DAMES = "abcdefgh"
@@ -28,14 +29,16 @@ def _forme(concept: str, langue: str) -> str | None:
     return f[0] if f else None
 
 
-def _item(texte: str, r: RSN, langue: str, paire: str, fmt: str = "synthetique") -> ItemType:
-    return ItemType(texte, code_rsn(r), r.jeu, r.nature, langue, paire, fmt)
+def _item(texte: str, r: RSN, langue: str, paire: str, fmt: str = "synthetique",
+          contexte: str = "") -> ItemType:
+    return ItemType(texte, code_rsn(r), r.jeu, r.nature, langue, paire, fmt, contexte)
 
 
 def items_synth() -> list[ItemType]:
     out: list[ItemType] = []
     langues = MULTI.langues
     # --- échecs : tous les coups légaux du départ, 3 formes ---
+    ctx_e = resume_contexte(E.rsn_depuis_position(E.Position.depart()))
     pos = E.Position.depart()
     for coup in pos.coups_legaux():
         r = E.action_depuis_coup(coup)
@@ -49,8 +52,9 @@ def items_synth() -> list[ItemType]:
             for texte in (f"{piece} {E.indice_vers_case(de)} {E.indice_vers_case(vers)}",
                           f"{E.indice_vers_case(de)}{E.indice_vers_case(vers)}",
                           f"{piece} {E.indice_vers_case(de)}-{E.indice_vers_case(vers)}"):
-                out.append(_item(texte, r, langue, f"synth-echecs-{de}-{vers}"))
+                out.append(_item(texte, r, langue, f"synth-echecs-{de}-{vers}", contexte=ctx_e))
     # --- dames : coups légaux du départ ---
+    ctx_d = resume_contexte(D.rsn_depuis_position(D.Position.depart()))
     dp = D.Position.depart()
     for coup in dp.coups_legaux():
         r = D.action_depuis_coup(coup)
@@ -60,8 +64,9 @@ def items_synth() -> list[ItemType]:
             if not jeu:
                 continue
             out.append(_item(f"{jeu} {D.indice_vers_case(a)} {D.indice_vers_case(b)}",
-                             r, langue, f"synth-dames-{a}-{b}"))
+                             r, langue, f"synth-dames-{a}-{b}", contexte=ctx_d))
     # --- go : tous les points et la passe ---
+    ctx_g = resume_contexte(G.Position.depart(9, 65).vers_rsn())
     for langue in langues:
         jeu = _forme("jeu.go", langue)
         if not jeu:
@@ -69,11 +74,11 @@ def items_synth() -> list[ItemType]:
         for p in range(81):
             r = RSN("go", "coup", {"taille": 9, "point": p})
             coord = G.point_vers_gtp(p, 9)
-            out.append(_item(f"{jeu} {coord}", r, langue, f"synth-go-{p}"))
-            out.append(_item(f"{coord}", r, langue, f"synth-go-{p}"))
+            out.append(_item(f"{jeu} {coord}", r, langue, f"synth-go-{p}", contexte=ctx_g))
+            out.append(_item(f"{coord}", r, langue, f"synth-go-{p}", contexte=ctx_g))
         rp = RSN("go", "coup", {"taille": 9, "passe": True})
         passe = _forme("go.passe", langue) or "pass"
-        out.append(_item(f"{jeu} {passe}", rp, langue, "synth-go-passe"))
+        out.append(_item(f"{jeu} {passe}", rp, langue, "synth-go-passe", contexte=ctx_g))
     # --- cartes : 52 cartes, rang + enseigne ---
     for langue in langues:
         for carte in range(52):
@@ -85,13 +90,15 @@ def items_synth() -> list[ItemType]:
             if rn and sn:
                 out.append(_item(f"{rn} {sn}", r, langue, f"synth-cartes-{carte}"))
     # --- morpion : 9 cases, 2 symboles, avec et sans nom de jeu ---
+    base_m = M.etat_initial()
     for langue in langues:
         jeu = _forme("jeu.morpion", langue)
         for case in range(9):
             for sym in ("X", "O"):
                 r = RSN("morpion", "coup", {"case": case, "symbole": sym})
+                ctx_m = resume_contexte(base_m.avec(corps={**base_m.corps, "trait": sym}))
                 coord = f"{LETTRES_DAMES[case % 3]}{case // 3 + 1}"
                 if jeu:
-                    out.append(_item(f"{jeu} {coord}", r, langue, f"synth-morpion-{case}-{sym}"))
-                out.append(_item(f"{sym} {coord}", r, langue, f"synth-morpion-{case}-{sym}"))
+                    out.append(_item(f"{jeu} {coord}", r, langue, f"synth-morpion-{case}-{sym}", contexte=ctx_m))
+                out.append(_item(f"{sym} {coord}", r, langue, f"synth-morpion-{case}-{sym}", contexte=ctx_m))
     return out

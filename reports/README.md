@@ -22,7 +22,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-hybride.md`](rapport-hybride.md) | **B11.6** : le codec avec contexte lit **528/528** (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire de traduction 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
-| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), restitution **33/79** ; natif réel seul 0 %, natif **synthétique normalisé 55,7 %** sur surfaces réelles (jeu 91 %, de/vers 95/88 %, invariance 37,0 %) ; baseline 45,1 %, consistance 38,3 %, adversaire 39,6 % : négatifs |
+| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), restitution **33/79** ; natif réel seul 0 %, natif **synthétique normalisé 55,7 %** sur surfaces réelles, **contexte suffixé 59,8 %** (invariance 40,7 %), préfixe 0,4 % / 88,9 % (collapse), baseline 45,1 %, consistance 38,3 %, adversaire 39,6 % |
 | [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 14,0/5,4 contre plancher 38,8, référence tronquée), NVLink |
 
 ## Les données brutes

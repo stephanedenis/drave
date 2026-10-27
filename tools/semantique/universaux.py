@@ -136,6 +136,22 @@ def rsn_depuis_code(code: dict, nature: str = "coup"):
     return RSN(str(code.get("jeu", "morpion")), nature, corps)
 
 
+def resume_contexte(ctx) -> str:
+    """Le contexte RSN en une ligne courte : trait, taille, cases, plateau."""
+    if ctx is None:
+        return ""
+    corps = dict(ctx.corps or {})
+    parts = [str(ctx.jeu), str(ctx.nature)]
+    for cle in ("trait", "taille", "passe", "roques", "ep", "demi", "plein"):
+        if cle in corps and corps[cle] is not None:
+            parts.append(f"{cle}={corps[cle]}")
+    if "cases" in corps and isinstance(corps["cases"], list):
+        parts.append("cases=" + ",".join("." if v is None else str(v) for v in corps["cases"]))
+    if "plateau" in corps:
+        parts.append("plateau=" + str(corps["plateau"]))
+    return " ".join(parts)
+
+
 def empreinte_code(code: dict) -> str:
     """L'empreinte du code typé : stable, indépendante de la langue."""
     return hashlib.sha256(json.dumps(code, sort_keys=True, ensure_ascii=False,

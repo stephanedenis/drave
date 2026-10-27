@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 from jeux.corpus import construire_corpus
 from jeux.corpus_multilingue import construire_corpus_multilingue
-from semantique.universaux import code_item
+from semantique.universaux import code_item, resume_contexte
 
 
 @dataclass(frozen=True)
@@ -26,6 +26,7 @@ class ItemType:
     langue: str
     paire: str
     format: str
+    contexte: str = ""
 
 
 def items() -> list[ItemType]:
@@ -40,7 +41,7 @@ def items() -> list[ItemType]:
                 continue
             vus.add(cle)
             out.append(ItemType(it.texte, code_item(it), it.jeu, it.attendu.nature,
-                                it.langue, it.paire, it.format))
+                                it.langue, it.paire, it.format, resume_contexte(it.contexte)))
     return out
 
 

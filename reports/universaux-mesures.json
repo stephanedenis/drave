@@ -68,7 +68,7 @@
   "base gelée 0 %",
   "déterminisme 1,000"
  ],
- "lecture": "codec 100 % ; natif synthétique normalisé 55,7 % (invariance 37,0 %) contre 45,1 / 7,4 sans normalisation ; consistance/adversaire négatifs ; le codec reste le bloc fiable",
+ "lecture": "codec 100 % ; natif normalisé 55,7/37,0 ; contexte suffixé 59,8/40,7 ; contexte préfixé 0,4/88,9 (collapse) ; le codec reste le bloc fiable",
  "version": 1,
  "modele_natif_synth": {
   "train": 10556,
@@ -112,5 +112,22 @@
   "rendu_classique": 0.3333333333333333,
   "n_rendu": 21,
   "meilleur_pas": 500
+ },
+ "modele_natif_contexte_prefixe": {
+  "exact": 0.003787878787878788,
+  "invariance_paires": 0.8888888888888888,
+  "jeu": 1.0,
+  "lecture": "collapse"
+ },
+ "modele_natif_contexte_suffixe": {
+  "exact": 0.5984848484848485,
+  "invariance_paires": 0.4074074074074074,
+  "jeu": 0.9867424242424242,
+  "action": 0.9810606060606061,
+  "de": 0.9772727272727273,
+  "vers": 0.9848484848484849,
+  "carte": 0.6950757575757576,
+  "determinisme": 1.0,
+  "lecture": "gain réel"
  }
 }

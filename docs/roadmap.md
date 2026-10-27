@@ -309,7 +309,8 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
 | B11.5 | **Cohérence inter-langues du natif** | ⚠️ **partiel** | normalisation lexicale : **55,7 %** de code exact et **37,0 %** d'invariance (contre 45,1 / 7,4) ; consistance softmax **38,3 %** (0) et adversaire **39,6 %** (0) restent deux négatifs |
 | B11.6 | **Codec + contexte, mémoire** | ✅ **mesuré** | codec **528/528** avec contexte (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
-| B11.7 | **Natif contextuel** | ⏳ **suivant** | le contexte est décisif pour le codec ; le natif ne le reçoit pas encore |
+| B11.7 | **Natif contextuel** | ⚠️ **partiel** | contexte **suffixé** : **59,8 %** de code exact et **40,7 %** d'invariance ; contexte **préfixé** : 0,4 % / 88,9 % (collapse) ; le codec reste à 100 % |
+| B11.8 | **Contexte séparé et cartes** | ⏳ **suivant** | un encodeur de contexte séparé, ou une fusion apprise ; cartes encore à 69,5 % |
 
 **Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
 le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il

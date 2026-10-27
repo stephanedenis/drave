@@ -63,7 +63,20 @@ labels RSN exacts, puis on teste sur les **528 surfaces réelles** B5/B7.
 | déterminisme | **1,000** |
 | restitution (15 formats testés) | **40,0 %** |
 
-### 2.3 Normalisation lexicale : le levier
+### 2.3 Contexte : préfixe = collapse, suffixe = gain
+
+Le contexte RSN (trait, cases, plateau) est résumé en une ligne. Deux positions ont été testées.
+
+| position | code exact | invariance | lecture |
+|---|---:|---:|---|
+| contexte **préfixe** | **0,4 %** | 88,9 % | collapse : le modèle prédit le contexte, pas la surface |
+| contexte **suffixe** | **59,8 %** | **40,7 %** | gain réel, sans collapse |
+
+Avec le contexte suffixé : `jeu` **98,7 %**, `action` **98,1 %**, `de`/`vers` **97,7 / 98,5 %**, `carte` **69,5 %**,
+déterminisme 1,000, train 96,8 % (surapprentissage). Le préfixe donne une **fausse invariance** : tous les
+codes se ressemblent, mais le code exact s'effondre à 0,4 %. C'est un **négatif nommé**.
+
+### 2.4 Normalisation lexicale : le levier
 
 Les mots du lexique (jeux, pièces, rangs, enseignes, passe) sont remplacés par des **concepts canoniques**
 (`[jeu.morpion]`, `[echecs.piece.N]`, `[cartes.rang.13]`) avant le parseur ; les coordonnées et les nombres

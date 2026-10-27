@@ -130,6 +130,8 @@ def main() -> int:
                     help="poids de l'adversaire de langue (gradient inversé)")
     ap.add_argument("--normaliser", action="store_true",
                     help="remplacer les mots du lexique par des concepts canoniques")
+    ap.add_argument("--contexte", action="store_true",
+                    help="préfixer la surface par le résumé du contexte RSN")
     ap.add_argument("--sortie", default="/tmp/semantique-type")
     args = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -152,6 +154,12 @@ def main() -> int:
     if args.normaliser:
         train = [dataclasses.replace(i, texte=normaliser(i.texte)) for i in train]
         val = [dataclasses.replace(i, texte=normaliser(i.texte)) for i in val]
+    if args.contexte:
+        def _avec_ctx(i):
+            t = (i.texte + " | " + i.contexte).strip(" |")
+            return dataclasses.replace(i, texte=t)
+        train = [_avec_ctx(i) for i in train]
+        val = [_avec_ctx(i) for i in val]
     print(f"# typé · {len(its)} items · {len(train)} train / {len(val)} val · "
           f"{len({i.paire for i in train})} paires train · {len({i.paire for i in val})} val · "
           f"{len(CHAMPS)} champs · {sum(len(v) for _, v in CHAMPS)} classes", flush=True)
