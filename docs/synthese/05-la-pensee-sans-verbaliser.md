@@ -1,6 +1,30 @@
 # 5. La pensée sans verbaliser — le travail de la nuit du 16 octobre
 
-> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — le pont.**
+> Un **pont** est une petite carte **linéaire** entre les états de deux langues : il aligne la structure du
+> raisonnement (1,00 / 0,91 / 0,68 / 0,52 / 0,46 pour 2 à 6 entités), pas les mots. Il doit rester linéaire ;
+> un MLP sur-apprend.
+> **Glossaire :** [pont](../glossaire/10-le-pont-linguistico-semantique-le-vocabu.md) · [état](../glossaire/02-modeles-et-architectures.md) · [sonde](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![Penser sans verbaliser](schemas/pensee.svg)
+
+> **Fiche concept — le plan.**
+> Le **plan** est l'état qui porterait la suite d'une série (la 5ᵉ phrase après les 4 premières). C'est le
+> **contre-exemple** : ni les ponts, ni le bilinguisme, ni le contraste ne l'alignent ; il s'entraîne dans le
+> modèle, et sa géométrie reste ancrée dans la langue.
+> **Glossaire :** [plan](../glossaire/02-modeles-et-architectures.md) · [contraste](../glossaire/10-le-pont-linguistico-semantique-le-vocabu.md) · [contrôle négatif](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![Les deux étages](schemas/etages.svg)
+
+## En trois idées
+
+1. **L'état porte le sens** : 16 jetons d'avance à **80,3 %**, quand le mot est à **118,4 %**.
+2. **L'itération s'obtient et se paie** : plate, **+3,2** points à 2,43 M et **+2,4** à 9,57 M.
+3. **La récurrence n'est pas qu'un coût** : **2,73** contre **2,76** bits/octet.
+
+**Le contre-exemple** : le **plan** ne s'aligne pas — ni pont, ni bilinguisme, ni contraste. *Le détail des
+mesures est dans la suite ; la carte du raisonnement est dans
+[`rapport-carte-raisonnement-naturel.md`](../../reports/rapport-carte-raisonnement-naturel.md).*
 
 ## La question, et pourquoi elle n'est pas abstraite
 

@@ -1,6 +1,12 @@
 # 1. Le cerveau Drave — l'idée, en cinq minutes
 
-> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — la région, et la coupe tardive.**
+> Une **région** est un groupe de couches consécutives ; un **état** la traverse. Couper **tard** ne coûte
+> presque rien (+0,52 %) ; couper tôt coûte +17,09 % — la région haute a besoin d'un état riche.
+> **Glossaire :** [région](../glossaire/04-le-moteur-drave-execution-structures-out.md) · [état](../glossaire/02-modeles-et-architectures.md) · [perplexité](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![Le bus et les régions](schemas/bus-evenements.svg)
 
 ## Le problème de départ
 

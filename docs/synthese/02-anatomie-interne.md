@@ -1,6 +1,13 @@
 # 2. L'anatomie interne — ce qui circule, et où
 
-> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — l'état et le bus.**
+> L'**état** est le vecteur de 896 nombres qui circule ; le **bus** transporte des messages de taille fixe,
+> horodatés et rejouables. Un état peut être écrit, relu, injecté ; un lien peut être étroit (448 fibres,
+> +2,81 %) sans être mauvais.
+> **Glossaire :** [état](../glossaire/02-modeles-et-architectures.md) · [bus](../glossaire/05-flux-protocole-et-transport.md) · [pont](../glossaire/04-le-moteur-drave-execution-structures-out.md)
+> **Illustration :** ![Le bus](schemas/bus-evenements.svg)
 
 ## Les quatre pièces
 

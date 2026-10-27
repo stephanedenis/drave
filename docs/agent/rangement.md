@@ -1,7 +1,7 @@
 # Le rangement, et la revue de documentation
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** La revue est étendue : fraîcheur
-> comparée au dernier commit, compteurs vérifiés (49 portes, 8 chapitres, 172/241), liens
+> comparée au dernier commit, compteurs vérifiés (49 portes, 8 chapitres, 174/242), liens
 > dont le libellé diffère de la cible, chemins morts, documents orphelins. **Les règles de
 > rangement ne changent pas.** *Spécifique : « 7 chapitres » devient « 8 chapitres ».*
 
@@ -63,6 +63,6 @@ reste vrai n'est **pas** daté : il reste dans `docs/`.
 
 ## La synthèse théorique
 
-[`docs/synthese/`](../synthese/) porte la **théorie** (8 chapitres, 7 schémas), et son `index.md` doit refléter les
+[`docs/synthese/`](../synthese/) porte la **théorie** (8 chapitres, 14 schémas), et son `index.md` doit refléter les
 **sept chantiers** et dire la même chose que `en-cours.md`. Les chiffres y sont cités comme état, jamais comme
 tableau de mesure.

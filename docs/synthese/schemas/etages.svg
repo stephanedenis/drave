@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker>
+  </defs>
+  <rect width="900" height="420" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Les deux étages, et le miroir</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">L'entrée-sortie linguistique (étage 1) et la pensée abstraite (étage 2) ; la sortie valide l'entrée.</text>
+
+  <rect x="30" y="100" width="150" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="105" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">surface</text>
+  <text x="105" y="158" text-anchor="middle" font-size="11.5" fill="#475569">langue, dialecte, style</text>
+
+  <rect x="235" y="100" width="180" height="80" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="325" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">RSN typée</text>
+  <text x="325" y="158" text-anchor="middle" font-size="11.5" fill="#475569">unités de sens, 15 champs</text>
+
+  <rect x="470" y="100" width="180" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="560" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#b45309">pensée</text>
+  <text x="560" y="158" text-anchor="middle" font-size="11.5" fill="#475569">opérations, composition</text>
+
+  <rect x="705" y="100" width="165" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="787" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#15803d">RSN → surface</text>
+  <text x="787" y="158" text-anchor="middle" font-size="11.5" fill="#475569">restitution du code</text>
+
+  <line x1="182" y1="140" x2="233" y2="140" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <line x1="417" y1="140" x2="468" y2="140" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <line x1="652" y1="140" x2="703" y2="140" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+
+  <path d="M787,185 C787,245 450,255 105,220 C95,218 90,210 90,200" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#fr)"/>
+  <text x="450" y="270" text-anchor="middle" font-size="12.5" fill="#b91c1c">le miroir : toute mesure d'entrée se double d'une mesure de sortie</text>
+
+  <rect x="30" y="300" width="840" height="86" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="450" y="328" text-anchor="middle" font-size="12.5" fill="#334155">B10 : rejouer le sens en 10 langues, l'encodeur converge (0,426 contre 0,167), le décodeur est négatif.</text>
+  <text x="450" y="350" text-anchor="middle" font-size="12.5" fill="#334155">B11 : codec 100 % (79/79, 449/449), surface 33/79, natif 59,8 / 40,7. B12 : modules M1–M9.</text>
+  <text x="450" y="372" text-anchor="middle" font-size="12" fill="#475569">La fluidité n'est pas la fidélité : ce n'est pas parce que la sortie est belle qu'elle est juste.</text>
+</svg>

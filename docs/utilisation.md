@@ -3,7 +3,7 @@
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
 > (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
-> pas.** *46→49 portes, 6→8 chapitres, 6→7 schémas ; les chemins `cerveau-facultes` et
+> pas.** *46→49 portes, 6→8 chapitres, 6→14 schémas ; les chemins `cerveau-facultes` et
 > `etat-cerveau` sont passés à l'archive.*
 
 > Écrit le **16/10**, **revu le 2026-10-27**. en réponse à une question simple : « que manque-t-il pour que je puisse utiliser
@@ -92,7 +92,7 @@ Le chemin image est **vérifié** ✓ (embedding exact, 31 couches à 7,58e-06 e
 
 ### La synthèse théorique (à lire en premier, ou en dernier)
 
-**`docs/synthese/`** ✓ — **huit chapitres** **vulgarisés** et **sept schémas SVG** : l'idée fondatrice, l'anatomie
+**`docs/synthese/`** ✓ — **huit chapitres** **vulgarisés** et **quatorze schémas SVG** : l'idée fondatrice, l'anatomie
 interne (régions, liens, bus, horloges), les modes d'exécution et les portes, les douze facultés et les neuf
 apports de biologie, la pensée sans verbaliser (le travail du 16/10), la méthode avec ses cinq pièges, les
 modèles alternatifs de l'entrée-sortie, et les opérations (la négation, la composition, la grappe).

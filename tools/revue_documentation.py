@@ -17,6 +17,7 @@ Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (utilisable comme por
 """
 from __future__ import annotations
 import pathlib, re, subprocess, sys
+import xml.etree.ElementTree as ET
 from datetime import date
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
@@ -35,6 +36,16 @@ def date_dernier_commit() -> str:
     try:
         return subprocess.check_output(
             ["git", "log", "-1", "--format=%ad", "--date=short"], cwd=RACINE, text=True
+        ).strip()
+    except Exception:
+        return ""
+
+
+def date_dernier_changement(chemin: str) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--format=%ad", "--date=short", "--", chemin],
+            cwd=RACINE, text=True,
         ).strip()
     except Exception:
         return ""
@@ -269,6 +280,56 @@ def main() -> int:
         ):
             if cible not in it:
                 alertes.append(f"cohérence : l'index ne mentionne pas {cible}")
+
+        # 5ter. la synthèse est une introduction tenue à jour
+        syn = RACINE / "docs/synthese"
+        chapitres = sorted(syn.glob("0*.md"))
+        for p in chapitres:
+            if p.name not in it:
+                alertes.append(f"synthèse : {p.name} n'est pas listé dans l'index")
+            tete = p.read_text(encoding="utf-8", errors="ignore")[:2500]
+            if "**Fiche concept" not in tete:
+                alertes.append(f"synthèse : {p.name} n'a pas de fiche concept en tête")
+            if "../glossaire/" not in tete:
+                alertes.append(f"synthèse : {p.name} n'a pas de lien glossaire dans sa fiche")
+            if "![" not in tete:
+                alertes.append(f"synthèse : {p.name} n'a pas d'illustration dans sa fiche")
+        m = re.search(r"Dernière mise à jour : (\d{4}-\d\d-\d\d)", it)
+        if not m:
+            alertes.append("synthèse : l'index n'a pas de « Dernière mise à jour »")
+        else:
+            dernier = date_dernier_changement("docs/synthese")
+            if dernier and m.group(1) < dernier:
+                alertes.append(f"synthèse : index daté {m.group(1)}, dernier changement {dernier}")
+        n = len(list((syn / "schemas").glob("*.svg")))
+        mots = {
+            1: "un", 2: "deux", 3: "trois", 4: "quatre", 5: "cinq", 6: "six",
+            7: "sept", 8: "huit", 9: "neuf", 10: "dix", 11: "onze", 12: "douze",
+            13: "treize", 14: "quatorze", 15: "quinze",
+        }
+        forme = mots.get(n, str(n))
+        if f"{forme} schémas" not in it:
+            alertes.append(f"synthèse : l'index ne dit pas « {forme} schémas » ({n} fichiers)")
+        utilisees: set[pathlib.Path] = set()
+        for p in [idx] + chapitres:
+            txt = p.read_text(encoding="utf-8", errors="ignore")
+            for im in re.finditer(r'!\[[^\]]*\]\(([^)]+)\)', txt):
+                c = im.group(1)
+                if c.startswith(("/", "http://", "https://")):
+                    alertes.append(f"synthèse : image non relative dans {p.name} → {c}")
+                    continue
+                cible = (p.parent / c).resolve()
+                if not cible.exists():
+                    alertes.append(f"synthèse : image absente dans {p.name} → {c}")
+                else:
+                    utilisees.add(cible)
+        for s in (syn / "schemas").glob("*.svg"):
+            if s.resolve() not in utilisees:
+                alertes.append(f"synthèse : schéma non référencé → {s.name}")
+            try:
+                ET.parse(s)
+            except Exception as e:
+                alertes.append(f"synthèse : SVG invalide {s.name} ({e})")
 
     print(f"  revue de documentation · {compte_fiches()} fiche(s) · {compte_json()} JSON · "
           f"{compte_docs()} doc(s) · {compte_portes()} porte(s) · {compte_chapitres()} chapitre(s)")

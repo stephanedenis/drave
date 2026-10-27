@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
+  <rect width="900" height="520" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Les opérations : ce que l'état porte, ce qu'il ne calcule pas</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Quatre mesures de B4 et la grappe du moteur : la structure est un sous-espace, pas une algèbre.</text>
+
+  <rect x="40" y="90" width="390" height="160" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="235" y="120" text-anchor="middle" font-size="15" font-weight="bold" fill="#b91c1c">Négation : pas une direction</text>
+  <text x="235" y="150" text-anchor="middle" font-size="12.5" fill="#334155">flip 0,4148 — sous le hasard (0,5)</text>
+  <text x="235" y="174" text-anchor="middle" font-size="12.5" fill="#334155">garde 0,5852 — au-dessus</text>
+  <text x="235" y="212" text-anchor="middle" font-size="12" fill="#475569">la sonde lit la relation de surface,</text>
+  <text x="235" y="230" text-anchor="middle" font-size="12" fill="#475569">pas l'opération.</text>
+
+  <rect x="470" y="90" width="390" height="160" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="665" y="120" text-anchor="middle" font-size="15" font-weight="bold" fill="#b45309">Composition : pas une algèbre</text>
+  <text x="665" y="150" text-anchor="middle" font-size="12.5" fill="#334155">le double nié ne revient pas : 0,5691</text>
+  <text x="665" y="174" text-anchor="middle" font-size="12.5" fill="#334155">apprenable, faiblement : 0,6174</text>
+  <text x="665" y="212" text-anchor="middle" font-size="12" fill="#475569">les opérations sont des sous-espaces</text>
+  <text x="665" y="230" text-anchor="middle" font-size="12" fill="#475569">appris, locaux.</text>
+
+  <rect x="40" y="270" width="390" height="160" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="235" y="300" text-anchor="middle" font-size="15" font-weight="bold" fill="#1d4ed8">LoRA : l'opération s'inverse</text>
+  <text x="235" y="330" text-anchor="middle" font-size="12.5" fill="#334155">flip 0,2283 = 1 − garde 0,7717</text>
+  <text x="235" y="354" text-anchor="middle" font-size="12.5" fill="#334155">le modèle reste intact (0,8135)</text>
+  <text x="235" y="392" text-anchor="middle" font-size="12" fill="#475569">le LoRA apprend à inverser la lecture,</text>
+  <text x="235" y="410" text-anchor="middle" font-size="12" fill="#475569">pas à transférer l'opération.</text>
+
+  <rect x="470" y="270" width="390" height="160" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="665" y="300" text-anchor="middle" font-size="15" font-weight="bold" fill="#15803d">Grappe : le moteur calcule 21 %</text>
+  <text x="665" y="330" text-anchor="middle" font-size="12.5" fill="#334155">top-1024 sur 4 864 neurones FFN</text>
+  <text x="665" y="354" text-anchor="middle" font-size="12.5" fill="#334155">PPL 30,7286 — la même</text>
+  <text x="665" y="392" text-anchor="middle" font-size="12" fill="#475569">64 et 256 effondrent : la grappe a</text>
+  <text x="665" y="410" text-anchor="middle" font-size="12" fill="#475569">une taille minimale mesurable.</text>
+
+  <text x="450" y="472" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">L'état porte les opérations, mais il ne les calcule pas.</text>
+  <text x="450" y="498" text-anchor="middle" font-size="12.5" fill="#475569">La structure (le sous-espace, la grappe) coûte : 0,62 pour la composition, 21 % pour la grappe.</text>
+</svg>

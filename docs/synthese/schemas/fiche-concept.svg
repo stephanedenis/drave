@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="DejaVu Sans, Arial, sans-serif">
+  <rect width="900" height="400" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">La fiche concept : quatre lignes, trois liens</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Une porte d'entrée, pas un chapitre. Elle dit le nom, le sens, où le vérifier, et où le voir.</text>
+
+  <rect x="70" y="90" width="760" height="250" rx="14" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+  <text x="100" y="122" font-size="15" font-weight="bold" fill="#1d4ed8">1 · LE NOM DU CONCEPT</text>
+  <text x="100" y="146" font-size="13" fill="#334155">« L'état » — le vecteur qu'une région lit et écrit.</text>
+
+  <line x1="100" y1="164" x2="800" y2="164" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="100" y="194" font-size="15" font-weight="bold" fill="#1d4ed8">2 · LA DÉFINITION, EN DEUX OU TROIS LIGNES</text>
+  <text x="100" y="218" font-size="13" fill="#334155">896 nombres pour le 0,5 B ; la seule monnaie d'échange entre régions ;</text>
+  <text x="100" y="238" font-size="13" fill="#334155">il porte le sens, pas les mots.</text>
+
+  <line x1="100" y1="256" x2="800" y2="256" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="100" y="286" font-size="15" font-weight="bold" fill="#1d4ed8">3 · LE GLOSSAIRE</text>
+  <rect x="300" y="270" width="130" height="26" rx="13" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="365" y="288" text-anchor="middle" font-size="11.5" fill="#1d4ed8">état</text>
+  <rect x="440" y="270" width="130" height="26" rx="13" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="505" y="288" text-anchor="middle" font-size="11.5" fill="#1d4ed8">résidu</text>
+  <rect x="580" y="270" width="160" height="26" rx="13" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="660" y="288" text-anchor="middle" font-size="11.5" fill="#1d4ed8">région</text>
+
+  <line x1="100" y1="310" x2="800" y2="310" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="100" y="338" font-size="15" font-weight="bold" fill="#1d4ed8">4 · L'ILLUSTRATION</text>
+  <text x="300" y="338" font-size="13" fill="#334155">un schéma du dossier, ou une figure de la fiche de résultats.</text>
+
+  <text x="450" y="382" text-anchor="middle" font-size="12.5" fill="#475569">La fiche est la même dans l'index et au début du chapitre : on peut la lire seule.</text>
+</svg>

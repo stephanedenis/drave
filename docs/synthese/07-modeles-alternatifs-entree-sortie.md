@@ -1,6 +1,13 @@
 # 7 — Les modèles alternatifs pour l'entrée et la sortie
 
-> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **intelligence** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — la RSN et l'unité de sens.**
+> La **RSN** (représentation sémantique neutre) est le contrat entre l'entrée et la sortie : une structure
+> multi-niveaux, indépendante de la langue de surface, annotée de son bruit. Ses éléments sont des **unités
+> de sens**, jamais des **jetons** de tokeniseur.
+> **Glossaire :** [RSN](../glossaire/01-le-projet-ses-noms-sa-methode.md) · [unité de sens](../glossaire/01-le-projet-ses-noms-sa-methode.md) · [jeton](../glossaire/03-formats-quantification-encodage.md)
+> **Illustration :** ![La couche commune](schemas/couche-commune.svg)
 
 > **Ce que ce chapitre est.** La **théorie** de l'étage entrée-sortie (nom historique : couche commune) : ce qu'il doit être, ce qu'on
 > en sait, ce qui reste à prouver. Les **mesures** (67, avec leurs erratums et leurs pièges) sont dans

@@ -6,6 +6,13 @@
 > [`rapport-grappe-intra-couche.md`](../../reports/rapport-grappe-intra-couche.md). Index de la synthèse :
 > [`index.md`](index.md).
 
+> **Fiche concept — l'opérateur et la grappe.**
+> Un **opérateur** est une transformation de l'état (négation, composition) : une **géométrie apprise**,
+> locale, pas une algèbre. Une **grappe** est un sous-ensemble de neurones qui suffit au calcul : le top-1024
+> (21 % des 4 864 FFN) rend la même perplexité (30,7286).
+> **Glossaire :** [opérateur](../glossaire/02-modeles-et-architectures.md) · [grappe](../glossaire/04-le-moteur-drave-execution-structures-out.md) · [perplexité](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![Les opérations](schemas/operations.svg)
+
 ## La question
 
 L'étage 2 doit **penser sans verbaliser** : lire la réponse dans l'**état**, avant la génération. La carte du

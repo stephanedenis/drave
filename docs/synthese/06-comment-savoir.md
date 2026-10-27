@@ -1,6 +1,12 @@
 # 6. Comment savoir qu'on a raison — la méthode, et ses pièges
 
-> **Périmètre** : ce chapitre relève du programme **méthode** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **méthode** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — le contrôle négatif.**
+> Un **contrôle négatif** est une mesure qui doit rester au hasard si l'effet n'existe pas : paires
+> mélangées, étiquettes permutées, source changée. Sans lui, un chiffre n'est pas un résultat.
+> **Glossaire :** [contrôle négatif](../glossaire/07-mesure-qualite-et-methode-experimentale.md) · [plancher](../glossaire/07-mesure-qualite-et-methode-experimentale.md) · [fiche](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![La méthode](schemas/methode.svg)
 
 ## Le problème
 

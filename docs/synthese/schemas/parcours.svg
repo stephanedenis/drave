@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+  <rect width="900" height="440" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Trois façons de lire la synthèse</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Dix minutes pour l'idée, trente pour le moteur, quarante-cinq pour l'intelligence.</text>
+
+  <rect x="30" y="180" width="150" height="80" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="105" y="212" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Vous arrivez</text>
+  <text x="105" y="238" text-anchor="middle" font-size="11.5" fill="#475569">par l'index</text>
+
+  <rect x="240" y="100" width="620" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="240" y="100" width="10" height="80" rx="5" fill="#1d4ed8"/>
+  <text x="270" y="126" font-size="15" font-weight="bold" fill="#0f172a">Découvrir — 10 minutes</text>
+  <text x="270" y="150" font-size="12.5" fill="#334155">chapitres 1 · 3 · 8 — pourquoi Drave existe, ce qu'il coupe, ce qu'il mesure.</text>
+  <text x="270" y="168" font-size="11.5" fill="#475569">pour un lecteur pressé, ou avant une réunion.</text>
+
+  <rect x="240" y="205" width="620" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <rect x="240" y="205" width="10" height="80" rx="5" fill="#15803d"/>
+  <text x="270" y="231" font-size="15" font-weight="bold" fill="#0f172a">Le moteur — 30 minutes</text>
+  <text x="270" y="255" font-size="12.5" fill="#334155">chapitres 1 · 2 · 3 · 4 · 6 — couper, répartir, rejouer, mesurer.</text>
+  <text x="270" y="273" font-size="11.5" fill="#475569">pour comprendre les cinq axes de la vision.</text>
+
+  <rect x="240" y="310" width="620" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <rect x="240" y="310" width="10" height="80" rx="5" fill="#b45309"/>
+  <text x="270" y="336" font-size="15" font-weight="bold" fill="#0f172a">L'intelligence — 45 minutes</text>
+  <text x="270" y="360" font-size="12.5" fill="#334155">chapitres 5 · 7 · 8, puis B10–B12 — lire, penser, opérer.</text>
+  <text x="270" y="378" font-size="11.5" fill="#475569">pour l'étage 2 et les chantiers en cours.</text>
+
+  <line x1="182" y1="210" x2="238" y2="140" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <line x1="182" y1="220" x2="238" y2="245" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+  <line x1="182" y1="235" x2="238" y2="350" stroke="#334155" stroke-width="2.5" marker-end="url(#f)"/>
+
+  <text x="450" y="424" text-anchor="middle" font-size="12.5" fill="#475569">Chaque chapitre s'ouvre sur une fiche concept : définition, liens vers le glossaire, illustration.</text>
+</svg>

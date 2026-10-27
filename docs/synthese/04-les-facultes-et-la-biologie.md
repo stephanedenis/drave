@@ -1,6 +1,13 @@
 # 4. Les douze facultés et la biologie
 
-> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
+> **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
+
+> **Fiche concept — la faculté.**
+> Une **faculté** est une capacité qu'on cherche à donner au modèle (C1–C12) ; un **apport de biologie**
+> (E1–E9) est une contrainte ou une idée inspirée du vivant. Une faculté sans mesure n'entre pas dans le
+> tableau ; chaque ligne renvoie à une fiche et à une porte.
+> **Glossaire :** [faculté](../glossaire/04-le-moteur-drave-execution-structures-out.md) · [biologie](../glossaire/04-le-moteur-drave-execution-structures-out.md) · [mesure](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
+> **Illustration :** ![Les facultés](schemas/facultes.svg)
 
 ## Ce que Drave cherche à donner à un modèle
 

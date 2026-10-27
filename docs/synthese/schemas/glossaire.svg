@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="DejaVu Sans, Arial, sans-serif">
+  <rect width="900" height="560" fill="#f8fafc"/>
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le glossaire en carte — onze familles</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Chaque fiche concept renvoie à une famille ; la famille renvoie au fichier qui définit le terme.</text>
+
+  <circle cx="450" cy="300" r="78" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="450" y="292" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Glossaire</text>
+  <text x="450" y="314" text-anchor="middle" font-size="11.5" fill="#475569">11 familles</text>
+
+  <!-- colonne gauche : moteur / matière -->
+  <rect x="30" y="95" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="124" text-anchor="middle" font-size="12.5" fill="#0f172a">1 · Le projet, ses noms, sa méthode</text>
+  <rect x="30" y="158" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="187" text-anchor="middle" font-size="12.5" fill="#0f172a">2 · Modèles et architectures</text>
+  <rect x="30" y="221" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="250" text-anchor="middle" font-size="12.5" fill="#0f172a">3 · Formats et quantification</text>
+  <rect x="30" y="284" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="313" text-anchor="middle" font-size="12.5" fill="#0f172a">4 · Le moteur Drave</text>
+  <rect x="30" y="347" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="376" text-anchor="middle" font-size="12.5" fill="#0f172a">5 · Flux, protocole, transport</text>
+  <rect x="30" y="410" width="230" height="48" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="145" y="439" text-anchor="middle" font-size="12.5" fill="#0f172a">6 · Répartition et matériel</text>
+
+  <!-- colonne droite : intelligence / méthode -->
+  <rect x="640" y="80" width="230" height="48" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="755" y="109" text-anchor="middle" font-size="12.5" fill="#0f172a">7 · Mesure et méthode</text>
+  <rect x="640" y="143" width="230" height="48" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="755" y="172" text-anchor="middle" font-size="12.5" fill="#0f172a">8 · Points relevés</text>
+  <rect x="640" y="206" width="230" height="48" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="755" y="235" text-anchor="middle" font-size="12.5" fill="#0f172a">9 · Sources externes</text>
+  <rect x="640" y="269" width="230" height="48" rx="8" fill="#fef3c7" stroke="#b45309"/>
+  <text x="755" y="298" text-anchor="middle" font-size="12.5" fill="#0f172a">10 · Le pont sémantique</text>
+  <rect x="640" y="332" width="230" height="48" rx="8" fill="#fef3c7" stroke="#b45309"/>
+  <text x="755" y="361" text-anchor="middle" font-size="12.5" fill="#0f172a">11 · Sources du § 10</text>
+
+  <!-- liens discrets -->
+  <line x1="262" y1="119" x2="388" y2="270" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="262" y1="182" x2="390" y2="282" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="262" y1="245" x2="392" y2="294" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="262" y1="308" x2="394" y2="306" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="262" y1="371" x2="392" y2="318" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="262" y1="434" x2="390" y2="330" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="638" y1="104" x2="512" y2="270" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="638" y1="167" x2="510" y2="282" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="638" y1="230" x2="508" y2="294" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="638" y1="293" x2="506" y2="306" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="638" y1="356" x2="508" y2="318" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <text x="450" y="500" text-anchor="middle" font-size="12.5" fill="#475569">Le glossaire est le vocabulaire du dépôt : couche vs étage, unité de sens vs jeton, RSN vs tokeniseur.</text>
+  <text x="450" y="522" text-anchor="middle" font-size="12.5" fill="#b91c1c">Une fiche qui n'a pas de lien de glossaire est une fiche qui n'a pas été relue.</text>
+</svg>
