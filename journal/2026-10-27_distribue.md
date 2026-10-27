@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-27.md](2026-10-27.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 10:53 | `ddbbea24` | DOCS — FICHE DE COHÉRENCE (PASSAGE 3) ET COMPTEURS 174/242 ; REVUE, TABLEAUX ET REGISTRE VERTS | `AGENTS.md`, `REPRISE.md`, `README.md` (+13) |
+| 11:28 | `6a4c10fb` | DOCS — SYNTHÈSE COMME INTRODUCTION : 9 FICHES CONCEPT, 14 SCHÉMAS, GLOSSAIRE ET LIENS RELATIFS | `rangement.md`, `01-le-cerveau-drave.md`, `02-anatomie-interne.md` (+19) |
 
 ## Mesures et rapports touchés
 
