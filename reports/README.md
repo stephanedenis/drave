@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-grappe-reseau.md`](rapport-grappe-reseau.md) | **A7.5** — grappe sur réseau : 1 672 o contre 7 416 (4,44×), fidélité 1 792/1 792, 0,125 ms loopback |
 | [`rapport-routeur-m1-m2.md`](rapport-routeur-m1-m2.md) | **B23** — routeur M1→M2 : espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique |
 | [`rapport-m2-typo.md`](rapport-m2-typo.md) | **B22** — M2 et les typos : M2 62–80 % contre M1 24–45 % sur suppression, substitution, insertion, transposition |
 | [`rapport-m9-dose.md`](rapport-m9-dose.md) | **B21** — M9 par dose : M3 0/4/8/12/12 tautologique, M5 +4,25 pts, sham nul, double non additive |

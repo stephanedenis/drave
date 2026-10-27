@@ -1,0 +1,31 @@
+{
+ "flux": {
+  "ntok": 4,
+  "canaux": 448,
+  "top": 96
+ },
+ "octets": {
+  "dense": 7416,
+  "sparse": 1672,
+  "ratio": 4.435406698564593
+ },
+ "fidelite": {
+  "exact": 1792,
+  "total": 1792,
+  "taux": 1.0
+ },
+ "reseau": {
+  "essais": 5,
+  "identiques": true,
+  "latence_ms_moyenne": 0.11005760170519352,
+  "latence_ms_min": 0.07033199653960764,
+  "latence_ms_max": 0.15113898552954197
+ },
+ "meta": {
+  "version": 2,
+  "ntok": 4,
+  "h": 448,
+  "nval": 356,
+  "octets": 1672
+ }
+}

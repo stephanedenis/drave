@@ -122,8 +122,9 @@ ailleurs*.
 | A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ✅ | le **relais ne change pas un chiffre** (`porte-topologie`, 92 s, 42.5477) ; le coût du flux : **1 608 octets/flux**, **0,25 Mbit/s**, latence ≤ 20 ms — [`rapport-mode4-lot-listes.md`](../reports/rapport-mode4-lot-listes.md) |
 | A7.3 | **La grappe intra-couche** : un sous-ensemble de neurones, pas une frontière de couche | ✅ mesuré | le **top-1024** (21 % des 4 864 neurones FFN) rend la **même perplexité** (30,7286 à quatre décimales) ; 64 et 256 l'effondrent — la grappe a une **taille minimale** mesurable — [`reports/rapport-grappe-intra-couche.md`](../reports/rapport-grappe-intra-couche.md) |
 | A7.4 | **La grappe déportée** : le flux ne transporte que les valeurs utiles | ✅ mesuré | le format v2 (masque + valeurs) coûte **4,22× moins** que le dense (1 704 o contre 7 196 o) et la porte du flux rend **60,8135 / 60,8135** — les mêmes chiffres, [`reports/rapport-grappe-deportee.md`](../reports/rapport-grappe-deportee.md) |
+| A7.5 | **La grappe sur le réseau** : transporter le flux v2 entre deux processus, mesurer latence, octets et fidélité | ✅ **mesuré** | **4,44×** moins d'octets (1 672 o contre 7 416), fidélité **1 792/1 792**, messages **5/5** identiques, **0,125 ms** loopback ; contrôle dense — [`reports/rapport-grappe-reseau.md`](../reports/rapport-grappe-reseau.md) |
 
-**Prochaine action** : aucune — la grappe est **mesurée** (le top-1024 exact à 21 %) ; sa **déportation en réseau** (le transport de la grappe) est la suite hors plan.
+**Prochaine action** : aucune sur A7.5 — le transport sparse est **mesuré** (4,44×, fidélité 100 %, 0,125 ms loopback). La suite (exécution d'une couche à distance, WAN) reste **hors plan**.
 
 ### A8 — L'ordonnanceur place **et** perte
 
@@ -351,7 +352,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B12.1 | **Bus + hub M1** | ✅ **mesuré** | **528/528** exact avec contexte ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** ; 1 584 événements |
-| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu + règles** | `aug-formes` : `de` **95,2 %, inédit 13/20**, `chemin_0` **88,1 %, 6/14** ; `aug-pos` : `vers` **95,4 %, 13,3/20**, promotions **0/3→3/3**, mais `de` 92,2 % et `chemin` 86,7 % ; `point` **97,14 % = majorité** ; aucune variante ne domine ; double dissociation sur les vus |
+| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu + règles** | `aug-formes` : `de` **95,2 %, inédit 13/20**, `chemin_0` **88,1 %, 6/14** ; `aug-pos` : `vers` **95,4 %, 13,3/20**, promotions **0/3→3/3**, mais `de` 92,2 % et `chemin` 86,7 % ; `point` **97,14 % = majorité** ; double dissociation sur les vus |
 | B12.3 | **M3 mémoire de travail** | ❌ **tautologique** | span 12/12 même avec des codes aléatoires ; n-back contrôle construit sur 5 items de même code ; interférence purement FIFO |
 | B12.4 | **M4 mémoire épisodique** | ❌ **lookup** | 528 items, **29 codes** ; rappel 1,0 = doublons ; 0/6 codes non stockés, 0/10 complétions exactes, 0/7 valeurs inédites |
 | B12.5 | **M5 prédictif** | ⚠️ **contexte** | sans contexte : action 97,5 % = majoritaire ; avec plateau : source **3,224→2,598 nat** (+5,9 pts), cible **3,520→3,109** (+3,6 pts), morpion **2,20→1,52 = oracle** ; échecs cible faible |
@@ -372,9 +373,10 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B13.1 | **Chaîne sémantique M1→M5→M6→M8** | ✅ **intégration** | M1 **528/528** ; M5 contexte **18,7 % vs 12,6 %** (surprise 2,423 vs 3,112) ; M6 **94,3 %** / switch **94,95 %** ; M8 **57,95 %** exact sur épisodes stockés (borne haute) ; M9 M1 **70,8 %** |
 | B12.11 | **Corrections** | ✅ **écrit** | [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md) : seul M1 est solide ; M2 vu seulement ; M3–M8 structurels/négatifs |
 
-**Bilan B12** : le **bus**, **M1**, **M2**, **M3**, **M4** et **M8** tiennent ; **M5, M6, M7** sont des
-**négatifs** ou des résultats trop faibles. Le prototype est un
-**échafaudage mesuré**, pas un cerveau du langage. Détail : [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
+**Bilan B12** : seul **M1** est solide ; **M2** est vu seulement, **M3/M4** sont structurels, **M5** gagne
+seulement avec le contexte, **M6** est un sélecteur, **M7** est une fréquence (pas une neuromodulation),
+**M8** est marginal, **M9** est une table de privations. Le prototype est un **échafaudage mesuré**, pas un
+cerveau du langage. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 
 
 ---
@@ -424,8 +426,11 @@ phases** (dernière mise à jour : 27/10) :
     **33/33** paires invariantes, perft échecs/dames, mats, dames 20/20, politique 79,7 %).
 11. **B10–B12 (27/10)** : le protocole sémantique (encodeur **0,426** ; décodeur **négatif**), la base typée
     (codec **100 %**, natif **59,8 / 40,7**, **surface 33/79**), les modules cerveau-langage (M1 **528/528**,
-    M2 **98,6 / 93,2**, M8 **96,48 %**, M5/M6/M7 **négatifs**) — **premiers passages mesurés** ; les suites
-    sont **B10.3** et **B12.10**.
+    M2 vu seulement, M8 marginal, M5/M6/M7 négatifs) — **corrigé** ; les suites sont **B10.3** (bloqué par le
+    décodeur) et **B12.10** (intégration).
+12. **A7.5 — la grappe sur le réseau** : le format sparse est mesuré (4,22×) ; le **transport réel** (latence,
+    octets, fidélité entre processus) ne l'est pas. C'est le prochain chantier à valeur, aligné sur la vision
+    du bus réparti.
 
 ## La file « jamais en attente »
 
