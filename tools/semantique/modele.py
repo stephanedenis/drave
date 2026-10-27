@@ -35,7 +35,7 @@ class RetourInverse(torch.autograd.Function):
 class Semantique(nn.Module):
     def __init__(self, base: nn.Module, n_langues: int, d_sem: int = 128,
                  k_prefixe: int = 4, deux_bases: bool = False, n_sem: int = 1,
-                 attention_sem: bool = False):
+                 attention_sem: bool = False, segments: bool = False):
         super().__init__()
         self.base = base
         self.base_decode = copy.deepcopy(base) if deux_bases else self.base
@@ -44,9 +44,13 @@ class Semantique(nn.Module):
         self.k = k_prefixe
         self.n_sem = n_sem
         self.attention_sem = bool(attention_sem and n_sem > 1)
+        self.segments = bool(segments and n_sem > 1)
         if self.attention_sem:
             self.requetes = nn.Parameter(torch.randn(n_sem, self.d_model) * 0.02)
             self.attn = nn.MultiheadAttention(self.d_model, 8, batch_first=True)
+            self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
+                                      nn.Linear(self.d_model, d_sem))
+        elif self.segments:
             self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
                                       nn.Linear(self.d_model, d_sem))
         else:
@@ -59,10 +63,10 @@ class Semantique(nn.Module):
     @classmethod
     def charger(cls, checkpoint: str, n_langues: int, d_sem: int = 128,
                 k_prefixe: int = 4, device: str = "cuda", deux_bases: bool = False,
-                n_sem: int = 1, attention_sem: bool = False):
+                n_sem: int = 1, attention_sem: bool = False, segments: bool = False):
         base = AutoModelForCausalLM.from_pretrained(checkpoint, dtype=torch.float32)
         return cls(base, n_langues, d_sem, k_prefixe, deux_bases, n_sem,
-                   attention_sem).to(device)
+                   attention_sem, segments).to(device)
 
     def encode_tokens(self, ids: torch.Tensor, masque: torch.Tensor,
                       pooling: str = "mean") -> torch.Tensor:
@@ -80,6 +84,20 @@ class Semantique(nn.Module):
             q = self.requetes.unsqueeze(0).expand(z.shape[0], -1, -1)
             zt, _ = self.attn(q, h, h, key_padding_mask=(masque == 0))
             tok = self.tete(zt)
+        elif self.segments:
+            # découpe l'article en n segments contigus ; chaque unité est la
+            # moyenne d'un segment : le contenu est lu, pas projeté depuis la moyenne.
+            B = h.shape[0]
+            toks = []
+            for i in range(self.n_sem):
+                vals = []
+                for b in range(B):
+                    n = int(masque[b].sum().item())
+                    debut = int(i * n / self.n_sem)
+                    fin = max(debut + 1, int((i + 1) * n / self.n_sem))
+                    vals.append(h[b, debut:fin].mean(dim=0))
+                toks.append(torch.stack(vals, dim=0))
+            tok = self.tete(torch.stack(toks, dim=1))
         else:
             tok = self.tete(z).view(z.shape[0], self.n_sem, self.d_sem)
         return F.normalize(tok, dim=-1)

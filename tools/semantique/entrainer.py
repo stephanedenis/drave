@@ -54,6 +54,11 @@ def info_nce(z_s: torch.Tensor, z_t: torch.Tensor, temperature: float = 0.07) ->
     return 0.5 * (F.cross_entropy(logits, cibles) + F.cross_entropy(logits.T, cibles))
 
 
+def tronque(texte: str, seq: int) -> str:
+    """La référence à la même longueur que la cible générée."""
+    return texte.encode("utf-8")[:seq].decode("utf-8", "ignore")
+
+
 def texte(ids) -> str:
     return bytes(int(i) % 256 for i in ids).decode("utf-8", "replace").strip()
 
@@ -130,8 +135,8 @@ def metriques(model, train, val, langues, seq, device, generer=True,
             ids = model.generer(zb, lb, seq)
             for (art, tgt), ligne in zip(travaux, ids):
                 hyp = texte(ligne.tolist())
-                ref = val[art][tgt]
-                plancher.append(chrf(val[art]["fra"], ref))
+                ref = tronque(val[art][tgt], seq)
+                plancher.append(chrf(tronque(val[art]["fra"], seq), ref))
                 (rec if tgt == "fra" else trans).append(chrf(hyp, ref))
     model.train()
     return {

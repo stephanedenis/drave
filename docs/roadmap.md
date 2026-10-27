@@ -291,7 +291,7 @@ les GPU sont libres.
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B10.1 | **L'encodeur** : rejouer les articles UDHR en 10 langues, `z` partagé, contrastive + adversaire, NVLink | ✅ **mesuré** | rappel parallèle **0,426** contre **0,167** de hasard ; mélangé **0,172** ; sonde de langue **0,100** ; 250 pas, 31,63 M, 2 GPU NVLink |
-| B10.2 | **Le décodeur sens → texte** : `z` gelé ou joint, décodeur séparé | ❌ **négatif** | chrF reconstruction **12,7–13,1**, traduction **5,3–8,4** contre un plancher **39,6** ; diagnostic sous le plancher ; ablations : `z` 512 → rappel **0,278**, préfixe 64 → **12,4/6,7**, joint → **12,9/8,4**, 8 unités linéaires → rappel **0,237** |
+| B10.2 | **Le décodeur sens → texte** : `z` gelé ou joint, décodeur séparé | ❌ **négatif** | chrF reconstruction **14,0**, traduction **5,4** contre un plancher **38,8** (référence tronquée) ; diagnostic sous le plancher ; ablations : `z` 512 → rappel **0,278**, préfixe 64 → **12,4/6,7**, joint → **12,9/8,4**, 8 unités linéaires → rappel **0,237** |
 | B10.3 | **Le raisonnement** sur `z` gelé | ⏳ **non branché** | attend un décodeur au-dessus du plancher |
 
 **Ce que le premier passage a appris** : l'alignement seul collapse ; l'all-gather doit être différentiable ;

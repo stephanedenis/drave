@@ -19,7 +19,7 @@ import torch.nn.functional as F
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from llm.mesure import chrf  # noqa: E402
 from semantique.corpus import charger, decouper, exemple  # noqa: E402
-from semantique.entrainer import pad, texte  # noqa: E402
+from semantique.entrainer import pad, texte, tronque  # noqa: E402
 from semantique.modele import Semantique  # noqa: E402
 
 
@@ -58,12 +58,13 @@ def main() -> int:
             out = modele.generer(zb, lb, args.seq)
         L = len(langues)
         m = [[0.0] * L for _ in range(L)]
+        refs_art = {l: tronque(textes[l], args.seq) for l in langues}
         for i in range(L):
             for j in range(L):
                 hyp = texte(out[i * L + j].tolist())
-                m[i][j] = chrf(hyp, textes[langues[j]])
+                m[i][j] = chrf(hyp, refs_art[langues[j]])
         matrice[art] = m
-        refs[art] = textes
+        refs[art] = refs_art
         # cohérence entre sources pour une même cible
         cons = []
         for j in range(L):

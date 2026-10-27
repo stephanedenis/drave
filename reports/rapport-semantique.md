@@ -70,6 +70,11 @@ le rappel, gelé — défaut de protocole à corriger : le critère de l'étage 
 | 150 | 3,03 | 12,5 | 7,5 | 39,6 |
 | 200 | 1,56 | **12,7** | **5,3** | **39,6** |
 
+**Correction de mesure.** Les chrF du tableau étaient calculés contre la **référence complète**, alors que la
+sortie est limitée à 256 octets : la comparaison était biaisée. Réévalué contre la **référence tronquée à la
+même longueur**, le même état donne **14,0** en reconstruction, **5,4** en traduction, pour un plancher de
+**38,8**. Le verdict ne change pas : le décodeur reste **très en dessous** du plancher.
+
 La perte **s'effondre** (12,4 → 1,6) mais le chrF **ne bouge pas** (12,7) et reste **très en dessous du
 plancher** (39,6). La génération ne suit pas la perte : le décodeur apprend la distribution locale, pas
 la restitution conditionnée par `z`. **Négatif nommé** : l'étage B n'est pas tenu.
@@ -79,11 +84,11 @@ validation, toutes les sources × toutes les cibles en un lot :
 
 | mesure | valeur |
 |---|---:|
-| chrF diagonal (reconstruction) | **7,30** |
-| chrF hors diagonale (traduction) | **6,26** |
-| plancher source→référence | **12,57** |
-| consensus entre sources (même cible) | **29,64** |
-| sensibilité à la source | **0,704** |
+| chrF diagonal (reconstruction) | **9,49** |
+| chrF hors diagonale (traduction) | **8,19** |
+| plancher source→référence | **11,56** |
+| consensus entre sources (même cible) | **27,52** |
+| sensibilité à la source | **0,725** |
 
 Le décodeur est **sous le plancher** dans les deux sens ; le consensus de 29,6 entre sources est bas, et
 la sensibilité à la source (0,704) est haute : les sorties dépendent encore de la langue d'entrée. C'est
@@ -101,6 +106,7 @@ Trois variantes ont été testées après le premier passage.
 | **ablation de `z`** | décoder avec `z` / `z=0` / `z` aléatoire | **5,84** / **2,52** / **2,56** : le décodeur **utilise** `z`, mais `z` ne porte pas le détail du texte |
 | **8 unités** | tête linéaire 8 × 128 + diversité 0,2, moyenne pour le rappel | rappel **0,237** (contre 0,426) : la moyenne des unités **dilue** ; les unités ne sont pas encore des lecteurs distincts |
 | **8 unités + attention** | requêtes Q/K/V sur les états, diversité 0,2 | perte **constante ~21,9**, rappel **0,17–0,20**, sonde **0,85–0,92** : l'implémentation **n'apprend pas** malgré des gradients non nuls ; **non concluant**, pas un verdict d'architecture |
+| **8 segments** | moyennes de 8 segments contigus, diversité 0,2 | rappel **0,346** (contre 0,426) ; décodeur **6,7 / 7,5** à 100 pas contre **12,0 / 8,3** pour le vecteur unique : pas de gain |
 
 **Lecture** : un `z` unique de 128 dimensions est un **code d'identité** (il retrouve l'article, il ne le
 reconstruit pas). Agrandir le vecteur ne rend pas le texte ; allonger le préfixe ne rend pas le texte ;

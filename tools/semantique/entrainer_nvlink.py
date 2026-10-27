@@ -99,6 +99,8 @@ def main() -> int:
                     help="nombre d'unités sémantiques (1 = vecteur unique)")
     ap.add_argument("--attention-sem", action="store_true",
                     help="les unités lisent les états par attention de requêtes")
+    ap.add_argument("--segments", action="store_true",
+                    help="les unités sont les moyennes de segments contigus de l'article")
     ap.add_argument("--diversite", type=float, default=0.1,
                     help="pénalité de redondance entre unités sémantiques")
     ap.add_argument("--pooling", default="mean", choices=("mean", "last"))
@@ -138,7 +140,7 @@ def main() -> int:
     rng = random.Random(args.graine + 1000 * rang)
     modele = Semantique.charger(args.checkpoint, len(langues), args.d_sem, args.prefixe, str(device),
                                 deux_bases=args.deux_bases, n_sem=args.n_sem,
-                                attention_sem=args.attention_sem)
+                                attention_sem=args.attention_sem, segments=args.segments)
     if args.etat:
         paquet = torch.load(args.etat, map_location=device, weights_only=False)
         cible = modele.state_dict()
@@ -257,6 +259,7 @@ def main() -> int:
         torch.save({"etat": modele.state_dict(), "langues": langues,
                     "config": {"d_sem": args.d_sem, "prefixe": args.prefixe,
                                "n_sem": args.n_sem, "attention_sem": args.attention_sem,
+                               "segments": args.segments,
                                "seq": args.seq, "checkpoint": args.checkpoint},
                     "meilleur": meilleur[1]}, args.sortie)
         pathlib.Path(str(args.sortie) + ".json").write_text(
