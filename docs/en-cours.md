@@ -30,8 +30,8 @@ La vision complète est dans [`vision.md`](vision.md).
   1 000) et le **négatif 30 langues** sont nommés. Détail : [`rapport-deepseek.md`](../reports/rapport-deepseek.md).
 - **B10 le protocole sémantique** — **premier passage** : l'**encodeur converge** sur 10 langues (rappel
   **0,426** contre 0,167 ; sonde de langue **0,100**) ; le **décodeur est négatif** (chrF **12,7–13,1** contre un
-  plancher **39,6**) ; les ablations montrent que `z` 512 et le préfixe 64 n'aident pas, et que `z` est un
-  **code d'identité** plus qu'un code de contenu. Le diagnostic multilingue est sous le plancher. Le raisonnement sur `z` n'est pas
+  plancher **39,6**) ; les ablations montrent que `z` 512, le préfixe 64 et 8 unités linéaires n'aident pas, et que `z` est un
+  **code d'identité** plus qu'un code de contenu ; le prochain levier est une **attention de requêtes**. Le diagnostic multilingue est sous le plancher. Le raisonnement sur `z` n'est pas
   branché. Protocole : [`protocole-semantique.md`](protocole-semantique.md) ; fiche :
   [`rapport-semantique.md`](../reports/rapport-semantique.md).
 

@@ -335,7 +335,7 @@
   "stage_a_pas": 300,
   "stage_b_pas": 200
  },
- "conclusion": "encodeur convergent (0,426 vs 0,167 ; sonde 0,100) ; decodeur negatif (12,9 vs plancher 39,6) ; ablations : z 512 et prefixe 64 n'aident pas, z est un code d'identite ; prochain levier = unites semantiques multiples ou attention croisee",
+ "conclusion": "encodeur convergent (0,426 vs 0,167 ; sonde 0,100) ; decodeur negatif (12,9 vs plancher 39,6) ; ablations : z 512, prefixe 64, joint et 8 unites lineaires n'aident pas ; prochain levier = attention de requetes / attention croisee",
  "ablations": {
   "z_512_stage_a": {
    "meilleur_pas": 200,
@@ -449,6 +449,14 @@
     }
    ],
    "note": "encodeur degèle lr 1e-5 ; rappel 0,437, chrF 12,9/8,4"
+  },
+  "multi_unit_8": {
+   "n_sem": 8,
+   "d_sem": 128,
+   "diversite": 0.2,
+   "rappel": 0.237,
+   "sonde": 0.1,
+   "note": "la moyenne de 8 unites lineaires dilue le rappel (0,426 a 1 unite)"
   }
  }
 }

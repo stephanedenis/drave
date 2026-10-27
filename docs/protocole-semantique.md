@@ -135,9 +135,10 @@ Le protocole a été exécuté sur **10 langues**, deux GPU NVLink, `route` 31,6
   avec une sensibilité à la source de **0,704**.
 
 Les **ablations** confirment le diagnostic : `z` de 512 dims **dégrade** le rappel (0,278), un préfixe de
-64 ne fait pas mieux que 16 (12,4 / 6,7), et le décodeur **utilise** `z` (5,84 avec, 2,52 sans) mais `z`
-ne porte que l'identité de l'article, pas son contenu. Le prochain levier est donc une **séquence d'unités
-sémantiques** (comme la RSN) ou une **attention croisée**, pas un vecteur plus gros ni un préfixe plus long.
+64 ne fait pas mieux que 16 (12,4 / 6,7), le décodeur **utilise** `z` (5,84 avec, 2,52 sans) mais `z` ne
+porte que l'identité de l'article, et **8 unités linéaires moyennées** diluent le rappel (0,237). Le prochain
+levier est donc une **attention de requêtes** sur les états (chaque unité lit des positions différentes), ou
+une **attention croisée** du décodeur — pas un vecteur plus gros, un préfixe plus long ou une moyenne d'unités.
 
 Le premier passage a corrigé trois choses dans le protocole : l'**all-gather détaché** (la contrastive ne
 touchait pas `z`), les **gradients du décodeur** (ils écrasent l'encodeur : étages séparés), et les

@@ -34,32 +34,30 @@ class RetourInverse(torch.autograd.Function):
 
 class Semantique(nn.Module):
     def __init__(self, base: nn.Module, n_langues: int, d_sem: int = 128,
-                 k_prefixe: int = 4, deux_bases: bool = False):
+                 k_prefixe: int = 4, deux_bases: bool = False, n_sem: int = 1):
         super().__init__()
         self.base = base
         self.base_decode = copy.deepcopy(base) if deux_bases else self.base
         self.d_model = int(base.config.hidden_size)
         self.d_sem = d_sem
         self.k = k_prefixe
-        self.tete = nn.Sequential(nn.LayerNorm(self.d_model), nn.Linear(self.d_model, d_sem))
-        self.prefixe = nn.Linear(d_sem, k_prefixe * self.d_model)
+        self.n_sem = n_sem
+        self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
+                                  nn.Linear(self.d_model, n_sem * d_sem))
+        self.prefixe = nn.Linear(d_sem, self.d_model)
         self.langue = nn.Embedding(n_langues, self.d_model)
         self.classif_langue = nn.Linear(d_sem, n_langues)
 
     @classmethod
     def charger(cls, checkpoint: str, n_langues: int, d_sem: int = 128,
-                k_prefixe: int = 4, device: str = "cuda", deux_bases: bool = False):
+                k_prefixe: int = 4, device: str = "cuda", deux_bases: bool = False,
+                n_sem: int = 1):
         base = AutoModelForCausalLM.from_pretrained(checkpoint, dtype=torch.float32)
-        return cls(base, n_langues, d_sem, k_prefixe, deux_bases).to(device)
+        return cls(base, n_langues, d_sem, k_prefixe, deux_bases, n_sem).to(device)
 
-    def encode(self, ids: torch.Tensor, masque: torch.Tensor,
-               pooling: str = "mean") -> torch.Tensor:
-        """ids [B,L], masque [B,L] (1 = vrai octet) -> z [B,d_sem], normalisé.
-
-        Le **mean pooling** est le défaut : prendre le dernier octet d'un article
-        tronqué ne voit que sa fin, et deux articles différents se ressemblent.
-        Le dernier état reste disponible pour l'A/B (`--pooling last`).
-        """
+    def encode_tokens(self, ids: torch.Tensor, masque: torch.Tensor,
+                      pooling: str = "mean") -> torch.Tensor:
+        """ids [B,L], masque [B,L] -> z_tokens [B,n_sem,d_sem], normalisés."""
         sortie = self.base(input_ids=ids, attention_mask=masque, output_hidden_states=True)
         h = sortie.hidden_states[-1]
         if pooling == "last":
@@ -69,14 +67,23 @@ class Semantique(nn.Module):
         else:
             m = masque.unsqueeze(-1).to(h.dtype)
             z = (h * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
-        z = self.tete(z)
-        return F.normalize(z, dim=-1)
+        tok = self.tete(z).view(z.shape[0], self.n_sem, self.d_sem)
+        return F.normalize(tok, dim=-1)
+
+    def encode(self, ids: torch.Tensor, masque: torch.Tensor,
+               pooling: str = "mean") -> torch.Tensor:
+        """Le vecteur pooled [B,d_sem] : moyenne des unités, normalisée."""
+        tok = self.encode_tokens(ids, masque, pooling)
+        return F.normalize(tok.mean(dim=1), dim=-1)
 
     def retour_inverse(self, z: torch.Tensor) -> torch.Tensor:
         return RetourInverse.apply(z)
 
     def _prefixe(self, z: torch.Tensor, langues: torch.Tensor) -> torch.Tensor:
-        p = self.prefixe(z).view(z.shape[0], self.k, self.d_model)
+        """z [B,d] ou [B,n,d] -> préfixe [B,n+1,d_model] (unités + langue)."""
+        if z.dim() == 2:
+            z = z.unsqueeze(1)
+        p = self.prefixe(z)
         l = self.langue(langues).unsqueeze(1)
         return torch.cat([p, l], dim=1)
 
@@ -89,8 +96,8 @@ class Semantique(nn.Module):
         remplissage sont masquées.
         """
         B, T = cibles.shape
-        P = self.k + 1
         prefixe = self._prefixe(z, langues)
+        P = prefixe.shape[1]
         dec_in = cibles[:, :-1]
         emb_in = self.base_decode.get_input_embeddings()(dec_in)
         emb = torch.cat([prefixe, emb_in], dim=1)

@@ -99,12 +99,13 @@ Trois variantes ont été testées après le premier passage.
 | **préfixe 64** | décodeur à 64 préfixes au lieu de 16, encodeur gelé | chrF **12,4 / 6,7** à 200 pas (contre 12,7 / 5,3) : pas de gain |
 | **joint** | encodeur dégelé à lr 1e-5, contraste 5, adversaire 0,2 | rappel **0,437**, sonde **0,100**, chrF **12,9 / 8,4** : le `z` garde l'identité, le décodeur ne décolle pas |
 | **ablation de `z`** | décoder avec `z` / `z=0` / `z` aléatoire | **5,84** / **2,52** / **2,56** : le décodeur **utilise** `z`, mais `z` ne porte pas le détail du texte |
+| **8 unités** | tête linéaire 8 × 128 + diversité 0,2, moyenne pour le rappel | rappel **0,237** (contre 0,426) : la moyenne des unités **dilue** ; les unités ne sont pas encore des lecteurs distincts |
 
 **Lecture** : un `z` unique de 128 dimensions est un **code d'identité** (il retrouve l'article, il ne le
 reconstruit pas). Agrandir le vecteur ne rend pas le texte ; allonger le préfixe ne rend pas le texte ;
-dégeler l'encodeur avec la reconstruction ne rend pas le texte. Le verrou est le **goulot** : il faut des
-**unités sémantiques multiples** (une séquence de `z`, comme la RSN) ou une **attention croisée** du
-décodeur sur les états, pas un seul vecteur moyenné.
+dégeler l'encodeur avec la reconstruction ne rend pas le texte. Le verrou est le **goulot** : une tête linéaire à 8 unités, moyennée pour le rappel, **dilue** (0,237) ;
+il faut des unités qui **lisent des positions différentes** — une **attention de requêtes** sur les états,
+ou une **attention croisée** du décodeur — pas une moyenne de projections.
 
 ## 4. Ressources et communication
 

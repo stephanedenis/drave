@@ -37,6 +37,16 @@ from semantique.entrainer import info_nce, metriques, pad  # noqa: E402
 from semantique.modele import Semantique  # noqa: E402
 
 
+def diversite(tok: torch.Tensor) -> torch.Tensor:
+    """Pénalise les unités sémantiques redondantes (cosinus hors diagonale)."""
+    if tok.shape[1] <= 1:
+        return torch.zeros((), device=tok.device)
+    sim = tok @ tok.transpose(1, 2)
+    n = tok.shape[1]
+    masque = ~torch.eye(n, dtype=torch.bool, device=tok.device)
+    return sim[:, masque].mean()
+
+
 def lot_distribue(articles, langues, arts, lot, seq, rng):
     src = [rng.choice(langues) for _ in arts]
     tgt = [rng.choice([l for l in langues if l != s]) for s in src]
@@ -85,6 +95,10 @@ def main() -> int:
     ap.add_argument("--lr-tete", type=float, default=1e-3)
     ap.add_argument("--d-sem", type=int, default=128)
     ap.add_argument("--prefixe", type=int, default=4)
+    ap.add_argument("--n-sem", type=int, default=1,
+                    help="nombre d'unités sémantiques (1 = vecteur unique)")
+    ap.add_argument("--diversite", type=float, default=0.1,
+                    help="pénalité de redondance entre unités sémantiques")
     ap.add_argument("--pooling", default="mean", choices=("mean", "last"))
     ap.add_argument("--adv", type=float, default=0.5)
     ap.add_argument("--contrastif", type=float, default=1.0)
@@ -121,7 +135,7 @@ def main() -> int:
     torch.manual_seed(args.graine + rang)
     rng = random.Random(args.graine + 1000 * rang)
     modele = Semantique.charger(args.checkpoint, len(langues), args.d_sem, args.prefixe, str(device),
-                                deux_bases=args.deux_bases)
+                                deux_bases=args.deux_bases, n_sem=args.n_sem)
     if args.etat:
         paquet = torch.load(args.etat, map_location=device, weights_only=False)
         cible = modele.state_dict()
@@ -170,20 +184,22 @@ def main() -> int:
         x_s, m_s, x_t, m_t, x_e, m_e = (x.to(device) for x in (x_s, m_s, x_t, m_t, x_e, m_e))
         ls_t = torch.tensor(ls, device=device); lt_t = torch.tensor(lt, device=device)
         le_t = torch.tensor(le, device=device)
-        z_s = modele.encode(x_s, m_s, args.pooling)
-        z_t = modele.encode(x_t, m_t, args.pooling)
-        z_e = modele.encode(x_e, m_e, args.pooling) if args.sorties else None
+        zt_s = modele.encode_tokens(x_s, m_s, args.pooling)
+        zt_t = modele.encode_tokens(x_t, m_t, args.pooling)
+        zt_e = modele.encode_tokens(x_e, m_e, args.pooling) if args.sorties else None
+        z_s = F.normalize(zt_s.mean(dim=1), dim=-1)
+        z_t = F.normalize(zt_t.mean(dim=1), dim=-1)
         if args.sans_decode:
             rec = trans = sorties = torch.zeros((), device=device)
         else:
-            rec = (modele.perte_texte(z_s, ls_t, x_s, m_s)
-                   + modele.perte_texte(z_t, lt_t, x_t, m_t))
-            trans = (modele.perte_texte(z_s, lt_t, x_t, m_t)
-                     + modele.perte_texte(z_t, ls_t, x_s, m_s))
+            rec = (modele.perte_texte(zt_s, ls_t, x_s, m_s)
+                   + modele.perte_texte(zt_t, lt_t, x_t, m_t))
+            trans = (modele.perte_texte(zt_s, lt_t, x_t, m_t)
+                     + modele.perte_texte(zt_t, ls_t, x_s, m_s))
             sorties = torch.zeros((), device=device)
             if args.sorties:
-                sorties = (modele.perte_texte(z_s, le_t, x_e, m_e)
-                           + modele.perte_texte(z_t, le_t, x_e, m_e))
+                sorties = (modele.perte_texte(zt_s, le_t, x_e, m_e)
+                           + modele.perte_texte(zt_t, le_t, x_e, m_e))
         # all-gather NVLink : plusieurs entrées, même article
         zs = AllGather.apply(z_s); zt = AllGather.apply(z_t)
         arts_t = torch.tensor(arts, device=device)
@@ -199,7 +215,8 @@ def main() -> int:
         adv = (F.cross_entropy(modele.classif_langue(modele.retour_inverse(z_s)), ls_t)
                + F.cross_entropy(modele.classif_langue(modele.retour_inverse(z_t)), lt_t))
         perte = (rec + trans + sorties + args.align * align
-                 + args.contrastif * contrastif + args.adv * adv)
+                 + args.contrastif * contrastif + args.adv * adv
+                 + args.diversite * 0.5 * (diversite(zt_s) + diversite(zt_t)))
         opt.zero_grad()
         perte.backward()
         # all-reduce des gradients sur NVLink (pas de DDP : la boucle appelle le module directement)
@@ -236,6 +253,7 @@ def main() -> int:
         pathlib.Path(args.sortie).parent.mkdir(parents=True, exist_ok=True)
         torch.save({"etat": modele.state_dict(), "langues": langues,
                     "config": {"d_sem": args.d_sem, "prefixe": args.prefixe,
+                               "n_sem": args.n_sem,
                                "seq": args.seq, "checkpoint": args.checkpoint},
                     "meilleur": meilleur[1]}, args.sortie)
         pathlib.Path(str(args.sortie) + ".json").write_text(
