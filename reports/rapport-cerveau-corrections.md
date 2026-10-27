@@ -39,6 +39,11 @@ l'entraînement synthétique, **20 sont inédites**.
   Le « 6,2 → 93,2 » était un **sous-entraînement** du mean à 300 pas, pas une propriété du dernier état.
 - **Contexte** : aucun gain mesuré ; le contexte synthétique est constant par jeu.
 - **Négatifs** : `point`, `chemin_0` sous la majorité.
+- **Augmentation par les règles** (`aug-formes`, 1 000 pas, 3 graines) : `de` **95,2 %**,
+  inédit **13/20 (65 %)** ; `chemin_0` **88,1 %**, inédit **6/14 (42,9 %)** ; `point` **96,7 %**,
+  inédit 1,7/4 ; `vers` **93,8 %**, inédit 11/20. L'augmentation aide `de`/`chemin_0` mais
+  `point` reste **sous la majorité 97,1 %** et `vers` ne bouge pas. Ce n'est pas de la lecture
+  sémantique : c'est la **couverture de formes** par les règles.
 - **Plus d'entraînement dégrade l'inédit** : à 1 000 pas, `de` tombe à **9,3/20** (46,7 %)
   contre 10,7/20 à 300 pas ; les formes vues restent à 100 %. Le split inédit est un **priori de
   classe**, pas une lecture.
