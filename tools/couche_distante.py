@@ -121,7 +121,7 @@ def encoder_flux(flux, sparse: bool = False, quant: bool = False):
         raise ValueError(f"flux attendu 2-D, reçu {x.shape}")
     ntok, h = int(x.shape[0]), int(x.shape[1])
     if quant:
-        maximum = np.max(np.abs(x.astype(np.float32)), axis=1, keepdims=True)
+        maximum = np.max(np.abs(x.astype(np.float32)), axis=0, keepdims=True)
         echelles = np.where(maximum > 0, maximum / 127.0, 1.0).astype(np.float32)
         q = np.clip(np.round(x.astype(np.float32) / echelles), -127, 127).astype(np.int8)
         payload = np.ascontiguousarray(echelles, dtype="<f4").tobytes() + np.ascontiguousarray(q).tobytes()
@@ -164,10 +164,10 @@ def decoder_flux(payload: bytes, ntok: int, h: int, sparse: bool = False,
     if n < 0:
         raise ValueError("ntok/h négatifs")
     if quant:
-        if len(payload) != 4 * ntok + n:
-            raise ValueError(f"payload int8 de {len(payload)} octets, attendu {4*ntok+n}")
-        echelles = np.frombuffer(payload[:4 * ntok], dtype="<f4").reshape(ntok, 1)
-        q = np.frombuffer(payload[4 * ntok:], dtype=np.int8, count=n).reshape(ntok, h)
+        if len(payload) != 4 * h + n:
+            raise ValueError(f"payload int8 de {len(payload)} octets, attendu {4*h+n}")
+        echelles = np.frombuffer(payload[:4 * h], dtype="<f4").reshape(1, h)
+        q = np.frombuffer(payload[4 * h:], dtype=np.int8, count=n).reshape(ntok, h)
         return q.astype(np.float32) * echelles
     if sparse:
         nmask = bits_masque(n)

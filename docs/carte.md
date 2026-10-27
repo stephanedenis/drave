@@ -48,6 +48,7 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **A7.8** int8 par canal | **compromis** — ratio 36–39 %, argmax 1,0, KL ~1e-3 ; lossy mais décision stable | [la fiche](../reports/rapport-couche-int8-canal.md) |
 | **A7.7** hidden int8 | **négatif** — 34,6 % du volume mais argmax 0,83–0,93, KL 0,12–0,37 ; bf16 meilleur | [la fiche](../reports/rapport-couche-int8.md) |
 | **A7.6** couche à distance | **mesuré** — logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× | [la fiche](../reports/rapport-couche-distante.md) |
 | **A7.5b** seuil réseau | **mesuré** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms | [la fiche](../reports/rapport-seuil-reseau.md) |
