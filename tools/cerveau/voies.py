@@ -50,12 +50,17 @@ def _lot(items_, lot, seq, rng):
 
 
 def entrainer(base, pas: int = 400, lot: int = 32, seq: int = 64, graine: int = 1,
-              device: str = "cuda"):
+              device: str = "cuda", synth: bool = False):
     rng = random.Random(graine)
     its = items()
-    train, val = decouper(its, graine, 0.2)
-    train = [i for i in train if i.code["de"] is not None]
-    val = [i for i in val if i.code["de"] is not None]
+    if synth:
+        from semantique.synth_corpus import items_synth
+        train = [i for i in items_synth() if i.code["de"] is not None]
+        val = [i for i in its if i.code["de"] is not None]
+    else:
+        train, val = decouper(its, graine, 0.2)
+        train = [i for i in train if i.code["de"] is not None]
+        val = [i for i in val if i.code["de"] is not None]
     m = Voies(base).to(device)
     for p in m.base.parameters():
         p.requires_grad = False

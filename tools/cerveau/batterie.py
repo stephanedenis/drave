@@ -75,19 +75,32 @@ def m2():
     from transformers import AutoModelForCausalLM
     from cerveau.voies import entrainer, evaluer
     base = AutoModelForCausalLM.from_pretrained("/tmp/natif-600-512-8-align-s1", dtype=torch.float32)
-    m, val = entrainer(base, 250, 32, 64, 1, "cuda" if torch.cuda.is_available() else "cpu")
+    m, val = entrainer(base, 300, 32, 64, 1, "cuda" if torch.cuda.is_available() else "cpu", synth=True)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     return {"normal": evaluer(m, val, dev), "lese_ventrale": evaluer(m, val, dev, "ventral"),
             "lese_dorsale": evaluer(m, val, dev, "dorsal")}
 
 
 def m3(seqs):
+    import random
     m = MemoireTravail(12)
     sp = m.span(seqs)
     n1 = m.nback_scores(seqs, 1)
     n2 = m.nback_scores(seqs, 2)
+    # contrôle n-back : une suite de 5 codes répétés, donc des répétitions réelles
+    its = items()
+    base = [i.code for i in its[:5]]
+    rng = random.Random(7)
+    seq = [dict(rng.choice(base)) for _ in range(40)]
+    ok1 = ok2 = 0
+    for i in range(2, len(seq)):
+        m.charger(seq[:i + 1])
+        ok1 += int(m.nback(1) is True)
+        ok2 += int(m.nback(2) is True)
     return {"span": sp["span"], "span_exact": sp["exact"],
-            "nback1": n1["exact"], "nback2": n2["exact"], "essais": sp["essais"]}
+            "nback1": n1["exact"], "nback2": n2["exact"],
+            "nback_controle1": ok1 / 38, "nback_controle2": ok2 / 38,
+            "essais": sp["essais"]}
 
 
 def m4():

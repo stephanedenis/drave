@@ -25,8 +25,8 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 | module | rôle | mesure | verdict |
 |---|---|---|---:|
 | **M1 hub** | surface → code RSN, retour canonique | **528/528** exact ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** | ✅ **tient** |
-| **M2 voies** | ventrale (`jeu`) / dorsale (`de`) | `jeu` **100 %** ; `de` **2,9 %** ; lésion ventrale `jeu` **23,2 %** ; lésion dorsale `de` **2,9 %** | ❌ **pas de double dissociation** |
-| **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12**, exact **1,0** ; n-back1 **0,06 %**, n-back2 **0,42 %** | ⚠️ **span oui, n-back non** |
+| **M2 voies** | ventrale (`jeu`) / dorsale (`de`) | `jeu` **100 %** ; `de` **6,2 %** (n=146) ; lésion ventrale `jeu` **21,2 %** ; lésion dorsale `de` **2,7 %** | ❌ **pas de double dissociation** |
+| **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12**, exact **1,0** ; n-back contrôle (5 codes répétés) **1,0** ; n-back brut **0,06 %** (test invalide) | ✅ **tampon** |
 | **M4 épisodique** | rappel par contenu, complétion, séparation | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** | ✅ **tient** |
 | **M5 prédictif** | action suivante, surprise | exact **98,9 %** = majoritaire **98,9 %** | ❌ **aucun gain** |
 | **M6 gating** | langue cible, inhibition, commutation | exact **70,0 %** ; FP **1**, FN **20** ; coût **−0,15** | ❌ **faible** |
@@ -37,8 +37,8 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 ## 3. Contrôles négatifs
 
 - **M1 sans contexte** : 70,8 % → le contexte est nécessaire.
-- **M2 lésion ventrale** : `jeu` 100 → 23,2 % ; **la tête porte bien la tâche**.
-- **M2 lésion dorsale** : `de` 2,9 % → 2,9 % ; **la tâche dorsale n'était déjà pas apprise**.
+- **M2 lésion ventrale** : `jeu` 100 → 21,2 % ; **la tête porte bien la tâche**.
+- **M2 lésion dorsale** : `de` 6,2 % → 2,7 % ; **la tâche dorsale n'était déjà pas apprise**.
 - **M3 capacité zéro** : span 0.
 - **M4 sans stockage** : rappel 0.
 - **M5 sans transitions** : 1,1 %.
@@ -51,8 +51,8 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
    généralise pas ; le natif normalisé reste à **59,8 %**.
 2. **M2 ne réalise pas la double dissociation** : la voie ventrale apprend `jeu` (trivial sur 69 items
    d'échecs), la voie dorsale reste au hasard. Le test est **invalide** pour conclure sur les voies.
-3. **M3 mesure un tampon**, pas la mémoire du réseau. Le n-back est dominé par l'absence de répétitions ;
-   il ne teste pas la mémoire de travail.
+3. **M3 mesure un tampon**, pas la mémoire du réseau. Le n-back brut est dominé par l'absence de
+   répétitions ; le **n-back contrôle** (5 codes répétés) est à 1,0, mais il mesure le tampon, pas le réseau.
 4. **M4 est un plus proche voisin exact** : le rappel 1,0 est attendu ; la complétion 97,9 % est réelle,
    mais ce n'est pas une généralisation.
 5. **M5 n'apprend rien** : l'action suivante est déjà majoritaire à 98,9 % ; le prédicteur ne fait pas mieux.
