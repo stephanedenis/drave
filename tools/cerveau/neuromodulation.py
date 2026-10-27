@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import collections
 import dataclasses
+import datetime
 import math
 import random
 import statistics
@@ -558,6 +559,545 @@ def controle_synthetique(episodes: list[EpisodeM7], permutations: int = 15,
             "lfu_bat_fifo": deltas["lfu_code"]["suf_code"]["moyenne"] > 0,
             "recompense_informative_bat_fifo": deltas["recompense_code"]["suf_code"]["moyenne"] > 0,
             "hasard_non_significatif": abs(deltas["hasard"]["suf_code"]["moyenne"]) < 0.10,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# M7-bis — MemoireFrequence : la fréquence comme politique, pas comme signal
+# ---------------------------------------------------------------------------
+POLITIQUES_FREQUENCE = ("fifo", "lru", "lfu", "lfu_recence",
+                        "contexte", "lfu_contexte", "hasard")
+
+
+class MemoireFrequence:
+    """M7-bis — une mémoire bornée dont la politique de base est la fréquence.
+
+    A2 a montré qu'aucun signal neuromodulateur ne bat le FIFO sur ce corpus,
+    mais que le LFU améliore nettement la rétention des répétés. M7-bis reprend
+    donc la fréquence comme *politique* et pose deux questions contrôlées :
+
+    - le **départage par récence** apporte-t-il quelque chose au LFU ? À
+      fréquence égale, on évince soit la plus ancienne arrivée (``lfu``), soit
+      la moins récemment écrite (``lfu_recence``) ;
+    - un **contexte** (jeu, longueur de surface, type d'action) apporte-t-il
+      quelque chose que la fréquence de l'item ne contient pas déjà ?
+
+    Politiques :
+
+    - ``fifo`` : évince la plus ancienne arrivée ;
+    - ``lru`` : évince la moins récemment écrite ;
+    - ``lfu`` : évince la moins fréquente ; à égalité, la plus ancienne
+      arrivée. Les items de fréquence 1 ont ``t_dernier == t_arrivee`` : le
+      départage ne diffère donc du LFU nu que sur des fréquences ≥ 2 ;
+    - ``lfu_recence`` : évince la moins fréquente ; à égalité, la moins
+      récemment écrite ;
+    - ``contexte`` : évince l'item dont le contexte est le moins fréquent
+      (score = nombre d'écritures du contexte) ; à égalité, le moins récent ;
+    - ``lfu_contexte`` : score = ``log1p(frequence) + beta * part_du_contexte``
+      où ``part_du_contexte`` est la part des écritures du contexte dans le
+      flux vu. ``beta=0`` redonne exactement ``lfu_recence`` (contrôle de
+      cohérence) ;
+    - ``hasard`` : priorité aléatoire fixée à la première écriture (contrôle
+      négatif).
+
+    Le contexte n'est utilisé que pour les politiques contextuelles ; il doit
+    alors être fourni à chaque écriture. Aucune information du suffixe n'entre
+    dans le score : le contexte est compté en ligne, au fil des écritures.
+    """
+
+    nom = "M7bis-memoire-frequence"
+
+    def __init__(self, capacite: int = 64, politique: str = "lfu",
+                 cle: str = "surface", graine: int = 0,
+                 beta: float = 1.0) -> None:
+        if politique not in POLITIQUES_FREQUENCE:
+            raise ValueError(f"politique inconnue : {politique}")
+        if cle not in CLEFS:
+            raise ValueError(f"clé inconnue : {cle}")
+        self.capacite = max(0, int(capacite))
+        self.politique = politique
+        self.cle = cle
+        self.beta = float(beta)
+        self._slots: dict[tuple, dict] = {}
+        self._ctx: collections.Counter = collections.Counter()
+        self._t = 0
+        self._n = 0
+        self._rng = random.Random(graine)
+
+    @property
+    def contextuel(self) -> bool:
+        return self.politique in ("contexte", "lfu_contexte")
+
+    # ---- lecture ---------------------------------------------------------
+    def contient(self, surface: str) -> bool:
+        return any(e["surface"] == surface for e in self._slots.values())
+
+    def contient_code(self, code: dict) -> bool:
+        return any(e["code"] == code for e in self._slots.values())
+
+    def codes(self) -> list[dict]:
+        return [dict(e["code"]) for e in self._slots.values()]
+
+    def etat(self) -> list[dict]:
+        return [{"surface": e["surface"], "code": dict(e["code"]),
+                 "frequence": int(e["freq"]), "contexte": e["ctx"],
+                 "t_arrivee": e["t_arrivee"], "t_dernier": e["t_dernier"]}
+                for e in sorted(self._slots.values(),
+                                key=lambda e: e["t_arrivee"])]
+
+    # ---- score et éviction ----------------------------------------------
+    def _cle(self, surface: str, code: dict) -> tuple:
+        if self.cle == "code":
+            return tuple(sorted(code.items()))
+        return ("surface", surface)
+
+    def _score(self, e: dict) -> float:
+        if self.politique in ("lfu", "lfu_recence"):
+            return float(e["freq"])
+        if self.politique == "contexte":
+            return float(self._ctx.get(e["ctx"], 0))
+        if self.politique == "lfu_contexte":
+            part = self._ctx.get(e["ctx"], 0) / max(1, self._n)
+            return math.log1p(e["freq"]) + self.beta * part
+        if self.politique == "hasard":
+            return float(e["hasard"])
+        return 0.0
+
+    def _departage(self, e: dict) -> int:
+        if self.politique in ("fifo", "lfu"):
+            return int(e["t_arrivee"])
+        return int(e["t_dernier"])
+
+    def _evincer(self) -> None:
+        if not self._slots:
+            return
+        if self.politique == "fifo":
+            cle = min(self._slots,
+                      key=lambda k: self._slots[k]["t_arrivee"])
+        elif self.politique == "lru":
+            cle = min(self._slots,
+                      key=lambda k: self._slots[k]["t_dernier"])
+        else:
+            cle = min(self._slots, key=lambda k: (
+                self._score(self._slots[k]),
+                self._departage(self._slots[k]), repr(k)))
+        del self._slots[cle]
+
+    def stocker(self, surface: str, code: dict,
+                contexte=None) -> None:
+        if self.capacite <= 0:
+            return
+        if self.contextuel and contexte is None:
+            raise ValueError(
+                f"contexte requis pour la politique {self.politique}")
+        cle = self._cle(surface, code)
+        self._t += 1
+        self._n += 1
+        if self.contextuel:
+            self._ctx[contexte] += 1
+        existant = self._slots.get(cle)
+        if existant is not None:
+            existant.update(surface=surface, code=dict(code),
+                            freq=existant["freq"] + 1,
+                            t_dernier=self._t, ctx=contexte)
+            return
+        if len(self._slots) >= self.capacite:
+            self._evincer()
+        self._slots[cle] = {"surface": surface, "code": dict(code),
+                            "freq": 1, "t_arrivee": self._t,
+                            "t_dernier": self._t, "ctx": contexte,
+                            "hasard": self._rng.random()}
+
+
+# ---------------------------------------------------------------------------
+# Le banc M7-bis : LFU, LFU + récence, contextes, clé permutée
+# ---------------------------------------------------------------------------
+_METRIQUES_BIS = ("ret_surface_prefixe", "ret_surface_finale",
+                  "ret_nouveaux_utiles", "ret_code", "rep_surface",
+                  "rep_code", "suf_surface", "suf_code", "codes_memoire")
+
+
+def _classe_longueur(surface: str) -> str:
+    n = len(surface)
+    if n <= 6:
+        return "court"
+    if n <= 11:
+        return "moyen"
+    return "long"
+
+
+def _contextes_episodes(episodes: list[EpisodeM7]) -> dict[str, list]:
+    """Les trois contextes disponibles *à l'écriture*, sans étiquette future."""
+    return {
+        "jeu": [f"jeu={e.jeu}" for e in episodes],
+        "longueur": [f"longueur={_classe_longueur(e.surface)}"
+                     for e in episodes],
+        "type": [f"type={e.code.get('action')}" for e in episodes],
+    }
+
+
+def _contextes_permutes(contextes: dict[str, list], ordre: list[int],
+                        prefixe: int, graine: int) -> dict[str, list]:
+    """Permute les étiquettes *du préfixe* en gardant exactement leur multiset.
+
+    C'est le contrôle « clé permutée » : les comptes marginaux de contexte sont
+    identiques, mais l'association item-contexte est détruite. Si la politique
+    contextuelle réelle ne fait pas mieux que sa version permutée, le contexte
+    n'apporte rien au-delà de sa distribution marginale.
+    """
+    out = {}
+    for j, (signal, labels) in enumerate(contextes.items()):
+        rng = random.Random(graine + 100003 + j * 7919)
+        sous = [labels[i] for i in ordre[:prefixe]]
+        rng.shuffle(sous)
+        lab = list(labels)
+        for pos, i in enumerate(ordre[:prefixe]):
+            lab[i] = sous[pos]
+        out[signal] = lab
+    return out
+
+
+def _tourner_frequence(episodes: list[EpisodeM7], ordre: list[int],
+                       prefixe: int, config: dict, capacite: int,
+                       contextes: list | None, graine: int = 0) -> dict:
+    memoire = MemoireFrequence(
+        capacite, politique=config["politique"], cle=config["cle"],
+        graine=graine, beta=config.get("beta", 1.0))
+    surfaces_vues: set[str] = set()
+    codes_vus: set[tuple] = set()
+    rep_s = rep_s_n = rep_c = rep_c_n = 0
+    for i in ordre[:prefixe]:
+        ep = episodes[i]
+        if ep.surface in surfaces_vues:
+            rep_s_n += 1
+            rep_s += int(memoire.contient(ep.surface))
+        if ep.cle_code in codes_vus:
+            rep_c_n += 1
+            rep_c += int(memoire.contient_code(ep.code))
+        surfaces_vues.add(ep.surface)
+        codes_vus.add(ep.cle_code)
+        ctx = None if contextes is None else contextes[i]
+        memoire.stocker(ep.surface, ep.code, contexte=ctx)
+    entrees = memoire.etat()
+    surfaces_memoire = {e["surface"] for e in entrees}
+    codes_memoire = {tuple(sorted(e["code"].items())) for e in entrees}
+    total_surfaces = collections.Counter(e.surface for e in episodes)
+    utiles = {s for s in surfaces_vues if total_surfaces[s] >= 2}
+    suffixe = ordre[prefixe:]
+    suf_s = sum(1 for i in suffixe
+                if episodes[i].surface in surfaces_memoire)
+    suf_c = sum(1 for i in suffixe
+                if episodes[i].cle_code in codes_memoire)
+    return {
+        "slots": len(entrees),
+        "ret_surface_prefixe": len(surfaces_memoire & surfaces_vues)
+        / max(1, len(surfaces_vues)),
+        "ret_surface_finale": len(surfaces_memoire)
+        / max(1, len({e.surface for e in episodes})),
+        "ret_nouveaux_utiles": len(surfaces_memoire & utiles)
+        / max(1, len(utiles)),
+        "ret_code": len(codes_memoire & codes_vus) / max(1, len(codes_vus)),
+        "rep_surface": rep_s / max(1, rep_s_n),
+        "rep_code": rep_c / max(1, rep_c_n),
+        "rep_n": rep_s_n,
+        "suf_surface": suf_s / max(1, len(suffixe)),
+        "suf_code": suf_c / max(1, len(suffixe)),
+        "codes_memoire": len(codes_memoire),
+    }
+
+
+def _oracle_frequence(episodes: list[EpisodeM7], ordre: list[int],
+                      prefixe: int, capacite: int) -> dict:
+    suffixe = ordre[prefixe:]
+    cs = collections.Counter(episodes[i].surface for i in suffixe)
+    cc = collections.Counter(episodes[i].cle_code for i in suffixe)
+    n = max(1, len(suffixe))
+    return {"suf_surface": sum(v for _, v in cs.most_common(capacite)) / n,
+            "suf_code": sum(v for _, v in cc.most_common(capacite)) / n}
+
+
+def _p_sign(deltas: list[float]) -> float:
+    """p bilatéral exact du signe, sans hypothèse de normalité."""
+    non_nuls = [d for d in deltas if d != 0]
+    if not non_nuls:
+        return 1.0
+    gains = sum(1 for d in non_nuls if d > 0)
+    n = len(non_nuls)
+    k = max(gains, n - gains)
+    p = sum(math.comb(n, i) for i in range(k, n + 1)) / (2 ** n)
+    return min(1.0, 2.0 * p)
+
+
+def _delta_bis(apparie: list[float], temoin: list[float]) -> dict:
+    d = [a - b for a, b in zip(apparie, temoin)]
+    out = _delta(apparie, temoin)
+    out["p_sign"] = _p_sign(d)
+    return out
+
+
+def _configs_frequence() -> list[dict]:
+    configs = []
+    for cle in ("surface", "code"):
+        suffixe = "" if cle == "surface" else "_code"
+        for politique in ("fifo", "lru", "lfu", "lfu_recence"):
+            configs.append({"nom": politique + suffixe,
+                            "politique": politique, "cle": cle, "beta": 0.0,
+                            "signal": None, "permute": False})
+    configs.append({"nom": "hasard", "politique": "hasard", "cle": "surface",
+                    "beta": 0.0, "signal": None, "permute": False})
+    for signal in ("jeu", "longueur", "type"):
+        configs.append({"nom": f"contexte_{signal}", "politique": "contexte",
+                        "cle": "surface", "beta": 0.0, "signal": signal,
+                        "permute": False})
+        configs.append({"nom": f"lfu_contexte_{signal}",
+                        "politique": "lfu_contexte", "cle": "surface",
+                        "beta": 1.0, "signal": signal, "permute": False})
+        for beta in (0.0, 0.5, 2.0, 4.0):
+            configs.append({"nom": f"lfu_contexte_{signal}_b{beta:g}",
+                            "politique": "lfu_contexte", "cle": "surface",
+                            "beta": beta, "signal": signal,
+                            "permute": False})
+    return configs
+
+
+def _configs_permutees(configs: list[dict]) -> list[dict]:
+    signaux = ("jeu", "longueur", "type")
+    noms = {f"contexte_{s}" for s in signaux}
+    noms |= {f"lfu_contexte_{s}" for s in signaux}
+    return [dict(c, nom=c["nom"] + "_permute", permute=True)
+            for c in configs if c["nom"] in noms]
+
+
+def _resume_delta(d: dict) -> dict:
+    return {"moyenne": d["moyenne"], "ic95": d["ic95"],
+            "gains": d["gains"], "p_sign": d["p_sign"], "n": d["n"],
+            "bat_zero": d["moyenne"] > 0 and d["ic95"][0] > 0}
+
+
+def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
+                      permutations: int = 30, capacite: int = 16,
+                      graine: int = 0, synthetique: bool = True) -> dict:
+    """Le banc M7-bis, apparié sur les mêmes 30 permutations.
+
+    Toutes les politiques voient le même flux, la même capacité et le même
+    préfixe. La mémoire est gelée à la fin du préfixe ; le suffixe (20 %) est
+    interrogé sans réécriture. Les deltas sont ``politique - LFU`` (même clé)
+    et ``politique - FIFO`` (même clé), permutation par permutation.
+
+    Le contrôle « clé permutée » réassigne les étiquettes de contexte du
+    préfixe au hasard, à multiset constant. Un gain contexte réel qui
+    disparaît après permutation est un gain de contexte ; un gain qui survit
+    est un artefact de la marge.
+    """
+    ep = episodes if episodes is not None else preparer_flux()
+    n = len(ep)
+    prefixe = int(n * 0.8)
+    base = _configs_frequence()
+    configs = base + _configs_permutees(base)
+    contextes = _contextes_episodes(ep)
+    resultats: dict[str, dict[str, list[float]]] = {
+        c["nom"]: collections.defaultdict(list) for c in configs}
+    oracle = collections.defaultdict(list)
+    for k in range(permutations):
+        ordre = list(range(n))
+        random.Random(graine + k).shuffle(ordre)
+        permutes = _contextes_permutes(contextes, ordre, prefixe,
+                                       graine + k)
+        for c in configs:
+            ctx = None
+            if c["signal"]:
+                source = permutes if c["permute"] else contextes
+                ctx = source[c["signal"]]
+            m = _tourner_frequence(ep, ordre, prefixe, c, capacite, ctx,
+                                   graine + k)
+            for met in _METRIQUES_BIS:
+                resultats[c["nom"]][met].append(m[met])
+        o = _oracle_frequence(ep, ordre, prefixe, capacite)
+        oracle["suf_surface"].append(o["suf_surface"])
+        oracle["suf_code"].append(o["suf_code"])
+    moyennes = {nom: {m: _stats(v) for m, v in vals.items()}
+                for nom, vals in resultats.items()}
+    ref_lfu = {"surface": "lfu", "code": "lfu_code"}
+    ref_fifo = {"surface": "fifo", "code": "fifo_code"}
+    deltas_lfu = {}
+    deltas_fifo = {}
+    for c in configs:
+        nom = c["nom"]
+        if nom != ref_lfu[c["cle"]]:
+            deltas_lfu[nom] = {m: _delta_bis(resultats[nom][m],
+                                             resultats[ref_lfu[c["cle"]]][m])
+                               for m in _METRIQUES_BIS}
+        if nom != ref_fifo[c["cle"]]:
+            deltas_fifo[nom] = {m: _delta_bis(resultats[nom][m],
+                                              resultats[ref_fifo[c["cle"]]][m])
+                                for m in _METRIQUES_BIS}
+    # contrôle de cohérence : beta=0 doit être identique à lfu_recence
+    ecart_beta_zero = {}
+    for signal in ("jeu", "longueur", "type"):
+        nom_b0 = f"lfu_contexte_{signal}_b0"
+        ecart_beta_zero[signal] = {
+            m: max((abs(a - b) for a, b in zip(resultats[nom_b0][m],
+                                               resultats["lfu_recence"][m])),
+                   default=0.0) for m in _METRIQUES_BIS}
+    # contrôles de contexte : réel vs permuté, réel vs LFU
+    contexte_controle = {}
+    for signal in ("jeu", "longueur", "type"):
+        for variante in ("contexte", "lfu_contexte"):
+            nom = f"{variante}_{signal}"
+            perm = nom + "_permute"
+            contexte_controle[nom] = {
+                "delta_reel_vs_permute": {
+                    m: _resume_delta(_delta_bis(resultats[nom][m],
+                                                resultats[perm][m]))
+                    for m in ("suf_surface", "suf_code", "rep_surface",
+                              "rep_code", "ret_nouveaux_utiles")},
+                "delta_reel_vs_lfu": {
+                    m: _resume_delta(deltas_lfu[nom][m])
+                    for m in ("suf_surface", "suf_code", "rep_surface",
+                              "rep_code", "ret_nouveaux_utiles")},
+                "delta_permute_vs_lfu": {
+                    m: _resume_delta(deltas_lfu[perm][m])
+                    for m in ("suf_surface", "suf_code", "rep_surface",
+                              "rep_code", "ret_nouveaux_utiles")},
+            }
+    plafond = capacite / max(1, len({e.surface for e in ep}))
+    toutes_au_plafond = all(
+        abs(moyennes[c["nom"]]["ret_surface_finale"]["moyenne"] - plafond)
+        < 1e-12 for c in configs)
+    # verdicts calculés, jamais déclarés
+    def _bat(d: dict) -> bool:
+        return d["moyenne"] > 0 and d["ic95"][0] > 0
+
+    rec = "lfu_recence"
+    rec_code = "lfu_recence_code"
+    verdict = {
+        "lfu_recence_bat_lfu": {
+            "surface": {m: _resume_delta(deltas_lfu[rec][m])
+                        for m in ("suf_surface", "rep_surface",
+                                  "ret_nouveaux_utiles")},
+            "code": {m: _resume_delta(deltas_lfu[rec_code][m])
+                     for m in ("suf_code", "rep_code", "ret_code")},
+        },
+        "lfu_bat_fifo": {
+            "surface": {m: _resume_delta(deltas_fifo["lfu"][m])
+                        for m in ("suf_surface", "rep_surface",
+                                  "ret_nouveaux_utiles")},
+            "code": {m: _resume_delta(deltas_fifo["lfu_code"][m])
+                     for m in ("suf_code", "rep_code", "ret_code")},
+        },
+        "contexte_bat_lfu": {
+            nom: {m: _resume_delta(deltas_lfu[nom][m])
+                  for m in ("suf_surface", "suf_code", "rep_surface",
+                            "rep_code", "ret_nouveaux_utiles")}
+            for nom in contexte_controle},
+        "cle_permutee_egale_reelle": {
+            nom: {m: _resume_delta(v["delta_reel_vs_permute"][m])
+                  for m in ("suf_surface", "suf_code", "rep_surface",
+                            "rep_code", "ret_nouveaux_utiles")}
+            for nom, v in contexte_controle.items()},
+        "plafond_surface_finale": plafond,
+        "toutes_politiques_au_plafond_historique": toutes_au_plafond,
+        "beta_zero_egal_lfu_recence": {
+            signal: all(max(abs(a - b) for a, b in zip(
+                resultats[f"lfu_contexte_{signal}_b0"][m],
+                resultats["lfu_recence"][m])) < 1e-12
+                for m in _METRIQUES_BIS)
+            for signal in ("jeu", "longueur", "type")},
+    }
+    resultat = {
+        "meta": {"module": "M7-bis", "classe": "MemoireFrequence",
+                 "date": datetime.datetime.now(
+                     datetime.timezone.utc).isoformat(timespec="seconds")},
+        "protocole": {
+            "n": n, "prefixe": prefixe, "suffixe": n - prefixe,
+            "capacite": capacite, "permutations": permutations,
+            "graine": graine,
+            "metriques": {
+                "ret_surface_prefixe": "surfaces retenues / surfaces distinctes vues au préfixe (plafonnée par la capacité)",
+                "ret_surface_finale": "surfaces retenues / surfaces distinctes du flux (plafond = capacité/vocabulaire)",
+                "ret_nouveaux_utiles": "surfaces vues au préfixe qui reviennent dans le flux et sont retenues / ces surfaces",
+                "ret_code": "codes retenus / codes distincts vus au préfixe",
+                "rep_surface": "écritures répétées dont la surface était déjà en mémoire",
+                "rep_code": "écritures répétées dont le code était déjà en mémoire",
+                "suf_surface": "requêtes du suffixe dont la surface est en mémoire (mémoire gelée)",
+                "suf_code": "requêtes du suffixe dont le code est en mémoire (mémoire gelée)",
+            },
+            "plafond_surface_finale": plafond,
+        },
+        "configurations": configs,
+        "resultats": moyennes,
+        "deltas_vs_lfu": deltas_lfu,
+        "deltas_vs_fifo": deltas_fifo,
+        "oracle_suffixe": {m: _stats(v) for m, v in oracle.items()},
+        "controles": {
+            "contexte_reel_vs_permute": contexte_controle,
+            "beta_zero_ecart_max": ecart_beta_zero,
+        },
+        "verdict": verdict,
+        "limites": [
+            "Les permutations aléatoires rendent le suffixe échangeable avec le préfixe : la fréquence d'item y est le prédicteur optimal, un contexte ne peut pas la battre par construction.",
+            "Le contrôle de contexte mesure donc surtout l'absence d'information contextuelle *au-delà* de la fréquence ; il ne teste pas une dérive temporelle réelle (jeux successifs), que les permutations détruisent.",
+            "rep_surface est en partie tautologique : le LFU est défini pour garder les items répétés.",
+            "Le plafond de rétention des nouveaux (capacité/vocabulaire) n'est pas un résultat ; ret_nouveaux_utiles est la métrique discriminante ajoutée.",
+        ],
+    }
+    if synthetique:
+        resultat["controle_synthetique_frequence"] = controle_zipf_frequence(
+            ep, permutations=max(8, permutations // 2), graine=graine + 1000)
+    return resultat
+
+
+def controle_zipf_frequence(episodes: list[EpisodeM7],
+                            permutations: int = 15, graine: int = 1000,
+                            capacite: int = 8) -> dict:
+    """Contrôle positif : sur un flux de Zipf, le LFU doit battre le FIFO."""
+    configs = [
+        {"nom": "fifo_code", "politique": "fifo", "cle": "code",
+         "beta": 0.0, "signal": None},
+        {"nom": "lfu_code", "politique": "lfu", "cle": "code",
+         "beta": 0.0, "signal": None},
+        {"nom": "lfu_recence_code", "politique": "lfu_recence", "cle": "code",
+         "beta": 0.0, "signal": None},
+        {"nom": "hasard", "politique": "hasard", "cle": "surface",
+         "beta": 0.0, "signal": None},
+    ]
+    res = {c["nom"]: collections.defaultdict(list) for c in configs}
+    for k in range(permutations):
+        flux, chauds = _flux_zipf(episodes, 528, capacite, graine + k)
+        ordre = list(range(len(flux)))
+        random.Random(graine + k).shuffle(ordre)
+        prefixe = int(len(flux) * 0.8)
+        for c in configs:
+            m = _tourner_frequence(flux, ordre, prefixe, c, capacite, None,
+                                   graine + k)
+            for met in _METRIQUES_BIS:
+                res[c["nom"]][met].append(m[met])
+    moyennes = {nom: {m: _stats(v) for m, v in vals.items()}
+                for nom, vals in res.items()}
+    deltas = {}
+    for nom in res:
+        if nom != "fifo_code":
+            deltas[nom] = {m: _delta_bis(res[nom][m], res["fifo_code"][m])
+                           for m in _METRIQUES_BIS}
+    deltas["lfu_code_vs_lfu_recence"] = {
+        m: _delta_bis(res["lfu_recence_code"][m], res["lfu_code"][m])
+        for m in _METRIQUES_BIS}
+    return {
+        "protocole": {"capacite": capacite, "permutations": permutations,
+                      "n": 528, "zipf": 1.1, "chauds": 8},
+        "politiques": moyennes,
+        "deltas": deltas,
+        "verdict": {
+            "lfu_bat_fifo_suffixe_code": (
+                deltas["lfu_code"]["suf_code"]["moyenne"] > 0
+                and deltas["lfu_code"]["suf_code"]["ic95"][0] > 0),
+            "lfu_recence_bat_lfu_suffixe_code": (
+                deltas["lfu_code_vs_lfu_recence"]["suf_code"]["moyenne"] > 0
+                and deltas["lfu_code_vs_lfu_recence"]["suf_code"]["ic95"][0]
+                > 0),
+            "hasard_non_significatif": (
+                abs(deltas["hasard"]["suf_code"]["moyenne"]) < 0.10),
         },
     }
 
