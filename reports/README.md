@@ -27,6 +27,7 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
+| [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) | **B12 — corrections** : M2 93,2 % = 126/126 vus + 11/20 inédits ; M3 span tautologique ; M4 29 codes, 0/6 non stockés ; M8 96,48 % marginal (exact 65,1 %, baseline par jeu 96,10 %) ; M5/M6/M7 négatifs |
 | [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation (`action` 98,6 %, `de` 93,2 %), M8 généralise (96,48 % hors stock), M5/M6/M7 **négatifs** ; M9 lésions |
 | [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, **restitution du code** 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, **surface 33/79**, raisonnement non branché) |
 | [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : **restitution du code** **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; **surface originale 33/79** ; sans décodeur neuronal |

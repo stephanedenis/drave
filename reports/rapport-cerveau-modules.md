@@ -2,6 +2,11 @@
 
 > **Objet.** Mesurer les neuf modules du prototype Python, sur les corpus B5/B7 et des parties générées
 > par les règles. Aucun résultat n'est extrapolé au moteur Rust ni à un cerveau biologique.
+>
+> **Correction importante (27/10).** Les chiffres M2–M8 de cette fiche sont les **premiers**, avant le stress
+> des sous-agents. Ils sont **gonflés par les doublons, les constantes et les templates**. Lire
+> [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) : M1 reste solide, M2 est vu/inédit,
+> M3/M4/M5/M6/M7/M8 sont structurels ou négatifs.
 
 ## 1. Dispositif
 

@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 173 fichiers / 242 JSON, 52 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -52,11 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
-- **B12 les modules cerveau-langage** — **premier passage** : bus réel, **M1 hub 528/528** (sans contexte
-  70,8 %), **M4 mémoire épisodique 1,0** (complétion 97,9 %, séparation 1,0), **M3** tampon 12/12 et n-back contrôle 1,0 ;
-  **M2** double dissociation (`action` **98,6 %**, `de` **93,2 %**, lésions **9,6 / 0,7 %**), **M5** ne bat pas la majorité, **M6** 72,9 %, **M7** nul (3,64 % = 3,64 %) ; **M8** généralise aux épisodes non stockés (**96,48 %** contre **0 %**). **M9** table de lésions. Fiche :
-  [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
-
+- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `de` **93,8 % = 126/126 vus + 11/20 inédits**, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 action constante ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 - **B12 pipeline** — **M1 → M4 → M8** : **528/528** surfaces, **7** prototypes, **96,33 %** de complétion
   sur 120 codes partiels ; test d'intégration, pas de généralisation M4.
 - **Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
@@ -72,7 +68,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **172** / **241** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **173** / **241** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **52** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -82,7 +78,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **172** / **241** |
+| fichiers / JSON de résultats | **173** / **241** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

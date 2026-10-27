@@ -340,16 +340,16 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B12.1 | **Bus + hub M1** | ✅ **mesuré** | **528/528** exact avec contexte ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** ; 1 584 événements |
-| B12.2 | **M2 voies ventrales/dorsales** | ✅ **double dissociation** | `action` **98,6 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `action` **9,6 %**, `de` **93,2 %** ; lésion dorsale `action` **98,6 %**, `de` **0,7 %** |
-| B12.3 | **M3 mémoire de travail** | ✅ **tampon** | span **12/12**, exact **1,0** ; n-back contrôle **1,0** ; n-back brut **0,06 %** (test invalide) |
-| B12.4 | **M4 mémoire épisodique** | ✅ **mesuré** | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** ; 29 codes uniques |
-| B12.5 | **M5 prédictif** | ❌ **négatif** | exact **98,9 %** = majoritaire **98,9 %** ; surprise **0,0096** ; aucun gain |
-| B12.6 | **M6 gating** | ❌ **faible** | exact **72,9 %** ; FP **1**, FN **18** ; coût **−0,11** |
-| B12.7 | **M7 neuromodulation** | ❌ **nul** | rétention **3,64 %** (fixe) = **3,64 %** (modulée), capacité 16 ; aucun effet |
-| B12.8 | **M8 sommeil** | ✅ **généralise** | prototypes **96,48 %** sur **106** épisodes non stockés ; baseline **0 %** (mémoire épisodique) |
+| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu seulement** | `de` 93,8 % = **126/126 vus** + **11/20 inédits** ; `vers` 94,5 % / **12/20** ; `point` et `chemin` **sous la majorité** ; double dissociation sur les vus, pas la généralisation |
+| B12.3 | **M3 mémoire de travail** | ❌ **tautologique** | span 12/12 même avec des codes aléatoires ; n-back contrôle construit sur 5 items de même code ; interférence purement FIFO |
+| B12.4 | **M4 mémoire épisodique** | ❌ **lookup** | 528 items, **29 codes** ; rappel 1,0 = doublons ; 0/6 codes non stockés, 0/10 complétions exactes, 0/7 valeurs inédites |
+| B12.5 | **M5 prédictif** | ❌ **négatif** | `action` constant par jeu ; 98,9 % = majoritaire ; le gain `source` est l'alternance de trait, pas du contenu |
+| B12.6 | **M6 gating** | ❌ **négatif** | 94,3 % de conjonction mais base **75 %** ; commutation **0,000** ; détection de langue non déterministe et collisions fr/en |
+| B12.7 | **M7 neuromodulation** | ❌ **nul** | 3,64 % = plafond 16/439 ; LFU +23,1 pts sur les répétés, nouveauté −19,6, incertitude −38,7, récompense −53,3 ; aucun signal ne bat FIFO |
+| B12.8 | **M8 sommeil** | ❌ **marginal** | 96,48 % de champs mais exact **65,1 %**, baseline par jeu **96,10 %** ; 0 % exact sur codes jamais vus ; le « 0 » baseline était faux |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
-| B12.10 | **Pipeline M1 → M4 → M8** | ✅ **intégré** | **528/528** surfaces, **7** prototypes, **96,33 %** de complétion sur 120 codes partiels (46 mémoire, 74 prototypes) |
-| B12.11 | **Suite** | ⏳ **suivant** | M2 équilibré + contexte ; M3 répétitions ; M5 ordre 2 ; M6 conflit ; M7 capacité ; M8 rejeu |
+| B12.10 | **Pipeline M1 → M4 → M8** | ⚠️ **intégration** | **528/528**, 7 prototypes, 96,33 % de complétion — tautologique : M4 ne généralise pas, M8 est la marginale |
+| B12.11 | **Corrections** | ✅ **écrit** | [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md) : seul M1 est solide ; M2 vu seulement ; M3–M8 structurels/négatifs |
 
 **Bilan B12** : le **bus**, **M1**, **M2**, **M3**, **M4** et **M8** tiennent ; **M5, M6, M7** sont des
 **négatifs** ou des résultats trop faibles. Le prototype est un
