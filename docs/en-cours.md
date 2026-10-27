@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 180 fichiers / 248 JSON, 53 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -74,7 +74,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **180** / **248** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **181** / **248** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **53** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -84,7 +84,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **180** / **248** |
+| fichiers / JSON de résultats | **181** / **248** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
