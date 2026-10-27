@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-26.md](2026-10-26.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 15:20 | `ae3d8004` | DOCS — B9 DANS LES CARTES : FENÊTRE 610/20 (3,71 % À 500 PAS), NÉGATIF 910/30, TRANSITION 9,23–9,96 M | `README.md`, `carte.md`, `index.md` (+5) |
 | 21:41 | `e75089a1` | B10 — 8 UNITÉS SÉMANTIQUES LINÉAIRES : NÉGATIF (RAPPEL 0,237 CONTRE 0,426) ; LE GOULOT DEMANDE UNE ATTENTION | `en-cours.md`, `protocole-semantique.md`, `roadmap.md` (+6) |
 | 21:45 | `deefc7b4` | B10 — ATTENTION DE REQUÊTES : IMPLÉMENTÉE, NON APPRISE (PERTE CONSTANTE ~21,9) ; NON CONCLUANT | `protocole-semantique.md`, `2026-10-26.md`, `2026-10-26_attention.md` (+5) |
+| 22:00 | `a14c812d` | B10 — DIAGNOSTIC ATTENTION : BASE GELÉE, 4 UNITÉS, PERTE CONSTANTE ; NON CONCLUANT | `protocole-semantique.md`, `2026-10-26.md`, `2026-10-26_mesures.md` (+3) |
 
 ## Chiffres du jour
 

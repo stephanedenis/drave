@@ -139,9 +139,9 @@ Les **ablations** confirment le diagnostic : `z` de 512 dims **dégrade** le rap
 porte que l'identité de l'article, et **8 unités linéaires moyennées** diluent le rappel (0,237). Le prochain
 levier est donc une **attention de requêtes** sur les états (chaque unité lit des positions différentes), ou
 une **attention croisée** du décodeur — pas un vecteur plus gros, un préfixe plus long ou une moyenne d'unités.
-La première implémentation d'attention de requêtes **n'a pas appris** (perte constante ~21,9, rappel au hasard),
-même avec la base gelée et 4 unités ; elle doit être diagnostiquée avant de conclure sur l'architecture. L'essai à
-lr 1e-2 a échoué sur un **assert interne PyTorch** (`ApproximateClock`), pas sur le modèle.
+L'implémentation d'attention de requêtes **apprend lentement** (rappel 0,344 au pas 500, sonde 0,183), mais
+reste **sous** le vecteur unique (0,426) ; ce n'est pas une architecture à retenir en l'état. L'essai à lr 1e-2 a
+échoué sur un **assert interne PyTorch** (`ApproximateClock`), pas sur le modèle.
 
 Le premier passage a corrigé trois choses dans le protocole : l'**all-gather détaché** (la contrastive ne
 touchait pas `z`), les **gradients du décodeur** (ils écrasent l'encodeur : étages séparés), et les

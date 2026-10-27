@@ -485,11 +485,12 @@
    "n_sem": 4,
    "attention_sem": true,
    "gele_base": true,
-   "lr_tete": 0.001,
+   "lr_tete": 0.003,
    "perte": "21,91 constante",
-   "rappel": "0,17–0,25",
-   "sonde": "0,57–0,85",
-   "note": "meme perte ; essai lr 1e-2 echoue sur assert interne PyTorch ApproximateClock, pas sur le modele"
+   "rappel": 0.344,
+   "sonde": 0.183,
+   "note": "apprend lentement, meilleur 0,344 au pas 500, sous le vecteur unique 0,426",
+   "pas": 600
   }
  }
 }

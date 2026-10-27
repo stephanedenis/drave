@@ -106,7 +106,7 @@ Trois variantes ont été testées après le premier passage.
 | **ablation de `z`** | décoder avec `z` / `z=0` / `z` aléatoire | **5,84** / **2,52** / **2,56** : le décodeur **utilise** `z`, mais `z` ne porte pas le détail du texte |
 | **8 unités** | tête linéaire 8 × 128 + diversité 0,2, moyenne pour le rappel | rappel **0,237** (contre 0,426) : la moyenne des unités **dilue** ; les unités ne sont pas encore des lecteurs distincts |
 | **8 unités + attention** | requêtes Q/K/V sur les états, diversité 0,2 | perte **constante ~21,9**, rappel **0,17–0,20**, sonde **0,85–0,92** : l'implémentation **n'apprend pas** malgré des gradients non nuls ; **non concluant**, pas un verdict d'architecture |
-| **4 unités + attention, base gelée** | seules requêtes/tête entraînées, lr tête 1e-3 | perte **21,91 constante**, rappel **0,17–0,25**, sonde **0,57–0,85** : le diagnostic ne débloque pas ; l'essai à lr 1e-2 a échoué sur un **assert interne PyTorch** (`ApproximateClock`, horloge non monotone), pas sur le modèle |
+| **4 unités + attention, base gelée** | requêtes/tête seules, 600 pas, lr 3e-3 | **apprend lentement** : rappel **0,344** au pas 500, sonde **0,183** — **sous** le vecteur unique (0,426) ; l'essai à lr 1e-2 a échoué sur un **assert interne PyTorch** (`ApproximateClock`), pas sur le modèle |
 | **8 segments** | moyennes de 8 segments contigus, diversité 0,2 | rappel **0,346** (contre 0,426) ; décodeur **6,7 / 7,5** à 100 pas contre **12,0 / 8,3** pour le vecteur unique : pas de gain |
 
 **Lecture** : un `z` unique de 128 dimensions est un **code d'identité** (il retrouve l'article, il ne le
