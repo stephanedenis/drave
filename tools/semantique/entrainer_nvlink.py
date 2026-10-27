@@ -78,6 +78,8 @@ def main() -> int:
     ap.add_argument("--pas", type=int, default=200)
     ap.add_argument("--eval-tous", type=int, default=50)
     ap.add_argument("--patience", type=int, default=3)
+    ap.add_argument("--critere", default="rappel",
+                    help="métrique d'arrêt : rappel (étage A) ou chrf_traduction (étage B)")
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--lr-base", type=float, default=1e-5)
     ap.add_argument("--lr-tete", type=float, default=1e-3)
@@ -222,8 +224,9 @@ def main() -> int:
                       f"sonde {m['sonde_langue']:.3f} · chrF rec {m['chrf_reconstruction']:.1f} / "
                       f"trad {m['chrf_traduction']:.1f} / plancher {m['chrf_plancher']:.1f} · "
                       f"{m['secondes']:.0f} s", flush=True)
-                if m["rappel"] > meilleur[0] + 1e-6:
-                    meilleur = (m["rappel"], pas); sans_gain = 0
+                score = m.get(args.critere, m["rappel"])
+                if score > meilleur[0] + 1e-6:
+                    meilleur = (score, pas); sans_gain = 0
                 else:
                     sans_gain += 1
             dist.barrier()
