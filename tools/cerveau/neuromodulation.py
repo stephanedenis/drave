@@ -17,6 +17,7 @@ class Neuromodulation:
         self.alpha = alpha
         self.beta = beta
         self.vus = set()
+        self.vus_surface = set()
 
     def signal(self, code: dict, marge: float = 1.0, recompense: float = 0.0) -> dict:
         cle = tuple(code.get(n) for n, _ in CHAMPS)
@@ -26,6 +27,11 @@ class Neuromodulation:
         incertitude = max(0.0, 1.0 - marge)
         poids = 1.0 + self.alpha * nouveaute + self.beta * incertitude + 0.2 * recompense
         return {"nouveaute": nouveaute, "incertitude": incertitude, "poids": poids}
+
+    def signal_surface(self, surface: str) -> dict:
+        nouveau = surface not in self.vus_surface
+        self.vus_surface.add(surface)
+        return {"nouveaute": 1.0 if nouveau else 0.0, "poids": 3.0 if nouveau else 1.0}
 
 
 class MemoireLimitee:

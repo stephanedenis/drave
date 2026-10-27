@@ -160,7 +160,7 @@ def m7():
         if it.texte not in vus:
             vus.add(it.texte); nouveaux.append(it.texte)
         fixe.stocker(it.texte, it.code, 1.0)
-        sig = mod.signal(it.code)
+        sig = mod.signal_surface(it.texte)
         module.stocker(it.texte, it.code, sig["poids"])
     retention = lambda m: sum(m.contient(s) for s in nouveaux) / max(1, len(nouveaux))
     return {"nouveaux": len(nouveaux), "retention_fixe": retention(fixe),

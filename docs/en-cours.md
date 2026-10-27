@@ -50,7 +50,7 @@ La vision complète est dans [`vision.md`](vision.md).
 
 - **B12 les modules cerveau-langage** — **premier passage** : bus réel, **M1 hub 528/528** (sans contexte
   70,8 %), **M4 mémoire épisodique 1,0** (complétion 97,9 %, séparation 1,0), **M3** tampon 12/12 et n-back contrôle 1,0 ;
-  **M2** double dissociation (`action` **98,6 %**, `de` **93,2 %**, lésions **19,2 / 3,4 %**), **M5** ne bat pas la majorité, **M6** 70,0 %, **M7** nul (3,64 % = 3,64 %) ; **M8** généralise aux épisodes non stockés (**96,48 %** contre **0 %**). **M9** table de lésions. Fiche :
+  **M2** double dissociation (`action` **98,6 %**, `de` **93,2 %**, lésions **9,6 / 0,7 %**), **M5** ne bat pas la majorité, **M6** 72,9 %, **M7** nul (3,64 % = 3,64 %) ; **M8** généralise aux épisodes non stockés (**96,48 %** contre **0 %**). **M9** table de lésions. Fiche :
   [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
 
 **Bilan B11** : le codec lit **528/528** et la restitution canonique fait **100 %** d'aller-retour ; le natif

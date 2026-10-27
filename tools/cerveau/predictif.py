@@ -16,19 +16,27 @@ class Predictif:
 
     def __init__(self) -> None:
         self.transitions = collections.defaultdict(collections.Counter)
+        self.transitions2 = collections.defaultdict(collections.Counter)
         self.majoritaire = {}
 
     def entrainer(self, sequences) -> None:
         for seq in sequences:
             pas = [p.code for p in seq.pas]
-            for a, b in zip(pas, pas[1:]):
+            for i, b in enumerate(pas[1:]):
+                a = pas[i]
                 self.transitions[(a["jeu"], a["action"])][b["action"]] += 1
+                if i > 0:
+                    self.transitions2[(a["jeu"], pas[i - 1]["action"], a["action"])][b["action"]] += 1
             for p in pas:
                 self.majoritaire.setdefault(p["jeu"], collections.Counter())[p["action"]] += 1
         self.majoritaire = {j: c.most_common(1)[0][0] for j, c in self.majoritaire.items()}
 
-    def predire(self, code: dict) -> tuple[str, float]:
+    def predire(self, code: dict, precedent: str | None = None) -> tuple[str, float]:
         c = self.transitions.get((code["jeu"], code["action"]))
+        if precedent is not None:
+            c2 = self.transitions2.get((code["jeu"], precedent, code["action"]))
+            if c2:
+                c = c2
         if not c:
             return self.majoritaire.get(code["jeu"], "deplacer"), 0.0
         total = sum(c.values())
@@ -40,8 +48,10 @@ class Predictif:
         surprise = []
         for seq in sequences:
             pas = [p.code for p in seq.pas]
-            for a, b in zip(pas, pas[1:]):
-                p, prob = self.predire(a)
+            for i, b in enumerate(pas[1:]):
+                a = pas[i]
+                precedent = pas[i - 1]["action"] if i > 0 else None
+                p, prob = self.predire(a, precedent)
                 total += 1
                 ok += int(p == b["action"])
                 surprise.append(-math.log(max(prob, 1e-6)))
