@@ -13,6 +13,7 @@
 | diff max logits | **0,486** | **1,717** | **0,929** |
 | KL | **0,0015** | **0,0020** | **0,0006** |
 | bits identiques | 0,0006 % | 0,0002 % | 0,0003 % |
+| PPL locale → quantifiée | 55,943 → **54,860** | 7,478 → **7,356** | 1,787 → **1,763** |
 
 ## Lecture
 
@@ -22,6 +23,9 @@
 - Le **volume** tombe à **36–39 %** du dense : **2,6× moins** d'octets, au prix des 896 échelles
   f32 (3 584 o par requête, indépendantes du nombre de jetons).
 - Les **bits** ne sont pas identiques : int8 est **lossy**, même par canal.
+- La **PPL ne se dégrade pas** sur ces trois invites (elle baisse même légèrement, 54,86 contre
+  55,94) : le bruit de quantification ne change pas la décision. Ce n'est pas une preuve de
+  fidélité ; c'est une absence de perte mesurable sur 3 textes.
 
 ## Verdict
 
@@ -31,7 +35,7 @@ mesurer la **PPL** avant de l'adopter par défaut.
 
 ## Limites
 
-- **Une couche**, 3 invites ; la PPL quantifiée n'est pas mesurée.
+- **Une couche**, 3 invites ; la PPL quantifiée est mesurée mais sur des textes courts.
 - Les **échelles par canal** coûtent 3,6 ko par requête ; pour de très petites séquences, le ratio
   se dégrade.
 - Le serveur **dequantifie** avant la couche ; le coût CPU n'est pas compté.

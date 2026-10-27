@@ -1472,6 +1472,7 @@ def executer(args) -> dict:
         )
         fid_quant = fidelite_np(refs[i], dist_quant)
         fid_dense_quant = fidelite_np(dist_dense, dist_quant)
+        ppl_quant = _perplexite_comparee(refs[i], dist_quant, ids_np)
 
         rtts = [mes_dense["rtt_ms"]]
         calculs = [mes_dense["calcul_serveur_ms"]]
@@ -1555,6 +1556,7 @@ def executer(args) -> dict:
                 "ratio_quant": mes_quant["octets_requete"] / mes_dense["octets_requete"],
                 "codec_quant": mes_quant["codec"],
                 "fidelite_quant": fid_quant,
+                "perplexite_quant": ppl_quant,
                 "dense_vs_quant": fid_dense_quant,
                 "latence_quant_ms": mes_quant["rtt_ms"],
                 "latence_quant_forward_ms": total_quant,
