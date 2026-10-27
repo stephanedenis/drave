@@ -3,15 +3,15 @@
 > **Objet.** M2 n'a aucune niche mesurée sur le corpus réel (M1 lit 528/528). On perturbe les
 > surfaces **sans changer le code attendu** et on demande : M2 sauve-t-il ce que M1 rate ?
 
-## Résultats (300 pas, graine 1, 528 surfaces)
+## Résultats (300 pas, **3 graines**, 528 surfaces)
 
 | mode | M1 exact | M2 `de` | M2 `vers` | lecture |
 |---|---:|---:|---:|---|
-| original | **100 %** | 93,15 % | 93,84 % | M1 gagne |
-| casse (`E2E4`) | **98,67 %** | 93,15 % | 93,84 % | M1 gagne |
-| espaces (`  e2e4  `) | 34,85 % | **41,78 %** | **45,21 %** | M2 gagne, mais reste faible |
-| typo (un caractère ôté) | 36,55 % | **71,23 %** | **76,71 %** | **M2 sauve** |
-| phrase (`le coup e2e4 est joue`) | **86,55 %** | **0,00 %** | 0,68 % | M1 gagne |
+| original | **100 %** | 92,88 % | 93,47 % | M1 gagne |
+| casse (`E2E4`) | **98,67 %** | 92,88 % | 93,47 % | M1 gagne |
+| espaces (`  e2e4  `) | 34,85 % | **52,74 %** | **48,63 %** | M2 gagne, mais reste faible |
+| typo (un caractère ôté) | 36,78 % | **71,92 %** | **75,11 %** | **M2 sauve** |
+| phrase (`le coup e2e4 est joue`) | **86,55 %** | **0,00 %** | 0,23 % | M1 gagne |
 
 ## Lecture
 
@@ -30,7 +30,7 @@ Un **routeur** (M1 d'abord, M2 si M1 échoue) sauverait donc les typos, pas les 
 
 ## Limites
 
-- Une graine, 300 pas, pas d'intervalle de confiance.
+- **3 graines**, 300 pas ; les espaces varient beaucoup (37–63 %), les typos restent fortes (68,5–76,7).
 - Les perturbations sont **synthétiques** ; les typos réelles sont plus variées.
 - Le code attendu est **inchangé** : on mesure la lecture de la forme, pas la compréhension.
 - M2 reste un **rameau** (B14) ; ce résultat ne le promeut pas en étage.
