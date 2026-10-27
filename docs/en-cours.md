@@ -48,6 +48,12 @@ La vision complète est dans [`vision.md`](vision.md).
   reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
+- **B12 les modules cerveau-langage** — **premier passage** : bus réel, **M1 hub 528/528** (sans contexte
+  70,8 %), **M4 mémoire épisodique 1,0** (complétion 97,9 %, séparation 1,0), **M3** tampon 12/12 ;
+  **M2** voie dorsale au hasard, **M5** ne bat pas la majorité, **M6** 70 %, **M7** nul, **M8** dégrade
+  (94,25 contre 97,25 %). **M9** table de lésions. Fiche :
+  [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
+
 **Bilan B11** : le codec lit **528/528** et la restitution canonique fait **100 %** d'aller-retour ; le natif
 normalisé + contexte reste à **59,8 %** de code exact et **40,7 %** d'invariance ; le raisonnement n'est
 **pas branché**. Bilan : [`bilan-b11.md`](../reports/bilan-b11.md).
