@@ -28,17 +28,19 @@ from transformers import AutoModelForCausalLM
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from jeux.codecs import codec  # noqa: E402
 from semantique.entrainer import pad  # noqa: E402
-from semantique.typed_corpus import decouper, items, lot  # noqa: E402
+from semantique.typed_corpus import decouper, items, lot, lot_par_paire  # noqa: E402
 from semantique.synth_corpus import items_synth  # noqa: E402
+from semantique.modele import RetourInverse  # noqa: E402
 from semantique.universaux import CHAMPS, code_rsn, index_code, rsn_depuis_code  # noqa: E402
 
 
 class ModeleType(nn.Module):
-    def __init__(self, base: nn.Module):
+    def __init__(self, base: nn.Module, n_langues: int = 1):
         super().__init__()
         self.base = base
         self.d_model = int(base.config.hidden_size)
         self.tetes = nn.ModuleList([nn.Linear(self.d_model, len(vals)) for _, vals in CHAMPS])
+        self.langue = nn.Linear(self.d_model, n_langues) if n_langues > 1 else None
 
     def encode(self, ids, masque):
         sortie = self.base(input_ids=ids, attention_mask=masque, output_hidden_states=True)
@@ -46,9 +48,11 @@ class ModeleType(nn.Module):
         m = masque.unsqueeze(-1).to(h.dtype)
         return (h * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
 
-    def logits(self, ids, masque):
-        h = self.encode(ids, masque)
+    def logits_depuis_h(self, h):
         return [tete(h) for tete in self.tetes]
+
+    def logits(self, ids, masque):
+        return self.logits_depuis_h(self.encode(ids, masque))
 
 
 def labels(items_, index: dict[str, int]):
@@ -71,6 +75,23 @@ def predire_lot(modele, items_, seq, device, lot=64):
                         for f, (nom, _) in enumerate(CHAMPS)}
                 out.append(code)
     return out
+
+
+def consistance(logits, choix):
+    """Même paire, langues différentes → mêmes distributions par champ."""
+    groupes = {}
+    for j, it in enumerate(choix):
+        groupes.setdefault(it.paire, []).append(j)
+    total = 0.0
+    n = 0
+    for idx in groupes.values():
+        if len(idx) < 2:
+            continue
+        for f, _ in enumerate(CHAMPS):
+            p = F.softmax(logits[f][idx], dim=-1)
+            total = total + ((p - p.mean(dim=0)) ** 2).mean()
+            n += 1
+    return total / max(1, n)
 
 
 def exactitude(items_, codes):
@@ -100,6 +121,11 @@ def main() -> int:
     ap.add_argument("--synth", action="store_true",
                     help="entraîner sur les surfaces synthétiques, tester sur les surfaces réelles")
     ap.add_argument("--synth-max-par-jeu", type=int, default=4000)
+    ap.add_argument("--consistance", type=float, default=0.0,
+                    help="poids de la cohérence entre langues d'une même paire")
+    ap.add_argument("--par-paire", type=int, default=4)
+    ap.add_argument("--adv-langue", type=float, default=0.0,
+                    help="poids de l'adversaire de langue (gradient inversé)")
     ap.add_argument("--sortie", default="/tmp/semantique-type")
     args = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -122,8 +148,10 @@ def main() -> int:
     print(f"# typé · {len(its)} items · {len(train)} train / {len(val)} val · "
           f"{len({i.paire for i in train})} paires train · {len({i.paire for i in val})} val · "
           f"{len(CHAMPS)} champs · {sum(len(v) for _, v in CHAMPS)} classes", flush=True)
+    langues_train = sorted({it.langue for it in train})
+    idx_langue = {l: i for i, l in enumerate(langues_train)}
     base = AutoModelForCausalLM.from_pretrained(args.checkpoint, dtype=torch.float32)
-    modele = ModeleType(base).to(device)
+    modele = ModeleType(base, len(langues_train)).to(device)
     if args.gele_base:
         for p in modele.base.parameters():
             p.requires_grad = False
@@ -131,6 +159,8 @@ def main() -> int:
         {"params": modele.base.parameters(), "lr": args.lr_base},
         {"params": modele.tetes.parameters(), "lr": args.lr_tete},
     ])
+    if modele.langue is not None:
+        opt.add_param_group({"params": modele.langue.parameters(), "lr": args.lr_tete})
     index = {nom: {v: i for i, v in enumerate(vals)} for nom, vals in CHAMPS}
     ytr = {k: v.to(device) for k, v in labels(train, index).items()}
     yva = labels(val, index)
@@ -144,20 +174,32 @@ def main() -> int:
     hist = []
     t0 = time.monotonic()
     for pas in range(1, args.pas + 1):
-        xs, choix = lot(train, args.lot, args.seq, rng)
+        if args.synth:
+            xs, choix = lot_par_paire(train, args.lot, args.seq, rng, args.par_paire)
+        else:
+            xs, choix = lot(train, args.lot, args.seq, rng)
         x, m = pad(xs)
         x, m = x.to(device), m.to(device)
-        logits = modele.logits(x, m)
+        h = modele.encode(x, m)
+        logits = modele.logits_depuis_h(h)
         idx = torch.tensor([id_train[id(c)] for c in choix], device=device)
-        perte = sum(F.cross_entropy(logits[f], ytr[nom][idx])
-                    for f, (nom, _) in enumerate(CHAMPS))
+        ce = sum(F.cross_entropy(logits[f], ytr[nom][idx])
+                 for f, (nom, _) in enumerate(CHAMPS))
+        cons = consistance(logits, choix) if args.consistance else torch.zeros((), device=device)
+        adv = torch.zeros((), device=device)
+        if args.adv_langue and modele.langue is not None:
+            yl = torch.tensor([idx_langue[c.langue] for c in choix], device=device)
+            adv = F.cross_entropy(modele.langue(RetourInverse.apply(h)), yl)
+        perte = ce + args.consistance * cons + args.adv_langue * adv
         opt.zero_grad(); perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
         if pas % args.eval_tous == 0 or pas == args.pas:
             codes = predire_lot(modele, val, args.seq, device)
             acc = exactitude(val, codes)
-            hist.append({"pas": pas, "perte": float(perte.detach()), **acc,
+            hist.append({"pas": pas, "perte": float(perte.detach()),
+                         "consistance": float(cons.detach()),
+                         "adv_langue": float(adv.detach()), **acc,
                          "secondes": time.monotonic() - t0})
             print(f"  pas {pas:4d} · perte {float(perte.detach()):.3f} · exact {acc['exact']:.3f} · "
                   f"jeu {acc['jeu']:.3f} · action {acc['action']:.3f} · de {acc['de']:.3f} · "

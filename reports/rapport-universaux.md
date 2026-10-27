@@ -63,6 +63,19 @@ labels RSN exacts, puis on teste sur les **528 surfaces réelles** B5/B7.
 | déterminisme | **1,000** |
 | restitution (15 formats testés) | **40,0 %** |
 
+### 2.3 Cohérence inter-langues : deux négatifs
+
+Deux régularisations ont été testées sur le même entraînement synthétique, avec le même test réel.
+
+| variante | code exact | invariance par paire | lecture |
+|---|---:|---:|---|
+| baseline synthétique | **45,1 %** | **7,4 %** | référence |
+| consistance softmax (poids 1,0) | 38,3 % | 0,0 % | la contrainte écrase le code, sans cohérence |
+| adversaire de langue (poids 0,5) | 39,6 % | 0,0 % | l'adversaire retire de l'information utile |
+
+La **consistance** et l'**adversaire** ne règlent pas le problème : ils **dégradent** le code exact et ne
+rendent pas les langues cohérentes. Le baseline synthétique reste le meilleur parseur natif.
+
 **Lecture** : la distillation synthétique **fonctionne** — le parseur natif passe de 0 % à **45,1 %** de code
 exact sur des surfaces réelles qu'il n'a jamais vues, avec **83 %** de jeu et **90 %** de source/cible. Mais
 il reste **loin du codec** (100 % de lecture exacte), et l'**invariance par paire est faible (7,4 %)** : les

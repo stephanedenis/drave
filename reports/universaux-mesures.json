@@ -68,7 +68,7 @@
   "base gelée 0 %",
   "déterminisme 1,000"
  ],
- "lecture": "codec 100 % ; natif réel seul 0 % ; natif synthétique 45,1 % (jeu 83 %, de/vers 90 %, invariance 7,4 %) ; le codec reste le bloc fiable",
+ "lecture": "codec 100 % ; natif synthétique 45,1 % (invariance 7,4 %) ; consistance 38,3 % (0) et adversaire 39,6 % (0) : deux négatifs ; le baseline reste le meilleur",
  "version": 1,
  "modele_natif_synth": {
   "train": 10556,
@@ -85,5 +85,17 @@
   "rendu_classique": 0.4,
   "n_rendu": 15,
   "meilleur_pas": 400
+ },
+ "modele_natif_consistance": {
+  "poids": 1.0,
+  "exact": 0.38257575757575757,
+  "invariance_paires": 0.0,
+  "lecture": "négatif"
+ },
+ "modele_natif_adversaire": {
+  "poids": 0.5,
+  "exact": 0.3958333333333333,
+  "invariance_paires": 0.0,
+  "lecture": "négatif"
  }
 }

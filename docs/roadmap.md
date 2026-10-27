@@ -307,7 +307,7 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | B11.2 | **Le parseur natif typé** : `route` 31,63 M, pooling moyen, 15 têtes | ⚠️ **partiel** | réel seul : **48,3 % train / 0 % validation** (surapprentissage) ; synthétique : **45,1 %** de code exact sur surfaces réelles, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** |
 | B11.3 | **Le codec classique** : lecture surface → RSN | ✅ **mesuré** | **79/79** et **449/449** RSN exactes (100 %) ; restitution **33/79** formats canoniques |
 | B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
-| B11.5 | **Cohérence inter-langues du natif** | ⏳ **suivant** | l'invariance par paire est le verrou : 7,4 % contre 100 % pour le codec |
+| B11.5 | **Cohérence inter-langues du natif** | ❌ **négatif** | consistance softmax **38,3 %** (invariance 0) ; adversaire de langue **39,6 %** (0) ; le baseline synthétique reste **45,1 %** (7,4 %) ; le verrou tient |
 
 **Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
 le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il

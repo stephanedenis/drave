@@ -63,3 +63,28 @@ def octets(texte: str, seq: int = 64) -> list[int]:
 def lot(items_: list[ItemType], lot: int, seq: int, rng: random.Random):
     choix = [rng.choice(items_) for _ in range(lot)]
     return [octets(i.texte, seq) for i in choix], choix
+
+
+def lot_par_paire(items_: list[ItemType], lot: int, seq: int, rng: random.Random,
+                  par_paire: int = 4):
+    """Échantillonne des groupes de surfaces de même paire (langues différentes).
+
+    C'est ce qui rend la perte de consistance possible : le lot contient le même
+    sens dans plusieurs langues, et le modèle doit produire le même code.
+    """
+    groupes = {}
+    for it in items_:
+        groupes.setdefault(it.paire, []).append(it)
+    paires = [p for p, v in groupes.items() if len(v) >= 2]
+    if not paires:
+        return lot(items_, lot, seq, rng)
+    n_groupes = max(1, lot // par_paire)
+    choix = []
+    for _ in range(n_groupes):
+        p = rng.choice(paires)
+        v = groupes[p]
+        if len(v) >= par_paire:
+            choix.extend(rng.sample(v, par_paire))
+        else:
+            choix.extend(rng.choice(v) for _ in range(par_paire))
+    return [octets(i.texte, seq) for i in choix], choix
