@@ -1,6 +1,6 @@
 <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="DejaVu Sans, Arial, sans-serif">
   <title>Trois parcours de lecture</title>
-  <desc>Decouvrir, moteur, intelligence : trois facons de lire la synthese.</desc>
+  <desc>Découvrir, moteur, intelligence : trois façons de lire la synthèse.</desc>
   <defs>
     <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
   </defs>

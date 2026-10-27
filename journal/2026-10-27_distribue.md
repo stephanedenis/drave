@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-27.md](2026-10-27.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 11:32 | `6e2ce420` | DOCS — LA FICHE DE COHÉRENCE ENREGISTRE L'INTRODUCTION DE LA SYNTHÈSE | `2026-10-27.md`, `2026-10-27_docs.md`, `rapport-coherence-docs-3.md` |
 | 11:55 | `47fc2151` | DOCS — CONTEXTE IA : BUDGETS ET MANIFESTE, CHAPITRE 5 SCINDÉ, INDEX RÉDUIT (175/242/53, T0 3 561 MOTS) | `AGENTS.md`, `README.md`, `REPRISE.md` (+28) |
 | 12:31 | `26057c13` | B15 — TEST MULTILINGUE : 528 SURFACES, 66 LANGUES, 30 PAIRES | `2026-10-27.md`, `2026-10-27_mesures.md`, `THEMES.md` (+2) |
+| 14:09 | `15effc93` | ILLUSTRATIONS — ANNOTATION ÉTAT DANS LE PANNEAU (ANATOMIE) | `anatomie-coupe.svg`, `2026-10-27.md`, `2026-10-27_docs.md` (+1) |
 
 ## Mesures et rapports touchés
 

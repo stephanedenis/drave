@@ -1,6 +1,6 @@
 <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
   <title>Drave en une image</title>
-  <desc>Texte, jetons, modele decoupe en regions, bus et sortie ; le cerveau organise les regions plutot que de calculer les couches.</desc>
+  <desc>Texte, jetons, modèle découpé en régions, bus et sortie ; le cerveau organise les régions plutôt que de calculer les couches.</desc>
   <defs>
     <marker id="fleche" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
       <path d="M0,0 L10,4 L0,8 z" fill="#334155"/>

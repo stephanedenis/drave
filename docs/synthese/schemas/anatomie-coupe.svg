@@ -1,6 +1,6 @@
 <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
   <title>L'anatomie d'une coupe</title>
-  <desc>Trois decoupages 0-3/4-23, 0-15/16-23 et 0-19/20-23, avec le cout du pont.</desc>
+  <desc>Trois découpages 0-3/4-23, 0-15/16-23 et 0-19/20-23, avec le coût du pont.</desc>
   <defs>
     <marker id="fleche" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
       <path d="M0,0 L10,4 L0,8 z" fill="#334155"/>

@@ -1,6 +1,6 @@
 <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
-  <title>Les operations</title>
-  <desc>Negation, composition, LoRA, grappe : ce que l'etat porte, ce qu'il ne calcule pas.</desc>
+  <title>Les opérations</title>
+  <desc>Négation, composition, LoRA, grappe : ce que l'état porte, ce qu'il ne calcule pas.</desc>
   <rect width="900" height="520" fill="#f8fafc"/>
   <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Les opérations : ce que l'état porte, ce qu'il ne calcule pas</text>
   <text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Quatre mesures de B4 et la grappe du moteur : la structure est un sous-espace, pas une algèbre.</text>
