@@ -480,6 +480,16 @@
    "chrf_reconstruction": 6.7,
    "chrf_traduction": 7.5,
    "note": "sous le vecteur unique (0,426 ; 12,0/8,3)"
+  },
+  "attention_queries_base_gelee": {
+   "n_sem": 4,
+   "attention_sem": true,
+   "gele_base": true,
+   "lr_tete": 0.001,
+   "perte": "21,91 constante",
+   "rappel": "0,17–0,25",
+   "sonde": "0,57–0,85",
+   "note": "meme perte ; essai lr 1e-2 echoue sur assert interne PyTorch ApproximateClock, pas sur le modele"
   }
  }
 }

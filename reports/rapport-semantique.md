@@ -106,6 +106,7 @@ Trois variantes ont été testées après le premier passage.
 | **ablation de `z`** | décoder avec `z` / `z=0` / `z` aléatoire | **5,84** / **2,52** / **2,56** : le décodeur **utilise** `z`, mais `z` ne porte pas le détail du texte |
 | **8 unités** | tête linéaire 8 × 128 + diversité 0,2, moyenne pour le rappel | rappel **0,237** (contre 0,426) : la moyenne des unités **dilue** ; les unités ne sont pas encore des lecteurs distincts |
 | **8 unités + attention** | requêtes Q/K/V sur les états, diversité 0,2 | perte **constante ~21,9**, rappel **0,17–0,20**, sonde **0,85–0,92** : l'implémentation **n'apprend pas** malgré des gradients non nuls ; **non concluant**, pas un verdict d'architecture |
+| **4 unités + attention, base gelée** | seules requêtes/tête entraînées, lr tête 1e-3 | perte **21,91 constante**, rappel **0,17–0,25**, sonde **0,57–0,85** : le diagnostic ne débloque pas ; l'essai à lr 1e-2 a échoué sur un **assert interne PyTorch** (`ApproximateClock`, horloge non monotone), pas sur le modèle |
 | **8 segments** | moyennes de 8 segments contigus, diversité 0,2 | rappel **0,346** (contre 0,426) ; décodeur **6,7 / 7,5** à 100 pas contre **12,0 / 8,3** pour le vecteur unique : pas de gain |
 
 **Lecture** : un `z` unique de 128 dimensions est un **code d'identité** (il retrouve l'article, il ne le
@@ -113,8 +114,9 @@ reconstruit pas). Agrandir le vecteur ne rend pas le texte ; allonger le préfix
 dégeler l'encodeur avec la reconstruction ne rend pas le texte. Le verrou est le **goulot** : une tête linéaire à 8 unités, moyennée pour le rappel, **dilue** (0,237) ;
 il faut des unités qui **lisent des positions différentes** — une **attention de requêtes** sur les états,
 ou une **attention croisée** du décodeur — pas une moyenne de projections. La première implémentation
-d'attention de requêtes **n'a pas appris** (perte constante) : elle est à diagnostiquer avant d'en tirer une
-conclusion.
+d'attention de requêtes **n'a pas appris** (perte constante), même avec la base gelée et 4 unités : elle est à
+diagnostiquer avant d'en tirer une conclusion. L'essai à lr 1e-2 a échoué sur un **assert interne PyTorch**
+(`ApproximateClock`), pas sur le modèle.
 
 ## 4. Ressources et communication
 

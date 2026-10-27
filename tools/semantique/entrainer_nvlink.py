@@ -113,6 +113,8 @@ def main() -> int:
     ap.add_argument("--deux-bases", action="store_true",
                     help="étage B : copie de la base pour le décodeur, l'encodeur reste gelé")
     ap.add_argument("--lr-decode", type=float, default=2e-4)
+    ap.add_argument("--gele-base", action="store_true",
+                    help="geler la base, entraîner requêtes/tête (diagnostic d'attention)")
     ap.add_argument("--gele-encodeur", action="store_true",
                     help="étage B : geler base et tête sémantique, entraîner le décodeur")
     ap.add_argument("--sans-decode", action="store_true",
@@ -152,6 +154,10 @@ def main() -> int:
                   f"{len(manquants.unexpected_keys)} inattendues", flush=True)
         if rang == 0:
             print(f"# état rechargé : {args.etat} (pas {paquet.get('meilleur')})", flush=True)
+    if args.gele_base:
+        for nom, p in modele.named_parameters():
+            if nom.startswith("base."):
+                p.requires_grad = False
     if args.gele_encodeur:
         for nom, p in modele.named_parameters():
             if nom.startswith(("base.", "tete.")):
