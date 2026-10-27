@@ -46,6 +46,11 @@ travail Cargo** (`[workspace]` + plusieurs caisses), qui donne :
 n'ont aucun rapport avec le code), et les **dépendances externes épinglées**.
 Le journal est le seul candidat sérieux aujourd'hui.
 
+**Mise à jour du 27/10** : `tools/docwatch/` est le premier sous-module. C'est une
+**dépendance externe** (le dépôt public `docwatch`), pas un découpage du code de
+Drave : la règle « non pour diviser » tient. Le pointeur est commité dans Drave ;
+le développement se fait dans le dépôt de l'outil.
+
 ### Le découpage proposé, d'après les dépendances réelles
 
 Mesuré sur les 28 758 lignes du crate unique et sur les `crate::` internes :
