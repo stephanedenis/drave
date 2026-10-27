@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 178 fichiers / 245 JSON, 53 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 179 fichiers / 246 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -52,6 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
+- **B16 M7-bis** — LFU bat FIFO : **+23,1 pts** répétés (30/30), **+4,25** suffixe, **+8,7** nouveaux utiles ; LFU+récence **= LFU** ; contexte **−8,5 / −42,9** ; c'est la **fréquence**, pas la neuromodulation.
 - **B14 M2 dans la chaîne** — **n'ajoute rien** : M1 **100 %** (`de`/`vers`), M2 **93,4 / 93,6 %**, aucun étage ne consomme M2 ; M5 plateau **18,70 % vs 12,60 %** ; M6 **94,32 / 94,95 %**. M2 est un rameau, pas un étage.
 - **B15 multilingue** — M1 sur **66 langues** : **528/528** avec contexte, **70,8 %** sans ; **26/26** variantes et **15/15** interlangues invariantes ; contrôle permuté **0 %** attendu / **90 %** donneur ; baseline surface **71,8 %**. Détail : [`rapport-multilingue.md`](../reports/rapport-multilingue.md).
 - **B13 chaîne sémantique** — M1 → M5 → M6 → M8 : **528/528**, M5 contexte **18,7 % vs 12,6 %**, M6 **94,3 %**, M8 **57,95 %** (borne haute, non tenue à l'écart). Intégration, pas preuve.
@@ -71,7 +72,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **178** / **245** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **179** / **246** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **53** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -81,7 +82,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **178** / **245** |
+| fichiers / JSON de résultats | **179** / **246** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
@@ -101,7 +102,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | **C3** restitution | ✅ mesuré ; **C3.2** : un module par famille, **4/5** au-dessus de la référence |
 | **C4** dialectes et styles | ✅ mesuré ; la date reste à contrôler |
 | **C5** qualité par domaine | ✅ six registres + dialogue spontané |
-| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) ; l'outil de présentation [mdserve](https://github.com/stephanedenis/mdserve) est un dépôt public autonome |
+| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) ; l'outil de présentation [docwatch](https://github.com/stephanedenis/docwatch) est un dépôt public autonome, seul serveur de documentation |
 | **C7** pensée abstraite | ✅ mesuré — la carte, **B4** close, **B5/B6** faits, **B10–B12** premier passage |
 
 ## Ce qui reste
