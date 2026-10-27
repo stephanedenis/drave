@@ -43,7 +43,9 @@ La vision complète est dans [`vision.md`](vision.md).
   l'**adversaire de langue** (39,6 %, invariance 0) restent deux **négatifs**. Le codec reste à **100 %**. Avec le **contexte**, le codec lit **528/528** (100 %) ; sans contexte, **374/528**
   (70,8 %) : le contexte est décisif, et le natif ne le reçoit pas encore. En **suffixe**, le contexte porte le natif à **59,8 %** de code exact et
   **40,7 %** d'invariance ; en **préfixe**, il collapse (0,4 % / 88,9 %) ; en **vecteur séparé**, **59,1 % / 40,7 %**,
-  aucun gain. Le verrou restant est `carte` (**69,3 %**) et les ambiguïtés de surface. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
+  aucun gain. Le verrou restant est `carte` (**69,3 %**) et les ambiguïtés de surface. La **restitution canonique** du
+  codec est **100 %** : **79/79** et **449/449** rendus, **aller-retour RSN exact** ; la surface originale n'est
+  reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 ## Où l'on en est

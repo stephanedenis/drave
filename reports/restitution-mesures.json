@@ -1,0 +1,15 @@
+{
+ "B5": {
+  "total": 79,
+  "rendu": 79,
+  "roundtrip": 79,
+  "erreurs": {}
+ },
+ "B7": {
+  "total": 449,
+  "rendu": 449,
+  "roundtrip": 449,
+  "erreurs": {}
+ },
+ "lecture": "restitution canonique 79/79 et 449/449, aller-retour 100 % ; surface originale 33/79 ; le codec canonique est le bloc de restitution fiable"
+}

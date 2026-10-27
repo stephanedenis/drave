@@ -311,7 +311,8 @@ Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
 | B11.6 | **Codec + contexte, mémoire** | ✅ **mesuré** | codec **528/528** avec contexte (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
 | B11.7 | **Natif contextuel** | ⚠️ **partiel** | contexte **suffixé** : **59,8 %** de code exact et **40,7 %** d'invariance ; contexte **préfixé** : 0,4 % / 88,9 % (collapse) ; le codec reste à 100 % |
 | B11.8 | **Contexte séparé** | ❌ **sans gain** | vecteur de contexte 512 + MLP : **59,1 %** / **40,7 %**, contre **59,8 %** / **40,7 %** pour le suffixe ; le verrou est ailleurs |
-| B11.9 | **Cartes et ambiguïtés** | ⏳ **suivant** | `carte` **69,3 %** ; symbole du morpion, chemin des dames : le codec lit 100 % |
+| B11.9 | **Restitution canonique** | ✅ **mesuré** | **79/79** et **449/449** rendus, **aller-retour RSN 100 %** ; surface originale seulement **33/79** ; sans décodeur neuronal |
+| B11.10 | **Cartes et ambiguïtés** | ⏳ **suivant** | `carte` **69,3 %** ; symbole du morpion, chemin des dames ; le codec lit 100 % |
 
 **Bilan de B11** : le **contrat typé** est clair et déterministe, et le **codec classique** est aujourd'hui
 le meilleur bloc linguistique du corpus (lecture exacte 100 %). Le **parseur natif typé** surapprend : il
