@@ -52,6 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
+- **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression.
 - **B18 restitution** — **528/528** rendus et relus, **0** échec ; c'est l'involution du codec, pas un décodeur neuronal (B10 négatif).
 - **B17 mémoire LFU** — LFU **9,28 %** suffixe surface vs FIFO **5,03 %**, suffixe code **74,69 vs 71,70 %** ; M8 couverture **70,75 %**, exact sur couverts **100 %** (lookup), généralisation **0 %**. LFU filtre, M8 ne généralise pas.
 - **B16 M7-bis** — LFU bat FIFO : **+23,1 pts** répétés (30/30), **+4,25** suffixe, **+8,7** nouveaux utiles ; LFU+récence **= LFU** ; contexte **−8,5 / −42,9** ; c'est la **fréquence**, pas la neuromodulation.
