@@ -1,0 +1,55 @@
+{
+ "flux": {
+  "ntok": 4,
+  "canaux": 448,
+  "non_nuls": 356
+ },
+ "octets": {
+  "dense": 7416,
+  "sparse": 1672,
+  "ratio": 4.435406698564593
+ },
+ "temps_local": {
+  "enc_dense_ms": 0.5919590999837965,
+  "enc_sparse_ms": 0.25055934966076165,
+  "dec_dense_ms": 0.49595735035836697,
+  "dec_sparse_ms": 0.37031450046924874
+ },
+ "lien": {
+  "debit_mbps": 1000.0
+ },
+ "latences": [
+  {
+   "latence_ms": 0,
+   "dense_ms": 1.1472444503421635,
+   "sparse_ms": 0.6342498501300103,
+   "gain": 1.8088210034373646
+  },
+  {
+   "latence_ms": 5,
+   "dense_ms": 6.147244450342163,
+   "sparse_ms": 5.6342498501300105,
+   "gain": 1.0910493169202136
+  },
+  {
+   "latence_ms": 20,
+   "dense_ms": 21.147244450342164,
+   "sparse_ms": 20.63424985013001,
+   "gain": 1.0248613157220698
+  },
+  {
+   "latence_ms": 50,
+   "dense_ms": 51.14724445034217,
+   "sparse_ms": 50.63424985013001,
+   "gain": 1.0101313755359376
+  },
+  {
+   "latence_ms": 100,
+   "dense_ms": 101.14724445034216,
+   "sparse_ms": 100.63424985013002,
+   "gain": 1.0050976143904895
+  }
+ ],
+ "seuil_latence_ms": -0.5129946002121533,
+ "lecture": "sparse gagne même à latence nulle"
+}
