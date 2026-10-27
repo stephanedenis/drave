@@ -68,7 +68,7 @@
   "base gelée 0 %",
   "déterminisme 1,000"
  ],
- "lecture": "codec 100 % ; natif normalisé 55,7/37,0 ; contexte suffixé 59,8/40,7 ; contexte préfixé 0,4/88,9 (collapse) ; le codec reste le bloc fiable",
+ "lecture": "codec 100 % ; natif normalisé 55,7/37,0 ; suffixe 59,8/40,7 ; vecteur contexte 59,1/40,7 ; préfixe 0,4/88,9 (collapse) ; cartes 69,3 %",
  "version": 1,
  "modele_natif_synth": {
   "train": 10556,
@@ -129,5 +129,13 @@
   "carte": 0.6950757575757576,
   "determinisme": 1.0,
   "lecture": "gain réel"
+ },
+ "modele_natif_contexte_vecteur": {
+  "exact": 0.5909090909090909,
+  "invariance_paires": 0.4074074074074074,
+  "jeu": 0.9412878787878788,
+  "carte": 0.6931818181818182,
+  "determinisme": 1.0,
+  "lecture": "aucun gain sur le suffixe"
  }
 }

@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import collections
 import dataclasses
+import hashlib
 import json
 import pathlib
 import random
@@ -37,24 +38,30 @@ from semantique.universaux import CHAMPS, code_rsn, index_code, rsn_depuis_code 
 
 
 class ModeleType(nn.Module):
-    def __init__(self, base: nn.Module, n_langues: int = 1):
+    def __init__(self, base: nn.Module, n_langues: int = 1, d_ctx: int = 0):
         super().__init__()
         self.base = base
         self.d_model = int(base.config.hidden_size)
         self.tetes = nn.ModuleList([nn.Linear(self.d_model, len(vals)) for _, vals in CHAMPS])
         self.langue = nn.Linear(self.d_model, n_langues) if n_langues > 1 else None
+        self.ctx_proj = (nn.Sequential(nn.Linear(d_ctx, self.d_model), nn.GELU(),
+                                       nn.Linear(self.d_model, self.d_model))
+                         if d_ctx else None)
 
-    def encode(self, ids, masque):
+    def encode(self, ids, masque, ctx=None):
         sortie = self.base(input_ids=ids, attention_mask=masque, output_hidden_states=True)
         h = sortie.hidden_states[-1]
         m = masque.unsqueeze(-1).to(h.dtype)
-        return (h * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
+        h = (h * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
+        if ctx is not None and self.ctx_proj is not None:
+            h = h + self.ctx_proj(ctx)
+        return h
 
     def logits_depuis_h(self, h):
         return [tete(h) for tete in self.tetes]
 
-    def logits(self, ids, masque):
-        return self.logits_depuis_h(self.encode(ids, masque))
+    def logits(self, ids, masque, ctx=None):
+        return self.logits_depuis_h(self.encode(ids, masque, ctx))
 
 
 def labels(items_, index: dict[str, int]):
@@ -62,7 +69,18 @@ def labels(items_, index: dict[str, int]):
             for nom, _ in CHAMPS}
 
 
-def predire_lot(modele, items_, seq, device, lot=64):
+def vecteur_contexte(texte: str, dim: int = 512) -> torch.Tensor:
+    """Hash de trigrammes de caractères : contexte fixe, indépendant de la langue."""
+    v = torch.zeros(dim)
+    t = " " + texte.lower() + " "
+    for i in range(len(t) - 2):
+        h = int.from_bytes(hashlib.blake2b(t[i:i + 3].encode("utf-8"), digest_size=8).digest(), "big")
+        v[h % dim] += 1.0
+    n = v.norm()
+    return v / n if n > 0 else v
+
+
+def predire_lot(modele, items_, seq, device, lot=64, ctxs=None):
     """Comme predire, mais lit correctement les 15 têtes par item."""
     modele.eval()
     out = []
@@ -71,7 +89,8 @@ def predire_lot(modele, items_, seq, device, lot=64):
             mor = items_[debut:debut + lot]
             xs = [list(i.texte.encode("utf-8"))[:seq] for i in mor]
             x, m = pad(xs)
-            logits = modele.logits(x.to(device), m.to(device))
+            c = ctxs[debut:debut + lot].to(device) if ctxs is not None else None
+            logits = modele.logits(x.to(device), m.to(device), c)
             for j in range(len(mor)):
                 code = {nom: CHAMPS[f][1][int(logits[f][j].argmax())]
                         for f, (nom, _) in enumerate(CHAMPS)}
@@ -132,6 +151,9 @@ def main() -> int:
                     help="remplacer les mots du lexique par des concepts canoniques")
     ap.add_argument("--contexte", action="store_true",
                     help="préfixer la surface par le résumé du contexte RSN")
+    ap.add_argument("--contexte-vecteur", action="store_true",
+                    help="ajouter un vecteur de contexte séparé aux états de surface")
+    ap.add_argument("--dim-contexte", type=int, default=512)
     ap.add_argument("--sortie", default="/tmp/semantique-type")
     args = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -166,7 +188,12 @@ def main() -> int:
     langues_train = sorted({it.langue for it in train})
     idx_langue = {l: i for i, l in enumerate(langues_train)}
     base = AutoModelForCausalLM.from_pretrained(args.checkpoint, dtype=torch.float32)
-    modele = ModeleType(base, len(langues_train)).to(device)
+    modele = ModeleType(base, len(langues_train),
+                        args.dim_contexte if args.contexte_vecteur else 0).to(device)
+    ctx_train = (torch.stack([vecteur_contexte(i.contexte, args.dim_contexte) for i in train])
+                 if args.contexte_vecteur else None)
+    ctx_val = (torch.stack([vecteur_contexte(i.contexte, args.dim_contexte) for i in val])
+               if args.contexte_vecteur else None)
     if args.gele_base:
         for p in modele.base.parameters():
             p.requires_grad = False
@@ -176,6 +203,8 @@ def main() -> int:
     ])
     if modele.langue is not None:
         opt.add_param_group({"params": modele.langue.parameters(), "lr": args.lr_tete})
+    if modele.ctx_proj is not None:
+        opt.add_param_group({"params": modele.ctx_proj.parameters(), "lr": args.lr_tete})
     index = {nom: {v: i for i, v in enumerate(vals)} for nom, vals in CHAMPS}
     ytr = {k: v.to(device) for k, v in labels(train, index).items()}
     yva = labels(val, index)
@@ -195,9 +224,10 @@ def main() -> int:
             xs, choix = lot(train, args.lot, args.seq, rng)
         x, m = pad(xs)
         x, m = x.to(device), m.to(device)
-        h = modele.encode(x, m)
-        logits = modele.logits_depuis_h(h)
         idx = torch.tensor([id_train[id(c)] for c in choix], device=device)
+        ctx_b = ctx_train[idx.cpu()].to(device) if ctx_train is not None else None
+        h = modele.encode(x, m, ctx_b)
+        logits = modele.logits_depuis_h(h)
         ce = sum(F.cross_entropy(logits[f], ytr[nom][idx])
                  for f, (nom, _) in enumerate(CHAMPS))
         cons = consistance(logits, choix) if args.consistance else torch.zeros((), device=device)
@@ -210,7 +240,7 @@ def main() -> int:
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step()
         if pas % args.eval_tous == 0 or pas == args.pas:
-            codes = predire_lot(modele, val, args.seq, device)
+            codes = predire_lot(modele, val, args.seq, device, ctxs=ctx_val)
             acc = exactitude(val, codes)
             hist.append({"pas": pas, "perte": float(perte.detach()),
                          "consistance": float(cons.detach()),
@@ -226,9 +256,9 @@ def main() -> int:
                 sans_gain += 1
             if sans_gain >= args.patience:
                 break
-    codes_tr = predire_lot(modele, train, args.seq, device)
+    codes_tr = predire_lot(modele, train, args.seq, device, ctxs=ctx_train)
     acc_tr = exactitude(train, codes_tr)
-    codes = predire_lot(modele, val, args.seq, device)
+    codes = predire_lot(modele, val, args.seq, device, ctxs=ctx_val)
     acc = exactitude(val, codes)
     # contrôle majoritaire
     acc_maj = exactitude(val, [majoritaire for _ in val])
@@ -248,7 +278,7 @@ def main() -> int:
             continue
         rendus.append(surf.strip().lower() == it.texte.strip().lower())
     # déterminisme
-    codes2 = predire_lot(modele, val, args.seq, device)
+    codes2 = predire_lot(modele, val, args.seq, device, ctxs=ctx_val)
     det = sum(a == b for a, b in zip(codes, codes2)) / max(1, len(codes))
     resultat = {"items": len(its), "train": len(train), "val": len(val),
                 "paires_val": len(groupes), "champs": len(CHAMPS),

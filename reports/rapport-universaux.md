@@ -76,7 +76,20 @@ Avec le contexte suffixé : `jeu` **98,7 %**, `action` **98,1 %**, `de`/`vers` *
 déterminisme 1,000, train 96,8 % (surapprentissage). Le préfixe donne une **fausse invariance** : tous les
 codes se ressemblent, mais le code exact s'effondre à 0,4 %. C'est un **négatif nommé**.
 
-### 2.4 Normalisation lexicale : le levier
+### 2.4 Contexte séparé : aucun gain
+
+Un vecteur de contexte séparé (hash stable de trigrammes, 512 dimensions, MLP) est ajouté aux états de
+surface, au lieu de concaténer le texte du contexte.
+
+| variante | code exact | invariance |
+|---|---:|---:|
+| contexte **suffixé** | **59,8 %** | **40,7 %** |
+| contexte **vectoriel séparé** | 59,1 % | 40,7 % |
+
+Le résultat est **le même** : la représentation du contexte n'est plus le verrou. Les limites restantes sont
+les **cartes** (`carte` 69,3 %) et les **ambiguïtés de surface** (symbole du morpion, chemin des dames).
+
+### 2.5 Normalisation lexicale : le levier
 
 Les mots du lexique (jeux, pièces, rangs, enseignes, passe) sont remplacés par des **concepts canoniques**
 (`[jeu.morpion]`, `[echecs.piece.N]`, `[cartes.rang.13]`) avant le parseur ; les coordonnées et les nombres
