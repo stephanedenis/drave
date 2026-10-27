@@ -27,6 +27,7 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
+| [`rapport-pipeline-memoire.md`](rapport-pipeline-memoire.md) | **B17** — LFU 9,28 % suffixe surface vs FIFO 5,03 % ; M8 couverture 70,75 %, exact sur couverts 100 % (lookup), généralisation 0 |
 | [`rapport-m7-frequence.md`](rapport-m7-frequence.md) | **B16** — M7-bis LFU : +23,1 pts répétés, +4,25 suffixe, +8,7 nouveaux ; LFU+récence = LFU ; contexte négatif |
 | [`rapport-pipeline-m2.md`](rapport-pipeline-m2.md) | **B14** — M2 dans la chaîne : M1 100 %, M2 93,4/93,6 %, aucun étage ne consomme M2 ; M5 plateau 18,70 % vs 12,60 % |
 | [`rapport-multilingue.md`](rapport-multilingue.md) | **B15** — M1 sur 66 langues : 528/528, invariance 26/26 et 15/15, contrôle permuté 0/90 %, baseline surface 71,8 % |

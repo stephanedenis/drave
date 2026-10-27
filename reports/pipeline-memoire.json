@@ -1,0 +1,27 @@
+{
+ "politiques": {
+  "fifo": {
+   "suf_surface": 0.050314465408805034,
+   "suf_code": 0.7169811320754716,
+   "codes_memoire": 16.0
+  },
+  "lru": {
+   "suf_surface": 0.059433962264150944,
+   "suf_code": 0.718867924528302,
+   "codes_memoire": 16.0
+  },
+  "lfu": {
+   "suf_surface": 0.09276729559748428,
+   "suf_code": 0.7468553459119497,
+   "codes_memoire": 16.0
+  }
+ },
+ "M8": {
+  "prototypes": 6,
+  "suffixe": 106,
+  "couverts": 75,
+  "couverture": 0.7075471698113207,
+  "exact_sur_couverts": 1.0,
+  "generalisation": 0.0
+ }
+}
