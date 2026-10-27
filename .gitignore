@@ -14,3 +14,7 @@ journal/sessions/archive.log
 # (commande exacte dans tools/ref_logits.md).
 tools/ref_logits
 target/
+
+# docwatch — SVG générés depuis les sources .puml/.mmd (docwatch les produit)
+docs/**/*.puml.svg
+docs/**/*.mmd.svg

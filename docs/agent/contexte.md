@@ -34,7 +34,7 @@
 | `AGENTS.md` | 1 200 | **T0** — toujours |
 | `docs/en-cours.md` | 2 000 | **T0** — toujours |
 | `docs/agent/*.md` | 1 200 | **T0** — un seul |
-| `docs/README.md` · `docs/carte.md` | 1 000 | **T1** — si l'on cherche un fichier |
+| `docs/README.md` · `docs/carte.md` | 1 100 | **T1** — si l'on cherche un fichier |
 | `docs/synthese/index.md` | 2 000 | **T1** — l'introduction |
 | `docs/synthese/0*.md` | 2 000 | **T1** — un chapitre |
 | `docs/roadmap.md` | 8 500 | **T1** — résumé + une section |

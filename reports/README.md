@@ -1,7 +1,7 @@
 # Les rapports — données intermédiaires et références
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : l'inventaire est complété par [`INDEX.md`](INDEX.md) (généré) ;
 > le warning `07-mesures` est corrigé (168 mesures / 10 parties).*

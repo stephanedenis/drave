@@ -6,7 +6,7 @@
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
 
-**Mis à jour : 2026-10-27, 11 h 40 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-27, 16 h 30 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
@@ -52,7 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
-- **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression.
+- **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
 - **B23 routeur** — original **100 %**, casse **99,3 %**, phrase **92,5 %**, espaces **41,8 %** vs M1 **11,6 %**, typo **56,2 %** < M2 **68,3 %** ; collision de lexique, pas un oracle.
 - **B22 M2 typos** — M1 **24–45 %** sur suppression/substitution/insertion/transposition ; M2 `de` **62–73 %**, `vers` **66–80 %** ; avantage **+21,9 à +46,5 pts**. Niche robuste, pas un étage.
 - **B21 M9 dose** — M3 span **0/4/8/12/12** (tautologique) ; M5 ordre 0/1/2 **13,81/15,70/18,06 %** (+4,25 pts) ; sham **nul** ; double lésion non additive.
@@ -63,9 +63,9 @@ La vision complète est dans [`vision.md`](vision.md).
 - **B14 M2 dans la chaîne** — **n'ajoute rien** : M1 **100 %** (`de`/`vers`), M2 **93,4 / 93,6 %**, aucun étage ne consomme M2 ; M5 plateau **18,70 % vs 12,60 %** ; M6 **94,32 / 94,95 %** ; le « M5 M1-lésé 28,03 % » est une couverture 51,4 %, pas un gain. M2 est un rameau, pas un étage.
 - **B15 multilingue** — M1 sur **66 langues** : **528/528** avec contexte, **70,8 %** sans ; **26/26** variantes et **15/15** interlangues invariantes ; contrôle permuté **0 %** attendu / **90 %** donneur ; baseline surface **71,8 %**. Détail : [`rapport-multilingue.md`](../reports/rapport-multilingue.md).
 - **B13 chaîne sémantique** — M1 → M5 → M6 → M8 : **528/528**, M5 contexte **18,7 % vs 12,6 %**, M6 **94,3 %**, M8 **57,95 %** (borne haute, non tenue à l'écart). Intégration, pas preuve.
-- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `aug-formes` **de 95,2 %, inédit 13/20, chemin 88,1 %, 6/14** ; `aug-pos` **vers 95,4 %, 13,3/20** ; `point` = majorité ; aucune variante ne domine, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 sans contexte action constante, avec plateau source dames **3,27→2,11 nat** ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
-- **B12 pipeline** — **M1 → M4 → M8** : **528/528** surfaces, **7** prototypes, **96,33 %** de complétion
-  sur 120 codes partiels ; test d'intégration, pas de généralisation M4.
+- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 vu seulement ; M3
+  **tautologique** ; M4 **lookup** ; M5 contexte ; M6 langue, commutation 0 ; M7 plafond 3,64 % ;
+  M8 **96,48 % marginal**. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 - **Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
 originale** reste à **33/79** ; le natif normalisé + contexte reste à **59,8 %** de code exact et **40,7 %**
 d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](../reports/bilan-b11.md).
@@ -81,13 +81,13 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
 | fichiers / JSON de résultats | **185** / **252** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
-| dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
+| dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
 ## Où l'on en est
 
 | | |
 |---|---:|
-| portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
+| portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
 | fichiers / JSON de résultats | **185** / **252** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
@@ -98,7 +98,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | le banc externe (B9) | **DeepSeek 310/310, chrF 82,82 contre 15,64 ; 31,63 M/610 : 4,40 %** |
 | le protocole sémantique (B10) | **encodeur 0,426 contre 0,167 ; décodeur négatif 14,0/5,4 contre 38,8** (référence tronquée) |
 | la base typée (B11) | **codec 100 %** (79/79, 449/449) ; natif **59,8 % / 40,7 %** ; surface **33/79** |
-| les modules cerveau-langage (B12) | **M1 528/528 ; M2 98,6/93,2 ; M8 96,48 %** ; M5/M6/M7 négatifs |
+| B22/B23 — M2 et le routeur | **M2 typos 62–80 % vs M1 24–45 %** ; routeur espaces **41,8 % vs 11,6 %**, typo **56,2 % < M2 68,3 %** |
 
 ## Les sept chantiers, en une ligne
 
@@ -114,10 +114,11 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 
 ## Ce qui reste
 
-**Court terme** — les lignes ouvertes, non bloquées : **B10.3** (un décodeur au-dessus du plancher, puis le
-raisonnement sur `z`), **B12.10** (M2 équilibré + contexte, M3 répétitions, M5 ordre 2, M6 conflit, M7 capacité,
-M8 rejeu), et les suites de **B9** (**31,63 M / 610 à 750/1 000 pas**, **plus de données avec la capacité**, le
-**masque dans le trainer**, l'**export du 31,63 M** vers le moteur).
+**Court terme** — **B23** : un score de confiance M1 (la collision de lexique laisse la typo à 56,2 %) ;
+**B22** : typos réelles et secours conditionnel ; **B21** : reproduire la dose M5 sur une autre lésion ;
+**B10.3** : un décodeur au-dessus du plancher, puis le raisonnement sur `z` ; **B12.10** : M2 équilibré,
+M3 répétitions, M5 ordre 2, M6 conflit, M7 capacité, M8 rejeu ; **B9** : 31,63 M / 610 à 750/1 000 pas,
+plus de données avec la capacité, masque dans le trainer, export du 31,63 M.
 
 **Moyen terme** — les suites des jeux hors plan (corpus externe, MCTS budgété, portage Rust), les **9 familles** de
 C3, la **prose scientifique** (bloquée par le corpus), le **FPGA**, la **démonstration distante** (compte Colab), le

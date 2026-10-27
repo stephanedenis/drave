@@ -1,7 +1,7 @@
 # Directives de l'agent — Drave
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
 > ci-dessous ne changent pas.** Source de vérité : `docs/en-cours.md` (état)
 > et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.

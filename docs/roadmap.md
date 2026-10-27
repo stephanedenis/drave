@@ -1,7 +1,7 @@
 # La roadmap de Drave — deux programmes, un ordre, aucune date
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) est
 > remis à jour ; B11 précède B12.*
@@ -399,6 +399,10 @@ un module par famille peut apprendre la **surface** de la famille sans apprendre
 **même mesure** à 1 langue (le 85,1 % de référence) doit tenir par famille, et la courbe doit être **comparée** à
 celle du module unique. Le `sino-tibetan` partait de **40,5 %** avant l'entraînement (le modèle connaissait déjà une
 partie des textes) : sa progression (59,5 points) est **moins parlante** que les autres — c'est écrit dans la fiche.
+
+> **Suites B19–B23.** **B23** : un score de confiance M1, car la collision de lexique laisse la typo
+> à 56,2 % ; **B22** : typos réelles et secours conditionnel ; **B21** : reproduire la dose M5 sur une
+> autre lésion ; **B19** : la niche est la typo et les espaces, pas la phrase.
 
 ## L'ordre du jour (carpe diem)
 

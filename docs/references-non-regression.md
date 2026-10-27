@@ -1,7 +1,7 @@
 # Références de non-régression
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Dernière passe :
-> **49 portes, 47 vertes, 2 structurelles, 1 h 34** (26/10 14 h 30). L'historique des
+> **49 portes, 47 vertes, 2 structurelles, 1 h 48** (27/10 14 h 33). L'historique des
 > passes est dans [`reports/historique-passes-portes.md`](../reports/historique-passes-portes.md).
 > Les compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.
 
@@ -10,7 +10,12 @@
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
 
-> **Passe du 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 34 min**) — la passe de clôture
+> **Passe du 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
+> finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux
+> rouges structurelles, avec les mêmes diagnostics ; **aucune régression**. Journaux :
+> `/tmp/portes-1027-12h45`.
+
+> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 34 min**) — la passe de clôture
 > de **B9**, avec `porte-deepseek` **incluse** (1 s, **verte** : 20 tests, dry-run, 60 et 310 prompts) et
 > `porte-jeux` **verte** (106 s : 449/449 au niveau 4, 11/11 paires, permutation 12/275, notation 5 112/5 112,
 > livre 10/10, go 9×9 10/10 contre 3/10, dames 0 défaite, cartes 44,7 % contre 51,0 %). Les **deux rouges**
@@ -23,7 +28,7 @@
 > `/tmp/portes-b9-1026-12h55`.
 >
 
-> **Historique des passes** : les passes du 10/10 au 26/10 09 h 40, et la passe du
+> **Historique des passes** : les passes antérieures au 26/10 14 h 30, dont celle du
 > 25/10 04 h 51, sont conservées dans
 > [`reports/historique-passes-portes.md`](../reports/historique-passes-portes.md).
 
@@ -32,7 +37,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** ; dernière passe : **47 vertes, 2 structurelles** (26/10 14 h 30), **1 h 34**, aucune sautée — les deux rouges sont **structurelles** et connues (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** ; dernière passe : **47 vertes, 2 structurelles** (27/10 14 h 33), **1 h 48**, aucune sautée — les deux rouges sont **structurelles** et connues (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE
