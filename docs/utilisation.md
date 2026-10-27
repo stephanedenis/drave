@@ -1,7 +1,7 @@
 # UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés corrigés
+> (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
 > pas.** *46→49 portes, 6→8 chapitres, 6→14 schémas ; les chemins `cerveau-facultes` et
 > `etat-cerveau` sont passés à l'archive.*
@@ -55,7 +55,7 @@ document ✓) → 404 ✗✓. Deux ajouts, désormais **dans le dépôt public**
 Vérifié : `/render` sur `docs/synthese/index.md` renvoie **6 images** aux `src` réécrits ✓, et
 `/asset?path=…/vue-ensemble.svg` répond **200 `image/svg+xml`** ✓.
 
-**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **59 tests**, CI Python 3.9–3.13, README et licence MIT
+**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **60 tests**, CI Python 3.9–3.13, README et licence MIT
 dans [**stephanedenis/mdserve**](https://github.com/stephanedenis/mdserve). Le paquet s'appelle
 `mdserve-local` (le nom `mdserve` est pris sur PyPI) ; les commandes restent `mdserve` et `mdopen`.
 
