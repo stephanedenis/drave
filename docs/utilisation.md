@@ -1,7 +1,7 @@
 # UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés corrigés
+> (**49 portes, 8 chapitres, 179 fichiers / 246 JSON, 53 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
 > pas.** *46→49 portes, 6→8 chapitres, 6→14 schémas ; les chemins `cerveau-facultes` et
 > `etat-cerveau` sont passés à l'archive.*

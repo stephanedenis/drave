@@ -12,7 +12,7 @@
 | niveau | ce qu'on charge | budget | exemples |
 |---|---|---:|---|
 | **T0 — toujours** | les règles, l'état, **un** document de tâche | **≤ 4 000 mots** | `AGENTS.md` · `docs/en-cours.md` · `docs/agent/<tâche>.md` |
-| **T1 — à la demande** | **un** concept, **une** section de roadmap, **un** verdict de fiche, **une** famille de glossaire | **budget par document** (tableau ci-dessous) | `docs/vision.md` · `docs/synthese/0*.md` · `reports/<fiche>.md` (verdict + section) · `docs/glossaire/0*.md` |
+| **T1 — à la demande** | **un** concept, **une** section de roadmap, **un** verdict de fiche, **une** fiche de glossaire | **budget par document** (tableau ci-dessous) | `docs/vision.md` · `docs/synthese/0*.md` · `reports/<fiche>.md` (verdict + section) · `docs/glossaire/0*.md` |
 | **T2 — jamais en entier** | l'histoire, les mesures brutes, les archives, les journaux | **0 mot par défaut** | `journal/` · `docs/archive/` · `reports/` (sauf verdict) · les documents datés |
 
 ## Le protocole de chargement
@@ -24,7 +24,7 @@
    ou la page de `docs/` qui le porte — **pas les deux**, et **pas** le glossaire entier.
 5. Si la tâche a besoin d'un **résultat**, lire le **verdict** de la fiche (les 10 premières lignes)
    puis **une** section ; jamais la fiche entière si elle dépasse 300 lignes.
-6. Si la tâche a besoin d'un **mot**, `grep` la famille de glossaire ; ne pas charger les 11 familles.
+6. Si la tâche a besoin d'un **mot**, lire sa **fiche** (`docs/glossaire/entrees/<slug>.md`, 2-3 lignes) ; si elle n'existe pas, `grep` la famille — jamais les 11.
 7. Si la tâche a besoin d'une **ligne de roadmap**, lire le **résumé exécutif** puis la section A ou B.
 
 ## Les budgets
@@ -40,7 +40,9 @@
 | `docs/roadmap.md` | 8 000 | **T1** — résumé + une section |
 | `docs/glossaire.md` | 1 500 | **T1** — l'index des familles |
 | `docs/glossaire/0*.md` | 5 000 | **T1** — `grep` le terme, jamais les 11 |
-| `reports/README.md` | 2 500 | **T1** — les fiches courantes seulement |
+| `docs/glossaire/README.md` | 2 000 | **T1** — l'index des entrées |
+| `docs/glossaire/entrees/*.md` | 150 | **T1** — une fiche, une carte |
+| `reports/README.md` | 2 800 | **T1** — les fiches courantes seulement |
 | `README.md` | 3 500 | **T1** — la vitrine publique |
 | `REPRISE.md` | 2 000 | **T1** — la check-list de démarrage |
 | `docs/utilisation.md` | 2 500 | **T1** — les commandes qui marchent |
@@ -58,7 +60,7 @@ détail de protocole.
 - `journal/` — le récit daté, y compris `journal/sessions/` : c'est de l'histoire, pas de l'état.
 - `docs/archive/` — les plans et notes conservés pour l'histoire.
 - `reports/` en entier — une fiche par question ; on cite la fiche, on ne l'avale pas.
-- `docs/glossaire/` en entier — on `grep` le terme dans la famille.
+- `docs/glossaire/` en entier — on charge la **fiche** du terme, ou on `grep` la famille.
 - `reports/historique-passes-portes.md` — l'historique des passes, pas les repères courants.
 - les documents datés — sauf si la tâche est **précisément** leur sujet.
 

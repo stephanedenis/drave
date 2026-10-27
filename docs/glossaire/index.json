@@ -1,0 +1,2317 @@
+{
+  "genere": "2026-10-27",
+  "entrees": [
+    {
+      "slug": "a-b",
+      "terme": "A/B (écart A/B)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/a-b.md",
+      "resume": "Comparaison de deux exécutions ne différant que par un réglage, sur le même texte et les mêmes jetons. Le dépôt en fait la règle quand un chiffre absolu n'est pas reproductible : « seul l'écart A/B fait foi » (`docs/plan-gpu-topk.md:99`)."
+    },
+    {
+      "slug": "banc",
+      "terme": "Banc (bench)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/banc.md",
+      "resume": "Dispositif de mesure isolé qui fait tourner une seule partie du moteur sur des données choisies, pour que la bonne réponse soit connue d'avance. Le dépôt en a plusieurs : `--banc-kv`, `--banc-mla`, `--banc-topk`, `--banc-vision`, `--gpu-banc` (`drave-core/src/main.rs`)."
+    },
+    {
+      "slug": "boxing",
+      "terme": "Boxing",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/boxing.md",
+      "resume": "Règle des sprints : 2 h chronométrées, on s'arrête quand la boîte est pleine même si c'est presque fini, et ce qui reste va au planning suivant. `docs/sprints.md:6-17`."
+    },
+    {
+      "slug": "cdc",
+      "terme": "CDC",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/cdc.md",
+      "resume": "Dans le corpus, **deux sens** : 1. **cahier des charges** : le document d'origine du projet, `Qtrinet-bootstrap.md`, qui imposait l'inférence ternaire sur FPGA, « 100 % logique, sans DSP » (`docs/histoire.md:11`) ; 2."
+    },
+    {
+      "slug": "couche-etage",
+      "terme": "Couche / Étage",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/couche-etage.md",
+      "resume": "Dans Drave, **deux mots pour deux choses** : 1. **couche** = **couche de neurones** d'un réseau (couche 1, 2, …) : une unité de calcul traversée par l'état."
+    },
+    {
+      "slug": "creneau-long",
+      "terme": "Créneau long",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/creneau-long.md",
+      "resume": "Unité de travail de 3 h, entre le sprint (2 h) et la journée (8 h) ; produit deux à trois chantiers (`docs/sprints.md:58-63`)."
+    },
+    {
+      "slug": "definition-of-done",
+      "terme": "Definition of done (engagement de fin de sprint)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/definition-of-done.md",
+      "resume": "Liste non négociable pour fermer un sprint « vert » : `cargo test --release` passe, les portes de non-régression sont intactes, tout est commité, la machine est rendue, tout chiffre annoncé a sa source (`docs/sprints.md:33-46`)."
+    },
+    {
+      "slug": "drave",
+      "terme": "Drave",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/drave.md",
+      "resume": "Nom du projet depuis le 30/09/2026 : *stream of logs*, « le flux des listes », et en français la drave, ces billots confiés à la rivière. Le mot porte trois propriétés : ça coule, ça se répartit, ça se surveille (`docs/vision.md:260-273`, `docs/histoire.md:18-24`)."
+    },
+    {
+      "slug": "ecart",
+      "terme": "Écart (0,00e0)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/ecart.md",
+      "resume": "Différence entre le résultat d'une exécution locale et celui d'une exécution découpée ou transportée. `0,00e0` signifie « aucun écart représentable » : c'est le critère de fidélité du transport dense (`docs/roadmap.md:55`, `docs/format-flux.md:185`)."
+    },
+    {
+      "slug": "fait-mesure-projete-deduit",
+      "terme": "Fait · mesuré · projeté · déduit",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/fait-mesure-projete-deduit.md",
+      "resume": "Étiquettes de confiance du dépôt. *Mesuré* : chiffre obtenu sur cette machine, commande citée ; *projeté* : extrapolé d'un modèle ou d'une limite matérielle ; *déduit* : conséquence d'une autre mesure."
+    },
+    {
+      "slug": "harnais",
+      "terme": "Harnais (harness)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/harnais.md",
+      "resume": "Petit montage de test autonome, souvent en Python, qui enveloppe un composant pour le mesurer ou le comparer à une référence. Exemples : harnais de perplexité (`src/bpe_np.py`, `src/transformer_np.py`), harnais MLA (`tools/mla_synthetique.py`, `--banc-mla`), harnais de vision (`tools/vision_ref.py`)."
+    },
+    {
+      "slug": "journal-de-session",
+      "terme": "Journal de session",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/journal-de-session.md",
+      "resume": "Historique horodaté de tout ce qui a été mesuré, archivé automatiquement à chaque commit (`tools/archive_sessions.py`, hook git + tâche horaire). Le journal est la mémoire brute : il n'est **pas** réécrit lors des renommages (`docs/histoire.md:38-43`, `docs/programme-recherche.md:206-208`)."
+    },
+    {
+      "slug": "jeton",
+      "terme": "Jeton",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/jeton.md",
+      "resume": "Unité de **tokenisation** d'un modèle : le découpage technique (octets, caractères, morceaux de mots) que le modèle calcule. C'est une unité **propre au tokeniseur**, variable d'un modèle et d'une écriture à l'autre, et **elle ne porte pas le sens** à elle seule."
+    },
+    {
+      "slug": "mesure-entrelacee-machine-au-calme",
+      "terme": "Mesure entrelacée · machine au calme",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/mesure-entrelacee-machine-au-calme.md",
+      "resume": "Protocole : mesurer les configurations comparées en alternance, parce que la charge de fond (bureau, autres projets) fait varier le temps mural de 30 % ; et préférer les mesures déterministes (perplexité, comptes d'événements) aux mesures de temps (`docs/programme-recherche.md:201-205`, `reports/rapport-campagne-parcimonie.md:8-10`)."
+    },
+    {
+      "slug": "non-regression",
+      "terme": "Non-régression (porte de non-régression)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/non-regression.md",
+      "resume": "Valeur de référence qu'une modification ne doit pas dégrader. Les portes du dépôt sont : Qwen2.5-0.5B à contexte 256 = **19,3885** ; gpt-oss à contexte 256 = **15,6017** ; Qwen3-30B en clusters = **799,8557** ; le banc réparti dense = **0,00e0** (`docs/sprints.md:38-41`, `docs/plan-gpu-topk.md:101`)."
+    },
+    {
+      "slug": "porte-de-correction",
+      "terme": "Porte de correction",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/porte-de-correction.md",
+      "resume": "Comparaison à une référence **externe** (llama.cpp ou une implémentation numpy indépendante) qui sert à corriger le moteur, jamais de but. « La conformité à llama.cpp est une porte de correction, pas le but : le but est de conduire des flux » (`docs/plan-modeles-lourds.md:83-85`, `docs/plan-deepseek41-complet.md:9`)."
+    },
+    {
+      "slug": "porte",
+      "terme": "Porte (de décision)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/porte.md",
+      "resume": "Un chiffre, mesuré sur cette machine, qui décide de continuer ou d'abandonner une branche ; « une porte non franchie arrête la branche — pas de poursuite par inertie » (`docs/programme-recherche.md:134-135`, `:210`). Exemples : *Porte A* (une variante bat le modèle de base de ≥1 % de perplexité), *Porte C* (apprendre un fait à l'inférence sans oubli catastrophique)."
+    },
+    {
+      "slug": "porte-drave",
+      "terme": "Porte Drave",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/porte-drave.md",
+      "resume": "Épreuve propre au projet, opposée à la porte de correction : nombre d'événements par jeton non nul, trace écrite puis **rejouée à l'identique**, découpage en grappes qui donne la même perplexité, flux nouveau lisible par un outil d'analyse (`docs/plan-deepseek41-complet.md:134-141`). Depuis le 03/10 (bloc 22), « rejouée à l'identique » est **défini et vérifié** : aucune liste manquante **et** écart de…"
+    },
+    {
+      "slug": "qtrinet",
+      "terme": "Qtrinet",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/qtrinet.md",
+      "resume": "Premier nom du projet, du nom d'un réseau ternaire sur un cluster de cartes **Stratix V** ; le cahier des charges d'origine, `Qtrinet-bootstrap.md`, est conservé tel quel comme pièce datée. Les variables `QT_*` ne font plus rien : le moteur prévient au lieu de laisser croire qu'une option est active (`docs/histoire.md:11`, `:46-60`)."
+    },
+    {
+      "slug": "rapport",
+      "terme": "Rapport",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/rapport.md",
+      "resume": "Document de `reports/` consignant une campagne : commande exacte, chiffres, erreurs trouvées, réserves. Un rapport porte ses propres corrections, souvent en tête (bandeau « État ») ou en sections « CORRIGÉ » (`reports/rapport-compacite-trace.md:13-18`)."
+    },
+    {
+      "slug": "rejeu",
+      "terme": "Rejeu",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/rejeu.md",
+      "resume": "Réinjection d'une trace enregistrée dans le moteur (`--flux-forcer <trace>`) : les activations calculées sont remplacées par celles du fichier, et si le résultat est identique, « une liste suffit à continuer le calcul » (`docs/roadmap.md:196-213`, `docs/format-flux.md:6-8`)."
+    },
+    {
+      "slug": "relire-relecture-adverse-relecture-deleguee",
+      "terme": "Relire · relecture adverse · relecture déléguée",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/relire-relecture-adverse-relecture-deleguee.md",
+      "resume": "Trois niveaux de relecture. La relecture *adverse* cherche activement à casser une affirmation ; la relecture *déléguée* est confiée à un autre agent et compte comme une tâche du sprint."
+    },
+    {
+      "slug": "representation-semantique-neutre",
+      "terme": "Représentation sémantique neutre (RSN)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/representation-semantique-neutre.md",
+      "resume": "L'objet échangé entre le **module pré-linguistique** (texte → sens) et le **module post-linguistique** (sens → texte) : une **structure multi-niveaux** (graphémique/phonologique, morphologique, syntaxique, sémantique, discursif/pragmatique), **indépendante de la langue de surface**, annotée de son bruit (confiance, ambiguïtés, langues probables). Ses éléments sont des **unités de sens**, jamais des **jetons** (voir **Jeton**) : le jeton est le porteur technique du modèle,…"
+    },
+    {
+      "slug": "rsn-jeu",
+      "terme": "RSN-jeu",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/rsn-jeu.md",
+      "resume": "La **représentation sémantique neutre** appliquée à un jeu symbolique : un **jeu** (`morpion`, `echecs`, `dames`, `go`, `cartes`), une **nature** (`etat`, `coup`, `partie`, `main`, `resultat`), un **corps** canonique (les unités de sens du jeu : cases, trait, roques, chemin, point, carte…) et une **annotation** (langue, format, confiance, ambiguïtés, surface d'origine, niveau de lecture). L'annotation est **hors de l'empreinte** : le bruit…"
+    },
+    {
+      "slug": "lexique-multilingue",
+      "terme": "Lexique multilingue",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/lexique-multilingue.md",
+      "resume": "La table des **libellés** des jeux dans **71 langues** : 35 concepts (pièces, rangs, enseignes, noms de jeux, notions de maîtres), 1 433 couples concept-langue, construits depuis **Wikidata** (CC0). Ce sont des **lemmes**, pas des formes fléchies ; les surfaces multilingues sont des **mots-clés** (pièce + cases, rang + enseigne, nom du jeu + coordonnée), pas de la grammaire."
+    },
+    {
+      "slug": "principe-de-maitre",
+      "terme": "Principe de maître",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/principe-de-maitre.md",
+      "resume": "Une **règle courte** tirée d'un ouvrage du domaine public (Lasker, Capablanca, Nimzowitsch, Tarrasch, Payne, Smith, Cavendish, les proverbes du go) et **encodée** dans la pensée : évaluation, livre d'ouvertures, prior de MCTS ou politique. Un principe n'est pas une citation : c'est une règle mesurable, avec son **contrôle** (la même recherche sans le principe)."
+    },
+    {
+      "slug": "banc-externe",
+      "terme": "Banc externe",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/banc-externe.md",
+      "resume": "Le dispositif qui sort le **langage** des GPU : **DeepSeek** (API) pour traduire, juger, générer et évaluer ; les GPU et CPU restent au **modèle natif** (`route`, `drave-core`) et aux mesures **boîte blanche** (perplexité, activations, flux, sondes). Une API ne donne ni les poids ni les activations : elle ne remplace pas ces mesures."
+    },
+    {
+      "slug": "professeur-eleve",
+      "terme": "Professeur / élève",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/professeur-eleve.md",
+      "resume": "Le **professeur** est le modèle externe (DeepSeek) dont on collecte les sorties ; l'**élève** est le modèle natif `route`. La **distillation** est au niveau des **séquences** (l'API ne donne pas les logits) ; le contrôle mélange les réponses d'entraînement et garde la validation alignée."
+    },
+    {
+      "slug": "retrospective",
+      "terme": "Rétrospective",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/retrospective.md",
+      "resume": "Partie de la cérémonie de fin de sprint : *garder* / *changer* / *doute*. « Une rétro qui ne change rien n'est pas une rétro : chaque \"changer\" doit devenir une action du sprint suivant » (`docs/sprints.md:27-29`)."
+    },
+    {
+      "slug": "session-sprint",
+      "terme": "Session · sprint",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/session-sprint.md",
+      "resume": "Une session (journée) peut contenir plusieurs sprints (2 h chacun) ; un index de session est écrit dans `reports/rapport-session-*.md` (`docs/sprints.md:56-65`)."
+    },
+    {
+      "slug": "trace",
+      "terme": "Trace (de flux)",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/trace.md",
+      "resume": "Enregistrement, couche par couche et jeton par jeton, des neurones actifs (indice + valeur) et de leur échelle. La trace est à la fois le journal d'exécution, la matière du rejeu, le contrat d'échange réseau et la donnée d'analyse (`docs/format-flux.md:1-18`)."
+    },
+    {
+      "slug": "verdict-negatif",
+      "terme": "Verdict négatif",
+      "famille": "1. Le projet, ses noms, sa méthode",
+      "fichier": "01-le-projet-ses-noms-sa-methode.md",
+      "fiche": "entrees/verdict-negatif.md",
+      "resume": "Résultat qui ferme une piste, consigné comme les autres. Exemples : le cache d'experts MXFP4 en VRAM (+6 %, « à ne pas activer par défaut », `docs/contexte-long.md:355-366`), l'épinglage NUMA (« mesuré, perdant », `docs/convertisseur.md:236-242`), le lot dense sur la tête de sortie (« ne gagne rien », `reports/rapport-prefill-par-lots.md:131-136`)."
+    },
+    {
+      "slug": "attention-creuse",
+      "terme": "Attention creuse",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/attention-creuse.md",
+      "resume": "Attention restreinte aux k meilleures clés par requête (`--attn-topk`) ou à une fenêtre (`--attn-window`). Mesure contre-intuitive du dépôt : restreindre aux 256 meilleures clés **améliore** la perplexité de 21 % sur du texte brut, parce que l'attention lointaine ajoute du bruit (`docs/contexte-long.md:557-578`)."
+    },
+    {
+      "slug": "attention",
+      "terme": "Attention (self-attention)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/attention.md",
+      "resume": "Mécanisme par lequel chaque jeton d'une séquence compare sa « requête » (Q) aux « clés » (K) de tous les jetons précédents, puis mélange leurs « valeurs » (V) selon ces scores. C'est le poste dont le coût croît avec la longueur du contexte (`reports/rapport-attention-creuse.md:5-6`)."
+    },
+    {
+      "slug": "batchnorm",
+      "terme": "BatchNorm (normalisation par lot)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/batchnorm.md",
+      "resume": "Normalisation qui centre et réduit les activations sur un lot d'exemples. Les réseaux à spikes de référence l'utilisent au lieu de LayerNorm, qui « ne s'applique pas » à eux (`docs/comparaison-spiking.md:113-116`)."
+    },
+    {
+      "slug": "biais",
+      "terme": "Biais (bias)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/biais.md",
+      "resume": "Terme additif ajouté après une projection. Les oublier est « l'erreur classique de ce dépôt » : elle a coûté 39,80 → 20,84 de perplexité sur gpt-oss et fait diverger tout le ViT (`docs/plan-mla-vision.md:171-173`, `docs/convertisseur.md:319-323`)."
+    },
+    {
+      "slug": "bpe",
+      "terme": "BPE (Byte Pair Encoding ; codage par paires d'octets)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/bpe.md",
+      "resume": "Algorithme de tokenisation qui découpe le texte en morceaux fréquents, appris statistiquement. Le moteur en a une implémentation Rust conforme au pré-tokenizer Qwen2 (737 cas sur 737) ; le `src/bpe_np.py` du harnais, lui, s'en écarte sur 5 points (5,2 % des identifiants) (`reports/rapport-inference.md:157-168`)."
+    },
+    {
+      "slug": "csa",
+      "terme": "CSA (Compressed Sparse Attention ; attention compressée creuse)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/csa.md",
+      "resume": "Régime d'attention de DeepSeek-V4 où les clés sont regroupées en blocs compressés, et où un **indexeur** ne sélectionne qu'un sous-ensemble de blocs candidats par jeton. V4.1 a 18 couches CSA (ratio 2), V4-Flash en a 21 (ratio 4) (`docs/plan-deepseek41-complet.md:100-130`, `reports/rapport-v4-hca.md:96`)."
+    },
+    {
+      "slug": "dsa",
+      "terme": "DSA",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/dsa.md",
+      "resume": "Sigle employé comme nom d'architecture GGUF (`glm-dsa`, pour GLM-5.3), variante « à indexeur » de l'attention creuse : le modèle choisit les blocs de clés à noter au lieu de toutes les noter (`docs/plan-modeles-lourds.md:93`, `reports/rapport-mla-experts.md:124`). À ne pas confondre avec la couche CSA proprement dite."
+    },
+    {
+      "slug": "engram",
+      "terme": "Engram",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/engram.md",
+      "resume": "Table d'adresses creuse, adressée par hachage de n-grammes (motifs de 1 à 4 jetons) : le modèle y lit des rangées de mémoire externe plutôt que de recalculer. Dans V4.1, deux couches d'engram pèsent 203 Go sur 365,7 Go, mais une session de 10 000 jetons n'en touche que ~4,6 Mo — d'où l'intérêt du `mmap` (`docs/plan-deepseek41-complet.md:53`, `reports/rapport-empreinte-memoire.md:7-10`)."
+    },
+    {
+      "slug": "expert",
+      "terme": "Expert (MoE)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/expert.md",
+      "resume": "Sous-réseau spécialisé qu'un routeur allume pour certains jetons seulement. « Un expert qui ne tire pas coûte zéro octet » : c'est l'avantage structurel revendiqué par le projet (`docs/programme-recherche.md:33-35`)."
+    },
+    {
+      "slug": "expert-partage",
+      "terme": "Expert partagé (shexp)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/expert-partage.md",
+      "resume": "Expert **toujours actif**, en plus des experts routés : ses tenseurs (`ffn_*_shexp.weight`) existent dans le GGUF mais le moteur ne les calcule pas encore — un manque nommé par `--config` (`reports/rapport-mla-experts.md:128-131`)."
+    },
+    {
+      "slug": "fenetre-glissante",
+      "terme": "Fenêtre glissante (sliding window attention, SWA)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/fenetre-glissante.md",
+      "resume": "Attention limitée aux N derniers jetons, apprise par le modèle. « La fenêtre déclarée par le modèle n'est pas un réglage, c'est une propriété » : l'élargir détruit la perplexité (×11) (`docs/contexte-long.md:575-578`)."
+    },
+    {
+      "slug": "ffn",
+      "terme": "FFN (Feed-Forward Network ; réseau à propagation avant)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/ffn.md",
+      "resume": "Le bloc qui suit l'attention dans chaque couche : deux ou trois projections avec une non-linéarité. Dans un MoE, il est remplacé par des experts routés."
+    },
+    {
+      "slug": "gelu",
+      "terme": "GELU (Gaussian Error Linear Unit)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/gelu.md",
+      "resume": "Non-linéarité lisse proche de ReLU. Le projecteur de vision en utilise un (approximation d'erf d'Abramowitz-Stegun 7.1.26), mais **pas** la tour du ViT, qui utilise SiLU (`docs/plan-mla-vision.md:187-201`)."
+    },
+    {
+      "slug": "gqa",
+      "terme": "GQA (Grouped-Query Attention ; attention à requêtes groupées)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/gqa.md",
+      "resume": "Compromis entre l'attention multi-têtes et MQA : plusieurs têtes de requête partagent une même tête de clé/valeur, ce qui réduit le cache. Qwen2.5-0.5B a 14 têtes de requête pour 2 têtes KV (`reports/rapport-modele-reel.md:3`)."
+    },
+    {
+      "slug": "hca",
+      "terme": "HCA (attention compressée à ratio élevé)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/hca.md",
+      "resume": "Régime d'attention de DeepSeek-V4 où un bloc de clés est résumé en un petit nombre de valeurs, avec une porte softmax par canal ; 20 couches de V4-Flash, validées à 0,999992 de corrélation avec llama.cpp au 128ᵉ jeton (`docs/plan-deepseek41-complet.md:226-237`, `reports/rapport-v4-hca.md:5`)."
+    },
+    {
+      "slug": "hyper-connexions",
+      "terme": "Hyper-connexions (HC)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/hyper-connexions.md",
+      "resume": "Mécanisme de V4.1 : l'état résiduel est dupliqué en 4 copies, puis remélangé à chaque couche par des poids (`pre`, `post`, `comb`) normalisés par **Sinkhorn** sur 20 itérations. Sans ce mélange, tout ce qui suit a la mauvaise entrée — et l'erreur est silencieuse (`docs/plan-deepseek41-complet.md:171-186`, `reports/rapport-v4-couches-0-1.md:55`)."
+    },
+    {
+      "slug": "mhc-retarde",
+      "terme": "mHC retardé (chaîne retardée de V4.1)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/mhc-retarde.md",
+      "resume": "Dans **V4** (`deepseek4`), chaque raccord (attention, FFN) replie l'entrée avec **ses propres** coefficients ; dans **V4.1** (`deepseek41`), les coefficients servent au raccord **suivant** : l'attention se replie avec la `pre` de la FFN précédente, la FFN avec la `pre` de l'attention courante, et la **tête** — qui n'a aucun poids appris chez V4.1 — avec la `pre` de la dernière…"
+    },
+    {
+      "slug": "cache-compresse-partage",
+      "terme": "Cache compressé partagé (kvsourcelayerids)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/cache-compresse-partage.md",
+      "resume": "Dans V4.1, seules quelques couches (**2, 8, 14, 20**) portent un compresseur et publient les clés compressées ; les couches suivantes (3..7, 9..13, 15..19, 21..39) **lisent les mêmes clés** au lieu de calculer les leurs. Un compresseur calculé couche par couche donnerait d'autres clés — un résultat faux qui ne casse rien."
+    },
+    {
+      "slug": "compression-de-contexte",
+      "terme": "Compression de contexte (ratio 1, 2, 4, 128)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/compression-de-contexte.md",
+      "resume": "Résumer `ratio` jetons en un seul latent de clé, afin que l'attention ne croisse plus avec la longueur. V4-Flash mélange **CSA** (ratio 4, fenêtre à chevauchement) et **HCA** (ratio 128) ; V4.1 utilise **2** (softmax par canal sur le groupe, apprise porte) et **1** (un latent par jeton, sans porte ni `ape`)."
+    },
+    {
+      "slug": "indexeur",
+      "terme": "Indexeur (lightning indexer)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/indexeur.md",
+      "resume": "Petit réseau qui note des blocs de clés et n'en retient qu'un sous-ensemble (2 048 blocs candidats) avant l'attention proprement dite. C'est « le flux le plus intéressant du modèle : il décide de ce que l'attention voit » (`docs/plan-deepseek41-complet.md:267-285`, `reports/rapport-v4-hca.md:96`)."
+    },
+    {
+      "slug": "jeton-2",
+      "terme": "Jeton (token)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/jeton-2.md",
+      "resume": "Le découpage **technique** du modèle : un mot court, un fragment de mot ou un signe. Le moteur raisonne en jetons, jamais en caractères (`docs/format-flux.md:29`)."
+    },
+    {
+      "slug": "k-wta",
+      "terme": "k-WTA (k-Winners Take All ; les k gagnants emportent tout)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/k-wta.md",
+      "resume": "Parcimonie imposée : ne garder que les k plus grandes activations d'un vecteur, les autres passant à zéro. Mesurée « dix fois meilleure » qu'un seuil absolu à sparsité égale (`reports/rapport-parcimonie-imposee.md:24`, `:42-54`)."
+    },
+    {
+      "slug": "kv",
+      "terme": "KV (cache clé-valeur)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/kv.md",
+      "resume": "Mémoire des clés et valeurs déjà calculées pour les jetons précédents, relue à chaque nouveau jeton. À contexte long, c'est le second mur du projet : 77 Go en f32 à 1 M de jetons pour gpt-oss, 9,7 Go en int4 (`docs/contexte-long.md:29-37`, `:61-73`)."
+    },
+    {
+      "slug": "layernorm",
+      "terme": "LayerNorm (normalisation de couche)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/layernorm.md",
+      "resume": "Normalisation sur les canaux d'un même jeton, qui stabilise l'entraînement. Voir aussi RMSNorm."
+    },
+    {
+      "slug": "lif",
+      "terme": "LIF (Leaky Integrate-and-Fire ; neurone à intégration et décharge)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/lif.md",
+      "resume": "Neurone des réseaux à spikes : il accumule son entrée et « décharge » un spike 0/1 quand un seuil est franchi. Il décharge à R̂ ≈ 0,15 chez SpikeGPT, d'où 6,7× moins d'événements (`docs/comparaison-spiking.md:36-40`)."
+    },
+    {
+      "slug": "logits",
+      "terme": "Logits",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/logits.md",
+      "resume": "Vecteur des scores bruts donnés par le modèle à chaque jeton possible du vocabulaire, avant normalisation en probabilités. Le moteur en écrit pour comparer deux exécutions (`--logits-bin`, `tools/compare_logits.py`)."
+    },
+    {
+      "slug": "lora",
+      "terme": "LoRA (Low-Rank Adaptation ; adaptation à rang faible)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/lora.md",
+      "resume": "Remplacer une grosse matrice par le produit de deux petites matrices (une « descente » puis une « remontée »), ce qui réduit le nombre de paramètres. C'est le principe des projections de MLA et de la sortie groupée de V4 (`q_lora_rank`, `kv_lora_rank`, `o_lora_rank` ; `docs/plan-mla-vision.md:26-53`, `docs/plan-deepseek41-complet.md:78-88`)."
+    },
+    {
+      "slug": "mla",
+      "terme": "MLA (Multi-head Latent Attention ; attention latente multi-têtes)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/mla.md",
+      "resume": "Variante d'attention qui ne stocke qu'un **latent** par jeton (une petite dizaine de valeurs) et reconstruit clés et valeurs à la lecture ; le cache KV devient ~50× plus petit. Validée contre numpy à 5,2e-7 et contre llama.cpp à 0,999024 sur GLM-5.3 (`docs/plan-mla-vision.md:8-90`, `reports/rapport-mla-experts.md`)."
+    },
+    {
+      "slug": "moe",
+      "terme": "MoE (Mixture of Experts ; mélange d'experts)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/moe.md",
+      "resume": "Architecture où chaque jeton n'est traité que par quelques experts choisis par un routeur (par exemple 8 sur 128). « Un modèle à cent experts dont deux tirent coûte le prix de deux » (`docs/programme-recherche.md:33-35`)."
+    },
+    {
+      "slug": "mqa",
+      "terme": "MQA (Multi-Query Attention ; attention à requête unique)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/mqa.md",
+      "resume": "Toutes les têtes de requête partagent une seule tête de clé/valeur. MLA et V4 en sont des variantes ou des descendants (`docs/plan-mla-vision.md:33`)."
+    },
+    {
+      "slug": "mrope",
+      "terme": "mRoPE (rotation 2-D, rotary position embedding multimodale)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/mrope.md",
+      "resume": "Rotation positionnelle appliquée en quatre blocs (ligne, colonne, ligne, colonne) pour des entrées 2-D comme les patchs d'image, au lieu de la rotation scalaire des jetons de texte. La convention exacte a été lue dans `clip.cpp` de llama.cpp (`docs/plan-mla-vision.md:500-535`, `:682-711`)."
+    },
+    {
+      "slug": "mtp",
+      "terme": "MTP (Multi-Token Prediction ; prédiction multi-jetons) et décodage spéculatif",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/mtp.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "nll",
+      "terme": "NLL (Negative Log-Likelihood ; log-vraisemblance négative)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/nll.md",
+      "resume": "Perte d'une prédiction : `−log(p)` du jeton réel, en nats. Plus elle est basse, meilleur est le modèle ; la perplexité est son exponentielle."
+    },
+    {
+      "slug": "patch-vit-projecteur",
+      "terme": "Patch · ViT · projecteur (mmproj)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/patch-vit-projecteur.md",
+      "resume": "Un *patch* est un carré d'image (14 × 14 pixels) traité comme un jeton ; le *ViT* est la tour de vision qui les encode ; le *projecteur* (`mmproj`) traduit ces vecteurs vers la dimension du modèle de texte. Chaîne démontrée de l'image aux logits sur Qwen2.5-VL-7B (`docs/plan-mla-vision.md:654-671`)."
+    },
+    {
+      "slug": "perdu-au-milieu",
+      "terme": "« Perdu au milieu » (lost in the middle)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/perdu-au-milieu.md",
+      "resume": "Comportement observé des modèles longs : ils retrouvent une information placée au début ou à la fin d'un contexte, mais beaucoup moins bien au milieu. Le test de l'aiguille du dépôt retrouve exactement ce motif (`reports/rapport-aiguille-topk.md:52-58`)."
+    },
+    {
+      "slug": "perplexite",
+      "terme": "Perplexité (PPL)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/perplexite.md",
+      "resume": "Exponentielle de la perte moyenne par jeton : mesure d'« étonnement » du modèle sur un texte. Plus elle est basse, mieux le modèle prédit ; un écart de quelques centièmes de pour cent est significatif sur un même corpus, mais **deux perplexités sur deux corpus ne se comparent pas** (`docs/format-flux.md:181-183`, `docs/contexte-long.md:316-319`)."
+    },
+    {
+      "slug": "preremplissage",
+      "terme": "Préremplissage (prefill) · décodage (decode)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/preremplissage.md",
+      "resume": "Le préremplissage traite tout le prompt d'un coup (parallélisable) ; le décodage produit les jetons un par un (séquentiel). « Le décodage restera séquentiel ; c'est le préremplissage qui est parallèle par nature » (`docs/vision.md:160-162`) ; le mode 3 du protocole sert au préremplissage (`docs/format-flux.md:127-134`)."
+    },
+    {
+      "slug": "puits-d-attention",
+      "terme": "Puits d'attention (attention sinks)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/puits-d-attention.md",
+      "resume": "Clé virtuelle de valeur nulle, apprise, qui ne compte que dans le dénominateur du softmax : elle sert de « poubelle » où le modèle jette son attention. Les oublier fausse toute la distribution, pas seulement la queue (`docs/convertisseur.md:286-288`, `docs/plan-gpu-topk.md:107-109`)."
+    },
+    {
+      "slug": "r",
+      "terme": "R̂ (taux de décharge)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/r.md",
+      "resume": "Proportion d'activations non nulles d'un réseau à spikes ; R̂ = 0,15 signifie 15 % de spikes. Sert de point de comparaison au projet, dont les LLM denses ont 0,00 % d'activations exactement nulles (`docs/comparaison-spiking.md:38`, `:56-58`)."
+    },
+    {
+      "slug": "rmsnorm",
+      "terme": "RMSNorm (Root Mean Square Normalization)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/rmsnorm.md",
+      "resume": "Normalisation qui divise par la moyenne quadratique des activations, sans centrage : moins coûteuse que LayerNorm. Utilisée par Qwen2, MLA et les hyper-connexions (`docs/plan-mla-vision.md:31-34`, `reports/rapport-execution-v41.md:34`)."
+    },
+    {
+      "slug": "rope",
+      "terme": "RoPE (Rotary Position Embedding ; plongement positionnel rotatif)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/rope.md",
+      "resume": "Fait tourner par paires les vecteurs Q et K d'un angle proportionnel à la position : la position devient relative, sans paramètre appris. Le moteur en a deux conventions (`NORM` et `NEOX`) et une variante retardée (voir YaRN) (`docs/plan-mla-vision.md:38-42`, `reports/rapport-v4-couches-0-1.md:7`)."
+    },
+    {
+      "slug": "routeur",
+      "terme": "Routeur (router) · routage",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/routeur.md",
+      "resume": "Petit réseau qui choisit, jeton par jeton, les experts à allumer (top-k puis renormalisation). Ses conventions (fonction de score, biais, échelle) ont chacune coûté une porte : « un faux \"oui\" est pire qu'un refus » (`reports/rapport-routage-experts.md:14-32`, `docs/plan-deepseek41-complet.md:104-106`)."
+    },
+    {
+      "slug": "rwkv",
+      "terme": "RWKV (Receptance Weighted Key Value)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/rwkv.md",
+      "resume": "Architecture récurrente alternative à l'attention, portée dans le domaine spiking par SpikeGPT (`docs/comparaison-spiking.md:34-40`). **Réf.** : Peng et al., *RWKV*, [arXiv:2305.13048](https://arxiv.org/abs/2305.13048)."
+    },
+    {
+      "slug": "silu-swiglu",
+      "terme": "SiLU · SwiGLU",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/silu-swiglu.md",
+      "resume": "*SiLU* est une non-linéarité lisse (`x·σ(x)`), aussi appelée sigmoid linear unit. *SwiGLU* est le bloc FFN qui combine deux projections avec cette porte : `a = SiLU(u·x) · (v·x)`, puis `a·d` (`reports/rapport-greffon.md:12-15`)."
+    },
+    {
+      "slug": "sinkhorn",
+      "terme": "Sinkhorn (normalisation de Sinkhorn)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/sinkhorn.md",
+      "resume": "Procédure itérative qui rend les lignes **et** les colonnes d'une matrice positives de somme 1 (transport optimal entropique). Employée 20 itérations durant par les hyper-connexions de V4.1 ; « une HC approximative ne se voit pas — les quatre copies restent plausibles » (`docs/plan-deepseek41-complet.md:174-186`)."
+    },
+    {
+      "slug": "softmax",
+      "terme": "Softmax",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/softmax.md",
+      "resume": "Fonction qui transforme des scores en probabilités positives de somme 1. C'est elle qui rend l'attention « dense » (toutes les clés reçoivent un poids non nul), d'où l'intérêt des variantes sans softmax (`docs/comparaison-spiking.md:100-106`)."
+    },
+    {
+      "slug": "table-de-routage",
+      "terme": "Table de routage (ffngatetid2eid)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/table-de-routage.md",
+      "resume": "Variante de routage sans score : les premières couches de V4 lisent l'expert à allumer dans une table indexée par le jeton (`I32`, forme `[129 280 × 6]`), au lieu de calculer un score (`reports/rapport-routage-experts.md:30-32`, `docs/plan-deepseek41-complet.md:49`)."
+    },
+    {
+      "slug": "tete",
+      "terme": "Tête (de sortie) · logits · argmax",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/tete.md",
+      "resume": "La *tête* est la matrice finale qui projette l'état caché sur le vocabulaire ; sa sortie est un vecteur de *logits*, et l'*argmax* en est le jeton le plus probable. Sur V4.1, la tête pèse 1,32 Go et représente 36 % du trafic par jeton (`reports/rapport-empreinte-memoire.md:461-476`)."
+    },
+    {
+      "slug": "tokeniser-tokenizer",
+      "terme": "Tokeniser · tokenizer",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/tokeniser-tokenizer.md",
+      "resume": "Découper le texte en jetons et l'inverse ; le *tokenizer* est la table (vocabulaire + règles) qui fait cette conversion. Le moteur vérifie l'aller-retour texte → jetons → texte et refuse un identifiant hors vocabulaire (`docs/plan-deepseek-v4-flash.md:38`, `docs/convertisseur.md:276-281`)."
+    },
+    {
+      "slug": "top-k",
+      "terme": "Top-k",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/top-k.md",
+      "resume": "Sélection des k plus grandes valeurs d'un ensemble. Le terme apparaît dans trois usages distincts du dépôt : les **experts** (routeur MoE), l'**attention** (`--attn-topk`, `--qk-topk`) et la **parcimonie d'activation** (`--act-topk`, `--topk-*` par projection)."
+    },
+    {
+      "slug": "transformer-couche-caches",
+      "terme": "Transformer · couche · cachés (hidden)",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/transformer-couche-caches.md",
+      "resume": "Un *transformer* est l'architecture empilant des *couches* identiques (attention puis FFN) ; la dimension *cachée* est la largeur du vecteur qui circule entre elles (896 pour Qwen2.5-0.5B, 5120 pour V4.1). Le vocabulaire du dépôt compte tout en « couches × cachés × jetons » (`docs/format-flux.md:26-31`)."
+    },
+    {
+      "slug": "yarn",
+      "terme": "YaRN (Yet another RoPE extensioN) · mscale · facteur",
+      "famille": "2. Modèles et architectures",
+      "fichier": "02-modeles-et-architectures.md",
+      "fiche": "entrees/yarn.md",
+      "resume": "Méthode pour étendre la portée positionnelle d'un modèle au-delà de sa longueur d'entraînement, en interpolant les basses fréquences et en mettant le softmax à l'échelle par un facteur `mscale = 1 + 0,1·ln(f)`. Le dépôt mesure que l'interpolation **dégrade** sur du texte brut et que `mscale` en est la moitié nuisible : le YaRN n'est donc appliqué qu'au-delà de 4…"
+    },
+    {
+      "slug": "b-poids",
+      "terme": "b/poids (bits par poids)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/b-poids.md",
+      "resume": "Nombre moyen de bits nécessaires pour stocker un poids. Un modèle 8 bits coûte 8 b/poids ; le format « liste d'événements » du dépôt en coûte 1,98, et un encodage ternaire 0,39 (`reports/rapport-optimisations.md:37`, `reports/rapport-valeur-unaire.md:89`)."
+    },
+    {
+      "slug": "bitnet-b1-58",
+      "terme": "BitNet b1.58",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/bitnet-b1-58.md",
+      "resume": "Famille de modèles **entraînés** en ternaire (−1, 0, +1), et non quantifiés après coup ; elle tourne autour de 50-70 % de poids non nuls. Sert de point de comparaison : « au-delà de ~90 % de zéros, un LLM généraliste s'effondre » si l'élagage est fait après entraînement (`reports/rapport-eparsite.md:69-71`)."
+    },
+    {
+      "slug": "bloc-de-quantification-echelle-par-bloc",
+      "terme": "Bloc de quantification · échelle par bloc",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/bloc-de-quantification-echelle-par-bloc.md",
+      "resume": "Les poids quantifiés sont rangés par paquets (blocs) de 32 ou 256, chacun accompagné d'une **échelle** (un facteur multiplicatif) qui ramène les entiers dans la dynamique réelle. « Ce n'est pas le nombre de bits qui compte, c'est la finesse des échelles » : passer d'une échelle par vecteur à une échelle par bloc de 32 fait tomber le coût…"
+    },
+    {
+      "slug": "dequantification",
+      "terme": "Dequantification (déquantification)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/dequantification.md",
+      "resume": "Recalcul de la valeur réelle d'un poids à partir de son entier stocké et de l'échelle de son bloc : `valeur = entier × échelle`. C'est l'opération qui coûte du temps à chaque lecture ; la vectoriser par quatre a fait passer l'attention à 1 M de clés de 13,6 à 7,0 ms par couche (`docs/contexte-long.md:241-248`)."
+    },
+    {
+      "slug": "e2m1-e8m0",
+      "terme": "E2M1 · E8M0",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/e2m1-e8m0.md",
+      "resume": "Les deux composants du format MXFP4 : **E2M1** est la valeur sur 4 bits (1 bit de signe, 2 d'exposant, 1 de mantisse, soit les huit magnitudes {0, ½, 1, 1½, 2, 3, 4, 6}) ; **E8M0** est l'échelle de bloc sur 1 octet, une puissance de deux. Tous deux lus dans le fichier gpt-oss sans requantification (`reports/rapport-passage-a-l-echelle.md:77-79`)."
+    },
+    {
+      "slug": "echappement-indices-par-ecarts",
+      "terme": "Échappement · indices par écarts",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/echappement-indices-par-ecarts.md",
+      "resume": "Une liste d'indices triés se comprime en n'écrivant que l'**écart** au neurone précédent, sur un octet. La valeur 255 est *réservée* : elle annonce un indice absolu sur les deux octets suivants (l'« échappement »)."
+    },
+    {
+      "slug": "entropie-huffman-inegalite-de-kraft",
+      "terme": "Entropie · Huffman · inégalité de Kraft",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/entropie-huffman-inegalite-de-kraft.md",
+      "resume": "L'*entropie* d'une source est le nombre minimal de bits par symbole qu'on ne peut pas battre en moyenne ; le codage de *Huffman* s'en approche ; l'*inégalité de Kraft* (Σ2^−l ≤ 1) est la condition qu'un code préfixe doit respecter. Le dépôt a **retiré** un gain annoncé de ×2,17 parce que le code proposé violait Kraft (Σ2^−l ≈ 1,99 >…"
+    },
+    {
+      "slug": "ggml-type-ggml-ggmlblcksize-ggmltypesize",
+      "terme": "ggml · type ggml · ggmlblcksize · ggmltypesize",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/ggml-type-ggml-ggmlblcksize-ggmltypesize.md",
+      "resume": "Ggml est la bibliothèque de tenseurs qui sous-tend llama.cpp, et donc la définition de référence des types quantifiés. Chaque type déclare combien de poids tient dans un bloc (`ggml_blck_size`) et combien d'octets pèse ce bloc (`ggml_type_size`) : un `Q4_K` range 256 poids en 144 octets."
+    },
+    {
+      "slug": "gguf",
+      "terme": "GGUF (GPT-Generated Unified Format)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/gguf.md",
+      "resume": "Format de fichier des modèles : un en-tête de métadonnées (architecture, couches, tokenizer, hyper-paramètres) suivi des tenseurs de poids, chacun avec son type de quantification. Le moteur le lit **en place**, en plusieurs fichiers (multi-shards) ou en clusters (`drave-core/src/gguf.rs`, `Gguf::open_multi`)."
+    },
+    {
+      "slug": "i8-i32",
+      "terme": "I8 · I32",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/i8-i32.md",
+      "resume": "Types entiers signés du GGUF, distincts des types quantifiés. V4.1 contient deux tenseurs d'engram en `I8` (lus par déquantification générique) et **aucun** `I32` — l'absence est vérifiée sur les deux copies du fichier (`docs/plan-deepseek41-complet.md:71`)."
+    },
+    {
+      "slug": "int4-int8",
+      "terme": "int4 · int8",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/int4-int8.md",
+      "resume": "Précisions entières : 16 niveaux signés pour int4 (ou des nibbles empaquetés), 256 pour int8. Le vocabulaire du dépôt les distingue de `i4`/`i8` (types de stockage) et de `Q4_0`/`Q8_0` (formats ggml à échelle par bloc)."
+    },
+    {
+      "slug": "iq2xxs-iq1m-iq2s-iq3xxs-iq4nl-iq4xs-iq1s",
+      "terme": "IQ2XXS · IQ1M · IQ2S · IQ3XXS · IQ4NL · IQ4XS · IQ1S",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/iq2xxs-iq1m-iq2s-iq3xxs-iq4nl-iq4xs-iq1s.md",
+      "resume": "Famille de types ggml « i-quants » : des super-blocs de 256 poids à très basse précision (1 à 4 bits) utilisant des codebooks. Ce sont les formats des modèles lourds (Kimi-K2.7 en `UD-IQ1_M`, GLM-5.3 en `UD-IQ1_S`, V4.1 en `IQ2_XXS`), et un type absent de la table du moteur a déjà rendu un inventaire faux (8,56 Go annoncés pour 86,9…"
+    },
+    {
+      "slug": "mxfp4",
+      "terme": "MXFP4 (Microscaling FP4 ; virgule flottante 4 bits à échelle microscopique)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/mxfp4.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "nibble",
+      "terme": "Nibble (quartet)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/nibble.md",
+      "resume": "Un demi-octet, soit 4 bits. Un poids 4 bits est un nibble ; deux poids tiennent donc dans un octet, l'un dans les bits bas, l'autre dans les bits hauts (`docs/convertisseur.md:26-33`)."
+    },
+    {
+      "slug": "nvfp4",
+      "terme": "NVFP4",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/nvfp4.md",
+      "resume": "Variante 4 bits de NVIDIA (blocs de 16 poids, échelle E4M3) présente dans la table des types du moteur (`docs/format-clusters.md:134`)."
+    },
+    {
+      "slug": "ptq",
+      "terme": "PTQ (Post-Training Quantization ; quantification après entraînement)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/ptq.md",
+      "resume": "Réduire la précision d'un modèle **déjà entraîné**, sans réentraînement. Tout le projet est en PTQ — c'est précisément la limite qu'il mesure : la parcimonie ne s'impose pas, elle s'entraîne (`reports/bilan-multi-materiel.md:86`, `docs/programme-recherche.md:89-93`)."
+    },
+    {
+      "slug": "q2k-q3k-q4k-q5k-q6k-q8k",
+      "terme": "Q2K · Q3K · Q4K · Q5K · Q6K · Q8K (k-quants)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/q2k-q3k-q4k-q5k-q6k-q8k.md",
+      "resume": "Types ggml à **super-blocs** de 256 poids, avec échelles et minima sur 6 bits ; `Q4_K_M` est la quantification la plus courante des modèles publiés (Qwen3-30B, Qwen2.5-1.5B). Un bug historique : ggml écrit les quatre quants d'un `Q6_K` en quarts successifs, le moteur les entrelaçait — trouvé en comparant à une référence F16 des mêmes poids (`docs/convertisseur.md:210-226`)."
+    },
+    {
+      "slug": "q40-q41-q50-q51-q80-q81",
+      "terme": "Q40 · Q41 · Q50 · Q51 · Q80 · Q81",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/q40-q41-q50-q51-q80-q81.md",
+      "resume": "Types ggml « legacy » à blocs de 32 poids et échelle (parfois minimum) sur 16 bits. `Q8_0` est le format de référence du projet (tête de sortie, projections) ; `Q8_1` est le format des **activations** chez ggml."
+    },
+    {
+      "slug": "qpat",
+      "terme": "QPAT",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/qpat.md",
+      "resume": "Format du « greffon » : un en-tête `QPAT | version | couche | n | u[n] | v[n] | d[n]` décrivant un neurone ajouté à une couche. **Où** : `tools/make_patch.py`, `--patch` (`reports/rapport-greffon.md:19`)."
+    },
+    {
+      "slug": "quantification",
+      "terme": "Quantification",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/quantification.md",
+      "resume": "Stocker les poids (ou les activations, ou le cache) dans un format plus compact que le flottant 32 bits, au prix d'une erreur. Les deux questions du dépôt sont : *combien de bits* et *où sont les échelles* ; la seconde compte plus que la première (`docs/vision.md:198-227`)."
+    },
+    {
+      "slug": "quantification-du-kv",
+      "terme": "Quantification du KV",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/quantification-du-kv.md",
+      "resume": "Quantifier les clés et les valeurs du cache plutôt que les poids. Résultat central : **tout l'écart vient des clés**, parce qu'une erreur de clé entre dans le softmax et déplace le poids relatif d'une position entière, alors qu'une erreur de valeur se moyenne (`docs/roadmap.md:155-194`)."
+    },
+    {
+      "slug": "sha-256",
+      "terme": "SHA-256",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/sha-256.md",
+      "resume": "Empreinte cryptographique utilisée pour vérifier qu'un fichier converti contient bien les mêmes octets que la source, tenseur par tenseur (1 587 tenseurs vérifiés sur Qwen3-30B) (`docs/format-clusters.md:60-63`). **Réf.** : FIPS 180-4, [NIST.FIPS.180-4.pdf](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)."
+    },
+    {
+      "slug": "shard",
+      "terme": "Shard (fragment)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/shard.md",
+      "resume": "Un modèle trop gros pour un fichier est publié en plusieurs **shards** : le premier porte les métadonnées et aucun tenseur, les suivants portent les poids. DeepSeek-V4-Flash en a 3, Kimi-K2.7 8, GLM-5.3 6 (`docs/plan-deepseek-v4-flash.md:36-46`, `reports/rapport-lecteur-multifichiers.md:30`)."
+    },
+    {
+      "slug": "super-bloc",
+      "terme": "Super-bloc",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/super-bloc.md",
+      "resume": "Unité de quantification des k-quants et des i-quants : 256 poids partageant échelles et minima. Un tenseur quantifié se lit donc « en tranches de 256 poids », ce qui rend le découpage par expert possible quand la dimension est multiple de 256 (`docs/format-clusters.md:50-55`, `reports/rapport-passage-a-l-echelle.md:84-91`)."
+    },
+    {
+      "slug": "trinaire-deux-listes-plans-binaires",
+      "terme": "Trinaire · deux listes · plans binaires",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/trinaire-deux-listes-plans-binaires.md",
+      "resume": "Cas extrême de l'encodage : au lieu d'écrire des valeurs, on écrit **deux listes**, celle des « + » et celle des « − », le signe étant porté par l'appartenance. L'information est alors dans la structure, pas dans un octet (`docs/vision.md:211-214`, `reports/rapport-encodage.md`)."
+    },
+    {
+      "slug": "unaire",
+      "terme": "Unaire (encodage)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/unaire.md",
+      "resume": "Représenter une valeur en répétant une adresse autant de fois que sa magnitude : coûteux en taille (42,45 b/poids mesurés) mais donnant un flux d'événements naturel. Mesuré « 13,7× plus cher » que le décalage-addition (`reports/rapport-mode-listes.md:19-24`)."
+    },
+    {
+      "slug": "varint",
+      "terme": "varint (entier à longueur variable)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/varint.md",
+      "resume": "Entier codé sur un nombre d'octets variable selon sa taille. Le décodeur du moteur en décode huit à la fois dans un mot de 64 bits (technique dite SWAR) ; `reports/rapport-optimisations.md:19`, `reports/rapport-inference.md:112`."
+    },
+    {
+      "slug": "zstd",
+      "terme": "zstd (Zstandard)",
+      "famille": "3. Formats, quantification, encodage",
+      "fichier": "03-formats-quantification-encodage.md",
+      "fiche": "entrees/zstd.md",
+      "resume": "Compresseur sans perte. Mesuré en étape **externe** sur la trace : `zstd -19` fait passer la trace de 45,1 Mo à 11,1 Mo, soit −79 % au total, sans une ligne de code dans le moteur (`reports/rapport-compacite-trace.md:20-27`)."
+    },
+    {
+      "slug": "accumulateur",
+      "terme": "Accumulateur",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/accumulateur.md",
+      "resume": "Vecteur de sortie dans lequel le mode « push » disperse les contributions : `acc[destination] += valeur × poids`. Sa taille décide de tout : 4 096 sorties × 3 octets = 12 Kio tiennent dans les blocs mémoire du FPGA, mais un accumulateur par fil de calcul fait 36 Mo pour une tête de 151 936 sorties (`reports/rapport-cpu-aer.md:11`, `reports/rapport-inference.md:131`)."
+    },
+    {
+      "slug": "aer",
+      "terme": "AER (Address Event Representation ; représentation par adresses d'événements)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/aer.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "aiguillage",
+      "terme": "Aiguillage (dispatch)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/aiguillage.md",
+      "resume": "Choix du noyau selon le format du tenseur (Q4_0, Q8_0, MXFP4, i-quant…), qui remplace un appel unique `matvec_q4`. Il évite de convertir et rend la lecture « en place » possible (`reports/rapport-mla-experts.md:98-99`)."
+    },
+    {
+      "slug": "binaire-drave-crate-drave-core",
+      "terme": "Binaire drave · crate drave-core",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/binaire-drave-crate-drave-core.md",
+      "resume": "Le moteur est un unique binaire Rust, sans dépendance externe (`std` seul), construit par `cargo build --release` dans `drave-core/`. Tous les bancs, mesures et bancs d'essai du dépôt l'appellent : `drave <modele.gguf> --ppl`, `--infer`, `--plan`, `--flux-serveur`… (`docs/colab-reparti.md:88-101`, `reports/rapport-inference.md:3-5`)."
+    },
+    {
+      "slug": "charge-flux-chargeflux",
+      "terme": "Charge · Flux · ChargeFlux",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/charge-flux-chargeflux.md",
+      "resume": "Structures internes du protocole : `ChargeFlux::Dense(Vec<f32>)` porte un vecteur, `ChargeFlux::Liste(...)` une liste quantifiée, `ChargeFlux::Lot(Vec<f32>)` un lot d'états aplati. `plat()` rend le vecteur plat d'un lot ; `en_dense()` panique nommément sur un lot, pour qu'on n'appelle pas la mauvaise conversion (`drave-core/src/main.rs`, `docs/plan-prefill-reparti.md:116-126`)."
+    },
+    {
+      "slug": "denseq4-denseq8",
+      "terme": "DenseQ4 · DenseQ8",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/denseq4-denseq8.md",
+      "resume": "Les deux noyaux denses du moteur : `DenseQ8` lit un bloc int8 à échelle par bloc de 32 et calcule un produit scalaire entier (exact au bit près en AVX2) ; `DenseQ4` fait de même sur des nibbles signés biaisés, avec une échelle `u16` par bloc (`docs/contexte-long.md:378-382`, `reports/rapport-mur-memoire-4bits.md:87-92`)."
+    },
+    {
+      "slug": "dispersion",
+      "terme": "Dispersion (scatter)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/dispersion.md",
+      "resume": "Écriture non contiguë : au lieu de lire une ligne de poids, on écrit une contribution à une destination arbitraire. C'est le geste central du push ; le GPU en fait 18,1 G événements/s et la DDR3 du FPGA en fait le goulot (`reports/bilan-multi-materiel.md:39`, `:48`)."
+    },
+    {
+      "slug": "evenement",
+      "terme": "Événement",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/evenement.md",
+      "resume": "Dans ce dépôt, un événement est un **couple (écart d'indice, valeur)** représentant une connexion active, sur 2 octets ; c'est l'unité de débit du projet (« 5,3 G événements/s »). Ne pas confondre avec l'événement au sens protocole réseau (`reports/bilan-multi-materiel.md:13`, `reports/rapport-cpu-aer.md:5-9`)."
+    },
+    {
+      "slug": "forward-forwardlot-forwardmla-logitslot",
+      "terme": "forward · forwardlot · forwardmla · logitslot",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/forward-forwardlot-forwardmla-logitslot.md",
+      "resume": "Les trois passes avant du moteur : `forward` traite un jeton, `forward_lot` un lot d'états (mode 3 et 4), `forward_mla` le chemin d'attention latente. `logits_lot` note un lot entier."
+    },
+    {
+      "slug": "fusedsign",
+      "terme": "FusedSign",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/fusedsign.md",
+      "resume": "Structure de liste « une seule liste triée par destination + un plan de signe » : elle fusionne les deux listes du cas trinaire en une seule, ce qui économise la valeur à stocker (`drave-core/src/list.rs:187`, `reports/rapport-optimisations.md:32`)."
+    },
+    {
+      "slug": "gather",
+      "terme": "Gather (lecture indexée)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/gather.md",
+      "resume": "Lire les activations à des indices arbitraires, ce que fait tout produit matrice-vecteur classique. Le mode push le supprime : chaque source active connaît déjà ses lecteurs (`reports/rapport-cpu-aer.md:5`)."
+    },
+    {
+      "slug": "grappe",
+      "terme": "Grappe (cluster)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/grappe.md",
+      "resume": "Groupe de neurones ou d'experts traité comme une unité de chargement et de placement. « Le moteur ne répartit pas des matrices, il route des listes » : une grappe est ce qu'on place sur un composant ou une machine (`docs/format-clusters.md:1-11`, `docs/programme-recherche.md:39-46`)."
+    },
+    {
+      "slug": "greffon",
+      "terme": "Greffon",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/greffon.md",
+      "resume": "Un neurone ajouté à une couche **sans réentraînement**, à la forme SwiGLU, chargé par `--patch`. Mesure : les neurones croisés n'apportent rien (23,6125 → 23,6253), mais la plomberie d'apprentissage existe (`reports/rapport-greffon.md:12-42`, `docs/programme-recherche.md:143-152`)."
+    },
+    {
+      "slug": "liste-valuee-liste-d-activation-liste-creuse",
+      "terme": "Liste valuée · liste d'activation · liste creuse",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/liste-valuee-liste-d-activation-liste-creuse.md",
+      "resume": "Le cœur de la représentation : pour une couche et un jeton, la liste des neurones actifs, chacun avec son indice, sa valeur et une échelle. « Une activation est un fait — \"le neurone 2 539 de la couche 23 a valu 27,8\" — et non une case dans un tableau » (`docs/vision.md:21-32`)."
+    },
+    {
+      "slug": "matvec-gemm-gemv",
+      "terme": "matvec · GEMM · GEMV",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/matvec-gemm-gemv.md",
+      "resume": "*GEMV* : produit matrice-vecteur (un jeton à la fois) ; *GEMM* : produit matrice-matrice (plusieurs jetons ensemble, donc les poids relus une fois pour tout le lot). Le préremplissage par lots est le passage GEMV → GEMM : −20 % à −31 % de temps mesuré (`docs/contexte-long.md:52-59`, `reports/rapport-prefill-par-lots.md`)."
+    },
+    {
+      "slug": "mode-push-pull-auto-seuilpush",
+      "terme": "Mode push · pull · auto · seuilpush",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/mode-push-pull-auto-seuilpush.md",
+      "resume": "*Push* : exécution par listes d'événements dispersées dans un accumulateur. *Pull* : produit scalaire dense, qui lit toute la ligne de poids."
+    },
+    {
+      "slug": "paire",
+      "terme": "Paire (indice, valeur) · paire (destination, valeur)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/paire.md",
+      "resume": "L'unité de contenu d'une liste : un indice (le neurone ou la destination) et une valeur quantifiée. Le mode 2 du protocole compte `n` **paires** ; le mode 4 compte des **états**, et le nombre d'actifs d'un lot est `Σ a_j` (`docs/format-flux.md:110-116`, `docs/plan-mode4-lot-listes.md:393-396`)."
+    },
+    {
+      "slug": "pool-de-threads-barriere",
+      "terme": "Pool de threads · barrière",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/pool-de-threads-barriere.md",
+      "resume": "Le moteur parallélise ses projections sur un ensemble de fils synchronisés par une barrière atomique ; un jeton paie 168 barrières (7 matrices × 24 couches). C'est ce pool qui limite le débit : 5,3 G événements/s à 32 fils, effondrement au-delà (`reports/rapport-inference.md:88-94`, `reports/bilan-multi-materiel.md:54`)."
+    },
+    {
+      "slug": "pushmat",
+      "terme": "PushMat",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/pushmat.md",
+      "resume": "Encodage de liste « écart + valeur int8 » avec, pour chaque ligne, la liste de ses destinations : le format qui matérialise le push (`drave-core/src/list.rs:266`, `reports/rapport-inference.md:31`)."
+    },
+    {
+      "slug": "sparsevec",
+      "terme": "SparseVec (vecteur creux)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/sparsevec.md",
+      "resume": "Structure `{ indices triés, valeurs contiguës }` qui représente une activation creuse explicite. C'est le type que reçoivent les accumulateurs `accumulate_push` / `accumulate` (`drave-core/src/engine.rs:29-41`, `:733-781`)."
+    },
+    {
+      "slug": "swar",
+      "terme": "SWAR (SIMD Within A Register)",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/swar.md",
+      "resume": "Technique qui traite plusieurs petites valeurs en parallèle **à l'intérieur** d'un registre entier (par masques et décalages), sans instruction SIMD dédiée. Le moteur s'en sert pour décoder huit varints d'un coup (`reports/rapport-inference.md:32`, `reports/rapport-optimisations.md:19`)."
+    },
+    {
+      "slug": "tete-garantie-tete-restreinte",
+      "terme": "Tête garantie · tête restreinte",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/tete-garantie-tete-restreinte.md",
+      "resume": "Deux modes d'évaluation : `--tete-restreinte` limite la tête de sortie à une liste de jetons autorisés, ce qui réduit le trafic mais fausse la perplexité (mesurée 12,6× trop optimiste) ; `--tete-garantie` est la version corrigée, qui garantit l'absence de biais (`reports/rapport-tete-garantie.md:9`, `reports/rapport-tete-restreinte.md:93-96`)."
+    },
+    {
+      "slug": "traceflux",
+      "terme": "TraceFlux",
+      "famille": "4. Le moteur Drave : exécution, structures, outils",
+      "fichier": "04-le-moteur-drave-execution-structures-out.md",
+      "fiche": "entrees/traceflux.md",
+      "resume": "L'écrivain de trace du moteur : il écrit l'en-tête `DRVF`, puis une liste par (couche, jeton), en version 1, 2 ou 3 selon `DRAVE_TRACE_BLOCS` (`drave-core/src/model.rs`, `docs/format-flux.md:20-73`)."
+    },
+    {
+      "slug": "colab-notebook-tunnel",
+      "terme": "Colab · notebook · tunnel",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/colab-notebook-tunnel.md",
+      "resume": "Google Colab est un runtime distant gratuit, choisi pour la démonstration de la phase 3.4 ; comme il n'accepte aucune connexion entrante, il faut un tunnel (`cloudflared`, `ssh -R`, Tailscale). Le kit est dans `colab/` (`docs/colab-reparti.md:1-21`, `:70-84`)."
+    },
+    {
+      "slug": "contrat-d-activation",
+      "terme": "Contrat d'activation (Act)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/contrat-d-activation.md",
+      "resume": "L'ensemble des réglages qui changent les chiffres calculés : niveaux de quantification, seuil, top-k, renormalisation, et les sept top-k par projection, plus `attn_topk`, `qk_topk`, `moe_topk`. Ils **voyagent dans l'en-tête** parce que sans eux le pair distant ne calculerait pas la même chose — et « le client impose les siens au serveur » (`docs/format-flux.md:100-109`, `:187`)."
+    },
+    {
+      "slug": "corps",
+      "terme": "Corps (payload) · en-tête",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/corps.md",
+      "resume": "Un message de flux = un **en-tête** de taille fixe (79 octets en v5, `TAILLE_TETE`, verrouillé par `assert_eq!`) suivi d'un **corps** variable. L'en-tête porte la magie, la version, le mode, la plage de couches, la position, le compte `n`, l'échelle et le contrat d'activation ; le corps porte les données du mode (`docs/format-flux.md:88-116`, `docs/plan-mode4-lot-listes.md:54-55`)."
+    },
+    {
+      "slug": "couche-source",
+      "terme": "Couche source (entrée d'attention / entrée de FFN)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/couche-source.md",
+      "resume": "Convention d'encodage d'une liste : un numéro de couche inférieur à 1 000 désigne l'entrée de l'attention, supérieur ou égal à 1 000 l'entrée du FFN de la couche `numéro − 1000`. Un seul champ porte donc deux points de trace (`docs/format-flux.md:27-28`)."
+    },
+    {
+      "slug": "drvf",
+      "terme": "DRVF (Drave Flux)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/drvf.md",
+      "resume": "Le format binaire du dépôt, à quatre usages : trace d'exécution, rejeu, transport réseau, analyse. Un fichier commence par la magie `DRVF` et une version (1, 2 ou 3) ; le transport utilise la même famille d'encodage, en protocole v5 (`docs/format-flux.md:1-24`, `docs/plan-deepseek41-complet.md:17`)."
+    },
+    {
+      "slug": "fluxbrut-norme-finale",
+      "terme": "fluxbrut · norme finale",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/fluxbrut-norme-finale.md",
+      "resume": "Règle de responsabilité : un flux qui circule est un **résidu brut** ; la normalisation finale n'appartient qu'au nœud qui possède la tête de sortie, et s'applique **une fois**. Confondre « ma plage va jusqu'à la dernière couche » et « je dois normer » a coûté la fidélité du découpage (798,3 au lieu de 18,2) (`docs/format-flux.md:167-174`, `docs/roadmap.md:244-249`)."
+    },
+    {
+      "slug": "lot",
+      "terme": "Lot (mode 3) · lot en listes (mode 4)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/lot.md",
+      "resume": "Le *lot* transporte `t` états d'un coup en f32 dense, sans perte, pour que le préremplissage ne paie qu'un aller-retour par lot (écart mesuré 0,00e0). Le *lot en listes* transporte les mêmes `t` états encodés comme le mode 2 (échelles par bloc, valeurs i8) : 1,5 ko par jeton au lieu de 3,5, soit **÷2,3 contre le lot dense** —…"
+    },
+    {
+      "slug": "magie",
+      "terme": "Magie (nombre magique)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/magie.md",
+      "resume": "Constante en tête de fichier ou de message qui permet de reconnaître le format : `0x44525631`, soit les octets `DRV1`, pour le protocole de flux. Une magie absente signale une désynchronisation du flux d'octets (`docs/format-flux.md:92`)."
+    },
+    {
+      "slug": "modes-0-a-4",
+      "terme": "Modes 0 à 4",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/modes-0-a-4.md",
+      "resume": "Les cinq modes du protocole v5 : **0** dense f32, **1** liste quantifiée (i16 + une échelle), **2** listes à échelle par bloc (i8, écarts), **3** lot dense, **4** lot en listes. Le mode 1 est « le format du disque, à l'octet près » ; le mode 0 est le seul sans perte avec le mode 3 (`docs/format-flux.md:93-116`)."
+    },
+    {
+      "slug": "nagle-ack-differe-tcpnodelay",
+      "terme": "Nagle · ACK différé · TCPNODELAY",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/nagle-ack-differe-tcpnodelay.md",
+      "resume": "Nagle est l'algorithme TCP qui retient les petites écritures en espérant en grouper d'autres ; l'ACK différé retarde l'accusé de réception. Ensemble, ils faisaient payer **97,6 ms par jeton** au banc réparti au lieu de 15,9 ms de calcul ; `set_nodelay(true)` ramène l'attente à 16,1 ms (`docs/roadmap.md:113`, `docs/colab-reparti.md:30`)."
+    },
+    {
+      "slug": "n-ud-moteur-pilote-pair",
+      "terme": "Nœud moteur · pilote · pair",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/n-ud-moteur-pilote-pair.md",
+      "resume": "Dans la démonstration répartie, le **pilote** garde les N premières couches (`--ppl-reparti <hôte:port> --couches-locales N`) et le **nœud moteur** sert le reste (`--flux-serveur <port>`) ; le *pair* est l'homologue vu par le protocole. Les deux nœuds doivent charger le **même GGUF** : la dimension ne voyage pas (`docs/colab-reparti.md:70-102`, `docs/format-flux.md:126-129`)."
+    },
+    {
+      "slug": "plafond",
+      "terme": "Plafond (PLAFONDFLUX, verifiertaille)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/plafond.md",
+      "resume": "Garde-fou de sûreté : toute taille annoncée par un message est vérifiée **avant** l'allocation correspondante, contre un plafond de 256 Mo ; un cumul est vérifié état par état. Sans lui, un en-tête corrompu provoquerait un épuisement mémoire au lieu d'une erreur de protocole (`docs/plan-mode4-lot-listes.md:183-232`)."
+    },
+    {
+      "slug": "position",
+      "terme": "Position (compteur global de jeton)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/position.md",
+      "resume": "Champ de la trace qui compte les jetons **globalement**, pas la place dans la fenêtre de contexte. Ce détail a coûté un bug : avec la position dans la fenêtre, deux fenêtres réécrivaient les mêmes clés et le rejeu rendait 356 694 au lieu de 17,43 (`docs/format-flux.md:75-86`)."
+    },
+    {
+      "slug": "protocole-v5",
+      "terme": "Protocole v5",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/protocole-v5.md",
+      "resume": "Version courante du protocole d'échange réseau : en-tête de 79 octets, cinq modes, contrat d'activation complet, refus immédiat d'un pair incompatible en nommant les deux versions. Règle écrite dans le code : **un nouveau mode ⇒ une nouvelle version** (`docs/format-flux.md:88-155`, `docs/plan-mode4-lot-listes.md:150-181`)."
+    },
+    {
+      "slug": "sentinelle-0xffff",
+      "terme": "Sentinelle 0xFFFF",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/sentinelle-0xffff.md",
+      "resume": "Marque de fin facultative d'un fichier de trace (`u16` valant 0xFFFF) ; la fin de fichier suffit, mais la sentinelle est écrite par la version 1 (`docs/format-flux.md:35`)."
+    },
+    {
+      "slug": "trace-de-flux-versions-1-a-3",
+      "terme": "Trace de flux, versions 1 à 3",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/trace-de-flux-versions-1-a-3.md",
+      "resume": "V1 : indices `u32` + valeurs `i16` (6,02 octets par neurone actif) ; v2 : indices par écarts `u8` + valeurs `i16` (3,01 octets, sans perte, **défaut**) ; v3 : valeurs `i8` + échelle `f16` par bloc de 32 (≈2,08 octets pour 21 630 645 actifs, avec perte, `DRAVE_TRACE_BLOCS=1`). Le rejeu par lots n'accepte pas la v3, et le dit…"
+    },
+    {
+      "slug": "tranche-de-liste",
+      "terme": "Tranche de liste (unité d'échange)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/tranche-de-liste.md",
+      "resume": "Granularité du contrat d'échange : un en-tête (couche, source, échelle, bits) plus des paires (destination, valeur). La vision en fait l'unité de travail autonome : « distribuer, c'est router des listes » (`docs/vision.md:146-166`)."
+    },
+    {
+      "slug": "version",
+      "terme": "Version (du format et du protocole)",
+      "famille": "5. Flux, protocole et transport",
+      "fichier": "05-flux-protocole-et-transport.md",
+      "fiche": "entrees/version.md",
+      "resume": "Trois numérotations coexistent et il faut les distinguer : la **trace** est en version 1/2/3 (`DRAVE_TRACE_BLOCS`), le **protocole réseau** en version 5, et le fichier GGUF a sa propre version d'en-tête. Un refus de version est prononcé **avant** toute interprétation du corps (`docs/format-flux.md:20-24`, `:143-153`)."
+    },
+    {
+      "slug": "alm",
+      "terme": "ALM (Adaptive Logic Module)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/alm.md",
+      "resume": "La brique logique élémentaire d'un FPGA Intel (Altera) Stratix V : un petit bloc capable de réaliser une fonction combinatoire. Le projet compte ses opérateurs en ALM : un PE d'événements tient en 176 ALM et 0 DSP, contre 115 ALM et 1 DSP avec un multiplieur (`docs/programme-recherche.md:58`, `reports/bilan-multi-materiel.md:66-67`)."
+    },
+    {
+      "slug": "avx2-avx-512-simd",
+      "terme": "AVX2 · AVX-512 · SIMD",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/avx2-avx-512-simd.md",
+      "resume": "*SIMD* : une instruction qui traite plusieurs nombres à la fois. *AVX2* est le jeu d'instructions 256 bits des processeurs x86 Haswell du banc ; le noyau de tête `Q8_0` l'utilise (`vpmaddwd` sur 32 niveaux), et la somme entière est exacte **au bit près** (`docs/contexte-long.md:378-382`)."
+    },
+    {
+      "slug": "bande-passante",
+      "terme": "Bande passante (bandwidth)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/bande-passante.md",
+      "resume": "Débit maximal d'un chemin de données : RAM (~20-25 Go/s), VRAM (~380-750 Go/s), DDR3 du FPGA (9,66 Go/s), PCIe x8 (6,5 Go/s), NVMe (3,5 à 31 Go/s selon la parallélisation). C'est la ressource qui borne le décodage : « à contexte court, tout est bande passante de poids ; à contexte long, c'est le KV puis le préremplissage » (`docs/contexte-long.md:580-586`,…"
+    },
+    {
+      "slug": "c-ur-physique-smt-hyperthreading-paire-ht",
+      "terme": "Cœur physique · SMT · hyperthreading · paire HT",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/c-ur-physique-smt-hyperthreading-paire-ht.md",
+      "resume": "Un cœur *physique* exécute un flux ; le *SMT* (hyperthreading) fait apparaître deux fils logiques par cœur en partageant certaines ressources. Mesure du dépôt : 10 cœurs avec 20 fils hyperthreadés donnent +27 %, mais 20 cœurs avec 40 fils ne font pas mieux que 20 cœurs (22,8 contre 22,6 Go/s) (`reports/rapport-architecture-memoire.md:249-260`, `:163`)."
+    },
+    {
+      "slug": "cuda-noyau",
+      "terme": "CUDA · noyau (kernel) · sm75 · PTX · FFI",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/cuda-noyau.md",
+      "resume": "*CUDA* est l'API de calcul GPU de NVIDIA ; un *noyau* est la fonction exécutée massivement en parallèle ; *sm_75* est le niveau de capacité de calcul du Quadro RTX 5000 (1024 fils par bloc, 48 ko de mémoire partagée, pas de `__reduce_add_sync`) ; *PTX* est l'assembleur virtuel dans lequel le noyau est précompilé et chargé par le moteur ;…"
+    },
+    {
+      "slug": "ddr3-ddr4",
+      "terme": "DDR3 · DDR4",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/ddr3-ddr4.md",
+      "resume": "Générations de mémoire vive externe. La carte FPGA Stratix V embarque de la DDR3 mesurée à 9,66 Go/s, qui est **son goulot** : c'est elle qui limite le FPGA à ~4,83 G événements/s projetés (`reports/bilan-multi-materiel.md:9`, `docs/comparaison-spiking.md:63`)."
+    },
+    {
+      "slug": "debit-latence-aller-retour-ttft",
+      "terme": "Débit · latence · aller-retour · TTFT",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/debit-latence-aller-retour-ttft.md",
+      "resume": "Le *débit* est ce qui passe par seconde (Go/s, tok/s, événements/s) ; la *latence* est le délai d'un aller-retour. Leçon du transport réparti : « le débit ne compte pas (0,25 Mbit/s), la latence compte quatre fois » — `attente ≈ calcul distant + 3,2 × latence` (`docs/roadmap.md:57`)."
+    },
+    {
+      "slug": "dma",
+      "terme": "DMA (Direct Memory Access)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/dma.md",
+      "resume": "Déplacement de données par le matériel sans mobiliser le processeur ; sur cette machine, c'est le noyau qui s'en charge (`reports/rapport-architecture-memoire.md:398`)."
+    },
+    {
+      "slug": "dram-less-hmb",
+      "terme": "DRAM-less · HMB (Host Memory Buffer)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/dram-less-hmb.md",
+      "resume": "Un SSD *DRAM-less* n'a pas de cache interne et emprunte un peu de RAM hôte (*HMB*) pour ses tables ; le NVMe de la machine est un MAP1602 de ce type, ce qui explique une partie de ses performances en lecture aléatoire (`reports/rapport-architecture-memoire.md:221`, `:285`)."
+    },
+    {
+      "slug": "dsp",
+      "terme": "DSP (Digital Signal Processor / bloc multiplieur)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/dsp.md",
+      "resume": "Bloc matériel spécialisé dans la multiplication, très coûteux en surface. Le projet s'en passe comme d'un principe (« 0 DSP ») : ses multiplications ternaires deviennent des additions et des décalages, et le PE synthétisé tient en 176 ALM sans DSP (`docs/histoire.md:11`, `docs/programme-recherche.md:58`, `reports/rapport-encodage.md:74`)."
+    },
+    {
+      "slug": "energie-par-evenement",
+      "terme": "Énergie par événement (nJ, pJ, TDP)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/energie-par-evenement.md",
+      "resume": "Coût énergétique d'un événement traité : 57 nJ mesurés sur CPU, 8,3 nJ **projetés** sur FPGA (limite DDR3), ~12,7 nJ déduits pour le GPU ; la comparaison neuromorphique cite E_AC = 0,9 pJ contre E_MAC = 4,5 pJ sur du 45 nm (`reports/bilan-multi-materiel.md:46-48`, `docs/comparaison-spiking.md:63`). Le *TDP* (thermal design power) est la puissance nominale utilisée pour convertir un temps de calcul…"
+    },
+    {
+      "slug": "fpga",
+      "terme": "FPGA (Field-Programmable Gate Array) · Stratix V · Quartus · iverilog · RTL",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/fpga.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "gpu-quadro-rtx-5000-miroir-vram-deport",
+      "terme": "GPU · Quadro RTX 5000 · miroir VRAM · déport",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md",
+      "resume": "Les deux Quadro RTX 5000 (16 Go chacune) servent de *déport* : le cache KV y est recopié en **miroir** paginé, ce qui fait passer l'attention à 1 M de clés de 968 ms à 13,2 ms par couche (×73) et rend le poste « attention » plat (3,3 ms/jeton) au lieu de croître linéairement (`docs/contexte-long.md:212-297`). **Où** : `DRAVE_GPU`, `DRAVE_GPU_KV`,…"
+    },
+    {
+      "slug": "grandes-pages-tlb-alignement-2-mo",
+      "terme": "Grandes pages · TLB · alignement 2 Mo",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/grandes-pages-tlb-alignement-2-mo.md",
+      "resume": "Le *TLB* est le cache des traductions d'adresses mémoire ; chaque page manquée coûte une marche de table. Des pages de 2 Mo au lieu de 4 ko divisent ce coût par 512, et l'alignement à 2 Mo du conteneur proposé prépare leur usage (`reports/rapport-passage-a-l-echelle.md:160`, `docs/convertisseur.md:146-148`)."
+    },
+    {
+      "slug": "grappe-commun-gguf-cluster-xx-gguf",
+      "terme": "Grappe · commun.gguf · cluster-XX.gguf",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/grappe-commun-gguf-cluster-xx-gguf.md",
+      "resume": "Forme éclatée d'un modèle : `commun.gguf` porte embeddings, tête, attention, normes et **routeurs**, chaque `cluster-XX.gguf` porte les tranches d'experts d'une grappe, et `mapping.tsv` relie les deux. Un nœud qui ne sert que la grappe 0 charge 3,20 Go au lieu de 18,56 et 625 ms au lieu de 3,9 s (`docs/format-clusters.md:1-13`, `:78-89`)."
+    },
+    {
+      "slug": "l1-l2-ligne-de-cache-banque-memoire",
+      "terme": "L1 · L2 · ligne de cache · banque mémoire",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/l1-l2-ligne-de-cache-banque-memoire.md",
+      "resume": "Mémoires internes du processeur, du plus rapide (L1, quelques dizaines de Kio) au plus grand (L2 partagé, 256 Kio ici). L'accumulateur du mode push doit tenir en L1 sous peine de s'effondrer ; les banques mémoire imposent un rembourrage des tuiles transposées, sans quoi 32 voies d'une lecture tombent dans la même banque (`reports/bilan-multi-materiel.md:132`, `docs/contexte-long.md:219-224`)."
+    },
+    {
+      "slug": "m20k",
+      "terme": "M20K",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/m20k.md",
+      "resume": "Bloc de mémoire embarqué du FPGA Stratix V (20 kbit). L'accumulateur d'un PE (4 096 × 24 bits = 12 Kio) tient dans les M20K ; la collecte irrégulière des listes en consomme 41 % (`reports/rapport-cpu-aer.md:11`, `reports/bilan-multi-materiel.md:95`)."
+    },
+    {
+      "slug": "mac",
+      "terme": "MAC (Multiply-Accumulate) · AC (Accumulate)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/mac.md",
+      "resume": "*MAC* : une multiplication suivie d'une addition, l'opération de base d'un réseau dense. *AC* : la seule addition, suffisante quand les valeurs sont binaires — c'est l'économie des réseaux à spikes et du ternaire (`docs/comparaison-spiking.md:59`)."
+    },
+    {
+      "slug": "mmap",
+      "terme": "mmap (memory-mapped file) · madvise · DRAVEMMAP",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/mmap.md",
+      "resume": "*mmap* projette un fichier en mémoire : le noyau lit les pages à la demande au lieu de charger le fichier. C'est ce qui permet d'ouvrir un GGUF de 365,7 Go avec 47 Mo de mémoire résidente ; `DRAVE_MMAP=0` revient à `read_to_end`, qui duplique le modèle (9,32 s et 6,35 Go contre 30,68 s et 19,20 Go en clusters) (`docs/format-clusters.md:181-186`,…"
+    },
+    {
+      "slug": "numa",
+      "terme": "NUMA (Non-Uniform Memory Access) · nœud · UPI/QPI · premier-touch · --pin",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/numa.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "n-ud-partiel",
+      "terme": "Nœud partiel",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/n-ud-partiel.md",
+      "resume": "Nœud qui ne charge qu'une partie des grappes (`DRAVE_CLUSTERS=0,3`) au lieu du modèle entier. Un cluster **demandé mais absent du disque est une erreur**, pas un silence ; et rien n'additionne encore les contributions de deux nœuds partiels (`docs/format-clusters.md:160-178`, `reports/rapport-lecteur-multifichiers.md:125`)."
+    },
+    {
+      "slug": "nvlink",
+      "terme": "NVLink",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/nvlink.md",
+      "resume": "Lien direct entre cartes NVIDIA, mesuré à 25,78 Go/s ici, soit ~2× le PCIe réel ; `cudaMemcpy` l'emprunte automatiquement (`docs/convertisseur.md:95`, `reports/rapport-architecture-memoire.md:226`)."
+    },
+    {
+      "slug": "nvme-ssd-odirect-pread",
+      "terme": "NVMe · SSD · ODIRECT · pread",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/nvme-ssd-odirect-pread.md",
+      "resume": "*NVMe* est le protocole des SSD rapides branchés en PCIe ; *pread* lit à une position donnée sans déplacer le curseur ; *O_DIRECT* demande à contourner le cache du noyau (il échoue ici, errno 29). Le NVMe parallélisé à 16 lecteurs (31 Go/s) dépasse la RAM (22 Go/s) : c'est le chemin retenu pour les experts (`reports/rapport-architecture-memoire.md:181-195`)."
+    },
+    {
+      "slug": "pcie",
+      "terme": "PCIe (Peripheral Component Interconnect Express)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/pcie.md",
+      "resume": "Bus qui relie les cartes d'extension. Mesuré à 6,5 Go/s en x8 Gen3 ici ; c'est **le goulot d'un montage hybride** : envoyer un flux d'événements au GPU coûte plus cher que de le calculer sur CPU tant que celui-ci tient 5,3 G événements/s (~10,6 Go/s d'événements), donc « le seuil d'intérêt du GPU par PCIe est proche de 1…"
+    },
+    {
+      "slug": "pe",
+      "terme": "PE (Processing Element ; élément de calcul)",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/pe.md",
+      "resume": "L'unité qui traite un événement par cycle dans le FPGA. Le dépôt en dimensionne le nombre selon la DDR3 : 51 voies tiennent la carte, l'optimum du banc seul est 32 PE à 177 MHz (`reports/bilan-multi-materiel.md:55`, `reports/rapport-cpu-aer.md:11`)."
+    },
+    {
+      "slug": "qsfp",
+      "terme": "QSFP+",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/qsfp.md",
+      "resume": "Lien réseau 4,8 Go/s envisagé pour chaîner plusieurs cartes FPGA (`reports/bilan-multi-materiel.md:9`, `docs/convertisseur.md:94`)."
+    },
+    {
+      "slug": "ram-vram-rss",
+      "terme": "RAM · VRAM · RSS",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/ram-vram-rss.md",
+      "resume": "*RAM* : mémoire de l'hôte (125 Go ici) ; *VRAM* : mémoire des cartes graphiques (2 × 16 Go, 30,2 Go exploitables) ; *RSS* (resident set size) : mémoire réellement occupée par un processus. Le contraste qui résume le projet : **47 Mo de RSS pour 365,7 Go de modèle adressé** en `mmap` (`reports/rapport-architecture-memoire.md:370-376`)."
+    },
+    {
+      "slug": "roofline",
+      "terme": "Roofline",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/roofline.md",
+      "resume": "Modèle qui prédit si un calcul est borné par la puissance de calcul ou par la bande passante mémoire ; le dépôt l'utilise pour projeter un modèle sur un matériel donné (`src/roofline.py`, `docs/programme-recherche.md:11`)."
+    },
+    {
+      "slug": "usb",
+      "terme": "USB",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/usb.md",
+      "resume": "Seul lien effectivement configuré du Stratix V dans le relevé matériel (625 Mo/s), cinquante fois moins que le NVMe parallélisé — ce qui interdit d'y déléguer le calcul (`reports/rapport-architecture-memoire.md:385-397`)."
+    },
+    {
+      "slug": "xeon-e5-2687w-v3-cpu",
+      "terme": "Xeon E5-2687W v3 · CPU",
+      "famille": "6. Répartition, matériel et énergie",
+      "fichier": "06-repartition-materiel-et-energie.md",
+      "fiche": "entrees/xeon-e5-2687w-v3-cpu.md",
+      "resume": "Le processeur du banc : 2 sockets × 10 cœurs (40 fils logiques), 125 Go de RAM, jeu d'instructions AVX2. Toutes les mesures « CPU » du dépôt sont faites dessus (`reports/bilan-multi-materiel.md:7`, `reports/rapport-inference.md:5`)."
+    },
+    {
+      "slug": "amplification-chaotique",
+      "terme": "Amplification chaotique",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/amplification-chaotique.md",
+      "resume": "Explication d'un écart de continuation entre deux chemins de calcul pourtant à perplexité identique : une différence de 1e-5 sur un logit peut faire basculer l'`argmax`, et la suite diverge. « La perplexité est identique, pas la continuation » (`docs/contexte-long.md:315-318`, `reports/rapport-aiguille-topk.md:136-139`)."
+    },
+    {
+      "slug": "banc-degenere-un-banc-qui-passe-ne-prouve-pas-qu-il-mesure",
+      "terme": "Banc dégénéré · « un banc qui passe ne prouve pas qu'il mesure »",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/banc-degenere-un-banc-qui-passe-ne-prouve-pas-qu-il-mesure.md",
+      "resume": "Un banc dont les données rendent le résultat vrai pour de mauvaises raisons. Exemple consigné : un banc de scores GPU où toutes les positions partageaient la même clé, ce qui a donné 1,03e-7 au lieu de 1,60-2,25e-7 (`reports/rapport-gpu-scores.md:27-36`, `docs/sprints.md:69-73`)."
+    },
+    {
+      "slug": "coherence-des-documents",
+      "terme": "Cohérence des documents (audits)",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/coherence-des-documents.md",
+      "resume": "Trois rapports passent le corpus au crible et classent chaque affirmation en OK / PÉRIMÉ / CONTRADICTOIRE / MANQUANT, avec `fichier:ligne` : `reports/rapport-coherence-docs.md` (80 affirmations, 38 périmées), `reports/rapport-coherence-docs-2.md` (66 affirmations, 27 tiennent) et `reports/rapport-coherence-vision.md` (les 18 documents de `docs/` **à l'époque**)."
+    },
+    {
+      "slug": "correlation-difference-symetrique-accord-top-1",
+      "terme": "Corrélation · différence symétrique · accord top-1",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/correlation-difference-symetrique-accord-top-1.md",
+      "resume": "Trois façons de comparer deux exécutions : la *corrélation* des logits (0,999024 entre le moteur et llama.cpp sur GLM-5.3), la *différence symétrique* des ensembles retenus (0 sur 14/14 lignes pour le top-k GPU), l'*accord top-1* (497 jetons sur 511 gardent le même argmax) (`reports/rapport-mla-experts.md:106-113`, `reports/rapport-logits-gpu-vs-cpu.md:40-44`)."
+    },
+    {
+      "slug": "croisement-push-pull",
+      "terme": "Croisement push/pull (≈22 %)",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/croisement-push-pull.md",
+      "resume": "La densité d'activation à laquelle le coût des deux chemins s'égale : en dessous, le push gagne (×2,1 à 10 %, ×8,3 à 1 %) ; au-dessus, le dense gagne (×4,7 à 100 %). Le seuil `seuil_push` a été corrigé de 0,15 à **0,22** après une première campagne fausse (`reports/rapport-croisement-push-pull.md:43-48`, `reports/rapport-mur-memoire-4bits.md:53-57`)."
+    },
+    {
+      "slug": "densite-d-activation-sparsite-parcimonie-creux",
+      "terme": "Densité d'activation · sparsité · parcimonie · creux",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/densite-d-activation-sparsite-parcimonie-creux.md",
+      "resume": "Fraction des neurones dont l'activation n'est pas nulle (ou dépasse un seuil). Le projet mesure 17,9 % à seuil 5 % du max sur Qwen2.5-0.5B, et 100 % (aucun zéro exact) à seuil nul ; c'est cette densité qui décide du chemin d'exécution (`docs/vision.md:44-55`, `reports/rapport-localite-activation.md:43-47`)."
+    },
+    {
+      "slug": "diff-par-couche",
+      "terme": "Diff par couche",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/diff-par-couche.md",
+      "resume": "Comparaison de deux traces couche par couche, jeton par jeton, pour localiser une divergence au lieu de la constater : « KV f32 contre int8 → première divergence couche 1, jeton 0, couche la plus touchée FFN 2 » (`docs/roadmap.md:16`, `tools/diff_flux.py`)."
+    },
+    {
+      "slug": "ecart-relatif-rms-ecart-max",
+      "terme": "Écart relatif · RMS · écart max",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/ecart-relatif-rms-ecart-max.md",
+      "resume": "Façons de chiffrer une erreur. L'*écart max relatif* est utilisé pour comparer des tenseurs (1e-7, 5,2e-7, 1,8e-6) ; le *RMS* (root mean square) pour une erreur répartie (0,085 % du max de la liste pour la trace v3) ; la *tolérance* du dépôt pour un noyau GPU est 1e-6 (`docs/format-flux.md:62-65`, `reports/rapport-gpu-scores.md:50-52`)."
+    },
+    {
+      "slug": "fidelite",
+      "terme": "Fidélité (bit à bit · exact · équivalent)",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/fidelite.md",
+      "resume": "Trois niveaux définis par le dépôt : *bit à bit* (même forme d'exécution, même résultat), *exact* (aucun réencodage : les octets du fichier sont ceux exécutés), *équivalent* (même perplexité à l'arrondi près). Un convertisseur qui réencode doit prouver « exact » ou renoncer au nom « haute fidélité » (`docs/convertisseur.md:150-163`)."
+    },
+    {
+      "slug": "gini-jaccard-2-r2-r-exposant-de-heaps",
+      "terme": "Gini · Jaccard · η² · R² · r · exposant de Heaps",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/gini-jaccard-2-r2-r-exposant-de-heaps.md",
+      "resume": "Statistiques employées pour tester une hypothèse : le *Gini* mesure la concentration d'un routage d'experts par couche ; le *Jaccard* le recouvrement de deux ensembles d'experts ; *η²* et *R²* la part de variance expliquée ; *r* une corrélation ; l'*exposant de Heaps* (~0,21) la croissance du vocabulaire d'un corpus. Ce sont eux qui ont infirmé la piste des «…"
+    },
+    {
+      "slug": "localite-d-activation-reorganisation-contigue",
+      "terme": "Localité d'activation · réorganisation contiguë",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/localite-d-activation-reorganisation-contigue.md",
+      "resume": "Les neurones qui s'allument ensemble sont-ils voisins en mémoire ? Un élagage *contigu* est 30 % plus rapide qu'un élagage *dispersé* à taux égal, et grouper les neurones co-actifs est la piste de gain la plus proche du programme (`reports/rapport-inference.md:285-288`, `docs/programme-recherche.md:219-221`)."
+    },
+    {
+      "slug": "magnitude-quantile-top-10",
+      "terme": "Magnitude · quantile · « top 10 % »",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/magnitude-quantile-top-10.md",
+      "resume": "La *magnitude* est la valeur absolue d'une activation ; le *quantile* Q d'une trace est le seuil qui retient une fraction donnée. Mesure clé du projet : les 10 % de neurones les plus forts portent **33,1 %** de la magnitude, et seuls **0,08 %** sont « chauds » plus de 90 % du temps — donc un préchargement statique…"
+    },
+    {
+      "slug": "p50-p90-p95-mediane-max",
+      "terme": "p50 · p90 · p95 · médiane · max",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/p50-p90-p95-mediane-max.md",
+      "resume": "Quantiles d'une distribution d'écarts : « |ΔNLL| médian 0,076, max 1,49 », « p90 0,0017 ». Le dépôt préfère la médiane et le p90 au maximum seul, parce qu'un jeton atypique peut porter tout l'écart (`reports/rapport-gpt-oss-perplexite.md:76`, `reports/rapport-aiguille-topk.md:133`)."
+    },
+    {
+      "slug": "porte-de-format",
+      "terme": "Porte de format",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/porte-de-format.md",
+      "resume": "Vérification que chaque type quantifié est déquantifié correctement, comparé à `libggml` au bit près : « 19 formats lisibles, 17 à la porte » (`tools/portes_formats.sh`, `docs/format-clusters.md:148-158`, `reports/rapport-coherence-vision.md:145-146`)."
+    },
+    {
+      "slug": "profilage-par-neurone-ppl-profil",
+      "terme": "Profilage par neurone · --ppl-profil",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/profilage-par-neurone-ppl-profil.md",
+      "resume": "Compter quels neurones s'allument, à quelle fréquence, avec quelle magnitude, couche par couche (`--profil-neurones`, `--neurones-sortie`) ; le temps par poste, lui, s'imprime à chaque `--ppl` (pas de drapeau), et `--ppl-profil` ajoute la **perte par tranche de 256 positions**. C'est l'axe 1 de la vision : « un flux de listes est observable par construction » (`docs/vision.md:62-89`, `docs/roadmap.md:129-149`)."
+    },
+    {
+      "slug": "profondeur-de-sonde-fenetre-taux-de-recuperation",
+      "terme": "Profondeur de sonde · fenêtre · taux de récupération",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/profondeur-de-sonde-fenetre-taux-de-recuperation.md",
+      "resume": "Vocabulaire du test de l'aiguille : le code à retrouver est planté à une *profondeur* relative (0,1 = tout au début, 0,9 = tout à la fin), chaque essai est une *sonde*, et le *taux de récupération* est la fraction de sondes réussies. La perplexité ne dit pas si le modèle **retrouve** une information : c'est pourquoi ce test existe…"
+    },
+    {
+      "slug": "reference-independante",
+      "terme": "Référence indépendante (numpy)",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/reference-independante.md",
+      "resume": "Seconde implémentation de la **même formule**, écrite dans un autre langage, pour valider un chemin : « une seconde implémentation de la même formule, pas une seconde exécution de la même implémentation ». C'est ainsi que MLA (5,2e-7), les patchs de vision (5,4e-7) et le projecteur (1,7e-6) ont été validés (`docs/vision.md:182-190`, `docs/plan-mla-vision.md:8-16`, `src/transformer_np.py`)."
+    },
+    {
+      "slug": "reproduit-non-reproduit",
+      "terme": "Reproduit · non reproduit",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/reproduit-non-reproduit.md",
+      "resume": "Mention explicite du dépôt quand un chiffre n'a pas été re-mesuré depuis sa première publication : « valeurs du 30/09, non reproduites depuis : seul l'écart A/B fait foi » (`docs/contexte-long.md:565-567`, `docs/plan-gpu-topk.md:86-90`). Un chiffre « non reproduit » ne doit pas être cité comme acquis."
+    },
+    {
+      "slug": "seuil-absolu-seuil-relatif",
+      "terme": "Seuil absolu · seuil relatif",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/seuil-absolu-seuil-relatif.md",
+      "resume": "Un seuil *absolu* coupe les activations sous une valeur fixe ; un seuil *relatif* les coupe sous une fraction du maximum du vecteur. Mesure : le seuil absolu est **10× moins efficace** que le k-WTA à sparsité égale (`reports/rapport-parcimonie-imposee.md:47`, `docs/roadmap.md:139-141`)."
+    },
+    {
+      "slug": "test-de-l-aiguille",
+      "terme": "Test de l'aiguille (« l'aiguille dans la botte de foin »)",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/test-de-l-aiguille.md",
+      "resume": "Banc de récupération : on plante un code (`AZUR-7391`) dans un long remplissage et on vérifie que le modèle le ressort. Version 2 : remplissage Wikitext-2, réponses de 40 jetons, préremplissage par lots — **12 sondes sur 12** trouvées (`docs/contexte-long.md:533-550`, `reports/rapport-aiguille.md:74`, `tools/aiguille.py`)."
+    },
+    {
+      "slug": "trace-mesure-recalcul",
+      "terme": "Trace · mesure · recalcul",
+      "famille": "7. Mesure, qualité et méthode expérimentale",
+      "fichier": "07-mesure-qualite-et-methode-experimentale.md",
+      "fiche": "entrees/trace-mesure-recalcul.md",
+      "resume": "Distinction de méthode : une trace est un enregistrement, une mesure est un chiffre obtenu en exécutant, un recalcul est une conséquence arithmétique du code. L'audit prévient : « les chiffres recalculables (3 663, 917 583, 1 419) sont des conséquences arithmétiques du code, pas des mesures neuves » (`reports/rapport-coherence-docs.md:205-211`)."
+    },
+    {
+      "slug": "professeur",
+      "terme": "Professeur",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/professeur.md",
+      "resume": "Le grand modèle dont on cherche à imiter **une** couche. Ici : `qwen2.5-0.5b-instruct-q4_k_m.gguf`."
+    },
+    {
+      "slug": "boite-noire",
+      "terme": "Boîte noire",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/boite-noire.md",
+      "resume": "Règle du projet : on ne lit du professeur **que la couche à émuler**. Jamais sa **tête**, jamais les jetons qu'il génère."
+    },
+    {
+      "slug": "tete-2",
+      "terme": "Tête",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/tete-2.md",
+      "resume": "La dernière projection du professeur, qui transforme sa représentation interne en probabilités sur son vocabulaire. On ne la lit pas."
+    },
+    {
+      "slug": "eleve",
+      "terme": "Élève",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/eleve.md",
+      "resume": "Voir **pont**."
+    },
+    {
+      "slug": "pont",
+      "terme": "Pont",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/pont.md",
+      "resume": "Notre modèle. Un réseau **récurrent** de petite taille, dont la sortie doit ressembler à la couche du professeur, et ce **pour toutes les langues à la fois**."
+    },
+    {
+      "slug": "jeton-3",
+      "terme": "Jeton",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/jeton-3.md",
+      "resume": "L'unité de découpage du texte qu'utilise un modèle. Un mot courant vaut souvent un jeton ; un mot rare ou une écriture mal couverte en vaut plusieurs."
+    },
+    {
+      "slug": "tokeniseur",
+      "terme": "Tokeniseur",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/tokeniseur.md",
+      "resume": "Le programme qui découpe le texte en **jetons**. Il est propre à chaque modèle et n'est pas neutre entre langues : un tokeniseur entraîné surtout sur de l'anglais découpe l'allemand en gros morceaux et le pular en miettes."
+    },
+    {
+      "slug": "reservoir",
+      "terme": "Réservoir",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/reservoir.md",
+      "resume": "Un réseau **récurrent** dont les poids internes sont tirés **au hasard** puis **gelés** : ils ne changent jamais. Seule la **lecture** qui le suit est ajustée."
+    },
+    {
+      "slug": "calcul-par-reservoir",
+      "terme": "Calcul par réservoir",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/calcul-par-reservoir.md",
+      "resume": "Le paradigme correspondant : dynamique fixe et aléatoire + lecture ajustée. Son intérêt ici est double : il n'exige **aucune rétropropagation**, et il est très peu coûteux à entraîner."
+    },
+    {
+      "slug": "recurrence",
+      "terme": "Récurrence",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/recurrence.md",
+      "resume": "Le fait qu'un neurone relise son propre état au pas précédent. C'est ce qui donne au réseau une **mémoire** : son état présent dépend de tout ce qu'il a lu avant, avec un oubli progressif."
+    },
+    {
+      "slug": "etat",
+      "terme": "État",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/etat.md",
+      "resume": "Le vecteur `s_t` des activations du réservoir au pas `t`. C'est la seule chose que la **lecture** voit."
+    },
+    {
+      "slug": "constante-de-temps",
+      "terme": "Constante de temps",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/constante-de-temps.md",
+      "resume": "Le nombre `a` qui règle la vitesse d'oubli : `s_t = (1-a)·s_{t-1} + a·tanh(...)`. Un `a` petit garde longtemps la trace du passé, un `a` grand l'oublie vite."
+    },
+    {
+      "slug": "multi-echelle",
+      "terme": "Multi-échelle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/multi-echelle.md",
+      "resume": "Donner à chaque neurone sa **propre** constante de temps, étalées logarithmiquement (ici de 0,02 à 0,80), au lieu d'une seule pour tous. Motif classique en dynamique : un système qui doit représenter des phénomènes lents et rapides a besoin de plusieurs échelles de temps."
+    },
+    {
+      "slug": "gain-d-entree",
+      "terme": "Gain d'entrée",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/gain-d-entree.md",
+      "resume": "Le facteur multiplicatif appliqué à la projection de l'entrée. Mesuré : le porter de 1 à 16 ne change **rien** (le `tanh` est déjà saturé), et le **baisser** dégrade."
+    },
+    {
+      "slug": "tanh",
+      "terme": "tanh",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/tanh.md",
+      "resume": "Fonction qui écrase tout nombre réel dans l'intervalle `[-1, +1]`. C'est la non-linéarité du réservoir."
+    },
+    {
+      "slug": "saturation",
+      "terme": "Saturation",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/saturation.md",
+      "resume": "État d'un neurone dont la sortie est collée à `±1`. Le pont vit **en saturation quasi permanente** : l'argument du `tanh` vaut 16,9 en moyenne."
+    },
+    {
+      "slug": "rayon-spectral",
+      "terme": "Rayon spectral",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/rayon-spectral.md",
+      "resume": "Le plus grand module des valeurs propres d'une matrice. Pour une récurrence, il décide de la **stabilité** : au-dessus de 1, l'état peut diverger ou osciller indéfiniment."
+    },
+    {
+      "slug": "jacobien",
+      "terme": "Jacobien",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/jacobien.md",
+      "resume": "La matrice des dérivées partielles d'une transformation. Pour la récurrence du pont, `J = (1-a)·I + a·D·P` où `D` est la pente locale du `tanh` et `P` la matrice des poids internes."
+    },
+    {
+      "slug": "oscillation",
+      "terme": "Oscillation",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/oscillation.md",
+      "resume": "Comportement d'un réseau récurrent dont l'état se met à battre indéfiniment au lieu de se stabiliser. Nom familier donné au phénomène en neurologie computationnelle."
+    },
+    {
+      "slug": "couche",
+      "terme": "Couche",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/couche.md",
+      "resume": "Ici, un ensemble de neurones soumis à une règle de connectivité stricte : **un neurone de la couche `c` ne lit que la couche `c-1` entière, et les siens nés avant lui**. Il ne lit jamais une couche plus basse directement."
+    },
+    {
+      "slug": "neurone",
+      "terme": "Neurone",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/neurone.md",
+      "resume": "Une unité qui calcule une moyenne pondérée de ses entrées, la passe au `tanh`, et la mélange à son propre passé. Le mot est employé au sens de *unité de calcul*, sans prétendre imiter un neurone biologique."
+    },
+    {
+      "slug": "naissance",
+      "terme": "Naissance",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/naissance.md",
+      "resume": "L'ajout d'un neurone au réseau. Ici, **un neurone à la fois** : aucun calendrier (1, 2, 4, 8… 256) ni plafond imposé, parce qu'un compte rond est le signe qu'on a **choisi** la taille au lieu de la **mesurer**."
+    },
+    {
+      "slug": "naissance-libre",
+      "terme": "Naissance libre",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/naissance-libre.md",
+      "resume": "Le mode correspondant. Une **couche** neuve ne s'ouvre que sur deux signes mesurés : (1) la couche courante est épuisée, et (2) des **concepts communs** ont émergé."
+    },
+    {
+      "slug": "concept-commun",
+      "terme": "Concept commun",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/concept-commun.md",
+      "resume": "Un neurone dont la trajectoire suit le même contenu d'une langue à l'autre, au lieu de suivre un trait propre à une langue. C'est le signal qui autorise une couche supplémentaire."
+    },
+    {
+      "slug": "attrition",
+      "terme": "Attrition",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/attrition.md",
+      "resume": "Le retrait des neurones redondants. Point capital : on **recalcule** la trajectoire des survivants sans les retirés ; on ne se contente pas de masquer des colonnes."
+    },
+    {
+      "slug": "redondance",
+      "terme": "Redondance",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/redondance.md",
+      "resume": "À quel point l'activation d'un neurone est déjà prédite par celle des autres. Le pont la calcule par un complément de Schur, donc une seule inversion de matrice."
+    },
+    {
+      "slug": "contribution",
+      "terme": "Contribution",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/contribution.md",
+      "resume": "L'énergie qu'un neurone apporte à la sortie, produit de la norme de son poids de lecture et de la norme de son activation."
+    },
+    {
+      "slug": "genealogie",
+      "terme": "Généalogie",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/genealogie.md",
+      "resume": "L'ensemble `(poids_parents, poids_couche, biais, couche, constante de temps)` conservé pour **chaque** neurone. C'est elle qui permet de recalculer un sous-ensemble de survivants sans les retirés."
+    },
+    {
+      "slug": "lecture",
+      "terme": "Lecture",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/lecture.md",
+      "resume": "La transformation, ajustée, qui convertit l'**état** du réservoir en la sortie visée. Ici elle est **linéaire** (ou quadratique), et c'est la **seule** partie du pont qui est apprise."
+    },
+    {
+      "slug": "retropropagation",
+      "terme": "Rétropropagation",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/retropropagation.md",
+      "resume": "L'algorithme standard qui ajuste les poids d'un réseau en propageant l'erreur de la sortie vers l'entrée. **Le pont ne l'utilise pas.** C'est une contrainte du projet, pour deux raisons : elle exige de connaître la sortie désirée partout, et elle rend l'apprentissage dépendant d'un calcul global, donc peu compatible avec une croissance locale par corrélation."
+    },
+    {
+      "slug": "forme-fermee",
+      "terme": "Forme fermée",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/forme-fermee.md",
+      "resume": "Une solution calculée d'un seul coup par une formule, par opposition à une méthode qui s'approche par étapes successives. La régression **ridge** est en forme fermée ; **NLMS** ne l'est pas."
+    },
+    {
+      "slug": "regression",
+      "terme": "Régression",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/regression.md",
+      "resume": "Ajuster les coefficients d'une combinaison pour qu'elle approche au mieux une cible. Voir *moindres carrés*."
+    },
+    {
+      "slug": "moindres-carres",
+      "terme": "Moindres carrés",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/moindres-carres.md",
+      "resume": "Le critère classique : minimiser la somme des **carrés** des écarts entre la prédiction et la cible. « Carrés » a une conséquence qu'on oublie : une ligne dont la cible a une norme double pèse **quatre fois** plus dans l'objectif."
+    },
+    {
+      "slug": "regression-ridge",
+      "terme": "Régression ridge",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/regression-ridge.md",
+      "resume": "Des moindres carrés auxquels on ajoute une pénalité proportionnelle au carré des coefficients. Elle sert à stabiliser le calcul quand les colonnes sont corrélées, ce qui est toujours le cas ici."
+    },
+    {
+      "slug": "ride",
+      "terme": "Ride",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/ride.md",
+      "resume": "Le nombre qui règle la force de cette pénalité. **Mesuré : le pont utilisait 0,3, soit dix à trente fois trop.** La fidélité de TEST est maximale à **0,03**."
+    },
+    {
+      "slug": "matrice-de-gram",
+      "terme": "Matrice de Gram",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/matrice-de-gram.md",
+      "resume": "La matrice `AᵀA` des produits scalaires deux à deux des colonnes d'une matrice `A`. C'est elle qu'on accumule pour résoudre une régression."
+    },
+    {
+      "slug": "caracteristiques",
+      "terme": "Caractéristiques",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/caracteristiques.md",
+      "resume": "Les colonnes de la matrice sur laquelle porte la régression. Ici : les états du réservoir, et éventuellement l'entrée du professeur."
+    },
+    {
+      "slug": "lecture-quadratique",
+      "terme": "Lecture quadratique",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/lecture-quadratique.md",
+      "resume": "Une lecture qui voit `[états, états²]` au lieu de `[états]`. Elle reste en forme fermée et n'ajoute qu'une inversion."
+    },
+    {
+      "slug": "nlms",
+      "terme": "NLMS",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/nlms.md",
+      "resume": "Voir la définition dans la famille."
+    },
+    {
+      "slug": "regle-delta",
+      "terme": "Règle delta",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/regle-delta.md",
+      "resume": "L'ancêtre de NLMS : `ΔW = η·(cible − prédiction)·entrée`. Locale, sans rétropropagation."
+    },
+    {
+      "slug": "fidelite-2",
+      "terme": "Fidélité",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/fidelite-2.md",
+      "resume": "La **similarité de cosinus** entre la sortie du pont et la couche du professeur, moyennée sur les positions puis sur les langues. Elle vaut entre −1 et 1."
+    },
+    {
+      "slug": "similarite-de-cosinus",
+      "terme": "Similarité de cosinus",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/similarite-de-cosinus.md",
+      "resume": "Le cosinus de l'angle entre deux vecteurs. Elle **ignore les longueurs** : multiplier un vecteur par 10 ne la change pas."
+    },
+    {
+      "slug": "norme",
+      "terme": "Norme",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/norme.md",
+      "resume": "La longueur d'un vecteur. Mesuré : la norme de la couche 10 du professeur varie de 362 à 574 selon la langue — c'est une propriété **réelle** de la langue, pas un artefact de longueur de texte."
+    },
+    {
+      "slug": "temoin-constant",
+      "terme": "Témoin constant",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/temoin-constant.md",
+      "resume": "La réponse la plus bête possible : prédire partout le même vecteur, la moyenne des cibles d'apprentissage. Tout modèle doit la battre, sinon il n'apporte rien."
+    },
+    {
+      "slug": "apport-propre",
+      "terme": "Apport propre",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/apport-propre.md",
+      "resume": "La fidélité **moins** le témoin constant. C'est la seule quantité qui dise quelque chose du pont, et non du corpus."
+    },
+    {
+      "slug": "invariance-inter-langue",
+      "terme": "Invariance inter-langue",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/invariance-inter-langue.md",
+      "resume": "À quel point deux langues qui disent la même chose ont des représentations qui se ressemblent. Mesurée par la similarité de cosinus entre les représentations de langues différentes pour un même contenu aligné, moyennée sur toutes les paires."
+    },
+    {
+      "slug": "pire-paire",
+      "terme": "Pire paire",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/pire-paire.md",
+      "resume": "La plus mauvaise similarité parmi toutes les paires de langues. Une moyenne peut cacher une langue qui décroche ; la pire paire ne le peut pas."
+    },
+    {
+      "slug": "oracle",
+      "terme": "Oracle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/oracle.md",
+      "resume": "Une lecture **ajustée sur le jeu qu'on évalue**, donc avantagée. Ce n'est **pas un modèle**, c'est un **diagnostic** : il borne ce que les caractéristiques permettent."
+    },
+    {
+      "slug": "vivier",
+      "terme": "Vivier",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/vivier.md",
+      "resume": "L'ensemble des langues disponibles pour l'apprentissage."
+    },
+    {
+      "slug": "hors-vivier",
+      "terme": "Hors vivier",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/hors-vivier.md",
+      "resume": "Une langue **hors vivier** n'a jamais été vue à l'apprentissage ; une langue **du même vivier** a servi, mais la lecture n'a pas été ajustée sur elle."
+    },
+    {
+      "slug": "panneau",
+      "terme": "Panneau",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/panneau.md",
+      "resume": "Un jeu d'évaluation. Le protocole en exige **deux** : le **TEST**, hors vivier, et la **VALIDATION**, du même vivier."
+    },
+    {
+      "slug": "ecart-a-l-oracle",
+      "terme": "Écart à l'oracle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/ecart-a-l-oracle.md",
+      "resume": "Oracle moins notre fidélité. Mesuré : **+0,0975 hors vivier contre +0,0112 dans le vivier**."
+    },
+    {
+      "slug": "fragmentation",
+      "terme": "Fragmentation",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/fragmentation.md",
+      "resume": "Combien de jetons le tokeniseur produit pour un caractère. Mesuré : **1,578** en pular (le tokeniseur hache) contre **0,271** en allemand (il est efficace), soit un rapport de 6."
+    },
+    {
+      "slug": "correlation-de-pearson",
+      "terme": "Corrélation de Pearson",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/correlation-de-pearson.md",
+      "resume": "Mesure de liaison **linéaire** entre deux séries, entre −1 et 1. Sensible aux valeurs extrêmes."
+    },
+    {
+      "slug": "correlation-de-spearman",
+      "terme": "Corrélation de Spearman",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/correlation-de-spearman.md",
+      "resume": "La même chose calculée sur les **rangs** plutôt que sur les valeurs. Insensible aux extrêmes et aux transformations croissantes."
+    },
+    {
+      "slug": "correlation-partielle",
+      "terme": "Corrélation partielle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/correlation-partielle.md",
+      "resume": "La liaison entre deux séries **après avoir retiré** l'effet d'une troisième. Sert à ne pas attribuer à une variable ce qui appartient à une autre — par exemple la norme plutôt que la longueur."
+    },
+    {
+      "slug": "coefficient-de-determination",
+      "terme": "Coefficient de détermination",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/coefficient-de-determination.md",
+      "resume": "La fraction de la variance expliquée, entre 0 et 1. Un R² de 0,67 signifie « les deux tiers »."
+    },
+    {
+      "slug": "sur-apprentissage",
+      "terme": "Sur-apprentissage",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/sur-apprentissage.md",
+      "resume": "Apprendre les particularités du jeu d'apprentissage au lieu de la régularité sous-jacente. Se voit à l'écart entre l'apprentissage et le test."
+    },
+    {
+      "slug": "couche-0",
+      "terme": "Couche 0",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/couche-0.md",
+      "resume": "La sortie de la couche d'embedding du professeur : le premier vecteur associé à chaque jeton. C'est ce que le pont reçoit en entrée."
+    },
+    {
+      "slug": "couche-cible",
+      "terme": "Couche cible",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/couche-cible.md",
+      "resume": "La couche du professeur que le pont cherche à reproduire. Le projet a d'abord visé la **couche 10**, puis mesuré que la **couche 8** est le plateau sémantique (invariance 0,6998 contre 0,6471)."
+    },
+    {
+      "slug": "trace-drvf",
+      "terme": "Trace DRVF",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/trace-drvf.md",
+      "resume": "Le fichier binaire produit par le moteur, qui contient les activations du professeur position par position. Format décrit au §3."
+    },
+    {
+      "slug": "encodage-positionnel-rotationnel",
+      "terme": "Encodage positionnel rotationnel",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/encodage-positionnel-rotationnel.md",
+      "resume": "La façon dont un modèle transformer inscrit la **position** d'un jeton dans son vecteur. Elle a une conséquence méthodologique : la position est lisible dans la couche 0, donc une lecture pourrait prédire le contenu par la seule position **si le corpus est aligné**."
+    },
+    {
+      "slug": "qwen2-5-0-5b-instruct",
+      "terme": "Qwen2.5-0.5B-Instruct",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/qwen2-5-0-5b-instruct.md",
+      "resume": "Le professeur employé. Un modèle « transformer » de 24 couches et environ 500 millions de paramètres, quantifié en Q4_K_M (§3)."
+    },
+    {
+      "slug": "corpus-aligne",
+      "terme": "Corpus aligné",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/corpus-aligne.md",
+      "resume": "Un ensemble de textes où le segment `i` d'une langue correspond au segment `i` d'une autre. Condition **nécessaire** pour mesurer l'invariance inter-langue."
+    },
+    {
+      "slug": "corpus-non-aligne",
+      "terme": "Corpus non aligné",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/corpus-non-aligne.md",
+      "resume": "Les segments ne se correspondent pas. On peut y mesurer la fidélité et le transfert, **pas** l'invariance."
+    },
+    {
+      "slug": "unite",
+      "terme": "Unité",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/unite.md",
+      "resume": "Une des dix sections alignées dans lesquelles l'UDHR a été découpée. Traiter par unité donne dix points de mesure alignés par langue au lieu d'un seul, donc une invariance dix fois mieux étayée."
+    },
+    {
+      "slug": "valeur-propre",
+      "terme": "Valeur propre",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/valeur-propre.md",
+      "resume": "Pour une matrice `M`, un vecteur `v` tel que `M·v = λ·v` : la matrice ne fait que l'étirer, sans changer sa direction. Le nombre `λ` est la valeur propre associée."
+    },
+    {
+      "slug": "complement-de-schur",
+      "terme": "Complément de Schur",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/complement-de-schur.md",
+      "resume": "Pour une matrice `G` découpée en blocs `[[A, B], [C, D]]`, la quantité `D − C·A⁻¹·B`. Ici il sert à mesurer la **redondance** : la part de l'activation d'un neurone que les autres expliquent déjà se lit sur la diagonale de l'inverse de la matrice de Gram, ce qui évite `K` inversions séparées pour `K` neurones."
+    },
+    {
+      "slug": "moyenne-glissante",
+      "terme": "Moyenne glissante",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/moyenne-glissante.md",
+      "resume": "Une moyenne qui donne plus de poids au présent et oublie progressivement le passé. La récurrence `s_t = (1-a)·s_{t-1} + a·x_t` en est une exactement."
+    },
+    {
+      "slug": "parcimonie",
+      "terme": "Parcimonie",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/parcimonie.md",
+      "resume": "Le fait qu'une représentation ait **peu** d'éléments non nuls. Une représentation parcimonieuse se calcule et se stocke beaucoup moins cher."
+    },
+    {
+      "slug": "impulsion",
+      "terme": "Impulsion",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/impulsion.md",
+      "resume": "Dans un réseau de neurones à impulsions, un signal bref émis quand le potentiel d'un neurone franchit un **seuil**, suivi d'une **remise à zéro**. C'est un événement, pas une valeur continue : c'est ce qui rend un tel réseau **parcimonieux par construction**."
+    },
+    {
+      "slug": "frame-temporelle",
+      "terme": "Frame temporelle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/frame-temporelle.md",
+      "resume": "Dans un simulateur à impulsions, la tranche de temps pendant laquelle on regroupe les événements avant de les traiter. Le projet `neuronspikes` annonce des frames jusqu'à 15 360 Hz, soit une résolution de 65 microsecondes."
+    },
+    {
+      "slug": "plongement",
+      "terme": "Plongement",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/plongement.md",
+      "resume": "La traduction d'un objet discret (un jeton, une image) en un **vecteur** de nombres réels, de façon que des objets proches aient des vecteurs proches. La **couche 0** du professeur est exactement cela."
+    },
+    {
+      "slug": "elagage",
+      "terme": "Élagage",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/elagage.md",
+      "resume": "Synonyme d'**attrition** au §10.3 : le retrait des unités inutiles. Le mot est plus courant en apprentissage automatique ; le dépôt emploie les deux."
+    },
+    {
+      "slug": "contexte",
+      "terme": "Contexte",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/contexte.md",
+      "resume": "Le nombre de jetons qu'un modèle peut lire avant de répondre. Sans rapport avec le « contexte » d'un processus (§4)."
+    },
+    {
+      "slug": "plang",
+      "terme": "Plang",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/plang.md",
+      "resume": "La variance des **moyennes par langue** de la sortie, autour de la moyenne globale. Ce que la représentation porte **parce que la langue change**, à contenu égal."
+    },
+    {
+      "slug": "pcont",
+      "terme": "Pcont",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/pcont.md",
+      "resume": "La variance des **moyennes par contenu** de la sortie, autour de la moyenne globale. Ce que la représentation porte **parce que le sujet change**, à langue égale."
+    },
+    {
+      "slug": "rapport-contenu-langue",
+      "terme": "Rapport contenu/langue",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/rapport-contenu-langue.md",
+      "resume": "`P_cont / P_lang`. Il vaut **10,912** pour le professeur à sa couche 8, et **1,698** pour une lecture optimale de sa propre couche 0."
+    },
+    {
+      "slug": "invariance-d-echelle",
+      "terme": "Invariance d'échelle",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/invariance-d-echelle.md",
+      "resume": "Le fait qu'une quantité ne change pas quand on multiplie son objet par un facteur. **Le rapport contenu/langue est invariant d'échelle** : `P_cont` et `P_lang` sont tous deux quadratiques, donc multiplier la sortie par `α` les multiplie tous deux par `α²`."
+    },
+    {
+      "slug": "decomposition-de-variance",
+      "terme": "Décomposition de variance",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/decomposition-de-variance.md",
+      "resume": "Écrire la variance totale d'un jeu de représentations comme la somme d'une part **entre langues**, d'une part **entre contenus** et d'un résidu. Exacte et additive."
+    },
+    {
+      "slug": "analyse-discriminante-lineaire",
+      "terme": "Analyse discriminante linéaire",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/analyse-discriminante-lineaire.md",
+      "resume": "Trouver les directions d'un espace qui **maximisent le rapport** entre la variance d'un groupe et celle d'un autre. C'est un **problème aux valeurs propres généralisé**, `C_cont·v = λ·C_lang·v`, donc **en forme fermée** et sans rétropropagation."
+    },
+    {
+      "slug": "retrecissement",
+      "terme": "Rétrécissement",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/retrecissement.md",
+      "resume": "Le fait qu'un ajustement par moindres carrés produise des prédictions **plus petites** que leurs cibles, ramenées vers la moyenne. Mesuré sur le pont : `‖écart à la moyenne‖/‖moyenne‖` vaut **0,623** chez nous contre"
+    },
+    {
+      "slug": "frontiere",
+      "terme": "Frontière",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/frontiere.md",
+      "resume": "L'ensemble des compromis atteignables entre deux quantités qu'on ne peut pas maximiser ensemble. Ici : **fidélité contre rapport contenu/langue**."
+    },
+    {
+      "slug": "caracteristiques-emboitees",
+      "terme": "Caractéristiques emboîtées",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/caracteristiques-emboitees.md",
+      "resume": "Comparer des jeux de caractéristiques dont l'un contient l'autre, pour attribuer un effet à la partie ajoutée. C'est ainsi qu'on a montré que **l'axe de langue vient de l'entrée** et non du réservoir : l'entrée seule a un rapport de 1,698, le réservoir seul de 1,354 (§70)."
+    },
+    {
+      "slug": "sous-espace-de-langue",
+      "terme": "Sous-espace de langue",
+      "famille": "10. Le pont linguistico-sémantique — le vocabulaire de l'émulation",
+      "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
+      "fiche": "entrees/sous-espace-de-langue.md",
+      "resume": "Les directions d'un espace de représentations qui portent la différence **entre langues**. On l'estime par les vecteurs propres dominants de la covariance inter-langue, puis on projette sur son complément."
+    }
+  ]
+}

@@ -51,9 +51,13 @@ def date_dernier_changement(chemin: str) -> str:
         return ""
 
 
+def est_carte(p: pathlib.Path) -> bool:
+    return p.parent.name == "entrees" and p.parent.parent.name == "glossaire"
+
+
 def docs_vivants():
     return [p for p in (RACINE / "docs").rglob("*.md")
-            if "archive" not in p.parts and p.name != "README.md"]
+            if "archive" not in p.parts and p.name != "README.md" and not est_carte(p)]
 
 
 def docs_tous():
@@ -137,6 +141,8 @@ def main() -> int:
     # 1. classement : aucune donnée de résultat dans docs/
     for f in (RACINE / "docs").rglob("*"):
         if f.suffix in (".json", ".csv", ".npz", ".jsonl") and f.is_file():
+            if f.name == "index.json" and f.parent.name == "glossaire":
+                continue
             alertes.append(f"classement : donnée de résultat dans docs/ → {f.relative_to(RACINE)}")
     for nom in ("07-mesures-couche-commune.md", "fiche-nuit-17-10.md"):
         if not (RACINE / "reports" / nom).exists():
@@ -232,6 +238,18 @@ def main() -> int:
     for p in docs_vivants():
         if p.resolve() not in entrants:
             alertes.append(f"navigation : {p.relative_to(RACINE)} n'a aucun lien entrant")
+
+    # 7b bis. les fiches glossaire sont toutes listées dans l'index du dossier
+    cartes = sorted((RACINE / "docs/glossaire/entrees").glob("*.md"))
+    if cartes:
+        idx_cartes = RACINE / "docs/glossaire/README.md"
+        if not idx_cartes.exists():
+            alertes.append("glossaire : docs/glossaire/README.md manque")
+        else:
+            txt = idx_cartes.read_text(encoding="utf-8", errors="ignore")
+            for c in cartes:
+                if c.name not in txt:
+                    alertes.append(f"glossaire : {c.name} n'est pas listé dans glossaire/README.md")
 
     # 7c. documents datés : une date de vérification, et pas trop vieille
     for f in docs_vivants():

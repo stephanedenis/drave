@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **172 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **176 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -102,6 +102,7 @@
 | [rapport-localite-activation.md](rapport-localite-activation.md) | Localité d'activation : ce que PowerInfer apporte, et ce qu'on en garde |
 | [rapport-logits-gpu-vs-cpu.md](rapport-logits-gpu-vs-cpu.md) | Rapport — pourquoi le déport des projections change (ou non) la perplexité |
 | [rapport-loi-frontiere-fenetre.md](rapport-loi-frontiere-fenetre.md) | La frontière de la fenêtre : pas de loi en N, un régime sûr (la moitié des clés) et un régime imprévisible en dessous |
+| [rapport-m7-frequence.md](rapport-m7-frequence.md) | B16 — M7-bis : la fréquence, pas la neuromodulation |
 | [rapport-m8-log-normal.md](rapport-m8-log-normal.md) | M8 — le variant log-normal : CAUSE TROUVÉE (le partage des poids), CORRIGÉE, et le moteur innocenté |
 | [rapport-materiel-disque-ou-cpu.md](rapport-materiel-disque-ou-cpu.md) | Disque ou CPU ? — ce que la mesure dit d'un deuxième NVMe |
 | [rapport-matvec-f32-parallele.md](rapport-matvec-f32-parallele.md) | Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit |
@@ -115,6 +116,7 @@
 | [rapport-modele-reel.md](rapport-modele-reel.md) | Drave — le modèle réel expose-t-il ses grappes ? |
 | [rapport-modules-famille.md](rapport-modules-famille.md) | C3.2b — un module de restitution par famille : l'indo-européen recopie à 100 % |
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
+| [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
@@ -133,6 +135,8 @@
 | [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
+| [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |
+| [rapport-pipeline-semantique.md](rapport-pipeline-semantique.md) | B13 — chaîne sémantique M1 → M5 → M6 → M8 |
 | [rapport-placement-bits-kv.md](rapport-placement-bits-kv.md) | Où mettre les bits du cache KV : la courbe complète |
 | [rapport-placement-kv-8k.md](rapport-placement-kv-8k.md) | Le placement du KV à 8 k : ×1,93 sur le préremplissage, ×5,8 sur l'attention |
 | [rapport-plateau-semantique.md](rapport-plateau-semantique.md) | Rapport — le plateau sémantique, mesuré sur un corpus multilingue réel |

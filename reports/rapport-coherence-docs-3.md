@@ -27,7 +27,7 @@ L'audit du 27/10 a trouvé trois familles de défauts.
 |---|---|---|
 | portes | 27 / 34 / 46 / 47 / **49** | **49** (47 vertes, 2 structurelles) |
 | chapitres de synthèse | 6 / 7 / **8** | **8** |
-| fichiers `reports/` | 60 / 164 / 170 / 172 / **175** | **175** au 27/10 11:40 |
+| fichiers `reports/` | 60 / 164 / 170 / 172 / **179** | **179** au 27/10 12:00 |
 | JSON de résultats | 236 / 241 / **242** | **242** |
 | documents `docs/` | 18 / **52** | **52** hors archive |
 | durée d'une passe | 60 / 85 / 90 / 97 min / **1 h 34** | **1 h 34** |
@@ -61,7 +61,7 @@ ni dans `docs/carte.md`, ni dans `docs/synthese/index.md`.
 ### Une source unique
 
 `docs/en-cours.md` porte désormais un bloc **« Les chiffres de l'état »** : 49 portes, 8 chapitres,
-175 fichiers / 242 JSON, 53 documents, 1 h 34. Les autres pages y renvoient ; `tools/revue_documentation.py`
+179 fichiers / 246 JSON, 53 documents, 1 h 34. Les autres pages y renvoient ; `tools/revue_documentation.py`
 compare ces valeurs au disque.
 
 ### Les points d'entrée
@@ -73,7 +73,7 @@ compare ces valeurs au disque.
   `docs/archive/`, compteur `49 portes / 583 fichiers`, date de revue.
 - `docs/utilisation.md` : 49 portes, 8 chapitres, 7 schémas, contradiction mdserve corrigée.
 - `docs/manques.md` : 49 portes (47/2), feuille de route `roadmap.md`, plan d'origine archivé.
-- `docs/glossaire.md` : 53 documents / 175 fichiers, parcours de lecture actuel, 2 276 lignes.
+- `docs/glossaire.md` : 53 documents / 179 fichiers, parcours de lecture actuel, 2 276 lignes.
 - `docs/references-non-regression.md` : la dernière passe est en tête ; l'historique (10/10 → 26/10
   09 h 40) est dans `reports/historique-passes-portes.md`.
 
@@ -99,7 +99,7 @@ Les 39 chemins morts sont corrigés vers `docs/archive/...` ; les 3 libellés (`
 
 `tools/index_reports.py` génère `reports/INDEX.md` : une ligne par fiche, triée par nom, avec son
 titre. Il exclut `README.md`, `INDEX.md` et `historique-*` ; la page d'état, elle, compte tous les
-`.md`. Au 27/10 10:52 : **172 fiches** dans l'index, **175 fichiers** dans `reports/`.
+`.md`. Au 27/10 10:52 : **176 fiches** dans l'index, **179 fichiers** dans `reports/`.
 
 ### La synthèse comme introduction
 
@@ -130,7 +130,7 @@ et l'usage de chaque schéma.
 Portes documentaires, au 27/10 après corrections :
 
 ```text
-revue de documentation · 175 fiche(s) · 242 JSON · 53 doc(s) · 49 porte(s) · 8 chapitre(s)
+revue de documentation · 179 fiche(s) · 246 JSON · 53 doc(s) · 49 porte(s) · 8 chapitre(s)
 ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence,
    vocabulaire, navigation
 
@@ -155,7 +155,7 @@ il ne peut pas voir le commit qui l'ajoute. Le commit de passe 2 (`a81c5bd9`) es
 
 ## 7. Ce qui pourrait rendre ce rapport faux
 
-- **Les compteurs bougent** : chaque fiche ou JSON ajouté par B12 change `175 / 242` ; la revue
+- **Les compteurs bougent** : chaque fiche ou JSON ajouté par B12 change `179 / 246` ; la revue
   échouera volontairement jusqu'à la mise à jour de `en-cours.md`. C'est le but, pas un bug.
 - **La revue est syntaxique** : elle vérifie qu'un lien résout et qu'un compteur correspond, pas
   qu'une phrase est vraie. Les contradictions sémantiques profondes (par exemple deux interprétations

@@ -418,13 +418,22 @@ def _m5_par_jeu(train, test, cible: str, contexte: bool, ordre: int) -> dict:
     """Décomposition par jeu, au même réglage que le résultat global."""
     m = Predictif(cible=cible, ordre=ordre, contexte=contexte, melange=0.5)
     m.entrainer(train)
+    return _par_jeu_modele(m, test)
+
+
+def _par_jeu_modele(modele: Predictif, test) -> dict:
+    """Évalue un modèle déjà entraîné, jeu par jeu.
+
+    Sert au contrôle M1 lésé : il montre quels jeux **survivent** à la
+    privation de contexte et lesquels sont perdus. Un exact plus haut sur un
+    sous-ensemble plus petit n'est pas un gain, c'est une sélection.
+    """
     out = {}
     for jeu in sorted({s.jeu for s in test}):
-        sous_train = [s for s in train if s.jeu == jeu]
-        sous_test = [s for s in test if s.jeu == jeu]
-        if not sous_train or not sous_test:
+        sous = [s for s in test if s.jeu == jeu]
+        if not sous:
             continue
-        r = m.evaluer(sous_test)
+        r = modele.evaluer(sous)
         if r["n"]:
             out[jeu] = {cle: r[cle] for cle in
                         ("n", "exact", "majoritaire", "surprise",
@@ -672,9 +681,13 @@ def mesurer(pas: int = 300, graines=(1, 2, 3), device: str = "cuda",
         m1 = _eval_m5(train_m1, test_m1, cible, True, 1)
         sans = _eval_m5(train_m1, test_m1, cible, False, 1)
         trans = _eval_m5(train_m1, test_m1, cible, True, 0)
-        lese = _eval_m5(train_nc, test_nc, cible, True, 1)
+        lese_modele = Predictif(cible=cible, ordre=1, contexte=True,
+                                melange=0.5)
+        lese_modele.entrainer(train_nc)
+        lese = lese_modele.evaluer(test_nc)
         perm = _eval_m5(train_m1, permuter_contextes(test_m1, graine=0),
                         cible, True, 1)
+        n_ref = max(1, ref["n"])
         m5[cible] = {
             "reference_codes_vrais": _m5_compact(ref),
             "chaine_m1": _m5_compact(m1),
@@ -682,9 +695,15 @@ def mesurer(pas: int = 300, graines=(1, 2, 3), device: str = "cuda",
             "sans_transitions": _m5_compact(trans),
             "m1_sans_contexte": _m5_compact(lese),
             "plateau_permute": _m5_compact(perm),
+            "couverture_m1_sans_contexte": lese["n"] / n_ref,
+            "note_m1_sans_contexte": (
+                "exact sur les pas qui survivent à la privation de contexte ; "
+                "la couverture n/ref et le détail par jeu montrent que le gain "
+                "apparent est une sélection, pas une amélioration"),
             "par_jeu_reference": _m5_par_jeu(train, test, cible, True, 1),
             "par_jeu_sans_plateau": _m5_par_jeu(train_m1, test_m1, cible,
                                                 False, 1),
+            "par_jeu_m1_sans_contexte": _par_jeu_modele(lese_modele, test_nc),
         }
 
     # ---- M6 ---------------------------------------------------------
@@ -727,6 +746,7 @@ def mesurer(pas: int = 300, graines=(1, 2, 3), device: str = "cuda",
                 "gain_surprise": ref["surprise"] - res["surprise"],
                 "n_reference": ref["n"],
                 "n_lessee": res["n"],
+                "couverture": res["n"] / max(1, ref["n"]),
             }
 
     # ---- Flux : la chaîne se parle-t-elle ? -------------------------

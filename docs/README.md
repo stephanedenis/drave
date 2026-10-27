@@ -1,7 +1,7 @@
 # La documentation de Drave — l'inventaire
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 175 fichiers / 242 JSON, 53 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 179 fichiers / 246 JSON, 53 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
 > `docs/roadmap.md` (plan). *Spécifique : cette page est l'**inventaire** ; `carte.md`
@@ -55,6 +55,8 @@ demande**, un document par tâche.
 | [histoire.md](histoire.md) | Qtrinet → Drave, les trois âges |
 | [references-non-regression.md](references-non-regression.md) | les repères des passes complètes |
 | [manques.md](manques.md) | le registre des manques mesurés |
+| [glossaire/README.md](glossaire/README.md) | l'index des 289 entrées et des fiches courtes |
+| [glossaire/entrees/](glossaire/entrees/) | les fiches glossaire par entrée (format carte pour mdserve) |
 | [semantique-universaux.md](semantique-universaux.md) | la base typée (B11) : 15 champs, 502 classes, les écoles |
 | [modules-cerveau-langage.md](modules-cerveau-langage.md) | les modules M1–M9 (B12), le bus et les négatifs |
 | [contexte-long.md](contexte-long.md) | ce que 1 M de jetons de contexte veut dire, et par où ça casse |

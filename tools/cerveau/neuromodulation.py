@@ -623,6 +623,8 @@ class MemoireFrequence:
         self._ctx: collections.Counter = collections.Counter()
         self._t = 0
         self._n = 0
+        self.evictions = 0
+        self.evictions_sans_freq1 = 0
         self._rng = random.Random(graine)
 
     @property
@@ -672,6 +674,9 @@ class MemoireFrequence:
     def _evincer(self) -> None:
         if not self._slots:
             return
+        self.evictions += 1
+        if min(e["freq"] for e in self._slots.values()) >= 2:
+            self.evictions_sans_freq1 += 1
         if self.politique == "fifo":
             cle = min(self._slots,
                       key=lambda k: self._slots[k]["t_arrivee"])
@@ -714,8 +719,9 @@ class MemoireFrequence:
 # Le banc M7-bis : LFU, LFU + récence, contextes, clé permutée
 # ---------------------------------------------------------------------------
 _METRIQUES_BIS = ("ret_surface_prefixe", "ret_surface_finale",
-                  "ret_nouveaux_utiles", "ret_code", "rep_surface",
-                  "rep_code", "suf_surface", "suf_code", "codes_memoire")
+                  "ret_nouveaux_utiles", "ret_nouveaux_suffixe",
+                  "ret_code", "rep_surface", "rep_code", "suf_surface",
+                  "suf_code", "codes_memoire")
 
 
 def _classe_longueur(surface: str) -> str:
@@ -785,6 +791,11 @@ def _tourner_frequence(episodes: list[EpisodeM7], ordre: list[int],
     total_surfaces = collections.Counter(e.surface for e in episodes)
     utiles = {s for s in surfaces_vues if total_surfaces[s] >= 2}
     suffixe = ordre[prefixe:]
+    prefix_counts = collections.Counter(
+        episodes[i].surface for i in ordre[:prefixe])
+    suffix_surfaces = {episodes[i].surface for i in suffixe}
+    nouveaux_suffixe = {s for s, c in prefix_counts.items()
+                        if c == 1 and s in suffix_surfaces}
     suf_s = sum(1 for i in suffixe
                 if episodes[i].surface in surfaces_memoire)
     suf_c = sum(1 for i in suffixe
@@ -797,6 +808,8 @@ def _tourner_frequence(episodes: list[EpisodeM7], ordre: list[int],
         / max(1, len({e.surface for e in episodes})),
         "ret_nouveaux_utiles": len(surfaces_memoire & utiles)
         / max(1, len(utiles)),
+        "ret_nouveaux_suffixe": len(surfaces_memoire & nouveaux_suffixe)
+        / max(1, len(nouveaux_suffixe)),
         "ret_code": len(codes_memoire & codes_vus) / max(1, len(codes_vus)),
         "rep_surface": rep_s / max(1, rep_s_n),
         "rep_code": rep_c / max(1, rep_c_n),
@@ -804,6 +817,8 @@ def _tourner_frequence(episodes: list[EpisodeM7], ordre: list[int],
         "suf_surface": suf_s / max(1, len(suffixe)),
         "suf_code": suf_c / max(1, len(suffixe)),
         "codes_memoire": len(codes_memoire),
+        "evictions": memoire.evictions,
+        "evictions_sans_freq1": memoire.evictions_sans_freq1,
     }
 
 
@@ -899,6 +914,7 @@ def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
     resultats: dict[str, dict[str, list[float]]] = {
         c["nom"]: collections.defaultdict(list) for c in configs}
     oracle = collections.defaultdict(list)
+    diagnostics = collections.defaultdict(collections.Counter)
     for k in range(permutations):
         ordre = list(range(n))
         random.Random(graine + k).shuffle(ordre)
@@ -913,6 +929,11 @@ def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
                                    graine + k)
             for met in _METRIQUES_BIS:
                 resultats[c["nom"]][met].append(m[met])
+            if c["nom"] in ("lfu", "lfu_recence", "lfu_code",
+                            "lfu_recence_code"):
+                diagnostics[c["nom"]]["evictions"] += m["evictions"]
+                diagnostics[c["nom"]]["sans_freq1"] += m[
+                    "evictions_sans_freq1"]
         o = _oracle_frequence(ep, ordre, prefixe, capacite)
         oracle["suf_surface"].append(o["suf_surface"])
         oracle["suf_code"].append(o["suf_code"])
@@ -975,14 +996,16 @@ def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
         "lfu_recence_bat_lfu": {
             "surface": {m: _resume_delta(deltas_lfu[rec][m])
                         for m in ("suf_surface", "rep_surface",
-                                  "ret_nouveaux_utiles")},
+                                  "ret_nouveaux_utiles",
+                                  "ret_nouveaux_suffixe")},
             "code": {m: _resume_delta(deltas_lfu[rec_code][m])
                      for m in ("suf_code", "rep_code", "ret_code")},
         },
         "lfu_bat_fifo": {
             "surface": {m: _resume_delta(deltas_fifo["lfu"][m])
                         for m in ("suf_surface", "rep_surface",
-                                  "ret_nouveaux_utiles")},
+                                  "ret_nouveaux_utiles",
+                                  "ret_nouveaux_suffixe")},
             "code": {m: _resume_delta(deltas_fifo["lfu_code"][m])
                      for m in ("suf_code", "rep_code", "ret_code")},
         },
@@ -1017,6 +1040,7 @@ def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
                 "ret_surface_prefixe": "surfaces retenues / surfaces distinctes vues au préfixe (plafonnée par la capacité)",
                 "ret_surface_finale": "surfaces retenues / surfaces distinctes du flux (plafond = capacité/vocabulaire)",
                 "ret_nouveaux_utiles": "surfaces vues au préfixe qui reviennent dans le flux et sont retenues / ces surfaces",
+                "ret_nouveaux_suffixe": "surfaces vues une seule fois au préfixe et présentes dans le suffixe, retenues / ces surfaces (oracle d'évaluation)",
                 "ret_code": "codes retenus / codes distincts vus au préfixe",
                 "rep_surface": "écritures répétées dont la surface était déjà en mémoire",
                 "rep_code": "écritures répétées dont le code était déjà en mémoire",
@@ -1033,13 +1057,19 @@ def experience_m7_bis(episodes: list[EpisodeM7] | None = None,
         "controles": {
             "contexte_reel_vs_permute": contexte_controle,
             "beta_zero_ecart_max": ecart_beta_zero,
+            "evictions": {
+                nom: {"evictions": int(v["evictions"]),
+                      "sans_freq1": int(v["sans_freq1"]),
+                      "part_sans_freq1": v["sans_freq1"]
+                      / max(1, v["evictions"])}
+                for nom, v in diagnostics.items()},
         },
         "verdict": verdict,
         "limites": [
             "Les permutations aléatoires rendent le suffixe échangeable avec le préfixe : la fréquence d'item y est le prédicteur optimal, un contexte ne peut pas la battre par construction.",
             "Le contrôle de contexte mesure donc surtout l'absence d'information contextuelle *au-delà* de la fréquence ; il ne teste pas une dérive temporelle réelle (jeux successifs), que les permutations détruisent.",
             "rep_surface est en partie tautologique : le LFU est défini pour garder les items répétés.",
-            "Le plafond de rétention des nouveaux (capacité/vocabulaire) n'est pas un résultat ; ret_nouveaux_utiles est la métrique discriminante ajoutée.",
+            "Le plafond de rétention des nouveaux (capacité/vocabulaire) n'est pas un résultat ; ret_nouveaux_utiles et ret_nouveaux_suffixe sont les métriques discriminantes ajoutées.",
         ],
     }
     if synthetique:
