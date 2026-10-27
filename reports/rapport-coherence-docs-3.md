@@ -101,6 +101,14 @@ Les 39 chemins morts sont corrigés vers `docs/archive/...` ; les 3 libellés (`
 titre. Il exclut `README.md`, `INDEX.md` et `historique-*` ; la page d'état, elle, compte tous les
 `.md`. Au 27/10 10:52 : **171 fiches** dans l'index, **174 fichiers** dans `reports/`.
 
+### La synthèse comme introduction
+
+Les **huit chapitres** de `docs/synthese/` s'ouvrent désormais sur une **fiche concept** (9 fiches au
+total), avec un lien vers le glossaire et une illustration ; l'index est une **introduction** (13
+concepts, carte des 11 familles, **14 schémas**). Les **169 liens internes** de la synthèse sont
+**relatifs** et résolvent ; la revue vérifie la fiche, le lien glossaire, l'image, la date de l'index
+et l'usage de chaque schéma.
+
 ## 4. L'outillage
 
 `tools/revue_documentation.py` vérifie maintenant :
