@@ -97,6 +97,8 @@ def main() -> int:
     ap.add_argument("--prefixe", type=int, default=4)
     ap.add_argument("--n-sem", type=int, default=1,
                     help="nombre d'unités sémantiques (1 = vecteur unique)")
+    ap.add_argument("--attention-sem", action="store_true",
+                    help="les unités lisent les états par attention de requêtes")
     ap.add_argument("--diversite", type=float, default=0.1,
                     help="pénalité de redondance entre unités sémantiques")
     ap.add_argument("--pooling", default="mean", choices=("mean", "last"))
@@ -135,7 +137,8 @@ def main() -> int:
     torch.manual_seed(args.graine + rang)
     rng = random.Random(args.graine + 1000 * rang)
     modele = Semantique.charger(args.checkpoint, len(langues), args.d_sem, args.prefixe, str(device),
-                                deux_bases=args.deux_bases, n_sem=args.n_sem)
+                                deux_bases=args.deux_bases, n_sem=args.n_sem,
+                                attention_sem=args.attention_sem)
     if args.etat:
         paquet = torch.load(args.etat, map_location=device, weights_only=False)
         cible = modele.state_dict()
@@ -253,7 +256,7 @@ def main() -> int:
         pathlib.Path(args.sortie).parent.mkdir(parents=True, exist_ok=True)
         torch.save({"etat": modele.state_dict(), "langues": langues,
                     "config": {"d_sem": args.d_sem, "prefixe": args.prefixe,
-                               "n_sem": args.n_sem,
+                               "n_sem": args.n_sem, "attention_sem": args.attention_sem,
                                "seq": args.seq, "checkpoint": args.checkpoint},
                     "meilleur": meilleur[1]}, args.sortie)
         pathlib.Path(str(args.sortie) + ".json").write_text(

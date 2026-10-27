@@ -34,7 +34,8 @@ class RetourInverse(torch.autograd.Function):
 
 class Semantique(nn.Module):
     def __init__(self, base: nn.Module, n_langues: int, d_sem: int = 128,
-                 k_prefixe: int = 4, deux_bases: bool = False, n_sem: int = 1):
+                 k_prefixe: int = 4, deux_bases: bool = False, n_sem: int = 1,
+                 attention_sem: bool = False):
         super().__init__()
         self.base = base
         self.base_decode = copy.deepcopy(base) if deux_bases else self.base
@@ -42,8 +43,15 @@ class Semantique(nn.Module):
         self.d_sem = d_sem
         self.k = k_prefixe
         self.n_sem = n_sem
-        self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
-                                  nn.Linear(self.d_model, n_sem * d_sem))
+        self.attention_sem = bool(attention_sem and n_sem > 1)
+        if self.attention_sem:
+            self.requetes = nn.Parameter(torch.randn(n_sem, self.d_model) * 0.02)
+            self.attn = nn.MultiheadAttention(self.d_model, 8, batch_first=True)
+            self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
+                                      nn.Linear(self.d_model, d_sem))
+        else:
+            self.tete = nn.Sequential(nn.LayerNorm(self.d_model),
+                                      nn.Linear(self.d_model, n_sem * d_sem))
         self.prefixe = nn.Linear(d_sem, self.d_model)
         self.langue = nn.Embedding(n_langues, self.d_model)
         self.classif_langue = nn.Linear(d_sem, n_langues)
@@ -51,9 +59,10 @@ class Semantique(nn.Module):
     @classmethod
     def charger(cls, checkpoint: str, n_langues: int, d_sem: int = 128,
                 k_prefixe: int = 4, device: str = "cuda", deux_bases: bool = False,
-                n_sem: int = 1):
+                n_sem: int = 1, attention_sem: bool = False):
         base = AutoModelForCausalLM.from_pretrained(checkpoint, dtype=torch.float32)
-        return cls(base, n_langues, d_sem, k_prefixe, deux_bases, n_sem).to(device)
+        return cls(base, n_langues, d_sem, k_prefixe, deux_bases, n_sem,
+                   attention_sem).to(device)
 
     def encode_tokens(self, ids: torch.Tensor, masque: torch.Tensor,
                       pooling: str = "mean") -> torch.Tensor:
@@ -67,7 +76,12 @@ class Semantique(nn.Module):
         else:
             m = masque.unsqueeze(-1).to(h.dtype)
             z = (h * m).sum(dim=1) / m.sum(dim=1).clamp(min=1)
-        tok = self.tete(z).view(z.shape[0], self.n_sem, self.d_sem)
+        if self.attention_sem:
+            q = self.requetes.unsqueeze(0).expand(z.shape[0], -1, -1)
+            zt, _ = self.attn(q, h, h, key_padding_mask=(masque == 0))
+            tok = self.tete(zt)
+        else:
+            tok = self.tete(z).view(z.shape[0], self.n_sem, self.d_sem)
         return F.normalize(tok, dim=-1)
 
     def encode(self, ids: torch.Tensor, masque: torch.Tensor,
