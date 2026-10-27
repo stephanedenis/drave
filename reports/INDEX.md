@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **169 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **171 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -40,9 +40,11 @@
 | [rapport-campagne-parcimonie.md](rapport-campagne-parcimonie.md) | Campagne « parcimonie imposée » — synthèse |
 | [rapport-capteur-hebbien.md](rapport-capteur-hebbien.md) | Capteur hebbien — apprendre des logs d'activation |
 | [rapport-carte-raisonnement-naturel.md](rapport-carte-raisonnement-naturel.md) | La carte du raisonnement naturel : quatre mesures, trois courbes, deux axes |
+| [rapport-cerveau-corrections.md](rapport-cerveau-corrections.md) | Corrections B12 — ce que le stress des sous-agents a changé |
 | [rapport-cerveau-modules.md](rapport-cerveau-modules.md) | Rapport — modules cerveau-langage M1–M9 |
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
 | [rapport-coherence-docs-2.md](rapport-coherence-docs-2.md) | Cohérence des documents avec le code — second passage |
+| [rapport-coherence-docs-3.md](rapport-coherence-docs-3.md) | Rapport — cohérence de la documentation, troisième passage |
 | [rapport-coherence-docs.md](rapport-coherence-docs.md) | Cohérence des documents avec le code — audit |
 | [rapport-coherence-vision.md](rapport-coherence-vision.md) | Cohérence des `docs/` avec la vision Drave — révision du 02/10 |
 | [rapport-compacite-trace.md](rapport-compacite-trace.md) | Compacité de la trace — le disque paie trois fois le câble |

@@ -1,7 +1,7 @@
 # Reprise — démarrer une session de travail
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 172 fichiers / 241 JSON, 52 documents**), chemins archivés corrigés
+> (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
 > pas.** *Cette page est mise à jour ; les pièges d'environnement du § 3 restent valides.*
 

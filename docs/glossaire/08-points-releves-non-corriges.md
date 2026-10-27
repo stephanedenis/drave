@@ -117,7 +117,7 @@ lecteur ne s'y trompe pas.
 
 17. **Le périmètre annoncé ne correspond pas au disque (constat du 2026-10-10).**
     À la date de l'audit, `reports/` contenait **60** rapports et `docs/` **18**
-    documents. Depuis, le dépôt a grandi : **172 fichiers, 241 JSON** et **52
+    documents. Depuis, le dépôt a grandi : **174 fichiers, 242 JSON** et **52
     documents** (2026-10-27). Le point reste consigné pour l'histoire ; les compteurs
     courants sont dans [`docs/en-cours.md`](../en-cours.md).
 

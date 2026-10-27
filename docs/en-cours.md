@@ -1,12 +1,12 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 173 fichiers / 242 JSON, 52 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 174 fichiers / 242 JSON, 52 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
 
-**Mis à jour : 2026-10-27, 09 h 38 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-27, 10 h 52 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
@@ -68,7 +68,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **173** / **242** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **174** / **242** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **52** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -78,7 +78,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **173** / **242** |
+| fichiers / JSON de résultats | **174** / **242** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

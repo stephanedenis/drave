@@ -34,7 +34,7 @@ Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `r
    (Glottolog, Gutenberg, Unicode UDHR, Cellar/EUR-Lex, Panini/Nipada) sont citées avec leur URL ou leur chemin ;
 4. **fraîcheur** : la date de `en-cours.md` est celle du **dernier commit** (comparaison réelle ; l'heure est
    informative) ;
-5. **compteurs** : la page d'état est la **source unique** — **49 portes, 8 chapitres, 172 fichiers / 241 JSON,
+5. **compteurs** : la page d'état est la **source unique** — **49 portes, 8 chapitres, 174 fichiers / 242 JSON,
    52 documents** — et la revue les compare au disque (fichiers de `reports/`, `docs/`, `tools/porte-*.sh`) ;
 6. **cohérence** : la synthèse ([`docs/synthese/index.md`](../synthese/index.md)) et le tableau de bord disent la
    même chose, et l'index liste **B10–B12** ;
