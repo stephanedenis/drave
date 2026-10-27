@@ -1,0 +1,31 @@
+{
+ "items": 528,
+ "lecture_codec": 528,
+ "lecture_couverture": 1.0,
+ "par_jeu": {
+  "morpion": 64,
+  "echecs": 146,
+  "dames": 70,
+  "go": 87,
+  "cartes": 161
+ },
+ "memoire_traduction": {
+  "cibles": 470,
+  "autres_surfaces": 428,
+  "note": "mémoire parallèle, pas un modèle"
+ },
+ "sans_contexte": {
+  "lecture": 374,
+  "couverture": 0.7083333333333334,
+  "note": "contexte absent, ambiguïtés non levées"
+ },
+ "avec_contexte": {
+  "lecture": 528,
+  "couverture": 1.0
+ },
+ "natif_normalise": {
+  "exact": 0.5568181818181818,
+  "invariance": 0.37037037037037035
+ },
+ "lecture": "codec avec contexte 528/528 ; sans contexte 374/528 ; mémoire 470 cibles (428 autres surfaces) ; natif normalisé 55,7 % / invariance 37,0 %"
+}

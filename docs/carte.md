@@ -37,7 +37,7 @@
 | **B7/B8** les langues et les maîtres | **faits** — 71 langues, 449/449, livre 10/10, go 10/10 | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (12,7 contre 39,6) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
-| **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (jeu 91 %, de/vers 95/88 %, invariance 37,0 %) ; consistance/adversaire négatifs | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; consistance/adversaire négatifs | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
 | **C1–C7** la langue | **mesurés** — corpus, traduction, restitution, styles, domaines, documentation, pensée | [l'état](en-cours.md) |
 
 ## Les preuves

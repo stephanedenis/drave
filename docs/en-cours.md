@@ -40,7 +40,8 @@ La vision complète est dans [`vision.md`](vision.md).
   **distillation synthétique** le débloque : **45,1 %** de code exact sur les **528 surfaces réelles** jamais
   vues, `jeu` **83,1 %**, `de`/`vers` **90,0 / 89,4 %** ; l'**invariance par paire** reste **7,4 %**. La **normalisation lexicale** (concepts canoniques) porte le natif à **55,7 %** de code exact et
   **37,0 %** d'invariance, contre **45,1 % / 7,4 %** ; la **consistance softmax** (38,3 %, invariance 0) et
-  l'**adversaire de langue** (39,6 %, invariance 0) restent deux **négatifs**. Le codec reste à **100 %**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
+  l'**adversaire de langue** (39,6 %, invariance 0) restent deux **négatifs**. Le codec reste à **100 %**. Avec le **contexte**, le codec lit **528/528** (100 %) ; sans contexte, **374/528**
+  (70,8 %) : le contexte est décisif, et le natif ne le reçoit pas encore. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 ## Où l'on en est
