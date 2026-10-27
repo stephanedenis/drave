@@ -27,55 +27,44 @@ gabarit n'est appliqué qu'avec `--prompt` ✓ — sans lui, le moteur lance un 
 il n'existe **aucun mode silencieux** ✗ (la télémétrie suit la réponse ✓) → le REPL construit le
 gabarit Qwen, tient l'historique, et **coupe l'instrumentation** ✓✓.
 
-### La documentation, en ligne — **DEUX serveurs, et ils ne servent pas la même chose**
+### La documentation, en ligne — **un seul serveur, `docwatch`**
 
-| | **mdserve** | **`serveur-doc.py`** |
-|---|---|---|
-| adresse | **http://127.0.0.1:8771/** ✓ | **http://localhost:8787/** (et **192.168.1.101:8787** ✓) |
-| ce que c'est | **le navigateur de documents** ✓ : **arbre** de contenu ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓, comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`, `~/.config/mdserve/pins.json` ✓ — `docs` et `reports` y sont ✓), **changement de racine** ✓ (ne peut que **restreindre** la vue ✗), **filtrage** ✓ | **la page « où en est le travail »** ✓ : `docs/en-cours.md` en premier, puis les documents de tête, la dernière passe des portes, les fiches récentes, le journal du jour ✓ |
-| portée | **127.0.0.1 seulement** ✗ (garantie par construction ✓) | **0.0.0.0** ✓ — donc accessible **depuis une autre machine** ✓ |
-| dépôt | [**stephanedenis/mdserve**](https://github.com/stephanedenis/mdserve) ✓ — paquet `mdserve-local`, licence MIT, CI Python 3.9–3.13 | ce dépôt, `tools/serveur-doc.py` |
-| service | `mdserve.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/mdserve.log` ✓) | `drave-doc.service` ✓ |
-| écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ | aucune ✓ |
+[**docwatch**](https://github.com/stephanedenis/docwatch) est le **seul** serveur de documentation du
+dépôt ✓. Il affiche une **collection de documents Markdown** pendant que d'autres processus les écrivent :
+**arbre** de contenu ✓, **rendu** HTML ✓, **rechargement** (le navigateur interroge `/stat` toutes les 3 s ✓,
+comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`,
+`~/.config/docwatch/pins.json` ✓ — `docs`, `reports` et `en-cours.md` y sont ✓), **changement de racine** ✓
+(ne peut que **restreindre** la vue ✗), **filtrage** ✓, **images et annexes** ✓.
 
-**Décision du 17/10 : mdserve est LE viewer** ✓✓ — il a l'arbre, le rechargement (3 s), les épingles, le
-filtrage **et désormais les images** ✓ (voir ci-dessous). `drave-doc` (8787) ne garde qu'un rôle : l'accès
-**depuis le réseau**, que mdserve refuse par construction (il n'écoute que sur 127.0.0.1 ✓).
-
-### mdserve est un dépôt public autonome (27/10)
-
-mdserve ne servait que le **Markdown** ✗ : une image écrite en syntaxe Markdown était rendue en
-`<img src="schemas/x.svg">` ✓, que le navigateur demandait à la **racine du serveur** (et non au dossier du
-document ✓) → 404 ✗✓. Deux ajouts, désormais **dans le dépôt public** ✓ :
-
-* une route **`/asset?path=…`** qui sert un fichier de la racine **avec son type** ✓ (`image/svg+xml` pour un
-  SVG ✓, validée par `safe_path` ✓ — pas de sortie de la racine ✓) ;
-* une **réécriture des `src` relatifs** vers cette route, résolus contre le **dossier du document** ✓✓.
-
-Vérifié : `/render` sur `docs/synthese/index.md` renvoie **6 images** aux `src` réécrits ✓, et
-`/asset?path=…/vue-ensemble.svg` répond **200 `image/svg+xml`** ✓.
+| quoi | valeur |
+|---|---|
+| adresse | **http://127.0.0.1:8771/** ✓ |
+| portée | **127.0.0.1 seulement** ✗ (garantie par construction ✓) |
+| dépôt | [**stephanedenis/docwatch**](https://github.com/stephanedenis/docwatch) ✓ — licence MIT, CI Python 3.9–3.13 |
+| service | `docwatch.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/docwatch.log` ✓) |
+| écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ |
 
 **Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **64 tests**, CI Python 3.9–3.13, README et licence MIT
-dans [**stephanedenis/mdserve**](https://github.com/stephanedenis/mdserve). Le paquet s'appelle
-`mdserve-local` (le nom `mdserve` est pris sur PyPI) ; les commandes restent `mdserve` et `mdopen`.
+dans [**stephanedenis/docwatch**](https://github.com/stephanedenis/docwatch). Ancien nom : `mdserve`
+(paquet `mdserve-local`) ; les commandes sont désormais `docwatch` et `docopen`.
 
 Installation et mise à jour :
 
 ```bash
-pipx install --force "git+https://github.com/stephanedenis/mdserve.git"
-pipx reinstall mdserve-local        # après une évolution du dépôt
+pipx install --force "git+https://github.com/stephanedenis/docwatch.git"
+pipx reinstall docwatch        # après une évolution du dépôt
 ```
 
 Le service lance le paquet avec `--no-browser` ✓. Il n'y a **plus de patch hors dépôt** ✓ : les sauvegardes
 `mdserve.avant-assets` et `mdserve.orig-20261027` ne servent qu'au retour arrière ✓.
 
-**Ce qui change pour la suite** : toute évolution de la présentation (arbre, rendu, épingles, routes) va dans
-le dépôt public, pas dans `tools/`. Drave ne garde que `serveur-doc.py` — la page « où en est ».
+**Le 27/10, l'ancien `serveur-doc.py` (port 8787, `drave-doc.service`) a été retiré** ✓ : il faisait double
+emploi avec docwatch et n'était pas versionnable indépendamment. La page « où en est » se lit désormais
+directement dans [`docs/en-cours.md`](en-cours.md) ✓ — c'est le document épinglé à ouvrir dans docwatch ✓.
+Le code reste dans l'historique Git et une sauvegarde hors dépôt ✓.
 
-**Lequel ouvrir ?** Pour **parcourir** le dépôt (l'arbre, les épingles, le filtrage, le suivi des
-modifications ✓) : **mdserve, port 8771** ✓✓. Pour **savoir en une page où en est le travail** ✓ (et y
-accéder depuis une autre machine ✓) : **8787** ✓.
-*Les deux tournent en service, redémarrent seuls, et relisent le disque — aucun rechargement manuel ✓.*
+**Ce qui change pour la suite** : toute évolution de la présentation (arbre, rendu, épingles, routes) va dans
+le dépôt public, pas dans `tools/`. Drave ne garde **aucun** serveur de documentation ✓.
 
 ### Mesurer un modèle
 
@@ -112,10 +101,9 @@ apports de biologie, la pensée sans verbaliser (le travail du 16/10), la métho
 modèles alternatifs de l'entrée-sortie, et les opérations (la négation, la composition, la grappe).
 Entrée : **`docs/synthese/index.md`** ✓.
 
-⚠️ **Où les schémas s'affichent** ✓ : sur **mdserve** (route `/asset` et réécriture des `src`, dans le paquet
-public depuis le 27/10)
-et sur **8787** ; si une image reste cassée, c'est un **cache** ✗ : rechargez avec `Ctrl+Maj+R` ✓ — ou ouvrez
-directement le fichier `docs/synthese/schemas/vue-ensemble.svg` ✓ (les SVG sont autonomes ✓).
+⚠️ **Où les schémas s'affichent** ✓ : sur **docwatch** (route `/asset` et réécriture des `src`) ; si une image
+reste cassée, c'est un **cache** ✗ : rechargez avec `Ctrl+Maj+R` ✓ — ou ouvrez directement le fichier
+`docs/synthese/schemas/vue-ensemble.svg` ✓ (les SVG sont autonomes ✓).
 
 ### Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)
 
@@ -135,7 +123,6 @@ d'instrument y sont **écrits à côté des chiffres** ✗✓ :
 | `iterer_bloc.py` ✓ | **itérer** un bloc répété : contenu et déplacement ✓ | `... --partage <modèle> --distinct <témoin> --ids <corpus>` |
 | **`banc_lecteur.py`** ✓ | **le banc** : λ de ridge par **validation croisée** ✓ et **batterie de longueurs** ✓ — il transforme un chiffre en **mesure** ✓✓ | `python3 tools/banc_lecteur.py --modeles A,B --ids <corpus> --longueurs 32,64,128,256` |
 | **`lecteur_non_lineaire.py`** ✓ | le lecteur **MLP** (et sa leçon : mal réglé, il **sur-apprend** ✗ — 119,9 % contre 85,2 % pour le ridge ✓) | `... --modeles A,B --ids <corpus>` |
-| `serveur-doc.py` ✓ / **mdserve** ✓ | les deux serveurs de documentation ; mdserve est le paquet public `mdserve-local` (voir plus haut ✓) | services `drave-doc` et `mdserve` |
 
 ⚠️ **Ce que les mesures de la nuit ont appris sur l'instrument** ✓✓ — à lire avant de refaire une mesure :
 un ridge **sous-déterminé** (moins de positions que de coefficients ✓) **interpole** et rend 0,0 % ✓✗ ;
