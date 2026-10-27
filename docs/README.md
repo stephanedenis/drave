@@ -11,7 +11,7 @@
 
 | si vous voulez… | lisez |
 |---|---|
-| **comprendre le projet** | [la vision](vision.md) · [la mission](agent/mission.md) · [le glossaire](glossaire.md) · [la synthèse](synthese/index.md) |
+| **comprendre le projet** | [la vision](vision.md) · [la mission](agent/mission.md) · [le protocole sémantique](protocole-semantique.md) · [le glossaire](glossaire.md) · [la synthèse](synthese/index.md) |
 | **faire** (résultat, porte, rangement, Panini, miroir, ressources) | [`agent/`](agent/) · [l'organisation](organisation-du-depot.md) · [l'utilisation](utilisation.md) |
 | **savoir où l'on en est** | [l'état](en-cours.md) · [la roadmap](roadmap.md) · [les résultats](../reports/README.md) · [les portes](references-non-regression.md) · [le journal](../journal/README.md) |
 
@@ -25,7 +25,7 @@ classique, et se remplacer sans toucher au bus. Les documents qui portent chaque
 | **le bus et les flux** | [la vision](vision.md) · [le format de flux](format-flux.md) · [les clusters](format-clusters.md) | [les portes](references-non-regression.md) |
 | **le bloc neuronal** | [la vision](vision.md) · [le format de flux](format-flux.md) · [la modularisation](modularisation.md) | [`reports/`](../reports/README.md) |
 | **le bloc classique** | [la vision](vision.md) · [la modularisation](modularisation.md) | [les jeux](jeux-symboliques.md) · [les portes](references-non-regression.md) |
-| **la langue (surface → RSN)** | [les jeux symboliques](jeux-symboliques.md) · [la généalogie](genealogie-des-langues.md) | [B7/B8](../reports/rapport-langues-maitres.md) |
+| **la langue (surface → RSN)** | [le protocole sémantique](protocole-semantique.md) · [les jeux symboliques](jeux-symboliques.md) · [la généalogie](genealogie-des-langues.md) | [B7/B8](../reports/rapport-langues-maitres.md) |
 | **la pensée (étage 2)** | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la synthèse 08](synthese/08-les-operations.md) | [les opérations](../reports/rapport-operateur-negation.md) |
 | **le professeur externe** | [le banc externe](llm-externe.md) | [B9](../reports/rapport-deepseek.md) |
 | **la mesure** | [la synthèse 06](synthese/06-comment-savoir.md) · [l'organisation](organisation-du-depot.md) | [les portes](references-non-regression.md) |

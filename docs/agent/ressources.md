@@ -30,6 +30,10 @@ gros modèle prend les deux.
   carte, avec `OMP_NUM_THREADS=4` chacun : **18–25 %** d'utilisation GPU, **560–680 Mo** par
   carte, ~60 s pour 500 pas (31,63 M : 102 s pour 1 000 pas). Le goulot est le **CPU/la boucle**,
   pas la VRAM.
+- **NVLink** : `nvidia-smi topo -m` donne **NV1**, `nvidia-smi nvlink --status` **25,781 GB/s** ; NCCL
+  **2.28.9**. Le protocole sémantique utilise deux rangs explicites (torchrun/elastic n'a pas démarré ici),
+  `all_gather` des `z` et `all_reduce` des gradients par NVLink ; 31,97 M (étage A) / 64,39 M (étage B,
+  deux bases), 65–78 % de GPU, seq 256, lot 8/rang, un fil CPU par rang.
 - **Portes** : une porte `drave` consomme ~**8,8 cœurs** ; la passe complète 49 portes dure **1 h 34**.
   Pendant une porte CPU, les deux GPU sont **libres** : on peut y lancer **deux entraînements**, pas
   plus, et garder le reste des cœurs pour la porte.

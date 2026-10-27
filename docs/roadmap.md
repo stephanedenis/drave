@@ -286,6 +286,19 @@ exemples dans les deux cas) ; c'est le résultat à expliquer. Le contrôle par 
 plancher chrF sont les garde-fous. Aucune ligne n'est bloquée : la clé est dans l'environnement,
 les GPU sont libres.
 
+### B10 — le protocole sémantique natif
+
+| ligne | objet | état | mesure |
+|---|---|---|---|
+| B10.1 | **L'encodeur** : rejouer les articles UDHR en 10 langues, `z` partagé, contrastive + adversaire, NVLink | ✅ **mesuré** | rappel parallèle **0,426** contre **0,167** de hasard ; mélangé **0,172** ; sonde de langue **0,100** ; 250 pas, 31,63 M, 2 GPU NVLink |
+| B10.2 | **Le décodeur sens → texte** : `z` gelé, décodeur séparé, préfixe 16 | ❌ **négatif** | chrF reconstruction **12,7**, traduction **5,3–7,8** contre un plancher **39,6** ; diagnostic sous le plancher |
+| B10.3 | **Le raisonnement** sur `z` gelé | ⏳ **non branché** | attend un décodeur au-dessus du plancher |
+
+**Ce que le premier passage a appris** : l'alignement seul collapse ; l'all-gather doit être différentiable ;
+les gradients du décodeur écrasent l'encodeur (étages séparés) ; les articles du lot global doivent être
+distincts. Prochaine action : décodeur à attention croisée, 20–30 articles, 3 graines, puis raisonnement.
+Détail : [`rapport-semantique.md`](../reports/rapport-semantique.md).
+
 **Bilan de B9** : le langage **sort des GPU** et le professeur est **fort là où la langue est
 proche** (espagnol 99,28, russe 98,86, français 96,58, italien 92,87, allemand 90,50) ; il est
 **faible en hindi et en swahili** (58,45 / 54,83). La distillation natif a une **transition entre

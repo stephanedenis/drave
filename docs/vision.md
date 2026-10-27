@@ -112,8 +112,8 @@ trois âges est dans [`histoire.md`](histoire.md).
 
 ## Où lire la suite
 
-- **Comprendre** : [`agent/mission.md`](agent/mission.md) · [`glossaire.md`](glossaire.md) ·
-  [`synthese/index.md`](synthese/index.md).
+- **Comprendre** : [`agent/mission.md`](agent/mission.md) · [`protocole-semantique.md`](protocole-semantique.md) ·
+  [`glossaire.md`](glossaire.md) · [`synthese/index.md`](synthese/index.md).
 - **Faire** : [`agent/`](agent/) · [`organisation-du-depot.md`](organisation-du-depot.md) ·
   [`utilisation.md`](utilisation.md).
 - **L'état et les preuves** : [`en-cours.md`](en-cours.md) · [`roadmap.md`](roadmap.md) ·

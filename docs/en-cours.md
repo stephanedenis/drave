@@ -2,7 +2,7 @@
 
 # En ce moment
 
-**Mis à jour : 2026-10-26, 16 h 20 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-26, 21 h 20 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
@@ -28,6 +28,11 @@ La vision complète est dans [`vision.md`](vision.md).
 - **B9 le banc externe** — **mesuré** : DeepSeek sert le langage, `route` reste sur GPU. Le **meilleur écart** de
   distillation est **4,40 % à 31,63 M / 610 exemples** ; la **fenêtre** (3,71 % à 500 pas, 1,29 % à 750, −0,49 % à
   1 000) et le **négatif 30 langues** sont nommés. Détail : [`rapport-deepseek.md`](../reports/rapport-deepseek.md).
+- **B10 le protocole sémantique** — **premier passage** : l'**encodeur converge** sur 10 langues (rappel
+  **0,426** contre 0,167 ; sonde de langue **0,100**) ; le **décodeur est négatif** (chrF **12,7** contre un
+  plancher **39,6**) et le diagnostic multilingue est sous le plancher. Le raisonnement sur `z` n'est pas
+  branché. Protocole : [`protocole-semantique.md`](protocole-semantique.md) ; fiche :
+  [`rapport-semantique.md`](../reports/rapport-semantique.md).
 
 ## Où l'on en est
 

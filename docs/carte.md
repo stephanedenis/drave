@@ -22,7 +22,7 @@
 | **le bus, les flux** | [la vision](vision.md) · [le format de flux](format-flux.md) · [les clusters](format-clusters.md) | [les portes](references-non-regression.md) |
 | **le bloc neuronal** | [le format de flux](format-flux.md) · [la modularisation](modularisation.md) | [les mesures](../reports/README.md) |
 | **le bloc classique** | [la vision](vision.md) · [la modularisation](modularisation.md) | [les jeux](jeux-symboliques.md) |
-| **la langue** | [les jeux symboliques](jeux-symboliques.md) · [la généalogie](genealogie-des-langues.md) · [le banc externe](llm-externe.md) | [B7/B8](../reports/rapport-langues-maitres.md) · [B9](../reports/rapport-deepseek.md) |
+| **la langue** | [le protocole sémantique](protocole-semantique.md) · [les jeux symboliques](jeux-symboliques.md) · [la généalogie](genealogie-des-langues.md) · [le banc externe](llm-externe.md) | [B7/B8](../reports/rapport-langues-maitres.md) · [B9](../reports/rapport-deepseek.md) |
 | **la pensée** | [la synthèse 05](synthese/05-la-pensee-sans-verbaliser.md) · [la synthèse 08](synthese/08-les-operations.md) | [B4](../reports/rapport-operateur-negation.md) · [B5/B6](../reports/rapport-jeux-symboliques.md) |
 | **la mesure** | [la synthèse 06](synthese/06-comment-savoir.md) · [l'organisation](organisation-du-depot.md) | [les portes](references-non-regression.md) |
 
@@ -36,6 +36,7 @@
 | **B5/B6** les jeux symboliques | **faits** — 112 items, 100 % au niveau 4, pensée 5/5 | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-jeux-symboliques.md) |
 | **B7/B8** les langues et les maîtres | **faits** — 71 langues, 449/449, livre 10/10, go 10/10 | [le concept](jeux-symboliques.md) · [la fiche](../reports/rapport-langues-maitres.md) |
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
+| **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (12,7 contre 39,6) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **C1–C7** la langue | **mesurés** — corpus, traduction, restitution, styles, domaines, documentation, pensée | [l'état](en-cours.md) |
 
 ## Les preuves

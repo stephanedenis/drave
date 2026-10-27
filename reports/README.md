@@ -21,6 +21,7 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
+| [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 12,7 contre plancher 39,6), NVLink |
 
 ## Les données brutes
 
@@ -28,6 +29,7 @@
 - [`jeux-langues-mesures.json`](jeux-langues-mesures.json) — les 71 langues : couverture, corpus, invariance, permutation, notation
 - [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json) — les 17 principes : échecs, dames, go, cartes, ablation
 - [`deepseek-mesures.json`](deepseek-mesures.json) — le banc DeepSeek : 60 prompts, chrF, plancher, tokens, latence
+- [`semantique-mesures.json`](semantique-mesures.json) — le protocole sémantique : historiques étage A, étage B, diagnostic multilingue, ressources NVLink
 - [`deepseek-mesures-300.json`](deepseek-mesures-300.json) — le banc à l'échelle : 310 prompts, chrF, plancher, tokens, latence
 - [`deepseek-natif-300.json`](deepseek-natif-300.json) — la distillation à l'échelle : aligné contre mélangé, 3 graines
 - [`contamination-0.5b.json`](contamination-0.5b.json) · [`contamination-1.5b.json`](contamination-1.5b.json) ·

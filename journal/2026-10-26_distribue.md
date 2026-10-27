@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-26.md](2026-10-26.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 09:38 | `17c2d29f` | B7/B8 — 71 LANGUES, 449 SURFACES, 11/11 PAIRES, PERMUTATION 12/275 ; MAÎTRES : d4, LIVRE 10/10, GO 9×9 10/10 CONTRE 3/10, DAMES 0 DÉFAITE, CARTES 44,7 % (NÉGATIF) | `AGENTS.md`, `README.md`, `README.md` (+36) |
+| 16:41 | `da71ba77` | DOCS — ALLÈGEMENT ET VISION BUS : 37 PLANS/NOTES ARCHIVÉS, ENTRÉES RÉÉCRITES (VISION 121 L, README 70, CARTE 54, EN-COURS 84) | `AGENTS.md`, `README.md`, `REPRISE.md` (+57) |
 
 ## Chiffres du jour
 
@@ -19,6 +20,9 @@
 ## Mesures et rapports touchés
 
 - [reports/README.md](../reports/README.md)
+- [reports/rapport-c8-echelle.md](../reports/rapport-c8-echelle.md)
+- [reports/rapport-gpu-topk-selection.md](../reports/rapport-gpu-topk-selection.md)
+- [reports/rapport-greffon.md](../reports/rapport-greffon.md)
 - [reports/rapport-jeux-symboliques.md](../reports/rapport-jeux-symboliques.md)
 - [reports/rapport-langues-maitres.md](../reports/rapport-langues-maitres.md)
 

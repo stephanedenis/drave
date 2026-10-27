@@ -1,0 +1,339 @@
+{
+ "campagne": "protocole-semantique-natif",
+ "date": "2026-10-26",
+ "base": "route 31,63 M (/tmp/natif-600-512-8-align-s1)",
+ "donnees": {
+  "source": "UDHR data/udhr/articles.jsonl",
+  "langues": [
+   "fra",
+   "spa",
+   "deu",
+   "ita",
+   "por",
+   "rus",
+   "arb",
+   "cmn",
+   "hin",
+   "swh"
+  ],
+  "train": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24
+  ],
+  "val": [
+   25,
+   26,
+   27,
+   28,
+   29,
+   30
+  ],
+  "articles": 30
+ },
+ "stage_a": {
+  "protocole": "encodeur seul, contrastive globale + locale, adversaire 0,2, NVLink 2 rangs",
+  "meilleur_pas": 250,
+  "historique": [
+   {
+    "alignement": 0.999504260663633,
+    "rappel": 0.21851851851851853,
+    "rappel_melange": 0.15185185185185185,
+    "sonde_langue": 0.9166666666666666,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 50,
+    "perte": 21.720340728759766,
+    "contrastif": 2.0801963806152344,
+    "adversaire": 4.591575622558594,
+    "secondes": 13.461233825000818
+   },
+   {
+    "alignement": 0.9930428215750942,
+    "rappel": 0.19814814814814816,
+    "rappel_melange": 0.1648148148148148,
+    "sonde_langue": 0.21666666666666667,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 100,
+    "perte": 19.092222213745117,
+    "contrastif": 1.817183017730713,
+    "adversaire": 4.5964508056640625,
+    "secondes": 25.918401609000284
+   },
+   {
+    "alignement": 0.9716929203934139,
+    "rappel": 0.26851851851851855,
+    "rappel_melange": 0.14444444444444443,
+    "sonde_langue": 0.18333333333333332,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 150,
+    "perte": 16.668882369995117,
+    "contrastif": 1.5738918781280518,
+    "adversaire": 4.63817024230957,
+    "secondes": 38.897915999012184
+   },
+   {
+    "alignement": 0.9574343310462103,
+    "rappel": 0.3611111111111111,
+    "rappel_melange": 0.14814814814814814,
+    "sonde_langue": 0.11666666666666667,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 200,
+    "perte": 15.267160415649414,
+    "contrastif": 1.434871792793274,
+    "adversaire": 4.571528434753418,
+    "secondes": 52.14546853399952
+   },
+   {
+    "alignement": 0.8777387474284127,
+    "rappel": 0.42592592592592593,
+    "rappel_melange": 0.17222222222222222,
+    "sonde_langue": 0.1,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 250,
+    "perte": 9.765972137451172,
+    "contrastif": 0.8844119310379028,
+    "adversaire": 4.574981689453125,
+    "secondes": 65.59427174201119
+   },
+   {
+    "alignement": 0.8930237591818527,
+    "rappel": 0.36666666666666664,
+    "rappel_melange": 0.13703703703703704,
+    "sonde_langue": 0.15,
+    "chrf_reconstruction": 0.0,
+    "chrf_traduction": 0.0,
+    "chrf_plancher": 0.0,
+    "n_rappel": 60,
+    "pas": 300,
+    "perte": 8.971529006958008,
+    "contrastif": 0.8033531904220581,
+    "adversaire": 4.669796943664551,
+    "secondes": 79.22552091200487
+   }
+  ]
+ },
+ "stage_b": {
+  "protocole": "encodeur gelé, décodeur séparé (base_decode), préfixe 16, NVLink 2 rangs",
+  "meilleur_pas": 50,
+  "historique": [
+   {
+    "alignement": 0.8930237591818527,
+    "rappel": 0.36666666666666664,
+    "rappel_melange": 0.13703703703703704,
+    "sonde_langue": 0.15,
+    "chrf_reconstruction": 12.154993740553037,
+    "chrf_traduction": 5.633498484879107,
+    "chrf_plancher": 39.64867205749372,
+    "n_rappel": 60,
+    "pas": 50,
+    "perte": 12.391525268554688,
+    "contrastif": 1.4143463373184204,
+    "adversaire": 4.530514717102051,
+    "secondes": 39.95977101998869
+   },
+   {
+    "alignement": 0.8930237591818527,
+    "rappel": 0.36666666666666664,
+    "rappel_melange": 0.13703703703703704,
+    "sonde_langue": 0.15,
+    "chrf_reconstruction": 12.197965332962667,
+    "chrf_traduction": 7.808454412881215,
+    "chrf_plancher": 39.64867205749372,
+    "n_rappel": 60,
+    "pas": 100,
+    "perte": 7.453488826751709,
+    "contrastif": 0.9154760837554932,
+    "adversaire": 4.630080223083496,
+    "secondes": 79.08280318099423
+   },
+   {
+    "alignement": 0.8930237591818527,
+    "rappel": 0.36666666666666664,
+    "rappel_melange": 0.13703703703703704,
+    "sonde_langue": 0.15,
+    "chrf_reconstruction": 12.518215766907497,
+    "chrf_traduction": 7.482666081505635,
+    "chrf_plancher": 39.64867205749372,
+    "n_rappel": 60,
+    "pas": 150,
+    "perte": 3.0279040336608887,
+    "contrastif": 0.8445921540260315,
+    "adversaire": 4.638082504272461,
+    "secondes": 118.07715453198762
+   },
+   {
+    "alignement": 0.8930237591818527,
+    "rappel": 0.36666666666666664,
+    "rappel_melange": 0.13703703703703704,
+    "sonde_langue": 0.15,
+    "chrf_reconstruction": 12.712636678693185,
+    "chrf_traduction": 5.288763085581544,
+    "chrf_plancher": 39.64867205749372,
+    "n_rappel": 60,
+    "pas": 200,
+    "perte": 1.5595206022262573,
+    "contrastif": 0.8415393233299255,
+    "adversaire": 4.5659379959106445,
+    "secondes": 157.20137659799366
+   }
+  ]
+ },
+ "diagnostic": {
+  "langues": [
+   "fra",
+   "spa",
+   "deu",
+   "cmn",
+   "swh"
+  ],
+  "articles": [
+   25,
+   26
+  ],
+  "matrice": {
+   "25": [
+    [
+     11.55604779028134,
+     11.757042906624502,
+     10.640081040866198,
+     0.10364842454394695,
+     0.0
+    ],
+    [
+     11.770843788907419,
+     11.735075308844245,
+     12.079943322031097,
+     0.10288065843621401,
+     0.0
+    ],
+    [
+     11.233785279648421,
+     11.801152987416925,
+     11.980116553494613,
+     0.10275380189066999,
+     0.0
+    ],
+    [
+     11.76275635929386,
+     12.258171099575327,
+     12.280865695019353,
+     0.10300782859497323,
+     0.0
+    ],
+    [
+     12.5673597008855,
+     12.179048604632754,
+     11.82382659468136,
+     0.10364842454394695,
+     9.861198772211004
+    ]
+   ],
+   "26": [
+    [
+     9.458813128320353,
+     2.7965438816002224,
+     9.308886400262468,
+     0.17415534656913967,
+     0.0
+    ],
+    [
+     9.404504201983269,
+     9.700770732544097,
+     9.742530485223462,
+     0.17325017325017325,
+     0.05811250581125058
+    ],
+    [
+     6.159585114079912,
+     4.628672287969184,
+     8.27580138002511,
+     0.17488632388947187,
+     0.02905625290562529
+    ],
+    [
+     9.702536875876497,
+     9.648655182945058,
+     7.648672157463592,
+     0.17343045438779048,
+     9.11290989389466
+    ],
+    [
+     9.945278173868406,
+     9.700609254486661,
+     9.272903623168347,
+     0.17325017325017325,
+     0.15162542455118871
+    ]
+   ]
+  },
+  "consensus_par_cible": {
+   "25": [
+    24.1119102833163,
+    25.551111482279715,
+    30.68789901603961,
+    23.366102573402067,
+    60.428615260524964
+   ],
+   "26": [
+    25.323440881271534,
+    15.487069208301042,
+    25.383476633194213,
+    22.192745343802702,
+    43.867325855067875
+   ]
+  },
+  "chrf_diagonal": 7.299588737325472,
+  "chrf_hors_diagonal": 6.260570174937376,
+  "chrf_plancher": 12.56520856696502,
+  "consensus_sources": 29.639969653720005,
+  "sensibilite_source": 0.7036003034628
+ },
+ "ressources": {
+  "gpu": "2 × Quadro RTX 5000, NVLink NV1",
+  "nvlink_GBps": 25.781,
+  "nccl": "2.28.9",
+  "stage_a_parametres": 31970000,
+  "stage_b_parametres": 64390000,
+  "seq": 256,
+  "lot_par_rang": 8,
+  "stage_a_pas": 300,
+  "stage_b_pas": 200
+ },
+ "conclusion": "encodeur convergent (rappel 0,426 vs 0,167 ; sonde 0,100) ; décodeur négatif (chrF 12,7 contre plancher 39,6) ; pas de raisonnement branché"
+}
