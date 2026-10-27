@@ -11,17 +11,13 @@
 ## Les trois voies autorisées
 
 1. **SVG direct** — un fichier `.svg` écrit à la main, avec `viewBox`.
-2. **Mermaid → SVG** — source `.mmd` puis conversion :
-   ```bash
-   mmdc -i schema.mmd -o schema.svg
-   ```
-3. **PlantUML → SVG** — source `.puml` puis conversion :
-   ```bash
-   plantuml -tsvg schema.puml
-   ```
+2. **Mermaid → SVG** — source `.mmd` ; **docwatch** génère `<source>.mmd.svg` ; l'image Markdown
+   pointe vers ce SVG.
+3. **PlantUML → SVG** — source `.puml` ; **docwatch** génère `<source>.puml.svg`.
 
-Si `mmdc` ou `plantuml` n'est pas installé, on écrit le **SVG directement** : on ne laisse pas
-l'ASCII art « en attendant ». Le source `.mmd`/`.puml` reste **à côté** du SVG quand il existe.
+Le **SVG généré n'a pas besoin d'être committé** : docwatch le produit à la demande. S'il est
+présent, docwatch le régénère. `mmdc`/`plantuml` restent utiles pour prévisualiser en local, mais
+ne sont pas nécessaires. Le source `.mmd`/`.puml` vit **à côté** de l'image.
 
 ## Où et comment
 
@@ -30,6 +26,8 @@ l'ASCII art « en attendant ». Le source `.mmd`/`.puml` reste **à côté** du 
 - **La synthèse** : [`docs/synthese/schemas/`](../synthese/schemas/) — les schémas des chapitres.
 - Chaque SVG porte un **`viewBox`**, un **`<title>`**, un **`<desc>`**, et `role="img"` sur la
   racine.
+- Les sources `.mmd`/`.puml` vivent à côté de l'image générée ; l'image Markdown pointe vers
+  `<source>.svg`.
 - Aucune ressource **externe** : pas de police distante, pas de script, pas d'image liée. Les
   couleurs et les polices sont dans le fichier.
 - Les liens d'image sont **relatifs** : `schemas/mon-schema.svg` depuis `docs/`, ou
@@ -55,6 +53,7 @@ python3 tools/verifier_schemas.py
 L'outil vérifie : l'absence d'ASCII art dans les documents, la validité XML des SVG, la présence
 d'un `viewBox` et d'un titre, l'absence de ressources externes, les liens d'image relatifs et
 existants, et le fait que chaque schéma est **référencé** quelque part.
+Une image `<source>.svg` peut être **absente** si la source `.mmd`/`.puml` existe : docwatch la génère.
 
 ## Améliorer un schéma existant
 

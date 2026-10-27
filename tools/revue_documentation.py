@@ -32,6 +32,10 @@ def liens(texte: str):
     return re.findall(r"\]\(([^)#]+?)\)", texte)
 
 
+def cible_generee(f: pathlib.Path, cible: str) -> bool:
+    return cible.endswith((".puml.svg", ".mmd.svg")) and (f.parent / cible[:-4]).exists()
+
+
 def date_dernier_commit() -> str:
     try:
         return subprocess.check_output(
@@ -186,7 +190,7 @@ def main() -> int:
             if cible.startswith(("http://", "https://", "mailto:")):
                 continue
             p = (f.parent / cible).resolve()
-            if not p.exists():
+            if not p.exists() and not cible_generee(f, cible):
                 alertes.append(f"annotation : {f.relative_to(RACINE)} → {cible} (cassé)")
     for f in sources_propres():
         try:

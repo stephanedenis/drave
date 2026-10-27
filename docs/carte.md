@@ -1,13 +1,13 @@
 # La carte de Drave — l'index des sujets
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
 > `docs/roadmap.md` (plan). *Spécifique : cette page est l'index des sujets ; les blocs
 > B10–B12 et les documents orphelins y sont ajoutés.*
 
-> **Le hub des sujets.** Chaque lien mène à **un fichier**. Les autres portes : [la vision](vision.md) ·
+> **Le hub des sujets.** Un lien, **un fichier**. Les autres portes : [la vision](vision.md) ·
 > [l'état](en-cours.md) · [la roadmap](roadmap.md) · [l'inventaire](README.md) · [les résultats](../reports/README.md) ·
 > [le journal](../journal/README.md) · [l'archive](archive/README.md).
 

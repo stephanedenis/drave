@@ -1,0 +1,13 @@
+@startuml
+title Choisir la source d'un schéma
+start
+:Le schéma est-il un flux ou une architecture ?;
+if (oui) then (oui)
+  :Écrire un source Mermaid .mmd;
+else (non)
+  :Écrire un source PlantUML .puml;
+endif
+:docwatch génère <source>.svg;
+:Markdown pointe vers <source>.svg;
+stop
+@enduml

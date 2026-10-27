@@ -1,7 +1,7 @@
 # La documentation de Drave — l'inventaire
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
 > `docs/roadmap.md` (plan). *Spécifique : cette page est l'**inventaire** ; `carte.md`
@@ -56,7 +56,7 @@ demande**, un document par tâche.
 | [histoire.md](histoire.md) | Qtrinet → Drave, les trois âges |
 | [references-non-regression.md](references-non-regression.md) | les repères des passes complètes |
 | [manques.md](manques.md) | le registre des manques mesurés |
-| [schemas/README.md](schemas/README.md) | l'index des 18 schémas et la convention SVG |
+| [schemas/README.md](schemas/README.md) | l'index des schémas, des sources docwatch et la convention SVG |
 | [glossaire/README.md](glossaire/README.md) | l'index des 289 entrées et des fiches courtes |
 | [glossaire/entrees/](glossaire/entrees/) | les fiches glossaire par entrée (format carte pour docwatch) |
 | [semantique-universaux.md](semantique-universaux.md) | la base typée (B11) : 15 champs, 502 classes, les écoles |

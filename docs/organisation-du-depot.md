@@ -1,7 +1,7 @@
 # Organisation du dépôt — quel dossier pour quoi
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés corrigés
+> (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés corrigés
 > (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
 > pas.** *Les règles de rangement restent ; les exemples de nommage et les compteurs sont
 > actualisés ci-dessous.*

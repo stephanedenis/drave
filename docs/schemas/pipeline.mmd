@@ -1,0 +1,10 @@
+flowchart LR
+  A["Idée"] --> B{"Source"}
+  B -->|"SVG direct"| C["schema.svg"]
+  B -->|"Mermaid"| D["schema.mmd"]
+  B -->|"PlantUML"| E["schema.puml"]
+  D --> F["docwatch"]
+  E --> F
+  F --> G["schema.mmd.svg<br/>schema.puml.svg"]
+  C --> H["Markdown"]
+  G --> H

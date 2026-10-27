@@ -43,6 +43,8 @@ def main() -> int:
             for lien in MOTIF.findall(texte):
                 if lien.startswith(("http://", "https://", "mailto:")) or " " in lien:
                     continue                       # un lien externe, ou une phrase : pas un chemin
+                if lien.endswith((".puml.svg", ".mmd.svg")) and (doc.parent / lien[:-4]).exists():
+                    continue                       # source docwatch : le SVG sera généré
                 if "/" not in lien and "." not in lien:
                     # ⚠️ UNE CIBLE SANS BARRE NI POINT EST UN EXEMPLE, PAS UN CHEMIN : le document
                     # `rapport-coherence-docs-2.md` écrit `[texte](chemin)` EN PROSE, pour décrire la

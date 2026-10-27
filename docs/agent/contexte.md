@@ -37,7 +37,7 @@
 | `docs/README.md` · `docs/carte.md` | 1 000 | **T1** — si l'on cherche un fichier |
 | `docs/synthese/index.md` | 2 000 | **T1** — l'introduction |
 | `docs/synthese/0*.md` | 2 000 | **T1** — un chapitre |
-| `docs/roadmap.md` | 8 000 | **T1** — résumé + une section |
+| `docs/roadmap.md` | 8 500 | **T1** — résumé + une section |
 | `docs/glossaire.md` | 1 500 | **T1** — l'index des familles |
 | `docs/glossaire/0*.md` | 5 000 | **T1** — `grep` le terme, jamais les 11 |
 | `docs/glossaire/README.md` | 2 000 | **T1** — l'index des entrées |

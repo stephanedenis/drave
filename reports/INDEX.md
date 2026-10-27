@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **178 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **181 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -102,8 +102,11 @@
 | [rapport-localite-activation.md](rapport-localite-activation.md) | Localité d'activation : ce que PowerInfer apporte, et ce qu'on en garde |
 | [rapport-logits-gpu-vs-cpu.md](rapport-logits-gpu-vs-cpu.md) | Rapport — pourquoi le déport des projections change (ou non) la perplexité |
 | [rapport-loi-frontiere-fenetre.md](rapport-loi-frontiere-fenetre.md) | La frontière de la fenêtre : pas de loi en N, un régime sûr (la moitié des clés) et un régime imprévisible en dessous |
+| [rapport-m2-secours.md](rapport-m2-secours.md) | B19 — M2 comme secours hors codec : les typos, pas les phrases |
+| [rapport-m2-typo.md](rapport-m2-typo.md) | B22 — M2 et les typos : quatre types, un avantage net |
 | [rapport-m7-frequence.md](rapport-m7-frequence.md) | B16 — M7-bis : la fréquence, pas la neuromodulation |
 | [rapport-m8-log-normal.md](rapport-m8-log-normal.md) | M8 — le variant log-normal : CAUSE TROUVÉE (le partage des poids), CORRIGÉE, et le moteur innocenté |
+| [rapport-m9-dose.md](rapport-m9-dose.md) | B21 — M9 par dose : M3 tautologique, M5 +4,25 pts, sham nul |
 | [rapport-materiel-disque-ou-cpu.md](rapport-materiel-disque-ou-cpu.md) | Disque ou CPU ? — ce que la mesure dit d'un deuxième NVMe |
 | [rapport-matvec-f32-parallele.md](rapport-matvec-f32-parallele.md) | Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit |
 | [rapport-memoire-travail-n5.md](rapport-memoire-travail-n5.md) | N5 — la mémoire de travail : le réseau ne l'APPREND pas, la structure la donne (+0,96 contre −2,77) |

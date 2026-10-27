@@ -1,7 +1,7 @@
 # Directives de l'agent — Drave
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 181 fichiers / 248 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 184 fichiers / 251 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
 > ci-dessous ne changent pas.** Source de vérité : `docs/en-cours.md` (état)
 > et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.
@@ -49,9 +49,9 @@ volonté** des événements.
 8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans
    `docs/en-cours.md` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
    — la **file « jamais en attente »** de la roadmap. → [`docs/agent/ressources.md`](docs/agent/ressources.md)
-9. **Les illustrations sont des SVG.** Aucun **ASCII art** : pas de `┌─┬─┐`, pas de flèches `──►`
-   dans un bloc de code. Un schéma est un fichier **`.svg`** (directement, ou converti depuis
-   Mermaid/PlantUML), avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
    `docs/schemas/` ou `docs/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
    → [`docs/agent/illustrations.md`](docs/agent/illustrations.md)
 

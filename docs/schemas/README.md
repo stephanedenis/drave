@@ -1,8 +1,8 @@
 # Les schémas — index et convention
 
-> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : les quatre schémas des
-> concepts (`docs/schemas/`) et les quatorze schémas de la synthèse
-> (`docs/synthese/schemas/`). Chaque fichier a un `viewBox`, un `<title>`, un `<desc>` et
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : quatre schémas directs
+> des concepts, deux sources générées par docwatch et les quatorze schémas de la synthèse
+> (`docs/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
 > `role="img"` ; aucun n'utilise de ressource externe.
 >
 > **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement ou converti depuis Mermaid ou
@@ -17,6 +17,19 @@
 | [protocole-semantique.svg](protocole-semantique.svg) | surface L1 → encodeur → z → décodeur + L2 → surface L2 | [le protocole](../protocole-semantique.md) |
 | [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../jeux-symboliques.md) |
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../format-flux.md) |
+
+## Les sources générées par docwatch
+
+docwatch convertit un source **Mermaid** (`.mmd`) ou **PlantUML** (`.puml`) en `<source>.svg` à la
+demande. L'image Markdown pointe vers ce SVG généré, **même s'il n'est pas versionné**.
+
+![Le pipeline des schémas](pipeline.mmd.svg)
+
+*Source : [pipeline.mmd](pipeline.mmd) ; docwatch génère `pipeline.mmd.svg`.*
+
+![Choisir une source de schéma](decision.puml.svg)
+
+*Source : [decision.puml](decision.puml) ; docwatch génère `decision.puml.svg`.*
 
 ## Les schémas de la synthèse
 
@@ -40,7 +53,7 @@
 ## Ajouter un schéma
 
 1. choisir le dossier : `docs/schemas/` pour un concept, `docs/synthese/schemas/` pour la synthèse ;
-2. écrire le SVG (ou convertir un `.mmd`/`.puml` avec `mmdc`/`plantuml`) ;
+2. écrire le SVG direct, ou un source `.mmd`/`.puml` (docwatch génère `<source>.svg`) ;
 3. lui donner un `viewBox`, un `<title>`, un `<desc>` et `role="img"` ;
 4. l'insérer dans la page avec un lien **relatif** et un texte alternatif ;
 5. l'ajouter à ce tableau ;
