@@ -57,7 +57,9 @@ La vision complète est dans [`vision.md`](vision.md).
   **M2** double dissociation (`action` **98,6 %**, `de` **93,2 %**, lésions **9,6 / 0,7 %**), **M5** ne bat pas la majorité, **M6** 72,9 %, **M7** nul (3,64 % = 3,64 %) ; **M8** généralise aux épisodes non stockés (**96,48 %** contre **0 %**). **M9** table de lésions. Fiche :
   [`rapport-cerveau-modules.md`](../reports/rapport-cerveau-modules.md).
 
-**Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
+- **B12 pipeline** — **M1 → M4 → M8** : **528/528** surfaces, **7** prototypes, **96,33 %** de complétion
+  sur 120 codes partiels ; test d'intégration, pas de généralisation M4.
+- **Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
 originale** reste à **33/79** ; le natif normalisé + contexte reste à **59,8 %** de code exact et **40,7 %**
 d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](../reports/bilan-b11.md).
 

@@ -13,6 +13,22 @@
 - **Corpus** : 528 coups B5/B7.
 - **M9** : privations déclarées.
 
+## 1 bis. La chaîne M1 → M4 → M8
+
+Le pipeline `tools/cerveau/pipeline.py` enchaîne les modules sur un seul bus :
+M1 perçoit, M4 stocke, M8 consolide.
+
+| mesure | valeur |
+|---|---:|
+| surfaces perçues (M1) | **528 / 528** |
+| prototypes consolidés (M8) | **7** |
+| codes partiels testés | 120 |
+| complétion (champs) | **96,33 %** |
+| lectures par mémoire vs prototype | 46 / 74 |
+
+**Lecture** : la chaîne **tient** ; elle ne prouve pas la généralisation de M4 (les codes sont stockés),
+seulement que les modules se parlent. C'est un test d'intégration, pas un nouveau résultat sémantique.
+
 ## 2. Résultats
 
 | module | mesure | verdict |

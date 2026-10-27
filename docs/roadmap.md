@@ -348,7 +348,8 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B12.7 | **M7 neuromodulation** | ❌ **nul** | rétention **3,64 %** (fixe) = **3,64 %** (modulée), capacité 16 ; aucun effet |
 | B12.8 | **M8 sommeil** | ✅ **généralise** | prototypes **96,48 %** sur **106** épisodes non stockés ; baseline **0 %** (mémoire épisodique) |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
-| B12.10 | **Suite** | ⏳ **suivant** | M2 équilibré + contexte ; M3 répétitions ; M5 ordre 2 ; M6 conflit ; M7 capacité ; M8 rejeu |
+| B12.10 | **Pipeline M1 → M4 → M8** | ✅ **intégré** | **528/528** surfaces, **7** prototypes, **96,33 %** de complétion sur 120 codes partiels (46 mémoire, 74 prototypes) |
+| B12.11 | **Suite** | ⏳ **suivant** | M2 équilibré + contexte ; M3 répétitions ; M5 ordre 2 ; M6 conflit ; M7 capacité ; M8 rejeu |
 
 **Bilan B12** : le **bus**, **M1**, **M2**, **M3**, **M4** et **M8** tiennent ; **M5, M6, M7** sont des
 **négatifs** ou des résultats trop faibles. Le prototype est un

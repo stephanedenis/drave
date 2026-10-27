@@ -20,6 +20,12 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 - **M1** : le hub typé (codec + contexte) ; il publie `sens` et `surface`.
 - **M2–M9** : blocs indépendants, mesurés par la batterie `tools/cerveau/batterie.py`.
 
+## 1 bis. La chaîne M1 → M4 → M8
+
+`pipeline.py` : surface → M1 → M4 → M8. Mesure : **528/528** perçues, **7** prototypes, **96,33 %** de
+complétion sur 120 codes partiels (46 lectures mémoire, 74 prototypes). C'est un test d'intégration ; M4
+ne généralise pas, il retrouve les codes stockés.
+
 ## 2. Les neuf modules
 
 | module | rôle | mesure | verdict |
