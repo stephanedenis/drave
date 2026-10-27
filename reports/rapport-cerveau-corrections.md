@@ -86,6 +86,7 @@ contient pas le plateau, et le tirage est uniforme parmi les coups légaux.
 - Nouvelle tâche de conflit fr/en (88 essais, 4 conditions) : **94,32 %** de conjonction,
   **88,64 %** équilibrée, VP 17, FP 0, FN 5 ; mais les politiques « langue seule », « sens seul » et
   « tout non » sont **toutes à 75 %** : chaque canal seul a 25 % de faux positifs.
+- **Tâche de gate de tâche** (sens/langue, 792 essais) : **94,95 %**, base 50 % ; conflit **0,000**, commutation **0,000** ; la langue seule est à 88,6 %, le sens à 100 %. C'est un **sélecteur de tâche**, pas un contrôle exécutif.
 - **Coût de commutation apparié = 0,000** ; l'ancien −0,15 était un artefact de composition.
 - Deux surfaces sont identiques fr/en (`go D4`, `tic-tac-toe A1`) : plafond exact **95,45 %** ; la
   porte est à **1 essai du plafond**. Les 5 FN sont **perceptifs**, pas inhibiteurs.

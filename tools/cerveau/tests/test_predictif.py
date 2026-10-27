@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import unittest
 
-from cerveau.predictif import (Predictif, baseline_tour, controle_negatif,
-                               permuter, valeur)
+from cerveau.predictif import (Predictif, baseline_tour, candidats_contexte,
+                               controle_negatif, permuter, permuter_contextes,
+                               plateau_contexte, valeur)
 from cerveau.sequences import Pas, Sequence, corpus
 
 
@@ -50,6 +51,84 @@ class TestCibles(unittest.TestCase):
     def test_cible_inconnue(self):
         with self.assertRaises(ValueError):
             valeur(_pas("echecs", source=1), "autre")
+
+
+class TestContexte(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.seqs = corpus(0, 12, 8)
+
+    def test_plateau_par_jeu(self):
+        for jeu, n in (("echecs", 64), ("dames", 32), ("go", 81), ("morpion", 9)):
+            seq = next(s for s in self.seqs if s.jeu == jeu)
+            occ, trait = plateau_contexte(seq.pas[0].contexte, jeu)
+            self.assertIsNotNone(occ, jeu)
+            self.assertEqual(len(occ), n, jeu)
+            self.assertIsNotNone(trait, jeu)
+
+    def test_la_vraie_valeur_est_dans_le_masque(self):
+        # invariant : le plateau d'avant le coup contient forcément la source
+        # (ma pièce) et la cible (case libre ou pièce adverse)
+        for seq in self.seqs:
+            for pas in seq.pas:
+                for cible in ("source", "cible"):
+                    y = valeur(pas, cible)
+                    if y is None:
+                        continue
+                    cand = candidats_contexte(pas.contexte, seq.jeu, cible)
+                    self.assertIsNotNone(cand, (seq.jeu, cible))
+                    self.assertIn(y, cand, (seq.jeu, cible, y))
+
+    def test_contexte_absent_ne_masque_pas(self):
+        seqs = [_sequence("morpion", [_pas("morpion", cible=i % 9) for i in range(9)])
+                for _ in range(3)]
+        a = Predictif("cible", 1, contexte=True, melange=0.5); a.entrainer(seqs)
+        b = Predictif("cible", 1, contexte=False); b.entrainer(seqs)
+        # les Pas de test n'ont pas de contexte : les deux bras sont identiques
+        for jeu in ("morpion",):
+            da = a.distribution(jeu, 3, 4, None)
+            db = b.distribution(jeu, 3, 4, None)
+            self.assertEqual(da, db)
+
+    def test_masque_uniforme(self):
+        ctx = "morpion etat trait=X taille=3 cases=X,O,.,.,.,.,.,.,."
+        m = Predictif("cible", 0, contexte=True, melange=0.0)
+        m.valeurs["morpion"].update(range(9))
+        m.marginal["morpion"].update(range(9))
+        d = m.distribution("morpion", None, None, ctx)
+        # le masque porte l'essentiel de la masse ; la fuite est négligeable
+        for x in range(2, 9):
+            self.assertGreater(d[x], 0.999 / 7)
+        for x in (0, 1):
+            self.assertLess(d[x], 1e-5)
+        self.assertAlmostEqual(sum(d.values()), 1.0)
+
+    def test_contexte_ameliore_la_surprisal(self):
+        # split entrelacé : chaque jeu est des deux côtés
+        train = self.seqs[::2]
+        test = self.seqs[1::2]
+        sans = Predictif("cible", 1); sans.entrainer(train)
+        ctx = Predictif("cible", 1, contexte=True, melange=0.5); ctx.entrainer(train)
+        a, b = sans.evaluer(test), ctx.evaluer(test)
+        self.assertGreater(a["n"], 0)
+        # le contexte peut évaluer des cibles hors vocabulaire que le modèle
+        # sans contexte saute : on compare le gain à la marginale, pas la
+        # surprisal brute sur des n différents.
+        self.assertGreater(b["gain_surprise"], a["gain_surprise"])
+        self.assertGreater(b["exact"], a["exact"])
+
+    def test_permutation_des_contextes(self):
+        melange = permuter_contextes(self.seqs, graine=0)
+        avant = sorted(p.contexte for s in self.seqs for p in s.pas)
+        apres = sorted(p.contexte for s in melange for p in s.pas)
+        self.assertEqual(avant, apres)
+        self.assertTrue(any(a.contexte != b.contexte
+                            for sa, sb in zip(self.seqs, melange)
+                            for a, b in zip(sa.pas, sb.pas)))
+
+    def test_melange_invalide(self):
+        with self.assertRaises(ValueError):
+            Predictif("cible", 1, melange=1.5)
 
 
 class TestPredictif(unittest.TestCase):

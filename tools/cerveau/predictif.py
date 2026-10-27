@@ -27,6 +27,15 @@ générées par un tirage **uniforme parmi les coups légaux**, et le code obser
 ne porte pas le plateau. Le seul gain réel est mécanique (alternance de trait,
 case libérée) ; il est isolé par `baseline_tour` et par le plancher oracle de la
 fiche. Voir `/tmp/a1-m5-m6.md` pour les chiffres.
+
+Sprint A6 : le **plateau** (`Pas.contexte`, produit par `resume_contexte`) est
+maintenant une observation du prédicteur. `contexte=True` restreint la loi aux
+valeurs compatibles avec l'occupation observée (source = mes pièces ; cible =
+cases non occupées par moi) et mélange cette loi temporelle masquée à
+l'uniforme sur ces candidats (`melange`). Aucune règle de déplacement n'est
+utilisée : le gain est celui de l'observation du plateau, l'écart restant à
+l'oracle est la géométrie des coups. `permuter_contextes` est le contrôle
+négatif (masque conservé, bon plateau détruit). Voir `/tmp/a6-m5-m6.md`.
 """
 from __future__ import annotations
 
@@ -34,6 +43,7 @@ import collections
 import dataclasses
 import math
 import random
+import re
 
 from .sequences import Sequence
 
@@ -74,6 +84,93 @@ def valeur(pas, cible: str = "cible"):
     raise ValueError(f"cible inconnue : {cible!r} (connues : {', '.join(CIBLES)})")
 
 
+# ----------------------------------------------------------------------
+# Le contexte de plateau (`resume_contexte`) : ce que le prédicteur voit.
+# ----------------------------------------------------------------------
+def _champ_contexte(contexte: str, nom: str) -> str | None:
+    m = re.search(rf"(?:^| ){re.escape(nom)}=(\[[^\]]*\]|[^ ]*)", contexte)
+    return m.group(1) if m else None
+
+
+def plateau_contexte(contexte: str, jeu: str):
+    """Décode `resume_contexte` en (occupants, trait), indexés comme les codes.
+
+    Rend `(None, None)` si le contexte est vide ou d'un format inconnu. Les
+    index sont ceux des champs `de`, `vers`, `point`, `case`, `chemin_*` : c'est
+    la convention du corpus, pas une règle du jeu.
+    """
+    if not contexte:
+        return None, None
+    trait = _champ_contexte(contexte, "trait")
+    if jeu == "echecs":
+        fen = _champ_contexte(contexte, "plateau")
+        if not fen:
+            return None, None
+        occ: list = []
+        for ch in fen:
+            if ch.isdigit():
+                occ.extend(["."] * int(ch))
+            elif ch != "/":
+                occ.append(ch)
+        return (occ if len(occ) == 64 else None), trait
+    if jeu == "dames":
+        cases = _champ_contexte(contexte, "cases")
+        if not cases:
+            return None, None
+        occ = cases.split(",")
+        return (occ if len(occ) == 32 else None), trait
+    if jeu == "go":
+        plat = _champ_contexte(contexte, "plateau")
+        if not plat:
+            return None, None
+        try:
+            occ = [int(x) for x in plat.strip("[]").replace(" ", "").split(",") if x]
+        except ValueError:
+            return None, None
+        return (occ if len(occ) == 81 else None), trait
+    if jeu == "morpion":
+        cases = _champ_contexte(contexte, "cases")
+        if not cases:
+            return None, None
+        occ = cases.split(",")
+        return (occ if len(occ) == 9 else None), trait
+    return None, None
+
+
+def candidats_contexte(contexte: str, jeu: str, cible: str):
+    """Les valeurs de `cible` compatibles avec le plateau, ou None.
+
+    Le filtre est **purement observable** : pour `source`, les cases occupées
+    par le trait (on ne peut déplacer que sa pièce) ; pour `cible`, les cases
+    qui ne sont pas occupées par le trait (case vide, ou pièce adverse pour une
+    prise). Aucune règle de déplacement n'est utilisée : la géométrie des coups
+    reste inconnue, c'est ce que mesure l'écart à l'oracle.
+    """
+    occ, trait = plateau_contexte(contexte, jeu)
+    if occ is None or trait is None:
+        return None
+    if jeu == "echecs":
+        propres = set("PNBRQK") if trait == "w" else set("pnbrqk")
+    elif jeu == "dames":
+        propres = set("wW") if trait == "w" else set("bB")
+    elif jeu == "go":
+        propres = {trait}
+    elif jeu == "morpion":
+        propres = {trait}
+    else:
+        return None
+    if cible == "source":
+        return frozenset(i for i, o in enumerate(occ) if str(o) in propres)
+    if cible == "cible":
+        if jeu == "echecs":
+            return frozenset(i for i, o in enumerate(occ) if str(o) not in propres)
+        if jeu in ("dames", "morpion"):
+            return frozenset(i for i, o in enumerate(occ) if o == ".")
+        if jeu == "go":
+            return frozenset(i for i, o in enumerate(occ) if o == 0)
+    return None
+
+
 def champ_cible(code: dict, cible: str) -> str | None:
     """Le nom du champ à permuter pour le contrôle négatif."""
     if cible == "action":
@@ -103,14 +200,21 @@ class Predictif:
 
     nom = "M5-predictif"
 
-    def __init__(self, cible: str = "cible", ordre: int = 1, kappa: float = 10.0) -> None:
+    def __init__(self, cible: str = "cible", ordre: int = 1, kappa: float = 10.0,
+                 contexte: bool = False, melange: float = 0.5) -> None:
         if cible not in CIBLES:
             raise ValueError(f"cible inconnue : {cible!r}")
         if ordre not in (0, 1, 2):
             raise ValueError("ordre doit valoir 0, 1 ou 2")
+        if not 0.0 <= melange <= 1.0:
+            raise ValueError("melange doit être dans [0, 1]")
         self.cible = cible
         self.ordre = ordre
         self.kappa = float(kappa)
+        self.contexte = bool(contexte)
+        # Poids du modèle temporel masqué ; le reste va à l'uniforme sur les
+        # candidats du plateau. melange=1 : Markov masqué pur ; 0 : uniforme.
+        self.melange = float(melange)
         self.transitions = collections.defaultdict(collections.Counter)   # ordre 1
         self.transitions2 = collections.defaultdict(collections.Counter)  # ordre 2
         self.marginal = collections.defaultdict(collections.Counter)      # ordre 0
@@ -137,12 +241,18 @@ class Predictif:
                         self.transitions2[(jeu, prev, cur)][y] += 1
 
     # ------------------------------------------------------------------
-    def distribution(self, jeu: str, cur=None, precedent=None) -> dict:
+    def distribution(self, jeu: str, cur=None, precedent=None, contexte=None) -> dict:
         """La loi prédictive de la cible, lissée à chaque niveau.
 
         Du plus spécifique au plus général : ordre 2 → ordre 1 → marginale du
         jeu. Chaque niveau est interpolé avec `kappa` pseudo-comptes du niveau
         inférieur, ce qui garantit une probabilité non nulle partout.
+
+        Si `contexte` est fourni et que le mode contexte est actif, la loi est
+        restreinte aux valeurs **observables** du plateau (`candidats_contexte`)
+        puis mélangée à l'uniforme sur ces candidats (`melange`). Le masque est
+        appliqué après le repli : une valeur absente du plateau ne peut pas être
+        prédite, même si elle est fréquente à l'entraînement.
         """
         valeurs = sorted(self.valeurs.get(jeu, ()))
         if not valeurs:
@@ -160,16 +270,50 @@ class Predictif:
             c = self.transitions2[(jeu, precedent, cur)]
             total = sum(c.values())
             dist = {x: (c[x] + self.kappa * dist[x]) / (total + self.kappa) for x in valeurs}
-        return dist
+        if not self.contexte or not contexte:
+            return dist
+        cand = candidats_contexte(contexte, jeu, self.cible)
+        if not cand:
+            return dist
+        z = sum(dist.get(x, 0.0) for x in cand)
+        if z > 0:
+            hist = {x: dist.get(x, 0.0) / z for x in cand}
+        else:
+            hist = {x: 1.0 / len(cand) for x in cand}
+        if self.melange >= 1.0:
+            masque = hist
+        else:
+            uniforme = 1.0 / len(cand)
+            masque = {x: self.melange * hist[x] + (1.0 - self.melange) * uniforme
+                      for x in cand}
+        # Le masque est une croyance, pas une certitude : une petite fuite vers
+        # la loi non masquée garde une probabilité finie à une cible que le
+        # plateau contredit (utile au contrôle par permutation des contextes).
+        fuite = 1e-6
+        return {x: (1.0 - fuite) * masque.get(x, 0.0) + fuite * dist.get(x, 0.0)
+                for x in set(masque) | set(dist)}
 
-    def predire(self, code: dict, precedent=None) -> tuple:
+    def _choix(self, dist, jeu: str, contexte=None):
+        """Argmax de la loi, restreint au masque quand il est actif.
+
+        Le masque définit le support de la prédiction ; la petite fuite qui
+        garde une probabilité finie à une cible contredite ne doit pas décider
+        de l'argmax. À égalité (masque uniforme), l'ordre des valeurs tranche.
+        """
+        if self.contexte and contexte:
+            cand = candidats_contexte(contexte, jeu, self.cible)
+            if cand:
+                return max(sorted(cand), key=lambda x: dist.get(x, 0.0))
+        return max(dist, key=dist.get)
+
+    def predire(self, code: dict, precedent=None, contexte=None) -> tuple:
         """Rend (valeur prédite, probabilité). `precedent` est une valeur de cible."""
         jeu = code.get("jeu")
         cur = valeur(code, self.cible)
-        dist = self.distribution(jeu, cur, precedent)
+        dist = self.distribution(jeu, cur, precedent, contexte)
         if not dist:
             return None, 0.0
-        choix = max(dist, key=dist.get)
+        choix = self._choix(dist, jeu, contexte)
         return choix, dist[choix]
 
     # ------------------------------------------------------------------
@@ -192,15 +336,16 @@ class Predictif:
                     continue
                 jeu = b.jeu
                 precedent = valeur(pas[i - 2], self.cible) if i >= 2 else None
-                dist = self.distribution(jeu, cur, precedent)
+                dist = self.distribution(jeu, cur, precedent,
+                                         getattr(b, "contexte", None))
                 if not dist:
                     continue
-                if y not in dist:
+                if y not in dist or dist.get(y, 0.0) <= 0.0:
                     # valeur de test jamais vue à l'entraînement : hors vocabulaire
                     hors_vocab += 1
                     continue
                 n += 1
-                ok += int(max(dist, key=dist.get) == y)
+                ok += int(self._choix(dist, jeu, getattr(b, "contexte", None)) == y)
                 surprise.append(-math.log(dist[y]))
                 p0 = self.marginal.get(jeu, collections.Counter())
                 total0 = sum(p0.values()) or 1
@@ -242,7 +387,8 @@ class Predictif:
         for cible in cibles:
             res_cible = {}
             for ordre in ordres:
-                m = Predictif(cible, ordre)
+                m = Predictif(cible, ordre, contexte=self.contexte,
+                              melange=self.melange)
                 m.entrainer(train)
                 r = m.evaluer(test)
                 if par_jeu:
@@ -359,6 +505,33 @@ def permuter(sequences, cible: str = "cible", graine: int = 0):
             code = dict(pas.code)
             code[champ] = v
             pas_out.append(dataclasses.replace(pas, code=code))
+        out.append(Sequence(seq.jeu, tuple(pas_out)))
+    return out
+
+
+def permuter_contextes(sequences, graine: int = 0):
+    """Permute les contextes entre pas d'un même jeu : le masque devient faux.
+
+    Contrôle négatif du gain de plateau. La distribution des contextes (donc
+    des masques) est conservée, mais chaque pas reçoit le plateau d'un autre
+    pas : si le gain vient du **bon** contexte, il doit disparaître.
+    """
+    rng = random.Random(graine)
+    positions = collections.defaultdict(list)
+    for si, seq in enumerate(sequences):
+        for pi in range(len(seq.pas)):
+            positions[seq.jeu].append((si, pi))
+    remplacements: dict[tuple[int, int], str] = {}
+    for jeu, pos in positions.items():
+        ctxs = [sequences[si].pas[pi].contexte for si, pi in pos]
+        rng.shuffle(ctxs)
+        for (si, pi), ctx in zip(pos, ctxs):
+            remplacements[(si, pi)] = ctx
+    out = []
+    for si, seq in enumerate(sequences):
+        pas_out = []
+        for pi, pas in enumerate(seq.pas):
+            pas_out.append(dataclasses.replace(pas, contexte=remplacements[(si, pi)]))
         out.append(Sequence(seq.jeu, tuple(pas_out)))
     return out
 

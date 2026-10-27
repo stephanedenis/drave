@@ -34,6 +34,7 @@ Voir `/tmp/a1-m5-m6.md` pour les chiffres et la décomposition.
 from __future__ import annotations
 
 import math
+import random
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
@@ -48,6 +49,8 @@ from jeux.regles import morpion as M
 from semantique.universaux import code_rsn, empreinte_code
 
 CONDITIONS = ("go", "traduction", "langue", "ni")
+# Tâches de la porte de tâche : juger le sens ou la langue de la sonde.
+TACHES = ("sens", "langue")
 # Domaines du lexique qui portent la langue d'une surface de jeu.
 DOMAINES = ("jeu.nom", "echecs.piece", "cartes.rang", "cartes.couleur",
             "go.passe", "commun.couleur")
@@ -69,6 +72,35 @@ class Essai:
     @property
     def attendu(self) -> bool:
         return self.condition == "go"
+
+
+@dataclass(frozen=True)
+class EssaiTache:
+    """Un essai de la tâche de commutation : sonde, cible, indice de tâche.
+
+    `tache` est la **consigne** (ce que la porte doit juger) ; `condition` dit
+    si les deux canaux sont d'accord (`congruent`) ou non (`incongruent`).
+    `transition` vaut `initiale`, `repetition` ou `commutation` selon le bloc
+    précédent. La bonne réponse dépend de la consigne, jamais de l'accord.
+    """
+
+    texte: str
+    jeu: str
+    langue_vraie: str
+    code_vrai: dict
+    cible_code: dict
+    cible_langue: str
+    tache: str
+    condition: str
+    transition: str
+    tache_precedente: str | None
+    reponse_sens: bool
+    reponse_langue: bool
+    contexte: object
+
+    @property
+    def attendu(self) -> bool:
+        return self.reponse_sens if self.tache == "sens" else self.reponse_langue
 
 
 def _contexte_depart(jeu: str):
@@ -239,6 +271,250 @@ class Porte:
                         cible_langue=langue, condition=condition,
                         contexte=info["contexte"]))
         return essais
+
+    # ------------------------------------------------------------------
+    # Tâche de commutation : deux consignes, conflit, switch.
+    # ------------------------------------------------------------------
+    def tache_switch(self, items=None, cibles=("fr", "en")) -> list[EssaiTache]:
+        """Tâche à deux consignes (`sens` / `langue`) sur les mêmes sondes B7.
+
+        Chaque groupe (code cible × langue cible) donne **9 blocs de 4 essais**
+        (go, traduction, langue, ni), tous de même consigne dans un bloc. La
+        suite des consignes est `sens, langue, langue, sens, sens, langue,
+        langue, sens, sens` : 4 commutations et 4 répétitions par groupe, à
+        sondes appariées (mêmes 4 essais, ordre tourné). La consigne est
+        l'**indice** ; elle est parfaitement fiable.
+
+        `condition` vaut `congruent` quand les deux canaux donnent la même
+        réponse (go : oui/oui ; ni : non/non) et `incongruent` quand ils
+        divergent (traduction : sens oui, langue non ; langue : sens non,
+        langue oui). C'est le conflit de la tâche : sous la consigne `sens`, le
+        canal langue est le distracteur, et réciproquement.
+        """
+        if len(cibles) != 2:
+            raise ValueError("la tâche de commutation exige exactement deux langues")
+        if items is None:
+            brut = [it for it in construire_corpus_multilingue().items]
+        else:
+            brut = list(items)
+        infos = [_normalise(it) for it in brut]
+        b7 = [i for i in infos if i["format"] == "multilingue"]
+        if sum(1 for i in b7 if i["langue"] in cibles) >= 2 * len(cibles):
+            infos = b7
+        infos = [i for i in infos if i["langue"] in cibles]
+
+        groupes: dict[str, dict[str, list[dict]]] = defaultdict(lambda: defaultdict(list))
+        for info in infos:
+            groupes[empreinte_code(info["code"])][info["langue"]].append(info)
+        codes = sorted(cle for cle, par_langue in groupes.items()
+                       if all(langue in par_langue for langue in cibles))
+        if not codes:
+            return []
+
+        def sonde(cle: str, langue: str) -> dict:
+            return sorted(groupes[cle][langue], key=lambda i: i["texte"])[0]
+
+        # Blocs appariés : 4 commutations et 4 répétitions, tâches équilibrées.
+        cycle = ("sens", "langue", "langue", "sens",
+                 "sens", "langue", "langue", "sens", "sens")
+        essais: list[EssaiTache] = []
+        for i_code, cle in enumerate(codes):
+            for i_langue, langue in enumerate(cibles):
+                autre = cibles[1] if langue == cibles[0] else cibles[0]
+                autres = [c for c in codes if c != cle]
+                cle_autre = autres[(i_code + i_langue) % len(autres)]
+                description = {
+                    "go": (cle, langue),
+                    "traduction": (cle, autre),
+                    "langue": (cle_autre, langue),
+                    "ni": (cle_autre, autre),
+                }
+                cible_code = dict(groupes[cle][cibles[0]][0]["code"])
+                probes = []
+                for condition, (cle_s, langue_s) in description.items():
+                    info = sonde(cle_s, langue_s)
+                    rep_sens = dict(info["code"]) == cible_code
+                    rep_langue = info["langue"] == langue
+                    probes.append({
+                        "info": info, "condition": condition,
+                        "reponse_sens": rep_sens, "reponse_langue": rep_langue,
+                        "congruent": rep_sens == rep_langue,
+                    })
+                for b, tache in enumerate(cycle):
+                    prec = cycle[b - 1] if b else None
+                    transition = ("initiale" if prec is None else
+                                  "commutation" if tache != prec else "repetition")
+                    decalage = (i_code + i_langue + b) % len(probes)
+                    for p in probes[decalage:] + probes[:decalage]:
+                        info = p["info"]
+                        essais.append(EssaiTache(
+                            texte=info["texte"], jeu=info["jeu"],
+                            langue_vraie=info["langue"], code_vrai=dict(info["code"]),
+                            cible_code=dict(cible_code), cible_langue=langue,
+                            tache=tache,
+                            condition="congruent" if p["congruent"] else "incongruent",
+                            transition=transition, tache_precedente=prec,
+                            reponse_sens=p["reponse_sens"],
+                            reponse_langue=p["reponse_langue"],
+                            contexte=info["contexte"]))
+        return essais
+
+    def _decisions_switch(self, essais, politique: str = "tache") -> list[dict]:
+        """Les décisions de la porte sur la tâche de commutation.
+
+        `tache` est la porte dure : elle applique le canal désigné par la
+        consigne et ignore l'autre. Les autres politiques sont les témoins
+        (canal seul, consigne inversée, indice aléatoire, tout-non) et le
+        **contrôle positif** de persévération : sur un bloc de commutation, la
+        porte reste sur la consigne précédente.
+        """
+        rng = random.Random(0)
+        decisions = []
+        for essai in essais:
+            code = self.lire(essai.texte, essai.jeu, essai.contexte)
+            langue = self.langue(essai.texte)
+            sens = code == essai.cible_code
+            langue_ok = langue == essai.cible_langue
+            if politique == "tache":
+                accepte = sens if essai.tache == "sens" else langue_ok
+            elif politique == "sens":
+                accepte = sens
+            elif politique == "langue":
+                accepte = langue_ok
+            elif politique == "tache_inversee":
+                accepte = langue_ok if essai.tache == "sens" else sens
+            elif politique == "tout_non":
+                accepte = False
+            elif politique == "indice_aleatoire":
+                accepte = sens if rng.choice(TACHES) == "sens" else langue_ok
+            elif politique == "perseveration_tache":
+                if essai.transition == "commutation" and essai.tache_precedente:
+                    accepte = (sens if essai.tache_precedente == "sens" else langue_ok)
+                else:
+                    accepte = sens if essai.tache == "sens" else langue_ok
+            else:
+                raise ValueError(f"politique de tâche inconnue : {politique!r}")
+            decisions.append({"accepte": bool(accepte), "code": code,
+                              "langue": langue, "sens": bool(sens),
+                              "langue_ok": bool(langue_ok), "essai": essai})
+        return decisions
+
+    @staticmethod
+    def _metriques_switch(decisions) -> dict:
+        """Exactitude et coûts de conflit/commutation, par tâche et croisés.
+
+        Les coûts sont des **effets d'exactitude** : `effet_conflit` =
+        exact(incongruent) − exact(congruent), `effet_commutation` =
+        exact(commutation) − exact(répétition). Un effet négatif est un coût.
+        """
+        par_tache = {t: {"n": 0, "corrects": 0, "acceptes": 0} for t in TACHES}
+        par_condition = {c: {"n": 0, "corrects": 0}
+                         for c in ("congruent", "incongruent")}
+        par_transition = {t: {"n": 0, "corrects": 0}
+                          for t in ("initiale", "repetition", "commutation")}
+        par_croise = {(c, t): {"n": 0, "corrects": 0}
+                      for c in par_condition for t in par_transition}
+        # Macro-moyenne par sonde (texte, jeu, code cible, langue cible) : les
+        # sondes ne sont pas également représentées dans le flux, la moyenne
+        # par essai favoriserait les sondes répétées.
+        par_sonde = {t: defaultdict(lambda: {"n": 0, "corrects": 0}) for t in TACHES}
+        n = ok = acceptes = positifs = 0
+        for d in decisions:
+            e = d["essai"]
+            correct = d["accepte"] == e.attendu
+            n += 1
+            ok += int(correct)
+            acceptes += int(d["accepte"])
+            positifs += int(e.attendu)
+            for table, cle in ((par_tache, e.tache),
+                               (par_condition, e.condition),
+                               (par_transition, e.transition),
+                               (par_croise, (e.condition, e.transition))):
+                table[cle]["n"] += 1
+                table[cle]["corrects"] += int(correct)
+            par_tache[e.tache]["acceptes"] += int(d["accepte"])
+            sonde = (e.texte, e.jeu, empreinte_code(e.cible_code), e.cible_langue)
+            par_sonde[e.tache][sonde]["n"] += 1
+            par_sonde[e.tache][sonde]["corrects"] += int(correct)
+
+        def exact(x):
+            return x["corrects"] / x["n"] if x["n"] else 0.0
+
+        for table in (par_tache, par_condition, par_transition, par_croise):
+            for x in table.values():
+                x["exact"] = exact(x)
+        effet_conflit = exact(par_condition["incongruent"]) - exact(par_condition["congruent"])
+        effet_commutation = (exact(par_transition["commutation"])
+                             - exact(par_transition["repetition"]))
+        macro_sonde = {}
+        for tache in TACHES:
+            vals = [exact(x) for x in par_sonde[tache].values()]
+            macro_sonde[tache] = {"n_sondes": len(vals),
+                                  "exact": sum(vals) / len(vals) if vals else 0.0}
+        # interaction : la commutation coûte-t-elle plus sous conflit ?
+        effet_commutation_congruent = (exact(par_croise[("congruent", "commutation")])
+                                       - exact(par_croise[("congruent", "repetition")]))
+        effet_commutation_incongruent = (
+            exact(par_croise[("incongruent", "commutation")])
+            - exact(par_croise[("incongruent", "repetition")]))
+        return {
+            "exact": ok / n if n else 0.0, "n": n, "acceptes": acceptes,
+            "positifs": positifs,
+            "taux_base_tout_non": (n - positifs) / n if n else 0.0,
+            "par_tache": par_tache, "par_condition": par_condition,
+            "par_transition": par_transition,
+            "par_croise": {f"{c}_{t}": x for (c, t), x in par_croise.items()},
+            "par_sonde": macro_sonde,
+            "effet_conflit": effet_conflit,
+            "effet_commutation": effet_commutation,
+            "effet_commutation_congruent": effet_commutation_congruent,
+            "effet_commutation_incongruent": effet_commutation_incongruent,
+            "interaction_conflit_commutation": (effet_commutation_incongruent
+                                                - effet_commutation_congruent),
+            "effet_tache_langue": (exact(par_tache["langue"])
+                                   - exact(par_tache["sens"])),
+            "effet_tache_langue_macro": (macro_sonde["langue"]["exact"]
+                                         - macro_sonde["sens"]["exact"]),
+        }
+
+    def executer_switch(self, items=None, cibles=("fr", "en")) -> dict:
+        """Exécute la tâche de commutation et rend les coûts mesurés.
+
+        La porte dure `tache` est comparée à ses témoins et au contrôle positif
+        `perseveration_tache`. Aucune clé n'est partagée avec `executer` : la
+        batterie M6 continue de mesurer la tâche de confluence.
+        """
+        essais = self.tache_switch(items, cibles)
+        if not essais:
+            return {"exact": 0.0, "n": 0, "effet_conflit": 0.0,
+                    "effet_commutation": 0.0, "politique": "tache"}
+        resultat = self._metriques_switch(self._decisions_switch(essais, "tache"))
+        resultat.update({
+            "politique": "tache", "cibles": list(cibles),
+            "n_commutations": resultat["par_transition"]["commutation"]["n"],
+            "n_repetitions": resultat["par_transition"]["repetition"]["n"],
+            "politiques": {},
+            "controles": {},
+        })
+        for politique in ("sens", "langue", "tache_inversee",
+                          "indice_aleatoire", "tout_non"):
+            r = self._metriques_switch(self._decisions_switch(essais, politique))
+            resultat["politiques"][politique] = {
+                "exact": r["exact"], "effet_conflit": r["effet_conflit"],
+                "effet_commutation": r["effet_commutation"],
+            }
+        persev = self._metriques_switch(
+            self._decisions_switch(essais, "perseveration_tache"))
+        resultat["controles"]["perseveration_tache"] = {
+            "exact": persev["exact"],
+            "effet_conflit": persev["effet_conflit"],
+            "effet_commutation": persev["effet_commutation"],
+            "effet_commutation_congruent": persev["effet_commutation_congruent"],
+            "effet_commutation_incongruent": persev["effet_commutation_incongruent"],
+            "interaction_conflit_commutation": persev["interaction_conflit_commutation"],
+        }
+        resultat["controle_perseveration"] = persev["effet_commutation"]
+        return resultat
 
     # ------------------------------------------------------------------
     # Politiques et mesures.
