@@ -110,8 +110,11 @@ contient pas le plateau, et le tirage est uniforme parmi les coups légaux.
 - Baseline **par jeu** : **96,10 %** de champs, exact **63,2 %** ; le groupe `(jeu, action)` n'apporte
   que **+0,38 pt**. La baseline annoncée « 0 » était fausse (elle mesurait une mémoire vide, pas un
   modèle trivial).
-- Sur codes jamais vus : exact **0 %**, champs 93,3 %, non nuls 68,5 % ; les prototypes ne peuvent
-  pas produire un code neuf. **M8 ne généralise pas** ; il résume la marginale.
+- Sur codes jamais vus : **leave-one-code-out**, exact **0 % par construction** ; champs **90,1 %**
+  en backoff type→groupe→jeu→global, mais champs **non nuls 63,5 %** et les coordonnées
+  (`de`, `vers`, `point`, `carte`, `case`, `chemin`) à **0 %** ; les prototypes ne peuvent pas produire
+  un code neuf. **M8 ne généralise pas** ; il résume la marginale. Le 96,48 % est un plafond de
+  champs, pas une exactitude.
 
 ## 9. M9 — lésions
 

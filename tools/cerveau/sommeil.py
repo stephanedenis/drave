@@ -27,6 +27,31 @@ dédupliquée par code et par paire, split par codes tenus à l'écart, et un
 repli sur le prototype sinon). L'hybride porte l'exact à 100 % sur la queue,
 mais uniquement parce que les 106 codes y ont été vus : c'est M4 qui travaille,
 pas la consolidation.
+
+**Passe A7 (M8 conditionné par le contexte).** ``experience_contexte`` mesure la
+question laissée ouverte : jeu, action et type de coup suffisent-ils, et
+« prototype + épisode » aide-t-il sur un code tenu à l'écart ? Résultats
+reproductibles sur le corpus (29 codes, 528 items) :
+
+- en *leave-one-code-out*, l'exact d'un prototype est **nul par construction** —
+  il ne peut sortir qu'un code déjà vu, et le code exclu n'est pas dans le
+  train. Ce n'est pas une mesure, c'est une preuve ;
+- la seule partie gagnée sur un code neuf est le **motif de ``None``** : la clé
+  ``jeu`` porte les champs à 89,20 %, le backoff ``type→groupe→jeu→global`` à
+  90,11 %, mais les champs non nuls restent à 61,3 % puis 62,0 %, dont
+  l'essentiel vient de ``jeu``/``action``/``taille`` (déjà connus par la clé) ;
+  les coordonnées du coup (``de``, ``vers``, ``point``, ``carte``, ``case``,
+  ``chemin``) sont à 0 % hors coïncidences de marginale ;
+- conditionner plus finement que ``(jeu, action)`` **n'aide pas** : le type
+  seul perd 0,23 pt de champs et 2,2 pts de non nuls ; le backoff ne récupère
+  que la structure ;
+- l'hybride historique est **tautologique** (index clé par le code cible
+  entier) ; un hybride honnête se clé par la **surface** et ne couvre alors que
+  les surfaces déjà vues, soit 0 % sur un code tenu à l'écart.
+
+Le négatif est donc net : la consolidation est une marginale du contexte, elle
+ne remplace pas la lecture de la surface (M2/M5). ``experience`` reste
+l'expérience publiée ; ``experience_contexte`` est le contrôle conditionné.
 """
 from __future__ import annotations
 
@@ -36,6 +61,8 @@ import random
 from semantique.universaux import CHAMPS
 
 NOMS = tuple(nom for nom, _ in CHAMPS)
+CLES = ("global", "jeu", "groupe", "type", "jeu_type", "action_type", "type_seul")
+LADDER = ("type", "groupe", "jeu", "global")
 
 
 def _code(e) -> dict:
@@ -52,6 +79,12 @@ def _cle(code: dict, cle) -> tuple:
         return cle(code)
     if cle == "type":
         return (code.get("jeu"), code.get("action"), _signature(code))
+    if cle == "jeu_type":
+        return (code.get("jeu"), _signature(code))
+    if cle == "action_type":
+        return (code.get("action"), _signature(code))
+    if cle == "type_seul":
+        return (_signature(code),)
     if cle == "jeu":
         return (code.get("jeu"),)
     if cle == "global":
@@ -378,9 +411,560 @@ class Sommeil:
         }
         return res
 
+    # ---- A7 : prototypes conditionnés, tenue à l'écart, hybrides honnêtes ---
+    @staticmethod
+    def _groupes(episodes, cle):
+        groupes = collections.defaultdict(list)
+        for e in episodes:
+            groupes[_cle(_code(e), cle)].append(_code(e))
+        return groupes
+
+    @classmethod
+    def _prototypes(cls, episodes, cle, mode: str = "champs"):
+        """Prototypes d'une clé, avec le support (nombre d'épisodes du groupe)."""
+        protos, supports = {}, {}
+        for k, codes in cls._groupes(episodes, cle).items():
+            if not codes:
+                continue
+            protos[k] = _mode_joint(codes) if mode == "joint" else _mode_champs(codes)
+            supports[k] = len(codes)
+        return protos, supports
+
+    def prototypes_multi(self, episodes, cles=CLES, mode: str = "champs") -> dict:
+        """Un couple (prototypes, supports) par clé, construit sur le même train."""
+        return {cle: self._prototypes(episodes, cle, mode) for cle in cles}
+
+    @staticmethod
+    def _predire(code, protos_par_cle, ladder=LADDER, min_support: int = 1):
+        """Prédit champ par champ en descendant l'échelle du plus fin au plus gros.
+
+        Un champ prend la valeur du premier prototype dont le groupe existe et
+        compte au moins ``min_support`` épisodes. Le niveau retenu est renvoyé :
+        il mesure la part du fin qui sert réellement.
+        """
+        protos_g, supports_g = protos_par_cle.get("global", ({}, {}))
+        global_proto = protos_g.get(("global",), {})
+        pred = {}
+        niveaux = collections.Counter()
+        for nom in NOMS:
+            valeur, niveau = None, "absent"
+            for cle in ladder:
+                protos, supports = protos_par_cle.get(cle, ({}, {}))
+                k = _cle(code, cle)
+                if k in protos and supports.get(k, 0) >= min_support:
+                    valeur, niveau = protos[k].get(nom), cle
+                    break
+            if niveau == "absent":
+                valeur, niveau = global_proto.get(nom), "global_absent"
+            pred[nom] = valeur
+            niveaux[niveau] += 1
+        return pred, niveaux
+
+    def evaluer_profond(self, episodes, protos_par_cle, ladder=LADDER,
+                        min_support: int = 1) -> dict:
+        """Évalue avec backoff et décompose champs nuls / non nuls.
+
+        L'exact ne compare que les champs présents dans le code cible, pour que
+        les codes partiels des tests unitaires restent évaluables.
+        """
+        ok = ex = n = 0
+        ok_nn = n_nn = ok_nul = n_nul = 0
+        par_champ = collections.defaultdict(
+            lambda: {"n_non_nul": 0, "ok_non_nul": 0, "n_nul": 0, "ok_nul": 0})
+        niveaux = collections.Counter()
+        for e in episodes:
+            code = _code(e)
+            pred, niv = self._predire(code, protos_par_cle, ladder, min_support)
+            niveaux.update(niv)
+            n += 1
+            ex += int(all(pred.get(nom) == code.get(nom) for nom in code))
+            for nom in NOMS:
+                bon = int(pred.get(nom) == code.get(nom))
+                ok += bon
+                d = par_champ[nom]
+                if code.get(nom) is None:
+                    n_nul += 1
+                    ok_nul += bon
+                    d["n_nul"] += 1
+                    d["ok_nul"] += bon
+                else:
+                    n_nn += 1
+                    ok_nn += bon
+                    d["n_non_nul"] += 1
+                    d["ok_non_nul"] += bon
+        return {
+            "champs": ok / max(1, n * len(NOMS)),
+            "exact": ex / max(1, n),
+            "champs_non_nuls": ok_nn / max(1, n_nn),
+            "champs_nuls": ok_nul / max(1, n_nul),
+            "n": n, "n_non_nuls": n_nn, "n_nuls": n_nul,
+            "niveaux_utilises": dict(niveaux),
+            "bruts": {"ok_champs": ok, "n_champs": n * len(NOMS),
+                      "ok_non_nuls": ok_nn, "n_non_nuls": n_nn,
+                      "ok_nuls": ok_nul, "n_nuls": n_nul, "exact": ex, "n": n},
+            "par_champ": {nom: {
+                "n_non_nul": d["n_non_nul"],
+                "exact_non_nul": d["ok_non_nul"] / max(1, d["n_non_nul"]),
+                "ok_non_nul": d["ok_non_nul"],
+                "n_nul": d["n_nul"],
+                "exact_nul": d["ok_nul"] / max(1, d["n_nul"]),
+                "ok_nul": d["ok_nul"],
+            } for nom, d in par_champ.items()},
+        }
+
+    @staticmethod
+    def _metriques(episodes, predire) -> dict:
+        ok = ex = n = ok_nn = n_nn = 0
+        for e in episodes:
+            code = _code(e)
+            pred = predire(e, code)
+            n += 1
+            ex += int(all(pred.get(nom) == code.get(nom) for nom in code))
+            ok += sum(1 for nom in NOMS if pred.get(nom) == code.get(nom))
+            for nom in NOMS:
+                if code.get(nom) is not None:
+                    n_nn += 1
+                    ok_nn += int(pred.get(nom) == code.get(nom))
+        return {"champs": ok / max(1, n * len(NOMS)), "exact": ex / max(1, n),
+                "champs_non_nuls": ok_nn / max(1, n_nn),
+                "n": n, "n_non_nuls": n_nn}
+
+    @staticmethod
+    def _prototypes_paires(episodes, mode: str = "champs") -> dict:
+        groupes = collections.defaultdict(list)
+        for e in episodes:
+            groupes[getattr(e, "paire", "")].append(_code(e))
+        return {k: (_mode_joint(v) if mode == "joint" else _mode_champs(v))
+                for k, v in groupes.items()}
+
+    def evaluer_paires(self, episodes, protos, global_proto=None) -> dict:
+        """Baseline **oracle** par paire : l'étiquette paire n'est pas une entrée.
+
+        Elle sert de détecteur de fuite : si une paire apparaît des deux côtés,
+        le prototype par paire rend le code cible sans rien lire.
+        """
+        def predire(e, code):
+            p = protos.get(getattr(e, "paire", ""))
+            return p if p is not None else (global_proto or {})
+        return self._metriques(episodes, predire)
+
+    @staticmethod
+    def index_surfaces(episodes) -> dict:
+        """Index des épisodes par (surface, jeu), la seule clé lisible au test."""
+        index = {}
+        for e in episodes:
+            texte = getattr(e, "texte", getattr(e, "surface", ""))
+            code = _code(e)
+            index.setdefault((texte, code.get("jeu")), code)
+        return index
+
+    def evaluer_hybride_surface(self, episodes, protos_par_cle, index,
+                                ladder=LADDER, min_support: int = 1) -> dict:
+        """Hybride honnête : mémoire de surface, repli sur le prototype.
+
+        La branche épisodique ne se déclenche que si la **surface** a été vue ;
+        c'est la seule information réellement disponible avant de lire le code.
+        """
+        n = couverts = ex = ex_c = ex_nc = ok = ok_c = ok_nc = 0
+        for e in episodes:
+            code = _code(e)
+            texte = getattr(e, "texte", getattr(e, "surface", ""))
+            k = (texte, code.get("jeu"))
+            n += 1
+            if k in index:
+                pred = index[k]
+                couverts += 1
+                bon = sum(1 for nom in NOMS if pred.get(nom) == code.get(nom))
+                ok += bon
+                ok_c += bon
+                ex_c += int(all(pred.get(nom) == code.get(nom) for nom in code))
+                ex += int(all(pred.get(nom) == code.get(nom) for nom in code))
+                continue
+            pred, _ = self._predire(code, protos_par_cle, ladder, min_support)
+            bon = sum(1 for nom in NOMS if pred.get(nom) == code.get(nom))
+            ok += bon
+            ok_nc += bon
+            ex_nc += int(all(pred.get(nom) == code.get(nom) for nom in code))
+            ex += int(all(pred.get(nom) == code.get(nom) for nom in code))
+        n_nc = n - couverts
+        return {"champs": ok / max(1, n * len(NOMS)), "exact": ex / max(1, n),
+                "couverture": couverts / max(1, n), "n": n,
+                "n_couverts": couverts, "n_non_couverts": n_nc,
+                "exact_sur_couverts": ex_c / max(1, couverts),
+                "exact_sur_non_couverts": ex_nc / max(1, n_nc),
+                "champs_sur_non_couverts": ok_nc / max(1, n_nc * len(NOMS))}
+
+    @staticmethod
+    def plafond_contextuel(episodes, cles=CLES) -> dict:
+        """Masse du code modal par clé : plafond d'exact d'un prédicteur contextuel.
+
+        Sur le corpus entier, aucun modèle qui ne voit que la clé ne peut faire
+        mieux que de rendre le code modal de son groupe. La masse modale est donc
+        la borne supérieure de l'exact ; ``1 - masse`` est l'irréductible.
+        """
+        n = len(episodes)
+        out = {}
+        for cle in cles:
+            groupes = Sommeil._groupes(episodes, cle)
+            masse = 0
+            for codes in groupes.values():
+                if codes:
+                    masse += collections.Counter(
+                        tuple(sorted(c.items())) for c in codes).most_common(1)[0][1]
+            out[cle] = {"masse_modale": masse / max(1, n), "groupes": len(groupes)}
+        par_paire = collections.defaultdict(list)
+        for e in episodes:
+            par_paire[getattr(e, "paire", "")].append(_code(e))
+        masse = 0
+        for codes in par_paire.values():
+            if codes:
+                masse += collections.Counter(
+                    tuple(sorted(c.items())) for c in codes).most_common(1)[0][1]
+        out["paire"] = {"masse_modale": masse / max(1, n), "groupes": len(par_paire),
+                        "oracle": "l'étiquette paire n'est pas une entrée"}
+        return out
+
+    @staticmethod
+    def _etiquette_code(code: dict) -> str:
+        champs = [nom for nom in NOMS if code.get(nom) is not None]
+        return f"{code.get('jeu')}:{code.get('action')}:{'+'.join(champs)}"
+
+    @staticmethod
+    def _resume_par_cle(cles: dict, cles_liste=CLES) -> dict:
+        out = {}
+        for cle in cles_liste:
+            acc = {"ok_champs": 0, "n_champs": 0, "ok_non_nuls": 0,
+                   "n_non_nuls": 0, "ok_nuls": 0, "n_nuls": 0, "exact": 0, "n": 0}
+            for r in cles.values():
+                for k in acc:
+                    acc[k] += r[cle]["bruts"][k]
+            out[cle] = {
+                "champs": acc["ok_champs"] / max(1, acc["n_champs"]),
+                "exact": acc["exact"] / max(1, acc["n"]),
+                "champs_non_nuls": acc["ok_non_nuls"] / max(1, acc["n_non_nuls"]),
+                "champs_nuls": acc["ok_nuls"] / max(1, acc["n_nuls"]),
+                "n": acc["n"], "n_non_nuls": acc["n_non_nuls"],
+            }
+        return out
+
+    @staticmethod
+    def _controle_cle_permutee(protos, supports, cle, rng) -> tuple:
+        """Même nombre de groupes, associations clé→prototype détruites.
+
+        Les prototypes d'un même jeu sont permutés en cycle : toutes les clés
+        existent encore, mais aucune ne porte plus l'information de sa clé.
+        """
+        cles_ = list(protos)
+        groupes = collections.defaultdict(list)
+        for k in cles_:
+            groupes[k[0] if cle in ("jeu", "groupe", "type") else "tous"].append(k)
+        perm = {}
+        fixes = 0
+        for membres in groupes.values():
+            if len(membres) < 2:
+                for k in membres:
+                    perm[k] = protos[k]
+                fixes += len(membres)
+                continue
+            valeurs = [protos[k] for k in membres]
+            decale = valeurs[1:] + valeurs[:1]
+            for k, v in zip(membres, decale):
+                perm[k] = v
+        return (perm, supports), fixes
+
+    def experience_contexte(self, items_=None, graines=(1, 2, 3)) -> dict:
+        """M8 conditionné : jeu, action, type de coup, et code tenu à l'écart.
+
+        Trois protocoles, tous les prototypes construits **sans** le code testé :
+
+        1. ``leave-one-code-out`` : 29 plis, un code exclu par pli, évalué une
+           fois (moyenne par code, non pondérée par la fréquence des surfaces) ;
+        2. ``codes_tenus`` : 3 graines, 20 % des codes exclus par jeu, évaluation
+           pondérée par les items et par code ;
+        3. ``paires_tenues`` : le split historique ``decouper`` par paire, avec
+           le contrôle de fuite ``codes_test_vus_dans_train``.
+
+        L'exact y est nul **par construction** (un prototype ne sort qu'un code
+        vu, le code exclu n'est pas dans le train) : la mesure utile est la
+        décomposition champs / non nuls / nuls et le backoff par champ.
+        """
+        from semantique.typed_corpus import decouper, items as corpus_items
+        its = list(items_) if items_ is not None else corpus_items()
+        n = len(its)
+        codes = sorted({tuple(sorted(_code(e).items())) for e in its}, key=repr)
+        par_jeu = collections.defaultdict(list)
+        for t in codes:
+            par_jeu[dict(t).get("jeu")].append(t)
+        plafond = self.plafond_contextuel(its, CLES)
+
+        # ---- 1. leave-one-code-out --------------------------------------
+        loo = {cle: {"champs": [], "exact": [], "champs_non_nuls": [],
+                     "champs_nuls": [], "n": 0} for cle in CLES}
+        loo["ladder"] = {"champs": [], "exact": [], "champs_non_nuls": [],
+                         "champs_nuls": [], "n": 0}
+        par_champ_loo = collections.defaultdict(
+            lambda: {"n_non_nul": 0, "ok_non_nul": 0, "n_nul": 0, "ok_nul": 0})
+        par_champ_jeu = collections.defaultdict(
+            lambda: {"n_non_nul": 0, "ok_non_nul": 0})
+        niveaux_loo = collections.Counter()
+        for t in codes:
+            tr = [e for e in its if tuple(sorted(_code(e).items())) != t]
+            te = [e for e in its if tuple(sorted(_code(e).items())) == t][:1]
+            pp = self.prototypes_multi(tr)
+            for cle in CLES:
+                r = self.evaluer_profond(
+                    te, {cle: pp[cle], "global": pp["global"]},
+                    ladder=(cle, "global"))
+                for k in ("champs", "exact", "champs_non_nuls", "champs_nuls"):
+                    loo[cle][k].append(r[k])
+                loo[cle]["n"] += r["n"]
+                if cle == "jeu":
+                    for nom, d in r["par_champ"].items():
+                        par_champ_jeu[nom]["n_non_nul"] += d["n_non_nul"]
+                        par_champ_jeu[nom]["ok_non_nul"] += d["ok_non_nul"]
+            r = self.evaluer_profond(te, pp)
+            for k in ("champs", "exact", "champs_non_nuls", "champs_nuls"):
+                loo["ladder"][k].append(r[k])
+            loo["ladder"]["n"] += r["n"]
+            niveaux_loo.update(r["niveaux_utilises"])
+            for nom, d in r["par_champ"].items():
+                par_champ_loo[nom]["n_non_nul"] += d["n_non_nul"]
+                par_champ_loo[nom]["ok_non_nul"] += d["ok_non_nul"]
+                par_champ_loo[nom]["n_nul"] += d["n_nul"]
+                par_champ_loo[nom]["ok_nul"] += d["ok_nul"]
+        loo_resume = {}
+        for cle in CLES + ("ladder",):
+            r = loo[cle]
+            m = lambda k: sum(r[k]) / max(1, len(r[k]))
+            loo_resume[cle] = {"champs": m("champs"), "exact": m("exact"),
+                               "champs_non_nuls": m("champs_non_nuls"),
+                               "champs_nuls": m("champs_nuls"), "n": r["n"]}
+        loo_resume["ladder"]["niveaux_utilises"] = dict(niveaux_loo)
+        loo_resume["ladder"]["par_champ"] = {
+            nom: {"n": d["n_non_nul"],
+                  "exact_non_nul": d["ok_non_nul"] / max(1, d["n_non_nul"]),
+                  "n_nul": d["n_nul"],
+                  "exact_nul": d["ok_nul"] / max(1, d["n_nul"])}
+            for nom, d in par_champ_loo.items() if d["n_non_nul"]}
+
+        # ---- 2. codes tenus à l'écart, 3 graines -------------------------
+        codes_tenus = []
+        for g in graines:
+            rng = random.Random(g)
+            exclus = set()
+            for jeu in sorted(par_jeu, key=str):
+                mel = list(par_jeu[jeu])
+                rng.shuffle(mel)
+                k = max(1, round(0.2 * len(mel)))
+                exclus.update(mel[:k])
+            tr = [e for e in its if tuple(sorted(_code(e).items())) not in exclus]
+            te = [e for e in its if tuple(sorted(_code(e).items())) in exclus]
+            pp = self.prototypes_multi(tr)
+            vus = {tuple(sorted(_code(e).items())) for e in tr}
+            row = {
+                "graine": g, "n_train": len(tr), "n_test": len(te),
+                "n_codes_exclus": len(exclus),
+                "codes_exclus": [self._etiquette_code(dict(t))
+                                 for t in sorted(exclus, key=repr)],
+                "codes_test_vus_dans_train": sum(
+                    1 for e in te if tuple(sorted(_code(e).items())) in vus),
+                "cles": {cle: self.evaluer_profond(
+                    te, {cle: pp[cle], "global": pp["global"]},
+                    ladder=(cle, "global")) for cle in CLES},
+                "dedup_code": self.evaluer_profond(
+                    self.dedupliquer(te, "code"), pp),
+                "ladder": self.evaluer_profond(te, pp),
+                "hybride_surface": self.evaluer_hybride_surface(
+                    te, pp, self.index_surfaces(tr)),
+                "hybride_oracle_code": self.evaluer_hybride(
+                    te, pp["groupe"][0], self.index_episodes(tr)),
+                "paire_oracle": self.evaluer_paires(
+                    te, self._prototypes_paires(tr),
+                    pp["global"][0].get(("global",))),
+            }
+            codes_tenus.append(row)
+        codes_tenus_resume = {
+            "par_cle": self._resume_par_cle(
+                {r["graine"]: r["cles"] for r in codes_tenus}),
+            "ladder_champs": sum(r["ladder"]["champs"] for r in codes_tenus)
+            / max(1, len(codes_tenus)),
+            "ladder_non_nuls": sum(r["ladder"]["champs_non_nuls"]
+                                   for r in codes_tenus) / max(1, len(codes_tenus)),
+            "ladder_exact": sum(r["ladder"]["exact"] for r in codes_tenus)
+            / max(1, len(codes_tenus)),
+            "hybride_surface": {
+                "couverture": sum(r["hybride_surface"]["couverture"]
+                                  for r in codes_tenus) / max(1, len(codes_tenus)),
+                "exact": sum(r["hybride_surface"]["exact"]
+                             for r in codes_tenus) / max(1, len(codes_tenus)),
+                "exact_sur_couverts": sum(
+                    r["hybride_surface"]["exact_sur_couverts"]
+                    for r in codes_tenus) / max(1, len(codes_tenus))},
+            "hybride_oracle_code": {
+                "couverture": sum(r["hybride_oracle_code"]["couverture"]
+                                  for r in codes_tenus) / max(1, len(codes_tenus)),
+                "exact": sum(r["hybride_oracle_code"]["exact"]
+                             for r in codes_tenus) / max(1, len(codes_tenus))},
+            "paire_oracle_champs": sum(r["paire_oracle"]["champs"]
+                                       for r in codes_tenus) / max(1, len(codes_tenus)),
+        }
+
+        # ---- 3. paires tenues à l'écart (split historique) ---------------
+        paires = []
+        for g in graines:
+            tr, te = decouper(its, g, 0.2)
+            pp = self.prototypes_multi(tr)
+            vus = {tuple(sorted(_code(e).items())) for e in tr}
+            paires.append({
+                "graine": g, "n_train": len(tr), "n_test": len(te),
+                "n_codes_test": len({tuple(sorted(_code(e).items())) for e in te}),
+                "items_code_vu": sum(
+                    1 for e in te if tuple(sorted(_code(e).items())) in vus),
+                "cles": {cle: self.evaluer_profond(
+                    te, {cle: pp[cle], "global": pp["global"]},
+                    ladder=(cle, "global")) for cle in CLES},
+                "dedup_code": self.evaluer_profond(
+                    self.dedupliquer(te, "code"), pp),
+                "ladder": self.evaluer_profond(te, pp),
+                "hybride_surface": self.evaluer_hybride_surface(
+                    te, pp, self.index_surfaces(tr)),
+                "paire_oracle": self.evaluer_paires(
+                    te, self._prototypes_paires(tr),
+                    pp["global"][0].get(("global",))),
+            })
+
+        # ---- 4. contrôles : la clé porte-t-elle l'information ? ---------
+        controles = {}
+        for cle in ("groupe", "type"):
+            rows, fixes = [], 0
+            for g in graines:
+                rng = random.Random(g)
+                exclus = set()
+                for jeu in sorted(par_jeu, key=str):
+                    mel = list(par_jeu[jeu])
+                    rng.shuffle(mel)
+                    exclus.update(mel[:max(1, round(0.2 * len(mel)))])
+                tr = [e for e in its if tuple(sorted(_code(e).items())) not in exclus]
+                te = [e for e in its if tuple(sorted(_code(e).items())) in exclus]
+                pp = self.prototypes_multi(tr, (cle, "global"))
+                (perm, supports), f = self._controle_cle_permutee(
+                    pp[cle][0], pp[cle][1], cle, rng)
+                rows.append(self.evaluer_profond(
+                    te, {cle: (perm, supports), "global": pp["global"]},
+                    ladder=(cle, "global")))
+                fixes += f
+            controles[cle] = {
+                "champs": sum(r["champs"] for r in rows) / max(1, len(rows)),
+                "exact": sum(r["exact"] for r in rows) / max(1, len(rows)),
+                "champs_non_nuls": sum(r["champs_non_nuls"] for r in rows)
+                / max(1, len(rows)),
+                "prototypes_fixes": fixes / max(1, len(graines)),
+                "note": "clé→prototype permutée en cycle dans chaque jeu",
+            }
+
+        # ---- 4 bis. la queue publiée : ses codes sont-ils dans le train ?
+        nq = int(len(its) * 0.8)
+        trq, teq = its[:nq], its[nq:]
+        ppq = self.prototypes_multi(trq)
+        vusq = {tuple(sorted(_code(e).items())) for e in trq}
+        queue = {
+            "n_train": len(trq), "n_test": len(teq),
+            "codes_test_vus_dans_train": sum(
+                1 for e in teq if tuple(sorted(_code(e).items())) in vusq),
+            "prototype": self.evaluer_profond(
+                teq, ppq, ladder=("groupe", "global")),
+            "paire_oracle": self.evaluer_paires(
+                teq, self._prototypes_paires(trq),
+                ppq["global"][0].get(("global",))),
+        }
+
+        # ---- 5. verdict ------------------------------------------------
+        g = loo_resume
+        gain_jeu = g["jeu"]["champs"] - g["global"]["champs"]
+        gain_groupe = g["groupe"]["champs"] - g["jeu"]["champs"]
+        gain_type = g["type"]["champs"] - g["jeu"]["champs"]
+        gain_ladder = g["ladder"]["champs"] - g["jeu"]["champs"]
+        gain_ladder_nn = (g["ladder"]["champs_non_nuls"]
+                          - g["jeu"]["champs_non_nuls"])
+        coords = {nom: g["ladder"]["par_champ"].get(nom, {}).get("exact_non_nul", 0.0)
+                  for nom in ("de", "vers", "point", "carte", "case",
+                              "chemin_0", "chemin_1", "roque", "promotion", "passe")}
+
+        def _acc_coordonnees(par) -> float:
+            noms = ("de", "vers", "point", "carte", "case", "chemin_0",
+                    "chemin_1", "chemin_2", "roque", "promotion", "passe")
+            n = sum(par[f]["n_non_nul"] for f in noms if f in par)
+            ok = sum(par[f]["ok_non_nul"] for f in noms if f in par)
+            return ok / max(1, n)
+
+        gain_coordonnees = _acc_coordonnees(par_champ_loo) - _acc_coordonnees(par_champ_jeu)
+        verdict = {
+            "exact_loo": g["ladder"]["exact"],
+            "exact_loo_preuve": ("nul par construction : le prototype ne peut "
+                                 "rendre qu'un code vu, le code exclu n'est pas "
+                                 "dans le train"),
+            "exact_codes_tenus": [r["ladder"]["exact"] for r in codes_tenus],
+            "champs_loo": {cle: g[cle]["champs"] for cle in CLES + ("ladder",)},
+            "non_nuls_loo": {cle: g[cle]["champs_non_nuls"]
+                             for cle in CLES + ("ladder",)},
+            "gain_jeu_sur_global_champs": gain_jeu,
+            "gain_groupe_sur_jeu_champs": gain_groupe,
+            "gain_type_sur_jeu_champs": gain_type,
+            "gain_backoff_sur_jeu_champs": gain_ladder,
+            "gain_backoff_sur_jeu_non_nuls": gain_ladder_nn,
+            "gain_backoff_sur_jeu_coordonnees": gain_coordonnees,
+            "plafond_groupe": plafond["groupe"]["masse_modale"],
+            "irreductible_groupe": 1.0 - plafond["groupe"]["masse_modale"],
+            "coordonnees_non_nulles_ladder": coords,
+            "hybride_surface_couverture": codes_tenus_resume[
+                "hybride_surface"]["couverture"],
+            "hybride_oracle_couverture": codes_tenus_resume[
+                "hybride_oracle_code"]["couverture"],
+            "hybride_oracle_tautologique": True,
+            "controle_cle_permutee": controles,
+            "queue_publiee": {
+                "champs": queue["prototype"]["champs"],
+                "exact": queue["prototype"]["exact"],
+                "n_test": queue["n_test"],
+                "codes_test_vus_dans_train": queue["codes_test_vus_dans_train"],
+                "paire_oracle_exact": queue["paire_oracle"]["exact"],
+                "plafond_corpus_groupe": plafond["groupe"]["masse_modale"],
+            },
+            "conditionner_aide_exact": False,
+            "conditionner_aide_structure": True,
+            "conditionner_aide_valeurs": gain_coordonnees > 0.05,
+            "conclusion": ("le conditionnement ne gagne que le motif de None ; "
+                           "les coordonnées justes sont des coïncidences de "
+                           "marginale (case de départ, sous-type roque) ; exact nul"),
+        }
+        return {
+            "protocole": {
+                "n": n, "codes": len(codes), "paires": len(
+                    {getattr(e, "paire", "") for e in its}),
+                "cles": CLES, "ladder": LADDER,
+                "graines": list(graines),
+                "split_codes": "20 % des codes par jeu, tenus à l'écart",
+                "split_paires": "decouper(graine, 0.2), comme typed_corpus",
+                "note": ("les prototypes ne voient jamais le code testé ; "
+                         "l'exact est nul par construction, pas par échec"),
+            },
+            "plafond_contextuel": plafond,
+            "loo_codes": loo_resume,
+            "codes_tenus": codes_tenus,
+            "codes_tenus_resume": codes_tenus_resume,
+            "paires_tenues": paires,
+            "controles": controles,
+            "queue_publiee": queue,
+            "verdict": verdict,
+        }
+
 
 def experience_m8(items_=None) -> dict:
     return Sommeil().experience(items_)
+
+
+def experience_contexte(items_=None, graines=(1, 2, 3)) -> dict:
+    return Sommeil().experience_contexte(items_, graines)
 
 
 if __name__ == "__main__":

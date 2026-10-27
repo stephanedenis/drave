@@ -10,9 +10,10 @@ est ``intacte - lésée`` ; un déficit négatif veut dire que la lésion *amél
 Modules couverts :
 
 - **M1** : retirer le contexte de perception ;
-- **M2** : couper la voie ventrale (action) ou dorsale (``de``) ; sur CPU, un
-  substitut déterministe à deux têtes (bayes naïf sur n-grammes) est déclaré,
-  avec la même double dissociation structurelle que ``voies.py`` ;
+- **M2** : couper la voie ventrale (action) ou dorsale (``de``). Par défaut le
+  **vrai ``voies.py``** est exécuté (encodeur natif gelé, entraînement des têtes
+  sur GPU ou CPU) ; si la base ou torch manque, le substitut bayésien à deux
+  têtes est déclaré dans ``statut`` (repli documenté, jamais silencieux) ;
 - **M3** : capacité du tampon (0, 1, 2, 4, 8, 12), dose-réponse ;
 - **M4** : stockage vide, puis lésion du champ d'adressage (le champ est mis à
   ``None`` dans la requête) ;
@@ -21,16 +22,20 @@ Modules couverts :
 - **M6** : retirer la porte (tout accepter), l'inverser, la rendre aléatoire ;
 - **M7** : retirer la modulation (FIFO) ; décomposition clé surface/code et
   signal nouveauté ;
-- **M8** : retirer le sommeil (repli sur la marginale globale), puis hybride
-  prototypes + épisodes et codes jamais vus.
+- **M8** : retirer le sommeil (repli sur la marginale globale) sur un **code
+  tenu à l'écart**, puis hybride surface + prototype et hybrides tautologiques.
 
-``batterie_lesions(rapide=True)`` reste sous quelques secondes ; ``rapide=False``
-augmente l'échantillon M4 et les permutations M7.
+Tous les déficits sont ``intacte - lésée`` (jamais ``1 - lésée``) ; le cas M4
+``par_champ`` est calculé explicitement depuis l'intacte mesurée. ``batterie_lesions(rapide=True)``
+exécute M2 réel (≈ 30 s sur GPU) ; ``m2="proxy"`` force le substitut CPU,
+``rapide=False`` augmente l'échantillon M4, les permutations M7 et les graines M2.
 """
 from __future__ import annotations
 
 import collections
 import math
+import os
+import pathlib
 import random
 import time
 
@@ -45,7 +50,7 @@ from cerveau.memoire_travail import MemoireTravail
 from cerveau.neuromodulation import experience_m7
 from cerveau.predictif import Predictif
 from cerveau.sequences import corpus
-from cerveau.sommeil import Sommeil, experience_m8
+from cerveau.sommeil import Sommeil, experience_contexte, experience_m8
 
 NOMS = tuple(nom for nom, _ in CHAMPS)
 
@@ -91,7 +96,7 @@ def _m1() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# M2 — les deux voies (substitut CPU déterministe)
+# M2 — les deux voies (voies.py réel, proxy bayésien en repli)
 # ---------------------------------------------------------------------------
 def _ngrammes(texte: str, jeu: str) -> list[str]:
     t = "<" + texte.lower() + ">"
@@ -135,7 +140,8 @@ class _Bayes:
         return meilleur
 
 
-def _m2() -> dict:
+def _m2_proxy() -> dict:
+    """Substitut CPU : deux têtes bayésiennes, même dissociation structurelle."""
     its = corpus_items()
     tr, te = decouper(its, 1, 0.2)
     if not te:
@@ -181,10 +187,10 @@ def _m2() -> dict:
     d_nn = ok_d_nn / max(1, n_nn)
     d_rand_nn = ok_d_rand_nn / max(1, n_nn * repetitions)
     d_prio_nn = ok_d_prio_nn / max(1, n_nn)
-    return _entree(
+    r = _entree(
         "couper la voie ventrale (action) / dorsale (de) — tête détruite",
         {"action": a, "de": d, "de_non_nul": d_nn, "n_de_non_nul": n_nn},
-        {"action": a_rand, "de": d_rand,
+        {"action": a_rand, "de": d_rand, "de_non_nul": d_rand_nn,
          "avec_priori": {"action": a_prio, "de": d_prio},
          "ventrale": {"action": a_rand, "de": d, "de_non_nul": d_nn},
          "dorsale": {"action": a, "de": d_rand, "de_non_nul": d_rand_nn}},
@@ -192,12 +198,125 @@ def _m2() -> dict:
          "de_non_nul": d_nn - d_rand_nn,
          "avec_priori": {"action": a - a_prio, "de": d - d_prio,
                          "de_non_nul": d_nn - d_prio_nn},
+         "majorite": {"action": a_prio, "de": d_prio},
+         "preservation": {"action_sous_lesion_dorsale": a,
+                          "de_sous_lesion_ventrale": d},
          "double_dissociation": (a - a_rand) > 0.2 and (d_nn - d_rand_nn) > 0.2},
-        n, statut="proxy CPU (bayes naïf, deux têtes) ; voies.py neuronal non exécuté",
+        n, statut="proxy CPU (bayes naïf, deux têtes) ; voies.py non exécuté",
         sham=0.0,
         note=("la tête détruite répond au hasard ; le repli majoritaire est mesuré à part. "
               "Sur le sous-ensemble `de`, l'action est structurellement constante "
               "(`deplacer`) : le score action de M2 y est trivial, comme le note M5."))
+    r["mode"] = "proxy"
+    return r
+
+
+def _m2_voies(pas: int = 300, graines=(1,), device: str | None = None,
+              base: str | None = None) -> dict:
+    """Le vrai M2 : encodeur natif gelé + têtes ventrale/dorsale de ``voies.py``.
+
+    Même dispositif que ``batterie.py`` (300 pas, lot 32, graine 1) pour que les
+    chiffres soient comparables. Les deux lésions sont **séparées** : la ventrale
+    détruit la tête action, la dorsale la tête ``de``. Le ``lessee`` publié est
+    l'union des deux lésions simples (chaque métrique vient de sa propre lésion).
+    """
+    import torch
+    from transformers import AutoModelForCausalLM
+    from cerveau.voies import entrainer, evaluer
+
+    base = base or os.environ.get("DRAVE_M2_BASE", "/tmp/natif-600-512-8-align-s1")
+    if not pathlib.Path(base).is_dir():
+        raise FileNotFoundError(f"base M2 absente : {base}")
+    device = device or os.environ.get(
+        "DRAVE_DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
+    t0 = time.monotonic()
+    par_graine = []
+    val = []
+    for graine in graines:
+        modele_base = AutoModelForCausalLM.from_pretrained(base, dtype=torch.float32)
+        m, val = entrainer(modele_base, pas, 32, 64, graine, device, synth=True)
+        intact = evaluer(m, val, device)
+        ventrale = evaluer(m, val, device, "ventral")
+        dorsale = evaluer(m, val, device, "dorsal")
+        sham = evaluer(m, val, device)
+        cibles_a = [it.code["action"] for it in val]
+        cibles_d = [it.code["de"] for it in val]
+        maj_a = collections.Counter(cibles_a).most_common(1)[0][1] / max(1, len(cibles_a))
+        maj_d = collections.Counter(cibles_d).most_common(1)[0][1] / max(1, len(cibles_d))
+        par_graine.append({
+            "graine": graine, "intacte": intact, "ventrale": ventrale,
+            "dorsale": dorsale,
+            "sham_action": abs(sham["action"] - intact["action"]),
+            "sham_de": abs(sham["de"] - intact["de"]),
+            "majorite_action": maj_a, "majorite_de": maj_d,
+        })
+        del modele_base, m
+        if device == "cuda":
+            torch.cuda.empty_cache()
+
+    def moy(famille: str, nom: str = "") -> float:
+        if nom:
+            return sum(g[famille][nom] for g in par_graine) / len(par_graine)
+        return sum(g[famille] for g in par_graine) / len(par_graine)
+
+    a, d = moy("intacte", "action"), moy("intacte", "de")
+    a_v, d_v = moy("ventrale", "action"), moy("ventrale", "de")
+    a_d, d_d = moy("dorsale", "action"), moy("dorsale", "de")
+    maj_a, maj_d = moy("majorite_action"), moy("majorite_de")
+    n = len(val)
+    r = _entree(
+        "couper la voie ventrale (action) / dorsale (de) — voies.py réel",
+        {"action": a, "de": d, "de_non_nul": d, "n": n},
+        {"action": a_v, "de": d_d, "de_non_nul": d_d,
+         "ventrale": {"action": a_v, "de": d_v, "de_non_nul": d_v},
+         "dorsale": {"action": a_d, "de": d_d, "de_non_nul": d_d},
+         "avec_priori": {"action": maj_a, "de": maj_d}},
+        {"action": a - a_v, "de": d - d_d, "de_non_nul": d - d_d,
+         "avec_priori": {"action": a - maj_a, "de": d - maj_d,
+                         "de_non_nul": d - maj_d},
+         "majorite": {"action": maj_a, "de": maj_d},
+         "preservation": {"action_sous_lesion_dorsale": a_d,
+                          "de_sous_lesion_ventrale": d_v},
+         "double_dissociation": ((a - a_v) > 0.2 and (d - d_d) > 0.2
+                                 and abs(d_v - d) < 0.05
+                                 and abs(a_d - a) < 0.05)},
+        n,
+        statut=(f"voies.py réel : base {base}, {pas} pas, graines "
+                f"{list(graines)}, {device}"),
+        sham=sum(g["sham_action"] + g["sham_de"] for g in par_graine)
+        / (2 * len(par_graine)),
+        note=("encodeur gelé ; chaque métrique du lessee vient de sa propre "
+              "lésion simple. Sur le sous-ensemble `de`, l'action est presque "
+              "constante (majorité %.3f), donc le score action intact est "
+              "trivial : le déficit utile est celui contre le hasard/majorité."
+              % maj_a))
+    r["mode"] = "voies"
+    r["graines"] = list(graines)
+    r["par_graine"] = par_graine
+    r["device"] = device
+    r["base"] = base
+    r["temps_s"] = time.monotonic() - t0
+    return r
+
+
+def _m2(mode: str = "auto", graines=(1,)) -> dict:
+    """Exécute M2 réel, ou le proxy déclaré (repli jamais silencieux)."""
+    if mode not in ("auto", "voies", "proxy"):
+        raise ValueError(f"m2 inconnu : {mode!r} (auto, voies, proxy)")
+    if mode == "proxy":
+        return _m2_proxy()
+    try:
+        return _m2_voies(graines=graines)
+    except Exception as exc:  # torch, transformers, base ou GPU absents
+        if mode == "voies":
+            raise
+        r = _m2_proxy()
+        r["statut"] = (f"proxy CPU (voies.py non exécuté : "
+                       f"{type(exc).__name__}: {exc})")
+        r["note"] += (" — repli documenté : le proxy reproduit la double "
+                      "dissociation, il ne remplace pas le module M2")
+        r["repli"] = f"{type(exc).__name__}: {exc}"
+        return r
 
 
 # ---------------------------------------------------------------------------
@@ -271,15 +390,23 @@ def _m4(taille: int = 32) -> dict:
         presents = [it for it in echantillon if it.code.get(nom) is not None]
         if not presents:
             continue
-        ok = 0
+        ok = ok_intact = 0
         for it in presents:
+            # intacte : même requête sans lésion du champ (le code complet est
+            # dans le magasin, donc le rappel vaut 1,0 par construction — c'est
+            # une tautologie de M4, pas une performance du champ).
+            e_intact = plein.chercher(dict(it.code), 1)
+            ok_intact += int(bool(e_intact) and e_intact[0].code == it.code)
             cue = dict(it.code)
             cue[nom] = None
             e = plein.chercher(cue, 1)
             ok += int(bool(e) and e[0].code == it.code)
+        intacte_champ = ok_intact / len(presents)
+        rappel_lese = ok / len(presents)
         champs[nom] = {"n": len(presents),
-                       "rappel_lese": ok / len(presents),
-                       "deficit": 1.0 - ok / len(presents)}
+                       "intacte": intacte_champ,
+                       "rappel_lese": rappel_lese,
+                       "deficit": intacte_champ - rappel_lese}
     plus_faible = max(champs, key=lambda k: champs[k]["deficit"]) if champs else None
     return _entree(
         "stockage vide (M4 sans épisodes) ; puis lésion du champ d'adressage",
@@ -429,47 +556,71 @@ def _m7(permutations: int = 6) -> dict:
 # M8 — le sommeil
 # ---------------------------------------------------------------------------
 def _m8() -> dict:
-    r = experience_m8()
-    q = r["queue"]
-    intact = q["module_champs"]
-    lese = q["baselines"]["global"]
-    code_nouveaux = r["codes_nouveaux"]
+    """Le sommeil, lésé sur le protocole honnête : code tenu à l'écart.
+
+    La lésion est le retrait de tout prototype (repli sur la marginale globale),
+    mesurée sur le **même** leave-one-code-out que l'intacte. La queue publiée
+    (96,48 %) est rappelée pour mémoire : ses 106 codes sont tous dans le train,
+    c'est une reconstruction intra-code, pas une généralisation.
+    """
+    rq = experience_m8()
+    rc = experience_contexte()
+    q = rq["queue"]
+    lq = rc["loo_codes"]
+    intact = lq["ladder"]
+    lese = lq["global"]
+    hyb = rc["codes_tenus_resume"]["hybride_surface"]
+    exact_nouveaux = rc["verdict"]["exact_codes_tenus"]
     return _entree(
-        "retirer le sommeil (aucun prototype, repli sur la marginale globale)",
+        "retirer le sommeil (aucun prototype, marginale globale) — code tenu à l'écart",
         {"champs": intact["champs"], "exact": intact["exact"],
          "champs_non_nuls": intact["champs_non_nuls"],
-         "exact_codes_uniques": r["dedup_tout"]["module"]["exact"],
-         "exact_codes_nouveaux": [c["module"]["exact"] for c in code_nouveaux],
+         "champs_nuls": intact["champs_nuls"],
+         "exact_codes_nouveaux": exact_nouveaux,
+         "exact_codes_uniques": rq["dedup_tout"]["module"]["exact"],
          "hybride_exact_queue": q["hybride"]["exact"],
-         "hybride_couverture_queue": q["hybride"]["couverture"]},
+         "hybride_couverture_queue": q["hybride"]["couverture"],
+         "hybride_surface_couverture_codes_tenus": hyb["couverture"],
+         "queue_champs": q["module_champs"]["champs"],
+         "queue_exact": q["module_champs"]["exact"],
+         "queue_codes_vus": rc["queue_publiee"]["codes_test_vus_dans_train"]},
         {"champs": lese["champs"], "exact": lese["exact"],
-         "champs_non_nuls": lese["champs_non_nuls"]},
+         "champs_non_nuls": lese["champs_non_nuls"],
+         "champs_nuls": lese["champs_nuls"]},
         {"champs": intact["champs"] - lese["champs"],
          "exact": intact["exact"] - lese["exact"],
          "champs_non_nuls": intact["champs_non_nuls"] - lese["champs_non_nuls"],
-         "exact_codes_nouveaux": 0.0,
-         "gain_honnete_sur_par_jeu_champs": r["verdict"]["gain_sur_par_jeu_champs"],
-         "hybride_exact_sur_codes_nouveaux": 0.0},
-        intact["n"], sham=0.0,
-        note="le sommeil porte le champ ; il ne produit aucun code jamais vu")
+         "champs_nuls": intact["champs_nuls"] - lese["champs_nuls"],
+         "exact_codes_nouveaux": [x - lese["exact"] for x in exact_nouveaux],
+         "hybride_exact_sur_codes_nouveaux": hyb["exact"],
+         "gain_honnete_sur_par_jeu_champs": rc["verdict"]["gain_groupe_sur_jeu_champs"],
+         "plafond_contextuel_groupe": rc["verdict"]["plafond_groupe"],
+         "type_seul_sur_jeu_champs": rc["verdict"]["gain_type_sur_jeu_champs"]},
+        29, sham=0.0,
+        note=("le sommeil porte la structure des champs (motif de None, +15,2 pts "
+              "de champs et +58,9 pts de non nuls contre la marginale globale) ; "
+              "il ne produit aucun code jamais vu (exact nul par construction). "
+              "L'hybride 100 % de la queue est tautologique (clé = code cible) ; "
+              "clé par surface, sa couverture sur codes tenus est 0 %."))
 
 
 # ---------------------------------------------------------------------------
 # La batterie
 # ---------------------------------------------------------------------------
-def batterie_lesions(rapide: bool = True) -> dict:
+def batterie_lesions(rapide: bool = True, m2: str = "auto") -> dict:
+    """Batterie M1–M9. ``m2`` : auto (réel si possible), voies, proxy."""
     t0 = time.monotonic()
     seqs = corpus(0, 40, 12)
     its = corpus_items()
     m1 = _m1()
-    m2 = _m2()
+    m2r = _m2(m2, graines=(1,) if rapide else (1, 2, 3))
     m3 = _m3(seqs)
     m4 = _m4(36 if rapide else 72)
     m5 = _m5(seqs)
     m6 = _m6(its)
     m7 = _m7(6 if rapide else 20)
     m8 = _m8()
-    modules = {"M1": m1, "M2": m2, "M3": m3, "M4": m4, "M5": m5,
+    modules = {"M1": m1, "M2": m2r, "M3": m3, "M4": m4, "M5": m5,
                "M6": m6, "M7": m7, "M8": m8}
     deficits = {k: v["deficit"] for k, v in modules.items()}
     plats = []
@@ -483,7 +634,9 @@ def batterie_lesions(rapide: bool = True) -> dict:
         if plat:
             plats.append(k)
     return {
-        "protocole": {"rapide": rapide, "cpu": True,
+        "protocole": {"rapide": rapide, "cpu": m2r.get("mode") != "voies",
+                      "m2_mode": m2r.get("mode"),
+                      "m2_statut": m2r["statut"],
                       "m4_echantillon": 36 if rapide else 72,
                       "m7_permutations": 6 if rapide else 20,
                       "n_items": len(its), "n_sequences": len(seqs)},
@@ -494,10 +647,32 @@ def batterie_lesions(rapide: bool = True) -> dict:
             "positif_M5": {"deficit": m5["deficit"]["controle_positif_deficit"]},
             "M6_tout_non": m6["lessee"]["tout_non"],
             "M6_tout_accepter": m6["lessee"]["tout_accepter"],
-            "M2_double_dissociation": m2["deficit"]["double_dissociation"],
+            "M2_mode": m2r.get("mode"),
+            "M2_double_dissociation": m2r["deficit"]["double_dissociation"],
+            "M2_preservation": m2r["deficit"]["preservation"],
             "M8_par_jeu": m8["lessee"]["champs"],
-            "M8_hybride": {"exact_queue": m8["intacte"]["hybride_exact_queue"],
-                           "exact_codes_nouveaux": m8["deficit"]["exact_codes_nouveaux"]},
+            "M8_exact_loo": m8["intacte"]["exact"],
+            "M8_hybride": {
+                "exact_queue_oracle": m8["intacte"]["hybride_exact_queue"],
+                "couverture_queue": m8["intacte"]["hybride_couverture_queue"],
+                "couverture_surface_codes_tenus":
+                    m8["intacte"]["hybride_surface_couverture_codes_tenus"],
+                "exact_codes_nouveaux": m8["deficit"]["exact_codes_nouveaux"]},
+            "M8_queue": {"champs": m8["intacte"]["queue_champs"],
+                         "exact": m8["intacte"]["queue_exact"],
+                         "codes_vus": m8["intacte"]["queue_codes_vus"],
+                         "plafond_corpus_groupe":
+                             m8["deficit"]["plafond_contextuel_groupe"]},
+        },
+        "audit": {
+            "deficits": "tous calculés intacte - lésée, jamais 1 - lésée",
+            "M4_par_champ": ("corrigé : intacte mesurée (1,0 par construction, "
+                             "tautologie de M4) moins rappel lésé"),
+            "batterie_py_M9": ("batterie.py publie des scores bruts (M3 span, "
+                               "M5 1-majoritaire, M6 1-exact, M7 rétention FIFO, "
+                               "M8 0,0 constant), pas des déficits ; "
+                               "incohérence de mapping documentée, batterie.py non modifié"),
+            "voies_vs_proxy": m2r.get("mode"),
         },
         "resume": {
             "deficits": deficits,
@@ -506,7 +681,10 @@ def batterie_lesions(rapide: bool = True) -> dict:
                 "M5 : les transitions ne gagnent que 3,7 pts (12,45 -> 8,79 %) ; "
                 "l'ordre 2 ne gagne rien ; l'ancien 98,9 % était la constante action",
                 "M7 : aucun signal ne bat FIFO ; la nouveauté par surface dégrade",
-                "M8 : l'exact sur codes jamais vus reste 0 %",
+                "M8 : exact nul par construction sur un code tenu à l'écart ; "
+                "le conditionnement (jeu, action, type) ne gagne que le motif de None",
+                "M8 : le 96,48 % publié est intra-code (106/106 codes de test "
+                "sont dans le train, plafond corpus du groupe 57,95 %)",
             ],
             "lesions_qui_ameliorent": [
                 "M7 : retirer la modulation de surface améliore le suffixe "
