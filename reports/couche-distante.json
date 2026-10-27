@@ -1,0 +1,1342 @@
+{
+  "experience": "A18 — une couche de modèle à distance (Qwen2.5-0.5B-Instruct)",
+  "date_utc": "2026-10-27T23:21:10.230245+00:00",
+  "commande": "/home/stephane/gpu-env/bin/python tools/couche_distante.py",
+  "environnement": {
+    "hostname": "Hauru",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.15.0",
+    "cuda_disponible": true,
+    "gpu": "Quadro RTX 5000",
+    "cuda_visible_devices": "0"
+  },
+  "modele": {
+    "id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "couche_distante": 12,
+    "n_couches": 24,
+    "hidden_size": 896,
+    "vocab_size": 151936,
+    "n_heads": 14,
+    "n_kv_heads": 2,
+    "head_dim": 64,
+    "dtype_client": "float32",
+    "device_client": "cuda:0"
+  },
+  "dispositif": {
+    "transport": "TCP IPv4 loopback 127.0.0.1, socket persistant",
+    "protocole": "en-tête binaire 38 o + hidden + position_ids i64 + cos/sin f32",
+    "encodage": "dense f32 ou sparse (masque 1 bit + valeurs f32), format A7.5",
+    "serveur": "processus séparé, une seule couche chargée depuis model.safetensors",
+    "client": "embeddings + couches 0..L-1 + couches L+1..23 + norm + lm_head",
+    "cache": "use_cache=False (prefill) ; aucun cache KV transféré",
+    "masque": "attention_mask=None (batch 1 sans padding), sdpa causal implicite",
+    "backend_principal": "sdpa",
+    "device_serveur_principal": "cuda:0",
+    "dtype_serveur_principal": "float32",
+    "serveur_duree_chargement_s": 0.5620362758636475
+  },
+  "poids": {
+    "hash_client": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+    "hash_serveur": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+    "identiques": true,
+    "methode": "sha256 des tenseurs fp32 triés par nom"
+  },
+  "memoire_client_mio": {
+    "avant": 1894.400390625,
+    "apres": 1837.51416015625,
+    "delta": 56.88623046875,
+    "note": "mesure torch.cuda.memory_allocated du processus client"
+  },
+  "invites": [
+    {
+      "indice": 0,
+      "texte": "La mesure est reine ; ce qui n'est pas compté n'existe pas.",
+      "ntokens": 18,
+      "fidelite": {
+        "forme": [
+          18,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 2734848,
+        "elements_total": 2734848,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 17,
+          "nll_moyenne": 4.024329317962501,
+          "perplexite": 55.94277638165075
+        },
+        "distant": {
+          "ntok": 17,
+          "nll_moyenne": 4.024329317962501,
+          "perplexite": 55.94277638165075
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 64512,
+          "n_pos": 144,
+          "n_cos": 4608,
+          "n_sin": 4608,
+          "nval": 16128,
+          "nmask": 0,
+          "octets_requete": 73910,
+          "octets_reponse": 64546,
+          "octets_total": 138456
+        },
+        "sparse": {
+          "n_x": 66528,
+          "n_pos": 144,
+          "n_cos": 4608,
+          "n_sin": 4608,
+          "nval": 16128,
+          "nmask": 2016,
+          "octets_requete": 75926,
+          "octets_reponse": 64546,
+          "octets_total": 140472
+        },
+        "ratio_octets_total": 1.0272764172642403,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.727641726424035,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 2734848,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            18,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 2734848,
+          "elements_total": 2734848,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 3.2381009950768203,
+        "latence_sparse_forward_ms": 47.836710000410676
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 5,
+          "min": 2.9467190033756196,
+          "mediane": 3.2070909801404923,
+          "moyenne": 3.348340396769345,
+          "max": 4.135994997341186,
+          "p95": 4.135994997341186
+        },
+        "rtt_couche_ms_valeurs": [
+          4.135994997341186,
+          3.2070909801404923,
+          3.4159899805672467,
+          3.0359070224221796,
+          2.9467190033756196
+        ],
+        "calcul_serveur_ms": {
+          "n": 5,
+          "min": 2.025,
+          "mediane": 2.144,
+          "moyenne": 2.2638,
+          "max": 2.703,
+          "p95": 2.703
+        },
+        "calcul_serveur_ms_valeurs": [
+          2.703,
+          2.144,
+          2.376,
+          2.071,
+          2.025
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 5,
+          "min": 45.83705400000326,
+          "mediane": 46.05475201969966,
+          "moyenne": 46.50591980316676,
+          "max": 48.72768899076618,
+          "p95": 48.72768899076618
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          48.72768899076618,
+          46.05475201969966,
+          46.06054900796153,
+          45.83705400000326,
+          45.849554997403175
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.11174799874424934,
+          "mediane": 0.11300502228550613,
+          "moyenne": 0.14652933653754494,
+          "max": 0.2148349885828793,
+          "p95": 0.2148349885828793
+        },
+        "ping_ms_valeurs": [
+          0.2148349885828793,
+          0.11300502228550613,
+          0.11174799874424934
+        ],
+        "part_couche_distante": 0.07199815444874491,
+        "octets_requete_moyen": 73910.0,
+        "repetitions": 5,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4106.111111111111,
+        "Mio_par_s": 21.051046301503458,
+        "tokens_par_s": 5375.797519680898
+      }
+    },
+    {
+      "indice": 1,
+      "texte": "Un train part de Montréal à 8 h et roule à 90 km/h. Un second part de Québec à 9 h et roule à 110 km/h. À quelle heure se croisent-ils si la distance est de 250 km ?",
+      "ntokens": 60,
+      "fidelite": {
+        "forme": [
+          60,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 9116160,
+        "elements_total": 9116160,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 59,
+          "nll_moyenne": 2.0119297939306833,
+          "perplexite": 7.477733917869921
+        },
+        "distant": {
+          "ntok": 59,
+          "nll_moyenne": 2.0119297939306833,
+          "perplexite": 7.477733917869921
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 215040,
+          "n_pos": 480,
+          "n_cos": 15360,
+          "n_sin": 15360,
+          "nval": 53760,
+          "nmask": 0,
+          "octets_requete": 246278,
+          "octets_reponse": 215074,
+          "octets_total": 461352
+        },
+        "sparse": {
+          "n_x": 221760,
+          "n_pos": 480,
+          "n_cos": 15360,
+          "n_sin": 15360,
+          "nval": 53760,
+          "nmask": 6720,
+          "octets_requete": 252998,
+          "octets_reponse": 215074,
+          "octets_total": 468072
+        },
+        "ratio_octets_total": 1.0272862375039589,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.7286237503958866,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 9116160,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            60,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 9116160,
+          "elements_total": 9116160,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 6.631393014686182,
+        "latence_sparse_forward_ms": 49.89230999490246
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 5,
+          "min": 3.991001984104514,
+          "mediane": 4.086337023181841,
+          "moyenne": 4.437881405465305,
+          "max": 5.660164984874427,
+          "p95": 5.660164984874427
+        },
+        "rtt_couche_ms_valeurs": [
+          4.388335015391931,
+          4.086337023181841,
+          5.660164984874427,
+          4.063568019773811,
+          3.991001984104514
+        ],
+        "calcul_serveur_ms": {
+          "n": 5,
+          "min": 2.534,
+          "mediane": 2.598,
+          "moyenne": 2.8578,
+          "max": 3.997,
+          "p95": 3.997
+        },
+        "calcul_serveur_ms_valeurs": [
+          2.598,
+          2.534,
+          3.997,
+          2.559,
+          2.601
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 5,
+          "min": 49.547916976734996,
+          "mediane": 51.33329800446518,
+          "moyenne": 51.79587778984569,
+          "max": 54.75703999400139,
+          "p95": 54.75703999400139
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          49.547916976734996,
+          51.15932098124176,
+          51.33329800446518,
+          54.75703999400139,
+          52.181812992785126
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.11174799874424934,
+          "mediane": 0.11300502228550613,
+          "moyenne": 0.14652933653754494,
+          "max": 0.2148349885828793,
+          "p95": 0.2148349885828793
+        },
+        "ping_ms_valeurs": [
+          0.2148349885828793,
+          0.11300502228550613,
+          0.11174799874424934
+        ],
+        "part_couche_distante": 0.08568020458059171,
+        "octets_requete_moyen": 246278.0,
+        "repetitions": 5,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4104.633333333333,
+        "Mio_par_s": 52.923677276876845,
+        "tokens_par_s": 13519.964712466013
+      }
+    },
+    {
+      "indice": 2,
+      "texte": "def fibonacci(n):\n    if n < 2:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n",
+      "ntokens": 28,
+      "fidelite": {
+        "forme": [
+          28,
+          151936
+        ],
+        "bits_identiques": true,
+        "valeurs_identiques": true,
+        "elements_bits_identiques": 4254208,
+        "elements_total": 4254208,
+        "taux_bits_identiques": 1.0,
+        "diff_max": 0.0,
+        "diff_moyenne": 0.0,
+        "allclose_1e-6": true,
+        "argmax_accord": 1.0,
+        "top5_intersection": 1.0,
+        "top1024_intersection": 1.0,
+        "kl_moyenne": 0.0
+      },
+      "perplexite": {
+        "local": {
+          "ntok": 27,
+          "nll_moyenne": 0.5803258544257475,
+          "perplexite": 1.7866205141093572
+        },
+        "distant": {
+          "ntok": 27,
+          "nll_moyenne": 0.5803258544257475,
+          "perplexite": 1.7866205141093572
+        },
+        "delta_nll": 0.0,
+        "delta_perplexite": 0.0,
+        "delta_relatif": 0.0
+      },
+      "flux": {
+        "dense": {
+          "n_x": 100352,
+          "n_pos": 224,
+          "n_cos": 7168,
+          "n_sin": 7168,
+          "nval": 25088,
+          "nmask": 0,
+          "octets_requete": 114950,
+          "octets_reponse": 100386,
+          "octets_total": 215336
+        },
+        "sparse": {
+          "n_x": 103488,
+          "n_pos": 224,
+          "n_cos": 7168,
+          "n_sin": 7168,
+          "nval": 25088,
+          "nmask": 3136,
+          "octets_requete": 118086,
+          "octets_reponse": 100386,
+          "octets_total": 218472
+        },
+        "ratio_octets_total": 1.027281426707264,
+        "ratio_hidden": 1.03125,
+        "gain_sparse_pct": -2.728142670726408,
+        "taux_zeros": 0.0,
+        "codec_dense": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "codec_sparse": {
+          "valeurs_identiques": true,
+          "bits_identiques": true,
+          "diff_max": 0.0
+        },
+        "fidelite_sparse": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 4254208,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "dense_vs_sparse": {
+          "forme": [
+            28,
+            151936
+          ],
+          "bits_identiques": true,
+          "valeurs_identiques": true,
+          "elements_bits_identiques": 4254208,
+          "elements_total": 4254208,
+          "taux_bits_identiques": 1.0,
+          "diff_max": 0.0,
+          "diff_moyenne": 0.0,
+          "allclose_1e-6": true,
+          "argmax_accord": 1.0,
+          "top5_intersection": 1.0,
+          "top1024_intersection": 1.0,
+          "kl_moyenne": 0.0
+        },
+        "latence_sparse_ms": 3.679504996398464,
+        "latence_sparse_forward_ms": 46.82706799940206
+      },
+      "latence": {
+        "rtt_couche_ms": {
+          "n": 5,
+          "min": 3.2810539996717125,
+          "mediane": 3.5753010015469044,
+          "moyenne": 3.6428940016776323,
+          "max": 4.2654830031096935,
+          "p95": 4.2654830031096935
+        },
+        "rtt_couche_ms_valeurs": [
+          4.2654830031096935,
+          3.5753010015469044,
+          3.6127360071986914,
+          3.47989599686116,
+          3.2810539996717125
+        ],
+        "calcul_serveur_ms": {
+          "n": 5,
+          "min": 2.234,
+          "mediane": 2.434,
+          "moyenne": 2.5332,
+          "max": 3.104,
+          "p95": 3.104
+        },
+        "calcul_serveur_ms_valeurs": [
+          3.104,
+          2.434,
+          2.5,
+          2.394,
+          2.234
+        ],
+        "forward_bout_en_bout_ms": {
+          "n": 5,
+          "min": 45.81121099181473,
+          "mediane": 46.86415501055308,
+          "moyenne": 46.73887180397287,
+          "max": 47.60176001582295,
+          "p95": 47.60176001582295
+        },
+        "forward_bout_en_bout_ms_valeurs": [
+          47.60176001582295,
+          47.18675700132735,
+          46.86415501055308,
+          46.23047600034624,
+          45.81121099181473
+        ],
+        "ping_ms": {
+          "n": 3,
+          "min": 0.11174799874424934,
+          "mediane": 0.11300502228550613,
+          "moyenne": 0.14652933653754494,
+          "max": 0.2148349885828793,
+          "p95": 0.2148349885828793
+        },
+        "ping_ms_valeurs": [
+          0.2148349885828793,
+          0.11300502228550613,
+          0.11174799874424934
+        ],
+        "part_couche_distante": 0.07794141923143257,
+        "octets_requete_moyen": 114950.0,
+        "repetitions": 5,
+        "repetitions_identiques": true
+      },
+      "debit": {
+        "octets_par_token": 4105.357142857143,
+        "Mio_par_s": 30.09279507457911,
+        "tokens_par_s": 7686.196740038384
+      }
+    }
+  ],
+  "agregats": {
+    "fidelite": {
+      "bits_identiques_tous": true,
+      "valeurs_identiques_toutes": true,
+      "diff_max": 0.0,
+      "argmax_accord_min": 1.0,
+      "top1024_intersection_min": 1.0,
+      "kl_max": 0.0,
+      "repetitions_identiques_toutes": true
+    },
+    "perplexite": {
+      "local": {
+        "ntok": 103,
+        "nll_moyenne": 1.9687985855996895,
+        "perplexite": 7.162066707346595
+      },
+      "distant": {
+        "ntok": 103,
+        "nll_moyenne": 1.9687985855996895,
+        "perplexite": 7.162066707346595
+      },
+      "delta_perplexite": 0.0,
+      "delta_relatif": 0.0
+    },
+    "reseau": {
+      "octets_requete_total": 435138.0,
+      "octets_par_token": 4105.075471698113,
+      "rtt_couche_ms": {
+        "n": 15,
+        "min": 2.9467190033756196,
+        "mediane": 3.6127360071986914,
+        "moyenne": 3.809705267970761,
+        "max": 5.660164984874427,
+        "p95": 4.388335015391931
+      },
+      "calcul_serveur_ms": {
+        "n": 15,
+        "min": 2.025,
+        "mediane": 2.5,
+        "moyenne": 2.5516,
+        "max": 3.997,
+        "p95": 3.104
+      },
+      "forward_bout_en_bout_ms": {
+        "n": 15,
+        "min": 45.81121099181473,
+        "mediane": 47.18675700132735,
+        "moyenne": 48.34688979899511,
+        "max": 54.75703999400139,
+        "p95": 52.181812992785126
+      },
+      "rtt_ping_ms": {
+        "n": 9,
+        "min": 0.11174799874424934,
+        "mediane": 0.11300502228550613,
+        "moyenne": 0.14652933653754494,
+        "max": 0.2148349885828793,
+        "p95": 0.2148349885828793
+      },
+      "debit_Mio_s": 7.261802956801465,
+      "debit_tokens_s": 1854.911645286074
+    },
+    "flux": {
+      "dense_total": 435138,
+      "sparse_total": 447010,
+      "ratio_total": 1.0272832986316984,
+      "ratio_hidden": 1.03125,
+      "taux_zeros_moyen": 0.0
+    }
+  },
+  "negatifs": {
+    "position_zero": {
+      "description": "RoPE ignorée : cos=sin=0 envoyés au serveur (même poids, même device)",
+      "config": {
+        "device": "cuda:0",
+        "dtype": "float32",
+        "attn": "sdpa",
+        "zero_positions": true
+      },
+      "zero_positions": true,
+      "par_invite": [
+        {
+          "indice": 0,
+          "ntokens": 18,
+          "fidelite": {
+            "forme": [
+              18,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151938,
+            "elements_total": 2734848,
+            "taux_bits_identiques": 0.05555628685762426,
+            "diff_max": 2.347569465637207,
+            "diff_moyenne": 0.24526320918667005,
+            "allclose_1e-6": false,
+            "argmax_accord": 0.9444444444444444,
+            "top5_intersection": 0.9222222222222223,
+            "top1024_intersection": 0.9325086805555556,
+            "kl_moyenne": 0.025661345071183936
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 17,
+              "nll_moyenne": 4.024329317962501,
+              "perplexite": 55.94277638165075
+            },
+            "distant": {
+              "ntok": 17,
+              "nll_moyenne": 4.034741714954335,
+              "perplexite": 56.52831793344687
+            },
+            "delta_nll": 0.010412396991834605,
+            "delta_perplexite": 0.5855415517961191,
+            "delta_relatif": 0.010466794636745574
+          },
+          "latence_couche_ms": 3.4027200017590076,
+          "forward_ms": 45.63332398538478
+        },
+        {
+          "indice": 1,
+          "ntokens": 60,
+          "fidelite": {
+            "forme": [
+              60,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151941,
+            "elements_total": 9116160,
+            "taux_bits_identiques": 0.016667215143218197,
+            "diff_max": 4.63380241394043,
+            "diff_moyenne": 0.33336243248313774,
+            "allclose_1e-6": false,
+            "argmax_accord": 0.9,
+            "top5_intersection": 0.866666666666666,
+            "top1024_intersection": 0.8853678385416667,
+            "kl_moyenne": 0.045733660583184704
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 59,
+              "nll_moyenne": 2.0119297939306833,
+              "perplexite": 7.477733917869921
+            },
+            "distant": {
+              "ntok": 59,
+              "nll_moyenne": 2.0965795203112845,
+              "perplexite": 8.138285410620027
+            },
+            "delta_nll": 0.0846497263806012,
+            "delta_perplexite": 0.6605514927501055,
+            "delta_relatif": 0.08833578461137163
+          },
+          "latence_couche_ms": 3.650521015515551,
+          "forward_ms": 49.30738001712598
+        },
+        {
+          "indice": 2,
+          "ntokens": 28,
+          "fidelite": {
+            "forme": [
+              28,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 151937,
+            "elements_total": 4254208,
+            "taux_bits_identiques": 0.03571452077566494,
+            "diff_max": 5.079658508300781,
+            "diff_moyenne": 0.45058951165015343,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.892857142857143,
+            "top1024_intersection": 0.8436453683035714,
+            "kl_moyenne": 0.019381314548362043
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803258544257475,
+              "perplexite": 1.7866205141093572
+            },
+            "distant": {
+              "ntok": 27,
+              "nll_moyenne": 0.5713237562883258,
+              "perplexite": 1.770609356040695
+            },
+            "delta_nll": -0.009002098137421699,
+            "delta_perplexite": -0.016011158068662157,
+            "delta_relatif": -0.008961700563840123
+          },
+          "latence_couche_ms": 3.313530993182212,
+          "forward_ms": 47.722169023472816
+        }
+      ],
+      "agregat": {
+        "bits_identiques_tous": false,
+        "diff_max": 5.079658508300781,
+        "argmax_accord_min": 0.9,
+        "top1024_intersection_min": 0.8436453683035714,
+        "kl_max": 0.045733660583184704,
+        "perplexite_locale": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687985855996895,
+          "perplexite": 7.162066707346595
+        },
+        "perplexite_distante": {
+          "ntok": 103,
+          "nll_moyenne": 2.016646041479362,
+          "perplexite": 7.513084056607954
+        },
+        "delta_perplexite": 0.3510173492613591,
+        "delta_nll": 0.04784745587967243,
+        "latence_couche_ms_moyenne": 3.4555906701522567
+      }
+    },
+    "device_cpu_fp32": {
+      "description": "même dtype fp32 et même backend sdpa, mais calcul CPU au lieu du GPU",
+      "config": {
+        "device": "cpu",
+        "dtype": "float32",
+        "attn": "sdpa",
+        "zero_positions": false
+      },
+      "zero_positions": false,
+      "par_invite": [
+        {
+          "indice": 0,
+          "ntokens": 18,
+          "fidelite": {
+            "forme": [
+              18,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 172896,
+            "elements_total": 2734848,
+            "taux_bits_identiques": 0.06321960123560798,
+            "diff_max": 1.52587890625e-05,
+            "diff_moyenne": 1.8041842484867285e-06,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 1.0,
+            "top1024_intersection": 1.0,
+            "kl_moyenne": 1.9253666343472104e-12
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 17,
+              "nll_moyenne": 4.024329317962501,
+              "perplexite": 55.94277638165075
+            },
+            "distant": {
+              "ntok": 17,
+              "nll_moyenne": 4.024328759417791,
+              "perplexite": 55.94274513511766
+            },
+            "delta_nll": -5.585447100386887e-07,
+            "delta_perplexite": -3.1246533090723005e-05,
+            "delta_relatif": -5.585445541271326e-07
+          },
+          "latence_couche_ms": 9.526846988592297,
+          "forward_ms": 52.76206400594674
+        },
+        {
+          "indice": 1,
+          "ntokens": 60,
+          "fidelite": {
+            "forme": [
+              60,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 296226,
+            "elements_total": 9116160,
+            "taux_bits_identiques": 0.03249460299073294,
+            "diff_max": 5.626678466796875e-05,
+            "diff_moyenne": 3.343055326527748e-06,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 1.0,
+            "top1024_intersection": 1.0,
+            "kl_moyenne": 8.76060666512401e-12
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 59,
+              "nll_moyenne": 2.0119297939306833,
+              "perplexite": 7.477733917869921
+            },
+            "distant": {
+              "ntok": 59,
+              "nll_moyenne": 2.01192931319277,
+              "perplexite": 7.477730323040584
+            },
+            "delta_nll": -4.807379134774692e-07,
+            "delta_perplexite": -3.594829337316696e-06,
+            "delta_relatif": -4.807377979478448e-07
+          },
+          "latence_couche_ms": 10.627632989780977,
+          "forward_ms": 56.36194799444638
+        },
+        {
+          "indice": 2,
+          "ntokens": 28,
+          "fidelite": {
+            "forme": [
+              28,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 161267,
+            "elements_total": 4254208,
+            "taux_bits_identiques": 0.03790764344385606,
+            "diff_max": 2.2172927856445312e-05,
+            "diff_moyenne": 2.126849845149084e-06,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 1.0,
+            "top1024_intersection": 1.0,
+            "kl_moyenne": 1.3444631606935713e-12
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803258544257475,
+              "perplexite": 1.7866205141093572
+            },
+            "distant": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803256846029957,
+              "perplexite": 1.7866202107005709
+            },
+            "delta_nll": -1.6982275174992623e-07,
+            "delta_perplexite": -3.034087863174051e-07,
+            "delta_relatif": -1.6982273735318465e-07
+          },
+          "latence_couche_ms": 47.0750090025831,
+          "forward_ms": 91.76315600052476
+        }
+      ],
+      "agregat": {
+        "bits_identiques_tous": false,
+        "diff_max": 5.626678466796875e-05,
+        "argmax_accord_min": 1.0,
+        "top1024_intersection_min": 1.0,
+        "kl_max": 8.76060666512401e-12,
+        "perplexite_locale": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687985855996895,
+          "perplexite": 7.162066707346595
+        },
+        "perplexite_distante": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687981735219102,
+          "perplexite": 7.162063756018659
+        },
+        "delta_perplexite": -2.9513279358184263e-06,
+        "delta_nll": -4.1207777923268907e-07,
+        "latence_couche_ms_moyenne": 22.409829660318792
+      },
+      "arreter": {
+        "code": 0,
+        "stderr": ""
+      }
+    },
+    "dtype_bf16": {
+      "description": "mêmes device et backend, mais poids et calcul en bfloat16",
+      "config": {
+        "device": "cuda:0",
+        "dtype": "bfloat16",
+        "attn": "sdpa",
+        "zero_positions": false
+      },
+      "zero_positions": false,
+      "par_invite": [
+        {
+          "indice": 0,
+          "ntokens": 18,
+          "fidelite": {
+            "forme": [
+              18,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 60,
+            "elements_total": 2734848,
+            "taux_bits_identiques": 2.1939062061218758e-05,
+            "diff_max": 0.45627593994140625,
+            "diff_moyenne": 0.011127518444635874,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 1.0,
+            "top1024_intersection": 0.9957139756944444,
+            "kl_moyenne": 0.0001621149550521559
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 17,
+              "nll_moyenne": 4.024329317962501,
+              "perplexite": 55.94277638165075
+            },
+            "distant": {
+              "ntok": 17,
+              "nll_moyenne": 4.015874016242137,
+              "perplexite": 55.47175743808648
+            },
+            "delta_nll": -0.008455301720363906,
+            "delta_perplexite": -0.47101894356427465,
+            "delta_relatif": -0.008419656192086473
+          },
+          "latence_couche_ms": 3.6514280072879046,
+          "forward_ms": 63.35142199532129
+        },
+        {
+          "indice": 1,
+          "ntokens": 60,
+          "fidelite": {
+            "forme": [
+              60,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 163,
+            "elements_total": 9116160,
+            "taux_bits_identiques": 1.788033557989329e-05,
+            "diff_max": 0.2591087818145752,
+            "diff_moyenne": 0.007474570962046923,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.9933333333333333,
+            "top1024_intersection": 0.9970703125,
+            "kl_moyenne": 4.454449597528947e-05
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 59,
+              "nll_moyenne": 2.0119297939306833,
+              "perplexite": 7.477733917869921
+            },
+            "distant": {
+              "ntok": 59,
+              "nll_moyenne": 2.0126444711630693,
+              "perplexite": 7.483079994182827
+            },
+            "delta_nll": 0.0007146772323860517,
+            "delta_perplexite": 0.005346076312905623,
+            "delta_relatif": 0.0007149326750086457
+          },
+          "latence_couche_ms": 5.243973981123418,
+          "forward_ms": 55.51552900578827
+        },
+        {
+          "indice": 2,
+          "ntokens": 28,
+          "fidelite": {
+            "forme": [
+              28,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 25,
+            "elements_total": 4254208,
+            "taux_bits_identiques": 5.876534480683596e-06,
+            "diff_max": 0.2907576560974121,
+            "diff_moyenne": 0.012461467458253963,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.9928571428571429,
+            "top1024_intersection": 0.9955357142857143,
+            "kl_moyenne": 5.324600371457496e-05
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803258544257475,
+              "perplexite": 1.7866205141093572
+            },
+            "distant": {
+              "ntok": 27,
+              "nll_moyenne": 0.5830501196455335,
+              "perplexite": 1.7914943780716104
+            },
+            "delta_nll": 0.0027242652197860817,
+            "delta_perplexite": 0.0048738639622532,
+            "delta_relatif": 0.0027279794023202823
+          },
+          "latence_couche_ms": 4.330505995312706,
+          "forward_ms": 45.342010009335354
+        }
+      ],
+      "agregat": {
+        "bits_identiques_tous": false,
+        "diff_max": 0.45627593994140625,
+        "argmax_accord_min": 1.0,
+        "top1024_intersection_min": 0.9955357142857143,
+        "kl_max": 0.0001621149550521559,
+        "perplexite_locale": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687985855996895,
+          "perplexite": 7.162066707346595
+        },
+        "perplexite_distante": {
+          "ntok": 103,
+          "nll_moyenne": 1.968526556360843,
+          "perplexite": 7.160118680763734
+        },
+        "delta_perplexite": -0.0019480265828608623,
+        "delta_nll": -0.0002720292388465051,
+        "latence_couche_ms_moyenne": 4.408635994574676
+      },
+      "arreter": {
+        "code": 0,
+        "stderr": ""
+      }
+    },
+    "backend_eager": {
+      "description": "même device et dtype, mais backend eager sans masque causal explicite",
+      "config": {
+        "device": "cuda:0",
+        "dtype": "float32",
+        "attn": "eager",
+        "zero_positions": false
+      },
+      "zero_positions": false,
+      "par_invite": [
+        {
+          "indice": 0,
+          "ntokens": 18,
+          "fidelite": {
+            "forme": [
+              18,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 2,
+            "elements_total": 2734848,
+            "taux_bits_identiques": 7.31302068707292e-07,
+            "diff_max": 1.3482065200805664,
+            "diff_moyenne": 0.09829685192745011,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.9555555555555557,
+            "top1024_intersection": 0.9705946180555556,
+            "kl_moyenne": 0.004981295614618182
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 17,
+              "nll_moyenne": 4.024329317962501,
+              "perplexite": 55.94277638165075
+            },
+            "distant": {
+              "ntok": 17,
+              "nll_moyenne": 3.9752068420746887,
+              "perplexite": 53.26113240958937
+            },
+            "delta_nll": -0.049122475887811934,
+            "delta_perplexite": -2.68164397206138,
+            "delta_relatif": -0.04793548238948255
+          },
+          "latence_couche_ms": 3.527388005750254,
+          "forward_ms": 63.992505019996315
+        },
+        {
+          "indice": 1,
+          "ntokens": 60,
+          "fidelite": {
+            "forme": [
+              60,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 3,
+            "elements_total": 9116160,
+            "taux_bits_identiques": 3.290859309182814e-07,
+            "diff_max": 2.3137755393981934,
+            "diff_moyenne": 0.22261681224655533,
+            "allclose_1e-6": false,
+            "argmax_accord": 0.95,
+            "top5_intersection": 0.8933333333333328,
+            "top1024_intersection": 0.92705078125,
+            "kl_moyenne": 0.02143028804214465
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 59,
+              "nll_moyenne": 2.0119297939306833,
+              "perplexite": 7.477733917869921
+            },
+            "distant": {
+              "ntok": 59,
+              "nll_moyenne": 2.0535143111455603,
+              "perplexite": 7.795247952259711
+            },
+            "delta_nll": 0.04158451721487699,
+            "delta_perplexite": 0.31751403438978976,
+            "delta_relatif": 0.0424612640509995
+          },
+          "latence_couche_ms": 5.202347994782031,
+          "forward_ms": 65.16885999008082
+        },
+        {
+          "indice": 2,
+          "ntokens": 28,
+          "fidelite": {
+            "forme": [
+              28,
+              151936
+            ],
+            "bits_identiques": false,
+            "valeurs_identiques": false,
+            "elements_bits_identiques": 1,
+            "elements_total": 4254208,
+            "taux_bits_identiques": 2.3506137922734384e-07,
+            "diff_max": 3.5921990871429443,
+            "diff_moyenne": 0.33762604769888027,
+            "allclose_1e-6": false,
+            "argmax_accord": 1.0,
+            "top5_intersection": 0.9357142857142858,
+            "top1024_intersection": 0.8841727120535714,
+            "kl_moyenne": 0.015990033677980454
+          },
+          "perplexite": {
+            "local": {
+              "ntok": 27,
+              "nll_moyenne": 0.5803258544257475,
+              "perplexite": 1.7866205141093572
+            },
+            "distant": {
+              "ntok": 27,
+              "nll_moyenne": 0.585874402571918,
+              "perplexite": 1.7965612167813403
+            },
+            "delta_nll": 0.005548548146170562,
+            "delta_perplexite": 0.009940702671983104,
+            "delta_relatif": 0.005563969848929342
+          },
+          "latence_couche_ms": 4.390710004372522,
+          "forward_ms": 64.1640380199533
+        }
+      ],
+      "agregat": {
+        "bits_identiques_tous": false,
+        "diff_max": 3.5921990871429443,
+        "argmax_accord_min": 0.95,
+        "top1024_intersection_min": 0.8841727120535714,
+        "kl_max": 0.02143028804214465,
+        "perplexite_locale": {
+          "ntok": 103,
+          "nll_moyenne": 1.9687985855996895,
+          "perplexite": 7.162066707346595
+        },
+        "perplexite_distante": {
+          "ntok": 103,
+          "nll_moyenne": 1.9859657237116461,
+          "perplexite": 7.286080329505568
+        },
+        "delta_perplexite": 0.12401362215897294,
+        "delta_nll": 0.017167138111956692,
+        "latence_couche_ms_moyenne": 4.373482001634936
+      },
+      "arreter": {
+        "code": 0,
+        "stderr": ""
+      }
+    }
+  },
+  "verdict": {
+    "fidelite": "logits identiques au bit près sur les 3 invites",
+    "exacte": true,
+    "ppl_identique": true,
+    "conclusion": "Couche 12 exécutée dans un second processus : logits identiques au bit près sur les 3 invites ; ΔPPL corpus = +0. RTT couche médian 3.613 ms, 4105 o/jeton, 1854.9 jetons/s. Sparse/dense = 1.027×.",
+    "causes": [
+      {
+        "controle": "position_zero",
+        "description": "RoPE ignorée : cos=sin=0 envoyés au serveur (même poids, même device)",
+        "diff_max_logits": 5.079658508300781,
+        "argmax_accord_min": 0.9,
+        "top1024_intersection_min": 0.8436453683035714,
+        "delta_perplexite": 0.3510173492613591
+      },
+      {
+        "controle": "device_cpu_fp32",
+        "description": "même dtype fp32 et même backend sdpa, mais calcul CPU au lieu du GPU",
+        "diff_max_logits": 5.626678466796875e-05,
+        "argmax_accord_min": 1.0,
+        "top1024_intersection_min": 1.0,
+        "delta_perplexite": -2.9513279358184263e-06
+      },
+      {
+        "controle": "dtype_bf16",
+        "description": "mêmes device et backend, mais poids et calcul en bfloat16",
+        "diff_max_logits": 0.45627593994140625,
+        "argmax_accord_min": 1.0,
+        "top1024_intersection_min": 0.9955357142857143,
+        "delta_perplexite": -0.0019480265828608623
+      },
+      {
+        "controle": "backend_eager",
+        "description": "même device et dtype, mais backend eager sans masque causal explicite",
+        "diff_max_logits": 3.5921990871429443,
+        "argmax_accord_min": 0.95,
+        "top1024_intersection_min": 0.8841727120535714,
+        "delta_perplexite": 0.12401362215897294
+      }
+    ]
+  },
+  "serveur_principal": {
+    "info": {
+      "port": 26731,
+      "pid": 347138,
+      "couche": 12,
+      "device": "cuda:0",
+      "dtype": "float32",
+      "attn": "sdpa",
+      "hash_poids_fp32": "07620bd537ccc0098b51f1f95d17ac94534c45091e89dbc81df14f97394ccb15",
+      "dossier_modele": "/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.15.0",
+      "duree_chargement_s": 0.5620362758636475
+    },
+    "arreter": {
+      "code": 0,
+      "stderr": ""
+    }
+  },
+  "duree_s": 50.7437961101532
+}
