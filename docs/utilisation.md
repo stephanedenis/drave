@@ -55,7 +55,7 @@ document ✓) → 404 ✗✓. Deux ajouts, désormais **dans le dépôt public**
 Vérifié : `/render` sur `docs/synthese/index.md` renvoie **6 images** aux `src` réécrits ✓, et
 `/asset?path=…/vue-ensemble.svg` répond **200 `image/svg+xml`** ✓.
 
-**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **60 tests**, CI Python 3.9–3.13, README et licence MIT
+**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **64 tests**, CI Python 3.9–3.13, README et licence MIT
 dans [**stephanedenis/mdserve**](https://github.com/stephanedenis/mdserve). Le paquet s'appelle
 `mdserve-local` (le nom `mdserve` est pris sur PyPI) ; les commandes restent `mdserve` et `mdopen`.
 
