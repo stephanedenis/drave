@@ -24,19 +24,19 @@ l'entraînement synthétique, **20 sont inédites**.
 
 | mesure | valeur |
 |---|---:|
-| `de` global | 93,8 % |
+| `de` moyen 3 graines | **93,6 %** |
 | `de` sur surfaces vues | **126 / 126** |
-| `de` sur surfaces inédites | **11 / 20** |
-| `vers` global | 94,5 % |
-| `vers` inédit | **12 / 20** |
+| `de` sur surfaces inédites | **10,7 / 20 = 53,3 %** |
+| `vers` moyen 3 graines | **94,3 %** |
+| `vers` inédit | **11,7 / 20 = 58,3 %** |
 | `point` | 95,7 % **< majorité 97,1 %** |
 | `chemin_0` | 84,3 % **< majorité 97,1 %** |
 
 - **Double dissociation** : valide sur les surfaces vues (lésion ventrale → action au hasard, lésion
   dorsale → `de` au hasard), mais **elle ne prouve pas la généralisation**.
-- **Dernier état** : le gain honnête sur `de`/`vers` est **~2,7–3,4 points** à 1 000 pas, pas 45 ;
-  `mean` seul atteint 89,7 % sur `de` à 1 000 pas. Le « 6,2 → 93,2 » était un **sous-entraînement**
-  du mean, pas une propriété du dernier état.
+- **Dernier état** : le gain honnête à 1 000 pas est **+2,7 pts** sur `de`, **+3,4** sur `vers`,
+  **+1,4** sur `point`, **−2,9** sur `chemin_0` ; `mean` seul atteint 89,7 % sur `de` à 1 000 pas.
+  Le « 6,2 → 93,2 » était un **sous-entraînement** du mean à 300 pas, pas une propriété du dernier état.
 - **Contexte** : aucun gain mesuré ; le contexte synthétique est constant par jeu.
 - **Négatifs** : `point`, `chemin_0` sous la majorité.
 
@@ -66,18 +66,26 @@ l'entraînement synthétique, **20 sont inédites**.
 
 `action()` classe le coup par la **forme** du code (présence de `de`/`vers`, `chemin`, `case`), pas
 par sa sémantique : échecs = toujours `deplacer`, dames = toujours `prendre`, morpion = une valeur.
-Prédire `action` ne peut pas battre la majorité : **98,9 % = 98,9 %**, ordre 2 compris.
-Le seul gain sur `source` est l'**alternance de trait** (+6,1 pts brut), pas du contenu ; l'oracle
-avec plateau reste inatteignable.
+Prédire `action` ne peut pas battre la majorité : **97,46 % = 97,46 %** sur 1 538 transitions,
+ordre 2 compris.
+
+Sur des cibles qui varient, il y a un gain **mécanique**, pas sémantique :
+`source` ordre 1 **12,60 % vs 6,49 %** (+6,10 pts), ordre 2 **14,42 %** ; `cible` ordre 1
+**7,92 % vs 5,80 %** (+2,12 pts) mais **surprisal −0,04 nat** (gain de mode). Les dames portent
+l'essentiel (`source` +8,8 pts, `cible` +6,1 à +12,9 pts) ; aux échecs le gain est **sous la
+baseline tour**. L'oracle avec plateau (H 1,1–2,8 nats) reste inatteignable : le code observé ne
+contient pas le plateau, et le tirage est uniforme parmi les coups légaux.
 
 ## 6. M6 — la porte est une détection de langue
 
-- Nouvelle tâche de conflit fr/en : **94,3 %** de conjonction, mais les politiques « langue seule »,
-  « sens seul » et « tout non » sont **toutes à 75 %** : chaque canal seul a 25 % de faux positifs.
+- Nouvelle tâche de conflit fr/en (88 essais, 4 conditions) : **94,32 %** de conjonction,
+  **88,64 %** équilibrée, VP 17, FP 0, FN 5 ; mais les politiques « langue seule », « sens seul » et
+  « tout non » sont **toutes à 75 %** : chaque canal seul a 25 % de faux positifs.
 - **Coût de commutation apparié = 0,000** ; l'ancien −0,15 était un artefact de composition.
-- `MULTI.detecte_langue` est **non déterministe** sur les surfaces ambiguës (`PYTHONHASHSEED`) et
-  deux surfaces sont identiques fr/en (`go D4`, `tic-tac-toe A1`) : la détection lexicale n'est pas
-  de l'inhibition.
+- Deux surfaces sont identiques fr/en (`go D4`, `tic-tac-toe A1`) : plafond exact **95,45 %** ; la
+  porte est à **1 essai du plafond**. Les 5 FN sont **perceptifs**, pas inhibiteurs.
+- `MULTI.detecte_langue` est **non déterministe** (`PYTHONHASHSEED`), le canal de la porte est
+  déterministe. La détection lexicale n'est pas du contrôle exécutif.
 
 ## 7. M7 — la métrique était le plafond
 
@@ -123,7 +131,7 @@ mêmes raisons. C'est un test d'intégration, pas un résultat sémantique.
 
 ## 12. Fichiers
 
-- Mesures : [`cerveau-mesures.json`](cerveau-mesures.json) ; sous-agents : `/tmp/a1-m5-m6.json`,
-  `/tmp/a2-m7-m8-m9.json`, `/tmp/a3-m2.json`, `/tmp/a4-m3-m4.json`.
+- Mesures corrigées : [`cerveau-mesures-corrigees.json`](cerveau-mesures-corrigees.json) ;
+  sous-agents : `/tmp/a1-m5-m6.json`, `/tmp/a2-m7-m8-m9.json`, `/tmp/a3-m2.json`, `/tmp/a4-m3-m4.json`.
 - Code : `tools/cerveau/`.
 - Ancienne fiche : [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md).

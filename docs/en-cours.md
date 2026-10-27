@@ -52,7 +52,7 @@ La vision complète est dans [`vision.md`](vision.md).
   originale** n'est reproduite qu'à **33/79**. Note : [`semantique-universaux.md`](semantique-universaux.md) ; fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
-- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `de` **93,8 % = 126/126 vus + 11/20 inédits**, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 action constante ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
+- **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 `de` **93,6 % = 126/126 vus + 10,7/20 inédits**, `point`/`chemin` sous la majorité ; M3 span **tautologique** ; M4 **lookup** (29 codes, 0/6 non stockés) ; M5 action constante ; M6 détection de langue, commutation 0 ; M7 plafond 3,64 %, LFU ; M8 **96,48 % marginal**, exact 65,1 %, baseline par jeu 96,10 %. Détail : [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 - **B12 pipeline** — **M1 → M4 → M8** : **528/528** surfaces, **7** prototypes, **96,33 %** de complétion
   sur 120 codes partiels ; test d'intégration, pas de généralisation M4.
 - **Bilan B11** : le codec lit **528/528** et la **restitution du code** fait **100 %** d'aller-retour ; la **surface
@@ -68,7 +68,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **173** / **241** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **173** / **242** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **52** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 34** (26/10 14 h 30) | `docs/references-non-regression.md` |
 
@@ -78,7 +78,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (26/10 14 h 30) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **173** / **241** |
+| fichiers / JSON de résultats | **173** / **242** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

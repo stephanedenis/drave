@@ -36,7 +36,14 @@ class Episodique:
     def _cle(self, code: dict):
         return vecteur(code)
 
-    def chercher(self, code: dict, k: int = 1):
+    def classer(self, code: dict, k: int = 1):
+        """Classe les épisodes par similarité cosinus décroissante.
+
+        Renvoie des couples `(score, episode)`, le score restant dans [0, 1] pour
+        des poids unitaires. La marge top1 - top2 est la seule mesure de
+        confiance disponible : sans seuil, un voisin proche n'est pas distingué
+        d'une réponse sûre.
+        """
         q = self._cle(code)
         scores = []
         for e in self.episodes:
@@ -46,19 +53,33 @@ class Episodique:
             nv = math.sqrt(sum(b * b for b in v)) or 1.0
             scores.append((dot / (nq * nv)) * e.poids)
         ordre = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:k]
-        return [self.episodes[i] for i in ordre]
+        return [(scores[i], self.episodes[i]) for i in ordre]
+
+    def chercher(self, code: dict, k: int = 1):
+        return [e for _, e in self.classer(code, k)]
+
+    def _marge(self, code: dict) -> tuple[float, float]:
+        c = self.classer(code, 2)
+        if not c:
+            return 0.0, 0.0
+        s1 = c[0][0]
+        s2 = c[1][0] if len(c) > 1 else 0.0
+        return s1, s1 - s2
 
     def rappel(self, code: dict) -> dict:
         e = self.chercher(code, 1)
-        return {"exact": bool(e and e[0].code == code), "surface": e[0].surface if e else None}
+        s, marge = self._marge(code)
+        return {"exact": bool(e and e[0].code == code), "surface": e[0].surface if e else None,
+                "similarite": s, "marge": marge}
 
     def completion(self, code_partiel: dict) -> dict:
         e = self.chercher(code_partiel, 1)
+        s, marge = self._marge(code_partiel)
         if not e:
-            return {"exact": False, "champs": 0.0}
+            return {"exact": False, "champs": 0.0, "similarite": s, "marge": marge}
         ok = sum(1 for nom, _ in CHAMPS if e[0].code.get(nom) == code_partiel.get(nom))
         return {"exact": e[0].code == code_partiel, "champs": ok / len(CHAMPS),
-                "code": e[0].code}
+                "code": e[0].code, "similarite": s, "marge": marge}
 
     def separation(self, code_a: dict, code_b: dict) -> dict:
         """Deux codes qui ne diffèrent que d'un champ doivent rester distincts."""

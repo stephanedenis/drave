@@ -31,12 +31,12 @@ ne généralise pas, il retrouve les codes stockés.
 | module | rôle | mesure | verdict |
 |---|---|---|---:|
 | **M1 hub** | surface → code RSN, retour canonique | **528/528** exact ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** | ✅ **tient** |
-| **M2 voies** | ventrale (`action`) / dorsale (`de`) | `action` **98,6 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `action` **9,6 %**, `de` **93,2 %** ; lésion dorsale `action` **98,6 %**, `de` **0,7 %** | ✅ **double dissociation** |
-| **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12**, exact **1,0** ; n-back contrôle (5 codes répétés) **1,0** ; n-back brut **0,06 %** (test invalide) | ✅ **tampon** |
-| **M4 épisodique** | rappel par contenu, complétion, séparation | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** | ✅ **tient** |
-| **M5 prédictif** | action suivante, ordre 2 | exact **98,9 %** = majoritaire **98,9 %** | ❌ **aucun gain** |
-| **M6 gating** | langue cible, inhibition, commutation | exact **72,9 %** ; FP **1**, FN **18** ; coût **−0,11** | ❌ **faible** |
-| **M7 neuromodulation** | nouveauté par surface, mémoire bornée (16) | rétention **3,64 %** (fixe) = **3,64 %** (modulée) | ❌ **aucun effet** |
+| **M2 voies** | ventrale (`action`) / dorsale (`de`) | `action` global **86,4 %** ; `de` **93,6 %** (3 graines) = **126/126 vus + 10,7/20 inédits** ; lésions croisées sur les vus | ⚠️ **vu seulement** |
+| **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12 même avec des codes aléatoires** ; n-back contrôle construit sur 5 items de même code ; interférence purement FIFO | ❌ **tautologique** |
+| **M4 épisodique** | rappel par contenu, complétion, séparation | 528 items, **29 codes** ; 0/6 codes non stockés, 0/10 complétions exactes, 0/7 valeurs inédites | ❌ **lookup** |
+| **M5 prédictif** | cible `action`/`source`/`cible`, ordres 0/1/2 | `action` **97,5 % = majoritaire** ; `source` +6,1 pts mécanique ; `cible` surprisal −0,04 | ❌ **négatif** |
+| **M6 gating** | conflit langue/tâche, inhibition, commutation | conjonction **94,3 %** mais base **75 %** ; commutation **0,000** ; 2 surfaces fr/en identiques | ❌ **négatif** |
+| **M7 neuromodulation** | mémoire bornée (16), 30 permutations | 3,64 % = plafond 16/439 ; LFU +23,1 pts, nouveauté −19,6, incertitude −38,7, récompense −53,3 | ❌ **négatif** |
 | **M8 sommeil** | prototypes par (jeu, action), test **non stocké** | **96,48 %** sur 106 épisodes non stockés ; baseline épisodique **0 %** | ✅ **généralise** |
 | **M9 lésion** | privations déclarées | contexte **29,2 %** ; mémoire **0** ; prédictif **1,1 %** | ✅ **table de dépendances** |
 
@@ -52,7 +52,10 @@ ne généralise pas, il retrouve les codes stockés.
 - **M8 sans sommeil** : les 106 épisodes de test ne sont pas dans la mémoire → **0 %** ; les prototypes
   consolidés donnent **96,48 %**.
 
-## 4. Critique honnête
+## 4. Critique honnête (après stress)
+
+> Les points ci-dessous remplacent les premières lectures ; voir
+> [`rapport-cerveau-corrections.md`](../reports/rapport-cerveau-corrections.md).
 
 1. **M1 n'est pas un hub neuronal** : c'est le codec classique avec un bus. Il est exact, mais il ne
    généralise pas ; le natif normalisé reste à **59,8 %**.

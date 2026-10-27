@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from collections import deque
 
+from semantique.universaux import CHAMPS
+
 
 class MemoireTravail:
     nom = "M3-memoire-travail"
@@ -22,8 +24,33 @@ class MemoireTravail:
         for c in codes[-self.capacite:]:
             self.tampon.append(dict(c))
 
+    def pousser(self, code: dict) -> None:
+        """Présente un code à la suite : le plus ancien sort si le tampon est plein.
+
+        C'est la présentation séquentielle (une liste poussée), par opposition à
+        `charger` qui remplace tout le tampon d'un coup.
+        """
+        self.tampon.append(dict(code))
+
     def lire(self, i: int):
         return self.tampon[i] if 0 <= i < len(self.tampon) else None
+
+    def distance(self, a: dict, b: dict) -> int:
+        """Distance de Hamming sur les champs typés (0 = même code)."""
+        return sum(1 for nom, _ in CHAMPS if a.get(nom) != b.get(nom))
+
+    def retrouver(self, code: dict):
+        """Reconnaissance par contenu : le code du tampon le plus proche.
+
+        Le tampon d'origine ne lit que par position ; cette lecture par contenu
+        sert à mesurer la reconnaissance et les faux souvenirs. Elle ne modifie
+        ni l'ordre ni le contenu du tampon.
+        """
+        if not self.tampon:
+            return None
+        i = min(range(len(self.tampon)), key=lambda j: self.distance(self.tampon[j], code))
+        d = self.distance(self.tampon[i], code)
+        return {"i": i, "code": self.tampon[i], "distance": d, "exact": d == 0}
 
     def nback(self, n: int):
         if len(self.tampon) <= n:

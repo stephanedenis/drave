@@ -340,7 +340,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | ligne | objet | état | mesure |
 |---|---|---|---|
 | B12.1 | **Bus + hub M1** | ✅ **mesuré** | **528/528** exact avec contexte ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** ; 1 584 événements |
-| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu seulement** | `de` 93,8 % = **126/126 vus** + **11/20 inédits** ; `vers` 94,5 % / **12/20** ; `point` et `chemin` **sous la majorité** ; double dissociation sur les vus, pas la généralisation |
+| B12.2 | **M2 voies ventrales/dorsales** | ⚠️ **vu seulement** | `de` 93,6 % (3 graines) = **126/126 vus** + **10,7/20 inédits** ; `vers` 94,3 % / **11,7/20** ; `point` et `chemin` **sous la majorité** ; double dissociation sur les vus, pas la généralisation |
 | B12.3 | **M3 mémoire de travail** | ❌ **tautologique** | span 12/12 même avec des codes aléatoires ; n-back contrôle construit sur 5 items de même code ; interférence purement FIFO |
 | B12.4 | **M4 mémoire épisodique** | ❌ **lookup** | 528 items, **29 codes** ; rappel 1,0 = doublons ; 0/6 codes non stockés, 0/10 complétions exactes, 0/7 valeurs inédites |
 | B12.5 | **M5 prédictif** | ❌ **négatif** | `action` constant par jeu ; 98,9 % = majoritaire ; le gain `source` est l'alternance de trait, pas du contenu |
