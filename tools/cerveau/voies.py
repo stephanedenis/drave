@@ -28,9 +28,9 @@ class Voies(nn.Module):
         super().__init__()
         self.base = base
         self.d_model = int(base.config.hidden_size)
-        self.ventral = nn.Linear(2 * self.d_model, 5)      # jeu
+        self.ventral = nn.Linear(2 * self.d_model, 8)      # action
         self.dorsal = nn.Linear(2 * self.d_model, 65)      # de (absent + 64 cases)
-        self._idx_jeu = {v: i for i, v in enumerate(CHAMPS[0][1])}
+        self._idx_action = {v: i for i, v in enumerate(CHAMPS[1][1])}
         self._idx_de = {v: i for i, v in enumerate(CHAMPS[2][1])}
 
     def encode(self, ids, masque):
@@ -70,12 +70,12 @@ def entrainer(base, pas: int = 400, lot: int = 32, seq: int = 64, graine: int = 
         p.requires_grad = False
     opt = torch.optim.AdamW([{"params": m.ventral.parameters(), "lr": 1e-3},
                              {"params": m.dorsal.parameters(), "lr": 1e-3}])
-    ia, ide = m._idx_jeu, m._idx_de
+    ia, ide = m._idx_action, m._idx_de
     for etape in range(1, pas + 1):
         (x, masque), choix = _lot(train, lot, seq, rng)
         x, masque = x.to(device), masque.to(device)
         va, vd = m.logits(x, masque)
-        cible_a = torch.tensor([ia[c.code["jeu"]] for c in choix], device=device)
+        cible_a = torch.tensor([ia[c.code["action"]] for c in choix], device=device)
         cible_d = torch.tensor([ide[c.code["de"]] for c in choix], device=device)
         perte = F.cross_entropy(va, cible_a) + F.cross_entropy(vd, cible_d)
         opt.zero_grad(); perte.backward(); opt.step()
@@ -97,7 +97,7 @@ def evaluer(m: Voies, val, device: str = "cuda", lese: str | None = None):
             vd = torch.randn_like(vd)
         pa = va.argmax(1).tolist(); pd = vd.argmax(1).tolist()
         for j, it in enumerate(mor):
-            ok_a += int(pa[j] == m._idx_jeu[it.code["jeu"]])
+            ok_a += int(pa[j] == m._idx_action[it.code["action"]])
             ok_d += int(pd[j] == m._idx_de[it.code["de"]])
             n += 1
-    return {"jeu": ok_a / max(1, n), "de": ok_d / max(1, n), "n": n}
+    return {"action": ok_a / max(1, n), "de": ok_d / max(1, n), "n": n}

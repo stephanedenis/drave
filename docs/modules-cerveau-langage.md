@@ -25,20 +25,20 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 | module | rôle | mesure | verdict |
 |---|---|---|---:|
 | **M1 hub** | surface → code RSN, retour canonique | **528/528** exact ; sans contexte **70,8 %** ; canonique **100 %** ; invariance **100 %** | ✅ **tient** |
-| **M2 voies** | ventrale (`jeu`) / dorsale (`de`) | `jeu` **100 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `jeu` **24,7 %**, `de` **93,2 %** ; lésion dorsale `jeu` **100 %**, `de` **2,1 %** | ✅ **double dissociation** |
+| **M2 voies** | ventrale (`action`) / dorsale (`de`) | `action` **98,6 %** ; `de` **93,2 %** (n=146) ; lésion ventrale `action` **19,2 %**, `de` **93,2 %** ; lésion dorsale `action` **98,6 %**, `de` **3,4 %** | ✅ **double dissociation** |
 | **M3 mémoire de travail** | tampon de codes, span, n-back | span **12/12**, exact **1,0** ; n-back contrôle (5 codes répétés) **1,0** ; n-back brut **0,06 %** (test invalide) | ✅ **tampon** |
 | **M4 épisodique** | rappel par contenu, complétion, séparation | rappel **1,0** ; complétion **97,9 %** ; séparation **1,0** | ✅ **tient** |
 | **M5 prédictif** | action suivante, surprise | exact **98,9 %** = majoritaire **98,9 %** | ❌ **aucun gain** |
-| **M6 gating** | langue cible, inhibition, commutation | exact **71,4 %** ; FP **2**, FN **20** ; coût **−0,13** | ❌ **faible** |
-| **M7 neuromodulation** | nouveauté sur mémoire bornée (64) | rétention **13,7 %** (fixe) vs **13,9 %** (modulée) | ❌ **aucun effet** |
+| **M6 gating** | langue cible, inhibition, commutation | exact **70,0 %** ; FP **1**, FN **20** ; coût **−0,15** | ❌ **faible** |
+| **M7 neuromodulation** | nouveauté sur mémoire bornée (16) | rétention **3,64 %** (fixe) = **3,64 %** (modulée) | ❌ **aucun effet** |
 | **M8 sommeil** | prototypes par (jeu, action), test **non stocké** | **96,48 %** sur 106 épisodes non stockés ; baseline épisodique **0 %** | ✅ **généralise** |
 | **M9 lésion** | privations déclarées | contexte **29,2 %** ; mémoire **0** ; prédictif **1,1 %** | ✅ **table de dépendances** |
 
 ## 3. Contrôles négatifs
 
 - **M1 sans contexte** : 70,8 % → le contexte est nécessaire.
-- **M2 lésion ventrale** : `jeu` 100 → 24,7 % ; `de` reste 93,2 %.
-- **M2 lésion dorsale** : `de` 93,2 → 2,1 % ; `jeu` reste 100 %.
+- **M2 lésion ventrale** : `action` 98,6 → 19,2 % ; `de` reste 93,2 %.
+- **M2 lésion dorsale** : `de` 93,2 → 3,4 % ; `action` reste 98,6 %.
 - **M3 capacité zéro** : span 0.
 - **M4 sans stockage** : rappel 0.
 - **M5 sans transitions** : 1,1 %.
@@ -71,7 +71,7 @@ surface ──► M1 hub ──► code RSN typé ──► bus ──► M2 voi
 - **M3** : construire des séquences avec répétitions contrôlées ; tester l'interférence.
 - **M5** : séquences stochastiques, ordre 2, comparaison à un modèle de langue.
 - **M6** : conflit langue/tâche, coût de commutation mesuré en pas, inhibition.
-- **M7** : la modulation ne sauve pas une mémoire de 64 places (13,9 % contre 13,7 %).
+- **M7** : la modulation ne sauve pas une mémoire de 16 places (3,64 % dans les deux cas).
 - **M8** : rejeu + prototypes + épisodes ; mesurer le gain hors domaine.
 - **M9** : lésions par module, batterie de déficits, double dissociation réelle.
 

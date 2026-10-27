@@ -18,19 +18,19 @@
 | module | mesure | verdict |
 |---|---|---:|
 | **M1** | exact **1,000** ; sans contexte **0,708** ; canonique **1,000** ; invariance **1,000** ; 1 584 événements | ✅ |
-| **M2** | `jeu` **1,000** ; `de` **0,9315** (n=146) ; lésion ventrale `jeu` **0,2466**, `de` **0,9315** ; lésion dorsale `jeu` **1,000**, `de` **0,0205** | ✅ double dissociation |
+| **M2** | `action` **0,9863** ; `de` **0,9315** (n=146) ; lésion ventrale `action` **0,1918**, `de` **0,9315** ; lésion dorsale `action` **0,9863**, `de` **0,0343** | ✅ double dissociation |
 | **M3** | span **12/12** ; exact **1,000** ; n-back contrôle **1,000** ; n-back brut **0,0006 / 0,0042** (invalide) | ✅ tampon |
 | **M4** | rappel **1,000** ; complétion **0,979** ; séparation **1,000** ; 29 codes uniques | ✅ |
 | **M5** | exact **0,989** = majoritaire **0,989** ; surprise **0,0096** | ❌ |
-| **M6** | exact **0,714** ; FP **2** ; FN **20** ; coût **−0,131** | ❌ |
-| **M7** | rétention **0,137** (fixe) vs **0,139** (modulée) sur 439 nouveaux, capacité 64 | ❌ |
+| **M6** | exact **0,700** ; FP **1** ; FN **20** ; coût **−0,150** | ❌ |
+| **M7** | rétention **0,0364** (fixe) = **0,0364** (modulée) sur 439 nouveaux, capacité 16 | ❌ |
 | **M8** | **0,9648** sur 106 épisodes non stockés ; baseline **0,0** (M4 n'a rien vu) | ✅ |
-| **M9** | contexte **0,292** ; M2 ventrale **0,247** ; M2 dorsale **0,021** ; M3 **0** ; M4 **0** ; M5 **0,011** ; M6 **0,286** ; M7 **0,137** ; M8 **0** | ✅ table |
+| **M9** | contexte **0,292** ; M2 ventrale **0,192** ; M2 dorsale **0,034** ; M3 **0** ; M4 **0** ; M5 **0,011** ; M6 **0,300** ; M7 **0,036** ; M8 **0** | ✅ table |
 
 ## 3. Contrôles
 
 - **M1** : avec/sans contexte (100 / 70,8).
-- **M2** : lésions croisées des têtes ; ventrale 100 → 24,7 %, dorsale 93,2 → 2,1 %.
+- **M2** : lésions croisées des têtes ; ventrale 98,6 → 19,2 %, dorsale 93,2 → 3,4 %.
 - **M3** : capacité zéro → span 0.
 - **M4** : stockage vide → rappel 0.
 - **M5** : sans transitions → 1,1 %.
@@ -53,8 +53,8 @@
 ## 5. Critique
 
 - **M1 exact** ne veut pas dire **M1 neuronal** : c'est un bloc classique.
-- **M2** est **valide** : la double dissociation est nette (`de` 93,2 %, lésion dorsale 2,1 %, lésion
-  ventrale `jeu` 24,7 %) ; le point qui a débloqué est le **dernier état caché**, pas seulement la moyenne.
+- **M2** est **valide** : la double dissociation est nette (`de` 93,2 %, lésion dorsale 3,4 %, lésion
+  ventrale `action` 19,2 %) ; le point qui a débloqué est le **dernier état caché**, pas seulement la moyenne.
   Le `jeu` reste trivial.
 - **M3** n-back est dominé par l'absence de répétitions ; le span est un tampon.
 - **M4** est un plus proche voisin ; le rappel exact est une propriété du stockage, pas une généralisation.

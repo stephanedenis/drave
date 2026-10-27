@@ -151,9 +151,9 @@ def m6():
 def m7():
     its = items()
     # même flux, deux politiques de rétention : FIFO (poids 1) et nouveauté
-    fixe = MemoireLimitee(64)
+    fixe = MemoireLimitee(16)
     mod = Neuromodulation()
-    module = MemoireLimitee(64)
+    module = MemoireLimitee(16)
     vus = set()
     nouveaux = []
     for it in its:
@@ -164,7 +164,7 @@ def m7():
         module.stocker(it.texte, it.code, sig["poids"])
     retention = lambda m: sum(m.contient(s) for s in nouveaux) / max(1, len(nouveaux))
     return {"nouveaux": len(nouveaux), "retention_fixe": retention(fixe),
-            "retention_modulee": retention(module), "capacite": 64, "n": len(its)}
+            "retention_modulee": retention(module), "capacite": 16, "n": len(its)}
 
 
 def m8():
@@ -190,7 +190,7 @@ def m9(m1r, m2r, m3r, m4r, m5r, m6r, m7r):
     vide = Episodique()
     return {
         "M1_sans_contexte": 1.0 - m1r["sans_contexte"],
-        "M2_lese_ventrale_jeu": m2r["lese_ventrale"]["jeu"],
+        "M2_lese_ventrale_action": m2r["lese_ventrale"]["action"],
         "M2_lese_dorsale_de": m2r["lese_dorsale"]["de"],
         "M3_capacite_zero": span0,
         "M4_sans_stockage": 0.0 if not vide.episodes else 0.0,
