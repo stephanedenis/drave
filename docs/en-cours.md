@@ -109,7 +109,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 | **C3** restitution | ✅ mesuré ; **C3.2** : un module par famille, **4/5** au-dessus de la référence |
 | **C4** dialectes et styles | ✅ mesuré ; la date reste à contrôler |
 | **C5** qualité par domaine | ✅ six registres + dialogue spontané |
-| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) ; l'outil de présentation [docwatch](https://github.com/stephanedenis/docwatch) est un dépôt public autonome, épinglé en sous-module dans `tools/docwatch/`, seul serveur de documentation |
+| **C6** documentation | ✅ fait — revue du 27/10 : compteurs et chemins corrigés ; fiche [`rapport-coherence-docs-3.md`](../reports/rapport-coherence-docs-3.md) ; l'outil de présentation [docwatch](https://github.com/stephanedenis/docwatch) est un dépôt public autonome, épinglé en sous-module dans `tools/docwatch/`, seul serveur de documentation : **multi-racines** (`/drave/`, `/docwatch/`) et **génération des SVG** `.mmd`/`.puml` |
 | **C7** pensée abstraite | ✅ mesuré — la carte, **B4** close, **B5/B6** faits, **B10–B12** premier passage |
 
 ## Ce qui reste

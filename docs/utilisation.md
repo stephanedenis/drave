@@ -35,17 +35,18 @@ dépôt ✓. Il affiche une **collection de documents Markdown** pendant que d'a
 comparaison par jetons de version en 64 bits ✓), **épingles** ✓ (`/pins`,
 `~/.config/docwatch/pins.json` ✓ — `docs`, `reports` et `en-cours.md` y sont ✓), **changement de racine** ✓
 (ne peut que **restreindre** la vue ✗), **filtrage** ✓, **images et annexes** ✓, **navigation par URL** ✓
-(`/docs/guide.md`, retour/avant, liens relatifs et ancres, sans rechargement de page).
+(`/drave/docs/guide.md`, retour/avant, liens relatifs et ancres, sans rechargement de page), **montages
+multiples** ✓ (`/drave/…`, `/docwatch/…`) et **diagrammes** ✓ (`.mmd`/`.puml` → `<source>.svg`).
 
 | quoi | valeur |
 |---|---|
-| adresse | **http://127.0.0.1:8771/** ✓ |
+| adresse | **http://127.0.0.1:8771/drave/** ✓ et **http://127.0.0.1:8771/docwatch/** ✓ |
 | portée | **127.0.0.1 seulement** ✗ (garantie par construction ✓) |
 | dépôt | [**stephanedenis/docwatch**](https://github.com/stephanedenis/docwatch) ✓ — licence MIT, CI Python 3.9–3.13 |
-| service | `docwatch.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/docwatch.log` ✓) |
-| écritures | **aucune** sur les documents ✓ (lecture seule ✗ : le source n'est **jamais** ouvert en écriture ✓) ; seules les **épingles** s'écrivent ✓ |
+| service | `docwatch.service` ✓ (`systemd --user`, `Restart=always` ✓, journal `/tmp/docwatch.log` ✓, config `~/.config/docwatch/config.toml` ✓) |
+| écritures | **aucune** sur les `.md` ✓ ; seules les **épingles** et les **SVG de diagrammes générés** s'écrivent ✓ |
 
-**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **69 tests**, CI Python 3.9–3.13, README et licence MIT
+**Le 27/10, l'outil a été isolé de Drave** ✓✓ : code, **87 tests**, CI Python 3.9–3.13, README et licence MIT
 dans [**stephanedenis/docwatch**](https://github.com/stephanedenis/docwatch). Ancien nom : `mdserve`
 (paquet `mdserve-local`) ; les commandes sont désormais `docwatch` et `docopen`.
 
@@ -56,8 +57,37 @@ pipx install --force "git+https://github.com/stephanedenis/docwatch.git"
 pipx reinstall docwatch        # après une évolution du dépôt
 ```
 
-Le service lance le paquet avec `--no-browser` ✓. Il n'y a **plus de patch hors dépôt** ✓ : les sauvegardes
-`~/.local/share/docwatch-migration/mdserve.*` ne servent qu'au retour arrière ✓.
+Le service lance le paquet avec `--config ~/.config/docwatch/config.toml --no-browser` ✓. Il n'y a **plus de
+patch hors dépôt** ✓ : les sauvegardes `~/.local/share/docwatch-migration/mdserve.*` ne servent qu'au retour
+arrière ✓.
+
+### Montages et diagrammes
+
+La configuration `~/.config/docwatch/config.toml` déclare les montages :
+
+```toml
+[[mounts]]
+name = "drave"
+path = "~/Data13TB/stephane/GitHub/Qtrinet"
+label = "Drave"
+
+[[mounts]]
+name = "docwatch"
+path = "~/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch"
+label = "docwatch"
+```
+
+Une seule instance sert donc les deux dépôts : `/drave/docs/en-cours.md` et `/docwatch/README.md` ✓.
+Les épingles et le filtre temporel suivent le montage courant ✓.
+
+Les sources **Mermaid** (`.mmd`, `.mermaid`) et **PlantUML** (`.puml`, `.pu`, `.plantuml`) sont converties
+automatiquement en SVG **à côté du source**, en conservant l'extension en affixe :
+`pipeline.mmd` → `pipeline.mmd.svg`, `decision.puml` → `decision.puml.svg` ✓. C'est ce que
+`docs/schemas/README.md` référence ✓. Les blocs Markdown `mermaid` / `puml` sont aussi rendus, via le cache
+et la route `/diagram/<hash>.<affixe>.svg` ✓. Un outil absent laisse le bloc intact ✓.
+
+Outils installés localement : `~/.local/bin/plantuml` (JAR) et `~/.local/bin/mmdc`
+(`@mermaid-js/mermaid-cli`, Chrome système) ✓. Les chemins sont dans `[diagrams]` ✓.
 
 **Le 27/10, l'ancien `serveur-doc.py` (port 8787, `drave-doc.service`) a été retiré** ✓ : il faisait double
 emploi avec docwatch et n'était pas versionnable indépendamment. La page « où en est » se lit désormais
