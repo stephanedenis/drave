@@ -1,5 +1,11 @@
 # Les rapports — données intermédiaires et références
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : l'inventaire manuel sera complété par un index généré ;
+> le warning `07-mesures` (67 mesures / 150 Ko) est faux (168 mesures / 10 parties).*
+
 > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
 > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
 > [`docs/en-cours.md`](../docs/en-cours.md).

@@ -1,5 +1,9 @@
 # Synthèse théorique de Drave
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours :
+> B10–B12 seront ajoutés aux « hors chapitres », et B4 passera de **cinq** à **six**
+> mesures (le LoRA). Les **huit chapitres** et les **sept schémas** sont exacts.
+
 > **Ce que ce dossier est.** Une explication **complète et vulgarisée** de ce que Drave sait faire, de
 > son fonctionnement interne, et des idées qui le gouvernent. Huit chapitres, sept schémas, et à la fin de
 > chacun la même question : *« comment sait-on que c'est vrai ? »* — parce que dans ce dépôt, une idée

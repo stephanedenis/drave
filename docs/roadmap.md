@@ -1,5 +1,11 @@
 # La roadmap de Drave — deux programmes, un ordre, aucune date
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) sera
+> remis à jour ; B12 sera replacé après B11.*
+
 > Suite de [`docs/vision.md`](vision.md). Le projet a **deux programmes** : le **moteur** (les flux de données, les
 > cinq axes) et l'**intelligence** (les deux étages). Ils avancent **en parallèle** ; l'ordre se décide par la
 > **valeur** et les **dépendances**, jamais par une date.

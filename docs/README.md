@@ -1,5 +1,12 @@
 # La documentation de Drave — la carte
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** Source de vérité pendant la passe : `docs/en-cours.md` (état) et
+> `docs/roadmap.md` (plan). *Spécifique : cette page devient l'**inventaire** ; `carte.md`
+> reste l'index des sujets, et les deux tableaux de blocs seront dédupliqués.*
+
 > **`docs/` dit ce qui reste vrai** : la vision, les concepts, les contrats, l'état et les règles. Les **chiffres**,
 > les séries et les comptes rendus vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/).
 > Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `reports/`.

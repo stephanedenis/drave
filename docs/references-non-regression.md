@@ -1,3 +1,9 @@
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : l'en-tête 34/34 ci-dessous sera remplacé par la dernière
+> passe (49 portes) ; l'historique des passes ira dans `reports/`.*
+
 > **2026-10-11 06 h 30 HAE** (heure lue sur la machine). Ces valeurs sont les **verdicts imprimés
 > par la passe complète des portes** (`tools/toutes-les-portes.sh`, **34 vertes sur
 > 34**, 85 min 8 s). Elles ne sont pas recopiées de mémoire : elles sortent du journal de la

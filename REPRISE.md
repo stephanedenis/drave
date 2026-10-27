@@ -1,5 +1,11 @@
 # Reprise — démarrer une session de travail
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : cette page sera réécrite/redirigée vers `en-cours.md` et
+> `roadmap.md` ; les pièges d'environnement du § 3 restent valides.*
+
 > **Check-list, pas un état.** L'état vit dans [`docs/etat.md`](docs/etat.md) (index des modules)
 > et [`docs/etat-cerveau.md`](docs/archive/etat-cerveau.md) (les douze capacités, avec le chiffre qui
 > prouve chacune). Ce fichier ne dit que : quoi lire, quoi vérifier, quels pièges éviter, et où

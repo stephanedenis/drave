@@ -1,5 +1,11 @@
 # Organisation du dépôt — quel dossier pour quoi
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : les règles de rangement restent ; les exemples de nommage
+> et les compteurs (38ᵉ porte, 413 fichiers) seront actualisés.*
+
 > Écrit le **2026-10-10 10:20 HAE** (EDT, UTC−4). Ce document est la **règle** : il dit ce qui va
 > dans `docs/`, dans `reports/` et dans `journal/`, comment nommer, et comment horodater. Il
 > existe parce que les trois dossiers étaient utilisés **en désordre** : des suivis d'avancement

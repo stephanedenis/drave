@@ -1,5 +1,11 @@
 # Glossaire raisonné de Drave
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : le contenu du glossaire reste ; la méta (18 docs / 60
+> rapports) et le parcours de lecture seront corrigés.*
+
 Ce document explique **tout le vocabulaire** employé dans `docs/` (18 documents) et
 `reports/` (60 rapports, plus 9 fichiers dans `sprints/`), pour quelqu'un qui ne
 connaît ni les grands modèles de langage, ni le matériel, ni le vocabulaire de la

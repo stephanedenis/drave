@@ -2,6 +2,12 @@
 
 # En ce moment
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes seront mis à
+> jour dans la passe 2 ; les chiffres B12 restent pilotés par le chantier en cours.*
+
 **Mis à jour : 2026-10-27, 09 h 05 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et

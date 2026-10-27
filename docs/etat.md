@@ -1,5 +1,11 @@
 # État des modules — l'index
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** *Spécifique : cette page sera redirigée vers `en-cours.md` ; l'ancien
+> index des modules part à l'archive.*
+
 > **2026-10-10 10:35 HAE.** Ce fichier est un **index** : pour chaque module du dépôt, sa
 > **roadmap** (ce qu'on projette), son **état** (où on en est) et sa **prochaine action**. Le
 > détail mesuré est dans `reports/` (une fiche par expérience), les événements dans `journal/`.

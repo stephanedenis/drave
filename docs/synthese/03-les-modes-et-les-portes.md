@@ -1,5 +1,8 @@
 # 3. Les modes et les portes — ce que le moteur fait vraiment
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Les compteurs de ce chapitre seront
+> alignés sur la dernière passe : **49 portes** (et non 46), **~1 h 34** (et non ~97 min).
+
 > **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md).
 
 ## Six façons de faire tourner le même modèle

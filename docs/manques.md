@@ -1,5 +1,9 @@
 # Registre des manques
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Le registre daté reste ; les
+> affirmations de contexte seront corrigées : **49 portes** (et non 27/27), la feuille
+> de route est [`roadmap.md`](roadmap.md), et les plans cités sont dans `docs/archive/`.
+
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
 > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
 > [`en-cours.md`](en-cours.md).

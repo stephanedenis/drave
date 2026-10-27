@@ -1,5 +1,12 @@
 # La carte de Drave — trouver un sujet en deux clics
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
+> ne changent pas.** Source de vérité pendant la passe : `docs/en-cours.md` (état) et
+> `docs/roadmap.md` (plan). *Spécifique : cette page reste l'index des sujets ; les blocs
+> B10–B12 y seront ajoutés, et les documents orphelins y seront rattachés.*
+
 > **Le hub des sujets.** Chaque lien mène à **un fichier**. Les autres portes : [la vision](vision.md) ·
 > [l'état](en-cours.md) · [la roadmap](roadmap.md) · [l'inventaire](README.md) · [les résultats](../reports/README.md) ·
 > [le journal](../journal/README.md) · [l'archive](archive/README.md).

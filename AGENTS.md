@@ -1,5 +1,11 @@
 # Directives de l'agent — Drave
 
+> **Révision documentaire — 2026-10-27 (passe 1/2).** Audit de cohérence en cours : compteurs
+> unifiés (**49 portes, 8 chapitres, 170 fiches / 241 JSON, 52 documents**), chemins archivés
+> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
+> ci-dessous ne changent pas.** Source de vérité pendant la passe : `docs/en-cours.md` (état)
+> et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.
+
 > **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
 > **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/agent/`](docs/agent/)
 > (tableau § 3). L'**état courant** est dans [`docs/en-cours.md`](docs/en-cours.md) ; la **roadmap** dans
