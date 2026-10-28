@@ -17,7 +17,7 @@ code d'aujourd'hui.
 
 | étape | ce qui a été fait |
 |---|---|
-| 1. cadrage | la vision retenue est celle de `docs/vision.md` **et** la précision du 02/10 : Drave ≠ llama.cpp ; listes d'activation (deux listes trinaires **ou** connexions pondérées) routées sur des **grappes de neurones** réparties entre composants et machines ; les flux sont aussi l'**instrument de débogage et d'analyse** qui adapte l'architecture à la tâche. llama.cpp n'est qu'une **porte de correction**. |
+| 1. cadrage | la vision retenue est celle de `docs/theorie/vision.md` **et** la précision du 02/10 : Drave ≠ llama.cpp ; listes d'activation (deux listes trinaires **ou** connexions pondérées) routées sur des **grappes de neurones** réparties entre composants et machines ; les flux sont aussi l'**instrument de débogage et d'analyse** qui adapte l'architecture à la tâche. llama.cpp n'est qu'une **porte de correction**. |
 | 2. relecture | cinq relectures adverses en parallèle (A : vision/roadmap/programme/sprints/histoire · B : format-flux/format-clusters/convertisseur/colab-reparti/contexte-long · C : plan-modeles-lourds/gpu-topk/mla-vision/prefill-reparti · D : plan-mode4/plan-v4-flash/plan41/comparaison-spiking). Chacune devait citer `fichier:ligne`, la citation exacte, le problème et une correction minimale, **sans toucher aux fichiers**. |
 | 3. correction | appliquée **par moi**, une assertion par remplacement (aucun remplacement silencieux : chaque ancre devait apparaître exactement une fois). |
 | 4. contrôle | une sixième relecture adverse du **diff** (voir ci-dessous) ; les portes du dépôt relancées sur le binaire reconstruit. |

@@ -234,7 +234,7 @@ YaRN déclaré, donne 714,83 ; notre moteur 722,56** (1,1 % d'écart, la même
 signature que les 3 à 7 % mesurés à 63 et 512 jetons). La dégradation avec la
 longueur est donc **celle du modèle sur du texte brut hors distribution** — pas
 un défaut de calcul. C'est aussi ce qui rend le chiffrage du 1 M
-(`docs/contexte-long.md`) une affaire d'ingénierie mémoire et de préremplissage,
+(`docs/implantation/contexte-long.md`) une affaire d'ingénierie mémoire et de préremplissage,
 pas de rotation.
 
 ## 9. Ce qui reste ouvert

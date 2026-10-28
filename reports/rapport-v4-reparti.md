@@ -66,7 +66,7 @@ l'original :
 
 Le gain de temps n'est pas un effet de cache : chaque expert routé vit dans UN
 fichier de grappe, donc le nœud ne lit que ce qu'il sert — c'est le mécanisme
-décrit dans `docs/format-clusters.md`, et il vaut ici **2,8×** sur un modèle dont
+décrit dans `docs/implantation/format-clusters.md`, et il vaut ici **2,8×** sur un modèle dont
 les experts pèsent 80 % du fichier.
 
 Trois bugs d'outillage ont été trouvés et corrigés pour y arriver (le

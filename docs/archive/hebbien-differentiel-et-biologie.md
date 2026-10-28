@@ -1,8 +1,8 @@
 # Notre hebbien différentiel face à la biologie
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > 9 octobre 2026. Le dépôt applique, mesure, sauve, recharge **et réfute** une règle
 > hebbienne différentielle (`--hebb-diff`, `rapports/rapport-capteur-hebbien.md`,

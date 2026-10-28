@@ -1,8 +1,8 @@
 # Programme de recherche — vers une intelligence locale
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 **Objet.** Définir une feuille de route vérifiable vers un système capable
 d'apprendre et d'évoluer *localement*, sur du matériel qu'une personne possède,
@@ -45,9 +45,9 @@ structurelles que ces piles n'ont pas :
    place — sur un composant (CPU, GPU, FPGA) ou sur une autre machine — là où son
    coût est le plus faible. C'est ce que la vision appelle les **grappes de
    neurones** : le moteur ne répartit pas des matrices, il route des listes
-   (`docs/vision.md` §3-§4), et le découpage en clusters d'experts le fait déjà
+   (`docs/theorie/vision.md` §3-§4), et le découpage en clusters d'experts le fait déjà
    sans changer un chiffre (Qwen3-30B : **origine 15,2789 · clusters 15,2789**,
-   mêmes 63 jetons, même contexte — `docs/format-clusters.md`).
+   mêmes 63 jetons, même contexte — `docs/implantation/format-clusters.md`).
 
 Ces quatre propriétés ne sont pas des opinions : elles sont mesurées, et elles
 définissent ce que le programme peut tenter que d'autres ne peuvent pas.

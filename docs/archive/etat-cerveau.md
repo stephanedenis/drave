@@ -1,7 +1,7 @@
 # État du cerveau Drave — capacités, expériences, prochaine action
 
 > **2026-10-12 16:45 HAE** (EDT, UTC−4 — lire `date`, jamais une horloge supposée : voir
-> `docs/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
+> `docs/methode/organisation-du-depot.md` § 4). Ce fichier est **l'état**, par rapport aux roadmaps :
 > ce qui est fait, avec le chiffre qui le prouve, et ce qui reste. Il ne raconte pas les rounds
 > (c'est `journal/`) et ne porte pas les mesures en détail (ce sont les fiches
 > `reports/campagne-benefices/`, une par expérience).
@@ -9,7 +9,7 @@
 > **Révision du 12/10 — le plan de travail (§ 6), et lui seul.** Trois constats, chacun vérifié :
 > une action était **périmée** (la carte des sorties de H avait tourné le 11/10 à 00 h 15, le plan
 > la disait « reste à lancer ») ; une **manquait** (le moteur ne voit pas l'array NVMe, que le
-> § 7.2 de `docs/configuration-nvme-raid-amd.md` attend sur le nœud 1) ; une **exception tombe**
+> § 7.2 de `docs/implantation/configuration-nvme-raid-amd.md` attend sur le nœud 1) ; une **exception tombe**
 > (`porte-topologie.sh` après un redémarrage — sortie vérifiée le 12/10). Le chantier des
 > **lecteurs parallèles** y entre avec le chiffre qui manquait (×3,8 entre 1 et 8 lecteurs sur
 > l'array). **Aucun chiffre de capacité n'a bougé** : `git log --since="2026-10-11 06:30" --
@@ -18,7 +18,7 @@
 >
 > Roadmaps de référence : `docs/plan-cerveau-complet.md` (les douze capacités),
 > `docs/roadmap-drave.md`, `docs/modele-pour-drave.md` § 3 (dessins H/I/J),
-> `docs/biologie-pour-drave.md` (expériences E1-E9), `docs/manques.md` (ce qui manque).
+> `docs/biologie-pour-drave.md` (expériences E1-E9), `docs/pilotage/manques.md` (ce qui manque).
 
 > ### OÙ REGARDER, EN CINQ LIGNES *(ajouté le 16/10 : le fichier a beaucoup grandi cette nuit)*
 >
@@ -28,11 +28,11 @@
 >    15/10 au soir ✗) ;
 > 3. **les expériences de biologie E1-E9** → § 3 (**E9** — l'homéostasie synaptique — y est **défini
 >    et mesuré** depuis le 15/10, et gardé par `porte-homeostasie` ✓) ;
-> 4. **les instruments de mesure** et leur état → § 5, et `docs/references-non-regression.md` pour la
+> 4. **les instruments de mesure** et leur état → § 5, et `docs/pilotage/references-non-regression.md` pour la
 >    **dernière passe des portes** (le chiffre qui fait foi) ;
 > 5. **le récit de ce qui a été fait, jour par jour** → `journal/` (chaque journée a ses notes, écrites
 >    à la main, et un journal automatique) — et la page **« où en est le travail »** est
->    [`docs/en-cours.md`](../en-cours.md), réécrite à chaque round et servie en HTML par
+>    [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md), réécrite à chaque round et servie en HTML par
 >    `tools/serveur-doc.py` **port 8787** ✓.
 
 ## 1. Les douze capacités
@@ -140,7 +140,7 @@
 - **39 portes** `tools/porte-*.sh` — **passe du 2026-10-13 à 13 h 44 : 37 vertes, 2 rouges**
   (~82 min), les deux rouges étant `porte-indice` (le critère
   **contrôle apparié** du 13/10 : l'indice réel ne bat pas le témoin) et `porte-melange` (le
-  mélange ne rend pas le code de A — nommés dans `docs/references-non-regression.md`). La passe du
+  mélange ne rend pas le code de A — nommés dans `docs/pilotage/references-non-regression.md`). La passe du
   **2026-10-11 à 06 h 30** en comptait **34 vertes sur 34** (85 min 8 s) ; trois sont nées le
   12/10 : **`porte-prechargement.sh`** (S4 : à la
   demande / `madvise` / fils / tampons, cache évincé avant chaque bras), **`porte-m5-brouillon.sh`**
@@ -150,7 +150,7 @@
   au mauvais nombre de cellules ne rend pas — et personne ne le voit) et
   **`porte-echange-experts.sh`** (le routage imposé est inerte par défaut, **exact** sur son propre
   routage — vu rouge sans `DRAVE_TRACE_EXPERTS_ORDRE` — et vivant sur un routage étranger). Repères :
-  `docs/references-non-regression.md`. La nuit
+  `docs/pilotage/references-non-regression.md`. La nuit
   en a ajouté **six** — sauvegarde du modèle, occupation × élagage, invariants du harnais, audit des
   drapeaux, occupation du moteur, poids creux — et **chacune a été vue ROUGE** avec son défaut
   rallumé par une variable d'environnement : c'est ce qui distingue une porte d'une décoration. La
@@ -299,7 +299,7 @@ après toute modification du chemin d'exécution.
 **2. ~~Le moteur ne voit pas l'array~~ — FAIT le 12/10** (commit `be29ebc4`). `--materiel` rend
 maintenant `DISQ /home/stephane/IA · 162 Go libres · nœud 1` : la liste n'est plus en dur
 (`materiel.rs`), et le nœud d'un array se lit sur **ses disques** (`/sys/block/md0/md/dev-*/`) —
-`md0` n'a pas de `device/numa_node`. Le § 7.2 de `docs/configuration-nvme-raid-amd.md` est satisfait.
+`md0` n'a pas de `device/numa_node`. Le § 7.2 de `docs/implantation/configuration-nvme-raid-amd.md` est satisfait.
 
 **3. Les lecteurs parallèles — premier pas FAIT, et le suivant est chiffré.** `DRAVE_TAMPONS=1`
 lit les experts **retenus** par `pread`, **par offset croissant**, dans des tampons à nous, et le

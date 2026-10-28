@@ -124,4 +124,4 @@ la lecture s'ajuste en forme fermée.
 **Les estampilles écrites dans le corps des textes ne sont pas fiables** : elles ont été
 saisies à la main en avançant une horloge supposée, et certaines tombaient **dans le
 futur** (jusqu'au 12 octobre 2026). La date fiable est celle de l'en-tête de chaque
-fichier, tirée de git. Voir `docs/organisation-du-depot.md` § 4.
+fichier, tirée de git. Voir `docs/methode/organisation-du-depot.md` § 4.

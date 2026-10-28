@@ -4,8 +4,8 @@
 > sont **pas** l'état courant, ni la feuille de route, ni les résultats. Le chargement par défaut ne les lit pas ;
 > on y va pour retrouver une décision ou une mesure ancienne.
 >
-> L'état : [`docs/en-cours.md`](../en-cours.md) · le plan : [`docs/roadmap.md`](../roadmap.md) · les résultats :
-> [`reports/README.md`](../../reports/README.md) · la carte : [`docs/carte.md`](../carte.md).
+> L'état : [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) · le plan : [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md) · les résultats :
+> [`reports/README.md`](../../reports/README.md) · la carte : [`docs/theorie/carte.md`](../theorie/carte.md).
 
 ## Les plans de chantier
 

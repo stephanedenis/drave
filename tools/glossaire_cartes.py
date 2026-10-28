@@ -29,7 +29,7 @@ import unicodedata
 from datetime import date
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
-GLOSS = RACINE / "docs" / "glossaire"
+GLOSS = RACINE / "docs" / "theorie" / "glossaire"
 ENTREES = GLOSS / "entrees"
 FAMILLES = [
     "01-le-projet-ses-noms-sa-methode.md",

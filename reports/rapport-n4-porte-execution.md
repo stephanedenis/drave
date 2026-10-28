@@ -120,7 +120,7 @@ rouges sont **les mêmes qu'avant** et pour la même cause structurelle (`porte-
 `porte-melange` : leur critère est marginal par construction, `reports/rapport-niah-fragilite.md`).
 `porte-flux` rend ses cinq modes aux références (61,9920 / 60,8135) — **aucune valeur de porte n'a
 bougé** — et la **40ᵉ porte** (`porte-adaptateur-sortie`) y est verte du premier coup, en 58 s.
-Repères : `docs/references-non-regression.md`.
+Repères : `docs/pilotage/references-non-regression.md`.
 
 ## 5. Ce que cette fiche ne dit pas
 

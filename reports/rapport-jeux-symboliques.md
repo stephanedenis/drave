@@ -3,7 +3,7 @@
 > Mesure du **25/10/2026**, sur `Hauru` (Python 3.13, sans GPU), `tools/jeux/` et
 > `tools/porte-jeux.sh`. Corpus **construit par le code** (`tools/jeux/corpus.py`), cinq jeux, deux langues
 > (puis **71** dans [la fiche B7/B8](rapport-langues-maitres.md)), plusieurs notations ; dix contrôles. JSON brut :
-> [`jeux-mesures.json`](jeux-mesures.json). Concept : [`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md).
+> [`jeux-mesures.json`](jeux-mesures.json). Concept : [`docs/theorie/jeux-symboliques.md`](../docs/theorie/jeux-symboliques.md).
 > Durée de la mesure complète : **188,7 s** (chiffres régénérés le 26/10 avec la couche multilingue).
 
 ## Ce qui est mesuré

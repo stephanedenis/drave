@@ -1,8 +1,8 @@
 # Plan — les modèles lourds : les télécharger, les analyser, découper leurs MoE
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 **En une ligne** : la bibliothèque brute vit sur le disque mécanique (4,7 To
 libres), le NVMe ne sert plus qu'aux fichiers que NOUS produisons ; une file de
@@ -89,7 +89,7 @@ python3 tools/telecharger_modeles.py --seulement GLM-5.3-UD-IQ1_S
      séquentiel (NVMe→RAM→VRAM), au lieu de sauter dans tout le fichier.
 4. **Le banc de bout en bout** : perplexité sur 512 jetons, comparable à
    llama.cpp, ou l'écart expliqué — la conformité à llama.cpp est une **porte de
-   correction**, pas le but : le but est de **conduire des flux** (`docs/vision.md`).
+   correction**, pas le but : le but est de **conduire des flux** (`docs/theorie/vision.md`).
 
 ## Les architectures à implémenter (l'état des lieux)
 
@@ -113,7 +113,7 @@ fichiers. C'est de la plomberie, pas de la recherche, et ça débloque tout le r
 | 2 | **tokenizer + gabarit** de DeepSeek-V4.1 | aller-retour identique sur Wikitext-2, un tour de conversation bien formé (jetons `｜User｜`/`｜Assistant｜`/`｜DSML｜`) |
 | 3 | **forward deepseek4** (attention latente + MoE 256/top-6) | perplexité comparable à llama.cpp **et** flux tracé puis **rejoué à l'identique** (portes Drave) ; sinon l'écart est expliqué |
 | 4 | **trace + découpage** sur les trois gros MoE | la question « fréquence ou co-activation ? » tranchée à 256 experts et plus |
-| 5 | **format** : manifeste + index + disposition contiguë | ✅ **écrit et mesuré sur Qwen3-30B-A3B** : `commun.gguf` + 8 `cluster-XX.gguf`, un nœud charge **3,20 Go au lieu de 18,56** et 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés par empreinte — [`docs/format-clusters.md`](../format-clusters.md) |
+| 5 | **format** : manifeste + index + disposition contiguë | ✅ **écrit et mesuré sur Qwen3-30B-A3B** : `commun.gguf` + 8 `cluster-XX.gguf`, un nœud charge **3,20 Go au lieu de 18,56** et 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés par empreinte — [`docs/implantation/format-clusters.md`](../implantation/format-clusters.md) |
 | 6 | **lecteur multi-fichiers** (le même que pour les shards) | le moteur ouvre `commun.gguf` + un cluster et tourne |
 
 ## Reprendre le téléchargement

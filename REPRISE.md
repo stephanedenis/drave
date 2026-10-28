@@ -1,8 +1,8 @@
 # Reprise — démarrer une session de travail
 
-> **Check-list, pas un état.** L'état vit dans [`docs/en-cours.md`](docs/en-cours.md) ; le plan
-> dans [`docs/roadmap.md`](docs/roadmap.md) ; l'ancien index par module est archivé
-> ([`docs/etat.md`](docs/etat.md) redirige). Ce fichier ne dit que : quoi lire, quoi vérifier,
+> **Check-list, pas un état.** L'état vit dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; le plan
+> dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; l'ancien index par module est archivé
+> ([`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) redirige). Ce fichier ne dit que : quoi lire, quoi vérifier,
 > quels pièges éviter, et où écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche
 > par expérience**. Version longue d'avant le 2026-10-10 :
 > [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
@@ -15,8 +15,8 @@ git log --oneline -5                   # ce qui vient d'être fait
 ls journal/ | tail -5                  # la journée en cours, par thème
 ```
 
-Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/en-cours.md`](docs/en-cours.md)
-(l'état) → [`docs/roadmap.md`](docs/roadmap.md) (la prochaine action) → la fiche `reports/` du
+Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md)
+(l'état) → [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) (la prochaine action) → la fiche `reports/` du
 chantier en cours.
 
 ## 2. Ce qui doit être vert
@@ -25,8 +25,8 @@ chantier en cours.
 |---|---|---|
 | tests | `cd drave-core && cargo test --release` | **138 tests** (le compte est dans la sortie) |
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
-| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (47 vertes, 2 structurelles), **1 h 34**, aucune sautée — le compte et les repères sont dans `docs/references-non-regression.md` (dernière passe : 26/10 14 h 30) |
-| les repères chiffrés | [`docs/references-non-regression.md`](docs/references-non-regression.md) | les valeurs de la passe du 26/10 |
+| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (47 vertes, 2 structurelles), **1 h 34**, aucune sautée — le compte et les repères sont dans `docs/pilotage/references-non-regression.md` (dernière passe : 26/10 14 h 30) |
+| les repères chiffrés | [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) | les valeurs de la passe du 26/10 |
 
 **APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**
 leurs prérequis (`tools/_corpus.sh` : le corpus d'identifiants, qui est `data/wikitext2_test.txt`
@@ -131,7 +131,7 @@ minutes) — sans quoi trois modes étaient restés cassés en silence.
 
 ## 5. Où écrire
 
-[`docs/organisation-du-depot.md`](docs/organisation-du-depot.md) — en résumé : **`docs/`** = fond,
+[`docs/methode/organisation-du-depot.md`](docs/methode/organisation-du-depot.md) — en résumé : **`docs/`** = fond,
 principes, plans, **état** ; **`reports/`** = **une fiche par expérience** (question, protocole,
 mesures, verdict, date réelle) ; **`journal/AAAA-MM-JJ_<thème>.md`** = les **événements datés**,
 avec liens (générés par `tools/journal_auto.py`, l'index du jour est `journal/AAAA-MM-JJ.md`).
@@ -150,7 +150,7 @@ avec liens (générés par `tools/journal_auto.py`, l'index du jour est `journal
 
 ## 7. Le premier pas, si rien n'est en cours
 
-`docs/roadmap.md` porte la **prochaine action par ligne** ; `docs/en-cours.md` dit l'état **courant**.
+`docs/pilotage/roadmap.md` porte la **prochaine action par ligne** ; `docs/pilotage/en-cours.md` dit l'état **courant**.
 L'ancien index par module est archivé dans
 [`docs/archive/etat-modules-2026-10-10.md`](docs/archive/etat-modules-2026-10-10.md). S'il n'y a
 plus de liste : la consigne du dépôt est de **choisir ce qui est mesurable maintenant**, de lui

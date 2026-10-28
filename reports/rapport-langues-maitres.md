@@ -7,7 +7,7 @@
 > leurs parties et leurs politiques. JSON bruts :
 > [`jeux-langues-mesures.json`](jeux-langues-mesures.json) et
 > [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json). Concept :
-> [`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md). Durées : **3,1 s** (langues), **468,8 s**
+> [`docs/theorie/jeux-symboliques.md`](../docs/theorie/jeux-symboliques.md). Durées : **3,1 s** (langues), **468,8 s**
 > (maîtres), **188,7 s** (jeux, régénéré avec le lexique Unicode).
 
 ## Ce qui est mesuré
@@ -223,4 +223,4 @@ cartes du dépôt est simplifié (pas d'enchères, pas de signalisation), et la 
 
 ## 10. La ligne de roadmap
 
-**B7** (les langues) et **B8** (les maîtres), mesurées ; voir [`docs/roadmap.md`](../docs/roadmap.md).
+**B7** (les langues) et **B8** (les maîtres), mesurées ; voir [`docs/pilotage/roadmap.md`](../docs/pilotage/roadmap.md).

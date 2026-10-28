@@ -1,7 +1,7 @@
 # Préremplissage par lots : ce que le GEMM apporte vraiment
 
 > Chantier 4 du plan de reprise. Le préremplissage est le mur n° 1 du contexte
-> long (`docs/contexte-long.md` : 4,5 h à 32 k, 1 234 h à 1 M en séquentiel) : le
+> long (`docs/implantation/contexte-long.md` : 4,5 h à 32 k, 1 234 h à 1 M en séquentiel) : le
 > moteur traitait **un jeton à la fois**, donc chaque matrice de poids était relue
 > pour chaque jeton.
 

@@ -2,7 +2,7 @@
 
 > **Document daté — dernière vérification : 2026-10-27.** Ce fichier conserve les
 > passes complètes antérieures à la dernière (26/10 14 h 30). Les repères courants
-> sont dans [`docs/references-non-regression.md`](../docs/references-non-regression.md).
+> sont dans [`docs/pilotage/references-non-regression.md`](../docs/pilotage/references-non-regression.md).
 > Il est **hors du chargement par défaut** : on y va pour retrouver une valeur ou une
 > durée ancienne, pas pour connaître l'état courant.
 
@@ -48,7 +48,7 @@
 > extérieur qui tombe plus près de l'aiguille que le hasard — **ne survit pas à la
 > reconstruction** : mesuré sur **cinq fenêtres** du même corpus, **deux passent** (1,21× et 1,69×
 > mieux que le hasard) et **trois échouent** (jusqu'à 2,13× pire). Détail et recommandations :
-> [`reports/rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md) — le critère est
+> [`reports/rapport-niah-fragilite.md`](rapport-niah-fragilite.md) — le critère est
 > marginal par construction, et ces deux rouges ne disent **rien** de l'état du moteur.
 >
 > **Passe du 2026-10-24 à 21 h 35** (**47 portes, 45 vertes, 2 rouges**, **1 h 47 min**) — la passe de contrôle de la
@@ -62,7 +62,7 @@
 > **Passe du 2026-10-24 à 19 h 04** (**47 portes, 44 vertes, 3 rouges**, **1 h 47 min**) — la passe de contrôle du
 > **soir**, après la v2 du relais (`kimi_k3.rs`) et les tests. **Deux rouges sont les structurels connus**
 > (`porte-indice` 857 s, `porte-melange` 105 s) ; **la troisième est un FAUX POSITIF** : `porte-tableaux` a lu
-> `docs/roadmap.md:107` (5 cellules) **deux minutes avant** le correctif `58db87d5` — relancée seule, la porte
+> `docs/pilotage/roadmap.md:107` (5 cellules) **deux minutes avant** le correctif `58db87d5` — relancée seule, la porte
 > **passe** (583 fichiers, 1 105 liens). **Aucun rouge nouveau réel** ; toutes les références sont stables
 > (`porte-flux` 60,8135 ; `porte-pont` +2,81 % / +25,35 % ; `porte-coupe` +0,52 % → +17,09 % ; `porte-gain`
 > 29,0206 → 1297,5437 ; `porte-topologie` 42,5477).
@@ -80,11 +80,11 @@
 > **la première passe à 47 portes**, avec `porte-diff-couche` (18 s, **verte**) : le contrat de flux tient.
 > Le verdict se lit **au registre** (`awk '$2 != 0'`) : **deux rouges, et ce sont les STRUCTURELS connus**
 > (`porte-indice` 827 s, `porte-melange` 104 s — le critère d'indice marginal, cf.
-> [`rapport-niah-fragilite.md`](../reports/rapport-niah-fragilite.md)) : **aucun rouge nouveau** après une journée
+> [`rapport-niah-fragilite.md`](rapport-niah-fragilite.md)) : **aucun rouge nouveau** après une journée
 > où `placement.rs` (4 tests), `diff_flux.py` (v2), `model.rs` (la tête revertée) et la nouvelle porte ont été
 > écrits. Les plus lourdes : `porte-indice` (827 s), `porte-homeostasie` (653 s), `porte-greffe` (648 s),
 > `porte-profondeur-routee` (516 s), `porte-poids-creux` (316 s), `porte-gain` (221 s), `porte-prechargement`
-> (189 s). Détail : [`reports/rapport-passe-complete-portes.md`](../reports/rapport-passe-complete-portes.md) § 2
+> (189 s). Détail : [`reports/rapport-passe-complete-portes.md`](rapport-passe-complete-portes.md) § 2
 > quinquies.
 >
 > **Passe du 2026-10-17 à 00 h 55** (**46 portes, 44 vertes, 2 rouges**, **97 min**, aucune sautée) —
@@ -227,7 +227,7 @@
 > chiffres** (7,4242 et 4 481 378,8799), que l'adaptateur = identité ne change **rien** (0,00e0),
 > qu'une demi-échelle — que la norme ne peut pas absorber — **change** le chiffre (×2,9), et que
 > les trois cas invalides rendent **code 2**. Fiche :
-> [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md).
+> [`reports/rapport-n4-porte-execution.md`](rapport-n4-porte-execution.md).
 >
 > **Passe du 2026-10-13 à 13 h 44** (**39 portes, 37 vertes, 2 rouges**, ~82 min) : après l'échange
 > d'experts (C9) et le **nouveau critère** de `porte-indice` (contrôle apparié). Les deux rouges
@@ -239,14 +239,14 @@
 > inerte par défaut, **exact** sur son propre routage — l'invariant qui fonde toute la mesure C9 —
 > et vivant sur un routage étranger). Vue **rouge** en retirant `DRAVE_TRACE_EXPERTS_ORDRE=1`
 > (54,4883 contre 54,5202). Fiche :
-> [`reports/rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md). Elle n'était
+> [`reports/rapport-c9-echange-experts.md`](rapport-c9-echange-experts.md). Elle n'était
 > pas encore dans une passe complète au moment de ce relevé.
 >
 > **Porte ajoutée le 2026-10-13 à 08 h 40** : `porte-tableaux.sh` (vérifie que chaque tableau
 > Markdown du dépôt a le même nombre de cellules partout — une seule ligne fautive fait rendre tout
 > le tableau comme du texte, et le texte reste visible, donc le défaut est muet). Vue **rouge** sur
 > deux défauts volontaires. Fiche :
-> [`reports/rapport-tableaux-casses.md`](../reports/rapport-tableaux-casses.md). Elle n'était pas
+> [`reports/rapport-tableaux-casses.md`](rapport-tableaux-casses.md). Elle n'était pas
 > encore dans une passe complète au moment de ce relevé.
 >
 > **Passe du 2026-10-13 à 06 h 19** (**37 portes, 35 vertes, 2 rouges**, ~71 min) : après le **pool

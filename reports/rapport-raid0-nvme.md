@@ -1,7 +1,7 @@
 # Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas
 
 > Campagne : **machine (stockage)** · expérience 01 — l'array NVMe monté le 12/10
-> Question : `docs/configuration-nvme-raid-amd.md` a été écrit **avant** l'intervention (§ 8 :
+> Question : `docs/implantation/configuration-nvme-raid-amd.md` a été écrit **avant** l'intervention (§ 8 :
 > « aucune de ces optimisations n'est mesurée sur cette configuration : elle n'existe pas
 > encore »). L'array existe depuis le 12/10. **Le pari du § 1 tient-il, et que faut-il en faire ?**
 > Verdict : **le pari tient** — 4 NVMe bien sur le **nœud 1**, GPU en **x16**, array à **7,45 Go/s**
@@ -150,6 +150,6 @@ seul prérequis qui manquait, et il tient en un fichier de 395 Ko qu'on garde.
   pas côté calcul ;
 * `~/IA` est à **83 %** (162 Go libres) : premier candidat à sortir, `~/IA/k3-nvme` (228 Go, 5
   shards sur 32, la bibliothèque du mécanique les porte tous) ;
-* `docs/numa-segregation.md` décrit l'état d'**avant** (« NVMe 931 Go, 97 % plein, 29 Go libres ») ;
+* `docs/implantation/numa-segregation.md` décrit l'état d'**avant** (« NVMe 931 Go, 97 % plein, 29 Go libres ») ;
 * `tools/harmony_canonique.py:17` pointe `…/GitHub/Drave/…`, chemin **mort** (le dépôt est
   `Qtrinet`) — la porte qui s'en sert échouerait sans le dire.

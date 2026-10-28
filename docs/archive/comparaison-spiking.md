@@ -1,15 +1,15 @@
 # SpikeGPT, Spikformer, Spikingformer — ce qu'ils nous apprennent
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Comparaison des trois architectures neuromorphiques de référence avec la nôtre,
 et inventaire des astuces transposables.
 
 Le cœur de Drave n'est pas remis en cause par cette comparaison : **router des
 flux d'activation sur des grappes de neurones réparties entre composants et
-machines** (`docs/vision.md`, axes 2-3) et **lire ces flux pour adapter
+machines** (`docs/theorie/vision.md`, axes 2-3) et **lire ces flux pour adapter
 l'architecture à la tâche** (§2) restent les deux dimensions structurantes. Le
 spike n'est examiné ici que comme **moyen d'obtenir la parcimonie** que nos
 modèles quantifiés n'ont pas naturellement.

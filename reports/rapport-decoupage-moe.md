@@ -104,7 +104,7 @@ Le découpage n'est pas resté théorique : `tools/convertir_clusters.py` produi
 sans requantification, `expert_count` réécrit, vérification par empreintes). Sur
 Qwen3-30B-A3B : **3,20 Go chargés au lieu de 18,56** pour un nœud qui sert un
 cluster, 625 ms au lieu de 3,9 s, 1 587 tenseurs vérifiés — le format est décrit
-dans [`docs/format-clusters.md`](../docs/format-clusters.md).
+dans [`docs/implantation/format-clusters.md`](../docs/implantation/format-clusters.md).
 
 ## Reproduire
 

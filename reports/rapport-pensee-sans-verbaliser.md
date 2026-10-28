@@ -2,7 +2,7 @@
 
 > **Objet.** Le détail des mesures de l'étage 2 : l'état porte-t-il le sens ? le pont l'aligne-t-il ?
 > le plan se transpose-t-il ? Les chiffres, les contrôles et les pièges, dans l'ordre où ils ont été
-> obtenus. La **synthèse** est dans [`docs/synthese/05`](../docs/synthese/05-la-pensee-sans-verbaliser.md).
+> obtenus. La **synthèse** est dans [`docs/theorie/synthese/05`](../docs/theorie/synthese/05-la-pensee-sans-verbaliser.md).
 >
 > **Verdict.** L'état porte le raisonnement (1,00 → 0,51 selon la profondeur), un **pont linéaire**
 > l'aligne (0,46-0,97 selon la langue et la longueur), et le **plan** est le contre-exemple : ni

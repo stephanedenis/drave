@@ -1,7 +1,7 @@
 # Strata → Drave — ce qu'on adopte de l'extérieur
 
 > **2026-10-12 08:51 HAE** (heure lue sur la machine). Note d'apport extérieur (convention :
-> `docs/organisation-du-depot.md` § 1, préfixe `*-pour-drave.md`). Le pendant biologique est
+> `docs/methode/organisation-du-depot.md` § 1, préfixe `*-pour-drave.md`). Le pendant biologique est
 > `docs/biologie-pour-drave.md` (E1-E9) ; ici les idées portent **S1-S6**.
 >
 > **Source** : <https://github.com/Niko1221/Strata>, lu le 2026-10-12 (API GitHub, `README.md`,
@@ -20,7 +20,7 @@ en 18 jours (API du 12/10) : ce n'est pas la preuve que c'est bon, c'est la preu
 « gros MoE sur matériel ordinaire » est devenue une attente de masse.
 
 Ce qu'on prend : **six idées**, dont trois tombent sur des manques déjà inscrits chez nous
-(`docs/manques.md`). Ce qu'on ne prend pas : le produit (§ 3).
+(`docs/pilotage/manques.md`). Ce qu'on ne prend pas : le produit (§ 3).
 
 | # | leur fait | leur chiffre | ce que ça touche chez nous |
 |---|---|---|---|
@@ -42,7 +42,7 @@ Ce qu'on prend : **six idées**, dont trois tombent sur des manques déjà inscr
 (`blk.40`), lue et exécutée comme le reste. Elle propose jusqu'à 3 jetons, une seule passe les
 vérifie tous.
 
-**Pourquoi ça compte chez nous.** `docs/manques.md` M5 porte déjà le cahier des charges mesuré :
+**Pourquoi ça compte chez nous.** `docs/pilotage/manques.md` M5 porte déjà le cahier des charges mesuré :
 brouillon générique **×0,70**, paire alignée **×1,09**, brouillon minuscule **×1,52**. Le gagnant
 mesuré est donc *minuscule*, et Strata montre où le prendre : **dans la cible**, sans entraîner ni
 servir un second modèle. Et la cible qui nous intéresse est exactement celle où le spéculatif paie :
@@ -88,7 +88,7 @@ recensement.
 
 **Pourquoi ça compte chez nous.** On a déjà la matière : `--clusters` et le partitionnement par
 co-activation (`docs/plan-modeles-lourds.md`, accord 1,000), et le convertisseur trace le routage
-(`--trace /tmp/routage.txt`, `docs/format-clusters.md`). Ce qui manque n'est pas la mesure, c'est
+(`--trace /tmp/routage.txt`, `docs/implantation/format-clusters.md`). Ce qui manque n'est pas la mesure, c'est
 **l'artefact** : un fichier de classement versionné, attaché au modèle, que le placement consomme —
 au lieu d'un calcul refait à chaque fois.
 
@@ -103,7 +103,7 @@ suivante pendant que la couche courante calcule**. C'est ce qui leur donne > 1 0
 document de 32 K.
 
 **Pourquoi ça compte chez nous.** C'est **exactement** le manque de méthode inscrit en bas de
-`docs/manques.md` § 1 : « la lecture mmap atteint **8,6 Mo/s sur disque dur contre 243 Mo/s en
+`docs/pilotage/manques.md` § 1 : « la lecture mmap atteint **8,6 Mo/s sur disque dur contre 243 Mo/s en
 séquentiel** (÷28) — un préchargement ordonné (`madvise`, lecture des experts par grappe) n'existe
 pas ». Strata ne nous apprend pas le chiffre (on l'a) : il nous apprend que **le préchargement est
 une condition de conception, pas une optimisation** — chez eux il est branché sur la boucle de
@@ -122,7 +122,7 @@ leur bug le plus instructif se trouve.
 > **fils qui entrent les pages** (calcul d'une passe de 7,70 s à 3,65 s, −53 %) ; et ce qui paierait
 > plus est nommé — le **`pread` explicite en parallèle**, 3 995 Mo/s contre 1 126 (×3,5), qui
 > demande des **tampons** (chantier « lecteurs parallèles », § 6.5.1 de
-> `docs/configuration-nvme-raid-amd.md`). L'idée de Strata telle quelle — prélecturer la **couche
+> `docs/implantation/configuration-nvme-raid-amd.md`). L'idée de Strata telle quelle — prélecturer la **couche
 > suivante** — a été **implémentée puis mesurée sans gain** (30,47 s sans, 32,05 s avec, témoin
 > `DRAVE_PRELIRE_DENSE=1`) : un préchargement synchrone ne se recouvre pas avec le calcul.
 > Détail : [`reports/rapport-s4-prechargement-moteur.md`](../../reports/rapport-s4-prechargement-moteur.md).
@@ -132,7 +132,7 @@ leur bug le plus instructif se trouve.
 **Leur idée.** Le cache d'experts du GPU se remplit d'un profil, puis **s'adapte à la conversation**.
 
 **Pourquoi ça compte chez nous, et sous quelle forme.** En VRAM, c'est déjà tranché (×1,09). Mais la
-question « **quel expert vit sur quel nœud** » est notre terrain : `docs/etat.md` note que la variante
+question « **quel expert vit sur quel nœud** » est notre terrain : `docs/pilotage/en-cours.md` note que la variante
 `--echange experts` (C9) a un gain **nul entre vues valides**. La différence entre les deux situations
 est instructive : Strata ne déplace pas un expert contre un autre, il **promeut ce qui est demandé**.
 La variante à instruire n'est donc pas l'échange, c'est la **promotion** guidée par la trace de routage

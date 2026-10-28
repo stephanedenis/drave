@@ -1,7 +1,7 @@
 # S4 — le préchargement par grappe : la lecture à la demande rend 29 Mo/s là où la grappe rend 1 230
 
 > Campagne : **S4 (Strata → Drave)** · expérience 01 — le mécanisme de lecture, hors du moteur
-> Question : `docs/manques.md` § 1 nomme le manque — « la lecture disque en mmap atteint **8,6 Mo/s**
+> Question : `docs/pilotage/manques.md` § 1 nomme le manque — « la lecture disque en mmap atteint **8,6 Mo/s**
 > sur disque dur contre **243 Mo/s** en séquentiel (÷28) ; un préchargement ordonné (`madvise`,
 > lecture des experts par grappe) n'existe pas ». **Que vaut ce préchargement, mesuré sur les
 > supports d'aujourd'hui**, et le manque tient-il encore tel quel ?
@@ -70,7 +70,7 @@ Détail des trois répétitions (Mo/s) — la dispersion est dans la règle du d
   huit lecteurs (`reports/rapport-raid0-nvme.md`). Le facteur manquant est le **groupe de lectures
   asynchrones** : `madvise` sur 1 Mio fait travailler `md0` sur les quatre disques d'un coup, là où
   un défaut de page fait la queue ;
-* **le manque de `docs/manques.md` § 1 tient, et il est plus grand qu'annoncé sur NVMe** : le
+* **le manque de `docs/pilotage/manques.md` § 1 tient, et il est plus grand qu'annoncé sur NVMe** : le
   document dit « sur NVMe, 140-300 Mo/s (÷5 à ÷11) » ; mesuré ici, la lecture à la demande sur
   l'array rend **29,43 Mo/s** au hasard et **96,77** en séquentiel — la borne haute de la grappe est
   **1 230 Mo/s**. Le chiffre du 9/10 décrivait le disque dur ; sur l'array, l'écart au préchargement

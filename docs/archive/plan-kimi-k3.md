@@ -1,8 +1,8 @@
 # Plan — Kimi-K3 : exécuter en local ce qui ne tient pas en local
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > Écrit le 03/10 (bloc 27) après une réorientation explicite : **les modèles
 > périmés sortent du chemin critique** (DeepSeek-V4-Flash : acquis conservés,

@@ -1,11 +1,11 @@
 # Les sprints de 2 h — charte
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Ce document dit **comment on travaille**, pas ce qu'on fait (ça, c'est
-`docs/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).
+`docs/pilotage/roadmap.md` et les sprints eux-mêmes, dans `sprints/`).
 
 ## Le boxing
 
@@ -52,7 +52,7 @@ Un sprint se ferme **vert**, et c'est non négociable :
 ## L'autonomie de l'objectif
 
 Choix du 30/09 : l'objectif de chaque sprint est fixé **par l'agent, sans
-validation** — le planning s'appuie sur `docs/roadmap.md`, sur la rétro du sprint
+validation** — le planning s'appuie sur `docs/pilotage/roadmap.md`, sur la rétro du sprint
 précédent et sur ce que la mesure a laissé ouvert. Vous gardez évidemment le droit
 d'interrompre ou de changer en cours de boîte ; c'est simplement le point de départ
 qui ne demande pas d'aller-retour.

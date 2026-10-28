@@ -1,8 +1,8 @@
 # Note — entraîner le chemin court (N4), la seule voie qui reste pour C8
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > Écrite le **2026-10-13 11 h 30 HAE** après la matinée de mesures
 > ([`reports/rapport-c8-echelle.md`](../../reports/rapport-c8-echelle.md)). Elle **propose** ; elle ne

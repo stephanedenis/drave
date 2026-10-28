@@ -74,7 +74,7 @@ Ce que ça dit :
   d'experts est le **`pread` explicite depuis des fils** (`tools/banc-experts.py` : 3 995 Mo/s
   contre 1 126 pour la demande) — et il demande des **tampons**, donc un chemin de calcul qui
   lit dans une mémoire à nous au lieu du mapping. C'est le chantier « lecteurs parallèles » du
-  § 6.5.1 de `docs/configuration-nvme-raid-amd.md`, et il reste ouvert ;
+  § 6.5.1 de `docs/implantation/configuration-nvme-raid-amd.md`, et il reste ouvert ;
 * **elle ne mesure que la passe d'un modèle dense-en-experts sur l'array** : la même porte sur la
   copie du disque dur reste à faire (le bras `demande` y est lent au point de borner la mesure) ;
 * **elle ne dit rien du décodage** (un jeton à la fois, où les experts d'un jeton ne sont pas

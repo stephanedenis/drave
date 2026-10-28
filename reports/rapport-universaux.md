@@ -179,4 +179,4 @@ traduction **de surface** demande encore un rendu par langue.
 - Code : [`universaux.py`](../tools/semantique/universaux.py), [`typed_corpus.py`](../tools/semantique/typed_corpus.py),
   [`entrainer_type.py`](../tools/semantique/entrainer_type.py), tests.
 - Mesures : [`universaux-mesures.json`](universaux-mesures.json).
-- Note de fond : [`docs/semantique-universaux.md`](../docs/semantique-universaux.md).
+- Note de fond : [`docs/theorie/semantique-universaux.md`](../docs/theorie/semantique-universaux.md).

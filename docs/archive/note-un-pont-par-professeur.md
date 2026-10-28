@@ -1,8 +1,8 @@
 # Un pont par professeur — il n'y a pas de couche sémantique universelle
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Correction de cap, énoncée par Stéphane, et elle invalide une comparaison que
 j'avais commise :

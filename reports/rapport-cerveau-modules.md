@@ -98,4 +98,4 @@ seulement que les modules se parlent. C'est un test d'intégration, pas un nouve
 - [`tools/cerveau/`](../tools/cerveau/) : bus, hub, voies, mémoires, prédictif, gating, neuromodulation,
   sommeil, batterie, séquences.
 - [`reports/cerveau-mesures.json`](cerveau-mesures.json).
-- Note : [`docs/modules-cerveau-langage.md`](../docs/modules-cerveau-langage.md).
+- Note : [`docs/theorie/modules-cerveau-langage.md`](../docs/theorie/modules-cerveau-langage.md).

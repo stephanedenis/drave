@@ -91,7 +91,7 @@ désormais la bonne conclusion (25,4 % contre 4,8 %).
 Dernière passe en date : `--entree-memoire K` ajouté à la périphérie (le signal devient un vecteur :
 valeur courante plus K retards), la porte étendue en conséquence (le tampon change la sortie, il
 est annoncé, un débordement est refusé), et **23 vertes sur 23** de nouveau. Détail porte par porte
-dans `docs/references-non-regression.md` § 2, régénéré depuis le journal de cette passe.
+dans `docs/pilotage/references-non-regression.md` § 2, régénéré depuis le journal de cette passe.
 
 ## 2 quater. La passe du 19:20 (25 portes, 59 min 25 s) — la suite COMPLÈTE
 
@@ -100,7 +100,7 @@ Dernière passe en date, et la première qui contient les **deux portes ajoutée
 à hauteur de sa moyenne, et 8 bits suffisent pour ÷4 d'octets) et `porte-c4-retard.sh` (C4 : un
 état n'est valide qu'à sa position — ×633 pour un pas — et manquer coûte ×1,06 contre ×633 pour
 réutiliser). **25 vertes sur 25**, détail dans
-`docs/references-non-regression.md` (régénéré depuis ce journal).
+`docs/pilotage/references-non-regression.md` (régénéré depuis ce journal).
 
 ## 2 quinquies. La passe du 24/10 (47 portes, 1 h 48 min) — la première à 47, et la nouvelle porte est verte
 

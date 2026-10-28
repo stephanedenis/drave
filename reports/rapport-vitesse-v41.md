@@ -69,7 +69,7 @@ valeur, sans FMA).
 4. **Un diagnostic documenté sans interrupteur est du code mort.** Le profil de
    perplexité par profondeur était décrit, codé, commenté — et aucun drapeau ne
    l'activait depuis des semaines (une relecture l'avait même écrit dans
-   `docs/vision.md`). Branché au bloc 19.
+   `docs/theorie/vision.md`). Branché au bloc 19.
 
 ## 5. Reproduire
 

@@ -1,8 +1,8 @@
 # Répétition Colab — la phase 3.4, pas à pas
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Objectif : deux machines qui se passent des **listes d'activation**, l'une sur le
 runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
@@ -10,10 +10,10 @@ runtime Colab, l'autre en local, et **les mêmes logits** qu'en local.
 Ce flux est aussi le **journal** qu'on relit (`--trace-flux`, puis
 `tools/analyse_flux.py`, `profil_flux.py`, `diff_flux.py`) pour comprendre où
 travaille le modèle et adapter l'architecture à la tâche — la fidélité du
-transport n'est pas le seul enjeu (`docs/vision.md` §2).
+transport n'est pas le seul enjeu (`docs/theorie/vision.md` §2).
 
 Ce document est la recette ; l'état du protocole et les chiffres qui la
-dimensionnent sont dans `docs/format-flux.md` et
+dimensionnent sont dans `docs/implantation/format-flux.md` et
 `reports/rapport-transport-liste.md`.
 
 ## Mise en place, concrètement

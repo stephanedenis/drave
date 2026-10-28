@@ -1,8 +1,8 @@
 # Quel modèle pour Drave ? — évaluer un modèle *ad hoc*, pas le moteur
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > 9 octobre 2026. Ce document sépare deux choses que les rapports mélangeaient
 > jusqu'ici : **ce que le moteur Drave fait payer** (un coût précis, mesurable) et

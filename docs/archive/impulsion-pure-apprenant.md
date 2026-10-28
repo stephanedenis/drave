@@ -1,8 +1,8 @@
 # Drave en mode impulsion pur serait-il un meilleur apprenant ?
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > 9 octobre 2026. Question posée telle quelle. Réponse en trois temps : ce que
 > « impulsion pure » peut vouloir dire chez nous, ce que nos propres mesures disent

@@ -1,8 +1,8 @@
 # Plan — exécuter DeepSeek-V4.1 **dans** Drave : les flux d'abord
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 **État au 02/10 10h00.** Version 2 de ce plan. La première version traitait le
 sujet comme « faire passer le forward de V4.1 » — c'est-à-dire comme llama.cpp.

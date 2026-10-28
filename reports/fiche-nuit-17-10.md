@@ -1,7 +1,7 @@
 # La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448
 
 **État au 18/10, 2 h.** Le chapitre complet est dans
-[`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md) ;
+[`docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md) ;
 le récit dans [`journal/2026-10-17.md`](../journal/2026-10-17.md) et [`journal/2026-10-18.md`](../journal/2026-10-18.md) ;
 l'état courant sur la page d'accueil.
 

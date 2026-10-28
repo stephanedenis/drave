@@ -308,7 +308,7 @@ c'est la preuve que la chaîne GPU → modèle → export fonctionne **sans Qwen
 
 ## 7. La ligne de roadmap
 
-**B9** — le banc externe et l'élève natif ; voir [`docs/roadmap.md`](../docs/roadmap.md).
+**B9** — le banc externe et l'élève natif ; voir [`docs/pilotage/roadmap.md`](../docs/pilotage/roadmap.md).
 B9.1 (adaptateur et porte) et B9.2 (corpus professeur, 310 prompts) sont mesurés ; B9.3
 (distillation) est **négatif à 4,04 M**, **transitoire à 9,23 M**, **positif à 9,96 M, 10,70 M,
 16,02 M et 22,54 M** (3/3 graines, 1,65–1,92 %) ; la perte masquée est **quasi égale** à 4,04 M

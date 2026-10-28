@@ -1,19 +1,19 @@
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **État du module « émulation d'un professeur »** — déplacé de `reports/recapitulatif.md` vers
 > `docs/` le **2026-10-10 10:30 HAE**, parce que ce document est un **état** (méthode appliquée,
 > résultats, corrections, ce qui est solide et ce qui ne l'est pas) et non un rapport
 > d'expérience : dans `reports/` une expérience = un fichier (voir
-> `docs/organisation-du-depot.md`). Les expériences de cette ligne sont dans
+> `docs/methode/organisation-du-depot.md`). Les expériences de cette ligne sont dans
 > `reports/toutes-langues/` (**107 fiches**, index `reports/toutes-langues.md`) et dans les
 > rapports voisins (`rapport-plateau-semantique.md`, `rapport-pont-semantique.md`,
 > `rapport-attention-creuse.md`, `rapport-logits-gpu-vs-cpu.md`).
 >
 > **Horodatage** : les dates de ce document ont été écrites avant la règle de fuseau ; la
-> chronologie fiable est celle de git (`docs/organisation-du-depot.md` § 4).
+> chronologie fiable est celle de git (`docs/methode/organisation-du-depot.md` § 4).
 
 # Récapitulatif — méthode appliquée et résultats
 

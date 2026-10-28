@@ -10,7 +10,7 @@
 
 ## 1. Le protocole
 
-Le détail est dans [`docs/protocole-semantique.md`](../docs/protocole-semantique.md) ; le code dans
+Le détail est dans [`docs/theorie/protocole-semantique.md`](../docs/theorie/protocole-semantique.md) ; le code dans
 [`tools/semantique/`](../tools/semantique/). En bref :
 
 1. **Rejouer** : chaque article UDHR (1–30) est lu dans **10 langues** (français, espagnol, allemand, italien,
@@ -161,5 +161,5 @@ diagnostiquer avant d'en tirer une conclusion. L'essai à lr 1e-2 a échoué sur
 - **Raisonnement** : après un décodeur au-dessus du plancher seulement ; sinon, on ne mesure que la surface.
 
 Les données et les historiques sont dans [`semantique-mesures.json`](semantique-mesures.json) ; le
-protocole dans [`docs/protocole-semantique.md`](../docs/protocole-semantique.md) ; le code dans
+protocole dans [`docs/theorie/protocole-semantique.md`](../docs/theorie/protocole-semantique.md) ; le code dans
 [`tools/semantique/`](../tools/semantique/).

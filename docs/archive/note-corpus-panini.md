@@ -1,8 +1,8 @@
 # Note — les corpus de Panini-Research, et ce qu'ils permettent de mesurer
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > Relevé du 06/10. Source : `/home/stephane/Data13TB/stephane/GitHub/Panini-Research`.
 

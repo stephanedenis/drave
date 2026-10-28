@@ -98,7 +98,7 @@ def compte_portes() -> int:
 
 
 def compte_chapitres() -> int:
-    return len(list((RACINE / "docs/synthese").glob("0*.md")))
+    return len(list((RACINE / "docs/theorie/synthese").glob("0*.md")))
 
 
 def compte_fiches() -> int:
@@ -120,9 +120,9 @@ def extrait_entier(texte: str, motif: str):
 
 def main() -> int:
     alertes: list[str] = []
-    en = RACINE / "docs/en-cours.md"
+    en = RACINE / "docs/pilotage/en-cours.md"
     if not en.exists():
-        print("✗ docs/en-cours.md absent")
+        print("✗ docs/pilotage/en-cours.md absent")
         return 1
     t = en.read_text()
 
@@ -244,11 +244,11 @@ def main() -> int:
             alertes.append(f"navigation : {p.relative_to(RACINE)} n'a aucun lien entrant")
 
     # 7b bis. les fiches glossaire sont toutes listées dans l'index du dossier
-    cartes = sorted((RACINE / "docs/glossaire/entrees").glob("*.md"))
+    cartes = sorted((RACINE / "docs/theorie/glossaire/entrees").glob("*.md"))
     if cartes:
-        idx_cartes = RACINE / "docs/glossaire/README.md"
+        idx_cartes = RACINE / "docs/theorie/glossaire/README.md"
         if not idx_cartes.exists():
-            alertes.append("glossaire : docs/glossaire/README.md manque")
+            alertes.append("glossaire : docs/theorie/glossaire/README.md manque")
         else:
             txt = idx_cartes.read_text(encoding="utf-8", errors="ignore")
             for c in cartes:
@@ -290,7 +290,7 @@ def main() -> int:
             )
 
     # 5bis. cohérence de la synthèse : huit chapitres, chapitres 7-8, B10–B12
-    idx = RACINE / "docs/synthese/index.md"
+    idx = RACINE / "docs/theorie/synthese/index.md"
     if idx.exists():
         it = idx.read_text()
         if "Huit chapitres" not in it:
@@ -304,7 +304,7 @@ def main() -> int:
                 alertes.append(f"cohérence : l'index ne mentionne pas {cible}")
 
         # 5ter. la synthèse est une introduction tenue à jour
-        syn = RACINE / "docs/synthese"
+        syn = RACINE / "docs/theorie/synthese"
         chapitres = sorted(syn.glob("0*.md"))
         for p in chapitres:
             if p.name not in it:
@@ -320,7 +320,7 @@ def main() -> int:
         if not m:
             alertes.append("synthèse : l'index n'a pas de « Dernière mise à jour »")
         else:
-            dernier = date_dernier_changement("docs/synthese")
+            dernier = date_dernier_changement("docs/theorie/synthese")
             if dernier and m.group(1) < dernier:
                 alertes.append(f"synthèse : index daté {m.group(1)}, dernier changement {dernier}")
         n = len(list((syn / "schemas").glob("*.svg")))

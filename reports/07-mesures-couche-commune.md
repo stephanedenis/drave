@@ -1,11 +1,11 @@
 > **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
 > (168 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
-> [`docs/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/synthese/07-modeles-alternatifs-entree-sortie.md).
+> [`docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md).
 
 # 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
 
 > **Vocabulaire** : « couche commune » est le **nom historique** de l'**étage entrée-sortie** (voir le
-> [glossaire](../docs/glossaire.md)) ; « couche 1 » désigne, lui, une **couche de neurones**. Les deux ne se
+> [glossaire](../docs/theorie/glossaire.md)) ; « couche 1 » désigne, lui, une **couche de neurones**. Les deux ne se
 > confondent pas.
 
 > **La question.** Peut-on arriver **plus vite** à une couche d'entrée-sortie **commune**, qui fasse
@@ -13,7 +13,7 @@
 > Cette note examine les familles de solutions, avec pour chacune : ce qu'elle gagne, ce qu'elle coûte, et
 > **comment on le mesure**.
 
-![Une couche commune, et la langue comme paramètre](../docs/synthese/schemas/couche-commune.svg)
+![Une couche commune, et la langue comme paramètre](../docs/theorie/synthese/schemas/couche-commune.svg)
 
 
 ## Les parties — les mesures, de la première à la dernière

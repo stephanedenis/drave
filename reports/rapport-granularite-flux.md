@@ -6,7 +6,7 @@
 > Plus de petits lots d'événements = plus de flexibilité pour l'optimisation en
 > temps réel. »
 >
-> C'est l'axe 3 de `docs/vision.md` (« Distribuer, c'est router des listes »), dont
+> C'est l'axe 3 de `docs/theorie/vision.md` (« Distribuer, c'est router des listes »), dont
 > les points ouverts étaient : la granularité, l'ordonnanceur de placement, et le
 > flux de poids depuis le NVMe. Ce rapport mesure la granularité sur des
 > **activations réelles** de V4-Flash (`DRAVE_DUMP_COUCHES`, 43 couches × 4

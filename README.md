@@ -26,7 +26,7 @@ architectures innovantes.
 L'ambition : faire éclore des modèles **plus légers, plus flexibles et plus puissants**, tout en restant **très
 flexibles sur le matériel** qui les supporte. Le cahier des charges d'origine (l'inférence ternaire sur un cluster de
 cartes Stratix V, [`Qtrinet-bootstrap.md`](Qtrinet-bootstrap.md)) est l'acte de naissance ; le projet s'appelle
-aujourd'hui Drave, et la vision complète est dans [`docs/vision.md`](docs/vision.md).
+aujourd'hui Drave, et la vision complète est dans [`docs/theorie/vision.md`](docs/theorie/vision.md).
 
 ## Le cœur : des listes, pas des matrices
 
@@ -225,7 +225,7 @@ levier : la structure, si.
    de carte des lignes qui avait fait croire à une « falaise » du raisonnement. Les mesures retirées restent dans la
    fiche.
 
-La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md`](docs/synthese/06-comment-savoir.md).
+La méthode complète et ses sept leçons : [`docs/theorie/synthese/06-comment-savoir.md`](docs/theorie/synthese/06-comment-savoir.md).
 
 ---
 
@@ -233,12 +233,12 @@ La méthode complète et ses sept leçons : [`docs/synthese/06-comment-savoir.md
 
 | vous cherchez… | allez à |
 |---|---|
-| **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/en-cours.md`](docs/en-cours.md) |
-| **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/vision.md`](docs/vision.md) |
-| **la roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/roadmap.md`](docs/roadmap.md) |
+| **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| **la roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
 | **les résultats**, mesure par mesure, avec les contrôles | [`reports/README.md`](reports/README.md) · [`reports/`](reports/) |
-| **la théorie** (8 chapitres) et la carte du raisonnement | [`docs/synthese/index.md`](docs/synthese/index.md) · [chap. 5](docs/synthese/05-la-pensee-sans-verbaliser.md) |
-| **la méthode** et ses pièges | [`docs/synthese/06-comment-savoir.md`](docs/synthese/06-comment-savoir.md) |
+| **la théorie** (8 chapitres) et la carte du raisonnement | [`docs/theorie/synthese/index.md`](docs/theorie/synthese/index.md) · [chap. 5](docs/theorie/synthese/05-la-pensee-sans-verbaliser.md) |
+| **la méthode** et ses pièges | [`docs/theorie/synthese/06-comment-savoir.md`](docs/theorie/synthese/06-comment-savoir.md) |
 | le **récit daté** de la recherche | [`journal/`](journal/) |
 | les **instruments** (les expériences sont rejouables) | [`tools/`](tools/) |
 | le **serveur de documentation** (sous-module) | [`tools/docwatch/`](tools/docwatch/) · [dépôt public](https://github.com/stephanedenis/docwatch) |
@@ -253,16 +253,16 @@ commité dans Drave.
 
 **Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un niveau
 d'architecture (étage 1 entrée-sortie, étage 2 pensée) ; une **unité de sens** est un élément de la représentation
-neutre (la « RSN »), jamais un « jeton » de tokeniseur. Le glossaire : [`docs/glossaire.md`](docs/glossaire.md).
+neutre (la « RSN »), jamais un « jeton » de tokeniseur. Le glossaire : [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md).
 
 ## Par où commencer
 
-0. [`docs/carte.md`](docs/carte.md) — **la carte** : trouver un sujet (un concept, un chantier, une phase)
+0. [`docs/theorie/carte.md`](docs/theorie/carte.md) — **la carte** : trouver un sujet (un concept, un chantier, une phase)
    directement, fichier par fichier ;
-1. [`docs/vision.md`](docs/vision.md) — la vision complète (le cœur et les cinq axes) ;
+1. [`docs/theorie/vision.md`](docs/theorie/vision.md) — la vision complète (le cœur et les cinq axes) ;
 2. [`AGENTS.md`](AGENTS.md) — la mission et les règles non négociables ;
-3. [`docs/en-cours.md`](docs/en-cours.md) — l'état courant, daté ;
-4. [`docs/synthese/05-la-pensee-sans-verbaliser.md`](docs/synthese/05-la-pensee-sans-verbaliser.md) — la carte du
+3. [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) — l'état courant, daté ;
+4. [`docs/theorie/synthese/05-la-pensee-sans-verbaliser.md`](docs/theorie/synthese/05-la-pensee-sans-verbaliser.md) — la carte du
    raisonnement, si c'est l'étage 2 qui vous intéresse.
 
 Pour rejouer : les outils sont dans [`tools/`](tools/), et chaque résultat a son JSON dans `reports/`. Les portes de
@@ -280,8 +280,8 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 les 71 langues et les maîtres (B7/B8), le banc externe (B9), le protocole sémantique (B10), la base typée (B11)
 et les modules cerveau-langage (B12). Les **chiffres, les contrôles et les négatifs**
 — y compris le seuil de distillation 9,23–9,96 M, le meilleur écart 4,40 % (31,63 M / 610 ex.), la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
-[`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/en-cours.md`](docs/en-cours.md) ; le **plan**
-dans [`docs/roadmap.md`](docs/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
+[`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; le **plan**
+dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
 
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.

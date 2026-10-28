@@ -1,8 +1,8 @@
 # Le coût du professeur : ce qu'on calcule pour rien
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Constat de départ : nos traces contiennent **toutes** les couches du professeur.
 La mission s'arrête au premier niveau abstrait — couche 10 sur 24 pour Qwen2.5-0.5B,

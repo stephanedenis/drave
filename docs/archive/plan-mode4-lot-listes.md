@@ -1,8 +1,8 @@
 # Spécification — mode 4 : le **lot en listes** (protocole v5)
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **État : ÉCRIT, mesuré et relu** (voir `reports/rapport-mode4-lot-listes.md`) — ce plan
 > reste la référence de conception, et les écarts constatés à la mise en œuvre sont
@@ -11,7 +11,7 @@
 > (`drave-core/src/main.rs`, `envoyer_lot_listes`). Le corps de spécification
 > ci-dessous est conservé tel quel — c'est le document de conception, pas un
 > reste-à-faire. Il suppose connus
-> `docs/format-flux.md` (protocole **v5**, modes 0–**4**) et `docs/plan-prefill-reparti.md`
+> `docs/implantation/format-flux.md` (protocole **v5**, modes 0–**4**) et `docs/plan-prefill-reparti.md`
 > (le mode 3, mis en œuvre, et ses leçons). Les numéros de ligne sont ceux de
 > l'arbre au moment de la rédaction (`VERSION_FLUX = 4`, `TAILLE_TETE = 79`,
 > `MODE_LOT = 3` — la version est passée à 5 depuis).
@@ -23,7 +23,7 @@ au seuil 0,01, **÷2,3 sur le fil**, au prix exact que le mode 2 paie déjà
 (2,7e-2 d'écart à 256 jetons, 1,3e-2 à 1 024). Le mode 4 ne touche ni au calcul,
 ni au cache KV, ni à la norme finale : il s'arrête au transport — le flux
 transporté est aussi le journal que relisent les outils d'analyse
-(`docs/vision.md` §2).
+(`docs/theorie/vision.md` §2).
 
 ## 0. Décisions d'architecture (à ne pas rediscuter)
 
@@ -425,7 +425,7 @@ sans lire le corps ; `assert_eq!(VERSION_FLUX, 5)` et `assert_eq!(TAILLE_TETE, 7
 | 4 | `main.rs` : 1666-1704 | `envoyer_lot_listes` (en-tête + corps par état) avec les deux garde-fous d'émetteur | test aller-retour par socket : le message relu par `recevoir_flux` rend le lot attendu ; `octets == 79 + corps` et `corps` conforme à la formule du §1.4 |
 | 5 | `main.rs` : 1849-1886, 1920-1939, 1982-2039 | branchement : `--lot > 1 && --flux-blocs` → mode 4 côté pilote ; branche serveur `MODE_LOT \|\| MODE_LOT_LISTES`, réponse en mode 4 ; message `--flux-liste` corrigé ; ligne de transport | les deux nœuds s'échangent des mode 4 ; le serveur annonce le bon nombre de lots ; `octets_recus ≈ octets_envoyes` |
 | 6 | campagne locale | la commande §6.1, plus le contrôle `--lot 1 --flux-blocs` pour la référence perdante, plus un run mode 3 à mêmes ids pour l'égalité de la référence locale | `écart(mode 4) ≤ 1,5 × écart(mode 2)` ; référence locale identique au run mode 3 ; ≈ 1 530 octets par jeton là où le mode 3 en met 3 589 |
-| 7 | `reports/rapport-mode4-lot-listes.md`, `docs/format-flux.md`, `docs/plan-prefill-reparti.md` §7, `docs/roadmap.md` 3.4/3.5 | consigner les chiffres **mesurés**, le tableau du mode 4 et la version 5 ; retirer « mode 4 non écrit » partout où c'est écrit | chaque nombre du rapport est recopié de la sortie de l'étape 6, commande incluse ; aucune mention de mode 4 « à écrire » ne subsiste |
+| 7 | `reports/rapport-mode4-lot-listes.md`, `docs/implantation/format-flux.md`, `docs/plan-prefill-reparti.md` §7, `docs/pilotage/roadmap.md` 3.4/3.5 | consigner les chiffres **mesurés**, le tableau du mode 4 et la version 5 ; retirer « mode 4 non écrit » partout où c'est écrit | chaque nombre du rapport est recopié de la sortie de l'étape 6, commande incluse ; aucune mention de mode 4 « à écrire » ne subsiste |
 
 Étapes 2 et 3 sont testables sans modèle ni campagne ; l'étape 4 aussi (socket
 locale). Ne pas commencer par 6.

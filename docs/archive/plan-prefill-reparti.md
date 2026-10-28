@@ -1,8 +1,8 @@
 # Plan — le préremplissage par lots sur le fil (phase 3.4)
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **État (30/09, après mise en œuvre).** Ce plan a été suivi : le mode 3 existe,
 > le préremplissage par lots est fidèle (écart **0,00e0** en 4 lots de 64 comme en
@@ -364,7 +364,7 @@ l'écart serait au contraire du même ordre que le chemin par jeton (2,7e-2 pour
 | 4 | `main.rs:1491-1552` | branche lot de la boucle serveur (§2.4) | 40 jetons, lot 8 : le serveur imprime « 5 flux servis », pas 39 |
 | 5 | `main.rs:1557-1661` | pilote par lots + référence locale au **même** découpage (§4.1) | la commande §4.2 rend `écart 0.00e0` |
 | 6 | `main.rs` (sortie du banc) | comptabilité : lots, octets par lot **et par jeton**, ms/jeton local et distant | 3 589 ± 1 octet par jeton à `t = 8`, 5 lots pour 39 positions |
-| 7 | `reports/rapport-prefill-reparti.md`, `docs/format-flux.md` | chiffres mesurés, tableau du protocole v3 (mode 3) | les nombres du rapport sont ceux de l'étape 5, commande recopiée telle quelle |
+| 7 | `reports/rapport-prefill-reparti.md`, `docs/implantation/format-flux.md` | chiffres mesurés, tableau du protocole v3 (mode 3) | les nombres du rapport sont ceux de l'étape 5, commande recopiée telle quelle |
 | 8 | `docs/colab-reparti.md` | répétition réelle (nœud moteur local, pilote Colab) | 200 jetons, `--lot 16`, écart **0,00e0** avec 60 ms d'aller-retour, et le tableau ms/jeton lots vs séquentiel |
 
 Étapes 1 à 3 sont indépendantes et testables sans réseau ; les étapes 4 et 5 se

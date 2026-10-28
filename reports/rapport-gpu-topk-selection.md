@@ -200,13 +200,13 @@ moyenne), la troisième 4 095 jetons (2 047 clés) — les lignes diffèrent don
 DEUX variables à la fois. Ce qui est établi : à ~255 clés le CPU gagne nettement
 (4,21 contre 7,68 ms/jeton), à ~2 047 clés le déport gagne nettement (7,59 contre
 19,58). **Le croisement en clés est donc entre 255 et 2 047 clés**, et il est plus
-haut que celui de l'attention complète (~4 000 clés d'après `docs/contexte-long.md`,
+haut que celui de l'attention complète (~4 000 clés d'après `docs/implantation/contexte-long.md`,
 mesuré à nombre de jetons égal) — à cause du coût fixe : 8 lancements et 17
 transferts par couche et par jeton. Une grille propre demanderait de faire varier le
 nombre de jetons à contexte fixé (17 434 jetons sont disponibles dans
 `/tmp/ids_qwen_long.txt` ; une passe à 16 384 jetons coûte ~20 min par chemin). La
 raison est la même que celle déjà payée sur le miroir KV (« les tampons alloués à
-chaque appel : 24,5 ms/jeton au lieu de 2,9 », `docs/contexte-long.md` §4.ter) :
+chaque appel : 24,5 ms/jeton au lieu de 2,9 », `docs/implantation/contexte-long.md` §4.ter) :
 la chaîne fait **six lancements et cinq recopies par couche et par jeton**, soit
 ~74 000 lancements pour ces 511 jetons, à comparer aux ~0,1 ms de calcul utile par
 couche. Ce n'est pas un noyau de plus qu'il faut, c'est **la fusion des quatre

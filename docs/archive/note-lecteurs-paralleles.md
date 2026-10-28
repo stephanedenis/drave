@@ -1,8 +1,8 @@
 # Les lecteurs parallèles — lire dans nos tampons au lieu du mapping
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **2026-10-12, 20 h 50 HAE** (heure lue sur la machine). Note de conception : ce qui est
 > **mesuré**, ce qui existe déjà, ce qui reste à trancher, et les **portes à tenir** (§ 5) —
@@ -20,7 +20,7 @@
 | le même motif, **`pread` depuis huit fils** dans des tampons | **3 995 Mo/s** (×3,5) | `tools/banc-experts.py` |
 | dans le moteur, la passe réelle (8 jetons de Qwen3-30B) | ~350 Mo/s utiles ; le **calcul** paie les défauts de page : 7,70 s → **3,65 s** après la prélecture parallèle | `tools/porte-prechargement.sh` |
 
-Le § 6.5.1 de `docs/configuration-nvme-raid-amd.md` l'avait écrit le 08/10 : « **les lecteurs
+Le § 6.5.1 de `docs/implantation/configuration-nvme-raid-amd.md` l'avait écrit le 08/10 : « **les lecteurs
 parallèles ne sont pas utilisés** — le plan calcule `lecteurs = 16` et ne s'en sert jamais ; sur un
 RAID0, c'est le chemin de lecture qu'il faut paralléliser explicitement (`pread` par bande, ou
 `O_DIRECT`) ». La mesure du 12/10 lui donne son chiffre.

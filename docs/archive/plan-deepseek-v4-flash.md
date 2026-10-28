@@ -1,8 +1,8 @@
 # Chantier — adapter les tests de contexte à DeepSeek-V4-Flash
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **État au 02/10 — écrit avant le téléchargement ; trois constats ont changé :**
 > le **lecteur multi-shards est fait** (`Gguf::open_multi` :

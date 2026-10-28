@@ -1,8 +1,8 @@
 # Plan : MLA et vision (chantier 5)
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 Ces deux-là n'étaient pas « à moitié faits », ils n'étaient pas commencés quand
 ce document a été écrit ; **ils ont été menés depuis**, et ce document consigne
@@ -296,7 +296,7 @@ d'injection d'embeddings, et une chaîne de pré-traitement d'image. À mener AP
 MLA, dont le chemin d'injection (`c_kv`) est plus simple et dont le gain
 (cache ÷50) est mesurable sur le plan 1 M. Ce plan ne traite ni la répartition
 entre grappes et machines, ni la lecture des flux : ces deux axes ont leurs
-propres chantiers (`docs/vision.md` §3-§4).
+propres chantiers (`docs/theorie/vision.md` §3-§4).
 
 ### Le point d'injection est en place (le seul ajout d'architecture)
 

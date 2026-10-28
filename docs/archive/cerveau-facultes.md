@@ -1,8 +1,8 @@
 # Le cerveau Drave, faculté par faculté — et le modèle le plus efficient pour chacune
 
 > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
-> **feuille de route courante** est [`roadmap.md`](../roadmap.md) ; l'**état** est
-> [`en-cours.md`](../en-cours.md).
+> **feuille de route courante** est [`roadmap.md`](../pilotage/roadmap.md) ; l'**état** est
+> [`en-cours.md`](../pilotage/en-cours.md).
 
 > **2026-10-14, 22 h 00 HAE** (heure lue sur la machine). Ce document est une **carte**, pas un
 > plan : pour chaque faculté d'un cerveau, **le mécanisme que Drave emploie aujourd'hui**, **le
@@ -12,7 +12,7 @@
 >
 > Ce document ne remplace pas les autres : `docs/plan-cerveau-complet.md` porte les **douze
 > capacités** (C1-C12), `docs/etat-cerveau.md` leur **état**, `docs/biologie-pour-drave.md` les
-> expériences **E1-E9**, `docs/manques.md` ce qui **manque** (M1-M9, N1-N5). Ici, l'entrée est la
+> expériences **E1-E9**, `docs/pilotage/manques.md` ce qui **manque** (M1-M9, N1-N5). Ici, l'entrée est la
 > **faculté**, pas la capacité : c'est la question « un cerveau, avec quoi ? ».
 
 ## 0. La carte en une table

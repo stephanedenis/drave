@@ -35,22 +35,22 @@ L'audit du 27/10 a trouvé trois familles de défauts.
 | fiche `07` | 67 mesures / 150 Ko / **168 / 10 parties** | **168 mesures, 10 parties** |
 
 **b. Des chemins et des libellés périmés.** **39 références en prose** ne résolvaient plus (dont 18
-dans `docs/etat.md`), **3 liens** annonçaient `docs/...` en pointant `docs/archive/...`, et
+dans `docs/pilotage/en-cours.md`), **3 liens** annonçaient `docs/...` en pointant `docs/archive/...`, et
 **4 documents** n'avaient aucun lien entrant : `configuration-nvme-raid-amd.md`,
 `contexte-long.md`, `convertisseur.md`, `numa-segregation.md`.
 
-**c. Des points d'entrée qui mentaient.** `docs/etat.md` (10/10) et `REPRISE.md` (11/10) décrivaient
+**c. Des points d'entrée qui mentaient.** `docs/pilotage/en-cours.md` (10/10) et `REPRISE.md` (11/10) décrivaient
 encore 34 portes et 122 tests ; `organisation-du-depot.md` citait la 38ᵉ porte et 413 fichiers ;
 `utilisation.md` disait 46 portes et 6 chapitres ; `manques.md` disait 27/27 ; le glossaire annonçait
 18 documents et 60 rapports. Les nouveaux chantiers **B10–B12** n'étaient ni dans `docs/README.md`,
-ni dans `docs/carte.md`, ni dans `docs/synthese/index.md`.
+ni dans `docs/theorie/carte.md`, ni dans `docs/theorie/synthese/index.md`.
 
 ## 2. La méthode
 
-1. **Lire les entrées** (`AGENTS.md`, `README.md`, `docs/README.md`, `docs/carte.md`, `en-cours`,
+1. **Lire les entrées** (`AGENTS.md`, `README.md`, `docs/README.md`, `docs/theorie/carte.md`, `en-cours`,
    `roadmap`, `references`, `reports/README`) et les documents de tâche.
 2. **Comparer** chaque invariant aux fichiers du disque (`reports/*.md`, `reports/*.json`,
-   `tools/porte-*.sh`, `docs/synthese/0*.md`, `docs/**/*.md`).
+   `tools/porte-*.sh`, `docs/theorie/synthese/0*.md`, `docs/**/*.md`).
 3. **Étendre la revue** pour que les défauts soient détectés automatiquement, pas à la main.
 4. **Corriger** les documents, puis relancer la revue et `porte-tableaux`.
 5. **Ne pas toucher** aux fichiers que le chantier B12 écrivait (`modules-cerveau-langage.md`,
@@ -60,33 +60,33 @@ ni dans `docs/carte.md`, ni dans `docs/synthese/index.md`.
 
 ### Une source unique
 
-`docs/en-cours.md` porte désormais un bloc **« Les chiffres de l'état »** : 49 portes, 8 chapitres,
+`docs/pilotage/en-cours.md` porte désormais un bloc **« Les chiffres de l'état »** : 49 portes, 8 chapitres,
 215 fichiers / 282 JSON, 54 documents, 1 h 34. Les autres pages y renvoient ; `tools/revue_documentation.py`
 compare ces valeurs au disque.
 
 ### Les points d'entrée
 
-- `docs/etat.md` : l'ancien index est archivé dans `docs/archive/etat-modules-2026-10-10.md` ; la page
+- `docs/pilotage/en-cours.md` : l'ancien index est archivé dans `docs/archive/etat-modules-2026-10-10.md` ; la page
   est une **redirection** vers `en-cours.md` et `roadmap.md`.
 - `REPRISE.md` : 138 tests, 49 portes, 1 h 34, dernière passe du 26/10, pointe vers l'état et le plan.
-- `docs/organisation-du-depot.md` : entrées actuelles, nommage des plans datés renvoyé à
+- `docs/methode/organisation-du-depot.md` : entrées actuelles, nommage des plans datés renvoyé à
   `docs/archive/`, compteur `49 portes / 583 fichiers`, date de revue.
-- `docs/utilisation.md` : 49 portes, 8 chapitres, 7 schémas, contradiction mdserve corrigée.
-- `docs/manques.md` : 49 portes (47/2), feuille de route `roadmap.md`, plan d'origine archivé.
-- `docs/glossaire.md` : 54 documents / 215 fichiers, parcours de lecture actuel, 2 276 lignes.
-- `docs/references-non-regression.md` : la dernière passe est en tête ; l'historique (10/10 → 26/10
+- `docs/pilotage/utilisation.md` : 49 portes, 8 chapitres, 7 schémas, contradiction mdserve corrigée.
+- `docs/pilotage/manques.md` : 49 portes (47/2), feuille de route `roadmap.md`, plan d'origine archivé.
+- `docs/theorie/glossaire.md` : 54 documents / 215 fichiers, parcours de lecture actuel, 2 276 lignes.
+- `docs/pilotage/references-non-regression.md` : la dernière passe est en tête ; l'historique (10/10 → 26/10
   09 h 40) est dans `reports/historique-passes-portes.md`.
 
 ### Les chemins et les orphelins
 
 Les 39 chemins morts sont corrigés vers `docs/archive/...` ; les 3 libellés (`README.md`,
-`REPRISE.md`, `docs/roadmap.md`) annoncent la cible réelle ; les 4 orphelins sont liés depuis
-`docs/README.md` et `docs/carte.md`. Les documents datés portent
+`REPRISE.md`, `docs/pilotage/roadmap.md`) annoncent la cible réelle ; les 4 orphelins sont liés depuis
+`docs/README.md` et `docs/theorie/carte.md`. Les documents datés portent
 `Dernière vérification : 2026-10-27` et la revue signale ceux de plus de 90 jours.
 
 ### B10–B12 et le vocabulaire
 
-- B10, B11 et B12 sont dans `docs/README.md`, `docs/carte.md` et `docs/synthese/index.md`.
+- B10, B11 et B12 sont dans `docs/README.md`, `docs/theorie/carte.md` et `docs/theorie/synthese/index.md`.
 - B11 est reformulé partout : **restitution du code (aller-retour RSN) 100 %**,
   **surface originale 33/79** — dans `en-cours`, `carte`, `roadmap`, `reports/README`, `bilan-b11`
   et `rapport-restitution`.
@@ -103,7 +103,7 @@ titre. Il exclut `README.md`, `INDEX.md` et `historique-*` ; la page d'état, el
 
 ### La synthèse comme introduction
 
-Les **huit chapitres** de `docs/synthese/` s'ouvrent désormais sur une **fiche concept** (9 fiches au
+Les **huit chapitres** de `docs/theorie/synthese/` s'ouvrent désormais sur une **fiche concept** (9 fiches au
 total), avec un lien vers le glossaire et une illustration ; l'index est une **introduction** (13
 concepts, carte des 11 familles, **14 schémas**). Les **170 liens internes** de la synthèse sont
 **relatifs** et résolvent ; la revue vérifie la fiche, le lien glossaire, l'image, la date de l'index
@@ -112,9 +112,9 @@ et l'usage de chaque schéma.
 ### Le glossaire par entrée
 
 Le glossaire passe de **11 familles** à **11 familles + 289 fiches** : une **carte courte** par
-entrée dans [`docs/glossaire/entrees/`](../docs/glossaire/entrees/), un **index groupé** par famille
-dans [`docs/glossaire/README.md`](../docs/glossaire/README.md), et un **manifeste**
-[`docs/glossaire/index.json`](../docs/glossaire/index.json) pour mdserve. Le générateur est
+entrée dans [`docs/theorie/glossaire/entrees/`](../docs/theorie/glossaire/entrees/), un **index groupé** par famille
+dans [`docs/theorie/glossaire/README.md`](../docs/theorie/glossaire/README.md), et un **manifeste**
+[`docs/theorie/glossaire/index.json`](../docs/theorie/glossaire/index.json) pour mdserve. Le générateur est
 `tools/glossaire_cartes.py` ; les fiches sont **exclues du compteur de documents** (comme les
 README) et la revue vérifie que chaque fiche est listée dans l'index. Le lien direct évite
 l'ancrage dans une famille de 500 lignes.
@@ -128,7 +128,7 @@ pensée ([`jeux-symboliques.svg`](../docs/schemas/jeux-symboliques.svg)) et l'en
 ([`format-flux.svg`](../docs/schemas/format-flux.svg)). Les 18 SVG du dépôt ont reçu `role="img"`,
 `<title>` et `<desc>` ; le `viewBox` de `portes.svg` a été ajusté au contenu.
 
-La règle est dans [`docs/agent/illustrations.md`](../docs/agent/illustrations.md) : **aucun ASCII art**,
+La règle est dans [`docs/methode/illustrations.md`](../docs/methode/illustrations.md) : **aucun ASCII art**,
 un schéma est un SVG, directement ou converti depuis Mermaid/PlantUML. Le vérificateur
 `python3 tools/verifier_schemas.py` contrôle l'absence d'ASCII, la validité XML, le `viewBox`, le titre,
 les liens relatifs et le fait que chaque schéma est référencé. L'index est
