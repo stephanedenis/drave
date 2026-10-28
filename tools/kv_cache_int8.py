@@ -99,3 +99,32 @@ def mesurer_bloc(device: str = "cuda", n: int = 128) -> dict:
             "base": base, "cache_int8_bloc": q,
             "identiques": base == q,
             "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
+
+
+class CacheMixte(DynamicCache):
+    """Cache mixte : K/V f32 pour les 64 premiers jetons, int8 au-delà."""
+
+    seuil = 64
+
+    def update(self, key_states, value_states, layer_idx, *args, **kwargs):
+        keys, values = super().update(key_states, value_states, layer_idx, *args, **kwargs)
+        layer = self.layers[layer_idx]
+        if layer.keys.shape[-2] > self.seuil:
+            layer.keys[..., self.seuil:, :] = _q(layer.keys[..., self.seuil:, :])
+            layer.values[..., self.seuil:, :] = _q(layer.values[..., self.seuil:, :])
+        return keys, values
+
+
+def mesurer_mixte(device: str = "cuda", n: int = 128) -> dict:
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    ids = tok(PROMPT, return_tensors="pt").input_ids.to(device)
+    base = _gen(m, ids, n)
+    with torch.no_grad():
+        out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                         past_key_values=CacheMixte(), pad_token_id=0)
+    q = out[0, ids.shape[1]:].tolist()
+    return {"modele": MODELE, "device": device, "prompt": PROMPT, "n": n,
+            "base": base, "cache_mixte": q,
+            "identiques": base == q,
+            "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
