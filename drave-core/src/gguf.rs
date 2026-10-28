@@ -717,6 +717,18 @@ impl<'a> Cur<'a> {
 }
 
 impl Gguf {
+    /// Construit un `Gguf` à partir d'octets déjà en mémoire (DRVM natif).
+    /// Aucun fichier temporaire, aucun `mmap` : le lecteur natif fournit le
+    /// header GGUF et les données, et le moteur les traite comme un GGUF.
+    pub fn depuis_octets(octets: Vec<u8>) -> std::io::Result<Self> {
+        let (meta, tensors, fin) = Self::entete(&octets).ok_or_else(|| {
+            std::io::Error::new(std::io::ErrorKind::InvalidData,
+                                "en-tête GGUF invalide dans les octets DRVM")
+        })?;
+        let start = Self::debut_donnees(&meta, fin);
+        Ok(Gguf { meta, tensors, bufs: vec![Tampon::Lu(octets)], starts: vec![start] })
+    }
+
     pub fn open<P: AsRef<Path>>(path: P) -> std::io::Result<Self> {
         let buf = ouvrir_tampon(path.as_ref())?;
         let (meta, tensors, fin) = Self::entete(&buf).ok_or_else(|| {

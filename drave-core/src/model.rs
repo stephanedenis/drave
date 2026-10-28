@@ -3887,8 +3887,15 @@ impl Model {
     #[allow(clippy::too_many_arguments)]
     pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                         auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
-        let t0 = Instant::now();
         let g = Gguf::open_auto(path).expect("ouverture du GGUF");
+        Self::load_partiel_g(g, ctx, n_threads, dense, keep, auto, q4, b6, couches)
+    }
+
+    /// Même chargement, mais le `Gguf` est déjà en mémoire (DRVM natif).
+    #[allow(clippy::too_many_arguments)]
+    pub fn load_partiel_g(g: Gguf, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+                           auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
+        let t0 = Instant::now();
         let arch = g.meta.get("general.architecture").and_then(|m| m.as_str())
                        .unwrap_or("").to_string();
         let r = routage_du_gguf(&g);

@@ -312,3 +312,54 @@ mod tests {
         let _ = std::fs::remove_file(&d);
     }
 }
+
+impl Drvm {
+    /// Reconstruit un GGUF complet **en mémoire** à partir du DRVM.
+    /// Aucun fichier temporaire : `Gguf::depuis_octets` le lit directement.
+    pub fn en_gguf(&self) -> Result<Vec<u8>, ErreurDrvm> {
+        let kv = self.tenseur("__gguf_kv")
+            .ok_or_else(|| ErreurDrvm("tenseur __gguf_kv absent".into()))?;
+        let imp = self.manifeste.get("execution").and_then(|e| e.get("import"))
+            .ok_or_else(|| ErreurDrvm("execution.import absent".into()))?;
+        let version = imp.get("version").and_then(Json::as_u64).unwrap_or(3) as u32;
+        let n_kv = imp.get("n_kv").and_then(Json::as_u64)
+            .ok_or_else(|| ErreurDrvm("import.n_kv absent : régénérer le DRVM".into()))?;
+        let align = imp.get("alignement").and_then(Json::as_u64).unwrap_or(32) as usize;
+        let tensors: Vec<&Tenseur> = self.tenseurs.iter()
+            .filter(|t| t.name != "__gguf_kv").collect();
+        let mut out: Vec<u8> = Vec::new();
+        out.extend_from_slice(b"GGUF");
+        out.extend_from_slice(&version.to_le_bytes());
+        out.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+        out.extend_from_slice(&n_kv.to_le_bytes());
+        out.extend_from_slice(kv);
+        for t in &tensors {
+            let nom = t.name.as_bytes();
+            out.extend_from_slice(&(nom.len() as u64).to_le_bytes());
+            out.extend_from_slice(nom);
+            let shape = self.manifeste.get("tensors").and_then(Json::as_array)
+                .and_then(|a| a.iter().find(|x| x.get("name").and_then(Json::as_str) == Some(t.name.as_str())))
+                .and_then(|x| x.get("shape")).and_then(Json::as_array)
+                .ok_or_else(|| ErreurDrvm(format!("shape absente : {}", t.name)))?;
+            out.extend_from_slice(&(shape.len() as u32).to_le_bytes());
+            for d in shape.iter().rev() {
+                out.extend_from_slice(&d.as_u64().unwrap_or(0).to_le_bytes());
+            }
+            let ttype: u32 = t.dtype.trim_start_matches("gguf_").parse()
+                .map_err(|_| ErreurDrvm(format!("type GGUF illisible : {}", t.dtype)))?;
+            out.extend_from_slice(&ttype.to_le_bytes());
+            out.extend_from_slice(&t.offset.to_le_bytes());
+        }
+        while out.len() % align != 0 { out.push(0); }
+        let data_start = out.len();
+        let total = self.tenseurs.iter().filter(|t| t.name != "__gguf_kv")
+            .map(|t| t.offset as usize + t.nbytes as usize).max().unwrap_or(0);
+        out.resize(data_start + total, 0);
+        for t in &tensors {
+            let src = self.tenseur(&t.name).ok_or_else(|| ErreurDrvm(format!("tenseur absent : {}", t.name)))?;
+            let a = data_start + t.offset as usize;
+            out[a..a + src.len()].copy_from_slice(src);
+        }
+        Ok(out)
+    }
+}

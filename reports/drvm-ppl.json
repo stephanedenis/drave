@@ -5,6 +5,8 @@
  "ppl_retour": 28.7355,
  "tokens": 127,
  "identiques": true,
- "niveau": "conversion",
- "drvm_execute": false
+ "niveau": "memoire",
+ "drvm_execute": false,
+ "drvm_ppl_memoire": 28.7355,
+ "fichier_temporaire": false
 }

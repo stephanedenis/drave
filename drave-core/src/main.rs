@@ -166,6 +166,27 @@ fn main() {
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
     }
+    if args[1] == "--drvm-ppl" {
+        let f = match args.get(2) {
+            Some(f) => f.clone(),
+            None => { eprintln!("--drvm-ppl attend un fichier DRVM"); std::process::exit(2); }
+        };
+        let d = match drvm::Drvm::open(&f) {
+            Ok(d) => d,
+            Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+        };
+        let octets = match d.en_gguf() {
+            Ok(o) => o,
+            Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+        };
+        let g = match Gguf::depuis_octets(octets) {
+            Ok(g) => g,
+            Err(e) => { eprintln!("Gguf depuis DRVM : {e}"); std::process::exit(3); }
+        };
+        let opt = analyser(&args);
+        run_ppl_avec(opt, Some(g));
+        return;
+    }
     // DRVM ne décrit pas des poids GGUF : la commande ne doit exiger aucun
     // fichier de modèle pour lire le conteneur natif.
     if args[1] == "--drvm-inspect" {
@@ -7787,6 +7808,10 @@ elle ne passe par AUCUNE couche, donc elle ne coûte aucune paire", opt.memoire,
 }
 
 fn run_ppl(opt: Options) {
+    run_ppl_avec(opt, None)
+}
+
+fn run_ppl_avec(opt: Options, g_drvm: Option<Gguf>) {
     // La restriction de la tête n'a pas de sens ici : le softmax normalise sur
     // tout le vocabulaire, et retirer des termes en retire aussi de la masse au
     // dénominateur. Mesuré, la perplexité BAISSE alors artificiellement (24,31
@@ -7815,6 +7840,11 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     } = opt;
     let lot = lot.max(1);
     let path = &modele_chemin();
+    let vocab = if let Some(g) = &g_drvm {
+        g.tensor("token_embd.weight").map(|t| t.dims[0] as usize)
+    } else {
+        mdl_cfg_vocab(path)
+    };
     // Défauts du mode PERPLEXITÉ : 256 jetons, trois quarts des cœurs, 16 bits
     // d'activation (la référence de non-régression en dépend).
     let cpu = engine::coeurs_physiques();
@@ -7837,7 +7867,6 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
     // Garde-fou : des identifiants hors vocabulaire signifient qu'on nourrit le
     // modèle avec le découpage d'un AUTRE modèle. La perplexité ne mesurerait
     // alors que l'absurdité de l'entrée — vérifié : 42 127 au lieu de 11.
-    let vocab = mdl_cfg_vocab(path);
     if let Some(v) = vocab {
         if let Some(&mauvais) = ids.iter().find(|&&i| i as usize >= v) {
             panic!("identifiant {mauvais} ≥ vocabulaire du modèle ({v}) : \
@@ -7848,8 +7877,12 @@ calculee sur un vocabulaire restreint n'est comparable a rien. Utilisez --infer.
         println!("{idfile} : {} tokens, fenêtres de {ctx}", ids.len());
     }
 
-    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
-                                             opt.couches);
+    let mut mdl = match g_drvm {
+        Some(g) => model::Model::load_partiel_g(g, ctx, n_threads, dense, keep, auto, q4, b6,
+                                                opt.couches),
+        None => model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+                                           opt.couches),
+    };
     poser_plage(&mut mdl, tete_partielle_opt, adaptateur_opt.as_deref());
     appliquer_fusion(&mut mdl, f_etat, f_alpha, f_pos, e_sortie, e_pos);
     if let Some(chemin) = flux_forcer.as_deref() {

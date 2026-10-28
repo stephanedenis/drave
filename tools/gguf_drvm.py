@@ -34,6 +34,7 @@ def _octets_tenseur(source: str, base: int, offset: int, octets: int) -> bytes:
 
 def gguf_vers_drvm(gguf: str, drvm: str) -> dict:
     kv, tenseurs, base, alignement, n_t, version = lire_entete(gguf)
+    n_kv, _ = parcourir_kv(kv)
     specs = [TensorSpec(NOM_KV, kv, dtype="u8", shape=(len(kv),), bloc="import",
                         quant="gguf_kv")]
     for t in tenseurs:
@@ -51,6 +52,7 @@ def gguf_vers_drvm(gguf: str, drvm: str) -> dict:
         "execution": {"activation": "DRVF", "placement": "local",
                       "import": {"format": "GGUF", "version": version,
                                  "alignement": alignement, "n_tenseurs": n_t,
+                                 "n_kv": n_kv,
                                  "kv_sha256": hashlib.sha256(kv).hexdigest()}},
     }
     h = write_drvm(drvm, manifeste, specs)

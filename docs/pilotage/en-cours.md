@@ -9,7 +9,7 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Agent principal** : **N0.5 partiel** — trace/rejeu du contenu DRVM **291/291** ; logits non exécutés. **Prochain : N0.3b**, parité PPL moteur DRVM.
+- **Agent principal** : **N0.3b** — `--drvm-ppl` calcule **28,7355** depuis DRVM en mémoire, sans fichier GGUF temporaire. **Prochain : N0.5 logits/DRVF**, puis N2.
 - **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
   travail n'est en attente d'eux.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -19,8 +19,8 @@
 
 - **N0 — DRVM** : format natif (manifeste, graphe, payload aligné 64 o, SHA-256, `mmap`), lecteur Python et
   Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), **poids 114/114**, N0.4
-  (GGUF ↔ DRVM, **SHA identique**), **PPL du retour 28,7355**, N0.6. **N0.5 partiel** : contenu 291/291 ;
-  **logits et exécution native DRVM à faire**.
+  (GGUF ↔ DRVM, **SHA identique**), **PPL DRVM en mémoire 28,7355**, N0.6. **N0.5 partiel** : contenu 291/291 ;
+  **logits/DRVF à faire**.
 - **N1 — `drave-n0`** : 11,47 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
   3 têtes précoces, cellule de pensée contractante, **pont** après le bloc 3. **PPL 3,465** ; têtes
   **57,6 / 61,6 / 62,1 %** contre **62,7 %** pour la principale ; pensée **λ = 0,709**.
