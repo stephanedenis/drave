@@ -230,3 +230,28 @@ def mesurer_48(device="cuda", n=256):
 
 def mesurer_96(device="cuda", n=256):
     return _mesurer_seuil(CacheMixte96, device, n)
+
+
+PROMPTS = [
+    "La mesure est reine parce que",
+    "Un train part de Montréal à 8 h et roule à 90 km/h. Il croise",
+    "Toute personne a droit à la liberté d'expression, ce qui signifie",
+]
+
+
+def mesurer_multi(device: str = "cuda", n: int = 256) -> dict:
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    lignes = []
+    for p in PROMPTS:
+        ids = tok(p, return_tensors="pt").input_ids.to(device)
+        base = _gen(m, ids, n)
+        with torch.no_grad():
+            out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                             past_key_values=CacheMixte(), pad_token_id=0)
+        q = out[0, ids.shape[1]:].tolist()
+        first = next((i for i, (x, y) in enumerate(zip(base, q)) if x != y), None)
+        lignes.append({"prompt": p, "premier_divergence": first,
+                       "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))})
+    return {"n": n, "seuil": 64, "prompts": lignes,
+            "accord_moyen": sum(l["accord"] for l in lignes) / len(lignes)}

@@ -1,0 +1,22 @@
+{
+ "n": 256,
+ "seuil": 64,
+ "prompts": [
+  {
+   "prompt": "La mesure est reine parce que",
+   "premier_divergence": 237,
+   "accord": 0.92578125
+  },
+  {
+   "prompt": "Un train part de Montréal à 8 h et roule à 90 km/h. Il croise",
+   "premier_divergence": 75,
+   "accord": 0.7130801687763713
+  },
+  {
+   "prompt": "Toute personne a droit à la liberté d'expression, ce qui signifie",
+   "premier_divergence": 225,
+   "accord": 0.88671875
+  }
+ ],
+ "accord_moyen": 0.8418600562587905
+}
