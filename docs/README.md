@@ -20,6 +20,7 @@
 | document | pour quoi |
 |---|---|
 | [`methode/mission.md`](methode/mission.md) | la vision, les deux programmes, l'ordre des priorités |
+| [`methode/echantillonnage-vdc.md`](methode/echantillonnage-vdc.md) | échantillonnage déterministe des fenêtres (van der Corput) |
 | [`methode/resultats.md`](methode/resultats.md) | ce qu'un résultat doit porter : chiffre, contrôle, commit, fiche |
 | [`methode/rangement.md`](methode/rangement.md) | les quatre familles de `docs/`, `reports/`, `journal/`, `data/`, la revue |
 | [`methode/organisation-du-depot.md`](methode/organisation-du-depot.md) | où écrire quoi, comment nommer et horodater |

@@ -17,6 +17,7 @@ import torch
 import torch.nn.functional as F
 
 from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+from tools.vdc import departs_vdc
 
 
 def charger(txt: str) -> torch.Tensor:
@@ -24,18 +25,18 @@ def charger(txt: str) -> torch.Tensor:
     return torch.tensor(list(b), dtype=torch.long)
 
 
-def lot(data, n, seq, device):
-    i = torch.randint(0, len(data) - seq - 1, (n,))
+def lot(data, n, seq, device, compteur=0):
+    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
     x = torch.stack([data[j:j + seq] for j in i]).to(device)
     y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
     return x, y
 
 
-def ppl(modele, data, seq, lot_n, device, n_lots=8):
+def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0):
     modele.eval(); tot = 0.0; n = 0
     with torch.no_grad():
         for _ in range(n_lots):
-            x, y = lot(data, lot_n, seq, device)
+            x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)
             logits = modele(x)["logits"]
             tot += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
                                          reduction="sum")); n += y.numel()
@@ -72,7 +73,7 @@ def main() -> None:
     train, val = charger(a.train), charger(a.val)
     t0 = time.time(); pertes = []
     for pas in range(1, a.pas + 1):
-        etu.train(); x, y = lot(train, a.lot, a.seq, a.device)
+        etu.train(); x, y = lot(train, a.lot, a.seq, a.device, pas * a.lot)
         with torch.no_grad():
             lp = prof(x).logits
         sortie = etu(x); ls = sortie["logits"]
@@ -94,7 +95,7 @@ def main() -> None:
     etu.eval(); bons_main = 0; bons_early = [0]*len(etu.cfg.early_blocks); n_ev = 0
     with torch.no_grad():
         for _ in range(4):
-            x, y = lot(val, a.lot, a.seq, a.device)
+            x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)
             s = etu(x)
             bons_main += int((s["logits"].argmax(-1) == y).sum())
             for j, e in enumerate(s["early"]):

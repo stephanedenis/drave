@@ -11,7 +11,8 @@ class TestCorpusNatif(unittest.TestCase):
             r = construire(str(p), fenetre=32, pas=16, max_fenetres=100, val=10)
             self.assertEqual(r["fenetres"], 100)
             self.assertEqual(r["train"] + r["val"], 100)
-            self.assertEqual(len(r["offsets_train"]), 90)
+            self.assertEqual(r["train"] + r["val"], 100)
+            self.assertEqual(r["ordre"], "van_der_corput")
 
 
 if __name__ == "__main__":

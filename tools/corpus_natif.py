@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
-import random
+from tools.vdc import ordre_vdc
 
 
 def construire_multi(sources: list[str], fenetre: int = 128, pas: int = 64,
@@ -32,12 +32,13 @@ def construire_multi(sources: list[str], fenetre: int = 128, pas: int = 64,
         offs = list(range(0, max(0, len(b) - fenetre + 1), pas))[:q]
         for o in offs:
             offsets.append({"source": src, "offset": o})
-    rng = random.Random(graine); rng.shuffle(offsets)
-    offsets = offsets[:max_fenetres]
+    ordre = ordre_vdc(len(offsets))
+    offsets = [offsets[i] for i in ordre][:max_fenetres]
     n_val = min(val, len(offsets) // 2)
     return {"sources": par_source, "fenetre": fenetre, "pas": pas,
-            "fenetres": len(offsets), "train": len(offsets) - n_val, "val": n_val,
-            "graine": graine, "offsets_train": offsets[n_val:], "offsets_val": offsets[:n_val],
+            "ordre": "van_der_corput", "fenetres": len(offsets),
+            "train": len(offsets) - n_val, "val": n_val,
+            "graine": graine, "premier_offset": offsets[0] if offsets else None,
             "licence": "sources locales — licences à vérifier avant diffusion",
             "note": "manifeste d'offsets multi-sources ; les corpus ne sont pas versionnés"}
 
@@ -51,12 +52,14 @@ def construire(source: str, fenetre: int = 128, pas: int = 64,
     if len(b) < fenetre:
         raise ValueError("corpus trop court")
     offsets = list(range(0, len(b) - fenetre + 1, pas))[:max_fenetres]
-    rng = random.Random(graine); rng.shuffle(offsets)
+    ordre = ordre_vdc(len(offsets))
+    offsets = [offsets[i] for i in ordre]
     n_val = min(val, len(offsets) // 2)
     return {
         "source": source, "octets": len(b), "fenetre": fenetre, "pas": pas,
-        "fenetres": len(offsets), "train": len(offsets) - n_val, "val": n_val,
-        "graine": graine, "offsets_train": offsets[n_val:], "offsets_val": offsets[:n_val],
+        "ordre": "van_der_corput", "fenetres": len(offsets),
+        "train": len(offsets) - n_val, "val": n_val,
+        "graine": graine, "premier_offset": offsets[0] if offsets else None,
         "licence": "source locale data/corpus_fr.txt — licence à vérifier avant diffusion",
         "note": "manifeste d'offsets ; le corpus n'est pas versionné",
     }
