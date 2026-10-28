@@ -47,15 +47,15 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 
 | # | chantier | critère |
 |---|---|---|
-| N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | entraîne 200 pas sans erreur |
-| N1.2 | Entraînement next-byte sur corpus propre | PPL < 4,0 sur tenu à l'écart |
-| N1.3 | Export DRVM et chargement moteur | PPL entraîneur = moteur à 1e-4 |
-| N1.4 | Têtes précoces (blocs 2, 4, 6) | accord > témoin sans tête |
-| N1.5 | Cellule de pensée contractante | λ < 1, contenu > baseline |
-| N1.6 | Pont de région | coût du pont ≤ 5 % de PPL |
+| N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | ✅ **architecture** — `tools/native_model.py`, 11,37 M, 6 blocs, 3 têtes, 4 tests de forme ; **entraînement 200 pas à faire** |
+| N1.2 | Entraînement next-byte sur corpus propre | ⏳ **à faire** — PPL < 4,0 sur tenu à l'écart |
+| N1.3 | Export DRVM et chargement moteur | ✅ **export** — 110 tenseurs, 45,5 Mo, `drave --drvm-inspect` lit 12 blocs ; **parité PPL à faire** |
+| N1.4 | Têtes précoces (blocs 2, 4, 6) | ⏳ **présentes, non entraînées** — accord > témoin à mesurer |
+| N1.5 | Cellule de pensée contractante | ⏳ **cellule présente, non mesurée** — λ < 1, contenu > baseline |
+| N1.6 | Pont de région | ⏳ **non implémenté** — coût ≤ 5 % de PPL |
 
 **Porte N1** : `drave-n0` est un **banc de mécanismes** mesuré dans le moteur ; il ne parle pas
-encore.
+encore. **État : architecture + export faits ; entraînement et mesures à faire.**
 
 ## N2 — distillation et données (3–4 semaines)
 

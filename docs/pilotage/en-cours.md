@@ -18,6 +18,7 @@ La vision complète est dans [`vision.md`](../theorie/vision.md).
 
 **La phase B12 est mesurée** ; les suites sont dans [`roadmap.md`](roadmap.md).
 
+- **N1 `drave-n0`** — **architecture** : 11,37 M, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %, 3 têtes précoces, cellule de pensée ; **export DRVM** 110 tenseurs / 45,5 Mo, lu par `drave --drvm-inspect`. Entraînement et mesures à faire.
 - **N0 le format DRVM** — **commencé** : manifeste, graphe, payload aligné, `mmap`, refus de version et de bloc inconnu ; **6 tests** ; `drave-core` lit DRVM (`drvm.rs`, CLI `--drvm-inspect`, test) ; la parité PPL avec un GGUF reste à mesurer.
 - **A7 la [grappe](../theorie/glossaire/entrees/grappe.md) [déportée](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md)** — **faite jusqu'à A7.26** : relais exact, grappe 21 %, transport sparse **4,44×**,
   seuil réseau, [couche](../theorie/glossaire/entrees/couche.md) distante **bit-à-bit**, [cache KV](../theorie/glossaire/entrees/kv.md) [int8](../theorie/glossaire/entrees/int4-int8.md),
