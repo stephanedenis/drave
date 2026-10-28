@@ -119,6 +119,8 @@ détail dans `reports/` ou la roadmap. On ne relève pas le budget.
 
 Un nouvel agent lit `AGENTS` + `en-cours` + **un** document de tâche, puis [`REPRISE`](../../REPRISE.md)
 pour les pièges. Le journal ne se lit que si l'on a besoin du **récit** d'une journée précise.
+Le journal est en **dossiers par jour** (`journal/AAAA-MM-JJ/`) ; chaque rapport de session
+renvoie à son jour, à l'index des sessions et à `en-cours` (`python3 tools/verifie_journal.py`).
 
 ## 5. Vérifier
 

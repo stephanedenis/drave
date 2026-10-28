@@ -13,7 +13,7 @@
 > **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) — la passe
 > du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
 > `porte-occupation-moteur` (contention ; elle passe **verte seule**) ; aucune régression.
-> Journaux : [`journal/2026-10-28.md`](../../journal/2026-10-28.md).
+> Journaux : [`journal/2026-10-28/README.md`](../../journal/2026-10-28/README.md).
 
 > **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
 > finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux

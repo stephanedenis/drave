@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **224 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **228 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -154,7 +154,11 @@
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
+| [rapport-native-corpus-multi.md](rapport-native-corpus-multi.md) | N2.6 — corpus diversifié : 49 999 fenêtres, quatre sources |
 | [rapport-native-corpus.md](rapport-native-corpus.md) | N2.1 — 50 000 fenêtres pour `drave-n0` |
+| [rapport-native-distillation-20m.md](rapport-native-distillation-20m.md) | N2.5 — un student de 21,6 M distillé : 4,294, pire que 11,5 M |
+| [rapport-native-distillation-multi.md](rapport-native-distillation-multi.md) | N2.7 — distillation multi-sources : 9,517, au niveau du professeur |
+| [rapport-native-distillation-tetes.md](rapport-native-distillation-tetes.md) | N2.4 — têtes précoces dans la distillation : pas de gain de PPL |
 | [rapport-native-distillation.md](rapport-native-distillation.md) | N2.3 — distillation : PPL 3,297 contre 3,465 |
 | [rapport-native-n0.md](rapport-native-n0.md) | N1.2 — `drave-n0` : PPL 3,35 sur le corpus français |
 | [rapport-native-pensee.md](rapport-native-pensee.md) | N1.5 — la pensée contractante de `drave-n0` : λ = 0,709 |

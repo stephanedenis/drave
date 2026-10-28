@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**32 commits** · **0 session(s)** · **8 thème(s)**
+**33 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 3 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 5 | [distribue.md](distribue.md) |
 | docs | 7 | [docs.md](docs.md) |
@@ -65,6 +65,7 @@
 | 13:17 | `2e762048` | N2.6 — CORPUS DIVERSIFIÉ : 49 999 FENÊTRES, 4 SOURCES |
 | 13:25 | `acd9c623` | MÉTHODE — ÉCHANTILLONNAGE VAN DER CORPUT, DÉTERMINISTE ET REPRODUCTIBLE |
 | 14:09 | `47b0a0f1` | JOURNAL — GÉNÉRATEURS EN DOSSIERS PAR JOUR (SESSION → JOUR/ÉTAT) |
+| 14:15 | `8a01dfcc` | N2.7 — DISTILLATION MULTI : STUDENT 9,517, PROFESSEUR 9,571, VDC PARTOUT |
 
 ## Le récit de la journée (écrit à la main)
 

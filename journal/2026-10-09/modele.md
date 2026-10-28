@@ -21,7 +21,7 @@
 | 10:02 | `f27530e6` | Moteur contre modèle : un tableau qui dit, pour chaque mesure, de qui elle parle | `modele-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 10:27 | `1f6889e8` | Biologie : ce que les connectomes imposent comme contraintes, et l'expérience E1 outillée | `biologie-pour-drave.md`, `MANIFEST.md`, `digest.md` (+2) |
 | 10:58 | `2919789b` | Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde | `biologie-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |
-| 11:10 | `33cc4551` | E6 outillée : poids log-normaux (theta = log|w| appris, signes figés à la naissance) | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 11:10 | `33cc4551` | E6 outillée : poids log-normaux (theta = log\|w\| appris, signes figés à la naissance) | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
 | 11:40 | `458e3082` | Les deux axes appris se cumulent : +poids élagués appris = ÷2 lectures à qualité égale | `modele-pour-drave.md`, `MANIFEST.md`, `digest.md` (+2) |
 | 12:12 | `47a180da` | E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4 | `biologie-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |
 | 12:51 | `d222f9d8` | E6 (poids log-normaux) : échec de code, consigné comme tel — le modèle sauvegardé n'est pas le modèle entraîné | `biologie-pour-drave.md`, `MANIFEST.md`, `digest.md` (+1) |

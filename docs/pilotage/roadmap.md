@@ -470,4 +470,4 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 
 > **Journal des décisions** : l'historique (30/09 → 27/10) est dans
-> [`journal/2026-10-27_decisions-roadmap.md`](../../journal/2026-10-27_decisions-roadmap.md).
+> [`journal/2026-10-27/decisions-roadmap.md`](../../journal/2026-10-27/decisions-roadmap.md).

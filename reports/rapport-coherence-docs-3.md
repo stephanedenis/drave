@@ -66,7 +66,7 @@ compare ces valeurs au disque.
 
 ### Les points d'entrée
 
-- `docs/pilotage/en-cours.md` : l'ancien index est archivé dans `docs/archive/etat-modules-2026-10-10.md` ; la page
+- `docs/pilotage/en-cours.md` : l'ancien index est archivé dans `docs/archive/etat-modules-2026-10-10/README.md` ; la page
   est une **redirection** vers `en-cours.md` et `roadmap.md`.
 - `REPRISE.md` : 138 tests, 49 portes, 1 h 34, dernière passe du 26/10, pointe vers l'état et le plan.
 - `docs/methode/organisation-du-depot.md` : entrées actuelles, nommage des plans datés renvoyé à
@@ -176,7 +176,7 @@ est propre** ; c'est la première action de la file.
 
 **Le journal est en retard d'un commit de housekeeping.** Il est généré par le `pre-commit`, donc
 il ne peut pas voir le commit qui l'ajoute. Le commit de passe 2 (`a81c5bd9`) est bien dans
-`journal/2026-10-27.md` ; seul le commit de régénération (`831ecdb1`) manque. C'est structurel.
+`journal/2026-10-27/README.md` ; seul le commit de régénération (`831ecdb1`) manque. C'est structurel.
 
 ## 7. Ce qui pourrait rendre ce rapport faux
 

@@ -88,6 +88,10 @@ THEMES: list[tuple[str, str, list[str], list[str]]] = [
 THEME_DEFAUT = ("divers", "Ce qui ne rentre dans aucun thème")
 
 
+def cellule(v) -> str:
+    return str(v).replace("|", "\\|")
+
+
 def theme_de(sujet: str, fichiers: list[str]) -> str:
     s = sujet.lower()
     for slug, _, mots, chemins in THEMES:
@@ -143,6 +147,12 @@ def sessions_du_jour(jour: str) -> list[dict]:
         if not m:
             continue
         sid, titre, debut, duree = m.group(1), m.group(2), m.group(3), float(m.group(4))
+        # le tableau porte l'identifiant court (8 caractères) et le lien vers le rapport
+        # complet : on prend l'identifiant COMPLET, sinon le lien du jour pointe un dossier
+        # `sessions/<8 caractères>/` qui n'existe pas.
+        mfull = re.search(r"sessions/([0-9a-f-]{36})/rapport\.md", l)
+        if mfull:
+            sid = mfull.group(1)
         t0 = time.mktime(time.strptime(debut, "%Y-%m-%d %H:%M"))
         t1 = t0 + duree * 3600
         # INTERSECTION de la fenêtre de session avec la JOURNÉE, et non « midi dedans » : une
@@ -280,11 +290,17 @@ def ecrire(chemin: Path, contenu: str, dry: bool, journal: list[str]) -> None:
         chemin.write_text(contenu, encoding="utf-8")
 
 
-def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | None = None) -> int:
+def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
     dossier = JOURNAL / jour
     dossier.mkdir(parents=True, exist_ok=True)
     commits = git_commits(jour)
     sessions = sessions_du_jour(jour)
+    id_courant = ""
+    if jour == time.strftime("%Y-%m-%d"):
+        ec = RACINE / "docs/pilotage/en-cours.md"
+        if ec.exists():
+            m = re.search(r"\*\*Id DSH\*\* : `([0-9a-f-]+)`", ec.read_text(encoding="utf-8"))
+            id_courant = m.group(1) if m else ""
     par_theme: dict[str, list[dict]] = {}
     for c in commits:
         par_theme.setdefault(theme_de(c["sujet"], c["fichiers"]), []).append(c)
@@ -317,7 +333,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
                 apercu = ", ".join(f"`{f.split('/')[-1]}`" for f in c["fichiers"][:3])
                 if n > 3:
                     apercu += f" (+{n - 3})"
-                lignes.append(f"| {c['heure']} | `{c['hash']}` | {c['sujet']} | {apercu} |")
+                lignes.append(f"| {c['heure']} | `{c['hash']}` | {cellule(c['sujet'])} | {apercu} |")
         else:
             lignes.append("*(aucun commit classé dans ce thème)*")
         lignes.append("")
@@ -401,13 +417,18 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
         lignes += ["## Autres pièces du jour", "",
                    " · ".join(f"[{e}]({e})" for e in extras), ""]
     lignes += ["## Sessions DSH", ""]
+    if id_courant:
+        lignes.append(f"- **Session en cours** : `{id_courant}` — "
+                      f"[l'état](../../docs/pilotage/en-cours.md) · "
+                      f"[l'index des sessions](../README.md#sessions) ; rapport à la fin de la session.")
+        lignes.append("")
     if sessions:
         lignes += ["| session | titre | début | durée | liens |", "|---|---|---|---|---|"]
         for s_ in sessions:
-            lignes.append(f"| `{s_['id']}` | {s_['titre']} | {s_['debut']} | "
+            lignes.append(f"| `{s_['id']}` | {cellule(s_['titre'])} | {s_['debut']} | "
                           f"{s_['duree']:.1f} h | [rapport](../sessions/{s_['id']}/rapport.md) · "
                           f"[digest](../sessions/{s_['id']}/digest.md) |")
-    else:
+    elif not id_courant:
         lignes += ["Aucune session indexée pour ce jour ; voir",
                    "[l'index des sessions](../README.md#sessions)."]
     lignes.append("")
@@ -415,8 +436,15 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
         lignes += ["## Tous les commits (heure réelle)", "", "| heure | commit | fait |",
                    "|---|---|---|"]
         for c in sorted(commits, key=lambda c: c["heure"]):
-            lignes.append(f"| {c['heure']} | `{c['hash']}` | {c['sujet']} |")
+            lignes.append(f"| {c['heure']} | `{c['hash']}` | {cellule(c['sujet'])} |")
         lignes.append("")
+    notes = lire_notes(dossier / "README.md")
+    lignes += ["## Le récit de la journée (écrit à la main)", "", NOTES_DEB, notes, NOTES_FIN, ""]
+    ecrire(dossier / "README.md", "\n".join(lignes), dry, trace)
+    return len(commits)
+
+
+def generer_themes(dry: bool, trace: list[str]) -> None:
     # la TABLE DES THÈMES, écrite à côté : c'est la règle de classement, elle doit être lisible
     # (et modifiable) sans lire le script
     table = ["# Thèmes du journal", "",
@@ -446,13 +474,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
             chiffres = m.group(1).strip() if m else "—"
             table.append(f"| [{f.parent.name}]({f.parent.name}/{f.name}) | {chiffres[:160]} |")
         table.append("")
-    if themes_ecrits is not None and "themes" not in themes_ecrits:
-        themes_ecrits.append("themes")
-        ecrire(JOURNAL / "THEMES.md", "\n".join(table), dry, trace)
-    notes = lire_notes(dossier / "README.md")
-    lignes += ["## Le récit de la journée (écrit à la main)", "", NOTES_DEB, notes, NOTES_FIN, ""]
-    ecrire(dossier / "README.md", "\n".join(lignes), dry, trace)
-    return len(commits)
+    ecrire(JOURNAL / "THEMES.md", "\n".join(table), dry, trace)
 
 
 def main() -> int:
@@ -480,12 +502,12 @@ def main() -> int:
 
     trace: list[str] = []
     total = 0
-    themes_ecrits: list = []
     for j in jours:
-        n = generer_jour(j, a.dry_run, trace, themes_ecrits)
+        n = generer_jour(j, a.dry_run, trace)
         total += n
         if not a.quiet:
             print(f"{j} : {n} commits")
+    generer_themes(a.dry_run, trace)
     if not a.quiet:
         print("\n".join(trace))
         print(f"{len(trace)} fichiers {'(simulation)' if a.dry_run else 'écrits'} · "

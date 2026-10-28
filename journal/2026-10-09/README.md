@@ -73,7 +73,7 @@
 | 10:37 | `7f24b33b` | Le budget chiffré : 0,4 pJ par événement synaptique contre 0,9 µJ chez nous |
 | 10:47 | `75a3d067` | Carte des taux complète : 50 %, 25 %, 12,5 % — chaque division par deux coûte 2 % puis 8 % |
 | 10:58 | `2919789b` | Le fait biologique que nos modèles ne reproduisent pas : des poids à queue lourde |
-| 11:10 | `33cc4551` | E6 outillée : poids log-normaux (theta = log|w| appris, signes figés à la naissance) |
+| 11:10 | `33cc4551` | E6 outillée : poids log-normaux (theta = log\|w\| appris, signes figés à la naissance) |
 | 11:40 | `458e3082` | Les deux axes appris se cumulent : +poids élagués appris = ÷2 lectures à qualité égale |
 | 12:01 | `5eaa70b6` | Notre hebbien différentiel face à la biologie : pourquoi il échoue, et par quoi le remplacer |
 | 12:12 | `47a180da` | E1 : un connectome inné ALÉATOIRE coûte 1 % de perplexité et divise les lectures par 4 |

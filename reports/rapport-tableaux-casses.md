@@ -66,7 +66,7 @@ défauts volontaires (un tableau à cellules inégales, une barre échappée hor
 Elle ne vérifie **pas** les tableaux « écrasés » sur une seule ligne (des retours à la ligne perdus
 à l'écriture) : indétectables sans heuristique, et **un faux positif dans une porte coûte plus cher
 que le défaut**. Huit cas connus sont laissés tels quels dans
-`journal/2026-10-10-reprise-historique.md` (un récit historique), et c'est écrit dans l'en-tête de
+`journal/2026-10-10/reprise-historique.md` (un récit historique), et c'est écrit dans l'en-tête de
 la porte.
 
 *Première version de ce contrôle, corrigée avant d'être crue* : elle criait sur **tout** `\` + `|`, y

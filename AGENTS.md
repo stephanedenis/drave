@@ -52,10 +52,10 @@ volonté** des événements.
    → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
 10. **Pilotage : cycles longs, sous-agents, état unique.** DSH ouvre **un goal par programme** avec
     `max_goal_rounds` **très grand (1 000)** ; on ne s'arrête qu'à un résultat mesuré, écrit, committé, ou
-    à un blocage nommé. Les tâches indépendantes partent en **sous-agents** (2 à 4 en parallèle) ; le
+    un blocage nommé. Les tâches indépendantes partent en **sous-agents** (2–4 en parallèle) ; le
     sous-agent ne touche **jamais** `en-cours`/`roadmap`/`AGENTS`, il rend un **diff d'état**. Le principal
-    met à jour [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) **à chaque cycle** (une ligne par
-    résultat, lien, prochaine action ; ≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+    met à jour `en-cours` **chaque cycle** (une ligne/résultat, lien, prochaine action ;
+    ≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
@@ -99,4 +99,5 @@ volonté** des événements.
 - la revue de documentation passe, et les liens résolvent.
 - le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
 - l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
 - les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.

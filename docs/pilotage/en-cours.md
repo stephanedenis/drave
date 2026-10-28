@@ -11,6 +11,7 @@
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
+- **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
 - **Agent principal** : **N2.7 terminé** — distillation multi **9,517** vs professeur **9,571**, VDC partout. **Prochain : N2.5b**, capacité à budget égal, puis N4.
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.

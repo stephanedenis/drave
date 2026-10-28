@@ -25,7 +25,7 @@
 **Règle** : ces fichiers **renvoient**, ils ne recopient pas. Un détail mesuré va dans
 `reports/`, un principe dans `docs/`, un fait daté dans `journal/`. Deux fichiers d'entrée de
 709 et 1 828 lignes ont été allégés le 2026-10-10 pour cette raison (versions longues conservées
-dans `journal/`, voir `journal/2026-10-10-reprise-historique.md`).
+dans `journal/`, voir `journal/2026-10-10/reprise-historique.md`).
 
 ## 1. `docs/` — quatre familles
 
@@ -93,14 +93,15 @@ les mesures, les portes et la documentation — donc **chaque jour est découpé
 
 | fichier | rôle |
 |---|---|
-| `journal/AAAA-MM-JJ.md` | l'**index du jour** : les thèmes, tous les commits, les sessions, et le **récit écrit à la main** (bloc « notes », préservé) |
-| `journal/AAAA-MM-JJ_<thème>.md` | les **commits du jour de ce thème**, les titres de tour de session qui s'y rattachent, les mesures touchées |
-| `journal/sessions/<id>/` | les rapports de session (automates, `tools/session_report.py`) |
-| `journal/AAAA-MM-JJ-<récit>.md` | une pièce longue écrite à la main (ex. le récit du sprint) |
-| `journal/README.md` | l'index général : les journées (index + thèmes) et les sessions — **régénéré**, ne pas éditer |
+| `journal/AAAA-MM-JJ/` | le **dossier du jour** : un dossier par jour, jamais un fichier `AAAA-MM-JJ*.md` à la racine |
+| `journal/AAAA-MM-JJ/README.md` | l'**index du jour** : les thèmes, tous les commits, les sessions, le **récit écrit à la main** (bloc « notes », préservé) |
+| `journal/AAAA-MM-JJ/<thème>.md` | les **commits du jour de ce thème**, les titres de tour de session qui s'y rattachent, les mesures touchées |
+| `journal/AAAA-MM-JJ/<récit>.md` | une pièce longue écrite à la main (ex. le récit du sprint) |
+| `journal/sessions/<id>/` | les rapports de session (automates, `tools/session_report.py`) ; chaque rapport renvoie à son jour et à `en-cours` |
+| `journal/README.md` | l'index général : les journées (dossiers) et les sessions — **régénéré**, ne pas éditer |
 
-Le nom commence par la **date** et finit par le **thème** : `ls journal/2026-10-1*_attention.md`
-suit un thème d'un jour à l'autre.
+Le jour est un **dossier** ; le thème est un **fichier** : `ls journal/2026-10-1*/attention.md`
+suit un thème d'un jour à l'autre. Vérifier : `python3 tools/verifie_journal.py`.
 
 **C'est automatisé** (`tools/journal_auto.py`, appelé par le `pre-commit`) : les commits du jour
 viennent de **git** (heure d'auteur, en HAE), les sessions actives de `journal/README.md`, et les

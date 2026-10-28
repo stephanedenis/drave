@@ -5,7 +5,7 @@
 > ([`docs/archive/etat-modules-2026-10-10.md`](docs/archive/etat-modules-2026-10-10.md)). Ce fichier ne dit que : quoi lire, quoi vérifier,
 > quels pièges éviter, et où écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche
 > par expérience**. Version longue d'avant le 2026-10-10 :
-> [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
+> [`journal/2026-10-10/reprise-historique.md`](journal/2026-10-10/reprise-historique.md).
 
 ## 1. Les cinq premières minutes
 
@@ -37,6 +37,7 @@ Un sous-agent ne touche **jamais** `en-cours`, `roadmap` ou `AGENTS` ; il rend u
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
 | toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (46 vertes, 3 rouges), **1 h 40**, aucune sautée — le compte et les repères sont dans `docs/pilotage/references-non-regression.md` (dernière passe : 28/10 00 h 12) |
 | l'état | `python3 tools/verifie_en_cours.py` | ✅ état court, structuré et reprenable |
+| le journal | `python3 tools/verifie_journal.py` | ✅ un dossier par jour, sessions ancrées |
 | les repères chiffrés | [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) | les valeurs de la passe du 28/10 |
 
 **APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**

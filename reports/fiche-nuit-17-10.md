@@ -2,7 +2,7 @@
 
 **État au 18/10, 2 h.** Le chapitre complet est dans
 [`docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md) ;
-le récit dans [`journal/2026-10-17.md`](../journal/2026-10-17.md) et [`journal/2026-10-18.md`](../journal/2026-10-18.md) ;
+le récit dans [`journal/2026-10-17/README.md`](../journal/2026-10-17/README.md) et [`journal/2026-10-18/README.md`](../journal/2026-10-18/README.md) ;
 l'état courant sur la page d'accueil.
 
 ## La question
