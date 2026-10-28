@@ -65,7 +65,7 @@ permutation.
 
 | # | chantier | critère |
 |---|---|---|
-| N2.1 | Collecte et filtrage (UDHR, textes publics, code, dialogue) | 50 000 séquences, licences tracées |
+| N2.1 | Collecte et filtrage (UDHR, textes publics, code, dialogue) | ⚠️ **volume** — 50 000 fenêtres, 45 000/5 000 ; **un seul corpus**, licence à vérifier, diversité non faite |
 | N2.2 | Professeur local (Qwen 0.5B, logits) + DeepSeek (séquences) | deux sources, pas une seule |
 | N2.3 | Distillation + pertes locales + têtes + pensée | écart ≤ **4,40 %** (B9) |
 | N2.4 | Contrôle 30 langues | pas de chute > 5 pts |

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-native-corpus.md`](rapport-native-corpus.md) | **N2.1** — 50 000 fenêtres, 45 000/5 000, manifeste d'offsets |
 | [`rapport-drvm-ppl.md`](rapport-drvm-ppl.md) | **N0.3b** — PPL du retour DRVM : **28,7355** identique à la source |
 | [`rapport-drvm-trace.md`](rapport-drvm-trace.md) | **N0.5** — trace/rejeu DRVM : 291/291, 6 144 listes, logits SHA identique, PPL 28,7355 |
 | [`rapport-gguf-drvm.md`](rapport-gguf-drvm.md) | **N0.4** — GGUF ↔ DRVM : 290 tenseurs, **SHA identique** sur 337 Mo |
