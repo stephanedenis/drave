@@ -173,6 +173,13 @@ def exporter_drvm(modele: NativeModel, chemin: str) -> str:
     manifeste = {
         "format": "DRVM", "version": 0,
         "model": {"name": "drave-n0", "parametres": modele.nb_parametres(),
+                  "architecture": {"kind": "drave-n0", "vocab": cfg.vocab,
+                                   "d_model": cfg.d_model, "n_blocks": cfg.n_blocks,
+                                   "n_heads": cfg.n_heads, "expert_hidden": cfg.expert_hidden,
+                                   "n_experts": cfg.n_experts, "top_k": cfg.top_k,
+                                   "kwta": cfg.kwta, "window": cfg.window,
+                                   "thought_steps": cfg.thought_steps,
+                                   "early_blocks": list(cfg.early_blocks)},
                   "tokenizer": {"kind": "bytes", "vocab": cfg.vocab}},
         "graph": {"regions": [{"id": "r0", "blocks": [b["id"] for b in blocs]}],
                   "blocks": blocs, "routes": [], "heads": [f"early{i}" for i in range(len(cfg.early_blocks))],

@@ -66,6 +66,7 @@ const VARS_LUES: &[&str] = &[
 mod clusters;
 mod kimi_k3;
 mod drvm;
+mod native;
 mod engine;
 mod engram;
 mod formats;
@@ -165,6 +166,19 @@ fn main() {
         eprintln!("       (un dossier contenant commun.gguf EST un modèle ; DRAVE_CLUSTERS=0,3");
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
+    }
+    if args[1] == "--drvm-forward" {
+        let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-forward attend un DRVM"); std::process::exit(2); } };
+        let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());
+        let d = match drvm::Drvm::open(&f) { Ok(d)=>d, Err(e)=>{eprintln!("{e}"); std::process::exit(3);} };
+        let n = match native::Native::open(&d) { Ok(n)=>n, Err(e)=>{eprintln!("{e}"); std::process::exit(3);} };
+        let ids: Vec<u32> = prompt.bytes().map(|b| b as u32).collect();
+        let logits = n.forward(&ids);
+        let mut top: Vec<(usize, f32)> = logits.iter().cloned().enumerate().collect();
+        top.sort_by(|a,b| b.1.partial_cmp(&a.1).unwrap()); top.truncate(5);
+        println!("DRVM natif · prompt {:?} · {} octets", prompt, ids.len());
+        for (i, v) in &top { println!("  octet {:>3} {:?} · logit {:.4}", i, *i as u8 as char, v); }
+        return;
     }
     if args[1] == "--drvm-ppl" {
         let f = match args.get(2) {

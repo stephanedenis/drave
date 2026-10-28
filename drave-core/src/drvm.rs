@@ -43,6 +43,9 @@ impl Json {
     pub fn as_u64(&self) -> Option<u64> {
         if let Json::Nombre(n) = self { Some(*n as u64) } else { None }
     }
+    pub fn as_f64(&self) -> Option<f64> {
+        if let Json::Nombre(n) = self { Some(*n) } else { None }
+    }
     pub fn as_array(&self) -> Option<&[Json]> {
         if let Json::Tableau(v) = self { Some(v) } else { None }
     }
@@ -61,6 +64,7 @@ pub struct Tenseur {
     pub offset: u64,
     pub nbytes: u64,
     pub dtype: String,
+    pub shape: Vec<u64>,
 }
 
 #[derive(Debug, Clone)]
@@ -245,6 +249,8 @@ impl Drvm {
             let offset = x.get("offset").and_then(Json::as_u64).ok_or_else(|| ErreurDrvm("tenseur sans offset".into()))?;
             let nbytes = x.get("nbytes").and_then(Json::as_u64).ok_or_else(|| ErreurDrvm("tenseur sans nbytes".into()))?;
             let dtype = x.get("dtype").and_then(Json::as_str).unwrap_or("f32");
+            let shape: Vec<u64> = x.get("shape").and_then(Json::as_array)
+                .map(|a| a.iter().filter_map(Json::as_u64).collect()).unwrap_or_default();
             if !ids.contains(bloc) { return Err(ErreurDrvm(format!("bloc inconnu pour {name}"))); }
             if nbytes == 0 || offset % ALIGNEMENT as u64 != 0 {
                 return Err(ErreurDrvm(format!("tenseur mal aligné : {name}")));
@@ -253,7 +259,7 @@ impl Drvm {
                 return Err(ErreurDrvm(format!("tenseur hors payload : {name}")));
             }
             tenseurs.push(Tenseur { name: name.to_string(), bloc: bloc.to_string(),
-                                    offset, nbytes, dtype: dtype.to_string() });
+                                    offset, nbytes, dtype: dtype.to_string(), shape });
         }
         Ok(Drvm { manifeste, blocs, tenseurs, payload_offset: poff, data: b })
     }

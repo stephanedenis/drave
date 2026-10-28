@@ -16,6 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-forward.md`](rapport-native-forward.md) | **N0.7** — exécution native DRVM : top-1 identique, logits **9,94 vs 10,82** |
 | [`rapport-native-generation.md`](rapport-native-generation.md) | **N4.1** — génération : cohérente 12 octets, puis dérive ; pas un assistant |
 | [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |
 | [`rapport-native-distillation-multi.md`](rapport-native-distillation-multi.md) | **N2.7** — distillation multi : student **9,517** vs professeur **9,571** |

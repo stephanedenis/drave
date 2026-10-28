@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**37 commits** · **0 session(s)** · **8 thème(s)**
+**38 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
-| distribue | 6 | [distribue.md](distribue.md) |
+| distribue | 7 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
@@ -70,6 +70,7 @@
 | 14:29 | `a86faa71` | N2.5b — CAPACITÉ À BUDGET ÉGAL : 21,63 M 4,294 CONTRE 11,47 M 4,476, −4,1 % |
 | 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT |
 | 15:00 | `bedeebae` | MÉTHODE — REPRENDRE UN GOAL EN PAUSE (GET_GOAL → UPDATE_GOAL RESUME) ; INDEX 230 |
+| 15:09 | `9cd78139` | N2.5b — CAPACITÉ À BUDGET ÉGAL, 3 GRAINES : 21,63 M 4,142 CONTRE 11,47 M 4,507 (−8,1 %) |
 
 ## Le récit de la journée (écrit à la main)
 

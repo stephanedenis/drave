@@ -47,6 +47,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 
 | # | chantier | critère |
 |---|---|---|
+| N0.7 | **Exécution native DRVM** | ⚠️ **technique** — top-1 identique, logits **9,94 vs 10,82** (écart 0,88), sans GGUF |
 | N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | ✅ **architecture** — `tools/native_model.py`, 11,37 M, 6 blocs, 3 têtes, 4 tests de forme ; **entraînement 200 pas à faire** |
 | N1.2 | Entraînement next-byte sur corpus propre | ⏳ **à faire** — PPL < 4,0 sur tenu à l'écart |
 | N1.3 | Export DRVM et chargement moteur | ✅ **export** — 114 tenseurs, `drave --drvm-inspect` lit 12 blocs ; **114/114 identiques** au checkpoint ; **parité PPL à faire** |
