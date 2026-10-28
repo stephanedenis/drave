@@ -50,7 +50,7 @@ La vision complète est dans [`vision.md`](../theorie/vision.md).
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **215** / **282** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **53** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Où l'on en est

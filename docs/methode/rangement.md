@@ -32,7 +32,7 @@ ce qu'on ne sait pas, et le lien vers la fiche). À chaque cycle,
 4. **fraîcheur** : la date de `en-cours.md` est celle du **dernier commit** (comparaison réelle ; l'heure est
    informative) ;
 5. **compteurs** : la page d'état est la **source unique** — **49 portes, 8 chapitres, 215 fichiers / 282 JSON,
-   53 documents** — et la revue les compare au disque (fichiers de `reports/`, `docs/`, `tools/porte-*.sh`) ;
+   55 documents** — et la revue les compare au disque (fichiers de `reports/`, `docs/`, `tools/porte-*.sh`) ;
 6. **cohérence** : la synthèse ([`docs/theorie/synthese/index.md`](../theorie/synthese/index.md)) et le tableau de bord disent la
    même chose, et l'index liste **B10–B12** ;
 7. **navigation** : aucun document vivant n'est **orphelin**, et aucun **chemin en code inline** ne pointe vers un

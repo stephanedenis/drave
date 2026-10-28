@@ -41,6 +41,7 @@
 | [`pilotage/utilisation.md`](pilotage/utilisation.md) | ce qui marche aujourd'hui, avec la commande exacte |
 | [`pilotage/manques.md`](pilotage/manques.md) | le registre des manques mesurés |
 | [`pilotage/references-non-regression.md`](pilotage/references-non-regression.md) | les repères chiffrés des passes complètes |
+| [`pilotage/roadmap-native.md`](pilotage/roadmap-native.md) | le programme N : DRVM, `drave-n0`, distillation |
 
 ## Théorie — ce qui reste vrai
 
@@ -56,6 +57,7 @@
 | [`theorie/genealogie-des-langues.md`](theorie/genealogie-des-langues.md) | la généalogie et l'avertissement époque/filiation |
 | [`theorie/synthese/index.md`](theorie/synthese/index.md) | la synthèse en 8 chapitres |
 | [`theorie/glossaire.md`](theorie/glossaire.md) | le vocabulaire : couche vs étage, unité de sens, RSN |
+| [`theorie/architecture-native.md`](theorie/architecture-native.md) | DRVM, `drave-n0` : le format et le modèle natifs |
 | [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 289 fiches du glossaire |
 
 ## Implantation — comment c'est construit

@@ -4,6 +4,11 @@
 > cinq axes) et l'**intelligence** (les deux étages). Ils avancent **en parallèle** ; l'ordre se décide par la
 > **valeur** et les **dépendances**, jamais par une date.
 
+> **Programme N — le natif Drave.** Décision : ni GGUF comme format natif, ni Qwen3-MoE comme architecture de
+> base. Le format **DRVM** et le modèle **`drave-n0`** deviennent la **ligne principale** ; B9/B10/B11 passent
+> au rang de **bancs**. Détail : [`roadmap-native.md`](roadmap-native.md) et
+> [`architecture-native.md`](../theorie/architecture-native.md).
+
 ## Comment lire cette roadmap
 
 - **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
