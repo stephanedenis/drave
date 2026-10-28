@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 14:18 | `cf75fd47` | JOURNAL — UN DOSSIER PAR JOUR (34 JOURS), SESSIONS DSH ANCRÉES AUX JOURS ET À EN-COURS ; 57 DOCS | `AGENTS.md`, `REPRISE.md`, `continuite.md` (+18) |
 | 15:30 | `47c41495` | DOCS — COMPTEUR EN-COURS : 233 FICHES / 300 JSON | `en-cours.md`, `README.md`, `moteur.md` |
 | 15:32 | `7c36760c` | DOCS — COMPTEURS : 234 FICHES / 300 JSON | `en-cours.md`, `README.md`, `docs.md` |
+| 15:50 | `333b9ca8` | DOCS — COMPTEURS : 237 FICHES / 303 JSON | `en-cours.md`, `README.md`, `moteur.md` |
 
 ## Mesures et rapports touchés
 

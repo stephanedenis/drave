@@ -262,6 +262,21 @@ impl Native {
         self.matvec("head_byte.weight", "head_byte.bias", &z, c.vocab)
     }
 
+    /// Génération SANS cache : refait toute la passe avant à chaque octet.
+    /// Sert de témoin pour mesurer le gain du cache.
+    pub fn generer_complet(&self, prompt: &[u8], n: usize) -> Vec<u8> {
+        let mut ids: Vec<u8> = prompt.to_vec();
+        for _ in 0..n {
+            let u: Vec<u32> = ids.iter().map(|&b| b as u32).collect();
+            let logits = self.forward(&u);
+            let suivant = logits.iter().enumerate()
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).map(|(i, _)| i as u8).unwrap_or(32);
+            ids.push(suivant);
+            if suivant == b'\n' { break; }
+        }
+        ids
+    }
+
     pub fn generer(&self, prompt: &[u8], n: usize) -> Vec<u8> {
         let mut cache = Cache::default();
         let mut ids: Vec<u8> = prompt.to_vec();

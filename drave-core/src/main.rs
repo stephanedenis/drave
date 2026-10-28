@@ -167,6 +167,18 @@ fn main() {
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
     }
+    if args[1] == "--drvm-generate-full" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());
+        let n: usize = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(32);
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let t = std::time::Instant::now();
+        let b = nat.generer_complet(prompt.as_bytes(), n);
+        eprintln!("[drvm-generate-full] {} octets en {:?}", b.len(), t.elapsed());
+        print!("{}", String::from_utf8_lossy(&b));
+        return;
+    }
     if args[1] == "--drvm-generate" {
         let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-generate attend un DRVM"); std::process::exit(2); } };
         let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());
