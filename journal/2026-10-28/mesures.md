@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 13:25 | `acd9c623` | MÉTHODE — ÉCHANTILLONNAGE VAN DER CORPUT, DÉTERMINISTE ET REPRODUCTIBLE | `README.md`, `echantillonnage-vdc.md`, `en-cours.md` (+10) |
 | 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
 | 15:00 | `bedeebae` | MÉTHODE — REPRENDRE UN GOAL EN PAUSE (GET_GOAL → UPDATE_GOAL RESUME) ; INDEX 230 | `REPRISE.md`, `continuite.md`, `README.md` (+3) |
+| 15:38 | `f71565c3` | N4.2 — SERVICE LOCAL : /SANTE ET /GENERER, 69 OCTETS, CPU, GREEDY | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
 
 ## Chiffres du jour
 
@@ -36,6 +37,7 @@
 - [reports/rapport-native-n0.md](../../reports/rapport-native-n0.md)
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
 - [reports/rapport-native-reflexe.md](../../reports/rapport-native-reflexe.md)
+- [reports/rapport-native-service.md](../../reports/rapport-native-service.md)
 - [reports/rapport-native-tetes.md](../../reports/rapport-native-tetes.md)
 
 <!-- notes -->

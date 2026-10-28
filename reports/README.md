@@ -17,6 +17,7 @@
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |
+| [`rapport-native-parite.md`](rapport-native-parite.md) | **N0.8** — parité native automatisée : **5/5** prompts, top-5 identique, écart < 0,0001 |
 | [`rapport-native-forward.md`](rapport-native-forward.md) | **N0.7** — exécution native DRVM : top-1 identique, logits **9,94 vs 10,82** |
 | [`rapport-native-generation.md`](rapport-native-generation.md) | **N4.1** — génération : cohérente 12 octets, puis dérive ; pas un assistant |
 | [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |

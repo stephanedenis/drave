@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**42 commits** · **0 session(s)** · **8 thème(s)**
+**43 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 10 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
 
@@ -75,6 +75,7 @@
 | 15:30 | `47c41495` | DOCS — COMPTEUR EN-COURS : 233 FICHES / 300 JSON |
 | 15:32 | `7c36760c` | DOCS — COMPTEURS : 234 FICHES / 300 JSON |
 | 15:36 | `87e652fd` | N0.7 — PARITÉ NATIVE DRVM : LOGITS IDENTIQUES À 0,0001, SANS GGUF |
+| 15:38 | `f71565c3` | N4.2 — SERVICE LOCAL : /SANTE ET /GENERER, 69 OCTETS, CPU, GREEDY |
 
 ## Le récit de la journée (écrit à la main)
 
