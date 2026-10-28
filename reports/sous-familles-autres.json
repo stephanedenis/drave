@@ -1,0 +1,33 @@
+{
+ "sous_familles": [
+  {
+   "famille": "atlantic-congo",
+   "sous_famille": "benue-congo",
+   "langues": 45,
+   "famille_apres": 94.0,
+   "sous_apres": 88.0
+  },
+  {
+   "famille": "austronesian",
+   "sous_famille": "est",
+   "langues": 12,
+   "famille_apres": 61.0,
+   "sous_apres": 60.3
+  },
+  {
+   "famille": "afro-asiatic",
+   "sous_famille": "ouest",
+   "langues": 6,
+   "famille_apres": 60.2,
+   "sous_apres": 53.5
+  },
+  {
+   "famille": "uralic",
+   "sous_famille": "côtier",
+   "langues": 5,
+   "famille_apres": 46.7,
+   "sous_apres": 100.0
+  }
+ ],
+ "controle": 0.0
+}
