@@ -20,12 +20,10 @@
 - **N0 — DRVM** : format natif (manifeste, graphe, payload aligné 64 o, SHA-256, `mmap`), lecteur Python et
   Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), N0.6. **Reste** : N0.3b
   (parité PPL avec un GGUF), N0.4 (`gguf2drvm`), N0.5 (trace/rejeu).
-- **N1 — `drave-n0`** : 11,42 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
-  3 têtes précoces, cellule de pensée. **PPL 3,58** en 10 000 pas ; têtes **55,6 / 60,7 / 61,7 %** contre
-  **61,8 %** pour la principale ; pensée contractante **λ = 0,709**.
-- **N1.5 — la pensée** : sans la cellule, la PPL explose à **721 726** ; avec elle, **3,53**. Le contenu est
-  donc porté par la pensée, pas seulement par la sortie.
-- **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**.
+- **N1 — `drave-n0`** : 11,47 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
+  3 têtes précoces, cellule de pensée contractante, **pont** après le bloc 3. **PPL 3,465** ; têtes
+  **57,6 / 61,6 / 62,1 %** contre **62,7 %** pour la principale ; pensée **λ = 0,709**.
+- **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N2 — la distillation** : **non commencée**. Le corpus de 10 000 pas est un banc, pas les 50 000 séquences
   visées.
@@ -47,8 +45,8 @@
 | | |
 |---|---:|
 | **N0 — DRVM** | format + lecteur Python/Rust + CLI ; **parité PPL à faire** |
-| **N1.2 — PPL** | **3,353** (modèle sans pensée) / **3,58** (contractant) |
-| **N1.4 — têtes précoces** | **55,15 / 60,94 / 62,13 %** ; principale **62,55 %** ; témoin **0,39 %** |
+| **N1 — PPL** | **3,465** (avec pont et pensée) ; sans pont **4,080** |
+| **N1.4 — têtes précoces** | **57,57 / 61,60 / 62,06 %** ; principale **62,70 %** ; témoin **0,39 %** |
 | **N1.5 — pensée** | **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
 | tests cerveau | **180 OK**, 31 skips |
 | portes | **46 vertes, 3 rouges** (28/10 00 h 12) |
