@@ -1,0 +1,21 @@
+{
+ "couche": 12,
+ "ntok": 64,
+ "n_kv_heads": 2,
+ "head_dim": 64,
+ "octets_kv": 65548,
+ "octets_par_jeton": 1024.1875,
+ "fidelite": true,
+ "messages_identiques": true,
+ "latence_ms_moyenne": 0.18639520276337862,
+ "latence_ms_min": 0.152674998389557,
+ "latence_ms_max": 0.207153003429994,
+ "comparaison_hidden_a76": {
+  "octets_par_jeton": 4105,
+  "ratio_kv_hidden": 0.24949756394640682
+ },
+ "projection_24_couches": {
+  "octets_par_jeton": 24580.5,
+  "mio_pour_4096_jetons": 96.017578125
+ }
+}
