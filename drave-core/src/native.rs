@@ -108,7 +108,10 @@ impl Native {
             ord.sort_by(|&a, &z| v[z].partial_cmp(&v[a]).unwrap());
             let seuil = v[ord[k - 1]];
             for q in 0..c.expert_hidden {
-                if v[q] >= seuil { h[base + q] = v[q] * ex[j] / se; }
+                // Le modèle Python calcule les poids du routeur mais ne les
+                // applique PAS à h (ils ne servent qu'au top-k). Les multiplier
+                // ici créait l'écart de 0,88 sur les logits.
+                if v[q] >= seuil { h[base + q] = v[q]; }
             }
         }
         self.matvec(&format!("blocks.{b}.ffn.down.weight"),

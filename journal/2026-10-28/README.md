@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**40 commits** · **0 session(s)** · **8 thème(s)**
+**41 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 7 | [distribue.md](distribue.md) |
-| docs | 9 | [docs.md](docs.md) |
+| docs | 10 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -73,6 +73,7 @@
 | 15:09 | `9cd78139` | N2.5b — CAPACITÉ À BUDGET ÉGAL, 3 GRAINES : 21,63 M 4,142 CONTRE 11,47 M 4,507 (−8,1 %) |
 | 15:29 | `e193442e` | N0.7 — EXÉCUTION NATIVE DRVM : TOP-1 IDENTIQUE, LOGITS 9,94 VS 10,82 |
 | 15:30 | `47c41495` | DOCS — COMPTEUR EN-COURS : 233 FICHES / 300 JSON |
+| 15:32 | `7c36760c` | DOCS — COMPTEURS : 234 FICHES / 300 JSON |
 
 ## Le récit de la journée (écrit à la main)
 

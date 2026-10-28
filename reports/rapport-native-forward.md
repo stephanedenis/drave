@@ -1,4 +1,4 @@
-# N0.7 — exécution native DRVM : le moteur calcule sans GGUF
+# N0.7 — exécution native DRVM : logits identiques, sans GGUF
 
 > **Objet.** Faire lire les tenseurs DRVM **directement** par le moteur Rust, sans `Gguf` en mémoire :
 > `--drvm-forward` charge le DRVM, reconstruit les poids f32 et calcule la passe avant de `drave-n0`.
@@ -14,25 +14,24 @@
 | | Rust natif | Python (référence) |
 |---|---:|---:|
 | octet argmax | **101 `e`** | **101 `e`** |
-| logit du top-1 | **9,9429** | **10,8232** |
-| top-2 | espace **6,8355** | espace **8,5745** |
-| top-3 | `Ã` **6,1602** | `Ã` **7,5609** |
-| top-4 | `a` **5,7669** | `a` **6,5002** |
-| top-5 | `.` **4,7802** | `,` **5,6266** |
+| logit du top-1 | **10,8232** | **10,8232** |
+| top-2 | espace **8,5744** | espace **8,5745** |
+| top-3 | `Ã` **7,5609** | `Ã` **7,5609** |
+| top-4 | `a` **6,5002** | `a` **6,5002** |
+| top-5 | `,` **5,6266** | `,` **5,6266** |
 
 ## Lecture
 
-- Le **top-1 est le même** : le moteur natif sait exécuter le graphe.
-- Les **logits ne sont pas identiques** : **9,94** contre **10,82**, soit **0,88** d'écart. Le top-5
-  diverge au cinquième rang.
-- L'exécution est **lente** et **sans cache KV** : une séquence complète refaite à chaque appel.
-- Ce n'est donc **pas** encore une parité numérique : c'est une **preuve d'exécution**.
+- Les **logits sont identiques** à **0,0001** près, et le top-5 est le même dans le même ordre.
+- La **cause** de l'écart initial de **0,88** était le **routeur** : le modèle Python calcule les poids
+  du top-k mais **ne les applique pas** à `h`. Le Rust les multipliait ; retirer cette multiplication
+  a suffi.
+- Le moteur exécute donc le **même graphe** que l'entraîneur, sans `Gguf`, sans fichier temporaire.
 
 ## Verdict
 
-**N0.7 — exécution native : atteint techniquement** (top-1 identique, pas de GGUF). **Parité des logits :
-non atteinte** (0,88). La cause reste à localiser : attention locale, LayerNorm, k-WTA ou ordre des
-tenseurs.
+**N0.7 est atteint** : **logits identiques** à 0,0001 près, **top-5 identique**, **sans GGUF**. Le
+routeur non appliqué était la seule cause de l'écart.
 
 ## Limites
 
@@ -40,7 +39,8 @@ tenseurs.
 - **f32**, pas de quantification.
 - **Pas de cache KV**, pas de batch.
 - **Pas de test unitaire** de la passe avant ; seul le CLI est vérifié.
-- **Top-1 identique** ne prouve pas la parité : le top-5 diverge.
+- **Pas de cache KV** : la passe avant est O(s²) et lente.
+- **Un seul prompt** ; la parité demande plusieurs prompts et un test automatique.
 
 ## Fichiers
 
