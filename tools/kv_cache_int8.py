@@ -62,3 +62,40 @@ def mesurer(device: str = "cuda", n: int = 32) -> dict:
 
 if __name__ == "__main__":
     print(json.dumps(mesurer(), ensure_ascii=False, indent=1))
+
+
+class CacheInt8Bloc(CacheInt8):
+    """Cache int8 avec une échelle par bloc de 32 jetons (au lieu d'un canal global)."""
+
+    bloc = 32
+
+    def update(self, key_states, value_states, layer_idx, *args, **kwargs):
+        keys, values = DynamicCache.update(self, key_states, value_states, layer_idx, *args, **kwargs)
+        layer = self.layers[layer_idx]
+        layer.keys = self._q_bloc(layer.keys)
+        layer.values = self._q_bloc(layer.values)
+        return keys, values
+
+    def _q_bloc(self, x):
+        # x : (batch, heads, seq, dim) ; blocs sur seq
+        morceaux = []
+        for i in range(0, x.shape[-2], self.bloc):
+            m = x[..., i:i + self.bloc, :]
+            echelle = m.abs().amax(dim=-2, keepdim=True).clamp_min(1e-12) / 127.0
+            morceaux.append((m / echelle).round().clamp(-127, 127) * echelle)
+        return torch.cat(morceaux, dim=-2)
+
+
+def mesurer_bloc(device: str = "cuda", n: int = 128) -> dict:
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    ids = tok(PROMPT, return_tensors="pt").input_ids.to(device)
+    base = _gen(m, ids, n)
+    with torch.no_grad():
+        out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                         past_key_values=CacheInt8Bloc(), pad_token_id=0)
+    q = out[0, ids.shape[1]:].tolist()
+    return {"modele": MODELE, "device": device, "prompt": PROMPT, "n": n,
+            "base": base, "cache_int8_bloc": q,
+            "identiques": base == q,
+            "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}

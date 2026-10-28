@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-kv-cache-int8-bloc.md`](rapport-kv-cache-int8-bloc.md) | **A7.19** — quantification par bloc : divergence au 41ᵉ, accord 32,81 %, pire que par canal |
 | [`rapport-kv-cache-int8-128.md`](rapport-kv-cache-int8-128.md) | **A7.18** — cache KV int8 sur 128 jetons : accord 60,94 %, divergence au 77ᵉ |
 | [`rapport-kv-cache-int8-64.md`](rapport-kv-cache-int8-64.md) | **A7.17** — cache KV int8 sur 64 jetons : 64/64 identiques |
 | [`rapport-kv-cache-int8.md`](rapport-kv-cache-int8.md) | **A7.16** — cache KV int8 stocké : 32/32 jetons greedy identiques |

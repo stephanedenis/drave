@@ -48,6 +48,7 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **A7.19** cache KV int8 bloc | **négatif** — divergence au 41ᵉ, accord 32,81 %, pire que par canal | [la fiche](../reports/rapport-kv-cache-int8-bloc.md) |
 | **A7.18** cache KV int8 128 | **négatif** — accord 60,94 %, divergence au 77ᵉ jeton | [la fiche](../reports/rapport-kv-cache-int8-128.md) |
 | **A7.17** cache KV int8 64 | **positive** — 64/64 identiques avec `CacheInt8` stocké | [la fiche](../reports/rapport-kv-cache-int8-64.md) |
 | **A7.16** cache KV int8 stocké | **positive** — 32/32 identiques avec un vrai cache int8 | [la fiche](../reports/rapport-kv-cache-int8.md) |
