@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**49 commits** · **0 session(s)** · **8 thème(s)**
+**50 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 12 | [mesures.md](mesures.md) |
+| mesures | 13 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 8 | [moteur.md](moteur.md) |
 
@@ -82,6 +82,7 @@
 | 15:52 | `56fedc25` | N0.10 — CACHE KV : 19,25× PLUS RAPIDE, 592,6 MS CONTRE 11 406,9 MS |
 | 16:16 | `fc1327cb` | N2.8 — DISTILLATION LONGUE : PPL 3,123 CONTRE 3,295, PORTE 2,5 NON ATTEINTE |
 | 16:19 | `eeaab7ae` | DOCS — EN-COURS : 4 PUISSES, N0/N1/N2/N4 |
+| 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO |
 
 ## Le récit de la journée (écrit à la main)
 

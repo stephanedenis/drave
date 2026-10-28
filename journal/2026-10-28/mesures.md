@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,6 +20,7 @@
 | 15:00 | `bedeebae` | MÉTHODE — REPRENDRE UN GOAL EN PAUSE (GET_GOAL → UPDATE_GOAL RESUME) ; INDEX 230 | `REPRISE.md`, `continuite.md`, `README.md` (+3) |
 | 15:38 | `f71565c3` | N4.2 — SERVICE LOCAL : /SANTE ET /GENERER, 69 OCTETS, CPU, GREEDY | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
 | 15:45 | `641a48c6` | N0.8 — PARITÉ NATIVE AUTOMATISÉE : 5/5 PROMPTS, TOP-5 IDENTIQUE, ÉCART < 0,0001 | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
+| 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO | `en-cours.md`, `roadmap-native.md`, `native.rs` (+5) |
 
 ## Chiffres du jour
 
@@ -40,6 +41,7 @@
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
 - [reports/rapport-native-reflexe.md](../../reports/rapport-native-reflexe.md)
 - [reports/rapport-native-service.md](../../reports/rapport-native-service.md)
+- [reports/rapport-native-test.md](../../reports/rapport-native-test.md)
 - [reports/rapport-native-tetes.md](../../reports/rapport-native-tetes.md)
 
 <!-- notes -->

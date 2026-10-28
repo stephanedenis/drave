@@ -277,6 +277,23 @@ impl Native {
         ids
     }
 
+    /// Perplexité d'un texte octet, avec cache KV. Chaque position est notée
+    /// une seule fois ; le cache évite la passe O(s²).
+    pub fn perplexite(&self, octets: &[u8]) -> (f64, usize) {
+        let mut cache = Cache::default();
+        let mut somme = 0.0f64;
+        for pos in 0..octets.len().saturating_sub(1) {
+            let logits = self.pas(octets[pos] as u32, pos, &mut cache);
+            let mx = logits.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+            let se: f32 = logits.iter().map(|v| (v - mx).exp()).sum();
+            let cible = octets[pos + 1] as usize;
+            let lp = (logits[cible] - mx) - se.ln();
+            somme -= lp as f64;
+        }
+        let n = octets.len().saturating_sub(1);
+        ((somme / n.max(1) as f64).exp(), n)
+    }
+
     pub fn generer(&self, prompt: &[u8], n: usize) -> Vec<u8> {
         let mut cache = Cache::default();
         let mut ids: Vec<u8> = prompt.to_vec();

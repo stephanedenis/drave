@@ -18,6 +18,7 @@
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |
 | [`rapport-native-distillation-20k.md`](rapport-native-distillation-20k.md) | **N2.8** — 20 000 pas : PPL **3,123** contre **3,295**, précision **67,96 %**, gap **+0,768** |
+| [`rapport-native-ppl.md`](rapport-native-ppl.md) | **N0.12** — PPL native **4,6585**, identique à Python sur 59 octets |
 | [`rapport-native-test.md`](rapport-native-test.md) | **N0.11** — test Rust autonome de la passe avant native (fixture 36 Ko) |
 | [`rapport-native-cache-gain.md`](rapport-native-cache-gain.md) | **N0.10** — cache KV : **19,25×** plus rapide, sortie identique |
 | [`rapport-native-cache.md`](rapport-native-cache.md) | **N0.9** — cache KV natif : sortie identique à Python, **592,6 ms**, 53 octets |

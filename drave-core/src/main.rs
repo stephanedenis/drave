@@ -167,6 +167,15 @@ fn main() {
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
     }
+    if args[1] == "--drvm-native-ppl" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let texte = args.get(3).cloned().unwrap_or_else(|| "La France est un pays de la couche".into());
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let (p, n) = nat.perplexite(texte.as_bytes());
+        println!("PPL native {:.4} sur {} octets notés", p, n);
+        return;
+    }
     if args[1] == "--drvm-generate-full" {
         let f = args.get(2).cloned().unwrap_or_default();
         let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());
