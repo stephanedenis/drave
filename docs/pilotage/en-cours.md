@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N0.10 terminé** — cache **19,25×** plus rapide, sortie identique. **Prochain : N2**, rapprocher la PPL de 2,5.
+- **Agent principal** : **N2.8** — 20 000 pas, PPL **3,123**, porte **2,5** non atteinte. **Prochain : capacité 21,63 M avec plus de pas, ou clôture.**
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -29,13 +29,14 @@
 - **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
-- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,295** ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal, 3 graines** : 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; checkpoint 11,47 M **3,295**. Porte **< 2,5** non atteinte.
+- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,123** après 20 000 pas ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal, 3 graines** : 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; checkpoint 11,47 M **3,295**. Porte **< 2,5** non atteinte.
 - **N4 — génération** : **technique** — greedy 160 octets, cohérent 12 octets puis dérive ; **pas un assistant**.
 - **N4.2 — service local** : HTTP `/sante` + `/generer`, **69 octets**, CPU, greedy ; pas d'auth, pas de cache KV.
 - **N0.7 — exécution native** : `--drvm-forward` calcule **sans GGUF** ; logits **10,8232** identiques.
 - **N0.8 — parité automatisée** : **5/5 prompts**, top-5 identique, écart max **0,00006**.
 - **N0.9 — cache KV natif** : sortie **identique** à Python, **53 octets** en **592,6 ms**.
 - **N0.10 — gain du cache** : **19,25×** (592,6 ms contre 11 406,9 ms), sortie identique.
+- **N2.8 — distillation longue** : PPL **3,123** contre **3,295** (−5,2 %), précision **67,96 %**, gap **+0,768** ; porte **< 2,5** non atteinte.
 
 ## Les chiffres de l'état
 
@@ -45,7 +46,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **238** / **304** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **239** / **305** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

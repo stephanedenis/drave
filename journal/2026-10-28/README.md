@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**46 commits** · **0 session(s)** · **8 thème(s)**
+**47 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 12 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| moteur | 7 | [moteur.md](moteur.md) |
+| moteur | 8 | [moteur.md](moteur.md) |
 
 ## Autres pièces du jour
 
@@ -79,6 +79,7 @@
 | 15:45 | `641a48c6` | N0.8 — PARITÉ NATIVE AUTOMATISÉE : 5/5 PROMPTS, TOP-5 IDENTIQUE, ÉCART < 0,0001 |
 | 15:48 | `5eaafc6b` | N0.9 — CACHE KV NATIF : SORTIE IDENTIQUE À PYTHON, 53 OCTETS EN 592,6 MS |
 | 15:50 | `333b9ca8` | DOCS — COMPTEURS : 237 FICHES / 303 JSON |
+| 15:52 | `56fedc25` | N0.10 — CACHE KV : 19,25× PLUS RAPIDE, 592,6 MS CONTRE 11 406,9 MS |
 
 ## Le récit de la journée (écrit à la main)
 
