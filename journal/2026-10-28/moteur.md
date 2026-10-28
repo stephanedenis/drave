@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,11 +12,13 @@
 | 10:38 | `cae5742a` | N0.3 — DRAVE-CORE LIT DRVM : EN-TÊTE, GRAPHE, BLOCS, TENSEURS, CLI --DRVM-INSPECT | `en-cours.md`, `roadmap-native.md`, `drvm.rs` (+5) |
 | 11:44 | `09e8d495` | MOTEUR — VARS_LUES : KV_BITS_COUCHES, PERTE_MAX ET LES VARS VISION | `main.rs`, `2026-10-28.md`, `2026-10-28_mesures.md` (+1) |
 | 12:04 | `bbf1c246` | N0.4 — GGUF ↔ DRVM : 290 TENSEURS, SHA-256 IDENTIQUE SUR 337 MO | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
+| 15:29 | `e193442e` | N0.7 — EXÉCUTION NATIVE DRVM : TOP-1 IDENTIQUE, LOGITS 9,94 VS 10,82 | `en-cours.md`, `roadmap-native.md`, `drvm.rs` (+8) |
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-gguf-drvm.md](../../reports/rapport-gguf-drvm.md)
+- [reports/rapport-native-forward.md](../../reports/rapport-native-forward.md)
 
 <!-- notes -->
 
