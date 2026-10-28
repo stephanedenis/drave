@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **212 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **224 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -69,6 +69,9 @@
 | [rapport-dessin-B-poids-creux.md](rapport-dessin-B-poids-creux.md) | Dessin B (poids creux) — le levier reste à trouver : élaguer coûte toujours cher |
 | [rapport-dialogue-diabla.md](rapport-dialogue-diabla.md) | Le dialogue réel (DiaBLa) : +40,3 / +44,2 au 1,5 B — mais la référence est une **post-édition**, pas une traduction |
 | [rapport-drapeaux-ignores.md](rapport-drapeaux-ignores.md) | Drapeaux et variables « analysés mais jamais appliqués » — audit systématique |
+| [rapport-drvm-parite.md](rapport-drvm-parite.md) | N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques |
+| [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM en mémoire : 28,7355 identique |
+| [rapport-drvm-trace.md](rapport-drvm-trace.md) | N0.5 — trace et rejeu DRVM : contenu, logits et rejeu exacts |
 | [rapport-e1-e2-connectome-croissance.md](rapport-e1-e2-connectome-croissance.md) | E1 et E2, re-mesurés : le connectome aléatoire coûte 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard |
 | [rapport-e2-croissance.md](rapport-e2-croissance.md) | E2 — la croissance locale ne bat pas la structure tirée au hasard (2,3431 contre 2,3215) |
 | [rapport-e4-ratio-signes.md](rapport-e4-ratio-signes.md) | E4 (côté ENTRAÎNEMENT) — le ratio de signes cortical ne paie pas : 2,2729 → 2,3838 → 2,5188 |
@@ -83,6 +86,7 @@
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
+| [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
 | [rapport-gpu-tandem-nvlink.md](rapport-gpu-tandem-nvlink.md) | Le tandem GPU (2 × Quadro RTX 5000, NVLink) : ce qu'il fait, ce qu'il pourrait faire |
@@ -150,6 +154,14 @@
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
+| [rapport-native-corpus.md](rapport-native-corpus.md) | N2.1 — 50 000 fenêtres pour `drave-n0` |
+| [rapport-native-distillation.md](rapport-native-distillation.md) | N2.3 — distillation : PPL 3,297 contre 3,465 |
+| [rapport-native-n0.md](rapport-native-n0.md) | N1.2 — `drave-n0` : PPL 3,35 sur le corpus français |
+| [rapport-native-pensee.md](rapport-native-pensee.md) | N1.5 — la pensée contractante de `drave-n0` : λ = 0,709 |
+| [rapport-native-pont.md](rapport-native-pont.md) | N1.6 — le pont de région de `drave-n0` : il paie |
+| [rapport-native-professeur.md](rapport-native-professeur.md) | N2.2 — le professeur local : 23,76 M, 1,236 bit/octet |
+| [rapport-native-reflexe.md](rapport-native-reflexe.md) | N1.7 — le réflexe de `drave-n0` : 24 % plus rapide |
+| [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
 | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
 | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-28, 11 h 20 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-28, 12 h 59 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../../reports/) ; le plan dans [`roadmap.md`](roadmap.md) et
@@ -9,9 +9,11 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
+- **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
+  parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Agent principal** : **N2.3 première passe** — PPL **3,297** contre **3,465**, gap **+0,942** au professeur ; porte **< 2,5** non atteinte. **Prochain : N2.4**, curriculum et pertes locales.
-- **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
-  travail n'est en attente d'eux.
+- **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
+  actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
   [`journal/2026-10-28_etat-ancien.md`](../../journal/2026-10-28_etat-ancien.md).
 
@@ -27,7 +29,6 @@
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
 - **N2 — la distillation** : **volume** 50 000 fenêtres (45 000/5 000), **professeur** Qwen3-MoE 23,76 M (PPL **2,355**), **distillation** PPL **3,297** contre **3,465** (−4,85 %), gap **+0,942**. Porte **< 2,5** non atteinte.
-- **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
 
 ## Les chiffres de l'état
 
@@ -38,7 +39,7 @@
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **227** / **294** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **56** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Où l'on en est

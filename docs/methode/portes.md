@@ -11,8 +11,9 @@ bash tools/toutes-les-portes.sh
 Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
 tableau, pas la première tuile), et borne **chaque** porte à `DELAI=1800` s. Durée observée d'une passe complète :
 **1 h 30 – 2 h** sur Hauru (**49 portes** ; certaines entraînent de petits modèles, d'autres utilisent les GPU ;
-`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **49 portes** (26/10 14 h 30) a donné
-**47 vertes, 2 structurelles** (`porte-indice`, `porte-melange`) ; `porte-deepseek` est **incluse** et verte.
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **49 portes** (28/10 00 h 12) a donné
+**46 vertes, 3 rouges** ; la liste et le diagnostic sont dans
+[`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
 
 ## Où est le registre (et comment lire le verdict)
 
@@ -34,8 +35,9 @@ Une porte **verte** a le code `0`. Une porte **rouge** a un code non nul (`1` é
 
 ## Les rouges connues
 
-Deux rouges **structurelles** sont connues et tolérées : **`porte-indice`** et **`porte-melange`**. Toute **autre**
-rouge est une **régression** et se corrige avant de continuer. *(Une rouge `124` est une porte trop lente ou
+Les rouges **tolérées** sont celles listées dans
+[`references-non-regression.md`](../pilotage/references-non-regression.md) ; toute **autre** rouge est une
+**régression** et se corrige avant de continuer. *(Une rouge `124` est une porte trop lente ou
 bloquée : ce n'est pas un échec de la porte, c'est le délai — relancer la porte seule avec un `DELAI` plus grand.)*
 
 ## Lancer un sous-ensemble

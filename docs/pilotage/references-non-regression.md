@@ -1,7 +1,7 @@
 # Références de non-régression
 
 > **Dernière passe :**
-> **49 portes, 47 vertes, 2 structurelles, 1 h 48** (27/10 14 h 33). L'historique des
+> **49 portes, 46 vertes, 3 rouges, 1 h 40** (28/10 00 h 12). L'historique des
 > passes est dans [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
 > Les compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.
 
@@ -10,7 +10,12 @@
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
 
-> **Passe du 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
+> **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) — la passe
+> du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
+> `porte-occupation-moteur` (contention ; elle passe **verte seule**) ; aucune régression.
+> Journaux : [`journal/2026-10-28.md`](../../journal/2026-10-28.md).
+
+> **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
 > finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux
 > rouges structurelles, avec les mêmes diagnostics ; **aucune régression**. Journaux :
 > `/tmp/portes-1027-12h45`.
@@ -37,7 +42,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** ; dernière passe : **47 vertes, 2 structurelles** (27/10 14 h 33), **1 h 48**, aucune sautée — les deux rouges sont **structurelles** et connues (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** ; dernière passe : **46 vertes, 3 rouges** (28/10 00 h 12), **1 h 40**, aucune sautée — les deux rouges sont **structurelles** et connues (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE

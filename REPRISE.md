@@ -2,7 +2,7 @@
 
 > **Check-list, pas un état.** L'état vit dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; le plan
 > dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; l'ancien index par module est archivé
-> ([`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) redirige). Ce fichier ne dit que : quoi lire, quoi vérifier,
+> ([`docs/archive/etat-modules-2026-10-10.md`](docs/archive/etat-modules-2026-10-10.md)). Ce fichier ne dit que : quoi lire, quoi vérifier,
 > quels pièges éviter, et où écrire. Le détail mesuré est dans [`reports/`](reports/) — **une fiche
 > par expérience**. Version longue d'avant le 2026-10-10 :
 > [`journal/2026-10-10-reprise-historique.md`](journal/2026-10-10-reprise-historique.md).
@@ -15,9 +15,19 @@ git log --oneline -5                   # ce qui vient d'être fait
 ls journal/ | tail -5                  # la journée en cours, par thème
 ```
 
-Puis, dans l'ordre : `journal/<aujourd'hui>.md` (l'index du jour) → [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md)
-(l'état) → [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) (la prochaine action) → la fiche `reports/` du
-chantier en cours.
+Puis, dans l'ordre : [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (l'état, **d'abord**) → **un**
+document de tâche (`docs/methode/...`) → la fiche `reports/` du chantier. Le journal du jour ne se lit
+que si l'on a besoin du **récit** ; la roadmap se lit par **résumé + section**.
+
+### Le cycle DSH
+
+1. **Goal unique par programme** — `max_goal_rounds` **1 000** (pas 20/50) ; on reprend avec `update_goal resume`.
+2. **Lire** `en-cours` (« Session en cours » + « Ce qui reste »), puis **un** document de tâche.
+3. **Déléguer** 2 à 4 sous-agents sur les actions indépendantes ; le principal garde l'état, la roadmap, les commits.
+4. **Intégrer** : vérifier, mettre à jour `en-cours` (une ligne/résultat + prochaine action), la roadmap, committer.
+5. **Si la limite tombe** : écrire `en-cours` + ce fichier, committer, puis `update_goal resume`.
+
+Un sous-agent ne touche **jamais** `en-cours`, `roadmap` ou `AGENTS` ; il rend un **diff d'état** que le principal applique.
 
 ## 2. Ce qui doit être vert
 
@@ -25,8 +35,9 @@ chantier en cours.
 |---|---|---|
 | tests | `cd drave-core && cargo test --release` | **138 tests** (le compte est dans la sortie) |
 | le calcul (non-régression) | `tools/porte-flux.sh` | cinq modes verts, ~2 min |
-| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (47 vertes, 2 structurelles), **1 h 34**, aucune sautée — le compte et les repères sont dans `docs/pilotage/references-non-regression.md` (dernière passe : 26/10 14 h 30) |
-| les repères chiffrés | [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) | les valeurs de la passe du 26/10 |
+| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** (46 vertes, 3 rouges), **1 h 40**, aucune sautée — le compte et les repères sont dans `docs/pilotage/references-non-regression.md` (dernière passe : 28/10 00 h 12) |
+| l'état | `python3 tools/verifie_en_cours.py` | ✅ état court, structuré et reprenable |
+| les repères chiffrés | [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) | les valeurs de la passe du 28/10 |
 
 **APRÈS UN REDÉMARRAGE, `/tmp` EST VIDE — et c'est prévu.** Les portes **régénèrent elles-mêmes**
 leurs prérequis (`tools/_corpus.sh` : le corpus d'identifiants, qui est `data/wikitext2_test.txt`

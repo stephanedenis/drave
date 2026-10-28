@@ -47,13 +47,7 @@
 | [`rapport-m9-dose.md`](rapport-m9-dose.md) | **B21** — M9 par dose : M3 0/4/8/12/12 tautologique, M5 +4,25 pts, sham nul, double non additive |
 | [`rapport-m2-secours.md`](rapport-m2-secours.md) | **B19** — M2 secours : typos 71,2/76,7 vs M1 36,6 ; espaces 41,8/45,2 vs 34,8 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général |
 | [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) | **B12 — corrections** : M2 93,2 % = 126/126 vus + 11/20 inédits ; M3 span tautologique ; M4 29 codes, 0/6 non stockés ; M8 96,48 % marginal (exact 65,1 %, baseline par jeu 96,10 %) ; M5/M6/M7 négatifs |
-| [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation (`action` 98,6 %, `de` 93,2 %), M8 généralise (96,48 % hors stock), M5/M6/M7 **négatifs** ; M9 lésions |
-| [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, **restitution du code** 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, **surface 33/79**, raisonnement non branché) |
 | [`rapport-restitution.md`](rapport-restitution.md) | **B11.9** : **restitution du code** **79/79** et **449/449** avec aller-retour RSN exact (**100 %**) ; **surface originale 33/79** ; sans décodeur neuronal |
-| [`rapport-hybride.md`](rapport-hybride.md) | **B11.6** : le codec avec contexte lit **528/528** (100 %) ; sans contexte **374/528** (70,8 %) ; mémoire de traduction 470 cibles, **pas un modèle** ; natif normalisé 55,7 % |
-| [`rapport-universaux.md`](rapport-universaux.md) | **B11** : la base typée (15 champs, 502 classes) — codec classique **100 %** de lecture (79/79, 449/449), **surface 33/79** ; natif réel seul 0 %, natif **synthétique normalisé 55,7 %** sur surfaces réelles, **contexte suffixé 59,8 %** (invariance 40,7 %), vecteur contexte 59,1 % / 40,7 %, préfixe 0,4 % / 88,9 % (collapse), cartes 69,3 %, baseline 45,1 %, consistance 38,3 %, adversaire 39,6 % |
-| [`rapport-semantique.md`](rapport-semantique.md) | **B10** : le protocole sémantique natif — encodeur convergent (rappel 0,426 contre 0,167 ; sonde 0,100) et décodeur **négatif** (chrF 14,0/5,4 contre plancher 38,8 en **référence tronquée** ; 12,7/5,3 contre 39,6 en **référence complète**), NVLink |
-| [`rapport-coherence-docs-3.md`](rapport-coherence-docs-3.md) | **la cohérence doc ↔ doc** : 39 chemins morts, 3 libellés et 4 orphelins corrigés ; compteurs **49/8/174/242/52** ; portes documentaires vertes, **passe complète à faire** |
 
 ## Les données brutes
 

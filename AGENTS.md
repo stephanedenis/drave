@@ -29,7 +29,7 @@ volonté** des événements.
    résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
 3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
    lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
-   structurelles tolérées : **`porte-indice`** et **`porte-melange`** ; toute autre est une régression. →
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
    [`docs/methode/portes.md`](docs/methode/portes.md)
 4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
    `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
@@ -50,6 +50,12 @@ volonté** des événements.
    `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
    `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
    → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** DSH ouvre **un goal par programme** avec
+    `max_goal_rounds` **très grand (1 000)** ; on ne s'arrête qu'à un résultat mesuré, écrit, committé, ou
+    à un blocage nommé. Les tâches indépendantes partent en **sous-agents** (2 à 4 en parallèle) ; le
+    sous-agent ne touche **jamais** `en-cours`/`roadmap`/`AGENTS`, il rend un **diff d'état**. Le principal
+    met à jour [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) **à chaque cycle** (une ligne par
+    résultat, lien, prochaine action ; ≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
@@ -61,6 +67,8 @@ volonté** des événements.
 | écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
 | ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
 | **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
 | **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
 | lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
 | étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
@@ -87,7 +95,8 @@ volonté** des événements.
 - l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
 - la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
 - la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
-- les portes sont vertes, **hors les deux rouges structurelles connues** ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
 - la revue de documentation passe, et les liens résolvent.
 - le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
 - les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.

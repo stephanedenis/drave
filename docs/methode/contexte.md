@@ -27,6 +27,14 @@
 6. Si la tâche a besoin d'un **mot**, lire sa **fiche** (`docs/theorie/glossaire/entrees/<slug>.md`, 2-3 lignes) ; si elle n'existe pas, `grep` la famille — jamais les 11.
 7. Si la tâche a besoin d'une **ligne de roadmap**, lire le **résumé exécutif** puis la section A ou B.
 
+## Le cycle : lire, déléguer, écrire
+
+- **Début** : `AGENTS.md` + `en-cours` (« Session en cours » + « Ce qui reste ») + **un** document de tâche.
+- **Pendant** : les sous-agents travaillent en parallèle ; le principal ne lit que leur **rapport de 10 lignes**.
+- **Fin** : `en-cours` (une ligne/résultat + prochaine action), roadmap, commit ;
+  `python3 tools/verifie_en_cours.py`.
+- **Jamais** : charger le journal ou les rapports « pour suivre » ; `en-cours` est le seul état.
+
 ## Les budgets
 
 | document | budget (mots) | usage |
@@ -83,6 +91,7 @@ avec un index. On ne « compense » pas par un contexte plus grand.
 ## Vérifier
 
 ```bash
+python3 tools/verifie_en_cours.py       # la structure et le budget de l'état
 python3 tools/taille_documents.py       # la taille, les budgets, les résumés manquants
 python3 tools/revue_documentation.py    # les liens, les compteurs, la cohérence
 bash tools/porte-tableaux.sh            # les tableaux et les liens

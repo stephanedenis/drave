@@ -17,6 +17,7 @@ est), `theorie/` (ce qui reste vrai), `implantation/` (comment c'est construit).
 de tableaux de mesures **déménage** dans `reports/` ; il reste dans `docs/` un **résumé de l'état** (ce qu'on sait,
 ce qu'on ne sait pas, et le lien vers la fiche). À chaque cycle,
 [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) dit l'état **courant** en quelques lignes, pas l'historique.
+Le **cycle**, les **sous-agents** et le **diff d'état** sont réglés dans [`continuite.md`](continuite.md) ; seul le principal écrit `en-cours`.
 
 ## La revue de fin de sous-chantier (obligatoire)
 

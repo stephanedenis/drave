@@ -33,6 +33,13 @@ Le message de commit suit la convention du dépôt : **une phrase-titre en majus
 verdict, puis le corps qui donne le dispositif et les contrôles. Il est lu par le journal : il doit rester vrai sans
 la fiche.
 
+## L'état `en-cours`
+
+Un résultat n'est **pas fini** tant que [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) ne porte pas
+**une ligne** (chiffre + lien vers la fiche) et la **prochaine action** ; la roadmap est mise à jour dans
+le même cycle. Seul le **principal** écrit `en-cours` ; un sous-agent rend un **diff d'état**. Pas de log,
+pas de tableau de mesures dans l'état : le chiffre et le lien.
+
 ## Ce qui n'est pas un résultat
 
 - un chiffre sans dispositif (« 73 % ») ;
