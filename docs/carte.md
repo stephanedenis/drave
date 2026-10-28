@@ -59,6 +59,7 @@
 | **B26** M6 conflit | **nul** — 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition | [la fiche](../reports/rapport-m6-conflit2.md) |
 | **B25** M8 rejeu | **négatif** — M8 exact 0, rejeu 0, hybride 0 sur 6 codes tenus | [la fiche](../reports/rapport-m8-rejeu.md) |
 | **B24** routeur confiance | **partiel** — typo 63,7 % (+7,5) mais espaces 34,2 % (−7,5) ; oracle 79,45 % | [la fiche](../reports/rapport-routeur-confiance.md) |
+| **C3.2d** sous-familles IE | **mesuré** — 54,6–100 % ; l'IE à 14,7 % est un effet de composition | [la fiche](../reports/rapport-ie-sous-familles.md) |
 | **C3.2c** 9 familles | **mesuré** — 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % | [la fiche](../reports/rapport-familles-9.md) |
 | **B23** routeur M1→M2 | **partiel** — espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique | [la fiche](../reports/rapport-routeur-m1-m2.md) |
 | **B22** M2 typos | **niche robuste** — M2 62–80 % contre M1 24–45 % sur 4 types de typos | [la fiche](../reports/rapport-m2-typo.md) |

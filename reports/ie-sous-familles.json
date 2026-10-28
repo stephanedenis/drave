@@ -1,0 +1,43 @@
+{
+ "famille": "Indo-European",
+ "langues_total": 98,
+ "apres_total": 14.7,
+ "sous_familles": [
+  {
+   "nom": "indo-iranien",
+   "langues": 26,
+   "avant": 0.0,
+   "apres": 100.0,
+   "controle": 0.0
+  },
+  {
+   "nom": "baltique",
+   "langues": 15,
+   "avant": 12.5,
+   "apres": 95.3,
+   "controle": 0.0
+  },
+  {
+   "nom": "italique",
+   "langues": 29,
+   "avant": 11.4,
+   "apres": 87.6,
+   "controle": 0.0
+  },
+  {
+   "nom": "celtique",
+   "langues": 5,
+   "avant": 0.0,
+   "apres": 79.9,
+   "controle": 0.0
+  },
+  {
+   "nom": "germanique",
+   "langues": 20,
+   "avant": 0.0,
+   "apres": 54.6,
+   "controle": 0.0
+  }
+ ],
+ "lecture": "l'IE entier à 14,7 % est un effet de composition ; toutes les sous-familles dépassent 54 %"
+}

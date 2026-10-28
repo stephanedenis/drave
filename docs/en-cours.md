@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 197 fichiers / 264 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 198 fichiers / 265 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -64,6 +64,7 @@ La vision complète est dans [`vision.md`](vision.md).
 - **B26 M6 conflit** — réplication d'A6 : **94,95 %**, conflit **0**, commutation **0** ; sélecteur sans compétition, pas de contrôle exécutif.
 - **B25 M8 rejeu** — 23/6 codes : M8 exact **0**, champs **74,6 %** ; rejeu **0**, hybride **0** ; le rejeu ne compose pas un code neuf.
 - **B24 routeur confiance** — typo **56,2→63,7 %** (+7,5) mais espaces **41,8→34,2 %** (−7,5) ; round-trip ne détecte que **31 %** des typos ; oracle **79,45 %**.
+- **C3.2d sous-familles IE** — indo-iranien **100 %**, baltique **95,3**, italique **87,6**, celtique **79,9**, germanique **54,6** ; l'IE entier à **14,7 %** est un **effet de composition**.
 - **C3.2c 9 familles** — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤0,5 %** ; indo-européen **14,7 %**, quechuan **88,2 %**, mayan **64,4 %**, afro-asiatic **60,2 %**, uralic **46,7 %**. L'hétérogénéité interne reste le facteur.
 - **B23 routeur** — original **100 %**, casse **99,3 %**, phrase **92,5 %**, espaces **41,8 %** vs M1 **11,6 %**, typo **56,2 %** < M2 **68,3 %** ; collision de lexique, pas un oracle.
 - **B22 M2 typos** — M1 **24–45 %** sur suppression/substitution/insertion/transposition ; M2 `de` **62–73 %**, `vers` **66–80 %** ; avantage **+21,9 à +46,5 pts**. Niche robuste, pas un étage.
@@ -91,7 +92,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **197** / **264** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **198** / **265** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
@@ -101,7 +102,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **197** / **264** |
+| fichiers / JSON de résultats | **198** / **265** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

@@ -157,7 +157,7 @@ def main() -> int:
     train = morceaux(n_train, 0)
     t0 = time.time()
     for pas in range(1, a.pas + 1):
-        lot = random.sample(train, a.lot)
+        lot = random.sample(train, min(a.lot, len(train)))
         pertes = []
         for t in lot:
             inv, cible = paire(t, True)                  # on n'entraîne QUE la recopie ✓
