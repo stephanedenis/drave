@@ -157,3 +157,24 @@ def mesurer_fenetre(device: str = "cuda", n: int = 256) -> dict:
             "base": base, "cache_fenetre": q,
             "identiques": base == q,
             "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
+
+
+class CacheMixte128(CacheMixte):
+    """Cache mixte avec 128 premiers jetons en f32 (au lieu de 64)."""
+
+    seuil = 128
+
+
+def mesurer_mixte128(device: str = "cuda", n: int = 256) -> dict:
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    ids = tok(PROMPT, return_tensors="pt").input_ids.to(device)
+    base = _gen(m, ids, n)
+    with torch.no_grad():
+        out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                         past_key_values=CacheMixte128(), pad_token_id=0)
+    q = out[0, ids.shape[1]:].tolist()
+    return {"modele": MODELE, "device": device, "prompt": PROMPT, "n": n,
+            "base": base, "cache_mixte128": q,
+            "identiques": base == q,
+            "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
