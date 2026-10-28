@@ -103,6 +103,7 @@ class NativeModel(nn.Module):
         self.early_heads = nn.ModuleList([nn.Linear(self.cfg.d_model, self.cfg.vocab)
                                           for _ in self.cfg.early_blocks])
         self.thought = nn.Linear(self.cfg.d_model, self.cfg.d_model)
+        self.thought_in = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)
         self.head_rsn = nn.Linear(self.cfg.d_model, self.cfg.rsn_dim)
 
@@ -114,8 +115,12 @@ class NativeModel(nn.Module):
             x = bloc(x)
             if i in self.cfg.early_blocks:
                 early.append(self.early_heads[self.cfg.early_blocks.index(i)](x))
+        h0 = x
         for _ in range(self.cfg.thought_steps):
-            x = x + torch.tanh(self.thought(x))
+            # Pas CONTRACTANT : tanh(W x + U h0), sans résidu x + ….
+            # Le résidu garantissait λ ≈ 1,42 ; le pas contractant ramène λ < 1
+            # tout en gardant le contenu par l'injection h0.
+            x = torch.tanh(self.thought(x) + self.thought_in(h0))
         return {"logits": self.head_byte(x), "early": early,
                 "thought": x, "rsn": self.head_rsn(x)}
 

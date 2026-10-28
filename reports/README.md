@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-native-pensee.md`](rapport-native-pensee.md) | **N1.5** — pensée contractante **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
 | [`rapport-native-tetes.md`](rapport-native-tetes.md) | **N1.4** — têtes précoces : **55,15 / 60,94 / 62,13 %** contre **62,55 %** pour la principale, témoin **0,39 %** |
 | [`rapport-native-n0.md`](rapport-native-n0.md) | **N1.2** — `drave-n0` 11,37 M : PPL **3,353** en 10 000 pas, DRVM 110 tenseurs |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
