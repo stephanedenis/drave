@@ -33,7 +33,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 | N0.1 | Écrire le manifeste et le graphe (blocs, ports, routes, têtes, pont, pensée) | ✅ **fait** — manifeste JSON canonique, graphe, hash vérifié |
 | N0.2 | Écrire le payload tenseurs (alignement, quantification, masque de sparsité) | ✅ **fait** — aller-retour octet-à-octet, 64 o |
 | N0.3 | Lire DRVM dans `drave-core` | ✅ **parseur + CLI + poids** — `drvm.rs` lit l'en-tête, le graphe, les blocs et les tenseurs ; **114/114 tenseurs identiques** au checkpoint ; **parité PPL moteur reste à faire** |
-| N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | ⏳ **à faire** — Qwen 0.5B importé, même PPL |
+| N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | ✅ **mesuré** — Qwen 0.5B Q4_0 : 290 tenseurs, **SHA identique** en aller-retour sur 337 Mo |
 | N0.5 | Trace et rejeu d'un bloc DRVM | ⏳ **à faire** — trace identique, mêmes logits |
 | N0.6 | Refus de version et de bloc inconnu | ✅ **fait** — version 99 et bloc `quantum` refusés |
 

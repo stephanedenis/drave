@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-gguf-drvm.md`](rapport-gguf-drvm.md) | **N0.4** — GGUF ↔ DRVM : 290 tenseurs, **SHA identique** sur 337 Mo |
 | [`rapport-native-reflexe.md`](rapport-native-reflexe.md) | **N1.7** — réflexe : **−24,05 %** de temps pour **−1,61 point** |
 | [`rapport-drvm-parite.md`](rapport-drvm-parite.md) | **N0.3b** — DRVM ↔ checkpoint : **114/114** tenseurs identiques |
 | [`rapport-native-pont.md`](rapport-native-pont.md) | **N1.6** — pont : PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** |

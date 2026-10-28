@@ -1,0 +1,10 @@
+{
+ "gguf": "models/Qwen2.5-0.5B-Q4_0.gguf",
+ "drvm": "/tmp/qwen05-q4.drvm",
+ "tenseurs": 290,
+ "kv_octets": 5931951,
+ "gguf_octets": 337000000,
+ "sha_source": "c8cd5f37dd1235fb010c45316d4ff8af875e1a4e0ff368b4bf6cacb9053d4919",
+ "sha_retour": "c8cd5f37dd1235fb010c45316d4ff8af875e1a4e0ff368b4bf6cacb9053d4919",
+ "identiques": true
+}

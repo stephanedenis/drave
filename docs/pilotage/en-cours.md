@@ -9,7 +9,7 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Agent principal** : **N1 est complet** (N1.2 PPL 3,353 ; N1.4 têtes ; N1.5 λ=0,709 ; N1.6 pont ; N1.7 réflexe). Dernier correctif : `VARS_LUES` (134 tests Rust verts). **Prochain : N0.3b**, parité PPL moteur DRVM.
+- **Agent principal** : **N0.4 est fait** — GGUF ↔ DRVM, Qwen 0.5B, 290 tenseurs, **SHA identique**. **Prochain : N0.5**, trace/rejeu DRVM ; puis N0.3b, parité PPL moteur.
 - **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
   travail n'est en attente d'eux.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -18,8 +18,8 @@
 ## Ce qui est en cours
 
 - **N0 — DRVM** : format natif (manifeste, graphe, payload aligné 64 o, SHA-256, `mmap`), lecteur Python et
-  Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), **poids 114/114**, N0.6.
-  **Reste** : parité **PPL moteur**, N0.4 (`gguf2drvm`), N0.5 (trace/rejeu).
+  Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), **poids 114/114**, N0.4
+  (GGUF ↔ DRVM, **SHA identique**), N0.6. **Reste** : parité **PPL moteur**, N0.5 (trace/rejeu).
 - **N1 — `drave-n0`** : 11,47 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
   3 têtes précoces, cellule de pensée contractante, **pont** après le bloc 3. **PPL 3,465** ; têtes
   **57,6 / 61,6 / 62,1 %** contre **62,7 %** pour la principale ; pensée **λ = 0,709**.
@@ -38,7 +38,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **221** / **288** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **222** / **289** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
