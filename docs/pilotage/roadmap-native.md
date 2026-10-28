@@ -34,7 +34,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 | N0.2 | Écrire le payload tenseurs (alignement, quantification, masque de sparsité) | ✅ **fait** — aller-retour octet-à-octet, 64 o |
 | N0.3 | Lire DRVM dans `drave-core` | ✅ **PPL DRVM en mémoire** — `drvm.rs` lit l'en-tête, le graphe, les tenseurs ; `--drvm-ppl` calcule **28,7355** sans fichier temporaire (via `Gguf::depuis_octets`) ; **114/114** tenseurs identiques |
 | N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | ✅ **mesuré** — Qwen 0.5B Q4_0 : 290 tenseurs, **SHA identique** en aller-retour sur 337 Mo |
-| N0.5 | Trace et rejeu d'un bloc DRVM | ⚠️ **partiel** — contenu **291/291** identique ; **logits et DRVF à faire** |
+| N0.5 | Trace et rejeu d'un bloc DRVM | ✅ **mesuré** — contenu **291/291**, trace **6 144 listes**, rejeu **0 manquante**, logits **SHA identique**, PPL **28,7355** |
 | N0.6 | Refus de version et de bloc inconnu | ✅ **fait** — version 99 et bloc `quantum` refusés |
 
 **Porte N0** : un modèle DRVM de test (petit, aléatoire) est **écrit**, **lu**, **exécuté** et

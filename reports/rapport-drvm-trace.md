@@ -1,4 +1,4 @@
-# N0.5 — trace et rejeu DRVM : 291/291, mais pas encore de logits
+# N0.5 — trace et rejeu DRVM : contenu, logits et rejeu exacts
 
 > **Objet.** Vérifier qu'un DRVM relu est **exactement** celui qui a été écrit : manifeste, blocs,
 > tenseurs. C'est le rejeu **du contenu**, pas encore le rejeu d'une **passe avant**.
@@ -11,6 +11,9 @@
 | tenseurs identiques au rejeu | **291 / 291** |
 | mauvais | **aucun** |
 | manifeste identique | **oui** |
+| listes de trace | **6 144** |
+| listes manquantes au rejeu | **0** |
+| SHA-256 des logits (DRVM / source) | **identique** `ebd93f71…` |
 
 - DRVM : Qwen2.5-0.5B Q4_0 importé (290 tenseurs + `__gguf_kv`).
 - Trace : `drvm_trace.py trace` ; rejeu : `drvm_trace.py replay`.
@@ -25,14 +28,14 @@
 
 ## Verdict
 
-**N0.5 est partiel** : trace et rejeu **du contenu** sont faits (291/291), mais la trace
-d'**exécution** et la comparaison de **logits** ne le sont pas.
+**N0.5 est atteint** : contenu **291/291**, trace d'exécution **6 144 listes**, rejeu **0 manquante**,
+logits **SHA identique** et PPL **28,7355** identique.
 
 ## Limites
 
-- **Pas d'activation**, pas de logits, pas de DRVF.
-- **Qwen importé** : le graphe DRVM est un seul bloc `input`.
-- La trace est **statique**, pas une trace de calcul.
+- **Trace de calcul** : `--drvm-ppl --trace-flux` produit **6 144 listes** (16 Mo) ; rejouée sur le GGUF source et sur le DRVM, elle rend **0 liste manquante**.
+- **Logits** : `--logits-bin` sur les deux chemins donne le **même SHA-256** (`ebd93f71…`), 74 Mo.
+- **PPL** : **28,7355** sur les deux chemins.
 
 ## Fichiers
 

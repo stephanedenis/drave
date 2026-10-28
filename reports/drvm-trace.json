@@ -5,5 +5,9 @@
  "manifeste_sha256": true,
  "drvm": "/tmp/qwen05-q4.drvm",
  "trace": "/tmp/qwen05-q4.trace.json",
- "niveau": "contenu"
+ "niveau": "contenu",
+ "trace_listes": 6144,
+ "rejeu_manquantes": 0,
+ "logits_sha": "ebd93f71e56156ccfc2f90a499e2e3852a0b0b4dbf68db7fc0054d8fa09342a1",
+ "ppl": 28.7355
 }

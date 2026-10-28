@@ -16,7 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-drvm-ppl.md`](rapport-drvm-ppl.md) | **N0.3b** — PPL du retour DRVM : **28,7355** identique à la source |
-| [`rapport-drvm-trace.md`](rapport-drvm-trace.md) | **N0.5** — trace/rejeu DRVM : 291/291 tenseurs, contenu identique ; pas de logits |
+| [`rapport-drvm-trace.md`](rapport-drvm-trace.md) | **N0.5** — trace/rejeu DRVM : 291/291, 6 144 listes, logits SHA identique, PPL 28,7355 |
 | [`rapport-gguf-drvm.md`](rapport-gguf-drvm.md) | **N0.4** — GGUF ↔ DRVM : 290 tenseurs, **SHA identique** sur 337 Mo |
 | [`rapport-native-reflexe.md`](rapport-native-reflexe.md) | **N1.7** — réflexe : **−24,05 %** de temps pour **−1,61 point** |
 | [`rapport-drvm-parite.md`](rapport-drvm-parite.md) | **N0.3b** — DRVM ↔ checkpoint : **114/114** tenseurs identiques |
