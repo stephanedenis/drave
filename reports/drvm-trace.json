@@ -1,0 +1,9 @@
+{
+ "tenseurs": 291,
+ "identiques": true,
+ "mauvais": [],
+ "manifeste_sha256": true,
+ "drvm": "/tmp/qwen05-q4.drvm",
+ "trace": "/tmp/qwen05-q4.trace.json",
+ "niveau": "contenu"
+}
