@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N2.7 terminé** — distillation multi **9,517** vs professeur **9,571**, VDC partout. **Prochain : N2.5b**, capacité à budget égal, puis N4.
+- **Agent principal** : **N2.5b terminé** — 21,63 M **4,294** vs 11,47 M **4,476** à budget égal ; le prior d'entraînement domine. **Prochain : N4**, génération contrôlée et service local.
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -29,7 +29,7 @@
 - **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
-- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,295** contre **3,465** (−4,9 %) ; **multi** : student **9,517** vs professeur **9,571** ; **21,63 M** à **4,294**. Porte **< 2,5** non atteinte.
+- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,295** ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal** : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %), mais 11,47 M entraîné **3,295**. Porte **< 2,5** non atteinte.
 
 ## Les chiffres de l'état
 
@@ -39,7 +39,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **231** / **298** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **232** / **299** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

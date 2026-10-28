@@ -1,0 +1,27 @@
+{
+ "professeur": "/tmp/route-teacher",
+ "student": "/tmp/drave-n0-11m-equal.pt",
+ "pas": 5000,
+ "lot": 8,
+ "seq": 128,
+ "lr": 0.0002,
+ "temperature": 2.0,
+ "alpha": 0.7,
+ "tetes": true,
+ "perte_finale": 67.13058471679688,
+ "ppl_val": 4.475603254917727,
+ "precision_main": 0.591064453125,
+ "precision_early": [
+  0.340087890625,
+  0.44921875,
+  0.5712890625
+ ],
+ "drvm": "/tmp/drave-n0-11m-equal.drvm",
+ "sha256_drvm": "a310449e14705416c69e984fa27886bb04aaf473262dea5268fdad5fabe7cffe",
+ "duree_s": 311.3447971343994,
+ "ppl_11m_checkpoint": 3.295,
+ "ppl_11m_random": 4.475603254917727,
+ "ppl_21m_random": 4.29445070484243,
+ "delta_21m_vs_11m_pct": -4.047556044567835,
+ "meme_budget": "5000 pas, lot 8, init al\u00e9atoire, professeur fr, VDC"
+}
