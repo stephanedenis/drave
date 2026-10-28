@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 194 fichiers / 261 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 195 fichiers / 262 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -53,6 +53,7 @@ La vision complète est dans [`vision.md`](vision.md).
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
+- **A7.10 KV int8** — **17 420 o** contre **65 548** (ratio **0,266**), **272 o/jeton**, **25,5 Mio** contre **96,0 Mio** pour 4 096 jetons ; diff max **0,0155** ; fidélité modèle non mesurée.
 - **A7.9 cache KV** — une couche **1 024 o/jeton** (0,25× hidden) ; **24 couches 24 580 o/jeton**, **96 Mio pour 4 096 jetons** ; transfert naïf négatif, garder le KV côté serveur ou le quantifier.
 - **A7.8 int8 par canal** — ratio **36–39 %**, argmax **1,0**, diff max **0,5–1,7**, KL **~1e-3** ; lossy, décision stable, PPL non mesurée ; 896 échelles f32.
 - **A7.7 hidden int8** — par tenseur : argmax **0**, KL **10,2** ; par jeton : argmax **0,83–0,93**, KL **0,12–0,37** ; volume **34,6 %** mais fidélité insuffisante. **Négatif** ; bf16 reste meilleur.
@@ -88,7 +89,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **194** / **261** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **195** / **262** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
@@ -98,7 +99,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **194** / **261** |
+| fichiers / JSON de résultats | **195** / **262** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

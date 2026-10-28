@@ -1,0 +1,11 @@
+{
+ "ntok": 64,
+ "octets_f32": 65548,
+ "octets_int8": 17420,
+ "ratio": 0.2657594434612803,
+ "fidelite_exacte": false,
+ "diff_max": 0.015490412712097168,
+ "diff_moyenne": 0.005001460202038288,
+ "par_jeton_int8": 272.1875,
+ "projection_24_couches_4096_mio": 25.517578125
+}
