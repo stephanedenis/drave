@@ -20,6 +20,14 @@ class TestNativeModel(unittest.TestCase):
         self.assertEqual(len(out["early"]), 1)
         self.assertEqual(out["rsn"].shape, (2, 8, cfg.rsn_dim))
 
+    def test_arret_precoce(self):
+        cfg = NativeConfig(d_model=32, n_blocks=4, n_heads=4, expert_hidden=16,
+                           n_experts=4, early_blocks=(1, 2, 3))
+        m = NativeModel(cfg).eval()
+        out = m.forward_jusqua(torch.randint(0, 256, (1, 8)), 2)
+        self.assertEqual(out["logits"].shape, (1, 8, 256))
+        self.assertIsNotNone(out["early"])
+
     def test_taille_12m(self):
         m = NativeModel()
         n = m.nb_parametres()

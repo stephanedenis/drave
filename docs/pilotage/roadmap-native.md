@@ -52,6 +52,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 | N1.3 | Export DRVM et chargement moteur | ✅ **export** — 114 tenseurs, `drave --drvm-inspect` lit 12 blocs ; **114/114 identiques** au checkpoint ; **parité PPL à faire** |
 | N1.4 | Têtes précoces (blocs 2, 4, 6) | ✅ **mesuré** — **55,15 / 60,94 / 62,13 %** contre **62,55 %** pour la principale, témoin **0,39 %** ; PPL 3,363 |
 | N1.5 | Cellule de pensée contractante | ✅ **mesuré** — **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** ; PPL **3,58** |
+| N1.7 | **Vitesse du réflexe** | ✅ **mesuré** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, gain **24,05 %**, coût **−1,61 point** de précision |
 | N1.6 | Pont de région | ✅ **mesuré** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %** |
 
 **Porte N1** : `drave-n0` est un **banc de mécanismes** mesuré dans le moteur ; il ne parle pas

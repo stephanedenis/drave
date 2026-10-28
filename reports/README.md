@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-native-reflexe.md`](rapport-native-reflexe.md) | **N1.7** — réflexe : **−24,05 %** de temps pour **−1,61 point** |
 | [`rapport-drvm-parite.md`](rapport-drvm-parite.md) | **N0.3b** — DRVM ↔ checkpoint : **114/114** tenseurs identiques |
 | [`rapport-native-pont.md`](rapport-native-pont.md) | **N1.6** — pont : PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** |
 | [`rapport-native-pensee.md`](rapport-native-pensee.md) | **N1.5** — pensée contractante **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |

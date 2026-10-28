@@ -128,6 +128,19 @@ class NativeModel(nn.Module):
         return {"logits": self.head_byte(x), "early": early,
                 "thought": x, "rsn": self.head_rsn(x)}
 
+    def forward_jusqua(self, ids, n_blocs: int):
+        """Passe avant arrêtée après `n_blocs` blocs (réflexe)."""
+        b, s = ids.shape
+        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device))[None]
+        early = None
+        for i, bloc in enumerate(self.blocks[:n_blocs]):
+            x = bloc(x)
+            if i == self.cfg.n_blocks // 2 - 1:
+                x = x + self.bridge(x)
+            if i in self.cfg.early_blocks:
+                early = self.early_heads[self.cfg.early_blocks.index(i)](x)
+        return {"logits": self.head_byte(x), "early": early, "thought": x}
+
     def nb_parametres(self) -> int:
         return sum(p.numel() for p in self.parameters())
 
