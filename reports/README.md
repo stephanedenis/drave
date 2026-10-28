@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-kv-attention.md`](rapport-kv-attention.md) | **A7.11** — attention avec KV int8 : argmax 97,66 %, corrélation 0,99998, ratio 0,266 |
 | [`rapport-kv-int8.md`](rapport-kv-int8.md) | **A7.10** — cache KV int8 : 4× moins d'octets, diff max 0,0155, 25,5 Mio pour 4 096 jetons |
 | [`rapport-kv-reseau.md`](rapport-kv-reseau.md) | **A7.9** — cache KV à distance : 1 024 o/jeton/layer, 24 580 o/jeton sur 24 couches, 96 Mio pour 4 096 jetons |
 | [`rapport-couche-int8-canal.md`](rapport-couche-int8-canal.md) | **A7.8** — int8 par canal : ratio 36–39 %, argmax 1,0, KL ~1e-3 ; lossy mais décision stable |

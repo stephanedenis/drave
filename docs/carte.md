@@ -48,6 +48,7 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **A7.11** attention KV int8 | **stable** — argmax 97,66 %, corrélation 0,99998, ratio 0,266 | [la fiche](../reports/rapport-kv-attention.md) |
 | **A7.10** KV int8 | **compromis** — 4× moins d'octets, diff max 0,0155, 25,5 Mio pour 4 096 jetons | [la fiche](../reports/rapport-kv-int8.md) |
 | **A7.9** cache KV | **négatif** — 24 couches 24 580 o/jeton, 96 Mio pour 4 096 jetons ; garder côté serveur | [la fiche](../reports/rapport-kv-reseau.md) |
 | **A7.8** int8 par canal | **compromis** — ratio 36–39 %, argmax 1,0, KL ~1e-3 ; lossy mais décision stable | [la fiche](../reports/rapport-couche-int8-canal.md) |
