@@ -1,0 +1,25 @@
+{
+ "professeur": "/tmp/route-teacher",
+ "student": "/tmp/drave-n0-distille-tetes.pt",
+ "pas": 5000,
+ "lot": 16,
+ "seq": 128,
+ "lr": 0.0002,
+ "temperature": 2.0,
+ "alpha": 0.7,
+ "tetes": true,
+ "perte_finale": 27.960918426513672,
+ "ppl_val": 3.295052371818759,
+ "precision_main": 0.62353515625,
+ "precision_early": [
+  0.549560546875,
+  0.6099853515625,
+  0.6297607421875
+ ],
+ "drvm": "/tmp/drave-n0-distille-tetes.drvm",
+ "sha256_drvm": "5c43b839fb882c80c43723e2e7cb065bf4564e8fc3e4f87af0f3d750f2222f97",
+ "duree_s": 343.0272114276886,
+ "ppl_avant": 3.297,
+ "variation_ppl": -0.0019476281812411678,
+ "professeur_ppl": 2.3552823178020192
+}

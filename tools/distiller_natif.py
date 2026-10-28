@@ -58,6 +58,8 @@ def main() -> None:
     ap.add_argument("--sortie", default="/tmp/drave-n0-distille.pt")
     ap.add_argument("--drvm", default="/tmp/drave-n0-distille.drvm")
     ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
+                    help="ajouter les têtes précoces à la distillation")
     a = ap.parse_args()
     torch.manual_seed(a.graine)
     from transformers import AutoModelForCausalLM
@@ -73,12 +75,15 @@ def main() -> None:
         etu.train(); x, y = lot(train, a.lot, a.seq, a.device)
         with torch.no_grad():
             lp = prof(x).logits
-        ls = etu(x)["logits"]
+        sortie = etu(x); ls = sortie["logits"]
         T = a.temperature
         kd = F.kl_div(F.log_softmax(ls / T, -1), F.softmax(lp / T, -1),
                       reduction="batchmean", log_target=False) * (T * T)
         ce = F.cross_entropy(ls.reshape(-1, 256), y.reshape(-1))
         perte = a.alpha * kd + (1 - a.alpha) * ce
+        if a.tetes:
+            for e in sortie["early"]:
+                perte = perte + 0.1 * F.cross_entropy(e.reshape(-1, 256), y.reshape(-1))
         opt.zero_grad(); perte.backward()
         torch.nn.utils.clip_grad_norm_(etu.parameters(), 1.0)
         opt.step(); pertes.append(float(perte))
@@ -86,11 +91,22 @@ def main() -> None:
             p = ppl(etu, val, a.seq, a.lot, a.device, n_lots=2)
             print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL {p:.3f} · {time.time()-t0:.0f} s", flush=True)
     p_etu = ppl(etu, val, a.seq, a.lot, a.device, n_lots=8)
+    etu.eval(); bons_main = 0; bons_early = [0]*len(etu.cfg.early_blocks); n_ev = 0
+    with torch.no_grad():
+        for _ in range(4):
+            x, y = lot(val, a.lot, a.seq, a.device)
+            s = etu(x)
+            bons_main += int((s["logits"].argmax(-1) == y).sum())
+            for j, e in enumerate(s["early"]):
+                bons_early[j] += int((e.argmax(-1) == y).sum())
+            n_ev += y.numel()
+    prec_main = bons_main/max(1,n_ev); prec_early = [b/max(1,n_ev) for b in bons_early]
     etu.eval(); torch.save({"config": cfg.__dict__, "state": etu.state_dict()}, a.sortie)
     h = exporter_drvm(etu, a.drvm)
     res = {"professeur": a.enseignant, "student": a.sortie, "pas": a.pas,
            "lot": a.lot, "seq": a.seq, "lr": a.lr, "temperature": a.temperature,
-           "alpha": a.alpha, "perte_finale": pertes[-1], "ppl_val": p_etu,
+           "alpha": a.alpha, "tetes": a.tetes, "perte_finale": pertes[-1], "ppl_val": p_etu,
+           "precision_main": prec_main, "precision_early": prec_early,
            "drvm": a.drvm, "sha256_drvm": h, "duree_s": time.time() - t0}
     pathlib.Path(a.sortie + ".json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
     print(json.dumps(res, ensure_ascii=False, indent=1))

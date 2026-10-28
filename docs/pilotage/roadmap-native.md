@@ -68,7 +68,7 @@ permutation.
 | N2.1 | Collecte et filtrage (UDHR, textes publics, code, dialogue) | ⚠️ **volume** — 50 000 fenêtres, 45 000/5 000 ; **un seul corpus**, licence à vérifier, diversité non faite |
 | N2.2 | Professeur local (Qwen 0.5B, logits) + DeepSeek (séquences) | deux sources, pas une seule |
 | N2.3 | Distillation + pertes locales + têtes + pensée | écart ≤ **4,40 %** (B9) |
-| N2.4 | Contrôle 30 langues | pas de chute > 5 pts |
+| N2.4 | **Têtes précoces dans la distillation** | ⚠️ **négatif** — 5 000 pas, PPL **3,295** contre **3,297**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
 | N2.5 | Contrôle par permutation | le modèle ne suit pas l'étiquette mélangée |
 | N2.6 | Ablation : sans perte locale, sans tête, sans pensée | chaque perte paie ou est retirée |
 

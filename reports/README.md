@@ -16,6 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
 | [`rapport-native-distillation.md`](rapport-native-distillation.md) | **N2.3** — distillation : PPL **3,297** contre **3,465**, gap **+0,942** au professeur |
 | [`rapport-native-corpus.md`](rapport-native-corpus.md) | **N2.1** — 50 000 fenêtres, 45 000/5 000, manifeste d'offsets |
 | [`rapport-drvm-ppl.md`](rapport-drvm-ppl.md) | **N0.3b** — PPL du retour DRVM : **28,7355** identique à la source |
