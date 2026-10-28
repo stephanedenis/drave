@@ -51,6 +51,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 | N0.8 | **Parité automatisée** | ✅ **5/5 prompts**, top-5 identique, écart max **0,00006** |
 | N0.9 | **Cache KV natif** | ✅ **parité** — sortie identique à Python, 53 octets en **592,6 ms** |
 | N0.10 | **Gain du cache** | ✅ **19,25×** — 592,6 ms contre 11 406,9 ms pour 53 octets, sortie identique |
+| N0.11 | **Test Rust natif** | ✅ **fixture 36 Ko**, 7 754 paramètres, forward + génération testés dans le crate |
 | N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | ✅ **architecture** — `tools/native_model.py`, 11,37 M, 6 blocs, 3 têtes, 4 tests de forme ; **entraînement 200 pas à faire** |
 | N1.2 | Entraînement next-byte sur corpus propre | ⏳ **à faire** — PPL < 4,0 sur tenu à l'écart |
 | N1.3 | Export DRVM et chargement moteur | ✅ **export** — 114 tenseurs, `drave --drvm-inspect` lit 12 blocs ; **114/114 identiques** au checkpoint ; **parité PPL à faire** |

@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N2.8** — 20 000 pas, PPL **3,123**, porte **2,5** non atteinte. **Prochain : capacité 21,63 M avec plus de pas, ou clôture.**
+- **Agent principal** : **N0.11** — test Rust autonome. **Prochain : PPL native de bout en bout.**
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -23,6 +23,7 @@
 - **N0 — DRVM** : format natif, lecteur Python/Rust, GGUF ↔ DRVM (**SHA identique**), trace/rejeu (**6 144 listes**, logits **SHA identique**), **exécution native** (`--drvm-forward`, logits **10,8232**), **parité automatisée 5/5 prompts** (écart **0,00006**) et **cache KV 19,25×** (592,6 ms contre 11 406,9 ms).
 - **N1 — `drave-n0`** : 11,47 M, 6 blocs, attention locale, FFN creux, 3 têtes précoces, pensée contractante **λ = 0,709**, pont **−9,3 %**, réflexe **−24,05 %**.
 - **N2 — distillation** : 49 999 fenêtres / 4 sources, VDC ; professeur fr **2,355** ; student **3,123** après 20 000 pas ; multi **9,517** vs **9,571** ; capacité à budget égal 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %). Porte **< 2,5 non atteinte**.
+- **N0.11 — test Rust** : fixture **36 Ko**, **7 754** paramètres, forward et génération testés dans le crate.
 - **N4 — usage** : génération greedy (cohérente 12 octets puis dérive) et service local `/sante` + `/generer` (69 octets, CPU) ; **pas un assistant**.
 
 ## Les chiffres de l'état
@@ -33,7 +34,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **239** / **305** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **240** / **305** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

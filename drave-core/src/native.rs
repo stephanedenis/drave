@@ -295,3 +295,20 @@ impl Native {
         ids
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn execute_une_petite_fixture_drvm() {
+        let chemin = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/tiny_n0.drvm");
+        let d = Drvm::open(chemin).expect("fixture DRVM");
+        let n = Native::open(&d).expect("ouverture native");
+        let l = n.forward(&[65, 66, 67]);
+        assert_eq!(l.len(), 256);
+        assert!(l.iter().all(|x| x.is_finite()), "logits non finis");
+        let g = n.generer(b"AB", 4);
+        assert!(g.len() >= 6);
+    }
+}
