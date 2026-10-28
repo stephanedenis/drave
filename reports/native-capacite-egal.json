@@ -23,5 +23,21 @@
  "ppl_11m_random": 4.475603254917727,
  "ppl_21m_random": 4.29445070484243,
  "delta_21m_vs_11m_pct": -4.047556044567835,
- "meme_budget": "5000 pas, lot 8, init al\u00e9atoire, professeur fr, VDC"
+ "meme_budget": "5000 pas, lot 8, init al\u00e9atoire, professeur fr, VDC",
+ "graines": 3,
+ "ppl_11m": [
+  4.475603254917727,
+  4.529376579917579,
+  4.515974793992531
+ ],
+ "ppl_21m": [
+  4.29445070484243,
+  4.06535660105953,
+  4.066633372957459
+ ],
+ "moyenne_11m": 4.506984876275946,
+ "ecart_type_11m": 0.027991187645367007,
+ "moyenne_21m": 4.142146892953139,
+ "ecart_type_21m": 0.13190051506201983,
+ "ecart_moyen_pct": -8.094945808299824
 }

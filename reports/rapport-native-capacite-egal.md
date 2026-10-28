@@ -15,37 +15,41 @@
 | professeur | `/tmp/route-teacher` (PPL **2,355**) | idem |
 | échantillonnage | VDC | VDC |
 
-## Résultats
+## Résultats — trois graines
 
-| mesure | 11,47 M | 21,63 M |
-|---|---:|---:|
-| **PPL validation** | **4,476** | **4,294** |
-| écart | — | **−4,1 %** |
-| précision principale | **59,11 %** | **58,81 %** |
-| tête précoce 3 | **57,13 %** | **57,81 %** |
-| durée | 311 s | 327 s |
+| graine | 11,47 M | 21,63 M |
+|---:|---:|---:|
+| 1 | 4,4756 | 4,2944 |
+| 2 | 4,5294 | 4,0654 |
+| 3 | 4,5160 | 4,0666 |
+| **moyenne** | **4,5070** | **4,1421** |
+| **écart-type** | **0,028** | **0,132** |
+| **écart moyen** | — | **−8,1 %** |
+| précision principale (moyenne) | **59,23 %** | **60,16 %** |
+| tête 3 (moyenne) | **57,13 %** | **57,81 %** |
 
 **Contrôle** : le même 11,47 M **parti d'un checkpoint** (`/tmp/drave-n0-pont.pt`) atteint **3,295**.
 Le passage de 4,476 à 3,295 mesure donc le **budget antérieur**, pas la capacité.
 
 ## Lecture
 
-- À **budget égal** et **initialisation égale**, le modèle plus gros est **meilleur de 4,1 %** :
-  **4,294** contre **4,476**. La capacité **sert**, faiblement.
+- À **budget égal** et **initialisation égale**, le modèle plus gros est **meilleur de 8,1 % en moyenne**
+  sur **trois graines** : **4,142** contre **4,507**. La capacité **sert**, mais la variance du 21,63 M
+  est **quatre fois plus grande** (0,132 contre 0,028).
 - Mais **l'historique d'entraînement pèse plus** : le même 11,47 M passe de **4,476** à **3,295** avec un
   checkpoint de départ. Le résultat N2.5 était donc bien **confondu**.
 - Les précisions sont **proches** (59,1 % vs 58,8 %) : le gain de PPL ne se voit pas encore en top-1.
 
 ## Verdict
 
-**N2.5b — capacité : positif faible** (+4,1 % de PPL à budget égal), **mais le prior d'entraînement
-domine** (+26 % pour le 11,47 M entraîné). La porte N2 (**PPL < 2,5**) reste hors de portée à 5 000 pas.
+**N2.5b — capacité : positif** (−8,1 % de PPL à budget égal sur trois graines), **mais le prior
+d'entraînement domine** (+26 % pour le 11,47 M entraîné). La porte N2 (**PPL < 2,5**) reste hors de portée à 5 000 pas.
 
 ## Limites
 
 - **5 000 pas** ; les deux modèles sont loin de la convergence.
 - **Un seul lot** de validation.
-- **Pas de moyenne sur plusieurs graines** : l'initialisation aléatoire est une source de variance.
+- **Trois graines** seulement ; la variance du 21,63 M est grande (0,132).
 - **Professeur fr**, corpus fr.
 
 ## Fichiers

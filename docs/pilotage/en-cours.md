@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N4.1 technique** — génération greedy, cohérente 12 octets puis dérive ; **pas un assistant**. **Prochain : N4.2**, service local ou N0, attention native.
+- **Agent principal** : **N2.5b, 3 graines** — 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; le prior d'entraînement domine. **Prochain : N0**, attention native DRVM.
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -29,7 +29,7 @@
 - **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
-- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,295** ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal** : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %). Porte **< 2,5** non atteinte.
+- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,295** ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal, 3 graines** : 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; checkpoint 11,47 M **3,295**. Porte **< 2,5** non atteinte.
 - **N4 — génération** : **technique** — greedy 160 octets, cohérent 12 octets puis dérive ; **pas un assistant**.
 
 ## Les chiffres de l'état

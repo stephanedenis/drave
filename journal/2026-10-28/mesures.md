@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 12:12 | `2958f80b` | N0.3b — PPL DU RETOUR DRVM : 28,7355 IDENTIQUE, MAIS PAS D'EXÉCUTION NATIVE | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+4) |
 | 13:25 | `acd9c623` | MÉTHODE — ÉCHANTILLONNAGE VAN DER CORPUT, DÉTERMINISTE ET REPRODUCTIBLE | `README.md`, `echantillonnage-vdc.md`, `en-cours.md` (+10) |
 | 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
+| 15:00 | `bedeebae` | MÉTHODE — REPRENDRE UN GOAL EN PAUSE (GET_GOAL → UPDATE_GOAL RESUME) ; INDEX 230 | `REPRISE.md`, `continuite.md`, `README.md` (+3) |
 
 ## Chiffres du jour
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**36 commits** · **0 session(s)** · **8 thème(s)**
+**37 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 9 | [mesures.md](mesures.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 4 | [moteur.md](moteur.md) |
 
@@ -69,6 +69,7 @@
 | 14:18 | `cf75fd47` | JOURNAL — UN DOSSIER PAR JOUR (34 JOURS), SESSIONS DSH ANCRÉES AUX JOURS ET À EN-COURS ; 57 DOCS |
 | 14:29 | `a86faa71` | N2.5b — CAPACITÉ À BUDGET ÉGAL : 21,63 M 4,294 CONTRE 11,47 M 4,476, −4,1 % |
 | 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT |
+| 15:00 | `bedeebae` | MÉTHODE — REPRENDRE UN GOAL EN PAUSE (GET_GOAL → UPDATE_GOAL RESUME) ; INDEX 230 |
 
 ## Le récit de la journée (écrit à la main)
 
