@@ -128,3 +128,32 @@ def mesurer_mixte(device: str = "cuda", n: int = 128) -> dict:
             "base": base, "cache_mixte": q,
             "identiques": base == q,
             "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
+
+
+class CacheFenetre(DynamicCache):
+    """Cache à fenêtre f32 : les 64 derniers jetons restent f32, le reste int8."""
+
+    fenetre = 64
+
+    def update(self, key_states, value_states, layer_idx, *args, **kwargs):
+        keys, values = super().update(key_states, value_states, layer_idx, *args, **kwargs)
+        layer = self.layers[layer_idx]
+        if layer.keys.shape[-2] > self.fenetre:
+            layer.keys[..., :-self.fenetre, :] = _q(layer.keys[..., :-self.fenetre, :])
+            layer.values[..., :-self.fenetre, :] = _q(layer.values[..., :-self.fenetre, :])
+        return keys, values
+
+
+def mesurer_fenetre(device: str = "cuda", n: int = 256) -> dict:
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    ids = tok(PROMPT, return_tensors="pt").input_ids.to(device)
+    base = _gen(m, ids, n)
+    with torch.no_grad():
+        out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                         past_key_values=CacheFenetre(), pad_token_id=0)
+    q = out[0, ids.shape[1]:].tolist()
+    return {"modele": MODELE, "device": device, "prompt": PROMPT, "n": n,
+            "base": base, "cache_fenetre": q,
+            "identiques": base == q,
+            "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
