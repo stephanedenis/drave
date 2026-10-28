@@ -1,11 +1,5 @@
 # UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés corrigés
-> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
-> pas.** *46→49 portes, 6→8 chapitres, 6→14 schémas ; les chemins `cerveau-facultes` et
-> `etat-cerveau` sont passés à l'archive.*
-
 > Écrit le **16/10**, **revu le 2026-10-27**. en réponse à une question simple : « que manque-t-il pour que je puisse utiliser
 > tout ça ? ». Ce document dit **ce qui s'utilise tout de suite** ✓, **la commande exacte** ✓, et
 > **ce qui n'existe pas encore** ✗ — avec ce que chaque manque coûterait ✓.

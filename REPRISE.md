@@ -1,10 +1,5 @@
 # Reprise — démarrer une session de travail
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés corrigés
-> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
-> pas.** *Cette page est mise à jour ; les pièges d'environnement du § 3 restent valides.*
-
 > **Check-list, pas un état.** L'état vit dans [`docs/en-cours.md`](docs/en-cours.md) ; le plan
 > dans [`docs/roadmap.md`](docs/roadmap.md) ; l'ancien index par module est archivé
 > ([`docs/etat.md`](docs/etat.md) redirige). Ce fichier ne dit que : quoi lire, quoi vérifier,

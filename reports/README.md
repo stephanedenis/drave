@@ -1,11 +1,5 @@
 # Les rapports — données intermédiaires et références
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : l'inventaire est complété par [`INDEX.md`](INDEX.md) (généré) ;
-> le warning `07-mesures` est corrigé (168 mesures / 10 parties).*
-
 > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
 > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
 > [`docs/en-cours.md`](../docs/en-cours.md).
@@ -28,29 +22,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
-| [`rapport-kv-cache-multi.md`](rapport-kv-cache-multi.md) | **A7.26** — cache mixte sur 3 prompts : accord moyen 84,19 %, décrochage à 75 sur le train |
-| [`rapport-kv-cache-seuils.md`](rapport-kv-cache-seuils.md) | **A7.25** — balayage des seuils f32 : 64 confirmé (237/92,6 %), les autres sont pires |
-| [`rapport-kv-cache-mixte-32.md`](rapport-kv-cache-mixte-32.md) | **A7.24** — seuil f32 à 32 : divergence au 41ᵉ, accord 16,41 % |
-| [`rapport-kv-cache-mixte-128.md`](rapport-kv-cache-mixte-128.md) | **A7.23** — seuil f32 à 128 : divergence au 215ᵉ, accord 83,98 %, moins bon que 64 |
-| [`rapport-kv-cache-fenetre.md`](rapport-kv-cache-fenetre.md) | **A7.22** — fenêtre f32 glissante : divergence au 77ᵉ, accord 32,42 %, pire que le mixte |
-| [`rapport-kv-cache-mixte-256.md`](rapport-kv-cache-mixte-256.md) | **A7.21** — cache mixte sur 256 jetons : accord 92,58 %, divergence au 237ᵉ |
-| [`rapport-kv-cache-mixte.md`](rapport-kv-cache-mixte.md) | **A7.20** — cache mixte f32→int8 : 128/128 identiques, mémoire 62,5 % |
-| [`rapport-kv-cache-int8-bloc.md`](rapport-kv-cache-int8-bloc.md) | **A7.19** — quantification par bloc : divergence au 41ᵉ, accord 32,81 %, pire que par canal |
-| [`rapport-kv-cache-int8-128.md`](rapport-kv-cache-int8-128.md) | **A7.18** — cache KV int8 sur 128 jetons : accord 60,94 %, divergence au 77ᵉ |
-| [`rapport-kv-cache-int8-64.md`](rapport-kv-cache-int8-64.md) | **A7.17** — cache KV int8 sur 64 jetons : 64/64 identiques |
-| [`rapport-kv-cache-int8.md`](rapport-kv-cache-int8.md) | **A7.16** — cache KV int8 stocké : 32/32 jetons greedy identiques |
-| [`rapport-kv-gen-64.md`](rapport-kv-gen-64.md) | **A7.15** — 64 jetons avec K/V int8 : 64/64 identiques, accord 1,0 |
-| [`rapport-kv-gen.md`](rapport-kv-gen.md) | **A7.14** — génération avec K/V int8 : 16/16 jetons identiques, accord 1,0 |
-| [`rapport-kv-ppl-long.md`](rapport-kv-ppl-long.md) | **A7.13** — K/V int8 sur 511 jetons : ΔPPL 0,0 sur 24 couches |
-| [`rapport-kv-ppl.md`](rapport-kv-ppl.md) | **A7.12** — PPL avec K/V int8 : 2,6792016 → 2,6792004, Δ −1,17e-6 sur 24 couches |
-| [`rapport-kv-attention.md`](rapport-kv-attention.md) | **A7.11** — attention avec KV int8 : argmax 97,66 %, corrélation 0,99998, ratio 0,266 |
-| [`rapport-kv-int8.md`](rapport-kv-int8.md) | **A7.10** — cache KV int8 : 4× moins d'octets, diff max 0,0155, 25,5 Mio pour 4 096 jetons |
-| [`rapport-kv-reseau.md`](rapport-kv-reseau.md) | **A7.9** — cache KV à distance : 1 024 o/jeton/layer, 24 580 o/jeton sur 24 couches, 96 Mio pour 4 096 jetons |
-| [`rapport-couche-int8-canal.md`](rapport-couche-int8-canal.md) | **A7.8** — int8 par canal : ratio 36–39 %, argmax 1,0, KL ~1e-3 ; lossy mais décision stable |
-| [`rapport-couche-int8.md`](rapport-couche-int8.md) | **A7.7** — hidden int8 : 34,6 % du volume mais argmax 0,83–0,93, KL 0,12–0,37 ; bf16 meilleur |
-| [`rapport-couche-distante.md`](rapport-couche-distante.md) | **A7.6** — couche Qwen 0.5B à distance : logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× |
-| [`rapport-seuil-reseau.md`](rapport-seuil-reseau.md) | **A7.5b** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms |
-| [`rapport-grappe-reseau.md`](rapport-grappe-reseau.md) | **A7.5** — grappe sur réseau : 1 672 o contre 7 416 (4,44×), fidélité 1 792/1 792, 0,125 ms loopback |
+| [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 | [`rapport-m6-moteur.md`](rapport-m6-moteur.md) | **B27** — M6 moteur : exact 100 %, conflit 0 ; le cue désigne le canal, pas de compétition |
 | [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |
 | [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
@@ -62,12 +34,6 @@
 | [`rapport-m2-typo.md`](rapport-m2-typo.md) | **B22** — M2 et les typos : M2 62–80 % contre M1 24–45 % sur suppression, substitution, insertion, transposition |
 | [`rapport-m9-dose.md`](rapport-m9-dose.md) | **B21** — M9 par dose : M3 0/4/8/12/12 tautologique, M5 +4,25 pts, sham nul, double non additive |
 | [`rapport-m2-secours.md`](rapport-m2-secours.md) | **B19** — M2 secours : typos 71,2/76,7 vs M1 36,6 ; espaces 41,8/45,2 vs 34,8 ; phrase M1 86,6 vs M2 0 ; niche, pas secours général |
-| [`rapport-restitution.md`](rapport-restitution.md) | **B18** — restitution canonique : 528/528 rendus et relus, 0 échec ; codec bidirectionnel, pas un décodeur neuronal |
-| [`rapport-pipeline-memoire.md`](rapport-pipeline-memoire.md) | **B17** — LFU 9,28 % suffixe surface vs FIFO 5,03 % ; M8 couverture 70,75 %, exact sur couverts 100 % (lookup), généralisation 0 |
-| [`rapport-m7-frequence.md`](rapport-m7-frequence.md) | **B16** — M7-bis LFU : +23,1 pts répétés, +4,25 suffixe, +8,7 nouveaux ; LFU+récence = LFU ; contexte négatif |
-| [`rapport-pipeline-m2.md`](rapport-pipeline-m2.md) | **B14** — M2 dans la chaîne : M1 100 %, M2 93,4/93,6 %, aucun étage ne consomme M2 ; M5 plateau 18,70 % vs 12,60 % |
-| [`rapport-multilingue.md`](rapport-multilingue.md) | **B15** — M1 sur 66 langues : 528/528, invariance 26/26 et 15/15, contrôle permuté 0/90 %, baseline surface 71,8 % |
-| [`rapport-pipeline-semantique.md`](rapport-pipeline-semantique.md) | **B13** — chaîne M1→M5→M6→M8 : M1 528/528 ; M5 contexte 18,7 % vs 12,6 % ; M6 94,3 % ; M8 57,95 % (borne haute, non tenue à l'écart) |
 | [`rapport-cerveau-corrections.md`](rapport-cerveau-corrections.md) | **B12 — corrections** : M2 93,2 % = 126/126 vus + 11/20 inédits ; M3 span tautologique ; M4 29 codes, 0/6 non stockés ; M8 96,48 % marginal (exact 65,1 %, baseline par jeu 96,10 %) ; M5/M6/M7 négatifs |
 | [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md) | **B12** : les modules M1–M9 — hub **528/528**, mémoire épisodique **1,0** ; M2 double dissociation (`action` 98,6 %, `de` 93,2 %), M8 généralise (96,48 % hors stock), M5/M6/M7 **négatifs** ; M9 lésions |
 | [`bilan-b11.md`](bilan-b11.md) | **bilan B11** : ce qui tient (codec 100 %, **restitution du code** 100 %, encodeur 0,426) et ce qui ne tient pas (natif 59,8 % / invariance 40,7 %, **surface 33/79**, raisonnement non branché) |

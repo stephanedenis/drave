@@ -1,12 +1,5 @@
 # La carte de Drave — l'index des sujets
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
-> `docs/roadmap.md` (plan). *Spécifique : cette page est l'index des sujets ; les blocs
-> B10–B12 et les documents orphelins y sont ajoutés.*
-
 > **Le hub des sujets.** Un lien, **un fichier**. Les autres portes : [la vision](vision.md) ·
 > [l'état](en-cours.md) · [la roadmap](roadmap.md) · [l'inventaire](README.md) · [les résultats](../reports/README.md) ·
 > [le journal](../journal/README.md) · [l'archive](archive/README.md).
@@ -48,33 +41,8 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
-| **A7.26** cache mixte 3 prompts | **compromis** — accord moyen 84,19 %, décrochage à 75 sur le train | [la fiche](../reports/rapport-kv-cache-multi.md) |
-| **A7.25** balayage seuils | **64 confirmé** — 237/92,6 %, les autres seuils sont pires | [la fiche](../reports/rapport-kv-cache-seuils.md) |
-| **A7.24** seuil f32 32 | **négatif** — divergence au 41ᵉ, accord 16,41 % | [la fiche](../reports/rapport-kv-cache-mixte-32.md) |
-| **A7.23** seuil f32 128 | **négatif** — divergence au 215ᵉ, accord 83,98 %, moins bon que le seuil 64 | [la fiche](../reports/rapport-kv-cache-mixte-128.md) |
-| **A7.22** fenêtre f32 glissante | **négatif** — divergence au 77ᵉ, accord 32,42 %, pire que le mixte | [la fiche](../reports/rapport-kv-cache-fenetre.md) |
-| **A7.21** cache mixte 256 | **compromis** — accord 92,58 %, divergence au 237ᵉ | [la fiche](../reports/rapport-kv-cache-mixte-256.md) |
-| **A7.20** cache KV mixte | **positive** — 128/128 identiques, mémoire 62,5 % | [la fiche](../reports/rapport-kv-cache-mixte.md) |
-| **A7.19** cache KV int8 bloc | **négatif** — divergence au 41ᵉ, accord 32,81 %, pire que par canal | [la fiche](../reports/rapport-kv-cache-int8-bloc.md) |
-| **A7.18** cache KV int8 128 | **négatif** — accord 60,94 %, divergence au 77ᵉ jeton | [la fiche](../reports/rapport-kv-cache-int8-128.md) |
-| **A7.17** cache KV int8 64 | **positive** — 64/64 identiques avec `CacheInt8` stocké | [la fiche](../reports/rapport-kv-cache-int8-64.md) |
-| **A7.16** cache KV int8 stocké | **positive** — 32/32 identiques avec un vrai cache int8 | [la fiche](../reports/rapport-kv-cache-int8.md) |
-| **A7.15** 64 jetons K/V int8 | **positive** — 64/64 identiques, accord 1,0 | [la fiche](../reports/rapport-kv-gen-64.md) |
-| **A7.14** génération K/V int8 | **positive** — 16/16 jetons identiques, accord 1,0 | [la fiche](../reports/rapport-kv-gen.md) |
-| **A7.13** K/V int8 512 | **positive** — ΔPPL 0,0 sur 511 jetons et 24 couches | [la fiche](../reports/rapport-kv-ppl-long.md) |
-| **A7.12** PPL K/V int8 | **positive** — PPL 2,6792016 → 2,6792004, Δ −1,17e-6 sur 24 couches | [la fiche](../reports/rapport-kv-ppl.md) |
-| **A7.11** attention KV int8 | **stable** — argmax 97,66 %, corrélation 0,99998, ratio 0,266 | [la fiche](../reports/rapport-kv-attention.md) |
-| **A7.10** KV int8 | **compromis** — 4× moins d'octets, diff max 0,0155, 25,5 Mio pour 4 096 jetons | [la fiche](../reports/rapport-kv-int8.md) |
-| **A7.9** cache KV | **négatif** — 24 couches 24 580 o/jeton, 96 Mio pour 4 096 jetons ; garder côté serveur | [la fiche](../reports/rapport-kv-reseau.md) |
-| **A7.8** int8 par canal | **compromis** — ratio 36–39 %, argmax 1,0, KL ~1e-3 ; lossy mais décision stable | [la fiche](../reports/rapport-couche-int8-canal.md) |
-| **A7.7** hidden int8 | **négatif** — 34,6 % du volume mais argmax 0,83–0,93, KL 0,12–0,37 ; bf16 meilleur | [la fiche](../reports/rapport-couche-int8.md) |
-| **A7.6** couche à distance | **mesuré** — logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× | [la fiche](../reports/rapport-couche-distante.md) |
-| **A7.5b** seuil réseau | **mesuré** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms | [la fiche](../reports/rapport-seuil-reseau.md) |
-| **A7.5** grappe réseau | **mesuré** — 4,44× moins d'octets, fidélité 100 %, 0,125 ms loopback | [la fiche](../reports/rapport-grappe-reseau.md) |
-| **B27** M6 moteur | **trivial** — exact 100 %, conflit 0, pas de compétition | [la fiche](../reports/rapport-m6-moteur.md) |
-| **B26** M6 conflit | **nul** — 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition | [la fiche](../reports/rapport-m6-conflit2.md) |
-| **B25** M8 rejeu | **négatif** — M8 exact 0, rejeu 0, hybride 0 sur 6 codes tenus | [la fiche](../reports/rapport-m8-rejeu.md) |
-| **B24** routeur confiance | **partiel** — typo 63,7 % (+7,5) mais espaces 34,2 % (−7,5) ; oracle 79,45 % | [la fiche](../reports/rapport-routeur-confiance.md) |
+| **A7.5–A7.26** cache KV et grappe réseau | **campagne** — 22 mesures, du cache int8 aux seuils ; voir les fiches | [l'index](../reports/INDEX.md) |
+| **B24–B27** routeur, M8, M6 | **partiels/négatifs** — confiance, rejeu, conflit, moteur ; voir les fiches | [l'index](../reports/INDEX.md) |
 | **C3.2e** sous-familles autres | **mesuré** — uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % | [la fiche](../reports/rapport-sous-familles-autres.md) |
 | **C3.2d** sous-familles IE | **mesuré** — 54,6–100 % ; l'IE à 14,7 % est un effet de composition | [la fiche](../reports/rapport-ie-sous-familles.md) |
 | **C3.2c** 9 familles | **mesuré** — 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % | [la fiche](../reports/rapport-familles-9.md) |

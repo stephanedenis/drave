@@ -1,6 +1,6 @@
 # État des modules — la redirection
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** L'ancien index des modules
+> **Redirection.** L'ancien index des modules
 > (2026-10-10) est archivé : [`etat-modules-2026-10-10.md`](archive/etat-modules-2026-10-10.md).
 > L'état courant est [`en-cours.md`](en-cours.md) ; le plan est [`roadmap.md`](roadmap.md).
 > Les règles de rangement sont dans [`organisation-du-depot.md`](organisation-du-depot.md).

@@ -1,11 +1,5 @@
 # La roadmap de Drave — deux programmes, un ordre, aucune date
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : le bas de la page (ordre du jour, file, décisions) est
-> remis à jour ; B11 précède B12.*
-
 > Suite de [`docs/vision.md`](vision.md). Le projet a **deux programmes** : le **moteur** (les flux de données, les
 > cinq axes) et l'**intelligence** (les deux étages). Ils avancent **en parallèle** ; l'ordre se décide par la
 > **valeur** et les **dépendances**, jamais par une date.
@@ -122,29 +116,7 @@ ailleurs*.
 | A7.2 | **Une couche exécutée ailleurs** : la même sortie, un autre nœud | ✅ | le **relais ne change pas un chiffre** (`porte-topologie`, 92 s, 42.5477) ; le coût du flux : **1 608 octets/flux**, **0,25 Mbit/s**, latence ≤ 20 ms — [`rapport-mode4-lot-listes.md`](../reports/rapport-mode4-lot-listes.md) |
 | A7.3 | **La grappe intra-couche** : un sous-ensemble de neurones, pas une frontière de couche | ✅ mesuré | le **top-1024** (21 % des 4 864 neurones FFN) rend la **même perplexité** (30,7286 à quatre décimales) ; 64 et 256 l'effondrent — la grappe a une **taille minimale** mesurable — [`reports/rapport-grappe-intra-couche.md`](../reports/rapport-grappe-intra-couche.md) |
 | A7.4 | **La grappe déportée** : le flux ne transporte que les valeurs utiles | ✅ mesuré | le format v2 (masque + valeurs) coûte **4,22× moins** que le dense (1 704 o contre 7 196 o) et la porte du flux rend **60,8135 / 60,8135** — les mêmes chiffres, [`reports/rapport-grappe-deportee.md`](../reports/rapport-grappe-deportee.md) |
-| A7.26 | **Cache mixte sur 3 prompts** | ⚠️ **compromis** | accord moyen **84,19 %** ; 237/92,6 %, **75/71,3 %** (train), 225/88,7 % ; le cache mixte décroche tôt sur un prompt de raisonnement |
-| A7.25 | **Balayage des seuils f32** | ✅ **64 confirmé** | 32 : 41/16,4 % ; 48 : 96/40,2 % ; **64 : 237/92,6 %** ; 96 : 96/38,3 % ; 128 : 215/84,0 % — 64 est le meilleur, hypothèse **64 = head_dim** |
-| A7.24 | **Seuil f32 à 32** | ❌ **négatif** | divergence au **41ᵉ**, accord **16,41 %** — le plus mauvais des trois ; le seuil **64** reste le meilleur (237ᵉ, 92,58 %) |
-| A7.23 | **Seuil f32 à 128** | ❌ **négatif** | divergence au **215ᵉ**, accord **83,98 %**, **moins bon** que le seuil 64 (237ᵉ, 92,58 %) ; l'effet n'est pas monotone |
-| A7.22 | **Fenêtre f32 glissante** | ❌ **négatif** | garder les 64 **derniers** jetons en f32 : divergence au **77ᵉ**, accord **32,42 %**, **pire** que le mixte (237ᵉ, 92,58 %) ; il faut protéger le **début** du cache |
-| A7.21 | **Cache mixte sur 256 jetons** | ⚠️ **compromis** | **92,58 %** d'accord, **premier divergent 237** ; le cache mixte tient 128 puis décroche tardivement ; recalage f32 périodique à envisager |
-| A7.20 | **Cache KV mixte f32→int8** | ✅ **positive** | 64 premiers jetons f32, int8 au-delà : **128/128** greedy identiques, aucun divergent ; mémoire **62,5 %** sur 128 jetons (approche 25 % en long) |
-| A7.19 | **Cache KV int8 par bloc** | ❌ **négatif** | bloc 32 : divergence au **41ᵉ**, accord **32,81 %** — **pire** que par canal (77ᵉ, 60,94 %) ; le problème est l'accumulation, pas la granularité |
-| A7.18 | **Cache KV int8 sur 128 jetons** | ❌ **négatif** | accord **60,94 %**, **premier jeton divergent 77** ; le cache int8 tient 64 jetons puis décroche ; il faut une quantification par bloc ou un cache mixte |
-| A7.17 | **Cache KV int8 sur 64 jetons** | ✅ **positive** | 64/64 jetons greedy identiques (accord 1,0) avec `CacheInt8` stocké ; un prompt, pas d'échantillonnage |
-| A7.16 | **Cache KV int8 stocké** | ✅ **positive** | `CacheInt8` remplace `DynamicCache` : 32/32 jetons greedy identiques (accord 1,0) ; le cache réellement stocké est int8, pas un hook |
-| A7.15 | **64 jetons avec K/V int8** | ✅ **positive** | 64/64 jetons greedy identiques (accord 1,0), texte identique ; un prompt, pas d'échantillonnage |
-| A7.14 | **Génération avec K/V int8** | ✅ **positive** | 16 jetons greedy **identiques** (16/16, accord 1,0) avec K/V int8 par canal sur 24 couches ; un prompt, pas d'échantillonnage |
-| A7.13 | **K/V int8 sur 512 jetons** | ✅ **positive** | 511 jetons, 24 couches : PPL **4,6979356** base et int8, Δ **0,0** ; un seul texte, pas de génération |
-| A7.12 | **PPL avec K/V int8** | ✅ **positive** | hooks sur les 24 couches de Qwen 0.5B : PPL **2,6792016** → **2,6792004**, Δ **−1,17e-6** ; 85 jetons, 5 textes courts ; pas de génération |
-| A7.11 | **Attention avec KV int8** | ✅ **stable** | diff max **0,0154**, moyenne **0,0048**, **argmax 97,66 %**, corrélation **0,99998**, ratio **0,266** ; Q aléatoire, pas de modèle |
-| A7.10 | **Cache KV int8** | ⚠️ **compromis** | **17 420 o** contre **65 548** (ratio **0,266**), **272 o/jeton**, **25,5 Mio** contre **96,0 Mio** pour 4 096 jetons ; diff max **0,0155**, moyenne **0,0050** ; fidélité modèle non mesurée |
-| A7.9 | **Cache KV à distance** | ❌ **négatif** | une couche **1 024 o/jeton** (0,25× le hidden) ; **24 couches 24 580 o/jeton**, **96 Mio pour 4 096 jetons** (6× le hidden) ; fidélité exacte, 0,179 ms loopback ; il faut garder le KV côté serveur ou le quantifier |
-| A7.8 | **Hidden int8 par canal** | ⚠️ **compromis** | ratio **36–39 %**, argmax **1,0**, diff max **0,5–1,7**, KL **~1e-3** ; lossy mais décision stable ; PPL non mesurée ; 896 échelles f32 (3,6 ko/requête) |
-| A7.7 | **Hidden int8** | ❌ **négatif** | int8 par tenseur : argmax **0**, diff **26,6**, KL **10,2** ; par jeton : argmax **0,83–0,93**, diff **17,0**, KL **0,12–0,37** ; volume **34,6 %** du dense mais fidélité insuffisante ; bf16 reste meilleur (argmax 1,0, 2× moins que f32) |
-| A7.6 | **Une couche à distance** | ✅ **mesuré** | Qwen 0.5B couche 12 dans un second processus : logits **identiques au bit près** 3/3, **ΔPPL +0** ; RTT **4,052 ms**, **4 105 o/jeton**, **3 987,6 jetons/s** ; sparse/dense **1,027×** (hidden réel dense, pas de gain) |
-| A7.5b | **Seuil réseau du sparse** | ✅ **mesuré** | dense **7 416 o**, sparse **1 672 o** (4,44×) ; encodage **0,254 vs 0,688 ms**, décodage **0,369 vs 0,490 ms** ; gain **1,94× à 0 ms**, **1,006× à 100 ms** ; seuil **−0,60 ms** : sparse gagne toujours sur ce lien |
-| A7.5 | **La grappe sur le réseau** : transporter le flux v2 entre deux processus, mesurer latence, octets et fidélité | ✅ **mesuré** | **4,44×** moins d'octets (1 672 o contre 7 416), fidélité **1 792/1 792**, messages **5/5** identiques, **0,125 ms** loopback ; contrôle dense — [`reports/rapport-grappe-reseau.md`](../reports/rapport-grappe-reseau.md) |
+| A7.5–A7.26 | **Cache KV et grappe réseau** | **campagne** | 22 mesures, du cache int8 aux seuils ; voir [`reports/INDEX.md`](../reports/INDEX.md) |
 
 **Prochaine action** : aucune sur A7.5 — le transport sparse est **mesuré** (4,44×, fidélité 100 %, 0,125 ms loopback). La suite (exécution d'une couche à distance, WAN) reste **hors plan**.
 

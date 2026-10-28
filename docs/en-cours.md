@@ -1,11 +1,5 @@
 # En ce moment
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 215 fichiers / 282 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
-> jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
-
 **Mis à jour : 2026-10-27, 16 h 30 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
@@ -53,33 +47,7 @@ La vision complète est dans [`vision.md`](vision.md).
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
-- **A7.26 cache mixte 3 prompts** — accord moyen **84,19 %** : 237/92,6 %, **75/71,3 %** (train), 225/88,7 % ; décrochage précoce sur le raisonnement.
-- **A7.25 balayage seuils** — 32 : 41/16,4 % ; 48 : 96/40,2 % ; **64 : 237/92,6 %** ; 96 : 96/38,3 % ; 128 : 215/84,0 % ; 64 est le meilleur, hypothèse 64 = head_dim.
-- **A7.24 seuil f32 32** — divergence au **41ᵉ**, accord **16,41 %** ; le plus mauvais ; 64 reste le meilleur.
-- **A7.23 seuil f32 128** — divergence au **215ᵉ**, accord **83,98 %**, moins bon que le seuil 64 (237ᵉ, 92,58 %) ; l'effet n'est pas monotone.
-- **A7.22 fenêtre f32 glissante** — 64 derniers jetons f32 : divergence au **77ᵉ**, accord **32,42 %**, pire que le mixte (237ᵉ, 92,58 %). Négatif ; il faut protéger le début.
-- **A7.21 cache mixte 256 jetons** — accord **92,58 %**, premier divergent **237** ; le mixte tient 128 puis décroche tard.
-- **A7.20 cache KV mixte** — f32 sur 64 jetons puis int8 : **128/128** identiques, aucun divergent ; mémoire **62,5 %** sur 128.
-- **A7.19 cache KV int8 par bloc** — bloc 32 : divergence au **41ᵉ**, accord **32,81 %**, **pire** que par canal (77ᵉ, 60,94 %).
-- **A7.18 cache KV int8 128 jetons** — accord **60,94 %**, **premier divergent au 77ᵉ** ; le cache int8 diverge après 64. Négatif.
-- **A7.17 cache KV int8 64 jetons** — **64/64** identiques avec `CacheInt8` stocké, accord 1,0.
-- **A7.16 cache KV int8 stocké** — `CacheInt8` réel : **32/32** jetons greedy identiques, accord 1,0 ; le cache stocké est int8.
-- **A7.15 64 jetons K/V int8** — **64/64** jetons greedy identiques, accord 1,0, texte identique ; un prompt.
-- **A7.14 génération K/V int8** — 16/16 jetons greedy identiques, accord 1,0 ; un prompt, pas d'échantillonnage.
-- **A7.13 K/V int8 512 jetons** — PPL **4,6979356** base et int8, Δ **0,0** sur 511 jetons et 24 couches ; un seul texte.
-- **A7.12 PPL K/V int8** — 24 couches, 85 jetons : PPL **2,6792016 → 2,6792004**, Δ **−1,17e-6** ; pas de perte mesurable, mais échantillon court.
-- **A7.11 attention KV int8** — diff max **0,0154**, **argmax 97,66 %**, corrélation **0,99998**, ratio **0,266** ; Q aléatoire, pas de modèle.
-- **A7.10 KV int8** — **17 420 o** contre **65 548** (ratio **0,266**), **272 o/jeton**, **25,5 Mio** contre **96,0 Mio** pour 4 096 jetons ; diff max **0,0155** ; fidélité modèle non mesurée.
-- **A7.9 cache KV** — une couche **1 024 o/jeton** (0,25× hidden) ; **24 couches 24 580 o/jeton**, **96 Mio pour 4 096 jetons** ; transfert naïf négatif, garder le KV côté serveur ou le quantifier.
-- **A7.8 int8 par canal** — ratio **36–39 %**, argmax **1,0**, diff max **0,5–1,7**, KL **~1e-3** ; lossy, décision stable, PPL non mesurée ; 896 échelles f32.
-- **A7.7 hidden int8** — par tenseur : argmax **0**, KL **10,2** ; par jeton : argmax **0,83–0,93**, KL **0,12–0,37** ; volume **34,6 %** mais fidélité insuffisante. **Négatif** ; bf16 reste meilleur.
-- **A7.6 couche à distance** — Qwen 0.5B couche 12 dans un second processus : logits **bit-à-bit** 3/3, **ΔPPL +0**, RTT **4,052 ms**, **4 105 o/jeton**, **3 987,6 tok/s** ; sparse/dense **1,027×** (hidden réel dense).
-- **A7.5b seuil réseau** — sparse **1 672 o** vs **7 416**, encodage/décodage plus rapides, **1,94× à 0 ms**, **1,006× à 100 ms**, seuil **−0,60 ms** : gagne toujours sur ce lien.
-- **A7.5 grappe réseau** — flux sparse **1 672 o** contre **7 416** dense (**4,44×**), fidélité **1 792/1 792**, **5/5** messages identiques, **0,125 ms** loopback ; contrôle dense.
-- **B27 M6 moteur** — 8 essais, réponse gauche/droite : exact **100 %**, conflit **0** ; le cue désigne le canal, pas de compétition. Négatif.
-- **B26 M6 conflit** — réplication d'A6 : **94,95 %**, conflit **0**, commutation **0** ; sélecteur sans compétition, pas de contrôle exécutif.
-- **B25 M8 rejeu** — 23/6 codes : M8 exact **0**, champs **74,6 %** ; rejeu **0**, hybride **0** ; le rejeu ne compose pas un code neuf.
-- **B24 routeur confiance** — typo **56,2→63,7 %** (+7,5) mais espaces **41,8→34,2 %** (−7,5) ; round-trip ne détecte que **31 %** des typos ; oracle **79,45 %**.
+- **B24–B27** — routeur confiance, M8 rejeu, M6 conflit/moteur : partiels ou négatifs, voir la roadmap.
 - **C3.2e sous-familles autres** — uralic côtier **100 %** contre **46,7 %** ; benue-congo **88 %** contre 94 ; austronesian **60,3** contre 61 ; afro-asiatic ouest **53,5** contre 60,2. Le découpage explique l'uralic.
 - **C3.2d sous-familles IE** — indo-iranien **100 %**, baltique **95,3**, italique **87,6**, celtique **79,9**, germanique **54,6** ; l'IE entier à **14,7 %** est un **effet de composition**.
 - **C3.2c 9 familles** — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤0,5 %** ; indo-européen **14,7 %**, quechuan **88,2 %**, mayan **64,4 %**, afro-asiatic **60,2 %**, uralic **46,7 %**. L'hétérogénéité interne reste le facteur.

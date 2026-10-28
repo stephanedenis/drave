@@ -1,6 +1,6 @@
 # Références de non-régression
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Dernière passe :
+> **Dernière passe :**
 > **49 portes, 47 vertes, 2 structurelles, 1 h 48** (27/10 14 h 33). L'historique des
 > passes est dans [`reports/historique-passes-portes.md`](../reports/historique-passes-portes.md).
 > Les compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.

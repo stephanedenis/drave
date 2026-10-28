@@ -1,10 +1,5 @@
 # Le rangement, et la revue de documentation
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** La revue est étendue : fraîcheur
-> comparée au dernier commit, compteurs vérifiés (49 portes, 8 chapitres, 174/242), liens
-> dont le libellé diffère de la cible, chemins morts, documents orphelins. **Les règles de
-> rangement ne changent pas.** *Spécifique : « 7 chapitres » devient « 8 chapitres ».*
-
 > Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). La règle la plus souvent violée du dépôt : à lire
 > **avant de classer un fichier** ou de clore un sous-chantier.
 

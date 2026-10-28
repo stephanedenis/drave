@@ -1,12 +1,5 @@
 # La documentation de Drave — l'inventaire
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
-> ne changent pas.** Source de vérité : `docs/en-cours.md` (état) et
-> `docs/roadmap.md` (plan). *Spécifique : cette page est l'**inventaire** ; `carte.md`
-> est l'index des sujets, et le tableau des blocs y vit désormais.*
-
 > **`docs/` dit ce qui reste vrai** : la vision, les concepts, les contrats, l'état et les règles. Les **chiffres**,
 > les séries et les comptes rendus vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/).
 > Une page de `docs/` qui se remplit de tableaux de mesures **déménage** dans `reports/`.

@@ -1,10 +1,6 @@
 # Directives de l'agent — Drave
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés
-> corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles et le routage
-> ci-dessous ne changent pas.** Source de vérité : `docs/en-cours.md` (état)
-> et `docs/roadmap.md` (plan). Ne pas recopier ces chiffres dans un nouveau document.
+> **Compteurs vivants.** Dans [`docs/en-cours.md`](docs/en-cours.md) ; ne pas les recopier ici.
 
 > **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
 > **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/agent/`](docs/agent/)

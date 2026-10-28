@@ -1,13 +1,6 @@
 # Glossaire raisonné de Drave
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs unifiés
-> (**49 portes, 8 chapitres, 185 fichiers / 252 JSON, 54 documents**), chemins archivés corrigés
-> (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md` ne changent
-> pas.** *Le contenu du glossaire reste ; la méta (54 docs / 185 fichiers) et le parcours de
-> lecture sont corrigés.*
-
-Ce document explique **tout le vocabulaire** employé dans `docs/` (54 documents hors archive) et
-`reports/` (185 fichiers, 252 JSON), pour quelqu'un qui ne
+Ce document explique **tout le vocabulaire** employé dans `docs/` et `reports/`, pour quelqu'un qui ne
 connaît ni les grands modèles de langage, ni le matériel, ni le vocabulaire de la
 mesure de performance. Il se lit seul : chaque notion est définie sur place, et
 chaque définition renvoie au fichier du dépôt qui l'emploie.
@@ -49,7 +42,7 @@ invariance, attrition, fragmentation…) et son §10.9 définit les termes emplo
 **dans** ces définitions. Le §11 liste les sources externes ajoutées, en distinguant
 celles dont l'adresse a été vérifiée de celles citées par titre.
 
-**Périmètre.** `docs/` (54 documents hors archive) et `reports/` (185 fichiers, 252 JSON) ; les
+**Périmètre.** `docs/` et `reports/` ; les
 9 fichiers de `sprints/` sont couverts pour leur vocabulaire propre (boxing, cérémonie,
 porte). Le code est cité pour dire *où* un terme est utilisé (`drave-core/src/`,
 `tools/`), mais le glossaire ne décrit pas le code ligne à ligne. Les fichiers

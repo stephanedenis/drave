@@ -1,10 +1,7 @@
 # Registre des manques
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Le registre daté reste ; les
-> affirmations de contexte sont corrigées : **49 portes** (47 vertes, 2 structurelles), la
-> feuille de route est [`roadmap.md`](roadmap.md), et les plans cités sont dans `docs/archive/`.
 > **Dernière vérification : 2026-10-27.**
->
+
 > **Résumé —** Le registre des manques mesurés (M1–M9, N1–N5, architecture) ; chaque ligne porte la
 > mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
 > défaut**. Lire ce résumé, puis la section utile.

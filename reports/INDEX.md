@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **182 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **212 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -51,6 +51,9 @@
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
+| [rapport-couche-distante.md](rapport-couche-distante.md) | A7.6 — une couche exécutée à distance : logits identiques au bit près |
+| [rapport-couche-int8-canal.md](rapport-couche-int8-canal.md) | A7.8 — int8 par canal : l'argmax tient, le bit non |
+| [rapport-couche-int8.md](rapport-couche-int8.md) | A7.7 — int8 sur le hidden : le volume baisse, la fidélité casse |
 | [rapport-cpu-aer.md](rapport-cpu-aer.md) | Drave — l'architecture « push » (AER) sur CPU |
 | [rapport-croisement-push-pull.md](rapport-croisement-push-pull.md) | Croisement push / pull — quand l'architecture événementielle est-elle justifiée ? |
 | [rapport-cycle-c2.md](rapport-cycle-c2.md) | C2 — le cycle à deux régions : exact au premier pas, **divergent** ensuite (14,65 → 2 988 en 4 pas) |
@@ -78,6 +81,7 @@
 | [rapport-engram-etat.md](rapport-engram-etat.md) | Engram de DeepSeek-V4.1 : ce qui est établi, ce qui manque, et pourquoi on s'arrête là |
 | [rapport-eparsite.md](rapport-eparsite.md) | Drave — élagage et approche par événement |
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
+| [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
@@ -87,6 +91,7 @@
 | [rapport-granularite-flux.md](rapport-granularite-flux.md) | Granularité des listes et volume des flux entre unités — mesuré |
 | [rapport-grappe-deportee.md](rapport-grappe-deportee.md) | A7.4 — la grappe déportée : le flux ne transporte plus les zéros |
 | [rapport-grappe-intra-couche.md](rapport-grappe-intra-couche.md) | A7.3 — la grappe intra-couche : le top-1024 (21 %) rend la même perplexité |
+| [rapport-grappe-reseau.md](rapport-grappe-reseau.md) | A7.5 — la grappe sur le réseau : fidélité exacte, 4,44× moins d'octets |
 | [rapport-grappes.md](rapport-grappes.md) | Drave — grappes afférentes/efférentes et découpage en sous-modèles |
 | [rapport-greffon.md](rapport-greffon.md) | Greffon : plomberie d'apprentissage |
 | [rapport-habituation.md](rapport-habituation.md) | L'habituation (soustraire le passé) n'apporte RIEN — le réseau calcule déjà la différence |
@@ -94,9 +99,28 @@
 | [rapport-hc-permutation.md](rapport-hc-permutation.md) | Hyper-connexions de V4-Flash : les 16 connexions sont une PERMUTATION |
 | [rapport-hebbien-produits.md](rapport-hebbien-produits.md) | A6.1 — les produits hebbiens n'ajoutent presque rien : +0,0045 de R² |
 | [rapport-hybride.md](rapport-hybride.md) | Rapport — hybride codec + mémoire, et le contexte |
+| [rapport-ie-sous-familles.md](rapport-ie-sous-familles.md) | C3.2d — l'indo-européen à 14,7 % est un effet de composition |
 | [rapport-inference.md](rapport-inference.md) | Inférence complète en Rust — Qwen2.5-0.5B sans GPU, sans BLAS, sans dépendance |
 | [rapport-jeux-symboliques.md](rapport-jeux-symboliques.md) | B5/B6 — les jeux symboliques : 112 surfaces, 100 % au niveau 4, 33/33 paires invariantes |
+| [rapport-kv-attention.md](rapport-kv-attention.md) | A7.11 — le KV int8 change 2,3 % des argmax d'attention |
+| [rapport-kv-cache-fenetre.md](rapport-kv-cache-fenetre.md) | A7.22 — fenêtre f32 glissante : pire que le cache mixte |
+| [rapport-kv-cache-int8-128.md](rapport-kv-cache-int8-128.md) | A7.18 — cache KV int8 sur 128 jetons : la divergence commence à 77 |
+| [rapport-kv-cache-int8-64.md](rapport-kv-cache-int8-64.md) | A7.17 — cache KV int8 stocké sur 64 jetons : 64/64 identiques |
+| [rapport-kv-cache-int8-bloc.md](rapport-kv-cache-int8-bloc.md) | A7.19 — quantification par bloc : pire que par canal |
+| [rapport-kv-cache-int8.md](rapport-kv-cache-int8.md) | A7.16 — cache KV int8 réellement stocké : 32/32 jetons identiques |
+| [rapport-kv-cache-mixte-128.md](rapport-kv-cache-mixte-128.md) | A7.23 — seuil f32 à 128 : moins bon qu'à 64 |
+| [rapport-kv-cache-mixte-256.md](rapport-kv-cache-mixte-256.md) | A7.21 — cache mixte sur 256 jetons : divergence au 237ᵉ |
+| [rapport-kv-cache-mixte-32.md](rapport-kv-cache-mixte-32.md) | A7.24 — seuil f32 à 32 : le plus mauvais des trois |
+| [rapport-kv-cache-mixte.md](rapport-kv-cache-mixte.md) | A7.20 — cache mixte f32 + int8 : 128/128 jetons identiques |
+| [rapport-kv-cache-multi.md](rapport-kv-cache-multi.md) | A7.26 — cache mixte sur 3 prompts : un décrochage à 75 |
+| [rapport-kv-cache-seuils.md](rapport-kv-cache-seuils.md) | A7.25 — balayage des seuils f32 : 64 reste le meilleur |
+| [rapport-kv-gen-64.md](rapport-kv-gen-64.md) | A7.15 — 64 jetons greedy identiques avec K/V int8 |
+| [rapport-kv-gen.md](rapport-kv-gen.md) | A7.14 — génération greedy identique avec K/V int8 |
+| [rapport-kv-int8.md](rapport-kv-int8.md) | A7.10 — cache KV en int8 : 4× moins d'octets, erreur 1,5e-2 |
 | [rapport-kv-par-couche.md](rapport-kv-par-couche.md) | La quantification du KV par couche : le coût de l'int8 est dans les **premières** couches |
+| [rapport-kv-ppl-long.md](rapport-kv-ppl-long.md) | A7.13 — K/V int8 sur 512 jetons : ΔPPL exactement 0 |
+| [rapport-kv-ppl.md](rapport-kv-ppl.md) | A7.12 — K/V int8 dans un vrai modèle : ΔPPL −1,2e-6 |
+| [rapport-kv-reseau.md](rapport-kv-reseau.md) | A7.9 — le cache KV à distance coûte 24,6 ko par jeton |
 | [rapport-langues-maitres.md](rapport-langues-maitres.md) | B7/B8 — 71 langues pour les jeux, et les livres des maîtres mesurés |
 | [rapport-lecteur-multifichiers.md](rapport-lecteur-multifichiers.md) | Rapport — un modèle éclaté se lit comme un seul |
 | [rapport-localite-activation.md](rapport-localite-activation.md) | Localité d'activation : ce que PowerInfer apporte, et ce qu'on en garde |
@@ -104,8 +128,11 @@
 | [rapport-loi-frontiere-fenetre.md](rapport-loi-frontiere-fenetre.md) | La frontière de la fenêtre : pas de loi en N, un régime sûr (la moitié des clés) et un régime imprévisible en dessous |
 | [rapport-m2-secours.md](rapport-m2-secours.md) | B19 — M2 comme secours hors codec : les typos, pas les phrases |
 | [rapport-m2-typo.md](rapport-m2-typo.md) | B22 — M2 et les typos : quatre types, un avantage net |
+| [rapport-m6-conflit2.md](rapport-m6-conflit2.md) | B26 — le conflit M6 reste à zéro |
+| [rapport-m6-moteur.md](rapport-m6-moteur.md) | B27 — un Stroop à réponse motrice reste sans conflit |
 | [rapport-m7-frequence.md](rapport-m7-frequence.md) | B16 — M7-bis : la fréquence, pas la neuromodulation |
 | [rapport-m8-log-normal.md](rapport-m8-log-normal.md) | M8 — le variant log-normal : CAUSE TROUVÉE (le partage des poids), CORRIGÉE, et le moteur innocenté |
+| [rapport-m8-rejeu.md](rapport-m8-rejeu.md) | B25 — le rejeu ne sauve pas M8 |
 | [rapport-m9-dose.md](rapport-m9-dose.md) | B21 — M9 par dose : M3 tautologique, M5 +4,25 pts, sham nul |
 | [rapport-materiel-disque-ou-cpu.md](rapport-materiel-disque-ou-cpu.md) | Disque ou CPU ? — ce que la mesure dit d'un deuxième NVMe |
 | [rapport-matvec-f32-parallele.md](rapport-matvec-f32-parallele.md) | Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit |
@@ -161,13 +188,16 @@
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-reutilisation-experts.md](rapport-reutilisation-experts.md) | La réutilisation des experts, mesurée |
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
+| [rapport-routeur-confiance.md](rapport-routeur-confiance.md) | B24 — le round-trip M1 améliore la typo, mais coûte les espaces |
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
+| [rapport-seuil-reseau.md](rapport-seuil-reseau.md) | A7.5b — le flux sparse gagne même à latence nulle |
 | [rapport-sommeil-budget.md](rapport-sommeil-budget.md) | Le budget du sommeil — ce que le rejeu rapporte (÷ croissant en domaine) et ce qu'il coûte (bruité) |
 | [rapport-sommeil-deux-nuits.md](rapport-sommeil-deux-nuits.md) | Deux nuits, deux expériences — la première garde son gain, la seconde n'ajoute presque rien |
 | [rapport-sommeil-selection.md](rapport-sommeil-selection.md) | La sélection du rejeu — à volume égal, *ce qu'on rejoue* compte moins que *rejouer* |
+| [rapport-sous-familles-autres.md](rapport-sous-familles-autres.md) | C3.2e — les sous-familles des autres familles |
 | [rapport-speculatif-reflexe.md](rapport-speculatif-reflexe.md) | Le réflexe propose, le cerveau vérifie — acceptation 2 à 30 % (le cerveau non entraîné : 0 %) |
 | [rapport-sprint-24h.md](rapport-sprint-24h.md) | Sprint 24 h — bilan B12 → B18 |
 | [rapport-tableaux-casses.md](rapport-tableaux-casses.md) | Un tableau qui ne rend pas est un tableau qui n'existe pas — 17 lignes, 9 fichiers, et une porte |

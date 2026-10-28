@@ -2,7 +2,7 @@
 
 > **Famille 8 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
 >
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Cet audit est daté du
+> **Audit daté du 2026-10-10.** Cet audit est daté du
 > **2026-10-10** ; les chemins cités sont ceux de l'époque, corrigés vers `docs/archive/`
 > quand le fichier a été archivé depuis. Les compteurs courants sont dans
 > [`docs/en-cours.md`](../en-cours.md). **Dernière vérification : 2026-10-27.**
@@ -117,9 +117,8 @@ lecteur ne s'y trompe pas.
 
 17. **Le périmètre annoncé ne correspond pas au disque (constat du 2026-10-10).**
     À la date de l'audit, `reports/` contenait **60** rapports et `docs/` **18**
-    documents. Depuis, le dépôt a grandi : **185 fichiers, 252 JSON** et **54
-    documents** (2026-10-27). Le point reste consigné pour l'histoire ; les compteurs
-    courants sont dans [`docs/en-cours.md`](../en-cours.md).
+    Depuis, le dépôt a grandi (les compteurs vivants sont dans
+    [`docs/en-cours.md`](../en-cours.md)).
 
 18. **Des termes attendus sont absents du corpus.**
     `Hadamard`, `MTP` (hors la mention `dspark_*`), `SparseVec` hors des rapports

@@ -1,14 +1,11 @@
 # 3. Les modes et les portes — ce que le moteur fait vraiment
 
-> **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Les compteurs de ce chapitre sont
-> alignés sur la dernière passe : **49 portes** (et non 46), **~1 h 34** (et non ~97 min).
-
 > **Périmètre** : ce chapitre relève du programme **moteur** ; la vision est dans [`docs/vision.md`](../vision.md), la roadmap dans [`docs/roadmap.md`](../roadmap.md) ; l'introduction dans [`index.md`](index.md).
 
 > **Fiche concept — le mode et la porte.**
 > Un **mode** est une façon de faire tourner le même modèle (dense, listes, réparti, rejoué) ; une **porte**
 > est un script qui vérifie une affirmation et **sort en erreur** si elle est fausse. Il y a **49 portes**,
-> **47 vertes** et **2 structurelles** (26/10, 1 h 34).
+> **47 vertes** et **2 structurelles** (27/10, 1 h 48).
 > **Glossaire :** [mode](../glossaire/04-le-moteur-drave-execution-structures-out.md) · [porte](../glossaire/07-mesure-qualite-et-methode-experimentale.md) · [registre](../glossaire/07-mesure-qualite-et-methode-experimentale.md)
 > **Illustration :** ![Les portes](schemas/portes.svg)
 
