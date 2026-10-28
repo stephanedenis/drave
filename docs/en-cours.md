@@ -8,8 +8,9 @@
 
 ## Où l'on va
 
-**Démontrer que la structure bat la taille, et construire le bus d'événements qui rend les blocs observables,
-décomposables, répartissables et rejouables.** Le bus accepte des blocs **neuronaux** (l'intuition, la langue) et
+**Démontrer que la structure bat la taille, et construire le [bus d'événements](glossaire/entrees/evenement.md) qui rend
+les blocs [observables](glossaire/entrees/trace.md), [décomposables](glossaire/entrees/couche-etage.md),
+[répartissables](glossaire/entrees/grappe.md) et [rejouables](glossaire/entrees/rejeu.md).** Le bus accepte des blocs **neuronaux** (l'intuition, la langue) et
 **classiques** (une règle, un solveur, une opération exacte) ; il les rend substituables, comparables et mesurables.
 La vision complète est dans [`vision.md`](vision.md).
 
@@ -17,8 +18,9 @@ La vision complète est dans [`vision.md`](vision.md).
 
 **La phase B12 est mesurée** ; les suites sont dans [`roadmap.md`](roadmap.md).
 
-- **A7 la grappe déportée** — **faite jusqu'à A7.26** : relais exact, grappe 21 %, transport sparse **4,44×**,
-  seuil réseau, couche distante **bit-à-bit**, cache KV int8, **cache mixte 92,6 % à 256 jetons**. Reste **A7.27**,
+- **A7 la [grappe](glossaire/entrees/grappe.md) [déportée](glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md)** — **faite jusqu'à A7.26** : relais exact, grappe 21 %, transport sparse **4,44×**,
+  seuil réseau, [couche](glossaire/entrees/couche.md) distante **bit-à-bit**, [cache KV](glossaire/entrees/kv.md) [int8](glossaire/entrees/int4-int8.md),
+  **[cache mixte](glossaire/entrees/quantification-du-kv.md) 92,6 % à 256 [jetons](glossaire/entrees/jeton-2.md)**. Reste **A7.27**,
   le recalage f32 des tokens incertains.
 - **B12 les modules cerveau-langage** — **corrigé** : M1 **528/528** solide ; M2 vu seulement ; M3 **tautologique** ;
   M4 **lookup** ; M5 contexte ; M6 langue, commutation 0 ; M7 plafond **3,64 %** ; M8 **96,48 % marginal**. Détail :
@@ -29,14 +31,14 @@ La vision complète est dans [`vision.md`](vision.md).
 - **B11 la base d'universaux typés** — le **codec classique** lit **528/528** et restitue le code à **100 %** ; le
   **natif** est à **59,8 % / 40,7 %** avec contexte ; la **surface originale** reste à **33/79**. Fiche :
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
-- **B13–B23** — chaînes sémantiques, mémoire, restitution, secours, typo, routeur : intégration mesurée, pas preuve
-  d'étage. Les négatifs sont nommés dans [`roadmap.md`](roadmap.md).
-- **B24–B27** — routeur confiance (**typo +7,5, espaces −7,5**), M8 rejeu (**0**), M6 conflit/moteur (**0**, sélecteur
+- **B13–B23** — chaînes sémantiques, mémoire, restitution, secours, typo, [routeur](glossaire/entrees/routeur.md) : intégration mesurée, pas preuve
+  d'[étage](glossaire/entrees/couche-etage.md). Les négatifs sont nommés dans [`roadmap.md`](roadmap.md).
+- **B24–B27** — [routeur](glossaire/entrees/routeur.md) confiance (**typo +7,5, espaces −7,5**), M8 [rejeu](glossaire/entrees/rejeu.md) (**0**), M6 conflit/moteur (**0**, sélecteur
   sans compétition). Détail : [`rapport-routeur-confiance.md`](../reports/rapport-routeur-confiance.md),
   [`rapport-m8-rejeu.md`](../reports/rapport-m8-rejeu.md), [`rapport-m6-conflit2.md`](../reports/rapport-m6-conflit2.md).
-- **C3.2c/d/e** — **9 familles** : **7/9 > 30 %**, moyenne **69,5 %** ; l'indo-européen à **14,7 %** est un **effet de
+- **C3.2c/d/e** — **9 [familles](glossaire/entrees/genealogie.md)** : **7/9 > 30 %**, moyenne **69,5 %** ; l'indo-européen à **14,7 %** est un **effet de
   composition** (sous-familles **54,6–100 %**) ; l'uralic côtier **100 %** explique l'uralic à **46,7 %**.
-- **Portes** — dernière passe : **46 vertes, 3 rouges** (`porte-indice`, `porte-melange` structurelles ;
+- **[Portes](glossaire/entrees/porte-drave.md)** — dernière passe : **46 vertes, 3 rouges** (`porte-indice`, `porte-melange` structurelles ;
   `porte-occupation-moteur` **verte seule**, rouge de contention).
 
 ## Les chiffres de l'état
@@ -102,6 +104,14 @@ scientifique** (bloquée par le corpus), le **FPGA**, la **démonstration distan
   60 playouts), le **portage Rust** du contrat RSN.
 - **Tranchée** : les styles à époque contrôlée — la surface capte l'époque (+0,138) plus que la filiation (+0,049) ;
   c'est une règle de méthode.
+
+## Le vocabulaire
+
+Les termes de cette page ont leur fiche : [bus d'événements](glossaire/entrees/evenement.md) ·
+[couche / étage](glossaire/entrees/couche-etage.md) · [RSN](glossaire/entrees/representation-semantique-neutre.md) ·
+[grappe](glossaire/entrees/grappe.md) · [KV](glossaire/entrees/kv.md) · [quantification du KV](glossaire/entrees/quantification-du-kv.md) ·
+[porte Drave](glossaire/entrees/porte-drave.md) · [rejeu](glossaire/entrees/rejeu.md) · [routeur](glossaire/entrees/routeur.md) ·
+[généalogie](glossaire/entrees/genealogie.md) · [fidélité](glossaire/entrees/fidelite.md) · [perplexité](glossaire/entrees/perplexite.md).
 
 ## La carte
 
