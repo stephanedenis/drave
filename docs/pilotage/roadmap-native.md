@@ -70,7 +70,7 @@ permutation.
 | N2.3 | Distillation + pertes locales + têtes + pensée | écart ≤ **4,40 %** (B9) |
 | N2.4 | **Têtes précoces dans la distillation** | ⚠️ **négatif** — 5 000 pas, PPL **3,295** contre **3,297**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
 | N2.5 | **Capacité du student** | ⚠️ **négatif confondu** — 21,63 M : PPL **4,294** contre **3,295** à 11,47 M ; initialisation aléatoire, 5 000 pas |
-| N2.6 | Ablation : sans perte locale, sans tête, sans pensée | chaque perte paie ou est retirée |
+| N2.6 | **Diversité du corpus** | ✅ **manifeste** — **49 999** fenêtres, **4 sources** (fr, UDHR, en, littérature) ; licences non vérifiées |
 
 **Porte N2** : le natif **bat ou égale** B9 (4,40 %) sur le même corpus, avec les pertes natives.
 

@@ -14,6 +14,34 @@ import pathlib
 import random
 
 
+def construire_multi(sources: list[str], fenetre: int = 128, pas: int = 64,
+                     max_fenetres: int = 50_000, val: int = 5_000,
+                     graine: int = 0) -> dict:
+    """Fenêtres sur plusieurs sources, sans concaténer les fichiers."""
+    par_source = []
+    for src in sources:
+        b = pathlib.Path(src).read_bytes()
+        offsets = list(range(0, max(0, len(b) - fenetre + 1), pas))
+        par_source.append({"source": src, "octets": len(b), "fenetres": len(offsets)})
+    # Répartition équilibrée, plafonnée à max_fenetres.
+    total = sum(x["fenetres"] for x in par_source)
+    quotas = {x["source"]: max(1, max_fenetres * x["fenetres"] // total) for x in par_source}
+    offsets = []
+    for src, q in quotas.items():
+        b = pathlib.Path(src).read_bytes()
+        offs = list(range(0, max(0, len(b) - fenetre + 1), pas))[:q]
+        for o in offs:
+            offsets.append({"source": src, "offset": o})
+    rng = random.Random(graine); rng.shuffle(offsets)
+    offsets = offsets[:max_fenetres]
+    n_val = min(val, len(offsets) // 2)
+    return {"sources": par_source, "fenetre": fenetre, "pas": pas,
+            "fenetres": len(offsets), "train": len(offsets) - n_val, "val": n_val,
+            "graine": graine, "offsets_train": offsets[n_val:], "offsets_val": offsets[:n_val],
+            "licence": "sources locales — licences à vérifier avant diffusion",
+            "note": "manifeste d'offsets multi-sources ; les corpus ne sont pas versionnés"}
+
+
 def construire(source: str, fenetre: int = 128, pas: int = 64,
                max_fenetres: int = 50_000, val: int = 5_000,
                graine: int = 0) -> dict:
@@ -37,6 +65,7 @@ def construire(source: str, fenetre: int = 128, pas: int = 64,
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default="data/corpus_fr.txt")
+    ap.add_argument("--sources", nargs="+", default=None)
     ap.add_argument("--fenetre", type=int, default=128)
     ap.add_argument("--pas", type=int, default=64)
     ap.add_argument("--max", type=int, default=50_000)
@@ -44,9 +73,13 @@ def main() -> None:
     ap.add_argument("--graine", type=int, default=0)
     ap.add_argument("--sortie", default="reports/native-corpus.json")
     a = ap.parse_args()
-    d = construire(a.source, a.fenetre, a.pas, a.max, a.val, a.graine)
+    if a.sources:
+        d = construire_multi(a.sources, a.fenetre, a.pas, a.max, a.val, a.graine)
+    else:
+        d = construire(a.source, a.fenetre, a.pas, a.max, a.val, a.graine)
     pathlib.Path(a.sortie).write_text(json.dumps(d, ensure_ascii=False, indent=1) + "\n")
-    print(json.dumps({k: d[k] for k in ("source","octets","fenetres","train","val","fenetre","pas")},
+    cles = ("fenetres","train","val","fenetre","pas")
+    print(json.dumps({k: d[k] for k in cles} | ({"sources": d["sources"]} if "sources" in d else {"source": d["source"], "octets": d["octets"]}),
                      ensure_ascii=False, indent=1))
 
 
