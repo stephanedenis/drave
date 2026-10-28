@@ -18,6 +18,7 @@ La vision complète est dans [`vision.md`](../theorie/vision.md).
 
 **La phase B12 est mesurée** ; les suites sont dans [`roadmap.md`](roadmap.md).
 
+- **N0 le format DRVM** — **commencé** : manifeste, graphe, payload aligné, `mmap`, refus de version et de bloc inconnu ; **6 tests** ; il reste `drave-core` lisant DRVM (N0.3).
 - **A7 la [grappe](../theorie/glossaire/entrees/grappe.md) [déportée](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md)** — **faite jusqu'à A7.26** : relais exact, grappe 21 %, transport sparse **4,44×**,
   seuil réseau, [couche](../theorie/glossaire/entrees/couche.md) distante **bit-à-bit**, [cache KV](../theorie/glossaire/entrees/kv.md) [int8](../theorie/glossaire/entrees/int4-int8.md),
   **[cache mixte](../theorie/glossaire/entrees/quantification-du-kv.md) 92,6 % à 256 [jetons](../theorie/glossaire/entrees/jeton-2.md)**. Reste **A7.27**,

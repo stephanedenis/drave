@@ -30,15 +30,16 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 
 | # | chantier | critère |
 |---|---|---|
-| N0.1 | Écrire le manifeste et le graphe (blocs, ports, routes, têtes, pont, pensée) | un bloc se lit seul ; hash vérifié |
-| N0.2 | Écrire le payload tenseurs (alignement, quantification, masque de sparsité) | aller-retour octet-à-octet |
-| N0.3 | Lire DRVM dans `drave-core` | même perplexité qu'un GGUF équivalent |
-| N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | Qwen 0.5B importé, même PPL |
-| N0.5 | Trace et rejeu d'un bloc DRVM | trace identique, mêmes logits |
-| N0.6 | Refus de version et de bloc inconnu | message nommé, pas d'exécution partielle |
+| N0.1 | Écrire le manifeste et le graphe (blocs, ports, routes, têtes, pont, pensée) | ✅ **fait** — manifeste JSON canonique, graphe, hash vérifié |
+| N0.2 | Écrire le payload tenseurs (alignement, quantification, masque de sparsité) | ✅ **fait** — aller-retour octet-à-octet, 64 o |
+| N0.3 | Lire DRVM dans `drave-core` | ⏳ **à faire** — même perplexité qu'un GGUF équivalent |
+| N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | ⏳ **à faire** — Qwen 0.5B importé, même PPL |
+| N0.5 | Trace et rejeu d'un bloc DRVM | ⏳ **à faire** — trace identique, mêmes logits |
+| N0.6 | Refus de version et de bloc inconnu | ✅ **fait** — version 99 et bloc `quantum` refusés |
 
 **Porte N0** : un modèle DRVM de test (petit, aléatoire) est **écrit**, **lu**, **exécuté** et
-**rejoué** par le moteur, sans conversion.
+**rejoué** par le moteur, sans conversion. **État : partiel** — écrit, lu et vérifié en Python
+(6 tests) ; l'exécution par `drave-core` (N0.3) reste la porte bloquante.
 
 ## N1 — `drave-n0` (2–3 semaines)
 
