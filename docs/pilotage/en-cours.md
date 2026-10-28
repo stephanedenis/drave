@@ -9,8 +9,7 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Agent principal** : N1.5 — cellule de pensée contractante de `drave-n0` ; correction du résidu (`λ = 1,42`),
-  réentraînement, mesure de `λ = 0,709` et du contenu.
+- **Agent principal** : N1 — `drave-n0` ; N1.5 (pensée λ=0,709) et N1.6 (pont −9,3 %) sont faits. Prochain : N0.3b (parité PPL moteur).
 - **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
   travail n'est en attente d'eux.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -27,7 +26,7 @@
 - **N1.5 — la pensée** : sans la cellule, la PPL explose à **721 726** ; avec elle, **3,53**. Le contenu est
   donc porté par la pensée, pas seulement par la sortie.
 - **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**.
-- **N1.6 — le pont** : **non implémenté**. C'est le prochain chantier.
+- **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N2 — la distillation** : **non commencée**. Le corpus de 10 000 pas est un banc, pas les 50 000 séquences
   visées.
 
@@ -39,7 +38,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **218** / **285** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **219** / **286** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

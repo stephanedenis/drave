@@ -1,0 +1,28 @@
+{
+ "modele": "drave-n0",
+ "parametres": 11469192,
+ "corpus": "data/corpus_fr.txt",
+ "octets": 4633889,
+ "pas": 10000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.2089155912399292,
+ "ppl_val": 3.464710195923203,
+ "jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.626953125,
+ "precision_early": [
+  0.57568359375,
+  0.615966796875,
+  0.62060546875
+ ],
+ "drvm": "/tmp/drave-n0-pont.drvm",
+ "sha256_drvm": "6f3cb5b46cb9c9d05ad339ea153e327d2df21cec6edb95f9bcd85f16b10c3197",
+ "duree_s": 438.14501905441284,
+ "ppl_avec_pont_8lots": 3.7027376438639146,
+ "ppl_sans_pont": 4.080495306647451,
+ "effet_pont": -0.0926,
+ "source": "/tmp/drave-n0-pont.pt"
+}

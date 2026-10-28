@@ -102,6 +102,7 @@ class NativeModel(nn.Module):
         self.blocks = nn.ModuleList([Block(self.cfg) for _ in range(self.cfg.n_blocks)])
         self.early_heads = nn.ModuleList([nn.Linear(self.cfg.d_model, self.cfg.vocab)
                                           for _ in self.cfg.early_blocks])
+        self.bridge = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.thought = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.thought_in = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)
@@ -113,6 +114,9 @@ class NativeModel(nn.Module):
         early = []
         for i, bloc in enumerate(self.blocks):
             x = bloc(x)
+            if i == self.cfg.n_blocks // 2 - 1:
+                # Pont de région : projection apprise entre les deux moitiés.
+                x = x + self.bridge(x)
             if i in self.cfg.early_blocks:
                 early.append(self.early_heads[self.cfg.early_blocks.index(i)](x))
         h0 = x
@@ -135,6 +139,8 @@ def _bloc_de(nom: str, cfg: NativeConfig) -> str:
         return f"early{nom.split('.')[1]}"
     if nom.startswith("embed.") or nom.startswith("pos."):
         return "input"
+    if nom.startswith("bridge"):
+        return "bridge"
     if nom.startswith("thought"):
         return "thought"
     return "output"
@@ -148,6 +154,7 @@ def exporter_drvm(modele: NativeModel, chemin: str) -> str:
         blocs.append({"id": f"b{i}", "kind": "local_mixer", "inputs": ["h"], "outputs": ["h"]})
     for i in range(len(cfg.early_blocks)):
         blocs.append({"id": f"early{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"y{i}"]})
+    blocs.append({"id": "bridge", "kind": "bridge", "inputs": ["h"], "outputs": ["h"]})
     blocs.append({"id": "thought", "kind": "thought", "inputs": ["h"], "outputs": ["h"]})
     blocs.append({"id": "output", "kind": "output", "inputs": ["h"], "outputs": ["logits", "rsn"]})
     manifeste = {
