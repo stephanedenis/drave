@@ -1,0 +1,5 @@
+{"modele": "/tmp/drave-n0-distille.pt", "parametres": 11469192,
+ "adresse": "127.0.0.1:8765", "routes": ["GET /sante", "POST /generer"],
+ "prompt": "La France est un pays", "n": 48, "octets": 69,
+ "texte": "La France est un pays de la couche 1 (le plafond de la porte de la co",
+ "deterministe": true, "authentification": false, "cache_kv": false}

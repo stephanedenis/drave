@@ -95,7 +95,7 @@ l'entraîneur.
 | # | chantier | critère |
 |---|---|---|
 | N4.1 | **Génération** | ✅ **technique** — greedy 160 octets : cohérent 12 octets, puis dérive ; pas un assistant |
-| N4.2 | SFT instruction (chat, arrêt, système) | suivi d'instructions > baseline |
+| N4.2 | **Service local** | ✅ **technique** — HTTP `/sante` + `/generer`, 69 octets, CPU, greedy ; pas d'auth, pas de cache |
 | N4.3 | Serveur OpenAI-compatible + streaming | un client standard se connecte |
 | N4.4 | Sûreté et refus | refus explicite, pas de fuite |
 | N4.5 | Évaluation externe | MMLU minimal, chrF, latence |
