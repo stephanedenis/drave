@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-kv-gen-64.md`](rapport-kv-gen-64.md) | **A7.15** — 64 jetons avec K/V int8 : 64/64 identiques, accord 1,0 |
 | [`rapport-kv-gen.md`](rapport-kv-gen.md) | **A7.14** — génération avec K/V int8 : 16/16 jetons identiques, accord 1,0 |
 | [`rapport-kv-ppl-long.md`](rapport-kv-ppl-long.md) | **A7.13** — K/V int8 sur 511 jetons : ΔPPL 0,0 sur 24 couches |
 | [`rapport-kv-ppl.md`](rapport-kv-ppl.md) | **A7.12** — PPL avec K/V int8 : 2,6792016 → 2,6792004, Δ −1,17e-6 sur 24 couches |

@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 201 fichiers / 268 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 202 fichiers / 269 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -53,6 +53,7 @@ La vision complète est dans [`vision.md`](vision.md).
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
+- **A7.15 64 jetons K/V int8** — **64/64** jetons greedy identiques, accord 1,0, texte identique ; un prompt.
 - **A7.14 génération K/V int8** — 16/16 jetons greedy identiques, accord 1,0 ; un prompt, pas d'échantillonnage.
 - **A7.13 K/V int8 512 jetons** — PPL **4,6979356** base et int8, Δ **0,0** sur 511 jetons et 24 couches ; un seul texte.
 - **A7.12 PPL K/V int8** — 24 couches, 85 jetons : PPL **2,6792016 → 2,6792004**, Δ **−1,17e-6** ; pas de perte mesurable, mais échantillon court.
@@ -95,7 +96,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **201** / **268** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **202** / **269** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
@@ -105,7 +106,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **201** / **268** |
+| fichiers / JSON de résultats | **202** / **269** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
