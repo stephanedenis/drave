@@ -1,0 +1,10 @@
+{
+ "modele": "Qwen/Qwen2.5-0.5B-Instruct",
+ "device": "cuda",
+ "ntokens": 85,
+ "ppl_base": 2.679201559459462,
+ "ppl_kv_int8": 2.6792003848973445,
+ "delta": -1.1745621173453458e-06,
+ "ratio": 0.9999995615999426,
+ "couches": 24
+}
