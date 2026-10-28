@@ -1,0 +1,32 @@
+{
+ "n": 256,
+ "seuils": [
+  {
+   "seuil": 32,
+   "premier_divergence": 41,
+   "accord": 0.1641
+  },
+  {
+   "seuil": 48,
+   "premier_divergence": 96,
+   "accord": 0.4023
+  },
+  {
+   "seuil": 64,
+   "premier_divergence": 237,
+   "accord": 0.9258
+  },
+  {
+   "seuil": 96,
+   "premier_divergence": 96,
+   "accord": 0.3828
+  },
+  {
+   "seuil": 128,
+   "premier_divergence": 215,
+   "accord": 0.8398
+  }
+ ],
+ "meilleur": 64,
+ "hypothese": "64 = head_dim"
+}

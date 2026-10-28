@@ -199,3 +199,34 @@ def mesurer_mixte32(device: str = "cuda", n: int = 256) -> dict:
             "base": base, "cache_mixte32": q,
             "identiques": base == q,
             "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base))}
+
+
+class CacheMixte48(CacheMixte):
+    seuil = 48
+
+
+class CacheMixte96(CacheMixte):
+    seuil = 96
+
+
+def _mesurer_seuil(classe, device="cuda", n=256):
+    tok = AutoTokenizer.from_pretrained(MODELE)
+    m = AutoModelForCausalLM.from_pretrained(MODELE, dtype=torch.float32).to(device).eval()
+    ids = tok(PROMPT, return_tensors="pt").input_ids.to(device)
+    base = _gen(m, ids, n)
+    with torch.no_grad():
+        out = m.generate(ids, max_new_tokens=n, do_sample=False,
+                         past_key_values=classe(), pad_token_id=0)
+    q = out[0, ids.shape[1]:].tolist()
+    first = next((i for i, (x, y) in enumerate(zip(base, q)) if x != y), None)
+    return {"n": n, "premier_divergence": first,
+            "accord": sum(a == b for a, b in zip(base, q)) / max(1, len(base)),
+            "identiques": base == q}
+
+
+def mesurer_48(device="cuda", n=256):
+    return _mesurer_seuil(CacheMixte48, device, n)
+
+
+def mesurer_96(device="cuda", n=256):
+    return _mesurer_seuil(CacheMixte96, device, n)
