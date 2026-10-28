@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**35 commits** · **0 session(s)** · **8 thème(s)**
+**36 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 4 | [moteur.md](moteur.md) |
 
@@ -68,6 +68,7 @@
 | 14:15 | `8a01dfcc` | N2.7 — DISTILLATION MULTI : STUDENT 9,517, PROFESSEUR 9,571, VDC PARTOUT |
 | 14:18 | `cf75fd47` | JOURNAL — UN DOSSIER PAR JOUR (34 JOURS), SESSIONS DSH ANCRÉES AUX JOURS ET À EN-COURS ; 57 DOCS |
 | 14:29 | `a86faa71` | N2.5b — CAPACITÉ À BUDGET ÉGAL : 21,63 M 4,294 CONTRE 11,47 M 4,476, −4,1 % |
+| 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT |
 
 ## Le récit de la journée (écrit à la main)
 

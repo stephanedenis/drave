@@ -39,7 +39,6 @@
 | [`rapport-jeux-symboliques.md`](rapport-jeux-symboliques.md) | **B5/B6** : la couverture par couche, l'invariance, la restitution, le perft, la force et les contrôles |
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
-| [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
 | [`INDEX.md`](INDEX.md) | **A7.5–A7.26** — 22 fiches de cache KV et de grappe réseau ; l'index exhaustif |
 | [`rapport-m6-moteur.md`](rapport-m6-moteur.md) | **B27** — M6 moteur : exact 100 %, conflit 0 ; le cue désigne le canal, pas de compétition |
 | [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |

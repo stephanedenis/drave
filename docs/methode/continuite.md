@@ -7,7 +7,6 @@
 >
 > **Règle d'or.** Un cycle n'est fini que lorsque le résultat est **mesuré, écrit, committé**, que
 > `en-cours` porte **une ligne de plus** avec sa **prochaine action**, et que la roadmap est à jour.
-> Un cycle qui ne laisse pas d'état est un cycle perdu.
 
 ## 1. Les cycles DSH
 
@@ -122,7 +121,14 @@ pour les pièges. Le journal ne se lit que si l'on a besoin du **récit** d'une 
 Le journal est en **dossiers par jour** (`journal/AAAA-MM-JJ/`) ; chaque rapport de session
 renvoie à son jour, à l'index des sessions et à `en-cours` (`python3 tools/verifie_journal.py`).
 
-## 5. Vérifier
+## 5. Reprendre un goal en pause
+
+Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander **directement**
+« Reprends le goal en pause » : l'agent appelle `get_goal` (goal_id, revision) puis
+`update_goal action="resume"`. Si la pause vient de `max_goal_rounds`, faire d'abord
+`action="edit"` avec `max_goal_rounds=1000`. Relire `en-cours` avant de continuer.
+
+## 6. Vérifier
 
 ```bash
 python3 tools/verifie_en_cours.py   # structure, taille, sections, prochaine action

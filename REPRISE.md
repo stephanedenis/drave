@@ -26,6 +26,7 @@ que si l'on a besoin du **récit** ; la roadmap se lit par **résumé + section*
 3. **Déléguer** 2 à 4 sous-agents sur les actions indépendantes ; le principal garde l'état, la roadmap, les commits.
 4. **Intégrer** : vérifier, mettre à jour `en-cours` (une ligne/résultat + prochaine action), la roadmap, committer.
 5. **Si la limite tombe** : écrire `en-cours` + ce fichier, committer, puis `update_goal resume`.
+6. **Goal en pause** : ouvrir la session qui le porte, demander « reprends le goal » ; l'agent fait `get_goal` puis `update_goal resume`. Si la pause vient de la limite, `edit max_goal_rounds=1000` avant.
 
 Un sous-agent ne touche **jamais** `en-cours`, `roadmap` ou `AGENTS` ; il rend un **diff d'état** que le principal applique.
 

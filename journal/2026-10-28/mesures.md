@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 11:38 | `2bd25490` | N1.7 — RÉFLEXE : 4 BLOCS 5,978 MS CONTRE 6 BLOCS 7,871 MS, −24,05 % POUR −1,61 POINT | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
 | 12:12 | `2958f80b` | N0.3b — PPL DU RETOUR DRVM : 28,7355 IDENTIQUE, MAIS PAS D'EXÉCUTION NATIVE | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+4) |
 | 13:25 | `acd9c623` | MÉTHODE — ÉCHANTILLONNAGE VAN DER CORPUT, DÉTERMINISTE ET REPRODUCTIBLE | `README.md`, `echantillonnage-vdc.md`, `en-cours.md` (+10) |
+| 14:52 | `32195457` | N4.1 — GÉNÉRATION : COHÉRENT 12 OCTETS PUIS DÉRIVE, PAS UN ASSISTANT | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
 
 ## Chiffres du jour
 
@@ -30,6 +31,7 @@
 - [reports/rapport-coherence-docs-3.md](../../reports/rapport-coherence-docs-3.md)
 - [reports/rapport-drvm-parite.md](../../reports/rapport-drvm-parite.md)
 - [reports/rapport-drvm-ppl.md](../../reports/rapport-drvm-ppl.md)
+- [reports/rapport-native-generation.md](../../reports/rapport-native-generation.md)
 - [reports/rapport-native-n0.md](../../reports/rapport-native-n0.md)
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
 - [reports/rapport-native-reflexe.md](../../reports/rapport-native-reflexe.md)
