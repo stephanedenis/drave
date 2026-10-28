@@ -51,7 +51,7 @@ La vision complète est dans [`vision.md`](../theorie/vision.md).
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **216** / **283** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **217** / **284** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
@@ -61,7 +61,7 @@ La vision complète est dans [`vision.md`](../theorie/vision.md).
 |---|---:|
 | portes (dernière passe) | **46 vertes, 3 rouges** (28/10 00 h 12) |
 | porte-deepseek | **verte** (20 tests) |
-| fichiers / JSON de résultats | **216** / **283** |
+| fichiers / JSON de résultats | **217** / **284** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |

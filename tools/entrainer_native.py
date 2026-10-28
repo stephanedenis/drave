@@ -56,6 +56,8 @@ def main() -> None:
     ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
     ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
     ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
+                    help="entraîner aussi les têtes précoces")
     a = ap.parse_args()
     torch.manual_seed(a.graine)
     data = charger(a.corpus)
@@ -68,8 +70,12 @@ def main() -> None:
     for pas in range(1, a.pas + 1):
         modele.train()
         x, y = lot(train, a.lot, a.seq, a.device)
-        logits = modele(x)["logits"]
-        perte = F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1))
+        sortie = modele(x)
+        pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
+        if a.tetes:
+            for e in sortie["early"]:
+                pertes.append(F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)))
+        perte = sum(pertes) / len(pertes)
         opt.zero_grad(); perte.backward()
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step(); pertes.append(float(perte))
@@ -77,6 +83,18 @@ def main() -> None:
             p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2)
             print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
     p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8)
+    # Précision top-1 : tête principale et têtes précoces.
+    modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
+    with torch.no_grad():
+        for _ in range(4):
+            x, y = lot(val, a.lot, a.seq, a.device)
+            s = modele(x)
+            bons_main += int((s["logits"].argmax(-1) == y).sum())
+            for j, e in enumerate(s["early"]):
+                bons_early[j] += int((e.argmax(-1) == y).sum())
+            n_eval += y.numel()
+    prec_main = bons_main / max(1, n_eval)
+    prec_early = [b / max(1, n_eval) for b in bons_early]
     modele.eval()
     torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
     h = exporter_drvm(modele, a.drvm)
@@ -84,6 +102,8 @@ def main() -> None:
            "corpus": a.corpus, "octets": len(data), "pas": a.pas,
            "seq": a.seq, "lot": a.lot, "lr": a.lr, "graine": a.graine,
            "perte_finale": pertes[-1], "ppl_val": p_val, "jetons_val": n_tok,
+           "tetes": a.tetes, "precision_main": prec_main,
+           "precision_early": prec_early,
            "drvm": a.drvm, "sha256_drvm": h, "duree_s": time.time() - t0}
     pathlib.Path(a.sortie + ".json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
     print(json.dumps(res, ensure_ascii=False, indent=1))

@@ -1,0 +1,24 @@
+{
+ "modele": "drave-n0",
+ "parametres": 11368392,
+ "corpus": "data/corpus_fr.txt",
+ "octets": 4633889,
+ "pas": 10000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.2286559343338013,
+ "ppl_val": 3.363414361875047,
+ "jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.62548828125,
+ "precision_early": [
+  0.551513671875,
+  0.609375,
+  0.621337890625
+ ],
+ "drvm": "/tmp/drave-n0-tetes.drvm",
+ "sha256_drvm": "d95c663a03f8677cc4203c15fa8cf9a4c0783d46282ffc07080d7b0a2a4ef45c",
+ "duree_s": 475.748083114624
+}

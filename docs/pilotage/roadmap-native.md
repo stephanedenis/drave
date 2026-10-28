@@ -50,7 +50,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 | N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | ✅ **architecture** — `tools/native_model.py`, 11,37 M, 6 blocs, 3 têtes, 4 tests de forme ; **entraînement 200 pas à faire** |
 | N1.2 | Entraînement next-byte sur corpus propre | ⏳ **à faire** — PPL < 4,0 sur tenu à l'écart |
 | N1.3 | Export DRVM et chargement moteur | ✅ **export** — 110 tenseurs, 45,5 Mo, `drave --drvm-inspect` lit 12 blocs ; **parité PPL à faire** |
-| N1.4 | Têtes précoces (blocs 2, 4, 6) | ⏳ **présentes, non entraînées** — accord > témoin à mesurer |
+| N1.4 | Têtes précoces (blocs 2, 4, 6) | ✅ **mesuré** — **55,15 / 60,94 / 62,13 %** contre **62,55 %** pour la principale, témoin **0,39 %** ; PPL 3,363 |
 | N1.5 | Cellule de pensée contractante | ⏳ **cellule présente, non mesurée** — λ < 1, contenu > baseline |
 | N1.6 | Pont de région | ⏳ **non implémenté** — coût ≤ 5 % de PPL |
 
