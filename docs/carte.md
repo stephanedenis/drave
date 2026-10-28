@@ -48,6 +48,7 @@
 | **B9** le banc externe | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](llm-externe.md) · [la fiche](../reports/rapport-deepseek.md) |
 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../reports/rapport-semantique.md) |
 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + contexte 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../reports/rapport-universaux.md) |
+| **A7.13** K/V int8 512 | **positive** — ΔPPL 0,0 sur 511 jetons et 24 couches | [la fiche](../reports/rapport-kv-ppl-long.md) |
 | **A7.12** PPL K/V int8 | **positive** — PPL 2,6792016 → 2,6792004, Δ −1,17e-6 sur 24 couches | [la fiche](../reports/rapport-kv-ppl.md) |
 | **A7.11** attention KV int8 | **stable** — argmax 97,66 %, corrélation 0,99998, ratio 0,266 | [la fiche](../reports/rapport-kv-attention.md) |
 | **A7.10** KV int8 | **compromis** — 4× moins d'octets, diff max 0,0155, 25,5 Mio pour 4 096 jetons | [la fiche](../reports/rapport-kv-int8.md) |
