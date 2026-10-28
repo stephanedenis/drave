@@ -93,7 +93,7 @@ l'entraîneur.
 
 | # | chantier | critère |
 |---|---|---|
-| N4.1 | Décision **octets vs BPE** | mesurée, pas idéologique |
+| N4.1 | **Génération** | ✅ **technique** — greedy 160 octets : cohérent 12 octets, puis dérive ; pas un assistant |
 | N4.2 | SFT instruction (chat, arrêt, système) | suivi d'instructions > baseline |
 | N4.3 | Serveur OpenAI-compatible + streaming | un client standard se connecte |
 | N4.4 | Sûreté et refus | refus explicite, pas de fuite |

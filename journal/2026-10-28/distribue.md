@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,10 +13,11 @@
 | 12:08 | `9f10f00a` | N0.5 — TRACE/REJEU DRVM : CONTENU 291/291 IDENTIQUE, LOGITS NON EXÉCUTÉS | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
 | 12:38 | `ef81e4f2` | N0.5 — TRACE/REJEU DRVM : 6 144 LISTES, 0 MANQUANTE, LOGITS SHA IDENTIQUE, PPL 28,7355 | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
 | 13:14 | `f3b70729` | N2.5 — STUDENT 21,63 M : PPL 4,294, PIRE QUE 11,47 M (3,295), BUDGET CONFONDU | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+5) |
+| 14:29 | `a86faa71` | N2.5b — CAPACITÉ À BUDGET ÉGAL : 21,63 M 4,294 CONTRE 11,47 M 4,476, −4,1 % | `en-cours.md`, `roadmap-native.md`, `README.md` (+4) |
 
 ## Chiffres du jour
 
-`4,294` · `3,295` · `28,7355` · `−9,3 %` · `3,465` · `4,080`
+`−4,1 %` · `4,294` · `4,476` · `3,295` · `28,7355` · `−9,3 %` · `3,465` · `4,080`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -24,6 +25,7 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-drvm-trace.md](../../reports/rapport-drvm-trace.md)
+- [reports/rapport-native-capacite-egal.md](../../reports/rapport-native-capacite-egal.md)
 - [reports/rapport-native-distillation-20m.md](../../reports/rapport-native-distillation-20m.md)
 - [reports/rapport-native-pont.md](../../reports/rapport-native-pont.md)
 
