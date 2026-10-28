@@ -329,3 +329,38 @@ mod tests {
         assert!(g.len() >= 6);
     }
 }
+
+/// Service HTTP minimal, std seul : `GET /sante`, `POST /generer` (corps = prompt,
+/// `?n=32`). Le cache KV est recréé par requête ; le modèle reste chargé.
+pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
+    use std::io::{Read, Write};
+    use std::net::TcpListener;
+    let d = crate::drvm::Drvm::open(chemin).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string()))?;
+    let n = Native::open(&d).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string()))?;
+    let l = TcpListener::bind(("127.0.0.1", port))?;
+    eprintln!("[drvm-serve] http://127.0.0.1:{port} · 11 M natif, cache par requête");
+    for flux in l.incoming() {
+        let mut s = match flux { Ok(s) => s, Err(_) => continue };
+        let mut buf = vec![0u8; 1 << 20];
+        let k = match s.read(&mut buf) { Ok(k) => k, Err(_) => continue };
+        let req = String::from_utf8_lossy(&buf[..k]);
+        let ligne = req.lines().next().unwrap_or("");
+        let (code, corps) = if ligne.starts_with("GET /sante") {
+            (200, format!("{{\"ok\":true,\"parametres\":{}}}", n.nb_parametres()))
+        } else if ligne.starts_with("POST /generer") {
+            let n_max: usize = ligne.split("n=").nth(1).and_then(|x| x.split(|c: char| !c.is_ascii_digit()).next()).and_then(|x| x.parse().ok()).unwrap_or(32);
+            let corps = req.split("\r\n\r\n").nth(1).unwrap_or("");
+            let t = std::time::Instant::now();
+            let b = n.generer(corps.as_bytes(), n_max);
+            let texte = String::from_utf8_lossy(&b).replace('\\', "\\\\").replace('"', "\\\"");
+            (200, format!("{{\"octets\":{},\"ms\":{:.1},\"texte\":\"{}\"}}", b.len(), t.elapsed().as_secs_f64() * 1000.0, texte.replace('\n', "\\n")))
+        } else { (404, "{\"erreur\":\"chemin inconnu\"}".to_string()) };
+        let rep = format!("HTTP/1.1 {code} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{corps}", corps.len());
+        let _ = s.write_all(rep.as_bytes());
+    }
+    Ok(())
+}
+
+impl Native {
+    pub fn nb_parametres(&self) -> usize { self.poids.values().map(|v| v.len()).sum() }
+}

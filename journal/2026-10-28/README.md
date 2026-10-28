@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**50 commits** · **0 session(s)** · **8 thème(s)**
+**51 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 13 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| moteur | 8 | [moteur.md](moteur.md) |
+| moteur | 9 | [moteur.md](moteur.md) |
 
 ## Autres pièces du jour
 
@@ -83,6 +83,7 @@
 | 16:16 | `fc1327cb` | N2.8 — DISTILLATION LONGUE : PPL 3,123 CONTRE 3,295, PORTE 2,5 NON ATTEINTE |
 | 16:19 | `eeaab7ae` | DOCS — EN-COURS : 4 PUISSES, N0/N1/N2/N4 |
 | 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO |
+| 16:29 | `d660fca3` | N0.12 — PPL NATIVE DE BOUT EN BOUT : 4,6585, IDENTIQUE À PYTHON |
 
 ## Le récit de la journée (écrit à la main)
 

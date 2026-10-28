@@ -16,6 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-service-rust.md`](rapport-native-service-rust.md) | **N4.3** — service Rust natif avec cache : **611 ms**, 53 octets |
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |
 | [`rapport-native-distillation-20k.md`](rapport-native-distillation-20k.md) | **N2.8** — 20 000 pas : PPL **3,123** contre **3,295**, précision **67,96 %**, gap **+0,768** |
 | [`rapport-native-ppl.md`](rapport-native-ppl.md) | **N0.12** — PPL native **4,6585**, identique à Python sur 59 octets |

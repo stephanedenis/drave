@@ -167,6 +167,12 @@ fn main() {
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
     }
+    if args[1] == "--drvm-serve" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let port: u16 = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(8766);
+        if let Err(e) = native::servir(&f, port) { eprintln!("serveur : {e}"); std::process::exit(3); }
+        return;
+    }
     if args[1] == "--drvm-native-ppl" {
         let f = args.get(2).cloned().unwrap_or_default();
         let texte = args.get(3).cloned().unwrap_or_else(|| "La France est un pays de la couche".into());

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 15:36 | `87e652fd` | N0.7 — PARITÉ NATIVE DRVM : LOGITS IDENTIQUES À 0,0001, SANS GGUF | `en-cours.md`, `roadmap-native.md`, `native.rs` (+3) |
 | 15:48 | `5eaafc6b` | N0.9 — CACHE KV NATIF : SORTIE IDENTIQUE À PYTHON, 53 OCTETS EN 592,6 MS | `en-cours.md`, `roadmap-native.md`, `main.rs` (+7) |
 | 15:52 | `56fedc25` | N0.10 — CACHE KV : 19,25× PLUS RAPIDE, 592,6 MS CONTRE 11 406,9 MS | `en-cours.md`, `roadmap-native.md`, `main.rs` (+6) |
+| 16:29 | `d660fca3` | N0.12 — PPL NATIVE DE BOUT EN BOUT : 4,6585, IDENTIQUE À PYTHON | `en-cours.md`, `roadmap-native.md`, `main.rs` (+6) |
 
 ## Chiffres du jour
 
-`0,0001`
+`4,6585` · `0,0001`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -30,6 +31,7 @@
 - [reports/rapport-native-cache-gain.md](../../reports/rapport-native-cache-gain.md)
 - [reports/rapport-native-cache.md](../../reports/rapport-native-cache.md)
 - [reports/rapport-native-forward.md](../../reports/rapport-native-forward.md)
+- [reports/rapport-native-ppl.md](../../reports/rapport-native-ppl.md)
 
 <!-- notes -->
 
