@@ -194,3 +194,89 @@ impl Native {
         self.matvec("head_byte.weight", "head_byte.bias", &out, c.vocab)
     }
 }
+
+#[derive(Default)]
+pub struct Cache {
+    k: Vec<Vec<Vec<f32>>>,
+    v: Vec<Vec<Vec<f32>>>,
+}
+
+impl Native {
+    /// Un jeton, avec cache KV : les clés/valeurs des positions précédentes ne
+    /// sont pas recalculées. C'est le chemin de génération.
+    pub fn pas(&self, id: u32, pos: usize, cache: &mut Cache) -> Vec<f32> {
+        let c = &self.cfg;
+        let dh = c.d / c.n_heads;
+        if cache.k.is_empty() {
+            cache.k = vec![vec![Vec::new(); c.n_heads]; c.n_blocks];
+            cache.v = vec![vec![Vec::new(); c.n_heads]; c.n_blocks];
+        }
+        let e = self.p("embed.weight"); let pe = self.p("pos.weight");
+        let mut x = vec![0.0f32; c.d];
+        for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
+        for b in 0..c.n_blocks {
+            let z = self.ln(&x, &format!("blocks.{b}.ln1"));
+            let qkv = self.matvec(&format!("blocks.{b}.qkv.weight"),
+                                  &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
+            let mut att = vec![0.0f32; c.d];
+            for t in 0..c.n_heads {
+                let q = &qkv[t * dh..(t + 1) * dh];
+                cache.k[b][t].extend_from_slice(&qkv[c.d + t * dh..c.d + (t + 1) * dh]);
+                cache.v[b][t].extend_from_slice(&qkv[2 * c.d + t * dh..2 * c.d + (t + 1) * dh]);
+                let nk = cache.k[b][t].len() / dh;
+                let debut = pos.saturating_sub(c.window - 1);
+                let mut sc = Vec::new();
+                for j in debut..=pos {
+                    let k = &cache.k[b][t][j * dh..(j + 1) * dh];
+                    let mut d = 0.0f32;
+                    for qq in 0..dh { d += q[qq] * k[qq]; }
+                    sc.push(d / (dh as f32).sqrt());
+                }
+                let mx = sc.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+                let ex: Vec<f32> = sc.iter().map(|v| (v - mx).exp()).collect();
+                let se: f32 = ex.iter().sum();
+                for (jj, j) in (debut..=pos).enumerate() {
+                    let v = &cache.v[b][t][j * dh..(j + 1) * dh];
+                    for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
+                }
+                let _ = nk;
+            }
+            let y = self.matvec(&format!("blocks.{b}.out.weight"),
+                                &format!("blocks.{b}.out.bias"), &att, c.d);
+            let z2 = self.ln(&(0..c.d).map(|k| x[k] + y[k]).collect::<Vec<_>>(),
+                             &format!("blocks.{b}.ln2"));
+            let f = self.ffn(&z2, b);
+            for k in 0..c.d { x[k] = x[k] + y[k] + f[k]; }
+            if b == c.n_blocks / 2 - 1 {
+                let br = self.matvec("bridge.weight", "bridge.bias", &x, c.d);
+                for k in 0..c.d { x[k] += br[k]; }
+            }
+        }
+        let mut z = x.clone();
+        let h0 = x;
+        for _ in 0..c.thought_steps {
+            let a = self.matvec("thought.weight", "thought.bias", &z, c.d);
+            let b = self.matvec("thought_in.weight", "thought_in.bias", &h0, c.d);
+            for k in 0..c.d { z[k] = (a[k] + b[k]).tanh(); }
+        }
+        self.matvec("head_byte.weight", "head_byte.bias", &z, c.vocab)
+    }
+
+    pub fn generer(&self, prompt: &[u8], n: usize) -> Vec<u8> {
+        let mut cache = Cache::default();
+        let mut ids: Vec<u8> = prompt.to_vec();
+        let mut logits = vec![0.0f32; self.cfg.vocab];
+        for (pos, &id) in ids.clone().iter().enumerate() {
+            logits = self.pas(id as u32, pos, &mut cache);
+        }
+        for _ in 0..n {
+            let suivant = logits.iter().enumerate()
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).map(|(i, _)| i as u8).unwrap_or(32);
+            ids.push(suivant);
+            let pos = ids.len() - 1;
+            logits = self.pas(suivant as u32, pos, &mut cache);
+            if suivant == b'\n' { break; }
+        }
+        ids
+    }
+}

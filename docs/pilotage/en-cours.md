@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N0.8 terminé** — parité native **5/5 prompts**, écart **0,00006**. **Prochain : cache KV** pour le moteur natif.
+- **Agent principal** : **N0.9 terminé** — cache KV, sortie identique, 53 octets en 592,6 ms. **Prochain : mesurer le gain du cache contre un forward complet.**
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -34,6 +34,7 @@
 - **N4.2 — service local** : HTTP `/sante` + `/generer`, **69 octets**, CPU, greedy ; pas d'auth, pas de cache KV.
 - **N0.7 — exécution native** : `--drvm-forward` calcule **sans GGUF** ; logits **10,8232** identiques.
 - **N0.8 — parité automatisée** : **5/5 prompts**, top-5 identique, écart max **0,00006**.
+- **N0.9 — cache KV natif** : sortie **identique** à Python, **53 octets** en **592,6 ms**.
 
 ## Les chiffres de l'état
 
@@ -43,7 +44,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **236** / **302** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **237** / **302** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
