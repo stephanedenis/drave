@@ -9,7 +9,7 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Agent principal** : **N2.1 volume** — 50 000 fenêtres, 45 000/5 000 ; **un seul corpus**. **Prochain : N2.2**, professeur et distillation.
+- **Agent principal** : **N2.3 première passe** — PPL **3,297** contre **3,465**, gap **+0,942** au professeur ; porte **< 2,5** non atteinte. **Prochain : N2.4**, curriculum et pertes locales.
 - **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
   travail n'est en attente d'eux.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -26,7 +26,7 @@
 - **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
 - **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
-- **N2 — la distillation** : **volume** — 50 000 fenêtres (45 000/5 000), mais **un seul corpus** et licence à vérifier ; distillation non commencée.
+- **N2 — la distillation** : **volume** 50 000 fenêtres (45 000/5 000), **professeur** Qwen3-MoE 23,76 M (PPL **2,355**), **distillation** PPL **3,297** contre **3,465** (−4,85 %), gap **+0,942**. Porte **< 2,5** non atteinte.
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
 
 ## Les chiffres de l'état
@@ -37,7 +37,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **225** / **292** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **227** / **294** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

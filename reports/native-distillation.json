@@ -1,0 +1,19 @@
+{
+ "professeur": "/tmp/route-teacher",
+ "student": "/tmp/drave-n0-distille.pt",
+ "pas": 2000,
+ "lot": 16,
+ "seq": 128,
+ "lr": 0.0002,
+ "temperature": 2.0,
+ "alpha": 0.7,
+ "perte_finale": 33.714813232421875,
+ "ppl_val": 3.2969529465530956,
+ "drvm": "/tmp/drave-n0-distille.drvm",
+ "sha256_drvm": "2270e1e90e62c0c486d02a1c259c18e25aafb048c5cf53c0a30783b03e384c8b",
+ "duree_s": 133.35180687904358,
+ "professeur_ppl": 2.3552823178020192,
+ "student_ppl": 3.465,
+ "gain_ppl_pct": 4.849842812320471,
+ "gap_professeur": 0.9416706287510763
+}
