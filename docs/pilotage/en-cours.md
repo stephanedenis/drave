@@ -12,7 +12,7 @@
 - **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
   parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
 - **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **N4.3** — service Rust natif, **611 ms**. N2.9 (21,63 M, 20 000 pas) tourne encore.**
+- **Agent principal** : **N2.9 négatif** — 21,63 M à **3,381**, pire que 11,47 M (**3,123**). **Quatre étapes faites.****
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
   actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -35,7 +35,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **242** / **307** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **243** / **308** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

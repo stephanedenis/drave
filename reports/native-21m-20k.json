@@ -1,0 +1,26 @@
+{
+ "professeur": "/tmp/route-teacher",
+ "student": "/tmp/drave-n0-21m-20k.pt",
+ "pas": 20000,
+ "lot": 8,
+ "seq": 128,
+ "lr": 0.0001,
+ "temperature": 2.0,
+ "alpha": 0.7,
+ "tetes": true,
+ "perte_finale": 32.51097106933594,
+ "ppl_val": 3.3809546517979627,
+ "precision_main": 0.66796875,
+ "precision_early": [
+  0.34716796875,
+  0.502685546875,
+  0.654296875
+ ],
+ "drvm": "/tmp/drave-n0-21m-20k.drvm",
+ "sha256_drvm": "740d95839ceaa3e05585f4e6954c23553bff209db80a8a0579d142eaefa29559",
+ "duree_s": 1275.8683338165283,
+ "ppl_11m_20k": 3.123,
+ "variation_pct": 8.259835152032103,
+ "ppl_21m_5k": 4.29445070484243,
+ "professeur_ppl": 2.3552823178020192
+}
