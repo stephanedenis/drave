@@ -1,0 +1,10 @@
+{
+ "source": "models/Qwen2.5-0.5B-Q4_0.gguf",
+ "retour": "/tmp/qwen05-q4-retour.gguf",
+ "ppl_source": 28.7355,
+ "ppl_retour": 28.7355,
+ "tokens": 127,
+ "identiques": true,
+ "niveau": "conversion",
+ "drvm_execute": false
+}

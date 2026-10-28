@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-28.md](2026-10-28.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 08:57 | `99f7c0b6` | DOCS — EN-COURS : LIENS VERS LES FICHES DU GLOSSAIRE | `en-cours.md`, `2026-10-28.md`, `2026-10-28_docs.md` |
 | 11:32 | `8af5a4b8` | N1.6 — PONT DE RÉGION : PPL 3,465, NEUTRALISÉ 4,080, EFFET −9,3 % | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
+| 12:08 | `9f10f00a` | N0.5 — TRACE/REJEU DRVM : CONTENU 291/291 IDENTIQUE, LOGITS NON EXÉCUTÉS | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+6) |
 
 ## Chiffres du jour
 
@@ -20,6 +21,7 @@
 ## Mesures et rapports touchés
 
 - [reports/README.md](../reports/README.md)
+- [reports/rapport-drvm-trace.md](../reports/rapport-drvm-trace.md)
 - [reports/rapport-native-pont.md](../reports/rapport-native-pont.md)
 
 <!-- notes -->

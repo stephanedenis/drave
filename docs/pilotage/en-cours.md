@@ -19,8 +19,8 @@
 
 - **N0 — DRVM** : format natif (manifeste, graphe, payload aligné 64 o, SHA-256, `mmap`), lecteur Python et
   Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), **poids 114/114**, N0.4
-  (GGUF ↔ DRVM, **SHA identique**), N0.6. **N0.5 partiel** : trace/rejeu du **contenu** 291/291 ; **logits à faire**.
-  **Reste** : parité **PPL moteur**.
+  (GGUF ↔ DRVM, **SHA identique**), **PPL du retour 28,7355**, N0.6. **N0.5 partiel** : contenu 291/291 ;
+  **logits et exécution native DRVM à faire**.
 - **N1 — `drave-n0`** : 11,47 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
   3 têtes précoces, cellule de pensée contractante, **pont** après le bloc 3. **PPL 3,465** ; têtes
   **57,6 / 61,6 / 62,1 %** contre **62,7 %** pour la principale ; pensée **λ = 0,709**.
@@ -39,7 +39,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **223** / **290** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **224** / **291** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **55** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
