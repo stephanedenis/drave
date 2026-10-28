@@ -32,7 +32,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 |---|---|---|
 | N0.1 | Écrire le manifeste et le graphe (blocs, ports, routes, têtes, pont, pensée) | ✅ **fait** — manifeste JSON canonique, graphe, hash vérifié |
 | N0.2 | Écrire le payload tenseurs (alignement, quantification, masque de sparsité) | ✅ **fait** — aller-retour octet-à-octet, 64 o |
-| N0.3 | Lire DRVM dans `drave-core` | ✅ **parseur + CLI** — `drvm.rs` lit l'en-tête, le graphe, les blocs et les tenseurs ; version 99 et bloc inconnu refusés ; **parité PPL avec un GGUF reste à faire** |
+| N0.3 | Lire DRVM dans `drave-core` | ✅ **parseur + CLI + poids** — `drvm.rs` lit l'en-tête, le graphe, les blocs et les tenseurs ; **114/114 tenseurs identiques** au checkpoint ; **parité PPL moteur reste à faire** |
 | N0.4 | `gguf2drvm` et `drvm2gguf` pour les modèles existants | ⏳ **à faire** — Qwen 0.5B importé, même PPL |
 | N0.5 | Trace et rejeu d'un bloc DRVM | ⏳ **à faire** — trace identique, mêmes logits |
 | N0.6 | Refus de version et de bloc inconnu | ✅ **fait** — version 99 et bloc `quantum` refusés |
@@ -49,7 +49,7 @@ moteur, tout entraînement est un banc hors moteur. C'est le chaînon manquant d
 |---|---|---|
 | N1.1 | Famille `native` dans l'entraîneur (blocs, routes, têtes précoces) | ✅ **architecture** — `tools/native_model.py`, 11,37 M, 6 blocs, 3 têtes, 4 tests de forme ; **entraînement 200 pas à faire** |
 | N1.2 | Entraînement next-byte sur corpus propre | ⏳ **à faire** — PPL < 4,0 sur tenu à l'écart |
-| N1.3 | Export DRVM et chargement moteur | ✅ **export** — 110 tenseurs, 45,5 Mo, `drave --drvm-inspect` lit 12 blocs ; **parité PPL à faire** |
+| N1.3 | Export DRVM et chargement moteur | ✅ **export** — 114 tenseurs, `drave --drvm-inspect` lit 12 blocs ; **114/114 identiques** au checkpoint ; **parité PPL à faire** |
 | N1.4 | Têtes précoces (blocs 2, 4, 6) | ✅ **mesuré** — **55,15 / 60,94 / 62,13 %** contre **62,55 %** pour la principale, témoin **0,39 %** ; PPL 3,363 |
 | N1.5 | Cellule de pensée contractante | ✅ **mesuré** — **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** ; PPL **3,58** |
 | N1.6 | Pont de région | ✅ **mesuré** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %** |
