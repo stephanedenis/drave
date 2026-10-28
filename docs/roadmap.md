@@ -383,6 +383,7 @@ Détail : [`rapport-universaux.md`](../reports/rapport-universaux.md).
 | B12.8 | **M8 sommeil** | ❌ **marginal** | 96,48 % de champs mais exact **65,1 %**, baseline par jeu **96,10 %** ; leave-one-code-out exact **0 % par construction**, non nuls 63,5 % ; coordonnées 0 % |
 | B12.9 | **M9 lésion** | ✅ **table** | contexte **29,2 %** ; M2 ventrale **24,7 %** ; M2 dorsale **2,1 %** ; M7 **13,7 %** ; M3 **0** ; M4 **0** ; M5 **1,1 %** ; M6 **30 %** ; M8 **0** |
 | B12.10 | **Pipeline M1 → M4 → M8** | ⚠️ **intégration** | **528/528**, 7 prototypes, 96,33 % de complétion — tautologique : M4 ne généralise pas, M8 est la marginale |
+| B27.1 | **M6 moteur** | ❌ **trivial** | 8 essais, réponse gauche/droite : exact **100 %**, congruents **100 %**, incongruents **100 %**, conflit **0** ; le cue désigne le canal, il n'y a **ni coût ni compétition** — ce n'est pas un Stroop |
 | B26.1 | **M6 conflit** | ❌ **nul** | réplication d'A6 : exact **94,95 %** (792 cas), conflit **0**, commutation **0** ; c'est un **sélecteur** sans compétition, pas un contrôle exécutif ; pas de réponse motrice |
 | B25.1 | **M8 rejeu** | ❌ **négatif** | 23/6 codes, 442/86 épisodes ; M8 exact **0**, champs **74,6 %** ; **rejeu 0** ; **hybride 0** ; le prototype ne compose pas un code neuf |
 | B24.1 | **Routeur confiance** | ⚠️ **partiel** | typo **56,2→63,7 %** (+7,5) mais espaces **41,8→34,2 %** (−7,5) ; round-trip M1 ne détecte que **31 %** des typos ; oracle **79,45 %** sur la typo ; aucun score ne domine |

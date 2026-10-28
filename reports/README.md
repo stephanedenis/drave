@@ -51,6 +51,7 @@
 | [`rapport-couche-distante.md`](rapport-couche-distante.md) | **A7.6** — couche Qwen 0.5B à distance : logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× |
 | [`rapport-seuil-reseau.md`](rapport-seuil-reseau.md) | **A7.5b** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms |
 | [`rapport-grappe-reseau.md`](rapport-grappe-reseau.md) | **A7.5** — grappe sur réseau : 1 672 o contre 7 416 (4,44×), fidélité 1 792/1 792, 0,125 ms loopback |
+| [`rapport-m6-moteur.md`](rapport-m6-moteur.md) | **B27** — M6 moteur : exact 100 %, conflit 0 ; le cue désigne le canal, pas de compétition |
 | [`rapport-m6-conflit2.md`](rapport-m6-conflit2.md) | **B26** — M6 conflit : 94,95 %, conflit 0, commutation 0 ; sélecteur sans compétition |
 | [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
 | [`rapport-sous-familles-autres.md`](rapport-sous-familles-autres.md) | **C3.2e** — sous-familles des autres familles : uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % |
