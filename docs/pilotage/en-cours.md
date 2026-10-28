@@ -20,23 +20,10 @@
 
 ## Ce qui est en cours
 
-- **N0 — DRVM** : format natif (manifeste, graphe, payload aligné 64 o, SHA-256, `mmap`), lecteur Python et
-  Rust (`drvm.rs`, CLI `--drvm-inspect`). **Fait** : N0.1, N0.2, N0.3 (parseur), **poids 114/114**, N0.4
-  (GGUF ↔ DRVM, **SHA identique**), **PPL 28,7355**, N0.5 (trace **6 144 listes**, logits **SHA identique**), N0.6.
-- **N1 — `drave-n0`** : 11,47 M, octets, 6 blocs, attention locale 256, FFN creux top-2 + k-WTA 25 %,
-  3 têtes précoces, cellule de pensée contractante, **pont** après le bloc 3. **PPL 3,465** ; têtes
-  **57,6 / 61,6 / 62,1 %** contre **62,7 %** pour la principale ; pensée **λ = 0,709**.
-- **N1.5 — la pensée contractante** : **λ = 0,709**, PPL **3,58**, sans pensée **721 726** ; **fait**. Le contenu est porté par la pensée, pas seulement par la sortie.
-- **N1.6 — le pont** : **fait** — PPL **3,465**, neutralisé **4,080** ; effet **−9,3 %** ; coût vs modèle sans pont **−3,2 %**.
-- **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
-- **N2 — la distillation** : **corpus** 49 999 fenêtres, **4 sources**, **ordre VDC** ; **professeur fr** 23,76 M (PPL **2,355**) ; **distillation fr** PPL **3,123** après 20 000 pas ; **multi** student **9,517** vs professeur **9,571** ; **capacité à budget égal, 3 graines** : 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; checkpoint 11,47 M **3,295**. Porte **< 2,5** non atteinte.
-- **N4 — génération** : **technique** — greedy 160 octets, cohérent 12 octets puis dérive ; **pas un assistant**.
-- **N4.2 — service local** : HTTP `/sante` + `/generer`, **69 octets**, CPU, greedy ; pas d'auth, pas de cache KV.
-- **N0.7 — exécution native** : `--drvm-forward` calcule **sans GGUF** ; logits **10,8232** identiques.
-- **N0.8 — parité automatisée** : **5/5 prompts**, top-5 identique, écart max **0,00006**.
-- **N0.9 — cache KV natif** : sortie **identique** à Python, **53 octets** en **592,6 ms**.
-- **N0.10 — gain du cache** : **19,25×** (592,6 ms contre 11 406,9 ms), sortie identique.
-- **N2.8 — distillation longue** : PPL **3,123** contre **3,295** (−5,2 %), précision **67,96 %**, gap **+0,768** ; porte **< 2,5** non atteinte.
+- **N0 — DRVM** : format natif, lecteur Python/Rust, GGUF ↔ DRVM (**SHA identique**), trace/rejeu (**6 144 listes**, logits **SHA identique**), **exécution native** (`--drvm-forward`, logits **10,8232**), **parité automatisée 5/5 prompts** (écart **0,00006**) et **cache KV 19,25×** (592,6 ms contre 11 406,9 ms).
+- **N1 — `drave-n0`** : 11,47 M, 6 blocs, attention locale, FFN creux, 3 têtes précoces, pensée contractante **λ = 0,709**, pont **−9,3 %**, réflexe **−24,05 %**.
+- **N2 — distillation** : 49 999 fenêtres / 4 sources, VDC ; professeur fr **2,355** ; student **3,123** après 20 000 pas ; multi **9,517** vs **9,571** ; capacité à budget égal 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %). Porte **< 2,5 non atteinte**.
+- **N4 — usage** : génération greedy (cohérente 12 octets puis dérive) et service local `/sante` + `/generer` (69 octets, CPU) ; **pas un assistant**.
 
 ## Les chiffres de l'état
 
