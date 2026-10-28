@@ -22,7 +22,7 @@ const VARS_LUES: &[&str] = &[
     "ETAT_ENTREE",
     "FLUX_VERIF", "GPU", "GPU_EXPERTS",
     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
-    "KV_BITS", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "KV_BITS", "KV_BITS_COUCHES", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
     // S4 (docs/strata-pour-drave.md) : la prélecture des experts. `PRELIRE` coupe tout
@@ -31,7 +31,7 @@ const VARS_LUES: &[&str] = &[
     // `PRELIRE_TRANCHE` garde l'ancienne granularité pour refaire la mesure qui a montré
     // qu'elle ne changeait rien ; `PRELIRE_DENSE` rallume la prélecture de la couche
     // suivante, mesurée sans gain (le témoin reste pour pouvoir la re-mesurer).
-    "PRELIRE_FILS", "PRELIRE_TRANCHE", "PRELIRE_DENSE",
+    "PRELIRE_FILS", "PRELIRE_TRANCHE", "PRELIRE_DENSE", "PERTE_MAX",
     // 12/10 : la lecture SÉQUENTIELLE dans nos tampons (directive « granularité fine de MoE,
     // allocation intelligente au lieu de virtualiser »). `TAMPONS` l'allume, `TAMPONS_FILS`
     // choisit le nombre de fils de lecture.
@@ -57,7 +57,7 @@ const VARS_LUES: &[&str] = &[
     "HEBB_MODULATEUR_FICHIER", "HEBB_BETA", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
     "V41_TETE_COPIE0",
-    "VISION_TEXTE",
+    "VISION_TEXTE", "VISION_TEXTE_IDS", "VISION_NOYAU", "VISION_IMAGE", "VISION_COUCHES", "VISION_FUSION", "VISION_POIDS", "VISION_COTE", "VISION_ATTENTION", "VISION_EMBED", "VISION_ENTREE", "VISION_ETAT",
     "YARN",
     "YARN_MSCALE", "YARN_NON",
     "YARN_RAMPE",
