@@ -5,7 +5,7 @@
 > Elle se lit **seule** ; les chiffres, les protocoles et les erratums vivent dans
 > [`reports/`](../../reports/).
 >
-> **Dernière mise à jour : 2026-10-27.** **Huit chapitres**, **quatorze schémas** sont à jour ;
+> **Dernière mise à jour : 2026-10-28.** **Huit chapitres**, **quatorze schémas** sont à jour ;
 > B10–B12 sont dans les « hors chapitres ».
 >
 > **Ce qu'elle n'est pas.** Un journal de mesures, ni une fiche de résultats : une **porte d'entrée**.

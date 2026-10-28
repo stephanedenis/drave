@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-27, 16 h 30 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-28, 08 h 16 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
 > les contrôles vivent dans [`reports/`](../reports/) ; le plan dans [`roadmap.md`](roadmap.md). **Ici, l'actualité
