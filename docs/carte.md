@@ -53,6 +53,7 @@
 | **A7.6** couche à distance | **mesuré** — logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× | [la fiche](../reports/rapport-couche-distante.md) |
 | **A7.5b** seuil réseau | **mesuré** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms | [la fiche](../reports/rapport-seuil-reseau.md) |
 | **A7.5** grappe réseau | **mesuré** — 4,44× moins d'octets, fidélité 100 %, 0,125 ms loopback | [la fiche](../reports/rapport-grappe-reseau.md) |
+| **B25** M8 rejeu | **négatif** — M8 exact 0, rejeu 0, hybride 0 sur 6 codes tenus | [la fiche](../reports/rapport-m8-rejeu.md) |
 | **B24** routeur confiance | **partiel** — typo 63,7 % (+7,5) mais espaces 34,2 % (−7,5) ; oracle 79,45 % | [la fiche](../reports/rapport-routeur-confiance.md) |
 | **C3.2c** 9 familles | **mesuré** — 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % | [la fiche](../reports/rapport-familles-9.md) |
 | **B23** routeur M1→M2 | **partiel** — espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique | [la fiche](../reports/rapport-routeur-m1-m2.md) |

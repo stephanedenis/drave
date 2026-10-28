@@ -33,6 +33,7 @@
 | [`rapport-couche-distante.md`](rapport-couche-distante.md) | **A7.6** — couche Qwen 0.5B à distance : logits bit-à-bit 3/3, ΔPPL 0, RTT 4,052 ms, 4 105 o/jeton ; sparse 1,027× |
 | [`rapport-seuil-reseau.md`](rapport-seuil-reseau.md) | **A7.5b** — sparse 1 672 o vs 7 416, gain 1,94× à 0 ms, 1,006× à 100 ms, seuil −0,60 ms |
 | [`rapport-grappe-reseau.md`](rapport-grappe-reseau.md) | **A7.5** — grappe sur réseau : 1 672 o contre 7 416 (4,44×), fidélité 1 792/1 792, 0,125 ms loopback |
+| [`rapport-m8-rejeu.md`](rapport-m8-rejeu.md) | **B25** — M8 rejeu : exact 0, champs 74,6 %, rejeu 0, hybride 0 sur 6 codes tenus |
 | [`rapport-familles-9.md`](rapport-familles-9.md) | **C3.2c** — 9 familles : 7/9 > 30 %, moyenne 69,5 %, contrôle 0 ; indo-européen 14,7 %, uralic 46,7 % |
 | [`rapport-routeur-confiance.md`](rapport-routeur-confiance.md) | **B24** — routeur confiance : typo 63,7 % (+7,5), espaces 34,2 % (−7,5), oracle 79,45 % |
 | [`rapport-routeur-m1-m2.md`](rapport-routeur-m1-m2.md) | **B23** — routeur M1→M2 : espaces 41,8 % vs 11,6 % ; typo 56,2 % < M2 68,3 % ; collision de lexique |

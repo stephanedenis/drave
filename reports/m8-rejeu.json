@@ -1,0 +1,13 @@
+{
+ "train": 442,
+ "test": 86,
+ "codes_train": 23,
+ "codes_test": 6,
+ "prototypes": 6,
+ "M8": {
+  "exact": 0.0,
+  "champs": 0.7457364341085271
+ },
+ "rejeu_exact": 0.0,
+ "hybride_exact": 0.0
+}
