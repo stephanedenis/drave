@@ -1,0 +1,17 @@
+{
+ "modele": "drave-n0",
+ "parametres": 11368392,
+ "corpus": "data/corpus_fr.txt",
+ "octets": 4633889,
+ "pas": 10000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.153599500656128,
+ "ppl_val": 3.3534094752982115,
+ "jetons_val": 8192,
+ "drvm": "/tmp/drave-n0-10000.drvm",
+ "sha256_drvm": "edf90a97e2c4ef7dae8927744c4e904a0aaf30b4e7a3f240c3d1c5918fcec2e1",
+ "duree_s": 448.5255482196808
+}
