@@ -9,7 +9,7 @@
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Agent principal** : N1.7 — réflexe mesuré (**−24,05 %** de temps, **−1,61 point** de précision) ; prochain : **N0.3b**, parité PPL moteur DRVM.
+- **Agent principal** : N1.7 — réflexe mesuré (**−24,05 %** de temps, **−1,61 point** de précision) ; **N1 est complet**. Dernier correctif : `VARS_LUES` (134 tests Rust verts). Prochain : **N0.3b**, parité PPL moteur DRVM.
 - **Sous-agents actifs** : **aucun**. Les sous-agents A18/A19/A20 (A7.6, A7.5b, B24) sont **inactifs** ; aucun
   travail n'est en attente d'eux.
 - **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
@@ -28,6 +28,7 @@
 - **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
 - **N2 — la distillation** : **non commencée**. Le corpus de 10 000 pas est un banc, pas les 50 000 séquences
   visées.
+- **N1.7 — le réflexe** : **fait** — 4 blocs **5,978 ms** contre 6 blocs **7,871 ms**, **−24,05 %** de temps pour **−1,61 point** de précision.
 
 ## Les chiffres de l'état
 
