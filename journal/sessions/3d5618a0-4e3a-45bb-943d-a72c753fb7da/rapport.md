@@ -1,5 +1,7 @@
 # Session 3d5618a0 — Tu écris un **document de
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `3d5618a0-4e3a-45bb-943d-a72c753fb7da` |

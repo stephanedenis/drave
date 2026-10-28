@@ -1,0 +1,79 @@
+# 2026-10-11
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**41 commits** · **1 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 7 | [2026-10-11/apprentissage.md](apprentissage.md) |
+| attention | 3 | [2026-10-11/attention.md](attention.md) |
+| distribue | 7 | [2026-10-11/distribue.md](distribue.md) |
+| divers | 0 | [2026-10-11/divers.md](divers.md) |
+| memoire | 1 | [2026-10-11/memoire.md](memoire.md) |
+| mesures | 1 | [2026-10-11/mesures.md](mesures.md) |
+| modele | 9 | [2026-10-11/modele.md](modele.md) |
+| moteur | 5 | [2026-10-11/moteur.md](moteur.md) |
+| portes | 8 | [2026-10-11/portes.md](portes.md) |
+
+## Sessions du jour
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 71.0 h | [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:02 | `673b4a28` | M9 : aucun instrument du depot ne mesure le cout de la sparsite des poids — et les huit modeles d'E6 le prouvent |
+| 00:15 | `38d47e1e` | Dessin H, carte des sorties : la borne monte quand on sort tard, mais le gain ATTEIGNABLE s'effondre |
+| 00:27 | `14ebf852` | E6 : il y a un CROISEMENT — le variant log-normal est pire a 50 % garde et bien meilleur a 25 % |
+| 00:32 | `2028f867` | Occupation x elagage : une porte pour que le fichier porte l'elagage qu'il ANNONCE |
+| 00:33 | `1ddcdcc7` | Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge |
+| 00:35 | `166bd617` | E6, volet cout : ce qu'un format creux lirait, variant par variant |
+| 00:48 | `d3a1ee81` | E6 : le controle TRANCHE — ce sont les SIGNES FIGES (Dale) qui portent la robustesse, pas la loi log-normale |
+| 01:12 | `53ed6277` | E6, plan 2x2 complet : c'est la CONTRAINTE DE SIGNE qui fait tout — et la loi log-normale NUIT |
+| 01:27 | `58ecf217` | E6 : le resultat tient sur TROIS graines (dense 46,6-55,5 contre signes figes 7,95-8,27 a 25 % gardes) |
+| 01:37 | `63cf920d` | Porte « signes figes » : la seule recette du depot qui rende l'elagage indolore, et elle se verrouille |
+| 01:38 | `3a02191d` | Etat : 31 portes, la porte des signes figes est nommee avec son rouge |
+| 01:40 | `38a6ca01` | Biologie : E6 tranchee dans la roadmap — c'est Dale, et la loi log-normale nuit (le soupcon de la veille etait un artefact) |
+| 01:47 | `5a5cec19` | BUG TROUVE ET CORRIGE : les poids reparametres n'etaient PLUS elagues du tout (l'attention restait intacte) |
+| 01:49 | `fb9f6d2c` | E6 : les chiffres des trois variantes parametrees sont marques EN RE-MESURE (le bug d'elagage les avait mesures sous un elagage plus leger) |
+| 02:19 | `fbbad1b9` | BUG BEAUCOUP PLUS GRAVE TROUVE : l'inverse etait applique DEUX FOIS a l'installation — le modele log-normal partait avec des poids de ±12 |
+| 02:52 | `f506e0e7` | Porte « invariants du harnais » : elle remplace une porte qui mesurait un artefact |
+| 02:54 | `5de4a929` | E6 : chiffres RETRACTES puis corriges (la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent) — dessin B et etat alignes |
+| 02:56 | `efec2b63` | Biologie : E6 corrigee dans la roadmap — la loi log-normale coute, la contrainte de signe n'a pas d'effet coherent, trois chiffres retires |
+| 03:20 | `150fd5db` | Audit des drapeaux du harnais : deux defauts de plus, et une porte qui les surveille |
+| 03:21 | `712df7eb` | Etat : 32 portes, et E1 marque « portait sur l'attention seule » (le masque ne couvrait que 5,8 % des poids) |
+| 03:23 | `ca2208b4` | Etat : E2 aussi portait sur l'attention seule (masque 5,8 % + gradient lu au mauvais endroit) |
+| 03:42 | `97c4b475` | E1 et E2 re-mesures avec un masque qui couvre tout le modele : le connectome coute 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard |
+| 03:43 | `caefb763` | Biologie : E1 et E2 corrigees dans la roadmap (connectome +9,4 %, croissance non pire que le hasard) |
+| 03:45 | `9644c161` | E1 : le volet cout est chiffre (÷4,3 lectures pour +9,4 % · ÷7,9 pour +18,4 %) — le compromis existe, il n'est pas gratuit |
+| 03:56 | `c50fbe14` | M9, seconde moitie LIVREE : le moteur annonce l'occupation des poids, et ce qu'un format creux lirait |
+| 03:57 | `0ab6789b` | M9 livre dans le registre des manques, et 33 portes dans l'etat |
+| 04:03 | `c2c97ecc` | M9, seconde moitie : la variable d'environnement est DECLAREE (le test du depot l'exige) |
+| 04:23 | `3e5d9c19` | Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la sparsite, et il est plus LENT |
+| 04:24 | `d3a0e921` | Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse) |
+| 04:41 | `bfbc26fc` | Le noyau creux couvre maintenant TOUT le modele : divise par 3,8 les paires, et 36 % plus LENT |
+| 04:42 | `b9772404` | Fiche B : le noyau creux couvre les experts (divise par 3,8 les paires) et reste 36 % plus lent — le prochain pas est un noyau, pas un modele |
+| 04:57 | `2fa0105a` | Dessin B : le noyau creux ne rattrape le dense qu'a 10 % de poids gardes — un regime ou le modele est detruit (x41 000). A 25 %, deux fois plus lent malgre divise par 3,8 de paires |
+| 04:58 | `45649fe8` | Etat : 34 portes (et non 35), la porte du noyau creux nommee avec son rouge |
+| 04:59 | `c5cd3f93` | Registre : M9 livre en entier, et le fait desagreable ecrit (le noyau creux ne paie qu'a 10 %, ou le modele est mort) |
+| 05:01 | `d7dada51` | Roadmap : le dessin B porte son etat mesure (le noyau existe, il paie les paires, et il ne paie le temps qu'a 10 %) |
+| 05:10 | `e275dd7c` | Coherence : les trois passages qui portaient encore « 1 % » et « divise par 7,9 » sans reserve sont marques (le chiffre decrivait 5,8 % du modele) |
+| 05:22 | `149a0ff9` | Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere) |
+| 05:38 | `7ba80147` | Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'elle ne rapporte |
+| 06:30 | `c5fd1747` | Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal |
+| 06:31 | `a409bdea` | Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact |
+| 08:11 | `22d9919c` | Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+<!-- /notes -->

@@ -1,0 +1,28 @@
+# 2026-10-28 — Mémoire épisodique, consolidation, greffe
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (2)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 12:34 | `d199ce16` | N0.3b — PPL DRVM EN MÉMOIRE : 28,7355 SANS FICHIER GGUF TEMPORAIRE | `en-cours.md`, `roadmap-native.md`, `drvm.rs` (+9) |
+| 13:03 | `628ddd64` | MÉTHODE — CYCLES DSH 1000, SOUS-AGENTS INTENSIFS, EN-COURS SOUS CONTRÔLE (56 DOCS) | `AGENTS.md`, `REPRISE.md`, `README.md` (+14) |
+
+## Chiffres du jour
+
+`28,7355`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-drvm-ppl.md](../../reports/rapport-drvm-ppl.md)
+
+<!-- notes -->
+
+<!-- /notes -->

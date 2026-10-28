@@ -1,5 +1,7 @@
 # Session c776b71f — Tu es relecteur ADVERSARIAL de
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `c776b71f-525a-4bad-b83c-eff1c2d204ff` |

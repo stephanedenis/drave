@@ -1,0 +1,29 @@
+# 2026-10-18 — Modèles, entraînement, parcimonie, biologie
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-18/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:19 | `7626171f` | MESURES 44-45 : la grille corrige la lecture de la traduction (14,4 % sur 40 langues stratifiées, pas 96 %), et le petit modèle en octets n'aligne que les langues proches (romanes 57-87 %, lointaines 0-10 %) | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-18/README.md` (+4) |
+| 01:41 | `6288927a` | JOURNAL du 18/10, paragraphes 45-48 : la grille qui corrige la traduction (14,4 % sur 40 langues stratifiees, 6,50 % dans un vivier de 1 200 etats), le petit modele qui n'aligne que les langues proches, la restitution qui existe pour un modele specialise (85,1 %) et meurt entre 1 et 10 langues, et le second couple de traducteurs | `2026-10-18/README.md`, `2026-10-18/mesures.md`, `README.md` (+1) |
+| 01:57 | `61683757` | JOURNAL 18/10, paragraphe 49 : la correction statistique du test groupe (le hasard est 1/30, pas 1/(N x 30) : 2x et 3,5x le hasard) et la grille a 100 langues (16,3 % de moyenne, classement stable, la traduction depend du modele et non de la methode) | `2026-10-18/README.md`, `2026-10-18/memoire.md`, `THEMES.md` |
+| 17:19 | `8227085b` | MESURE 50 — LA QUALITE DE TRADUCTEUR : LE PETIT MODELE NE TRADUIT PAS ENCORE (domaine juridique). Banc chrF contre traduction humaine : fra->eng 38,3 (+7,4 au-dessus du plancher « ne rien traduire »), fra->deu 26,9 (+8,4), mais eng->fra 20,9 et fra->spa 29,8 sont SOUS le plancher (29,2 et 36,4), et fra->cmn 0,8 (quasi nul) | `en-cours.md`, `2026-10-18/README.md`, `2026-10-18/mesures.md` (+3) |
+| 17:25 | `18d6a355` | EN-COURS DEVIENT UN TABLEAU DE BORD : graphe de dependances des sept chantiers, et pour chacun les sous-chantiers independants a paralleliser (C5.1 banc juridique fait, C5.2 litteraire, C5.3 modele plus grand, C5.4 technique, C5.5 quotidien, C2.1 genealogie par domaine, C4.1 styles a epoque controlee, C3.1 restitution par famille, C1.1 familles manquantes) | `en-cours.md`, `2026-10-18/README.md`, `2026-10-18/modele.md` |
+
+## Chiffres du jour
+
+`16,3 %` · `14,4 %` · `6,50 %` · `85,1 %` · `96 %` · `-87 %` · `-10 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
+
+<!-- notes -->
+
+<!-- /notes -->

@@ -1,5 +1,7 @@
 # Session da69b1fa — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `da69b1fa-91b0-4c69-bb2b-58bf00e92e28` |

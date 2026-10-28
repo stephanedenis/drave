@@ -1,5 +1,7 @@
 # Session 15fd322f — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `15fd322f-7e9e-48c0-a970-f36335eb622a` |

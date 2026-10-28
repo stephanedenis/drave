@@ -1,5 +1,7 @@
 # Session bcfe0b97 — Tu es relecteur ADVERSARIAL dans
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `bcfe0b97-1795-4610-8e8b-b598ca1ba6cb` |

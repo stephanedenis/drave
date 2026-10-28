@@ -1,5 +1,7 @@
 # Session 13446299 — Tu es relecteur ADVERSARIAL autonome
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `13446299-79d8-497c-ba83-673c176a4637` |

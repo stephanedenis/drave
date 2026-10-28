@@ -1,5 +1,7 @@
 # Session 48ec07ab — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `48ec07ab-ec9d-4297-a7bf-d84974667e61` |

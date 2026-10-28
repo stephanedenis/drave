@@ -1,5 +1,7 @@
 # Session bbd6969f — Continue avec REPRISE.md
 
+> **Journaux :** [le jour](../../2026-09-28/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `bbd6969f-0f70-42b2-8951-64d1f2f36d2e` |

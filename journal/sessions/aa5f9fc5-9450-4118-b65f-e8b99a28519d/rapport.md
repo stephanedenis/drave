@@ -1,5 +1,7 @@
 # Session aa5f9fc5 — Tu es vérificateur de documentation
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `aa5f9fc5-9450-4118-b65f-e8b99a28519d` |

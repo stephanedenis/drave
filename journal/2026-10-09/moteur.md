@@ -1,0 +1,55 @@
+# 2026-10-09 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-09/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (4)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 05:47 | `e473968` | Les correctifs du moteur sont promus : 77 tests verts, Codestral à 8 jetons, porte rejouée | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 06:36 | `f9d94ba` | Le débit de lecture réel : 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 23:20 | `00b021f` | C9/C10 pas 1 : le pont à fibres limitées — combien de fibres, et à quel prix | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+4) |
+| 23:39 | `f8ac10e` | C8 pas 1 : le réflexe — un chemin court qui ne sait RIEN, et la cause mesurée | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+4) |
+
+## Chiffres du jour
+
+`8,6 Mo` · `243 Mo` · `8 jetons` · `8 Mo`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (14)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:07** — Deux nouveaux résultats, et un troisième bug du moteur corrigé
+- **00:11** — Préparation d'une mesure spéculative moteur : petit brouillon, grande cible
+- **00:12** — Écriture d'un outil de mesure spéculative par le moteur (ids générés, pas de re-tokenisation)
+- **00:16** — Vérification critique : le chemin « listes » reproduit-il exactement le chemin dense ?
+- **02:41** — Validation : les experts en Q8 donnent-ils enfin des événements au chemin par listes ?
+- **02:41** — Le moteur refuse les experts Q8 — j'examine le chargeur d'experts pour l'ouvrir
+- **02:42** — Le moteur refuse les experts Q8 : je consigne le manque et réoriente la chaîne de nuit
+- **05:36** — Le moteur refuse le lot sur V4.1 (hyper-connexions) — un refus explicite, consigné
+- **06:36** — Découverte : le streaming mmap donne 8 Mo/s sur disque dur contre 243 Mo/s en séquentiel
+- **09:52** — Contradiction à instruire : +2× de pas améliore la validation mais dégrade le moteur
+- **13:24** — Rédaction : l'architecture du cerveau et ce qui manque à Drave comme moteur
+- **13:25** — Étude livrée : l'édifice cérébral face aux primitives du moteur
+- **13:49** — Question GPU : je vérifie d'abord ce que le moteur offre comme noyaux
+- **14:53** — Mesure du gain de parallélisme de compilation : profil actuel contre profil parallèle
+
+## Sessions (titres de tour)
+
+- `d31b3d9b` — Tour 8 — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste t… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+
+## Sessions actives ce jour
+
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
+
+<!-- notes -->
+` … `
+<!-- /notes -->

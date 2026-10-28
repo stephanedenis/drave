@@ -1,5 +1,7 @@
 # Session 6d0c1d28 — Tu es relecteur ADVERSARIAL de
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `6d0c1d28-76e1-42f8-9e8c-7f88395f9e55` |

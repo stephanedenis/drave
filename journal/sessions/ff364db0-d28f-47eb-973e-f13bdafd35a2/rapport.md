@@ -1,5 +1,7 @@
 # Session ff364db0 — Relecture ADVERSARIALE de clôture, dans
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `ff364db0-d28f-47eb-973e-f13bdafd35a2` |

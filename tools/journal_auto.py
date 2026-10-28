@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""journal_auto.py — le journal quotidien, ÉCRIT PAR JOUR ET PAR THÈME, à partir de git et des sessions.
+"""journal_auto.py — le journal quotidien, ÉCRIT PAR JOUR (UN DOSSIER) ET PAR THÈME, à partir de git et des sessions.
 
 POURQUOI. Le journal doit consigner les **événements datés** (voir
 `docs/organisation-du-depot.md`), et une journée de ce dépôt est trop riche pour un seul
 fichier : un jour touche le moteur, les protocoles, les mesures, les portes et la
 documentation. D'où le découpage **`<AAAA-MM-JJ>_<thème>.md`** : on lit la journée d'un thème,
 et on suit un thème **d'un jour à l'autre** (le nom commence par la date, le thème suit —
-`ls journal/2026-10-1*_attention.md`).
+`ls journal/2026-10-1*/attention.md`).
 
 SOURCES, et rien d'autre :
   1. **git** — les commits du jour (heure d'auteur, en heure locale de la machine) et les
@@ -281,6 +281,8 @@ def ecrire(chemin: Path, contenu: str, dry: bool, journal: list[str]) -> None:
 
 
 def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | None = None) -> int:
+    dossier = JOURNAL / jour
+    dossier.mkdir(parents=True, exist_ok=True)
     commits = git_commits(jour)
     sessions = sessions_du_jour(jour)
     par_theme: dict[str, list[dict]] = {}
@@ -305,7 +307,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
             "> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).",
             "> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.",
             "> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : "
-            f"[{jour}.md]({jour}.md). Convention : `docs/organisation-du-depot.md`.", "",
+            "[README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.", "",
             f"## Commits du jour ({len(cs)})", "",
         ]
         if cs:
@@ -340,7 +342,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
             lignes += ["## Sessions (titres de tour)", ""]
             for sid, t in tours[th][:plafond]:
                 lignes.append(f"- `{sid}` — {t} → "
-                              f"[rapport complet](sessions/{sid}/rapport.md)")
+                              f"[rapport complet](../sessions/{sid}/rapport.md)")
             reste = len(tours[th]) - plafond
             if reste > 0:
                 lignes.append(f"- *(+{reste} autres tours — le détail est dans le rapport de "
@@ -351,37 +353,40 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
             for s in sessions:
                 lignes.append(f"- `{s['id']}` — {s['titre']} (début {s['debut']}, "
                               f"{s['duree']:.1f} h) → "
-                              f"[rapport](sessions/{s['id']}/rapport.md) · "
-                              f"[digest](sessions/{s['id']}/digest.md)")
+                              f"[rapport](../sessions/{s['id']}/rapport.md) · "
+                              f"[digest](../sessions/{s['id']}/digest.md)")
             lignes.append("")
         # les fiches de reports touchées ce jour-là : le lien vers la MESURE
         fiches = sorted({f for c in cs for f in c["fichiers"]
                          if f.startswith("reports/") and f.endswith(".md")})
         if fiches:
             lignes += ["## Mesures et rapports touchés", ""]
-            lignes += [f"- [{f}](../{f})" for f in fiches] + [""]
-        nom = JOURNAL / f"{jour}_{th}.md"
+            lignes += [f"- [{f}](../../{f})" for f in fiches] + [""]
+        nom = dossier / f"{th}.md"
         notes = lire_notes(nom)
         lignes += [NOTES_DEB, notes, NOTES_FIN, ""]
         ecrire(nom, "\n".join(lignes), dry, trace)
-        fichiers_theme.append((th, len(cs), f"{jour}_{th}.md"))
+        fichiers_theme.append((th, len(cs), f"{th}.md"))
 
     # NETTOYAGE : un fichier de thème qui n'est plus produit doit disparaître, sinon le journal
     # garde un thème vide après un reclassement (et « l'évolution » montre des journées fantômes).
     connus = {s_[0] for s_ in THEMES} | {THEME_DEFAUT[0]}
     produits = {th for th, _, _ in fichiers_theme}
-    for vieux in JOURNAL.glob(f"{jour}_*.md"):
-        th_vieux = vieux.stem[len(jour) + 1:]
+    for vieux in dossier.glob("*.md"):
+        if vieux.name == "README.md":
+            continue
+        th_vieux = vieux.stem
         if th_vieux in connus and th_vieux not in produits and not dry:
             vieux.unlink()
             trace.append(f"  (retiré, thème vide) {vieux.relative_to(RACINE)}")
 
-    # l'index du jour
+    # l'index du jour, DANS le dossier du jour
     lignes = [
         f"# {jour}", "",
-        "> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**",
-        "> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est",
-        "> conservé plus bas, dans le bloc « notes » (marqueurs HTML).", "",
+        "> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier",
+        f"> [`journal/{jour}/`](README.md). Le récit écrit à la main est conservé plus bas, dans",
+        "> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·",
+        "> [l'index des sessions](../README.md#sessions).", "",
         f"**{len(commits)} commits** · **{len(sessions)} session(s)** · "
         f"**{len(themes)} thème(s)**", "",
         "## Thèmes du jour", "", "| thème | commits | fichier |", "|---|---|---|",
@@ -389,14 +394,23 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
     for th, n, nom in fichiers_theme:
         lignes.append(f"| {th} | {n} | [{nom}]({nom}) |")
     lignes.append("")
+    noms_themes = {th for th, _, _ in fichiers_theme}
+    extras = sorted(p.name for p in dossier.glob("*.md")
+                    if p.name != "README.md" and p.stem not in noms_themes)
+    if extras:
+        lignes += ["## Autres pièces du jour", "",
+                   " · ".join(f"[{e}]({e})" for e in extras), ""]
+    lignes += ["## Sessions DSH", ""]
     if sessions:
-        lignes += ["## Sessions du jour", "",
-                   "| session | titre | début | durée | liens |", "|---|---|---|---|---|"]
+        lignes += ["| session | titre | début | durée | liens |", "|---|---|---|---|---|"]
         for s_ in sessions:
             lignes.append(f"| `{s_['id']}` | {s_['titre']} | {s_['debut']} | "
-                          f"{s_['duree']:.1f} h | [rapport](sessions/{s_['id']}/rapport.md) · "
-                          f"[digest](sessions/{s_['id']}/digest.md) |")
-        lignes.append("")
+                          f"{s_['duree']:.1f} h | [rapport](../sessions/{s_['id']}/rapport.md) · "
+                          f"[digest](../sessions/{s_['id']}/digest.md) |")
+    else:
+        lignes += ["Aucune session indexée pour ce jour ; voir",
+                   "[l'index des sessions](../README.md#sessions)."]
+    lignes.append("")
     if commits:
         lignes += ["## Tous les commits (heure réelle)", "", "| heure | commit | fait |",
                    "|---|---|---|"]
@@ -407,7 +421,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
     # (et modifiable) sans lire le script
     table = ["# Thèmes du journal", "",
              "> Généré par `tools/journal_auto.py` — c'est la **règle de classement** des fichiers",
-             "> `journal/AAAA-MM-JJ_<thème>.md`. Un commit (ou une étape de session) est classé par",
+             "> `journal/AAAA-MM-JJ/<thème>.md`. Un commit (ou une étape de session) est classé par",
              "> le **premier** thème dont un mot-clé apparaît dans son texte ; à défaut, par les",
              "> **chemins** touchés ; à défaut, en `divers`. Pour changer le classement, éditer la",
              "> table `THEMES` du script et relancer : rien d'autre n'est à toucher.", "",
@@ -421,7 +435,7 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
               "possible (`ls journal/*_<thème>.md`).", ""]
     tous = [s_ for s_, _, _, _ in THEMES] + [THEME_DEFAUT[0]]
     for slug in tous:
-        jours_theme = sorted(JOURNAL.glob(f"*_{slug}.md"))
+        jours_theme = sorted(JOURNAL.glob(f"*/{slug}.md"))
         if not jours_theme:
             continue
         table += [f"### `{slug}` — {titre_theme(slug)}", "",
@@ -430,14 +444,14 @@ def generer_jour(jour: str, dry: bool, trace: list[str], themes_ecrits: list | N
             t = f.read_text(encoding="utf-8")
             m = re.search(r"## Chiffres du jour\n\n(.*)", t)
             chiffres = m.group(1).strip() if m else "—"
-            table.append(f"| [{f.stem[:10]}]({f.name}) | {chiffres[:160]} |")
+            table.append(f"| [{f.parent.name}]({f.parent.name}/{f.name}) | {chiffres[:160]} |")
         table.append("")
     if themes_ecrits is not None and "themes" not in themes_ecrits:
         themes_ecrits.append("themes")
         ecrire(JOURNAL / "THEMES.md", "\n".join(table), dry, trace)
-    notes = lire_notes(JOURNAL / f"{jour}.md")
+    notes = lire_notes(dossier / "README.md")
     lignes += ["## Le récit de la journée (écrit à la main)", "", NOTES_DEB, notes, NOTES_FIN, ""]
-    ecrire(JOURNAL / f"{jour}.md", "\n".join(lignes), dry, trace)
+    ecrire(dossier / "README.md", "\n".join(lignes), dry, trace)
     return len(commits)
 
 

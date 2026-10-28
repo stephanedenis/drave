@@ -1,5 +1,7 @@
 # Session 11b2d312 — Tu es relecteur ADVERSARIAL autonome
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `11b2d312-9a7e-4a4e-814f-ed0384ed9d4d` |

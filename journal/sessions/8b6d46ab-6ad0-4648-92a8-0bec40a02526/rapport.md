@@ -1,5 +1,7 @@
 # Session 8b6d46ab — Tu dois LIRE TOUT le
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8b6d46ab-6ad0-4648-92a8-0bec40a02526` |

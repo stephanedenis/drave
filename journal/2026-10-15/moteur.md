@@ -1,0 +1,35 @@
+# 2026-10-15 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (9)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 02:19 | `ec3130b1` | Deux specialistes FORTS ne s'additionnent pas : la fusion par somme donne MOINS que chacun sur m32 (-4,0 % contre -7,4 % et -8,7 %) | `2026-10-15/README.md`, `2026-10-15/attention.md`, `THEMES.md` (+1) |
+| 03:55 | `827ebf40` | Le MOTEUR confirme le point optimal du balayage : rang 4 exporte et relu par drave donne -7,47 % sur m32 et -16,11 % sur m20 (le harnais disait -7,63 % et -15,93 %) | `2026-10-15/README.md`, `2026-10-15/memoire.md`, `THEMES.md` (+1) |
+| 09:27 | `94c2f57d` | CORRECTION : c'est la REFERENCE qui explose a sa derniere couche (x71,7) — l'ecart de la tour de vision n'est donc PAS attribuable au moteur, et l'etat honnete est « non verifie », pas « faux » | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 09:37 | `509fae6f` | La comparaison COUCHE PAR COUCHE trouve un vrai bug de la tour de vision : les BIAIS des LayerNorm etaient ignores — cosinus de la couche 0 de -0,50 a +0,69, normes de 3,2x a ~10 % | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 12:47 | `2242443a` | La cause principale de l'ecart de la tour est trouvee, et ce n'est PAS le moteur : le noyau de patchs du mmproj ne porte qu'UNE des deux tranches temporelles du Conv3d | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 12:59 | `9ca449b3` | Le noyau repare : l'embedding devient EXACT (0,00 % sur 256 patchs) et la couche 0 atteint cosinus +0,9972 — l'ecart croit ensuite avec la profondeur, signature de la quantification | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 13:43 | `f22ce5f2` | L'image naturelle ne sauve PAS la comparaison : l'explosion etait propre a l'image (33 273 contre 249) mais l'ecart entre implementations croit quand meme avec la profondeur — mon hypothese etait a moitie fausse | `en-cours.md`, `main.rs`, `2026-10-15/README.md` (+3) |
+| 16:18 | `d67bf6d3` | Le projecteur de la vision : l'ecart de 66,6 % reste INEXPLIQUE, et mon premier « correctif » etait FAUX — le panic l'a prouve | `en-cours.md`, `main.rs`, `2026-10-15/README.md` (+4) |
+| 18:19 | `97c7fbe1` | LE PROJECTEUR EST VERIFIE (cosinus +0,99997509, ecart 0,71 % = la quantification) — et l'ecart de 66,6 % venait de MA comparaison | `en-cours.md`, `main.rs`, `2026-10-15/README.md` (+4) |
+
+## Chiffres du jour
+
+`0,71 %` · `66,6 %` · `0,00 %` · `0,9972` · `10 %` · `-7,47 %` · `-16,11 %` · `-7,63 %` · `-15,93 %` · `-4,0 %` · `-7,4 %` · `-8,7 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-consolidation-balayage.md](../reports/rapport-consolidation-balayage.md)
+- [reports/rapport-consolidation-structure-partagee.md](../reports/rapport-consolidation-structure-partagee.md)
+- [reports/rapport-vision-qwen2vl.md](../reports/rapport-vision-qwen2vl.md)
+
+<!-- notes -->
+
+<!-- /notes -->

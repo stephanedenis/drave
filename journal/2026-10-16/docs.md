@@ -1,0 +1,32 @@
+# 2026-10-16 — Documentation, état, conventions
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (8)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 02:52 | `96610b7b` | Etat du cerveau : un sommaire « ou regarder, en cinq lignes » en tete (le fichier a beaucoup grandi cette nuit) | `etat-cerveau.md`, `2026-10-16/README.md`, `2026-10-16/attention.md` |
+| 03:26 | `1081b23f` | Page vivante : l'avertissement « source different du binaire » est LEVE (le binaire a ete reconstruit depuis) et « ce qui reste » dit l'etat reel du mRoPE (cadre en quatre pas, TROIS faits) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+1) |
+| 13:06 | `4348eef5` | Journal du 16/10 : regeneration automatique apres le commit de l'outil de pensee silencieuse | `2026-10-16/README.md`, `2026-10-16/mesures.md` |
+| 14:05 | `c661bc18` | UTILISER DRAVE : le point d'entree qui manquait (tools/chat.py) et le document qui dit ce qui marche et ce qui manque (docs/utilisation.md) | `en-cours.md`, `utilisation.md`, `2026-10-16/README.md` (+2) |
+| 14:30 | `a6e4d85a` | mdserve est de retour (127.0.0.1:8771, service systemd) et les DEUX serveurs sont maintenant documentes — ils ne servent pas la meme chose | `en-cours.md`, `utilisation.md`, `2026-10-16/README.md` (+2) |
+| 22:10 | `4a43091f` | L'EMPREINTE EST LOCALE : nette a un jeton (couche 23, k=1 : 49,3 % contre 76,9 % en lecture, soit 27,6 points, REPRODUIT) et NULLE des k=4 (le vrai alignement rejoint la contre-epreuve, stable a 88 %) — copier CONCENTRE l'etat sur le jeton emis, lire garde le champ large | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/portes.md` (+3) |
+| 22:22 | `0334abf2` | L'ITERATION EST IMPOSSIBLE SUR CET ETAT : en demandant a l'operateur d'etre bon APRES k pas (k tire entre 1 et 8), l'optimisation trouve L'IDENTITE (87,0 % a 1, 2 et 4 pas, 86,9 a 8 — exactement la baseline) — la seule maniere de rester bon a 8 pas est de NE RIEN FAIRE | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/mesures.md` (+3) |
+| 22:26 | `2da484bf` | LE BLOC REPETE : l'etat devient PLUS habitable (82,9 contre 85,7 a t=1; 86,7 contre 87,1 a t=4 — l'ecart tombe de 2,8 a 0,4 point) mais pas encore habitable — et quatreieme lecon d'instrument de la soiree | `2026-10-16/README.md`, `2026-10-16/docs.md`, `THEMES.md` (+3) |
+
+## Chiffres du jour
+
+`87,0 %` · `49,3 %` · `76,9 %` · `88 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-modele-drave.md](../reports/rapport-modele-drave.md)
+
+<!-- notes -->
+
+<!-- /notes -->

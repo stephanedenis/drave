@@ -1,0 +1,45 @@
+# 2026-10-26 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-26/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (17)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 11:57 | `b79feb93` | B9 — SEUIL DE CAPACITÉ : À 4,04 M LE CONTRÔLE GAGNE (2,7510 CONTRE 2,7709), À 22,54 M L'ALIGNÉ GAGNE 3/3 (2,6915 CONTRE 2,7393, 1,74 %) | `AGENTS.md`, `README.md`, `README.md` (+13) |
+| 12:33 | `fa1f6beb` | B9 — SEUIL LOCALISÉ ENTRE 4,04 M ET 10,70 M ; POSITIF 3/3 À 10,70 / 16,02 / 22,54 M ; PERTE MASQUÉE NON CONCLUANTE | `AGENTS.md`, `README.md`, `README.md` (+18) |
+| 13:28 | `ee4a6fb6` | B9 — TRANSITION 9,23–9,96 M : 4,04 M NÉGATIF, 9,23 M TRANSITOIRE, 9,96 M PREMIER 3/3 ; MASQUE CALIBRÉ QUASI ÉGAL (0,02 % / 0,15 %) | `AGENTS.md`, `README.md`, `README.md` (+13) |
+| 13:33 | `855f842a` | B9 — 26,99 M : ALIGNÉ 2,6796 CONTRE MÉLANGÉ 2,7606, 3/3, 2,93 % — LE MEILLEUR ÉCART | `AGENTS.md`, `README.md`, `en-cours.md` (+8) |
+| 13:45 | `e74c4d21` | B9 — 31,63 M : 500 PAS NE PAIENT PAS (0,27 %, 2/3), 1 000 PAS 1,41 % (3/3) ; LE 27 M RESTE LE MEILLEUR RELATIF | `AGENTS.md`, `README.md`, `en-cours.md` (+8) |
+| 14:50 | `bded4ab3` | B9 — 610 EXEMPLES, 20 LANGUES : 27 M ALIGNÉ 2,9611 CONTRE 3,0751, 3/3, 3,71 % ; L'ÉCART RELATIF CROÎT | `AGENTS.md`, `README.md`, `ressources.md` (+8) |
+| 14:58 | `cf3dc896` | B9 — 610 EXEMPLES À 1 000 PAS : LE CONTRÔLE REPASSE (2,7443 CONTRE 2,7577, +0,49 %) ; L'EFFET 500 PAS EST TRANSITOIRE | `AGENTS.md`, `README.md`, `en-cours.md` (+8) |
+| 15:12 | `2371e9b0` | B9 — 910 EXEMPLES, 30 LANGUES : LE CONTRÔLE REPASSE (3,1548 CONTRE 3,1620, +0,23 %) ; L'EFFET SE DILUE | `AGENTS.md`, `README.md`, `en-cours.md` (+8) |
+| 16:07 | `4ab50c03` | B9 — 31,63 M / 610 EXEMPLES : 4,40 % (3/3), MEILLEUR ÉCART ; LA CAPACITÉ NE PAIE QU'AVEC LES DONNÉES | `AGENTS.md`, `README.md`, `en-cours.md` (+9) |
+| 21:34 | `a9a3d22e` | B10 — ABLATIONS : z 512 ET PRÉFIXE 64 N'AIDENT PAS ; LE DÉCODEUR UTILISE z MAIS z EST UN CODE D'IDENTITÉ (12,9 CONTRE 39,6) | `en-cours.md`, `protocole-semantique.md`, `roadmap.md` (+5) |
+| 21:56 | `d59e94c2` | B10 — CORRECTION DE MESURE : CHRF SUR RÉFÉRENCE TRONQUÉE (14,0 / 5,4 CONTRE 38,8) ; VERDICT INCHANGÉ ; SEGMENTS NÉGATIFS | `en-cours.md`, `roadmap.md`, `2026-10-26/README.md` (+8) |
+| 22:28 | `325c1dec` | B11 — BASE D'UNIVERSAUX TYPÉS : CODEC 100 % (79/79, 449/449), PARSEUR NATIF TYPÉ SURAPPREND (48,3 % TRAIN / 0 % VAL) | `carte.md`, `en-cours.md`, `protocole-semantique.md` (+14) |
+| 22:43 | `0584fd74` | B11 — COHÉRENCE INTER-LANGUES : CONSISTANCE 38,3 % (INVARIANCE 0) ET ADVERSAIRE 39,6 % (0), DEUX NÉGATIFS ; LE BASELINE SYNTHÉTIQUE RESTE À 45,1 % | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
+| 22:49 | `bb94843f` | B11.5 — NORMALISATION LEXICALE : 55,7 % DE CODE EXACT ET 37,0 % D'INVARIANCE (CONTRE 45,1 / 7,4), LE CODEC RESTE À 100 % | `carte.md`, `en-cours.md`, `roadmap.md` (+10) |
+| 23:00 | `38c3d880` | B11.7 — CONTEXTE SUFFIXÉ : 59,8 % DE CODE EXACT ET 40,7 % D'INVARIANCE ; PRÉFIXE 0,4 / 88,9 (COLLAPSE) | `carte.md`, `en-cours.md`, `roadmap.md` (+12) |
+| 23:08 | `532ddd07` | B11.8 — CONTEXTE SÉPARÉ : 59,1 % / 40,7 %, AUCUN GAIN SUR LE SUFFIXE (59,8 / 40,7) ; LE VERROU EST AILLEURS | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
+| 23:10 | `386e59d5` | B11.9 — RESTITUTION CANONIQUE : 79/79 ET 449/449 ALLER-RETOUR RSN EXACT (100 %), SANS DÉCODEUR NEURONAL | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
+
+## Chiffres du jour
+
+`100 %` · `59,1 %` · `40,7 %` · `59,8 %` · `55,7 %` · `37,0 %` · `38,3 %` · `39,6 %` · `45,1 %` · `48,3 %` · `0 %` · `4,40 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/README.md](../reports/README.md)
+- [reports/rapport-deepseek.md](../reports/rapport-deepseek.md)
+- [reports/rapport-restitution.md](../reports/rapport-restitution.md)
+- [reports/rapport-semantique.md](../reports/rapport-semantique.md)
+- [reports/rapport-universaux.md](../reports/rapport-universaux.md)
+
+<!-- notes -->
+
+<!-- /notes -->

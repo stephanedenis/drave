@@ -1,5 +1,7 @@
 # Session 1966e052 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445` |

@@ -1,0 +1,28 @@
+# 2026-10-15 — Outils et harnais
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (3)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 06:06 | `2b6176de` | Le harnais n'est PAS reproductible a graine egale : 0,4 point d'ecart entre deux executions identiques (meme graine, meme epoque retenue) — ce qui RECALIBRE toutes les conclusions de la nuit | `2026-10-15/README.md`, `2026-10-15/modele.md`, `README.md` (+3) |
+| 06:17 | `41fde4e4` | Balayage REFAIT avec le harnais exact : rang 4 toujours le meilleur (-7,92 %), l'ordre 4 > 2 > 8 > 16 > 32 est confirme et les valeurs ont bouge jusqu'a 0,5 point (ce que le defaut coutait) | `2026-10-15/README.md`, `2026-10-15/mesures.md`, `rapport-consolidation-balayage.md` |
+| 07:52 | `b8bb1759` | La GRILLE rang x pas (9 points, harnais exact) explique la non-composition : le pas optimal DEPEND du rang (1e-3 a rang 4, 3e-4 a rangs 2 et 8) — les deux optima a une dimension etaient pris sur deux tranches differentes | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/portes.md` (+1) |
+
+## Chiffres du jour
+
+`-7,92 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-consolidation-balayage.md](../reports/rapport-consolidation-balayage.md)
+- [reports/rapport-sommeil-selection.md](../reports/rapport-sommeil-selection.md)
+
+<!-- notes -->
+
+<!-- /notes -->

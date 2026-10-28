@@ -1,0 +1,428 @@
+# 2026-10-15
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**76 commits** · **0 session(s)** · **10 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 1 | [2026-10-15/apprentissage.md](apprentissage.md) |
+| attention | 4 | [2026-10-15/attention.md](attention.md) |
+| distribue | 1 | [2026-10-15/distribue.md](distribue.md) |
+| docs | 7 | [2026-10-15/docs.md](docs.md) |
+| memoire | 9 | [2026-10-15/memoire.md](memoire.md) |
+| mesures | 16 | [2026-10-15/mesures.md](mesures.md) |
+| modele | 15 | [2026-10-15/modele.md](modele.md) |
+| moteur | 9 | [2026-10-15/moteur.md](moteur.md) |
+| outils | 3 | [2026-10-15/outils.md](outils.md) |
+| portes | 11 | [2026-10-15/portes.md](portes.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:00 | `33a07378` | La BOUCLE DU CERVEAU en une commande : percevoir -> retenir -> se souvenir -> consolider -> agir, chaque maillon mesure par le moteur |
+| 00:05 | `bf6f86ba` | Deux nuits, deux experiences : la premiere garde son gain (-7,85 % sur m32), la seconde n'ajoute presque rien (-0,30 %) — et rien n'est oublie |
+| 01:41 | `4123006b` | Le budget d'attention a-t-il une bonne taille par texte ? Le cout de la moitie varie de x180, un budget uniforme CASSE la tolerance sur 5 textes sur 8, et la politique par texte la tient pour -14,1 % de cles |
+| 01:42 | `db89e8be` | Le budget d'une DECISION : la profondeur est le seul levier lineaire (357,8 -> 119,3 -> 59,6 M paires pour 24/8/4 couches), et la fenetre d'attention ne deplace PAS cette metrique — deux monnaies, le plan n'en comptait qu'une |
+| 01:46 | `b4a31314` | La PROXIMITE temporelle du rejeu ne compte pas non plus : rejouer les vingt morceaux qui precedent immediatement le texte mesure (m12..m31 contre m32) donne -10,71 % contre -9,98 % pour les vingt premiers — 0,7 point, dans le bruit |
+| 02:08 | `bf80a0fd` | Ce qui se consolide est la STRUCTURE PARTAGEE : meme memorisation (-22,5 %) mais transfert -7,4 % (wikitext) contre +1,2 % (corpus_en) — et la fusion de deux experiences garde le gain du fort, accumule les couts du faible |
+| 02:10 | `e3fb38c4` | Aucun signal BON MARCHE ne predit la sensibilite au budget d'attention (correlations -0,019 et +0,096 sur huit textes) : la politique par texte exige DEUX passes, donc 2x le calcul pour -14,1 % de cles |
+| 02:19 | `ec3130b1` | Deux specialistes FORTS ne s'additionnent pas : la fusion par somme donne MOINS que chacun sur m32 (-4,0 % contre -7,4 % et -8,7 %) |
+| 02:22 | `87b6d5d0` | Le point fixe « au sens fort » est le PIRE des quatre objectifs de cycle : rejoindre l'etat du maitre donne 35,28 -> 70,67 -> 221,64 -> 789,73 (la boucle diverge encore, et elle sacrifie la prediction) |
+| 02:27 | `9e327ad3` | L'HABITUATION (soustraire le passe) n'apporte RIEN : le reseau calcule deja la difference (+0,921 avec le tampon brut contre +0,817 avec le gain negatif) |
+| 02:29 | `81808b32` | L'hypothese « corpus_en est heterogene » est VERIFIEE : dispersion des morceaux x2,9 (CV 75,4 % contre 26,1 %, max/min 13,5 contre 3,5) |
+| 03:33 | `484088ae` | Passe complete apres les outils de la nuit : 43 portes, 41 vertes, les deux memes rouges, aucune valeur deplacee |
+| 03:36 | `bc195566` | Mon propre critere (choisir un rejeu HOMOGENE) est CONTREDIT par le test : le lot disperse transfere autant (-0,95 % contre -0,82 %), et les deux effets sont dans le bruit |
+| 03:40 | `292e96d5` | Quatre jours de consolidation sequentielle sur un corpus heterogene : deux jours REFUSES par le protocole (aucune epoque n'ameliore la validation — le modele est rendu inchange), un jour accepte qui DEGRADE le texte tenu a l'ecart (+0,36 %) |
+| 03:50 | `d9478d0b` | Le balayage de la consolidation : optimum INTERIEUR de capacite (rang 4 : -7,63 %, contre -5,28 % au rang 32 qui a 8 fois plus de parametres) et de pas (3e-4), et les deux optima NE COMPOSENT PAS |
+| 03:55 | `827ebf40` | Le MOTEUR confirme le point optimal du balayage : rang 4 exporte et relu par drave donne -7,47 % sur m32 et -16,11 % sur m20 (le harnais disait -7,63 % et -15,93 %) |
+| 04:09 | `922c9cb3` | Le reflexe PROPOSE, le cerveau VERIFIE : taux d'acceptation 2,4 a 30 % (K=4) et 75 % (K=1) pour le reflexe distille, 0 % partout pour la tete non entrainee — et le gain net reste sous 1 |
+| 04:14 | `d4e79a18` | La 44e porte : l'invariant du decodage speculatif est VERIFIE (la suite du pilote est identique JETON POUR JETON a celle du cerveau seul), le temoin reste a zero, et un brouillon invalide echoue en le disant |
+| 04:29 | `15eb6b33` | Deux tentatives pour combler le facteur 1,5 du decodage speculatif, deux echecs : T=2 fait TOMBER l'accord de 51,0 % a 22,1 % (et T=4 diverge), le rang 4 (qui gagne 2,35 points en perplexite) perd 3,7 points d'accord |
+| 04:30 | `06b107f5` | Etat du cerveau : index de la nuit (27 commits, 16 fiches, 13 outils) et les cinq questions restees ouvertes, dans l'ordre |
+| 05:50 | `9a899131` | Passe a 44 portes : 41 vertes, la 44e porte (speculatif) verte du premier coup — et le troisieme rouge etait une INSTABILITE de mesure, corrigee en renforcant la mesure (3 repetitions au lieu de 2) |
+| 05:55 | `2ca33663` | Le PREMIER critere de selection qui departage : rejouer les morceaux REPETITIFS — -14,5 % contre -10,9 % sur m20, a trois graines (dispersion de graine 1,3 point a l'interieur de chaque bras) |
+| 05:59 | `74715f9d` | La courbe « diversite du lot -> transfert » : un SEUIL, pas un gradient — le lot le plus VARIE est le pire (-7,85 % sur m20 contre -11 a -14 %), mais entre Q1 et Q4 il n'y a aucun ordre |
+| 06:00 | `7857c789` | Carte corrigee (un SEUIL, pas un tri : « pas sur du bruit ») et journal du 15/10 complete des rounds 8 a 12 (E5 bis, les deux echecs du facteur 1,5, le speculatif, le balayage, le seuil de diversite, la porte instable renforcee) |
+| 06:06 | `2b6176de` | Le harnais n'est PAS reproductible a graine egale : 0,4 point d'ecart entre deux executions identiques (meme graine, meme epoque retenue) — ce qui RECALIBRE toutes les conclusions de la nuit |
+| 06:10 | `f2267a18` | Le defaut de reproductibilite est CORRIGE : la graine etait posee APRES le tirage des LoRA — deux executions identiques rendent maintenant le meme nombre AU BIT PRES |
+| 06:17 | `41fde4e4` | Balayage REFAIT avec le harnais exact : rang 4 toujours le meilleur (-7,92 %), l'ordre 4 > 2 > 8 > 16 > 32 est confirme et les valeurs ont bouge jusqu'a 0,5 point (ce que le defaut coutait) |
+| 06:21 | `de852947` | Selection et diversite REFAITES avec le harnais exact : l'ordre est le meme (hasard -7,21 %, surprise -4,86 %) et le lot repetitif gagne desormais sur les DEUX tests (-7,85 % contre -6,78 % sur m32, -14,54 % contre -10,31 % sur m20) |
+| 06:24 | `a3325093` | Confirmations exactes : 12 et 24 epoques rendent LE MEME chiffre (6,7487 — zero point d'ecart, pas +0,05), et l'habituation est reproduite au chiffre pres (+0,921 et +0,817) |
+| 06:26 | `b3099699` | Journal du 15/10 : le defaut le plus utile de la nuit (le harnais n'etait pas reproductible, et ce n'etait pas du bruit) et ce qu'il a recalibre |
+| 06:27 | `4fd330ac` | Carte : le cout de la consolidation est le point EFFICIENT mesure (0,035 % des poids au rang 4), et le rang 8 (0,07 %) est etiquete comme tel la ou il a servi |
+| 07:43 | `ce6f3023` | Passe finale : 44 portes, 42 vertes — le meilleur etat du depot, il ne reste que les deux rouges structurels |
+| 07:52 | `b8bb1759` | La GRILLE rang x pas (9 points, harnais exact) explique la non-composition : le pas optimal DEPEND du rang (1e-3 a rang 4, 3e-4 a rangs 2 et 8) — les deux optima a une dimension etaient pris sur deux tranches differentes |
+| 07:55 | `67399ba3` | Le critere de diversite sur un SECOND corpus : la direction tient (3 comparaisons sur 4), l'utilite non — sur corpus_en AUCUN lot ne transfere, meme le plus repetitif (0,345) |
+| 08:00 | `5a88d093` | Un troisieme proxy pour la politique de budget : la SONDE COURTE (128 jetons) — correlation +0,274, le meilleur des trois et toujours insuffisant |
+| 08:01 | `ef8460af` | Journal et etat du cerveau : les trois rounds d'apres 8 h (la grille rang x pas qui explique la non-composition, le critere de diversite sur un second corpus, la sonde courte) |
+| 08:54 | `e8cb840c` | La selection par SIMILARITE (l'idee de la boucle C6 -> C7) n'aide pas : le lot proche de m32 fait -7,46 % (niveau du hasard) et le lot proche de m20 fait -10,68 % (PIR que le hasard), tous deux sous le lot repetitif |
+| 09:00 | `eed3b2c7` | La condition de rentabilite du decodage speculatif est EXACTEMENT p > c (l'accord doit battre le cout du brouillon, et K disparait) — les deux brouillons mesures sont JUSTE dessous |
+| 09:20 | `897b0bb8` | La VISION n'est plus bloquee : modele telecharge (Qwen2-VL-2B + mmproj, 520 tenseurs), la tour ENTIERE tourne dans le moteur — et elle A TORT (norme 862,9 contre 116 651,3 pour la reference, facteur 135) |
+| 09:27 | `94c2f57d` | CORRECTION : c'est la REFERENCE qui explose a sa derniere couche (x71,7) — l'ecart de la tour de vision n'est donc PAS attribuable au moteur, et l'etat honnete est « non verifie », pas « faux » |
+| 09:37 | `509fae6f` | La comparaison COUCHE PAR COUCHE trouve un vrai bug de la tour de vision : les BIAIS des LayerNorm etaient ignores — cosinus de la couche 0 de -0,50 a +0,69, normes de 3,2x a ~10 % |
+| 09:38 | `b7d4956c` | Journal et etat : la vision debloquee (modele telecharge, tour entiere, quatre bugs d'architecture corriges dont les biais des LayerNorm) et la lecon sur les references |
+| 10:54 | `0a11b0b4` | Passe a 44 portes apres les changements de vision : 42 vertes, 2 rouges structurels — et un troisieme rouge qui etait de MA faute (porte-tableaux), avec le piege qui l'a laisse passer |
+| 11:01 | `481f9545` | La convention de rotation 2-D, tranchee par la SOURCE (rotate_half apparie i et i+hd/2, pas (2i,2i+1)) : cosinus +0,84 a la couche 2 — et le suspect suivant est nomme avec sa preuve |
+| 11:02 | `a68b652a` | Journal : la rotation 2-D tranchee par la source (cosinus +0,84), le suspect suivant avec sa preuve (l'attribution des positions aux patchs), et le piege de lecture d'une porte a travers un tail |
+| 11:07 | `bb7c26c6` | Vision : l'hypothese « ordre des patchs » est ELIMINEE (l'equivalence lecture/par-blocs est confirmee, la comparaison ne bouge pas) — trois suspects precis restent |
+| 11:19 | `8fa997ff` | La 45e porte : la VISION entre dans la passe — elle verifie le refus et les formes, MESURE la tour sans la juger, et dit ce qu'elle n'a pas pu comparer |
+| 11:20 | `35757063` | Carte : la vision a sa porte (45e) et son etat exact — modele et tour presents, tour mesuree non verifiee, trois suspects nommes |
+| 11:30 | `cd6211b9` | Journal : la 45e porte (vision), le resume corrige qui annoncait plus qu'il n'avait mesure, et la lecon sur les references ecrites d'apres les memes hypotheses |
+| 12:40 | `22183f80` | Passe a 45 portes : 43 vertes, 2 rouges structurels — la porte de vision (45e) est verte du premier coup |
+| 12:47 | `2242443a` | La cause principale de l'ecart de la tour est trouvee, et ce n'est PAS le moteur : le noyau de patchs du mmproj ne porte qu'UNE des deux tranches temporelles du Conv3d |
+| 12:59 | `9ca449b3` | Le noyau repare : l'embedding devient EXACT (0,00 % sur 256 patchs) et la couche 0 atteint cosinus +0,9972 — l'ecart croit ensuite avec la profondeur, signature de la quantification |
+| 13:17 | `8b5dcda4` | Le serveur de documentation du depot : « ou en est le travail ? », en HTML — plus docs/en-cours.md, ecrit a chaque round |
+| 13:30 | `a9d6cc3e` | Les 32 couches a poids egaux : les HUIT PREMIERES SONT EXACTES (1e-5), puis la tour EXPLOSE — et c'est le modele, pas le code |
+| 13:43 | `f22ce5f2` | L'image naturelle ne sauve PAS la comparaison : l'explosion etait propre a l'image (33 273 contre 249) mais l'ecart entre implementations croit quand meme avec la profondeur — mon hypothese etait a moitie fausse |
+| 14:02 | `000ec103` | POURQUOI les couches profondes ne se comparent pas : l'attention S'EFFONDRE (entropie 3,36 -> 0,16) et BASCULE d'un patch a l'autre — l'ecart est discret, pas un arrondi amplifie |
+| 14:29 | `efc7b21b` | LA TOUR DE VISION EST VERIFIEE : ecart max 7,58e-06 sur les 31 couches, EN ISOLATION — et la porte en fait un critere |
+| 14:32 | `7ffec657` | Le PROJECTEUR de la vision : un bug de STRUCTURE trouve en comparant sur le MEME etat d'entree (cosinus +0,7804, ecart 66,6 %) |
+| 16:18 | `d67bf6d3` | Le projecteur de la vision : l'ecart de 66,6 % reste INEXPLIQUE, et mon premier « correctif » etait FAUX — le panic l'a prouve |
+| 16:20 | `bd8f925f` | Projecteur : etat honnete (trois explications essayees, trois fois contredites) et AVERTISSEMENT — le binaire en place ne correspond pas au source |
+| 18:19 | `97c7fbe1` | LE PROJECTEUR EST VERIFIE (cosinus +0,99997509, ecart 0,71 % = la quantification) — et l'ecart de 66,6 % venait de MA comparaison |
+| 18:29 | `b31f53ca` | Reference de non-regression : la passe de 16 h 19 (45 portes, 43 vertes) et l'etape 6 de porte-vision (le projecteur, 0,71 %) |
+| 18:31 | `95a76b1f` | Journal et etat du cerveau : l'apres-midi de vision (modele debloque, cinq bugs corriges, tour verifiee en isolation a 7,58e-06, projecteur a 0,71 %, et deux lecons pour moi) |
+| 19:52 | `e2097ba7` | Passe de 18 h 20 : 45 portes, 43 vertes — premiere passe ou porte-vision verifie les couches isolees (6,3e-06) ET le projecteur (0,71 %) |
+| 20:13 | `ff385fb9` | Injection : le bloc portait 3584 EN DUR (la dimension d'un AUTRE modele) — corrige ; le splice fonctionne ; la comparaison ne conclut pas (et le vrai manque est nomme : le mRoPE du modele de langue) |
+| 20:32 | `156e5ce2` | E9 — l'HOMEOSTASIE SYNAPTIQUE : definie et mesuree ; amortir le changement plastique rend la consolidation MEILLEURE des deux cotes |
+| 20:44 | `ceb8d496` | E9, suite : de l'ORACLE a une REGLE — l'amplitude se choisit sur l'activite du modele, pas sur le domaine vise |
+| 20:58 | `4785d767` | La 46e porte : l'HOMEOSTASIE (E9) devient un invariant — x0 rend le modele, l'activite croit avec l'amplitude, la domination de x0,6 est reproduite |
+| 21:19 | `fb6617fa` | E9 se REPLIQUE sur trois volumes de rejeu (3, 10 et 20 morceaux) : a chaque fois x0,6 fait mieux en domaine ET coute moins cher hors domaine — et le benefice GRANDIT avec le rejeu (0,7 point a 3 morceaux, 1,4 point a 20) |
+| 21:25 | `1f43a583` | E9 : par COUCHE ou globalement ? Amortir les couches HAUTES est le meilleur profil (-0,65 % hors domaine contre -0,04 % pour l'inverse) — mais l'ecart est PETIT et l'echelle uniforme reste la meilleure en domaine |
+| 21:27 | `3db187b6` | Journal du 15/10, paragraphes 36 a 41 : E9 (homeostasie synaptique) — defini, mesure, replique sur trois volumes, borne par couche, et garde par une 46e porte |
+| 22:07 | `f6c13a16` | UN CRITERE DE LOT QUI BAT TOUS LES CRITERES DE MORCEAU : l'ETALEMENT des pertes (-10,80 % a volume egal contre -7,21 % pour le hasard) — et il SE COMPOSE avec E9 |
+| 22:12 | `890b6663` | CONTRE-EPREUVE de l'etalement : trois graines (il gagne les trois, mais de 1,8 point = le bruit) et un second volume (a 10 morceaux il PERD) — le critere n'est PAS etabli, et « une graine ne mesure pas un critere » |
+| 22:25 | `5b23115c` | E9 passe la contre-epreuve des GRAINES (contrairement au critere d'etalement, teste le meme soir de la meme facon) : x0,6 gagne m32 ET le hors domaine sur les graines 0, 1 et 2, effet = 5x le bruit |
+| 22:37 | `e6728c0e` | E9, la REGLE tient sur trois graines : le minimum de perplexite sur un texte NEUTRE tombe sur x0,75 a chaque fois (courbe en U) |
+| 22:38 | `c3a1f677` | E9, la regle : la ligne du modele de base (perplexite neutre 9,6706) — toutes les variantes la battent, et la regle cherche le MEILLEUR point de cette aide, pas le seul |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+**La nuit du 15/10 (00 h → 03 h) — le cerveau : la QUANTITÉ domine le PLACEMENT, et deux facultés
+qui ne s'additionnent pas.**
+
+**1. E5 — distiller le cerveau dans le réflexe.** Le réflexe entraîné à la perplexité ne partageait
+**aucun** jeton avec le cerveau en génération (0/96) : la question d'E5, cadrée depuis le 10/10,
+était la bonne. Mesuré — à architecture identique, **l'objectif décide de la faculté** : perplexité
+⇒ 181,54 et **28,0 %** d'accord ; distillation (KL) ⇒ 574,70 et **51,0 %** (m20 : 40,5 → **68,1 %**).
+L'accord fait **×1,8**, la perplexité coûte **×3,2**, et le **mélange** KL + λ·CE est **pire sur les
+deux axes** (46,8 % d'accord, 1 476 de perplexité à λ = 1). En génération de 32 jetons, l'accord
+reste **0/96** et **5/96** (0,51³² ≈ 2 × 10⁻¹⁰). Ce que le réflexe apporte vraiment : le **TEMPS**
+(TTFT **÷3,1**, débit **×2,0**). Fiche :
+[`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md).
+
+**2. Le CYCLE, trois objectifs, aucun ne converge.** Entraîné, le cycle dompte la divergence
+(**×228** au pas 4 : 15 868 → 52,24) mais **dégrade encore** (~×1,4 par pas) et ne bat jamais une
+passe ; « dernier pas » donne la meilleure arrivée (43,55), « point fixe » la meilleure amorce
+(22,05 au pas 2), « somme » l'équilibre — **aucun ne fait converger la boucle**. Et le moteur est
+plus pessimiste à chaque pas (+1,7 % au pas 1, +19,6 % au pas 4) : **la quantification s'amplifie
+dans la boucle**. Fiche :
+[`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md).
+
+**3. Le SOMMEIL : combien, quoi, et combien de nuits.** La courbe — **−5,57 %** (3 morceaux rejoués),
+−7,67 % (10), **−9,98 %** (20) — et **le rejeu court est le plus efficient** (3 morceaux : 56 % du
+gain pour un coût indétectable). **À volume égal, la règle de sélection pèse peu** : hasard
+−6,49 %, premiers −5,51 %, **surprise −4,82 %**, faciles −4,26 % — « rejouer ce qui a surpris » est
+**faux ici**, et la proximité temporelle non plus ne compte pas (−10,71 % contre −9,98 %). Doubler
+les époques : **+0,05 point** (la limite est la **donnée**). Et **deux nuits** : la première garde
+son gain (−7,85 %), la seconde n'ajoute presque rien (−0,30 %) — **ni oubli, ni gain**. Fiches :
+[`budget`](../reports/rapport-sommeil-budget.md) · [`sélection`](../reports/rapport-sommeil-selection.md) ·
+[`deux nuits`](../reports/rapport-sommeil-deux-nuits.md).
+
+**4. L'ATTENTION : le volume domine, et le placement est de second ordre.** À clés **égales**,
+uniforme et alterné se disputent le point (−0,41 % sur m32, +1,51 % sur m20). Mais **le budget a une
+bonne taille PAR TEXTE** : le coût de la moitié va de **+0,04 % à +7,39 %** (×180), donc un budget
+uniforme **casse** la tolérance de +1 % sur **5 textes sur 8**, quand une politique par texte la
+tient partout pour **−14,1 % de clés**. Et **aucun signal bon marché ne prédit la sensibilité**
+(corrélations −0,019 et +0,096) : la politique exige **deux passes**. Fiches :
+[`allocation`](../reports/rapport-budget-attention-allocation.md) · [`politique`](../reports/rapport-politique-budget-attention.md).
+
+**5. Le budget d'une DÉCISION : deux monnaies.** 357,8 M paires (24 couches) → **119,3 M** (8) →
+**59,6 M** (4), exactement linéaire en couches — et **la fenêtre d'attention ne déplace PAS cette
+métrique** (119,3 M avec le quart des clés comme avec toutes) : elle compte les **projections**, pas
+les scores. Un budget de cerveau s'exprime donc en **deux monnaies** (paires ; clés/octets), et le
+plan n'en comptait qu'une. Fiche :
+[`rapport-budget-decision.md`](../reports/rapport-budget-decision.md).
+
+**6. CE QUI SE CONSOLIDE EST LA STRUCTURE PARTAGÉE.** Deux spécialistes, même budget : sur le
+morceau **rejoué**, la mémorisation est **identique** (−22,7 % et −22,5 %) ; sur un morceau **jamais
+vu du même corpus**, le transfert est **−7,4 %** (wikitext2, un domaine unique) contre **+1,2 %**
+(`corpus_en`, plusieurs). Et la **fusion** de deux expériences par somme : elle garde le gain du
+spécialiste **fort** (−7,3 % contre −7,4 %) mais **accumule les coûts** ; avec **deux forts**, elle
+donne **moins que chacun** sur m32 (−4,0 % contre −7,4 % et −8,7 %) — **la somme ne passe pas
+l'échelle**, l'agrégation doit être **déclarée**. Un **bug** attrapé par une **égalité** : la
+première fusion écrasait au lieu de sommer (« A+B » rendait exactement les chiffres de B). Fiche :
+[`rapport-consolidation-structure-partagee.md`](../reports/rapport-consolidation-structure-partagee.md).
+
+**7. La BOUCLE DU CERVEAU, en une commande.** Percevoir (85 626 jetons réversibles) → retenir (8
+pas, déterministe) → se souvenir (round-trip **300/300**) → consolider (**17,0197 → 16,3429,
+−3,98 %** sur un morceau **jamais rejoué**) → agir. Deux défauts attrapés en l'écrivant : le signal
+de la périphérie est un fichier **texte** (en binaire, le moteur refusait et le script annonçait un
+faux « la mémoire n'est pas déterministe »), et la mesure portait sur le **premier morceau rejoué**
+(−26 % de « consolidation » qui était de la **récitation**). Fiche :
+[`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md) § 3ter.
+
+**Et la conclusion de la nuit, en une phrase** : dans ce cerveau, **la quantité domine le placement**
+(volume de rejeu, volume de clés, profondeur) — sauf une exception mesurée, la **décision par
+contenu** (la politique de budget), qui est la première chose de la nuit à battre une constante.
+**La nuit du 15/10 (03 h 30 → 06 h) — le RÉFLEXE, le BALAYAGE et le premier critère qui départage.**
+
+**8. E5 bis, puis DEUX tentatives pour combler le « facteur 1,5 » — deux échecs, écrits.** Le
+mélange KL + λ·CE est **pire sur les deux axes** (à λ = 1 : 1 476 de perplexité et 46,8 % d'accord,
+contre 575 et 51,0 % pour la distillation seule). Puis, pour le décodage spéculatif : **T = 2 fait
+tomber l'accord de 51,0 % à 22,1 %** (T = 4 diverge), et le **rang 4** — qui gagne 2,35 points en
+perplexité — **perd 3,7 points d'accord**. Ce qui rend « bon petit modèle » ne rend pas « bon
+imitateur ».
+
+**9. Le décodage SPÉCULATIF : le réflexe propose, le cerveau vérifie** (`tools/speculatif_drave.py`
++ `porte-speculatif.sh`, 44ᵉ porte). **Taux d'acceptation** : 2,4 à 30 % (K = 4) et **75 %** (K = 1)
+pour le réflexe distillé, **0 %** partout pour la tête non entraînée — la confirmation **en boucle,
+sans aucune sonde**, de ce que E5 mesurait par sonde. Et **le gain net reste sous 1** (0,95 au
+mieux) : il manque un facteur 1,5. **L'invariant est vérifié, pas espéré** : la suite du pilote est
+identique **jeton pour jeton** à celle du cerveau seul.
+
+**10. Le BALAYAGE de la consolidation** (les deux réglages que toutes les fiches laissaient en
+défaut) : **optimum INTÉRIEUR de capacité** — rang 4 (**0,035 %** des poids) donne −7,63 %, le rang
+32 (huit fois plus) −5,28 % ; optimum intérieur de pas (3e-4, −7,57 %) ; et **les deux optima ne
+composent pas** (−7,31 %). Confirmé **au moteur** : −7,47 % sur m32 et **−16,11 %** sur m20.
+
+**11. Le premier critère de sélection du rejeu qui DÉPARTAGE** — et c'est un **seuil**, pas un tri :
+le lot le plus **varié** (> 0,9 trigramme distinct par jeton) transfère **−7,85 %** sur m20 contre
+−11 à −14 % pour les autres ; mais entre les quatre autres lots, **aucun ordre**. Autrement dit :
+**la quantité domine le placement**, sauf que **le bruit ne s'apprend pas**. (Et les trois critères
+précédents — surprise, dispersion, proximité — n'avaient rien départagé.)
+
+**12. Et une porte instable a été trouvée, comprise et RENFORCÉE** : `porte-prechargement` a rendu
+rouge pendant la passe complète (tampons 12,48 s contre fils 10,95 s) puis **verte relancée seule**
+(10,45 contre 13,06). La cause : la comparaison portait sur la **médiane de deux** répétitions —
+un seul chargement lent décidait. Elle en prend **trois** maintenant. *Ce n'est pas la porte qui a
+été affaiblie, c'est la mesure qui a été renforcée.*
+**13. Le défaut le plus utile de la nuit : le harnais n'était pas reproductible — et ce n'était
+pas du bruit.** En vérifiant qu'un chiffre de la boucle du cerveau ne bougeait pas entre deux
+exécutions, il bouge : **12,6829 puis 12,7362** (m4) pour deux exécutions **identiques** (mêmes
+morceaux, mêmes époques, **même graine**, même époque retenue). Le diagnostic a écarté le suspect
+habituel (les noyaux : avec `use_deterministic_algorithms(True)` **strict**, l'entraînement passe
+sans erreur) et trouvé la cause : **la graine était posée APRÈS le tirage des matrices LoRA**
+(`torch.manual_seed` vivait dans `entrainer`, donc après `Banc(a)`) — un RNG **non semé**, différent
+à chaque processus. *Semer après avoir tiré ne seme rien.* Corrigé : la graine et les trois réglages
+de déterminisme passent **avant** la construction du banc, et deux exécutions rendent désormais
+**12,732836173028936 deux fois**. Les deux autres outils (`cycle_entraine.py`,
+`memoire_travail.py`) étaient déjà dans le bon ordre.
+
+**Ce que ça a recalibré, et c'est le vrai apport** : les fiches citaient un « bruit de graine de
+0,14 point » — c'était le bruit entre deux graines **différentes**, et l'irreproductibilité en
+ajoutait 0,4 à 0,5. Toutes les comparaisons fines de la nuit ont été **refaites** : le balayage de
+rang (**rang 4 = −7,92 %**, ordre 4 > 2 > 8 > 16 > 32 confirmé, valeurs déplacées jusqu'à 0,5 point),
+les règles de sélection (**hasard −7,21 % · premiers −5,99 % · surprise −4,86 % · faciles −4,06 %**,
+même ordre, étendue 3,15 points), les lots de diversité (**répétitifs −7,85 % / −14,54 %** contre
+variés −6,78 % / −10,31 % — le critère gagne maintenant sur **les deux** tests), le doublement des
+époques (**6,7487 dans les deux cas : ZÉRO point**, plus « +0,05 »), et l'habituation (+0,921 contre
++0,817, identiques). *La leçon de méthode est écrite dans la fiche : un écart qu'on n'explique pas
+n'est pas une mesure bruitée, c'est une question ouverte.*
+**Après 8 h — la grille, le second corpus, la sonde.**
+
+**14. La GRILLE rang × pas (9 points, harnais exact)** explique enfin la « non-composition » : **le
+pas optimal dépend du rang** (1e-3 au rang 4, 3e-4 aux rangs 2 et 8) — les deux optima à une
+dimension étaient lus sur **deux tranches différentes** de la surface. Le meilleur point reste
+**(rang 4, pas 1e-3) : −7,92 %** sur m32 (et −15,99 % sur m20) ; **rang 2** (moitié moins de
+paramètres : 0,018 % du modèle) donne **−16,00 %** sur m20 pour 0,9 point de moins sur m32. La
+surface est plate autour de l'optimum et tout ce qui est plus gros perd 2,9 points.
+
+**15. Le critère de diversité sur un SECOND corpus** : la direction tient (le lot répétitif fait
+mieux ou moins mal dans **trois comparaisons sur quatre**), l'utilité non — sur `corpus_en`, **aucun
+lot ne transfère**, même le plus répétitif (0,345 : du texte presque formulaire). *Le corpus décide
+si l'on peut consolider ; le lot décide seulement l'ordre.*
+
+**16. Un troisième proxy pour la politique de budget : la SONDE COURTE** (128 jetons, 62,5 % des
+clés comme sur le texte entier). Corrélation **+0,274** — le meilleur des trois proxys (−0,019,
++0,096), et toujours insuffisant : il rate le texte le plus sensible (m15 : +2,08 % contre +7,39 %)
+et coûte 25 % du texte pour économiser 14 % de clés. La politique reste une **mesure**, pas une
+estimation.
+**Après 9 h — la VISION : débloquée, et trois bugs trouvés par une seconde implémentation.**
+
+**17. Le seul ❌ déblocable de la carte a été traité.** `models/vision/` porte maintenant
+**Qwen2-VL-2B-Instruct-Q4_K_M.gguf** (986 Mo) **et son `mmproj` Q8_0** (710 Mo, **520 tenseurs** —
+c'est le fichier qui porte `v.patch_embd.weight` **et toute la tour**). `--banc-vision` **ne panique
+plus** et déroule **les 32 couches, la rotation 2-D, `v.post_ln`, le projecteur `mm.0`/`mm.2` et
+l'injection**.
+
+**18. Trois corrections d'architecture, et une quatrième qui est un VRAI bug.** (a) **le MLP dépend
+du modèle** : gpt-oss (pour qui la tranche avait été écrite) a trois matrices et du SwiGLU,
+**Qwen2-VL en a deux** et du quick-GELU ; (b) la **fenêtre locale est conditionnelle** — Qwen2.5-VL
+en a une, **Qwen2-VL aucune**, et le banc l'appliquait quand même ; (c) la sortie du projecteur est
+**écrite** (sans quoi rien n'est comparable) ; et (d) **la LayerNorm n'appliquait que son POIDS,
+jamais son BIAIS** — trouvé par la comparaison **couche par couche** (`DRAVE_VISION_COUCHES=N`),
+qui a montré que la divergence commence à la **couche 0** (cosinus **−0,5035**, norme 1 073 contre
+335).
+
+**19. Ce que la correction a rendu** : couche 0 **cosinus +0,6867** (norme 327,6 contre 335,1),
+couche 1 +0,7676, couche 2 +0,7996 — les normes concordent à **~10 %** là où elles différaient de
+3,2× puis de 74×. L'écart relatif reste de **60 à 78 %** (la quantification vaut ~1 %) : il reste
+une différence structurelle, et les deux suspects sont **nommés** — la convention de rotation 2-D
+et l'ordre des têtes (`nh_t = 16` en dur). Fiche :
+[`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md).
+
+**20. Et la leçon, la même que la nuit, mais retournée contre son auteur** : *une implémentation qui
+« tourne » n'est pas une implémentation qui « a raison »* — **une référence non plus**. La première
+conclusion (« la tour a tort, facteur 135 ») a dû être **corrigée** : instrumentée, la référence
+**explose elle-même à sa dernière couche** (norme 1 628 → 116 650, ×71,7, avec deux normalisations
+d'entrée). L'état honnête est donc « **non vérifié** », pas « faux » — et c'est la comparaison
+couche par couche qui a tranché, pas la comparaison de fin.
+**Après 11 h — la rotation 2-D, tranchée par la source, et ce qui reste.**
+
+**21. Le premier suspect nommé a été lu dans la RÉFÉRENCE, pas deviné.** La rotation 2-D du banc
+appariait les dimensions `(2i, 2i+1)` (paires consécutives), disposait les fréquences « moitié de
+tête par secteur » — la convention de **Qwen2.5-VL** — et suivait l'indice de paire **global** pour
+l'exposant. `transformers` dit l'inverse sur les trois points : `rotate_half` apparie **`i` et
+`i + hd/2`**, les fréquences sont **20 pour la ligne puis 20 pour la colonne** (répétées telles
+quelles), et l'exposant vaut `10000^(−j/20)`. **Corrigé**, l'accord progresse encore : cosinus
+**+0,6896 · +0,7838 · +0,8400** aux couches 0-2 (contre +0,6867 · +0,7676 · +0,7996).
+
+**22. Ce qui reste, et il est nommé avec sa preuve** : l'écart relatif est encore de **55 à 78 %**
+(la quantification vaut ~1 %). Le suspect suivant : `get_vision_position_ids` attribue au patch
+d'indice **16** la position **(0, 8)**, alors que ce patch est la **ligne 1, colonne 0** dans
+l'ordre du banc — les deux implémentations n'attribuent pas les positions aux mêmes emplacements de
+la séquence (ordre de lecture contre ordre **groupé par blocs de fusion 2 × 2**). Cela se tranchera
+sur **un patch isolé**, pas sur une norme.
+
+**23. Et un piège de lecture, payé une fois** : `porte-tableaux` était **rouge** depuis ma fiche de
+la sélection par similarité (séparateur à 6 cellules pour un en-tête à 5), et je ne l'avais pas vu
+**parce que je lisais la porte à travers un `tail`** : la dernière ligne (« 460 fichier(s)
+examiné(s) ») est celle qui *suit* l'échec, et le code de sortie que je voyais était celui du tuyau.
+C'est la deuxième fois de la nuit qu'un instrument mal lu a failli coûter une conclusion fausse
+(après la référence de vision qui explosait à sa dernière couche). **C'est écrit dans
+`docs/references-non-regression.md`**, à côté de la règle.
+**Après 11 h — la 45ᵉ porte, et une leçon sur les références.**
+
+**24. `porte-vision.sh` entre dans la passe (45 portes).** Elle vérifie **ce qui est établi** —
+le **refus** d'un modèle sans tour de vision (en le disant, pas en paniquant ✓), les **formes** du
+modèle (tour 256 × 1280, jetons d'image 64 × 1536 ✓) — et elle **MESURE** la tour sans la juger :
+sa norme est publiée, l'écart à la référence indépendante est renvoyé à la fiche. Le jour où l'écart
+tombera à quelques pour cent, cette ligne devra devenir le **critère** — c'est écrit dans la porte
+pour que ce soit un choix, pas un oubli.
+
+**25. Sa première version annonçait « embedding exact » alors que la comparaison n'avait pas
+tourné** ✗ — corrigée dans la minute : le résumé dit maintenant « embedding **NON comparé** ». Une
+porte qui résume au-delà de ce qu'elle a mesuré est exactement le défaut que ce dépôt traque.
+
+**26. Et la leçon de fond, écrite dans l'en-tête de la porte** : `tools/vision_ref.py` (la référence
+numpy) **reprend les hypothèses du moteur** — mêmes conventions de rotation, mêmes LayerNorm sans
+biais — et **ne pouvait donc pas les mettre en défaut** ✗. C'est la référence **indépendante**
+(`transformers`) qui l'a fait, et c'est elle qui a trouvé les deux vrais bugs. *Une référence
+écrite d'après la même lecture vérifie l'arithmétique, pas les conventions.*
+
+**27. La taille de l'image du banc est réglable** (`DRAVE_VISION_COTE`, défaut 224) : la référence
+numpy n'a été validée qu'à **28 × 28** (5,4e-7), et sans ce réglage la porte ne pouvait comparer
+que des formes.
+**L'après-midi du 15/10 — LA VISION : débloquée, corrigée, et **vérifiée de bout en bout**.**
+
+**28. Le seul ❌ déblocable de la carte a été traité.** `models/vision/` porte **Qwen2-VL-2B** (986 Mo)
+**et son `mmproj`** (710 Mo, **520 tenseurs** — c'est le fichier qui porte `v.patch_embd.weight` **et
+toute la tour**). `--banc-vision` **ne panique plus** et déroule **les 32 couches, la rotation 2-D,
+`v.post_ln`, le projecteur `mm.0`/`mm.2` et l'injection**.
+
+**29. Cinq bugs d'architecture corrigés** : le **MLP** dépend du modèle (Qwen2-VL a **deux** matrices
+et du quick-GELU, gpt-oss en a trois et du SwiGLU) ; la **fenêtre locale** est rendue **conditionnelle**
+(Qwen2.5-VL en a une, **Qwen2-VL aucune**) ; les **jetons d'image** sont écrits (sans quoi rien n'est
+comparable) ; les **biais des LayerNorm étaient ignorés** (couche 0 : cosinus **−0,50 → +0,69**) ; et
+la **convention de rotation 2-D** a été lue dans la source (`rotate_half` apparie `i` et `i + hd/2`,
+pas `(2i, 2i+1)`).
+
+**30. La cause de l'écart avec la référence était dans les POIDS** : le noyau de patchs du `mmproj`
+est **exactement la première tranche temporelle** du noyau 3-D de la référence (0,00 % d'écart), la
+seconde — de même norme — étant **absente**. Or Qwen2-VL traite une image fixe en **dupliquant la
+trame** : le modèle somme les deux tranches. Le noyau sommé se reconstruit depuis les `safetensors`
+et se donne au moteur (`DRAVE_VISION_NOYAU`) : **l'embedding devient EXACT (0,00 % sur 256 patchs)**.
+
+**31. LA TOUR EST VÉRIFIÉE — couche par couche, EN ISOLATION** (`tools/vision_isole.py`) :
+**écart max 7,58e-06 sur les 31 couches**. Comparer des sorties ne dit rien au-delà de la couche ~8 :
+l'attention **s'effondre** (entropie **3,36 → 0,16** entre les couches 1 et 15) et **bascule** d'un
+patch à l'autre (variation totale **0,94**) — un phénomène **discret**, qu'aucune tolérance ne
+réconcilie. La méthode : **le même état d'entrée** aux deux implémentations, et la comparaison de la
+couche **seule**.
+
+**32. Et le PROJECTEUR est vérifié aussi** : cosinus **+0,99997509**, écart **0,71 %** (la
+quantification Q8_0). L'écart de **66,6 %** que j'ai poursuivi pendant une heure venait de **MA
+comparaison** — je nourrissais la référence en **ordre de lecture** alors que son `view` regroupe les
+quatre entrées **consécutives** de la séquence.
+
+**33. Deux leçons, et elles sont pour moi.** (a) *Une implémentation qui « tourne » n'est pas une
+implémentation qui « a raison »* — et **une référence non plus** : la référence numpy du dépôt
+**reprend les hypothèses du moteur** (mêmes conventions de rotation, mêmes LayerNorm sans biais) et
+ne pouvait donc pas les mettre en défaut. C'est la référence **indépendante** (`transformers`) qui a
+trouvé les vrais bugs. (b) *L'instrument se vérifie avant la conclusion* : **deux fois** j'ai tiré une
+conclusion fausse sur le **code** alors que le défaut était dans **ma mesure** — un « correctif » du
+moteur démenti par un panic (`v.post_ln` fait **1280** poids, pas 5120), puis l'écart de 66,6 % qui
+venait de l'ordre de mes entrées.
+
+**34. Et une porte de plus** (`porte-vision.sh`, 45ᵉ) : elle vérifie le **refus** (un modèle sans tour
+de vision est refusé en le disant), les **formes**, les **couches 1, 15 et 31 EN ISOLATION**
+(6,3e-06) et le **projecteur** (0,71 %) — et **mesure** la tour sans la juger, en **disant** ce qui
+n'est pas vérifié (l'embedding contre la référence numpy, dont le format a dérivé).
+
+**35. Et un serveur de documentation** (`tools/serveur-doc.py`, port **8787**) répond à la question
+« où en est le travail ? » : il rend les documents en HTML et affiche en premier
+[`docs/en-cours.md`](../docs/en-cours.md), réécrit à chaque round.
+**La soirée du 15/10 — E9 : LE SEUL EMPLACEMENT VIDE DE LA TABLE DE BIOLOGIE, REMPLI ET MESURÉ.**
+
+**36. E9 est défini et mesuré : l'homéostasie synaptique** — la mise à l'échelle **globale** du
+changement plastique, le mécanisme par lequel un neurone garde son activité dans sa plage malgré la
+potentialisation. Appliqué à la consolidation : **l'amplitude du delta est un réglage**, et il ne
+l'était pas. Courbe complète (LoRA rang 4, delta × s) :
+
+| échelle | m32 | m20 | hors domaine |
+|---:|---:|---:|---:|
+| base | 7,4242 | 19,1237 | 17,2673 |
+| ×0,5 | −8,60 % | −14,42 % | −0,52 % |
+| **×0,6** | **−8,75 %** | −15,24 % | **−0,58 %** |
+| ×0,75 | −8,67 % | −15,94 % | −0,29 % |
+| ×0,9 | −8,07 % | −16,25 % | +0,02 % |
+| **×1,0** *(le réglage publié)* | −7,47 % | −16,11 % | **+0,33 %** |
+| ×1,25 | −5,39 % | −15,20 % | +1,64 % |
+
+**Le coût hors domaine est MONOTONE en l'amplitude** — c'est la signature de l'homéostasie, et l'ordre
+est parfait sur cinq points — **et le gain en domaine ne paie pas ce coût** : à ×0,6, la consolidation
+fait **mieux en domaine ET mieux hors domaine** que le delta entier. **Le réglage publié jusqu'ici
+était donc hors de l'optimum**, et c'est écrit plutôt que corrigé en silence.
+
+**37. Et l'amplitude n'a pas besoin d'un oracle.** La règle essayée d'abord — « garder l'activité dans
+±1 % du modèle de base » — **rejette tout** (la consolidation déplace l'activité de +2,07 % dès ×0,5).
+La seconde marche : **minimiser la perplexité du modèle sur un texte NEUTRE** (sa propre activité
+récente, jetons 40 000..41 024 : ni rejouée, ni testée, ni l'autre corpus) désigne **×0,75** — le
+voisinage de l'optimum de l'oracle. C'est ce qu'un cerveau a : **son activité d'hier, pas le domaine de
+demain.**
+
+**38. Le réglage se RÉPLIQUE sur trois volumes de rejeu** (3, 10 et 20 morceaux) : à chaque fois ×0,6
+fait mieux en domaine **et** coûte moins cher hors domaine, la monotonie tient dans les deux, et le
+bénéfice **grandit avec le rejeu** (0,7 point de hors-domaine gagné à 3 morceaux, **1,4 point à 20**) —
+cohérent : plus la consolidation est forte, plus il y a à amortir. Le seul désaccord, constant : m20
+préfère ×1,0 → ce n'est pas « ×0,6 partout » mais **un compromis**, qui penche du côté de
+l'homéostasie dès qu'on regarde deux textes sur trois.
+
+**39. Par couche ou globalement ?** Amortir les **couches hautes** est le meilleur profil (−0,65 % de
+hors-domaine contre −0,04 % pour l'inverse : les basses portent des traits généraux, les hautes **la
+spécialisation** qu'on limite), **mais l'écart est petit** et l'échelle **uniforme** reste la meilleure
+en domaine. **Une seule échelle suffit** : l'amplitude globale est le levier, **où** on l'applique est
+de second ordre — la même conclusion que pour l'allocation du budget d'attention, et la deuxième fois
+que la nuit la retrouve.
+
+**40. Et une 46ᵉ porte** (`porte-homeostasie.sh`) fait du réglage un **invariant** : ×0 rend le modèle
+(à la re-quantification de l'export près, **2,6e-05**), l'activité est **monotone** en l'amplitude
+(72,13 ≤ 73,67 ≤ 74,18), et la **domination de ×0,6 est reproduite** à chaque passe (m32 −8,74 % contre
+−7,47 % ; hors +0,07 % contre +0,80 %). Un écart noté dans la fiche : la porte **ré-exporte** le LoRA
+et la re-quantification déplace le hors-domaine de **~0,5 point** — la direction est stable, mais un
+chiffre cité au dixième dépend de l'export.
+
+**41. E9 est un RÉGLAGE, pas un mécanisme de plus** : une seule échelle globale, donc **rien à
+l'exécution** — le meilleur rapport efficience/effet de toutes les fiches de consolidation. Ce qui
+reste ouvert : une homéostasie qui **mesurerait** l'amplitude en ligne (ici elle est choisie par la
+règle du texte neutre, qui demande de savoir ce qu'on n'a pas rejoué ✗), et la même question sur
+d'autres corpus, d'autres rangs, d'autres époques.
+<!-- /notes -->

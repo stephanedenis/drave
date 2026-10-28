@@ -1,0 +1,32 @@
+# 2026-10-18 — Mémoire épisodique, consolidation, greffe
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-18/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (7)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:10 | `4a8c888f` | LA SERIE UDHR (mesures 39 a 43) : 448 langues, 13 222 articles alignes ; la TRADUCTION retrouve le meme article d'une langue a l'autre a 96,4 % (dont francais-chinois), la RESTITUTION ne reproduit exactement AUCUN des 13 222 articles (61 % d'octets justes), les DIALECTES sont lisibles a 100 % et leur contenu se retrouve a 52 %, les STYLES a 100 % et 24 % | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-18/README.md` (+10) |
+| 01:18 | `2423f370` | LA RESTITUTION CORRIGEE : mon « 0 article exact sur 13 222 » etait un artefact (articles encodes sans contexte). En flux, un modele francais specialise reproduit 85,1 % de fragments de 32 octets EXACTEMENT, le meme modele partage sur 448 langues tombe a 0,6 % — et les deux sont a 0 % sur le jamais-vu | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-18/README.md` (+8) |
+| 01:55 | `16d7e491` | CORRECTION STATISTIQUE ET GRILLE A 100 LANGUES : dans le test groupe, le hasard n'est pas 1/(N x 30) mais 1/30 (le meme article existe dans ~100 langues) — le 6,50 % vaut donc 2x le hasard, pas 81x. La grille a 100 langues donne 16,3 % de moyenne et un test groupe a 3,5x le hasard | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-18/README.md` (+3) |
+| 09:58 | `2906e2f9` | GENEALOGIE DES LANGUES, DIALECTES ET STYLES : theorie partagee avec Panini/Nipada, et regle §5 (les etudier a chaque cycle). Leur avertissement est capital : leur signature lexicale capte l'EPOQUE (beta +0,138) bien plus que la FILIATION (beta +0,049) — la surface transmet les signifiants, pas la genealogie | `AGENTS.md`, `genealogie-des-langues.md`, `2026-10-18/README.md` (+1) |
+| 13:29 | `baf0e16d` | MESURE 49b — LA GENEALOGIE TIENT A ECRITURE CONTROLEE : en ne gardant que le latin (70 langues, 2 415 paires), l'ordre reste 37,2 % (meme branche) > 27,8 % (meme famille) > 10,8 % (familles differentes), soit 3,4x — l'effet n'est pas un effet d'alphabet. Et le test groupe est jete : 2,05 % pour un hasard de 3,3 %, sous le hasard, parce que le plus proche voisin est une langue parente, pas le meme article | `en-cours.md`, `2026-10-18/README.md`, `2026-10-18/mesures.md` (+3) |
+| 17:40 | `906398e1` | MIROIR DE SORTIE (AGENTS.md §7) ET PREMIERE MESURE (51) : la boucle entree -> sortie -> entree ne valide pas encore l'entree — direct 35,8 de chrF, boucle 24,9, plancher 100. Ce que l'entree comprend, la sortie ne sait pas le redire | `AGENTS.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-18/README.md` (+4) |
+| 22:11 | `98a0b0c7` | MESURE 54 — LA QUALITE VIENT-ELLE AVEC LA TAILLE ? A moitie, et le plancher reste roi. A taille egale (memes 6 articles), Qwen 1,5 B gagne +11,9 en anglais->francais, +5,1 en espagnol, +5,4 en chinois, mais perd 3,8 en francais->anglais ; et francais->espagnol (32,1) reste SOUS le plancher « ne rien traduire » (35,5) | `.AGENTS.md.kate-swp`, `2026-10-18/README.md`, `2026-10-18/mesures.md` (+3) |
+
+## Chiffres du jour
+
+`37,2 %` · `27,8 %` · `10,8 %` · `2,05 %` · `3,3 %` · `2415 paires` · `0,138` · `0,049` · `6,50 %` · `16,3 %` · `85,1 %` · `0,6 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
+- [reports/fiche-nuit-17-10.md](../reports/fiche-nuit-17-10.md)
+
+<!-- notes -->
+
+<!-- /notes -->

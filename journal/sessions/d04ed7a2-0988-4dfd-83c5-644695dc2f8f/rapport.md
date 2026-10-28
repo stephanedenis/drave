@@ -1,5 +1,7 @@
 # Session d04ed7a2 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `d04ed7a2-0988-4dfd-83c5-644695dc2f8f` |

@@ -1,5 +1,7 @@
 # Session 34e1d4be — Tu es relecteur ADVERSE. Tu
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `34e1d4be-3708-4065-ae77-eca21f86e857` |

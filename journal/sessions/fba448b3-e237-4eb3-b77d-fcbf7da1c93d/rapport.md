@@ -1,5 +1,7 @@
 # Session fba448b3 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `fba448b3-e237-4eb3-b77d-fcbf7da1c93d` |

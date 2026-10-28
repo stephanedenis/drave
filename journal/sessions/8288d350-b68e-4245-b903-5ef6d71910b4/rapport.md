@@ -1,5 +1,7 @@
 # Session 8288d350 — You are doing an ADVERSARIAL
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8288d350-b68e-4245-b903-5ef6d71910b4` |

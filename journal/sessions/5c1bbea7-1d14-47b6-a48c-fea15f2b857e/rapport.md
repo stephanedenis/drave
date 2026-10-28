@@ -1,5 +1,7 @@
 # Session 5c1bbea7 — Tu es relecteur ADVERSE. Tu
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `5c1bbea7-1d14-47b6-a48c-fea15f2b857e` |

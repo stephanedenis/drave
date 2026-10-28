@@ -1,5 +1,7 @@
 # Session 42059fde — Tu es vérificateur de documentation
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `42059fde-f06f-4e2c-9a23-8292d887fb6e` |

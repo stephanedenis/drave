@@ -1,5 +1,7 @@
 # Session 1820cf6b — Tu es un vérificateur ADVERSARIAL
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `1820cf6b-c8a4-411c-894c-31195b9ff7a8` |

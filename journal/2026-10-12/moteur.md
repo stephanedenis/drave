@@ -1,0 +1,99 @@
+# 2026-10-12 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (3)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 18:42 | `0c352069` | S4 : le préchargement par grappe mesuré hors du moteur — 1 230 Mo/s contre 29,43 à la demande sur l'array (×42), et 30,56 contre 0,56 sur le disque dur | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `rapport-prelire-grappe.md` (+1) |
+| 20:43 | `6c95d970` | S4 : la prelecture parallele des experts entre dans le moteur — le calcul d'une passe tombe de 7,70 a 3,65 s (-53 %), perplexite identique ; l'idee de Strata (couche suivante) est mesuree sans gain et reste un temoin eteint | `manques.md`, `strata-pour-drave.md`, `gguf.rs` (+9) |
+| 22:47 | `2bbecc86` | Chargement : la forme « listes » devient paresseuse — 26,95 s a 7,36 s (Qwen3-30B) et 6,85 s a 0,60 s (0,5B), sans deplacer un chiffre | `gguf.rs`, `main.rs`, `model.rs` (+4) |
+
+## Chiffres du jour
+
+`26,95 s` · `7,36 s` · `6,85 s` · `0,60 s` · `-53 %` · `3,65 s` · `×42` · `1230 Mo`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (2)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **08:52** — Je commite la note, puis je vérifie si un GGUF local porte une couche MTP
+- **08:56** — Le moteur a paniqué (mauvais ordre d'arguments) — je nettoie et j'extrais la config V4.1
+
+## Sessions actives ce jour
+
+- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-prelire-grappe.md](../reports/rapport-prelire-grappe.md)
+- [reports/rapport-s4-prechargement-moteur.md](../reports/rapport-s4-prechargement-moteur.md)
+
+<!-- notes -->
+**S4 est commencé — par la mesure du mécanisme, hors du moteur.** `docs/strata-pour-drave.md` § 4
+désigne le **préchargement ordonné** comme première action, et `docs/manques.md` § 1 porte le
+manque chiffré (8,6 Mo/s en mmap sur disque dur contre 243 Mo/s en séquentiel). Avant de toucher au
+moteur, le banc `tools/banc-prelire.py` compare **trois ordres de lecture** sur le même fichier et
+les mêmes octets utiles : **29,43 Mo/s** au hasard, **96,77** en pages consécutives, **1 230** en
+grappes de 1 Mio préchargées par `madvise` — sur l'array (**×42**). Sur disque dur : 0,56 / 16,27 /
+30,56. Fiche : [`reports/rapport-prelire-grappe.md`](../reports/rapport-prelire-grappe.md).
+
+*Trois pièges, tous corrigés et écrits dans la fiche* : une fenêtre plus petite que la lecture en
+avance du noyau n'est pas un hasard (premier essai : 300 Mo/s de cache, pris pour une mesure) ; le
+contrôle à froid doit toucher une page **à côté** (12-36 ms sur plateau, 136-3 476 µs sur l'array) ;
+`madvise` est asynchrone, donc on précharge **puis** on parcourt.
+
+**La suite, une seule action** : la porte `tools/porte-prechargement.sh` — la même passe, trois bras
+(`DRAVE_PRELIRE=0`, le préchargement actuel de la couche courante, un préchargement ordonné par la
+disposition), débit de lecture et temps de préchargement mesurés séparément du décodage. Le moteur
+ne bougera qu'après : une modification du moteur se paie d'une passe complète des portes.
+
+---
+
+**La nuit du 12 au 13 — quatre mesures, quatre changements, et trois leçons.**
+
+**1. S4 est entré dans le moteur.** `prelecture_parallele` (des fils qui entrent les pages) : le
+calcul d'une passe tombe de **7,70 s à 3,65 s** (−53 %), défauts majeurs de 957 170 à 4 188,
+perplexité identique. **L'idée de Strata telle quelle — prélecturer la couche suivante — a été
+implémentée puis ÉTEINTE** : 30,47 s sans, 32,05 s avec (un préchargement synchrone ne se recouvre
+pas avec le calcul). Elle reste un témoin (`DRAVE_PRELIRE_DENSE=1`).
+
+**2. La lecture séquentielle dans nos tampons** (`DRAVE_TAMPONS=1`, la directive du 12/10 :
+« granularité fine, allocation intelligente au lieu de virtualiser »). Quatre bras, même passe,
+cache évincé avant chacun : **tampons 6,22 Go lus / 3,40 s de passe**, fils 10,90 / 3,70,
+`madvise` 8,04 / 7,25, à la demande 9,52 / 5,97 — perplexité identique. Les tampons gagnent **et**
+sur les octets **et** sur le temps.
+
+**3. Le chargement construisait 2,7 Go de « listes » que personne ne lisait.** La forme push est
+devenue **paresseuse** : **26,95 s → 7,36 s** (Qwen3-30B), **6,85 s → 0,60 s** (0,5B). Et une leçon,
+attrapée par `porte-flux.sh` : ma première version la rendait disponible **aussi** en mode
+`--dense`, ce qui faisait basculer les couches creuses sur le chemin push — **61,9920 → 58,8636**,
+mode « listes par blocs » rouge. *Une paresse ne doit pas élargir ce que le chargement avait
+décidé.* Trouvé ensuite *qui* utilise cette forme : l'**inférence** (93 tenseurs à la demande), pas
+les passes `--ppl` (zéro) — verrouillé par `porte-push-paresseux.sh`, vue **rouge** avec
+`DRAVE_PUSH_FAUX=1`.
+
+**4. La VRAM : ce qui coûte n'est pas le lien, c'est l'ALLOCATION.** Un expert MXFP4 monté avec
+allocation : **11,72 ms** (0,38 Go/s) ; dans un tampon réutilisé : **1,05 ms** (4,19 Go/s) — 91 % du
+coût. D'où un **pool** dans le cache d'experts : **−11,6 % à travail identique** sur gpt-oss (5,60 s
+→ 4,95 s, mêmes 264 montages, perplexité identique), et une **fuite réparée** — `MatriceGpu` n'a pas
+de `Drop`, une éviction laissait la VRAM allouée. *Et un faux A/B corrigé et écrit* : le premier
+essai omettait `DRAVE_GPU_EXPERTS`, donc le cache n'existait pas et les deux runs étaient CPU — les
+10,7 % d'écart n'étaient que la variance du disque dur.
+
+**Le reste de la nuit fut les portes.** Trois nouvelles (`porte-prechargement`, `porte-m5-brouillon`,
+`porte-push-paresseux`) et quatre réparées : `porte-topologie` (prérequis régénérés, plus de
+dépendance à `/tmp`) et les trois portes à aiguille, dont l'entrée est désormais **versionnée** —
+elle vivait dans `/tmp/campagne24` sans l'avoir jamais été, et sa disparition a rendu trois portes
+« code 2 ». La passe du 12/10 à 23 h 00 : **34 vertes, 2 rouges** (36 portes, ~74 min), et les deux
+rouges sont **instruits** : le critère d'indice extérieur est **marginal par construction** —
+mesuré sur cinq fenêtres du même corpus, il passe **deux fois** (1,21× et 1,69×) et échoue **trois
+fois**. Je n'ai pas choisi la fenêtre qui passe : une porte verte obtenue en choisissant son entrée
+ne vérifie plus rien.
+<!-- /notes -->

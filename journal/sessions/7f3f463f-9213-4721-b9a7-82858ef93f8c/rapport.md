@@ -1,5 +1,7 @@
 # Session 7f3f463f — Tu es un vérificateur ADVERSARIAL
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `7f3f463f-9213-4721-b9a7-82858ef93f8c` |

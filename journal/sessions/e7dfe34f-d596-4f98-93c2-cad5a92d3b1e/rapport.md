@@ -1,5 +1,7 @@
 # Session e7dfe34f — Tu travailles dans un dépôt
 
+> **Journaux :** [le jour](../../2026-09-28/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `e7dfe34f-d596-4f98-93c2-cad5a92d3b1e` |

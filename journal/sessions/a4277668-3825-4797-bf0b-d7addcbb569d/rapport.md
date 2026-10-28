@@ -1,5 +1,7 @@
 # Session a4277668 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `a4277668-3825-4797-bf0b-d7addcbb569d` |

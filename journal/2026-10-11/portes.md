@@ -1,0 +1,63 @@
+# 2026-10-11 — Portes et vérifications
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (8)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:32 | `2028f867` | Occupation x elagage : une porte pour que le fichier porte l'elagage qu'il ANNONCE | `2026-10-11/README.md`, `2026-10-11/apprentissage.md`, `2026-10-11/divers.md` (+7) |
+| 00:33 | `1ddcdcc7` | Etat : 30 portes, et les deux portes hors passe sont nommees avec leur rouge | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-11/README.md` (+11) |
+| 01:37 | `63cf920d` | Porte « signes figes » : la seule recette du depot qui rende l'elagage indolore, et elle se verrouille | `2026-10-11/README.md`, `2026-10-11/apprentissage.md`, `2026-10-11/divers.md` (+11) |
+| 01:38 | `3a02191d` | Etat : 31 portes, la porte des signes figes est nommee avec son rouge | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-11/README.md` (+5) |
+| 02:52 | `f506e0e7` | Porte « invariants du harnais » : elle remplace une porte qui mesurait un artefact | `2026-10-11/README.md`, `2026-10-11/apprentissage.md`, `2026-10-11/attention.md` (+12) |
+| 03:20 | `150fd5db` | Audit des drapeaux du harnais : deux defauts de plus, et une porte qui les surveille | `2026-10-11/README.md`, `2026-10-11/apprentissage.md`, `2026-10-11/attention.md` (+13) |
+| 06:30 | `c5fd1747` | Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal | `references-non-regression.md`, `2026-10-11/README.md`, `2026-10-11/apprentissage.md` (+13) |
+| 06:31 | `a409bdea` | Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact | `etat-cerveau.md`, `2026-10-11/README.md`, `2026-10-11/portes.md` (+5) |
+
+## Chiffres du jour
+
+`8 s` · `25 %` · `78 %` · `÷3,8` · `1 %` · `÷7,9`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (27)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:16** — Vérification finale de l'état du dépôt pour ce round
+- **00:19** — Vérification décisive : l'instrument voit-il l'élagage, lui ?
+- **00:26** — Résultat RETOURNÉ à 25 % — vérification de l'occupation réelle
+- **00:28** — Porte de l'occupation annoncée (verte, et vue rouge avec l'ancien comportement)
+- **00:31** — La porte montre le vrai défaut en rouge (78 % pour une cible de 25 %) — commit
+- **00:49** — Non-régression : les deux portes du harnais et les tests, après les changements
+- **01:15** — Vérification du résultat sur deux autres graines (la conclusion ne peut pas tenir sur une seule)
+- **01:37** — Commit de la porte « signes figés » et des refus explicites
+- **02:39** — La porte des signes figés mesurait le même artefact — vérification après correctifs
+- **02:42** — Nouvelle porte : les INVARIANTS du harnais (les deux bugs d'aujourd'hui), pas un seuil fragile
+- **02:46** — Les deux défauts doivent pouvoir se rallumer, pour que la porte ait un rouge
+- **02:52** — Retrait de la porte au seuil fragile, commit de la porte d'invariants
+- **03:15** — Vérification du rouge de l'audit (défaut rallumé)
+- **03:20** — Commit de l'audit, de sa porte et du masque étendu
+- **03:24** — Vérification finale du round : portes du harnais et tests
+- **04:30** — Branchement des deux autres projections d'experts et vérification
+- **04:35** — Retrait des sondes, mise à jour de la porte (÷3,8 global) et vérifications
+- **05:09** — Trois documents portent encore l'ancien « 1 % » ou le « ÷7,9 » sans réserve — correction
+- **05:21** — Balayage des autres références périmées (comptes de portes, chiffres retirés)
+- **05:40** — Round 60 : état de la passe complète des 34 portes
+- **06:29** — Passe complète TERMINÉE : 34 portes, 34 vertes — relevé du verdict
+- **06:32** — Objectif au terme de ses 60 rounds : vérification des contraintes et clôture
+- **06:33** — Clôture : 60 rounds, deux jours, 34 portes vertes — bilan de ce qui a été établi
+- **08:03** — Fermeture : processus en cours, puis dépendances /tmp des portes (un redémarrage les efface)
+- **08:03** — Toutes les portes dépendent d'un corpus dans /tmp — qu'un redémarrage effacera. Inventaire
+- *(+2 autres étapes — voir les rapports de session)*
+
+## Sessions actives ce jour
+
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+
+<!-- notes -->
+
+<!-- /notes -->

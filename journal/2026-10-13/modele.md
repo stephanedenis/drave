@@ -1,0 +1,31 @@
+# 2026-10-13 — Modèles, entraînement, parcimonie, biologie
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 09:13 | `52c35b0a` | Tableau interrompu : la citation C8 coupait le tableau des capacites en deux (sept lignes orphelines, C9 a C12bis) — citation deplacee apres, en-tete rendu au tableau de plan-modeles-lourds, et la porte verifie desormais les lignes ORPHELINES | `etat-cerveau.md`, `organisation-du-depot.md`, `plan-modeles-lourds.md` (+4) |
+| 10:09 | `4a17c1d0` | C8 a l'echelle : la courbe monte encore (1032,58 -> 179,59 de 4 a 30 morceaux) mais un adaptateur NON LINEAIRE a donnees egales rend 376,01, soit 2,1x PIRE — la limite est la donnee, pas la capacite, et le manque reste N4 | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/modele.md` (+3) |
+| 10:50 | `2830407b` | C8 : la profondeur de sortie est un levier bon marche des que le lecteur est entraine — 179,59 (16 couches) / 267,98 (8) / 534,91 (4) contre 449 500 a 24,7 MILLIONS pour la tete empruntee ; l'etat precoce est lisible | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/modele.md` (+1) |
+| 11:29 | `e4dab3d6` | Note de conception : entrainer le chemin court (N4) — trois dessins du moins cher au plus cher, et cinq portes ecrites AVANT le code (invariant d'identite, temoin de la tete empruntee, deux morceaux de test, deux graines, validation separee) | `etat-cerveau.md`, `note-chemin-court-n4.md`, `2026-10-13/README.md` (+1) |
+| 13:12 | `ea35324a` | C9 sur un modele route : echanger les choix d'experts ne transfere RIEN — et la mesure a d'abord menti (x0,81, un << gain >> de 19 % demonte par les controles : signe dependant du texte, aleatoire aussi bon ou meilleur) | `etat-cerveau.md`, `references-non-regression.md`, `main.rs` (+6) |
+
+## Chiffres du jour
+
+`19 %` · `16 couches`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-c8-echelle.md](../reports/rapport-c8-echelle.md)
+- [reports/rapport-c9-echange-experts.md](../reports/rapport-c9-echange-experts.md)
+- [reports/rapport-tableaux-casses.md](../reports/rapport-tableaux-casses.md)
+
+<!-- notes -->
+
+<!-- /notes -->

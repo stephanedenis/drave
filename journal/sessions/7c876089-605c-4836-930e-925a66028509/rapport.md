@@ -1,5 +1,7 @@
 # Session 7c876089 — Tu es relecteur ADVERSARIAL dans
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `7c876089-605c-4836-930e-925a66028509` |

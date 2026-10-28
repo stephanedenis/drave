@@ -1,5 +1,7 @@
 # Session 8a0aa6e5 — Tu es un relecteur adverse.
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8a0aa6e5-1a5e-450f-a6ea-070eed249d63` |

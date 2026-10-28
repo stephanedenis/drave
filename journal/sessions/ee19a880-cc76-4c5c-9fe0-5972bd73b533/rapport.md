@@ -1,5 +1,7 @@
 # Session ee19a880 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `ee19a880-cc76-4c5c-9fe0-5972bd73b533` |

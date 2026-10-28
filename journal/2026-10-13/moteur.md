@@ -1,0 +1,151 @@
+# 2026-10-13 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:18 | `ebc58252` | VRAM : un pool de tampons dans le cache d'experts — -11,6 % a travail identique (memes 264 montages, perplexite 27736,1204 inchangee), et une fuite reparee (MatriceGpu n'a pas de Drop) | `main.rs`, `model.rs`, `2026-10-13/README.md` (+2) |
+| 01:14 | `ad37253a` | Journal du 12/10 (theme moteur) : le recit de la nuit — quatre mesures, quatre changements (prelecture parallele, tampons sequentiels, chargement paresseux, pool VRAM) et trois lecons | `2026-10-12/moteur.md`, `2026-10-13/README.md`, `2026-10-13/attention.md` (+2) |
+| 01:15 | `0abefdce` | Note des lecteurs paralleles : etat au 13/10 — les tampons sont dans le moteur et gagnent sur les octets ET sur le temps (6,22 Go / 3,40 s) | `note-lecteurs-paralleles.md`, `2026-10-13/README.md`, `2026-10-13/moteur.md` |
+| 02:23 | `a386fda6` | La passe a attrape ma porte : elle lisait << chargees en Xs >> alors que le moteur imprime << 601.03ms >> sous la seconde — elle passait sur une machine lente et echouait sur une machine rapide | `references-non-regression.md`, `2026-10-13/README.md`, `2026-10-13/docs.md` (+4) |
+| 06:18 | `04f1925a` | Pool de tampons : neutre en temps (2,4 s avant, 2,3-2,4 apres) — et l'hypothese des 250 000 defauts de page par jeton est REFUTEE (glibc reutilise les blocs de 0,88 Mo) | `gguf.rs`, `main.rs`, `model.rs` (+3) |
+
+## Chiffres du jour
+
+`2,4 s` · `0,88 Mo` · `601.03ms` · `3,40 s` · `6,22 Go` · `-11,6 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-pool-tampons.md](../reports/rapport-pool-tampons.md)
+- [reports/rapport-vram-transfert.md](../reports/rapport-vram-transfert.md)
+
+<!-- notes -->
+**La fin de l'après-midi (15 h 00 → 16 h 25) : la passe après les changements, la loi moyennée, et
+deux pièges mesurés.**
+
+* **passe complète du 13/10 à 13 h 44 : 37 vertes sur 39** (~82 min) — le meilleur état du dépôt, et
+  il inclut les deux portes nées aujourd'hui (`porte-echange-experts` ✅, `porte-tableaux` ✅). Les
+  deux rouges sont les mêmes, mais celui de `porte-indice` **a changé de cause** : il ne dit plus
+  « moins bien que le hasard » mais « **pas mieux que le témoin** » ;
+* **la loi de la fenêtre, moyennée** (`tools/loi-fenetre-textes.sh`, dix textes sur deux N) : à
+  N = 4 096, garder la moitié des clés coûte **+0,9 %** (étendue 1,0 point) et le quart **+4,1 %**
+  (1,5 point) — alors qu'à N = 2 048 le quart allait de **+2,8 % à +49,2 %**. Le régime sûr (la
+  moitié, ≤2,1 %) se confirme ; **même la dispersion dépend de N et du texte**, donc on ne descend
+  pas sous la moitié ;
+* **`--attn-sinks 0` n'est PAS « pas de puits »** : à N = 4 096 et fenêtre 2 048, **55,9647 avec**
+  contre **12,3112 sans** (référence 12,2177). Le zéro *active* le mécanisme et casse l'attention —
+  un piège, parce que zéro est la valeur qui ressemble au neutre. Mon outil est tombé dedans, le
+  commentaire dit maintenant pourquoi ;
+* **et un piège pour moi-même** : `pkill -f loi-fenetre-textes` a tué **mon propre shell** (le motif
+  figurait dans ma ligne de commande). Le dépôt le dit déjà ; je l'ai repayé. Crochets dans le
+  motif, désormais.
+<!-- notes -->
+**Le critère des portes à aiguille a été refait (13 h 35), et le nouveau critère tue l'effet.**
+
+`porte-indice.sh` comparait la distance à l'aiguille au **hasard** — un seuil qui dépend du texte
+(2 fenêtres sur 5 passaient). La porte construit maintenant une **question témoin** (même invite,
+même longueur, même position, mais elle ne désigne pas l'aiguille) et compare les **deux** distances
+sur le **même** magasin : le texte s'annule.
+
+Résultat : sur la fenêtre versionnée, l'indice réel tombe à **482** jetons et le témoin à **459** ;
+sur la fenêtre qui passait le test du hasard, l'indice réel à **315** et le témoin à **1**. **Le
+témoin égale ou bat l'indice réel dans les deux cas** : ce que la porte mesurait n'est pas porté par
+le sens de la question. Les deux rouges restent, mais leur cause est désormais **structurelle et
+nommée** — et la mesure au hasard avait raison de ne pas être crue.
+<!-- notes -->
+**L'après-midi du 13/10 (12 h 57 → 13 h 20) : C9 sur un modèle routé — un négatif, et la mesure qui a
+d'abord menti.**
+
+La « variante la plus plausible » du § 6.8 était `--echange experts` : échanger les **choix
+d'experts** entre deux instances qui voient des textes différents. Il manquait le pendant de la
+capture (`DRAVE_TRACE_EXPERTS` écrivait déjà `couche cle e0 e1 …`) : **`DRAVE_ROUTAGE_FORCER`** la
+relit et impose les choix, en gardant les poids du modèle pour les experts imposés.
+
+**L'invariant a d'abord été faux** : 37,2013 contre 37,1990 en s'imposant sa propre trace. Cause
+trouvée : la trace **trie** les experts, donc l'accumulation flottante change. `DRAVE_TRACE_EXPERTS_ORDRE=1`
+garde l'ordre de sélection, et l'invariant devient **exact** — c'est ce qui rend la mesure possible.
+
+Ensuite la mesure a **menti** : imposer à A le routage de B à la dernière couche donnait **×0,81**
+(une amélioration de 19 % !). Les contrôles l'ont démonté : **tout** routage différent y change la
+perplexité de ±20 à 50 %, le **signe dépend du texte** (×0,81 · ×1,46 · ×1,26), et l'ordre « réel
+mieux que l'aléatoire » ne tient que **2 fois sur 3** (le sens inverse l'inverse). Échanger tout le
+routage est catastrophique (×92,6) — mais 4× moins que l'aléatoire, donc il y a bien un peu de
+structure commune ; elle n'est simplement pas utilisable.
+
+**Conclusion : pas de gain latéral par les experts**, ce qui recoupe le « gain nul » de l'échange
+d'états. Le mécanisme et sa porte (`tools/porte-echange-experts.sh`, vue **rouge** sans l'option
+d'ordre) restent au dépôt. Fiche :
+[`reports/rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md).
+
+*Ce qui reste ouvert, et ce n'est plus de la latéralité* : la **dernière couche** est un poste où le
+routage du modèle n'est pas optimal (tout routage différent y bouge la perplexité de ±20-50 %).
+C'est une question d'architecture, à mesurer sur un modèle entraîné.
+<!-- notes -->
+**La matinée du 13/10 (09 h 30 → 11 h 05) : C8 à l'échelle, et le manque N4 confirmé par la mesure.**
+
+La question ouverte du plan § 6.9 était « reste l'échelle ». Réponse en trois mesures, sur **33
+morceaux** de 1 024 jetons répartis dans le corpus, avec **validation séparée** (m30+m31) et **test
+sur un morceau jamais vu** (m32) :
+
+* **la donnée paie encore, à rendements décroissants** : perplexité TEST **1 032,58** (4 morceaux) ·
+  **369,22** (8) · **260,81** (15) · **179,59** (30) — ÷5,75 pour ×7,5 de données, et ÷1,4 par
+  doublement en fin de courbe ;
+* **la capacité n'est PAS la limite** : à données égales, un adaptateur **non linéaire**
+  (896→512→896, GELU) rend **376,01**, soit **2,1× pire** que le linéaire. Ajouter des paramètres ne
+  remplace pas des exemples ;
+* **la profondeur de sortie est un levier bon marché dès que le lecteur est entraîné** : 179,59
+  (16 couches) · **205,58** (12) · 267,98 (8) · **534,91** (4) — ×1,14 · ×1,30 · ×2,00 par 4 couches,
+  la pénalité s'accélérant seulement quand on sort très tôt —, là où la tête **empruntée**
+  s'effondre de 449 500 à **24,7 millions**. À un sixième du réseau, un lecteur
+  entraîné rend 535 quand la tête du modèle rend 24,7 millions (÷46 000) : **l'information est dans
+  l'état, c'est le lecteur qui manquait** ;
+* **et les deux leviers se multiplient largement** : le rapport 8/16 couches vaut 1,69 · 1,47 ·
+  1,49 pour 4, 15 et 30 morceaux — mais **il dépend du texte** (×1,17 sur un second morceau de test,
+  m20) : le facteur va de 1,2 à 1,7. Ma première version disait « ~×1,5 constant » : **c'était trop
+  fort, corrigé dans la fiche et dans le plan**. La direction, elle, ne change pas : on ne rattrape
+  pas une sortie précoce avec des données.
+
+**Deux contrôles, et ils comptent** : la **graine** pèse **0,7 %** (178,39 contre 179,59 → la courbe
+tient), mais le **morceau de test** pèse **×10** — et la **forme** de la courbe ne se transporte pas
+non plus : de 15 à 30 morceaux, m32 gagne ÷1,45 et m20 gagne ÷22,8 (une falaise). Seule la
+**direction** est robuste : plus de données aide. Aucune loi chiffrée ne se tire d'un seul texte.
+
+Conclusion pour le dessin : la voie « adapter un chemin gelé » ne rattrapera pas le modèle
+(~4 000 morceaux par extrapolation), et agrandir la tête est **mesuré contre-productif** → **le
+manque est bien N4**, entraîner le chemin court. Fiche :
+[`reports/rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md).
+<!-- notes -->
+**La seconde moitié de la nuit (02 h 30 → 04 h 00) : le cerveau et les outils.**
+
+* **Dessin H, sorties précoces (8 et 4)** : la sortie 8 porte le meilleur produit théorique
+  (**16,96 %** des paires au mieux, 4,8× la sortie 22) mais le **routeur réel y perd 0,30 point** —
+  aux sorties précoces, aucun seuil de confiance n'atteint la parité. Le facteur limitant est bien
+  la qualité du chemin court (N4). `reports/rapport-design-H-sorties-precoces.md`
+* **La loi de la frontière en N n'existe pas** : à N = 2 048, garder **la moitié** des clés coûte
+  ≤2 % sur **trois textes** (+0,5 / +1,9 / +0,8), garder le **quart** coûte **+5 à +49 %** — un
+  facteur 9 selon le texte, qui domine toute tendance en N. `reports/rapport-loi-frontiere-fenetre.md`
+* **`MADV_POPULATE_READ` tranché** : 2 121 Mo/s, soit ≈ le `madvise` par tranches et **2,2× sous**
+  `pread` par 8 fils (4 603) — il ne remplace pas les tampons. Et un défaut de banc corrigé : le
+  bras passait un **offset de fichier** comme adresse à `madvise` (ENOMEM, aucune mesure).
+* **La famille « prérequis dans /tmp » est fermée** : cinq outils de plus branchés sur
+  `tools/_corpus.sh` (le corpus est régénéré, plus supposé), et l'outil de la fenêtre rendu
+  persistant.
+* **La passe a attrapé ma propre porte** : `porte-push-paresseux` lisait `chargées en …s` alors que
+  le moteur imprime `601.03ms` sous la seconde — elle passait sur une machine lente et échouait sur
+  une machine rapide. Corrigée (unité lue, refus de mesurer sur du vide).
+<!-- notes -->
+**La nuit du 12 au 13 est racontée dans [`2026-10-12/moteur.md`](2026-10-12_moteur.md)** (section
+« La nuit du 12 au 13 ») : la prélecture parallèle (−53 % de calcul d'une passe), la lecture
+séquentielle dans nos tampons (6,22 Go / 3,40 s), le chargement paresseux (26,95 s → 7,36 s) et le
+pool VRAM (−11,6 % à travail identique) — avec les trois leçons payées : une paresse ne doit pas
+élargir ce que le chargement avait décidé, un A/B doit vérifier que le chemin mesuré est **actif**,
+et un critère de porte ne survit pas toujours à une reconstruction de son entrée. Les commits de
+cette nuit sont listés ci-dessus, datés par git.
+<!-- /notes -->

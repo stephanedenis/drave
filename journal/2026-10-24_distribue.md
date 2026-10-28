@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24.md](2026-10-24.md). Convention : `docs/organisation-du-depot.md`.
 
-## Commits du jour (29)
+## Commits du jour (30)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -37,10 +37,11 @@
 | 23:30 | `b17bee8c` | DOC — LA PORTE D'ENTREE ET LA MISSION DISENT LA PHASE FAITE : A7, B4, A8 ne sont plus « la nouvelle phase » a venir — elles sont faites, mesurees et closes (A7 : le relais, la grappe a 21 %, le transport a 4,22x ; B4 : les six mesures, jusqu'au LoRA qui inverse ; A8 : la regle branchée en opt-in). Le pic du 32 B et la prose scientifique restent nommes | `AGENTS.md`, `mission.md`, `2026-10-24.md` (+2) |
 | 23:31 | `13db82c5` | DOC — LA VISION DIT LES AXES 2 ET 3 FAITS : le tableau des cinq axes renvoyait a A8 et A7 comme a venir ; il dit maintenant A8, fait (la regle place+perte, opt-in) et A7, fait (le relais 42,5477, la grappe a 21 %, le transport a 4,22x). La demonstration distante reste bloquee par le compte Colab | `vision.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
 | 23:33 | `37f02537` | README — CE QUI EST FAIT, CE QUI RESTE OUVERT : le README disait qu'A7 « reste a faire », que B4 « n'est pas encore mesure », qu'A8 « manque » — c'etait perime. Il dit maintenant : fait, mesure (A7 : relais 42,5477, grappe 21 %, transport 4,22x ; B4 : les six mesures, jusqu'au LoRA qui inverse ; A8 : la regle en opt-in) et reste ouvert, bloque par le dehors (la prose, le 32 B, les langues/Colab/FPGA) | `README.md`, `2026-10-24.md`, `2026-10-24_distribue.md` (+1) |
+| 23:50 | `63a878de` | ROADMAP — LA LIGNE C3.2 : LES MODULES PAR FAMILLE. C3 est mesure (85,1 % a une langue ; 30 % -> 4,4 % -> 0,4 % -> 0,6 % a 1/10/50/448 langues : la restitution meurt entre 1 et 10). La suite : C3.2a le decoupage par famille (441 langues, 55 familles, 10 de plus de 9 langues), C3.2b un module par famille (lora_recopie --ids), C3.2c la comparaison a la courbe (le taux a 10 langues doit depasser 4,4 %). Le controle : la surface de la famille n'est pas la restitution | `roadmap.md`, `2026-10-24.md`, `2026-10-24_mesures.md` (+1) |
 
 ## Chiffres du jour
 
-`21 %` · `42,5477` · `0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135` · `0,7717` · `723 paires` · `60,8135` · `1 %` · `+2,28 %`
+`85,1 %` · `30 %` · `4,4 %` · `0,4 %` · `0,6 %` · `21 %` · `42,5477` · `0,4662` · `0,2283` · `1,0000` · `0,0022` · `0,8135`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

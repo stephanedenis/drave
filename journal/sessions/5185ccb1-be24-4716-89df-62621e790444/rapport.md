@@ -1,5 +1,7 @@
 # Session 5185ccb1 — Tu es relecteur ADVERSARIAL dans
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `5185ccb1-be24-4716-89df-62621e790444` |

@@ -1,5 +1,7 @@
 # Session 7d0d2578 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `7d0d2578-0048-4998-8494-7d2daef56769` |

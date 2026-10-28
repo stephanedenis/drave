@@ -1,5 +1,7 @@
 # Session 4b146dfd — Tu es relecteur ADVERSE. Tu
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `4b146dfd-ce0b-4af8-910f-610ab438d4e6` |

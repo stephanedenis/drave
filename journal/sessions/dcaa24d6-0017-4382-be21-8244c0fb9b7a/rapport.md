@@ -1,5 +1,7 @@
 # Session dcaa24d6 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `dcaa24d6-0017-4382-be21-8244c0fb9b7a` |

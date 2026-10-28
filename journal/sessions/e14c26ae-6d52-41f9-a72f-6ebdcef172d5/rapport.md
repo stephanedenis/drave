@@ -1,5 +1,7 @@
 # Session e14c26ae — Tu es relecteur ADVERSARIAL, en
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `e14c26ae-6d52-41f9-a72f-6ebdcef172d5` |

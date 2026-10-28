@@ -1,5 +1,7 @@
 # Session 18c3f6d0 — Relecture ADVERSARIALE ciblée (10 minut
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `18c3f6d0-5bb1-45bb-9f94-ab0e7812218d` |

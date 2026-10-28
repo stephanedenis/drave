@@ -1,5 +1,7 @@
 # Session 8e04c99a — Tu es VÉRIFICATEUR de documentation
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8e04c99a-8ba1-4675-9f80-fa3338449b17` |

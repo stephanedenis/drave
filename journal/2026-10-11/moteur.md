@@ -1,0 +1,57 @@
+# 2026-10-11 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 04:03 | `c2c97ecc` | M9, seconde moitie : la variable d'environnement est DECLAREE (le test du depot l'exige) | `main.rs`, `2026-10-11/README.md`, `2026-10-11/apprentissage.md` (+12) |
+| 04:23 | `3e5d9c19` | Dessin B : un noyau qui lit les SEULS non-nuls — exact, il paie la sparsite, et il est plus LENT | `main.rs`, `model.rs`, `2026-10-11/README.md` (+13) |
+| 04:24 | `d3a0e921` | Fiche B : le noyau creux est exact, paie la sparsite, et est 8,5 % plus LENT (mesure, pas promesse) | `2026-10-11/README.md`, `2026-10-11/moteur.md`, `README.md` (+4) |
+| 04:58 | `45649fe8` | Etat : 34 portes (et non 35), la porte du noyau creux nommee avec son rouge | `etat-cerveau.md`, `2026-10-11/README.md`, `2026-10-11/distribue.md` (+5) |
+| 05:22 | `149a0ff9` | Etat : la passe complete en cours porte sur 34 portes (trois modifications du moteur depuis la derniere) | `etat-cerveau.md`, `2026-10-11/README.md`, `2026-10-11/apprentissage.md` (+12) |
+
+## Chiffres du jour
+
+`8,5 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (15)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:18** — Décision : instrument Python plutôt que modification du moteur (les experts ne passent pas par `Proj`)
+- **03:47** — Implémentation : compter les non-nuls d'un tenseur Q4_0 sans le déquantifier
+- **03:56** — Commit de la seconde moitié de M9 (le moteur voit l'occupation) et de sa porte
+- **04:01** — ALERTE : un test casse par ma modification du moteur — identification
+- **04:04** — Dessin B, la pièce manquante : un noyau qui lit les SEULS non-nuls
+- **04:04** — Écriture du noyau creux (CSR de non-nuls, en tête de `Proj`)
+- **04:05** — Branchement du noyau creux dans `matvec` et dans le chemin par lots
+- **04:08** — Mesure : le noyau creux change-t-il la VITESSE de génération ?
+- **04:09** — Résultat honnête : le noyau creux est EXACT et compte moins, mais il est plus LENT
+- **04:19** — Interrupteur pour un rouge fidèle (le noyau n'est pas branché) et déclaration de variable
+- **04:23** — Commit du noyau creux, de sa porte et du fait désagréable
+- **04:26** — Layout Q4_0 du `DenseQ4` emprunté — lecture du noyau pour le décoder correctement
+- **04:33** — Branchement du noyau creux dans le chemin des experts jeton par jeton
+- **04:43** — À quelle densité le noyau creux devient-il RENTABLE ? (mesure du point de bascule)
+- **05:00** — Passe complète des 34 portes (le moteur a changé trois fois depuis la dernière)
+
+## Sessions (titres de tour)
+
+- `d31b3d9b` — Tour 8 — donc les nouveaux nvme seront sur l'autre cpu pour ne pas réduire le nombre de voies des gpu. La ram reste t… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+
+## Sessions actives ce jour
+
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-dessin-B-poids-creux.md](../reports/rapport-dessin-B-poids-creux.md)
+
+<!-- notes -->
+
+<!-- /notes -->

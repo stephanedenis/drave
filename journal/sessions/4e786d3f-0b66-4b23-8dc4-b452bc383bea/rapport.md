@@ -1,5 +1,7 @@
 # Session 4e786d3f — Tu es un relecteur ADVERSARIAL.
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `4e786d3f-0b66-4b23-8dc4-b452bc383bea` |

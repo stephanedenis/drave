@@ -1,0 +1,78 @@
+# 2026-10-10 — Ce qui ne rentre dans aucun thème
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (0)
+
+*(aucun commit classé dans ce thème)*
+
+## Chiffres du jour
+
+`400 s` · `0,509` · `3,7 %` · `−11,5 %` · `−4,5 %` · `512 jetons` · `50 ms` · `50,2 ms` · `−20 %` · `−8 %` · `10 ms` · `9,4341`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (151)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:06** — C2 : `opt` est déstructuré dans run_ppl — je capture les valeurs avant
+- **00:07** — C2 : j'ajoute `--fusion-pos` (n'injecter qu'à la position de la question) et je branche l'inférence
+- **00:10** — C2 : `--infer` veut `--prompt`, et un avertissement parasite sur `fusion-alpha` — je corrige
+- **00:28** — C2 : deux captures coûtaient 400 s — je capture plusieurs positions en UNE passe
+- **00:38** — C2 : je vérifie que l'injection atteint réellement le calcul (sortie complète d'un essai)
+- **00:39** — C2 : l'injection est chargée mais sans effet — je regarde quelle fonction l'inférence appelle
+- **00:40** — C2 : j'injectais à la position 0, qui ne sert pas à générer — je teste à la DERNIÈRE position
+- **00:42** — C2 : la position « dernière » ne se devine pas (l'invite gagne un jeton) — je l'ajoute comme valeur symbolique
+- **00:43** — C2 : la résolution doit se faire APRÈS la troncature du contexte — je déplace
+- **01:05** — C2 : le garde-fou du dépôt a attrapé ma variable non déclarée — je la déclare
+- **02:28** — Je récapitule la session avec les livrables exacts
+- **02:29** — Session résumée : 15 commits, 6 capacités du cerveau livrées et mesurées
+- **02:39** — C2 : le décalage d'un jeton frappe encore la CAPTURE — je calibre la position avant de mélanger
+- **02:47** — C2 : troisième fois que le décalage d'un jeton me mord — je capture depuis l'inférence elle-même
+- **03:06** — La bascule est entre 0,5 et 0,6 — cohérent avec le rapport des normes (0,509)
+- **03:38** — Mon test cherchait « Z » dans les identifiants — le contenu est bien là (1863 = « ZQ »)
+- **03:52** — Le cas 5 échoue À RAISON : la suite appartient maintenant à A — je réécris l'assertion
+- **04:08** — Round livré : C2 (règle de mélange mesurée) + correction d'un faux négatif publié
+- **04:21** — Mon splice a visé la mauvaise fonction — je reviens au commit et je prends le chemin sûr (8 passes)
+- **04:23** — Mon parseur lisait deux fois le même argument — je corrige (`args.get(i+2)`)
+- **05:44** — Round 6 livré : prédiction réfutée proprement — et elle confirme une leçon par une 3ᵉ voie
+- **05:50** — Le pilote PANIQUE (code 134) au lieu de mon chemin d'erreur — je regarde où
+- **05:51** — La panique est à la CONNEXION initiale (le pair était déjà mort) — je la nomme aussi
+- **06:02** — `set -u` et un second argument absent — je corrige et relance
+- **06:03** — Code 127 (commande introuvable) sur le cas 5 — je reproduis à la main
+- *(+126 autres étapes — voir les rapports de session)*
+
+## Sessions (titres de tour)
+
+- `d31b3d9b` — Tour 1 — où en est-on → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 2 — ça fait plusieurs jours qu'on est sur des travaux lourds avec peu de résultats constructifs. Il faut revenir… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 5 — Hypothèse de changement de configuration matériel : Si je déploie ce projet sur une station de travail bi-pr… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 7 — le ram est actuellement hors de prix. je t'ai fait évaluer une approche asymétrique, mais c'est déconseillé.… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 9 — encore une journée complète avant l'arrivé du nouveau matériel. Exécute pendant 24h les tâches que tu trouve… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 36 — allons-y pour un sprint cerveau complet. Vasy en mode autonome jusqu'à demain matin (9h hae 10 octobre) → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 37 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 38 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 39 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 40 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 41 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 42 — <goal_round> Objective: "Sprint « cerveau complet » en autonomie jusqu'au 10 octobre 9 h (HAE) : implémente… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 43 — ajuste tes sprints en timeboxing plus qu'en tranche de backlog. C'est à dire que tu dois continuer pour occ… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 44 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 45 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 46 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 47 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 48 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 49 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 50 — <goal_round> Objective: "Timeboxing jusqu'au 10 octobre 9 h (HAE) : occuper TOUT le temps imparti en progrè… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- *(+42 autres tours — le détail est dans le rapport de session)*
+
+## Sessions actives ce jour
+
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+
+<!-- notes -->
+` … `
+<!-- /notes -->

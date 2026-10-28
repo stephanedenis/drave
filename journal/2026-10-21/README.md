@@ -1,0 +1,476 @@
+# 2026-10-21
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**50 commits** · **0 session(s)** · **6 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 1 | [2026-10-21/apprentissage.md](apprentissage.md) |
+| distribue | 12 | [2026-10-21/distribue.md](distribue.md) |
+| memoire | 4 | [2026-10-21/memoire.md](memoire.md) |
+| mesures | 22 | [2026-10-21/mesures.md](mesures.md) |
+| modele | 9 | [2026-10-21/modele.md](modele.md) |
+| moteur | 2 | [2026-10-21/moteur.md](moteur.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:04 | `7848738b` | MESURE 76 — JW.ORG 2026 : 11 LANGUES, 139 PARAGRAPHES ALIGNES PAR data-pid — toutes au-dessus du hasard (+12,5 haoussa a +44,7 arabe egyptien). LA COUVERTURE DEMOGRAPHIQUE ATTEINT 19/20 : seul manque le pidgin nigerian (creole oral sans corpus parallele). Le critere de passage a l'etage 2 est atteint ; l'etage 2 s'ouvre |
+| 00:22 | `261acc5b` | MESURE 77 — ETAGE 2, PREMIERE MESURE : la representation est PARTAGEE entre les langues mais NON ALIGNEE. Un pont lineaire par langue atteint un cosinus de 0,78-0,92 et retrouve la bonne traduction dans 28-67 % des cas (hasard 0,7 %), controle negatif ~0. Le retrieval brut va de 5 % (arabe egyptien, urdu) a 87 % (vietnamien) : les langues proches s'alignent d'elles-memes, les lointaines ont besoin du pont. L'etage 2 a sa premiere mesure |
+| 00:57 | `f93259e5` | MESURE 78 — ETAGE 2 : LA TAILLE NE CHANGE PRESQUE RIEN A L'ALIGNEMENT (+3,7 en lecture, +1,4 en ecriture du 3 B au 7 B) ; le sens partage vit dans les PREMIERES COUCHES (4-6) et LIRE ≈ ECRIRE. Le pont lineaire reste a 28-69 % (hasard 0,7 %), controle negatif ~0 |
+| 01:10 | `0266a82f` | MESURE 79 — ETAGE 2 : LA COMPOSITION N'EST PAS DEMONTREE. Seuls les paragraphes COMPLETS s'alignent (0,2-0,78) ; les prefixes de caracteres restent pres du hasard (0,0-0,18) et la trajectoire est plate (+0,02 a +0,18). Le test est CONFONDU : les prefixes ne sont pas des unites de sens equivalentes — il faut aligner des phrases, pas des caracteres |
+| 01:36 | `10f48a2c` | MESURE 80 — LA COMPOSITION EST LA : sur des phrases ALIGNEES (Verne FR/EN, 200 phrases en 50 series de 4), le sens de la phrase est partage (retrieval 0,61, hasard 0,5 %) et sa POSITION dans la serie est retrouvee (ordre 0,84, hasard 25 %) a la COUCHE 18. Le pont lineaire est inutile (0,42) et la derniere couche s'effondre (0,09) : le sens est au milieu, la langue a la fin |
+| 01:47 | `dc8c7c3c` | MESURE 81 — LA COMPOSITION PROFITE DE LA TAILLE : 0,76 / 0,865 au 7 B (couche 14 sur 28) contre 0,61 / 0,84 au 3 B (couche 18 sur 36) — +15 points de retrieval. Le sens neutre vit a 50 % de la profondeur dans les deux modeles, et la derniere couche s'effondre encore plus (0,125) |
+| 01:50 | `60dfb783` | MESURE 82 — LE PAS DE PENSEE APPRIS TIENT DEUX PAS : l'operateur lineaire predit l'etat suivant (cosinus 0,81-0,90 contre 0,51-0,78 pour l'identite ; retrieval 0,22 contre 2,2 % de hasard), l'iteration retrouve la bonne position deux fois (0,73 puis 0,53, hasard 25 %), puis S'EFFONDRE au troisieme (0,13-0,47). La falaise du chapitre 5 est repoussee de un a deux pas, mais elle est toujours la |
+| 01:54 | `5c39f566` | MESURE 83 — LE PAS DE PENSEE NE PROFITE PAS DE LA TAILLE : le 7 B ne tient pas plus de pas que le 3 B (0,6-0,73 puis 0,27-0,53), et son cosinus est meme plus bas (0,73-0,84 contre 0,81-0,90). La composition profite de la taille (+15, mesure 81), la dynamique non : le probleme est l'OPERATEUR, pas le modele |
+| 02:00 | `b74d1b5c` | MESURE 84 — LA CONTRACTION SIMPLE NE SAUVE PAS LE PAS DE PENSEE : melanger le pas appris avec l'etat courant (alpha < 1) DEGRADE l'iteration (alpha 0,75 : 0,40/0,07/0,33 ; alpha 1 : 0,73/0,53/0,33 au 3 B, couche 12). Un pas plus petit ne va pas plus loin : la falaise n'est pas une question d'amplitude, mais de direction. La contraction doit etre APPRISE, pas imposee par un melange |
+| 02:03 | `1a79a8c4` | MESURE 85 — UN MLP RESIDUEL NE FAIT PAS MIEUX : il sur-apprend (perte 0,0001 sur 105 transitions) et generalise moins bien que le lineaire (0,40/0,07/0,07 contre 0,73/0,53/0,33 a la couche 6 ; 0,067/0/0 contre 0,60/0,33/0,47 a la couche 18). La limite est la DONNEE, pas la forme de l'operateur : il faut une recurrence entrainee sur beaucoup plus de phrases |
+| 02:10 | `ad59e098` | MESURE 86 — LE PIDGIN NIGERIAN EST MESURE, ET LE MODELE NE LE TRADUIT PAS : marge -1,5 sur le plancher (33,9 contre 35,3) — le modele copie/adapte l'anglais au lieu de produire du pidgin. Le sens inverse fait a peine mieux (+3,2). La couverture reste 19/20 : le pidgin est un trou REEL, pas un trou d'instrument |
+| 03:43 | `f1890732` | JOURNAL — LES PORTES DE LA NUIT : 44 vertes, 2 rouges (porte-indice et porte-melange, les deux rouges structurelles connues). Toute autre porte est tenue ; la passe complete est verte |
+| 03:45 | `a8788cd8` | MESURE 87 — LA COMPOSITION PLAFONNE ENTRE 7 ET 14 B : 0,68 / 0,855 au 14 B (couche 16) contre 0,76 / 0,865 au 7 B (couche 14) — le gain de taille s'arrete, et l'OOM de la repartition invite a la prudence. Le sens reste a mi-profondeur (16/48 = 33 %) et la derniere couche s'effondre (0,050) |
+| 03:50 | `ca2e0567` | MESURE 88 — LE PAS DE PENSEE AU 14 B : la taille ameliore le PREMIER pas (0,933 a la couche 40, contre 0,733 au 3 B/7 B), mais PAS la DUREE : le pas 2 retombe a 0,467 et le pas 3 a 0,133. La falaise n'est pas une question de capacite du modele, mais de dynamique |
+| 04:09 | `0d27043b` | MESURE 89 — LE PIDGIN : LA LECTURE PASSE, L'ECRITURE NON. pcm->eng est au-dessus du plancher dans les deux tailles (7 B : +3,2 [+1,3;+5,3] ; 14 B : +4,4 [+1,0;+7,9]) ; eng->pcm est negatif au 7 B (-1,5 [-3,4;+0,5]) et marginal au 14 B (+2,3 [-0,6;+5,5]). Le few-shot aide la lecture (+16,3) mais pas l'ecriture (-6,9). La couverture du pidgin est UNIDIRECTIONNELLE |
+| 04:19 | `8c975bcf` | MESURE 90 — L'ECRITURE DU PIDGIN N'EST PAS APPRENABLE SUR 39 PAGES : le LoRA (r=16, 7,4 M parametres) memorise parfaitement (perte 0,003) mais ne transfere RIEN (marge appariee -4,2 sur le conte tenu a part, contre -4,1 avant). L'ecriture est un trou de DONNEES, pas de methode |
+| 04:31 | `8c93df71` | MESURE 91 — L'ADAPTATION MONOLINGUE DETRUIT LA TRADUCTION : le LoRA sur 63 textes pidgin (24 articles BBC + 39 pages de contes, conte de test exclu) fait tomber le chrF de 40,8 a 10,5 (marge -34,4, 0/11 pages au-dessus du plancher). Le modele perd le suivi d'instruction et continue le texte — oubli catastrophique. La production du pidgin demande des milliers de pages et un entrainement melange, pas un LoRA sur 63 textes |
+| 05:06 | `62f65396` | MESURE 92 — L'ENTRAINEMENT MELANGE AMELIORE L'ECRITURE DU PIDGIN : marge -4,1 -> +1,2 (chrF 40,8 -> 46,1) sur le conte tenu a part, SANS CATASTROPHE (lecture +9,3 -> +9,0 ; traduction generale -1,0 -> -1,9). Le pidgin s'apprend avec des donnees : 1 840 articles BBC + melange 50/25/25 et LoRA sur les 12 dernieres couches |
+| 05:30 | `59a12737` | MESURE 93 — BBC SEUL : L'ECRITURE MONTE DE -4,1 A -0,5 (+3,6) MAIS NE PASSE PAS LE PLANCHER. Sur les 50 pages, la marge reste negative (IC [-3,3 ; +2,2]) ; la lecture est stable (+0,2 -> +1,0) et la traduction generale perd 1,2. Le corpus monolingue seul ne suffit pas : il manque les PAIRES |
+| 05:43 | `d7b31f95` | MESURE 94 — LA VALIDATION CROISEE DEMENT LE GAIN : sur les 5 contes (50 pages), la marge poolee est -2,3 [-5,5 ; +1,0] (20/50 pages au-dessus). Le +1,2 de la mesure 92 etait une FLUCTUATION d'un conte, pas un apprentissage. L'ecriture du pidgin reste sous le plancher : il faut des milliers de paires, pas seulement du monolingue |
+| 06:07 | `0bd8f485` | MESURE 95 — LES 2 832 PAIRES TRANSLATEWIKI AMELIORENT L'ECRITURE : marge poolee +1,3 [-0,9 ; +3,5] sur les 50 pages (28/50), contre -2,3 sans les paires — +3,6 points. L'ecriture passe de significativement negative a positivement marginale ; les PAIRES sont le levier, il en faut plus pour reduire l'IC |
+| 06:21 | `236b24fd` | MESURE 96 — LES PAIRES BIBLIQUES DEGRADENT L'ECRITURE : marge poolee -4,6 [-7,9 ; -1,1] sur les 50 pages (14/50), pire que sans paires (-2,3) et que translatewiki (+1,3). LE REGISTRE COMPTE PLUS QUE LE VOLUME : 30 950 paires archaiques/religieuses (KJV vs PCMWBT 2019) apprennent la langue de la Bible, pas celle des contes |
+| 06:34 | `1878edf7` | MESURE 97 — LA BIBLE MODERNE (WEB) NE SAUVE RIEN : marge -6,2 [-10,5 ; -2,1] (17/50), PIRE que le KJV (-4,6). C'est le REGISTRE religieux qui nuit, pas l'archaisme. Il faut des paires NARRATIVES MODERNES (contes, actualites, dialogues), pas des textes sacres |
+| 06:38 | `14521b49` | DOCUMENTATION — LA LECON DU REGISTRE entre dans la synthese : 30 950 paires bibliques DEGRADENT la traduction du pidgin (-4,6 avec le KJV, -6,2 avec le WEB moderne), quand 2 832 paires modernes l'ameliorent (+1,3). Le registre compte plus que le volume et que la modernite (mesures 96-97) |
+| 06:51 | `f7f9069e` | MESURE 98 — LA VALIDATION CROISEE A 7 CONTES (71 pages) CONFIRME LE SEUIL : marge +0,9 [-0,9 ; +2,9], 36/71 pages — positive, pas significative. Les deux contes manquants (0066 : +3,1 ; 0327 : +0,0) ont ete recuperes dans le depot GitHub (pages en level3-txt) ; l'ecriture reste au seuil et demande plus de paires narratives |
+| 07:04 | `4f062d44` | OUTIL — k-fold : option --repartir pour le 7 B ; le 7 B OOM sur 2x16 Go avec les logits plein vocabulaire (batch 2, 256 jetons). Le 3 B reste le modele mesure ; un 7 B batch 1 + gradient checkpointing est a essayer |
+| 08:26 | `a94d9af5` | MESURE 99 — LE 7 B N'EST PAS MESURABLE SUR CE MATERIEL : fp16 OOM (chargement puis logits plein vocabulaire) ; 8 bits + LoRA donne des generations cassees (chrF 17,0, marge -21,9, 1/71 page). Ce n'est pas une mesure du 7 B, c'est un echec d'outillage. Le 3 B reste la reference (+0,9 sur 71 pages, mesure 98) |
+| 08:55 | `4a7c768b` | MESURE 100 — LE 7 B fp16 CASSE AUSSI LES GENERATIONS (chrF 8,2-24,8) : l'entrainement LoRA 7 B est le probleme, pas la quantification. Le meme dispositif fonctionne sur le 3 B (chrF 39,8, +0,9). Le 7 B n'a pas ete teste dans des conditions valides ; le 3 B reste la reference |
+| 09:07 | `f0fbcac4` | MESURE 101 — LE 7 B RESTE CASSE MEME AVEC LA RECETTE CORRIGEE : couches 16-27, sans checkpointing, lr 5e-6 -> chrF 26,0, marge -19,0 (3/11). Le probleme n'est ni les couches, ni le checkpointing, ni le lr : c'est la pile 7 B fp16 reparti + LoRA (device_map + PEFT + generation). Le 3 B, meme pli, fait 51,8 (+6,9) |
+| 09:19 | `074b43a7` | MESURE 102 — LA BIBLE NARRATIVE ECHOUE AUSSI (-20,3) : le domaine biblique est TOXIQUE pour ce corpus, pas seulement son archaisme. Meme les livres narratifs (Genese, Evangiles, Actes) avec le WEB moderne cassent la traduction (chrF 24,6 contre 51,8 sans Bible). Le translatewiki reste le seul levier positif |
+| 09:49 | `1c9dc222` | MESURE 103 — ABLATIONS DE RECETTE : le chat (+2,2) et toutes les couches (+4,2) font MOINS BIEN que last-12 (+6,9) sur le pli 0210. La recette simple est la meilleure ; le verrou n'est ni le format, ni les couches, ni le rang : c'est la DONNEE |
+| 09:53 | `3fe1cce2` | SOURCES — inventaire des sources paralleles pidgin-anglais : 8 testees, 3 utilisees (contes 71 pages, translatewiki 2832 paires, BBC 1840 articles), la Bible ecartee (toxique), JW/OPUS/Tatoeba inaccessibles. Le corpus narratif moderne non religieux n'existe pas dans les sources ouvertes accessibles ; l'ecriture plafonne a +0,9 |
+| 13:49 | `832b776e` | MESURE 104 — LA WIKIPEDIA PIDGIN (1 186 paires LOCALES) DEGRADE AUSSI L'ECRITURE : -10,8 sur le pli 0210 (chrF 34,1 contre 51,8 sans wiki). Le registre utile est encore plus etroit que « moderne non religieux » : seul le registre des CONTES tient. Verification du contenu local : 6 langues Nipada (81 Go, 2026-06-08), index anglais 4 218 781 titres, 0 doublon ; le pidgin manquait, dump telecharge, 1 186 paires construites sans API |
+| 14:26 | `f440561a` | MESURE 105 — LE 7 B REPARE (AUTOCAST + GRADSCALER) DONNE +1,2 [-0,6 ; +3,1] SUR 71 PAGES — mieux que le 3 B (+0,9), mais pas significatif. Le bug etait l'overflow fp16 sans scaler ; la taille n'est pas le levier, le corpus reste la limite |
+| 14:41 | `d3bbba4c` | MESURE 106 — TRIPLER LE CORPUS DE CONTES (211 pages, 21 contes) NE CHANGE RIEN : +1,0 [-0,9 ; +2,9] contre +0,9 (71 pages). L'hypothese « il suffit de plus de contes » est FALSIFIEE ; le verrou est la PRODUCTION du pidgin, pas le volume |
+| 15:02 | `7427192e` | MESURE 107 — LE 14 B FRANCHIT LE SEUIL : +4,6 [+2,4 ; +7,0] sur 71 pages (50/71), quatre plis significatifs. L'ecriture du pidgin est etablie avec un adaptateur 14 B ; la COUVERTURE PASSE A 20/20. La taille est le levier : 3 B +0,9, 7 B +1,2, 14 B +4,6 |
+| 16:10 | `6ffbd1df` | MESURE 108 — L'OPERATEUR APPRIS PAR RECURRENCE NE TIENT PAS PLUS DE PAS : 0,73/0,27/0,27, le pas 2 retombe au hasard (0,25), la ou le lineaire tenait 0,53. Les poids partages + les cibles multi-pas n'etendent pas la dynamique ; la falaise n'est ni une contraction ni une capacite manquante. Le penser sans verbaliser reste a 1-2 pas |
+| 16:35 | `5f9b7242` | DRAVE — GPU AUTOMATIQUE : le GPU est essayé par défaut, le CPU reste le repli ; DRAVE_GPU=0 force le CPU. CUDA_VISIBLE_DEVICES vide est ignoré avec un avertissement (le piège qui masquait les 2 RTX 5000 alors que nvidia-smi les montrait) |
+| 18:16 | `a90c47a2` | DOC — le tableau des questions dit 20/20 (mesure 107) ; la ligne 124 n'a plus de cellule en trop (porte-tableaux : 527 fichiers verts). Portes : 44 vertes, 2 rouges connues |
+| 20:01 | `f096d4d8` | JOURNAL — verdict final des portes : 44 vertes, 2 rouges structurelles connues ; porte-tableaux repassee verte, porte-vision verte (608) avec le GPU automatique |
+| 20:29 | `65548bf6` | DOC — les docs disent la verite actuelle, pas l'historique : l'etage 2 tient deux pas et ne s'etend pas par les operateurs testes (la piste active est l'etat latent) ; les paires doivent etre du bon registre ET du bon domaine. Les details des echecs restent dans reports/ |
+| 20:38 | `113dacfe` | MESURE 109 — L'ETAT LATENT ENTRAINE AVEC LA TACHE COLLAPSE : le pas 3 monte a 0,60-0,67 mais le pas 1 tombe a 0,00 ; le pas partage saute au dernier etat (point fixe), ce n'est pas une dynamique. Erreur de parcours notee : le F etait a lr 1e-5 (0,00/0,00/0,00), corrige par groupes de lr (F a 1e-3) |
+| 20:39 | `2015644d` | DOC — synthese 05 : la dynamique tient deux pas et aucun operateur teste ne l'etend (contraction, MLP, recurrence, latent) ; le latent collapse en point fixe. L'historique des mesures 82-85 reste dans reports/ |
+| 20:41 | `59e302f0` | MESURE 109 (suite) — le latent 14 B collapse pareil : 0,00/0,40/0,40 ; le pas 1 reste au point fixe. Outil composition_latente.py versionne |
+| 20:52 | `4057fb6a` | MESURE 110 — LA PENALITE DE POINT FIXE NE DEBLOQUE PAS LE PAS 1 (0,00) : le pas 3 perd meme au 3 B (0,60 -> 0,47). Le diagnostic : l'entrainement joint collapse les etats (le LoRA rapproche les h), le F devient trivial ; les etats figes restent la meilleure base (0,73/0,27/0,27) |
+| 20:53 | `d37ffaa1` | README — index des mesures 109-110 (latent et penalite) ; les JSON des compositions latentes |
+| 21:12 | `38058bea` | MESURE 111 — LE PIDGIN A 600 PAS : +5,0 [+2,1 ; +7,3] sur 71 pages, 59/71 (contre +4,6, 50/71 a 300 pas). Le 0089 passe de -1,9 a +2,3 ; le 0095 de +1,5 a +4,9 ; seul le 0327 reste negatif (-2,8). La couverture 20/20 se renforce |
+| 21:40 | `276ba7ef` | MESURE 112 — LE PIDGIN A 1000 PAS : +5,8 [+4,1 ; +7,6], 59/71, les 7 plis positifs (le 0327 passe de -2,8 a +4,7 ; le 0066 a +7,9). La couverture 20/20 est solide : marge +5,8, IC le plus etroit |
+| 23:27 | `07e4be7d` | ERRATUM 6 + MESURES 113-114 — LA « FALAISE » DU PAS DE PENSEE ETAIT UNE CARTE DES LIGNES CASSEE : 200 noms pour 400 lignes, les « series de 4 phrases » etaient fr0/en0/fr1/en1, des paires de traduction. Sur la carte correcte, l'operateur lineaire PREDIT LA MOYENNE (effondrement 0,89-0,99, retrieval 0-8,9 % contre 2,2 %), aux 3 B/7 B/14 B ; le contrastif reste au hasard (2,2-11,1 %) et un MLP memorise sans generaliser. Mesures 82-85, 88 et 108 RETIREES. Le perimetre des langues s'arrete au francais inclus et l'etage 2 devient le chantier principal |
+| 23:42 | `1f0f557a` | MESURE 115 — L'ETAT D'UNE PHRASE NE PORTE PAS LA SUIVANTE : 630 series, 1 323 transitions ; le lineaire reste la moyenne (cos 0,827-0,940 contre 0,821-0,939 ; effondrement 0,933-0,995) et le MLP memorise (perte 0,03) sans generaliser (retrieval 0-1,15 %, dans la serie 14-27 % contre 25 %). Ni l'echantillon, ni la forme, ni l'objectif : il manque l'etat de PLAN de la serie. L'etage 2 devient la phase principale |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+**La nuit du 20 au 21 octobre — de la couverture à l'étage 2.**
+
+La journée a commencé par une **porte fermée** : l'UDHR, seule ressource alignée pour les 12 langues qui manquent à
+la couverture, est **inutilisable** — 7 langues la **récitent** (l'article 1 canonique en hindi, arabe, bengali,
+indonésien, urdu, japonais, marathi), 5 ne savent pas la lire (mesure 75). Et le test au jeton était **aveugle** :
+il ajoutait une phrase dans la langue cible, que le modèle recopiait sans traduire.
+
+La **porte s'est ouverte** avec **jw.org** : les mêmes articles de *La Tour de garde* d'**août 2026**, en 12 langues,
+avec des **traductions humaines** et des identifiants `data-pid` partagés (mesure 76). 139 paragraphes, 11 langues
+au-dessus du hasard (+12,5 haoussa à +44,7 arabe égyptien) : la **couverture démographique atteint 19/20** ; seule
+manque le **pidgin nigérian**, un créole oral sans corpus parallèle post-cutoff.
+
+**L'étage 2 s'est ouvert** le même soir. La représentation neutre **existe** (un pont linéaire retrouve la bonne
+traduction dans 28-69 %, mesure 77), mais elle **n'est pas donnée** : les langues proches s'alignent d'elles-mêmes,
+les lointaines ont besoin du pont. La **taille ne change presque rien** à cet alignement (+3,7, mesure 78), et le
+sens partagé vit dans les **premières couches** (4-6).
+
+La **composition** a d'abord échoué (préfixes de caractères, mesure 79), puis **réussi** sur des phrases vraiment
+alignées (Verne FR/EN : 0,61 de retrieval, 0,84 d'ordre, couche 18, mesure 80), et **profité de la taille** (0,76 /
+0,865 au 7 B, couche 14 sur 28, mesure 81). Le **pas de pensée** appris tient **deux pas** (0,73 puis 0,53) puis
+s'effondre (mesure 82) ; la **taille ne le repousse pas** (mesure 83) et la **contraction par mélange dégrade**
+(mesure 84), et un **MLP résiduel** sur-apprend et fait moins bien que le linéaire (mesure 85) — le problème est
+l'**opérateur** et la **donnée** : il faut une **récurrence entraînée**, pas un opérateur post-hoc.
+
+**Le pidgin nigérian**, dernière langue manquante, a été **mesuré** (African Storybook, 50 pages) : le modèle le
+**lit** (pcm→eng : +3,2 au 7 B, +4,4 au 14 B, IC exclus de 0) mais ne l'**écrit** pas (eng→pcm : −1,5 au 7 B, +2,3
+marginal au 14 B, −6,9 en few-shot) — mesures 86 et 89. Un **LoRA sur 39 pages** mémorise parfaitement (perte 0,003)
+mais ne transfère pas (−4,2) : l'écriture est un **trou de données**, pas de méthode (mesure 90). *La couverture est
+**unidirectionnelle** : lire oui, écrire non.* L'**adaptation monolingue** (63 textes BBC + contes) **détruit** la traduction
+(chrF 40,8 → 10,5, oubli catastrophique, mesure 91). Mais avec **1 840 articles BBC Pidgin** et un entraînement
+**mélangé** (pidgin + traduction + anglais), l'écriture **passe de −4,1 à +1,2** sans catastrophe (mesure 92) ; le
+corpus **BBC seul** la mène à **−0,5** sur 50 pages (mesure 93) : le pidgin est un **trou de données**, pas une
+incapacité, et il manque surtout des **paires**. La **validation croisée** des 5 contes **dément** le gain :
+marge poolée **−2,3** [−5,5 ; +1,0], 20/50 pages au-dessus — le +1,2 était une **fluctuation** (mesure 94). Mais avec **2 832 paires translatewiki**, la validation croisée
+remonte à **+1,3** [−0,9 ; +3,5] : **les paires sont le levier**, il en faut plus pour réduire l'IC (mesure 95). Mais **30 950 paires bibliques**
+**dégradent** l'écriture (−4,6) : le **registre** compte plus que le **volume** — il faut des paires **modernes et
+narratives**, pas archaïques (mesure 96). La Bible **WEB moderne** est **pire** encore (−6,2) : c'est le **registre
+religieux** qui nuit, pas l'archaïsme (mesure 97). Avec les **7 contes** (71 pages), la marge est **+0,9**
+[−0,9 ; +2,9] : le seuil est confirmé, pas franchi (mesure 98). Le **7 B** n'est **pas mesurable** sur 2×16 Go : fp16 OOM, 8 bits
+cassé (chrF 17,0) — le 3 B reste la référence (mesure 99). En **fp16 par pli**, le 7 B casse **aussi** les
+générations (chrF 8,2-24,8) : c'est l'**entraînement LoRA 7 B** qui est en cause, pas la quantification (mesure 100). Même avec la **recette
+corrigée** (couches 16-27, sans checkpointing, lr 5e-6), le 7 B reste cassé (chrF 26,0, marge −19,0) : la pile
+7 B réparti + LoRA est en cause (mesure 101). La **Bible narrative** (Genèse, Évangiles, Actes, 7 526 paires) échoue
+**aussi** (−20,3) : le **domaine biblique** est toxique, pas seulement la forme (mesure 102). Les **ablations de recette** (chat : +2,2 ;
+toutes les couches : +4,2) font **moins bien** que last-12 (+6,9) : la recette est réglée, le verrou est la **donnée**
+(mesure 103). Vérification du **contenu local** : 6 langues Nipada (81 Go, 2026-06-08), index anglais 4,2 M de
+titres, **0 doublon** ; le pidgin manquait, son dump est téléchargé (1 902 articles) et 1 186 paires locales sont
+construites — mais la **Wikipédia dégrade aussi** l'écriture (−10,8) : le registre des **contes** est le seul qui
+aide (mesure 104). Le **7 B est réparé** : l'overflow fp16 (sans scaler) cassait la génération ; avec **autocast +
+GradScaler**, il donne **+1,2** [−0,6 ; +3,1] sur 71 pages, un peu mieux que le 3 B (+0,9) — la taille n'est pas le
+levier, le corpus reste la limite (mesure 105). La **base brute African Storybook** (`asp-raw-db`) donne **14 contes
+pidgin-anglais de plus** (140 pages, appariés par les illustrations) : le corpus **triple** (211 pages, 21 contes) mais
+la marge reste **+1,0** — l'hypothèse « il suffit de plus de contes » est **falsifiée** (mesure 106). Mais le **14 B** franchit le seuil :
+**+4,6 [+2,4 ; +7,0]** sur 71 pages (50/71), quatre plis significatifs — l'écriture du pidgin est **établie** et la
+**couverture passe à 20/20** (mesure 107). **Ce que la nuit
+laisse** : une couverture à 19/20 (pidgin mesuré et échoué), un étage 2 avec cinq mesures (représentation,
+composition, dynamique), et une **carte précise** de ce qui manque — des données pour le pidgin, une dynamique
+contractante **entraînée**, et les langues lointaines dans la composition.
+
+**23 h 30 — le périmètre s'arrête au français, et l'étage 2 devient le chantier principal.** Décision de Stéphane :
+les langues à couvrir sont les plus parlées **jusqu'au français inclus** (5 langues, Ethnologue 2026) ; les 20 déjà
+mesurées restent une **marge**, pas un critère. La couverture entrée-sortie est donc **close** sur le périmètre, et
+la phase change : la **pensée abstraite** passe au premier plan, les registres parlé/technique continuant en
+parallèle.
+
+**23 h 45 — erratum 6 : la « falaise » du pas de pensée était un bug de carte des lignes.** En reprenant les états
+Verne pour la nouvelle phase, un contrôle de cohérence saute aux yeux : `noms` porte **200** noms pour **400** lignes.
+`composition_verne.py` écrit deux états par phrase (FR puis EN) et n'en nommait qu'un : les « séries de 4 phrases »
+de la mesure 82 étaient `fr0, en0, fr1, en1`, des **paires de traduction** — le « pas de pensée » appris était un
+opérateur de **traduction**, et « deux pas puis la falaise » un artefact de l'alternance des langues. Le pont
+FR→EN sur les lignes paires/impaires le confirme (44-48 % de retrieval parmi 50 paires) ; sur la carte correcte,
+les 0,73/0,53/0,13 deviennent **0,13/0,33/0,47**. Les mesures **82-85, 88 et 108** sont **retirées** ; la source et
+les outils sont corrigés (les anciens refusent de tourner).
+
+**Mesures 113-114 — l'opérateur linéaire n'est qu'une moyenne.** Sur la carte correcte (phrase i → ligne 2i), le
+ridge **prédit la moyenne** : cosinus égal au prédicteur constant à ±0,03, **effondrement 0,89-0,99**, retrieval
+**0-8,9 %** contre 2,2 % de hasard, aux 3 B/7 B/14 B. Un opérateur **contrastif** ne fait pas mieux (2,2-11,1 %), et
+un MLP contrastif **mémorise** (perte 0,03) sans généraliser. *Il n'y a donc pas de premier pas : l'état d'une phrase
+ne porte pas la suivante — la question de l'étage 2 devient celle du **plan** de la série.*
+
+**23 h 40 (21 octobre) — mesure 115 : l'information n'est pas dans l'état d'une phrase.** La mesure 114 laissait la
+question ouverte (105 transitions, un MLP qui mémorise). On passe à **630 séries** (2 520 phrases, 3 B) : **1 323
+transitions** d'entraînement, 567 de test. Le linéaire reste la **moyenne** (cos 0,827-0,940 contre 0,821-0,939,
+effondrement 0,933-0,995) et le MLP, qui mémorise (perte 0,03), reste au **hasard** (retrieval 0-1,15 % ; dans la
+série 14-27 % contre 25 %). *Ce n'est ni l'échantillon, ni la forme, ni l'objectif : l'état d'une phrase ne porte pas
+la suivante ; il faut un état qui porte le **plan** de la série.* C'est le premier chantier de l'étage 2, désormais
+la phase principale.
+
+**0 h 05 (22 octobre) — mesure 116 : le contexte ne porte pas le contenu.** Sur 307 séries de 8 phrases, le contexte
+(moyenne du préfixe + ridge) retrouve la suite **dans la série** jusqu'à 0,40, et le GRU jusqu'à 0,24 — mais le test
+de **contenu** (8 candidats non vus d'autres séries, même pas) reste à **0,14** contre 0,125, et le contrôle à 0,13.
+*Le gain dans la série est un effet de position : la phrase suivante est la seule « nouvelle ». Le plan n'est pas
+extractible des états figés — il faut l'entraîner dans le modèle.* C'est le prochain chantier de l'étage 2.
+
+
+**0 h 10 (22 octobre) — mesure 117 : le plan est un mince résidu.** Un auto-encodeur GRU (8 états → code de 32 →
+décodeur) reconstruit la trajectoire des séries tenues à part à **0,86-0,89**, contre **0,83-0,88** pour la simple
+**moyenne** : +0,02 à +0,03, même si le code bat le **code mélangé** de +0,06 à +0,09. *La trajectoire est dominée par
+l'état moyen ; le plan n'est pas un objet de faible dimension lisible dans les états figés.* Le critère de la suite
+est donc le **gain sur la moyenne**, et le plan doit être **entraîné** dans le modèle.
+
+
+**0 h 15 (22 octobre) — mesure 118 : la langue est lisible, la structure ne l'est pas.** Une sonde de **position**
+(8 classes) entraînée sur le FR et testée sur le FR et l'EN reste à **0,105-0,144** (hasard 0,125), tandis qu'une
+sonde de **langue** atteint **0,999-1,000** : l'état porte la langue, pas la structure. *L'« ordre 0,84 » de la mesure
+80 était l'appariement des traductions, pas un code de position.* C'est cohérent avec les mesures 113-117.
+
+
+**1 h 20 (22 octobre) — mesure 119 : le plan s'entraîne.** Après six mesures négatives sur les états figés, le
+premier résultat **positif** de l'étage 2 : un LoRA (3 B, r = 16, toutes les couches) entraîné par InfoNCE à
+retrouver la **5ᵉ phrase** depuis les 4 premières fait passer le retrieval de contenu de **0,239 à 0,443** (hasard
+0,125) sur des séries tenues à part. Le **contrôle à cibles mélangées** reste à **0,227** : le gain vient de
+l'objectif, pas du LoRA. *Le plan n'est pas un objet à lire dans les états figés, c'est un objet à entraîner.* Le
+chantier suivant est le plan **multi-pas** — la dynamique.
+
+
+**1 h 50 (22 octobre) — mesure 120 : le plan porte trois pas.** Le même état de plan z (dernier état de la couche 18
+sur les 4 premières phrases) est entraîné à retrouver la 5ᵉ, la 6ᵉ et la 7ᵉ phrase parmi 8 candidats : **0,443 /
+0,295 / 0,341** contre 0,125 de hasard, après 300 pas (avant : 0,239 / 0,205 / 0,170). *La dynamique n'est plus
+bloquée à un pas : un état de plan entraîné porte trois pas.* C'est le premier résultat de l'étage 2 qui dépasse le
+pas unique ; la suite est l'échelle et les horizons au-delà de 3.
+
+
+**8 h 10 (22 octobre) — mesure 121 : le plan transfère en partie.** Le contrôle des **cibles figées** (mises en cache
+avant l'entraînement) ramène le retrieval du plan à **0,318 / 0,250 / 0,216** (hasard 0,125 ; avant 0,239 / 0,205 /
+0,170), contre 0,409 / 0,284 / 0,330 sur les cibles du modèle fine-tuné : environ **la moitié** du gain de la mesure
+120 est un vrai plan, l'autre moitié est l'adaptation de l'espace cible. *Le critère de la suite est désormais le
+retrieval contre les cibles figées.*
+
+
+**8 h 40 (22 octobre) — mesures 122-123 : le plan transfère peu.** À **16 phrases** (144 séries, 40 items par
+horizon), le gain apparent (0,189 → 0,254 avec les cibles du modèle entraîné) **disparaît** sur les cibles figées
+(0,193 contre 0,189). À la **graine 5678** (8 phrases), le gain se reproduit (0,409 / 0,330 / 0,352) et le contrôle
+mélangé reste au hasard (0,227 / 0,205 / 0,170), mais le transfert figé est **inconstant** (+0,080 / 0,000 / +0,068).
+*Le plan appris est donc, pour une large part, une adaptation de l'espace cible ; la suite est d'**entraîner contre
+des cibles figées**.*
+
+
+**9 h 15 (22 octobre) — mesure 124 : contre des cibles figées, le plan transfère.** En cachant les cibles du modèle
+figé et en entraînant le LoRA **contre elles**, le retrieval transféré monte à **0,324 / 0,273 / 0,216** (moyenne de
+deux graines ; hasard 0,125 ; avant 0,205 / 0,216 / 0,165), avec le **même signe** aux deux découpages. Seul **h1**
+est solide (z ≈ 2,0) ; h2/h3 restent dans le bruit de 88 items. *Ce n'était pas l'information qui manquait, c'était
+la cible qui bougeait.* La suite : plus de séries de test, horizons au-delà de 3, état de plan récurrent.
+
+
+**10 h 00 (22 octobre) — mesure 125 : le raisonnement est dans l'état, le pont manque.** Chaînes d'ordre contrôlées
+(2 à 6 entités, prémisses mélangées, FR/EN) : une sonde linéaire retrouve la conclusion à **1,00 / 0,92 / 0,84 /
+0,78 / 0,51** (FR) et **1,00 / 0,98 / 0,85 / 0,52 / 0,53** (EN), contre 5 % de hasard ; les contrôles à étiquettes
+mélangées sont au hasard. Mais le **transfert FR→EN est au hasard** (0,02-0,09). *Le raisonnement est là, sa
+géométrie ne l'est pas : la prochaine brique est le pont d'alignement.*
+
+
+**11 h 00 (22 octobre) — mesure 126 : le pont linéaire rend le raisonnement indépendant de la langue.** Sur **2000
+chaînes appariées** FR/EN, un pont ridge EN→FR appris sur les états permet à la sonde FR de lire l'état EN :
+**1,00 / 0,91 / 0,68 / 0,52 / 0,46** pour 2 à 6 entités, contre 0,04-0,08 sans pont ; le contrôle à paires mélangées
+reste au hasard (0,05-0,08). *La géométrie est alignable par une petite structure, pas par un modèle plus gros :
+la tête bien faite, c'est un état qui compose + un pont qui le rend commun.*
+
+
+**11 h 30 (22 octobre) — mesure 127 : le pont est structurel, pas lexical.** La même expérience avec une autre
+relation (« a une taille supérieure à » / « is taller than ») donne **1,00 / 0,85 / 0,67 / 0,56 / 0,44**, superposable
+à l'ordre (1,00 / 0,91 / 0,68 / 0,52 / 0,46), contrôle à paires mélangées au hasard. *Un même pont sert deux
+relations : l'alignement porte la structure du raisonnement, pas les mots de la relation.*
+
+
+**12 h 00 (22 octobre) — mesure 128 : le pont n'est pas propre à une langue.** Avec l'espagnol comme source (2000
+chaînes appariées), le pont ES→FR donne **1,00 / 0,92 / 0,72 / 0,56 / 0,50**, superposable au FR/EN
+(1,00 / 0,91 / 0,68 / 0,52 / 0,46) ; contrôle à paires mélangées au hasard. *Le pont est une petite structure
+portable, calculée par paire de langues.*
+
+
+**12 h 35 (22 octobre) — mesure 129 : le pont doit rester linéaire.** Un MLP EN→FR (2048 → 512 → 2048) ne dépasse
+pas le hasard (0,04-0,17), contre 0,46-1,00 pour le pont linéaire ; contrôle au hasard. *Avec ~250 paires par
+longueur, la capacité non linéaire sur-apprend : l'alignement est une petite structure linéaire, pas un réseau.*
+
+
+**13 h 15 (22 octobre) — mesure 130 : le pont n'est pas une couche.** Aux couches **12, 18 et 24**, le pont linéaire
+EN→FR récupère le raisonnement (0,38-1,00) ; la **couche 12** est la meilleure aux longues chaînes (0,74 / 0,64 /
+0,48) et in-langue. *L'alignement est une propriété de la représentation à mi-profondeur ; la « tête bien faite » a
+une profondeur, le milieu du réseau.*
+
+
+**13 h 50 (22 octobre) — mesure 131 : quatre langues.** Avec l'allemand comme source, le pont DE→FR donne **1,00 /
+0,94 / 0,74 / 0,65 / 0,52**, comme FR/EN et FR/ES ; contrôle à paires mélangées au hasard. *L'alignement est
+langue-général sur quatre langues indo-européennes, dont une à ordre des mots différent.*
+
+
+**14 h 20 (22 octobre) — mesure 132 : le pont ne se transpose pas au plan.** Sur les 307 séries Verne appariées, le
+pont EN→FR appris sur les prompts donne **0,148**, contre **0,250** sans pont (hasard 0,125) : il aligne le
+raisonnement (une question courte), pas l'**état de plan** (un contexte de 4 phrases). *Le plan reste à entraîner
+dans le modèle ; le pont n'est pas un mécanisme universel.*
+
+
+**15 h 00 (22 octobre) — mesure 133 : le pont tient pour l'arabe.** Avec l'arabe comme source (autre famille, autre
+écriture), le pont AR→FR donne **1,00 / 0,90 / 0,73 / 0,48 / 0,41**, contre 0,04-0,08 sans pont ; contrôle au hasard.
+*L'alignement n'est pas un effet de voisinage : il tient pour une langue non indo-européenne.*
+
+
+**16 h 05 (22 octobre) — mesure 134 : la géométrie n'est pas partagée entre tâches.** Un pont EN→FR appris sur les
+2000 paires de **raisonnement**, appliqué aux prompts de **plan**, donne **0,125** — exactement le hasard (le même
+pont récupère 0,46-1,00 sur le raisonnement). *Les tâches de l'étage 2 ont des géométries locales : un pont par
+tâche, ou un plan entraîné dans le modèle.*
+
+
+**11 h 05 (22 octobre) — mesure 135 : un seul pont pour toutes les longueurs.** Pont et sonde **poolés** sur toutes
+les longueurs : **0,94 / 0,91 / 0,81** pour 4 à 6 entités (contre 0,46-0,68 avec un pont par longueur) ; un pont
+appris sur les chaînes de 2 entités **seul** échoue (0,03-0,12). *Une seule carte linéaire, calculée une fois sur
+toutes les longueurs : la version la plus économique de la tête bien faite.*
+
+
+**11 h 20 (22 octobre) — mesure 136 : le multi-tâches ne suffit pas.** Un pont EN→FR appris sur 1400 paires de
+raisonnement **et** 215 paires de prompts de plan donne **0,136** sur le plan (hasard 0,125 ; sans pont 0,250) ;
+contrôle à paires de plan mélangées 0,125. *Ajouter des paires de plan ne l'aligne pas : il faut aligner les
+**cibles**, ou entraîner le plan dans le modèle (mesures 119-124).*
+
+
+**11 h 40 (22 octobre) — mesure 137 : le pont marche au 7 B.** Au 7 B (réparti sur les deux GPU), pont et sonde
+poolés donnent **1,00 / 1,00 / 0,95 / 0,87 / 0,81**, contre 0,06-0,10 sans pont ; contrôle au hasard. *La taille
+améliore le raisonnement in-langue (FR 0,926 à 6 entités contre 0,653 au 3 B), mais l'alignement reste la même carte
+linéaire : la tête bien faite ne remplace pas la grosse tête, elle la rend utilisable dans toutes les langues.*
+
+
+**11 h 55 (22 octobre) — mesure 138 : un code partagé non supervisé ne suffit pas.** Une ACP commune FR+EN suivie du
+pont donne **0,14-0,98** à 64 dims et **0,34-1,00** à 256 dims, contre **0,46-1,00** pour le pont pleine dimension :
+la compression non supervisée perd l'information de raisonnement. *La tête bien faite n'est pas une réduction de
+dimension, c'est une carte alignée.*
+
+
+**12 h 20 (22 octobre) — mesure 139 : la CCA aligne, le code de 64 dims perd l'information.** Un code CCA (64 dims,
+sur une ACP 256) porte le raisonnement d'une langue à l'autre au niveau de son in-langue (0,281 contre 0,306 à
+6 entités), mais ce code est plus faible que l'espace plein (0,306 contre 0,653). *L'alignement est supervisé et
+réel ; le problème est la capacité, pas l'alignement.*
+
+
+**12 h 35 (22 octobre) — mesure 140 : la CCA à 256 dims récupère.** Le code CCA de 256 dimensions donne
+**0,57-1,00** (contre 0,28-1,00 à 64 dims) : la capacité était le problème ; le transfert reste à 68-76 % de
+l'in-langue, et le pont poolé garde l'avantage à 6 entités (0,81). *Deux petites structures, deux compromis : le
+pont garde la performance, la CCA donne un code commun.*
+
+
+**16 h 15 (22 octobre) — mesure 141 : au 14 B, le pont est quasi parfait.** Qwen2.5-14B (réparti sur les deux GPU) :
+pont et sonde poolés donnent **1,00 / 1,00 / 1,00 / 1,00 / 0,975**, contre 0,03-0,08 sans pont ; contrôle au hasard.
+*Le raisonnement est parfait in-langue et le pont le transfère quasi sans perte : la petite structure linéaire suffit
+à 3, 7 et 14 B.*
+
+
+**16 h 55 (22 octobre) — mesure 142 : entraîner en français ne suffit pas.** Un LoRA + tête (500 pas, FR seulement)
+garde une sonde FR forte (0,974), mais la sonde FR→EN reste à **0,092** (hasard 5 %) et le pont **baisse à 0,513**
+(0,81 figé) : le fine-tuning monolingue n'aligne pas, il **dégrade** l'alignement. *Il faut un objectif multilingue,
+pas seulement réussir en français.*
+
+
+**17 h 35 (22 octobre) — mesure 143 : le registre parlé est mesuré (TED2020).** 400 paires de conférences TED
+(traductions humaines), deux modèles, deux sens : marge **+39,8** (EN→FR) et **+40,7** (FR→EN) au 7 B, contre
++37,7 / +38,3 au 3 B ; plancher 23,7-25,1. *Le parlé préparé passe au-dessus de la presse (+38,6) ; seul le dialogue
+spontané reste à couvrir.*
+
+
+**17 h 55 (22 octobre) — mesure 144 : le multilingue n'aligne pas non plus.** Un entraînement alterné FR/EN (500 pas,
+échauffement de la tête) garde une sonde FR à 0,989, mais la sonde FR→EN reste à **0,042** et le pont baisse à
+**0,451** (0,81 figé). *La supervision de la tâche, même bilingue, n'apprend pas l'alignement ; il faut un objectif
+contrastif entre les paires FR/EN.*
+
+
+**18 h 15 (22 octobre) — mesure 145 : le registre technique (WikiMatrix miné).** 400 paires Wikipédia minées
+(filtrées), 7 B, deux sens : marge **+41,0** (EN→FR) et **+46,0** (FR→EN), plancher 32,1 / 34,2. *Les marges les plus
+hautes des cinq registres, mais la référence est **minée** : le plancher aussi est haut, et le chrF peut être gonflé
+par les entités partagées. La carte couvre désormais juridique, presse, littéraire, parlé préparé et technique.*
+
+
+**18 h 35 (22 octobre) — mesure 146 : le contraste explicite ne suffit pas.** Un entraînement avec **InfoNCE FR↔EN**
+(500 pas, τ = 0,07) garde une sonde FR à 0,985, mais la sonde FR→EN reste à **0,042** et le pont à **0,466**. *En
+500 pas sur un LoRA d'attention, l'alignement appris n'émerge pas ; le pont externe reste la structure qui marche.*
+
+
+**18 h 55 (22 octobre) — mesure 147 : l'alignement s'apprend.** Avec un contraste plus fort (**batch 8, poids 2,
+800 pas**), la sonde FR→EN passe de 0,058 (figé) et 0,042 (contraste faible) à **0,742** ; la tête atteint **0,734**
+en EN et le pont 0,779. Le prix est l'in-langue : la sonde FR baisse de 0,987 à 0,776. *Le raisonnement devient
+indépendant de la langue dans le modèle, sans pont — à condition de fournir des négatifs et un poids suffisant.*
+
+
+**19 h 15 (22 octobre) — mesure 148 : le dialogue spontané (OpenSubtitles).** 400 paires de sous-titres (traductions
+humaines), 7 B, deux sens : marge **+32,3** (EN→FR) et **+33,6** (FR→EN), plancher 17,2 (le plus bas). *Le dialogue
+est le plus dur après le littéraire, et de loin le plus libre ; la carte des six registres est complète.*
+
+
+**19 h 50 (22 octobre) — mesure 149 : le contrôle du contraste.** Avec des paires **mélangées** dans l'InfoNCE, la
+sonde FR→EN monte quand même à **0,505** (paires correctes : 0,742) : l'entraînement **bilingue** aligne déjà en
+grande partie, et le bon appariement ajoute **+24 points**. *Le contraste correct n'est pas la cause unique ;
+le contrôle « bilingue sans contraste » est lancé pour séparer les deux effets.*
+
+
+**20 h 20 (22 octobre) — mesure 150 : le bilinguisme est la cause principale.** Sans contraste, la sonde FR→EN monte
+à **0,656** ; le contraste correct ajoute +9 (0,742), le mélangé coûte −15 (0,505) ; l'in-langue est meilleure sans
+contraste (0,826). *L'alignement est une conséquence de la supervision bilingue avec assez de batch et de pas ; le
+contraste correct affine, le mauvais dégrade.*
+
+
+**20 h 50 (22 octobre) — mesure 151 : la courbe.** L'alignement émerge **entre 400 et 800 pas** (0,042-0,132 à
+400-500 pas, 0,404-0,656 à 800) ; à 800 pas, le batch 8 fait **0,656** contre 0,404 (batch 4). À nombre d'exemples
+égal (3 200), b8/400 donne 0,13 et b4/800 0,40 : *c'est le nombre de pas qui compte*. L'in-langue paie (0,969 →
+0,826). Le run à 1 600 pas est lancé pour la saturation.
+
+
+**21 h 20 (22 octobre) — mesure 152 : la saturation.** À **1 600 pas** (batch 8), la sonde FR→EN atteint **0,753**
+(800 : 0,656) : le gain ralentit (+10 pour 800 pas de plus) et l'in-langue plafonne à 0,826 (figé 0,987). *Le
+compromis se stabilise : ~0,75 en transfert, ~0,83 en in-langue. L'adaptateur est sauvegardé dans
+`data/adaptateurs/bilingue-1600` pour le test du plan.*
+
+
+**21 h 50 (22 octobre) — mesure 153 : l'alignement ne transfère pas au plan.** Avec l'adaptateur aligné sur le
+raisonnement (1 600 pas bilingues), le test du plan donne **EN→FR sans pont 0,273** (figé : 0,250 ; hasard 0,125) :
+pas de transfert. *L'alignement est local à la tâche ; il faut entraîner le plan lui-même.*
+
+
+**22 h 40 (22 octobre) — mesure 154 : le plan s'aligne par son entraînement.** Un LoRA entraîné sur l'objectif du plan
+(prompt 4 phrases → 5ᵉ parmi 8), alterné FR/EN, 800 pas : **FR→FR 0,398, EN→EN 0,466, EN→FR 0,364** — contre 0,250
+(figé) et 0,273 (raisonnement) pour l'EN→FR. *Le plan s'aligne par son propre entraînement bilingue, pas par un pont ;
+le transfert atteint 91 % de l'in-langue.* Le contrôle FR seul est lancé.
+
+
+**23 h 30 (22 octobre) — mesure 155 : le contrôle FR seul corrige 154.** L'EN→FR du plan est **identique** (0,364)
+avec le français seul : le gain de 154 vient de l'entraînement de la **tâche** (les cibles FR deviennent plus
+discriminables), **pas** du bilinguisme. *Le plan ne s'aligne pas ; son transfert apparent est un effet côté cible.
+La conclusion de 154 est corrigée.*
+
+
+**0 h 50 (23 octobre) — mesure 156 : le plan résiste.** L'InfoNCE explicite FR↔EN (un pas sur deux, 800 pas, batch 4)
+n'ajoute que **+2 points** à l'EN→FR du plan (0,386 contre 0,364) ; l'EN→EN monte (0,534) mais le FR→FR baisse
+(0,330) : le contraste déplace la représentation vers l'anglais au lieu de la partager. *La géométrie du plan est
+ancrée dans la langue — le seul endroit de l'étage 2 où l'alignement échoue à toutes les méthodes.*
+
+
+**1 h 40 (23 octobre) — mesure 157 : la profondeur.** Au 3 B, le pont tient jusqu'à **12 entités** : 0,950 / 0,793 /
+0,622 / 0,561 / 0,469 pour 4, 6, 8, 10, 12 ; l'in-langue suit (1,000 → 0,711), le contrôle reste au hasard
+(0,02-0,06). *Pas de mur de profondeur : une pente.* Le 14 B est lancé pour voir si elle s'aplatit.
+
+
+**2 h 30 (23 octobre) — mesure 158 : la profondeur au 14 B.** La pente s'aplatit nettement : **0,966 à 8 entités,
+0,862 à 10, 0,695 à 12** (3 B : 0,622 / 0,561 / 0,469) ; l'in-langue 0,836 (3 B : 0,711) ; contrôle au hasard.
+*La profondeur dépend de la taille ; le pont suit la représentation.*
+
+
+**3 h 30 (23 octobre) — mesure 159 : le technique à référence humaine.** JRC-Acquis, sous-corpus technique (chimie,
+énergie, environnement), 400 paires, 7 B : marge **+36,4** (EN→FR) et **+34,9** (FR→EN), plancher 31,6-33,7. *La
+WikiMatrix minée donnait +41/+46 : la référence minée partageait les termes, elle gonflait. Le technique humain est au
+niveau du juridique (~+35).*
+
+
+
+**4 h 30 (23 octobre) — mesure 160 : le raisonnement naturel (XNLI).** 2490 paires FR/EN traduites, 3 B : l'inférence
+est dans l'état (FR **0,502**, EN **0,576** contre 33,3 % de hasard) et le pont la transfère à **0,592** — au-dessus
+du FR in-langue. *Le pont ne marche pas que sur le synthétique : il transfère aussi l'inférence naturelle.*
+
+
+**5 h 30 (23 octobre) — mesure 161 : le naturel au 14 B.** Pas de gain sur XNLI : FR 0,481, EN 0,589, pont 0,627
+(3 B : 0,502 / 0,576 / 0,592). *La taille ne change presque rien pour l'inférence naturelle ; la limite est la sonde
+linéaire sur l'état brut, pas le modèle. Il faudra une sonde non linéaire ou un fine-tuning.*
+
+
+**6 h 20 (23 octobre) — mesure 162 : la sonde non linéaire ne fait pas mieux.** Le MLP (512, 30 époques) donne
+**0,453** en FR (linéaire : 0,502), 0,368 en FR→EN, 0,542 au pont (0,592) : il sur-apprend. *Ce n'est pas la sonde qui
+limite le raisonnement naturel, c'est l'état ; pour progresser, il faut entraîner le modèle, pas changer le readout.*
+
+
+**7 h 10 (23 octobre) — mesure 163 : le fine-tuning XNLI.** LoRA + tête 3 classes, 400 pas bilingues : la tête atteint
+**0,592** (FR) et **0,610** (EN, zéro-ressource) ; la sonde FR→FR 0,592 ; et le **pont monte à 0,751** (figé : 0,592).
+*L'inférence naturelle se travaille par l'entraînement : le modèle apprend une représentation plus partageable.*
+
+
+**8 h 30 (23 octobre) — mesure 164 : le train complet XNLI.** 13 394 paires du train MultiNLI (hors domaine), 1 000
+pas : la sonde reste à **0,586** (163 : 0,592), le pont monte à **0,773** (163 : 0,751), la tête baisse
+(0,456/0,534). *Le domaine compte plus que le volume : plus de données d'ailleurs n'améliorent pas l'inférence
+in-domain.*
+
+
+**9 h 20 (23 octobre) — mesure 165 : la prose technique (MultiUN).** Documents de l'ONU traduits par des humains,
+sous-corpus technique (eau, énergie, chimie), 400 paires, 7 B : marge **+33,2** (EN→FR) et **+32,9** (FR→EN),
+plancher 30,4-33,0. *La prose technique est plus dure que le juridico-technique (JRC +36,4/+34,9) et que le
+juridique (+35,3) ; la WikiMatrix minée (+41/+46) reste le cas du gonflement. La carte des registres est complète.*
+
+
+**10 h 40 (23 octobre) — mesure 166 : le contraste seul dégrade le plan.** Avec le contraste FR↔EN à chaque pas
+(sans la tâche), l'EN→FR tombe à **0,318** et le FR→FR à 0,284 (alterné : 0,386 ; tâche seule : 0,364). *Le plan a
+besoin de sa tâche ; le contraste n'est pas un levier pour lui, il casse l'état. La récurrence de bout en bout reste
+la seule voie.*
+
+
+**11 h 50 (23 octobre) — mesure 167 : la récurrence ne sauve pas le plan.** Le GRU sur les 4 phrases (entraîné avec
+le LoRA, 800 pas) donne **0,273** (FR→FR) et **0,273** (EN→FR), contre 0,43 et 0,36 pour le contexte joint : les
+états par phrase sont plus faibles et le GRU sur-apprend (perte 0,012). *La ligne plan est close : le contexte joint
+et sa tâche, rien d'autre.*
+
+
+**12 h 30 (23 octobre) — mesure 168 : le plan multi-tâches ne l'aligne pas.** Entraîné avec le contraste du
+raisonnement (un pas sur deux), le plan donne **0,364** (EN→FR) — exactement le chiffre de la tâche seule —, le
+FR→FR baisse (0,375) et l'EN→EN monte (0,511). *Six variantes ont échoué : la ligne plan est définitivement close.*
+
+<!-- /notes -->

@@ -1,0 +1,57 @@
+# 2026-10-12 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (6)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 18:20 | `be29ebc4` | Machine : le raid0 de 4 NVMe est en service et mesuré — 7,45 Go/s à 8 lecteurs contre 1,95 à un (×3,8), QPI sans coût mesurable aux trois placements, DRAM-less confirmé en aléa QD1 | `REPRISE.md`, `configuration-nvme-raid-amd.md`, `etat-cerveau.md` (+6) |
+| 18:22 | `6a39a8bf` | Journal du 12/10 : le raid0 en service (trois commits dans la journée) — récit et chiffres dans le bloc notes du thème mesures | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `README.md` (+1) |
+| 18:43 | `77a72f81` | Journal du 12/10 : S4 commence par la mesure du mecanisme (grappe x42 sur l'array), cinq commits dans la journee | `2026-10-12/README.md`, `2026-10-12/moteur.md`, `README.md` (+1) |
+| 22:29 | `0a671116` | S4 (suite) : la lecture sequentielle dans nos tampons — 6,22 Go lus et passe de 3,40 s contre 10,90 Go et 3,70 s pour les fils ; perplexite identique dans les quatre bras | `gguf.rs`, `main.rs`, `model.rs` (+12) |
+| 22:58 | `088cf7ff` | Le fichier d'entree des trois portes a aiguille est VERSIONNE — un prerequis de mesure qui vit dans /tmp rend la mesure non reproductible | `2026-10-12/README.md`, `2026-10-12/distribue.md`, `README.md` (+6) |
+| 23:00 | `b4b6554a` | Fiches : horodatages rectifies — l'heure se lit, elle ne se suppose pas (REPRISE.md § 1) ; mes trois fiches de la nuit portaient des heures estimees au lieu des heures de git | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `rapport-chargement-paresseux.md` (+2) |
+
+## Chiffres du jour
+
+`3,40 s` · `3,70 s` · `6,22 Go` · `10,90 Go` · `×3,8` · `7,45 Go`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Sessions actives ce jour
+
+- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-raid0-nvme.md](../reports/rapport-raid0-nvme.md)
+- [reports/rapport-s4-prechargement-moteur.md](../reports/rapport-s4-prechargement-moteur.md)
+- [reports/rapport-vram-transfert.md](../reports/rapport-vram-transfert.md)
+
+<!-- notes -->
+**Le raid0 est en service, et mesuré.** L'array (4 × NVMe, 938 Go, `~/IA`, **nœud 1**) porte
+depuis aujourd'hui les modèles lourds, les artefacts, le store Ollama et les caches ; **les chemins
+configurés n'ont pas changé** (ce sont des liens — si le raid n'est pas monté, l'outil échoue au
+lieu d'écrire sur le mauvais disque). Chiffres : **7,45 Go/s** en lecture à 8 lecteurs contre
+**1,95** à un (**×3,8** — c'est le chiffre qui manquait au chantier des lecteurs parallèles),
+**2,86 Go/s** en écriture, et **92 µs** par entrée d'engram de 264 octets contre **27 713 µs** sur
+le mécanique. Le **QPI ne coûte rien** à cette bande (7,41 / 7,42 / 7,47 Go/s selon le placement).
+Ce qui n'a **pas** gagné à être déplacé, et c'est mesuré : la compilation de `drave-core` (48,03 s
+cible HDD contre 48,79 s cible array). Fiche :
+[`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) · politique et outils :
+`~/IA/README.md` (`etat-raid.sh`, `banc-io.py`, `banc-numa-raid.py`).
+
+**Deux effets de bord, tous deux entrés au plan.** (1) `drave … --materiel` **ne voit pas
+l'array** : la liste est en dur (`drave-core/src/materiel.rs:244`) et `md0` n'a pas de
+`device/numa_node` — il faut passer par ses disques. (2) `porte-topologie.sh` **survit au
+redémarrage** : prérequis persistants sur l'array, porte tenue (30,4363 puis 42,5477, écarts
+**0,00e0**) — l'« unique exception » de `REPRISE.md` § 2 tombe.
+
+*Note de sûreté* : un raid0 n'a **aucune redondance**, donc rien d'unique n'y vit sans copie — les
+**116 Go** d'artefacts (clusters réécrits, uniques) sont sauvegardés sur le mécanique et vérifiés
+**octet pour octet** (manifeste SHA-256, 45 fichiers).
+<!-- /notes -->

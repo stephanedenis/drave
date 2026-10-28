@@ -8,25 +8,25 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 05:44 | `892acfd` | C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
-| 07:27 | `dee9e58` | Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
-| 08:02 | `031dbc4` | E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
-| 08:24 | `c54c6fa` | attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
-| 08:33 | `e6f7b6b` | attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+4) |
-| 08:44 | `dd66191` | PROTOCOLE v7 LIVRE : la fenetre d'attention voyage, le refus disparait, tout est vert | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
-| 09:32 | `484a4ef` | CORRECTION : le v7 transporte la fenetre, mais le PILOTE ne l'applique pas — ma conclusion du round 28 etait hative | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
-| 09:35 | `712a8b4` | Les trois lignes manquantes : le pilote applique enfin la fenetre, et la mesure le confirme | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
-| 09:40 | `dd95fa9` | --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
-| 09:41 | `639b007` | Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
-| 10:07 | `85cf49c` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+5) |
-| 10:19 | `531e760` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) | `etat-cerveau.md`, `2026-10-10.md`, `README.md` (+4) |
-| 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
-| 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
-| 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
-| 11:42 | `62c9da5` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+9) |
-| 12:04 | `7b0ba27` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+15) |
-| 12:05 | `9cb184d` | Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4) | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+6) |
-| 19:31 | `7a3a770` | Fenetre x puits : la non-monotonie a 512 jetons est CLOSE — c'est le corpus, pas une loi | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+15) |
+| 05:44 | `892acfdf` | C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
+| 07:27 | `dee9e582` | Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 08:02 | `031dbc4d` | E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 08:24 | `c54c6fa7` | attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
+| 08:33 | `e6f7b6b5` | attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+4) |
+| 08:44 | `dd66191e` | PROTOCOLE v7 LIVRE : la fenetre d'attention voyage, le refus disparait, tout est vert | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
+| 09:32 | `484a4ef9` | CORRECTION : le v7 transporte la fenetre, mais le PILOTE ne l'applique pas — ma conclusion du round 28 etait hative | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
+| 09:35 | `712a8b49` | Les trois lignes manquantes : le pilote applique enfin la fenetre, et la mesure le confirme | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+3) |
+| 09:40 | `dd95fa9f` | --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 09:41 | `639b007f` | Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
+| 10:07 | `85cf49cd` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas | `sprint-cerveau.md`, `main.rs`, `MANIFEST.md` (+5) |
+| 10:19 | `531e7605` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) | `etat-cerveau.md`, `2026-10-10.md`, `README.md` (+4) |
+| 10:39 | `024e5092` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+13) |
+| 10:57 | `b4f15896` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+14) |
+| 11:10 | `499400e5` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+14) |
+| 11:42 | `62c9da52` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index | `etat.md`, `organisation-du-depot.md`, `2026-10-10.md` (+9) |
+| 12:04 | `7b0ba273` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit | `2026-10-10.md`, `2026-10-10_apprentissage.md`, `2026-10-10_attention.md` (+15) |
+| 12:05 | `9cb184d7` | Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4) | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_attention.md` (+6) |
+| 19:31 | `7a3a7704` | Fenetre x puits : la non-monotonie a 512 jetons est CLOSE — c'est le corpus, pas une loi | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+15) |
 
 ## Chiffres du jour
 
@@ -67,7 +67,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -75,5 +75,5 @@
 - [reports/rapport-fenetre-puits-attention.md](../reports/rapport-fenetre-puits-attention.md)
 
 <!-- notes -->
-` … `
+
 <!-- /notes -->

@@ -1,5 +1,7 @@
 # Session 4d7a793b — Tu es relecteur ADVERSARIAL, en
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `4d7a793b-74d1-4c46-bb53-21953fe91d87` |

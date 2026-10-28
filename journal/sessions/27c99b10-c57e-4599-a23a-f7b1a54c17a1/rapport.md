@@ -1,5 +1,7 @@
 # Session 27c99b10 — Tu écris un tokenizer BPE
 
+> **Journaux :** [le jour](../../2026-09-25/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `27c99b10-c57e-4599-a23a-f7b1a54c17a1` |

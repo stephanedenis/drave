@@ -1,0 +1,96 @@
+# 2026-10-09 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-09/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (13)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 01:55 | `69cf405` | Campagne 24 h : l'équivalence au bit près, le routage qui s'inverse, le lot à froid | `MANIFEST.md`, `digest.md`, `rapport.md` (+2) |
+| 02:49 | `c372bfc` | Spéculatif : l'alignement du brouillon aide, mais l'acceptation plafonne à 15,6 % | `MANIFEST.md`, `digest.md`, `rapport.md` (+3) |
+| 02:58 | `ec4fd0c` | La porte gpt-oss rend 15,6017 au chiffre près : la campagne est verte partout | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 05:07 | `fc056fb` | Le point de la file à 5 h 20 : ce qui est fait, ce qui tourne, ce qui reste un manque | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 05:57 | `3b584c1` | L'aiguille tient jusqu'à 12 288 jetons : 18 sondes sur 18 | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 07:33 | `838c511` | Ce que le nouveau matériel change, d'après les mesures — et ce qu'il ne change pas | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 10:47 | `75a3d06` | Carte des taux complète : 50 %, 25 %, 12,5 % — chaque division par deux coûte 2 % puis 8 % | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 12:24 | `e681012` | Le rapport de campagne renvoie aux trois documents de conception, et porte le résultat de structure innée | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 14:11 | `f9afaaf` | La courbe lecture-qualité, réponse finale : ÷4 pour +1 %, ÷8 pour +4 %, ÷15 pour +22 % si l'axe est imposé | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 14:42 | `ccdd6e7` | README : la campagne du 8-9 octobre en tête, avec ses cinq résultats et ses quatre documents | `README.md`, `MANIFEST.md`, `digest.md` (+1) |
+| 15:34 | `8015c64` | Annexe : manifeste des journaux de la campagne (59 fichiers d'étape, 79 Kio, 17 journaux de chaînes) | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 15:55 | `505ed18` | Clôture du rapport : ce qui reste n'est plus de la mesure en retard mais du travail identifié | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 23:23 | `3eb2cbc` | C9 : la falaise du pont est une MARCHE entre 448 et 392 fibres | `MANIFEST.md`, `digest.md`, `rapport.md` (+2) |
+
+## Chiffres du jour
+
+`392 fibres` · `79 Kio` · `+1 %` · `+4 %` · `+22 %` · `÷4` · `÷8` · `÷15` · `50 %` · `25 %` · `12,5 %` · `2 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Étapes du jour (26)
+
+*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
+
+- **00:09** — Vérification de l'état des jobs et de la campagne en cours
+- **00:16** — Lancement des trois mesures spéculatives (contrôle 0,5B→1,5B, puis grandes cibles)
+- **00:26** — Résultat fort : logits identiques au bit près. Relevé du reste de la campagne
+- **00:27** — Consignation du résultat d'équivalence bit à bit et des mesures de la campagne
+- **00:30** — Découverte : le binaire de campagne est périmé (tokenizer SPM d'avant correctif) — vérification des builds isolés
+- **00:31** — Re-mesure de la ligne codestral avec le tokenizer corrigé (binaire isolé)
+- **01:04** — La campagne est terminée : 22 portes vertes, 1 rouge — il faut la nommer
+- **01:12** — Mesure propre du lot sur disque : éviction du cache par `posix_fadvise` puis passes à froid
+- **02:58** — La porte gpt-oss passe : 15,6017 exactement — la campagne est entièrement verte
+- **05:07** — Sentinelle pour la chaîne 512 creux et la fin de l'aiguille
+- **05:57** — Aiguille : 18 sondes sur 18, jusqu'à 12 288 jetons
+- **06:25** — Machine au calme : re-mesure codestral corrigée (la dernière mesure en attente)
+- **06:34** — Rédaction du résumé exécutif de la campagne (la porte d'entrée du rapport)
+- **07:03** — Mise en file d'un troisième point de la carte des taux : 12,5 % gardé
+- **07:33** — Section de liaison : ce que le nouveau matériel change, d'après ces mesures
+- **12:24** — Trois documents et deux mesures nouvelles : je fais le point
+- **13:02** — Point d'étape : livrables en place, deux mesures en file — objectif laissé actif
+- **13:02** — Reprise : état des deux dernières mesures de structure
+- **14:42** — Mise à jour de la porte d'entrée du dépôt avec la campagne et les documents de conception
+- **14:55** — Réponse : pas de remote, et la mesure du parallélisme de compilation (×3 disponible)
+- **15:22** — Le dépôt est publié, et la question submodules/parallélisme est tranchée par la mesure
+- **15:34** — Fabrication du manifeste des journaux de la campagne (livrable vérifiable)
+- **15:55** — Mise à jour de la clôture du rapport de campagne (état réel de la file)
+- **23:08** — C9 : je mesure les octets réels des trois encodages pour comparer à armes égales
+- **23:21** — C9 : capture trop large (deux lignes de perplexité) — je resserre le motif
+- *(+1 autres étapes — voir les rapports de session)*
+
+## Sessions (titres de tour)
+
+- `d31b3d9b` — Tour 6 — je viens de commander une carte pcie pour 4 nvme 4x4 et 4 unités Patriot P320 256GB PCIe Gen 3x4 M.2 2280 SS… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 10 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 11 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 12 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 13 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 14 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 15 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 16 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 17 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 18 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 19 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 20 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 21 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 22 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 23 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 24 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 25 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 26 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 27 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- `d31b3d9b` — Tour 28 — <goal_round> Objective: "Pendant 24 h (et jusqu'à l'arrivée du nouveau matériel), mesurer et documenter ce… → [rapport complet](../sessions/d31b3d9b/rapport.md)
+- *(+7 autres tours — le détail est dans le rapport de session)*
+
+## Sessions actives ce jour
+
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
+
+<!-- notes -->
+` … `
+<!-- /notes -->

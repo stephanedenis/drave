@@ -1,0 +1,53 @@
+# 2026-10-12
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**16 commits** · **1 session(s)** · **8 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| distribue | 1 | [2026-10-12/distribue.md](distribue.md) |
+| divers | 0 | [2026-10-12/divers.md](divers.md) |
+| docs | 2 | [2026-10-12/docs.md](docs.md) |
+| memoire | 1 | [2026-10-12/memoire.md](memoire.md) |
+| mesures | 6 | [2026-10-12/mesures.md](mesures.md) |
+| modele | 1 | [2026-10-12/modele.md](modele.md) |
+| moteur | 3 | [2026-10-12/moteur.md](moteur.md) |
+| portes | 2 | [2026-10-12/portes.md](portes.md) |
+
+## Sessions du jour
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 08:53 | `e8afe672` | Docs : strata-pour-drave — S1-S6 ; M5 change de cahier des charges (le brouillon est une couche de la cible, V4.1 declare dspark_* 37-39), S4 (prechargement ordonne) en premiere action |
+| 08:58 | `29b70594` | Rapport : le brouillon de V4.1 est dans le fichier (3 couches declarees, 75 tenseurs, 41 263 M poids) ; K3 n'en declare aucun (64 cles verifiees) — S1 de strata-pour-drave mis a jour |
+| 18:20 | `be29ebc4` | Machine : le raid0 de 4 NVMe est en service et mesuré — 7,45 Go/s à 8 lecteurs contre 1,95 à un (×3,8), QPI sans coût mesurable aux trois placements, DRAM-less confirmé en aléa QD1 |
+| 18:22 | `6a39a8bf` | Journal du 12/10 : le raid0 en service (trois commits dans la journée) — récit et chiffres dans le bloc notes du thème mesures |
+| 18:42 | `0c352069` | S4 : le préchargement par grappe mesuré hors du moteur — 1 230 Mo/s contre 29,43 à la demande sur l'array (×42), et 30,56 contre 0,56 sur le disque dur |
+| 18:43 | `77a72f81` | Journal du 12/10 : S4 commence par la mesure du mecanisme (grappe x42 sur l'array), cinq commits dans la journee |
+| 20:43 | `6c95d970` | S4 : la prelecture parallele des experts entre dans le moteur — le calcul d'une passe tombe de 7,70 a 3,65 s (-53 %), perplexite identique ; l'idee de Strata (couche suivante) est mesuree sans gain et reste un temoin eteint |
+| 20:47 | `a1bf0699` | M5/S1 : la porte du brouillon verifie ce qui est verifiable — le fichier declare ses 3 couches (cibles 37-39) et porte ses 75 tenseurs ; vue ROUGE sur un modele qui ne les declare pas |
+| 20:49 | `7a118fb9` | Docs : note de conception des lecteurs paralleles — le chiffre qui ouvre le chantier (pread par 8 fils : 3 995 Mo/s contre 1 126 a la demande), ce qui existe deja, MADV_POPULATE_READ a trancher avant tout, et les portes a tenir ecrites avant le code |
+| 22:29 | `0a671116` | S4 (suite) : la lecture sequentielle dans nos tampons — 6,22 Go lus et passe de 3,40 s contre 10,90 Go et 3,70 s pour les fils ; perplexite identique dans les quatre bras |
+| 22:47 | `2bbecc86` | Chargement : la forme « listes » devient paresseuse — 26,95 s a 7,36 s (Qwen3-30B) et 6,85 s a 0,60 s (0,5B), sans deplacer un chiffre |
+| 22:57 | `334f8085` | VRAM : ce qui coute n'est pas le lien mais l'ALLOCATION — 11,72 ms par expert MXFP4 avec allocation contre 1,05 ms dans un tampon reutilise (91 % du cout), et 3,39 contre 0,27 ms en Q4_K |
+| 22:58 | `088cf7ff` | Le fichier d'entree des trois portes a aiguille est VERSIONNE — un prerequis de mesure qui vit dans /tmp rend la mesure non reproductible |
+| 23:00 | `b4b6554a` | Fiches : horodatages rectifies — l'heure se lit, elle ne se suppose pas (REPRISE.md § 1) ; mes trois fiches de la nuit portaient des heures estimees au lieu des heures de git |
+| 23:06 | `1793d189` | La porte de la paresse : l'inference prend le chemin push (93 tenseurs construits a la demande), les passes --ppl aucun — meme texte gourmand, chargement 5,2x plus rapide, et vue ROUGE avec un defaut volontaire |
+| 23:08 | `a809ef71` | Plan du cerveau : trois items soldes (array visible, lecteurs paralleles en tampons, chargement paresseux) et deux neufs (VRAM : allocation 37-91 % du cout ; le reste du chargement) |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+<!-- /notes -->

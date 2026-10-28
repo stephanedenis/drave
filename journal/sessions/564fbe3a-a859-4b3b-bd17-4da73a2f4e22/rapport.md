@@ -1,5 +1,7 @@
 # Session 564fbe3a — Tu es relecteur ADVERSARIAL de
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `564fbe3a-a859-4b3b-bd17-4da73a2f4e22` |

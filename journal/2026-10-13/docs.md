@@ -1,0 +1,23 @@
+# 2026-10-13 — Documentation, état, conventions
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (3)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 01:38 | `b51824d1` | Journal du 13/10 : renvoi vers le recit de la nuit (le travail a bascule apres minuit, les commits sont dates par git) | `2026-10-13/README.md`, `2026-10-13/moteur.md`, `THEMES.md` |
+| 05:37 | `f0263131` | Plan 6.7 : sept textes au lieu de trois (N/2 de +0,5 a +2,1 %, N/4 de +2,8 a +49,2 %) | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/attention.md` (+1) |
+| 11:28 | `cc23420b` | Journal du 13/10 : courbe de profondeur a quatre points, et la correction de ma propre affirmation (le rapport depend du texte, 1,2 a 1,7) | `2026-10-13/README.md`, `2026-10-13/mesures.md`, `2026-10-13/moteur.md` (+1) |
+
+## Chiffres du jour
+
+`+2,1 %` · `+49,2 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+<!-- notes -->
+
+<!-- /notes -->

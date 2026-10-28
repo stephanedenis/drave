@@ -1,5 +1,7 @@
 # Session 18b8879c — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `18b8879c-f211-43b8-9908-cf65e509b21d` |

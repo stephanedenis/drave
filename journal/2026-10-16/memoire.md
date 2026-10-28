@@ -1,0 +1,37 @@
+# 2026-10-16 — Mémoire épisodique, consolidation, greffe
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (10)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:31 | `073bc487` | porte-cycle-c2 : elle GARDE desormais la BORNITUDE (aucun NaN/infini, croissance par pas dans [1,5 ; 20]) et MESURE lambda — la cible realiste de C2 devient un invariant | `references-non-regression.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+2) |
+| 00:33 | `cde13806` | Journal du 16/10 : le recit du petit matin — E9 replique et garde, l'etalement renverse, la cause du cycle trouvee (et mon lambda corrige deux fois), 46 portes dont la bornitude de C2 | `2026-10-16/README.md`, `2026-10-16/memoire.md`, `README.md` (+1) |
+| 01:02 | `c4c7ab85` | E5 : la reproduction sur d'autres graines N'ABOUTIT PAS, et les trois obstacles sont documentes (mauvais drapeau masque par >/dev/null, mauvais bras qui mesurait le chemin complet, et un protocole qui ne tient pas dans 16 Go) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/mesures.md` (+3) |
+| 01:29 | `4180b8d0` | Journal du 16/10 (paragraphes 6 a 9) : le verdict sur la famille speculative, les quatre obstacles d'une reproduction, et le bilan honnete de trois rounds de plomberie | `2026-10-16/README.md`, `2026-10-16/apprentissage.md`, `README.md` (+1) |
+| 02:49 | `8c8b4899` | Journal du 16/10 (paragraphes 10 a 13) : le fil E5 — quatre murs (memoire, stabilite, objectif, mesure), le resultat replique sur deux graines, et la plomberie desormais gardee par porte-reflexe | `2026-10-16/README.md`, `2026-10-16/distribue.md`, `README.md` (+1) |
+| 03:22 | `bf0b6fd8` | Etat du cerveau, ligne C7 : l'ancien chiffre reste et le nouveau est A COTE — l'amplitude (E9) depasse l'optimum publie (x0,6 : m32 -8,75 % contre -7,47 %, hors domaine -0,58 % contre +0,33 %), sur trois volumes et trois graines, et une regle auto-contenue la designe | `etat-cerveau.md`, `2026-10-16/README.md`, `2026-10-16/portes.md` |
+| 13:17 | `e0fe07a6` | PENSER SANS VERBALISER : premiere mesure — la boucle d'etat naive DETRUIT la prediction (x30 000), ce n'est PAS une question d'echelle, et VERBALISER N'EST PAS DU GASPILLAGE (-1,55 % a 16 jetons) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/docs.md` (+2) |
+| 13:31 | `59f30d4a` | LE PAS LATENT : h_p -> h_{p+1} n'est PAS un pas de pensee — il est expansif (lambda de 30 a 120) et AUCUN amortissement ne donne a la fois contraction et contenu ; la raison est le vrai resultat, et les deux fils (cycle et pensee silencieuse) demandent le MEME objet | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/portes.md` (+2) |
+| 22:17 | `fbc3ca25` | ETAPE 3 REUSSIE : l'alignement entree=sortie amene le jouet 2M a cosinus +0,701 et echelle 1,015 (contre 0,14 et 648 sur Qwen), SANS degrader la langue (4,30 contre 4,69 bits/octet — il l'ameliore) et le contenu long SURVIT (k=16 : 88,3 % contre 89,0) ; MAIS la boucle directe echoue encore (lambda = 7311, contenu detruit) — l'alignement est necessaire mais PAS suffisant, il faut entrainer le PAS | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/docs.md` (+5) |
+| 23:25 | `876e15f0` | UTILISATION : les dix outils de la nuit du 16/10 ont leur entree dans docs/utilisation.md (chat, recopie, empreinte, pont abstrait, pensee silencieuse, pas latent, boucle directe, operateur, iterer un bloc, les deux serveurs) — et les quatre options ajoutees a l'entraineur | `utilisation.md`, `2026-10-16/README.md`, `2026-10-16/mesures.md` (+1) |
+
+## Chiffres du jour
+
+`88,3 %` · `0,701` · `1,015` · `-1,55 %` · `16 jetons` · `-8,75 %` · `-7,47 %` · `-0,58 %` · `+0,33 %` · `16 Go`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-cycle-c2.md](../reports/rapport-cycle-c2.md)
+- [reports/rapport-e5-distillation.md](../reports/rapport-e5-distillation.md)
+- [reports/rapport-modele-drave.md](../reports/rapport-modele-drave.md)
+- [reports/rapport-pensee-silencieuse.md](../reports/rapport-pensee-silencieuse.md)
+
+<!-- notes -->
+
+<!-- /notes -->

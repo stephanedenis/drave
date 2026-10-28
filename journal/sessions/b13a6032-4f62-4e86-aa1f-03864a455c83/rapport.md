@@ -1,5 +1,7 @@
 # Session b13a6032 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `b13a6032-4f62-4e86-aa1f-03864a455c83` |

@@ -1,5 +1,7 @@
 # Session f2de810a — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `f2de810a-b765-444d-b3cc-d8fce1ba2105` |

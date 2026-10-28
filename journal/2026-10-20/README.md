@@ -1,0 +1,35 @@
+# 2026-10-20
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**9 commits** · **0 session(s)** · **3 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| distribue | 3 | [2026-10-20/distribue.md](distribue.md) |
+| mesures | 5 | [2026-10-20/mesures.md](mesures.md) |
+| modele | 1 | [2026-10-20/modele.md](modele.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 08:53 | `c37f01b7` | MESURE 68 — LE LITTERAIRE NE PERD PAS LES NOMS (92,5 % au 3 B, 96,2 % au 7 B) NI LE CONTENU (0,5 % d'omissions, 2,0 % d'expansions) : le chrF bas (47,7-49,8) est un ecart de STYLE, pas de fidelite. Les paires AVEC noms font mieux (52,6) que celles sans (47,9), et le controle negatif est a 8,8 % (x10,9) : le littéraire a besoin d'une metrique de sens, pas d'un module d'entites |
+| 09:47 | `3595c0fc` | MESURE 69 — LA QUALITE PAR LANGUE : 45-71 de chrF brut sur 8 langues, mais 33-40 de MARGE sur le plancher — l'ecart brut (24 points) est surtout la DISTANCE des langues, pas la qualite (la marge ne fait que 7,5 points). Et le 7 B COMBLE le polonais (+10,1 de marge, le plus grand gain) : la taille aide la ou la couverture manque. 27e piege : comparer le chrF entre langues sans plancher par langue |
+| 10:02 | `5fbf0c39` | MESURE 70 — LE REGISTRE PRESSE EST AU NIVEAU DU JURIDIQUE (marge +38,6 en francais, +35,9 en allemand au 7 B) : la hierarchie des registres est institutionnel ≈ presse > litteraire, et le litteraire est le seul outlier (-10 points de marge). Le quotidien PARLE reste a construire |
+| 11:05 | `9aafba76` | MESURE 71 — LA CARTE DES 24 LANGUES : la COUVERTURE est le facteur (+35,8 de marge sur le hasard pour les 13 langues annoncees, +21,5 pour les 10 non annoncees ; ecart +14,2) ; les trous sont l'irlandais (+8,0) et le maltais (+10,8). Et le PLANCHER depend de l'ECRITURE : le bulgare parait le meilleur (+47,5) mais n'est qu'au milieu (+27,0) — 28e piege : entre ecritures, la comparaison se fait sur le HASARD |
+| 11:18 | `07d8cb73` | DOCUMENTATION — LA SYNTHESE D'EN-COURS PASSE EN POINTS : la cible, les sept resultats du moment (juge contamine, qualite reelle, taille, trois registres, couverture des langues, bruit d'entree, acquis), le plan de match en quatre etapes, et ce qui bloque encore l'etage 2. Une page lisible en trente lignes au lieu d'un paragraphe de vingt |
+| 12:21 | `c2a8ab45` | MESURE 72 — LA TAILLE NE COMBLE PAS LA COUVERTURE : +4,5 de marge sur le hasard pour les 13 langues annoncees, +5,9 pour les 10 autres ; l'ecart reste a 14,2 (contre 15,6 au 3 B, soit -1,4). La taille leve le plancher des langues faibles (croate +8,1, slovaque +8,0, grec +7,8, lituanien +7,6) mais ne ferme pas le trou ; l'irlandais est un MUR (+0,9) et le maltais est sous le plancher au 3 B (-4,2) |
+| 12:25 | `fb59341e` | DOCUMENTATION — DECOUPER PAR LANGUE (MoE) : la reponse des mesures. OUI en SURFACE (noyau partage + adaptateurs/ tetes par langue, 1,33 % des poids, 5 ms de bascule, charges a la demande) ; NON en NOYAU (l'espace semantique partage a 96 % serait detruit, les langues peu dotees n'ont pas les donnees, et le routage par document echoue sur le texte court ou mele). Plan d'experience C5.6 en cinq points |
+| 14:36 | `5877e62a` | MESURE 73 — LES GRANDES LANGUES HORS UE : chinois 35,3 et russe 52,3 sur l'ONU 2026 (61 paragraphes, 5 resolutions), +31,1 / +31,2 au-dessus du hasard. MAIS LE CHRF N'EST PAS COMPARABLE ENTRE ECRITURES (hasard 4,2 en chinois, 21,1 en russe, 26 en latin) : il faut un plafond humain. Et la COUVERTURE DEMOGRAPHIQUE EST DE 7/20 (Ethnologue 2026) — le critere de passage a l'etage 2 n'est pas atteint ; reste 13 langues, dont 5 des 10 premieres |
+| 23:25 | `f1e3b02b` | MESURE 74 — ERRATUM DE LA MESURE 73 : le PDF faussait les references (le chinois perdait 6,5 points) ; le DOCX de l'ONU les corrige et l'ARABE entre (47,4 au 7 B, marge +27,6). La couverture passe a 8/20. Le corpus ONU en DOCX (6 langues, 61 paragraphes) devient le banc propre des grandes langues hors UE |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+<!-- /notes -->

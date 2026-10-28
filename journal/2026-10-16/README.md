@@ -1,0 +1,375 @@
+# 2026-10-16
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**75 commits** · **0 session(s)** · **10 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 6 | [2026-10-16/apprentissage.md](apprentissage.md) |
+| attention | 4 | [2026-10-16/attention.md](attention.md) |
+| distribue | 3 | [2026-10-16/distribue.md](distribue.md) |
+| docs | 8 | [2026-10-16/docs.md](docs.md) |
+| memoire | 10 | [2026-10-16/memoire.md](memoire.md) |
+| mesures | 13 | [2026-10-16/mesures.md](mesures.md) |
+| modele | 19 | [2026-10-16/modele.md](modele.md) |
+| moteur | 2 | [2026-10-16/moteur.md](moteur.md) |
+| outils | 1 | [2026-10-16/outils.md](outils.md) |
+| portes | 9 | [2026-10-16/portes.md](portes.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:16 | `8813b520` | Passe de 22 h 40 : 46 portes, 44 vertes — premiere passe a 46 portes, avec porte-homeostasie (E9) et les deux verifications de porte-vision (couches isolees 6,3e-06, projecteur 0,71 %) toutes vertes |
+| 00:20 | `5afd4c57` | C2 : l'hypothese de la FUITE D'ECHELLE est REFUTEE — renormer l'etat entre les pas rend la divergence ~1000 fois PIRE ; ce n'est pas l'amplitude qu'il faut brider, c'est la sensibilite |
+| 00:23 | `ab69eac3` | C2 : LA CAUSE EST TROUVEE ET ELLE TIENT EN UN NOMBRE — le pas de temps AMPLIFIE (lambda = 206 non entraine, 136 entraine) ; une application expansive n'a pas de point fixe stable, d'ou l'echec des quatre objectifs |
+| 00:26 | `76d6b5fd` | C2 : CORRECTION de mon propre chiffre — lambda local est de l'ordre de 1e4, le 206 etait le regime SATURE ; et la cible realiste devient la BORNITUDE, pas la contraction |
+| 00:31 | `073bc487` | porte-cycle-c2 : elle GARDE desormais la BORNITUDE (aucun NaN/infini, croissance par pas dans [1,5 ; 20]) et MESURE lambda — la cible realiste de C2 devient un invariant |
+| 00:33 | `cde13806` | Journal du 16/10 : le recit du petit matin — E9 replique et garde, l'etalement renverse, la cause du cycle trouvee (et mon lambda corrige deux fois), 46 portes dont la bornitude de C2 |
+| 00:45 | `7794f34e` | Speculatif : VERDICT SUR LA FAMILLE — cinq configurations, cinq fois p <= c ; le reflexe n-grammes (pourtant quasi gratuit) n'accepte que 1 a 4 % |
+| 01:02 | `c4c7ab85` | E5 : la reproduction sur d'autres graines N'ABOUTIT PAS, et les trois obstacles sont documentes (mauvais drapeau masque par >/dev/null, mauvais bras qui mesurait le chemin complet, et un protocole qui ne tient pas dans 16 Go) |
+| 01:05 | `59d29fb5` | n4_dessin_b.py : deux corrections trouvees par un essai a blanc d'une minute (un plantage latent et un piege d'aide) |
+| 01:10 | `f357525b` | E5 : DEUXIEME MUR documente — a volume reduit la distillation n'est JAMAIS retenue, parce que l'epoque est choisie sur la perplexite qu'elle degrade par construction |
+| 01:29 | `4180b8d0` | Journal du 16/10 (paragraphes 6 a 9) : le verdict sur la famille speculative, les quatre obstacles d'une reproduction, et le bilan honnete de trois rounds de plomberie |
+| 01:32 | `8435ee72` | Le GARDE-FOU de l'objectif est en place : le tableau de resultats avertit quand un bras distille a une epoque retenue de 0 (le modele NON ENTRAINE) |
+| 01:34 | `23170e12` | E5 : le FOND du deuxieme mur — a 10 morceaux la distillation DIVERGE (3 epoques portent la perplexite a 2,7e12) ; l'epoque 0 retenue etait le MOINDRE MAL, pas un artefact |
+| 01:41 | `b9840b08` | E5 : LA FENETRE EST VIDE a 10 morceaux — 1e-3/3e-4/1e-4 DETRUISENT le modele (2,7e12 / 2,7e11 / 6,96e4) et 1e-5 n'APPREND RIEN (17,72 contre 17,58 de base) : il n'y a pas de reglage a trouver, il y a un manque de donnees |
+| 01:56 | `90026f0d` | Le KL TRONQUE elargit la fenetre d'un facteur 10 (stable a 1e-4 la ou le KL plein detruisait le modele) — mais mon hypothese « la forme, pas l'amplitude » est a moitie fausse, et l'ACCORD n'a pas pu etre mesure (0,0 % pour les deux bras, dont un entraine) |
+| 02:01 | `b45ab30c` | E5 : la CAUSE du « 0,0 % » est trouvee (l'adaptateur exporte est l'IDENTITE, donc le reflexe est une tete empruntee qui rend des jetons incoherents) — sa RAISON ne l'est pas, et les deux pistes sont nommees |
+| 02:04 | `c4893d01` | E5 : diagnostic FERME — l'adaptateur ne recoit AUCUN gradient (ecart a l'identite exactement 0,0 a l'epoque forcee 10, avec un LoRA pourtant entraine a la norme 6,57) |
+| 02:05 | `1423b969` | E5 : le defaut est localise dans le chemin JOINT — l'adaptateur SEUL s'entraine (norme 34,49 contre 29,93, ecart 0,199) et l'adaptateur JOINT ne bouge pas (ecart exactement 0,0) |
+| 02:11 | `c3688651` | E5 : SYNTHESE — la cause etait ecrite dans le code (« avec --objectif plein, l'adaptateur NE JOUE PAS : il n'existe que sur un chemin tronque ») ; c'etait MON erreur de drapeau, pas un defaut d'outil |
+| 02:26 | `e6bca27c` | E5 : LA MESURE EST FAITE — le TEMOIN est reproduit (25,7 % contre 28,0 % publie) mais la DISTILLATION le RENVERSE (17,1 % contre 25,7 % a m32, 13,8 % contre 38,1 % a m20) |
+| 02:32 | `8fcbb697` | E5 : LA DIRECTION EST REPRODUITE — avec un KL tronque a 512 classes la distillation GAGNE (30,3 % contre 25,7 % en m32, 51,4 % contre 38,1 % en m20), comme publie (51,0/28,0 et 68,1/40,5) |
+| 02:37 | `9b231f84` | E5 CONFIRME SUR DEUX GRAINES : la distillation ameliore l'accord 4 fois sur 4 (m32 +4,6 et +4,8 points, STABLE ; m20 +1,3 a +13,3, INSTABLE) pour un cout stable (perplexite +148 % et +143 %) |
+| 02:43 | `3ac23699` | E5 : LE MELANGE NE RACHETE RIEN — KL + lambda.CE donne les memes chiffres (accord 30,2 % et perplexite 467-475 a lambda = 0,3 comme a 1,0), ce qui confirme E5 (« pire des deux cotes ») en plus radical : SANS EFFET |
+| 02:48 | `585e1147` | porte-reflexe : elle garde desormais l'ASSEMBLAGE du reflexe — les quatre pannes de la nuit etaient la, et aucune n'etait visible dans un chiffre |
+| 02:49 | `8c8b4899` | Journal du 16/10 (paragraphes 10 a 13) : le fil E5 — quatre murs (memoire, stabilite, objectif, mesure), le resultat replique sur deux graines, et la plomberie desormais gardee par porte-reflexe |
+| 02:50 | `a2b6a71f` | Carte et etat : E5 remesure (16/10) — temoin reproduit, direction repliquee, DEUX reglages critiques (le taux : fenetre vide ; la largeur du KL : 64 classes inversent le signe), prix stable et gain instable, melange sans effet, pas de version « petit volume » |
+| 02:52 | `96610b7b` | Etat du cerveau : un sommaire « ou regarder, en cinq lignes » en tete (le fichier a beaucoup grandi cette nuit) |
+| 02:55 | `3a5d4170` | Vision : le projet mRoPE est CADRE en quatre pas mesurables — et le seul pas incertain (les valeurs d'or) est nomme avec sa cause (la signature de get_rope_index a change avec la version de transformers) |
+| 02:57 | `cf421121` | mRoPE, pas 1 : la cause du blocage est ecrite — dans la version installee, get_rope_index et son helper NE S'ACCORDENT PAS (16 positions rendues pour 4 jetons fusionnes) ; changement de plan : des valeurs d'or par COMPORTEMENT |
+| 02:59 | `c558fefb` | mRoPE, pas 3 : la specification est ENTIEREMENT determinee (lue dans la source) — 16 frequences pour t, 24 pour h, 24 pour w ; pour le texte les trois lignes sont egales, donc le mRoPE est un SUR-ENSEMBLE STRICT de la RoPE deja verifiee |
+| 03:01 | `b36242ac` | mRoPE : l'outil des valeurs d'or par COMPORTEMENT est ecrit (tools/mrope_valeurs_or.py) — trois conventions candidates, et une grille >= 8x8 rendue obligatoire (sur 2x2 les deux premiers candidats sont identiques) |
+| 03:03 | `6ab2e6aa` | mRoPE, pas 2 : les positions sont ECRITES EN RUST et testees (drave-core/src/mrope.rs, trois essais verts par rustc seul — sans cargo, donc sans toucher au binaire d'une passe en cours) |
+| 03:05 | `74912961` | mRoPE, pas 3 : la rotation est ECRITE ET TESTEE (appliquer_mrope) — cinq essais verts, dont le CONTROLE CROISE : positions egales => exactement la rotation 1-D du moteur, contre des valeurs calculees en PYTHON |
+| 03:06 | `8afb8d80` | Journal du 16/10 (paragraphes 14 a 18) : le projet mRoPE — cadre en quatre pas, pas 1 outille (valeurs d'or par COMPORTEMENT), pas 3 lu dans la source et rendu MECANIQUE (le texte degenere en 1-D), pas 2 et 3 ecrits et testes (cinq essais verts, dont un controle croise en Python) |
+| 03:08 | `e4cbb887` | mRoPE : le GGUF de Qwen2-VL-2B NE DECLARE RIEN de sa rotation (mrope, rope_scaling, rope_theta absents) alors que le config.json de la reference declare mrope_section [16,24,24] — le moteur applique donc une RoPE 1-D EN SILENCE |
+| 03:11 | `9ea7a156` | DEUX DEFAUTS DE MESURE, DE LA MEME FAMILLE : porte-tableaux NE POUVAIT PAS ECHOUER (son sys.exit n'arretait que Python) — et je l'ai lue a travers tail pendant huit rounds, avec un tableau casse dans la carte |
+| 03:12 | `4bb51a3f` | Reference de non-regression : les trois defauts de mesure du 16/10 (une porte qui ne pouvait pas echouer, une porte lue a travers tail pendant huit rounds, et un renvoi qui ne se verifie qu'a la machine) |
+| 03:14 | `8762d060` | Reference de non-regression : le tableau est recolle (une ligne vide rendait une de ses lignes orpheline) et la lecon des trois defauts de mesure y est ecrite — la porte, qui peut desormais ECHOUER, l'a attrape deux fois de suite |
+| 03:16 | `95f35a67` | AUDIT DES 46 PORTES : combien ne peuvent pas echouer ? Deux vrais defauts (porte-tableaux et porte-prechargement, tous deux corriges) et des faux positifs documentes |
+| 03:18 | `0f3ca0f7` | AUDIT DES PORTES, suite : CHAQUE porte a-t-elle un chemin d'echec ? Oui — 0 sur 46 sans « exit 1-9 » (mediane 6, min 2, max 17), et le seul « sans ❌ dans sa source » est un faux positif (le marqueur vient de l'outil appele) |
+| 03:19 | `81f99c14` | mRoPE : le PLAN DE BRANCHEMENT est ecrit — UN seul site d'appel compte (model.rs:7872-7877, l'attention principale), les autres sont le cache latent MLA, et deux regles s'appliquent (refuser le mRoPE sans positions, echoir la rotation appliquee) |
+| 03:21 | `706799c5` | Journal du 16/10 (paragraphes 19 a 23) : deux portes qui ne pouvaient pas echouer (dont une qui documente les tableaux depuis des semaines), huit rounds de lecture a travers tail, et l'audit des 46 portes |
+| 03:22 | `bf0b6fd8` | Etat du cerveau, ligne C7 : l'ancien chiffre reste et le nouveau est A COTE — l'amplitude (E9) depasse l'optimum publie (x0,6 : m32 -8,75 % contre -7,47 %, hors domaine -0,58 % contre +0,33 %), sur trois volumes et trois graines, et une regle auto-contenue la designe |
+| 03:24 | `c06968d1` | Etat du cerveau, ligne C2 : la cause de la divergence y entre (lambda local >= 3,7e4, l'entrainement reduit lambda de 34 % sans le soumettre, l'hypothese de l'echelle refutee, et la BORNITUDE desormais gardee par la porte) |
+| 03:26 | `1081b23f` | Page vivante : l'avertissement « source different du binaire » est LEVE (le binaire a ete reconstruit depuis) et « ce qui reste » dit l'etat reel du mRoPE (cadre en quatre pas, TROIS faits) |
+| 04:18 | `fd95d182` | PASSE DU 16/10 A 02 h 49 : 46 portes, 44 vertes, 2 rouges (les structurels) — et c'est la PREMIERE passe ou les portes peuvent ECHOUER |
+| 04:27 | `6397d127` | La passe ecrit desormais son REGISTRE — parce que le compte de celle du 16/10 est une RECONSTRUCTION, pas une lecture |
+| 13:04 | `9a939a45` | PENSER SANS VERBALISER : l'outil est ecrit (tools/pensee_silencieuse.py) — iterer l'ETAT au lieu des jetons, et mesurer ce que la pensee transmet a la suite |
+| 13:06 | `4348eef5` | Journal du 16/10 : regeneration automatique apres le commit de l'outil de pensee silencieuse |
+| 13:17 | `e0fe07a6` | PENSER SANS VERBALISER : premiere mesure — la boucle d'etat naive DETRUIT la prediction (x30 000), ce n'est PAS une question d'echelle, et VERBALISER N'EST PAS DU GASPILLAGE (-1,55 % a 16 jetons) |
+| 13:24 | `c49098c1` | LE LANGAGE ABSTRAIT existe et BAT LE JETON : un mapping appris (etat pre-linguistique -> entree post-linguistique) predit le jeton suivant a 68,6-73 % quand le mot choisi par le modele est a 122,9 % (pire que l'embedding moyen) — et l'etat porte la suite a 16 jetons d'avance (84,7 %) ; toutes les couches se valent |
+| 13:29 | `e1fe9357` | Le serveur de doc devient un SERVICE (systemd --user, Restart=always, linger) et la porte des documents exige que la page vivante DATE DU DERNIER COMMIT |
+| 13:31 | `59f30d4a` | LE PAS LATENT : h_p -> h_{p+1} n'est PAS un pas de pensee — il est expansif (lambda de 30 a 120) et AUCUN amortissement ne donne a la fois contraction et contenu ; la raison est le vrai resultat, et les deux fils (cycle et pensee silencieuse) demandent le MEME objet |
+| 14:05 | `c661bc18` | UTILISER DRAVE : le point d'entree qui manquait (tools/chat.py) et le document qui dit ce qui marche et ce qui manque (docs/utilisation.md) |
+| 14:12 | `e9f85ae6` | ETUDE : un modele NATIF DRAVE — chaque exigence tiree d'une mesure du depot, architecture qui en decoule, quatre etapes chacune mesurable avec un outil qui existe |
+| 14:14 | `1e062466` | L'ETAPE 0 du modele natif, trouvee en essayant : l'entraineur TOURNE (4 M parametres, val 4,8948 bits/octet, k-WTA 25 % sur 17 projections) mais ecrit du format HuggingFace — et le moteur ne lit QUE du GGUF : l'aller-retour n'est pas cable |
+| 14:24 | `326349bb` | L'OBJECTIF D'IDENTITE (directive du 16/10) est MESURE : les deux espaces sont a un facteur 648 d'echelle ET a un cosinus de +0,1387 — l'identite, meme avec echelle et decalage, fait PIRE que le temoin bete ; aucun raccord a posteriori ne peut marcher |
+| 14:28 | `7a29cd57` | E5 : LA CONFIGURATION PUBLIEE NE REPRODUIT PAS (KL plein, taux 1e-3 -> 24,9 % contre 25,7 % pour le temoin : RIEN) — mais la variante stable BAT le temoin (KL tronque 512, 1e-4 -> 30,3 % et 51,4 %) |
+| 14:30 | `a6e4d85a` | mdserve est de retour (127.0.0.1:8771, service systemd) et les DEUX serveurs sont maintenant documentes — ils ne servent pas la meme chose |
+| 16:44 | `a9a1fc71` | LE PLAN DU MODELE LINGUISTIQUE UNIFIE (entree = sortie) : quatre etapes, chacune avec son critere de reussite chiffre et son critere d'echec — et son risque principal nomme d'avance |
+| 16:52 | `f91bdde8` | LA SONDE DE RECOPIE : la premisse est FAUSSE sur ce modele (0/128 jetons recopies) — et ma mesure d'empreinte etait DEGENEREE (meme position = trivial) ; la bonne empreinte est celle de la GENERATION, avec contre-epreuve |
+| 17:00 | `47021c74` | ETAPE -1 LANCEE : le LoRA de recopie (tools/lora_recopie.py) — et l'essai a blanc montre deja 0,5 % -> 39,3 % de recopie en UN pas, avec le controle (resume) a 0,0 % |
+| 21:50 | `3b606f55` | L'EMPREINTE EXISTE (etape A) : la copie litterale fait porter le texte par l'etat BEAUCOUP plus fort que la lecture — couche 23, k=1 : 42,1 % contre 68,8 % (26 points), le vrai alignement etant partout tres en dessous de la contre-epreuve (78 %, remarquablement plate) |
+| 22:10 | `4a43091f` | L'EMPREINTE EST LOCALE : nette a un jeton (couche 23, k=1 : 49,3 % contre 76,9 % en lecture, soit 27,6 points, REPRODUIT) et NULLE des k=4 (le vrai alignement rejoint la contre-epreuve, stable a 88 %) — copier CONCENTRE l'etat sur le jeton emis, lire garde le champ large |
+| 22:17 | `fbc3ca25` | ETAPE 3 REUSSIE : l'alignement entree=sortie amene le jouet 2M a cosinus +0,701 et echelle 1,015 (contre 0,14 et 648 sur Qwen), SANS degrader la langue (4,30 contre 4,69 bits/octet — il l'ameliore) et le contenu long SURVIT (k=16 : 88,3 % contre 89,0) ; MAIS la boucle directe echoue encore (lambda = 7311, contenu detruit) — l'alignement est necessaire mais PAS suffisant, il faut entrainer le PAS |
+| 22:19 | `ea2ee114` | L'OPERATEUR DE PENSEE : il existe, il CONTRACTE (lambda = 0,9972 — le premier pas contractant de la nuit) et il AMELIORE le contenu d'un pas (87,0 -> 72,0 %, moins 15 points) — mais il ne vaut que pour UN pas |
+| 22:22 | `0334abf2` | L'ITERATION EST IMPOSSIBLE SUR CET ETAT : en demandant a l'operateur d'etre bon APRES k pas (k tire entre 1 et 8), l'optimisation trouve L'IDENTITE (87,0 % a 1, 2 et 4 pas, 86,9 a 8 — exactement la baseline) — la seule maniere de rester bon a 8 pas est de NE RIEN FAIRE |
+| 22:26 | `2da484bf` | LE BLOC REPETE : l'etat devient PLUS habitable (82,9 contre 85,7 a t=1; 86,7 contre 87,1 a t=4 — l'ecart tombe de 2,8 a 0,4 point) mais pas encore habitable — et quatreieme lecon d'instrument de la soiree |
+| 22:38 | `50a7dd32` | L'ETAT DEVIENT HABITABLE : avec la recurrence tiree aleatoirement a l'entrainement (--recurrence-max 4), l'iteration est PLATE (88,4 / 88,2 / 88,5) — une premiere dans la nuit — au prix de 6 points de nettete a t=1 (88,4 contre 82,9) |
+| 22:42 | `330a7b2e` | LE CURSEUR EST UNE FALAISE : des t_max = 2 l'iteration est plate (+0,3 d'etalement, contre +3,8 sans recurrence) mais la nettete ne revient pas (88,0 a t=1, contre 82,9) — il n'y a pas de milieu entre « precis mais instable » et « stable mais emousse » |
+| 22:45 | `97079e96` | POURQUOI LA FALAISE : les modeles plats ont appris un POINT FIXE — le deplacement de l'etat entre t=1 et t=4 tombe de 77,5 % (sans recurrence) a 49,0 % puis 44,8 % ; habitabilite et perte de nettete sont LE MEME PHENOMENE |
+| 23:17 | `7292ce2c` | JOURNAL du 16/10 : les notes de la nuit (paragraphes 24-28) — les trois idees de Stephane, les treize mesures, les quatre pieges d'instrument, et la question qui a change de forme |
+| 23:20 | `f76d9ebb` | LA COURBE DE CAPACITE N'EST PAS LISIBLE A BUDGET DE PAS EGAL : le modele dim 512 est sous-entraine (validation 5,05 contre 4,74), son contenu s'effondre (110,2 %) par sous-entrainement et NON par capacite — la question reste ouverte et precisement posee |
+| 23:24 | `25987389` | LA CAMPAGNE DE NUIT EST LANCEE : dim 256 (carte 0, 654 Mio) et dim 512 (carte 1, 1086 Mio), 15000 pas chacune, une evaluation tous les 1000, recette du paragraphe 17 — et un defaut d'outillage corrige en route |
+| 23:25 | `876e15f0` | UTILISATION : les dix outils de la nuit du 16/10 ont leur entree dans docs/utilisation.md (chat, recopie, empreinte, pont abstrait, pensee silencieuse, pas latent, boucle directe, operateur, iterer un bloc, les deux serveurs) — et les quatre options ajoutees a l'entraineur |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+**6. Le décodage spéculatif : un VERDICT SUR LA FAMILLE, pas un essai de plus.** La loi est
+`gain > 1 ⟺ p > c`, et les brouillons **distillés** étaient **tous juste en dessous** (30,0 % pour un
+seuil de 33,3 % ; 14,3 % pour 16,7 %) : **l'acceptation croît moins vite que le coût** ✗. Dernier
+espoir de la famille : le brouillon de coût **quasi nul** — le **réflexe** (C8), qui recopie ce qui a
+déjà suivi le même contexte dans le texte. Mesuré : **3,8 %** sur de la prose, **1,2 %** sur une liste,
+**2,4 %** sur du code auto-répété ✗ — le modèle de 0,5 B **n'écrit pas** ce que le contexte avait
+écrit, il invente la suite. **Cinq configurations, cinq fois `p ≤ c`** → sur ce modèle et ces textes,
+le décodage spéculatif **ne paie pas**. Écrit comme un **résultat**, pas comme un échec.
+
+**7. Et un round où le travail a été de la PLOMBERIE — avec deux vrais défauts trouvés.** En voulant
+tester E5 sur d'autres graines (la leçon « une graine ne mesure pas un critère »), quatre obstacles :
+* **un mauvais drapeau masqué** (`--couches-lora` appartient à l'exporteur ✗, et je l'avais caché sous
+  `>/dev/null 2>&1` → **deux tours perdus** ✗). *Ne jamais faire taire une commande qu'on n'a pas
+  encore vue réussir.*
+* **un mauvais bras** (`--bras lora` au lieu de `lora+adaptateur` → l'accord tombait à **100 %** ✗ :
+  ce n'était pas un bon résultat mais un **mauvais objet mesuré**, le chemin complet) ;
+* **la mémoire** : le protocole d'E5 (29 morceaux) demande **15,3 Go pour 15,55 Go** et échoue dans
+  `kl_div` ✗ ;
+* **et le contournement « réduire le volume » ne marche pas** ✗ : à 10 morceaux, l'époque retenue est
+  **0** — l'outil choisit l'époque sur la **perplexité**, or la distillation **la dégrade par
+  construction** → c'est le modèle **non entraîné** qui est exporté, **sans erreur** ✗✗. *Un chiffre
+  plausible pour un calcul qui n'a pas eu lieu* : même famille que le « 100 % » du `--accord`.
+
+**8. Ce qui a été corrigé, et ce qui est nommé.** Corrigé et committé : un **plantage latent** de
+`n4_dessin_b.py` (`entrainer()` lisait `accord_avant` avant sa première affectation → `UnboundLocal`
+avec certaines combinaisons de drapeaux ✗ — trouvé par un **essai à blanc d'une minute** ✓, que je
+n'avais jamais fait), et le **piège d'aide** du `--accord`, désormais écrit là où on le lit. Nommé et
+**pas encore corrigé** : la **sélection d'époque** quand l'objectif n'est pas la perplexité (la
+correction — `--epoque-forcee`, ou une garde qui **avertit** — a été écrite deux fois et **cassée deux
+fois** par mes patchs ✗ ; le fichier a été **remis à la version committée** ✓, et la correction reste à
+faire ✓). **E5 n'est donc PAS testé sur plusieurs graines** : sa table se lit comme les autres tables à
+graine unique — un **ordre de grandeur** ✗ — et son chiffre publié n'est **ni confirmé ni infirmé**.
+
+**9. Le bilan honnête de ces trois rounds** : deux **défauts réels** trouvés (un plantage latent, un
+piège de mesure) et **deux murs documentés** — c'est de la **qualité de reproduction**, pas de la
+nouveauté scientifique ✗✓. Une leçon de plus, et elle est chère : *un patch écrit en trois passes sur
+un outil partagé se casse* ✗ — la prochaine fois, **une** édition, **un** essai à blanc, **un**
+commit.
+**10. LE FIL E5 — QUINZE ROUNDS POUR UN MÉCANISME, ET QUATRE PANNES QUI N'ÉTAIENT PAS DANS LE MODÈLE.**
+Tout part d'une envie légitime : appliquer au résultat d'E5 (la distillation **double l'accord** du
+réflexe, 28 % → 51 %) la règle de la nuit — *une graine ne mesure pas un critère*. Il en est sorti
+**quatre murs**, dont **trois franchis** et **un expliqué**, et un mécanisme enfin compris :
+
+* **mur 1 — la MÉMOIRE** : le protocole d'E5 (29 morceaux) demande **15,3 Go pour 15,55 Go** et échoue
+  dans `kl_div` ✗. **Franchi** plus tard ✓ : avec le KL tronqué, le protocole complet **passe** ✓ ;
+* **mur 2 — la STABILITÉ** : à 10 morceaux, le KL **plein** diverge (2,7e12 en trois époques ✗) et la
+  seule façon de tenir est un taux de 1e-5, où il **n'apprend rien** ✗ — **fenêtre vide** ✗✓. Franchis
+  par le **KL tronqué** (`--kl-tronque`) : la fenêtre passe de {1e-5} à **{1e-5 ; 1e-4}** ✓ (×10) ;
+* **mur 3 — L'OBJECTIF** : `--objectif plein` ne fait **pas jouer l'adaptateur** ✗ — c'est **écrit dans
+  un commentaire du code** (« l'adaptateur de sortie, lui, ne joue pas : il n'existe que sur un chemin
+  tronqué » ✗) que je n'avais pas lu ✓. **C'était mon erreur de drapeau**, pas un défaut d'outil ✗ ;
+* **mur 4 — LA MESURE** : l'« accord » d'E5 est celui de **l'outil** (`--accord`, sur le chemin
+  tronqué ✗), pas celui du **harnais spéculatif** ✗ — qui mesure une **génération libre** et rend
+  **0 %** même pour un bras à 26 % d'accord ✓ (un brouillon à 26 % dérape en quelques jetons ✓).
+
+**11. ET LE RÉSULTAT, mesuré, répliqué, chiffré.** Avec la bonne configuration (KL **large** — K=512 ✗,
+taux **bas** 1e-4 ✗, **29** morceaux ✗, `--objectif tronque` ✗) :
+
+| graine | bras | accord m32 | accord m20 | perplexité m32 |
+|---:|---|---:|---:|---:|
+| 1 | témoin | 25,7 % | 38,1 % | 192,69 |
+| 1 | **distillé** | **30,3 %** | **51,4 %** | 478,94 |
+| 2 | témoin | 24,8 % | 37,6 % | 228,90 |
+| 2 | **distillé** | **29,6 %** | **38,9 %** | 555,79 |
+
+* **le témoin est reproduit** (25,7 / 24,8 contre **28,0 %** publié ✓) et **la direction est répliquée** :
+  quatre comparaisons, quatre fois dans le même sens ✓✓ ;
+* **mais le gain est stable sur un texte et instable sur l'autre** ✗ : **+4,6 et +4,8** points sur m32 ✓,
+  **+1,3 à +13,3** sur m20 ✗ ; le **coût**, lui, est parfaitement stable (perplexité **+148 %** et
+  **+143 %** ✓). *La distillation paie un prix certain pour un gain incertain* ✓ ;
+* **et le mélange KL + λ·CE ne rachète rien** ✗ : à λ = 0,3 comme à 1,0, les chiffres sont **identiques**
+  (accord 30,2 %, perplexité 467-475 ✓) — le gradient de la CE pointe dans la **même direction** que
+  celui du KL, donc il ne change que l'amplitude, déjà réglée par le taux ✓ ;
+* **la sensibilité est le vrai enseignement** : le mécanisme **diverge** au taux par défaut à petit
+  volume ✗ et **s'inverse** si le KL est trop tronqué (**64** classes : 17,1 % contre 25,7 % ✗✓) —
+  deux réglages que la fiche d'origine **ne mentionnait pas** ✗, et que le protocole publié respectait
+  sans le dire ✓.
+
+**12. ET LA PLOMBERIE QUI A COÛTÉ CES QUINZE ROUNDS EST DÉSORMAIS GARDÉE.** `porte-reflexe` vérifie
+maintenant l'**assemblage** : le moteur **refuse** un adaptateur sans tête partielle (et le dit ✓), un
+adaptateur **NUL** ne change **rien** (invariant d'identité ✓, « perplexité 11163272.0495 » identique
+avec et sans ✓), et l'accord est **mesuré avant et après** ✓. *La porte garde la plomberie, la fiche
+garde le résultat.*
+
+**13. LA LEÇON, ET ELLE EST LA CINQUIÈME DU MÊME GENRE.** J'ai cherché un **bug d'outil** pendant cinq
+rounds ✗ alors que la cause était **mon propre choix de drapeau**, écrit dans un commentaire du code
+que je n'avais pas lu ✓. *Lire le code qui décide, avant de suspecter celui qui exécute.* Et deux
+leçons de plomberie, payées comptant : **ne jamais faire taire une commande qu'on n'a pas encore vue
+réussir** ✗, et **un essai à blanc d'une minute trouve ce qu'aucune relecture ne voit** ✓ (il a trouvé
+un plantage latent de l'outil ✓).
+**14. LE SEUL VRAI PROJET QUI RESTE : LE mRoPE DE LA VISION MULTIMODALE — CADRÉ, ET DÉJÀ AUX TROIS QUARTS.**
+Le chemin image est **vérifié** (embedding exact, 31 couches à 7,58e-06, `post_ln` à +1,00000012,
+projecteur à 0,71 % ✓) et le **splice** fonctionne (les 64 jetons d'image se posent aux positions 0..63
+✓) — mais le moteur applique au modèle de langue une **RoPE 1-D** ✗ alors que Qwen2-VL utilise un
+**mRoPE** ✗. Ce qui manquait pour qu'une question sur une image ait un sens ✓.
+
+**15. Le pas 1 (les valeurs d'or) a résisté, et la cause est instructive.** Je voulais **appeler** la
+référence pour obtenir ses positions ✗ — trois adaptations, trois refus ✗. En lisant **la source
+installée** (au lieu de la mémoire d'une autre version ✓), la cause apparaît : **`get_rope_index` et son
+helper ne s'accordent pas** dans cette version ✗✓ — le premier lui passe la **ligne 1-D** de son
+itérateur quand le second attend un tenseur **2-D**, et une fois réparé il rend **16 positions pour une
+image qui produit 4 jetons** (il numérote les **patchs**, la séquence porte les jetons **fusionnés** ✗).
+**Changement de plan, et il est meilleur** : les valeurs d'or s'obtiennent en **faisant parler** le
+modèle ✓ — comparer ses logits **par défaut** à ceux obtenus avec des positions **explicites** ✓. C'est
+**outillé** (`tools/mrope_valeurs_or.py` ✓, trois conventions candidates ✓ : par blocs 2 × 2, raster,
+dégénérée ✓) et **indépendant de la version** ✓✓.
+
+**16. Le pas 3 (l'application) était écrit dans la source, et il rend le projet MÉCANIQUE.** En lisant
+`apply_multimodal_rotary_pos_emb` ✓ : les `cos`/`sin` ont la dimension **entière** de la tête (128 ✓),
+les sections `[16, 24, 24]` sont **doublées** en `[32, 48, 48]` ✓, et chaque paquet prend la ligne
+`i % 3` ✓. En unités de **fréquence** (64 ✓) : **16 pour `t`, 24 pour `h`, 24 pour `w`** ✓. Et pour le
+**texte**, les trois lignes sont **égales** ✓ — donc **le mRoPE est un sur-ensemble strict de la RoPE
+déjà vérifiée** ✓✓ : le brancher n'est pas une réécriture risquée ✗, c'est un découpage ✓.
+
+**17. Les pas 2 et 3 sont écrits et testés, sans toucher au binaire d'une passe en cours.**
+`drave-core/src/mrope.rs` — un **fichier à part** ✓, qui ne touche pas à `main.rs` ✓ : il a donc pu être
+écrit **pendant** une passe de portes ✓, et essayé par **`rustc` seul** ✓ (sans `cargo`, donc sans
+reconstruire le binaire ✓). **Cinq essais verts** ✓✓, dont le **contrôle croisé** : avec les trois
+positions égales, `appliquer_mrope` doit rendre **exactement** la rotation 1-D du moteur ✓ — vérifié
+contre des valeurs **calculées en Python, hors du Rust** ✓, parce qu'une variante plausible et fausse
+passerait un essai écrit avec ses propres conventions ✗ (c'est la leçon de la tour de vision ✓).
+
+**18. Et un essai a attrapé une erreur de ma part — c'est exactement ce qu'on lui demande.** J'avais
+écrit que la section de `h` occupait les dimensions « 64..112 » ✗ ; avec `rotate_half`, **une fréquence
+occupe DEUX dimensions** ✓ (la fréquence `i` est sur `i` **et** `i + half` ✓), donc la section de `h`
+(fréquences 16..39) est sur **16..40 ET 80..104** ✓. L'essai a refusé ✓, j'ai corrigé, et il vérifie
+maintenant **les deux sens** : *ce qui doit bouger bouge, ce qui doit rester immobile reste immobile* ✓✓.
+Reste le pas 4 — la vérification de bout en bout — et le branchement dans le moteur, à faire **après**
+la passe (avec reconstruction ✓).
+**19. ET UN DÉFAUT PIRE QUE LES AUTRES, TROUVÉ PAR ACCIDENT : DEUX PORTES QUI NE POUVAIENT PAS ÉCHOUER.**
+En vérifiant un lien de documentation, la porte `porte-tableaux` a signalé trois lignes de tableau
+**orphelines** ✓ — dans `docs/cerveau-facultes.md`, où **j'avais** inséré un bloc de citation **au milieu
+d'un tableau** ✗, **huit rounds plus tôt** ✓. Et elle les signalait **en sortant en 0** ✗✗ : son
+`sys.exit(...)` n'arrêtait que **Python** ✓, et le script **ne propageait pas** le code ✓. Autrement dit,
+**une porte qui documente les tableaux depuis des semaines ne pouvait pas dire non** ✗✓ — *le pire
+défaut de la famille que ce dépôt traque* ✓. Corrigée (`[ $? -eq 0 ] || exit 1` ✓), et **vérifiée** : elle
+sort maintenant en **1** ✓.
+
+**20. Et je l'ai lue à travers `tail` pendant ces huit rounds.** Le dépôt le dit **noir sur blanc** —
+« ne jamais lire une porte à travers un pipe : le code de sortie devient celui du tuyau » ✓ — c'est même
+écrit dans `docs/references-non-regression.md` ✓. Huit commits sont donc passés avec un tableau cassé ✗
+sans que je m'en aperçoive ✓✗. **Troisième fois cette nuit** que mon **instrument de lecture** est le
+maillon faible, pas la chose mesurée (après le `>/dev/null` qui masquait un mauvais drapeau ✓ et le
+comptage des ❌ dans le source au lieu du code de sortie ✓).
+
+**21. L'audit qui a suivi, et son résultat précis.** La question — *combien d'autres portes ne peuvent
+pas échouer ?* ✗ — a été posée aux **46** scripts, par analyse statique (sans les exécuter ✓) :
+
+| famille | trouvée | verdict |
+|---|---|---|
+| heredoc Python avec `sys.exit` **non propagé** | **2** | ✅ `porte-tableaux` et **`porte-prechargement`** — corrigées ✓ (la seconde imprimait « PORTE ROUGE » et sortait en 0 ✗, un `rm -f` avalait le code ✓) |
+| `sys.exit` **propagé par l'appelant** | 1 | ✅ faux positif ✓ (`REP=$(moduler …) \|\| { …; exit 1; }` ✓) |
+| `\|\| true` | 3 | ✅ légitimes ✓ (extractions dont le vide est un état valide ✓) |
+| pipe vers `tail` **dans** une porte | 9 | ✅ faux positifs ✓ (extractions de valeur ✓) |
+| portes **sans aucun `exit 1-9`** | **0 sur 46** ✓ | ✅ chemins d'échec : médiane **6**, min **2**, max **17** ✓✓ |
+| portes sans `❌` dans leur source | 1 | ✅ faux positif ✓ : le marqueur de `porte-mistral` vient de `compare_logits.py` ✓ |
+
+**22. Et une porte de plus, dans la foulée** : `tools/verifier_liens.py` — **308 liens** relatifs
+vérifiés dans `docs/` et `reports/` ✓ — est appelé par `porte-tableaux` ✓. *Un document de ce dépôt
+**est** fait de renvois : un renvoi mort ne casse rien le jour où on l'écrit, il casse six semaines plus
+tard* ✓. Deux familles de faux positifs corrigées en chemin ✓ : les exemples dans les blocs de code ✓,
+et le motif `[texte](chemin)` écrit **en prose** dans le rapport qui décrit cette vérification ✓.
+
+**23. Le bilan de la nuit, en une ligne.** La passe tourne encore, mais elle tourne **avec des portes
+qui peuvent échouer** ✓✓ — et c'est la différence entre un rituel et une mesure ✓.
+
+**24. Une journée de plus, et une question de Stéphane qui a déplacé la nuit.** En fin d'après-midi, une
+remarque : *un cerveau d'expert gagne à ne pas verbaliser — et un LLM, lui, passe par les jetons.* Puis la
+suite : *il ne faut pas retomber sur le mode jeton, il faut un **langage abstrait** entre la sortie
+prélinguistique et l'entrée postlinguistique.* Puis la méthode : *la **copie littérale** comme sonde, pour
+aller chercher des empreintes.* Trois idées, et trois expériences exécutables — c'est ce qui a occupé la
+soirée ✓.
+
+**25. Ce qui a été mesuré, dans l'ordre, et ce que chaque chiffre a coûté.** (a) Réinjecter l'état brut
+détruit la prédiction de **cinq ordres de grandeur** (×30 000 ✗) et **normer n'y change rien** ✗✓ — donc
+ce n'est pas une affaire d'échelle. (b) Un **mapping appris** de l'état vers l'entrée **bat le jeton** ✓✓
+(68,6 % contre 122,9 % d'écart — le mot que le modèle aurait dit est *pire que l'embedding moyen* ✓✗).
+(c) Mais ce mapping est un **lecteur**, pas un **inverse** : la boucle repasse et explose encore ✗.
+(d) La **distillation** d'E5, rejouée avec les deux GPU, ne reproduit pas sa configuration publiée ✗
+(24,9 % d'accord pour 25,7 % de témoin) — mais la variante stable, elle, **bat le témoin** ✓✓.
+(e) Le LoRA de **recopie** atteint **100,0 %** avec un contrôle à **0,0 %** ✓✓ — et, sur des textes
+neufs, **60,9 %** ✓✗ (sur-apprentissage, dit et mesuré).
+(f) L'**empreinte** existe ✓✓ : pendant la copie, l'état dit le jeton source à **49,3 %** contre **76,9 %**
+en lecture (couche 23, k=1 ✓, **reproduit** sur deux exécutions ✓) — et elle est **locale** ✗ (nulle à
+k=4 : *copier braque le projecteur sur le mot suivant ; lire garde le champ large* ✓✓).
+(g) L'**alignement** entrée=sortie réussit ✓✓ : cosinus **+0,14 → +0,70**, échelle **648 → 1,015**, et la
+langue **s'améliore** (4,30 contre 4,69 bits/octet ✓ — effet régularisant ✓) ; le contenu long **survit**
+(k=16 : 88,3 % contre 89,0 ✓✓) — l'effondrement au mot, annoncé comme risque principal, **n'a pas eu
+lieu** ✓.
+(h) La **boucle directe** échoue quand même ✗ (λ = **7 311**, contenu détruit) : l'alignement est
+**nécessaire mais pas suffisant** ✓✓. (i) Un **opérateur post-hoc** trouve **le premier pas contractant de
+la nuit** (λ = **0,9972** ✓✓) et gagne **15 points** sur un pas ✓ — puis ne vaut que pour un ✗ : entraîné
+pour k pas, il ne trouve que **l'identité** ✗✓.
+(j) Le **bloc répété** (poids partagés ✓) est meilleur dès t=1 (82,9 contre 85,7 ✓) et dégrade le moins ✓.
+(k) La **récurrence tirée à l'entraînement** rend l'itération **PLATE** ✓✓ (88,4 · 88,2 · 88,5 — une
+première ✓) au prix de 6 points de netteté ✗. (l) Et le compromis n'est pas un curseur mais une
+**FALAISE** ✓✓ : dès t_max = 2, l'itération est plate (+0,3) et la netteté ne revient pas ✗. (m) La cause
+est trouvée ✓✓ : les modèles plats ont appris un **point fixe** — leur état se déplace de **44,8 %** entre
+t=1 et t=4, contre **77,5 %** sans récurrence ✓. *Habitabilité et perte de netteté sont le même
+phénomène.*
+
+**26. Ce que la nuit a appris sur les instruments — quatre fois le même piège.** (1) Une « empreinte » qui
+aligne l'état sur **sa propre** position donne **0,0 %** : c'est trivial ✗✓. (2) Un ridge sur **moins de
+positions que de coefficients** interpole et donne **0,0 %** encore ✗✓. (3) Un plan de textes qui **sort du
+corpus** rend « n = 149 » sur 24 textes demandés ✗✓. (4) Un modèle dont les couches ajoutées sont
+**silencieusement ignorées** (la boucle est bornée par `config.num_hidden_layers`, et `layer_types` est une
+liste **par couche**) rend **82,9 / 82,9 / 82,9** ✗✓ — et j'ai failli y lire « l'état est habitable » ✓✗.
+Les quatre fois, la règle qui a sauvé la mesure est la même : **écrire à côté du chiffre ce qui pourrait le
+rendre faux** ✓✓.
+
+**27. Le bilan, et la question qui a changé de forme.** On peut **unifier le vocabulaire** ✓, **extraire une
+empreinte** ✓, **aligner sans perdre la langue** ✓, et même **obtenir une itération plate** ✓✓. Mais
+**l'itération ne s'ajoute pas** à un modèle qui ne l'a pas apprise ✗, et quand on l'apprend, l'état devient
+un **point fixe** — donc **stable et moins riche** ✗✓. La question n'est donc plus « comment forcer
+l'itération » ✗ mais **« quelle capacité faut-il pour qu'un point fixe reste lisible ? »** ✓✓ — une question
+de **taille**, donc une question à laquelle **deux GPU peuvent répondre** ✓.
+
+**28. Ce qui a été rangé, aussi.** Le serveur de documentation est devenu un **service** (`drave-doc` ✓,
+redémarre seul ✓, relit le disque à chaque requête ✓) et **mdserve** a été relancé sur **127.0.0.1:8771** ✓
+avec ses épingles retrouvées ✓ ; une **porte** exige désormais que `docs/en-cours.md` **date du dernier
+commit** ✓✓ (testée dans les deux sens ✓). Et une **aide** cassée par un `%` non échappé a été réparée ✓ —
+la même famille de défaut que celle du matin ✓.
+
+**29. Et la nuit a continué, après le journal.** Les notes ci-dessus s'arrêtaient à 23 h ✓ ; la moitié la plus
+utile est venue après ✓. Trois choses, dans l'ordre.
+
+**30. D'abord la campagne — et une leçon de lancement.** Deux tailles (dim 256 et dim 512), 15 000 pas, une
+carte chacune ✓. Le premier lancement était **cassé** ✗ : les drapeaux passaient par une **variable de
+shell** ✓, et l'affectation, dans une liste `&&` terminée par `&`, **ne parvient pas au second sous-shell** ✓✗
+— le run 512 a construit un **MoE de 28,46 M** sur un corpus de **100 Mo** ✗✗, alors que l'autre faisait du
+dense sur 352 Ko ✓✗. *Les deux runs n'étaient pas comparables, et les journaux le disaient* ✓ — il fallait
+les lire ✓. Tués **par PID** ✓ (jamais `pkill -f` ✓ : il a tué mon propre shell, deux fois ✓✗ — la ligne de
+commande contient le motif qu'on cherche ✗). Relancés avec des drapeaux **explicites** ✓✓.
+
+**31. Ensuite la borne, qui n'était pas celle qu'on croyait.** Sur **352 Ko**, les deux tailles
+**sur-apprennent** ✗ (validation 5,00 → 6,41 et 5,07 → 7,51 ✓) et, à validation égale, le plus gros n'est
+**pas** meilleur (5,07 contre 5,00 ✗✓) : la capacité n'était pas la borne, **le corpus l'était** ✓✓.
+Sur **96 Mo** (`data/corpus_en.txt` ✓, 273 fois plus ✓) : les deux **descendent** (3,59 → 2,8183 et 3,58 →
+**2,7297** ✓✓), plus de sur-apprentissage ✓, et le plus gros **gagne** (3,1 % ✓). *La question de capacité
+n'était pas une question de taille de modèle : c'était une question de taille de données* ✓✓.
+
+**32. Enfin — et c'est le plus important — l'instrument a été pris en défaut, puis réparé.** Le modèle 512,
+meilleur en langue ✓, avait un « contenu » **pire** (104,3 % contre 90,2 ✗) → conclusion écrite : « le
+meilleur est le moins lisible » ✗✓. Deux vérifications l'ont **détruite** ✗✓ : mon **lecteur non linéaire
+sur-apprenait** (119,9 contre 85,2 pour le ridge ✓✗), et surtout **le chiffre dépendait des réglages** (104,3
+à longueur 64, **87,0** à longueur 128 ✗✓). D'où **`tools/banc_lecteur.py`** ✓ : un **λ de ridge choisi par
+validation croisée** ✓ et une **batterie de longueurs** ✓ (32 · 64 · 128 · 256) — le classement devient
+**stable** ✓✓ et l'écart tombe de **14 points à 1-2** ✓.
+
+**33. Et le banc a discrimine — c'est sa seule vertu qui compte.** Rejouées avec lui : **la falaise survit**
+✓✓ (et se nettoie : 79,3 à t=1 pour le modèle sans récurrence, qui dégrade de +4,2, contre 84,8 → 84,6 pour
+celui avec récurrence ✓) ; **l'empreinte survit** ✓✓ (chiffres identiques — λ = 1e-3 était déjà le bon ✓, ses
+5 365 positions n'interpolent pas ✓) ; **le contenu long survit et s'améliore** ✓✓ (84,9 → **80,3** à 16
+jetons d'avance, contre 118,4 pour le mot ✓ — **38 points** d'écart ✓) ; **le corpus** tient ✓ ; **le point
+fixe** n'est pas concerné ✓ ; et **« le meilleur est le moins lisible » tombe** ✗✓. *Un banc qui aurait tout
+confirmé, ou tout cassé, n'aurait rien valu* ✓✓.
+
+**34. Ce que la nuit laisse, en une page.** Trois piliers **mesurés et passés à l'épreuve** ✓✓ : on peut
+**lire le contenu long** dans l'état (80,3 % à 16 jetons, 38 points devant le mot ✓), **extraire une
+empreinte** (49,3 contre 76,9, trois exécutions ✓), **rendre l'itération plate** (84,8 · 84,6 ✓). Une
+**falaise** chiffrée : la planéité coûte **≈ 5 points** de netteté, et la bascule se fait **au premier pas de
+récurrence** ✗✓ — parce que les modèles plats ont appris un **point fixe** ✓ (déplacement 44,8 % contre
+77,5 % ✓). Et un **programme** qui n'est plus une intuition : une **dynamique apprise**, **contractante et
+informative** ✓, dont le prix est connu ✓.
+Et la leçon de méthode qui les résume toutes ✓✓ : **cinq fois** cette nuit, une mesure s'est déguisée en
+résultat ✗✓ (la position avec elle-même ✓, le ridge sous-déterminé ✓, le plan de textes hors corpus ✓, les
+couches silencieusement ignorées ✓, les réglages du lecteur ✓) — et **cinq fois** la même règle l'a démasquée :
+**écrire à côté du chiffre ce qui pourrait le rendre faux** ✓✓.
+<!-- /notes -->

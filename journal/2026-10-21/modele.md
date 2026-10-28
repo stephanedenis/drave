@@ -1,0 +1,34 @@
+# 2026-10-21 — Modèles, entraînement, parcimonie, biologie
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (9)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 01:47 | `dc8c7c3c` | MESURE 81 — LA COMPOSITION PROFITE DE LA TAILLE : 0,76 / 0,865 au 7 B (couche 14 sur 28) contre 0,61 / 0,84 au 3 B (couche 18 sur 36) — +15 points de retrieval. Le sens neutre vit a 50 % de la profondeur dans les deux modeles, et la derniere couche s'effondre encore plus (0,125) | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+6) |
+| 01:54 | `5c39f566` | MESURE 83 — LE PAS DE PENSEE NE PROFITE PAS DE LA TAILLE : le 7 B ne tient pas plus de pas que le 3 B (0,6-0,73 puis 0,27-0,53), et son cosinus est meme plus bas (0,73-0,84 contre 0,81-0,90). La composition profite de la taille (+15, mesure 81), la dynamique non : le probleme est l'OPERATEUR, pas le modele | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+5) |
+| 02:03 | `1a79a8c4` | MESURE 85 — UN MLP RESIDUEL NE FAIT PAS MIEUX : il sur-apprend (perte 0,0001 sur 105 transitions) et generalise moins bien que le lineaire (0,40/0,07/0,07 contre 0,73/0,53/0,33 a la couche 6 ; 0,067/0/0 contre 0,60/0,33/0,47 a la couche 18). La limite est la DONNEE, pas la forme de l'operateur : il faut une recurrence entrainee sur beaucoup plus de phrases | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+6) |
+| 02:10 | `ad59e098` | MESURE 86 — LE PIDGIN NIGERIAN EST MESURE, ET LE MODELE NE LE TRADUIT PAS : marge -1,5 sur le plancher (33,9 contre 35,3) — le modele copie/adapte l'anglais au lieu de produire du pidgin. Le sens inverse fait a peine mieux (+3,2). La couverture reste 19/20 : le pidgin est un trou REEL, pas un trou d'instrument | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/modele.md` (+6) |
+| 03:50 | `ca2e0567` | MESURE 88 — LE PAS DE PENSEE AU 14 B : la taille ameliore le PREMIER pas (0,933 a la couche 40, contre 0,733 au 3 B/7 B), mais PAS la DUREE : le pas 2 retombe a 0,467 et le pas 3 a 0,133. La falaise n'est pas une question de capacite du modele, mais de dynamique | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/distribue.md` (+5) |
+| 08:55 | `4a7c768b` | MESURE 100 — LE 7 B fp16 CASSE AUSSI LES GENERATIONS (chrF 8,2-24,8) : l'entrainement LoRA 7 B est le probleme, pas la quantification. Le meme dispositif fonctionne sur le 3 B (chrF 39,8, +0,9). Le 7 B n'a pas ete teste dans des conditions valides ; le 3 B reste la reference | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+6) |
+| 16:10 | `6ffbd1df` | MESURE 108 — L'OPERATEUR APPRIS PAR RECURRENCE NE TIENT PAS PLUS DE PAS : 0,73/0,27/0,27, le pas 2 retombe au hasard (0,25), la ou le lineaire tenait 0,53. Les poids partages + les cibles multi-pas n'etendent pas la dynamique ; la falaise n'est ni une contraction ni une capacite manquante. Le penser sans verbaliser reste a 1-2 pas | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+4) |
+| 20:38 | `113dacfe` | MESURE 109 — L'ETAT LATENT ENTRAINE AVEC LA TACHE COLLAPSE : le pas 3 monte a 0,60-0,67 mais le pas 1 tombe a 0,00 ; le pas partage saute au dernier etat (point fixe), ce n'est pas une dynamique. Erreur de parcours notee : le F etait a lr 1e-5 (0,00/0,00/0,00), corrige par groupes de lr (F a 1e-3) | `2026-10-21/README.md`, `2026-10-21/distribue.md`, `07-mesures-couche-commune.md` (+2) |
+| 20:52 | `4057fb6a` | MESURE 110 — LA PENALITE DE POINT FIXE NE DEBLOQUE PAS LE PAS 1 (0,00) : le pas 3 perd meme au 3 B (0,60 -> 0,47). Le diagnostic : l'entrainement joint collapse les etats (le LoRA rapproche les h), le F devient trivial ; les etats figes restent la meilleure base (0,73/0,27/0,27) | `2026-10-21/README.md`, `2026-10-21/mesures.md`, `07-mesures-couche-commune.md` (+3) |
+
+## Chiffres du jour
+
+`0,933` · `0,733` · `0,467` · `0,133` · `0,0001` · `0,067` · `50 %` · `0,865` · `0,125`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
+- [reports/README.md](../reports/README.md)
+
+<!-- notes -->
+
+<!-- /notes -->

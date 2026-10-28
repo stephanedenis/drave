@@ -1,0 +1,29 @@
+# 2026-10-25 — Mémoire épisodique, consolidation, greffe
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-25/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:02 | `81d5309f` | C3.2a — LE DECOUPAGE PAR FAMILLE EST FAIT : tools/decoupage_familles.py groupe les 13 222 articles UDHR par famille (la genealogie : 441 langues, 55 familles). Resultat : 28 familles, 362 langues, 12 383 articles ; 9 familles de 9 langues ou plus (Indo-European 98, Atlantic-Congo 74, Austronesian 35, Sino-Tibetan 17, Turkic 14, Afro-Asiatic 12, Quechuan 11, Mayan 9, Uralic 9), ecrites dans data/udhr/familles/ (gitignore : le corpus est reproductible, l'outil est versionne). Prochaine action : C3.2b, un module sur la plus grande famille | `roadmap.md`, `2026-10-25/README.md`, `README.md` (+1) |
+| 02:50 | `0316de52` | C3.2b — LE MODULE PAR FAMILLE RECOPIE A 100 % : la famille indo-europeenne (98 langues, 3 688 articles) est recopiee EXACTEMENT apres 200 pas de LoRA (0 % avant), et le controle (une cible differente) reste a 0 % — la copie est acquise, le perroquet est evite. Le chiffre a une granularite grossiere (3 textes d'evaluation) et le modele est le 0,5 B : la reserve est dans la fiche. Prochaine action : C3.2c, la courbe par famille contre la reference | `roadmap.md`, `2026-10-25/README.md`, `2026-10-25/docs.md` (+3) |
+| 03:21 | `251ef285` | DOC — LA PAGE VIVANTE PASSE AU 25/10 : la porte a attrape le retard (la page disait 2026-10-24, le dernier commit est du 25 a 00 h). Un cycle sans page a jour est un cycle que personne ne peut lire | `en-cours.md`, `2026-10-25/README.md`, `2026-10-25/mesures.md` (+1) |
+| 03:49 | `e6dbe9a4` | C3.2c — LA VARIABILITE INTER-FAMILLES : l'atlantic-congo (74 langues, 2 458 articles) recopie a 94,0 % sur les MEMES 8 textes d'evaluation, contre 14,7 % pour l'indo-europeen — le module par famille marche tres bien sur une famille et beaucoup moins sur une autre. Le taux depend de la famille, pas seulement du module : la courbe par famille sera heterogene, pas une constante | `roadmap.md`, `2026-10-25/README.md`, `2026-10-25/memoire.md` (+1) |
+| 06:30 | `fb15ab20` | PASSE 25/10 04 h 51 — 44 VERTES, 2 ROUGES (LES STRUCTURELLES) : la passe complete apres les changements de C3.2 (GPU, entrees, --famille, evaluation optionnelle) ne casse aucune porte. porte-flux 60,8135, porte-pont +2,81/+25,35, porte-topologie 42,5477, porte-gain 29,0206 -> 1297,5. awk '$2 != 0' sur le registre donne exactement porte-indice et porte-melange. 1 h 45, 46 entrees | `references-non-regression.md`, `2026-10-25/README.md`, `2026-10-25/mesures.md` |
+
+## Chiffres du jour
+
+`60,8135` · `42,5477` · `29,0206` · `94,0 %` · `14,7 %` · `100 %` · `0 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-modules-famille.md](../reports/rapport-modules-famille.md)
+
+<!-- notes -->
+
+<!-- /notes -->

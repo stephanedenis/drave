@@ -1,5 +1,7 @@
 # Session 31f26a6e — Tu es un relecteur ADVERSARIAL
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `31f26a6e-65f5-480d-be32-36b9f425b3dd` |

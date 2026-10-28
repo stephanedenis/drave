@@ -1,5 +1,7 @@
 # Session 04ed1834 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `04ed1834-b0f8-42a1-aa21-75a75c19647e` |

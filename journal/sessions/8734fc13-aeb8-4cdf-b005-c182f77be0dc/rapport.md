@@ -1,5 +1,7 @@
 # Session 8734fc13 — Tu es un relecteur ADVERSARIAL
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8734fc13-aeb8-4cdf-b005-c182f77be0dc` |

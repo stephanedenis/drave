@@ -1,5 +1,7 @@
 # Session d31b3d9b — Où en est-on
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` |

@@ -1,5 +1,7 @@
 # Session 482522d1 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `482522d1-31f1-43eb-ae9c-a681336404f7` |

@@ -1,5 +1,7 @@
 # Session f3ca67c4 — MISSION STRICTEMENT EN LECTURE SEULE.
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `f3ca67c4-b171-4eee-9e14-29f9dd1c8c23` |

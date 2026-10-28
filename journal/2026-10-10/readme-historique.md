@@ -84,7 +84,7 @@ d'**architecture** — chacun avec la mesure qui l'établit.
 
 ## La journée du 30/09 — huit chantiers, mesurés
 
-Le détail est dans [`reports/rapport-session-2026-09-30.md`](reports/rapport-session-2026-09-30.md).
+Le détail est dans [`reports/rapport-session-2026-09-30/README.md`](reports/rapport-session-2026-09-30/README.md).
 
 | chantier | résultat |
 |---|---|

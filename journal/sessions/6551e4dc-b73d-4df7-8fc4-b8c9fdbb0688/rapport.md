@@ -1,5 +1,7 @@
 # Session 6551e4dc — Tu es un relecteur adverse.
 
+> **Journaux :** [le jour](../../2026-10-01/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `6551e4dc-b73d-4df7-8fc4-b8c9fdbb0688` |

@@ -1,0 +1,238 @@
+# 2026-10-14
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**13 commits** · **0 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 2 | [2026-10-14/apprentissage.md](apprentissage.md) |
+| attention | 1 | [2026-10-14/attention.md](attention.md) |
+| distribue | 1 | [2026-10-14/distribue.md](distribue.md) |
+| docs | 1 | [2026-10-14/docs.md](docs.md) |
+| memoire | 3 | [2026-10-14/memoire.md](memoire.md) |
+| mesures | 1 | [2026-10-14/mesures.md](mesures.md) |
+| modele | 2 | [2026-10-14/modele.md](modele.md) |
+| moteur | 1 | [2026-10-14/moteur.md](moteur.md) |
+| portes | 1 | [2026-10-14/portes.md](portes.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 13:56 | `030fb3ab` | Dessin B de N4 : le chemin court entraine paie d'autant plus qu'on sort tot (÷1,19 a ÷1,32 a profondeur 8, ÷1,83 a profondeur 4) — et le chiffre publie de m20 etait mesure sur un morceau VU (fuite de x8,0 prouvee par la commande retrouvee) |
+| 13:58 | `c4e22a38` | Journal du 14/10 : le dessin B de N4 mesure (÷1,19 a ÷1,32 a profondeur 8, ÷1,83 a profondeur 4), le GGUF qui est l'Instruct, et les deux chiffres publies qui tombent (m20 etait vu, 14,2342 est un chiffre de corpus) |
+| 13:59 | `28daf13d` | Journal du 14/10 : index et themes regeneres apres le second commit (le recit reste dans le bloc notes) |
+| 14:01 | `00678fef` | n4_dessin_b : le corpus /tmp est REGENERE s'il manque (identique au bit, verifie par cmp) — la lecon du 12/10 s'applique aussi a un banc de mesure, pas seulement aux portes |
+| 16:06 | `aeb941f1` | Porte d'execution de N4 : le chemin court entraine est mesure par le MOTEUR (÷1,47 et ÷1,24) — et la graine ne suffit pas a reproduire un chiffre qui retropropage |
+| 16:07 | `3aab0953` | Journal du 14/10 : le second round (porte d'execution) — index et themes regeneres |
+| 21:06 | `16e17230` | C7 — la consolidation : le rejeu met l'experience dans les poids (-16,4 % en domaine sur des textes JAMAIS rejoues, mesures par le moteur) mais elle SPECIALISE (+1,3 % hors domaine) |
+| 22:58 | `3b790022` | C2 + N5 + la carte des facultes : le cycle est exact au pas 1 puis diverge, et la memoire de travail est une STRUCTURE (le reseau ne l'apprend pas) |
+| 23:04 | `f417d4e4` | Le budget du sommeil (courbe de rejeu) et les facultes qui COMPOSENT : -5,6 % des 3 morceaux rejoues, -10,0 % a 20, et un cout hors domaine BRUITE plutot que croissant |
+| 23:12 | `9c6503b4` | C2 bis — le cycle ENTRAINE : x228 au pas 4, mais la boucle degrade encore et ne bat jamais une passe |
+| 23:20 | `6be75b81` | Le sommeil : COMBIEN bat QUOI (-6,5 % au hasard contre -4,8 % par surprise) — et le budget d'attention : OU le depenser est un levier de second ordre |
+| 23:31 | `f38db721` | E5 — distiller le cerveau dans le reflexe : l'accord double (28 % -> 51 %) mais le texte ne suit toujours pas (5/96), et ce que le reflexe apporte vraiment est le TEMPS (x2,0, TTFT /3,1) |
+| 23:43 | `c52553c6` | E5 bis — le melange KL + lambda*CE est PIRE sur les DEUX axes : a lambda=1, perplexite 2,6x pire que la distillation seule (1 476 contre 575) ET accord plus bas (46,8 % contre 51,0 %) ; a lambda=4, l'accord tombe a 36,9 % / 25,9 % |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+**Le round du 14/10 : le dessin B de N4 est mesuré — et deux chiffres publiés la veille tombent.**
+
+**Le banc, d'abord.** Le dessin B (entraîner les couches basses par LoRA) exige de **rétropropager
+à travers les couches**, ce que le moteur Rust ne fait pas : il fallait donc un modèle torch qui
+soit **le même** que celui du moteur, et une porte qui le prouve — sinon on mesure un autre modèle
+en croyant mesurer le sien. `tools/n4_dessin_b.py` (nouveau) la porte : modèle complet **−3,3 %**,
+chemin tronqué à tête empruntée **−0,12 %** (8 couches) et **+0,78 %** (4 couches), et l'**état
+brut** sur 1 020 positions à **cos 0,99964-0,99994** contre les fichiers `--etat-sortie`. Les
+chiffres publiés de C8 sont reproduits : 267,98 → **253,75 / 260,22**, 534,91 → **510,15**, et
+`24 656 438,5178` **au chiffre près** côté moteur.
+
+**Le piège de mise en place, gardé parce qu'il a coûté une fausse piste.**
+`models/Qwen2.5-0.5B-Q8_0.gguf` est l'**Instruct**, pas le base : les normes f32 du GGUF sont
+**identiques au bit** à celles de `Qwen2.5-0.5B-Instruct` et diffèrent de **1,5 à 2,5 %** de celles
+du `Qwen2.5-0.5B` en cache HF. La première sonde comparait donc l'état du moteur au **mauvais
+modèle** et rendait cos 0,944-0,995 — ce qui ressemblait à « le moteur s'écarte ». Le métadata du
+GGUF le disait (`finetune = Instruct`), le **nom du fichier** non. Écrit dans `REPRISE.md` § 3.
+
+**La fuite, ensuite — trouvée en vérifiant la porte « deux morceaux jamais vus ».** Le comptage a
+répondu que **m20 était dans la liste d'entraînement**, et pas seulement chez moi : la commande du
+13/10 est retrouvée dans le journal de session —
+`train=$(for i in $(seq 0 29); do printf … "$T/etat-m$i" …)`, puis `--test "$T/etat-m20"`. La même
+construction a servi pour les profondeurs 4, 8, 12 et pour la capacité. Mesuré sur mon banc, seul
+le morceau changeant : **×8,0** à profondeur 8 et **×14,4** à profondeur 4 (adaptateur seul).
+Tombent avec elle : « le morceau de test pèse **×10** », la « **falaise ÷22,8** » de 15 à 30
+morceaux, et le rapport 8/16 « **×1,17** » — trois énoncés bâtis sur un morceau qui n'était pas un
+test. **m32 est propre** (absent de toutes les listes) et la courbe de profondeur du § 2bis reste
+debout. La règle du 10/10 existait pourtant, écrite noir sur blanc : « LA LISTE D'ENTRAÎNEMENT
+EXCLUT LE MORCEAU DE TEST — construit comme ceci, jamais à la main » (`if i != 7`).
+
+**Deuxième correction, du même genre, trouvée en cherchant d'où venait « modèle complet
+14,2342 »** : ce n'est pas un chiffre de morceau, c'est la **moyenne géométrique des 33 morceaux**
+(14,4283 mesuré ici en torch). Sur m32, le modèle complet rend **7,4242** (moteur) — donc « ×12,6
+du modèle complet » est **×24,2**, et tous les rapports « ×N » des fiches C8 sont deux fois trop
+optimistes. Un repère de corpus divisé par… un chiffre de corpus, ça ne compare rien.
+
+**Le résultat, enfin — protocole propre** (m20 **exclu** de l'entraînement, 29 morceaux,
+validation m30+m31, deux morceaux jamais vus, **deux graines**) :
+
+* à **profondeur 8**, `lora+adaptateur` rend **203,32 / 210,44** contre **268,13 / 249,79** pour
+  l'adaptateur sur couches gelées, sur m32 → **÷1,19 à ÷1,32** ; sur m20 : **rien** (÷1,01 et
+  ×1,07, dans le bruit de graine) ;
+* à **profondeur 4** : **÷1,83** sur m32 (283,67 contre 520,28) et **÷1,64** sur m20 (187,98 contre
+  307,88) — **le dessin B paie d'autant plus qu'on sort tôt**, exactement ce que la prédictibilité
+  des états annonçait (R² 0,65 pour le saut direct contre 0,78 et 0,75 pour les pas élémentaires) ;
+* le **LoRA seul, à tête gelée**, ne suffit pas (×1,33 et ×1,45 sur m20) sauf à profondeur 4
+  (÷1,84 / ÷1,13) : le dessin B ne rend pas l'état *nativement* lisible, il le rend **exploitable
+  par un lecteur entraîné**. C'est la nuance qui décide du dessin suivant.
+
+Fiche : [`reports/rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · rectification
+posée dans [`reports/rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md) (l'ancien chiffre
+reste à côté du nouveau) · état : `docs/etat-cerveau.md` § 6.
+
+**Ce qui reste ouvert** : porter le modèle entraîné dans le **moteur** (le dessin B n'est mesuré
+qu'en torch ; `tools/exporter_gguf.py` ne fait que la famille MoE de Qwen3 — un GGUF dense Qwen2
+est le prochain pas, c'est la porte d'exécution du dépôt), et trancher ÷1,2-1,9 contre le bruit de
+graine sur **plus de morceaux de test** (deux graines font 3,5 à 7,3 % d'écart ; le gain vaut
+÷1,19 à ÷1,32).
+
+Portes du jour : `porte-tableaux` **verte** (420 fichiers) et `porte-flux` **vert** (cinq modes,
+valeurs de référence inchangées 61,9920 / 60,8135) — le chemin d'exécution n'a pas bougé, seule
+une chaîne de mesure nouvelle est née.
+**Le second round du 14/10 (14 h 10 → 15 h 00) : la PORTE D'EXÉCUTION — le chemin court est
+mesuré par le MOTEUR.**
+
+Un chiffre que `drave` ne reproduit pas n'est pas encore un chiffre du dépôt. Le dessin B était
+mesuré en torch ; il fallait donc **écrire un GGUF dense Qwen2** (le convertisseur existant ne
+fait que la famille MoE de Qwen3, et Qwen2.5-0.5B est dense : biais q/k/v, tête liée) et **poser
+le lecteur appris** sur un chemin tronqué. Les deux sont faits :
+
+* `tools/exporter_gguf_dense.py` — 290 tenseurs, métadonnées **copiées verbatim** du GGUF de
+  référence (les 38 paires KV, tokenizer de 151 936 jetons compris : un tokenizer réécrit dérive
+  en silence). Vérifié **sur place** : le modèle réécrit rend **7,4242** et **4 481 378,8799**,
+  les chiffres de l'original, au chiffre près. Premier essai instructif : un export **F32**
+  (1,98 Go, écrit et relu sans erreur) **panique** le moteur — `q8_view : type 0 non géré` : le
+  format d'échange est Q8_0, les normes et les biais restant en f32 ;
+* `drave --adaptateur-sortie F` — matrice `h × h` f32 brute appliquée à l'état **brut** avant la
+  norme finale, sur les **trois** chemins de forward. Refusée sans `--tete-partielle`, mauvaise
+  taille et fichier absent rendant **code 2** (trois refus testés) ;
+* la 40ᵉ porte, `tools/porte-adaptateur-sortie.sh`, tient les quatre contrôles : écriture fidèle,
+  **invariant d'identité bit à bit**, et **le drapeau AGIT** (une demi-échelle, que la norme ne
+  peut pas absorber, multiplie la perplexité par 2,9 — l'invariant seul ne l'aurait pas montré).
+
+**Le verdict du moteur**, à profondeur 8, sur les deux morceaux jamais vus : `adaptateur` seul
+**272,45** (m32) / **168,85** (m20), `lora+adaptateur` **185,67** / **136,33** — soit **÷1,47** et
+**÷1,24**. Le moteur retrouve torch à **2 %** (c'est la quantification Q8_0 : le modèle complet
+montre le même +3 %). La chaîne complète est réutilisable : 10 s et 0,53 Go par export.
+
+**Et une variabilité qui n'était pas prévue** : en réentraînant le même protocole à la **même
+graine**, le dessin A rend **exactement** le même chiffre trois fois de suite, mais les bras qui
+rétropropage à travers les couches donnent ÷1,32 · ÷1,46 · ÷1,43 sur m32 (et ÷1,01 · ÷1,25 ·
+÷1,22 sur m20). Le signe est stable — le dessin B n'est jamais pire —, la taille varie de ±10 %,
+et la cause probable (ordre des réductions CUDA, noyaux `cuBLAS` choisis selon la mémoire) n'est
+**pas** démontrée. Écrit dans `REPRISE.md` § 3 : un chiffre qui rétropropage se cite avec son
+étendue entre exécutions.
+
+Fiche : [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) ·
+outils : `tools/exporter_gguf_dense.py`, `tools/porte-adaptateur-sortie.sh` · état :
+`docs/etat-cerveau.md` § 6 (C8).
+**La nuit du 14 au 15/10 : le cerveau, faculté par faculté (consolidation, cycle, carte).**
+
+**1. C7 — LA CONSOLIDATION : le rejeu met l'expérience dans les poids.** La seule question du plan
+(« la perplexité baisse-t-elle sur un jeu NON rejoué ? ») a une réponse mesurée par le MOTEUR :
+après deux époques sur dix morceaux rejoués (~10 000 jetons, LoRA rang 8 sur les 8 premières
+couches, **0,07 %** des paramètres), m20 passe de **19,1247 à 15,9804** (**−16,4 %**) et m32 de
+**7,4250 à 6,9333** (**−6,6 %**) — sur des textes **jamais rejoués**. Mais sur un **autre corpus** :
+**17,2679 → 17,4919** (**+1,3 %**) : la consolidation **spécialise**. Quatre contrôles, dont deux
+qui comptent : un LoRA **nul** fusionné laisse le GGUF **identique au bit** (l'invariant du plan),
+et un LoRA **aléatoire** de même forme améliore déjà de **1,5 %** — c'est la borne du « gain
+gratuit », et le −16,4 % est dix fois au-dessus. Le rejeu **mélangé** fait exploser la validation
+(15,97 → 130,5) et l'époque choisie est **0** : le protocole refuse de publier un modèle dégradé.
+Fiche : [`reports/rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md).
+
+**2. C2 — LE CYCLE À DEUX RÉGIONS : la dernière capacité que le validateur refusait.** Un cycle
+n'est pas « une boucle de plus » : il demande un ordonnancement **par pas de temps**. Trois pièces :
+le validateur accepte un cycle **si et seulement si** un de ses liens est `recurrent` avec un délai
+> 0 ; le plan imprime l'ordre d'un pas sur une ligne machine-lisible (une seule implémentation de
+la règle) ; le pilote `tools/derouler.py` déroule, en transportant l'état **brut** par
+`DRAVE_ETAT_ENTREE` (format REFD). Les cinq portes écrites d'avance tiennent : deux régions
+enchaînées = le modèle d'un seul tenant (**14,6496 = 14,6496**, écart **0,00e0**), le **pas 1** du
+graphe récurrent = cette référence, trajectoire **déterministe** (`cmp`), coût publié (**N pas ×
+régions**), refus en code 3 (cycle nu, récurrent sans délai) et 2 (pilote). Et le résultat :
+**non entraîné, le cycle DIVERGE** — 14,65 → 275,52 → 940,22 → **2 988,46** en quatre pas, ce que
+la note annonçait (« un cycle à gain ≥ 1 diverge ») et ce que la récurrence locale disait déjà
+(« un écho, pas une mémoire »). Trouvé en chemin : `--etat-sortie` n'écrivait **rien** sur un nœud
+intermédiaire (la capture vivait après le retour anticipé) — les portes ne le voyaient pas, elles
+passent toutes `--tete-partielle`. Corrigé. Fiche :
+[`reports/rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md).
+
+**3. La CARTE DES FACULTÉS.** Le cerveau Drave, faculté par faculté, avec **le mécanisme le plus
+efficient** pour chacune et son coût : [`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md)
+(et sa forme exécutable `tools/carte-facultes.sh`). La leçon qui s'en dégage est contre-intuitive
+là où elle compte : **ce qui doit être retenu exactement demande une STRUCTURE** (un tampon : 0
+paire, R² 1,000), **ce qui doit être retrouvé demande un MAGASIN** (épisodique : 11 jetons sur
+2 048), **ce qui doit être su demande des POIDS** (consolidation : 0,07 % des poids et une perte de
+généralité), et **ce qui doit être amplifié par le temps demande un CYCLE** — qui, non entraîné,
+diverge. Neuf facultés sont faites et chiffrées, six partielles, une est un résultat négatif.
+**La nuit du 14 au 15/10 — le cerveau, faculté par faculté (suite et fin).**
+
+**3. LE CYCLE À DEUX RÉGIONS (C2) — la dernière capacité que le validateur refusait.** Voir plus
+haut : la conception, les cinq portes, et la divergence non entraînée (14,65 → 2 988 en 4 pas).
+**Puis entraîné** : ×228 au pas 4 (15 868 → 52,24), et **trois objectifs** essayés (somme,
+dernier pas, point fixe) — **aucun ne fait converger la boucle**, et le meilleur pas 4 entraîné
+(43,55) reste **×2,4 pire qu'une passe** (18,40) pour **quatre fois le calcul**. Fiches :
+[`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) ·
+[`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md).
+
+**4. N5 — LA MÉMOIRE DE TRAVAIL EST UNE STRUCTURE, PAS UN ENTRAÎNEMENT.** Plan 2×2 : **sans**
+tampon, l'entraînement **ne crée pas** la mémoire (−1,091 → **−2,773**, contrôle à cibles
+mélangées −2,855) ; **avec** le tampon dans l'entrée, le modèle **gelé** lit déjà (+0,879) et
+l'entraîné fait mieux (+0,964) ; le **moteur confirme** la direction (+0,766 non linéaire contre
+−0,493) et le tampon lu directement vaut **1,000 pour zéro paire**. Les chiffres publiés sont
+reproduits (présent +0,96/+0,99, mémoire −2,879/−0,493 pour −0,611/−0,681 annoncés). Fiche :
+[`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md).
+
+**5. LE SOMMEIL — COMBIEN, ET QUOI.** La courbe : **−5,57 %** (3 morceaux rejoués), −6,70 % (6),
+−7,67 % (10), **−9,98 %** (20) sur un texte **jamais rejoué**, pour un coût hors domaine **bruité**
+(−0,41 à +3,30 %) — le point le plus efficient est le rejeu **court**. Et **à volume égal**, la
+règle de sélection pèse peu : **hasard −6,49 %**, premiers −5,51 %, **surprise (les plus durs)
+−4,82 %**, faciles −4,26 % — **l'intuition « rejouer ce qui a surpris » est fausse ici**, et la
+seule règle qui coûte ailleurs est « rejouer ce qu'on sait déjà » (+2,07 %). Fiches :
+[`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) ·
+[`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md).
+
+**6. OÙ DÉPENSER LE BUDGET D'ATTENTION** (à clés égales, motif alterné) : sur m32 l'alterné bat
+l'uniforme (9,6110 contre 9,6624) **et même le complet** (9,6503) ; sur m20 il perd (15,6744 contre
+15,4227). Aucune allocation n'est « la bonne » ; le **volume** pèse bien plus (+0,50 % à +3,85 %
+selon le texte). Fiche :
+[`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md).
+
+**7. E5 — DISTILLER LE CERVEAU DANS LE RÉFLEXE.** Le réflexe entraîné à la perplexité ne partageait
+**aucun** jeton avec le cerveau en génération (0/96) : la question d'E5 (cadrée depuis le 10/10)
+était donc la bonne. Mesuré — à architecture identique, l'objectif **décide de la faculté** :
+perplexité ⇒ 181,54 et **28,0 %** d'accord ; distillation (KL) ⇒ 574,70 et **51,0 %** (m20 :
+40,5 → **68,1 %**). L'accord fait **×1,8**, la perplexité coûte **×3,2**, et le **mélange**
+KL + λ·CE est **pire sur les deux axes** (46,8 % d'accord et 1 476 de perplexité à λ = 1). En
+génération de 32 jetons, l'accord reste **0/96** et **5/96** : la fidélité s'effondre
+exponentiellement (0,51³² ≈ 2 × 10⁻¹⁰). Ce que le réflexe apporte vraiment est le **TEMPS** :
+TTFT **÷3,1**, débit **×2,0**. Fiche :
+[`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md).
+
+**8. LA BOUCLE DU CERVEAU, en une commande** (`tools/boucle-cerveau.sh`) : percevoir (85 626
+jetons réversibles) → retenir (8 pas, déterministe) → se souvenir (round-trip **300/300**) →
+consolider (**17,0197 → 16,3429, −3,98 %** sur un morceau **jamais rejoué**) → agir. Deux défauts
+attrapés en l'écrivant : le signal de la périphérie est un fichier **texte** (en binaire, le moteur
+refusait et le script annonçait « la mémoire n'est pas déterministe » — un refus avalé), et la
+mesure portait sur les 1 024 **premiers** jetons, c'est-à-dire le **premier morceau rejoué** :
+−26 % de « consolidation » qui était de la **récitation**. Les deux sont corrigés, et les deux sont
+écrits.
+
+**Et la carte** : [`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md) — toutes les facultés,
+le mécanisme le plus efficient pour chacune, son coût, et la règle qui s'en dégage : *ce qui doit
+être retenu exactement demande une STRUCTURE ; ce qui doit être retrouvé, un MAGASIN ; ce qui doit
+être su, des POIDS — et ce qui doit être amplifié par le temps, un CYCLE, qui non entraîné diverge.*
+<!-- /notes -->

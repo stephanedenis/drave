@@ -1,5 +1,7 @@
 # Session 22bcae27 — Étude de Qtrinet-bootstrap.md
 
+> **Journaux :** [le jour](../../2026-09-25/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `22bcae27-254b-47b2-acda-87467dab060c` |

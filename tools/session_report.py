@@ -194,6 +194,11 @@ def rapport(a: dict) -> str:
     debut = a["debut"] / 1000 if a["debut"] else 0
     fin = a["fin"] / 1000 if a["fin"] else 0
     L += [f"# Session {str(a['id'])[:8]} — {a['titre'] or '(sans titre)'}", ""]
+    date_jour = time.strftime("%Y-%m-%d", time.localtime(debut)) if debut else ""
+    lien_jour = (f"[le jour](../../{date_jour}/README.md)" if date_jour
+                 else "[le journal](../../README.md)")
+    L += [f"> **Journaux :** {lien_jour} · [l'état](../../../docs/pilotage/en-cours.md) · "
+          f"[l'index des sessions](../../README.md#sessions).", ""]
     L += ["| | |", "|---|---|",
           f"| Identifiant | `{a['id']}` |",
           f"| Dossier | `{a['cwd']}` |",
@@ -309,19 +314,24 @@ def main() -> int:
     # Journées : index `AAAA-MM-JJ.md` + fichiers de thème `AAAA-MM-JJ_theme.md`, générés par
     # `tools/journal_auto.py`. On les groupe PAR JOUR (l'index, puis ses thèmes) : c'est ce qui
     # permet de suivre un thème d'un jour à l'autre.
-    jours: dict[str, dict[str, list[str]]] = {}
+    jours: dict[str, dict[str, list]] = {}
     autres: list[str] = []
-    for f in sorted((repo / "journal").glob("*.md")):
-        if f.name == "README.md":
+    for d in sorted((repo / "journal").iterdir()):
+        if not d.is_dir() or d.name == "sessions" or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name):
             continue
-        m = re.match(r"(\d{4}-\d{2}-\d{2})(?:_(.+))?\.md$", f.name)
-        if m:
-            jours.setdefault(m.group(1), {"index": [], "themes": []})
-            if m.group(2):
-                jours[m.group(1)]["themes"].append((m.group(2), f.name))
-            else:
-                jours[m.group(1)]["index"].append(f.name)
+        index = d / "README.md"
+        if index.exists():
+            jours.setdefault(d.name, {"index": [], "themes": []})["index"].append(
+                f"{d.name}/README.md")
         else:
+            autres.append(f"{d.name}/ (sans README.md)")
+        for p in sorted(d.glob("*.md")):
+            if p.name == "README.md":
+                continue
+            jours.setdefault(d.name, {"index": [], "themes": []})["themes"].append(
+                (p.stem, f"{d.name}/{p.name}"))
+    for f in sorted((repo / "journal").glob("*.md")):
+        if f.name not in ("README.md", "THEMES.md"):
             autres.append(f.name)
     lignes_jours = ["| jour | index | thèmes |", "|---|---|---|"]
     for j in sorted(jours, reverse=True):
@@ -329,8 +339,8 @@ def main() -> int:
         lien_idx = f"[{idx[0]}]({idx[0]})" if idx else "—"
         themes = " · ".join(f"[{t}]({n})" for t, n in sorted(jours[j]["themes"]))
         lignes_jours.append(f"| **{j}** | {lien_idx} | {themes or '—'} |")
-    if autres:
-        lignes_jours += ["", "Autres pièces : " + " · ".join(f"[{n}]({n})" for n in autres)]
+    autres.append("THEMES.md")
+    lignes_jours += ["", "Autres pièces : " + " · ".join(f"[{n}]({n})" for n in autres)]
     JOURNAL_DES_JOURS = "\n".join(lignes_jours)
 
     dest = repo / "journal" / "sessions"
@@ -338,8 +348,11 @@ def main() -> int:
     index = ["# Journal", "",
              "Le journal consigne les **événements datés**, avec des liens vers le reste : les",
              "**mesures** sont dans `reports/` (une fiche par expérience) et l'**état** dans",
-             "`docs/etat-*.md` — convention : `docs/organisation-du-depot.md`. Tout horodatage",
-             "est en heure locale de la machine (**HAE = EDT, UTC−4**).", "",
+             "`docs/pilotage/en-cours.md` — convention : `docs/methode/organisation-du-depot.md`.",
+             "Tout horodatage est en heure locale de la machine (**HAE = EDT, UTC−4**).", "",
+             "**Une journée = un dossier** `journal/AAAA-MM-JJ/` : `README.md` (index), les thèmes",
+             "et les autres pièces datées. Les sessions DSH sont dans `journal/sessions/<id>/` ;",
+             "chaque rapport renvoie à son jour et à `en-cours`.", "",
              "## Journées", "",
              JOURNAL_DES_JOURS, "",
              "## Sessions (régénéré automatiquement)", "",

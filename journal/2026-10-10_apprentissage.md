@@ -8,9 +8,9 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 10:59 | `0b00de5` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage | `2026-10-09.md`, `2026-10-09_apprentissage.md`, `2026-10-09_attention.md` (+18) |
-| 20:54 | `4f11679` | M8 : trois causes ELIMINEES, une hypothese nommee — le defaut log-normal est toujours la (x78) | `manques.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+15) |
-| 23:48 | `b0afa88` | E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-10.md` (+16) |
+| 10:59 | `0b00de5a` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage | `2026-10-09.md`, `2026-10-09_apprentissage.md`, `2026-10-09_attention.md` (+18) |
+| 20:54 | `4f116790` | M8 : trois causes ELIMINEES, une hypothese nommee — le defaut log-normal est toujours la (x78) | `manques.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+15) |
+| 23:48 | `b0afa88a` | E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-10.md` (+16) |
 
 ## Étapes du jour (5)
 
@@ -24,7 +24,7 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 

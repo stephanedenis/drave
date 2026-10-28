@@ -1,5 +1,7 @@
 # Session 67637ea9 — MISSION STRICTEMENT EN LECTURE SEULE.
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `67637ea9-78c6-4c20-a77c-0f90ee2a9ddc` |

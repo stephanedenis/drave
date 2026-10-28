@@ -1,5 +1,7 @@
 # Session 2c2a6595 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `2c2a6595-b208-446e-bbd1-d0f49eca45e8` |

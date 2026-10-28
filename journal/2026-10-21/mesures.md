@@ -1,0 +1,47 @@
+# 2026-10-21 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-21/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (22)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:04 | `7848738b` | MESURE 76 — JW.ORG 2026 : 11 LANGUES, 139 PARAGRAPHES ALIGNES PAR data-pid — toutes au-dessus du hasard (+12,5 haoussa a +44,7 arabe egyptien). LA COUVERTURE DEMOGRAPHIQUE ATTEINT 19/20 : seul manque le pidgin nigerian (creole oral sans corpus parallele). Le critere de passage a l'etage 2 est atteint ; l'etage 2 s'ouvre | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-21/README.md` (+7) |
+| 00:22 | `261acc5b` | MESURE 77 — ETAGE 2, PREMIERE MESURE : la representation est PARTAGEE entre les langues mais NON ALIGNEE. Un pont lineaire par langue atteint un cosinus de 0,78-0,92 et retrouve la bonne traduction dans 28-67 % des cas (hasard 0,7 %), controle negatif ~0. Le retrieval brut va de 5 % (arabe egyptien, urdu) a 87 % (vietnamien) : les langues proches s'alignent d'elles-memes, les lointaines ont besoin du pont. L'etage 2 a sa premiere mesure | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+7) |
+| 00:57 | `f93259e5` | MESURE 78 — ETAGE 2 : LA TAILLE NE CHANGE PRESQUE RIEN A L'ALIGNEMENT (+3,7 en lecture, +1,4 en ecriture du 3 B au 7 B) ; le sens partage vit dans les PREMIERES COUCHES (4-6) et LIRE ≈ ECRIRE. Le pont lineaire reste a 28-69 % (hasard 0,7 %), controle negatif ~0 | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+8) |
+| 01:10 | `0266a82f` | MESURE 79 — ETAGE 2 : LA COMPOSITION N'EST PAS DEMONTREE. Seuls les paragraphes COMPLETS s'alignent (0,2-0,78) ; les prefixes de caracteres restent pres du hasard (0,0-0,18) et la trajectoire est plate (+0,02 a +0,18). Le test est CONFONDU : les prefixes ne sont pas des unites de sens equivalentes — il faut aligner des phrases, pas des caracteres | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+6) |
+| 01:36 | `10f48a2c` | MESURE 80 — LA COMPOSITION EST LA : sur des phrases ALIGNEES (Verne FR/EN, 200 phrases en 50 series de 4), le sens de la phrase est partage (retrieval 0,61, hasard 0,5 %) et sa POSITION dans la serie est retrouvee (ordre 0,84, hasard 25 %) a la COUCHE 18. Le pont lineaire est inutile (0,42) et la derniere couche s'effondre (0,09) : le sens est au milieu, la langue a la fin | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+5) |
+| 01:50 | `60dfb783` | MESURE 82 — LE PAS DE PENSEE APPRIS TIENT DEUX PAS : l'operateur lineaire predit l'etat suivant (cosinus 0,81-0,90 contre 0,51-0,78 pour l'identite ; retrieval 0,22 contre 2,2 % de hasard), l'iteration retrouve la bonne position deux fois (0,73 puis 0,53, hasard 25 %), puis S'EFFONDRE au troisieme (0,13-0,47). La falaise du chapitre 5 est repoussee de un a deux pas, mais elle est toujours la | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+7) |
+| 02:00 | `b74d1b5c` | MESURE 84 — LA CONTRACTION SIMPLE NE SAUVE PAS LE PAS DE PENSEE : melanger le pas appris avec l'etat courant (alpha < 1) DEGRADE l'iteration (alpha 0,75 : 0,40/0,07/0,33 ; alpha 1 : 0,73/0,53/0,33 au 3 B, couche 12). Un pas plus petit ne va pas plus loin : la falaise n'est pas une question d'amplitude, mais de direction. La contraction doit etre APPRISE, pas imposee par un melange | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+6) |
+| 04:09 | `0d27043b` | MESURE 89 — LE PIDGIN : LA LECTURE PASSE, L'ECRITURE NON. pcm->eng est au-dessus du plancher dans les deux tailles (7 B : +3,2 [+1,3;+5,3] ; 14 B : +4,4 [+1,0;+7,9]) ; eng->pcm est negatif au 7 B (-1,5 [-3,4;+0,5]) et marginal au 14 B (+2,3 [-0,6;+5,5]). Le few-shot aide la lecture (+16,3) mais pas l'ecriture (-6,9). La couverture du pidgin est UNIDIRECTIONNELLE | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/modele.md` (+6) |
+| 04:19 | `8c975bcf` | MESURE 90 — L'ECRITURE DU PIDGIN N'EST PAS APPRENABLE SUR 39 PAGES : le LoRA (r=16, 7,4 M parametres) memorise parfaitement (perte 0,003) mais ne transfere RIEN (marge appariee -4,2 sur le conte tenu a part, contre -4,1 avant). L'ecriture est un trou de DONNEES, pas de methode | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+4) |
+| 08:26 | `a94d9af5` | MESURE 99 — LE 7 B N'EST PAS MESURABLE SUR CE MATERIEL : fp16 OOM (chargement puis logits plein vocabulaire) ; 8 bits + LoRA donne des generations cassees (chrF 17,0, marge -21,9, 1/71 page). Ce n'est pas une mesure du 7 B, c'est un echec d'outillage. Le 3 B reste la reference (+0,9 sur 71 pages, mesure 98) | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/distribue.md` (+5) |
+| 09:19 | `074b43a7` | MESURE 102 — LA BIBLE NARRATIVE ECHOUE AUSSI (-20,3) : le domaine biblique est TOXIQUE pour ce corpus, pas seulement son archaisme. Meme les livres narratifs (Genese, Evangiles, Actes) avec le WEB moderne cassent la traduction (chrF 24,6 contre 51,8 sans Bible). Le translatewiki reste le seul levier positif | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/distribue.md` (+4) |
+| 09:49 | `1c9dc222` | MESURE 103 — ABLATIONS DE RECETTE : le chat (+2,2) et toutes les couches (+4,2) font MOINS BIEN que last-12 (+6,9) sur le pli 0210. La recette simple est la meilleure ; le verrou n'est ni le format, ni les couches, ni le rang : c'est la DONNEE | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+5) |
+| 14:26 | `f440561a` | MESURE 105 — LE 7 B REPARE (AUTOCAST + GRADSCALER) DONNE +1,2 [-0,6 ; +3,1] SUR 71 PAGES — mieux que le 3 B (+0,9), mais pas significatif. Le bug etait l'overflow fp16 sans scaler ; la taille n'est pas le levier, le corpus reste la limite | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/distribue.md` (+12) |
+| 14:41 | `d3bbba4c` | MESURE 106 — TRIPLER LE CORPUS DE CONTES (211 pages, 21 contes) NE CHANGE RIEN : +1,0 [-0,9 ; +2,9] contre +0,9 (71 pages). L'hypothese « il suffit de plus de contes » est FALSIFIEE ; le verrou est la PRODUCTION du pidgin, pas le volume | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+12) |
+| 15:02 | `7427192e` | MESURE 107 — LE 14 B FRANCHIT LE SEUIL : +4,6 [+2,4 ; +7,0] sur 71 pages (50/71), quatre plis significatifs. L'ecriture du pidgin est etablie avec un adaptateur 14 B ; la COUVERTURE PASSE A 20/20. La taille est le levier : 3 B +0,9, 7 B +1,2, 14 B +4,6 | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+10) |
+| 18:16 | `a90c47a2` | DOC — le tableau des questions dit 20/20 (mesure 107) ; la ligne 124 n'a plus de cellule en trop (porte-tableaux : 527 fichiers verts). Portes : 44 vertes, 2 rouges connues | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/moteur.md` (+2) |
+| 20:39 | `2015644d` | DOC — synthese 05 : la dynamique tient deux pas et aucun operateur teste ne l'etend (contraction, MLP, recurrence, latent) ; le latent collapse en point fixe. L'historique des mesures 82-85 reste dans reports/ | `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md`, `2026-10-21/modele.md` |
+| 20:41 | `59e302f0` | MESURE 109 (suite) — le latent 14 B collapse pareil : 0,00/0,40/0,40 ; le pas 1 reste au point fixe. Outil composition_latente.py versionne | `2026-10-21/README.md`, `2026-10-21/mesures.md`, `07-mesures-couche-commune.md` (+2) |
+| 20:53 | `d37ffaa1` | README — index des mesures 109-110 (latent et penalite) ; les JSON des compositions latentes | `2026-10-21/README.md`, `2026-10-21/modele.md`, `README.md` |
+| 21:12 | `38058bea` | MESURE 111 — LE PIDGIN A 600 PAS : +5,0 [+2,1 ; +7,3] sur 71 pages, 59/71 (contre +4,6, 50/71 a 300 pas). Le 0089 passe de -1,9 a +2,3 ; le 0095 de +1,5 a +4,9 ; seul le 0327 reste negatif (-2,8). La couverture 20/20 se renforce | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+9) |
+| 21:40 | `276ba7ef` | MESURE 112 — LE PIDGIN A 1000 PAS : +5,8 [+4,1 ; +7,6], 59/71, les 7 plis positifs (le 0327 passe de -2,8 a +4,7 ; le 0066 a +7,9). La couverture 20/20 est solide : marge +5,8, IC le plus etroit | `en-cours.md`, `2026-10-21/README.md`, `2026-10-21/mesures.md` (+9) |
+| 23:42 | `1f0f557a` | MESURE 115 — L'ETAT D'UNE PHRASE NE PORTE PAS LA SUIVANTE : 630 series, 1 323 transitions ; le lineaire reste la moyenne (cos 0,827-0,940 contre 0,821-0,939 ; effondrement 0,933-0,995) et le MLP memorise (perte 0,03) sans generaliser (retrieval 0-1,15 %, dans la serie 14-27 % contre 25 %). Ni l'echantillon, ni la forme, ni l'objectif : il manque l'etat de PLAN de la serie. L'etage 2 devient la phase principale | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+9) |
+
+## Chiffres du jour
+
+`-1,15 %` · `-27 %` · `25 %` · `0,827` · `0,940` · `0,821` · `0,939` · `0,933` · `0,995` · `0,003` · `2,2 %` · `0,5 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
+- [reports/README.md](../reports/README.md)
+
+<!-- notes -->
+
+<!-- /notes -->

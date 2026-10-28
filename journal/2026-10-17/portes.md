@@ -1,0 +1,29 @@
+# 2026-10-17 — Portes et vérifications
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-17/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (5)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:52 | `12eed046` | LE CONTENU LONG SURVIT ET S'AMELIORE : avec un lambda de validation croisee, l'etat porte la suite a 16 jetons d'avance a 80,3 % (contre 118,4 pour le mot, soit 38 points d'ecart) — les TROIS piliers de la nuit tiennent, et la profondeur compte un peu (la couche 23 bat la 12 a tous les horizons) | `2026-10-17/README.md`, `2026-10-17/mesures.md`, `rapport-modele-drave.md` (+1) |
+| 12:51 | `bbc3a439` | LES IMAGES NE CHARGAIENT PAS : le serveur envoyait « Content-Type: text/html » pour TOUT, donc un SVG servi comme du HTML — le navigateur refuse de le rendre. L'URL etait bonne (200), seul le TYPE etait faux | `utilisation.md`, `2026-10-17/README.md`, `2026-10-17/docs.md` (+3) |
+| 16:58 | `df13b2bb` | LE CONTROLE D'ALIGNEMENT, ET UN FICHIER MAL ETIQUETE : Alice et Verne sont alignes (0,1 a 1,7 %), donc la variation de huit fois entre leurs signaux n'est PAS un defaut d'alignement — mais le « Dracula » francais du corpus Panini contient « Vocations Explained: Matrimony, Virginity… », un AUTRE livre (rapport de longueur 0,101). La replication porte sur DEUX livres, pas trois, et le corpus doit etre signale | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-17/README.md` (+2) |
+| 19:23 | `47e01768` | RECTIFICATION D'HEURE : il est 19 h 23, pas 23 h — la page est redatee de 19 h 30, et le passage complet des 46 portes (lance a 19 h 19, deux portes vertes) finira vers 21 h | `en-cours.md`, `2026-10-17/README.md`, `2026-10-17/distribue.md` |
+| 20:10 | `6c1eb284` | LA LIGNE 14 DU TABLEAU D'OUVERTURE citait l'ancien corpus (13,2 Mo, 18 textes, 66 322 formes) : elle porte maintenant les deux, l'ancien et l'enrichi (15,7 Mo, 21 textes, 87 341 formes, avec Proust, Stendhal, Hugo, Voltaire, Baudelaire, Chateaubriand, Diderot, Montesquieu, Corneille, Verne, Zola) | `07-modeles-alternatifs-entree-sortie.md`, `2026-10-17/README.md`, `2026-10-17/docs.md` |
+
+## Chiffres du jour
+
+`13,2 Mo` · `15,7 Mo` · `1,7 %` · `0,101` · `80,3 %` · `16 jetons`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/rapport-modele-drave.md](../reports/rapport-modele-drave.md)
+
+<!-- notes -->
+
+<!-- /notes -->

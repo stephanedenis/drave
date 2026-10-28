@@ -1,5 +1,7 @@
 # Session c25f97d1 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `c25f97d1-9a4d-41da-b983-004f793afe43` |

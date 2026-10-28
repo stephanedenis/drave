@@ -1,5 +1,7 @@
 # Session 8549abcb — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8549abcb-5d9a-4594-915b-5628c80a2a08` |

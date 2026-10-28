@@ -1,0 +1,108 @@
+# 2026-10-24 — Modèles, entraînement, parcimonie, biologie
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (21)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 09:16 | `92cb672b` | B2.7 (profondeur fixe) — PREMIER POINT : le 1,5 B a la couche 14 (50 %) donne 0,578/0,703, MOINS que sa couche 18 (0,692/0,83 a 64 %) — la profondeur relative ne suffit pas : chaque modele a sa meilleure couche. Le 32 B a la couche 32 tourne | `2026-10-22/moteur.md`, `2026-10-24/README.md`, `2026-10-24/mesures.md` (+3) |
+| 09:31 | `1b292eb1` | DOC — la carte du raisonnement naturel porte le confondant de la couche : mesures 165-168 (1,5 B 0,692/0,83, 32 B 0,410/0,49), la profondeur relative varie (64 % a 28 %) donc la decroissance n'est pas attribuable a la taille, et le point a profondeur fixe (1,5 B couche 14 : 0,578/0,703) montre que chaque modele a sa meilleure couche ; comparaison scalaire suspendue. Le NLI francais dur perd sa marge, pas sa lisibilite | `05-la-pensee-sans-verbaliser.md`, `2026-10-24/README.md`, `2026-10-24/distribue.md` (+1) |
+| 09:37 | `7a8fc87e` | B2.7 TRANCHE — A PROFONDEUR RELATIVE FIXE, L'ECHELLE AIDE : le 32 B a la couche 32 (50 %) donne 0,600/0,772, le meilleur des points mesures (1,5 B 0,578/0,703 ; 3 B 0,502/0,592). La « decroissance avec la taille » (0,410/0,49 a la couche 18) etait l'EFFET DE LA COUCHE ; la lecon double : fixer la profondeur relative entre modeles, et chaque modele a sa meilleure couche | `roadmap.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-22/moteur.md` (+5) |
+| 09:59 | `1343a271` | B2.8 — LE 3 B DECROCHE SUR LES TROIS JEUX A PROFONDEUR FIXE : XNLI 0,502 contre 0,578 (1,5 B), DACCORD 0,592 contre 0,701, GQNLI 0,80 contre 0,90. Son MLP tombe au hasard sur DACCORD : le 3 B est le modele le moins lineairement lisible de la serie, la lisibilite n'est pas monotone avec la taille | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+7) |
+| 10:38 | `8988184e` | DOC — LE README ACTUALISE SUR LE XNLI : le paragraphe « sur de vraies phrases » portait les chiffres du 3 B (50/58) ; il donne ceux du 1,5 B (69/78, pont 83) et le 32 B (60 a sa meilleure couche), avec la lecon : la sonde mesure l'acces a l'etat, pas la qualite du modele | `README.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+2) |
+| 10:43 | `8b8b145b` | B2.8 CORRIGE — LE 3 B DECOLLE A SA COUCHE 30 : 0,511 (c.12), 0,592 (c.18), 0,836 (c.24), 0,865 (c.30). La couche 18 etait un mauvais point, pas le modele : a sa meilleure couche le 3 B est le meilleur de la serie (devant le 1,5 B 0,692 et le 32 B 0,600). La « decroissance avec la taille » etait le point de mesure ; la carte se lit par modele a sa meilleure couche, ou avec les deux bornes | `README.md`, `roadmap.md`, `05-la-pensee-sans-verbaliser.md` (+7) |
+| 10:47 | `cdd0b251` | B2.8 — LA COMPARAISON FINALE : le 1,5 B culmine a 0,810 (couche 22, 79 %), le 3 B a 0,865 (couche 30, 83 %) — le 3 B est meilleur a son pic, la taille aide au bon endroit. Les deux « decroissances » du jour (couche 18, profondeur 50 %) etaient des effets du point de mesure ; la carte se lit par modele, a son pic | `README.md`, `roadmap.md`, `05-la-pensee-sans-verbaliser.md` (+7) |
+| 10:57 | `b9680501` | DOC — LA HUITIEME LECON : LE POINT DE MESURE. La meme erreur a ete faite deux fois le meme jour (la couche 18, puis la profondeur 50 %) : une « decroissance avec la taille » qui etait un effet du point de mesure. La regle est ajoutee aux sept : comparer les modeles a leur pic, ou donner les deux bornes | `06-comment-savoir.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+3) |
+| 11:03 | `5ecac883` | DOC — LE BILAN DE LA SESSION : quarante-quatre mesures nouvelles (125-168), le dialogue spontane, les huit lecons, et la carte qui se lit par modele a son pic. Le compte etait reste a 40 (125-165) | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/moteur.md` |
+| 13:04 | `0db01bee` | CORRECTION — LE 14 B L24 EST LE MEILLEUR DES QUATRE POINTS : 0,6305/0,815, mesure du 09:54 que trois documents disaient « non mesuree ». La fiche du 32 B (la table et la conclusion) et la roadmap sont corrigees : a profondeur fixe, l'echelle n'aide pas de facon monotone — 14 B 0,63, 32 B 0,60, 1,5 B 0,58, 3 B 0,50 | `roadmap.md`, `2026-10-24/README.md`, `2026-10-24/mesures.md` (+2) |
+| 13:06 | `bfc757bd` | DOC — LA LIGNE B2.7 SE CONTREDISAIT : elle disait « le 32 B, le meilleur des points mesures » et, dans la meme ligne, « le 14 B, le meilleur des quatre ». La contradiction est levee : le 32 B reste le meilleur de sa serie (0,41 -> 0,60), mais l'echelle n'aide pas de facon monotone — le 14 B (0,6305/0,815) est le meilleur des quatre points | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+2) |
+| 14:36 | `4352f56b` | DOC — LE TABLEAU A PROFONDEUR FIXE EST CORRIGE : le titre disait « couche (50 %) » alors que ses lignes vont de 50 a 100 %. La colonne « profondeur » est ajoutee, et la conclusion refaite : a 50 % le 32 B est le meilleur et le 14 B le DERNIER (0,4833) ; mais le 14 B est le premier a 67 % (0,6305). Le balayage du 14 B est de +0,147 entre le pire et le meilleur point : la profondeur decide autant que le modele | `2026-10-22/moteur.md`, `2026-10-24/README.md`, `2026-10-24/mesures.md` (+2) |
+| 14:38 | `12ce9062` | DOC — LA LIGNE B2.8 REEECRITE : elle etait restee a « premiere mesure » ; elle porte maintenant le 14 B (0,7189/0,8701 a sa couche 30), la comparaison a 50 % (le 32 B mene, le 14 B est DERNIER a 0,4833) et le balayage de +0,147 entre le pire et le meilleur point du 14 B. La profondeur decide autant que le modele | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+2) |
+| 16:04 | `a039a8ce` | B4.2 (suite) — LA ROADMAP ET L'ETAT : la ligne B4.2 passe a « apprenable, pas transferable » (0,7042 reentraine ; 0,4148 et 0,3312 en transfert), la prochaine action devient B4.3, la page vivante et le journal portent le resultat | `en-cours.md`, `roadmap.md`, `2026-10-24/README.md` (+3) |
+| 16:10 | `ef28b1e8` | B4.3 — LES DEUX OPERATIONS TIENNENT DANS UN SEUL OPERATEUR : entraine sur le melange (identite + negation), il lit l'original a 0,7749 et le nie a 0,6977 (controle 0,4791) — le cout de la jointure est faible (0,035 et 0,006). L'operateur est un SOUS-ESPACE (une relation + une polarite), pas une direction. B4.4 devient la composition : le nie du nie revient-il a l'original ? | `en-cours.md`, `roadmap.md`, `2026-10-24/README.md` (+5) |
+| 20:54 | `ea7da664` | B4.6 — LE FLAG --lora MANQUAIT : le corps du mode LoRA etait bien ecrit (le if, le poser_lora, l'entrainement, le print) mais l'argument n'avait pas ete ajoute — l'outil refusait --lora. Le flag est la, le py_compile passe | `2026-10-24/README.md`, `2026-10-24/memoire.md`, `THEMES.md` (+1) |
+| 20:56 | `82de0a8f` | B4.6 — POSER_LORA MODIFIE EN PLACE : il rend la liste des conteneurs, pas le modele ; l'appel ne doit pas ecraser model. Corrige, py_compile vert | `2026-10-24/README.md`, `2026-10-24/modele.md`, `operateur_negation.py` |
+| 20:58 | `7ea1207c` | B4.6 — LE LORA SE CREE AU DTYPE DU NOYAU : A et B etaient en float32, le modele en float16 — la multiplication echouait (c10::Half != float). Les deux parametres prennent base.weight.dtype. Le piege du 14e jour se rejoue : deux objets qui doivent etre ensemble (le dispositif, le dtype) et ne le sont pas | `2026-10-24/README.md`, `2026-10-24/modele.md`, `adaptateur_langue.py` |
+| 21:10 | `6512aaac` | B4.6 — LE DIAGNOSTIC EST FAIT, L'ENTRAINEMENT DIVERGEAIT : --sans-entrainement (le LoRA pose sans entrainer) rend reference_orig a 0,8103 — le forward du LoRA est PROPRE ; c'est l'entrainement qui cassait le modele (0,48). Fix : lr 1e-5 au lieu de 1e-4, gradient clipping a 1.0, la perte finale imprimee | `2026-10-24/README.md`, `2026-10-24/modele.md`, `operateur_negation.py` |
+| 21:16 | `53b03dae` | B4.6 — LE LORA CALCULE EN FLOAT32 : en float16 la perte partait en NaN (sous-debordement du produit x@A.T). A et B sont en float32, le forward fait x.float() et rend le resultat au dtype d'entree. Le modele reste en float16, le LoRA calcule en float32 | `2026-10-24/README.md`, `2026-10-24/modele.md`, `THEMES.md` (+1) |
+| 21:36 | `a3cc378c` | SYNTHESE — LE CHAPITRE 08 PASSE A SIX MESURES : B4.6 (le LoRA) rejoint la table (l'operation apprise dans les poids s'INVERSE : 0,2283 = 1 - 0,7717) et une section dit pourquoi — l'entrainement ne transfere pas l'operation, il retourne la reponse. Le controle (le LoRA original : 0,4662) est dans la fiche | `08-les-operations.md`, `2026-10-24/README.md`, `2026-10-24/distribue.md` (+1) |
+
+## Chiffres du jour
+
+`0,2283` · `0,7717` · `0,4662` · `0,8103` · `0,7749` · `0,6977` · `0,4791` · `0,035` · `0,006` · `0,7042` · `0,4148` · `0,3312`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/README.md](../reports/README.md)
+- [reports/rapport-32b-couche-confondant.md](../reports/rapport-32b-couche-confondant.md)
+- [reports/rapport-nli-francais-dur.md](../reports/rapport-nli-francais-dur.md)
+- [reports/rapport-operateur-negation.md](../reports/rapport-operateur-negation.md)
+
+<!-- notes -->
+**Le 24 octobre — la révision : raison d'être, stratégie, plan.** Les 173 mesures ont déplacé le centre de gravité.
+La **raison d'être** de la vision est réécrite : la structure bat la taille n'est plus une hypothèse mais un résultat
+mesuré (la sonde plate dès le 1,5 B, le pont à 0,87, le 14 B dernier à 50 %), et les **refus** sont écrits (apprendre
+des flux +0,0045, le 4 bits de la tête +10 %, la course à l'échelle). La **stratégie** passe de « mesurer l'échelle »
+à « exploiter la structure » : **A7 la grappe déportée**, **B4 les opérateurs abstraits**, **A8 l'ordonnanceur place
+et perte** ; le pic du 32 B et la prose scientifique restent nommés. Le **plan** (roadmap) porte ces trois lignes.
+
+**Le 24 octobre (suite) — A7.2 établi, A8.2 codé.** Le **relais ne change pas un chiffre** (`porte-topologie`, 92 s,
+42.5477) : une couche exécutée ailleurs rend la même sortie, et le coût du flux est mesuré (1 608 octets/flux,
+0,25 Mbit/s, latence ≤ 20 ms). Reste la **grappe intra-couche** (A7.3). Et l'ordonnanceur a son **terme de perte** :
+`choisir_avec_perte` (3 nouveaux tests) refuse la tête 4 bits (+10 %) à un budget de 5 %, accepte l'int8 tardif
+(+0,03 %) à 1 %, exige 5 % pour l'int4 tardif (+2,7 %) et refuse l'int4 global (+364 %) — **la leçon de la tête est
+devenue une règle testée**.
+
+**Le 24 octobre (suite) — la page vivante devient un état du moment.** Elle faisait 253 lignes, dont l'essentiel était
+un récit détaillé du 21 octobre et une « synthèse » qui redisait les fiches. Elle est réécrite en ~110 lignes :
+**où l'on va** (l'objectif final, la thèse mesurée), **ce qui est en cours** (la nouvelle phase A7/B4/A8 et
+l'actualité du jour), **où l'on en est** (les six chiffres qui comptent), **les sept chantiers en une ligne**, et
+**ce qui reste aux trois horizons** — court (B4.1, A7.3, A8.3), moyen (les opérateurs composés, la grappe, le
+corpus), final (l'étage 2 et le moteur décomposable). Les détails renvoient aux fiches, à la synthèse et à la
+roadmap. La revue exige les 7 chantiers : ils y sont, en une ligne chacun.
+
+**Le 24 octobre (suite) — B4.1 : la négation n'est pas portée par l'état.** L'opérateur de négation (« Il est faux
+que : H ») sur les 1 034 paires DACCORD, au pic de la sonde (1,5 B, couche 22) : la référence tient (0,8103) mais le
+**flip** est à **0,4148** (sous le hasard) et la **garde** à **0,5852** (au-dessus) — la sonde relit l'étiquette
+originale sur les paires niées : elle lit la **relation de surface**, pas l'**opération**. Le contrôle au hasard est
+propre (0,4566). C'est le premier résultat de B4 et il est **négatif** : la question devient celle de l'**opérateur
+appris** (B4.2), comme le plan a dû être entraîné.
+
+**Le 24 octobre (suite) — B4.2 : la négation est apprenable, pas transférable.** Une sonde **réentraînée** sur les
+paires niées lit la relation basculée à **0,7042** (hasard 0,5 ; contrôle 0,4952), mais la sonde de l'original ne lit
+pas le nié (0,4148) et réciproquement (0,3312). **L'opérateur n'est pas une direction, c'est une géométrie locale** —
+la même leçon que le plan. B4.3 devient : un opérateur appris sur une paire d'opérations transfère-t-il à une autre ?
+
+**Le 24 octobre (suite) — B4.3 : les deux opérations tiennent ensemble.** Un opérateur entraîné sur le **mélange**
+(l'identité + la négation) lit l'original à **0,7749** et le nié à **0,6977** (contrôle 0,4791) : le coût de la
+jointure est faible (0,035 et 0,006). **L'opérateur est un sous-espace** — une relation et une polarité — pas une
+direction. B4.4 devient : la **composition** (le nié du nié revient-il à l'original ?).
+
+**Le 24 octobre (suite) — B4.4 : la composition n'est pas algébrique.** Le double nié (« il est faux que : il est faux
+que : H ») n'est pas lu comme l'original : **0,5691** (contre 0,8103 de référence), et le mélange est **sous** le
+hasard (0,3601). L'opérateur n'est pas une **algèbre** : deux négations ne s'annulent pas dans l'état. Les opérations
+sont des **sous-espaces appris** (B4.3), pas les générateurs d'un groupe — **la composition doit être apprise** comme
+une tâche. B4.5 devient : la composition apprise.
+
+**Le 24 octobre (suite) — B4.5 et la clôture de B4.** Le triple (original, nié, double nié) lit le double à
+**0,6174** (contrôle 0,4598) : la composition est **apprenable, mais faiblement** (+0,117 sur le hasard, contre
++0,31 pour l'original). **Bilan de B4** : les opérations sont des géométries **apprises**, locales, non
+compositionnelles gratuitement — *l'état porte les opérations, mais il ne les calcule pas*. La ligne est **close** ;
+les suites (le LoRA de la mesure 119, une troisième opération) sont hors du plan. Le plan reprend à A8.3 puis A7.3.
+
+**Le 24 octobre (suite) — la synthèse passe à huit chapitres.** Le chapitre **08 — les opérations** relie les cinq
+mesures de B4 (l'état porte les opérations, mais il ne les calcule pas) et la **grappe** du moteur (le top-1024 exact
+à 21 %). Deux sens du mot « structure », tous deux mesurés et tous deux coûteux. La revue et la carte suivent (huit
+chapitres).
+
+**Le 24 octobre (soir) — B4.6 : le LoRA de la négation inverse la lecture.** L'entraînement converge (la perte 0,0022)
+et le modèle reste intact (0,8135), mais la sonde de l'original lit le nié à **0,2283** — l'**inverse** de ce qu'elle
+lit sur l'original (0,7717), et exactement `1 − 0,7717`. Le LoRA a appris la **surface** (« il est faux que ») comme un
+**marqueur d'inversion**, pas l'opération. Négatif de B4.6, cohérent avec B4.2 (la géométrie). Le trajet : trois
+instruments réparés (le flag, la liste, le float32/float16) et un diagnostic `--sans-entrainement` qui a tranché.
+<!-- /notes -->

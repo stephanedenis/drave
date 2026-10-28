@@ -1,5 +1,7 @@
 # Session 8b315bb2 — Tu es relecteur ADVERSE. Tu
 
+> **Journaux :** [le jour](../../2026-10-02/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `8b315bb2-abba-4033-b3d4-177d04b4f194` |

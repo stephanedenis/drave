@@ -1,0 +1,54 @@
+# 2026-10-24 — Moteur : chargement, calcul, listes, quantification
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (11)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 08:53 | `76813d33` | B2.8 MESURE — LE NLI FRANCAIS PLUS DUR : au 1,5 B, DACCORD +26,9, GQNLI +56,7, XNLI +35,9 de marge (controles au hasard) ; le jeu dur est lisible mais sa marge est la plus faible, les quantificateurs sont les plus faciles. Et le 1,5 B bat le 3 B et le 14 B sur la sonde (0,692 contre 0,502 et 0,481) et le pont (0,83 contre 0,592 et 0,627) : la lisibilite lineaire n'est pas la capacite | `en-cours.md`, `roadmap.md`, `2026-10-22/moteur.md` (+9) |
+| 09:35 | `240b08d0` | A5.3 — LA QUANTIFICATION DU KV PAR COUCHE : l'int8 sur les couches 0-11 coute +2,28 %, sur les 12-23 +0,03 % — tout le cout est dans les PREMIERES couches. Le nouvel environnement DRAVE_KV_BITS_COUCHES surcharge la precision par couche, et la politique par couche est possible : les tardives en 8 bits sans perte mesurable | `roadmap.md`, `model.rs`, `2026-10-22/moteur.md` (+5) |
+| 10:28 | `c880ef86` | A2.6 — LA TETE PASSE PAR LA REGLE DE PLACEMENT : son placement etait un drapeau (-q 4) ; placement::choisir decide si la tete quantifiee tient en VRAM (110 Mo pour le 0,5 B) et l'y place sans drapeau — 4,04 ms par jeton mesures. Le drapeau reste pour forcer | `roadmap.md`, `model.rs`, `2026-10-22/moteur.md` (+3) |
+| 10:36 | `fee85478` | A5.3 PROLONGE — LE 4 BITS PAR COUCHE : le 8 bits sur les couches 12-23 est quasi gratuit (+0,03 %), mais le 4 bits y coute +2,7 % (32,4788 contre 31,6576). La quantification par couche est un CURSEUR, pas un interrupteur : le 4 bits tardif est le seul endroit ou il est defendable, et il n'est pas gratuit | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+3) |
+| 11:01 | `71ca6b98` | DOC — LA VISION CORRIGEE SUR LE TOP-K : l'axe 2 disait « le deport du top-k retombe sur le CPU » ; il est fait (le noyau fusionne, le seuil 131 072 mesure, le repli leve en opt-in). La politique de placement a sa regle ; reste l'ordonnanceur complet (la place ET la perte) | `vision.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
+| 11:05 | `63ae6afe` | DOC — LES PORTES DE DONNEES DOCUMENTEES : porte-diff-couche verifie un contrat (reproductibilite, divergence nommee) et non un temps ; rapide, sans GPU dedie. Ajoutee au document des portes | `portes.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
+| 11:07 | `b08bf0ce` | DOC — LA QUESTION DE LA VISION EST REPONDUE : la page vivante portait « la vision de l'etage — Stephane, en attente » ; elle est ecrite depuis le README (une vision des flots, deux programmes, deux etages ordonnes dans l'intelligence). La ligne est marquee repondue | `en-cours.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
+| 12:46 | `cfcbb0ae` | CORRECTION — LE 32B EN 4 BITS FORCAIT TOUT SUR LE GPU0 : le code disait device_map={: 0} alors que son propre commentaire disait « le 32 B a besoin des deux » ; corrige en auto (13/13 + debordement CPU). La cause de l'OOM de la couche 48 est trouvee et documentee — la mesure redevient possible, lente (3-4 h par couche) | `2026-10-24/README.md`, `2026-10-24/portes.md`, `THEMES.md` (+2) |
+| 16:33 | `ef2fe636` | A8.3 (suite) — L'ETAT ET LE JOURNAL : la page vivante dit que la regle est branchee (elle rend le choix de la main, 30,7286 des deux cotes), le journal du moteur porte la mesure | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/distribue.md` (+2) |
+| 16:38 | `1e61acff` | DOC — LES DEUX ENTREES D'INDEX ET LA NOTE A7.3 : rapport-regle-placement-perte (A8.3) et rapport-grappe-intra-couche (A7.3) manquaient a l'index ; le journal du moteur porte la mesure de la grappe | `2026-10-24/README.md`, `2026-10-24/mesures.md`, `2026-10-24/moteur.md` (+2) |
+| 16:42 | `82e9a9bf` | SYNTHESE — LE CHAPITRE 08 : LES OPERATIONS ET LA GRAPPE. Il relie les cinq mesures de B4 (l'etat porte les operations, mais il ne les calcule pas : pas une direction, apprenable, un sous-espace, pas une algebre, une composition apprise a 0,62) et la grappe du moteur (le top-1024 exact a 21 %). Deux sens de « structure », tous deux mesures et tous deux couteux. La synthese passe a HUIT chapitres ; la revue et la carte suivent | `carte.md`, `08-les-operations.md`, `index.md` (+4) |
+
+## Chiffres du jour
+
+`21 %` · `30,7286` · `+0,03 %` · `+2,7 %` · `32,4788` · `31,6576` · `4,04 ms` · `110 Mo` · `+2,28 %` · `0,692` · `0,502` · `0,481`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/README.md](../reports/README.md)
+- [reports/rapport-32b-couche-confondant.md](../reports/rapport-32b-couche-confondant.md)
+- [reports/rapport-kv-par-couche.md](../reports/rapport-kv-par-couche.md)
+- [reports/rapport-nli-francais-dur.md](../reports/rapport-nli-francais-dur.md)
+- [reports/rapport-placement-kv-8k.md](../reports/rapport-placement-kv-8k.md)
+
+<!-- notes -->
+**Le 24 octobre (suite) — A8.3 : la règle place et perte est branchée.** `placement::kv_precision` choisit la précision
+du KV par couche selon le budget `DRAVE_PERTE_MAX` (défaut 1 %) : l'int8 si sa perte mesurée tient (+2,28 % sur les
+premières, +0,03 % sur les dernières), le f32 sinon. **Mesure** : la règle rend le **choix de la main** — 30,7286 des
+deux côtés (contre 30,7660 en f32), mêmes couches en int8, même PPL à quatre décimales. Deux tests ajoutés (8/8). La
+leçon de la tête devient la règle du KV.
+
+**Le 24 octobre (suite) — A7.3 : la grappe intra-couche existe à 21 %.** Le moteur ne calcule que les k neurones les
+plus actifs (`--act-topk`) : à **1 024** (21 % des 4 864 neurones FFN), la perplexité est **identique** au réseau
+complet (30,7286 à quatre décimales) ; à 64 et 256, elle **s'effondre** (446 et 6 918). La grappe a une **taille
+minimale mesurable**, et c'est la densité naturelle des activations (SwiGLU) qu'elle épouse. **A7 est complète** :
+la couche déportée, la grappe et sa taille.
+
+**Le 24 octobre (soir) — A7.4 : la grappe déportée.** Le format du relais passe en **version 2** (un masque d'un bit
+par canal + les valeurs non nulles) : le flux de la grappe coûte **4,22× moins** que le dense (1 704 o contre 7 196 o)
+et la **porte du flux rend les mêmes chiffres** (60,8135 / 60,8135). La version 1 reste lisible. **A7 est
+complète** — la couche déportée, la grappe, sa taille, et son transport.
+<!-- /notes -->

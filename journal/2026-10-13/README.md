@@ -1,0 +1,73 @@
+# 2026-10-13
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
+> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
+> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+
+**41 commits** · **0 session(s)** · **9 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| attention | 9 | [2026-10-13/attention.md](attention.md) |
+| distribue | 4 | [2026-10-13/distribue.md](distribue.md) |
+| docs | 3 | [2026-10-13/docs.md](docs.md) |
+| memoire | 2 | [2026-10-13/memoire.md](memoire.md) |
+| mesures | 7 | [2026-10-13/mesures.md](mesures.md) |
+| modele | 5 | [2026-10-13/modele.md](modele.md) |
+| moteur | 5 | [2026-10-13/moteur.md](moteur.md) |
+| outils | 1 | [2026-10-13/outils.md](outils.md) |
+| portes | 5 | [2026-10-13/portes.md](portes.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:18 | `ebc58252` | VRAM : un pool de tampons dans le cache d'experts — -11,6 % a travail identique (memes 264 montages, perplexite 27736,1204 inchangee), et une fuite reparee (MatriceGpu n'a pas de Drop) |
+| 00:19 | `1400a92d` | Repères : la passe du 12/10 23h00 est consignée (36 portes, 34 vertes, 2 rouges nommes et instruits) — les valeurs des portes n'ont pas bouge |
+| 01:12 | `6ea04a92` | Le critere de porte-indice ne survit pas a une reconstruction de son entree : 2 fenetres sur 5 passent (1,21x et 1,69x mieux que le hasard), 3 echouent (jusqu'a 2,13x pire) — le critere est marginal par construction |
+| 01:14 | `ad37253a` | Journal du 12/10 (theme moteur) : le recit de la nuit — quatre mesures, quatre changements (prelecture parallele, tampons sequentiels, chargement paresseux, pool VRAM) et trois lecons |
+| 01:15 | `0abefdce` | Note des lecteurs paralleles : etat au 13/10 — les tampons sont dans le moteur et gagnent sur les octets ET sur le temps (6,22 Go / 3,40 s) |
+| 01:38 | `b51824d1` | Journal du 13/10 : renvoi vers le recit de la nuit (le travail a bascule apres minuit, les commits sont dates par git) |
+| 02:23 | `a386fda6` | La passe a attrape ma porte : elle lisait << chargees en Xs >> alors que le moteur imprime << 601.03ms >> sous la seconde — elle passait sur une machine lente et echouait sur une machine rapide |
+| 02:29 | `3bf7125a` | MADV_POPULATE_READ tranche : 2 121 Mo/s contre 2 077 pour madvise par tranches et 4 603 pour pread par 8 fils — il ne remplace pas les tampons (2,2x sous le disque) |
+| 02:30 | `00c1a88d` | Fiche des deux passes de la nuit : ce qu'elles ont attrape (quatre portes muettes qui dependaient de /tmp, et ma propre porte fragile a l'unite d'un nombre) et ce qu'elles ne disent PAS (le chemin VRAM n'est exerce par aucune porte) |
+| 02:33 | `af4fe1ce` | Chargement : je corrige une affirmation d'hier soir — sur 32 jetons l'emprunt des blocs Q4_K est 0,63 % MOINS precis (33,9093 contre 33,6967), pas plus fidèle ; et la decision est chiffree (0,63 % contre 5,5 s par passe) |
+| 02:34 | `e1e55caa` | Dessin H : les sorties precoces mesurees (8 et 4) — le produit theorique monte a 16,96 % mais le routeur REEL y perd 0,30 point ; le facteur limitant est bien la qualite du chemin court (N4), pas la profondeur de sortie |
+| 02:36 | `601bcbd2` | Plan, item 6 (dessin H) : les sorties precoces sont mesurees — reponse non, chiffree (16,96 % au mieux a la sortie 8, mais -0,30 point de justesse pour un routeur reel) |
+| 02:42 | `c16132dd` | Cinq outils de plus branches sur tools/_corpus.sh : la famille << prerequis dans /tmp >> est fermee (le corpus est regenere au lieu d'etre suppose) |
+| 03:58 | `317d3351` | La frontiere de la fenetre n'a pas de loi en N : garder la moitie des cles coute <=2 % sur TROIS textes (+0,5/+1,9/+0,8), garder le quart coute +5 a +49 % (facteur 9 selon le texte) |
+| 03:59 | `93c66918` | Journal du 13/10 : la seconde moitie de la nuit (dessin H aux sorties precoces, la loi de la frontiere, POPULATE_READ tranche, la famille /tmp fermee, et ma porte attrapee par la passe) |
+| 05:11 | `b3bf9aaa` | Passe de certification (03h59) : 35 vertes sur 37, et porte-push-paresseux VERTE dans la passe — la correction est verifiee dans les conditions ou le defaut etait apparu |
+| 05:35 | `2427a44e` | Frontiere de la fenetre : SEPT textes au lieu de trois — N/2 tient partout (+0,5 a +2,1 %) et N/4 va de +2,8 a +49,2 % (facteur 17,6) |
+| 05:37 | `f0263131` | Plan 6.7 : sept textes au lieu de trois (N/2 de +0,5 a +2,1 %, N/4 de +2,8 a +49,2 %) |
+| 06:06 | `f53e86c3` | Les deux facons de depenser la moitie des cles se valent : fenetre 1024 pure (+0,5 a +2,1 %) et fenetre 512 + 512 puits (+0,3 a +2,1 %) sur les sept memes textes — le partage fenetre/drain est un parametre d'implementation, pas de qualite |
+| 06:08 | `4a15e65d` | Plan 6.7 : les deux facons de depenser la moitie des cles se valent (fenetre pure ou fenetre + puits) — le partage est un parametre d'implementation |
+| 06:18 | `04f1925a` | Pool de tampons : neutre en temps (2,4 s avant, 2,3-2,4 apres) — et l'hypothese des 250 000 defauts de page par jeton est REFUTEE (glibc reutilise les blocs de 0,88 Mo) |
+| 06:19 | `763b67af` | Docs : le pool de tampons est fait et NEUTRE en temps (hypothese refutee) — garde pour borner la memoire et rendre les allocations visibles ; le recouvrement reste, avec son ampleur cernée |
+| 06:21 | `4a3a517c` | Plan, item 3 : la phrase melangeait deux mesures differentes (2,3 s de passe contre 3,05 s de calcul de la porte) — corrigee, et le recouvrement est dit a faible rendement |
+| 07:30 | `ac148005` | Quatrieme passe (06h19) apres le pool de tampons : 35 vertes sur 37, memes deux rouges instruits, memes valeurs — et le pool est neutre en temps (mesure a part, pas deduit de la passe) |
+| 08:37 | `3fdbb90f` | Un tableau Markdown qui ne rend pas est un tableau qui n'existe pas : 17 lignes dans 9 fichiers corrigees, et une 38e porte (porte-tableaux.sh) pour empecher la recidive |
+| 09:13 | `52c35b0a` | Tableau interrompu : la citation C8 coupait le tableau des capacites en deux (sept lignes orphelines, C9 a C12bis) — citation deplacee apres, en-tete rendu au tableau de plan-modeles-lourds, et la porte verifie desormais les lignes ORPHELINES |
+| 10:09 | `4a17c1d0` | C8 a l'echelle : la courbe monte encore (1032,58 -> 179,59 de 4 a 30 morceaux) mais un adaptateur NON LINEAIRE a donnees egales rend 376,01, soit 2,1x PIRE — la limite est la donnee, pas la capacite, et le manque reste N4 |
+| 10:50 | `2830407b` | C8 : la profondeur de sortie est un levier bon marche des que le lecteur est entraine — 179,59 (16 couches) / 267,98 (8) / 534,91 (4) contre 449 500 a 24,7 MILLIONS pour la tete empruntee ; l'etat precoce est lisible |
+| 10:57 | `50d776c4` | C8 : controles de robustesse — la graine pese 0,7 % (la courbe tient), le morceau de test pese x10 (17,35 sur m20 contre 179,59 sur m32) ; les valeurs absolues ne se transposent pas d'un texte a l'autre |
+| 11:02 | `211393a4` | C8 : les deux leviers (donnees, profondeur) se multiplient — le rapport 8/16 couches reste ~1,5 que l'on ait 4, 15 ou 30 morceaux (1,69 / 1,47 / 1,49) |
+| 11:04 | `a1c180ce` | Journal du 13/10 : la matinee C8 — la donnee paie encore, la capacite non, la profondeur est bon marche des que le lecteur est entraine, et les deux leviers se multiplient |
+| 11:27 | `d8397b01` | C8 : courbe de profondeur complete (4/8/12/16 couches : 535 / 268 / 206 / 180) — et je corrige ma propre affirmation : le rapport 8/16 n'est pas constant, il depend du texte (1,17 sur m20, 1,49 sur m32) |
+| 11:28 | `cc23420b` | Journal du 13/10 : courbe de profondeur a quatre points, et la correction de ma propre affirmation (le rapport depend du texte, 1,2 a 1,7) |
+| 11:29 | `e4dab3d6` | Note de conception : entrainer le chemin court (N4) — trois dessins du moins cher au plus cher, et cinq portes ecrites AVANT le code (invariant d'identite, temoin de la tete empruntee, deux morceaux de test, deux graines, validation separee) |
+| 11:35 | `9aed7285` | C8 : la FORME de la courbe ne se transporte pas d'un texte a l'autre — de 15 a 30 morceaux, m32 gagne /1,45 et m20 gagne /22,8 (falaise) ; seule la direction (plus de donnees aide) est robuste, et aucune loi chiffree ne se tire d'un seul morceau de test |
+| 13:12 | `ea35324a` | C9 sur un modele route : echanger les choix d'experts ne transfere RIEN — et la mesure a d'abord menti (x0,81, un << gain >> de 19 % demonte par les controles : signe dependant du texte, aleatoire aussi bon ou meilleur) |
+| 13:43 | `d4e40d95` | porte-indice : le controle apparie est fait, et il TUE l'effet — l'indice reel tombe a 482 jetons contre 459 pour le temoin (et 315 contre 1 sur la fenetre qui passait le hasard) : ce que la porte mesurait n'est pas porte par le sens de la question |
+| 15:06 | `bf948370` | Passe du 13/10 13h44 : 37 vertes sur 39 — porte-echange-experts et porte-tableaux y sont vertes, et le rouge de porte-indice a change de cause (il ne dit plus << moins bien que le hasard >> mais << pas mieux que le temoin >>) |
+| 16:22 | `df58cbe2` | Fenetre d'attention : la loi moyennee — a N=4096, N/2 coute +0,9 % (etendue 1,0 pt) et N/4 +4,1 % (1,5 pt), alors qu'a N=2048 le quart allait de +2,8 a +49,2 % : meme la DISPERSION depend de N et du texte |
+| 16:24 | `84bc1b2a` | Journal du 13/10 : la passe a 37/39, la loi moyennee de la fenetre, et deux pieges mesures (--attn-sinks 0 qui n'est pas neutre, et mon propre pkill) |
+| 16:58 | `3d25e12e` | Fenetre : cinq textes a N=4096 au lieu de trois — la moitie des cles coute jusqu'a +3,0 % (pas <=2,1 %), le quart +3,2 a +9,3 % ; je corrige ma propre conclusion du jour (trois textes ne suffisaient pas) |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+<!-- /notes -->

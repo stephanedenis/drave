@@ -1,5 +1,7 @@
 # Session 850eebf1 — Tu travailles dans le dépôt
 
+> **Journaux :** [le jour](../../2026-10-08/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `850eebf1-88b1-443e-b75e-6f89890b35ec` |

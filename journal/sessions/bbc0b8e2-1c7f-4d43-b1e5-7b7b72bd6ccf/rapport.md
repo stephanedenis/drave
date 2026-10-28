@@ -1,5 +1,7 @@
 # Session bbc0b8e2 — Avis sur le dépôt GitHub Strata
 
+> **Journaux :** [le jour](../../2026-10-12/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` |

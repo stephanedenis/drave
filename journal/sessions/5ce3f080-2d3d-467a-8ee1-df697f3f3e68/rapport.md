@@ -1,5 +1,7 @@
 # Session 5ce3f080 — Tu es relecteur ADVERSARIAL dans
 
+> **Journaux :** [le jour](../../2026-09-30/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
 | | |
 |---|---|
 | Identifiant | `5ce3f080-2d3d-467a-8ee1-df697f3f3e68` |

@@ -1,0 +1,43 @@
+# 2026-10-24 — Documentation, état, conventions
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+
+## Commits du jour (9)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 10:51 | `b7fdebad` | DOC — LE PIC DU 32 B NOMME ET LA SYNTHESE CORRIGEE : la couche 48 en 4 bits fait OOM (batch 4), le point couterait 3-4 h par couche et la tendance suffit — il est nomme, pas cache. Le paragraphe 165-168 portait encore la conclusion d'avant la correction (le 3 B « moins lisible ») alors qu'il culmine a 0,865 contre 0,810 pour le 1,5 B | `05-la-pensee-sans-verbaliser.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+3) |
+| 11:10 | `93b10bad` | DOC — L'ORDRE DU JOUR DE LA ROADMAP REECRIT : tout ce qui y figurait comme « a faire » est fait (le top-k, le diff, la decision par couche, le 32 B, le NLI dur, DiaBLa) ; l'A2.6 est partiel (la regle, le KV, la tete revertée) ; les restes sont nommes et bloques (les OOM, le corpus, le MoE, Colab, le FPGA) | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
+| 11:16 | `d892ecbb` | DOC — LES PROCHAINES ACTIONS DE LA ROADMAP ALIGNEES : sept sur huit pointaient vers des lignes faites (le top-k, le diff, la decision par couche, le capteur, le 32 B, le plan) ; elles disent maintenant « aucune » avec le chiffre qui le prouve, et la seule action ouverte est B1.5 (bloquee, corpus scientifique) | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
+| 11:26 | `bdb87c39` | DOC — L'INDEX DES RAPPORTS COMPLET : quinze fichiers sur 377 n'etaient pas indexes (le bruit, la contamination, le miroir, DiaBLa 1,5 B, le juridique par taille, les couches XNLI) ; une section « complements » les ajoute — 0 non indexe, verifie mecaniquement | `2026-10-22/moteur.md`, `2026-10-24/README.md`, `2026-10-24/mesures.md` (+2) |
+| 13:48 | `93e213be` | DOC — L'INDEX COMPLETE SUR LA SATURATION : le JSON du 3 B l30 (0,7269/0,8568) et la mention de la quasi-egalite avec le 14 B a 83 % | `2026-10-24/README.md`, `2026-10-24/mesures.md`, `README.md` |
+| 15:37 | `b5679726` | DOC — LA PAGE VIVANTE DEVIENT UN ETAT DU MOMENT : elle dit où l'on va (l'objectif final et la thèse mesurée), ce qui est en cours (la nouvelle phase A7/B4/A8 et l'actualité du jour), où l'on en est (les six chiffres qui comptent), les sept chantiers en une ligne, et ce qui reste aux trois horizons — court, moyen, final. Les détails renvoient aux fiches, à la synthèse et à la roadmap : 253 lignes de récit remplacées par ~110 lignes d'actualité | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/distribue.md` (+3) |
+| 16:20 | `93b03041` | B4.4 — LA COMPOSITION N'EST PAS ALGEBRIQUE : le nie du nie n'est pas lu comme l'original (0,5691 contre 0,8103 de reference) et le melange est SOUS le hasard (0,3601). L'operateur n'est pas une algebre : deux negations ne s'annulent pas dans l'etat. Les operations sont des sous-espaces appris (B4.3), pas les generateurs d'un groupe — la composition doit etre APPRISE comme une tache. B4.5 devient la composition apprise | `en-cours.md`, `roadmap.md`, `2026-10-24/README.md` (+5) |
+| 23:24 | `f6aea619` | DOC — L'HEURE DE LA NUIT : la page vivante passe a 23 h 30 (le B4.6 et la passe de nuit sont deja dans son corps ; seule l'heure disait encore 19 h) | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/memoire.md` (+1) |
+| 23:26 | `647e4449` | DOC — LE BILAN DIT LES TROIS PASSES : la page vivante annoncait « les deux passes » (le matin et le soir) ; elle dit maintenant les TROIS du 24/10 (10 h 53, 19 h 04, 21 h 35), toutes a 45/47, avec les deux structurels seuls et toutes les references stables | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/docs.md` |
+
+## Chiffres du jour
+
+`0,5691` · `0,8103` · `0,3601` · `83 %` · `0,7269` · `0,8568` · `0,865` · `0,810`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Mesures et rapports touchés
+
+- [reports/README.md](../reports/README.md)
+- [reports/rapport-32b-couche-confondant.md](../reports/rapport-32b-couche-confondant.md)
+- [reports/rapport-carte-raisonnement-naturel.md](../reports/rapport-carte-raisonnement-naturel.md)
+- [reports/rapport-operateur-negation.md](../reports/rapport-operateur-negation.md)
+
+<!-- notes -->
+**Le 24 octobre (suite) — la navigation par fichiers.** La documentation était fortement écrite mais **mal
+navigable** : deux fichiers faisaient à eux seuls 8 246 lignes (`reports/07-mesures-couche-commune.md` 5 972,
+`docs/glossaire.md` 2 274) et aucune ancre de titre n'était fiable selon le rendu. Décisions : (1) une **carte des
+sujets** (`docs/carte.md`, 83 liens) — un concept, un chantier, une phase, une activité → **un fichier** ; (2) le
+chapitre 7 découpé en **10 parties** (179 sections) avec un index qui garde les 26 liens existants ; (3) le glossaire
+découpé en **11 familles** avec son hub ; (4) la revue étendue au dossier `glossaire/` (le glossaire cite les formes
+interdites pour les définir) ; (5) le serveur du site pointe « la carte » dans son en-tête. **Vérifié** : mdserve
+(155 liens, 4 tableaux) et le site (83 liens, SVG 200 image/svg+xml) rendent les deux.
+<!-- /notes -->

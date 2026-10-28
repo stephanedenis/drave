@@ -8,7 +8,7 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:06 | `f9ca016` | Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4 | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
+| 00:06 | `f9ca016f` | Contexte et lots : le contexte déclaré ne coûte rien à fenêtre courte, et le lot vaut x1,4 | `MANIFEST.md`, `digest.md`, `rapport.md` (+1) |
 
 ## Chiffres du jour
 
@@ -26,12 +26,12 @@
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 49.8 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
+- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](sessions/d31b3d9b/rapport.md) · [digest](sessions/d31b3d9b/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
 
 <!-- notes -->
-` … `
+
 <!-- /notes -->
