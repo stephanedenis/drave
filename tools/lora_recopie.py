@@ -86,6 +86,9 @@ def main() -> int:
     ap.add_argument("--longueur", type=int, default=96, help="longueur du texte à recopier (jetons)")
     ap.add_argument("--lot", type=int, default=4)
     ap.add_argument("--eval-tous", type=int, default=250)
+    ap.add_argument("--eval-debut", type=int, default=60_000,
+                    help="token de début des textes d'évaluation (défaut 60 000 ; "
+                         "les familles courtes le ramènent à la moitié)")
     ap.add_argument("--eval-textes", type=int, default=3,
                     help="le nombre de textes d'évaluation (3 par défaut ; 8+ pour C3.2c)")
     ap.add_argument("--sortie", default="/tmp/lora-recopie.pt")
@@ -138,7 +141,10 @@ def main() -> int:
                     (bons if recopie else controles).append(c / max(1, len(cible)))
         return 100 * sum(bons) / len(bons), 100 * sum(controles) / len(controles)
 
-    eval_txt = morceaux(a.eval_textes, 60_000)                       # des textes JAMAIS vus à l'entraînement ✓
+    eval_debut = int(a.eval_debut)
+    if eval_debut > len(ids) - L:
+        eval_debut = max(L, len(ids) // 2)
+    eval_txt = morceaux(a.eval_textes, eval_debut)                   # des textes JAMAIS vus à l'entraînement ✓
     poses = poser_lora(m, a.rang, a.alpha)
     n_param = sum(p.numel() for mod in poses for p in (mod.A, mod.B))
     print(f"LoRA : {len(poses)} projections · {n_param:,} paramètres ({100 * n_param / sum(p.numel() for p in m.parameters()):.4f} % du modèle)")
@@ -147,7 +153,8 @@ def main() -> int:
     print(f"AVANT : recopie {avant[0]:5.1f} % · contrôle (résumé) {avant[1]:5.1f} %")
 
     opt = torch.optim.AdamW([p for mod in poses for p in (mod.A, mod.B)], lr=a.lr)
-    train = morceaux(64, 0)
+    n_train = max(1, min(64, max(1, eval_debut // 4096)))
+    train = morceaux(n_train, 0)
     t0 = time.time()
     for pas in range(1, a.pas + 1):
         lot = random.sample(train, a.lot)

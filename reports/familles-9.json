@@ -1,0 +1,72 @@
+{
+ "familles": [
+  {
+   "famille": "indo-european",
+   "langues": 98,
+   "avant": 0.0,
+   "apres": 14.7,
+   "controle": 0.0
+  },
+  {
+   "famille": "atlantic-congo",
+   "langues": 74,
+   "avant": null,
+   "apres": 94.0,
+   "controle": 0.0
+  },
+  {
+   "famille": "quechuan",
+   "langues": 11,
+   "avant": 33.3,
+   "apres": 88.2,
+   "controle": 0.0
+  },
+  {
+   "famille": "mayan",
+   "langues": 9,
+   "avant": 8.9,
+   "apres": 64.4,
+   "controle": 0.0
+  },
+  {
+   "famille": "afro-asiatic",
+   "langues": 12,
+   "avant": 0.0,
+   "apres": 60.2,
+   "controle": 0.5
+  },
+  {
+   "famille": "austronesian",
+   "langues": 35,
+   "avant": null,
+   "apres": 61.0,
+   "controle": 0.0
+  },
+  {
+   "famille": "uralic",
+   "langues": 9,
+   "avant": 31.0,
+   "apres": 46.7,
+   "controle": 0.0
+  },
+  {
+   "famille": "turkic",
+   "langues": 14,
+   "avant": null,
+   "apres": 96.1,
+   "controle": 0.0
+  },
+  {
+   "famille": "sino-tibetan",
+   "langues": 17,
+   "avant": 40.5,
+   "apres": 100.0,
+   "controle": 0.0
+  }
+ ],
+ "moyenne": 69.5,
+ "mediane": 64.4,
+ "au_dessus_30": 7,
+ "total": 9,
+ "protocole": "8 textes, 200 pas, rang 8 ; eval_debut 60k (5 familles) ou moitié (4 familles courtes)"
+}
