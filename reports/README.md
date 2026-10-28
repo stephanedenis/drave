@@ -28,6 +28,7 @@
 | [`rapport-langues-maitres.md`](rapport-langues-maitres.md) | **B7/B8** : 71 langues, 449 surfaces, la permutation, la notation, les principes des maîtres et leurs négatifs |
 | [`rapport-deepseek.md`](rapport-deepseek.md) | **B9** : DeepSeek pour le langage, 310 prompts, chrF, le natif sur GPU, la transition 9,23–9,96 M, la fenêtre 610/20 (3,71 % à 500 pas) et le négatif 910/30 |
 | [`rapport-sprint-24h.md`](rapport-sprint-24h.md) | **Bilan du sprint 24 h** — M1 solide ; M2 vu ; M3/M4 structurels ; M5 contexte ; M6 sélecteur ; M7 fréquence ; M8 marginal ; M9 réel ; B13–B18 |
+| [`rapport-kv-cache-mixte-32.md`](rapport-kv-cache-mixte-32.md) | **A7.24** — seuil f32 à 32 : divergence au 41ᵉ, accord 16,41 % |
 | [`rapport-kv-cache-mixte-128.md`](rapport-kv-cache-mixte-128.md) | **A7.23** — seuil f32 à 128 : divergence au 215ᵉ, accord 83,98 %, moins bon que 64 |
 | [`rapport-kv-cache-fenetre.md`](rapport-kv-cache-fenetre.md) | **A7.22** — fenêtre f32 glissante : divergence au 77ᵉ, accord 32,42 %, pire que le mixte |
 | [`rapport-kv-cache-mixte-256.md`](rapport-kv-cache-mixte-256.md) | **A7.21** — cache mixte sur 256 jetons : accord 92,58 %, divergence au 237ᵉ |

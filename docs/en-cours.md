@@ -1,7 +1,7 @@
 # En ce moment
 
 > **Révision documentaire — 2026-10-27 (passe 2/2, appliquée).** Compteurs
-> unifiés (**49 portes, 8 chapitres, 211 fichiers / 278 JSON, 54 documents**), chemins archivés
+> unifiés (**49 portes, 8 chapitres, 212 fichiers / 279 JSON, 54 documents**), chemins archivés
 > corrigés (`docs/archive/`), B10–B12 réintégrés dans les cartes. **Les règles d'`AGENTS.md`
 > ne changent pas.** *Spécifique : la date, les compteurs et les lignes ouvertes sont mis à
 > jour ci-dessous ; les chiffres B12 restent pilotés par le chantier en cours.*
@@ -53,6 +53,7 @@ La vision complète est dans [`vision.md`](vision.md).
   [`rapport-universaux.md`](../reports/rapport-universaux.md).
 
 - **Portes** — passe complète **49 portes : 47 vertes, 2 rouges structurelles** (`porte-indice`, `porte-melange`) ; aucune régression (27/10 14 h 33).
+- **A7.24 seuil f32 32** — divergence au **41ᵉ**, accord **16,41 %** ; le plus mauvais ; 64 reste le meilleur.
 - **A7.23 seuil f32 128** — divergence au **215ᵉ**, accord **83,98 %**, moins bon que le seuil 64 (237ᵉ, 92,58 %) ; l'effet n'est pas monotone.
 - **A7.22 fenêtre f32 glissante** — 64 derniers jetons f32 : divergence au **77ᵉ**, accord **32,42 %**, pire que le mixte (237ᵉ, 92,58 %). Négatif ; il faut protéger le début.
 - **A7.21 cache mixte 256 jetons** — accord **92,58 %**, premier divergent **237** ; le mixte tient 128 puis décroche tard.
@@ -105,7 +106,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|---|
 | portes | **49** (47 vertes, 2 structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/synthese/0*.md` |
-| fichiers / JSON de résultats | **211** / **278** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **212** / **279** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **54** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 48** (27/10 14 h 33) | `docs/references-non-regression.md` |
 
@@ -115,7 +116,7 @@ d'invariance ; le raisonnement n'est **pas branché**. Bilan : [`bilan-b11.md`](
 |---|---:|
 | portes (passe complète) | **49** — **47 vertes, 2 structurelles** (27/10 14 h 33) |
 | porte-deepseek | **verte** (20 tests), incluse dans la passe |
-| fichiers / JSON de résultats | **211** / **278** |
+| fichiers / JSON de résultats | **212** / **279** |
 | la sonde, au pic du 1,5 B | **0,7256** (XNLI) |
 | le pont, au pic du 14 B | **0,8715** — il plafonne à 0,87 |
 | la sémantique des jeux (B5/B6) | **112 items, 100 % au niveau 4, 33/33 paires** |
