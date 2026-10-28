@@ -65,6 +65,7 @@ const VARS_LUES: &[&str] = &[
 
 mod clusters;
 mod kimi_k3;
+mod drvm;
 mod engine;
 mod engram;
 mod formats;
@@ -112,6 +113,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
         eprintln!("usage: drave <modele.gguf|dossier-de-clusters> [--matrix NOM] [--threads N]");
+        eprintln!("       drave --drvm-inspect MODELE.drvm  en-tête, graphe et tenseurs DRVM");
         eprintln!("       drave <modele> --infer (--ids 1,2,3 | --prompt TEXTE | --ids-file F)");
         eprintln!("             [--n 32] [--temp 0] [--ctx 512] [--threads N]");
         eprintln!("       drave <modele> --ppl FICHIER-IDS [--ctx N] [--limit N] [--dense]");
@@ -163,6 +165,25 @@ fn main() {
         eprintln!("       (un dossier contenant commun.gguf EST un modèle ; DRAVE_CLUSTERS=0,3");
         eprintln!("        ne charge que certains clusters ; DRAVE_MMAP=0 lit au lieu de mapper)");
         std::process::exit(1);
+    }
+    // DRVM ne décrit pas des poids GGUF : la commande ne doit exiger aucun
+    // fichier de modèle pour lire le conteneur natif.
+    if args[1] == "--drvm-inspect" {
+        let f = match args.get(2) {
+            Some(f) => f.clone(),
+            None => { eprintln!("--drvm-inspect attend un fichier DRVM"); std::process::exit(2); }
+        };
+        match drvm::Drvm::open(&f) {
+            Ok(d) => {
+                println!("{}", d.resume());
+                for b in &d.blocs { println!("  bloc {:<12} {}", b.id, b.kind); }
+                for t in &d.tenseurs {
+                    println!("  tenseur {:<24} bloc {:<10} {} o  {}", t.name, t.bloc, t.nbytes, t.dtype);
+                }
+                std::process::exit(0);
+            }
+            Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+        }
     }
     // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
     // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
