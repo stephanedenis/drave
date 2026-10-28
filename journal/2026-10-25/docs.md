@@ -2,14 +2,14 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-25/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 02:18 | `b2683e2d` | C3.2b — L'EVALUATION DEVIENT OPTIONNELLE : --eval-tous 0 supprime les evaluations intermediaires (le taux_recopie coute 25 s par passage ; les 3 evaluations rendaient le run interminable). Le run court ne paie plus que l'evaluation finale | `2026-10-25/README.md`, `2026-10-25/modele.md`, `README.md` (+2) |
-| 04:42 | `8674c155` | DOC — LA PAGE VIVANTE DIT C3.2 FAIT : la ligne C3 portait « 85 %, detruite a 10 langues » ; elle dit maintenant que C3.2 est fait — un module par famille, 4 familles sur 5 au-dessus de la reference (14,7 % a 100 %). Les modules par famille sortent des questions ouvertes : il ne reste que le pic du 32 B | `en-cours.md`, `2026-10-25/README.md`, `2026-10-25/modele.md` (+1) |
+| 02:18 | `b2683e2d` | C3.2b — L'EVALUATION DEVIENT OPTIONNELLE : --eval-tous 0 supprime les evaluations intermediaires (le taux_recopie coute 25 s par passage ; les 3 evaluations rendaient le run interminable). Le run court ne paie plus que l'evaluation finale | `2026-10-25.md`, `2026-10-25_modele.md`, `README.md` (+2) |
+| 04:42 | `8674c155` | DOC — LA PAGE VIVANTE DIT C3.2 FAIT : la ligne C3 portait « 85 %, detruite a 10 langues » ; elle dit maintenant que C3.2 est fait — un module par famille, 4 familles sur 5 au-dessus de la reference (14,7 % a 100 %). Les modules par famille sortent des questions ouvertes : il ne reste que le pic du 32 B | `en-cours.md`, `2026-10-25.md`, `2026-10-25_modele.md` (+1) |
 
 ## Chiffres du jour
 

@@ -2,14 +2,14 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-17/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 12:55 | `a3808d31` | LA LISTE D'UN DOSSIER NE MONTRAT QUE LES .md : le sous-dossier schemas/ (et donc les six SVG) etait INVISIBLE cote web — c'est exactement ce que Stephane voyait | `2026-10-17/README.md`, `2026-10-17/portes.md`, `serveur-doc.py` |
-| 19:16 | `2913d8f8` | L'AUDIT DE TRACABILITE DU BILAN : aucun des 19 nombres cites par le bilan n'est absent du corps du chapitre — le seul ecart (« 37 % » contre « 37,5 % ») est une graphie, pas une erreur. L'outil tools/verifier_bilan.py dit lui-meme ce qu'il ne peut pas faire | `07-modeles-alternatifs-entree-sortie.md`, `2026-10-17/README.md`, `2026-10-17/mesures.md` (+1) |
+| 12:55 | `a3808d31` | LA LISTE D'UN DOSSIER NE MONTRAT QUE LES .md : le sous-dossier schemas/ (et donc les six SVG) etait INVISIBLE cote web — c'est exactement ce que Stephane voyait | `2026-10-17.md`, `2026-10-17_portes.md`, `serveur-doc.py` |
+| 19:16 | `2913d8f8` | L'AUDIT DE TRACABILITE DU BILAN : aucun des 19 nombres cites par le bilan n'est absent du corps du chapitre — le seul ecart (« 37 % » contre « 37,5 % ») est une graphie, pas une erreur. L'outil tools/verifier_bilan.py dit lui-meme ce qu'il ne peut pas faire | `07-modeles-alternatifs-entree-sortie.md`, `2026-10-17.md`, `2026-10-17_mesures.md` (+1) |
 
 ## Chiffres du jour
 

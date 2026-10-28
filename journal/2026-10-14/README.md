@@ -1,24 +1,30 @@
 # 2026-10-14
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-14/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **0 session(s)** · **9 thème(s)**
+**14 commits** · **0 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 2 | [2026-10-14/apprentissage.md](apprentissage.md) |
-| attention | 1 | [2026-10-14/attention.md](attention.md) |
-| distribue | 1 | [2026-10-14/distribue.md](distribue.md) |
-| docs | 1 | [2026-10-14/docs.md](docs.md) |
-| memoire | 3 | [2026-10-14/memoire.md](memoire.md) |
-| mesures | 1 | [2026-10-14/mesures.md](mesures.md) |
-| modele | 2 | [2026-10-14/modele.md](modele.md) |
-| moteur | 1 | [2026-10-14/moteur.md](moteur.md) |
-| portes | 1 | [2026-10-14/portes.md](portes.md) |
+| apprentissage | 2 | [apprentissage.md](apprentissage.md) |
+| attention | 1 | [attention.md](attention.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 1 | [docs.md](docs.md) |
+| memoire | 4 | [memoire.md](memoire.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
+| modele | 2 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+| portes | 1 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -37,6 +43,7 @@
 | 23:20 | `6be75b81` | Le sommeil : COMBIEN bat QUOI (-6,5 % au hasard contre -4,8 % par surprise) — et le budget d'attention : OU le depenser est un levier de second ordre |
 | 23:31 | `f38db721` | E5 — distiller le cerveau dans le reflexe : l'accord double (28 % -> 51 %) mais le texte ne suit toujours pas (5/96), et ce que le reflexe apporte vraiment est le TEMPS (x2,0, TTFT /3,1) |
 | 23:43 | `c52553c6` | E5 bis — le melange KL + lambda*CE est PIRE sur les DEUX axes : a lambda=1, perplexite 2,6x pire que la distillation seule (1 476 contre 575) ET accord plus bas (46,8 % contre 51,0 %) ; a lambda=4, l'accord tombe a 36,9 % / 25,9 % |
+| 23:47 | `8f049a33` | Le cycle : trois objectifs d'entrainement, et AUCUN ne fait converger la boucle (somme 52,2 · dernier 43,6 · point fixe 52,4 au pas 4, contre 15,4 pour une passe) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -90,8 +97,8 @@ validation m30+m31, deux morceaux jamais vus, **deux graines**) :
   (÷1,84 / ÷1,13) : le dessin B ne rend pas l'état *nativement* lisible, il le rend **exploitable
   par un lecteur entraîné**. C'est la nuance qui décide du dessin suivant.
 
-Fiche : [`reports/rapport-n4-dessin-b.md`](../reports/rapport-n4-dessin-b.md) · rectification
-posée dans [`reports/rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md) (l'ancien chiffre
+Fiche : [`reports/rapport-n4-dessin-b.md`](../../reports/rapport-n4-dessin-b.md) · rectification
+posée dans [`reports/rapport-c8-echelle.md`](../../reports/rapport-c8-echelle.md) (l'ancien chiffre
 reste à côté du nouveau) · état : `docs/etat-cerveau.md` § 6.
 
 **Ce qui reste ouvert** : porter le modèle entraîné dans le **moteur** (le dessin B n'est mesuré
@@ -137,7 +144,7 @@ et la cause probable (ordre des réductions CUDA, noyaux `cuBLAS` choisis selon 
 **pas** démontrée. Écrit dans `REPRISE.md` § 3 : un chiffre qui rétropropage se cite avec son
 étendue entre exécutions.
 
-Fiche : [`reports/rapport-n4-porte-execution.md`](../reports/rapport-n4-porte-execution.md) ·
+Fiche : [`reports/rapport-n4-porte-execution.md`](../../reports/rapport-n4-porte-execution.md) ·
 outils : `tools/exporter_gguf_dense.py`, `tools/porte-adaptateur-sortie.sh` · état :
 `docs/etat-cerveau.md` § 6 (C8).
 **La nuit du 14 au 15/10 : le cerveau, faculté par faculté (consolidation, cycle, carte).**
@@ -152,7 +159,7 @@ qui comptent : un LoRA **nul** fusionné laisse le GGUF **identique au bit** (l'
 et un LoRA **aléatoire** de même forme améliore déjà de **1,5 %** — c'est la borne du « gain
 gratuit », et le −16,4 % est dix fois au-dessus. Le rejeu **mélangé** fait exploser la validation
 (15,97 → 130,5) et l'époque choisie est **0** : le protocole refuse de publier un modèle dégradé.
-Fiche : [`reports/rapport-consolidation-c7.md`](../reports/rapport-consolidation-c7.md).
+Fiche : [`reports/rapport-consolidation-c7.md`](../../reports/rapport-consolidation-c7.md).
 
 **2. C2 — LE CYCLE À DEUX RÉGIONS : la dernière capacité que le validateur refusait.** Un cycle
 n'est pas « une boucle de plus » : il demande un ordonnancement **par pas de temps**. Trois pièces :
@@ -168,10 +175,10 @@ la note annonçait (« un cycle à gain ≥ 1 diverge ») et ce que la récurren
 (« un écho, pas une mémoire »). Trouvé en chemin : `--etat-sortie` n'écrivait **rien** sur un nœud
 intermédiaire (la capture vivait après le retour anticipé) — les portes ne le voyaient pas, elles
 passent toutes `--tete-partielle`. Corrigé. Fiche :
-[`reports/rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md).
+[`reports/rapport-cycle-c2.md`](../../reports/rapport-cycle-c2.md).
 
 **3. La CARTE DES FACULTÉS.** Le cerveau Drave, faculté par faculté, avec **le mécanisme le plus
-efficient** pour chacune et son coût : [`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md)
+efficient** pour chacune et son coût : [`docs/cerveau-facultes.md`](../../docs/archive/cerveau-facultes.md)
 (et sa forme exécutable `tools/carte-facultes.sh`). La leçon qui s'en dégage est contre-intuitive
 là où elle compte : **ce qui doit être retenu exactement demande une STRUCTURE** (un tampon : 0
 paire, R² 1,000), **ce qui doit être retrouvé demande un MAGASIN** (épisodique : 11 jetons sur
@@ -185,8 +192,8 @@ haut : la conception, les cinq portes, et la divergence non entraînée (14,65 �
 **Puis entraîné** : ×228 au pas 4 (15 868 → 52,24), et **trois objectifs** essayés (somme,
 dernier pas, point fixe) — **aucun ne fait converger la boucle**, et le meilleur pas 4 entraîné
 (43,55) reste **×2,4 pire qu'une passe** (18,40) pour **quatre fois le calcul**. Fiches :
-[`rapport-cycle-c2.md`](../reports/rapport-cycle-c2.md) ·
-[`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md).
+[`rapport-cycle-c2.md`](../../reports/rapport-cycle-c2.md) ·
+[`rapport-cycle-entraine.md`](../../reports/rapport-cycle-entraine.md).
 
 **4. N5 — LA MÉMOIRE DE TRAVAIL EST UNE STRUCTURE, PAS UN ENTRAÎNEMENT.** Plan 2×2 : **sans**
 tampon, l'entraînement **ne crée pas** la mémoire (−1,091 → **−2,773**, contrôle à cibles
@@ -194,7 +201,7 @@ mélangées −2,855) ; **avec** le tampon dans l'entrée, le modèle **gelé** 
 l'entraîné fait mieux (+0,964) ; le **moteur confirme** la direction (+0,766 non linéaire contre
 −0,493) et le tampon lu directement vaut **1,000 pour zéro paire**. Les chiffres publiés sont
 reproduits (présent +0,96/+0,99, mémoire −2,879/−0,493 pour −0,611/−0,681 annoncés). Fiche :
-[`rapport-memoire-travail-n5.md`](../reports/rapport-memoire-travail-n5.md).
+[`rapport-memoire-travail-n5.md`](../../reports/rapport-memoire-travail-n5.md).
 
 **5. LE SOMMEIL — COMBIEN, ET QUOI.** La courbe : **−5,57 %** (3 morceaux rejoués), −6,70 % (6),
 −7,67 % (10), **−9,98 %** (20) sur un texte **jamais rejoué**, pour un coût hors domaine **bruité**
@@ -202,14 +209,14 @@ reproduits (présent +0,96/+0,99, mémoire −2,879/−0,493 pour −0,611/−0,
 règle de sélection pèse peu : **hasard −6,49 %**, premiers −5,51 %, **surprise (les plus durs)
 −4,82 %**, faciles −4,26 % — **l'intuition « rejouer ce qui a surpris » est fausse ici**, et la
 seule règle qui coûte ailleurs est « rejouer ce qu'on sait déjà » (+2,07 %). Fiches :
-[`rapport-sommeil-budget.md`](../reports/rapport-sommeil-budget.md) ·
-[`rapport-sommeil-selection.md`](../reports/rapport-sommeil-selection.md).
+[`rapport-sommeil-budget.md`](../../reports/rapport-sommeil-budget.md) ·
+[`rapport-sommeil-selection.md`](../../reports/rapport-sommeil-selection.md).
 
 **6. OÙ DÉPENSER LE BUDGET D'ATTENTION** (à clés égales, motif alterné) : sur m32 l'alterné bat
 l'uniforme (9,6110 contre 9,6624) **et même le complet** (9,6503) ; sur m20 il perd (15,6744 contre
 15,4227). Aucune allocation n'est « la bonne » ; le **volume** pèse bien plus (+0,50 % à +3,85 %
 selon le texte). Fiche :
-[`rapport-budget-attention-allocation.md`](../reports/rapport-budget-attention-allocation.md).
+[`rapport-budget-attention-allocation.md`](../../reports/rapport-budget-attention-allocation.md).
 
 **7. E5 — DISTILLER LE CERVEAU DANS LE RÉFLEXE.** Le réflexe entraîné à la perplexité ne partageait
 **aucun** jeton avec le cerveau en génération (0/96) : la question d'E5 (cadrée depuis le 10/10)
@@ -220,7 +227,7 @@ KL + λ·CE est **pire sur les deux axes** (46,8 % d'accord et 1 476 de perplexi
 génération de 32 jetons, l'accord reste **0/96** et **5/96** : la fidélité s'effondre
 exponentiellement (0,51³² ≈ 2 × 10⁻¹⁰). Ce que le réflexe apporte vraiment est le **TEMPS** :
 TTFT **÷3,1**, débit **×2,0**. Fiche :
-[`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md).
+[`rapport-e5-distillation.md`](../../reports/rapport-e5-distillation.md).
 
 **8. LA BOUCLE DU CERVEAU, en une commande** (`tools/boucle-cerveau.sh`) : percevoir (85 626
 jetons réversibles) → retenir (8 pas, déterministe) → se souvenir (round-trip **300/300**) →
@@ -231,7 +238,7 @@ mesure portait sur les 1 024 **premiers** jetons, c'est-à-dire le **premier mor
 −26 % de « consolidation » qui était de la **récitation**. Les deux sont corrigés, et les deux sont
 écrits.
 
-**Et la carte** : [`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md) — toutes les facultés,
+**Et la carte** : [`docs/cerveau-facultes.md`](../../docs/archive/cerveau-facultes.md) — toutes les facultés,
 le mécanisme le plus efficient pour chacune, son coût, et la règle qui s'en dégage : *ce qui doit
 être retenu exactement demande une STRUCTURE ; ce qui doit être retrouvé, un MAGASIN ; ce qui doit
 être su, des POIDS — et ce qui doit être amplifié par le temps, un CYCLE, qui non entraîné diverge.*

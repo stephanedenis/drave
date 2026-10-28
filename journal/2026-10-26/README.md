@@ -1,22 +1,32 @@
 # 2026-10-26
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-26/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**34 commits** · **0 session(s)** · **7 thème(s)**
+**35 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 3 | [2026-10-26/apprentissage.md](apprentissage.md) |
-| attention | 6 | [2026-10-26/attention.md](attention.md) |
-| distribue | 3 | [2026-10-26/distribue.md](distribue.md) |
-| docs | 1 | [2026-10-26/docs.md](docs.md) |
-| memoire | 1 | [2026-10-26/memoire.md](memoire.md) |
-| mesures | 17 | [2026-10-26/mesures.md](mesures.md) |
-| portes | 3 | [2026-10-26/portes.md](portes.md) |
+| apprentissage | 3 | [apprentissage.md](apprentissage.md) |
+| attention | 6 | [attention.md](attention.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
+| docs | 1 | [docs.md](docs.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
+| mesures | 18 | [mesures.md](mesures.md) |
+| portes | 3 | [portes.md](portes.md) |
+
+## Autres pièces du jour
+
+[deepseek.md](deepseek.md) · [langues-maitres.md](langues-maitres.md)
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -56,6 +66,7 @@
 | 23:00 | `38c3d880` | B11.7 — CONTEXTE SUFFIXÉ : 59,8 % DE CODE EXACT ET 40,7 % D'INVARIANCE ; PRÉFIXE 0,4 / 88,9 (COLLAPSE) |
 | 23:08 | `532ddd07` | B11.8 — CONTEXTE SÉPARÉ : 59,1 % / 40,7 %, AUCUN GAIN SUR LE SUFFIXE (59,8 / 40,7) ; LE VERROU EST AILLEURS |
 | 23:10 | `386e59d5` | B11.9 — RESTITUTION CANONIQUE : 79/79 ET 449/449 ALLER-RETOUR RSN EXACT (100 %), SANS DÉCODEUR NEURONAL |
+| 23:13 | `f8977255` | B11 — BILAN : CODEC 100 % ET RESTITUTION CANONIQUE 100 %, NATIF 59,8 % / INVARIANCE 40,7 %, RAISONNEMENT NON BRANCHÉ ; OBJECTIF NON ATTEINT |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,29 +1,29 @@
 # 2026-10-12
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-12/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**16 commits** · **1 session(s)** · **8 thème(s)**
+**17 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 1 | [2026-10-12/distribue.md](distribue.md) |
-| divers | 0 | [2026-10-12/divers.md](divers.md) |
-| docs | 2 | [2026-10-12/docs.md](docs.md) |
-| memoire | 1 | [2026-10-12/memoire.md](memoire.md) |
-| mesures | 6 | [2026-10-12/mesures.md](mesures.md) |
-| modele | 1 | [2026-10-12/modele.md](modele.md) |
-| moteur | 3 | [2026-10-12/moteur.md](moteur.md) |
-| portes | 2 | [2026-10-12/portes.md](portes.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 2 | [docs.md](docs.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
+| moteur | 3 | [moteur.md](moteur.md) |
+| portes | 2 | [portes.md](portes.md) |
 
-## Sessions du jour
+## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md) |
+| `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | [rapport](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) · [digest](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -45,6 +45,7 @@
 | 23:00 | `b4b6554a` | Fiches : horodatages rectifies — l'heure se lit, elle ne se suppose pas (REPRISE.md § 1) ; mes trois fiches de la nuit portaient des heures estimees au lieu des heures de git |
 | 23:06 | `1793d189` | La porte de la paresse : l'inference prend le chemin push (93 tenseurs construits a la demande), les passes --ppl aucun — meme texte gourmand, chargement 5,2x plus rapide, et vue ROUGE avec un defaut volontaire |
 | 23:08 | `a809ef71` | Plan du cerveau : trois items soldes (array visible, lecteurs paralleles en tampons, chargement paresseux) et deux neufs (VRAM : allocation 37-91 % du cout ; le reste du chargement) |
+| 23:09 | `8a7af88f` | Manques : le manque de methode a deux pas faits et mesures — la prelecture parallele (calcul -53 %) puis les tampons sequentiels (6,22 Go / 3,40 s contre 10,90 / 3,70), et ce qui reste est nomme (pool, recouvrement, VRAM) |
 
 ## Le récit de la journée (écrit à la main)
 

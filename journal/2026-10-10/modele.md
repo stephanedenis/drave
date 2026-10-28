@@ -2,76 +2,40 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 07:39 | `d104da6` | E4 : l'equilibre excitation/inhibition — l'hypothese est vraie dans UN SEUL sens | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
-| 07:47 | `e873179` | E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
-| 07:54 | `0bc27b9` | E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul | `sprint-cerveau.md`, `main.rs`, `model.rs` (+5) |
-| 12:34 | `87a841a` | C8 : une tete ENTRAINEE pour sa profondeur — 845,45 contre 456 586,60 (div 540) sur le meme texte | `etat-cerveau.md`, `2026-10-10/README.md`, `2026-10-10/apprentissage.md` (+16) |
-| 13:44 | `58f399a` | Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert) | `etat-cerveau.md`, `2026-10-10/README.md`, `2026-10-10/docs.md` (+4) |
-| 19:51 | `a4676d1` | E4 cote ENTRAINEMENT : le ratio de signes cortical COUTE (refute) — 2,2729 / 2,3838 / 2,5188 bits par octet | `biologie-pour-drave.md`, `etat-cerveau.md`, `2026-10-10/README.md` (+17) |
-| 20:02 | `014effe` | E2 : la croissance locale ne bat pas le hasard (refutee) — 2,3431 contre 2,3215 a densite egale | `biologie-pour-drave.md`, `etat-cerveau.md`, `2026-10-10/README.md` (+17) |
-| 23:04 | `1d3898f` | M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree | `REPRISE.md`, `etat-cerveau.md`, `manques.md` (+21) |
-| 23:24 | `24a7789` | Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele | `REPRISE.md`, `etat-cerveau.md`, `2026-10-10/README.md` (+16) |
+| 07:39 | `d104da6c` | E4 : l'equilibre excitation/inhibition — l'hypothese est vraie dans UN SEUL sens | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 07:47 | `e8731791` | E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+3) |
+| 07:54 | `0bc27b93` | E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul | `sprint-cerveau.md`, `main.rs`, `model.rs` (+5) |
+| 12:34 | `87a841ae` | C8 : une tete ENTRAINEE pour sa profondeur — 845,45 contre 456 586,60 (div 540) sur le meme texte | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+16) |
+| 13:44 | `58f399ac` | Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert) | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_docs.md` (+4) |
+| 19:51 | `a4676d1f` | E4 cote ENTRAINEMENT : le ratio de signes cortical COUTE (refute) — 2,2729 / 2,3838 / 2,5188 bits par octet | `biologie-pour-drave.md`, `etat-cerveau.md`, `2026-10-10.md` (+17) |
+| 20:02 | `014effe6` | E2 : la croissance locale ne bat pas le hasard (refutee) — 2,3431 contre 2,3215 a densite egale | `biologie-pour-drave.md`, `etat-cerveau.md`, `2026-10-10.md` (+17) |
+| 23:04 | `1d3898fc` | M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree | `REPRISE.md`, `etat-cerveau.md`, `manques.md` (+21) |
+| 23:24 | `24a77894` | Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele | `REPRISE.md`, `etat-cerveau.md`, `2026-10-10.md` (+16) |
 
 ## Chiffres du jour
 
-`5,8 %` · `2,3431` · `2,3215` · `2,2729` · `2,3838` · `2,5188` · `24 couches` · `−11,5 %` · `8000 états` · `8188 états` · `×540` · `×59`
+`5,8 %` · `2,3431` · `2,3215` · `2,2729` · `2,3838` · `2,5188` · `24 couches`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (71)
-
-*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
-
-- **00:04** — C2 : j'injecte en fin de forward sur un modèle TRONQUÉ — le point de coupe devient le point d'injection
-- **00:10** — C2 : `..Default::default()` donnait 0,0 au poids de fusion — un drapeau qui n'aurait rien fait
-- **00:39** — C2 : l'état injecté est peut-être trop PETIT devant le résidu — je teste avec un poids énorme
-- **00:45** — C2 : je mesure l'échelle réelle des états capturés — c'est peut-être là qu'est le problème
-- **03:09** — Le modèle rend « K00 » pour « KJ-9999-QP » — mon détecteur exigeait la chaîne exacte
-- **07:19** — 19/20 vertes ; la rouge est pré-existante (`/tmp/moteur_route.gguf`, modèle entraîné ici) — je la nomme
-- **07:29** — E4 : courbe de dose d'une INHIBITION négative (`--ffn-gain` < 0) par couche — prédiction d'un optimum intérieur
-- **07:39** — Round 15 livré : E4 — l'équilibre excitation/inhibition, et un levier de −11,5 % SANS entraîner
-- **07:48** — E4 (suite) : combiner les gains de DEUX couches — le levier se compose-t-il ?
-- **11:23** — Je prépare le chantier C8 (tête réflexe entraînée par profondeur) : je vérifie la capture d'états multi-positions
-- **11:27** — La tête empruntée à la couche 16 donne 728 388 de perplexité (le modèle complet : 9,43) — je sonde ce que l'état contient vraiment
-- **11:36** — Point à vérifier : la plage `--couches 0:23` avec tête ne rend pas le chiffre du modèle complet (37,34 contre 9,43)
-- **12:05** — Prochain chantier C8 : capturer 8 000 états pour entraîner une vraie tête ; je lance la capture
-- **12:10** — Je regarde si un lecteur GGUF Python existe pour extraire la tête de sortie (tête entraînée comparable)
-- **12:11** — J'écris l'entraîneur de tête réflexe (adaptateur + tête liée du modèle, perplexité plein vocabulaire)
-- **12:13** — Capture terminée (8 188 états) — j'entraîne la tête réflexe de profondeur 16
-- **12:14** — La tête entraînée descend à ~923 (test) contre 341 288 pour l'identité — je fige la meilleure époque et je mesure la référence du moteur sur le MÊME texte
-- **12:34** — J'écris la fiche de la tête entraînée (le résultat est net : ×540 sur la tête empruntée)
-- **12:34** — Référence obtenue sur le même texte : modèle complet 14,2342 — l'écart du réflexe est ×59 (pas ×90) ; je corrige la fiche
-- **12:37** — Épreuve honnête : entraîner sur des textes et tester sur des textes JAMAIS VUS — je prépare la capture par morceaux
-- **12:42** — Sur un texte JAMAIS VU : ÷79 (2 632 contre 207 428) — je mesure la référence du modèle complet et j'écris la fiche
-- **12:45** — Défaut de méthode : l'entraînement n'était pas graine-fixé (deux runs diffèrent) — j'ajoute la graine et je refais la référence
-- **13:14** — Pour isoler l'effet « plus de données » à texte de test ÉGAL : 31 morceaux entraînent, m7 teste
-- **13:15** — Erreur attrapée : m7 était DANS la liste d'entraînement (fuite) — je refais sans le morceau de test
-- **13:16** — Résultats propres (graine fixée) : 85,0 contre 697 572 pour la tête empruntée, à ×5,7 du modèle complet — je réécris la fiche
-- *(+46 autres étapes — voir les rapports de session)*
-
-## Sessions (titres de tour)
-
-- `d31b3d9b` — Tour 3 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architect… → [rapport complet](../sessions/d31b3d9b/rapport.md)
-- `d31b3d9b` — Tour 4 — <goal_round> Objective: "Produire un modèle nativement événementiel qui soit à son meilleur dans l'architect… → [rapport complet](../sessions/d31b3d9b/rapport.md)
-
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+- `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) · [digest](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-c8-tete-entrainee.md](../reports/rapport-c8-tete-entrainee.md)
-- [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
-- [reports/rapport-e2-croissance.md](../reports/rapport-e2-croissance.md)
-- [reports/rapport-e4-ratio-signes.md](../reports/rapport-e4-ratio-signes.md)
-- [reports/rapport-e6-poids-lognormaux.md](../reports/rapport-e6-poids-lognormaux.md)
-- [reports/rapport-m8-log-normal.md](../reports/rapport-m8-log-normal.md)
+- [reports/rapport-c8-tete-entrainee.md](../../reports/rapport-c8-tete-entrainee.md)
+- [reports/rapport-campagne-benefices.md](../../reports/rapport-campagne-benefices.md)
+- [reports/rapport-e2-croissance.md](../../reports/rapport-e2-croissance.md)
+- [reports/rapport-e4-ratio-signes.md](../../reports/rapport-e4-ratio-signes.md)
+- [reports/rapport-e6-poids-lognormaux.md](../../reports/rapport-e6-poids-lognormaux.md)
+- [reports/rapport-m8-log-normal.md](../../reports/rapport-m8-log-normal.md)
 
 <!-- notes -->
 ` … `

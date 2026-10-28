@@ -2,7 +2,7 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-27/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (56)
 
@@ -14,36 +14,36 @@
 | 09:16 | `091203d1` | B12 — M2 ACTION 98,6 % / DE 93,2 % (LÉSIONS 19,2 / 3,4) ; M7 NUL À CAPACITÉ 16 | `en-cours.md`, `modules-cerveau-langage.md`, `roadmap.md` (+9) |
 | 10:18 | `515e6e62` | B12 — CORRECTION MAJEURE : M1 SEUL SOLIDE ; M2 VU SEULEMENT ; M3–M8 STRUCTURELS/NÉGATIFS | `AGENTS.md`, `README.md`, `en-cours.md` (+7) |
 | 10:27 | `530b7043` | B12 — STRESS SOUS-AGENTS : M1 SEUL SOLIDE ; M2 VU SEULEMENT ; M3–M8 NÉGATIFS ; M9 PROXY | `en-cours.md`, `modules-cerveau-langage.md`, `roadmap.md` (+20) |
-| 10:41 | `b271db7a` | B12 — M2 : LE SPLIT INÉDIT NE CONTIENT QUE 2–3 CLASSES ; 10,7/13 EST UN PRIORI, PAS UNE LECTURE | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `2026-10-27/sprint-24h.md` (+1) |
-| 11:05 | `9a3f753d` | B12 — M5 CONTEXTE : SOURCE +0,626 NAT, CIBLE +0,411 ; M6 SÉLECTEUR 94,95 % MAIS CONFLIT 0 | `roadmap.md`, `2026-10-27/README.md`, `2026-10-27/memoire.md` (+5) |
-| 11:09 | `843fef8c` | B12 — M9 RÉEL : ACTION 98,6→12,3, DE 91,8→2,05 ; M8 LEAVE-ONE-CODE-OUT EXACT 0 | `roadmap.md`, `2026-10-27/README.md`, `2026-10-27/mesures.md` (+6) |
-| 11:21 | `0632e24f` | B12 — VERDICT FINAL : M1 SOLIDE ; M5 CONTEXTE POSITIF ; M9 RÉEL ; M3/M4/M6/M7/M8 STRUCTURELS/NÉGATIFS | `modules-cerveau-langage.md`, `2026-10-27/README.md`, `2026-10-27/modele.md` (+3) |
-| 11:24 | `07badd16` | B12 — M2 AUG-FORMES : DE 95,2 % INÉDIT 13/20 ; CHEMIN 88,1 % 6/14 ; POINT SOUS LA MAJORITÉ | `en-cours.md`, `roadmap.md`, `2026-10-27/README.md` (+2) |
-| 11:27 | `daf5ccaf` | B12 — M9 RÉSERVE : ACTION TRIVIALE, DE SEUL INFORMATIF ; M8 QUEUE 106/106 VUS | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `THEMES.md` (+1) |
-| 11:36 | `74c1fd86` | B12 — M2 AUG-POS : VERS 95,4 % INÉDIT 13,3/20 ; DE 92,2 % ; POINT = MAJORITÉ ; AUCUNE VARIANTE NE DOMINE | `en-cours.md`, `roadmap.md`, `2026-10-27/README.md` (+6) |
-| 11:48 | `fcb20469` | B12 — MESURES CORRIGÉES A1–A7 (1,4 MO) ; M8 SOMMEIL DOCSTRING | `en-cours.md`, `utilisation.md`, `2026-10-27/README.md` (+4) |
+| 10:41 | `b271db7a` | B12 — M2 : LE SPLIT INÉDIT NE CONTIENT QUE 2–3 CLASSES ; 10,7/13 EST UN PRIORI, PAS UNE LECTURE | `2026-10-27.md`, `2026-10-27_mesures.md`, `2026-10-27_sprint-24h.md` (+1) |
+| 11:05 | `9a3f753d` | B12 — M5 CONTEXTE : SOURCE +0,626 NAT, CIBLE +0,411 ; M6 SÉLECTEUR 94,95 % MAIS CONFLIT 0 | `roadmap.md`, `2026-10-27.md`, `2026-10-27_memoire.md` (+5) |
+| 11:09 | `843fef8c` | B12 — M9 RÉEL : ACTION 98,6→12,3, DE 91,8→2,05 ; M8 LEAVE-ONE-CODE-OUT EXACT 0 | `roadmap.md`, `2026-10-27.md`, `2026-10-27_mesures.md` (+6) |
+| 11:21 | `0632e24f` | B12 — VERDICT FINAL : M1 SOLIDE ; M5 CONTEXTE POSITIF ; M9 RÉEL ; M3/M4/M6/M7/M8 STRUCTURELS/NÉGATIFS | `modules-cerveau-langage.md`, `2026-10-27.md`, `2026-10-27_modele.md` (+3) |
+| 11:24 | `07badd16` | B12 — M2 AUG-FORMES : DE 95,2 % INÉDIT 13/20 ; CHEMIN 88,1 % 6/14 ; POINT SOUS LA MAJORITÉ | `en-cours.md`, `roadmap.md`, `2026-10-27.md` (+2) |
+| 11:27 | `daf5ccaf` | B12 — M9 RÉSERVE : ACTION TRIVIALE, DE SEUL INFORMATIF ; M8 QUEUE 106/106 VUS | `2026-10-27.md`, `2026-10-27_mesures.md`, `THEMES.md` (+1) |
+| 11:36 | `74c1fd86` | B12 — M2 AUG-POS : VERS 95,4 % INÉDIT 13,3/20 ; DE 92,2 % ; POINT = MAJORITÉ ; AUCUNE VARIANTE NE DOMINE | `en-cours.md`, `roadmap.md`, `2026-10-27.md` (+6) |
+| 11:48 | `fcb20469` | B12 — MESURES CORRIGÉES A1–A7 (1,4 MO) ; M8 SOMMEIL DOCSTRING | `en-cours.md`, `utilisation.md`, `2026-10-27.md` (+4) |
 | 11:59 | `08a9cf18` | B13 — CHAÎNE M1→M5→M6→M8 : 528/528, M5 CONTEXTE 18,7 % VS 12,6 %, M6 94,3 %, M8 57,95 (BORNE HAUTE) | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
-| 12:02 | `088922e0` | B12 — M2 A5 FINAL : AUCUN GAIN UNIFORME ; AUG-POS LIT LES PROMOTIONS 3/3 ; ROQUE 0/3 | `roadmap.md`, `2026-10-27/README.md`, `2026-10-27/mesures.md` (+2) |
+| 12:02 | `088922e0` | B12 — M2 A5 FINAL : AUCUN GAIN UNIFORME ; AUG-POS LIT LES PROMOTIONS 3/3 ; ROQUE 0/3 | `roadmap.md`, `2026-10-27.md`, `2026-10-27_mesures.md` (+2) |
 | 12:25 | `db2c2b93` | B15 — M1 SUR 66 LANGUES : 528/528, INVARIANCE 26/26 ET 15/15, CONTRÔLE PERMUTÉ 0/90 | `carte.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 12:29 | `25830d86` | B14 — M2 DANS LA CHAÎNE : 100 % VS 93,4/93,6 %, AUCUN ÉTAGE NE LE CONSOMME ; RAMEAU | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
-| 12:39 | `59ad77f3` | B16 — M7-BIS LFU : +23,1 PTS RÉPÉTÉS, +4,25 SUFFIXE, LFU+RÉCENCE = LFU ; FRÉQUENCE, PAS NEUROMODULATION | `carte.md`, `roadmap.md`, `2026-10-27/README.md` (+8) |
-| 12:43 | `c122f430` | B14 — CORRECTION M5 : LE 28,03 % EST UNE COUVERTURE DE 51,4 %, PAS UN GAIN ; M5 HONNÊTE 12,60 % | `en-cours.md`, `roadmap.md`, `2026-10-27/sprint-24h.md` (+2) |
-| 12:49 | `6e09c002` | B16 — FINAL : NOUVEAUX SUFFIXE −0,67, ÉVICTIONS 11 163 ; LFU+RÉCENCE NE DÉPARTAGE JAMAIS | `2026-10-27/README.md`, `2026-10-27/docs.md`, `2026-10-27/mesures.md` (+4) |
+| 12:39 | `59ad77f3` | B16 — M7-BIS LFU : +23,1 PTS RÉPÉTÉS, +4,25 SUFFIXE, LFU+RÉCENCE = LFU ; FRÉQUENCE, PAS NEUROMODULATION | `carte.md`, `roadmap.md`, `2026-10-27.md` (+8) |
+| 12:43 | `c122f430` | B14 — CORRECTION M5 : LE 28,03 % EST UNE COUVERTURE DE 51,4 %, PAS UN GAIN ; M5 HONNÊTE 12,60 % | `en-cours.md`, `roadmap.md`, `2026-10-27_sprint-24h.md` (+2) |
+| 12:49 | `6e09c002` | B16 — FINAL : NOUVEAUX SUFFIXE −0,67, ÉVICTIONS 11 163 ; LFU+RÉCENCE NE DÉPARTAGE JAMAIS | `2026-10-27.md`, `2026-10-27_docs.md`, `2026-10-27_mesures.md` (+4) |
 | 12:58 | `4816b7b6` | B17 — M7-BIS DANS LA CHAÎNE : LFU 9,28 % SUFFIXE VS 5,03 %, M8 COUVERTURE 70,75 %, GÉNÉRALISATION 0 | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 13:02 | `7606abbc` | B18 — RESTITUTION CANONIQUE : 528/528 RENDUS ET RELUS, 0 ÉCHEC ; CODEC, PAS DÉCODEUR | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
-| 13:08 | `71e6035d` | BILAN — SPRINT 24 H : M1 SOLIDE, M5 CONTEXTE, M7 FRÉQUENCE, M8 MARGINAL ; B13–B18 | `README.md`, `en-cours.md`, `2026-10-27/README.md` (+3) |
+| 13:08 | `71e6035d` | BILAN — SPRINT 24 H : M1 SOLIDE, M5 CONTEXTE, M7 FRÉQUENCE, M8 MARGINAL ; B13–B18 | `README.md`, `en-cours.md`, `2026-10-27.md` (+3) |
 | 15:10 | `1b0d4162` | B19 — M2 SECOURS : TYPOS 71,2/76,7 VS M1 36,6 ; PHRASES M1 86,6 VS M2 0 ; NICHE, PAS SECOURS GÉNÉRAL | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
-| 15:22 | `5b781b55` | B19 — 3 GRAINES : M2 TYPO 71,9/75,1 VS M1 36,8 ; PHRASE 0 ; ESPACES 52,7/48,6 VARIABLES | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `m2-secours.json` (+1) |
+| 15:22 | `5b781b55` | B19 — 3 GRAINES : M2 TYPO 71,9/75,1 VS M1 36,8 ; PHRASE 0 ; ESPACES 52,7/48,6 VARIABLES | `2026-10-27.md`, `2026-10-27_mesures.md`, `m2-secours.json` (+1) |
 | 15:25 | `d9454abb` | B21 — M9 PAR DOSE : M3 0/4/8/12/12 TAUTOLOGIQUE ; M5 +4,25 PTS ; SHAM NUL ; DOUBLE NON ADDITIVE | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 15:30 | `c42f4370` | B22 — M2 ET LES TYPOS : 62–80 % CONTRE M1 24–45 % SUR SUPPRESSION, SUBSTITUTION, INSERTION, TRANSPOSITION | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
-| 15:33 | `6f10ade7` | B22 — 3 GRAINES : M2 61,6–73,5 % CONTRE M1 24,7–43,3 % SUR LES QUATRE TYPOS | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `THEMES.md` (+2) |
+| 15:33 | `6f10ade7` | B22 — 3 GRAINES : M2 61,6–73,5 % CONTRE M1 24,7–43,3 % SUR LES QUATRE TYPOS | `2026-10-27.md`, `2026-10-27_mesures.md`, `THEMES.md` (+2) |
 | 16:39 | `d6fd9c85` | A7.5 — GRAPPE SUR RÉSEAU : 4,44× MOINS D'OCTETS, FIDÉLITÉ 1 792/1 792, 0,125 MS LOOPBACK | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 18:59 | `b689d829` | A7.5b — SEUIL RÉSEAU : SPARSE 1 672 O VS 7 416, GAIN 1,94× À 0 MS, 1,006× À 100 MS, SEUIL −0,60 MS | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 19:23 | `6b02d1d0` | A7.6 — COUCHE À DISTANCE : LOGITS BIT-À-BIT 3/3, ΔPPL 0, RTT 4,052 MS ; SPARSE 1,027× | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
-| 19:29 | `975137d6` | A7.6 — NÉGATIFS : ROPE 5,08 ; CPU 5,6e-5 ; BF16 0,456 ; EAGER 3,59 | `2026-10-27/README.md`, `2026-10-27/portes.md`, `couche-distante.json` (+1) |
+| 19:29 | `975137d6` | A7.6 — NÉGATIFS : ROPE 5,08 ; CPU 5,6e-5 ; BF16 0,456 ; EAGER 3,59 | `2026-10-27.md`, `2026-10-27_portes.md`, `couche-distante.json` (+1) |
 | 19:36 | `c48c1d07` | A7.7 — HIDDEN INT8 : 34,6 % DU VOLUME MAIS ARGMAX 0,83–0,93, KL 0,12–0,37 ; NÉGATIF | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 19:39 | `736d7d2e` | A7.8 — INT8 PAR CANAL : RATIO 36–39 %, ARGMAX 1,0, KL ~1e-3 ; LOSSY MAIS DÉCISION STABLE | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
-| 19:41 | `22233b50` | A7.8 — PPL INT8 PAR CANAL : 54,86 VS 55,94, 7,36 VS 7,48, 1,76 VS 1,79 ; PAS DE PERTE MESURABLE | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `THEMES.md` (+3) |
+| 19:41 | `22233b50` | A7.8 — PPL INT8 PAR CANAL : 54,86 VS 55,94, 7,36 VS 7,48, 1,76 VS 1,79 ; PAS DE PERTE MESURABLE | `2026-10-27.md`, `2026-10-27_mesures.md`, `THEMES.md` (+3) |
 | 20:11 | `c214270b` | C3.2c — 9 FAMILLES : 7/9 > 30 %, MOYENNE 69,5 %, CONTRÔLE ≤0,5 % ; INDO-EUROPÉEN 14,7 %, URALIC 46,7 % | `carte.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 20:13 | `6bb7c778` | B25 — M8 REJEU : EXACT 0, CHAMPS 74,6 %, REJEU 0, HYBRIDE 0 SUR 6 CODES TENUS | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 20:17 | `5f4367ac` | A7.9 — CACHE KV À DISTANCE : 1 024 O/JETON/COUCHE, 24 580 O/JETON SUR 24 COUCHES, 96 MIO POUR 4 096 JETONS | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
@@ -73,45 +73,45 @@
 
 ## Mesures et rapports touchés
 
-- [reports/README.md](../reports/README.md)
-- [reports/rapport-cerveau-corrections.md](../reports/rapport-cerveau-corrections.md)
-- [reports/rapport-cerveau-modules.md](../reports/rapport-cerveau-modules.md)
-- [reports/rapport-coherence-docs-3.md](../reports/rapport-coherence-docs-3.md)
-- [reports/rapport-couche-distante.md](../reports/rapport-couche-distante.md)
-- [reports/rapport-couche-int8-canal.md](../reports/rapport-couche-int8-canal.md)
-- [reports/rapport-couche-int8.md](../reports/rapport-couche-int8.md)
-- [reports/rapport-familles-9.md](../reports/rapport-familles-9.md)
-- [reports/rapport-grappe-reseau.md](../reports/rapport-grappe-reseau.md)
-- [reports/rapport-ie-sous-familles.md](../reports/rapport-ie-sous-familles.md)
-- [reports/rapport-kv-cache-int8-128.md](../reports/rapport-kv-cache-int8-128.md)
-- [reports/rapport-kv-cache-int8-64.md](../reports/rapport-kv-cache-int8-64.md)
-- [reports/rapport-kv-cache-int8-bloc.md](../reports/rapport-kv-cache-int8-bloc.md)
-- [reports/rapport-kv-cache-int8.md](../reports/rapport-kv-cache-int8.md)
-- [reports/rapport-kv-cache-mixte-128.md](../reports/rapport-kv-cache-mixte-128.md)
-- [reports/rapport-kv-cache-mixte-256.md](../reports/rapport-kv-cache-mixte-256.md)
-- [reports/rapport-kv-cache-mixte-32.md](../reports/rapport-kv-cache-mixte-32.md)
-- [reports/rapport-kv-cache-multi.md](../reports/rapport-kv-cache-multi.md)
-- [reports/rapport-kv-cache-seuils.md](../reports/rapport-kv-cache-seuils.md)
-- [reports/rapport-kv-gen-64.md](../reports/rapport-kv-gen-64.md)
-- [reports/rapport-kv-gen.md](../reports/rapport-kv-gen.md)
-- [reports/rapport-kv-int8.md](../reports/rapport-kv-int8.md)
-- [reports/rapport-kv-ppl-long.md](../reports/rapport-kv-ppl-long.md)
-- [reports/rapport-kv-ppl.md](../reports/rapport-kv-ppl.md)
-- [reports/rapport-kv-reseau.md](../reports/rapport-kv-reseau.md)
-- [reports/rapport-m2-secours.md](../reports/rapport-m2-secours.md)
-- [reports/rapport-m2-typo.md](../reports/rapport-m2-typo.md)
-- [reports/rapport-m6-conflit2.md](../reports/rapport-m6-conflit2.md)
-- [reports/rapport-m7-frequence.md](../reports/rapport-m7-frequence.md)
-- [reports/rapport-m8-rejeu.md](../reports/rapport-m8-rejeu.md)
-- [reports/rapport-m9-dose.md](../reports/rapport-m9-dose.md)
-- [reports/rapport-multilingue.md](../reports/rapport-multilingue.md)
-- [reports/rapport-pipeline-m2.md](../reports/rapport-pipeline-m2.md)
-- [reports/rapport-pipeline-memoire.md](../reports/rapport-pipeline-memoire.md)
-- [reports/rapport-pipeline-semantique.md](../reports/rapport-pipeline-semantique.md)
-- [reports/rapport-restitution.md](../reports/rapport-restitution.md)
-- [reports/rapport-seuil-reseau.md](../reports/rapport-seuil-reseau.md)
-- [reports/rapport-sous-familles-autres.md](../reports/rapport-sous-familles-autres.md)
-- [reports/rapport-sprint-24h.md](../reports/rapport-sprint-24h.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
+- [reports/rapport-cerveau-modules.md](../../reports/rapport-cerveau-modules.md)
+- [reports/rapport-coherence-docs-3.md](../../reports/rapport-coherence-docs-3.md)
+- [reports/rapport-couche-distante.md](../../reports/rapport-couche-distante.md)
+- [reports/rapport-couche-int8-canal.md](../../reports/rapport-couche-int8-canal.md)
+- [reports/rapport-couche-int8.md](../../reports/rapport-couche-int8.md)
+- [reports/rapport-familles-9.md](../../reports/rapport-familles-9.md)
+- [reports/rapport-grappe-reseau.md](../../reports/rapport-grappe-reseau.md)
+- [reports/rapport-ie-sous-familles.md](../../reports/rapport-ie-sous-familles.md)
+- [reports/rapport-kv-cache-int8-128.md](../../reports/rapport-kv-cache-int8-128.md)
+- [reports/rapport-kv-cache-int8-64.md](../../reports/rapport-kv-cache-int8-64.md)
+- [reports/rapport-kv-cache-int8-bloc.md](../../reports/rapport-kv-cache-int8-bloc.md)
+- [reports/rapport-kv-cache-int8.md](../../reports/rapport-kv-cache-int8.md)
+- [reports/rapport-kv-cache-mixte-128.md](../../reports/rapport-kv-cache-mixte-128.md)
+- [reports/rapport-kv-cache-mixte-256.md](../../reports/rapport-kv-cache-mixte-256.md)
+- [reports/rapport-kv-cache-mixte-32.md](../../reports/rapport-kv-cache-mixte-32.md)
+- [reports/rapport-kv-cache-multi.md](../../reports/rapport-kv-cache-multi.md)
+- [reports/rapport-kv-cache-seuils.md](../../reports/rapport-kv-cache-seuils.md)
+- [reports/rapport-kv-gen-64.md](../../reports/rapport-kv-gen-64.md)
+- [reports/rapport-kv-gen.md](../../reports/rapport-kv-gen.md)
+- [reports/rapport-kv-int8.md](../../reports/rapport-kv-int8.md)
+- [reports/rapport-kv-ppl-long.md](../../reports/rapport-kv-ppl-long.md)
+- [reports/rapport-kv-ppl.md](../../reports/rapport-kv-ppl.md)
+- [reports/rapport-kv-reseau.md](../../reports/rapport-kv-reseau.md)
+- [reports/rapport-m2-secours.md](../../reports/rapport-m2-secours.md)
+- [reports/rapport-m2-typo.md](../../reports/rapport-m2-typo.md)
+- [reports/rapport-m6-conflit2.md](../../reports/rapport-m6-conflit2.md)
+- [reports/rapport-m7-frequence.md](../../reports/rapport-m7-frequence.md)
+- [reports/rapport-m8-rejeu.md](../../reports/rapport-m8-rejeu.md)
+- [reports/rapport-m9-dose.md](../../reports/rapport-m9-dose.md)
+- [reports/rapport-multilingue.md](../../reports/rapport-multilingue.md)
+- [reports/rapport-pipeline-m2.md](../../reports/rapport-pipeline-m2.md)
+- [reports/rapport-pipeline-memoire.md](../../reports/rapport-pipeline-memoire.md)
+- [reports/rapport-pipeline-semantique.md](../../reports/rapport-pipeline-semantique.md)
+- [reports/rapport-restitution.md](../../reports/rapport-restitution.md)
+- [reports/rapport-seuil-reseau.md](../../reports/rapport-seuil-reseau.md)
+- [reports/rapport-sous-familles-autres.md](../../reports/rapport-sous-familles-autres.md)
+- [reports/rapport-sprint-24h.md](../../reports/rapport-sprint-24h.md)
 
 <!-- notes -->
 

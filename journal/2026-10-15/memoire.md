@@ -2,21 +2,21 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:00 | `33a07378` | La BOUCLE DU CERVEAU en une commande : percevoir -> retenir -> se souvenir -> consolider -> agir, chaque maillon mesure par le moteur | `cerveau-facultes.md`, `2026-10-15/README.md`, `README.md` (+2) |
-| 02:08 | `bf80a0fd` | Ce qui se consolide est la STRUCTURE PARTAGEE : meme memorisation (-22,5 %) mais transfert -7,4 % (wikitext) contre +1,2 % (corpus_en) — et la fusion de deux experiences garde le gain du fort, accumule les couts du faible | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/mesures.md` (+3) |
-| 02:22 | `87b6d5d0` | Le point fixe « au sens fort » est le PIRE des quatre objectifs de cycle : rejoindre l'etat du maitre donne 35,28 -> 70,67 -> 221,64 -> 789,73 (la boucle diverge encore, et elle sacrifie la prediction) | `2026-10-15/README.md`, `2026-10-15/moteur.md`, `README.md` (+3) |
-| 03:40 | `292e96d5` | Quatre jours de consolidation sequentielle sur un corpus heterogene : deux jours REFUSES par le protocole (aucune epoque n'ameliore la validation — le modele est rendu inchange), un jour accepte qui DEGRADE le texte tenu a l'ecart (+0,36 %) | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/mesures.md` (+2) |
-| 03:50 | `d9478d0b` | Le balayage de la consolidation : optimum INTERIEUR de capacite (rang 4 : -7,63 %, contre -5,28 % au rang 32 qui a 8 fois plus de parametres) et de pas (3e-4), et les deux optima NE COMPOSENT PAS | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/memoire.md` (+2) |
-| 06:27 | `4fd330ac` | Carte : le cout de la consolidation est le point EFFICIENT mesure (0,035 % des poids au rang 4), et le rang 8 (0,07 %) est etiquete comme tel la ou il a servi | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/docs.md` |
-| 08:54 | `e8cb840c` | La selection par SIMILARITE (l'idee de la boucle C6 -> C7) n'aide pas : le lot proche de m32 fait -7,46 % (niveau du hasard) et le lot proche de m20 fait -10,68 % (PIR que le hasard), tous deux sous le lot repetitif | `2026-10-15/README.md`, `2026-10-15/docs.md`, `rapport-sommeil-selection.md` |
+| 00:00 | `33a07378` | La BOUCLE DU CERVEAU en une commande : percevoir -> retenir -> se souvenir -> consolider -> agir, chaque maillon mesure par le moteur | `cerveau-facultes.md`, `2026-10-15.md`, `README.md` (+2) |
+| 02:08 | `bf80a0fd` | Ce qui se consolide est la STRUCTURE PARTAGEE : meme memorisation (-22,5 %) mais transfert -7,4 % (wikitext) contre +1,2 % (corpus_en) — et la fusion de deux experiences garde le gain du fort, accumule les couts du faible | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_mesures.md` (+3) |
+| 02:22 | `87b6d5d0` | Le point fixe « au sens fort » est le PIRE des quatre objectifs de cycle : rejoindre l'etat du maitre donne 35,28 -> 70,67 -> 221,64 -> 789,73 (la boucle diverge encore, et elle sacrifie la prediction) | `2026-10-15.md`, `2026-10-15_moteur.md`, `README.md` (+3) |
+| 03:40 | `292e96d5` | Quatre jours de consolidation sequentielle sur un corpus heterogene : deux jours REFUSES par le protocole (aucune epoque n'ameliore la validation — le modele est rendu inchange), un jour accepte qui DEGRADE le texte tenu a l'ecart (+0,36 %) | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_mesures.md` (+2) |
+| 03:50 | `d9478d0b` | Le balayage de la consolidation : optimum INTERIEUR de capacite (rang 4 : -7,63 %, contre -5,28 % au rang 32 qui a 8 fois plus de parametres) et de pas (3e-4), et les deux optima NE COMPOSENT PAS | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_memoire.md` (+2) |
+| 06:27 | `4fd330ac` | Carte : le cout de la consolidation est le point EFFICIENT mesure (0,035 % des poids au rang 4), et le rang 8 (0,07 %) est etiquete comme tel la ou il a servi | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_docs.md` |
+| 08:54 | `e8cb840c` | La selection par SIMILARITE (l'idee de la boucle C6 -> C7) n'aide pas : le lot proche de m32 fait -7,46 % (niveau du hasard) et le lot proche de m20 fait -10,68 % (PIR que le hasard), tous deux sous le lot repetitif | `2026-10-15.md`, `2026-10-15_docs.md`, `rapport-sommeil-selection.md` |
 | 20:32 | `156e5ce2` | E9 — l'HOMEOSTASIE SYNAPTIQUE : definie et mesuree ; amortir le changement plastique rend la consolidation MEILLEURE des deux cotes | `cerveau-facultes.md`, `en-cours.md`, `etat-cerveau.md` (+3) |
-| 20:44 | `ceb8d496` | E9, suite : de l'ORACLE a une REGLE — l'amplitude se choisit sur l'activite du modele, pas sur le domaine vise | `en-cours.md`, `etat-cerveau.md`, `2026-10-15/README.md` (+2) |
+| 20:44 | `ceb8d496` | E9, suite : de l'ORACLE a une REGLE — l'amplitude se choisit sur l'activite du modele, pas sur le domaine vise | `en-cours.md`, `etat-cerveau.md`, `2026-10-15.md` (+2) |
 
 ## Chiffres du jour
 
@@ -26,12 +26,12 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-consolidation-balayage.md](../reports/rapport-consolidation-balayage.md)
-- [reports/rapport-consolidation-structure-partagee.md](../reports/rapport-consolidation-structure-partagee.md)
-- [reports/rapport-cycle-entraine.md](../reports/rapport-cycle-entraine.md)
-- [reports/rapport-e9-homeostasie.md](../reports/rapport-e9-homeostasie.md)
-- [reports/rapport-sommeil-selection.md](../reports/rapport-sommeil-selection.md)
-- [reports/rapport-vie-quatre-jours.md](../reports/rapport-vie-quatre-jours.md)
+- [reports/rapport-consolidation-balayage.md](../../reports/rapport-consolidation-balayage.md)
+- [reports/rapport-consolidation-structure-partagee.md](../../reports/rapport-consolidation-structure-partagee.md)
+- [reports/rapport-cycle-entraine.md](../../reports/rapport-cycle-entraine.md)
+- [reports/rapport-e9-homeostasie.md](../../reports/rapport-e9-homeostasie.md)
+- [reports/rapport-sommeil-selection.md](../../reports/rapport-sommeil-selection.md)
+- [reports/rapport-vie-quatre-jours.md](../../reports/rapport-vie-quatre-jours.md)
 
 <!-- notes -->
 

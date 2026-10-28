@@ -1,21 +1,28 @@
 # 2026-10-25
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-25/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **0 session(s)** · **6 thème(s)**
+**23 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| docs | 2 | [2026-10-25/docs.md](docs.md) |
-| memoire | 5 | [2026-10-25/memoire.md](memoire.md) |
-| mesures | 7 | [2026-10-25/mesures.md](mesures.md) |
-| modele | 4 | [2026-10-25/modele.md](modele.md) |
-| moteur | 1 | [2026-10-25/moteur.md](moteur.md) |
-| portes | 2 | [2026-10-25/portes.md](portes.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 2 | [docs.md](docs.md) |
+| memoire | 5 | [memoire.md](memoire.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
+| modele | 4 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+| portes | 3 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -42,6 +49,8 @@
 | 06:32 | `49694721` | DOC — LA PAGE VIVANTE PORTE LA PASSE DU 25/10 : la phrase ne comptait que les trois passes du 24/10 (45/47). Elle ajoute celle du 25/10 a 04 h 51 (44/2, 46 entrees, les memes deux structurelles) — et dit ce qu'elle etablit : aucune porte cassee par les instruments de C3.2 |
 | 06:34 | `ba5f692c` | MISSION — LA STRATEGIE PORTE C3.2 : le paragraphe de l'entree-sortie disait qu'on ne declare complet que sur des chiffres couvrant langues, dialectes, styles et domaines ; il ajoute le chiffre de C3.2 (4 familles sur 5 au-dessus de la reference, de 14,7 % a 100 %, controle 0 %) et la cinquieme qui dit ou le travail reste |
 | 06:37 | `df627001` | README — LA RESTITUTION PAR FAMILLE EST DANS CE QUI EST FAIT : la section « fait, mesure » listait A7, B4 et A8 ; elle ajoute C3.2 (28 familles decoupees, le module par famille, la courbe sur 5 familles — 4 sur 5 au-dessus de la reference, de 14,7 % a 100 %, controle 0 %). Le README dit maintenant tout ce qui est accompli |
+| 06:39 | `4db9b1f7` | AGENTS — LA PORTE D'ENTREE PORTE C3.2 : le resume de la phase listait A7, B4, A8 ; il ajoute C3.2 (28 familles, le module par famille, la courbe sur 5 familles, 4 sur 5 au-dessus de la reference, de 14,7 % a 100 %, controle 0 %). La porte d'entree dit maintenant tout ce qui est accompli |
+| 23:59 | `f202be32` | B5/B6 — LES JEUX SYMBOLIQUES : 112 SURFACES, 100 % AU NIVEAU 4, 33/33 PAIRES, 0 COLLISION, PERFT ET PENSÉE INVARIANTE 5/5 |
 
 ## Le récit de la journée (écrit à la main)
 

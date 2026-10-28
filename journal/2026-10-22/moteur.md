@@ -2,20 +2,19 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 21:14 | `fbfda606` | DOC — README reecrit : la vision (les deux etages, la tete bien faite, la methode falsifiable) et les six axes de recherche (entree-sortie, RSN, raisonnement, plan, methode, moteur), avec l'etat en chiffres et les chantiers ouverts | `README.md`, `2026-10-22/README.md`, `2026-10-22/mesures.md` (+1) |
-| 21:23 | `92a8b983` | DOC — README refait pour un lecteur qui arrive : le probleme (les grandes tetes, la geometrie non partagee), l'idee (deux etages, la sonde), les six resultats en langage clair (traduire, le raisonnement dans l'etat, le pont, l'alignement appris, le plan qui resiste, le naturel), la methode, le depot, le moteur et les limites | `README.md`, `2026-10-22/README.md`, `2026-10-22/moteur.md` (+2) |
+| 21:14 | `fbfda606` | DOC — README reecrit : la vision (les deux etages, la tete bien faite, la methode falsifiable) et les six axes de recherche (entree-sortie, RSN, raisonnement, plan, methode, moteur), avec l'etat en chiffres et les chantiers ouverts | `README.md`, `2026-10-22.md`, `2026-10-22_mesures.md` (+1) |
+| 21:23 | `92a8b983` | DOC — README refait pour un lecteur qui arrive : le probleme (les grandes tetes, la geometrie non partagee), l'idee (deux etages, la sonde), les six resultats en langage clair (traduire, le raisonnement dans l'etat, le pont, l'alignement appris, le plan qui resiste, le naturel), la methode, le depot, le moteur et les limites | `README.md`, `2026-10-22.md`, `2026-10-22_moteur.md` (+2) |
 | 22:10 | `d625c4af` | DOC — AGENTS.md, mission.md et la carte des docs repenses autour de la vision : les flots de donnees (des listes, pas des matrices), les deux programmes en parallele (le moteur et l'intelligence), les deux etages ordonnes dans l'intelligence, la ligne de roadmap dans chaque resultat, et la regle du jamais-en-attente | `AGENTS.md`, `README.md`, `mission.md` (+6) |
-| 22:12 | `5806e0b6` | DOC — la synthese index est cadree par les deux programmes : le moteur (chapitres 1-4 et 6) et l'intelligence (chapitres 5 et 7), avec la vision et la roadmap en tete | `2026-10-22/README.md`, `2026-10-22/moteur.md` |
+| 22:12 | `5806e0b6` | DOC — la synthese index est cadree par les deux programmes : le moteur (chapitres 1-4 et 6) et l'intelligence (chapitres 5 et 7), avec la vision et la roadmap en tete | `2026-10-22.md`, `2026-10-22_moteur.md` |
+| 22:18 | `7882ac2d` | DOC — les dernieres occurrences de « Drave Natif » alignees sur « Drave », et la priorite de l'en-cours recadree sur les deux programmes (le moteur en parallele, l'intelligence avec ses deux etages ordonnes) | `README.md`, `en-cours.md`, `2026-10-22.md` (+1) |
 
 <!-- notes -->
-
-
 **Le 24 octobre — A2.5 : le top-k fusionné est mesuré.** Le noyau `attn_topk_tout` (un lancement par ligne) gagne
 jusqu'à ~64 k clés (0,14 contre 0,27 ms à 4 k), perd au-delà (5,86 contre 4,10 ms à 1 M) : le croisement est entre
 65 k et 131 k, le seuil `SEUIL_NOYAU4 = 131_072` est dans `model.rs`. La fusion **complète** la chaîne séparée, elle
@@ -321,5 +320,4 @@ raisonnement naturel.
 **Le 24 octobre — la journée entre au journal des décisions.** La roadmap porte désormais la ligne du 24/10 : la passe
 45/47, les trois courbes, la sonde qui sature dès le 1,5 B, les deux blocages VRAM et le corpus manquant. Ce qui reste
 est nommé, pas oublié.
-
 <!-- /notes -->

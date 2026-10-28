@@ -16,6 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-distillation-multi.md`](rapport-native-distillation-multi.md) | **N2.7** — distillation multi : student **9,517** vs professeur **9,571** |
 | [`rapport-native-distillation-20m.md`](rapport-native-distillation-20m.md) | **N2.5** — student 21,63 M : PPL **4,294**, pire que 11,47 M (**3,295**) ; budget de pas confondu |
 | [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |
 | [`rapport-native-distillation.md`](rapport-native-distillation.md) | **N2.3** — distillation : PPL **3,297** contre **3,465**, gap **+0,942** au professeur |

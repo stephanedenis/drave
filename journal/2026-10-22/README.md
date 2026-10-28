@@ -1,21 +1,27 @@
 # 2026-10-22
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-22/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**63 commits** · **0 session(s)** · **6 thème(s)**
+**64 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| attention | 1 | [2026-10-22/attention.md](attention.md) |
-| distribue | 18 | [2026-10-22/distribue.md](distribue.md) |
-| docs | 2 | [2026-10-22/docs.md](docs.md) |
-| mesures | 23 | [2026-10-22/mesures.md](mesures.md) |
-| modele | 15 | [2026-10-22/modele.md](modele.md) |
-| moteur | 4 | [2026-10-22/moteur.md](moteur.md) |
+| attention | 1 | [attention.md](attention.md) |
+| distribue | 18 | [distribue.md](distribue.md) |
+| docs | 2 | [docs.md](docs.md) |
+| mesures | 23 | [mesures.md](mesures.md) |
+| modele | 15 | [modele.md](modele.md) |
+| moteur | 5 | [moteur.md](moteur.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -84,6 +90,7 @@
 | 22:07 | `2b01a433` | MESURE 168 — LE PLAN MULTI-TACHES NE L'ALIGNE PAS : EN->FR 0,364 (exactement la tache seule), FR->FR 0,375, EN->EN 0,511. Six variantes ont echoue : la ligne plan est definitivement close |
 | 22:10 | `d625c4af` | DOC — AGENTS.md, mission.md et la carte des docs repenses autour de la vision : les flots de donnees (des listes, pas des matrices), les deux programmes en parallele (le moteur et l'intelligence), les deux etages ordonnes dans l'intelligence, la ligne de roadmap dans chaque resultat, et la regle du jamais-en-attente |
 | 22:12 | `5806e0b6` | DOC — la synthese index est cadree par les deux programmes : le moteur (chapitres 1-4 et 6) et l'intelligence (chapitres 5 et 7), avec la vision et la roadmap en tete |
+| 22:18 | `7882ac2d` | DOC — les dernieres occurrences de « Drave Natif » alignees sur « Drave », et la priorite de l'en-cours recadree sur les deux programmes (le moteur en parallele, l'intelligence avec ses deux etages ordonnes) |
 
 ## Le récit de la journée (écrit à la main)
 

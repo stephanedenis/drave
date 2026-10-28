@@ -35,6 +35,14 @@ import torch.nn as nn
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from essai_decharge import charger, lot_aleatoire  # noqa: E402
+from tools.vdc import departs_vdc  # noqa: E402
+
+
+def lot_vdc(ids, seq, lot, compteur):
+    """Fenêtres par van der Corput : même compteur, mêmes fenêtres."""
+    i = departs_vdc(compteur, lot, len(ids) - seq - 1, seq)
+    return (torch.from_numpy(np.stack([ids[j:j + seq] for j in i]).astype(np.int64)),
+            torch.from_numpy(np.stack([ids[j + 1:j + seq + 1] for j in i]).astype(np.int64)))
 
 
 def construire(famille, a):
@@ -897,7 +905,7 @@ def main():
               f"température {a.temperature}")
 
     for pas in range(1, a.pas + 1):
-        x, y = lot_aleatoire(train, a.seq, a.lot, g)
+        x, y = lot_vdc(train, a.seq, a.lot, pas * a.lot)
         x = x.to(dev)
         # Entrée et étiquettes = LA MÊME séquence : le modèle décale lui-même
         # (`shift_logits`/`shift_labels`). Passer `y` — déjà décalé par
@@ -912,7 +920,7 @@ def main():
             # « couche 0 » ✓, donc les poids sont liés **par construction** ✓✓ et un pas d'optimisation met
             # à jour le bloc unique ✓. Les deux bornes de la bibliothèque doivent suivre ✗ (leçon du 16/10 :
             # `num_hidden_layers` borne la boucle du forward ✓, `layer_types` est une liste PAR COUCHE ✓).
-            tt = int(torch.randint(1, a.recurrence_max + 1, (1,)).item())
+            tt = 1 + (pas % a.recurrence_max)  # déterministe, pas de tirage
             modele.model.layers = torch.nn.ModuleList([modele.model.layers[0]] * (tt * a.couches))
             modele.config.num_hidden_layers = len(modele.model.layers)
             modele.config.layer_types = list(modele.config.layer_types[:a.couches]) * tt

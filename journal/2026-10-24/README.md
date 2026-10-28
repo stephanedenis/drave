@@ -1,24 +1,30 @@
 # 2026-10-24
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-24/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**117 commits** · **0 session(s)** · **9 thème(s)**
+**118 commits** · **0 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 1 | [2026-10-24/apprentissage.md](apprentissage.md) |
-| attention | 1 | [2026-10-24/attention.md](attention.md) |
-| distribue | 29 | [2026-10-24/distribue.md](distribue.md) |
-| docs | 9 | [2026-10-24/docs.md](docs.md) |
-| memoire | 7 | [2026-10-24/memoire.md](memoire.md) |
-| mesures | 28 | [2026-10-24/mesures.md](mesures.md) |
-| modele | 21 | [2026-10-24/modele.md](modele.md) |
-| moteur | 11 | [2026-10-24/moteur.md](moteur.md) |
-| portes | 10 | [2026-10-24/portes.md](portes.md) |
+| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+| attention | 1 | [attention.md](attention.md) |
+| distribue | 30 | [distribue.md](distribue.md) |
+| docs | 9 | [docs.md](docs.md) |
+| memoire | 7 | [memoire.md](memoire.md) |
+| mesures | 28 | [mesures.md](mesures.md) |
+| modele | 21 | [modele.md](modele.md) |
+| moteur | 11 | [moteur.md](moteur.md) |
+| portes | 10 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -91,7 +97,7 @@
 | 14:55 | `0de2d40f` | DOC — LA SYNTHESE 05 PORTE LA SATURATION : la carte du raisonnement naturel est completee — la sonde est plate des le 1,5 B (0,7256 / 0,7269 / 0,7189 / 0,7376), le pont monte encore (0,826 -> 0,857 -> 0,870) mais sature a 0,87. Deux axes, deux comportements : la forme la plus forte de la these |
 | 14:57 | `be53ed6c` | B2.8 — LA CARTE DU RAISONNEMENT NATUREL, SYNTHESE : quatre mesures (sonde, pont, pic, balayage), trois courbes (1,5 B / 3 B / 14 B, plus deux points du 32 B), deux axes (la sonde plate des le 1,5 B ; le pont qui monte puis sature a 0,87), quatre lecons et quatre limites. Un document qui relie les 20 mesures du jour |
 | 14:59 | `17cf0812` | DOC — LES DEUX ENTREES VERS LA CARTE : la synthese 05 et la page vivante pointent vers la nouvelle synthese du raisonnement naturel (quatre mesures, trois courbes, deux axes, quatre limites) |
-| 15:00 | `1d70ecb7` | FIX — LE LIEN VERS LA CARTE ETAIT CASSE : depuis docs/synthese/, le chemin est ../../reports/ (deux niveaux), pas ../reports/ (un niveau). La revue de documentation l'a signale et c'est corrige |
+| 15:00 | `1d70ecb7` | FIX — LE LIEN VERS LA CARTE ETAIT CASSE : depuis docs/synthese/, le chemin est ../../reports/ (deux niveaux), pas ../../reports/ (un niveau). La revue de documentation l'a signale et c'est corrige |
 | 15:03 | `79fa11b4` | DOC — L'INVENTAIRE DES DOCS OUVRE SUR LA CARTE : la nouvelle synthese du raisonnement naturel est referencee depuis docs/README.md, a cote des mesures — c'est le seul document qui donne la vue d'ensemble |
 | 15:06 | `7525fd80` | DOC — LA JOURNEE ENTRE AU JOURNAL DES DECISIONS : la roadmap porte la ligne du 24/10 — la passe 45/47, les trois courbes, la sonde qui sature des le 1,5 B, les deux blocages VRAM et le corpus manquant. Ce qui reste est nomme, pas oublie |
 | 15:08 | `6bdc3fec` | DOC — LA PAGE VIVANTE MISE A L'HEURE : sa date etait bonne (2026-10-24) mais son heure etait restee a 08 h 24 ; elle est a 15 h 00. La porte ne verifie que la date — l'heure, c'est pour le lecteur |
@@ -141,6 +147,7 @@
 | 23:36 | `83a4fa8c` | CARTE — LES LIGNES A7, A8, B4 PORTENT LEUR ETAT : la carte des sujets les citait sans dire ou elles en sont. A7 : fait (42,5477, 21 %, 4,22x) ; A8 : fait, opt-in ; B4 : close (six mesures). Le concept des operateurs renvoie aux six mesures, plus a la seule B4.1 |
 | 23:38 | `595284d4` | DOC — LA PAGE VIVANTE COMPTE JUSTE : le tableau disait 156 fiches et 228 JSON ; le disque en a 160 et 230 (les fiches du jour : la grappe deportee, la regle place+perte, l'operateur LoRA, la passe de nuit). Les deux totaux sont ceux de ls |
 | 23:41 | `81e6df61` | DOC — LA QUESTION DES STYLES EST TRANCHEE : la page vivante listait « les styles a epoque controlee » comme ouverts sans blocage, alors que C4 est mesure (les dialectes sont lisibles). Ce qui reste est une REGLE DE METHODE (controler la date dans tout test de style — la lecon Panini : la surface capte +0,138, la filiation +0,049), pas une ligne de plan. Restent ouverts : les modules par famille (C3) et le pic du 32 B (decision humaine) |
+| 23:50 | `63a878de` | ROADMAP — LA LIGNE C3.2 : LES MODULES PAR FAMILLE. C3 est mesure (85,1 % a une langue ; 30 % -> 4,4 % -> 0,4 % -> 0,6 % a 1/10/50/448 langues : la restitution meurt entre 1 et 10). La suite : C3.2a le decoupage par famille (441 langues, 55 familles, 10 de plus de 9 langues), C3.2b un module par famille (lora_recopie --ids), C3.2c la comparaison a la courbe (le taux a 10 langues doit depasser 4,4 %). Le controle : la surface de la famille n'est pas la restitution |
 
 ## Le récit de la journée (écrit à la main)
 

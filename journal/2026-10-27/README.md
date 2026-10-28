@@ -1,24 +1,35 @@
 # 2026-10-27
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-27/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**101 commits** · **0 session(s)** · **9 thème(s)**
+**102 commits** · **0 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 1 | [2026-10-27/apprentissage.md](apprentissage.md) |
-| attention | 2 | [2026-10-27/attention.md](attention.md) |
-| distribue | 6 | [2026-10-27/distribue.md](distribue.md) |
-| docs | 19 | [2026-10-27/docs.md](docs.md) |
-| memoire | 6 | [2026-10-27/memoire.md](memoire.md) |
-| mesures | 56 | [2026-10-27/mesures.md](mesures.md) |
-| modele | 1 | [2026-10-27/modele.md](modele.md) |
-| outils | 1 | [2026-10-27/outils.md](outils.md) |
-| portes | 9 | [2026-10-27/portes.md](portes.md) |
+| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+| attention | 2 | [attention.md](attention.md) |
+| distribue | 6 | [distribue.md](distribue.md) |
+| docs | 19 | [docs.md](docs.md) |
+| memoire | 6 | [memoire.md](memoire.md) |
+| mesures | 56 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 9 | [portes.md](portes.md) |
+
+## Autres pièces du jour
+
+[decisions-roadmap.md](decisions-roadmap.md) · [sprint-24h.md](sprint-24h.md)
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -125,6 +136,7 @@
 | 23:20 | `fe521cea` | A7.24 — SEUIL F32 À 32 : DIVERGENCE AU 41ᵉ, ACCORD 16,41 %, LE PLUS MAUVAIS DES TROIS |
 | 23:23 | `2c20e7b7` | A7.25 — BALAYAGE DES SEUILS F32 : 64 CONFIRMÉ (237/92,6 %), LES AUTRES SONT PIRE |
 | 23:26 | `9b79373f` | A7.26 — CACHE MIXTE SUR 3 PROMPTS : ACCORD MOYEN 84,19 %, DÉCROCHAGE À 75 SUR LE TRAIN |
+| 23:29 | `18e67fcf` | B27 — M6 MOTEUR : EXACT 100 %, CONFLIT 0, PAS DE COMPÉTITION |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -41,8 +41,8 @@ les jeux **188,7 s**, les langues **3,1 s**, sur Hauru (Python 3.13, sans GPU).
 permutation, la notation, les maîtres. Elle est verte. La passe complète des 48 portes reste à lancer avant le
 commit de clôture.
 
-**Les fichiers.** [`reports/rapport-langues-maitres.md`](../reports/rapport-langues-maitres.md),
-[`reports/jeux-langues-mesures.json`](../reports/jeux-langues-mesures.json),
-[`reports/jeux-maitres-mesures.json`](../reports/jeux-maitres-mesures.json), le concept
-[`docs/jeux-symboliques.md`](../docs/jeux-symboliques.md), la roadmap **B7/B8**.
+**Les fichiers.** [`reports/rapport-langues-maitres.md`](../../reports/rapport-langues-maitres.md),
+[`reports/jeux-langues-mesures.json`](../../reports/jeux-langues-mesures.json),
+[`reports/jeux-maitres-mesures.json`](../../reports/jeux-maitres-mesures.json), le concept
+[`docs/jeux-symboliques.md`](../../docs/jeux-symboliques.md), la roadmap **B7/B8**.
 <!-- /notes -->

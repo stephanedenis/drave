@@ -3,7 +3,7 @@
 > **Ce que ce fichier est.** L'historique des décisions qui ont façonné la roadmap : le renommage,
 > le recentrage sur les flots, les jeux symboliques, B10–B12 et la remise en cohérence documentaire.
 > **Chargement :** journal — **ne pas charger par défaut** ; la roadmap courante est
-> [`docs/roadmap.md`](../docs/roadmap.md).
+> [`docs/roadmap.md`](../../docs/roadmap.md).
 
 ## Les décisions
 

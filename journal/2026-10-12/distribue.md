@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 22:57 | `334f8085` | VRAM : ce qui coute n'est pas le lien mais l'ALLOCATION — 11,72 ms par expert MXFP4 avec allocation contre 1,05 ms dans un tampon reutilise (91 % du cout), et 3,39 contre 0,27 ms en Q4_K | `gpu.rs`, `main.rs`, `2026-10-12/README.md` (+3) |
+| 22:57 | `334f8085` | VRAM : ce qui coute n'est pas le lien mais l'ALLOCATION — 11,72 ms par expert MXFP4 avec allocation contre 1,05 ms dans un tampon reutilise (91 % du cout), et 3,39 contre 0,27 ms en Q4_K | `gpu.rs`, `main.rs`, `2026-10-12.md` (+3) |
 
 ## Chiffres du jour
 
@@ -18,11 +18,11 @@
 
 ## Sessions actives ce jour
 
-- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+- `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) · [digest](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-vram-transfert.md](../reports/rapport-vram-transfert.md)
+- [reports/rapport-vram-transfert.md](../../reports/rapport-vram-transfert.md)
 
 <!-- notes -->
 

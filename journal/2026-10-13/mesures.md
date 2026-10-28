@@ -2,19 +2,19 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 02:29 | `3bf7125a` | MADV_POPULATE_READ tranche : 2 121 Mo/s contre 2 077 pour madvise par tranches et 4 603 pour pread par 8 fils — il ne remplace pas les tampons (2,2x sous le disque) | `note-lecteurs-paralleles.md`, `2026-10-13/README.md`, `2026-10-13/moteur.md` (+3) |
-| 02:33 | `af4fe1ce` | Chargement : je corrige une affirmation d'hier soir — sur 32 jetons l'emprunt des blocs Q4_K est 0,63 % MOINS precis (33,9093 contre 33,6967), pas plus fidèle ; et la decision est chiffree (0,63 % contre 5,5 s par passe) | `2026-10-13/README.md`, `2026-10-13/portes.md`, `rapport-chargement-paresseux.md` |
-| 02:34 | `e1e55caa` | Dessin H : les sorties precoces mesurees (8 et 4) — le produit theorique monte a 16,96 % mais le routeur REEL y perd 0,30 point ; le facteur limitant est bien la qualite du chemin court (N4), pas la profondeur de sortie | `2026-10-13/README.md`, `2026-10-13/mesures.md`, `THEMES.md` (+1) |
-| 02:36 | `601bcbd2` | Plan, item 6 (dessin H) : les sorties precoces sont mesurees — reponse non, chiffree (16,96 % au mieux a la sortie 8, mais -0,30 point de justesse pour un routeur reel) | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/mesures.md` (+1) |
-| 06:21 | `4a3a517c` | Plan, item 3 : la phrase melangeait deux mesures differentes (2,3 s de passe contre 3,05 s de calcul de la porte) — corrigee, et le recouvrement est dit a faible rendement | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/memoire.md` (+2) |
-| 07:30 | `ac148005` | Quatrieme passe (06h19) apres le pool de tampons : 35 vertes sur 37, memes deux rouges instruits, memes valeurs — et le pool est neutre en temps (mesure a part, pas deduit de la passe) | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-13/README.md` (+3) |
-| 11:27 | `d8397b01` | C8 : courbe de profondeur complete (4/8/12/16 couches : 535 / 268 / 206 / 180) — et je corrige ma propre affirmation : le rapport 8/16 n'est pas constant, il depend du texte (1,17 sur m20, 1,49 sur m32) | `etat-cerveau.md`, `2026-10-13/README.md`, `2026-10-13/distribue.md` (+1) |
+| 02:29 | `3bf7125a` | MADV_POPULATE_READ tranche : 2 121 Mo/s contre 2 077 pour madvise par tranches et 4 603 pour pread par 8 fils — il ne remplace pas les tampons (2,2x sous le disque) | `note-lecteurs-paralleles.md`, `2026-10-13.md`, `2026-10-13_moteur.md` (+3) |
+| 02:33 | `af4fe1ce` | Chargement : je corrige une affirmation d'hier soir — sur 32 jetons l'emprunt des blocs Q4_K est 0,63 % MOINS precis (33,9093 contre 33,6967), pas plus fidèle ; et la decision est chiffree (0,63 % contre 5,5 s par passe) | `2026-10-13.md`, `2026-10-13_portes.md`, `rapport-chargement-paresseux.md` |
+| 02:34 | `e1e55caa` | Dessin H : les sorties precoces mesurees (8 et 4) — le produit theorique monte a 16,96 % mais le routeur REEL y perd 0,30 point ; le facteur limitant est bien la qualite du chemin court (N4), pas la profondeur de sortie | `2026-10-13.md`, `2026-10-13_mesures.md`, `THEMES.md` (+1) |
+| 02:36 | `601bcbd2` | Plan, item 6 (dessin H) : les sorties precoces sont mesurees — reponse non, chiffree (16,96 % au mieux a la sortie 8, mais -0,30 point de justesse pour un routeur reel) | `etat-cerveau.md`, `2026-10-13.md`, `2026-10-13_mesures.md` (+1) |
+| 06:21 | `4a3a517c` | Plan, item 3 : la phrase melangeait deux mesures differentes (2,3 s de passe contre 3,05 s de calcul de la porte) — corrigee, et le recouvrement est dit a faible rendement | `etat-cerveau.md`, `2026-10-13.md`, `2026-10-13_memoire.md` (+2) |
+| 07:30 | `ac148005` | Quatrieme passe (06h19) apres le pool de tampons : 35 vertes sur 37, memes deux rouges instruits, memes valeurs — et le pool est neutre en temps (mesure a part, pas deduit de la passe) | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-13.md` (+3) |
+| 11:27 | `d8397b01` | C8 : courbe de profondeur complete (4/8/12/16 couches : 535 / 268 / 206 / 180) — et je corrige ma propre affirmation : le rapport 8/16 n'est pas constant, il depend du texte (1,17 sur m20, 1,49 sur m32) | `etat-cerveau.md`, `2026-10-13.md`, `2026-10-13_distribue.md` (+1) |
 
 ## Chiffres du jour
 
@@ -24,11 +24,11 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-c8-echelle.md](../reports/rapport-c8-echelle.md)
-- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
-- [reports/rapport-design-H-sorties-precoces.md](../reports/rapport-design-H-sorties-precoces.md)
-- [reports/rapport-passe-complete-13-octobre.md](../reports/rapport-passe-complete-13-octobre.md)
-- [reports/rapport-s4-prechargement-moteur.md](../reports/rapport-s4-prechargement-moteur.md)
+- [reports/rapport-c8-echelle.md](../../reports/rapport-c8-echelle.md)
+- [reports/rapport-chargement-paresseux.md](../../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-design-H-sorties-precoces.md](../../reports/rapport-design-H-sorties-precoces.md)
+- [reports/rapport-passe-complete-13-octobre.md](../../reports/rapport-passe-complete-13-octobre.md)
+- [reports/rapport-s4-prechargement-moteur.md](../../reports/rapport-s4-prechargement-moteur.md)
 
 <!-- notes -->
 

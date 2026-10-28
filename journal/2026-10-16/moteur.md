@@ -2,18 +2,18 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 03:05 | `74912961` | mRoPE, pas 3 : la rotation est ECRITE ET TESTEE (appliquer_mrope) — cinq essais verts, dont le CONTROLE CROISE : positions egales => exactement la rotation 1-D du moteur, contre des valeurs calculees en PYTHON | `en-cours.md`, `mrope.rs`, `2026-10-16/README.md` (+2) |
-| 03:08 | `e4cbb887` | mRoPE : le GGUF de Qwen2-VL-2B NE DECLARE RIEN de sa rotation (mrope, rope_scaling, rope_theta absents) alors que le config.json de la reference declare mrope_section [16,24,24] — le moteur applique donc une RoPE 1-D EN SILENCE | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/portes.md` (+1) |
+| 03:05 | `74912961` | mRoPE, pas 3 : la rotation est ECRITE ET TESTEE (appliquer_mrope) — cinq essais verts, dont le CONTROLE CROISE : positions egales => exactement la rotation 1-D du moteur, contre des valeurs calculees en PYTHON | `en-cours.md`, `mrope.rs`, `2026-10-16.md` (+2) |
+| 03:08 | `e4cbb887` | mRoPE : le GGUF de Qwen2-VL-2B NE DECLARE RIEN de sa rotation (mrope, rope_scaling, rope_theta absents) alors que le config.json de la reference declare mrope_section [16,24,24] — le moteur applique donc une RoPE 1-D EN SILENCE | `en-cours.md`, `2026-10-16.md`, `2026-10-16_portes.md` (+1) |
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-vision-qwen2vl.md](../reports/rapport-vision-qwen2vl.md)
+- [reports/rapport-vision-qwen2vl.md](../../reports/rapport-vision-qwen2vl.md)
 
 <!-- notes -->
 

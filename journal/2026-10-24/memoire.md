@@ -2,7 +2,7 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (7)
 
@@ -10,11 +10,11 @@
 |---|---|---|---|
 | 08:03 | `ff6ffcce` | A2.5 MESURE — LE TOP-K GPU : le noyau fusionne (1 lancement) gagne jusqu'a ~64 k cles (x1,1 a x1,9), la chaine separee au-dela (x1,43 a 1 M) ; le croisement 65 k-131 k et le seuil SEUIL_NOYAU4=131072 sont mesures, conforme a 9,7e-7 a 1 M. La fusion complete la chaine, elle ne la remplace pas | `en-cours.md`, `plan-gpu-topk.md`, `roadmap.md` (+5) |
 | 08:09 | `5efbfd4f` | A4.3 — LA PORTE DU DIFF PAR COUCHE : deux executions identiques donnent un flux identique (reproductibilite), le KV 8 bits donne une divergence NOMMEE (couche 1, jeton 1, 857 neurones, 9,3e-5), et le contrat est verifie ; diff_flux.py lit la v2 (indices par ecarts, echappement 255) — il ne lisait que la v1 et se desalignait | `portes.md`, `en-cours.md`, `roadmap.md` (+7) |
-| 10:24 | `7630800e` | DOC — la page vivante corrige une phrase perimee (« le 1,5 B bat le 14 B », d'avant la mesure a profondeur fixe) et consolide le moteur : A4.3, A5.3, A2.6 (choisir, 4 tests), A6.1 et A6.3 ; a profondeur egale le 32 B est le meilleur, le 3 B le moins lisible | `en-cours.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+3) |
-| 12:41 | `0735519e` | PORTES — LA PASSE COMPLETE DU 24/10 : 47 portes, 45 vertes, 2 rouges (les deux structurels connus : porte-indice 827 s, porte-melange 104 s), 1 h 48 min. La 47e porte (porte-diff-couche) est VERTE en 18 s : le contrat de flux tient. Aucun rouge nouveau apres une journee ou placement.rs, diff_flux.py v2, model.rs (tete revertée) et la nouvelle porte ont ete ecrits | `references-non-regression.md`, `2026-10-24/README.md`, `2026-10-24/portes.md` (+1) |
-| 18:46 | `4c5429dc` | PORTES — LA PASSE DE CONTROLE DU 24/10 (SOIR) : 47 portes, 45 vertes, 2 rouges (les memes structurelles : porte-indice 846 s, porte-melange 103 s), 1 h 47 min. AUCUN rouge nouveau apres une journee de changements (le KV opt-in, la regle place+perte, les tests, le chapitre 08, la navigation par fichiers) et TOUTES les references sont stables : porte-flux 60,8135 ; porte-pont +2,81/+25,35 ; porte-coupe +0,52-17,09 ; porte-gain 29,0206->1297,5437 ; porte-topologie 42,5477 ; porte-greffe branchee | `references-non-regression.md`, `2026-10-24/README.md`, `2026-10-24/portes.md` (+2) |
-| 20:51 | `00e73dfe` | PORTES — LA PASSE DU 24/10 A 19 H 04 : 47 portes, 44 vertes, 3 rouges, 1 h 47 min. Les deux structurels (porte-indice 857 s, porte-melange 105 s) + porte-tableaux en FAUX POSITIF : il a lu docs/roadmap.md:107 (5 cellules) DEUX MINUTES AVANT le correctif 58db87d5 ; relance seul, il passe (583 fichiers, 1 105 liens). AUCUN rouge nouveau reel ; toutes les references stables | `references-non-regression.md`, `2026-10-24/README.md`, `2026-10-24/distribue.md` |
-| 23:22 | `72e5ec41` | PORTES — LA PASSE DE NUIT DU 24/10 : 47 portes, 45 vertes, 2 rouges, 1 h 47 min. Les deux rouges sont les seuls structurels (porte-indice 860 s, porte-melange 104 s), AUCUN rouge nouveau apres le LoRA (le float32, les trois flags) et le chapitre 08. Toutes les references stables (porte-flux 60,8135, porte-pont +2,81/+25,35, porte-coupe +0,52-17,09, porte-gain 29,0206->1297,5437, porte-topologie 42,5477, porte-reparti-moteur 0,0000 %). C'est la TROISIEME passe du 24/10, toutes a 45/2 | `references-non-regression.md`, `2026-10-24/README.md`, `2026-10-24/modele.md` (+1) |
+| 10:24 | `7630800e` | DOC — la page vivante corrige une phrase perimee (« le 1,5 B bat le 14 B », d'avant la mesure a profondeur fixe) et consolide le moteur : A4.3, A5.3, A2.6 (choisir, 4 tests), A6.1 et A6.3 ; a profondeur egale le 32 B est le meilleur, le 3 B le moins lisible | `en-cours.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+3) |
+| 12:41 | `0735519e` | PORTES — LA PASSE COMPLETE DU 24/10 : 47 portes, 45 vertes, 2 rouges (les deux structurels connus : porte-indice 827 s, porte-melange 104 s), 1 h 48 min. La 47e porte (porte-diff-couche) est VERTE en 18 s : le contrat de flux tient. Aucun rouge nouveau apres une journee ou placement.rs, diff_flux.py v2, model.rs (tete revertée) et la nouvelle porte ont ete ecrits | `references-non-regression.md`, `2026-10-24.md`, `2026-10-24_portes.md` (+1) |
+| 18:46 | `4c5429dc` | PORTES — LA PASSE DE CONTROLE DU 24/10 (SOIR) : 47 portes, 45 vertes, 2 rouges (les memes structurelles : porte-indice 846 s, porte-melange 103 s), 1 h 47 min. AUCUN rouge nouveau apres une journee de changements (le KV opt-in, la regle place+perte, les tests, le chapitre 08, la navigation par fichiers) et TOUTES les references sont stables : porte-flux 60,8135 ; porte-pont +2,81/+25,35 ; porte-coupe +0,52-17,09 ; porte-gain 29,0206->1297,5437 ; porte-topologie 42,5477 ; porte-greffe branchee | `references-non-regression.md`, `2026-10-24.md`, `2026-10-24_portes.md` (+2) |
+| 20:51 | `00e73dfe` | PORTES — LA PASSE DU 24/10 A 19 H 04 : 47 portes, 44 vertes, 3 rouges, 1 h 47 min. Les deux structurels (porte-indice 857 s, porte-melange 105 s) + porte-tableaux en FAUX POSITIF : il a lu docs/roadmap.md:107 (5 cellules) DEUX MINUTES AVANT le correctif 58db87d5 ; relance seul, il passe (583 fichiers, 1 105 liens). AUCUN rouge nouveau reel ; toutes les references stables | `references-non-regression.md`, `2026-10-24.md`, `2026-10-24_distribue.md` |
+| 23:22 | `72e5ec41` | PORTES — LA PASSE DE NUIT DU 24/10 : 47 portes, 45 vertes, 2 rouges, 1 h 47 min. Les deux rouges sont les seuls structurels (porte-indice 860 s, porte-melange 104 s), AUCUN rouge nouveau apres le LoRA (le float32, les trois flags) et le chapitre 08. Toutes les references stables (porte-flux 60,8135, porte-pont +2,81/+25,35, porte-coupe +0,52-17,09, porte-gain 29,0206->1297,5437, porte-topologie 42,5477, porte-reparti-moteur 0,0000 %). C'est la TROISIEME passe du 24/10, toutes a 45/2 | `references-non-regression.md`, `2026-10-24.md`, `2026-10-24_modele.md` (+1) |
 
 ## Chiffres du jour
 
@@ -24,9 +24,9 @@
 
 ## Mesures et rapports touchés
 
-- [reports/README.md](../reports/README.md)
-- [reports/rapport-gpu-topk-tout.md](../reports/rapport-gpu-topk-tout.md)
-- [reports/rapport-passe-complete-portes.md](../reports/rapport-passe-complete-portes.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-gpu-topk-tout.md](../../reports/rapport-gpu-topk-tout.md)
+- [reports/rapport-passe-complete-portes.md](../../reports/rapport-passe-complete-portes.md)
 
 <!-- notes -->
 

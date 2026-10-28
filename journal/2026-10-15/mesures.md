@@ -2,28 +2,28 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:05 | `bf6f86ba` | Deux nuits, deux experiences : la premiere garde son gain (-7,85 % sur m32), la seconde n'ajoute presque rien (-0,30 %) — et rien n'est oublie | `etat-cerveau.md`, `2026-10-14/README.md`, `2026-10-15/README.md` (+6) |
-| 01:46 | `b4a31314` | La PROXIMITE temporelle du rejeu ne compte pas non plus : rejouer les vingt morceaux qui precedent immediatement le texte mesure (m12..m31 contre m32) donne -10,71 % contre -9,98 % pour les vingt premiers — 0,7 point, dans le bruit | `2026-10-15/README.md`, `2026-10-15/attention.md`, `THEMES.md` (+1) |
-| 02:29 | `81808b32` | L'hypothese « corpus_en est heterogene » est VERIFIEE : dispersion des morceaux x2,9 (CV 75,4 % contre 26,1 %, max/min 13,5 contre 3,5) | `2026-10-15/README.md`, `2026-10-15/portes.md`, `README.md` (+2) |
-| 03:36 | `bc195566` | Mon propre critere (choisir un rejeu HOMOGENE) est CONTREDIT par le test : le lot disperse transfere autant (-0,95 % contre -0,82 %), et les deux effets sont dans le bruit | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/portes.md` (+1) |
-| 04:29 | `15eb6b33` | Deux tentatives pour combler le facteur 1,5 du decodage speculatif, deux echecs : T=2 fait TOMBER l'accord de 51,0 % a 22,1 % (et T=4 diverge), le rang 4 (qui gagne 2,35 points en perplexite) perd 3,7 points d'accord | `2026-10-15/README.md`, `2026-10-15/portes.md`, `rapport-speculatif-reflexe.md` |
-| 05:50 | `9a899131` | Passe a 44 portes : 41 vertes, la 44e porte (speculatif) verte du premier coup — et le troisieme rouge etait une INSTABILITE de mesure, corrigee en renforcant la mesure (3 repetitions au lieu de 2) | `references-non-regression.md`, `2026-10-15/README.md`, `2026-10-15/docs.md` (+3) |
-| 05:55 | `2ca33663` | Le PREMIER critere de selection qui departage : rejouer les morceaux REPETITIFS — -14,5 % contre -10,9 % sur m20, a trois graines (dispersion de graine 1,3 point a l'interieur de chaque bras) | `2026-10-15/README.md`, `2026-10-15/mesures.md`, `rapport-sommeil-selection.md` |
-| 05:59 | `74715f9d` | La courbe « diversite du lot -> transfert » : un SEUIL, pas un gradient — le lot le plus VARIE est le pire (-7,85 % sur m20 contre -11 a -14 %), mais entre Q1 et Q4 il n'y a aucun ordre | `2026-10-15/README.md`, `2026-10-15/mesures.md`, `THEMES.md` (+1) |
-| 06:10 | `f2267a18` | Le defaut de reproductibilite est CORRIGE : la graine etait posee APRES le tirage des LoRA — deux executions identiques rendent maintenant le meme nombre AU BIT PRES | `2026-10-15/README.md`, `2026-10-15/outils.md`, `README.md` (+5) |
-| 06:24 | `a3325093` | Confirmations exactes : 12 et 24 epoques rendent LE MEME chiffre (6,7487 — zero point d'ecart, pas +0,05), et l'habituation est reproduite au chiffre pres (+0,921 et +0,817) | `2026-10-15/README.md`, `2026-10-15/portes.md`, `THEMES.md` (+2) |
-| 07:55 | `67399ba3` | Le critere de diversite sur un SECOND corpus : la direction tient (3 comparaisons sur 4), l'utilite non — sur corpus_en AUCUN lot ne transfere, meme le plus repetitif (0,345) | `2026-10-15/README.md`, `2026-10-15/outils.md`, `rapport-sommeil-selection.md` |
-| 09:00 | `eed3b2c7` | La condition de rentabilite du decodage speculatif est EXACTEMENT p > c (l'accord doit battre le cout du brouillon, et K disparait) — les deux brouillons mesures sont JUSTE dessous | `2026-10-15/README.md`, `2026-10-15/memoire.md`, `THEMES.md` (+2) |
-| 11:07 | `bb7c26c6` | Vision : l'hypothese « ordre des patchs » est ELIMINEE (l'equivalence lecture/par-blocs est confirmee, la comparaison ne bouge pas) — trois suspects precis restent | `2026-10-15/README.md`, `2026-10-15/portes.md`, `rapport-vision-qwen2vl.md` (+1) |
-| 11:19 | `8fa997ff` | La 45e porte : la VISION entre dans la passe — elle verifie le refus et les formes, MESURE la tour sans la juger, et dit ce qu'elle n'a pas pu comparer | `references-non-regression.md`, `main.rs`, `2026-10-15/README.md` (+3) |
-| 11:30 | `cd6211b9` | Journal : la 45e porte (vision), le resume corrige qui annoncait plus qu'il n'avait mesure, et la lecon sur les references ecrites d'apres les memes hypotheses | `2026-10-15/README.md`, `2026-10-15/modele.md` |
-| 22:12 | `890b6663` | CONTRE-EPREUVE de l'etalement : trois graines (il gagne les trois, mais de 1,8 point = le bruit) et un second volume (a 10 morceaux il PERD) — le critere n'est PAS etabli, et « une graine ne mesure pas un critere » | `en-cours.md`, `etat-cerveau.md`, `2026-10-15/README.md` (+3) |
+| 00:05 | `bf6f86ba` | Deux nuits, deux experiences : la premiere garde son gain (-7,85 % sur m32), la seconde n'ajoute presque rien (-0,30 %) — et rien n'est oublie | `etat-cerveau.md`, `2026-10-14.md`, `2026-10-15.md` (+6) |
+| 01:46 | `b4a31314` | La PROXIMITE temporelle du rejeu ne compte pas non plus : rejouer les vingt morceaux qui precedent immediatement le texte mesure (m12..m31 contre m32) donne -10,71 % contre -9,98 % pour les vingt premiers — 0,7 point, dans le bruit | `2026-10-15.md`, `2026-10-15_attention.md`, `THEMES.md` (+1) |
+| 02:29 | `81808b32` | L'hypothese « corpus_en est heterogene » est VERIFIEE : dispersion des morceaux x2,9 (CV 75,4 % contre 26,1 %, max/min 13,5 contre 3,5) | `2026-10-15.md`, `2026-10-15_portes.md`, `README.md` (+2) |
+| 03:36 | `bc195566` | Mon propre critere (choisir un rejeu HOMOGENE) est CONTREDIT par le test : le lot disperse transfere autant (-0,95 % contre -0,82 %), et les deux effets sont dans le bruit | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_portes.md` (+1) |
+| 04:29 | `15eb6b33` | Deux tentatives pour combler le facteur 1,5 du decodage speculatif, deux echecs : T=2 fait TOMBER l'accord de 51,0 % a 22,1 % (et T=4 diverge), le rang 4 (qui gagne 2,35 points en perplexite) perd 3,7 points d'accord | `2026-10-15.md`, `2026-10-15_portes.md`, `rapport-speculatif-reflexe.md` |
+| 05:50 | `9a899131` | Passe a 44 portes : 41 vertes, la 44e porte (speculatif) verte du premier coup — et le troisieme rouge etait une INSTABILITE de mesure, corrigee en renforcant la mesure (3 repetitions au lieu de 2) | `references-non-regression.md`, `2026-10-15.md`, `2026-10-15_docs.md` (+3) |
+| 05:55 | `2ca33663` | Le PREMIER critere de selection qui departage : rejouer les morceaux REPETITIFS — -14,5 % contre -10,9 % sur m20, a trois graines (dispersion de graine 1,3 point a l'interieur de chaque bras) | `2026-10-15.md`, `2026-10-15_mesures.md`, `rapport-sommeil-selection.md` |
+| 05:59 | `74715f9d` | La courbe « diversite du lot -> transfert » : un SEUIL, pas un gradient — le lot le plus VARIE est le pire (-7,85 % sur m20 contre -11 a -14 %), mais entre Q1 et Q4 il n'y a aucun ordre | `2026-10-15.md`, `2026-10-15_mesures.md`, `THEMES.md` (+1) |
+| 06:10 | `f2267a18` | Le defaut de reproductibilite est CORRIGE : la graine etait posee APRES le tirage des LoRA — deux executions identiques rendent maintenant le meme nombre AU BIT PRES | `2026-10-15.md`, `2026-10-15_outils.md`, `README.md` (+5) |
+| 06:24 | `a3325093` | Confirmations exactes : 12 et 24 epoques rendent LE MEME chiffre (6,7487 — zero point d'ecart, pas +0,05), et l'habituation est reproduite au chiffre pres (+0,921 et +0,817) | `2026-10-15.md`, `2026-10-15_portes.md`, `THEMES.md` (+2) |
+| 07:55 | `67399ba3` | Le critere de diversite sur un SECOND corpus : la direction tient (3 comparaisons sur 4), l'utilite non — sur corpus_en AUCUN lot ne transfere, meme le plus repetitif (0,345) | `2026-10-15.md`, `2026-10-15_outils.md`, `rapport-sommeil-selection.md` |
+| 09:00 | `eed3b2c7` | La condition de rentabilite du decodage speculatif est EXACTEMENT p > c (l'accord doit battre le cout du brouillon, et K disparait) — les deux brouillons mesures sont JUSTE dessous | `2026-10-15.md`, `2026-10-15_memoire.md`, `THEMES.md` (+2) |
+| 11:07 | `bb7c26c6` | Vision : l'hypothese « ordre des patchs » est ELIMINEE (l'equivalence lecture/par-blocs est confirmee, la comparaison ne bouge pas) — trois suspects precis restent | `2026-10-15.md`, `2026-10-15_portes.md`, `rapport-vision-qwen2vl.md` (+1) |
+| 11:19 | `8fa997ff` | La 45e porte : la VISION entre dans la passe — elle verifie le refus et les formes, MESURE la tour sans la juger, et dit ce qu'elle n'a pas pu comparer | `references-non-regression.md`, `main.rs`, `2026-10-15.md` (+3) |
+| 11:30 | `cd6211b9` | Journal : la 45e porte (vision), le resume corrige qui annoncait plus qu'il n'avait mesure, et la lecon sur les references ecrites d'apres les memes hypotheses | `2026-10-15.md`, `2026-10-15_modele.md` |
+| 22:12 | `890b6663` | CONTRE-EPREUVE de l'etalement : trois graines (il gagne les trois, mais de 1,8 point = le bruit) et un second volume (a 10 morceaux il PERD) — le critere n'est PAS etabli, et « une graine ne mesure pas un critere » | `en-cours.md`, `etat-cerveau.md`, `2026-10-15.md` (+3) |
 
 ## Chiffres du jour
 
@@ -33,14 +33,14 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-consolidation-balayage.md](../reports/rapport-consolidation-balayage.md)
-- [reports/rapport-consolidation-structure-partagee.md](../reports/rapport-consolidation-structure-partagee.md)
-- [reports/rapport-habituation.md](../reports/rapport-habituation.md)
-- [reports/rapport-sommeil-budget.md](../reports/rapport-sommeil-budget.md)
-- [reports/rapport-sommeil-deux-nuits.md](../reports/rapport-sommeil-deux-nuits.md)
-- [reports/rapport-sommeil-selection.md](../reports/rapport-sommeil-selection.md)
-- [reports/rapport-speculatif-reflexe.md](../reports/rapport-speculatif-reflexe.md)
-- [reports/rapport-vision-qwen2vl.md](../reports/rapport-vision-qwen2vl.md)
+- [reports/rapport-consolidation-balayage.md](../../reports/rapport-consolidation-balayage.md)
+- [reports/rapport-consolidation-structure-partagee.md](../../reports/rapport-consolidation-structure-partagee.md)
+- [reports/rapport-habituation.md](../../reports/rapport-habituation.md)
+- [reports/rapport-sommeil-budget.md](../../reports/rapport-sommeil-budget.md)
+- [reports/rapport-sommeil-deux-nuits.md](../../reports/rapport-sommeil-deux-nuits.md)
+- [reports/rapport-sommeil-selection.md](../../reports/rapport-sommeil-selection.md)
+- [reports/rapport-speculatif-reflexe.md](../../reports/rapport-speculatif-reflexe.md)
+- [reports/rapport-vision-qwen2vl.md](../../reports/rapport-vision-qwen2vl.md)
 
 <!-- notes -->
 

@@ -2,22 +2,22 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-24/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 10:22 | `63ee9413` | A2.6 — LA REGLE DE PLACEMENT DEVIENT GENERALE : placement::choisir(octets_par_jeton, octets_total, libre_vram, libre_ram) parcourt les supports par cout croissant et rend le premier qui a la place (le gros KV en RAM, le petit en VRAM, le trop-gros en NVMe). Quatre tests verts, build vert ; les experts et la tete l'utiliseront par la meme fonction | `roadmap.md`, `placement.rs`, `2026-10-22/moteur.md` (+4) |
-| 11:14 | `4760fc65` | DOC — LE COMPTE DES VERIFICATIONS PASSE A 47 : l'index de la synthese annoncait « les 46 verifications » alors que la porte du diff par couche est la 47e ; les « 46 portes » des passes datees restent (ce sont des passes historiques) | `index.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
-| 11:31 | `dd9a413b` | DOC — LE RAPPORT DE PASSE COMPLETE PASSE A 47 PORTES : il datait du 2026-10-10 (22 portes) ; il annonce la suite des passes jusqu'a la 47e (porte-diff-couche, le 24/10), et la section 2 quinquies attend le verdict — elle ne sera pas ecrite d'avance | `2026-10-24/README.md`, `2026-10-24/docs.md`, `rapport-passe-complete-portes.md` |
-| 12:43 | `ea70c7ed` | DOC — LA PASSE COMPLETE INSCRITE AU BILAN : la page vivante porte le verdict du 24/10 — 47 portes, 45 vertes, 2 rouges (les structurels), 1 h 48 min ; la 47e porte (porte-diff-couche) est verte en 18 s, et rien de ce qui a ete ecrit aujourd'hui n'a casse une porte | `en-cours.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+2) |
-| 14:53 | `7cef4485` | DOC — LA SONDE SATURE DES LE 1,5 B : la ligne B2.8 et le journal portent la saturation (0,7256 au pic du 1,5 B, 0,7269 au 3 B, 0,7189 au 14 B : dix fois la taille pour +0,001). Le pont monte encore (0,826 -> 0,857 -> 0,870) mais sature a 0,87 | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+2) |
-| 15:06 | `7525fd80` | DOC — LA JOURNEE ENTRE AU JOURNAL DES DECISIONS : la roadmap porte la ligne du 24/10 — la passe 45/47, les trois courbes, la sonde qui sature des le 1,5 B, les deux blocages VRAM et le corpus manquant. Ce qui reste est nomme, pas oublie | `roadmap.md`, `2026-10-22/moteur.md`, `2026-10-24/README.md` (+1) |
-| 15:08 | `6bdc3fec` | DOC — LA PAGE VIVANTE MISE A L'HEURE : sa date etait bonne (2026-10-24) mais son heure etait restee a 08 h 24 ; elle est a 15 h 00. La porte ne verifie que la date — l'heure, c'est pour le lecteur | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/portes.md` |
-| 16:26 | `f251e786` | B4.5 ET LA CLOTURE DE B4 — LA COMPOSITION S'APPREND, FAIBLEMENT : le triple (original, nie, double nie) lit le double a 0,6174 (controle 0,4598) — +0,117 sur le hasard, contre 0,8103 pour l'original. Bilan de B4 : les operations sont des GEOMETRIES APPRISES, locales, non compositionnelles gratuitement — l'etat porte les operations, mais il ne les calcule pas. La ligne est close ; le plan reprend a A8.3 puis A7.3 | `en-cours.md`, `roadmap.md`, `2026-10-24/README.md` (+6) |
+| 10:22 | `63ee9413` | A2.6 — LA REGLE DE PLACEMENT DEVIENT GENERALE : placement::choisir(octets_par_jeton, octets_total, libre_vram, libre_ram) parcourt les supports par cout croissant et rend le premier qui a la place (le gros KV en RAM, le petit en VRAM, le trop-gros en NVMe). Quatre tests verts, build vert ; les experts et la tete l'utiliseront par la meme fonction | `roadmap.md`, `placement.rs`, `2026-10-22_moteur.md` (+4) |
+| 11:14 | `4760fc65` | DOC — LE COMPTE DES VERIFICATIONS PASSE A 47 : l'index de la synthese annoncait « les 46 verifications » alors que la porte du diff par couche est la 47e ; les « 46 portes » des passes datees restent (ce sont des passes historiques) | `index.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+1) |
+| 11:31 | `dd9a413b` | DOC — LE RAPPORT DE PASSE COMPLETE PASSE A 47 PORTES : il datait du 2026-10-10 (22 portes) ; il annonce la suite des passes jusqu'a la 47e (porte-diff-couche, le 24/10), et la section 2 quinquies attend le verdict — elle ne sera pas ecrite d'avance | `2026-10-24.md`, `2026-10-24_docs.md`, `rapport-passe-complete-portes.md` |
+| 12:43 | `ea70c7ed` | DOC — LA PASSE COMPLETE INSCRITE AU BILAN : la page vivante porte le verdict du 24/10 — 47 portes, 45 vertes, 2 rouges (les structurels), 1 h 48 min ; la 47e porte (porte-diff-couche) est verte en 18 s, et rien de ce qui a ete ecrit aujourd'hui n'a casse une porte | `en-cours.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+2) |
+| 14:53 | `7cef4485` | DOC — LA SONDE SATURE DES LE 1,5 B : la ligne B2.8 et le journal portent la saturation (0,7256 au pic du 1,5 B, 0,7269 au 3 B, 0,7189 au 14 B : dix fois la taille pour +0,001). Le pont monte encore (0,826 -> 0,857 -> 0,870) mais sature a 0,87 | `roadmap.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+2) |
+| 15:06 | `7525fd80` | DOC — LA JOURNEE ENTRE AU JOURNAL DES DECISIONS : la roadmap porte la ligne du 24/10 — la passe 45/47, les trois courbes, la sonde qui sature des le 1,5 B, les deux blocages VRAM et le corpus manquant. Ce qui reste est nomme, pas oublie | `roadmap.md`, `2026-10-22_moteur.md`, `2026-10-24.md` (+1) |
+| 15:08 | `6bdc3fec` | DOC — LA PAGE VIVANTE MISE A L'HEURE : sa date etait bonne (2026-10-24) mais son heure etait restee a 08 h 24 ; elle est a 15 h 00. La porte ne verifie que la date — l'heure, c'est pour le lecteur | `en-cours.md`, `2026-10-24.md`, `2026-10-24_portes.md` |
+| 16:26 | `f251e786` | B4.5 ET LA CLOTURE DE B4 — LA COMPOSITION S'APPREND, FAIBLEMENT : le triple (original, nie, double nie) lit le double a 0,6174 (controle 0,4598) — +0,117 sur le hasard, contre 0,8103 pour l'original. Bilan de B4 : les operations sont des GEOMETRIES APPRISES, locales, non compositionnelles gratuitement — l'etat porte les operations, mais il ne les calcule pas. La ligne est close ; le plan reprend a A8.3 puis A7.3 | `en-cours.md`, `roadmap.md`, `2026-10-24.md` (+6) |
 | 16:57 | `5c69a33f` | A8.3 — LA REGLE DEVIENT OPT-IN : le passage du defaut a la regle place+perte a DECALE les portes (porte-coupe est passee de +0,52-17,09 % a 5,9-11,6 % et a echoue). La regle s'active par DRAVE_PERTE_MAX ; sans le drapeau, le defaut reste le f32. Un changement de defaut qui deplace les chiffres des portes ne se fait pas sans les epingler d'abord — la regle du depot a joue. La ligne A8.3 dit opt-in, la fiche explique le pourquoi | `en-cours.md`, `roadmap.md`, `model.rs` (+4) |
-| 23:38 | `595284d4` | DOC — LA PAGE VIVANTE COMPTE JUSTE : le tableau disait 156 fiches et 228 JSON ; le disque en a 160 et 230 (les fiches du jour : la grappe deportee, la regle place+perte, l'operateur LoRA, la passe de nuit). Les deux totaux sont ceux de ls | `en-cours.md`, `2026-10-24/README.md`, `2026-10-24/mesures.md` (+1) |
+| 23:38 | `595284d4` | DOC — LA PAGE VIVANTE COMPTE JUSTE : le tableau disait 156 fiches et 228 JSON ; le disque en a 160 et 230 (les fiches du jour : la grappe deportee, la regle place+perte, l'operateur LoRA, la passe de nuit). Les deux totaux sont ceux de ls | `en-cours.md`, `2026-10-24.md`, `2026-10-24_mesures.md` (+1) |
 
 ## Chiffres du jour
 
@@ -27,10 +27,10 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-operateur-negation.md](../reports/rapport-operateur-negation.md)
-- [reports/rapport-passe-complete-portes.md](../reports/rapport-passe-complete-portes.md)
-- [reports/rapport-placement-kv-8k.md](../reports/rapport-placement-kv-8k.md)
-- [reports/rapport-regle-placement-perte.md](../reports/rapport-regle-placement-perte.md)
+- [reports/rapport-operateur-negation.md](../../reports/rapport-operateur-negation.md)
+- [reports/rapport-passe-complete-portes.md](../../reports/rapport-passe-complete-portes.md)
+- [reports/rapport-placement-kv-8k.md](../../reports/rapport-placement-kv-8k.md)
+- [reports/rapport-regle-placement-perte.md](../../reports/rapport-regle-placement-perte.md)
 
 <!-- notes -->
 

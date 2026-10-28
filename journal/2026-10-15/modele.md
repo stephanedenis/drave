@@ -2,27 +2,28 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 06:00 | `7857c789` | Carte corrigee (un SEUIL, pas un tri : « pas sur du bruit ») et journal du 15/10 complete des rounds 8 a 12 (E5 bis, les deux echecs du facteur 1,5, le speculatif, le balayage, le seuil de diversite, la porte instable renforcee) | `2026-10-15/README.md`, `2026-10-15/mesures.md`, `THEMES.md` |
-| 09:20 | `897b0bb8` | La VISION n'est plus bloquee : modele telecharge (Qwen2-VL-2B + mmproj, 520 tenseurs), la tour ENTIERE tourne dans le moteur — et elle A TORT (norme 862,9 contre 116 651,3 pour la reference, facteur 135) | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+3) |
-| 09:38 | `b7d4956c` | Journal et etat : la vision debloquee (modele telecharge, tour entiere, quatre bugs d'architecture corriges dont les biais des LayerNorm) et la lecon sur les references | `etat-cerveau.md`, `2026-10-15/README.md`, `2026-10-15/moteur.md` (+1) |
-| 11:20 | `35757063` | Carte : la vision a sa porte (45e) et son etat exact — modele et tour presents, tour mesuree non verifiee, trois suspects nommes | `cerveau-facultes.md`, `2026-10-15/README.md`, `2026-10-15/mesures.md` |
-| 13:30 | `a9d6cc3e` | Les 32 couches a poids egaux : les HUIT PREMIERES SONT EXACTES (1e-5), puis la tour EXPLOSE — et c'est le modele, pas le code | `main.rs`, `2026-10-15/README.md`, `2026-10-15/docs.md` (+2) |
-| 18:31 | `95a76b1f` | Journal et etat du cerveau : l'apres-midi de vision (modele debloque, cinq bugs corriges, tour verifiee en isolation a 7,58e-06, projecteur a 0,71 %, et deux lecons pour moi) | `etat-cerveau.md`, `2026-10-15/README.md`, `2026-10-15/portes.md` (+1) |
-| 20:13 | `ff385fb9` | Injection : le bloc portait 3584 EN DUR (la dimension d'un AUTRE modele) — corrige ; le splice fonctionne ; la comparaison ne conclut pas (et le vrai manque est nomme : le mRoPE du modele de langue) | `en-cours.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 06:00 | `7857c789` | Carte corrigee (un SEUIL, pas un tri : « pas sur du bruit ») et journal du 15/10 complete des rounds 8 a 12 (E5 bis, les deux echecs du facteur 1,5, le speculatif, le balayage, le seuil de diversite, la porte instable renforcee) | `2026-10-15.md`, `2026-10-15_mesures.md`, `THEMES.md` |
+| 09:20 | `897b0bb8` | La VISION n'est plus bloquee : modele telecharge (Qwen2-VL-2B + mmproj, 520 tenseurs), la tour ENTIERE tourne dans le moteur — et elle A TORT (norme 862,9 contre 116 651,3 pour la reference, facteur 135) | `cerveau-facultes.md`, `main.rs`, `2026-10-15.md` (+3) |
+| 09:38 | `b7d4956c` | Journal et etat : la vision debloquee (modele telecharge, tour entiere, quatre bugs d'architecture corriges dont les biais des LayerNorm) et la lecon sur les references | `etat-cerveau.md`, `2026-10-15.md`, `2026-10-15_moteur.md` (+1) |
+| 11:20 | `35757063` | Carte : la vision a sa porte (45e) et son etat exact — modele et tour presents, tour mesuree non verifiee, trois suspects nommes | `cerveau-facultes.md`, `2026-10-15.md`, `2026-10-15_mesures.md` |
+| 13:30 | `a9d6cc3e` | Les 32 couches a poids egaux : les HUIT PREMIERES SONT EXACTES (1e-5), puis la tour EXPLOSE — et c'est le modele, pas le code | `main.rs`, `2026-10-15.md`, `2026-10-15_docs.md` (+2) |
+| 18:31 | `95a76b1f` | Journal et etat du cerveau : l'apres-midi de vision (modele debloque, cinq bugs corriges, tour verifiee en isolation a 7,58e-06, projecteur a 0,71 %, et deux lecons pour moi) | `etat-cerveau.md`, `2026-10-15.md`, `2026-10-15_portes.md` (+1) |
+| 20:13 | `ff385fb9` | Injection : le bloc portait 3584 EN DUR (la dimension d'un AUTRE modele) — corrige ; le splice fonctionne ; la comparaison ne conclut pas (et le vrai manque est nomme : le mRoPE du modele de langue) | `en-cours.md`, `main.rs`, `2026-10-15.md` (+2) |
 | 20:58 | `4785d767` | La 46e porte : l'HOMEOSTASIE (E9) devient un invariant — x0 rend le modele, l'activite croit avec l'amplitude, la domination de x0,6 est reproduite | `cerveau-facultes.md`, `en-cours.md`, `references-non-regression.md` (+4) |
-| 21:19 | `fb6617fa` | E9 se REPLIQUE sur trois volumes de rejeu (3, 10 et 20 morceaux) : a chaque fois x0,6 fait mieux en domaine ET coute moins cher hors domaine — et le benefice GRANDIT avec le rejeu (0,7 point a 3 morceaux, 1,4 point a 20) | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/modele.md` (+2) |
-| 21:25 | `1f43a583` | E9 : par COUCHE ou globalement ? Amortir les couches HAUTES est le meilleur profil (-0,65 % hors domaine contre -0,04 % pour l'inverse) — mais l'ecart est PETIT et l'echelle uniforme reste la meilleure en domaine | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/modele.md` (+1) |
-| 21:27 | `3db187b6` | Journal du 15/10, paragraphes 36 a 41 : E9 (homeostasie synaptique) — defini, mesure, replique sur trois volumes, borne par couche, et garde par une 46e porte | `2026-10-15/README.md`, `2026-10-15/modele.md`, `THEMES.md` |
-| 22:07 | `f6c13a16` | UN CRITERE DE LOT QUI BAT TOUS LES CRITERES DE MORCEAU : l'ETALEMENT des pertes (-10,80 % a volume egal contre -7,21 % pour le hasard) — et il SE COMPOSE avec E9 | `en-cours.md`, `etat-cerveau.md`, `2026-10-15/README.md` (+2) |
-| 22:25 | `5b23115c` | E9 passe la contre-epreuve des GRAINES (contrairement au critere d'etalement, teste le meme soir de la meme facon) : x0,6 gagne m32 ET le hors domaine sur les graines 0, 1 et 2, effet = 5x le bruit | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/mesures.md` (+2) |
-| 22:37 | `e6728c0e` | E9, la REGLE tient sur trois graines : le minimum de perplexite sur un texte NEUTRE tombe sur x0,75 a chaque fois (courbe en U) | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/modele.md` (+1) |
-| 22:38 | `c3a1f677` | E9, la regle : la ligne du modele de base (perplexite neutre 9,6706) — toutes les variantes la battent, et la regle cherche le MEILLEUR point de cette aide, pas le seul | `2026-10-15/README.md`, `2026-10-15/modele.md`, `rapport-e9-homeostasie.md` |
+| 21:19 | `fb6617fa` | E9 se REPLIQUE sur trois volumes de rejeu (3, 10 et 20 morceaux) : a chaque fois x0,6 fait mieux en domaine ET coute moins cher hors domaine — et le benefice GRANDIT avec le rejeu (0,7 point a 3 morceaux, 1,4 point a 20) | `en-cours.md`, `2026-10-15.md`, `2026-10-15_modele.md` (+2) |
+| 21:25 | `1f43a583` | E9 : par COUCHE ou globalement ? Amortir les couches HAUTES est le meilleur profil (-0,65 % hors domaine contre -0,04 % pour l'inverse) — mais l'ecart est PETIT et l'echelle uniforme reste la meilleure en domaine | `en-cours.md`, `2026-10-15.md`, `2026-10-15_modele.md` (+1) |
+| 21:27 | `3db187b6` | Journal du 15/10, paragraphes 36 a 41 : E9 (homeostasie synaptique) — defini, mesure, replique sur trois volumes, borne par couche, et garde par une 46e porte | `2026-10-15.md`, `2026-10-15_modele.md`, `THEMES.md` |
+| 22:07 | `f6c13a16` | UN CRITERE DE LOT QUI BAT TOUS LES CRITERES DE MORCEAU : l'ETALEMENT des pertes (-10,80 % a volume egal contre -7,21 % pour le hasard) — et il SE COMPOSE avec E9 | `en-cours.md`, `etat-cerveau.md`, `2026-10-15.md` (+2) |
+| 22:25 | `5b23115c` | E9 passe la contre-epreuve des GRAINES (contrairement au critere d'etalement, teste le meme soir de la meme facon) : x0,6 gagne m32 ET le hors domaine sur les graines 0, 1 et 2, effet = 5x le bruit | `en-cours.md`, `2026-10-15.md`, `2026-10-15_mesures.md` (+2) |
+| 22:37 | `e6728c0e` | E9, la REGLE tient sur trois graines : le minimum de perplexite sur un texte NEUTRE tombe sur x0,75 a chaque fois (courbe en U) | `en-cours.md`, `2026-10-15.md`, `2026-10-15_modele.md` (+1) |
+| 22:38 | `c3a1f677` | E9, la regle : la ligne du modele de base (perplexite neutre 9,6706) — toutes les variantes la battent, et la regle cherche le MEILLEUR point de cette aide, pas le seul | `2026-10-15.md`, `2026-10-15_modele.md`, `rapport-e9-homeostasie.md` |
+| 22:40 | `73f3c39b` | Etat du cerveau : les questions ouvertes REEcrites (trois des cinq avaient change) — la vision n'est plus « bloquee par un modele absent », elle est verifiee ; le critere de rejeu a un etat exact ; E9 entre dans la liste | `en-cours.md`, `etat-cerveau.md`, `2026-10-15.md` (+2) |
 
 ## Chiffres du jour
 
@@ -32,9 +33,9 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-e9-homeostasie.md](../reports/rapport-e9-homeostasie.md)
-- [reports/rapport-sommeil-selection.md](../reports/rapport-sommeil-selection.md)
-- [reports/rapport-vision-qwen2vl.md](../reports/rapport-vision-qwen2vl.md)
+- [reports/rapport-e9-homeostasie.md](../../reports/rapport-e9-homeostasie.md)
+- [reports/rapport-sommeil-selection.md](../../reports/rapport-sommeil-selection.md)
+- [reports/rapport-vision-qwen2vl.md](../../reports/rapport-vision-qwen2vl.md)
 
 <!-- notes -->
 

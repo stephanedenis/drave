@@ -1,24 +1,30 @@
 # 2026-10-13
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-13/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **0 session(s)** · **9 thème(s)**
+**42 commits** · **0 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| attention | 9 | [2026-10-13/attention.md](attention.md) |
-| distribue | 4 | [2026-10-13/distribue.md](distribue.md) |
-| docs | 3 | [2026-10-13/docs.md](docs.md) |
-| memoire | 2 | [2026-10-13/memoire.md](memoire.md) |
-| mesures | 7 | [2026-10-13/mesures.md](mesures.md) |
-| modele | 5 | [2026-10-13/modele.md](modele.md) |
-| moteur | 5 | [2026-10-13/moteur.md](moteur.md) |
-| outils | 1 | [2026-10-13/outils.md](outils.md) |
-| portes | 5 | [2026-10-13/portes.md](portes.md) |
+| attention | 9 | [attention.md](attention.md) |
+| distribue | 4 | [distribue.md](distribue.md) |
+| docs | 4 | [docs.md](docs.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
+| modele | 5 | [modele.md](modele.md) |
+| moteur | 5 | [moteur.md](moteur.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 5 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -65,6 +71,7 @@
 | 16:22 | `df58cbe2` | Fenetre d'attention : la loi moyennee — a N=4096, N/2 coute +0,9 % (etendue 1,0 pt) et N/4 +4,1 % (1,5 pt), alors qu'a N=2048 le quart allait de +2,8 a +49,2 % : meme la DISPERSION depend de N et du texte |
 | 16:24 | `84bc1b2a` | Journal du 13/10 : la passe a 37/39, la loi moyennee de la fenetre, et deux pieges mesures (--attn-sinks 0 qui n'est pas neutre, et mon propre pkill) |
 | 16:58 | `3d25e12e` | Fenetre : cinq textes a N=4096 au lieu de trois — la moitie des cles coute jusqu'a +3,0 % (pas <=2,1 %), le quart +3,2 a +9,3 % ; je corrige ma propre conclusion du jour (trois textes ne suffisaient pas) |
+| 17:00 | `a1615bda` | Un etat precoce predit un etat profond a R2 0,65 (identite 0,19) — mais les pas elementaires sont MIEUX predits (0,78 et 0,75), donc ~35 % de la variance profonde est CREEE par les couches intermediaires : c'est le dessin B de N4 qu'il faut, pas le A |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,19 +1,26 @@
 # 2026-10-19
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-19/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **0 session(s)** · **4 thème(s)**
+**14 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| docs | 3 | [2026-10-19/docs.md](docs.md) |
-| memoire | 4 | [2026-10-19/memoire.md](memoire.md) |
-| mesures | 5 | [2026-10-19/mesures.md](mesures.md) |
-| modele | 1 | [2026-10-19/modele.md](modele.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 3 | [docs.md](docs.md) |
+| memoire | 4 | [memoire.md](memoire.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -32,6 +39,7 @@
 | 19:37 | `f28465b5` | VOCABULAIRE — « COUCHE » = COUCHE DE NEURONES, « ÉTAGE » = NIVEAU D'ARCHITECTURE : la mission ne dit plus « deux couches » (ambigu) mais « deux étages » ; l'étage 1 est l'entrée-sortie, l'étage 2 la pensée abstraite. La règle est écrite dans le glossaire, AGENTS.md et les documents de tâche ; « couche commune » reste le nom historique, à lire « étage entrée-sortie » |
 | 19:40 | `ceb86b2c` | VOCABULAIRE — la page de généalogie dit « étage entrée-sortie » (nom historique : couche commune) |
 | 19:45 | `651c1764` | VOCABULAIRE — LA REPRÉSENTATION SÉMANTIQUE NEUTRE (RSN) N'EST PAS UN JETON : entre le module pré-linguistique et le module post-linguistique circule une structure multi-niveaux faite d'unités de sens ; le jeton est l'unité technique du tokeniseur. La revue de documentation refuse désormais « jeton sémantique / de sens / neutre ». Et la direction est écrite : à mesure que les modules s'approcheront de grammaires formelles multi-niveaux (compréhension totale), l'unité de mesure doit s'éloigner du jeton vers le constituant grammatical |
+| 19:48 | `4a0e657f` | GLOSSAIRE — l'entrée « Jeton » du § 2 ne duplique plus la convention du § 1 : elle donne le découpage technique et renvoie à « Jeton / RSN », avec l'interdiction explicite |
 
 ## Le récit de la journée (écrit à la main)
 

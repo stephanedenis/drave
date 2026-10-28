@@ -1,25 +1,31 @@
 # 2026-10-16
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-16/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**75 commits** · **0 session(s)** · **10 thème(s)**
+**76 commits** · **0 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 6 | [2026-10-16/apprentissage.md](apprentissage.md) |
-| attention | 4 | [2026-10-16/attention.md](attention.md) |
-| distribue | 3 | [2026-10-16/distribue.md](distribue.md) |
-| docs | 8 | [2026-10-16/docs.md](docs.md) |
-| memoire | 10 | [2026-10-16/memoire.md](memoire.md) |
-| mesures | 13 | [2026-10-16/mesures.md](mesures.md) |
-| modele | 19 | [2026-10-16/modele.md](modele.md) |
-| moteur | 2 | [2026-10-16/moteur.md](moteur.md) |
-| outils | 1 | [2026-10-16/outils.md](outils.md) |
-| portes | 9 | [2026-10-16/portes.md](portes.md) |
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
+| attention | 4 | [attention.md](attention.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
+| docs | 8 | [docs.md](docs.md) |
+| memoire | 10 | [memoire.md](memoire.md) |
+| mesures | 14 | [mesures.md](mesures.md) |
+| modele | 19 | [modele.md](modele.md) |
+| moteur | 2 | [moteur.md](moteur.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 9 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -100,6 +106,7 @@
 | 23:20 | `f76d9ebb` | LA COURBE DE CAPACITE N'EST PAS LISIBLE A BUDGET DE PAS EGAL : le modele dim 512 est sous-entraine (validation 5,05 contre 4,74), son contenu s'effondre (110,2 %) par sous-entrainement et NON par capacite — la question reste ouverte et precisement posee |
 | 23:24 | `25987389` | LA CAMPAGNE DE NUIT EST LANCEE : dim 256 (carte 0, 654 Mio) et dim 512 (carte 1, 1086 Mio), 15000 pas chacune, une evaluation tous les 1000, recette du paragraphe 17 — et un defaut d'outillage corrige en route |
 | 23:25 | `876e15f0` | UTILISATION : les dix outils de la nuit du 16/10 ont leur entree dans docs/utilisation.md (chat, recopie, empreinte, pont abstrait, pensee silencieuse, pas latent, boucle directe, operateur, iterer un bloc, les deux serveurs) — et les quatre options ajoutees a l'entraineur |
+| 23:47 | `c6a10cd7` | LA CAMPAGNE A REPONDU, MAIS LA BORNE EST LE CORPUS : les deux tailles sur-apprennent (val 5,00 -> 6,41 et 5,07 -> 7,51 sur 15000 pas) et, a validation egale (pas 1000), le plus gros n'est pas meilleur (5,07 contre 5,00) — la bonne campagne est sur corpus_en (96 Mo) |
 
 ## Le récit de la journée (écrit à la main)
 

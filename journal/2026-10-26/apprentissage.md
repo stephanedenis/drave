@@ -2,7 +2,7 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-26/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (3)
 
@@ -20,9 +20,9 @@
 
 ## Mesures et rapports touchés
 
-- [reports/README.md](../reports/README.md)
-- [reports/rapport-deepseek.md](../reports/rapport-deepseek.md)
-- [reports/rapport-universaux.md](../reports/rapport-universaux.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-deepseek.md](../../reports/rapport-deepseek.md)
+- [reports/rapport-universaux.md](../../reports/rapport-universaux.md)
 
 <!-- notes -->
 

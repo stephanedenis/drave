@@ -2,9 +2,9 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-26/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,27 +18,29 @@
 | 15:12 | `2371e9b0` | B9 — 910 EXEMPLES, 30 LANGUES : LE CONTRÔLE REPASSE (3,1548 CONTRE 3,1620, +0,23 %) ; L'EFFET SE DILUE | `AGENTS.md`, `README.md`, `en-cours.md` (+8) |
 | 16:07 | `4ab50c03` | B9 — 31,63 M / 610 EXEMPLES : 4,40 % (3/3), MEILLEUR ÉCART ; LA CAPACITÉ NE PAIE QU'AVEC LES DONNÉES | `AGENTS.md`, `README.md`, `en-cours.md` (+9) |
 | 21:34 | `a9a3d22e` | B10 — ABLATIONS : z 512 ET PRÉFIXE 64 N'AIDENT PAS ; LE DÉCODEUR UTILISE z MAIS z EST UN CODE D'IDENTITÉ (12,9 CONTRE 39,6) | `en-cours.md`, `protocole-semantique.md`, `roadmap.md` (+5) |
-| 21:56 | `d59e94c2` | B10 — CORRECTION DE MESURE : CHRF SUR RÉFÉRENCE TRONQUÉE (14,0 / 5,4 CONTRE 38,8) ; VERDICT INCHANGÉ ; SEGMENTS NÉGATIFS | `en-cours.md`, `roadmap.md`, `2026-10-26/README.md` (+8) |
+| 21:56 | `d59e94c2` | B10 — CORRECTION DE MESURE : CHRF SUR RÉFÉRENCE TRONQUÉE (14,0 / 5,4 CONTRE 38,8) ; VERDICT INCHANGÉ ; SEGMENTS NÉGATIFS | `en-cours.md`, `roadmap.md`, `2026-10-26.md` (+8) |
 | 22:28 | `325c1dec` | B11 — BASE D'UNIVERSAUX TYPÉS : CODEC 100 % (79/79, 449/449), PARSEUR NATIF TYPÉ SURAPPREND (48,3 % TRAIN / 0 % VAL) | `carte.md`, `en-cours.md`, `protocole-semantique.md` (+14) |
 | 22:43 | `0584fd74` | B11 — COHÉRENCE INTER-LANGUES : CONSISTANCE 38,3 % (INVARIANCE 0) ET ADVERSAIRE 39,6 % (0), DEUX NÉGATIFS ; LE BASELINE SYNTHÉTIQUE RESTE À 45,1 % | `carte.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 22:49 | `bb94843f` | B11.5 — NORMALISATION LEXICALE : 55,7 % DE CODE EXACT ET 37,0 % D'INVARIANCE (CONTRE 45,1 / 7,4), LE CODEC RESTE À 100 % | `carte.md`, `en-cours.md`, `roadmap.md` (+10) |
 | 23:00 | `38c3d880` | B11.7 — CONTEXTE SUFFIXÉ : 59,8 % DE CODE EXACT ET 40,7 % D'INVARIANCE ; PRÉFIXE 0,4 / 88,9 (COLLAPSE) | `carte.md`, `en-cours.md`, `roadmap.md` (+12) |
 | 23:08 | `532ddd07` | B11.8 — CONTEXTE SÉPARÉ : 59,1 % / 40,7 %, AUCUN GAIN SUR LE SUFFIXE (59,8 / 40,7) ; LE VERROU EST AILLEURS | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 23:10 | `386e59d5` | B11.9 — RESTITUTION CANONIQUE : 79/79 ET 449/449 ALLER-RETOUR RSN EXACT (100 %), SANS DÉCODEUR NEURONAL | `carte.md`, `en-cours.md`, `roadmap.md` (+8) |
+| 23:13 | `f8977255` | B11 — BILAN : CODEC 100 % ET RESTITUTION CANONIQUE 100 %, NATIF 59,8 % / INVARIANCE 40,7 %, RAISONNEMENT NON BRANCHÉ ; OBJECTIF NON ATTEINT | `en-cours.md`, `roadmap.md`, `2026-10-26.md` (+5) |
 
 ## Chiffres du jour
 
-`100 %` · `59,1 %` · `40,7 %` · `59,8 %` · `55,7 %` · `37,0 %` · `38,3 %` · `39,6 %` · `45,1 %` · `48,3 %` · `0 %` · `4,40 %`
+`100 %` · `59,8 %` · `40,7 %` · `59,1 %` · `55,7 %` · `37,0 %` · `38,3 %` · `39,6 %` · `45,1 %` · `48,3 %` · `0 %` · `4,40 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Mesures et rapports touchés
 
-- [reports/README.md](../reports/README.md)
-- [reports/rapport-deepseek.md](../reports/rapport-deepseek.md)
-- [reports/rapport-restitution.md](../reports/rapport-restitution.md)
-- [reports/rapport-semantique.md](../reports/rapport-semantique.md)
-- [reports/rapport-universaux.md](../reports/rapport-universaux.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/bilan-b11.md](../../reports/bilan-b11.md)
+- [reports/rapport-deepseek.md](../../reports/rapport-deepseek.md)
+- [reports/rapport-restitution.md](../../reports/rapport-restitution.md)
+- [reports/rapport-semantique.md](../../reports/rapport-semantique.md)
+- [reports/rapport-universaux.md](../../reports/rapport-universaux.md)
 
 <!-- notes -->
 

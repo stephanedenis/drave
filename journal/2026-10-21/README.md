@@ -1,21 +1,28 @@
 # 2026-10-21
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-21/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**50 commits** · **0 session(s)** · **6 thème(s)**
+**51 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 1 | [2026-10-21/apprentissage.md](apprentissage.md) |
-| distribue | 12 | [2026-10-21/distribue.md](distribue.md) |
-| memoire | 4 | [2026-10-21/memoire.md](memoire.md) |
-| mesures | 22 | [2026-10-21/mesures.md](mesures.md) |
-| modele | 9 | [2026-10-21/modele.md](modele.md) |
-| moteur | 2 | [2026-10-21/moteur.md](moteur.md) |
+| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+| distribue | 12 | [distribue.md](distribue.md) |
+| memoire | 4 | [memoire.md](memoire.md) |
+| mesures | 22 | [mesures.md](mesures.md) |
+| modele | 9 | [modele.md](modele.md) |
+| moteur | 2 | [moteur.md](moteur.md) |
+| portes | 1 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -71,6 +78,7 @@
 | 21:40 | `276ba7ef` | MESURE 112 — LE PIDGIN A 1000 PAS : +5,8 [+4,1 ; +7,6], 59/71, les 7 plis positifs (le 0327 passe de -2,8 a +4,7 ; le 0066 a +7,9). La couverture 20/20 est solide : marge +5,8, IC le plus etroit |
 | 23:27 | `07e4be7d` | ERRATUM 6 + MESURES 113-114 — LA « FALAISE » DU PAS DE PENSEE ETAIT UNE CARTE DES LIGNES CASSEE : 200 noms pour 400 lignes, les « series de 4 phrases » etaient fr0/en0/fr1/en1, des paires de traduction. Sur la carte correcte, l'operateur lineaire PREDIT LA MOYENNE (effondrement 0,89-0,99, retrieval 0-8,9 % contre 2,2 %), aux 3 B/7 B/14 B ; le contrastif reste au hasard (2,2-11,1 %) et un MLP memorise sans generaliser. Mesures 82-85, 88 et 108 RETIREES. Le perimetre des langues s'arrete au francais inclus et l'etage 2 devient le chantier principal |
 | 23:42 | `1f0f557a` | MESURE 115 — L'ETAT D'UNE PHRASE NE PORTE PAS LA SUIVANTE : 630 series, 1 323 transitions ; le lineaire reste la moyenne (cos 0,827-0,940 contre 0,821-0,939 ; effondrement 0,933-0,995) et le MLP memorise (perte 0,03) sans generaliser (retrieval 0-1,15 %, dans la serie 14-27 % contre 25 %). Ni l'echantillon, ni la forme, ni l'objectif : il manque l'etat de PLAN de la serie. L'etage 2 devient la phase principale |
+| 23:44 | `2cde211a` | DOC — la page vivante et le recit restent au 21 octobre (23 h 45) : l'horloge n'a pas passe minuit, la porte des tableaux repasse au vert |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -472,5 +480,4 @@ et sa tâche, rien d'autre.*
 **12 h 30 (23 octobre) — mesure 168 : le plan multi-tâches ne l'aligne pas.** Entraîné avec le contraste du
 raisonnement (un pas sur deux), le plan donne **0,364** (EN→FR) — exactement le chiffre de la tâche seule —, le
 FR→FR baisse (0,375) et l'EN→EN monte (0,511). *Six variantes ont échoué : la ligne plan est définitivement close.*
-
 <!-- /notes -->

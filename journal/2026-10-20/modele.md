@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-20/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 12:25 | `fb59341e` | DOCUMENTATION — DECOUPER PAR LANGUE (MoE) : la reponse des mesures. OUI en SURFACE (noyau partage + adaptateurs/ tetes par langue, 1,33 % des poids, 5 ms de bascule, charges a la demande) ; NON en NOYAU (l'espace semantique partage a 96 % serait detruit, les langues peu dotees n'ont pas les donnees, et le routage par document echoue sur le texte court ou mele). Plan d'experience C5.6 en cinq points | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-20/README.md` (+4) |
+| 12:25 | `fb59341e` | DOCUMENTATION — DECOUPER PAR LANGUE (MoE) : la reponse des mesures. OUI en SURFACE (noyau partage + adaptateurs/ tetes par langue, 1,33 % des poids, 5 ms de bascule, charges a la demande) ; NON en NOYAU (l'espace semantique partage a 96 % serait detruit, les langues peu dotees n'ont pas les donnees, et le routage par document echoue sur le texte court ou mele). Plan d'experience C5.6 en cinq points | `en-cours.md`, `07-modeles-alternatifs-entree-sortie.md`, `2026-10-20.md` (+4) |
 
 ## Chiffres du jour
 

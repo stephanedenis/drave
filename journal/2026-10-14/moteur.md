@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-14/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 13:58 | `c4e22a38` | Journal du 14/10 : le dessin B de N4 mesure (÷1,19 a ÷1,32 a profondeur 8, ÷1,83 a profondeur 4), le GGUF qui est l'Instruct, et les deux chiffres publies qui tombent (m20 etait vu, 14,2342 est un chiffre de corpus) | `2026-10-14/README.md`, `2026-10-14/modele.md`, `README.md` (+1) |
+| 13:58 | `c4e22a38` | Journal du 14/10 : le dessin B de N4 mesure (÷1,19 a ÷1,32 a profondeur 8, ÷1,83 a profondeur 4), le GGUF qui est l'Instruct, et les deux chiffres publies qui tombent (m20 etait vu, 14,2342 est un chiffre de corpus) | `2026-10-14.md`, `2026-10-14_modele.md`, `README.md` (+1) |
 
 ## Chiffres du jour
 

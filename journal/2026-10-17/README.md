@@ -1,23 +1,30 @@
 # 2026-10-17
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-17/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**75 commits** · **0 session(s)** · **8 thème(s)**
+**76 commits** · **0 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 6 | [2026-10-17/distribue.md](distribue.md) |
-| docs | 15 | [2026-10-17/docs.md](docs.md) |
-| memoire | 4 | [2026-10-17/memoire.md](memoire.md) |
-| mesures | 16 | [2026-10-17/mesures.md](mesures.md) |
-| modele | 23 | [2026-10-17/modele.md](modele.md) |
-| moteur | 4 | [2026-10-17/moteur.md](moteur.md) |
-| outils | 2 | [2026-10-17/outils.md](outils.md) |
-| portes | 5 | [2026-10-17/portes.md](portes.md) |
+| attention | 1 | [attention.md](attention.md) |
+| distribue | 6 | [distribue.md](distribue.md) |
+| docs | 15 | [docs.md](docs.md) |
+| memoire | 4 | [memoire.md](memoire.md) |
+| mesures | 16 | [mesures.md](mesures.md) |
+| modele | 23 | [modele.md](modele.md) |
+| moteur | 4 | [moteur.md](moteur.md) |
+| outils | 2 | [outils.md](outils.md) |
+| portes | 5 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -98,6 +105,7 @@
 | 21:00 | `d9e68975` | LE PASSAGE COMPLET EST TERMINE : 44 vertes, 2 rouges — les MEMES qu'a 00 h 55 (porte-indice 860 s contre 817, porte-melange 102 contre 101). Ce sont les deux structurelles connues, et mon travail de la nuit ne les a ni creees ni aggravees : rien n'a casse |
 | 21:03 | `f5df05e0` | LA FICHE DE SYNTHESE DE LA NUIT (reports/fiche-nuit-17-10.md) : ce qui tient avec les chiffres et les mesures, ce qui a ete retire, ce qui reste ouvert, le corpus, les trois avertissements sur les corpus de Panini, la sante du depot et les douze outils ecrits cette nuit |
 | 21:04 | `2226f109` | L'INDEX DE LA SYNTHESE : il disait « six chapitres, six schemas » alors qu'il y en a SEPT (sept schemas SVG), et sa description du chapitre 7 datait d'avant les 38 mesures — elle dit maintenant le noyau neutre (cinq replications), la langue en 1,33 % des poids, les six relations retirees et ce qui reste ouvert |
+| 23:56 | `350f59cd` | ERRATUM MAJEUR : LE « NOYAU NEUTRE » ETAIT UN ARTEFACT D'INSTRUMENT — la sonde du chapitre entrain̂ait sur UNE SEULE langue (le decoupage portait sur les lignes, toutes les fenetres anglaises d'abord) et testait sur un melange. Sonde corrigee : la langue est lisible a 80-98 % des la couche 1 dans les cinq modeles-jouets, 100 % dans Qwen, 99 % dans le modele a 448 langues |
 
 ## Le récit de la journée (écrit à la main)
 

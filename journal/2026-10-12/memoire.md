@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 08:58 | `29b70594` | Rapport : le brouillon de V4.1 est dans le fichier (3 couches declarees, 75 tenseurs, 41 263 M poids) ; K3 n'en declare aucun (64 cles verifiees) — S1 de strata-pour-drave mis a jour | `strata-pour-drave.md`, `2026-10-12/README.md`, `2026-10-12/divers.md` (+7) |
+| 08:58 | `29b70594` | Rapport : le brouillon de V4.1 est dans le fichier (3 couches declarees, 75 tenseurs, 41 263 M poids) ; K3 n'en declare aucun (64 cles verifiees) — S1 de strata-pour-drave mis a jour | `strata-pour-drave.md`, `2026-10-12.md`, `2026-10-12_divers.md` (+7) |
 
 ## Chiffres du jour
 
@@ -16,24 +16,13 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (6)
-
-*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
-
-- **08:56** — Exécution du premier pas S1 : les clés `dspark_*` et les tenseurs 37-39 de V4.1
-- **08:56** — Les clés `dspark_*` sont dans le JSON `deepseek41.config`, pas au premier niveau — je vérifie
-- **08:57** — Les clés confirment 3 couches MTP ; je vérifie maintenant que leurs **poids** sont dans le fichier
-- **08:57** — Deux détails à corriger (somme des poids, clé de config de K3) avant d'écrire la fiche
-- **08:57** — Dernier contrôle : la liste des clés K3 (pour que le négatif soit vérifié, pas silencieux)
-- **08:57** — Le négatif K3 est vérifié (64 clés listées) — j'écris la fiche `reports/` avec l'en-tête conventionnel
-
 ## Sessions actives ce jour
 
-- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+- `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) · [digest](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-v41-couches-brouillon.md](../reports/rapport-v41-couches-brouillon.md)
+- [reports/rapport-v41-couches-brouillon.md](../../reports/rapport-v41-couches-brouillon.md)
 
 <!-- notes -->
 

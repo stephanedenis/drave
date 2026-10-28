@@ -2,31 +2,31 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:16 | `8813b520` | Passe de 22 h 40 : 46 portes, 44 vertes — premiere passe a 46 portes, avec porte-homeostasie (E9) et les deux verifications de porte-vision (couches isolees 6,3e-06, projecteur 0,71 %) toutes vertes | `references-non-regression.md`, `2026-10-16/README.md`, `README.md` |
-| 00:20 | `5afd4c57` | C2 : l'hypothese de la FUITE D'ECHELLE est REFUTEE — renormer l'etat entre les pas rend la divergence ~1000 fois PIRE ; ce n'est pas l'amplitude qu'il faut brider, c'est la sensibilite | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+4) |
-| 00:23 | `ab69eac3` | C2 : LA CAUSE EST TROUVEE ET ELLE TIENT EN UN NOMBRE — le pas de temps AMPLIFIE (lambda = 206 non entraine, 136 entraine) ; une application expansive n'a pas de point fixe stable, d'ou l'echec des quatre objectifs | `en-cours.md`, `etat-cerveau.md`, `2026-10-16/README.md` (+3) |
-| 00:26 | `76d6b5fd` | C2 : CORRECTION de mon propre chiffre — lambda local est de l'ordre de 1e4, le 206 etait le regime SATURE ; et la cible realiste devient la BORNITUDE, pas la contraction | `en-cours.md`, `etat-cerveau.md`, `2026-10-16/README.md` (+2) |
-| 02:01 | `b45ab30c` | E5 : la CAUSE du « 0,0 % » est trouvee (l'adaptateur exporte est l'IDENTITE, donc le reflexe est une tete empruntee qui rend des jetons incoherents) — sa RAISON ne l'est pas, et les deux pistes sont nommees | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/attention.md` (+2) |
-| 02:04 | `c4893d01` | E5 : diagnostic FERME — l'adaptateur ne recoit AUCUN gradient (ecart a l'identite exactement 0,0 a l'epoque forcee 10, avec un LoRA pourtant entraine a la norme 6,57) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+2) |
-| 02:05 | `1423b969` | E5 : le defaut est localise dans le chemin JOINT — l'adaptateur SEUL s'entraine (norme 34,49 contre 29,93, ecart 0,199) et l'adaptateur JOINT ne bouge pas (ecart exactement 0,0) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+1) |
-| 02:11 | `c3688651` | E5 : SYNTHESE — la cause etait ecrite dans le code (« avec --objectif plein, l'adaptateur NE JOUE PAS : il n'existe que sur un chemin tronque ») ; c'etait MON erreur de drapeau, pas un defaut d'outil | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+2) |
-| 02:43 | `3ac23699` | E5 : LE MELANGE NE RACHETE RIEN — KL + lambda.CE donne les memes chiffres (accord 30,2 % et perplexite 467-475 a lambda = 0,3 comme a 1,0), ce qui confirme E5 (« pire des deux cotes ») en plus radical : SANS EFFET | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/apprentissage.md` (+2) |
-| 03:24 | `c06968d1` | Etat du cerveau, ligne C2 : la cause de la divergence y entre (lambda local >= 3,7e4, l'entrainement reduit lambda de 34 % sans le soumettre, l'hypothese de l'echelle refutee, et la BORNITUDE desormais gardee par la porte) | `etat-cerveau.md`, `2026-10-16/README.md`, `2026-10-16/memoire.md` (+1) |
-| 13:24 | `c49098c1` | LE LANGAGE ABSTRAIT existe et BAT LE JETON : un mapping appris (etat pre-linguistique -> entree post-linguistique) predit le jeton suivant a 68,6-73 % quand le mot choisi par le modele est a 122,9 % (pire que l'embedding moyen) — et l'etat porte la suite a 16 jetons d'avance (84,7 %) ; toutes les couches se valent | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/memoire.md` (+4) |
-| 14:12 | `e9f85ae6` | ETUDE : un modele NATIF DRAVE — chaque exigence tiree d'une mesure du depot, architecture qui en decoule, quatre etapes chacune mesurable avec un outil qui existe | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/docs.md` (+2) |
-| 14:14 | `1e062466` | L'ETAPE 0 du modele natif, trouvee en essayant : l'entraineur TOURNE (4 M parametres, val 4,8948 bits/octet, k-WTA 25 % sur 17 projections) mais ecrit du format HuggingFace — et le moteur ne lit QUE du GGUF : l'aller-retour n'est pas cable | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+1) |
-| 14:24 | `326349bb` | L'OBJECTIF D'IDENTITE (directive du 16/10) est MESURE : les deux espaces sont a un facteur 648 d'echelle ET a un cosinus de +0,1387 — l'identite, meme avec echelle et decalage, fait PIRE que le temoin bete ; aucun raccord a posteriori ne peut marcher | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+2) |
-| 14:28 | `7a29cd57` | E5 : LA CONFIGURATION PUBLIEE NE REPRODUIT PAS (KL plein, taux 1e-3 -> 24,9 % contre 25,7 % pour le temoin : RIEN) — mais la variante stable BAT le temoin (KL tronque 512, 1e-4 -> 30,3 % et 51,4 %) | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+2) |
-| 16:44 | `a9a1fc71` | LE PLAN DU MODELE LINGUISTIQUE UNIFIE (entree = sortie) : quatre etapes, chacune avec son critere de reussite chiffre et son critere d'echec — et son risque principal nomme d'avance | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/docs.md` (+1) |
-| 16:52 | `f91bdde8` | LA SONDE DE RECOPIE : la premisse est FAUSSE sur ce modele (0/128 jetons recopies) — et ma mesure d'empreinte etait DEGENEREE (meme position = trivial) ; la bonne empreinte est celle de la GENERATION, avec contre-epreuve | `en-cours.md`, `2026-10-16/README.md`, `2026-10-16/modele.md` (+1) |
-| 22:38 | `50a7dd32` | L'ETAT DEVIENT HABITABLE : avec la recurrence tiree aleatoirement a l'entrainement (--recurrence-max 4), l'iteration est PLATE (88,4 / 88,2 / 88,5) — une premiere dans la nuit — au prix de 6 points de nettete a t=1 (88,4 contre 82,9) | `2026-10-16/README.md`, `2026-10-16/docs.md`, `rapport-modele-drave.md` (+1) |
-| 22:45 | `97079e96` | POURQUOI LA FALAISE : les modeles plats ont appris un POINT FIXE — le deplacement de l'etat entre t=1 et t=4 tombe de 77,5 % (sans recurrence) a 49,0 % puis 44,8 % ; habitabilite et perte de nettete sont LE MEME PHENOMENE | `2026-10-16/README.md`, `2026-10-16/mesures.md`, `rapport-modele-drave.md` (+1) |
+| 00:16 | `8813b520` | Passe de 22 h 40 : 46 portes, 44 vertes — premiere passe a 46 portes, avec porte-homeostasie (E9) et les deux verifications de porte-vision (couches isolees 6,3e-06, projecteur 0,71 %) toutes vertes | `references-non-regression.md`, `2026-10-16.md`, `README.md` |
+| 00:20 | `5afd4c57` | C2 : l'hypothese de la FUITE D'ECHELLE est REFUTEE — renormer l'etat entre les pas rend la divergence ~1000 fois PIRE ; ce n'est pas l'amplitude qu'il faut brider, c'est la sensibilite | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+4) |
+| 00:23 | `ab69eac3` | C2 : LA CAUSE EST TROUVEE ET ELLE TIENT EN UN NOMBRE — le pas de temps AMPLIFIE (lambda = 206 non entraine, 136 entraine) ; une application expansive n'a pas de point fixe stable, d'ou l'echec des quatre objectifs | `en-cours.md`, `etat-cerveau.md`, `2026-10-16.md` (+3) |
+| 00:26 | `76d6b5fd` | C2 : CORRECTION de mon propre chiffre — lambda local est de l'ordre de 1e4, le 206 etait le regime SATURE ; et la cible realiste devient la BORNITUDE, pas la contraction | `en-cours.md`, `etat-cerveau.md`, `2026-10-16.md` (+2) |
+| 02:01 | `b45ab30c` | E5 : la CAUSE du « 0,0 % » est trouvee (l'adaptateur exporte est l'IDENTITE, donc le reflexe est une tete empruntee qui rend des jetons incoherents) — sa RAISON ne l'est pas, et les deux pistes sont nommees | `en-cours.md`, `2026-10-16.md`, `2026-10-16_attention.md` (+2) |
+| 02:04 | `c4893d01` | E5 : diagnostic FERME — l'adaptateur ne recoit AUCUN gradient (ecart a l'identite exactement 0,0 a l'epoque forcee 10, avec un LoRA pourtant entraine a la norme 6,57) | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+2) |
+| 02:05 | `1423b969` | E5 : le defaut est localise dans le chemin JOINT — l'adaptateur SEUL s'entraine (norme 34,49 contre 29,93, ecart 0,199) et l'adaptateur JOINT ne bouge pas (ecart exactement 0,0) | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+1) |
+| 02:11 | `c3688651` | E5 : SYNTHESE — la cause etait ecrite dans le code (« avec --objectif plein, l'adaptateur NE JOUE PAS : il n'existe que sur un chemin tronque ») ; c'etait MON erreur de drapeau, pas un defaut d'outil | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+2) |
+| 02:43 | `3ac23699` | E5 : LE MELANGE NE RACHETE RIEN — KL + lambda.CE donne les memes chiffres (accord 30,2 % et perplexite 467-475 a lambda = 0,3 comme a 1,0), ce qui confirme E5 (« pire des deux cotes ») en plus radical : SANS EFFET | `en-cours.md`, `2026-10-16.md`, `2026-10-16_apprentissage.md` (+2) |
+| 03:24 | `c06968d1` | Etat du cerveau, ligne C2 : la cause de la divergence y entre (lambda local >= 3,7e4, l'entrainement reduit lambda de 34 % sans le soumettre, l'hypothese de l'echelle refutee, et la BORNITUDE desormais gardee par la porte) | `etat-cerveau.md`, `2026-10-16.md`, `2026-10-16_memoire.md` (+1) |
+| 13:24 | `c49098c1` | LE LANGAGE ABSTRAIT existe et BAT LE JETON : un mapping appris (etat pre-linguistique -> entree post-linguistique) predit le jeton suivant a 68,6-73 % quand le mot choisi par le modele est a 122,9 % (pire que l'embedding moyen) — et l'etat porte la suite a 16 jetons d'avance (84,7 %) ; toutes les couches se valent | `en-cours.md`, `2026-10-16.md`, `2026-10-16_memoire.md` (+4) |
+| 14:12 | `e9f85ae6` | ETUDE : un modele NATIF DRAVE — chaque exigence tiree d'une mesure du depot, architecture qui en decoule, quatre etapes chacune mesurable avec un outil qui existe | `en-cours.md`, `2026-10-16.md`, `2026-10-16_docs.md` (+2) |
+| 14:14 | `1e062466` | L'ETAPE 0 du modele natif, trouvee en essayant : l'entraineur TOURNE (4 M parametres, val 4,8948 bits/octet, k-WTA 25 % sur 17 projections) mais ecrit du format HuggingFace — et le moteur ne lit QUE du GGUF : l'aller-retour n'est pas cable | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+1) |
+| 14:24 | `326349bb` | L'OBJECTIF D'IDENTITE (directive du 16/10) est MESURE : les deux espaces sont a un facteur 648 d'echelle ET a un cosinus de +0,1387 — l'identite, meme avec echelle et decalage, fait PIRE que le temoin bete ; aucun raccord a posteriori ne peut marcher | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+2) |
+| 14:28 | `7a29cd57` | E5 : LA CONFIGURATION PUBLIEE NE REPRODUIT PAS (KL plein, taux 1e-3 -> 24,9 % contre 25,7 % pour le temoin : RIEN) — mais la variante stable BAT le temoin (KL tronque 512, 1e-4 -> 30,3 % et 51,4 %) | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+2) |
+| 16:44 | `a9a1fc71` | LE PLAN DU MODELE LINGUISTIQUE UNIFIE (entree = sortie) : quatre etapes, chacune avec son critere de reussite chiffre et son critere d'echec — et son risque principal nomme d'avance | `en-cours.md`, `2026-10-16.md`, `2026-10-16_docs.md` (+1) |
+| 16:52 | `f91bdde8` | LA SONDE DE RECOPIE : la premisse est FAUSSE sur ce modele (0/128 jetons recopies) — et ma mesure d'empreinte etait DEGENEREE (meme position = trivial) ; la bonne empreinte est celle de la GENERATION, avec contre-epreuve | `en-cours.md`, `2026-10-16.md`, `2026-10-16_modele.md` (+1) |
+| 22:38 | `50a7dd32` | L'ETAT DEVIENT HABITABLE : avec la recurrence tiree aleatoirement a l'entrainement (--recurrence-max 4), l'iteration est PLATE (88,4 / 88,2 / 88,5) — une premiere dans la nuit — au prix de 6 points de nettete a t=1 (88,4 contre 82,9) | `2026-10-16.md`, `2026-10-16_docs.md`, `rapport-modele-drave.md` (+1) |
+| 22:45 | `97079e96` | POURQUOI LA FALAISE : les modeles plats ont appris un POINT FIXE — le deplacement de l'etat entre t=1 et t=4 tombe de 77,5 % (sans recurrence) a 49,0 % puis 44,8 % ; habitabilite et perte de nettete sont LE MEME PHENOMENE | `2026-10-16.md`, `2026-10-16_mesures.md`, `rapport-modele-drave.md` (+1) |
 
 ## Chiffres du jour
 
@@ -36,10 +36,10 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-cycle-c2.md](../reports/rapport-cycle-c2.md)
-- [reports/rapport-e5-distillation.md](../reports/rapport-e5-distillation.md)
-- [reports/rapport-modele-drave.md](../reports/rapport-modele-drave.md)
-- [reports/rapport-pensee-silencieuse.md](../reports/rapport-pensee-silencieuse.md)
+- [reports/rapport-cycle-c2.md](../../reports/rapport-cycle-c2.md)
+- [reports/rapport-e5-distillation.md](../../reports/rapport-e5-distillation.md)
+- [reports/rapport-modele-drave.md](../../reports/rapport-modele-drave.md)
+- [reports/rapport-pensee-silencieuse.md](../../reports/rapport-pensee-silencieuse.md)
 
 <!-- notes -->
 

@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 18:42 | `0c352069` | S4 : le préchargement par grappe mesuré hors du moteur — 1 230 Mo/s contre 29,43 à la demande sur l'array (×42), et 30,56 contre 0,56 sur le disque dur | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `rapport-prelire-grappe.md` (+1) |
+| 18:42 | `0c352069` | S4 : le préchargement par grappe mesuré hors du moteur — 1 230 Mo/s contre 29,43 à la demande sur l'array (×42), et 30,56 contre 0,56 sur le disque dur | `2026-10-12.md`, `2026-10-12_mesures.md`, `rapport-prelire-grappe.md` (+1) |
 | 20:43 | `6c95d970` | S4 : la prelecture parallele des experts entre dans le moteur — le calcul d'une passe tombe de 7,70 a 3,65 s (-53 %), perplexite identique ; l'idee de Strata (couche suivante) est mesuree sans gain et reste un temoin eteint | `manques.md`, `strata-pour-drave.md`, `gguf.rs` (+9) |
 | 22:47 | `2bbecc86` | Chargement : la forme « listes » devient paresseuse — 26,95 s a 7,36 s (Qwen3-30B) et 6,85 s a 0,60 s (0,5B), sans deplacer un chiffre | `gguf.rs`, `main.rs`, `model.rs` (+4) |
 
@@ -18,22 +18,15 @@
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (2)
-
-*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
-
-- **08:52** — Je commite la note, puis je vérifie si un GGUF local porte une couche MTP
-- **08:56** — Le moteur a paniqué (mauvais ordre d'arguments) — je nettoie et j'extrais la config V4.1
-
 ## Sessions actives ce jour
 
-- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+- `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) · [digest](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
-- [reports/rapport-prelire-grappe.md](../reports/rapport-prelire-grappe.md)
-- [reports/rapport-s4-prechargement-moteur.md](../reports/rapport-s4-prechargement-moteur.md)
+- [reports/rapport-chargement-paresseux.md](../../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-prelire-grappe.md](../../reports/rapport-prelire-grappe.md)
+- [reports/rapport-s4-prechargement-moteur.md](../../reports/rapport-s4-prechargement-moteur.md)
 
 <!-- notes -->
 **S4 est commencé — par la mesure du mécanisme, hors du moteur.** `docs/strata-pour-drave.md` § 4
@@ -42,7 +35,7 @@ manque chiffré (8,6 Mo/s en mmap sur disque dur contre 243 Mo/s en séquentiel)
 moteur, le banc `tools/banc-prelire.py` compare **trois ordres de lecture** sur le même fichier et
 les mêmes octets utiles : **29,43 Mo/s** au hasard, **96,77** en pages consécutives, **1 230** en
 grappes de 1 Mio préchargées par `madvise` — sur l'array (**×42**). Sur disque dur : 0,56 / 16,27 /
-30,56. Fiche : [`reports/rapport-prelire-grappe.md`](../reports/rapport-prelire-grappe.md).
+30,56. Fiche : [`reports/rapport-prelire-grappe.md`](../../reports/rapport-prelire-grappe.md).
 
 *Trois pièges, tous corrigés et écrits dans la fiche* : une fenêtre plus petite que la lecture en
 avance du noyau n'est pas un hasard (premier essai : 300 Mo/s de cache, pris pour une mesure) ; le

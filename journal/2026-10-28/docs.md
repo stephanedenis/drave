@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 10:41 | `9118e112` | N1.1/N1.3 — DRAVE-N0 : 11,37 M, EXPORT DRVM, 110 TENSEURS, 12 BLOCS | `en-cours.md`, `roadmap-native.md`, `2026-10-28.md` (+3) |
 | 11:45 | `07c7654e` | DOCS — EN-COURS 11 h 45 : N1 COMPLET, VARS_LUES, PROCHAIN N0.3B | `en-cours.md`, `2026-10-28.md`, `2026-10-28_moteur.md` |
 | 11:58 | `edf4323f` | DOCS — EN-COURS 11 h 59 : N1 COMPLET, PROCHAIN N0.3B | `en-cours.md`, `2026-10-28.md`, `2026-10-28_docs.md` |
+| 14:09 | `47b0a0f1` | JOURNAL — GÉNÉRATEURS EN DOSSIERS PAR JOUR (SESSION → JOUR/ÉTAT) | `2026-10-09.md`, `README.md`, `apprentissage.md` (+301) |
 
 ## Mesures et rapports touchés
 

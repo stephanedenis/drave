@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-16/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 01:05 | `59d29fb5` | n4_dessin_b.py : deux corrections trouvees par un essai a blanc d'une minute (un plantage latent et un piege d'aide) | `2026-10-16/README.md`, `2026-10-16/memoire.md`, `THEMES.md` (+1) |
+| 01:05 | `59d29fb5` | n4_dessin_b.py : deux corrections trouvees par un essai a blanc d'une minute (un plantage latent et un piege d'aide) | `2026-10-16.md`, `2026-10-16_memoire.md`, `THEMES.md` (+1) |
 
 <!-- notes -->
 

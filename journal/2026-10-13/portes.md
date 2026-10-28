@@ -2,28 +2,28 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:19 | `1400a92d` | Repères : la passe du 12/10 23h00 est consignée (36 portes, 34 vertes, 2 rouges nommes et instruits) — les valeurs des portes n'ont pas bouge | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-13/README.md` (+3) |
-| 02:30 | `00c1a88d` | Fiche des deux passes de la nuit : ce qu'elles ont attrape (quatre portes muettes qui dependaient de /tmp, et ma propre porte fragile a l'unite d'un nombre) et ce qu'elles ne disent PAS (le chemin VRAM n'est exerce par aucune porte) | `2026-10-13/README.md`, `2026-10-13/mesures.md`, `README.md` (+2) |
-| 03:59 | `93c66918` | Journal du 13/10 : la seconde moitie de la nuit (dessin H aux sorties precoces, la loi de la frontiere, POPULATE_READ tranche, la famille /tmp fermee, et ma porte attrapee par la passe) | `2026-10-13/README.md`, `2026-10-13/attention.md`, `2026-10-13/moteur.md` (+1) |
-| 05:11 | `b3bf9aaa` | Passe de certification (03h59) : 35 vertes sur 37, et porte-push-paresseux VERTE dans la passe — la correction est verifiee dans les conditions ou le defaut etait apparu | `references-non-regression.md`, `2026-10-13/README.md`, `2026-10-13/portes.md` (+1) |
+| 00:19 | `1400a92d` | Repères : la passe du 12/10 23h00 est consignée (36 portes, 34 vertes, 2 rouges nommes et instruits) — les valeurs des portes n'ont pas bouge | `etat-cerveau.md`, `references-non-regression.md`, `2026-10-13.md` (+3) |
+| 02:30 | `00c1a88d` | Fiche des deux passes de la nuit : ce qu'elles ont attrape (quatre portes muettes qui dependaient de /tmp, et ma propre porte fragile a l'unite d'un nombre) et ce qu'elles ne disent PAS (le chemin VRAM n'est exerce par aucune porte) | `2026-10-13.md`, `2026-10-13_mesures.md`, `README.md` (+2) |
+| 03:59 | `93c66918` | Journal du 13/10 : la seconde moitie de la nuit (dessin H aux sorties precoces, la loi de la frontiere, POPULATE_READ tranche, la famille /tmp fermee, et ma porte attrapee par la passe) | `2026-10-13.md`, `2026-10-13_attention.md`, `2026-10-13_moteur.md` (+1) |
+| 05:11 | `b3bf9aaa` | Passe de certification (03h59) : 35 vertes sur 37, et porte-push-paresseux VERTE dans la passe — la correction est verifiee dans les conditions ou le defaut etait apparu | `references-non-regression.md`, `2026-10-13.md`, `2026-10-13_portes.md` (+1) |
 | 08:37 | `3fdbb90f` | Un tableau Markdown qui ne rend pas est un tableau qui n'existe pas : 17 lignes dans 9 fichiers corrigees, et une 38e porte (porte-tableaux.sh) pour empecher la recidive | `etat-cerveau.md`, `manques.md`, `organisation-du-depot.md` (+15) |
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-attention-creuse.md](../reports/rapport-attention-creuse.md)
-- [reports/rapport-engram-etat.md](../reports/rapport-engram-etat.md)
-- [reports/rapport-gpt-oss-perplexite.md](../reports/rapport-gpt-oss-perplexite.md)
-- [reports/rapport-minimal.md](../reports/rapport-minimal.md)
-- [reports/rapport-passe-complete-13-octobre.md](../reports/rapport-passe-complete-13-octobre.md)
-- [reports/rapport-routage-experts.md](../reports/rapport-routage-experts.md)
-- [reports/rapport-tableaux-casses.md](../reports/rapport-tableaux-casses.md)
-- [reports/rapport-v4-yarn-compresse.md](../reports/rapport-v4-yarn-compresse.md)
+- [reports/rapport-attention-creuse.md](../../reports/rapport-attention-creuse.md)
+- [reports/rapport-engram-etat.md](../../reports/rapport-engram-etat.md)
+- [reports/rapport-gpt-oss-perplexite.md](../../reports/rapport-gpt-oss-perplexite.md)
+- [reports/rapport-minimal.md](../../reports/rapport-minimal.md)
+- [reports/rapport-passe-complete-13-octobre.md](../../reports/rapport-passe-complete-13-octobre.md)
+- [reports/rapport-routage-experts.md](../../reports/rapport-routage-experts.md)
+- [reports/rapport-tableaux-casses.md](../../reports/rapport-tableaux-casses.md)
+- [reports/rapport-v4-yarn-compresse.md](../../reports/rapport-v4-yarn-compresse.md)
 
 <!-- notes -->
 

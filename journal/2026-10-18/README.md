@@ -1,20 +1,26 @@
 # 2026-10-18
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-18/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**23 commits** · **0 session(s)** · **5 thème(s)**
+**24 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| docs | 4 | [2026-10-18/docs.md](docs.md) |
-| memoire | 7 | [2026-10-18/memoire.md](memoire.md) |
-| mesures | 6 | [2026-10-18/mesures.md](mesures.md) |
-| modele | 5 | [2026-10-18/modele.md](modele.md) |
-| moteur | 1 | [2026-10-18/moteur.md](moteur.md) |
+| docs | 4 | [docs.md](docs.md) |
+| memoire | 7 | [memoire.md](memoire.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
+| modele | 5 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -43,12 +49,13 @@
 | 21:35 | `6d77af66` | MESURE 52 — LE SENS EXTRAIT PORTE SON BRUIT : entropie par token, tokens ambigus, langue probable. Le chinois est deux fois plus incertain (11-17 % de tokens ambigus contre 1-2 %) et le detecteur de langue le dit « anglais » — parce que la consigne est en anglais (20e piege, dans mon propre outil) |
 | 21:42 | `4b6f3550` | MESURE 53 — LE MARQUEUR DE BRUIT CORRIGE : l'unite faisait mentir le chinois. En bits par PHRASE, le chinois (189-244) est normal, au niveau du francais (174-512) et du russe (154-582) — il n'est pas plus incertain, il est plus DENSE. Trois corrections d'instrument, et un 21e piege : une unite non comparable entre ecritures fabrique une conclusion fausse |
 | 22:11 | `98a0b0c7` | MESURE 54 — LA QUALITE VIENT-ELLE AVEC LA TAILLE ? A moitie, et le plancher reste roi. A taille egale (memes 6 articles), Qwen 1,5 B gagne +11,9 en anglais->francais, +5,1 en espagnol, +5,4 en chinois, mais perd 3,8 en francais->anglais ; et francais->espagnol (32,1) reste SOUS le plancher « ne rien traduire » (35,5) |
+| 22:22 | `72ae65d0` | MESURE 55 — LA QUALITE VIENT AVEC LA TAILLE, ET LE PLANCHER EST BATTU PARTOUT A 3 B : francais->anglais 35,8 -> 32,0 -> 70,0 (0,5 / 1,5 / 3 B), anglais->francais 20,1 -> 32,0 -> 62,8, francais->espagnol 27,0 -> 32,1 -> 50,4 (contre un plancher de 35,5, franchi pour la premiere fois), francais->chinois 1,0 -> 6,4 -> 11,6 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
 > **Écrit à la main** dans la nuit et la matinée du 17 au 18 (heures locales, EDT). Le récit de la journée du 17 est dans
-> [`journal/2026-10-17/README.md`](2026-10-17/README.md) ; ici, ce qui s'est passé **après minuit**.
+> [`journal/2026-10-17/README.md`](../2026-10-17/README.md) ; ici, ce qui s'est passé **après minuit**.
 
 ## 18 octobre, la série UDHR (00 h - 1 h)
 

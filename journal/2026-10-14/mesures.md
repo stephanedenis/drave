@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-14/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 14:01 | `00678fef` | n4_dessin_b : le corpus /tmp est REGENERE s'il manque (identique au bit, verifie par cmp) — la lecon du 12/10 s'applique aussi a un banc de mesure, pas seulement aux portes | `2026-10-14/README.md`, `2026-10-14/docs.md`, `README.md` (+2) |
+| 14:01 | `00678fef` | n4_dessin_b : le corpus /tmp est REGENERE s'il manque (identique au bit, verifie par cmp) — la lecon du 12/10 s'applique aussi a un banc de mesure, pas seulement aux portes | `2026-10-14.md`, `2026-10-14_docs.md`, `README.md` (+2) |
 
 ## Chiffres du jour
 

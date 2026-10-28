@@ -1,25 +1,31 @@
 # 2026-10-15
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-15/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**76 commits** · **0 session(s)** · **10 thème(s)**
+**77 commits** · **0 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 1 | [2026-10-15/apprentissage.md](apprentissage.md) |
-| attention | 4 | [2026-10-15/attention.md](attention.md) |
-| distribue | 1 | [2026-10-15/distribue.md](distribue.md) |
-| docs | 7 | [2026-10-15/docs.md](docs.md) |
-| memoire | 9 | [2026-10-15/memoire.md](memoire.md) |
-| mesures | 16 | [2026-10-15/mesures.md](mesures.md) |
-| modele | 15 | [2026-10-15/modele.md](modele.md) |
-| moteur | 9 | [2026-10-15/moteur.md](moteur.md) |
-| outils | 3 | [2026-10-15/outils.md](outils.md) |
-| portes | 11 | [2026-10-15/portes.md](portes.md) |
+| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+| attention | 4 | [attention.md](attention.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 7 | [docs.md](docs.md) |
+| memoire | 9 | [memoire.md](memoire.md) |
+| mesures | 16 | [mesures.md](mesures.md) |
+| modele | 16 | [modele.md](modele.md) |
+| moteur | 9 | [moteur.md](moteur.md) |
+| outils | 3 | [outils.md](outils.md) |
+| portes | 11 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+Aucune session indexée pour ce jour ; voir
+[l'index des sessions](../README.md#sessions).
 
 ## Tous les commits (heure réelle)
 
@@ -101,6 +107,7 @@
 | 22:25 | `5b23115c` | E9 passe la contre-epreuve des GRAINES (contrairement au critere d'etalement, teste le meme soir de la meme facon) : x0,6 gagne m32 ET le hors domaine sur les graines 0, 1 et 2, effet = 5x le bruit |
 | 22:37 | `e6728c0e` | E9, la REGLE tient sur trois graines : le minimum de perplexite sur un texte NEUTRE tombe sur x0,75 a chaque fois (courbe en U) |
 | 22:38 | `c3a1f677` | E9, la regle : la ligne du modele de base (perplexite neutre 9,6706) — toutes les variantes la battent, et la regle cherche le MEILLEUR point de cette aide, pas le seul |
+| 22:40 | `73f3c39b` | Etat du cerveau : les questions ouvertes REEcrites (trois des cinq avaient change) — la vision n'est plus « bloquee par un modele absent », elle est verifiee ; le critere de rejeu a un etat exact ; E9 entre dans la liste |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -116,7 +123,7 @@ L'accord fait **×1,8**, la perplexité coûte **×3,2**, et le **mélange** KL 
 deux axes** (46,8 % d'accord, 1 476 de perplexité à λ = 1). En génération de 32 jetons, l'accord
 reste **0/96** et **5/96** (0,51³² ≈ 2 × 10⁻¹⁰). Ce que le réflexe apporte vraiment : le **TEMPS**
 (TTFT **÷3,1**, débit **×2,0**). Fiche :
-[`rapport-e5-distillation.md`](../reports/rapport-e5-distillation.md).
+[`rapport-e5-distillation.md`](../../reports/rapport-e5-distillation.md).
 
 **2. Le CYCLE, trois objectifs, aucun ne converge.** Entraîné, le cycle dompte la divergence
 (**×228** au pas 4 : 15 868 → 52,24) mais **dégrade encore** (~×1,4 par pas) et ne bat jamais une
@@ -124,7 +131,7 @@ passe ; « dernier pas » donne la meilleure arrivée (43,55), « point fixe » 
 (22,05 au pas 2), « somme » l'équilibre — **aucun ne fait converger la boucle**. Et le moteur est
 plus pessimiste à chaque pas (+1,7 % au pas 1, +19,6 % au pas 4) : **la quantification s'amplifie
 dans la boucle**. Fiche :
-[`rapport-cycle-entraine.md`](../reports/rapport-cycle-entraine.md).
+[`rapport-cycle-entraine.md`](../../reports/rapport-cycle-entraine.md).
 
 **3. Le SOMMEIL : combien, quoi, et combien de nuits.** La courbe — **−5,57 %** (3 morceaux rejoués),
 −7,67 % (10), **−9,98 %** (20) — et **le rejeu court est le plus efficient** (3 morceaux : 56 % du
@@ -133,8 +140,8 @@ gain pour un coût indétectable). **À volume égal, la règle de sélection p�
 **faux ici**, et la proximité temporelle non plus ne compte pas (−10,71 % contre −9,98 %). Doubler
 les époques : **+0,05 point** (la limite est la **donnée**). Et **deux nuits** : la première garde
 son gain (−7,85 %), la seconde n'ajoute presque rien (−0,30 %) — **ni oubli, ni gain**. Fiches :
-[`budget`](../reports/rapport-sommeil-budget.md) · [`sélection`](../reports/rapport-sommeil-selection.md) ·
-[`deux nuits`](../reports/rapport-sommeil-deux-nuits.md).
+[`budget`](../../reports/rapport-sommeil-budget.md) · [`sélection`](../../reports/rapport-sommeil-selection.md) ·
+[`deux nuits`](../../reports/rapport-sommeil-deux-nuits.md).
 
 **4. L'ATTENTION : le volume domine, et le placement est de second ordre.** À clés **égales**,
 uniforme et alterné se disputent le point (−0,41 % sur m32, +1,51 % sur m20). Mais **le budget a une
@@ -142,14 +149,14 @@ bonne taille PAR TEXTE** : le coût de la moitié va de **+0,04 % à +7,39 %** (
 uniforme **casse** la tolérance de +1 % sur **5 textes sur 8**, quand une politique par texte la
 tient partout pour **−14,1 % de clés**. Et **aucun signal bon marché ne prédit la sensibilité**
 (corrélations −0,019 et +0,096) : la politique exige **deux passes**. Fiches :
-[`allocation`](../reports/rapport-budget-attention-allocation.md) · [`politique`](../reports/rapport-politique-budget-attention.md).
+[`allocation`](../../reports/rapport-budget-attention-allocation.md) · [`politique`](../../reports/rapport-politique-budget-attention.md).
 
 **5. Le budget d'une DÉCISION : deux monnaies.** 357,8 M paires (24 couches) → **119,3 M** (8) →
 **59,6 M** (4), exactement linéaire en couches — et **la fenêtre d'attention ne déplace PAS cette
 métrique** (119,3 M avec le quart des clés comme avec toutes) : elle compte les **projections**, pas
 les scores. Un budget de cerveau s'exprime donc en **deux monnaies** (paires ; clés/octets), et le
 plan n'en comptait qu'une. Fiche :
-[`rapport-budget-decision.md`](../reports/rapport-budget-decision.md).
+[`rapport-budget-decision.md`](../../reports/rapport-budget-decision.md).
 
 **6. CE QUI SE CONSOLIDE EST LA STRUCTURE PARTAGÉE.** Deux spécialistes, même budget : sur le
 morceau **rejoué**, la mémorisation est **identique** (−22,7 % et −22,5 %) ; sur un morceau **jamais
@@ -159,7 +166,7 @@ spécialiste **fort** (−7,3 % contre −7,4 %) mais **accumule les coûts** ; 
 donne **moins que chacun** sur m32 (−4,0 % contre −7,4 % et −8,7 %) — **la somme ne passe pas
 l'échelle**, l'agrégation doit être **déclarée**. Un **bug** attrapé par une **égalité** : la
 première fusion écrasait au lieu de sommer (« A+B » rendait exactement les chiffres de B). Fiche :
-[`rapport-consolidation-structure-partagee.md`](../reports/rapport-consolidation-structure-partagee.md).
+[`rapport-consolidation-structure-partagee.md`](../../reports/rapport-consolidation-structure-partagee.md).
 
 **7. La BOUCLE DU CERVEAU, en une commande.** Percevoir (85 626 jetons réversibles) → retenir (8
 pas, déterministe) → se souvenir (round-trip **300/300**) → consolider (**17,0197 → 16,3429,
@@ -167,7 +174,7 @@ pas, déterministe) → se souvenir (round-trip **300/300**) → consolider (**1
 de la périphérie est un fichier **texte** (en binaire, le moteur refusait et le script annonçait un
 faux « la mémoire n'est pas déterministe »), et la mesure portait sur le **premier morceau rejoué**
 (−26 % de « consolidation » qui était de la **récitation**). Fiche :
-[`docs/cerveau-facultes.md`](../docs/archive/cerveau-facultes.md) § 3ter.
+[`docs/cerveau-facultes.md`](../../docs/archive/cerveau-facultes.md) § 3ter.
 
 **Et la conclusion de la nuit, en une phrase** : dans ce cerveau, **la quantité domine le placement**
 (volume de rejeu, volume de clés, profondeur) — sauf une exception mesurée, la **décision par
@@ -267,7 +274,7 @@ couche 1 +0,7676, couche 2 +0,7996 — les normes concordent à **~10 %** là o�
 3,2× puis de 74×. L'écart relatif reste de **60 à 78 %** (la quantification vaut ~1 %) : il reste
 une différence structurelle, et les deux suspects sont **nommés** — la convention de rotation 2-D
 et l'ordre des têtes (`nh_t = 16` en dur). Fiche :
-[`rapport-vision-qwen2vl.md`](../reports/rapport-vision-qwen2vl.md).
+[`rapport-vision-qwen2vl.md`](../../reports/rapport-vision-qwen2vl.md).
 
 **20. Et la leçon, la même que la nuit, mais retournée contre son auteur** : *une implémentation qui
 « tourne » n'est pas une implémentation qui « a raison »* — **une référence non plus**. La première
@@ -369,7 +376,7 @@ n'est pas vérifié (l'embedding contre la référence numpy, dont le format a d
 
 **35. Et un serveur de documentation** (`tools/serveur-doc.py`, port **8787**) répond à la question
 « où en est le travail ? » : il rend les documents en HTML et affiche en premier
-[`docs/en-cours.md`](../docs/en-cours.md), réécrit à chaque round.
+[`docs/en-cours.md`](../../docs/pilotage/en-cours.md), réécrit à chaque round.
 **La soirée du 15/10 — E9 : LE SEUL EMPLACEMENT VIDE DE LA TABLE DE BIOLOGIE, REMPLI ET MESURÉ.**
 
 **36. E9 est défini et mesuré : l'homéostasie synaptique** — la mise à l'échelle **globale** du

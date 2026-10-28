@@ -2,22 +2,22 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-27/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 09:06 | `e6985d94` | B12 — M2 DOUBLE DISSOCIATION : DE 93,2 %, LÉSIONS 19,2 / 1,4 ; LE DERNIER ÉTAT DÉBLOQUE | `en-cours.md`, `modules-cerveau-langage.md`, `roadmap.md` (+9) |
-| 09:38 | `831ecdb1` | JOURNAL — RÉGÉNÉRATION APRÈS LE COMMIT DE COHÉRENCE (9 COMMITS DU 27/10, PASSE 2 VISIBLE) | `en-cours.md`, `2026-10-27/README.md`, `2026-10-27/docs.md` (+1) |
-| 09:49 | `b563a155` | B12 — PIPELINE M1→M4→M8 : 528/528, COMPLÉTION 96,3 %, PROTOYPES 7 | `2026-10-27/README.md`, `2026-10-27/docs.md`, `2026-10-27/sprint-24h.md` (+3) |
+| 09:38 | `831ecdb1` | JOURNAL — RÉGÉNÉRATION APRÈS LE COMMIT DE COHÉRENCE (9 COMMITS DU 27/10, PASSE 2 VISIBLE) | `en-cours.md`, `2026-10-27.md`, `2026-10-27_docs.md` (+1) |
+| 09:49 | `b563a155` | B12 — PIPELINE M1→M4→M8 : 528/528, COMPLÉTION 96,3 %, PROTOYPES 7 | `2026-10-27.md`, `2026-10-27_docs.md`, `2026-10-27_sprint-24h.md` (+3) |
 | 09:54 | `d28ad551` | B12 — PIPELINE M1→M4→M8 : 528/528, COMPLÉTION 96,3 %, 7 PROTOTYPES (DOCS) | `en-cours.md`, `modules-cerveau-langage.md`, `roadmap.md` (+5) |
-| 11:30 | `96d50d8d` | DOCS — SCHÉMA MÉTHODE : TEXTES DANS LES CADRES | `methode.svg`, `2026-10-27/README.md`, `2026-10-27/distribue.md` |
-| 12:15 | `597cd245` | JOURNAL — PASSE COMPLÈTE 47 VERTES, 2 ROUGES STRUCTURELLES ; B13 INTÉGRÉ | `2026-10-27/README.md`, `2026-10-27/mesures.md`, `2026-10-27/sprint-24h.md` |
+| 11:30 | `96d50d8d` | DOCS — SCHÉMA MÉTHODE : TEXTES DANS LES CADRES | `methode.svg`, `2026-10-27.md`, `2026-10-27_distribue.md` |
+| 12:15 | `597cd245` | JOURNAL — PASSE COMPLÈTE 47 VERTES, 2 ROUGES STRUCTURELLES ; B13 INTÉGRÉ | `2026-10-27.md`, `2026-10-27_mesures.md`, `2026-10-27_sprint-24h.md` |
 | 12:36 | `441cb959` | DOCWATCH — SEUL SERVEUR DE DOCUMENTATION ; SERVEUR-DOC.PY ET DRAVE-DOC RETIRÉS | `references-non-regression.md`, `utilisation.md`, `serveur-doc.py` |
 | 12:37 | `69a28d89` | DOCS — DOCWATCH DANS EN-COURS ; B16 ET COMPTEURS 179/246 | `en-cours.md` |
 | 12:38 | `a53c76e5` | DOCS — DOCWATCH : SAUVEGARDES DE MIGRATION | `utilisation.md` |
-| 12:45 | `655d3037` | GLOSSAIRE — CONTRAT MDSERVE DANS L'INDEX (289 FICHES) | `README.md`, `2026-10-27/README.md`, `2026-10-27/mesures.md` (+3) |
+| 12:45 | `655d3037` | GLOSSAIRE — CONTRAT MDSERVE DANS L'INDEX (289 FICHES) | `README.md`, `2026-10-27.md`, `2026-10-27_mesures.md` (+3) |
 | 12:52 | `09cdf8cf` | DOCWATCH — SOUS-MODULE tools/docwatch ; DÉVELOPPEMENT ÉDITABLE ; CLONE ET POINTEUR DOCUMENTÉS | `.gitmodules`, `README.md`, `utilisation.md` (+1) |
 | 12:53 | `fb47565f` | DOCS — DOCWATCH EST LE PREMIER SOUS-MODULE, DÉPENDANCE EXTERNE ÉPINGLÉE | `modularisation.md` |
 | 12:53 | `a8c78663` | DOCS — DOCWATCH ÉPINGLÉ EN SOUS-MODULE DANS L'ÉTAT COURANT | `en-cours.md` |
@@ -36,10 +36,10 @@
 
 ## Mesures et rapports touchés
 
-- [reports/INDEX.md](../reports/INDEX.md)
-- [reports/README.md](../reports/README.md)
-- [reports/rapport-cerveau-modules.md](../reports/rapport-cerveau-modules.md)
-- [reports/rapport-coherence-docs-3.md](../reports/rapport-coherence-docs-3.md)
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-cerveau-modules.md](../../reports/rapport-cerveau-modules.md)
+- [reports/rapport-coherence-docs-3.md](../../reports/rapport-coherence-docs-3.md)
 
 <!-- notes -->
 

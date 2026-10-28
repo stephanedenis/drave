@@ -2,16 +2,16 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-13/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:18 | `ebc58252` | VRAM : un pool de tampons dans le cache d'experts — -11,6 % a travail identique (memes 264 montages, perplexite 27736,1204 inchangee), et une fuite reparee (MatriceGpu n'a pas de Drop) | `main.rs`, `model.rs`, `2026-10-13/README.md` (+2) |
-| 01:14 | `ad37253a` | Journal du 12/10 (theme moteur) : le recit de la nuit — quatre mesures, quatre changements (prelecture parallele, tampons sequentiels, chargement paresseux, pool VRAM) et trois lecons | `2026-10-12/moteur.md`, `2026-10-13/README.md`, `2026-10-13/attention.md` (+2) |
-| 01:15 | `0abefdce` | Note des lecteurs paralleles : etat au 13/10 — les tampons sont dans le moteur et gagnent sur les octets ET sur le temps (6,22 Go / 3,40 s) | `note-lecteurs-paralleles.md`, `2026-10-13/README.md`, `2026-10-13/moteur.md` |
-| 02:23 | `a386fda6` | La passe a attrape ma porte : elle lisait << chargees en Xs >> alors que le moteur imprime << 601.03ms >> sous la seconde — elle passait sur une machine lente et echouait sur une machine rapide | `references-non-regression.md`, `2026-10-13/README.md`, `2026-10-13/docs.md` (+4) |
+| 00:18 | `ebc58252` | VRAM : un pool de tampons dans le cache d'experts — -11,6 % a travail identique (memes 264 montages, perplexite 27736,1204 inchangee), et une fuite reparee (MatriceGpu n'a pas de Drop) | `main.rs`, `model.rs`, `2026-10-13.md` (+2) |
+| 01:14 | `ad37253a` | Journal du 12/10 (theme moteur) : le recit de la nuit — quatre mesures, quatre changements (prelecture parallele, tampons sequentiels, chargement paresseux, pool VRAM) et trois lecons | `2026-10-12_moteur.md`, `2026-10-13.md`, `2026-10-13_attention.md` (+2) |
+| 01:15 | `0abefdce` | Note des lecteurs paralleles : etat au 13/10 — les tampons sont dans le moteur et gagnent sur les octets ET sur le temps (6,22 Go / 3,40 s) | `note-lecteurs-paralleles.md`, `2026-10-13.md`, `2026-10-13_moteur.md` |
+| 02:23 | `a386fda6` | La passe a attrape ma porte : elle lisait << chargees en Xs >> alors que le moteur imprime << 601.03ms >> sous la seconde — elle passait sur une machine lente et echouait sur une machine rapide | `references-non-regression.md`, `2026-10-13.md`, `2026-10-13_docs.md` (+4) |
 | 06:18 | `04f1925a` | Pool de tampons : neutre en temps (2,4 s avant, 2,3-2,4 apres) — et l'hypothese des 250 000 defauts de page par jeton est REFUTEE (glibc reutilise les blocs de 0,88 Mo) | `gguf.rs`, `main.rs`, `model.rs` (+3) |
 
 ## Chiffres du jour
@@ -22,9 +22,9 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
-- [reports/rapport-pool-tampons.md](../reports/rapport-pool-tampons.md)
-- [reports/rapport-vram-transfert.md](../reports/rapport-vram-transfert.md)
+- [reports/rapport-chargement-paresseux.md](../../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-pool-tampons.md](../../reports/rapport-pool-tampons.md)
+- [reports/rapport-vram-transfert.md](../../reports/rapport-vram-transfert.md)
 
 <!-- notes -->
 **La fin de l'après-midi (15 h 00 → 16 h 25) : la passe après les changements, la loi moyennée, et
@@ -82,7 +82,7 @@ structure commune ; elle n'est simplement pas utilisable.
 **Conclusion : pas de gain latéral par les experts**, ce qui recoupe le « gain nul » de l'échange
 d'états. Le mécanisme et sa porte (`tools/porte-echange-experts.sh`, vue **rouge** sans l'option
 d'ordre) restent au dépôt. Fiche :
-[`reports/rapport-c9-echange-experts.md`](../reports/rapport-c9-echange-experts.md).
+[`reports/rapport-c9-echange-experts.md`](../../reports/rapport-c9-echange-experts.md).
 
 *Ce qui reste ouvert, et ce n'est plus de la latéralité* : la **dernière couche** est un poste où le
 routage du modèle n'est pas optimal (tout routage différent y bouge la perplexité de ±20-50 %).
@@ -120,7 +120,7 @@ non plus : de 15 à 30 morceaux, m32 gagne ÷1,45 et m20 gagne ÷22,8 (une falai
 Conclusion pour le dessin : la voie « adapter un chemin gelé » ne rattrapera pas le modèle
 (~4 000 morceaux par extrapolation), et agrandir la tête est **mesuré contre-productif** → **le
 manque est bien N4**, entraîner le chemin court. Fiche :
-[`reports/rapport-c8-echelle.md`](../reports/rapport-c8-echelle.md).
+[`reports/rapport-c8-echelle.md`](../../reports/rapport-c8-echelle.md).
 <!-- notes -->
 **La seconde moitié de la nuit (02 h 30 → 04 h 00) : le cerveau et les outils.**
 

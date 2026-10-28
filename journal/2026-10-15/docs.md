@@ -2,19 +2,19 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-15/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 04:30 | `06b107f5` | Etat du cerveau : index de la nuit (27 commits, 16 fiches, 13 outils) et les cinq questions restees ouvertes, dans l'ordre | `etat-cerveau.md`, `2026-10-15/README.md`, `2026-10-15/mesures.md` (+1) |
-| 06:26 | `b3099699` | Journal du 15/10 : le defaut le plus utile de la nuit (le harnais n'etait pas reproductible, et ce n'etait pas du bruit) et ce qu'il a recalibre | `2026-10-15/README.md`, `2026-10-15/mesures.md`, `THEMES.md` |
-| 08:01 | `ef8460af` | Journal et etat du cerveau : les trois rounds d'apres 8 h (la grille rang x pas qui explique la non-composition, le critere de diversite sur un second corpus, la sonde courte) | `etat-cerveau.md`, `2026-10-15/README.md`, `2026-10-15/distribue.md` (+2) |
-| 11:01 | `481f9545` | La convention de rotation 2-D, tranchee par la SOURCE (rotate_half apparie i et i+hd/2, pas (2i,2i+1)) : cosinus +0,84 a la couche 2 — et le suspect suivant est nomme avec sa preuve | `cerveau-facultes.md`, `main.rs`, `2026-10-15/README.md` (+2) |
+| 04:30 | `06b107f5` | Etat du cerveau : index de la nuit (27 commits, 16 fiches, 13 outils) et les cinq questions restees ouvertes, dans l'ordre | `etat-cerveau.md`, `2026-10-15.md`, `2026-10-15_mesures.md` (+1) |
+| 06:26 | `b3099699` | Journal du 15/10 : le defaut le plus utile de la nuit (le harnais n'etait pas reproductible, et ce n'etait pas du bruit) et ce qu'il a recalibre | `2026-10-15.md`, `2026-10-15_mesures.md`, `THEMES.md` |
+| 08:01 | `ef8460af` | Journal et etat du cerveau : les trois rounds d'apres 8 h (la grille rang x pas qui explique la non-composition, le critere de diversite sur un second corpus, la sonde courte) | `etat-cerveau.md`, `2026-10-15.md`, `2026-10-15_distribue.md` (+2) |
+| 11:01 | `481f9545` | La convention de rotation 2-D, tranchee par la SOURCE (rotate_half apparie i et i+hd/2, pas (2i,2i+1)) : cosinus +0,84 a la couche 2 — et le suspect suivant est nomme avec sa preuve | `cerveau-facultes.md`, `main.rs`, `2026-10-15.md` (+2) |
 | 13:17 | `8b5dcda4` | Le serveur de documentation du depot : « ou en est le travail ? », en HTML — plus docs/en-cours.md, ecrit a chaque round | `en-cours.md`, `references-non-regression.md`, `main.rs` (+5) |
-| 14:32 | `7ffec657` | Le PROJECTEUR de la vision : un bug de STRUCTURE trouve en comparant sur le MEME etat d'entree (cosinus +0,7804, ecart 66,6 %) | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/portes.md` (+2) |
-| 16:20 | `bd8f925f` | Projecteur : etat honnete (trois explications essayees, trois fois contredites) et AVERTISSEMENT — le binaire en place ne correspond pas au source | `en-cours.md`, `2026-10-15/README.md`, `2026-10-15/moteur.md` (+2) |
+| 14:32 | `7ffec657` | Le PROJECTEUR de la vision : un bug de STRUCTURE trouve en comparant sur le MEME etat d'entree (cosinus +0,7804, ecart 66,6 %) | `en-cours.md`, `2026-10-15.md`, `2026-10-15_portes.md` (+2) |
+| 16:20 | `bd8f925f` | Projecteur : etat honnete (trois explications essayees, trois fois contredites) et AVERTISSEMENT — le binaire en place ne correspond pas au source | `en-cours.md`, `2026-10-15.md`, `2026-10-15_moteur.md` (+2) |
 
 ## Chiffres du jour
 
@@ -24,7 +24,7 @@
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-vision-qwen2vl.md](../reports/rapport-vision-qwen2vl.md)
+- [reports/rapport-vision-qwen2vl.md](../../reports/rapport-vision-qwen2vl.md)
 
 <!-- notes -->
 

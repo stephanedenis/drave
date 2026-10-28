@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-22/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 17:05 | `75b6ab2a` | MESURE 146 — LA PERTE CONTRASTIVE FR/EN N'ALIGNE TOUJOURS PAS : sonde FR->EN 0,042 (hasard 5%), pont 0,466 contre 0,810 fige ; en 500 pas sur un LoRA d'attention, l'alignement appris n'emerge pas. Le pont externe reste la structure qui marche | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21/README.md` (+6) |
+| 17:05 | `75b6ab2a` | MESURE 146 — LA PERTE CONTRASTIVE FR/EN N'ALIGNE TOUJOURS PAS : sonde FR->EN 0,042 (hasard 5%), pont 0,466 contre 0,810 fige ; en 500 pas sur un LoRA d'attention, l'alignement appris n'emerge pas. Le pont externe reste la structure qui marche | `en-cours.md`, `05-la-pensee-sans-verbaliser.md`, `2026-10-21.md` (+6) |
 
 ## Chiffres du jour
 
@@ -18,8 +18,8 @@
 
 ## Mesures et rapports touchés
 
-- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
-- [reports/README.md](../reports/README.md)
+- [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md)
+- [reports/README.md](../../reports/README.md)
 
 <!-- notes -->
 

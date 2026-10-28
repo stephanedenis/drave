@@ -2,72 +2,41 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-10/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 07:19 | `ae7e149` | Verification complete : 19 portes vertes, 1 rouge nommee et NON expliquee | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
-| 08:10 | `39d32f3` | Audit des drapeaux par chemin : methode de criblage, portee exacte, et ce qui reste a instruire | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
-| 11:22 | `3bc24b3` | Passe complete : 22/22 vertes en 70 min — et une porte qui etait verte en ne comparant RIEN | `etat-cerveau.md`, `manques.md`, `2026-10-10/README.md` (+18) |
-| 13:25 | `5234391` | Porte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille | `etat-cerveau.md`, `2026-10-10/README.md`, `2026-10-10/apprentissage.md` (+14) |
-| 13:48 | `e0c67fd` | Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes | `etat-cerveau.md`, `note-peripherie-c8.md`, `2026-10-10/README.md` (+6) |
-| 14:15 | `1644696` | C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte | `main.rs`, `model.rs`, `2026-10-10/README.md` (+16) |
-| 15:21 | `624b694` | Passe complete apres la peripherie : 23 portes, 23 vertes, 78 minutes | `etat-cerveau.md`, `manques.md`, `references-non-regression.md` (+16) |
-| 17:20 | `6abc556` | Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25) | `README.md`, `REPRISE.md`, `modularisation.md` (+7) |
-| 18:13 | `5b349e4` | Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal | `references-non-regression.md`, `2026-10-10/README.md`, `2026-10-10/apprentissage.md` (+13) |
-| 19:20 | `763822b` | Passe complete FINALE : 25 portes, 25 vertes, 57 minutes — les reperes sont regeneres depuis ce journal | `etat-cerveau.md`, `manques.md`, `references-non-regression.md` (+16) |
-| 21:33 | `fcd442d` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres | `manques.md`, `references-non-regression.md`, `2026-10-10/README.md` (+14) |
-| 21:34 | `e2a710c` | Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s) | `etat-cerveau.md`, `2026-10-10/README.md`, `2026-10-10/docs.md` (+5) |
+| 07:19 | `ae7e1494` | Verification complete : 19 portes vertes, 1 rouge nommee et NON expliquee | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+1) |
+| 08:10 | `39d32f3e` | Audit des drapeaux par chemin : methode de criblage, portee exacte, et ce qui reste a instruire | `sprint-cerveau.md`, `MANIFEST.md`, `digest.md` (+2) |
+| 11:22 | `3bc24b39` | Passe complete : 22/22 vertes en 70 min — et une porte qui etait verte en ne comparant RIEN | `etat-cerveau.md`, `manques.md`, `2026-10-10.md` (+18) |
+| 13:25 | `52343910` | Porte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+14) |
+| 13:48 | `e0c67fd1` | Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes | `etat-cerveau.md`, `note-peripherie-c8.md`, `2026-10-10.md` (+6) |
+| 14:15 | `16446961` | C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte | `main.rs`, `model.rs`, `2026-10-10.md` (+16) |
+| 15:21 | `624b6944` | Passe complete apres la peripherie : 23 portes, 23 vertes, 78 minutes | `etat-cerveau.md`, `manques.md`, `references-non-regression.md` (+16) |
+| 17:20 | `6abc5568` | Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25) | `README.md`, `REPRISE.md`, `modularisation.md` (+7) |
+| 18:13 | `5b349e4c` | Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal | `references-non-regression.md`, `2026-10-10.md`, `2026-10-10_apprentissage.md` (+13) |
+| 19:20 | `763822b3` | Passe complete FINALE : 25 portes, 25 vertes, 57 minutes — les reperes sont regeneres depuis ce journal | `etat-cerveau.md`, `manques.md`, `references-non-regression.md` (+16) |
+| 21:33 | `fcd442d3` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres | `manques.md`, `references-non-regression.md`, `2026-10-10.md` (+14) |
+| 21:34 | `e2a710c6` | Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s) | `etat-cerveau.md`, `2026-10-10.md`, `2026-10-10_docs.md` (+5) |
 
 ## Chiffres du jour
 
-`13 s` · `136 jetons` · `0,509` · `37,8 %` · `173,0196` · `2048 jetons` · `388 s` · `1 s` · `0 jeton` · `×633`
+`13 s`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
-## Étapes du jour (74)
-
-*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
-
-- **01:06** — C2 : je transforme l'expérience en porte — témoin de non-effet, mécanisme, et le négatif expliqué
-- **01:33** — Je lance la suite complète des portes en fond et je remets à jour la liste d'actions
-- **02:28** — Porte verte (136 jetons, 3,29× mieux que le hasard) — je commite avec la correction honnête
-- **02:37** — C2 : je soupçonne le même décalage d'un jeton que dans la porte précédente — je vérifie
-- **03:24** — Résultat net : la somme ARBITRE (jamais de 3e contenu), bascule à 0,6 prédite à 0,509 ; je corrige la porte précédente
-- **04:14** — L'état stocké est la sortie NORMÉE (norme 306) — je teste si l'injection porte quand même le contenu
-- **06:05** — Round 10 : vérification complète — 8 rounds ont touché le chemin d'exécution, je passe toutes les portes
-- **07:20** — Round 10 livré : vérification complète des 20 portes — 19 vertes, 1 rouge nommée
-- **07:20** — Round 11 : j'instruis la porte rouge — dense contre routé, c'est l'hypothèse que la porte teste
-- **07:20** — Le dense échoue aussi (37,8 %) — ce n'est pas le routage ; je lis les commandes de la porte
-- **07:21** — PORTE TENUE : 173,0196 des deux côtés — la rouge était un DÉFAUT DE PORTE ; je le corrige
-- **07:56** — Round 18 livré : vérification du changement de type `ffn_gain` — contrainte tenue
-- **08:35** — Round 25 livré : vérification du chemin d'exécution après le refus — trois portes vertes
-- **08:38** — 9 tests encodent la mise en page v6 — je reviens en arrière plutôt que de laisser les tests rouges
-- **09:45** — Vérification du code de sortie réel, puis ajout au portail et commit
-- **09:51** — Pendant que le portail tourne, j'écris l'instrument qui manquait : la passe complète des 22 portes
-- **10:19** — Passe à 8 portes vertes sur 8, gain en cours ; je lance la question décisive (2 048 jetons) et je vérifie les références cassées
-- **10:20** — Bug attrapé par ma propre vérification : au-delà de 99 fiches, le tri lexicographique casse l'ordre — je corrige et je refais
-- **10:23** — Portail `porte-gain` vert dans la passe complète (388 s) ; j'ajoute l'index d'états par module demandé
-- **11:21** — Deux portes vertes en 0-1 s : c'est suspect — je regarde ce qu'elles ont réellement mesuré
-- **11:21** — Porte fantôme trouvée : `porte-tokenizer-kimi` lit stdin sans redirection — elle compare 0 jeton et sort verte
-- **11:21** — Je répare la porte (jeu de textes intégré + refus de verdir sans comparaison) et je la fais tourner
-- **12:45** — Vérification que le refactor n'a rien cassé (tête linéaire, 8 morceaux)
-- **13:17** — Pendant la capture, je confronte les résultats C8 à la porte que le plan lui fixe
-- **13:18** — La porte du réflexe conclut « pas de sortie précoce utilisable » — conclusion dépassée : je la corrige et j'y ajoute la sonde
-- *(+49 autres étapes — voir les rapports de session)*
-
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 62.7 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+- `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) · [digest](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-c8-inter-langue.md](../reports/rapport-c8-inter-langue.md)
-- [reports/rapport-campagne-benefices.md](../reports/rapport-campagne-benefices.md)
-- [reports/rapport-fenetre-puits-attention.md](../reports/rapport-fenetre-puits-attention.md)
-- [reports/rapport-passe-complete-portes.md](../reports/rapport-passe-complete-portes.md)
+- [reports/rapport-c8-inter-langue.md](../../reports/rapport-c8-inter-langue.md)
+- [reports/rapport-campagne-benefices.md](../../reports/rapport-campagne-benefices.md)
+- [reports/rapport-fenetre-puits-attention.md](../../reports/rapport-fenetre-puits-attention.md)
+- [reports/rapport-passe-complete-portes.md](../../reports/rapport-passe-complete-portes.md)
 
 <!-- notes -->
 ` … `

@@ -1,30 +1,30 @@
 # 2026-10-11
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-11/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **1 session(s)** · **9 thème(s)**
+**42 commits** · **1 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 7 | [2026-10-11/apprentissage.md](apprentissage.md) |
-| attention | 3 | [2026-10-11/attention.md](attention.md) |
-| distribue | 7 | [2026-10-11/distribue.md](distribue.md) |
-| divers | 0 | [2026-10-11/divers.md](divers.md) |
-| memoire | 1 | [2026-10-11/memoire.md](memoire.md) |
-| mesures | 1 | [2026-10-11/mesures.md](mesures.md) |
-| modele | 9 | [2026-10-11/modele.md](modele.md) |
-| moteur | 5 | [2026-10-11/moteur.md](moteur.md) |
-| portes | 8 | [2026-10-11/portes.md](portes.md) |
+| apprentissage | 7 | [apprentissage.md](apprentissage.md) |
+| attention | 3 | [attention.md](attention.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
+| modele | 9 | [modele.md](modele.md) |
+| moteur | 5 | [moteur.md](moteur.md) |
+| portes | 8 | [portes.md](portes.md) |
 
-## Sessions du jour
+## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 71.0 h | [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md) |
+| `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` | Où en est-on | 2026-10-08 09:11 | 71.0 h | [rapport](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) · [digest](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -71,6 +71,7 @@
 | 06:30 | `c5fd1747` | Passe complete du 11/10 06 h 30 : 34 portes, 34 vertes, 85 min 8 s — reperes regeneres depuis le journal |
 | 06:31 | `a409bdea` | Etat : passe complete du 11/10 06 h 30 (34/34, 85 min 8 s), six portes ajoutees et toutes vues rouges, une retiree car elle mesurait un artefact |
 | 08:11 | `22d9919c` | Reprise : les portes regenerent leurs prerequis de /tmp (tools/_corpus.sh, modele de porte-reparti-moteur) — une seule exception, qui refuse en le disant |
+| 08:13 | `6723034b` | Etat : note de reprise apres redemarrage (les portes regenerent leurs prerequis, sauf la topologie qui le dit) |
 
 ## Le récit de la journée (écrit à la main)
 

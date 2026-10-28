@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**31 commits** · **0 session(s)** · **8 thème(s)**
+**32 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 5 | [distribue.md](distribue.md) |
-| docs | 6 | [docs.md](docs.md) |
+| docs | 7 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 8 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -26,8 +26,8 @@
 
 ## Sessions DSH
 
-Aucune session indexée pour ce jour ; voir
-[l'index des sessions](../README.md#sessions).
+- **Session en cours** : `f0969e87-af0c-43b1-93cf-f278d9c90846` — [l'état](../../docs/pilotage/en-cours.md) · [l'index des sessions](../README.md#sessions) ; rapport à la fin de la session.
+
 
 ## Tous les commits (heure réelle)
 
@@ -64,6 +64,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:14 | `f3b70729` | N2.5 — STUDENT 21,63 M : PPL 4,294, PIRE QUE 11,47 M (3,295), BUDGET CONFONDU |
 | 13:17 | `2e762048` | N2.6 — CORPUS DIVERSIFIÉ : 49 999 FENÊTRES, 4 SOURCES |
 | 13:25 | `acd9c623` | MÉTHODE — ÉCHANTILLONNAGE VAN DER CORPUT, DÉTERMINISTE ET REPRODUCTIBLE |
+| 14:09 | `47b0a0f1` | JOURNAL — GÉNÉRATEURS EN DOSSIERS PAR JOUR (SESSION → JOUR/ÉTAT) |
 
 ## Le récit de la journée (écrit à la main)
 

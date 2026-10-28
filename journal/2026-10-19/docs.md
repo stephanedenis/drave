@@ -2,7 +2,7 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-19/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (3)
 
@@ -10,7 +10,7 @@
 |---|---|---|---|
 | 15:51 | `60b7e0b9` | DOCUMENTATION — AGENTS.md PASSE DE 9,3 Ko A 5,0 Ko (65 lignes) : la mission, les 7 regles non negociables et un ROUTAGE par tache ; le detail part dans docs/agent/ (7 documents charges a la demande). Le cout de contexte injecte a chaque session baisse de 46 %, et une tache ne charge plus que son document | `AGENTS.md`, `README.md`, `miroir.md` (+8) |
 | 19:37 | `f28465b5` | VOCABULAIRE — « COUCHE » = COUCHE DE NEURONES, « ÉTAGE » = NIVEAU D'ARCHITECTURE : la mission ne dit plus « deux couches » (ambigu) mais « deux étages » ; l'étage 1 est l'entrée-sortie, l'étage 2 la pensée abstraite. La règle est écrite dans le glossaire, AGENTS.md et les documents de tâche ; « couche commune » reste le nom historique, à lire « étage entrée-sortie » | `AGENTS.md`, `README.md`, `miroir.md` (+11) |
-| 19:40 | `ceb86b2c` | VOCABULAIRE — la page de généalogie dit « étage entrée-sortie » (nom historique : couche commune) | `genealogie-des-langues.md`, `2026-10-19/README.md`, `2026-10-19/docs.md` |
+| 19:40 | `ceb86b2c` | VOCABULAIRE — la page de généalogie dit « étage entrée-sortie » (nom historique : couche commune) | `genealogie-des-langues.md`, `2026-10-19.md`, `2026-10-19_docs.md` |
 
 ## Chiffres du jour
 
@@ -20,7 +20,7 @@
 
 ## Mesures et rapports touchés
 
-- [reports/07-mesures-couche-commune.md](../reports/07-mesures-couche-commune.md)
+- [reports/07-mesures-couche-commune.md](../../reports/07-mesures-couche-commune.md)
 
 <!-- notes -->
 

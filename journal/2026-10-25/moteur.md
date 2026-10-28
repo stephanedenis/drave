@@ -2,13 +2,13 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-25/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 04:21 | `1bb62354` | C3.2c — LES ENTREES AUSSI SONT SUR LE GPU : b, c, seq et la sortie du generate etaient sur CPU (meme piege). Corrige : .to('cuda') sur les trois entrees, .cpu() sur la sortie avant decode. Le run GPU peut enfin mesurer | `2026-10-25/README.md`, `2026-10-25/modele.md`, `lora_recopie.py` |
+| 04:21 | `1bb62354` | C3.2c — LES ENTREES AUSSI SONT SUR LE GPU : b, c, seq et la sortie du generate etaient sur CPU (meme piege). Corrige : .to('cuda') sur les trois entrees, .cpu() sur la sortie avant decode. Le run GPU peut enfin mesurer | `2026-10-25.md`, `2026-10-25_modele.md`, `lora_recopie.py` |
 
 <!-- notes -->
 

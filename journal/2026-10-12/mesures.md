@@ -2,35 +2,36 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-12/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 18:20 | `be29ebc4` | Machine : le raid0 de 4 NVMe est en service et mesuré — 7,45 Go/s à 8 lecteurs contre 1,95 à un (×3,8), QPI sans coût mesurable aux trois placements, DRAM-less confirmé en aléa QD1 | `REPRISE.md`, `configuration-nvme-raid-amd.md`, `etat-cerveau.md` (+6) |
-| 18:22 | `6a39a8bf` | Journal du 12/10 : le raid0 en service (trois commits dans la journée) — récit et chiffres dans le bloc notes du thème mesures | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `README.md` (+1) |
-| 18:43 | `77a72f81` | Journal du 12/10 : S4 commence par la mesure du mecanisme (grappe x42 sur l'array), cinq commits dans la journee | `2026-10-12/README.md`, `2026-10-12/moteur.md`, `README.md` (+1) |
+| 18:22 | `6a39a8bf` | Journal du 12/10 : le raid0 en service (trois commits dans la journée) — récit et chiffres dans le bloc notes du thème mesures | `2026-10-12.md`, `2026-10-12_mesures.md`, `README.md` (+1) |
+| 18:43 | `77a72f81` | Journal du 12/10 : S4 commence par la mesure du mecanisme (grappe x42 sur l'array), cinq commits dans la journee | `2026-10-12.md`, `2026-10-12_moteur.md`, `README.md` (+1) |
 | 22:29 | `0a671116` | S4 (suite) : la lecture sequentielle dans nos tampons — 6,22 Go lus et passe de 3,40 s contre 10,90 Go et 3,70 s pour les fils ; perplexite identique dans les quatre bras | `gguf.rs`, `main.rs`, `model.rs` (+12) |
-| 22:58 | `088cf7ff` | Le fichier d'entree des trois portes a aiguille est VERSIONNE — un prerequis de mesure qui vit dans /tmp rend la mesure non reproductible | `2026-10-12/README.md`, `2026-10-12/distribue.md`, `README.md` (+6) |
-| 23:00 | `b4b6554a` | Fiches : horodatages rectifies — l'heure se lit, elle ne se suppose pas (REPRISE.md § 1) ; mes trois fiches de la nuit portaient des heures estimees au lieu des heures de git | `2026-10-12/README.md`, `2026-10-12/mesures.md`, `rapport-chargement-paresseux.md` (+2) |
+| 22:58 | `088cf7ff` | Le fichier d'entree des trois portes a aiguille est VERSIONNE — un prerequis de mesure qui vit dans /tmp rend la mesure non reproductible | `2026-10-12.md`, `2026-10-12_distribue.md`, `README.md` (+6) |
+| 23:00 | `b4b6554a` | Fiches : horodatages rectifies — l'heure se lit, elle ne se suppose pas (REPRISE.md § 1) ; mes trois fiches de la nuit portaient des heures estimees au lieu des heures de git | `2026-10-12.md`, `2026-10-12_mesures.md`, `rapport-chargement-paresseux.md` (+2) |
+| 23:09 | `8a7af88f` | Manques : le manque de methode a deux pas faits et mesures — la prelecture parallele (calcul -53 %) puis les tampons sequentiels (6,22 Go / 3,40 s contre 10,90 / 3,70), et ce qui reste est nomme (pool, recouvrement, VRAM) | `manques.md`, `2026-10-12.md`, `2026-10-12_docs.md` (+1) |
 
 ## Chiffres du jour
 
-`3,40 s` · `3,70 s` · `6,22 Go` · `10,90 Go` · `×3,8` · `7,45 Go`
+`-53 %` · `3,40 s` · `6,22 Go` · `3,70 s` · `10,90 Go` · `×3,8` · `7,45 Go`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `bbc0b8e2` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2/rapport.md) · [digest](../sessions/bbc0b8e2/digest.md)
+- `bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf` — Avis sur le dépôt GitHub Strata (début 2026-10-12 08:44, 0.2 h) → [rapport](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) · [digest](../sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-chargement-paresseux.md](../reports/rapport-chargement-paresseux.md)
-- [reports/rapport-raid0-nvme.md](../reports/rapport-raid0-nvme.md)
-- [reports/rapport-s4-prechargement-moteur.md](../reports/rapport-s4-prechargement-moteur.md)
-- [reports/rapport-vram-transfert.md](../reports/rapport-vram-transfert.md)
+- [reports/rapport-chargement-paresseux.md](../../reports/rapport-chargement-paresseux.md)
+- [reports/rapport-raid0-nvme.md](../../reports/rapport-raid0-nvme.md)
+- [reports/rapport-s4-prechargement-moteur.md](../../reports/rapport-s4-prechargement-moteur.md)
+- [reports/rapport-vram-transfert.md](../../reports/rapport-vram-transfert.md)
 
 <!-- notes -->
 **Le raid0 est en service, et mesuré.** L'array (4 × NVMe, 938 Go, `~/IA`, **nœud 1**) porte
@@ -42,7 +43,7 @@ lieu d'écrire sur le mauvais disque). Chiffres : **7,45 Go/s** en lecture à 8 
 le mécanique. Le **QPI ne coûte rien** à cette bande (7,41 / 7,42 / 7,47 Go/s selon le placement).
 Ce qui n'a **pas** gagné à être déplacé, et c'est mesuré : la compilation de `drave-core` (48,03 s
 cible HDD contre 48,79 s cible array). Fiche :
-[`reports/rapport-raid0-nvme.md`](../reports/rapport-raid0-nvme.md) · politique et outils :
+[`reports/rapport-raid0-nvme.md`](../../reports/rapport-raid0-nvme.md) · politique et outils :
 `~/IA/README.md` (`etat-raid.sh`, `banc-io.py`, `banc-numa-raid.py`).
 
 **Deux effets de bord, tous deux entrés au plan.** (1) `drave … --materiel` **ne voit pas

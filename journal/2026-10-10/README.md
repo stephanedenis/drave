@@ -1,160 +1,165 @@
 # 2026-10-10
 
-> **Généré** par `tools/journal_auto.py` — index de la journée, découpée par **thème**
-> (une journée de ce dépôt ne tient pas dans un fichier). Le récit écrit à la main est
-> conservé plus bas, dans le bloc « notes » (marqueurs HTML).
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-10-10/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
 
-**124 commits** · **1 session(s)** · **10 thème(s)**
+**125 commits** · **1 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 3 | [2026-10-10/apprentissage.md](apprentissage.md) |
-| attention | 19 | [2026-10-10/attention.md](attention.md) |
-| distribue | 25 | [2026-10-10/distribue.md](distribue.md) |
-| divers | 0 | [2026-10-10/divers.md](divers.md) |
-| docs | 17 | [2026-10-10/docs.md](docs.md) |
-| memoire | 18 | [2026-10-10/memoire.md](memoire.md) |
-| mesures | 16 | [2026-10-10/mesures.md](mesures.md) |
-| modele | 9 | [2026-10-10/modele.md](modele.md) |
-| moteur | 5 | [2026-10-10/moteur.md](moteur.md) |
-| portes | 12 | [2026-10-10/portes.md](portes.md) |
+| apprentissage | 3 | [apprentissage.md](apprentissage.md) |
+| attention | 19 | [attention.md](attention.md) |
+| distribue | 26 | [distribue.md](distribue.md) |
+| docs | 17 | [docs.md](docs.md) |
+| memoire | 18 | [memoire.md](memoire.md) |
+| mesures | 16 | [mesures.md](mesures.md) |
+| modele | 9 | [modele.md](modele.md) |
+| moteur | 5 | [moteur.md](moteur.md) |
+| portes | 12 | [portes.md](portes.md) |
 
-## Sessions du jour
+## Autres pièces du jour
+
+[readme-historique.md](readme-historique.md) · [reprise-historique.md](reprise-historique.md)
+
+## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d31b3d9b` | Où en est-on | 2026-10-08 09:11 | 62.7 h | [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md) |
+| `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` | Où en est-on | 2026-10-08 09:11 | 71.0 h | [rapport](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) · [digest](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md) |
 
 ## Tous les commits (heure réelle)
 
 | heure | commit | fait |
 |---|---|---|
-| 00:03 | `d9d532f` | C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0) |
-| 01:32 | `b852b09` | C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte |
-| 01:50 | `19a4a01` | Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message) |
-| 02:02 | `7a8cfb7` | C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard |
-| 02:28 | `f537818` | C6 : la porte de l'indice étranger CORRIGE la mesure — l'effet est réel, non robuste |
-| 03:39 | `b5d5fe9` | C2 : deux entrées, une règle de mélange — et la CORRECTION d'un faux négatif |
-| 04:08 | `52d49ec` | Porte greffe : cas 5 réécrit — la greffe porte le CONTENU, pas seulement le 1er jeton |
-| 04:20 | `089c52a` | C6/C2 : la mémoire QUI SERT, de bout en bout — et le goulot est le RAPPEL |
-| 04:56 | `b21f715` | C6 : le rappel par le contenu dépend de l'INDICE, pas de la mémoire (8 indices mesurés) |
-| 05:12 | `7a688a7` | C6 : le rappel n'est PAS continu — deux jetons voisins donnent 50 et 1 006 jetons |
-| 05:44 | `892acfd` | C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater |
-| 05:48 | `203872a` | C10 : budget d'octets par lien — déclaré dans la topologie, vérifié sur ce qui PASSE |
-| 05:56 | `619b940` | C11 : pannes de lien nommees, code distinct, et jamais de resultat partiel |
-| 06:05 | `47b2ad6` | C10 (suite) : budget de LATENCE par lien — troisieme volet des budgets du plan |
-| 07:19 | `ae7e149` | Verification complete : 19 portes vertes, 1 rouge nommee et NON expliquee |
-| 07:21 | `c43425e` | La porte rouge de repartition : c'etait un DEFAUT DE PORTE, pas du modele |
-| 07:25 | `b1b63b0` | C11 (decouverte) : le registre des regions — les topologies ne codent plus les adresses |
-| 07:27 | `dee9e58` | Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi |
-| 07:28 | `7869a12` | Etat reprenable consolide : trois chantiers avec leur premiere commande, et cinq corrections a ne pas reintroduire |
-| 07:39 | `d104da6` | E4 : l'equilibre excitation/inhibition — l'hypothese est vraie dans UN SEUL sens |
-| 07:47 | `e873179` | E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE |
-| 07:54 | `0bc27b9` | E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul |
-| 07:55 | `6d9bc74` | Verification apres le changement de type de ffn_gain : porte-flux verte, reference inchangee |
-| 08:02 | `031dbc4` | E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre |
-| 08:09 | `719ab85` | Defaut trouve et corrige : --ffn-gain ne faisait RIEN dans le chemin reparti |
-| 08:10 | `39d32f3` | Audit des drapeaux par chemin : methode de criblage, portee exacte, et ce qui reste a instruire |
-| 08:12 | `9775545` | Candidats instruits : la mesure vide etait MON erreur, et deux drapeaux restent a instruire |
-| 08:24 | `c54c6fa` | attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE |
-| 08:33 | `e6f7b6b` | attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux |
-| 08:35 | `c23f43f` | Protocole v7 specifie a l'octet pres, et PAS implemente : le round qui le fera doit avoir de la marge |
-| 08:35 | `671b4b4` | Verification apres le refus des reglages non transportables : flux, pannes et registre vertes |
-| 08:39 | `af6d566` | Protocole v7 tente et REVERTE : neuf tests encodent la mise en page v6 |
-| 08:44 | `dd66191` | PROTOCOLE v7 LIVRE : la fenetre d'attention voyage, le refus disparait, tout est vert |
-| 08:55 | `6df044f` | Verification du protocole v7 sur toutes les portes reparties : huit vertes |
-| 08:56 | `1a6ce84` | Protocole v8 specifie : le compte de PAIRES du noeud, et sa difficulte propre |
-| 09:01 | `e22dbd7` | PROTOCOLE v8 LIVRE : le compte de paires du noeud voyage, et le chiffre a attrape mon bug |
-| 09:07 | `957bf34` | Budget de paires : tente et REVERTE — deux lecons, dont une donnee par la porte |
-| 09:10 | `4767b22` | C10 CLOS : trois budgets, trois codes — octets (6), latence (8), paires (9) |
-| 09:11 | `4367099` | Etalonnage de l'instrument de trace : 50 ms injectes, 50,2 ms mesures |
-| 09:12 | `d09f78c` | La GIGUE d'un pas reparti : 7 ms sur 17,7 (40 %) — ce qu'un ordonnanceur doit tolerer |
-| 09:13 | `c4bb56a` | La gigue avec un VRAI RTT : 14,8 ms sur 30,2 (49 %) — elle croit plus vite que la latence |
-| 09:15 | `656a65f` | Combien de MESSAGES coute un pas ? Quatre — et c'est l'en-tete ecrit a part |
-| 09:18 | `d875b75` | Fusion des deux ecritures : -20 % de la duree d'un pas, sans rien couter |
-| 09:19 | `ec2d0fb` | Le gain de la fusion est FIXE PAR ECHANGE : -20 % sur un pas-jeton, ~-8 % sur un lot |
-| 09:30 | `c749af2` | Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes |
-| 09:32 | `484a4ef` | CORRECTION : le v7 transporte la fenetre, mais le PILOTE ne l'applique pas — ma conclusion du round 28 etait hative |
-| 09:35 | `712a8b4` | Les trois lignes manquantes : le pilote applique enfin la fenetre, et la mesure le confirme |
-| 09:39 | `63203d7` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert |
-| 09:40 | `dd95fa9` | --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART |
-| 09:41 | `639b007` | Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas |
-| 10:07 | `85cf49c` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas |
-| 10:18 | `4a8cac9` | Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates |
-| 10:19 | `531e760` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) |
-| 10:20 | `8b90ce1` | Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat |
-| 10:22 | `17819d8` | Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques) |
-| 10:23 | `de8d002` | docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane |
-| 10:29 | `dab819b` | Journal automatise par JOUR et par THEME (tools/journal_auto.py), branche sur le pre-commit |
-| 10:31 | `145092a` | Journal : les ETAPES du jour (lignes du journal de session) sont reprises par theme |
-| 10:32 | `381030e` | Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable |
-| 10:39 | `024e509` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 |
-| 10:40 | `a944d0c` | Journal : les CHIFFRES du jour par theme, extraits des textes deja fiables |
-| 10:56 | `33676cb` | Journal : etapes DATEES par la trace de session (elles couvraient toute la session) |
-| 10:57 | `b4f1589` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % |
-| 10:59 | `0b00de5` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage |
-| 11:10 | `499400e` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) |
-| 11:22 | `3bc24b3` | Passe complete : 22/22 vertes en 70 min — et une porte qui etait verte en ne comparant RIEN |
-| 11:28 | `cfbcb82` | C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible |
-| 11:35 | `4d03891` | README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier |
-| 11:41 | `116fa0f` | C8 : la courbe de profondeur, et le piege --couches a:b (la borne est EXCLUE) |
-| 11:42 | `62c9da5` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index |
-| 12:04 | `7b0ba27` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit |
-| 12:05 | `9cb184d` | Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4) |
-| 12:34 | `87a841a` | C8 : une tete ENTRAINEE pour sa profondeur — 845,45 contre 456 586,60 (div 540) sur le meme texte |
-| 12:36 | `4a62339` | C8 : le reflexe va plus vite (x1,54 en generation, TTFT div 2,4) — le compromis est pose |
-| 12:44 | `5f1283d` | C8 : la tete reflexe GENERALISE — div 79 sur un texte jamais vu (contre div 540 sur le meme texte) |
-| 13:16 | `eac873a` | C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges |
-| 13:25 | `5234391` | Porte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille |
-| 13:40 | `6dad657` | C8 : transfert a un AUTRE corpus — div 1 730 sur la tete empruntee, x2,6 de cout de domaine |
-| 13:41 | `c8372cb` | Etat et journal : le transfert inter-corpus de C8 est consigne (le patch precedent avait echoue sur un motif perime) |
-| 13:44 | `58f399a` | Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert) |
-| 13:46 | `c594a48` | C8 : l'epoque se choisit sur une VALIDATION, pas sur le test (--val), et la fuite est verifiee sans effet ici |
-| 13:48 | `e0c67fd` | Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes |
-| 14:07 | `923c969` | C8 inter-langue : le transfert echoue, et le corpus PARALLELE rendait le chiffre trompeur |
-| 14:15 | `1644696` | C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte |
-| 14:19 | `e1a0e33` | C8 peripherie : la tache fermee mesuree — le signal COURANT est dans la sortie (R2 0,913), sa MEMOIRE n'y est pas |
-| 14:42 | `eed13e8` | C8 peripherie : la memoire du signal n'est PAS dans l'etat — meme une lecture non lineaire ne la trouve pas |
-| 15:21 | `624b694` | Passe complete apres la peripherie : 23 portes, 23 vertes, 78 minutes |
-| 15:22 | `7f1da31` | Duree de la passe : 3 525 s (58 min 45 s), ecrite partout de la meme facon — un chiffre se recopie exactement ou pas du tout |
-| 15:47 | `3dfe715` | C8 : la poursuite demande une STRUCTURE, pas un parametre — deux references le tranchent |
-| 15:53 | `ed49d1b` | C8 : un tampon en entree rend le passe PARTIELLEMENT lisible (R2 +0,283 contre -0,399) |
-| 15:55 | `5c44644` | Horodatage : je corrige MA propre rechute — les heures etaient estimees, pas lues (jusqu a 3 h 06 d avance) |
-| 15:56 | `b6453bb` | Horodatage : les deux dernieres estampilles en avance (etat, fiche de passe) corrigees sur l'heure lue |
-| 15:58 | `2cf2387` | Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal) |
-| 16:09 | `f3e37b1` | C8 : l'etat mesure est consigne DANS LE PLAN (ce qui est fait, ce qui manque) · C9 : la conception et ses cinq portes, ecrites avant le code |
-| 16:58 | `f8a52d6` | Troisieme passe complete : 23 vertes, 0 rouge — apres le tampon d'entree de la peripherie |
-| 17:09 | `549de14` | C9 lateralite : l'echange est EXACT, le gain est NUL (mesure), et la porte verrouille les deux |
-| 17:13 | `f2c0e28` | C9 : le cout COMPRESSE de l'echange — 8 bits pour div 4 d'octets et +3,0 %, et quantifier bat elaguer |
-| 17:18 | `c558b56` | C4 : le prix d'un etat en retard est MESURE — x633 pour UN pas, et ce que ca impose a l'ordonnanceur |
-| 17:20 | `6abc556` | Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25) |
-| 17:31 | `cc9a511` | C4 : perime ou manquant ? La politique d'ordonnanceur est tranchee — on ne reutilise JAMAIS (x633 contre x1,06) |
-| 17:32 | `7d72564` | Note de peripherie C8 : la STRUCTURE de memoire, concue AVANT le code, avec ses quatre portes |
-| 17:34 | `0302cf9` | Etat : le renvoi vers la conception de la memoire de C8 (le patch precedent avait echoue sur un motif perime) |
-| 18:13 | `5b349e4` | Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal |
-| 18:14 | `73ec478` | Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres |
-| 19:20 | `763822b` | Passe complete FINALE : 25 portes, 25 vertes, 57 minutes — les reperes sont regeneres depuis ce journal |
-| 19:21 | `c7450e3` | Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer |
-| 19:25 | `4d7a41e` | C8 : la STRUCTURE de memoire est livree — la poursuite donne R2 1,000 et une erreur NULLE, pour zero paire de plus |
-| 19:31 | `7a3a770` | Fenetre x puits : la non-monotonie a 512 jetons est CLOSE — c'est le corpus, pas une loi |
-| 19:51 | `a4676d1` | E4 cote ENTRAINEMENT : le ratio de signes cortical COUTE (refute) — 2,2729 / 2,3838 / 2,5188 bits par octet |
-| 20:02 | `014effe` | E2 : la croissance locale ne bat pas le hasard (refutee) — 2,3431 contre 2,3215 a densite egale |
-| 20:07 | `e1028f9` | C2 : la recurrence est implementee, bornee, gratuite en paires — et elle NUIT (echo, pas memoire) |
-| 20:09 | `b070381` | C2 : la conception du CYCLE a deux regions, ecrite AVANT le code, avec ses cinq portes |
-| 20:10 | `97086a1` | Registre des manques : N5 — le modele ne retient pas un signal injecte (mesure : present 0,992 / passe -0,681 / tampon 1,000) |
-| 20:28 | `5f74821` | Passe du 20 h 28 : 26 vertes sur 26 (dont porte-memoire) — comptes mis a jour |
-| 20:40 | `7957d33` | Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges |
-| 20:54 | `4f11679` | M8 : trois causes ELIMINEES, une hypothese nommee — le defaut log-normal est toujours la (x78) |
-| 21:33 | `fcd442d` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres |
-| 21:34 | `e2a710c` | Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s) |
-| 22:29 | `4ef5864` | Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant |
-| 22:33 | `e6c988e` | Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer |
-| 22:38 | `84c8179` | REPRISE : deux pieges de plus, tous les deux payes aujourd'hui |
-| 23:04 | `1d3898f` | M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree |
-| 23:24 | `24a7789` | Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele |
-| 23:48 | `b0afa88` | E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve |
+| 00:03 | `d9d532f7` | C7 suite : le rejeu RÉPÉTÉ est un point fixe, pas une usure (erreur exactement 0,00e0) |
+| 01:32 | `b852b093` | C2/C6 : la greffe d'état — branchée, et elle ne transfère PAS le contexte |
+| 01:50 | `19a4a012` | Porte bus-socket : elle rendait 1 en ayant TOUT réussi (sys.exit avec un message) |
+| 02:02 | `7a8cfb70` | C6 : un indice ÉTRANGER retrouve le bon passage — 136 jetons contre 448 de hasard |
+| 02:28 | `f537818f` | C6 : la porte de l'indice étranger CORRIGE la mesure — l'effet est réel, non robuste |
+| 03:39 | `b5d5fe96` | C2 : deux entrées, une règle de mélange — et la CORRECTION d'un faux négatif |
+| 04:08 | `52d49ec3` | Porte greffe : cas 5 réécrit — la greffe porte le CONTENU, pas seulement le 1er jeton |
+| 04:20 | `089c52a3` | C6/C2 : la mémoire QUI SERT, de bout en bout — et le goulot est le RAPPEL |
+| 04:56 | `b21f7158` | C6 : le rappel par le contenu dépend de l'INDICE, pas de la mémoire (8 indices mesurés) |
+| 05:12 | `7a688a7c` | C6 : le rappel n'est PAS continu — deux jetons voisins donnent 50 et 1 006 jetons |
+| 05:44 | `892acfdf` | C6 : clé de FENÊTRE — la prédiction est RÉFUTÉE, et elle confirme le §24 quater |
+| 05:48 | `203872af` | C10 : budget d'octets par lien — déclaré dans la topologie, vérifié sur ce qui PASSE |
+| 05:56 | `619b9405` | C11 : pannes de lien nommees, code distinct, et jamais de resultat partiel |
+| 06:05 | `47b2ad6d` | C10 (suite) : budget de LATENCE par lien — troisieme volet des budgets du plan |
+| 07:19 | `ae7e1494` | Verification complete : 19 portes vertes, 1 rouge nommee et NON expliquee |
+| 07:21 | `c43425e9` | La porte rouge de repartition : c'etait un DEFAUT DE PORTE, pas du modele |
+| 07:25 | `b1b63b0a` | C11 (decouverte) : le registre des regions — les topologies ne codent plus les adresses |
+| 07:27 | `dee9e582` | Balayage des portes : le piege de fenetre etait LATENT dans porte-topologie aussi |
+| 07:28 | `7869a126` | Etat reprenable consolide : trois chantiers avec leur premiere commande, et cinq corrections a ne pas reintroduire |
+| 07:39 | `d104da6c` | E4 : l'equilibre excitation/inhibition — l'hypothese est vraie dans UN SEUL sens |
+| 07:47 | `e8731791` | E4 (suite) : le profil complet sur 24 couches — le desequilibre est a l'ENTREE |
+| 07:54 | `0bc27b93` | E4 (suite) : les gains NE SE COMPOSENT PAS — le profil defait le meilleur reglage seul |
+| 07:55 | `6d9bc74f` | Verification apres le changement de type de ffn_gain : porte-flux verte, reference inchangee |
+| 08:02 | `031dbc4d` | E4 (suite) : le gain d'entree generalise, mais sa MAGNITUDE depend de la fenetre |
+| 08:09 | `719ab855` | Defaut trouve et corrige : --ffn-gain ne faisait RIEN dans le chemin reparti |
+| 08:10 | `39d32f3e` | Audit des drapeaux par chemin : methode de criblage, portee exacte, et ce qui reste a instruire |
+| 08:12 | `9775545c` | Candidats instruits : la mesure vide etait MON erreur, et deux drapeaux restent a instruire |
+| 08:24 | `c54c6fa7` | attn-topk : pas de defaut (il agit a contexte long) · attn-window : un vrai trou, correction REVERTEE |
+| 08:33 | `e6f7b6b5` | attn-window en reparti : un REFUS explicite, pas un resultat faux et silencieux |
+| 08:35 | `c23f43fa` | Protocole v7 specifie a l'octet pres, et PAS implemente : le round qui le fera doit avoir de la marge |
+| 08:35 | `671b4b4d` | Verification apres le refus des reglages non transportables : flux, pannes et registre vertes |
+| 08:39 | `af6d5667` | Protocole v7 tente et REVERTE : neuf tests encodent la mise en page v6 |
+| 08:44 | `dd66191e` | PROTOCOLE v7 LIVRE : la fenetre d'attention voyage, le refus disparait, tout est vert |
+| 08:55 | `6df044f5` | Verification du protocole v7 sur toutes les portes reparties : huit vertes |
+| 08:56 | `1a6ce844` | Protocole v8 specifie : le compte de PAIRES du noeud, et sa difficulte propre |
+| 09:01 | `e22dbd76` | PROTOCOLE v8 LIVRE : le compte de paires du noeud voyage, et le chiffre a attrape mon bug |
+| 09:07 | `957bf34f` | Budget de paires : tente et REVERTE — deux lecons, dont une donnee par la porte |
+| 09:10 | `4767b220` | C10 CLOS : trois budgets, trois codes — octets (6), latence (8), paires (9) |
+| 09:11 | `43670993` | Etalonnage de l'instrument de trace : 50 ms injectes, 50,2 ms mesures |
+| 09:12 | `d09f78c7` | La GIGUE d'un pas reparti : 7 ms sur 17,7 (40 %) — ce qu'un ordonnanceur doit tolerer |
+| 09:13 | `c4bb56a3` | La gigue avec un VRAI RTT : 14,8 ms sur 30,2 (49 %) — elle croit plus vite que la latence |
+| 09:15 | `656a65fa` | Combien de MESSAGES coute un pas ? Quatre — et c'est l'en-tete ecrit a part |
+| 09:18 | `d875b759` | Fusion des deux ecritures : -20 % de la duree d'un pas, sans rien couter |
+| 09:19 | `ec2d0fbe` | Le gain de la fusion est FIXE PAR ECHANGE : -20 % sur un pas-jeton, ~-8 % sur un lot |
+| 09:30 | `c749af23` | Verification apres v7/v8 et la fusion des ecritures : huit portes reparties vertes |
+| 09:32 | `484a4ef9` | CORRECTION : le v7 transporte la fenetre, mais le PILOTE ne l'applique pas — ma conclusion du round 28 etait hative |
+| 09:35 | `712a8b49` | Les trois lignes manquantes : le pilote applique enfin la fenetre, et la mesure le confirme |
+| 09:39 | `63203d79` | Inventaire des drapeaux en reparti : cinq agissent, trois inertes (deux attendus), un ouvert |
+| 09:40 | `dd95fa9f` | --attn-sinks : ecrit dans les trois chemins, transporte par le v7… et LU NULLE PART |
+| 09:41 | `639b007f` | Journal : la section 46 bis (--attn-sinks ecrit partout, lu nulle part) manquait — l'ancre du premier essai ne correspondait pas |
+| 10:07 | `85cf49cd` | --attn-sinks : le refus etait FAUX (le compteur EST lu, branche a fenetre) — le drapeau vit, et le zero n'existait pas |
+| 10:18 | `4a8cac90` | Rangement : docs = fond, reports = une fiche par experience, journal = evenements dates |
+| 10:19 | `531e7605` | Fenetre x puits d'attention : +2,0 % de perplexite pour divide 2,67 les cles notees (512 jetons) |
+| 10:20 | `8b90ce1e` | Rangement (suite) : rapport toutes-langues eclate (107 fiches), recapituatif range comme etat |
+| 10:22 | `17819d88` | Journal : l'index liste les ENTREES QUOTIDIENNES (il ne voyait que les sessions automatiques) |
+| 10:23 | `de8d0022` | docs/etat.md : l'index des modules (roadmap -> etat -> prochaine action) demande par Stephane |
+| 10:29 | `dab819b5` | Journal automatise par JOUR et par THEME (tools/journal_auto.py), branche sur le pre-commit |
+| 10:31 | `145092af` | Journal : les ETAPES du jour (lignes du journal de session) sont reprises par theme |
+| 10:32 | `381030e7` | Journal : journal/THEMES.md, la regle de classement rendue lisible et modifiable |
+| 10:39 | `024e5092` | Fenetre x puits : la pente en N mesuree — gratuit a 512 jetons, +40 % a 2 048 |
+| 10:40 | `a944d0cf` | Journal : les CHIFFRES du jour par theme, extraits des textes deja fiables |
+| 10:56 | `33676cb6` | Journal : etapes DATEES par la trace de session (elles couvraient toute la session) |
+| 10:57 | `b4f15896` | Fenetre x puits a 2 048 : MA conclusion du §4 etait bornee par la grille — avec 512 puits, +0,33 % |
+| 10:59 | `0b00de5a` | Journal : classement affine (theme APPRENTISSAGE, plus de model.rs fourre-tout) + nettoyage |
+| 11:10 | `499400e5` | Carte fenetre x puits : la case donne aussi le TEMPS et le debit (tok/s) |
+| 11:22 | `3bc24b39` | Passe complete : 22/22 vertes en 70 min — et une porte qui etait verte en ne comparant RIEN |
+| 11:28 | `cfbcb827` | C8 : l'etat de la couche 16 CONTIENT le prochain jeton (43,1 %) — c'est la TETE qui est le maillon faible |
+| 11:35 | `4d038918` | README et REPRISE allegés : demarrer en 5 minutes, et renvoyer au lieu de recopier |
+| 11:41 | `116fa0f9` | C8 : la courbe de profondeur, et le piege --couches a:b (la borne est EXCLUE) |
+| 11:42 | `62c9da52` | Carte fenetre x puits : secondes corrigees, et les points d'entree nommes dans l'index |
+| 12:04 | `7b0ba273` | Fenetre x puits : le prix REEL en temps mesure — diviser les cles par 4 ne rend que +12 % de debit |
+| 12:05 | `9cb184d7` | Etat : le prix en temps de la fenetre est consigne (div 4 de cles = +12 % de debit, pas x4) |
+| 12:34 | `87a841ae` | C8 : une tete ENTRAINEE pour sa profondeur — 845,45 contre 456 586,60 (div 540) sur le meme texte |
+| 12:36 | `4a623390` | C8 : le reflexe va plus vite (x1,54 en generation, TTFT div 2,4) — le compromis est pose |
+| 12:44 | `5f1283d7` | C8 : la tete reflexe GENERALISE — div 79 sur un texte jamais vu (contre div 540 sur le meme texte) |
+| 13:16 | `eac873a3` | C8 : la tete reflexe generalise (x5,7 du modele complet) — et deux pieges de protocole corriges |
+| 13:25 | `52343910` | Porte du reflexe : la conclusion « pas de sortie precoce utilisable » est corrigee, et l'invariant est verrouille |
+| 13:40 | `6dad6575` | C8 : transfert a un AUTRE corpus — div 1 730 sur la tete empruntee, x2,6 de cout de domaine |
+| 13:41 | `c8372cb9` | Etat et journal : le transfert inter-corpus de C8 est consigne (le patch precedent avait echoue sur un motif perime) |
+| 13:44 | `58f399ac` | Etat : la ligne C8 renvoie aux cinq fiches (sonde, courbe, tete entrainee, generalisation, transfert) |
+| 13:46 | `c594a48a` | C8 : l'epoque se choisit sur une VALIDATION, pas sur le test (--val), et la fuite est verifiee sans effet ici |
+| 13:48 | `e0c67fd1` | Note de conception : la PERIPHERIE de C8 (entrees, sorties, delais, reflexe) et ses quatre portes |
+| 14:07 | `923c969b` | C8 inter-langue : le transfert echoue, et le corpus PARALLELE rendait le chiffre trompeur |
+| 14:15 | `16446961` | C8 (peripherie) : une ENTREE (signal), une SORTIE (etat par pas), un DELAI — et sa porte |
+| 14:19 | `e1a0e33c` | C8 peripherie : la tache fermee mesuree — le signal COURANT est dans la sortie (R2 0,913), sa MEMOIRE n'y est pas |
+| 14:42 | `eed13e81` | C8 peripherie : la memoire du signal n'est PAS dans l'etat — meme une lecture non lineaire ne la trouve pas |
+| 15:21 | `624b6944` | Passe complete apres la peripherie : 23 portes, 23 vertes, 78 minutes |
+| 15:22 | `7f1da318` | Duree de la passe : 3 525 s (58 min 45 s), ecrite partout de la meme facon — un chiffre se recopie exactement ou pas du tout |
+| 15:47 | `3dfe715e` | C8 : la poursuite demande une STRUCTURE, pas un parametre — deux references le tranchent |
+| 15:53 | `ed49d1bc` | C8 : un tampon en entree rend le passe PARTIELLEMENT lisible (R2 +0,283 contre -0,399) |
+| 15:55 | `5c44644d` | Horodatage : je corrige MA propre rechute — les heures etaient estimees, pas lues (jusqu a 3 h 06 d avance) |
+| 15:56 | `b6453bb1` | Horodatage : les deux dernieres estampilles en avance (etat, fiche de passe) corrigees sur l'heure lue |
+| 15:58 | `2cf2387b` | Horodatage : les 5 dernieres mentions « 17 h 55 » (heure estimee) remplacees par 15 h 15 (fin reelle de la passe, lue sur le journal) |
+| 16:09 | `f3e37b1a` | C8 : l'etat mesure est consigne DANS LE PLAN (ce qui est fait, ce qui manque) · C9 : la conception et ses cinq portes, ecrites avant le code |
+| 16:58 | `f8a52d65` | Troisieme passe complete : 23 vertes, 0 rouge — apres le tampon d'entree de la peripherie |
+| 17:09 | `549de14d` | C9 lateralite : l'echange est EXACT, le gain est NUL (mesure), et la porte verrouille les deux |
+| 17:13 | `f2c0e28b` | C9 : le cout COMPRESSE de l'echange — 8 bits pour div 4 d'octets et +3,0 %, et quantifier bat elaguer |
+| 17:18 | `c558b565` | C4 : le prix d'un etat en retard est MESURE — x633 pour UN pas, et ce que ca impose a l'ordonnanceur |
+| 17:20 | `6abc5568` | Le nombre de portes n'est plus fige dans les fichiers d'entree (il a change trois fois aujourd'hui : 22 -> 23 -> 25) |
+| 17:31 | `cc9a5111` | C4 : perime ou manquant ? La politique d'ordonnanceur est tranchee — on ne reutilise JAMAIS (x633 contre x1,06) |
+| 17:32 | `7d72564e` | Note de peripherie C8 : la STRUCTURE de memoire, concue AVANT le code, avec ses quatre portes |
+| 17:34 | `0302cf9b` | Etat : le renvoi vers la conception de la memoire de C8 (le patch precedent avait echoue sur un motif perime) |
+| 18:13 | `5b349e4c` | Passe du 18 h 12 : 24 vertes sur 24, dont la porte des jumeaux (nouvelle) — reperes regeneres depuis son journal |
+| 18:14 | `73ec478b` | Index des modules et prochaine action : les suites de C9 et C4 sont nommees avec leurs chiffres |
+| 19:20 | `763822b3` | Passe complete FINALE : 25 portes, 25 vertes, 57 minutes — les reperes sont regeneres depuis ce journal |
+| 19:21 | `c7450e37` | Duree de la passe : 59 min 25 s (3565 s) — le commit precedent disait 57 min, ecrit avant de la calculer |
+| 19:25 | `4d7a41e7` | C8 : la STRUCTURE de memoire est livree — la poursuite donne R2 1,000 et une erreur NULLE, pour zero paire de plus |
+| 19:31 | `7a3a7704` | Fenetre x puits : la non-monotonie a 512 jetons est CLOSE — c'est le corpus, pas une loi |
+| 19:51 | `a4676d1f` | E4 cote ENTRAINEMENT : le ratio de signes cortical COUTE (refute) — 2,2729 / 2,3838 / 2,5188 bits par octet |
+| 20:02 | `014effe6` | E2 : la croissance locale ne bat pas le hasard (refutee) — 2,3431 contre 2,3215 a densite egale |
+| 20:07 | `e1028f94` | C2 : la recurrence est implementee, bornee, gratuite en paires — et elle NUIT (echo, pas memoire) |
+| 20:09 | `b0703814` | C2 : la conception du CYCLE a deux regions, ecrite AVANT le code, avec ses cinq portes |
+| 20:10 | `97086a11` | Registre des manques : N5 — le modele ne retient pas un signal injecte (mesure : present 0,992 / passe -0,681 / tampon 1,000) |
+| 20:28 | `5f748214` | Passe du 20 h 28 : 26 vertes sur 26 (dont porte-memoire) — comptes mis a jour |
+| 20:40 | `7957d336` | Aide du moteur : la PERIPHERIE (C8) et la recurrence (C2) y sont decrites, avec leurs pieges |
+| 20:54 | `4f116790` | M8 : trois causes ELIMINEES, une hypothese nommee — le defaut log-normal est toujours la (x78) |
+| 21:33 | `fcd442d3` | Passe complete FINALE : 27 portes, 27 vertes — les quatre portes du jour y sont, et les reperes sont regeneres |
+| 21:34 | `e2a710c6` | Etat : le compte des portes suit la passe finale (27 vertes sur 27, 60 min 13 s) |
+| 22:29 | `4ef58643` | Dessin H (profondeur routee) : la borne de l'oracle vaut 31 % des jetons, et le routeur n'est pas le facteur limitant |
+| 22:33 | `e6c988e2` | Dessin H : la carte des points de sortie est ecrite (12, 16, 20, 22) et reste a lancer |
+| 22:38 | `84c81796` | REPRISE : deux pieges de plus, tous les deux payes aujourd'hui |
+| 23:04 | `1d3898fc` | M8 CORRIGE : le fichier sauve ne reproduisait pas le modele parce que la tete est LIEE a la table d'entree |
+| 23:24 | `24a77894` | Entrainement : ecrire dans un poids reparametre n'ecrivait RIEN, et l'elagage ne couvrait que 5,8 % du modele |
+| 23:48 | `b0afa88a` | E6 REFUTEE : un poids log-normal n'est pas plus elagable, il l'est beaucoup MOINS — et le temoin le prouve |
+| 23:53 | `2ef2774a` | Instrument : le compteur de paires du moteur ne voit PAS l'elagage des poids, sur aucun chemin |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -173,7 +178,7 @@
   quantification 16 bits des activations en perplexité), que PyTorch n'a pas — un modèle dont les
   magnitudes couvrent plusieurs ordres de grandeur peut les dépasser. Trois tests écrits
   (mesurer la plage d'activation, élargir les clamps, exporter en F32).
-- Fiche : [`reports/rapport-m8-log-normal.md`](../reports/rapport-m8-log-normal.md).
+- Fiche : [`reports/rapport-m8-log-normal.md`](../../reports/rapport-m8-log-normal.md).
 
 ### 20 h 10 — Registre des manques : N5, le modèle ne retient pas un signal injecté
 
@@ -191,7 +196,7 @@
   sa sortie du pas précédent ; un cycle **entre** régions exige un ordonnancement **par pas de
   temps** — le pilote exécute aujourd'hui un **ordre topologique**, qui n'existe pas pour un graphe
   cyclique.
-- Conception écrite ([`docs/note-cycle-c2.md`](../docs/archive/note-cycle-c2.md)) : `recurrent: true` avec
+- Conception écrite ([`docs/note-cycle-c2.md`](../../docs/archive/note-cycle-c2.md)) : `recurrent: true` avec
   **délai obligatoire**, **état par région**, ordonnancement du graphe **privé de ses liens
   récurrents** + injection des états du pas `t−1`, `--pas-temps N` borné, et une **référence hors
   moteur** (4 pas de temps) — c'est la validation du plan, et elle doit être **exacte**.
@@ -215,7 +220,7 @@
   réseau en a fait** — le réinjecter ajoute un écho qui noie l'entrée.
 - Même leçon que C8 le même jour : ce qui manquait n'était pas le **câblage** (une boucle), c'était
   la **structure** (un tampon lu directement : R² 1,000) ou l'**entraînement**.
-- Fiche : [`reports/rapport-c2-recurrence.md`](../reports/rapport-c2-recurrence.md).
+- Fiche : [`reports/rapport-c2-recurrence.md`](../../reports/rapport-c2-recurrence.md).
 
 ### 20:02 — E2 : la croissance locale ne bat pas le hasard (réfutée)
 
@@ -230,7 +235,7 @@
   paie).
 - Piège évité dans la règle : accumuler le gradient **après** l'application du masque aurait
   accumulé zéro sur les connexions interdites — celles que la croissance doit justement départager.
-- Fiche : [`reports/rapport-e2-croissance.md`](../reports/rapport-e2-croissance.md).
+- Fiche : [`reports/rapport-e2-croissance.md`](../../reports/rapport-e2-croissance.md).
 
 ### 19:51 — E4 côté ENTRAÎNEMENT : le ratio de signes cortical coûte (réfuté)
 
@@ -246,7 +251,7 @@
 - Deux pièges de harnais attrapés : tenseur de signes sur **CPU** avec des poids sur **GPU**, et
   `randperm` sur `cuda` avec un générateur **cpu** (le générateur reste sur CPU — la graine est
   reproductible — et la permutation est déplacée).
-- Fiche : [`reports/rapport-e4-ratio-signes.md`](../reports/rapport-e4-ratio-signes.md).
+- Fiche : [`reports/rapport-e4-ratio-signes.md`](../../reports/rapport-e4-ratio-signes.md).
 
 ### 19:31 — Fenêtre × puits : la non-monotonie est CLOSE (c'est le corpus, pas une loi)
 
@@ -258,7 +263,7 @@
   **+0,3 %** contre l'attention complète (13,1368) pour **÷1,33 de clés**.
 - Leçon de dimensionnement : le prix d'une fenêtre dépend de la **longueur** (×633 en retard pour
   C4, +40 % à 2 048 ici) **et du corpus** — une règle se mesure sur le corpus visé.
-- Fiche : [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md) § 5 bis.
+- Fiche : [`reports/rapport-fenetre-puits-attention.md`](../../reports/rapport-fenetre-puits-attention.md) § 5 bis.
 
 ### 19:25 — C8 : la STRUCTURE de mémoire est livrée, et la poursuite est résolue (R² 1,000)
 
@@ -276,7 +281,7 @@
   sortie — « refus muet » sur un refus parfaitement dit.
 - Ce que ça ne dit pas : que le **modèle** sache s'en servir (la réinjection la fait transformer par
   le réseau : 0,980 → 0,852) — c'est un entraînement (C7), pas un câblage.
-- Fiche : [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) § 2 quinquies.
+- Fiche : [`reports/rapport-c8-peripherie.md`](../../reports/rapport-c8-peripherie.md) § 2 quinquies.
 
 ### 17:31 — C4 : périmé ou manquant ? La politique est tranchée (×633 contre ×1,06)
 
@@ -290,7 +295,7 @@
   sur la **dernière** position — or la perplexité note les N−1 premiers pas, et cette position ne
   sert pas. Le chiffre sortait **identique à la référence**, ce qui ressemblait à un résultat.
   Corrigé en trouant des positions **notées** (32, 64, 96).
-- Fiche et porte mises à jour : [`reports/rapport-c4-retard.md`](../reports/rapport-c4-retard.md) ·
+- Fiche et porte mises à jour : [`reports/rapport-c4-retard.md`](../../reports/rapport-c4-retard.md) ·
   `tools/porte-c4-retard.sh`.
 
 ### 17:18 — C4 : un état n'est valide qu'à SA position (×633 pour un pas de retard)
@@ -305,7 +310,7 @@
   *asynchrone* et *désaligné*, et elle est maintenant chiffrée.
 - **Porte** : `tools/porte-c4-retard.sh` (25ᵉ) — retard 0 = modèle entier, retard 1 ≥ ×10,
   la dégradation sature.
-- Fiche : [`reports/rapport-c4-retard.md`](../reports/rapport-c4-retard.md).
+- Fiche : [`reports/rapport-c4-retard.md`](../../reports/rapport-c4-retard.md).
 
 ### 17:09 — C9 latéralité : l'échange est exact, le gain est NUL, et la porte le verrouille
 
@@ -324,7 +329,7 @@
 - Deux pièges de banc : la capture d'états n'écrit rien sans `--tete-partielle` (l'écriture est dans
   la branche qui applique la norme), et l'en-tête REFD doit être `ne = [canaux, 1, 1, 1]` (mettre
   le nombre de positions dans `ne[1]` fait lire tout le fichier comme **un** état → panique).
-- Fiche : [`reports/rapport-c9-lateralite.md`](../reports/rapport-c9-lateralite.md).
+- Fiche : [`reports/rapport-c9-lateralite.md`](../../reports/rapport-c9-lateralite.md).
 
 ### 15 h 20 → 15 h 55 — C8 : un tampon en entrée rend le passé PARTIELLEMENT lisible (0,283)
 
@@ -337,7 +342,7 @@
   contexte produisent un état que rien ne lit. La récurrence est ce qui donne un contexte.
 - Les trois régimes sont donc chiffrés : sans structure **rien** (−0,4) · tampon en entrée
   **partiel** (0,283) · ligne à retard **exact** (1,000, par construction).
-- Fiche : [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) § 2 quater.
+- Fiche : [`reports/rapport-c8-peripherie.md`](../../reports/rapport-c8-peripherie.md) § 2 quater.
 
 ### 15 h 00 → 15 h 20 — C8 : la poursuite demande une STRUCTURE, pas un paramètre
 
@@ -349,7 +354,7 @@
 - Donc : l'état du modèle ne garde rien du passé (R² −0,68), aucune des deux références ne
   s'applique à lui, et **retenir demande une structure** — le deuxième manque de C8 après la tête
   réflexe. Le câblage n'était pas le manque, une fois de plus.
-- Fiche : [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) § 2 ter ·
+- Fiche : [`reports/rapport-c8-peripherie.md`](../../reports/rapport-c8-peripherie.md) § 2 ter ·
   outil : `tools/peripherie_memoire.py --reference`.
 
 ### 14 h 30 → 15 h 20 — C8 périphérie : la mémoire n'est pas dans l'état, même non linéairement
@@ -363,7 +368,7 @@
   dans l'état résiduel** — le modèle n'a jamais été entraîné à retenir. Suite : entraînement, ou
   lecture branchée sur le cache.
 - Outil : `tools/peripherie_memoire.py` · fiche mise à jour :
-  [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md).
+  [`reports/rapport-c8-peripherie.md`](../../reports/rapport-c8-peripherie.md).
 
 ### 14 h 20 → 15 h 00 — C8 périphérie : livrée, sa porte est verte, et la tâche fermée dit ce qui manque
 
@@ -379,8 +384,8 @@
   **courant** est dans la sortie (R² **0,913** en récurrent, 0,377 en pas indépendants), mais le
   signal d'il y a **8 pas** ne l'est pas (R² **−0,973**). **Le modèle ne garde pas le signal** :
   la poursuite demande un entraînement, pas du câblage. Le témoin `v[t+1]` reste bas (pas de fuite).
-- Fiche : [`reports/rapport-c8-peripherie.md`](../reports/rapport-c8-peripherie.md) · conception
-  mise à jour : [`docs/note-peripherie-c8.md`](../docs/archive/note-peripherie-c8.md).
+- Fiche : [`reports/rapport-c8-peripherie.md`](../../reports/rapport-c8-peripherie.md) · conception
+  mise à jour : [`docs/note-peripherie-c8.md`](../../docs/archive/note-peripherie-c8.md).
 
 ### 14 h 10 → 14 h 30 — C8 inter-langue : échec du transfert, et un corpus PARALLÈLE qui fausse la lecture
 
@@ -395,13 +400,13 @@
 - Leçon de protocole : **vérifier que les morceaux sont indépendants** avant de conclure d'un
   chiffre — un corpus parallèle, des paraphrases, des fenêtres voisines : tous violent
   l'indépendance, et aucun ne le dit.
-- Fiche : [`reports/rapport-c8-inter-langue.md`](../reports/rapport-c8-inter-langue.md).
+- Fiche : [`reports/rapport-c8-inter-langue.md`](../../reports/rapport-c8-inter-langue.md).
 
 ### 13 h 45 → 14 h 00 — la périphérie de C8 : conception écrite AVANT le code
 
 - La moitié « réflexe » de C8 est mesurée (fiches C8) ; l'autre moitié — les **régions frontière**
   (entrée, sortie, délai) et la **tâche fermée** — n'existait pas. La conception minimale est
-  écrite dans [`docs/note-peripherie-c8.md`](../docs/archive/note-peripherie-c8.md), **avec ses quatre
+  écrite dans [`docs/note-peripherie-c8.md`](../../docs/archive/note-peripherie-c8.md), **avec ses quatre
   portes avant le code** : entrée constante ⇒ sortie constante (au bit près), délai réel et
   mesuré, réflexe **plus rapide et moins bon** (les deux chiffres publiés ensemble), et la
   métrique du plan — **événements (paires) par décision**.
@@ -418,7 +423,7 @@
   vraie de la **tête empruntée** et fausse de l'**état**. Elle verrouille maintenant l'invariant
   qui décide de C8 — l'état de 16 couches contient le prochain jeton (sonde linéaire **25,4 %**
   contre 4,8 % pour la classe majoritaire, mesuré par la porte elle-même).
-- Fiche : [`reports/rapport-c8-transfert-corpus.md`](../reports/rapport-c8-transfert-corpus.md).
+- Fiche : [`reports/rapport-c8-transfert-corpus.md`](../../reports/rapport-c8-transfert-corpus.md).
 
 ### 13 h 30 → 13 h 55 — C8 : 40 morceaux, et deux pièges de protocole qui changeaient tout
 
@@ -435,7 +440,7 @@
   la tête rendait **1,5978**, mieux que le modèle complet — c'était de la **mémorisation**. Un
   test qui appartient à l'entraînement ne teste rien, et il ne le dit pas.
 - Fiche réécrite (les chiffres reproductibles remplacent les anciens, conservés comme trace) :
-  [`reports/rapport-c8-generalisation.md`](../reports/rapport-c8-generalisation.md).
+  [`reports/rapport-c8-generalisation.md`](../../reports/rapport-c8-generalisation.md).
 
 ### 12 h 40 → 13 h 45 — C8 : la tête généralise-t-elle ? ÷79 sur un texte jamais vu
 
@@ -446,7 +451,7 @@
 - **Résultat** : tête empruntée **208 438,39** → tête entraînée **2 632,05** (**÷79**), modèle
   complet **10,3866** (le réflexe reste ×253 derrière). Sur le **même** texte, la même recette
   donnait ÷540 : **la généralisation coûte un facteur 7**, et elle tient.
-- Fiche : [`reports/rapport-c8-generalisation.md`](../reports/rapport-c8-generalisation.md) ·
+- Fiche : [`reports/rapport-c8-generalisation.md`](../../reports/rapport-c8-generalisation.md) ·
   outils : `tools/c8_corpus.sh`, `tools/c8_entrainer_tete.py`.
 
 ### 12 h 10 → 12 h 40 — C8 : une tête ENTRAÎNÉE pour sa profondeur, ÷540
@@ -461,7 +466,7 @@
 - Deux pièges de harnais attrapés par une erreur visible : l'ordre des dimensions d'un GGUF
   (`dims[0]` est la contiguë — lire `h = dims[1]` demandait une identité de **86 Gio**), et le
   mélange fp16/fp32 qui lève au premier matmul.
-- Fiche : [`reports/rapport-c8-tete-entrainee.md`](../reports/rapport-c8-tete-entrainee.md) ·
+- Fiche : [`reports/rapport-c8-tete-entrainee.md`](../../reports/rapport-c8-tete-entrainee.md) ·
   outil : `tools/c8_entrainer_tete.py`.
 
 ### 11 h 35 → 12 h 05 — la courbe de profondeur de C8, et une étiquette fausse attrapée par un contrôle
@@ -475,7 +480,7 @@
   étiquetait « 4/24 … 24/24 » des plages qui exécutaient **une couche de moins** : `--couches a:b`
   **exclut** `b`. Chiffres justes, étiquettes fausses — la même famille que tout le reste : ce qui
   compte n'est pas le chiffre seul, c'est ce qu'il prétend mesurer.
-- Fiche corrigée : [`reports/rapport-c8-sonde-profondeur.md`](../reports/rapport-c8-sonde-profondeur.md) ·
+- Fiche corrigée : [`reports/rapport-c8-sonde-profondeur.md`](../../reports/rapport-c8-sonde-profondeur.md) ·
   pilote : `tools/c8_carte_profondeur.sh`.
 
 ### 11 h 20 → 11 h 45 — C8 : l'information est dans l'état, la tête est le maillon faible
@@ -487,7 +492,7 @@
   l'état de la couche 16 prédit le prochain jeton (parmi les 256 plus fréquents) à **43,1 %**
   sur des positions **jamais vues**, contre **4,0 %** pour la classe majoritaire. **L'état
   contient l'information** : c'est la tête empruntée qui ne sait pas la lire.
-- Fiche : [`reports/rapport-c8-sonde-profondeur.md`](../reports/rapport-c8-sonde-profondeur.md) ·
+- Fiche : [`reports/rapport-c8-sonde-profondeur.md`](../../reports/rapport-c8-sonde-profondeur.md) ·
   outil : `tools/c8_sonde_lineaire.py`. Suite : tête **non linéaire** entraînée, et courbe
   profondeur → décodabilité.
 
@@ -495,7 +500,7 @@
 
 - **La passe complète des portes** (`tools/toutes-les-portes.sh`) : **22 vertes sur 22, en
   70 minutes**. C'est la première fois que la suite tourne **comme une suite** ; le détail est
-  dans [`reports/rapport-passe-complete-portes.md`](../reports/rapport-passe-complete-portes.md).
+  dans [`reports/rapport-passe-complete-portes.md`](../../reports/rapport-passe-complete-portes.md).
 - **Une porte était verte en ne mesurant RIEN** : `porte-tokenizer-kimi.sh` lisait ses textes sur
   `stdin`, que personne ne lui fournissait — elle comparait **0 jeton** et sortait en 0. Ce n'est
   pas un lancement manuel qui l'aurait montré : c'est le **temps** (0 seconde pour une porte qui
@@ -606,9 +611,9 @@
 
 ## Où c'est écrit
 
-- fiches : [`reports/campagne-benefices/`](../reports/campagne-benefices/) — 24 à 50 (C6, C10,
+- fiches : [`reports/campagne-benefices/`](../../reports/campagne-benefices/) — 24 à 50 (C6, C10,
   C11, E4, v7/v8, messages, gigue, drapeaux, **47 = la correction `--attn-sinks`**) ;
-- état : [`docs/etat-cerveau.md`](../docs/archive/etat-cerveau.md) — les capacités et la prochaine action ;
+- état : [`docs/etat-cerveau.md`](../../docs/archive/etat-cerveau.md) — les capacités et la prochaine action ;
 - instrument qui manquait : `tools/toutes-les-portes.sh` (la passe **complète**), parce que
   `tools/porte-gain.sh` § 9 était **rouge depuis le v7** sans que personne le voie.
 
@@ -629,12 +634,12 @@
   `reports/campagne-benefices.md` ; monolithe archivé. Vérifié : les 51 fiches **reconstituent**
   le monolithe ligne à ligne.
 - **10 h 18 — récit du sprint déplacé** de `docs/` vers
-  [`journal/2026-10-09/sprint-cerveau-recit.md`](2026-10-09/sprint-cerveau-recit.md) ; **47 titres
-  re-datés par git**. État consolidé écrit dans [`docs/etat-cerveau.md`](../docs/archive/etat-cerveau.md).
+  [`journal/2026-10-09/sprint-cerveau-recit.md`](../2026-10-09/sprint-cerveau-recit.md) ; **47 titres
+  re-datés par git**. État consolidé écrit dans [`docs/etat-cerveau.md`](../../docs/archive/etat-cerveau.md).
 - **10 h 18 — la carte fenêtre × puits à 512 jetons** (elle tournait en tâche de fond) :
   attention complète **13,1368** ; **fenêtre 128 + 64 puits = 13,3968** (**+2,0 %**) pour
   **192 clés notées sur 512** (**÷2,67**) ; zéro puits **casse** (1297,54). Fiche :
-  [`reports/rapport-fenetre-puits-attention.md`](../reports/rapport-fenetre-puits-attention.md).
+  [`reports/rapport-fenetre-puits-attention.md`](../../reports/rapport-fenetre-puits-attention.md).
 
 **Ce que ça change pour la suite** : les mesures vivent désormais dans des fiches datables, l'état
 dans un seul fichier, et le récit ici — plus de chiffres importants enfouis dans un document de

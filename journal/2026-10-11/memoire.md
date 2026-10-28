@@ -2,38 +2,21 @@
 
 > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
-> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [2026-10-11/README.md](README.md). Convention : `docs/organisation-du-depot.md`.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
 ## Commits du jour (1)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 05:38 | `7ba80147` | Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'elle ne rapporte | `2026-10-11/README.md`, `2026-10-11/apprentissage.md`, `2026-10-11/attention.md` (+12) |
-
-## Chiffres du jour
-
-`15 s` · `4 Go`
-
-*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
-
-## Étapes du jour (6)
-
-*Ce que l'agent a consigné en le faisant (lignes `⏵` du journal de session) :*
-
-- **03:04** — La croissance ne s'applique qu'une fois en 200 pas — lecture de la boucle
-- **04:29** — Branchement du noyau creux dans la boucle des experts
-- **05:31** — Découverte chère : construire la forme creuse coûte 15 s et 4 Go sur 0,5 B — mesure de la mémoire
-- **05:32** — Ajout de la mesure de mémoire à la porte et à la fiche (le noyau creux coûte 4× la mémoire)
-- **05:38** — Commit : le prix de la forme creuse est chiffré (4× la mémoire, 2,6× le chargement)
-- **06:32** — Bilan final : consolidation et vérification de l'état du dépôt
+| 05:38 | `7ba80147` | Dessin B : le prix de la forme creuse est chiffre — 4x la memoire et 2,6x le chargement (8 octets par non-nul). Une forme creuse non quantifiee coute plus qu'elle ne rapporte | `2026-10-11.md`, `2026-10-11_apprentissage.md`, `2026-10-11_attention.md` (+12) |
 
 ## Sessions actives ce jour
 
-- `d31b3d9b` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b/rapport.md) · [digest](../sessions/d31b3d9b/digest.md)
+- `d31b3d9b-58e4-4d34-85fa-381b6f6a6a76` — Où en est-on (début 2026-10-08 09:11, 71.0 h) → [rapport](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/rapport.md) · [digest](../sessions/d31b3d9b-58e4-4d34-85fa-381b6f6a6a76/digest.md)
 
 ## Mesures et rapports touchés
 
-- [reports/rapport-dessin-B-poids-creux.md](../reports/rapport-dessin-B-poids-creux.md)
+- [reports/rapport-dessin-B-poids-creux.md](../../reports/rapport-dessin-B-poids-creux.md)
 
 <!-- notes -->
 
