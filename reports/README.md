@@ -17,6 +17,8 @@
 |---|---|
 | [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
 | [`rapport-native-prof20k-6.md`](rapport-native-prof20k-6.md) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
+| [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |
+| [`rapport-native-plafond.md`](rapport-native-plafond.md) | **N2 synthèse** — plafond **2,708**, six essais, porte 2,5 non atteinte |
 | [`rapport-native-prof20k-7.md`](rapport-native-prof20k-7.md) | **N2.24** — T=4 : PPL **2,852**, arrêté |
 | [`rapport-native-prof30k-2.md`](rapport-native-prof30k-2.md) | **N2.22** — professeur 30k, lr 1e-5 : PPL **2,828**, arrêté |
 | [`rapport-native-prof20k-5.md`](rapport-native-prof20k-5.md) | **N2.19** — 30 000 pas : PPL **2,708**, précision **72,80 %** |

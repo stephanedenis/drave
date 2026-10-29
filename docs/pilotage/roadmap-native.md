@@ -96,6 +96,8 @@ permutation.
 | N2.21 | **Professeur 30k, lr 3e-6** | ⚠️ **négatif** — PPL **2,823** ; arrêté |
 | N2.22 | **Professeur 30k, lr 1e-5** | ⚠️ **négatif** — PPL **2,828** ; arrêté |
 | N2.23 | **Professeur 20k, lr 3e-6** | ⚠️ **négatif** — PPL **2,753** ; arrêté |
+| N2.S | **Synthèse plafond** | ⚠️ **2,708** ; six essais, aucun ne bat 2,708 ; porte 2,5 non atteinte |
+| N2.25 | **lr 1e-6** | ⚠️ **négatif** — PPL **2,758** à 12 500 pas ; arrêté |
 | N2.24 | **Température 4** | ⚠️ **négatif** — PPL **2,852** ; arrêté |
 
 **Porte N2** : le natif **bat ou égale** B9 (4,40 %) sur le même corpus, avec les pertes natives.

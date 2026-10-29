@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **0 session(s)** · **3 thème(s)**
+**12 commits** · **0 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| docs | 3 | [docs.md](docs.md) |
+| docs | 4 | [docs.md](docs.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -35,6 +35,7 @@
 | 04:01 | `8ec49f6a` | DOCS — N2.24 : COMPTEURS ET LIGNE ROADMAP |
 | 04:03 | `e8ea9852` | DOCS — ROADMAP N2.7–N2.24 ET ENTRÉES README |
 | 04:05 | `a2cc7311` | N4.5 — MEILLEUR STUDENT SERVI : PPL 2,708, 53 OCTETS EN 589,2 MS |
+| 04:06 | `53577daa` | DOCS — COMPTEURS 259/324 |
 
 ## Le récit de la journée (écrit à la main)
 
