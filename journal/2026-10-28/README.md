@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**60 commits** · **0 session(s)** · **8 thème(s)**
+**61 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 19 | [mesures.md](mesures.md) |
+| mesures | 20 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 11 | [moteur.md](moteur.md) |
 
@@ -93,6 +93,7 @@
 | 20:59 | `678eb20f` | N2.12 — PROFESSEUR 10K : PPL 2,910 CONTRE 3,082, TÊTE 3 69,97 % |
 | 21:22 | `8c40af98` | N2.13 — 20 000 PAS DE PLUS : PPL 2,876, PRÉCISION 70,00 % |
 | 21:28 | `29c4fd1b` | N2.15 — PROFESSEUR 20 000 PAS : 0,904 BIT/OCTET, PPL 1,869 |
+| 21:50 | `125db616` | N2.14 — PROFESSEUR 20K : PPL 2,787, PRÉCISION 71,30 % |
 
 ## Le récit de la journée (écrit à la main)
 
