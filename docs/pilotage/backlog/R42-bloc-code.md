@@ -1,7 +1,7 @@
 # R42 — Bloc code (AST, flux de données, exécution)
 
-> **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R01
-> **Ligne de roadmap** : R4.2 · **Fiche de résultat attendue** : rapport-r42-bloc-code.md (à créer dans `reports/`)
+> **Statut** : mesurée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R01
+> **Ligne de roadmap** : R4.2 · **Fiche de résultat** : [`rapport-r42-bloc-code.md`](../../../reports/rapport-r42-bloc-code.md)
 > **Résumé** : Lire du code par son AST et son exécution, pas comme un texte.
 > **Glossaire** : [AST](../../theorie/glossaire/entrees/ast.md) · [parseur](../../theorie/glossaire/entrees/parseur.md).
 
@@ -17,6 +17,16 @@ Lire du code demande la portée, le flux de données, les appels et l'exécution
 | **sortie** | un AST, un graphe de symboles, un résultat d'exécution ou une trace |
 | **coût** | coût linéaire en nœuds ; l'exécution est bornée (sable) |
 | **trace** | l'AST et l'exécution sont tracés |
+
+## L'état
+
+**Mesurée le 2026-10-29** — **294/294** fichiers de `tools/*.py` acceptés (**453 038** nœuds,
+**1 722** fonctions, **73** classes) ; **24/24** extraits exécutés à la valeur exacte ; portée
+et nom libre vérifiés (`x` module/fonction, `sous_total` signalé) ; le contrôle **texte seul
+échoue 3/3** ; **7/7** refus nommés ; coût **×4,4** pour ×4 nœuds. Fiche :
+[`rapport-r42-bloc-code.md`](../../../reports/rapport-r42-bloc-code.md) ; spec :
+[`bloc-code.md`](../../implantation/bloc-code.md) ; porte `tools/porte-bloc-code.sh` ; JSON :
+[`r42-bloc-code.json`](../../../reports/r42-bloc-code.json).
 
 ## Ce qui est mesuré
 
@@ -43,14 +53,14 @@ Lire du code demande la portée, le flux de données, les appels et l'exécution
 
 ## Étapes
 
-1. choisir le langage et le parseur
-2. implémenter l'AST, les symboles et l'exécuteur
-3. mesurer parseur et exécution ; écrire la fiche
+1. ✅ choisir le langage et le parseur
+2. ✅ implémenter l'AST, les symboles et l'exécuteur
+3. ✅ mesurer parseur et exécution ; écrire la fiche
 
-## Documents à écrire
+## Documents
 
-- `bloc-code.md` (langage, AST, exécuteur, porte, dans `docs/implantation/`)
-- mettre à jour R4.2
+- ✅ [`bloc-code.md`](../../implantation/bloc-code.md) — langage, AST, exécuteur, porte, limites.
+- ✅ R4.2 marquée mesurée dans la roadmap ; prochaine action : **R4.3**.
 
 ## Voir aussi
 

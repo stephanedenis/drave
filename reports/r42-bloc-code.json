@@ -1,0 +1,242 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R4.2",
+ "dispositif": {
+  "corpus": "tools/*.py",
+  "fixtures": "tools/tests/code/",
+  "langage": "Python 3 (ast), interpréteur en sable",
+  "machine": "CPU, aucun modèle chargé"
+ },
+ "parseur": {
+  "fichiers": 294,
+  "acceptes": 294,
+  "refuses": [],
+  "noeuds": 453038,
+  "fonctions": 1722,
+  "classes": 73,
+  "secondes": 3.273
+ },
+ "execution": {
+  "justes": 24,
+  "faux": 0,
+  "total": 24,
+  "details": [
+   {
+    "nom": "priorité",
+    "attendu": 14,
+    "rendu": 14,
+    "correct": true
+   },
+   {
+    "nom": "puissance",
+    "attendu": 1048,
+    "rendu": 1048,
+    "correct": true
+   },
+   {
+    "nom": "division entière",
+    "attendu": 3,
+    "rendu": 3,
+    "correct": true
+   },
+   {
+    "nom": "modulo",
+    "attendu": 2,
+    "rendu": 2,
+    "correct": true
+   },
+   {
+    "nom": "parenthèses",
+    "attendu": 14,
+    "rendu": 14,
+    "correct": true
+   },
+   {
+    "nom": "chaînes",
+    "attendu": "drave",
+    "rendu": "drave",
+    "correct": true
+   },
+   {
+    "nom": "longueur",
+    "attendu": 4,
+    "rendu": 4,
+    "correct": true
+   },
+   {
+    "nom": "somme range",
+    "attendu": 45,
+    "rendu": 45,
+    "correct": true
+   },
+   {
+    "nom": "tri",
+    "attendu": [
+     1,
+     2,
+     3
+    ],
+    "rendu": [
+     1,
+     2,
+     3
+    ],
+    "correct": true
+   },
+   {
+    "nom": "compréhension",
+    "attendu": [
+     0,
+     1,
+     4,
+     9,
+     16
+    ],
+    "rendu": [
+     0,
+     1,
+     4,
+     9,
+     16
+    ],
+    "correct": true
+   },
+   {
+    "nom": "max",
+    "attendu": 7,
+    "rendu": 7,
+    "correct": true
+   },
+   {
+    "nom": "min liste",
+    "attendu": 2,
+    "rendu": 2,
+    "correct": true
+   },
+   {
+    "nom": "abs",
+    "attendu": 12,
+    "rendu": 12,
+    "correct": true
+   },
+   {
+    "nom": "arrondi",
+    "attendu": 3,
+    "rendu": 3,
+    "correct": true
+   },
+   {
+    "nom": "comparaison chaînée",
+    "attendu": true,
+    "rendu": true,
+    "correct": true
+   },
+   {
+    "nom": "négation",
+    "attendu": true,
+    "rendu": true,
+    "correct": true
+   },
+   {
+    "nom": "appartenance",
+    "attendu": true,
+    "rendu": true,
+    "correct": true
+   },
+   {
+    "nom": "compréhension filtrée",
+    "attendu": 6,
+    "rendu": 6,
+    "correct": true
+   },
+   {
+    "nom": "dictionnaire",
+    "attendu": 1,
+    "rendu": 1,
+    "correct": true
+   },
+   {
+    "nom": "fonction",
+    "attendu": 49,
+    "rendu": 49,
+    "correct": true
+   },
+   {
+    "nom": "boucle",
+    "attendu": 10,
+    "rendu": 10,
+    "correct": true
+   },
+   {
+    "nom": "condition",
+    "attendu": 10,
+    "rendu": 10,
+    "correct": true
+   },
+   {
+    "nom": "récursion",
+    "attendu": 120,
+    "rendu": 120,
+    "correct": true
+   },
+   {
+    "nom": "dépaquetage",
+    "attendu": 12,
+    "rendu": 12,
+    "correct": true
+   }
+  ]
+ },
+ "portee_et_flux": {
+  "x_module": "module",
+  "x_fonction": "fonction",
+  "x_module_vaut": 1,
+  "x_fonction_vaut": 1,
+  "y": 2,
+  "libres_flux": [
+   [
+    "sous_total",
+    1
+   ]
+  ],
+  "libres_portee": []
+ },
+ "controles": {
+  "2**10 + 24": {
+   "attendu": 1048,
+   "execute": 1048,
+   "texte": 2,
+   "texte_correct": false,
+   "execute_correct": true
+  },
+  "sum(range(10))": {
+   "attendu": 45,
+   "execute": 45,
+   "texte": 10,
+   "texte_correct": false,
+   "execute_correct": true
+  },
+  "(3 + 4) * 2": {
+   "attendu": 14,
+   "execute": 14,
+   "texte": 3,
+   "texte_correct": false,
+   "execute_correct": true
+  }
+ },
+ "refus": {
+  "syntaxe": "Refus: syntaxe (ligne 1) : invalid syntax",
+  "import": "Refus: import interdit (ligne 1) : os",
+  "attribut": "Refus: attribut interdit (ligne 1) : obj.methode",
+  "division_zero": "ErreurExecution: division par zéro",
+  "nom_inconnu": "ErreurExecution: nom inconnu : jamais_defini (ligne 1)",
+  "boucle": "ErreurExecution: boucle bornée dépassée (10000)",
+  "appel_interdit": "ErreurExecution: nom inconnu : open (ligne 1)"
+ },
+ "cout": {
+  "ratio_x4": 4.52
+ },
+ "rejeu": {
+  "identique": true
+ }
+}

@@ -1,0 +1,132 @@
+[
+ {
+  "nom": "priorité",
+  "source": "2 + 3 * 4",
+  "attendu": 14
+ },
+ {
+  "nom": "puissance",
+  "source": "2 ** 10 + 24",
+  "attendu": 1048
+ },
+ {
+  "nom": "division entière",
+  "source": "17 // 5",
+  "attendu": 3
+ },
+ {
+  "nom": "modulo",
+  "source": "17 % 5",
+  "attendu": 2
+ },
+ {
+  "nom": "parenthèses",
+  "source": "(3 + 4) * 2",
+  "attendu": 14
+ },
+ {
+  "nom": "chaînes",
+  "source": "'dra' + 've'",
+  "attendu": "drave"
+ },
+ {
+  "nom": "longueur",
+  "source": "len([1, 2, 3, 4])",
+  "attendu": 4
+ },
+ {
+  "nom": "somme range",
+  "source": "sum(range(10))",
+  "attendu": 45
+ },
+ {
+  "nom": "tri",
+  "source": "sorted([3, 1, 2])",
+  "attendu": [
+   1,
+   2,
+   3
+  ]
+ },
+ {
+  "nom": "compréhension",
+  "source": "[i * i for i in range(5)]",
+  "attendu": [
+   0,
+   1,
+   4,
+   9,
+   16
+  ]
+ },
+ {
+  "nom": "max",
+  "source": "max(3, 7, 5)",
+  "attendu": 7
+ },
+ {
+  "nom": "min liste",
+  "source": "min([4, 2, 9])",
+  "attendu": 2
+ },
+ {
+  "nom": "abs",
+  "source": "abs(-12)",
+  "attendu": 12
+ },
+ {
+  "nom": "arrondi",
+  "source": "round(2.6)",
+  "attendu": 3
+ },
+ {
+  "nom": "comparaison chaînée",
+  "source": "1 < 2 < 3",
+  "attendu": true
+ },
+ {
+  "nom": "négation",
+  "source": "not (1 == 2)",
+  "attendu": true
+ },
+ {
+  "nom": "appartenance",
+  "source": "'a' in 'drave'",
+  "attendu": true
+ },
+ {
+  "nom": "compréhension filtrée",
+  "source": "sum([i for i in range(6) if i % 2 == 0])",
+  "attendu": 6
+ },
+ {
+  "nom": "dictionnaire",
+  "source": "{'a': 1}['a']",
+  "attendu": 1
+ },
+ {
+  "nom": "fonction",
+  "source": "def carre(x):\n    return x * x\ncarre(7)",
+  "attendu": 49
+ },
+ {
+  "nom": "boucle",
+  "source": "def f(n):\n    s = 0\n    for i in range(n):\n        s = s + i\n    return s\nf(5)",
+  "attendu": 10
+ },
+ {
+  "nom": "condition",
+  "source": "x = 5\nif x > 3:\n    y = 10\nelse:\n    y = 0\ny",
+  "attendu": 10
+ },
+ {
+  "nom": "récursion",
+  "source": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nfact(5)",
+  "attendu": 120
+ },
+ {
+  "nom": "dépaquetage",
+  "source": "a, b = 3, 4\na * b",
+  "attendu": 12
+ }
+]

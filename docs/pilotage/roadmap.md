@@ -30,7 +30,7 @@
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 close (négatif)** | B11.10 (cartes) ; B10.3 attend **B10.2bis** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1 mesurée** | **R0.4** — négatifs difficiles ; **R4.2** (bloc code) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1, R4.2 mesurées** | **R0.4** — négatifs difficiles ; **R4.3** (bloc maths) |
 
 ## L'ordre du jour (carpe diem)
 
@@ -39,8 +39,9 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) est un **pilote négatif**
    (0,601 contre BM25 0,836) et **R0.5** (routeur) un **signal** (AUC 0,785, règle non transférable).
-   **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**) ;
-   la suite des blocs structurels est **R4.2** (code).
+   **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**)
+   et **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) ; la suite
+   des blocs structurels est **R4.3** (maths).
 2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
    (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
    atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
@@ -150,7 +151,7 @@ sait pas dire ce qu'il a sauté n'est pas un lecteur, c'est un filtre.
 | **R1 — la fenêtre native** | contexte hiérarchique, curriculum, tokenisation | PPL à 1 000 octets, aiguille native, stabilité | R0, N1 ; plafonné par N2 |
 | **R2 — la mémoire** | gist, entités, store épisodique, relecture | réponse multi-sections, citation, relecture | R1, et le négatif de mémoire (acquis) |
 | **R3 — la restitution** | SFT de lecture, réponse/résumé/extraction, citations | exactitude tenue à l'écart, fidélité | R0, R2 ; plafonné par N4 |
-| **R4 — les blocs structurels** | tableaux ✅, code, maths, vision/OCR | extraction exacte, exécution, layout | R0 |
+| **R4 — les blocs structurels** | tableaux ✅, code ✅, maths, vision/OCR | extraction exacte, exécution, layout | R0 |
 | **R5 — la lecture croisée** | multi-documents, retrieval, multilingue | comparaison, provenance, traduction | R3 ; encodeur exécutable (manque M4) |
 
 ### R0 — le lecteur v0 (système, sans entraînement)
@@ -208,7 +209,7 @@ le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement d
 | # | fonctionnalité | état | porte |
 |---|---|---|---|
 | **R4.1** | **tableaux** : parseur 2D, en-têtes, cellules, opérations classiques (filtre, jointure, agrégat) | ✅ **996 cellules**, **802** exactes, texte plat **0/3** | extraction exacte sur 100 cellules ; contrôle : texte plat |
-| **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ⏳ après R0 | réponse par exécution exacte ; contrôle : lecture du texte seul |
+| **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ✅ **294 fichiers**, **24/24** extraits, texte seul **0/3** | réponse par exécution exacte ; contrôle : lecture du texte seul |
 | **R4.3** | **maths** : LaTeX/MathML, définitions, preuve ; CAS bloc | ⏳ après R0 | évaluation symbolique exacte ; contrôle : surface |
 | **R4.4** | **vision/OCR** : scans, figures, layout | ⏳ après R4.1–R4.3 | 10 pages scannées, même réponse que le texte natif |
 
@@ -243,7 +244,7 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **non bloqué, à faire** : **R0.5** (routeur, `8156fdcb`) ; **R4.2** (bloc code) ;
+- **non bloqué, à faire** : **R0.5** (routeur, `8156fdcb`) ; **R4.3** (bloc maths) ;
   **N2** (la hiérarchie) ; **N4** (consigne courte) ; **A2.6/A3.2/A8.0** (moteur) ;
   **N3** (opérations natives) ; **R13** (octets ou BPE) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;

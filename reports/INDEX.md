@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **282 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **284 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -16,6 +16,7 @@
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
+| [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
 | [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
@@ -253,6 +254,7 @@
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,785), la règle ne transfère pas |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
+| [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
