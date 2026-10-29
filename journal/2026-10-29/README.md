@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**49 commits** · **0 session(s)** · **7 thème(s)**
+**50 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 10 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
-| modele | 2 | [modele.md](modele.md) |
+| modele | 3 | [modele.md](modele.md) |
 | moteur | 4 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
@@ -81,6 +81,7 @@ Aucune session indexée pour ce jour ; voir
 | 14:11 | `076d15ef` | ÉTAT — LE GRAPHE DES CHANTIERS, ACTIVITÉS ET ÉTATS DANS EN-COURS |
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS |
 | 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION |
+| 14:25 | `8114767d` | SESSION — CLÔTURE f0969e87 : N0.15/N4.7, N4.8, EN-COURS À JOUR |
 
 ## Le récit de la journée (écrit à la main)
 

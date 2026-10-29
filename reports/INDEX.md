@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **273 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **276 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -157,10 +157,12 @@
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
 | [rapport-native-8b-warm.md](rapport-native-8b-warm.md) | N2.29 — 8 blocs réchauffés : 2,866, toujours derrière 2,708 |
 | [rapport-native-8b.md](rapport-native-8b.md) | N2.28 — 8 blocs : PPL 4,84, négatif |
+| [rapport-native-best-2.md](rapport-native-best-2.md) | N0.15/N4.7 — le meilleur 2,6998, servi par le moteur natif |
 | [rapport-native-best-service.md](rapport-native-best-service.md) | N4.5 — le meilleur student derrière le service natif |
 | [rapport-native-cache-gain.md](rapport-native-cache-gain.md) | N0.10 — cache KV : 19,25× plus rapide que le forward complet |
 | [rapport-native-cache.md](rapport-native-cache.md) | N0.9 — cache KV natif : même sortie, 0,59 s |
 | [rapport-native-capacite-egal.md](rapport-native-capacite-egal.md) | N2.5b — capacité à budget égal : 21,63 M bat 11,47 M de 4,1 % |
+| [rapport-native-consignes.md](rapport-native-consignes.md) | N4.8 — consignes courtes : 0/40 sur des mots tenus |
 | [rapport-native-corpus-multi.md](rapport-native-corpus-multi.md) | N2.6 — corpus diversifié : 49 999 fenêtres, quatre sources |
 | [rapport-native-corpus.md](rapport-native-corpus.md) | N2.1 — 50 000 fenêtres pour `drave-n0` |
 | [rapport-native-ctx129-2.md](rapport-native-ctx129-2.md) | N2.34 — 129, 10 000 pas de plus : 2,712, pas de gain |
@@ -243,6 +245,7 @@
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
 | [rapport-r02-controleur.md](rapport-r02-controleur.md) | R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget |
+| [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |

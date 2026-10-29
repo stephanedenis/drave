@@ -42,6 +42,7 @@ import lecteur_controleur as lc  # noqa: E402
 
 LECTEUR = "extractif"  # "extractif" (R0.2) ou "modele" (R0.3)
 CRITERE = "bm25"       # "bm25" (R0.2) ou "couverture" (le critère qui n'est pas celui du lecteur)
+SANS_HASARD = False    # le contrôle aléatoire coûte 300 générations de plus
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BANC = RACINE / "tools/tests/documents/bench-pilote.json"
@@ -162,7 +163,10 @@ def note(resultat: dict, document: dict, question: dict) -> dict:
 
 
 def banc(documents: list[dict]) -> dict:
-    modes = (("controlee_0.30", "debut_0.30", "aleatoire_0.30", "closed_book")
+    if LECTEUR == "modele" and SANS_HASARD:
+        modes = ("controlee_0.30", "debut_0.30", "closed_book")
+    else:
+        modes = (("controlee_0.30", "debut_0.30", "aleatoire_0.30", "closed_book")
              if LECTEUR == "modele" else
              ("integrale", "controlee_0.10", "controlee_0.30", "controlee_0.50",
               "aleatoire_0.30", "melangee_0.30", "sans_but", "closed_book"))
@@ -282,14 +286,17 @@ def main() -> int:
     ap.add_argument("--lecteur", choices=("extractif", "modele"), default="extractif")
     ap.add_argument("--depuis", type=pathlib.Path, help="relit un JSON de résultats déjà écrit")
     ap.add_argument("--critere", choices=("bm25", "couverture"), default="bm25")
+    ap.add_argument("--sans-hasard", action="store_true",
+                    help="retire le contrôle aléatoire (banc complet : 600 générations au lieu de 900)")
     ap.add_argument("--limite", type=int, default=0,
                     help="ne garder que N questions (2 par type) — pour le lecteur modèle, lent")
     args = ap.parse_args()
-    global LECTEUR, CRITERE
+    global LECTEUR, CRITERE, SANS_HASARD
     if args.lecteur == "modele" and args.porte:
         raise SystemExit("la porte est extractive : le modèle se mesure avec --json, pas en porte")
     LECTEUR = args.lecteur
     CRITERE = args.critere
+    SANS_HASARD = args.sans_hasard
     if args.depuis:
         return affiche(json.loads(args.depuis.read_text(encoding="utf-8")))
     documents = charge(json.loads(args.banc.read_text(encoding="utf-8"))["documents"])

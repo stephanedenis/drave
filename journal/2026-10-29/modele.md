@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 12:41 | `1359d13f` | ÉTAT — R0.3 RÉSERVÉ À 8156FDBC : LECTEUR MODÈLE ET BANC COMPLET | `en-cours.md`, `README.md`, `distribue.md` |
 | 13:07 | `5a2fffae` | R0.3 — LE MODÈLE LIT : CONTRÔLEUR 0,500 CONTRE TRONCATURE 0,400 ET HASARD 0,000 (10 QUESTIONS) | `banc-lecture.md`, `R03-banc-lecture-rapide.md`, `en-cours.md` (+10) |
+| 14:25 | `8114767d` | SESSION — CLÔTURE f0969e87 : N0.15/N4.7, N4.8, EN-COURS À JOUR | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 
 ## Chiffres du jour
 

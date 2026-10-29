@@ -50,13 +50,17 @@ def generer(prompt: str, jetons: int = JETONS) -> tuple[str, float]:
         [BINAIRE, "-m", str(MODELE), "-p", prompt, "-n", str(jetons),
          "--temp", "0", "-ngl", "99", "-t", "4",
          "--no-warmup", "--single-turn"],
-        capture_output=True, text=True, timeout=600, env=environnement,
+        capture_output=True, timeout=600, env=environnement,
         stdin=subprocess.DEVNULL,
     )
     duree = time.time() - debut
+    # llama.cpp tronque l'écho du prompt et peut couper un caractère UTF-8 en deux : on lit
+    # des OCTETS et on décode en tolérant, sinon un accent au mauvais endroit fait tomber tout
+    # le banc (attrapé sur les 249 questions, position 1448).
+    stdout = sortie.stdout.decode("utf-8", errors="replace")
     if sortie.returncode != 0:
-        raise RuntimeError(f"llama-cli a échoué : {sortie.stderr[-400:]}")
-    return sortie.stdout, duree
+        raise RuntimeError(f"llama-cli a échoué : {sortie.stderr.decode('utf-8', 'replace')[-400:]}")
+    return stdout, duree
 
 
 def extrait(texte: str, prompt: str) -> str:

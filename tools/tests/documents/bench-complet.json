@@ -1,0 +1,1931 @@
+{
+ "version": 1,
+ "date": "2026-10-29",
+ "note": "Banc complet R0.3 : 30 documents, 5 types, questions GABARIT (valeur demandée par deux mots rares du passage gold). Mesure la sélection à l'échelle ; ne mesure pas la paraphrase — c'est le banc pilote, puis R0.3 durci.",
+ "documents": [
+  {
+   "chemin": "docs/theorie/vision.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « activations » et « couche » ?",
+     "indice": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
+     "valeur": "2 539",
+     "passage": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la couche 23 a valu 27,8 » —, regroupés en listes valuées poussées vers leurs lecteurs.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 4833 » et « dernier » ?",
+     "indice": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
+     "valeur": "1,5",
+     "passage": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est plate dès 1,5 B, le pont plafonne à 0,87 ; à profondeur fixe, le 14 B est dernier (0,4833).",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « activation » et « amener » ?",
+     "indice": "Il est répartissable. Un bloc va là où son entrée est déjà, ou là où e",
+     "valeur": "2,669",
+     "passage": "Il est répartissable. Un bloc va là où son entrée est déjà, ou là où elle coûte le moins à amener. Le découpage suit les poids (2,669 Go par jeton pour V4-Flash",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « chemins » et « choisit » ?",
+     "indice": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
+     "valeur": "22",
+     "passage": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré à ~22 % de densité ; en dessous, les listes gagnent, au-dessus, le dense. Le moteur garde",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « gros » et « sature » ?",
+     "indice": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la ta",
+     "valeur": "1,5",
+     "passage": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « renommage » et « âges » ?",
+     "indice": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
+     "valeur": "2026",
+     "passage": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md.",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « pleine » et « promesses » ?",
+     "indice": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
+     "valeur": "2016",
+     "passage": "(2016) est le point de repère : les promesses de 1 000 mots/minute avec compréhension pleine ne tiennent pas.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « lectures » et « rapides » ?",
+     "indice": "Têtes précoces\t57,6 / 61,6 / 62,1 % vs 62,7 % ; témoin 0,39 %\tce sont ",
+     "valeur": "57,6",
+     "passage": "Têtes précoces\t57,6 / 61,6 / 62,1 % vs 62,7 % ; témoin 0,39 %\tce sont des lectures rapides de jetons, pas des stratégies",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « demande » et « déjà » ?",
+     "indice": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
+     "valeur": "6,22",
+     "passage": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (6,22 Go lus, 3,40 s contre 9,52 Go / 5,97 s à la demande), cache KV 19,25×, codec classiqu",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « comparer » et « agent » ?",
+     "indice": "12\tLecture croisée (comparer, citer)\tretrieval, provenance, agent\t❌ M4",
+     "valeur": "12",
+     "passage": "12\tLecture croisée (comparer, citer)\tretrieval, provenance, agent\t❌ M4, pas d'agent\tindex + provenance + boucle d'outils",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « généralise » et « longueur » ?",
+     "indice": "Bloque : 129 octets. Les tentatives 130/136/160/256 sont toutes négati",
+     "valeur": "129",
+     "passage": "Bloque : 129 octets. Les tentatives 130/136/160/256 sont toutes négatives ; à 2 000 octets la PPL est 54, donc le modèle ne généralise pas, il surapprend sa lon",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « accélère » et « différence » ?",
+     "indice": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
+     "valeur": "24",
+     "passage": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, pas ce qui vaut la peine d'être lu. Il n",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « travail » et « épisodique » ?",
+     "indice": "5.4 La mémoire de travail et épisodique (L4)",
+     "valeur": "5.4",
+     "passage": "5.4 La mémoire de travail et épisodique (L4)",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « échoue » et « contrôle » ?",
+     "indice": "Porte : une courbe vitesse-compréhension par type, avec un point « écr",
+     "valeur": "30",
+     "passage": "Porte : une courbe vitesse-compréhension par type, avec un point « écrémage à 30 % du coût, ≥ 90 % de l'exactitude » et un contrôle négatif qui échoue.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « chacun » et « dispositif » ?",
+     "indice": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
+     "valeur": "30",
+     "passage": "Dispositif proposé : 30 documents, 6 par type (prose, technique, tableau, code, juridique), 10 questions chacun avec spans gold.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « cible » et « courir » ?",
+     "indice": "courir après 1 000 mots/minute : la revue scientifique dit que c'est u",
+     "valeur": "1 000",
+     "passage": "courir après 1 000 mots/minute : la revue scientifique dit que c'est une illusion ; la cible est l'allocation, pas le débit ;",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « dilue » et « donne » ?",
+     "indice": "La distillation par séquences, même avec 610 exemples et 31,63 M param",
+     "valeur": "610",
+     "passage": "La distillation par séquences, même avec 610 exemples et 31,63 M paramètres, donne un écart relatif réel (4,40 %) mais transitoire : à 1 000 pas, le contrôle re",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « couche » et « dimension » ?",
+     "indice": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
+     "valeur": "128",
+     "passage": "Le sens est un goulot, pas une couche. z est de dimension petite (128), normalisé ; le décodeur ne reçoit que z et la langue cible. La langue est dans le décode",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « rien » et « texte » ?",
+     "indice": "plancher : chrF(surface L, surface L') — le même texte sans traduction",
+     "valeur": "20",
+     "passage": "plancher : chrF(surface L, surface L') — le même texte sans traduction ; sans lui, un chrF de 20 ne dit rien ;",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « capacité » et « ensemble » ?",
+     "indice": "natif 31,63 M / 610 (B9)\tle point de départ : capacité et données se p",
+     "valeur": "31,63",
+     "passage": "natif 31,63 M / 610 (B9)\tle point de départ : capacité et données se paient ensemble",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « last » et « variantes » ?",
+     "indice": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
+     "valeur": "10",
+     "passage": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes : mean/last, avec/sans adversaire) ;",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « batchée » et « boucle » ?",
+     "indice": "évaluation batchée : les 12 générations de validation partent en un se",
+     "valeur": "12",
+     "passage": "évaluation batchée : les 12 générations de validation partent en un seul generate, pas en boucle ;",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « base » et « champs » ?",
+     "indice": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
+     "valeur": "15",
+     "passage": "Le protocole libre est complété par une base fixe d'universaux : 15 champs, 502 classes, sortie one-hot déterministe, codec classique pour la surface.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « exécuté » et « nvlink » ?",
+     "indice": "Le protocole a été exécuté sur 10 langues, deux GPU NVLink, route 31,6",
+     "valeur": "10",
+     "passage": "Le protocole a été exécuté sur 10 langues, deux GPU NVLink, route 31,63 M.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ablations » et « confirment » ?",
+     "indice": "Les ablations confirment le diagnostic : z de 512 dims dégrade le rapp",
+     "valeur": "512",
+     "passage": "Les ablations confirment le diagnostic : z de 512 dims dégrade le rappel (0,278), un préfixe de 64 ne fait pas mieux que 16 (12,4 / 6,7), le décodeur utilise z ",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « choix » et « dira » ?",
+     "indice": "la taille de z : 128 est un choix de départ ; la courbe 32/64/128/256 ",
+     "valeur": "128",
+     "passage": "la taille de z : 128 est un choix de départ ; la courbe 32/64/128/256 dira où le sens sature ;",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrondi » et « bool » ?",
+     "indice": "typée — le corps est un arbre de null, bool, int, str, listes et dicti",
+     "valeur": "65",
+     "passage": "typée — le corps est un arbre de null, bool, int, str, listes et dictionnaires. Aucun flottant : le komi du go est en dixièmes (65 pour 6,5), pour que l'emprein",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrête » et « demi » ?",
+     "indice": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
+     "valeur": "32",
+     "passage": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la promotion arrête le pion",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « depuis » et « détectés » ?",
+     "indice": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
+     "valeur": "35",
+     "passage": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wikidata CC0) et le corpus de 449 surfaces sont mesurés : lecture au niveau 4, paires inter-la",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « domaine » et « gagnent » ?",
+     "indice": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
+     "valeur": "17",
+     "passage": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) changent l'ouverture des échecs, tiennent le livre, gagnent au go 9×9 et ne perdent pas aux d",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ambiguës » et « couvre » ?",
+     "indice": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas ",
+     "valeur": "71",
+     "passage": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les mots-clés, pas la grammaire. Cinq langues",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « wikidata » et « multilingue » ?",
+     "indice": "tools/jeux/lexique_multilingue.py\tle lexique 71 langues (Wikidata) et ",
+     "valeur": "71",
+     "passage": "tools/jeux/lexique_multilingue.py\tle lexique 71 langues (Wikidata) et sa recherche",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contrôles » et « couverture » ?",
+     "indice": "tools/jeux/mesure_langues.py\tla couverture et les contrôles des 71 lan",
+     "valeur": "71",
+     "passage": "tools/jeux/mesure_langues.py\tla couverture et les contrôles des 71 langues",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « conceptuelle » et « jackendoff » ?",
+     "indice": "2.2 Sémantique conceptuelle (Jackendoff)",
+     "valeur": "2.2",
+     "passage": "2.2 Sémantique conceptuelle (Jackendoff)",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « text » et « meaning » ?",
+     "indice": "2.3 Théorie Sens-Texte (Meaning-Text Theory)",
+     "valeur": "2.3",
+     "passage": "2.3 Théorie Sens-Texte (Meaning-Text Theory)",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dependency » et « language » ?",
+     "indice": "Source : Mel'čuk, Dependency in Language (2014), PDF.",
+     "valeur": "2014",
+     "passage": "Source : Mel'čuk, Dependency in Language (2014), PDF.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ingrédients » et « physique » ?",
+     "indice": "2.6 La physique comme source d'ingrédients",
+     "valeur": "2.6",
+     "passage": "2.6 La physique comme source d'ingrédients",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « chrf » et « contre » ?",
+     "indice": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
+     "valeur": "14,0",
+     "passage": "Le protocole « embedding libre puis décodeur » a échoué sur la restitution (chrF 14,0 contre un plancher 38,8).",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « passage » et « surapprend » ?",
+     "indice": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
+     "valeur": "100",
+     "passage": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le parseur natif typé surapprend (48,3 % train, 0 % validation).",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « paramètres » et « vocab » ?",
+     "indice": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
+     "valeur": "12",
+     "passage": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « entrée » et « local » ?",
+     "indice": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
+     "valeur": "256",
+     "passage": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ajouté » et « entraîné » ?",
+     "indice": "sorties précoces\ttêtes après les blocs 2, 4, 6\tle réflexe est entraîné",
+     "valeur": "2, 4, 6",
+     "passage": "sorties précoces\ttêtes après les blocs 2, 4, 6\tle réflexe est entraîné avec le modèle, pas ajouté après",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « corpus » et « exemples » ?",
+     "indice": "Données : 610 exemples est un banc, pas un corpus.",
+     "valeur": "610",
+     "passage": "Données : 610 exemples est un banc, pas un corpus.",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « charge » et « conversion » ?",
+     "indice": "N0.2\tle moteur le charge-t-il ?\tdrave-core lit DRVM sans conversion",
+     "valeur": "0.2",
+     "passage": "N0.2\tle moteur le charge-t-il ?\tdrave-core lit DRVM sans conversion",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « entraîneur » et « près » ?",
+     "indice": "N1.1\tl'entraîneur et le moteur sont-ils d'accord ?\tmême perplexité à 1",
+     "valeur": "1.1",
+     "passage": "N1.1\tl'entraîneur et le moteur sont-ils d'accord ?\tmême perplexité à 1e-4 près",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « baseline » et « contractante » ?",
+     "indice": "N1.3\tla pensée est-elle contractante ?\tλ < 1 et contenu > baseline",
+     "valeur": "1.3",
+     "passage": "N1.3\tla pensée est-elle contractante ?\tλ < 1 et contenu > baseline",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « chute » et « langues » ?",
+     "indice": "N2.2\tles langues tiennent-elles ?\tpas de chute > 5 pts sur 30 langues",
+     "valeur": "2.2",
+     "passage": "N2.2\tles langues tiennent-elles ?\tpas de chute > 5 pts sur 30 langues",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « exact » et « identique » ?",
+     "indice": "N3.2\tle rejeu est-il exact ?\ttrace identique, mêmes logits",
+     "valeur": "3.2",
+     "passage": "N3.2\tle rejeu est-il exact ?\ttrace identique, mêmes logits",
+     "type": "prose"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « assistant » et « parle » ?",
+     "indice": "Trop petit : 12 M ne parle pas ; c'est un banc de mécanismes, pas un a",
+     "valeur": "12",
+     "passage": "Trop petit : 12 M ne parle pas ; c'est un banc de mécanismes, pas un assistant.",
+     "type": "prose"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « défaut » et « blocs » ?",
+     "indice": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
+     "valeur": "16",
+     "passage": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « indice » et « valeur » ?",
+     "indice": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
+     "valeur": "32",
+     "passage": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « taille » et « actifs » ?",
+     "indice": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
+     "valeur": "14",
+     "passage": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « jetons » et « dense » ?",
+     "indice": "trace dense, 512 jetons\t132 396 736 o\t66 370 408 o (−49,87 %)",
+     "valeur": "512",
+     "passage": "trace dense, 512 jetons\t132 396 736 o\t66 370 408 o (−49,87 %)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « jetons » et « dense » ?",
+     "indice": "trace dense, 512 jetons\t66 370 408 o\t45 079 930 o (−32,1 %)",
+     "valeur": "512",
+     "passage": "trace dense, 512 jetons\t66 370 408 o\t45 079 930 o (−32,1 %)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « erreur » et « nulle » ?",
+     "indice": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
+     "valeur": "0,085",
+     "passage": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « mauvaise » et « réécrivaient » ?",
+     "indice": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
+     "valeur": "356 694",
+     "passage": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, position) et le rejeu rejouait la mauvaise : perplexité 356 694 au lieu de 17,43.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « découpée » et « façon » ?",
+     "indice": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
+     "valeur": "256",
+     "passage": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence locale découpée de la même façon), ou en 1 seul lot de 917 583 octets — un aller-retour pour",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « devinette » et « critère » ?",
+     "indice": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
+     "valeur": "3.5",
+     "passage": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « brut » et « confondre » ?",
+     "indice": "Le nœud moteur le déclare par un drapeau explicite (flux_brut) plutôt ",
+     "valeur": "798,3",
+     "passage": "Le nœud moteur le déclare par un drapeau explicite (flux_brut) plutôt que de le déduire de sa plage de couches : « ma plage va jusqu'à la dernière couche » et «",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « rendent » et « spécification » ?",
+     "indice": "La spécification du manifeste de graphe de document (R0.1) : ce qu'est",
+     "valeur": "0.1",
+     "passage": "La spécification du manifeste de graphe de document (R0.1) : ce qu'est un flux, ce qu'est une région, et les trois contrôles qui rendent la découpe vérifiable.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « champ » et « représentation » ?",
+     "indice": "Il faut une représentation du document qui (a) survive au rejeu, (b) s",
+     "valeur": "0.2",
+     "passage": "Il faut une représentation du document qui (a) survive au rejeu, (b) serve de champ de lecture au contrôleur (R0.2), et (c) se vérifie sans modèle.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « audit » et « citation » ?",
+     "indice": "la source\tla provenance dans le fichier d'origine : page (PDF), bloc (",
+     "valeur": "32",
+     "passage": "la source\tla provenance dans le fichier d'origine : page (PDF), bloc (HTML/DOCX/EPUB), offset (Markdown)\tl'audit, la citation (R32), la relecture (R22)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « attachée » et « change » ?",
+     "indice": "source.sha256\tla découpe est attachée au fichier exact : si la source ",
+     "valeur": "256",
+     "passage": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « concaténation » et « longueur » ?",
+     "indice": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
+     "valeur": "256",
+     "passage": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se vérifie seul",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « encode » et « hash » ?",
+     "indice": "Hash — sha256(region.texte) se recalcule, et flux_bytes[start:end] est",
+     "valeur": "256",
+     "passage": "Hash — sha256(region.texte) se recalcule, et flux_bytes[start:end] est exactement region.texte.encode(\"utf-8\").",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « couvert » et « doublon » ?",
+     "indice": "partition (§ 4.1–4.2)\tla découpe est interne : tout est couvert, rien ",
+     "valeur": "4.1",
+     "passage": "partition (§ 4.1–4.2)\tla découpe est interne : tout est couvert, rien n'est inventé\tun offset faux, un trou, un doublon de région",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ajoute » et « communs » ?",
+     "indice": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
+     "valeur": "99",
+     "passage": "fidélité\tle flux contre une extraction indépendante : au moins 99 % des mots communs\tun extracteur qui perd du texte ou qui en ajoute",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « scannée » et « donc » ?",
+     "indice": "pas d'OCR : une page scannée n'a pas de texte, donc pas de graphe (R4.",
+     "valeur": "4.4",
+     "passage": "pas d'OCR : une page scannée n'a pas de texte, donc pas de graphe (R4.4) ;",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contrat » et « fiche » ?",
+     "indice": "La fiche R01 — le contrat, la porte, les contrôles.",
+     "valeur": "01",
+     "passage": "La fiche R01 — le contrat, la porte, les contrôles.",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « choisit » et « paie » ?",
+     "indice": "La spécification de R0.2 : ce qu'un contrôleur de lecture choisit, ce ",
+     "valeur": "0.2",
+     "passage": "La spécification de R0.2 : ce qu'un contrôleur de lecture choisit, ce qu'il paie, et ce qui permet de rejouer sa trajectoire.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « manifeste » et « entrée » ?",
+     "indice": "entrée\tun manifeste de graphe (R0.1), une question, un budget en octet",
+     "valeur": "0.1",
+     "passage": "entrée\tun manifeste de graphe (R0.1), une question, un budget en octets",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « comparables » et « fraction » ?",
+     "indice": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
+     "valeur": "10",
+     "passage": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrête » et « jusqu » ?",
+     "indice": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
+     "valeur": "80",
+     "passage": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ; on s'arrête quand le score passe sous 10 % du meilleur : un passage qui ne partage presqu",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dépense » et « réglage » ?",
+     "indice": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
+     "valeur": "20",
+     "passage": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépense tout en lecture ne peut plus vérifier",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « absence » et « calibrée » ?",
+     "indice": "il ne juge pas la confiance : la relecture se déclenche sur l'absence ",
+     "valeur": "06",
+     "passage": "il ne juge pas la confiance : la relecture se déclenche sur l'absence de score, pas sur une incertitude calibrée (R06) ;",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « traverse » et « documents » ?",
+     "indice": "il ne traverse pas les documents : un document, une question (R51).",
+     "valeur": "51",
+     "passage": "il ne traverse pas les documents : un document, une question (R51).",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/banc-lecture.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « métriques » et « négatifs » ?",
+     "indice": "La spécification de R0.3 (et du banc pilote qui mesure R0.2) : le corp",
+     "valeur": "0.3",
+     "passage": "La spécification de R0.3 (et du banc pilote qui mesure R0.2) : le corpus, les questions, les modes, les métriques et les contrôles négatifs.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « paraphrases » et « pilote » ?",
+     "indice": "Les paraphrases sont un cas de R0.3 avec un modèle, pas du pilote.",
+     "valeur": "0.3",
+     "passage": "Les paraphrases sont un cas de R0.3 avec un modèle, pas du pilote.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « celle » et « exige » ?",
+     "indice": "La porte exige, à 30 % du budget et par type : récupération ≥ 0,90, et",
+     "valeur": "30",
+     "passage": "La porte exige, à 30 % du budget et par type : récupération ≥ 0,90, et valeur ≥ 0,90 × celle de la lecture intégrale (si elle est non nulle).",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « circulaire » et « partagent » ?",
+     "indice": "contrôleur et lecteur partagent BM25 : « le choix du lecteur est toujo",
+     "valeur": "25",
+     "passage": "contrôleur et lecteur partagent BM25 : « le choix du lecteur est toujours lu » est en partie structurel ; le chiffre non circulaire est la récupération du gold ",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « answerer » et « bornés » ?",
+     "indice": "Seul l'answerer change : il reçoit les passages sélectionnés, dans l'o",
+     "valeur": "1 200",
+     "passage": "Seul l'answerer change : il reçoit les passages sélectionnés, dans l'ordre de lecture, bornés par la fenêtre (1 200 caractères, ~300 jetons).",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « debut » et « fait » ?",
+     "indice": "debut_0.30\tla troncature naïve : les premiers passages du document — c",
+     "valeur": "0.30",
+     "passage": "debut_0.30\tla troncature naïve : les premiers passages du document — ce que fait un lecteur qui n'a pas de politique",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « appel » et « coûte » ?",
+     "indice": "La génération coûte ~1,9 s par appel sur GPU (contre 8 à 15 s sur le C",
+     "valeur": "1,9",
+     "passage": "La génération coûte ~1,9 s par appel sur GPU (contre 8 à 15 s sur le CPU du moteur), soit une minute pour 30 questions : la porte reste extractive et rapide, la",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « difficulté » et « référence » ?",
+     "indice": "Le pilote (20 questions main) reste la référence de difficulté.",
+     "valeur": "20",
+     "passage": "Le pilote (20 questions main) reste la référence de difficulté.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « durci » et « sauts » ?",
+     "indice": "R0.3 « durci » (paraphrases, réponses à deux sauts) est la suite.",
+     "valeur": "0.3",
+     "passage": "R0.3 « durci » (paraphrases, réponses à deux sauts) est la suite.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « hérite » et « limite » ?",
+     "indice": "Ce n'est pas un choix de banc, c'est une limite du lecteur, et R5.2 (m",
+     "valeur": "5.2",
+     "passage": "Ce n'est pas un choix de banc, c'est une limite du lecteur, et R5.2 (multilingue) en hérite.",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « vérification » et « daté » ?",
+     "indice": "Document daté — dernière vérification : 2026-10-27.",
+     "valeur": "2026",
+     "passage": "Document daté — dernière vérification : 2026-10-27.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « relisent » et « entrées » ?",
+     "indice": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
+     "valeur": "128",
+     "passage": "À chaque jeton, l'attention relit tout le KV des couches pleines (les couches à fenêtre ne relisent que 128 entrées).",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « réversibilité » et « tokenisé » ?",
+     "indice": "Le corpus de 16 455 jetons (tokenisé avec le tokenizer du modèle, réve",
+     "valeur": "16 455",
+     "passage": "Le corpus de 16 455 jetons (tokenisé avec le tokenizer du modèle, réversibilité vérifiée) permet enfin de mesurer à la longueur de la référence :",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « int4 » et « valeurs » ?",
+     "indice": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
+     "valeur": "32",
+     "passage": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « accumulateur » et « applique » ?",
+     "indice": "Deux noyaux : le premier découpe les clés en nsplit tranches (sans quo",
+     "valeur": "48",
+     "passage": "Deux noyaux : le premier découpe les clés en nsplit tranches (sans quoi il n'y aurait qu'un bloc par tête KV — deux blocs sur 48 SM) et calcule un (max, somme, ",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « appel » et « appels » ?",
+     "indice": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
+     "valeur": "24",
+     "passage": "Piège de mesure noté au passage : les tampons du noyau étaient alloués à chaque appel — 24 couches × 6 appels CUDA par jeton, mesuré 24,5 ms/jeton à 512 jetons ",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « qwen2 » et « notés » ?",
+     "indice": "Qwen2.5-0.5B, contexte 4 096, 4 095 jetons notés, --lot 512 :",
+     "valeur": "2.5",
+     "passage": "Qwen2.5-0.5B, contexte 4 096, 4 095 jetons notés, --lot 512 :",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « attribue » et « conclut » ?",
+     "indice": "L'écart de +3,0 % contre +0,8 % à 8 192 ne vient pas des valeurs : le ",
+     "valeur": "3,0",
+     "passage": "L'écart de +3,0 % contre +0,8 % à 8 192 ne vient pas des valeurs : le §4.bis.3 ci-dessus l'attribue aux clés (DRAVE_KV_K_F32=1 ramène l'écart à +0,023 %, DRAVE_",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « basculait » et « dégrade » ?",
+     "indice": "L'interpolation dégrade encore au-delà de 4 096 — d'un facteur 131 — a",
+     "valeur": "4 096",
+     "passage": "L'interpolation dégrade encore au-delà de 4 096 — d'un facteur 131 — alors que c'est exactement la zone où le moteur basculait.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrêté » et « code » ?",
+     "indice": "Aiguille dans la botte de foin (tools/aiguille.py) : la perplexité ne ",
+     "valeur": "2.5",
+     "passage": "Aiguille dans la botte de foin (tools/aiguille.py) : la perplexité ne dit pas si le modèle RETROUVE une information. Le script plante un code à une profondeur d",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « dernière » et « vérification » ?",
+     "indice": "Document daté — dernière vérification : 2026-10-27.",
+     "valeur": "2026",
+     "passage": "Document daté — dernière vérification : 2026-10-27.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « différence » et « tenir » ?",
+     "indice": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
+     "valeur": "120",
+     "passage": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas tenir en mémoire et tenir.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dispersion » et « mode » ?",
+     "indice": "GPU, dispersion d'événements\t18,1 G év/s\tmode push",
+     "valeur": "18,1",
+     "passage": "GPU, dispersion d'événements\t18,1 G év/s\tmode push",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « auto » et « forme » ?",
+     "indice": "bit à bit\tmême forme d'exécution, même résultat\t✅ obtenu (push/pull/au",
+     "valeur": "19,2641",
+     "passage": "bit à bit\tmême forme d'exécution, même résultat\t✅ obtenu (push/pull/auto : PPL 19,2641 identique ; AVX2 vs scalaire : identique)",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « requantification » et « aucune » ?",
+     "indice": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
+     "valeur": "30",
+     "passage": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « lieu » et « jeton » ?",
+     "indice": "Le 30B-A3B lit 1,8 G poids par jeton au lieu de 30 G.",
+     "valeur": "30",
+     "passage": "Le 30B-A3B lit 1,8 G poids par jeton au lieu de 30 G.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « aussi » et « chiffre » ?",
+     "indice": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
+     "valeur": "4,81",
+     "passage": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre 5,4 mesurés.",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « résidents » et « aucune » ?",
+     "indice": "gpt-oss-120b charge et tourne : 62,2 Go résidents — la taille du fichi",
+     "valeur": "120",
+     "passage": "gpt-oss-120b charge et tourne : 62,2 Go résidents — la taille du fichier, aucune copie — pour 62,2 Go de mémoire crête, à ~195 ms par jeton (5 tok/s) :",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « silu » et « écrêtés » ?",
+     "indice": "2\t185\tactivation gpt-oss : g·σ(1,702·g)·(u+1), g et u écrêtés à ±7 — c",
+     "valeur": "2\t185",
+     "passage": "2\t185\tactivation gpt-oss : g·σ(1,702·g)·(u+1), g et u écrêtés à ±7 — ce n'est PAS SiLU",
+     "type": "technique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « hidden » et « topk » ?",
+     "indice": "[config] 36 couches, hidden 2880 · activation-oss routeur-topk moe",
+     "valeur": "36",
+     "passage": "[config] 36 couches, hidden 2880 · activation-oss routeur-topk moe",
+     "type": "technique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « ancien » et « archivé » ?",
+     "indice": "Détail et histoire : l'ancien plan A/B est archivé dans roadmap-detail",
+     "valeur": "2026",
+     "passage": "Détail et histoire : l'ancien plan A/B est archivé dans roadmap-detail-2026-10-29.md, le détail N dans roadmap-native-2026-10-29.md.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « attend » et « gist » ?",
+     "indice": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
+     "valeur": "21",
+     "passage": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution attend le gist.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « typés » ?",
+     "indice": "B11\tla base d'universaux typés : schéma, parseur, codec, contexte\t✅ / ",
+     "valeur": "11",
+     "passage": "B11\tla base d'universaux typés : schéma, parseur, codec, contexte\t✅ / ⚠️\tB11.10 (cartes et ambiguïtés) ; le codec lit 100 %",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contenu » et « gagne » ?",
+     "indice": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+     "valeur": "24,05",
+     "passage": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie précoce gagne 24,05 % de temps en perdant 1,61 point ; c'est une décision sur la confiance ",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contradiction » et « greffées » ?",
+     "indice": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+     "valeur": "0.4",
+     "passage": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (requête → spans), relecture (confiance/contradiction), greffées sur les têtes précoces\t⏳ apr",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « faits » et « entités » ?",
+     "indice": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'e",
+     "valeur": "2.1",
+     "passage": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'entités et de faits, tampon en entrée\t⏳\tréponse dont l'indice est en section 2 après lectur",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « bloque » et « contre » ?",
+     "indice": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
+     "valeur": "4.6",
+     "passage": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique est sous le plancher chrF (12,7 / 5,3 contre 39,6).",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dessus » et « dépend » ?",
+     "indice": "R5.2\tlecture en traduction : décodeur au-dessus du plancher chrF, puis",
+     "valeur": "5.2",
+     "passage": "R5.2\tlecture en traduction : décodeur au-dessus du plancher chrF, puis lecture multilingue\t⏳ après B10.3\tchrF > 39,6 ; la réponse ne dépend pas de la langue sou",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « absent » et « nommé » ?",
+     "indice": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
+     "valeur": "1.5",
+     "passage": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local), B10.3 (B10.2bis absent du backlog) ;",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « graines » et « raisonnement » ?",
+     "indice": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
+     "valeur": "10.3",
+     "passage": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune attention croisée, 20–30 articles, 3 graines",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « heure » et « locale » ?",
+     "indice": "Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).",
+     "valeur": "2026",
+     "passage": "Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « analyse » et « tenir » ?",
+     "indice": "Rôle : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambig",
+     "valeur": "11.10",
+     "passage": "Rôle : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambiguïtés) sur CPU.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
+     "indice": "Prochaine action : B11.10 — cartes et ambiguïtés ; R0.3 est à 8156fdcb",
+     "valeur": "11.10",
+     "passage": "Prochaine action : B11.10 — cartes et ambiguïtés ; R0.3 est à 8156fdcb.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 4ba4 » et « 5033 » ?",
+     "indice": "Id : 8156fdcb-5033-4ba4-a5f3-f8a078e6e57e.",
+     "valeur": "8156",
+     "passage": "Id : 8156fdcb-5033-4ba4-a5f3-f8a078e6e57e.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « appel » et « contre » ?",
+     "indice": "Ce qu'elle fait : R0.3 — le modèle tourne sur GPU (llama-cli CUDA, 1,9",
+     "valeur": "0.3",
+     "passage": "Ce qu'elle fait : R0.3 — le modèle tourne sur GPU (llama-cli CUDA, 1,9 s/appel) : contrôleur 0,500 contre troncature 0,400 et hasard 0,000 (10 questions, indica",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « questions » et « action » ?",
+     "indice": "Prochaine action : R0.3 — le banc complet (30 documents, 300 questions",
+     "valeur": "0.3",
+     "passage": "Prochaine action : R0.3 — le banc complet (30 documents, 300 questions) sur GPU.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contextes » et « négatifs » ?",
+     "indice": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
+     "valeur": "130",
+     "passage": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « intégration » et « retiré » ?",
+     "indice": "B12.10 — intégration : close négative ; oracle = M8 (0,436), M4 seul =",
+     "valeur": "12.10",
+     "passage": "B12.10 — intégration : close négative ; oracle = M8 (0,436), M4 seul = 0/606 ; la porte « M4 retiré » est vide.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « fichiers » et « json » ?",
+     "indice": "fichiers / JSON de résultats\t277 / 343\treports/*.md / reports/*.json",
+     "valeur": "277",
+     "passage": "fichiers / JSON de résultats\t277 / 343\treports/*.md / reports/*.json",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrêtées » et « priorités » ?",
+     "indice": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+     "valeur": "29",
+     "passage": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; priorités arrêtées\tvérifier le graphe (8156fdcb)",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/backlog/dependances.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « ouvertes » et « dures » ?",
+     "indice": "29 fiches, 8 lignes ouvertes sans fiche, 41 arêtes dures, 3 plafonds.",
+     "valeur": "29",
+     "passage": "29 fiches, 8 lignes ouvertes sans fiche, 41 arêtes dures, 3 plafonds.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « carte » et « fpga » ?",
+     "indice": "A5.4\tbloquée\tA5 (acquis)\tbloqué : la carte Stratix V\t—\tA5.4-fpga.md",
+     "valeur": "5.4",
+     "passage": "A5.4\tbloquée\tA5 (acquis)\tbloqué : la carte Stratix V\t—\tA5.4-fpga.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « parite » et « prête » ?",
+     "indice": "N0.3b\tprête\tN0 (acquis)\t—\t—\tN0.3b-parite-ppl.md",
+     "valeur": "0.3",
+     "passage": "N0.3b\tprête\tN0 (acquis)\t—\t—\tN0.3b-parite-ppl.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « relecture » et « tete » ?",
+     "indice": "R06\tspécifiée\tR03 (dure), R21 (dure), R22 (dure)\t—\t—\tR06-tete-relectur",
+     "valeur": "06",
+     "passage": "R06\tspécifiée\tR03 (dure), R21 (dure), R22 (dure)\t—\t—\tR06-tete-relecture.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « restitution » et « plafond » ?",
+     "indice": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+     "valeur": "31",
+     "passage": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51, R52\tR31-restitution-sft.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « croisee » et « exécutable » ?",
+     "indice": "R51\tspécifiée\tR31 (dure), R32 (dure), R03 (dure), R01 (dure)\tle manque",
+     "valeur": "51",
+     "passage": "R51\tspécifiée\tR31 (dure), R32 (dure), R03 (dure), R01 (dure)\tle manque M4 (aucun encodeur exécutable)\t—\tR51-lecture-croisee.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « book » et « closed » ?",
+     "indice": "Une même mesure sous deux noms. R02 disait dépendre de R03, et R03 de ",
+     "valeur": "02",
+     "passage": "Une même mesure sous deux noms. R02 disait dépendre de R03, et R03 de R02 : le contrôleur se mesure sur le banc, le banc a besoin des modes du contrôleur. Ce n'",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « budget » et « chiffrer » ?",
+     "indice": "R13\tspécifiée\taucune arête dure ; N1 suffit à deux tokenisations\tchiff",
+     "valeur": "13",
+     "passage": "R13\tspécifiée\taucune arête dure ; N1 suffit à deux tokenisations\tchiffrer octets contre BPE à budget égal",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « intérêt » et « mêmes » ?",
+     "indice": "Ce qui n'ouvre rien attend. R43 (maths), R44 (OCR) et R52 (multilingue",
+     "valeur": "43",
+     "passage": "Ce qui n'ouvre rien attend. R43 (maths), R44 (OCR) et R52 (multilingue) n'ouvrent que sur eux-mêmes ; ils ne sont pas la prochaine action, quel que soit leur in",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrive » et « compréhension » ?",
+     "indice": "R03 venant en dernier, la première courbe vitesse-compréhension arrive",
+     "valeur": "03",
+     "passage": "R03 venant en dernier, la première courbe vitesse-compréhension arrive après R01 et R02 — c'est le prix de l'ordre strict, et il est nommé.",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/backlog/index.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « dependances » et « fiches » ?",
+     "indice": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
+     "valeur": "29",
+     "passage": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe des dépendances est dans dependances.md.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contrôleur » et « mesurée » ?",
+     "indice": "R02\tContrôleur de lecture\tmesurée\tP0\tR01\tR0.2",
+     "valeur": "02",
+     "passage": "R02\tContrôleur de lecture\tmesurée\tP0\tR01\tR0.2",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « balayage » et « tête » ?",
+     "indice": "R05\tTête de balayage\tspécifiée\tP1\tR03, R01\tR0.4",
+     "valeur": "05",
+     "passage": "R05\tTête de balayage\tspécifiée\tP1\tR03, R01\tR0.4",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « curriculum » et « contexte » ?",
+     "indice": "R12\tCurriculum de contexte long\tspécifiée\tP1\tR11\tR1.2",
+     "valeur": "12",
+     "passage": "R12\tCurriculum de contexte long\tspécifiée\tP1\tR11\tR1.2",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « travail » et « gist » ?",
+     "indice": "R21\tMémoire de travail et gist\tspécifiée\tP1\tR01, R11\tR2.1",
+     "valeur": "21",
+     "passage": "R21\tMémoire de travail et gist\tspécifiée\tP1\tR01, R11\tR2.1",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « citations » et « provenance » ?",
+     "indice": "R32\tCitations et provenance\tspécifiée\tP2\tR31, R01, R21\tR3.2",
+     "valeur": "32",
+     "passage": "R32\tCitations et provenance\tspécifiée\tP2\tR31, R01, R21\tR3.2",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « croisée » et « multi » ?",
+     "indice": "R51\tLecture croisée / multi-documents\tspécifiée\tP3\tR31, R32, R03, R01\t",
+     "valeur": "51",
+     "passage": "R51\tLecture croisée / multi-documents\tspécifiée\tP3\tR31, R32, R03, R01\tR5.1",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « gguf » et « parité » ?",
+     "indice": "N0.3b\tParité de perplexité DRVM ↔ GGUF\tmesurée\tP1\tN0\tN0.3b",
+     "valeur": "0.3",
+     "passage": "N0.3b\tParité de perplexité DRVM ↔ GGUF\tmesurée\tP1\tN0\tN0.3b",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « complet » et « fpga » ?",
+     "indice": "A5.4\tOpérateur FPGA complet\tbloquée\tP3\tA5\tA5.4",
+     "valeur": "5.4",
+     "passage": "A5.4\tOpérateur FPGA complet\tbloquée\tP3\tA5\tA5.4",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
+     "indice": "B11.10\tCartes et ambiguïtés de la RSN\tprête\tP2\tB11\tB11.10",
+     "valeur": "11.10",
+     "passage": "B11.10\tCartes et ambiguïtés de la RSN\tprête\tP2\tB11\tB11.10",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « autant » et « existe » ?",
+     "indice": "Et un manque de méthode, qui compte autant : la lecture disque en mmap",
+     "valeur": "8,6",
+     "passage": "Et un manque de méthode, qui compte autant : la lecture disque en mmap atteint 8,6 Mo/s sur disque dur contre 243 Mo/s en séquentiel (÷28) — un préchargement or",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « comblé » et « fiches » ?",
+     "indice": "Mesuré, et son premier pas comblé le 12/10 — fiches reports/rapport-pr",
+     "valeur": "12",
+     "passage": "Mesuré, et son premier pas comblé le 12/10 — fiches reports/rapport-prelire-grappe.md (le mécanisme, hors moteur) et reports/rapport-s4-prechargement-moteur.md ",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « array » et « dessus » ?",
+     "indice": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
+     "valeur": "29",
+     "passage": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur un motif d'experts.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « change » et « entière » ?",
+     "indice": "Ce qui paie n'est pas madvise — sur une plage entière il rend ×1,06, e",
+     "valeur": "1,06",
+     "passage": "Ce qui paie n'est pas madvise — sur une plage entière il rend ×1,06, et sa granularité ne change rien dans le moteur (31 à 36 s dans tous les cas) — mais des fi",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « avance » et « dépasse » ?",
+     "indice": "C'est le seul bras qui gagne et sur les octets et sur le temps : la le",
+     "valeur": "75",
+     "passage": "C'est le seul bras qui gagne et sur les octets et sur le temps : la lecture en avance du noyau dépasse la plage utile de 75 %.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « allocation » et « copie » ?",
+     "indice": "Ce qui reste ouvert est nommé : le pool et le recouvrement (une copie ",
+     "valeur": "37",
+     "passage": "Ce qui reste ouvert est nommé : le pool et le recouvrement (une copie ne se recouvre pas avec un calcul plus court qu'elle), et le même remède côté VRAM — où la",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 00e0 » et « bouge » ?",
+     "indice": "Le découpage à deux nœuds est exact : 0,00e0 (modes 0, 1, 3), et la pe",
+     "valeur": "0,00",
+     "passage": "Le découpage à deux nœuds est exact : 0,00e0 (modes 0, 1, 3), et la perplexité ne bouge pas jusqu'à 50 ms de latence par message.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « affirmait » et « alors » ?",
+     "indice": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
+     "valeur": "49",
+     "passage": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deux structurelles connues : tools/toutes-les-portes.sh, 49 portes (47 vertes, 2 structurelle",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « aiguilles » et « jusqu » ?",
+     "indice": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
+     "valeur": "18",
+     "passage": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « complète » et « dernière » ?",
+     "indice": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
+     "valeur": "49",
+     "passage": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/10 23 h 55).",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « finale » et « restent » ?",
+     "indice": "Passe précédente — 2026-10-27 à 14 h 33 (49 portes, 47 vertes, 2 rouge",
+     "valeur": "2026",
+     "passage": "Passe précédente — 2026-10-27 à 14 h 33 (49 portes, 47 vertes, 2 rouges, 1 h 48 min) — la passe finale du sprint 24 h. porte-indice 843 s et porte-melange 112 s",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « antérieures » et « conservées » ?",
+     "indice": "Historique des passes : les passes antérieures au 26/10 14 h 30, dont ",
+     "valeur": "26",
+     "passage": "Historique des passes : les passes antérieures au 26/10 14 h 30, dont celle du 25/10 04 h 51, sont conservées dans reports/historique-passes-portes.md.",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « doit » et « dépôt » ?",
+     "indice": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
+     "valeur": "308",
+     "passage": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 liens relatifs vérifiés dans docs/ et reports/ ✓) est appelé par porte-tableaux ✓ — un docume",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « canal » et « diffusé » ?",
+     "indice": "porte-bus.sh\t75 s\t✅ le canal diffusé par fichier change la région du m",
+     "valeur": "75",
+     "passage": "porte-bus.sh\t75 s\t✅ le canal diffusé par fichier change la région du milieu",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « conditions » et « consécutifs » ?",
+     "indice": "porte-episodique.sh\t166 s\t✅ la porte C6 est franchie — et elle dit ses",
+     "valeur": "166",
+     "passage": "porte-episodique.sh\t166 s\t✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « installer » et « intact » ?",
+     "indice": "porte-harnais-invariants.sh\t105 s\t✅ porte harnais : installer une repa",
+     "valeur": "105",
+     "passage": "porte-harnais-invariants.sh\t105 s\t✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « arbitrent » et « entrées » ?",
+     "indice": "porte-melange.sh\t805 s\t✅ la porte est franchie. Ce qu'elle dit : deux ",
+     "valeur": "805",
+     "passage": "porte-melange.sh\t805 s\t✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « divisées » et « noyau » ?",
+     "indice": "porte-poids-creux.sh\t354 s\t✅ porte poids creux : le noyau creux est EX",
+     "valeur": "354",
+     "passage": "porte-poids-creux.sh\t354 s\t✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « calculé » et « nommant » ?",
+     "indice": "porte-registre.sh\t14 s\t✅ région absente : refusée en la nommant (code ",
+     "valeur": "14",
+     "passage": "porte-registre.sh\t14 s\t✅ région absente : refusée en la nommant (code 2), rien n'est calculé",
+     "type": "tableau"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « main » et « reference » ?",
+     "indice": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "passage": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « between » et « section » ?",
+     "indice": "section 11 of the Agreement between the United Nations and the United ",
+     "valeur": "11",
+     "passage": "section 11 of the Agreement between the United Nations and the United States of",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2025 » et « counsel » ?",
+     "indice": "of 12 September 2025, and the statements made therein, including the p",
+     "valeur": "12",
+     "passage": "of 12 September 2025, and the statements made therein, including the position of the United Nations Legal Counsel,",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « commission » et « grande » ?",
+     "indice": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "passage": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « entre » et « section » ?",
+     "indice": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
+     "valeur": "11",
+     "passage": "représentants visés à la section 11 de l’Accord entre l’Organisation des Nations Unies",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2025 » et « conseillère » ?",
+     "indice": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
+     "valeur": "12",
+     "passage": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment de la position de la Conseillère juridique de l’ONU,",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « comisión » et « previa » ?",
+     "indice": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "passage": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « entre » et « quienes » ?",
+     "indice": "sesiones de la Asamblea General a los representantes a quienes se hace",
+     "valeur": "11",
+     "passage": "sesiones de la Asamblea General a los representantes a quienes se hace referencia en la sección 11 del Acuerdo entre las Naciones Unidas y los Estados Unidos de",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2025 » et « anfitrión » ?",
+     "indice": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
+     "valeur": "12",
+     "passage": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formuladas en ella, incluida la posición de la Asesora Jurídica de las Naciones Unidas,",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « conferences » et « coordinated » ?",
+     "indice": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
+     "valeur": "13",
+     "passage": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major United Nations conferences and summits ",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « main » et « reference » ?",
+     "indice": "[without reference to a Main Committee (A/80/L.11)]",
+     "valeur": "80",
+     "passage": "[without reference to a Main Committee (A/80/L.11)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « chap » et « conf » ?",
+     "indice": "See A/CONF.189/12 and A/CONF.189/12/Corr.1, chap.",
+     "valeur": "189",
+     "passage": "See A/CONF.189/12 and A/CONF.189/12/Corr.1, chap.",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « agenda » et « reaffirming » ?",
+     "indice": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
+     "valeur": "2030",
+     "passage": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 1998 » et « resolutions » ?",
+     "indice": "Reaffirming also its resolutions 53/199 of 15 December 1998 and 61/185",
+     "valeur": "53",
+     "passage": "Reaffirming also its resolutions 53/199 of 15 December 1998 and 61/185 of",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2022 » et « recommendation » ?",
+     "indice": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
+     "valeur": "39",
+     "passage": "39 (2022) on the rights of Indigenous women and girls 12 and general recommendation No.",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2024 » et « inclusive » ?",
+     "indice": "40 (2024) on the equal and inclusive representation of women in decisi",
+     "valeur": "40",
+     "passage": "40 (2024) on the equal and inclusive representation of women in decision-making systems, respectively, 13",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « conférences » et « connexes » ?",
+     "indice": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
+     "valeur": "13",
+     "passage": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des grandes conférences et réunions au sommet ",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « commission » et « grande » ?",
+     "indice": "[sans renvoi à une grande commission (A/80/L.11)]",
+     "valeur": "80",
+     "passage": "[sans renvoi à une grande commission (A/80/L.11)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « action » et « population » ?",
+     "indice": "Programme d’action de la Conférence internationale sur la population e",
+     "valeur": "10",
+     "passage": "Programme d’action de la Conférence internationale sur la population et le développement 10 ,",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « horizon » et « durable » ?",
+     "indice": "Réaffirmant le Programme de développement durable à l’horizon 2030 11 ",
+     "valeur": "2030 11",
+     "passage": "Réaffirmant le Programme de développement durable à l’horizon 2030 11 et",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « résolutions » et « dispositions » ?",
+     "indice": "Réaffirmant également les dispositions de ses résolutions 53/199 du",
+     "valeur": "53",
+     "passage": "Réaffirmant également les dispositions de ses résolutions 53/199 du",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2022 » et « note » ?",
+     "indice": "Prenant note de la recommandation générale n o 39 (2022) sur les droit",
+     "valeur": "39",
+     "passage": "Prenant note de la recommandation générale n o 39 (2022) sur les droits des",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2024 » et « comité » ?",
+     "indice": "femmes et des filles autochtones du Comité pour l’élimination de la di",
+     "valeur": "12",
+     "passage": "femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des femmes 12 et de la recommandation générale n o 40 (2024) sur la",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « conexas » et « conferencias » ?",
+     "indice": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
+     "valeur": "13",
+     "passage": "Octogésimo período de sesiones Tema 13 del programa Aplicación y seguimiento integrados y coordinados de los resultados de las grandes conferencias y cumbres de",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « comisión » et « previa » ?",
+     "indice": "[sin remisión previa a una Comisión Principal (A/80/L.11)]",
+     "valeur": "80",
+     "passage": "[sin remisión previa a una Comisión Principal (A/80/L.11)]",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « véase » et « anexo » ?",
+     "indice": "Véase la resolución 2200 A (XXI), anexo.",
+     "valeur": "2200",
+     "passage": "Véase la resolución 2200 A (XXI), anexo.",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « agenda » et « reafirmando » ?",
+     "indice": "Reafirmando la Agenda 2030 para el Desarrollo Sostenible 11 y que el",
+     "valeur": "2030",
+     "passage": "Reafirmando la Agenda 2030 para el Desarrollo Sostenible 11 y que el",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 1998 » et « resoluciones » ?",
+     "indice": "Reafirmando también sus resoluciones 53/199, de 15 de diciembre de 199",
+     "valeur": "53",
+     "passage": "Reafirmando también sus resoluciones 53/199, de 15 de diciembre de 1998, y",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2022 » et « relativa » ?",
+     "indice": "39 (2022), relativa a los derechos de las mujeres y las niñas indígena",
+     "valeur": "39",
+     "passage": "39 (2022), relativa a los derechos de las mujeres y las niñas indígenas 12 , y núm.",
+     "type": "juridique"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2024 » et « inclusiva » ?",
+     "indice": "40 (2024), relativa a la representación igualitaria e inclusiva de las",
+     "valeur": "40",
+     "passage": "40 (2024), relativa a la representación igualitaria e inclusiva de las mujeres en los sistemas de toma de decisiones 13 ,",
+     "type": "juridique"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « 2026 » et « puisse » ?",
+     "indice": "Écrit le 16/10, revu le 2026-10-27. en réponse à une question simple :",
+     "valeur": "16",
+     "passage": "Écrit le 16/10, revu le 2026-10-27. en réponse à une question simple : « que manque-t-il pour que je puisse utiliser tout ça ? ».",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « construction » et « garantie » ?",
+     "indice": "portée\t127.0.0.1 seulement ✗ (garantie par construction ✓)",
+     "valeur": "127.0.0.1",
+     "passage": "portée\t127.0.0.1 seulement ✗ (garantie par construction ✓)",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « licence » et « python » ?",
+     "indice": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
+     "valeur": "3.9",
+     "passage": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 8787 » et « double » ?",
+     "indice": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
+     "valeur": "27",
+     "passage": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été retiré ✓ : il faisait double emploi avec docwatch et n'était pas versionnable indépendamm",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « celui » et « devient » ?",
+     "indice": "⚠️ Ne jamais lire une porte à travers un tail ✗ : le code de sortie de",
+     "valeur": "16",
+     "passage": "⚠️ Ne jamais lire une porte à travers un tail ✗ : le code de sortie devient celui du tuyau ✓ (leçon payée le 16/10 ✓).",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « alternatifs » et « anatomie » ?",
+     "indice": "docs/theorie/synthese/ ✓ — huit chapitres vulgarisés et quatorze schém",
+     "valeur": "16",
+     "passage": "docs/theorie/synthese/ ✓ — huit chapitres vulgarisés et quatorze schémas SVG : l'idée fondatrice, l'anatomie interne (régions, liens, bus, horloges), les modes ",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « itérative » et « empreinte » ?",
+     "indice": "Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée it",
+     "valeur": "16",
+     "passage": "Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée itérative)",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contrôle » et « recopier » ?",
+     "indice": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
+     "valeur": "100,0",
+     "passage": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec contrôle à 0,0 % ✓)\tpython3 tools/lora_recopie.py --hf <snapshot> --ids <corpus>",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « lineaire » et « réglé » ?",
+     "indice": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
+     "valeur": "119,9",
+     "passage": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il sur-apprend ✗ — 119,9 % contre 85,2 % pour le ridge ✓)\t... --modeles A,B --ids <corpus>",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « appris » et « cible » ?",
+     "indice": "⚠️ Ce que les mesures de la nuit ont appris sur l'instrument ✓✓ — à li",
+     "valeur": "0,0",
+     "passage": "⚠️ Ce que les mesures de la nuit ont appris sur l'instrument ✓✓ — à lire avant de refaire une mesure : un ridge sous-déterminé (moins de positions que de coeffi",
+     "type": "code"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « dernière » et « daté » ?",
+     "indice": "Document daté — dernière vérification : 2026-10-27.",
+     "valeur": "2026",
+     "passage": "Document daté — dernière vérification : 2026-10-27.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « montée » et « nommés » ?",
+     "indice": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
+     "valeur": "6.2",
+     "passage": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (root requis), la montée du lien GPU sous charge (§ 7.5), et la moitié « calcul » du § 6.3.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « achète » et « aurait » ?",
+     "indice": "Ce que ce plan achète, et c'est mesuré : les GPU gardent leurs x16 (36",
+     "valeur": "16",
+     "passage": "Ce que ce plan achète, et c'est mesuré : les GPU gardent leurs x16 (36 voies utilisées sur 40 — la carte 4×NVMe n'aurait pas pu tenir sur le nœud 0 sans faire t",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « conséquence » et « effondre » ?",
+     "indice": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
+     "valeur": "350",
+     "passage": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue (télécharger 350 Go de poids), le débit s'effondre une fois le cache SLC épuisé.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « pilote » et « radeon » ?",
+     "indice": "5.1 Le pilote : radeon ou amdgpu — les deux sont là",
+     "valeur": "5.1",
+     "passage": "5.1 Le pilote : radeon ou amdgpu — les deux sont là",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « origine » et « paramètre » ?",
+     "indice": "Si la carte reçue est en fait une RX 550 (GCN 4, Polaris), elle est pi",
+     "valeur": "550",
+     "passage": "Si la carte reçue est en fait une RX 550 (GCN 4, Polaris), elle est pilotée par amdgpu d'origine : aucun paramètre de noyau, et le firmware est là aussi.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « disque » et « swap » ?",
+     "indice": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
+     "valeur": "62",
+     "passage": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/s).",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ahead » et « read » ?",
+     "indice": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe",
+     "valeur": "1 024\t4 096",
+     "passage": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « adressés » et « mapper » ?",
+     "indice": "mmap par défaut : 47 Mo de RSS pour 365 Go adressés — ne pas passer à ",
+     "valeur": "47",
+     "passage": "mmap par défaut : 47 Mo de RSS pour 365 Go adressés — ne pas passer à DRAVE_MMAP=0, qui lit au lieu de mapper.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « corrige » et « coupable » ?",
+     "indice": "Le motif d'accès coûte 35 % : 133 Mio/s obtenus sur le disque dur là o",
+     "valeur": "35",
+     "passage": "Le motif d'accès coûte 35 % : 133 Mio/s obtenus sur le disque dur là où le séquentiel plafonne à 205. Un array ne corrige pas un motif — mais il rend l'écart vi",
+     "type": "code"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « autonome » et « converti » ?",
+     "indice": "En une ligne : un GGUF est converti en commun.gguf + cluster-XX.gguf, ",
+     "valeur": "3,20",
+     "passage": "En une ligne : un GGUF est converti en commun.gguf + cluster-XX.gguf, un fichier GGUF autonome par cluster d'experts, avec un manifeste qui porte la corresponda",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « tranches » et « couches » ?",
+     "indice": "cluster-00.gguf      les tranches d'experts du cluster 0, toutes couch",
+     "valeur": "00",
+     "passage": "cluster-00.gguf      les tranches d'experts du cluster 0, toutes couches",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « alignés » et « arrête » ?",
+     "indice": "Aucune requantification. Les octets des poids sont copiés tels quels. ",
+     "valeur": "768",
+     "passage": "Aucune requantification. Les octets des poids sont copiés tels quels. Les blocs de quantification sont alignés sur l'axe des experts (768 et 2048 sont des multi",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « concaténation » et « correspondante » ?",
+     "indice": "Vérification par empreintes. --verifier relit chaque fichier produit e",
+     "valeur": "256",
+     "passage": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les clusters, la concaténation des tranches ",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « decoupage » et « divise » ?",
+     "indice": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
+     "valeur": "1,8",
+     "passage": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ordre divise la ventilation d'un jeton par ~1,8 (3,08 nœuds au lieu de 5,32 à 8 clusters).",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « qwen2 » et « embeddings » ?",
+     "indice": "Mesuré sur Qwen2.5-0.5B : commun.gguf (embeddings + tête) + 4 fichiers",
+     "valeur": "2.5",
+     "passage": "Mesuré sur Qwen2.5-0.5B : commun.gguf (embeddings + tête) + 4 fichiers de 6 couches, 290 tenseurs vérifiés.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « annonce » et « inventaire » ?",
+     "indice": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
+     "valeur": "1 587",
+     "passage": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle d'origine.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « bloc » et « compte » ?",
+     "indice": "octets_tensor doit connaître la taille de chaque type : nelem() compte",
+     "valeur": "32",
+     "passage": "octets_tensor doit connaître la taille de chaque type : nelem() compte des poids, et un type quantifié range 32 ou 256 poids par bloc.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « absents » et « confondus » ?",
+     "indice": "types confondus : 41 · divergents : 0 · absents du moteur : 0",
+     "valeur": "41",
+     "passage": "types confondus : 41 · divergents : 0 · absents du moteur : 0",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « quatre » et « rendraient » ?",
+     "indice": "Avec elle, deux nœuds à quatre clusters rendraient 799,8557 pour 4,60 ",
+     "valeur": "799,8557",
+     "passage": "Avec elle, deux nœuds à quatre clusters rendraient 799,8557 pour 4,60 Go chacun — moins que les 6,28 Go d'un nœud complet.",
+     "type": "code"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/methode/portes.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « arrêter » et « lance » ?",
+     "indice": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
+     "valeur": "1800",
+     "passage": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêter à la première rouge (on veut le tableau, pas la première tuile), et borne chaque porte ",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dernière » et « diagnostic » ?",
+     "indice": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
+     "valeur": "49",
+     "passage": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vertes, 3 rouges ; la liste et le diagnostic sont dans references-non-regression.md. porte-dee",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « 13h30 » et « affiché » ?",
+     "indice": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
+     "valeur": "1019",
+     "passage": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « bloquée » et « délai » ?",
+     "indice": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
+     "valeur": "124",
+     "passage": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un échec de la porte, c'est le délai — relancer la porte seule avec un DELAI plus grand.)",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « bash » et « tableaux » ?",
+     "indice": "PORTES=\"tableaux registre vision\" DELAI=600 bash tools/toutes-les-port",
+     "valeur": "600",
+     "passage": "PORTES=\"tableaux registre vision\" DELAI=600 bash tools/toutes-les-portes.sh",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « attendre » et « audit » ?",
+     "indice": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
+     "valeur": "28",
+     "passage": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui occupe 28 Go de VRAM pendant une passe fait attendre ou échouer les portes qui utilisent l",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « contrat » et « couche » ?",
+     "indice": "Les portes de données (porte-diff-couche) vérifient un contrat, pas un",
+     "valeur": "30",
+     "passage": "Les portes de données (porte-diff-couche) vérifient un contrat, pas un temps : deux exécutions identiques doivent donner un flux identique (la reproductibilité)",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « conservé » et « donne » ?",
+     "indice": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
+     "valeur": "15",
+     "passage": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : en cas de rouge, tail -15 sur ce fichier donne la raison, pas le marqueur.",
+     "type": "code"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « dernière » et « vérification » ?",
+     "indice": "Document daté — dernière vérification : 2026-10-27.",
+     "valeur": "2026",
+     "passage": "Document daté — dernière vérification : 2026-10-27.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « nvidia » et « sens » ?",
+     "indice": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
+     "valeur": "25,781",
+     "passage": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « hyperthreads » et « tient » ?",
+     "indice": "mémoire\tpasse dense d'un modèle qui tient en RAM\tla bande passante mém",
+     "valeur": "20",
+     "passage": "mémoire\tpasse dense d'un modèle qui tient en RAM\tla bande passante mémoire\t20 cœurs = 22,5 Go/s, + hyperthreads = 18,9",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « donnent » et « faible » ?",
+     "indice": "La mémoire asymétrique 32/128 Go est le point faible. Aujourd'hui c'es",
+     "valeur": "32",
+     "passage": "La mémoire asymétrique 32/128 Go est le point faible. Aujourd'hui c'est 64/64. Toute charge dense forcée sur un socket paie les +8 % (mesuré ci-dessous) à −19 %",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « asymétrie » et « rendre » ?",
+     "indice": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
+     "valeur": "64",
+     "passage": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin que d'un socket ; l'autre moitié a besoin des deux. Une asymétrie 32/128 retire une capac",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « mêmes » et « configurations » ?",
+     "indice": "passe dense 0,5 B et 30 B : mêmes trois configurations ;",
+     "valeur": "0,5",
+     "passage": "passe dense 0,5 B et 30 B : mêmes trois configurations ;",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « sert » et « partagent » ?",
+     "indice": "GPU en x16 + carte en x4 (32 + 4 + 4 = 40 ✅) : les 4 SSD partagent alo",
+     "valeur": "16",
+     "passage": "GPU en x16 + carte en x4 (32 + 4 + 4 = 40 ✅) : les 4 SSD partagent alors ~3,9 Go/s — le débit d'un seul SSD. L'array ne sert à rien.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « rapporter » et « mesurer » ?",
+     "indice": "11.4 Ce que l'array peut rapporter, et ce qu'il faut mesurer",
+     "valeur": "11.4",
+     "passage": "11.4 Ce que l'array peut rapporter, et ce qu'il faut mesurer",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « memory » et « overcommit » ?",
+     "indice": "vm.swappiness est déjà à 10, vm.overcommit_memory à 1 : les réglages n",
+     "valeur": "10",
+     "passage": "vm.swappiness est déjà à 10, vm.overcommit_memory à 1 : les réglages ne sont pas le problème, le support l'est.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « impossible » et « lire » ?",
+     "indice": "lire 206,58 Gio (passe K3)\timpossible à garder\t~30 s",
+     "valeur": "206,58",
+     "passage": "lire 206,58 Gio (passe K3)\timpossible à garder\t~30 s",
+     "type": "code"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/methode/continuite.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle valeur le document associe-t-il à « filet » et « harnais » ?",
+     "indice": "max_goal_rounds\t1 000 (ou le maximum du harnais)\tla limite est un file",
+     "valeur": "1 000",
+     "passage": "max_goal_rounds\t1 000 (ou le maximum du harnais)\tla limite est un filet, pas un objectif : on ne s'arrête pas à 20 ou 50 rounds",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dessous » et « format » ?",
+     "indice": "format de rapport : les 10 lignes ci-dessous ;",
+     "valeur": "10",
+     "passage": "format de rapport : les 10 lignes ci-dessous ;",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « budget » et « coupe » ?",
+     "indice": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+     "valeur": "2 000",
+     "passage": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « identifiant » et « toujours » ?",
+     "indice": "prochaine action\ttoujours nommée, avec son identifiant (N0.3b, N2.4…)",
+     "valeur": "0.3",
+     "passage": "prochaine action\ttoujours nommée, avec son identifiant (N0.3b, N2.4…)",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « dépassement » et « déplace » ?",
+     "indice": "Dépassement : au-delà de 2 000 mots, on coupe (résumé + lien) ou on dé",
+     "valeur": "2 000",
+     "passage": "Dépassement : au-delà de 2 000 mots, on coupe (résumé + lien) ou on déplace le détail dans reports/ ou la roadmap ; on ne relève pas le budget.",
+     "type": "code"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « abord » et « edit » ?",
+     "indice": "Si la pause vient de max_goal_rounds, faire d'abord action=\"edit\" avec",
+     "valeur": "1000",
+     "passage": "Si la pause vient de max_goal_rounds, faire d'abord action=\"edit\" avec max_goal_rounds=1000.",
+     "type": "code"
+    }
+   ]
+  }
+ ],
+ "questions": 249
+}

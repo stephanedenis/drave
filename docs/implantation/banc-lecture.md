@@ -109,12 +109,33 @@ le taux absolu ne dit rien d'un grand modèle ; la fenêtre de 512 jetons est un
 propriété du document ; et un prompt de complétion n'est pas une consigne (pas d'instruction
 système ici).
 
-## 7. La montée en R0.3
+## 7. Le banc complet
 
-Le pilote est la **première tranche** du banc complet : 30 documents (5 types × 6), 10
-questions par document, trois budgets, et la courbe vitesse-compréhension par type. Ce qui
-manque n'est pas le harnais — il est écrit — c'est le **corpus annoté** : les 20 questions
-sont un pilote, pas les 300 du banc complet.
+Le pilote (20 questions main) reste la référence de **difficulté**. Le banc complet mesure la
+**sélection à l'échelle** : 30 documents (5 types × 6) et **249 questions**, construites par
+`tools/banc_complet.py` et **générées par gabarit** :
+
+- on prend un passage qui porte une **valeur numérique** (un nombre, une date) ;
+- on demande cette valeur par **deux mots rares** du passage — les moins fréquents du document,
+  donc les plus discriminants ;
+- le passage est le gold, la valeur est la réponse attendue.
+
+**Ce que le gabarit ne peut pas faire** : une question générée partage forcément des mots avec
+son gold, donc la sélection y est plus facile que sur une paraphrase. C'est assumé et écrit :
+le banc complet mesure la **couverture**, le pilote mesure la **difficulté**. R0.3 « durci »
+(paraphrases, réponses à deux sauts) est la suite.
+
+**Le corpus juridique est latin à dessein.** Le tokeniseur du lecteur (BM25) ne lit ni le
+cyrillique ni le CJK : les PDF russes et chinois ne produisent **aucune ancre**, donc aucune
+question. Ce n'est pas un choix de banc, c'est une **limite du lecteur**, et R5.2 (multilingue)
+en hérite.
+
+**Ce que le banc ne porte pas** : les questions à valeur **textuelle** (« que désigne X ? »)
+sont écartées — un mot n'est pas une valeur, et le contrôle devient du bruit. Les 20 questions
+main, elles, en portent.
+
+**Le harnais est le même** : `--banc <fichier>` remplace le pilote, les modes et les contrôles
+ne changent pas. L'extractif passe les 249 questions en **3 s** ; le modèle GPU en ~16 min.
 
 ## 8. Voir aussi
 

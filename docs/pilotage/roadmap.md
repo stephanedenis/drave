@@ -30,14 +30,14 @@
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 close (négatif)** | B11.10 (cartes) ; B10.3 attend **B10.2bis** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | 🔬 R0.1, R0.2 **mesurés** ; R0.3 **pilote + modèle** | **R0.3** (banc complet, 300 questions) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1, R0.2, R0.3 **mesurés** | **R0.4** (les trois têtes), ou R0.3 durci |
 
 ## L'ordre du jour (carpe diem)
 
 L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-10-29**.
 
-1. **R0 — le lecteur v0** (nouveau, non bloqué) : **R0.1 et R0.2 sont mesurés** (51 pages ; récupération 1,000 à
-   30 % sur 5 types) ; la suite est **R0.3** — le banc complet, 30 documents et 300 questions.
+1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
+   30 % sur 5 types et **249 questions**) ; la suite est **R0.4** — les trois têtes — ou le banc durci.
 2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
    (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
    atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
@@ -159,7 +159,7 @@ C'est la **priorité** : un lecteur au niveau **système**, avec le moteur exist
 |---|---|---|---|
 | **R0.1** | **graphe de document** : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance ; parseurs PDF/HTML/DOCX/Markdown ; sans modèle | ✅ **51 pages**, fidélité **1,000** | 50 pages découpées, provenance exacte, rejeu identique |
 | **R0.2** | **contrôleur de lecture** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, titres, premières/dernières phrases, BM25/regex) | ✅ **1,000** à 30 % sur **5 types** | à 30 % du budget, **≥ 90 %** de la réponse de la lecture intégrale sur **3 types** |
-| **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ⚠️ **pilote** : 20 questions, modèle GPU (contrôleur **0,500** / début **0,400**) | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
+| **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ✅ **249 questions** : extractif **1,000** à 30 % ; modèle **0,231** contre début **0,042** | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
 | **R0.4** | **têtes de lecture** : `survol` (pertinence d'une région), `balayage` (requête → spans), `relecture` (confiance/contradiction), greffées sur les têtes précoces | ⏳ après R0.3 | la tête bat le contrôle classique à budget égal |
 
 **Ordre arrêté** : **R0.1**, puis **R0.2**, puis **R0.3** (la courbe de R0.3 est la mesure jointe de R0.2) ; R0.4
