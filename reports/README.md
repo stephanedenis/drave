@@ -20,6 +20,7 @@
 | [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |
 | [`rapport-native-8b-warm.md`](rapport-native-8b-warm.md) | **N2.29** — 8 blocs réchauffés : PPL **2,866**, arrêté |
 | [`rapport-native-8b.md`](rapport-native-8b.md) | **N2.28** — 8 blocs : PPL **4,838**, arrêté |
+| [`rapport-native-ctx136.md`](rapport-native-ctx136.md) | **N2.31** — contexte 136 : PPL **2,974**, arrêté |
 | [`rapport-native-ctx160.md`](rapport-native-ctx160.md) | **N2.30** — contexte 160 : PPL **3,804**, arrêté |
 | [`rapport-native-ctx256.md`](rapport-native-ctx256.md) | **N2.27** — contexte 256 : PPL **5,675**, arrêté |
 | [`rapport-native-local.md`](rapport-native-local.md) | **N2.26** — têtes locales : PPL **2,763**, dégradation |

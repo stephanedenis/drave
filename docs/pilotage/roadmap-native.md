@@ -102,6 +102,7 @@ permutation.
 | N2.27 | **Contexte 256** | ⚠️ **négatif** — PPL **5,675** à 12 750 pas ; saut direct 128→256 |
 | N2.29 | **8 blocs réchauffés** | ⚠️ **négatif** — PPL **2,866** à 6 250 pas ; la profondeur ne paie pas |
 | N2.30 | **Contexte 160** | ⚠️ **négatif** — PPL **3,804** à 4 750 pas ; seuil trop loin de 128 |
+| N2.31 | **Contexte 136** | ⚠️ **négatif** — PPL **2,974** à 4 250 pas ; même 8 positions de plus coûtent |
 | N2.S | **Synthèse plafond** | ⚠️ **2,708** ; six essais, aucun ne bat 2,708 ; porte 2,5 non atteinte |
 | N2.25 | **lr 1e-6** | ⚠️ **négatif** — PPL **2,758** à 12 500 pas ; arrêté |
 | N2.24 | **Température 4** | ⚠️ **négatif** — PPL **2,852** ; arrêté |

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **0 session(s)** · **5 thème(s)**
+**23 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 13 | [mesures.md](mesures.md) |
+| mesures | 14 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -48,6 +48,7 @@
 | 05:11 | `098126ae` | N2.27 — CONTEXTE 256 : PPL 5,675, CHUTE, ARRÊTÉ |
 | 05:28 | `c4068ebc` | N2.28 — 8 BLOCS : PPL 4,838, NÉGATIF CONFONDU, ARRÊTÉ |
 | 05:45 | `c93e3628` | N2.29 — 8 BLOCS RÉCHAUFFÉS : PPL 2,866, LA PROFONDEUR NE PAIE PAS |
+| 06:02 | `5015cf95` | N2.30 — CONTEXTE 160 : PPL 3,804, NÉGATIF, ARRÊTÉ |
 
 ## Le récit de la journée (écrit à la main)
 
