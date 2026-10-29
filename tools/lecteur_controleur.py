@@ -142,12 +142,21 @@ class Controleur:
     """La politique : cinq actions, un budget, une trace. Chaque décision est un événement
     rejouable, et le coût est celui des octets réellement lus."""
 
-    def __init__(self, passages: list[dict], question: str, budget_octets: int):
+    def __init__(self, passages: list[dict], question: str, budget_octets: int,
+                 critere: str = "bm25"):
         self.passages = passages
         self.question = question
         self.budget = max(budget_octets, 1)
         self.index = Index(passages)
         self.scores = self.index.scores(question)
+        if critere == "couverture":
+            # BM25 récompense la RARETÉ des mots ; il ne voit pas qu'un passage contient
+            # *tous* les mots de la question. La couverture le voit, et c'est ce qui
+            # distingue une définition d'une phrase qui parle du même sujet.
+            jetons_question = set(jetons(question))
+            for i in range(len(passages)):
+                couverture = len(jetons_question & set(self.index.jetons[i])) / max(len(jetons_question), 1)
+                self.scores[i] += 2.0 * couverture
         self.lus: list[int] = []
         self.cout = 0
         self.evenements: list[dict] = []
@@ -290,7 +299,8 @@ def repondre(passages_lus: list[dict], question: str, scores: list[float] | None
             "octets": p["octets"], "score": round(score, 3), "prov": p["prov"]}
 
 
-def lire_document(chemin: pathlib.Path, question: str, budget: float = 1.0) -> dict:
+def lire_document(chemin: pathlib.Path, question: str, budget: float = 1.0,
+                  critere: str = "bm25") -> dict:
     m = graphe_document.manifeste(chemin)
     tous = passages(m)
     total = sum(p["octets"] for p in tous)
@@ -307,16 +317,17 @@ def main() -> int:
     ap.add_argument("--manifeste", type=pathlib.Path)
     ap.add_argument("--question", required=True)
     ap.add_argument("--budget", type=float, default=0.3)
+    ap.add_argument("--critere", choices=("bm25", "couverture"), default="bm25")
     args = ap.parse_args()
     if args.manifeste:
         m = json.loads(args.manifeste.read_text(encoding="utf-8"))
         tous = passages(m)
         total = sum(p["octets"] for p in tous)
-        controleur = Controleur(tous, args.question, int(total * args.budget))
+        controleur = Controleur(tous, args.question, int(total * args.budget), critere=args.critere)
         t = controleur.lire()
         r = repondre([tous[i] for i in t["passages_lus"]], args.question)
     elif args.document:
-        resultat = lire_document(args.document, args.question, args.budget)
+        resultat = lire_document(args.document, args.question, args.budget, critere=args.critere)
         t, r = resultat["trajectoire"], resultat["reponse"]
     else:
         ap.error("--document ou --manifeste est requis")

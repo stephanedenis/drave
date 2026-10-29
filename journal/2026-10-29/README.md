@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**44 commits** · **0 session(s)** · **6 thème(s)**
+**45 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,6 +13,7 @@
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 23 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | moteur | 3 | [moteur.md](moteur.md) |
@@ -75,6 +76,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ |
 | 13:07 | `5a2fffae` | R0.3 — LE MODÈLE LIT : CONTRÔLEUR 0,500 CONTRE TRONCATURE 0,400 ET HASARD 0,000 (10 QUESTIONS) |
 | 13:11 | `b1197a46` | B12.10 — LE BRANCHEMENT M4 PAR CHAMPS OBSERVÉS EST INERTE : RETIRÉ, MARGE À ESSAYER |
+| 13:19 | `fe40a9fa` | B12.10 — ORACLE = M8, M4 SEUL = 0/606 : LA PORTE « M4 RETIRÉ » EST VIDE ; CLOSE NÉGATIVE |
 
 ## Le récit de la journée (écrit à la main)
 

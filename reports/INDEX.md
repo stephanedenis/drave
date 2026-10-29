@@ -243,7 +243,7 @@
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
 | [rapport-r02-controleur.md](rapport-r02-controleur.md) | R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget |
-| [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : sélectionner bat tronquer, d'une question |
+| [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |

@@ -1,0 +1,488 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "critere": "couverture",
+ "questions": 10,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.071,
+    "valeur": 0.0,
+    "cout": 1166.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.274,
+    "valeur": 0.5,
+    "cout": 1763.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.148,
+    "valeur": 0.0,
+    "cout": 1778.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.417,
+    "valeur": 0.5,
+    "cout": 1065.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.364,
+    "valeur": 0.5,
+    "cout": 864.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.238,
+    "valeur": 0.0,
+    "cout": 1112.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.531,
+    "valeur": 0.5,
+    "cout": 588.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.556,
+    "valeur": 0.5,
+    "cout": 2113.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.174,
+    "valeur": 0.0,
+    "cout": 2117.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.151,
+    "valeur": 0.5,
+    "cout": 2557.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.094,
+    "valeur": 0.0,
+    "cout": 5796.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.099,
+    "valeur": 0.0,
+    "cout": 5840.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.518,
+    "valeur": 1.0,
+    "cout": 2694.5
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.545,
+    "valeur": 0.5,
+    "cout": 3032.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.411,
+    "valeur": 0.0,
+    "cout": 3131.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+   "or": "4 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.75,
+    "valeur": true,
+    "cout": 2709,
+    "reponse": "L'en-tête DRVF porte exactement 4 octets."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.8571,
+    "valeur": true,
+    "cout": 3032,
+    "reponse": "L'en-tête \"DRVF\" porte 4 octets."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.6,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "L'en-tête \"DRVF\" porte 6,02 octets par neurone actif."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets coûte le mode dense par flux ?",
+   "or": "3 663 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 2680,
+    "reponse": "Le mode dense coûte 3,663 octets par flux."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2326,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Le mode dense par flux (DRVF) coûte 16 octets."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "Le mode dense par flux (DRVF) coûte 6,02 octets par neurone actif"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désignait la drave sur la rivière ?",
+   "or": "billots",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1739,
+    "valeur": false,
+    "cout": 488,
+    "reponse": "La drave sur la rivière était un terme utilisé pour désigner un billot ou un bateau qui était guid"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "La drave sur la rivière désignait un flux de listes."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "La drave sur la rivière désignait une route ou un chemin qui était particulièrement difficile à suivre ou"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle est la thèse du projet ?",
+   "or": "structure bat la taille",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.8889,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse du projet est : \"La structure bat la taille.\""
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.8889,
+    "valeur": true,
+    "cout": 2113,
+    "reponse": "La thèse du projet est : la structure bat la taille."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "La thèse du projet est de développer et mettre en œuvre un système de réseau de neurones et de"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le meilleur score de perplexité de N2 ?",
+   "or": "2,6998",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1622,
+    "valeur": true,
+    "cout": 2477,
+    "reponse": "Le meilleur score de perplexité de N2 est de 2,6998."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 5796,
+    "reponse": "Pour calculer le meilleur score de perplexité de N2, nous devons analyser les données fournies. La"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1026,
+    "valeur": false,
+    "cout": 5840,
+    "reponse": "Le meilleur score de perplexité de N2 est de 4,6585. Cela correspond à la"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle porte N2 doit-elle franchir ?",
+   "or": "< 2,5",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": false,
+    "cout": 2638,
+    "reponse": "Pour déterminer la porte N2 que N2 doit franchir, nous devons suivre les étapes suiv"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.093,
+    "valeur": false,
+    "cout": 5796,
+    "reponse": "Pour identifier la porte N2 qui doit être franchie, nous devons suivre les étapes suivantes :\n\n1"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 5840,
+    "reponse": "Pour répondre à cette question, nous devons identifier les informations fournies pour déterminer la porte N2 que"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+   "or": "19 septembre 2025",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.6667,
+    "valeur": true,
+    "cout": 1112,
+    "reponse": "La résolution adoptée par l'Assemblée générale le 19 septembre 2025 a"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.5455,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "La résolution a été adoptée le 19 septembre 2025."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.3333,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "La résolution 80/1 a été adoptée le 29 septembre 2025."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quelle session de l'Assemblée générale est concernée ?",
+   "or": "quatre-vingtième session",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 1019,
+    "reponse": "La session de l'Assemblée générale concernée est la 4e session."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 864,
+    "reponse": "La session de l'Assemblée générale concernée est la 80e."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "La session de l'Assemblée générale concernée est la 46ème session. Cette décision est prise"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel outil est déclaré dans le manifeste ?",
+   "or": "\"outil\": \"graphe_document.py\"",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": "Le manifeste ne porte aucun horodatage."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.4706,
+    "valeur": true,
+    "cout": 1763,
+    "reponse": "Le modèle déclaré dans le manifeste est le code de l'outil `tools/graphe_document.py`."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "Le outil déclaré dans le manifeste est le contrôleur. Il est utilisé pour déterminer la"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel type de région porte les séparateurs ?",
+   "or": "type blanc est émis",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1441,
+    "reponse": "Les séparateurs (ou séparateurs spéciaux) ne font pas partie des types de régions que nous avons"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0769,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Les séparateurs dans un document documentaire sont généralement des lignes horizontales ou verticales qui"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "Les séparateurs dans les régions sont des spans. Les spans sont des éléments de texte qui sont décompos"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}

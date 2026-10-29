@@ -41,6 +41,7 @@ import graphe_document  # noqa: E402
 import lecteur_controleur as lc  # noqa: E402
 
 LECTEUR = "extractif"  # "extractif" (R0.2) ou "modele" (R0.3)
+CRITERE = "bm25"       # "bm25" (R0.2) ou "couverture" (le critère qui n'est pas celui du lecteur)
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BANC = RACINE / "tools/tests/documents/bench-pilote.json"
@@ -59,7 +60,12 @@ def f1(texte_a: str, texte_b: str) -> float:
 
 
 def normalise(texte: str) -> str:
-    return re.sub(r"\s+", " ", texte.lower()).strip()
+    """Comparaison de valeurs : les séparateurs de milliers et la virgule décimale ne sont
+    pas des différences. « 3 663 », « 3.663 » et « 3,663 » sont la même réponse — sans cette
+    règle, un modèle juste était compté faux, et le banc mesurait la typographie."""
+    texte = texte.lower()
+    texte = re.sub(r"(?<=\d)[\s.,](?=\d)", "", texte)
+    return re.sub(r"\s+", " ", texte).strip()
 
 
 def charge(documents: list[dict]) -> list[dict]:
@@ -130,12 +136,12 @@ def essai(document: dict, question: dict, mode: str, budget: float,
         ordre = list(range(len(passages)))
         (aleatoire or random.Random(GRAINE)).shuffle(ordre)
         melanges = [passages[i] for i in ordre]
-        controleur = lc.Controleur(melanges, question["question"], int(total * budget))
+        controleur = lc.Controleur(melanges, question["question"], int(total * budget), critere=CRITERE)
         trajectoire = controleur.lire()
         lus = {ordre[i] for i in trajectoire["passages_lus"]}
         return {"lu": lus, "reponse": repondre(question, [passages[i] for i in sorted(lus)], scores),
                 "cout": trajectoire["cout_octets"]}
-    controleur = lc.Controleur(passages, question["question"], int(total * budget))
+    controleur = lc.Controleur(passages, question["question"], int(total * budget), critere=CRITERE)
     trajectoire = controleur.lire_tout() if mode == "integrale" else controleur.lire()
     lus = set(trajectoire["passages_lus"])
     return {"lu": lus,
@@ -200,7 +206,7 @@ def banc(documents: list[dict]) -> dict:
                 "valeur": round(sum(l[mode]["valeur"] for l in lignes) / n, 3),
                 "cout": round(sum(l[mode]["cout"] for l in lignes) / n, 1),
             }
-    return {"date": "2026-10-29", "ligne": "R0.2", "graine": GRAINE,
+    return {"date": "2026-10-29", "ligne": "R0.2", "graine": GRAINE, "critere": CRITERE,
             "questions": len(details), "types": sorted({d["type"] for d in documents}),
             "agregats": agregats, "details": details}
 
@@ -275,13 +281,15 @@ def main() -> int:
     ap.add_argument("--porte", action="store_true")
     ap.add_argument("--lecteur", choices=("extractif", "modele"), default="extractif")
     ap.add_argument("--depuis", type=pathlib.Path, help="relit un JSON de résultats déjà écrit")
+    ap.add_argument("--critere", choices=("bm25", "couverture"), default="bm25")
     ap.add_argument("--limite", type=int, default=0,
                     help="ne garder que N questions (2 par type) — pour le lecteur modèle, lent")
     args = ap.parse_args()
-    global LECTEUR
+    global LECTEUR, CRITERE
     if args.lecteur == "modele" and args.porte:
         raise SystemExit("la porte est extractive : le modèle se mesure avec --json, pas en porte")
     LECTEUR = args.lecteur
+    CRITERE = args.critere
     if args.depuis:
         return affiche(json.loads(args.depuis.read_text(encoding="utf-8")))
     documents = charge(json.loads(args.banc.read_text(encoding="utf-8"))["documents"])

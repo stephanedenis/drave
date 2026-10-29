@@ -2,6 +2,7 @@
  "date": "2026-10-29",
  "ligne": "R0.2",
  "graine": 20261029,
+ "critere": "bm25",
  "questions": 10,
  "types": [
   "code",
@@ -14,19 +15,19 @@
   "code": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.48,
-    "valeur": 1.0,
+    "f1": 0.071,
+    "valeur": 0.0,
     "cout": 1166.0
    },
    "debut_0.30": {
     "recuperation": 0.5,
-    "f1": 0.233,
+    "f1": 0.274,
     "valeur": 0.5,
     "cout": 1763.0
    },
    "aleatoire_0.30": {
     "recuperation": 0.0,
-    "f1": 0.074,
+    "f1": 0.148,
     "valeur": 0.0,
     "cout": 1778.0
    },
@@ -40,19 +41,19 @@
   "juridique": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.466,
+    "f1": 0.417,
     "valeur": 0.5,
     "cout": 1065.5
    },
    "debut_0.30": {
     "recuperation": 1.0,
-    "f1": 0.356,
+    "f1": 0.364,
     "valeur": 0.5,
     "cout": 864.0
    },
    "aleatoire_0.30": {
     "recuperation": 0.0,
-    "f1": 0.293,
+    "f1": 0.238,
     "valeur": 0.0,
     "cout": 1112.0
    },
@@ -66,19 +67,19 @@
   "prose": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.0,
-    "valeur": 0.0,
-    "cout": 636.0
+    "f1": 0.531,
+    "valeur": 0.5,
+    "cout": 588.5
    },
    "debut_0.30": {
     "recuperation": 1.0,
-    "f1": 0.481,
+    "f1": 0.556,
     "valeur": 0.5,
     "cout": 2113.0
    },
    "aleatoire_0.30": {
     "recuperation": 0.0,
-    "f1": 0.05,
+    "f1": 0.174,
     "valeur": 0.0,
     "cout": 2117.0
    },
@@ -92,21 +93,21 @@
   "tableau": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.146,
+    "f1": 0.151,
     "valeur": 0.5,
-    "cout": 2589.5
+    "cout": 2557.5
    },
    "debut_0.30": {
     "recuperation": 1.0,
-    "f1": 0.0,
+    "f1": 0.094,
     "valeur": 0.0,
-    "cout": 5791.0
+    "cout": 5796.0
    },
    "aleatoire_0.30": {
     "recuperation": 0.0,
-    "f1": 0.054,
+    "f1": 0.099,
     "valeur": 0.0,
-    "cout": 5806.0
+    "cout": 5840.0
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -118,19 +119,19 @@
   "technique": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.327,
-    "valeur": 0.5,
+    "f1": 0.518,
+    "valeur": 1.0,
     "cout": 2612.5
    },
    "debut_0.30": {
     "recuperation": 0.5,
-    "f1": 0.25,
+    "f1": 0.545,
     "valeur": 0.5,
     "cout": 3032.0
    },
    "aleatoire_0.30": {
     "recuperation": 0.5,
-    "f1": 0.023,
+    "f1": 0.411,
     "valeur": 0.0,
     "cout": 3131.0
    },
@@ -150,24 +151,24 @@
    "or": "4 octets",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.5,
+    "f1": 0.75,
     "valeur": true,
     "cout": 2709,
-    "reponse": "4 octets."
+    "reponse": "L'en-tête DRVF porte exactement 4 octets."
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.5,
+    "f1": 0.8571,
     "valeur": true,
     "cout": 3032,
-    "reponse": "4 octets."
+    "reponse": "L'en-tête \"DRVF\" porte 4 octets."
    },
    "aleatoire_0.30": {
     "recupere": true,
-    "f1": 0.0,
+    "f1": 0.6,
     "valeur": false,
     "cout": 3131,
-    "reponse": ""
+    "reponse": "L'en-tête \"DRVF\" porte 6,02 octets par neurone actif."
    },
    "closed_book": {
     "recupere": false,
@@ -184,24 +185,24 @@
    "or": "3 663 octets",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1538,
-    "valeur": false,
+    "f1": 0.2857,
+    "valeur": true,
     "cout": 2516,
-    "reponse": "3,663 octets par flux."
+    "reponse": "Le mode dense coûte 3,663 octets par flux."
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.0,
+    "f1": 0.2326,
     "valeur": false,
     "cout": 3032,
-    "reponse": "12"
+    "reponse": "Le mode dense par flux (DRVF) coûte 16 octets."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0465,
+    "f1": 0.2222,
     "valeur": false,
     "cout": 3131,
-    "reponse": "6,02 octets par neurone actif en v1, 3,01 en v2"
+    "reponse": "Le mode dense par flux (DRVF) coûte 6,02 octets par neurone actif"
    },
    "closed_book": {
     "recupere": false,
@@ -214,28 +215,28 @@
   {
    "document": "docs/theorie/vision.md",
    "type": "prose",
-   "question": "Que désigne le mot « drave » ?",
+   "question": "Que désignait la drave sur la rivière ?",
    "or": "billots",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.0,
+    "f1": 0.1739,
     "valeur": false,
-    "cout": 583,
-    "reponse": "Le bus, en c"
+    "cout": 488,
+    "reponse": "La drave sur la rivière était un terme utilisé pour désigner un billot ou un bateau qui était guid"
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.1053,
+    "f1": 0.2222,
     "valeur": false,
     "cout": 2113,
-    "reponse": "Le mot « drave » désigne un bus d'événements pour l'IA."
+    "reponse": "La drave sur la rivière désignait un flux de listes."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1,
+    "f1": 0.1818,
     "valeur": false,
     "cout": 2117,
-    "reponse": "Le mot « drave » désigne le bus. Il est utilisé dans le contexte de la programmation, où"
+    "reponse": "La drave sur la rivière désignait une route ou un chemin qui était particulièrement difficile à suivre ou"
    },
    "closed_book": {
     "recupere": false,
@@ -252,24 +253,24 @@
    "or": "structure bat la taille",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
+    "f1": 0.8889,
+    "valeur": true,
     "cout": 689,
-    "reponse": "Le projet cherche à faire tourner des modèles de types différents sur des"
+    "reponse": "La thèse du projet est : \"La structure bat la taille.\""
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.8571,
+    "f1": 0.8889,
     "valeur": true,
     "cout": 2113,
-    "reponse": "La structure bat la taille."
+    "reponse": "La thèse du projet est : la structure bat la taille."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0,
+    "f1": 0.1667,
     "valeur": false,
     "cout": 2117,
-    "reponse": "Le projet est une théorie de l'information. Il s'agit de décrire comment les modèles de types"
+    "reponse": "La thèse du projet est de développer et mettre en œuvre un système de réseau de neurones et de"
    },
    "closed_book": {
     "recupere": false,
@@ -286,24 +287,24 @@
    "or": "2,6998",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 2509,
-    "reponse": "2"
+    "f1": 0.1622,
+    "valeur": true,
+    "cout": 2477,
+    "reponse": "Le meilleur score de perplexité de N2 est de 2,6998."
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.0,
+    "f1": 0.0952,
     "valeur": false,
-    "cout": 5791,
-    "reponse": "0.99"
+    "cout": 5796,
+    "reponse": "Pour calculer le meilleur score de perplexité de N2, nous devons analyser les données fournies. La"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0,
+    "f1": 0.1026,
     "valeur": false,
-    "cout": 5806,
-    "reponse": "68,1917 / 92,1875, natif 4,6"
+    "cout": 5840,
+    "reponse": "Le meilleur score de perplexité de N2 est de 4,6585. Cela correspond à la"
    },
    "closed_book": {
     "recupere": false,
@@ -320,24 +321,24 @@
    "or": "< 2,5",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2927,
-    "valeur": true,
-    "cout": 2670,
-    "reponse": "N2 doit franchir la porte < 2,5 non atteinte. Le levier retenu est la hi"
+    "f1": 0.1395,
+    "valeur": false,
+    "cout": 2638,
+    "reponse": "Pour déterminer la porte N2 que N2 doit franchir, nous devons suivre les étapes suiv"
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.0,
+    "f1": 0.093,
     "valeur": false,
-    "cout": 5791,
-    "reponse": "Il faut que la route soit étiquetée, que le plan soit documenté, que les documents soient écrit"
+    "cout": 5796,
+    "reponse": "Pour identifier la porte N2 qui doit être franchie, nous devons suivre les étapes suivantes :\n\n1"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1081,
+    "f1": 0.0952,
     "valeur": false,
-    "cout": 5806,
-    "reponse": "N2 doit franchir la porte A.3.2/A.3.3. La porte A.3."
+    "cout": 5840,
+    "reponse": "Pour répondre à cette question, nous devons identifier les informations fournies pour déterminer la porte N2 que"
    },
    "closed_book": {
     "recupere": false,
@@ -354,24 +355,24 @@
    "or": "19 septembre 2025",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.75,
+    "f1": 0.6667,
     "valeur": true,
     "cout": 1112,
-    "reponse": "Le 19 septembre 2025"
+    "reponse": "La résolution adoptée par l'Assemblée générale le 19 septembre 2025 a"
    },
    "debut_0.30": {
     "recupere": true,
     "f1": 0.5455,
     "valeur": true,
     "cout": 864,
-    "reponse": "Le 19 septembre 2025 la résolution a été adoptée."
+    "reponse": "La résolution a été adoptée le 19 septembre 2025."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.3636,
+    "f1": 0.3333,
     "valeur": false,
     "cout": 1112,
-    "reponse": "La résolution a été adoptée le 29 septembre 2025."
+    "reponse": "La résolution 80/1 a été adoptée le 29 septembre 2025."
    },
    "closed_book": {
     "recupere": false,
@@ -388,24 +389,24 @@
    "or": "quatre-vingtième session",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.1667,
     "valeur": false,
     "cout": 1019,
-    "reponse": "La 4e session de l'Assemblée générale est concernée."
+    "reponse": "La session de l'Assemblée générale concernée est la 4e session."
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.1667,
+    "f1": 0.1818,
     "valeur": false,
     "cout": 864,
-    "reponse": "La fournaison de la question est la quatrième session de l'Assemblée générale."
+    "reponse": "La session de l'Assemblée générale concernée est la 80e."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.2222,
+    "f1": 0.1429,
     "valeur": false,
     "cout": 1112,
-    "reponse": "La session de la 45ème session."
+    "reponse": "La session de l'Assemblée générale concernée est la 46ème session. Cette décision est prise"
    },
    "closed_book": {
     "recupere": false,
@@ -422,24 +423,24 @@
    "or": "\"outil\": \"graphe_document.py\"",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.5455,
-    "valeur": true,
+    "f1": 0.0,
+    "valeur": false,
     "cout": 891,
-    "reponse": "Le graphe_document.py"
+    "reponse": "Le manifeste ne porte aucun horodatage."
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.3,
+    "f1": 0.4706,
     "valeur": true,
     "cout": 1763,
-    "reponse": "Le code est tools/graphe_document.py ; la porte est tools/porte-document.sh ; les résultats mesurés"
+    "reponse": "Le modèle déclaré dans le manifeste est le code de l'outil `tools/graphe_document.py`."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0,
+    "f1": 0.1429,
     "valeur": false,
     "cout": 1778,
-    "reponse": ""
+    "reponse": "Le outil déclaré dans le manifeste est le contrôleur. Il est utilisé pour déterminer la"
    },
    "closed_book": {
     "recupere": false,
@@ -456,24 +457,24 @@
    "or": "type blanc est émis",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4138,
-    "valeur": true,
+    "f1": 0.1429,
+    "valeur": false,
     "cout": 1441,
-    "reponse": "Le type blanc porte les séparateurs. C'est le type blanc qui vaut \\n entre deux régions."
+    "reponse": "Les séparateurs (ou séparateurs spéciaux) ne font pas partie des types de régions que nous avons"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1667,
+    "f1": 0.0769,
     "valeur": false,
     "cout": 1763,
-    "reponse": "Les séparateurs sont des régions, donc les offsets sont des régions."
+    "reponse": "Les séparateurs dans un document documentaire sont généralement des lignes horizontales ou verticales qui"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1481,
+    "f1": 0.1538,
     "valeur": false,
     "cout": 1778,
-    "reponse": "Le type de région porte les séparateurs. Il est une région qui commence à la fin de la ligne et qui"
+    "reponse": "Les séparateurs dans les régions sont des spans. Les spans sont des éléments de texte qui sont décompos"
    },
    "closed_book": {
     "recupere": false,

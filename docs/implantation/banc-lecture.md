@@ -74,8 +74,9 @@ closed-book silencieux, « mélangée » sans effondrement.
 ## 6. Le lecteur modèle
 
 Le lecteur extractif plafonne (25 à 75 % même en lisant tout) : c'est lui qu'il faut changer,
-pas la sélection. Le banc accepte donc `--lecteur modele` : un **Qwen2.5-0.5B** exécuté par le
-moteur Drave (`--infer --temp 0`), sans API ni réseau, en génération **greedy**.
+pas la sélection. Le banc accepte donc `--lecteur modele` : un **Qwen2.5-0.5B** sur **GPU** via
+`llama-cli` (build CUDA, `-ngl 99`, `--temp 0`), sans API ni réseau, en génération **greedy**.
+Un seul GPU (`CUDA_VISIBLE_DEVICES=0`) : l'autre reste à N2.
 
 **Ce qui change, et ce qui ne change pas.** La sélection est identique — même contrôleur, mêmes
 budgets. Seul l'answerer change : il reçoit les passages sélectionnés, dans l'ordre de lecture,
@@ -93,9 +94,14 @@ ce qui tient, et c'est précisément pour cela que la sélection compte.
 La comparaison qui décide est **contrôleur contre début** : si sélectionner ne bat pas prendre
 le début, le contrôleur ne sert à rien.
 
-**Ce n'est pas une porte.** La génération coûte ~7 s par appel (dont le chargement du modèle),
-soit plusieurs minutes pour 20 questions : la porte reste extractive et rapide. La mesure
-modèle se lance à la main et vit dans `reports/`.
+**Ce n'est pas une porte.** La génération coûte ~1,9 s par appel sur GPU (contre 8 à 15 s sur
+le CPU du moteur), soit une minute pour 30 questions : la porte reste extractive et rapide, la
+mesure modèle se lance à la main et vit dans `reports/`.
+
+**Le runtime fait partie du dispositif.** Le même GGUF, le même prompt et le même greedy
+donnanent des réponses différentes selon le moteur (BOS, pénalité de répétition, découpage du
+prompt) : 0,6 sur le moteur CPU, 0,5 sur `llama-cli`. Aucun chiffre de lecteur ne se cite sans
+son runtime.
 
 **Ce qui pourrait la rendre fausse** : un modèle de 0,5 B peut échouer pour des raisons de
 capacité et non de sélection — la comparaison « contrôleur contre début » reste valable, mais

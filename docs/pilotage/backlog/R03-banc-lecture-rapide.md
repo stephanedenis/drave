@@ -1,7 +1,7 @@
 # R03 — Banc de lecture rapide (corpus, tâches, contrôles)
 
 > **Statut** : partiel · **Priorité** : P0 · **Programme** : R · **Dépend de** : R01, R02
-> **Ligne de roadmap** : R0.3 · **Tranches** : [R0.2, 20 questions](../../../reports/rapport-r02-controleur.md) · [lecteur modèle, 10 questions](../../../reports/rapport-r03-lecteur-modele.md) — le banc complet (30 documents, 300 questions) reste à faire
+> **Ligne de roadmap** : R0.3 · **Tranches** : [R0.2, 20 questions](../../../reports/rapport-r02-controleur.md) · [lecteur modèle, 10 questions](../../../reports/rapport-r03-lecteur-modele.md) (0,500 / 0,400 / 0,000) — le banc complet (30 documents, 300 questions) reste à faire
 > **Résumé** : Mesurer la compréhension par unité de calcul, par type de document, avec des contrôles négatifs.
 > **Glossaire** : [banc de lecture rapide](../../theorie/glossaire/entrees/banc-de-lecture-rapide.md) · [span](../../theorie/glossaire/entrees/span.md) · [closed-book](../../theorie/glossaire/entrees/closed-book.md) · [F1](../../theorie/glossaire/entrees/f1.md) · [chrF](../../theorie/glossaire/entrees/chrf.md) · [contrôle négatif](../../theorie/glossaire/entrees/controle-negatif.md).
 

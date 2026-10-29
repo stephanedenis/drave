@@ -31,8 +31,8 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1** (51 pages, fidélité 1,000), **R0.2** (récupération
   1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
-- **Ce qu'elle fait** : R0.3 — le **modèle** (Qwen2.5-0.5B du moteur) est branché : contrôleur
-  **0,500** contre troncature **0,400** et hasard **0,000** (10 questions, indicatif).
+- **Ce qu'elle fait** : R0.3 — le **modèle** tourne sur **GPU** (`llama-cli` CUDA, 1,9 s/appel) :
+  contrôleur **0,500** contre troncature **0,400** et hasard **0,000** (10 questions, indicatif).
 - **Ce que font les autres** : `f0969e87` tient l'état et prend **B11.10** ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
@@ -40,7 +40,7 @@
   `docs/implantation/banc-lecture.md`, `reports/r03-*`, `docs/pilotage/backlog/R03-banc-lecture-rapide.md`.
 - **Prochaine action** : **R0.3** — le banc complet (30 documents, 300 questions) et un critère de
   sélection qui ne soit pas le BM25 du lecteur.
-- **Bloquants** : aucun ; le moteur local exécute le modèle (30 tok/s, 0,4 s pour 12 jetons).
+- **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
 ### Session `N2-GPU` — calcul : distillation
@@ -73,7 +73,7 @@
 |---|---|---|
 | portes | **51** (49 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **276** / **340** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **276** / **341** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **93** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
