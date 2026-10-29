@@ -18,10 +18,11 @@
 
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
-- **Ce qu'elle fait** : R0.1 (graphe de document, **prête**), R0.2 (contrôleur), R0.3 (banc) ; sous-agents à lancer.
+- **Ce qu'elle fait** : R0.1 (graphe de document, **prête**), puis R0.2 (contrôleur), puis R0.3 (banc) ;
+  l'ordre est **strict**.
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et ses fiches ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : R0.1 + R0.2 + R0.3 en parallèle ; N0.3b en attente de la parité.
+- **Prochaine action** : R0.1, puis R0.2, puis R0.3 (mesure jointe R0.2/R0.3.2) ; N0.3b en parallèle, coût faible.
 - **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
@@ -33,8 +34,8 @@
   maintient [`dependances.md`](backlog/dependances.md) et le SVG.
 - **Ce que font les autres** : `f0969e87` tient l'état/roadmap et prépare R0 ; `N2-GPU` distille ; elle rend un
   **diff d'état**.
-- **Prochaine action** : `python3 tools/verifie_backlog.py` ; finaliser `dependances.md` (modifié après `8bca0318`).
-- **Bloquants** : `dependances.md` en cours ; 8 lignes sans fiche ; le graphe doit rester synchrone avec les fiches.
+- **Prochaine action** : les quatre arbitrages sont rendus (`e59f7c09`) ; vérifier le graphe à chaque ajout de fiche.
+- **Bloquants** : 8 lignes sans fiche ; le graphe doit rester synchrone avec les fiches.
 - **Journal** : commit `8bca0318` · [docs du jour](../../journal/2026-10-29/docs.md) · [sessions](../../journal/README.md#sessions).
 
 ### Session `N2-GPU` — calcul : distillation
@@ -73,10 +74,10 @@
 |---|---|---|---|
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3/B12.10 ouverts | B10.3 décodeur sous le plancher ; B1.5 corpus | B12.10, puis B10.3 |
-| **N — le natif** | N0/N1 mesurés ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus | N0.3b, N2, N4 |
-| **R — le lecteur** | ⏳ R0 non commencé ; R01 prête | aucun pour R0 ; R1 dépend de N1/N2 | R0.1 + R0.2 + R0.3 |
+| **N — le natif** | N0/N1 mesurés ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N0.3b ; N2 (hiérarchie) ; N4 (consigne) |
+| **R — le lecteur** | ⏳ R0 non commencé ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.1 → R0.2 → R0.3 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
-| **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; `dependances.md` en cours | vérifier le graphe (`8156fdcb`) |
+| **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
 
 **C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
 **C6** documentation · **C7** pensée : ✅ mesurés ; détail dans
@@ -84,7 +85,7 @@
 
 ## Ce qui reste
 
-**R0** — R0.1/R0.2/R0.3 (non bloqué). **N0.3b** — parité DRVM ↔ GGUF. **N2** — données/capacité.
+**R0** — R0.1 → R0.2 → R0.3 (non bloqué). **N0.3b** — parité DRVM ↔ GGUF. **N2** — la **hiérarchie** ; **N5 gelé**.
 **N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B12.10** — intégration.
 **Backlog** — graphe et fiches (`8156fdcb`).
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
@@ -92,8 +93,8 @@
 ## Les questions ouvertes
 
 - **R0** : **90 %** à **30 %** du coût ? → **R0.3** (banc) tranche.
-- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (hiérarchie) tranche.
-- **N2** : **< 2,5** ? → **N2** (données/capacité) tranche.
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **N2** (hiérarchie), puis **R1.1**, tranchent.
+- **N2** : **< 2,5** ? → **N2** (la hiérarchie) tranche.
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Backlog** : graphe sans cycle ni arête morte ? → `tools/verifie_backlog.py` tranche.
 

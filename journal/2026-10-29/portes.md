@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:00 | `5f027768` | PORTES — 49 : 47 VERTES, 2 ROUGES STRUCTURELLES ; HARNAIS ET AUDIT CORRIGÉS | `en-cours.md`, `references-non-regression.md`, `README.md` (+1) |
+| 10:04 | `e59f7c09` | PILOTAGE — QUATRE ARBITRAGES RENDUS : N2 PORTE LA HIÉRARCHIE, SFT PARTAGÉ N4/R31, N5 GELÉ, R0 EN ORDRE STRICT | `N2-distillation.md`, `N4-usage-sft.md`, `R11-contexte-hierarchique.md` (+8) |
 
 <!-- notes -->
 
