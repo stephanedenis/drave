@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**56 commits** · **0 session(s)** · **8 thème(s)**
+**57 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 5 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
@@ -89,6 +89,7 @@
 | 20:03 | `f44eff68` | N0.13 — PPL NATIVE SUR 1 076 OCTETS : 18,6394, PYTHON 18,6395 |
 | 20:11 | `8b28f889` | N4.4 — SERVICE DURCI : JETON 401/200, CORPS 64 KO, N ≤ 256 ; PAS DE SFT |
 | 20:22 | `923d70ed` | N2.10 — PROFESSEUR 10 000 PAS : 1,073 BIT/OCTET, PPL 2,104 |
+| 20:35 | `8884ca5b` | N2.11 — DISTILLATION 50 000 PAS : PPL 3,082, PLATEAU |
 
 ## Le récit de la journée (écrit à la main)
 
