@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **0 session(s)** · **3 thème(s)**
+**13 commits** · **0 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | docs | 4 | [docs.md](docs.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -36,6 +36,7 @@
 | 04:03 | `e8ea9852` | DOCS — ROADMAP N2.7–N2.24 ET ENTRÉES README |
 | 04:05 | `a2cc7311` | N4.5 — MEILLEUR STUDENT SERVI : PPL 2,708, 53 OCTETS EN 589,2 MS |
 | 04:06 | `53577daa` | DOCS — COMPTEURS 259/324 |
+| 04:22 | `3e5ea72d` | N2.25 + SYNTHÈSE — PLAFOND 2,708 : SIX ESSAIS, AUCUN NE BAT 2,708 |
 
 ## Le récit de la journée (écrit à la main)
 
