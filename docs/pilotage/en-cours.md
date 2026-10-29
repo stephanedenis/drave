@@ -34,7 +34,7 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
+| portes | **49** (47 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **252** / **317** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
@@ -49,7 +49,7 @@
 | **N1.4 — têtes précoces** | **57,57 / 61,60 / 62,06 %** ; principale **62,70 %** ; témoin **0,39 %** |
 | **N1.5 — pensée** | **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
 | tests cerveau | **180 OK**, 31 skips |
-| portes | **46 vertes, 3 rouges** (28/10 00 h 12) |
+| portes | **47 vertes, 2 rouges** (28/10 23 h 55) |
 
 ## Les sept chantiers, en une ligne
 
