@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**94 commits** · **0 session(s)** · **7 thème(s)**
+**95 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| attention | 1 | [attention.md](attention.md) |
 | distribue | 9 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
@@ -126,6 +127,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:46 | `96d9d3bb` | BANC RÉPARÉ APRÈS LA DÉRIVE DE continuite.md : 83 QUESTIONS VÉRIFIÉES, 0 PROBLÈME |
 | 16:53 | `0e8f7a20` | A8.3a — PORTE-PONT : RÉGIME 1 % ÉPINGLÉ (111,8003 / 115,6406, +5,88/+25,75) |
 | 17:02 | `d8df29e0` | A8.3a — PORTE-COUPE : RÉGIME 1 % ÉPINGLÉ (111,8003 ; VARIANCE 2,4 %) |
+| 17:05 | `0c074374` | B10.2bis + A8.3b — L'ATTENTION NE DÉCOLLE PAS LE DÉCODEUR (11,2 CONTRE 38,5) ; LE MÉLANGE KV EST NON MONOTONE |
 
 ## Le récit de la journée (écrit à la main)
 

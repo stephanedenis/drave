@@ -24,11 +24,11 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : R05 balayage (**0,984**/0,711) et voie auto (+0,109/−0,150) ; deux
-  correctifs rejetés ; banc réparé après la dérive de `continuite.md` (**83** questions vérifiées).
+- **Ce qu'elle fait** : **corpus gelé** (30 docs, manifeste sha256, 0 problème) ; bancs
+  régénérés (248 + 83) et mesures rejouées ; la dérive des documents vivants est close.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : R11 (bloqué par N2) sinon consolidation ; R06 à réécrire (modalité).
+- **Prochaine action** : cascade des lecteurs (R06 v2) puis synthèse du programme R.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -79,8 +79,8 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **304** / **376** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **104** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **306** / **377** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **105** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants

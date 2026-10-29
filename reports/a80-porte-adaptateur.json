@@ -1,0 +1,24 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-adaptateur-sortie.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "references": {
+  "complet": 17.4315,
+  "tronque": 2687292.8165
+ },
+ "tolerance": 0.0005,
+ "mesures": {
+  "complet": 17.4315,
+  "tronque": 2687292.8165,
+  "demi_echelle": 7740947.0594,
+  "facteur": 2.8805744621019786
+ },
+ "controle": "décalage de 10 % des deux références refusé par la même expression",
+ "gate": "exit 0 ; écriture fidèle, identité, effet, refus",
+ "limites": [
+  "un seul modèle",
+  "tronqué = PPL de la tête partielle, valeur énorme",
+  "la plage 0:8 et 256 jetons sont fixés"
+ ]
+}

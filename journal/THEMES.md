@@ -54,6 +54,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-26](2026-10-26/attention.md) | `0,344` · `0,426` · `0,237` · `3,71 %` · `1,29 %` · `−0,49 %` |
 | [2026-10-27](2026-10-27/attention.md) | `32,42 %` · `97,66 %` · `0,266` |
 | [2026-10-28](2026-10-28/attention.md) | — |
+| [2026-10-29](2026-10-29/attention.md) | — |
 
 ### `memoire` — Mémoire épisodique, consolidation, greffe
 

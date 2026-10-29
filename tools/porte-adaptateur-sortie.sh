@@ -67,6 +67,15 @@ echo "  écriture  : complet $ORIG_COMPLET → $COPIE_COMPLET · tronqué $ORIG_
 if [ -z "$ORIG_COMPLET" ] || [ -z "$COPIE_COMPLET" ] || [ -z "$ORIG_TRONQ" ] || [ -z "$COPIE_TRONQ" ]; then
     echo "  ❌ perplexité illisible (une porte ne mesure pas sur du vide)"; exit 1
 fi
+# A8.0 — les deux PPL de référence sont épinglées (5e-4).
+$P - "$ORIG_COMPLET" "$ORIG_TRONQ" <<'PPLAD' || exit 1
+import sys
+complet, tronq = float(sys.argv[1]), float(sys.argv[2])
+for nom, val, attendu in (("complet", complet, 17.4315), ("tronque", tronq, 2687292.8165)):
+    if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print(f"  ✅ PPL épinglées : complet {complet} · tronqué {tronq}")
+PPLAD
 ecart_complet=$($P -c "print(abs($COPIE_COMPLET-$ORIG_COMPLET)/max($ORIG_COMPLET,1e-9))")
 ecart_tronq=$($P -c "print(abs($COPIE_TRONQ-$ORIG_TRONQ)/max($ORIG_TRONQ,1e-9))")
 $P -c "import sys; sys.exit(0 if $ecart_complet < 1e-6 else 1)" \
