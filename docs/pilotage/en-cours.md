@@ -19,10 +19,10 @@
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
 - **Ce qu'elle fait** : **N0.3b est mesuré** (conversion 68,1917 / 92,1875 ; natif 4,6585 / 18,6394) ;
-  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; le split par code tenu à l'écart donne **0 exact** et **0,436** de champ ; la suite est de brancher M4.
+  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; le split par code tenu à l'écart donne **0 exact** et **0,436** de champ ; le branchement par champs observés est inerte (**0 sélection M4**).
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et R0.3 ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **B12.10** — brancher `Episodique.completion` dans `repondre` pour les cues partiels, puis re-mesurer ; R0.3 est à `8156fdcb`.
+- **Prochaine action** : **B12.10** — essayer la **marge de similarité** (top1 − top2), ou changer la porte ; R0.3 est à `8156fdcb`.
 - **Bloquants** : aucun pour B12.10 ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 

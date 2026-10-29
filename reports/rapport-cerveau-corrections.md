@@ -215,12 +215,16 @@ Le défaut était muet : 0/161 cartes, 0/528 items.
 - La tautologie est confirmée : **0 code exact** sur les codes neufs. Le **96,33 %** publié est
   mesuré sur des codes **stockés** avec un autre protocole (masque `vers`, 80 items) ; notre
   mesure stockée, tous champs masqués, donne **0,809**.
+- **Tentative de branchement** : une règle « garder M4 si ses champs **observés** collent mieux
+  que le prototype » a été mesurée ; sur les trois graines, le chemin reste **`prototype`**
+  (321/321, 71/71, 214/214). Les champs observés sont à égalité, et le champ masqué est le seul
+  discriminant : la règle est **retirée**, branche inerte. Le prochain essai est la **marge** de
+  similarité (top1 − top2), ou un changement de porte.
 
 **Verdict B12.10 (2026-10-29)** : la **plomberie du contexte** est réparée (0/528 → 528/528) ;
 le **split par code tenu à l'écart** donne **0 exact** et **0,436** de champ, avec une variance
-0,056–0,859. La porte « M4 retiré ⇒ chute » n'est pas franchie : il faut **brancher
-`Episodique.completion`** dans `Pipeline.repondre` pour les cues partiels (ou changer la porte),
-puis re-mesurer. La **généralisation** reste ouverte.
+0,056–0,859. La porte « M4 retiré ⇒ chute » n'est pas franchie : le branchement naïf par champs observés est **inerte** ; il faut une **marge de confiance**
+ou changer la porte, puis re-mesurer. La **généralisation** reste ouverte.
 
 ## 12. Fichiers
 

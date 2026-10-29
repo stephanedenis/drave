@@ -53,14 +53,6 @@ class Pipeline:
             return "memoire", r
         proto = self.prototypes.get((cue.get("jeu"), cue.get("action")))
         if proto:
-            # Hybride : garder le candidat qui explique le mieux les champs **observés**
-            # (le champ masqué ne sert jamais à choisir, seulement à évaluer).
-            code_m4 = r.get("code")
-            observes = [k for k, v in cue.items() if v is not None]
-            m4_ok = sum(1 for k in observes if code_m4 and code_m4.get(k) == cue.get(k))
-            p_ok = sum(1 for k in observes if proto.get(k) == cue.get(k))
-            if code_m4 is not None and m4_ok > p_ok:
-                return "memoire-partiel", r
             champs = sum(1 for k, v in cue.items() if proto.get(k) == v and v is not None)
             return "prototype", {"champs": champs, "code": proto}
         return "vide", r
