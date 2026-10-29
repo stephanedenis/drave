@@ -11,7 +11,7 @@
 | 04:25 | `1d57756a` | DOCS — COMPTEURS 261/325 ET LIENS DE FICHES NON ÉCRITES | `en-cours.md`, `README.md`, `docs.md` (+1) |
 | 11:50 | `4ffa34b7` | R0.1 — 51 PAGES, 1 423 RÉGIONS, FIDÉLITÉ 1,000 : LE GRAPHE DE DOCUMENT EST MESURÉ | `document-graph.md`, `R01-graphe-document.md`, `index.md` (+16) |
 | 12:04 | `08149617` | R0.2 — À 30 % DU BUDGET, LE CONTRÔLEUR RÉCUPÈRE 100 % DES PASSAGES ; LE LECTEUR PLAFONNE À 25–75 % | `banc-lecture.md`, `lecteur-controleur.md`, `R02-controleur-lecture.md` (+15) |
-| 12:24 | `103c8b74` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ | `README.md`, `distribue.md`, `THEMES.md` (+1) |
+| 12:24 | `7a8a441e` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ | `README.md`, `distribue.md`, `THEMES.md` (+1) |
 
 ## Chiffres du jour
 

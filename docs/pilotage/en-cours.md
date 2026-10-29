@@ -27,22 +27,22 @@
 - **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
-### Session `8156fdcb` — backlog livré, puis R0.2 (contrôleur de lecture)
+### Session `8156fdcb` — R0.2 livré, R0.3 en cours (lecteur modèle)
 
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
-- **Rôle** : graphe du backlog (livré : 41 arêtes, 3 plafonds, 8 lignes sans fiche) ; **R0.1** livré
-  (51 pages, fidélité 1,000) ; **R0.2** mesuré le 29/10.
-- **Ce qu'elle fait** : R0.2 — contrôleur classique (survol, balayage, lecture, relecture, arrêt),
-  budget en **octets**, trace rejouable ; banc **pilote** de 5 types. Récupération **1,000** à 30 %.
-- **Ce que font les autres** : `f0969e87` tient l'état et prend N0.3b ; `N2-GPU` distille la hiérarchie ;
+- **Rôle** : graphe du backlog (livré), **R0.1** (51 pages, fidélité 1,000), **R0.2** (récupération
+  1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
+- **Ce qu'elle fait** : R0.3 — brancher un **modèle** (Qwen2.5-0.5B du moteur) comme lecteur, et
+  comparer la sélection du contrôleur à la troncature naïve et au hasard, à fenêtre égale.
+- **Ce que font les autres** : `f0969e87` tient l'état et N0.3b ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
-- **Fichiers réservés** : `tools/lecteur_controleur.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
-  `docs/implantation/lecteur-controleur.md`, `docs/implantation/banc-lecture.md`, `reports/r02-*`,
-  `docs/pilotage/backlog/R02-controleur-lecture.md`, `R03-banc-lecture-rapide.md`.
-- **Prochaine action** : **R0.3** — le banc complet (30 documents, 300 questions), et un **modèle**
-  pour savoir si le plafond de 25–75 % est celui du lecteur extractif ou du document.
-- **Bloquants** : aucun ; le pilote est extractif classique, sans modèle externe.
-- **Journal** : commit `4ffa34b7` (R0.1) · [docs du jour](../../journal/2026-10-29/docs.md) · [sessions](../../journal/README.md#sessions).
+- **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
+  `tools/tests/documents/bench-pilote.json`, `docs/implantation/lecteur-controleur.md`,
+  `docs/implantation/banc-lecture.md`, `reports/r03-*`, `docs/pilotage/backlog/R03-banc-lecture-rapide.md`.
+- **Prochaine action** : **R0.3** — modèle contre extractif sur le banc pilote, puis le banc complet
+  (30 documents, 300 questions).
+- **Bloquants** : aucun ; le moteur local exécute le modèle (30 tok/s, 0,4 s pour 12 jetons).
+- **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
 ### Session `N2-GPU` — calcul : distillation
 
