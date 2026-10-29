@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**111 commits** · **0 session(s)** · **8 thème(s)**
+**112 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 16 | [portes.md](portes.md) |
+| portes | 17 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -144,6 +144,7 @@ Aucune session indexée pour ce jour ; voir
 | 19:22 | `2704947c` | JOURNAL — LE DÉCLENCHEUR, ET LA FIN D'UNE OBSTINATION (SESSION 8156fdcb) |
 | 19:27 | `9216634d` | A8.0 — PORTE-GAIN ÉPINGLÉE : 14,6496 / 12,9635 / 996,0390 ; ÉTAT 8/33 |
 | 19:30 | `ba0c4ac5` | R13.1 — PPL BPE-NATIVE : CONDITION NOMMÉE (PAS DE MODÈLE BPE NATIF) |
+| 19:33 | `1ec24a7f` | N3.1 — INVENTAIRE : PAS DE PORTE COMPOSÉE AVANT SERVICE/K-WTA |
 
 ## Le récit de la journée (écrit à la main)
 

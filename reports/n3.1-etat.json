@@ -1,7 +1,7 @@
 {
  "date": "2026-10-29",
  "ligne": "N3.1",
- "verdict": "état, pas de porte composée",
+ "verdict": "état corrigé : une seule brique sans porte (k-WTA/routes) ; la composition reste prématurée",
  "briques": {
   "sortie_precoce": {
    "gate": "porte-reflexe.sh",
@@ -24,15 +24,15 @@
    "service": "oui"
   },
   "profondeur_routee": {
-   "gate": "aucune",
-   "service": "rapport design-H, pas de porte"
+   "gate": "porte-profondeur-routee.sh",
+   "service": "rapport design-H, porte existante"
   },
   "k_wta_routes": {
    "gate": "aucune",
    "service": "aucun chemin"
   }
  },
- "decision": "ne pas ajouter une méta-porte qui lance les portes existantes : elle ne testerait pas la composition ; N3.2 service sortie précoce, N3.3 k-WTA/routes, N3.4 profondeur routée",
+ "decision": "ne pas ajouter une méta-porte qui lance les portes existantes : elle ne testerait pas la composition ; N3.2 service sortie précoce, N3.3 k-WTA/routes",
  "controle": "aucune nouvelle mesure ; l'inventaire montre deux briques sans porte/service",
  "limites": [
   "inventaire statique",

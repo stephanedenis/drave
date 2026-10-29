@@ -64,8 +64,7 @@
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
 - **B10.2bis — le décodeur** : **négative** — 3 bras × 3 graines : **11,1/11,2/11,0** contre **38,5** ;
   à 1800 pas : 10,2–11,4 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
-- **A8.0 — 6 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : trois régimes, mélange
-  meilleur 2/3 — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
+- **A8.0 — 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : 3 régimes — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 42 arêtes, 1 sans fiche ; `tools/verifie_backlog.py`.
@@ -88,9 +87,9 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 6 portes épinglées** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3b** (mode de lot) ; A6.2 (bloqué) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 8 portes épinglées** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3b** (mode de lot) ; A6.2 (bloqué) |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée** ; B10.3 attend un **autre levier** |
-| **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; **N3.1** ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; **N3.2 service** ; N4 (consigne) |
+| **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; **N3.1** (porte prof.) ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; **N3.2 service** ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 condition** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13.1** (modèle BPE natif) ; **R4.4 bloqué** |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | **37 fiches ; 42 arêtes** | 1 sans fiche | vérifier le graphe (`8156fdcb`) |
