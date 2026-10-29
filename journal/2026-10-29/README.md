@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **0 session(s)** · **3 thème(s)**
+**15 commits** · **0 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | mesures | 8 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -38,6 +39,7 @@
 | 04:06 | `53577daa` | DOCS — COMPTEURS 259/324 |
 | 04:22 | `3e5ea72d` | N2.25 + SYNTHÈSE — PLAFOND 2,708 : SIX ESSAIS, AUCUN NE BAT 2,708 |
 | 04:23 | `87dfd1fc` | DOCS — COMPTEURS 260/325 |
+| 04:25 | `1d57756a` | DOCS — COMPTEURS 261/325 ET LIENS DE FICHES NON ÉCRITES |
 
 ## Le récit de la journée (écrit à la main)
 

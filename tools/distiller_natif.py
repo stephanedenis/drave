@@ -68,7 +68,9 @@ def main() -> None:
     for p in prof.parameters(): p.requires_grad_(False)
     ck = torch.load(a.init, map_location="cpu", weights_only=False)
     cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
-    etu = NativeModel(cfg).to(a.device); etu.load_state_dict(ck["state"])
+    etu = NativeModel(cfg).to(a.device)
+    manquants = etu.load_state_dict(ck["state"], strict=False)
+    print(f"# chargement strict=False · manquants {list(manquants.missing_keys)[:6]}", flush=True)
     opt = torch.optim.AdamW(etu.parameters(), lr=a.lr, weight_decay=0.01)
     train, val = charger(a.train), charger(a.val)
     t0 = time.time(); pertes = []
@@ -85,6 +87,8 @@ def main() -> None:
         if a.tetes:
             for e in sortie["early"]:
                 perte = perte + 0.1 * F.cross_entropy(e.reshape(-1, 256), y.reshape(-1))
+            for l in sortie["local"]:
+                perte = perte + 0.05 * F.cross_entropy(l.reshape(-1, 256), y.reshape(-1))
         opt.zero_grad(); perte.backward()
         torch.nn.utils.clip_grad_norm_(etu.parameters(), 1.0)
         opt.step(); pertes.append(float(perte))
