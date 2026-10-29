@@ -31,6 +31,7 @@
 | [`rapport-native-professeur-20k.md`](rapport-native-professeur-20k.md) | **N2.15** — professeur 20 000 pas : **0,904 bit/octet**, PPL **1,869** |
 | [`rapport-native-professeur-10k.md`](rapport-native-professeur-10k.md) | **N2.10** — professeur 10 000 pas : **1,073 bit/octet**, PPL **2,104** |
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-best-service.md`](rapport-native-best-service.md) | **N4.5** — meilleur student **2,708** servi : 53 octets, **589 ms** |
 | [`rapport-native-service-auth.md`](rapport-native-service-auth.md) | **N4.4** — service durci : **401/200**, corps 64 Ko, n ≤ 256 ; pas de SFT |
 | [`rapport-native-service-rust.md`](rapport-native-service-rust.md) | **N4.3** — service Rust natif avec cache : **611 ms**, 53 octets |
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |

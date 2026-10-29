@@ -1,0 +1,4 @@
+{"modele": "/tmp/n0-best.drvm", "parametres": 11469192, "ppl_validation": 2.7077790503722454,
+ "prompt": "La France est un pays", "n": 32, "octets": 53, "ms": 589.2,
+ "texte": "La France est un payse de reprise — et c'est un cha",
+ "ppl_native_1076": 45.2822, "ppl_python_1076": 45.2765}
