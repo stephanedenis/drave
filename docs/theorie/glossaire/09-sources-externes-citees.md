@@ -1,6 +1,6 @@
 # 9. Sources externes citées
 
-> **Famille 9 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 9 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

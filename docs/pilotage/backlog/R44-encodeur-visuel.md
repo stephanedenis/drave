@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43
 > **Ligne de roadmap** : R4.4 · **Fiche de résultat attendue** : rapport-r44-encodeur-visuel.md (à créer dans `reports/`)
 > **Résumé** : Lire les pages scannées, les figures et le layout, et retrouver la réponse du texte natif.
+> **Glossaire** : [OCR](../../theorie/glossaire/entrees/ocr.md) · [layout](../../theorie/glossaire/entrees/layout.md) · [WER](../../theorie/glossaire/entrees/wer.md).
 
 ## Le besoin
 

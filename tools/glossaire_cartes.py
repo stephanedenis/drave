@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """glossaire_cartes.py — une fiche par entrée de glossaire, un index, un manifeste.
 
-Le glossaire est découpé en **11 familles** (les définitions longues). Ce script en extrait
+Le glossaire est découpé en **12 familles** (les définitions longues). Ce script en extrait
 les **entrées** et génère :
 
   - `docs/glossaire/entrees/<slug>.md` : une **fiche courte** (titre, résumé, famille,
@@ -40,6 +40,7 @@ FAMILLES = [
     "06-repartition-materiel-et-energie.md",
     "07-mesure-qualite-et-methode-experimentale.md",
     "10-le-pont-linguistico-semantique-le-vocabu.md",
+    "12-la-lecture-le-document-et-ses-mesures.md",
 ]
 ANNEXES = [
     ("8. Points relevés", "08-points-releves-non-corriges.md"),
@@ -192,14 +193,15 @@ def lien(e: dict) -> str:
 
 
 def index(toutes: list[dict]) -> str:
+    n_fam = len({e["famille"] for e in toutes})
     lignes = [
         "# L'index des entrées du glossaire",
         "",
         "> **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par",
         "> entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions",
-        "> complètes restent dans les 11 familles ; le manifeste [`index.json`](index.json) sert à",
+        f"> complètes restent dans les {n_fam} familles ; le manifeste [`index.json`](index.json) sert à",
         "> docwatch pour afficher une fiche en contexte.",
-        "> **Chargement :** T1 — ouvrir la fiche du terme, pas les 11 familles.",
+        f"> **Chargement :** T1 — ouvrir la fiche du terme, pas les {n_fam} familles.",
         "> **Pour docwatch.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche",
         "> **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,",
         "> l'index et le manifeste ; après une modification d'une famille, relancer le générateur.",

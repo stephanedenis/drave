@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R03, R21, R22
 > **Ligne de roadmap** : R0.4 · **Fiche de résultat attendue** : rapport-r06-tete-relecture.md (à créer dans `reports/`)
 > **Résumé** : Déclencher une relecture ciblée quand la réponse est incertaine ou contredit une autre région.
+> **Glossaire** : [relecture](../../theorie/glossaire/entrees/relecture.md) · [gist](../../theorie/glossaire/entrees/gist.md).
 
 ## Le besoin
 

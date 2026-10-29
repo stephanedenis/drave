@@ -228,6 +228,8 @@ de tableaux n'a pas besoin d'être appris.
 
 **Les fiches de fonctionnalité** : [`backlog/index.md`](backlog/index.md) — une fiche par fonctionnalité R, avec le
 contrat, la porte, les contrôles négatifs et ce qui pourrait la rendre fausse.
+**Les termes** : [glossaire, famille 12](../theorie/glossaire/12-la-lecture-le-document-et-ses-mesures.md) — lecture
+rapide, graphe de document, gist, mesures et blocs structurels.
 
 ---
 

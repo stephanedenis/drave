@@ -1,6 +1,6 @@
 # 11. Sources externes ajoutées par le §10
 
-> **Famille 11 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 11 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

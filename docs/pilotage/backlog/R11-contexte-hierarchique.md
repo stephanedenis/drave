@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, N1 · **Plafonné par** : N2 (la qualité du student)
 > **Ligne de roadmap** : R1.1 · **Fiche de résultat attendue** : rapport-r11-contexte-hierarchique.md (à créer dans `reports/`)
 > **Résumé** : Lire par sections avec un état de section, sans exiger que l'attention voie toute la page.
+> **Glossaire** : [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [test de l'aiguille](../../theorie/glossaire/entrees/test-de-l-aiguille.md) · [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md).
 
 ## Le besoin
 

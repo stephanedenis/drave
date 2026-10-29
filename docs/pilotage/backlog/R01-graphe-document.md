@@ -3,6 +3,7 @@
 > **Statut** : prête · **Priorité** : P0 · **Programme** : R · **Dépend de** : —
 > **Ligne de roadmap** : R0.1 · **Fiche de résultat attendue** : rapport-r01-graphe-document.md (à créer dans `reports/`)
 > **Résumé** : Transformer un document en un arbre de régions typées, avec offsets et provenance, sans modèle.
+> **Glossaire** : [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md) · [parseur](../../theorie/glossaire/entrees/parseur.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 
 ## Le besoin
 

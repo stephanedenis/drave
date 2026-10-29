@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R31, R32, R03, R01 · **Contraint par** : le manque M4 (aucun encodeur exécutable)
 > **Ligne de roadmap** : R5.1 · **Fiche de résultat attendue** : rapport-r51-lecture-croisee.md (à créer dans `reports/`)
 > **Résumé** : Comparer plusieurs documents, suivre les citations et signaler les contradictions.
+> **Glossaire** : [retrieval](../../theorie/glossaire/entrees/retrieval.md) · [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md) · [span](../../theorie/glossaire/entrees/span.md).
 
 ## Le besoin
 

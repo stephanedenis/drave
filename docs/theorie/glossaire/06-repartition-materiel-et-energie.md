@@ -1,6 +1,6 @@
 # 6. Répartition, matériel et énergie
 
-> **Famille 6 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 6 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

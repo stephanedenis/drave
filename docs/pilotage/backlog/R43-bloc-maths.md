@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R01
 > **Ligne de roadmap** : R4.3 · **Fiche de résultat attendue** : rapport-r43-bloc-maths.md (à créer dans `reports/`)
 > **Résumé** : Lire une formule, suivre une définition et évaluer symboliquement.
+> **Glossaire** : [CAS](../../theorie/glossaire/entrees/cas.md) · [parseur](../../theorie/glossaire/entrees/parseur.md).
 
 ## Le besoin
 

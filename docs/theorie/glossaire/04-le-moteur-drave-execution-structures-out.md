@@ -1,6 +1,6 @@
 # 4. Le moteur Drave : exécution, structures, outils
 
-> **Famille 4 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 4 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

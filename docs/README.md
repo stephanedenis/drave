@@ -61,7 +61,7 @@
 | [`theorie/glossaire.md`](theorie/glossaire.md) | le vocabulaire : couche vs étage, unité de sens, RSN |
 | [`theorie/architecture-native.md`](theorie/architecture-native.md) | DRVM, `drave-n0` : le format et le modèle natifs |
 | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la lecture rapide humaine, les 14 techniques et les cinq couches qui manquent |
-| [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 289 fiches du glossaire |
+| [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 316 fiches du glossaire |
 
 ## Implantation — comment c'est construit
 

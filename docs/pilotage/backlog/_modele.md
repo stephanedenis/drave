@@ -3,6 +3,7 @@
 > **Statut** : idée · **Priorité** : P? · **Programme** : R · **Dépend de** : —
 > **Ligne de roadmap** : R?.? · **Fiche de résultat attendue** : `<rapport-attendu>.md` (à créer dans `reports/`)
 > **Résumé** : une phrase qui dit ce que la fonctionnalité rend possible.
+> **Glossaire** : [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md) · [contrat](../../theorie/glossaire/entrees/contrat.md) — remplacer par les termes de la fiche.
 
 ## Le besoin
 

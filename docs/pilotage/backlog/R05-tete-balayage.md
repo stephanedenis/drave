@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01 · **Contraint par** : le manque M4 (aucun encodeur exécutable)
 > **Ligne de roadmap** : R0.4 · **Fiche de résultat attendue** : rapport-r05-tete-balayage.md (à créer dans `reports/`)
 > **Résumé** : Retrouver les spans qui répondent à une requête, en combinant index classique et scoreur neuronal.
+> **Glossaire** : [retrieval](../../theorie/glossaire/entrees/retrieval.md) · [span](../../theorie/glossaire/entrees/span.md) · [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md).
 
 ## Le besoin
 

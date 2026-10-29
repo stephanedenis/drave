@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R01
 > **Ligne de roadmap** : R4.2 · **Fiche de résultat attendue** : rapport-r42-bloc-code.md (à créer dans `reports/`)
 > **Résumé** : Lire du code par son AST et son exécution, pas comme un texte.
+> **Glossaire** : [AST](../../theorie/glossaire/entrees/ast.md) · [parseur](../../theorie/glossaire/entrees/parseur.md).
 
 ## Le besoin
 

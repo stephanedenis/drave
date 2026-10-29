@@ -1,6 +1,6 @@
 # 5. Flux, protocole et transport
 
-> **Famille 5 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 5 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # 3. Formats, quantification, encodage
 
-> **Famille 3 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 3 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # 7. Mesure, qualité et méthode expérimentale
 
-> **Famille 7 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 7 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

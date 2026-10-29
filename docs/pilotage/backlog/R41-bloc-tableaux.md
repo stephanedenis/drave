@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R01
 > **Ligne de roadmap** : R4.1 · **Fiche de résultat attendue** : rapport-r41-bloc-tableaux.md (à créer dans `reports/`)
 > **Résumé** : Lire un tableau en 2D : en-têtes, cellules, lignes, colonnes, et opérations classiques.
+> **Glossaire** : [tableau](../../theorie/glossaire/entrees/tableau.md) · [parseur](../../theorie/glossaire/entrees/parseur.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 
 ## Le besoin
 

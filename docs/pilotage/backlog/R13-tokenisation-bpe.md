@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : — · **Plafonné par** : N2 (la qualité du corpus)
 > **Ligne de roadmap** : R1.3 · **Fiche de résultat attendue** : rapport-r13-tokenisation.md (à créer dans `reports/`)
 > **Résumé** : Décider par la mesure si le natif doit rester en octets ou passer au BPE.
+> **Glossaire** : [BPE](../../theorie/glossaire/entrees/bpe.md) · [tokeniseur](../../theorie/glossaire/entrees/tokeniser-tokenizer.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md).
 
 ## Le besoin
 

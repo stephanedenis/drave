@@ -1,5 +1,5 @@
 {
-  "genere": "2026-10-28",
+  "genere": "2026-10-29",
   "entrees": [
     {
       "slug": "a-b",
@@ -2312,6 +2312,222 @@
       "fichier": "10-le-pont-linguistico-semantique-le-vocabu.md",
       "fiche": "entrees/sous-espace-de-langue.md",
       "resume": "Les directions d'un espace de représentations qui portent la différence **entre langues**. On l'estime par les vecteurs propres dominants de la covariance inter-langue, puis on projette sur son complément."
+    },
+    {
+      "slug": "lecture-rapide",
+      "terme": "Lecture rapide (survol, balayage, écrémage, lecture sélective)",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/lecture-rapide.md",
+      "resume": "Ensemble des modes de lecture qui adaptent l'effort au but et au document : **survol** (structure, titres, début et fin), **balayage** (chercher une cible), **écrémage** (prendre le gist, sauter les détails), **lecture sélective** (ne lire que l'utile). La revue de Rayner et al."
+    },
+    {
+      "slug": "controleur-de-lecture",
+      "terme": "Contrôleur de lecture",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/controleur-de-lecture.md",
+      "resume": "Politique qui choisit, pour un but et un budget, la prochaine action de lecture (survol, balayage, lecture, relecture, arrêt) et sa profondeur. Il transforme un document en **trajectoire** tracée, rejouable ; il est **classique d'abord**, neuronal ensuite."
+    },
+    {
+      "slug": "relecture",
+      "terme": "Relecture",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/relecture.md",
+      "resume": "Retour sur un passage mal compris, pour récupérer une information ou vérifier une contradiction ; à ne pas confondre avec la relecture adverse d'un document. Elle exige une mémoire du texte (store de régions) et un déclencheur."
+    },
+    {
+      "slug": "graphe-de-document",
+      "terme": "Graphe de document",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/graphe-de-document.md",
+      "resume": "Représentation d'un document en **régions typées** (titre, section, paragraphe, tableau, code, maths, figure), avec leur **offset** dans le fichier, leur parent et leur **provenance**. Le **manifeste** est l'objet sérialisé qui porte ces régions et survit au rejeu."
+    },
+    {
+      "slug": "span",
+      "terme": "Span",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/span.md",
+      "resume": "Intervalle de texte délimité par deux offsets. Un **span gold** est l'intervalle de référence qui contient la réponse attendue ; il sert à mesurer l'exactitude et la **citation**."
+    },
+    {
+      "slug": "closed-book",
+      "terme": "Closed-book",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/closed-book.md",
+      "resume": "Réglage d'évaluation où le modèle répond **sans le document**, de mémoire. C'est le contrôle négatif du banc de lecture : si le closed-book fait aussi bien que la lecture, le banc ne mesure pas la lecture."
+    },
+    {
+      "slug": "gist",
+      "terme": "Gist",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/gist.md",
+      "resume": "Le **gist** est l'état résumé d'un document (thème, entités, faits) qui tient lieu de mémoire de travail entre les sections. La **mémoire épisodique** est le store des régions et de leur état, qui permet de revenir sur un passage."
+    },
+    {
+      "slug": "retrieval",
+      "terme": "Retrieval",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/retrieval.md",
+      "resume": "Sélection des passages pertinents dans un ou plusieurs documents avant lecture. Un **index** (lexical ou vectoriel) rend la recherche sous-linéaire ; **BM25** est le scoreur lexical classique."
+    },
+    {
+      "slug": "curriculum",
+      "terme": "Curriculum",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/curriculum.md",
+      "resume": "Ordre de difficulté croissante des exemples pendant l'entraînement (longueur, contexte, tâche). Dans R1.2, il désigne la recette qui allonge le contexte sans refaire les négatifs 130–256."
+    },
+    {
+      "slug": "sft",
+      "terme": "SFT",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/sft.md",
+      "resume": "Entraînement supervisé sur des couples instruction → réponse, pour apprendre un format et un comportement. Le SFT de lecture (R3.1) doit tenir sur des **documents non vus**, pas seulement mémoriser."
+    },
+    {
+      "slug": "distillation",
+      "terme": "Distillation",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/distillation.md",
+      "resume": "Entraîner un petit modèle (**élève**) à imiter les sorties ou les distributions d'un grand (**professeur**). Le programme N distille Qwen/DeepSeek dans `drave-n0` ; la porte est l'écart au professeur sur un jeu tenu à l'écart."
+    },
+    {
+      "slug": "chrf",
+      "terme": "chrF",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/chrf.md",
+      "resume": "Mesure de similarité de chaînes par n-grammes de caractères, utilisée pour la traduction et la restitution. Elle se lit toujours avec un **plancher** (la surface source contre la référence) : sans plancher, un chrF de 20 ne dit rien."
+    },
+    {
+      "slug": "wer",
+      "terme": "WER",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/wer.md",
+      "resume": "Proportion de mots faux (substitutions, insertions, suppressions) dans une transcription OCR. C'est une mesure d'entrée pour R4.4 ; la mesure de sortie reste la **parité de réponse** avec le texte natif."
+    },
+    {
+      "slug": "f1",
+      "terme": "F1",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/f1.md",
+      "resume": "Moyenne harmonique de la précision et du rappel ; utile quand les réponses sont des **spans** et que le nombre de mots compte."
+    },
+    {
+      "slug": "auc",
+      "terme": "AUC",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/auc.md",
+      "resume": "Probabilité qu'un score classe un positif avant un négatif ; elle mesure le classement d'une tête (survol, balayage) indépendamment du seuil."
+    },
+    {
+      "slug": "parseur",
+      "terme": "Parseur",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/parseur.md",
+      "resume": "Programme qui transforme un format (HTML, PDF, DOCX, code, LaTeX) en structure (arbre, grille, AST). Dans R0.1, un parseur par format émet des **régions** ; il est classique, pas neuronal."
+    },
+    {
+      "slug": "ast",
+      "terme": "AST",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/ast.md",
+      "resume": "Arbre qui représente la structure d'un programme (expressions, instructions, portées) sans la ponctuation de surface. Il permet de lire du code par ses dépendances et de l'exécuter."
+    },
+    {
+      "slug": "cas",
+      "terme": "CAS",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/cas.md",
+      "resume": "Bibliothèque qui manipule des expressions symboliques (dérivée, simplification, substitution) au lieu de les évaluer numériquement."
+    },
+    {
+      "slug": "ocr",
+      "terme": "OCR",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/ocr.md",
+      "resume": "Conversion d'une image de texte en texte machine. Dans R4.4, l'OCR est un **bloc externe** ; la porte est la parité de réponse avec le texte natif, pas le WER seul."
+    },
+    {
+      "slug": "layout",
+      "terme": "Layout",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/layout.md",
+      "resume": "Organisation spatiale d'une page (colonnes, titres, tableaux, figures, ordre de lecture). C'est l'information que le texte plat perd et que R4.4 doit restaurer."
+    },
+    {
+      "slug": "drvm",
+      "terme": "DRVM",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/drvm.md",
+      "resume": "Format natif de modèle du programme N : manifeste, graphe de blocs, payload de tenseurs, hash. Il remplace GGUF comme format de référence pour `drave-n0`."
+    },
+    {
+      "slug": "controle-negatif",
+      "terme": "Contrôle négatif",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/controle-negatif.md",
+      "resume": "Dispositif qui doit **échouer** si la mesure ne mesure pas ce qu'elle prétend : closed-book, régions aléatoires, sections mélangées, plancher chrF. Sans lui, un chiffre n'est pas un résultat."
+    },
+    {
+      "slug": "graphe-de-dependances",
+      "terme": "Graphe de dépendances",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/graphe-de-dependances.md",
+      "resume": "Représentation des dépendances entre fiches : une **arête dure** bloque l'artefact d'entrée ; un **plafond** borne le résultat sans bloquer le travail ; la **frontière** est l'ensemble des items disponibles. À ne pas confondre avec le plafond de flux ni avec la frontière fidélité/contenu."
+    },
+    {
+      "slug": "contrat",
+      "terme": "Contrat",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/contrat.md",
+      "resume": "Ce qu'une fonctionnalité reçoit, rend, coûte et trace, écrit avant le code. À ne pas confondre avec le contrat d'activation, qui est un format de flux."
+    },
+    {
+      "slug": "tableau",
+      "terme": "Tableau",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/tableau.md",
+      "resume": "Grille de cellules indexées par lignes et colonnes, avec en-têtes et fusions ; elle se lit par un parseur 2D et des opérations classiques (filtre, jointure, agrégat)."
+    },
+    {
+      "slug": "tenu-a-l-ecart",
+      "terme": "Tenu à l'écart",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/tenu-a-l-ecart.md",
+      "resume": "Jeu d'évaluation dont les documents ne sont jamais vus à l'entraînement ; c'est la condition pour distinguer l'apprentissage de la mémorisation (24/24 vus, 0/4 tenus)."
+    },
+    {
+      "slug": "banc-de-lecture-rapide",
+      "terme": "Banc de lecture rapide",
+      "famille": "12. La lecture, le document et leurs mesures",
+      "fichier": "12-la-lecture-le-document-et-ses-mesures.md",
+      "fiche": "entrees/banc-de-lecture-rapide.md",
+      "resume": "Banc qui mesure la **compréhension par unité de calcul** sur plusieurs types de documents, avec des modes (intégral, écrémage, balayage, sélectif) et des contrôles négatifs (closed-book, régions aléatoires, sections mélangées)."
     }
   ]
 }

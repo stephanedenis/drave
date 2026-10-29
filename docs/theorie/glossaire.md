@@ -42,6 +42,10 @@ invariance, attrition, fragmentation…) et son §10.9 définit les termes emplo
 **dans** ces définitions. Le §11 liste les sources externes ajoutées, en distinguant
 celles dont l'adresse a été vérifiée de celles citées par titre.
 
+**Section 12 — la lecture et le document.** Le programme R a ajouté la famille 12 : elle définit les
+modes de lecture (survol, balayage, écrémage, sélectif), le contrôleur, le graphe de document, le gist,
+les mesures (chrF, WER, F1, AUC) et les blocs structurels (parseur, AST, CAS, OCR, layout).
+
 **Périmètre.** `docs/` et `reports/` ; les
 9 fichiers de `sprints/` sont couverts pour leur vocabulaire propre (boxing, cérémonie,
 porte). Le code est cité pour dire *où* un terme est utilisé (`drave-core/src/`,
@@ -119,6 +123,6 @@ directement. Les liens vers ce fichier continuent de fonctionner.
 | **11.** Sources externes ajoutées par le §10 | [11-sources-externes-ajoutees-par-le-10.md](glossaire/11-sources-externes-ajoutees-par-le-10.md) | 50 |
 
 > **Les fiches par entrée.** L'index complet est [`glossaire/README.md`](glossaire/README.md) :
-> **289 entrées**, une **fiche courte** par entrée dans [`glossaire/entrees/`](glossaire/entrees/), et
+> **316 entrées**, une **fiche courte** par entrée dans [`glossaire/entrees/`](glossaire/entrees/), et
 > un manifeste [`glossaire/index.json`](glossaire/index.json) pour docwatch. Les définitions complètes
-> restent dans les 11 familles ci-dessus ; une fiche est une **carte**, pas une copie.
+> restent dans les 12 familles ci-dessus ; une fiche est une **carte**, pas une copie.

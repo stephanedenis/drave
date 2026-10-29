@@ -1,6 +1,6 @@
 # 8. Points relevés, non corrigés
 
-> **Famille 8 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 8 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 >
 > **Audit daté du 2026-10-10.** Cet audit est daté du
 > **2026-10-10** ; les chemins cités sont ceux de l'époque, corrigés vers `docs/archive/`

@@ -1,6 +1,6 @@
 # 10. Le pont linguistico-sémantique — le vocabulaire de l'émulation
 
-> **Famille 10 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 10 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

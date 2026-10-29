@@ -52,7 +52,8 @@
 - **R0 — lecteur v0** : R0.1 **prête**, R0.2/R0.3 spécifiées ; aucun bloquant.
 - **Backlog — graphe** : 40 arêtes dures, 4 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
-- **Documentation** : roadmap unique A/B/N/R ; **89 documents** ; éléments terminés transférés au journal.
+- **Documentation** : roadmap unique A/B/N/R ; **90 documents** ; glossaire **famille 12** (27 termes) ;
+  éléments terminés transférés au journal.
 
 ## Les chiffres de l'état
 
@@ -63,7 +64,7 @@
 | portes | **49** (47 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **273** / **337** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **89** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **90** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants

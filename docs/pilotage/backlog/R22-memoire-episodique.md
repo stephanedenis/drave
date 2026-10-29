@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R01, R21
 > **Ligne de roadmap** : R2.2 · **Fiche de résultat attendue** : rapport-r22-memoire-episodique.md (à créer dans `reports/`)
 > **Résumé** : Stocker les régions, les offsets et les états pour pouvoir revenir sur un passage.
+> **Glossaire** : [gist](../../theorie/glossaire/entrees/gist.md) · [KV](../../theorie/glossaire/entrees/kv.md) · [retrieval](../../theorie/glossaire/entrees/retrieval.md).
 
 ## Le besoin
 

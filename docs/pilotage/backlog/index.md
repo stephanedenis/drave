@@ -91,6 +91,25 @@ Toute nouvelle fiche part de [`_modele.md`](_modele.md). Le modèle impose les s
 sortie, coût, trace), mesures, portes, contrôles négatifs, ce qui pourrait la rendre fausse, étapes, documents à
 écrire, voir aussi. Une fiche sans **porte** ni **contrôle négatif** n'est pas une fiche : c'est un vœu.
 
+## Le glossaire
+
+Les termes du backlog sont définis dans la **famille 12** du glossaire :
+[la lecture, le document et leurs mesures](../../theorie/glossaire/12-la-lecture-le-document-et-ses-mesures.md).
+Chaque fiche lie ses termes en tête ; les entrées clés sont
+[lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md) ·
+[contrôleur de lecture](../../theorie/glossaire/entrees/controleur-de-lecture.md) ·
+[graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md) ·
+[gist](../../theorie/glossaire/entrees/gist.md) ·
+[span](../../theorie/glossaire/entrees/span.md) ·
+[closed-book](../../theorie/glossaire/entrees/closed-book.md) ·
+[SFT](../../theorie/glossaire/entrees/sft.md) ·
+[chrF](../../theorie/glossaire/entrees/chrf.md) ·
+[AST](../../theorie/glossaire/entrees/ast.md) ·
+[OCR](../../theorie/glossaire/entrees/ocr.md) ·
+[DRVM](../../theorie/glossaire/entrees/drvm.md) ·
+[contrôle négatif](../../theorie/glossaire/entrees/controle-negatif.md) ·
+[graphe de dépendances](../../theorie/glossaire/entrees/graphe-de-dependances.md).
+
 ## Ce qui n'est pas dans ce dossier
 
 - **les résultats** : ils sont dans `reports/` ; une fiche de backlog ne porte pas de chiffre ;

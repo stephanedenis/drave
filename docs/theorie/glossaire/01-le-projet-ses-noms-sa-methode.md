@@ -1,6 +1,6 @@
 # 1. Le projet, ses noms, sa méthode
 
-> **Famille 1 du glossaire** (11 familles). Index : [le glossaire](../glossaire.md).
+> **Famille 1 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
 
 ---
 

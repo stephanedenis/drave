@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, R03, R21 · **Plafonné par** : N4
 > **Ligne de roadmap** : R3.1 · **Fiche de résultat attendue** : rapport-r31-restitution-sft.md (à créer dans `reports/`)
 > **Résumé** : Apprendre au modèle à répondre, résumer et extraire depuis ce qu'il a lu, sur des jeux tenus à l'écart.
+> **Glossaire** : [SFT](../../theorie/glossaire/entrees/sft.md) · [tenu à l’écart](../../theorie/glossaire/entrees/tenu-a-l-ecart.md) · [span](../../theorie/glossaire/entrees/span.md).
 
 ## Le besoin
 

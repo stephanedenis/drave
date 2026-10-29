@@ -3,6 +3,7 @@
 > **Statut** : spécifiée · **Priorité** : P0 · **Programme** : R · **Dépend de** : R01 (son schéma de manifeste)
 > **Ligne de roadmap** : R0.2 · **Fiche de résultat attendue** : rapport-r02-controleur.md (à créer dans `reports/`)
 > **Résumé** : Choisir, pour un but et un budget, la prochaine action de lecture et sa profondeur.
+> **Glossaire** : [contrôleur de lecture](../../theorie/glossaire/entrees/controleur-de-lecture.md) · [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md) · [span](../../theorie/glossaire/entrees/span.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 
 ## Le besoin
 
