@@ -104,6 +104,52 @@ def eval_pipeline(p, its):
     return {"n": n, "champ": ok / n if n else 0.0, "chemins": dict(kinds)}
 
 
+def eval_marges(p, its):
+    """M4, M8, oracle et politique de marge (M4 si marge > t, sinon M8)."""
+    n = ok4 = ok8 = oracle = m4_seul = m8_seul = 0
+    seuils = (0.0, 0.05, 0.1, 0.2, 0.3, 0.5)
+    couv = {s: 0 for s in seuils}
+    bons = {s: 0 for s in seuils}
+    marges = Counter()
+    for it in its:
+        proto = p.prototypes.get((it.code.get("jeu"), it.code.get("action")))
+        for f in non_nuls(it.code):
+            cue = dict(it.code)
+            cue[f] = None
+            r = p.memoire.completion(cue)
+            code4 = r.get("code")
+            m4 = (code4 or {}).get(f) == it.code.get(f)
+            m8 = (proto or {}).get(f) == it.code.get(f)
+            n += 1
+            ok4 += int(m4)
+            ok8 += int(m8)
+            oracle += int(m4 or m8)
+            m4_seul += int(m4 and not m8)
+            m8_seul += int(m8 and not m4)
+            marge = float(r.get("marge", 0.0))
+            marges[round(marge, 3)] += 1
+            for s in seuils:
+                if marge > s:
+                    couv[s] += 1
+                    bons[s] += int(m4)
+                else:
+                    bons[s] += int(m8)
+    return {
+        "n": n,
+        "m4": ok4 / n if n else 0.0,
+        "m8": ok8 / n if n else 0.0,
+        "oracle": oracle / n if n else 0.0,
+        "m4_seul": m4_seul,
+        "m8_seul": m8_seul,
+        "marges": dict(marges),
+        "politiques": [
+            {"seuil": s, "couverture": couv[s] / n if n else 0.0,
+             "champ": bons[s] / n if n else 0.0}
+            for s in seuils
+        ],
+    }
+
+
 def eval_sans_m4(p, its):
     """M8 seul : on vide la mémoire après consolidation, les prototypes restent."""
     p.memoire.episodes = []
@@ -125,6 +171,7 @@ def principal():
         stocke = eval_m4(p, train)
         test_m4 = eval_m4(p, val)
         proto = eval_proto(p, val)
+        marges = eval_marges(p, val)
         sans = eval_sans_m4(p, val)
         pipe = eval_pipeline(p, val)
         resultats.append({
@@ -135,6 +182,7 @@ def principal():
             "stocke_m4": stocke,
             "test_m4": test_m4,
             "test_m8": proto,
+            "test_marges": marges,
             "test_m8_sans_m4": sans,
             "test_pipeline": pipe,
         })
@@ -157,6 +205,9 @@ def principal():
         "test_pipeline_champ": moy("test_pipeline", "champ"),
         "test_m4_exact": moy("test_m4", "exact"),
         "test_m8_exact": moy("test_m8", "exact"),
+        "oracle_champ": moy("test_marges", "oracle"),
+        "m4_seul": sum(r["test_marges"]["m4_seul"] for r in resultats),
+        "m8_seul": sum(r["test_marges"]["m8_seul"] for r in resultats),
     }
     out = {"agregats": ag, "par_graine": resultats}
     print(json.dumps(out, ensure_ascii=False, indent=1))

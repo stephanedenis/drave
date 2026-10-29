@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**43 commits** · **0 session(s)** · **6 thème(s)**
+**44 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
-| mesures | 22 | [mesures.md](mesures.md) |
+| mesures | 23 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | moteur | 3 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -74,6 +74,7 @@ Aucune session indexée pour ce jour ; voir
 | 12:54 | `e11f096a` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE |
 | 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ |
 | 13:07 | `5a2fffae` | R0.3 — LE MODÈLE LIT : CONTRÔLEUR 0,500 CONTRE TRONCATURE 0,400 ET HASARD 0,000 (10 QUESTIONS) |
+| 13:11 | `b1197a46` | B12.10 — LE BRANCHEMENT M4 PAR CHAMPS OBSERVÉS EST INERTE : RETIRÉ, MARGE À ESSAYER |
 
 ## Le récit de la journée (écrit à la main)
 

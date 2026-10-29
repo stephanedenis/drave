@@ -17,13 +17,13 @@
 ### Session `f0969e87` — principale : état, docs, R0
 
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
+- **Rôle** : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambiguïtés) sur CPU.
 - **Ce qu'elle fait** : **N0.3b est mesuré** (conversion 68,1917 / 92,1875 ; natif 4,6585 / 18,6394) ;
-  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; le split par code tenu à l'écart donne **0 exact** et **0,436** de champ ; le branchement par champs observés est inerte (**0 sélection M4**).
+  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; le split par code tenu à l'écart donne **0 exact** et **0,436** de champ ; **oracle = M8**, **M4 seul = 0/606** : **B12.10 est close négative**.
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et R0.3 ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **B12.10** — essayer la **marge de similarité** (top1 − top2), ou changer la porte ; R0.3 est à `8156fdcb`.
-- **Bloquants** : aucun pour B12.10 ; N2 dépend du GPU.
+- **Prochaine action** : **B11.10** — cartes et ambiguïtés ; R0.3 est à `8156fdcb`.
+- **Bloquants** : aucun pour B11.10 ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
 ### Session `8156fdcb` — R0.2 livré, R0.3 en cours (lecteur modèle)
@@ -33,7 +33,7 @@
   1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
 - **Ce qu'elle fait** : R0.3 — le **modèle** (Qwen2.5-0.5B du moteur) est branché : contrôleur
   **0,500** contre troncature **0,400** et hasard **0,000** (10 questions, indicatif).
-- **Ce que font les autres** : `f0969e87` tient l'état et prend **B12.10** ; `N2-GPU` distille la hiérarchie ;
+- **Ce que font les autres** : `f0969e87` tient l'état et prend **B11.10** ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
   `tools/tests/documents/bench-pilote.json`, `docs/implantation/lecteur-controleur.md`,
@@ -61,6 +61,7 @@
   [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
+- **B12.10 — intégration** : **close négative** ; oracle = **M8** (0,436), **M4 seul = 0/606** ; la porte « M4 retiré » est vide.
 - **Documentation** : roadmap unique A/B/N/R ; **93 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.
 
@@ -81,7 +82,7 @@
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
-| **B — l'intelligence** | ✅ B1–B12 ; B10.3/B12.10 ouverts | B10.3 décodeur sous le plancher ; B1.5 corpus | B12.10, puis B10.3 |
+| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | B11.10, puis B10.3 |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1 mesuré (51 pages) ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.2 → R0.3 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
@@ -94,7 +95,7 @@
 ## Ce qui reste
 
 **R0** — **R0.1 et R0.2 mesurés** ; R0.3 porté par `8156fdcb`. **N2** — la **hiérarchie** ; **N5 gelé**.
-**N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B12.10** — contexte du pipeline.
+**N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B11.10** — cartes et ambiguïtés.
 **Backlog** — graphe et fiches (`8156fdcb`).
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 

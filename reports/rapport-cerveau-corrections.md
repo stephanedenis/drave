@@ -215,16 +215,20 @@ Le défaut était muet : 0/161 cartes, 0/528 items.
 - La tautologie est confirmée : **0 code exact** sur les codes neufs. Le **96,33 %** publié est
   mesuré sur des codes **stockés** avec un autre protocole (masque `vers`, 80 items) ; notre
   mesure stockée, tous champs masqués, donne **0,809**.
-- **Tentative de branchement** : une règle « garder M4 si ses champs **observés** collent mieux
-  que le prototype » a été mesurée ; sur les trois graines, le chemin reste **`prototype`**
-  (321/321, 71/71, 214/214). Les champs observés sont à égalité, et le champ masqué est le seul
-  discriminant : la règle est **retirée**, branche inerte. Le prochain essai est la **marge** de
-  similarité (top1 − top2), ou un changement de porte.
+- **Oracle et marge** : sur **606 observations** (3 graines), **M4 seul = 0**, **M8 seul = 63** :
+  M4 ne gagne **aucun** champ que M8 ne gagne déjà ; l'oracle est **exactement M8** (**0,436**).
+  Les marges ne valent que **0** ou **0,067** ; utiliser M4 dès que la marge > 0 (34 % / 83 % des
+  cues) fait tomber le champ à **0,037 / 0,028**, et un seuil > 0,1 ne sélectionne rien. La règle
+  par champs observés était déjà inerte (0 sélection) ; la marge ne sauve pas M4.
 
 **Verdict B12.10 (2026-10-29)** : la **plomberie du contexte** est réparée (0/528 → 528/528) ;
 le **split par code tenu à l'écart** donne **0 exact** et **0,436** de champ, avec une variance
-0,056–0,859. La porte « M4 retiré ⇒ chute » n'est pas franchie : le branchement naïf par champs observés est **inerte** ; il faut une **marge de confiance**
-ou changer la porte, puis re-mesurer. La **généralisation** reste ouverte.
+0,056–0,859. La porte « M4 retiré ⇒ chute » est **vide** : M4 n'a **aucune** contribution unique
+(**0/606**), et l'oracle est **M8** (**0,436**). Le chemin `prototype` est **optimal** parmi M4 et
+M8 sur ce corpus ; ne pas brancher M4 sur les cues partiels est le **bon** comportement.
+**B12.10 est mesurée — négative.** La généralisation n'est pas là, et la porte doit être changée
+(ou M4 doit changer d'espace de code) ; toute suite (autre métrique, corpus plus grand) est hors
+plan.
 
 ## 12. Fichiers
 

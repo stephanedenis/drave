@@ -78,7 +78,7 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 | N2 | [Distillation native (50 000 séquences)](N2-distillation.md) | en cours | P1 | N1 | N2 |
 | N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | — | N4 |
 | B10.3 | [Raisonnement sur `z` gelé](B10.3-raisonnement-z.md) | bloquée | P2 | B10.2bis | B10.3 |
-| B12.10 | [Pipeline M1 → M4 → M8](B12.10-pipeline-m1-m4-m8.md) | partiel | P2 | B12 | B12.10 |
+| B12.10 | [Pipeline M1 → M4 → M8](B12.10-pipeline-m1-m4-m8.md) | mesurée | P2 | B12 | B12.10 |
 | A3.4 | [Démonstration Colab](A3.4-colab.md) | bloquée | P3 | A3 | A3.4 |
 | A5.4 | [Opérateur FPGA complet](A5.4-fpga.md) | bloquée | P3 | A5 | A5.4 |
 | A6.2 | [Routage MoE appris](A6.2-moe-local.md) | bloquée | P3 | A6 | A6.2 |

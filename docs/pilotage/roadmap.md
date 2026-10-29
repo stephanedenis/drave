@@ -28,7 +28,7 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur** | B12.10 et B11.10 (autonomes) ; B10.3 attend **B10.2bis** |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 close (négatif)** | B11.10 (cartes) ; B10.3 attend **B10.2bis** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | 🔬 R0.1, R0.2 **mesurés** ; R0.3 **pilote + modèle** | **R0.3** (banc complet, 300 questions) |
 
@@ -46,7 +46,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    611 ms. La restitution depuis un document lu est **R31**.
 5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
 6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
-7. **B12.10, B11.10, A2.6, A3.2, A8.0, N3** — les autonomes, qui remplissent la file « jamais en attente ».
+7. **B11.10, A2.6, A3.2, A8.0, N3** — les autonomes, qui remplissent la file « jamais en attente ».
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
    suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend `B10.2bis`.
 
@@ -76,7 +76,7 @@ rejouer et payer le calcul au prorata de l'activité. C'est le support de R0.
 ## Programme B — L'intelligence (les deux étages)
 
 L'étage 1 (langue) est mesuré ; l'étage 2 (pensée) est mesuré dans ses opérations, avec des négatifs nommés.
-Les lignes ouvertes sont **B10.3** (décodeur) et **B12.10** (contexte du pipeline) ; **B1.5** est bloquée par le corpus.
+La ligne ouverte est **B10.3** (décodeur) ; **B12.10** est **close** (négatif) ; **B1.5** est bloquée par le corpus.
 
 | # | chantier | état | prochaine action |
 |---|---|---|---|
@@ -91,7 +91,7 @@ Les lignes ouvertes sont **B10.3** (décodeur) et **B12.10** (contexte du pipeli
 | **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
 | **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** par le décodeur ; tenter l'attention croisée |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ / ⚠️ | B11.10 (cartes et ambiguïtés) ; le codec lit **100 %** |
-| **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10** (intégration) ; seul M1 est solide |
+| **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |
 
 **Ce qui compte pour R** : le **codec classique** lit **100 %** des surfaces ; c'est la preuve qu'un bloc
@@ -240,13 +240,13 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
 - **non bloqué, à faire** : **R0.3** (banc complet, `8156fdcb`) ; **N2** (la hiérarchie) ;
-  **N4** (consigne courte) ; **B12.10** (contexte du pipeline) ; **B11.10** (cartes) ; **A2.6/A3.2/A8.0** (moteur) ;
+  **N4** (consigne courte) ; **B11.10** (cartes) ; **A2.6/A3.2/A8.0** (moteur) ;
   **N3** (opérations natives) ; **R13** (octets ou BPE) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
   B10.3 (B10.2bis absent du backlog) ;
 - **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
-  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF).
+  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF), B12.10 (intégration, négatif).
 
 ## Ce qui est bloqué, et par quoi
 
