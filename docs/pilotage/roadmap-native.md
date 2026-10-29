@@ -106,6 +106,7 @@ permutation.
 | N2.32 | **Contexte 130** | ⚠️ **négatif** — PPL **2,786** à 2 250 pas ; même +2 positions dégradent |
 | N2.33 | **Contexte 129** | ✅ **nouveau meilleur** — PPL **2,6998** contre 2,708 ; curriculum au pas de 1 |
 | N2.34 | **129, 10k de plus** | ⚠️ **négatif** — PPL **2,712** à 8 500 pas ; le gain de N2.33 était ponctuel |
+| N2.35 | **Contexte 130 après 129** | ⚠️ **négatif** — PPL **2,7149** ; le point 129 était isolé |
 | N2.S | **Synthèse plafond** | ⚠️ **2,708** ; six essais, aucun ne bat 2,708 ; porte 2,5 non atteinte |
 | N2.25 | **lr 1e-6** | ⚠️ **négatif** — PPL **2,758** à 12 500 pas ; arrêté |
 | N2.24 | **Température 4** | ⚠️ **négatif** — PPL **2,852** ; arrêté |
