@@ -22,16 +22,16 @@ question est donc : l'attention croisée change-t-elle le chrF ?
 
 | bras | graine | chrF reconstruction | chrF traduction | rappel | sonde de langue |
 |---|---:|---:|---:|---:|---:|
-| 1 | 17.0 | 11.4 | 0.319 | 0.267 |
-| 2 | 19.2 | 11.2 | 0.302 | 0.317 |
-| 3 | 16.0 | 10.8 | 0.326 | 0.333 |
+| 1  | | 17.0 | 11.4 | 0.319 | 0.267 |
+| 2  | | 19.2 | 11.2 | 0.302 | 0.317 |
+| 3  | | 16.0 | 10.8 | 0.326 | 0.333 |
 | **moyenne** | | **17.4** | **11.13** | | |
 
 | bras | graine | chrF reconstruction | chrF traduction | rappel | sonde de langue |
 |---|---:|---:|---:|---:|---:|
-| 1 | 16.6 | 11.1 | 0.259 | 0.2 |
-| 2 | 15.8 | 11.3 | 0.285 | 0.383 |
-| 3 | 16.8 | 11.2 | 0.331 | 0.333 |
+| 1  | | 16.6 | 11.1 | 0.259 | 0.2 |
+| 2  | | 15.8 | 11.3 | 0.285 | 0.383 |
+| 3  | | 16.8 | 11.2 | 0.331 | 0.333 |
 | **moyenne** | | **16.4** | **11.2** | | |
 
 | bras | graine | chrF reconstruction | chrF traduction | rappel | sonde de langue |

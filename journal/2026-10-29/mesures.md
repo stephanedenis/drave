@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (37)
+## Commits du jour (38)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -45,6 +45,7 @@
 | 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE | `R05-tete-balayage.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 16:42 | `33a11db0` | BALAYAGE — DEUX CORRECTIFS ESSAYÉS ET REJETÉS : LE RERANK ET LES NOMBRES EN MOTS DÉGRADENT L'INDEX | `tete-balayage.md`, `en-cours.md`, `README.md` (+11) |
 | 16:46 | `96d9d3bb` | BANC RÉPARÉ APRÈS LA DÉRIVE DE continuite.md : 83 QUESTIONS VÉRIFIÉES, 0 PROBLÈME | `R03-banc-lecture-rapide.md`, `R05-tete-balayage.md`, `R06-tete-relecture.md` (+8) |
+| 17:09 | `261bdc42` | B10.2bis — TABLEAU : COLONNE GRAINE VIDE AJOUTÉE | `en-cours.md`, `README.md`, `portes.md` (+2) |
 
 ## Chiffres du jour
 
@@ -57,6 +58,7 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
+- [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
 - [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-miroir-blocs.md](../../reports/rapport-miroir-blocs.md)
