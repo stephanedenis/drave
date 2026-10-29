@@ -25,8 +25,7 @@
   elles rendent un **diff d'état**.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/banc_complet.py`,
   `tools/porte-lecteur.sh`, `tools/tests/documents/bench-*.json`, `reports/r03-*`,
-  `docs/implantation/lecteur-controleur.md`,
-  `docs/implantation/banc-lecture.md`, `reports/r03-*`, `docs/pilotage/backlog/R03-banc-lecture-rapide.md`.
+  `docs/implantation/{lecteur-controleur,banc-lecture}.md`, `docs/pilotage/backlog/R03-*.md`.
 - **Prochaine action** : **R0.4** (les trois têtes) ou R0.3 « durci » (paraphrases).
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).

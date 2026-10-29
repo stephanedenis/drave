@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**50 commits** · **0 session(s)** · **7 thème(s)**
+**51 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
-| moteur | 4 | [moteur.md](moteur.md) |
+| moteur | 5 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
@@ -82,6 +82,7 @@ Aucune session indexée pour ce jour ; voir
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS |
 | 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION |
 | 14:25 | `8114767d` | SESSION — CLÔTURE f0969e87 : N0.15/N4.7, N4.8, EN-COURS À JOUR |
+| 14:39 | `72a4ff5f` | R0.3 — 249 QUESTIONS, 30 DOCUMENTS SUR GPU : SÉLECTION 1,000 À 30 %, LE CONTRÔLEUR BAT LA TRONCATURE 5,5× |
 
 ## Le récit de la journée (écrit à la main)
 
