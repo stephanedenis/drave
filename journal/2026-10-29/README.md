@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**57 commits** · **0 session(s)** · **7 thème(s)**
+**58 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 27 | [mesures.md](mesures.md) |
+| mesures | 28 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -89,6 +89,7 @@ Aucune session indexée pour ce jour ; voir
 | 14:52 | `7fb1c8a6` | R4.1 — LE BLOC TABLEAUX : 996 CELLULES, 802 EXACTES, LE TEXTE PLAT RATE 3/3 |
 | 14:53 | `4767036b` | JOURNAL — R4.1 ENTRE AU RÉCIT DU JOUR (55 COMMITS) |
 | 15:04 | `989102e1` | B11.10 — CARTES 161/161, AMBIGUÏTÉS REFUSÉES : LE 69,3 % EST NATIF |
+| 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE |
 
 ## Le récit de la journée (écrit à la main)
 

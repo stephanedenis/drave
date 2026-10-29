@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (27)
+## Commits du jour (28)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -35,10 +35,11 @@
 | 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION | `en-cours.md`, `README.md`, `mesures.md` (+6) |
 | 14:52 | `7fb1c8a6` | R4.1 — LE BLOC TABLEAUX : 996 CELLULES, 802 EXACTES, LE TEXTE PLAT RATE 3/3 | `bloc-tableaux.md`, `R41-bloc-tableaux.md`, `README.md` (+16) |
 | 15:04 | `989102e1` | B11.10 — CARTES 161/161, AMBIGUÏTÉS REFUSÉES : LE 69,3 % EST NATIF | `README.md`, `docs.md`, `b1110-cartes.json` (+3) |
+| 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE | `R04-tete-survol.md`, `index.md`, `en-cours.md` (+8) |
 
 ## Chiffres du jour
 
-`69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763`
+`0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -70,6 +71,7 @@
 - [reports/rapport-native-prof30k.md](../../reports/rapport-native-prof30k.md)
 - [reports/rapport-native-professeur-30k.md](../../reports/rapport-native-professeur-30k.md)
 - [reports/rapport-native-sft.md](../../reports/rapport-native-sft.md)
+- [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
 - [reports/rapport-r41-bloc-tableaux.md](../../reports/rapport-r41-bloc-tableaux.md)
 
 <!-- notes -->
