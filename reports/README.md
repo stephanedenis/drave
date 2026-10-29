@@ -18,6 +18,7 @@
 | [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
 | `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
 | [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |
+| [`rapport-native-ctx256.md`](rapport-native-ctx256.md) | **N2.27** — contexte 256 : PPL **5,675**, arrêté |
 | [`rapport-native-local.md`](rapport-native-local.md) | **N2.26** — têtes locales : PPL **2,763**, dégradation |
 | [`rapport-native-plafond.md`](rapport-native-plafond.md) | **N2 synthèse** — plafond **2,708**, six essais, porte 2,5 non atteinte |
 | [`rapport-native-prof20k-7.md`](rapport-native-prof20k-7.md) | **N2.24** — T=4 : PPL **2,852**, arrêté |

@@ -98,6 +98,7 @@ permutation.
 | N2.22 | **Professeur 30k, lr 1e-5** | ⚠️ **négatif** — PPL **2,828** ; arrêté |
 | N2.23 | **Professeur 20k, lr 3e-6** | ⚠️ **négatif** — PPL **2,753** ; arrêté |
 | N2.26 | **Têtes locales** | ⚠️ **négatif** — PPL **2,763** à 13 000 pas ; arrêté |
+| N2.27 | **Contexte 256** | ⚠️ **négatif** — PPL **5,675** à 12 750 pas ; saut direct 128→256 |
 | N2.S | **Synthèse plafond** | ⚠️ **2,708** ; six essais, aucun ne bat 2,708 ; porte 2,5 non atteinte |
 | N2.25 | **lr 1e-6** | ⚠️ **négatif** — PPL **2,758** à 12 500 pas ; arrêté |
 | N2.24 | **Température 4** | ⚠️ **négatif** — PPL **2,852** ; arrêté |
