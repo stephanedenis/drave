@@ -46,9 +46,20 @@ ppl() { # $@ = drapeaux
     | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+"
 }
 
+check_ppl() {  # valeur, attendu, nom
+    python3 - "$1" "$2" "$3" <<'PPLGAIN' || exit 1
+import sys
+val, attendu, nom = float(sys.argv[1]), float(sys.argv[2]), sys.argv[3]
+if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
+    sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print(f"  ✅ PPL {nom} épinglée : {val}")
+PPLGAIN
+}
+
 echo "=== 1. invariant : --ffn-gain L:1.0 EST l'absence de réglage ==="
 REF=$(ppl)
 echo "  sans réglage : $REF"
+check_ppl "$REF" 14.6496 "référence"
 for L in 0 6 18; do
   P=$(ppl --ffn-gain "$L:1.0")
   printf '  couche %-3s gain 1.0 : %s\n' "$L" "${P:-échec}"
@@ -74,6 +85,9 @@ echo "  ✅ toute inhibition dégrade, et de plus en plus : l'optimum intérieur
 echo "=== 3. optimum INTÉRIEUR (couche 0) : 0,75 doit battre 0,5 ET 1,5 ==="
 P05=$(ppl --ffn-gain "0:0.5"); P075=$(ppl --ffn-gain "0:0.75"); P15=$(ppl --ffn-gain "0:1.5")
 printf '  gain 0,5 : %s · 0,75 : %s · 1,5 : %s\n' "$P05" "$P075" "$P15"
+check_ppl "$P05" 14.1057 "gain 0.5"
+check_ppl "$P075" 12.9635 "gain 0.75"
+check_ppl "$P15" 15.4298 "gain 1.5"
 python3 - "$P05" "$P075" "$P15" "$REF" <<'PY' || exit 1
 import sys
 a, b, c, ref = (float(x) for x in sys.argv[1:5])
@@ -86,6 +100,7 @@ PY
 echo "=== 4. la FALAISE : 0,25 à la couche 0 casse le modèle ==="
 P025=$(ppl --ffn-gain "0:0.25")
 echo "  gain 0,25 : $P025"
+check_ppl "$P025" 996.0390 "falaise 0.25"
 python3 - "$P025" "$REF" <<'PY' || exit 1
 import sys
 a, ref = float(sys.argv[1]), float(sys.argv[2])

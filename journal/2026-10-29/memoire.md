@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 16:30 | `b8a1764b` | R06 — LA RELECTURE : RELIRE PLUS NE CHANGE RIEN (0/249, 0/84), LE DÉCLENCHEUR RÉCUPÈRE 2/9 | `pipeline-lecture.md`, `R06-tete-relecture.md`, `en-cours.md` (+9) |
 | 16:33 | `90c751ca` | R05 — LE BALAYAGE CLASSIQUE : RAPPEL@10 0,984 SUR LE LEXICAL, 0,702 SUR LES PARAPHRASES, 0,1 MS | `tete-balayage.md`, `R05-tete-balayage.md`, `en-cours.md` (+8) |
 | 19:21 | `a72cf1dc` | LE DÉCLENCHEUR EST TROUVÉ — LA CASCADE À CONFIANCE CALIBRÉE ÉGALE L'ORACLE HORS ÉCHANTILLON | `R06-tete-relecture.md`, `en-cours.md`, `programme-r.md` (+9) |
+| 19:22 | `2704947c` | JOURNAL — LE DÉCLENCHEUR, ET LA FIN D'UNE OBSTINATION (SESSION 8156fdcb) | `README.md`, `memoire.md` |
 
 ## Chiffres du jour
 

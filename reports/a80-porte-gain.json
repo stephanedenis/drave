@@ -1,0 +1,28 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-gain.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": 0.0005,
+ "references": {
+  "sans_reglage": 14.6496,
+  "gain_0.5": 14.1057,
+  "gain_0.75": 12.9635,
+  "gain_1.5": 15.4298,
+  "falaise_0.25": 996.039
+ },
+ "mesures": {
+  "sans_reglage": 14.6496,
+  "gain_0.5": 14.1057,
+  "gain_0.75": 12.9635,
+  "gain_1.5": 15.4298,
+  "falaise_0.25": 996.039
+ },
+ "controle": "décalage de 10 % des cinq références refusé par la même expression",
+ "gate": "exit 0 ; identité, inhibition, optimum, falaise, profil, réparti, puits",
+ "limites": [
+  "un seul modèle",
+  "128 jetons pour la plupart des points",
+  "996,0390 est une falaise, pas une qualité"
+ ]
+}
