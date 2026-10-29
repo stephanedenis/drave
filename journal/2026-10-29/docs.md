@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,6 +20,7 @@
 | 14:11 | `076d15ef` | ÉTAT — LE GRAPHE DES CHANTIERS, ACTIVITÉS ET ÉTATS DANS EN-COURS | `en-cours.md`, `README.md`, `chantiers-etats.svg` (+3) |
 | 14:41 | `7d47b3c7` | ÉTAT — LISTE DES FICHIERS RÉSERVÉS NETTOYÉE (R0.3 CLOS) | `en-cours.md`, `README.md`, `moteur.md` (+1) |
 | 14:46 | `6e995187` | MÉTHODE — IDENTITÉ DSH, PAIRS ET DISCIPLINE GIT ; 71d57f53 INSCRIT | `AGENTS.md`, `continuite.md`, `en-cours.md` (+2) |
+| 14:53 | `4767036b` | JOURNAL — R4.1 ENTRE AU RÉCIT DU JOUR (55 COMMITS) | `README.md`, `mesures.md` |
 
 ## Mesures et rapports touchés
 

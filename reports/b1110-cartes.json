@@ -1,0 +1,42 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B11.10",
+ "dispositif": "codec B11, cartes 161 items, 4 surfaces ambiguës, lit sans jeu puis avec jeu",
+ "cartes": {
+  "items": 161,
+  "codec_exact": 161,
+  "avec_rsn": 8,
+  "sans_rsn": 153
+ },
+ "avant": {
+  "A1": "morpion:case=0",
+  "E4": "go:point=289",
+  "d4": "go:point=288",
+  "b6-c5": "dames:chemin=[8,13]"
+ },
+ "apres": {
+  "A1": "refus:4 jeux",
+  "E4": "refus:4 jeux",
+  "d4": "refus:4 jeux",
+  "b6-c5": "refus:2 jeux"
+ },
+ "avec_jeu": {
+  "A1": {"jeu": "morpion", "exact": true},
+  "E4": {"jeu": "echecs", "exact": true},
+  "d4": {"jeu": "go", "exact": true},
+  "b6-c5": {"jeu": "dames", "exact": true}
+ },
+ "controles": {
+  "e2e4": "echecs",
+  "2D": "cartes",
+  "porte_jeux": "exit 0 ; 100 % au niveau 4, 33/33 paires, 0 collision, 71 langues"
+ },
+ "natif_carte": 0.693,
+ "note_natif": "B11.7 : champ carte du parseur natif, pas le codec ; le codec lit 161/161.",
+ "limites": [
+  "161 items synthétiques, 4 surfaces ambiguës",
+  "8 contextes RSN seulement ; le reste est lu sans validation",
+  "pas de nouvelle mesure du modèle natif",
+  "garde par motif : coordonnée nue ou deux cases séparées par un tiret"
+ ]
+}

@@ -190,6 +190,22 @@ def tous_les_codecs() -> dict[str, Codec]:
     return {j: codec(j) for j in _NOMS}
 
 
+def _ambiguite_de_surface(texte: str) -> tuple[str, ...]:
+    """Une coordonnée nue est ambiguë entre plusieurs jeux.
+
+    `A1` est une case de morpion, une case d'échecs, un point de go ou une case
+    de dames ; `E4`/`d4` sont des cases d'échecs et des points de go ; `b6-c5`
+    est un chemin de dames ou un coup d'échecs. Sans jeu ni contexte, le
+    dispatcher ne doit pas **deviner** : il refuse et nomme les jeux candidats.
+    """
+    t = texte.strip()
+    if re.fullmatch(r"[A-Za-z]\d{1,2}", t):
+        return ("morpion", "echecs", "dames", "go")
+    if re.fullmatch(r"[A-Za-z]\d{1,2}\s*[-–]\s*[A-Za-z]\d{1,2}", t):
+        return ("echecs", "dames")
+    return ()
+
+
 def lit(texte: str, jeu: str | None = None, niveau: int = 4,
         contexte: RSN | None = None, langue: str | None = None) -> Lecture:
     """Lit une surface ; si `jeu` est absent, choisit le codec le plus confiant.
@@ -200,6 +216,12 @@ def lit(texte: str, jeu: str | None = None, niveau: int = 4,
     """
     if jeu is not None:
         return codec(jeu).lit(texte, niveau=niveau, contexte=contexte, langue=langue)
+    if contexte is None and MULTI.jeu(texte) is None:
+        ambigus = _ambiguite_de_surface(texte)
+        if ambigus:
+            return Lecture("?", texte, niveau, naturel(texte), jetons(texte),
+                           erreurs=[f"surface ambiguë : jeu non précisé ({', '.join(ambigus)})"],
+                           ambiguites=tuple(f"jeu ambigu : {j}" for j in ambigus))
     scores = {j: c.detecte(texte) for j, c in tous_les_codecs().items()}
     meilleur = max(scores, key=lambda j: scores[j])
     if scores[meilleur] <= 0.0:

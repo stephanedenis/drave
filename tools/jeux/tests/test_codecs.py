@@ -39,6 +39,25 @@ class TestCouches(unittest.TestCase):
         self.assertEqual(r["bons"], r["total"], r["echecs"])
 
 
+class TestAmbiguites(unittest.TestCase):
+    def test_coordonnees_nues_refusees(self):
+        for surface in ("A1", "E4", "d4", "b6-c5"):
+            l = lit(surface)
+            self.assertFalse(l.ok, surface)
+            self.assertTrue(l.erreurs, surface)
+            self.assertIn("ambigu", " ".join(l.erreurs).lower(), surface)
+
+    def test_jeu_explicite_leve_l_ambiguite(self):
+        self.assertTrue(lit("A1", jeu="morpion", niveau=4).ok)
+        self.assertTrue(lit("E4", jeu="go", niveau=4).ok)
+        self.assertTrue(lit("d4", jeu="go", niveau=4).ok)
+        self.assertTrue(lit("b6-c5", jeu="dames", niveau=4).ok)
+
+    def test_surfaces_non_ambigues_inchangees(self):
+        self.assertEqual(lit("e2e4").jeu, "echecs")
+        self.assertEqual(lit("2D").jeu, "cartes")
+
+
 class TestMorpion(unittest.TestCase):
     def test_grille_et_trait(self):
         l = lit("X O X | . . . | . . .", jeu="morpion", niveau=4)
