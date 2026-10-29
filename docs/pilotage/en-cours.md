@@ -57,17 +57,18 @@
 ## Ce qui est en cours
 
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; R0.4 **négatif**, R0.5 **signal** (AUC 0,785) ; suite **R0.4**.
-- **R4.1–R4.3 — les blocs structurels** : **mesurées** (996 cellules, 802 exactes, texte plat **0/3** ;
-  294 fichiers, 24/24 extraits, texte seul **0/3** ; 32 formules, 10/10 dérivées, surface **0/3**) ;
-  fiches [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
-  [`r43`](../../reports/rapport-r43-bloc-maths.md).
-- **A8.0 — les portes épinglées** : flux **61,9920 / 60,8135**, pont **113,0068 / 111,9225**
+- **R4.1–R4.3 — les blocs structurels** : **mesurées entrée+sortie** : 996 cellules,
+  802 exactes, texte plat **0/3** ; 294 fichiers, 24/24 extraits, texte seul **0/3** ; 32 formules,
+  10/10 dérivées, surface **0/3** ; **miroir 34/34, 296/296, 42/42**) ; fiches
+  [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
+  [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
+- **A8.0 — portes épinglées** : flux **61,9920 / 60,8135**, pont **113,0068 / 111,9225**
   (falaise **+2,81 % / +25,35 %**) ; fiches [`a80-flux`](../../reports/rapport-a80-porte-flux.md),
   [`a80-pont`](../../reports/rapport-a80-porte-pont.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** = natif ;
   fiche [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **Backlog — graphe** : 41 arêtes dures, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
-- **N2 — distillation** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; **N4** — consignes **0/40**.
+- **Backlog — graphe** : 41 arêtes dures, 8 sans fiche ; vérifié par `tools/verifie_backlog.py`.
+- **N2 — distillation** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
   Suite : [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
 
 ## Les chiffres de l'état
@@ -76,9 +77,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **55** (53 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **56** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **289** / **357** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **290** / **360** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **97** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

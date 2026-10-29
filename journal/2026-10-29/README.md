@@ -5,19 +5,19 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**60 commits** · **0 session(s)** · **7 thème(s)**
+**72 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 4 | [distribue.md](distribue.md) |
-| docs | 14 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 29 | [mesures.md](mesures.md) |
+| distribue | 6 | [distribue.md](distribue.md) |
+| docs | 20 | [docs.md](docs.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
+| mesures | 30 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 3 | [portes.md](portes.md) |
+| portes | 5 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -92,6 +92,18 @@ Aucune session indexée pour ce jour ; voir
 | 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE |
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS |
 | 15:22 | `65ab24cf` | ÉTAT — R4.1 MESURÉE : 996 CELLULES, 802 EXACTES ; T0 À 3 993 |
+| 15:23 | `52075592` | JOURNAL — R4.1 ET L'ÉTAT DANS LE RÉCIT DU JOUR (59 COMMITS) |
+| 15:27 | `0731544b` | A8.0 — 0 PORTE SUR 33 N'ÉPINGLE UNE PPL : A8.3 RESTE OPT-IN |
+| 15:28 | `1ded6b7f` | SCHÉMA — R4.1 MESURÉE ET LES SESSIONS À JOUR : R0.3 MESURÉ, R0.4/R0.5 OUVERTS |
+| 15:30 | `6480f6d8` | ÉTAT — COMPTEURS 285 / 352 (A8.0 COMMITTÉ) |
+| 15:32 | `e0c7c837` | R0.4 v2 ET R0.5 v2 — LES DEUX VERSIONS DURCIES CONFIRMENT LE DIAGNOSTIC : LE BANC EST LE VERROU |
+| 15:51 | `2fc844b3` | A8.0 — PORTE-FLUX ÉPINGLÉE : PPL 61,9920 / 60,8135, TOLÉRANCE 5e-4 |
+| 15:52 | `4ccf641f` | R4.2 — LE BLOC CODE : 294 FICHIERS, 453 038 NŒUDS, 24/24 EXTRAITS EXÉCUTÉS |
+| 15:54 | `a7d0ccdc` | ÉTAT — R4.2 MESURÉE : 294 FICHIERS, 24/24 EXTRAITS ; T0 À 3 937 |
+| 15:56 | `d7a4d1bf` | A8.0 — PORTE-PONT ÉPINGLÉE : PPL 113,0068 / 111,9225, FALAISE +2,81 % / +25,35 % |
+| 16:01 | `6415d58b` | R4.3 — LE BLOC MATHS : 32 FORMULES EXACTES, 10/10 DÉRIVÉES, L'ORACLE SYMPY D'ACCORD |
+| 16:02 | `727d13e0` | ÉTAT — LE FAIT ET SA LIGNE : LE COMMIT REFUSE UN RÉSULTAT SANS ÉTAT |
+| 16:06 | `543b5a02` | CONTINUITÉ — LA SESSION QUI CLÔT, PAS UN « PRINCIPAL » |
 
 ## Le récit de la journée (écrit à la main)
 

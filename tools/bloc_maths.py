@@ -132,18 +132,33 @@ def _n(valeur: Fraction | int) -> tuple:
 
 
 def _somme(gauche, droite):
+    """Somme ; les deux constantes se replient — l'AST est canonique."""
+    if gauche[0] == "n" and droite[0] == "n":
+        return _n(gauche[1] + droite[1])
     return ("+", gauche, droite)
 
 
 def _produit(gauche, droite):
+    if gauche[0] == "n" and droite[0] == "n":
+        return _n(gauche[1] * droite[1])
     return ("*", gauche, droite)
 
 
 def _moins(noeud):
+    if noeud[0] == "n":
+        return _n(-noeud[1])
     return ("neg", noeud)
 
 
 def _puissance(base, exposant):
+    if base[0] == "n" and exposant[0] == "n":
+        e = exposant[1]
+        if e.denominator == 1:
+            if e.numerator >= 0:
+                return _n(base[1] ** e.numerator)
+            if base[1] == 0:
+                raise ErreurCalcul("division par zéro (puissance négative de 0)")
+            return _n(Fraction(1, 1) / (base[1] ** (-e.numerator)))
     return ("^", base, exposant)
 
 
@@ -475,6 +490,60 @@ def empreinte(noeud) -> str:
     return hashlib.sha256(repr(noeud).encode()).hexdigest()
 
 
+# ------------------------------------------------------------------ la restitution
+
+def vers_latex(noeud) -> str:
+    """Rend la formule : parenthèses partout, donc relecture EXACTE (le miroir)."""
+    type_ = noeud[0]
+    if type_ == "n":
+        valeur = noeud[1]
+        if valeur.denominator == 1:
+            return str(valeur.numerator)
+        if valeur < 0:
+            return f"-\\frac{{{-valeur.numerator}}}{{{valeur.denominator}}}"
+        return f"\\frac{{{valeur.numerator}}}{{{valeur.denominator}}}"
+    if type_ == "v":
+        return "\\" + noeud[1] if noeud[1] in LETTRES_GRECQUES else noeud[1]
+    if type_ == "+":
+        return f"({vers_latex(noeud[1])} + {vers_latex(noeud[2])})"
+    if type_ == "*":
+        return f"({vers_latex(noeud[1])} \\cdot {vers_latex(noeud[2])})"
+    if type_ == "neg":
+        return f"-({vers_latex(noeud[1])})"
+    if type_ == "^":
+        return f"({vers_latex(noeud[1])}^{{{vers_latex(noeud[2])}}})"
+    if type_ == "fn":
+        return f"\\{noeud[1]}{{{vers_latex(noeud[2])}}}"
+    raise Refus("restitution impossible", None, type_)
+
+
+def miroir() -> dict:
+    """Le miroir entrée/sortie : rendre, relire, retrouver le MÊME AST.
+
+    Les formules et les dérivées sont rendues en LaTeX, relues par le même parseur, et
+    l'empreinte doit être identique. Le contrôle négatif rend la formule SANS parenthèses :
+    la précédence change, donc l'AST change — c'est ce qui prouve que la restitution
+    n'est pas triviale.
+    """
+    donnees = charge()
+    cas = [(cas_["nom"], analyse_latex(cas_["latex"])) for cas_ in donnees["formules"]]
+    cas += [(f"dérivée {index}", derive(analyse_latex(cas_["latex"]), cas_["var"]))
+            for index, cas_ in enumerate(donnees["derivees"])]
+    justes, details = 0, []
+    for nom, ast in cas:
+        rendu = vers_latex(ast)
+        relu = analyse_latex(rendu)
+        correct = empreinte(relu) == empreinte(ast)
+        justes += correct
+        details.append({"nom": nom, "rendu": rendu[:60], "correct": correct})
+    # contrôle négatif : restitution sans parenthèses (précédence perdue)
+    source = analyse_latex("(1 + 2) \\cdot 3")
+    perdu = "1 + 2 \\cdot 3"
+    negatif = empreinte(analyse_latex(perdu)) != empreinte(source)
+    return {"justes": justes, "total": len(cas),
+            "negatif_perd": negatif, "details": details}
+
+
 # ------------------------------------------------------------------ les mesures
 
 def charge() -> dict:
@@ -692,9 +761,20 @@ def autotest() -> int:
     if not (2.5 <= cout["ratio"] <= 6.0):
         problemes.append(f"coût non linéaire : ×{cout['ratio']:.2f} pour ×4")
 
+    miroir_resultat = miroir()
+    print(f"7. miroir      : {miroir_resultat['justes']}/{miroir_resultat['total']} "
+          f"restitutions exactes ; contrôle sans parenthèses "
+          f"{'perdu' if miroir_resultat['negatif_perd'] else 'NON PERDU'}")
+    if miroir_resultat["justes"] != miroir_resultat["total"]:
+        problemes.append(f"miroir : {miroir_resultat['total'] - miroir_resultat['justes']} "
+                         f"restitution(s) fausse(s) : "
+                         f"{[d for d in miroir_resultat['details'] if not d['correct']][:3]}")
+    if not miroir_resultat["negatif_perd"]:
+        problemes.append("le contrôle sans parenthèses ne perd rien : le miroir ne prouve rien")
+
     source = "\\frac{1}{3}+\\frac{1}{6}"
     empreintes = [empreinte(analyse_latex(source)) for _ in range(2)]
-    print(f"7. rejeu       : {'identique' if empreintes[0] == empreintes[1] else 'DIFFÉRENT'}")
+    print(f"8. rejeu       : {'identique' if empreintes[0] == empreintes[1] else 'DIFFÉRENT'}")
     if empreintes[0] != empreintes[1]:
         problemes.append("le rejeu ne redonne pas la même empreinte")
 
@@ -724,6 +804,7 @@ def mesure(chemin: pathlib.Path) -> int:
         "controles": controle_surface(),
         "refus": _refus(),
         "cout": {"ratio_x4": round(_cout()["ratio"], 2)},
+        "miroir": miroir(),
         "rejeu": {"identique": empreinte(analyse_latex("\\frac{1}{3}+\\frac{1}{6}"))
                   == empreinte(analyse_latex("\\frac{1}{3}+\\frac{1}{6}"))},
     }
@@ -743,9 +824,15 @@ def main() -> int:
     ap.add_argument("--derive", type=str)
     ap.add_argument("--var", type=str, default="x")
     ap.add_argument("--autotest", action="store_true")
+    ap.add_argument("--miroir", action="store_true")
     args = ap.parse_args()
     if args.porte or args.autotest:
         return autotest()
+    if args.miroir:
+        resultat = miroir()
+        print(json.dumps(resultat, ensure_ascii=False, indent=1))
+        return 0 if (resultat["justes"] == resultat["total"]
+                     and resultat["negatif_perd"]) else 1
     if args.mesure:
         return mesure(args.mesure)
     if args.calcule:

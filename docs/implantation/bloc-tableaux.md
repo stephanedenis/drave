@@ -88,6 +88,15 @@ au moins 5 tableaux avec en-tête ; les opérations justes sur fixtures ; le **t
 en-tête, colonne de texte) ; le coût linéaire ; le rejeu identique. Une seule condition
 manquante rend la porte rouge.
 
+## 6 bis. La restitution (miroir)
+
+La grille se **rend** en Markdown ou en CSV, puis se **relit** : 34/34 tableaux gardent
+en-têtes, dimensions et textes de cellules. Les fusions ne sont pas représentables dans ces
+formats et sont comptées à part — le miroir ne prétend pas les restituer. Le contrôle
+négatif est le **texte plat** : rendu tel quel, il ne redonne aucun tableau.
+
+Porte : [`porte-miroir-blocs.sh`](../../tools/porte-miroir-blocs.sh).
+
 ## 7. Ce que le bloc ne fait pas
 
 - **pas de PDF non balisé** : un tableau PDF reste du texte (R0.1) ; le bloc ne l'invente pas

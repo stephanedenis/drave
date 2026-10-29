@@ -31,6 +31,8 @@ spécification : [`bloc-tableaux.md`](../../implantation/bloc-tableaux.md) ; por
 **Ce que R4.1 ne fait pas** : les tableaux PDF non balisés (R0.1 les laisse en texte, R4.4
 les prendra) ; les en-têtes fusionnées (refusées, pas devinées).
 
+**Miroir entrée/sortie** : 34/34 grilles rendus puis relus à l'identique, contrôle négatif perdu (34 exacts).
+
 ## Ce qui est mesuré
 
 - exactitude des cellules et des en-têtes

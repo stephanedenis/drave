@@ -647,6 +647,63 @@ def execute(source: str, nom: str = "<snippet>", max_pas: int = 200_000,
 
 
 
+# ------------------------------------------------------------------ la restitution
+
+def cle_ast(arbre) -> list[tuple]:
+    """La forme de l'AST, sans les numéros de ligne : ce que la restitution doit garder."""
+    cle = []
+    for noeud in ast.walk(arbre):
+        type_ = type(noeud).__name__
+        detail = ""
+        if isinstance(noeud, ast.Constant):
+            detail = repr(noeud.value)
+        elif isinstance(noeud, ast.Name):
+            detail = noeud.id
+        elif isinstance(noeud, ast.arg):
+            detail = noeud.arg
+        elif isinstance(noeud, ast.Attribute):
+            detail = noeud.attr
+        elif isinstance(noeud, (ast.FunctionDef, ast.ClassDef)):
+            detail = noeud.name
+        elif isinstance(noeud, ast.keyword):
+            detail = str(noeud.arg)
+        cle.append((type_, detail))
+    return cle
+
+
+def vers_source(module: Module) -> str:
+    """Rend le module en source Python (la restitution du bloc code)."""
+    return ast.unparse(module.arbre)
+
+
+def miroir() -> dict:
+    """Le miroir entrée/sortie : rendre, relire, retrouver le MÊME AST.
+
+    Chaque fichier du corpus est rendu par `ast.unparse`, relu par le parseur, et la forme
+    des deux AST doit être identique (sans les numéros de ligne, que la restitution change).
+    Le contrôle négatif aplatit un bloc indenté sur une ligne : la syntaxe casse, donc
+    l'AST est perdu — la restitution n'est pas triviale.
+    """
+    justes = 0
+    details = []
+    for fichier in CORPUS:
+        module = analyse(fichier.read_text(encoding="utf-8", errors="replace"),
+                         fichier.name)
+        relu = analyse(vers_source(module), fichier.name + " (relu)")
+        correct = cle_ast(module.arbre) == cle_ast(relu.arbre)
+        justes += correct
+        if not correct:
+            details.append(fichier.name)
+    plat = "def f():\n    a = 1\n    b = 2"
+    perdu = False
+    try:
+        analyse("if x: a = 1 b = 2")
+    except Refus:
+        perdu = True
+    return {"justes": justes, "total": len(CORPUS), "negatif_perd": perdu,
+            "faux": details[:5], "exemple": vers_source(analyse(plat))[:60]}
+
+
 # ------------------------------------------------------------------ les mesures
 
 CORPUS = sorted((RACINE / "tools").glob("*.py"))
@@ -830,9 +887,18 @@ def autotest() -> int:
     if not (2.5 <= cout["ratio"] <= 6.0):
         problemes.append(f"coût non linéaire : ×{cout['ratio']:.2f} pour ×4")
 
+    restitution = miroir()
+    print(f"7. miroir      : {restitution['justes']}/{restitution['total']} fichiers "
+          f"rendus puis relus à l'identique ; contrôle aplati "
+          f"{'perdu' if restitution['negatif_perd'] else 'NON PERDU'}")
+    if restitution["justes"] != restitution["total"]:
+        problemes.append(f"miroir : {restitution['faux']}")
+    if not restitution["negatif_perd"]:
+        problemes.append("le contrôle aplati ne perd rien : le miroir ne prouve rien")
+
     source = (FIXTURES / "portee.py").read_text(encoding="utf-8")
     empreintes = [empreinte(analyse(source)) for _ in range(2)]
-    print(f"7. rejeu       : {'identique' if empreintes[0] == empreintes[1] else 'DIFFÉRENT'}")
+    print(f"8. rejeu       : {'identique' if empreintes[0] == empreintes[1] else 'DIFFÉRENT'}")
     if empreintes[0] != empreintes[1]:
         problemes.append("le rejeu ne redonne pas la même empreinte")
 
@@ -861,6 +927,7 @@ def mesure(chemin: pathlib.Path) -> int:
         "controles": controle_texte_seul(),
         "refus": _refus(),
         "cout": {"ratio_x4": round(_cout()["ratio"], 2)},
+        "miroir": miroir(),
         "rejeu": {"identique": empreinte(analyse((FIXTURES / "portee.py")
                                                  .read_text(encoding="utf-8")))
                   == empreinte(analyse((FIXTURES / "portee.py")
@@ -881,9 +948,15 @@ def main() -> int:
     ap.add_argument("--json", type=pathlib.Path)
     ap.add_argument("--execute", type=str)
     ap.add_argument("--autotest", action="store_true")
+    ap.add_argument("--miroir", action="store_true")
     args = ap.parse_args()
     if args.porte or args.autotest:
         return autotest()
+    if args.miroir:
+        resultat = miroir()
+        print(json.dumps(resultat, ensure_ascii=False, indent=1))
+        return 0 if (resultat["justes"] == resultat["total"]
+                     and resultat["negatif_perd"]) else 1
     if args.mesure:
         return mesure(args.mesure)
     if args.execute:

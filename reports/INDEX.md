@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **286 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **287 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -146,6 +146,7 @@
 | [rapport-matvec-f32-parallele.md](rapport-matvec-f32-parallele.md) | Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit |
 | [rapport-memoire-travail-n5.md](rapport-memoire-travail-n5.md) | N5 — la mémoire de travail : le réseau ne l'APPREND pas, la structure la donne (+0,96 contre −2,77) |
 | [rapport-minimal.md](rapport-minimal.md) | Drave — test de principe : modèle minimal en ternaire / multi-bits |
+| [rapport-miroir-blocs.md](rapport-miroir-blocs.md) | Le miroir des trois blocs : 34/34 tableaux, 296/296 modules, 42/42 formules |
 | [rapport-mla-experts.md](rapport-mla-experts.md) | Rapport — MLA à rang faible et formats sans noyau : GLM-5.3 et Kimi deviennent calculables |
 | [rapport-mode-listes.md](rapport-mode-listes.md) | Drave — « mode listes » : exécuter sans GPU |
 | [rapport-mode4-lot-listes.md](rapport-mode4-lot-listes.md) | Mode 4 — le lot en listes : ÷2,3 sur les octets, et ce qu'il coûte |

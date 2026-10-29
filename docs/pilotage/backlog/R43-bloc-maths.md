@@ -29,6 +29,8 @@ dépendance est mesurée, pas cachée). Fiche :
 [`bloc-maths.md`](../../implantation/bloc-maths.md) ; porte `tools/porte-bloc-maths.sh` ; JSON :
 [`r43-bloc-maths.json`](../../../reports/r43-bloc-maths.json).
 
+**Miroir entrée/sortie** : 42/42 formules et dérivées rendus puis relus à l'identique, contrôle négatif perdu (42 exacts).
+
 ## Ce qui est mesuré
 
 - taux de parse exact

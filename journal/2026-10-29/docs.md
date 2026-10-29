@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (20)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,6 +22,12 @@
 | 14:46 | `6e995187` | MÉTHODE — IDENTITÉ DSH, PAIRS ET DISCIPLINE GIT ; 71d57f53 INSCRIT | `AGENTS.md`, `continuite.md`, `en-cours.md` (+2) |
 | 14:53 | `4767036b` | JOURNAL — R4.1 ENTRE AU RÉCIT DU JOUR (55 COMMITS) | `README.md`, `mesures.md` |
 | 15:22 | `65ab24cf` | ÉTAT — R4.1 MESURÉE : 996 CELLULES, 802 EXACTES ; T0 À 3 993 | `index.md`, `en-cours.md`, `roadmap.md` (+3) |
+| 15:23 | `52075592` | JOURNAL — R4.1 ET L'ÉTAT DANS LE RÉCIT DU JOUR (59 COMMITS) | `README.md`, `docs.md` |
+| 15:28 | `1ded6b7f` | SCHÉMA — R4.1 MESURÉE ET LES SESSIONS À JOUR : R0.3 MESURÉ, R0.4/R0.5 OUVERTS | `chantiers-etats.svg`, `README.md`, `portes.md` |
+| 15:30 | `6480f6d8` | ÉTAT — COMPTEURS 285 / 352 (A8.0 COMMITTÉ) | `en-cours.md`, `README.md`, `docs.md` |
+| 15:54 | `a7d0ccdc` | ÉTAT — R4.2 MESURÉE : 294 FICHIERS, 24/24 EXTRAITS ; T0 À 3 937 | `en-cours.md`, `README.md`, `distribue.md` |
+| 16:02 | `727d13e0` | ÉTAT — LE FAIT ET SA LIGNE : LE COMMIT REFUSE UN RÉSULTAT SANS ÉTAT | `AGENTS.md`, `continuite.md`, `en-cours.md` (+12) |
+| 16:06 | `543b5a02` | CONTINUITÉ — LA SESSION QUI CLÔT, PAS UN « PRINCIPAL » | `continuite.md` |
 
 ## Mesures et rapports touchés
 

@@ -80,6 +80,15 @@ valeur exacte ; la portée de `x` (module/fonction) et `y = 2` ; `sous_total` si
 faux positif ; le **texte seul qui échoue 3/3** ; **7 refus nommés** ; le coût linéaire ; le
 rejeu identique. Une seule condition manquante rend la porte rouge.
 
+## 5 bis. La restitution (miroir)
+
+Le module se **rend** par `ast.unparse`, puis se **relit** : 296/296 modules retrouvent la
+même forme d'AST (type de chaque nœud, constantes, noms, arguments — les numéros de ligne
+changent, c'est attendu). Le contrôle négatif est la **source aplatie** : `if x: a = 1 b = 2`
+ne se relit pas.
+
+Porte : [`porte-miroir-blocs.sh`](../../tools/porte-miroir-blocs.sh).
+
 ## 6. Ce que le bloc ne fait pas
 
 - **pas d'autre langage** : Python seulement ; le reste du dépôt (Rust, JS, C) n'est pas lu ;

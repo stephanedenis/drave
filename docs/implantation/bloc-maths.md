@@ -72,6 +72,15 @@ L'AST est traduit en **sympy** : `\pi` → `sp.pi`, les rationnels → `sp.Ratio
 → `sp.sin`… L'oracle valide le **calcul** et la **traduction**, pas la lecture du LaTeX (il
 reçoit l'AST). Les dérivées sont comparées **numériquement en 5 points**, pas symboliquement.
 
+## 6 bis. La restitution (miroir)
+
+La formule se **rend** en LaTeX parenthésé, puis se **relit** : 32 formules et 10 dérivées
+retrouvent le même AST (les constantes sont repliées à la construction, donc `\frac{1}{2}` et
+`1/2` sont le même nœud). Le contrôle négatif est la formule **sans parenthèses** : la
+précédence change, l'AST change.
+
+Porte : [`porte-miroir-blocs.sh`](../../tools/porte-miroir-blocs.sh).
+
 ## 7. Ce que le bloc ne fait pas
 
 - **pas de LaTeX complet** : intégrales, sommes, matrices, dérivées partielles, `\left`/`\right`

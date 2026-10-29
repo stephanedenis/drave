@@ -65,9 +65,16 @@
   "colonne_texte_non_sommable": "NonNumerique"
  },
  "cout": {
-  "secondes_corpus": 0.0249,
-  "millisecondes_par_1000_cellules": 25.0,
-  "ratio_x4": 3.8
+  "secondes_corpus": 0.0499,
+  "millisecondes_par_1000_cellules": 50.1,
+  "ratio_x4": 3.55
+ },
+ "miroir": {
+  "justes": 34,
+  "total": 34,
+  "non_representables": 1,
+  "negatif_perd": true,
+  "faux": []
  },
  "rejeu": {
   "identique": true

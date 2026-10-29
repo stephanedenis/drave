@@ -270,7 +270,7 @@
    },
    {
     "latex": "\\ln{x}",
-    "derivee": "('*', ('^', ('v', 'x'), ('n', Fraction(-1, 1))), ('*', ('n',",
+    "derivee": "('*', ('^', ('v', 'x'), ('n', Fraction(-1, 1))), ('n', Fract",
     "correct": true
    },
    {
@@ -371,7 +371,224 @@
   "variable_absente": "ErreurCalcul: variable absente : x"
  },
  "cout": {
-  "ratio_x4": 4.11
+  "ratio_x4": 4.24
+ },
+ "miroir": {
+  "justes": 42,
+  "total": 42,
+  "negatif_perd": true,
+  "details": [
+   {
+    "nom": "fractions",
+    "rendu": "\\frac{1}{2}",
+    "correct": true
+   },
+   {
+    "nom": "puissance",
+    "rendu": "1024",
+    "correct": true
+   },
+   {
+    "nom": "racine carrée",
+    "rendu": "\\sqrt{144}",
+    "correct": true
+   },
+   {
+    "nom": "Pythagore",
+    "rendu": "25",
+    "correct": true
+   },
+   {
+    "nom": "produit de fractions",
+    "rendu": "\\frac{1}{2}",
+    "correct": true
+   },
+   {
+    "nom": "somme de trois",
+    "rendu": "1",
+    "correct": true
+   },
+   {
+    "nom": "parenthèse cubique",
+    "rendu": "27",
+    "correct": true
+   },
+   {
+    "nom": "exposant négatif",
+    "rendu": "\\frac{1}{8}",
+    "correct": true
+   },
+   {
+    "nom": "réduction",
+    "rendu": "\\frac{5}{2}",
+    "correct": true
+   },
+   {
+    "nom": "décimaux",
+    "rendu": "\\frac{15}{4}",
+    "correct": true
+   },
+   {
+    "nom": "soustraction",
+    "rendu": "\\frac{1}{2}",
+    "correct": true
+   },
+   {
+    "nom": "puissances",
+    "rendu": "12",
+    "correct": true
+   },
+   {
+    "nom": "fraction fois entier",
+    "rendu": "1",
+    "correct": true
+   },
+   {
+    "nom": "facteur commun",
+    "rendu": "20",
+    "correct": true
+   },
+   {
+    "nom": "division de puissance",
+    "rendu": "8",
+    "correct": true
+   },
+   {
+    "nom": "moins unaire",
+    "rendu": "-9",
+    "correct": true
+   },
+   {
+    "nom": "moins entre parenthèses",
+    "rendu": "9",
+    "correct": true
+   },
+   {
+    "nom": "dixièmes",
+    "rendu": "\\frac{3}{10}",
+    "correct": true
+   },
+   {
+    "nom": "racine et carré",
+    "rendu": "(\\sqrt{9} + 4)",
+    "correct": true
+   },
+   {
+    "nom": "soustraction de moitiés",
+    "rendu": "2",
+    "correct": true
+   },
+   {
+    "nom": "pi",
+    "rendu": "\\pi",
+    "correct": true
+   },
+   {
+    "nom": "sinus zéro",
+    "rendu": "\\sin{0}",
+    "correct": true
+   },
+   {
+    "nom": "cosinus zéro",
+    "rendu": "\\cos{0}",
+    "correct": true
+   },
+   {
+    "nom": "logarithme un",
+    "rendu": "\\ln{1}",
+    "correct": true
+   },
+   {
+    "nom": "exponentielle zéro",
+    "rendu": "\\exp{0}",
+    "correct": true
+   },
+   {
+    "nom": "variable fraction",
+    "rendu": "(\\frac{1}{2} \\cdot x)",
+    "correct": true
+   },
+   {
+    "nom": "variable linéaire",
+    "rendu": "((2 \\cdot x) + 3)",
+    "correct": true
+   },
+   {
+    "nom": "variable carrée",
+    "rendu": "(x^{2})",
+    "correct": true
+   },
+   {
+    "nom": "variable divisée",
+    "rendu": "(x \\cdot \\frac{1}{2})",
+    "correct": true
+   },
+   {
+    "nom": "racine et fraction",
+    "rendu": "(\\sqrt{16} + \\frac{1}{2})",
+    "correct": true
+   },
+   {
+    "nom": "irrationnel au carré",
+    "rendu": "(\\sqrt{2} \\cdot \\sqrt{2})",
+    "correct": true
+   },
+   {
+    "nom": "sinus de pi",
+    "rendu": "\\sin{\\pi}",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 0",
+    "rendu": "((2 \\cdot (x^{1})) \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 1",
+    "rendu": "(((0 \\cdot (x^{3})) + (3 \\cdot ((3 \\cdot (x^{2})) \\cdot 1)))",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 2",
+    "rendu": "(\\cos{x} \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 3",
+    "rendu": "(-(\\sin{x}) \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 4",
+    "rendu": "(\\exp{x} \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 5",
+    "rendu": "((x^{-1}) \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 6",
+    "rendu": "(((2 \\cdot \\sqrt{x})^{-1}) \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 7",
+    "rendu": "((0 \\cdot (x^{-1})) + (1 \\cdot ((-1 \\cdot (x^{-2})) \\cdot 1)",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 8",
+    "rendu": "((3 \\cdot (((x^{2}) + 1)^{2})) \\cdot (((2 \\cdot (x^{1})) \\cd",
+    "correct": true
+   },
+   {
+    "nom": "dérivée 9",
+    "rendu": "((((0 \\cdot (x^{2})) + (2 \\cdot ((2 \\cdot (x^{1})) \\cdot 1))",
+    "correct": true
+   }
+  ]
  },
  "rejeu": {
   "identique": true

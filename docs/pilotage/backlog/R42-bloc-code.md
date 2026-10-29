@@ -28,6 +28,8 @@ et nom libre vérifiés (`x` module/fonction, `sous_total` signalé) ; le contr�
 [`bloc-code.md`](../../implantation/bloc-code.md) ; porte `tools/porte-bloc-code.sh` ; JSON :
 [`r42-bloc-code.json`](../../../reports/r42-bloc-code.json).
 
+**Miroir entrée/sortie** : 296/296 modules rendus puis relus à l'identique, contrôle négatif perdu (296 exacts).
+
 ## Ce qui est mesuré
 
 - couverture du parseur (fichiers acceptés)

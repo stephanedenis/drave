@@ -293,8 +293,12 @@ def _grille_markdown(lignes: list[str], offsets: list[int], debut: int,
 
 
 def markdown(chemin: pathlib.Path) -> list[Grille]:
-    """Tous les tableaux Markdown d'un fichier, avec provenance. Les refus sont nommés."""
-    texte = chemin.read_text(encoding="utf-8-sig")
+    """Tous les tableaux Markdown d'un fichier, avec provenance."""
+    return markdown_texte(chemin.read_text(encoding="utf-8-sig"), str(chemin))
+
+
+def markdown_texte(texte: str, nom: str = "<texte>") -> list[Grille]:
+    """Tous les tableaux Markdown d'un TEXTE (le miroir relit sa propre restitution)."""
     lignes = texte.splitlines()
     offsets = _offsets(texte)
     grilles: list[Grille] = []
@@ -304,10 +308,10 @@ def markdown(chemin: pathlib.Path) -> list[Grille]:
             i += 1
             continue
         try:
-            grille, i = _grille_markdown(lignes, offsets, i, str(chemin))
+            grille, i = _grille_markdown(lignes, offsets, i, nom)
             grilles.append(grille)
         except Refus as refus:
-            grilles.append(Grille(source=str(chemin), format_="markdown", entetes=None,
+            grilles.append(Grille(source=nom, format_="markdown", entetes=None,
                                   lignes=[], sans_entete=True, refus=str(refus)))
             while i < len(lignes) and _ligne_tableau(lignes[i]):
                 i += 1
@@ -455,9 +459,13 @@ def html(chemin: pathlib.Path) -> list[Grille]:
 
 def csv_(chemin: pathlib.Path, entetes: bool = True, limite: int | None = None) -> Grille:
     """Un CSV : la première ligne est l'en-tête (déclaré, pas deviné) ; largeur constante."""
-    with chemin.open(newline="", encoding="utf-8-sig") as fichier:
-        lecteur = csv.reader(fichier)
-        rangees = [r for _, r in zip(range(limite or 10 ** 9), lecteur)]
+    return csv_texte(chemin.read_text(encoding="utf-8-sig"), str(chemin), entetes, limite)
+
+
+def csv_texte(texte: str, nom: str = "<texte>", entetes: bool = True,
+              limite: int | None = None) -> Grille:
+    lecteur = csv.reader(io.StringIO(texte))
+    rangees = [r for _, r in zip(range(limite or 10 ** 9), lecteur)]
     if not rangees:
         raise Refus("CSV vide", None)
     largeur = len(rangees[0])
@@ -476,7 +484,7 @@ def csv_(chemin: pathlib.Path, entetes: bool = True, limite: int | None = None) 
     corps = [[Cellule(texte=c.strip(), brut=c, ligne=numero, colonne=col, bloc=numero - 1)
               for col, c in enumerate(rangee)]
              for numero, rangee in enumerate(rangees[1:] if entetes else rangees, start=debut)]
-    return Grille(source=str(chemin), format_="csv", entetes=noms, lignes=corps,
+    return Grille(source=nom, format_="csv", entetes=noms, lignes=corps,
                   sans_entete=not entetes, ligne_debut=1)
 
 
@@ -549,6 +557,85 @@ def jointure(gauche: Grille, colonne_gauche: str,
                           for i, nom in enumerate(droite.entetes or [])})
             resultat.append(ligne)
     return resultat
+
+
+# ------------------------------------------------------------------ la restitution
+
+def _echappe(cellule: str) -> str:
+    return cellule.replace("\\", "\\\\").replace("|", "\\|")
+
+
+def vers_markdown(grille: Grille) -> str:
+    """Rend la grille en tableau Markdown (une barre échappée reste une barre)."""
+    if grille.entetes is None:
+        raise Refus("restitution impossible sans en-tête")
+    if grille.fusions:
+        raise Refus("restitution impossible avec des fusions", None,
+                    "Markdown ne sait pas exprimer rowspan/colspan")
+    entetes = "| " + " | ".join(_echappe(c) for c in grille.entetes) + " |"
+    separateur = "|" + "|".join("---" for _ in grille.entetes) + "|"
+    corps = ["| " + " | ".join(_echappe(c.texte) for c in rangee) + " |"
+             for rangee in grille.lignes]
+    return "\n".join([entetes, separateur] + corps)
+
+
+def vers_csv(grille: Grille) -> str:
+    """Rend la grille en CSV (les en-têtes sont la première ligne)."""
+    if grille.entetes is None:
+        raise Refus("restitution impossible sans en-tête")
+    if grille.fusions:
+        raise Refus("restitution impossible avec des fusions")
+    tampon = io.StringIO()
+    ecrivain = csv.writer(tampon, lineterminator="\n")
+    ecrivain.writerow(grille.entetes)
+    for rangee in grille.lignes:
+        ecrivain.writerow([c.texte for c in rangee])
+    return tampon.getvalue()
+
+
+def _meme_grille(a: Grille, b: Grille) -> bool:
+    if (a.entetes or []) != (b.entetes or []):
+        return False
+    if a.n_lignes != b.n_lignes:
+        return False
+    return all([[c.texte for c in la] == [c.texte for c in lb]
+                for la, lb in zip(a.lignes, b.lignes)])
+
+
+def miroir() -> dict:
+    """Le miroir entrée/sortie : rendre la grille, la relire, retrouver la même grille.
+
+    Les tableaux Markdown, le CSV et le HTML sans fusion sont rendus puis relus. Les
+    fusions ne sont PAS représentables en Markdown/CSV : elles sont comptées à part, et
+    nommées — on ne prétend pas les restituer. Le contrôle négatif rend le texte PLAT
+    (rangées tabulées) : plus de barres, donc plus de tableau — la grille est perdue.
+    """
+    grilles = corpus_grilles()
+    justes = total = 0
+    non_representables = 0
+    details = []
+    for grille in grilles:
+        if grille.refus or grille.entetes is None or grille.fusions:
+            non_representables += 1
+            continue
+        total += 1
+        try:
+            if grille.format == "csv":
+                relue = csv_texte(vers_csv(grille))
+            else:
+                rendu = vers_markdown(grille)
+                relues = markdown_texte(rendu, "restitution")
+                relue = relues[0] if relues else None
+            correct = relue is not None and _meme_grille(grille, relue)
+        except Refus:
+            correct = False
+        justes += correct
+        if not correct:
+            details.append(grille.source)
+    plat = grilles[0].texte_plat() if grilles else ""
+    perdu = len(markdown_texte(plat, "plat")) == 0
+    return {"justes": justes, "total": total, "non_representables": non_representables,
+            "negatif_perd": perdu, "faux": details[:5]}
 
 
 # ------------------------------------------------------------------ le corpus et les mesures
@@ -827,10 +914,20 @@ def autotest() -> int:
     if not (2.5 <= cout["ratio"] <= 6.0):
         problemes.append(f"coût non linéaire : ×{cout['ratio']:.2f} pour ×4")
 
-    # 5. le rejeu : deux lectures du même fichier donnent la même empreinte
+    restitution = miroir()
+    print(f"5. miroir      : {restitution['justes']}/{restitution['total']} tableaux rendus "
+          f"puis relus à l'identique ({restitution['non_representables']} non "
+          f"représentables : fusions/sans en-tête) ; contrôle plat "
+          f"{'perdu' if restitution['negatif_perd'] else 'NON PERDU'}")
+    if restitution["justes"] != restitution["total"]:
+        problemes.append(f"miroir : {restitution['faux']}")
+    if not restitution["negatif_perd"]:
+        problemes.append("le contrôle plat ne perd rien : le miroir ne prouve rien")
+
+    # 6. le rejeu : deux lectures du même fichier donnent la même empreinte
     empreintes = [manifeste(g)["sha256"] for g in markdown(RACINE / CORPUS[0])]
     empreintes2 = [manifeste(g)["sha256"] for g in markdown(RACINE / CORPUS[0])]
-    print(f"5. rejeu       : {'identique' if empreintes == empreintes2 else 'DIFFÉRENT'} "
+    print(f"6. rejeu       : {'identique' if empreintes == empreintes2 else 'DIFFÉRENT'} "
           f"({len(empreintes)} tableaux)")
     if empreintes != empreintes2:
         problemes.append("le rejeu ne redonne pas la même empreinte")
@@ -910,6 +1007,7 @@ def mesure(chemin: pathlib.Path) -> int:
         "cout": {"secondes_corpus": round(duree, 4),
                  "millisecondes_par_1000_cellules": round(duree / max(cellules, 1) * 1e6, 1),
                  "ratio_x4": round(_linearite()["ratio"], 2)},
+        "miroir": miroir(),
         "rejeu": {"identique": [manifeste(g)["sha256"] for g in markdown(
             RACINE / CORPUS[0])] == [manifeste(g)["sha256"] for g in markdown(
                 RACINE / CORPUS[0])]},
@@ -935,9 +1033,15 @@ def main() -> int:
     ap.add_argument("--mesure", type=pathlib.Path, help="écrit le JSON de la fiche")
     ap.add_argument("--json", type=pathlib.Path, help="les grilles d'un fichier")
     ap.add_argument("--autotest", action="store_true", help="alias de --porte")
+    ap.add_argument("--miroir", action="store_true")
     args = ap.parse_args()
     if args.porte or args.autotest:
         return autotest()
+    if args.miroir:
+        resultat = miroir()
+        print(json.dumps(resultat, ensure_ascii=False, indent=1))
+        return 0 if (resultat["justes"] == resultat["total"]
+                     and resultat["negatif_perd"]) else 1
     if args.mesure:
         return mesure(args.mesure)
     if args.json:

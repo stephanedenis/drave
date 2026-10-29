@@ -8,13 +8,13 @@
   "machine": "CPU, aucun modèle chargé"
  },
  "parseur": {
-  "fichiers": 294,
-  "acceptes": 294,
+  "fichiers": 296,
+  "acceptes": 296,
   "refuses": [],
-  "noeuds": 453038,
-  "fonctions": 1722,
-  "classes": 73,
-  "secondes": 3.273
+  "noeuds": 462429,
+  "fonctions": 1786,
+  "classes": 76,
+  "secondes": 3.99
  },
  "execution": {
   "justes": 24,
@@ -234,7 +234,14 @@
   "appel_interdit": "ErreurExecution: nom inconnu : open (ligne 1)"
  },
  "cout": {
-  "ratio_x4": 4.52
+  "ratio_x4": 4.24
+ },
+ "miroir": {
+  "justes": 296,
+  "total": 296,
+  "negatif_perd": true,
+  "faux": [],
+  "exemple": "def f():\n    a = 1\n    b = 2"
  },
  "rejeu": {
   "identique": true
