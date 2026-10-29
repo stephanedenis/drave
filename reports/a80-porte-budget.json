@@ -1,0 +1,20 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-budget.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "reference": 111.9225,
+ "tolerance": 0.0005,
+ "mesures": {
+  "sans_budget": 111.9225,
+  "budget_genereux": 111.9225,
+  "latence_genereuse": 111.9225
+ },
+ "controle": "décalage de 10 % de la référence refusé par la même expression",
+ "gate": "exit 0 ; 6 sections vertes ; PPL épinglée",
+ "limites": [
+  "un seul modèle",
+  "topologie à deux régions",
+  "les budgets insuffisants ne rendent aucune PPL"
+ ]
+}

@@ -52,6 +52,14 @@ PPL=$(printf '%s\n' "$A" | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep 
 OCT=$(printf '%s\n' "$A" | grep -oE "[0-9]+ octets par flux" | head -1 | grep -oE "^[0-9]+")
 echo "  perplexité $PPL · $OCT octets par flux · code $CA"
 [ -n "$PPL" ] || { echo "  ❌ aucune perplexité"; exit 1; }
+# A8.0 — la PPL du découpage sans budget est épinglée (5e-4).
+python3 - "$PPL" <<'PPLBUD' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 111.9225
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL budget : {val} (attendu {attendu})")
+print(f"  ✅ PPL épinglée : {val}")
+PPLBUD
 
 echo "=== 2. budget GÉNÉREUX : le résultat ne doit pas changer ==="
 topo $((OCT + 500))
