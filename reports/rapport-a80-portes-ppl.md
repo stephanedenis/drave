@@ -9,11 +9,12 @@
 > main ; données [`a80-portes-ppl.json`](a80-portes-ppl.json). **Ce n'est pas une mesure de PPL**,
 > c'est l'audit de ce que les portes vérifient.
 
-> **Mise à jour du 29/10** : `porte-flux`, `porte-pont` et `porte-topologie` sont désormais
-> **épinglées** (3/33) — voir [`rapport-a80-porte-flux.md`](rapport-a80-porte-flux.md),
-> [`rapport-a80-porte-pont.md`](rapport-a80-porte-pont.md) et
-> [`rapport-a80-porte-topologie.md`](rapport-a80-porte-topologie.md). L'audit ci-dessous reste la
-> photographie du point de départ (0/33).
+> **Mise à jour du 29/10** : `porte-flux`, `porte-pont`, `porte-topologie` et `porte-coupe` sont
+> désormais **épinglées** (4/33) — voir [`rapport-a80-porte-flux.md`](rapport-a80-porte-flux.md),
+> [`rapport-a80-porte-pont.md`](rapport-a80-porte-pont.md),
+> [`rapport-a80-porte-topologie.md`](rapport-a80-porte-topologie.md) et
+> [`rapport-a83-defaut.md`](rapport-a83-defaut.md). L'audit ci-dessous reste la photographie du
+> point de départ (0/33).
 
 ## La question
 
