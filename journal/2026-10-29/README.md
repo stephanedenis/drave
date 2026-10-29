@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**99 commits** · **0 session(s)** · **8 thème(s)**
+**100 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
-| mesures | 39 | [mesures.md](mesures.md) |
+| mesures | 40 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 12 | [portes.md](portes.md) |
@@ -132,6 +132,7 @@ Aucune session indexée pour ce jour ; voir
 | 17:09 | `261bdc42` | B10.2bis — TABLEAU : COLONNE GRAINE VIDE AJOUTÉE |
 | 17:10 | `c9b3da49` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) |
 | 17:31 | `8c3ba915` | B10.2bis + A8.3b — LES PAS NE SUFFISENT PAS (1800 PAS : 10,2–11,4) ; LA TOPOLOGIE ENTRE DANS LE TABLEAU |
+| 17:32 | `981e4bbf` | CORPUS GELÉ — LA DÉRIVE DES BANCS EST CLOSE : 30 DOCUMENTS, MANIFESTE SHA256, 0 PROBLÈME |
 
 ## Le récit de la journée (écrit à la main)
 

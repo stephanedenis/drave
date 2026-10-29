@@ -54,7 +54,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
-| **A2.6** | sans fiche | A2 (acquis) | — | — | — |
+| **A2.6** | partiel | A2 (acquis) | la tête coûte +10 % de PPL en 4 bits | — | [A2.6-ordonnanceur.md](A2.6-ordonnanceur.md) |
 | **A3.2** | mesurée | A3 (acquis) | — | A3.3 | [A3.2-granularite.md](A3.2-granularite.md) |
 | **A3.3** | mesurée | A3.2 (dure) | — | — | [A3.3-seuil.md](A3.3-seuil.md) |
 | **A3.4** | bloquée | A3 (acquis) | bloqué : le compte et le runtime Colab | — | [A3.4-colab.md](A3.4-colab.md) |
@@ -79,7 +79,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 |---|---|---|---|---|---|
 | **N0.3b** | prête | N0 (acquis) | — | — | [N0.3b-parite-ppl.md](N0.3b-parite-ppl.md) |
 | **N2** | en cours | N1 (acquis) | — | N5, R11 | [N2-distillation.md](N2-distillation.md) |
-| **N3** | sans fiche | N1 (acquis) | — | — | — |
+| **N3** | partiel | N1 (acquis) | variabilité ±10 %, service ≠ mesure | — | [N3-operations-natives.md](N3-operations-natives.md) |
 | **N4** | partiel | — | N2 (plafond) | N5 | [N4-usage-sft.md](N4-usage-sft.md) |
 | **N5** | sans fiche | N2 (dure), N4 (dure) | — | — | — |
 
@@ -158,11 +158,11 @@ réelle : elle est plus large que l'ordre du jour de la roadmap, et c'est voulu.
 | **B11.10** | prête | `B11` mesuré ; le codec lit 100 % | étendre le codec aux cartes, nommer les ambiguïtés |
 | **B12.10** | partiel | `B12` acquis ; les modules existent | jeu de codes neufs et ablation de M4 |
 | **R13** | spécifiée | aucune arête dure ; `N1` suffit à deux tokenisations | chiffrer octets contre BPE à budget égal |
-| **A2.6** | sans fiche | `A2` mesuré | compléter l'ordonnanceur : experts, tête |
+| **A2.6** | partiel | `A2` mesuré | experts et tête dans la règle `choisir` |
 | **A3.2** | sans fiche | `A3` mesuré | granularité par bloc |
 | **A8.0** | sans fiche | c'est une condition, pas une dépendance | épingler les portes qui mesurent une PPL |
 | **B10.2bis** | sans fiche | le négatif `B10.2` est acquis | décodeur à attention croisée, 20–30 articles, 3 graines |
-| **N3** | sans fiche | `N1` mesuré | porter les briques mesurées en production et en porte |
+| **N3** | partiel | `N1` mesuré | porter sortie précoce et profondeur routée en service |
 
 **Ce qui n'y est pas, et pourquoi** : `A3.4`, `A5.4`, `A6.2`, `B1.5` sont bloqués par une
 ressource externe nommée ; `B10.3` et `R52` attendent `B10.2bis` ; `N5` attend `N2` et `N4` ; tout

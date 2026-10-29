@@ -67,7 +67,7 @@
   meilleur 2/3 — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **Backlog — graphe** : 41 arêtes dures, 4 sans fiche ; `tools/verifie_backlog.py`.
+- **Backlog — graphe** : 42 arêtes, 1 sans fiche ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
   Suite : [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
 
@@ -80,7 +80,7 @@
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **307** / **379** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **105** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **107** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -92,7 +92,7 @@
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 pré-mesure** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13** (PPL BPE) ; **R4.4 bloqué** |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
-| **Backlog — graphe** | **35 fiches ; 42 arêtes dures** | 3 lignes sans fiche | vérifier le graphe (`8156fdcb`) |
+| **Backlog — graphe** | **37 fiches ; 42 arêtes** | 1 sans fiche | vérifier le graphe (`8156fdcb`) |
 
 ![Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives](../schemas/chantiers-etats.svg)
 

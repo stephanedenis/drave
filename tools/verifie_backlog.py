@@ -60,8 +60,6 @@ ACQUIS = {
 # (elles bloquent des fiches) mais elles ne portent ni porte ni contrôle négatif : c'est un
 # trou nommé, pas une ligne du backlog.
 SANS_FICHE = {
-    "A2.6": ("Ordonnanceur : experts et tête", ["A2"], "roadmap § A, ligne A2"),
-    "N3": ("Opérations natives en production", ["N1"], "roadmap § N, ligne N3"),
     "N5": ("Échelle 50–100 M", ["N2", "N4"], "roadmap § N, ligne N5"),
 }
 
