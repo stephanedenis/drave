@@ -28,7 +28,7 @@
 | 07:15 | `00f9d1c8` | N2.34 — 129 + 10 000 PAS : PPL 2,712, NÉGATIF, ARRÊTÉ | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 07:28 | `42f74d5e` | N2.35 — CONTEXTE 130 APRÈS 129 : PPL 2,7149, NÉGATIF | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 11:55 | `19db1632` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE | `en-cours.md`, `README.md`, `distribue.md` (+2) |
-| 12:54 | `0274b67c` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE | `B12.10-pipeline-m1-m4-m8.md`, `N0.3b-parite-ppl.md`, `index.md` (+13) |
+| 12:54 | `e11f096a` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE | `B12.10-pipeline-m1-m4-m8.md`, `N0.3b-parite-ppl.md`, `index.md` (+14) |
 
 ## Chiffres du jour
 

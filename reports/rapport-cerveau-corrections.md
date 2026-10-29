@@ -193,14 +193,39 @@ Le défaut était muet : 0/161 cartes, 0/528 items.
   qu'un résumé (`resume_contexte`) dans `ItemType`. La correction ne peut pas restituer un contexte
   qui a été jeté en amont. La généralisation M4/M8 sur un code tenu à l'écart reste ouverte.
 
-**Verdict B12.10** : la **plomberie** est réparée (le pipeline lit 528/528 au lieu de 0) ; la
-**généralisation** n'est pas mesurée par ce correctif. Le prochain pas est le split par code tenu à
-l'écart, avec M4 retiré.
+### Le split par code tenu à l'écart
+
+**Protocole (2026-10-29).** 29 codes uniques, **3 graines**, **6 codes tenus à l'écart** par graine
+(toutes leurs surfaces) ; pour chaque champ non nul, on le masque et on demande la complétion.
+**M4** = plus proche voisin ; **M8** = prototype `(jeu, action)` ; **pipeline** = `repondre`.
+
+| mesure | stocké (M4) | tenu (M4) | tenu (M8) | tenu (pipeline) | tenu sans M4 |
+|---|---:|---:|---:|---:|---:|
+| **champ non nul** | **0,809** | **0,153** | **0,436** | **0,436** | **0,436** |
+| **code exact** | **0,809** | **0** | **0** | — | — |
+
+- **Variance par graine** (M8, champ) : **0,056 / 0,859 / 0,393** ; M4 : **0,037 / 0,028 / 0,393**.
+  Six codes par graine, c'est peu : la moyenne **0,436** n'est pas un taux stable, c'est une
+  enveloppe.
+- Le chemin `repondre` est **`prototype` 321/321, 214/214 et 71/71** sur les cues partiels :
+  **M4 n'est jamais appelé**. `completion` n'est utilisé que si `exact` est vrai, ce qui n'arrive
+  pas quand un champ est masqué.
+- **M4 retiré ne change rien** (0,436) : la porte « M4 retiré ⇒ le score chute » **n'est pas
+  franchie**, non parce que M4 est inutile, mais parce qu'il n'est **pas branché**.
+- La tautologie est confirmée : **0 code exact** sur les codes neufs. Le **96,33 %** publié est
+  mesuré sur des codes **stockés** avec un autre protocole (masque `vers`, 80 items) ; notre
+  mesure stockée, tous champs masqués, donne **0,809**.
+
+**Verdict B12.10 (2026-10-29)** : la **plomberie du contexte** est réparée (0/528 → 528/528) ;
+le **split par code tenu à l'écart** donne **0 exact** et **0,436** de champ, avec une variance
+0,056–0,859. La porte « M4 retiré ⇒ chute » n'est pas franchie : il faut **brancher
+`Episodique.completion`** dans `Pipeline.repondre` pour les cues partiels (ou changer la porte),
+puis re-mesurer. La **généralisation** reste ouverte.
 
 ## 12. Fichiers
 
 - Mesures corrigées : [`cerveau-mesures-corrigees.json`](cerveau-mesures-corrigees.json) ;
   sous-agents : `/tmp/a1-m5-m6.json`, `/tmp/a2-m7-m8-m9.json`, `/tmp/a3-m2.json`, `/tmp/a4-m3-m4.json`.
 - Code : `tools/cerveau/` ; B12.10 : `tools/semantique/typed_corpus.py`, `tools/cerveau/pipeline.py`,
-  `tools/cerveau/hub.py`, tests `test_pipeline.py` et `test_bus.py`.
+  `tools/cerveau/hub.py`, `tools/cerveau/b1210_holdout.py`, tests `test_pipeline.py` et `test_bus.py`.
 - Ancienne fiche : [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md).
