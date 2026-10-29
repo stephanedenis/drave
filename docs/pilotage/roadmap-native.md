@@ -103,6 +103,7 @@ l'entraîneur.
 | N4.1 | **Génération** | ✅ **technique** — greedy 160 octets : cohérent 12 octets, puis dérive ; pas un assistant |
 | N4.2 | **Service local** | ✅ **technique** — HTTP `/sante` + `/generer`, 69 octets, CPU, greedy ; pas d'auth |
 | N4.3 | **Service Rust + cache** | ✅ **611 ms**, 53 octets, texte identique à Python ; mono-thread |
+| N4.4 | **Service durci** | ⚠️ **partiel** — jeton **401/200**, corps 64 Ko, n ≤ 256 ; **aucun alignement SFT** |
 | N4.3 | Serveur OpenAI-compatible + streaming | un client standard se connecte |
 | N4.4 | Sûreté et refus | refus explicite, pas de fuite |
 | N4.5 | Évaluation externe | MMLU minimal, chrF, latence |

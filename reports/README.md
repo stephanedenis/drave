@@ -16,6 +16,7 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
+| [`rapport-native-service-auth.md`](rapport-native-service-auth.md) | **N4.4** — service durci : **401/200**, corps 64 Ko, n ≤ 256 ; pas de SFT |
 | [`rapport-native-service-rust.md`](rapport-native-service-rust.md) | **N4.3** — service Rust natif avec cache : **611 ms**, 53 octets |
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |
 | [`rapport-native-21m-20k.md`](rapport-native-21m-20k.md) | **N2.9** — 21,63 M, 20 000 pas : PPL **3,381**, pire que 11,47 M (**3,123**) |

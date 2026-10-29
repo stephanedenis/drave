@@ -26,7 +26,7 @@
 - **N0.11 — test Rust** : fixture **36 Ko**, **7 754** paramètres, forward et génération testés dans le crate.
 - **N0.12 — PPL native** : **4,6585**, identique à Python sur 59 octets.
 - **N0.13 — PPL native de corpus** : **18,6394** sur **1 076 octets**, Python **18,6395**.
-- **N4 — usage** : génération greedy (cohérente 12 octets puis dérive), service Python (69 octets) et **service Rust avec cache** (53 octets, **611 ms**) ; **pas un assistant**.
+- **N4 — usage** : génération greedy, service Python (69 octets), **service Rust cache** (53 octets, 611 ms), **jeton 401/200** ; **pas d'alignement SFT**, pas un assistant.
 
 ## Les chiffres de l'état
 
@@ -36,7 +36,7 @@
 |---|---|---|
 | portes | **49** (46 vertes, 3 rouges) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **244** / **309** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **245** / **310** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

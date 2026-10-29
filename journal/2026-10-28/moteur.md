@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 15:52 | `56fedc25` | N0.10 — CACHE KV : 19,25× PLUS RAPIDE, 592,6 MS CONTRE 11 406,9 MS | `en-cours.md`, `roadmap-native.md`, `main.rs` (+6) |
 | 16:29 | `d660fca3` | N0.12 — PPL NATIVE DE BOUT EN BOUT : 4,6585, IDENTIQUE À PYTHON | `en-cours.md`, `roadmap-native.md`, `main.rs` (+6) |
 | 16:31 | `723f37f3` | N4.3 — SERVICE RUST NATIF AVEC CACHE KV : 611 MS, 53 OCTETS | `en-cours.md`, `roadmap-native.md`, `main.rs` (+7) |
+| 20:03 | `f44eff68` | N0.13 — PPL NATIVE SUR 1 076 OCTETS : 18,6394, PYTHON 18,6395 | `en-cours.md`, `roadmap-native.md`, `main.rs` (+6) |
 
 ## Chiffres du jour
 
-`4,6585` · `0,0001`
+`18,6394` · `18,6395` · `4,6585` · `0,0001`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -32,6 +33,7 @@
 - [reports/rapport-native-cache-gain.md](../../reports/rapport-native-cache-gain.md)
 - [reports/rapport-native-cache.md](../../reports/rapport-native-cache.md)
 - [reports/rapport-native-forward.md](../../reports/rapport-native-forward.md)
+- [reports/rapport-native-ppl-corpus.md](../../reports/rapport-native-ppl-corpus.md)
 - [reports/rapport-native-ppl.md](../../reports/rapport-native-ppl.md)
 - [reports/rapport-native-service-rust.md](../../reports/rapport-native-service-rust.md)
 

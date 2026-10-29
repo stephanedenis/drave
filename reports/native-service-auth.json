@@ -1,0 +1,3 @@
+{"serveur": "127.0.0.1:8767", "modele": "/tmp/n0-native.drvm",
+ "auth": "DRAVE_TOKEN, Authorization: Bearer", "sans_jeton": 401, "avec_jeton": 200,
+ "max_body_octets": 65536, "max_n": 256, "alignement_sft": false}

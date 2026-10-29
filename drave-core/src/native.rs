@@ -341,14 +341,18 @@ pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
     eprintln!("[drvm-serve] http://127.0.0.1:{port} · 11 M natif, cache par requête");
     for flux in l.incoming() {
         let mut s = match flux { Ok(s) => s, Err(_) => continue };
-        let mut buf = vec![0u8; 1 << 20];
+        let mut buf = vec![0u8; 64 * 1024]; // 64 Ko max par requête
         let k = match s.read(&mut buf) { Ok(k) => k, Err(_) => continue };
         let req = String::from_utf8_lossy(&buf[..k]);
         let ligne = req.lines().next().unwrap_or("");
-        let (code, corps) = if ligne.starts_with("GET /sante") {
+        let auth_ok = std::env::var("DRAVE_TOKEN").ok().map(|t| req.contains(&format!("Authorization: Bearer {t}")))
+            .unwrap_or(true);
+        let (code, corps) = if !auth_ok {
+            (401, "{\"erreur\":\"jeton requis\"}".to_string())
+        } else if ligne.starts_with("GET /sante") {
             (200, format!("{{\"ok\":true,\"parametres\":{}}}", n.nb_parametres()))
         } else if ligne.starts_with("POST /generer") {
-            let n_max: usize = ligne.split("n=").nth(1).and_then(|x| x.split(|c: char| !c.is_ascii_digit()).next()).and_then(|x| x.parse().ok()).unwrap_or(32);
+            let n_max: usize = ligne.split("n=").nth(1).and_then(|x| x.split(|c: char| !c.is_ascii_digit()).next()).and_then(|x| x.parse().ok()).unwrap_or(32).min(256);
             let corps = req.split("\r\n\r\n").nth(1).unwrap_or("");
             let t = std::time::Instant::now();
             let b = n.generer(corps.as_bytes(), n_max);
