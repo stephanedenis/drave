@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 16:22 | `295124d8` | A8.0 — PORTE-COUPE ÉPINGLÉE : PPL 113,0068, COÛTS +0,52…+17,09 % | `README.md`, `modele.md`, `THEMES.md` (+1) |
 | 16:23 | `95f5a7e0` | A8.0 — AUDIT PPL : 4 PORTES SUR 33 ÉPINGLÉES | `en-cours.md`, `README.md`, `portes.md` (+2) |
 | 16:53 | `0e8f7a20` | A8.3a — PORTE-PONT : RÉGIME 1 % ÉPINGLÉ (111,8003 / 115,6406, +5,88/+25,75) | `en-cours.md`, `README.md`, `mesures.md` (+3) |
+| 17:02 | `d8df29e0` | A8.3a — PORTE-COUPE : RÉGIME 1 % ÉPINGLÉ (111,8003 ; VARIANCE 2,4 %) | `en-cours.md`, `README.md`, `portes.md` (+4) |
 
 ## Chiffres du jour
 
-`1 %` · `111,8003` · `115,6406` · `+17,09 %` · `113,0068` · `−5,9 %` · `+19,5 %` · `+2,81 %` · `+25,35 %` · `111,9225`
+`1 %` · `2,4 %` · `111,8003` · `115,6406` · `+17,09 %` · `113,0068` · `−5,9 %` · `+19,5 %` · `+2,81 %` · `+25,35 %` · `111,9225`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -31,6 +32,7 @@
 - [reports/rapport-a80-porte-pont.md](../../reports/rapport-a80-porte-pont.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 - [reports/rapport-a83-defaut.md](../../reports/rapport-a83-defaut.md)
+- [reports/rapport-a83a-coupe.md](../../reports/rapport-a83a-coupe.md)
 - [reports/rapport-a83a-pont.md](../../reports/rapport-a83a-pont.md)
 
 <!-- notes -->

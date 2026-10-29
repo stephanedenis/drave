@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 16 h 25 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-29, 17 h 30 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -29,19 +29,18 @@
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
 - **Prochaine action** : R11 (bloqué par N2) sinon consolidation ; R06 à réécrire (modalité).
-- **À noter** : backlog rouge (A8.3/R13 hors vocabulaire) ; `continuite.md` dérivé, banc à 83 questions.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
-### Session `c3d0f0bd` — R4.1–R4.3 les blocs structurels
+### Session `c3d0f0bd` — R4, B10.2bis, A8.3b
 
 - **Id** : `c3d0f0bd-e344-4600-a023-0ed50d25b48b`.
-- **Rôle** : **R4.1**, **R4.2**, **R4.3** mesurées (`7fb1c8a6`, `4ccf641f`, ce cycle).
-- **Ce qu'elle fait** : grille (R4.1) ; AST et interpréteur en sable (R4.2) ; LaTeX et CAS exact (R4.3).
+- **Rôle** : **R4.1–R4.3**, **B10.2bis** et **A8.3b** mesurées (`7fb1c8a6`, `4ccf641f`, ce cycle).
+- **Ce qu'elle fait** : blocs R4.1–R4.3 et leur miroir ; décodeur B10.2bis (3 bras × 3 graines) ; régimes de KV A8.3b.
 - **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `71d57f53` A8.0/B11.10.
 - **Fichiers réservés** : `tools/bloc_*.py`, `tools/porte-bloc-*.sh`, `tools/tests/tableaux/`,
   `tools/tests/code/`, `tools/tests/maths/`, `reports/r4*`, `docs/implantation/bloc-*.md`.
-- **Prochaine action** : **R4.4 bloqué** (aucun OCR) ; la ligne lecteur reprend à **R0.4**.
+- **Prochaine action** : **B10.2bis** suite (capacité/corpus) ; **A8.3b** (mode de lot) ; **R4.4 bloqué**.
 - **Bloquants** : aucun.
 - **Journal** : [mesures du jour](../../journal/2026-10-29/mesures.md).
 
@@ -58,14 +57,14 @@
 ## Ce qui est en cours
 
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; R0.4 **négatif**, R0.5 **signal** (AUC 0,785) ; suite **R0.4**.
-- **R4.1–R4.3 — les blocs structurels** : **mesurées entrée+sortie** : 996 cellules,
-  802 exactes, texte plat **0/3** ; 294 fichiers, 24/24 extraits, texte seul **0/3** ; 32 formules,
-  10/10 dérivées, surface **0/3** ; **miroir 34/34, 296/296, 42/42**) ; fiches
+- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **A8.0 — 6 portes** : flux **61,9920/60,8135** · pont **113,0068/111,9225** · budget
-  **111,9225** ; **A8.3 refusé**.
-  [`a83`](../../reports/rapport-a83-defaut.md).
+- **B10.2bis — le décodeur** : **négative** — 3 bras × 3 graines : **11,1/11,2/11,0** contre **38,5** ;
+  l'attention n'aide pas ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
+- **A8.0 — 6 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : trois régimes, mélange
+  meilleur 2/3 — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 41 arêtes dures, 4 sans fiche ; `tools/verifie_backlog.py`.
@@ -80,7 +79,7 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **303** / **375** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **304** / **376** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **104** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
@@ -88,12 +87,12 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 6 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a flux/pont/coupe** ; A8.3b ; A6.2 (bloqué) |
-| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée**, puis B10.3 (bloqué) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 6 portes épinglées** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3b** (mode de lot) ; A6.2 (bloqué) |
+| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée** ; B10.3 attend un **autre levier** |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 pré-mesure** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13** (PPL BPE) ; **R4.4 bloqué** |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
-| **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
+| **Backlog — graphe** | **35 fiches ; 42 arêtes dures** | 3 lignes sans fiche | vérifier le graphe (`8156fdcb`) |
 
 ![Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives](../schemas/chantiers-etats.svg)
 

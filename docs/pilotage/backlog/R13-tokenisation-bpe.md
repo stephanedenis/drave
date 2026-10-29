@@ -1,6 +1,6 @@
 # R13 — Tokenisation : octets ou BPE (décision mesurée)
 
-> **Statut** : pré-mesure · **Priorité** : P2 · **Programme** : R · **Dépend de** : — · **Plafonné par** : N2 (la qualité du corpus)
+> **Statut** : prête · **Priorité** : P2 · **Programme** : R · **Dépend de** : — · **Plafonné par** : N2 (la qualité du corpus)
 > **Ligne de roadmap** : R1.3 · **Fiche de résultat** : [rapport-r13-tokenisation.md](../../../reports/rapport-r13-tokenisation.md)
 > **Résumé** : Décider par la mesure si le natif doit rester en octets ou passer au BPE.
 > **Glossaire** : [BPE](../../theorie/glossaire/entrees/bpe.md) · [tokeniseur](../../theorie/glossaire/entrees/tokeniser-tokenizer.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md).

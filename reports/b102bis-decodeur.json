@@ -1,0 +1,165 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B10.2bis",
+ "dispositif": {
+  "corpus": "data/udhr/articles.jsonl, 30 articles, 10 langues",
+  "decoupage": "24 train / 6 validation (articles 25-30)",
+  "checkpoint": "/tmp/natif-224-6-align-s1 (9,29 M paramètres)",
+  "pas": 600,
+  "graines": [
+   1,
+   2,
+   3
+  ],
+  "lot": 8,
+  "seq": 128,
+  "machine": "GPU, torch 2.11 cu130"
+ },
+ "mesures": [
+  {
+   "bras": "a",
+   "graine": 1,
+   "chrf_reconstruction": 17.0,
+   "chrf_traduction": 11.4,
+   "plancher": 38.5,
+   "pas_meilleur": 400,
+   "rappel": 0.319,
+   "rappel_melange": 0.126,
+   "sonde": 0.267,
+   "alignement": 0.795,
+   "perte": 4.6623,
+   "secondes": 269.8
+  },
+  {
+   "bras": "a",
+   "graine": 2,
+   "chrf_reconstruction": 19.2,
+   "chrf_traduction": 11.2,
+   "plancher": 38.5,
+   "pas_meilleur": 500,
+   "rappel": 0.302,
+   "rappel_melange": 0.163,
+   "sonde": 0.317,
+   "alignement": 0.781,
+   "perte": 4.8247,
+   "secondes": 259.7
+  },
+  {
+   "bras": "a",
+   "graine": 3,
+   "chrf_reconstruction": 16.0,
+   "chrf_traduction": 10.8,
+   "plancher": 38.5,
+   "pas_meilleur": 500,
+   "rappel": 0.326,
+   "rappel_melange": 0.137,
+   "sonde": 0.333,
+   "alignement": 0.79,
+   "perte": 4.9806,
+   "secondes": 266.9
+  },
+  {
+   "bras": "b",
+   "graine": 1,
+   "chrf_reconstruction": 16.6,
+   "chrf_traduction": 11.1,
+   "plancher": 38.5,
+   "pas_meilleur": 600,
+   "rappel": 0.259,
+   "rappel_melange": 0.137,
+   "sonde": 0.2,
+   "alignement": 0.848,
+   "perte": 4.7989,
+   "secondes": 265.1
+  },
+  {
+   "bras": "b",
+   "graine": 2,
+   "chrf_reconstruction": 15.8,
+   "chrf_traduction": 11.3,
+   "plancher": 38.5,
+   "pas_meilleur": 600,
+   "rappel": 0.285,
+   "rappel_melange": 0.133,
+   "sonde": 0.383,
+   "alignement": 0.829,
+   "perte": 4.7484,
+   "secondes": 266.9
+  },
+  {
+   "bras": "b",
+   "graine": 3,
+   "chrf_reconstruction": 16.8,
+   "chrf_traduction": 11.2,
+   "plancher": 38.5,
+   "pas_meilleur": 300,
+   "rappel": 0.331,
+   "rappel_melange": 0.133,
+   "sonde": 0.333,
+   "alignement": 0.826,
+   "perte": 5.661,
+   "secondes": 260.7
+  },
+  {
+   "bras": "c",
+   "graine": 1,
+   "chrf_reconstruction": 16.5,
+   "chrf_traduction": 11.2,
+   "plancher": 38.5,
+   "pas_meilleur": 600,
+   "rappel": 0.33,
+   "rappel_melange": 0.135,
+   "sonde": 0.333,
+   "alignement": 0.798,
+   "perte": 4.5495,
+   "secondes": 269.8
+  },
+  {
+   "bras": "c",
+   "graine": 2,
+   "chrf_reconstruction": 18.2,
+   "chrf_traduction": 10.8,
+   "plancher": 38.5,
+   "pas_meilleur": 400,
+   "rappel": 0.283,
+   "rappel_melange": 0.161,
+   "sonde": 0.433,
+   "alignement": 0.761,
+   "perte": 4.7011,
+   "secondes": 282.3
+  },
+  {
+   "bras": "c",
+   "graine": 3,
+   "chrf_reconstruction": 16.2,
+   "chrf_traduction": 11.0,
+   "plancher": 38.5,
+   "pas_meilleur": 500,
+   "rappel": 0.348,
+   "rappel_melange": 0.135,
+   "sonde": 0.367,
+   "alignement": 0.771,
+   "perte": 4.9656,
+   "secondes": 267.7
+  }
+ ],
+ "moyennes": {
+  "a": {
+   "trad": 11.13,
+   "rec": 17.4,
+   "ecart_trad": 0.25
+  },
+  "b": {
+   "trad": 11.2,
+   "rec": 16.4,
+   "ecart_trad": 0.08
+  },
+  "c": {
+   "trad": 11.0,
+   "rec": 16.97,
+   "ecart_trad": 0.16
+  }
+ },
+ "verdict": "négatif : l'attention croisée et les segments ne décollent pas le décodeur",
+ "plancher": 38.5
+}

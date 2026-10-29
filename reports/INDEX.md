@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **298 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **301 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -24,7 +24,9 @@
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
 | [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-a83-defaut.md](rapport-a83-defaut.md) | A8.3 — le défaut place+perte n'est pas neutre : les portes épinglées bougent de −5,9 % à +19,5 % |
+| [rapport-a83a-coupe.md](rapport-a83a-coupe.md) | A8.3a — `porte-coupe` : le régime 1 % écrase la variance du point de coupe |
 | [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |
+| [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |
 | [rapport-a83b-regimes.md](rapport-a83b-regimes.md) | A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
@@ -32,6 +34,7 @@
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-b102bis-decodeur.md](rapport-b102bis-decodeur.md) | B10.2bis — l'attention croisée ne décolle pas le décodeur : 16,5 / 11,2 contre un plancher de 38,5 |
 | [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |

@@ -27,8 +27,8 @@
 
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; A8.3 **refusé** | **A8.3a** (régime 1 %) ; **A6.2** (bloqué) |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 close (négatif)** | B11.10 (cartes) ; B10.3 attend **B10.2bis** |
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé** | **A8.3b** (mode de lot) ; **A6.2** (bloqué) |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 et B10.2bis closes (négatif)** | B11.10 (cartes) ; B10.3 attend un **autre levier** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1–R4.3 mesurées** | **R0.4** — négatifs difficiles ; **R4.4 bloqué** (OCR) |
 
@@ -52,7 +52,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
 6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
 7. **N3, R13** — les autonomes restants, qui remplissent la file « jamais en attente ».
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
-   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend `B10.2bis`.
+   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **autre levier** (capacité/corpus) : B10.2bis est close négative.
 
 ---
 
@@ -70,7 +70,7 @@ ouvertes**, des **bloqués nommés** ou des **opt-in** à passer par défaut. Le
 | **A5** | formats, matériels, énergie : SIMD, PTX, FPGA, KV | ✅ / 🧱 | **A5.4 bloqué** (FPGA) ; le 8 bits tardif est gratuit (+0,03 %) |
 | **A6** | apprendre des flux : capteur hebbien, routage MoE, élagage | ✅ / ⏳ | **A6.2 bloqué** (pas de MoE local) ; A6.1/A6.3 ont rendu leurs négatifs |
 | **A7** | la grappe déportée : relais, grappe intra-couche, format sparse | ✅ | la suite (WAN) est **hors plan** |
-| **A8** | l'ordonnanceur place **et** perte : `choisir_avec_perte` | ✅ **opt-in** ; A8.0 a épinglé 2 portes, A8.3 **échoue** (−5,9 % … +19,5 %) | **A8.3a** : épingler le régime 1 %, expliquer la non-monotonie |
+| **A8** | l'ordonnanceur place **et** perte : `choisir_avec_perte` | ✅ **opt-in** ; 6 portes épinglées, A8.3 **échoue** (−5,9 % … +19,5 %) | **A8.3b** : isoler le mode de lot (le signe du mélange) |
 
 **Ce qui compte pour R** : le moteur sait déjà exécuter un modèle externe (Qwen 0,5 B à 12 288 jetons), tracer,
 rejouer et payer le calcul au prorata de l'activité. C'est le support de R0.
@@ -80,7 +80,7 @@ rejouer et payer le calcul au prorata de l'activité. C'est le support de R0.
 ## Programme B — L'intelligence (les deux étages)
 
 L'étage 1 (langue) est mesuré ; l'étage 2 (pensée) est mesuré dans ses opérations, avec des négatifs nommés.
-La ligne ouverte est **B10.3** (décodeur) ; **B12.10** est **close** (négatif) ; **B1.5** est bloquée par le corpus.
+La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **closes** (négatif) ; **B1.5** est bloquée par le corpus.
 
 | # | chantier | état | prochaine action |
 |---|---|---|---|
@@ -93,7 +93,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** est **close** (négatif)
 | **B7** | les langues : 71 langues, 1 433 couples, 449 surfaces | ✅ | aucune — **449/449**, **11/11** paires invariantes |
 | **B8** | les maîtres : 17 principes, 9 sources, livre, parties | ✅ | aucune — livre **10/10**, go 9×9 **10/10** contre 3/10, cartes **44,7 %** |
 | **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
-| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** par le décodeur ; tenter l'attention croisée |
+| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; l'attention croisée est **testée (négative)** — capacité/corpus ensuite |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ / ⚠️ | B11.10 (cartes et ambiguïtés) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |
@@ -247,7 +247,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 
 - **non bloqué, à faire** : **R0.5** (routeur, `8156fdcb`) ; **R0.4** (négatifs difficiles) ;
   **N2** (la hiérarchie) ; **N4** (consigne courte) ; **N3/R13** (natif/lecteur) ;
-  **N3** (opérations natives) ; **R13** (octets ou BPE) ; **A8.3a** (régime 1 %) ;
+  **N3** (opérations natives) ; **R13** (octets ou BPE) ; **A8.3b** (mode de lot) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
   B10.3 (B10.2bis absent du backlog), **R4.4** (aucun OCR : ni tesseract ni pytesseract) ;

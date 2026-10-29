@@ -1,0 +1,52 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3b",
+ "dispositif": {
+  "modele": "Qwen2.5-0.5B-Q8_0",
+  "portes": [
+   "porte-flux",
+   "porte-pont"
+  ],
+  "regimes": {
+   "f32": "aucun KV int8",
+   "melange_1": "DRAVE_PERTE_MAX=1 (dernières couches int8)",
+   "int8_partout": "DRAVE_KV_BITS=8"
+  }
+ },
+ "mesures": {
+  "f32": {
+   "flux_mode0": 61.992,
+   "flux_mode3": 60.8135,
+   "pont_dense": 113.0068
+  },
+  "melange_1": {
+   "flux_mode0": 58.32,
+   "flux_mode3": 62.7357,
+   "pont_dense": 111.8003
+  },
+  "int8_partout": {
+   "flux_mode0": 66.6195,
+   "flux_mode3": 72.6501,
+   "pont_dense": 120.0813
+  }
+ },
+ "ecarts_pct": {
+  "melange_1": {
+   "flux_mode0": -5.9,
+   "flux_mode3": 3.2,
+   "pont_dense": -1.1
+  },
+  "int8_partout": {
+   "flux_mode0": 7.5,
+   "flux_mode3": 19.5,
+   "pont_dense": 6.3
+  }
+ },
+ "controles": {
+  "budget_10_egal_int8_partout": true,
+  "budget_nul_egal_f32": true,
+  "melange_meilleur_2_sur_3": true
+ },
+ "verdict": "non-monotonie réelle et reproductible ; A8.3 reste opt-in",
+ "prochain": "isoler le mode de lot (même régime, deux lots)"
+}

@@ -61,7 +61,6 @@ ACQUIS = {
 # trou nommé, pas une ligne du backlog.
 SANS_FICHE = {
     "A2.6": ("Ordonnanceur : experts et tête", ["A2"], "roadmap § A, ligne A2"),
-    "A8.3": ("Ordonnanceur : opt-in → défaut", ["A8.0"], "roadmap § A, ligne A8"),
     "N3": ("Opérations natives en production", ["N1"], "roadmap § N, ligne N3"),
     "N5": ("Échelle 50–100 M", ["N2", "N4"], "roadmap § N, ligne N5"),
 }
