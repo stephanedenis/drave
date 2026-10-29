@@ -103,6 +103,12 @@ VERDICT=$(/home/stephane/gpu-env/bin/python - "$REF" "$DEUX" <<'PY'
 import sys
 a, b = float(sys.argv[1]), float(sys.argv[2])
 rel = abs(a - b) / a
+# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la
+# porte ; la valeur est celle du modèle route seed 1 sur cette machine.
+attendu = 9.1748
+if abs(a - attendu) > 1e-3 * attendu:
+    print(f"REF {a} != {attendu}")
+    sys.exit(2)
 print(f"{rel*100:.4f}")
 sys.exit(0 if rel < 0.001 else 1)
 PY

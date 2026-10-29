@@ -1,0 +1,20 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-reparti-moteur.sh",
+ "modele": "moteur_route seed 1 (192 dim, 4 couches, 8 experts top-2)",
+ "reference": 9.1748,
+ "tolerance": 0.001,
+ "mesures": {
+  "entier": 9.1748,
+  "reparti": 9.1748,
+  "ecart_flux": 0.0
+ },
+ "controle": "décalage de 10 % de la référence refusé par la même expression",
+ "gate": "exit 0 ; découpage ne change pas la PPL",
+ "limites": [
+  "modèle régénéré par la porte",
+  "une seule machine",
+  "PPL = 9,1748 sur ce corpus de 255 octets"
+ ]
+}
