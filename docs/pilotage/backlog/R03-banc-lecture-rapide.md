@@ -1,7 +1,7 @@
 # R03 — Banc de lecture rapide (corpus, tâches, contrôles)
 
 > **Statut** : mesurée · **Priorité** : P0 · **Programme** : R · **Dépend de** : R01, R02
-> **Ligne de roadmap** : R0.3 · **Tranches** : [R0.2, 20 questions](../../../reports/rapport-r02-controleur.md) · [lecteur modèle](../../../reports/rapport-r03-lecteur-modele.md) · [banc complet, 249 questions](../../../reports/rapport-r03-banc-complet.md) — le banc « durci » (paraphrases) reste à faire
+> **Ligne de roadmap** : R0.3 · **Tranches** : [R0.2, 20 questions](../../../reports/rapport-r02-controleur.md) · [lecteur modèle](../../../reports/rapport-r03-lecteur-modele.md) · [banc complet, 249 questions](../../../reports/rapport-r03-banc-complet.md) · [banc durci, 19 paraphrases](../../../reports/rapport-r03-banc-durci.md) — mesuré
 > **Résumé** : Mesurer la compréhension par unité de calcul, par type de document, avec des contrôles négatifs.
 > **Glossaire** : [banc de lecture rapide](../../theorie/glossaire/entrees/banc-de-lecture-rapide.md) · [span](../../theorie/glossaire/entrees/span.md) · [closed-book](../../theorie/glossaire/entrees/closed-book.md) · [F1](../../theorie/glossaire/entrees/f1.md) · [chrF](../../theorie/glossaire/entrees/chrf.md) · [contrôle négatif](../../theorie/glossaire/entrees/controle-negatif.md).
 

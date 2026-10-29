@@ -1,0 +1,631 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "critere": "bm25",
+ "questions": 19,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.232,
+    "valeur": 1.0,
+    "cout": 753.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.165,
+    "valeur": 0.0,
+    "cout": 810.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "controlee_0.30": {
+    "recuperation": 0.333,
+    "f1": 0.263,
+    "valeur": 0.333,
+    "cout": 1009.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.667,
+    "f1": 0.344,
+    "valeur": 0.667,
+    "cout": 864.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.203,
+    "valeur": 1.0,
+    "cout": 888.2
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.052,
+    "valeur": 0.0,
+    "cout": 2113.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.169,
+    "valeur": 0.5,
+    "cout": 2600.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.25,
+    "f1": 0.116,
+    "valeur": 0.0,
+    "cout": 5772.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "controlee_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.143,
+    "valeur": 0.75,
+    "cout": 2300.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.097,
+    "valeur": 0.0,
+    "cout": 3032.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
+   "or": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": true,
+    "cout": 1762,
+    "reponse": "Le numéro identifie le neurone dans le contexte donné par le texte. Le neurone 2539"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "Le numéro identifie le neurone quand le texte définit ce qu'est un fait. Dans ce cas, le numéro"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "À partir de quelle taille la sonde cesse-t-elle de progresser ?",
+   "or": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": true,
+    "cout": 777,
+    "reponse": "La sonde cesse-t-elle de progresser à partir de 1,5 B ?"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "À partir de 10000000000000000000"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "À quel taux de remplissage les listes deviennent-elles moins intéressantes que le reste ?",
+   "or": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2308,
+    "valeur": true,
+    "cout": 697,
+    "reponse": "À un taux de remplissage de 22% de densité, les listes deviennent moins"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "À un taux de remplissage de 100%.\n\nLa raison pour cette raison est que lorsque les"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle année figure dans la note de renommage ?",
+   "or": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4,
+    "valeur": true,
+    "cout": 317,
+    "reponse": "La note de renommage fait référence à 2026."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.125,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "La note de renommage de Drave figure dans l'année 2023."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Sur combien de bits le numéro de version est-il codé ?",
+   "or": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 1420,
+    "reponse": "Le numéro de version est codé en 16 bits."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Le numéro de version est codé sur 4 bits."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle largeur a l'indice d'un neurone actif dans la liste ?",
+   "or": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2121,
+    "reponse": "Le largeur d'un neurone actif dans la liste est de 16 octets."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Le largeur d'un neurone actif dans la liste d'activation est de 16 bits."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets fixes compte une entrée de liste en première version ?",
+   "or": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.1333,
+    "valeur": true,
+    "cout": 2536,
+    "reponse": "Une entrée de liste en première version compte 14 octets fixes."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Une entrée de liste en première version compte 4 octets fixes."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle quantité de jetons a été traitée en quatre lots de 64 ?",
+   "or": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2581,
+    "valeur": true,
+    "cout": 3123,
+    "reponse": "En quatre lots de 64 jetons, 256 jetons ont été traités."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1875,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Pour traiter 4 lots de 64 jetons dans un format DRVF (Distributed Random Walk), vous"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel numéro porte la fiche de la mémoire de travail ?",
+   "or": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 3347,
+    "reponse": "Le numéro de la fiche de la mémoire de travail est 2."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 5772,
+    "reponse": "Le numéro de la fiche de la mémoire de travail est 1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel pourcentage de temps l'abandon anticipé fait-il gagner ?",
+   "or": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": true,
+    "cout": 1838,
+    "reponse": "Le pourcentage de temps gagné par l'abandon anticipé est de 24,05%."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 5772,
+    "reponse": "Pour calculer le pourcentage de temps gagné par l'abandon anticipé, nous devons considérer"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le numéro de la phase qui ajoute les trois têtes de lecture ?",
+   "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2,
+    "valeur": true,
+    "cout": 4185,
+    "reponse": "Le numéro de la phase qui ajoute les trois têtes de lecture est R0.4."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 5772,
+    "reponse": "Le numéro de la phase qui ajoute les trois têtes de lecture est 1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel numéro désigne le raisonnement mené sur l'espace latent ?",
+   "or": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 1030,
+    "reponse": "Le raisonnement mené sur l'espace latent est désigné par le numéro 32 dans la roadmap de"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1053,
+    "valeur": false,
+    "cout": 5772,
+    "reponse": "Le raisonnement mené sur l'espace latent est désigné par le numéro 2026-1"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session figure dans la référence du document préparatoire ?",
+   "or": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 965,
+    "reponse": "Le numéro de session dans le document préparatoire est 4-vingtième session."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "Le numéro de session dans la référence du document préparatoire est 80/1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel article de l'accord sur le siège est invoqué pour les représentants ?",
+   "or": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5882,
+    "valeur": true,
+    "cout": 1104,
+    "reponse": "Le texte mentionné indique que les représentants visés à la section 11 de l'Accord de"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.6667,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "Le texte mentionné dans l'article 11 de l'accord entre l'Organisation des Nations Unies et"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois la réunion citée a-t-elle eu lieu ?",
+   "or": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.2,
+    "valeur": false,
+    "cout": 958,
+    "reponse": "La réunion citée a eu lieu le 19 septembre 2025."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2,
+    "valeur": false,
+    "cout": 864,
+    "reponse": "La réunion citée a eu lieu le 19 septembre 2025."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quelle durée maximale est accordée à chaque porte ?",
+   "or": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2308,
+    "valeur": true,
+    "cout": 794,
+    "reponse": "La durée maximale accordée à chaque porte est de 1800 secondes (1 h 30"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "La durée maximale accordée à chaque porte est de 1 h 30."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Combien d'épreuves le dernier passage intégral a-t-il exécutées ?",
+   "or": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": true,
+    "cout": 891,
+    "reponse": "Le dernier passage intégral a exécuté 49 épreuves."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "Le dernier passage intégral a exécuté 46 épreuves."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quel numéro de jour figure dans le nom du dossier des journaux ?",
+   "or": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4286,
+    "valeur": true,
+    "cout": 713,
+    "reponse": "Le numéro de jour dans le nom du dossier des journaux est 1019."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2353,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "Le numéro de jour figure dans le nom du dossier des journaux. Il est écrit en majuscule et commence"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quel code de sortie signale un dépassement de délai ?",
+   "or": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2,
+    "valeur": true,
+    "cout": 614,
+    "reponse": "Le code de sortie qui signale un dépassement de délai est 124."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1905,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "Le code de sortie qui signale un dépassement de délai est \"DELI\" (Delai)."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}

@@ -22,14 +22,14 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1** (51 pages, fidélité 1,000), **R0.2** (récupération
   1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
-- **Ce qu'elle fait** : R0.3 — banc **complet** (30 documents, **249 questions**) sur **GPU** : extractif
-  **1,000** à 30 % ; modèle **0,231** contre troncature **0,042** ; hasard et closed-book **0,000**.
+- **Ce qu'elle fait** : R0.3 — banc complet (249 questions) et **durci** (19 paraphrases) sur GPU :
+  lexical **1,000** sur les mots, **0,30** sur les paraphrases ; modèle **0,717** sur les paraphrases.
 - **Ce que font les autres** : `71d57f53` pair (docs, B12.10) ; `N2-GPU` N2 ; `f0969e87`
   **close dans l'état** (fenêtre ouverte).
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/banc_complet.py`,
   `tools/porte-lecteur.sh`, `tools/tests/documents/bench-*.json`, `reports/r03-*`,
   `docs/implantation/lecteur-controleur.md`, `docs/implantation/banc-lecture.md`, `docs/pilotage/backlog/R03-*.md`.
-- **Prochaine action** : **R0.4** (les trois têtes) ou R0.3 « durci » (paraphrases).
+- **Prochaine action** : **R0.4** — les trois têtes, désormais mesurables (le lexical ne sature plus).
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -73,9 +73,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **51** (49 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **52** (50 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **279** / **345** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **280** / **348** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **93** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

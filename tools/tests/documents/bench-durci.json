@@ -1,0 +1,151 @@
+{
+ "version": 1,
+ "date": "2026-10-29",
+ "note": "Banc durci R0.3 : questions PARAPHRASES, écrites à la main sur des golds du banc complet. Le recouvrement lexical question↔gold est vérifié < 0,5. Mesure la compréhension, pas la couverture.",
+ "documents": [
+  {
+   "chemin": "docs/theorie/vision.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
+     "indice": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
+     "valeur": "2 539",
+     "source": "Quelle valeur le document associe-t-il à « activations » et « couche » ?"
+    },
+    {
+     "question": "À partir de quelle taille la sonde cesse-t-elle de progresser ?",
+     "indice": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
+     "valeur": "1,5",
+     "source": "Quelle valeur le document associe-t-il à « 4833 » et « dernier » ?"
+    },
+    {
+     "question": "À quel taux de remplissage les listes deviennent-elles moins intéressantes que le reste ?",
+     "indice": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
+     "valeur": "22",
+     "source": "Quelle valeur le document associe-t-il à « chemins » et « choisit » ?"
+    },
+    {
+     "question": "Quelle année figure dans la note de renommage ?",
+     "indice": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
+     "valeur": "2026",
+     "source": "Quelle valeur le document associe-t-il à « renommage » et « âges » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Sur combien de bits le numéro de version est-il codé ?",
+     "indice": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
+     "valeur": "16",
+     "source": "Quelle valeur le document associe-t-il à « défaut » et « blocs » ?"
+    },
+    {
+     "question": "Quelle largeur a l'indice d'un neurone actif dans la liste ?",
+     "indice": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
+     "valeur": "32",
+     "source": "Quelle valeur le document associe-t-il à « indice » et « valeur » ?"
+    },
+    {
+     "question": "Combien d'octets fixes compte une entrée de liste en première version ?",
+     "indice": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
+     "valeur": "14",
+     "source": "Quelle valeur le document associe-t-il à « taille » et « actifs » ?"
+    },
+    {
+     "question": "Quelle quantité de jetons a été traitée en quatre lots de 64 ?",
+     "indice": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
+     "valeur": "256",
+     "source": "Quelle valeur le document associe-t-il à « découpée » et « façon » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quel numéro porte la fiche de la mémoire de travail ?",
+     "indice": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
+     "valeur": "21",
+     "source": "Quelle valeur le document associe-t-il à « attend » et « gist » ?"
+    },
+    {
+     "question": "Quel pourcentage de temps l'abandon anticipé fait-il gagner ?",
+     "indice": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+     "valeur": "24,05",
+     "source": "Quelle valeur le document associe-t-il à « contenu » et « gagne » ?"
+    },
+    {
+     "question": "Quel est le numéro de la phase qui ajoute les trois têtes de lecture ?",
+     "indice": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+     "valeur": "0.4",
+     "source": "Quelle valeur le document associe-t-il à « contradiction » et « greffées » ?"
+    },
+    {
+     "question": "Quel numéro désigne le raisonnement mené sur l'espace latent ?",
+     "indice": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
+     "valeur": "10.3",
+     "source": "Quelle valeur le document associe-t-il à « graines » et « raisonnement » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel numéro de session figure dans la référence du document préparatoire ?",
+     "indice": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "source": "Quelle valeur le document associe-t-il à « commission » et « grande » ?"
+    },
+    {
+     "question": "Quel article de l'accord sur le siège est invoqué pour les représentants ?",
+     "indice": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
+     "valeur": "11",
+     "source": "Quelle valeur le document associe-t-il à « entre » et « section » ?"
+    },
+    {
+     "question": "Quel jour du mois la réunion citée a-t-elle eu lieu ?",
+     "indice": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
+     "valeur": "12",
+     "source": "Quelle valeur le document associe-t-il à « 2025 » et « conseillère » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/methode/portes.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle durée maximale est accordée à chaque porte ?",
+     "indice": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
+     "valeur": "1800",
+     "source": "Quelle valeur le document associe-t-il à « arrêter » et « lance » ?"
+    },
+    {
+     "question": "Combien d'épreuves le dernier passage intégral a-t-il exécutées ?",
+     "indice": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
+     "valeur": "49",
+     "source": "Quelle valeur le document associe-t-il à « dernière » et « diagnostic » ?"
+    },
+    {
+     "question": "Quel numéro de jour figure dans le nom du dossier des journaux ?",
+     "indice": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
+     "valeur": "1019",
+     "source": "Quelle valeur le document associe-t-il à « 13h30 » et « affiché » ?"
+    },
+    {
+     "question": "Quel code de sortie signale un dépassement de délai ?",
+     "indice": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
+     "valeur": "124",
+     "source": "Quelle valeur le document associe-t-il à « bloquée » et « délai » ?"
+    }
+   ]
+  }
+ ]
+}

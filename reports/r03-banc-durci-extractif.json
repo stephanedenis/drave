@@ -1,0 +1,1446 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "critere": "bm25",
+ "questions": 19,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 3059.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.25,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 270.2
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 753.0
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 922.2
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 911.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.296,
+    "valeur": 0.25,
+    "cout": 753.0
+   },
+   "sans_but": {
+    "recuperation": 0.5,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 891.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.037,
+    "valeur": 0.0,
+    "cout": 3711.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.0,
+    "f1": 0.118,
+    "valeur": 0.0,
+    "cout": 332.7
+   },
+   "controlee_0.30": {
+    "recuperation": 0.333,
+    "f1": 0.037,
+    "valeur": 0.0,
+    "cout": 1009.0
+   },
+   "controlee_0.50": {
+    "recuperation": 0.333,
+    "f1": 0.037,
+    "valeur": 0.0,
+    "cout": 1462.3
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.333,
+    "f1": 0.052,
+    "valeur": 0.0,
+    "cout": 1112.0
+   },
+   "melangee_0.30": {
+    "recuperation": 0.333,
+    "f1": 0.037,
+    "valeur": 0.0,
+    "cout": 1009.0
+   },
+   "sans_but": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 315.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.286,
+    "valeur": 0.5,
+    "cout": 7082.0
+   },
+   "controlee_0.10": {
+    "recuperation": 1.0,
+    "f1": 0.286,
+    "valeur": 0.5,
+    "cout": 562.2
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.286,
+    "valeur": 0.5,
+    "cout": 888.2
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.286,
+    "valeur": 0.5,
+    "cout": 888.2
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.25,
+    "f1": 0.264,
+    "valeur": 0.25,
+    "cout": 2117.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.286,
+    "valeur": 0.5,
+    "cout": 888.2
+   },
+   "sans_but": {
+    "recuperation": 0.5,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 1730.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.073,
+    "valeur": 0.25,
+    "cout": 19448.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.75,
+    "f1": 0.073,
+    "valeur": 0.25,
+    "cout": 1496.2
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.073,
+    "valeur": 0.25,
+    "cout": 2600.0
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.073,
+    "valeur": 0.25,
+    "cout": 2600.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.25,
+    "f1": 0.098,
+    "valeur": 0.25,
+    "cout": 5826.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.073,
+    "valeur": 0.25,
+    "cout": 2600.0
+   },
+   "sans_but": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 2170.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.11,
+    "valeur": 0.5,
+    "cout": 10441.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.5,
+    "f1": 0.11,
+    "valeur": 0.5,
+    "cout": 948.8
+   },
+   "controlee_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.11,
+    "valeur": 0.5,
+    "cout": 2300.0
+   },
+   "controlee_0.50": {
+    "recuperation": 0.75,
+    "f1": 0.11,
+    "valeur": 0.5,
+    "cout": 3293.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.146,
+    "valeur": 0.25,
+    "cout": 3131.0
+   },
+   "melangee_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.11,
+    "valeur": 0.5,
+    "cout": 2301.5
+   },
+   "sans_but": {
+    "recuperation": 0.75,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 2295.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
+   "or": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 7082,
+    "reponse": "Le nom dit ce que fait ce moteur : il ne lit pas des matrices, il conduit un flux."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 619,
+    "reponse": "Le nom dit ce que fait ce moteur : il ne lit pas des matrices, il conduit un flux."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1762,
+    "reponse": "Le nom dit ce que fait ce moteur : il ne lit pas des matrices, il conduit un flux."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1762,
+    "reponse": "Le nom dit ce que fait ce moteur : il ne lit pas des matrices, il conduit un flux."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2117,
+    "reponse": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la couche 23 a valu 27,8 » —, regroupés en listes val"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1762,
+    "reponse": "Le nom dit ce que fait ce moteur : il ne lit pas des matrices, il conduit un flux."
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "À partir de quelle taille la sonde cesse-t-elle de progresser ?",
+   "or": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": true,
+    "cout": 7082,
+    "reponse": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": true,
+    "cout": 616,
+    "reponse": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": true,
+    "cout": 777,
+    "reponse": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": true,
+    "cout": 777,
+    "reponse": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": true,
+    "cout": 777,
+    "reponse": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la taille sans données ni structure ne paie pas."
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "À quel taux de remplissage les listes deviennent-elles moins intéressantes que le reste ?",
+   "or": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 7082,
+    "reponse": "Ici : ce qui reste vrai quand les chiffres changent."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 697,
+    "reponse": "Ici : ce qui reste vrai quand les chiffres changent."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 697,
+    "reponse": "Ici : ce qui reste vrai quand les chiffres changent."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 697,
+    "reponse": "Ici : ce qui reste vrai quand les chiffres changent."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0571,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la couche 23 a valu 27,8 » —, regroupés en listes val"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 697,
+    "reponse": "Ici : ce qui reste vrai quand les chiffres changent."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle année figure dans la note de renommage ?",
+   "or": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 7082,
+    "reponse": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 317,
+    "reponse": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 317,
+    "reponse": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 317,
+    "reponse": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 317,
+    "reponse": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dans histoire.md."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Sur combien de bits le numéro de version est-il codé ?",
+   "or": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "la fidélité de l'encodage est chiffrée\tDRAVE_FLUX_VERIF=1 : écart relatif 1,5e-5, soit la quantification 16 bits"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 900,
+    "reponse": "la fidélité de l'encodage est chiffrée\tDRAVE_FLUX_VERIF=1 : écart relatif 1,5e-5, soit la quantification 16 bits"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 1420,
+    "reponse": "la fidélité de l'encodage est chiffrée\tDRAVE_FLUX_VERIF=1 : écart relatif 1,5e-5, soit la quantification 16 bits"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 1420,
+    "reponse": "la fidélité de l'encodage est chiffrée\tDRAVE_FLUX_VERIF=1 : écart relatif 1,5e-5, soit la quantification 16 bits"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "version 1\tversion 2"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 1420,
+    "reponse": "la fidélité de l'encodage est chiffrée\tDRAVE_FLUX_VERIF=1 : écart relatif 1,5e-5, soit la quantification 16 bits"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle largeur a l'indice d'un neurone actif dans la liste ?",
+   "or": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 10441,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 914,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2121,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2121,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2121,
+    "reponse": "Trois octets par neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets fixes compte une entrée de liste en première version ?",
+   "or": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 10441,
+    "reponse": "liste     couche       u16          < 1000 : entrée d'attention"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 952,
+    "reponse": "liste     couche       u16          < 1000 : entrée d'attention"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2536,
+    "reponse": "liste     couche       u16          < 1000 : entrée d'attention"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4422,
+    "reponse": "liste     couche       u16          < 1000 : entrée d'attention"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "version 1\tversion 2"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2536,
+    "reponse": "liste     couche       u16          < 1000 : entrée d'attention"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle quantité de jetons a été traitée en quatre lots de 64 ?",
+   "or": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 1029,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 3123,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 5209,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 3131,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 3129,
+    "reponse": "un lot ne change pas le résultat non plus\t256 jetons en 4 lots de 64 : écart 0,00e0 (18,0851 = 18,0851) ; en 1 lot de 25"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel numéro porte la fiche de la mémoire de travail ?",
+   "or": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 19448,
+    "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1680,
+    "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3347,
+    "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3347,
+    "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1935,
+    "valeur": true,
+    "cout": 5826,
+    "reponse": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'entités et de faits, tampon en entrée\t⏳\tréponse don"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3347,
+    "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel pourcentage de temps l'abandon anticipé fait-il gagner ?",
+   "or": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 19448,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1572,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1838,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1838,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5826,
+    "reponse": "Ce n'est pas « ajouter des paramètres » : à 20 000 pas, le student 21,63 M fait 3,381 contre 3,123 pour 11,47 M ; la cap"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1838,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le numéro de la phase qui ajoute les trois têtes de lecture ?",
+   "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.2051,
+    "valeur": true,
+    "cout": 19448,
+    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.2051,
+    "valeur": true,
+    "cout": 1703,
+    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2051,
+    "valeur": true,
+    "cout": 4185,
+    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.2051,
+    "valeur": true,
+    "cout": 4185,
+    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 5826,
+    "reponse": "R0 : un contrôleur classique + un modèle externe atteint-il 90 % de la compréhension à 30 % du coût sur trois types de d"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.2051,
+    "valeur": true,
+    "cout": 4185,
+    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel numéro désigne le raisonnement mené sur l'espace latent ?",
+   "or": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 19448,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1030,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1030,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1030,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 5826,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1030,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session figure dans la référence du document préparatoire ?",
+   "or": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "vingtième session."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": "Participation de l’État de Palestine à la quatre-vingtième session"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 965,
+    "reponse": "vingtième session."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1483,
+    "reponse": "vingtième session."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "vingtième session."
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 965,
+    "reponse": "vingtième session."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel article de l'accord sur le siège est invoqué pour les représentants ?",
+   "or": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "Rappelant ses résolutions concernant la question de Palestine, Rappelant également l’Accord de Siège, 1."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.3529,
+    "valeur": false,
+    "cout": 315,
+    "reponse": "et les États-Unis d’Amérique relatif au Siège de l’Organisation des Nations Unies 1 se"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1104,
+    "reponse": "Rappelant ses résolutions concernant la question de Palestine, Rappelant également l’Accord de Siège, 1."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1525,
+    "reponse": "Rappelant ses résolutions concernant la question de Palestine, Rappelant également l’Accord de Siège, 1."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "Rappelant ses résolutions concernant la question de Palestine, Rappelant également l’Accord de Siège, 1."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1104,
+    "reponse": "Rappelant ses résolutions concernant la question de Palestine, Rappelant également l’Accord de Siège, 1."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois la réunion citée a-t-elle eu lieu ?",
+   "or": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 368,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 958,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1379,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0444,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "quatre-vingtième session, sa Présidente fera distribuer, comme document de l’Assemblée, la déclaration préenregistrée do"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 958,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quelle durée maximale est accordée à chaque porte ?",
+   "or": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 3059,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 257,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 794,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 1471,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 911,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 794,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Combien d'épreuves le dernier passage intégral a-t-il exécutées ?",
+   "or": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3059,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 295,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 911,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quel numéro de jour figure dans le nom du dossier des journaux ?",
+   "or": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3059,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 272,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 713,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 713,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 911,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 713,
+    "reponse": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quel code de sortie signale un dépassement de délai ?",
+   "or": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 3059,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 257,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 614,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 614,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 911,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 614,
+    "reponse": "nom-de-la-porte   code-de-sortie   durée-en-secondes"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}
