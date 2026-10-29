@@ -1,0 +1,252 @@
+{
+ "formules": [
+  {
+   "nom": "fractions",
+   "latex": "\\frac{1}{3}+\\frac{1}{6}",
+   "attendu": "1/2"
+  },
+  {
+   "nom": "puissance",
+   "latex": "2^{10}",
+   "attendu": "1024"
+  },
+  {
+   "nom": "racine carrée",
+   "latex": "\\sqrt{144}",
+   "attendu": "12"
+  },
+  {
+   "nom": "Pythagore",
+   "latex": "3^{2}+4^{2}",
+   "attendu": "25"
+  },
+  {
+   "nom": "produit de fractions",
+   "latex": "\\frac{2}{3}\\cdot\\frac{3}{4}",
+   "attendu": "1/2"
+  },
+  {
+   "nom": "somme de trois",
+   "latex": "\\frac{1}{2}+\\frac{1}{3}+\\frac{1}{6}",
+   "attendu": "1"
+  },
+  {
+   "nom": "parenthèse cubique",
+   "latex": "(1+2)^{3}",
+   "attendu": "27"
+  },
+  {
+   "nom": "exposant négatif",
+   "latex": "2^{-3}",
+   "attendu": "1/8"
+  },
+  {
+   "nom": "réduction",
+   "latex": "\\frac{10}{4}",
+   "attendu": "5/2"
+  },
+  {
+   "nom": "décimaux",
+   "latex": "1.5+2.25",
+   "attendu": "15/4"
+  },
+  {
+   "nom": "soustraction",
+   "latex": "\\frac{3}{4}-\\frac{1}{4}",
+   "attendu": "1/2"
+  },
+  {
+   "nom": "puissances",
+   "latex": "2^{3}+2^{2}",
+   "attendu": "12"
+  },
+  {
+   "nom": "fraction fois entier",
+   "latex": "\\frac{1}{3}\\cdot 3",
+   "attendu": "1"
+  },
+  {
+   "nom": "facteur commun",
+   "latex": "(2+3)\\cdot 4",
+   "attendu": "20"
+  },
+  {
+   "nom": "division de puissance",
+   "latex": "\\frac{2^{5}}{4}",
+   "attendu": "8"
+  },
+  {
+   "nom": "moins unaire",
+   "latex": "-3^{2}",
+   "attendu": "-9"
+  },
+  {
+   "nom": "moins entre parenthèses",
+   "latex": "(-3)^{2}",
+   "attendu": "9"
+  },
+  {
+   "nom": "dixièmes",
+   "latex": "\\frac{1}{10}+\\frac{2}{10}",
+   "attendu": "3/10"
+  },
+  {
+   "nom": "racine et carré",
+   "latex": "\\sqrt{9}+2^{2}",
+   "attendu": "7"
+  },
+  {
+   "nom": "soustraction de moitiés",
+   "latex": "\\frac{7}{2}-\\frac{3}{2}",
+   "attendu": "2"
+  },
+  {
+   "nom": "pi",
+   "latex": "\\pi",
+   "attendu_float": 3.141592653589793
+  },
+  {
+   "nom": "sinus zéro",
+   "latex": "\\sin{0}",
+   "attendu_float": 0.0
+  },
+  {
+   "nom": "cosinus zéro",
+   "latex": "\\cos{0}",
+   "attendu_float": 1.0
+  },
+  {
+   "nom": "logarithme un",
+   "latex": "\\ln{1}",
+   "attendu_float": 0.0
+  },
+  {
+   "nom": "exponentielle zéro",
+   "latex": "\\exp{0}",
+   "attendu_float": 1.0
+  },
+  {
+   "nom": "variable fraction",
+   "latex": "\\frac{1}{2}x",
+   "env": {
+    "x": "3"
+   },
+   "attendu": "3/2"
+  },
+  {
+   "nom": "variable linéaire",
+   "latex": "2x+3",
+   "env": {
+    "x": "4"
+   },
+   "attendu": "11"
+  },
+  {
+   "nom": "variable carrée",
+   "latex": "x^{2}",
+   "env": {
+    "x": "5"
+   },
+   "attendu": "25"
+  },
+  {
+   "nom": "variable divisée",
+   "latex": "\\frac{x}{2}",
+   "env": {
+    "x": "7"
+   },
+   "attendu": "7/2"
+  },
+  {
+   "nom": "racine et fraction",
+   "latex": "\\sqrt{16}+\\frac{1}{2}",
+   "attendu": "9/2"
+  },
+  {
+   "nom": "irrationnel au carré",
+   "latex": "\\sqrt{2}\\cdot\\sqrt{2}",
+   "attendu_float": 2.0,
+   "tolerance": 1e-09
+  },
+  {
+   "nom": "sinus de pi",
+   "latex": "\\sin{\\pi}",
+   "attendu_float": 0.0,
+   "tolerance": 1e-09
+  }
+ ],
+ "derivees": [
+  {
+   "latex": "x^{2}",
+   "var": "x"
+  },
+  {
+   "latex": "3x^{3}+2x",
+   "var": "x"
+  },
+  {
+   "latex": "\\sin{x}",
+   "var": "x"
+  },
+  {
+   "latex": "\\cos{x}",
+   "var": "x"
+  },
+  {
+   "latex": "\\exp{x}",
+   "var": "x"
+  },
+  {
+   "latex": "\\ln{x}",
+   "var": "x"
+  },
+  {
+   "latex": "\\sqrt{x}",
+   "var": "x"
+  },
+  {
+   "latex": "\\frac{1}{x}",
+   "var": "x"
+  },
+  {
+   "latex": "(x^{2}+1)^{3}",
+   "var": "x"
+  },
+  {
+   "latex": "2x^{2}-3x+1",
+   "var": "x"
+  }
+ ],
+ "equations": [
+  {
+   "latex": "2x+3=7",
+   "var": "x",
+   "attendu": "2"
+  },
+  {
+   "latex": "3x-1=8",
+   "var": "x",
+   "attendu": "3"
+  },
+  {
+   "latex": "\\frac{x}{2}+1=3",
+   "var": "x",
+   "attendu": "4"
+  },
+  {
+   "latex": "5(x-1)=10",
+   "var": "x",
+   "attendu": "3"
+  },
+  {
+   "latex": "-2x+4=0",
+   "var": "x",
+   "attendu": "2"
+  },
+  {
+   "latex": "x^{2}=4",
+   "var": "x",
+   "refus": true
+  }
+ ]
+}

@@ -1,0 +1,379 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R4.3",
+ "dispositif": {
+  "corpus": "tools/tests/maths/formules.json (le dépôt n'a pas de corpus LaTeX)",
+  "langage": "sous-ensemble LaTeX",
+  "arithmetique": "fractions.Fraction (exacte) ; flottant pour les irrationnels",
+  "oracle": "sympy (évaluation, dérivée, solution)",
+  "machine": "CPU, aucun modèle chargé"
+ },
+ "formules": {
+  "exactes": 32,
+  "sympy": 32,
+  "total": 32,
+  "details": [
+   {
+    "nom": "fractions",
+    "latex": "\\frac{1}{3}+\\frac{1}{6}",
+    "valeur": "1/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "puissance",
+    "latex": "2^{10}",
+    "valeur": "1024",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "racine carrée",
+    "latex": "\\sqrt{144}",
+    "valeur": "12",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "Pythagore",
+    "latex": "3^{2}+4^{2}",
+    "valeur": "25",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "produit de fractions",
+    "latex": "\\frac{2}{3}\\cdot\\frac{3}{4}",
+    "valeur": "1/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "somme de trois",
+    "latex": "\\frac{1}{2}+\\frac{1}{3}+\\frac{1}{6}",
+    "valeur": "1",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "parenthèse cubique",
+    "latex": "(1+2)^{3}",
+    "valeur": "27",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "exposant négatif",
+    "latex": "2^{-3}",
+    "valeur": "1/8",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "réduction",
+    "latex": "\\frac{10}{4}",
+    "valeur": "5/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "décimaux",
+    "latex": "1.5+2.25",
+    "valeur": "15/4",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "soustraction",
+    "latex": "\\frac{3}{4}-\\frac{1}{4}",
+    "valeur": "1/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "puissances",
+    "latex": "2^{3}+2^{2}",
+    "valeur": "12",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "fraction fois entier",
+    "latex": "\\frac{1}{3}\\cdot 3",
+    "valeur": "1",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "facteur commun",
+    "latex": "(2+3)\\cdot 4",
+    "valeur": "20",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "division de puissance",
+    "latex": "\\frac{2^{5}}{4}",
+    "valeur": "8",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "moins unaire",
+    "latex": "-3^{2}",
+    "valeur": "-9",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "moins entre parenthèses",
+    "latex": "(-3)^{2}",
+    "valeur": "9",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "dixièmes",
+    "latex": "\\frac{1}{10}+\\frac{2}{10}",
+    "valeur": "3/10",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "racine et carré",
+    "latex": "\\sqrt{9}+2^{2}",
+    "valeur": "7",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "soustraction de moitiés",
+    "latex": "\\frac{7}{2}-\\frac{3}{2}",
+    "valeur": "2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "pi",
+    "latex": "\\pi",
+    "valeur": "3.141592653589793",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "sinus zéro",
+    "latex": "\\sin{0}",
+    "valeur": "0.0",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "cosinus zéro",
+    "latex": "\\cos{0}",
+    "valeur": "1.0",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "logarithme un",
+    "latex": "\\ln{1}",
+    "valeur": "0.0",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "exponentielle zéro",
+    "latex": "\\exp{0}",
+    "valeur": "1.0",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "variable fraction",
+    "latex": "\\frac{1}{2}x",
+    "valeur": "3/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "variable linéaire",
+    "latex": "2x+3",
+    "valeur": "11",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "variable carrée",
+    "latex": "x^{2}",
+    "valeur": "25",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "variable divisée",
+    "latex": "\\frac{x}{2}",
+    "valeur": "7/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "racine et fraction",
+    "latex": "\\sqrt{16}+\\frac{1}{2}",
+    "valeur": "9/2",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "irrationnel au carré",
+    "latex": "\\sqrt{2}\\cdot\\sqrt{2}",
+    "valeur": "2.0000000000000004",
+    "correct": true,
+    "sympy": true
+   },
+   {
+    "nom": "sinus de pi",
+    "latex": "\\sin{\\pi}",
+    "valeur": "1.2246467991473532e-16",
+    "correct": true,
+    "sympy": true
+   }
+  ]
+ },
+ "derivees": {
+  "justes": 10,
+  "total": 10,
+  "details": [
+   {
+    "latex": "x^{2}",
+    "derivee": "('*', ('*', ('n', Fraction(2, 1)), ('^', ('v', 'x'), ('n', F",
+    "correct": true
+   },
+   {
+    "latex": "3x^{3}+2x",
+    "derivee": "('+', ('+', ('*', ('n', Fraction(0, 1)), ('^', ('v', 'x'), (",
+    "correct": true
+   },
+   {
+    "latex": "\\sin{x}",
+    "derivee": "('*', ('fn', 'cos', ('v', 'x')), ('n', Fraction(1, 1)))",
+    "correct": true
+   },
+   {
+    "latex": "\\cos{x}",
+    "derivee": "('*', ('neg', ('fn', 'sin', ('v', 'x'))), ('n', Fraction(1, ",
+    "correct": true
+   },
+   {
+    "latex": "\\exp{x}",
+    "derivee": "('*', ('fn', 'exp', ('v', 'x')), ('n', Fraction(1, 1)))",
+    "correct": true
+   },
+   {
+    "latex": "\\ln{x}",
+    "derivee": "('*', ('^', ('v', 'x'), ('n', Fraction(-1, 1))), ('*', ('n',",
+    "correct": true
+   },
+   {
+    "latex": "\\sqrt{x}",
+    "derivee": "('*', ('^', ('*', ('n', Fraction(2, 1)), ('fn', 'sqrt', ('v'",
+    "correct": true
+   },
+   {
+    "latex": "\\frac{1}{x}",
+    "derivee": "('+', ('*', ('n', Fraction(0, 1)), ('^', ('v', 'x'), ('n', F",
+    "correct": true
+   },
+   {
+    "latex": "(x^{2}+1)^{3}",
+    "derivee": "('*', ('*', ('n', Fraction(3, 1)), ('^', ('+', ('^', ('v', '",
+    "correct": true
+   },
+   {
+    "latex": "2x^{2}-3x+1",
+    "derivee": "('+', ('+', ('+', ('*', ('n', Fraction(0, 1)), ('^', ('v', '",
+    "correct": true
+   }
+  ]
+ },
+ "equations": {
+  "justes": 6,
+  "total": 6,
+  "refus": 1,
+  "details": [
+   {
+    "latex": "2x+3=7",
+    "racine": "2",
+    "oracle": "2",
+    "correct": true
+   },
+   {
+    "latex": "3x-1=8",
+    "racine": "3",
+    "oracle": "3",
+    "correct": true
+   },
+   {
+    "latex": "\\frac{x}{2}+1=3",
+    "racine": "4",
+    "oracle": "4",
+    "correct": true
+   },
+   {
+    "latex": "5(x-1)=10",
+    "racine": "3",
+    "oracle": "3",
+    "correct": true
+   },
+   {
+    "latex": "-2x+4=0",
+    "racine": "2",
+    "oracle": "2",
+    "correct": true
+   },
+   {
+    "latex": "x^{2}=4",
+    "refus": true,
+    "correct": true
+   }
+  ]
+ },
+ "controles": {
+  "\\frac{1}{3}+\\frac{1}{6}": {
+   "attendu": "1/2",
+   "calcule": "1/2",
+   "surface": "1",
+   "surface_correcte": false,
+   "calcule_correct": true
+  },
+  "2^{10}": {
+   "attendu": "1024",
+   "calcule": "1024",
+   "surface": "2",
+   "surface_correcte": false,
+   "calcule_correct": true
+  },
+  "\\sqrt{144}+1": {
+   "attendu": "13",
+   "calcule": "13",
+   "surface": "144",
+   "surface_correcte": false,
+   "calcule_correct": true
+  }
+ },
+ "refus": {
+  "macro_inconnue": "Refus: macro inconnue (position 4) : \\int",
+  "accolade_ouverte": "Refus: formule incomplète (position 5)",
+  "caractere_inconnu": "Refus: caractère inconnu (position 2) : @",
+  "syntaxe": "Refus: formule incomplète (position 2)",
+  "division_zero": "ErreurCalcul: division par zéro (puissance négative de 0)",
+  "racine_negative": "ErreurCalcul: racine d'un nombre négatif",
+  "non_lineaire": "Refus: équation non linéaire : dérivée seconde 2",
+  "variable_absente": "ErreurCalcul: variable absente : x"
+ },
+ "cout": {
+  "ratio_x4": 4.11
+ },
+ "rejeu": {
+  "identique": true
+ }
+}

@@ -1,7 +1,7 @@
 # R43 — Bloc maths (notation, définitions, évaluation)
 
-> **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R01
-> **Ligne de roadmap** : R4.3 · **Fiche de résultat attendue** : rapport-r43-bloc-maths.md (à créer dans `reports/`)
+> **Statut** : mesurée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R01
+> **Ligne de roadmap** : R4.3 · **Fiche de résultat** : [`rapport-r43-bloc-maths.md`](../../../reports/rapport-r43-bloc-maths.md)
 > **Résumé** : Lire une formule, suivre une définition et évaluer symboliquement.
 > **Glossaire** : [CAS](../../theorie/glossaire/entrees/cas.md) · [parseur](../../theorie/glossaire/entrees/parseur.md).
 
@@ -17,6 +17,17 @@ Les maths ne se lisent pas comme de la prose : il faut la précédence, les déf
 | **sortie** | un AST mathématique, une évaluation symbolique ou un pas de preuve |
 | **coût** | coût polynomial borné ; le CAS est un bloc classique |
 | **trace** | l'AST et l'évaluation sont tracés |
+
+## L'état
+
+**Mesurée le 2026-10-29** — **32/32** formules exactes (fractions) et **32/32** recoupées par
+**sympy** ; **10/10** dérivées justes (5 points, oracle sympy) ; **6/6** équations (dont
+**1 refus** d'une non linéaire) ; **8/8** refus nommés ; le contrôle **surface échoue 3/3** ;
+coût **×4,1** pour ×4 termes. Le CAS est **interne** ; sympy ne sert que d'oracle (la
+dépendance est mesurée, pas cachée). Fiche :
+[`rapport-r43-bloc-maths.md`](../../../reports/rapport-r43-bloc-maths.md) ; spec :
+[`bloc-maths.md`](../../implantation/bloc-maths.md) ; porte `tools/porte-bloc-maths.sh` ; JSON :
+[`r43-bloc-maths.json`](../../../reports/r43-bloc-maths.json).
 
 ## Ce qui est mesuré
 
@@ -43,14 +54,14 @@ Les maths ne se lisent pas comme de la prose : il faut la précédence, les déf
 
 ## Étapes
 
-1. choisir le parseur et le CAS
-2. implémenter l'AST et l'évaluation
-3. mesurer parse et exactitude ; écrire la fiche
+1. ✅ choisir le parseur et le CAS (interne, oracle sympy)
+2. ✅ implémenter l'AST, l'évaluation, la dérivée et la résolution
+3. ✅ mesurer parse et exactitude ; écrire la fiche
 
-## Documents à écrire
+## Documents
 
-- `bloc-maths.md` (notation, parseur, CAS, porte, dans `docs/implantation/`)
-- mettre à jour R4.3
+- ✅ [`bloc-maths.md`](../../implantation/bloc-maths.md) — notation, parseur, CAS, porte, limites.
+- ✅ R4.3 marquée mesurée dans la roadmap ; **R4.4 est bloqué** (aucun OCR sur la machine).
 
 ## Voir aussi
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**68 commits** · **0 session(s)** · **7 thème(s)**
+**69 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | mesures | 30 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 4 | [portes.md](portes.md) |
+| portes | 5 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -100,6 +100,7 @@ Aucune session indexée pour ce jour ; voir
 | 15:51 | `2fc844b3` | A8.0 — PORTE-FLUX ÉPINGLÉE : PPL 61,9920 / 60,8135, TOLÉRANCE 5e-4 |
 | 15:52 | `4ccf641f` | R4.2 — LE BLOC CODE : 294 FICHIERS, 453 038 NŒUDS, 24/24 EXTRAITS EXÉCUTÉS |
 | 15:54 | `a7d0ccdc` | ÉTAT — R4.2 MESURÉE : 294 FICHIERS, 24/24 EXTRAITS ; T0 À 3 937 |
+| 15:56 | `d7a4d1bf` | A8.0 — PORTE-PONT ÉPINGLÉE : PPL 113,0068 / 111,9225, FALAISE +2,81 % / +25,35 % |
 
 ## Le récit de la journée (écrit à la main)
 
