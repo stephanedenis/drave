@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (40)
+## Commits du jour (41)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -48,6 +48,7 @@
 | 17:09 | `261bdc42` | B10.2bis — TABLEAU : COLONNE GRAINE VIDE AJOUTÉE | `en-cours.md`, `README.md`, `portes.md` (+2) |
 | 17:10 | `c9b3da49` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 17:32 | `981e4bbf` | CORPUS GELÉ — LA DÉRIVE DES BANCS EST CLOSE : 30 DOCUMENTS, MANIFESTE SHA256, 0 PROBLÈME | `banc-lecture.md`, `corpus-gele.md`, `R03-banc-lecture-rapide.md` (+47) |
+| 17:37 | `11713f7c` | LE PROGRAMME R EN UNE PAGE — CE QUI TIENT, CE QUI NE TIENT PAS, TROIS LOIS | `en-cours.md`, `programme-r.md`, `roadmap.md` (+6) |
 
 ## Chiffres du jour
 
@@ -90,6 +91,7 @@
 - [reports/rapport-r03-banc-durci.md](../../reports/rapport-r03-banc-durci.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
 - [reports/rapport-r05-balayage.md](../../reports/rapport-r05-balayage.md)
+- [reports/rapport-r06-cascade.md](../../reports/rapport-r06-cascade.md)
 - [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
 - [reports/rapport-r13-tokenisation.md](../../reports/rapport-r13-tokenisation.md)

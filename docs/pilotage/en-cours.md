@@ -37,7 +37,7 @@
 
 - **Id** : `c3d0f0bd-e344-4600-a023-0ed50d25b48b`.
 - **Rôle** : **R4.1–R4.3**, **B10.2bis** et **A8.3b** mesurées (`7fb1c8a6`, `4ccf641f`, ce cycle).
-- **Ce qu'elle fait** : blocs R4.1–R4.3 et leur miroir ; décodeur B10.2bis (3 bras × 3 graines) ; régimes de KV A8.3b.
+- **Ce qu'elle fait** : blocs R4.1–R4.3, miroir ; décodeur B10.2bis (3×3 graines) ; régimes de KV A8.3b.
 - **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `71d57f53` A8.0/B11.10.
 - **Fichiers réservés** : `tools/bloc_*.py`, `tools/porte-bloc-*.sh`, `tools/tests/tableaux/`,
   `tools/tests/code/`, `tools/tests/maths/`, `reports/r4*`, `docs/implantation/bloc-*.md`.
@@ -49,7 +49,7 @@
 
 - **Id** : aucun Id DSH (job GPU, hors session).
 - **Rôle** : N2 — professeur et distillation ; ne touche ni aux docs ni aux fiches.
-- **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k ; mesure de PPL.
+- **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k ; PPL.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `8156fdcb` R0.5 ; `c3d0f0bd` R4.2.
 - **Prochaine action** : N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708**) ; **N5 gelé**.
 - **Bloquants** : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.
