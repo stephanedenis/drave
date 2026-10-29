@@ -1,0 +1,75 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R4.1",
+ "dispositif": {
+  "corpus_fichiers": 9,
+  "corpus_tableaux": 35,
+  "corpus_cellules": 996,
+  "formats": [
+   "csv",
+   "html",
+   "markdown"
+  ],
+  "machine": "CPU, aucun modèle chargé"
+ },
+ "grille": {
+  "cellules_markdown_mesurees": 802,
+  "provenance_exacte": 802,
+  "avec_entete": 34,
+  "sans_entete": 1,
+  "refus": [],
+  "erreurs": []
+ },
+ "operations": {
+  "somme_coût": 120,
+  "moyenne_durée": 3.0,
+  "min_coût": 10,
+  "max_coût": 50,
+  "filtre_rouge": 2,
+  "jointure": 3,
+  "entête_multiniveau": [
+   "Région / Zone",
+   "Mois / Janvier",
+   "Mois / Février"
+  ]
+ },
+ "controles": {
+  "somme_colonne": {
+   "grille": 120,
+   "plat": 146,
+   "plat_correct": false
+  },
+  "cellule_2_2": {
+   "grille": "3",
+   "plat": "B4\t40\t3\trouge\t—",
+   "plat_correct": false
+  },
+  "filtre_etat": {
+   "grille": 2,
+   "plat": 3,
+   "plat_correct": false
+  }
+ },
+ "fusions": {
+  "declarées": 3,
+  "cases_couvertes": 3
+ },
+ "sans_entete": {
+  "signale": true,
+  "operation_refusee": "SansEntete"
+ },
+ "refus_fixtures": {
+  "irregulier": "Refus",
+  "entete_fusionnee": "Refus",
+  "imbrique": "Refus",
+  "colonne_texte_non_sommable": "NonNumerique"
+ },
+ "cout": {
+  "secondes_corpus": 0.0249,
+  "millisecondes_par_1000_cellules": 25.0,
+  "ratio_x4": 3.8
+ },
+ "rejeu": {
+  "identique": true
+ }
+}

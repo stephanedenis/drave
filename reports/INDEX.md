@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **277 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **278 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -248,6 +248,7 @@
 | [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |
 | [rapport-r03-banc-durci.md](rapport-r03-banc-durci.md) | R0.3 durci — 19 paraphrases : le lexique tombe, le modèle prend la tête |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
+| [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |

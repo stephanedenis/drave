@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**53 commits** · **0 session(s)** · **7 thème(s)**
+**54 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
-| modele | 3 | [modele.md](modele.md) |
+| modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
@@ -85,6 +85,7 @@ Aucune session indexée pour ce jour ; voir
 | 14:39 | `72a4ff5f` | R0.3 — 249 QUESTIONS, 30 DOCUMENTS SUR GPU : SÉLECTION 1,000 À 30 %, LE CONTRÔLEUR BAT LA TRONCATURE 5,5× |
 | 14:41 | `7d47b3c7` | ÉTAT — LISTE DES FICHIERS RÉSERVÉS NETTOYÉE (R0.3 CLOS) |
 | 14:46 | `6e995187` | MÉTHODE — IDENTITÉ DSH, PAIRS ET DISCIPLINE GIT ; 71d57f53 INSCRIT |
+| 14:48 | `de9afbc9` | R0.3 DURCI — 19 PARAPHRASES : LE LEXIQUE TOMBE À 0,30, LE MODÈLE PREND LA TÊTE À 0,717 |
 
 ## Le récit de la journée (écrit à la main)
 
