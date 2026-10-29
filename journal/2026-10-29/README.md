@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**6 commits** · **0 session(s)** · **3 thème(s)**
+**7 commits** · **0 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
-| mesures | 4 | [mesures.md](mesures.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -30,6 +30,7 @@
 | 01:51 | `096747cc` | N2.19 — 30 000 PAS DE PLUS : PPL 2,708, PRÉCISION 72,80 % |
 | 01:52 | `7afd909a` | DOCS — EN-COURS DATÉ DU 2026-10-29, 01 H 52 |
 | 02:38 | `2967b07e` | N2.20 — PROFESSEUR 30 000 PAS : 0,794 BIT/OCTET, PPL 1,734 |
+| 02:53 | `0c3bd21e` | N2.21 — PROFESSEUR 30K, LR 3E-6 : PPL 2,823, DÉGRADATION, ARRÊTÉ |
 
 ## Le récit de la journée (écrit à la main)
 
