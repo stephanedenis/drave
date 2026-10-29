@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 15 h 30 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-29, 15 h 55 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -31,28 +31,18 @@
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
-### Session `c3d0f0bd` — pair : R4.1 le bloc tableaux
+### Session `c3d0f0bd` — pair : R4.1/R4.2 les blocs structurels
 
 - **Id** : `c3d0f0bd-e344-4600-a023-0ed50d25b48b`.
-- **Rôle** : pair ; **R4.1** mesurée (commit `7fb1c8a6`) ; état écrit sur accord de l'humain.
-- **Ce qu'elle fait** : grille typée (Markdown/HTML/CSV), provenance exacte, `filtre`/`jointure`/`agrégat`.
+- **Rôle** : pair ; **R4.1** et **R4.2** mesurées (commits `7fb1c8a6`, `4ccf641f`) ; état écrit sur accord de l'humain.
+- **Ce qu'elle fait** : grille typée (R4.1) ; AST, portée et interpréteur en sable (R4.2).
 - **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `71d57f53` close.
-- **Fichiers réservés** : `tools/bloc_tableaux.py`, `tools/porte-bloc-tableaux.sh`, `tools/tests/tableaux/`,
-  `reports/r41-*`, `docs/implantation/bloc-tableaux.md`, `docs/pilotage/backlog/R41-*.md`.
-- **Prochaine action** : **R4.2** (bloc code) ; la ligne lecteur reprend à **R0.4**.
+- **Fichiers réservés** : `tools/bloc_tableaux.py`, `tools/bloc_code.py`, `tools/porte-bloc-tableaux.sh`,
+  `tools/porte-bloc-code.sh`, `tools/tests/tableaux/`, `tools/tests/code/`, `reports/r41-*`, `reports/r42-*`,
+  `docs/implantation/bloc-tableaux.md`, `docs/implantation/bloc-code.md`.
+- **Prochaine action** : **R4.3** (bloc maths) ; la ligne lecteur reprend à **R0.4**.
 - **Bloquants** : aucun.
 - **Journal** : [mesures du jour](../../journal/2026-10-29/mesures.md).
-
-### Session `71d57f53` — pair : docs, B12.10
-
-- **Id** : `71d57f53-8b41-4220-84dd-7bb9eedc88d9`.
-- **Rôle** : pair — docs, B12.10, diagramme ; close.
-- **Ce qu'elle fait** : N0.3b intégré ; B12.10 **close négative** (oracle M8, M4 seul 0/606) ; diagramme.
-- **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `c3d0f0bd` R4.1.
-- **Prochaine action** : aucune — patch multi-sessions appliqué (commit `6e995187`), B12.10 close.
-- **Bloquants** : aucun.
-- **Fichiers réservés** : `tools/cerveau/b1210_holdout.py`, `docs/schemas/chantiers-etats.svg`.
-- **Journal** : [jour](../../journal/2026-10-29/README.md).
 
 ### Session `N2-GPU` — calcul : distillation
 
@@ -68,8 +58,9 @@
 
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; R0.4 (tête de survol) **pilote négatif** (0,601 contre
   BM25 0,836) ; R0.5 (routeur) **signal** (AUC 0,785, seuil non transférable) ; suite **R0.4**.
-- **R4.1 — le bloc tableaux** : **mesurée** (996 cellules, **802** exactes, texte plat **0/3**) ;
-  fiche [`rapport-r41-bloc-tableaux.md`](../../reports/rapport-r41-bloc-tableaux.md) ; porte `tools/porte-bloc-tableaux.sh`.
+- **R4.1 / R4.2 — les blocs structurels** : **mesurées** (996 cellules, 802 exactes, texte plat
+  **0/3** ; 294 fichiers, 24/24 extraits, texte seul **0/3**) ; fiches
+  [`r41`](../../reports/rapport-r41-bloc-tableaux.md) et [`r42`](../../reports/rapport-r42-bloc-code.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; **N4** — consignes **0/40**.
   Suite : [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
@@ -80,10 +71,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **52** (50 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **53** (51 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **285** / **353** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **95** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **287** / **355** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **96** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -93,7 +84,7 @@
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | B11.10, puis B10.3 |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
-| **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1 mesurée** | aucun pour R0 ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R4.2** (bloc code) |
+| **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1/R4.2 mesurées** | aucun pour R0 ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R4.3** (bloc maths) |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
 
@@ -109,7 +100,7 @@ sont marquées dans la boîte de leur activité. Le détail est dans la [roadmap
 
 ## Ce qui reste
 
-**R0** — R0.1–R0.3 **mesurés**, R0.4/R0.5 ouverts ; **R4.1** — **mesurée**, suite **R4.2** (code). **N2** — la **hiérarchie** ; **N5 gelé**.
+**R0** — R0.1–R0.3 **mesurés**, R0.4/R0.5 ouverts ; **R4.1–R4.2** — **mesurées**, suite **R4.3** (maths). **N2** — la **hiérarchie** ; **N5 gelé**.
 **N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B11.10** — cartes et ambiguïtés.
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
