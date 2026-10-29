@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,10 +23,11 @@
 | 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO | `en-cours.md`, `roadmap-native.md`, `native.rs` (+5) |
 | 16:52 | `1daa8741` | N2.9 — 21,63 M SUR 20 000 PAS : PPL 3,381, PIRE QUE 11,47 M (3,123) | `en-cours.md`, `README.md`, `moteur.md` (+3) |
 | 20:11 | `8b28f889` | N4.4 — SERVICE DURCI : JETON 401/200, CORPS 64 KO, N ≤ 256 ; PAS DE SFT | `en-cours.md`, `roadmap-native.md`, `native.rs` (+6) |
+| 20:22 | `923d70ed` | N2.10 — PROFESSEUR 10 000 PAS : 1,073 BIT/OCTET, PPL 2,104 | `en-cours.md`, `README.md`, `mesures.md` (+3) |
 
 ## Chiffres du jour
 
-`3,381` · `3,123` · `0,0001` · `28,7355` · `−24,05 %` · `5,978` · `7,871` · `0,709` · `62,13 %` · `62,55 %` · `0,39 %` · `3,353`
+`1,073` · `2,104` · `3,381` · `3,123` · `0,0001` · `28,7355` · `−24,05 %` · `5,978` · `7,871` · `0,709` · `62,13 %` · `62,55 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -42,6 +43,7 @@
 - [reports/rapport-native-n0.md](../../reports/rapport-native-n0.md)
 - [reports/rapport-native-parite.md](../../reports/rapport-native-parite.md)
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
+- [reports/rapport-native-professeur-10k.md](../../reports/rapport-native-professeur-10k.md)
 - [reports/rapport-native-reflexe.md](../../reports/rapport-native-reflexe.md)
 - [reports/rapport-native-service-auth.md](../../reports/rapport-native-service-auth.md)
 - [reports/rapport-native-service.md](../../reports/rapport-native-service.md)

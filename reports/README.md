@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-native-distillation-50k.md`](rapport-native-distillation-50k.md) | **N2.11** — 50 000 pas : PPL **3,082**, plateau ; tête 3 **68,70 %** |
 | [`rapport-native-professeur-10k.md`](rapport-native-professeur-10k.md) | **N2.10** — professeur 10 000 pas : **1,073 bit/octet**, PPL **2,104** |
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`rapport-native-service-auth.md`](rapport-native-service-auth.md) | **N4.4** — service durci : **401/200**, corps 64 Ko, n ≤ 256 ; pas de SFT |
