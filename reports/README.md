@@ -20,6 +20,7 @@
 | [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |
 | [`rapport-native-8b-warm.md`](rapport-native-8b-warm.md) | **N2.29** — 8 blocs réchauffés : PPL **2,866**, arrêté |
 | [`rapport-native-8b.md`](rapport-native-8b.md) | **N2.28** — 8 blocs : PPL **4,838**, arrêté |
+| [`rapport-native-ctx129-2.md`](rapport-native-ctx129-2.md) | **N2.34** — 129, 10 000 pas de plus : PPL **2,712**, arrêté |
 | [`rapport-native-ctx129.md`](rapport-native-ctx129.md) | **N2.33** — contexte 129 : PPL **2,6998**, nouveau meilleur |
 | [`rapport-native-ctx130.md`](rapport-native-ctx130.md) | **N2.32** — contexte 130 : PPL **2,786**, arrêté |
 | [`rapport-native-ctx136.md`](rapport-native-ctx136.md) | **N2.31** — contexte 136 : PPL **2,974**, arrêté |
