@@ -79,6 +79,24 @@ permutation.
 | N2.5 | **Capacité du student** | ⚠️ **négatif confondu** — 21,63 M : PPL **4,294** contre **3,295** à 11,47 M ; initialisation aléatoire, 5 000 pas |
 | N2.5b | **Capacité à budget égal** | ✅ **mesuré, 3 graines** — 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %) ; le checkpoint 11,47 M à **3,295** montre que le prior domine |
 | N2.6 | **Diversité du corpus** | ✅ **manifeste** — **49 999** fenêtres, **4 sources** (fr, UDHR, en, littérature) ; licences non vérifiées |
+| N2.7 | **Distillation multi-sources** | ✅ **mesuré** — student **9,517**, professeur **9,571** ; corpus plus dur ; porte **< 2,5** non atteinte |
+| N2.8 | **Distillation longue** | ⚠️ **progrès** — 20 000 pas : PPL **3,123** contre **3,295** |
+| N2.9 | **Gros student** | ⚠️ **négatif** — 21,63 M, 20 000 pas : PPL **3,381**, pire que 11,47 M (**3,123**) |
+| N2.10 | **Professeur 10 000 pas** | ✅ **1,073 bit/octet**, PPL **2,104** |
+| N2.11 | **Distillation 50 000 pas** | ⚠️ **plateau** — PPL **3,082** |
+| N2.12 | **Professeur 10k** | ⚠️ **progrès** — PPL **2,910** |
+| N2.13 | **20 000 pas de plus** | ⚠️ **marginal** — PPL **2,876** |
+| N2.14 | **Professeur 20k** | ⚠️ **progrès** — PPL **2,787** |
+| N2.15 | **Professeur 20 000 pas** | ✅ **0,904 bit/octet**, PPL **1,869** |
+| N2.16 | **20 000 pas de plus** | ⚠️ **plateau** — PPL **2,755** |
+| N2.17 | **30 000 pas de plus** | ⚠️ **progrès** — PPL **2,726** |
+| N2.18 | **30 000 pas de plus** | ⚠️ **marginal** — PPL **2,714** |
+| N2.19 | **30 000 pas de plus** | ⚠️ **marginal** — PPL **2,708** ; meilleur français |
+| N2.20 | **Professeur 30 000 pas** | ✅ **0,794 bit/octet**, PPL **1,734** |
+| N2.21 | **Professeur 30k, lr 3e-6** | ⚠️ **négatif** — PPL **2,823** ; arrêté |
+| N2.22 | **Professeur 30k, lr 1e-5** | ⚠️ **négatif** — PPL **2,828** ; arrêté |
+| N2.23 | **Professeur 20k, lr 3e-6** | ⚠️ **négatif** — PPL **2,753** ; arrêté |
+| N2.24 | **Température 4** | ⚠️ **négatif** — PPL **2,852** ; arrêté |
 
 **Porte N2** : le natif **bat ou égale** B9 (4,40 %) sur le même corpus, avec les pertes natives.
 
