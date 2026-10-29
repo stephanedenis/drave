@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**81 commits** · **0 session(s)** · **7 thème(s)**
+**82 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
-| mesures | 31 | [mesures.md](mesures.md) |
+| mesures | 32 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 9 | [portes.md](portes.md) |
@@ -113,6 +113,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:22 | `295124d8` | A8.0 — PORTE-COUPE ÉPINGLÉE : PPL 113,0068, COÛTS +0,52…+17,09 % |
 | 16:23 | `95f5a7e0` | A8.0 — AUDIT PPL : 4 PORTES SUR 33 ÉPINGLÉES |
 | 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 |
+| 16:27 | `09588098` | A2.6 — PARTIEL : TÊTE REFUSÉE, EXPERTS BLOQUÉS A6.2 ; A3.2/A3.3 MESURÉES |
 
 ## Le récit de la journée (écrit à la main)
 

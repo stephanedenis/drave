@@ -1,22 +1,22 @@
 {
  "date": "2026-10-29",
  "ligne": "R0.6",
- "seuil": 3.8,
+ "seuil": 1.0,
  "pilote": {
   "n": 20,
-  "acceptes": 19,
+  "acceptes": 20,
   "valeur_trouvee": 12,
-  "provenance_verifiee": 19,
+  "provenance_verifiee": 20,
   "taux_valeur": 0.6
  },
  "hors_sujet": {
   "n": 10,
-  "refuses": 10,
-  "taux_refus": 1.0
+  "refuses": 9,
+  "taux_refus": 0.9
  },
  "paraphrases": {
   "n": 8,
-  "extractif_valeur": 3,
+  "extractif_valeur": 4,
   "modele_valeur": 7
  },
  "rejeu_identique": true,
@@ -99,8 +99,8 @@
    "valeur": "2,6998",
    "trouve": true,
    "valeur_trouvee": true,
-   "octets_lus": 2772,
-   "score": 6.434
+   "octets_lus": 2771,
+   "score": 6.463
   },
   {
    "document": "docs/pilotage/roadmap.md",
@@ -108,8 +108,8 @@
    "valeur": "2,5",
    "trouve": true,
    "valeur_trouvee": true,
-   "octets_lus": 2667,
-   "score": 5.767
+   "octets_lus": 2875,
+   "score": 5.722
   },
   {
    "document": "docs/pilotage/roadmap.md",
@@ -118,7 +118,7 @@
    "trouve": true,
    "valeur_trouvee": false,
    "octets_lus": 2296,
-   "score": 4.351
+   "score": 4.364
   },
   {
    "document": "docs/pilotage/roadmap.md",
@@ -126,8 +126,8 @@
    "valeur": "51",
    "trouve": true,
    "valeur_trouvee": true,
-   "octets_lus": 6141,
-   "score": 8.031
+   "octets_lus": 6205,
+   "score": 8.036
   },
   {
    "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
@@ -151,7 +151,7 @@
    "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
    "question": "Quel est le numéro de la résolution ?",
    "valeur": "80/1",
-   "trouve": false,
+   "trouve": true,
    "valeur_trouvee": false,
    "octets_lus": 341,
    "score": 3.624
@@ -206,7 +206,7 @@
   {
    "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
    "valeur": "2 539",
-   "extractif_trouve": false,
+   "extractif_trouve": true,
    "extractif_valeur": false,
    "modele_trouve": true,
    "modele_valeur": true
@@ -230,8 +230,8 @@
   {
    "question": "Quelle année figure dans la note de renommage ?",
    "valeur": "2026",
-   "extractif_trouve": false,
-   "extractif_valeur": false,
+   "extractif_trouve": true,
+   "extractif_valeur": true,
    "modele_trouve": true,
    "modele_valeur": true
   },

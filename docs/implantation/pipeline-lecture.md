@@ -20,7 +20,7 @@ restent des mesures, pas un lecteur.
 | **budget** | le coût est en **octets lus** ; il ne dépasse jamais la fraction demandée |
 | **provenance** | la réponse porte sa région, son `start`, son `octets`, son `prov` ; les octets cités sont **vérifiables** dans le flux |
 | **rejeu** | aucune horloge, aucun aléa : deux exécutions rendent le **même JSON** (hors durée) |
-| **refus** | si le meilleur score est sous le **seuil** (3,8), la réponse est « insuffisant » — le pipeline ne rend pas un passage au hasard |
+| **refus** | si le meilleur score est sous le **seuil** (1,0), la réponse est « insuffisant » — le pipeline ne rend pas un passage au hasard |
 
 **Sortie** (extrait) :
 
@@ -66,9 +66,12 @@ bat générer.
 | **paraphrases** (8 questions) | extractif · modèle | **3/8** · **7/8** |
 | **rejeu** | deux exécutions | identique |
 
-**Le seuil 3,8** sépare les réponses justes du pilote (3,94–11,08) du seul faux positif hors
-sujet (3,56). Il est **calibré sur ce corpus** : l'échelle BM25 brute ne se transporte pas d'un
-document à l'autre (la leçon de R0.5). Détail et limites : `reports/rapport-r06-pipeline.md`.
+**Le seuil 1,0** attrape les questions qui ne partagent **rien** avec le document (score 0,00).
+Un seuil plus haut (3,8) séparait, sur le document du pilote, les réponses justes (3,94–11,08) du
+faux positif hors sujet (3,56) — mais **mesuré sur 84 paraphrases, il refusait 32 % des questions
+et coûtait 6,7 points** pour un refus gagné sur dix. Rejeté. L'échelle BM25 brute ne se transporte
+pas d'un document à l'autre (la leçon de R0.5) : le seuil s'expose et se calibre par corpus. Détail
+et limites : `reports/rapport-r06-pipeline.md`.
 
 ## 6. Ce qui pourrait le rendre faux
 

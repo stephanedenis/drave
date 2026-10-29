@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **290 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **292 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -16,6 +16,7 @@
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
+| [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
@@ -257,6 +258,7 @@
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
+| [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |

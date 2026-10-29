@@ -1,8 +1,8 @@
 # R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle
 
 > **Ligne de roadmap** : R0.6 · **Date** : 2026-10-29 · **Verdict** : ✅ **le contrat est tenu** —
-> 19/20 réponses acceptées au pilote dont **12 justes** (0,600), **provenance vérifiée 19/19**,
-> **refus 10/10** sur des questions hors sujet, **rejeu identique**, et le **modèle** répond
+> 20/20 réponses acceptées au pilote dont **12 justes** (0,600), **provenance vérifiée 20/20**,
+> **refus 9/10** sur des questions hors sujet, **rejeu identique**, et le **modèle** répond
 > **7/8** là où l'extractif n'en donne que **3/8** (paraphrases).
 >
 > **Dispositif** : `tools/lecture.py` (extractif par défaut, modèle sur demande) ; seuil de refus
@@ -33,8 +33,8 @@ rejeu — et que vaut l'assemblage sur les trois régimes mesurés ?
 
 | régime | mesure | chiffre |
 |---|---|---|
-| **pilote** (20 questions) | réponses acceptées · justes · provenance | **19/20** · **12/20 = 0,600** · **19/19** |
-| **hors sujet** (10 questions) | refus | **10/10 = 1,000** |
+| **pilote** (20 questions) | réponses acceptées · justes · provenance | **20/20** · **12/20 = 0,600** · **20/20** |
+| **hors sujet** (10 questions) | refus | **9/10 = 0,900** |
 | **paraphrases** (8 questions) | extractif · modèle | **3/8** · **7/8** |
 | **rejeu** | deux exécutions, même JSON | **identique** |
 | **porte** | 6 contrôles | **6/6** |
@@ -47,13 +47,16 @@ sujet, et rejoue à l'identique.
 refusé ou trompé), le **modèle en donne 7/8**. C'est la leçon de R0.3 rendue **utilisable** :
 le lexique pour les mots, le modèle pour les paraphrases, et le refus comme aiguillage.
 
-## Le seuil, et pourquoi 3,8
+## Le seuil, et pourquoi 1,0 (et pas 3,8)
 
 Les scores BM25 des **réponses justes** du pilote vont de **3,94 à 11,08** ; le seul **faux
-positif** hors sujet (« trois » dans « trois octets ») est à **3,56**. Le seuil **3,8** sépare
-les deux, refuse 1 question du pilote (dont la réponse était fausse de toute façon) et laisse
-passer les 12 justes. Il est exposé (`--seuil`) : c'est un réglage **calibré sur ce corpus**,
-pas une constante universelle.
+positif** hors sujet (« trois » dans « trois octets ») est à **3,56**. Un seuil de **3,8** sépare
+les deux sur ce document — et c'est un piège : **mesuré sur les 84 paraphrases, il refuse 32 %
+des questions et coûte 6,7 points** (0,269 → 0,202) pour gagner **un** refus sur dix. Le seuil
+est donc ramené à **1,0** : il attrape les questions qui ne partagent **rien** avec le document
+(score 0,00) et laisse passer les autres. Le faux positif à 3,56 reste — il n'est pas séparable
+des vraies réponses par un seuil global. C'est la leçon de R0.5 appliquée : **un seuil absolu ne
+se transporte pas**. Exposé (`--seuil`), il se calibre par corpus.
 
 ## Ce qui pourrait le rendre faux
 

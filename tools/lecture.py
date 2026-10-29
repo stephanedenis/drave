@@ -35,8 +35,9 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import graphe_document  # noqa: E402
 import lecteur_controleur as lc  # noqa: E402
 
-SEUIL = 3.8  # calibré : les réponses justes du pilote sont à 3,94–11,08 ; le faux positif
-# hors sujet (« trois ») à 3,56. Sous 3,8, on refuse plutôt que de deviner.
+SEUIL = 1.0  # calibré sur le corpus du pilote : les vraies questions y scores 3,6–11,1, le
+# hors-sujet 0,0 ; un seuil plus haut (3,8) refusait 32 % des paraphrases d'autres documents
+# pour gagner 1 refus sur 10 — mesuré, et rejeté (voir la fiche R06).
 
 
 def flux_octets(manifeste: dict) -> bytes:
