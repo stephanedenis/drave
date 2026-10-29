@@ -1,0 +1,63 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3a",
+ "porte": "porte-flux.sh",
+ "regime": "DRAVE_PERTE_MAX=1",
+ "f32": {
+  "mode0": {
+   "ref": 61.992,
+   "ecart": 0.0
+  },
+  "mode1": {
+   "ref": 61.992,
+   "ecart": 0.0
+  },
+  "mode2": {
+   "ref": 61.992,
+   "ecart": 0.0365
+  },
+  "mode3": {
+   "ref": 60.8135,
+   "ecart": 0.0
+  },
+  "mode4": {
+   "ref": 60.8135,
+   "ecart": 0.00445
+  }
+ },
+ "perte1": {
+  "mode0": {
+   "ref": 58.32,
+   "ecart": 0.0
+  },
+  "mode1": {
+   "ref": 58.32,
+   "ecart": 0.0
+  },
+  "mode2": {
+   "ref": 58.32,
+   "ecart": 0.114,
+   "plafond": 0.12
+  },
+  "mode3": {
+   "ref": 62.7357,
+   "ecart": 0.0
+  },
+  "mode4": {
+   "ref": 62.7357,
+   "ecart": 0.0349,
+   "plafond": 0.04
+  }
+ },
+ "gates": {
+  "f32": "exit 0",
+  "perte1": "exit 0"
+ },
+ "controle": "le même gate passe dans les deux régimes ; les références f32 sont inchangées",
+ "decision": "A8.3a flux fait ; pont/coupe restent ; A8.3 opt-in",
+ "limites": [
+  "un seul modèle",
+  "DRAVE_PERTE_MAX=1 exact ; les budgets 0,001/10 ne sont pas épinglés",
+  "l'écart du codec augmente sous la règle"
+ ]
+}

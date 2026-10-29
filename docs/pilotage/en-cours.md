@@ -24,8 +24,8 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : R05 balayage (**0,984**/0,714) et voie auto (+0,109 valeurs / −0,150
-  mixte) ; deux correctifs (rerank, nombres en mots) **essayés et rejetés** par la mesure.
+- **Ce qu'elle fait** : R05 balayage (**0,984**/0,711) et voie auto (+0,109/−0,150) ; deux
+  correctifs rejetés ; banc réparé après la dérive de `continuite.md` (**83** questions vérifiées).
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
 - **Prochaine action** : R11 (bloqué par N2) sinon consolidation ; R06 à réécrire (modalité).
@@ -79,15 +79,15 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **299** / **371** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **103** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **300** / **372** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **104** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 6 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a** (régime 1 %) ; A6.2 (bloqué) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 6 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a flux** ; pont/coupe ; A6.2 (bloqué) |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée**, puis B10.3 (bloqué) |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 pré-mesure** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13** (PPL BPE) ; **R4.4 bloqué** |

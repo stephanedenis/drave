@@ -69,6 +69,18 @@ echec=0
 ecart2=""
 tester() {   # nom, plafond d'écart, référence PPL, arguments du pilote
     local nom="$1" plafond="$2" ref_attendue="$3"; shift 3
+    # A8.3a — le régime 1 % a ses propres références et ses propres plafonds : la
+    # règle change la PPL et l'écart du codec. On ne mélange pas les deux régimes.
+    if [ "${DRAVE_PERTE_MAX:-}" = "1" ]; then
+        case "$nom" in
+            "mode 0"*|"mode 1"*|"mode 2"*) ref_attendue="58.3200" ;;
+            "mode 3"*|"mode 4"*) ref_attendue="62.7357" ;;
+        esac
+        case "$nom" in
+            "mode 2"*) plafond="1.2e-1" ;;
+            "mode 4"*) plafond="4e-2" ;;
+        esac
+    fi
     demarrer_serveur || { printf "  %-34s %s\n" "$nom" "❌ nœud moteur"; echec=1; return; }
     local sortie code
     # `timeout` sur le PILOTE aussi : une régression du cadriciel qui bloque le

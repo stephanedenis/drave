@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (35)
+## Commits du jour (36)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -43,6 +43,7 @@
 | 16:31 | `98e0b6e1` | R13.0 — BPE 3,4–5,2 OCTETS/JETON, RÉVERSIBLE ; PPL À MESURER | `R13-tokenisation-bpe.md`, `en-cours.md`, `roadmap.md` (+4) |
 | 16:35 | `a0ff20a1` | LE BALAYAGE ENTRE DANS LE PIPELINE : 0,944 SUR LES QUESTIONS À VALEUR CONTRE 0,851 POUR L'EXTRACTIF | `tete-balayage.md`, `R05-tete-balayage.md`, `en-cours.md` (+5) |
 | 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE | `R05-tete-balayage.md`, `en-cours.md`, `roadmap.md` (+7) |
+| 16:42 | `33a11db0` | BALAYAGE — DEUX CORRECTIFS ESSAYÉS ET REJETÉS : LE RERANK ET LES NOMBRES EN MOTS DÉGRADENT L'INDEX | `tete-balayage.md`, `en-cours.md`, `README.md` (+11) |
 
 ## Chiffres du jour
 
