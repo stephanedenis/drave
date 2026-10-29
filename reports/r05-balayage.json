@@ -1,0 +1,18 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.4/R05",
+ "resultats": {
+  "lexical": {
+   "n": 249,
+   "trouves": 245,
+   "rappel10": 0.984,
+   "ms_moyen": 0.12
+  },
+  "paraphrase": {
+   "n": 84,
+   "trouves": 59,
+   "rappel10": 0.702,
+   "ms_moyen": 0.13
+  }
+ }
+}

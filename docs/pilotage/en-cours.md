@@ -24,11 +24,11 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : pipeline R0.6 livré (12/20 pilote, modèle 7/8) ; **R06 relecture :
-  triple négatif** (relire plus = 0/249 ; déclencheur 2/9 récupérés, 15 manqués) ; seuil ramené à 1,0.
+- **Ce qu'elle fait** : **R05 balayage** : index de spans, rappel@10 **0,984** (lexical) /
+  **0,702** (paraphrases), 0,1 ms ; pipeline R0.6 et R06 (triple négatif) livrés avant.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : réécrire R06 autour du **changement de modalité** ; sinon **R11**.
+- **Prochaine action** : brancher le balayage dans le pipeline (action du contrôleur) ; R06 à réécrire.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -77,10 +77,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **57** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **296** / **367** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **102** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **297** / **368** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **103** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
