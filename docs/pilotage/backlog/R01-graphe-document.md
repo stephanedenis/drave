@@ -1,6 +1,6 @@
 # R01 — Graphe de document et registre de régions
 
-> **Statut** : spécifiée · **Priorité** : P0 · **Programme** : R · **Dépend de** : —
+> **Statut** : prête · **Priorité** : P0 · **Programme** : R · **Dépend de** : —
 > **Ligne de roadmap** : R0.1 · **Fiche de résultat attendue** : rapport-r01-graphe-document.md (à créer dans `reports/`)
 > **Résumé** : Transformer un document en un arbre de régions typées, avec offsets et provenance, sans modèle.
 

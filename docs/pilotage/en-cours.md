@@ -36,8 +36,9 @@
   plancher** (chrF **12,7 / 5,3** contre **39,6**) ; B12.10 (pipeline M1→M4→M8) partiel.
 - **A — moteur** : A1–A8 mesurés, sauf **A3.4** (Colab), **A5.4** (FPGA), **A6.2** (MoE local) ; restent
   A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en opt-in.
-- **Backlog** : **29 fiches** — 19 pour R, 10 pour les lignes ouvertes A/B/N ; une fiche par contrat, porte et
-  contrôle négatif.
+- **Backlog** : **29 fiches** — 19 pour R, 10 pour les lignes ouvertes A/B/N ; une fiche par contrat,
+  porte et contrôle négatif. Le **graphe** est dans [`backlog/dependances.md`](backlog/dependances.md) :
+  40 arêtes dures, 4 plafonds, 8 lignes sans fiche, vérifié par `tools/verifie_backlog.py`.
 - **Documentation** : une **seule roadmap** (A/B/N/R) ; l'ancien détail A/B et N est archivé et lié depuis la
   roadmap ; l'analyse de la lecture rapide est dans [`lecture-rapide.md`](../theorie/lecture-rapide.md).
 
@@ -50,7 +51,7 @@
 | portes | **49** (47 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **273** / **337** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **88** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **89** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Où l'on en est

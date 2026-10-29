@@ -1,6 +1,6 @@
 # R02 — Contrôleur de lecture (survol, balayage, sélectif, relecture)
 
-> **Statut** : spécifiée · **Priorité** : P0 · **Programme** : R · **Dépend de** : R01
+> **Statut** : spécifiée · **Priorité** : P0 · **Programme** : R · **Dépend de** : R01 (son schéma de manifeste)
 > **Ligne de roadmap** : R0.2 · **Fiche de résultat attendue** : rapport-r02-controleur.md (à créer dans `reports/`)
 > **Résumé** : Choisir, pour un but et un budget, la prochaine action de lecture et sa profondeur.
 

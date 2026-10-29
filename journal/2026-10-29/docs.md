@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 04:03 | `e8ea9852` | DOCS — ROADMAP N2.7–N2.24 ET ENTRÉES README | `roadmap-native.md`, `README.md`, `docs.md` (+1) |
 | 04:06 | `53577daa` | DOCS — COMPTEURS 259/324 | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 04:23 | `87dfd1fc` | DOCS — COMPTEURS 260/325 | `en-cours.md`, `README.md`, `mesures.md` |
+| 08:18 | `3b9162d1` | DOCS — UNE ROADMAP UNIQUE (A/B/N/R), ANALYSE LECTURE RAPIDE, BACKLOG 29 FICHES | `AGENTS.md`, `README.md`, `README.md` (+47) |
 
 ## Mesures et rapports touchés
 

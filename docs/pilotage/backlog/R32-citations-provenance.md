@@ -1,6 +1,6 @@
 # R32 — Citations et provenance
 
-> **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R31, R01
+> **Statut** : spécifiée · **Priorité** : P2 · **Programme** : R · **Dépend de** : R31, R01, R21
 > **Ligne de roadmap** : R3.2 · **Fiche de résultat attendue** : rapport-r32-citations.md (à créer dans `reports/`)
 > **Résumé** : Faire citer chaque réponse par sa région et son offset, et vérifier la citation.
 

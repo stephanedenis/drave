@@ -1,6 +1,6 @@
 # R51 — Lecture croisée / multi-documents
 
-> **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R31, R03
+> **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R31, R32, R03, R01 · **Contraint par** : le manque M4 (aucun encodeur exécutable)
 > **Ligne de roadmap** : R5.1 · **Fiche de résultat attendue** : rapport-r51-lecture-croisee.md (à créer dans `reports/`)
 > **Résumé** : Comparer plusieurs documents, suivre les citations et signaler les contradictions.
 

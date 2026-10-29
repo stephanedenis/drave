@@ -5,17 +5,21 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**28 commits** · **0 session(s)** · **5 thème(s)**
+**29 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | mesures | 19 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
+
+## Autres pièces du jour
+
+[etat-transfere.md](etat-transfere.md)
 
 ## Sessions DSH
 
@@ -54,6 +58,7 @@
 | 07:04 | `5e0c1bb5` | N2.33 — CONTEXTE 129 : PPL 2,6998, NOUVEAU MEILLEUR |
 | 07:15 | `00f9d1c8` | N2.34 — 129 + 10 000 PAS : PPL 2,712, NÉGATIF, ARRÊTÉ |
 | 07:28 | `42f74d5e` | N2.35 — CONTEXTE 130 APRÈS 129 : PPL 2,7149, NÉGATIF |
+| 08:18 | `3b9162d1` | DOCS — UNE ROADMAP UNIQUE (A/B/N/R), ANALYSE LECTURE RAPIDE, BACKLOG 29 FICHES |
 
 ## Le récit de la journée (écrit à la main)
 

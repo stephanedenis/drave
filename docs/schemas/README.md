@@ -1,6 +1,6 @@
 # Les schémas — index et convention
 
-> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : quatre schémas directs
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : cinq schémas directs
 > des concepts, deux sources générées par docwatch et les quatorze schémas de la synthèse
 > (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
 > `role="img"` ; aucun n'utilise de ressource externe.
@@ -17,6 +17,7 @@
 | [protocole-semantique.svg](protocole-semantique.svg) | surface L1 → encodeur → z → décodeur + L2 → surface L2 | [le protocole](../theorie/protocole-semantique.md) |
 | [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
+| [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
 
 ## Les sources générées par docwatch
 

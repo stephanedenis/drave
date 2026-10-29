@@ -8,7 +8,7 @@
 > **La roadmap** est [`../roadmap.md`](../roadmap.md) ; l'**analyse** qui a ouvert le programme R est
 > [`../../theorie/lecture-rapide.md`](../../theorie/lecture-rapide.md) ; l'**état courant** est
 > [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **29 fiches** : 19 pour R, 10 pour les lignes
-> ouvertes A/B/N.
+> ouvertes A/B/N ; le **graphe** des dépendances est dans [`dependances.md`](dependances.md).
 
 ## Comment utiliser une fiche
 
@@ -41,30 +41,31 @@ non bloquant ; **P3** = plus tard, ou dépend d'un bloc absent (vision, maths, W
 
 ## Le programme R (lecteur)
 
-**19 fiches.** Ordre de dépendance : `R01 → R02 → R03` ; `R03 → R04/R05/R06` ; `R11 → R12` ; `R21 → R22` ;
-`R31 → R32` ; `R41–R44` après R01 ; `R51/R52` après R3.
+**19 fiches.** La colonne « dépend de » ne porte que les **arêtes dures** ; les plafonds et les
+contraintes mesurées sont dans chaque fiche et dans le [graphe](dependances.md). Le chemin le plus
+long est `R01 → R02 → R03 → R31 → R32 → R51`.
 
 | id | fiche | statut | prio | dépend de | ligne |
 |---|---|---|---|---|---|
-| R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | spécifiée | P0 | — | R0.1 |
+| R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | prête | P0 | — | R0.1 |
 | R02 | [Contrôleur de lecture](R02-controleur-lecture.md) | spécifiée | P0 | R01 | R0.2 |
 | R03 | [Banc de lecture rapide](R03-banc-lecture-rapide.md) | spécifiée | P0 | R01, R02 | R0.3 |
-| R04 | [Tête de survol](R04-tete-survol.md) | spécifiée | P1 | R03 | R0.4 |
-| R05 | [Tête de balayage](R05-tete-balayage.md) | spécifiée | P1 | R03 | R0.4 |
-| R06 | [Tête de relecture](R06-tete-relecture.md) | spécifiée | P1 | R03, R22 | R0.4 |
-| R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | N1, N2 | R1.1 |
+| R04 | [Tête de survol](R04-tete-survol.md) | spécifiée | P1 | R03, R01 | R0.4 |
+| R05 | [Tête de balayage](R05-tete-balayage.md) | spécifiée | P1 | R03, R01 | R0.4 |
+| R06 | [Tête de relecture](R06-tete-relecture.md) | spécifiée | P2 | R03, R21, R22 | R0.4 |
+| R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | R01, N1 | R1.1 |
 | R12 | [Curriculum de contexte long](R12-curriculum-contexte.md) | spécifiée | P1 | R11 | R1.2 |
-| R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | spécifiée | P2 | N4.1 | R1.3 |
-| R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | N5, R11 | R2.1 |
-| R22 | [Mémoire épisodique et relecture](R22-memoire-episodique.md) | spécifiée | P2 | R21 | R2.2 |
-| R31 | [Restitution : SFT de lecture](R31-restitution-sft.md) | spécifiée | P1 | N4, R03 | R3.1 |
-| R32 | [Citations et provenance](R32-citations-provenance.md) | spécifiée | P2 | R31, R01 | R3.2 |
+| R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | spécifiée | P2 | — | R1.3 |
+| R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | R01, R11 | R2.1 |
+| R22 | [Mémoire épisodique et relecture](R22-memoire-episodique.md) | spécifiée | P2 | R01, R21 | R2.2 |
+| R31 | [Restitution : SFT de lecture](R31-restitution-sft.md) | spécifiée | P1 | R01, R03, R21 | R3.1 |
+| R32 | [Citations et provenance](R32-citations-provenance.md) | spécifiée | P2 | R31, R01, R21 | R3.2 |
 | R41 | [Bloc tableaux](R41-bloc-tableaux.md) | spécifiée | P2 | R01 | R4.1 |
 | R42 | [Bloc code (AST, exécution)](R42-bloc-code.md) | spécifiée | P2 | R01 | R4.2 |
 | R43 | [Bloc maths](R43-bloc-maths.md) | spécifiée | P3 | R01 | R4.3 |
 | R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | spécifiée | P3 | R41, R42, R43 | R4.4 |
-| R51 | [Lecture croisée / multi-documents](R51-lecture-croisee.md) | spécifiée | P3 | R31, R03 | R5.1 |
-| R52 | [Décodeur multilingue](R52-multilingue-decodeur.md) | spécifiée | P3 | B10.3, R31 | R5.2 |
+| R51 | [Lecture croisée / multi-documents](R51-lecture-croisee.md) | spécifiée | P3 | R31, R32, R03, R01 | R5.1 |
+| R52 | [Décodeur multilingue](R52-multilingue-decodeur.md) | spécifiée | P3 | B10.3, R31, R32 | R5.2 |
 
 ## Les lignes ouvertes A/B/N
 
@@ -73,16 +74,16 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 
 | id | fiche | statut | prio | dépend de | ligne |
 |---|---|---|---|---|---|
-| N0.3b | [Parité de perplexité DRVM ↔ GGUF](N0.3b-parite-ppl.md) | à faire | P1 | N0 | N0.3b |
+| N0.3b | [Parité de perplexité DRVM ↔ GGUF](N0.3b-parite-ppl.md) | prête | P1 | N0 | N0.3b |
 | N2 | [Distillation native (50 000 séquences)](N2-distillation.md) | en cours | P1 | N1 | N2 |
-| N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | N2 | N4 |
-| B10.3 | [Raisonnement sur `z` gelé](B10.3-raisonnement-z.md) | bloquée | P2 | B10.2 | B10.3 |
+| N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | — | N4 |
+| B10.3 | [Raisonnement sur `z` gelé](B10.3-raisonnement-z.md) | bloquée | P2 | B10.2bis | B10.3 |
 | B12.10 | [Pipeline M1 → M4 → M8](B12.10-pipeline-m1-m4-m8.md) | partiel | P2 | B12 | B12.10 |
 | A3.4 | [Démonstration Colab](A3.4-colab.md) | bloquée | P3 | A3 | A3.4 |
 | A5.4 | [Opérateur FPGA complet](A5.4-fpga.md) | bloquée | P3 | A5 | A5.4 |
 | A6.2 | [Routage MoE appris](A6.2-moe-local.md) | bloquée | P3 | A6 | A6.2 |
 | B1.5 | [Prose scientifique (corpus humain)](B1.5-prose-scientifique.md) | bloquée | P3 | B1 | B1.5 |
-| B11.10 | [Cartes et ambiguïtés de la RSN](B11.10-cartes-ambiguites.md) | à faire | P2 | B11 | B11.10 |
+| B11.10 | [Cartes et ambiguïtés de la RSN](B11.10-cartes-ambiguites.md) | prête | P2 | B11 | B11.10 |
 
 ## Le modèle de fiche
 
@@ -99,6 +100,7 @@ sortie, coût, trace), mesures, portes, contrôles négatifs, ce qui pourrait la
 
 ## Voir aussi
 
+- [Le graphe des dépendances](dependances.md) — les arêtes dures, les plafonds, la frontière et les priorités.
 - [La roadmap unique](../roadmap.md) — les programmes A, B, N, R et l'ordre du jour.
 - [L'analyse de la lecture rapide](../../theorie/lecture-rapide.md) — les 14 techniques et les cinq couches.
 - [L'état courant](../en-cours.md) — la prochaine action.

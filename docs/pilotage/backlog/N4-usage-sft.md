@@ -1,6 +1,6 @@
 # N4 — Usage : SFT, service, sûreté
 
-> **Statut** : partiel · **Priorité** : P1 · **Programme** : N · **Dépend de** : N2
+> **Statut** : partiel · **Priorité** : P1 · **Programme** : N · **Dépend de** : — · **Plafonné par** : N2 (la qualité du student)
 > **Ligne de roadmap** : N4 · **Fiche de résultat attendue** : rapport-n4-usage.md (à créer dans `reports/`)
 > **Résumé** : Rendre le natif utilisable : répondre, s'arrêter, suivre une consigne, servir sur une API.
 

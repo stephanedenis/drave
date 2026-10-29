@@ -7,7 +7,8 @@
 > **Détail et histoire** : l'ancien plan A/B est archivé dans
 > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
 > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
-> dans [`backlog/index.md`](backlog/index.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+> dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+> [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
 
 ## Comment lire cette roadmap
 
@@ -111,7 +112,7 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 | **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — données et capacité ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
 | **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 | porter les briques mesurées en **production** et en **porte** |
 | **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — SFT (**24/24 vus, 0/4 tenus**) et service durci |
-| **N5** | l'échelle : 50–100 M, corpus élargi | ⏳ | après N2/N4 ; BPE si N4.1 le justifie |
+| **N5** | l'échelle : 50–100 M, corpus élargi | ⏳ | après N2/N4 ; BPE si R13 le justifie |
 
 **Les trois leçons N qui contraignent R** :
 
@@ -142,11 +143,11 @@ sait pas dire ce qu'il a sauté n'est pas un lecteur, c'est un filtre.
 | phase | livrable | ce qui est mesuré | dépend de |
 |---|---|---|---|
 | **R0 — le lecteur v0** | graphe de document, contrôleur classique, banc | exactitude, citation, événements, octets, secondes ; courbe par type | **rien** (modèle externe) |
-| **R1 — la fenêtre native** | contexte hiérarchique, curriculum, tokenisation | PPL à 1 000 octets, aiguille native, stabilité | N1/N2 |
-| **R2 — la mémoire** | gist, entités, store épisodique, relecture | réponse multi-sections, citation, relecture | N5, R1 |
-| **R3 — la restitution** | SFT de lecture, réponse/résumé/extraction, citations | exactitude tenue à l'écart, fidélité | N4, R0 |
+| **R1 — la fenêtre native** | contexte hiérarchique, curriculum, tokenisation | PPL à 1 000 octets, aiguille native, stabilité | R0, N1 ; plafonné par N2 |
+| **R2 — la mémoire** | gist, entités, store épisodique, relecture | réponse multi-sections, citation, relecture | R1, et le négatif de mémoire (acquis) |
+| **R3 — la restitution** | SFT de lecture, réponse/résumé/extraction, citations | exactitude tenue à l'écart, fidélité | R0, R2 ; plafonné par N4 |
 | **R4 — les blocs structurels** | tableaux, code, maths, vision/OCR | extraction exacte, exécution, layout | R0 |
-| **R5 — la lecture croisée** | multi-documents, retrieval, multilingue | comparaison, provenance, traduction | R3, M4 |
+| **R5 — la lecture croisée** | multi-documents, retrieval, multilingue | comparaison, provenance, traduction | R3 ; encodeur exécutable (manque M4) |
 
 ### R0 — le lecteur v0 (système, sans entraînement)
 
@@ -183,7 +184,7 @@ suffit, le contexte brut n'est pas le premier chantier.
 | **R2.1** | **mémoire de travail / gist** : état de résumé par section, table d'entités et de faits, tampon en entrée | ⏳ | réponse dont l'indice est en section 2 après lecture de la section 5, **avec citation** ; closed-book échoue |
 | **R2.2** | **mémoire épisodique / relecture** : store de régions (offsets), KV avec éviction, déclencheur de relecture | ⏳ | la relecture récupère une information que le gist a perdue ; contrôle : sans le store, échec |
 
-**Ce qui bloque** : N5 est **négatif** — le réseau ne retient pas le signal à 8 pas. R2.1 doit donc commencer par
+**Ce qui bloque** : le négatif de mémoire est établi — le réseau ne retient pas le signal à 8 pas. R2.1 doit donc commencer par
 le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement de mémoire.
 
 ### R3 — la restitution
@@ -267,6 +268,8 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **N — détail mesuré** : [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md) (176 lignes,
   archive).
 - **Les fiches** : [`reports/README.md`](../../reports/README.md) et [`reports/INDEX.md`](../../reports/INDEX.md).
+- **Le graphe des dépendances** : [`backlog/dependances.md`](backlog/dependances.md) — 40 arêtes dures,
+  4 plafonds, la frontière et les sous-items.
 - **Le récit daté** : [`journal/`](../../journal/README.md) ; le journal des décisions de la roadmap est dans
   [`journal/2026-10-27/decisions-roadmap.md`](../../journal/2026-10-27/decisions-roadmap.md).
 - **Le concept du lecteur** : [`lecture-rapide.md`](../theorie/lecture-rapide.md) ; le **backlog** :

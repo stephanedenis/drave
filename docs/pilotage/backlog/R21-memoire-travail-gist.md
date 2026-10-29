@@ -1,6 +1,6 @@
 # R21 — Mémoire de travail et gist
 
-> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : N5, R11
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, R11 · **Contraint par** : la mémoire à 8 pas est négative (mesuré)
 > **Ligne de roadmap** : R2.1 · **Fiche de résultat attendue** : rapport-r21-memoire-gist.md (à créer dans `reports/`)
 > **Résumé** : Tenir un état de résumé, une table d'entités et de faits, et un tampon en entrée.
 

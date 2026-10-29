@@ -1,6 +1,6 @@
 # R04 — Tête de survol (pertinence d'une région)
 
-> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
 > **Ligne de roadmap** : R0.4 · **Fiche de résultat attendue** : rapport-r04-tete-survol.md (à créer dans `reports/`)
 > **Résumé** : Prédire, depuis le début d'une région, si elle vaut la peine d'être lue pour le but courant.
 

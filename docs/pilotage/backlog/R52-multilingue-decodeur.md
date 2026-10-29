@@ -1,6 +1,6 @@
 # R52 — Décodeur multilingue (lecture en traduction)
 
-> **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : B10.3, R31
+> **Statut** : spécifiée · **Priorité** : P3 · **Programme** : R · **Dépend de** : B10.3, R31, R32
 > **Ligne de roadmap** : R5.2 · **Fiche de résultat attendue** : rapport-r52-multilingue.md (à créer dans `reports/`)
 > **Résumé** : Lire un document dans une langue et répondre dans une autre, sans que la réponse dépende de la surface.
 

@@ -1,6 +1,6 @@
 # R12 — Curriculum de contexte long (129 → 1 000 octets)
 
-> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R11
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R11 · **Contraint par** : les cinq négatifs 129–256
 > **Ligne de roadmap** : R1.2 · **Fiche de résultat attendue** : rapport-r12-curriculum-contexte.md (à créer dans `reports/`)
 > **Résumé** : Trouver une recette d'allongement du contexte qui ne refait pas les négatifs 130/136/160/256.
 
