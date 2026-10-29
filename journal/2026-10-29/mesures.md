@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (26)
+## Commits du jour (27)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -34,10 +34,11 @@
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS | `en-cours.md`, `README.md`, `docs.md` (+3) |
 | 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION | `en-cours.md`, `README.md`, `mesures.md` (+6) |
 | 14:52 | `7fb1c8a6` | R4.1 — LE BLOC TABLEAUX : 996 CELLULES, 802 EXACTES, LE TEXTE PLAT RATE 3/3 | `bloc-tableaux.md`, `R41-bloc-tableaux.md`, `README.md` (+16) |
+| 15:04 | `989102e1` | B11.10 — CARTES 161/161, AMBIGUÏTÉS REFUSÉES : LE 69,3 % EST NATIF | `README.md`, `docs.md`, `b1110-cartes.json` (+3) |
 
 ## Chiffres du jour
 
-`2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763` · `2,708`
+`69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -45,6 +46,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-native-8b-warm.md](../../reports/rapport-native-8b-warm.md)
 - [reports/rapport-native-8b.md](../../reports/rapport-native-8b.md)

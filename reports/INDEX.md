@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **278 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **280 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -22,6 +22,7 @@
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
 | [rapport-budget-kimi-k3.md](rapport-budget-kimi-k3.md) | Kimi-K3 Q4 : ce qu'un jeton lit vraiment, et ce que ça impose |
@@ -248,6 +249,7 @@
 | [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |
 | [rapport-r03-banc-durci.md](rapport-r03-banc-durci.md) | R0.3 durci — 19 paraphrases : le lexique tombe, le modèle prend la tête |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
+| [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |

@@ -1,7 +1,7 @@
 # R04 — Tête de survol (pertinence d'une région)
 
-> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
-> **Ligne de roadmap** : R0.4 · **Fiche de résultat attendue** : rapport-r04-tete-survol.md (à créer dans `reports/`)
+> **Statut** : en cours · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
+> **Ligne de roadmap** : R0.4 · **Pilote** : [rapport-r04-tete-survol.md](../../../reports/rapport-r04-tete-survol.md) — tête **0,601** contre BM25 **0,836** (1/5 documents ; gagne sur le juridique à 0,956 contre 0,622)
 > **Résumé** : Prédire, depuis le début d'une région, si elle vaut la peine d'être lue pour le but courant.
 > **Glossaire** : [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md) · [AUC](../../theorie/glossaire/entrees/auc.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 
