@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,6 +20,7 @@
 | 16:53 | `0e8f7a20` | A8.3a — PORTE-PONT : RÉGIME 1 % ÉPINGLÉ (111,8003 / 115,6406, +5,88/+25,75) | `en-cours.md`, `README.md`, `mesures.md` (+3) |
 | 17:02 | `d8df29e0` | A8.3a — PORTE-COUPE : RÉGIME 1 % ÉPINGLÉ (111,8003 ; VARIANCE 2,4 %) | `en-cours.md`, `README.md`, `portes.md` (+4) |
 | 17:07 | `8770ea50` | A8.0 — PORTE-ADAPTATEUR ÉPINGLÉE : 17,4315 / 2 687 292,8165 ; ÉTAT 7/33 | `en-cours.md`, `README.md`, `attention.md` (+6) |
+| 18:22 | `ef352945` | PORTES — LES TROIS SOUS-PASSES DU 29/10 : 33 PASSAGES, 32 VERTES, 1 ROUGE TOLÉRÉE | `references-non-regression.md`, `README.md`, `docs.md` |
 
 ## Chiffres du jour
 
