@@ -24,11 +24,11 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : R05 balayage branché dans le pipeline (`--lecteur span`) : **0,944**
-  sur les questions à valeur contre 0,851 pour l'extractif ; porte du pipeline 7 contrôles.
+- **Ce qu'elle fait** : R05 balayage dans le pipeline (**0,944** sur les valeurs) ; **voie auto**
+  mesurée : +0,109 sur un corpus de valeurs, **−0,150** sur le pilote mixte — le corpus décide.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : choix automatique de la voie (valeur / sens / paraphrase) dans le pipeline.
+- **Prochaine action** : spans de nombres en mots et score de span (pas du passage) ; sinon R11.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 

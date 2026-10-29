@@ -58,6 +58,33 @@ est donc ramené à **1,0** : il attrape les questions qui ne partagent **rien**
 des vraies réponses par un seuil global. C'est la leçon de R0.5 appliquée : **un seuil absolu ne
 se transporte pas**. Exposé (`--seuil`), il se calibre par corpus.
 
+## Le choix automatique de la voie : +11 points sur un corpus de valeurs, −15 sur un corpus mixte
+
+`--lecteur auto` classe la question par sa **forme** (« combien », « quel numéro », « quelle
+date » → span ; sinon extractif). Résultat sur les trois jeux :
+
+| jeu | auto | extractif | écart |
+|---|---:|---:|---:|
+| lexical (249, questions à valeur) | **0,944** | 0,835 | **+0,109** |
+| paraphrases (84, à valeur) | **0,333** | 0,274 | **+0,059** |
+| pilote (20, mixte) | 0,450 | **0,600** | **−0,150** |
+
+**Sur un corpus qui demande des valeurs, le choix automatique paie** (+11 points sur le
+lexical). **Sur un corpus mixte, il coûte** (−15 points sur le pilote). Les cinq désaccords du
+pilote disent pourquoi :
+
+- **les nombres en mots** : « combien d'invariants ? » attend « six », le span ne connaît que les
+  chiffres et rend « 2 » ;
+- **le classement du span** : « combien de pages R0.1 ? » attend « 51 », le span rend « 0.1 »
+  (le premier chiffre de la phrase, pas la réponse) — le span hérite du BM25 du **passage**, pas
+  d'un score de **span** ;
+- **un artefact de contrôle** : « point 7 » attendu, « 7 » rendu — la valeur est juste, la
+  comparaison est stricte.
+
+**La leçon, la même que R0.5 mais par un autre chemin** : le choix de la voie dépend du
+**corpus**, pas seulement de la forme de la question. Le défaut du pipeline reste l'extractif ;
+`--auto` s'active pour un corpus dont on sait qu'il demande des valeurs.
+
 ## Ce qui pourrait le rendre faux
 
 - **le seuil est calibré sur l'échelle BM25 brute** de ce corpus : un autre document, une autre

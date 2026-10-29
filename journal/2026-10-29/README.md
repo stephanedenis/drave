@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**86 commits** · **0 session(s)** · **7 thème(s)**
+**87 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 7 | [distribue.md](distribue.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 34 | [mesures.md](mesures.md) |
@@ -118,6 +118,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:31 | `98e0b6e1` | R13.0 — BPE 3,4–5,2 OCTETS/JETON, RÉVERSIBLE ; PPL À MESURER |
 | 16:33 | `90c751ca` | R05 — LE BALAYAGE CLASSIQUE : RAPPEL@10 0,984 SUR LE LEXICAL, 0,702 SUR LES PARAPHRASES, 0,1 MS |
 | 16:35 | `a0ff20a1` | LE BALAYAGE ENTRE DANS LE PIPELINE : 0,944 SUR LES QUESTIONS À VALEUR CONTRE 0,851 POUR L'EXTRACTIF |
+| 16:36 | `b49daabf` | A8.0 — PORTE-REPARTI ÉPINGLÉE : PPL 9,1748 ; ÉTAT 5/33 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **294 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **295 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -19,6 +19,7 @@
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
+| [rapport-a80-porte-reparti.md](rapport-a80-porte-reparti.md) | A8.0 — `porte-reparti-moteur` épingle sa PPL : 9,1748 |
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
 | [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-a83-defaut.md](rapport-a83-defaut.md) | A8.3 — le défaut place+perte n'est pas neutre : les portes épinglées bougent de −5,9 % à +19,5 % |

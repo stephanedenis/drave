@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import pathlib
 import sys
 import time
@@ -38,6 +39,20 @@ import lecteur_controleur as lc  # noqa: E402
 SEUIL = 1.0  # calibré sur le corpus du pilote : les vraies questions y scores 3,6–11,1, le
 # hors-sujet 0,0 ; un seuil plus haut (3,8) refusait 32 % des paraphrases d'autres documents
 # pour gagner 1 refus sur 10 — mesuré, et rejeté (voir la fiche R06).
+
+
+# La FORME de la question décide de la voie : un nombre, une date ou un taux se balaient ;
+# un sens se lit. C'est un signal syntaxique — il ne dépend ni de l'échelle des scores ni du
+# corpus, contrairement au seuil de R0.5 qui ne transférait pas.
+RE_VALEUR = re.compile(
+    r"\b(combien|quel(?:le)?\s+(?:est\s+(?:le|la)\s+)?(?:numéro|taux|jour|point|score|"
+    r"pourcentage|taille|valeur|montant|date|durée|nombre|prix|poids|part|proportion)|"
+    r"à\s+quelle|en\s+quelle|quelle\s+date|quel\s+jour)", re.I)
+
+
+def voie(question: str) -> str:
+    """« span » pour une question de valeur, « extractif » pour une question de sens."""
+    return "span" if RE_VALEUR.search(question) else "extractif"
 
 
 def flux_octets(manifeste: dict) -> bytes:
@@ -75,6 +90,9 @@ def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
         resultat["reponse"] = {"trouve": False, "motif": "budget épuisé avant toute lecture"}
         resultat["duree_s"] = round(time.time() - debut, 2)
         return resultat
+    if lecteur == "auto":
+        lecteur = voie(question)
+        resultat["voie_choisie"] = lecteur
     if lecteur == "extractif":
         if meilleur < seuil:
             resultat["reponse"] = {
@@ -94,6 +112,10 @@ def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
         index = index_spans.IndexSpans(manifeste)
         spans = index.chercher(question, 10)
         if not spans or spans[0]["score"] < seuil * 0.1:
+            if resultat.get("voie_choisie") == "span":
+                # le balayage n'a rien trouvé : on retombe sur la lecture, sans le dire deux fois
+                resultat["voie_choisie"] = "extractif (repli)"
+                return pipeline(chemin, question, budget, "extractif", seuil)
             resultat["reponse"] = {"trouve": False,
                                    "motif": f"aucun span au-dessus du seuil (meilleur {spans[0]['score'] if spans else 0:.2f})"}
         else:
@@ -191,7 +213,7 @@ def main() -> int:
     ap.add_argument("--document", type=pathlib.Path)
     ap.add_argument("--question")
     ap.add_argument("--budget", type=float, default=0.30)
-    ap.add_argument("--lecteur", choices=("extractif", "modele", "span"), default="extractif")
+    ap.add_argument("--lecteur", choices=("extractif", "modele", "span", "auto"), default="extractif")
     ap.add_argument("--seuil", type=float, default=SEUIL)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--autotest", action="store_true")

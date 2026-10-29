@@ -1,0 +1,65 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.6",
+ "resultats": {
+  "pilote": {
+   "auto": {
+    "n": 20,
+    "justes": 9,
+    "taux": 0.45,
+    "voies": {
+     "span": 9,
+     "extractif": 10,
+     "auto": 1
+    }
+   },
+   "extractif": {
+    "n": 20,
+    "justes": 12,
+    "taux": 0.6,
+    "voies": {
+     "extractif": 20
+    }
+   }
+  },
+  "lexical": {
+   "auto": {
+    "n": 249,
+    "justes": 235,
+    "taux": 0.944,
+    "voies": {
+     "span": 248,
+     "auto": 1
+    }
+   },
+   "extractif": {
+    "n": 249,
+    "justes": 208,
+    "taux": 0.835,
+    "voies": {
+     "extractif": 249
+    }
+   }
+  },
+  "paraphrase": {
+   "auto": {
+    "n": 84,
+    "justes": 28,
+    "taux": 0.333,
+    "voies": {
+     "span": 46,
+     "extractif": 28,
+     "auto": 10
+    }
+   },
+   "extractif": {
+    "n": 84,
+    "justes": 23,
+    "taux": 0.274,
+    "voies": {
+     "extractif": 84
+    }
+   }
+  }
+ }
+}
