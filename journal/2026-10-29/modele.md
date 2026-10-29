@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 16:20 | `3328e0ec` | LE BANC DURCI PASSE À 84 PARAPHRASES : MODÈLE 0,375 CONTRE LEXICAL 0,269, TÊTE 0,575 CONTRE BM25 0,745 | `R03-banc-lecture-rapide.md`, `R04-tete-survol.md`, `R07-routeur-extractif-generatif.md` (+15) |
 | 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 | `pipeline-lecture.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 17:34 | `53fec194` | R06 v2 — LA CASCADE DES LECTEURS : +1,2 POINT SUR LES PARAPHRASES POUR 9 APPELS DE MODÈLE | `pipeline-lecture.md`, `R06-tete-relecture.md`, `en-cours.md` (+6) |
+| 19:30 | `ba0c4ac5` | R13.1 — PPL BPE-NATIVE : CONDITION NOMMÉE (PAS DE MODÈLE BPE NATIF) | `en-cours.md`, `README.md`, `portes.md` (+3) |
 
 ## Chiffres du jour
 
@@ -31,6 +32,7 @@
 - [reports/rapport-r06-cascade.md](../../reports/rapport-r06-cascade.md)
 - [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
+- [reports/rapport-r13.1-condition.md](../../reports/rapport-r13.1-condition.md)
 
 <!-- notes -->
 

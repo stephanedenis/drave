@@ -1,0 +1,42 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.1",
+ "verdict": "état, pas de porte composée",
+ "briques": {
+  "sortie_precoce": {
+   "gate": "porte-reflexe.sh",
+   "service": "non — bench --reflexe-essai"
+  },
+  "rejeu": {
+   "gate": "porte-trace.sh",
+   "service": "oui"
+  },
+  "placement": {
+   "gate": "porte-topologie.sh",
+   "service": "oui"
+  },
+  "pont": {
+   "gate": "porte-pont.sh",
+   "service": "oui"
+  },
+  "coupe": {
+   "gate": "porte-coupe.sh",
+   "service": "oui"
+  },
+  "profondeur_routee": {
+   "gate": "aucune",
+   "service": "rapport design-H, pas de porte"
+  },
+  "k_wta_routes": {
+   "gate": "aucune",
+   "service": "aucun chemin"
+  }
+ },
+ "decision": "ne pas ajouter une méta-porte qui lance les portes existantes : elle ne testerait pas la composition ; N3.2 service sortie précoce, N3.3 k-WTA/routes, N3.4 profondeur routée",
+ "controle": "aucune nouvelle mesure ; l'inventaire montre deux briques sans porte/service",
+ "limites": [
+  "inventaire statique",
+  "pas de run N3",
+  "service non instrumenté"
+ ]
+}

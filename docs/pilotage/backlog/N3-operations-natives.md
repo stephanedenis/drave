@@ -4,7 +4,8 @@
 > **Ligne de roadmap** : N3 · **Fiches de résultat** :
 > [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
 > [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
-> [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md).
+> [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
+> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
