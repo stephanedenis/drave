@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 09 h 20 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -35,11 +35,11 @@
   contrôleur **0,500** contre troncature **0,400** et hasard **0,000** (10 questions, indicatif).
 - **Ce que font les autres** : `f0969e87` tient l'état et prend **B11.10** ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
-- **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
-  `tools/tests/documents/bench-pilote.json`, `docs/implantation/lecteur-controleur.md`,
+- **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/banc_complet.py`,
+  `tools/porte-lecteur.sh`, `tools/tests/documents/bench-*.json`, `reports/r03-*`,
+  `docs/implantation/lecteur-controleur.md`,
   `docs/implantation/banc-lecture.md`, `reports/r03-*`, `docs/pilotage/backlog/R03-banc-lecture-rapide.md`.
-- **Prochaine action** : **R0.3** — le banc complet (30 documents, 300 questions) et un critère de
-  sélection qui ne soit pas le BM25 du lecteur.
+- **Prochaine action** : **R0.3** — le banc complet (30 documents, 300 questions) sur **GPU**.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -84,9 +84,15 @@
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | B11.10, puis B10.3 |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
-| **R — le lecteur** | 🔬 R0.1 mesuré (51 pages) ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.2 → R0.3 |
+| **R — le lecteur** | 🔬 R0.1 et R0.2 mesurés ; R0.3 en cours | aucun pour R0 ; R1 dépend de N1/N2 | R0.3 (banc complet), puis R0.4 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
+
+![Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives](../schemas/chantiers-etats.svg)
+
+*Lecture : la flèche va de ce qui est nécessaire à ce qui en dépend ; la couleur dit l'état ; les sessions actives
+sont marquées dans la boîte de leur activité. Le détail est dans la [roadmap](roadmap.md) et le
+[backlog](backlog/index.md).*
 
 **C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
 **C6** documentation · **C7** pensée : ✅ mesurés ; détail dans
