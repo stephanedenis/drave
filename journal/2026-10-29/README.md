@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**107 commits** · **0 session(s)** · **8 thème(s)**
+**108 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 23 | [docs.md](docs.md) |
-| memoire | 5 | [memoire.md](memoire.md) |
+| memoire | 6 | [memoire.md](memoire.md) |
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
@@ -140,6 +140,7 @@ Aucune session indexée pour ce jour ; voir
 | 18:22 | `ef352945` | PORTES — LES TROIS SOUS-PASSES DU 29/10 : 33 PASSAGES, 32 VERTES, 1 ROUGE TOLÉRÉE |
 | 18:23 | `de90d922` | SESSION — CLÔTURE c3d0f0bd : 7 RÉSULTATS, 7 FICHES, 32 PORTES VERTES SUR 33 PASSAGES |
 | 19:04 | `43a7510c` | PORTES — LE DERNIER LOT EST VERT : 19/19, DONT VISION (580 S) ; 52 PASSAGES, 1 TOLÉRÉE |
+| 19:21 | `a72cf1dc` | LE DÉCLENCHEUR EST TROUVÉ — LA CASCADE À CONFIANCE CALIBRÉE ÉGALE L'ORACLE HORS ÉCHANTILLON |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -168,4 +169,12 @@ valeur, rendre le span bat générer.
 
 Deux correctifs ont été essayés et **rejetés par la mesure** (le rerank, les nombres en mots) —
 consignés, parce qu'un négatif mesuré vaut un positif.
+
+**Le déclencheur, et la fin d'une obstination.** Trois séries d'essais (R0.5, R06, cascade v2)
+avaient échoué sur le même rocher : un seuil absolu sur un score BM25 ne transfère pas. La
+réponse n'était pas un autre score — c'était un **protocole**. Des signaux sans échelle
+(couverture 0,906, accord 0,848, dispersion 0,752, stabilité 0,500), un classement qui transfère
+(AUC 1,000/0,891), et surtout un seuil **calibré sur une moitié du corpus, testé sur l'autre** :
+la cascade égale l'oracle hors échantillon (0,911 sur le lexical, 0,415 sur les paraphrases),
+avec 15 et 35 appels de modèle. Le verrou unique du programme R est levé.
 <!-- /notes -->
