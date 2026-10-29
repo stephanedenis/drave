@@ -43,9 +43,10 @@ BINAIRE = RACINE / "drave-core/target/release/drave"
 MODELE = RACINE / "models/Qwen2.5-0.5B-Q8_0.gguf"
 BANC = RACINE / "tools/tests/documents/bench-durci.json"
 NEGATIFS = 5
-COUCHES = "0:3"
+COUCHES = __import__("os").environ.get("TETE_COUCHES", "0:3")
+DURS = __import__("os").environ.get("TETE_DURS", "0") == "1"
 GRAINE = 20261029
-CACHE = pathlib.Path("/tmp/tete-survol.npz")
+CACHE = pathlib.Path(f"/tmp/tete-survol-{COUCHES.replace(':', '-')}{'-durs' if DURS else ''}.npz")
 
 
 def paires() -> list[dict]:
@@ -59,7 +60,18 @@ def paires() -> list[dict]:
             or_ = next((i for i, p in enumerate(passages) if q["indice"] in p["texte"]), None)
             if or_ is None:
                 continue
-            autres = [i for i in range(len(passages)) if i != or_ and len(passages[i]["texte"]) > 60]
+            # négatifs DURS : les passages de la MÊME section que le gold (même vocabulaire),
+            # au lieu de passages tirés au hasard — sinon BM25 (et la tête) les séparent sans peine.
+            section = passages[or_]["section"]
+            if DURS:
+                autres = [i for i in range(len(passages))
+                          if i != or_ and passages[i]["section"] == section
+                          and len(passages[i]["texte"]) > 60]
+                if len(autres) < NEGATIFS:
+                    autres += [i for i in range(len(passages))
+                               if i != or_ and i not in autres and len(passages[i]["texte"]) > 60]
+            else:
+                autres = [i for i in range(len(passages)) if i != or_ and len(passages[i]["texte"]) > 60]
             choix = aleatoire.sample(autres, min(NEGATIFS, len(autres)))
             for indice, etiquette in [(or_, 1)] + [(i, 0) for i in choix]:
                 out.append({"document": document["chemin"], "type": document["type"],
@@ -180,7 +192,9 @@ def mesure(json_path: pathlib.Path | None = None) -> int:
     if json_path is not None:
         json_path.write_text(json.dumps({
             "date": "2026-10-29", "ligne": "R0.4", "paires": int(len(y)),
-            "positifs": int(y.sum()), "couches": COUCHES, "modele": "Qwen2.5-0.5B-Q8_0",
+            "positifs": int(y.sum()), "couches": COUCHES,
+            "negatifs": "durs (même section)" if DURS else "aléatoires",
+            "modele": "Qwen2.5-0.5B-Q8_0",
             "partage": "leave-one-document-out",
             "resultats": resultats,
             "moyennes": {"tete": round(float(tete), 3), "bm25": round(float(classique), 3),

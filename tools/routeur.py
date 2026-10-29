@@ -65,10 +65,20 @@ def charge() -> list[dict]:
             scores = index_par_document[cle[0]].scores(cle[1])
             mots = set(lc.jetons(cle[1]))
             couverture = (len(mots & jetons_par_document[cle[0]]) / len(mots)) if mots else 0.0
+            import statistics
+            sommet = max(scores) if scores else 0.0
+            moyenne = statistics.fmean(scores) if scores else 0.0
+            ecart = statistics.pstdev(scores) if len(scores) > 1 else 1.0
+            # signaux SANS ÉCHELLE : le sommet rapporté à la distribution du document
+            z = (sommet - moyenne) / (ecart if ecart > 1e-9 else 1.0)
+            ratio = sommet / (moyenne if moyenne > 1e-9 else 1.0)
+            # étendue : quelle part des passages partage un mot de la question
+            etendue = sum(1 for s in scores if s > 0.5 * sommet) / len(scores) if scores else 0.0
             lignes.append({
                 "banc": banc, "document": cle[0], "question": cle[1],
                 "type": detail["type"],
-                "signal": round(max(scores), 3) if scores else 0.0,
+                "signal": round(sommet, 3),
+                "z": round(z, 3), "ratio": round(ratio, 3), "etendue": round(etendue, 3),
                 "couverture": round(couverture, 3),
                 "extractif": 1 if detail["controlee_0.30"]["valeur"] else 0,
                 "modele": 1 if modele[cle]["controlee_0.30"]["valeur"] else 0,
@@ -134,30 +144,36 @@ def main() -> int:
     modele_fixe = sum(l["modele"] for l in lignes) / len(lignes)
     oracle = sum(max(l["extractif"], l["modele"]) for l in lignes) / len(lignes)
     transferts = []
+    champs = ("z", "ratio", "etendue", "couverture", "signal")
     for banc_test in ("lexical", "paraphrase"):
         apprentissage = [l for l in lignes if l["banc"] != banc_test]
         test = [l for l in lignes if l["banc"] == banc_test]
-        seuil = seuil_sur(apprentissage, "couverture")
-        transferts.append({"banc_test": banc_test, "seuil": round(seuil, 3),
-                           "exactitude": round(exactitude_sur(test, seuil, "couverture"), 3),
-                           "n": len(test),
-                           "fixe_extractif": round(sum(l["extractif"] for l in test) / len(test), 3),
-                           "fixe_modele": round(sum(l["modele"] for l in test) / len(test), 3),
-                           "oracle": round(sum(max(l["extractif"], l["modele"]) for l in test) / len(test), 3)})
+        tailles = {"fixe_extractif": round(sum(l["extractif"] for l in test) / len(test), 3),
+                   "fixe_modele": round(sum(l["modele"] for l in test) / len(test), 3),
+                   "oracle": round(sum(max(l["extractif"], l["modele"]) for l in test) / len(test), 3)}
+        par_signal = {}
+        for champ in champs:
+            seuil = seuil_sur(apprentissage, champ)
+            par_signal[champ] = {"seuil": round(seuil, 3),
+                                 "exactitude": round(exactitude_sur(test, seuil, champ), 3)}
+        transferts.append({"banc_test": banc_test, "n": len(test), "signaux": par_signal, **tailles})
 
     print("=== ROUTEUR EXTRACTIF / GÉNÉRATIF ===")
     print(f"  {len(lignes)} questions · {len(differes)} où les deux lecteurs diffèrent")
     print(f"  AUC du signal BM25   : {signal_auc:.3f}")
     print(f"  AUC couverture       : {couverture_auc:.3f}")
+    for champ in ("z", "ratio", "etendue"):
+        print(f"  AUC {champ:16s} : {auc([l[champ] for l in differes], labels):.3f}")
     print(f"  AUC longueur (faux)  : {longueur_auc:.3f}")
     print(f"  AUC aléatoire        : {aleatoire_auc:.3f}")
     print(f"  exactitude : fixe extractif {extractif_fixe:.3f} · fixe modèle {modele_fixe:.3f} "
           f"· oracle {oracle:.3f}")
     for t in transferts:
-        print(f"  couverture : seuil appris ailleurs, testé sur {t['banc_test']:11s} "
-              f"(n={t['n']:3d}, seuil {t['seuil']:.2f}) : {t['exactitude']:.3f} "
-              f"· fixe ext {t['fixe_extractif']:.3f} · fixe modèle {t['fixe_modele']:.3f} "
-              f"· oracle {t['oracle']:.3f}")
+        print(f"  testé sur {t['banc_test']:11s} (n={t['n']:3d}) · fixe ext {t['fixe_extractif']:.3f} "
+              f"· fixe modèle {t['fixe_modele']:.3f} · oracle {t['oracle']:.3f}")
+        for champ, v in t["signaux"].items():
+            print(f"     seuil appris ailleurs · {champ:11s} (seuil {v['seuil']:>6.2f}) → "
+                  f"exactitude {v['exactitude']:.3f}")
     if args.json:
         args.json.write_text(json.dumps({
             "date": "2026-10-29", "ligne": "R0.5", "questions": len(lignes),

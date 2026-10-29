@@ -1,0 +1,57 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.4",
+ "paires": 114,
+ "positifs": 19,
+ "couches": "8:11",
+ "negatifs": "durs (même section)",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "partage": "leave-one-document-out",
+ "resultats": [
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "n_test": 18,
+   "auc_tete": 0.4,
+   "auc_bm25": 0.6,
+   "auc_etiquettes_melangees": 0.667
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "n_test": 24,
+   "auc_tete": 0.338,
+   "auc_bm25": 0.694,
+   "auc_etiquettes_melangees": 0.35
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "n_test": 24,
+   "auc_tete": 0.637,
+   "auc_bm25": 0.8,
+   "auc_etiquettes_melangees": 0.388
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "n_test": 24,
+   "auc_tete": 0.438,
+   "auc_bm25": 1.0,
+   "auc_etiquettes_melangees": 0.575
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "n_test": 24,
+   "auc_tete": 0.425,
+   "auc_bm25": 0.963,
+   "auc_etiquettes_melangees": 0.8
+  }
+ ],
+ "moyennes": {
+  "tete": 0.448,
+  "bm25": 0.811,
+  "etiquettes_melangees": 0.556
+ }
+}

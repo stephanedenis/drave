@@ -32,7 +32,7 @@ lecteur perd la moitié des cas. Le routeur doit choisir — la seule question q
 | mesure | valeur |
 |---|---|
 | questions où les deux lecteurs **diffèrent** | **184** / 267 |
-| **AUC du signal BM25** | **0,785** |
+| **AUC du signal BM25** | **0,781** |
 | AUC de la couverture | 0,529 |
 | AUC du signal aléatoire | 0,407 |
 | AUC de la longueur de la question (faux signal) | 0,395 |
@@ -64,6 +64,30 @@ mauvais : **on ne déploie pas**.
    petit pour l'apprendre.
 3. **Le gain est concentré** : 7 points au mieux, sur 19 questions sur 267. Le routeur est un
    raffinement, pas un levier — tant que le régime paraphrase reste rare dans le corpus.
+
+## La version 2 (signaux relatifs) : mieux, toujours pas déployable
+
+La version 1 échouait sur le **transfert du seuil** : un seuil absolu dépend de l'échelle des
+scores. La version 2 ajoute trois signaux **sans échelle** : le **z-score** du sommet dans la
+distribution des scores du document, le **ratio** sommet/moyenne, et l'**étendue** (part des
+passages à plus de la moitié du sommet).
+
+| seuil appris sur l'autre banc, testé sur | z | ratio | étendue | couverture | signal brut |
+|---|---:|---:|---:|---:|---:|
+| le banc lexical (n=248) | **0,734** | 0,355 | 0,234 | 0,512 | 0,496 |
+| les paraphrases (n=19) | 0,474 | 0,474 | 0,368 | 0,526 | 0,421 |
+
+**Le z-score transfère mieux** (0,734 contre 0,496), et c'est cohérent : il compare le sommet à
+la distribution du document, pas à une constante. **Mais il reste sous le choix fixe** (0,855
+sur le lexical, 0,737 sur les paraphrases) : le routeur ne bat toujours pas le lecteur unique.
+
+**AUC des signaux** : brut **0,781** · z **0,761** · ratio 0,686 · couverture 0,529 ·
+étendue 0,272 · aléatoire 0,407. L'étendue est **anti-corrélée** : les questions lexicales touchent beaucoup de passages,
+donc « large » ne veut pas dire « facile ».
+
+**Conclusion** : le signal est bon, la **calibration par document** est la bonne direction, mais
+le banc des paraphrases (19 questions) ne permet pas d'apprendre le régime. Il faut **plus de
+paraphrases** avant de rejouer le routeur — pas un autre signal.
 
 ## Ce qui pourrait le rendre faux
 

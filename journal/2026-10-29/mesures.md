@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (29)
+## Commits du jour (30)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -37,6 +37,7 @@
 | 15:04 | `989102e1` | B11.10 — CARTES 161/161, AMBIGUÏTÉS REFUSÉES : LE 69,3 % EST NATIF | `README.md`, `docs.md`, `b1110-cartes.json` (+3) |
 | 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE | `R04-tete-survol.md`, `index.md`, `en-cours.md` (+8) |
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS | `R07-routeur-extractif-generatif.md`, `index.md`, `en-cours.md` (+8) |
+| 15:32 | `fe4c61a0` | R0.4 v2 ET R0.5 v2 — LES DEUX VERSIONS DURCIES CONFIRMENT LE DIAGNOSTIC : LE BANC EST LE VERROU | `R04-tete-survol.md`, `R07-routeur-extractif-generatif.md`, `en-cours.md` (+10) |
 
 ## Chiffres du jour
 

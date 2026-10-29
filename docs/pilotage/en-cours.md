@@ -22,12 +22,12 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : R0.4 tête de survol (**0,601** contre BM25 **0,836**, négatif) ; R0.5 routeur :
-  signal AUC **0,785** mais **seuil non transférable** — choix par défaut : extractif.
+- **Ce qu'elle fait** : R0.4 **deux négatifs** (v1 0,601 ; v2 0,448 contre BM25 0,811) ; R0.5 routeur :
+  AUC **0,785**, z-score transfère **0,734** mais reste sous le choix fixe. Défaut : extractif.
 - **Ce que font les autres** : `71d57f53` close ; `N2-GPU` N2 ; `c3d0f0bd` R4.1.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `tools/banc_*.py`,
   `tools/tests/documents/bench-*.json`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : R0.5 — signal **relatif** par document et banc paraphrase plus grand ; R0.4 — négatifs difficiles.
+- **Prochaine action** : **plus de paraphrases** (le banc de 19 bloque R0.4 et R0.5) ; ensuite R0.4 avec un encodeur ajusté.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -82,7 +82,7 @@
 |---|---|---|
 | portes | **52** (50 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **285** / **352** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **285** / **353** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **95** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

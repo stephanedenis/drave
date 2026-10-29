@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **281 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **282 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -16,6 +16,7 @@
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
+| [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
 | [rapport-analyse-flux.md](rapport-analyse-flux.md) | Analyse du flux, couche par couche |

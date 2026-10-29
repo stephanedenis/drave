@@ -8,7 +8,8 @@
 > **Dispositif** : 114 paires (question, passage) — 19 questions du banc durci × (1 gold +
 > 5 négatifs du même document) ; **états précoces** après les 4 premières couches de
 > Qwen2.5-0.5B (896 valeurs, capturés par le moteur) ; tête logistique ridge ; partage
-> **leave-one-document-out** ; JSON brut [`r04-tete-survol.json`](r04-tete-survol.json).
+> **leave-one-document-out** ; JSON bruts [`r04-tete-survol.json`](r04-tete-survol.json) et
+> [`r04-tete-survol-v2.json`](r04-tete-survol-v2.json) (version 2 : couches 8–11, négatifs durs).
 
 ## La question
 
@@ -59,6 +60,35 @@ R0.3 durci avait identifié — et le seul endroit où une tête mérite d'être
 4. **La tâche est un reranking, pas une recherche** : ici BM25 classe 6 candidats, alors que sa
    faiblesse mesurée en R0.3 (0,33 sur le juridique) portait sur la recherche dans **tout le
    document** — deux tâches différentes, et la fiche ne les distingue pas.
+
+## La version 2 (états 8–11, négatifs durs) : pire
+
+Deux changements, ceux que la fiche demandait : des **négatifs durs** (passages de la **même
+section** que le gold, donc même vocabulaire) et des **états plus profonds** (après la couche 11
+au lieu de 4).
+
+| document | type | AUC tête | AUC BM25 | mélangé |
+|---|---|---:|---:|---:|
+| A_RES_80_1-fr.pdf | juridique | 0,400 | 0,600 | 0,667 |
+| format-flux.md | technique | 0,338 | 0,694 | 0,350 |
+| portes.md | code | 0,637 | 0,800 | 0,388 |
+| roadmap.md | tableau | 0,438 | 1,000 | 0,575 |
+| vision.md | prose | 0,425 | 0,963 | 0,800 |
+| **moyenne** | | **0,448** | **0,811** | **0,556** |
+
+**La tête décroche** (0,448, sous le hasard) et ne gagne plus **aucun** document. Le contrôle à
+0,556 est du bruit d'échantillon, pas une fuite.
+
+**Pourquoi c'est pire, et pourquoi c'est utile** : les négatifs faciles de la version 1
+aidaient BM25 (0,836) *et* la tête (0,601) ; les négatifs durs retirent cette béquille, et la
+tête — 90 paires pour 896 dimensions — s'effondre. Les états plus profonds n'y changent rien :
+le problème n'est pas la couche, c'est le **nombre de paires**.
+
+**Conclusion des deux versions** : une **sonde linéaire** sur les états d'un 0,5 B, avec 114
+paires, ne bat pas BM25. Ce n'est pas « R0.4 est impossible » — c'est « R0.4 demande des
+**centaines ou des milliers** de paires, et sans doute un encodeur **ajusté**, pas une sonde ».
+La victoire juridique de la version 1 était du bruit : la version 2 la retourne (0,400 contre
+0,600).
 
 ## Ce qui pourrait le rendre faux
 

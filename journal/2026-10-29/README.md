@@ -5,16 +5,16 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**63 commits** · **0 session(s)** · **7 thème(s)**
+**65 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
-| docs | 16 | [docs.md](docs.md) |
+| docs | 17 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 29 | [mesures.md](mesures.md) |
+| mesures | 30 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -95,6 +95,8 @@ Aucune session indexée pour ce jour ; voir
 | 15:23 | `52075592` | JOURNAL — R4.1 ET L'ÉTAT DANS LE RÉCIT DU JOUR (59 COMMITS) |
 | 15:27 | `0731544b` | A8.0 — 0 PORTE SUR 33 N'ÉPINGLE UNE PPL : A8.3 RESTE OPT-IN |
 | 15:28 | `1ded6b7f` | SCHÉMA — R4.1 MESURÉE ET LES SESSIONS À JOUR : R0.3 MESURÉ, R0.4/R0.5 OUVERTS |
+| 15:30 | `6480f6d8` | ÉTAT — COMPTEURS 285 / 352 (A8.0 COMMITTÉ) |
+| 15:32 | `fe4c61a0` | R0.4 v2 ET R0.5 v2 — LES DEUX VERSIONS DURCIES CONFIRMENT LE DIAGNOSTIC : LE BANC EST LE VERROU |
 
 ## Le récit de la journée (écrit à la main)
 
