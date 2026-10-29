@@ -18,15 +18,14 @@
 - **Un cycle = un sous-chantier**, pas un round : plusieurs heures et délégations possibles.
 - **On ne s'arrête pas sur un compteur** : si la limite tombe avant un résultat, écrire `en-cours` +
   [`REPRISE`](../../REPRISE.md), committer, puis `update_goal resume`.
-- **Un cycle bloqué** (corpus, compte, matériel) se **nomme** et l'on prend la **ligne suivante**.
-- **Pas de nouveau goal par sous-chantier** : le goal porte le programme.
+- **Un cycle bloqué** se **nomme** et l'on prend la **ligne suivante**.
 
 ## 2. Les sous-agents
 
 ### Quand déléguer
 
-- **deux tâches indépendantes** (mesure, audit, conversion, test, revue) : **2 à 4** en parallèle ;
-- une tâche **longue et isolée** (campagne, migration, vérification) ;
+- **deux tâches indépendantes** : **2 à 4** en parallèle ;
+- une tâche **longue et isolée** ;
 - une **revue adverse** ou une **continuation** : `subagent_fork`.
 
 **On ne délègue pas** : une édition triviale d'une ligne, l'écriture de `en-cours`/`roadmap`/`AGENTS`,
@@ -85,8 +84,8 @@ fiches sont des résultats, la roadmap est le plan : aucun ne remplace l'état.
 | **cadence** | mise à jour **à chaque cycle**, et **avant chaque commit de clôture** |
 | **une ligne par résultat** | le chiffre + le lien vers la fiche ; jamais le protocole |
 | **prochaine action** | toujours nommée, avec son identifiant (N0.3b, N2.4…) |
-| **sous-agents actifs** | tableau ou ligne : qui, quoi, état ; « aucun » est une information |
-| **sessions actives** | une sous-section par session : Id, rôle, action, autres sessions, prochaine action, bloquants, journal |
+| **identité DSH** | `DSH_SESSION_ID` absent des sessions = **pair** : pas d'état, un **diff** ; déclarer périmètre, fichiers réservés et goal ; sans principale, l'humain en désigne une ; une session fermée rouvre son bloc |
+| **sessions actives** | une sous-section par session : Id, rôle, action, autres sessions, prochaine action, bloquants, journal ; le rôle dit **principale** ou **pair** |
 | **bloquants** | un bloquant par chantier A/B/N/R, même « aucun » |
 | **questions ouvertes** | **5 au plus**, chacune avec ce qui la débloque |
 | **pas de logs** | pas de tableaux de mesures, pas de séries, pas de récit de round |
@@ -95,15 +94,16 @@ fiches sont des résultats, la roadmap est le plan : aucun ne remplace l'état.
 **Lecture** : `AGENTS.md` + `en-cours` (« Sessions en cours », « Les chantiers et leurs bloquants »,
 « Ce qui reste ») + **un** document de tâche. On ne lit ni le journal ni les rapports « pour suivre ».
 
-**Écriture** : seul le **principal** écrit `en-cours` ; un sous-agent rend un **diff d'état**, que le
-principal applique avec le lien et la prochaine action.
+**Écriture** : seul le **principal** écrit `en-cours` ; un **pair** ou un sous-agent rend un
+**diff d'état**, que le principal applique. Git : `git status`, `git add` explicite, jamais
+`-A`/`commit -a`, jamais `--amend` sur le commit d'un autre.
 
 **Dépassement** : au-delà de 2 000 mots, on **coupe** (résumé + lien) ou on déplace le détail dans
 `reports/` ou la roadmap ; on ne relève pas le budget.
 
 ## 4. La passation
 
-À la fin d'un cycle, `en-cours` doit permettre à un agent qui n'a **rien vu** de reprendre :
+À la fin d'un cycle, `en-cours` doit permettre de reprendre sans contexte :
 
 - la **date** est celle du dernier commit ;
 - **« Sessions en cours »** : une sous-section par session active, avec ses sept champs (Id, rôle, action,

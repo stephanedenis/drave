@@ -14,6 +14,9 @@
 > Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
 > [`journal/sessions/`](../../journal/sessions/).
 
+> **Identité.** `echo $DSH_SESSION_ID` ; si l'ID n'est pas listé, tu es un **pair** : pas d'écriture
+> de l'état, un **diff** à la principale. Une session fermée ne rouvre pas sans bloc.
+
 ### Session `8156fdcb` — R0.2 livré, R0.3 en cours (lecteur modèle)
 
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
@@ -21,21 +24,33 @@
   1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
 - **Ce qu'elle fait** : R0.3 — banc **complet** (30 documents, **249 questions**) sur **GPU** : extractif
   **1,000** à 30 % ; modèle **0,231** contre troncature **0,042** ; hasard et closed-book **0,000**.
-- **Ce que font les autres** : `f0969e87` tient l'état et prend **B11.10** ; `N2-GPU` distille la hiérarchie ;
-  elles rendent un **diff d'état**.
+- **Ce que font les autres** : `71d57f53` pair (docs, B12.10) ; `N2-GPU` N2 ; `f0969e87`
+  **close dans l'état** (fenêtre ouverte).
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/banc_complet.py`,
   `tools/porte-lecteur.sh`, `tools/tests/documents/bench-*.json`, `reports/r03-*`,
-  `docs/implantation/{lecteur-controleur,banc-lecture}.md`, `docs/pilotage/backlog/R03-*.md`.
+  `docs/implantation/lecteur-controleur.md`, `docs/implantation/banc-lecture.md`, `docs/pilotage/backlog/R03-*.md`.
 - **Prochaine action** : **R0.4** (les trois têtes) ou R0.3 « durci » (paraphrases).
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
+
+### Session `71d57f53` — pair : docs, B12.10
+
+- **Id** : `71d57f53-8b41-4220-84dd-7bb9eedc88d9`.
+- **Rôle** : pair — docs, B12.10 et diagramme ; état sur accord de l'humain.
+- **Ce qu'elle fait** : N0.3b intégré ; B12.10 — contexte réparé (**0/528 → 528/528**) puis **close négative** (oracle = **M8**, M4 seul = **0/606**) ; diagramme des chantiers.
+- **Ce que font les autres** : `8156fdcb` R0.3 ; `N2-GPU` N2 ; `f0969e87` **close dans l'état** (fenêtre ouverte).
+- **Prochaine action** : patch multi-sessions appliqué avec l'accord de l'humain ; ne pas écrire l'état sans accord.
+- **Bloquants** : aucun.
+- **Fichiers réservés** : `tools/cerveau/b1210_holdout.py`, `docs/schemas/chantiers-etats.svg`.
+- **Journal** : [jour](../../journal/2026-10-29/README.md).
 
 ### Session `N2-GPU` — calcul : distillation
 
 - **Id** : aucun Id DSH (job GPU lancé par la session principale).
 - **Rôle** : N2 — professeur et distillation ; ne touche ni aux docs ni aux fiches.
 - **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k ; mesure de PPL.
-- **Ce que font les autres** : `f0969e87` prépare R0 et tient l'état ; `8156fdcb` tient le graphe du backlog.
+- **Ce que font les autres** : `71d57f53` pair (docs, B12.10) ; `8156fdcb` R0.3 ; `f0969e87`
+  **close dans l'état** (fenêtre ouverte).
 - **Prochaine action** : N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708**) ; **N5 gelé**.
 - **Bloquants** : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.
 - **Journal** : [mesures du jour](../../journal/2026-10-29/mesures.md).
@@ -47,7 +62,7 @@
 - **N0.3b — parité DRVM ↔ GGUF** : **close** (conversion et natif) ; fiche
   [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
-- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**. **N4.8** : consignes courtes **0/40** sur mots tenus. **Session `f0969e87` fermée** ; suite dans [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
+- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**. **N4.8** : consignes courtes **0/40** sur mots tenus. **Session `f0969e87` close dans l'état ; fenêtre encore ouverte** ; suite dans [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
 - **B12.10 — intégration** : **close négative** ; oracle = **M8** (0,436), **M4 seul = 0/606** ; la porte « M4 retiré » est vide.
 - **Documentation** : roadmap unique A/B/N/R ; **93 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.

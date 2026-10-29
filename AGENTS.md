@@ -48,12 +48,12 @@ volonté** des événements.
    `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
    `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
    → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
-10. **Pilotage : cycles longs, sous-agents, état unique.** DSH ouvre **un goal par programme** avec
-    `max_goal_rounds` **très grand (1 000)** ; on ne s'arrête qu'à un résultat mesuré, écrit, committé, ou
-    un blocage nommé. Les tâches indépendantes partent en **sous-agents** (2–4 en parallèle) ; le
-    sous-agent ne touche **jamais** `en-cours`/`roadmap`/`AGENTS`, il rend un **diff d'état**. Le principal
-    met à jour `en-cours` **chaque cycle** (une ligne/résultat, lien, prochaine action ;
-    ≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage nommé. Les tâches
+    indépendantes partent en **sous-agents** (2–4) ; ils ne touchent jamais `en-cours`/`roadmap`/`AGENTS`
+    et rendent un **diff**. **Identité** : `DSH_SESSION_ID` absent des sessions = **pair**, même
+    diff. Git : `git add` explicite, jamais `-A`/`commit -a`. Le principal met `en-cours` à jour
+    (≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
