@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 08:54 | `8bca0318` | DOCS — GRAPHE DES DÉPENDANCES DU BACKLOG (40 ARÊTES DURES, 4 PLAFONDS), 7 DÉFAUTS CORRIGÉS, VÉRIFIÉ PAR tools/verifie_backlog.py | `A3.4-colab.md`, `A5.4-fpga.md`, `A6.2-moe-local.md` (+30) |
 | 09:02 | `9e569aec` | DOCS — EN-COURS MULTI-SESSIONS (3 SESSIONS), BLOQUANTS PAR CHANTIER, TRANSFERT AU JOURNAL | `contexte.md`, `continuite.md`, `en-cours.md` (+3) |
 | 10:02 | `a7dd8473` | DOCS — GLOSSAIRE 12 (27 TERMES DE LECTURE), BACKLOG LIÉ AU GLOSSAIRE | `README.md`, `A3.4-colab.md`, `A5.4-fpga.md` (+75) |
+| 14:11 | `076d15ef` | ÉTAT — LE GRAPHE DES CHANTIERS, ACTIVITÉS ET ÉTATS DANS EN-COURS | `en-cours.md`, `README.md`, `chantiers-etats.svg` (+3) |
 
 ## Mesures et rapports touchés
 
