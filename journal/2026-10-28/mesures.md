@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,6 +22,7 @@
 | 15:45 | `641a48c6` | N0.8 — PARITÉ NATIVE AUTOMATISÉE : 5/5 PROMPTS, TOP-5 IDENTIQUE, ÉCART < 0,0001 | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO | `en-cours.md`, `roadmap-native.md`, `native.rs` (+5) |
 | 16:52 | `1daa8741` | N2.9 — 21,63 M SUR 20 000 PAS : PPL 3,381, PIRE QUE 11,47 M (3,123) | `en-cours.md`, `README.md`, `moteur.md` (+3) |
+| 20:11 | `8b28f889` | N4.4 — SERVICE DURCI : JETON 401/200, CORPS 64 KO, N ≤ 256 ; PAS DE SFT | `en-cours.md`, `roadmap-native.md`, `native.rs` (+6) |
 
 ## Chiffres du jour
 
@@ -42,6 +43,7 @@
 - [reports/rapport-native-parite.md](../../reports/rapport-native-parite.md)
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
 - [reports/rapport-native-reflexe.md](../../reports/rapport-native-reflexe.md)
+- [reports/rapport-native-service-auth.md](../../reports/rapport-native-service-auth.md)
 - [reports/rapport-native-service.md](../../reports/rapport-native-service.md)
 - [reports/rapport-native-test.md](../../reports/rapport-native-test.md)
 - [reports/rapport-native-tetes.md](../../reports/rapport-native-tetes.md)

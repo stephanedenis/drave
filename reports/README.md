@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-native-professeur-10k.md`](rapport-native-professeur-10k.md) | **N2.10** — professeur 10 000 pas : **1,073 bit/octet**, PPL **2,104** |
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`rapport-native-service-auth.md`](rapport-native-service-auth.md) | **N4.4** — service durci : **401/200**, corps 64 Ko, n ≤ 256 ; pas de SFT |
 | [`rapport-native-service-rust.md`](rapport-native-service-rust.md) | **N4.3** — service Rust natif avec cache : **611 ms**, 53 octets |

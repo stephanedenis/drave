@@ -1,0 +1,12 @@
+{
+ "famille": "Qwen3-MoE",
+ "parametres": 23760000,
+ "pas": 10000,
+ "lot": 16,
+ "seq": 128,
+ "val_bits_octet": 1.0729,
+ "ppl_val": 2.1036577389110254,
+ "duree_s": 1800,
+ "source": "data/corpus_fr_train.txt",
+ "sortie": "/tmp/route-teacher-10k"
+}
