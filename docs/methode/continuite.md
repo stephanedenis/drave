@@ -49,7 +49,7 @@ la décision humaine, ou deux agents sur le **même fichier**.
 6. **format de rapport** : les **10 lignes** ci-dessous ;
 7. **interdits** : `en-cours`, `roadmap`, `AGENTS`, les fichiers d'un autre agent.
 
-**Un seul écrivain par fichier** : le principal garde l'état, la roadmap et les directives ; le sous-agent
+**Un seul écrivain par fichier** : la session qui clôt garde l'état, la roadmap et les directives ; le sous-agent
 possède son périmètre.
 
 ### Le rapport d'un sous-agent (10 lignes)
@@ -69,7 +69,7 @@ Pas de logs bruts, pas de récit de tâtonnements, pas de tableau de mesures.
 
 ### L'intégration
 
-Le principal **vérifie** (porte, lien, contrôle), **met à jour `en-cours`**, **commite** et
+La session **vérifie** (porte, lien, contrôle), **met à jour `en-cours`**, **commite** et
 **marque la roadmap**. Un résultat de sous-agent n'est **pas fini** tant qu'il n'est pas intégré :
 le sous-agent ne clôt pas la tâche, il la rend intégrale.
 
