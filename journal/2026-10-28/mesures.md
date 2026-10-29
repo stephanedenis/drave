@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,10 +28,11 @@
 | 21:22 | `8c40af98` | N2.13 — 20 000 PAS DE PLUS : PPL 2,876, PRÉCISION 70,00 % | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 | 21:28 | `29c4fd1b` | N2.15 — PROFESSEUR 20 000 PAS : 0,904 BIT/OCTET, PPL 1,869 | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 | 21:50 | `125db616` | N2.14 — PROFESSEUR 20K : PPL 2,787, PRÉCISION 71,30 % | `en-cours.md`, `README.md`, `mesures.md` (+4) |
+| 22:14 | `241a4f91` | N2.16 — 20 000 PAS DE PLUS : PPL 2,755, PLATEAU | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 
 ## Chiffres du jour
 
-`71,30 %` · `2,787` · `0,904` · `1,869` · `70,00 %` · `2,876` · `69,97 %` · `2,910` · `3,082` · `1,073` · `2,104` · `3,381`
+`2,755` · `71,30 %` · `2,787` · `0,904` · `1,869` · `70,00 %` · `2,876` · `69,97 %` · `2,910` · `3,082` · `1,073` · `2,104`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -49,6 +50,7 @@
 - [reports/rapport-native-pensee.md](../../reports/rapport-native-pensee.md)
 - [reports/rapport-native-prof10k-2.md](../../reports/rapport-native-prof10k-2.md)
 - [reports/rapport-native-prof10k.md](../../reports/rapport-native-prof10k.md)
+- [reports/rapport-native-prof20k-2.md](../../reports/rapport-native-prof20k-2.md)
 - [reports/rapport-native-prof20k.md](../../reports/rapport-native-prof20k.md)
 - [reports/rapport-native-professeur-10k.md](../../reports/rapport-native-professeur-10k.md)
 - [reports/rapport-native-professeur-20k.md](../../reports/rapport-native-professeur-20k.md)

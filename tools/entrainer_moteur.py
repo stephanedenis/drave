@@ -35,7 +35,10 @@ import torch.nn as nn
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from essai_decharge import charger, lot_aleatoire  # noqa: E402
-from tools.vdc import departs_vdc  # noqa: E402
+try:  # lancé comme module (python -m tools…) ou comme script (python tools/…)
+    from tools.vdc import departs_vdc  # noqa: E402
+except ModuleNotFoundError:  # sys.path[0] == tools/
+    from vdc import departs_vdc  # noqa: E402
 
 
 def lot_vdc(ids, seq, lot, compteur):
