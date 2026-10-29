@@ -1,0 +1,48 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-flux.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0.gguf",
+ "tolerance": 0.0005,
+ "references": {
+  "mode0": 61.992,
+  "mode1": 61.992,
+  "mode2": 61.992,
+  "mode3": 60.8135,
+  "mode4": 60.8135
+ },
+ "mesures": {
+  "mode0": {
+   "ppl_ref": 61.992,
+   "ppl_deux": 61.992,
+   "ecart": 0.0
+  },
+  "mode1": {
+   "ppl_ref": 61.992,
+   "ppl_deux": 61.992,
+   "ecart": 0.0
+  },
+  "mode2": {
+   "ppl_ref": 61.992,
+   "ppl_deux": 64.2535,
+   "ecart": 0.0365
+  },
+  "mode3": {
+   "ppl_ref": 60.8135,
+   "ppl_deux": 60.8135,
+   "ecart": 0.0
+  },
+  "mode4": {
+   "ppl_ref": 60.8135,
+   "ppl_deux": 60.5427,
+   "ecart": 0.00445
+  }
+ },
+ "gate": "exit 0 ; 5 modes verts ; controle de reference actif",
+ "controle": "décalage de 10 % de la référence refusé par la même expression",
+ "limites": [
+  "un seul modèle/quantification",
+  "PPL à deux nœuds des modes avec perte non épinglée",
+  "tolérance 5e-4"
+ ]
+}

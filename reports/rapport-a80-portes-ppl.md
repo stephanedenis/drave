@@ -9,6 +9,10 @@
 > main ; données [`a80-portes-ppl.json`](a80-portes-ppl.json). **Ce n'est pas une mesure de PPL**,
 > c'est l'audit de ce que les portes vérifient.
 
+> **Mise à jour du 29/10** : `porte-flux` est désormais **épinglée** (1/33) — voir
+> [`rapport-a80-porte-flux.md`](rapport-a80-porte-flux.md). L'audit ci-dessous reste la photographie
+> du point de départ (0/33).
+
 ## La question
 
 A8.3 est branché en **opt-in** (`DRAVE_PERTE_MAX`) : la règle place + perte rend le même choix que

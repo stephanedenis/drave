@@ -67,8 +67,8 @@ trap 'arreter_serveur; rm -rf "$TRAVAIL"' EXIT
 
 echec=0
 ecart2=""
-tester() {   # nom, plafond d'écart, arguments du pilote
-    local nom="$1" plafond="$2"; shift 2
+tester() {   # nom, plafond d'écart, référence PPL, arguments du pilote
+    local nom="$1" plafond="$2" ref_attendue="$3"; shift 3
     demarrer_serveur || { printf "  %-34s %s\n" "$nom" "❌ nœud moteur"; echec=1; return; }
     local sortie code
     # `timeout` sur le PILOTE aussi : une régression du cadriciel qui bloque le
@@ -87,6 +87,15 @@ tester() {   # nom, plafond d'écart, arguments du pilote
     if [ -z "$ecart" ] || [ "$code" != "0" ]; then
         printf "  %-34s %s\n" "$nom" "❌ pas d'écart mesuré (code $code)"; echec=1
         printf '%s\n' "$sortie" | tail -3 | sed 's/^/      /'
+        return
+    fi
+    # A8.0 — la PPL de référence est ÉPINGLÉE : la porte ne vérifie plus seulement
+    # l'écart entre deux nœuds, elle vérifie l'absolu. Tolérance 5e-4 (0,05 %) :
+    # les références sont stables à quatre décimales sur ce modèle.
+    local ok_ref
+    ok_ref=$(python3 -c "import sys; a=float('$ppl_ref'); b=float('$ref_attendue'); sys.exit(0 if abs(a-b) <= 5e-4*max(b,1.0) else 1)" 2>/dev/null && echo oui || echo non)
+    if [ "$ok_ref" != "oui" ]; then
+        printf "  %-34s %s  ❌ référence PPL %s (attendu %s)\n" "$nom" "$ecart" "$ppl_ref" "$ref_attendue"; echec=1
         return
     fi
     # Le mode 2 est le codec de référence (avec perte) : le mode 4 emploie le
@@ -115,11 +124,14 @@ tester() {   # nom, plafond d'écart, arguments du pilote
 # Plafonds : 0 pour les modes SANS perte (0, 1, 3) ; pour les deux modes à codec
 # quantifié, une valeur mesurée majorée d'un facteur ~2 — et le mode 4 doit en
 # plus rester sous le mode 2 (même codec, un état à la fois).
-tester "mode 0 — f32 dense"          "0"      --flux
-tester "mode 1 — listes quantifiées" "0"      --flux-listes
-tester "mode 2 — listes par blocs"   "6e-2"   --flux-blocs --lot 1
-tester "mode 3 — lot dense f32"      "0"      --lot 4
-tester "mode 4 — lot en listes"      "1e-2"   --lot 4 --flux-blocs
+# Références PPL (A8.0) : les modes 0/1/2 partent de 61,9920 ; les modes 3/4 de
+# 60,8135 (le lot dense change la référence locale). La PPL à deux nœuds des modes
+# avec perte n'est pas épinglée : elle dépend du codec, et l'écart ci-dessus la borne.
+tester "mode 0 — f32 dense"          "0"      "61.9920" --flux
+tester "mode 1 — listes quantifiées" "0"      "61.9920" --flux-listes
+tester "mode 2 — listes par blocs"   "6e-2"   "61.9920" --flux-blocs --lot 1
+tester "mode 3 — lot dense f32"      "0"      "60.8135" --lot 4
+tester "mode 4 — lot en listes"      "1e-2"   "60.8135" --lot 4 --flux-blocs
 
 arreter_serveur
 exit $echec
