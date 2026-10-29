@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (24)
+## Commits du jour (25)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -32,6 +32,7 @@
 | 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+3) |
 | 13:11 | `b1197a46` | B12.10 — LE BRANCHEMENT M4 PAR CHAMPS OBSERVÉS EST INERTE : RETIRÉ, MARGE À ESSAYER | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+4) |
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS | `en-cours.md`, `README.md`, `docs.md` (+3) |
+| 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION | `en-cours.md`, `README.md`, `mesures.md` (+6) |
 
 ## Chiffres du jour
 
@@ -47,6 +48,7 @@
 - [reports/rapport-native-8b.md](../../reports/rapport-native-8b.md)
 - [reports/rapport-native-best-2.md](../../reports/rapport-native-best-2.md)
 - [reports/rapport-native-best-service.md](../../reports/rapport-native-best-service.md)
+- [reports/rapport-native-consignes.md](../../reports/rapport-native-consignes.md)
 - [reports/rapport-native-ctx129-2.md](../../reports/rapport-native-ctx129-2.md)
 - [reports/rapport-native-ctx129.md](../../reports/rapport-native-ctx129.md)
 - [reports/rapport-native-ctx130-2.md](../../reports/rapport-native-ctx130-2.md)

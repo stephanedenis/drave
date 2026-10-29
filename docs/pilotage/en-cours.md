@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-29, 14 h 25 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -13,18 +13,6 @@
 
 > Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
 > [`journal/sessions/`](../../journal/sessions/).
-
-### Session `f0969e87` — principale : état, docs, R0
-
-- **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Rôle** : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambiguïtés) sur CPU.
-- **Ce qu'elle fait** : **N0.3b est mesuré** (conversion 68,1917 / 92,1875 ; natif 4,6585 / 18,6394) ;
-  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; le split par code tenu à l'écart donne **0 exact** et **0,436** de champ ; **oracle = M8**, **M4 seul = 0/606** : **B12.10 est close négative**.
-- **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et R0.3 ; `N2-GPU` distille ;
-  elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **B11.10** — cartes et ambiguïtés ; R0.3 est à `8156fdcb`.
-- **Bloquants** : aucun pour B11.10 ; N2 dépend du GPU.
-- **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
 ### Session `8156fdcb` — R0.2 livré, R0.3 en cours (lecteur modèle)
 
@@ -60,7 +48,7 @@
 - **N0.3b — parité DRVM ↔ GGUF** : **close** (conversion et natif) ; fiche
   [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
-- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**. **N4.8** : consignes courtes **0/40** sur mots tenus.
+- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**. **N4.8** : consignes courtes **0/40** sur mots tenus. **Session `f0969e87` fermée** ; suite dans [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
 - **B12.10 — intégration** : **close négative** ; oracle = **M8** (0,436), **M4 seul = 0/606** ; la porte « M4 retiré » est vide.
 - **Documentation** : roadmap unique A/B/N/R ; **93 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.

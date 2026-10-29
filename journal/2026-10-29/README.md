@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**48 commits** · **0 session(s)** · **7 thème(s)**
+**49 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 10 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 24 | [mesures.md](mesures.md) |
+| mesures | 25 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | moteur | 4 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -80,6 +80,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:56 | `acdfa987` | R0.3 — LE LECTEUR PASSE SUR GPU (1,9 S/APPEL) : CONTRÔLEUR 0,500, DÉBUT 0,400, HASARD 0,000 |
 | 14:11 | `076d15ef` | ÉTAT — LE GRAPHE DES CHANTIERS, ACTIVITÉS ET ÉTATS DANS EN-COURS |
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS |
+| 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION |
 
 ## Le récit de la journée (écrit à la main)
 
