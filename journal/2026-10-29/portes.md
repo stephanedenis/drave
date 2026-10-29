@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,6 +26,7 @@
 | 19:27 | `9216634d` | A8.0 — PORTE-GAIN ÉPINGLÉE : 14,6496 / 12,9635 / 996,0390 ; ÉTAT 8/33 | `en-cours.md`, `README.md`, `memoire.md` (+4) |
 | 19:33 | `1ec24a7f` | N3.1 — INVENTAIRE : PAS DE PORTE COMPOSÉE AVANT SERVICE/K-WTA | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+4) |
 | 19:38 | `3c227622` | N3.1 — CORRECTION : LA PROFONDEUR ROUTÉE A UNE PORTE ; A8.0 = 8 | `en-cours.md`, `README.md`, `portes.md` (+2) |
+| 19:55 | `bb6bfd4b` | N3.2a — LE SERVICE NATIF VIT : /SANTE, GÉNÉRATION DÉTERMINISTE, 404 ; PORTE 59 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 
 ## Chiffres du jour
 
@@ -44,6 +45,7 @@
 - [reports/rapport-a83a-coupe.md](../../reports/rapport-a83a-coupe.md)
 - [reports/rapport-a83a-pont.md](../../reports/rapport-a83a-pont.md)
 - [reports/rapport-n3.1-etat.md](../../reports/rapport-n3.1-etat.md)
+- [reports/rapport-n3.2a-service.md](../../reports/rapport-n3.2a-service.md)
 
 <!-- notes -->
 

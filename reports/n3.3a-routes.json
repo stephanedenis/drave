@@ -1,0 +1,32 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.3a",
+ "porte": "porte-n3-routes.sh",
+ "modele": "drave-n0 synthétique, graine 7, 113 292 paramètres, mêmes poids",
+ "configs": {
+  "A": {
+   "top_k": 2,
+   "kwta": 0.5
+  },
+  "B": {
+   "top_k": 1,
+   "kwta": 1.0
+  }
+ },
+ "mesures": {
+  "a_deux_fois": "identique (27 octets)",
+  "a_vs_b": "différent"
+ },
+ "controle": "même modèle deux fois identique ; config de routage différente change la sortie",
+ "verdict": "routage/k-WTA vivant dans le moteur natif",
+ "limites": [
+  "modèle synthétique",
+  "prouve la sensibilité à la config, pas la justesse de la sparsité",
+  "une seule graine, un prompt"
+ ],
+ "prochain": [
+  "N3.3b finesse de la sparsité/top-k",
+  "N3.2b sortie précoce en service",
+  "porte de composition N3"
+ ]
+}
