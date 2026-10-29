@@ -29,7 +29,8 @@
 
 ## Le cycle : lire, déléguer, écrire
 
-- **Début** : `AGENTS.md` + `en-cours` (« Session en cours » + « Ce qui reste ») + **un** document de tâche.
+- **Début** : `AGENTS.md` + `en-cours` (« Sessions en cours » + « Les chantiers et leurs bloquants » +
+  « Ce qui reste ») + **un** document de tâche. Les sessions terminées sont dans `journal/sessions/`.
 - **Pendant** : les sous-agents travaillent en parallèle ; le principal ne lit que leur **rapport de 10 lignes**.
 - **Fin** : `en-cours` (une ligne/résultat + prochaine action), roadmap, commit ;
   `python3 tools/verifie_en_cours.py`.

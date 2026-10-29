@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,8 @@
 | 04:06 | `53577daa` | DOCS — COMPTEURS 259/324 | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 04:23 | `87dfd1fc` | DOCS — COMPTEURS 260/325 | `en-cours.md`, `README.md`, `mesures.md` |
 | 08:18 | `3b9162d1` | DOCS — UNE ROADMAP UNIQUE (A/B/N/R), ANALYSE LECTURE RAPIDE, BACKLOG 29 FICHES | `AGENTS.md`, `README.md`, `README.md` (+47) |
+| 08:54 | `8bca0318` | DOCS — GRAPHE DES DÉPENDANCES DU BACKLOG (40 ARÊTES DURES, 4 PLAFONDS), 7 DÉFAUTS CORRIGÉS, VÉRIFIÉ PAR tools/verifie_backlog.py | `A3.4-colab.md`, `A5.4-fpga.md`, `A6.2-moe-local.md` (+30) |
+| 09:02 | `f7dc0acf` | DOCS — EN-COURS MULTI-SESSIONS (3 SESSIONS), BLOQUANTS PAR CHANTIER, TRANSFERT AU JOURNAL | `contexte.md`, `continuite.md`, `en-cours.md` (+3) |
 
 ## Mesures et rapports touchés
 
@@ -25,4 +27,8 @@
   archivés et liés ; `docs/pilotage/backlog/` reçoit **29 fiches** (19 R, 10 lignes ouvertes A/B/N). Aucun chiffre
   nouveau : les mesures citées sont celles des fiches existantes ; les compteurs passent à **88 documents**.
 - **Ce qui reste ouvert** : R0.1/R0.2/R0.3 (lecteur v0), N0.3b (parité), N2 (porte < 2,5), N4 (SFT tenu à l'écart).
+- **09 h 20 — l'état passe au pluriel et reste léger.** `en-cours` a désormais une section **Sessions en cours** avec
+  une sous-section par session active (`f0969e87`, `8156fdcb`, `N2-GPU`), une table **chantiers × bloquants** et un
+  transfert des éléments finis vers [`etat-transfere.md`](etat-transfere.md). Le contrôleur `verifie_en_cours.py`
+  vérifie les sept champs de chaque session et refuse un bloquant vide.
 <!-- /notes -->

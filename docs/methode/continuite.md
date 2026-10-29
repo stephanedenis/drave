@@ -1,12 +1,10 @@
 # Continuité — cycles longs, sous-agents, état unique
 
-> **Objet.** Ce document règle **comment un travail continue** : la taille des cycles DSH, le recours
-> aux sous-agents, et la discipline de [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md). Il ne
-> remplace ni le planning (roadmap) ni les résultats (reports) : il dit **qui écrit l'état, quand, et
-> avec quoi on reprend**.
+> **Objet.** Comment un travail continue : cycles DSH, sous-agents, discipline de
+> [`en-cours`](../pilotage/en-cours.md). Ni planning ni résultats : **qui écrit l'état, quand, et avec quoi on reprend**.
 >
-> **Règle d'or.** Un cycle n'est fini que lorsque le résultat est **mesuré, écrit, committé**, que
-> `en-cours` porte **une ligne de plus** avec sa **prochaine action**, et que la roadmap est à jour.
+> **Règle d'or.** Un cycle est fini quand le résultat est **mesuré, écrit, committé**, qu'`en-cours` porte sa
+> **prochaine action**, et que la roadmap est à jour.
 
 ## 1. Les cycles DSH
 
@@ -17,23 +15,19 @@
 | reprise | `update_goal resume` | on reprend le **même** goal, on n'en ouvre pas un nouveau |
 | fin de cycle | résultat + fiche + commit + `en-cours` + roadmap | jamais « le temps est écoulé » |
 
-- **Un cycle = un sous-chantier**, pas un round de sous-agent. Il peut durer plusieurs heures et
-  contenir plusieurs délégations.
-- **On ne s'arrête pas sur un compteur.** Si la limite est atteinte avant un résultat : écrire
-  `en-cours` + [`REPRISE`](../../REPRISE.md), committer, puis `update_goal resume`.
-- **Un cycle bloqué** (corpus, compte, matériel) se **nomme** dans `en-cours` et l'on prend la
-  **ligne suivante** de la roadmap — jamais une attente silencieuse.
-- **Pas de nouveau goal pour un sous-chantier** : le goal porte le programme, le cycle porte le
-  sous-chantier.
+- **Un cycle = un sous-chantier**, pas un round : plusieurs heures et délégations possibles.
+- **On ne s'arrête pas sur un compteur** : si la limite tombe avant un résultat, écrire `en-cours` +
+  [`REPRISE`](../../REPRISE.md), committer, puis `update_goal resume`.
+- **Un cycle bloqué** (corpus, compte, matériel) se **nomme** et l'on prend la **ligne suivante**.
+- **Pas de nouveau goal par sous-chantier** : le goal porte le programme.
 
 ## 2. Les sous-agents
 
 ### Quand déléguer
 
-- dès qu'il y a **deux tâches indépendantes** (mesure, audit, conversion, test, revue) : **2 à 4
-  sous-agents en parallèle** ;
-- pour une tâche **longue et isolée** (campagne, migration, vérification exhaustive) ;
-- pour une **revue adverse** ou une **continuation** qui a besoin du contexte : `subagent_fork`.
+- **deux tâches indépendantes** (mesure, audit, conversion, test, revue) : **2 à 4** en parallèle ;
+- une tâche **longue et isolée** (campagne, migration, vérification) ;
+- une **revue adverse** ou une **continuation** : `subagent_fork`.
 
 **On ne délègue pas** : une édition triviale d'une ligne, l'écriture de `en-cours`/`roadmap`/`AGENTS`,
 la décision humaine, ou deux agents sur le **même fichier**.
@@ -49,16 +43,15 @@ la décision humaine, ou deux agents sur le **même fichier**.
 **Contrat de prompt** (obligatoire) :
 
 1. **objectif** en une phrase, et le résultat attendu ;
-2. **fichiers autorisés** — le sous-agent ne touche à rien d'autre ;
+2. **fichiers autorisés** — rien d'autre ;
 3. **livrable** : fichier, mesure, diff, rapport ;
 4. **critères d'acceptation** et **contrôle négatif** ;
 5. **condition d'arrêt** (temps, essais, succès) ;
 6. **format de rapport** : les **10 lignes** ci-dessous ;
-7. **interdits** : `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `AGENTS.md`, les
-   fichiers d'un autre agent.
+7. **interdits** : `en-cours`, `roadmap`, `AGENTS`, les fichiers d'un autre agent.
 
-**Un seul écrivain par fichier.** Le principal garde la propriété de l'état, de la roadmap et des
-directives ; le sous-agent est propriétaire de son périmètre.
+**Un seul écrivain par fichier** : le principal garde l'état, la roadmap et les directives ; le sous-agent
+possède son périmètre.
 
 ### Le rapport d'un sous-agent (10 lignes)
 
@@ -93,40 +86,45 @@ fiches sont des résultats, la roadmap est le plan : aucun ne remplace l'état.
 | **une ligne par résultat** | le chiffre + le lien vers la fiche ; jamais le protocole |
 | **prochaine action** | toujours nommée, avec son identifiant (N0.3b, N2.4…) |
 | **sous-agents actifs** | tableau ou ligne : qui, quoi, état ; « aucun » est une information |
+| **sessions actives** | une sous-section par session : Id, rôle, action, autres sessions, prochaine action, bloquants, journal |
+| **bloquants** | un bloquant par chantier A/B/N/R, même « aucun » |
 | **questions ouvertes** | **5 au plus**, chacune avec ce qui la débloque |
 | **pas de logs** | pas de tableaux de mesures, pas de séries, pas de récit de round |
 | **pas de doublon** | un résultat n'apparaît qu'une fois ; on supprime la ligne périmée |
 
-**Lecture** : `AGENTS.md` + `en-cours` (**« Session en cours »** + **« Ce qui reste »**) + **un**
-document de tâche. On ne lit ni le journal ni les rapports « pour suivre » : `en-cours` suffit.
+**Lecture** : `AGENTS.md` + `en-cours` (« Sessions en cours », « Les chantiers et leurs bloquants »,
+« Ce qui reste ») + **un** document de tâche. On ne lit ni le journal ni les rapports « pour suivre ».
 
-**Écriture** : seul le **principal** écrit `en-cours`. Un sous-agent rend un **diff d'état** ; le
-principal l'applique, avec le lien et la prochaine action.
+**Écriture** : seul le **principal** écrit `en-cours` ; un sous-agent rend un **diff d'état**, que le
+principal applique avec le lien et la prochaine action.
 
-**Dépassement** : si `en-cours` dépasse 2 000 mots, on **coupe** (résumé + lien) ou on déplace le
-détail dans `reports/` ou la roadmap. On ne relève pas le budget.
+**Dépassement** : au-delà de 2 000 mots, on **coupe** (résumé + lien) ou on déplace le détail dans
+`reports/` ou la roadmap ; on ne relève pas le budget.
 
 ## 4. La passation
 
 À la fin d'un cycle, `en-cours` doit permettre à un agent qui n'a **rien vu** de reprendre :
 
 - la **date** est celle du dernier commit ;
-- **« Session en cours »** dit l'ID DSH, le goal, les sous-agents actifs et la reprise ;
+- **« Sessions en cours »** : une sous-section par session active, avec ses sept champs (Id, rôle, action,
+  autres sessions, prochaine action, bloquants, journal) ;
+- **« Les chantiers et leurs bloquants »** : A/B/N/R, bloquant non vide ;
 - **« Ce qui reste »** nomme la **prochaine action** ;
 - les **questions ouvertes** sont celles qui bloquent, pas celles qui sont déjà tranchées ;
 - le **commit** et la **fiche** sont liés.
 
-Un nouvel agent lit `AGENTS` + `en-cours` + **un** document de tâche, puis [`REPRISE`](../../REPRISE.md)
-pour les pièges. Le journal ne se lit que si l'on a besoin du **récit** d'une journée précise.
-Le journal est en **dossiers par jour** (`journal/AAAA-MM-JJ/`) ; chaque rapport de session
-renvoie à son jour, à l'index des sessions et à `en-cours` (`python3 tools/verifie_journal.py`).
+**Sessions terminées** : archivées dans `journal/sessions/<id>/rapport.md`, elles **sortent** d'`en-cours` ;
+les éléments finis du jour vont dans `journal/AAAA-MM-JJ/etat-transfere.md`.
+
+Un nouvel agent lit `AGENTS` + `en-cours` + **un** document de tâche, puis [`REPRISE`](../../REPRISE.md).
+Le journal ne se lit que pour le **récit** d'une journée ; chaque rapport de session renvoie à son jour,
+à l'index des sessions et à `en-cours` (`python3 tools/verifie_journal.py`).
 
 ## 5. Reprendre un goal en pause
 
-Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander **directement**
-« Reprends le goal en pause » : l'agent appelle `get_goal` (goal_id, revision) puis
-`update_goal action="resume"`. Si la pause vient de `max_goal_rounds`, faire d'abord
-`action="edit"` avec `max_goal_rounds=1000`. Relire `en-cours` avant de continuer.
+Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander « Reprends le goal en pause » :
+`get_goal` (goal_id, revision), puis `update_goal action="resume"`. Si la pause vient de
+`max_goal_rounds`, faire d'abord `action="edit"` avec `max_goal_rounds=1000`.
 
 ## 6. Vérifier
 
@@ -136,8 +134,8 @@ python3 tools/taille_documents.py   # budgets T0/T1
 python3 tools/revue_documentation.py # liens, compteurs, fraîcheur
 ```
 
-`verifie_en_cours.py` échoue si `en-cours` dépasse 2 000 mots, s'il manque une section, si une
-section « Ce qui est en cours » dépasse 10 puces, si les questions ouvertes dépassent 5, ou si la
-prochaine action n'est pas nommée.
+`verifie_en_cours.py` échoue si `en-cours` dépasse 2 000 mots, s'il manque une section, si une session
+active n'a pas ses sept champs, si un chantier A/B/N/R a un bloquant vide, si « Ce qui est en cours »
+dépasse 10 puces, si les questions ouvertes dépassent 5, ou si la prochaine action n'est pas nommée.
 
 > *Un état qu'on ne peut pas reprendre en deux minutes n'est pas un état : c'est un journal.*
