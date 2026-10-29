@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**90 commits** · **0 session(s)** · **7 thème(s)**
+**91 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 8 | [distribue.md](distribue.md) |
+| distribue | 9 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 36 | [mesures.md](mesures.md) |
@@ -122,6 +122,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE |
 | 16:39 | `61511b4b` | ÉTAT — COMPTEUR JSON ALIGNÉ (370) |
 | 16:42 | `33a11db0` | BALAYAGE — DEUX CORRECTIFS ESSAYÉS ET REJETÉS : LE RERANK ET LES NOMBRES EN MOTS DÉGRADENT L'INDEX |
+| 16:44 | `f900db9a` | A8.3a — PORTE-FLUX : RÉGIME 1 % ÉPINGLÉ (58,3200 / 62,7357) |
 
 ## Le récit de la journée (écrit à la main)
 

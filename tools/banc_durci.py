@@ -32,6 +32,10 @@ import lecteur_controleur as lc  # noqa: E402
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 SOURCE = RACINE / "tools/tests/documents/bench-complet.json"
 SEUIL_RECOUVREMENT = 0.5
+# DÉRIVE DES DOCUMENTS VIVANTS : la question « plafond de mots » de continuite.md a été retirée
+# le 29/10 — le document a été réécrit par une session voisine et son gold ne résolvait plus.
+# Le banc est donc à 83 questions ; les mesures de la fiche R0.3 ont été faites sur 84. Un cas
+# d'écart ne change pas les conclusions, et la correction durable est un corpus gelé (R0.3).
 
 # Les paraphrases sont écrites à la main, une par gold du banc complet. Chaque entrée désigne
 # le document et l'indice de la question source : la valeur et le gold sont repris tels quels,
@@ -194,8 +198,6 @@ ENTREES = [
      "Quelle vitesse le pont NVLink atteint-il dans chaque direction ?"),
     ("docs/implantation/numa-segregation.md", 4,
      "Quelle taille de RAM faut-il garder des deux côtés ?"),
-    ("docs/methode/continuite.md", 2,
-     "Quel plafond de mots l'état courant ne doit-il pas dépasser ?"),
     ("docs/theorie/lecture-rapide.md", 2,
      "Quel volume les tampons d'avance ont-ils traité ?"),
     ("docs/theorie/protocole-semantique.md", 4,

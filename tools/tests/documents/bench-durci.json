@@ -658,18 +658,6 @@
    ]
   },
   {
-   "chemin": "docs/methode/continuite.md",
-   "type": "code",
-   "questions": [
-    {
-     "question": "Quel plafond de mots l'état courant ne doit-il pas dépasser ?",
-     "indice": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
-     "valeur": "2 000",
-     "source": "Quelle valeur le document associe-t-il à « budget » et « coupe » ?"
-    }
-   ]
-  },
-  {
    "chemin": "docs/pilotage/backlog/dependances.md",
    "type": "tableau",
    "questions": [

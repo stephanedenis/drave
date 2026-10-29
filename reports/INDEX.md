@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **296 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **298 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -24,6 +24,8 @@
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
 | [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-a83-defaut.md](rapport-a83-defaut.md) | A8.3 — le défaut place+perte n'est pas neutre : les portes épinglées bougent de −5,9 % à +19,5 % |
+| [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |
+| [rapport-a83b-regimes.md](rapport-a83b-regimes.md) | A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
 | [rapport-analyse-flux.md](rapport-analyse-flux.md) | Analyse du flux, couche par couche |

@@ -102,6 +102,12 @@ robuste ; il est *moins mauvais* que le lexical.
 
 ## Ce qui pourrait le rendre faux
 
+- **dérive des documents vivants** : les mesures de cette fiche ont été faites sur **84**
+  questions ; le 29/10, une session voisine a réécrit `docs/methode/continuite.md` et la
+  question « plafond de mots » n'a plus de gold — elle a été retirée, le banc est à **83**
+  (revérifié, 0 problème). Un cas d'écart ne change pas les conclusions ; la correction durable
+  est un **corpus gelé**, qui reste à faire ;
+
 - **19 questions** : un cas vaut 0,05 à 0,25 selon le type ; c'est un pilote de difficulté.
 - **Paraphrases écrites par l'auteur du banc** : elles peuvent être plus faciles (ou plus
   dures) qu'une paraphrase naturelle. Le recouvrement est vérifié, l'équité ne l'est pas.

@@ -1,6 +1,6 @@
 # R05 — Tête de balayage (requête → spans)
 
-> **Statut** : partielle · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01 · **Contraint par** : le manque M4 (aucun encodeur exécutable)
+> **Statut** : partiel · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01 · **Contraint par** : le manque M4 (aucun encodeur exécutable)
 > **Ligne de roadmap** : R0.4 · **Résultat** : [rapport-r05-balayage.md](../../../reports/rapport-r05-balayage.md) — chemin **classique** mesuré : rappel@10 **0,984** (lexical), **0,702** (paraphrases), 0,1 ms ; **branché dans le pipeline** (`--lecteur span`) : **0,944** sur les questions à valeur contre 0,851 pour l'extractif ; la tête n'est pas ajoutée (même mur que R0.4). `--lecteur auto` : **+0,109** sur un corpus de valeurs, **−0,150** sur un corpus mixte (nombres en mots, classement du span).
 > **Résumé** : Retrouver les spans qui répondent à une requête, en combinant index classique et scoreur neuronal.
 > **Glossaire** : [retrieval](../../theorie/glossaire/entrees/retrieval.md) · [span](../../theorie/glossaire/entrees/span.md) · [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md).
