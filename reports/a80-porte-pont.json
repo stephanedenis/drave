@@ -1,0 +1,52 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-pont.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0.gguf",
+ "references": {
+  "ppl_dense": 113.0068,
+  "ppl_blocs": 111.9225,
+  "falaise_448": 2.81,
+  "falaise_392": 25.35
+ },
+ "tolerances": {
+  "ppl": 0.0005,
+  "falaise_pct": 0.05
+ },
+ "courbe": {
+  "896": {
+   "ppl": 111.9225,
+   "ecart_pct": 0.0
+  },
+  "672": {
+   "ppl": 112.9891,
+   "ecart_pct": 0.953
+  },
+  "448": {
+   "ppl": 115.0632,
+   "ecart_pct": 2.806
+  },
+  "224": {
+   "ppl": 233.8589,
+   "ecart_pct": 108.947
+  },
+  "112": {
+   "ppl": 1153.3098,
+   "ecart_pct": 930.454
+  }
+ },
+ "controles": {
+  "decalage_10pct_refuse": {
+   "ppl_dense_10pct": false,
+   "ppl_blocs_10pct": false,
+   "falaise_448_10pct": false,
+   "falaise_392_10pct": false
+  }
+ },
+ "gate": "exit 0 ; 8 sections vertes ; références actives",
+ "limites": [
+  "un seul modèle/quantification",
+  "PPL absolues liées au corpus de 48 identifiants",
+  "tolérance 5e-4 / 0,05 point"
+ ]
+}

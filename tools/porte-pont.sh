@@ -68,6 +68,16 @@ kill $N 2>/dev/null; wait $N 2>/dev/null
 echo "  blocs — sans pont : $REFB · --pont-k 0 : $ZB"
 [ "$REFB" = "$ZB" ] || { echo "  ❌ pont entier non identique en mode blocs"; exit 1; }
 echo "  ✅ pont entier identique dans les deux encodages"
+# A8.0 — les deux PPL de référence sont ÉPINGLÉES (absolu, 5e-4) : la porte ne
+# vérifie plus seulement l'égalité entre bras, elle vérifie la valeur.
+python3 - "$REF" "$REFB" <<'PPLREF' || exit 1
+import sys
+ref, refb = float(sys.argv[1]), float(sys.argv[2])
+for nom, val, attendu in (("dense", ref, 113.0068), ("blocs", refb, 111.9225)):
+    if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
+        sys.exit(f"  ❌ PPL de référence {nom} : {val} (attendu {attendu})")
+print(f"  ✅ PPL de référence épinglées : dense {ref} · blocs {refb}")
+PPLREF
 
 echo "=== 2. la courbe (listes par blocs) : perplexité ↔ fibres ↔ octets ==="
 printf '  %8s  %12s  %10s  %10s  %10s\n' "fibres" "perplexité" "octets->" "octets<-" "ecart %"
@@ -179,6 +189,10 @@ if d448 >= 5.0:
     sys.exit(f"  ❌ 448 fibres devraient coûter moins de 5 % : {d448:.2f} %")
 if d392 <= 10.0:
     sys.exit(f"  ❌ 392 fibres devraient coûter plus de 10 % (la falaise) : {d392:.2f} %")
+# A8.0 — les deux côtés de la falaise sont épinglés (références historiques).
+for nom, val, attendu in (("448", d448, 2.81), ("392", d392, 25.35)):
+    if abs(val - attendu) > 0.05:
+        sys.exit(f"  ❌ falaise {nom} : {val:.2f} % (attendu {attendu:.2f} %)")
 print(f"  ✅ 448 fibres : +{d448:.2f} % · 392 fibres : +{d392:.2f} % — la marche est entre les deux")
 PY
 
