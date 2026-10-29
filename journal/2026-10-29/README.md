@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**77 commits** · **0 session(s)** · **7 thème(s)**
+**78 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
-| modele | 4 | [modele.md](modele.md) |
+| modele | 5 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 7 | [portes.md](portes.md) |
 
@@ -109,6 +109,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:10 | `3672eae9` | SCHÉMA — R4.1–R4.3 ET LE MIROIR, A8.0 TROIS PORTES, R4.4 BLOQUÉ |
 | 16:13 | `a489d9ff` | A8.3 — LE DÉFAUT PLACE+PERDE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ |
 | 16:17 | `b5a2d317` | GRAPHE — 4 TROUS COMBLÉS (A3.2, A3.3, A8.0, B10.2bis) : 0 ARÊTE MORTE, 0 CYCLE |
+| 16:20 | `3328e0ec` | LE BANC DURCI PASSE À 84 PARAPHRASES : MODÈLE 0,375 CONTRE LEXICAL 0,269, TÊTE 0,575 CONTRE BM25 0,745 |
 
 ## Le récit de la journée (écrit à la main)
 

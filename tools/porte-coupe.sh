@@ -66,6 +66,10 @@ pts = [(int(l.split()[0]), l.split()[1]) for l in open(sys.argv[1])]
 valeurs = {p[1] for p in pts}
 if len(valeurs) != 1:
     sys.exit(f"  ❌ le point de coupe change le résultat : {pts}")
+# A8.0 — la PPL sans perte est épinglée (absolu, 5e-4).
+val = float(pts[0][1])
+if abs(val - 113.0068) > 5e-4 * 113.0068:
+    sys.exit(f"  ❌ PPL sans perte : {val} (attendu 113.0068)")
 print(f"  ✅ {len(pts)} points de coupe, UNE seule perplexité ({pts[0][1]}) : "
       "le découpage est numériquement neutre quand le lien est sans perte")
 PY
@@ -84,6 +88,11 @@ pts = [(int(l.split()[0]), float(l.split()[1])) for l in open(sys.argv[1])]
 ecart = (max(p[1] for p in pts) - min(p[1] for p in pts)) / min(p[1] for p in pts)
 if ecart < 0.02:
     sys.exit(f"  ❌ avec un lien encodé, le point de coupe devrait compter : écart {ecart:.2%}")
+# A8.0 — les quatre PPL encodées sont épinglées (5e-4).
+attendus = {4: 116.3407, 6: 108.8721, 12: 111.9225, 18: 118.5275}
+for n, p in pts:
+    if abs(p - attendus[n]) > 5e-4 * max(attendus[n], 1.0):
+        sys.exit(f"  ❌ PPL encodée coupe {n}/24 : {p} (attendu {attendus[n]})")
 print(f"  ✅ avec un lien encodé, les mêmes coupes s'écartent de {100*ecart:.1f} % — "
       "c'est l'ENCODAGE qui rend le point de coupe significatif")
 PY
@@ -107,6 +116,11 @@ meilleur = min(couts, key=couts.get)
 pire = max(couts, key=couts.get)
 if couts[pire] < 3.0 * max(couts[meilleur], 0.1):
     sys.exit(f"  ❌ le coût du pont ne dépend pas assez du point de coupe : {couts}")
+# A8.0 — les trois coûts de coupe sont épinglés (0,05 point).
+attendus = {12: 2.81, 15: 17.09, 18: 0.52}
+for n, c in couts.items():
+    if abs(c - attendus[n]) > 0.05:
+        sys.exit(f"  ❌ coût du pont coupe {n}/24 : {c:+.2f} % (attendu {attendus[n]:+.2f} %)")
 print(f"  ✅ le coût du pont va de {couts[meilleur]:+.2f} % (coupe {meilleur}/24) à "
       f"{couts[pire]:+.2f} % (coupe {pire}/24) — il y a un bon endroit pour couper")
 PY
