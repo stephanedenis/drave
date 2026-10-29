@@ -1,0 +1,215 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "dispositif": "audit statique des tools/porte-*.sh ; 7 comparaisons relues à la main",
+ "total_portes_ppl": 33,
+ "portes_avec_reference_externe": 0,
+ "portes_avec_comparaison": 7,
+ "comparaisons_totales": 10,
+ "portes": [
+  {
+   "porte": "porte-adaptateur-sortie.sh",
+   "lignes_ppl": 15,
+   "comparaisons": 1,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-budget.sh",
+   "lignes_ppl": 25,
+   "comparaisons": 3,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-bus-socket.sh",
+   "lignes_ppl": 6,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-bus.sh",
+   "lignes_ppl": 6,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-c4-retard.sh",
+   "lignes_ppl": 4,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-consolidation.sh",
+   "lignes_ppl": 5,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-coupe.sh",
+   "lignes_ppl": 5,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-cycle-c2.sh",
+   "lignes_ppl": 9,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-delais.sh",
+   "lignes_ppl": 4,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-diff-couche.sh",
+   "lignes_ppl": 1,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-echange-experts.sh",
+   "lignes_ppl": 9,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-flux.sh",
+   "lignes_ppl": 2,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-fusion.sh",
+   "lignes_ppl": 0,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-gain.sh",
+   "lignes_ppl": 13,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-harnais-invariants.sh",
+   "lignes_ppl": 1,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-homeostasie.sh",
+   "lignes_ppl": 2,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-horloge.sh",
+   "lignes_ppl": 7,
+   "comparaisons": 1,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-indice.sh",
+   "lignes_ppl": 0,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-jumeaux.sh",
+   "lignes_ppl": 4,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-melange.sh",
+   "lignes_ppl": 1,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-mistral.sh",
+   "lignes_ppl": 3,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-occupation-moteur.sh",
+   "lignes_ppl": 0,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-pannes.sh",
+   "lignes_ppl": 10,
+   "comparaisons": 1,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-poids-creux.sh",
+   "lignes_ppl": 8,
+   "comparaisons": 1,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-pont.sh",
+   "lignes_ppl": 9,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-prechargement.sh",
+   "lignes_ppl": 7,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-profondeur-routee.sh",
+   "lignes_ppl": 7,
+   "comparaisons": 1,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-push-paresseux.sh",
+   "lignes_ppl": 0,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-reflexe.sh",
+   "lignes_ppl": 3,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-registre.sh",
+   "lignes_ppl": 10,
+   "comparaisons": 2,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-reparti-moteur.sh",
+   "lignes_ppl": 13,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-topologie.sh",
+   "lignes_ppl": 9,
+   "comparaisons": 0,
+   "reference_externe": 0
+  },
+  {
+   "porte": "porte-trace.sh",
+   "lignes_ppl": 0,
+   "comparaisons": 0,
+   "reference_externe": 0
+  }
+ ],
+ "note": "0 référence externe : les comparaisons sont intra-run (identité, budget, dense/creux).",
+ "limites": [
+  "audit statique, aucune porte exécutée",
+  "regex sur les scripts",
+  "les valeurs de PPL dépendent du modèle et du corpus"
+ ]
+}

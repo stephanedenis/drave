@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**60 commits** · **0 session(s)** · **7 thème(s)**
+**61 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
-| docs | 14 | [docs.md](docs.md) |
+| docs | 15 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 29 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
@@ -92,6 +92,7 @@ Aucune session indexée pour ce jour ; voir
 | 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE |
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS |
 | 15:22 | `65ab24cf` | ÉTAT — R4.1 MESURÉE : 996 CELLULES, 802 EXACTES ; T0 À 3 993 |
+| 15:23 | `52075592` | JOURNAL — R4.1 ET L'ÉTAT DANS LE RÉCIT DU JOUR (59 COMMITS) |
 
 ## Le récit de la journée (écrit à la main)
 
