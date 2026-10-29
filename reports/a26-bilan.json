@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A2.6",
+ "verdict": "partielle",
+ "parties": {
+  "choisir_generique": {
+   "etat": "fait",
+   "preuve": "placement.rs, 4 tests ; kv_en_vram appliqué dans model.rs"
+  },
+  "kv_vram": {
+   "etat": "fait",
+   "preuve": "rapport-placement-kv-8k.md, ×1,93 / ×5,8"
+  },
+  "tete_4bits": {
+   "etat": "refusee",
+   "preuve": "TETE_4BIT +10 % PPL ; choisir_avec_perte la refuse à 5 %"
+  },
+  "experts": {
+   "etat": "bloque",
+   "preuve": "A6.2 — pas de MoE local"
+  },
+  "place_et_perte": {
+   "etat": "opt-in",
+   "preuve": "A8.3 refusé par la mesure ; A8.3a à venir"
+  }
+ },
+ "controle": "choisir_avec_perte refuse la tête 4 bits à 5 % (test) ; sans MoE local, les experts ne sont pas mesurables",
+ "limites": [
+  "bilan, pas une nouvelle mesure",
+  "la tête 4 bits a été essayée puis revertée ; pas de chiffre courant",
+  "experts non mesurables sans A6.2"
+ ]
+}

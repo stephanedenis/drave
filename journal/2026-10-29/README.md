@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**80 commits** · **0 session(s)** · **7 thème(s)**
+**81 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
-| modele | 5 | [modele.md](modele.md) |
+| modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 9 | [portes.md](portes.md) |
 
@@ -112,6 +112,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:20 | `3328e0ec` | LE BANC DURCI PASSE À 84 PARAPHRASES : MODÈLE 0,375 CONTRE LEXICAL 0,269, TÊTE 0,575 CONTRE BM25 0,745 |
 | 16:22 | `295124d8` | A8.0 — PORTE-COUPE ÉPINGLÉE : PPL 113,0068, COÛTS +0,52…+17,09 % |
 | 16:23 | `95f5a7e0` | A8.0 — AUDIT PPL : 4 PORTES SUR 33 ÉPINGLÉES |
+| 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -27,7 +27,7 @@
 
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A8.3 **refusé par la mesure** | A2.6, A3.2/A3.3 ; **A8.3a** (épingler le régime 1 %) |
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; A8.3 **refusé** | **A8.3a** (régime 1 %) ; **A6.2** (bloqué) |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur**, **B12.10 close (négatif)** | B11.10 (cartes) ; B10.3 attend **B10.2bis** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1–R4.3 mesurées** | **R0.4** — négatifs difficiles ; **R4.4 bloqué** (OCR) |
@@ -50,7 +50,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    611 ms. La restitution depuis un document lu est **R31**.
 5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
 6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
-7. **B11.10, A2.6, A3.2, A8.0, N3** — les autonomes, qui remplissent la file « jamais en attente ».
+7. **N3, R13** — les autonomes restants, qui remplissent la file « jamais en attente ».
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
    suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend `B10.2bis`.
 
@@ -64,8 +64,8 @@ ouvertes**, des **bloqués nommés** ou des **opt-in** à passer par défaut. Le
 | # | chantier | état | prochaine action |
 |---|---|---|---|
 | **A1** | observer et régler : trace v3, diff par couche, profilage, décision par couche | ✅ | aucune — la table est faite, la quantification testée |
-| **A2** | placer sur une machine : KV paginé, GPU, top-k, ordonnanceur | ✅ / 🔬 | compléter l'ordonnanceur (experts, tête) ; la règle `choisir` a 4 tests |
-| **A3** | répartir : protocole v5, granularité, seuil, Colab | ✅ / 🔬 / 🧱 | A3.2 (granularité par bloc) ; **A3.4 bloqué** (compte Colab) |
+| **A2** | placer sur une machine : KV paginé, GPU, top-k, ordonnanceur | ✅ / ⚠️ | **partielle** — tête 4 bits refusée (+10 % PPL), experts bloqués par **A6.2** ; [`bilan`](../../reports/rapport-a26-bilan.md) |
+| **A3** | répartir : protocole v5, granularité, seuil, Colab | ✅ / 🧱 | **A3.2/A3.3 mesurées** ; **A3.4 bloqué** (compte Colab) |
 | **A4** | rejouer, comparer : portes, références indépendantes, diff | ✅ | aucune |
 | **A5** | formats, matériels, énergie : SIMD, PTX, FPGA, KV | ✅ / 🧱 | **A5.4 bloqué** (FPGA) ; le 8 bits tardif est gratuit (+0,03 %) |
 | **A6** | apprendre des flux : capteur hebbien, routage MoE, élagage | ✅ / ⏳ | **A6.2 bloqué** (pas de MoE local) ; A6.1/A6.3 ont rendu leurs négatifs |
@@ -246,7 +246,7 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
 - **non bloqué, à faire** : **R0.5** (routeur, `8156fdcb`) ; **R0.4** (négatifs difficiles) ;
-  **N2** (la hiérarchie) ; **N4** (consigne courte) ; **A2.6/A3.2/A8.0** (moteur) ;
+  **N2** (la hiérarchie) ; **N4** (consigne courte) ; **N3/R13** (natif/lecteur) ;
   **N3** (opérations natives) ; **R13** (octets ou BPE) ; **A8.3a** (régime 1 %) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 14:25 | `8114767d` | SESSION — CLÔTURE f0969e87 : N0.15/N4.7, N4.8, EN-COURS À JOUR | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 14:48 | `de9afbc9` | R0.3 DURCI — 19 PARAPHRASES : LE LEXIQUE TOMBE À 0,30, LE MODÈLE PREND LA TÊTE À 0,717 | `R03-banc-lecture-rapide.md`, `en-cours.md`, `roadmap.md` (+9) |
 | 16:20 | `3328e0ec` | LE BANC DURCI PASSE À 84 PARAPHRASES : MODÈLE 0,375 CONTRE LEXICAL 0,269, TÊTE 0,575 CONTRE BM25 0,745 | `R03-banc-lecture-rapide.md`, `R04-tete-survol.md`, `R07-routeur-extractif-generatif.md` (+15) |
+| 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 | `pipeline-lecture.md`, `en-cours.md`, `roadmap.md` (+7) |
 
 ## Chiffres du jour
 
@@ -26,6 +27,7 @@
 - [reports/rapport-r03-banc-durci.md](../../reports/rapport-r03-banc-durci.md)
 - [reports/rapport-r03-lecteur-modele.md](../../reports/rapport-r03-lecteur-modele.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
+- [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
 
 <!-- notes -->

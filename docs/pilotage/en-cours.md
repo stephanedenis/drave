@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **57** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **293** / **364** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **294** / **365** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **102** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
@@ -87,7 +87,7 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 4 portes** ; **A8.3 refusé par la mesure** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; **A8.3a** (régime 1 %) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 4 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a** (régime 1 %) ; A6.2 (bloqué) |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée**, puis B10.3 (bloqué) |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R4.4 bloqué** |
