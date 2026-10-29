@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (30)
+## Commits du jour (31)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -38,6 +38,7 @@
 | 15:06 | `0374ef78` | R0.4 — LA TÊTE DE SURVOL PERD CONTRE BM25 (0,601 CONTRE 0,836), MAIS GAGNE SUR LE JURIDIQUE | `R04-tete-survol.md`, `index.md`, `en-cours.md` (+8) |
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS | `R07-routeur-extractif-generatif.md`, `index.md`, `en-cours.md` (+8) |
 | 15:32 | `e0c7c837` | R0.4 v2 ET R0.5 v2 — LES DEUX VERSIONS DURCIES CONFIRMENT LE DIAGNOSTIC : LE BANC EST LE VERROU | `R04-tete-survol.md`, `R07-routeur-extractif-generatif.md`, `en-cours.md` (+11) |
+| 16:07 | `d2457e46` | MIROIR — LES TROIS BLOCS RESTITUENT : 34/34 TABLEAUX, 296/296 MODULES, 42/42 FORMULES | `bloc-code.md`, `bloc-maths.md`, `bloc-tableaux.md` (+20) |
 
 ## Chiffres du jour
 
@@ -51,6 +52,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
+- [reports/rapport-miroir-blocs.md](../../reports/rapport-miroir-blocs.md)
 - [reports/rapport-native-8b-warm.md](../../reports/rapport-native-8b-warm.md)
 - [reports/rapport-native-8b.md](../../reports/rapport-native-8b.md)
 - [reports/rapport-native-best-2.md](../../reports/rapport-native-best-2.md)

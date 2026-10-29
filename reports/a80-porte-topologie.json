@@ -1,0 +1,27 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-topologie.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0.gguf",
+ "references": {
+  "reference": 17.4702,
+  "historique": 30.4363,
+  "topologie": 30.4363,
+  "relais": 42.5477
+ },
+ "tolerance": 0.0005,
+ "mesures": {
+  "reference": 17.4702,
+  "historique": 30.4363,
+  "topologie": 30.4363,
+  "relais_deux": 42.5477,
+  "relais_trois": 42.5477
+ },
+ "controle": "décalage de 10 % des trois références refusé par la même expression",
+ "gate": "exit 0 ; 5 sections vertes ; PPL épinglées",
+ "limites": [
+  "un seul modèle/quantification",
+  "référence modèle entier à 255 identifiants",
+  "relais à 128 identifiants"
+ ]
+}

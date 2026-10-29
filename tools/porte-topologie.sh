@@ -73,8 +73,9 @@ cat > "$TOPO" <<JSON
 JSON
 
 echo "=== 1. référence : le modèle entier ==="
-$D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx 256 --threads 8 --abits 16 2>/dev/null \
-    | grep -oE "perplexité [0-9.]+ sur" | tail -1
+REF=$($D "$M" --ppl "$IDS" --limit "$LIMITE" --ctx 256 --threads 8 --abits 16 2>/dev/null \
+    | grep -oE "perplexité [0-9.]+ sur" | tail -1 | grep -oE "[0-9.]+")
+echo "perplexité $REF sur"
 
 echo "=== 2. découpage historique ($COUCHES couches locales) ==="
 $D "$M" --flux-serveur "$PORT" --ctx 256 --threads 8 > "$T/n1.log" 2>&1 & SRV=$!
@@ -158,4 +159,18 @@ JSON
         echo "  ÉCHEC : deux régions $V2 · trois régions $V3"; exit 1
     fi
 fi
+# A8.0 — les trois PPL de référence sont ÉPINGLÉES (absolu, 5e-4) : la porte ne
+# vérifie plus seulement l'égalité entre bras, elle vérifie la valeur.
+python3 - "$REF" "$A" "$B" "${V2:-}" "${V3:-}" <<'PPLTOPO' || exit 1
+import sys
+ref, a, b = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])
+attendus = [("reference", ref, 17.4702), ("historique", a, 30.4363), ("topologie", b, 30.4363)]
+if sys.argv[4] and sys.argv[5]:
+    attendus += [("relais 2", float(sys.argv[4]), 42.5477), ("relais 3", float(sys.argv[5]), 42.5477)]
+for nom, val, attendu in attendus:
+    if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print("  ✅ PPL épinglées : " + " · ".join(f"{nom} {val}" for nom, val, _ in attendus))
+PPLTOPO
+
 rm -rf "$T"
