@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**1 commits** · **0 session(s)** · **1 thème(s)**
+**2 commits** · **0 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| mesures | 1 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -23,6 +24,7 @@
 | heure | commit | fait |
 |---|---|---|
 | 00:00 | `5f027768` | PORTES — 49 : 47 VERTES, 2 ROUGES STRUCTURELLES ; HARNAIS ET AUDIT CORRIGÉS |
+| 00:37 | `8e0477ef` | N2.17 — 30 000 PAS DE PLUS : PPL 2,726, PRÉCISION 72,34 % |
 
 ## Le récit de la journée (écrit à la main)
 
