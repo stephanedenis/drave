@@ -24,6 +24,9 @@ class Hub:
         self.dernier = None
 
     def percevoir(self, texte: str, jeu: str, contexte=None):
+        if isinstance(contexte, str):
+            self.bus.publier("echec", {"texte": texte, "erreur": "contexte str : RSN attendu"}, self.nom)
+            return None
         try:
             lec = codec(jeu).lit(texte, niveau=4, contexte=contexte)
         except Exception as e:

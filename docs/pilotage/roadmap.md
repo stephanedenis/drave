@@ -29,7 +29,7 @@
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur** | B12.10 et B11.10 (autonomes) ; B10.3 attend **B10.2bis** |
-| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N2 plafonne à 2,708** ; N4 partiel | **N0.3b** (parité), **N2** (la hiérarchie), **N4** (consigne courte) |
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | 🔬 R0.1 et R0.2 **mesurés** ; R0.3 pilote | **R0.3** (banc complet, 300 questions) |
 
 ## L'ordre du jour (carpe diem)
@@ -41,7 +41,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
 2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
    (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
    atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
-3. **N0.3b — la parité de perplexité DRVM ↔ GGUF** : la seule porte N0 encore ouverte, et un coût faible.
+3. ~~N0.3b — la parité de perplexité DRVM ↔ GGUF~~ **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394**.
 4. **N4 — l'usage** : la **consigne courte** tenue à l'écart ; SFT **24/24 vus, 0/4 tenus** ; service 69 octets /
    611 ms. La restitution depuis un document lu est **R31**.
 5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
@@ -76,7 +76,7 @@ rejouer et payer le calcul au prorata de l'activité. C'est le support de R0.
 ## Programme B — L'intelligence (les deux étages)
 
 L'étage 1 (langue) est mesuré ; l'étage 2 (pensée) est mesuré dans ses opérations, avec des négatifs nommés.
-Les lignes ouvertes sont **B10.3** (décodeur) et **B12.10** (intégration) ; **B1.5** est bloquée par le corpus.
+Les lignes ouvertes sont **B10.3** (décodeur) et **B12.10** (contexte du pipeline) ; **B1.5** est bloquée par le corpus.
 
 | # | chantier | état | prochaine action |
 |---|---|---|---|
@@ -108,7 +108,7 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 
 | # | chantier | état | prochaine action |
 |---|---|---|---|
-| **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ (sauf N0.3b) | **N0.3b** — parité de perplexité DRVM ↔ GGUF |
+| **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ | aucune — N0.3b est **close** (conversion et natif) |
 | **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
 | **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
 | **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 | porter les briques mesurées en **production** et en **porte** |
@@ -239,14 +239,14 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **non bloqué, à faire** : **R0.1 → R0.2 → R0.3** (lecteur v0) ; **N0.3b** (parité) ; **N2** (la hiérarchie) ;
-  **N4** (consigne courte) ; **B12.10** (intégration) ; **B11.10** (cartes) ; **A2.6/A3.2/A8.0** (moteur) ;
+- **non bloqué, à faire** : **R0.3** (banc complet, `8156fdcb`) ; **N2** (la hiérarchie) ;
+  **N4** (consigne courte) ; **B12.10** (contexte du pipeline) ; **B11.10** (cartes) ; **A2.6/A3.2/A8.0** (moteur) ;
   **N3** (opérations natives) ; **R13** (octets ou BPE) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
   B10.3 (B10.2bis absent du backlog) ;
 - **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
-  (langues et maîtres), C3.2 (familles).
+  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF).
 
 ## Ce qui est bloqué, et par quoi
 

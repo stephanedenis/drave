@@ -18,13 +18,12 @@
 
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
-- **Ce qu'elle fait** : R0.1 (graphe de document) est **mesuré** — 51 pages, fidélité **1,000** ;
-  la suite est R0.3 (banc complet) ;
-  l'ordre est **strict**.
-- **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et ses fiches ; `N2-GPU` distille ;
+- **Ce qu'elle fait** : **N0.3b est mesuré** (conversion 68,1917 / 92,1875 ; natif 4,6585 / 18,6394) ;
+  elle a réparé le contexte du pipeline (**0/528 → 528/528**) ; la suite est le split par code tenu à l'écart.
+- **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et R0.3 ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **N0.3b** en parallèle ; R0.2 est **mesuré** par `8156fdcb` (récupération 1,000 à 30 %).
-- **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
+- **Prochaine action** : **B12.10** — split par code tenu à l'écart, M4 retiré ; R0.3 est à `8156fdcb`.
+- **Bloquants** : aucun pour B12.10 ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
 ### Session `8156fdcb` — R0.2 livré, R0.3 en cours (lecteur modèle)
@@ -34,7 +33,7 @@
   1,000 à 30 %, 5 types, commit `08149617`) ; **R0.3** en cours depuis le 29/10.
 - **Ce qu'elle fait** : R0.3 — brancher un **modèle** (Qwen2.5-0.5B du moteur) comme lecteur, et
   comparer la sélection du contrôleur à la troncature naïve et au hasard, à fenêtre égale.
-- **Ce que font les autres** : `f0969e87` tient l'état et N0.3b ; `N2-GPU` distille la hiérarchie ;
+- **Ce que font les autres** : `f0969e87` tient l'état et prend **B12.10** ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
   `tools/tests/documents/bench-pilote.json`, `docs/implantation/lecteur-controleur.md`,
@@ -56,11 +55,13 @@
 
 ## Ce qui est en cours
 
-- **R0 — lecteur v0** : R0.1 **mesurée** (51 pages) et R0.2 **mesuré** (récupération 1,000 à 30 %, 5 types) ;
-  R0.3 en **pilote** (20 questions) ; aucun bloquant.
+- **R0 — lecteur v0** : R0.1 **mesuré** (51 pages) et R0.2 **mesuré** (récupération 1,000 à 30 %, 5 types) ;
+  R0.3 est porté par `8156fdcb` ; aucun bloquant.
+- **N0.3b — parité DRVM ↔ GGUF** : **close** (conversion et natif) ; fiche
+  [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
-- **Documentation** : roadmap unique A/B/N/R ; **90 documents** ; glossaire **famille 12** (27 termes) ;
+- **Documentation** : roadmap unique A/B/N/R ; **93 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.
 
 ## Les chiffres de l'état
@@ -81,7 +82,7 @@
 |---|---|---|---|
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3/B12.10 ouverts | B10.3 décodeur sous le plancher ; B1.5 corpus | B12.10, puis B10.3 |
-| **N — le natif** | N0/N1 mesurés ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N0.3b ; N2 (hiérarchie) ; N4 (consigne) |
+| **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1 mesuré (51 pages) ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.2 → R0.3 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
@@ -92,8 +93,8 @@
 
 ## Ce qui reste
 
-**R0** — **R0.1 mesuré** ; R0.2 → R0.3 (non bloqué). **N0.3b** — parité DRVM ↔ GGUF. **N2** — la **hiérarchie** ; **N5 gelé**.
-**N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B12.10** — intégration.
+**R0** — **R0.1 et R0.2 mesurés** ; R0.3 porté par `8156fdcb`. **N2** — la **hiérarchie** ; **N5 gelé**.
+**N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B12.10** — contexte du pipeline.
 **Backlog** — graphe et fiches (`8156fdcb`).
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 

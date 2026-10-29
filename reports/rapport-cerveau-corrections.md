@@ -170,9 +170,37 @@ mêmes raisons. C'est un test d'intégration, pas un résultat sémantique.
 un module solide (M1), un gain de contexte (M5), une table de lésions réelle (M9), et des
 mécanismes structurels (M2, M3, M4, M6, M8) ou négatifs (M7) qui **nomment** ce qui manque.
 
+## 11bis. B12.10 — le contexte du pipeline était une chaîne
+
+**Mesure du 2026-10-29.** Le pipeline M1 → M4 → M8 passait `ItemType.contexte` — un **résumé**
+(`resume_contexte`, chaîne) — au codec, qui attend un **RSN** avec `.corps`. Le codec levait
+`AttributeError`, `Hub.percevoir` l'attrapait et rendait `None`, et le pipeline ne stockait **rien**.
+Le défaut était muet : 0/161 cartes, 0/528 items.
+
+| chemin | cartes | items | exactes |
+|---|---:|---:|---:|
+| `Hub` avec `ItemType.contexte` (chaîne) | 161 | 528 | **0** |
+| `Pipeline.percevoir_item` (RSN si présent, sinon `None`) | 161 | 528 | **161 / 528** |
+| dont contexte RSN disponible | 8 | 8 | **8 / 8** |
+| dont contexte perdu en amont (chaîne seule) | 153 | 520 | **153 / 520** |
+| contrôle : contexte RSN **mélangé** | 8 | 8 | **4 / 8**, 4 refus |
+
+- Le codec lit **161/161** cartes sans contexte et **8/8** avec le RSN ; le pipeline retrouve
+  **528/528** items après la correction.
+- Le contrôle mélangé est le signe que le contexte **sert** : la moitié des cartes ne sont plus
+  valides avec le contexte d'une autre donne, et le codec refuse les 4 autres.
+- **Ce qui reste** : seuls **8** items de cartes portent un RSN complet ; les **153** autres n'ont
+  qu'un résumé (`resume_contexte`) dans `ItemType`. La correction ne peut pas restituer un contexte
+  qui a été jeté en amont. La généralisation M4/M8 sur un code tenu à l'écart reste ouverte.
+
+**Verdict B12.10** : la **plomberie** est réparée (le pipeline lit 528/528 au lieu de 0) ; la
+**généralisation** n'est pas mesurée par ce correctif. Le prochain pas est le split par code tenu à
+l'écart, avec M4 retiré.
+
 ## 12. Fichiers
 
 - Mesures corrigées : [`cerveau-mesures-corrigees.json`](cerveau-mesures-corrigees.json) ;
   sous-agents : `/tmp/a1-m5-m6.json`, `/tmp/a2-m7-m8-m9.json`, `/tmp/a3-m2.json`, `/tmp/a4-m3-m4.json`.
-- Code : `tools/cerveau/`.
+- Code : `tools/cerveau/` ; B12.10 : `tools/semantique/typed_corpus.py`, `tools/cerveau/pipeline.py`,
+  `tools/cerveau/hub.py`, tests `test_pipeline.py` et `test_bus.py`.
 - Ancienne fiche : [`rapport-cerveau-modules.md`](rapport-cerveau-modules.md).

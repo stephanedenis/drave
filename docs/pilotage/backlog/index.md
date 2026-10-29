@@ -74,7 +74,7 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 
 | id | fiche | statut | prio | dépend de | ligne |
 |---|---|---|---|---|---|
-| N0.3b | [Parité de perplexité DRVM ↔ GGUF](N0.3b-parite-ppl.md) | prête | P1 | N0 | N0.3b |
+| N0.3b | [Parité de perplexité DRVM ↔ GGUF](N0.3b-parite-ppl.md) | mesurée | P1 | N0 | N0.3b |
 | N2 | [Distillation native (50 000 séquences)](N2-distillation.md) | en cours | P1 | N1 | N2 |
 | N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | — | N4 |
 | B10.3 | [Raisonnement sur `z` gelé](B10.3-raisonnement-z.md) | bloquée | P2 | B10.2bis | B10.3 |

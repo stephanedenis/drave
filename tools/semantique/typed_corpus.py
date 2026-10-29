@@ -27,6 +27,7 @@ class ItemType:
     paire: str
     format: str
     contexte: str = ""
+    contexte_rsn: object | None = None
 
 
 def items() -> list[ItemType]:
@@ -41,7 +42,8 @@ def items() -> list[ItemType]:
                 continue
             vus.add(cle)
             out.append(ItemType(it.texte, code_item(it), it.jeu, it.attendu.nature,
-                                it.langue, it.paire, it.format, resume_contexte(it.contexte)))
+                                it.langue, it.paire, it.format, resume_contexte(it.contexte),
+                                it.contexte))
     return out
 
 

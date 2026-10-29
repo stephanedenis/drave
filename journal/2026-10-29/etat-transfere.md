@@ -9,7 +9,8 @@
 
 | chantier | état | où lire |
 |---|---|---|
-| **N0 — DRVM** | ✅ format, lecteur Python/Rust, GGUF ↔ DRVM (SHA identique), trace/rejeu (6 144 listes), exécution native ; **N0.3b (parité PPL) reste ouvert** | [`roadmap-native-2026-10-29.md`](../../docs/archive/roadmap-native-2026-10-29.md) |
+| **N0 — DRVM** | ✅ format, lecteur Python/Rust, GGUF ↔ DRVM (SHA identique), trace/rejeu (6 144 listes), exécution native ; **N0.3b (parité PPL) close** | [`roadmap-native-2026-10-29.md`](../../docs/archive/roadmap-native-2026-10-29.md) |
+| **N0.3b — parité DRVM ↔ GGUF** | ✅ conversion **68,1917 / 92,1875** (15 / 304 jetons) ; natif **4,6585 / 18,6394** contre Python **4,658519 / 18,6395** ; close | [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md) |
 | **N1 — `drave-n0`** | ✅ 11,47 M, 6 blocs ; PPL 3,465 avec pont (4,080 sans) ; têtes 57,6/61,6/62,1 % ; réflexe −24,05 % ; pensée λ = 0,709 ; cache 19,25× | [`roadmap-native-2026-10-29.md`](../../docs/archive/roadmap-native-2026-10-29.md) |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | [`etat-ancien.md`](../2026-10-28/etat-ancien.md) |
 | **B3/B4** | ✅ plan (0,43), opérateurs (négatifs nommés) | [`rapport-operateur-negation.md`](../../reports/rapport-operateur-negation.md) |

@@ -30,6 +30,18 @@ class Pipeline:
             self.memoire.stocker(texte, code, langue)
         return code
 
+    def percevoir_item(self, it):
+        """Perçoit un `ItemType` en portant son **contexte RSN** (pas son résumé).
+
+        `ItemType.contexte` est une chaîne (`resume_contexte`) ; le codec attend
+        un `RSN` avec `.corps`. Passer la chaîne faisait échouer la lecture en
+        silence, et le pipeline ne stockait rien.
+        """
+        ctx = getattr(it, "contexte_rsn", None)
+        if ctx is None and not isinstance(getattr(it, "contexte", None), str):
+            ctx = getattr(it, "contexte", None)
+        return self.percevoir(it.texte, it.jeu, ctx)
+
     def consolider(self):
         self.prototypes = self.sommeil.consolider(self.memoire.episodes)
         self.bus.publier("prototypes", len(self.prototypes), self.nom)

@@ -24,6 +24,12 @@ class TestBus(unittest.TestCase):
         surface = h.rendre(code, ctx)
         self.assertIn(surface, ("Nf3", "nf3", "g1f3", "g1-f3"))
 
+    def test_contexte_str_refuse(self):
+        """Une chaîne n'est pas un RSN : refus explicite, pas un échec muet."""
+        h = Hub()
+        self.assertIsNone(h.percevoir("2D", "cartes", "cartes etat"))
+        self.assertEqual(h.bus.compter("echec"), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

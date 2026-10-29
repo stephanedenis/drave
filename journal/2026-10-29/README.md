@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**39 commits** · **0 session(s)** · **5 thème(s)**
+**41 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,8 @@
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
-| mesures | 20 | [mesures.md](mesures.md) |
+| mesures | 21 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
 | moteur | 3 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
@@ -69,6 +70,8 @@ Aucune session indexée pour ce jour ; voir
 | 12:03 | `bc4e3d92` | N0.3b — PARITÉ PPL DRVM ↔ GGUF CLOSE : 68,1917 / 92,1875 (CONVERSION), 4,6585 / 18,6394 (NATIF) |
 | 12:04 | `08149617` | R0.2 — À 30 % DU BUDGET, LE CONTRÔLEUR RÉCUPÈRE 100 % DES PASSAGES ; LE LECTEUR PLAFONNE À 25–75 % |
 | 12:24 | `7a8a441e` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ |
+| 12:41 | `1359d13f` | ÉTAT — R0.3 RÉSERVÉ À 8156FDBC : LECTEUR MODÈLE ET BANC COMPLET |
+| 12:54 | `0274b67c` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE |
 
 ## Le récit de la journée (écrit à la main)
 
