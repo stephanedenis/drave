@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 04:22 | `3e5ea72d` | N2.25 + SYNTHÈSE — PLAFOND 2,708 : SIX ESSAIS, AUCUN NE BAT 2,708 | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 04:42 | `3fac1112` | N2.26 — TÊTES LOCALES : PPL 2,763, DÉGRADATION, ARRÊTÉ | `en-cours.md`, `roadmap-native.md`, `README.md` (+8) |
 | 04:48 | `c4378136` | N4.6 — SFT MINIMAL : 24/24 VUS, 0/4 TENUS, MÉMORISATION | `en-cours.md`, `roadmap-native.md`, `README.md` (+8) |
+| 05:11 | `098126ae` | N2.27 — CONTEXTE 256 : PPL 5,675, CHUTE, ARRÊTÉ | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 
 ## Chiffres du jour
 
-`2,763` · `2,708` · `2,852` · `2,823` · `0,794` · `1,734` · `72,80 %` · `72,62 %` · `2,714` · `72,34 %` · `2,726`
+`5,675` · `2,763` · `2,708` · `2,852` · `2,823` · `0,794` · `1,734` · `72,80 %` · `72,62 %` · `2,714` · `72,34 %` · `2,726`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -29,6 +30,7 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-native-best-service.md](../../reports/rapport-native-best-service.md)
+- [reports/rapport-native-ctx256.md](../../reports/rapport-native-ctx256.md)
 - [reports/rapport-native-local.md](../../reports/rapport-native-local.md)
 - [reports/rapport-native-plafond.md](../../reports/rapport-native-plafond.md)
 - [reports/rapport-native-prof20k-3.md](../../reports/rapport-native-prof20k-3.md)

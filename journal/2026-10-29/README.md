@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **0 session(s)** · **5 thème(s)**
+**20 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -45,6 +45,7 @@
 | 04:45 | `702e4dae` | FIX — VARS_LUES : DRAVE_TOKEN |
 | 04:48 | `c4378136` | N4.6 — SFT MINIMAL : 24/24 VUS, 0/4 TENUS, MÉMORISATION |
 | 04:53 | `0bf0297e` | N0.14 — PPL NATIVE 1 996 OCTETS : 54,0379, PYTHON 54,0343 |
+| 05:11 | `098126ae` | N2.27 — CONTEXTE 256 : PPL 5,675, CHUTE, ARRÊTÉ |
 
 ## Le récit de la journée (écrit à la main)
 
