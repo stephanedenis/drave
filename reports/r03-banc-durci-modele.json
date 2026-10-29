@@ -3,7 +3,7 @@
  "ligne": "R0.2",
  "graine": 20261029,
  "critere": "bm25",
- "questions": 19,
+ "questions": 84,
  "types": [
   "code",
   "juridique",
@@ -14,16 +14,16 @@
  "agregats": {
   "code": {
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.232,
-    "valeur": 1.0,
-    "cout": 753.0
+    "recuperation": 0.684,
+    "f1": 0.182,
+    "valeur": 0.474,
+    "cout": 1484.2
    },
    "debut_0.30": {
-    "recuperation": 0.5,
-    "f1": 0.165,
-    "valeur": 0.0,
-    "cout": 810.0
+    "recuperation": 0.263,
+    "f1": 0.119,
+    "valeur": 0.053,
+    "cout": 2950.4
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -34,16 +34,16 @@
   },
   "juridique": {
    "controlee_0.30": {
-    "recuperation": 0.333,
-    "f1": 0.263,
-    "valeur": 0.333,
-    "cout": 1009.0
+    "recuperation": 0.357,
+    "f1": 0.152,
+    "valeur": 0.357,
+    "cout": 475.3
    },
    "debut_0.30": {
-    "recuperation": 0.667,
-    "f1": 0.344,
-    "valeur": 0.667,
-    "cout": 864.0
+    "recuperation": 0.643,
+    "f1": 0.157,
+    "valeur": 0.5,
+    "cout": 1155.8
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -54,16 +54,16 @@
   },
   "prose": {
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.203,
-    "valeur": 1.0,
-    "cout": 888.2
+    "recuperation": 0.833,
+    "f1": 0.158,
+    "valeur": 0.556,
+    "cout": 1575.9
    },
    "debut_0.30": {
-    "recuperation": 0.5,
-    "f1": 0.052,
-    "valeur": 0.0,
-    "cout": 2113.0
+    "recuperation": 0.278,
+    "f1": 0.079,
+    "valeur": 0.056,
+    "cout": 3042.7
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -74,16 +74,16 @@
   },
   "tableau": {
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.169,
-    "valeur": 0.5,
-    "cout": 2600.0
+    "recuperation": 0.667,
+    "f1": 0.122,
+    "valeur": 0.267,
+    "cout": 1706.3
    },
    "debut_0.30": {
-    "recuperation": 0.25,
-    "f1": 0.116,
-    "valeur": 0.0,
-    "cout": 5772.0
+    "recuperation": 0.2,
+    "f1": 0.098,
+    "valeur": 0.133,
+    "cout": 4142.5
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -94,16 +94,16 @@
   },
   "technique": {
    "controlee_0.30": {
-    "recuperation": 0.75,
-    "f1": 0.143,
-    "valeur": 0.75,
-    "cout": 2300.0
+    "recuperation": 0.722,
+    "f1": 0.15,
+    "valeur": 0.222,
+    "cout": 2424.3
    },
    "debut_0.30": {
-    "recuperation": 0.75,
-    "f1": 0.097,
-    "valeur": 0.0,
-    "cout": 3032.0
+    "recuperation": 0.333,
+    "f1": 0.109,
+    "valeur": 0.056,
+    "cout": 3840.5
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -331,6 +331,87 @@
    }
   },
   {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle erreur relative le codage par valeur introduit-il, en pourcentage du maximum ?",
+   "or": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3158,
+    "valeur": false,
+    "cout": 634,
+    "reponse": "La erreur relative à la valeur nulle introduit une erreur par valeur de 85%. Cela signifie que"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2353,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "La réponse à cette question est que le codage par valeur introduit une erreur de 100% du maximum"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quel chiffre de perplexité traduit une clé réécrite au mauvais endroit ?",
+   "or": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 890,
+    "reponse": "Le chiffre de perplexité qui traduit une clé réécrite au mauvais endroit est de 1"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "La clé réécrite au mauvais endroit est une clé de perplexité de 1.0."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle phase exige une réponse plutôt qu'un refus ?",
+   "or": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2708,
+    "reponse": "La réponse exige une réponse plutôt qu'un refus. Cela signifie que lorsqu'un nœud distant"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "La réponse exige une réponse plutôt qu'un refus est la phase 3, qui est appelée \"phase"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
    "document": "docs/pilotage/roadmap.md",
    "type": "tableau",
    "question": "Quel numéro porte la fiche de la mémoire de travail ?",
@@ -339,14 +420,14 @@
     "recupere": true,
     "f1": 0.1538,
     "valeur": false,
-    "cout": 3347,
+    "cout": 3399,
     "reponse": "Le numéro de la fiche de la mémoire de travail est 2."
    },
    "debut_0.30": {
     "recupere": true,
     "f1": 0.1538,
     "valeur": false,
-    "cout": 5772,
+    "cout": 5992,
     "reponse": "Le numéro de la fiche de la mémoire de travail est 1."
    },
    "closed_book": {
@@ -373,7 +454,7 @@
     "recupere": false,
     "f1": 0.069,
     "valeur": false,
-    "cout": 5772,
+    "cout": 5992,
     "reponse": "Pour calculer le pourcentage de temps gagné par l'abandon anticipé, nous devons considérer"
    },
    "closed_book": {
@@ -391,16 +472,16 @@
    "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2,
-    "valeur": true,
-    "cout": 4185,
-    "reponse": "Le numéro de la phase qui ajoute les trois têtes de lecture est R0.4."
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 4220,
+    "reponse": "Le numéro de la phase qui ajoute les trois têtes de lecture est **R0**."
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1379,
+    "f1": 0.1081,
     "valeur": false,
-    "cout": 5772,
+    "cout": 5992,
     "reponse": "Le numéro de la phase qui ajoute les trois têtes de lecture est 1."
    },
    "closed_book": {
@@ -427,8 +508,62 @@
     "recupere": false,
     "f1": 0.1053,
     "valeur": false,
-    "cout": 5772,
+    "cout": 5992,
     "reponse": "Le raisonnement mené sur l'espace latent est désigné par le numéro 2026-1"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel identifiant porte le chantier qui bloque sur les cartes tenues ?",
+   "or": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 3824,
+    "reponse": "Le chantier qui bloque sur les cartes tenues est identifié par le chantier \"B11.1"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1053,
+    "valeur": false,
+    "cout": 5992,
+    "reponse": "Le chantier qui bloque sur les cartes tenues est le chantier N."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel identifiant désigne le manque de corpus d'articles ?",
+   "or": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2609,
+    "valeur": true,
+    "cout": 2385,
+    "reponse": "Le manque de corpus d'articles désigne le B1.5."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 5992,
+    "reponse": "Le manque de corpus d'articles désigne le manque de contenu ou de données pour les articles. Cela"
    },
    "closed_book": {
     "recupere": false,
@@ -618,6 +753,1626 @@
     "valeur": false,
     "cout": 810,
     "reponse": "Le code de sortie qui signale un dépassement de délai est \"DELI\" (Delai)."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quelle quantité de mémoire graphique un modèle occupé prend-il pendant une passe ?",
+   "or": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3158,
+    "valeur": true,
+    "cout": 892,
+    "reponse": "Un modèle occupé prend 28 Go de VRAM pendant une passe."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1463,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "Pour calculer la quantité de mémoire graphique un modèle prend-il pendant une passe, nous pouvons utiliser"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Combien de lignes du journal faut-il lire pour connaître la cause d'un échec ?",
+   "or": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 621,
+    "reponse": "Pour connaître la cause d'un échec de la porte rouge, il faut lire le fichier $JOURNA"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 810,
+    "reponse": "Pour connaître la cause d'un échec, il faut lire 10 lignes du journal. Cela"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "De quelle année date l'étude qui a lancé la mode de la lecture ultra-rapide ?",
+   "or": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4687,
+    "reponse": "L'étude qui a lancé la mode de la lecture ultra-rapide est de 2010."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5242,
+    "reponse": "L'étude qui a lancé la mode de la lecture ultra-rapide a été lancée en 20"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "De quel pourcentage l'abandon anticipé accélère-t-il ?",
+   "or": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2162,
+    "valeur": true,
+    "cout": 928,
+    "reponse": "Le 24% de l'abandon anticipé accélère la sortie précoce de l'application"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5242,
+    "reponse": "Le pourcentage d'abandon anticipé de la lecture rapide pour Drave est de 20%. Cela"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "Combien de pièces le protocole d'évaluation doit-il rassembler ?",
+   "or": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 1553,
+    "reponse": "Le protocole d'évaluation doit rassembler 10 pièces."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 5242,
+    "reponse": "Le protocole d'évaluation doit rassembler 10 pièces. Cela comprend :\n\n1. Un document"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "Quel volume les tampons d'avance ont-ils traité ?",
+   "or": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 1098,
+    "reponse": "Les tampons d'avance ont traité 6 tampons."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0625,
+    "valeur": false,
+    "cout": 5242,
+    "reponse": "Le volume des tampons d'avance que Drave a traité est de 1000 pages."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Combien de nombres porte le vecteur de sens ?",
+   "or": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": true,
+    "cout": 2248,
+    "reponse": "Le vecteur de sens est de taille 128."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": false,
+    "cout": 2643,
+    "reponse": "Le vecteur de sens porte 10 nombres."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Quel est le nombre de propriétés typées du schéma fixe ?",
+   "or": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.16,
+    "valeur": true,
+    "cout": 595,
+    "reponse": "Le schéma fixe est composé de 15 propriétés typées. Cela signifie que"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 2643,
+    "reponse": "Le schéma fixe est composé de 10 propriétés typées."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Combien de langues la première exécution du protocole a-t-elle couvertes ?",
+   "or": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": true,
+    "cout": 2404,
+    "reponse": "La première exécution du protocole a couvert 10 langues."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2222,
+    "valeur": true,
+    "cout": 2643,
+    "reponse": "La première exécution du protocole a couvert 10 langues."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Combien de cases compte le plateau du jeu de dames décrit ?",
+   "or": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 2653,
+    "reponse": "Le plateau du jeu de dames décrit avec une taille de 9x18x27."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1739,
+    "valeur": false,
+    "cout": 3196,
+    "reponse": "Le plateau du jeu de dames décrit avec 18 cases."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Combien d'idées le vocabulaire commun aux langues couvre-t-il ?",
+   "or": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1283,
+    "reponse": "Le vocabulaire commun aux 71 langues couvre 100 idées. C'est un chiffre"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0556,
+    "valeur": false,
+    "cout": 3196,
+    "reponse": "Le vocabulaire commun aux langues couvre environ 100-150 idées. Cela dé"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Quel est le nombre de règles de jeu que les maîtres enseignent ?",
+   "or": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0645,
+    "valeur": false,
+    "cout": 2825,
+    "reponse": "Le nombre de règles de jeu que les maîtres enseignent est de six."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0588,
+    "valeur": false,
+    "cout": 3196,
+    "reponse": "Le nombre de règles de jeu que les maîtres enseignent est très grand et dépend de la langue"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "question": "Quel score le premier protocole a-t-il obtenu sur la restitution ?",
+   "or": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": false,
+    "cout": 1106,
+    "reponse": "Le premier protocole a obtenu un score de 38,8 sur la restitution."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2353,
+    "valeur": false,
+    "cout": 2128,
+    "reponse": "Le premier protocole a obtenu un score de 1 sur la restitution."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "question": "Quelle proportion des positions l'outil déterministe décode-t-il ?",
+   "or": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 688,
+    "reponse": "Pour déterminer la proportion des positions l'outil décode-t-il déterministe, nous devons considérer"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2128,
+    "reponse": "Pour déterminer la proportion des positions l'outil décode-t-il, nous devons analyser les caracté"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "question": "Combien de millions de paramètres compte le petit modèle natif ?",
+   "or": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2105,
+    "valeur": true,
+    "cout": 1341,
+    "reponse": "Le petit modèle natif, Qwen3-MoE, compte environ 12 millions de paramètres."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1788,
+    "reponse": "Le petit modèle natif Drave, qui est un modèle drave-n0, est un modèle monolithique dense"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "question": "Quelle taille fait le vocabulaire d'entrée du modèle ?",
+   "or": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2353,
+    "valeur": true,
+    "cout": 1404,
+    "reponse": "Le vocabulaire d'entrée du modèle Drave est de taille 256."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.125,
+    "valeur": false,
+    "cout": 1788,
+    "reponse": "Le vocabulaire d'entrée du modèle Drave est de taille 1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "question": "Combien de bits fait le condensat du fichier complet ?",
+   "or": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 857,
+    "reponse": "Le condensat du fichier complet est de 16 bits."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Le condensat du fichier complet est de 160 bits. Cela se détermine par la taille"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "question": "À partir de quel seuil de recouvrement la découpe est-elle acceptée ?",
+   "or": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 739,
+    "reponse": "La découpe est acceptée lorsque le seuil de recouvrement est supérieur à 50%."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Pour définir un seuil de recouvrement pour la découpe d'un document, nous devons prendre en"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quelle proportion du document le plus petit budget représente-t-il ?",
+   "or": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 975,
+    "reponse": "Le document représente la moitié du budget le plus petit."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2353,
+    "valeur": true,
+    "cout": 1159,
+    "reponse": "Le document le plus petit budget représente 100 octets."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quelle part du budget la lecture peut-elle consommer au plus ?",
+   "or": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 1073,
+    "reponse": "La lecture peut consommer jusqu'à 80% du budget. C'est une décision de politique, pas un"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1159,
+    "reponse": "La lecture peut consommer le plus de budget en fonction de la longueur et de la complexité du texte."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quel cinquième de l'enveloppe est gardé pour vérifier ?",
+   "or": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": false,
+    "cout": 333,
+    "reponse": "Le cinquième de l'enveloppe qui est gardé pour vérifier est le contrôleur de lecture."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1159,
+    "reponse": "Le cinquième de l'enveloppe qui est gardé pour vérifier est le coût cumulé."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Combien d'entrées les blocs à portée courte regardent-ils ?",
+   "or": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 2672,
+    "reponse": "Le problème que vous avez identifié est lié à la manière dont les couches de GPT-2 sont traitées"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 9144,
+    "reponse": "Pour calculer la nombre d'entrées pour les blocs à portée courte, nous devons comprendre que"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Sur combien de bits les clés sont-elles stockées dans la variante compressée ?",
+   "or": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 7598,
+    "reponse": "Sur la variante compressée, les clés sont stockées dans 4 bits."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9144,
+    "reponse": "Pour obtenir la taille exacte de chaque clé dans la variante compressée, nous devons utiliser des informations"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Quel facteur les blocs du réseau appliquent-ils aux lancements graphiques ?",
+   "or": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4320,
+    "reponse": "Le facteur appliqué aux lancements graphiques par les blocs du réseau est de 14. Cela"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9144,
+    "reponse": "Le facteur appliqué aux lancements graphiques par le blocs du réseau est le factor YaRN (You Can"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Combien de milliards de paramètres compte le modèle dont le fichier pèse 60 Go ?",
+   "or": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2963,
+    "valeur": false,
+    "cout": 4724,
+    "reponse": "Le modèle dont le fichier pèse 60 Go compte 62,2 Go de paramètres."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 4490,
+    "reponse": "Pour calculer le nombre de milliards de paramètres du modèle dont le fichier pèse 60 Go,"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Combien de milliards de paramètres le modèle qui tient en 17,7 Go compte-t-il ?",
+   "or": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3,
+    "valeur": false,
+    "cout": 4745,
+    "reponse": "Le modèle qui tient en 17,7 Go compte 17,7 Go de paramètres."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.3,
+    "valeur": false,
+    "cout": 4490,
+    "reponse": "Pour calculer le nombre de milliards de paramètres du modèle qui tient en 17,7 Go,"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Quelle vitesse avait été annoncée avant la mesure ?",
+   "or": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2169,
+    "reponse": "La vitesse annoncée avant la mesure était de 12 % sur Q4_0."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4490,
+    "reponse": "La vitesse annoncée avant la mesure était de 413 Mo."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "question": "Quel plafond de contexte est refusé par les essais du modèle ?",
+   "or": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 502,
+    "reponse": "En tant qu'assistant Alibaba Cloud, je n'ai pas accès à des informations spécifiques sur les essais"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1906,
+    "reponse": "En tant qu'assistant Alibaba Cloud, je n'ai pas accès à des informations spécifiques sur les essais"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "question": "Combien d'items le réseau de dépendances réunit-il ?",
+   "or": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 414,
+    "reponse": "Le réseau de dépendances réunit 10 items. Cela comprend les sessions en cours, les sessions en"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1906,
+    "reponse": "Le réseau de dépendances réunit 10 items. Cela s'agit de la liste des fichiers"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/backlog/index.md",
+   "type": "tableau",
+   "question": "Combien de fiches le backlog contient-il au total ?",
+   "or": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 593,
+    "reponse": "Le backlog contient 29 fiches."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 1653,
+    "reponse": "Le backlog contient 29 fiches."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves le dernier passage complet a-t-il lancées ?",
+   "or": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0238,
+    "valeur": false,
+    "cout": 1018,
+    "reponse": "Le dernier passage complet a lancé 10 épreuves."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0235,
+    "valeur": false,
+    "cout": 3215,
+    "reponse": "Le dernier passage complet a été lancé le 9 octobre 2026."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Quel débit le disque atteint-il au hasard sur l'array ?",
+   "or": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3636,
+    "valeur": true,
+    "cout": 1885,
+    "reponse": "Le disque atteint un débit de 29 Mo/s au hasard sur l'array."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1739,
+    "valeur": false,
+    "cout": 3215,
+    "reponse": "Le débit du disque atteint-il au hasard sur l'array selon la réponse donnée ?"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves de rappel le réseau a-t-il passées à longue portée ?",
+   "or": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1133,
+    "reponse": "Le réseau a passé à longue portée 8 époques de rappel. Cela signifie qu'il"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3215,
+    "reponse": "Le réseau a passé à longue portée 9 épreuves de rappel."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves le dernier passage intégral a-t-il lancées ?",
+   "or": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 350,
+    "reponse": "Le dernier passage intégral a lancé 5 épreuves. C'est le nombre de modes de la"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": true,
+    "cout": 3481,
+    "reponse": "Le dernier passage intégral a lancé 49 épreuves."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "question": "Combien de renvois internes le script a-t-il validés ?",
+   "or": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0702,
+    "valeur": false,
+    "cout": 844,
+    "reponse": "Le script a validé trois renvois internes. Cela signifie qu'il a vérifié les réponses"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0392,
+    "valeur": false,
+    "cout": 3481,
+    "reponse": "Le script a validé 1 renvoi internes."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session figure dans la référence du projet de résolution ?",
+   "or": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.1538,
+    "valeur": true,
+    "cout": 822,
+    "reponse": "Le numéro de session figure dans la référence du projet de résolution 80/1."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1538,
+    "valeur": true,
+    "cout": 757,
+    "reponse": "Le numéro de session figure dans la référence du projet de résolution 80/1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel article de l'accord de siège est cité pour les représentants ?",
+   "or": "section 11 of the Agreement between the United Nations and the United ",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": true,
+    "cout": 264,
+    "reponse": "Le texte de l'accord de siège cité pour les représentants est le 11e article de l"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": true,
+    "cout": 757,
+    "reponse": "Le texte mentionné dans l'article de l'accord de siège est le 11 de l'article 1"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois l'assemblée mentionnée a-t-elle eu lieu ?",
+   "or": "of 12 September 2025, and the statements made therein, including the p",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 264,
+    "reponse": "Le 19 septembre 2025, la Assemblée a eu lieu."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 757,
+    "reponse": "Le 19 septembre 2025."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session apparaît dans la référence du document préparatoire ?",
+   "or": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": "Le numéro de session apparaît dans la référence du document préparatoire sous le numéro 25151"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": true,
+    "cout": 826,
+    "reponse": "Le numéro de session apparaît dans la référence du document préparatoire sous le numéro 80/1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quelle section de l'accord sur le siège concerne les représentants ?",
+   "or": "sesiones de la Asamblea General a los representantes a quienes se hace",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": "La section de l'accord sur le siège concerne les représentants. Cette section est spécifiquement déta"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 826,
+    "reponse": "La section de l'accord sur le siège concerne les représentants. Cette section est mentionnée dans la rés"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois la réunion citée s'est-elle tenue ?",
+   "or": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 203,
+    "reponse": "Le jour du mois de septembre de 2025 a été utilisé pour la réunion citée."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 826,
+    "reponse": "Le jour du mois de septembre 2025 a été cité dans la réunion."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour est examiné à cette session ?",
+   "or": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 381,
+    "reponse": "Cette session examine l'ordre du jour 13, qui est intitulé \"Integrated and coordinated implementation"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1379,
+    "valeur": true,
+    "cout": 1658,
+    "reponse": "Cette session examine l'ordre du jour, en particulier l'ordre du jour 13, qui"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quel numéro porte la recommandation sur les droits des femmes autochtones ?",
+   "or": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": "La recommandation sur les droits des femmes autochtones porte le numéro 2519432."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1658,
+    "reponse": "La recommandation sur les droits des femmes autochtones porte le numéro 5."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quelle année borne l'agenda du développement durable ?",
+   "or": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4706,
+    "valeur": true,
+    "cout": 452,
+    "reponse": "L'agenda du développement durable, en tant que 2030 Agenda pour Sustainable Development, est basé sur"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1658,
+    "reponse": "L'agenda du développement durable est le 80e session de la Assemblée générale des Nations Unies"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "question": "Quel thème de l'ordre du jour ouvre le document ?",
+   "or": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1875,
+    "valeur": false,
+    "cout": 461,
+    "reponse": "Le thème de l'ordre du jour ouvre la session de l'Assemblée générale sur la"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1212,
+    "valeur": false,
+    "cout": 1980,
+    "reponse": "Le thème de l'ordre du jour ouvre le document. Il s'agit de la Journée intern"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour ouvre le document ?",
+   "or": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": "Le document ouvre sur la résolution aprobée par la Assemblée générale le 26 novembre"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 1886,
+    "reponse": "Le document ouvre le point 13 du programme \"Aplicación et suivi intégré des résultats des grandes"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "À partir de quelle version de Python l'intégration continue du projet tourne-t-elle ?",
+   "or": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1691,
+    "reponse": "À partir de la version 3.13 de Python, l'intégration continue du projet tourne à"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 3843,
+    "reponse": "À partir de la version 2.5.0 de Python, l'intégration continue du projet de Q"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "Quel score l'adaptation de faible rang obtient-elle sur l'exercice de copie ?",
+   "or": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": "Pour répondre à cette question, nous devons identifier les éléments qui manquent et les calculer leur coût. Vo"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3843,
+    "reponse": "La réponse est que l'adaptation de faible rang obtient un score de 0. \n\nCela se"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "Quel taux le réseau à couches cachées obtient-il avec de mauvais paramètres ?",
+   "or": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1034,
+    "reponse": "Le taux de couches cachées obtenu avec des paramètres mauvais est de 31. Ce ta"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3843,
+    "reponse": "Le réseau à couches cachées obtient un taux de 100% avec des paramètres mauvais"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "À quelle date le vieux démon a-t-il cessé d'être utilisé ?",
+   "or": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0714,
+    "valeur": false,
+    "cout": 750,
+    "reponse": "Le vieux démon a cessé d'être utilisé le 16/10/2023."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1481,
+    "valeur": true,
+    "cout": 3843,
+    "reponse": "À partir de la date 2026-10-27, le vieux démon n'a plus"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Combien de gigaoctets de fichiers faut-il écrire pour épuiser la mémoire tampon ?",
+   "or": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 2483,
+    "reponse": "Pour épuiser la mémoire tampon, il faut écrire 26 Go de fichiers."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 4548,
+    "reponse": "Pour épuiser la mémoire tampon, il faut écrire 2,86 Go/s (2,"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Quelle taille fait la zone d'échange de la machine ?",
+   "or": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1314,
+    "reponse": "La zone d'échange de la machine est de taille 128 MB."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4548,
+    "reponse": "La zone d'échange de la machine est de 128 Go."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Quel paragraphe traite du read_ahead_kb resté ouvert ?",
+   "or": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.24,
+    "valeur": false,
+    "cout": 1100,
+    "reponse": "Le paragraphe qui traite du read_ahead_kb resté ouvert est le 1er parag"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.32,
+    "valeur": false,
+    "cout": 4548,
+    "reponse": "Le paragraphe traite du read_ahead_kb resté ouvert dans la fiche de la fiche"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Quelle longueur d'empreinte est comparée pour vérifier chaque tenseur ?",
+   "or": "Vérification par empreintes. --verifier relit chaque fichier produit e",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1714,
+    "valeur": true,
+    "cout": 1915,
+    "reponse": "La longueur d'empreinte comparée pour vérifier chaque tenseur est de 256 poids par bloc"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 2686,
+    "reponse": "Pour vérifier chaque tenseur, il est nécessaire de comparer la longueur d'empreinte de chaque cluster (cluster"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Combien de tableaux de nombres le manifeste recense-t-il ?",
+   "or": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": true,
+    "cout": 1241,
+    "reponse": "Le manifeste recense 1587 tableaux de nombres."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.125,
+    "valeur": false,
+    "cout": 2686,
+    "reponse": "Le manifeste recense 3,20 Go de tableaux de nombres."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Combien de nœuds la nouvelle disposition épargne-t-elle ?",
+   "or": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 1179,
+    "reponse": "La nouvelle disposition des nœuds, avec quatre clusters chacun, permet de réduire le surcoût de"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2686,
+    "reponse": "La nouvelle disposition de GGUF, avec un cluster-XX.gguf pour chaque cluster, permet de réduire le"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "question": "Quelle vitesse le pont NVLink atteint-il dans chaque direction ?",
+   "or": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5263,
+    "valeur": true,
+    "cout": 3115,
+    "reponse": "Le pont NVLink atteint une vitesse de 25,781 Go/s par sens."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": false,
+    "cout": 6112,
+    "reponse": "Le pont NVLink atteint une vitesse de 10 Gbps dans chaque direction."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "question": "Quelle taille de RAM faut-il garder des deux côtés ?",
+   "or": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1875,
+    "valeur": false,
+    "cout": 5092,
+    "reponse": "Pour garder K3 (128 Go) sur deux côtés, vous devrez utiliser une taille de RAM"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 6112,
+    "reponse": "Pour garder les deux côtés de la RAM, il est recommandé de choisir une taille de RAM suffisante"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/continuite.md",
+   "type": "code",
+   "question": "Quel plafond de mots l'état courant ne doit-il pas dépasser ?",
+   "or": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 1692,
+    "reponse": "Le plafond de mots pour un état courant ne doit pas dépasser 2 000"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 1900,
+    "reponse": "Le plafond de mots que l'état courant ne doit pas dépasser est de 20 mots"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/backlog/dependances.md",
+   "type": "tableau",
+   "question": "Quel numéro porte la restitution après le gist ?",
+   "or": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 2160,
+    "reponse": "Le numéro de la restitution après le gist est N5."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 4114,
+    "reponse": "La réponse à votre question est :\n\nR21\n\nCela se traduit par \"Restitution après le gist\""
    },
    "closed_book": {
     "recupere": false,

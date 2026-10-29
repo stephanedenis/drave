@@ -1,7 +1,7 @@
 # R07 — Routeur extractif / génératif (quel lecteur pour cette question ?)
 
 > **Statut** : partiel · **Priorité** : P1 · **Programme** : R · **Dépend de** : R02, R03
-> **Ligne de roadmap** : R0.5 · **Résultat** : [rapport-r07-routeur.md](../../../reports/rapport-r07-routeur.md) — signal AUC **0,785** ; v1 seuil **non transférable** (0,496 / 0,421) ; **v2** z-score **0,734** / 0,474, toujours sous le choix fixe. Il faut plus de paraphrases.
+> **Ligne de roadmap** : R0.5 · **Résultat** : [rapport-r07-routeur.md](../../../reports/rapport-r07-routeur.md) — signal AUC **0,826** (332 questions) ; transfert z-score **0,802** / 0,321, toujours sous le choix fixe (0,855 / 0,381). Il faut une calibration apprise par document.
 > **Résumé** : Choisir, pour une question et un document, entre **rendre le passage** (extractif) et **générer** (modèle) — parce qu'aucun des deux ne gagne partout.
 
 ## Le besoin

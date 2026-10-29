@@ -1,8 +1,8 @@
 # R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique
 
-> **Ligne de roadmap** : R0.4 (pilote) · **Date** : 2026-10-29 · **Verdict** : ❌ **la tête ne
-> bat pas le scoreur classique** — AUC moyenne **0,601** contre **0,836** pour BM25, victoire
-> sur **1 document sur 5**. ✅ le contrôle des étiquettes mélangées (**0,467**) montre que le
+> **Ligne de roadmap** : R0.4 · **Date** : 2026-10-29 · **Verdict** : ❌ **la tête ne bat jamais le
+> scoreur classique** — v1 0,601 contre 0,836 ; v2 0,448 contre 0,811 ; **v3 (498 paires) 0,575
+> contre 0,745**. La donnée paie (+13 points), mais une sonde linéaire ne rattrape pas BM25. ✅ le contrôle des étiquettes mélangées (**0,467**) montre que le
 > signal est réel mais faible, pas une fuite.
 >
 > **Dispositif** : 114 paires (question, passage) — 19 questions du banc durci × (1 gold +
@@ -89,6 +89,31 @@ paires, ne bat pas BM25. Ce n'est pas « R0.4 est impossible » — c'est « R0.
 **centaines ou des milliers** de paires, et sans doute un encodeur **ajusté**, pas une sonde ».
 La victoire juridique de la version 1 était du bruit : la version 2 la retourne (0,400 contre
 0,600).
+
+## La version 3 (498 paires, 84 questions) : la donnée paie, mais ne suffit pas
+
+Avec le banc élargi (84 questions × 6 paires = 504, 498 après écart d'un gold déplacé), la tête
+dispose de **~450 paires d'entraînement par pli** au lieu de 90. Mêmes états (couches 8–11),
+mêmes négatifs durs.
+
+| type | AUC tête | AUC BM25 | mélangé |
+|---|---:|---:|---:|
+| prose | 0,684 | 0,882 | 0,603 |
+| tableau | 0,605 | 0,728 | 0,505 |
+| technique | 0,583 | 0,705 | 0,553 |
+| code | 0,581 | 0,762 | 0,517 |
+| juridique | 0,422 | 0,646 | 0,559 |
+| **moyenne** | **0,575** | **0,745** | **0,548** |
+
+**La tendance est bonne** : 0,448 (114 paires) → **0,575** (498 paires), et la tête gagne
+6 documents sur 28. **Mais elle reste 17 points sous BM25**, et le contrôle des étiquettes
+mélangées (0,548) est si proche de la tête que son avantage est, sur plusieurs types, du bruit
+— sur le juridique, le contrôle (0,559) fait **mieux** que la tête (0,422).
+
+**Ce que ça dit** : la donnée est bien le facteur limitant (×5,5 de paires → +13 points d'AUC),
+mais une **sonde linéaire** sur les états d'un 0,5 B ne rattrapera pas BM25 avec 500 paires.
+Il faudrait des **milliers** de paires et/ou un encodeur **ajusté**. La porte R0.4 reste
+ouverte, avec ce chemin nommé.
 
 ## Ce qui pourrait le rendre faux
 

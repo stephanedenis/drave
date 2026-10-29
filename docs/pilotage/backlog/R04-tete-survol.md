@@ -1,7 +1,7 @@
 # R04 — Tête de survol (pertinence d'une région)
 
 > **Statut** : partiel · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
-> **Ligne de roadmap** : R0.4 · **Pilote** : [rapport-r04-tete-survol.md](../../../reports/rapport-r04-tete-survol.md) — tête **0,601** contre BM25 **0,836** (v1) ; **v2** (états 8–11, négatifs durs) : **0,448** contre **0,811**, 0/5. Il faut des centaines de paires et un encodeur ajusté, pas une sonde linéaire.
+> **Ligne de roadmap** : R0.4 · **Pilote** : [rapport-r04-tete-survol.md](../../../reports/rapport-r04-tete-survol.md) — v1 **0,601** contre **0,836** ; v2 **0,448** contre **0,811** ; **v3 (498 paires) 0,575 contre 0,745**. La donnée paie, mais une sonde linéaire ne rattrape pas BM25 : il faut des milliers de paires et/ou un encodeur ajusté.
 > **Résumé** : Prédire, depuis le début d'une région, si elle vaut la peine d'être lue pour le but courant.
 > **Glossaire** : [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md) · [AUC](../../theorie/glossaire/entrees/auc.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 

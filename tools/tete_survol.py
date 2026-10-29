@@ -108,7 +108,7 @@ def capture() -> tuple[np.ndarray, np.ndarray, list[dict]]:
             continue
         X.append(etat)
         y.append(paire["etiquette"])
-        meta.append({k: paire[k] for k in ("document", "type", "question", "etiquette")})
+        meta.append({k: paire[k] for k in ("document", "type", "question", "passage", "etiquette")})
         if numero % 20 == 0:
             print(f"  {numero + 1}/{len(jeu)} paires…")
     return np.array(X), np.array(y), meta
@@ -156,9 +156,27 @@ def mesure(json_path: pathlib.Path | None = None) -> int:
     # le texte des passages n'est pas dans le cache : le jeu est déterministe (graine fixe),
     # on le reconstruit et on l'aligne par indice.
     jeu = paires()
-    if len(jeu) != len(meta):
-        raise SystemExit(f"cache périmé : {len(meta)} paires, {len(jeu)} attendues")
-    meta = [{**m, "passage": jeu[i]["passage"]} for i, m in enumerate(meta)]
+    # Le cache ne porte pas les passages pour les anciennes captures : on aligne par POSITION
+    # (les groupes sont contigus et dans l'ordre du banc). Un document qui a bougé depuis la
+    # capture fait perdre un groupe entier — on l'écarte, au lieu de tout refuser.
+    passages: list[str | None] = []
+    if "passage" in meta[0]:
+        passages = [m["passage"] for m in meta]
+    else:
+        pos = 0
+        for m in meta:
+            if pos < len(jeu) and (jeu[pos]["document"], jeu[pos]["question"]) == (m["document"], m["question"]):
+                passages.append(jeu[pos]["passage"])
+                pos += 1
+            else:
+                passages.append(None)
+        ecartees = sum(1 for x in passages if x is None)
+        if ecartees:
+            print(f"  ⚠️ {ecartees} paires écartées (gold déplacé depuis la capture)")
+    garder = [i for i, x in enumerate(passages) if x is not None]
+    X = X[garder]
+    y = y[garder]
+    meta = [{**meta[i], "passage": passages[i]} for i in garder]
     scores_bm25 = bm25_scores(meta)
     plis = sorted({m["document"] for m in meta})
     resultats = []

@@ -24,11 +24,11 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : R0.4 **deux négatifs** (v1 0,601 ; v2 0,448 contre BM25 0,811) ; R0.5 routeur :
-  AUC **0,785**, z-score transfère **0,734** mais reste sous le choix fixe. Défaut : extractif.
+- **Ce qu'elle fait** : banc durci élargi **84 paraphrases** ; modèle **0,375** contre lexical
+  **0,269** ; tête v3 **0,575** contre BM25 **0,745** ; routeur AUC **0,826**, transfert 0,802.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : **plus de paraphrases** (le banc de 19 bloque R0.4 et R0.5) ; ensuite R0.4 avec un encodeur ajusté.
+- **Prochaine action** : R0.4 — encodeur ajusté ou milliers de paires ; routeur — calibration apprise.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -62,8 +62,8 @@
   10/10 dérivées, surface **0/3** ; **miroir 34/34, 296/296, 42/42**) ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **A8.0 — 3 portes** : flux **61,9920/60,8135** · pont **113,0068/111,9225** · topologie
-  **17,4702/30,4363/42,5477** ; **A8.3 refusé** : **−5,9 % … +19,5 %** —
+- **A8.0 — 4 portes** : flux **61,9920/60,8135** · pont **113,0068/111,9225** · topologie
+  **17,4702/30,4363/42,5477** · coupe **113,0068** ; **A8.3 refusé** (−5,9…+19,5 %).
   [`a83`](../../reports/rapport-a83-defaut.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
@@ -87,7 +87,7 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 3 portes** ; **A8.3 refusé par la mesure** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; **A8.3a** (régime 1 %) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 4 portes** ; **A8.3 refusé par la mesure** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; **A8.3a** (régime 1 %) |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée**, puis B10.3 (bloqué) |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R4.4 bloqué** |

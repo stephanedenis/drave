@@ -3,7 +3,7 @@
  "ligne": "R0.2",
  "graine": 20261029,
  "critere": "bm25",
- "questions": 19,
+ "questions": 84,
  "types": [
   "code",
   "juridique",
@@ -15,45 +15,45 @@
   "code": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 3059.0
+    "f1": 0.251,
+    "valeur": 0.211,
+    "cout": 10070.0
    },
    "controlee_0.10": {
-    "recuperation": 0.25,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 270.2
+    "recuperation": 0.368,
+    "f1": 0.202,
+    "valeur": 0.158,
+    "cout": 808.8
    },
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 753.0
+    "recuperation": 0.684,
+    "f1": 0.251,
+    "valeur": 0.211,
+    "cout": 1484.2
    },
    "controlee_0.50": {
-    "recuperation": 1.0,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 922.2
+    "recuperation": 0.684,
+    "f1": 0.251,
+    "valeur": 0.211,
+    "cout": 1722.2
    },
    "aleatoire_0.30": {
-    "recuperation": 0.75,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 911.0
+    "recuperation": 0.526,
+    "f1": 0.262,
+    "valeur": 0.316,
+    "cout": 3015.1
    },
    "melangee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.296,
-    "valeur": 0.25,
-    "cout": 753.0
+    "recuperation": 0.684,
+    "f1": 0.251,
+    "valeur": 0.211,
+    "cout": 1484.2
    },
    "sans_but": {
-    "recuperation": 0.5,
+    "recuperation": 0.158,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 891.0
+    "cout": 1779.2
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -65,45 +65,45 @@
   "juridique": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.037,
-    "valeur": 0.0,
-    "cout": 3711.0
+    "f1": 0.222,
+    "valeur": 0.214,
+    "cout": 4456.6
    },
    "controlee_0.10": {
-    "recuperation": 0.0,
-    "f1": 0.118,
-    "valeur": 0.0,
-    "cout": 332.7
+    "recuperation": 0.286,
+    "f1": 0.239,
+    "valeur": 0.214,
+    "cout": 291.1
    },
    "controlee_0.30": {
-    "recuperation": 0.333,
-    "f1": 0.037,
-    "valeur": 0.0,
-    "cout": 1009.0
+    "recuperation": 0.357,
+    "f1": 0.222,
+    "valeur": 0.214,
+    "cout": 475.3
    },
    "controlee_0.50": {
-    "recuperation": 0.333,
-    "f1": 0.037,
-    "valeur": 0.0,
-    "cout": 1462.3
+    "recuperation": 0.357,
+    "f1": 0.222,
+    "valeur": 0.214,
+    "cout": 599.2
    },
    "aleatoire_0.30": {
-    "recuperation": 0.333,
-    "f1": 0.052,
+    "recuperation": 0.143,
+    "f1": 0.011,
     "valeur": 0.0,
-    "cout": 1112.0
+    "cout": 1335.3
    },
    "melangee_0.30": {
-    "recuperation": 0.333,
-    "f1": 0.037,
-    "valeur": 0.0,
-    "cout": 1009.0
+    "recuperation": 0.357,
+    "f1": 0.222,
+    "valeur": 0.214,
+    "cout": 475.3
    },
    "sans_but": {
-    "recuperation": 0.0,
+    "recuperation": 0.071,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 315.0
+    "cout": 233.4
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -115,45 +115,45 @@
   "prose": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.286,
-    "valeur": 0.5,
-    "cout": 7082.0
+    "f1": 0.292,
+    "valeur": 0.333,
+    "cout": 10381.7
    },
    "controlee_0.10": {
-    "recuperation": 1.0,
-    "f1": 0.286,
-    "valeur": 0.5,
-    "cout": 562.2
+    "recuperation": 0.667,
+    "f1": 0.292,
+    "valeur": 0.333,
+    "cout": 833.0
    },
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.286,
-    "valeur": 0.5,
-    "cout": 888.2
+    "recuperation": 0.833,
+    "f1": 0.292,
+    "valeur": 0.333,
+    "cout": 1575.9
    },
    "controlee_0.50": {
-    "recuperation": 1.0,
-    "f1": 0.286,
-    "valeur": 0.5,
-    "cout": 888.2
+    "recuperation": 0.833,
+    "f1": 0.292,
+    "valeur": 0.333,
+    "cout": 1667.4
    },
    "aleatoire_0.30": {
-    "recuperation": 0.25,
-    "f1": 0.264,
-    "valeur": 0.25,
-    "cout": 2117.0
+    "recuperation": 0.278,
+    "f1": 0.142,
+    "valeur": 0.111,
+    "cout": 3110.7
    },
    "melangee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.286,
-    "valeur": 0.5,
-    "cout": 888.2
+    "recuperation": 0.833,
+    "f1": 0.292,
+    "valeur": 0.333,
+    "cout": 1575.9
    },
    "sans_but": {
-    "recuperation": 0.5,
+    "recuperation": 0.167,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 1730.0
+    "cout": 1723.3
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -165,45 +165,45 @@
   "tableau": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.073,
-    "valeur": 0.25,
-    "cout": 19448.0
+    "f1": 0.126,
+    "valeur": 0.2,
+    "cout": 14044.8
    },
    "controlee_0.10": {
-    "recuperation": 0.75,
-    "f1": 0.073,
-    "valeur": 0.25,
-    "cout": 1496.2
+    "recuperation": 0.467,
+    "f1": 0.125,
+    "valeur": 0.2,
+    "cout": 1102.3
    },
    "controlee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.073,
-    "valeur": 0.25,
-    "cout": 2600.0
+    "recuperation": 0.667,
+    "f1": 0.126,
+    "valeur": 0.2,
+    "cout": 1702.9
    },
    "controlee_0.50": {
-    "recuperation": 1.0,
-    "f1": 0.073,
-    "valeur": 0.25,
-    "cout": 2600.0
+    "recuperation": 0.667,
+    "f1": 0.126,
+    "valeur": 0.2,
+    "cout": 1702.9
    },
    "aleatoire_0.30": {
-    "recuperation": 0.25,
-    "f1": 0.098,
-    "valeur": 0.25,
-    "cout": 5826.0
+    "recuperation": 0.267,
+    "f1": 0.149,
+    "valeur": 0.267,
+    "cout": 4208.1
    },
    "melangee_0.30": {
-    "recuperation": 1.0,
-    "f1": 0.073,
-    "valeur": 0.25,
-    "cout": 2600.0
+    "recuperation": 0.667,
+    "f1": 0.126,
+    "valeur": 0.2,
+    "cout": 1702.9
    },
    "sans_but": {
-    "recuperation": 0.0,
+    "recuperation": 0.133,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 2170.0
+    "cout": 2361.1
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -215,45 +215,45 @@
   "technique": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.11,
-    "valeur": 0.5,
-    "cout": 10441.0
+    "f1": 0.333,
+    "valeur": 0.389,
+    "cout": 13166.6
    },
    "controlee_0.10": {
-    "recuperation": 0.5,
-    "f1": 0.11,
-    "valeur": 0.5,
-    "cout": 948.8
+    "recuperation": 0.611,
+    "f1": 0.333,
+    "valeur": 0.389,
+    "cout": 1152.2
    },
    "controlee_0.30": {
-    "recuperation": 0.75,
-    "f1": 0.11,
-    "valeur": 0.5,
-    "cout": 2300.0
+    "recuperation": 0.722,
+    "f1": 0.333,
+    "valeur": 0.389,
+    "cout": 2424.3
    },
    "controlee_0.50": {
-    "recuperation": 0.75,
-    "f1": 0.11,
-    "valeur": 0.5,
-    "cout": 3293.0
+    "recuperation": 0.722,
+    "f1": 0.333,
+    "valeur": 0.389,
+    "cout": 3062.3
    },
    "aleatoire_0.30": {
-    "recuperation": 0.5,
-    "f1": 0.146,
-    "valeur": 0.25,
-    "cout": 3131.0
+    "recuperation": 0.444,
+    "f1": 0.192,
+    "valeur": 0.222,
+    "cout": 3945.5
    },
    "melangee_0.30": {
-    "recuperation": 0.75,
-    "f1": 0.11,
-    "valeur": 0.5,
-    "cout": 2301.5
+    "recuperation": 0.722,
+    "f1": 0.333,
+    "valeur": 0.389,
+    "cout": 2425.2
    },
    "sans_but": {
-    "recuperation": 0.75,
+    "recuperation": 0.222,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 2295.0
+    "cout": 2049.1
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -761,6 +761,192 @@
    }
   },
   {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle erreur relative le codage par valeur introduit-il, en pourcentage du maximum ?",
+   "or": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 634,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 634,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 634,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3131,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 634,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quel chiffre de perplexité traduit une clé réécrite au mauvais endroit ?",
+   "or": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 10441,
+    "reponse": "C'est dit ici parce que c'est le seul cas où la clé n'est pas une simple fonction du jeton."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 890,
+    "reponse": "C'est dit ici parce que c'est le seul cas où la clé n'est pas une simple fonction du jeton."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 890,
+    "reponse": "C'est dit ici parce que c'est le seul cas où la clé n'est pas une simple fonction du jeton."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 890,
+    "reponse": "C'est dit ici parce que c'est le seul cas où la clé n'est pas une simple fonction du jeton."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1765,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "un rejeu redonne le même résultat\t--flux-forcer : perplexité 19,3885 avec et sans rejeu (chemin par jeton), 17,4294 (che"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 890,
+    "reponse": "C'est dit ici parce que c'est le seul cas où la clé n'est pas une simple fonction du jeton."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quelle phase exige une réponse plutôt qu'un refus ?",
+   "or": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 10441,
+    "reponse": "Transporter la liste plutôt que le vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des matrices » v"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 999,
+    "reponse": "Transporter la liste plutôt que le vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des matrices » v"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 2708,
+    "reponse": "Transporter la liste plutôt que le vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des matrices » v"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 3063,
+    "reponse": "Transporter la liste plutôt que le vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des matrices » v"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "La norme finale n'appartient qu'au nœud qui possède la tête de sortie, et elle s'applique une fois."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 2708,
+    "reponse": "Transporter la liste plutôt que le vecteur dense, c'est le sujet même de la phase 3 — « des listes, pas des matrices » v"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
    "document": "docs/pilotage/roadmap.md",
    "type": "tableau",
    "question": "Quel numéro porte la fiche de la mémoire de travail ?",
@@ -769,7 +955,7 @@
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 19448,
+    "cout": 20109,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "controlee_0.10": {
@@ -783,28 +969,28 @@
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3347,
+    "cout": 3391,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "controlee_0.50": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3347,
+    "cout": 3391,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "aleatoire_0.30": {
     "recupere": false,
     "f1": 0.1935,
     "valeur": true,
-    "cout": 5826,
+    "cout": 6031,
     "reponse": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'entités et de faits, tampon en entrée\t⏳\tréponse don"
    },
    "melangee_0.30": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3347,
+    "cout": 3391,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "sans_but": {
@@ -831,14 +1017,14 @@
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 19448,
+    "cout": 20109,
     "reponse": "Ce que R ne fait pas"
    },
    "controlee_0.10": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1572,
+    "cout": 1838,
     "reponse": "Ce que R ne fait pas"
    },
    "controlee_0.30": {
@@ -857,10 +1043,10 @@
    },
    "aleatoire_0.30": {
     "recupere": true,
-    "f1": 0.0,
+    "f1": 0.1176,
     "valeur": false,
-    "cout": 5826,
-    "reponse": "Ce n'est pas « ajouter des paramètres » : à 20 000 pas, le student 21,63 M fait 3,381 contre 3,123 pour 11,47 M ; la cap"
+    "cout": 6031,
+    "reponse": "R1.3\ttokenisation : octets ou BPE ; la décision est mesurée, pas doctrinale\t⏳\tmême qualité, moins d'octets ou de temps ;"
    },
    "melangee_0.30": {
     "recupere": true,
@@ -891,45 +1077,45 @@
    "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
    "integrale": {
     "recupere": true,
-    "f1": 0.2051,
-    "valeur": true,
-    "cout": 19448,
-    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 20109,
+    "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.10": {
     "recupere": true,
-    "f1": 0.2051,
-    "valeur": true,
-    "cout": 1703,
-    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1696,
+    "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2051,
-    "valeur": true,
-    "cout": 4185,
-    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4177,
+    "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.50": {
     "recupere": true,
-    "f1": 0.2051,
-    "valeur": true,
-    "cout": 4185,
-    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4177,
+    "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1111,
+    "f1": 0.0909,
     "valeur": false,
-    "cout": 5826,
+    "cout": 6031,
     "reponse": "R0 : un contrôleur classique + un modèle externe atteint-il 90 % de la compréhension à 30 % du coût sur trois types de d"
    },
    "melangee_0.30": {
     "recupere": true,
-    "f1": 0.2051,
-    "valeur": true,
-    "cout": 4185,
-    "reponse": "R — le lecteur\tdocument, politique de lecture, fenêtre, mémoire, restitution\t✅ R0.1, R0.2, R0.3 mesurés\tR0.4 (les trois "
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4177,
+    "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "sans_but": {
     "recupere": false,
@@ -955,7 +1141,7 @@
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 19448,
+    "cout": 20109,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "controlee_0.10": {
@@ -983,7 +1169,7 @@
     "recupere": false,
     "f1": 0.087,
     "valeur": false,
-    "cout": 5826,
+    "cout": 6031,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "melangee_0.30": {
@@ -992,6 +1178,130 @@
     "valeur": false,
     "cout": 1030,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel identifiant porte le chantier qui bloque sur les cartes tenues ?",
+   "or": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 20109,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1728,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 3824,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 3824,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 6031,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 3824,
+    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel identifiant désigne le manque de corpus d'articles ?",
+   "or": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 20109,
+    "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 1651,
+    "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 2385,
+    "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 2385,
+    "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1714,
+    "valeur": true,
+    "cout": 6031,
+    "reponse": "B1\tl'entrée-sortie linguistique : juge, chrF, registres, 24 langues, dialogue\t✅\tB1.5 bloquée (aucun corpus parallèle hum"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": true,
+    "cout": 2385,
+    "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "sans_but": {
     "recupere": false,
@@ -1432,6 +1742,3726 @@
     "f1": 0.0,
     "valeur": false,
     "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Quelle quantité de mémoire graphique un modèle occupé prend-il pendant une passe ?",
+   "or": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3059,
+    "reponse": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui occupe 28 Go de VRAM pendant une passe fait attend"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0625,
+    "valeur": false,
+    "cout": 204,
+    "reponse": "Ne pas fausser la passe"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 892,
+    "reponse": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui occupe 28 Go de VRAM pendant une passe fait attend"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1230,
+    "reponse": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui occupe 28 Go de VRAM pendant une passe fait attend"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1509,
+    "valeur": true,
+    "cout": 911,
+    "reponse": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vertes, 3 rouges ; la liste et le diagnostic sont dans"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 892,
+    "reponse": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui occupe 28 Go de VRAM pendant une passe fait attend"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "question": "Combien de lignes du journal faut-il lire pour connaître la cause d'un échec ?",
+   "or": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3059,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 250,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 621,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 621,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 911,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 621,
+    "reponse": "À lire avant de lancer ou de lire les portes."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "De quelle année date l'étude qui a lancé la mode de la lecture ultra-rapide ?",
+   "or": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 17831,
+    "reponse": "Ce que la lecture rapide humaine est vraiment"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1513,
+    "reponse": "Ce que la lecture rapide humaine est vraiment"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4687,
+    "reponse": "Ce que la lecture rapide humaine est vraiment"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4687,
+    "reponse": "Ce que la lecture rapide humaine est vraiment"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5349,
+    "reponse": "La lecture rapide humaine est un pilotage L2–L4, prouvé par un banc L5–L6."
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4687,
+    "reponse": "Ce que la lecture rapide humaine est vraiment"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1800,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "De quel pourcentage l'abandon anticipé accélère-t-il ?",
+   "or": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 17831,
+    "reponse": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 928,
+    "reponse": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 928,
+    "reponse": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 928,
+    "reponse": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, "
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5349,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 928,
+    "reponse": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mais elle décide quand le prochain octet est facile, "
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1800,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "Combien de pièces le protocole d'évaluation doit-il rassembler ?",
+   "or": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 17831,
+    "reponse": "La lecture rapide — ce que Drave doit construire pour lire comme un humain"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1553,
+    "reponse": "La lecture rapide — ce que Drave doit construire pour lire comme un humain"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1553,
+    "reponse": "La lecture rapide — ce que Drave doit construire pour lire comme un humain"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1553,
+    "reponse": "La lecture rapide — ce que Drave doit construire pour lire comme un humain"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5349,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1553,
+    "reponse": "La lecture rapide — ce que Drave doit construire pour lire comme un humain"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1800,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "question": "Quel volume les tampons d'avance ont-ils traité ?",
+   "or": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 17831,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1098,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1098,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1098,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 5349,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1176,
+    "valeur": false,
+    "cout": 1098,
+    "reponse": "la prélecture/tampons — une vraie avance I/O, mesurée, même si ce n'est pas une vision périphérique de modèle ;"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1800,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Combien de nombres porte le vecteur de sens ?",
+   "or": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 9306,
+    "reponse": "Le raisonnement attend. Tant que z n'est pas stable, il n'y a rien à raisonner : un embedding qui change avec la langue "
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 902,
+    "reponse": "Le raisonnement attend. Tant que z n'est pas stable, il n'y a rien à raisonner : un embedding qui change avec la langue "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 2248,
+    "reponse": "Le raisonnement attend. Tant que z n'est pas stable, il n'y a rien à raisonner : un embedding qui change avec la langue "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 2568,
+    "reponse": "Le raisonnement attend. Tant que z n'est pas stable, il n'y a rien à raisonner : un embedding qui change avec la langue "
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.2,
+    "valeur": false,
+    "cout": 2789,
+    "reponse": "la sonde de langue reste haute → z porte la langue ;"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 2248,
+    "reponse": "Le raisonnement attend. Tant que z n'est pas stable, il n'y a rien à raisonner : un embedding qui change avec la langue "
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2060,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Quel est le nombre de propriétés typées du schéma fixe ?",
+   "or": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9306,
+    "reponse": "le nombre de préfixes : 4 ; la courbe 1/2/4/8 ;"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 595,
+    "reponse": "le nombre de préfixes : 4 ; la courbe 1/2/4/8 ;"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 595,
+    "reponse": "le nombre de préfixes : 4 ; la courbe 1/2/4/8 ;"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 595,
+    "reponse": "le nombre de préfixes : 4 ; la courbe 1/2/4/8 ;"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2789,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 595,
+    "reponse": "le nombre de préfixes : 4 ; la courbe 1/2/4/8 ;"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2060,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "question": "Combien de langues la première exécution du protocole a-t-elle couvertes ?",
+   "or": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.4348,
+    "valeur": true,
+    "cout": 9306,
+    "reponse": "deux résultats : le 10 langues et le 20 langues se comparent à protocole constant, pas à données différentes."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.4348,
+    "valeur": true,
+    "cout": 761,
+    "reponse": "deux résultats : le 10 langues et le 20 langues se comparent à protocole constant, pas à données différentes."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4348,
+    "valeur": true,
+    "cout": 2404,
+    "reponse": "deux résultats : le 10 langues et le 20 langues se comparent à protocole constant, pas à données différentes."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.4348,
+    "valeur": true,
+    "cout": 2404,
+    "reponse": "deux résultats : le 10 langues et le 20 langues se comparent à protocole constant, pas à données différentes."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2789,
+    "reponse": "Ce qui rendrait le protocole faux"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.4348,
+    "valeur": true,
+    "cout": 2404,
+    "reponse": "deux résultats : le 10 langues et le 20 langues se comparent à protocole constant, pas à données différentes."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2060,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Combien de cases compte le plateau du jeu de dames décrit ?",
+   "or": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 10847,
+    "reponse": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 934,
+    "reponse": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2653,
+    "reponse": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3747,
+    "reponse": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3249,
+    "reponse": "jeu\tlogique\tpourquoi"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2653,
+    "reponse": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1858,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Combien d'idées le vocabulaire commun aux langues couvre-t-il ?",
+   "or": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.2545,
+    "valeur": false,
+    "cout": 10847,
+    "reponse": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les m"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.2545,
+    "valeur": false,
+    "cout": 960,
+    "reponse": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les m"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2545,
+    "valeur": false,
+    "cout": 1283,
+    "reponse": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les m"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.2545,
+    "valeur": false,
+    "cout": 1283,
+    "reponse": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les m"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3249,
+    "reponse": "Vocabulaire : une RSN-jeu est faite d'unités de sens ; le jeton reste l'unité technique du tokeniseur."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.2545,
+    "valeur": false,
+    "cout": 1283,
+    "reponse": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas de formes fléchies ; les 71 langues couvrent les m"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1858,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "question": "Quel est le nombre de règles de jeu que les maîtres enseignent ?",
+   "or": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 10847,
+    "reponse": "Les langues et les maîtres (B7/B8)"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 1008,
+    "reponse": "Les langues et les maîtres (B7/B8)"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 2825,
+    "reponse": "Les langues et les maîtres (B7/B8)"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 3058,
+    "reponse": "Les langues et les maîtres (B7/B8)"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0465,
+    "valeur": false,
+    "cout": 3249,
+    "reponse": "la force n'est pas le sujet de ce chantier : le perft prouve les règles, pas la qualité de jeu. Le MCTS du go est mesuré"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.069,
+    "valeur": false,
+    "cout": 2825,
+    "reponse": "Les langues et les maîtres (B7/B8)"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1858,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "question": "Quel score le premier protocole a-t-il obtenu sur la restitution ?",
+   "or": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 7313,
+    "reponse": "Le protocole est dans protocole-semantique.md ; le premier résultat typé dans rapport-universaux.md."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 691,
+    "reponse": "Le protocole est dans protocole-semantique.md ; le premier résultat typé dans rapport-universaux.md."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 1106,
+    "reponse": "Le protocole est dans protocole-semantique.md ; le premier résultat typé dans rapport-universaux.md."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 1106,
+    "reponse": "Le protocole est dans protocole-semantique.md ; le premier résultat typé dans rapport-universaux.md."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 2189,
+    "reponse": "Conséquence pour le protocole"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 1106,
+    "reponse": "Le protocole est dans protocole-semantique.md ; le premier résultat typé dans rapport-universaux.md."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1089,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "question": "Quelle proportion des positions l'outil déterministe décode-t-il ?",
+   "or": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 7313,
+    "reponse": "Sortie : un one-hot concaténé sur les champs, lu par argmax — donc déterministe."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 688,
+    "reponse": "Sortie : un one-hot concaténé sur les champs, lu par argmax — donc déterministe."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 688,
+    "reponse": "Sortie : un one-hot concaténé sur les champs, lu par argmax — donc déterministe."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 688,
+    "reponse": "Sortie : un one-hot concaténé sur les champs, lu par argmax — donc déterministe."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2189,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 688,
+    "reponse": "Sortie : un one-hot concaténé sur les champs, lu par argmax — donc déterministe."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1089,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "question": "Combien de millions de paramètres compte le petit modèle natif ?",
+   "or": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 6067,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 558,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1341,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1341,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1818,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1341,
+    "reponse": "On jette : Qwen3-MoE comme base, GGUF comme format natif, le modèle monolithique, le tokenizer imposé, le chat avant les"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1484,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "question": "Quelle taille fait le vocabulaire d'entrée du modèle ?",
+   "or": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 6067,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 556,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1404,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1404,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1818,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1404,
+    "reponse": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; séquences plus longues, mais tête minuscule"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1484,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "question": "Combien de bits fait le condensat du fichier complet ?",
+   "or": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5969,
+    "reponse": "Ce que le graphe ne fait pas"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 547,
+    "reponse": "Ce que le graphe ne fait pas"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 857,
+    "reponse": "Ce que le graphe ne fait pas"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 857,
+    "reponse": "Ce que le graphe ne fait pas"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "PDF deux colonnes : la colonne gauche doit sortir entièrement avant la droite, sans alternance. Il prouve que l'ordre de"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 857,
+    "reponse": "Ce que le graphe ne fait pas"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "question": "À partir de quel seuil de recouvrement la découpe est-elle acceptée ?",
+   "or": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5969,
+    "reponse": "Un graphe qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 575,
+    "reponse": "Un graphe qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 739,
+    "reponse": "Un graphe qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 739,
+    "reponse": "Un graphe qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "partition (§ 4.1–4.2)\tla découpe est interne : tout est couvert, rien n'est inventé\tun offset faux, un trou, un doublon "
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 739,
+    "reponse": "Un graphe qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quelle proportion du document le plus petit budget représente-t-il ?",
+   "or": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4051,
+    "reponse": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 368,
+    "reponse": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 975,
+    "reponse": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1185,
+    "reponse": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1212,
+    "reponse": "il ne traverse pas les documents : un document, une question (R51)."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 975,
+    "reponse": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce qui rend les documents comparables entre eux."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 825,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quelle part du budget la lecture peut-elle consommer au plus ?",
+   "or": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 4051,
+    "reponse": "L'arrêt se déclenche sur l'une de ces raisons, toujours nommée dans la trace : part de budget atteinte, score marginal t"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 338,
+    "reponse": "L'arrêt se déclenche sur l'une de ces raisons, toujours nommée dans la trace : part de budget atteinte, score marginal t"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 1073,
+    "reponse": "L'arrêt se déclenche sur l'une de ces raisons, toujours nommée dans la trace : part de budget atteinte, score marginal t"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 1674,
+    "reponse": "L'arrêt se déclenche sur l'une de ces raisons, toujours nommée dans la trace : part de budget atteinte, score marginal t"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 1212,
+    "reponse": "entrée\tun manifeste de graphe (R0.1), une question, un budget en octets"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 1073,
+    "reponse": "L'arrêt se déclenche sur l'une de ces raisons, toujours nommée dans la trace : part de budget atteinte, score marginal t"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 825,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "question": "Quel cinquième de l'enveloppe est gardé pour vérifier ?",
+   "or": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4051,
+    "reponse": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépen"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 333,
+    "reponse": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépen"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 333,
+    "reponse": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépen"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 333,
+    "reponse": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépen"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1212,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 333,
+    "reponse": "Les 20 % réservés au balayage et à la relecture sont une décision de politique, pas un réglage : un contrôleur qui dépen"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 825,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Combien d'entrées les blocs à portée courte regardent-ils ?",
+   "or": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 30786,
+    "reponse": "La portée de la rotation — le mur discret, et la température qui n'aide pas"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2672,
+    "reponse": "La portée de la rotation — le mur discret, et la température qui n'aide pas"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2672,
+    "reponse": "La portée de la rotation — le mur discret, et la température qui n'aide pas"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2672,
+    "reponse": "La portée de la rotation — le mur discret, et la température qui n'aide pas"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9226,
+    "reponse": "l'interpolation des basses fréquences est la partie utile de YaRN pour étendre la portée : elle garde les phases lointai"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2672,
+    "reponse": "La portée de la rotation — le mur discret, et la température qui n'aide pas"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2710,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Sur combien de bits les clés sont-elles stockées dans la variante compressée ?",
+   "or": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 30786,
+    "reponse": "4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 2569,
+    "reponse": "4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 7598,
+    "reponse": "4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 7598,
+    "reponse": "4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9226,
+    "reponse": "4.bis KV quantifié : mesuré, et le 4 bits est cher"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 7598,
+    "reponse": "4.bis.3 OÙ mettre les bits : les clés, pas les valeurs (30/09)"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2710,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "question": "Quel facteur les blocs du réseau appliquent-ils aux lancements graphiques ?",
+   "or": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 30786,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2583,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4320,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4320,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9226,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4320,
+    "reponse": "Le point de croisement est vers 4 000 clés (en dessous, les lancements et les recopies coûtent plus que le calcul)."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2710,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Combien de milliards de paramètres compte le modèle dont le fichier pèse 60 Go ?",
+   "or": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 15821,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1575,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4724,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 7907,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4744,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4744,
+    "reponse": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 61 de copie) et 60 Go — c'est-à-dire entre ne pas t"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2722,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Combien de milliards de paramètres le modèle qui tient en 17,7 Go compte-t-il ?",
+   "or": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 15821,
+    "reponse": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1574,
+    "reponse": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4745,
+    "reponse": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 7908,
+    "reponse": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.3,
+    "valeur": true,
+    "cout": 4744,
+    "reponse": "Qwen3-30B-A3B\tQ4_K_M\t7,6139\t5,4\t13,3 s\t17,7 Go"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4735,
+    "reponse": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune copie, aucune requantification."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2722,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "question": "Quelle vitesse avait été annoncée avant la mesure ?",
+   "or": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 15821,
+    "reponse": "C'est exactement ce que la double quantification avait coûté : 12 % de perplexité sur Q4_0 avant qu'on s'en aperçoive."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1288,
+    "reponse": "C'est exactement ce que la double quantification avait coûté : 12 % de perplexité sur Q4_0 avant qu'on s'en aperçoive."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2169,
+    "reponse": "C'est exactement ce que la double quantification avait coûté : 12 % de perplexité sur Q4_0 avant qu'on s'en aperçoive."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2169,
+    "reponse": "C'est exactement ce que la double quantification avait coûté : 12 % de perplexité sur Q4_0 avant qu'on s'en aperçoive."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4744,
+    "reponse": "Règles de conception, chacune adossée à une mesure :"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2169,
+    "reponse": "C'est exactement ce que la double quantification avait coûté : 12 % de perplexité sur Q4_0 avant qu'on s'en aperçoive."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2722,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "question": "Quel plafond de contexte est refusé par les essais du modèle ?",
+   "or": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 6708,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 502,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 502,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 502,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2011,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 502,
+    "reponse": "Méthode : contexte · continuité · résultats · portes."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1003,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "question": "Combien d'items le réseau de dépendances réunit-il ?",
+   "or": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 6708,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 414,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 414,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 414,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2011,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 414,
+    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1003,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/backlog/index.md",
+   "type": "tableau",
+   "question": "Combien de fiches le backlog contient-il au total ?",
+   "or": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 5607,
+    "reponse": "20 fiches."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 483,
+    "reponse": "20 fiches."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 593,
+    "reponse": "20 fiches."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 593,
+    "reponse": "20 fiches."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 1682,
+    "reponse": "20 fiches."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 593,
+    "reponse": "20 fiches."
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1480,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves le dernier passage complet a-t-il lancées ?",
+   "or": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 11080,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 1018,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 1018,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 1018,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 3306,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 1018,
+    "reponse": "Rien ici n'est une feuille de route : la feuille de route courante est roadmap.md ; le plan d'origine est archivé (docs/"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3259,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Quel débit le disque atteint-il au hasard sur l'array ?",
+   "or": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 11080,
+    "reponse": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 968,
+    "reponse": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1885,
+    "reponse": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1885,
+    "reponse": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3306,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1885,
+    "reponse": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tiennent : 29 Mo/s au hasard sur l'array, 1 126 Mo/s sur"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3259,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves de rappel le réseau a-t-il passées à longue portée ?",
+   "or": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0202,
+    "valeur": false,
+    "cout": 11080,
+    "reponse": "N5\tmémoire d'un signal injecté — le modèle n'en a aucune, et il ne l'APPREND pas\tsonde linéaire et non linéaire sur l'ét"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1104,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0202,
+    "valeur": false,
+    "cout": 1133,
+    "reponse": "N5\tmémoire d'un signal injecté — le modèle n'en a aucune, et il ne l'APPREND pas\tsonde linéaire et non linéaire sur l'ét"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0202,
+    "valeur": false,
+    "cout": 1133,
+    "reponse": "N5\tmémoire d'un signal injecté — le modèle n'en a aucune, et il ne l'APPREND pas\tsonde linéaire et non linéaire sur l'ét"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3306,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0202,
+    "valeur": false,
+    "cout": 1133,
+    "reponse": "N5\tmémoire d'un signal injecté — le modèle n'en a aucune, et il ne l'APPREND pas\tsonde linéaire et non linéaire sur l'ét"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3259,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "question": "Combien d'épreuves le dernier passage intégral a-t-il lancées ?",
+   "or": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 11940,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 350,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 350,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 350,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 3579,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 350,
+    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3577,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "question": "Combien de renvois internes le script a-t-il validés ?",
+   "or": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0333,
+    "valeur": false,
+    "cout": 11940,
+    "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0333,
+    "valeur": false,
+    "cout": 844,
+    "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0333,
+    "valeur": false,
+    "cout": 844,
+    "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0333,
+    "valeur": false,
+    "cout": 844,
+    "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3579,
+    "reponse": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 liens relatifs vérifiés dans docs/ et reports/ ✓) est"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0333,
+    "valeur": false,
+    "cout": 844,
+    "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3577,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session figure dans la référence du projet de résolution ?",
+   "or": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3344,
+    "reponse": "session."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 272,
+    "reponse": "session."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 822,
+    "reponse": "session."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1197,
+    "reponse": "session."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1003,
+    "reponse": "Assembly at its eightieth session after introduction by its representative who is physically present in the Assembly Hal"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 822,
+    "reponse": "session."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel article de l'accord de siège est cité pour les représentants ?",
+   "or": "section 11 of the Agreement between the United Nations and the United ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3344,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1003,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois l'assemblée mentionnée a-t-elle eu lieu ?",
+   "or": "of 12 September 2025, and the statements made therein, including the p",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3344,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1003,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 264,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quel numéro de session apparaît dans la référence du document préparatoire ?",
+   "or": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3558,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1065,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quelle section de l'accord sur le siège concerne les représentants ?",
+   "or": "sesiones de la Asamblea General a los representantes a quienes se hace",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3558,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1065,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "question": "Quel jour du mois la réunion citée s'est-elle tenue ?",
+   "or": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3558,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1065,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 203,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour est examiné à cette session ?",
+   "or": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 5775,
+    "reponse": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 381,
+    "reponse": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 381,
+    "reponse": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 381,
+    "reponse": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1732,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 381,
+    "reponse": "Eightieth session Agenda item 13 Integrated and coordinated implementation of and follow-up to the outcomes of the major"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quel numéro porte la recommandation sur les droits des femmes autochtones ?",
+   "or": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5775,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1732,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "question": "Quelle année borne l'agenda du développement durable ?",
+   "or": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 5775,
+    "reponse": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 452,
+    "reponse": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 452,
+    "reponse": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 452,
+    "reponse": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1732,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 452,
+    "reponse": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that the"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 179,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "question": "Quel thème de l'ordre du jour ouvre le document ?",
+   "or": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 6766,
+    "reponse": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des gr"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 461,
+    "reponse": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des gr"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 461,
+    "reponse": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des gr"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 461,
+    "reponse": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des gr"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2021,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 461,
+    "reponse": "Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des gr"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 190,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour ouvre le document ?",
+   "or": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 6463,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1937,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 195,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "À partir de quelle version de Python l'intégration continue du projet tourne-t-elle ?",
+   "or": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 12893,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1029,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1691,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1691,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 3859,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1691,
+    "reponse": "Le service tourne sur une installation éditable du sous-module — pipx install --editable tools/docwatch — donc après une"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "Quel score l'adaptation de faible rang obtient-elle sur l'exercice de copie ?",
+   "or": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 12893,
+    "reponse": null
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3859,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "Quel taux le réseau à couches cachées obtient-il avec de mauvais paramètres ?",
+   "or": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 12893,
+    "reponse": "Le chemin image est vérifié ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à 0,71 % ✓) — mais ce n'e"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1034,
+    "reponse": "Le chemin image est vérifié ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à 0,71 % ✓) — mais ce n'e"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1034,
+    "reponse": "Le chemin image est vérifié ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à 0,71 % ✓) — mais ce n'e"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1034,
+    "reponse": "Le chemin image est vérifié ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à 0,71 % ✓) — mais ce n'e"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3859,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1034,
+    "reponse": "Le chemin image est vérifié ✓ (embedding exact, 31 couches à 7,58e-06 en isolation, projecteur à 0,71 % ✓) — mais ce n'e"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "question": "À quelle date le vieux démon a-t-il cessé d'être utilisé ?",
+   "or": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 12893,
+    "reponse": "Une porte vérifie que la page vivante date du dernier commit ✓✓ : un cycle qui commite sans la mettre à jour échoue ✓."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 750,
+    "reponse": "Une porte vérifie que la page vivante date du dernier commit ✓✓ : un cycle qui commite sans la mettre à jour échoue ✓."
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 750,
+    "reponse": "Une porte vérifie que la page vivante date du dernier commit ✓✓ : un cycle qui commite sans la mettre à jour échoue ✓."
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 750,
+    "reponse": "Une porte vérifie que la page vivante date du dernier commit ✓✓ : un cycle qui commite sans la mettre à jour échoue ✓."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3859,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 750,
+    "reponse": "Une porte vérifie que la page vivante date du dernier commit ✓✓ : un cycle qui commite sans la mettre à jour échoue ✓."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1069,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Combien de gigaoctets de fichiers faut-il écrire pour épuiser la mémoire tampon ?",
+   "or": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 15456,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1239,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 2483,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 2483,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 4631,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 2483,
+    "reponse": "# Système de fichiers : XFS, pour les fichiers de plusieurs centaines de Go et"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4272,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Quelle taille fait la zone d'échange de la machine ?",
+   "or": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 15456,
+    "reponse": "# taille.)"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1314,
+    "reponse": "# taille.)"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1314,
+    "reponse": "# taille.)"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1314,
+    "reponse": "# taille.)"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4631,
+    "reponse": "# taille.)"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1314,
+    "reponse": "# taille.)"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4272,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "question": "Quel paragraphe traite du read_ahead_kb resté ouvert ?",
+   "or": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 15456,
+    "reponse": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1100,
+    "reponse": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1100,
+    "reponse": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1100,
+    "reponse": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 4631,
+    "reponse": "# read_ahead large — un modèle se lit en flux."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1100,
+    "reponse": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4272,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Quelle longueur d'empreinte est comparée pour vérifier chaque tenseur ?",
+   "or": "Vérification par empreintes. --verifier relit chaque fichier produit e",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 9017,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 739,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1915,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1915,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2702,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1915,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1588,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Combien de tableaux de nombres le manifeste recense-t-il ?",
+   "or": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 9017,
+    "reponse": "manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 671,
+    "reponse": "manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des"
+   },
+   "controlee_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1241,
+    "reponse": "manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des"
+   },
+   "controlee_0.50": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1241,
+    "reponse": "manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": true,
+    "cout": 2702,
+    "reponse": "Vérification par empreintes. --verifier relit chaque fichier produit et compare le SHA-256 de chaque tenseur — pour les "
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1241,
+    "reponse": "manifeste.json       rôle de chaque fichier, tenseurs, tailles, ordre des"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1588,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "question": "Combien de nœuds la nouvelle disposition épargne-t-elle ?",
+   "or": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 9017,
+    "reponse": "Un dossier qui contient commun.gguf est un modèle : drave <dossier> …, sans option nouvelle."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 834,
+    "reponse": "Un dossier qui contient commun.gguf est un modèle : drave <dossier> …, sans option nouvelle."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1179,
+    "reponse": "Un dossier qui contient commun.gguf est un modèle : drave <dossier> …, sans option nouvelle."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1179,
+    "reponse": "Un dossier qui contient commun.gguf est un modèle : drave <dossier> …, sans option nouvelle."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 2702,
+    "reponse": "Le moteur saute déjà un expert absent, mais rien n'additionne encore ce que deux nœuds calculent chacun de leur côté."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1179,
+    "reponse": "Un dossier qui contient commun.gguf est un modèle : drave <dossier> …, sans option nouvelle."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1588,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "question": "Quelle vitesse le pont NVLink atteint-il dans chaque direction ?",
+   "or": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 20760,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1851,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3115,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3115,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 6224,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3115,
+    "reponse": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvlink -s"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2669,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "question": "Quelle taille de RAM faut-il garder des deux côtés ?",
+   "or": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 20760,
+    "reponse": "contenu\ttaille\ttient dans l'array de 1 To ?"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1681,
+    "reponse": "contenu\ttaille\ttient dans l'array de 1 To ?"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5092,
+    "reponse": "contenu\ttaille\ttient dans l'array de 1 To ?"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 8598,
+    "reponse": "contenu\ttaille\ttient dans l'array de 1 To ?"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0588,
+    "valeur": false,
+    "cout": 6224,
+    "reponse": "Si l'objectif est de faire tenir K3, il faut 2 To (8 SSD) ou garder K3 réparti entre l'array et le disque dur."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5092,
+    "reponse": "contenu\ttaille\ttient dans l'array de 1 To ?"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2669,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/methode/continuite.md",
+   "type": "code",
+   "question": "Quel plafond de mots l'état courant ne doit-il pas dépasser ?",
+   "or": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 6465,
+    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 521,
+    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1692,
+    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1692,
+    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1937,
+    "reponse": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1692,
+    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1264,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/backlog/dependances.md",
+   "type": "tableau",
+   "question": "Quel numéro porte la restitution après le gist ?",
+   "or": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 13875,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 1229,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 2160,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 2160,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 4156,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": true,
+    "cout": 2160,
+    "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1980,
     "reponse": null
    },
    "closed_book": {

@@ -1,0 +1,241 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.4",
+ "paires": 498,
+ "positifs": 83,
+ "couches": "8:11",
+ "negatifs": "durs (même section)",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "partage": "leave-one-document-out",
+ "resultats": [
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "n_test": 18,
+   "auc_tete": 0.311,
+   "auc_bm25": 0.467,
+   "auc_etiquettes_melangees": 0.8
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "n_test": 18,
+   "auc_tete": 0.422,
+   "auc_bm25": 0.5,
+   "auc_etiquettes_melangees": 0.378
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "n_test": 18,
+   "auc_tete": 0.444,
+   "auc_bm25": 0.578,
+   "auc_etiquettes_melangees": 0.511
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "n_test": 18,
+   "auc_tete": 0.956,
+   "auc_bm25": 0.833,
+   "auc_etiquettes_melangees": 0.467
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "n_test": 6,
+   "auc_tete": 0.2,
+   "auc_bm25": 0.5,
+   "auc_etiquettes_melangees": 1.0
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "n_test": 6,
+   "auc_tete": 0.2,
+   "auc_bm25": 1.0,
+   "auc_etiquettes_melangees": 0.2
+  },
+  {
+   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "n_test": 18,
+   "auc_tete": 0.489,
+   "auc_bm25": 0.644,
+   "auc_etiquettes_melangees": 0.311
+  },
+  {
+   "document": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "n_test": 18,
+   "auc_tete": 0.756,
+   "auc_bm25": 0.644,
+   "auc_etiquettes_melangees": 0.556
+  },
+  {
+   "document": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "n_test": 18,
+   "auc_tete": 0.556,
+   "auc_bm25": 0.789,
+   "auc_etiquettes_melangees": 0.4
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "n_test": 12,
+   "auc_tete": 0.25,
+   "auc_bm25": 0.5,
+   "auc_etiquettes_melangees": 0.5
+  },
+  {
+   "document": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "n_test": 18,
+   "auc_tete": 0.8,
+   "auc_bm25": 0.767,
+   "auc_etiquettes_melangees": 0.822
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "n_test": 42,
+   "auc_tete": 0.641,
+   "auc_bm25": 0.79,
+   "auc_etiquettes_melangees": 0.576
+  },
+  {
+   "document": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "n_test": 18,
+   "auc_tete": 0.711,
+   "auc_bm25": 0.8,
+   "auc_etiquettes_melangees": 0.733
+  },
+  {
+   "document": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "n_test": 12,
+   "auc_tete": 0.45,
+   "auc_bm25": 0.9,
+   "auc_etiquettes_melangees": 0.4
+  },
+  {
+   "document": "docs/methode/portes.md",
+   "type": "code",
+   "n_test": 36,
+   "auc_tete": 0.606,
+   "auc_bm25": 0.875,
+   "auc_etiquettes_melangees": 0.7
+  },
+  {
+   "document": "docs/pilotage/backlog/dependances.md",
+   "type": "tableau",
+   "n_test": 6,
+   "auc_tete": 0.8,
+   "auc_bm25": 1.0,
+   "auc_etiquettes_melangees": 0.8
+  },
+  {
+   "document": "docs/pilotage/backlog/index.md",
+   "type": "tableau",
+   "n_test": 6,
+   "auc_tete": 0.8,
+   "auc_bm25": 0.8,
+   "auc_etiquettes_melangees": 0.4
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "n_test": 12,
+   "auc_tete": 0.6,
+   "auc_bm25": 0.4,
+   "auc_etiquettes_melangees": 0.4
+  },
+  {
+   "document": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "n_test": 18,
+   "auc_tete": 0.444,
+   "auc_bm25": 0.667,
+   "auc_etiquettes_melangees": 0.467
+  },
+  {
+   "document": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "n_test": 12,
+   "auc_tete": 0.6,
+   "auc_bm25": 0.5,
+   "auc_etiquettes_melangees": 0.5
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "n_test": 36,
+   "auc_tete": 0.383,
+   "auc_bm25": 1.0,
+   "auc_etiquettes_melangees": 0.461
+  },
+  {
+   "document": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "n_test": 24,
+   "auc_tete": 0.562,
+   "auc_bm25": 0.625,
+   "auc_etiquettes_melangees": 0.35
+  },
+  {
+   "document": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "n_test": 12,
+   "auc_tete": 0.45,
+   "auc_bm25": 0.95,
+   "auc_etiquettes_melangees": 0.55
+  },
+  {
+   "document": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "n_test": 18,
+   "auc_tete": 0.756,
+   "auc_bm25": 1.0,
+   "auc_etiquettes_melangees": 0.711
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "n_test": 24,
+   "auc_tete": 0.637,
+   "auc_bm25": 0.675,
+   "auc_etiquettes_melangees": 0.613
+  },
+  {
+   "document": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "n_test": 18,
+   "auc_tete": 0.489,
+   "auc_bm25": 0.956,
+   "auc_etiquettes_melangees": 0.467
+  },
+  {
+   "document": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "n_test": 12,
+   "auc_tete": 1.0,
+   "auc_bm25": 0.75,
+   "auc_etiquettes_melangees": 0.7
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "n_test": 24,
+   "auc_tete": 0.775,
+   "auc_bm25": 0.963,
+   "auc_etiquettes_melangees": 0.575
+  }
+ ],
+ "moyennes": {
+  "tete": 0.575,
+  "bm25": 0.745,
+  "etiquettes_melangees": 0.548
+ }
+}

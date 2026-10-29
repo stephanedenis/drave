@@ -1,7 +1,8 @@
-# R0.3 durci — 19 paraphrases : le lexique tombe, le modèle prend la tête
+# R0.3 durci — 19 puis 84 paraphrases : le lexique tombe, le modèle prend la tête (de moins en moins)
 
 > **Ligne de roadmap** : R0.3 (banc durci) · **Date** : 2026-10-29 · **Verdict** : ✅ **le
-> renversement est net** — sur des questions qui ne partagent presque aucun mot avec le
+> renversement tient, de moins en moins à mesure que le banc grandit** (84 questions : 0,375
+> contre 0,269 ; 19 questions : 0,717 contre 0,30) — sur des questions qui ne partagent presque aucun mot avec le
 > passage (recouvrement moyen **0,20**), le lecteur lexical tombe à **0,30** de réponses
 > justes, le **modèle** en donne **0,717** ; et son contrôleur bat toujours la troncature
 > (**0,133**) et le closed-book (**0,000**).
@@ -68,6 +69,36 @@ contre 0,133 pour la troncature naïve — **5,4×** — et 0,000 en closed-book
 réponses sont dans les 1 200 premiers caractères du PDF (en-tête, objet, date), et le contrôleur
 préfère d'autres passages. C'est la limite de la fenêtre quand le document met sa réponse
 devant : le contrôleur doit pouvoir dire « le début suffit ».
+
+## Le banc élargi (84 paraphrases) — le modèle gagne encore, mais de moins
+
+Le pilote de 19 questions a été **quadruplé** : 84 paraphrases sur 29 documents, recouvrement
+moyen **0,17** (max 0,43), toujours vérifié par le constructeur. Les deux lecteurs sont rejoués.
+
+| type | extractif, valeur à 30 % | modèle, contrôleur | modèle, début | closed-book |
+|---|---:|---:|---:|---:|
+| code | 0,211 | **0,474** | 0,053 | 0,000 |
+| juridique | 0,214 | 0,357 | **0,500** | 0,000 |
+| prose | 0,333 | **0,556** | 0,056 | 0,000 |
+| tableau | 0,200 | **0,267** | 0,133 | 0,000 |
+| technique | **0,389** | 0,222 | 0,056 | 0,000 |
+| **agrégat** | **0,269** | **0,375** | **0,160** | **0,000** |
+
+**Ce qui change avec l'échelle** :
+
+- le modèle garde l'avantage (**0,375** contre **0,269**, +11 points) mais il était de +42 points
+  sur 19 questions : le banc élargi est **plus dur pour lui aussi** (0,717 → 0,375) ;
+- il ne gagne plus que **4 types sur 5** : sur la **technique**, l'extractif reprend la main
+  (0,389 contre 0,222) — les paraphrases techniques gardent assez de vocabulaire pour BM25 ;
+- le **juridique** confirme le motif : le **début** (0,500) bat le contrôleur (0,357) — les
+  réponses sont dans les premières lignes du PDF, et le contrôleur préfère d'autres passages ;
+- la **récupération** de l'extractif tombe à **0,653** en moyenne à 30 % (contre 0,817 sur 19),
+  et le contrôle aléatoire monte à 0,526 sur le code : sur les documents courts, tirer au sort
+  couvre presque tout — le contrôle aléatoire y perd son sens.
+
+**Conclusion** : le régime paraphrase tient (le modèle devant), mais l'écart se resserre quand
+le banc grandit et se diversifie. Le modèle de 0,5 B n'est pas un lecteur de paraphrases
+robuste ; il est *moins mauvais* que le lexical.
 
 ## Ce qui pourrait le rendre faux
 

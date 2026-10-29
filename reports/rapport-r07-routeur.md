@@ -1,4 +1,4 @@
-# R0.5 — le routeur : le signal prédit (0,785), la règle ne transfère pas
+# R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas
 
 > **Ligne de roadmap** : R0.5 · **Date** : 2026-10-29 · **Verdict** : ⚠️ **partiel** — le signal
 > BM25 **prédit** quel lecteur gagne (AUC **0,785**, contrôles à 0,41), mais un **seuil
@@ -88,6 +88,38 @@ donc « large » ne veut pas dire « facile ».
 **Conclusion** : le signal est bon, la **calibration par document** est la bonne direction, mais
 le banc des paraphrases (19 questions) ne permet pas d'apprendre le régime. Il faut **plus de
 paraphrases** avant de rejouer le routeur — pas un autre signal.
+
+## La version 3 (332 questions) : le signal monte à 0,826
+
+Le banc élargi ajoute 84 paraphrases aux 248 questions lexicales. Le signal et les contrôles :
+
+| mesure | valeur |
+|---|---:|
+| questions où les lecteurs diffèrent | 201 / 332 |
+| **AUC du signal BM25** | **0,826** |
+| AUC du z-score | 0,782 |
+| AUC du ratio | 0,729 |
+| AUC de la couverture | 0,584 |
+| AUC de l'étendue | 0,264 |
+| AUC de la longueur (faux signal) | 0,438 |
+| AUC aléatoire | 0,409 |
+
+Le signal **monte** (0,781 → 0,826) et les contrôles restent au hasard ou en dessous. Le
+transfert s'améliore aussi :
+
+| seuil appris sur l'autre banc, testé sur | z-score | brut | choix fixe |
+|---|---:|---:|---:|
+| le banc lexical (n=248) | **0,802** | 0,524 | 0,855 |
+| les paraphrases (n=84) | 0,321 | 0,310 | **0,381** |
+
+**Mais le routeur ne bat toujours pas le choix fixe** : 0,802 contre 0,855 sur le lexical,
+0,321 contre 0,381 sur les paraphrases. L'oracle est à 0,792 (0,899 / 0,476) : le gain maximal
+possible se réduit à mesure que le banc grandit, parce que les deux lecteurs deviennent **moins
+complémentaires** (le modèle ne domine plus nettement les paraphrases).
+
+**Conclusion inchangée** : le signal prédit de mieux en mieux, la règle ne décide pas encore.
+Il faut une calibration par document **apprise** (pas un seuil global) — et, pour cela, un banc
+de plusieurs centaines de paraphrases.
 
 ## Ce qui pourrait le rendre faux
 

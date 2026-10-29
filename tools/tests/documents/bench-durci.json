@@ -60,6 +60,24 @@
      "indice": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
      "valeur": "256",
      "source": "Quelle valeur le document associe-t-il à « découpée » et « façon » ?"
+    },
+    {
+     "question": "Quelle erreur relative le codage par valeur introduit-il, en pourcentage du maximum ?",
+     "indice": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
+     "valeur": "0,085",
+     "source": "Quelle valeur le document associe-t-il à « erreur » et « nulle » ?"
+    },
+    {
+     "question": "Quel chiffre de perplexité traduit une clé réécrite au mauvais endroit ?",
+     "indice": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
+     "valeur": "356 694",
+     "source": "Quelle valeur le document associe-t-il à « mauvaise » et « réécrivaient » ?"
+    },
+    {
+     "question": "Quelle phase exige une réponse plutôt qu'un refus ?",
+     "indice": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
+     "valeur": "3.5",
+     "source": "Quelle valeur le document associe-t-il à « devinette » et « critère » ?"
     }
    ]
   },
@@ -90,6 +108,18 @@
      "indice": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
      "valeur": "10.3",
      "source": "Quelle valeur le document associe-t-il à « graines » et « raisonnement » ?"
+    },
+    {
+     "question": "Quel identifiant porte le chantier qui bloque sur les cartes tenues ?",
+     "indice": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
+     "valeur": "4.6",
+     "source": "Quelle valeur le document associe-t-il à « bloque » et « contre » ?"
+    },
+    {
+     "question": "Quel identifiant désigne le manque de corpus d'articles ?",
+     "indice": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
+     "valeur": "1.5",
+     "source": "Quelle valeur le document associe-t-il à « absent » et « nommé » ?"
     }
    ]
   },
@@ -144,6 +174,510 @@
      "indice": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
      "valeur": "124",
      "source": "Quelle valeur le document associe-t-il à « bloquée » et « délai » ?"
+    },
+    {
+     "question": "Quelle quantité de mémoire graphique un modèle occupé prend-il pendant une passe ?",
+     "indice": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
+     "valeur": "28",
+     "source": "Quelle valeur le document associe-t-il à « attendre » et « audit » ?"
+    },
+    {
+     "question": "Combien de lignes du journal faut-il lire pour connaître la cause d'un échec ?",
+     "indice": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
+     "valeur": "15",
+     "source": "Quelle valeur le document associe-t-il à « conservé » et « donne » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/lecture-rapide.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "De quelle année date l'étude qui a lancé la mode de la lecture ultra-rapide ?",
+     "indice": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
+     "valeur": "2016",
+     "source": "Quelle valeur le document associe-t-il à « pleine » et « promesses » ?"
+    },
+    {
+     "question": "De quel pourcentage l'abandon anticipé accélère-t-il ?",
+     "indice": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
+     "valeur": "24",
+     "source": "Quelle valeur le document associe-t-il à « accélère » et « différence » ?"
+    },
+    {
+     "question": "Combien de pièces le protocole d'évaluation doit-il rassembler ?",
+     "indice": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
+     "valeur": "30",
+     "source": "Quelle valeur le document associe-t-il à « chacun » et « dispositif » ?"
+    },
+    {
+     "question": "Quel volume les tampons d'avance ont-ils traité ?",
+     "indice": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
+     "valeur": "6,22",
+     "source": "Quelle valeur le document associe-t-il à « demande » et « déjà » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/protocole-semantique.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Combien de nombres porte le vecteur de sens ?",
+     "indice": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
+     "valeur": "128",
+     "source": "Quelle valeur le document associe-t-il à « couche » et « dimension » ?"
+    },
+    {
+     "question": "Quel est le nombre de propriétés typées du schéma fixe ?",
+     "indice": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
+     "valeur": "15",
+     "source": "Quelle valeur le document associe-t-il à « base » et « champs » ?"
+    },
+    {
+     "question": "Combien de langues la première exécution du protocole a-t-elle couvertes ?",
+     "indice": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
+     "valeur": "10",
+     "source": "Quelle valeur le document associe-t-il à « last » et « variantes » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/jeux-symboliques.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Combien de cases compte le plateau du jeu de dames décrit ?",
+     "indice": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
+     "valeur": "32",
+     "source": "Quelle valeur le document associe-t-il à « arrête » et « demi » ?"
+    },
+    {
+     "question": "Combien d'idées le vocabulaire commun aux langues couvre-t-il ?",
+     "indice": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
+     "valeur": "35",
+     "source": "Quelle valeur le document associe-t-il à « depuis » et « détectés » ?"
+    },
+    {
+     "question": "Quel est le nombre de règles de jeu que les maîtres enseignent ?",
+     "indice": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
+     "valeur": "17",
+     "source": "Quelle valeur le document associe-t-il à « domaine » et « gagnent » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/semantique-universaux.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Quel score le premier protocole a-t-il obtenu sur la restitution ?",
+     "indice": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
+     "valeur": "14,0",
+     "source": "Quelle valeur le document associe-t-il à « chrf » et « contre » ?"
+    },
+    {
+     "question": "Quelle proportion des positions l'outil déterministe décode-t-il ?",
+     "indice": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
+     "valeur": "100",
+     "source": "Quelle valeur le document associe-t-il à « passage » et « surapprend » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/theorie/architecture-native.md",
+   "type": "prose",
+   "questions": [
+    {
+     "question": "Combien de millions de paramètres compte le petit modèle natif ?",
+     "indice": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
+     "valeur": "12",
+     "source": "Quelle valeur le document associe-t-il à « paramètres » et « vocab » ?"
+    },
+    {
+     "question": "Quelle taille fait le vocabulaire d'entrée du modèle ?",
+     "indice": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
+     "valeur": "256",
+     "source": "Quelle valeur le document associe-t-il à « entrée » et « local » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/document-graph.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Combien de bits fait le condensat du fichier complet ?",
+     "indice": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
+     "valeur": "256",
+     "source": "Quelle valeur le document associe-t-il à « concaténation » et « longueur » ?"
+    },
+    {
+     "question": "À partir de quel seuil de recouvrement la découpe est-elle acceptée ?",
+     "indice": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
+     "valeur": "99",
+     "source": "Quelle valeur le document associe-t-il à « ajoute » et « communs » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/lecteur-controleur.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Quelle proportion du document le plus petit budget représente-t-il ?",
+     "indice": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
+     "valeur": "10",
+     "source": "Quelle valeur le document associe-t-il à « comparables » et « fraction » ?"
+    },
+    {
+     "question": "Quelle part du budget la lecture peut-elle consommer au plus ?",
+     "indice": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
+     "valeur": "80",
+     "source": "Quelle valeur le document associe-t-il à « arrête » et « jusqu » ?"
+    },
+    {
+     "question": "Quel cinquième de l'enveloppe est gardé pour vérifier ?",
+     "indice": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
+     "valeur": "20",
+     "source": "Quelle valeur le document associe-t-il à « dépense » et « réglage » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/contexte-long.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Combien d'entrées les blocs à portée courte regardent-ils ?",
+     "indice": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
+     "valeur": "128",
+     "source": "Quelle valeur le document associe-t-il à « relisent » et « entrées » ?"
+    },
+    {
+     "question": "Sur combien de bits les clés sont-elles stockées dans la variante compressée ?",
+     "indice": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
+     "valeur": "32",
+     "source": "Quelle valeur le document associe-t-il à « int4 » et « valeurs » ?"
+    },
+    {
+     "question": "Quel facteur les blocs du réseau appliquent-ils aux lancements graphiques ?",
+     "indice": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
+     "valeur": "24",
+     "source": "Quelle valeur le document associe-t-il à « appel » et « appels » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/convertisseur.md",
+   "type": "technique",
+   "questions": [
+    {
+     "question": "Combien de milliards de paramètres compte le modèle dont le fichier pèse 60 Go ?",
+     "indice": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
+     "valeur": "120",
+     "source": "Quelle valeur le document associe-t-il à « différence » et « tenir » ?"
+    },
+    {
+     "question": "Combien de milliards de paramètres le modèle qui tient en 17,7 Go compte-t-il ?",
+     "indice": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
+     "valeur": "30",
+     "source": "Quelle valeur le document associe-t-il à « requantification » et « aucune » ?"
+    },
+    {
+     "question": "Quelle vitesse avait été annoncée avant la mesure ?",
+     "indice": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
+     "valeur": "4,81",
+     "source": "Quelle valeur le document associe-t-il à « aussi » et « chiffre » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/en-cours.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quel plafond de contexte est refusé par les essais du modèle ?",
+     "indice": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
+     "valeur": "130",
+     "source": "Quelle valeur le document associe-t-il à « contextes » et « négatifs » ?"
+    },
+    {
+     "question": "Combien d'items le réseau de dépendances réunit-il ?",
+     "indice": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+     "valeur": "29",
+     "source": "Quelle valeur le document associe-t-il à « arrêtées » et « priorités » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/backlog/index.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Combien de fiches le backlog contient-il au total ?",
+     "indice": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
+     "valeur": "29",
+     "source": "Quelle valeur le document associe-t-il à « dependances » et « fiches » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/manques.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Combien d'épreuves le dernier passage complet a-t-il lancées ?",
+     "indice": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
+     "valeur": "49",
+     "source": "Quelle valeur le document associe-t-il à « affirmait » et « alors » ?"
+    },
+    {
+     "question": "Quel débit le disque atteint-il au hasard sur l'array ?",
+     "indice": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
+     "valeur": "29",
+     "source": "Quelle valeur le document associe-t-il à « array » et « dessus » ?"
+    },
+    {
+     "question": "Combien d'épreuves de rappel le réseau a-t-il passées à longue portée ?",
+     "indice": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
+     "valeur": "18",
+     "source": "Quelle valeur le document associe-t-il à « aiguilles » et « jusqu » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/references-non-regression.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Combien d'épreuves le dernier passage intégral a-t-il lancées ?",
+     "indice": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
+     "valeur": "49",
+     "source": "Quelle valeur le document associe-t-il à « complète » et « dernière » ?"
+    },
+    {
+     "question": "Combien de renvois internes le script a-t-il validés ?",
+     "indice": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
+     "valeur": "308",
+     "source": "Quelle valeur le document associe-t-il à « doit » et « dépôt » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel numéro de session figure dans la référence du projet de résolution ?",
+     "indice": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "source": "Quelle valeur le document associe-t-il à « main » et « reference » ?"
+    },
+    {
+     "question": "Quel article de l'accord de siège est cité pour les représentants ?",
+     "indice": "section 11 of the Agreement between the United Nations and the United ",
+     "valeur": "11",
+     "source": "Quelle valeur le document associe-t-il à « between » et « section » ?"
+    },
+    {
+     "question": "Quel jour du mois l'assemblée mentionnée a-t-elle eu lieu ?",
+     "indice": "of 12 September 2025, and the statements made therein, including the p",
+     "valeur": "12",
+     "source": "Quelle valeur le document associe-t-il à « 2025 » et « counsel » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel numéro de session apparaît dans la référence du document préparatoire ?",
+     "indice": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
+     "valeur": "80",
+     "source": "Quelle valeur le document associe-t-il à « comisión » et « previa » ?"
+    },
+    {
+     "question": "Quelle section de l'accord sur le siège concerne les représentants ?",
+     "indice": "sesiones de la Asamblea General a los representantes a quienes se hace",
+     "valeur": "11",
+     "source": "Quelle valeur le document associe-t-il à « entre » et « quienes » ?"
+    },
+    {
+     "question": "Quel jour du mois la réunion citée s'est-elle tenue ?",
+     "indice": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
+     "valeur": "12",
+     "source": "Quelle valeur le document associe-t-il à « 2025 » et « anfitrión » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel point de l'ordre du jour est examiné à cette session ?",
+     "indice": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
+     "valeur": "13",
+     "source": "Quelle valeur le document associe-t-il à « conferences » et « coordinated » ?"
+    },
+    {
+     "question": "Quel numéro porte la recommandation sur les droits des femmes autochtones ?",
+     "indice": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
+     "valeur": "39",
+     "source": "Quelle valeur le document associe-t-il à « 2022 » et « recommendation » ?"
+    },
+    {
+     "question": "Quelle année borne l'agenda du développement durable ?",
+     "indice": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
+     "valeur": "2030",
+     "source": "Quelle valeur le document associe-t-il à « agenda » et « reaffirming » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel thème de l'ordre du jour ouvre le document ?",
+     "indice": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
+     "valeur": "13",
+     "source": "Quelle valeur le document associe-t-il à « conférences » et « connexes » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "questions": [
+    {
+     "question": "Quel point de l'ordre du jour ouvre le document ?",
+     "indice": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
+     "valeur": "13",
+     "source": "Quelle valeur le document associe-t-il à « conexas » et « conferencias » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/utilisation.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "À partir de quelle version de Python l'intégration continue du projet tourne-t-elle ?",
+     "indice": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
+     "valeur": "3.9",
+     "source": "Quelle valeur le document associe-t-il à « licence » et « python » ?"
+    },
+    {
+     "question": "Quel score l'adaptation de faible rang obtient-elle sur l'exercice de copie ?",
+     "indice": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
+     "valeur": "100,0",
+     "source": "Quelle valeur le document associe-t-il à « contrôle » et « recopier » ?"
+    },
+    {
+     "question": "Quel taux le réseau à couches cachées obtient-il avec de mauvais paramètres ?",
+     "indice": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
+     "valeur": "119,9",
+     "source": "Quelle valeur le document associe-t-il à « lineaire » et « réglé » ?"
+    },
+    {
+     "question": "À quelle date le vieux démon a-t-il cessé d'être utilisé ?",
+     "indice": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
+     "valeur": "27",
+     "source": "Quelle valeur le document associe-t-il à « 8787 » et « double » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Combien de gigaoctets de fichiers faut-il écrire pour épuiser la mémoire tampon ?",
+     "indice": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
+     "valeur": "350",
+     "source": "Quelle valeur le document associe-t-il à « conséquence » et « effondre » ?"
+    },
+    {
+     "question": "Quelle taille fait la zone d'échange de la machine ?",
+     "indice": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
+     "valeur": "62",
+     "source": "Quelle valeur le document associe-t-il à « disque » et « swap » ?"
+    },
+    {
+     "question": "Quel paragraphe traite du read_ahead_kb resté ouvert ?",
+     "indice": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
+     "valeur": "6.2",
+     "source": "Quelle valeur le document associe-t-il à « montée » et « nommés » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/format-clusters.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle longueur d'empreinte est comparée pour vérifier chaque tenseur ?",
+     "indice": "Vérification par empreintes. --verifier relit chaque fichier produit e",
+     "valeur": "256",
+     "source": "Quelle valeur le document associe-t-il à « concaténation » et « correspondante » ?"
+    },
+    {
+     "question": "Combien de tableaux de nombres le manifeste recense-t-il ?",
+     "indice": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
+     "valeur": "1 587",
+     "source": "Quelle valeur le document associe-t-il à « annonce » et « inventaire » ?"
+    },
+    {
+     "question": "Combien de nœuds la nouvelle disposition épargne-t-elle ?",
+     "indice": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
+     "valeur": "1,8",
+     "source": "Quelle valeur le document associe-t-il à « decoupage » et « divise » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/implantation/numa-segregation.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quelle vitesse le pont NVLink atteint-il dans chaque direction ?",
+     "indice": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
+     "valeur": "25,781",
+     "source": "Quelle valeur le document associe-t-il à « nvidia » et « sens » ?"
+    },
+    {
+     "question": "Quelle taille de RAM faut-il garder des deux côtés ?",
+     "indice": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
+     "valeur": "64",
+     "source": "Quelle valeur le document associe-t-il à « asymétrie » et « rendre » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/methode/continuite.md",
+   "type": "code",
+   "questions": [
+    {
+     "question": "Quel plafond de mots l'état courant ne doit-il pas dépasser ?",
+     "indice": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+     "valeur": "2 000",
+     "source": "Quelle valeur le document associe-t-il à « budget » et « coupe » ?"
+    }
+   ]
+  },
+  {
+   "chemin": "docs/pilotage/backlog/dependances.md",
+   "type": "tableau",
+   "questions": [
+    {
+     "question": "Quel numéro porte la restitution après le gist ?",
+     "indice": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+     "valeur": "31",
+     "source": "Quelle valeur le document associe-t-il à « restitution » et « plafond » ?"
     }
    ]
   }
