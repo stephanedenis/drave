@@ -179,7 +179,8 @@ fn main() {
         if let Some(f) = texte.strip_prefix('@') {
             texte = std::fs::read_to_string(f).expect("fichier de texte illisible");
         }
-        texte = texte.chars().take(1024).collect();
+        let limite: usize = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(1024);
+        texte = texte.chars().take(limite).collect();
         let d = drvm::Drvm::open(&f).expect("DRVM");
         let nat = native::Native::open(&d).expect("natif");
         let (p, n) = nat.perplexite(texte.as_bytes());

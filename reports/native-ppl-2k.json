@@ -1,0 +1,3 @@
+{"modele": "/tmp/n0-best.drvm", "parametres": 11469192, "fichier": "data/corpus_fr_val.txt",
+ "octets_notes_rust": 1996, "octets_notes_python": 1997,
+ "ppl_rust": 54.0379, "ppl_python": 54.0343, "ecart": 0.0036, "limite_caracteres": 1900}

@@ -41,6 +41,7 @@
 | [`rapport-native-service.md`](rapport-native-service.md) | **N4.2** — service local HTTP : `/sante`, `/generer`, 69 octets, pas de production |
 | [`rapport-native-21m-20k.md`](rapport-native-21m-20k.md) | **N2.9** — 21,63 M, 20 000 pas : PPL **3,381**, pire que 11,47 M (**3,123**) |
 | [`rapport-native-distillation-20k.md`](rapport-native-distillation-20k.md) | **N2.8** — 20 000 pas : PPL **3,123** contre **3,295**, précision **67,96 %**, gap **+0,768** |
+| [`rapport-native-ppl-2k.md`](rapport-native-ppl-2k.md) | **N0.14** — PPL native **1 996 octets** : **54,0379** vs **54,0343** Python |
 | [`rapport-native-ppl-corpus.md`](rapport-native-ppl-corpus.md) | **N0.13** — PPL native sur **1 076 octets** : **18,6394** vs **18,6395** Python |
 | [`rapport-native-ppl.md`](rapport-native-ppl.md) | **N0.12** — PPL native **4,6585**, identique à Python sur 59 octets |
 | [`rapport-native-test.md`](rapport-native-test.md) | **N0.11** — test Rust autonome de la passe avant native (fixture 36 Ko) |

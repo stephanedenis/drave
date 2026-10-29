@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 04:05 | `a2cc7311` | N4.5 — MEILLEUR STUDENT SERVI : PPL 2,708, 53 OCTETS EN 589,2 MS | `roadmap-native.md`, `README.md`, `docs.md` (+3) |
 | 04:22 | `3e5ea72d` | N2.25 + SYNTHÈSE — PLAFOND 2,708 : SIX ESSAIS, AUCUN NE BAT 2,708 | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 04:42 | `3fac1112` | N2.26 — TÊTES LOCALES : PPL 2,763, DÉGRADATION, ARRÊTÉ | `en-cours.md`, `roadmap-native.md`, `README.md` (+8) |
+| 04:48 | `c4378136` | N4.6 — SFT MINIMAL : 24/24 VUS, 0/4 TENUS, MÉMORISATION | `en-cours.md`, `roadmap-native.md`, `README.md` (+8) |
 
 ## Chiffres du jour
 
@@ -37,6 +38,7 @@
 - [reports/rapport-native-prof20k-8.md](../../reports/rapport-native-prof20k-8.md)
 - [reports/rapport-native-prof30k.md](../../reports/rapport-native-prof30k.md)
 - [reports/rapport-native-professeur-30k.md](../../reports/rapport-native-professeur-30k.md)
+- [reports/rapport-native-sft.md](../../reports/rapport-native-sft.md)
 
 <!-- notes -->
 

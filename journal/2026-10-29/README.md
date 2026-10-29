@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **0 session(s)** · **5 thème(s)**
+**18 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 9 | [mesures.md](mesures.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -43,6 +43,7 @@
 | 04:25 | `1d57756a` | DOCS — COMPTEURS 261/325 ET LIENS DE FICHES NON ÉCRITES |
 | 04:42 | `3fac1112` | N2.26 — TÊTES LOCALES : PPL 2,763, DÉGRADATION, ARRÊTÉ |
 | 04:45 | `702e4dae` | FIX — VARS_LUES : DRAVE_TOKEN |
+| 04:48 | `c4378136` | N4.6 — SFT MINIMAL : 24/24 VUS, 0/4 TENUS, MÉMORISATION |
 
 ## Le récit de la journée (écrit à la main)
 
