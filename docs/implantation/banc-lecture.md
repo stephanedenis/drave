@@ -139,6 +139,8 @@ ne changent pas. L'extractif passe les 249 questions en **3 s** ; le modèle GPU
 
 ## 8. Voir aussi
 
+- [Le corpus gelé](corpus-gele.md) — le banc lit des copies figées, pas la documentation vivante.
+
 - [La fiche R03](../pilotage/backlog/R03-banc-lecture-rapide.md) — le contrat et la porte.
 - [Le contrôleur de lecture](lecteur-controleur.md) — ce que le banc mesure.
 - [Le graphe de document](document-graph.md) — la découpe que le banc consomme.

@@ -1,0 +1,217 @@
+{
+ "version": 1,
+ "date": "2026-10-30",
+ "note": "Corpus gelé des bancs R0.3 : la source peut évoluer, la copie est le banc.",
+ "documents": [
+  {
+   "source": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
+   "type": "juridique",
+   "octets": 176604,
+   "sha256": "cb81bd161e0533a1d30c6c7946f502ba2711cad15d0801ad526a40598d1eb80a"
+  },
+  {
+   "source": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
+   "type": "juridique",
+   "octets": 179177,
+   "sha256": "191a2dabac755f31ac47348f3e7b7bee21c73348f94110479d42b4fd7d7ce6d8"
+  },
+  {
+   "source": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "octets": 132676,
+   "sha256": "42a3d2ab567d01b801271a9fef5282035d3b09be555146a8636deabd7e5988f8"
+  },
+  {
+   "source": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
+   "type": "juridique",
+   "octets": 203097,
+   "sha256": "5668d0eb10f508a0504f1366fcc113f2355ea7d65e877fec154fc3f02f87ee90"
+  },
+  {
+   "source": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
+   "type": "juridique",
+   "octets": 203700,
+   "sha256": "12984f515b98c3a53eca0f5a0ec1ac0aee8d9fc97af7b9b7951cb458c03e495a"
+  },
+  {
+   "source": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "copie": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
+   "type": "juridique",
+   "octets": 196728,
+   "sha256": "2d910f7cf70bbb9c8e38d845762680b8016cada31dce9a07938a6295a410ea99"
+  },
+  {
+   "source": "docs/implantation/banc-lecture.md",
+   "copie": "tools/tests/documents/corpus/technique/banc-lecture.md",
+   "type": "technique",
+   "octets": 8019,
+   "sha256": "7f7356dce169ce6e79c25990ce17d989fefd7acf215861dd664191bee2f06f05"
+  },
+  {
+   "source": "docs/implantation/configuration-nvme-raid-amd.md",
+   "copie": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
+   "type": "code",
+   "octets": 17068,
+   "sha256": "211cb049d749b1e15bb4f156c5fd3c7161be5a9fb978cd8e6fad68d1a8c77068"
+  },
+  {
+   "source": "docs/implantation/contexte-long.md",
+   "copie": "tools/tests/documents/corpus/technique/contexte-long.md",
+   "type": "technique",
+   "octets": 33825,
+   "sha256": "ec04d673a035e6dc762f1d371d7d06624f1616fc9cd8e5f4c281863797777fa6"
+  },
+  {
+   "source": "docs/implantation/convertisseur.md",
+   "copie": "tools/tests/documents/corpus/technique/convertisseur.md",
+   "type": "technique",
+   "octets": 17857,
+   "sha256": "af36f76f68471ca48fc91cd0cb2db16a4e63aa1d9f771d7d86907044578b6656"
+  },
+  {
+   "source": "docs/implantation/document-graph.md",
+   "copie": "tools/tests/documents/corpus/technique/document-graph.md",
+   "type": "technique",
+   "octets": 6777,
+   "sha256": "0539a00a7f97d6b3695507a8d0146ae6981f79139fbc1f4dce9352154324b151"
+  },
+  {
+   "source": "docs/implantation/format-clusters.md",
+   "copie": "tools/tests/documents/corpus/code/format-clusters.md",
+   "type": "code",
+   "octets": 9862,
+   "sha256": "217dadcb0d0ec6018a9d2d812ae740bfeae91eb85f043f8724210e01237f7311"
+  },
+  {
+   "source": "docs/implantation/format-flux.md",
+   "copie": "tools/tests/documents/corpus/technique/format-flux.md",
+   "type": "technique",
+   "octets": 11280,
+   "sha256": "1a544fa7d29e4ca051117ba5c0303b03c9cf6c15b39ed73bdec5687684deef47"
+  },
+  {
+   "source": "docs/implantation/lecteur-controleur.md",
+   "copie": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
+   "type": "technique",
+   "octets": 4616,
+   "sha256": "95b69fa94bd4e2e20f30411ade1f75717f211be67c9d3eb59a93583a641e4c91"
+  },
+  {
+   "source": "docs/implantation/numa-segregation.md",
+   "copie": "tools/tests/documents/corpus/code/numa-segregation.md",
+   "type": "code",
+   "octets": 23008,
+   "sha256": "54528ea890232e6db6dc8429ab89da035dffbfb7010b9d79b5904708d7a1d1ec"
+  },
+  {
+   "source": "docs/methode/continuite.md",
+   "copie": "tools/tests/documents/corpus/code/continuite.md",
+   "type": "code",
+   "octets": 7518,
+   "sha256": "c5ac6d9c78c952eafaea8843f46241d73e0d2badea5700b2315a5f11b95ff23b"
+  },
+  {
+   "source": "docs/methode/portes.md",
+   "copie": "tools/tests/documents/corpus/code/portes.md",
+   "type": "code",
+   "octets": 3486,
+   "sha256": "ca4a4e4354a19fe02d40b05e1b5f719eac42178f64a5d4e026cbb1d0810af186"
+  },
+  {
+   "source": "docs/pilotage/backlog/dependances.md",
+   "copie": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "octets": 17387,
+   "sha256": "280c453edb7fb1c97977c4f7be40d2cdef3e40de72744f99fb8123021b584a17"
+  },
+  {
+   "source": "docs/pilotage/backlog/index.md",
+   "copie": "tools/tests/documents/corpus/tableau/index.md",
+   "type": "tableau",
+   "octets": 8664,
+   "sha256": "009824d6db2ba5d62d187f10a51f1bf70f008d16fbd7b960c20611866bf0b065"
+  },
+  {
+   "source": "docs/pilotage/en-cours.md",
+   "copie": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "type": "tableau",
+   "octets": 8818,
+   "sha256": "a7810547335b3ccae28f2aaa8b993a3d9c95410e208ddfbb193804f58fedfc63"
+  },
+  {
+   "source": "docs/pilotage/manques.md",
+   "copie": "tools/tests/documents/corpus/tableau/manques.md",
+   "type": "tableau",
+   "octets": 12411,
+   "sha256": "6e5a4ca25f224ddecd98018595f4654a6da66356c718cba158adf21bf59e37c9"
+  },
+  {
+   "source": "docs/pilotage/references-non-regression.md",
+   "copie": "tools/tests/documents/corpus/tableau/references-non-regression.md",
+   "type": "tableau",
+   "octets": 13526,
+   "sha256": "11d624f7d1d93f2fed8c680d1ee287fe1e20604771107b835688f3679a053ae6"
+  },
+  {
+   "source": "docs/pilotage/roadmap.md",
+   "copie": "tools/tests/documents/corpus/tableau/roadmap.md",
+   "type": "tableau",
+   "octets": 24634,
+   "sha256": "747deebc977ade8cf7ee18b1ef6aae6e84fd1c54eb9f85cc76dda355cf60cc11"
+  },
+  {
+   "source": "docs/pilotage/utilisation.md",
+   "copie": "tools/tests/documents/corpus/code/utilisation.md",
+   "type": "code",
+   "octets": 14336,
+   "sha256": "d5b4ec83bc66582a28d6ad7e9e031515746765fe2cda66b16da036692ee685fe"
+  },
+  {
+   "source": "docs/theorie/architecture-native.md",
+   "copie": "tools/tests/documents/corpus/prose/architecture-native.md",
+   "type": "prose",
+   "octets": 6964,
+   "sha256": "e053af844ac69b810d70a95682b6ef84cbeebf267230e54ad9f766ab9b640b62"
+  },
+  {
+   "source": "docs/theorie/jeux-symboliques.md",
+   "copie": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
+   "type": "prose",
+   "octets": 12745,
+   "sha256": "776298d3e5f976745d9bac3057bf680800a089cd6f738c80f6c19a2677fed0a7"
+  },
+  {
+   "source": "docs/theorie/lecture-rapide.md",
+   "copie": "tools/tests/documents/corpus/prose/lecture-rapide.md",
+   "type": "prose",
+   "octets": 20233,
+   "sha256": "fb52a64f9282017b3461a7919385b4a60c54e8fcf9e9b9c837eb34cde3f6946d"
+  },
+  {
+   "source": "docs/theorie/protocole-semantique.md",
+   "copie": "tools/tests/documents/corpus/prose/protocole-semantique.md",
+   "type": "prose",
+   "octets": 10595,
+   "sha256": "65025d2dc19950a6e48887fe993963c1a546b9d9076a8ba336fbfc0f63d0b08f"
+  },
+  {
+   "source": "docs/theorie/semantique-universaux.md",
+   "copie": "tools/tests/documents/corpus/prose/semantique-universaux.md",
+   "type": "prose",
+   "octets": 8884,
+   "sha256": "60cf95666483b0dd42c8759c97f3a3878a4361d6b257eda9c035365d6cd38374"
+  },
+  {
+   "source": "docs/theorie/vision.md",
+   "copie": "tools/tests/documents/corpus/prose/vision.md",
+   "type": "prose",
+   "octets": 8221,
+   "sha256": "63cc0b444cb36069aa6713e0cd67cc4deb5d541a20ad7e4703112240aa6cea31"
+  }
+ ]
+}

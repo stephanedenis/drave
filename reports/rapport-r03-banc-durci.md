@@ -104,9 +104,10 @@ robuste ; il est *moins mauvais* que le lexical.
 
 - **dérive des documents vivants** : les mesures de cette fiche ont été faites sur **84**
   questions ; le 29/10, une session voisine a réécrit `docs/methode/continuite.md` et la
-  question « plafond de mots » n'a plus de gold — elle a été retirée, le banc est à **83**
-  (revérifié, 0 problème). Un cas d'écart ne change pas les conclusions ; la correction durable
-  est un **corpus gelé**, qui reste à faire ;
+  question « plafond de mots » n'a plus de gold. Le banc est passé à **83** et la correction
+  durable est faite : un **corpus gelé** (`tools/corpus_gele.py`, 30 documents, manifeste
+  sha256) ; les mesures rejouées sur le corpus figé sont dans
+  [`rapport-corpus-gele.md`](rapport-corpus-gele.md) ;
 
 - **19 questions** : un cas vaut 0,05 à 0,25 selon le type ; c'est un pilote de difficulté.
 - **Paraphrases écrites par l'auteur du banc** : elles peuvent être plus faciles (ou plus

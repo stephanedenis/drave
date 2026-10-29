@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 16:09 | `6872bef1` | A8.0 — PORTE-TOPOLOGIE ÉPINGLÉE : 17,4702 / 30,4363 / 42,5477 ; ÉTAT 3/33 | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 | 16:36 | `b49daabf` | A8.0 — PORTE-REPARTI ÉPINGLÉE : PPL 9,1748 ; ÉTAT 5/33 | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 | 16:44 | `f900db9a` | A8.3a — PORTE-FLUX : RÉGIME 1 % ÉPINGLÉ (58,3200 / 62,7357) | `en-cours.md`, `README.md`, `mesures.md` (+3) |
+| 17:31 | `8c3ba915` | B10.2bis + A8.3b — LES PAS NE SUFFISENT PAS (1800 PAS : 10,2–11,4) ; LA TOPOLOGIE ENTRE DANS LE TABLEAU | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+5) |
 
 ## Chiffres du jour
 
@@ -33,6 +34,8 @@
 - [reports/rapport-a80-porte-topologie.md](../../reports/rapport-a80-porte-topologie.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 - [reports/rapport-a83a-flux.md](../../reports/rapport-a83a-flux.md)
+- [reports/rapport-a83b-regimes.md](../../reports/rapport-a83b-regimes.md)
+- [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
 - [reports/rapport-r01-graphe-document.md](../../reports/rapport-r01-graphe-document.md)
 - [reports/rapport-r02-controleur.md](../../reports/rapport-r02-controleur.md)
 - [reports/rapport-r42-bloc-code.md](../../reports/rapport-r42-bloc-code.md)

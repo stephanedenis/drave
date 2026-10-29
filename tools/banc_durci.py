@@ -26,6 +26,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import corpus_gele  # noqa: E402
 import graphe_document  # noqa: E402
 import lecteur_controleur as lc  # noqa: E402
 
@@ -226,10 +227,12 @@ def construit() -> dict:
     par_chemin = {d["chemin"]: d for d in source["documents"]}
     documents: dict[str, dict] = {}
     for chemin, indice_source, question in ENTREES:
-        origine = par_chemin[chemin]
+        # la source (docs/…) est résolue vers sa copie gelée : c'est ELLE que le banc mesure
+        cle = str(corpus_gele.chemin_fige(chemin).relative_to(RACINE))
+        origine = par_chemin[cle]
         q = origine["questions"][indice_source]
         document = documents.setdefault(
-            chemin, {"chemin": chemin, "type": origine["type"], "questions": []})
+            cle, {"chemin": cle, "source": chemin, "type": origine["type"], "questions": []})
         document["questions"].append({
             "question": question, "indice": q["indice"], "valeur": q["valeur"],
             "source": q["question"],

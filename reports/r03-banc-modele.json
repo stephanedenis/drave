@@ -3,7 +3,7 @@
  "ligne": "R0.2",
  "graine": 20261029,
  "critere": "bm25",
- "questions": 249,
+ "questions": 248,
  "types": [
   "code",
   "juridique",
@@ -15,15 +15,15 @@
   "code": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.277,
-    "valeur": 0.204,
-    "cout": 1149.7
+    "f1": 0.275,
+    "valeur": 0.208,
+    "cout": 1156.0
    },
    "debut_0.30": {
-    "recuperation": 0.296,
-    "f1": 0.202,
-    "valeur": 0.056,
-    "cout": 3514.3
+    "recuperation": 0.321,
+    "f1": 0.206,
+    "valeur": 0.057,
+    "cout": 3549.1
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -75,15 +75,15 @@
   "tableau": {
    "controlee_0.30": {
     "recuperation": 1.0,
-    "f1": 0.273,
-    "valeur": 0.22,
-    "cout": 1527.9
+    "f1": 0.281,
+    "valeur": 0.203,
+    "cout": 1498.1
    },
    "debut_0.30": {
-    "recuperation": 0.237,
-    "f1": 0.191,
-    "valeur": 0.017,
-    "cout": 3359.2
+    "recuperation": 0.22,
+    "f1": 0.196,
+    "valeur": 0.051,
+    "cout": 3506.5
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -115,7 +115,7 @@
  },
  "details": [
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « activations » et « couche » ?",
    "or": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
@@ -142,7 +142,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « 4833 » et « dernier » ?",
    "or": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
@@ -169,7 +169,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « activation » et « amener » ?",
    "or": "Il est répartissable. Un bloc va là où son entrée est déjà, ou là où e",
@@ -196,7 +196,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « chemins » et « choisit » ?",
    "or": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
@@ -223,7 +223,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « gros » et « sature » ?",
    "or": "Ce n'est pas « plus gros = mieux » : la sonde sature dès 1,5 B ; la ta",
@@ -250,7 +250,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « renommage » et « âges » ?",
    "or": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
@@ -277,7 +277,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « pleine » et « promesses » ?",
    "or": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
@@ -304,7 +304,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « lectures » et « rapides » ?",
    "or": "Têtes précoces\t57,6 / 61,6 / 62,1 % vs 62,7 % ; témoin 0,39 %\tce sont ",
@@ -331,7 +331,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « demande » et « déjà » ?",
    "or": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
@@ -358,7 +358,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « comparer » et « agent » ?",
    "or": "12\tLecture croisée (comparer, citer)\tretrieval, provenance, agent\t❌ M4",
@@ -385,7 +385,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « généralise » et « longueur » ?",
    "or": "Bloque : 129 octets. Les tentatives 130/136/160/256 sont toutes négati",
@@ -412,7 +412,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « accélère » et « différence » ?",
    "or": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
@@ -439,7 +439,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « travail » et « épisodique » ?",
    "or": "5.4 La mémoire de travail et épisodique (L4)",
@@ -466,7 +466,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « échoue » et « contrôle » ?",
    "or": "Porte : une courbe vitesse-compréhension par type, avec un point « écr",
@@ -493,7 +493,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « chacun » et « dispositif » ?",
    "or": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
@@ -520,7 +520,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « cible » et « courir » ?",
    "or": "courir après 1 000 mots/minute : la revue scientifique dit que c'est u",
@@ -547,7 +547,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « dilue » et « donne » ?",
    "or": "La distillation par séquences, même avec 610 exemples et 31,63 M param",
@@ -574,7 +574,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « couche » et « dimension » ?",
    "or": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
@@ -601,7 +601,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « rien » et « texte » ?",
    "or": "plancher : chrF(surface L, surface L') — le même texte sans traduction",
@@ -628,7 +628,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « capacité » et « ensemble » ?",
    "or": "natif 31,63 M / 610 (B9)\tle point de départ : capacité et données se p",
@@ -655,7 +655,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « last » et « variantes » ?",
    "or": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
@@ -682,7 +682,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « batchée » et « boucle » ?",
    "or": "évaluation batchée : les 12 générations de validation partent en un se",
@@ -709,7 +709,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « base » et « champs » ?",
    "or": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
@@ -736,7 +736,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « exécuté » et « nvlink » ?",
    "or": "Le protocole a été exécuté sur 10 langues, deux GPU NVLink, route 31,6",
@@ -763,7 +763,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « ablations » et « confirment » ?",
    "or": "Les ablations confirment le diagnostic : z de 512 dims dégrade le rapp",
@@ -790,7 +790,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « choix » et « dira » ?",
    "or": "la taille de z : 128 est un choix de départ ; la courbe 32/64/128/256 ",
@@ -817,7 +817,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « arrondi » et « bool » ?",
    "or": "typée — le corps est un arbre de null, bool, int, str, listes et dicti",
@@ -844,7 +844,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « arrête » et « demi » ?",
    "or": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
@@ -871,7 +871,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « depuis » et « détectés » ?",
    "or": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
@@ -898,7 +898,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « domaine » et « gagnent » ?",
    "or": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
@@ -925,7 +925,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « ambiguës » et « couvre » ?",
    "or": "les langues : le lexique multilingue est fait de lemmes Wikidata, pas ",
@@ -952,7 +952,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « wikidata » et « multilingue » ?",
    "or": "tools/jeux/lexique_multilingue.py\tle lexique 71 langues (Wikidata) et ",
@@ -979,7 +979,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « contrôles » et « couverture » ?",
    "or": "tools/jeux/mesure_langues.py\tla couverture et les contrôles des 71 lan",
@@ -1006,7 +1006,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « conceptuelle » et « jackendoff » ?",
    "or": "2.2 Sémantique conceptuelle (Jackendoff)",
@@ -1033,7 +1033,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « text » et « meaning » ?",
    "or": "2.3 Théorie Sens-Texte (Meaning-Text Theory)",
@@ -1060,7 +1060,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « dependency » et « language » ?",
    "or": "Source : Mel'čuk, Dependency in Language (2014), PDF.",
@@ -1087,7 +1087,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « ingrédients » et « physique » ?",
    "or": "2.6 La physique comme source d'ingrédients",
@@ -1114,7 +1114,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « chrf » et « contre » ?",
    "or": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
@@ -1141,7 +1141,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « passage » et « surapprend » ?",
    "or": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
@@ -1168,7 +1168,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « paramètres » et « vocab » ?",
    "or": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
@@ -1195,7 +1195,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « entrée » et « local » ?",
    "or": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
@@ -1222,7 +1222,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « ajouté » et « entraîné » ?",
    "or": "sorties précoces\ttêtes après les blocs 2, 4, 6\tle réflexe est entraîné",
@@ -1249,7 +1249,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « corpus » et « exemples » ?",
    "or": "Données : 610 exemples est un banc, pas un corpus.",
@@ -1276,7 +1276,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « charge » et « conversion » ?",
    "or": "N0.2\tle moteur le charge-t-il ?\tdrave-core lit DRVM sans conversion",
@@ -1303,7 +1303,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « entraîneur » et « près » ?",
    "or": "N1.1\tl'entraîneur et le moteur sont-ils d'accord ?\tmême perplexité à 1",
@@ -1330,7 +1330,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « baseline » et « contractante » ?",
    "or": "N1.3\tla pensée est-elle contractante ?\tλ < 1 et contenu > baseline",
@@ -1357,7 +1357,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « chute » et « langues » ?",
    "or": "N2.2\tles langues tiennent-elles ?\tpas de chute > 5 pts sur 30 langues",
@@ -1384,7 +1384,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « exact » et « identique » ?",
    "or": "N3.2\tle rejeu est-il exact ?\ttrace identique, mêmes logits",
@@ -1411,7 +1411,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle valeur le document associe-t-il à « assistant » et « parle » ?",
    "or": "Trop petit : 12 M ne parle pas ; c'est un banc de mécanismes, pas un a",
@@ -1438,7 +1438,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « défaut » et « blocs » ?",
    "or": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
@@ -1465,7 +1465,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « indice » et « valeur » ?",
    "or": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
@@ -1492,7 +1492,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « taille » et « actifs » ?",
    "or": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
@@ -1519,7 +1519,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « jetons » et « dense » ?",
    "or": "trace dense, 512 jetons\t132 396 736 o\t66 370 408 o (−49,87 %)",
@@ -1546,7 +1546,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « jetons » et « dense » ?",
    "or": "trace dense, 512 jetons\t66 370 408 o\t45 079 930 o (−32,1 %)",
@@ -1573,7 +1573,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « erreur » et « nulle » ?",
    "or": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
@@ -1600,7 +1600,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « mauvaise » et « réécrivaient » ?",
    "or": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
@@ -1627,7 +1627,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « découpée » et « façon » ?",
    "or": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
@@ -1654,7 +1654,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « devinette » et « critère » ?",
    "or": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
@@ -1681,7 +1681,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « brut » et « confondre » ?",
    "or": "Le nœud moteur le déclare par un drapeau explicite (flux_brut) plutôt ",
@@ -1708,7 +1708,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « rendent » et « spécification » ?",
    "or": "La spécification du manifeste de graphe de document (R0.1) : ce qu'est",
@@ -1735,7 +1735,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « champ » et « représentation » ?",
    "or": "Il faut une représentation du document qui (a) survive au rejeu, (b) s",
@@ -1762,7 +1762,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « audit » et « citation » ?",
    "or": "la source\tla provenance dans le fichier d'origine : page (PDF), bloc (",
@@ -1789,7 +1789,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « attachée » et « change » ?",
    "or": "source.sha256\tla découpe est attachée au fichier exact : si la source ",
@@ -1816,7 +1816,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « concaténation » et « longueur » ?",
    "or": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
@@ -1843,7 +1843,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « encode » et « hash » ?",
    "or": "Hash — sha256(region.texte) se recalcule, et flux_bytes[start:end] est",
@@ -1870,7 +1870,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « couvert » et « doublon » ?",
    "or": "partition (§ 4.1–4.2)\tla découpe est interne : tout est couvert, rien ",
@@ -1897,7 +1897,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « ajoute » et « communs » ?",
    "or": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
@@ -1924,7 +1924,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « scannée » et « donc » ?",
    "or": "pas d'OCR : une page scannée n'a pas de texte, donc pas de graphe (R4.",
@@ -1951,7 +1951,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « contrat » et « fiche » ?",
    "or": "La fiche R01 — le contrat, la porte, les contrôles.",
@@ -1978,7 +1978,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « choisit » et « paie » ?",
    "or": "La spécification de R0.2 : ce qu'un contrôleur de lecture choisit, ce ",
@@ -2005,7 +2005,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « manifeste » et « entrée » ?",
    "or": "entrée\tun manifeste de graphe (R0.1), une question, un budget en octet",
@@ -2032,7 +2032,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « comparables » et « fraction » ?",
    "or": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
@@ -2059,7 +2059,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « arrête » et « jusqu » ?",
    "or": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
@@ -2086,7 +2086,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « dépense » et « réglage » ?",
    "or": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
@@ -2113,7 +2113,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « absence » et « calibrée » ?",
    "or": "il ne juge pas la confiance : la relecture se déclenche sur l'absence ",
@@ -2140,7 +2140,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « traverse » et « documents » ?",
    "or": "il ne traverse pas les documents : un document, une question (R51).",
@@ -2167,7 +2167,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « métriques » et « négatifs » ?",
    "or": "La spécification de R0.3 (et du banc pilote qui mesure R0.2) : le corp",
@@ -2194,7 +2194,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « paraphrases » et « pilote » ?",
    "or": "Les paraphrases sont un cas de R0.3 avec un modèle, pas du pilote.",
@@ -2221,7 +2221,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « celle » et « exige » ?",
    "or": "La porte exige, à 30 % du budget et par type : récupération ≥ 0,90, et",
@@ -2248,7 +2248,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « circulaire » et « partagent » ?",
    "or": "contrôleur et lecteur partagent BM25 : « le choix du lecteur est toujo",
@@ -2275,7 +2275,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « answerer » et « bornés » ?",
    "or": "Seul l'answerer change : il reçoit les passages sélectionnés, dans l'o",
@@ -2302,7 +2302,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « debut » et « fait » ?",
    "or": "debut_0.30\tla troncature naïve : les premiers passages du document — c",
@@ -2329,7 +2329,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « appel » et « coûte » ?",
    "or": "La génération coûte ~1,9 s par appel sur GPU (contre 8 à 15 s sur le C",
@@ -2356,7 +2356,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « difficulté » et « référence » ?",
    "or": "Le pilote (20 questions main) reste la référence de difficulté.",
@@ -2383,7 +2383,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « durci » et « sauts » ?",
    "or": "R0.3 « durci » (paraphrases, réponses à deux sauts) est la suite.",
@@ -2410,7 +2410,7 @@
    }
   },
   {
-   "document": "docs/implantation/banc-lecture.md",
+   "document": "tools/tests/documents/corpus/technique/banc-lecture.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « hérite » et « limite » ?",
    "or": "Ce n'est pas un choix de banc, c'est une limite du lecteur, et R5.2 (m",
@@ -2437,7 +2437,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « vérification » et « daté » ?",
    "or": "Document daté — dernière vérification : 2026-10-27.",
@@ -2464,7 +2464,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « relisent » et « entrées » ?",
    "or": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
@@ -2491,7 +2491,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « réversibilité » et « tokenisé » ?",
    "or": "Le corpus de 16 455 jetons (tokenisé avec le tokenizer du modèle, réve",
@@ -2518,7 +2518,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « int4 » et « valeurs » ?",
    "or": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
@@ -2545,7 +2545,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « accumulateur » et « applique » ?",
    "or": "Deux noyaux : le premier découpe les clés en nsplit tranches (sans quo",
@@ -2572,7 +2572,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « appel » et « appels » ?",
    "or": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
@@ -2599,7 +2599,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « qwen2 » et « notés » ?",
    "or": "Qwen2.5-0.5B, contexte 4 096, 4 095 jetons notés, --lot 512 :",
@@ -2626,7 +2626,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « attribue » et « conclut » ?",
    "or": "L'écart de +3,0 % contre +0,8 % à 8 192 ne vient pas des valeurs : le ",
@@ -2653,7 +2653,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « basculait » et « dégrade » ?",
    "or": "L'interpolation dégrade encore au-delà de 4 096 — d'un facteur 131 — a",
@@ -2680,7 +2680,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « arrêté » et « code » ?",
    "or": "Aiguille dans la botte de foin (tools/aiguille.py) : la perplexité ne ",
@@ -2707,7 +2707,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « dernière » et « vérification » ?",
    "or": "Document daté — dernière vérification : 2026-10-27.",
@@ -2734,7 +2734,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « différence » et « tenir » ?",
    "or": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
@@ -2761,7 +2761,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « dispersion » et « mode » ?",
    "or": "GPU, dispersion d'événements\t18,1 G év/s\tmode push",
@@ -2788,7 +2788,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « auto » et « forme » ?",
    "or": "bit à bit\tmême forme d'exécution, même résultat\t✅ obtenu (push/pull/au",
@@ -2815,7 +2815,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « requantification » et « aucune » ?",
    "or": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
@@ -2842,7 +2842,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « lieu » et « jeton » ?",
    "or": "Le 30B-A3B lit 1,8 G poids par jeton au lieu de 30 G.",
@@ -2869,7 +2869,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « aussi » et « chiffre » ?",
    "or": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
@@ -2896,7 +2896,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « résidents » et « aucune » ?",
    "or": "gpt-oss-120b charge et tourne : 62,2 Go résidents — la taille du fichi",
@@ -2923,7 +2923,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « silu » et « écrêtés » ?",
    "or": "2\t185\tactivation gpt-oss : g·σ(1,702·g)·(u+1), g et u écrêtés à ±7 — c",
@@ -2950,7 +2950,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle valeur le document associe-t-il à « hidden » et « topk » ?",
    "or": "[config] 36 couches, hidden 2880 · activation-oss routeur-topk moe",
@@ -2977,7 +2977,7 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « ancien » et « archivé » ?",
    "or": "Détail et histoire : l'ancien plan A/B est archivé dans roadmap-detail",
@@ -2985,14 +2985,14 @@
     "recupere": true,
     "f1": 0.24,
     "valeur": true,
-    "cout": 2578,
-    "reponse": "Le document associe les valeurs \"ancien\" et \"archivé\" à la date \"2026"
+    "cout": 2617,
+    "reponse": "Le document associe les valeurs \"ancien\" et \"archivé\" à la valeur \"2026"
    },
    "debut_0.30": {
     "recupere": true,
     "f1": 0.16,
     "valeur": false,
-    "cout": 5796,
+    "cout": 6293,
     "reponse": "Le document associe les valeurs suivantes à \"ancien\" et \"archivé\":\n\n- \"ancien\""
    },
    "closed_book": {
@@ -3004,22 +3004,22 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « attend » et « gist » ?",
    "or": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2353,
+    "f1": 0.375,
     "valeur": false,
-    "cout": 3614,
-    "reponse": "Le document associe-t-il à \"attend\" et \"gist\" selon les informations fournies :\n\n- \"attend\""
+    "cout": 3730,
+    "reponse": "Le document associe à \"attend\" la valeur \"mémoire épisodique\" et à \"gist\" la"
    },
    "debut_0.30": {
     "recupere": true,
     "f1": 0.25,
     "valeur": false,
-    "cout": 5796,
+    "cout": 6293,
     "reponse": "Le document associe les valeurs suivantes à \"attend\" et \"gist\":\n\n- \"attend\" : 0"
    },
    "closed_book": {
@@ -3031,23 +3031,23 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « typés » ?",
-   "or": "B11\tla base d'universaux typés : schéma, parseur, codec, contexte\t✅ / ",
+   "question": "Quelle valeur le document associe-t-il à « cerveau » et « langage » ?",
+   "or": "B12\tles modules cerveau-langage M1–M9\t⚠️ / ❌\tB12.10 close (négatif : o",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2727,
+    "f1": 0.1667,
     "valeur": false,
-    "cout": 2576,
-    "reponse": "Le document associe les valeurs \"ambiguïtés\" et \"typés\" à la valeur \"cartes"
+    "cout": 2606,
+    "reponse": "Le document associe les valeurs suivantes à \"cerveau\" et \"langage\":\n\n- \"cerveau"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.0909,
+    "f1": 0.1739,
     "valeur": false,
-    "cout": 5796,
-    "reponse": "Dans la contexte de la roadmap de Drave, il semble que les valeurs associées à \"ambiguït"
+    "cout": 6293,
+    "reponse": "L'élément associé à \"cerveau\" et \"langage\" dans la roadmap de Drave est"
    },
    "closed_book": {
     "recupere": false,
@@ -3058,23 +3058,23 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « contenu » et « gagne » ?",
-   "or": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+   "question": "Quelle valeur le document associe-t-il à « aggrave » et « celui » ?",
+   "or": "La mémoire manque. Le signal courant est lisible (R² 0,992), celui d'i",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2963,
+    "f1": 0.25,
     "valeur": false,
-    "cout": 2646,
-    "reponse": "Le document associe à \"contenu\" une valeur de 1,61 point et à \"gagne\""
+    "cout": 2706,
+    "reponse": "Le document associe à \"aggrave\" la valeur -2,773 et à \"celui\" la"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1429,
+    "f1": 0.08,
     "valeur": false,
-    "cout": 5796,
-    "reponse": "Le document associe les valeurs suivantes à \"contenu\" et \"gagne\":\n\n- Contenu : \"content"
+    "cout": 6293,
+    "reponse": "Dans la contexte de la roadmap de Drave, la valeur associée à \"aggrave\" est \"dépend"
    },
    "closed_book": {
     "recupere": false,
@@ -3085,23 +3085,23 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « contradiction » et « greffées » ?",
-   "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+   "question": "Quelle valeur le document associe-t-il à « bancs » et « choix » ?",
+   "or": "R0.5\trouteur extractif / génératif : choisir le lecteur selon la quest",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1379,
+    "f1": 0.1951,
     "valeur": false,
-    "cout": 2673,
-    "reponse": "Le document associe à \"contradiction\" une valeur de 1 et à \"greffées\" une valeur"
+    "cout": 2748,
+    "reponse": "Le document associe la valeur \"bancs\" à \"signal BM25\" et la valeur \"choix"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.05,
     "valeur": false,
-    "cout": 5796,
-    "reponse": "Dans la contexte de la roadmap de Drave, la valeur associée à \"contradiction\" et \"gre"
+    "cout": 6293,
+    "reponse": "Dans la contexte de la roadmap de Drave, il semble que les valeurs associées à \"bancs\""
    },
    "closed_book": {
     "recupere": false,
@@ -3112,23 +3112,23 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « faits » et « entités » ?",
-   "or": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'e",
+   "question": "Quelle valeur le document associe-t-il à « brut » et « premier » ?",
+   "or": "R1.1 doit être tenté avant R1.2 : si la hiérarchie suffit, le contexte",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.3333,
+    "f1": 0.3,
     "valeur": false,
-    "cout": 2815,
-    "reponse": "Le document associe les valeurs \"faits\" et \"entités\" à la section 2 après lecture de la"
+    "cout": 2591,
+    "reponse": "Le document associe le contexte \"brut\" à \"premier\" pour les deux points suivants :"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1333,
+    "f1": 0.2105,
     "valeur": false,
-    "cout": 5796,
-    "reponse": "Le document associe les valeurs suivantes à \"faits\" et \"entités\":\n\n- Faits : \"mes"
+    "cout": 6293,
+    "reponse": "Le document associe à \"brut\" la valeur \"mesuré et écrit\" et à \"premier"
    },
    "closed_book": {
     "recupere": false,
@@ -3139,23 +3139,23 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « bloque » et « contre » ?",
+   "question": "Quelle valeur le document associe-t-il à « bloque » et « sémantique » ?",
    "or": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4545,
+    "f1": 0.3636,
     "valeur": false,
-    "cout": 3436,
-    "reponse": "Le document associe à \"bloque\" la valeur 24/24 vus et à \"contre\""
+    "cout": 3375,
+    "reponse": "Le document associe le blocage \"bloque\" à la valeur 24/24 vus et le"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1905,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 5796,
-    "reponse": "Le document associe à \"bloque\" la valeur \"dépendance\" et à \"contre\" la valeur \""
+    "cout": 6293,
+    "reponse": "Le document associe à \"bloque\" la valeur \"dépendance\" et à \"sémantique\""
    },
    "closed_book": {
     "recupere": false,
@@ -3166,7 +3166,7 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « dessus » et « dépend » ?",
    "or": "R5.2\tlecture en traduction : décodeur au-dessus du plancher chrF, puis",
@@ -3174,14 +3174,14 @@
     "recupere": true,
     "f1": 0.16,
     "valeur": false,
-    "cout": 2656,
+    "cout": 2695,
     "reponse": "Le document associe la valeur \"dessus\" à \"span\" et la valeur \"dépend\" à \"par"
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.16,
     "valeur": false,
-    "cout": 5796,
+    "cout": 6293,
     "reponse": "Le document associe les valeurs suivantes à \"dessus\" et \"dépend\" :\n\n- \"dessus\""
    },
    "closed_book": {
@@ -3193,22 +3193,22 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « absent » et « nommé » ?",
    "or": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
    "controlee_0.30": {
     "recupere": true,
     "f1": 0.25,
-    "valeur": true,
-    "cout": 2582,
-    "reponse": "Le document associe les valeurs \"absent\" et \"nommé\" à \"B1.5\"."
+    "valeur": false,
+    "cout": 2669,
+    "reponse": "Le document associe à \"absent\" la valeur \"R4.4 bloqué\" et à \"nommé"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.16,
+    "f1": 0.125,
     "valeur": false,
-    "cout": 5796,
+    "cout": 6293,
     "reponse": "Le document associe à \"absent\" la valeur \"nommé\" et à \"nommé\" la valeur \""
    },
    "closed_book": {
@@ -3220,22 +3220,22 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « graines » et « raisonnement » ?",
    "or": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2222,
+    "f1": 0.2105,
     "valeur": false,
-    "cout": 3014,
-    "reponse": "Le document associe à \"graines\" la valeur de 3 et à \"raisonnement\" la valeur de"
+    "cout": 3082,
+    "reponse": "Le document associe les valeurs \"graines\" et \"raisonnement\" à la valeur \"32\"."
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.2105,
     "valeur": false,
-    "cout": 5796,
+    "cout": 6293,
     "reponse": "Le document associe les valeurs suivantes à \"graines\" et \"raisonnement\" :\n\n- Graines : \""
    },
    "closed_book": {
@@ -3247,104 +3247,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « heure » et « locale » ?",
-   "or": "Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).",
+   "or": "Mis à jour : 2026-10-29, 17 h 30 HAE (heure locale, EDT).",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2353,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 383,
-    "reponse": "Le document associe la valeur \"heure\" à \"heure locale\"."
+    "cout": 351,
+    "reponse": "Le document associe la valeur \"heure\" à \"heure locale\" et la valeur \"local\" à \"heure\"."
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.2353,
-    "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe la valeur \"heure locale\" à \"heure\"."
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/en-cours.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « analyse » et « tenir » ?",
-   "or": "Rôle : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambig",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2353,
-    "valeur": false,
-    "cout": 414,
-    "reponse": "Le document associe les valeurs suivantes à \"analyse\" et \"tenir\":\n\n- Analyse : \"R"
-   },
-   "debut_0.30": {
-    "recupere": true,
-    "f1": 0.2353,
-    "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"analyse\" et \"tenir\" :\n\n- Analyse :"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/en-cours.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
-   "or": "Prochaine action : B11.10 — cartes et ambiguïtés ; R0.3 est à 8156fdcb",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2667,
-    "valeur": false,
-    "cout": 524,
-    "reponse": "Le document associe les valeurs suivantes à \"ambiguïtés\" et \"cartes\" :\n\nAmbigu"
-   },
-   "debut_0.30": {
-    "recupere": true,
-    "f1": 0.2667,
-    "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"ambiguïtés\" et \"cartes\" :\n\nAmbigu"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/en-cours.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « 4ba4 » et « 5033 » ?",
-   "or": "Id : 8156fdcb-5033-4ba4-a5f3-f8a078e6e57e.",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.3077,
+    "f1": 0.4211,
     "valeur": true,
-    "cout": 1927,
-    "reponse": "L'ID 8156fdcb est associé à deux documents :\n\n1. Document 815"
-   },
-   "debut_0.30": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 1882,
-    "reponse": "Je suis désolé, mais je ne peux pas fournir de réponse à cette question car elle est incomplète"
+    "cout": 1960,
+    "reponse": "Le document associe les valeurs \"heure locale\" et \"heure\" à \"2026-10-"
    },
    "closed_book": {
     "recupere": false,
@@ -3355,23 +3274,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « appel » et « contre » ?",
-   "or": "Ce qu'elle fait : R0.3 — le modèle tourne sur GPU (llama-cli CUDA, 1,9",
+   "question": "Quelle valeur le document associe-t-il à « livré » et « pilote » ?",
+   "or": "Rôle : graphe du backlog (livré), R0.1–R0.3 mesurés ; R0.4 (pilote nég",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1481,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 494,
-    "reponse": "Le document associe les valeurs suivantes à \"appel\" et \"contre\":\n\n- \"appel\" :"
+    "cout": 401,
+    "reponse": "Le document associe les valeurs suivantes à \"livré\" et \"pilote\":\n\n- Livré :"
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.1481,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"appel\" et \"contre\":\n\n- \"Appel\" :"
+    "cout": 1960,
+    "reponse": "Le document associe les valeurs suivantes à \"livré\" et \"pilote\":\n\n- Livré :"
    },
    "closed_book": {
     "recupere": false,
@@ -3382,23 +3301,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « questions » et « action » ?",
-   "or": "Prochaine action : R0.3 — le banc complet (30 documents, 300 questions",
+   "question": "Quelle valeur le document associe-t-il à « modele » et « réservés » ?",
+   "or": "Fichiers réservés : tools/lecteur_modele.py, tools/routeur.py, reports",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.3333,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 809,
-    "reponse": "Le document associe la valeur \"questions\" à \"prochaine action\" et la valeur \"action\" à \""
+    "cout": 552,
+    "reponse": "Le document associe les valeurs suivantes à \"modele\" et \"réservés\":\n\n- \"modele\" : \""
    },
    "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2222,
+    "recupere": true,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"questions\" et \"action\" :\n\nQuestions :\n- \"N0."
+    "cout": 1960,
+    "reponse": "Le document associe les valeurs suivantes à \"modele\" et \"réservés\":\n\n- \"modele\" : \""
    },
    "closed_book": {
     "recupere": false,
@@ -3409,23 +3328,104 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « contextes » et « négatifs » ?",
+   "question": "Quelle valeur le document associe-t-il à « 4ccf641f » et « 7fb1c8a6 » ?",
+   "or": "Rôle : R4.1–R4.3, B10.2bis et A8.3b mesurées (7fb1c8a6, 4ccf641f, ce c",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3529,
+    "valeur": true,
+    "cout": 373,
+    "reponse": "Le document associe à \"4ccf641f\" la valeur \"R4, B10."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2667,
+    "valeur": true,
+    "cout": 1960,
+    "reponse": "Le document associe à \"4ccf641f\" et \"7fb1c8a6\""
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « capacité » et « mode » ?",
+   "or": "Prochaine action : B10.2bis suite (capacité/corpus) ; A8.3b (mode de l",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4762,
+    "valeur": false,
+    "cout": 575,
+    "reponse": "Le document associe la valeur \"capacité\" à \"A8.3b (mode de lot)\" et"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2105,
+    "valeur": false,
+    "cout": 1960,
+    "reponse": "Le document associe à \"capacité\" la valeur \"0,984\" et à \"mode\""
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « contextes » et « occupé » ?",
    "or": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4211,
+    "f1": 0.3158,
     "valeur": false,
+    "cout": 393,
+    "reponse": "Le document associe la valeur \"contextes\" à \"GPU occupé\" et la valeur \"occupé\" à"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 1960,
+    "reponse": "Le document associe les termes \"contextes\" et \"occupés\" à des informations sur les sessions et les"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « aide » et « b102bis » ?",
+   "or": "B10.2bis — le décodeur : négative — 3 bras × 3 graines : 11,1/11,2/11,",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3,
+    "valeur": true,
     "cout": 425,
-    "reponse": "Le document associe la valeur \"contextes\" à \"GPU occupé\" et la valeur \"négatifs"
+    "reponse": "Le document associe \"aide\" à \"négative\" et \"b102bis\" à \""
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2222,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"contextes\" et \"négatifs\":\n\nContextes:\n-"
+    "cout": 1960,
+    "reponse": "En tant qu'assistant Alibaba Cloud, je n'ai pas accès à des informations spécifiques sur les documents ou"
    },
    "closed_book": {
     "recupere": false,
@@ -3436,23 +3436,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « intégration » et « retiré » ?",
-   "or": "B12.10 — intégration : close négative ; oracle = M8 (0,436), M4 seul =",
+   "question": "Quelle valeur le document associe-t-il à « arêtes » et « dures » ?",
+   "or": "Backlog — graphe : 41 arêtes dures, 4 sans fiche ; tools/verifie_backl",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2105,
     "valeur": false,
-    "cout": 443,
-    "reponse": "Le document associe les valeurs suivantes à « intégration » et « retiré » :\n\n- « intégr"
+    "cout": 470,
+    "reponse": "Le document associe la valeur \"arêtes dures\" à \"35\" et la valeur \"dures\""
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1818,
+    "f1": 0.2222,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"intégration\" et \"retiré\":\n\n- \"intégration\""
+    "cout": 1960,
+    "reponse": "Le document associe à \"arêtes\" et \"dures\" les valeurs suivantes :\n\n- Arêtes :"
    },
    "closed_book": {
     "recupere": false,
@@ -3463,23 +3463,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « fichiers » et « json » ?",
-   "or": "fichiers / JSON de résultats\t277 / 343\treports/*.md / reports/*.json",
+   "question": "Quelle valeur le document associe-t-il à « archive » et « documents » ?",
+   "or": "documents de docs/\t104 (hors archive et README)\tdocs/**/*.md",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2222,
+    "f1": 0.5,
     "valeur": false,
-    "cout": 702,
-    "reponse": "Le document associe la valeur \"fichiers\" à \"JSON\" dans le contexte que vous avez fourni"
+    "cout": 353,
+    "reponse": "Le document associe la valeur \"archive\" à \"docs\" et la valeur \"documents\" à \"docs/\"."
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.2667,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les termes \"fichiers\" et \"json\" à la valeur \"0\"."
+    "cout": 1960,
+    "reponse": "Le document associe les termes \"archive\" et \"documents\" à \"R0.1–R0."
    },
    "closed_book": {
     "recupere": false,
@@ -3490,23 +3490,23 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « arrêtées » et « priorités » ?",
-   "or": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+   "question": "Quelle valeur le document associe-t-il à « lignes » et « vérifier » ?",
+   "or": "Backlog — graphe\t35 fiches ; 42 arêtes dures\t3 lignes sans fiche\tvérif",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.3,
     "valeur": false,
-    "cout": 447,
-    "reponse": "Le document associe les valeurs suivantes à \"arrêtées\" et \"priorités\":\n\n- \"arrêtées"
+    "cout": 391,
+    "reponse": "Le document associe la valeur \"lignes\" à \"42\" et la valeur \"vérifier\""
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1818,
+    "f1": 0.1053,
     "valeur": false,
-    "cout": 1882,
-    "reponse": "Le document associe les valeurs suivantes à \"arrêtées\" et \"priorités\":\n\n- \"Arrêtées"
+    "cout": 1960,
+    "reponse": "Le document associe les lignes à \"l'histoire\" et les vérifications à \"la garantie\". C"
    },
    "closed_book": {
     "recupere": false,
@@ -3517,7 +3517,7 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « ouvertes » et « dures » ?",
    "or": "29 fiches, 8 lignes ouvertes sans fiche, 41 arêtes dures, 3 plafonds.",
@@ -3532,7 +3532,7 @@
     "recupere": true,
     "f1": 0.3529,
     "valeur": false,
-    "cout": 4114,
+    "cout": 4206,
     "reponse": "Le document associe les valeurs \"ouvertes\" et \"dures\" à \"8 lignes ouvertes"
    },
    "closed_book": {
@@ -3544,23 +3544,23 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « carte » et « fpga » ?",
-   "or": "A5.4\tbloquée\tA5 (acquis)\tbloqué : la carte Stratix V\t—\tA5.4-fpga.md",
+   "question": "Quelle valeur le document associe-t-il à « seuil » et « mesurée » ?",
+   "or": "A3.3\tmesurée\tA3.2 (dure)\t—\t—\tA3.3-seuil.md",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4706,
-    "valeur": false,
-    "cout": 1283,
-    "reponse": "Le document associe la valeur \"carte Stratix V\" à \"fpga.md\"."
+    "f1": 0.4615,
+    "valeur": true,
+    "cout": 2171,
+    "reponse": "Le document associe la valeur \"A3.3\" à \"seuil\" et \"A3.2\""
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.2353,
+    "f1": 0.4286,
     "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs suivantes à \"carte\" et \"fpga\":\n\n- Carte : \"R"
+    "cout": 4206,
+    "reponse": "Le document associe le terme \"seuil\" à \"dure\" et le terme \"mesurée\" à"
    },
    "closed_book": {
     "recupere": false,
@@ -3571,23 +3571,23 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « parite » et « prête » ?",
-   "or": "N0.3b\tprête\tN0 (acquis)\t—\t—\tN0.3b-parite-ppl.md",
+   "question": "Quelle valeur le document associe-t-il à « franchit » et « plancher » ?",
+   "or": "B10.2bis\tmesurée (négative)\t—\tl'attention ne franchit pas le plancher ",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4444,
-    "valeur": true,
-    "cout": 1836,
-    "reponse": "Le document associe la valeur \"parite-ppl\" à \"N0.3b\" et la valeur \""
+    "f1": 0.1739,
+    "valeur": false,
+    "cout": 1342,
+    "reponse": "Le document associe une valeur de \"négative\" à \"franchit\" et une valeur de \"positive"
    },
    "debut_0.30": {
     "recupere": true,
-    "f1": 0.2353,
+    "f1": 0.1739,
     "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs \"parite\" et \"prête\" à \"fait\" et \"douce\"."
+    "cout": 4206,
+    "reponse": "Le document associe à \"franchit\" la valeur \"fait\" et à \"plancher\" la valeur \""
    },
    "closed_book": {
     "recupere": false,
@@ -3598,23 +3598,131 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « relecture » et « tete » ?",
-   "or": "R06\tspécifiée\tR03 (dure), R21 (dure), R22 (dure)\t—\t—\tR06-tete-relectur",
+   "question": "Quelle valeur le document associe-t-il à « controleur » et « lecture » ?",
+   "or": "R02\tmesurée\tR01 (dure)\t—\tR03\tR02-controleur-lecture.md",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4,
+    "f1": 0.3529,
+    "valeur": false,
+    "cout": 1919,
+    "reponse": "Le document associe la valeur \"controleur-lecture.md\" à \"controleur\" et la valeur \""
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2353,
+    "valeur": false,
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs \"controleur\" et \"lecture\" à \"fait\". Cela signifie que"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « tokenisation » et « plafond » ?",
+   "or": "R13\tspécifiée\t—\tN2 (plafond)\t—\tR13-tokenisation-bpe.md",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.625,
     "valeur": true,
-    "cout": 1462,
-    "reponse": "Le document associe la valeur \"R06\" à \"relecture\" et à \"tete-relecture.md"
+    "cout": 1793,
+    "reponse": "Le document associe la valeur \"tokenisation-bpe.md\" à \"plafond\" et \"R13"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2667,
+    "valeur": false,
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs suivantes à \"tokenisation\" et \"plafond\":\n\n- Tokenisation :"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « code » et « bloc » ?",
+   "or": "R42\tspécifiée\tR01 (dure)\t—\tR44\tR42-bloc-code.md",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3529,
+    "valeur": false,
+    "cout": 1588,
+    "reponse": "Le document associe la valeur \"code\" à \"dure\" et la valeur \"bloc\" à \"block"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2667,
+    "valeur": false,
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs \"code\" et \"bloc\" à \"fait\"."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « avait » et « exige » ?",
+   "or": "Une condition sans identifiant. A8.3 (« opt-in → défaut ») exige d'« é",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 1396,
+    "reponse": "Le document associe une valeur de \"avait\" à \"opt-in → défaut\" et une valeur de \""
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs \"avait\" et \"exige\" à \"N5\" et \"mémoire"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « ablation » et « codes » ?",
+   "or": "B12.10\tpartiel\tB12 acquis ; les modules existent\tjeu de codes neufs et",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3158,
+    "valeur": false,
+    "cout": 1297,
+    "reponse": "Le document associe la valeur \"ablation\" à \"codes\" et la valeur \"M4\" à \"N"
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.2105,
     "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs suivantes à \"relecture\" et \"tete\":\n\n- \"relecture\" :"
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs suivantes à \"ablation\" et \"codes\":\n\n- \"ablation\" :"
    },
    "closed_book": {
     "recupere": false,
@@ -3625,158 +3733,23 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « restitution » et « plafond » ?",
-   "or": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+   "question": "Quelle valeur le document associe-t-il à « attendent » et « bloqués » ?",
+   "or": "Ce qui n'y est pas, et pourquoi : A3.4, A5.4, A6.2, B1.5 sont bloqués ",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2308,
-    "valeur": false,
-    "cout": 1938,
-    "reponse": "Le document associe la valeur \"restitution-sft.md\" à \"restitution\" et la valeur \"plaf"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.1667,
-    "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs \"restitution\" et \"plafond\" à \"fait\" et \"douce"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « croisee » et « exécutable » ?",
-   "or": "R51\tspécifiée\tR31 (dure), R32 (dure), R03 (dure), R01 (dure)\tle manque",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2308,
-    "valeur": false,
-    "cout": 1448,
-    "reponse": "Le document associe la valeur \"R31\" à \"croisee\" et la valeur \"R32"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.16,
-    "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs \"croisee\" et \"exécutable\" à \"douce\" et"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « book » et « closed » ?",
-   "or": "Une même mesure sous deux noms. R02 disait dépendre de R03, et R03 de ",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.087,
-    "valeur": false,
-    "cout": 1583,
-    "reponse": "Le document associe la valeur \"closed\" à \"book\" et \"closed\" à \"closed\"."
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.0851,
-    "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs suivantes à \"book\" et \"closed\":\n\n- \"book\" : 8 lign"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « budget » et « chiffrer » ?",
-   "or": "R13\tspécifiée\taucune arête dure ; N1 suffit à deux tokenisations\tchiff",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.4348,
-    "valeur": false,
-    "cout": 1323,
-    "reponse": "Le document associe une valeur de \"budget\" à \"chiffrer octets contre BPE\"."
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.1739,
-    "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe les valeurs suivantes à \"budget\" et \"chiffrer\":\n\nBudget : 10"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « intérêt » et « mêmes » ?",
-   "or": "Ce qui n'ouvre rien attend. R43 (maths), R44 (OCR) et R52 (multilingue",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.1905,
-    "valeur": false,
-    "cout": 1381,
-    "reponse": "Le document associe une valeur de 1 à 5 à \"intérêt\" et \"mêmes\"."
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.1739,
-    "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe le terme \"intérêt\" à \"douce\" et le terme \"mêmes\""
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « arrive » et « compréhension » ?",
-   "or": "R03 venant en dernier, la première courbe vitesse-compréhension arrive",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2857,
+    "f1": 0.2963,
     "valeur": true,
-    "cout": 1357,
-    "reponse": "Le document associe à \"arrive\" et \"compréhension\" une valeur de \"R03\"."
+    "cout": 1500,
+    "reponse": "Le document associe à \"attendent\" A3.4, A5.4, A6.2,"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1818,
+    "f1": 0.1429,
     "valeur": false,
-    "cout": 4114,
-    "reponse": "Le document associe à \"arrive\" la valeur \"fait\" et à \"compréhension\" la valeur"
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs suivantes à \"attendent\" et \"bloqués\" :\n\n- \"attendent"
    },
    "closed_book": {
     "recupere": false,
@@ -3787,7 +3760,34 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « avant » et « donc » ?",
+   "or": "R31 attend R21, donc la restitution ne se mesure pas avant la mémoire.",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 1934,
+    "reponse": "Le document associe une valeur de \"précaution\" à \"avant\" et une valeur de \"dépend"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 4206,
+    "reponse": "Le document associe les valeurs suivantes à \"avant\" et \"donc\":\n\nAvant : \"N5"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « dependances » et « fiches » ?",
    "or": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
@@ -3802,7 +3802,7 @@
     "recupere": true,
     "f1": 0.3333,
     "valeur": false,
-    "cout": 1653,
+    "cout": 1723,
     "reponse": "Le document associe les valeurs suivantes à \"dependances\" et \"fiches\":\n\ndependances.md\n-"
    },
    "closed_book": {
@@ -3814,23 +3814,23 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « contrôleur » et « mesurée » ?",
-   "or": "R02\tContrôleur de lecture\tmesurée\tP0\tR01\tR0.2",
+   "question": "Quelle valeur le document associe-t-il à « banc » et « rapide » ?",
+   "or": "R03\tBanc de lecture rapide\tmesurée\tP0\tR01, R02\tR0.3",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.3333,
+    "f1": 0.375,
     "valeur": false,
-    "cout": 919,
-    "reponse": "Le document associe le terme \"contrôleur\" à \"mesurée\"."
+    "cout": 901,
+    "reponse": "Le document associe le terme \"banc\" à \"mesurée\" et le terme \"rapide\" à"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2857,
+    "f1": 0.125,
     "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe une valeur à \"contrôleur\" et \"mesurée\" en fonction de la structure de"
+    "cout": 1723,
+    "reponse": "Le document associe la valeur \"banc\" à \"banc\" et la valeur \"rapprochée\""
    },
    "closed_book": {
     "recupere": false,
@@ -3841,23 +3841,23 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « balayage » et « tête » ?",
-   "or": "R05\tTête de balayage\tspécifiée\tP1\tR03, R01\tR0.4",
+   "question": "Quelle valeur le document associe-t-il à « relecture » et « tête » ?",
+   "or": "R06\tTête de relecture\tspécifiée\tP2\tR03, R21, R22\tR0.4",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2667,
+    "f1": 0.25,
     "valeur": false,
-    "cout": 788,
-    "reponse": "Le document associe le terme \"balayage\" à \"Tête de balayage\" et le terme \""
+    "cout": 851,
+    "reponse": "Le document associe le terme \"relecture\" à la fiche \"R03\" et le terme \"t"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2667,
+    "f1": 0.25,
     "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe les valeurs suivantes à \"balayage\" et \"tête\":\n\nBalayage:\n-"
+    "cout": 1723,
+    "reponse": "Le document associe les valeurs suivantes à \"relecture\" et \"tête\":\n\n\"relecture\" :"
    },
    "closed_book": {
     "recupere": false,
@@ -3868,7 +3868,7 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « curriculum » et « contexte » ?",
    "or": "R12\tCurriculum de contexte long\tspécifiée\tP1\tR11\tR1.2",
@@ -3883,7 +3883,7 @@
     "recupere": false,
     "f1": 0.2667,
     "valeur": false,
-    "cout": 1653,
+    "cout": 1723,
     "reponse": "Le document associe les valeurs suivantes à \"curriculum\" et \"contexte\":\n\n- \"curriculum\" :"
    },
    "closed_book": {
@@ -3895,23 +3895,50 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « travail » et « gist » ?",
-   "or": "R21\tMémoire de travail et gist\tspécifiée\tP1\tR01, R11\tR2.1",
+   "question": "Quelle valeur le document associe-t-il à « épisodique » et « mémoire » ?",
+   "or": "R22\tMémoire épisodique et relecture\tspécifiée\tP2\tR01, R21\tR2.2",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.375,
-    "valeur": true,
-    "cout": 694,
-    "reponse": "Le document associe les termes \"travail\" et \"gist\" à la fiche \"R21\"."
+    "f1": 0.2667,
+    "valeur": false,
+    "cout": 760,
+    "reponse": "Le document associe-t-il à \"épisodique\" et \"mémoire\" en fonction de la famille"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.125,
+    "valeur": false,
+    "cout": 1723,
+    "reponse": "Le document associe une valeur à \"episodique\" et \"mémoire\" en fonction de la structure de"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/index.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « encodeur » et « visuel » ?",
+   "or": "R44\tEncodeur visuel / OCR\tspécifiée\tP3\tR41, R42, R43\tR4.4",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": false,
+    "cout": 693,
+    "reponse": "Le document associe le terme \"encodeur\" à \"OCR\" et le terme \"visuel\" à \"OCR"
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.1176,
     "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe les valeurs suivantes à \"work\" et \"gist\":\n\n- \"work\" : \"work\""
+    "cout": 1723,
+    "reponse": "Le document associe la valeur \"encodeur\" à \"visual\" pour les fonctionnalités \"index\" dans le"
    },
    "closed_book": {
     "recupere": false,
@@ -3922,61 +3949,7 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « citations » et « provenance » ?",
-   "or": "R32\tCitations et provenance\tspécifiée\tP2\tR31, R01, R21\tR3.2",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.25,
-    "valeur": false,
-    "cout": 695,
-    "reponse": "Le document associe les termes \"citations\" et \"provenance\" à la famille 12 du"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2353,
-    "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe une valeur à \"citations\" et à \"provenance\". Cela signifie que chaque"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/index.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « croisée » et « multi » ?",
-   "or": "R51\tLecture croisée / multi-documents\tspécifiée\tP3\tR31, R32, R03, R01\t",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2105,
-    "valeur": false,
-    "cout": 711,
-    "reponse": "Le document associe-t-il à \"croisée\" et \"multi\" les valeurs suivantes :\n\n- Croisée :"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2105,
-    "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe une valeur à \"croisée\" et \"multi\" pour les fonctionnalités suivantes :\n\n-"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « gguf » et « parité » ?",
    "or": "N0.3b\tParité de perplexité DRVM ↔ GGUF\tmesurée\tP1\tN0\tN0.3b",
@@ -3991,7 +3964,7 @@
     "recupere": false,
     "f1": 0.2222,
     "valeur": false,
-    "cout": 1653,
+    "cout": 1723,
     "reponse": "Le document associe les valeurs suivantes à \"gguf\" et \"parité\":\n\n\"gguf\" = \""
    },
    "closed_book": {
@@ -4003,23 +3976,77 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « complet » et « fpga » ?",
-   "or": "A5.4\tOpérateur FPGA complet\tbloquée\tP3\tA5\tA5.4",
+   "question": "Quelle valeur le document associe-t-il à « colab » et « démonstration » ?",
+   "or": "A3.4\tDémonstration Colab\tbloquée\tP3\tA3\tA3.4",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.2667,
+    "f1": 0.4286,
+    "valeur": false,
+    "cout": 679,
+    "reponse": "Le document associe le terme \"colab\" à \"bloquée\" et le terme \"démonstration\""
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2857,
+    "valeur": false,
+    "cout": 1723,
+    "reponse": "Le document associe les valeurs suivantes à \"colab\" et \"démonstration\":\n\n- Colab :"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/index.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « corpus » et « humain » ?",
+   "or": "B1.5\tProse scientifique (corpus humain)\tbloquée\tP3\tB1\tB1.5",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 693,
+    "reponse": "Le document associe-t-il à \"corpus\" et \"humain\" en fonction de la famille 12"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 1723,
+    "reponse": "Le document associe une valeur à \"corpus\" et \"humain\" en fonction de la structure et de la"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/tableau/index.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « rentabilité » et « seuil » ?",
+   "or": "A3.3\tSeuil de rentabilité\tmesurée\tP2\tA3.2\tA3.3",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
     "valeur": false,
     "cout": 682,
-    "reponse": "Le document associe-t-il à \"complet\" et \"fpga\" en fonction de la famille 12"
+    "reponse": "Le document associe à \"rentabilité\" et \"seuil\" les valeurs suivantes :\n\n- \"rentabilité\""
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.25,
+    "f1": 0.2667,
     "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe une valeur de \"complet\" à \"fpga\" pour les fonctionnalités de lecture rapide"
+    "cout": 1723,
+    "reponse": "Le document associe une valeur à \"rentabilité\" et \"seuil\" en fonction de la structure de données et"
    },
    "closed_book": {
     "recupere": false,
@@ -4030,34 +4057,7 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
-   "or": "B11.10\tCartes et ambiguïtés de la RSN\tprête\tP2\tB11\tB11.10",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.25,
-    "valeur": false,
-    "cout": 694,
-    "reponse": "Le document associe à \"ambiguïtés\" la valeur \"cartes\" et à \"comptes"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2353,
-    "valeur": false,
-    "cout": 1653,
-    "reponse": "Le document associe les valeurs suivantes à \"ambiguïtés\" et \"cartes\":\n\nAmbiguï"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « autant » et « existe » ?",
    "or": "Et un manque de méthode, qui compte autant : la lecture disque en mmap",
@@ -4084,7 +4084,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « comblé » et « fiches » ?",
    "or": "Mesuré, et son premier pas comblé le 12/10 — fiches reports/rapport-pr",
@@ -4111,7 +4111,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « array » et « dessus » ?",
    "or": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
@@ -4138,7 +4138,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « change » et « entière » ?",
    "or": "Ce qui paie n'est pas madvise — sur une plage entière il rend ×1,06, e",
@@ -4165,7 +4165,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « avance » et « dépasse » ?",
    "or": "C'est le seul bras qui gagne et sur les octets et sur le temps : la le",
@@ -4192,7 +4192,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « allocation » et « copie » ?",
    "or": "Ce qui reste ouvert est nommé : le pool et le recouvrement (une copie ",
@@ -4219,7 +4219,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « 00e0 » et « bouge » ?",
    "or": "Le découpage à deux nœuds est exact : 0,00e0 (modes 0, 1, 3), et la pe",
@@ -4246,7 +4246,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « affirmait » et « alors » ?",
    "or": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
@@ -4273,7 +4273,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « aiguilles » et « jusqu » ?",
    "or": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
@@ -4300,7 +4300,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « complète » et « dernière » ?",
    "or": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
@@ -4315,7 +4315,7 @@
     "recupere": true,
     "f1": 0.2,
     "valeur": true,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe à \"completes\" la valeur 49 et à \"la dernière\" la valeur"
    },
    "closed_book": {
@@ -4327,7 +4327,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « finale » et « restent » ?",
    "or": "Passe précédente — 2026-10-27 à 14 h 33 (49 portes, 47 vertes, 2 rouge",
@@ -4342,7 +4342,7 @@
     "recupere": true,
     "f1": 0.2051,
     "valeur": false,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe les valeurs \"finale\" et \"restent\" à \"49 portes\"."
    },
    "closed_book": {
@@ -4354,7 +4354,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « antérieures » et « conservées » ?",
    "or": "Historique des passes : les passes antérieures au 26/10 14 h 30, dont ",
@@ -4369,7 +4369,7 @@
     "recupere": true,
     "f1": 0.1538,
     "valeur": false,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe les valeurs suivantes à \"antérieures\" et \"conservées\":\n\n- \"antérie"
    },
    "closed_book": {
@@ -4381,7 +4381,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « doit » et « dépôt » ?",
    "or": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
@@ -4396,7 +4396,7 @@
     "recupere": false,
     "f1": 0.1111,
     "valeur": false,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe les valeurs suivantes à \"doit\" et \"dépôt\":\n\n\"doit\" :"
    },
    "closed_book": {
@@ -4408,7 +4408,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « canal » et « diffusé » ?",
    "or": "porte-bus.sh\t75 s\t✅ le canal diffusé par fichier change la région du m",
@@ -4423,7 +4423,7 @@
     "recupere": false,
     "f1": 0.2353,
     "valeur": false,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe les valeurs suivantes à \"canal\" et \"diffusé\":\n\n- \"canal\""
    },
    "closed_book": {
@@ -4435,7 +4435,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Quelle valeur le document associe-t-il à « conditions » et « consécutifs » ?",
    "or": "porte-episodique.sh\t166 s\t✅ la porte C6 est franchie — et elle dit ses",
@@ -4450,7 +4450,7 @@
     "recupere": false,
     "f1": 0.2105,
     "valeur": false,
-    "cout": 3481,
+    "cout": 3613,
     "reponse": "Le document associe les valeurs suivantes à \"conditions\" et \"consécutifs\":\n\nConditions:\n- 4"
    },
    "closed_book": {
@@ -4462,23 +4462,23 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « installer » et « intact » ?",
-   "or": "porte-harnais-invariants.sh\t105 s\t✅ porte harnais : installer une repa",
+   "question": "Quelle valeur le document associe-t-il à « injection » et « branchée » ?",
+   "or": "porte-greffe.sh\t829 s\t✅ la porte est franchie. Ce qu'elle établit : l'",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.3,
+    "f1": 0.2667,
     "valeur": false,
-    "cout": 2284,
-    "reponse": "Le document associe les valeurs \"installer\" et \"intact\" à \"le modèle intact\"."
+    "cout": 2568,
+    "reponse": "Le document associe \"injection\" à \"BRANCHÉE\"."
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2105,
+    "f1": 0.2222,
     "valeur": false,
-    "cout": 3481,
-    "reponse": "Le document associe à \"installer\" la valeur 1 et à \"intact\" la valeur 0."
+    "cout": 3613,
+    "reponse": "Le document associe à \"injection\" et \"branchée\" les valeurs suivantes :\n\n- \"injection\""
    },
    "closed_book": {
     "recupere": false,
@@ -4489,23 +4489,23 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « arbitrent » et « entrées » ?",
-   "or": "porte-melange.sh\t805 s\t✅ la porte est franchie. Ce qu'elle dit : deux ",
+   "question": "Quelle valeur le document associe-t-il à « crée » et « jumeaux » ?",
+   "or": "porte-jumeaux.sh\t77 s\tPORTE TENUE : l'échange est exact, il ne crée pa",
    "controlee_0.30": {
     "recupere": true,
     "f1": 0.2222,
     "valeur": false,
-    "cout": 2263,
-    "reponse": "Le document associe \"arbitrent\" à \"entrées\" et \"entrées\" à \"portes\"."
+    "cout": 881,
+    "reponse": "Le document associe la valeur \"crée\" à \"jumeaux\"."
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2105,
+    "f1": 0.2,
     "valeur": false,
-    "cout": 3481,
-    "reponse": "Le document associe à \"arbitrent\" la valeur \"49\" et à \"entrées\" la valeur"
+    "cout": 3613,
+    "reponse": "Le document associe à \"crée\" et \"jumeaux\" les valeurs suivantes :\n\n- \"Crée"
    },
    "closed_book": {
     "recupere": false,
@@ -4516,50 +4516,23 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « divisées » et « noyau » ?",
-   "or": "porte-poids-creux.sh\t354 s\t✅ porte poids creux : le noyau creux est EX",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.4348,
-    "valeur": false,
-    "cout": 2282,
-    "reponse": "Le document associe les valeurs \"divisées\" et \"noyau\" à \"porte poids creux\"."
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2727,
-    "valeur": false,
-    "cout": 3481,
-    "reponse": "Le document associe les valeurs \"divisées\" et \"noyau\" à \"porte-document\"."
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/references-non-regression.md",
-   "type": "tableau",
-   "question": "Quelle valeur le document associe-t-il à « calculé » et « nommant » ?",
-   "or": "porte-registre.sh\t14 s\t✅ région absente : refusée en la nommant (code ",
+   "question": "Quelle valeur le document associe-t-il à « absent » et « annoncé » ?",
+   "or": "porte-pannes.sh\t45 s\t✅ pair absent : échec annoncé en 2 s (code 7), au",
    "controlee_0.30": {
     "recupere": true,
     "f1": 0.4706,
     "valeur": false,
-    "cout": 2255,
-    "reponse": "Le document associe \"calculé\" à \"refusée en la nommant (code 2)\" et \""
+    "cout": 2248,
+    "reponse": "Le document associe à \"absent\" \"échec annoncé en 2 s (code 7)\""
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2222,
+    "f1": 0.2667,
     "valeur": false,
-    "cout": 3481,
-    "reponse": "Le document associe les valeurs \"calculé\" et \"nommant\" à \"2026-10"
+    "cout": 3613,
+    "reponse": "Le document associe à \"absent\" 0 et à \"annoncé\" 1."
    },
    "closed_book": {
     "recupere": false,
@@ -4570,7 +4543,34 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
+   "type": "tableau",
+   "question": "Quelle valeur le document associe-t-il à « classe » et « contient » ?",
+   "or": "porte-reflexe.sh\t106 s\t✅ l'état de 16 couches CONTIENT le prochain jet",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 2278,
+    "reponse": "Le document associe les valeurs suivantes à \"class\" et \"contient\":\n\n- \"class\" : \"1"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 3613,
+    "reponse": "Le document associe à \"class\" et \"contient\" les valeurs suivantes :\n\n- \"class\" :"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « main » et « reference » ?",
    "or": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
@@ -4597,7 +4597,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « between » et « section » ?",
    "or": "section 11 of the Agreement between the United Nations and the United ",
@@ -4624,7 +4624,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2025 » et « counsel » ?",
    "or": "of 12 September 2025, and the statements made therein, including the p",
@@ -4651,7 +4651,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « commission » et « grande » ?",
    "or": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
@@ -4678,7 +4678,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « entre » et « section » ?",
    "or": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
@@ -4705,7 +4705,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2025 » et « conseillère » ?",
    "or": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
@@ -4732,7 +4732,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « comisión » et « previa » ?",
    "or": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
@@ -4759,7 +4759,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « entre » et « quienes » ?",
    "or": "sesiones de la Asamblea General a los representantes a quienes se hace",
@@ -4786,7 +4786,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2025 » et « anfitrión » ?",
    "or": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
@@ -4813,7 +4813,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « conferences » et « coordinated » ?",
    "or": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
@@ -4840,7 +4840,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « main » et « reference » ?",
    "or": "[without reference to a Main Committee (A/80/L.11)]",
@@ -4867,7 +4867,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « chap » et « conf » ?",
    "or": "See A/CONF.189/12 and A/CONF.189/12/Corr.1, chap.",
@@ -4894,7 +4894,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « agenda » et « reaffirming » ?",
    "or": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
@@ -4921,7 +4921,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 1998 » et « resolutions » ?",
    "or": "Reaffirming also its resolutions 53/199 of 15 December 1998 and 61/185",
@@ -4948,7 +4948,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2022 » et « recommendation » ?",
    "or": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
@@ -4975,7 +4975,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2024 » et « inclusive » ?",
    "or": "40 (2024) on the equal and inclusive representation of women in decisi",
@@ -5002,7 +5002,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « conférences » et « connexes » ?",
    "or": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
@@ -5029,7 +5029,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « commission » et « grande » ?",
    "or": "[sans renvoi à une grande commission (A/80/L.11)]",
@@ -5056,7 +5056,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « action » et « population » ?",
    "or": "Programme d’action de la Conférence internationale sur la population e",
@@ -5083,7 +5083,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « horizon » et « durable » ?",
    "or": "Réaffirmant le Programme de développement durable à l’horizon 2030 11 ",
@@ -5110,7 +5110,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « résolutions » et « dispositions » ?",
    "or": "Réaffirmant également les dispositions de ses résolutions 53/199 du",
@@ -5137,7 +5137,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2022 » et « note » ?",
    "or": "Prenant note de la recommandation générale n o 39 (2022) sur les droit",
@@ -5164,7 +5164,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2024 » et « comité » ?",
    "or": "femmes et des filles autochtones du Comité pour l’élimination de la di",
@@ -5191,7 +5191,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « conexas » et « conferencias » ?",
    "or": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
@@ -5218,7 +5218,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « comisión » et « previa » ?",
    "or": "[sin remisión previa a una Comisión Principal (A/80/L.11)]",
@@ -5245,7 +5245,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « véase » et « anexo » ?",
    "or": "Véase la resolución 2200 A (XXI), anexo.",
@@ -5272,7 +5272,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « agenda » et « reafirmando » ?",
    "or": "Reafirmando la Agenda 2030 para el Desarrollo Sostenible 11 y que el",
@@ -5299,7 +5299,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 1998 » et « resoluciones » ?",
    "or": "Reafirmando también sus resoluciones 53/199, de 15 de diciembre de 199",
@@ -5326,7 +5326,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2022 » et « relativa » ?",
    "or": "39 (2022), relativa a los derechos de las mujeres y las niñas indígena",
@@ -5353,7 +5353,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quelle valeur le document associe-t-il à « 2024 » et « inclusiva » ?",
    "or": "40 (2024), relativa a la representación igualitaria e inclusiva de las",
@@ -5380,7 +5380,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « 2026 » et « puisse » ?",
    "or": "Écrit le 16/10, revu le 2026-10-27. en réponse à une question simple :",
@@ -5407,7 +5407,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « construction » et « garantie » ?",
    "or": "portée\t127.0.0.1 seulement ✗ (garantie par construction ✓)",
@@ -5434,7 +5434,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « licence » et « python » ?",
    "or": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
@@ -5461,7 +5461,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « 8787 » et « double » ?",
    "or": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
@@ -5488,7 +5488,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « celui » et « devient » ?",
    "or": "⚠️ Ne jamais lire une porte à travers un tail ✗ : le code de sortie de",
@@ -5515,7 +5515,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « alternatifs » et « anatomie » ?",
    "or": "docs/theorie/synthese/ ✓ — huit chapitres vulgarisés et quatorze schém",
@@ -5542,7 +5542,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « itérative » et « empreinte » ?",
    "or": "Les outils de la nuit du 16/10 (langage abstrait, empreinte, pensée it",
@@ -5569,7 +5569,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « contrôle » et « recopier » ?",
    "or": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
@@ -5596,7 +5596,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « lineaire » et « réglé » ?",
    "or": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
@@ -5623,7 +5623,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « appris » et « cible » ?",
    "or": "⚠️ Ce que les mesures de la nuit ont appris sur l'instrument ✓✓ — à li",
@@ -5650,7 +5650,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « dernière » et « daté » ?",
    "or": "Document daté — dernière vérification : 2026-10-27.",
@@ -5677,7 +5677,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « montée » et « nommés » ?",
    "or": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
@@ -5704,7 +5704,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « achète » et « aurait » ?",
    "or": "Ce que ce plan achète, et c'est mesuré : les GPU gardent leurs x16 (36",
@@ -5731,7 +5731,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « conséquence » et « effondre » ?",
    "or": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
@@ -5758,7 +5758,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « pilote » et « radeon » ?",
    "or": "5.1 Le pilote : radeon ou amdgpu — les deux sont là",
@@ -5785,7 +5785,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « origine » et « paramètre » ?",
    "or": "Si la carte reçue est en fait une RX 550 (GCN 4, Polaris), elle est pi",
@@ -5812,7 +5812,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « disque » et « swap » ?",
    "or": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
@@ -5839,7 +5839,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « ahead » et « read » ?",
    "or": "read_ahead_kb\t1 024\t4 096 à 8 192 sur md0 et sur les NVMe",
@@ -5866,7 +5866,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « adressés » et « mapper » ?",
    "or": "mmap par défaut : 47 Mo de RSS pour 365 Go adressés — ne pas passer à ",
@@ -5893,7 +5893,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « corrige » et « coupable » ?",
    "or": "Le motif d'accès coûte 35 % : 133 Mio/s obtenus sur le disque dur là o",
@@ -5920,7 +5920,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « autonome » et « converti » ?",
    "or": "En une ligne : un GGUF est converti en commun.gguf + cluster-XX.gguf, ",
@@ -5947,7 +5947,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « tranches » et « couches » ?",
    "or": "cluster-00.gguf      les tranches d'experts du cluster 0, toutes couch",
@@ -5974,7 +5974,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « alignés » et « arrête » ?",
    "or": "Aucune requantification. Les octets des poids sont copiés tels quels. ",
@@ -6001,7 +6001,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « concaténation » et « correspondante » ?",
    "or": "Vérification par empreintes. --verifier relit chaque fichier produit e",
@@ -6028,7 +6028,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « decoupage » et « divise » ?",
    "or": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
@@ -6055,7 +6055,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « qwen2 » et « embeddings » ?",
    "or": "Mesuré sur Qwen2.5-0.5B : commun.gguf (embeddings + tête) + 4 fichiers",
@@ -6082,7 +6082,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « annonce » et « inventaire » ?",
    "or": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
@@ -6109,7 +6109,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « bloc » et « compte » ?",
    "or": "octets_tensor doit connaître la taille de chaque type : nelem() compte",
@@ -6136,7 +6136,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « absents » et « confondus » ?",
    "or": "types confondus : 41 · divergents : 0 · absents du moteur : 0",
@@ -6163,7 +6163,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « quatre » et « rendraient » ?",
    "or": "Avec elle, deux nœuds à quatre clusters rendraient 799,8557 pour 4,60 ",
@@ -6190,7 +6190,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « arrêter » et « lance » ?",
    "or": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
@@ -6217,7 +6217,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « dernière » et « diagnostic » ?",
    "or": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
@@ -6244,7 +6244,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « 13h30 » et « affiché » ?",
    "or": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
@@ -6271,7 +6271,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « bloquée » et « délai » ?",
    "or": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
@@ -6298,7 +6298,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « bash » et « tableaux » ?",
    "or": "PORTES=\"tableaux registre vision\" DELAI=600 bash tools/toutes-les-port",
@@ -6325,7 +6325,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « attendre » et « audit » ?",
    "or": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
@@ -6352,7 +6352,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « contrat » et « couche » ?",
    "or": "Les portes de données (porte-diff-couche) vérifient un contrat, pas un",
@@ -6379,7 +6379,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « conservé » et « donne » ?",
    "or": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
@@ -6406,7 +6406,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « dernière » et « vérification » ?",
    "or": "Document daté — dernière vérification : 2026-10-27.",
@@ -6433,7 +6433,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « nvidia » et « sens » ?",
    "or": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
@@ -6460,7 +6460,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « hyperthreads » et « tient » ?",
    "or": "mémoire\tpasse dense d'un modèle qui tient en RAM\tla bande passante mém",
@@ -6487,7 +6487,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « donnent » et « faible » ?",
    "or": "La mémoire asymétrique 32/128 Go est le point faible. Aujourd'hui c'es",
@@ -6514,7 +6514,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « asymétrie » et « rendre » ?",
    "or": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
@@ -6541,7 +6541,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « mêmes » et « configurations » ?",
    "or": "passe dense 0,5 B et 30 B : mêmes trois configurations ;",
@@ -6568,7 +6568,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « sert » et « partagent » ?",
    "or": "GPU en x16 + carte en x4 (32 + 4 + 4 = 40 ✅) : les 4 SSD partagent alo",
@@ -6595,7 +6595,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « rapporter » et « mesurer » ?",
    "or": "11.4 Ce que l'array peut rapporter, et ce qu'il faut mesurer",
@@ -6622,7 +6622,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « memory » et « overcommit » ?",
    "or": "vm.swappiness est déjà à 10, vm.overcommit_memory à 1 : les réglages n",
@@ -6649,7 +6649,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « impossible » et « lire » ?",
    "or": "lire 206,58 Gio (passe K3)\timpossible à garder\t~30 s",
@@ -6676,7 +6676,7 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
+   "document": "tools/tests/documents/corpus/code/continuite.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « filet » et « harnais » ?",
    "or": "max_goal_rounds\t1 000 (ou le maximum du harnais)\tla limite est un file",
@@ -6684,14 +6684,14 @@
     "recupere": true,
     "f1": 0.3,
     "valeur": true,
-    "cout": 601,
-    "reponse": "Le document associe la valeur \"filet\" à \"1 000 (ou le maximum du harn"
+    "cout": 589,
+    "reponse": "Le document associe à \"filet\" et \"harnais\" une valeur de 1000 rounds"
    },
    "debut_0.30": {
     "recupere": true,
     "f1": 0.3158,
     "valeur": false,
-    "cout": 1900,
+    "cout": 1946,
     "reponse": "Le document associe à \"filet\" et \"harnais\" une valeur de \"000\" ("
    },
    "closed_book": {
@@ -6703,22 +6703,22 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
+   "document": "tools/tests/documents/corpus/code/continuite.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « dessous » et « format » ?",
    "or": "format de rapport : les 10 lignes ci-dessous ;",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.3077,
+    "f1": 0.1429,
     "valeur": false,
-    "cout": 518,
-    "reponse": "Le document associe-t-il à \"dessous\" et \"format\" les valeurs suivantes :\n\n- Dessous :"
+    "cout": 506,
+    "reponse": "Le document associe une valeur de \"format\" à \"DSH\" (Documents de suivi des Heures)"
    },
    "debut_0.30": {
-    "recupere": false,
+    "recupere": true,
     "f1": 0.3077,
     "valeur": false,
-    "cout": 1900,
+    "cout": 1946,
     "reponse": "Le document associe les valeurs suivantes à \"dessous\" et \"format\":\n\n\"dessous\" :\n- \""
    },
    "closed_book": {
@@ -6730,23 +6730,23 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
+   "document": "tools/tests/documents/corpus/code/continuite.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « budget » et « coupe » ?",
-   "or": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+   "or": "budget\t≤ 2 000 mots ; au-delà, on coupe (résumé + lien) et on ne relèv",
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.4,
+    "f1": 0.375,
     "valeur": true,
-    "cout": 689,
+    "cout": 541,
     "reponse": "Le document associe une valeur de \"budget\" de 2 000 mots et une valeur de \"cou"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.2353,
+    "f1": 0.2857,
     "valeur": false,
-    "cout": 1900,
-    "reponse": "Le document associe les valeurs suivantes à \"budget\" et \"coupe\":\n\nBudget:\n- \"max_goal_round"
+    "cout": 1946,
+    "reponse": "Le document associe à \"budget\" et \"coupe\" la valeur \"1000\" (ou le"
    },
    "closed_book": {
     "recupere": false,
@@ -6757,7 +6757,7 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
+   "document": "tools/tests/documents/corpus/code/continuite.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « identifiant » et « toujours » ?",
    "or": "prochaine action\ttoujours nommée, avec son identifiant (N0.3b, N2.4…)",
@@ -6765,15 +6765,15 @@
     "recupere": true,
     "f1": 0.2667,
     "valeur": false,
-    "cout": 544,
+    "cout": 532,
     "reponse": "Le document associe-t-il à \"identifiant\" et \"toujours\" la valeur suivante :\n\n\"Ident"
    },
    "debut_0.30": {
     "recupere": false,
-    "f1": 0.1333,
+    "f1": 0.2667,
     "valeur": false,
-    "cout": 1900,
-    "reponse": "Le document associe les valeurs suivantes à \"identifiant\" et \"toute la fois\":\n\n- Identifiant :"
+    "cout": 1946,
+    "reponse": "Le document associe les valeurs suivantes à \"identifiant\" et \"toujours\":\n\n- Identifiant :"
    },
    "closed_book": {
     "recupere": false,
@@ -6784,34 +6784,7 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
-   "type": "code",
-   "question": "Quelle valeur le document associe-t-il à « dépassement » et « déplace » ?",
-   "or": "Dépassement : au-delà de 2 000 mots, on coupe (résumé + lien) ou on dé",
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.2,
-    "valeur": false,
-    "cout": 622,
-    "reponse": "Le document associe les valeurs suivantes à \"dépassement\" et \"déplace\":\n\n- \"Dép"
-   },
-   "debut_0.30": {
-    "recupere": false,
-    "f1": 0.2,
-    "valeur": false,
-    "cout": 1900,
-    "reponse": "Le document associe les valeurs suivantes à \"dépassement\" et \"déplace\":\n\n- Dépasse"
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/methode/continuite.md",
+   "document": "tools/tests/documents/corpus/code/continuite.md",
    "type": "code",
    "question": "Quelle valeur le document associe-t-il à « abord » et « edit » ?",
    "or": "Si la pause vient de max_goal_rounds, faire d'abord action=\"edit\" avec",
@@ -6819,14 +6792,14 @@
     "recupere": true,
     "f1": 0.4545,
     "valeur": false,
-    "cout": 564,
+    "cout": 552,
     "reponse": "Le document associe les valeurs \"abord\" et \"edit\" à \"max_goal_rounds=100"
    },
    "debut_0.30": {
     "recupere": false,
     "f1": 0.2,
     "valeur": false,
-    "cout": 1900,
+    "cout": 1946,
     "reponse": "Le document associe les valeurs suivantes à \"abord\" et \"edit\":\n\n- \"abord\" :"
    },
    "closed_book": {

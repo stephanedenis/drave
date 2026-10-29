@@ -4,7 +4,8 @@
  "note": "Banc durci R0.3 : questions PARAPHRASES, écrites à la main sur des golds du banc complet. Le recouvrement lexical question↔gold est vérifié < 0,5. Mesure la compréhension, pas la couverture.",
  "documents": [
   {
-   "chemin": "docs/theorie/vision.md",
+   "chemin": "tools/tests/documents/corpus/prose/vision.md",
+   "source": "docs/theorie/vision.md",
    "type": "prose",
    "questions": [
     {
@@ -34,7 +35,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/format-flux.md",
+   "chemin": "tools/tests/documents/corpus/technique/format-flux.md",
+   "source": "docs/implantation/format-flux.md",
    "type": "technique",
    "questions": [
     {
@@ -82,7 +84,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/roadmap.md",
+   "chemin": "tools/tests/documents/corpus/tableau/roadmap.md",
+   "source": "docs/pilotage/roadmap.md",
    "type": "tableau",
    "questions": [
     {
@@ -93,15 +96,15 @@
     },
     {
      "question": "Quel pourcentage de temps l'abandon anticipé fait-il gagner ?",
-     "indice": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
-     "valeur": "24,05",
-     "source": "Quelle valeur le document associe-t-il à « contenu » et « gagne » ?"
+     "indice": "La mémoire manque. Le signal courant est lisible (R² 0,992), celui d'i",
+     "valeur": "0,992",
+     "source": "Quelle valeur le document associe-t-il à « aggrave » et « celui » ?"
     },
     {
      "question": "Quel est le numéro de la phase qui ajoute les trois têtes de lecture ?",
-     "indice": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
-     "valeur": "0.4",
-     "source": "Quelle valeur le document associe-t-il à « contradiction » et « greffées » ?"
+     "indice": "R0.5\trouteur extractif / génératif : choisir le lecteur selon la quest",
+     "valeur": "0.5",
+     "source": "Quelle valeur le document associe-t-il à « bancs » et « choix » ?"
     },
     {
      "question": "Quel numéro désigne le raisonnement mené sur l'espace latent ?",
@@ -113,7 +116,7 @@
      "question": "Quel identifiant porte le chantier qui bloque sur les cartes tenues ?",
      "indice": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
      "valeur": "4.6",
-     "source": "Quelle valeur le document associe-t-il à « bloque » et « contre » ?"
+     "source": "Quelle valeur le document associe-t-il à « bloque » et « sémantique » ?"
     },
     {
      "question": "Quel identifiant désigne le manque de corpus d'articles ?",
@@ -124,7 +127,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -148,7 +152,8 @@
    ]
   },
   {
-   "chemin": "docs/methode/portes.md",
+   "chemin": "tools/tests/documents/corpus/code/portes.md",
+   "source": "docs/methode/portes.md",
    "type": "code",
    "questions": [
     {
@@ -190,7 +195,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/lecture-rapide.md",
+   "chemin": "tools/tests/documents/corpus/prose/lecture-rapide.md",
+   "source": "docs/theorie/lecture-rapide.md",
    "type": "prose",
    "questions": [
     {
@@ -220,7 +226,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/protocole-semantique.md",
+   "chemin": "tools/tests/documents/corpus/prose/protocole-semantique.md",
+   "source": "docs/theorie/protocole-semantique.md",
    "type": "prose",
    "questions": [
     {
@@ -244,7 +251,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/jeux-symboliques.md",
+   "chemin": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
+   "source": "docs/theorie/jeux-symboliques.md",
    "type": "prose",
    "questions": [
     {
@@ -268,7 +276,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/semantique-universaux.md",
+   "chemin": "tools/tests/documents/corpus/prose/semantique-universaux.md",
+   "source": "docs/theorie/semantique-universaux.md",
    "type": "prose",
    "questions": [
     {
@@ -286,7 +295,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/architecture-native.md",
+   "chemin": "tools/tests/documents/corpus/prose/architecture-native.md",
+   "source": "docs/theorie/architecture-native.md",
    "type": "prose",
    "questions": [
     {
@@ -304,7 +314,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/document-graph.md",
+   "chemin": "tools/tests/documents/corpus/technique/document-graph.md",
+   "source": "docs/implantation/document-graph.md",
    "type": "technique",
    "questions": [
     {
@@ -322,7 +333,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/lecteur-controleur.md",
+   "chemin": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
+   "source": "docs/implantation/lecteur-controleur.md",
    "type": "technique",
    "questions": [
     {
@@ -346,7 +358,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/contexte-long.md",
+   "chemin": "tools/tests/documents/corpus/technique/contexte-long.md",
+   "source": "docs/implantation/contexte-long.md",
    "type": "technique",
    "questions": [
     {
@@ -370,7 +383,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/convertisseur.md",
+   "chemin": "tools/tests/documents/corpus/technique/convertisseur.md",
+   "source": "docs/implantation/convertisseur.md",
    "type": "technique",
    "questions": [
     {
@@ -394,25 +408,27 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/en-cours.md",
+   "chemin": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "source": "docs/pilotage/en-cours.md",
    "type": "tableau",
    "questions": [
     {
      "question": "Quel plafond de contexte est refusé par les essais du modèle ?",
-     "indice": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
-     "valeur": "130",
-     "source": "Quelle valeur le document associe-t-il à « contextes » et « négatifs » ?"
+     "indice": "B10.2bis — le décodeur : négative — 3 bras × 3 graines : 11,1/11,2/11,",
+     "valeur": "10.2",
+     "source": "Quelle valeur le document associe-t-il à « aide » et « b102bis » ?"
     },
     {
      "question": "Combien d'items le réseau de dépendances réunit-il ?",
-     "indice": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
-     "valeur": "29",
-     "source": "Quelle valeur le document associe-t-il à « arrêtées » et « priorités » ?"
+     "indice": "Backlog — graphe\t35 fiches ; 42 arêtes dures\t3 lignes sans fiche\tvérif",
+     "valeur": "35",
+     "source": "Quelle valeur le document associe-t-il à « lignes » et « vérifier » ?"
     }
    ]
   },
   {
-   "chemin": "docs/pilotage/backlog/index.md",
+   "chemin": "tools/tests/documents/corpus/tableau/index.md",
+   "source": "docs/pilotage/backlog/index.md",
    "type": "tableau",
    "questions": [
     {
@@ -424,7 +440,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/manques.md",
+   "chemin": "tools/tests/documents/corpus/tableau/manques.md",
+   "source": "docs/pilotage/manques.md",
    "type": "tableau",
    "questions": [
     {
@@ -448,7 +465,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/references-non-regression.md",
+   "chemin": "tools/tests/documents/corpus/tableau/references-non-regression.md",
+   "source": "docs/pilotage/references-non-regression.md",
    "type": "tableau",
    "questions": [
     {
@@ -466,7 +484,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-en.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -490,7 +509,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-es.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -514,7 +534,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-en.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -538,7 +559,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -550,7 +572,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-es.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -562,7 +585,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/utilisation.md",
+   "chemin": "tools/tests/documents/corpus/code/utilisation.md",
+   "source": "docs/pilotage/utilisation.md",
    "type": "code",
    "questions": [
     {
@@ -592,7 +616,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/configuration-nvme-raid-amd.md",
+   "chemin": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
+   "source": "docs/implantation/configuration-nvme-raid-amd.md",
    "type": "code",
    "questions": [
     {
@@ -616,7 +641,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/format-clusters.md",
+   "chemin": "tools/tests/documents/corpus/code/format-clusters.md",
+   "source": "docs/implantation/format-clusters.md",
    "type": "code",
    "questions": [
     {
@@ -640,7 +666,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/numa-segregation.md",
+   "chemin": "tools/tests/documents/corpus/code/numa-segregation.md",
+   "source": "docs/implantation/numa-segregation.md",
    "type": "code",
    "questions": [
     {
@@ -658,14 +685,15 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/backlog/dependances.md",
+   "chemin": "tools/tests/documents/corpus/tableau/dependances.md",
+   "source": "docs/pilotage/backlog/dependances.md",
    "type": "tableau",
    "questions": [
     {
      "question": "Quel numéro porte la restitution après le gist ?",
-     "indice": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
-     "valeur": "31",
-     "source": "Quelle valeur le document associe-t-il à « restitution » et « plafond » ?"
+     "indice": "R13\tspécifiée\t—\tN2 (plafond)\t—\tR13-tokenisation-bpe.md",
+     "valeur": "13",
+     "source": "Quelle valeur le document associe-t-il à « tokenisation » et « plafond » ?"
     }
    ]
   }

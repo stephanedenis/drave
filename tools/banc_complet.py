@@ -29,6 +29,7 @@ import sys
 from collections import Counter
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import corpus_gele  # noqa: E402
 import graphe_document  # noqa: E402
 import lecteur_controleur as lc  # noqa: E402
 
@@ -118,12 +119,14 @@ def construire() -> dict:
     documents = []
     for type_, chemins in CORPUS.items():
         for chemin in chemins:
-            fichier = RACINE / chemin
+            # le banc lit la COPIE GELÉE : la documentation peut évoluer sans casser le banc
+            fichier = corpus_gele.chemin_fige(chemin)
             if not fichier.exists():
                 print(f"  ⚠️ absent : {chemin}")
                 continue
             questions = questions_du_document(fichier, type_)
-            documents.append({"chemin": chemin, "type": type_, "questions": questions})
+            documents.append({"chemin": str(fichier.relative_to(RACINE)), "source": chemin,
+                              "type": type_, "questions": questions})
     total = sum(len(d["questions"]) for d in documents)
     return {"version": 1, "date": "2026-10-29",
             "note": ("Banc complet R0.3 : 30 documents, 5 types, questions GABARIT (valeur demandée "

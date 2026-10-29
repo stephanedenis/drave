@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**98 commits** · **0 session(s)** · **8 thème(s)**
+**99 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 9 | [distribue.md](distribue.md) |
+| distribue | 10 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 39 | [mesures.md](mesures.md) |
@@ -131,6 +131,7 @@ Aucune session indexée pour ce jour ; voir
 | 17:07 | `8770ea50` | A8.0 — PORTE-ADAPTATEUR ÉPINGLÉE : 17,4315 / 2 687 292,8165 ; ÉTAT 7/33 |
 | 17:09 | `261bdc42` | B10.2bis — TABLEAU : COLONNE GRAINE VIDE AJOUTÉE |
 | 17:10 | `c9b3da49` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) |
+| 17:31 | `8c3ba915` | B10.2bis + A8.3b — LES PAS NE SUFFISENT PAS (1800 PAS : 10,2–11,4) ; LA TOPOLOGIE ENTRE DANS LE TABLEAU |
 
 ## Le récit de la journée (écrit à la main)
 

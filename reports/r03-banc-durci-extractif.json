@@ -3,7 +3,7 @@
  "ligne": "R0.2",
  "graine": 20261029,
  "critere": "bm25",
- "questions": 84,
+ "questions": 83,
  "types": [
   "code",
   "juridique",
@@ -15,45 +15,45 @@
   "code": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.251,
-    "valeur": 0.211,
-    "cout": 10070.0
+    "f1": 0.265,
+    "valeur": 0.222,
+    "cout": 10270.3
    },
    "controlee_0.10": {
-    "recuperation": 0.368,
-    "f1": 0.202,
-    "valeur": 0.158,
-    "cout": 808.8
+    "recuperation": 0.333,
+    "f1": 0.213,
+    "valeur": 0.167,
+    "cout": 824.8
    },
    "controlee_0.30": {
-    "recuperation": 0.684,
-    "f1": 0.251,
-    "valeur": 0.211,
-    "cout": 1484.2
+    "recuperation": 0.667,
+    "f1": 0.265,
+    "valeur": 0.222,
+    "cout": 1472.7
    },
    "controlee_0.50": {
-    "recuperation": 0.684,
-    "f1": 0.251,
-    "valeur": 0.211,
-    "cout": 1722.2
+    "recuperation": 0.667,
+    "f1": 0.265,
+    "valeur": 0.222,
+    "cout": 1723.8
    },
    "aleatoire_0.30": {
-    "recuperation": 0.526,
-    "f1": 0.262,
-    "valeur": 0.316,
-    "cout": 3015.1
+    "recuperation": 0.5,
+    "f1": 0.221,
+    "valeur": 0.278,
+    "cout": 3074.9
    },
    "melangee_0.30": {
-    "recuperation": 0.684,
-    "f1": 0.251,
-    "valeur": 0.211,
-    "cout": 1484.2
+    "recuperation": 0.667,
+    "f1": 0.265,
+    "valeur": 0.222,
+    "cout": 1472.7
    },
    "sans_but": {
-    "recuperation": 0.158,
+    "recuperation": 0.167,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 1779.2
+    "cout": 1807.8
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -165,45 +165,45 @@
   "tableau": {
    "integrale": {
     "recuperation": 1.0,
-    "f1": 0.126,
-    "valeur": 0.2,
-    "cout": 14044.8
+    "f1": 0.113,
+    "valeur": 0.133,
+    "cout": 14426.3
    },
    "controlee_0.10": {
-    "recuperation": 0.467,
-    "f1": 0.125,
-    "valeur": 0.2,
-    "cout": 1102.3
+    "recuperation": 0.333,
+    "f1": 0.112,
+    "valeur": 0.133,
+    "cout": 1113.5
    },
    "controlee_0.30": {
-    "recuperation": 0.667,
-    "f1": 0.126,
-    "valeur": 0.2,
-    "cout": 1702.9
+    "recuperation": 0.467,
+    "f1": 0.113,
+    "valeur": 0.133,
+    "cout": 1803.1
    },
    "controlee_0.50": {
-    "recuperation": 0.667,
-    "f1": 0.126,
-    "valeur": 0.2,
-    "cout": 1702.9
+    "recuperation": 0.467,
+    "f1": 0.113,
+    "valeur": 0.133,
+    "cout": 1803.1
    },
    "aleatoire_0.30": {
     "recuperation": 0.267,
-    "f1": 0.149,
-    "valeur": 0.267,
-    "cout": 4208.1
+    "f1": 0.117,
+    "valeur": 0.2,
+    "cout": 4317.7
    },
    "melangee_0.30": {
-    "recuperation": 0.667,
-    "f1": 0.126,
-    "valeur": 0.2,
-    "cout": 1702.9
+    "recuperation": 0.467,
+    "f1": 0.113,
+    "valeur": 0.133,
+    "cout": 1803.1
    },
    "sans_but": {
     "recuperation": 0.133,
     "f1": 0.0,
     "valeur": 0.0,
-    "cout": 2361.1
+    "cout": 2383.9
    },
    "closed_book": {
     "recuperation": 0.0,
@@ -265,7 +265,7 @@
  },
  "details": [
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
    "or": "Les activations d'un réseau sont des faits — « le neurone 2 539 de la ",
@@ -327,7 +327,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "À partir de quelle taille la sonde cesse-t-elle de progresser ?",
    "or": "La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est pl",
@@ -389,7 +389,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "À quel taux de remplissage les listes deviennent-elles moins intéressantes que le reste ?",
    "or": "La sparsité ne gagne pas toujours : le croisement push/pull est mesuré",
@@ -451,7 +451,7 @@
    }
   },
   {
-   "document": "docs/theorie/vision.md",
+   "document": "tools/tests/documents/corpus/prose/vision.md",
    "type": "prose",
    "question": "Quelle année figure dans la note de renommage ?",
    "or": "Le renommage est fait (2026-09-30) ; l'histoire des trois âges est dan",
@@ -513,7 +513,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Sur combien de bits le numéro de version est-il codé ?",
    "or": "version      u16          = 2 (défaut) ou 3 (`DRAVE_TRACE_BLOCS=1`)",
@@ -575,7 +575,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle largeur a l'indice d'un neurone actif dans la liste ?",
    "or": "puis n_actifs × ( indice u32 · valeur i16 )           [version 1]",
@@ -637,7 +637,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Combien d'octets fixes compte une entrée de liste en première version ?",
    "or": "Taille : 14 + 6 × n_actifs en v1, 14 + 3 × n_actifs en v2.",
@@ -699,7 +699,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle quantité de jetons a été traitée en quatre lots de 64 ?",
    "or": "Mesuré : 256 jetons en 4 lots de 64 (écart 0,00e0 avec la référence lo",
@@ -761,7 +761,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle erreur relative le codage par valeur introduit-il, en pourcentage du maximum ?",
    "or": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)",
@@ -823,7 +823,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quel chiffre de perplexité traduit une clé réécrite au mauvais endroit ?",
    "or": "Avec la position, deux fenêtres réécrivaient les mêmes clés (couche, p",
@@ -885,7 +885,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-flux.md",
+   "document": "tools/tests/documents/corpus/technique/format-flux.md",
    "type": "technique",
    "question": "Quelle phase exige une réponse plutôt qu'un refus ?",
    "or": "C'est le critère de la phase 3.5 : pas de silence, pas de devinette.",
@@ -947,7 +947,7 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel numéro porte la fiche de la mémoire de travail ?",
    "or": "R21/R31 — la mémoire et la restitution : après R0.3 ; la restitution a",
@@ -955,7 +955,7 @@
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "controlee_0.10": {
@@ -969,28 +969,28 @@
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3391,
+    "cout": 3669,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "controlee_0.50": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3391,
+    "cout": 3669,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1935,
-    "valeur": true,
-    "cout": 6031,
-    "reponse": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'entités et de faits, tampon en entrée\t⏳\tréponse don"
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 6283,
+    "reponse": "R2 — la mémoire"
    },
    "melangee_0.30": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3391,
+    "cout": 3669,
     "reponse": "Les fiches de fonctionnalité : backlog/index.md — une fiche par fonctionnalité R, avec le contrat, la porte, les contrôl"
    },
    "sans_but": {
@@ -1009,50 +1009,50 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel pourcentage de temps l'abandon anticipé fait-il gagner ?",
-   "or": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
+   "or": "La mémoire manque. Le signal courant est lisible (R² 0,992), celui d'i",
    "integrale": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "Ce que R ne fait pas"
    },
    "controlee_0.10": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1838,
+    "cout": 1679,
     "reponse": "Ce que R ne fait pas"
    },
    "controlee_0.30": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1838,
+    "cout": 1679,
     "reponse": "Ce que R ne fait pas"
    },
    "controlee_0.50": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1838,
+    "cout": 1679,
     "reponse": "Ce que R ne fait pas"
    },
    "aleatoire_0.30": {
     "recupere": true,
-    "f1": 0.1176,
-    "valeur": false,
-    "cout": 6031,
-    "reponse": "R1.3\ttokenisation : octets ou BPE ; la décision est mesurée, pas doctrinale\t⏳\tmême qualité, moins d'octets ou de temps ;"
-   },
-   "melangee_0.30": {
-    "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1838,
+    "cout": 6283,
+    "reponse": "Ce que R ne fait pas"
+   },
+   "melangee_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1679,
     "reponse": "Ce que R ne fait pas"
    },
    "sans_but": {
@@ -1071,50 +1071,50 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel est le numéro de la phase qui ajoute les trois têtes de lecture ?",
-   "or": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
+   "or": "R0.5\trouteur extractif / génératif : choisir le lecteur selon la quest",
    "integrale": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.10": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1696,
+    "cout": 1805,
     "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.30": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 4177,
+    "cout": 4600,
     "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "controlee_0.50": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 4177,
+    "cout": 4600,
     "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0909,
-    "valeur": false,
-    "cout": 6031,
-    "reponse": "R0 : un contrôleur classique + un modèle externe atteint-il 90 % de la compréhension à 30 % du coût sur trois types de d"
+    "f1": 0.0526,
+    "valeur": true,
+    "cout": 6283,
+    "reponse": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (requête → spans), relecture (confiance/contradiction"
    },
    "melangee_0.30": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 4177,
+    "cout": 4600,
     "reponse": "phase\tlivrable\tce qui est mesuré\tdépend de"
    },
    "sans_but": {
@@ -1133,7 +1133,7 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel numéro désigne le raisonnement mené sur l'espace latent ?",
    "or": "B10.3 raisonnement sur z\tle décodeur est sous le plancher chrF\tune att",
@@ -1141,42 +1141,42 @@
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "controlee_0.10": {
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 1030,
+    "cout": 1059,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "controlee_0.30": {
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 1030,
+    "cout": 1059,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "controlee_0.50": {
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 1030,
+    "cout": 1059,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "aleatoire_0.30": {
     "recupere": false,
     "f1": 0.087,
     "valeur": false,
-    "cout": 6031,
+    "cout": 6283,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "melangee_0.30": {
     "recupere": true,
     "f1": 0.087,
     "valeur": false,
-    "cout": 1030,
+    "cout": 1059,
     "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
    },
    "sans_but": {
@@ -1195,7 +1195,7 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel identifiant porte le chantier qui bloque sur les cartes tenues ?",
    "or": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
@@ -1203,7 +1203,7 @@
     "recupere": true,
     "f1": 0.1111,
     "valeur": false,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
    },
    "controlee_0.10": {
@@ -1217,28 +1217,28 @@
     "recupere": true,
     "f1": 0.1111,
     "valeur": false,
-    "cout": 3824,
+    "cout": 4112,
     "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
    },
    "controlee_0.50": {
     "recupere": true,
     "f1": 0.1111,
     "valeur": false,
-    "cout": 3824,
+    "cout": 4112,
     "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1111,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 6031,
-    "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
+    "cout": 6283,
+    "reponse": "#\tchantier\tétat\tprochaine action"
    },
    "melangee_0.30": {
     "recupere": true,
     "f1": 0.1111,
     "valeur": false,
-    "cout": 3824,
+    "cout": 4112,
     "reponse": "Ce qui bloque : les 130–256 sont tous négatifs."
    },
    "sans_but": {
@@ -1257,50 +1257,50 @@
    }
   },
   {
-   "document": "docs/pilotage/roadmap.md",
+   "document": "tools/tests/documents/corpus/tableau/roadmap.md",
    "type": "tableau",
    "question": "Quel identifiant désigne le manque de corpus d'articles ?",
    "or": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
    "integrale": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2,
     "valeur": true,
-    "cout": 20109,
+    "cout": 20984,
     "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "controlee_0.10": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2,
     "valeur": true,
-    "cout": 1651,
+    "cout": 1699,
     "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "controlee_0.30": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2,
     "valeur": true,
-    "cout": 2385,
+    "cout": 2696,
     "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "controlee_0.50": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2,
     "valeur": true,
-    "cout": 2385,
+    "cout": 2696,
     "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.1714,
+    "f1": 0.1905,
     "valeur": true,
-    "cout": 6031,
+    "cout": 6283,
     "reponse": "B1\tl'entrée-sortie linguistique : juge, chrF, registres, 24 langues, dialogue\t✅\tB1.5 bloquée (aucun corpus parallèle hum"
    },
    "melangee_0.30": {
     "recupere": true,
-    "f1": 0.1818,
+    "f1": 0.2,
     "valeur": true,
-    "cout": 2385,
+    "cout": 2696,
     "reponse": "B1.5 prose scientifique\taucun corpus parallèle humain d'articles FR/EN\tun corpus (revue, actes, manuel) traduit par des "
    },
    "sans_but": {
@@ -1319,7 +1319,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quel numéro de session figure dans la référence du document préparatoire ?",
    "or": "[sans renvoi à une grande commission (A/80/L.2/Rev.1)]",
@@ -1381,7 +1381,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quel article de l'accord sur le siège est invoqué pour les représentants ?",
    "or": "représentants visés à la section 11 de l’Accord entre l’Organisation d",
@@ -1443,7 +1443,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "question": "Quel jour du mois la réunion citée a-t-elle eu lieu ?",
    "or": "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, n",
@@ -1505,7 +1505,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle durée maximale est accordée à chaque porte ?",
    "or": "Elle lance toutes les tools/porte-*.sh, séquentiellement, sans s'arrêt",
@@ -1567,7 +1567,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Combien d'épreuves le dernier passage intégral a-t-il exécutées ?",
    "or": "La dernière passe complète à 49 portes (28/10 00 h 12) a donné 46 vert",
@@ -1629,7 +1629,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quel numéro de jour figure dans le nom du dossier des journaux ?",
    "or": "JOURNAUX=/tmp/portes-1019-13h30   # le dossier affiché au lancement",
@@ -1691,7 +1691,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quel code de sortie signale un dépassement de délai ?",
    "or": "(Une rouge 124 est une porte trop lente ou bloquée : ce n'est pas un é",
@@ -1753,7 +1753,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Quelle quantité de mémoire graphique un modèle occupé prend-il pendant une passe ?",
    "or": "Les portes et une mesure GPU ne cohabitent pas : lancer un modèle qui ",
@@ -1815,7 +1815,7 @@
    }
   },
   {
-   "document": "docs/methode/portes.md",
+   "document": "tools/tests/documents/corpus/code/portes.md",
    "type": "code",
    "question": "Combien de lignes du journal faut-il lire pour connaître la cause d'un échec ?",
    "or": "Le journal de chaque porte est conservé dans $JOURNAUX/<porte>.log : e",
@@ -1877,7 +1877,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "De quelle année date l'étude qui a lancé la mode de la lecture ultra-rapide ?",
    "or": "(2016) est le point de repère : les promesses de 1 000 mots/minute ave",
@@ -1939,7 +1939,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "De quel pourcentage l'abandon anticipé accélère-t-il ?",
    "or": "Bloque : la sortie précoce accélère de 24 % en perdant 1,61 point, mai",
@@ -2001,7 +2001,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Combien de pièces le protocole d'évaluation doit-il rassembler ?",
    "or": "Dispositif proposé : 30 documents, 6 par type (prose, technique, table",
@@ -2063,7 +2063,7 @@
    }
   },
   {
-   "document": "docs/theorie/lecture-rapide.md",
+   "document": "tools/tests/documents/corpus/prose/lecture-rapide.md",
    "type": "prose",
    "question": "Quel volume les tampons d'avance ont-ils traité ?",
    "or": "À l'inverse, ce qui existe déjà et qui est rare : prélecture/tampons (",
@@ -2125,7 +2125,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Combien de nombres porte le vecteur de sens ?",
    "or": "Le sens est un goulot, pas une couche. z est de dimension petite (128)",
@@ -2187,7 +2187,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Quel est le nombre de propriétés typées du schéma fixe ?",
    "or": "Le protocole libre est complété par une base fixe d'universaux : 15 ch",
@@ -2249,7 +2249,7 @@
    }
   },
   {
-   "document": "docs/theorie/protocole-semantique.md",
+   "document": "tools/tests/documents/corpus/prose/protocole-semantique.md",
    "type": "prose",
    "question": "Combien de langues la première exécution du protocole a-t-elle couvertes ?",
    "or": "deux GPU : un pour 10 langues, un pour 20 langues (ou deux variantes :",
@@ -2311,7 +2311,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Combien de cases compte le plateau du jeu de dames décrit ?",
    "or": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
@@ -2373,7 +2373,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Combien d'idées le vocabulaire commun aux langues couvre-t-il ?",
    "or": "Le lexique multilingue (35 concepts, 71 langues, construit depuis Wiki",
@@ -2435,7 +2435,7 @@
    }
   },
   {
-   "document": "docs/theorie/jeux-symboliques.md",
+   "document": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
    "type": "prose",
    "question": "Quel est le nombre de règles de jeu que les maîtres enseignent ?",
    "or": "Les maîtres (17 principes, 9 sources du domaine public, 3 parties) cha",
@@ -2497,7 +2497,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quel score le premier protocole a-t-il obtenu sur la restitution ?",
    "or": "Le protocole « embedding libre puis décodeur » a échoué sur la restitu",
@@ -2559,7 +2559,7 @@
    }
   },
   {
-   "document": "docs/theorie/semantique-universaux.md",
+   "document": "tools/tests/documents/corpus/prose/semantique-universaux.md",
    "type": "prose",
    "question": "Quelle proportion des positions l'outil déterministe décode-t-il ?",
    "or": "Résultat du premier passage : le codec lit 100 % des coups B5/B7, le p",
@@ -2621,7 +2621,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Combien de millions de paramètres compte le petit modèle natif ?",
    "or": "Échelle : 12 M paramètres, octets (vocab 256), 6 blocs, deux régions.",
@@ -2683,7 +2683,7 @@
    }
   },
   {
-   "document": "docs/theorie/architecture-native.md",
+   "document": "tools/tests/documents/corpus/prose/architecture-native.md",
    "type": "prose",
    "question": "Quelle taille fait le vocabulaire d'entrée du modèle ?",
    "or": "entrée\toctets 256 + mélangeur local (fenêtre 8)\tpas de tokeniseur ; sé",
@@ -2745,7 +2745,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "Combien de bits fait le condensat du fichier complet ?",
    "or": "flux\tla longueur et le SHA-256 de la concaténation : le manifeste se v",
@@ -2807,7 +2807,7 @@
    }
   },
   {
-   "document": "docs/implantation/document-graph.md",
+   "document": "tools/tests/documents/corpus/technique/document-graph.md",
    "type": "technique",
    "question": "À partir de quel seuil de recouvrement la découpe est-elle acceptée ?",
    "or": "fidélité\tle flux contre une extraction indépendante : au moins 99 % de",
@@ -2869,7 +2869,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle proportion du document le plus petit budget représente-t-il ?",
    "or": "Le budget est une fraction du document (10 %, 30 %, 50 %) : c'est ce q",
@@ -2931,7 +2931,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quelle part du budget la lecture peut-elle consommer au plus ?",
    "or": "lecture — les passages dans l'ordre du score, jusqu'à 80 % du budget ;",
@@ -2993,7 +2993,7 @@
    }
   },
   {
-   "document": "docs/implantation/lecteur-controleur.md",
+   "document": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
    "type": "technique",
    "question": "Quel cinquième de l'enveloppe est gardé pour vérifier ?",
    "or": "Les 20 % réservés au balayage et à la relecture sont une décision de p",
@@ -3055,7 +3055,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Combien d'entrées les blocs à portée courte regardent-ils ?",
    "or": "À chaque jeton, l'attention relit tout le KV des couches pleines (les ",
@@ -3117,7 +3117,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Sur combien de bits les clés sont-elles stockées dans la variante compressée ?",
    "or": "clés f32 · valeurs int4\t4,625\t58 %\t+0,46 %",
@@ -3179,7 +3179,7 @@
    }
   },
   {
-   "document": "docs/implantation/contexte-long.md",
+   "document": "tools/tests/documents/corpus/technique/contexte-long.md",
    "type": "technique",
    "question": "Quel facteur les blocs du réseau appliquent-ils aux lancements graphiques ?",
    "or": "Piège de mesure noté au passage : les tampons du noyau étaient alloués",
@@ -3241,7 +3241,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Combien de milliards de paramètres compte le modèle dont le fichier pèse 60 Go ?",
    "or": "Pour gpt-oss-120b, c'est la différence entre 121 Go (60 de fichier + 6",
@@ -3303,7 +3303,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Combien de milliards de paramètres le modèle qui tient en 17,7 Go compte-t-il ?",
    "or": "Le 30B tient en 17,7 Go, soit exactement la taille du fichier : aucune",
@@ -3365,7 +3365,7 @@
    }
   },
   {
-   "document": "docs/implantation/convertisseur.md",
+   "document": "tools/tests/documents/corpus/technique/convertisseur.md",
    "type": "technique",
    "question": "Quelle vitesse avait été annoncée avant la mesure ?",
    "or": "Le plan chiffre maintenant aussi ce régime — 4,81 tok/s prévus contre ",
@@ -3427,57 +3427,57 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
    "question": "Quel plafond de contexte est refusé par les essais du modèle ?",
-   "or": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
+   "or": "B10.2bis — le décodeur : négative — 3 bras × 3 graines : 11,1/11,2/11,",
    "integrale": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 6708,
+    "cout": 6626,
     "reponse": "Méthode : contexte · continuité · résultats · portes."
    },
    "controlee_0.10": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 502,
+    "cout": 574,
     "reponse": "Méthode : contexte · continuité · résultats · portes."
    },
    "controlee_0.30": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 502,
+    "cout": 766,
     "reponse": "Méthode : contexte · continuité · résultats · portes."
    },
    "controlee_0.50": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 502,
+    "cout": 766,
     "reponse": "Méthode : contexte · continuité · résultats · portes."
    },
    "aleatoire_0.30": {
-    "recupere": true,
+    "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 2011,
-    "reponse": "Méthode : contexte · continuité · résultats · portes."
+    "cout": 1983,
+    "reponse": null
    },
    "melangee_0.30": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 502,
+    "cout": 766,
     "reponse": "Méthode : contexte · continuité · résultats · portes."
    },
    "sans_but": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1003,
+    "cout": 1141,
     "reponse": null
    },
    "closed_book": {
@@ -3489,57 +3489,57 @@
    }
   },
   {
-   "document": "docs/pilotage/en-cours.md",
+   "document": "tools/tests/documents/corpus/tableau/en-cours.md",
    "type": "tableau",
    "question": "Combien d'items le réseau de dépendances réunit-il ?",
-   "or": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
+   "or": "Backlog — graphe\t35 fiches ; 42 arêtes dures\t3 lignes sans fiche\tvérif",
    "integrale": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 6708,
+    "cout": 6626,
     "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
    },
    "controlee_0.10": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 414,
+    "cout": 365,
     "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
    },
    "controlee_0.30": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 414,
+    "cout": 365,
     "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
    },
    "controlee_0.50": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 414,
+    "cout": 365,
     "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
    },
    "aleatoire_0.30": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 2011,
-    "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
+    "cout": 1983,
+    "reponse": null
    },
    "melangee_0.30": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 414,
+    "cout": 365,
     "reponse": "Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives"
    },
    "sans_but": {
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 1003,
+    "cout": 1141,
     "reponse": null
    },
    "closed_book": {
@@ -3551,7 +3551,7 @@
    }
   },
   {
-   "document": "docs/pilotage/backlog/index.md",
+   "document": "tools/tests/documents/corpus/tableau/index.md",
    "type": "tableau",
    "question": "Combien de fiches le backlog contient-il au total ?",
    "or": "29 fiches : 19 pour R, 10 pour les lignes ouvertes A/B/N ; le graphe d",
@@ -3559,7 +3559,7 @@
     "recupere": true,
     "f1": 0.1667,
     "valeur": false,
-    "cout": 5607,
+    "cout": 5809,
     "reponse": "20 fiches."
    },
    "controlee_0.10": {
@@ -3587,7 +3587,7 @@
     "recupere": false,
     "f1": 0.1667,
     "valeur": false,
-    "cout": 1682,
+    "cout": 1737,
     "reponse": "20 fiches."
    },
    "melangee_0.30": {
@@ -3613,7 +3613,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Combien d'épreuves le dernier passage complet a-t-il lancées ?",
    "or": "Les portes du dépôt tournent TOUTES, et les seules rouges sont les deu",
@@ -3675,7 +3675,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Quel débit le disque atteint-il au hasard sur l'array ?",
    "or": "Les chiffres ci-dessus décrivent le régime à la demande, et ils tienne",
@@ -3737,7 +3737,7 @@
    }
   },
   {
-   "document": "docs/pilotage/manques.md",
+   "document": "tools/tests/documents/corpus/tableau/manques.md",
    "type": "tableau",
    "question": "Combien d'épreuves de rappel le réseau a-t-il passées à longue portée ?",
    "or": "La mémoire tient : 18 aiguilles sur 18 jusqu'à 12 288 jetons.",
@@ -3799,57 +3799,57 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Combien d'épreuves le dernier passage intégral a-t-il lancées ?",
    "or": "Dernière passe complète : 49 portes, 47 vertes, 2 rouges, 1 h 40 (28/1",
    "integrale": {
     "recupere": true,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 11940,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 12057,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "controlee_0.10": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 350,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 467,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "controlee_0.30": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 350,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 467,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "controlee_0.50": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 350,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 467,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "aleatoire_0.30": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 3579,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 3612,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "melangee_0.30": {
     "recupere": false,
-    "f1": 0.0667,
+    "f1": 0.0,
     "valeur": false,
-    "cout": 350,
-    "reponse": "le profil release est le binaire de MESURE : toute promotion dans le chemin d'exécution se paie d'un passage des portes "
+    "cout": 467,
+    "reponse": "porte-etat.sh\t0,1 s\t✅ aucun fait commité après le dernier état ; contrôle négatif : 3 refus attendus, 3 passes"
    },
    "sans_but": {
     "recupere": true,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3577,
+    "cout": 3610,
     "reponse": null
    },
    "closed_book": {
@@ -3861,7 +3861,7 @@
    }
   },
   {
-   "document": "docs/pilotage/references-non-regression.md",
+   "document": "tools/tests/documents/corpus/tableau/references-non-regression.md",
    "type": "tableau",
    "question": "Combien de renvois internes le script a-t-il validés ?",
    "or": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 lie",
@@ -3869,7 +3869,7 @@
     "recupere": true,
     "f1": 0.0333,
     "valeur": false,
-    "cout": 11940,
+    "cout": 12057,
     "reponse": "Elle imprimait ses défauts (❌) puis sortait en 0 ✗ : le sys.exit(...) de son bloc Python n'arrêtait que Python ✗, et le "
    },
    "controlee_0.10": {
@@ -3897,7 +3897,7 @@
     "recupere": true,
     "f1": 1.0,
     "valeur": true,
-    "cout": 3579,
+    "cout": 3612,
     "reponse": "Et une porte de plus dans la foulée : tools/verifier_liens.py (308 liens relatifs vérifiés dans docs/ et reports/ ✓) est"
    },
    "melangee_0.30": {
@@ -3911,7 +3911,7 @@
     "recupere": false,
     "f1": 0.0,
     "valeur": false,
-    "cout": 3577,
+    "cout": 3610,
     "reponse": null
    },
    "closed_book": {
@@ -3923,7 +3923,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quel numéro de session figure dans la référence du projet de résolution ?",
    "or": "[without reference to a Main Committee (A/80/L.2/Rev.1)]",
@@ -3985,7 +3985,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quel article de l'accord de siège est cité pour les représentants ?",
    "or": "section 11 of the Agreement between the United Nations and the United ",
@@ -4047,7 +4047,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
    "type": "juridique",
    "question": "Quel jour du mois l'assemblée mentionnée a-t-elle eu lieu ?",
    "or": "of 12 September 2025, and the statements made therein, including the p",
@@ -4109,7 +4109,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quel numéro de session apparaît dans la référence du document préparatoire ?",
    "or": "[sin remisión previa a una Comisión Principal (A/80/L.2/Rev.1)]",
@@ -4171,7 +4171,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quelle section de l'accord sur le siège concerne les représentants ?",
    "or": "sesiones de la Asamblea General a los representantes a quienes se hace",
@@ -4233,7 +4233,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
    "type": "juridique",
    "question": "Quel jour du mois la réunion citée s'est-elle tenue ?",
    "or": "Anfitrión el 12 de septiembre de 2025 y de las declaraciones formulada",
@@ -4295,7 +4295,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quel point de l'ordre du jour est examiné à cette session ?",
    "or": "Eightieth session Agenda item 13 Integrated and coordinated implementa",
@@ -4357,7 +4357,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quel numéro porte la recommandation sur les droits des femmes autochtones ?",
    "or": "39 (2022) on the rights of Indigenous women and girls 12 and general r",
@@ -4419,7 +4419,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
    "type": "juridique",
    "question": "Quelle année borne l'agenda du développement durable ?",
    "or": "Reaffirming the 2030 Agenda for Sustainable Development 11 and that th",
@@ -4481,7 +4481,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "question": "Quel thème de l'ordre du jour ouvre le document ?",
    "or": "Quatre-vingtième session Point 13 de l’ordre du jour Application et su",
@@ -4543,7 +4543,7 @@
    }
   },
   {
-   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "document": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
    "type": "juridique",
    "question": "Quel point de l'ordre du jour ouvre le document ?",
    "or": "Octogésimo período de sesiones Tema 13 del programa Aplicación y segui",
@@ -4605,7 +4605,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "À partir de quelle version de Python l'intégration continue du projet tourne-t-elle ?",
    "or": "dépôt\tstephanedenis/docwatch ✓ — licence MIT, CI Python 3.9–3.13",
@@ -4667,7 +4667,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quel score l'adaptation de faible rang obtient-elle sur l'exercice de copie ?",
    "or": "lora_recopie.py ✓\tapprend au modèle à recopier (LoRA, 100,0 % avec con",
@@ -4729,7 +4729,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "Quel taux le réseau à couches cachées obtient-il avec de mauvais paramètres ?",
    "or": "lecteur_non_lineaire.py ✓\tle lecteur MLP (et sa leçon : mal réglé, il ",
@@ -4791,7 +4791,7 @@
    }
   },
   {
-   "document": "docs/pilotage/utilisation.md",
+   "document": "tools/tests/documents/corpus/code/utilisation.md",
    "type": "code",
    "question": "À quelle date le vieux démon a-t-il cessé d'être utilisé ?",
    "or": "Le 27/10, l'ancien serveur-doc.py (port 8787, drave-doc.service) a été",
@@ -4853,7 +4853,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Combien de gigaoctets de fichiers faut-il écrire pour épuiser la mémoire tampon ?",
    "or": "En lecture séquentielle, c'est sans conséquence ; en écriture soutenue",
@@ -4915,7 +4915,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quelle taille fait la zone d'échange de la machine ?",
    "or": "Swap: 62 Gi, 26 Gi utilisés, et le swap est sur le disque dur (246 Mo/",
@@ -4977,7 +4977,7 @@
    }
   },
   {
-   "document": "docs/implantation/configuration-nvme-raid-amd.md",
+   "document": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
    "type": "code",
    "question": "Quel paragraphe traite du read_ahead_kb resté ouvert ?",
    "or": "Restent ouverts, et nommés dans la fiche : le read_ahead_kb du § 6.2 (",
@@ -5039,7 +5039,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Quelle longueur d'empreinte est comparée pour vérifier chaque tenseur ?",
    "or": "Vérification par empreintes. --verifier relit chaque fichier produit e",
@@ -5101,7 +5101,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Combien de tableaux de nombres le manifeste recense-t-il ?",
    "or": "L'inventaire annonce 1 587 tenseurs et 18,55 Go, exactement le modèle ",
@@ -5163,7 +5163,7 @@
    }
   },
   {
-   "document": "docs/implantation/format-clusters.md",
+   "document": "tools/tests/documents/corpus/code/format-clusters.md",
    "type": "code",
    "question": "Combien de nœuds la nouvelle disposition épargne-t-elle ?",
    "or": "Le rapport rapport-decoupage-moe.md montre que cette seule mise en ord",
@@ -5225,7 +5225,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle vitesse le pont NVLink atteint-il dans chaque direction ?",
    "or": "NVLink\t25,781 Go/s par sens, lien 0 sur les deux cartes\tnvidia-smi nvl",
@@ -5287,7 +5287,7 @@
    }
   },
   {
-   "document": "docs/implantation/numa-segregation.md",
+   "document": "tools/tests/documents/corpus/code/numa-segregation.md",
    "type": "code",
    "question": "Quelle taille de RAM faut-il garder des deux côtés ?",
    "or": "Garder la mémoire symétrique (64/64). La moitié des charges n'a besoin",
@@ -5349,111 +5349,49 @@
    }
   },
   {
-   "document": "docs/methode/continuite.md",
-   "type": "code",
-   "question": "Quel plafond de mots l'état courant ne doit-il pas dépasser ?",
-   "or": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
-   "integrale": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 6465,
-    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
-   },
-   "controlee_0.10": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 521,
-    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
-   },
-   "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 1692,
-    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
-   },
-   "controlee_0.50": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 1692,
-    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
-   },
-   "aleatoire_0.30": {
-    "recupere": true,
-    "f1": 1.0,
-    "valeur": true,
-    "cout": 1937,
-    "reponse": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches"
-   },
-   "melangee_0.30": {
-    "recupere": true,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 1692,
-    "reponse": "À la fin d'un cycle, en-cours doit permettre de reprendre sans contexte :"
-   },
-   "sans_but": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 1264,
-    "reponse": null
-   },
-   "closed_book": {
-    "recupere": false,
-    "f1": 0.0,
-    "valeur": false,
-    "cout": 0,
-    "reponse": null
-   }
-  },
-  {
-   "document": "docs/pilotage/backlog/dependances.md",
+   "document": "tools/tests/documents/corpus/tableau/dependances.md",
    "type": "tableau",
    "question": "Quel numéro porte la restitution après le gist ?",
-   "or": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
+   "or": "R13\tspécifiée\t—\tN2 (plafond)\t—\tR13-tokenisation-bpe.md",
    "integrale": {
     "recupere": true,
-    "f1": 0.1395,
-    "valeur": true,
-    "cout": 13875,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 14075,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },
    "controlee_0.10": {
     "recupere": false,
-    "f1": 0.1395,
-    "valeur": true,
+    "f1": 0.0,
+    "valeur": false,
     "cout": 1229,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },
    "controlee_0.30": {
-    "recupere": true,
-    "f1": 0.1395,
-    "valeur": true,
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
     "cout": 2160,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },
    "controlee_0.50": {
-    "recupere": true,
-    "f1": 0.1395,
-    "valeur": true,
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
     "cout": 2160,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },
    "aleatoire_0.30": {
-    "recupere": false,
-    "f1": 0.1395,
-    "valeur": true,
-    "cout": 4156,
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 4222,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },
    "melangee_0.30": {
-    "recupere": true,
-    "f1": 0.1395,
-    "valeur": true,
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
     "cout": 2160,
     "reponse": "Le SFT se partage. N4 porte la consigne courte sans document (format, arrêt, refus) ; R31 porte la lecture multi-section"
    },

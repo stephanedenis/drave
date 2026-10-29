@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **301 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **304 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -17,6 +17,7 @@
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
+| [rapport-a80-porte-adaptateur.md](rapport-a80-porte-adaptateur.md) | A8.0 — `porte-adaptateur-sortie` épingle ses PPL : 17,4315 / 2 687 292,8165 |
 | [rapport-a80-porte-budget.md](rapport-a80-porte-budget.md) | A8.0 — `porte-budget` épingle sa PPL : 111,9225 |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
@@ -65,6 +66,7 @@
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
+| [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
 | [rapport-couche-distante.md](rapport-couche-distante.md) | A7.6 — une couche exécutée à distance : logits identiques au bit près |
 | [rapport-couche-int8-canal.md](rapport-couche-int8-canal.md) | A7.8 — int8 par canal : l'argmax tient, le bit non |
 | [rapport-couche-int8.md](rapport-couche-int8.md) | A7.7 — int8 sur le hidden : le volume baisse, la fidélité casse |
@@ -265,6 +267,7 @@
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r05-balayage.md](rapport-r05-balayage.md) | R05 — le balayage : 0,984 de rappel@10 sur le lexical, 0,702 sur les paraphrases |
+| [rapport-r06-cascade.md](rapport-r06-cascade.md) | R06 v2 — la cascade des lecteurs : +1,2 point, pour 9 appels de modèle |
 | [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |

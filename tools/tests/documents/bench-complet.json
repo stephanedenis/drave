@@ -4,7 +4,8 @@
  "note": "Banc complet R0.3 : 30 documents, 5 types, questions GABARIT (valeur demandée par deux mots rares du passage gold). Mesure la sélection à l'échelle ; ne mesure pas la paraphrase — c'est le banc pilote, puis R0.3 durci.",
  "documents": [
   {
-   "chemin": "docs/theorie/vision.md",
+   "chemin": "tools/tests/documents/corpus/prose/vision.md",
+   "source": "docs/theorie/vision.md",
    "type": "prose",
    "questions": [
     {
@@ -52,7 +53,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/lecture-rapide.md",
+   "chemin": "tools/tests/documents/corpus/prose/lecture-rapide.md",
+   "source": "docs/theorie/lecture-rapide.md",
    "type": "prose",
    "questions": [
     {
@@ -128,7 +130,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/protocole-semantique.md",
+   "chemin": "tools/tests/documents/corpus/prose/protocole-semantique.md",
+   "source": "docs/theorie/protocole-semantique.md",
    "type": "prose",
    "questions": [
     {
@@ -204,7 +207,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/jeux-symboliques.md",
+   "chemin": "tools/tests/documents/corpus/prose/jeux-symboliques.md",
+   "source": "docs/theorie/jeux-symboliques.md",
    "type": "prose",
    "questions": [
     {
@@ -259,7 +263,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/semantique-universaux.md",
+   "chemin": "tools/tests/documents/corpus/prose/semantique-universaux.md",
+   "source": "docs/theorie/semantique-universaux.md",
    "type": "prose",
    "questions": [
     {
@@ -307,7 +312,8 @@
    ]
   },
   {
-   "chemin": "docs/theorie/architecture-native.md",
+   "chemin": "tools/tests/documents/corpus/prose/architecture-native.md",
+   "source": "docs/theorie/architecture-native.md",
    "type": "prose",
    "questions": [
     {
@@ -383,7 +389,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/format-flux.md",
+   "chemin": "tools/tests/documents/corpus/technique/format-flux.md",
+   "source": "docs/implantation/format-flux.md",
    "type": "technique",
    "questions": [
     {
@@ -459,7 +466,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/document-graph.md",
+   "chemin": "tools/tests/documents/corpus/technique/document-graph.md",
+   "source": "docs/implantation/document-graph.md",
    "type": "technique",
    "questions": [
     {
@@ -535,7 +543,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/lecteur-controleur.md",
+   "chemin": "tools/tests/documents/corpus/technique/lecteur-controleur.md",
+   "source": "docs/implantation/lecteur-controleur.md",
    "type": "technique",
    "questions": [
     {
@@ -590,7 +599,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/banc-lecture.md",
+   "chemin": "tools/tests/documents/corpus/technique/banc-lecture.md",
+   "source": "docs/implantation/banc-lecture.md",
    "type": "technique",
    "questions": [
     {
@@ -666,7 +676,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/contexte-long.md",
+   "chemin": "tools/tests/documents/corpus/technique/contexte-long.md",
+   "source": "docs/implantation/contexte-long.md",
    "type": "technique",
    "questions": [
     {
@@ -742,7 +753,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/convertisseur.md",
+   "chemin": "tools/tests/documents/corpus/technique/convertisseur.md",
+   "source": "docs/implantation/convertisseur.md",
    "type": "technique",
    "questions": [
     {
@@ -818,7 +830,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/roadmap.md",
+   "chemin": "tools/tests/documents/corpus/tableau/roadmap.md",
+   "source": "docs/pilotage/roadmap.md",
    "type": "tableau",
    "questions": [
     {
@@ -836,35 +849,35 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « typés » ?",
-     "indice": "B11\tla base d'universaux typés : schéma, parseur, codec, contexte\t✅ / ",
-     "valeur": "11",
-     "passage": "B11\tla base d'universaux typés : schéma, parseur, codec, contexte\t✅ / ⚠️\tB11.10 (cartes et ambiguïtés) ; le codec lit 100 %",
+     "question": "Quelle valeur le document associe-t-il à « cerveau » et « langage » ?",
+     "indice": "B12\tles modules cerveau-langage M1–M9\t⚠️ / ❌\tB12.10 close (négatif : o",
+     "valeur": "12",
+     "passage": "B12\tles modules cerveau-langage M1–M9\t⚠️ / ❌\tB12.10 close (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « contenu » et « gagne » ?",
-     "indice": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie p",
-     "valeur": "24,05",
-     "passage": "Le saut de calcul existe, le saut de contenu n'existe pas. La sortie précoce gagne 24,05 % de temps en perdant 1,61 point ; c'est une décision sur la confiance ",
+     "question": "Quelle valeur le document associe-t-il à « aggrave » et « celui » ?",
+     "indice": "La mémoire manque. Le signal courant est lisible (R² 0,992), celui d'i",
+     "valeur": "0,992",
+     "passage": "La mémoire manque. Le signal courant est lisible (R² 0,992), celui d'il y a 8 pas ne l'est pas (−0,681), et l'entraînement l'aggrave (−1,091 → −2,773). Le tampo",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « contradiction » et « greffées » ?",
-     "indice": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (re",
-     "valeur": "0.4",
-     "passage": "R0.4\ttêtes de lecture : survol (pertinence d'une région), balayage (requête → spans), relecture (confiance/contradiction), greffées sur les têtes précoces\t⏳ apr",
+     "question": "Quelle valeur le document associe-t-il à « bancs » et « choix » ?",
+     "indice": "R0.5\trouteur extractif / génératif : choisir le lecteur selon la quest",
+     "valeur": "0.5",
+     "passage": "R0.5\trouteur extractif / génératif : choisir le lecteur selon la question (signal BM25), parce qu'aucun des deux ne gagne partout\t⚠️ signal AUC 0,826 ; z-score ",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « faits » et « entités » ?",
-     "indice": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'e",
-     "valeur": "2.1",
-     "passage": "R2.1\tmémoire de travail / gist : état de résumé par section, table d'entités et de faits, tampon en entrée\t⏳\tréponse dont l'indice est en section 2 après lectur",
+     "question": "Quelle valeur le document associe-t-il à « brut » et « premier » ?",
+     "indice": "R1.1 doit être tenté avant R1.2 : si la hiérarchie suffit, le contexte",
+     "valeur": "1.1",
+     "passage": "R1.1 doit être tenté avant R1.2 : si la hiérarchie suffit, le contexte brut n'est pas le premier chantier.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « bloque » et « contre » ?",
+     "question": "Quelle valeur le document associe-t-il à « bloque » et « sémantique » ?",
      "indice": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique",
      "valeur": "4.6",
      "passage": "Ce qui bloque : N4.6 est 24/24 vus, 0/4 tenus ; le décodeur sémantique est sous le plancher chrF (12,7 / 5,3 contre 39,6).",
@@ -881,7 +894,7 @@
      "question": "Quelle valeur le document associe-t-il à « absent » et « nommé » ?",
      "indice": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (F",
      "valeur": "1.5",
-     "passage": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local), B10.3 (B10.2bis absent du backlog) ;",
+     "passage": "bloqué, nommé : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local), B10.3 (B10.2bis absent du backlog), R4.4 (aucun OCR : ni te",
      "type": "tableau"
     },
     {
@@ -894,83 +907,85 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/en-cours.md",
+   "chemin": "tools/tests/documents/corpus/tableau/en-cours.md",
+   "source": "docs/pilotage/en-cours.md",
    "type": "tableau",
    "questions": [
     {
      "question": "Quelle valeur le document associe-t-il à « heure » et « locale » ?",
-     "indice": "Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).",
+     "indice": "Mis à jour : 2026-10-29, 17 h 30 HAE (heure locale, EDT).",
      "valeur": "2026",
-     "passage": "Mis à jour : 2026-10-29, 14 h 10 HAE (heure locale, EDT).",
+     "passage": "Mis à jour : 2026-10-29, 17 h 30 HAE (heure locale, EDT).",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « analyse » et « tenir » ?",
-     "indice": "Rôle : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambig",
-     "valeur": "11.10",
-     "passage": "Rôle : tenir l'état, la roadmap et l'analyse ; B11.10 (cartes et ambiguïtés) sur CPU.",
+     "question": "Quelle valeur le document associe-t-il à « livré » et « pilote » ?",
+     "indice": "Rôle : graphe du backlog (livré), R0.1–R0.3 mesurés ; R0.4 (pilote nég",
+     "valeur": "0.1",
+     "passage": "Rôle : graphe du backlog (livré), R0.1–R0.3 mesurés ; R0.4 (pilote négatif) et R0.5 (routeur) ouverts.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
-     "indice": "Prochaine action : B11.10 — cartes et ambiguïtés ; R0.3 est à 8156fdcb",
-     "valeur": "11.10",
-     "passage": "Prochaine action : B11.10 — cartes et ambiguïtés ; R0.3 est à 8156fdcb.",
+     "question": "Quelle valeur le document associe-t-il à « modele » et « réservés » ?",
+     "indice": "Fichiers réservés : tools/lecteur_modele.py, tools/routeur.py, reports",
+     "valeur": "03",
+     "passage": "Fichiers réservés : tools/lecteur_modele.py, tools/routeur.py, reports/r03-*, reports/r07-*.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « 4ba4 » et « 5033 » ?",
-     "indice": "Id : 8156fdcb-5033-4ba4-a5f3-f8a078e6e57e.",
-     "valeur": "8156",
-     "passage": "Id : 8156fdcb-5033-4ba4-a5f3-f8a078e6e57e.",
+     "question": "Quelle valeur le document associe-t-il à « 4ccf641f » et « 7fb1c8a6 » ?",
+     "indice": "Rôle : R4.1–R4.3, B10.2bis et A8.3b mesurées (7fb1c8a6, 4ccf641f, ce c",
+     "valeur": "4.1",
+     "passage": "Rôle : R4.1–R4.3, B10.2bis et A8.3b mesurées (7fb1c8a6, 4ccf641f, ce cycle).",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « appel » et « contre » ?",
-     "indice": "Ce qu'elle fait : R0.3 — le modèle tourne sur GPU (llama-cli CUDA, 1,9",
-     "valeur": "0.3",
-     "passage": "Ce qu'elle fait : R0.3 — le modèle tourne sur GPU (llama-cli CUDA, 1,9 s/appel) : contrôleur 0,500 contre troncature 0,400 et hasard 0,000 (10 questions, indica",
+     "question": "Quelle valeur le document associe-t-il à « capacité » et « mode » ?",
+     "indice": "Prochaine action : B10.2bis suite (capacité/corpus) ; A8.3b (mode de l",
+     "valeur": "10.2",
+     "passage": "Prochaine action : B10.2bis suite (capacité/corpus) ; A8.3b (mode de lot) ; R4.4 bloqué.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « questions » et « action » ?",
-     "indice": "Prochaine action : R0.3 — le banc complet (30 documents, 300 questions",
-     "valeur": "0.3",
-     "passage": "Prochaine action : R0.3 — le banc complet (30 documents, 300 questions) sur GPU.",
-     "type": "tableau"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « contextes » et « négatifs » ?",
+     "question": "Quelle valeur le document associe-t-il à « contextes » et « occupé » ?",
      "indice": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ;",
      "valeur": "130",
      "passage": "Bloquants : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « intégration » et « retiré » ?",
-     "indice": "B12.10 — intégration : close négative ; oracle = M8 (0,436), M4 seul =",
-     "valeur": "12.10",
-     "passage": "B12.10 — intégration : close négative ; oracle = M8 (0,436), M4 seul = 0/606 ; la porte « M4 retiré » est vide.",
+     "question": "Quelle valeur le document associe-t-il à « aide » et « b102bis » ?",
+     "indice": "B10.2bis — le décodeur : négative — 3 bras × 3 graines : 11,1/11,2/11,",
+     "valeur": "10.2",
+     "passage": "B10.2bis — le décodeur : négative — 3 bras × 3 graines : 11,1/11,2/11,0 contre 38,5 ; l'attention n'aide pas ; fiche b102bis.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « fichiers » et « json » ?",
-     "indice": "fichiers / JSON de résultats\t277 / 343\treports/*.md / reports/*.json",
-     "valeur": "277",
-     "passage": "fichiers / JSON de résultats\t277 / 343\treports/*.md / reports/*.json",
+     "question": "Quelle valeur le document associe-t-il à « arêtes » et « dures » ?",
+     "indice": "Backlog — graphe : 41 arêtes dures, 4 sans fiche ; tools/verifie_backl",
+     "valeur": "41",
+     "passage": "Backlog — graphe : 41 arêtes dures, 4 sans fiche ; tools/verifie_backlog.py.",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « arrêtées » et « priorités » ?",
-     "indice": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; pri",
-     "valeur": "29",
-     "passage": "Backlog — graphe\t29 fiches ; 41 arêtes dures\t8 lignes sans fiche ; priorités arrêtées\tvérifier le graphe (8156fdcb)",
+     "question": "Quelle valeur le document associe-t-il à « archive » et « documents » ?",
+     "indice": "documents de docs/\t104 (hors archive et README)\tdocs/**/*.md",
+     "valeur": "104",
+     "passage": "documents de docs/\t104 (hors archive et README)\tdocs/**/*.md",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « lignes » et « vérifier » ?",
+     "indice": "Backlog — graphe\t35 fiches ; 42 arêtes dures\t3 lignes sans fiche\tvérif",
+     "valeur": "35",
+     "passage": "Backlog — graphe\t35 fiches ; 42 arêtes dures\t3 lignes sans fiche\tvérifier le graphe (8156fdcb)",
      "type": "tableau"
     }
    ]
   },
   {
-   "chemin": "docs/pilotage/backlog/dependances.md",
+   "chemin": "tools/tests/documents/corpus/tableau/dependances.md",
+   "source": "docs/pilotage/backlog/dependances.md",
    "type": "tableau",
    "questions": [
     {
@@ -981,72 +996,73 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « carte » et « fpga » ?",
-     "indice": "A5.4\tbloquée\tA5 (acquis)\tbloqué : la carte Stratix V\t—\tA5.4-fpga.md",
-     "valeur": "5.4",
-     "passage": "A5.4\tbloquée\tA5 (acquis)\tbloqué : la carte Stratix V\t—\tA5.4-fpga.md",
+     "question": "Quelle valeur le document associe-t-il à « seuil » et « mesurée » ?",
+     "indice": "A3.3\tmesurée\tA3.2 (dure)\t—\t—\tA3.3-seuil.md",
+     "valeur": "3.3",
+     "passage": "A3.3\tmesurée\tA3.2 (dure)\t—\t—\tA3.3-seuil.md",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « parite » et « prête » ?",
-     "indice": "N0.3b\tprête\tN0 (acquis)\t—\t—\tN0.3b-parite-ppl.md",
-     "valeur": "0.3",
-     "passage": "N0.3b\tprête\tN0 (acquis)\t—\t—\tN0.3b-parite-ppl.md",
+     "question": "Quelle valeur le document associe-t-il à « franchit » et « plancher » ?",
+     "indice": "B10.2bis\tmesurée (négative)\t—\tl'attention ne franchit pas le plancher ",
+     "valeur": "10.2",
+     "passage": "B10.2bis\tmesurée (négative)\t—\tl'attention ne franchit pas le plancher (16,5/11,2)\tB10.3\tB10.2bis-decodeur-attention-croisee.md",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « relecture » et « tete » ?",
-     "indice": "R06\tspécifiée\tR03 (dure), R21 (dure), R22 (dure)\t—\t—\tR06-tete-relectur",
-     "valeur": "06",
-     "passage": "R06\tspécifiée\tR03 (dure), R21 (dure), R22 (dure)\t—\t—\tR06-tete-relecture.md",
-     "type": "tableau"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « restitution » et « plafond » ?",
-     "indice": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51",
-     "valeur": "31",
-     "passage": "R31\tspécifiée\tR01 (dure), R03 (dure), R21 (dure)\tN4 (plafond)\tR32, R51, R52\tR31-restitution-sft.md",
-     "type": "tableau"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « croisee » et « exécutable » ?",
-     "indice": "R51\tspécifiée\tR31 (dure), R32 (dure), R03 (dure), R01 (dure)\tle manque",
-     "valeur": "51",
-     "passage": "R51\tspécifiée\tR31 (dure), R32 (dure), R03 (dure), R01 (dure)\tle manque M4 (aucun encodeur exécutable)\t—\tR51-lecture-croisee.md",
-     "type": "tableau"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « book » et « closed » ?",
-     "indice": "Une même mesure sous deux noms. R02 disait dépendre de R03, et R03 de ",
+     "question": "Quelle valeur le document associe-t-il à « controleur » et « lecture » ?",
+     "indice": "R02\tmesurée\tR01 (dure)\t—\tR03\tR02-controleur-lecture.md",
      "valeur": "02",
-     "passage": "Une même mesure sous deux noms. R02 disait dépendre de R03, et R03 de R02 : le contrôleur se mesure sur le banc, le banc a besoin des modes du contrôleur. Ce n'",
+     "passage": "R02\tmesurée\tR01 (dure)\t—\tR03\tR02-controleur-lecture.md",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « budget » et « chiffrer » ?",
-     "indice": "R13\tspécifiée\taucune arête dure ; N1 suffit à deux tokenisations\tchiff",
+     "question": "Quelle valeur le document associe-t-il à « tokenisation » et « plafond » ?",
+     "indice": "R13\tspécifiée\t—\tN2 (plafond)\t—\tR13-tokenisation-bpe.md",
      "valeur": "13",
-     "passage": "R13\tspécifiée\taucune arête dure ; N1 suffit à deux tokenisations\tchiffrer octets contre BPE à budget égal",
+     "passage": "R13\tspécifiée\t—\tN2 (plafond)\t—\tR13-tokenisation-bpe.md",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « intérêt » et « mêmes » ?",
-     "indice": "Ce qui n'ouvre rien attend. R43 (maths), R44 (OCR) et R52 (multilingue",
-     "valeur": "43",
-     "passage": "Ce qui n'ouvre rien attend. R43 (maths), R44 (OCR) et R52 (multilingue) n'ouvrent que sur eux-mêmes ; ils ne sont pas la prochaine action, quel que soit leur in",
+     "question": "Quelle valeur le document associe-t-il à « code » et « bloc » ?",
+     "indice": "R42\tspécifiée\tR01 (dure)\t—\tR44\tR42-bloc-code.md",
+     "valeur": "42",
+     "passage": "R42\tspécifiée\tR01 (dure)\t—\tR44\tR42-bloc-code.md",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « arrive » et « compréhension » ?",
-     "indice": "R03 venant en dernier, la première courbe vitesse-compréhension arrive",
-     "valeur": "03",
-     "passage": "R03 venant en dernier, la première courbe vitesse-compréhension arrive après R01 et R02 — c'est le prix de l'ordre strict, et il est nommé.",
+     "question": "Quelle valeur le document associe-t-il à « avait » et « exige » ?",
+     "indice": "Une condition sans identifiant. A8.3 (« opt-in → défaut ») exige d'« é",
+     "valeur": "8.3",
+     "passage": "Une condition sans identifiant. A8.3 (« opt-in → défaut ») exige d'« épingler les portes qui mesurent une PPL ». Cette condition n'avait ni id ni fiche : elle e",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « ablation » et « codes » ?",
+     "indice": "B12.10\tpartiel\tB12 acquis ; les modules existent\tjeu de codes neufs et",
+     "valeur": "12.10",
+     "passage": "B12.10\tpartiel\tB12 acquis ; les modules existent\tjeu de codes neufs et ablation de M4",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « attendent » et « bloqués » ?",
+     "indice": "Ce qui n'y est pas, et pourquoi : A3.4, A5.4, A6.2, B1.5 sont bloqués ",
+     "valeur": "3.4",
+     "passage": "Ce qui n'y est pas, et pourquoi : A3.4, A5.4, A6.2, B1.5 sont bloqués par une ressource externe nommée ; B10.3 et R52 attendent B10.2bis ; N5 attend N2 et N4 ; ",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « avant » et « donc » ?",
+     "indice": "R31 attend R21, donc la restitution ne se mesure pas avant la mémoire.",
+     "valeur": "31",
+     "passage": "R31 attend R21, donc la restitution ne se mesure pas avant la mémoire.",
      "type": "tableau"
     }
    ]
   },
   {
-   "chemin": "docs/pilotage/backlog/index.md",
+   "chemin": "tools/tests/documents/corpus/tableau/index.md",
+   "source": "docs/pilotage/backlog/index.md",
    "type": "tableau",
    "questions": [
     {
@@ -1057,17 +1073,17 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « contrôleur » et « mesurée » ?",
-     "indice": "R02\tContrôleur de lecture\tmesurée\tP0\tR01\tR0.2",
-     "valeur": "02",
-     "passage": "R02\tContrôleur de lecture\tmesurée\tP0\tR01\tR0.2",
+     "question": "Quelle valeur le document associe-t-il à « banc » et « rapide » ?",
+     "indice": "R03\tBanc de lecture rapide\tmesurée\tP0\tR01, R02\tR0.3",
+     "valeur": "03",
+     "passage": "R03\tBanc de lecture rapide\tmesurée\tP0\tR01, R02\tR0.3",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « balayage » et « tête » ?",
-     "indice": "R05\tTête de balayage\tspécifiée\tP1\tR03, R01\tR0.4",
-     "valeur": "05",
-     "passage": "R05\tTête de balayage\tspécifiée\tP1\tR03, R01\tR0.4",
+     "question": "Quelle valeur le document associe-t-il à « relecture » et « tête » ?",
+     "indice": "R06\tTête de relecture\tspécifiée\tP2\tR03, R21, R22\tR0.4",
+     "valeur": "06",
+     "passage": "R06\tTête de relecture\tspécifiée\tP2\tR03, R21, R22\tR0.4",
      "type": "tableau"
     },
     {
@@ -1078,24 +1094,17 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « travail » et « gist » ?",
-     "indice": "R21\tMémoire de travail et gist\tspécifiée\tP1\tR01, R11\tR2.1",
-     "valeur": "21",
-     "passage": "R21\tMémoire de travail et gist\tspécifiée\tP1\tR01, R11\tR2.1",
+     "question": "Quelle valeur le document associe-t-il à « épisodique » et « mémoire » ?",
+     "indice": "R22\tMémoire épisodique et relecture\tspécifiée\tP2\tR01, R21\tR2.2",
+     "valeur": "22",
+     "passage": "R22\tMémoire épisodique et relecture\tspécifiée\tP2\tR01, R21\tR2.2",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « citations » et « provenance » ?",
-     "indice": "R32\tCitations et provenance\tspécifiée\tP2\tR31, R01, R21\tR3.2",
-     "valeur": "32",
-     "passage": "R32\tCitations et provenance\tspécifiée\tP2\tR31, R01, R21\tR3.2",
-     "type": "tableau"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « croisée » et « multi » ?",
-     "indice": "R51\tLecture croisée / multi-documents\tspécifiée\tP3\tR31, R32, R03, R01\t",
-     "valeur": "51",
-     "passage": "R51\tLecture croisée / multi-documents\tspécifiée\tP3\tR31, R32, R03, R01\tR5.1",
+     "question": "Quelle valeur le document associe-t-il à « encodeur » et « visuel » ?",
+     "indice": "R44\tEncodeur visuel / OCR\tspécifiée\tP3\tR41, R42, R43\tR4.4",
+     "valeur": "44",
+     "passage": "R44\tEncodeur visuel / OCR\tspécifiée\tP3\tR41, R42, R43\tR4.4",
      "type": "tableau"
     },
     {
@@ -1106,23 +1115,31 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « complet » et « fpga » ?",
-     "indice": "A5.4\tOpérateur FPGA complet\tbloquée\tP3\tA5\tA5.4",
-     "valeur": "5.4",
-     "passage": "A5.4\tOpérateur FPGA complet\tbloquée\tP3\tA5\tA5.4",
+     "question": "Quelle valeur le document associe-t-il à « colab » et « démonstration » ?",
+     "indice": "A3.4\tDémonstration Colab\tbloquée\tP3\tA3\tA3.4",
+     "valeur": "3.4",
+     "passage": "A3.4\tDémonstration Colab\tbloquée\tP3\tA3\tA3.4",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « ambiguïtés » et « cartes » ?",
-     "indice": "B11.10\tCartes et ambiguïtés de la RSN\tprête\tP2\tB11\tB11.10",
-     "valeur": "11.10",
-     "passage": "B11.10\tCartes et ambiguïtés de la RSN\tprête\tP2\tB11\tB11.10",
+     "question": "Quelle valeur le document associe-t-il à « corpus » et « humain » ?",
+     "indice": "B1.5\tProse scientifique (corpus humain)\tbloquée\tP3\tB1\tB1.5",
+     "valeur": "1.5",
+     "passage": "B1.5\tProse scientifique (corpus humain)\tbloquée\tP3\tB1\tB1.5",
+     "type": "tableau"
+    },
+    {
+     "question": "Quelle valeur le document associe-t-il à « rentabilité » et « seuil » ?",
+     "indice": "A3.3\tSeuil de rentabilité\tmesurée\tP2\tA3.2\tA3.3",
+     "valeur": "3.3",
+     "passage": "A3.3\tSeuil de rentabilité\tmesurée\tP2\tA3.2\tA3.3",
      "type": "tableau"
     }
    ]
   },
   {
-   "chemin": "docs/pilotage/manques.md",
+   "chemin": "tools/tests/documents/corpus/tableau/manques.md",
+   "source": "docs/pilotage/manques.md",
    "type": "tableau",
    "questions": [
     {
@@ -1191,7 +1208,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/references-non-regression.md",
+   "chemin": "tools/tests/documents/corpus/tableau/references-non-regression.md",
+   "source": "docs/pilotage/references-non-regression.md",
    "type": "tableau",
    "questions": [
     {
@@ -1237,37 +1255,38 @@
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « installer » et « intact » ?",
-     "indice": "porte-harnais-invariants.sh\t105 s\t✅ porte harnais : installer une repa",
-     "valeur": "105",
-     "passage": "porte-harnais-invariants.sh\t105 s\t✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage",
+     "question": "Quelle valeur le document associe-t-il à « injection » et « branchée » ?",
+     "indice": "porte-greffe.sh\t829 s\t✅ la porte est franchie. Ce qu'elle établit : l'",
+     "valeur": "829",
+     "passage": "porte-greffe.sh\t829 s\t✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « arbitrent » et « entrées » ?",
-     "indice": "porte-melange.sh\t805 s\t✅ la porte est franchie. Ce qu'elle dit : deux ",
-     "valeur": "805",
-     "passage": "porte-melange.sh\t805 s\t✅ la porte est franchie. Ce qu'elle dit : deux entrées qui se somment ARBITRENT",
+     "question": "Quelle valeur le document associe-t-il à « crée » et « jumeaux » ?",
+     "indice": "porte-jumeaux.sh\t77 s\tPORTE TENUE : l'échange est exact, il ne crée pa",
+     "valeur": "77",
+     "passage": "porte-jumeaux.sh\t77 s\tPORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « divisées » et « noyau » ?",
-     "indice": "porte-poids-creux.sh\t354 s\t✅ porte poids creux : le noyau creux est EX",
-     "valeur": "354",
-     "passage": "porte-poids-creux.sh\t354 s\t✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur",
+     "question": "Quelle valeur le document associe-t-il à « absent » et « annoncé » ?",
+     "indice": "porte-pannes.sh\t45 s\t✅ pair absent : échec annoncé en 2 s (code 7), au",
+     "valeur": "45",
+     "passage": "porte-pannes.sh\t45 s\t✅ pair absent : échec annoncé en 2 s (code 7), aucune perplexité",
      "type": "tableau"
     },
     {
-     "question": "Quelle valeur le document associe-t-il à « calculé » et « nommant » ?",
-     "indice": "porte-registre.sh\t14 s\t✅ région absente : refusée en la nommant (code ",
-     "valeur": "14",
-     "passage": "porte-registre.sh\t14 s\t✅ région absente : refusée en la nommant (code 2), rien n'est calculé",
+     "question": "Quelle valeur le document associe-t-il à « classe » et « contient » ?",
+     "indice": "porte-reflexe.sh\t106 s\t✅ l'état de 16 couches CONTIENT le prochain jet",
+     "valeur": "106",
+     "passage": "porte-reflexe.sh\t106 s\t✅ l'état de 16 couches CONTIENT le prochain jeton : 25.4 % contre 4.8 % pour la classe majorit",
      "type": "tableau"
     }
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-en.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1294,7 +1313,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-fr.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1321,7 +1341,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf",
+   "source": "data/onu/pdf/A_RES_80_1-es.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1348,7 +1369,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-en.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1403,7 +1425,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-fr.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-fr.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1458,7 +1481,8 @@
    ]
   },
   {
-   "chemin": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "chemin": "tools/tests/documents/corpus/juridique/A_RES_80_10-es.pdf",
+   "source": "data/onu/pdf/A_RES_80_10-es.pdf",
    "type": "juridique",
    "questions": [
     {
@@ -1513,7 +1537,8 @@
    ]
   },
   {
-   "chemin": "docs/pilotage/utilisation.md",
+   "chemin": "tools/tests/documents/corpus/code/utilisation.md",
+   "source": "docs/pilotage/utilisation.md",
    "type": "code",
    "questions": [
     {
@@ -1589,7 +1614,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/configuration-nvme-raid-amd.md",
+   "chemin": "tools/tests/documents/corpus/code/configuration-nvme-raid-amd.md",
+   "source": "docs/implantation/configuration-nvme-raid-amd.md",
    "type": "code",
    "questions": [
     {
@@ -1665,7 +1691,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/format-clusters.md",
+   "chemin": "tools/tests/documents/corpus/code/format-clusters.md",
+   "source": "docs/implantation/format-clusters.md",
    "type": "code",
    "questions": [
     {
@@ -1741,7 +1768,8 @@
    ]
   },
   {
-   "chemin": "docs/methode/portes.md",
+   "chemin": "tools/tests/documents/corpus/code/portes.md",
+   "source": "docs/methode/portes.md",
    "type": "code",
    "questions": [
     {
@@ -1803,7 +1831,8 @@
    ]
   },
   {
-   "chemin": "docs/implantation/numa-segregation.md",
+   "chemin": "tools/tests/documents/corpus/code/numa-segregation.md",
+   "source": "docs/implantation/numa-segregation.md",
    "type": "code",
    "questions": [
     {
@@ -1879,7 +1908,8 @@
    ]
   },
   {
-   "chemin": "docs/methode/continuite.md",
+   "chemin": "tools/tests/documents/corpus/code/continuite.md",
+   "source": "docs/methode/continuite.md",
    "type": "code",
    "questions": [
     {
@@ -1898,9 +1928,9 @@
     },
     {
      "question": "Quelle valeur le document associe-t-il à « budget » et « coupe » ?",
-     "indice": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+     "indice": "budget\t≤ 2 000 mots ; au-delà, on coupe (résumé + lien) et on ne relèv",
      "valeur": "2 000",
-     "passage": "budget\t≤ 2 000 mots ; au-delà, on coupe et on renvoie aux fiches",
+     "passage": "budget\t≤ 2 000 mots ; au-delà, on coupe (résumé + lien) et on ne relève pas",
      "type": "code"
     },
     {
@@ -1908,13 +1938,6 @@
      "indice": "prochaine action\ttoujours nommée, avec son identifiant (N0.3b, N2.4…)",
      "valeur": "0.3",
      "passage": "prochaine action\ttoujours nommée, avec son identifiant (N0.3b, N2.4…)",
-     "type": "code"
-    },
-    {
-     "question": "Quelle valeur le document associe-t-il à « dépassement » et « déplace » ?",
-     "indice": "Dépassement : au-delà de 2 000 mots, on coupe (résumé + lien) ou on dé",
-     "valeur": "2 000",
-     "passage": "Dépassement : au-delà de 2 000 mots, on coupe (résumé + lien) ou on déplace le détail dans reports/ ou la roadmap ; on ne relève pas le budget.",
      "type": "code"
     },
     {
@@ -1927,5 +1950,5 @@
    ]
   }
  ],
- "questions": 249
+ "questions": 248
 }
