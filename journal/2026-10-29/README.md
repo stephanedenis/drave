@@ -5,19 +5,19 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**73 commits** · **0 session(s)** · **7 thème(s)**
+**76 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 6 | [distribue.md](distribue.md) |
+| distribue | 7 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 5 | [portes.md](portes.md) |
+| portes | 7 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -105,6 +105,9 @@ Aucune session indexée pour ce jour ; voir
 | 16:02 | `727d13e0` | ÉTAT — LE FAIT ET SA LIGNE : LE COMMIT REFUSE UN RÉSULTAT SANS ÉTAT |
 | 16:06 | `543b5a02` | CONTINUITÉ — LA SESSION QUI CLÔT, PAS UN « PRINCIPAL » |
 | 16:07 | `d2457e46` | MIROIR — LES TROIS BLOCS RESTITUENT : 34/34 TABLEAUX, 296/296 MODULES, 42/42 FORMULES |
+| 16:09 | `6872bef1` | A8.0 — PORTE-TOPOLOGIE ÉPINGLÉE : 17,4702 / 30,4363 / 42,5477 ; ÉTAT 3/33 |
+| 16:10 | `3672eae9` | SCHÉMA — R4.1–R4.3 ET LE MIROIR, A8.0 TROIS PORTES, R4.4 BLOQUÉ |
+| 16:13 | `66eb7107` | A8.3 — LE DÉFAUT PLACE+PERLE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ |
 
 ## Le récit de la journée (écrit à la main)
 

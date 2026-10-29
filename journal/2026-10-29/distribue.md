@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 12:24 | `7a8a441e` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ | `README.md`, `distribue.md`, `THEMES.md` (+1) |
 | 15:51 | `2fc844b3` | A8.0 — PORTE-FLUX ÉPINGLÉE : PPL 61,9920 / 60,8135, TOLÉRANCE 5e-4 | `README.md`, `mesures.md`, `a80-porte-flux.json` (+3) |
 | 15:52 | `4ccf641f` | R4.2 — LE BLOC CODE : 294 FICHIERS, 453 038 NŒUDS, 24/24 EXTRAITS EXÉCUTÉS | `bloc-code.md`, `R42-bloc-code.md`, `index.md` (+13) |
+| 16:09 | `6872bef1` | A8.0 — PORTE-TOPOLOGIE ÉPINGLÉE : 17,4702 / 30,4363 / 42,5477 ; ÉTAT 3/33 | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 
 ## Chiffres du jour
 
-`61,9920` · `60,8135` · `30 %` · `100 %` · `75 %` · `1,000`
+`17,4702` · `30,4363` · `42,5477` · `61,9920` · `60,8135` · `30 %` · `100 %` · `75 %` · `1,000`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -26,6 +27,7 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a80-porte-flux.md](../../reports/rapport-a80-porte-flux.md)
+- [reports/rapport-a80-porte-topologie.md](../../reports/rapport-a80-porte-topologie.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 - [reports/rapport-r01-graphe-document.md](../../reports/rapport-r01-graphe-document.md)
 - [reports/rapport-r02-controleur.md](../../reports/rapport-r02-controleur.md)

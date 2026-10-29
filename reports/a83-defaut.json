@@ -1,0 +1,59 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3",
+ "dispositif": {
+  "moteur": "drave-core release, Qwen2.5-0.5B-Q8_0",
+  "levier": "DRAVE_PERTE_MAX (budget en %) ; kv_precision par couche",
+  "portes": [
+   "porte-flux",
+   "porte-pont"
+  ],
+  "machine": "la même que les portes A8.0"
+ },
+ "references": {
+  "flux_mode0": 61.992,
+  "flux_mode3": 60.8135,
+  "pont_dense": 113.0068
+ },
+ "mesures": [
+  {
+   "budget": "0.001",
+   "couches_int8": 0,
+   "flux_mode0": 61.992,
+   "flux_mode3": 60.8135,
+   "note": "aucune couche ne passe : référence exacte"
+  },
+  {
+   "budget": "1",
+   "flux_mode0": 58.32,
+   "flux_mode3": 62.7357,
+   "pont_dense": 111.8003
+  },
+  {
+   "budget": "10",
+   "flux_mode0": 66.6195,
+   "flux_mode3": 72.6501
+  }
+ ],
+ "ecarts_pct": {
+  "1": {
+   "flux_mode0": -5.9,
+   "flux_mode3": 3.2,
+   "pont_dense": -1.1
+  },
+  "10": {
+   "flux_mode0": 7.5,
+   "flux_mode3": 19.5
+  }
+ },
+ "controles": {
+  "budget_nul_exact": true,
+  "budget_10_degrade": true,
+  "non_monotone_a_1": true
+ },
+ "verdict": "opt-in conserve",
+ "prochain": [
+  "A8.3a — épingler le régime 1 %",
+  "A8.3b — expliquer la non-monotonie"
+ ]
+}
