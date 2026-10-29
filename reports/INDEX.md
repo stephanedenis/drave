@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **230 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **271 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -154,19 +154,59 @@
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
+| [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
+| [rapport-native-8b-warm.md](rapport-native-8b-warm.md) | N2.29 — 8 blocs réchauffés : 2,866, toujours derrière 2,708 |
+| [rapport-native-8b.md](rapport-native-8b.md) | N2.28 — 8 blocs : PPL 4,84, négatif |
+| [rapport-native-best-service.md](rapport-native-best-service.md) | N4.5 — le meilleur student derrière le service natif |
+| [rapport-native-cache-gain.md](rapport-native-cache-gain.md) | N0.10 — cache KV : 19,25× plus rapide que le forward complet |
+| [rapport-native-cache.md](rapport-native-cache.md) | N0.9 — cache KV natif : même sortie, 0,59 s |
 | [rapport-native-capacite-egal.md](rapport-native-capacite-egal.md) | N2.5b — capacité à budget égal : 21,63 M bat 11,47 M de 4,1 % |
 | [rapport-native-corpus-multi.md](rapport-native-corpus-multi.md) | N2.6 — corpus diversifié : 49 999 fenêtres, quatre sources |
 | [rapport-native-corpus.md](rapport-native-corpus.md) | N2.1 — 50 000 fenêtres pour `drave-n0` |
+| [rapport-native-ctx129-2.md](rapport-native-ctx129-2.md) | N2.34 — 129, 10 000 pas de plus : 2,712, pas de gain |
+| [rapport-native-ctx129.md](rapport-native-ctx129.md) | N2.33 — contexte 129 : PPL 2,700, nouveau meilleur |
+| [rapport-native-ctx130-2.md](rapport-native-ctx130-2.md) | N2.35 — contexte 130 après 129 : PPL 2,715, négatif |
+| [rapport-native-ctx130.md](rapport-native-ctx130.md) | N2.32 — contexte 130 : PPL 2,78, encore au-dessus |
+| [rapport-native-ctx136.md](rapport-native-ctx136.md) | N2.31 — contexte 136 : PPL 2,974, négatif |
+| [rapport-native-ctx160.md](rapport-native-ctx160.md) | N2.30 — curriculum 160 : PPL 3,8, négatif |
+| [rapport-native-ctx256.md](rapport-native-ctx256.md) | N2.27 — contexte 256 : chute à 5,7 |
+| [rapport-native-distillation-20k.md](rapport-native-distillation-20k.md) | N2.8 — distillation longue : PPL 3,123, encore loin de 2,5 |
 | [rapport-native-distillation-20m.md](rapport-native-distillation-20m.md) | N2.5 — un student de 21,6 M distillé : 4,294, pire que 11,5 M |
+| [rapport-native-distillation-50k.md](rapport-native-distillation-50k.md) | N2.11 — distillation 50 000 pas : PPL 3,082, plateau |
 | [rapport-native-distillation-multi.md](rapport-native-distillation-multi.md) | N2.7 — distillation multi-sources : 9,517, au niveau du professeur |
 | [rapport-native-distillation-tetes.md](rapport-native-distillation-tetes.md) | N2.4 — têtes précoces dans la distillation : pas de gain de PPL |
 | [rapport-native-distillation.md](rapport-native-distillation.md) | N2.3 — distillation : PPL 3,297 contre 3,465 |
+| [rapport-native-forward.md](rapport-native-forward.md) | N0.7 — exécution native DRVM : logits identiques, sans GGUF |
 | [rapport-native-generation.md](rapport-native-generation.md) | N4.1 — génération avec `drave-n0` : cohérente 12 octets, puis du bruit |
+| [rapport-native-local.md](rapport-native-local.md) | N2.26 — têtes locales : encore une dégradation |
 | [rapport-native-n0.md](rapport-native-n0.md) | N1.2 — `drave-n0` : PPL 3,35 sur le corpus français |
+| [rapport-native-parite.md](rapport-native-parite.md) | N0.8 — parité native automatisée : 5/5 prompts, écart < 0,0001 |
 | [rapport-native-pensee.md](rapport-native-pensee.md) | N1.5 — la pensée contractante de `drave-n0` : λ = 0,709 |
+| [rapport-native-plafond.md](rapport-native-plafond.md) | N2 — synthèse : le plafond de 2,708 |
 | [rapport-native-pont.md](rapport-native-pont.md) | N1.6 — le pont de région de `drave-n0` : il paie |
+| [rapport-native-ppl-2k.md](rapport-native-ppl-2k.md) | N0.14 — PPL native sur 1 996 octets : 54,0379, Python 54,0343 |
+| [rapport-native-ppl-corpus.md](rapport-native-ppl-corpus.md) | N0.13 — PPL native sur 1 076 octets : 18,6394, identique à Python |
+| [rapport-native-ppl.md](rapport-native-ppl.md) | N0.12 — PPL native de bout en bout : 4,6585, identique à Python |
+| [rapport-native-prof10k-2.md](rapport-native-prof10k-2.md) | N2.13 — 20 000 pas de plus avec le professeur 10k : PPL 2,876 |
+| [rapport-native-prof10k.md](rapport-native-prof10k.md) | N2.12 — distillation avec le professeur 10k : PPL 2,910 |
+| [rapport-native-prof20k-2.md](rapport-native-prof20k-2.md) | N2.16 — 20 000 pas de plus : PPL 2,755, plateau |
+| [rapport-native-prof20k-3.md](rapport-native-prof20k-3.md) | N2.17 — 30 000 pas de plus : PPL 2,726 |
+| [rapport-native-prof20k-4.md](rapport-native-prof20k-4.md) | N2.18 — 30 000 pas de plus : PPL 2,714 |
+| [rapport-native-prof20k-5.md](rapport-native-prof20k-5.md) | N2.19 — 30 000 pas de plus : PPL 2,708 |
+| [rapport-native-prof20k-7.md](rapport-native-prof20k-7.md) | N2.24 — professeur 20k, température 4 : encore une dégradation |
+| [rapport-native-prof20k-8.md](rapport-native-prof20k-8.md) | N2.25 — lr 1e-6 : encore une dégradation |
+| [rapport-native-prof20k.md](rapport-native-prof20k.md) | N2.14 — distillation avec le professeur 20k : PPL 2,787 |
+| [rapport-native-prof30k.md](rapport-native-prof30k.md) | N2.21 — professeur 30k, lr 3e-6 : dégradation, arrêté |
+| [rapport-native-professeur-10k.md](rapport-native-professeur-10k.md) | N2.10 — professeur français 10 000 pas : 1,073 bit/octet, PPL 2.104 |
+| [rapport-native-professeur-20k.md](rapport-native-professeur-20k.md) | N2.15 — professeur 20 000 pas : 0,904 bit/octet, PPL 1.871 |
+| [rapport-native-professeur-30k.md](rapport-native-professeur-30k.md) | N2.20 — professeur 30 000 pas : 0,794 bit/octet, PPL 1.734 |
 | [rapport-native-professeur.md](rapport-native-professeur.md) | N2.2 — le professeur local : 23,76 M, 1,236 bit/octet |
 | [rapport-native-reflexe.md](rapport-native-reflexe.md) | N1.7 — le réflexe de `drave-n0` : 24 % plus rapide |
+| [rapport-native-service-auth.md](rapport-native-service-auth.md) | N4.4 — service durci : jeton, taille, n borné |
+| [rapport-native-service-rust.md](rapport-native-service-rust.md) | N4.3 — service Rust natif avec cache KV : 611 ms |
+| [rapport-native-service.md](rapport-native-service.md) | N4.2 — service local : `drave-n0` derrière HTTP |
+| [rapport-native-sft.md](rapport-native-sft.md) | N4.6 — SFT minimal : 24/24 vus, 0/4 tenus |
+| [rapport-native-test.md](rapport-native-test.md) | N0.11 — test Rust de la passe avant native |
 | [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
 | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
 | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
@@ -201,6 +241,7 @@
 | [rapport-prelire-grappe.md](rapport-prelire-grappe.md) | S4 — le préchargement par grappe : la lecture à la demande rend 29 Mo/s là où la grappe rend 1 230 |
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
+| [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |

@@ -1,7 +1,8 @@
 # Références de non-régression
 
-> **Dernière passe :**
-> **49 portes, 47 vertes, 2 rouges, 1 h 40** (28/10 23 h 55). Les deux rouges sont les
+> **Dernière passe complète :**
+> **49 portes, 47 vertes, 2 rouges, 1 h 40** (28/10 23 h 55). Depuis, **une porte ajoutée**
+> (`porte-document`, R0.1, **verte** le 29/10 en 5 s) : le compte est **50**. Les deux rouges sont les
 > structurelles connues (`porte-indice`, `porte-melange`) ; `porte-harnais-invariants` et
 > `porte-audit-drapeaux`, rouges dans la passe complète, ont été corrigés (import VDC) et
 > **rejoués verts** individuellement. L'historique des

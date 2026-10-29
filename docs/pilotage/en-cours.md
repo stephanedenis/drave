@@ -18,11 +18,12 @@
 
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
-- **Ce qu'elle fait** : R0.1 (graphe de document, **prête**), puis R0.2 (contrôleur), puis R0.3 (banc) ;
+- **Ce qu'elle fait** : R0.1 (graphe de document) est **mesuré** — 51 pages, fidélité **1,000** ;
+  la suite est R0.2 (contrôleur), puis R0.3 (banc) ;
   l'ordre est **strict**.
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et ses fiches ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : R0.1, puis R0.2, puis R0.3 (mesure jointe R0.2/R0.3.2) ; N0.3b en parallèle, coût faible.
+- **Prochaine action** : **R0.2** (contrôleur), puis R0.3 (mesure jointe R0.2/R0.3.2) ; N0.3b en parallèle.
 - **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
@@ -50,7 +51,7 @@
 
 ## Ce qui est en cours
 
-- **R0 — lecteur v0** : R0.1 **prête**, R0.2/R0.3 spécifiées ; aucun bloquant.
+- **R0 — lecteur v0** : R0.1 **mesurée** (51 pages, 1 423 régions, fidélité 1,000) ; R0.2/R0.3 spécifiées ; aucun bloquant.
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
 - **Documentation** : roadmap unique A/B/N/R ; **90 documents** ; glossaire **famille 12** (27 termes) ;
@@ -62,10 +63,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **49** (47 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **50** (48 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **273** / **337** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **90** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **274** / **338** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **91** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -75,7 +76,7 @@
 | **A — le moteur** | ✅ A1–A8 ; A2.6/A3.2/A3.3 ouverts | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | A2.6, A3.2/A3.3 ; A8.3 en opt-in |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3/B12.10 ouverts | B10.3 décodeur sous le plancher ; B1.5 corpus | B12.10, puis B10.3 |
 | **N — le natif** | N0/N1 mesurés ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N0.3b ; N2 (hiérarchie) ; N4 (consigne) |
-| **R — le lecteur** | ⏳ R0 non commencé ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.1 → R0.2 → R0.3 |
+| **R — le lecteur** | 🔬 R0.1 mesuré (51 pages) ; R01 prête | aucun pour R0 ; R1 dépend de R01 et N2 | R0.2 → R0.3 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; priorités arrêtées | vérifier le graphe (`8156fdcb`) |
 
@@ -85,7 +86,7 @@
 
 ## Ce qui reste
 
-**R0** — R0.1 → R0.2 → R0.3 (non bloqué). **N0.3b** — parité DRVM ↔ GGUF. **N2** — la **hiérarchie** ; **N5 gelé**.
+**R0** — **R0.1 mesuré** ; R0.2 → R0.3 (non bloqué). **N0.3b** — parité DRVM ↔ GGUF. **N2** — la **hiérarchie** ; **N5 gelé**.
 **N4** — SFT tenu à l'écart. **B10.3** — décodeur (bloqué). **B12.10** — intégration.
 **Backlog** — graphe et fiches (`8156fdcb`).
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).

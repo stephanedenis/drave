@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**33 commits** · **0 session(s)** · **5 thème(s)**
+**34 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 9 | [docs.md](docs.md) |
 | mesures | 19 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
-| portes | 2 | [portes.md](portes.md) |
+| portes | 3 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -63,6 +63,7 @@ Aucune session indexée pour ce jour ; voir
 | 09:02 | `9e569aec` | DOCS — EN-COURS MULTI-SESSIONS (3 SESSIONS), BLOQUANTS PAR CHANTIER, TRANSFERT AU JOURNAL |
 | 10:02 | `a7dd8473` | DOCS — GLOSSAIRE 12 (27 TERMES DE LECTURE), BACKLOG LIÉ AU GLOSSAIRE |
 | 10:04 | `e59f7c09` | PILOTAGE — QUATRE ARBITRAGES RENDUS : N2 PORTE LA HIÉRARCHIE, SFT PARTAGÉ N4/R31, N5 GELÉ, R0 EN ORDRE STRICT |
+| 10:06 | `9539d8af` | ÉTAT — R0 EN ORDRE STRICT, N2 PORTE LA HIÉRARCHIE, N5 GELÉ, PRIORITÉS ARRÊTÉES |
 
 ## Le récit de la journée (écrit à la main)
 

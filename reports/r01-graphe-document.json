@@ -1,0 +1,462 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.1",
+ "documents": 30,
+ "pages": 51,
+ "regions": 1423,
+ "types": {
+  "blanc": 1393,
+  "code": 3,
+  "figure": 3,
+  "legende": 1,
+  "liste": 203,
+  "note": 120,
+  "paragraphe": 805,
+  "section": 226,
+  "tableau": 30,
+  "titre": 32
+ },
+ "controles": {
+  "texte_plat_echoue": true,
+  "deux_colonnes": "6 G puis 6 D, 0 retour(s)",
+  "notes": 120,
+  "fuites_de_notes": 0,
+  "requete_tableau": true
+ },
+ "documents_detail": [
+  {
+   "document": "data/onu/pdf/A_RES_80_1-en.pdf",
+   "regions": 85,
+   "types": {
+    "blanc": 42,
+    "note": 2,
+    "paragraphe": 32,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-es.pdf",
+   "regions": 93,
+   "types": {
+    "blanc": 46,
+    "note": 2,
+    "paragraphe": 36,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "regions": 91,
+   "types": {
+    "blanc": 45,
+    "note": 7,
+    "paragraphe": 29,
+    "section": 8,
+    "titre": 2
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-ru.pdf",
+   "regions": 95,
+   "types": {
+    "blanc": 47,
+    "note": 3,
+    "paragraphe": 36,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-zh.pdf",
+   "regions": 83,
+   "types": {
+    "blanc": 41,
+    "note": 3,
+    "paragraphe": 32,
+    "section": 6,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-en.pdf",
+   "regions": 155,
+   "types": {
+    "blanc": 77,
+    "note": 15,
+    "paragraphe": 55,
+    "section": 7,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-es.pdf",
+   "regions": 159,
+   "types": {
+    "blanc": 79,
+    "note": 15,
+    "paragraphe": 57,
+    "section": 7,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-fr.pdf",
+   "regions": 153,
+   "types": {
+    "blanc": 76,
+    "note": 13,
+    "paragraphe": 56,
+    "section": 7,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-ru.pdf",
+   "regions": 193,
+   "types": {
+    "blanc": 96,
+    "note": 17,
+    "paragraphe": 71,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_10-zh.pdf",
+   "regions": 153,
+   "types": {
+    "blanc": 76,
+    "note": 17,
+    "paragraphe": 53,
+    "section": 5,
+    "titre": 2
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_2-en.pdf",
+   "regions": 89,
+   "types": {
+    "blanc": 44,
+    "note": 3,
+    "paragraphe": 32,
+    "section": 9,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_2-es.pdf",
+   "regions": 89,
+   "types": {
+    "blanc": 44,
+    "note": 3,
+    "paragraphe": 32,
+    "section": 9,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_2-fr.pdf",
+   "regions": 89,
+   "types": {
+    "blanc": 44,
+    "note": 8,
+    "paragraphe": 27,
+    "section": 9,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_2-ru.pdf",
+   "regions": 99,
+   "types": {
+    "blanc": 49,
+    "note": 3,
+    "paragraphe": 38,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_2-zh.pdf",
+   "regions": 69,
+   "types": {
+    "blanc": 34,
+    "note": 3,
+    "paragraphe": 26,
+    "section": 5,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_4-en.pdf",
+   "regions": 107,
+   "types": {
+    "blanc": 53,
+    "note": 3,
+    "paragraphe": 42,
+    "section": 8,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "regions": 93,
+   "types": {
+    "blanc": 46,
+    "liste": 25,
+    "paragraphe": 11,
+    "section": 10,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "regions": 169,
+   "types": {
+    "blanc": 84,
+    "liste": 35,
+    "paragraphe": 18,
+    "section": 19,
+    "tableau": 12,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/pilotage/en-cours.md",
+   "regions": 103,
+   "types": {
+    "blanc": 51,
+    "liste": 33,
+    "paragraphe": 6,
+    "section": 10,
+    "tableau": 2,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/theorie/lecture-rapide.md",
+   "regions": 177,
+   "types": {
+    "blanc": 88,
+    "liste": 49,
+    "paragraphe": 19,
+    "section": 16,
+    "tableau": 4,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/methode/resultats.md",
+   "regions": 41,
+   "types": {
+    "blanc": 20,
+    "liste": 9,
+    "paragraphe": 5,
+    "section": 5,
+    "tableau": 1,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "regions": 75,
+   "types": {
+    "blanc": 37,
+    "code": 2,
+    "figure": 1,
+    "liste": 4,
+    "paragraphe": 20,
+    "section": 7,
+    "tableau": 3,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/theorie/glossaire/README.md",
+   "regions": 49,
+   "types": {
+    "blanc": 24,
+    "liste": 3,
+    "paragraphe": 11,
+    "section": 10,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "docs/theorie/synthese/01-le-cerveau-drave.md",
+   "regions": 43,
+   "types": {
+    "blanc": 21,
+    "figure": 2,
+    "liste": 3,
+    "paragraphe": 10,
+    "section": 5,
+    "tableau": 1,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "tools/tests/documents/html/article.html",
+   "regions": 25,
+   "types": {
+    "blanc": 12,
+    "code": 1,
+    "legende": 1,
+    "liste": 4,
+    "note": 1,
+    "paragraphe": 2,
+    "section": 2,
+    "tableau": 1,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "tools/tests/documents/html/deux-colonnes.html",
+   "regions": 9,
+   "types": {
+    "blanc": 4,
+    "paragraphe": 4,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "tools/tests/documents/html/entites.html",
+   "regions": 15,
+   "types": {
+    "blanc": 7,
+    "note": 2,
+    "paragraphe": 4,
+    "tableau": 1,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "/tmp/r01-porte/vision.docx",
+   "regions": 93,
+   "types": {
+    "blanc": 46,
+    "liste": 25,
+    "paragraphe": 11,
+    "section": 10,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "/tmp/r01-porte/resultats.epub",
+   "regions": 41,
+   "types": {
+    "blanc": 20,
+    "liste": 9,
+    "paragraphe": 5,
+    "section": 5,
+    "tableau": 1,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  },
+  {
+   "document": "/tmp/r01-porte/format-flux.docx",
+   "regions": 81,
+   "types": {
+    "blanc": 40,
+    "liste": 4,
+    "paragraphe": 25,
+    "section": 7,
+    "tableau": 4,
+    "titre": 1
+   },
+   "fidelite": 1.0,
+   "partition": true,
+   "rejeu": true
+  }
+ ],
+ "erreurs": []
+}

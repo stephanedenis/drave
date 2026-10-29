@@ -47,7 +47,7 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 
 | id | fiche | statut | prio | dépend de | ligne |
 |---|---|---|---|---|---|
-| R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | prête | P0 | — | R0.1 |
+| R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | mesurée | P0 | — | R0.1 |
 | R02 | [Contrôleur de lecture](R02-controleur-lecture.md) | spécifiée | P0 | R01 | R0.2 |
 | R03 | [Banc de lecture rapide](R03-banc-lecture-rapide.md) | spécifiée | P0 | R01, R02 | R0.3 |
 | R04 | [Tête de survol](R04-tete-survol.md) | spécifiée | P1 | R03, R01 | R0.4 |

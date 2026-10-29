@@ -1,7 +1,7 @@
 # R01 — Graphe de document et registre de régions
 
-> **Statut** : prête · **Priorité** : P0 · **Programme** : R · **Dépend de** : —
-> **Ligne de roadmap** : R0.1 · **Fiche de résultat attendue** : rapport-r01-graphe-document.md (à créer dans `reports/`)
+> **Statut** : mesurée · **Priorité** : P0 · **Programme** : R · **Dépend de** : —
+> **Ligne de roadmap** : R0.1 · **Fiche de résultat** : [rapport-r01-graphe-document.md](../../../reports/rapport-r01-graphe-document.md) — 51 pages, 1 423 régions, fidélité 1,000
 > **Résumé** : Transformer un document en un arbre de régions typées, avec offsets et provenance, sans modèle.
 > **Glossaire** : [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md) · [parseur](../../theorie/glossaire/entrees/parseur.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 
@@ -51,7 +51,7 @@ Le modèle ne voit qu'un flux d'octets : il ne peut pas dire « lis le titre, sa
 
 ## Documents à écrire
 
-- `document-graph.md` (spécification du manifeste, dans `docs/implantation/`)
+- [`document-graph.md`](../../implantation/document-graph.md) (spécification du manifeste, dans `docs/implantation/`)
 - mettre à jour la ligne R0.1 de la roadmap
 
 ## Voir aussi
