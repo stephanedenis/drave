@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**31 commits** · **0 session(s)** · **5 thème(s)**
+**32 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 8 | [docs.md](docs.md) |
+| docs | 9 | [docs.md](docs.md) |
 | mesures | 19 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -60,7 +60,8 @@ Aucune session indexée pour ce jour ; voir
 | 07:28 | `42f74d5e` | N2.35 — CONTEXTE 130 APRÈS 129 : PPL 2,7149, NÉGATIF |
 | 08:18 | `3b9162d1` | DOCS — UNE ROADMAP UNIQUE (A/B/N/R), ANALYSE LECTURE RAPIDE, BACKLOG 29 FICHES |
 | 08:54 | `8bca0318` | DOCS — GRAPHE DES DÉPENDANCES DU BACKLOG (40 ARÊTES DURES, 4 PLAFONDS), 7 DÉFAUTS CORRIGÉS, VÉRIFIÉ PAR tools/verifie_backlog.py |
-| 09:02 | `f7dc0acf` | DOCS — EN-COURS MULTI-SESSIONS (3 SESSIONS), BLOQUANTS PAR CHANTIER, TRANSFERT AU JOURNAL |
+| 09:02 | `9e569aec` | DOCS — EN-COURS MULTI-SESSIONS (3 SESSIONS), BLOQUANTS PAR CHANTIER, TRANSFERT AU JOURNAL |
+| 10:02 | `a7dd8473` | DOCS — GLOSSAIRE 12 (27 TERMES DE LECTURE), BACKLOG LIÉ AU GLOSSAIRE |
 
 ## Le récit de la journée (écrit à la main)
 

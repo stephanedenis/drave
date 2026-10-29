@@ -9,6 +9,8 @@
 
 La PPL ne prouve pas la lecture. Le SFT actuel mémorise (24/24 vus, 0/4 tenus). Il faut une tâche de restitution avec un partage par document, pas par exemple.
 
+**Périmètre arrêté le 2026-10-29** : la **lecture multi-sections** (gist et régions, citations, refus). La consigne courte sans document reste à **N4** ; les deux partagent le protocole de partage par document, écrit une fois.
+
 ## Le contrat
 
 | élément | contenu |

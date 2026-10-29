@@ -9,13 +9,15 @@
 
 Le service tourne (69 octets, 611 ms) mais le SFT mémorise : 24/24 vus, 0/4 tenus. Sans tenue à l'écart, il n'y a pas d'assistant.
 
+**Périmètre arrêté le 2026-10-29** : la **consigne courte, sans document** (format, arrêt, refus). La restitution depuis un document lu est **R31** ; les deux partagent le même protocole de partage par document, écrit une fois.
+
 ## L'état
 
 Génération greedy 160 octets (12 cohérents), service Python/Rust, jeton 401/200, pas d'alignement SFT.
 
 ## La porte
 
-≥ 80 % des instructions tenues sur des documents/consignes non vus ; refus explicite ; pas de fuite.
+≥ 80 % des instructions tenues sur des **consignes courtes non vues, sans document** ; refus explicite ; pas de fuite.
 
 ## Contrôles négatifs
 
@@ -24,7 +26,7 @@ Génération greedy 160 octets (12 cohérents), service Python/Rust, jeton 401/2
 
 ## Prochaine action
 
-Construire un jeu SFT avec partage par document, entraîner, évaluer tenu à l'écart ; écrire la fiche.
+Construire un jeu de consignes courtes avec partage par document, entraîner, évaluer tenu à l'écart ; écrire la fiche. Le protocole de partage est commun avec R31.
 
 ## Voir aussi
 

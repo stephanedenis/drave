@@ -53,7 +53,7 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 | R04 | [Tête de survol](R04-tete-survol.md) | spécifiée | P1 | R03, R01 | R0.4 |
 | R05 | [Tête de balayage](R05-tete-balayage.md) | spécifiée | P1 | R03, R01 | R0.4 |
 | R06 | [Tête de relecture](R06-tete-relecture.md) | spécifiée | P2 | R03, R21, R22 | R0.4 |
-| R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | R01, N1 | R1.1 |
+| R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | R01, N1, N2 | R1.1 |
 | R12 | [Curriculum de contexte long](R12-curriculum-contexte.md) | spécifiée | P1 | R11 | R1.2 |
 | R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | spécifiée | P2 | — | R1.3 |
 | R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | R01, R11 | R2.1 |

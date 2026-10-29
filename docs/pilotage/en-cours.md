@@ -29,7 +29,7 @@
 
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe des dépendances du backlog, `tools/verifie_backlog.py`, fiches A/B/N/R.
-- **Ce qu'elle fait** : vérifie **40 arêtes dures**, **4 plafonds**, **8 lignes sans fiche** ; a corrigé **7 défauts** ;
+- **Ce qu'elle fait** : vérifie **41 arêtes dures**, **3 plafonds**, **8 lignes sans fiche** ; a corrigé **7 défauts** ;
   maintient [`dependances.md`](backlog/dependances.md) et le SVG.
 - **Ce que font les autres** : `f0969e87` tient l'état/roadmap et prépare R0 ; `N2-GPU` distille ; elle rend un
   **diff d'état**.
@@ -50,7 +50,7 @@
 ## Ce qui est en cours
 
 - **R0 — lecteur v0** : R0.1 **prête**, R0.2/R0.3 spécifiées ; aucun bloquant.
-- **Backlog — graphe** : 40 arêtes dures, 4 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
+- **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
 - **Documentation** : roadmap unique A/B/N/R ; **90 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.
@@ -76,7 +76,7 @@
 | **N — le natif** | N0/N1 mesurés ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus | N0.3b, N2, N4 |
 | **R — le lecteur** | ⏳ R0 non commencé ; R01 prête | aucun pour R0 ; R1 dépend de N1/N2 | R0.1 + R0.2 + R0.3 |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
-| **Backlog — graphe** | 29 fiches ; 40 arêtes dures | 8 lignes sans fiche ; `dependances.md` en cours | vérifier le graphe (`8156fdcb`) |
+| **Backlog — graphe** | 29 fiches ; 41 arêtes dures | 8 lignes sans fiche ; `dependances.md` en cours | vérifier le graphe (`8156fdcb`) |
 
 **C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
 **C6** documentation · **C7** pensée : ✅ mesurés ; détail dans

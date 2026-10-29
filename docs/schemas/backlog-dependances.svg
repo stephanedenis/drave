@@ -173,6 +173,7 @@
   <path d="M 549 658 V 668 H 25 V 443 H 855 V 448" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 549 658 V 673 H 34 V 514 H 753 V 524" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 1161 354 V 359 H 16 V 220 H 753 V 220" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
+  <path d="M 1161 354 V 364 H 25 V 139 H 1161 V 144" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 651 506 V 521 H 34 V 286 H 1161 V 296" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 855 506 V 516 H 25 V 215 H 753 V 220" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 855 506 V 521 H 34 V 286 H 1161 V 296" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
@@ -202,7 +203,6 @@
   <path d="M 243 506 V 511 H 16 V 144 H 1161 V 144" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 243 506 V 516 H 25 V 291 H 753 V 296" stroke="#3a3a3a" stroke-width="1.3" fill="none" marker-end="url(#fleche)"/>
   <path d="M 753 354 V 364 H 25 V 139 H 1161 V 144" stroke="#b26a00" stroke-width="1.1" fill="none" stroke-dasharray="4 3" marker-end="url(#fleche-douce)"/>
-  <path d="M 1161 354 V 364 H 25 V 139 H 1161 V 144" stroke="#b26a00" stroke-width="1.1" fill="none" stroke-dasharray="4 3" marker-end="url(#fleche-douce)"/>
   <path d="M 345 430 V 435 H 16 V 144 H 1161 V 144" stroke="#b26a00" stroke-width="1.1" fill="none" stroke-dasharray="4 3" marker-end="url(#fleche-douce)"/>
   <path d="M 957 582 V 597 H 34 V 286 H 753 V 296" stroke="#b26a00" stroke-width="1.1" fill="none" stroke-dasharray="4 3" marker-end="url(#fleche-douce)"/>
   <text x="16" y="774" font-family="Verdana, DejaVu Sans, sans-serif" font-size="10" font-weight="bold" fill="#1a1a1a">Légende</text>

@@ -28,26 +28,27 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur** | B12.10 (intégration), puis B10.3 |
-| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N2 plafonne à 2,708** ; N4 partiel | **N0.3b** (parité), **N2** (données), **N4** (SFT) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ⏳ **nouveau** ; R0 est non bloqué | **R0.1 + R0.2 + R0.3** en parallèle |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur** | B12.10 et B11.10 (autonomes) ; B10.3 attend **B10.2bis** |
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N2 plafonne à 2,708** ; N4 partiel | **N0.3b** (parité), **N2** (la hiérarchie), **N4** (consigne courte) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ⏳ **nouveau** ; R0 est non bloqué | **R0.1**, puis **R0.2**, puis **R0.3** |
 
 ## L'ordre du jour (carpe diem)
 
 L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-10-29**.
 
-1. **R0 — le lecteur v0** (nouveau, non bloqué) : graphe de document, contrôleur classique, banc de lecture. Il ne
-   demande **aucun entraînement** et se mesure avec les modèles que le moteur sait déjà exécuter.
-2. **N2 — la distillation** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734** (0,794 bit/octet) ;
-   student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non atteinte**.
-3. **N0.3b — la parité de perplexité DRVM ↔ GGUF** : la seule porte N0 encore ouverte.
-4. **N4 — l'usage** : SFT **24/24 vus, 0/4 tenus** ; service 69 octets / 611 ms ; reste l'alignement.
-5. **B12.10 — le pipeline M1 → M4 → M8** : intégration partielle, à mesurer sans tautologie.
-6. **B10.3 — le raisonnement sur `z`** : bloqué par le décodeur (**chrF 12,7 / 5,3 contre un plancher 39,6**) ;
-   prochaine tentative : attention croisée, 20–30 articles, 3 graines.
-7. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
-   suivante, jamais l'attente.
-8. **R1–R5** : après R0 et au rythme de N2/N4 ; les dépendances sont écrites dans le programme R.
+1. **R0 — le lecteur v0** (nouveau, non bloqué) : **R0.1, puis R0.2, puis R0.3** — l'ordre du graphe.
+   Il ne demande **aucun entraînement** et se mesure avec les modèles que le moteur sait déjà exécuter.
+2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
+   (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
+   atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
+3. **N0.3b — la parité de perplexité DRVM ↔ GGUF** : la seule porte N0 encore ouverte, et un coût faible.
+4. **N4 — l'usage** : la **consigne courte** tenue à l'écart ; SFT **24/24 vus, 0/4 tenus** ; service 69 octets /
+   611 ms. La restitution depuis un document lu est **R31**.
+5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
+6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
+7. **B12.10, B11.10, A2.6, A3.2, A8.0, N3** — les autonomes, qui remplissent la file « jamais en attente ».
+8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
+   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend `B10.2bis`.
 
 ---
 
@@ -109,10 +110,10 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 |---|---|---|---|
 | **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ (sauf N0.3b) | **N0.3b** — parité de perplexité DRVM ↔ GGUF |
 | **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
-| **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — données et capacité ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
+| **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
 | **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 | porter les briques mesurées en **production** et en **porte** |
-| **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — SFT (**24/24 vus, 0/4 tenus**) et service durci |
-| **N5** | l'échelle : 50–100 M, corpus élargi | ⏳ | après N2/N4 ; BPE si R13 le justifie |
+| **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — la **consigne courte** tenue à l'écart (**24/24 vus, 0/4 tenus**) ; la lecture est **R31** |
+| **N5** | l'échelle : 50–100 M, corpus élargi | ⏸ **gelé** | après le verdict de **R11** sur le contexte ; BPE si R13 le justifie |
 
 **Les trois leçons N qui contraignent R** :
 
@@ -161,7 +162,8 @@ C'est la **priorité** : un lecteur au niveau **système**, avec le moteur exist
 | **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ⏳ | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
 | **R0.4** | **têtes de lecture** : `survol` (pertinence d'une région), `balayage` (requête → spans), `relecture` (confiance/contradiction), greffées sur les têtes précoces | ⏳ après R0.3 | la tête bat le contrôle classique à budget égal |
 
-**Ordre** : R0.1 et R0.2 en parallèle, R0.3 dès que les deux tiennent ; R0.4 seulement après la ligne de base.
+**Ordre arrêté** : **R0.1**, puis **R0.2**, puis **R0.3** (la courbe de R0.3 est la mesure jointe de R0.2) ; R0.4
+seulement après la ligne de base.
 **Contrôles négatifs** : régions aléatoires au même budget, sections mélangées, questions dont la réponse est dans le
 titre, **closed-book**. **Ce qui pourrait le rendre faux** : spans gold dans les titres, contrôleur réglé sur le
 test, modèle qui répond de mémoire, petit N, temps mesuré à chaud.
@@ -237,10 +239,12 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **non bloqué, à faire** : **R0.1**, **R0.2**, **R0.3** (lecteur v0) ; **N0.3b** (parité) ; **N2** (données) ;
-  **N4** (SFT) ; **B12.10** (intégration) ; **B11.10** (cartes) ; **A2.6/A3.2/A3.3** (moteur) ;
+- **non bloqué, à faire** : **R0.1 → R0.2 → R0.3** (lecteur v0) ; **N0.3b** (parité) ; **N2** (la hiérarchie) ;
+  **N4** (consigne courte) ; **B12.10** (intégration) ; **B11.10** (cartes) ; **A2.6/A3.2/A8.0** (moteur) ;
+  **N3** (opérations natives) ; **R13** (octets ou BPE) ;
+- **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
-  B10.3 (décodeur sous le plancher) ;
+  B10.3 (B10.2bis absent du backlog) ;
 - **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
   (langues et maîtres), C3.2 (familles).
 
@@ -258,7 +262,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 
 - **R0** : un contrôleur **classique** + un modèle externe atteint-il **90 %** de la compréhension à **30 %** du
   coût sur trois types de documents ?
-- **R1** : le natif peut-il lire **1 000 octets** sans refaire les négatifs 130–256 — et la hiérarchie suffit-elle ?
+- **R1** : la **hiérarchie portée par N2** suffit-elle à lire **1 000 octets** sans refaire les négatifs 130–256 ?
 - **R2** : un **gist** explicite bat-il le **closed-book** sur une question dont l'indice est loin ?
 - **N2** : le student peut-il descendre sous **2,5** de PPL, ou le plateau **2,708** est-il la capacité du corpus ?
 - **B10.3** : un décodeur à attention croisée dépasse-t-il le plancher **39,6** de chrF ?
@@ -270,8 +274,8 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **N — détail mesuré** : [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md) (176 lignes,
   archive).
 - **Les fiches** : [`reports/README.md`](../../reports/README.md) et [`reports/INDEX.md`](../../reports/INDEX.md).
-- **Le graphe des dépendances** : [`backlog/dependances.md`](backlog/dependances.md) — 40 arêtes dures,
-  4 plafonds, la frontière et les sous-items.
+- **Le graphe des dépendances** : [`backlog/dependances.md`](backlog/dependances.md) — 41 arêtes dures,
+  3 plafonds, la frontière et les sous-items.
 - **Le récit daté** : [`journal/`](../../journal/README.md) ; le journal des décisions de la roadmap est dans
   [`journal/2026-10-27/decisions-roadmap.md`](../../journal/2026-10-27/decisions-roadmap.md).
 - **Le concept du lecteur** : [`lecture-rapide.md`](../theorie/lecture-rapide.md) ; le **backlog** :

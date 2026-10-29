@@ -6,8 +6,8 @@
 > inversées, frontière) et **dessiné** dans
 > [`backlog-dependances.svg`](../../schemas/backlog-dependances.svg).
 >
-> **Relevé du 2026-10-29.** 29 fiches, 8 lignes ouvertes **sans fiche**, 40 arêtes dures,
-> 4 plafonds. La roadmap donne l'ordre, l'index donne le statut, ce document donne le graphe ;
+> **Relevé du 2026-10-29.** 29 fiches, 8 lignes ouvertes **sans fiche**, 41 arêtes dures,
+> 3 plafonds. La roadmap donne l'ordre, l'index donne le statut, ce document donne le graphe ;
 > les trois se contredisent s'ils sont écrits trois fois — d'où l'outil.
 
 ## 1. Trois types d'arête, et pourquoi un seul ne suffit pas
@@ -78,7 +78,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **N0.3b** | prête | N0 (acquis) | — | — | [N0.3b-parite-ppl.md](N0.3b-parite-ppl.md) |
-| **N2** | en cours | N1 (acquis) | — | N5 | [N2-distillation.md](N2-distillation.md) |
+| **N2** | en cours | N1 (acquis) | — | N5, R11 | [N2-distillation.md](N2-distillation.md) |
 | **N3** | sans fiche | N1 (acquis) | — | — | — |
 | **N4** | partiel | — | N2 (plafond) | N5 | [N4-usage-sft.md](N4-usage-sft.md) |
 | **N5** | sans fiche | N2 (dure), N4 (dure) | — | — | — |
@@ -93,7 +93,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 | **R04** | spécifiée | R03 (dure), R01 (dure) | — | — | [R04-tete-survol.md](R04-tete-survol.md) |
 | **R05** | spécifiée | R03 (dure), R01 (dure) | le manque M4 (aucun encodeur exécutable) | — | [R05-tete-balayage.md](R05-tete-balayage.md) |
 | **R06** | spécifiée | R03 (dure), R21 (dure), R22 (dure) | — | — | [R06-tete-relecture.md](R06-tete-relecture.md) |
-| **R11** | spécifiée | R01 (dure), N1 (acquis) | N2 (plafond) | R12, R21 | [R11-contexte-hierarchique.md](R11-contexte-hierarchique.md) |
+| **R11** | spécifiée | R01 (dure), N1 (acquis), N2 (dure) | — | R12, R21 | [R11-contexte-hierarchique.md](R11-contexte-hierarchique.md) |
 | **R12** | spécifiée | R11 (dure) | les cinq négatifs 129–256 | — | [R12-curriculum-contexte.md](R12-curriculum-contexte.md) |
 | **R13** | spécifiée | — | N2 (plafond) | — | [R13-tokenisation-bpe.md](R13-tokenisation-bpe.md) |
 | **R21** | spécifiée | R01 (dure), R11 (dure) | la mémoire à 8 pas est négative (mesuré) | R06, R22, R31, R32 | [R21-memoire-travail-gist.md](R21-memoire-travail-gist.md) |
@@ -113,8 +113,8 @@ Sept défauts, tous corrigés dans les fiches. Aucun n'était visible à la lect
 dans le graphe.
 
 1. **Une collision d'identifiants.** `N5` désignait l'**échelle** (roadmap) et la **mémoire**
-   (manques) — deux choses opposées : une ligne à faire, un négatif mesuré. La roadmap citait les
-   deux à quarante lignes d'écart. Corrigé : le négatif de mémoire n'a plus d'identifiant, il est
+   (manques) — deux choses opposées : une ligne à faire, un négatif mesuré. La roadmap les citait
+   à trente lignes d'écart. Corrigé : le négatif de mémoire n'a plus d'identifiant, il est
    nommé « la mémoire à 8 pas est négative ». Même dette pour `N3` (opérations natives /
    apprentissage local) et `M4` (module cerveau / manque encodeur) : **les identifiants se
    réutilisent, pas les faits**.
@@ -168,7 +168,7 @@ réelle : elle est plus large que l'ordre du jour de la roadmap, et c'est voulu.
 ressource externe nommée ; `B10.3` et `R52` attendent `B10.2bis` ; `N5` attend `N2` et `N4` ; tout
 le reste du lecteur attend le banc.
 
-## 6. La proposition de priorités (à arbitrer)
+## 6. Les priorités (arrêtées le 2026-10-29)
 
 Le critère n'est pas la date : c'est **valeur / coût / dépendances**. Trois règles en découlent.
 
@@ -179,39 +179,44 @@ Le critère n'est pas la date : c'est **valeur / coût / dépendances**. Trois r
 - **Un négatif écrit ne se refait pas.** Les longueurs 130–256, la mémoire à 8 pas et `B10.2` ont
   leur réponse ; les refaire coûte sans apprendre.
 
+**Les quatre arbitrages rendus le 2026-10-29.**
+
+1. **La hiérarchie est portée par N2.** `R11` en mesure la fenêtre et **attend N2** : sa
+   dépendance redevient dure. Conséquence assumée : `R11` et `R12` ne démarrent pas avant la série
+   hiérarchie de N2, qui porte donc deux choses — sa porte `< 2,5` et le changement d'architecture.
+2. **Le SFT se partage.** `N4` porte la **consigne courte sans document** (format, arrêt, refus) ;
+   `R31` porte la **lecture multi-sections** (gist, citations, refus). Le protocole de partage par
+   document est écrit **une fois** et sert aux deux.
+3. **L'échelle `N5` est gelée** jusqu'au verdict de `R11` sur le contexte. On ne paie pas 50–100 M
+   pour contourner un défaut de schéma.
+4. **R0 suit l'ordre du graphe** : `R01` (schéma, parseurs), puis `R02` (contrôleur), puis `R03`
+   (banc). La courbe de `R03.2` est la **mesure jointe** de `R02` : une seule fiche de résultat.
+
 | rang | items | pourquoi |
 |---|---|---|
-| **P0** | `R03.1`, `R01`, `R02`, `R03.2` | l'instrument et le lecteur v0 : aucune dépendance, aucun entraînement, et tout le reste se mesure avec |
-| **P0 bis** | `N0.3b` | coût faible, ferme N0, et rend le banc natif crédible |
-| **P1** | `R11`, `R12` | la fenêtre native : le verrou du contexte, et le seul levier que N2 n'a pas essayé |
-| **P1** | `N4`, `R21`, `R31` | l'usage et la restitution : sans tenue à l'écart, il n'y a pas d'assistant |
+| **P0** | `R01` → `R02` → `R03` | l'ordre du graphe : aucun entraînement, et tout le reste se mesure avec |
+| **P0 bis** | `N0.3b` | coût faible, ferme N0, rend le banc natif crédible |
+| **P1** | `N2` | la hiérarchie : le verrou du contexte, et le seul levier non essayé |
+| **P1** | `R11`, `R12` | après N2 : la fenêtre qui en résulte |
+| **P1** | `N4`, `R21`, `R31` | la consigne courte, la mémoire, la restitution de lecture |
 | **P1** | `R04`, `R05` | les deux têtes qui ne demandent que le banc |
 | **P2** | `R22`, `R06`, `R32`, `R41`, `R42`, `R13` | le reste du lecteur, dans l'ordre du graphe |
-| **P2** | `N2`, `N3`, `B11.10`, `B12.10`, `A2.6`, `A3.2`, `A8.0` | lignes autonomes, utiles, non bloquantes |
-| **P3** | `R43`, `R44`, `R51`, `R52`, `B10.3`, `B10.2bis`, `N5`, `A3.3`, `A8.3` | plus tard, ou dépend d'un bloc absent |
+| **P2** | `N3`, `B11.10`, `B12.10`, `A2.6`, `A3.2`, `A8.0` | lignes autonomes, utiles, non bloquantes |
+| **P3** | `R43`, `R44`, `R51`, `R52`, `B10.3`, `B10.2bis`, `A3.3`, `A8.3` | plus tard, ou dépend d'un bloc absent |
+| **gelé** | `N5` | 50–100 M : après le verdict de `R11` sur le schéma |
 | **bloqués** | `A3.4`, `A5.4`, `A6.2`, `B1.5` | ressource externe nommée : on prend la ligne suivante |
 
-**Les quatre arbitrages** — ils ne sont pas dans le graphe, ils sont dans la valeur.
-
-1. **Qui porte la hiérarchie ?** `R11` la porte (elle prend `R01` et `N1`, pas `N2`) ; `N2` se
-   limite alors aux données et à la capacité. Si `N2` la garde, `R11` attend un plateau.
-2. **Qui porte le SFT tenu à l'écart ?** `N4` pour la consigne courte, `R31` pour la lecture
-   multi-sections et les citations — avec un protocole de partage par document écrit **une fois**.
-   Si `R31` absorbe `N4`, le chantier double de taille ; si `N4` absorbe `R31`, la lecture attend.
-3. **Gèle-t-on l'échelle (`N5`) ?** Monter à 50–100 M est le poste le plus cher du dépôt. Tant que
-   `R11` n'a pas dit si l'échec du contexte est un défaut de **schéma**, l'échelle paierait pour
-   contourner un défaut, pas pour le lever.
-4. **Par quoi commence R0 ?** Le corpus et le banc minimal (`R03.1`) ne dépendent de personne et
-   débloquent la mesure de `R01` et de `R02` ; le graphe du document (`R01`) peut avancer en
-   parallèle sur son schéma. L'ordre écrit dans la roadmap — « les trois en parallèle » — n'est
-   vrai qu'à cette condition.
+**Ce que ces choix coûtent.** `N2` est le point de charge du plan : il porte sa porte et la
+hiérarchie. `R31` attend `R21`, donc la restitution ne se mesure pas avant la mémoire. `R03`
+venant en dernier, la première courbe vitesse-compréhension arrive après `R01` et `R02` — c'est le
+prix de l'ordre strict, et il est nommé.
 
 ## 7. Les sous-items : là où un item cache deux contrats
 
 | item | sous-items | ce qui les sépare | ordre |
 |---|---|---|---|
 | `R01` | `R01.1` schéma, `R01.2` parseurs et corpus | le schéma est le seul artefact dont `R02` a besoin ; les parseurs se mesurent sur le corpus | schéma d'abord |
-| `R03` | `R03.1` corpus et banc minimal, `R03.2` courbe et modes | le corpus ne dépend ni de `R01` ni de `R02` ; la courbe dépend des deux | `R03.1` avant `R02` |
+| `R03` | `R03.1` corpus et banc minimal, `R03.2` courbe et modes | le corpus ne dépend ni de `R01` ni de `R02` ; la courbe dépend des deux | corpus préparé en parallèle ; courbe = mesure jointe avec `R02` |
 | `R22` | `R22a` store, `R22b` éviction | le store précède le déclencheur ; l'éviction se règle par le gain du déclencheur | `R22a` → `R06` → `R22b` |
 | `R02` + `R03.2` | une mesure jointe | deux fiches mesureraient deux fois le même chiffre | une seule fiche de résultat |
 
