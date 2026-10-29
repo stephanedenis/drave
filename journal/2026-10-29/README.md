@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**61 commits** · **0 session(s)** · **7 thème(s)**
+**62 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | mesures | 29 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 3 | [portes.md](portes.md) |
+| portes | 4 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -93,6 +93,7 @@ Aucune session indexée pour ce jour ; voir
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS |
 | 15:22 | `65ab24cf` | ÉTAT — R4.1 MESURÉE : 996 CELLULES, 802 EXACTES ; T0 À 3 993 |
 | 15:23 | `52075592` | JOURNAL — R4.1 ET L'ÉTAT DANS LE RÉCIT DU JOUR (59 COMMITS) |
+| 15:27 | `0731544b` | A8.0 — 0 PORTE SUR 33 N'ÉPINGLE UNE PPL : A8.3 RESTE OPT-IN |
 
 ## Le récit de la journée (écrit à la main)
 
