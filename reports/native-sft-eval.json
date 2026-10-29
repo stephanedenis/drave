@@ -1,0 +1,176 @@
+{
+ "vus": "24/24",
+ "tenus": "0/4",
+ "details_vus": [
+  {
+   "q": "Quelle est la capitale de la France ?",
+   "attendu": "Paris",
+   "obtenu": "Paris au hachag",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la capitale de l'Italie ?",
+   "attendu": "Rome",
+   "obtenu": "Romeour Hugorob",
+   "ok": true
+  },
+  {
+   "q": "Combien font 2 et 2 ?",
+   "attendu": "4",
+   "obtenu": "4 446 petite pa",
+   "ok": true
+  },
+  {
+   "q": "Combien font 3 fois 4 ?",
+   "attendu": "12",
+   "obtenu": "127 768 traces,",
+   "ok": true
+  },
+  {
+   "q": "Qui a écrit Les Misérables ?",
+   "attendu": "Victor Hugo",
+   "obtenu": "Victor Hugoroda",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la couleur du ciel ?",
+   "attendu": "bleu",
+   "obtenu": "bleux et bleuxe",
+   "ok": true
+  },
+  {
+   "q": "Quel est le contraire de grand ?",
+   "attendu": "petit",
+   "obtenu": "petite routée",
+   "ok": true
+  },
+  {
+   "q": "Combien de jours dans une semaine ?",
+   "attendu": "7",
+   "obtenu": "72 788 octets a",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la capitale de l'Espagne ?",
+   "attendu": "Madrid",
+   "obtenu": "Madriddenring H",
+   "ok": true
+  },
+  {
+   "q": "Combien font 5 plus 7 ?",
+   "attendu": "12",
+   "obtenu": "120 transport e",
+   "ok": true
+  },
+  {
+   "q": "Quel est le pluriel de cheval ?",
+   "attendu": "chevaux",
+   "obtenu": "chevaux corrig�",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la monnaie de la France ?",
+   "attendu": "euro",
+   "obtenu": "eurones en VRAM",
+   "ok": true
+  },
+  {
+   "q": "Quel est le roi des animaux ?",
+   "attendu": "lion",
+   "obtenu": "lionnes entre l",
+   "ok": true
+  },
+  {
+   "q": "Combien de mois dans une année ?",
+   "attendu": "12",
+   "obtenu": "127 ms par jeto",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la capitale de l'Allemagne ?",
+   "attendu": "Berlin",
+   "obtenu": "Berline de coh�",
+   "ok": true
+  },
+  {
+   "q": "Quel est le féminin de acteur ?",
+   "attendu": "actrice",
+   "obtenu": "actrices, actri",
+   "ok": true
+  },
+  {
+   "q": "Combien font 10 moins 3 ?",
+   "attendu": "7",
+   "obtenu": "76666154 octets",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la planète la plus proche du Soleil ?",
+   "attendu": "Mercure",
+   "obtenu": "Mercure Hugorob",
+   "ok": true
+  },
+  {
+   "q": "Quel est le symbole chimique de l'eau ?",
+   "attendu": "H2O",
+   "obtenu": "H2OR LIROME (re",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la capitale du Portugal ?",
+   "attendu": "Lisbonne",
+   "obtenu": "Lisbonner les e",
+   "ok": true
+  },
+  {
+   "q": "Combien font 6 fois 6 ?",
+   "attendu": "36",
+   "obtenu": "3636 en 364 366",
+   "ok": true
+  },
+  {
+   "q": "Quel est le contraire de chaud ?",
+   "attendu": "froid",
+   "obtenu": "froid, huit fic",
+   "ok": true
+  },
+  {
+   "q": "Quelle est la capitale de la Belgique ?",
+   "attendu": "Bruxelles",
+   "obtenu": "Bruxelles prér",
+   "ok": true
+  },
+  {
+   "q": "Combien de côtés a un triangle ?",
+   "attendu": "3",
+   "obtenu": "36 384 v3 : 365",
+   "ok": true
+  }
+ ],
+ "details_tenus": [
+  {
+   "q": "Quelle est la capitale de la Suisse ?",
+   "attendu": "Berne",
+   "obtenu": "Parise de liens",
+   "ok": false
+  },
+  {
+   "q": "Combien font 9 fois 9 ?",
+   "attendu": "81",
+   "obtenu": "127 788 retrouv",
+   "ok": false
+  },
+  {
+   "q": "Quel est le contraire de rapide ?",
+   "attendu": "lent",
+   "obtenu": "petite Hugorisa",
+   "ok": false
+  },
+  {
+   "q": "Quelle est la capitale du Canada ?",
+   "attendu": "Ottawa",
+   "obtenu": "Berliner et ble",
+   "ok": false
+  }
+ ]
+}

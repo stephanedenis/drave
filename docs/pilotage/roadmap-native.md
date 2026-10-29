@@ -125,6 +125,7 @@ l'entraîneur.
 | N4.2 | **Service local** | ✅ **technique** — HTTP `/sante` + `/generer`, 69 octets, CPU, greedy ; pas d'auth |
 | N4.3 | **Service Rust + cache** | ✅ **611 ms**, 53 octets, texte identique à Python ; mono-thread |
 | N4.4 | **Service durci** | ⚠️ **partiel** — jeton **401/200**, corps 64 Ko, n ≤ 256 ; **aucun alignement SFT** |
+| N4.6 | **SFT minimal** | ⚠️ **mémorisation** — **24/24** vus, **0/4** tenus ; pas d'alignement |
 | N4.5 | **Meilleur student servi** | ✅ **PPL 2,708**, 53 octets en **589,2 ms**, texte plus structuré |
 | N4.3 | Serveur OpenAI-compatible + streaming | un client standard se connecte |
 | N4.4 | Sûreté et refus | refus explicite, pas de fuite |
