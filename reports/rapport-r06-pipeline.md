@@ -85,6 +85,11 @@ pilote disent pourquoi :
 **corpus**, pas seulement de la forme de la question. Le défaut du pipeline reste l'extractif ;
 `--auto` s'active pour un corpus dont on sait qu'il demande des valeurs.
 
+Deux correctifs ont été essayés pour rattraper le pilote — un score de fenêtre et des spans de
+nombres en mots — et **les deux ont été rejetés par la mesure** (détail dans la fiche R05) : le
+pilote gagne 2 questions, les bancs en perdent 5. Le déficit de l'auto sur un corpus mixte
+(−0,150) reste **nommé, pas corrigé**.
+
 ## Ce qui pourrait le rendre faux
 
 - **le seuil est calibré sur l'échelle BM25 brute** de ce corpus : un autre document, une autre

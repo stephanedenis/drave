@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,10 +28,13 @@
 | 15:54 | `a7d0ccdc` | ÉTAT — R4.2 MESURÉE : 294 FICHIERS, 24/24 EXTRAITS ; T0 À 3 937 | `en-cours.md`, `README.md`, `distribue.md` |
 | 16:02 | `727d13e0` | ÉTAT — LE FAIT ET SA LIGNE : LE COMMIT REFUSE UN RÉSULTAT SANS ÉTAT | `AGENTS.md`, `continuite.md`, `en-cours.md` (+12) |
 | 16:06 | `543b5a02` | CONTINUITÉ — LA SESSION QUI CLÔT, PAS UN « PRINCIPAL » | `continuite.md` |
+| 16:39 | `61511b4b` | ÉTAT — COMPTEUR JSON ALIGNÉ (370) | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-a80-porte-budget.md](../../reports/rapport-a80-porte-budget.md)
+- [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 
 <!-- notes -->
 - **08 h 30 — une seule roadmap, et le lecteur entre au plan.** L'analyse `docs/theorie/lecture-rapide.md` ouvre le

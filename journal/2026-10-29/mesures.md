@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (31)
+## Commits du jour (35)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -39,10 +39,14 @@
 | 15:19 | `23b98f14` | R0.5 — LE ROUTEUR : LE SIGNAL PRÉDIT (AUC 0,785), LA RÈGLE NE TRANSFÈRE PAS | `R07-routeur-extractif-generatif.md`, `index.md`, `en-cours.md` (+8) |
 | 15:32 | `e0c7c837` | R0.4 v2 ET R0.5 v2 — LES DEUX VERSIONS DURCIES CONFIRMENT LE DIAGNOSTIC : LE BANC EST LE VERROU | `R04-tete-survol.md`, `R07-routeur-extractif-generatif.md`, `en-cours.md` (+11) |
 | 16:07 | `d2457e46` | MIROIR — LES TROIS BLOCS RESTITUENT : 34/34 TABLEAUX, 296/296 MODULES, 42/42 FORMULES | `bloc-code.md`, `bloc-maths.md`, `bloc-tableaux.md` (+20) |
+| 16:27 | `09588098` | A2.6 — PARTIEL : TÊTE REFUSÉE, EXPERTS BLOQUÉS A6.2 ; A3.2/A3.3 MESURÉES | `en-cours.md`, `roadmap.md`, `README.md` (+3) |
+| 16:31 | `98e0b6e1` | R13.0 — BPE 3,4–5,2 OCTETS/JETON, RÉVERSIBLE ; PPL À MESURER | `R13-tokenisation-bpe.md`, `en-cours.md`, `roadmap.md` (+4) |
+| 16:35 | `a0ff20a1` | LE BALAYAGE ENTRE DANS LE PIPELINE : 0,944 SUR LES QUESTIONS À VALEUR CONTRE 0,851 POUR L'EXTRACTIF | `tete-balayage.md`, `R05-tete-balayage.md`, `en-cours.md` (+5) |
+| 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE | `R05-tete-balayage.md`, `en-cours.md`, `roadmap.md` (+7) |
 
 ## Chiffres du jour
 
-`0,785` · `0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866`
+`0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -50,6 +54,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
 - [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-miroir-blocs.md](../../reports/rapport-miroir-blocs.md)
@@ -76,7 +81,10 @@
 - [reports/rapport-native-professeur-30k.md](../../reports/rapport-native-professeur-30k.md)
 - [reports/rapport-native-sft.md](../../reports/rapport-native-sft.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
+- [reports/rapport-r05-balayage.md](../../reports/rapport-r05-balayage.md)
+- [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
+- [reports/rapport-r13-tokenisation.md](../../reports/rapport-r13-tokenisation.md)
 - [reports/rapport-r41-bloc-tableaux.md](../../reports/rapport-r41-bloc-tableaux.md)
 
 <!-- notes -->

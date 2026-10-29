@@ -44,7 +44,17 @@ c'est là qu'une tête serait utile — et c'est là que R0.4 a montré qu'elle 
 | terme absent | « zorglub 42 » ne rend rien |
 | **terme d'un autre document** | « drave » / « billots » dans `format-flux.md` ne rendent rien |
 
-## 5. Ce qui pourrait le rendre faux
+## 5. Ce qui a été essayé (et rejeté)
+
+| essai | but | résultat | décision |
+|---|---|---|---|
+| score de fenêtre (rerank) | que « 51 » batte « 0.1 » | top-1 lexical 0,932 → **0,691** | retiré |
+| nombres en mots (« six ») | que « combien d'invariants ? » trouve « six » | +2 au pilote, −1 lexical, −4 paraphrases | retiré |
+
+Le classement interne du balayage est **fragile** : les deux améliorations naturelles le
+dégradent. L'index reste simple, et une tête ne s'y ajoute pas sans données (R0.4).
+
+## 6. Ce qui pourrait le rendre faux
 
 - **le terme de la question est dans le span gold par construction** : sur le banc lexical, le
   rappel@10 mesure surtout que BM25 retrouve la phrase — le span index hérite des limites du

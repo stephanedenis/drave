@@ -73,6 +73,25 @@ répondre : 3/20 contre 12/20 — il rend un nombre même quand on demande une d
 Le pipeline garde l'extractif par défaut ; `--lecteur span` est la voie des valeurs, et le
 choix automatique (détecter « combien », « quel numéro », « quelle date ») reste à faire.
 
+## Ce qui a été essayé (et rejeté par la mesure)
+
+Deux corrections naturelles ont été implémentées, mesurées, puis retirées.
+
+**1. Un score de fenêtre (rerank).** Chaque span était rescroé par la couverture de la question
+dans le texte qui l'entoure (±50 caractères), au lieu du seul BM25 du passage. But : que « 51 »
+batte « 0.1 » dans « combien de pages R0.1 ? ». Résultat : le top-1 du banc lexical **tombe de
+0,932 à 0,691** — la couverture récompense les mots de la question, pas la valeur, et réordonne
+les spans d'une même phrase au détriment du bon. Retiré.
+
+**2. Les nombres en mots** (« six », « cinq », « quatre-vingtième ») comme spans. But : que
+« combien d'invariants ? » trouve « six ». Résultat : le pilote gagne **2 questions** (l'auto
+passe de 0,450 à 0,550), mais le rappel@10 perd **1 question** sur le lexical (0,984 → 0,980) et
+**4** sur les paraphrases (0,702 → 0,655) — le bruit des spans l'emporte. Retiré.
+
+**Ce que ça dit** : le balayage classique est bon (0,984) mais son **classement interne** est
+fragile ; les deux intuitions qui devaient l'améliorer le dégradent. C'est un argument de plus
+pour ne pas ajouter de tête dessus sans données — et une raison de garder l'index simple.
+
 ## Ce qui pourrait le rendre faux
 
 - **le terme de la question est dans le span gold par construction** : sur le banc lexical, le

@@ -40,6 +40,18 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 RE_NOMBRE = re.compile(r"\d[\d\s.,]*\d|\d")
 RE_DATE = re.compile(r"\d{4}-\d{2}-\d{2}|\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|"
                      r"juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}", re.I)
+# Les nombres en MOTS : « combien d'invariants ? » attend « six », pas un chiffre. Le lexique est
+# fermé (les cardinaux et ordinaux courants) — un span de type « nombre-mot ».
+MOTS_NOMBRES = (
+    "un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|"
+    "seize|vingt|trente|quarante|cinquante|soixante|cent|mille|million|milliard|"
+    "premier|première|second|seconde|deuxième|troisième|quatrième|cinquième|sixième|septième|"
+    "huitième|neuvième|dixième|onzième|douzième|treizième|quatorzième|quinzième|seizième|"
+    "vingtième|trentième|quarantième|cinquantième|soixantième|centième|millième|"
+    "quatre-vingt|quatre-vingts|quatre-vingtième|quatre-vingt-dix|soixante-dix|"
+    "dix-sept|dix-huit|dix-neuf|deux-cents|trois-cents"
+)
+RE_NOMBRE_MOT = re.compile(rf"\b(?:{MOTS_NOMBRES})\b", re.I)
 UNITES = ("octets", "o", "Go", "Mo", "Ko", "Gio", "Mio", "ms", "s", "ns", "µs", "%", "jetons",
           "t/s", "tok/s", "couches", "paramètres", "M", "B", "G")
 
@@ -50,6 +62,8 @@ def spans_du_document(manifeste: dict) -> list[dict]:
     out = []
     for passage in passages:
         texte = passage["texte"]
+        # Les nombres en MOTS (« six », « cinq ») ont été essayés : +2 questions au pilote,
+        # −5 sur les deux bancs (le bruit des spans l'emporte). Mesuré, rejeté — voir la fiche.
         for motif, type_ in ((RE_DATE, "date"), (RE_NOMBRE, "nombre")):
             for m in motif.finditer(texte):
                 span = m.group(0).strip()
@@ -64,7 +78,8 @@ def spans_du_document(manifeste: dict) -> list[dict]:
                 debut = passage["start"] + len(texte[:m.start()].encode("utf-8"))
                 out.append({"texte": span, "type": type_, "start": debut,
                             "octets": len(span.encode("utf-8")),
-                            "passage": passage["indice"], "region": passage["region"]})
+                            "passage": passage["indice"], "region": passage["region"],
+                            "pos": m.start(), "fenetre": texte[max(0, m.start() - 50):m.end() + 50]})
     return out
 
 
@@ -80,13 +95,19 @@ class IndexSpans:
             self.par_passage.setdefault(span["passage"], []).append(i)
 
     def chercher(self, requete: str, k: int = 10) -> list[dict]:
-        """Le classement : les passages par BM25, puis leurs spans dans l'ordre."""
+        """Le classement : le BM25 du passage porteur, puis ses spans dans l'ordre.
+
+        La fenêtre (le texte autour du nombre) a été essayée comme second terme : elle
+        RÉORDONNE les spans d'une même phrase et fait tomber le top-1 de 0,932 à 0,691 sur le
+        banc lexical — la couverture de la fenêtre récompense les mots de la question, pas la
+        valeur. Mesuré, rejeté (voir la fiche R05, § « ce qui a été essayé »)."""
         scores = self.index.scores(requete)
         ordre = sorted(range(len(self.passages)), key=lambda i: -scores[i])
         sortie: list[dict] = []
         for i in ordre:
             for j in self.par_passage.get(i, []):
                 span = dict(self.spans[j])
+                span.pop("fenetre", None)
                 span["score"] = round(scores[i], 3)
                 sortie.append(span)
             if len(sortie) >= k:

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **295 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **296 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -17,6 +17,7 @@
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
+| [rapport-a80-porte-budget.md](rapport-a80-porte-budget.md) | A8.0 — `porte-budget` épingle sa PPL : 111,9225 |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
 | [rapport-a80-porte-reparti.md](rapport-a80-porte-reparti.md) | A8.0 — `porte-reparti-moteur` épingle sa PPL : 9,1748 |

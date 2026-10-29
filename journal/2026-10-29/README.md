@@ -5,19 +5,19 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**76 commits** · **0 session(s)** · **7 thème(s)**
+**89 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 7 | [distribue.md](distribue.md) |
-| docs | 20 | [docs.md](docs.md) |
-| memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 31 | [mesures.md](mesures.md) |
-| modele | 4 | [modele.md](modele.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
+| docs | 21 | [docs.md](docs.md) |
+| memoire | 5 | [memoire.md](memoire.md) |
+| mesures | 35 | [mesures.md](mesures.md) |
+| modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 7 | [portes.md](portes.md) |
+| portes | 9 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -107,7 +107,20 @@ Aucune session indexée pour ce jour ; voir
 | 16:07 | `d2457e46` | MIROIR — LES TROIS BLOCS RESTITUENT : 34/34 TABLEAUX, 296/296 MODULES, 42/42 FORMULES |
 | 16:09 | `6872bef1` | A8.0 — PORTE-TOPOLOGIE ÉPINGLÉE : 17,4702 / 30,4363 / 42,5477 ; ÉTAT 3/33 |
 | 16:10 | `3672eae9` | SCHÉMA — R4.1–R4.3 ET LE MIROIR, A8.0 TROIS PORTES, R4.4 BLOQUÉ |
-| 16:13 | `66eb7107` | A8.3 — LE DÉFAUT PLACE+PERLE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ |
+| 16:13 | `a489d9ff` | A8.3 — LE DÉFAUT PLACE+PERDE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ |
+| 16:17 | `b5a2d317` | GRAPHE — 4 TROUS COMBLÉS (A3.2, A3.3, A8.0, B10.2bis) : 0 ARÊTE MORTE, 0 CYCLE |
+| 16:20 | `3328e0ec` | LE BANC DURCI PASSE À 84 PARAPHRASES : MODÈLE 0,375 CONTRE LEXICAL 0,269, TÊTE 0,575 CONTRE BM25 0,745 |
+| 16:22 | `295124d8` | A8.0 — PORTE-COUPE ÉPINGLÉE : PPL 113,0068, COÛTS +0,52…+17,09 % |
+| 16:23 | `95f5a7e0` | A8.0 — AUDIT PPL : 4 PORTES SUR 33 ÉPINGLÉES |
+| 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 |
+| 16:27 | `09588098` | A2.6 — PARTIEL : TÊTE REFUSÉE, EXPERTS BLOQUÉS A6.2 ; A3.2/A3.3 MESURÉES |
+| 16:30 | `b8a1764b` | R06 — LA RELECTURE : RELIRE PLUS NE CHANGE RIEN (0/249, 0/84), LE DÉCLENCHEUR RÉCUPÈRE 2/9 |
+| 16:31 | `98e0b6e1` | R13.0 — BPE 3,4–5,2 OCTETS/JETON, RÉVERSIBLE ; PPL À MESURER |
+| 16:33 | `90c751ca` | R05 — LE BALAYAGE CLASSIQUE : RAPPEL@10 0,984 SUR LE LEXICAL, 0,702 SUR LES PARAPHRASES, 0,1 MS |
+| 16:35 | `a0ff20a1` | LE BALAYAGE ENTRE DANS LE PIPELINE : 0,944 SUR LES QUESTIONS À VALEUR CONTRE 0,851 POUR L'EXTRACTIF |
+| 16:36 | `b49daabf` | A8.0 — PORTE-REPARTI ÉPINGLÉE : PPL 9,1748 ; ÉTAT 5/33 |
+| 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE |
+| 16:39 | `61511b4b` | ÉTAT — COMPTEUR JSON ALIGNÉ (370) |
 
 ## Le récit de la journée (écrit à la main)
 
