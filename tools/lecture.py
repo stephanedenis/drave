@@ -60,8 +60,30 @@ def flux_octets(manifeste: dict) -> bytes:
     return b"".join(r["texte"].encode("utf-8") for r in manifeste["regions"])
 
 
+def confiance(question: str, passages: list[dict], scores: list[float],
+              index_spans=None) -> dict:
+    """La confiance dans une réponse extractive, sans échelle : couverture de la réponse,
+    accord avec le balayage, dispersion relative. (La stabilité a été mesurée inutile, 0,500 :
+    elle n'entre pas.)"""
+    if not passages or not scores:
+        return {"confiance": 0.0, "couverture": 0.0, "accord": 0, "dispersion": 0.0}
+    ordre = sorted(range(len(scores)), key=lambda i: -scores[i])
+    top, second = ordre[0], (scores[ordre[1]] if len(ordre) > 1 else 0.0)
+    mots = set(lc.jetons(question))
+    couv = len(mots & set(lc.jetons(passages[top]["texte"]))) / max(len(mots), 1)
+    accord = 0
+    if index_spans is not None:
+        haut = index_spans.chercher(question, 1)
+        accord = int(bool(haut) and haut[0]["passage"] == passages[top]["indice"])
+    disp = min(1.0, (scores[top] - second) / max(scores[top], 1e-9))
+    c = 0.5 * couv + 0.3 * accord + 0.2 * disp
+    return {"confiance": round(c, 3), "couverture": round(couv, 3), "accord": accord,
+            "dispersion": round(disp, 3)}
+
+
 def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
-             lecteur: str = "extractif", seuil: float = SEUIL) -> dict:
+             lecteur: str = "extractif", seuil: float = SEUIL,
+             seuil_confiance: float | None = None) -> dict:
     debut = time.time()
     manifeste = graphe_document.manifeste(chemin)
     tous = lc.passages(manifeste)
@@ -91,13 +113,25 @@ def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
         resultat["duree_s"] = round(time.time() - debut, 2)
         return resultat
     if lecteur == "cascade":
-        # R06 v2 : la relecture n'est pas un second passage (mesuré nul), c'est un CHANGEMENT
-        # DE MODALITÉ. Étage 1 : le span ou l'extractif (selon la forme de la question) ;
-        # étage 2 : si le premier étage refuse, le modèle — et lui seul paie ses 1,9 s.
+        # R06 v3 : la relecture n'est pas un second passage (mesuré nul), c'est un CHANGEMENT
+        # DE MODALITÉ, déclenché par une CONFIANCE SANS ÉCHELLE. Étage 1 : le span ou
+        # l'extractif ; étage 2 : le modèle, si la confiance est sous le seuil.
+        import index_spans
         base = pipeline(chemin, question, budget, "auto", seuil)
         if base["reponse"] and base["reponse"].get("trouve"):
-            base["voie_choisie"] = f"{base.get('voie_choisie', 'auto')} (cascade, étage 1)"
-            return base
+            if seuil_confiance is not None:
+                manifeste = graphe_document.manifeste(chemin)
+                passages = lc.passages(manifeste)
+                controleur = lc.Controleur(passages, question, max(int(sum(p["octets"] for p in passages) * budget), 1))
+                c = confiance(question, passages, controleur.scores,
+                              index_spans.IndexSpans(manifeste))
+                base["confiance"] = c
+                if c["confiance"] >= seuil_confiance:
+                    base["voie_choisie"] = f"{base.get('voie_choisie', 'auto')} (cascade, étage 1, confiance {c['confiance']})"
+                    return base
+            else:
+                base["voie_choisie"] = f"{base.get('voie_choisie', 'auto')} (cascade, étage 1)"
+                return base
         haut = pipeline(chemin, question, budget, "modele", seuil)
         haut["voie_choisie"] = "modele (cascade, étage 2)"
         haut["etage1"] = base["reponse"]
@@ -227,6 +261,8 @@ def main() -> int:
     ap.add_argument("--budget", type=float, default=0.30)
     ap.add_argument("--lecteur", choices=("extractif", "modele", "span", "auto", "cascade"), default="extractif")
     ap.add_argument("--seuil", type=float, default=SEUIL)
+    ap.add_argument("--seuil-confiance", type=float, default=None,
+                    help="cascade : sous cette confiance, appeler le modèle")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--autotest", action="store_true")
     args = ap.parse_args()
@@ -234,7 +270,8 @@ def main() -> int:
         return autotest()
     if not args.document or not args.question:
         ap.error("--document et --question sont requis")
-    resultat = pipeline(args.document, args.question, args.budget, args.lecteur, args.seuil)
+    resultat = pipeline(args.document, args.question, args.budget, args.lecteur, args.seuil,
+                        args.seuil_confiance)
     if args.json:
         print(json.dumps(resultat, ensure_ascii=False, indent=1))
     else:

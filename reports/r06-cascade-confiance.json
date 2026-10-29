@@ -1,0 +1,28 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R06",
+ "resultats": {
+  "lexical": {
+   "n_cal": 124,
+   "n_test": 123,
+   "seuil": 0.159,
+   "taux_test": 0.911,
+   "appels": 15,
+   "fixe_ext": 0.87,
+   "fixe_mod": 0.26,
+   "oracle": 0.911,
+   "taux_cal": 0.919
+  },
+  "paraphrase": {
+   "n_cal": 42,
+   "n_test": 41,
+   "seuil": 0.527,
+   "taux_test": 0.415,
+   "appels": 35,
+   "fixe_ext": 0.268,
+   "fixe_mod": 0.366,
+   "oracle": 0.415,
+   "taux_cal": 0.452
+  }
+ }
+}

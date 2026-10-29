@@ -1,0 +1,49 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R06",
+ "n": 330,
+ "signaux": {
+  "dispersion": 0.752,
+  "couverture": 0.906,
+  "accord": 0.848,
+  "stabilite": 0.5
+ },
+ "transferts": [
+  {
+   "banc_test": "lexical",
+   "n": 247,
+   "auc": 1.0,
+   "seuil": 0.461,
+   "taux": 0.636,
+   "appels_modele": 123,
+   "plafond_seuil": 0.915,
+   "seuil_plafond": 0.063,
+   "fixe_extractif": 0.874,
+   "fixe_modele": 0.231
+  },
+  {
+   "banc_test": "paraphrase",
+   "n": 83,
+   "auc": 0.891,
+   "seuil": 0.95,
+   "taux": 0.373,
+   "appels_modele": 33,
+   "plafond_seuil": 0.422,
+   "seuil_plafond": 0.975,
+   "fixe_extractif": 0.265,
+   "fixe_modele": 0.373
+  }
+ ],
+ "politiques": {
+  "lexical": {
+   "extractif": 0.874,
+   "modele": 0.231,
+   "oracle": 0.915
+  },
+  "paraphrase": {
+   "extractif": 0.265,
+   "modele": 0.373,
+   "oracle": 0.458
+  }
+ }
+}

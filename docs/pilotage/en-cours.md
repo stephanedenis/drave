@@ -24,12 +24,12 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : **corpus gelé** (30 docs, sha256) et mesures rejouées (248 + 83) ;
-  **cascade** des lecteurs : 0,976 lexical, 0,325 paraphrases (+1,2 pt pour 9 appels).
+- **Ce qu'elle fait** : **déclencheur sans échelle** (couverture 0,906, accord 0,848) et
+  **cascade à confiance calibrée = oracle** hors échantillon (0,911 / 0,415) — le verrou est levé.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : le **déclencheur** de la cascade (le verrou : 9 appels pour 1 question) ;
-  puis la synthèse du programme R.
+- **Prochaine action** : publier la cascade à confiance dans le pipeline (seuil calibré) ;
+  R11 bloqué par N2.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -80,7 +80,7 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **307** / **379** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **309** / **381** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **304 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **306 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -267,7 +267,9 @@
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r05-balayage.md](rapport-r05-balayage.md) | R05 — le balayage : 0,984 de rappel@10 sur le lexical, 0,702 sur les paraphrases |
+| [rapport-r06-cascade-confiance.md](rapport-r06-cascade-confiance.md) | R06 v4 — la cascade à confiance calibrée égale l'oracle, hors échantillon |
 | [rapport-r06-cascade.md](rapport-r06-cascade.md) | R06 v2 — la cascade des lecteurs : +1,2 point, pour 9 appels de modèle |
+| [rapport-r06-declencheur.md](rapport-r06-declencheur.md) | R06 v3 — le déclencheur sans échelle : il classe (0,89–1,00), il faut le calibrer |
 | [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
