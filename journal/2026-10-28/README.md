@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**57 commits** · **0 session(s)** · **8 thème(s)**
+**58 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 16 | [mesures.md](mesures.md) |
+| mesures | 17 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 11 | [moteur.md](moteur.md) |
 
@@ -90,6 +90,7 @@
 | 20:11 | `8b28f889` | N4.4 — SERVICE DURCI : JETON 401/200, CORPS 64 KO, N ≤ 256 ; PAS DE SFT |
 | 20:22 | `923d70ed` | N2.10 — PROFESSEUR 10 000 PAS : 1,073 BIT/OCTET, PPL 2,104 |
 | 20:35 | `8884ca5b` | N2.11 — DISTILLATION 50 000 PAS : PPL 3,082, PLATEAU |
+| 20:59 | `678eb20f` | N2.12 — PROFESSEUR 10K : PPL 2,910 CONTRE 3,082, TÊTE 3 69,97 % |
 
 ## Le récit de la journée (écrit à la main)
 
