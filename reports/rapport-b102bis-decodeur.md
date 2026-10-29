@@ -36,9 +36,9 @@ question est donc : l'attention croisée change-t-elle le chrF ?
 
 | bras | graine | chrF reconstruction | chrF traduction | rappel | sonde de langue |
 |---|---:|---:|---:|---:|---:|
-| 1 | 16.5 | 11.2 | 0.33 | 0.333 |
-| 2 | 18.2 | 10.8 | 0.283 | 0.433 |
-| 3 | 16.2 | 11.0 | 0.348 | 0.367 |
+| 1 | | 16.5 | 11.2 | 0.33 | 0.333 |
+| 2 | | 18.2 | 10.8 | 0.283 | 0.433 |
+| 3 | | 16.2 | 11.0 | 0.348 | 0.367 |
 | **moyenne** | | **16.97** | **11.0** | | |
 
 **Le résultat est un plateau, pas un gain** : les trois bras sont à **11.13 ± 0.25**

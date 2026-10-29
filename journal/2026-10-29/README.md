@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**95 commits** · **0 session(s)** · **8 thème(s)**
+**96 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 37 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 11 | [portes.md](portes.md) |
+| portes | 12 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -128,6 +128,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:53 | `0e8f7a20` | A8.3a — PORTE-PONT : RÉGIME 1 % ÉPINGLÉ (111,8003 / 115,6406, +5,88/+25,75) |
 | 17:02 | `d8df29e0` | A8.3a — PORTE-COUPE : RÉGIME 1 % ÉPINGLÉ (111,8003 ; VARIANCE 2,4 %) |
 | 17:05 | `0c074374` | B10.2bis + A8.3b — L'ATTENTION NE DÉCOLLE PAS LE DÉCODEUR (11,2 CONTRE 38,5) ; LE MÉLANGE KV EST NON MONOTONE |
+| 17:07 | `8770ea50` | A8.0 — PORTE-ADAPTATEUR ÉPINGLÉE : 17,4315 / 2 687 292,8165 ; ÉTAT 7/33 |
 
 ## Le récit de la journée (écrit à la main)
 
