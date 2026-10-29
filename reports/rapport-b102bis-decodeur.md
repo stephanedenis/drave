@@ -47,6 +47,27 @@ entre bras est de **0.2 point** de chrF,
 contre **27.3 points** manquants pour atteindre le plancher. Ce n'est pas une
 question de réglage : c'est un autre levier.
 
+
+## Les pas ne suffisent pas — 1800 pas, deux bras
+
+Le chrF monte-t-il avec l'entraînement ? Non. Mêmes bras, même corpus, **1800 pas** (éval
+tous les 300) :
+
+| pas | projection rec | projection trad | attention rec | attention trad | rappel (proj / att) |
+|---:|---:|---:|---:|---:|---:|
+| 300 | 18.3 | 10.7 | 16.1 | 10.2 | 0.309 / 0.241 |
+| 600 | 16.6 | 11.4 | 16.6 | 11.1 | 0.319 / 0.259 |
+| 900 | 15.9 | 10.1 | 14.3 | 11.2 | 0.387 / 0.313 |
+| 1200 | 17.9 | 11.4 | 16.6 | 10.9 | 0.367 / 0.304 |
+| 1500 | 15.5 | 10.8 | 15.4 | 11.3 | 0.398 / 0.317 |
+| 1800 | 16.9 | 11.2 | 15.3 | 10.7 | 0.374 / 0.328 |
+
+La traduction reste entre **10,2 et 11,4** sur les deux bras et les six points de mesure ;
+la reconstruction oscille entre 14,3 et 18,3 sans tendance ; pendant ce temps le **rappel
+monte** (0,24 → 0,40). L'encodeur apprend, le décodeur ne décolle pas : **ce n'est pas un
+problème de durée d'entraînement**. Trois leviers restent nommés : la **capacité** (9,29 M),
+le **corpus** (30 articles) et l'**objectif** de décodage (byte-level).
+
 ## Les contrôles
 
 | contrôle | ce qu'il devait faire | ce qu'il a fait |

@@ -161,5 +161,84 @@
   }
  },
  "verdict": "négatif : l'attention croisée et les segments ne décollent pas le décodeur",
- "plancher": 38.5
+ "plancher": 38.5,
+ "pas_1800": {
+  "projection": [
+   {
+    "pas": 300,
+    "rec": 18.3,
+    "trad": 10.7,
+    "rappel": 0.309
+   },
+   {
+    "pas": 600,
+    "rec": 16.6,
+    "trad": 11.4,
+    "rappel": 0.319
+   },
+   {
+    "pas": 900,
+    "rec": 15.9,
+    "trad": 10.1,
+    "rappel": 0.387
+   },
+   {
+    "pas": 1200,
+    "rec": 17.9,
+    "trad": 11.4,
+    "rappel": 0.367
+   },
+   {
+    "pas": 1500,
+    "rec": 15.5,
+    "trad": 10.8,
+    "rappel": 0.398
+   },
+   {
+    "pas": 1800,
+    "rec": 16.9,
+    "trad": 11.2,
+    "rappel": 0.374
+   }
+  ],
+  "attention": [
+   {
+    "pas": 300,
+    "rec": 16.1,
+    "trad": 10.2,
+    "rappel": 0.241
+   },
+   {
+    "pas": 600,
+    "rec": 16.6,
+    "trad": 11.1,
+    "rappel": 0.259
+   },
+   {
+    "pas": 900,
+    "rec": 14.3,
+    "trad": 11.2,
+    "rappel": 0.313
+   },
+   {
+    "pas": 1200,
+    "rec": 16.6,
+    "trad": 10.9,
+    "rappel": 0.304
+   },
+   {
+    "pas": 1500,
+    "rec": 15.4,
+    "trad": 11.3,
+    "rappel": 0.317
+   },
+   {
+    "pas": 1800,
+    "rec": 15.3,
+    "trad": 10.7,
+    "rappel": 0.328
+   }
+  ],
+  "verdict": "le chrF ne monte pas avec les pas (10,2–11,4) ; le rappel monte (0,24–0,40)"
+ }
 }

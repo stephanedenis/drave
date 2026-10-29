@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**97 commits** · **0 session(s)** · **8 thème(s)**
+**98 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 9 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
-| mesures | 38 | [mesures.md](mesures.md) |
+| mesures | 39 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 12 | [portes.md](portes.md) |
@@ -130,6 +130,7 @@ Aucune session indexée pour ce jour ; voir
 | 17:05 | `0c074374` | B10.2bis + A8.3b — L'ATTENTION NE DÉCOLLE PAS LE DÉCODEUR (11,2 CONTRE 38,5) ; LE MÉLANGE KV EST NON MONOTONE |
 | 17:07 | `8770ea50` | A8.0 — PORTE-ADAPTATEUR ÉPINGLÉE : 17,4315 / 2 687 292,8165 ; ÉTAT 7/33 |
 | 17:09 | `261bdc42` | B10.2bis — TABLEAU : COLONNE GRAINE VIDE AJOUTÉE |
+| 17:10 | `c9b3da49` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) |
 
 ## Le récit de la journée (écrit à la main)
 

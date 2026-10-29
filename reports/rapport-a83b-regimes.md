@@ -19,19 +19,21 @@ D'où vient-il — de la règle, du nombre de couches, ou du chemin de calcul ?
 
 ## Ce qui est mesuré
 
-| régime | flux mode 0 | flux mode 3 | pont (dense) |
-|---|---:|---:|---:|
-| **f32** (aucun KV int8) | **61,9920** | **60,8135** | **113,0068** |
-| **mélange 1 %** (dernières couches int8) | **58,3200** (−5,9 %) | **62,7357** (+3,2 %) | **111,8003** (−1,1 %) |
-| **int8 partout** (`DRAVE_KV_BITS=8`) | **66,6195** (+7,5 %) | **72,6501** (+19,5 %) | **120,0813** (+6,3 %) |
+| régime | flux mode 0 | flux mode 3 | pont (dense) | topologie (réf / coupe / régions) |
+|---|---:|---:|---:|---:|
+| **f32** (aucun KV int8) | **61,9920** | **60,8135** | **113,0068** | **17,4702 / 30,4363 / 42,5477** |
+| **mélange 1 %** (dernières couches int8) | **58,3200** (−5,9 %) | **62,7357** (+3,2 %) | **111,8003** (−1,1 %) | **17,4825 / 30,4564 / 41,5274** (+0,07 / +0,07 / **−2,4**) |
+| **int8 partout** (`DRAVE_KV_BITS=8`) | **66,6195** (+7,5 %) | **72,6501** (+19,5 %) | **120,0813** (+6,3 %) | non mesuré |
 
 **Trois faits, et un seul est surprenant** :
 1. l'int8 **partout** dégrade **partout** (+6,3 % à +19,5 %) — c'est le comportement attendu
    d'une quantification ;
 2. le mélange **tardif** est un **troisième** point, reproductible : ce n'est ni le f32 ni
    l'int8 partout ;
-3. sur **deux mesures sur trois** (flux mode 0, pont), le mélange fait **mieux** que le f32 —
-   et sur le mode 3 (lot), il fait **moins bien**. Le mode de lot est donc dans l'effet.
+3. sur **trois mesures sur six** (flux mode 0, pont, topologie « deux régions »), le mélange
+   fait **mieux** que le f32 ; sur le mode 3 (lot) il fait moins bien, et sur les deux autres
+   mesures de topologie il ne bouge presque pas (+0,07 %). Le **mode de lot** est donc dans
+   l'effet.
 
 ## Le contrôle qui compte
 

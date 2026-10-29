@@ -17,12 +17,22 @@
   "f32": {
    "flux_mode0": 61.992,
    "flux_mode3": 60.8135,
-   "pont_dense": 113.0068
+   "pont_dense": 113.0068,
+   "topologie": {
+    "reference": 17.4702,
+    "coupe": 30.4363,
+    "regions": 42.5477
+   }
   },
   "melange_1": {
    "flux_mode0": 58.32,
    "flux_mode3": 62.7357,
-   "pont_dense": 111.8003
+   "pont_dense": 111.8003,
+   "topologie": {
+    "reference": 17.4825,
+    "coupe": 30.4564,
+    "regions": 41.5274
+   }
   },
   "int8_partout": {
    "flux_mode0": 66.6195,
@@ -34,7 +44,10 @@
   "melange_1": {
    "flux_mode0": -5.9,
    "flux_mode3": 3.2,
-   "pont_dense": -1.1
+   "pont_dense": -1.1,
+   "topologie_reference": 0.07,
+   "topologie_coupe": 0.07,
+   "topologie_regions": -2.4
   },
   "int8_partout": {
    "flux_mode0": 7.5,
@@ -45,7 +58,8 @@
  "controles": {
   "budget_10_egal_int8_partout": true,
   "budget_nul_egal_f32": true,
-  "melange_meilleur_2_sur_3": true
+  "melange_meilleur_2_sur_3": true,
+  "topologie_au_chiffre": false
  },
  "verdict": "non-monotonie réelle et reproductible ; A8.3 reste opt-in",
  "prochain": "isoler le mode de lot (même régime, deux lots)"
