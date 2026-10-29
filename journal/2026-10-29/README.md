@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**101 commits** · **0 session(s)** · **8 thème(s)**
+**102 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 22 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 40 | [mesures.md](mesures.md) |
-| modele | 6 | [modele.md](modele.md) |
+| modele | 7 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 12 | [portes.md](portes.md) |
 
@@ -134,9 +134,33 @@ Aucune session indexée pour ce jour ; voir
 | 17:31 | `8c3ba915` | B10.2bis + A8.3b — LES PAS NE SUFFISENT PAS (1800 PAS : 10,2–11,4) ; LA TOPOLOGIE ENTRE DANS LE TABLEAU |
 | 17:32 | `981e4bbf` | CORPUS GELÉ — LA DÉRIVE DES BANCS EST CLOSE : 30 DOCUMENTS, MANIFESTE SHA256, 0 PROBLÈME |
 | 17:33 | `f9a33c69` | GRAPHE — 2 FICHES DE PLUS (A2.6, N3) : 37 FICHES, UNE SEULE LIGNE SANS FICHE |
+| 17:34 | `53fec194` | R06 v2 — LA CASCADE DES LECTEURS : +1,2 POINT SUR LES PARAPHRASES POUR 9 APPELS DE MODÈLE |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Session `8156fdcb` — le programme R, de la mesure à la loi.**
 
+Le banc des paraphrases est passé de 19 à **84** questions écrites à la main (recouvrement
+moyen 0,17), puis à **83** après qu'une réécriture de `continuite.md` a emporté un gold — la
+dérive des documents vivants, réparée par un **corpus gelé** (30 documents, manifeste sha256,
+re-gel idempotent).
+
+Les trois mesures rejouées sur le banc élargi ont dit des choses différentes de la veille : le
+modèle garde l'avantage sur les paraphrases mais de moins en moins (0,717 → 0,375) ; la tête de
+survol ne bat jamais BM25 (0,601/0,836, puis 0,448/0,811, puis 0,540/0,720 malgré ×5,5 de
+paires) ; le routeur voit son signal monter à **0,826** sans qu'aucun seuil ne transfère.
+
+Puis le programme a basculé de la mesure vers l'usage : le **pipeline** (R0.6) assemble le
+document, le contrôleur et les lecteurs — 0,600 au pilote, 9/10 refusés, 7/8 au modèle ; le
+**balayage** (R05) donne 0,984 de rappel@10 en 0,1 ms ; la **relecture** est morte (relire plus
+ne change rien, 0/249) et renaît en **cascade** (span → extractif → modèle), +1,2 point pour
+9 appels de modèle.
+
+Trois lois en sortent, écrites dans [le programme R en une page](../../docs/pilotage/programme-r.md) :
+le corpus décide du lecteur, un signal qui prédit n'est pas une règle qui décide, et pour une
+valeur, rendre le span bat générer.
+
+Deux correctifs ont été essayés et **rejetés par la mesure** (le rerank, les nombres en mots) —
+consignés, parce qu'un négatif mesuré vaut un positif.
 <!-- /notes -->

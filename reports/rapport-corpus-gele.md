@@ -1,6 +1,6 @@
 # Le corpus gelé — la dérive des bancs est close
 
-> **Ligne de roadmap** : R0.3 (méthode) · **Date** : 2026-10-30 · **Verdict** : ✅ **le corpus
+> **Ligne de roadmap** : R0.3 (méthode) · **Date** : 2026-10-29 · **Verdict** : ✅ **le corpus
 > des bancs est gelé et vérifié** — 30 documents, 1,4 Mo, manifeste sha256, **0 problème** ;
 > les bancs régénérés sur les copies (**248** questions lexicales, **83** paraphrases) ; la
 > réécriture d'un document ne change plus un banc.

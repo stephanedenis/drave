@@ -1,6 +1,6 @@
 # R06 v2 — la cascade des lecteurs : +1,2 point, pour 9 appels de modèle
 
-> **Ligne de roadmap** : R06 (relecture) · **Date** : 2026-10-30 · **Verdict** : ✅ **la
+> **Ligne de roadmap** : R06 (relecture) · **Date** : 2026-10-29 · **Verdict** : ✅ **la
 > cascade est le seul dispositif de relecture qui gagne** — **0,325** contre 0,313 (auto) sur
 > les paraphrases, **0,976** sur le lexical, **0,450** au pilote — ⚠️ mais le gain des
 > paraphrases coûte **9 appels de modèle** (18 s) pour **une question**.

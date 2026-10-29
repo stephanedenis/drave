@@ -49,6 +49,13 @@ def sources_actuelles() -> list[tuple[str, str]]:
 
 
 def fige() -> int:
+    # IDEMPOTENT : une copie déjà gelée n'est PAS recopiée. Sans cette règle, un --fige après
+    # une réécriture de la documentation changerait le corpus dans le dos des bancs — c'est
+    # exactement la fuite que le gel doit fermer. Re-geler une entrée est explicite : on la
+    # supprime du manifeste (ou de la copie) d'abord.
+    ancien = {}
+    if MANIFESTE.exists():
+        ancien = {e["source"]: e for e in json.loads(MANIFESTE.read_text(encoding="utf-8"))["documents"]}
     entrees = []
     for source, type_ in sources_actuelles():
         original = RACINE / source
@@ -56,6 +63,9 @@ def fige() -> int:
             print(f"  ⚠️ source absente : {source}")
             continue
         copie = CORPUS / type_ / original.name
+        if source in ancien and (RACINE / ancien[source]["copie"]).exists():
+            entrees.append(ancien[source])  # déjà gelé : on garde la copie et son empreinte
+            continue
         copie.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(original, copie)
         entrees.append({"source": source,
@@ -63,7 +73,7 @@ def fige() -> int:
                         "type": type_, "octets": copie.stat().st_size,
                         "sha256": sha256(copie)})
     MANIFESTE.write_text(json.dumps(
-        {"version": 1, "date": "2026-10-30",
+        {"version": 1, "date": "2026-10-29",
          "note": "Corpus gelé des bancs R0.3 : la source peut évoluer, la copie est le banc.",
          "documents": entrees}, ensure_ascii=False, indent=1), encoding="utf-8")
     total = sum(e["octets"] for e in entrees)

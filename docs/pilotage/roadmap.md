@@ -133,7 +133,9 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 
 ---
 
-## Programme R — Le lecteur (la nouvelle cible)
+## Programme R
+
+**Synthèse : [le programme R en une page](programme-r.md)** — ce qui tient, ce qui ne tient pas, les trois lois. — Le lecteur (la nouvelle cible)
 
 **La cible** : lire un document **comme un humain lit vite** — survoler, balayer, lire sélectivement, revenir — en
 payant le calcul au prorata de ce qui est lu, et **prouver** la compréhension par la restitution. Le concept, les
