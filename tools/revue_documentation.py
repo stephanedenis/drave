@@ -6,7 +6,8 @@ Ce qu'elle vérifie, et qu'il faut corriger AVANT le commit de clôture :
   2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
   3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
      ment pas sur la cible ; les sources externes sont citées ;
-  4. fraîcheur  : en-cours.md date du dernier commit (comparaison réelle, pas de format) ;
+  4. fraîcheur  : en-cours.md date du dernier commit, ET aucun fait n'a été commité après
+     le dernier état (comparaison de commits, pas de dates : voir verifie_etat_a_jour.py) ;
   5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
      les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
   6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) ;
@@ -21,6 +22,9 @@ import xml.etree.ElementTree as ET
 from datetime import date
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(RACINE / "tools"))
+from verifie_etat_a_jour import etat_modifie, retards  # noqa: E402  (même dossier)
+
 GABARIT = ("<", "*", "AAAA", "...")
 CHEMIN = re.compile(
     r"`((?:docs|reports|tools|journal|data|drave-core|sprints)/"
@@ -131,7 +135,8 @@ def main() -> int:
     if len(ids) < 7:
         alertes.append(f"structure : {len(ids)} chantiers sur 7 dans en-cours.md ({ids})")
 
-    # 4. fraîcheur : la date de la page doit être celle du dernier commit
+    # 4. fraîcheur : la date de la page, ET aucun fait commité après le dernier état.
+    #    La date seule ne suffit pas : deux commits du même jour passaient (A8.0, 29/10).
     m = re.search(r"Mis à jour : (\d{4}-\d\d-\d\d)", t)
     if not m:
         alertes.append("fraîcheur : en-cours.md n'a pas de date « Mis à jour : AAAA-MM-JJ »")
@@ -140,6 +145,16 @@ def main() -> int:
         if dernier and page != dernier:
             alertes.append(
                 f"fraîcheur : en-cours.md dit {page}, le dernier commit date du {dernier}"
+            )
+    retard = retards(RACINE)
+    if retard and not etat_modifie(RACINE):
+        etat, _fait, lignes = retard
+        if etat == "absent":
+            alertes.append("fraîcheur : en-cours.md n'a jamais été commité")
+        else:
+            alertes.append(
+                f"fraîcheur : {len(lignes)} fait(s) commité(s) après le dernier état "
+                f"({etat[1]}) — mettre en-cours.md à jour"
             )
 
     # 1. classement : aucune donnée de résultat dans docs/

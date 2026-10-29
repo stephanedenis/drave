@@ -49,11 +49,11 @@ volonté** des événements.
    `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
    → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
 10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
-    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage nommé. Les tâches
-    indépendantes partent en **sous-agents** (2–4) ; ils ne touchent jamais `en-cours`/`roadmap`/`AGENTS`
-    et rendent un **diff**. **Identité** : `DSH_SESSION_ID` absent des sessions = **pair**, même
-    diff. Git : `git add` explicite, jamais `-A`/`commit -a`. Le principal met `en-cours` à jour
-    (≤ 2 000 mots). → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
