@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**15 commits** · **0 session(s)** · **4 thème(s)**
+**16 commits** · **0 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -40,6 +40,7 @@
 | 04:22 | `3e5ea72d` | N2.25 + SYNTHÈSE — PLAFOND 2,708 : SIX ESSAIS, AUCUN NE BAT 2,708 |
 | 04:23 | `87dfd1fc` | DOCS — COMPTEURS 260/325 |
 | 04:25 | `1d57756a` | DOCS — COMPTEURS 261/325 ET LIENS DE FICHES NON ÉCRITES |
+| 04:42 | `3fac1112` | N2.26 — TÊTES LOCALES : PPL 2,763, DÉGRADATION, ARRÊTÉ |
 
 ## Le récit de la journée (écrit à la main)
 

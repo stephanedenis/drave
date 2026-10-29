@@ -22,7 +22,7 @@ const VARS_LUES: &[&str] = &[
     "ETAT_ENTREE",
     "FLUX_VERIF", "GPU", "GPU_EXPERTS",
     "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
-    "KV_BITS", "KV_BITS_COUCHES", "KV_F16", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "KV_BITS", "KV_BITS_COUCHES", "KV_F16", "TOKEN", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
     "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
     "SANS_EMPRUNT",
     // S4 (docs/strata-pour-drave.md) : la prélecture des experts. `PRELIRE` coupe tout
