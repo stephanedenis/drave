@@ -1,0 +1,22 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R13.1",
+ "decision": "condition nommée, pas de PPL BPE-native mesurée",
+ "condition": "le modèle natif est en octets (vocab 256) ; aucun checkpoint BPE natif n'existe",
+ "preuves": {
+  "native_vocab": 256,
+  "native_tokenizer": "bytes",
+  "qwen_bpe_vocab": 151936,
+  "r13_0": "BPE 3,4–5,2 octets/jeton, réversible"
+ },
+ "pourquoi_pas": "comparer la PPL d'un modèle Qwen BPE à celle de drave-n0 en octets comparerait deux modèles, pas deux tokenisations",
+ "prochain": [
+  "abstraire le tokenizer dans NativeConfig",
+  "entraîner un petit modèle BPE natif au même budget",
+  "comparer bits/octet à budget égal"
+ ],
+ "limites": [
+  "aucune nouvelle mesure",
+  "condition de campagne, pas un patch"
+ ]
+}

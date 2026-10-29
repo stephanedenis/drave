@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**109 commits** · **0 session(s)** · **8 thème(s)**
+**110 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 15 | [portes.md](portes.md) |
+| portes | 16 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -142,6 +142,7 @@ Aucune session indexée pour ce jour ; voir
 | 19:04 | `43a7510c` | PORTES — LE DERNIER LOT EST VERT : 19/19, DONT VISION (580 S) ; 52 PASSAGES, 1 TOLÉRÉE |
 | 19:21 | `a72cf1dc` | LE DÉCLENCHEUR EST TROUVÉ — LA CASCADE À CONFIANCE CALIBRÉE ÉGALE L'ORACLE HORS ÉCHANTILLON |
 | 19:22 | `2704947c` | JOURNAL — LE DÉCLENCHEUR, ET LA FIN D'UNE OBSTINATION (SESSION 8156fdcb) |
+| 19:27 | `9216634d` | A8.0 — PORTE-GAIN ÉPINGLÉE : 14,6496 / 12,9635 / 996,0390 ; ÉTAT 8/33 |
 
 ## Le récit de la journée (écrit à la main)
 
