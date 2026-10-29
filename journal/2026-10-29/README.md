@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**113 commits** · **0 session(s)** · **8 thème(s)**
+**114 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 23 | [docs.md](docs.md) |
-| memoire | 7 | [memoire.md](memoire.md) |
+| memoire | 8 | [memoire.md](memoire.md) |
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
@@ -146,6 +146,7 @@ Aucune session indexée pour ce jour ; voir
 | 19:30 | `ba0c4ac5` | R13.1 — PPL BPE-NATIVE : CONDITION NOMMÉE (PAS DE MODÈLE BPE NATIF) |
 | 19:33 | `1ec24a7f` | N3.1 — INVENTAIRE : PAS DE PORTE COMPOSÉE AVANT SERVICE/K-WTA |
 | 19:38 | `3c227622` | N3.1 — CORRECTION : LA PROFONDEUR ROUTÉE A UNE PORTE ; A8.0 = 8 |
+| 19:44 | `9ca7b1d2` | A8.0 — PORTE-CYCLE-C2 ÉPINGLÉE : 14,6496 ; ÉTAT 9/33 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -41,7 +41,7 @@
 - **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `71d57f53` A8.0/B11.10.
 - **Fichiers réservés** : `tools/bloc_*.py`, `tools/porte-bloc-*.sh`, `tools/tests/tableaux/`,
   `tools/tests/code/`, `tools/tests/maths/`, `reports/r4*`, `docs/implantation/bloc-*.md`.
-- **Prochaine action** : **B10.2bis** suite (capacité/corpus) ; **A8.3b** (mode de lot) ; **R4.4 bloqué**.
+- **Prochaine action** : **B10.2bis** suite (capacité/corpus) ; **A8.3b** (chemin lot) ; **R4.4 bloqué**.
 - **Bloquants** : aucun.
 - **Journal** : [mesures du jour](../../journal/2026-10-29/mesures.md).
 
@@ -64,7 +64,7 @@
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
 - **B10.2bis — le décodeur** : **négative** — 3 bras × 3 graines : **11,1/11,2/11,0** contre **38,5** ;
   à 1800 pas : 10,2–11,4 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
-- **A8.0 — 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : 3 régimes — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
+- **A8.0 — 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : lot 1 ≠ ≥2 — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 42 arêtes, 1 sans fiche ; `tools/verifie_backlog.py`.
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **313** / **385** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **314** / **386** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

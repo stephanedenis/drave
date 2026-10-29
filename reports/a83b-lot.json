@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3b.1",
+ "question": "le signe du mélange 1 % vient-il de la taille de lot ou d'un chemin lot binaire ?",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "couches_locales": 12,
+ "limit": 24,
+ "ctx": 64,
+ "mesures": {
+  "f32": {
+   "1": 61.992,
+   "2": 60.8135,
+   "4": 60.8135,
+   "8": 60.8135,
+   "16": 60.8135
+  },
+  "perte1": {
+   "1": 58.32,
+   "2": 62.7357,
+   "4": 62.7357,
+   "8": 62.7357,
+   "16": 62.7357
+  }
+ },
+ "constat": "lot 1 = pas de lot ; lot >= 2 identique à quatre décimales dans chaque régime ; le basculement est binaire, pas une taille",
+ "controle": "lot 2/4/8/16 identiques ; lot 1 = mode 0 (61,9920 / 58,3200) ; déterministe",
+ "decision": "A8.3 reste opt-in ; le prochain pas est le chemin de cache/occupation, pas la taille de lot",
+ "limites": [
+  "un seul modèle",
+  "24 jetons, 12 couches locales, ctx 64",
+  "le mécanisme n'est pas isolé"
+ ]
+}
