@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (36)
+## Commits du jour (37)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -44,6 +44,7 @@
 | 16:35 | `a0ff20a1` | LE BALAYAGE ENTRE DANS LE PIPELINE : 0,944 SUR LES QUESTIONS À VALEUR CONTRE 0,851 POUR L'EXTRACTIF | `tete-balayage.md`, `R05-tete-balayage.md`, `en-cours.md` (+5) |
 | 16:38 | `63f0f4ea` | LE CHOIX AUTOMATIQUE DE LA VOIE : +0,109 SUR UN CORPUS DE VALEURS, -0,150 SUR UN CORPUS MIXTE | `R05-tete-balayage.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 16:42 | `33a11db0` | BALAYAGE — DEUX CORRECTIFS ESSAYÉS ET REJETÉS : LE RERANK ET LES NOMBRES EN MOTS DÉGRADENT L'INDEX | `tete-balayage.md`, `en-cours.md`, `README.md` (+11) |
+| 16:46 | `96d9d3bb` | BANC RÉPARÉ APRÈS LA DÉRIVE DE continuite.md : 83 QUESTIONS VÉRIFIÉES, 0 PROBLÈME | `R03-banc-lecture-rapide.md`, `R05-tete-balayage.md`, `R06-tete-relecture.md` (+8) |
 
 ## Chiffres du jour
 
@@ -81,6 +82,7 @@
 - [reports/rapport-native-prof30k.md](../../reports/rapport-native-prof30k.md)
 - [reports/rapport-native-professeur-30k.md](../../reports/rapport-native-professeur-30k.md)
 - [reports/rapport-native-sft.md](../../reports/rapport-native-sft.md)
+- [reports/rapport-r03-banc-durci.md](../../reports/rapport-r03-banc-durci.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
 - [reports/rapport-r05-balayage.md](../../reports/rapport-r05-balayage.md)
 - [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)

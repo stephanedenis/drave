@@ -29,15 +29,14 @@
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
 - **Prochaine action** : R11 (bloqué par N2) sinon consolidation ; R06 à réécrire (modalité).
-- **À noter** : graphe du backlog rouge sur 2 statuts hors vocabulaire (A8.3, R13) — fiches de
-  sessions voisines, non touchées ; `continuite.md` a dérivé, banc ramené à 83 questions vérifiées.
+- **À noter** : backlog rouge (A8.3/R13 hors vocabulaire) ; `continuite.md` dérivé, banc à 83 questions.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
 ### Session `c3d0f0bd` — R4.1–R4.3 les blocs structurels
 
 - **Id** : `c3d0f0bd-e344-4600-a023-0ed50d25b48b`.
-- **Rôle** : **R4.1**, **R4.2**, **R4.3** mesurées (`7fb1c8a6`, `4ccf641f`, ce cycle) ; l'état se commite avec le fait.
+- **Rôle** : **R4.1**, **R4.2**, **R4.3** mesurées (`7fb1c8a6`, `4ccf641f`, ce cycle).
 - **Ce qu'elle fait** : grille (R4.1) ; AST et interpréteur en sable (R4.2) ; LaTeX et CAS exact (R4.3).
 - **Ce que font les autres** : `8156fdcb` R0.5 ; `N2-GPU` N2 ; `71d57f53` A8.0/B11.10.
 - **Fichiers réservés** : `tools/bloc_*.py`, `tools/porte-bloc-*.sh`, `tools/tests/tableaux/`,
@@ -81,7 +80,7 @@
 |---|---|---|
 | portes | **58** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **301** / **373** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **302** / **374** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **104** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
@@ -89,7 +88,7 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 6 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a flux** ; pont/coupe ; A6.2 (bloqué) |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0 : 6 portes** ; **A2.6 partiel** ; **A3.2/A3.3 mesurées** ; **A8.3 refusé** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A8.3a flux/pont** ; coupe ; A6.2 (bloqué) |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10 close (négatif)** | B10.3 décodeur sous le plancher ; B1.5 corpus | **B11.10 mesurée**, puis B10.3 (bloqué) |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 pré-mesure** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13** (PPL BPE) ; **R4.4 bloqué** |

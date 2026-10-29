@@ -1,0 +1,29 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3a",
+ "porte": "porte-pont.sh",
+ "regime": "DRAVE_PERTE_MAX=1",
+ "f32": {
+  "dense": 113.0068,
+  "blocs": 111.9225,
+  "falaise_448": 2.81,
+  "falaise_392": 25.35
+ },
+ "perte1": {
+  "dense": 111.8003,
+  "blocs": 115.6406,
+  "falaise_448": 5.88,
+  "falaise_392": 25.75
+ },
+ "gates": {
+  "f32": "exit 0",
+  "perte1": "exit 0"
+ },
+ "controle": "le même gate passe dans les deux régimes ; sans le mode dual, le régime 1 % échoue sur la référence et sur 448 fibres",
+ "decision": "A8.3a flux+pont faits ; coupe reste ; A8.3 opt-in",
+ "limites": [
+  "un seul modèle",
+  "1 % exact ; 0,001/10 non épinglés",
+  "la falaise 448 double sous la règle"
+ ]
+}

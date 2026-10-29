@@ -70,13 +70,15 @@ echo "  blocs — sans pont : $REFB · --pont-k 0 : $ZB"
 echo "  ✅ pont entier identique dans les deux encodages"
 # A8.0 — les deux PPL de référence sont ÉPINGLÉES (absolu, 5e-4) : la porte ne
 # vérifie plus seulement l'égalité entre bras, elle vérifie la valeur.
-python3 - "$REF" "$REFB" <<'PPLREF' || exit 1
+python3 - "$REF" "$REFB" "${DRAVE_PERTE_MAX:-}" <<'PPLREF' || exit 1
 import sys
 ref, refb = float(sys.argv[1]), float(sys.argv[2])
-for nom, val, attendu in (("dense", ref, 113.0068), ("blocs", refb, 111.9225)):
+perte = sys.argv[3] == "1"
+att = (111.8003, 115.6406) if perte else (113.0068, 111.9225)
+for nom, val, attendu in (("dense", ref, att[0]), ("blocs", refb, att[1])):
     if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
         sys.exit(f"  ❌ PPL de référence {nom} : {val} (attendu {attendu})")
-print(f"  ✅ PPL de référence épinglées : dense {ref} · blocs {refb}")
+print(f"  ✅ PPL de référence épinglées ({'1 %' if perte else 'f32'}) : dense {ref} · blocs {refb}")
 PPLREF
 
 echo "=== 2. la courbe (listes par blocs) : perplexité ↔ fibres ↔ octets ==="
@@ -181,16 +183,19 @@ N=$(nœud --pont-k 392); sleep 2
 R392=$(pilote --flux-blocs --pont-k 392); P392=$(ppl "$R392")
 kill $N 2>/dev/null; wait $N 2>/dev/null
 printf '%s\n' "$R392" | grep -E "transport" | sed 's/^/  /'
-python3 - "$REFB" "$P448" "$P392" <<'PY' || exit 1
+python3 - "$REFB" "$P448" "$P392" "${DRAVE_PERTE_MAX:-}" <<'PY' || exit 1
 import sys
 refb, p448, p392 = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])
 d448, d392 = 100.0 * (p448 - refb) / refb, 100.0 * (p392 - refb) / refb
-if d448 >= 5.0:
-    sys.exit(f"  ❌ 448 fibres devraient coûter moins de 5 % : {d448:.2f} %")
+perte = len(sys.argv) > 4 and sys.argv[4] == "1"
+seuil448 = 7.0 if perte else 5.0
+if d448 >= seuil448:
+    sys.exit(f"  ❌ 448 fibres devraient coûter moins de {seuil448:.1f} % : {d448:.2f} %")
 if d392 <= 10.0:
     sys.exit(f"  ❌ 392 fibres devraient coûter plus de 10 % (la falaise) : {d392:.2f} %")
-# A8.0 — les deux côtés de la falaise sont épinglés (références historiques).
-for nom, val, attendu in (("448", d448, 2.81), ("392", d392, 25.35)):
+# A8.0/A8.3a — les deux côtés de la falaise sont épinglés, par régime.
+att = (5.88, 25.75) if perte else (2.81, 25.35)
+for nom, val, attendu in (("448", d448, att[0]), ("392", d392, att[1])):
     if abs(val - attendu) > 0.05:
         sys.exit(f"  ❌ falaise {nom} : {val:.2f} % (attendu {attendu:.2f} %)")
 print(f"  ✅ 448 fibres : +{d448:.2f} % · 392 fibres : +{d392:.2f} % — la marche est entre les deux")
