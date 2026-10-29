@@ -89,6 +89,20 @@ def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
                                    {"trouve": True, "texte": r["texte"], "region": r["region"],
                                     "start": r["start"], "octets": r["octets"],
                                     "score": r["score"], "prov": r["prov"]})
+    elif lecteur == "span":
+        import index_spans
+        index = index_spans.IndexSpans(manifeste)
+        spans = index.chercher(question, 10)
+        if not spans or spans[0]["score"] < seuil * 0.1:
+            resultat["reponse"] = {"trouve": False,
+                                   "motif": f"aucun span au-dessus du seuil (meilleur {spans[0]['score'] if spans else 0:.2f})"}
+        else:
+            s = spans[0]
+            resultat["reponse"] = {"trouve": True, "texte": s["texte"], "start": s["start"],
+                                   "octets": s["octets"], "score": s["score"],
+                                   "type": s["type"], "region": s["region"],
+                                   "autres_spans": [{"texte": x["texte"], "start": x["start"]}
+                                                    for x in spans[1:4]]}
     else:
         import lecteur_modele
         ordonnes = sorted(zip(lus, scores), key=lambda x: -x[1])
@@ -148,6 +162,13 @@ def autotest() -> int:
         print("❌ rejeu : deux exécutions diffèrent")
 
     total += 1
+    span = pipeline(chemin, question, budget=0.30, lecteur="span")
+    if span["reponse"] and span["reponse"]["trouve"] and "3 663" in span["reponse"]["texte"]:
+        print(f"✅ span : « {span['reponse']['texte']} » à l'offset {span['reponse']['start']}"); ok += 1
+    else:
+        print("❌ span : la valeur n'est pas dans le span rendu")
+
+    total += 1
     refus = pipeline(chemin, "Quelle est la capitale du Pérou ?", budget=0.30)
     if refus["reponse"] and not refus["reponse"]["trouve"]:
         print(f"✅ refus : « {refus['reponse']['motif'][:60]}… »"); ok += 1
@@ -170,7 +191,7 @@ def main() -> int:
     ap.add_argument("--document", type=pathlib.Path)
     ap.add_argument("--question")
     ap.add_argument("--budget", type=float, default=0.30)
-    ap.add_argument("--lecteur", choices=("extractif", "modele"), default="extractif")
+    ap.add_argument("--lecteur", choices=("extractif", "modele", "span"), default="extractif")
     ap.add_argument("--seuil", type=float, default=SEUIL)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--autotest", action="store_true")

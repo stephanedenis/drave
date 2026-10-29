@@ -54,14 +54,28 @@ c'est là qu'une tête serait utile — et c'est là que R0.4 a montré qu'elle 
 - **la tokenisation** : les offsets sont en octets du flux, pas du fichier source ; la provenance
   `prov` donne le fichier, l'offset donne le flux.
 
-## 6. Ce que ça change
+## 6. Branché dans le pipeline
+
+`lecture.py --lecteur span` rend le **span** (valeur + offset) au lieu de la phrase :
+
+| voie | questions à valeur (249) | paraphrases (84) | questions mixtes (20) | coût |
+|---|---:|---:|---:|---:|
+| span | **0,944** | 0,405 | 3/20 | 0,1 ms |
+| extractif | 0,851 | 0,286 | **12/20** | ~1 ms |
+| modèle | — | **0,381** | — | 1,9 s |
+
+**La question décide de la voie** : un nombre ou une date → le span ; un sens avec les mots du
+document → l'extractif ; une paraphrase → le modèle. Le pipeline garde l'extractif par défaut ;
+le choix automatique reste à faire.
+
+## 7. Ce que ça change
 
 1. **Le contrôleur peut balayer** : `index_spans` donne au pipeline une action « balayage » qui
    rend des valeurs, pas des passages — le branchement reste à faire ;
 2. **La tête de balayage n'est pas ajoutée** : la porte 2 de la fiche (« la tête bat BM25 sur
    les paraphrases ») est le même mur que R0.4, et il est nommé.
 
-## 7. Voir aussi
+## 8. Voir aussi
 
 - [Le graphe de document](document-graph.md) — les régions et les offsets.
 - [Le contrôleur](lecteur-controleur.md) — le scoreur que l'index réutilise.

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**84 commits** · **0 session(s)** · **7 thème(s)**
+**85 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
-| memoire | 4 | [memoire.md](memoire.md) |
+| memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 33 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
@@ -116,6 +116,7 @@ Aucune session indexée pour ce jour ; voir
 | 16:27 | `09588098` | A2.6 — PARTIEL : TÊTE REFUSÉE, EXPERTS BLOQUÉS A6.2 ; A3.2/A3.3 MESURÉES |
 | 16:30 | `b8a1764b` | R06 — LA RELECTURE : RELIRE PLUS NE CHANGE RIEN (0/249, 0/84), LE DÉCLENCHEUR RÉCUPÈRE 2/9 |
 | 16:31 | `98e0b6e1` | R13.0 — BPE 3,4–5,2 OCTETS/JETON, RÉVERSIBLE ; PPL À MESURER |
+| 16:33 | `90c751ca` | R05 — LE BALAYAGE CLASSIQUE : RAPPEL@10 0,984 SUR LE LEXICAL, 0,702 SUR LES PARAPHRASES, 0,1 MS |
 
 ## Le récit de la journée (écrit à la main)
 

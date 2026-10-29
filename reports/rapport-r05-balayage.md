@@ -47,6 +47,32 @@ sur les paraphrases** (0,702) — et c'est exactement là qu'une tête serait n�
 3. **Le rappel@10 du lexical hérite du contrôleur** : le span index classe par le BM25 du
    passage ; il ne fait pas mieux que lui, il fait autre chose (des valeurs au lieu de phrases).
 
+## Le balayage branché dans le pipeline : 0,944 sur les questions à valeur
+
+`lecture.py --lecteur span` rend le **span** (valeur + offset exact) au lieu de la phrase. Sur
+les mêmes questions, la comparaison est directe :
+
+| voie | questions à valeur (249) | paraphrases (84) | questions mixtes (pilote, 20) | coût |
+|---|---:|---:|---:|---:|
+| **span** (top-1) | **0,944** | 0,405 | 3/20 | 0,1 ms |
+| extractif | 0,851 | 0,286 | **12/20** | ~1 ms |
+| modèle | — | **0,381** | — | 1,9 s |
+
+**Sur une question à valeur, le span bat l'extractif de 9,3 points** (0,944 contre 0,851) et
+cite l'octet exact. **Sur une question de sens** (« que désignait la drave ? »), il ne peut pas
+répondre : 3/20 contre 12/20 — il rend un nombre même quand on demande une définition.
+
+**La règle des trois voies** se précise donc :
+
+| la question demande… | la voie | chiffre |
+|---|---|---|
+| un **nombre, une date** | **span** | 0,944 · 0,1 ms |
+| un **sens**, avec les mots du document | **extractif** | 0,851 · ~1 ms |
+| un **sens**, en paraphrase | **modèle** | 0,381 · 1,9 s |
+
+Le pipeline garde l'extractif par défaut ; `--lecteur span` est la voie des valeurs, et le
+choix automatique (détecter « combien », « quel numéro », « quelle date ») reste à faire.
+
 ## Ce qui pourrait le rendre faux
 
 - **le terme de la question est dans le span gold par construction** : sur le banc lexical, le
