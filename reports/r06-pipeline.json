@@ -1,0 +1,271 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.6",
+ "seuil": 3.8,
+ "pilote": {
+  "n": 20,
+  "acceptes": 19,
+  "valeur_trouvee": 12,
+  "provenance_verifiee": 19,
+  "taux_valeur": 0.6
+ },
+ "hors_sujet": {
+  "n": 10,
+  "refuses": 10,
+  "taux_refus": 1.0
+ },
+ "paraphrases": {
+  "n": 8,
+  "extractif_valeur": 3,
+  "modele_valeur": 7
+ },
+ "rejeu_identique": true,
+ "details": [
+  {
+   "document": "docs/implantation/format-flux.md",
+   "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+   "valeur": "4",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 2709,
+   "score": 11.078
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "question": "Combien d'octets coûte le mode dense par flux ?",
+   "valeur": "3 663",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 2516,
+   "score": 8.956
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "question": "Quel taux de couverture le mode liste atteint-il ?",
+   "valeur": "99,9997",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 2510,
+   "score": 4.208
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "question": "Combien d'octets pèse l'en-tête de liste ?",
+   "valeur": "14",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 2532,
+   "score": 7.268
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "question": "Que désignait la drave sur la rivière ?",
+   "valeur": "billots",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 488,
+   "score": 5.723
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "question": "Quelle est la thèse du projet ?",
+   "valeur": "structure bat la taille",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 689,
+   "score": 5.194
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "question": "Combien d'axes la vision a-t-elle ?",
+   "valeur": "cinq",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 401,
+   "score": 5.505
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "question": "Que désigne « Stream of logs » ?",
+   "valeur": "flux des listes",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 274,
+   "score": 10.387
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "question": "Quel est le meilleur score de perplexité de N2 ?",
+   "valeur": "2,6998",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 2772,
+   "score": 6.434
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "question": "Quelle porte N2 doit-elle franchir ?",
+   "valeur": "2,5",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 2667,
+   "score": 5.767
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "question": "Quelle ligne d'échelle est suspendue ?",
+   "valeur": "N5",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 2296,
+   "score": 4.351
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "question": "Combien de pages R0.1 a-t-il découpées ?",
+   "valeur": "51",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 6141,
+   "score": 8.031
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+   "valeur": "19 septembre 2025",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 1112,
+   "score": 7.905
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "question": "Quelle session de l'Assemblée générale est concernée ?",
+   "valeur": "quatre-vingtième",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 1019,
+   "score": 5.403
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "question": "Quel est le numéro de la résolution ?",
+   "valeur": "80/1",
+   "trouve": false,
+   "valeur_trouvee": false,
+   "octets_lus": 341,
+   "score": 3.624
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "question": "Quel point de l'ordre du jour est traité ?",
+   "valeur": "point 7",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 875,
+   "score": 10.43
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "question": "Quel outil est déclaré dans le manifeste ?",
+   "valeur": "graphe_document.py",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 891,
+   "score": 3.936
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "question": "Quel type de région porte les séparateurs ?",
+   "valeur": "blanc",
+   "trouve": true,
+   "valeur_trouvee": false,
+   "octets_lus": 1441,
+   "score": 6.342
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "question": "Combien d'invariants le manifeste doit-il respecter ?",
+   "valeur": "six",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 1200,
+   "score": 5.844
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "question": "Quel champ identifie le fichier source ?",
+   "valeur": "sha256",
+   "trouve": true,
+   "valeur_trouvee": true,
+   "octets_lus": 1444,
+   "score": 5.532
+  }
+ ],
+ "paraphrases_details": [
+  {
+   "question": "Quel numéro identifie le neurone cité en exemple quand le texte définit ce qu'est un fait ?",
+   "valeur": "2 539",
+   "extractif_trouve": false,
+   "extractif_valeur": false,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "À partir de quelle taille la sonde cesse-t-elle de progresser ?",
+   "valeur": "1,5",
+   "extractif_trouve": true,
+   "extractif_valeur": true,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "À quel taux de remplissage les listes deviennent-elles moins intéressantes que le reste ?",
+   "valeur": "22",
+   "extractif_trouve": true,
+   "extractif_valeur": false,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "Quelle année figure dans la note de renommage ?",
+   "valeur": "2026",
+   "extractif_trouve": false,
+   "extractif_valeur": false,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "Sur combien de bits le numéro de version est-il codé ?",
+   "valeur": "16",
+   "extractif_trouve": true,
+   "extractif_valeur": true,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "Quelle largeur a l'indice d'un neurone actif dans la liste ?",
+   "valeur": "32",
+   "extractif_trouve": true,
+   "extractif_valeur": false,
+   "modele_trouve": true,
+   "modele_valeur": false
+  },
+  {
+   "question": "Combien d'octets fixes compte une entrée de liste en première version ?",
+   "valeur": "14",
+   "extractif_trouve": true,
+   "extractif_valeur": false,
+   "modele_trouve": true,
+   "modele_valeur": true
+  },
+  {
+   "question": "Quelle quantité de jetons a été traitée en quatre lots de 64 ?",
+   "valeur": "256",
+   "extractif_trouve": true,
+   "extractif_valeur": true,
+   "modele_trouve": true,
+   "modele_valeur": true
+  }
+ ]
+}

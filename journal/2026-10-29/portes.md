@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 16:10 | `3672eae9` | SCHÉMA — R4.1–R4.3 ET LE MIROIR, A8.0 TROIS PORTES, R4.4 BLOQUÉ | `chantiers-etats.svg` |
 | 16:13 | `a489d9ff` | A8.3 — LE DÉFAUT PLACE+PERDE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
 | 16:22 | `295124d8` | A8.0 — PORTE-COUPE ÉPINGLÉE : PPL 113,0068, COÛTS +0,52…+17,09 % | `README.md`, `modele.md`, `THEMES.md` (+1) |
+| 16:23 | `95f5a7e0` | A8.0 — AUDIT PPL : 4 PORTES SUR 33 ÉPINGLÉES | `en-cours.md`, `README.md`, `portes.md` (+2) |
 
 ## Chiffres du jour
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **289 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **290 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -256,6 +256,7 @@
 | [rapport-r03-banc-durci.md](rapport-r03-banc-durci.md) | R0.3 durci — 19 puis 84 paraphrases : le lexique tombe, le modèle prend la tête (de moins en moins) |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
+| [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
