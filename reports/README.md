@@ -98,147 +98,22 @@
 
 ## Les données brutes
 
-- [`jeux-mesures.json`](jeux-mesures.json) — le corpus des 112 surfaces, la couverture par niveau, les contrôles et la pensée
-- [`jeux-langues-mesures.json`](jeux-langues-mesures.json) — les 71 langues : couverture, corpus, invariance, permutation, notation
-- [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json) — les 17 principes : échecs, dames, go, cartes, ablation
-- [`deepseek-mesures.json`](deepseek-mesures.json) — le **premier** banc DeepSeek (60 prompts) ; le banc à l'échelle est `deepseek-mesures-300.json`
-- [`cerveau-mesures.json`](cerveau-mesures.json) — la batterie M1–M9 : hub, voies, mémoires, prédictif, gating, neuromodulation, sommeil, lésions
-- [`restitution-mesures.json`](restitution-mesures.json) — la **restitution du code** et l'aller-retour RSN
-- [`hybride-mesures.json`](hybride-mesures.json) — le codec avec/sans contexte et la mémoire de traduction
-- [`universaux-mesures.json`](universaux-mesures.json) — la base typée : corpus, schéma, parseur natif et codec classique
-- [`semantique-mesures.json`](semantique-mesures.json) — le protocole sémantique : historiques étage A, étage B, diagnostic multilingue, ressources NVLink
-- [`deepseek-mesures-300.json`](deepseek-mesures-300.json) — le banc à l'échelle : 310 prompts, chrF, plancher, tokens, latence
-- [`deepseek-natif-300.json`](deepseek-natif-300.json) — la distillation à l'échelle : aligné contre mélangé, 3 graines
-- [`contamination-0.5b.json`](contamination-0.5b.json) · [`contamination-1.5b.json`](contamination-1.5b.json) ·
-  [`contamination-3b.json`](contamination-3b.json) · [`contamination-7b.json`](contamination-7b.json)
-- [`contamination-eurlex-3b.json`](contamination-eurlex-3b.json) ·
-  [`contamination-eurlex-7b.json`](contamination-eurlex-7b.json)
-- [`traduction-eurlex-3b.json`](traduction-eurlex-3b.json) · [`traduction-eurlex-7b.json`](traduction-eurlex-7b.json) ·
-  [`traduction-eurlex-14b.json`](traduction-eurlex-14b.json)
-- [`traduction-eurlex2509-3b.json`](traduction-eurlex2509-3b.json) ·
-  [`traduction-eurlex2509-7b.json`](traduction-eurlex2509-7b.json) *(réplication, règlement 2025/2509)*
-- [`traduction-eurlex-3b-fraeng.json`](traduction-eurlex-3b-fraeng.json) ·
-  [`traduction-eurlex-7b-fraeng.json`](traduction-eurlex-7b-fraeng.json)
-- [`traduction-eurlex-0.5b.json`](traduction-eurlex-0.5b.json) · [`traduction-eurlex-1.5b.json`](traduction-eurlex-1.5b.json)
-- [`traduction-langues-3b.json`](traduction-langues-3b.json) · [`traduction-langues-7b.json`](traduction-langues-7b.json)
-- [`traduction-presse-3b.json`](traduction-presse-3b.json) · [`traduction-presse-7b.json`](traduction-presse-7b.json)
-- [`traduction-24langues-A.json`](traduction-24langues-A.json) · [`traduction-24langues-B.json`](traduction-24langues-B.json)
-- [`traduction-24langues-3b-A.json`](traduction-24langues-3b-A.json) · [`traduction-24langues-3b-B.json`](traduction-24langues-3b-B.json)
-- [`traduction-onu-3b.json`](traduction-onu-3b.json) · [`traduction-onu-7b.json`](traduction-onu-7b.json) *(PDF, périmés)*
-- [`traduction-onu6-3b.json`](traduction-onu6-3b.json) · [`traduction-onu6-7b.json`](traduction-onu6-7b.json) *(DOCX, 6 langues)*
-- [`contamination-udhr-A.json`](contamination-udhr-A.json) · [`contamination-udhr-B.json`](contamination-udhr-B.json)
-- [`traduction-jw-A.json`](traduction-jw-A.json) · [`traduction-jw-B.json`](traduction-jw-B.json)
-- [`traduction-pidgin-7b.json`](traduction-pidgin-7b.json) · [`traduction-pidgin-14b.json`](traduction-pidgin-14b.json) · [`pidgin-fewshot-7b.json`](pidgin-fewshot-7b.json)
-- [`lora-pidgin-3b.json`](lora-pidgin-3b.json) · [`lora-pidgin-mono-3b.json`](lora-pidgin-mono-3b.json) · [`lora-pidgin-mixte-3b.json`](lora-pidgin-mixte-3b.json) · [`lora-pidgin-bbc-3b.json`](lora-pidgin-bbc-3b.json) · [`kfold-pidgin.json`](kfold-pidgin.json) · [`kfold-pidgin-tw.json`](kfold-pidgin-tw.json) · [`kfold-pidgin-bible.json`](kfold-pidgin-bible.json) · [`kfold-pidgin-web.json`](kfold-pidgin-web.json) · [`kfold-pidgin-7.json`](kfold-pidgin-7.json) · [`kfold-pidgin-7b-8bit.json`](kfold-pidgin-7b-8bit.json)
-- [`kfold-7b-0001.json`](kfold-7b-0001.json) · [`kfold-7b-0004.json`](kfold-7b-0004.json) · [`kfold-7b-0066.json`](kfold-7b-0066.json) · [`kfold-7b-fix-0210.json`](kfold-7b-fix-0210.json) · [`kfold-bible-narratif-0210.json`](kfold-bible-narratif-0210.json) · [`kfold-chat-0210.json`](kfold-chat-0210.json) · [`kfold-tout-0210.json`](kfold-tout-0210.json) · [`kfold-wiki-0210.json`](kfold-wiki-0210.json)
-- [`kfold-7b-amp-0001.json`](kfold-7b-amp-0001.json) · [`kfold-7b-amp-0004.json`](kfold-7b-amp-0004.json) · [`kfold-7b-amp-0066.json`](kfold-7b-amp-0066.json) · [`kfold-7b-amp-0089.json`](kfold-7b-amp-0089.json) · [`kfold-7b-amp-0095.json`](kfold-7b-amp-0095.json) · [`kfold-7b-amp-0210.json`](kfold-7b-amp-0210.json) · [`kfold-7b-amp-0327.json`](kfold-7b-amp-0327.json)
-- [`kfold-asp-0001.json`](kfold-asp-0001.json) · [`kfold-asp-0004.json`](kfold-asp-0004.json) · [`kfold-asp-0066.json`](kfold-asp-0066.json) · [`kfold-asp-0089.json`](kfold-asp-0089.json) · [`kfold-asp-0095.json`](kfold-asp-0095.json) · [`kfold-asp-0210.json`](kfold-asp-0210.json) · [`kfold-asp-0327.json`](kfold-asp-0327.json)
-- [`kfold-14b-0001.json`](kfold-14b-0001.json) · [`kfold-14b-0004.json`](kfold-14b-0004.json) · [`kfold-14b-0066.json`](kfold-14b-0066.json) · [`kfold-14b-0089.json`](kfold-14b-0089.json) · [`kfold-14b-0095.json`](kfold-14b-0095.json) · [`kfold-14b-0210.json`](kfold-14b-0210.json) · [`kfold-14b-0327.json`](kfold-14b-0327.json)
-- [`pensee-multilingue.json`](pensee-multilingue.json)
-- [`alignement-3b.json`](alignement-3b.json) · [`alignement-7b.json`](alignement-7b.json)
-- [`composition-multilingue.json`](composition-multilingue.json)
-- [`composition-verne.json`](composition-verne.json) · [`composition-verne-7b.json`](composition-verne-7b.json) · [`composition-verne-14b.json`](composition-verne-14b.json)
-- [`pas-de-pensee.json`](pas-de-pensee.json) · [`pas-de-pensee-7b.json`](pas-de-pensee-7b.json) · [`pas-de-pensee-14b.json`](pas-de-pensee-14b.json) — **retirés (erratum 6)** : carte des lignes cassée
-- [`pas-de-pensee-contracte-3b.json`](pas-de-pensee-contracte-3b.json) · [`pas-de-pensee-contracte-7b.json`](pas-de-pensee-contracte-7b.json) — **retirés (erratum 6)**
-- [`pas-de-pensee-mlp-6.json`](pas-de-pensee-mlp-6.json) · [`pas-de-pensee-mlp-18.json`](pas-de-pensee-mlp-18.json) — **retirés (erratum 6)**
-- [`pas-de-pensee-corrige-3b.json`](pas-de-pensee-corrige-3b.json) · [`pas-de-pensee-corrige-7b.json`](pas-de-pensee-corrige-7b.json) · [`pas-de-pensee-corrige-14b.json`](pas-de-pensee-corrige-14b.json) — le pas de pensée sur la **carte correcte** (mesure 113 : l'opérateur prédit la moyenne)
-- [`pas-de-pensee-non-lineaire-3b.json`](pas-de-pensee-non-lineaire-3b.json) — MLP contrastif (mesure 114 : mémorise, ne généralise pas)
-- [`pas-de-pensee-corrige-large.json`](pas-de-pensee-corrige-large.json) · [`pas-de-pensee-non-lineaire-large.json`](pas-de-pensee-non-lineaire-large.json) — 630 séries (mesure 115 : l'état d'une phrase ne porte pas la suivante)
-- [`composition-verne-large.json`](composition-verne-large.json) — la composition sur 630 séries (contrôle de la mesure 115 : 0,53 / 0,867 à la couche 18)
-- [`pas-de-plan-3b.json`](pas-de-plan-3b.json) · [`composition-verne-plan.json`](composition-verne-plan.json) — le contexte sur 8 phrases (mesure 116 : le contenu reste à 0,14 contre 0,125)
-- [`pas-de-plan-code-3b.json`](pas-de-plan-code-3b.json) — le code de plan (mesure 117 : 0,86-0,89, à peine au-dessus de la moyenne)
-- [`position-multilingue.json`](position-multilingue.json) — la position dans la série (mesure 118 : 0,13 contre 0,125 ; la langue est à 1,00)
-- [`plan-entrainement-3b.json`](plan-entrainement-3b.json) · [`plan-entrainement-melange.json`](plan-entrainement-melange.json) — le plan entraîné (mesure 119 : 0,239 → 0,443 ; contrôle mélangé 0,227)
-- [`plan-multi-3b.json`](plan-multi-3b.json) — le plan multi-pas (mesure 120 : 0,443 / 0,295 / 0,341 à trois horizons)
-- [`plan-controle-3b.json`](plan-controle-3b.json) — le contrôle des cibles figées (mesure 121 : 0,318 / 0,250 / 0,216 ; moitié du gain)
-- [`plan-16.json`](plan-16.json) — l'échelle 16 phrases, horizons 1-7 (mesure 122 : transfert figé nul)
-- [`plan-fige-1234.json`](plan-fige-1234.json) · [`plan-fige-5678.json`](plan-fige-5678.json) — l'objectif contre cibles figées (mesure 124 : 0,324 / 0,273 / 0,216 en moyenne ; h1 solide)
-- [`raisonnement-latent-3b.json`](raisonnement-latent-3b.json) — le raisonnement transitif dans l'état (mesure 125 : 1,00 → 0,51 en FR, transfert FR→EN au hasard)
-- [`pont-raisonnement-3b.json`](pont-raisonnement-3b.json) — le pont EN→FR du raisonnement (mesure 126 : 1,00 / 0,91 / 0,68 / 0,52 / 0,46)
-- [`pont-raisonnement-taille-3b.json`](pont-raisonnement-taille-3b.json) — le pont avec une autre relation (mesure 127 : 1,00 / 0,85 / 0,67 / 0,56 / 0,44)
-- [`pont-raisonnement-es-3b.json`](pont-raisonnement-es-3b.json) — le pont FR/ES (mesure 128 : 1,00 / 0,92 / 0,72 / 0,56 / 0,50)
-- [`pont-mlp-3b.json`](pont-mlp-3b.json) — le pont non linéaire (mesure 129 : échec, 0,04-0,17)
-- [`pont-raisonnement-l12-3b.json`](pont-raisonnement-l12-3b.json) · [`pont-raisonnement-l24-3b.json`](pont-raisonnement-l24-3b.json) — le pont aux couches 12 et 24 (mesure 130 : la couche 12 est la meilleure aux longues chaînes)
-- [`pont-raisonnement-de-3b.json`](pont-raisonnement-de-3b.json) — le pont FR/DE (mesure 131 : 1,00 / 0,94 / 0,74 / 0,65 / 0,52)
-- [`pont-plan-3b.json`](pont-plan-3b.json) — le pont de l'état de plan (mesure 132 : il dégrade, 0,148 contre 0,250)
-- [`pont-raisonnement-ar-3b.json`](pont-raisonnement-ar-3b.json) — le pont FR/AR (mesure 133 : 1,00 / 0,90 / 0,73 / 0,48 / 0,41)
-- [`pont-croise-3b.json`](pont-croise-3b.json) — le pont croisé raisonnement → plan (mesure 134 : 0,125, le hasard)
-- [`pont-longueur2-3b.json`](pont-longueur2-3b.json) · [`pont-pool-pont-3b.json`](pont-pool-pont-3b.json) · [`pont-pool-3b.json`](pont-pool-3b.json) — le pont par longueur, poolé, et tout poolé (mesure 135 : un seul pont suffit, 0,94 / 0,91 / 0,81)
-- [`pont-multi-3b.json`](pont-multi-3b.json) — le pont multi-tâches (mesure 136 : 0,136, le plan n'est toujours pas aligné)
-- [`pont-raisonnement-7b.json`](pont-raisonnement-7b.json) — le pont au 7 B (mesure 137 : 1,00 / 1,00 / 0,95 / 0,87 / 0,81)
-- [`code-partage-64-3b.json`](code-partage-64-3b.json) · [`code-partage-256-3b.json`](code-partage-256-3b.json) — le code partagé non supervisé (mesure 138 : 64 dims 0,14-0,98 ; 256 dims 0,34-1,00)
-- [`cca-raisonnement-3b.json`](cca-raisonnement-3b.json) — le code partagé CCA (mesure 139 : 0,28-1,00 ; le transfert rejoint l'in-langue du code)
-- [`cca-256-3b.json`](cca-256-3b.json) — la CCA à 256 dims (mesure 140 : 0,57-1,00 ; la capacité était le problème)
-- [`pont-raisonnement-14b.json`](pont-raisonnement-14b.json) — le pont au 14 B (mesure 141 : 1,00 / 1,00 / 1,00 / 1,00 / 0,975)
-- [`raisonnement-entrainement-3b.json`](raisonnement-entrainement-3b.json) — l'entraînement du raisonnement en FR (mesure 142 : la sonde EN reste à 0,092, le pont baisse à 0,513)
-- [`registre-parle-7b.json`](registre-parle-7b.json) · [`registre-parle-3b.json`](registre-parle-3b.json) — le registre parlé (mesure 143 : +39,8 / +40,7 au 7 B)
-- [`raisonnement-multilingue-3b.json`](raisonnement-multilingue-3b.json) — l'entraînement multilingue (mesure 144 : la sonde EN reste à 0,042, le pont baisse à 0,451)
-- [`registre-technique-7b.json`](registre-technique-7b.json) — le registre technique miné (mesure 145 : +41,0 / +46,0, référence WikiMatrix)
-- [`raisonnement-contrastif-3b.json`](raisonnement-contrastif-3b.json) — l'entraînement contrastif FR/EN (mesure 146 : la sonde EN reste à 0,042, le pont à 0,466)
-- [`raisonnement-contrastif-fort-3b.json`](raisonnement-contrastif-fort-3b.json) — le contraste fort (mesure 147 : sonde FR→EN 0,742, tête 0,734, pont 0,779)
-- [`registre-dialogue-7b.json`](registre-dialogue-7b.json) — le dialogue spontané (mesure 148 : +32,3 / +33,6)
-- [`raisonnement-contrastif-melange-3b.json`](raisonnement-contrastif-melange-3b.json) — le contrôle du contraste (mesure 149 : paires mélangées, sonde EN 0,505 contre 0,742)
-- [`raisonnement-bilingue-3b.json`](raisonnement-bilingue-3b.json) — le bilingue sans contraste (mesure 150 : sonde EN 0,656 ; le contraste correct ajoute +9, le mélangé coûte −15)
-- [`raisonnement-b8-p400.json`](raisonnement-b8-p400.json) · [`raisonnement-b4-p800.json`](raisonnement-b4-p800.json) — la courbe (mesure 151 : 0,13 à 400 pas, 0,40-0,66 à 800)
-- [`raisonnement-b8-p1600.json`](raisonnement-b8-p1600.json) — la saturation (mesure 152 : sonde EN 0,753 à 1 600 pas, in-langue 0,826)
-- [`pont-plan-alignee-3b.json`](pont-plan-alignee-3b.json) — le plan avec l'adaptateur aligné (mesure 153 : 0,273 contre 0,250 figé, l'alignement ne transfère pas)
-- [`plan-bilingue-3b.json`](plan-bilingue-3b.json) — le plan entraîné en bilingue (mesure 154 : EN→FR 0,364 contre 0,250 figé, presque le FR→FR 0,398)
-- [`plan-fr-seul-3b.json`](plan-fr-seul-3b.json) — le contrôle FR seul (mesure 155 : EN→FR 0,364 identique, le bilinguisme n'ajoute rien)
-- [`plan-contraste-3b.json`](plan-contraste-3b.json) — le plan avec contraste explicite (mesure 156 : EN→FR 0,386, +2 points, la géométrie résiste)
-- [`pont-profondeur-3b.json`](pont-profondeur-3b.json) — la profondeur au 3 B (mesure 157 : 0,95 à 4 entités → 0,47 à 12, une pente)
-- [`pont-profondeur-14b.json`](pont-profondeur-14b.json) — la profondeur au 14 B (mesure 158 : 0,966 à 8, 0,862 à 10, 0,695 à 12, la pente s'aplatit)
-- [`registre-technique-humain-7b.json`](registre-technique-humain-7b.json) — le technique à référence humaine (mesure 159 : +36,4 / +34,9 ; la WikiMatrix gonflait)
-- [`xnli-3b.json`](xnli-3b.json) — le raisonnement naturel XNLI (mesure 160 : inférence 0,502/0,576, pont 0,592)
-- [`xnli-14b.json`](xnli-14b.json) — XNLI au 14 B (mesure 161 : pas de gain, 0,481/0,589, pont 0,627)
-- [`xnli-mlp-3b.json`](xnli-mlp-3b.json) — XNLI avec sonde MLP (mesure 162 : 0,453 contre 0,502 au linéaire, ce n'est pas la sonde qui limite)
-- [`xnli-entrainement-3b.json`](xnli-entrainement-3b.json) — le fine-tuning XNLI (mesure 163 : tête 0,592/0,610, pont 0,751)
-- [`xnli-train-complet-3b.json`](xnli-train-complet-3b.json) — le train complet hors domaine (mesure 164 : sonde 0,586, pont 0,773, le domaine compte plus que le volume)
-- [`xnli-1.5b.json`](xnli-1.5b.json) — la baseline XNLI au 1,5 B (le 1,5 B bat le 3 B : 0,692 contre 0,502 ; pont 0,83)
-- [`nli-daccord-1.5b.json`](nli-daccord-1.5b.json) — DACCORD au 1,5 B (marge +26,9, contrôle 0,550)
-- [`nli-gqnli-1.5b.json`](nli-gqnli-1.5b.json) — GQNLI-FR au 1,5 B (marge +56,7, les quantificateurs)
-- [`nli-daccord-1.5b-l14.json`](nli-daccord-1.5b-l14.json) — DACCORD au 1,5 B, couche 14 (50 % : 0,701)
-- [`nli-daccord-3b.json`](nli-daccord-3b.json) — DACCORD au 3 B, couche 18 (50 % : 0,592)
-- [`nli-daccord-1.5b-l22.json`](nli-daccord-1.5b-l22.json) — DACCORD au 1,5 B, couche 22 (**le pic : 0,810**)
-- [`nli-daccord-1.5b-l26.json`](nli-daccord-1.5b-l26.json) — DACCORD au 1,5 B, couche 26 (0,801)
-- [`nli-daccord-3b-l12.json`](nli-daccord-3b-l12.json) — DACCORD au 3 B, couche 12 (0,511)
-- [`nli-daccord-3b-l24.json`](nli-daccord-3b-l24.json) — DACCORD au 3 B, couche 24 (0,836)
-- [`nli-daccord-3b-l30.json`](nli-daccord-3b-l30.json) — DACCORD au 3 B, couche 30 (**le pic : 0,865**)
-- [`nli-gqnli-3b.json`](nli-gqnli-3b.json) — GQNLI-FR au 3 B (0,80, le 3 B décroche)
-- [`rapport-nli-francais-dur.md`](rapport-nli-francais-dur.md) — le NLI français plus dur que XNLI (le rapport)
-- [`xnli-32b.json`](xnli-32b.json) — XNLI au 32 B en nf4 (sonde 0,410, pont 0,49)
-- [`rapport-32b-couche-confondant.md`](rapport-32b-couche-confondant.md)
-- [`rapport-carte-raisonnement-naturel.md`](rapport-carte-raisonnement-naturel.md) — **la synthèse** : quatre mesures, trois courbes, deux axes, quatre leçons
-- [`rapport-regle-placement-perte.md`](rapport-regle-placement-perte.md) — A8.3 : la règle place+perte rend le choix de la main (30,7286 des deux côtés)
-- [`rapport-grappe-intra-couche.md`](rapport-grappe-intra-couche.md) — A7.3 : le top-1024 (21 %) rend la même perplexité
-- [`rapport-grappe-deportee.md`](rapport-grappe-deportee.md) — A7.4 : le flux v2 (masque) coûte 4,22× moins, chiffres identiques
-- [`rapport-operateur-negation.md`](rapport-operateur-negation.md) — B4.1 : la négation n'est pas portée par l'état (flip 0,4148, garde 0,5852)
-- [`operateur-negation-1.5b-l22.json`](operateur-negation-1.5b-l22.json) — le JSON de l'opérateur de négation (1,5 B, couche 22) — le 32 B et le confondant de la couche relative
-- [`registre-dialogue-diabla-1.5b.json`](registre-dialogue-diabla-1.5b.json) — DiaBLa au 1,5 B (+40,3/+44,2, **post-éditions** : une borne haute)
-- [`registre-dialogue-diabla-refs-3b.json`](registre-dialogue-diabla-refs-3b.json) — DiaBLa au 3 B, références indépendantes (+38,1/+41,3 : la traduction profite de la taille)
-- [`registre-dialogue-opensubs-1.5b.json`](registre-dialogue-opensubs-1.5b.json) — OpenSubtitles au 1,5 B (+27,0/+30,4, les sous-titres humains)
-- [`rapport-dialogue-diabla.md`](rapport-dialogue-diabla.md) — le dialogue réel : DiaBLa, et pourquoi sa référence n'est pas comparable
-- [`rapport-kv-par-couche.md`](rapport-kv-par-couche.md) — la quantification du KV par couche (le coût de l'int8 est dans les premières couches)
-- [`rapport-hebbien-produits.md`](rapport-hebbien-produits.md) — A6.1 : les produits hebbiens (+0,0045 de R², la trace linéaire explique déjà 92 %)
-- [`rapport-elagage-logs.md`](rapport-elagage-logs.md) — A6.3 : aucun neurone mort sur 116 736, mais 63 % s'allument à peine
-- [`registre-technique-prose-7b.json`](registre-technique-prose-7b.json) — la prose technique MultiUN (mesure 165 : +33,2 / +32,9, plus dure que le juridico-technique)
-- [`plan-contraste-plein-3b.json`](plan-contraste-plein-3b.json) — le contraste plein du plan (mesure 166 : 0,318, il dégrade sans la tâche)
-- [`plan-recurrent-3b.json`](plan-recurrent-3b.json) — le plan récurrent de bout en bout (mesure 167 : 0,273, la récurrence est pire que le contexte joint)
-- [`plan-multi-tache-3b.json`](plan-multi-tache-3b.json) — le plan multi-tâches (mesure 168 : 0,364, la ligne plan est définitivement close)
-- [`plan-seed5678.json`](plan-seed5678.json) · [`plan-seed5678-melange.json`](plan-seed5678-melange.json) — la graine 5678 et son contrôle (mesure 123 : gain reproduit, transfert figé inconstant)
-- [`carte-24langues.json`](carte-24langues.json) · [`carte-24langues-3b.json`](carte-24langues-3b.json)
-- [`analyse-litteraire.json`](analyse-litteraire.json)
-- [`traduction-litteraire-3b.json`](traduction-litteraire-3b.json) ·
-  [`traduction-litteraire-7b.json`](traduction-litteraire-7b.json)
-- [`traduction-udhr-propre-7b.json`](traduction-udhr-propre-7b.json) ·
-  [`traduction-udhr-propre-3b-fraeng.json`](traduction-udhr-propre-3b-fraeng.json) ·
-  [`traduction-udhr-propre-7b-fraeng.json`](traduction-udhr-propre-7b-fraeng.json)
-- [`restitution-fra-flux.json`](restitution-fra-flux.json)
-- [`restitution-fra.json`](restitution-fra.json)
-- [`restitution-udhr-flux.json`](restitution-udhr-flux.json)
-- [`restitution-udhr.json`](restitution-udhr.json)
-- [`sonde-octets-moyenne.json`](sonde-octets-moyenne.json)
-- [`sonde-octets-position.json`](sonde-octets-position.json)
-- [`traduction-legal.json`](traduction-legal.json)
+L'index **exhaustif** des JSON est [`INDEX.md`](INDEX.md) ; les fichiers sont dans ce dossier. Les
+principaux agrégats sont :
+
+- [`jeux-mesures.json`](jeux-mesures.json) — 112 surfaces, couverture par niveau, contrôles, pensée ;
+- [`jeux-langues-mesures.json`](jeux-langues-mesures.json) — 71 langues, invariance, permutation, notation ;
+- [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json) — 17 principes, échecs, dames, go, cartes ;
+- [`deepseek-mesures.json`](deepseek-mesures.json) · [`deepseek-mesures-300.json`](deepseek-mesures-300.json) ·
+  [`deepseek-natif-300.json`](deepseek-natif-300.json) — le banc externe et la distillation à l'échelle ;
+- [`cerveau-mesures.json`](cerveau-mesures.json) — la batterie M1–M9 ;
+- [`restitution-mesures.json`](restitution-mesures.json) · [`hybride-mesures.json`](hybride-mesures.json) ·
+  [`universaux-mesures.json`](universaux-mesures.json) · [`semantique-mesures.json`](semantique-mesures.json) —
+  les blocs B10–B12.
+
+Les JSON de campagne (`traduction-*`, `kfold-*`, `contamination-*`, `pont-*`, `xnli-*`, `plan-*`,
+`registre-*`) sont décrits dans la fiche de la mesure correspondante ; [`INDEX.md`](INDEX.md) donne le
+titre de chaque fiche.
 
 ## Les autres fiches
 

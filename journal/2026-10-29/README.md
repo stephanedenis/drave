@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**37 commits** · **0 session(s)** · **5 thème(s)**
+**39 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 4 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | mesures | 20 | [mesures.md](mesures.md) |
 | moteur | 3 | [moteur.md](moteur.md) |
@@ -67,6 +67,8 @@ Aucune session indexée pour ce jour ; voir
 | 11:50 | `4ffa34b7` | R0.1 — 51 PAGES, 1 423 RÉGIONS, FIDÉLITÉ 1,000 : LE GRAPHE DE DOCUMENT EST MESURÉ |
 | 11:55 | `19db1632` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE |
 | 12:03 | `bc4e3d92` | N0.3b — PARITÉ PPL DRVM ↔ GGUF CLOSE : 68,1917 / 92,1875 (CONVERSION), 4,6585 / 18,6394 (NATIF) |
+| 12:04 | `08149617` | R0.2 — À 30 % DU BUDGET, LE CONTRÔLEUR RÉCUPÈRE 100 % DES PASSAGES ; LE LECTEUR PLAFONNE À 25–75 % |
+| 12:24 | `103c8b74` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ |
 
 ## Le récit de la journée (écrit à la main)
 
