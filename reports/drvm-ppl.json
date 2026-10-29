@@ -8,5 +8,50 @@
  "niveau": "memoire",
  "drvm_execute": false,
  "drvm_ppl_memoire": 28.7355,
- "fichier_temporaire": false
+ "fichier_temporaire": false,
+ "n0_3b_cloture": {
+  "date": "2026-10-29",
+  "qwen": [
+   {
+    "texte_octets": 59,
+    "tokens_notes": 15,
+    "ppl_gguf": 68.1917,
+    "ppl_drvm": 68.1917,
+    "ecart": 0.0
+   },
+   {
+    "texte_octets": 1076,
+    "tokens_notes": 304,
+    "ppl_gguf": 92.1875,
+    "ppl_drvm": 92.1875,
+    "ecart": 0.0
+   }
+  ],
+  "native": [
+   {
+    "texte_octets": 59,
+    "octets_notes": 59,
+    "ppl_python": 4.658519,
+    "ppl_native": 4.6585,
+    "ecart": 0.000019
+   },
+   {
+    "texte_octets": 1076,
+    "octets_notes": 1076,
+    "ppl_python": 18.6395,
+    "ppl_native": 18.6394,
+    "ecart": 0.0001
+   }
+  ],
+  "controles": {
+   "sha_gguf": "c8cd5f37dd1235fb010c45316d4ff8af875e1a4e0ff368b4bf6cacb9053d4919",
+   "sha_drvm": "52d2c1c05246134cd294ad57482f3caba5cbda1cb4e91513018767ed46dc3671",
+   "aller_retour_sha_identique": true,
+   "deterministe": true,
+   "drvm_tronque_refuse": true
+  },
+  "drvm_execute_natif_qwen": false,
+  "drvm_native_drave_n0": true,
+  "limite": "La parité Qwen est une parité de conteneur ; la passe avant native n'existe que pour drave-n0."
+ }
 }

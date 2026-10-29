@@ -70,7 +70,7 @@
 | [rapport-dialogue-diabla.md](rapport-dialogue-diabla.md) | Le dialogue réel (DiaBLa) : +40,3 / +44,2 au 1,5 B — mais la référence est une **post-édition**, pas une traduction |
 | [rapport-drapeaux-ignores.md](rapport-drapeaux-ignores.md) | Drapeaux et variables « analysés mais jamais appliqués » — audit systématique |
 | [rapport-drvm-parite.md](rapport-drvm-parite.md) | N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques |
-| [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM en mémoire : 28,7355 identique |
+| [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM : 28,7355 ; close : conversion 68,1917/92,1875, natif 4,6585/18,6394 |
 | [rapport-drvm-trace.md](rapport-drvm-trace.md) | N0.5 — trace et rejeu DRVM : contenu, logits et rejeu exacts |
 | [rapport-e1-e2-connectome-croissance.md](rapport-e1-e2-connectome-croissance.md) | E1 et E2, re-mesurés : le connectome aléatoire coûte 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard |
 | [rapport-e2-croissance.md](rapport-e2-croissance.md) | E2 — la croissance locale ne bat pas la structure tirée au hasard (2,3431 contre 2,3215) |
