@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "note": "Banc PILOTE de R0.2 : 5 types, 4 questions par type. Chaque question porte un « indice » qui localise le passage gold (le harnais échoue si l'indice est absent) et une « valeur » courte qui doit se retrouver dans la réponse. Les questions sont LEXICALES : aucun mot de la question n'est absent du document — un lecteur lexical ne peut pas répondre à une paraphrase, et ce serait mesurer le lecteur, pas le contrôleur. Les paraphrases sont un cas de R0.3, avec un modèle. Le banc complet (30 documents, 10 questions, 5 types) est R0.3.",
+  "documents": [
+    {
+      "chemin": "docs/implantation/format-flux.md",
+      "type": "technique",
+      "questions": [
+        {
+          "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+          "indice": "4 octets",
+          "valeur": "4"
+        },
+        {
+          "question": "Combien d'octets coûte le mode dense par flux ?",
+          "indice": "3 663 octets",
+          "valeur": "3 663"
+        },
+        {
+          "question": "Quel taux de couverture le mode liste atteint-il ?",
+          "indice": "99,9997",
+          "valeur": "99,9997"
+        },
+        {
+          "question": "Combien d'octets pèse l'en-tête de liste ?",
+          "indice": "14 octets",
+          "valeur": "14"
+        }
+      ]
+    },
+    {
+      "chemin": "docs/theorie/vision.md",
+      "type": "prose",
+      "questions": [
+        {
+          "question": "Que désigne le mot « drave » ?",
+          "indice": "billots",
+          "valeur": "billots"
+        },
+        {
+          "question": "Quelle est la thèse du projet ?",
+          "indice": "structure bat la taille",
+          "valeur": "structure bat la taille"
+        },
+        {
+          "question": "Combien d'axes la vision a-t-elle ?",
+          "indice": "cinq axes",
+          "valeur": "cinq"
+        },
+        {
+          "question": "Que désigne « Stream of logs » ?",
+          "indice": "flux des listes",
+          "valeur": "flux des listes"
+        }
+      ]
+    },
+    {
+      "chemin": "docs/pilotage/roadmap.md",
+      "type": "tableau",
+      "questions": [
+        {
+          "question": "Quel est le meilleur score de perplexité de N2 ?",
+          "indice": "2,6998",
+          "valeur": "2,6998"
+        },
+        {
+          "question": "Quelle porte N2 doit-elle franchir ?",
+          "indice": "< 2,5",
+          "valeur": "2,5"
+        },
+        {
+          "question": "Quelle ligne d'échelle est suspendue ?",
+          "indice": "N5 est gelé",
+          "valeur": "N5"
+        },
+        {
+          "question": "Combien de pages R0.1 a-t-il découpées ?",
+          "indice": "51 pages",
+          "valeur": "51"
+        }
+      ]
+    },
+    {
+      "chemin": "data/onu/pdf/A_RES_80_1-fr.pdf",
+      "type": "juridique",
+      "questions": [
+        {
+          "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+          "indice": "19 septembre 2025",
+          "valeur": "19 septembre 2025"
+        },
+        {
+          "question": "Quelle session de l'Assemblée générale est concernée ?",
+          "indice": "quatre-vingtième session",
+          "valeur": "quatre-vingtième"
+        },
+        {
+          "question": "Quel est le numéro de la résolution ?",
+          "indice": "80/1.",
+          "valeur": "80/1"
+        },
+        {
+          "question": "Quel point de l'ordre du jour est traité ?",
+          "indice": "Point 7 de l’ordre du jour",
+          "valeur": "point 7"
+        }
+      ]
+    },
+    {
+      "chemin": "docs/implantation/document-graph.md",
+      "type": "code",
+      "questions": [
+        {
+          "question": "Quel outil est déclaré dans le manifeste ?",
+          "indice": "\"outil\": \"graphe_document.py\"",
+          "valeur": "graphe_document.py"
+        },
+        {
+          "question": "Quel type de région porte les séparateurs ?",
+          "indice": "type blanc est émis",
+          "valeur": "blanc"
+        },
+        {
+          "question": "Combien d'invariants le manifeste doit-il respecter ?",
+          "indice": "Les six invariants",
+          "valeur": "six"
+        },
+        {
+          "question": "Quel champ identifie le fichier source ?",
+          "indice": "source.sha256",
+          "valeur": "sha256"
+        }
+      ]
+    }
+  ]
+}

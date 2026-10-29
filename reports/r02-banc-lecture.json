@@ -1,0 +1,1507 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "questions": 20,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.522,
+    "valeur": 0.5,
+    "cout": 5969.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.75,
+    "f1": 0.522,
+    "valeur": 0.5,
+    "cout": 533.5
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.522,
+    "valeur": 0.5,
+    "cout": 1244.0
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.522,
+    "valeur": 0.5,
+    "cout": 1357.8
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.022,
+    "valeur": 0.0,
+    "cout": 1778.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.522,
+    "valeur": 0.5,
+    "cout": 1244.0
+   },
+   "sans_but": {
+    "recuperation": 0.25,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 1024.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.306,
+    "valeur": 0.25,
+    "cout": 3711.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.75,
+    "f1": 0.056,
+    "valeur": 0.0,
+    "cout": 340.0
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.306,
+    "valeur": 0.25,
+    "cout": 836.8
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.306,
+    "valeur": 0.25,
+    "cout": 1040.2
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.25,
+    "f1": 0.102,
+    "valeur": 0.25,
+    "cout": 1112.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.306,
+    "valeur": 0.25,
+    "cout": 837.0
+   },
+   "sans_but": {
+    "recuperation": 0.5,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 315.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.533,
+    "valeur": 0.5,
+    "cout": 7082.0
+   },
+   "controlee_0.10": {
+    "recuperation": 1.0,
+    "f1": 0.533,
+    "valeur": 0.5,
+    "cout": 486.8
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.533,
+    "valeur": 0.5,
+    "cout": 486.8
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.533,
+    "valeur": 0.5,
+    "cout": 486.8
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 2117.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.533,
+    "valeur": 0.5,
+    "cout": 486.8
+   },
+   "sans_but": {
+    "recuperation": 0.75,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 1730.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.398,
+    "valeur": 0.75,
+    "cout": 19335.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.75,
+    "f1": 0.398,
+    "valeur": 0.75,
+    "cout": 1702.2
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.398,
+    "valeur": 0.75,
+    "cout": 3358.8
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.398,
+    "valeur": 0.75,
+    "cout": 4328.2
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.374,
+    "valeur": 0.5,
+    "cout": 5790.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.398,
+    "valeur": 0.75,
+    "cout": 3361.8
+   },
+   "sans_but": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 2170.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "integrale": {
+    "recuperation": 1.0,
+    "f1": 0.784,
+    "valeur": 0.75,
+    "cout": 10441.0
+   },
+   "controlee_0.10": {
+    "recuperation": 0.75,
+    "f1": 0.784,
+    "valeur": 0.75,
+    "cout": 907.5
+   },
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.784,
+    "valeur": 0.75,
+    "cout": 2566.8
+   },
+   "controlee_0.50": {
+    "recuperation": 1.0,
+    "f1": 0.784,
+    "valeur": 0.75,
+    "cout": 3763.5
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.538,
+    "valeur": 0.5,
+    "cout": 3131.0
+   },
+   "melangee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.784,
+    "valeur": 0.75,
+    "cout": 2566.8
+   },
+   "sans_but": {
+    "recuperation": 0.5,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 2295.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+   "or": "4 octets",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 903,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2709,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2959,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3131,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2709,
+    "reponse": "en-tête   \"DRVF\"                    4 octets"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets coûte le mode dense par flux ?",
+   "or": "3 663 octets",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "Le mode dense coûte 3 663 octets par flux (79 d'en-tête + 896 × 4) pour Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nom"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 908,
+    "reponse": "Le mode dense coûte 3 663 octets par flux (79 d'en-tête + 896 × 4) pour Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nom"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2516,
+    "reponse": "Le mode dense coûte 3 663 octets par flux (79 d'en-tête + 896 × 4) pour Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nom"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4210,
+    "reponse": "Le mode dense coûte 3 663 octets par flux (79 d'en-tête + 896 × 4) pour Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nom"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0714,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "Réserve honnête : le lot voyage en f32 dense (3,5 ko par jeton) ; le lot en LISTES est le mode 4 (1,5 ko par jeton, voir"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2516,
+    "reponse": "Le mode dense coûte 3 663 octets par flux (79 d'en-tête + 896 × 4) pour Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nom"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quel taux de couverture le mode liste atteint-il ?",
+   "or": "99,9997",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 10441,
+    "reponse": "Le mode 1 est le format du disque, à l'octet près : deux octets d'indice, deux octets de valeur, une échelle par liste."
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 922,
+    "reponse": "Le mode 1 est le format du disque, à l'octet près : deux octets d'indice, deux octets de valeur, une échelle par liste."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 2510,
+    "reponse": "Le mode 1 est le format du disque, à l'octet près : deux octets d'indice, deux octets de valeur, une échelle par liste."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 3648,
+    "reponse": "Le mode 1 est le format du disque, à l'octet près : deux octets d'indice, deux octets de valeur, une échelle par liste."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.08,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "erreur par valeur\tnulle\tRMS 0,085 % du max de la liste (max 0,394 %)"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 2510,
+    "reponse": "Le mode 1 est le format du disque, à l'octet près : deux octets d'indice, deux octets de valeur, une échelle par liste."
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets pèse l'en-tête de liste ?",
+   "or": "14 octets",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 10441,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 897,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2532,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 4237,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3131,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 2532,
+    "reponse": "Mesuré sur une trace dense : 6,02 octets par neurone actif en v1, 3,01 en v2 ; sur une trace creuse (39,9 % d'activité) "
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2295,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désigne le mot « drave » ?",
+   "or": "billots",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 7082,
+    "reponse": "Drave — la vision"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 583,
+    "reponse": "Drave — la vision"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 583,
+    "reponse": "Drave — la vision"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 583,
+    "reponse": "Drave — la vision"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1333,
+    "valeur": false,
+    "cout": 583,
+    "reponse": "Drave — la vision"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle est la thèse du projet ?",
+   "or": "structure bat la taille",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 7082,
+    "reponse": "La thèse : la structure bat la taille."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse : la structure bat la taille."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse : la structure bat la taille."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse : la structure bat la taille."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "Le projet est né du besoin de faire tourner des modèles de types différents sur des machines limitées, de les combiner, "
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse : la structure bat la taille."
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Combien d'axes la vision a-t-elle ?",
+   "or": "cinq axes",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 7082,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 401,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 401,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 401,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 401,
+    "reponse": "Ce que la vision n'est pas"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désigne « Stream of logs » ?",
+   "or": "flux des listes",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 7082,
+    "reponse": "« Stream of logs » : le flux des listes."
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 274,
+    "reponse": "« Stream of logs » : le flux des listes."
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 274,
+    "reponse": "« Stream of logs » : le flux des listes."
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 274,
+    "reponse": "« Stream of logs » : le flux des listes."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": null
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 274,
+    "reponse": "« Stream of logs » : le flux des listes."
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1730,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le meilleur score de perplexité de N2 ?",
+   "or": "2,6998",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 19335,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 1554,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2669,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2669,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 5790,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2669,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle porte N2 doit-elle franchir ?",
+   "or": "< 2,5",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 19335,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 1697,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2794,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2794,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 5790,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.6792,
+    "valeur": true,
+    "cout": 2794,
+    "reponse": "N2\tla distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek\t🔬\tN2 — la hiérarchie (état de section, 3 grain"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle ligne d'échelle est suspendue ?",
+   "or": "N5 est gelé",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 19335,
+    "reponse": "ligne\tbloqué par\tce qu'il faudrait"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 1643,
+    "reponse": "ligne\tbloqué par\tce qu'il faudrait"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 2196,
+    "reponse": "ligne\tbloqué par\tce qu'il faudrait"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 2196,
+    "reponse": "ligne\tbloqué par\tce qu'il faudrait"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5790,
+    "reponse": "B2\treprésentation et raisonnement : RSN, composition, XNLI, 32 B\t✅\taucune — l'échelle et la profondeur sont tracées"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0667,
+    "valeur": false,
+    "cout": 2196,
+    "reponse": "ligne\tbloqué par\tce qu'il faudrait"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Combien de pages R0.1 a-t-il découpées ?",
+   "or": "51 pages",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 19335,
+    "reponse": "R0.1\tgraphe de document : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 1915,
+    "reponse": "R0.1\tgraphe de document : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 5776,
+    "reponse": "R0.1\tgraphe de document : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 9654,
+    "reponse": "R0.1\tgraphe de document : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1379,
+    "valeur": false,
+    "cout": 5790,
+    "reponse": "R0 : un contrôleur classique + un modèle externe atteint-il 90 % de la compréhension à 30 % du coût sur trois types de d"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": true,
+    "cout": 5788,
+    "reponse": "R0.1\tgraphe de document : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2170,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+   "or": "19 septembre 2025",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 370,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 1380,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "Voir résolution 169 (II)."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 1113,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quelle session de l'Assemblée générale est concernée ?",
+   "or": "quatre-vingtième session",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "Assemblée générale"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": "Assemblée générale"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1019,
+    "reponse": "Assemblée générale"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1565,
+    "reponse": "Assemblée générale"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.24,
+    "valeur": true,
+    "cout": 1112,
+    "reponse": "Président, qui sera diffusée dans la salle de l’Assemblée générale lors du débat général de la quatre-vingtième session,"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1019,
+    "reponse": "Assemblée générale"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel est le numéro de la résolution ?",
+   "or": "80/1.",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3711,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 341,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 341,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "Voir résolution 169 (II)."
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 341,
+    "reponse": "Résolution adoptée par l’Assemblée générale"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour est traité ?",
+   "or": "Point 7 de l’ordre du jour",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 3711,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 360,
+    "reponse": null
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 875,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 875,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "quatre-vingtième session, sa Présidente fera distribuer, comme document de l’Assemblée, la déclaration préenregistrée do"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 875,
+    "reponse": "Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 315,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel outil est déclaré dans le manifeste ?",
+   "or": "\"outil\": \"graphe_document.py\"",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5969,
+    "reponse": "Le manifeste"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 539,
+    "reponse": "Le manifeste"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": "Le manifeste"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": "Le manifeste"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "Le manifeste"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": "Le manifeste"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel type de région porte les séparateurs ?",
+   "or": "type blanc est émis",
+   "integrale": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 5969,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "controlee_0.10": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 503,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1441,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1896,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 0.087,
+    "valeur": false,
+    "cout": 1441,
+    "reponse": "stats\tle décompte par type, pour la porte"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Combien d'invariants le manifeste doit-il respecter ?",
+   "or": "Les six invariants",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 5969,
+    "reponse": "Les six invariants"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 573,
+    "reponse": "Les six invariants"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1200,
+    "reponse": "Les six invariants"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1200,
+    "reponse": "Les six invariants"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "Le manifeste"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1200,
+    "reponse": "Les six invariants"
+   },
+   "sans_but": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel champ identifie le fichier source ?",
+   "or": "source.sha256",
+   "integrale": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 5969,
+    "reponse": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide"
+   },
+   "controlee_0.10": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 519,
+    "reponse": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide"
+   },
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1444,
+    "reponse": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide"
+   },
+   "controlee_0.50": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1444,
+    "reponse": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "champ\trôle"
+   },
+   "melangee_0.30": {
+    "recupere": true,
+    "f1": 1.0,
+    "valeur": true,
+    "cout": 1444,
+    "reponse": "source.sha256\tla découpe est attachée au fichier exact : si la source change, le manifeste est invalide"
+   },
+   "sans_but": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1024,
+    "reponse": null
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}

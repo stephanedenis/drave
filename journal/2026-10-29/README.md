@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**36 commits** · **0 session(s)** · **5 thème(s)**
+**37 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | mesures | 20 | [mesures.md](mesures.md) |
-| moteur | 2 | [moteur.md](moteur.md) |
+| moteur | 3 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
@@ -66,6 +66,7 @@ Aucune session indexée pour ce jour ; voir
 | 10:06 | `9539d8af` | ÉTAT — R0 EN ORDRE STRICT, N2 PORTE LA HIÉRARCHIE, N5 GELÉ, PRIORITÉS ARRÊTÉES |
 | 11:50 | `4ffa34b7` | R0.1 — 51 PAGES, 1 423 RÉGIONS, FIDÉLITÉ 1,000 : LE GRAPHE DE DOCUMENT EST MESURÉ |
 | 11:55 | `19db1632` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE |
+| 12:03 | `bc4e3d92` | N0.3b — PARITÉ PPL DRVM ↔ GGUF CLOSE : 68,1917 / 92,1875 (CONVERSION), 4,6585 / 18,6394 (NATIF) |
 
 ## Le récit de la journée (écrit à la main)
 

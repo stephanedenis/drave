@@ -19,11 +19,11 @@
 - **Id** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
 - **Rôle** : tenir l'état, la roadmap et l'analyse ; préparer R0 (lecteur v0) sur CPU.
 - **Ce qu'elle fait** : R0.1 (graphe de document) est **mesuré** — 51 pages, fidélité **1,000** ;
-  la suite est R0.2 (contrôleur), puis R0.3 (banc) ;
+  la suite est R0.3 (banc complet) ;
   l'ordre est **strict**.
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et ses fiches ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **N0.3b** en parallèle ; R0.2 est pris par `8156fdcb` (contrôleur + banc pilote).
+- **Prochaine action** : **N0.3b** en parallèle ; R0.2 est **mesuré** par `8156fdcb` (récupération 1,000 à 30 %).
 - **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
@@ -31,16 +31,16 @@
 
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré : 41 arêtes, 3 plafonds, 8 lignes sans fiche) ; **R0.1** livré
-  (51 pages, fidélité 1,000) ; **R0.2** en cours depuis le 29/10.
+  (51 pages, fidélité 1,000) ; **R0.2** mesuré le 29/10.
 - **Ce qu'elle fait** : R0.2 — contrôleur classique (survol, balayage, lecture, relecture, arrêt),
-  budget en **octets**, trace rejouable ; banc **pilote** de 5 types.
+  budget en **octets**, trace rejouable ; banc **pilote** de 5 types. Récupération **1,000** à 30 %.
 - **Ce que font les autres** : `f0969e87` tient l'état et prend N0.3b ; `N2-GPU` distille la hiérarchie ;
   elles rendent un **diff d'état**.
 - **Fichiers réservés** : `tools/lecteur_controleur.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
   `docs/implantation/lecteur-controleur.md`, `docs/implantation/banc-lecture.md`, `reports/r02-*`,
   `docs/pilotage/backlog/R02-controleur-lecture.md`, `R03-banc-lecture-rapide.md`.
-- **Prochaine action** : la porte R0.2 — **≥ 90 %** de l'exactitude de la lecture intégrale à **30 %**
-  du budget, sur **3 types**.
+- **Prochaine action** : **R0.3** — le banc complet (30 documents, 300 questions), et un **modèle**
+  pour savoir si le plafond de 25–75 % est celui du lecteur extractif ou du document.
 - **Bloquants** : aucun ; le pilote est extractif classique, sans modèle externe.
 - **Journal** : commit `4ffa34b7` (R0.1) · [docs du jour](../../journal/2026-10-29/docs.md) · [sessions](../../journal/README.md#sessions).
 
@@ -56,7 +56,8 @@
 
 ## Ce qui est en cours
 
-- **R0 — lecteur v0** : R0.1 **mesurée** (51 pages, 1 423 régions, fidélité 1,000) ; R0.2/R0.3 spécifiées ; aucun bloquant.
+- **R0 — lecteur v0** : R0.1 **mesurée** (51 pages) et R0.2 **mesuré** (récupération 1,000 à 30 %, 5 types) ;
+  R0.3 en **pilote** (20 questions) ; aucun bloquant.
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
 - **N2 — distillation** : GPU ; plateau **2,708** ; porte **< 2,5** non atteinte.
 - **Documentation** : roadmap unique A/B/N/R ; **90 documents** ; glossaire **famille 12** (27 termes) ;
@@ -68,10 +69,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **50** (48 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **51** (49 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **274** / **338** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **91** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **275** / **339** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **93** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants

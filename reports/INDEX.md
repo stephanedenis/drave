@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **271 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **272 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -70,7 +70,7 @@
 | [rapport-dialogue-diabla.md](rapport-dialogue-diabla.md) | Le dialogue réel (DiaBLa) : +40,3 / +44,2 au 1,5 B — mais la référence est une **post-édition**, pas une traduction |
 | [rapport-drapeaux-ignores.md](rapport-drapeaux-ignores.md) | Drapeaux et variables « analysés mais jamais appliqués » — audit systématique |
 | [rapport-drvm-parite.md](rapport-drvm-parite.md) | N0.3b — DRVM ↔ checkpoint : 114/114 tenseurs identiques |
-| [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM : 28,7355 ; close : conversion 68,1917/92,1875, natif 4,6585/18,6394 |
+| [rapport-drvm-ppl.md](rapport-drvm-ppl.md) | N0.3b — PPL DRVM ↔ GGUF : 28,7355, puis 59 / 1 076 octets ; close |
 | [rapport-drvm-trace.md](rapport-drvm-trace.md) | N0.5 — trace et rejeu DRVM : contenu, logits et rejeu exacts |
 | [rapport-e1-e2-connectome-croissance.md](rapport-e1-e2-connectome-croissance.md) | E1 et E2, re-mesurés : le connectome aléatoire coûte 9 % (pas 1 %), et la croissance n'est PAS pire que le hasard |
 | [rapport-e2-croissance.md](rapport-e2-croissance.md) | E2 — la croissance locale ne bat pas la structure tirée au hasard (2,3431 contre 2,3215) |
@@ -242,6 +242,7 @@
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
+| [rapport-r02-controleur.md](rapport-r02-controleur.md) | R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |

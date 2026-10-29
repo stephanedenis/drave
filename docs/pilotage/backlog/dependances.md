@@ -87,9 +87,9 @@ contrat, donc pas de porte ni de contrôle négatif.
 
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
-| **R01** | prête | — | — | R02, R03, R04, R05, R11, R21, R22, R31, R32, R41, R42, R43, R51 | [R01-graphe-document.md](R01-graphe-document.md) |
-| **R02** | spécifiée | R01 (dure) | — | R03 | [R02-controleur-lecture.md](R02-controleur-lecture.md) |
-| **R03** | spécifiée | R01 (dure), R02 (dure) | — | R04, R05, R06, R31, R51 | [R03-banc-lecture-rapide.md](R03-banc-lecture-rapide.md) |
+| **R01** | mesurée | — | — | R02, R03, R04, R05, R11, R21, R22, R31, R32, R41, R42, R43, R51 | [R01-graphe-document.md](R01-graphe-document.md) |
+| **R02** | mesurée | R01 (dure) | — | R03 | [R02-controleur-lecture.md](R02-controleur-lecture.md) |
+| **R03** | partiel | R01 (dure), R02 (dure) | — | R04, R05, R06, R31, R51 | [R03-banc-lecture-rapide.md](R03-banc-lecture-rapide.md) |
 | **R04** | spécifiée | R03 (dure), R01 (dure) | — | — | [R04-tete-survol.md](R04-tete-survol.md) |
 | **R05** | spécifiée | R03 (dure), R01 (dure) | le manque M4 (aucun encodeur exécutable) | — | [R05-tete-balayage.md](R05-tete-balayage.md) |
 | **R06** | spécifiée | R03 (dure), R21 (dure), R22 (dure) | — | — | [R06-tete-relecture.md](R06-tete-relecture.md) |
