@@ -63,9 +63,9 @@ Ensuite, dans cet ordre :
    s'appelle Drave, et la table de conversion des anciens noms de variables. À
    lire tôt : tous les rapports antérieurs au 30/09/2026 emploient encore
    « Qtrinet », `QT_*` et `qtrinet-core`.
-2. **`docs/pilotage/roadmap.md`** (430 lignes) — l'état réel de chaque chantier, phase par
-   phase, avec les chiffres et leur date. C'est le document qui dit ce qui est
-   fait (✅), en cours (🔬), à faire (⏳) ou bloqué (🧱).
+2. **`docs/pilotage/roadmap.md`** — le **plan unique** (A, B, N, R) : l'état réel de chaque
+   chantier et sa prochaine action. C'est le document qui dit ce qui est
+   fait (✅), en cours (🔬), à faire (⏳) ou bloqué (🧱) ; le détail mesuré est dans l'archive liée.
 3. **`docs/implantation/format-flux.md`** (209 lignes) — le format `DRVF` : ce qu'est une trace,
    comment elle se relit, et le protocole réseau **v5** avec ses cinq modes. Le
    cœur technique du projet est là.

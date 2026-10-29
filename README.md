@@ -235,7 +235,7 @@ La méthode complète et ses sept leçons : [`docs/theorie/synthese/06-comment-s
 |---|---|
 | **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
 | **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
-| **la roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la roadmap** (les quatre chantiers A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
 | **les résultats**, mesure par mesure, avec les contrôles | [`reports/README.md`](reports/README.md) · [`reports/`](reports/) |
 | **la théorie** (8 chapitres) et la carte du raisonnement | [`docs/theorie/synthese/index.md`](docs/theorie/synthese/index.md) · [chap. 5](docs/theorie/synthese/05-la-pensee-sans-verbaliser.md) |
 | **la méthode** et ses pièges | [`docs/theorie/synthese/06-comment-savoir.md`](docs/theorie/synthese/06-comment-savoir.md) |

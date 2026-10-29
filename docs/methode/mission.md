@@ -25,6 +25,10 @@ mieux que des paramètres ajoutés. La mesure a déjà tranché : la sonde est *
 
 ## Les deux programmes
 
+> La **roadmap** découpe ces deux programmes en **quatre chantiers** : **A** (moteur), **B** (intelligence),
+> **N** (natif) et **R** (lecteur). Les deux programmes de la vision restent l'ordre : le moteur et l'intelligence
+> ne se bloquent pas l'un l'autre ; N et R sont les lignes qui les rendent mesurables.
+
 ### Le moteur
 
 Le bus, les blocs, l'ordonnanceur, le transport, les formats, le rejeu, les portes. Il avance par ses propres mesures

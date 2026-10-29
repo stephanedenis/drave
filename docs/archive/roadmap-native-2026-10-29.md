@@ -1,4 +1,6 @@
-# Roadmap native — DRVM, `drave-n0`, distillation
+# Roadmap native — détail N (archive)
+
+> **Document daté — archivé le 2026-10-29.** Copie de l'ancienne `docs/pilotage/roadmap-native.md` (programme N, 176 lignes) au moment de la fusion. La **feuille de route courante** est [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md) ; le détail A/B est dans [`roadmap-detail-2026-10-29.md`](roadmap-detail-2026-10-29.md). **Ne pas charger par défaut** : c'est de l'histoire et des mesures, pas le plan.
 
 > **Programme N**, prioritaire sur B9/B10/B11 comme **ligne principale**. B9/B10/B11 deviennent
 > des **bancs de mesure** du natif, pas la base à adapter. Décision d'architecture :

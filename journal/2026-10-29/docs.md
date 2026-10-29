@@ -19,5 +19,9 @@
 - [reports/README.md](../../reports/README.md)
 
 <!-- notes -->
-
+- **08 h 30 — une seule roadmap, et le lecteur entre au plan.** L'analyse `docs/theorie/lecture-rapide.md` ouvre le
+  **programme R** ; `docs/pilotage/roadmap.md` devient le plan unique A/B/N/R, les anciens plans A/B et N sont
+  archivés et liés ; `docs/pilotage/backlog/` reçoit **29 fiches** (19 R, 10 lignes ouvertes A/B/N). Aucun chiffre
+  nouveau : les mesures citées sont celles des fiches existantes ; les compteurs passent à **88 documents**.
+- **Ce qui reste ouvert** : R0.1/R0.2/R0.3 (lecteur v0), N0.3b (parité), N2 (porte < 2,5), N4 (SFT tenu à l'écart).
 <!-- /notes -->

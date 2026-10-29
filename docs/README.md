@@ -13,7 +13,7 @@
 |---|---|
 | **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole sémantique](theorie/protocole-semantique.md) · [le glossaire](theorie/glossaire.md) · [la synthèse](theorie/synthese/index.md) |
 | **faire** (résultat, porte, rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](methode/organisation-du-depot.md) · [l'utilisation](pilotage/utilisation.md) |
-| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
+| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [le backlog](pilotage/backlog/index.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
 
 ## Méthode — comment on travaille
 
@@ -39,11 +39,11 @@
 | document | pour quoi |
 |---|---|
 | [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, questions |
-| [`pilotage/roadmap.md`](pilotage/roadmap.md) | le **plan** : lignes A/B, prochaine action par ligne |
+| [`pilotage/roadmap.md`](pilotage/roadmap.md) | le **plan unique** : chantiers A/B/N/R, prochaine action par ligne |
+| [`pilotage/backlog/index.md`](pilotage/backlog/index.md) | le **backlog** : une fiche par fonctionnalité (R, et lignes ouvertes A/B/N) |
 | [`pilotage/utilisation.md`](pilotage/utilisation.md) | ce qui marche aujourd'hui, avec la commande exacte |
 | [`pilotage/manques.md`](pilotage/manques.md) | le registre des manques mesurés |
 | [`pilotage/references-non-regression.md`](pilotage/references-non-regression.md) | les repères chiffrés des passes complètes |
-| [`pilotage/roadmap-native.md`](pilotage/roadmap-native.md) | le programme N : DRVM, `drave-n0`, distillation |
 
 ## Théorie — ce qui reste vrai
 
@@ -60,6 +60,7 @@
 | [`theorie/synthese/index.md`](theorie/synthese/index.md) | la synthèse en 8 chapitres |
 | [`theorie/glossaire.md`](theorie/glossaire.md) | le vocabulaire : couche vs étage, unité de sens, RSN |
 | [`theorie/architecture-native.md`](theorie/architecture-native.md) | DRVM, `drave-n0` : le format et le modèle natifs |
+| [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la lecture rapide humaine, les 14 techniques et les cinq couches qui manquent |
 | [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 289 fiches du glossaire |
 
 ## Implantation — comment c'est construit

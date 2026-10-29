@@ -25,7 +25,7 @@
 5. Si la tâche a besoin d'un **résultat**, lire le **verdict** de la fiche (les 10 premières lignes)
    puis **une** section ; jamais la fiche entière si elle dépasse 300 lignes.
 6. Si la tâche a besoin d'un **mot**, lire sa **fiche** (`docs/theorie/glossaire/entrees/<slug>.md`, 2-3 lignes) ; si elle n'existe pas, `grep` la famille — jamais les 11.
-7. Si la tâche a besoin d'une **ligne de roadmap**, lire le **résumé exécutif** puis la section A ou B.
+7. Si la tâche a besoin d'une **ligne de roadmap**, lire le **résumé exécutif** puis la section A, B, N ou R.
 
 ## Le cycle : lire, déléguer, écrire
 
@@ -45,7 +45,8 @@
 | `docs/README.md` · `docs/theorie/carte.md` | 1 100 | **T1** — si l'on cherche un fichier |
 | `docs/theorie/synthese/index.md` | 2 000 | **T1** — l'introduction |
 | `docs/theorie/synthese/0*.md` | 2 000 | **T1** — un chapitre |
-| `docs/pilotage/roadmap.md` | 8 500 | **T1** — résumé + une section |
+| `docs/pilotage/roadmap.md` | 8 500 | **T1** — résumé + un programme |
+| `docs/pilotage/backlog/index.md` | 1 500 | **T1** — une fiche, pas le dossier |
 | `docs/theorie/glossaire.md` | 1 500 | **T1** — l'index des familles |
 | `docs/theorie/glossaire/0*.md` | 5 000 | **T1** — `grep` le terme, jamais les 11 |
 | `docs/theorie/glossaire/README.md` | 2 000 | **T1** — l'index des entrées |

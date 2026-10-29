@@ -25,7 +25,7 @@ volonté** des événements.
    `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
 2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
    rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
-   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B…). *Sans contrôle négatif, ce n'est pas un
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
    résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
 3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
    lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
@@ -39,11 +39,9 @@ volonté** des événements.
    test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
 6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
    la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
-7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est
-   celui de la **valeur** et des **dépendances**, jamais celui d'une date. Un chantier est **fini** quand il est
-   mesuré, écrit et committé ; il est alors **marqué** dans la roadmap et le suivant est désigné.
-8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans
-   `docs/pilotage/en-cours.md` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
    — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
 9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
    **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
@@ -62,8 +60,9 @@ volonté** des événements.
 | si la tâche est… | lire |
 |---|---|
 | comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
-| la **roadmap** (les deux programmes, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
-| comprendre la mission, les priorités, la philosophie | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
 | écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
 | ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
 | **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
@@ -79,11 +78,11 @@ volonté** des événements.
 | **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
 | le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
 | **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
-| la carte de la documentation (l'inventaire) | [`docs/README.md`](docs/README.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
 
 > **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
-> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit le plus souvent. Ne pas les
-> charger « pour être complet » — c'est du contexte qui coûte et qui périme.
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
 
 > **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
 > tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans

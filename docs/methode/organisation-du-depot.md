@@ -16,7 +16,8 @@
 | `README.md` | ce qu'est Drave, trois commandes, **où est quoi** | la vitrine, 283 lignes |
 | `REPRISE.md` | la **check-list de démarrage** : quoi lire, quoi vérifier, les pièges, où écrire | revu le 27/10 |
 | `docs/pilotage/en-cours.md` | l'**état courant** (synthèse, chantiers, questions) | la page vivante |
-| `docs/pilotage/roadmap.md` | le **plan** : les lignes A et B, la prochaine action | la feuille de route |
+| `docs/pilotage/roadmap.md` | le **plan unique** : A, B, N, R et la prochaine action | la feuille de route |
+| `docs/pilotage/backlog/index.md` | le **backlog** : une fiche par fonctionnalité (R et lignes ouvertes A/B/N) | le suivi des contrats |
 | `docs/pilotage/references-non-regression.md` | les **repères chiffrés** (ce qui ne doit pas bouger) | repères + historique |
 | `docs/README.md` | l'**inventaire** de `docs/` | la carte d'orientation |
 | `docs/theorie/carte.md` | l'**index des sujets** (un lien par fichier) | la carte des blocs |
@@ -35,7 +36,7 @@ ni une méthode avec un résultat.
 | famille | contenu | exemples |
 |---|---|---|
 | **`docs/methode/`** | **comment on travaille** : mission, résultats, rangement, portes, contexte, miroir, Panini, ressources, illustrations, organisation | `mission.md`, `resultats.md`, `portes.md` |
-| **`docs/pilotage/`** | **où l'on en est** : état courant, roadmap, manques, repères de non-régression, utilisation | `en-cours.md`, `roadmap.md`, `manques.md` |
+| **`docs/pilotage/`** | **où l'on en est** : état courant, roadmap, backlog, manques, repères de non-régression, utilisation | `en-cours.md`, `roadmap.md`, `backlog/`, `manques.md` |
 | **`docs/theorie/`** | **ce qui reste vrai** : vision, carte, histoire, protocole, universaux, modules, jeux, généalogie, synthèse, glossaire | `vision.md`, `glossaire.md`, `synthese/` |
 | **`docs/implantation/`** | **comment c'est construit** : formats, convertisseur, contexte long, banc externe, NUMA, NVMe/AMD | `format-flux.md`, `format-clusters.md` |
 | **`docs/schemas/`** | les **schémas partagés** (SVG, sources `.mmd`/`.puml`) | `format-flux.svg` |
@@ -49,8 +50,11 @@ Nommage :
 
 | préfixe | contenu | où |
 |---|---|---|
-| `plan-*.md`, `roadmap*.md`, `etat-*.md`, `note-*.md`, `*-pour-drave.md` | un **plan, une note ou un état daté** : ce qui n'est plus vrai quand les chiffres changent | `docs/archive/` — **hors du chargement par défaut** |
+| `plan-*.md`, `roadmap-*.md` (daté), `etat-*.md`, `note-*.md`, `*-pour-drave.md` | un **plan, une note ou un état daté** : ce qui n'est plus vrai quand les chiffres changent | `docs/archive/` — **hors du chargement par défaut** |
 | (sans préfixe) | un **domaine vivant** : méthode, pilotage, théorie, implantation | `docs/<famille>/` |
+
+> **Exception unique** : `docs/pilotage/roadmap.md` est le **plan vivant** (A/B/N/R) ; il ne va pas dans
+> `docs/archive/`. Dès qu'un plan est remplacé, il est archivé sous `roadmap-<sujet>-AAAA-MM-JJ.md`.
 
 ### 1bis. Un tableau qui ne rend pas est un tableau qui n'existe pas
 

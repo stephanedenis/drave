@@ -11,7 +11,8 @@
 | [la vision](vision.md) — le bus d'événements, les blocs, l'hybridation, ce qu'elle refuse | |
 | [la mission](../methode/mission.md) — les deux programmes, l'ordre des priorités | |
 | [l'état](../pilotage/en-cours.md) — ce qui est en cours, les chiffres qui comptent, les questions | |
-| [la roadmap](../pilotage/roadmap.md) — les lignes A et B, la file « jamais en attente » | |
+| [la roadmap](../pilotage/roadmap.md) — les chantiers A, B, N, R et la file « jamais en attente » | |
+| [la lecture rapide](lecture-rapide.md) · [le backlog](../pilotage/backlog/index.md) — 14 techniques, 5 couches, une fiche par fonctionnalité | |
 | [les portes](../pilotage/references-non-regression.md) — les passes complètes, les repères | |
 | [le glossaire](glossaire.md) — le vocabulaire non négociable | |
 

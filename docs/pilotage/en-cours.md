@@ -1,33 +1,45 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 01 h 52 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-29, 08 h 30 HAE (heure locale, EDT).**
 
 > Cette page dit **où l'on va, ce qui est en cours, où l'on en est, et ce qu'il reste**. Les chiffres, les séries et
-> les contrôles vivent dans [`reports/`](../../reports/) ; le plan dans [`roadmap.md`](roadmap.md) et
-> [`roadmap-native.md`](roadmap-native.md). **Ici, l'actualité seulement** — le détail se charge à la demande.
+> les contrôles vivent dans [`reports/`](../../reports/) ; le plan est **unique** : [`roadmap.md`](roadmap.md)
+> (programmes A, B, N, R) ; les fiches de fonctionnalité dans [`backlog/index.md`](backlog/index.md). **Ici,
+> l'actualité seulement** — le détail se charge à la demande.
 
 ## Session en cours
 
 - **Id DSH** : `f0969e87-af0c-43b1-93cf-f278d9c90846`.
-- **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en
-  parallèle ; reprise par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
-- **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-28/README.md).
-- **Agent principal** : **sprint 08:00** — professeur 10 000 pas (GPU 1) et distillation 30 000 pas (GPU 0) en parallèle ; PPL native de corpus en attente.**
+- **Cycle DSH** : goal unique par programme, **max_goal_rounds 1 000** ; 2 à 4 sous-agents en parallèle ; reprise
+  par `update_goal resume` (voir [`continuite.md`](../methode/continuite.md)).
+- **Journaux** : [l'index des sessions](../../journal/README.md#sessions) · [le journal du jour](../../journal/2026-10-29/README.md).
+- **Agent principal** : **sprint 08:00** — N2 (professeur 10 000 pas, distillation 30 000 pas) sur GPU ;
+  **R0 — lecteur v0** (graphe de document, contrôleur, banc) sur CPU, sans entraînement.
 - **Sous-agents actifs** : **aucun pour l'instant**. Au prochain cycle, lancer **2 à 4** sous-agents sur les
-  actions indépendantes (N0.3b, N1.6, N2). Les anciens A18/A19/A20 sont **inactifs** ; aucun travail n'attend.
-- **Reprise** : lire cette page, puis [`roadmap-native.md`](roadmap-native.md) (N0/N1) ; l'historique est dans
-  [`journal/2026-10-28/etat-ancien.md`](../../journal/2026-10-28/etat-ancien.md).
+  actions indépendantes : **R0.1** (graphe), **R0.2** (contrôleur), **R0.3** (banc), **N0.3b** (parité).
+- **Reprise** : lire cette page, puis [`roadmap.md`](roadmap.md) § **Programme R** et § **L'ordre du jour** ;
+  l'historique est dans [`journal/2026-10-28/etat-ancien.md`](../../journal/2026-10-28/etat-ancien.md).
 
 ## Ce qui est en cours
 
-- **N0 — DRVM** : format natif, lecteur Python/Rust, GGUF ↔ DRVM (**SHA identique**), trace/rejeu (**6 144 listes**, logits **SHA identique**), **exécution native** (`--drvm-forward`, logits **10,8232**), **parité automatisée 5/5 prompts** (écart **0,00006**) et **cache KV 19,25×** (592,6 ms contre 11 406,9 ms).
-- **N1 — `drave-n0`** : 11,47 M, 6 blocs, attention locale, FFN creux, 3 têtes précoces, pensée contractante **λ = 0,709**, pont **−9,3 %**, réflexe **−24,05 %**.
-- **N2 — distillation** : 49 999 fenêtres / 4 sources, VDC ; professeur fr **2,355** ; student **3,123** après 20 000 pas ; multi **9,517** vs **9,571** ; capacité à budget égal 21,63 M **4,142** vs 11,47 M **4,507** (−8,1 %). Porte **< 2,5 non atteinte**.
-- **N0.11 — test Rust** : fixture **36 Ko**, **7 754** paramètres, forward et génération testés dans le crate.
-- **N0.12 — PPL native** : **4,6585**, identique à Python sur 59 octets.
-- **N0.13 — PPL native de corpus** : **18,6394** sur **1 076 octets**, Python **18,6395**.
-- **N0.14 — PPL native 2k** : **54,0379** sur **1 996 octets**, Python **54,0343**.
-- **N4 — usage** : génération greedy, service Python (69 octets), **service Rust cache** (53 octets, 611 ms), **jeton 401/200** ; **pas d'alignement SFT**, pas un assistant.
+- **N0 — DRVM** : format, lecteur Python/Rust, GGUF ↔ DRVM (**SHA identique**), trace/rejeu (**6 144 listes**,
+  logits **SHA identique**), exécution native ; seule la **parité PPL** (N0.3b) reste ouverte.
+- **N1 — `drave-n0`** : 11,47 M, 6 blocs, attention locale, FFN creux, 3 têtes précoces ; PPL **3,465** avec pont
+  (**4,080** sans), pensée **λ = 0,709**, réflexe **−24,05 %**, cache **19,25×**.
+- **N2 — distillation** : 49 999 fenêtres / 4 sources ; professeur 30k **1,734** ; student **3,123** à 20 000 pas ;
+  meilleur **2,6998**, plateau **2,708** ; porte **< 2,5 non atteinte**.
+- **N4 — usage** : génération greedy, service Python (69 octets), service Rust (53 octets, 611 ms), jeton
+  **401/200** ; **SFT 24/24 vus, 0/4 tenus** — pas d'alignement.
+- **R0 — lecteur v0** : **nouveau et non bloqué** — graphe de document (R0.1), contrôleur de lecture (R0.2), banc
+  de lecture rapide (R0.3) ; se mesure avec un modèle externe, sans entraîner le natif.
+- **B10/B12 — sémantique et cerveau** : encodeur `z` **0,426** contre **0,167** de hasard ; décodeur **sous le
+  plancher** (chrF **12,7 / 5,3** contre **39,6**) ; B12.10 (pipeline M1→M4→M8) partiel.
+- **A — moteur** : A1–A8 mesurés, sauf **A3.4** (Colab), **A5.4** (FPGA), **A6.2** (MoE local) ; restent
+  A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en opt-in.
+- **Backlog** : **29 fiches** — 19 pour R, 10 pour les lignes ouvertes A/B/N ; une fiche par contrat, porte et
+  contrôle négatif.
+- **Documentation** : une **seule roadmap** (A/B/N/R) ; l'ancien détail A/B et N est archivé et lié depuis la
+  roadmap ; l'analyse de la lecture rapide est dans [`lecture-rapide.md`](../theorie/lecture-rapide.md).
 
 ## Les chiffres de l'état
 
@@ -38,17 +50,19 @@
 | portes | **49** (47 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **273** / **337** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **57** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **88** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Où l'on en est
 
 | | |
 |---|---:|
-| **N0 — DRVM** | format + lecteur Python/Rust + CLI ; **parité PPL à faire** |
+| **N0 — DRVM** | format + lecteur + rejeu ; **parité PPL à faire** |
 | **N1 — PPL** | **3,465** (avec pont et pensée) ; sans pont **4,080** |
-| **N1.4 — têtes précoces** | **57,57 / 61,60 / 62,06 %** ; principale **62,70 %** ; témoin **0,39 %** |
-| **N1.5 — pensée** | **λ = 0,709** ; PPL sans pensée **721 726**, avec **3,53** |
+| **N2 — distillation** | meilleur **2,6998**, plateau **2,708** ; porte **< 2,5** non atteinte |
+| **N4 — usage** | service **611 ms** ; SFT **24/24 vus, 0/4 tenus** |
+| **R0 — lecteur** | **à faire** : graphe, contrôleur, banc ; c'est la priorité non bloquée |
+| **B10/B12** | `z` **0,426** ; décodeur négatif ; B12.10 partiel |
 | tests cerveau | **180 OK**, 31 skips |
 | portes | **47 vertes, 2 rouges** (28/10 23 h 55) |
 
@@ -62,26 +76,27 @@
 | **C4** dialectes et styles | ✅ mesuré ; la date reste à contrôler |
 | **C5** qualité par domaine | ✅ six registres + dialogue spontané |
 | **C6** documentation | ✅ fait — quatre familles, revue verte |
-| **C7** pensée abstraite | ✅ mesuré — la carte, **B4** close, **B5/B6** faits, **B10–B12** premier passage ; **N1.5** en cours |
+| **C7** pensée abstraite | ✅ mesuré — **B4** close, **B5/B6** faits, **B10–B12** premier passage |
 
 ## Ce qui reste
 
-**N0.3b** — parité PPL DRVM ↔ GGUF. **N0.4** — `gguf2drvm`. **N0.5** — trace/rejeu DRVM. **N1.6** — pont de
-région. **N2** — 50 000 séquences et distillation. **N4** — SFT chat, service, sûreté.
-
-**Migré** : les résultats A7.5–A7.26, B10–B27, C3.2c/d/e et les anciens tableaux de bord sont dans
-[`journal/2026-10-28/etat-ancien.md`](../../journal/2026-10-28/etat-ancien.md) ; ils ne sont plus dans cette page.
+**R0** — le lecteur v0 : **R0.1** graphe de document, **R0.2** contrôleur, **R0.3** banc (priorité non bloquée).
+**N0.3b** — parité PPL DRVM ↔ GGUF. **N2** — données/capacité, porte < 2,5. **N4** — SFT tenu à l'écart.
+**B10.3** — raisonnement sur `z` (bloqué par le décodeur). **B12.10** — pipeline M1→M4→M8.
+**Bloqués** : B1.5 (corpus), A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local).
 
 ## Les questions ouvertes
 
-- **N0.3b** : le moteur peut-il exécuter une passe avant DRVM et rendre la même PPL que l'entraîneur ?
-- **N1.6** : le pont de région coûte-t-il moins de **5 %** de PPL ?
-- **N2** : 50 000 séquences sont-elles accessibles et licites ?
+- **R0** : un contrôleur classique + un modèle externe atteint-il **90 %** de la compréhension à **30 %** du coût
+  sur trois types de documents ?
+- **R1** : le natif peut-il lire **1 000 octets** sans refaire les négatifs 130–256 — et la hiérarchie suffit-elle ?
+- **N2** : le student peut-il descendre sous **2,5** de PPL, ou le plateau **2,708** est-il la capacité du corpus ?
 - **N4** : le BPE est-il nécessaire, ou les octets suffisent-ils à 12 M ?
+- **B10.3** : un décodeur à attention croisée dépasse-t-il le plancher **39,6** de chrF ?
 
 ## La carte
 
 [`carte.md`](../theorie/carte.md) — les sujets, bloc par bloc ; [`README.md`](../README.md) — l'inventaire ;
-[`roadmap.md`](roadmap.md) — le plan ; [`roadmap-native.md`](roadmap-native.md) — le programme N ;
-[`synthese/index.md`](../theorie/synthese/index.md) — la théorie ; [`reports/`](../../reports/) et
+[`roadmap.md`](roadmap.md) — **le plan unique (A/B/N/R)** ; [`backlog/index.md`](backlog/index.md) — les fiches de
+fonctionnalité ; [`synthese/index.md`](../theorie/synthese/index.md) — la théorie ; [`reports/`](../../reports/) et
 [`journal/`](../../journal/) — les preuves et le récit.
