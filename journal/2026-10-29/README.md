@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**114 commits** · **0 session(s)** · **8 thème(s)**
+**115 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 23 | [docs.md](docs.md) |
 | memoire | 8 | [memoire.md](memoire.md) |
-| mesures | 41 | [mesures.md](mesures.md) |
+| mesures | 42 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 18 | [portes.md](portes.md) |
@@ -147,6 +147,7 @@ Aucune session indexée pour ce jour ; voir
 | 19:33 | `1ec24a7f` | N3.1 — INVENTAIRE : PAS DE PORTE COMPOSÉE AVANT SERVICE/K-WTA |
 | 19:38 | `3c227622` | N3.1 — CORRECTION : LA PROFONDEUR ROUTÉE A UNE PORTE ; A8.0 = 8 |
 | 19:44 | `9ca7b1d2` | A8.0 — PORTE-CYCLE-C2 ÉPINGLÉE : 14,6496 ; ÉTAT 9/33 |
+| 19:48 | `b5a9cdec` | A8.3b — LE SIGNE VIENT DU CHEMIN LOT (1 vs ≥2), PAS DE LA TAILLE |
 
 ## Le récit de la journée (écrit à la main)
 

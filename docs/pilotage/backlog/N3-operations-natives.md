@@ -5,7 +5,8 @@
 > [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
 > [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
 > [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
-> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md).
+> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+> [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -24,8 +25,9 @@ le rejeu et le placement (A2.6). La profondeur routée (dessin B) est **exécut�
 moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court
 entraîné est le facteur limitant (**23,19 %** contre **47,73 %** pour le long).
 
-**Ce qui reste** : porter chaque brique dans le chemin de service et lui donner une **porte**
-qui la mesure (temps, perte, rejeu), plutôt qu'un outil qui la mesure une fois.
+**Ce qui reste** : N3.2b (sortie précoce en service), N3.3 (`k-WTA/routes`), puis la porte
+de composition. N3.2a (service natif) est **fait** : `--drvm-serve`, `/sante`, génération
+déterministe, 404.
 
 ## Le contrat
 

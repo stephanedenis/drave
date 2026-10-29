@@ -1,0 +1,37 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.2a",
+ "porte": "porte-n3-service.sh",
+ "modele": {
+  "kind": "DRVM drave-n0 synthétique",
+  "graine": 7,
+  "parametres": 113292,
+  "n_blocks": 1,
+  "n_experts": 4,
+  "top_k": 2,
+  "kwta": 0.5,
+  "vocab": 256
+ },
+ "mesures": {
+  "sante_parametres": 113292,
+  "abc_1": {
+   "octets": 11,
+   "texte": "abc\\u0013...4L...\\u0019L"
+  },
+  "abc_2": "identique",
+  "zzz": "différent",
+  "inconnu": 404
+ },
+ "controle": "même prompt deux fois identique ; autre prompt différent ; /inconnu 404 ; /sante = modèle",
+ "verdict": "service natif vivant, déterministe, sans early exit",
+ "limites": [
+  "modèle synthétique, pas une qualité",
+  "pas de sortie précoce/pont/rejeu dans le service",
+  "pas d'auth ni de cache KV"
+ ],
+ "prochain": [
+  "N3.2b sortie précoce en service",
+  "N3.3 porte k-WTA/routes",
+  "porte de composition N3"
+ ]
+}
