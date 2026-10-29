@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**105 commits** · **0 session(s)** · **8 thème(s)**
+**106 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 13 | [portes.md](portes.md) |
+| portes | 14 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -138,6 +138,7 @@ Aucune session indexée pour ce jour ; voir
 | 17:37 | `11713f7c` | LE PROGRAMME R EN UNE PAGE — CE QUI TIENT, CE QUI NE TIENT PAS, TROIS LOIS |
 | 18:20 | `48afabe2` | ÉTAT — T0 À 4 000, SESSION AUTONOME CLOSE |
 | 18:22 | `ef352945` | PORTES — LES TROIS SOUS-PASSES DU 29/10 : 33 PASSAGES, 32 VERTES, 1 ROUGE TOLÉRÉE |
+| 18:23 | `de90d922` | SESSION — CLÔTURE c3d0f0bd : 7 RÉSULTATS, 7 FICHES, 32 PORTES VERTES SUR 33 PASSAGES |
 
 ## Le récit de la journée (écrit à la main)
 

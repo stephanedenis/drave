@@ -149,9 +149,10 @@ Trois sous-passes ciblées, registre lu par `awk '$2 != 0'` :
 | CPU (blocs, miroir, docs) | 7 | **7** | 0 |
 | GPU (document, flux, lecteur, pont, topologie) | 5 | **5** | 0 |
 | moyenne (bus, coupe, délais, épisodique, gain, homéostasie, mémoire, mélange, récurrence, registre) | 11 | **10** | 1 tolérée (**`porte-melange`**) |
-| divers (adaptateur, audit, diff, fusion, greffe, harnais, jumeaux, m5, pannes, spéculatif, trace) | 11 | **11** | 0 |
+| divers 1 (adaptateur, audit, diff, fusion, greffe, harnais, jumeaux, m5, pannes, spéculatif, trace) | 11 | **11** | 0 |
+| divers 2 (c4-retard, cerveau, consolidation, cycle-c2, échange-experts, horloge, mistral, occupations, périphérie, poids-creux, préchargement, profondeur-routée, push-paresseux, réflexe, reparti, sauvegarde, tokenizer, vision) | 19 | **19** | 0 |
 
-**33 passages, 32 vertes, 1 rouge tolérée.** La passe **complète** (52 portes, ~1 h 40) n'a pas
+**52 passages, 51 vertes, 1 rouge tolérée.** La passe **complète** (52 portes, ~1 h 40) n'a pas
 été relancée : elle reste la règle de clôture, et les sous-passes ne la remplacent pas.
 
 ## 3. Les trois invariants qui ne sont pas des chiffres
