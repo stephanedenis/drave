@@ -1,0 +1,47 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3a",
+ "porte": "porte-coupe.sh",
+ "regime": "DRAVE_PERTE_MAX=1",
+ "f32": {
+  "sans_perte": 113.0068,
+  "encode": {
+   "4": 116.3407,
+   "6": 108.8721,
+   "12": 111.9225,
+   "18": 118.5275
+  },
+  "couts": {
+   "12": 2.81,
+   "15": 17.09,
+   "18": 0.52
+  },
+  "variance_encode_pct": 8.9
+ },
+ "perte1": {
+  "sans_perte": 111.8003,
+  "encode": {
+   "4": 114.1178,
+   "6": 116.8011,
+   "12": 115.6406,
+   "18": 114.5345
+  },
+  "couts": {
+   "12": 5.88,
+   "15": 11.56,
+   "18": 8.04
+  },
+  "variance_encode_pct": 2.4
+ },
+ "gates": {
+  "f32": "exit 0",
+  "perte1": "exit 0"
+ },
+ "controle": "le même gate passe dans les deux régimes ; sans dual, le 1 % échoue sur 113,0068 et sur la variance des coûts",
+ "decision": "A8.3a flux+pont+coupe faits ; A8.3b (défaut) reste",
+ "limites": [
+  "un seul modèle",
+  "1 % exact",
+  "le point de coupe compte moins sous la règle (2,4 % vs 8,9 %)"
+ ]
+}

@@ -60,7 +60,7 @@ for N in 4 6 8 10 12 15 18 20; do
   echo "$N $P" >> "$T/sansperte.txt"
   printf '  coupe %2d/%-2d : %s\n' "$N" "$((24 - N))" "$P"
 done
-python3 - "$T/sansperte.txt" <<'PY' || exit 1
+python3 - "$T/sansperte.txt" "${DRAVE_PERTE_MAX:-}" <<'PY' || exit 1
 import sys
 pts = [(int(l.split()[0]), l.split()[1]) for l in open(sys.argv[1])]
 valeurs = {p[1] for p in pts}
@@ -68,8 +68,10 @@ if len(valeurs) != 1:
     sys.exit(f"  ❌ le point de coupe change le résultat : {pts}")
 # A8.0 — la PPL sans perte est épinglée (absolu, 5e-4).
 val = float(pts[0][1])
-if abs(val - 113.0068) > 5e-4 * 113.0068:
-    sys.exit(f"  ❌ PPL sans perte : {val} (attendu 113.0068)")
+perte = sys.argv[2] == "1"
+att = 111.8003 if perte else 113.0068
+if abs(val - att) > 5e-4 * att:
+    sys.exit(f"  ❌ PPL sans perte : {val} (attendu {att})")
 print(f"  ✅ {len(pts)} points de coupe, UNE seule perplexité ({pts[0][1]}) : "
       "le découpage est numériquement neutre quand le lien est sans perte")
 PY
@@ -82,14 +84,15 @@ for N in 4 6 12 18; do
   echo "$N $P" >> "$T/encode.txt"
   printf '  coupe %2d/%-2d : %s\n' "$N" "$((24 - N))" "$P"
 done
-python3 - "$T/encode.txt" <<'PY' || exit 1
+python3 - "$T/encode.txt" "${DRAVE_PERTE_MAX:-}" <<'PY' || exit 1
 import sys
 pts = [(int(l.split()[0]), float(l.split()[1])) for l in open(sys.argv[1])]
 ecart = (max(p[1] for p in pts) - min(p[1] for p in pts)) / min(p[1] for p in pts)
 if ecart < 0.02:
     sys.exit(f"  ❌ avec un lien encodé, le point de coupe devrait compter : écart {ecart:.2%}")
-# A8.0 — les quatre PPL encodées sont épinglées (5e-4).
-attendus = {4: 116.3407, 6: 108.8721, 12: 111.9225, 18: 118.5275}
+# A8.0/A8.3a — les quatre PPL encodées sont épinglées, par régime.
+perte = sys.argv[2] == "1"
+attendus = {4: 114.1178, 6: 116.8011, 12: 115.6406, 18: 114.5345} if perte else {4: 116.3407, 6: 108.8721, 12: 111.9225, 18: 118.5275}
 for n, p in pts:
     if abs(p - attendus[n]) > 5e-4 * max(attendus[n], 1.0):
         sys.exit(f"  ❌ PPL encodée coupe {n}/24 : {p} (attendu {attendus[n]})")
@@ -108,16 +111,18 @@ for N in 12 15 18; do
 a, b = float('$P0'), float('$P1')
 print('  coupe %2d/%-2d : pont 448 fibres → %+.2f %%' % ($N, 24-$N, 100.0*(b-a)/a))"
 done
-python3 - "$T/pont.txt" <<'PY' || exit 1
+python3 - "$T/pont.txt" "${DRAVE_PERTE_MAX:-}" <<'PY' || exit 1
 import sys
 pts = [(int(l.split()[0]), float(l.split()[1]), float(l.split()[2])) for l in open(sys.argv[1])]
 couts = {n: 100.0 * (p1 - p0) / p0 for n, p0, p1 in pts}
 meilleur = min(couts, key=couts.get)
 pire = max(couts, key=couts.get)
-if couts[pire] < 3.0 * max(couts[meilleur], 0.1):
+perte = sys.argv[2] == "1"
+seuil = 1.5 if perte else 3.0
+if couts[pire] < seuil * max(couts[meilleur], 0.1):
     sys.exit(f"  ❌ le coût du pont ne dépend pas assez du point de coupe : {couts}")
-# A8.0 — les trois coûts de coupe sont épinglés (0,05 point).
-attendus = {12: 2.81, 15: 17.09, 18: 0.52}
+# A8.0/A8.3a — les trois coûts de coupe sont épinglés, par régime.
+attendus = {12: 5.88, 15: 11.56, 18: 8.04} if perte else {12: 2.81, 15: 17.09, 18: 0.52}
 for n, c in couts.items():
     if abs(c - attendus[n]) > 0.05:
         sys.exit(f"  ❌ coût du pont coupe {n}/24 : {c:+.2f} % (attendu {attendus[n]:+.2f} %)")
