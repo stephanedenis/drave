@@ -14,7 +14,7 @@
 | 15:27 | `0731544b` | A8.0 — 0 PORTE SUR 33 N'ÉPINGLE UNE PPL : A8.3 RESTE OPT-IN | `README.md`, `docs.md`, `a80-portes-ppl.json` (+1) |
 | 15:56 | `d7a4d1bf` | A8.0 — PORTE-PONT ÉPINGLÉE : PPL 113,0068 / 111,9225, FALAISE +2,81 % / +25,35 % | `README.md`, `docs.md`, `a80-porte-pont.json` (+3) |
 | 16:10 | `3672eae9` | SCHÉMA — R4.1–R4.3 ET LE MIROIR, A8.0 TROIS PORTES, R4.4 BLOQUÉ | `chantiers-etats.svg` |
-| 16:13 | `66eb7107` | A8.3 — LE DÉFAUT PLACE+PERLE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
+| 16:13 | `a489d9ff` | A8.3 — LE DÉFAUT PLACE+PERDE DÉPLACE LES PORTES DE −5,9 % À +19,5 % : OPT-IN CONSERVÉ | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
 
 ## Chiffres du jour
 

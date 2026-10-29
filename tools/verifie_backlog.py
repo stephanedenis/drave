@@ -61,13 +61,9 @@ ACQUIS = {
 # trou nommé, pas une ligne du backlog.
 SANS_FICHE = {
     "A2.6": ("Ordonnanceur : experts et tête", ["A2"], "roadmap § A, ligne A2"),
-    "A3.2": ("Granularité par bloc", ["A3"], "roadmap § A, ligne A3"),
-    "A3.3": ("Seuil de granularité", ["A3.2"], "roadmap § A, ligne A3"),
-    "A8.0": ("Épingler les portes PPL", ["A8"], "id proposé : condition d'A8.3"),
     "A8.3": ("Ordonnanceur : opt-in → défaut", ["A8.0"], "roadmap § A, ligne A8"),
     "N3": ("Opérations natives en production", ["N1"], "roadmap § N, ligne N3"),
     "N5": ("Échelle 50–100 M", ["N2", "N4"], "roadmap § N, ligne N5"),
-    "B10.2bis": ("Décodeur : attention croisée", [], "id proposé : travail de déblocage de B10.3"),
 }
 
 # Les contraintes mesurées n'ont pas d'arête : elles sont portées par la clé

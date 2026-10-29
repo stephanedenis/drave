@@ -55,12 +55,12 @@ contrat, donc pas de porte ni de contrôle négatif.
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **A2.6** | sans fiche | A2 (acquis) | — | — | — |
-| **A3.2** | sans fiche | A3 (acquis) | — | A3.3 | — |
-| **A3.3** | sans fiche | A3.2 (dure) | — | — | — |
+| **A3.2** | mesurée | A3 (acquis) | — | A3.3 | [A3.2-granularite.md](A3.2-granularite.md) |
+| **A3.3** | mesurée | A3.2 (dure) | — | — | [A3.3-seuil.md](A3.3-seuil.md) |
 | **A3.4** | bloquée | A3 (acquis) | bloqué : le compte et le runtime Colab | — | [A3.4-colab.md](A3.4-colab.md) |
 | **A5.4** | bloquée | A5 (acquis) | bloqué : la carte Stratix V | — | [A5.4-fpga.md](A5.4-fpga.md) |
 | **A6.2** | bloquée | A6 (acquis) | bloqué : aucun MoE local dans 16 Go de VRAM | — | [A6.2-moe-local.md](A6.2-moe-local.md) |
-| **A8.0** | sans fiche | A8 (acquis) | — | A8.3 | — |
+| **A8.0** | mesurée | A8 (acquis) | — | A8.3 | [A8.0-portes-ppl.md](A8.0-portes-ppl.md) |
 | **A8.3** | sans fiche | A8.0 (dure) | — | — | — |
 
 ### B — l'intelligence
@@ -68,7 +68,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **B1.5** | bloquée | B1 (acquis) | bloqué : aucun corpus parallèle humain d'articles | — | [B1.5-prose-scientifique.md](B1.5-prose-scientifique.md) |
-| **B10.2bis** | sans fiche | — | — | B10.3 | — |
+| **B10.2bis** | spécifiée | — | corpus 20–30 articles, 3 graines | B10.3 | [B10.2bis-decodeur-attention-croisee.md](B10.2bis-decodeur-attention-croisee.md) |
 | **B10.3** | bloquée | B10.2bis (dure) | B10.2 négatif (chrF 12,7 / 5,3 contre 39,6) | R52 | [B10.3-raisonnement-z.md](B10.3-raisonnement-z.md) |
 | **B11.10** | prête | B11 (acquis) | — | — | [B11.10-cartes-ambiguites.md](B11.10-cartes-ambiguites.md) |
 | **B12.10** | partiel | B12 (acquis) | — | — | [B12.10-pipeline-m1-m4-m8.md](B12.10-pipeline-m1-m4-m8.md) |

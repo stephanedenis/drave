@@ -67,7 +67,7 @@
   [`a83`](../../reports/rapport-a83-defaut.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **Backlog — graphe** : 41 arêtes dures, 8 sans fiche ; `tools/verifie_backlog.py`.
+- **Backlog — graphe** : 41 arêtes dures, 4 sans fiche ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
   Suite : [journal/sessions/f0969e87…](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846.md).
 
@@ -79,8 +79,8 @@
 |---|---|---|
 | portes | **56** (54 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **292** / **362** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **97** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **292** / **363** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **101** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
