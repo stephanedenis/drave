@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (25)
+## Commits du jour (26)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -33,6 +33,7 @@
 | 13:11 | `b1197a46` | B12.10 — LE BRANCHEMENT M4 PAR CHAMPS OBSERVÉS EST INERTE : RETIRÉ, MARGE À ESSAYER | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+4) |
 | 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS | `en-cours.md`, `README.md`, `docs.md` (+3) |
 | 14:21 | `1853a65b` | N4.8 — CONSIGNES COURTES : 0/40 SUR MOTS TENUS, MÉMORISATION | `en-cours.md`, `README.md`, `mesures.md` (+6) |
+| 14:52 | `7fb1c8a6` | R4.1 — LE BLOC TABLEAUX : 996 CELLULES, 802 EXACTES, LE TEXTE PLAT RATE 3/3 | `bloc-tableaux.md`, `R41-bloc-tableaux.md`, `README.md` (+16) |
 
 ## Chiffres du jour
 
@@ -42,6 +43,7 @@
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-native-8b-warm.md](../../reports/rapport-native-8b-warm.md)
@@ -66,6 +68,7 @@
 - [reports/rapport-native-prof30k.md](../../reports/rapport-native-prof30k.md)
 - [reports/rapport-native-professeur-30k.md](../../reports/rapport-native-professeur-30k.md)
 - [reports/rapport-native-sft.md](../../reports/rapport-native-sft.md)
+- [reports/rapport-r41-bloc-tableaux.md](../../reports/rapport-r41-bloc-tableaux.md)
 
 <!-- notes -->
 
