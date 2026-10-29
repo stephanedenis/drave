@@ -1,0 +1,85 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R13",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "mesures": [
+  {
+   "echantillon": "arabe",
+   "octets": 12575,
+   "caracteres": 6871,
+   "mots": 1103,
+   "tokens_bpe": 4444,
+   "octets_par_token": 2.83,
+   "tokens_par_mot": 4.029,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "cjk",
+   "octets": 6445,
+   "caracteres": 2185,
+   "mots": 49,
+   "tokens_bpe": 1402,
+   "octets_par_token": 4.597,
+   "tokens_par_mot": 28.612,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "cyrillique",
+   "octets": 16809,
+   "caracteres": 9029,
+   "mots": 1041,
+   "tokens_bpe": 6038,
+   "octets_par_token": 2.784,
+   "tokens_par_mot": 5.8,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "en",
+   "octets": 47214,
+   "caracteres": 47198,
+   "mots": 6848,
+   "tokens_bpe": 9146,
+   "octets_par_token": 5.162,
+   "tokens_par_mot": 1.336,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "fr",
+   "octets": 14304,
+   "caracteres": 13810,
+   "mots": 2402,
+   "tokens_bpe": 4250,
+   "octets_par_token": 3.366,
+   "tokens_par_mot": 1.769,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "multi",
+   "octets": 12632,
+   "caracteres": 12573,
+   "mots": 1957,
+   "tokens_bpe": 3444,
+   "octets_par_token": 3.668,
+   "tokens_par_mot": 1.76,
+   "reversible": true,
+   "code": 0
+  },
+  {
+   "echantillon": "random",
+   "octets": 16804,
+   "caracteres": 12200,
+   "mots": 200,
+   "tokens_bpe": 10321,
+   "octets_par_token": 1.628,
+   "tokens_par_mot": 51.605,
+   "reversible": true,
+   "code": 0
+  }
+ ],
+ "note": "PPL non mesurée ; réversibilité vérifiée par --tokenize"
+}
