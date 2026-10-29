@@ -175,7 +175,11 @@ fn main() {
     }
     if args[1] == "--drvm-native-ppl" {
         let f = args.get(2).cloned().unwrap_or_default();
-        let texte = args.get(3).cloned().unwrap_or_else(|| "La France est un pays de la couche".into());
+        let mut texte = args.get(3).cloned().unwrap_or_else(|| "La France est un pays de la couche".into());
+        if let Some(f) = texte.strip_prefix('@') {
+            texte = std::fs::read_to_string(f).expect("fichier de texte illisible");
+        }
+        texte = texte.chars().take(1024).collect();
         let d = drvm::Drvm::open(&f).expect("DRVM");
         let nat = native::Native::open(&d).expect("natif");
         let (p, n) = nat.perplexite(texte.as_bytes());

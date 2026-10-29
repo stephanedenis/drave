@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**52 commits** · **0 session(s)** · **8 thème(s)**
+**53 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 13 | [mesures.md](mesures.md) |
+| mesures | 14 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 10 | [moteur.md](moteur.md) |
 
@@ -85,6 +85,7 @@
 | 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO |
 | 16:29 | `d660fca3` | N0.12 — PPL NATIVE DE BOUT EN BOUT : 4,6585, IDENTIQUE À PYTHON |
 | 16:31 | `723f37f3` | N4.3 — SERVICE RUST NATIF AVEC CACHE KV : 611 MS, 53 OCTETS |
+| 16:52 | `1daa8741` | N2.9 — 21,63 M SUR 20 000 PAS : PPL 3,381, PIRE QUE 11,47 M (3,123) |
 
 ## Le récit de la journée (écrit à la main)
 

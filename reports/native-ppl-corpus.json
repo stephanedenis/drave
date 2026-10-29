@@ -1,0 +1,4 @@
+{"modele": "/tmp/n0-native.drvm", "fichier": "data/corpus_fr_val.txt",
+ "octets_notes_rust": 1076, "octets_notes_python": 1077,
+ "ppl_rust": 18.6394, "ppl_python": 18.6395, "duree_s": 12.5,
+ "limite_caracteres": 1024}

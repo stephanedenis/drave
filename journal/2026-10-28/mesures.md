@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,10 +21,11 @@
 | 15:38 | `f71565c3` | N4.2 — SERVICE LOCAL : /SANTE ET /GENERER, 69 OCTETS, CPU, GREEDY | `en-cours.md`, `roadmap-native.md`, `README.md` (+6) |
 | 15:45 | `641a48c6` | N0.8 — PARITÉ NATIVE AUTOMATISÉE : 5/5 PROMPTS, TOP-5 IDENTIQUE, ÉCART < 0,0001 | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 16:26 | `d97076b8` | N0.11 — TEST RUST AUTONOME DE LA PASSE AVANT NATIVE, FIXTURE 36 KO | `en-cours.md`, `roadmap-native.md`, `native.rs` (+5) |
+| 16:52 | `1daa8741` | N2.9 — 21,63 M SUR 20 000 PAS : PPL 3,381, PIRE QUE 11,47 M (3,123) | `en-cours.md`, `README.md`, `moteur.md` (+3) |
 
 ## Chiffres du jour
 
-`0,0001` · `28,7355` · `−24,05 %` · `5,978` · `7,871` · `0,709` · `62,13 %` · `62,55 %` · `0,39 %` · `3,353`
+`3,381` · `3,123` · `0,0001` · `28,7355` · `−24,05 %` · `5,978` · `7,871` · `0,709` · `62,13 %` · `62,55 %` · `0,39 %` · `3,353`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -35,6 +36,7 @@
 - [reports/rapport-coherence-docs-3.md](../../reports/rapport-coherence-docs-3.md)
 - [reports/rapport-drvm-parite.md](../../reports/rapport-drvm-parite.md)
 - [reports/rapport-drvm-ppl.md](../../reports/rapport-drvm-ppl.md)
+- [reports/rapport-native-21m-20k.md](../../reports/rapport-native-21m-20k.md)
 - [reports/rapport-native-generation.md](../../reports/rapport-native-generation.md)
 - [reports/rapport-native-n0.md](../../reports/rapport-native-n0.md)
 - [reports/rapport-native-parite.md](../../reports/rapport-native-parite.md)
