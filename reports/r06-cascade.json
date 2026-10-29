@@ -1,0 +1,69 @@
+{
+ "date": "2026-10-30",
+ "ligne": "R06",
+ "resultats": {
+  "pilote": {
+   "cascade": {
+    "n": 20,
+    "taux": 0.45,
+    "appels_modele": 0,
+    "voies": {
+     "span (cascade, étage 1)": 9,
+     "extractif (cascade, étage 1)": 10,
+     "auto (cascade, étage 1)": 1
+    }
+   },
+   "auto": {
+    "n": 20,
+    "taux": 0.45,
+    "appels_modele": 0,
+    "voies": {
+     "span": 9,
+     "extractif": 10,
+     "auto": 1
+    }
+   }
+  },
+  "lexical": {
+   "cascade": {
+    "n": 248,
+    "taux": 0.976,
+    "appels_modele": 0,
+    "voies": {
+     "span (cascade, étage 1)": 248
+    }
+   },
+   "auto": {
+    "n": 248,
+    "taux": 0.976,
+    "appels_modele": 0,
+    "voies": {
+     "span": 248
+    }
+   }
+  },
+  "paraphrase": {
+   "cascade": {
+    "n": 83,
+    "taux": 0.325,
+    "appels_modele": 9,
+    "voies": {
+     "span (cascade, étage 1)": 46,
+     "extractif (cascade, étage 1)": 25,
+     "modele (cascade, étage 2)": 9,
+     "auto (cascade, étage 1)": 3
+    }
+   },
+   "auto": {
+    "n": 83,
+    "taux": 0.313,
+    "appels_modele": 0,
+    "voies": {
+     "span": 46,
+     "extractif": 27,
+     "auto": 10
+    }
+   }
+  }
+ }
+}

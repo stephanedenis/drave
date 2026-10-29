@@ -1,7 +1,7 @@
 # R06 — Tête de relecture (confiance et contradiction)
 
 > **Statut** : partiel · **Priorité** : P2 · **Programme** : R · **Dépend de** : R03, R21, R22
-> **Ligne de roadmap** : R0.4 · **Résultat** : [rapport-r06-relecture.md](../../../reports/rapport-r06-relecture.md) — **triple négatif** : relire plus ne change rien (0/249, 0/84), le déclencheur par refus récupère 2/9 et en manque 15, le recouvrement ne sépare pas. À réécrire autour du **changement de modalité** ; la porte « gist » (R21) n'est pas testable.
+> **Ligne de roadmap** : R0.4 · **Résultat** : [rapport-r06-relecture.md](../../../reports/rapport-r06-relecture.md) (triple négatif : relire plus ne change rien, 0/249) ; **v2** [rapport-r06-cascade.md](../../../reports/rapport-r06-cascade.md) — la **cascade** span → extractif → modèle : **0,325** contre 0,313 sur les paraphrases, 0,976 sur le lexical, 0,450 au pilote ; +1,2 point pour 9 appels. Le verrou reste le **déclencheur** ; la porte « gist » (R21) n'est pas testable.
 > **Résumé** : Déclencher une relecture ciblée quand la réponse est incertaine ou contredit une autre région.
 > **Glossaire** : [relecture](../../theorie/glossaire/entrees/relecture.md) · [gist](../../theorie/glossaire/entrees/gist.md).
 

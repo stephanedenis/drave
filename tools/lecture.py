@@ -90,6 +90,18 @@ def pipeline(chemin: pathlib.Path, question: str, budget: float = 0.30,
         resultat["reponse"] = {"trouve": False, "motif": "budget épuisé avant toute lecture"}
         resultat["duree_s"] = round(time.time() - debut, 2)
         return resultat
+    if lecteur == "cascade":
+        # R06 v2 : la relecture n'est pas un second passage (mesuré nul), c'est un CHANGEMENT
+        # DE MODALITÉ. Étage 1 : le span ou l'extractif (selon la forme de la question) ;
+        # étage 2 : si le premier étage refuse, le modèle — et lui seul paie ses 1,9 s.
+        base = pipeline(chemin, question, budget, "auto", seuil)
+        if base["reponse"] and base["reponse"].get("trouve"):
+            base["voie_choisie"] = f"{base.get('voie_choisie', 'auto')} (cascade, étage 1)"
+            return base
+        haut = pipeline(chemin, question, budget, "modele", seuil)
+        haut["voie_choisie"] = "modele (cascade, étage 2)"
+        haut["etage1"] = base["reponse"]
+        return haut
     if lecteur == "auto":
         lecteur = voie(question)
         resultat["voie_choisie"] = lecteur
@@ -213,7 +225,7 @@ def main() -> int:
     ap.add_argument("--document", type=pathlib.Path)
     ap.add_argument("--question")
     ap.add_argument("--budget", type=float, default=0.30)
-    ap.add_argument("--lecteur", choices=("extractif", "modele", "span", "auto"), default="extractif")
+    ap.add_argument("--lecteur", choices=("extractif", "modele", "span", "auto", "cascade"), default="extractif")
     ap.add_argument("--seuil", type=float, default=SEUIL)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--autotest", action="store_true")

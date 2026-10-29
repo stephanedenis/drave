@@ -28,7 +28,8 @@
   **cascade** des lecteurs : 0,976 lexical, 0,325 paraphrases (+1,2 pt pour 9 appels).
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : cascade des lecteurs (R06 v2) puis synthèse du programme R.
+- **Prochaine action** : le **déclencheur** de la cascade (le verrou : 9 appels pour 1 question) ;
+  puis la synthèse du programme R.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
