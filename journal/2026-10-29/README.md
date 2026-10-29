@@ -5,15 +5,15 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**34 commits** · **0 session(s)** · **5 thème(s)**
+**36 commits** · **0 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 1 | [distribue.md](distribue.md) |
+| distribue | 2 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
-| mesures | 19 | [mesures.md](mesures.md) |
+| mesures | 20 | [mesures.md](mesures.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
 
@@ -64,6 +64,8 @@ Aucune session indexée pour ce jour ; voir
 | 10:02 | `a7dd8473` | DOCS — GLOSSAIRE 12 (27 TERMES DE LECTURE), BACKLOG LIÉ AU GLOSSAIRE |
 | 10:04 | `e59f7c09` | PILOTAGE — QUATRE ARBITRAGES RENDUS : N2 PORTE LA HIÉRARCHIE, SFT PARTAGÉ N4/R31, N5 GELÉ, R0 EN ORDRE STRICT |
 | 10:06 | `9539d8af` | ÉTAT — R0 EN ORDRE STRICT, N2 PORTE LA HIÉRARCHIE, N5 GELÉ, PRIORITÉS ARRÊTÉES |
+| 11:50 | `4ffa34b7` | R0.1 — 51 PAGES, 1 423 RÉGIONS, FIDÉLITÉ 1,000 : LE GRAPHE DE DOCUMENT EST MESURÉ |
+| 11:55 | `2e0133ce` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE |
 
 ## Le récit de la journée (écrit à la main)
 

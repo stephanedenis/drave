@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (19)
+## Commits du jour (20)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -27,6 +27,7 @@
 | 07:04 | `5e0c1bb5` | N2.33 — CONTEXTE 129 : PPL 2,6998, NOUVEAU MEILLEUR | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 07:15 | `00f9d1c8` | N2.34 — 129 + 10 000 PAS : PPL 2,712, NÉGATIF, ARRÊTÉ | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 07:28 | `42f74d5e` | N2.35 — CONTEXTE 130 APRÈS 129 : PPL 2,7149, NÉGATIF | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
+| 11:55 | `2e0133ce` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE | `en-cours.md`, `README.md`, `distribue.md` (+1) |
 
 ## Chiffres du jour
 

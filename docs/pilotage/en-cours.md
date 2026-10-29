@@ -23,21 +23,26 @@
   l'ordre est **strict**.
 - **Ce que font les autres** : `8156fdcb` tient le **graphe du backlog** et ses fiches ; `N2-GPU` distille ;
   elles rendent un **diff d'état**, la principale applique.
-- **Prochaine action** : **R0.2** (contrôleur), puis R0.3 (mesure jointe R0.2/R0.3.2) ; N0.3b en parallèle.
+- **Prochaine action** : **N0.3b** en parallèle ; R0.2 est pris par `8156fdcb` (contrôleur + banc pilote).
 - **Bloquants** : aucun pour R0 ; N0.3b dépend de la parité DRVM ↔ GGUF ; N2 dépend du GPU.
 - **Journal** : [index des sessions](../../journal/README.md#sessions) · [jour](../../journal/2026-10-29/README.md).
 
-### Session `8156fdcb` — backlog : graphe, dépendances, fiches
+### Session `8156fdcb` — backlog livré, puis R0.2 (contrôleur de lecture)
 
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
-- **Rôle** : graphe des dépendances du backlog, `tools/verifie_backlog.py`, fiches A/B/N/R.
-- **Ce qu'elle fait** : vérifie **41 arêtes dures**, **3 plafonds**, **8 lignes sans fiche** ; a corrigé **7 défauts** ;
-  maintient [`dependances.md`](backlog/dependances.md) et le SVG.
-- **Ce que font les autres** : `f0969e87` tient l'état/roadmap et prépare R0 ; `N2-GPU` distille ; elle rend un
-  **diff d'état**.
-- **Prochaine action** : les quatre arbitrages sont rendus (`e59f7c09`) ; vérifier le graphe à chaque ajout de fiche.
-- **Bloquants** : 8 lignes sans fiche ; le graphe doit rester synchrone avec les fiches.
-- **Journal** : commit `8bca0318` · [docs du jour](../../journal/2026-10-29/docs.md) · [sessions](../../journal/README.md#sessions).
+- **Rôle** : graphe du backlog (livré : 41 arêtes, 3 plafonds, 8 lignes sans fiche) ; **R0.1** livré
+  (51 pages, fidélité 1,000) ; **R0.2** en cours depuis le 29/10.
+- **Ce qu'elle fait** : R0.2 — contrôleur classique (survol, balayage, lecture, relecture, arrêt),
+  budget en **octets**, trace rejouable ; banc **pilote** de 5 types.
+- **Ce que font les autres** : `f0969e87` tient l'état et prend N0.3b ; `N2-GPU` distille la hiérarchie ;
+  elles rendent un **diff d'état**.
+- **Fichiers réservés** : `tools/lecteur_controleur.py`, `tools/banc_lecture.py`, `tools/porte-lecteur.sh`,
+  `docs/implantation/lecteur-controleur.md`, `docs/implantation/banc-lecture.md`, `reports/r02-*`,
+  `docs/pilotage/backlog/R02-controleur-lecture.md`, `R03-banc-lecture-rapide.md`.
+- **Prochaine action** : la porte R0.2 — **≥ 90 %** de l'exactitude de la lecture intégrale à **30 %**
+  du budget, sur **3 types**.
+- **Bloquants** : aucun ; le pilote est extractif classique, sans modèle externe.
+- **Journal** : commit `4ffa34b7` (R0.1) · [docs du jour](../../journal/2026-10-29/docs.md) · [sessions](../../journal/README.md#sessions).
 
 ### Session `N2-GPU` — calcul : distillation
 
@@ -45,7 +50,7 @@
 - **Rôle** : N2 — professeur et distillation ; ne touche ni aux docs ni aux fiches.
 - **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k ; mesure de PPL.
 - **Ce que font les autres** : `f0969e87` prépare R0 et tient l'état ; `8156fdcb` tient le graphe du backlog.
-- **Prochaine action** : N2 — données/capacité, porte **< 2,5** (meilleur **2,6998**, plateau **2,708**).
+- **Prochaine action** : N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708**) ; **N5 gelé**.
 - **Bloquants** : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.
 - **Journal** : [mesures du jour](../../journal/2026-10-29/mesures.md).
 
