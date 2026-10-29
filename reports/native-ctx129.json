@@ -1,0 +1,24 @@
+{
+ "professeur": "/tmp/route-teacher-20k",
+ "student": "/tmp/drave-n0-ctx129.pt",
+ "pas": 10000,
+ "lot": 15,
+ "seq": 129,
+ "lr": 5e-06,
+ "temperature": 2.0,
+ "alpha": 0.7,
+ "tetes": true,
+ "perte_finale": 35.23850631713867,
+ "ppl_val": 2.699767641509761,
+ "precision_main": 0.724031007751938,
+ "precision_early": [
+  0.5713178294573643,
+  0.6688630490956072,
+  0.7253229974160207
+ ],
+ "drvm": "/tmp/drave-n0-ctx129.drvm",
+ "sha256_drvm": "ac514962fffddb2b3d7dffa9ce8d6be110b050936b035917e3ce85ae49897e22",
+ "duree_s": 1468.331059217453,
+ "ppl_avant": 2.7077790503722454,
+ "gain": 0.008011408862484526
+}
