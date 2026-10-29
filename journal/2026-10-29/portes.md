@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 19:04 | `43a7510c` | PORTES — LE DERNIER LOT EST VERT : 19/19, DONT VISION (580 S) ; 52 PASSAGES, 1 TOLÉRÉE | `references-non-regression.md`, `README.md`, `portes.md` |
 | 19:27 | `9216634d` | A8.0 — PORTE-GAIN ÉPINGLÉE : 14,6496 / 12,9635 / 996,0390 ; ÉTAT 8/33 | `en-cours.md`, `README.md`, `memoire.md` (+4) |
 | 19:33 | `1ec24a7f` | N3.1 — INVENTAIRE : PAS DE PORTE COMPOSÉE AVANT SERVICE/K-WTA | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+4) |
+| 19:38 | `3c227622` | N3.1 — CORRECTION : LA PROFONDEUR ROUTÉE A UNE PORTE ; A8.0 = 8 | `en-cours.md`, `README.md`, `portes.md` (+2) |
 
 ## Chiffres du jour
 

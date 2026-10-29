@@ -1,0 +1,26 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-cycle-c2.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "reference": 14.6496,
+ "tolerance": 0.0005,
+ "mesures": {
+  "directe": 14.6496,
+  "pas_1": 14.6496,
+  "trajectoire": [
+   14.6496,
+   275.5153,
+   940.2153,
+   2988.4562
+  ],
+  "lambda": 488.82
+ },
+ "controle": "décalage de 10 % de la référence refusé par la même expression",
+ "gate": "exit 0 ; chaîne exacte, pas 1 exact, borné, coût dit, trajectoire déterministe, λ mesuré",
+ "limites": [
+  "un seul modèle",
+  "128 jetons",
+  "le cycle non entraîné diverge : c'est le résultat, pas une qualité"
+ ]
+}

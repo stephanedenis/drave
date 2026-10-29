@@ -60,6 +60,14 @@ PY
 ppl_directe=$("$D" "$M" --ppl "$T/morceau.txt" --limit "$LIMITE" --ctx "$LIMITE" --threads 8 2>&1 \
               | grep -oE "perplexité [0-9.]+ sur" | grep -oE "[0-9.]+" | head -1)
 [ -n "$ppl_directe" ] || { echo "  ❌ perplexité directe illisible"; exit 1; }
+# A8.0 — la PPL de référence (128 jetons) est épinglée (5e-4).
+python3 - "$ppl_directe" <<'PPLC2' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 14.6496
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL référence : {val} (attendu {attendu})")
+print(f"  ✅ PPL référence épinglée : {val}")
+PPLC2
 echo "porte du cycle C2 — référence (modèle d'un seul tenant, $LIMITE jetons) : $ppl_directe"
 
 # ------------------------------------------------ 1. la chaîne de deux régions est EXACTE
