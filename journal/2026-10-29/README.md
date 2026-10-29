@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **0 session(s)** · **6 thème(s)**
+**42 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
-| mesures | 21 | [mesures.md](mesures.md) |
+| mesures | 22 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 3 | [moteur.md](moteur.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -72,6 +72,7 @@ Aucune session indexée pour ce jour ; voir
 | 12:24 | `7a8a441e` | DOCS — REPORTS/README SOUS BUDGET : 1 724 MOTS, INDEX EXHAUSTIF RENVOYÉ |
 | 12:41 | `1359d13f` | ÉTAT — R0.3 RÉSERVÉ À 8156FDBC : LECTEUR MODÈLE ET BANC COMPLET |
 | 12:54 | `e11f096a` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE |
+| 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ |
 
 ## Le récit de la journée (écrit à la main)
 

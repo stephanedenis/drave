@@ -30,7 +30,7 @@
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** | A2.6 (ordonnanceur), A3.2/A3.3 (granularité, seuil) ; A8.3 en **opt-in** |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B10.3 décodeur** | B12.10 et B11.10 (autonomes) ; B10.3 attend **B10.2bis** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | 🔬 R0.1 et R0.2 **mesurés** ; R0.3 pilote | **R0.3** (banc complet, 300 questions) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | 🔬 R0.1, R0.2 **mesurés** ; R0.3 **pilote + modèle** | **R0.3** (banc complet, 300 questions) |
 
 ## L'ordre du jour (carpe diem)
 
@@ -159,7 +159,7 @@ C'est la **priorité** : un lecteur au niveau **système**, avec le moteur exist
 |---|---|---|---|
 | **R0.1** | **graphe de document** : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance ; parseurs PDF/HTML/DOCX/Markdown ; sans modèle | ✅ **51 pages**, fidélité **1,000** | 50 pages découpées, provenance exacte, rejeu identique |
 | **R0.2** | **contrôleur de lecture** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, titres, premières/dernières phrases, BM25/regex) | ✅ **1,000** à 30 % sur **5 types** | à 30 % du budget, **≥ 90 %** de la réponse de la lecture intégrale sur **3 types** |
-| **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ⚠️ **pilote** (20 questions, 5 types) | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
+| **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ⚠️ **pilote** : 20 questions, et un modèle (contrôleur **0,500** / début **0,400**) | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
 | **R0.4** | **têtes de lecture** : `survol` (pertinence d'une région), `balayage` (requête → spans), `relecture` (confiance/contradiction), greffées sur les têtes précoces | ⏳ après R0.3 | la tête bat le contrôle classique à budget égal |
 
 **Ordre arrêté** : **R0.1**, puis **R0.2**, puis **R0.3** (la courbe de R0.3 est la mesure jointe de R0.2) ; R0.4

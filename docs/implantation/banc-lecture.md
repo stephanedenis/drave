@@ -71,14 +71,46 @@ closed-book silencieux, « mélangée » sans effondrement.
 - **temps non mesuré** : le coût est en octets, pas en secondes ; un modèle lent changerait
   la conclusion sur le débit.
 
-## 6. La montée en R0.3
+## 6. Le lecteur modèle
+
+Le lecteur extractif plafonne (25 à 75 % même en lisant tout) : c'est lui qu'il faut changer,
+pas la sélection. Le banc accepte donc `--lecteur modele` : un **Qwen2.5-0.5B** exécuté par le
+moteur Drave (`--infer --temp 0`), sans API ni réseau, en génération **greedy**.
+
+**Ce qui change, et ce qui ne change pas.** La sélection est identique — même contrôleur, mêmes
+budgets. Seul l'answerer change : il reçoit les passages sélectionnés, dans l'ordre de lecture,
+bornés par la **fenêtre** (1 200 caractères, ~300 jetons). Le modèle ne « lit » pas tout : il lit
+ce qui tient, et c'est précisément pour cela que la sélection compte.
+
+**Les trois façons de remplir la fenêtre**, à budget égal :
+
+| mode | ce qu'il représente |
+|---|---|
+| `controlee_0.30` | le contrôleur de R0.2 : les passages qu'il a choisis |
+| `debut_0.30` | la **troncature naïve** : les premiers passages du document — ce que fait un lecteur qui n'a pas de politique |
+| `aleatoire_0.30` | des passages au hasard, même budget |
+
+La comparaison qui décide est **contrôleur contre début** : si sélectionner ne bat pas prendre
+le début, le contrôleur ne sert à rien.
+
+**Ce n'est pas une porte.** La génération coûte ~7 s par appel (dont le chargement du modèle),
+soit plusieurs minutes pour 20 questions : la porte reste extractive et rapide. La mesure
+modèle se lance à la main et vit dans `reports/`.
+
+**Ce qui pourrait la rendre fausse** : un modèle de 0,5 B peut échouer pour des raisons de
+capacité et non de sélection — la comparaison « contrôleur contre début » reste valable, mais
+le taux absolu ne dit rien d'un grand modèle ; la fenêtre de 512 jetons est un réglage, pas une
+propriété du document ; et un prompt de complétion n'est pas une consigne (pas d'instruction
+système ici).
+
+## 7. La montée en R0.3
 
 Le pilote est la **première tranche** du banc complet : 30 documents (5 types × 6), 10
 questions par document, trois budgets, et la courbe vitesse-compréhension par type. Ce qui
 manque n'est pas le harnais — il est écrit — c'est le **corpus annoté** : les 20 questions
 sont un pilote, pas les 300 du banc complet.
 
-## 7. Voir aussi
+## 8. Voir aussi
 
 - [La fiche R03](../pilotage/backlog/R03-banc-lecture-rapide.md) — le contrat et la porte.
 - [Le contrôleur de lecture](lecteur-controleur.md) — ce que le banc mesure.

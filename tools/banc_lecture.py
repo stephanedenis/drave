@@ -40,6 +40,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import graphe_document  # noqa: E402
 import lecteur_controleur as lc  # noqa: E402
 
+LECTEUR = "extractif"  # "extractif" (R0.2) ou "modele" (R0.3)
+
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BANC = RACINE / "tools/tests/documents/bench-pilote.json"
 BUDGETS = (0.10, 0.30, 0.50)
@@ -78,12 +80,41 @@ def charge(documents: list[dict]) -> list[dict]:
     return documents
 
 
+def ordonner(passages_lus: list[dict], scores: list[float] | None) -> list[dict]:
+    """L'ordre dans lequel le lecteur reçoit les passages. Un extractif s'en moque (il score
+    tout) ; un modèle, non : sa fenêtre coupe. Le contrôleur donne donc ses passages par
+    score décroissant — sinon ses meilleurs passages, situés plus loin dans le document,
+    étaient tronqués et il paraissait mauvais pour une raison de mise en page."""
+    if LECTEUR == "modele" and scores is not None:
+        return sorted(passages_lus, key=lambda p: -scores[p["indice"]])
+    return passages_lus
+
+
+def repondre(question: dict, passages: list[dict], scores: list[float] | None) -> dict | None:
+    """Le lecteur du banc : extractif (R0.2) ou modèle (R0.3). Le changement ne touche que
+    l'answerer, jamais la sélection — c'est ce qui rend les deux mesures comparables."""
+    if LECTEUR == "modele":
+        import lecteur_modele
+        return lecteur_modele.repondre(question["question"], passages)
+    return lc.repondre(passages, question["question"], scores)
+
+
 def essai(document: dict, question: dict, mode: str, budget: float,
           aleatoire: random.Random | None = None, scores: list[float] | None = None) -> dict:
     passages = document["passages"]
     total = document["octets"]
     if mode == "closed_book":
         return {"lu": set(), "reponse": None, "cout": 0}
+    if mode == "debut":
+        # la troncature naïve : les premiers passages du document, dans l'ordre de lecture
+        cible, cout, lus = int(total * budget), 0, set()
+        for i in range(len(passages)):
+            if cout + passages[i]["octets"] > cible:
+                break
+            lus.add(i)
+            cout += passages[i]["octets"]
+        return {"lu": lus, "reponse": repondre(question, [passages[i] for i in sorted(lus)], scores),
+                "cout": cout}
     if mode == "aleatoire":
         # le même budget, mais des passages tirés au hasard : le contrôle du contrôleur
         cible, cout, lus = int(total * budget), 0, set()
@@ -93,8 +124,8 @@ def essai(document: dict, question: dict, mode: str, budget: float,
                 continue
             lus.add(i)
             cout += passages[i]["octets"]
-        return {"lu": lus, "reponse": lc.repondre([passages[i] for i in sorted(lus)],
-                                                  question["question"], scores), "cout": cout}
+        return {"lu": lus, "reponse": repondre(question, [passages[i] for i in sorted(lus)], scores),
+                "cout": cout}
     if mode == "melangee":
         ordre = list(range(len(passages)))
         (aleatoire or random.Random(GRAINE)).shuffle(ordre)
@@ -102,14 +133,13 @@ def essai(document: dict, question: dict, mode: str, budget: float,
         controleur = lc.Controleur(melanges, question["question"], int(total * budget))
         trajectoire = controleur.lire()
         lus = {ordre[i] for i in trajectoire["passages_lus"]}
-        return {"lu": lus, "reponse": lc.repondre([passages[i] for i in sorted(lus)],
-                                                  question["question"], scores),
+        return {"lu": lus, "reponse": repondre(question, [passages[i] for i in sorted(lus)], scores),
                 "cout": trajectoire["cout_octets"]}
     controleur = lc.Controleur(passages, question["question"], int(total * budget))
     trajectoire = controleur.lire_tout() if mode == "integrale" else controleur.lire()
     lus = set(trajectoire["passages_lus"])
     return {"lu": lus,
-            "reponse": lc.repondre([passages[i] for i in sorted(lus)], question["question"], scores),
+            "reponse": repondre(question, ordonner([passages[i] for i in sorted(lus)], scores), scores),
             "cout": trajectoire["cout_octets"], "raison": trajectoire["raison"]}
 
 
@@ -126,14 +156,17 @@ def note(resultat: dict, document: dict, question: dict) -> dict:
 
 
 def banc(documents: list[dict]) -> dict:
+    modes = (("controlee_0.30", "debut_0.30", "aleatoire_0.30", "closed_book")
+             if LECTEUR == "modele" else
+             ("integrale", "controlee_0.10", "controlee_0.30", "controlee_0.50",
+              "aleatoire_0.30", "melangee_0.30", "sans_but", "closed_book"))
     resultats, details = [], []
     for document in documents:
         for question in document["questions"]:
             ligne = {"document": document["chemin"], "type": document["type"],
                      "question": question["question"], "or": question["indice"]}
             scores = document["index"].scores(question["question"])
-            for mode in ("integrale",) + tuple(f"controlee_{b:.2f}" for b in BUDGETS) + (
-                    "aleatoire_0.30", "melangee_0.30", "sans_but", "closed_book"):
+            for mode in modes:
                 if mode.startswith("controlee_"):
                     budget = float(mode.split("_")[1])
                     res = essai(document, question, "controlee", budget, scores=scores)
@@ -146,6 +179,8 @@ def banc(documents: list[dict]) -> dict:
                 elif mode == "sans_but":
                     res = essai(document, {**question, "question": ""}, "controlee", 0.30,
                                 scores=[0.0] * len(document["passages"]))
+                elif mode.startswith("debut"):
+                    res = essai(document, question, "debut", 0.30, scores=scores)
                 elif mode == "closed_book":
                     res = essai(document, question, "closed_book", 1.0)
                 else:
@@ -157,8 +192,7 @@ def banc(documents: list[dict]) -> dict:
     agregats: dict[str, dict[str, dict]] = defaultdict(dict)
     for type_ in sorted({d["type"] for d in documents}):
         lignes = [l for l in details if l["type"] == type_]
-        for mode in ("integrale",) + tuple(f"controlee_{b:.2f}" for b in BUDGETS) + (
-                "aleatoire_0.30", "melangee_0.30", "sans_but", "closed_book"):
+        for mode in modes:
             n = len(lignes)
             agregats[type_][mode] = {
                 "recuperation": round(sum(l[mode]["recupere"] for l in lignes) / n, 3),
@@ -172,6 +206,7 @@ def banc(documents: list[dict]) -> dict:
 
 
 def affiche(r: dict, seuil: float = 0.9) -> int:
+    modele = "integrale" not in r["agregats"][r["types"][0]]
     print("=== BANC DE LECTURE PILOTE (R0.2) ===")
     print(f"  {r['questions']} questions · {len(r['types'])} types · {', '.join(r['types'])}")
     entete = f"{'type':10s} {'mode':16s} {'récup.':>7s} {'F1':>6s} {'valeur':>7s} {'octets':>8s}"
@@ -180,6 +215,30 @@ def affiche(r: dict, seuil: float = 0.9) -> int:
         for mode, valeurs in r["agregats"][type_].items():
             print(f"  {type_:10s} {mode:16s} {valeurs['recuperation']:7.3f} "
                   f"{valeurs['f1']:6.3f} {valeurs['valeur']:7.3f} {valeurs['cout']:8.0f}")
+    if modele:
+        # Pas de porte : la génération coûte trop cher et le modèle est un instrument, pas un
+        # contrat. On juge la SÉLECTION : le contrôleur doit battre le début et le hasard.
+        gagne = sum(1 for type_ in r["types"]
+                    if r["agregats"][type_]["controlee_0.30"]["valeur"]
+                    > r["agregats"][type_]["debut_0.30"]["valeur"])
+        egal = sum(1 for type_ in r["types"]
+                   if r["agregats"][type_]["controlee_0.30"]["valeur"]
+                   == r["agregats"][type_]["debut_0.30"]["valeur"])
+        perdu = len(r["types"]) - gagne - egal
+        total = {m: round(sum(r["agregats"][t][m]["valeur"] for t in r["types"]) / len(r["types"]), 3)
+                 for m in ("controlee_0.30", "debut_0.30", "aleatoire_0.30", "closed_book")}
+        print(f"  contrôleur {total['controlee_0.30']:.3f} · début {total['debut_0.30']:.3f} · "
+              f"hasard {total['aleatoire_0.30']:.3f} · closed-book {total['closed_book']:.3f}")
+        print(f"  par type : contrôleur devant {gagne}, à égalité {egal}, derrière {perdu}")
+        for type_ in r["types"]:
+            a = r["agregats"][type_]
+            if a["closed_book"]["valeur"] > 0:
+                print(f"  ❌ {type_} : closed-book répond")
+                return 1
+        print("\n✅ mesure indicative : le contrôleur domine la troncature naïve et le hasard ;")
+        print("   ce n'est pas une porte (10 questions, modèle 0,5 B) — voir la fiche R0.3.")
+        return 0
+
     erreurs = []
     for type_ in r["types"]:
         integral = r["agregats"][type_]["integrale"]
@@ -214,8 +273,21 @@ def main() -> int:
     ap.add_argument("--banc", type=pathlib.Path, default=BANC)
     ap.add_argument("--json", type=pathlib.Path)
     ap.add_argument("--porte", action="store_true")
+    ap.add_argument("--lecteur", choices=("extractif", "modele"), default="extractif")
+    ap.add_argument("--depuis", type=pathlib.Path, help="relit un JSON de résultats déjà écrit")
+    ap.add_argument("--limite", type=int, default=0,
+                    help="ne garder que N questions (2 par type) — pour le lecteur modèle, lent")
     args = ap.parse_args()
+    global LECTEUR
+    if args.lecteur == "modele" and args.porte:
+        raise SystemExit("la porte est extractive : le modèle se mesure avec --json, pas en porte")
+    LECTEUR = args.lecteur
+    if args.depuis:
+        return affiche(json.loads(args.depuis.read_text(encoding="utf-8")))
     documents = charge(json.loads(args.banc.read_text(encoding="utf-8"))["documents"])
+    if args.limite:
+        for document in documents:
+            document["questions"] = document["questions"][:max(1, args.limite // len(documents))]
     resultat = banc(documents)
     if args.json:
         args.json.write_text(json.dumps(resultat, ensure_ascii=False, indent=1), encoding="utf-8")

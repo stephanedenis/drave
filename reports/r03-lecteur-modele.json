@@ -1,0 +1,487 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "questions": 10,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.48,
+    "valeur": 1.0,
+    "cout": 1166.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.233,
+    "valeur": 0.5,
+    "cout": 1763.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.074,
+    "valeur": 0.0,
+    "cout": 1778.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.466,
+    "valeur": 0.5,
+    "cout": 1065.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.356,
+    "valeur": 0.5,
+    "cout": 864.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.293,
+    "valeur": 0.0,
+    "cout": 1112.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 636.0
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.481,
+    "valeur": 0.5,
+    "cout": 2113.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.05,
+    "valeur": 0.0,
+    "cout": 2117.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.146,
+    "valeur": 0.5,
+    "cout": 2589.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 5791.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.0,
+    "f1": 0.054,
+    "valeur": 0.0,
+    "cout": 5806.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.327,
+    "valeur": 0.5,
+    "cout": 2612.5
+   },
+   "debut_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.25,
+    "valeur": 0.5,
+    "cout": 3032.0
+   },
+   "aleatoire_0.30": {
+    "recuperation": 0.5,
+    "f1": 0.023,
+    "valeur": 0.0,
+    "cout": 3131.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+   "or": "4 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5,
+    "valeur": true,
+    "cout": 2709,
+    "reponse": "4 octets."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.5,
+    "valeur": true,
+    "cout": 3032,
+    "reponse": "4 octets."
+   },
+   "aleatoire_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": ""
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets coûte le mode dense par flux ?",
+   "or": "3 663 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1538,
+    "valeur": false,
+    "cout": 2516,
+    "reponse": "3,663 octets par flux."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "12"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0465,
+    "valeur": false,
+    "cout": 3131,
+    "reponse": "6,02 octets par neurone actif en v1, 3,01 en v2"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désigne le mot « drave » ?",
+   "or": "billots",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 583,
+    "reponse": "Le bus, en c"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1053,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "Le mot « drave » désigne un bus d'événements pour l'IA."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "Le mot « drave » désigne le bus. Il est utilisé dans le contexte de la programmation, où"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle est la thèse du projet ?",
+   "or": "structure bat la taille",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 689,
+    "reponse": "Le projet cherche à faire tourner des modèles de types différents sur des"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.8571,
+    "valeur": true,
+    "cout": 2113,
+    "reponse": "La structure bat la taille."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2117,
+    "reponse": "Le projet est une théorie de l'information. Il s'agit de décrire comment les modèles de types"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le meilleur score de perplexité de N2 ?",
+   "or": "2,6998",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 2509,
+    "reponse": "2"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5791,
+    "reponse": "0.99"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5806,
+    "reponse": "68,1917 / 92,1875, natif 4,6"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle porte N2 doit-elle franchir ?",
+   "or": "< 2,5",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2927,
+    "valeur": true,
+    "cout": 2670,
+    "reponse": "N2 doit franchir la porte < 2,5 non atteinte. Le levier retenu est la hi"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 5791,
+    "reponse": "Il faut que la route soit étiquetée, que le plan soit documenté, que les documents soient écrit"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1081,
+    "valeur": false,
+    "cout": 5806,
+    "reponse": "N2 doit franchir la porte A.3.2/A.3.3. La porte A.3."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+   "or": "19 septembre 2025",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.75,
+    "valeur": true,
+    "cout": 1112,
+    "reponse": "Le 19 septembre 2025"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.5455,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "Le 19 septembre 2025 la résolution a été adoptée."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.3636,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "La résolution a été adoptée le 29 septembre 2025."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quelle session de l'Assemblée générale est concernée ?",
+   "or": "quatre-vingtième session",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 1019,
+    "reponse": "La 4e session de l'Assemblée générale est concernée."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 864,
+    "reponse": "La fournaison de la question est la quatrième session de l'Assemblée générale."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 1112,
+    "reponse": "La session de la 45ème session."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel outil est déclaré dans le manifeste ?",
+   "or": "\"outil\": \"graphe_document.py\"",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5455,
+    "valeur": true,
+    "cout": 891,
+    "reponse": "Le graphe_document.py"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.3,
+    "valeur": true,
+    "cout": 1763,
+    "reponse": "Le code est tools/graphe_document.py ; la porte est tools/porte-document.sh ; les résultats mesurés"
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": ""
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel type de région porte les séparateurs ?",
+   "or": "type blanc est émis",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.4138,
+    "valeur": true,
+    "cout": 1441,
+    "reponse": "Le type blanc porte les séparateurs. C'est le type blanc qui vaut \\n entre deux régions."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Les séparateurs sont des régions, donc les offsets sont des régions."
+   },
+   "aleatoire_0.30": {
+    "recupere": false,
+    "f1": 0.1481,
+    "valeur": false,
+    "cout": 1778,
+    "reponse": "Le type de région porte les séparateurs. Il est une région qui commence à la fin de la ligne et qui"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}

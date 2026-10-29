@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (21)
+## Commits du jour (22)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -29,10 +29,11 @@
 | 07:28 | `42f74d5e` | N2.35 — CONTEXTE 130 APRÈS 129 : PPL 2,7149, NÉGATIF | `en-cours.md`, `roadmap-native.md`, `README.md` (+5) |
 | 11:55 | `19db1632` | ÉTAT — R0.2 RÉSERVÉ À 8156FDBC (CONTRÔLEUR + BANC PILOTE), R0.1 LIVRÉ, N2 PORTE LA HIÉRARCHIE | `en-cours.md`, `README.md`, `distribue.md` (+2) |
 | 12:54 | `e11f096a` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE | `B12.10-pipeline-m1-m4-m8.md`, `N0.3b-parite-ppl.md`, `index.md` (+14) |
+| 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+3) |
 
 ## Chiffres du jour
 
-`2,7149` · `2,712` · `2,6998` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763` · `2,708` · `2,852`
+`0,436` · `2,7149` · `2,712` · `2,6998` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763` · `2,708`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
