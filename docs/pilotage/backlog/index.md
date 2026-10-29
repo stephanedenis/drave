@@ -61,7 +61,7 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 | R22 | [Mémoire épisodique et relecture](R22-memoire-episodique.md) | spécifiée | P2 | R01, R21 | R2.2 |
 | R31 | [Restitution : SFT de lecture](R31-restitution-sft.md) | spécifiée | P1 | R01, R03, R21 | R3.1 |
 | R32 | [Citations et provenance](R32-citations-provenance.md) | spécifiée | P2 | R31, R01, R21 | R3.2 |
-| R41 | [Bloc tableaux](R41-bloc-tableaux.md) | spécifiée | P2 | R01 | R4.1 |
+| R41 | [Bloc tableaux](R41-bloc-tableaux.md) | mesurée | P2 | R01 | R4.1 |
 | R42 | [Bloc code (AST, exécution)](R42-bloc-code.md) | spécifiée | P2 | R01 | R4.2 |
 | R43 | [Bloc maths](R43-bloc-maths.md) | spécifiée | P3 | R01 | R4.3 |
 | R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | spécifiée | P3 | R41, R42, R43 | R4.4 |
