@@ -60,7 +60,7 @@
 - **N0.3b — parité DRVM ↔ GGUF** : **close** (conversion et natif) ; fiche
   [`rapport-drvm-ppl.md`](../../reports/rapport-drvm-ppl.md).
 - **Backlog — graphe** : 41 arêtes dures, 3 plafonds, 8 lignes sans fiche ; vérifié par `tools/verifie_backlog.py`.
-- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**.
+- **N2 — distillation** : GPU ; meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. **N0.15/N4.7** : exporté, parité native, servi **650,1 ms**. **N4.8** : consignes courtes **0/40** sur mots tenus.
 - **B12.10 — intégration** : **close négative** ; oracle = **M8** (0,436), **M4 seul = 0/606** ; la porte « M4 retiré » est vide.
 - **Documentation** : roadmap unique A/B/N/R ; **93 documents** ; glossaire **famille 12** (27 termes) ;
   éléments terminés transférés au journal.
@@ -73,7 +73,7 @@
 |---|---|---|
 | portes | **51** (49 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **277** / **343** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **278** / **344** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **93** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

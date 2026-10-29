@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,10 +31,11 @@
 | 12:54 | `e11f096a` | B12.10 — LE CONTEXTE DU PIPELINE ÉTAIT UNE CHAÎNE : 0/528 → 528/528 ; N0.3b CLOSE | `B12.10-pipeline-m1-m4-m8.md`, `N0.3b-parite-ppl.md`, `index.md` (+14) |
 | 13:05 | `7fb36771` | B12.10 — SPLIT PAR CODE TENU À L'ÉCART : 0 EXACT, 0,436 DE CHAMP, M4 NON BRANCHÉ | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+3) |
 | 13:11 | `b1197a46` | B12.10 — LE BRANCHEMENT M4 PAR CHAMPS OBSERVÉS EST INERTE : RETIRÉ, MARGE À ESSAYER | `B12.10-pipeline-m1-m4-m8.md`, `en-cours.md`, `README.md` (+4) |
+| 14:18 | `c8acf22e` | N0.15/N4.7 — MEILLEUR 2,6998 SERVI : PARITÉ NATIVE, 650,1 MS | `en-cours.md`, `README.md`, `docs.md` (+3) |
 
 ## Chiffres du jour
 
-`0,436` · `2,7149` · `2,712` · `2,6998` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763` · `2,708`
+`2,6998` · `0,436` · `2,7149` · `2,712` · `2,786` · `2,974` · `3,804` · `2,866` · `4,838` · `5,675` · `2,763` · `2,708`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -44,6 +45,7 @@
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-native-8b-warm.md](../../reports/rapport-native-8b-warm.md)
 - [reports/rapport-native-8b.md](../../reports/rapport-native-8b.md)
+- [reports/rapport-native-best-2.md](../../reports/rapport-native-best-2.md)
 - [reports/rapport-native-best-service.md](../../reports/rapport-native-best-service.md)
 - [reports/rapport-native-ctx129-2.md](../../reports/rapport-native-ctx129-2.md)
 - [reports/rapport-native-ctx129.md](../../reports/rapport-native-ctx129.md)

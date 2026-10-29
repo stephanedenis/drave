@@ -1,0 +1,245 @@
+{
+ "tenus": "0/40",
+ "details": [
+  {
+   "q": "Écris deux fois : tour",
+   "attendu": "tour tour",
+   "obtenu": "our our ours ours ours ours our",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : désert",
+   "attendu": "DÉSERT",
+   "obtenu": "AUTREAUNESARDINGEAU AURTE AUTEI",
+   "ok": false
+  },
+  {
+   "q": "Répète : forêt",
+   "attendu": "forêt",
+   "obtenu": "fenêtre fenêtre fenêtre fen�",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : neige",
+   "attendu": "neige neige",
+   "obtenu": "table table table table table t",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : nuage",
+   "attendu": "nuage nuage",
+   "obtenu": "nur renard renard renard renard",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : DÉSERT",
+   "attendu": "désert",
+   "obtenu": "ÉTOIle table table table table",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : vent",
+   "attendu": "vent vent",
+   "obtenu": "villeur villeur villeur villeur",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : ÎLE",
+   "attendu": "île",
+   "obtenu": "étoile étoile Étoile Étoile",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : pont",
+   "attendu": "pont pont",
+   "obtenu": "populs payse pays pays pays pay",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : NUAGE",
+   "attendu": "nuage",
+   "obtenu": "nuit nuit nuit nuit nuit nuit n",
+   "ok": false
+  },
+  {
+   "q": "Répète : plage",
+   "attendu": "plage",
+   "obtenu": "pain pain pain pain pain pain p",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : FORÊT",
+   "attendu": "forêt",
+   "obtenu": "fenêtre fenêtre fenêtre fen�",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : NEIGE",
+   "attendu": "neige",
+   "obtenu": "nuit nuit nuit nuit nuit nuit n",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : orage",
+   "attendu": "orage orage",
+   "obtenu": "outil ours ours ours ours ours",
+   "ok": false
+  },
+  {
+   "q": "Répète : nuage",
+   "attendu": "nuage",
+   "obtenu": "table table table table table t",
+   "ok": false
+  },
+  {
+   "q": "Répète : tour",
+   "attendu": "tour",
+   "obtenu": "tigre tigre tigre tigre tigre t",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : pont",
+   "attendu": "PONT",
+   "obtenu": "PAYSONTAGNE PAYSONNEURTE PAGNEA",
+   "ok": false
+  },
+  {
+   "q": "Répète : île",
+   "attendu": "île",
+   "obtenu": "étoileur Étoile étoile Étoi",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : neige",
+   "attendu": "NEIGE",
+   "obtenu": "AUTINEAU AUTENAUTENATINAGEAUTAG",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : vent",
+   "attendu": "VENT",
+   "obtenu": "VALEUREAU VILEAURDENUE AUTEESEA",
+   "ok": false
+  },
+  {
+   "q": "Répète : pont",
+   "attendu": "pont",
+   "obtenu": "pays pays pays pays pays pays p",
+   "ok": false
+  },
+  {
+   "q": "Répète : orage",
+   "attendu": "orage",
+   "obtenu": "oiseau oit on ami ami ami ami a",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : PLAGE",
+   "attendu": "plage",
+   "obtenu": "payse pays pays pays pays pays",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : forêt",
+   "attendu": "forêt forêt",
+   "obtenu": "fenêtre fenêtre fenêtre fen�",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : VENT",
+   "attendu": "vent",
+   "obtenu": "villeur villeur villeur villeur",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : tour",
+   "attendu": "TOUR",
+   "obtenu": "AUTREILAGEAURDIAGE AUTREIL AUTI",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : ORAGE",
+   "attendu": "orage",
+   "obtenu": "ami ami ami ami ami ami ami ami",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : désert",
+   "attendu": "désert désert",
+   "obtenu": "tigre tigre tigre tigre tigre t",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : plage",
+   "attendu": "PLAGE",
+   "obtenu": "VILLAGEAU VILEAU VILLEUR EAU ES",
+   "ok": false
+  },
+  {
+   "q": "Répète : désert",
+   "attendu": "désert",
+   "obtenu": "tigre tigre tigre tigre tigre t",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : nuage",
+   "attendu": "NUAGE",
+   "obtenu": "AUTINATINNEAURDINER AUNEAUNE AU",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : PONT",
+   "attendu": "pont",
+   "obtenu": "pays pays pays pays pays pays p",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : orage",
+   "attendu": "ORAGE",
+   "obtenu": "AAITENAUTENAUNEAUTEILEILLEAUTEI",
+   "ok": false
+  },
+  {
+   "q": "Répète : neige",
+   "attendu": "neige",
+   "obtenu": "table table table table table t",
+   "ok": false
+  },
+  {
+   "q": "Répète : vent",
+   "attendu": "vent",
+   "obtenu": "villeur villeur villeur villeur",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : île",
+   "attendu": "île île",
+   "obtenu": "étoile étoile Étoile Étoile",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : forêt",
+   "attendu": "FORÊT",
+   "obtenu": "FRÈRE FRÈRESRÈRESONRER FRÈR",
+   "ok": false
+  },
+  {
+   "q": "Mets en minuscules : TOUR",
+   "attendu": "tour",
+   "obtenu": "tigre tigre tigre tigre tigre t",
+   "ok": false
+  },
+  {
+   "q": "Écris deux fois : plage",
+   "attendu": "plage plage",
+   "obtenu": "porte porte porte porte porte p",
+   "ok": false
+  },
+  {
+   "q": "Mets en majuscules : île",
+   "attendu": "ÎLE",
+   "obtenu": "�AITE EAUILEILLEAU AGILEUREAu A",
+   "ok": false
+  }
+ ]
+}
