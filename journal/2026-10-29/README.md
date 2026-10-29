@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**103 commits** · **0 session(s)** · **8 thème(s)**
+**104 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
-| docs | 22 | [docs.md](docs.md) |
+| docs | 23 | [docs.md](docs.md) |
 | memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 41 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
@@ -136,6 +136,7 @@ Aucune session indexée pour ce jour ; voir
 | 17:33 | `f9a33c69` | GRAPHE — 2 FICHES DE PLUS (A2.6, N3) : 37 FICHES, UNE SEULE LIGNE SANS FICHE |
 | 17:34 | `53fec194` | R06 v2 — LA CASCADE DES LECTEURS : +1,2 POINT SUR LES PARAPHRASES POUR 9 APPELS DE MODÈLE |
 | 17:37 | `11713f7c` | LE PROGRAMME R EN UNE PAGE — CE QUI TIENT, CE QUI NE TIENT PAS, TROIS LOIS |
+| 18:20 | `48afabe2` | ÉTAT — T0 À 4 000, SESSION AUTONOME CLOSE |
 
 ## Le récit de la journée (écrit à la main)
 

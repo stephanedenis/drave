@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,6 +30,7 @@
 | 16:06 | `543b5a02` | CONTINUITÉ — LA SESSION QUI CLÔT, PAS UN « PRINCIPAL » | `continuite.md` |
 | 16:39 | `61511b4b` | ÉTAT — COMPTEUR JSON ALIGNÉ (370) | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 17:33 | `f9a33c69` | GRAPHE — 2 FICHES DE PLUS (A2.6, N3) : 37 FICHES, UNE SEULE LIGNE SANS FICHE | `A2.6-ordonnanceur.md`, `N3-operations-natives.md`, `dependances.md` (+5) |
+| 18:20 | `48afabe2` | ÉTAT — T0 À 4 000, SESSION AUTONOME CLOSE | `en-cours.md`, `README.md`, `mesures.md` |
 
 ## Mesures et rapports touchés
 
