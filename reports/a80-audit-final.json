@@ -1,0 +1,59 @@
+{
+ "date": "2026-10-30",
+ "ligne": "A8.0",
+ "total": 33,
+ "epinglees": 19,
+ "restantes": 14,
+ "pinned": [
+  "adaptateur-sortie",
+  "budget",
+  "bus-socket",
+  "bus",
+  "c4-retard",
+  "consolidation",
+  "coupe",
+  "cycle-c2",
+  "delais",
+  "flux",
+  "fusion",
+  "gain",
+  "pannes",
+  "pont",
+  "profondeur-routee",
+  "reflexe",
+  "reparti-moteur",
+  "topologie",
+  "trace"
+ ],
+ "restantes_categories": {
+  "comparaison_intra_run_non_epinglee": [
+   "horloge",
+   "poids-creux",
+   "registre"
+  ],
+  "verte_sans_ppl": [
+   "homeostasie"
+  ],
+  "rouges_qualifiees": [
+   "indice",
+   "melange"
+  ],
+  "sans_ppl": [
+   "diff-couche",
+   "echange-experts",
+   "harnais-invariants",
+   "jumeaux",
+   "mistral",
+   "occupation-moteur",
+   "prechargement",
+   "push-paresseux"
+  ]
+ },
+ "verdict": "19/33 épinglées ; 3 comparatifs intra-run, 2 rouges qualifiées, 1 verte sans PPL, 8 sans PPL",
+ "controle": "inventaire statique des 33 ; les 19 références sont dans les portes",
+ "limites": [
+  "audit statique",
+  "les 3 comparatifs n'ont pas de référence externe",
+  "les 8 sans PPL ne peuvent pas être épinglées"
+ ]
+}

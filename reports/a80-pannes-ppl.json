@@ -1,0 +1,17 @@
+{
+ "date": "2026-10-30",
+ "ligne": "A8.0",
+ "porte": "porte-pannes.sh",
+ "ppl_nominale": 33.0156,
+ "tolerance": 0.0005,
+ "mesures": {
+  "nominal": "code 0, PPL 33.0156",
+  "pair_tue": "pas 102, 375768 octets, code 7, aucune PPL",
+  "pair_absent": "1 s, code 7, aucune PPL"
+ },
+ "controle": "PPL nominale vérifiée ; les deux pannes ne rendent aucune PPL",
+ "limites": [
+  "un seul modèle",
+  "le pas/octets de panne varie"
+ ]
+}

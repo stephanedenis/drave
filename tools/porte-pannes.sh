@@ -51,6 +51,13 @@ kill $NPID 2>/dev/null; wait $NPID 2>/dev/null
 PPL=$(printf '%s\n' "$A" | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
 echo "  perplexité ${PPL:-aucune} · code $CA"
 [ -n "$PPL" ] && [ "$CA" = 0 ] || { echo "  ❌ l'exécution nominale n'a pas rendu son résultat"; exit 1; }
+python3 - "$PPL" <<'PPLPR' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 33.0156
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL nominale : {val} (attendu {attendu})")
+print(f"  ✅ PPL nominale épinglée : {val}")
+PPLPR
 
 echo "=== 2. pair TUÉ en cours de route ==="
 # Le pilote est lancé EN FOND et tué par le chronomètre : attendre « client connecté » dans
