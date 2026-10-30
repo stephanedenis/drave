@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 08:53 | `c766ef93` | R13.3 — ANGLAIS 100 MO : LE BPE PERD 4,2/6,6 % À OCTETS ÉGAUX | `en-cours.md`, `roadmap.md`, `README.md` (+3) |
+| 09:16 | `ecb67fe9` | B10 — LE CONTRASTIF NE FAIT PAS LIRE `z` : 32,6 DE CHRF (INCHANGÉ), ÉCART `z` 1,45 CONTRE 2,57 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `roadmap.md` (+6) |
 
 ## Chiffres du jour
 
@@ -18,6 +19,8 @@
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-b10-contraste.md](../../reports/rapport-b10-contraste.md)
 - [reports/rapport-r13.3-anglais.md](../../reports/rapport-r13.3-anglais.md)
 
 <!-- notes -->

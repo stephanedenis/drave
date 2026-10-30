@@ -22,7 +22,8 @@
 > [`n3.5c-reseau`](../../../reports/rapport-n3.5c-reseau.md),
 > [`n3.5d-refus`](../../../reports/rapport-n3.5d-refus.md),
 > [`n3.5e-generation`](../../../reports/rapport-n3.5e-generation.md),
-> [`n3.5f-positions`](../../../reports/rapport-n3.5f-positions.md).
+> [`n3.5f-positions`](../../../reports/rapport-n3.5f-positions.md),
+> [`n3.6-service-briques`](../../../reports/rapport-n3.6-service-briques.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -41,10 +42,14 @@ le rejeu et le placement (A2.6). La profondeur routée (dessin B) est **exécut�
 moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court
 entraîné est le facteur limitant (**23,19 %** contre **47,73 %** pour le long).
 
-**Ce qui reste** : un chemin natif distribué (le placement natif est une métadonnée), une
-composition complète, et une architecture de cache si elle existe. N3.2a, N3.2b0, N3.2b1
-(seuil), N3.2b2 (condition K/V), N3.3a/b/c, N3.4a (composition), N3.4b (pont) et N3.4c
-(condition placement) sont **faits**.
+La **composition de service** (pont + placement + seuil) est **tenue** (N3.6) : le pont agit,
+le placement reste une métadonnée, la décision à seuil est rejouable ; le saut de calcul reste
+conditionnel (N3.2b2).
+
+**Ce qui reste** : un chemin natif distribué (le placement natif est une métadonnée) et une
+architecture de cache si elle existe ; la composition de service est **faite** (N3.6). N3.2a,
+N3.2b0, N3.2b1 (seuil), N3.2b2 (condition K/V), N3.3a/b/c, N3.4a (composition), N3.4b (pont),
+N3.4c (condition placement) et N3.6 (service : pont/placement/seuil) sont **faits**.
 
 ## Le contrat
 
@@ -76,7 +81,8 @@ composition complète, et une architecture de cache si elle existe. N3.2a, N3.2b
 ## Étapes
 
 1. ✅ les briques mesurées (sortie précoce, cache, pont, rejeu, profondeur routée) ;
-2. ⏳ porter la sortie précoce et la profondeur routée dans le chemin de service ;
+2. ✅ profondeur routée, décision à seuil et pont dans le service (N3.2b0/b1, N3.6) ; le saut
+   de calcul reste conditionnel (N3.2b2) ;
 3. ⏳ une porte par brique (temps, perte, rejeu) ;
 4. ⏳ k-WTA et routes : même traitement.
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **358 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **359 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -214,6 +214,7 @@
 | [rapport-n3.5d-refus.md](rapport-n3.5d-refus.md) | N3.5d — l’empreinte du modèle refuse un aval divergent |
 | [rapport-n3.5e-generation.md](rapport-n3.5e-generation.md) | N3.5e — la génération est répartie sur deux processus TCP |
 | [rapport-n3.5f-positions.md](rapport-n3.5f-positions.md) | N3.5f — la position est vérifiée à chaque pas |
+| [rapport-n3.6-service-briques.md](rapport-n3.6-service-briques.md) | N3.6 — le pont, le placement et le seuil composent dans le service |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |

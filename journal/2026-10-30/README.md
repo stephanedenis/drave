@@ -5,18 +5,18 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **0 session(s)** · **6 thème(s)**
+**11 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 1 | [docs.md](docs.md) |
+| docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 3 | [portes.md](portes.md) |
+| portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -35,6 +35,9 @@ Aucune session indexée pour ce jour ; voir
 | 08:53 | `c766ef93` | R13.3 — ANGLAIS 100 MO : LE BPE PERD 4,2/6,6 % À OCTETS ÉGAUX |
 | 08:58 | `daabf6be` | A8.0 — 19/33 : PORTE-PANNES ÉPINGLÉE À 33,0156 ; AUDIT FINAL DES 14 RESTANTES |
 | 09:03 | `e3747c3f` | B10 — LE DÉCODEUR MOT BAT LE PLANCHER SUR JW (26,7 CONTRE 17,1), MAIS LE `z` NE PORTE QUE 1,9 POINT |
+| 09:16 | `ecb67fe9` | B10 — LE CONTRASTIF NE FAIT PAS LIRE `z` : 32,6 DE CHRF (INCHANGÉ), ÉCART `z` 1,45 CONTRE 2,57 |
+| 10:04 | `8664cc67` | SCHÉMA — ÉTAT AU 30/10 09 h 25 : A8.0 19 PORTES, B10.2BIS CLOSE, R13 |
+| 10:34 | `43a46d7e` | DOCWATCH — L'ÉTAT EN WBS INLINE, LE GANTT DANS LA ROADMAP, LE SVG SUPPRIMÉ |
 
 ## Le récit de la journée (écrit à la main)
 

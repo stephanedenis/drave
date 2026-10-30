@@ -1,0 +1,24 @@
+{
+  "ligne": "N3.6",
+  "date": "2026-10-30",
+  "porte": "tools/porte-n3-service-briques.sh",
+  "verdict": "composition tenue, condition N3.2b2",
+  "duree_porte_s": 6.54,
+  "modeles": {
+    "A": {"parametres": 428504, "blocs": 4, "placement": "local", "pont": "normal", "poids_pont_nuls": 0},
+    "B": {"parametres": 428504, "blocs": 4, "placement": "local", "pont": "nul", "poids_pont_nuls": 4160},
+    "C": {"parametres": 428504, "blocs": 4, "placement": "remote", "pont": "normal", "poids_pont_nuls": 0},
+    "T": {"parametres": 132528, "blocs": 2, "placement": "local", "pont": "normal", "poids_pont_nuls": 0}
+  },
+  "controles": {
+    "A_deterministe": true,
+    "A_vs_B_differents": true,
+    "A_vs_C_identiques": true,
+    "textes_seuil_0_et_1_differents": true,
+    "seuil_0": {"anticipe": 12, "complet": 0},
+    "seuil_1": {"anticipe": 0, "complet": 12},
+    "seuil_0_01": {"anticipe": 11, "complet": 1},
+    "rejeu_0_01_identique": true
+  },
+  "condition": "N3.2b2 : la decision a seuil calcule les deux chemins ; le saut de calcul n'est pas gratuit"
+}
