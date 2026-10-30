@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (26)
+## Commits du jour (27)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -34,6 +34,7 @@
 | 20:43 | `bacf43d2` | N3.2b1 — SEUIL DE CONFIANCE DANS LE SERVICE : 12/0, 0/12, 11/1 ; PORTE 65 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 20:46 | `51a3dc91` | N3.2b2 — LE SAUT DE CALCUL N'EST PAS GRATUIT : 5,2 → 2,0 MS, SORTIE DIFFÉRENTE ; PORTE 66 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 20:58 | `a0324368` | A8.0 — PORTE-REFLEXE ÉPINGLÉE : 11 163 272,0495 ; ÉTAT 13/33 | `en-cours.md`, `README.md`, `distribue.md` (+5) |
+| 21:01 | `5bed145a` | N3.4c — LE PLACEMENT NATIF EST UNE MÉTADONNÉE, PAS UN CHEMIN ; PORTE 68 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
 
 ## Chiffres du jour
 
@@ -60,6 +61,7 @@
 - [reports/rapport-n3.2b2-cache.md](../../reports/rapport-n3.2b2-cache.md)
 - [reports/rapport-n3.3b-sparsite.md](../../reports/rapport-n3.3b-sparsite.md)
 - [reports/rapport-n3.4a-composition.md](../../reports/rapport-n3.4a-composition.md)
+- [reports/rapport-n3.4c-placement.md](../../reports/rapport-n3.4c-placement.md)
 
 <!-- notes -->
 

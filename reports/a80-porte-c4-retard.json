@@ -1,0 +1,26 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-c4-retard.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0, 128 jetons, couches 0:24",
+ "tolerance": 0.0005,
+ "references": {
+  "entier": 14.6496,
+  "retard0": 14.6496,
+  "retard1": 9277.9771,
+  "retard8": 151517.0001,
+  "manquant": 15.5295
+ },
+ "mesures": {
+  "retard1_sur_retard0": 633,
+  "retard8_sur_retard0": 10343,
+  "manquant_sur_entier": 1.06
+ },
+ "controle": "décalage de 10 % des cinq PPL refusé par la même expression",
+ "gate": "exit 0 ; position = identité, manquer coûte moins que réutiliser",
+ "limites": [
+  "un seul modèle",
+  "128 jetons",
+  "les très grandes PPL sont des bornes, pas des qualités"
+ ]
+}

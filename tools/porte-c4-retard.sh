@@ -55,6 +55,15 @@ REF=$($D "$M" --ppl "$IDS" --limit "$N" --ctx "$CTX" --threads 8 2>&1 \
 R0=$(ppl_impose "$T/r0.refd"); R1=$(ppl_impose "$T/r1.refd"); R8=$(ppl_impose "$T/r8.refd")
 printf '  modèle entier %s · retard 0 %s · retard 1 %s · retard 8 %s\n' \
        "${REF:-?}" "${R0:-?}" "${R1:-?}" "${R8:-?}"
+# A8.0 — les quatre PPL du retard sont épinglées (5e-4).
+python3 - "$REF" "$R0" "$R1" "$R8" <<'PPLC4' || exit 1
+import sys
+for nom, val, attendu in (("entier", sys.argv[1], 14.6496), ("retard0", sys.argv[2], 14.6496),
+                          ("retard1", sys.argv[3], 9277.9771), ("retard8", sys.argv[4], 151517.0001)):
+    if abs(float(val) - attendu) > 5e-4 * max(attendu, 1.0):
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print("  ✅ PPL du retard épinglées : 14,6496 / 14,6496 / 9 277,9771 / 151 517,0001")
+PPLC4
 python3 - <<PY || exit 1
 import sys
 def f(x):
@@ -88,6 +97,13 @@ Z = X.copy(); Z[64] = 0                    # une position NOTÉE sans état (pas
 PY
 PH=$(ppl_impose "$T/hole.refd")
 printf '  périmé (1 pas) %s · manquant (1 position notée) %s\n' "${R1:-?}" "${PH:-?}"
+python3 - "$PH" <<'PPLC4H' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 15.5295
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL manquant : {val} (attendu {attendu})")
+print(f"  ✅ PPL manquant épinglée : {val}")
+PPLC4H
 python3 - <<PY || exit 1
 import sys
 def f(x):
