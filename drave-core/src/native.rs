@@ -4,6 +4,7 @@
 //! s'exécute, pas d'être rapide.
 
 use std::collections::HashMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::drvm::{Drvm, ErreurDrvm, Json};
 
@@ -32,6 +33,10 @@ fn u(j: &Json, k: &str) -> Result<usize, ErreurDrvm> {
 pub struct Native {
     cfg: Cfg,
     poids: HashMap<String, Vec<f32>>,
+    // N3.3c — compteurs de sparsité réelle, remis à zéro à chaque chargement.
+    appels_ffn: AtomicUsize,
+    experts_actifs: AtomicUsize,
+    canaux_actifs: AtomicUsize,
 }
 
 impl Native {
@@ -54,7 +59,8 @@ impl Native {
             }
             poids.insert(t.name.clone(), v);
         }
-        Ok(Native { cfg, poids })
+        Ok(Native { cfg, poids, appels_ffn: AtomicUsize::new(0),
+                    experts_actifs: AtomicUsize::new(0), canaux_actifs: AtomicUsize::new(0) })
     }
 
     fn p(&self, n: &str) -> &[f32] {
@@ -83,11 +89,13 @@ impl Native {
 
     fn ffn(&self, x: &[f32], b: usize) -> Vec<f32> {
         let c = &self.cfg;
+        self.appels_ffn.fetch_add(1, Ordering::Relaxed);
         let rout = self.matvec(&format!("blocks.{b}.ffn.router.weight"),
                               &format!("blocks.{b}.ffn.router.bias"), x, c.n_experts);
         let mut idx: Vec<usize> = (0..c.n_experts).collect();
         idx.sort_by(|&a, &z| rout[z].partial_cmp(&rout[a]).unwrap());
         idx.truncate(c.top_k);
+        self.experts_actifs.fetch_add(idx.len(), Ordering::Relaxed);
         let mx = idx.iter().map(|&e| rout[e]).fold(f32::NEG_INFINITY, f32::max);
         let ex: Vec<f32> = idx.iter().map(|&e| (rout[e] - mx).exp()).collect();
         let se: f32 = ex.iter().sum();
@@ -107,12 +115,14 @@ impl Native {
             let mut ord: Vec<usize> = (0..c.expert_hidden).collect();
             ord.sort_by(|&a, &z| v[z].partial_cmp(&v[a]).unwrap());
             let seuil = v[ord[k - 1]];
+            let mut actifs = 0usize;
             for q in 0..c.expert_hidden {
                 // Le modèle Python calcule les poids du routeur mais ne les
                 // applique PAS à h (ils ne servent qu'au top-k). Les multiplier
                 // ici créait l'écart de 0,88 sur les logits.
-                if v[q] >= seuil { h[base + q] = v[q]; }
+                if v[q] >= seuil { h[base + q] = v[q]; actifs += 1; }
             }
+            self.canaux_actifs.fetch_add(actifs, Ordering::Relaxed);
         }
         self.matvec(&format!("blocks.{b}.ffn.down.weight"),
                     &format!("blocks.{b}.ffn.down.bias"), &h, c.d)
@@ -394,4 +404,11 @@ pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
 
 impl Native {
     pub fn nb_parametres(&self) -> usize { self.poids.values().map(|v| v.len()).sum() }
+
+    /// N3.3c — compteurs réels : (appels ffn, experts retenus, canaux actifs).
+    pub fn sparsite(&self) -> (usize, usize, usize) {
+        (self.appels_ffn.load(Ordering::Relaxed),
+         self.experts_actifs.load(Ordering::Relaxed),
+         self.canaux_actifs.load(Ordering::Relaxed))
+    }
 }

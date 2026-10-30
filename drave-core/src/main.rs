@@ -211,6 +211,17 @@ fn main() {
         print!("{}", String::from_utf8_lossy(&b));
         return;
     }
+    if args[1] == "--drvm-sparsite" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let prompt = args.get(3).cloned().unwrap_or_else(|| "abc".into());
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let n = native::Native::open(&d).expect("natif");
+        let ids: Vec<u32> = prompt.bytes().map(|b| b as u32).collect();
+        n.forward(&ids);
+        let (a, e, c) = n.sparsite();
+        println!("appels_ffn {a} experts_actifs {e} canaux_actifs {c}");
+        return;
+    }
     if args[1] == "--drvm-forward" {
         let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-forward attend un DRVM"); std::process::exit(2); } };
         let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());

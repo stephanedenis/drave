@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**125 commits** · **0 session(s)** · **8 thème(s)**
+**126 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
-| docs | 23 | [docs.md](docs.md) |
+| docs | 24 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
@@ -158,6 +158,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 |
 | 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 |
 | 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN |
+| 20:21 | `ebd8a960` | ÉTAT — T0 À 3 999 (A8.3C COMMITTÉ) |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,0 +1,48 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.3c",
+ "porte": "porte-n3-sparsite-compte.sh",
+ "modele": "drave-n0 synthétique, graine 7, 113 292 paramètres, 1 bloc, prompt abc",
+ "configs": {
+  "A": {
+   "top_k": 2,
+   "kwta": 0.5
+  },
+  "B": {
+   "top_k": 2,
+   "kwta": 0.25
+  },
+  "C": {
+   "top_k": 1,
+   "kwta": 0.5
+  }
+ },
+ "compteurs": {
+  "A": {
+   "appels_ffn": 3,
+   "experts_actifs": 6,
+   "canaux_actifs": 48
+  },
+  "B": {
+   "appels_ffn": 3,
+   "experts_actifs": 6,
+   "canaux_actifs": 24
+  },
+  "C": {
+   "appels_ffn": 3,
+   "experts_actifs": 3,
+   "canaux_actifs": 24
+  }
+ },
+ "controle": "compteurs exacts attendus ; A deux fois identique ; kwta agit sur les canaux, top_k sur les experts",
+ "verdict": "comptage direct dans le moteur, pas seulement la sortie",
+ "limites": [
+  "modèle synthétique",
+  "prompt 3 octets, 1 bloc",
+  "les égalités au seuil sont comptées >="
+ ],
+ "prochain": [
+  "N3.2b seuil de confiance",
+  "porte de composition N3"
+ ]
+}
