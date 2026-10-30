@@ -32,6 +32,16 @@ echo "=== 1. exécution + trace globale ==="
 N=$(nœud); sleep 2
 S=$(pilote --trace-globale "$T/trace.txt")
 printf '%s\n' "$S" | grep -E "trace\]|deux nœuds" | sed 's/^/  /'
+# A8.0 — la PPL du chemin réparti f32 est épinglée (5e-4).
+PPL=$(printf '%s\n' "$S" | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+[ -n "$PPL" ] || { echo "  ❌ aucune perplexité répartie"; exit 1; }
+python3 - "$PPL" <<'PPLTR' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 59.0790
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL répartie : {val} (attendu {attendu})")
+print(f"  ✅ PPL répartie épinglée : {val}")
+PPLTR
 kill $N 2>/dev/null; wait $N 2>/dev/null
 LIGNES=$(grep -vc '^#' "$T/trace.txt" 2>/dev/null || echo 0)
 echo "  croisements enregistrés : $LIGNES"

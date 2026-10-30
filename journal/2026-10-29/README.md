@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**131 commits** · **0 session(s)** · **8 thème(s)**
+**132 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 24 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
-| modele | 9 | [modele.md](modele.md) |
+| modele | 10 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
 | portes | 25 | [portes.md](portes.md) |
 
@@ -164,6 +164,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:34 | `737af4ee` | A8.0 — PORTE-FUSION ÉPINGLÉE : 113,0068 ; ÉTAT 11/33 |
 | 20:43 | `bacf43d2` | N3.2b1 — SEUIL DE CONFIANCE DANS LE SERVICE : 12/0, 0/12, 11/1 ; PORTE 65 |
 | 20:46 | `51a3dc91` | N3.2b2 — LE SAUT DE CALCUL N'EST PAS GRATUIT : 5,2 → 2,0 MS, SORTIE DIFFÉRENTE ; PORTE 66 |
+| 20:48 | `f84d4f29` | N3.4b — LE PONT NATIF AGIT : 4 160 POIDS NULS, SORTIE DIFFÉRENTE ; PORTE 67 |
 
 ## Le récit de la journée (écrit à la main)
 

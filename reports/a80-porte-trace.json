@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-trace.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": 0.0005,
+ "reference": 59.079,
+ "mesures": {
+  "ppl_repartie": 59.079,
+  "croisements": 126,
+  "rejeu": "identique",
+  "trace_fausse": "détectée"
+ },
+ "controle": "décalage de 10 % de la PPL refusé par la même expression",
+ "gate": "exit 0 ; trace 126 croisements, rejeu identique, faux bit détecté",
+ "limites": [
+  "un seul modèle",
+  "la PPL dépend de la limite de la porte",
+  "le rejeu ne dit pas la qualité"
+ ]
+}
