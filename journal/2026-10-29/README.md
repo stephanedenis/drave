@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**140 commits** · **0 session(s)** · **8 thème(s)**
+**141 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 48 | [mesures.md](mesures.md) |
 | modele | 10 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 30 | [portes.md](portes.md) |
+| portes | 31 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -173,6 +173,7 @@ Aucune session indexée pour ce jour ; voir
 | 22:03 | `3c517fb2` | ÉTAT — A8.0 RÉCONCILIÉ À 14 PORTES |
 | 22:08 | `30a0c341` | A8.0 — PORTE-BUS ÉPINGLÉE : 64,1160 / 59,0790 / 66,0379 ; ÉTAT 15/33 |
 | 22:10 | `dc0587a0` | PORTES — PASSE COMPLÈTE DU 29/10 : 62 PORTES, 60 VERTES, 2 ROUGES TOLÉRÉES, 1 H 46 |
+| 22:11 | `c946296e` | A8.0 — PORTE-DELAIS ÉPINGLÉE : 59,0790 ; ÉTAT 16/33 |
 
 ## Le récit de la journée (écrit à la main)
 

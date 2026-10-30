@@ -14,12 +14,6 @@
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
 
-> **Passe du 2026-10-29 à 22 h 09** (**62 portes, 60 vertes, 2 rouges**, **1 h 46 min**) —
-> première passe complète de la journée, après R4.1–R4.3, le miroir, A8.3/A8.3b/A8.3c,
-> B10.2bis (4 leviers) et 7 fiches de backlog. Les **deux rouges** sont les structurelles
-> connues (`porte-indice` **895 s**, `porte-melange` **110 s**), mêmes diagnostics ;
-> **aucune régression**. Journaux : `/tmp/portes-1029-20h23`.
-
 > **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) — la passe
 > du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
 > `porte-occupation-moteur` (contention ; elle passe **verte seule**) ; aucune régression.

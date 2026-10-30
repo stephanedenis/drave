@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (30)
+## Commits du jour (31)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -38,10 +38,11 @@
 | 21:05 | `0c6bea37` | A8.0 — PORTE-C4-RETARD ÉPINGLÉE : 14,6496 / 9 277,9771 / 151 517 ; ÉTAT 14/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
 | 22:03 | `3c517fb2` | ÉTAT — A8.0 RÉCONCILIÉ À 14 PORTES | `en-cours.md`, `README.md`, `mesures.md` |
 | 22:10 | `dc0587a0` | PORTES — PASSE COMPLÈTE DU 29/10 : 62 PORTES, 60 VERTES, 2 ROUGES TOLÉRÉES, 1 H 46 | `en-cours.md`, `references-non-regression.md`, `README.md` (+2) |
+| 22:11 | `c946296e` | A8.0 — PORTE-DELAIS ÉPINGLÉE : 59,0790 ; ÉTAT 16/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
 
 ## Chiffres du jour
 
-`14,6496` · `9277,9771` · `272,0495` · `113,0068` · `12,9635` · `996,0390` · `17,4315` · `292,8165` · `1 %` · `2,4 %` · `111,8003` · `115,6406`
+`59,0790` · `14,6496` · `9277,9771` · `272,0495` · `113,0068` · `12,9635` · `996,0390` · `17,4315` · `292,8165` · `1 %` · `2,4 %` · `111,8003`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -50,6 +51,7 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/rapport-a80-porte-adaptateur.md](../../reports/rapport-a80-porte-adaptateur.md)
 - [reports/rapport-a80-porte-c4-retard.md](../../reports/rapport-a80-porte-c4-retard.md)
+- [reports/rapport-a80-porte-delais.md](../../reports/rapport-a80-porte-delais.md)
 - [reports/rapport-a80-porte-fusion.md](../../reports/rapport-a80-porte-fusion.md)
 - [reports/rapport-a80-porte-gain.md](../../reports/rapport-a80-porte-gain.md)
 - [reports/rapport-a80-porte-pont.md](../../reports/rapport-a80-porte-pont.md)
