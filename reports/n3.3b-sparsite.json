@@ -1,0 +1,37 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.3b",
+ "porte": "porte-n3-sparsite.sh",
+ "modele": "drave-n0 synthétique, graine 7, 113 292 paramètres, mêmes poids",
+ "configs": {
+  "A": {
+   "top_k": 2,
+   "kwta": 0.5
+  },
+  "B": {
+   "top_k": 2,
+   "kwta": 0.25
+  },
+  "C": {
+   "top_k": 3,
+   "kwta": 0.5
+  }
+ },
+ "mesures": {
+  "a_deux_fois": "identique (27 octets)",
+  "a_vs_b": "différent (kwta seul)",
+  "a_vs_c": "différent (top_k seul)"
+ },
+ "controle": "A deux fois identique ; kwta seul change ; top_k seul change",
+ "verdict": "kwta et top_k agissent séparément dans le moteur natif",
+ "limites": [
+  "modèle synthétique",
+  "config, pas comptage direct des experts actifs",
+  "un prompt"
+ ],
+ "prochain": [
+  "N3.3c comptage direct des experts/canaux actifs",
+  "N3.2b seuil de confiance",
+  "porte de composition N3"
+ ]
+}

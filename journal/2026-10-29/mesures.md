@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (45)
+## Commits du jour (46)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -53,6 +53,7 @@
 | 20:03 | `cae26b73` | B10.2bis — LE CORPUS NE DÉCOLLE PAS LE DÉCODEUR : 7,6/6,3/8,0 SUR 12 LANGUES CONTRE 17,1 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 20:08 | `db6d4058` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) | `en-cours.md`, `README.md`, `memoire.md` (+2) |
 | 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
+| 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+4) |
 
 ## Chiffres du jour
 
@@ -66,6 +67,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
 - [reports/rapport-a83b-lot.md](../../reports/rapport-a83b-lot.md)
+- [reports/rapport-b102bis-capacite.md](../../reports/rapport-b102bis-capacite.md)
 - [reports/rapport-b102bis-corpus-jw.md](../../reports/rapport-b102bis-corpus-jw.md)
 - [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
 - [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
