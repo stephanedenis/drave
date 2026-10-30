@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (51)
+## Commits du jour (52)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -59,6 +59,7 @@
 | 22:23 | `e220336a` | A8.3c.1 — LE SIGNE NE DÉPEND PAS DU CONTEXTE : 24 MESURES, ctx 64/256/512 IDENTIQUES | `en-cours.md`, `README.md`, `distribue.md` (+3) |
 | 22:41 | `0668ef4e` | R13.1 — LE BPE NATIF BAT L'OCTET : 3,249 CONTRE 3,689 BITS/OCTET, −11,9 % À OCTETS ÉGAUX | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
 | 22:56 | `2a653d12` | R13.1 — CORRECTION D'AUDIT : 11,0 % BITS/OCTET EXACT (VAL), PAS 11,9 % | `en-cours.md`, `roadmap.md`, `README.md` (+4) |
+| 23:11 | `ccdda6b5` | A8.3b/c — DÉCISION : OPT-IN, CAUSE = CHEMIN LOT, CACHE INNOCENTÉ | `en-cours.md`, `README.md`, `portes.md` (+2) |
 
 ## Chiffres du jour
 
@@ -71,6 +72,7 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
+- [reports/rapport-a83b-decision.md](../../reports/rapport-a83b-decision.md)
 - [reports/rapport-a83b-lot.md](../../reports/rapport-a83b-lot.md)
 - [reports/rapport-a83c-ctx.md](../../reports/rapport-a83c-ctx.md)
 - [reports/rapport-a83c-lot.md](../../reports/rapport-a83c-lot.md)

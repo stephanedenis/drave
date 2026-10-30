@@ -1,0 +1,20 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.5d",
+ "porte": "porte-n3-refus.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres",
+ "empreinte": "FNV-1a 64 sur les poids triés par nom, dans l'en-tête TCP",
+ "mesures": {
+  "client_A_vs_aval_B": "REFUS, code 4, aucun logit",
+  "client_A_vs_aval_A": "succès bit-exact"
+ },
+ "controle": "mêmes formes, poids du pont différents : l'empreinte refuse ; même modèle : succès",
+ "limites": [
+  "pas encore de session/position/génération",
+  "localhost, sans auth/TLS",
+  "un seul forward"
+ ],
+ "prochain": [
+  "N3.5e sessions/positions/boucle de génération"
+ ]
+}

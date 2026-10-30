@@ -525,6 +525,21 @@ impl Native {
     pub fn cfg_d(&self) -> usize { self.cfg.d }
     pub fn vocab_size(&self) -> usize { self.cfg.vocab }
 
+    /// N3.5d — empreinte FNV-1a 64 des poids triés par nom : deux processus
+    /// qui ne chargent pas le même modèle doivent le voir avant de calculer.
+    pub fn empreinte(&self) -> u64 {
+        let mut noms: Vec<&String> = self.poids.keys().collect();
+        noms.sort();
+        let mut h: u64 = 0xcbf29ce484222325;
+        for n in noms {
+            for b in n.bytes() { h ^= b as u64; h = h.wrapping_mul(0x100000001b3); }
+            for v in &self.poids[n] {
+                for b in v.to_le_bytes() { h ^= b as u64; h = h.wrapping_mul(0x100000001b3); }
+            }
+        }
+        h
+    }
+
     /// N3.3c — compteurs réels : (appels ffn, experts retenus, canaux actifs).
     pub fn sparsite(&self) -> (usize, usize, usize) {
         (self.appels_ffn.load(Ordering::Relaxed),

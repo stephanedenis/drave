@@ -252,7 +252,17 @@ fn main() {
             let dim = u32::from_le_bytes(b4) as usize;
             if s.read_exact(&mut b4).is_err() { continue; }
             let k_recu = (u32::from_le_bytes(b4) as usize).min(nat.cfg_n_blocks());
+            if s.read_exact(&mut b4).is_err() { continue; }
+            let mut eb = [0u8; 8];
+            // relire les 8 octets de l'empreinte (le premier u32 est déjà consommé)
+            eb[..4].copy_from_slice(&b4);
+            if s.read_exact(&mut eb[4..]).is_err() { continue; }
+            let empreinte = u64::from_le_bytes(eb);
             if dim != nat.cfg_d() || n == 0 { continue; }
+            if empreinte != nat.empreinte() {
+                let _ = s.write_all(&u32::MAX.to_le_bytes());
+                continue;
+            }
             let mut cache = native::Cache::default();
             let mut logits = vec![0.0f32; nat.vocab_size()];
             let mut h = vec![0.0f32; dim];
@@ -286,10 +296,17 @@ fn main() {
         s.write_all(&(hs.len() as u32).to_le_bytes()).unwrap();
         s.write_all(&(nat.cfg_d() as u32).to_le_bytes()).unwrap();
         s.write_all(&(k as u32).to_le_bytes()).unwrap();
+        s.write_all(&nat.empreinte().to_le_bytes()).unwrap();
         for h in &hs { for v in h { s.write_all(&v.to_le_bytes()).unwrap(); } }
         let mut b4 = [0u8; 4];
+        s.read_exact(&mut b4).unwrap();
+        if u32::from_le_bytes(b4) == u32::MAX {
+            eprintln!("[split] REFUS : l'aval n'a pas la même empreinte de modèle");
+            std::process::exit(4);
+        }
         let mut logits = vec![0.0f32; nat.vocab_size()];
-        for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
+        logits[0] = f32::from_le_bytes(b4);
+        for v in logits.iter_mut().skip(1) { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
         for v in logits { print!("{:08x}", v.to_bits()); }
         println!();
         return;
