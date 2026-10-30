@@ -1,0 +1,52 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B10.2bis",
+ "dispositif": {
+  "corpus": "UDHR 30 articles, 10 langues",
+  "checkpoint": "/tmp/natif-600-512-8-align-s1 (31,77 M)",
+  "reference": "même protocole, base 9,29 M (B10.2bis)",
+  "pas": 600,
+  "graine": 1,
+  "lot": 8,
+  "seq": 128
+ },
+ "mesures": [
+  {
+   "bras": "a",
+   "graine": 1,
+   "rec": 16.9,
+   "trad": 11.8,
+   "plancher": 38.5,
+   "rappel": 0.335,
+   "sonde": 0.2,
+   "pas": 200
+  },
+  {
+   "bras": "b",
+   "graine": 1,
+   "rec": 16.5,
+   "trad": 11.6,
+   "plancher": 38.5,
+   "rappel": 0.335,
+   "sonde": 0.25,
+   "pas": 300
+  },
+  {
+   "bras": "c",
+   "graine": 1,
+   "rec": 17.7,
+   "trad": 11.7,
+   "plancher": 38.5,
+   "rappel": 0.333,
+   "sonde": 0.133,
+   "pas": 300
+  }
+ ],
+ "reference_9_29M": {
+  "a": 11.13,
+  "b": 11.2,
+  "c": 11.0,
+  "plancher": 38.5
+ },
+ "verdict": "la capacité ne décolle pas le décodeur"
+}
