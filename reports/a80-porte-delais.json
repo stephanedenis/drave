@@ -1,0 +1,22 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-delais.sh",
+ "tolerance": 0.0005,
+ "references": {
+  "delai0": 59.079,
+  "delai50": 59.079
+ },
+ "mesures": {
+  "empreintes": "identiques",
+  "mur_0": 7.24,
+  "mur_50": 10.43
+ },
+ "controle": "décalage de 10 % refusé",
+ "gate": "exit 0 ; délai ne change aucun chiffre, le temps augmente",
+ "limites": [
+  "un seul modèle",
+  "64 pas",
+  "le temps dépend de la machine"
+ ]
+}

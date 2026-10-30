@@ -50,6 +50,14 @@ P1=$(printf '%s' "$R1" | grep -oE "perplexité [0-9.]+" | grep -oE "[0-9.]+")
 M1=$(printf '%s' "$R1" | grep -oE "MUR=[0-9.]+" | cut -d= -f2)
 
 echo "=== verdict ==="
+# A8.0 — la PPL (délai 0 et 50 ms) est épinglée (5e-4).
+python3 - "$P0" "$P1" <<'PPLDEL' || exit 1
+import sys
+for nom, val, attendu in (("delai0", sys.argv[1], 59.0790), ("delai50", sys.argv[2], 59.0790)):
+    if abs(float(val) - attendu) > 5e-4 * attendu:
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print("  ✅ PPL délais épinglées : 59,0790 / 59,0790")
+PPLDEL
 [ "$P0" = "$P1" ] && echo "  ✅ même perplexité ($P0)" || { echo "  ❌ $P0 ≠ $P1"; exit 1; }
 diff -q <(det "$T/t0.txt") <(det "$T/t50.txt") >/dev/null \
     && echo "  ✅ empreintes identiques : le délai ne change AUCUN chiffre" \
