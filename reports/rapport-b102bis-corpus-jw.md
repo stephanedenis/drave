@@ -23,9 +23,9 @@ décodeur ? Le corpus JW donne **4,6× plus d'unités** et 12 langues (dont 6 no
 
 | bras | graine | chrF traduction | rappel | sonde |
 |---|---:|---:|---:|---:|
-| 1 | 8.2 | 0.325 | 0.158 |
-| 2 | 7.4 | 0.387 | 0.208 |
-| 3 | 7.2 | 0.328 | 0.182 |
+| 1  | | 8.2 | 0.325 | 0.158 |
+| 2  | | 7.4 | 0.387 | 0.208 |
+| 3  | | 7.2 | 0.328 | 0.182 |
 | **moyenne** | | **7.6** | | |
 
 | bras | graine | chrF traduction | rappel | sonde |
