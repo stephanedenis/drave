@@ -233,6 +233,67 @@ fn main() {
         println!();
         return;
     }
+    if args[1] == "--drvm-serve-aval" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let port: u16 = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(7101);
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let l = std::net::TcpListener::bind(("127.0.0.1", port)).expect("bind");
+        eprintln!("[drvm-serve-aval] 127.0.0.1:{port} · blocs {k}..{} · aucun cache sur le fil", nat.cfg_n_blocks());
+        use std::io::{Read, Write};
+        for flux in l.incoming() {
+            let mut s = match flux { Ok(s) => s, Err(_) => continue };
+            let mut b4 = [0u8; 4];
+            if s.read_exact(&mut b4).is_err() { continue; }
+            let n = u32::from_le_bytes(b4) as usize;
+            if s.read_exact(&mut b4).is_err() { continue; }
+            let dim = u32::from_le_bytes(b4) as usize;
+            if s.read_exact(&mut b4).is_err() { continue; }
+            let k_recu = (u32::from_le_bytes(b4) as usize).min(nat.cfg_n_blocks());
+            if dim != nat.cfg_d() || n == 0 { continue; }
+            let mut cache = native::Cache::default();
+            let mut logits = vec![0.0f32; nat.vocab_size()];
+            let mut h = vec![0.0f32; dim];
+            for pos in 0..n {
+                for v in h.iter_mut() {
+                    if s.read_exact(&mut b4).is_err() { return; }
+                    *v = f32::from_le_bytes(b4);
+                }
+                logits = nat.pas_aval(&h, pos, &mut cache, k_recu);
+            }
+            for v in &logits { let _ = s.write_all(&v.to_le_bytes()); }
+        }
+        return;
+    }
+    if args[1] == "--drvm-split-net" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let prompt = args.get(4).cloned().unwrap_or_else(|| "abc".into());
+        let adresse = args.get(5).cloned().unwrap_or_else(|| "127.0.0.1:7101".into());
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let mut cache = native::Cache::default();
+        let mut hs: Vec<Vec<f32>> = Vec::new();
+        for (pos, b) in prompt.bytes().enumerate() {
+            hs.push(nat.pas_amont(b as u32, pos, &mut cache, k));
+        }
+        use std::io::{Read, Write};
+        let mut s = std::net::TcpStream::connect(&adresse).expect("connexion aval");
+        let _ = s.set_nodelay(true);
+        s.write_all(&(hs.len() as u32).to_le_bytes()).unwrap();
+        s.write_all(&(nat.cfg_d() as u32).to_le_bytes()).unwrap();
+        s.write_all(&(k as u32).to_le_bytes()).unwrap();
+        for h in &hs { for v in h { s.write_all(&v.to_le_bytes()).unwrap(); } }
+        let mut b4 = [0u8; 4];
+        let mut logits = vec![0.0f32; nat.vocab_size()];
+        for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
+        for v in logits { print!("{:08x}", v.to_bits()); }
+        println!();
+        return;
+    }
     if args[1] == "--drvm-pas-hex" {
         let f = args.get(2).cloned().unwrap_or_default();
         let prompt = args.get(3).cloned().unwrap_or_else(|| "abc".into());

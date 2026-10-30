@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**149 commits** · **0 session(s)** · **8 thème(s)**
+**150 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 51 | [mesures.md](mesures.md) |
 | modele | 10 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 32 | [portes.md](portes.md) |
+| portes | 33 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -182,6 +182,7 @@ Aucune session indexée pour ce jour ; voir
 | 22:52 | `6eca9a15` | N3.5a — DÉCOUPAGE 0..k / k..n BIT-EXACT, K=0..4 ; 2 BUGS LATENTS CORRIGÉS ; PORTE 70 |
 | 22:54 | `8b9608f0` | A8.0 — PORTE-PROFONDEUR ÉPINGLÉE : 14,6496 ; ÉTAT 18/33 |
 | 22:56 | `2a653d12` | R13.1 — CORRECTION D'AUDIT : 11,0 % BITS/OCTET EXACT (VAL), PAS 11,9 % |
+| 23:04 | `d8498639` | N3.5b — DEUX PROCESSUS, FRONTIÈRE PAR FICHIER : LOGITS IDENTIQUES ; PORTE 71 |
 
 ## Le récit de la journée (écrit à la main)
 

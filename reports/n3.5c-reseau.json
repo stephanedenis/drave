@@ -1,0 +1,32 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.5c",
+ "porte": "porte-n3-reseau.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "protocole": "TCP localhost : n, d, k puis hiddens de frontière ; retour logits",
+ "mesures": {
+  "k": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "prompts": [
+   "abc",
+   "zzz"
+  ],
+  "logits": "identiques au pas plein"
+ },
+ "bug_corrige": "le serveur utilisait son K de ligne de commande, pas le K du client ; K ajouté à l'en-tête",
+ "controle": "K=0..4, deux prompts, comparaison bit-à-bit ; aucun cache K/V sur le fil",
+ "limites": [
+  "localhost seulement, pas d'auth/TLS",
+  "un seul forward, pas une boucle de génération",
+  "les deux processus chargent tous les poids"
+ ],
+ "prochain": [
+  "N3.5d session/refus/empreinte et boucle de génération",
+  "B11.10"
+ ]
+}
