@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-30",
+ "ligne": "R13.4",
+ "corpus": "français train/val",
+ "graines": {
+  "1": {
+   "bytes": 1.8020511721549923,
+   "bpe512": 1.8141570645401088,
+   "bpe1024": 1.8726400325986698
+  },
+  "2": {
+   "bytes": 1.7982096171805013,
+   "bpe512": 1.7999580833404434,
+   "bpe1024": 1.874974350802071
+  }
+ },
+ "moyennes": {
+  "bytes": 1.8001303946677467,
+  "bpe512": 1.807057573940276,
+  "bpe1024": 1.8738071917003705
+ },
+ "ecarts_pct": {
+  "bpe512": 0.385,
+  "bpe1024": 4.09
+ },
+ "verdict": "deux graines : BPE512 +0,39 % (dans le bruit), BPE1024 +4,09 % ; aucun gain à octets égaux",
+ "controle": "mêmes ids/val/architecture ; graines 1 et 2 ; 10k bytes, 5k BPE512, 4k BPE1024",
+ "limites": [
+  "deux graines",
+  "français seulement",
+  "le BPE512 varie de 0,67 à 0,10 % selon la graine"
+ ]
+}

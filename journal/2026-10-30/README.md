@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**18 commits** · **0 session(s)** · **7 thème(s)**
+**19 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 4 | [docs.md](docs.md) |
+| docs | 5 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -46,6 +46,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:02 | `ac60b79a` | ÉTAT — WBS 13:00, B11.10 4/4 |
 | 13:06 | `277103ff` | A8.3d — LE LOT N'EST PAS LES THREADS : L'ÉCART DE 1,90 % SURVIT À 1 THREAD |
 | 13:19 | `68590bf0` | LE GRAPHE CONFRONTE L'INDEX, L'ÉTAT POINTE LA FRONTIÈRE — SIX STATUTS DIVERGENTS CORRIGÉS |
+| 13:25 | `842e1770` | SESSIONS — LES TROIS PLANS CONFIRMÉS : PÉRIMÈTRES, FICHIERS, HEARTBEAT 13:05 |
 
 ## Le récit de la journée (écrit à la main)
 

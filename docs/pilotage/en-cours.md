@@ -83,7 +83,7 @@
 |---|---|---|
 | portes | **78** (61 vertes, 2 rouges, 15 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **365** / **437** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **366** / **438** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 
