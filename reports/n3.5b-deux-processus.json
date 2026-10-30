@@ -1,0 +1,32 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.5b",
+ "porte": "porte-n3-deux-processus.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "protocole": "fichier : amont écrit les hiddens de toutes les positions, aval les relit",
+ "mesures": {
+  "k": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "prompts": [
+   "abc",
+   "zzz"
+  ],
+  "logits": "identiques au pas plein"
+ },
+ "bug_corrige": "en-tête d écrit en usize (8 octets), lu en u32 (4) : décalage silencieux de 4 octets",
+ "controle": "K=0..4, deux prompts, comparaison bit-à-bit des logits",
+ "limites": [
+  "transfert par fichier, pas TCP",
+  "un seul forward, pas une boucle de génération",
+  "les deux processus chargent tous les poids"
+ ],
+ "prochain": [
+  "N3.5c TCP localhost",
+  "refus empreinte/K/position"
+ ]
+}

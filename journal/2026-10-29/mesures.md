@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (50)
+## Commits du jour (51)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -58,10 +58,11 @@
 | 21:10 | `4619fd80` | N3.4d — COUVERTURE N3 PAR BRIQUE : COMPOSITION NATIVE = CONDITION | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 22:23 | `e220336a` | A8.3c.1 — LE SIGNE NE DÉPEND PAS DU CONTEXTE : 24 MESURES, ctx 64/256/512 IDENTIQUES | `en-cours.md`, `README.md`, `distribue.md` (+3) |
 | 22:41 | `0668ef4e` | R13.1 — LE BPE NATIF BAT L'OCTET : 3,249 CONTRE 3,689 BITS/OCTET, −11,9 % À OCTETS ÉGAUX | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
+| 22:56 | `2a653d12` | R13.1 — CORRECTION D'AUDIT : 11,0 % BITS/OCTET EXACT (VAL), PAS 11,9 % | `en-cours.md`, `roadmap.md`, `README.md` (+4) |
 
 ## Chiffres du jour
 
-`−11,9 %` · `3,249` · `3,689` · `1,90 %` · `0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %`
+`11,0 %` · `11,9 %` · `−11,9 %` · `3,249` · `3,689` · `1,90 %` · `0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

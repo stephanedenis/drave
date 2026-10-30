@@ -233,6 +233,64 @@ fn main() {
         println!();
         return;
     }
+    if args[1] == "--drvm-pas-hex" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let prompt = args.get(3).cloned().unwrap_or_else(|| "abc".into());
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let mut cache = native::Cache::default();
+        let mut logits = vec![0.0f32; nat.vocab_size()];
+        for (pos, b) in prompt.bytes().enumerate() {
+            logits = nat.pas(b as u32, pos, &mut cache);
+        }
+        for v in logits { print!("{:08x}", v.to_bits()); }
+        println!();
+        return;
+    }
+    if args[1] == "--drvm-split-amont" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let prompt = args.get(4).cloned().unwrap_or_else(|| "abc".into());
+        let sortie = args.get(5).cloned().unwrap_or_default();
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let mut cache = native::Cache::default();
+        let ids: Vec<u32> = prompt.bytes().map(|b| b as u32).collect();
+        let mut hs: Vec<Vec<f32>> = Vec::new();
+        for (pos, &id) in ids.iter().enumerate() {
+            hs.push(nat.pas_amont(id, pos, &mut cache, k));
+        }
+        let mut w = std::io::BufWriter::new(std::fs::File::create(&sortie).expect("sortie"));
+        use std::io::Write;
+        w.write_all(&(hs.len() as u32).to_le_bytes()).unwrap();
+        w.write_all(&(nat.cfg_d() as u32).to_le_bytes()).unwrap();
+        for h in hs { for v in h { w.write_all(&v.to_le_bytes()).unwrap(); } }
+        return;
+    }
+    if args[1] == "--drvm-split-aval" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let entree = args.get(4).cloned().unwrap_or_default();
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let mut r = std::fs::File::open(&entree).expect("entree");
+        use std::io::Read;
+        let mut b4 = [0u8; 4];
+        r.read_exact(&mut b4).unwrap(); let n = u32::from_le_bytes(b4) as usize;
+        r.read_exact(&mut b4).unwrap(); let dim = u32::from_le_bytes(b4) as usize;
+        let mut cache = native::Cache::default();
+        let mut logits = vec![0.0f32; nat.vocab_size()];
+        let mut h = vec![0.0f32; dim];
+        for pos in 0..n {
+            for v in h.iter_mut() { r.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
+            logits = nat.pas_aval(&h, pos, &mut cache, k);
+        }
+        for v in logits { print!("{:08x}", v.to_bits()); }
+        println!();
+        return;
+    }
     if args[1] == "--drvm-generate-split" {
         let f = args.get(2).cloned().unwrap_or_default();
         let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);

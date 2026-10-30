@@ -522,6 +522,7 @@ impl Native {
     pub fn nb_parametres(&self) -> usize { self.poids.values().map(|v| v.len()).sum() }
 
     pub fn cfg_n_blocks(&self) -> usize { self.cfg.n_blocks }
+    pub fn cfg_d(&self) -> usize { self.cfg.d }
     pub fn vocab_size(&self) -> usize { self.cfg.vocab }
 
     /// N3.3c — compteurs réels : (appels ffn, experts retenus, canaux actifs).
