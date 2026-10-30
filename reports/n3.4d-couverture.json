@@ -1,0 +1,41 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.4d",
+ "verdict": "couverture N3 par brique",
+ "briques": {
+  "k_wta_routes": [
+   "n3.3a-routes",
+   "n3.3b-sparsite",
+   "n3.3c-sparsite-compte"
+  ],
+  "sortie_precoce": [
+   "n3.2b0-profondeur",
+   "n3.2b1-seuil",
+   "n3.2b2-cache"
+  ],
+  "pont": [
+   "n3.4b-pont",
+   "porte-pont"
+  ],
+  "rejeu": [
+   "porte-trace"
+  ],
+  "placement": [
+   "porte-topologie",
+   "n3.4c-placement (condition native)"
+  ],
+  "service": [
+   "n3.2a-service"
+  ],
+  "composition": [
+   "n3.4a-composition"
+  ]
+ },
+ "condition": "une composition native unique avec placement demanderait un chemin distribué natif qui n'existe pas",
+ "controle": "chaque brique a une porte verte ou une condition nommée ; aucune n'est supposée",
+ "limites": [
+  "synthèse, pas une nouvelle mesure",
+  "le placement natif reste une métadonnée",
+  "la composition complète native reste impossible"
+ ]
+}

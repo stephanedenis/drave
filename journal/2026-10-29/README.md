@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**135 commits** · **0 session(s)** · **8 thème(s)**
+**136 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 10 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 27 | [portes.md](portes.md) |
+| portes | 28 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -168,6 +168,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:53 | `c1a9c37b` | A8.0 — PORTE-TRACE ÉPINGLÉE : 59,0790 ; ÉTAT 12/33 |
 | 20:58 | `a0324368` | A8.0 — PORTE-REFLEXE ÉPINGLÉE : 11 163 272,0495 ; ÉTAT 13/33 |
 | 21:01 | `5bed145a` | N3.4c — LE PLACEMENT NATIF EST UNE MÉTADONNÉE, PAS UN CHEMIN ; PORTE 68 |
+| 21:05 | `0c6bea37` | A8.0 — PORTE-C4-RETARD ÉPINGLÉE : 14,6496 / 9 277,9771 / 151 517 ; ÉTAT 14/33 |
 
 ## Le récit de la journée (écrit à la main)
 
