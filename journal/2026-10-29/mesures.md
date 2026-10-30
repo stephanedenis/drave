@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (47)
+## Commits du jour (48)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -55,6 +55,7 @@
 | 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+4) |
 | 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN | `A8.3-defaut.md`, `en-cours.md`, `roadmap.md` (+6) |
+| 21:10 | `4619fd80` | N3.4d — COUVERTURE N3 PAR BRIQUE : COMPOSITION NATIVE = CONDITION | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 
 ## Chiffres du jour
 
@@ -76,6 +77,7 @@
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-corpus-gele.md](../../reports/rapport-corpus-gele.md)
 - [reports/rapport-miroir-blocs.md](../../reports/rapport-miroir-blocs.md)
+- [reports/rapport-n3.4d-couverture.md](../../reports/rapport-n3.4d-couverture.md)
 - [reports/rapport-native-8b-warm.md](../../reports/rapport-native-8b-warm.md)
 - [reports/rapport-native-8b.md](../../reports/rapport-native-8b.md)
 - [reports/rapport-native-best-2.md](../../reports/rapport-native-best-2.md)
