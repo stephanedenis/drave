@@ -38,7 +38,7 @@
   "ecart_pct": -1.2
  },
  "controle": "mêmes graine/architecture/corpus ; octets 200→400 montre l'effet des données (3,818→3,689) ; BPE reste 11,9 % devant à octets égaux",
- "verdict": "le BPE natif gagne 11,9 % de bits/octet à budget d'octets égal",
+ "verdict": "le BPE gagne 11,0 % de bits/octet (val exacte), 11,9 % avec le ratio global biaisé",
  "limites": [
   "français seulement",
   "vocab 512",
@@ -51,5 +51,22 @@
   "anglais/multilingue",
   "plus de pas",
   "contexte long"
- ]
+ ],
+ "correction_audit": {
+  "bits_par_octet_val": 3.2823,
+  "gain_pct": 11.0,
+  "raison": "le ratio global 0,505849 est biaisé ; la tranche de val a 0,510982",
+  "limites_supplementaires": [
+   "tokenizer entraîné sur le corpus entier (fuite de val)",
+   "128 jetons BPE = 253 octets contre 128 octets (contexte 2x)",
+   "BPE +5,4 % de paramètres",
+   "200/400 pas, 8192 jetons de val"
+  ],
+  "pilote_independant": {
+   "octets": 2.6204,
+   "bpe": 2.1738,
+   "gain_pct": 17.0,
+   "note": "1500 pas, sous-entraîné, non comparable au chiffre principal"
+  }
+ }
 }
