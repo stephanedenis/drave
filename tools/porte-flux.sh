@@ -17,6 +17,9 @@
 # une échelle par bloc de 32 canaux) : leur écart est une perte assumée, et la
 # porte vérifie qu'il reste sous un plafond mesuré, pas qu'il est nul.
 #
+#   THREADS=N (défaut 8) : nombre de threads ; A8.3d a montré que l'écart de lot
+#   survit à 1 thread — ce n'est pas le pool, c'est le noyau par lots.
+#
 #   tools/porte-flux.sh            la porte
 #   MODELE=... tools/porte-flux.sh autre modèle (dense, sans hyper-connexions)
 
@@ -27,6 +30,7 @@ MODELE=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
 N_IDS=${N_IDS:-24}
 COUCHES=${COUCHES:-12}
 CTX=${CTX:-64}
+THREADS=${THREADS:-8}
 PORT=${PORT:-$((48000 + RANDOM % 1000))}
 
 # Tout ce qui est écrit par cette porte vit dans SON répertoire : deux
@@ -52,7 +56,7 @@ fi
 SRV=""
 demarrer_serveur() {
     : > "$LOG_SRV"
-    "$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads 8 \
+    "$D" "$MODELE" --flux-serveur "$PORT" --ctx "$CTX" --threads "$THREADS" \
          > "$LOG_SRV" 2>&1 &
     SRV=$!
     for _ in $(seq 1 120); do
@@ -88,7 +92,7 @@ tester() {   # nom, plafond d'écart, référence PPL, arguments du pilote
     # sans préfixe v6) laissait la porte tourner jusqu'au `timeout` de
     # `portes.sh`, et un `timeout` externe rend un code que personne ne lisait.
     sortie=$(timeout 180 "$D" "$MODELE" --ppl-reparti "127.0.0.1:$PORT" \
-             --couches-locales "$COUCHES" --limit "$N_IDS" --ctx "$CTX" --threads 8 "$@" 2>&1)
+             --couches-locales "$COUCHES" --limit "$N_IDS" --ctx "$CTX" --threads "$THREADS" "$@" 2>&1)
     code=$?
     arreter_serveur
     local ecart

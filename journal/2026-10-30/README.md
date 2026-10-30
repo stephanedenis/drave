@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**15 commits** · **0 session(s)** · **6 thème(s)**
+**16 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 2 | [docs.md](docs.md) |
+| docs | 3 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -42,6 +42,7 @@ Aucune session indexée pour ce jour ; voir
 | 11:08 | `da725e8a` | SESSIONS — LE PLAN AVANT L'ÉTAT : LINTER, MODÈLE, PORTE 78 |
 | 12:58 | `b19ab8b7` | LA CASCADE À CONFIANCE EST PUBLIÉE : DEUX FICHIERS DATÉS, UN SEUIL REPRODUCTIBLE, 0,894 OUT-OF-SAMPLE |
 | 13:00 | `10a05c30` | SESSIONS — MIGRATION DOUCE : 3 PLANS À CONFIRMER, STRICT ROUGE, EN-COURS RECALÉ |
+| 13:02 | `ac60b79a` | ÉTAT — WBS 13:00, B11.10 4/4 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -72,3 +72,9 @@ LOT=4 bash tools/porte-flux.sh                          # f32 : 60,8135
 DRAVE_PERTE_MAX=1 LOT=1 bash tools/porte-flux.sh        # mélange : 58,3200
 DRAVE_PERTE_MAX=1 LOT=4 bash tools/porte-flux.sh        # mélange : 62,7357
 ```
+
+## Suite — A8.3d (2026-10-30)
+
+L'écart de **1,90 %** survit à **1 thread** (61,9920 / 60,8135 aux deux nombres de threads) : ce
+n'est pas le pool de threads, c'est le **noyau par lots**. Voir
+[`rapport-a83d-lot-threads.md`](rapport-a83d-lot-threads.md).

@@ -1,0 +1,19 @@
+{
+  "ligne": "A8.3d",
+  "date": "2026-10-30",
+  "dispositif": {
+    "modele": "Qwen2.5-0.5B-Q8_0",
+    "porte": "porte-flux mode 3 (--lot)",
+    "lots": [1, 4],
+    "threads": [1, 8],
+    "ids": 24,
+    "ctx": 64
+  },
+  "mesures": {
+    "threads_8": {"lot_1": 61.9920, "lot_4": 60.8135},
+    "threads_1": {"lot_1": 61.9920, "lot_4": 60.8135}
+  },
+  "ecart_pct": {"threads_8": -1.90, "threads_1": -1.90},
+  "verdict": "le lot n'est pas les threads : l'ecart de 1,90 % survit a 1 thread",
+  "condition": "le noyau par lots (sommes par bloc) est la cause restante ; le pool de threads n'y est pour rien"
+}

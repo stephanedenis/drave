@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-30, 13 h 00 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-30, 13 h 05 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -83,7 +83,7 @@
 |---|---|---|
 | portes | **78** (61 vertes, 2 rouges, 15 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **364** / **436** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **365** / **437** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 
@@ -91,7 +91,7 @@
 
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 19 portes** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé, A8.3c expliqué** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (A6.2 bloqué) ; lot |
+| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 19 portes** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (A6.2 bloqué) ; réduire le lot |
 | **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes** ; décodeur (32,5) | `z` ~2 points ; B1.5 corpus | **B11.10 hybride 4/4** ; B10.3 attend un **encodeur** |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; **N3.1/N3.2a/N3.2b0/N3.2b1/N3.2b2/N3.3a/N3.3b/N3.3c/N3.4a/N3.4b/N3.4c/N3.4d/N3.5a/N3.5b/N3.5c/N3.5d/N3.5e/N3.5f/N3.6** ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 condition** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13.4** (2e graine) ; **R4.4 bloqué** |
@@ -101,12 +101,12 @@
 ```plantuml
 @startwbs
 scale 1.8
-title Les chantiers — état au 30/10 13 h 00
+title Les chantiers — état au 30/10 13 h 05
 * Drave
 **[#c8e6c9] A — le moteur
 ***[#c8e6c9] A1–A8
 ***[#c8e6c9] A8.0/A8.3a — 19 portes
-***[#c8e6c9] A8.3b/c
+***[#c8e6c9] A8.3b/c/d
 ***[#ffe0b2] A2.6 — partiel
 ***[#ffcdd2] A3.4/A5.4/A6.2 — bloqués
 **[#ffe0b2] B — l'intelligence

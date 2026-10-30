@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **361 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **362 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -48,6 +48,7 @@
 | [rapport-a83b-regimes.md](rapport-a83b-regimes.md) | A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire |
 | [rapport-a83c-ctx.md](rapport-a83c-ctx.md) | A8.3c.1 — le signe du mélange ne dépend pas de la taille du contexte |
 | [rapport-a83c-lot.md](rapport-a83c-lot.md) | A8.3c — le lot n'est pas neutre : la « non-monotonie » du KV était un effet de chemin |
+| [rapport-a83d-lot-threads.md](rapport-a83d-lot-threads.md) | A8.3d — le lot n'est pas les threads : l'écart de 1,90 % survit à 1 thread |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
 | [rapport-analyse-flux.md](rapport-analyse-flux.md) | Analyse du flux, couche par couche |
