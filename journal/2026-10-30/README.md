@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**4 commits** · **0 session(s)** · **4 thème(s)**
+**5 commits** · **0 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | docs | 1 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 1 | [portes.md](portes.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -29,6 +29,7 @@ Aucune session indexée pour ce jour ; voir
 | 00:06 | `336a2271` | ÉTAT — DATE ALIGNÉE SUR LE COMMIT DU 30 |
 | 08:34 | `733232ff` | R06 v5 — LA CALIBRATION COÛTE ~50 GOLDS, LES POIDS APPRIS N'AJOUTENT RIEN, LE PILOTE EST COMPLÉTÉ |
 | 08:41 | `720d7e7d` | N3.5f — POSITION VÉRIFIÉE PAS À PAS, DÉSYNC REFUSÉE (CODE 4) ; PORTE 76 |
+| 08:42 | `2640e017` | B10 — L'OBJECTIF MOT LÈVE LE DÉCODEUR (32,5, PLANCHER 33,7) MAIS LE `z` NE PORTE QUE 2,6 POINTS |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,0 +1,51 @@
+{
+ "date": "2026-10-30",
+ "ligne": "R13.3",
+ "corpus": "data/corpus_en.txt / corpus_en_val.txt",
+ "donnees": {
+  "train_octets": 100276153,
+  "val_octets": 2032162,
+  "bpe512_val_jetons": 1183621,
+  "bpe1024_val_jetons": 1000473
+ },
+ "modeles": {
+  "bytes_10k": {
+   "pas": 10000,
+   "ppl_val": 6.2365825190798345,
+   "bits_par_octet_val": 2.6407556871983693,
+   "precision_main": 0.463134765625,
+   "duree_s": 470.6
+  },
+  "bpe512_5k": {
+   "pas": 5000,
+   "ppl_val": 26.45225688079784,
+   "bits_par_octet_val": 2.7522346622562877,
+   "precision_main": 0.271240234375,
+   "duree_s": 227.0
+  },
+  "bpe1024_4k": {
+   "pas": 4000,
+   "ppl_val": 52.607470428668414,
+   "bits_par_octet_val": 2.814687022911439,
+   "precision_main": 0.193359375,
+   "duree_s": 194.8
+  }
+ },
+ "ecarts_pct": {
+  "bpe512": 4.22,
+  "bpe1024": 6.59
+ },
+ "verdict": "sur l'anglais aussi, le BPE perd à octets égaux ; 512 +4,2 %, 1024 +6,6 %",
+ "controle": "train/val séparés, même graine/architecture, 5k/4k BPE ≈ 10k bytes en octets vus",
+ "limites": [
+  "une graine",
+  "10k/5k/4k pas",
+  "anglais 100 Mo",
+  "précision par jeton non comparable"
+ ],
+ "prochain": [
+  "deuxième graine",
+  "plus de pas",
+  "corpus multilingue"
+ ]
+}
