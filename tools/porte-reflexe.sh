@@ -156,6 +156,15 @@ np.eye(896, dtype='<f4').tofile('$T3/identite.f32')" 2>/dev/null
         > "$T3/export.log" 2>&1 || { echo "  ❌ export du chemin tronqué échoué :"; tail -2 "$T3/export.log"; exit 1; }
     REF8=$("$D" "$T3/tronque-8.gguf" --ppl "$T3/morceau.txt" --limit 512 --ctx 512 --threads 8 \
            --couches 0:8 --tete-partielle 2>&1 | grep -oE "perplexité [0-9.]+ sur" | head -1)
+    # A8.0 — la PPL du chemin tronqué (adaptateur nul) est épinglée (5e-4).
+    PPL8=$(printf '%s' "$REF8" | grep -oE "[0-9.]+" | head -1)
+    python3 - "$PPL8" <<'PPLREF' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 11163272.0495
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL tronquée : {val} (attendu {attendu})")
+print(f"  ✅ PPL tronquée épinglée : {val}")
+PPLREF
     # 1. le moteur REFUSE un adaptateur sans tête partielle, et il le dit
     "$D" "$T3/tronque-8.gguf" --ppl "$T3/morceau.txt" --limit 512 --ctx 512 --threads 8 \
         --couches 0:8 --adaptateur-sortie "$T3/identite.f32" > "$T3/refus.log" 2>&1

@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-reflexe.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0 tronqué 8 couches, adaptateur nul",
+ "tolerance": 0.0005,
+ "reference": 11163272.0495,
+ "mesures": {
+  "ppl_tronquee": 11163272.0495,
+  "adaptateur_nul": "identique",
+  "accord_16_couches": 0.254,
+  "cos_16": 0.145
+ },
+ "controle": "décalage de 10 % de la PPL refusé par la même expression",
+ "gate": "exit 0 ; refus sans tête partielle, identité nulle, accord branché",
+ "limites": [
+  "PPL d'un chemin tronqué, pas une qualité du modèle complet",
+  "adaptateur nul",
+  "un corpus de 512 jetons"
+ ]
+}

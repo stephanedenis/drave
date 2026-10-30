@@ -10,7 +10,7 @@
 > c'est l'audit de ce que les portes vérifient.
 
 > **Mise à jour du 29/10** : `porte-flux`, `porte-pont`, `porte-topologie`, `porte-coupe`,
-> `porte-reparti-moteur` et `porte-budget` sont désormais **épinglées** (12/33) — voir
+> `porte-reparti-moteur` et `porte-budget` sont désormais **épinglées** (13/33) — voir
 > [`rapport-a80-porte-flux.md`](rapport-a80-porte-flux.md),
 > [`rapport-a80-porte-pont.md`](rapport-a80-porte-pont.md),
 > [`rapport-a80-porte-topologie.md`](rapport-a80-porte-topologie.md),
@@ -22,7 +22,8 @@
 > [`rapport-a80-porte-cycle-c2.md`](rapport-a80-porte-cycle-c2.md) et
 > [`rapport-a80-porte-consolidation.md`](rapport-a80-porte-consolidation.md) et
 > [`rapport-a80-porte-fusion.md`](rapport-a80-porte-fusion.md) et
-> [`rapport-a80-porte-trace.md`](rapport-a80-porte-trace.md). L'audit ci-dessous reste la
+> [`rapport-a80-porte-trace.md`](rapport-a80-porte-trace.md) et
+> [`rapport-a80-porte-reflexe.md`](rapport-a80-porte-reflexe.md). L'audit ci-dessous reste la
 > photographie du point de départ (0/33).
 
 ## La question

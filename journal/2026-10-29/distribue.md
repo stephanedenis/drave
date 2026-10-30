@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,10 +18,11 @@
 | 16:36 | `b49daabf` | A8.0 — PORTE-REPARTI ÉPINGLÉE : PPL 9,1748 ; ÉTAT 5/33 | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 | 16:44 | `f900db9a` | A8.3a — PORTE-FLUX : RÉGIME 1 % ÉPINGLÉ (58,3200 / 62,7357) | `en-cours.md`, `README.md`, `mesures.md` (+3) |
 | 17:31 | `8c3ba915` | B10.2bis + A8.3b — LES PAS NE SUFFISENT PAS (1800 PAS : 10,2–11,4) ; LA TOPOLOGIE ENTRE DANS LE TABLEAU | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+5) |
+| 20:53 | `c1a9c37b` | A8.0 — PORTE-TRACE ÉPINGLÉE : 59,0790 ; ÉTAT 12/33 | `en-cours.md`, `README.md`, `modele.md` (+4) |
 
 ## Chiffres du jour
 
-`1 %` · `58,3200` · `62,7357` · `9,1748` · `17,4702` · `30,4363` · `42,5477` · `61,9920` · `60,8135` · `30 %` · `100 %` · `75 %`
+`59,0790` · `1 %` · `58,3200` · `62,7357` · `9,1748` · `17,4702` · `30,4363` · `42,5477` · `61,9920` · `60,8135` · `30 %` · `100 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -32,6 +33,7 @@
 - [reports/rapport-a80-porte-flux.md](../../reports/rapport-a80-porte-flux.md)
 - [reports/rapport-a80-porte-reparti.md](../../reports/rapport-a80-porte-reparti.md)
 - [reports/rapport-a80-porte-topologie.md](../../reports/rapport-a80-porte-topologie.md)
+- [reports/rapport-a80-porte-trace.md](../../reports/rapport-a80-porte-trace.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 - [reports/rapport-a83a-flux.md](../../reports/rapport-a83a-flux.md)
 - [reports/rapport-a83b-regimes.md](../../reports/rapport-a83b-regimes.md)
