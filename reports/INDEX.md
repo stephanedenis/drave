@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **306 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **314 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -19,7 +19,9 @@
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
 | [rapport-a80-porte-adaptateur.md](rapport-a80-porte-adaptateur.md) | A8.0 — `porte-adaptateur-sortie` épingle ses PPL : 17,4315 / 2 687 292,8165 |
 | [rapport-a80-porte-budget.md](rapport-a80-porte-budget.md) | A8.0 — `porte-budget` épingle sa PPL : 111,9225 |
+| [rapport-a80-porte-cycle-c2.md](rapport-a80-porte-cycle-c2.md) | A8.0 — `porte-cycle-c2` épingle la PPL de référence : 14,6496 |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
+| [rapport-a80-porte-gain.md](rapport-a80-porte-gain.md) | A8.0 — `porte-gain` épingle la courbe du gain FFN |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
 | [rapport-a80-porte-reparti.md](rapport-a80-porte-reparti.md) | A8.0 — `porte-reparti-moteur` épingle sa PPL : 9,1748 |
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
@@ -28,6 +30,7 @@
 | [rapport-a83a-coupe.md](rapport-a83a-coupe.md) | A8.3a — `porte-coupe` : le régime 1 % écrase la variance du point de coupe |
 | [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |
 | [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |
+| [rapport-a83b-lot.md](rapport-a83b-lot.md) | A8.3b.1 — le signe du mélange vient du **chemin lot**, pas de la taille de lot |
 | [rapport-a83b-regimes.md](rapport-a83b-regimes.md) | A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
@@ -35,6 +38,7 @@
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-b102bis-corpus-jw.md](rapport-b102bis-corpus-jw.md) | B10.2bis — le corpus : 139 unités parallèles, 12 langues, et le décodeur ne décolle pas |
 | [rapport-b102bis-decodeur.md](rapport-b102bis-decodeur.md) | B10.2bis — l'attention croisée ne décolle pas le décodeur : 16,5 / 11,2 contre un plancher de 38,5 |
 | [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
@@ -169,6 +173,9 @@
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
+| [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
+| [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
+| [rapport-n3.3a-routes.md](rapport-n3.3a-routes.md) | N3.3a — le routage/k-WTA du natif est vivant |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
@@ -274,6 +281,7 @@
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
 | [rapport-r13-tokenisation.md](rapport-r13-tokenisation.md) | R13.0 — BPE : 3,4 à 5,2 octets par jeton, réversible ; la PPL reste à mesurer |
+| [rapport-r13.1-condition.md](rapport-r13.1-condition.md) | R13.1 — la PPL BPE-native n’est pas mesurable sans un modèle BPE natif |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |

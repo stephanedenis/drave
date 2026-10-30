@@ -93,7 +93,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **c
 | **B7** | les langues : 71 langues, 1 433 couples, 449 surfaces | ✅ | aucune — **449/449**, **11/11** paires invariantes |
 | **B8** | les maîtres : 17 principes, 9 sources, livre, parties | ✅ | aucune — livre **10/10**, go 9×9 **10/10** contre 3/10, cartes **44,7 %** |
 | **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
-| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; l'attention croisée est **testée (négative)** — capacité/corpus ensuite |
+| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 4 leviers testés (attention, pas, corpus, capacité) — l'**objectif** de décodage reste |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ / ⚠️ | B11.10 (cartes et ambiguïtés) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |

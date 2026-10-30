@@ -29,7 +29,11 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from llm.mesure import chrf  # noqa: E402
-from semantique.corpus import LANGUES, charger, decouper, exemple, lot  # noqa: E402
+from semantique import corpus as corpus_udhr  # noqa: E402
+from semantique import corpus_jw  # noqa: E402
+
+CORPUS = corpus_udhr
+SOURCE = "fra"
 from semantique.modele import Semantique  # noqa: E402
 
 
@@ -69,7 +73,7 @@ def etats(model, articles, langues, seq, device, pooling="mean", lot=64):
     z = {a: {} for a in articles}
     for debut in range(0, len(cles), lot):
         morceau = cles[debut:debut + lot]
-        ids, masque = pad([exemple(articles, a, l, seq) for a, l in morceau])
+        ids, masque = pad([CORPUS.exemple(articles, a, l, seq) for a, l in morceau])
         zz = model.encode(ids.to(device), masque.to(device), pooling=pooling)
         for (a, l), v in zip(morceau, zz):
             z[a][l] = v
@@ -79,7 +83,7 @@ def etats(model, articles, langues, seq, device, pooling="mean", lot=64):
 @torch.no_grad()
 def metriques(model, train, val, langues, seq, device, generer=True,
               articles_chrf: int = 3, cibles_chrf: list[str] | None = None,
-              pooling: str = "mean"):
+              pooling: str = "mean", source: str = "fra"):
     model.eval()
     ztr = etats(model, train, langues, seq, device, pooling=pooling)
     zva = etats(model, val, langues, seq, device, pooling=pooling)
@@ -130,14 +134,14 @@ def metriques(model, train, val, langues, seq, device, generer=True,
         cibles = cibles_chrf or [l for l in ("fra", "spa", "deu", "cmn") if l in langues]
         travaux = [(art, tgt) for art in arts[:max(1, articles_chrf)] for tgt in cibles]
         if travaux:
-            zb = torch.stack([zva[a]["fra"] for a, _ in travaux])
+            zb = torch.stack([zva[a][source] for a, _ in travaux])
             lb = torch.tensor([langues.index(t) for _, t in travaux], device=device)
             ids = model.generer(zb, lb, seq)
             for (art, tgt), ligne in zip(travaux, ids):
                 hyp = texte(ligne.tolist())
                 ref = tronque(val[art][tgt], seq)
-                plancher.append(chrf(tronque(val[art]["fra"], seq), ref))
-                (rec if tgt == "fra" else trans).append(chrf(hyp, ref))
+                plancher.append(chrf(tronque(val[art][source], seq), ref))
+                (rec if tgt == source else trans).append(chrf(hyp, ref))
     model.train()
     return {
         "alignement": align,
@@ -154,7 +158,9 @@ def metriques(model, train, val, langues, seq, device, generer=True,
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--checkpoint", default="/tmp/natif-600-512-8-align-s1")
-    ap.add_argument("--langues", default=",".join(LANGUES))
+    ap.add_argument("--langues", default=None)
+    ap.add_argument("--corpus", default="udhr", choices=("udhr", "jw"))
+    ap.add_argument("--source", default=None)
     ap.add_argument("--articles", type=int, default=30)
     ap.add_argument("--seq", type=int, default=128)
     ap.add_argument("--lot", type=int, default=8)
@@ -176,30 +182,42 @@ def main() -> int:
     ap.add_argument("--graine", type=int, default=1)
     ap.add_argument("--sortie", default="/tmp/semantique-poc")
     ap.add_argument("--sans-gpu", action="store_true")
+    ap.add_argument("--n-sem", type=int, default=1,
+                    help="unités sémantiques (n_sem) ; >1 ouvre l'attention croisée")
+    ap.add_argument("--attention-sem", action="store_true",
+                    help="B10.2bis : requêtes apprises sur les états (attention croisée)")
+    ap.add_argument("--segments", action="store_true",
+                    help="unités = segments contigus de l'article (moyenne, pas projection)")
     args = ap.parse_args()
-    langues = [l.strip() for l in args.langues.split(",") if l.strip()]
+    global CORPUS, SOURCE
+    CORPUS = corpus_jw if args.corpus == "jw" else corpus_udhr
+    SOURCE = args.source or CORPUS.SOURCE
+    langues = [l.strip() for l in (args.langues or ",".join(CORPUS.LANGUES)).split(",") if l.strip()]
     device = torch.device("cpu" if args.sans_gpu or not torch.cuda.is_available() else "cuda")
     torch.manual_seed(args.graine)
     rng = random.Random(args.graine)
-    articles = charger(langues, args.articles)
-    train, val = decouper(articles)
+    articles = CORPUS.charger(langues, args.articles)
+    train, val = CORPUS.decouper(articles)
     if not train or not val:
         print(f"# corpus vide : {len(articles)} articles, {len(train)} train, {len(val)} val")
         return 2
     print(f"# sémantique · {len(langues)} langues · {len(articles)} articles · "
           f"{len(train)} train / {len(val)} val · {device}")
     torch.set_num_threads(max(1, min(4, torch.get_num_threads())))
-    model = Semantique.charger(args.checkpoint, len(langues), args.d_sem, args.prefixe, str(device))
+    model = Semantique.charger(args.checkpoint, len(langues), args.d_sem, args.prefixe, str(device),
+                               n_sem=args.n_sem, attention_sem=args.attention_sem,
+                               segments=args.segments)
     n_params = sum(p.numel() for p in model.parameters())
     print(f"# base {args.checkpoint} · {n_params/1e6:.2f} M paramètres · d_sem {args.d_sem} · "
-          f"préfixe {args.prefixe}")
+          f"préfixe {args.prefixe} · n_sem {args.n_sem} "
+          f"(attention {model.attention_sem}, segments {model.segments})")
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr)
     meilleur = (-1.0, 0, None)
     sans_gain = 0
     historique = []
     t0 = time.monotonic()
     for pas in range(1, args.pas + 1):
-        xs, ls, xt, lt, _ = lot(train, langues, args.lot, args.seq, rng)
+        xs, ls, xt, lt, _ = CORPUS.lot(train, langues, args.lot, args.seq, rng)
         x_s, m_s = pad(xs)
         x_t, m_t = pad(xt)
         x_s, m_s, x_t, m_t = x_s.to(device), m_s.to(device), x_t.to(device), m_t.to(device)
@@ -222,9 +240,11 @@ def main() -> int:
         opt.step()
         if pas % args.eval_tous == 0 or pas == args.pas:
             cibles = [l.strip() for l in args.eval_cibles.split(",") if l.strip() in langues]
+            if args.corpus == "jw" and args.eval_cibles == "fra,spa,deu,cmn":
+                cibles = [l for l in ("hin", "jpn", "swh", "ind") if l in langues]
             m = metriques(model, train, val, langues, args.seq, device,
                           articles_chrf=args.eval_chrf_articles, cibles_chrf=cibles,
-                          pooling=args.pooling)
+                          pooling=args.pooling, source=SOURCE)
             m.update({"pas": pas, "perte": float(perte.detach()), "secondes": time.monotonic() - t0})
             historique.append(m)
             print(f"  pas {pas:5d} · perte {m['perte']:.4f} · align {m['alignement']:.3f} · "

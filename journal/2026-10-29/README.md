@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**116 commits** · **0 session(s)** · **8 thème(s)**
+**117 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 23 | [docs.md](docs.md) |
 | memoire | 8 | [memoire.md](memoire.md) |
 | mesures | 42 | [mesures.md](mesures.md) |
-| modele | 8 | [modele.md](modele.md) |
+| modele | 9 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 19 | [portes.md](portes.md) |
 
@@ -149,6 +149,7 @@ Aucune session indexée pour ce jour ; voir
 | 19:44 | `9ca7b1d2` | A8.0 — PORTE-CYCLE-C2 ÉPINGLÉE : 14,6496 ; ÉTAT 9/33 |
 | 19:48 | `b5a9cdec` | A8.3b — LE SIGNE VIENT DU CHEMIN LOT (1 vs ≥2), PAS DE LA TAILLE |
 | 19:55 | `bb6bfd4b` | N3.2a — LE SERVICE NATIF VIT : /SANTE, GÉNÉRATION DÉTERMINISTE, 404 ; PORTE 59 |
+| 19:58 | `5aa47f70` | N3.3a — ROUTAGE/K-WTA VIVANT : MÊMES POIDS, CONFIG DIFFÉRENTE, SORTIE DIFFÉRENTE ; PORTE 60 |
 
 ## Le récit de la journée (écrit à la main)
 

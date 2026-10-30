@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 16:25 | `8c2179fd` | R0.6 — LE PIPELINE DE LECTURE : 12/20 AU PILOTE, 10/10 REFUSÉS, 7/8 AU MODÈLE, PORTE 6/6 | `pipeline-lecture.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 17:34 | `53fec194` | R06 v2 — LA CASCADE DES LECTEURS : +1,2 POINT SUR LES PARAPHRASES POUR 9 APPELS DE MODÈLE | `pipeline-lecture.md`, `R06-tete-relecture.md`, `en-cours.md` (+6) |
 | 19:30 | `ba0c4ac5` | R13.1 — PPL BPE-NATIVE : CONDITION NOMMÉE (PAS DE MODÈLE BPE NATIF) | `en-cours.md`, `README.md`, `portes.md` (+3) |
+| 19:58 | `5aa47f70` | N3.3a — ROUTAGE/K-WTA VIVANT : MÊMES POIDS, CONFIG DIFFÉRENTE, SORTIE DIFFÉRENTE ; PORTE 60 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 
 ## Chiffres du jour
 
@@ -26,6 +27,7 @@
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-n3.3a-routes.md](../../reports/rapport-n3.3a-routes.md)
 - [reports/rapport-r03-banc-durci.md](../../reports/rapport-r03-banc-durci.md)
 - [reports/rapport-r03-lecteur-modele.md](../../reports/rapport-r03-lecteur-modele.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)

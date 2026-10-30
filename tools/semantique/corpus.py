@@ -19,6 +19,7 @@ RACINE = pathlib.Path(__file__).resolve().parents[2]
 ARTICLES = RACINE / "data" / "udhr" / "articles.jsonl"
 
 LANGUES = ["fra", "spa", "deu", "ita", "por", "rus", "arb", "cmn", "hin", "swh"]
+SOURCE = "fra"
 
 
 def charger(langues: list[str] | None = None, max_art: int = 30,

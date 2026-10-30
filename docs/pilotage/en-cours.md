@@ -62,8 +62,8 @@
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **B10.2bis — le décodeur** : **négative** — 3 bras × 3 graines : **11,1/11,2/11,0** contre **38,5** ;
-  à 1800 pas : 10,2–11,4 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
+- **B10.2bis — le décodeur** : **négative** — 3×3 : **11,1/11,2/11,0** contre **38,5** ;
+  au pas 1800 : 10,2–11,4 ; corpus JW 7,6/6,3/8,0 contre 17,1 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
 - **A8.0 — 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3b** : lot 1 ≠ ≥2 — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **60** (56 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **316** / **388** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **317** / **389** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
 

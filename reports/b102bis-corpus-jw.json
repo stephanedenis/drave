@@ -1,0 +1,126 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B10.2bis",
+ "dispositif": {
+  "corpus": "data/jw/jw_2026.json — 5 articles, 12 langues, 139 unités",
+  "decoupage": "par article : 101 train / 38 val",
+  "checkpoint": "/tmp/natif-224-6-align-s1 (9,29 M)",
+  "pas": 600,
+  "graines": [
+   1,
+   2,
+   3
+  ],
+  "lot": 8,
+  "seq": 128,
+  "cibles_chrf": [
+   "ind",
+   "swh",
+   "vie"
+  ],
+  "source_chrf": "eng"
+ },
+ "mesures": [
+  {
+   "bras": "a",
+   "graine": 1,
+   "trad": 8.2,
+   "plancher": 17.1,
+   "rappel": 0.325,
+   "rappel_melange": 0.014,
+   "sonde": 0.158
+  },
+  {
+   "bras": "a",
+   "graine": 2,
+   "trad": 7.4,
+   "plancher": 17.1,
+   "rappel": 0.387,
+   "rappel_melange": 0.017,
+   "sonde": 0.208
+  },
+  {
+   "bras": "a",
+   "graine": 3,
+   "trad": 7.2,
+   "plancher": 17.1,
+   "rappel": 0.328,
+   "rappel_melange": 0.017,
+   "sonde": 0.182
+  },
+  {
+   "bras": "b",
+   "graine": 1,
+   "trad": 6.8,
+   "plancher": 17.1,
+   "rappel": 0.244,
+   "rappel_melange": 0.019,
+   "sonde": 0.103
+  },
+  {
+   "bras": "b",
+   "graine": 2,
+   "trad": 7.4,
+   "plancher": 17.1,
+   "rappel": 0.198,
+   "rappel_melange": 0.02,
+   "sonde": 0.147
+  },
+  {
+   "bras": "b",
+   "graine": 3,
+   "trad": 4.8,
+   "plancher": 17.1,
+   "rappel": 0.276,
+   "rappel_melange": 0.022,
+   "sonde": 0.156
+  },
+  {
+   "bras": "c",
+   "graine": 1,
+   "trad": 8.7,
+   "plancher": 17.1,
+   "rappel": 0.315,
+   "rappel_melange": 0.013,
+   "sonde": 0.239
+  },
+  {
+   "bras": "c",
+   "graine": 2,
+   "trad": 8.1,
+   "plancher": 17.1,
+   "rappel": 0.379,
+   "rappel_melange": 0.015,
+   "sonde": 0.182
+  },
+  {
+   "bras": "c",
+   "graine": 3,
+   "trad": 7.2,
+   "plancher": 17.1,
+   "rappel": 0.305,
+   "rappel_melange": 0.018,
+   "sonde": 0.182
+  }
+ ],
+ "moyennes": {
+  "a": {
+   "trad": 7.6,
+   "rec": 0.0,
+   "n": 3
+  },
+  "b": {
+   "trad": 6.33,
+   "rec": 0.0,
+   "n": 3
+  },
+  "c": {
+   "trad": 8.0,
+   "rec": 0.0,
+   "n": 3
+  }
+ },
+ "plancher": 17.1,
+ "verdict": "le corpus plus grand et plus divers ne décolle pas le décodeur non plus",
+ "note_reconstruction": "les 9 runs n'incluaient pas la source dans les cibles ; le run de contrôle (eng → eng) donne 9,4 de reconstruction pour un plancher de 37,8"
+}
