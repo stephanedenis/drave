@@ -30,16 +30,16 @@ décodeur ? Le corpus JW donne **4,6× plus d'unités** et 12 langues (dont 6 no
 
 | bras | graine | chrF traduction | rappel | sonde |
 |---|---:|---:|---:|---:|
-| 1 | 6.8 | 0.244 | 0.103 |
-| 2 | 7.4 | 0.198 | 0.147 |
-| 3 | 4.8 | 0.276 | 0.156 |
+| 1  | | 6.8 | 0.244 | 0.103 |
+| 2  | | 7.4 | 0.198 | 0.147 |
+| 3  | | 4.8 | 0.276 | 0.156 |
 | **moyenne** | | **6.33** | | |
 
 | bras | graine | chrF traduction | rappel | sonde |
 |---|---:|---:|---:|---:|
-| 1 | 8.7 | 0.315 | 0.239 |
-| 2 | 8.1 | 0.379 | 0.182 |
-| 3 | 7.2 | 0.305 | 0.182 |
+| 1  | | 8.7 | 0.315 | 0.239 |
+| 2  | | 8.1 | 0.379 | 0.182 |
+| 3  | | 7.2 | 0.305 | 0.182 |
 | **moyenne** | | **8.0** | | |
 
 **Comparaison avec l'UDHR** (même modèle, même protocole) : traduction **11,1 / 11,2 / 11,0**

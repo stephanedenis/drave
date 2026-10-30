@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,16 +16,18 @@
 | 19:21 | `a72cf1dc` | LE DÉCLENCHEUR EST TROUVÉ — LA CASCADE À CONFIANCE CALIBRÉE ÉGALE L'ORACLE HORS ÉCHANTILLON | `R06-tete-relecture.md`, `en-cours.md`, `programme-r.md` (+9) |
 | 19:22 | `2704947c` | JOURNAL — LE DÉCLENCHEUR, ET LA FIN D'UNE OBSTINATION (SESSION 8156fdcb) | `README.md`, `memoire.md` |
 | 19:44 | `9ca7b1d2` | A8.0 — PORTE-CYCLE-C2 ÉPINGLÉE : 14,6496 ; ÉTAT 9/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
+| 20:06 | `f577e3c8` | A8.0 — PORTE-CONSOLIDATION ÉPINGLÉE : 17,4268 / 17,1655 ; ÉTAT 10/33 | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 
 ## Chiffres du jour
 
-`14,6496` · `0,984` · `0,702`
+`17,4268` · `17,1655` · `14,6496` · `0,984` · `0,702`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-a80-porte-consolidation.md](../../reports/rapport-a80-porte-consolidation.md)
 - [reports/rapport-a80-porte-cycle-c2.md](../../reports/rapport-a80-porte-cycle-c2.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
