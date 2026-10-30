@@ -29,6 +29,12 @@ peut-il être bon ?* (douce), *qu'est-ce qui est déjà interdit ?* (fait).
 
 ## 2. Le graphe
 
+**La vue de décision** est la [carte des chantiers](../../schemas/chantiers-decision.svg) :
+quatre couloirs (A, B, N, R), la **profondeur de dépendance** comme axe vertical — pas une date —
+la frontière encadrée en vert et les **sources de blocage** nommées en bas. Elle se régénère par
+`python3 tools/carte_decisions.py --svg docs/schemas/chantiers-decision.svg`. Le graphe d'items
+qui suit reste la vue de détail.
+
 ![Le graphe des dépendances du backlog : quatre chantiers, arêtes dures et plafonds](../../schemas/backlog-dependances.svg)
 
 *Lecture de haut en bas ; trait plein = arête dure, pointillé = plafond, bord interrompu = bloquée

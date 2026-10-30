@@ -95,6 +95,9 @@
 `python3 tools/verifie_backlog.py`, qui confronte aussi les statuts des fiches et de l'index.
 Cette table ne garde que les **bloquants externes** (ce que le graphe ne peut pas dire : une
 ressource qui manque) et la **prochaine action** ; elle ne recopie pas les statuts, qui dérivent.
+La vue d'ensemble est la **[carte de décision](../schemas/chantiers-decision.svg)** : quatre
+couloirs, la profondeur de dépendance comme axe (jamais le temps), la frontière en vert et les
+sources de blocage nommées.
 
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|

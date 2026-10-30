@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **0 session(s)** · **7 thème(s)**
+**20 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 5 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
-| modele | 2 | [modele.md](modele.md) |
+| modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -47,6 +47,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:06 | `277103ff` | A8.3d — LE LOT N'EST PAS LES THREADS : L'ÉCART DE 1,90 % SURVIT À 1 THREAD |
 | 13:19 | `68590bf0` | LE GRAPHE CONFRONTE L'INDEX, L'ÉTAT POINTE LA FRONTIÈRE — SIX STATUTS DIVERGENTS CORRIGÉS |
 | 13:25 | `842e1770` | SESSIONS — LES TROIS PLANS CONFIRMÉS : PÉRIMÈTRES, FICHIERS, HEARTBEAT 13:05 |
+| 13:30 | `21a361f9` | R13.4 — DEUX GRAINES : BPE512 DANS LE BRUIT, BPE1024 PERD 4,09 % |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -81,4 +82,16 @@ six statuts avaient divergé — R05 et R06 annoncées « spécifiées » alors 
 versions mesurées, A8.3 absente de l'index. `verifie_backlog.py` confronte désormais les deux,
 et l'état ne recopie plus les statuts : il pointe la **frontière** du graphe et ne garde que les
 **bloquants externes** — la seule chose que le graphe ne peut pas dire.
+
+**La carte de décision, et l'arrimage des écrans.** Trois vues avaient échoué à aider la
+décision : le WBS d'états (ni dépendances ni sources), le Gantt (étalé en jours alors qu'on
+décide par périodes courtes), le graphe d'items (37 nœuds, dense). La nouvelle carte place les
+quatre chantiers en couloirs et la **profondeur de dépendance** en axe vertical — jamais le
+temps : en haut, la frontière (11 items, encadrés en vert) ; en dessous, ce qu'elle débloque ;
+en bas, les **sources de blocage** nommées (Colab, FPGA, VRAM, corpus). Elle se régénère par
+`tools/carte_decisions.py`.
+
+Et une convention pour l'humain : le **premier item** de la liste de tâches d'un écran TUI porte
+`Session <id> — <rôle>`, le même id que le titre du bloc d'`en-cours` et que le champ `Session`
+du plan. Trois supports, une identité — écrite dans `continuite.md` § 4.
 <!-- /notes -->

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 958" role="img" width="1240" height="958">
+  <title>La carte de décision des chantiers — la profondeur de dépendance comme axe, les sources de blocage nommées</title>
+  <desc>Quatre couloirs (A le moteur, B l'intelligence, N le natif, R le lecteur) ; les 38 items du backlog y sont placés par leur profondeur de dépendance, pas par une date. La frontière (11 items) est encadrée en vert : ce qui peut démarrer maintenant. Les sources de blocage externes sont nommées en bas. Le chemin critique est encadré en pointillé rouge.</desc>
+  <rect x="0" y="0" width="1240" height="958" fill="#ffffff"/>
+  <text x="24" y="30" font-family="Verdana, DejaVu Sans, sans-serif" font-size="15" font-weight="bold" fill="#1a1a1a">La carte de décision des chantiers</text>
+  <text x="24" y="48" font-family="Verdana, DejaVu Sans, sans-serif" font-size="9" fill="#555555">quatre couloirs · la verticale est la PROFONDEUR DE DÉPENDANCE, pas le temps · vert = peut démarrer (frontière) · orange = en cours · gris = mesuré · rouge = bloqué · pointillé rouge = dépendance entre chantiers · encadré rouge = chemin critique</text>
+  <text x="24" y="66" font-family="Verdana, DejaVu Sans, sans-serif" font-size="9" fill="#2e7d32">frontière (11) : A2.6, B10.3, B11.10, N2, N3, N4, R04, R05, R07, R13, R44</text>
+  <text x="24" y="82" font-family="Verdana, DejaVu Sans, sans-serif" font-size="9" fill="#b03a2e">chemin critique : R01 → R02 → R03 → R31 → R32 → R51</text>
+  <rect x="30" y="84" width="280" height="850" rx="9" fill="#eaf1fb" stroke="#24558f" stroke-width="1" opacity="0.55"/>
+  <text x="40" y="102" font-family="Verdana, DejaVu Sans, sans-serif" font-size="12" font-weight="bold" fill="#24558f">A — le moteur</text>
+  <rect x="330" y="84" width="280" height="850" rx="9" fill="#fdf3e3" stroke="#b26a00" stroke-width="1" opacity="0.55"/>
+  <text x="340" y="102" font-family="Verdana, DejaVu Sans, sans-serif" font-size="12" font-weight="bold" fill="#b26a00">B — l'intelligence</text>
+  <rect x="630" y="84" width="280" height="850" rx="9" fill="#eaf5ea" stroke="#2e7d32" stroke-width="1" opacity="0.55"/>
+  <text x="640" y="102" font-family="Verdana, DejaVu Sans, sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">N — le natif</text>
+  <rect x="930" y="84" width="280" height="850" rx="9" fill="#f3e8f8" stroke="#6a1b9a" stroke-width="1" opacity="0.55"/>
+  <text x="940" y="102" font-family="Verdana, DejaVu Sans, sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">R — le lecteur</text>
+  <text x="16" y="112" font-family="Verdana, DejaVu Sans, sans-serif" font-size="9" fill="#555555" transform="rotate(-90 16 112)">profondeur de dépendance →</text>
+  <rect x="38" y="118" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="44" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">A2.6</text>
+  <text x="84" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Ordonnanceur : experts et tête</text>
+  <rect x="38" y="144" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="44" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">A3.2</text>
+  <text x="84" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Granularité du flux : par couche, par b…</text>
+  <rect x="38" y="170" width="264" height="24" rx="5" fill="#ffcdd2" stroke="#b03a2e" stroke-width="1"/>
+  <text x="44" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">A3.4</text>
+  <text x="84" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Démonstration Colab (préremplissage rép…</text>
+  <rect x="38" y="196" width="264" height="24" rx="5" fill="#ffcdd2" stroke="#b03a2e" stroke-width="1"/>
+  <text x="44" y="212" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">A5.4</text>
+  <text x="84" y="212" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Opérateur FPGA complet</text>
+  <rect x="38" y="222" width="264" height="24" rx="5" fill="#ffcdd2" stroke="#b03a2e" stroke-width="1"/>
+  <text x="44" y="238" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">A6.2</text>
+  <text x="84" y="238" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Routage MoE appris (MoE local)</text>
+  <rect x="38" y="248" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="44" y="264" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">A8.0</text>
+  <text x="84" y="264" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Épingler les portes qui mesurent une PPL</text>
+  <rect x="38" y="284" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="44" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">A3.3</text>
+  <text x="84" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Seuil de rentabilité : quand le découpa…</text>
+  <rect x="38" y="310" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="44" y="326" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">A8.3</text>
+  <text x="84" y="326" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Passer la règle place+perte par défaut</text>
+  <rect x="338" y="118" width="264" height="24" rx="5" fill="#ffcdd2" stroke="#b03a2e" stroke-width="1"/>
+  <text x="344" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">B1.5</text>
+  <text x="384" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Prose scientifique (corpus parallèle hu…</text>
+  <rect x="338" y="144" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="344" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">B10.2bis</text>
+  <text x="384" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Décodeur à attention croisée</text>
+  <rect x="338" y="170" width="264" height="24" rx="5" fill="#ffcdd2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="344" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">B10.3</text>
+  <text x="384" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Raisonnement sur `z` gelé</text>
+  <rect x="338" y="196" width="264" height="24" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="344" y="212" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#2e7d32">B11.10</text>
+  <text x="384" y="212" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Cartes et ambiguïtés de la RSN</text>
+  <rect x="338" y="222" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="344" y="238" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">B12.10</text>
+  <text x="384" y="238" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Pipeline M1 → M4 → M8</text>
+  <rect x="638" y="118" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="644" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">N0.3b</text>
+  <text x="684" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Parité de perplexité DRVM ↔ GGUF</text>
+  <rect x="638" y="144" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="644" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">N2</text>
+  <text x="684" y="160" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Distillation native (50 000 séquences)</text>
+  <rect x="638" y="170" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="644" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">N3</text>
+  <text x="684" y="186" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Opérations natives : de la mesure à la …</text>
+  <rect x="638" y="284" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="644" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">N4</text>
+  <text x="684" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Usage : SFT, service, sûreté</text>
+  <rect x="638" y="450" width="264" height="24" rx="5" fill="#fdecea" stroke="#b03a2e" stroke-width="1"/>
+  <text x="644" y="466" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b03a2e">N5</text>
+  <text x="684" y="466" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Échelle 50–100 M</text>
+  <rect x="938" y="118" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R01</text>
+  <text x="984" y="134" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Graphe de document et registre de régio…</text>
+  <rect x="938" y="118" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="284" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R02</text>
+  <text x="984" y="300" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Contrôleur de lecture (survol, balayage…</text>
+  <rect x="938" y="284" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="310" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="326" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R11</text>
+  <text x="984" y="326" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Contexte hiérarchique et état de section</text>
+  <rect x="938" y="336" width="264" height="24" rx="5" fill="#c8e6c9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="944" y="352" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#2e7d32">R13</text>
+  <text x="984" y="352" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Tokenisation : octets ou BPE (décision …</text>
+  <rect x="938" y="362" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="378" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R41</text>
+  <text x="984" y="378" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Bloc tableaux</text>
+  <rect x="938" y="388" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="404" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R42</text>
+  <text x="984" y="404" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Bloc code (AST, flux de données, exécut…</text>
+  <rect x="938" y="414" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="430" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R43</text>
+  <text x="984" y="430" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Bloc maths (notation, définitions, éval…</text>
+  <rect x="938" y="450" width="264" height="24" rx="5" fill="#eeeeee" stroke="#555555" stroke-width="1"/>
+  <text x="944" y="466" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#555555">R03</text>
+  <text x="984" y="466" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Banc de lecture rapide (corpus, tâches,…</text>
+  <rect x="938" y="450" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="476" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="492" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R12</text>
+  <text x="984" y="492" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Curriculum de contexte long (129 → 1 00…</text>
+  <rect x="938" y="502" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="518" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R21</text>
+  <text x="984" y="518" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Mémoire de travail et gist</text>
+  <rect x="938" y="528" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="944" y="544" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R44</text>
+  <text x="984" y="544" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Encodeur visuel / OCR (scans, figures, …</text>
+  <rect x="938" y="564" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="944" y="580" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">R04</text>
+  <text x="984" y="580" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Tête de survol (pertinence d'une région)</text>
+  <rect x="938" y="590" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="944" y="606" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">R05</text>
+  <text x="984" y="606" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Tête de balayage (requête → spans)</text>
+  <rect x="938" y="616" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="944" y="632" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">R07</text>
+  <text x="984" y="632" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Routeur extractif / génératif (quel lec…</text>
+  <rect x="938" y="642" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="658" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R22</text>
+  <text x="984" y="658" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Mémoire épisodique et relecture</text>
+  <rect x="938" y="668" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="684" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R31</text>
+  <text x="984" y="684" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Restitution : SFT de lecture (réponse, …</text>
+  <rect x="938" y="668" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="704" width="264" height="24" rx="5" fill="#ffe0b2" stroke="#b26a00" stroke-width="1"/>
+  <text x="944" y="720" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#b26a00">R06</text>
+  <text x="984" y="720" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Tête de relecture (confiance et contrad…</text>
+  <rect x="938" y="730" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="746" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R32</text>
+  <text x="984" y="746" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Citations et provenance</text>
+  <rect x="938" y="730" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="766" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="782" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R51</text>
+  <text x="984" y="782" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Lecture croisée / multi-documents</text>
+  <rect x="938" y="766" width="264" height="24" rx="5" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <rect x="938" y="792" width="264" height="24" rx="5" fill="#f5f5f5" stroke="#666666" stroke-width="1"/>
+  <text x="944" y="808" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.6" font-weight="bold" fill="#666666">R52</text>
+  <text x="984" y="808" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7.8" fill="#333333">Décodeur multilingue (lecture en traduc…</text>
+  <line x1="170.0" y1="284" x2="170.0" y2="168" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="170.0" y1="310" x2="170.0" y2="272" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="284" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="450" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="450" x2="1070.0" y2="308" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="564" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="564" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="590" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="590" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="704" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="704" x2="1070.0" y2="526" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="704" x2="1070.0" y2="666" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="616" x2="1070.0" y2="308" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="616" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="310" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <path d="M 1202 322.0 C 920.0 322.0, 920.0 156.0, 638 156.0" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="920.0" y="235.0" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7" fill="#b03a2e">R11→N2</text>
+  <line x1="1070.0" y1="476" x2="1070.0" y2="334" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="502" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="502" x2="1070.0" y2="334" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="642" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="642" x2="1070.0" y2="526" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="668" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="668" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="668" x2="1070.0" y2="526" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="730" x2="1070.0" y2="692" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="730" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="730" x2="1070.0" y2="526" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="362" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="388" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="414" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="528" x2="1070.0" y2="386" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="528" x2="1070.0" y2="412" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="528" x2="1070.0" y2="438" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="766" x2="1070.0" y2="692" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="766" x2="1070.0" y2="754" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="766" x2="1070.0" y2="474" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="766" x2="1070.0" y2="142" stroke="#9a9a9a" stroke-width="1"/>
+  <path d="M 1202 804.0 C 770.0 804.0, 770.0 182.0, 338 182.0" fill="none" stroke="#b03a2e" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="770.0" y="489.0" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif" font-size="7" fill="#b03a2e">R52→B10.3</text>
+  <line x1="1070.0" y1="792" x2="1070.0" y2="692" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="1070.0" y1="792" x2="1070.0" y2="754" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="770.0" y1="450" x2="770.0" y2="168" stroke="#9a9a9a" stroke-width="1"/>
+  <line x1="770.0" y1="450" x2="770.0" y2="308" stroke="#9a9a9a" stroke-width="1"/>
+  <rect x="30" y="862" width="1180" height="64" rx="8" fill="#fdecea" stroke="#b03a2e" stroke-width="1.1"/>
+  <text x="42" y="880" font-family="Verdana, DejaVu Sans, sans-serif" font-size="10" font-weight="bold" fill="#b03a2e">Les sources de blocage (une ressource externe — le graphe ne peut pas la lever)</text>
+  <text x="42" y="896" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.4" fill="#7a2a20">A3.4 : le compte et le runtime Colab</text>
+  <text x="42" y="908" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.4" fill="#7a2a20">A5.4 : la carte Stratix V</text>
+  <text x="42" y="920" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.4" fill="#7a2a20">A6.2 : aucun MoE local dans 16 Go de VRAM</text>
+  <text x="42" y="932" font-family="Verdana, DejaVu Sans, sans-serif" font-size="8.4" fill="#7a2a20">B1.5 : aucun corpus parallèle humain d'articles</text>
+</svg>

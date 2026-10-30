@@ -117,6 +117,26 @@ Un nouvel agent lit `AGENTS` + `en-cours` + **un** document de tâche, puis [`RE
 Le journal ne se lit que pour le **récit** d'une journée ; chaque rapport de session renvoie à son jour,
 à l'index des sessions et à `en-cours` (`python3 tools/verifie_journal.py`).
 
+## 4. Arrimer l'écran à la session
+
+Le TUI montre, par écran, la liste de tâches d'une session — mais rien ne dit, **à l'écran**,
+quelle session il porte. Trois supports doivent porter la même identité, au même endroit :
+
+| support | où | forme |
+|---|---|---|
+| `en-cours` | le titre du bloc de session | `### Session \`8156fdcb\` — R0.1–R0.5 (lecteur)` |
+| le plan | `journal/sessions/<id>/plan.md` | le champ `Session` = l'id |
+| le TUI | **le premier item** de la liste de tâches | `Session <id> — <rôle>` |
+
+**Règle.** Le premier item du TUI se met à jour **avec le plan**, à chaque cycle ; un écran dont
+le premier item ne correspond à aucun titre d'`en-cours` est une session **non déclarée**, ou un
+plan périmé — les deux se corrigent avant de continuer. C'est ce qui permet à l'humain de passer
+d'un écran à sa ligne d'état sans deviner, et aux agents de savoir qui possède quoi.
+
+**Le contrôle.** `python3 tools/sessions.py --check` compare les **plans** et `en-cours`
+(mandats, périmètres, fichiers réservés, heartbeats). Le TUI, lui, n'est pas lisible depuis le
+dépôt : c'est une **convention**, et c'est pour cela qu'elle est écrite ici.
+
 ## 5. Reprendre un goal en pause
 
 Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander « Reprends le goal en pause » :
@@ -128,6 +148,7 @@ Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander « 
 ```bash
 python3 tools/verifie_en_cours.py       # structure, taille, sections, prochaine action
 python3 tools/verifie_etat_a_jour.py    # aucun fait commité après le dernier état
+python3 tools/sessions.py --check       # plans de session ↔ en-cours (mandats, périmètres)
 python3 tools/taille_documents.py       # budgets T0/T1
 python3 tools/revue_documentation.py    # liens, compteurs, fraîcheur
 ```
