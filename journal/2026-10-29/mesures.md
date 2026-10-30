@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (48)
+## Commits du jour (49)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -56,6 +56,7 @@
 | 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+4) |
 | 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN | `A8.3-defaut.md`, `en-cours.md`, `roadmap.md` (+6) |
 | 21:10 | `4619fd80` | N3.4d — COUVERTURE N3 PAR BRIQUE : COMPOSITION NATIVE = CONDITION | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
+| 22:23 | `e220336a` | A8.3c.1 — LE SIGNE NE DÉPEND PAS DU CONTEXTE : 24 MESURES, ctx 64/256/512 IDENTIQUES | `en-cours.md`, `README.md`, `distribue.md` (+3) |
 
 ## Chiffres du jour
 
@@ -69,6 +70,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
 - [reports/rapport-a83b-lot.md](../../reports/rapport-a83b-lot.md)
+- [reports/rapport-a83c-ctx.md](../../reports/rapport-a83c-ctx.md)
 - [reports/rapport-a83c-lot.md](../../reports/rapport-a83c-lot.md)
 - [reports/rapport-b102bis-capacite.md](../../reports/rapport-b102bis-capacite.md)
 - [reports/rapport-b102bis-corpus-jw.md](../../reports/rapport-b102bis-corpus-jw.md)

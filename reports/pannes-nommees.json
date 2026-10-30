@@ -1,0 +1,30 @@
+{
+ "date": "2026-10-29",
+ "ligne": "C11",
+ "porte": "porte-pannes.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": null,
+ "mesures": {
+  "nominal_ppl": 33.0156,
+  "pair_tue": {
+   "region": "d",
+   "pas": 95,
+   "octets": 349980,
+   "code": 7
+  },
+  "pair_absent": {
+   "region": "d",
+   "pas": 0,
+   "octets": 0,
+   "code": 7,
+   "secondes": 2
+  }
+ },
+ "controle": "code 7 dans les deux cas ; aucune perplexité rendue ; la panne nomme région, pas et octets",
+ "gate": "exit 0 ; panne nommée, pas de résultat partiel, pair absent en 2 s",
+ "limites": [
+  "un seul modèle",
+  "le pas 95 dépend du moment du kill",
+  "pas de réseau réellement distribué"
+ ]
+}

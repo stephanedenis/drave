@@ -5147,9 +5147,10 @@ posé — le dire ici, plutôt que de rendre un chiffre inchangé sans un mot");
     let mut sock = match std::net::TcpStream::connect(pair) {
         Ok(s) => s,
         Err(e) => {
-            eprintln!("[pannes] PANNE : le pair local → {pair} est INJOIGNABLE ({e}). Aucune \
-perplexité n'est rendue — un graphe amputé d'une région n'est pas une version approchée du \
-même calcul. Vérifiez que le nœud écoute (--flux-serveur {pair}).");
+            eprintln!("[pannes] PANNE sur le lien local → {pair_region} : le pair {pair} est \
+INJOIGNABLE ({e}) au pas 0 (0 octets échangés). Aucune perplexité n'est rendue — un graphe \
+amputé d'une région n'est pas une version approchée du même calcul. Vérifiez que le nœud \
+écoute (--flux-serveur {pair}).");
             std::process::exit(7);
         }
     };
