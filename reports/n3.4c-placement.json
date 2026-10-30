@@ -1,0 +1,27 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.4c",
+ "porte": "porte-n3-placement.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "configs": {
+  "A": "placement=local",
+  "B": "placement=remote",
+  "C": "pont nul (contrôle)"
+ },
+ "mesures": {
+  "a_deux_fois": "identique (35 octets)",
+  "a_vs_b": "identique (placement inerte)",
+  "a_vs_c": "différent"
+ },
+ "controle": "A déterministe ; local/remote identiques ; pont nul différent : la porte détecte un vrai changement",
+ "verdict": "le placement natif est une métadonnée, pas un chemin distribué",
+ "limites": [
+  "champ de manifeste, pas une exécution distribuée",
+  "le placement distribué est couvert par porte-topologie (Qwen)",
+  "modèle synthétique"
+ ],
+ "prochain": [
+  "un chemin natif distribué si nécessaire",
+  "composition complète N3"
+ ]
+}

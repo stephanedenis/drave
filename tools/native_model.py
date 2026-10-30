@@ -167,7 +167,7 @@ def _bloc_de(nom: str, cfg: NativeConfig) -> str:
     return "output"
 
 
-def exporter_drvm(modele: NativeModel, chemin: str) -> str:
+def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local") -> str:
     """Exporte les poids et le graphe en DRVM v0. Retourne le hash du fichier."""
     cfg = modele.cfg
     blocs = [{"id": "input", "kind": "input", "inputs": [], "outputs": ["h"]}]
@@ -193,7 +193,7 @@ def exporter_drvm(modele: NativeModel, chemin: str) -> str:
         "graph": {"regions": [{"id": "r0", "blocks": [b["id"] for b in blocs]}],
                   "blocks": blocs, "routes": [], "heads": [f"early{i}" for i in range(len(cfg.early_blocks))],
                   "thought": {"steps": cfg.thought_steps}, "bridge": None},
-        "execution": {"activation": "DRVF", "placement": "local",
+        "execution": {"activation": "DRVF", "placement": placement,
                       "cache": {"kind": "kv", "max": cfg.window},
                       "replay": {"seed": 0}},
     }
