@@ -22,10 +22,10 @@
  },
  "avec_jeu": {
   "A1": "morpion ok",
-  "E4": "echecs routé, position requise",
+  "E4": "echecs requete case 36",
   "d4": "go ok",
   "b6-c5": "dames ok",
-  "note": "4/4 routées, 3/4 lues ; correction B11.10a"
+  "note": "4/4 routées et lues (B11.10c)"
  },
  "controles": {
   "e2e4": "echecs",

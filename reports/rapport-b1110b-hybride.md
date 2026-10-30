@@ -2,7 +2,7 @@
 
 > **Ligne de roadmap** : B11.10 · **Date** : 2026-10-29 · **Verdict** : ✅ **hybride** — quand
 > la phrase nomme le jeu, l’indice est **strippé** et la surface est lue avec le jeu explicite.
-> **4/4 routées, 3/4 lues** : `E4` aux échecs exige une **position** pour un SAN.
+> **4/4 routées, 4/4 lues** : `E4` est une **requête de case** (B11.10c).
 >
 > **Dispositif** : `tools/jeux/hybride.py`, `lit_avec_indice` ; porte
 > `tools/porte-b1110-hybride.sh` ; données [`b1110b-hybride.json`](b1110b-hybride.json).
@@ -14,11 +14,11 @@
 | `A1 au morpion` | morpion | **oui** | case 0 |
 | `d4 au go` | go | **oui** | point 288 |
 | `b6-c5 aux dames` | dames | **oui** | chemin [8,13] |
-| `E4 aux échecs` | échecs | **non** | position requise pour un SAN |
+| `E4 aux échecs` | échecs | **oui** | requête case 36 |
 
 - **Sans indice** : les quatre sont refusées.
 - **`e2e4` et `2D`** : non touchés.
-- **Bilan** : 4/4 routées, **3/4 lues**.
+- **Bilan** : 4/4 routées, **4/4 lues**.
 
 ## Le contrôle négatif
 

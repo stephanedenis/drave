@@ -1,7 +1,7 @@
 {
  "date": "2026-10-29",
  "ligne": "B11.10a",
- "verdict": "routage 4/4, lecture exacte 3/4",
+ "verdict": "résolu : 4/4 routées et lues après la case E4 (B11.10c)",
  "surfaces": {
   "A1": {
    "jeu": "morpion",
@@ -13,9 +13,11 @@
   },
   "E4": {
    "jeu": "echecs",
-   "ok": false,
-   "rsn": null,
-   "erreur": "position requise pour un SAN"
+   "ok": true,
+   "rsn": {
+    "nature": "requete",
+    "case": 36
+   }
   },
   "d4": {
    "jeu": "go",

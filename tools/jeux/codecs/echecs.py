@@ -336,6 +336,15 @@ class CodecEchecs(Codec):
             return self.reussi(lec, E.action_depuis_coup(E.Coup(de, vers, promo)),
                                "uci", 0.8, ["position requise pour valider"])
 
+        # 4b-bis. une CASE seule (`E4`) : avec le jeu explicite, c'est une
+        # référence de case, PAS un coup. Le SAN exige une position ; la case, non.
+        m = re.fullmatch(r"([a-h][1-8])", texte.strip(), re.IGNORECASE)
+        if m:
+            idx = E.case_vers_indice(m.group(1).lower())
+            lec.format = "case"
+            return self.reussi(lec, RSN("echecs", "requete", {"case": idx}),
+                               "case", 0.8, ["case sans position : ce n'est pas un coup"])
+
         # 4c. SAN — exige la position (c'est la légalité qui désambiguïse)
         erreur_san = None
         if pos is not None and niveau >= 1:

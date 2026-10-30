@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 19:22 | `2704947c` | JOURNAL — LE DÉCLENCHEUR, ET LA FIN D'UNE OBSTINATION (SESSION 8156fdcb) | `README.md`, `memoire.md` |
 | 19:44 | `9ca7b1d2` | A8.0 — PORTE-CYCLE-C2 ÉPINGLÉE : 14,6496 ; ÉTAT 9/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
 | 20:06 | `f577e3c8` | A8.0 — PORTE-CONSOLIDATION ÉPINGLÉE : 17,4268 / 17,1655 ; ÉTAT 10/33 | `en-cours.md`, `README.md`, `mesures.md` (+4) |
+| 23:31 | `4884e9bb` | B11.10b — L'INDICE DE JEU STRIPPÉ : 4/4 ROUTÉES, 3/4 LUES ; PORTE 75 | `en-cours.md`, `README.md`, `docs.md` (+4) |
 
 ## Chiffres du jour
 
@@ -30,6 +31,7 @@
 - [reports/rapport-a80-porte-consolidation.md](../../reports/rapport-a80-porte-consolidation.md)
 - [reports/rapport-a80-porte-cycle-c2.md](../../reports/rapport-a80-porte-cycle-c2.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)
+- [reports/rapport-b1110b-hybride.md](../../reports/rapport-b1110b-hybride.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
 - [reports/rapport-r05-balayage.md](../../reports/rapport-r05-balayage.md)
 - [reports/rapport-r06-cascade-confiance.md](../../reports/rapport-r06-cascade-confiance.md)

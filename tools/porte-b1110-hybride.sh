@@ -11,7 +11,7 @@ cases = {
     "A1 au morpion": ("morpion", True),
     "d4 au go": ("go", True),
     "b6-c5 aux dames": ("dames", True),
-    "E4 aux échecs": ("echecs", False),
+    "E4 aux échecs": ("echecs", True),
 }
 ok = 0
 for texte, (jeu, lu) in cases.items():
@@ -22,8 +22,8 @@ for texte, (jeu, lu) in cases.items():
         raise SystemExit(f"  ❌ {texte!r} : ok={l.ok} (attendu {lu})")
     ok += int(l.ok)
     print(f"  ✅ {texte!r} → {l.jeu} · lu={l.ok} · {l.erreurs[:1] or l.rsn.corps}")
-if ok != 3:
-    raise SystemExit(f"  ❌ {ok}/4 lues (attendu 3/4 ; E4 exige une position)")
+if ok != 4:
+    raise SystemExit(f"  ❌ {ok}/4 lues (attendu 4/4 ; E4 = requête de case)")
 for s in ("A1", "E4", "d4", "b6-c5"):
     if lit(s).ok:
         raise SystemExit(f"  ❌ {s} lu sans indice")
@@ -33,5 +33,5 @@ for s, jeu in (("e2e4", "echecs"), ("2D", "cartes")):
     if not l.ok or l.jeu != jeu:
         raise SystemExit(f"  ❌ contrôle {s!r} : ok={l.ok} jeu={l.jeu}")
 print("  ✅ e2e4/2D non touchés")
-print("PORTE TENUE : 4/4 routées · 3/4 lues · E4 exige une position")
+print("PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case")
 PY

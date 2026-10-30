@@ -1,0 +1,23 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B11.10c",
+ "verdict": "E4 lu comme requête de case ; hybride 4/4",
+ "surface": "E4",
+ "rsn": {
+  "nature": "requete",
+  "corps": {
+   "case": 36
+  }
+ },
+ "avec_indice": true,
+ "controle": "E4 nue refusée ; e2e4 et 2D non touchés ; A1/d4/b6-c5 inchangés",
+ "limites": [
+  "une case n'est pas un coup : nature requete, pas coup",
+  "pas de position validée",
+  "quatre surfaces"
+ ],
+ "prochain": [
+  "corpus 161",
+  "champ natif 69,3 %"
+ ]
+}

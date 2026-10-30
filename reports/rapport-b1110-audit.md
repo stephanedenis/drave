@@ -13,7 +13,7 @@
 | surface | jeu | `ok` | RSN / erreur |
 |---|---|---|---|
 | `A1` | morpion | **oui** | case 0, symbole nul |
-| `E4` | échecs | **non** | position requise pour un SAN |
+| `E4` | échecs | **oui** (B11.10c) | requête case 36 |
 | `d4` | go | **oui** | point 288, taille 19 |
 | `b6-c5` | dames | **oui** | chemin [8, 13] |
 
