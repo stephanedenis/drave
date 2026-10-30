@@ -1,0 +1,36 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B11.10b",
+ "porte": "porte-b1110-hybride.sh",
+ "principe": "stripper l'indice de jeu (aux échecs, au go, aux dames, au morpion) puis lit(surface, jeu)",
+ "cas": {
+  "A1 au morpion": {
+   "jeu": "morpion",
+   "lu": true
+  },
+  "d4 au go": {
+   "jeu": "go",
+   "lu": true
+  },
+  "b6-c5 aux dames": {
+   "jeu": "dames",
+   "lu": true
+  },
+  "E4 aux échecs": {
+   "jeu": "echecs",
+   "lu": false,
+   "erreur": "position requise pour un SAN"
+  }
+ },
+ "bilan": "4/4 routées, 3/4 lues ; E4 exige une position",
+ "controle": "sans indice, 4/4 refusées ; e2e4 et 2D non touchés",
+ "limites": [
+  "quatre surfaces",
+  "pas de corpus 161",
+  "pas de champ natif"
+ ],
+ "prochain": [
+  "fournir une position pour E4 ou accepter le refus",
+  "corpus large"
+ ]
+}

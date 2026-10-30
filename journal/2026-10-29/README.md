@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**155 commits** · **0 session(s)** · **8 thème(s)**
+**156 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 16 | [distribue.md](distribue.md) |
-| docs | 25 | [docs.md](docs.md) |
+| docs | 26 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 52 | [mesures.md](mesures.md) |
 | modele | 11 | [modele.md](modele.md) |
@@ -188,6 +188,7 @@ Aucune session indexée pour ce jour ; voir
 | 23:18 | `77296739` | N3.5d — L'EMPREINTE REFUSE UN AVAL DIVERGENT (CODE 4) ; PORTE 73 |
 | 23:23 | `50db63c0` | N3.5e — GÉNÉRATION RÉPARTIE TCP, DEUX CACHES, BIT-IDENTIQUE ; PORTE 74 |
 | 23:27 | `472c25a6` | B11.10a — 4/4 ROUTÉES, 3/4 LUES : E4 EXIGE UNE POSITION |
+| 23:28 | `d99786be` | ÉTAT — DATE ALIGNÉE SUR LE DERNIER COMMIT |
 
 ## Le récit de la journée (écrit à la main)
 
