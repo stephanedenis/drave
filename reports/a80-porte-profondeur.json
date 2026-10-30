@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-profondeur-routee.sh",
+ "tolerance": 0.0005,
+ "modele": "Qwen2.5-0.5B-Q8_0, 8192 jetons",
+ "reference_pleine_profondeur": 14.6496,
+ "mesures": {
+  "profondeur16_ppl": 429684.6614,
+  "profondeur24_ppl": 14.6496,
+  "accord_16_24": 0.3093,
+  "oracle_par_jeton": 0.5192
+ },
+ "controle": "décalage de 10 % de la PPL pleine profondeur refusé",
+ "gate": "exit 0 ; chaîne hors-ligne = moteur, borne de l'oracle chiffrée",
+ "limites": [
+  "un seul modèle",
+  "8192 jetons",
+  "la PPL 16 couches dépend de l'adaptateur entraîné"
+ ]
+}

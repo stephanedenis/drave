@@ -69,6 +69,15 @@ for PROF in 16 24; do
     [ -n "$PPL" ] || { echo "  ❌ aucune perplexité dans $T/v$PROF.log : la capture a échoué"; exit 1; }
     [ -s "$T/v$PROF.126" ] || { echo "  ❌ la capture $PROF couches n'a rien écrit"; exit 1; }
     echo "  — profondeur $PROF (moteur : $PPL)"
+    if [ "$PROF" = "24" ]; then
+        python3 - "$PPL" <<'PPLPR' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 14.6496
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL pleine profondeur : {val} (attendu {attendu})")
+print(f"  ✅ PPL pleine profondeur épinglée : {val}")
+PPLPR
+    fi
     $P tools/verifier_chaine_etat.py --etats "$T/v$PROF" --ids "$IDS" --modele "$M" \
         --ppl-attendue "$PPL" || exit 1
 done
