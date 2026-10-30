@@ -1,0 +1,25 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-consolidation.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": 0.0005,
+ "references": {
+  "base": 17.4268,
+  "aleatoire": 17.1655,
+  "rapport": 0.985
+ },
+ "mesures": {
+  "base": 17.4268,
+  "aleatoire": 17.1655,
+  "rapport": 0.985,
+  "nul_identique": true
+ },
+ "controle": "décalage de 10 % des deux PPL refusé par la même expression",
+ "gate": "exit 0 ; nul identique au bit, aléatoire visible, lecteur hors fichier",
+ "limites": [
+  "un seul modèle",
+  "256 jetons",
+  "le rapport 0,9850 est un déplacement, pas une qualité"
+ ]
+}

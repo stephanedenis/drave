@@ -97,6 +97,15 @@ if cmp -s "$T/base.gguf" "$T/aleatoire.gguf"; then
 else
     p_base=$(ppl "$T/base.gguf"); p_alea=$(ppl "$T/aleatoire.gguf")
     [ -n "$p_base" ] && [ -n "$p_alea" ] || { echo "  ❌ perplexité illisible"; exit 1; }
+    # A8.0 — la PPL de base et le rapport du LoRA aléatoire sont épinglés (5e-4).
+    $P - "$p_base" "$p_alea" <<'PPLC' || exit 1
+import sys
+base, alea = float(sys.argv[1]), float(sys.argv[2])
+for nom, val, attendu in (("base", base, 17.4268), ("alea", alea, 17.1655)):
+    if abs(val - attendu) > 5e-4 * max(attendu, 1.0):
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print(f"  ✅ PPL épinglées : base {base} · aléatoire {alea}")
+PPLC
     rapport=$($P -c "print(f'{$p_alea/max($p_base,1e-12):.4f}')")
     echo "  ✅ B. LoRA aléatoire ⇒ fichier différent · perplexité $p_base → $p_alea (×$rapport)"
 fi

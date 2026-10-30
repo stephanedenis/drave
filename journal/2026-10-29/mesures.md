@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (42)
+## Commits du jour (43)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -50,6 +50,7 @@
 | 17:32 | `981e4bbf` | CORPUS GELÉ — LA DÉRIVE DES BANCS EST CLOSE : 30 DOCUMENTS, MANIFESTE SHA256, 0 PROBLÈME | `banc-lecture.md`, `corpus-gele.md`, `R03-banc-lecture-rapide.md` (+47) |
 | 17:37 | `11713f7c` | LE PROGRAMME R EN UNE PAGE — CE QUI TIENT, CE QUI NE TIENT PAS, TROIS LOIS | `en-cours.md`, `programme-r.md`, `roadmap.md` (+6) |
 | 19:48 | `b5a9cdec` | A8.3b — LE SIGNE VIENT DU CHEMIN LOT (1 vs ≥2), PAS DE LA TAILLE | `en-cours.md`, `README.md`, `memoire.md` (+3) |
+| 20:03 | `cae26b73` | B10.2bis — LE CORPUS NE DÉCOLLE PAS LE DÉCODEUR : 7,6/6,3/8,0 SUR 12 LANGUES CONTRE 17,1 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `roadmap.md` (+8) |
 
 ## Chiffres du jour
 
@@ -63,6 +64,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
 - [reports/rapport-a83b-lot.md](../../reports/rapport-a83b-lot.md)
+- [reports/rapport-b102bis-corpus-jw.md](../../reports/rapport-b102bis-corpus-jw.md)
 - [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
 - [reports/rapport-b1110-cartes.md](../../reports/rapport-b1110-cartes.md)
 - [reports/rapport-cerveau-corrections.md](../../reports/rapport-cerveau-corrections.md)
