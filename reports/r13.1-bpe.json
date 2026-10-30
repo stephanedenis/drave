@@ -1,0 +1,55 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R13.1",
+ "porte": "porte-r13-bpe.sh",
+ "corpus": "data/corpus_fr.txt",
+ "tokenizer": {
+  "type": "BPE byte-level",
+  "vocab": 512,
+  "octets": 4633889,
+  "jetons": 2344050,
+  "octets_par_jeton": 1.9768729335978328,
+  "reversible": true
+ },
+ "modeles": {
+  "octets_200": {
+   "vocab": 256,
+   "parametres": 11814792,
+   "ppl": 14.107245362588944,
+   "bits_par_octet": 3.81836440389223
+  },
+  "octets_400": {
+   "vocab": 256,
+   "parametres": 11814792,
+   "ppl": 12.89809175930387,
+   "bits_par_octet": 3.6890857331692604
+  },
+  "bpe_200": {
+   "vocab": 512,
+   "parametres": 12448136,
+   "ppl": 85.8308408368051,
+   "bits_par_octet": 3.2492853321259885,
+   "tokens_par_octet": 0.505849406405721
+  }
+ },
+ "budget": {
+  "octets_vus_octets": 409600,
+  "octets_vus_bpe": 404864,
+  "ecart_pct": -1.2
+ },
+ "controle": "mêmes graine/architecture/corpus ; octets 200→400 montre l'effet des données (3,818→3,689) ; BPE reste 11,9 % devant à octets égaux",
+ "verdict": "le BPE natif gagne 11,9 % de bits/octet à budget d'octets égal",
+ "limites": [
+  "français seulement",
+  "vocab 512",
+  "200/400 pas",
+  "une graine",
+  "le modèle BPE a 5,4 % de paramètres en plus"
+ ],
+ "prochain": [
+  "vocab 1024",
+  "anglais/multilingue",
+  "plus de pas",
+  "contexte long"
+ ]
+}

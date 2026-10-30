@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**144 commits** · **0 session(s)** · **8 thème(s)**
+**145 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 13 | [distribue.md](distribue.md) |
+| distribue | 14 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 49 | [mesures.md](mesures.md) |
@@ -177,6 +177,7 @@ Aucune session indexée pour ce jour ; voir
 | 22:13 | `fa20b2ae` | DOCS — RÉFÉRENCES : PASSE DUPLIQUÉE RETIRÉE (T1 2 500) |
 | 22:19 | `36aa6bd5` | A8.0 — PORTE-BUS-SOCKET ÉPINGLÉE : 113,0068 / 148,7080 / 42,3176 / 148,9144 ; ÉTAT 17/33 |
 | 22:23 | `e220336a` | A8.3c.1 — LE SIGNE NE DÉPEND PAS DU CONTEXTE : 24 MESURES, ctx 64/256/512 IDENTIQUES |
+| 22:28 | `7a46498b` | C11 — LA PANNE NOMME RÉGION, PAS ET OCTETS : PORTE-PANNES VERTE |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,6 +21,7 @@
 | 20:53 | `c1a9c37b` | A8.0 — PORTE-TRACE ÉPINGLÉE : 59,0790 ; ÉTAT 12/33 | `en-cours.md`, `README.md`, `modele.md` (+4) |
 | 22:08 | `30a0c341` | A8.0 — PORTE-BUS ÉPINGLÉE : 64,1160 / 59,0790 / 66,0379 ; ÉTAT 15/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
 | 22:19 | `36aa6bd5` | A8.0 — PORTE-BUS-SOCKET ÉPINGLÉE : 113,0068 / 148,7080 / 42,3176 / 148,9144 ; ÉTAT 17/33 | `en-cours.md`, `README.md`, `docs.md` (+4) |
+| 22:28 | `7a46498b` | C11 — LA PANNE NOMME RÉGION, PAS ET OCTETS : PORTE-PANNES VERTE | `en-cours.md`, `main.rs`, `README.md` (+3) |
 
 ## Chiffres du jour
 
@@ -42,6 +43,7 @@
 - [reports/rapport-a83a-flux.md](../../reports/rapport-a83a-flux.md)
 - [reports/rapport-a83b-regimes.md](../../reports/rapport-a83b-regimes.md)
 - [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
+- [reports/rapport-pannes-nommees.md](../../reports/rapport-pannes-nommees.md)
 - [reports/rapport-r01-graphe-document.md](../../reports/rapport-r01-graphe-document.md)
 - [reports/rapport-r02-controleur.md](../../reports/rapport-r02-controleur.md)
 - [reports/rapport-r42-bloc-code.md](../../reports/rapport-r42-bloc-code.md)
