@@ -58,6 +58,9 @@
 | `REPRISE.md` | 2 000 | **T1** — la check-list de démarrage |
 | `docs/pilotage/utilisation.md` | 2 500 | **T1** — les commandes qui marchent |
 
+> **Les sources de diagrammes** (` ```plantuml `, ` ```mermaid `) sont **rendues, pas lues** : elles
+> ne comptent pas dans le budget. Le document les porte, la page montre le SVG.
+
 Les documents **datés** (`contexte-long`, `numa-segregation`, `configuration-nvme-raid-amd`,
 `convertisseur`, `manques`, `modularisation`) ont un **résumé** en tête et ne se chargent **jamais**
 par défaut : on lit le résumé, puis la section utile.

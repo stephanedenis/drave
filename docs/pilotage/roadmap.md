@@ -54,6 +54,55 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
    suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 17,1**), le contrôle `z` montre qu'il ne lit que ~7 % du sens.
 
+## Le Gantt indicatif
+
+> **Échelle.** Un Gantt se lit en **jours**, pas en heures : c'est un affichage **indicatif** du plan, pas une
+> échéance. L'état courant, à l'heure, est dans [`en-cours.md`](en-cours.md) ; la source est **dans cette page**
+> et docwatch la rend en SVG (hors docwatch, on voit le code).
+
+```plantuml
+@startgantt
+scale 2
+Title Les chantiers — ordre de dépendance (durées indicatives, aucune échéance)
+Project starts 2026-10-29
+[A1–A8] lasts 1 day and is 100% complete and is colored in #2e7d32
+[A8.0/A8.3a] lasts 1 day and is 100% complete and is colored in #2e7d32
+[A8.3b/c] lasts 1 day and is 100% complete and is colored in #2e7d32
+[A2.6] lasts 2 days and is 30% complete and is colored in #b26a00
+[A3.4/A5.4/A6.2] lasts 1 day and is colored in #b03a2e
+[B1–B12] lasts 1 day and is 100% complete and is colored in #2e7d32
+[B10.2bis] lasts 1 day and is 100% complete and is colored in #2e7d32
+[B10.3] lasts 2 days and is 15% complete and is colored in #b03a2e
+[B11.10] lasts 1 day and is 100% complete and is colored in #2e7d32
+[B12.10] lasts 1 day and is colored in #6a1b9a
+[R0.1–R0.3] lasts 1 day and is 100% complete and is colored in #2e7d32
+[R4.1–R4.3] lasts 1 day and is 100% complete and is colored in #2e7d32
+[R0.5] lasts 2 days and is 60% complete and is colored in #b26a00
+[R4.4] lasts 1 day and is colored in #b03a2e
+[N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32
+[N2] lasts 4 days and is 30% complete and is colored in #b26a00
+[N4] lasts 2 days and is colored in #1565c0
+[N5] lasts 1 day and is colored in #9e9e9e
+[A8.0/A8.3a] starts at [A1–A8]'s end
+[A8.3b/c] starts at [A8.0/A8.3a]'s end
+[A2.6] starts at [A8.3b/c]'s end
+[A3.4/A5.4/A6.2] starts at [A2.6]'s end
+[B10.2bis] starts at [B1–B12]'s end
+[B10.3] starts at [B10.2bis]'s end
+[B11.10] starts at [B1–B12]'s end
+[B12.10] starts at [B11.10]'s end
+[R4.1–R4.3] starts at [R0.1–R0.3]'s end
+[R0.5] starts at [R0.1–R0.3]'s end
+[R4.4] starts at [R4.1–R4.3]'s end
+[N2] starts at [N0/N1]'s end
+[N4] starts at [N2]'s end
+[N5] starts at [N4]'s end
+@endgantt
+```
+
+*Lecture : vert = mesuré/close, orange = en cours/partiel, rouge = bloqué, violet = négatif, gris = gelé.
+Les durées sont des ordres de grandeur ; les dépendances réelles sont dans le [graphe du backlog](backlog/dependances.md).*
+
 ---
 
 ## Programme A — Le moteur (la drave, les flux)

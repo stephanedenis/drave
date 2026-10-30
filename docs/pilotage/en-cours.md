@@ -94,11 +94,42 @@
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
 | **Backlog — graphe** | **37 fiches ; 42 arêtes** | 1 sans fiche | vérifier le graphe (`8156fdcb`) |
 
-![Les chantiers, leurs activités et leurs états : dépendances A/B/N/R, états et sessions actives](../schemas/chantiers-etats.svg)
+```plantuml
+@startwbs
+scale 1.8
+title Les chantiers — état au 30/10 09 h 25
+* Drave
+**[#c8e6c9] A — le moteur
+***[#c8e6c9] A1–A8
+***[#c8e6c9] A8.0/A8.3a — 19 portes
+***[#c8e6c9] A8.3b/c
+***[#ffe0b2] A2.6 — partiel
+***[#ffcdd2] A3.4/A5.4/A6.2 — bloqués
+**[#ffe0b2] B — l'intelligence
+***[#c8e6c9] B1–B12
+***[#c8e6c9] B10.2bis — close
+***[#ffcdd2] B10.3 — attend un encodeur
+***[#c8e6c9] B11.10 — mesurée
+***[#e1bee7] B12.10 — négatif
+**[#ffe0b2] N — le natif
+***[#c8e6c9] N0/N1
+***[#ffe0b2] N2 — 30 %
+***[#bbdefb] N4 — à faire
+***[#e0e0e0] N5 — gelé
+**[#ffe0b2] R — le lecteur
+***[#c8e6c9] R0.1–R0.3
+***[#c8e6c9] R4.1–R4.3
+***[#ffe0b2] R0.5 — en cours
+***[#ffcdd2] R4.4 — bloqué
+** Sessions actives
+*** 8156fdcb — R0.5 (cascade)
+*** c3d0f0bd — B10.2bis/A8.3b
+*** N2-GPU — N2
+@endwbs
+```
 
-*Lecture : la flèche va de ce qui est nécessaire à ce qui en dépend ; la couleur dit l'état ; les sessions actives
-sont marquées dans la boîte de leur activité. Le détail est dans la [roadmap](roadmap.md) et le
-[backlog](backlog/index.md).*
+*Lecture : structure et états, sans axe de temps (en-cours se pilote à l'heure) ; vert = mesuré, rouge = bloqué.
+Gantt (jours) dans la [roadmap](roadmap.md#le-gantt-indicatif), dépendances dans le [graphe](backlog/dependances.md).*
 
 **C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
 **C6** documentation · **C7** pensée : ✅ mesurés ; détail dans

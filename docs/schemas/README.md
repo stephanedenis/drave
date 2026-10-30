@@ -1,12 +1,13 @@
 # Les schémas — index et convention
 
-> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : six schémas directs
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : cinq schémas directs
 > des concepts, deux sources générées par docwatch et les quatorze schémas de la synthèse
 > (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
 > `role="img"` ; aucun n'utilise de ressource externe.
 >
-> **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement ou converti depuis Mermaid ou
-> PlantUML. Voir [`docs/methode/illustrations.md`](../methode/illustrations.md) ; vérifier avec
+> **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement, converti depuis Mermaid ou
+> PlantUML, ou un **bloc inline** rendu par docwatch. Voir
+> [`docs/methode/illustrations.md`](../methode/illustrations.md) ; vérifier avec
 > `python3 tools/verifier_schemas.py`.
 
 ## Les schémas des concepts
@@ -18,7 +19,11 @@
 | [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
 | [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
-| [chantiers-etats.svg](chantiers-etats.svg) | les chantiers A/B/N/R, leurs activités, dépendances et états | [l’état](../pilotage/en-cours.md) |
+
+Le **schéma des chantiers** n'est plus un fichier : c'est un bloc **PlantUML inline** dans
+[`en-cours.md`](../pilotage/en-cours.md) (structure et états, sans axe de temps) et un **Gantt
+indicatif** inline dans la [`roadmap.md`](../pilotage/roadmap.md#le-gantt-indicatif) ; docwatch les
+rend en SVG, la source reste dans la page.
 
 ## Les sources générées par docwatch
 

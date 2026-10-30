@@ -8,16 +8,19 @@
 > la police, casse au moindre changement de largeur et ne peut pas être validé. Le dépôt est lu par
 > des humains **et** des agents : une illustration doit être un objet, pas une suite de caractères.
 
-## Les trois voies autorisées
+## Les quatre voies autorisées
 
 1. **SVG direct** — un fichier `.svg` écrit à la main, avec `viewBox`.
 2. **Mermaid → SVG** — source `.mmd` ; **docwatch** génère `<source>.mmd.svg` ; l'image Markdown
    pointe vers ce SVG.
 3. **PlantUML → SVG** — source `.puml` ; **docwatch** génère `<source>.puml.svg`.
+4. **Bloc inline** — un bloc ` ```plantuml ` ou ` ```mermaid ` **dans le Markdown** ; docwatch le rend
+   en SVG mis en cache, sans fichier à côté. La source vit dans la page : elle se révise avec le texte.
 
 Le **SVG généré n'a pas besoin d'être committé** : docwatch le produit à la demande. S'il est
 présent, docwatch le régénère. `mmdc`/`plantuml` restent utiles pour prévisualiser en local, mais
-ne sont pas nécessaires. Le source `.mmd`/`.puml` vit **à côté** de l'image.
+ne sont pas nécessaires. Le source `.mmd`/`.puml` vit **à côté** de l'image ; un bloc inline n'a pas
+de fichier séparé.
 
 ## Où et comment
 
@@ -36,9 +39,14 @@ ne sont pas nécessaires. Le source `.mmd`/`.puml` vit **à côté** de l'image.
 - Un concept = **une** illustration ; on réutilise un schéma existant plutôt que d'en créer un
   doublon.
 
+> **L'échelle et la largeur.** Un Gantt (jours/semaines) va dans la
+> [roadmap](../pilotage/roadmap.md#le-gantt-indicatif) ; [en-cours](../pilotage/en-cours.md) se pilote à
+> l'heure et n'a pas d'axe de temps : un diagramme d'états ou un WBS sans date y est plus juste. Un
+> diagramme large (1 500–2 000 px) est normal — les écrans sont en 4K.
+
 ## Ce qui est interdit
 
-- les blocs de code qui dessinent une architecture, un flux, un arbre ou une carte ;
+- les blocs de code **ASCII** qui dessinent une architecture, un flux, un arbre ou une carte ;
 - les caractères de boîte `┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼ │ ─` ;
 - les flèches `──►`, `◄──`, `-->` alignées dans un bloc de code ;
 - les liens d'image absolus ou externes ;
@@ -52,7 +60,9 @@ python3 tools/verifier_schemas.py
 
 L'outil vérifie : l'absence d'ASCII art dans les documents, la validité XML des SVG, la présence
 d'un `viewBox` et d'un titre, l'absence de ressources externes, les liens d'image relatifs et
-existants, et le fait que chaque schéma est **référencé** quelque part.
+existants, et le fait que chaque schéma est **référencé** quelque part. Il vérifie aussi que chaque
+bloc **PlantUML inline** se rend (`plantuml` requis) ; Mermaid inline n'est pas vérifié ici, `mmdc`
+demande un navigateur (`chrome-headless-shell`).
 Une image `<source>.svg` peut être **absente** si la source `.mmd`/`.puml` existe : docwatch la génère.
 
 ## Améliorer un schéma existant

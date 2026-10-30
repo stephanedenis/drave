@@ -11,6 +11,9 @@ Ce que l'outil vérifie :
 Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
 ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens
 est donnée à titre indicatif (≈ caractères / 4).
+
+Les **sources de diagrammes** (` ```plantuml `, ` ```mermaid `) sont **rendues, pas lues** :
+elles ne comptent pas dans le budget ; le document les porte, la page montre le SVG.
 """
 from __future__ import annotations
 import pathlib
@@ -70,6 +73,19 @@ def mots(texte: str) -> int:
     return len(re.findall(r"\S+", texte))
 
 
+#: Une source de diagramme est **rendue**, pas lue comme de la prose : elle ne compte
+#: pas dans le budget de contexte. Le rendu (docwatch) est ce que voit le lecteur ;
+#: la source reste dans le document pour être révisée avec lui.
+DIAGRAMME = re.compile(
+    r"^[ \t]*```[ \t]*(?:plantuml|puml|pu|mermaid|mmd)[ \t]*\n.*?^[ \t]*```[ \t]*$",
+    re.MULTILINE | re.DOTALL,
+)
+
+
+def mots_hors_diagrammes(texte: str) -> int:
+    return mots(DIAGRAMME.sub("", texte))
+
+
 def classe(rel: str) -> tuple[str, int]:
     for cat, motif, budget in BUDGETS:
         if pathlib.Path(rel).match(motif):
@@ -90,7 +106,7 @@ def main() -> int:
                 continue
             rel = str(p.relative_to(RACINE))
             t = p.read_text(encoding="utf-8", errors="ignore")
-            n = mots(t)
+            n = mots_hors_diagrammes(t)
             lignes.append((n, t.count("\n") + 1, rel, cat, budget))
             tete = "\n".join(t.splitlines()[:20])
             if cat in ("T0", "T1"):
@@ -124,7 +140,7 @@ def main() -> int:
     # T0 : la somme des trois lectures par défaut
     def poids(rel: str) -> int:
         q = RACINE / rel
-        return mots(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
+        return mots_hors_diagrammes(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
 
     agents = list((RACINE / "docs/methode").glob("*.md"))
     t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
