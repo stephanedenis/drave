@@ -20,9 +20,9 @@ from tools.native_model import NativeConfig, NativeModel, exporter_drvm
 from tools.vdc import departs_vdc
 
 
-def charger_ids(chemin: str) -> torch.Tensor:
+def charger_ids(chemin: str, min_taille: int = 100_000) -> torch.Tensor:
     data = torch.load(chemin, map_location="cpu")
-    if data.numel() < 100_000:
+    if data.numel() < min_taille:
         raise SystemExit(f"{chemin} : corpus trop court")
     return data.to(torch.long)
 
@@ -69,7 +69,7 @@ def main() -> None:
     torch.manual_seed(a.graine)
     data = charger_ids(a.ids)
     if a.val_ids:
-        val = charger_ids(a.val_ids)
+        val = charger_ids(a.val_ids, min_taille=10_000)
         train = data
     else:
         n_val = max(10_000, len(data) // 20)

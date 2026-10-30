@@ -1,0 +1,23 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-indice.sh",
+ "statut": "rouge structurelle qualifiée",
+ "invites": {
+  "A": 1470,
+  "B": 1440,
+  "aiguille": 669
+ },
+ "echo_interne": "64/64 mais ne prouve rien",
+ "exterieur": {
+  "distance": 482,
+  "temoins": 459,
+  "hasard": 370
+ },
+ "echec": "l'indice extérieur (482) est au niveau du témoin (459), écart nul ou négatif",
+ "verdict": "rouge non corrigée : rien n'est établi sur ce texte ; la porte refuse",
+ "limites": [
+  "un seul modèle",
+  "mémoire par contenu, pas sémantique"
+ ]
+}

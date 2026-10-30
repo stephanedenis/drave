@@ -1,0 +1,36 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R13.2",
+ "tokenizer": {
+  "vocab": 1024,
+  "val_jetons": 94463,
+  "val_octets": 231694,
+  "octets_par_jeton_val": 2.4527486952563438
+ },
+ "modele": {
+  "pas": 4000,
+  "ppl_val": 24.136011713482464,
+  "bits_par_octet_val": 1.8726400325986698,
+  "precision_main": 0.32763671875,
+  "duree_s": 193.6,
+  "octets_vus": 10157400
+ },
+ "baseline_bytes": {
+  "pas": 10000,
+  "bits_par_octet_val": 1.8020511721549923
+ },
+ "ecart_pct": 3.92,
+ "verdict": "vocab 1024 perd 3,9 % à octets égaux (pire que 512 à 0,7 %)",
+ "controle": "mêmes train/val/graine/architecture ; 4k BPE1024 ≈ 10k bytes en octets vus",
+ "limites": [
+  "français",
+  "4k pas",
+  "une graine",
+  "précision par jeton non comparable"
+ ],
+ "prochain": [
+  "anglais 100 Mo",
+  "plus de pas",
+  "deuxième graine"
+ ]
+}
