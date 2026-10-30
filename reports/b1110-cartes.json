@@ -21,10 +21,11 @@
   "b6-c5": "refus:2 jeux"
  },
  "avec_jeu": {
-  "A1": {"jeu": "morpion", "exact": true},
-  "E4": {"jeu": "echecs", "exact": true},
-  "d4": {"jeu": "go", "exact": true},
-  "b6-c5": {"jeu": "dames", "exact": true}
+  "A1": "morpion ok",
+  "E4": "echecs routé, position requise",
+  "d4": "go ok",
+  "b6-c5": "dames ok",
+  "note": "4/4 routées, 3/4 lues ; correction B11.10a"
  },
  "controles": {
   "e2e4": "echecs",

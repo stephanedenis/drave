@@ -1,0 +1,52 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B11.10a",
+ "verdict": "routage 4/4, lecture exacte 3/4",
+ "surfaces": {
+  "A1": {
+   "jeu": "morpion",
+   "ok": true,
+   "rsn": {
+    "case": 0,
+    "symbole": null
+   }
+  },
+  "E4": {
+   "jeu": "echecs",
+   "ok": false,
+   "rsn": null,
+   "erreur": "position requise pour un SAN"
+  },
+  "d4": {
+   "jeu": "go",
+   "ok": true,
+   "rsn": {
+    "point": 288,
+    "taille": 19
+   }
+  },
+  "b6-c5": {
+   "jeu": "dames",
+   "ok": true,
+   "rsn": {
+    "chemin": [
+     8,
+     13
+    ]
+   }
+  }
+ },
+ "indices": {
+  "E4 aux échecs": "jeu echecs, ok False",
+  "A1 au morpion": "jeu morpion, ok False",
+  "d4 au go": "ok True",
+  "b6-c5 aux dames": "ok True"
+ },
+ "controle": "sans jeu, les quatre sont refusées ; avec jeu, le routage est 4/4 mais E4 exige une position",
+ "limites": [
+  "4 surfaces",
+  "pas de corpus 161",
+  "pas de champ natif"
+ ],
+ "correction": "le rapport B11.10 disait 4/4 exact avec jeu ; c'est 4/4 routé, 3/4 lu"
+}

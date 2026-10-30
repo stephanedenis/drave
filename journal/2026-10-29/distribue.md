@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 22:19 | `36aa6bd5` | A8.0 — PORTE-BUS-SOCKET ÉPINGLÉE : 113,0068 / 148,7080 / 42,3176 / 148,9144 ; ÉTAT 17/33 | `en-cours.md`, `README.md`, `docs.md` (+4) |
 | 22:28 | `7a46498b` | C11 — LA PANNE NOMME RÉGION, PAS ET OCTETS : PORTE-PANNES VERTE | `en-cours.md`, `main.rs`, `README.md` (+3) |
 | 22:52 | `6eca9a15` | N3.5a — DÉCOUPAGE 0..k / k..n BIT-EXACT, K=0..4 ; 2 BUGS LATENTS CORRIGÉS ; PORTE 70 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+8) |
+| 23:23 | `50db63c0` | N3.5e — GÉNÉRATION RÉPARTIE TCP, DEUX CACHES, BIT-IDENTIQUE ; PORTE 74 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+6) |
 
 ## Chiffres du jour
 
@@ -45,6 +46,7 @@
 - [reports/rapport-a83b-regimes.md](../../reports/rapport-a83b-regimes.md)
 - [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)
 - [reports/rapport-n3.5a-deux-regions.md](../../reports/rapport-n3.5a-deux-regions.md)
+- [reports/rapport-n3.5e-generation.md](../../reports/rapport-n3.5e-generation.md)
 - [reports/rapport-pannes-nommees.md](../../reports/rapport-pannes-nommees.md)
 - [reports/rapport-r01-graphe-document.md](../../reports/rapport-r01-graphe-document.md)
 - [reports/rapport-r02-controleur.md](../../reports/rapport-r02-controleur.md)

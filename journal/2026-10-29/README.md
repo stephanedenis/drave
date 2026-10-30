@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**153 commits** · **0 session(s)** · **8 thème(s)**
+**154 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 15 | [distribue.md](distribue.md) |
+| distribue | 16 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 52 | [mesures.md](mesures.md) |
@@ -186,6 +186,7 @@ Aucune session indexée pour ce jour ; voir
 | 23:09 | `89bb7ef8` | N3.5c — DEUX PROCESSUS TCP, AUCUN CACHE SUR LE FIL : LOGITS IDENTIQUES ; PORTE 72 |
 | 23:11 | `ccdda6b5` | A8.3b/c — DÉCISION : OPT-IN, CAUSE = CHEMIN LOT, CACHE INNOCENTÉ |
 | 23:18 | `77296739` | N3.5d — L'EMPREINTE REFUSE UN AVAL DIVERGENT (CODE 4) ; PORTE 73 |
+| 23:23 | `50db63c0` | N3.5e — GÉNÉRATION RÉPARTIE TCP, DEUX CACHES, BIT-IDENTIQUE ; PORTE 74 |
 
 ## Le récit de la journée (écrit à la main)
 

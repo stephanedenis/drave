@@ -35,7 +35,7 @@ base d'un **69,3 %** — chiffre qui vient du champ natif, pas de la couche clas
 | `E4` sans jeu | go, point 289 | **refus** (4 jeux) |
 | `d4` sans jeu | go, point 288 | **refus** (4 jeux) |
 | `b6-c5` sans jeu | dames, chemin `[8, 13]` | **refus** (2 jeux) |
-| avec le jeu explicite | — | **4 / 4 exact** |
+| avec le jeu explicite | — | **4 / 4 routées, 3 / 4 lues** (`E4` exige une position) |
 | `e2e4` | échecs | échecs |
 | `2D` | cartes | cartes |
 
@@ -48,7 +48,7 @@ la collision que la porte B11.10 demandait de contrôler.
 
 - **Sans jeu** : les quatre surfaces sont refusées, avec `ok = False` et les jeux candidats dans
   `ambiguites` ; aucune ne produit de RSN.
-- **Avec jeu** : `A1` → morpion, `E4` → échecs, `d4` → go, `b6-c5` → dames ; **4/4** exacts.
+- **Avec jeu** : `A1` → morpion, `E4` → échecs, `d4` → go, `b6-c5` → dames ; **4/4 routées**, **3/4 lues** (`E4` exige une position pour un SAN).
 - **Surfaces non ambiguës** : `e2e4` reste un coup d'échecs, `2D` une carte ; le garde ne les touche pas.
 - **Porte des jeux** : `exit 0` ; **100 %** au niveau 4, **33/33** paires invariantes, **0 collision**,
   71 langues et les maîtres mesurés.
