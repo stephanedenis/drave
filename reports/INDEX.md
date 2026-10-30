@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **357 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **358 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -54,6 +54,7 @@
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-b10-contraste.md](rapport-b10-contraste.md) | B10 — le terme contrastif ne fait pas lire `z` : 32,6 de chrF (inchangé), écart `z` 1,5 (contre 2,6) |
 | [rapport-b10-decodeur-mots.md](rapport-b10-decodeur-mots.md) | B10 — le décodeur au niveau du mot : 32,5 de chrF (plancher 33,7), mais le `z` ne porte que 2,6 points |
 | [rapport-b10-mots-jw.md](rapport-b10-mots-jw.md) | B10 — le décodeur mot sur JW : 26,7 contre un plancher de 17,1 (+9,5), mais le `z` ne porte que 1,9 point |
 | [rapport-b102bis-capacite.md](rapport-b102bis-capacite.md) | B10.2bis — la capacité : 31,77 M contre 9,29 M, le décodeur ne bouge pas |

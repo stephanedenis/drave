@@ -179,7 +179,7 @@ def paires(articles: dict, langues: list[str], rng: random.Random, n: int):
 
 def entrainer(articles: dict, val: dict, z: dict, vocab: Vocabulaire, langues: list[str],
               graine: int, pas: int, device, lot: int = 32, lr: float = 1e-3,
-              eval_tous: int = 500) -> dict:
+              eval_tous: int = 500, contraste: float = 0.0, marge: float = 1.0) -> dict:
     torch.manual_seed(graine)
     rng = random.Random(graine)
     model = DecodeurMots(len(vocab), len(langues)).to(device)
@@ -203,6 +203,14 @@ def entrainer(articles: dict, val: dict, z: dict, vocab: Vocabulaire, langues: l
         logits = model(tokens, langues_t, zs)
         perte = F.cross_entropy(logits.reshape(-1, logits.shape[-1]), labels.reshape(-1),
                                 ignore_index=-100)
+        # Terme contrastif : le décodeur doit préférer le z CORRECT au z d'une autre unité.
+        # Sans lui, la langue et le registre suffisent (le z ne porte que ~2 points).
+        if contraste > 0:
+            zs_melange = zs.roll(1, dims=0)
+            logits_s = model(tokens, langues_t, zs_melange)
+            perte_s = F.cross_entropy(logits_s.reshape(-1, logits_s.shape[-1]),
+                                      labels.reshape(-1), ignore_index=-100)
+            perte = perte + contraste * torch.relu(marge - (perte_s - perte.detach()))
         opt.zero_grad()
         perte.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -270,14 +278,16 @@ def controles(model, val: dict, z: dict, vocab: Vocabulaire, langues: list[str],
 
 # ------------------------------------------------------------------ les modes
 
-def une_graine(graine: int, pas: int, device, seq: int = 128) -> dict:
+def une_graine(graine: int, pas: int, device, seq: int = 128, contraste: float = 0.0,
+               marge: float = 1.0) -> dict:
     langues = CONFIG["langues"]
     articles = CONFIG["module"].charger(langues)
     train, val = CONFIG["module"].decouper(articles)
     vocab = Vocabulaire(train, langues)
     z = etats_encodeur(articles, langues, device, seq)
     debut = time.monotonic()
-    resultat = entrainer(train, val, z, vocab, langues, graine, pas, device)
+    resultat = entrainer(train, val, z, vocab, langues, graine, pas, device,
+                         contraste=contraste, marge=marge)
     meilleur = max(resultat["historique"], key=lambda m: m["chrf_trad"])
     controles_ = controles(resultat["model"], val, z, vocab, langues, device)
     return {"graine": graine, "meilleur": meilleur, "controles": controles_,
@@ -286,10 +296,12 @@ def une_graine(graine: int, pas: int, device, seq: int = 128) -> dict:
             "vocabulaire": len(vocab)}
 
 
-def mesure(chemin: pathlib.Path, pas: int, graines: list[int], corpus: str = "udhr") -> int:
+def mesure(chemin: pathlib.Path, pas: int, graines: list[int], corpus: str = "udhr",
+           contraste: float = 0.0, marge: float = 1.0) -> int:
     _configurer(corpus)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    resultats = [une_graine(g, pas, device) for g in graines]
+    resultats = [une_graine(g, pas, device, contraste=contraste, marge=marge)
+                 for g in graines]
     trad = [r["meilleur"]["chrf_trad"] for r in resultats]
     rec = [r["meilleur"]["chrf_rec"] for r in resultats]
     plancher = resultats[0]["meilleur"]["chrf_plancher"]
@@ -303,6 +315,7 @@ def mesure(chemin: pathlib.Path, pas: int, graines: list[int], corpus: str = "ud
             "encodeur": f"{CHECKPOINT} + {ENCODEUR_ENTRAINE} (gelé)",
             "decodeur": "mots : embedding + langue + 2 couches d'attention croisée sur z",
             "pas": pas, "graines": graines, "cibles": CIBLES,
+            "contraste": contraste, "marge": marge,
         },
         "resultats": [{"graine": r["graine"], "meilleur": r["meilleur"],
                        "controles": r["controles"],
@@ -332,15 +345,18 @@ def main() -> int:
     ap.add_argument("--pas", type=int, default=3000)
     ap.add_argument("--sortie", default="/tmp/mots-s1")
     ap.add_argument("--corpus", default="udhr", choices=("udhr", "jw"))
+    ap.add_argument("--contraste", type=float, default=0.0)
+    ap.add_argument("--marge", type=float, default=1.0)
     ap.add_argument("--mesure", type=pathlib.Path)
     ap.add_argument("--graines", default="1,2,3")
     args = ap.parse_args()
     if args.mesure:
         graines = [int(g) for g in args.graines.split(",") if g.strip()]
-        return mesure(args.mesure, args.pas, graines, args.corpus)
+        return mesure(args.mesure, args.pas, graines, args.corpus,
+                      args.contraste, args.marge)
     _configurer(args.corpus)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    r = une_graine(args.graine, args.pas, device)
+    r = une_graine(args.graine, args.pas, device, contraste=args.contraste, marge=args.marge)
     pathlib.Path(args.sortie + ".json").write_text(
         json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"écrit {args.sortie}.json · meilleur {r['meilleur']}")

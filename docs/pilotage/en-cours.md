@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-30, 09 h 05 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-30, 09 h 25 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -62,8 +62,8 @@
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **B10.2bis — décodeur** : 3×3 : **11,1** ; 1800 : 10,2–11,4 ; capacité 11,8 ;
-  **mots 32,5** ; **JW 26,7** (plancher 17,1) ; `z` ~2 points ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
+- **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;
+  **JW 26,7** (plancher 17,1) ; `z` 1,5–2,6 points ; **contrastif négatif** ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
 - **A8.0 : 17** ; **A8.3b refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**, ctx stable) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **76** (60 vertes, 2 rouges, 14 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **360** / **433** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **361** / **434** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 

@@ -1,0 +1,94 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B10",
+ "dispositif": {
+  "corpus": "UDHR 30 articles, 9 langues avec espaces (cmn exclu)",
+  "decoupage": "24 train / 6 validation (articles 25-30)",
+  "encodeur": "/tmp/natif-224-6-align-s1 + /tmp/b102bis-a-s1 (gelé)",
+  "decodeur": "mots : embedding + langue + 2 couches d'attention croisée sur z",
+  "pas": 3000,
+  "graines": [
+   1,
+   2,
+   3
+  ],
+  "cibles": [
+   "spa",
+   "deu",
+   "ita",
+   "por",
+   "rus",
+   "swh"
+  ],
+  "contraste": 0.5,
+  "marge": 1.0
+ },
+ "resultats": [
+  {
+   "graine": 1,
+   "meilleur": {
+    "chrf_rec": 28.363459259848273,
+    "chrf_trad": 32.8499101052583,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 2500,
+    "perte": 0.019601237028837204,
+    "graine": 1
+   },
+   "controles": {
+    "chrf_z_melange": 31.77156505611119,
+    "chrf_langue_melangee": 12.181169661540302
+   },
+   "secondes": 197.3,
+   "vocabulaire": 3705
+  },
+  {
+   "graine": 2,
+   "meilleur": {
+    "chrf_rec": 35.60269792985483,
+    "chrf_trad": 33.066657810001715,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 2500,
+    "perte": 0.038770586252212524,
+    "graine": 2
+   },
+   "controles": {
+    "chrf_z_melange": 30.88645547255047,
+    "chrf_langue_melangee": 11.643020694865852
+   },
+   "secondes": 193.0,
+   "vocabulaire": 3705
+  },
+  {
+   "graine": 3,
+   "meilleur": {
+    "chrf_rec": 30.89159282030728,
+    "chrf_trad": 31.861628083076987,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 2000,
+    "perte": 0.04892636090517044,
+    "graine": 3
+   },
+   "controles": {
+    "chrf_z_melange": 30.749644233908352,
+    "chrf_langue_melangee": 11.734387556819236
+   },
+   "secondes": 195.9,
+   "vocabulaire": 3705
+  }
+ ],
+ "controles_moyens": {
+  "chrf_z_melange": 31.14,
+  "chrf_langue_melangee": 11.85
+ },
+ "moyennes": {
+  "chrf_trad": 32.59,
+  "chrf_rec": 31.62,
+  "chrf_plancher": 33.67
+ },
+ "reference_octets": {
+  "chrf_trad": 11.1,
+  "chrf_rec": 17.4,
+  "chrf_plancher": 38.5
+ },
+ "verdict": "l'objectif mot bat l'octet"
+}

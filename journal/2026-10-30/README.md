@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **0 session(s)** · **6 thème(s)**
+**8 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 2 | [portes.md](portes.md) |
+| portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -34,6 +34,7 @@ Aucune session indexée pour ce jour ; voir
 | 08:42 | `2640e017` | B10 — L'OBJECTIF MOT LÈVE LE DÉCODEUR (32,5, PLANCHER 33,7) MAIS LE `z` NE PORTE QUE 2,6 POINTS |
 | 08:53 | `c766ef93` | R13.3 — ANGLAIS 100 MO : LE BPE PERD 4,2/6,6 % À OCTETS ÉGAUX |
 | 08:58 | `daabf6be` | A8.0 — 19/33 : PORTE-PANNES ÉPINGLÉE À 33,0156 ; AUDIT FINAL DES 14 RESTANTES |
+| 09:03 | `e3747c3f` | B10 — LE DÉCODEUR MOT BAT LE PLANCHER SUR JW (26,7 CONTRE 17,1), MAIS LE `z` NE PORTE QUE 1,9 POINT |
 
 ## Le récit de la journée (écrit à la main)
 
