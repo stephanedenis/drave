@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **359 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **361 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -319,6 +319,7 @@
 | [rapport-r06-cascade.md](rapport-r06-cascade.md) | R06 v2 — la cascade des lecteurs : +1,2 point, pour 9 appels de modèle |
 | [rapport-r06-declencheur.md](rapport-r06-declencheur.md) | R06 v3 — le déclencheur sans échelle : il classe (0,89–1,00), il faut le calibrer |
 | [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
+| [rapport-r06-publication.md](rapport-r06-publication.md) | R06 v6 — la cascade à confiance est publiée : deux fichiers, un seuil, une recette |
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
 | [rapport-r13-tokenisation.md](rapport-r13-tokenisation.md) | R13.0 — BPE : 3,4 à 5,2 octets par jeton, réversible ; la PPL reste à mesurer |
@@ -340,6 +341,7 @@
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
+| [rapport-sessions-plans.md](rapport-sessions-plans.md) | Sessions — le plan avant l'état |
 | [rapport-seuil-reseau.md](rapport-seuil-reseau.md) | A7.5b — le flux sparse gagne même à latence nulle |
 | [rapport-sommeil-budget.md](rapport-sommeil-budget.md) | Le budget du sommeil — ce que le rejeu rapporte (÷ croissant en domaine) et ce qu'il coûte (bruité) |
 | [rapport-sommeil-deux-nuits.md](rapport-sommeil-deux-nuits.md) | Deux nuits, deux expériences — la première garde son gain, la seconde n'ajoute presque rien |

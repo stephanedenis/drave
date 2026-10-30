@@ -1,0 +1,15 @@
+{
+ "date": "2026-10-30",
+ "ligne": "R06",
+ "banc": "tools/tests/documents/bench-durci.json",
+ "part": "paires",
+ "n": 42,
+ "seuil": 0.394,
+ "taux_calibration": 0.429,
+ "empreinte_corpus": "32f66ea5f18dd4a2",
+ "poids": {
+  "couverture": 0.5,
+  "accord": 0.3,
+  "dispersion": 0.2
+ }
+}

@@ -12,3 +12,8 @@ Un plan n'est pas un état : `en-cours` reste la seule source de l'état. Un pla
 > 45 min) est signalé ; une session qui reprend un périmètre périmé le rafraîchit d'abord.
 
 Modèle : [`_modele/plan.md`](_modele/plan.md). Vérification : `python3 tools/sessions.py --check`.
+
+Migration douce : `python3 tools/sessions.py --depuis-en-cours` crée, pour chaque session listée
+dans `en-cours` et sans plan, un plan **à confirmer** (rôle, fichiers, heartbeat et prochaine action
+recopiés de l'état). La session le complète ensuite ; `--strict` reste rouge tant qu'il y a des
+« à confirmer ».

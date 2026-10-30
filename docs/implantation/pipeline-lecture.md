@@ -21,7 +21,8 @@ restent des mesures, pas un lecteur.
 | **provenance** | la réponse porte sa région, son `start`, son `octets`, son `prov` ; les octets cités sont **vérifiables** dans le flux |
 | **rejeu** | aucune horloge, aucun aléa : deux exécutions rendent le **même JSON** (hors durée) |
 | **refus** | si le meilleur score est sous le **seuil** (1,0), la réponse est « insuffisant » — le pipeline ne rend pas un passage au hasard |
-| **cascade** | `--lecteur cascade` : étage 1 span/extractif, étage 2 le modèle si l'étage 1 refuse — la relecture comme **changement de modalité** (R06 v2) |
+| **cascade** | `--lecteur cascade` : étage 1 span/extractif, étage 2 le modèle si la **confiance** est sous le seuil — la relecture comme **changement de modalité** (R06 v4) |
+| **calibration** | `--calibration FICHIER` : le seuil vient d'un fichier daté (`tools/calibrer.py`), pas d'une ligne de commande — la politique est publiée et reproductible (R06 v6) |
 
 **Sortie** (extrait) :
 

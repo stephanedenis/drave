@@ -263,6 +263,8 @@ def main() -> int:
     ap.add_argument("--seuil", type=float, default=SEUIL)
     ap.add_argument("--seuil-confiance", type=float, default=None,
                     help="cascade : sous cette confiance, appeler le modèle")
+    ap.add_argument("--calibration", type=pathlib.Path,
+                    help="cascade : lire le seuil d'un fichier de calibration (tools/calibrer.py)")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--autotest", action="store_true")
     args = ap.parse_args()
@@ -270,8 +272,11 @@ def main() -> int:
         return autotest()
     if not args.document or not args.question:
         ap.error("--document et --question sont requis")
+    seuil_confiance = args.seuil_confiance
+    if args.calibration:
+        seuil_confiance = json.loads(args.calibration.read_text(encoding="utf-8"))["seuil"]
     resultat = pipeline(args.document, args.question, args.budget, args.lecteur, args.seuil,
-                        args.seuil_confiance)
+                        seuil_confiance)
     if args.json:
         print(json.dumps(resultat, ensure_ascii=False, indent=1))
     else:

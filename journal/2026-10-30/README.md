@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **0 session(s)** · **6 thème(s)**
+**13 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
-| modele | 1 | [modele.md](modele.md) |
+| modele | 2 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -39,6 +39,7 @@ Aucune session indexée pour ce jour ; voir
 | 10:04 | `8664cc67` | SCHÉMA — ÉTAT AU 30/10 09 h 25 : A8.0 19 PORTES, B10.2BIS CLOSE, R13 |
 | 10:34 | `43a46d7e` | DOCWATCH — L'ÉTAT EN WBS INLINE, LE GANTT DANS LA ROADMAP, LE SVG SUPPRIMÉ |
 | 10:46 | `f9132a68` | N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE |
+| 11:08 | `da725e8a` | SESSIONS — LE PLAN AVANT L'ÉTAT : LINTER, MODÈLE, PORTE 78 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -60,4 +61,11 @@ est un corpus mixte du côté lexical, cohérent avec la loi « le corpus décid
 La recette de déploiement du programme R est complète : 50 golds → le seuil → la cascade à
 confiance, à ~1 point de l'oracle, 12 % d'appels modèle sur un corpus lexical, 85 % sur un
 corpus de paraphrases.
+
+**La politique est publiée.** La cascade à confiance n'était qu'un réglage de séance (un seuil
+tapé sur la ligne de commande). Elle devient une **politique** : `tools/calibrer.py` transforme
+un banc en fichier daté (banc, empreinte du corpus gelé, n, seuil, taux), `lecture.py --cascade
+--calibration` le lit, et `--verifie` recalcule le seuil à l'identique. Sur un découpage
+indépendant, la cascade égale encore l'oracle sur le lexical (0,894) et bat les deux choix fixes
+sur les paraphrases (0,366 contre 0,341 et 0,317).
 <!-- /notes -->

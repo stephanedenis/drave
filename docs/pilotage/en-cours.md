@@ -28,12 +28,12 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : cascade à confiance calibrée = oracle (0,911 / 0,415) ; **courbe de
-  calibration** : ~50 golds suffisent, les poids appris n'ajoutent rien ; pilote complété.
+- **Ce qu'elle fait** : cascade à confiance **publiée** (`tools/calibrer.py`, fichiers datés,
+  `--calibration`) : out-of-sample 0,894 (oracle) / 0,366 (au-dessus des deux fixes).
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
-- **Prochaine action** : publier la cascade à confiance dans le pipeline (seuil calibré) ;
-  R11 bloqué par N2.
+- **Prochaine action** : la boucle de lecture (R11, dépend de N2) ou la restitution (R31, dépend
+  de R21) — toutes deux hors R0 ; sinon consolidation.
 - **Bloquants** : aucun ; le GPU 0 lit à 1 409 t/s de prompt, le GPU 1 reste à N2.
 - **Journal** : commits `4ffa34b7` (R0.1), `08149617` (R0.2) · [docs du jour](../../journal/2026-10-29/docs.md).
 
@@ -83,7 +83,7 @@
 |---|---|---|
 | portes | **78** (61 vertes, 2 rouges, 15 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **363** / **436** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **364** / **436** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 

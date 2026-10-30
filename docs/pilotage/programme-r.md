@@ -21,7 +21,7 @@
 | **têtes de lecture** (R0.4) | 0,601/0,836 puis 0,448/0,811 puis **0,540/0,720** | une sonde linéaire sur un 0,5 B, avec 500 paires, ne bat pas BM25 ; la donnée et l'encodeur manquent |
 | **routeur** (R0.5) | signal AUC **0,826**, transfert 0,802/0,321 | un signe qui **prédit** n'est pas une règle qui **décide** : un seuil absolu ne transfère pas d'un corpus à l'autre |
 | **relecture** (R06) | relire plus : **0/249** | le lecteur extractif répond avec le passage le mieux scoré, toujours lu ; la relecture doit changer de **modalité** |
-| ~~déclencheur de la cascade~~ | **levé** (R06 v4/v5) : cascade à confiance **calibrée** = oracle (0,911 / 0,415) avec **~50 golds** | il fallait **calibrer par corpus**, pas transférer un seuil |
+| ~~déclencheur de la cascade~~ | **levé** (R06 v4/v5) : cascade à confiance **calibrée** = oracle (0,911 / 0,415) avec **~50 golds** | il fallait **calibrer par corpus**, pas transférer un seuil — **publié** (R06 v6 : fichier daté, `--calibration`) |
 
 ## 3. Les trois lois du programme
 
