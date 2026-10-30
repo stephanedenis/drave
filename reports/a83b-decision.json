@@ -1,0 +1,45 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3b/c",
+ "decision": "opt-in maintenu",
+ "cause": "le signe bascule avec le chemin lot binaire (lot 1 vs lot ≥ 2), pas avec la taille du cache",
+ "preuves": {
+  "lot_f32": {
+   "1": 61.992,
+   "2": 60.8135,
+   "4": 60.8135
+  },
+  "lot_perte1": {
+   "1": 58.32,
+   "2": 62.7357,
+   "4": 62.7357
+  },
+  "ctx": {
+   "64": "identique",
+   "256": "identique",
+   "512": "identique",
+   "mesures": 24
+  },
+  "portes_epinglees": 18,
+  "regimes_dual": [
+   "porte-flux",
+   "porte-pont",
+   "porte-coupe"
+  ]
+ },
+ "condition_pour_defaut": [
+  "instrumenter forward_lot (quantification d'activation i32 vs chemin jeton)",
+  "références duales pour les 18 portes épinglées",
+  "rejouer les portes sous le défaut"
+ ],
+ "controle": "24 exécutions ctx × lot × régime ; lot 1 = mode 0 ; lot ≥2 identique",
+ "limites": [
+  "un seul modèle",
+  "24 jetons",
+  "le chemin lot n'est pas instrumenté"
+ ],
+ "prochain": [
+  "A8.3b2 instrumentation forward_lot",
+  "B11.10"
+ ]
+}
