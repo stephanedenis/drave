@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,10 +30,11 @@
 | 20:15 | `91b88113` | N3.2b0 — PROFONDEUR DE SERVICE + LECTURE HTTP COMPLÈTE ; PORTE 61 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+6) |
 | 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 20:28 | `706020ee` | N3.4a — SERVICE + PROFONDEUR + ROUTAGE + COMPTAGE COMPOSÉS ; PORTE 64 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
+| 20:34 | `737af4ee` | A8.0 — PORTE-FUSION ÉPINGLÉE : 113,0068 ; ÉTAT 11/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
 
 ## Chiffres du jour
 
-`14,6496` · `12,9635` · `996,0390` · `17,4315` · `292,8165` · `1 %` · `2,4 %` · `111,8003` · `115,6406` · `+17,09 %` · `113,0068` · `−5,9 %`
+`113,0068` · `14,6496` · `12,9635` · `996,0390` · `17,4315` · `292,8165` · `1 %` · `2,4 %` · `111,8003` · `115,6406` · `+17,09 %` · `−5,9 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -41,6 +42,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/rapport-a80-porte-adaptateur.md](../../reports/rapport-a80-porte-adaptateur.md)
+- [reports/rapport-a80-porte-fusion.md](../../reports/rapport-a80-porte-fusion.md)
 - [reports/rapport-a80-porte-gain.md](../../reports/rapport-a80-porte-gain.md)
 - [reports/rapport-a80-porte-pont.md](../../reports/rapport-a80-porte-pont.md)
 - [reports/rapport-a80-portes-ppl.md](../../reports/rapport-a80-portes-ppl.md)

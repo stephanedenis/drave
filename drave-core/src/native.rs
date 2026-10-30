@@ -215,7 +215,17 @@ impl Native {
     /// Un jeton, avec cache KV : les clés/valeurs des positions précédentes ne
     /// sont pas recalculées. C'est le chemin de génération.
     pub fn pas(&self, id: u32, pos: usize, cache: &mut Cache) -> Vec<f32> {
+        let env = std::env::var("DRAVE_NATIVE_PROFONDEUR").ok()
+            .and_then(|v| v.parse::<usize>().ok())
+            .unwrap_or(self.cfg.n_blocks)
+            .clamp(1, self.cfg.n_blocks);
+        self.pas_profondeur(id, pos, cache, env)
+    }
+
+    /// N3.2b0 — un pas à profondeur imposée ; N3.2b1 l'utilise pour les deux caches.
+    fn pas_profondeur(&self, id: u32, pos: usize, cache: &mut Cache, profondeur: usize) -> Vec<f32> {
         let c = &self.cfg;
+        let profondeur = profondeur.clamp(1, c.n_blocks);
         let dh = c.d / c.n_heads;
         if cache.k.is_empty() {
             cache.k = vec![vec![Vec::new(); c.n_heads]; c.n_blocks];
@@ -224,13 +234,6 @@ impl Native {
         let e = self.p("embed.weight"); let pe = self.p("pos.weight");
         let mut x = vec![0.0f32; c.d];
         for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
-        // N3.2b0 — profondeur de service optionnelle : `DRAVE_NATIVE_PROFONDEUR=N` coupe
-        // le calcul après N blocs (défaut : tous). C'est une sortie précoce FIXE, sans
-        // seuil de confiance : la porte N3.2b0 mesure le chemin, pas la qualité.
-        let profondeur = std::env::var("DRAVE_NATIVE_PROFONDEUR").ok()
-            .and_then(|v| v.parse::<usize>().ok())
-            .unwrap_or(c.n_blocks)
-            .clamp(1, c.n_blocks);
         for b in 0..profondeur {
             let z = self.ln(&x, &format!("blocks.{b}.ln1"));
             let qkv = self.matvec(&format!("blocks.{b}.qkv.weight"),
@@ -328,6 +331,48 @@ impl Native {
         }
         ids
     }
+
+    /// N3.2b1 — décision à seuil : pour chaque jeton, calcule le chemin court et le
+    /// chemin plein, garde le jeton du court si sa confiance (softmax max) atteint le
+    /// seuil, sinon celui du plein. Les deux caches sont entretenus : aucun saut de
+    /// calcul (le court ET le plein sont calculés) ; la porte mesure la DÉCISION.
+    pub fn generer_seuil(&self, prompt: &[u8], n: usize, profondeur: usize, seuil: f32)
+        -> (Vec<u8>, usize, usize) {
+        let profondeur = profondeur.clamp(1, self.cfg.n_blocks.saturating_sub(1).max(1));
+        let mut ce = Cache::default();
+        let mut cf = Cache::default();
+        let mut ids: Vec<u8> = prompt.to_vec();
+        let mut logits_e = vec![0.0f32; self.cfg.vocab];
+        let mut logits_f = vec![0.0f32; self.cfg.vocab];
+        for (pos, &id) in ids.clone().iter().enumerate() {
+            logits_e = self.pas_profondeur(id as u32, pos, &mut ce, profondeur);
+            logits_f = self.pas_profondeur(id as u32, pos, &mut cf, self.cfg.n_blocks);
+        }
+        let (mut anticipe, mut complet) = (0usize, 0usize);
+        for _ in 0..n {
+            let (ie, ce_max) = argmax_conf(&logits_e);
+            let (ifull, _) = argmax_conf(&logits_f);
+            let suivant = if ce_max >= seuil {
+                anticipe += 1; ie
+            } else {
+                complet += 1; ifull
+            };
+            ids.push(suivant);
+            let pos = ids.len() - 1;
+            logits_e = self.pas_profondeur(suivant as u32, pos, &mut ce, profondeur);
+            logits_f = self.pas_profondeur(suivant as u32, pos, &mut cf, self.cfg.n_blocks);
+            if suivant == b'\n' { break; }
+        }
+        (ids, anticipe, complet)
+    }
+}
+
+fn argmax_conf(logits: &[f32]) -> (u8, f32) {
+    let mx = logits.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+    let se: f32 = logits.iter().map(|v| (v - mx).exp()).sum();
+    let (i, _) = logits.iter().enumerate()
+        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).unwrap_or((0, &0.0));
+    (i as u8, 1.0 / se.max(1e-30))
 }
 
 #[cfg(test)]
@@ -391,10 +436,16 @@ pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
         } else if ligne.starts_with("POST /generer") {
             let n_max: usize = ligne.split("n=").nth(1).and_then(|x| x.split(|c: char| !c.is_ascii_digit()).next()).and_then(|x| x.parse().ok()).unwrap_or(32).min(256);
             let corps = req.split("\r\n\r\n").nth(1).unwrap_or("");
+            let seuil = ligne.split("seuil=").nth(1).and_then(|x| x.split(|c: char| c == '&' || c.is_whitespace()).next()).and_then(|x| x.parse::<f32>().ok());
+            let profondeur = ligne.split("profondeur=").nth(1).and_then(|x| x.split(|c: char| c == '&' || c.is_whitespace()).next()).and_then(|x| x.parse::<usize>().ok());
             let t = std::time::Instant::now();
-            let b = n.generer(corps.as_bytes(), n_max);
+            let (b, anticipe, complet) = match (seuil, profondeur) {
+                (Some(s), Some(p)) => n.generer_seuil(corps.as_bytes(), n_max, p, s),
+                _ => (n.generer(corps.as_bytes(), n_max), 0, 0),
+            };
             let texte = String::from_utf8_lossy(&b).replace('\\', "\\\\").replace('"', "\\\"");
-            (200, format!("{{\"octets\":{},\"ms\":{:.1},\"texte\":\"{}\"}}", b.len(), t.elapsed().as_secs_f64() * 1000.0, texte.replace('\n', "\\n")))
+            (200, format!("{{\"octets\":{},\"ms\":{:.1},\"choix_anticipe\":{},\"choix_complet\":{},\"texte\":\"{}\"}}",
+                          b.len(), t.elapsed().as_secs_f64() * 1000.0, anticipe, complet, texte.replace('\n', "\\n")))
         } else { (404, "{\"erreur\":\"chemin inconnu\"}".to_string()) };
         let rep = format!("HTTP/1.1 {code} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{corps}", corps.len());
         let _ = s.write_all(rep.as_bytes());

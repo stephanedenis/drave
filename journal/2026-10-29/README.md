@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**128 commits** · **0 session(s)** · **8 thème(s)**
+**129 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 22 | [portes.md](portes.md) |
+| portes | 23 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -161,6 +161,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:21 | `ebd8a960` | ÉTAT — T0 À 3 999 (A8.3C COMMITTÉ) |
 | 20:25 | `04357861` | N3.3c — LE MOTEUR COMPTE LES EXPERTS/CANAUX : 6/6/3 · 48/24/24 ; PORTE 63 |
 | 20:28 | `706020ee` | N3.4a — SERVICE + PROFONDEUR + ROUTAGE + COMPTAGE COMPOSÉS ; PORTE 64 |
+| 20:34 | `737af4ee` | A8.0 — PORTE-FUSION ÉPINGLÉE : 113,0068 ; ÉTAT 11/33 |
 
 ## Le récit de la journée (écrit à la main)
 

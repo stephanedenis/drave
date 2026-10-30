@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.2b1",
+ "porte": "porte-n3-seuil.sh",
+ "modele": "drave-n0 synthétique, graine 7, 132 528 paramètres, 2 blocs",
+ "principe": "pour chaque jeton, calculer court (profondeur 1) et plein ; garder le court si confiance >= seuil",
+ "mesures": {
+  "seuil_0": {
+   "anticipe": 12,
+   "complet": 0
+  },
+  "seuil_1": {
+   "anticipe": 0,
+   "complet": 12
+  },
+  "seuil_0.01": {
+   "anticipe": 11,
+   "complet": 1,
+   "deterministe": true
+  }
+ },
+ "controle": "seuil 0 = tout court ; seuil 1 = tout plein ; 0,01 = 11/1 ; textes différents ; déterministe",
+ "verdict": "décision à seuil branchée et comptée dans le service",
+ "limites": [
+  "aucun saut de calcul : les deux chemins sont calculés",
+  "seuil calibré sur ce modèle",
+  "un prompt"
+ ],
+ "prochain": [
+  "N3.2b2 cache continu pour un vrai saut de calcul",
+  "composition avec pont/placement"
+ ]
+}
