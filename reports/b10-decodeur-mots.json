@@ -1,0 +1,92 @@
+{
+ "date": "2026-10-29",
+ "ligne": "B10",
+ "dispositif": {
+  "corpus": "UDHR 30 articles, 9 langues avec espaces (cmn exclu)",
+  "decoupage": "24 train / 6 validation (articles 25-30)",
+  "encodeur": "/tmp/natif-224-6-align-s1 (9,29 M, gelé)",
+  "decodeur": "mots : embedding + langue + 2 couches d'attention croisée sur z",
+  "pas": 3000,
+  "graines": [
+   1,
+   2,
+   3
+  ],
+  "cibles": [
+   "spa",
+   "deu",
+   "ita",
+   "por",
+   "rus",
+   "swh"
+  ]
+ },
+ "resultats": [
+  {
+   "graine": 1,
+   "meilleur": {
+    "chrf_rec": 34.26312539096181,
+    "chrf_trad": 33.29820508623189,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 2500,
+    "perte": 0.017041262239217758,
+    "graine": 1
+   },
+   "controles": {
+    "chrf_z_melange": 30.808259386600714,
+    "chrf_langue_melangee": 11.455263036440698
+   },
+   "secondes": 133.8,
+   "vocabulaire": 3705
+  },
+  {
+   "graine": 2,
+   "meilleur": {
+    "chrf_rec": 32.1184613305656,
+    "chrf_trad": 31.43102284696186,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 3000,
+    "perte": 0.03201623260974884,
+    "graine": 2
+   },
+   "controles": {
+    "chrf_z_melange": 29.396841963512045,
+    "chrf_langue_melangee": 12.183247181796817
+   },
+   "secondes": 132.3,
+   "vocabulaire": 3705
+  },
+  {
+   "graine": 3,
+   "meilleur": {
+    "chrf_rec": 31.956385169639685,
+    "chrf_trad": 32.70707894128391,
+    "chrf_plancher": 33.67436508096635,
+    "pas": 2000,
+    "perte": 0.02859196998178959,
+    "graine": 3
+   },
+   "controles": {
+    "chrf_z_melange": 29.526156911854294,
+    "chrf_langue_melangee": 11.716570936249889
+   },
+   "secondes": 143.6,
+   "vocabulaire": 3705
+  }
+ ],
+ "controles_moyens": {
+  "chrf_z_melange": 29.91,
+  "chrf_langue_melangee": 11.79
+ },
+ "moyennes": {
+  "chrf_trad": 32.48,
+  "chrf_rec": 32.78,
+  "chrf_plancher": 33.67
+ },
+ "reference_octets": {
+  "chrf_trad": 11.1,
+  "chrf_rec": 17.4,
+  "chrf_plancher": 38.5
+ },
+ "verdict": "l'objectif mot bat l'octet"
+}

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **351 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **353 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -52,6 +52,7 @@
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
+| [rapport-b10-decodeur-mots.md](rapport-b10-decodeur-mots.md) | B10 — le décodeur au niveau du mot : 32,5 de chrF (plancher 33,7), mais le `z` ne porte que 2,6 points |
 | [rapport-b102bis-capacite.md](rapport-b102bis-capacite.md) | B10.2bis — la capacité : 31,77 M contre 9,29 M, le décodeur ne bouge pas |
 | [rapport-b102bis-corpus-jw.md](rapport-b102bis-corpus-jw.md) | B10.2bis — le corpus : 139 unités parallèles, 12 langues, et le décodeur ne décolle pas |
 | [rapport-b102bis-decodeur.md](rapport-b102bis-decodeur.md) | B10.2bis — l'attention croisée ne décolle pas le décodeur : 16,5 / 11,2 contre un plancher de 38,5 |
@@ -208,6 +209,7 @@
 | [rapport-n3.5c-reseau.md](rapport-n3.5c-reseau.md) | N3.5c — deux processus, frontière TCP, logits identiques |
 | [rapport-n3.5d-refus.md](rapport-n3.5d-refus.md) | N3.5d — l’empreinte du modèle refuse un aval divergent |
 | [rapport-n3.5e-generation.md](rapport-n3.5e-generation.md) | N3.5e — la génération est répartie sur deux processus TCP |
+| [rapport-n3.5f-positions.md](rapport-n3.5f-positions.md) | N3.5f — la position est vérifiée à chaque pas |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
