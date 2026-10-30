@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **0 session(s)** · **6 thème(s)**
+**14 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
+| mesures | 4 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -40,6 +40,7 @@ Aucune session indexée pour ce jour ; voir
 | 10:34 | `43a46d7e` | DOCWATCH — L'ÉTAT EN WBS INLINE, LE GANTT DANS LA ROADMAP, LE SVG SUPPRIMÉ |
 | 10:46 | `f9132a68` | N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE |
 | 11:08 | `da725e8a` | SESSIONS — LE PLAN AVANT L'ÉTAT : LINTER, MODÈLE, PORTE 78 |
+| 12:58 | `b19ab8b7` | LA CASCADE À CONFIANCE EST PUBLIÉE : DEUX FICHIERS DATÉS, UN SEUIL REPRODUCTIBLE, 0,894 OUT-OF-SAMPLE |
 
 ## Le récit de la journée (écrit à la main)
 

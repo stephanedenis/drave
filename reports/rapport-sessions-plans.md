@@ -11,16 +11,17 @@
 
 | élément | résultat |
 |---|---|
-| plan de la session de coordination | lisible, `71d57f53` |
+| plan de la session de coordination | lisible, `71d57f53` (terminé) |
 | `--autotest` | plan valide accepté, périmètre dupliqué refusé, champ manquant refusé |
-| `--check` | sort 0 ; 2 avertissements « session en-cours sans plan » (8156 a quitté la liste) |
-| `--strict` | échouerait sur ces 3 sessions (migration non finie) |
+| `--depuis-en-cours` | 3 plans **à confirmer** : `8156fdcb`, `c3d0f0bd`, `N2-GPU` |
+| `--check` | sort 0 ; 3 avertissements « plan à confirmer » |
+| `--strict` | rouge tant que les 3 plans ne sont pas confirmés |
 
 ## Le contrôle négatif
 
 - **Périmètre dupliqué** : deux plans actifs sur `A8.0` → erreur.
 - **Champ manquant** : plan sans périmètre/fichiers/heartbeat → erreur.
-- **Session en-cours sans plan** : avertissement (erreur en `--strict`).
+- **Session en-cours sans plan** : migration `--depuis-en-cours` puis confirmation ; avertissement (erreur en `--strict`).
 - **Plan actif non listé** : avertissement, pas une invention d'état.
 - **La porte** `tools/porte-sessions.sh` exécute l'autotest et le check.
 

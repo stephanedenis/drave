@@ -23,6 +23,8 @@ ETAT = "docs/pilotage/en-cours.md"
 CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
           "prochaine action", "état")
 ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+A_CONFIRMER = {"à confirmer", "a confirmer"}
+ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
 PEREMPTION_MIN = 45
 
 
@@ -85,6 +87,58 @@ def ids_en_cours(racine: Path) -> list[str]:
     return re.findall(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?", texte, re.M)
 
 
+def sections_en_cours(racine: Path) -> list[dict]:
+    p = racine / ETAT
+    if not p.exists():
+        return []
+    texte = p.read_text(encoding="utf-8")
+    m = re.search(r"Mis à jour\s*:\s*(\d{4}-\d{2}-\d{2}),\s*(\d{1,2})\s*h\s*(\d{2})", texte)
+    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+    morceaux = re.split(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?\s*—\s*(.*)$", texte, flags=re.M)
+    out = []
+    for i in range(1, len(morceaux), 3):
+        sid, role, bloc = morceaux[i], morceaux[i + 1].strip(), morceaux[i + 2]
+        champs = {}
+        for mm in re.finditer(r"^-\s+\*\*(.+?)\*\*\s*:\s*(.*(?:\n(?!-\s+\*\*).*)*)", bloc, re.M):
+            champs[_cle(mm.group(1))] = " ".join(x.strip() for x in mm.group(2).splitlines()).strip()
+        out.append({"id": sid, "role": role, "champs": champs,
+                    "fichiers": champs.get("fichiers réservés", ""),
+                    "prochaine": champs.get("prochaine action", ""),
+                    "heartbeat": heartbeat})
+    return out
+
+
+def depuis_en_cours(racine: Path) -> int:
+    """Crée un plan *à confirmer* à partir de la section `en-cours`, sans l'inventer."""
+    n = 0
+    for s in sections_en_cours(racine):
+        chemin = racine / SESSIONS / s["id"] / "plan.md"
+        if chemin.exists():
+            continue
+        chemin.parent.mkdir(parents=True, exist_ok=True)
+        heartbeat = s["heartbeat"] or datetime.now().strftime("%Y-%m-%d %H:%M HAE")
+        role = s["role"] or "à confirmer"
+        fichiers = s["fichiers"] or "à confirmer"
+        prochaine = s["prochaine"] or "à confirmer"
+        chemin.write_text(f"""# Plan de session — {s['id']}
+
+> **Repris de `en-cours` le {datetime.now().strftime('%Y-%m-%d %H:%M')}** — plan *à confirmer* par la
+> session : le heartbeat est celui de l'état, pas une preuve de vie.
+
+- **Session** : `{s['id']}`
+- **Rôle** : {role}
+- **Périmètre** : à confirmer
+- **Fichiers réservés** : {fichiers}
+- **Heartbeat** : {heartbeat}
+- **Prochaine action** : {prochaine}
+- **État** : à confirmer
+""", encoding="utf-8")
+        n += 1
+        print(f"  + {chemin.relative_to(racine)}")
+    print(f"  {n} plan(s) créé(s) à confirmer ; les sessions les complètent, elles ne sont pas actives.")
+    return 0
+
+
 def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
     erreurs: list[str] = []
     avertissements: list[str] = []
@@ -95,8 +149,11 @@ def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
         manquants = [c for c in CHAMPS if c not in p["champs"]]
         if manquants:
             erreurs.append(f"{p['chemin']} : champ(s) manquant(s) — {', '.join(manquants)}")
-        if p["etat"] not in ACTIFS and p["etat"] not in {"terminé", "termine", "libre", "libre."}:
+        if p["etat"] not in ETATS_CONNUS:
             erreurs.append(f"{p['chemin']} : état inconnu {p['etat']!r}")
+        if p["etat"] in A_CONFIRMER:
+            (erreurs if strict else avertissements).append(
+                f"plan à confirmer : {p['id']} — la session doit le compléter")
         if p["age"] is None:
             erreurs.append(f"{p['chemin']} : heartbeat illisible")
         if p["id"] in vus:
@@ -202,6 +259,8 @@ def main() -> int:
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--modele", action="store_true")
     ap.add_argument("--autotest", action="store_true")
+    ap.add_argument("--depuis-en-cours", action="store_true",
+                    help="crée des plans à confirmer depuis les sections de en-cours")
     a = ap.parse_args()
     if a.modele:
         print(MODELE)
@@ -209,6 +268,8 @@ def main() -> int:
     if a.autotest:
         return autotest()
     r = Path(a.racine).resolve()
+    if a.depuis_en_cours:
+        return depuis_en_cours(r)
     if a.check:
         e, w = verifier(r, strict=a.strict)
         for x in w:
