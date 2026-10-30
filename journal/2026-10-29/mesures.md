@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (46)
+## Commits du jour (47)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -54,10 +54,11 @@
 | 20:08 | `db6d4058` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) | `en-cours.md`, `README.md`, `memoire.md` (+2) |
 | 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `README.md` (+4) |
+| 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN | `A8.3-defaut.md`, `en-cours.md`, `roadmap.md` (+6) |
 
 ## Chiffres du jour
 
-`0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149` · `2,712`
+`1,90 %` · `0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -67,6 +68,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-a26-bilan.md](../../reports/rapport-a26-bilan.md)
 - [reports/rapport-a83b-lot.md](../../reports/rapport-a83b-lot.md)
+- [reports/rapport-a83c-lot.md](../../reports/rapport-a83c-lot.md)
 - [reports/rapport-b102bis-capacite.md](../../reports/rapport-b102bis-capacite.md)
 - [reports/rapport-b102bis-corpus-jw.md](../../reports/rapport-b102bis-corpus-jw.md)
 - [reports/rapport-b102bis-decodeur.md](../../reports/rapport-b102bis-decodeur.md)

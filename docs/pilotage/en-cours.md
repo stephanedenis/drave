@@ -63,8 +63,8 @@
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
 - **B10.2bis — le décodeur** : **négative** — 3×3 : **11,1/11,2/11,0** contre **38,5** ;
-  1800 pas : 10,2–11,4 ; JW 7,6/6,3/8,0 ; capacité 11,8/11,6/11,7 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
-- **A8.0 : 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1 ≠ ≥2 (**1,90 %**) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
+  1800 : 10,2–11,4 ; JW 7,6/6,3/8,0 ; capacité 11,8/11,6/11,7 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
+- **A8.0 : 8 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 42 arêtes, 1 sans fiche ; `tools/verifie_backlog.py`.
