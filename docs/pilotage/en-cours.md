@@ -64,7 +64,7 @@
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
 - **B10.2bis — décodeur** : **négative** — 3×3 : **11,1/11,2/11,0** contre **38,5** ;
   1800 : 10,2–11,4 ; JW 7,6/6,3/8,0 ; capacité 11,8/11,6/11,7 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
-- **A8.0 : 17 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
+- **A8.0 : 17 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**, ctx stable) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 42 arêtes, 1 sans fiche ; `tools/verifie_backlog.py`.
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **68** (60 vertes, 2 rouges, 6 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **336** / **408** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **337** / **409** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 

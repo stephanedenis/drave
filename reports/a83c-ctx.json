@@ -1,0 +1,58 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3c.1",
+ "question": "le signe du mélange dépend-il de la taille du contexte (cache KV) ?",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "couches_locales": 12,
+ "limit": 24,
+ "mesures": {
+  "f32": {
+   "64": {
+    "lot0": 61.992,
+    "lot1": 61.992,
+    "lot2": 60.8135,
+    "lot4": 60.8135
+   },
+   "256": {
+    "lot0": 61.992,
+    "lot1": 61.992,
+    "lot2": 60.8135,
+    "lot4": 60.8135
+   },
+   "512": {
+    "lot0": 61.992,
+    "lot1": 61.992,
+    "lot2": 60.8135,
+    "lot4": 60.8135
+   }
+  },
+  "perte1": {
+   "64": {
+    "lot0": 58.32,
+    "lot1": 58.32,
+    "lot2": 62.7357,
+    "lot4": 62.7357
+   },
+   "256": {
+    "lot0": 58.32,
+    "lot1": 58.32,
+    "lot2": 62.7357,
+    "lot4": 62.7357
+   },
+   "512": {
+    "lot0": 58.32,
+    "lot1": 58.32,
+    "lot2": 62.7357,
+    "lot4": 62.7357
+   }
+  }
+ },
+ "constat": "les chiffres sont identiques à ctx 64, 256 et 512 ; le signe ne dépend pas de la taille du cache",
+ "controle": "24 exécutions, deux régimes ; même modèle, même limite ; ctx seul varie",
+ "decision": "A8.3 reste opt-in ; le prochain pas est le code du chemin lot, pas la capacité du cache",
+ "limites": [
+  "un seul modèle",
+  "limite 24 jetons",
+  "le chemin lot n'est pas instrumenté"
+ ]
+}
