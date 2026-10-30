@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-29, 23 h 59 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-30, 00 h 55 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
