@@ -1,0 +1,40 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.2b0",
+ "porte": "porte-n3-profondeur.sh",
+ "modele": {
+  "kind": "DRVM drave-n0 synthétique",
+  "graine": 7,
+  "parametres": 132528,
+  "n_blocks": 2
+ },
+ "avant": {
+  "symptome": "même requête, corps parfois perdu : 12 octets puis 15",
+  "cause": "le service lisait la requête en un seul read, sans Content-Length"
+ },
+ "apres": {
+  "pleine_profondeur": {
+   "octets": 15,
+   "deterministe": true
+  },
+  "profondeur_1": {
+   "octets": 15,
+   "deterministe": true,
+   "different": true
+  },
+  "sante": 132528
+ },
+ "controle": "même profondeur deux fois identique ; profondeur 1 différente ; /sante stable",
+ "verdict": "profondeur de service branchée et requête HTTP lue en entier",
+ "limites": [
+  "profondeur fixe, pas de seuil de confiance",
+  "modèle synthétique 2 blocs",
+  "un prompt",
+  "la qualité n'est pas mesurée"
+ ],
+ "prochain": [
+  "N3.2b seuil de confiance",
+  "N3.3b sparsité/top-k",
+  "porte de composition N3"
+ ]
+}

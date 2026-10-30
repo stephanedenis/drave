@@ -214,7 +214,14 @@ impl Native {
         let e = self.p("embed.weight"); let pe = self.p("pos.weight");
         let mut x = vec![0.0f32; c.d];
         for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
-        for b in 0..c.n_blocks {
+        // N3.2b0 — profondeur de service optionnelle : `DRAVE_NATIVE_PROFONDEUR=N` coupe
+        // le calcul après N blocs (défaut : tous). C'est une sortie précoce FIXE, sans
+        // seuil de confiance : la porte N3.2b0 mesure le chemin, pas la qualité.
+        let profondeur = std::env::var("DRAVE_NATIVE_PROFONDEUR").ok()
+            .and_then(|v| v.parse::<usize>().ok())
+            .unwrap_or(c.n_blocks)
+            .clamp(1, c.n_blocks);
+        for b in 0..profondeur {
             let z = self.ln(&x, &format!("blocks.{b}.ln1"));
             let qkv = self.matvec(&format!("blocks.{b}.qkv.weight"),
                                   &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
@@ -341,9 +348,29 @@ pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
     eprintln!("[drvm-serve] http://127.0.0.1:{port} · 11 M natif, cache par requête");
     for flux in l.incoming() {
         let mut s = match flux { Ok(s) => s, Err(_) => continue };
-        let mut buf = vec![0u8; 64 * 1024]; // 64 Ko max par requête
-        let k = match s.read(&mut buf) { Ok(k) => k, Err(_) => continue };
-        let req = String::from_utf8_lossy(&buf[..k]);
+        // N3.2b0 — lire la requête ENTIÈRE, pas un seul `read` : le corps peut arriver
+        // dans un second segment TCP. Le service perdait alors le prompt (corps vide)
+        // et la même requête donnait une génération différente — mesuré par la porte
+        // N3.2b0 avant ce correctif.
+        let mut buf: Vec<u8> = Vec::new();
+        let mut tmp = [0u8; 8192];
+        loop {
+            match s.read(&mut tmp) {
+                Ok(0) => break,
+                Ok(n) => buf.extend_from_slice(&tmp[..n]),
+                Err(_) => break,
+            }
+            if buf.len() > 64 * 1024 { break; }
+            let texte = String::from_utf8_lossy(&buf);
+            if let Some(p) = texte.find("\r\n\r\n") {
+                let cl = texte[..p].lines()
+                    .find_map(|l| l.to_ascii_lowercase().strip_prefix("content-length:")
+                        .and_then(|v| v.trim().parse::<usize>().ok()))
+                    .unwrap_or(0);
+                if buf.len() >= p + 4 + cl { break; }
+            }
+        }
+        let req = String::from_utf8_lossy(&buf);
         let ligne = req.lines().next().unwrap_or("");
         let auth_ok = std::env::var("DRAVE_TOKEN").ok().map(|t| req.contains(&format!("Authorization: Bearer {t}")))
             .unwrap_or(true);

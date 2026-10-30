@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (44)
+## Commits du jour (45)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -52,6 +52,7 @@
 | 19:48 | `b5a9cdec` | A8.3b — LE SIGNE VIENT DU CHEMIN LOT (1 vs ≥2), PAS DE LA TAILLE | `en-cours.md`, `README.md`, `memoire.md` (+3) |
 | 20:03 | `cae26b73` | B10.2bis — LE CORPUS NE DÉCOLLE PAS LE DÉCODEUR : 7,6/6,3/8,0 SUR 12 LANGUES CONTRE 17,1 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 20:08 | `db6d4058` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) | `en-cours.md`, `README.md`, `memoire.md` (+2) |
+| 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 
 ## Chiffres du jour
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**120 commits** · **0 session(s)** · **8 thème(s)**
+**121 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 23 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
-| mesures | 44 | [mesures.md](mesures.md) |
+| mesures | 45 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
 | portes | 19 | [portes.md](portes.md) |
@@ -153,6 +153,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:03 | `cae26b73` | B10.2bis — LE CORPUS NE DÉCOLLE PAS LE DÉCODEUR : 7,6/6,3/8,0 SUR 12 LANGUES CONTRE 17,1 |
 | 20:06 | `f577e3c8` | A8.0 — PORTE-CONSOLIDATION ÉPINGLÉE : 17,4268 / 17,1655 ; ÉTAT 10/33 |
 | 20:08 | `db6d4058` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (6 LIGNES) |
+| 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) |
 
 ## Le récit de la journée (écrit à la main)
 
