@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 10:46 | `f9132a68` | N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 12:58 | `b19ab8b7` | LA CASCADE À CONFIANCE EST PUBLIÉE : DEUX FICHIERS DATÉS, UN SEUIL REPRODUCTIBLE, 0,894 OUT-OF-SAMPLE | `pipeline-lecture.md`, `R06-tete-relecture.md`, `en-cours.md` (+14) |
 | 13:00 | `10a05c30` | SESSIONS — MIGRATION DOUCE : 3 PLANS À CONFIRMER, STRICT ROUGE, EN-COURS RECALÉ | `en-cours.md`, `README.md`, `mesures.md` (+4) |
+| 13:32 | `b33b56ab` | LA CARTE DE DÉCISION DES CHANTIERS — LA PROFONDEUR DE DÉPENDANCE COMME AXE, LES SOURCES NOMMÉES | `continuite.md`, `dependances.md`, `en-cours.md` (+5) |
 
 ## Chiffres du jour
 

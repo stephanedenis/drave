@@ -119,44 +119,17 @@ Le journal ne se lit que pour le **récit** d'une journée ; chaque rapport de s
 
 ## 4. Arrimer l'écran à la session
 
-Le TUI montre, par écran, la liste de tâches d'une session — mais rien ne dit, **à l'écran**,
-quelle session il porte. Trois supports doivent porter la même identité, au même endroit :
-
-| support | où | forme |
-|---|---|---|
-| `en-cours` | le titre du bloc de session | `### Session \`8156fdcb\` — R0.1–R0.5 (lecteur)` |
-| le plan | `journal/sessions/<id>/plan.md` | le champ `Session` = l'id |
-| le TUI | **le premier item** de la liste de tâches | `Session <id> — <rôle>` |
-
-**Règle.** Le premier item du TUI se met à jour **avec le plan**, à chaque cycle ; un écran dont
-le premier item ne correspond à aucun titre d'`en-cours` est une session **non déclarée**, ou un
-plan périmé — les deux se corrigent avant de continuer. C'est ce qui permet à l'humain de passer
-d'un écran à sa ligne d'état sans deviner, et aux agents de savoir qui possède quoi.
-
-**Le contrôle.** `python3 tools/sessions.py --check` compare les **plans** et `en-cours`
-(mandats, périmètres, fichiers réservés, heartbeats). Le TUI, lui, n'est pas lisible depuis le
-dépôt : c'est une **convention**, et c'est pour cela qu'elle est écrite ici.
+`en-cours`, `journal/sessions/<id>/plan.md` et le premier item du TUI portent la même identité
+(`Session <id> — rôle`). Le premier item suit le plan ; sinon la session est non déclarée ou le
+plan périmé. `tools/sessions.py --check` compare plans et `en-cours` ; le TUI reste une convention.
 
 ## 5. Reprendre un goal en pause
 
-Un goal est **lié à sa session**. Ouvrir la session qui le porte, demander « Reprends le goal en pause » :
-`get_goal` (goal_id, revision), puis `update_goal action="resume"`. Si la pause vient de
-`max_goal_rounds`, faire d'abord `action="edit"` avec `max_goal_rounds=1000`.
+`get_goal`, puis `update_goal action="resume"` ; si `max_goal_rounds` est atteint, `edit` d'abord.
 
 ## 6. Vérifier
 
-```bash
-python3 tools/verifie_en_cours.py       # structure, taille, sections, prochaine action
-python3 tools/verifie_etat_a_jour.py    # aucun fait commité après le dernier état
-python3 tools/sessions.py --check       # plans de session ↔ en-cours (mandats, périmètres)
-python3 tools/taille_documents.py       # budgets T0/T1
-python3 tools/revue_documentation.py    # liens, compteurs, fraîcheur
-```
-
-`verifie_en_cours.py` échoue si `en-cours` dépasse 2 000 mots, s'il manque une section, si une session
-active n'a pas ses sept champs, si un chantier A/B/N/R a un bloquant vide, si « Ce qui est en cours »
-dépasse 10 puces, si les questions ouvertes dépassent 5, ou si la prochaine action n'est pas nommée.
-
-Le hook `pre-commit` (`tools/installe_hooks.sh`) refuse un fait sans `en-cours` ; `--head` et `porte-etat.sh` signalent un état en retard.
+`verifie_en_cours.py`, `verifie_etat_a_jour.py`, `sessions.py --check`, `taille_documents.py`,
+`revue_documentation.py` ; le hook refuse un fait sans `en-cours`.
 
 > *Un état qu'on ne peut pas reprendre en deux minutes n'est pas un état : c'est un journal.*

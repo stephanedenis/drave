@@ -4,8 +4,7 @@
 > dans `docs/`, dans `reports/` et dans `journal/`, comment nommer, et comment horodater. Il
 > existe parce que les trois dossiers étaient utilisés **en désordre** : des suivis d'avancement
 > et des résultats de campagne dans `docs/`, des rapports de dizaines d'expériences dans un seul
-> fichier de 179 Ko, et des **dates dans le futur** (jusqu'au 12 octobre 2026, alors que le travail
-> s'est fait du 9 octobre 15 h 30 au 10 octobre 10 h 13).
+> fichier de 179 Ko, et des **dates dans le futur**.
 
 ---
 

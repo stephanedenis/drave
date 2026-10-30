@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**20 commits** · **0 session(s)** · **7 thème(s)**
+**21 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 5 | [mesures.md](mesures.md) |
+| mesures | 6 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -48,6 +48,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:19 | `68590bf0` | LE GRAPHE CONFRONTE L'INDEX, L'ÉTAT POINTE LA FRONTIÈRE — SIX STATUTS DIVERGENTS CORRIGÉS |
 | 13:25 | `842e1770` | SESSIONS — LES TROIS PLANS CONFIRMÉS : PÉRIMÈTRES, FICHIERS, HEARTBEAT 13:05 |
 | 13:30 | `21a361f9` | R13.4 — DEUX GRAINES : BPE512 DANS LE BRUIT, BPE1024 PERD 4,09 % |
+| 13:32 | `b33b56ab` | LA CARTE DE DÉCISION DES CHANTIERS — LA PROFONDEUR DE DÉPENDANCE COMME AXE, LES SOURCES NOMMÉES |
 
 ## Le récit de la journée (écrit à la main)
 
