@@ -245,12 +245,14 @@ fn main() {
         for flux in l.incoming() {
             let mut s = match flux { Ok(s) => s, Err(_) => continue };
             let mut b4 = [0u8; 4];
-            let mut lire = |s: &mut std::net::TcpStream| -> Option<u32> {
-                s.read_exact(&mut b4).ok()?; Some(u32::from_le_bytes(b4))
-            };
-            let total = match lire(&mut s) { Some(v) => v as usize, None => continue };
-            let dim = match lire(&mut s) { Some(v) => v as usize, None => continue };
-            let k = match lire(&mut s) { Some(v) => (v as usize).min(nat.cfg_n_blocks()), None => continue };
+            fn lire_u32(s: &mut std::net::TcpStream) -> Option<u32> {
+                let mut b = [0u8; 4];
+                s.read_exact(&mut b).ok()?;
+                Some(u32::from_le_bytes(b))
+            }
+            let total = match lire_u32(&mut s) { Some(v) => v as usize, None => continue };
+            let dim = match lire_u32(&mut s) { Some(v) => v as usize, None => continue };
+            let k = match lire_u32(&mut s) { Some(v) => (v as usize).min(nat.cfg_n_blocks()), None => continue };
             let mut eb = [0u8; 8];
             if s.read_exact(&mut eb).is_err() { continue; }
             let empreinte = u64::from_le_bytes(eb);
@@ -262,11 +264,17 @@ fn main() {
             let mut h = vec![0.0f32; dim];
             let mut logits = vec![0.0f32; nat.vocab_size()];
             for pos in 0..total {
+                let pos_lu = match lire_u32(&mut s) { Some(v) => v as usize, None => return };
+                if pos_lu != pos {
+                    let _ = s.write_all(&[0u8]);
+                    return;
+                }
                 for v in h.iter_mut() {
                     if s.read_exact(&mut b4).is_err() { return; }
                     *v = f32::from_le_bytes(b4);
                 }
                 logits = nat.pas_aval(&h, pos, &mut cache, k);
+                let _ = s.write_all(&[1u8]);
                 for v in &logits { let _ = s.write_all(&v.to_le_bytes()); }
             }
         }
@@ -291,11 +299,20 @@ fn main() {
         s.write_all(&(nat.cfg_d() as u32).to_le_bytes()).unwrap();
         s.write_all(&(k as u32).to_le_bytes()).unwrap();
         s.write_all(&nat.empreinte().to_le_bytes()).unwrap();
+        let desync = std::env::var("DRAVE_POS_DESYNC").is_ok();
         let mut b4 = [0u8; 4];
+        let mut st = [0u8; 1];
         let mut logits = vec![0.0f32; nat.vocab_size()];
         for (pos, &id) in ids.clone().iter().enumerate() {
+            let envoye = if desync && pos == 0 { 1 } else { pos };
+            s.write_all(&(envoye as u32).to_le_bytes()).unwrap();
             let h = nat.pas_amont(id as u32, pos, &mut ca, k);
             for v in &h { s.write_all(&v.to_le_bytes()).unwrap(); }
+            s.read_exact(&mut st).unwrap();
+            if st[0] != 1 {
+                eprintln!("[split] REFUS : position désynchronisée");
+                std::process::exit(4);
+            }
             for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
         }
         for _ in 0..n {
@@ -303,8 +320,15 @@ fn main() {
                 .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).map(|(i, _)| i as u8).unwrap_or(32);
             ids.push(suivant);
             let pos = ids.len() - 1;
+            let envoye = if desync && pos == 0 { 1 } else { pos };
+            s.write_all(&(envoye as u32).to_le_bytes()).unwrap();
             let h = nat.pas_amont(suivant as u32, pos, &mut ca, k);
             for v in &h { s.write_all(&v.to_le_bytes()).unwrap(); }
+            s.read_exact(&mut st).unwrap();
+            if st[0] != 1 {
+                eprintln!("[split] REFUS : position désynchronisée");
+                std::process::exit(4);
+            }
             for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
         }
         for b in ids { print!("{:02x}", b); }

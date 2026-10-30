@@ -21,7 +21,8 @@
 > [`n3.5b-deux-processus`](../../../reports/rapport-n3.5b-deux-processus.md),
 > [`n3.5c-reseau`](../../../reports/rapport-n3.5c-reseau.md),
 > [`n3.5d-refus`](../../../reports/rapport-n3.5d-refus.md),
-> [`n3.5e-generation`](../../../reports/rapport-n3.5e-generation.md).
+> [`n3.5e-generation`](../../../reports/rapport-n3.5e-generation.md),
+> [`n3.5f-positions`](../../../reports/rapport-n3.5f-positions.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.

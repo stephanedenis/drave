@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-30",
+ "ligne": "N3.5f",
+ "porte": "porte-n3-positions.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres",
+ "protocole": "chaque PAS envoie pos u32 ; le serveur exige pos == attendu ; statut 0/1",
+ "mesures": {
+  "succes_K2": "bit-exact",
+  "desync": "REFUS code 4"
+ },
+ "controle": "DRAVE_POS_DESYNC=1 envoie pos 1 au lieu de 0 ; le serveur refuse",
+ "limites": [
+  "localhost, sans auth/TLS",
+  "une connexion = une session",
+  "le test de désync est un hook d'environnement"
+ ],
+ "prochain": [
+  "session id u32",
+  "N3.6 composition multi-régions"
+ ]
+}

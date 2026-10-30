@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**2 commits** · **0 session(s)** · **2 thème(s)**
+**3 commits** · **0 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,6 +13,7 @@
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
+| modele | 1 | [modele.md](modele.md) |
 
 ## Sessions DSH
 
@@ -25,6 +26,7 @@ Aucune session indexée pour ce jour ; voir
 |---|---|---|
 | 00:04 | `da038e34` | R13.2 + A8.0 — VOCAB 1024 PERD 3,9 % À OCTETS ÉGAUX ; PORTE-INDICE ROUGE QUALIFIÉE |
 | 00:06 | `336a2271` | ÉTAT — DATE ALIGNÉE SUR LE COMMIT DU 30 |
+| 08:34 | `733232ff` | R06 v5 — LA CALIBRATION COÛTE ~50 GOLDS, LES POIDS APPRIS N'AJOUTENT RIEN, LE PILOTE EST COMPLÉTÉ |
 
 ## Le récit de la journée (écrit à la main)
 
