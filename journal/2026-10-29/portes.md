@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (34)
+## Commits du jour (35)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -42,6 +42,7 @@
 | 22:54 | `8b9608f0` | A8.0 — PORTE-PROFONDEUR ÉPINGLÉE : 14,6496 ; ÉTAT 18/33 | `en-cours.md`, `README.md`, `distribue.md` (+4) |
 | 23:04 | `d8498639` | N3.5b — DEUX PROCESSUS, FRONTIÈRE PAR FICHIER : LOGITS IDENTIQUES ; PORTE 71 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 23:09 | `89bb7ef8` | N3.5c — DEUX PROCESSUS TCP, AUCUN CACHE SUR LE FIL : LOGITS IDENTIQUES ; PORTE 72 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+6) |
+| 23:18 | `77296739` | N3.5d — L'EMPREINTE REFUSE UN AVAL DIVERGENT (CODE 4) ; PORTE 73 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
 
 ## Chiffres du jour
 
@@ -74,6 +75,7 @@
 - [reports/rapport-n3.4c-placement.md](../../reports/rapport-n3.4c-placement.md)
 - [reports/rapport-n3.5b-deux-processus.md](../../reports/rapport-n3.5b-deux-processus.md)
 - [reports/rapport-n3.5c-reseau.md](../../reports/rapport-n3.5c-reseau.md)
+- [reports/rapport-n3.5d-refus.md](../../reports/rapport-n3.5d-refus.md)
 
 <!-- notes -->
 

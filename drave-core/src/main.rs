@@ -233,6 +233,84 @@ fn main() {
         println!();
         return;
     }
+    if args[1] == "--drvm-serve-gen" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k_cli: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let port: u16 = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(7102);
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let l = std::net::TcpListener::bind(("127.0.0.1", port)).expect("bind");
+        eprintln!("[drvm-serve-gen] 127.0.0.1:{port} · blocs {k_cli}..{} · boucle de génération", nat.cfg_n_blocks());
+        use std::io::{Read, Write};
+        for flux in l.incoming() {
+            let mut s = match flux { Ok(s) => s, Err(_) => continue };
+            let mut b4 = [0u8; 4];
+            let mut lire = |s: &mut std::net::TcpStream| -> Option<u32> {
+                s.read_exact(&mut b4).ok()?; Some(u32::from_le_bytes(b4))
+            };
+            let total = match lire(&mut s) { Some(v) => v as usize, None => continue };
+            let dim = match lire(&mut s) { Some(v) => v as usize, None => continue };
+            let k = match lire(&mut s) { Some(v) => (v as usize).min(nat.cfg_n_blocks()), None => continue };
+            let mut eb = [0u8; 8];
+            if s.read_exact(&mut eb).is_err() { continue; }
+            let empreinte = u64::from_le_bytes(eb);
+            if dim != nat.cfg_d() || total == 0 || empreinte != nat.empreinte() {
+                let _ = s.write_all(&u32::MAX.to_le_bytes());
+                continue;
+            }
+            let mut cache = native::Cache::default();
+            let mut h = vec![0.0f32; dim];
+            let mut logits = vec![0.0f32; nat.vocab_size()];
+            for pos in 0..total {
+                for v in h.iter_mut() {
+                    if s.read_exact(&mut b4).is_err() { return; }
+                    *v = f32::from_le_bytes(b4);
+                }
+                logits = nat.pas_aval(&h, pos, &mut cache, k);
+                for v in &logits { let _ = s.write_all(&v.to_le_bytes()); }
+            }
+        }
+        return;
+    }
+    if args[1] == "--drvm-gen-net" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let prompt = args.get(4).cloned().unwrap_or_else(|| "abc".into());
+        let n: usize = args.get(5).and_then(|x| x.parse().ok()).unwrap_or(12);
+        let adresse = args.get(6).cloned().unwrap_or_else(|| "127.0.0.1:7102".into());
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let total = prompt.len() + n;
+        let mut ids: Vec<u8> = prompt.bytes().collect();
+        let mut ca = native::Cache::default();
+        use std::io::{Read, Write};
+        let mut s = std::net::TcpStream::connect(&adresse).expect("connexion aval");
+        let _ = s.set_nodelay(true);
+        s.write_all(&(total as u32).to_le_bytes()).unwrap();
+        s.write_all(&(nat.cfg_d() as u32).to_le_bytes()).unwrap();
+        s.write_all(&(k as u32).to_le_bytes()).unwrap();
+        s.write_all(&nat.empreinte().to_le_bytes()).unwrap();
+        let mut b4 = [0u8; 4];
+        let mut logits = vec![0.0f32; nat.vocab_size()];
+        for (pos, &id) in ids.clone().iter().enumerate() {
+            let h = nat.pas_amont(id as u32, pos, &mut ca, k);
+            for v in &h { s.write_all(&v.to_le_bytes()).unwrap(); }
+            for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
+        }
+        for _ in 0..n {
+            let suivant = logits.iter().enumerate()
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).map(|(i, _)| i as u8).unwrap_or(32);
+            ids.push(suivant);
+            let pos = ids.len() - 1;
+            let h = nat.pas_amont(suivant as u32, pos, &mut ca, k);
+            for v in &h { s.write_all(&v.to_le_bytes()).unwrap(); }
+            for v in logits.iter_mut() { s.read_exact(&mut b4).unwrap(); *v = f32::from_le_bytes(b4); }
+        }
+        for b in ids { print!("{:02x}", b); }
+        println!();
+        return;
+    }
     if args[1] == "--drvm-serve-aval" {
         let f = args.get(2).cloned().unwrap_or_default();
         let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);

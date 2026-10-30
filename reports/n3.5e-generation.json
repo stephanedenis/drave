@@ -1,0 +1,31 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.5e",
+ "porte": "porte-n3-generation.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "protocole": "TCP : total, d, k, empreinte ; puis un hidden par position ; retour logits",
+ "mesures": {
+  "k": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "prompts": [
+   "abc",
+   "zzz"
+  ],
+  "generation": "bit-identique à generer local"
+ },
+ "controle": "deux caches (amont 0..k, aval k..n) ; aucun cache sur le fil ; K des deux côtés du pont",
+ "limites": [
+  "localhost, sans auth/TLS",
+  "une session par connexion",
+  "total de positions fixé à l'avance"
+ ],
+ "prochain": [
+  "N3.5f sessions/positions/refus de désynchronisation",
+  "B11.10"
+ ]
+}
