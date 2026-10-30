@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**157 commits** · **0 session(s)** · **8 thème(s)**
+**158 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 26 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
 | mesures | 52 | [mesures.md](mesures.md) |
-| modele | 11 | [modele.md](modele.md) |
+| modele | 12 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
 | portes | 35 | [portes.md](portes.md) |
 
@@ -190,6 +190,7 @@ Aucune session indexée pour ce jour ; voir
 | 23:27 | `472c25a6` | B11.10a — 4/4 ROUTÉES, 3/4 LUES : E4 EXIGE UNE POSITION |
 | 23:28 | `d99786be` | ÉTAT — DATE ALIGNÉE SUR LE DERNIER COMMIT |
 | 23:31 | `4884e9bb` | B11.10b — L'INDICE DE JEU STRIPPÉ : 4/4 ROUTÉES, 3/4 LUES ; PORTE 75 |
+| 23:36 | `d1eb552b` | B11.10c — E4 = REQUÊTE DE CASE : 4/4 ROUTÉES ET LUES |
 
 ## Le récit de la journée (écrit à la main)
 

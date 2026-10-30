@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-melange.sh",
+ "statut": "rouge structurelle qualifiée",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "jetons": {
+  "A": 1470,
+  "B": 1470,
+  "C": 1440
+ },
+ "capture": "position 1470 depuis une invite de 1471 jetons",
+ "echec": "l'état de A ne rend pas le code de A dans une invite sans code : le mélange ne pourrait rien dire",
+ "controle": "A/B/C, A sans aiguille ; la porte échoue au contrôle de calibration",
+ "verdict": "rouge non corrigée : le mélange n'est pas mesurable sur ce montage",
+ "limites": [
+  "un seul modèle",
+  "le défaut est dans le montage/état, pas dans le mélange",
+  "pas de pin PPL"
+ ]
+}
