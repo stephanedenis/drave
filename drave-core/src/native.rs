@@ -20,6 +20,8 @@ pub struct Cfg {
     pub kwta: f64,
     pub window: usize,
     pub thought_steps: usize,
+    /// Nombre de positions du tenseur `pos.weight` (lu au chargement, plus de 2047 en dur).
+    pub max_pos: usize,
 }
 
 fn champ<'a>(j: &'a Json, k: &str) -> Result<&'a Json, ErreurDrvm> {
@@ -43,12 +45,13 @@ impl Native {
     pub fn open(d: &Drvm) -> Result<Self, ErreurDrvm> {
         let arch = d.manifeste.get("model").and_then(|m| m.get("architecture"))
             .ok_or_else(|| ErreurDrvm("model.architecture absent : DRVM non natif".into()))?;
-        let cfg = Cfg {
+        let mut cfg = Cfg {
             vocab: u(arch, "vocab")?, d: u(arch, "d_model")?, n_blocks: u(arch, "n_blocks")?,
             n_heads: u(arch, "n_heads")?, expert_hidden: u(arch, "expert_hidden")?,
             n_experts: u(arch, "n_experts")?, top_k: u(arch, "top_k")?,
             kwta: champ(arch, "kwta").ok().and_then(Json::as_f64).unwrap_or(0.25),
             window: u(arch, "window")?, thought_steps: u(arch, "thought_steps")?,
+            max_pos: 0,
         };
         let mut poids = HashMap::new();
         for t in &d.tenseurs {
@@ -59,6 +62,7 @@ impl Native {
             }
             poids.insert(t.name.clone(), v);
         }
+        cfg.max_pos = poids.get("pos.weight").map(|p| p.len() / cfg.d).unwrap_or(2048).max(1);
         Ok(Native { cfg, poids, appels_ffn: AtomicUsize::new(0),
                     experts_actifs: AtomicUsize::new(0), canaux_actifs: AtomicUsize::new(0) })
     }
@@ -133,7 +137,7 @@ impl Native {
         let mut x = vec![0.0f32; c.d];
         for (pos, &id) in ids.iter().enumerate() {
             let e = self.p("embed.weight"); let pe = self.p("pos.weight");
-            for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
+            for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
         }
         // Pour cette version, on exécute la dernière position seulement, avec
         // les positions précédentes comme contexte.
@@ -141,7 +145,7 @@ impl Native {
         let mut h = vec![vec![0.0f32; c.d]; s];
         for (pos, &id) in ids.iter().enumerate() {
             let e = self.p("embed.weight"); let pe = self.p("pos.weight");
-            for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
+            for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
         }
         for b in 0..c.n_blocks {
             let mut nh = vec![vec![0.0f32; c.d]; s];
@@ -183,7 +187,7 @@ impl Native {
                 for k in 0..c.d { nh[pos][k] = h[pos][k] + y[k] + f[k]; }
             }
             h = nh;
-            if b == c.n_blocks / 2 - 1 {
+            if c.n_blocks >= 2 && b == c.n_blocks / 2 - 1 {
                 for pos in 0..s {
                     let br = self.matvec("bridge.weight", "bridge.bias", &h[pos], c.d);
                     for k in 0..c.d { h[pos][k] += br[k]; }
@@ -211,6 +215,15 @@ pub struct Cache {
     v: Vec<Vec<Vec<f32>>>,
 }
 
+impl Cache {
+    fn assurer(&mut self, n_blocks: usize, n_heads: usize) {
+        if self.k.is_empty() {
+            self.k = vec![vec![Vec::new(); n_heads]; n_blocks];
+            self.v = vec![vec![Vec::new(); n_heads]; n_blocks];
+        }
+    }
+}
+
 impl Native {
     /// Un jeton, avec cache KV : les clés/valeurs des positions précédentes ne
     /// sont pas recalculées. C'est le chemin de génération.
@@ -222,20 +235,27 @@ impl Native {
         self.pas_profondeur(id, pos, cache, env)
     }
 
-    /// N3.2b0 — un pas à profondeur imposée ; N3.2b1 l'utilise pour les deux caches.
-    fn pas_profondeur(&self, id: u32, pos: usize, cache: &mut Cache, profondeur: usize) -> Vec<f32> {
+    /// Entrée d'une région : embedding + position. Seul endroit qui lit
+    /// `embed.weight` et `pos.weight` ; la région aval ne ré-embedde jamais.
+    fn entree(&self, id: u32, pos: usize) -> Vec<f32> {
         let c = &self.cfg;
-        let profondeur = profondeur.clamp(1, c.n_blocks);
-        let dh = c.d / c.n_heads;
-        if cache.k.is_empty() {
-            cache.k = vec![vec![Vec::new(); c.n_heads]; c.n_blocks];
-            cache.v = vec![vec![Vec::new(); c.n_heads]; c.n_blocks];
-        }
         let e = self.p("embed.weight"); let pe = self.p("pos.weight");
         let mut x = vec![0.0f32; c.d];
-        for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(2047) * c.d + k]; }
-        for b in 0..profondeur {
-            let z = self.ln(&x, &format!("blocks.{b}.ln1"));
+        for k in 0..c.d {
+            x[k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k];
+        }
+        x
+    }
+
+    /// Traverse les blocs `blocs` (indices ABSOLUS) en écrivant K/V dans
+    /// `cache[b]`. Ni embedding, ni tête. Le pont est appliqué à l'indice
+    /// absolu : une seule des deux régions le porte.
+    fn traverser(&self, x: &mut [f32], pos: usize, blocs: std::ops::Range<usize>, cache: &mut Cache) {
+        let c = &self.cfg;
+        let dh = c.d / c.n_heads;
+        cache.assurer(c.n_blocks, c.n_heads);
+        for b in blocs {
+            let z = self.ln(x, &format!("blocks.{b}.ln1"));
             let qkv = self.matvec(&format!("blocks.{b}.qkv.weight"),
                                   &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
             let mut att = vec![0.0f32; c.d];
@@ -243,7 +263,6 @@ impl Native {
                 let q = &qkv[t * dh..(t + 1) * dh];
                 cache.k[b][t].extend_from_slice(&qkv[c.d + t * dh..c.d + (t + 1) * dh]);
                 cache.v[b][t].extend_from_slice(&qkv[2 * c.d + t * dh..2 * c.d + (t + 1) * dh]);
-                let nk = cache.k[b][t].len() / dh;
                 let debut = pos.saturating_sub(c.window - 1);
                 let mut sc = Vec::new();
                 for j in debut..=pos {
@@ -259,7 +278,6 @@ impl Native {
                     let v = &cache.v[b][t][j * dh..(j + 1) * dh];
                     for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
                 }
-                let _ = nk;
             }
             let y = self.matvec(&format!("blocks.{b}.out.weight"),
                                 &format!("blocks.{b}.out.bias"), &att, c.d);
@@ -267,19 +285,49 @@ impl Native {
                              &format!("blocks.{b}.ln2"));
             let f = self.ffn(&z2, b);
             for k in 0..c.d { x[k] = x[k] + y[k] + f[k]; }
-            if b == c.n_blocks / 2 - 1 {
-                let br = self.matvec("bridge.weight", "bridge.bias", &x, c.d);
+            if c.n_blocks >= 2 && b == c.n_blocks / 2 - 1 {
+                let br = self.matvec("bridge.weight", "bridge.bias", x, c.d);
                 for k in 0..c.d { x[k] += br[k]; }
             }
         }
-        let mut z = x.clone();
-        let h0 = x;
+    }
+
+    /// Tête terminale : thought_steps puis head_byte. Une seule fois, dans la
+    /// dernière région.
+    fn tete(&self, x: &[f32]) -> Vec<f32> {
+        let c = &self.cfg;
+        let mut z = x.to_vec();
+        let h0 = x.to_vec();
         for _ in 0..c.thought_steps {
             let a = self.matvec("thought.weight", "thought.bias", &z, c.d);
             let b = self.matvec("thought_in.weight", "thought_in.bias", &h0, c.d);
             for k in 0..c.d { z[k] = (a[k] + b[k]).tanh(); }
         }
         self.matvec("head_byte.weight", "head_byte.bias", &z, c.vocab)
+    }
+
+    /// N3.2b0 — un pas à profondeur imposée ; N3.2b1 l'utilise pour les deux caches.
+    fn pas_profondeur(&self, id: u32, pos: usize, cache: &mut Cache, profondeur: usize) -> Vec<f32> {
+        let p = profondeur.clamp(1, self.cfg.n_blocks);
+        let mut x = self.entree(id, pos);
+        self.traverser(&mut x, pos, 0..p, cache);
+        self.tete(&x)
+    }
+
+    /// Région AMONT : blocs `0..k`, hidden de frontière. `k == 0` est légitime.
+    pub fn pas_amont(&self, id: u32, pos: usize, cache: &mut Cache, k: usize) -> Vec<f32> {
+        let k = k.min(self.cfg.n_blocks);
+        let mut x = self.entree(id, pos);
+        self.traverser(&mut x, pos, 0..k, cache);
+        x
+    }
+
+    /// Région AVAL : blocs `k..n`, puis tête. La frontière a déjà traversé k blocs.
+    pub fn pas_aval(&self, frontiere: &[f32], pos: usize, cache: &mut Cache, k: usize) -> Vec<f32> {
+        let k = k.min(self.cfg.n_blocks);
+        let mut x = frontiere.to_vec();
+        self.traverser(&mut x, pos, k..self.cfg.n_blocks, cache);
+        self.tete(&x)
     }
 
     /// Génération SANS cache : refait toute la passe avant à chaque octet.
@@ -390,6 +438,23 @@ mod tests {
         let g = n.generer(b"AB", 4);
         assert!(g.len() >= 6);
     }
+
+    #[test]
+    fn split_amont_aval_egal_pas() {
+        let chemin = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/tiny_n0.drvm");
+        let d = Drvm::open(chemin).expect("fixture DRVM");
+        let n = Native::open(&d).expect("ouverture native");
+        for k in 0..=n.cfg.n_blocks {
+            let (mut ca, mut cv, mut cp) = (Cache::default(), Cache::default(), Cache::default());
+            for pos in 0..6usize {
+                let id = b"abcdef"[pos] as u32;
+                let attendu = n.pas(id, pos, &mut cp);
+                let h = n.pas_amont(id, pos, &mut ca, k);
+                let got = n.pas_aval(&h, pos, &mut cv, k);
+                assert_eq!(attendu, got, "k={k} pos={pos}");
+            }
+        }
+    }
 }
 
 /// Service HTTP minimal, std seul : `GET /sante`, `POST /generer` (corps = prompt,
@@ -456,10 +521,14 @@ pub fn servir(chemin: &str, port: u16) -> std::io::Result<()> {
 impl Native {
     pub fn nb_parametres(&self) -> usize { self.poids.values().map(|v| v.len()).sum() }
 
+    pub fn cfg_n_blocks(&self) -> usize { self.cfg.n_blocks }
+    pub fn vocab_size(&self) -> usize { self.cfg.vocab }
+
     /// N3.3c — compteurs réels : (appels ffn, experts retenus, canaux actifs).
     pub fn sparsite(&self) -> (usize, usize, usize) {
         (self.appels_ffn.load(Ordering::Relaxed),
          self.experts_actifs.load(Ordering::Relaxed),
          self.canaux_actifs.load(Ordering::Relaxed))
     }
+
 }

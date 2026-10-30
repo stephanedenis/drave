@@ -222,6 +222,46 @@ fn main() {
         println!("appels_ffn {a} experts_actifs {e} canaux_actifs {c}");
         return;
     }
+    if args[1] == "--drvm-generate-hex" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let prompt = args.get(3).cloned().unwrap_or_else(|| "abc".into());
+        let n: usize = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(12);
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let b = nat.generer(prompt.as_bytes(), n);
+        for x in b { print!("{:02x}", x); }
+        println!();
+        return;
+    }
+    if args[1] == "--drvm-generate-split" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+        let prompt = args.get(4).cloned().unwrap_or_else(|| "abc".into());
+        let n: usize = args.get(5).and_then(|x| x.parse().ok()).unwrap_or(12);
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let k = k.min(nat.cfg_n_blocks());
+        let mut ids: Vec<u8> = prompt.bytes().collect();
+        let mut ca = native::Cache::default();
+        let mut cv = native::Cache::default();
+        let mut logits = vec![0.0f32; nat.vocab_size()];
+        for (pos, &id) in ids.clone().iter().enumerate() {
+            let h = nat.pas_amont(id as u32, pos, &mut ca, k);
+            logits = nat.pas_aval(&h, pos, &mut cv, k);
+        }
+        for _ in 0..n {
+            let suivant = logits.iter().enumerate()
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).map(|(i, _)| i as u8).unwrap_or(32);
+            ids.push(suivant);
+            let pos = ids.len() - 1;
+            let h = nat.pas_amont(suivant as u32, pos, &mut ca, k);
+            logits = nat.pas_aval(&h, pos, &mut cv, k);
+            if suivant == b'\n' { break; }
+        }
+        for b in ids { print!("{:02x}", b); }
+        println!();
+        return;
+    }
     if args[1] == "--drvm-forward" {
         let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-forward attend un DRVM"); std::process::exit(2); } };
         let prompt = args.get(3).cloned().unwrap_or_else(|| "La France est un pays".into());

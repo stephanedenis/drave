@@ -1,0 +1,36 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.5a",
+ "porte": "porte-n3-deux-regions.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "decoupage": "blocs 0..k (amont) + k..n (aval), hidden de frontière d f32",
+ "mesures": {
+  "k": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "prompts": [
+   "abc",
+   "zzz"
+  ],
+  "sortie": "bit-identique au modèle plein",
+  "test_unitaire": "split_amont_aval_egal_pas vert"
+ },
+ "bugs_corriges": [
+  "pont n_blocks=1 : underflow usize",
+  "max_pos 2047 en dur : fixture 32 positions"
+ ],
+ "controle": "K=0 et K=4 encadrent le pont ; K=1 le met dans l'aval, K=2 dans l'amont ; deux prompts",
+ "limites": [
+  "un seul processus : contrôle du découpage, pas du fil",
+  "aucun cache K/V transféré",
+  "poids chargés en entier"
+ ],
+ "prochain": [
+  "N3.5b : deux processus, transfert TCP du hidden de frontière",
+  "refus de désynchronisation/empreinte"
+ ]
+}

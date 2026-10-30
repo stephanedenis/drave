@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (49)
+## Commits du jour (50)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -57,10 +57,11 @@
 | 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN | `A8.3-defaut.md`, `en-cours.md`, `roadmap.md` (+6) |
 | 21:10 | `4619fd80` | N3.4d — COUVERTURE N3 PAR BRIQUE : COMPOSITION NATIVE = CONDITION | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 22:23 | `e220336a` | A8.3c.1 — LE SIGNE NE DÉPEND PAS DU CONTEXTE : 24 MESURES, ctx 64/256/512 IDENTIQUES | `en-cours.md`, `README.md`, `distribue.md` (+3) |
+| 22:41 | `0668ef4e` | R13.1 — LE BPE NATIF BAT L'OCTET : 3,249 CONTRE 3,689 BITS/OCTET, −11,9 % À OCTETS ÉGAUX | `en-cours.md`, `roadmap.md`, `README.md` (+6) |
 
 ## Chiffres du jour
 
-`1,90 %` · `0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %` · `2,6998` · `0,436` · `2,7149`
+`−11,9 %` · `3,249` · `3,689` · `1,90 %` · `0,109` · `0,150` · `0,944` · `0,851` · `0,785` · `0,601` · `0,836` · `69,3 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -109,6 +110,7 @@
 - [reports/rapport-r06-pipeline.md](../../reports/rapport-r06-pipeline.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
 - [reports/rapport-r13-tokenisation.md](../../reports/rapport-r13-tokenisation.md)
+- [reports/rapport-r13.1-bpe.md](../../reports/rapport-r13.1-bpe.md)
 - [reports/rapport-r41-bloc-tableaux.md](../../reports/rapport-r41-bloc-tableaux.md)
 
 <!-- notes -->
