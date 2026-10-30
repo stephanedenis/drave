@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 20:28 | `706020ee` | N3.4a — SERVICE + PROFONDEUR + ROUTAGE + COMPTAGE COMPOSÉS ; PORTE 64 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 20:34 | `737af4ee` | A8.0 — PORTE-FUSION ÉPINGLÉE : 113,0068 ; ÉTAT 11/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
+| 20:43 | `bacf43d2` | N3.2b1 — SEUIL DE CONFIANCE DANS LE SERVICE : 12/0, 0/12, 11/1 ; PORTE 65 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
 
 ## Chiffres du jour
 
@@ -52,6 +53,7 @@
 - [reports/rapport-n3.1-etat.md](../../reports/rapport-n3.1-etat.md)
 - [reports/rapport-n3.2a-service.md](../../reports/rapport-n3.2a-service.md)
 - [reports/rapport-n3.2b0-profondeur.md](../../reports/rapport-n3.2b0-profondeur.md)
+- [reports/rapport-n3.2b1-seuil.md](../../reports/rapport-n3.2b1-seuil.md)
 - [reports/rapport-n3.3b-sparsite.md](../../reports/rapport-n3.3b-sparsite.md)
 - [reports/rapport-n3.4a-composition.md](../../reports/rapport-n3.4a-composition.md)
 

@@ -115,7 +115,7 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 | **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ | aucune — N0.3b est **close** (conversion et natif) |
 | **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
 | **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
-| **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **partiel** | **N3.2a service ✅ · N3.2b0 profondeur ✅ · N3.2b1 seuil ✅ · N3.3a routage ✅ · N3.3b séparation ✅ · N3.3c comptage ✅ · N3.4a composition ✅** ; N3.2b2 cache ; pont/placement |
+| **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **partiel** | **N3.2a service ✅ · N3.2b0 profondeur ✅ · N3.2b1 seuil ✅ · N3.2b2 condition ✅ · N3.3a routage ✅ · N3.3b séparation ✅ · N3.3c comptage ✅ · N3.4a composition ✅** ; pont/placement |
 | **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — la **consigne courte** tenue à l'écart (**24/24 vus, 0/4 tenus**) ; la lecture est **R31** |
 | **N5** | l'échelle : 50–100 M, corpus élargi | ⏸ **gelé** | après le verdict de **R11** sur le contexte ; BPE si R13 le justifie |
 

@@ -12,7 +12,8 @@
 > [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
 > [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
 > [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md),
-> [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md).
+> [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md),
+> [`n3.2b2-cache`](../../../reports/rapport-n3.2b2-cache.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -31,8 +32,8 @@ le rejeu et le placement (A2.6). La profondeur routée (dessin B) est **exécut�
 moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court
 entraîné est le facteur limitant (**23,19 %** contre **47,73 %** pour le long).
 
-**Ce qui reste** : N3.2b2 (cache continu pour un vrai saut de calcul), puis la composition
-avec pont/placement. N3.2a, N3.2b0, N3.2b1 (seuil de décision), N3.3a/b/c et N3.4a sont **faits**.
+**Ce qui reste** : la composition avec pont/placement, et une architecture de cache si elle
+existe. N3.2a, N3.2b0, N3.2b1 (seuil), N3.2b2 (condition K/V), N3.3a/b/c et N3.4a sont **faits**.
 
 ## Le contrat
 

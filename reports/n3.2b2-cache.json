@@ -1,0 +1,28 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.2b2",
+ "porte": "porte-n3-cache.sh",
+ "modele": "drave-n0 synthétique, graine 7, 663 272 paramètres, 8 blocs",
+ "mesures": {
+  "plein_ms_median": 5.2,
+  "profondeur_1_ms_median": 2.0,
+  "deterministe": true,
+  "sortie_differente": true
+ },
+ "condition": "les couches sautées ne fournissent plus leurs K/V aux jetons suivants",
+ "verdict": "le saut de calcul est réel mais n'est pas gratuit ; N3.2b2 est une condition, pas un patch de cache",
+ "options": [
+  "recalculer le plein (aucun gain net)",
+  "stocker tous les K/V (aucun gain)",
+  "accepter un modèle tronqué (sortie différente)"
+ ],
+ "limites": [
+  "modèle synthétique",
+  "un prompt",
+  "temps médians sur 3 mesures"
+ ],
+ "prochain": [
+  "composition avec pont/placement",
+  "N3.2b2 si une architecture de cache le permet"
+ ]
+}
