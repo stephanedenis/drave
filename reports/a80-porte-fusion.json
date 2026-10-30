@@ -1,0 +1,21 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-fusion.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": 0.0005,
+ "reference": 113.0068,
+ "mesures": {
+  "ppl_repartie": 113.0068,
+  "croisements": 188,
+  "divergence_detectee": true,
+  "v1_refusee": true
+ },
+ "controle": "décalage de 10 % de la PPL refusé par la même expression",
+ "gate": "exit 0 ; fusion ordonnée, divergence attribuée, v1 refusée",
+ "limites": [
+  "un seul modèle",
+  "trace locale",
+  "la PPL n'est pas la qualité de la fusion"
+ ]
+}

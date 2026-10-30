@@ -40,6 +40,16 @@ S=$($D "$M" --ppl-reparti "127.0.0.1:$PORT" --topologie "$TOPO" --ids-file "$IDS
      --limit "$LIMITE" --ctx 256 --threads 8 --flux f32 --trace-globale "$T/drv.txt" 2>&1)
 CODE=$?
 printf '%s\n' "$S" | grep -E "trace\]|deux nœuds" | sed 's/^/  /'
+# A8.0 — la PPL du chemin réparti f32 est épinglée (5e-4).
+PPL=$(printf '%s\n' "$S" | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
+[ -n "$PPL" ] || { echo "  ❌ aucune perplexité répartie"; exit 1; }
+python3 - "$PPL" <<'PPLFUS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 113.0068
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL répartie : {val} (attendu {attendu})")
+print(f"  ✅ PPL répartie épinglée : {val}")
+PPLFUS
 kill $N 2>/dev/null; wait $N 2>/dev/null
 grep -E "trace\]" "$T/n.log" | sed 's/^/  nœud : /'
 DL=$(grep -vc '^#' "$T/drv.txt" 2>/dev/null || echo 0)
