@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (28)
+## Commits du jour (29)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -36,6 +36,7 @@
 | 20:58 | `a0324368` | A8.0 — PORTE-REFLEXE ÉPINGLÉE : 11 163 272,0495 ; ÉTAT 13/33 | `en-cours.md`, `README.md`, `distribue.md` (+5) |
 | 21:01 | `5bed145a` | N3.4c — LE PLACEMENT NATIF EST UNE MÉTADONNÉE, PAS UN CHEMIN ; PORTE 68 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
 | 21:05 | `0c6bea37` | A8.0 — PORTE-C4-RETARD ÉPINGLÉE : 14,6496 / 9 277,9771 / 151 517 ; ÉTAT 14/33 | `en-cours.md`, `README.md`, `portes.md` (+4) |
+| 22:03 | `3c517fb2` | ÉTAT — A8.0 RÉCONCILIÉ À 14 PORTES | `en-cours.md`, `README.md`, `mesures.md` |
 
 ## Chiffres du jour
 

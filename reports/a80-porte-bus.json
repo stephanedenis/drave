@@ -1,0 +1,25 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-bus.sh",
+ "modele": "Qwen2.5-0.5B-Q8_0",
+ "tolerance": 0.0005,
+ "references": {
+  "bus_gain_1.5": 64.116,
+  "relais_sans_bus": 59.079,
+  "relais_bus": 66.0379,
+  "fichier_sans_canal": 59.079,
+  "fichier_canal": 66.0379
+ },
+ "mesures": {
+  "croisements": 126,
+  "bus_neutre": "identique"
+ },
+ "controle": "décalage de 10 % des PPL refusé par la même expression",
+ "gate": "exit 0 ; bus neutre identique, bus non neutre différent, relais/file changent",
+ "limites": [
+  "un seul modèle",
+  "topologie à trois régions",
+  "les PPL dépendent de la limite"
+ ]
+}

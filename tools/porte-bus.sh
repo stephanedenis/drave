@@ -45,6 +45,14 @@ echo "=== 2. bus NON NEUTRE : le bus doit être BRANCHÉ ==="
 N=$(nœud); sleep 2
 C=$(ppl --bus gain=1.5 --trace-globale "$T/gain.txt"); kill $N 2>/dev/null; wait $N 2>/dev/null
 echo "  gain=1.5 : $C"
+# A8.0 — la PPL du bus non neutre est épinglée (5e-4).
+python3 - "$C" <<'PPLBUS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 64.1160
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL bus gain=1.5 : {val} (attendu {attendu})")
+print(f"  ✅ PPL bus épinglée : {val}")
+PPLBUS
 if [ "$C" != "$A" ]; then echo "  ✅ la sortie change : le bus agit"
 else echo "  ❌ gain non neutre sans effet : le bus n'est pas branché"; exit 1; fi
 diff -q <(sans_det "$T/gain.txt") <(sans_det "$T/sans.txt") >/dev/null \
@@ -79,6 +87,13 @@ R0=$($D "$M" --ppl-reparti "127.0.0.1:$P1" --topologie "$T/t3.json" --ids-file "
       --limit "$LIMITE" --ctx 256 --threads 8 --flux 2>&1 | grep -oE "deux nœuds +: perplexité [0-9.]+" | grep -oE "[0-9.]+$")
 kill $N1 $N2 2>/dev/null; wait $N1 $N2 2>/dev/null
 echo "  relais sans bus : $R0 · relais avec bus gain=1.5 : $R"
+python3 - "$R0" "$R" <<'PPLBUSR' || exit 1
+import sys
+for nom, val, attendu in (("relais sans bus", sys.argv[1], 59.0790), ("relais bus", sys.argv[2], 66.0379)):
+    if abs(float(val) - attendu) > 5e-4 * attendu:
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print("  ✅ PPL relais épinglées : 59,0790 / 66,0379")
+PPLBUSR
 [ -n "$R" ] && [ "$R" != "$R0" ] && echo "  ✅ le bus traverse les instances et agit sur la région du milieu" \
     || { echo "  ❌ le bus du nœud relais est sans effet"; exit 1; }
 echo "=== 4. bus diffusé par FICHIER DE CONTRÔLE, sur un nœud RELAIS (C5bis) ==="
@@ -106,6 +121,13 @@ relais() { # relais <contenu du fichier de contrôle>
 }
 R0=$(relais "# aucun canal"); R1=$(relais "MODULATION gain 1.5")
 echo "  fichier sans canal : $R0 · canal gain=1,5 : $R1"
+python3 - "$R0" "$R1" <<'PPLBUSF' || exit 1
+import sys
+for nom, val, attendu in (("fichier sans canal", sys.argv[1], 59.0790), ("fichier canal", sys.argv[2], 66.0379)):
+    if abs(float(val) - attendu) > 5e-4 * attendu:
+        sys.exit(f"  ❌ PPL {nom} : {val} (attendu {attendu})")
+print("  ✅ PPL fichier épinglées : 59,0790 / 66,0379")
+PPLBUSF
 [ -n "$R1" ] && [ "$R1" != "$R0" ] && echo "  ✅ le canal diffusé par fichier change la région du milieu" \
     || { echo "  ❌ le fichier de contrôle est sans effet"; exit 1; }
 rm -rf "$T"
