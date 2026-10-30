@@ -39,16 +39,28 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from llm.mesure import chrf  # noqa: E402
-from semantique.corpus import LANGUES, charger, decouper, exemple  # noqa: E402
+from semantique import corpus as corpus_udhr  # noqa: E402
+from semantique import corpus_jw  # noqa: E402
 from semantique.modele import Semantique  # noqa: E402
 
 CHECKPOINT = "/tmp/natif-224-6-align-s1"
-ENCODEUR_ENTRAINE = "/tmp/b102bis-a-s1"  # état Semantique sauvé par entrainer.py
 D_SEM = 128
 D = 128
 MAX_MOTS = 64
-CIBLES = ["spa", "deu", "ita", "por", "rus", "swh"]
-SOURCE = "fra"
+
+# Les réglages dépendent du corpus : deux mondes, deux protocoles.
+CONFIGS = {
+    "udhr": {"module": corpus_udhr, "encodeur": "/tmp/b102bis-a-s1",
+             "langues": [l for l in corpus_udhr.LANGUES if l != "cmn"],
+             "source": "fra", "cibles": ["spa", "deu", "ita", "por", "rus", "swh"]},
+    "jw": {"module": corpus_jw, "encodeur": "/tmp/jw-a-s1",
+           "langues": [l for l in corpus_jw.LANGUES if l != "jpn"],
+           "source": "eng", "cibles": ["ind", "swh", "vie"]},
+}
+CONFIG = CONFIGS["udhr"]
+CIBLES = CONFIG["cibles"]
+SOURCE = CONFIG["source"]
+ENCODEUR_ENTRAINE = CONFIG["encodeur"]
 
 
 # ------------------------------------------------------------------ le vocabulaire
@@ -126,12 +138,22 @@ class DecodeurMots(nn.Module):
 
 # ------------------------------------------------------------------ les données
 
+def _configurer(corpus: str) -> None:
+    """Fixe le monde (corpus, encodeur, source, cibles) pour la durée du run."""
+    global CONFIG, CIBLES, SOURCE, ENCODEUR_ENTRAINE
+    CONFIG = CONFIGS[corpus]
+    CIBLES = CONFIG["cibles"]
+    SOURCE = CONFIG["source"]
+    ENCODEUR_ENTRAINE = CONFIG["encodeur"]
+
+
 def etats_encodeur(articles: dict, langues: list[str], device, seq: int = 128) -> dict:
     """Le `z` GELÉ de chaque (article, langue) : l'encodeur ne bouge pas."""
     # L'encodeur est celui de B10.2bis, ENTRAÎNÉ puis GELÉ : le checkpoint de base seul
     # n'a pas de tête (elle est créée aléatoirement) — geler une tête au hasard ne
     # mesurerait rien. On recharge l'état sauvé par entrainer.py.
-    model = Semantique.charger(CHECKPOINT, len(LANGUES), D_SEM, 4, str(device))
+    model = Semantique.charger(CHECKPOINT, len(CONFIG["module"].LANGUES), D_SEM, 4,
+                               str(device))
     etat = torch.load(ENCODEUR_ENTRAINE, map_location="cpu")
     model.load_state_dict(etat["etat"])
     model.eval()
@@ -139,7 +161,8 @@ def etats_encodeur(articles: dict, langues: list[str], device, seq: int = 128) -
     with torch.no_grad():
         for art, textes in articles.items():
             for langue in langues:
-                ids = torch.tensor([exemple(articles, art, langue, seq)], device=device)
+                ids = torch.tensor([CONFIG["module"].exemple(articles, art, langue, seq)],
+                                   device=device)
                 masque = torch.ones_like(ids)
                 cache[(art, langue)] = model.encode(ids, masque)[0].cpu()
     del model
@@ -248,9 +271,9 @@ def controles(model, val: dict, z: dict, vocab: Vocabulaire, langues: list[str],
 # ------------------------------------------------------------------ les modes
 
 def une_graine(graine: int, pas: int, device, seq: int = 128) -> dict:
-    langues = [l for l in LANGUES if l != "cmn"]  # pas d'espaces : hors comparaison
-    articles = charger(langues, 30)
-    train, val = decouper(articles)
+    langues = CONFIG["langues"]
+    articles = CONFIG["module"].charger(langues)
+    train, val = CONFIG["module"].decouper(articles)
     vocab = Vocabulaire(train, langues)
     z = etats_encodeur(articles, langues, device, seq)
     debut = time.monotonic()
@@ -263,7 +286,8 @@ def une_graine(graine: int, pas: int, device, seq: int = 128) -> dict:
             "vocabulaire": len(vocab)}
 
 
-def mesure(chemin: pathlib.Path, pas: int, graines: list[int]) -> int:
+def mesure(chemin: pathlib.Path, pas: int, graines: list[int], corpus: str = "udhr") -> int:
+    _configurer(corpus)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     resultats = [une_graine(g, pas, device) for g in graines]
     trad = [r["meilleur"]["chrf_trad"] for r in resultats]
@@ -272,9 +296,11 @@ def mesure(chemin: pathlib.Path, pas: int, graines: list[int]) -> int:
     donnees = {
         "date": "2026-10-29", "ligne": "B10",
         "dispositif": {
-            "corpus": "UDHR 30 articles, 9 langues avec espaces (cmn exclu)",
+            "corpus": ("JW : 139 unités, 5 articles, 11 langues avec espaces (jpn exclu)"
+                       if corpus == "jw" else
+                       "UDHR 30 articles, 9 langues avec espaces (cmn exclu)"),
             "decoupage": "24 train / 6 validation (articles 25-30)",
-            "encodeur": f"{CHECKPOINT} (9,29 M, gelé)",
+            "encodeur": f"{CHECKPOINT} + {ENCODEUR_ENTRAINE} (gelé)",
             "decodeur": "mots : embedding + langue + 2 couches d'attention croisée sur z",
             "pas": pas, "graines": graines, "cibles": CIBLES,
         },
@@ -305,12 +331,14 @@ def main() -> int:
     ap.add_argument("--graine", type=int, default=1)
     ap.add_argument("--pas", type=int, default=3000)
     ap.add_argument("--sortie", default="/tmp/mots-s1")
+    ap.add_argument("--corpus", default="udhr", choices=("udhr", "jw"))
     ap.add_argument("--mesure", type=pathlib.Path)
     ap.add_argument("--graines", default="1,2,3")
     args = ap.parse_args()
     if args.mesure:
         graines = [int(g) for g in args.graines.split(",") if g.strip()]
-        return mesure(args.mesure, args.pas, graines)
+        return mesure(args.mesure, args.pas, graines, args.corpus)
+    _configurer(args.corpus)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     r = une_graine(args.graine, args.pas, device)
     pathlib.Path(args.sortie + ".json").write_text(

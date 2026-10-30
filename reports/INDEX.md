@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **353 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **357 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -17,8 +17,10 @@
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
+| [rapport-a80-audit-final.md](rapport-a80-audit-final.md) | A8.0 — audit final : 19/33, les 14 restantes classées |
 | [rapport-a80-indice-qualifie.md](rapport-a80-indice-qualifie.md) | A8.0 — `porte-indice` : rouge structurelle qualifiée |
 | [rapport-a80-melange-qualifie.md](rapport-a80-melange-qualifie.md) | A8.0 — `porte-melange` : la rouge est qualifiée, pas maquillée |
+| [rapport-a80-pannes-ppl.md](rapport-a80-pannes-ppl.md) | A8.0 — `porte-pannes` épingle la PPL nominale : 33,0156 |
 | [rapport-a80-porte-adaptateur.md](rapport-a80-porte-adaptateur.md) | A8.0 — `porte-adaptateur-sortie` épingle ses PPL : 17,4315 / 2 687 292,8165 |
 | [rapport-a80-porte-budget.md](rapport-a80-porte-budget.md) | A8.0 — `porte-budget` épingle sa PPL : 111,9225 |
 | [rapport-a80-porte-bus-socket.md](rapport-a80-porte-bus-socket.md) | A8.0 — `porte-bus-socket` épingle la référence et les trois régimes : 113,0068 / 148,7080 / 42,3176 / 148,9144 |
@@ -53,6 +55,7 @@
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
 | [rapport-b10-decodeur-mots.md](rapport-b10-decodeur-mots.md) | B10 — le décodeur au niveau du mot : 32,5 de chrF (plancher 33,7), mais le `z` ne porte que 2,6 points |
+| [rapport-b10-mots-jw.md](rapport-b10-mots-jw.md) | B10 — le décodeur mot sur JW : 26,7 contre un plancher de 17,1 (+9,5), mais le `z` ne porte que 1,9 point |
 | [rapport-b102bis-capacite.md](rapport-b102bis-capacite.md) | B10.2bis — la capacité : 31,77 M contre 9,29 M, le décodeur ne bouge pas |
 | [rapport-b102bis-corpus-jw.md](rapport-b102bis-corpus-jw.md) | B10.2bis — le corpus : 139 unités parallèles, 12 langues, et le décodeur ne décolle pas |
 | [rapport-b102bis-decodeur.md](rapport-b102bis-decodeur.md) | B10.2bis — l'attention croisée ne décolle pas le décodeur : 16,5 / 11,2 contre un plancher de 38,5 |
@@ -321,6 +324,7 @@
 | [rapport-r13.1-campagne.md](rapport-r13.1-campagne.md) | R13.1c — à octets égaux, le BPE ne gagne plus |
 | [rapport-r13.1-condition.md](rapport-r13.1-condition.md) | R13.1 — la PPL BPE-native n’est pas mesurable sans un modèle BPE natif |
 | [rapport-r13.2-vocab1024.md](rapport-r13.2-vocab1024.md) | R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux |
+| [rapport-r13.3-anglais.md](rapport-r13.3-anglais.md) | R13.3 — anglais 100 Mo : le BPE perd encore à octets égaux |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |

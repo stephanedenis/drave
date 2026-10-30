@@ -28,7 +28,7 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé, A8.3c expliqué** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10 et B10.2bis closes** ; le **décodeur** est levé (objectif mot), le `z` reste | B11.10 (cartes) ; B10.3 attend un **encodeur qui porte** |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10 et B10.2bis closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B11.10 (cartes) ; B10.3 attend un **encodeur qui porte** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1–R4.3 mesurées** | **R0.4** — négatifs difficiles ; **R4.4 bloqué** (OCR) |
 
@@ -52,7 +52,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
 6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
 7. **N3, R13** — les autonomes restants, qui remplissent la file « jamais en attente ».
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
-   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5), le contrôle `z` montre qu'il ne lit que 8 % du sens.
+   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 17,1**), le contrôle `z` montre qu'il ne lit que ~7 % du sens.
 
 ---
 
@@ -93,7 +93,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **c
 | **B7** | les langues : 71 langues, 1 433 couples, 449 surfaces | ✅ | aucune — **449/449**, **11/11** paires invariantes |
 | **B8** | les maîtres : 17 principes, 9 sources, livre, parties | ✅ | aucune — livre **10/10**, go 9×9 **10/10** contre 3/10, cartes **44,7 %** |
 | **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
-| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (32,5) mais le `z` ne porte que **2,6** points — le verrou est l'encodeur |
+| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (**32,5** UDHR, **26,7** JW > plancher 17,1) mais le `z` ne porte que **1,9–2,6** points — le verrou est l'encodeur |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ / ⚠️ | B11.10 (cartes et ambiguïtés) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |

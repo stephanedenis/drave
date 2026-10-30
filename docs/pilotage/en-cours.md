@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-30, 08 h 50 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-30, 09 h 05 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -62,8 +62,8 @@
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **B10.2bis — décodeur** : 3×3 : **11,1** ; 1800 : 10,2–11,4 ; JW 7,6 ; capacité 11,8 ;
-  **mots 32,5** (plancher 33,7 ; `z` 29,9) ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md).
+- **B10.2bis — décodeur** : 3×3 : **11,1** ; 1800 : 10,2–11,4 ; capacité 11,8 ;
+  **mots 32,5** ; **JW 26,7** (plancher 17,1) ; `z` ~2 points ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
 - **A8.0 : 17** ; **A8.3b refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**, ctx stable) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **76** (60 vertes, 2 rouges, 14 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **359** / **432** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **360** / **433** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 
@@ -88,7 +88,7 @@
 | chantier | état | bloquant | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 19 portes** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3 refusé, A8.3c expliqué** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (A6.2 bloqué) ; lot |
-| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes** ; décodeur (32,5) | le `z` porte **2,6** points ; B1.5 corpus | **B11.10 hybride 4/4** ; B10.3 attend un **encodeur** |
+| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes** ; décodeur (32,5) | `z` ~2 points ; B1.5 corpus | **B11.10 hybride 4/4** ; B10.3 attend un **encodeur** |
 | **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; **N3.1/N3.2a/N3.2b0/N3.2b1/N3.2b2/N3.3a/N3.3b/N3.3c/N3.4a/N3.4b/N3.4c/N3.4d/N3.5a/N3.5b/N3.5c/N3.5d/N3.5e/N3.5f** ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; **N3.2 service** ; N4 (consigne) |
 | **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 condition** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13.4** (2e graine) ; **R4.4 bloqué** |
 | **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
