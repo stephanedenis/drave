@@ -78,12 +78,15 @@ def charge() -> list[dict]:
                 stable = int(sorted(range(len(passages)), key=lambda i: -scores2[i])[0] == top)
             else:
                 stable = 1
+            dispersion = (scores[top] - second) / max(scores[top], 1e-9)
             lignes.append({
                 "banc": banc, "document": cle[0], "question": cle[1],
                 "extractif_juste": int(detail["controlee_0.30"]["valeur"]),
                 "modele_juste": int(modele[cle]["controlee_0.30"]["valeur"]),
-                "dispersion": round((scores[top] - second) / max(scores[top], 1e-9), 3),
+                "dispersion": round(dispersion, 3),
                 "couverture": round(couv, 3), "accord": accord, "stabilite": stable,
+                # la confiance à poids fixés, la même que lecture.confiance()
+                "conf": round(0.5 * couv + 0.3 * accord + 0.2 * min(1.0, dispersion), 3),
             })
     return lignes
 
@@ -110,11 +113,68 @@ def confiance(lignes: list[dict], w: np.ndarray) -> np.ndarray:
     return 1 / (1 + np.exp(-np.clip(np.hstack([X, np.ones((len(X), 1))]) @ w, -30, 30)))
 
 
+def courbe(lignes: list[dict], tirages: int = 20) -> dict:
+    """Combien de questions calibrées faut-il ? Pour chaque taille k, on tire k questions de la
+    moitié de calibration, on règle le seuil (poids fixés), on teste sur la moitié de test —
+    répété, moyenné. Puis les poids APPRIS (logistique) sur le même tirage."""
+    import random
+    resultats = {}
+    for banc in ("lexical", "paraphrase"):
+        sous = [l for l in lignes if l["banc"] == banc]
+        test = sous[1::2]                       # le test est FIXE : les impaires
+        pool = sous[::2]                        # le pool de calibration : les paires
+        tailles = sorted({max(5, int(len(pool) * f)) for f in (0.1, 0.2, 0.4, 0.6, 0.8, 1.0)})
+        courbe_banc = []
+        for k in tailles:
+            taux_fixe, taux_appris = [], []
+            for graine in range(tirages):
+                rnd = random.Random(1000 + graine)
+                cal = rnd.sample(pool, min(k, len(pool)))
+                # poids fixés : le seuil qui maximise le taux sur l'échantillon
+                meilleur, seuil = -1, 0.0
+                for s in sorted({l["conf"] for l in cal}):
+                    taux = np.mean([l["modele_juste"] if l["conf"] < s else l["extractif_juste"] for l in cal])
+                    if taux > meilleur:
+                        meilleur, seuil = taux, s
+                taux_fixe.append(float(np.mean([l["modele_juste"] if l["conf"] < seuil else l["extractif_juste"]
+                                                for l in test])))
+                # poids appris : une logistique sur les 4 signaux
+                X = np.array([[l[s] for s in SIGNAUX] for l in cal])
+                w = entraine(X, np.array([l["extractif_juste"] for l in cal]))
+                conf_cal = 1 / (1 + np.exp(-np.clip(np.hstack([X, np.ones((len(X), 1))]) @ w, -30, 30)))
+                meilleur2, seuil2 = -1, 0.0
+                for s in sorted(set(conf_cal)):
+                    taux = np.mean([l["modele_juste"] if c < s else l["extractif_juste"] for l, c in zip(cal, conf_cal)])
+                    if taux > meilleur2:
+                        meilleur2, seuil2 = taux, s
+                Xt = np.array([[l[s] for s in SIGNAUX] for l in test])
+                conf_test = 1 / (1 + np.exp(-np.clip(np.hstack([Xt, np.ones((len(Xt), 1))]) @ w, -30, 30)))
+                taux_appris.append(float(np.mean([l["modele_juste"] if c < seuil2 else l["extractif_juste"]
+                                                  for l, c in zip(test, conf_test)])))
+            courbe_banc.append({"k": k, "fixe_moy": round(float(np.mean(taux_fixe)), 3),
+                                "fixe_ecart": round(float(np.std(taux_fixe)), 3),
+                                "appris_moy": round(float(np.mean(taux_appris)), 3),
+                                "appris_ecart": round(float(np.std(taux_appris)), 3)})
+            print(f"  {banc:10s} k={k:3d} · fixé {np.mean(taux_fixe):.3f} ± {np.std(taux_fixe):.3f} "
+                  f"· appris {np.mean(taux_appris):.3f} ± {np.std(taux_appris):.3f}")
+        resultats[banc] = {"pool": len(pool), "test": len(test), "courbe": courbe_banc}
+    return resultats
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="R06 v3 — le déclencheur sans échelle.")
     ap.add_argument("--json", type=pathlib.Path)
+    ap.add_argument("--courbe", action="store_true")
     args = ap.parse_args()
     lignes = charge()
+    if args.courbe:
+        print("=== COURBE DE CALIBRATION (test fixe, tirages) ===")
+        res = courbe(lignes)
+        if args.json:
+            args.json.write_text(json.dumps({"date": "2026-10-29", "ligne": "R06", "courbe": res},
+                                            ensure_ascii=False, indent=1), encoding="utf-8")
+            print(f"  résultats : {args.json}")
+        return 0
     resultats = {"n": len(lignes), "signaux": {}, "transferts": [], "politiques": {}}
 
     print("=== SIGNAUX (AUC pour « l'extractif a juste ») ===")

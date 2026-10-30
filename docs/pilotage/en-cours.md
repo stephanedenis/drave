@@ -24,8 +24,8 @@
 - **Id** : `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e`.
 - **Rôle** : graphe du backlog (livré), **R0.1–R0.3 mesurés** ; **R0.4** (pilote négatif) et
   **R0.5** (routeur) ouverts.
-- **Ce qu'elle fait** : **déclencheur sans échelle** (couverture 0,906, accord 0,848) et
-  **cascade à confiance calibrée = oracle** hors échantillon (0,911 / 0,415) — le verrou est levé.
+- **Ce qu'elle fait** : cascade à confiance calibrée = oracle (0,911 / 0,415) ; **courbe de
+  calibration** : ~50 golds suffisent, les poids appris n'ajoutent rien ; pilote complété.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `N2-GPU` N2 ; `c3d0f0bd` R4.2.
 - **Fichiers réservés** : `tools/lecteur_modele.py`, `tools/routeur.py`, `reports/r03-*`, `reports/r07-*`.
 - **Prochaine action** : publier la cascade à confiance dans le pipeline (seuil calibré) ;
@@ -79,7 +79,7 @@
 |---|---|---|
 | portes | **75** (60 vertes, 2 rouges, 13 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **353** / **425** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **354** / **427** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 

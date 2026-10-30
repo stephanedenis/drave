@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **319 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **351 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -17,22 +17,34 @@
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
+| [rapport-a80-indice-qualifie.md](rapport-a80-indice-qualifie.md) | A8.0 — `porte-indice` : rouge structurelle qualifiée |
+| [rapport-a80-melange-qualifie.md](rapport-a80-melange-qualifie.md) | A8.0 — `porte-melange` : la rouge est qualifiée, pas maquillée |
 | [rapport-a80-porte-adaptateur.md](rapport-a80-porte-adaptateur.md) | A8.0 — `porte-adaptateur-sortie` épingle ses PPL : 17,4315 / 2 687 292,8165 |
 | [rapport-a80-porte-budget.md](rapport-a80-porte-budget.md) | A8.0 — `porte-budget` épingle sa PPL : 111,9225 |
+| [rapport-a80-porte-bus-socket.md](rapport-a80-porte-bus-socket.md) | A8.0 — `porte-bus-socket` épingle la référence et les trois régimes : 113,0068 / 148,7080 / 42,3176 / 148,9144 |
+| [rapport-a80-porte-bus.md](rapport-a80-porte-bus.md) | A8.0 — `porte-bus` épingle le bus et le relais : 64,1160 / 59,0790 / 66,0379 |
+| [rapport-a80-porte-c4-retard.md](rapport-a80-porte-c4-retard.md) | A8.0 — `porte-c4-retard` épingle la PPL du retard : 14,6496 → 9 277,9771 |
 | [rapport-a80-porte-consolidation.md](rapport-a80-porte-consolidation.md) | A8.0 — `porte-consolidation` épingle la PPL de base : 17,4268 |
 | [rapport-a80-porte-cycle-c2.md](rapport-a80-porte-cycle-c2.md) | A8.0 — `porte-cycle-c2` épingle la PPL de référence : 14,6496 |
+| [rapport-a80-porte-delais.md](rapport-a80-porte-delais.md) | A8.0 — `porte-delais` épingle la PPL : 59,0790 à 0 et 50 ms |
 | [rapport-a80-porte-flux.md](rapport-a80-porte-flux.md) | A8.0 — `porte-flux` épingle ses PPL : 61,9920 / 60,8135 |
+| [rapport-a80-porte-fusion.md](rapport-a80-porte-fusion.md) | A8.0 — `porte-fusion` épingle sa PPL répartie : 113,0068 |
 | [rapport-a80-porte-gain.md](rapport-a80-porte-gain.md) | A8.0 — `porte-gain` épingle la courbe du gain FFN |
 | [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |
+| [rapport-a80-porte-profondeur.md](rapport-a80-porte-profondeur.md) | A8.0 — `porte-profondeur-routee` épingle la PPL pleine profondeur : 14,6496 |
+| [rapport-a80-porte-reflexe.md](rapport-a80-porte-reflexe.md) | A8.0 — `porte-reflexe` épingle la PPL du chemin tronqué : 11 163 272,0495 |
 | [rapport-a80-porte-reparti.md](rapport-a80-porte-reparti.md) | A8.0 — `porte-reparti-moteur` épingle sa PPL : 9,1748 |
 | [rapport-a80-porte-topologie.md](rapport-a80-porte-topologie.md) | A8.0 — `porte-topologie` épingle ses PPL : 17,4702 / 30,4363 / 42,5477 |
+| [rapport-a80-porte-trace.md](rapport-a80-porte-trace.md) | A8.0 — `porte-trace` épingle sa PPL répartie : 59,0790 |
 | [rapport-a80-portes-ppl.md](rapport-a80-portes-ppl.md) | A8.0 — 0 porte sur 33 n'épingle une PPL |
 | [rapport-a83-defaut.md](rapport-a83-defaut.md) | A8.3 — le défaut place+perte n'est pas neutre : les portes épinglées bougent de −5,9 % à +19,5 % |
 | [rapport-a83a-coupe.md](rapport-a83a-coupe.md) | A8.3a — `porte-coupe` : le régime 1 % écrase la variance du point de coupe |
 | [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |
 | [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |
+| [rapport-a83b-decision.md](rapport-a83b-decision.md) | A8.3b/c — décision : le défaut reste opt-in, la cause est le chemin lot |
 | [rapport-a83b-lot.md](rapport-a83b-lot.md) | A8.3b.1 — le signe du mélange vient du **chemin lot**, pas de la taille de lot |
 | [rapport-a83b-regimes.md](rapport-a83b-regimes.md) | A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire |
+| [rapport-a83c-ctx.md](rapport-a83c-ctx.md) | A8.3c.1 — le signe du mélange ne dépend pas de la taille du contexte |
 | [rapport-a83c-lot.md](rapport-a83c-lot.md) | A8.3c — le lot n'est pas neutre : la « non-monotonie » du KV était un effet de chemin |
 | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
 | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
@@ -43,7 +55,10 @@
 | [rapport-b102bis-capacite.md](rapport-b102bis-capacite.md) | B10.2bis — la capacité : 31,77 M contre 9,29 M, le décodeur ne bouge pas |
 | [rapport-b102bis-corpus-jw.md](rapport-b102bis-corpus-jw.md) | B10.2bis — le corpus : 139 unités parallèles, 12 langues, et le décodeur ne décolle pas |
 | [rapport-b102bis-decodeur.md](rapport-b102bis-decodeur.md) | B10.2bis — l'attention croisée ne décolle pas le décodeur : 16,5 / 11,2 contre un plancher de 38,5 |
+| [rapport-b1110-audit.md](rapport-b1110-audit.md) | B11.10a — audit : 4/4 routées, 3/4 lues |
 | [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
+| [rapport-b1110b-hybride.md](rapport-b1110b-hybride.md) | B11.10b — l’indice de jeu strippé route les quatre ambiguës |
+| [rapport-b1110c-case.md](rapport-b1110c-case.md) | B11.10c — `E4` lu comme requête de case : l’hybride passe à 4/4 |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
 | [rapport-budget-kimi-k3.md](rapport-budget-kimi-k3.md) | Kimi-K3 Q4 : ce qu'un jeton lit vraiment, et ce que ça impose |
@@ -179,8 +194,20 @@
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
+| [rapport-n3.2b1-seuil.md](rapport-n3.2b1-seuil.md) | N3.2b1 — le service décide par seuil de confiance |
+| [rapport-n3.2b2-cache.md](rapport-n3.2b2-cache.md) | N3.2b2 — le saut de calcul est réel, mais il n’est pas gratuit |
 | [rapport-n3.3a-routes.md](rapport-n3.3a-routes.md) | N3.3a — le routage/k-WTA du natif est vivant |
 | [rapport-n3.3b-sparsite.md](rapport-n3.3b-sparsite.md) | N3.3b — `kwta` et `top_k` agissent séparément |
+| [rapport-n3.3c-sparsite-compte.md](rapport-n3.3c-sparsite-compte.md) | N3.3c — le moteur compte les experts et les canaux actifs |
+| [rapport-n3.4a-composition.md](rapport-n3.4a-composition.md) | N3.4a — service, profondeur, routage et comptage composés sur les mêmes modèles |
+| [rapport-n3.4b-pont.md](rapport-n3.4b-pont.md) | N3.4b — le pont natif agit dans la génération |
+| [rapport-n3.4c-placement.md](rapport-n3.4c-placement.md) | N3.4c — le placement natif est une métadonnée, pas un chemin distribué |
+| [rapport-n3.4d-couverture.md](rapport-n3.4d-couverture.md) | N3.4d — la couverture N3 par brique est complète, la composition native reste conditionnelle |
+| [rapport-n3.5a-deux-regions.md](rapport-n3.5a-deux-regions.md) | N3.5a — le modèle natif coupé en deux régions est bit-exact |
+| [rapport-n3.5b-deux-processus.md](rapport-n3.5b-deux-processus.md) | N3.5b — deux processus, frontière par fichier, logits identiques |
+| [rapport-n3.5c-reseau.md](rapport-n3.5c-reseau.md) | N3.5c — deux processus, frontière TCP, logits identiques |
+| [rapport-n3.5d-refus.md](rapport-n3.5d-refus.md) | N3.5d — l’empreinte du modèle refuse un aval divergent |
+| [rapport-n3.5e-generation.md](rapport-n3.5e-generation.md) | N3.5e — la génération est répartie sur deux processus TCP |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
@@ -245,6 +272,7 @@
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
 | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
 | [rapport-p0-flux.md](rapport-p0-flux.md) | P0 — Le harnais de flux : compter ce qu'on paie, par provenance |
+| [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |
 | [rapport-parcimonie-imposee.md](rapport-parcimonie-imposee.md) | Parcimonie imposée à l'inférence — la frontière mesurée |
 | [rapport-passage-a-l-echelle.md](rapport-passage-a-l-echelle.md) | Passer aux gros modèles : ce qui bloque, chiffré |
@@ -279,6 +307,7 @@
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
 | [rapport-r05-balayage.md](rapport-r05-balayage.md) | R05 — le balayage : 0,984 de rappel@10 sur le lexical, 0,702 sur les paraphrases |
+| [rapport-r06-calibration.md](rapport-r06-calibration.md) | R06 v5 — la courbe de calibration : ~50 golds suffisent, les poids appris n'ajoutent rien |
 | [rapport-r06-cascade-confiance.md](rapport-r06-cascade-confiance.md) | R06 v4 — la cascade à confiance calibrée égale l'oracle, hors échantillon |
 | [rapport-r06-cascade.md](rapport-r06-cascade.md) | R06 v2 — la cascade des lecteurs : +1,2 point, pour 9 appels de modèle |
 | [rapport-r06-declencheur.md](rapport-r06-declencheur.md) | R06 v3 — le déclencheur sans échelle : il classe (0,89–1,00), il faut le calibrer |
@@ -286,7 +315,10 @@
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
 | [rapport-r13-tokenisation.md](rapport-r13-tokenisation.md) | R13.0 — BPE : 3,4 à 5,2 octets par jeton, réversible ; la PPL reste à mesurer |
+| [rapport-r13.1-bpe.md](rapport-r13.1-bpe.md) | R13.1 — pilote : le BPE gagne 11,9 % à 200/400 pas (corrigé 11,0 %) |
+| [rapport-r13.1-campagne.md](rapport-r13.1-campagne.md) | R13.1c — à octets égaux, le BPE ne gagne plus |
 | [rapport-r13.1-condition.md](rapport-r13.1-condition.md) | R13.1 — la PPL BPE-native n’est pas mesurable sans un modèle BPE natif |
+| [rapport-r13.2-vocab1024.md](rapport-r13.2-vocab1024.md) | R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |

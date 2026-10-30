@@ -1,0 +1,102 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R06",
+ "courbe": {
+  "lexical": {
+   "pool": 124,
+   "test": 123,
+   "courbe": [
+    {
+     "k": 12,
+     "fixe_moy": 0.891,
+     "fixe_ecart": 0.034,
+     "appris_moy": 0.891,
+     "appris_ecart": 0.034
+    },
+    {
+     "k": 24,
+     "fixe_moy": 0.899,
+     "fixe_ecart": 0.022,
+     "appris_moy": 0.898,
+     "appris_ecart": 0.024
+    },
+    {
+     "k": 49,
+     "fixe_moy": 0.906,
+     "fixe_ecart": 0.007,
+     "appris_moy": 0.906,
+     "appris_ecart": 0.007
+    },
+    {
+     "k": 74,
+     "fixe_moy": 0.908,
+     "fixe_ecart": 0.004,
+     "appris_moy": 0.908,
+     "appris_ecart": 0.004
+    },
+    {
+     "k": 99,
+     "fixe_moy": 0.908,
+     "fixe_ecart": 0.004,
+     "appris_moy": 0.908,
+     "appris_ecart": 0.004
+    },
+    {
+     "k": 124,
+     "fixe_moy": 0.911,
+     "fixe_ecart": 0.0,
+     "appris_moy": 0.911,
+     "appris_ecart": 0.0
+    }
+   ]
+  },
+  "paraphrase": {
+   "pool": 42,
+   "test": 41,
+   "courbe": [
+    {
+     "k": 5,
+     "fixe_moy": 0.35,
+     "fixe_ecart": 0.037,
+     "appris_moy": 0.332,
+     "appris_ecart": 0.044
+    },
+    {
+     "k": 8,
+     "fixe_moy": 0.371,
+     "fixe_ecart": 0.037,
+     "appris_moy": 0.349,
+     "appris_ecart": 0.035
+    },
+    {
+     "k": 16,
+     "fixe_moy": 0.393,
+     "fixe_ecart": 0.031,
+     "appris_moy": 0.365,
+     "appris_ecart": 0.02
+    },
+    {
+     "k": 25,
+     "fixe_moy": 0.399,
+     "fixe_ecart": 0.03,
+     "appris_moy": 0.371,
+     "appris_ecart": 0.02
+    },
+    {
+     "k": 33,
+     "fixe_moy": 0.395,
+     "fixe_ecart": 0.024,
+     "appris_moy": 0.374,
+     "appris_ecart": 0.018
+    },
+    {
+     "k": 42,
+     "fixe_moy": 0.415,
+     "fixe_ecart": 0.0,
+     "appris_moy": 0.366,
+     "appris_ecart": 0.0
+    }
+   ]
+  }
+ }
+}

@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-10-30** | [2026-10-30/README.md](2026-10-30/README.md) | [memoire](2026-10-30/memoire.md) |
+| **2026-10-30** | [2026-10-30/README.md](2026-10-30/README.md) | [docs](2026-10-30/docs.md) · [memoire](2026-10-30/memoire.md) |
 | **2026-10-29** | [2026-10-29/README.md](2026-10-29/README.md) | [attention](2026-10-29/attention.md) · [distribue](2026-10-29/distribue.md) · [docs](2026-10-29/docs.md) · [etat-transfere](2026-10-29/etat-transfere.md) · [memoire](2026-10-29/memoire.md) · [mesures](2026-10-29/mesures.md) · [modele](2026-10-29/modele.md) · [moteur](2026-10-29/moteur.md) · [portes](2026-10-29/portes.md) |
 | **2026-10-28** | [2026-10-28/README.md](2026-10-28/README.md) | [apprentissage](2026-10-28/apprentissage.md) · [attention](2026-10-28/attention.md) · [distribue](2026-10-28/distribue.md) · [docs](2026-10-28/docs.md) · [etat-ancien](2026-10-28/etat-ancien.md) · [memoire](2026-10-28/memoire.md) · [mesures](2026-10-28/mesures.md) · [modele](2026-10-28/modele.md) · [moteur](2026-10-28/moteur.md) |
 | **2026-10-27** | [2026-10-27/README.md](2026-10-27/README.md) | [apprentissage](2026-10-27/apprentissage.md) · [attention](2026-10-27/attention.md) · [decisions-roadmap](2026-10-27/decisions-roadmap.md) · [distribue](2026-10-27/distribue.md) · [docs](2026-10-27/docs.md) · [memoire](2026-10-27/memoire.md) · [mesures](2026-10-27/mesures.md) · [modele](2026-10-27/modele.md) · [moteur](2026-10-27/moteur.md) · [outils](2026-10-27/outils.md) · [portes](2026-10-27/portes.md) · [sprint-24h](2026-10-27/sprint-24h.md) |

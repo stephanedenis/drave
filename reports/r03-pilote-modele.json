@@ -1,0 +1,658 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R0.2",
+ "graine": 20261029,
+ "critere": "bm25",
+ "questions": 20,
+ "types": [
+  "code",
+  "juridique",
+  "prose",
+  "tableau",
+  "technique"
+ ],
+ "agregats": {
+  "code": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.186,
+    "valeur": 0.25,
+    "cout": 1244.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.25,
+    "f1": 0.287,
+    "valeur": 0.25,
+    "cout": 1763.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "juridique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.458,
+    "valeur": 0.5,
+    "cout": 836.8
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.39,
+    "valeur": 0.5,
+    "cout": 864.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "prose": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.47,
+    "valeur": 0.75,
+    "cout": 463.0
+   },
+   "debut_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.452,
+    "valeur": 0.5,
+    "cout": 2113.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "tableau": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.129,
+    "valeur": 0.0,
+    "cout": 3542.5
+   },
+   "debut_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.086,
+    "valeur": 0.0,
+    "cout": 6321.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  },
+  "technique": {
+   "controlee_0.30": {
+    "recuperation": 1.0,
+    "f1": 0.309,
+    "valeur": 0.5,
+    "cout": 2566.8
+   },
+   "debut_0.30": {
+    "recuperation": 0.75,
+    "f1": 0.335,
+    "valeur": 0.25,
+    "cout": 3032.0
+   },
+   "closed_book": {
+    "recuperation": 0.0,
+    "f1": 0.0,
+    "valeur": 0.0,
+    "cout": 0.0
+   }
+  }
+ },
+ "details": [
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets porte l'en-tête « DRVF » ?",
+   "or": "4 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.75,
+    "valeur": true,
+    "cout": 2709,
+    "reponse": "L'en-tête DRVF porte exactement 4 octets."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.8571,
+    "valeur": true,
+    "cout": 3032,
+    "reponse": "L'en-tête \"DRVF\" porte 4 octets."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets coûte le mode dense par flux ?",
+   "or": "3 663 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2857,
+    "valeur": true,
+    "cout": 2516,
+    "reponse": "Le mode dense coûte 3,663 octets par flux."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2326,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Le mode dense par flux (DRVF) coûte 16 octets."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Quel taux de couverture le mode liste atteint-il ?",
+   "or": "99,9997",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0909,
+    "valeur": false,
+    "cout": 2510,
+    "reponse": "Le mode liste atteint un taux de couverture de 4,45e-3."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "Le taux de couverture du format de flux (DRVF) atteint un niveau élevé. Le format est dé"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/format-flux.md",
+   "type": "technique",
+   "question": "Combien d'octets pèse l'en-tête de liste ?",
+   "or": "14 octets",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1111,
+    "valeur": false,
+    "cout": 2532,
+    "reponse": "Le format DRVF (dense) coûte 3 663 octets par flux pour Qwen2"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.25,
+    "valeur": false,
+    "cout": 3032,
+    "reponse": "L'en-tête de liste pèse 4 octets."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désignait la drave sur la rivière ?",
+   "or": "billots",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1739,
+    "valeur": false,
+    "cout": 488,
+    "reponse": "La drave sur la rivière était un terme utilisé pour désigner un billot ou un bateau qui était guid"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.2222,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "La drave sur la rivière désignait un flux de listes."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Quelle est la thèse du projet ?",
+   "or": "structure bat la taille",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.8889,
+    "valeur": true,
+    "cout": 689,
+    "reponse": "La thèse du projet est : \"La structure bat la taille.\""
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.8889,
+    "valeur": true,
+    "cout": 2113,
+    "reponse": "La thèse du projet est : la structure bat la taille."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Combien d'axes la vision a-t-elle ?",
+   "or": "cinq axes",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2,
+    "valeur": true,
+    "cout": 401,
+    "reponse": "La vision a cinq axes."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0833,
+    "valeur": false,
+    "cout": 2113,
+    "reponse": "La vision de Drave a 3 axes principales :\n\n1. **Listes** : Les listes sont les éléments"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/theorie/vision.md",
+   "type": "prose",
+   "question": "Que désigne « Stream of logs » ?",
+   "or": "flux des listes",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.6154,
+    "valeur": true,
+    "cout": 274,
+    "reponse": "« Stream of logs » désigne le flux des listes, qui est une méthode de gestion des données et de communication"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.6154,
+    "valeur": true,
+    "cout": 2113,
+    "reponse": "Le \"Stream of logs\" désigne le flux des listes, qui est le type de données que le projet utilise"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quel est le meilleur score de perplexité de N2 ?",
+   "or": "2,6998",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1622,
+    "valeur": false,
+    "cout": 2736,
+    "reponse": "Le meilleur score de perplexité de N2 est de 2,708."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0952,
+    "valeur": false,
+    "cout": 6321,
+    "reponse": "Pour calculer le meilleur score de perplexité de N2, nous devons analyser les données fournies. La"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle porte N2 doit-elle franchir ?",
+   "or": "< 2,5",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1395,
+    "valeur": false,
+    "cout": 2756,
+    "reponse": "Pour déterminer la porte N2 que N2 doit franchir, nous devons suivre les étapes suiv"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.093,
+    "valeur": false,
+    "cout": 6321,
+    "reponse": "Pour identifier la porte N2 qui doit être franchie, nous devons suivre les étapes suivantes :\n\n1"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Quelle ligne d'échelle est suspendue ?",
+   "or": "N5 est gelé",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1579,
+    "valeur": false,
+    "cout": 2332,
+    "reponse": "La ligne d'échelle suspendue est B1.5, qui est bloquée par le corpus."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1026,
+    "valeur": false,
+    "cout": 6321,
+    "reponse": "La ligne d'échelle suspendue dans cette roadmap est la suivante :\n\n\"Le carpe diem : pas"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/pilotage/roadmap.md",
+   "type": "tableau",
+   "question": "Combien de pages R0.1 a-t-il découpées ?",
+   "or": "51 pages",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0571,
+    "valeur": false,
+    "cout": 6346,
+    "reponse": "R0.1 a été découpée en 50 pages."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.0548,
+    "valeur": false,
+    "cout": 6321,
+    "reponse": "La roadmap de Drave a été découpée en trois pages :\n\n1. **R0.0** : Document"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel jour de septembre 2025 la résolution a-t-elle été adoptée ?",
+   "or": "19 septembre 2025",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.6667,
+    "valeur": true,
+    "cout": 1112,
+    "reponse": "La résolution adoptée par l'Assemblée générale le 19 septembre 2025 a"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.5455,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "La résolution a été adoptée le 19 septembre 2025."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quelle session de l'Assemblée générale est concernée ?",
+   "or": "quatre-vingtième session",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1667,
+    "valeur": false,
+    "cout": 1019,
+    "reponse": "La session de l'Assemblée générale concernée est la 4e session."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.1818,
+    "valeur": false,
+    "cout": 864,
+    "reponse": "La session de l'Assemblée générale concernée est la 80e."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel est le numéro de la résolution ?",
+   "or": "80/1.",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5,
+    "valeur": true,
+    "cout": 341,
+    "reponse": "Le numéro de la résolution est 80/1."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.5,
+    "valeur": true,
+    "cout": 864,
+    "reponse": "Le numéro de la résolution est 80/1."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "data/onu/pdf/A_RES_80_1-fr.pdf",
+   "type": "juridique",
+   "question": "Quel point de l'ordre du jour est traité ?",
+   "or": "Point 7 de l’ordre du jour",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.5,
+    "valeur": false,
+    "cout": 875,
+    "reponse": "Le point de l'ordre du jour traité est la distribution des questions inscrites à l'ordre"
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": false,
+    "cout": 864,
+    "reponse": "Le point de l'ordre du jour traité est la participation de l'État de Palestine à la quatre-"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel outil est déclaré dans le manifeste ?",
+   "or": "\"outil\": \"graphe_document.py\"",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 891,
+    "reponse": "Le manifeste ne porte aucun horodatage."
+   },
+   "debut_0.30": {
+    "recupere": true,
+    "f1": 0.4706,
+    "valeur": true,
+    "cout": 1763,
+    "reponse": "Le modèle déclaré dans le manifeste est le code de l'outil `tools/graphe_document.py`."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel type de région porte les séparateurs ?",
+   "or": "type blanc est émis",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.1429,
+    "valeur": false,
+    "cout": 1441,
+    "reponse": "Les séparateurs (ou séparateurs spéciaux) ne font pas partie des types de régions que nous avons"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.0769,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Les séparateurs dans un document documentaire sont généralement des lignes horizontales ou verticales qui"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Combien d'invariants le manifeste doit-il respecter ?",
+   "or": "Les six invariants",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.3333,
+    "valeur": true,
+    "cout": 1200,
+    "reponse": "Le manifeste doit respecter six invariants principaux :\n\n1. **Le manifeste ne porte aucun horodat"
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.2,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Le manifeste doit respecter les trois invariants suivants :\n\n1. **Survivance au rejeu**"
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  },
+  {
+   "document": "docs/implantation/document-graph.md",
+   "type": "code",
+   "question": "Quel champ identifie le fichier source ?",
+   "or": "source.sha256",
+   "controlee_0.30": {
+    "recupere": true,
+    "f1": 0.2667,
+    "valeur": false,
+    "cout": 1444,
+    "reponse": "Le champ qui identifie le fichier source est \"chemin\"."
+   },
+   "debut_0.30": {
+    "recupere": false,
+    "f1": 0.4,
+    "valeur": false,
+    "cout": 1763,
+    "reponse": "Le champ identifiant le fichier source est le `source`."
+   },
+   "closed_book": {
+    "recupere": false,
+    "f1": 0.0,
+    "valeur": false,
+    "cout": 0,
+    "reponse": null
+   }
+  }
+ ]
+}
