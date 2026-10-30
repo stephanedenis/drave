@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**130 commits** · **0 session(s)** · **8 thème(s)**
+**131 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 24 | [portes.md](portes.md) |
+| portes | 25 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -163,6 +163,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:28 | `706020ee` | N3.4a — SERVICE + PROFONDEUR + ROUTAGE + COMPTAGE COMPOSÉS ; PORTE 64 |
 | 20:34 | `737af4ee` | A8.0 — PORTE-FUSION ÉPINGLÉE : 113,0068 ; ÉTAT 11/33 |
 | 20:43 | `bacf43d2` | N3.2b1 — SEUIL DE CONFIANCE DANS LE SERVICE : 12/0, 0/12, 11/1 ; PORTE 65 |
+| 20:46 | `51a3dc91` | N3.2b2 — LE SAUT DE CALCUL N'EST PAS GRATUIT : 5,2 → 2,0 MS, SORTIE DIFFÉRENTE ; PORTE 66 |
 
 ## Le récit de la journée (écrit à la main)
 

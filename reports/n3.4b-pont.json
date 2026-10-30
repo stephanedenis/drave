@@ -1,0 +1,25 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.4b",
+ "porte": "porte-n3-pont.sh",
+ "modele": "drave-n0 synthétique, graine 7, 428 504 paramètres, 4 blocs",
+ "difference": {
+  "A": "pont normal",
+  "B": "bridge.weight et bridge.bias mis à zéro (4 160 poids)"
+ },
+ "mesures": {
+  "a_deux_fois": "identique (35 octets)",
+  "a_vs_b": "différent"
+ },
+ "controle": "A deux fois identique ; pont nul change la sortie",
+ "verdict": "le pont natif agit dans la génération",
+ "limites": [
+  "pont du modèle natif, pas le lien distribué",
+  "pas de placement dans cette porte",
+  "modèle synthétique, un prompt"
+ ],
+ "prochain": [
+  "N3.4c placement natif si un chemin existe",
+  "porte de composition complète"
+ ]
+}
