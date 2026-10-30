@@ -49,7 +49,7 @@
 
 - **Id** : aucun Id DSH (job GPU, hors session).
 - **Rôle** : N2 — professeur et distillation ; ne touche ni aux docs ni aux fiches.
-- **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k ; PPL.
+- **Ce qu'elle fait** : 49 999 fenêtres, 4 sources ; professeur 30k ; student 20k–30k.
 - **Ce que font les autres** : `71d57f53` A8.0/B11.10 ; `8156fdcb` R0.5 ; `c3d0f0bd` R4.2.
 - **Prochaine action** : N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708**) ; **N5 gelé**.
 - **Bloquants** : GPU occupé ; les contextes 130/136/160/256 sont négatifs ; le corpus est à 4 sources.
@@ -62,7 +62,7 @@
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-- **B10.2bis — le décodeur** : **négative** — 3×3 : **11,1/11,2/11,0** contre **38,5** ;
+- **B10.2bis — décodeur** : **négative** — 3×3 : **11,1/11,2/11,0** contre **38,5** ;
   1800 : 10,2–11,4 ; JW 7,6/6,3/8,0 ; capacité 11,8/11,6/11,7 ; fiche [`b102bis`](../../reports/rapport-b102bis-decodeur.md).
 - **A8.0 : 15 portes** ; **A8.3 refusé** (−5,9…+19,5 %) ; **A8.3c** : lot 1≠≥2 (**1,90 %**) — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md).
 - **B11.10** : **mesurée** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
@@ -77,11 +77,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **68** (64 vertes, 2 rouges structurelles) | `tools/porte-*.sh` |
+| portes | **68** (60 vertes, 2 rouges, 6 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **334** / **406** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
-| dernière passe complète | **1 h 40** (28/10 00 h 12) | `docs/pilotage/references-non-regression.md` |
+| dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

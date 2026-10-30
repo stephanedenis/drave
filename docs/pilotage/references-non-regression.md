@@ -1,18 +1,24 @@
 # Références de non-régression
 
-> **Dernière passe complète :**
-> **49 portes, 47 vertes, 2 rouges, 1 h 40** (28/10 23 h 55). Depuis, **une porte ajoutée**
-> (`porte-document`, R0.1, **verte** le 29/10 en 5 s) : le compte est **50**. Les deux rouges sont les
-> structurelles connues (`porte-indice`, `porte-melange`) ; `porte-harnais-invariants` et
-> `porte-audit-drapeaux`, rouges dans la passe complète, ont été corrigés (import VDC) et
-> **rejoués verts** individuellement. L'historique des
-> passes est dans [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
-> Les compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.
+> **Dernière passe complète — 2026-10-29 à 22 h 09 :**
+> **62 portes, 60 vertes, 2 rouges, 1 h 46**. Les deux rouges sont les **structurelles connues**
+> (`porte-indice`, 895 s ; `porte-melange`, 110 s), avec les mêmes diagnostics ; **aucune
+> régression**. Depuis, **6 portes ajoutées** dans la journée (le compte du disque est **68**) :
+> elles sont vertes individuellement, mais n'ont pas encore pris leur tour dans une passe
+> complète. Journaux : `/tmp/portes-1029-20h23`. L'historique des passes est dans
+> [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md). Les
+> compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.
 
 > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
 > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
+
+> **Passe du 2026-10-29 à 22 h 09** (**62 portes, 60 vertes, 2 rouges**, **1 h 46 min**) —
+> première passe complète de la journée, après R4.1–R4.3, le miroir, A8.3/A8.3b/A8.3c,
+> B10.2bis (4 leviers) et 7 fiches de backlog. Les **deux rouges** sont les structurelles
+> connues (`porte-indice` **895 s**, `porte-melange` **110 s**), mêmes diagnostics ;
+> **aucune régression**. Journaux : `/tmp/portes-1029-20h23`.
 
 > **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) — la passe
 > du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
