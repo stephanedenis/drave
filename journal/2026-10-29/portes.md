@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,6 +28,7 @@
 | 19:38 | `3c227622` | N3.1 — CORRECTION : LA PROFONDEUR ROUTÉE A UNE PORTE ; A8.0 = 8 | `en-cours.md`, `README.md`, `portes.md` (+2) |
 | 19:55 | `bb6bfd4b` | N3.2a — LE SERVICE NATIF VIT : /SANTE, GÉNÉRATION DÉTERMINISTE, 404 ; PORTE 59 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 | 20:15 | `91b88113` | N3.2b0 — PROFONDEUR DE SERVICE + LECTURE HTTP COMPLÈTE ; PORTE 61 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+6) |
+| 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+5) |
 
 ## Chiffres du jour
 
@@ -48,6 +49,7 @@
 - [reports/rapport-n3.1-etat.md](../../reports/rapport-n3.1-etat.md)
 - [reports/rapport-n3.2a-service.md](../../reports/rapport-n3.2a-service.md)
 - [reports/rapport-n3.2b0-profondeur.md](../../reports/rapport-n3.2b0-profondeur.md)
+- [reports/rapport-n3.3b-sparsite.md](../../reports/rapport-n3.3b-sparsite.md)
 
 <!-- notes -->
 

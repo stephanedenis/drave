@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**123 commits** · **0 session(s)** · **8 thème(s)**
+**124 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 46 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
-| portes | 20 | [portes.md](portes.md) |
+| portes | 21 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -156,6 +156,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:09 | `0eb5d9f2` | B10.2bis — TABLEAUX : COLONNE GRAINE VIDE AJOUTÉE (3 LIGNES) |
 | 20:15 | `91b88113` | N3.2b0 — PROFONDEUR DE SERVICE + LECTURE HTTP COMPLÈTE ; PORTE 61 |
 | 20:17 | `0eff33e1` | B10.2bis — LA CAPACITÉ NE SUFFIT PAS : 31,77 M DONNE 11,8 CONTRE 11,1, PLANCHER 38,5 |
+| 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -142,8 +142,8 @@ tester() {   # nom, plafond d'écart, référence PPL, arguments du pilote
 tester "mode 0 — f32 dense"          "0"      "61.9920" --flux
 tester "mode 1 — listes quantifiées" "0"      "61.9920" --flux-listes
 tester "mode 2 — listes par blocs"   "6e-2"   "61.9920" --flux-blocs --lot 1
-tester "mode 3 — lot dense f32"      "0"      "60.8135" --lot 4
-tester "mode 4 — lot en listes"      "1e-2"   "60.8135" --lot 4 --flux-blocs
+tester "mode 3 — lot dense f32"      "0"      "60.8135" --lot "${LOT:-4}"
+tester "mode 4 — lot en listes"      "1e-2"   "60.8135" --lot "${LOT:-4}" --flux-blocs
 
 arreter_serveur
 exit $echec

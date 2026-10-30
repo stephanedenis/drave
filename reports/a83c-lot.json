@@ -1,0 +1,39 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3c",
+ "dispositif": {
+  "modele": "Qwen2.5-0.5B-Q8_0",
+  "porte": "porte-flux (mode 3)",
+  "regimes": [
+   "f32",
+   "melange_1"
+  ],
+  "lots": [
+   1,
+   2,
+   4
+  ]
+ },
+ "mesures": {
+  "lot_1": {
+   "f32": 61.992,
+   "melange_1": 58.32
+  },
+  "lot_2": {
+   "f32": 60.8135,
+   "melange_1": 62.7357
+  },
+  "lot_4": {
+   "f32": 60.8135,
+   "melange_1": 62.7357
+  }
+ },
+ "effets_pct": {
+  "melange_lot_1": -5.9,
+  "melange_lot_4": 3.2,
+  "lot_sur_f32": -1.9
+ },
+ "explication": "le préremplissage par lots n'est pas bit à bit identique (main.rs l. 799-812) : sommes réordonnées, routeur à l'égalité",
+ "verdict": "non-monotonie expliquée : effet par chemin, pas anomalie de la règle",
+ "prochain": "réduire la non-équivalence du lot, ou l'assumer comme références distinctes"
+}
