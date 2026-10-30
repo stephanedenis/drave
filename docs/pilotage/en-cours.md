@@ -101,7 +101,7 @@
 ```plantuml
 @startwbs
 scale 1.8
-title Les chantiers — état au 30/10 11 h 10
+title Les chantiers — état au 30/10 13 h 00
 * Drave
 **[#c8e6c9] A — le moteur
 ***[#c8e6c9] A1–A8
@@ -113,7 +113,7 @@ title Les chantiers — état au 30/10 11 h 10
 ***[#c8e6c9] B1–B12
 ***[#c8e6c9] B10.2bis — close
 ***[#ffcdd2] B10.3 — attend un encodeur
-***[#c8e6c9] B11.10 — mesurée
+***[#c8e6c9] B11.10 — 4/4
 ***[#e1bee7] B12.10 — négatif
 **[#ffe0b2] N — le natif
 ***[#c8e6c9] N0/N1

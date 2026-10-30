@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 09:16 | `ecb67fe9` | B10 — LE CONTRASTIF NE FAIT PAS LIRE `z` : 32,6 DE CHRF (INCHANGÉ), ÉCART `z` 1,45 CONTRE 2,57 | `B10.2bis-decodeur-attention-croisee.md`, `en-cours.md`, `roadmap.md` (+6) |
 | 10:46 | `f9132a68` | N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 12:58 | `b19ab8b7` | LA CASCADE À CONFIANCE EST PUBLIÉE : DEUX FICHIERS DATÉS, UN SEUIL REPRODUCTIBLE, 0,894 OUT-OF-SAMPLE | `pipeline-lecture.md`, `R06-tete-relecture.md`, `en-cours.md` (+14) |
+| 13:00 | `10a05c30` | SESSIONS — MIGRATION DOUCE : 3 PLANS À CONFIRMER, STRICT ROUGE, EN-COURS RECALÉ | `en-cours.md`, `README.md`, `mesures.md` (+4) |
 
 ## Chiffres du jour
 
@@ -26,6 +27,7 @@
 - [reports/rapport-n3.6-service-briques.md](../../reports/rapport-n3.6-service-briques.md)
 - [reports/rapport-r06-publication.md](../../reports/rapport-r06-publication.md)
 - [reports/rapport-r13.3-anglais.md](../../reports/rapport-r13.3-anglais.md)
+- [reports/rapport-sessions-plans.md](../../reports/rapport-sessions-plans.md)
 
 <!-- notes -->
 
