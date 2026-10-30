@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**141 commits** · **0 session(s)** · **8 thème(s)**
+**142 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 12 | [distribue.md](distribue.md) |
-| docs | 24 | [docs.md](docs.md) |
+| docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 48 | [mesures.md](mesures.md) |
 | modele | 10 | [modele.md](modele.md) |
@@ -174,6 +174,7 @@ Aucune session indexée pour ce jour ; voir
 | 22:08 | `30a0c341` | A8.0 — PORTE-BUS ÉPINGLÉE : 64,1160 / 59,0790 / 66,0379 ; ÉTAT 15/33 |
 | 22:10 | `dc0587a0` | PORTES — PASSE COMPLÈTE DU 29/10 : 62 PORTES, 60 VERTES, 2 ROUGES TOLÉRÉES, 1 H 46 |
 | 22:11 | `c946296e` | A8.0 — PORTE-DELAIS ÉPINGLÉE : 59,0790 ; ÉTAT 16/33 |
+| 22:13 | `fa20b2ae` | DOCS — RÉFÉRENCES : PASSE DUPLIQUÉE RETIRÉE (T1 2 500) |
 
 ## Le récit de la journée (écrit à la main)
 

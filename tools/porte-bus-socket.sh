@@ -91,6 +91,13 @@ nœuds "" ref
 R=$(pilote); REF=$(ppl "$R")
 arrêter
 echo "  perplexité de référence : $REF"
+python3 - "$REF" <<'PPLBS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 113.0068
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL référence : {val} (attendu {attendu})")
+print(f"  ✅ PPL référence épinglée : {val}")
+PPLBS
 
 echo "=== 2. bus STATIQUE sur le nœud (--bus gain=2.0) ==="
 nœuds "" stat --bus gain=2.0
@@ -98,6 +105,13 @@ S=$(pilote); STAT=$(ppl "$S")
 arrêter
 grep -E "bus\]" "$T/log_stat_n1.txt" | tail -1 | sed 's/^/  /'
 echo "  perplexité avec gain statique : $STAT"
+python3 - "$STAT" <<'PPLBS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 148.7080
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL gain statique : {val} (attendu {attendu})")
+print(f"  ✅ PPL gain statique épinglée : {val}")
+PPLBS
 [ "$STAT" != "$REF" ] || { echo "  ❌ le gain statique ne change RIEN — le bus n'est pas branché"; exit 1; }
 
 echo "=== 3. bus par SOCKET, ligne envoyée avant la connexion du pilote ==="
@@ -151,6 +165,13 @@ VOL=$(ppl "$(cat "$T/vol.txt")")
 grep -E "deux nœuds" "$T/vol.txt" | sed 's/^/  /'
 arrêter
 echo "  perplexité modulée en plein vol : $VOL  (référence $REF · dès le pas 0 $STAT)"
+python3 - "$VOL" <<'PPLBS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 42.3176
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL plein vol : {val} (attendu {attendu})")
+print(f"  ✅ PPL plein vol épinglée : {val}")
+PPLBS
 grep -q "reçu par le réseau" "$T/log_vol_n1.txt" || { echo "  ❌ le nœud n'a pas appliqué la ligne"; exit 1; }
 python3 -c "
 import sys
@@ -194,6 +215,13 @@ wait $PID 2>/dev/null
 PIL2=$(ppl "$(cat "$T/pilbus2.txt")")
 arrêter
 echo "  perplexité avec le bus du pilote modulé : $PIL2 (référence $REF)"
+python3 - "$PIL2" <<'PPLBS' || exit 1
+import sys
+val, attendu = float(sys.argv[1]), 148.9144
+if abs(val - attendu) > 5e-4 * attendu:
+    sys.exit(f"  ❌ PPL bus pilote : {val} (attendu {attendu})")
+print(f"  ✅ PPL bus pilote épinglée : {val}")
+PPLBS
 python3 -c "
 import sys
 r, p = float('$REF'), float('$PIL2')

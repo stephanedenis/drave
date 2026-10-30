@@ -1,0 +1,25 @@
+{
+ "date": "2026-10-29",
+ "ligne": "A8.0",
+ "porte": "porte-bus-socket.sh",
+ "tolerance": 0.0005,
+ "references": {
+  "reference": 113.0068,
+  "gain_statique": 148.708,
+  "socket_avant": 148.708,
+  "plein_vol": 42.3176,
+  "bus_pilote": 148.9144
+ },
+ "mesures": {
+  "neutre": "identique au bit",
+  "socket_avant": "identique au statique",
+  "plein_vol": "différent des deux"
+ },
+ "controle": "décalage de 10 % des PPL refusé par la même expression",
+ "gate": "exit 0 ; neutre inerte, socket branché, plein vol ni référence ni pas 0, bus pilote agit",
+ "limites": [
+  "un seul modèle",
+  "topologie à deux régions",
+  "PPL liées au montage"
+ ]
+}
