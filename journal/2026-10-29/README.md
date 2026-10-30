@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**158 commits** · **0 session(s)** · **8 thème(s)**
+**159 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | mesures | 52 | [mesures.md](mesures.md) |
 | modele | 12 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
-| portes | 35 | [portes.md](portes.md) |
+| portes | 36 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -191,6 +191,7 @@ Aucune session indexée pour ce jour ; voir
 | 23:28 | `d99786be` | ÉTAT — DATE ALIGNÉE SUR LE DERNIER COMMIT |
 | 23:31 | `4884e9bb` | B11.10b — L'INDICE DE JEU STRIPPÉ : 4/4 ROUTÉES, 3/4 LUES ; PORTE 75 |
 | 23:36 | `d1eb552b` | B11.10c — E4 = REQUÊTE DE CASE : 4/4 ROUTÉES ET LUES |
+| 23:42 | `4db2a6b3` | A8.0 — PORTE-MELANGE : ROUGE STRUCTURELLE QUALIFIÉE, PAS MAQUILLÉE |
 
 ## Le récit de la journée (écrit à la main)
 

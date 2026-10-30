@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (35)
+## Commits du jour (36)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -43,6 +43,7 @@
 | 23:04 | `d8498639` | N3.5b — DEUX PROCESSUS, FRONTIÈRE PAR FICHIER : LOGITS IDENTIQUES ; PORTE 71 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+8) |
 | 23:09 | `89bb7ef8` | N3.5c — DEUX PROCESSUS TCP, AUCUN CACHE SUR LE FIL : LOGITS IDENTIQUES ; PORTE 72 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+6) |
 | 23:18 | `77296739` | N3.5d — L'EMPREINTE REFUSE UN AVAL DIVERGENT (CODE 4) ; PORTE 73 | `N3-operations-natives.md`, `en-cours.md`, `roadmap.md` (+7) |
+| 23:42 | `4db2a6b3` | A8.0 — PORTE-MELANGE : ROUGE STRUCTURELLE QUALIFIÉE, PAS MAQUILLÉE | `en-cours.md`, `README.md`, `modele.md` (+2) |
 
 ## Chiffres du jour
 
@@ -53,6 +54,7 @@
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-a80-melange-qualifie.md](../../reports/rapport-a80-melange-qualifie.md)
 - [reports/rapport-a80-porte-adaptateur.md](../../reports/rapport-a80-porte-adaptateur.md)
 - [reports/rapport-a80-porte-c4-retard.md](../../reports/rapport-a80-porte-c4-retard.md)
 - [reports/rapport-a80-porte-delais.md](../../reports/rapport-a80-porte-delais.md)
