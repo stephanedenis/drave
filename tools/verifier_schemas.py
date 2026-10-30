@@ -9,7 +9,8 @@ Ce que l'outil vérifie :
      n'a pas à porter les métadonnées : docwatch les produit ;
   3. chaque image Markdown est relative, pointe vers un `.svg` et a un texte alternatif ; un
      `<source>.svg` peut être **absent** si le source `.puml`/`.mmd` existe (docwatch le génère) ;
-  4. chaque SVG direct et chaque source `.puml`/`.mmd` est référencé dans un document.
+  4. chaque SVG direct et chaque source `.puml`/`.mmd` est référencé dans un document ;
+  5. le schéma des chantiers (`chantiers-etats.svg`) ne date pas d'avant `en-cours.md`.
 
 Sortie : un rapport lisible, code 0 si tout passe, 1 sinon.
 """
@@ -22,6 +23,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 DOCS = RACINE / "docs"
 SCHEMAS = DOCS / "schemas"
 SCHEMAS_SYNTH = DOCS / "synthese" / "schemas"
+ETAT = DOCS / "pilotage" / "en-cours.md"
 GENERE = (".puml.svg", ".mmd.svg")
 NS = "{http://www.w3.org/2000/svg}"
 
@@ -121,18 +123,43 @@ def verifier_references(alertes: list[str]):
                 alertes.append(f"schéma non référencé : {p.relative_to(RACINE)}")
 
 
+def verifier_fraicheur(alertes: list[str]):
+    """Le schéma d'état ne peut pas dater d'avant la page d'état.
+
+    Même défaut que la revue d'hier : comparer des dates ne voit pas deux mises à
+    jour du même jour, mais il voit le décrochage d'un jour — c'est ce qui est
+    arrivé au schéma du 29/10 lu avec l'état du 30/10.
+    """
+    schema = SCHEMAS / "chantiers-etats.svg"
+    if not schema.exists() or not ETAT.exists():
+        return
+    m_schema = re.search(
+        r"état au (\d{4}-\d{2}-\d{2})", schema.read_text(encoding="utf-8", errors="ignore")
+    )
+    m_etat = re.search(
+        r"Mis à jour : (\d{4}-\d{2}-\d{2})", ETAT.read_text(encoding="utf-8", errors="ignore")
+    )
+    if m_schema and m_etat and m_schema.group(1) < m_etat.group(1):
+        alertes.append(
+            f"fraîcheur : {schema.name} dit {m_schema.group(1)}, en-cours dit "
+            f"{m_etat.group(1)} — mettre le schéma à jour"
+        )
+
+
 def main() -> int:
     alertes: list[str] = []
     verifier_ascii(alertes)
     verifier_images(alertes)
     verifier_svg(alertes)
     verifier_references(alertes)
+    verifier_fraicheur(alertes)
     nd = len(documents())
     ni = len(list(DOCS.rglob("*.svg")))
     nsrc = len(list(DOCS.rglob("*.puml"))) + len(list(DOCS.rglob("*.mmd")))
     print(f"  schémas · {nd} document(s) · {ni} SVG · {nsrc} source(s)")
     if not alertes:
-        print("  ✅ aucun ASCII art, SVG valides et référencés, sources et images relatives.")
+        print("  ✅ aucun ASCII art, SVG valides et référencés, sources et images relatives ;")
+        print("     le schéma des chantiers est à la date de l'état.")
         return 0
     print(f"  ❌ {len(alertes)} anomalie(s) :")
     for a in alertes:
