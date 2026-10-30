@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-30, 10 h 45 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-30, 11 h 10 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -12,6 +12,10 @@
 
 > Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
 > [`journal/sessions/`](../../journal/sessions/).
+
+> **Plan d'abord.** Chaque session active expose son mandat dans
+> [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+> avant d'écrire ici.
 
 > **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
 > aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne. La garantie est au
@@ -77,9 +81,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **77** (61 vertes, 2 rouges, 14 hors passe) | `tools/porte-*.sh` |
+| portes | **78** (61 vertes, 2 rouges, 15 hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **362** / **435** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **363** / **436** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **108** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
 

@@ -1,0 +1,25 @@
+{
+ "date": "2026-10-30",
+ "ligne": "coordination-sessions",
+ "version": "légère",
+ "plan_count": 1,
+ "sessions_en_cours": 2,
+ "sans_plan": 2,
+ "autotest": {
+  "plan_valide": true,
+  "perimetre_duplique_refuse": true,
+  "champ_manquant_refuse": true
+ },
+ "check": {
+  "exit": 0,
+  "avertissements": 2,
+  "strict": "rouge jusqu'à migration"
+ },
+ "limites": [
+  "heartbeat manuel",
+  "pas de claim automatique",
+  "plans existants absents",
+  "plan n'est pas l'état"
+ ],
+ "note": "8156fdcb a quitté la liste active pendant la mise en place"
+}

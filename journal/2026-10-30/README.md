@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **0 session(s)** · **6 thème(s)**
+**12 commits** · **0 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 2 | [mesures.md](mesures.md) |
+| mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -38,6 +38,7 @@ Aucune session indexée pour ce jour ; voir
 | 09:16 | `ecb67fe9` | B10 — LE CONTRASTIF NE FAIT PAS LIRE `z` : 32,6 DE CHRF (INCHANGÉ), ÉCART `z` 1,45 CONTRE 2,57 |
 | 10:04 | `8664cc67` | SCHÉMA — ÉTAT AU 30/10 09 h 25 : A8.0 19 PORTES, B10.2BIS CLOSE, R13 |
 | 10:34 | `43a46d7e` | DOCWATCH — L'ÉTAT EN WBS INLINE, LE GANTT DANS LA ROADMAP, LE SVG SUPPRIMÉ |
+| 10:46 | `f9132a68` | N3.6 — PONT, PLACEMENT ET SEUIL COMPOSENT DANS LE SERVICE |
 
 ## Le récit de la journée (écrit à la main)
 

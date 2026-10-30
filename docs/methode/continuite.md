@@ -86,13 +86,14 @@ fiches sont des résultats, la roadmap est le plan : aucun ne remplace l'état.
 | **prochaine action** | toujours nommée, avec son identifiant (N0.3b, N2.4…) |
 | **écriture** | toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne (hook `pre-commit`) |
 | **sessions actives** | une sous-section par session : Id, rôle, action, autres sessions, prochaine action, bloquants, journal ; le rôle nomme le chantier |
+| **plan** | `journal/sessions/<id>/plan.md` |
 | **bloquants** | un bloquant par chantier A/B/N/R, même « aucun » |
 | **questions ouvertes** | **5 au plus**, chacune avec ce qui la débloque |
 | **pas de logs** | pas de tableaux de mesures, pas de séries, pas de récit de round |
 | **pas de doublon** | un résultat n'apparaît qu'une fois ; on supprime la ligne périmée |
 
 **Lecture** : `AGENTS.md` + `en-cours` (« Sessions en cours », « Les chantiers et leurs bloquants »,
-« Ce qui reste ») + **un** document de tâche. On ne lit ni le journal ni les rapports « pour suivre ».
+« Ce qui reste ») + **un** document de tâche. On ne lit ni journal ni rapports « pour suivre ».
 
 **Écriture** : toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap,
 backlog) ne se commite sans sa ligne — `tools/verifie_etat_a_jour.py` le refuse (hook) et
