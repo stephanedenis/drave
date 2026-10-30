@@ -19,20 +19,24 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", default="data/corpus_fr.txt")
     ap.add_argument("--vocab", type=int, default=512)
+    ap.add_argument("--tokenizer", default="", help="tokenizer existant (sinon entraîné)")
     ap.add_argument("--sortie-tokenizer", required=True)
     ap.add_argument("--sortie-ids", required=True)
     ap.add_argument("--sortie-octets", required=True)
     ap.add_argument("--stats", required=True)
     a = ap.parse_args()
     texte = pathlib.Path(a.corpus).read_text(errors="replace")
-    tok = Tokenizer(models.BPE(unk_token=None))
-    tok.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
-    tok.decoder = decoders.ByteLevel()
-    ent = trainers.BpeTrainer(vocab_size=a.vocab, special_tokens=[],
-                              initial_alphabet=pre_tokenizers.ByteLevel.alphabet(),
-                              show_progress=False)
-    tok.train_from_iterator([texte], ent)
-    tok.save(a.sortie_tokenizer)
+    if a.tokenizer:
+        tok = Tokenizer.from_file(a.tokenizer)
+    else:
+        tok = Tokenizer(models.BPE(unk_token=None))
+        tok.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
+        tok.decoder = decoders.ByteLevel()
+        ent = trainers.BpeTrainer(vocab_size=a.vocab, special_tokens=[],
+                                  initial_alphabet=pre_tokenizers.ByteLevel.alphabet(),
+                                  show_progress=False)
+        tok.train_from_iterator([texte], ent)
+        tok.save(a.sortie_tokenizer)
     enc = tok.encode(texte)
     ids = torch.tensor(enc.ids, dtype=torch.long)
     torch.save(ids, a.sortie_ids)

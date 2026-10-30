@@ -68,5 +68,11 @@
    "gain_pct": 17.0,
    "note": "1500 pas, sous-entraîné, non comparable au chiffre principal"
   }
+ },
+ "campagne_10k": {
+  "bytes": 1.8020511721549923,
+  "bpe_10k": 1.6332448576967713,
+  "bpe_5k_octets_egaux": 1.8141570645401088,
+  "verdict": "gain à pas égaux seulement ; perte à octets égaux"
  }
 }

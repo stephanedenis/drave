@@ -50,6 +50,9 @@ def ppl(modele, data, seq, lot_n, device, vocab, n_lots=8, compteur=0):
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", required=True, help="tenseur .pt d'identifiants")
+    ap.add_argument("--val-ids", default="", help="tenseur .pt de validation")
+    ap.add_argument("--val-octets", type=int, default=0)
+    ap.add_argument("--eval-lots", type=int, default=8)
     ap.add_argument("--vocab", type=int, default=256)
     ap.add_argument("--octets", type=int, default=0, help="octets du corpus (bits/octet)")
     ap.add_argument("--pas", type=int, default=200)
@@ -65,8 +68,12 @@ def main() -> None:
     a = ap.parse_args()
     torch.manual_seed(a.graine)
     data = charger_ids(a.ids)
-    n_val = max(10_000, len(data) // 20)
-    train, val = data[:-n_val], data[-n_val:]
+    if a.val_ids:
+        val = charger_ids(a.val_ids)
+        train = data
+    else:
+        n_val = max(10_000, len(data) // 20)
+        train, val = data[:-n_val], data[-n_val:]
     cfg = NativeConfig(vocab=a.vocab)
     modele = NativeModel(cfg).to(a.device)
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
@@ -86,7 +93,7 @@ def main() -> None:
         if pas % 50 == 0 or pas == 1:
             p, n = ppl(modele, val, a.seq, a.lot, a.device, a.vocab, n_lots=2)
             print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
-    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, a.vocab, n_lots=8)
+    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, a.vocab, n_lots=a.eval_lots)
     # Précision top-1 : tête principale et têtes précoces.
     modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
     with torch.no_grad():
@@ -112,6 +119,9 @@ def main() -> None:
     octets = a.octets or len(data)
     res["bits_par_octet"] = math.log2(max(p_val, 1e-30)) * len(data) / max(octets, 1)
     res["tokens_par_octet"] = len(data) / max(octets, 1)
+    if a.val_octets:
+        res["bits_par_octet_val"] = math.log2(max(p_val, 1e-30)) * len(val) / a.val_octets
+        res["val_jetons"] = len(val); res["val_octets"] = a.val_octets
     pathlib.Path(a.sortie + ".json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
     print(json.dumps(res, ensure_ascii=False, indent=1))
 

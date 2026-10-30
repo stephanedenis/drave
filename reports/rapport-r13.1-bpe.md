@@ -1,10 +1,12 @@
-# R13.1 — le BPE natif gagne 11,9 % de bits/octet à budget d’octets égal
+# R13.1 — pilote : le BPE gagne 11,9 % à 200/400 pas (corrigé 11,0 %)
 
-> **Ligne de roadmap** : R13.1 · **Date** : 2026-10-29 · **Verdict** : ✅ **le BPE natif bat
+> **Ligne de roadmap** : R13.1 · **Date** : 2026-10-29 · **Verdict pilote** : ✅ **le BPE natif bat
 > l’octet** — à budget d’**octets** égal (~405–410 k octets vus), le modèle BPE 512 fait
 > **3,249 bits/octet** contre **3,689** pour le modèle octets ; après correction du ratio de validation,
 > le chiffre exact est **3,2823** contre **3,689**, soit **−11,0 %**. Le tokenizer
-> est **réversible** (1,977 octet/jeton). La condition R13.1 « pas de modèle BPE natif » est levée.
+> est **réversible** (1,977 octet/jeton). **Mise à jour 10 k** : à octets égaux, le BPE perd 0,7 % (1,8142 contre 1,8021) ; voir
+> [`rapport-r13.1-campagne.md`](rapport-r13.1-campagne.md). Le pilote est conservé comme mesure
+> à son budget, pas comme verdict.
 >
 > **Dispositif** : `tools/tokenizer_bpe.py` + `tools/entrainer_native_tokens.py`, corpus
 > `data/corpus_fr.txt`, mêmes architecture/graine/seed ; porte `tools/porte-r13-bpe.sh` ;

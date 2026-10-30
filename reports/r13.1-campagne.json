@@ -1,0 +1,57 @@
+{
+ "date": "2026-10-29",
+ "ligne": "R13.1",
+ "porte": "campagne 10k (hors porte)",
+ "corpus": "data/corpus_fr_train.txt / corpus_fr_val.txt",
+ "tokenizer": {
+  "vocab": 512,
+  "train_octets": 4402195,
+  "train_jetons": 2225746,
+  "val_octets": 231694,
+  "val_jetons": 118650,
+  "octets_par_jeton_val": 1.9527517909818795
+ },
+ "modeles": {
+  "bytes_10k": {
+   "pas": 10000,
+   "ppl_val": 3.487156644825321,
+   "bits_par_octet_val": 1.8020511721549923,
+   "precision_main": 0.6494140625,
+   "duree_s": 400.0
+  },
+  "bpe_10k": {
+   "pas": 10000,
+   "ppl_val": 9.121820752824766,
+   "bits_par_octet_val": 1.6332448576967713,
+   "precision_main": 0.440673828125,
+   "duree_s": 379.9
+  },
+  "bpe_5k_octets_egaux": {
+   "pas": 5000,
+   "ppl_val": 12.0,
+   "bits_par_octet_val": 1.8141570645401088,
+   "duree_s": 217.8
+  }
+ },
+ "calculs": {
+  "gain_pas_egaux_pct": 9.37,
+  "gain_octets_egaux_pct": -0.67,
+  "octets_vus": {
+   "bytes_10k": 10240000,
+   "bpe_10k": 20251507,
+   "bpe_5k": 10125754
+  }
+ },
+ "verdict": "à pas égaux le BPE gagne 9,4 % ; à octets égaux il perd 0,7 %",
+ "controle": "mêmes graine/architecture/val ; 5k BPE = 10k bytes en octets vus ; val séparée",
+ "limites": [
+  "français, vocab 512, 10k pas, une graine",
+  "la précision par jeton n'est pas comparable",
+  "le tokenizer est entraîné sur le train seulement"
+ ],
+ "prochain": [
+  "vocab 1024",
+  "anglais 100 Mo",
+  "plus de pas/another seed"
+ ]
+}

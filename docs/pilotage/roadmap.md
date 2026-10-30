@@ -182,7 +182,7 @@ test, modèle qui répond de mémoire, petit N, temps mesuré à chaud.
 |---|---|---|---|
 | **R1.1** | **contexte hiérarchique** : span → paragraphe → section → document, avec un **état de section** ; le modèle n'a pas besoin de voir toute la page | ⏳ | PPL à 1 000 octets dans un facteur **1,5** de celle à 129 ; aiguille **native** ≥ 15/18 à 4 000 octets |
 | **R1.2** | **curriculum de contexte** : une recette qui ne refait pas les négatifs 130/136/160/256 ; piste : états de résumé, pas seulement des positions | ⏳ | 1 000 octets **stable**, pas un point isolé |
-| **R1.3** | **tokenisation** : octets ou BPE ; la décision est **mesurée**, pas doctrinale | ✅ **mesurée** | BPE natif **3,2823** contre octets **3,689** bits/octet (val exacte, **−11,0 %**) |
+| **R1.3** | **tokenisation** : octets ou BPE ; la décision est **mesurée**, pas doctrinale | 🔬 **condition** | à octets égaux BPE **1,8142** contre bytes **1,8021** (+0,7 % BPE perd) ; à pas égaux −9,4 % |
 
 **Ce qui bloque** : les 130–256 sont **tous négatifs**. R1.1 doit être tenté **avant** R1.2 : si la hiérarchie
 suffit, le contexte brut n'est pas le premier chantier.

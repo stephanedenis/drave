@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (26)
+## Commits du jour (27)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -34,6 +34,7 @@
 | 20:21 | `ebd8a960` | ÉTAT — T0 À 3 999 (A8.3C COMMITTÉ) | `en-cours.md`, `README.md`, `mesures.md` (+1) |
 | 22:13 | `fa20b2ae` | DOCS — RÉFÉRENCES : PASSE DUPLIQUÉE RETIRÉE (T1 2 500) | `references-non-regression.md`, `README.md`, `portes.md` (+1) |
 | 23:28 | `d99786be` | ÉTAT — DATE ALIGNÉE SUR LE DERNIER COMMIT | `en-cours.md`, `README.md`, `modele.md` |
+| 23:44 | `e18163cb` | ÉTAT — T0 4 000 : MÉLANGE ROUGE QUALIFIÉ | `en-cours.md`, `README.md`, `portes.md` |
 
 ## Mesures et rapports touchés
 
