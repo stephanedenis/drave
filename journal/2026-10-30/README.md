@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**16 commits** · **0 session(s)** · **6 thème(s)**
+**17 commits** · **0 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,6 +16,7 @@
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -43,6 +44,7 @@ Aucune session indexée pour ce jour ; voir
 | 12:58 | `b19ab8b7` | LA CASCADE À CONFIANCE EST PUBLIÉE : DEUX FICHIERS DATÉS, UN SEUIL REPRODUCTIBLE, 0,894 OUT-OF-SAMPLE |
 | 13:00 | `10a05c30` | SESSIONS — MIGRATION DOUCE : 3 PLANS À CONFIRMER, STRICT ROUGE, EN-COURS RECALÉ |
 | 13:02 | `ac60b79a` | ÉTAT — WBS 13:00, B11.10 4/4 |
+| 13:06 | `277103ff` | A8.3d — LE LOT N'EST PAS LES THREADS : L'ÉCART DE 1,90 % SURVIT À 1 THREAD |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -71,4 +73,10 @@ un banc en fichier daté (banc, empreinte du corpus gelé, n, seuil, taux), `lec
 --calibration` le lit, et `--verifie` recalcule le seuil à l'identique. Sur un découpage
 indépendant, la cascade égale encore l'oracle sur le lexical (0,894) et bat les deux choix fixes
 sur les paraphrases (0,366 contre 0,341 et 0,317).
+
+**Le graphe ne ment plus par omission.** Le backlog s'écrit deux fois (la fiche, puis l'index) :
+six statuts avaient divergé — R05 et R06 annoncées « spécifiées » alors qu'elles ont cinq
+versions mesurées, A8.3 absente de l'index. `verifie_backlog.py` confronte désormais les deux,
+et l'état ne recopie plus les statuts : il pointe la **frontière** du graphe et ne garde que les
+**bloquants externes** — la seule chose que le graphe ne peut pas dire.
 <!-- /notes -->

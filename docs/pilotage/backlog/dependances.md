@@ -228,6 +228,13 @@ prix de l'ordre strict, et il est nommé.
 - **les ressources** : un item bloqué par le matériel n'est pas bloqué par le code ;
 - **les dates** : il n'y en a pas, et c'est voulu.
 
+**Et ce qu'il refuse de laisser diverger** : le statut est écrit deux fois (la fiche, puis
+l'index). Depuis le 30/10, `verifie_backlog.py` **confronte les deux** — six écarts dormaient
+(R04, R05, R06, R13, B10.2bis, et A8.3 absente de l'index) ; un graphe qui annonce « spécifiée »
+une fiche mesurée depuis trois versions n'est pas un graphe, c'est un souvenirs. L'état
+(`en-cours.md`) ne recopie plus les statuts : il pointe la frontière et ne garde que les
+**bloquants externes**.
+
 ## Voir aussi
 
 - [L'index du backlog](index.md) — les fiches, leur statut et leur priorité.

@@ -152,6 +152,29 @@ def arreter(noeuds: dict, erreurs: list[str], avertissements: list[str]) -> None
         profondeur(n)
 
 
+def controler_index(noeuds: dict, erreurs: list[str]) -> None:
+    """L'index et les fiches disent-ils le MÊME statut ? Le backlog est écrit deux fois (la
+    fiche, puis l'index) ; un graphe écrit deux fois diverge — c'est la raison d'être de cet
+    outil. Sans ce contrôle, l'index peut annoncer « spécifiée » une fiche mesurée depuis
+    trois versions (arrivé à R05 et R06)."""
+    index = (BACKLOG / "index.md").read_text(encoding="utf-8")
+    vus = set()
+    for ligne in index.splitlines():
+        m = re.match(r"\|\s*([A-Z]\d+(?:\.\d+)?[a-z0-9]*)\s*\|\s*[^|]+\|\s*([^|]+)\|", ligne)
+        if not m:
+            continue
+        nid, statut_index = m.group(1).strip(), m.group(2).strip()
+        if nid not in noeuds or noeuds[nid]["sans_fiche"]:
+            continue
+        vus.add(nid)
+        if noeuds[nid]["statut"] != statut_index:
+            erreurs.append(f"{nid} : l'index dit « {statut_index} », la fiche dit "
+                           f"« {noeuds[nid]['statut']} »")
+    for nid, noeud in noeuds.items():
+        if not noeud["sans_fiche"] and nid not in vus:
+            erreurs.append(f"{nid} : fiche absente de l'index")
+
+
 def controler(noeuds: dict):
     erreurs: list[str] = []
     avert: list[str] = []
@@ -222,6 +245,7 @@ def controler(noeuds: dict):
             if cible in noeuds and noeuds[cible]["sans_fiche"]:
                 avert.append(f"trou : {n} dépend de {cible}, qui n'a pas de fiche")
 
+    controler_index(noeuds, erreurs)
     return erreurs, avert, niveau
 
 

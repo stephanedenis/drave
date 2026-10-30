@@ -50,13 +50,13 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 | R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | mesurée | P0 | — | R0.1 |
 | R02 | [Contrôleur de lecture](R02-controleur-lecture.md) | mesurée | P0 | R01 | R0.2 |
 | R03 | [Banc de lecture rapide](R03-banc-lecture-rapide.md) | mesurée | P0 | R01, R02 | R0.3 |
-| R04 | [Tête de survol](R04-tete-survol.md) | en cours | P1 | R03, R01 | R0.4 |
-| R05 | [Tête de balayage](R05-tete-balayage.md) | spécifiée | P1 | R03, R01 | R0.4 |
-| R06 | [Tête de relecture](R06-tete-relecture.md) | spécifiée | P2 | R03, R21, R22 | R0.4 |
+| R04 | [Tête de survol](R04-tete-survol.md) | partiel | P1 | R03, R01 | R0.4 |
+| R05 | [Tête de balayage](R05-tete-balayage.md) | partiel | P1 | R03, R01 | R0.4 |
+| R06 | [Tête de relecture](R06-tete-relecture.md) | partiel | P2 | R03, R21, R22 | R0.4 |
 | R07 | [Routeur extractif / génératif](R07-routeur-extractif-generatif.md) | partiel | P1 | R02, R03 | R0.5 |
 | R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | R01, N1, N2 | R1.1 |
 | R12 | [Curriculum de contexte long](R12-curriculum-contexte.md) | spécifiée | P1 | R11 | R1.2 |
-| R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | spécifiée | P2 | — | R1.3 |
+| R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | prête | P2 | — | R1.3 |
 | R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | R01, R11 | R2.1 |
 | R22 | [Mémoire épisodique et relecture](R22-memoire-episodique.md) | spécifiée | P2 | R01, R21 | R2.2 |
 | R31 | [Restitution : SFT de lecture](R31-restitution-sft.md) | spécifiée | P1 | R01, R03, R21 | R3.1 |
@@ -78,7 +78,7 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 | N0.3b | [Parité de perplexité DRVM ↔ GGUF](N0.3b-parite-ppl.md) | mesurée | P1 | N0 | N0.3b |
 | N2 | [Distillation native (50 000 séquences)](N2-distillation.md) | en cours | P1 | N1 | N2 |
 | N4 | [Usage : SFT, service, sûreté](N4-usage-sft.md) | partiel | P1 | — | N4 |
-| B10.2bis | [Décodeur à attention croisée](B10.2bis-decodeur-attention-croisee.md) | spécifiée | P2 | — | B10.2bis |
+| B10.2bis | [Décodeur à attention croisée](B10.2bis-decodeur-attention-croisee.md) | mesurée | P2 | — | B10.2bis |
 | B10.3 | [Raisonnement sur `z` gelé](B10.3-raisonnement-z.md) | bloquée | P2 | B10.2bis | B10.3 |
 | B12.10 | [Pipeline M1 → M4 → M8](B12.10-pipeline-m1-m4-m8.md) | mesurée | P2 | B12 | B12.10 |
 | A3.4 | [Démonstration Colab](A3.4-colab.md) | bloquée | P3 | A3 | A3.4 |
@@ -91,6 +91,7 @@ prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadm
 | A3.2 | [Granularité du flux](A3.2-granularite.md) | mesurée | P2 | A3 | A3.2 |
 | A3.3 | [Seuil de rentabilité](A3.3-seuil.md) | mesurée | P2 | A3.2 | A3.3 |
 | A8.0 | [Portes PPL épinglées](A8.0-portes-ppl.md) | mesurée | P2 | A8 | A8.0 |
+| A8.3 | [Passer la règle place+perte par défaut](A8.3-defaut.md) | mesurée | P3 | A8.0 | A8.3 |
 
 ## Le modèle de fiche
 

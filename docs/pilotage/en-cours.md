@@ -89,56 +89,25 @@
 
 ## Les chantiers et leurs bloquants
 
-| chantier | état | bloquant | prochaine action |
+**Les dépendances ne sont pas dans cette page.** Elles vivent dans le **graphe** du backlog —
+[`backlog/dependances.md`](backlog/dependances.md) §5 pour la frontière, et le schéma
+[`backlog-dependances.svg`](../schemas/backlog-dependances.svg) — recalculé par
+`python3 tools/verifie_backlog.py`, qui confronte aussi les statuts des fiches et de l'index.
+Cette table ne garde que les **bloquants externes** (ce que le graphe ne peut pas dire : une
+ressource qui manque) et la **prochaine action** ; elle ne recopie pas les statuts, qui dérivent.
+
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | ✅ A1–A8 ; **A8.0/A8.3a : 19 portes** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (A6.2 bloqué) ; réduire le lot |
-| **B — l'intelligence** | ✅ B1–B12 ; B10.3 ouvert ; **B12.10, B10.2bis closes** ; décodeur (32,5) | `z` ~2 points ; B1.5 corpus | **B11.10 hybride 4/4** ; B10.3 attend un **encodeur** |
-| **N — le natif** | N0/N1 mesurés ; N0.3b **close** ; N2 plateau ; **N3.1/N3.2a/N3.2b0/N3.2b1/N3.2b2/N3.3a/N3.3b/N3.3c/N3.4a/N3.4b/N3.4c/N3.4d/N3.5a/N3.5b/N3.5c/N3.5d/N3.5e/N3.5f/N3.6** ; N4 partiel | N2 **< 2,5** non atteint ; N4 **0/4** tenus ; N5 gelé | N2 (hiérarchie) ; N4 (consigne) |
-| **R — le lecteur** | 🔬 R0.1–R0.3 **mesurés** ; R0.4/R0.5 ouverts ; **R4.1–R4.3 mesurées** ; **R13 condition** | **R4.4 bloqué** (aucun OCR) ; R1 dépend de N1/N2 | **R0.4** (négatifs difficiles), **R0.5** (routeur) ; **R13.4** (2e graine) ; **R4.4 bloqué** |
-| **C1–C7** | ✅ corpus, traduction, restitution, styles, domaines, documentation, pensée | C4 date à contrôler ; le reste est hors plan | transférés au journal |
-| **Backlog — graphe** | **37 fiches ; 42 arêtes** | 1 sans fiche | vérifier le graphe (`8156fdcb`) |
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
+| **B — l'intelligence** | **B10.3, B11.10** | B1.5 corpus | **B11.10** ; B10.3 attend un encodeur |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; N4 0/4 ; N5 gelé | **N2** (hiérarchie) ; **N4** (consigne) |
+| **R — le lecteur** | **R04, R05, R07, R13, R44** | R4.4 (aucun OCR) ; R1 dépend de N1/N2 | R0.4/R0.5 : négatifs nommés ; **R13** (2e graine) |
+| **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+| **Backlog — graphe** | **37 fiches, 42 arêtes, 11 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
-```plantuml
-@startwbs
-scale 1.8
-title Les chantiers — état au 30/10 13 h 05
-* Drave
-**[#c8e6c9] A — le moteur
-***[#c8e6c9] A1–A8
-***[#c8e6c9] A8.0/A8.3a — 19 portes
-***[#c8e6c9] A8.3b/c/d
-***[#ffe0b2] A2.6 — partiel
-***[#ffcdd2] A3.4/A5.4/A6.2 — bloqués
-**[#ffe0b2] B — l'intelligence
-***[#c8e6c9] B1–B12
-***[#c8e6c9] B10.2bis — close
-***[#ffcdd2] B10.3 — attend un encodeur
-***[#c8e6c9] B11.10 — 4/4
-***[#e1bee7] B12.10 — négatif
-**[#ffe0b2] N — le natif
-***[#c8e6c9] N0/N1
-***[#ffe0b2] N2 — 30 %
-***[#c8e6c9] N3.6 — service ✅
-***[#bbdefb] N4 — à faire
-***[#e0e0e0] N5 — gelé
-**[#ffe0b2] R — le lecteur
-***[#c8e6c9] R0.1–R0.3
-***[#c8e6c9] R4.1–R4.3
-***[#ffe0b2] R0.5 — en cours
-***[#ffcdd2] R4.4 — bloqué
-** Sessions actives
-*** 8156fdcb — R0.5 (cascade)
-*** c3d0f0bd — B10.2bis/A8.3b
-*** N2-GPU — N2
-@endwbs
-```
-
-*Lecture : structure et états, sans axe de temps (en-cours se pilote à l'heure) ; vert = mesuré, rouge = bloqué.
-Gantt (jours) dans la [roadmap](roadmap.md#le-gantt-indicatif), dépendances dans le [graphe](backlog/dependances.md).*
-
-**C1** corpus · **C2** traduction · **C3** restitution · **C4** styles · **C5** domaines ·
-**C6** documentation · **C7** pensée : ✅ mesurés ; détail dans
-[`etat-transfere.md`](../../journal/2026-10-29/etat-transfere.md).
+**Les sept chantiers C** (hors graphe, transférés au journal) : **C1** corpus · **C2**
+traduction · **C3** restitution · **C4** styles (date à contrôler) · **C5** domaines · **C6**
+documentation · **C7** pensée — mesurés, et désormais du récit, pas du plan.
 
 ## Ce qui reste
 
