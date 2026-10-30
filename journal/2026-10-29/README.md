@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**126 commits** · **0 session(s)** · **8 thème(s)**
+**127 commits** · **0 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
-| moteur | 5 | [moteur.md](moteur.md) |
+| moteur | 6 | [moteur.md](moteur.md) |
 | portes | 21 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
@@ -159,6 +159,7 @@ Aucune session indexée pour ce jour ; voir
 | 20:19 | `cb36f86c` | N3.3b — KWTA ET TOP_K AGISSENT SÉPARÉMENT ; PORTE 62 |
 | 20:20 | `a1aae534` | A8.3c — LE LOT N'EST PAS NEUTRE (1,90 %) : LA NON-MONOTONIE DU KV ÉTAIT UN EFFET DE CHEMIN |
 | 20:21 | `ebd8a960` | ÉTAT — T0 À 3 999 (A8.3C COMMITTÉ) |
+| 20:25 | `04357861` | N3.3c — LE MOTEUR COMPTE LES EXPERTS/CANAUX : 6/6/3 · 48/24/24 ; PORTE 63 |
 
 ## Le récit de la journée (écrit à la main)
 

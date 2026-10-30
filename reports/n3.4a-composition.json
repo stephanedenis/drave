@@ -1,0 +1,44 @@
+{
+ "date": "2026-10-29",
+ "ligne": "N3.4a",
+ "porte": "porte-n3-composition.sh",
+ "modele": "drave-n0 synthétique, graine 7, 132 528 paramètres, 2 blocs",
+ "configs": {
+  "A": {
+   "top_k": 2,
+   "kwta": 0.5
+  },
+  "B": {
+   "top_k": 1,
+   "kwta": 0.5
+  }
+ },
+ "mesures": {
+  "sante": 132528,
+  "a_deux_fois": "identique",
+  "profondeur_1": "différente et déterministe",
+  "b_vs_a": "différente",
+  "compteurs_A": [
+   6,
+   12,
+   96
+  ],
+  "compteurs_B": [
+   6,
+   6,
+   48
+  ]
+ },
+ "controle": "A déterministe ; profondeur 1 différente ; top_k=1 différent ; compteurs exacts",
+ "verdict": "service + profondeur + routage + comptage composés sur les mêmes modèles",
+ "limites": [
+  "profondeur fixe, pas de seuil de confiance",
+  "pas de pont/placement dans la même exécution",
+  "modèle synthétique"
+ ],
+ "prochain": [
+  "N3.2b seuil de confiance",
+  "pont/placement dans la composition",
+  "porte de composition complète"
+ ]
+}

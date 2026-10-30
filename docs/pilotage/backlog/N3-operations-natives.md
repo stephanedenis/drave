@@ -10,7 +10,8 @@
 > [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
 > [`n3.2b0-profondeur`](../../../reports/rapport-n3.2b0-profondeur.md),
 > [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
-> [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md).
+> [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
+> [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -29,9 +30,9 @@ le rejeu et le placement (A2.6). La profondeur routée (dessin B) est **exécut�
 moteur** : **÷1,47 / ÷1,24** à profondeur 8, avec une variabilité de ±10 % ; le chemin court
 entraîné est le facteur limitant (**23,19 %** contre **47,73 %** pour le long).
 
-**Ce qui reste** : N3.2b (seuil de confiance), puis la porte de composition. N3.2a
-(service), N3.2b0 (profondeur + lecture HTTP), N3.3a (routage), N3.3b (kwta/top_k séparés)
-et N3.3c (comptage direct) sont **faits**.
+**Ce qui reste** : N3.2b (seuil de confiance), puis la composition avec pont/placement.
+N3.2a (service), N3.2b0 (profondeur + lecture HTTP), N3.3a (routage), N3.3b (kwta/top_k
+séparés), N3.3c (comptage direct) et N3.4a (composition des briques branchées) sont **faits**.
 
 ## Le contrat
 
