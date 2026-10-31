@@ -5,13 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**1 commits** · **1 session(s)** · **1 thème(s)**
+**2 commits** · **1 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
+| modele | 1 | [modele.md](modele.md) |
 
 ## Sessions DSH
 
@@ -24,6 +25,7 @@
 | heure | commit | fait |
 |---|---|---|
 | 11:35 | `eff8d8e4` | SESSIONS — 104 ARCHIVES RETROUVÉES, CINQ CLÔTURES, L'ÉTAT À UNE SEULE SESSION |
+| 11:41 | `a2344c84` | ÉTAT — LA CLÔTURE `eff8d8e4` ACTÉE, `22e518ee` CLOSE, N2 DÉSIGNÉE |
 
 ## Le récit de la journée (écrit à la main)
 

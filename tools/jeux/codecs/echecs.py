@@ -338,8 +338,11 @@ class CodecEchecs(Codec):
 
         # 4b-bis. une CASE seule (`E4`) : avec le jeu explicite, c'est une
         # référence de case, PAS un coup. Le SAN exige une position ; la case, non.
+        # MAIS si une position est fournie, c'est le SAN qui tranche : sans ce
+        # `pos is None`, `e4` avec `contexte=départ` devenait une requête de case
+        # au lieu du coup `e2e4` (régression d1eb552b, 110/112 au niveau 4).
         m = re.fullmatch(r"([a-h][1-8])", texte.strip(), re.IGNORECASE)
-        if m:
+        if m and pos is None:
             idx = E.case_vers_indice(m.group(1).lower())
             lec.format = "case"
             return self.reussi(lec, RSN("echecs", "requete", {"case": idx}),
