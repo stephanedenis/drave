@@ -4,11 +4,18 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 11:35 | `eff8d8e4` | SESSIONS — 104 ARCHIVES RETROUVÉES, CINQ CLÔTURES, L'ÉTAT À UNE SEULE SESSION | `.gitignore`, `README.md`, `tokenisation.md` (+141) |
+| 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) | `en-cours.md`, `references-non-regression.md`, `README.md` (+5) |
+
+## Chiffres du jour
+
+`+0,36 %` · `+0,37 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -17,6 +24,7 @@
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-n2-hierarchie.md](../../reports/rapport-n2-hierarchie.md)
 - [reports/rapport-r04-tete-survol.md](../../reports/rapport-r04-tete-survol.md)
 - [reports/rapport-r07-routeur.md](../../reports/rapport-r07-routeur.md)
 - [reports/rapport-r13-decision.md](../../reports/rapport-r13-decision.md)

@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**5 commits** · **1 session(s)** · **4 thème(s)**
+**6 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 1 | [docs.md](docs.md) |
+| docs | 2 | [docs.md](docs.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -31,6 +31,7 @@
 | 12:40 | `2edb3079` | JEUX — LE SAN L'EMPORTE SUR LA CASE QUAND UNE POSITION EST FOURNIE (110/112 → 112/112) |
 | 12:51 | `93f094e5` | GRAPHE — LE PARSEUR PERDAIT LES LIENS MARKDOWN : 42 ARÊTES DEVENAIENT 43, LA FRONTIÈRE PASSAIT DE 12 À 4 |
 | 12:59 | `3b9d179c` | PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET |
+| 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |
 
 ## Le récit de la journée (écrit à la main)
 

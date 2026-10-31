@@ -1,24 +1,15 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-10-31 à 12 h 54 :**
-> **78 portes, 73 vertes, 5 rouges, 1 h 37**. Journaux : `/tmp/portes-1031-11h17`. Les cinq rouges :
-> `porte-indice` (826 s) et `porte-melange` (102 s), les deux **structurelles connues**, mêmes
-> diagnostics ; `porte-homeostasie` (exit 2) — **environnementale** : elle exige
-> `/tmp/n4/rang4-lora.pt`, un artefact de balayage effacé au démarrage de 07 h 09 ; `porte-jeux`
-> — **vraie régression**, reproduite et corrigée le jour même (`2edb3079` : le SAN perdait contre
-> la requête de case quand une position était fournie, 110/112) ; `porte-reparti-moteur` — la PPL
-> de référence épinglée (**9,1748**) n'est plus reproduite (**8,7434**, −4,7 %) alors que l'écart
-> de flux entier/réparti est **nul** : à trancher entre référence périmée et changement du modèle
-> régénéré par la porte. Aucune autre rouge.
+> **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+> (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+> au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN
+> perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+> (8,7434), écart de flux nul — à trancher.
 
-> **Passe précédente — 2026-10-29 à 22 h 09 :**
-> **62 portes, 60 vertes, 2 rouges, 1 h 46**. Les deux rouges sont les **structurelles connues**
-> (`porte-indice`, 895 s ; `porte-melange`, 110 s), avec les mêmes diagnostics ; **aucune
-> régression**. Depuis, **6 portes ajoutées** dans la journée (le compte du disque est **68**) :
-> elles sont vertes individuellement, mais n'ont pas encore pris leur tour dans une passe
-> complète. Journaux : `/tmp/portes-1029-20h23`. L'historique des passes est dans
-> [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md). Les
-> compteurs de la page d'état sont vérifiés par `tools/revue_documentation.py`.
+> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+> mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
+> historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
 
 > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
 > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
