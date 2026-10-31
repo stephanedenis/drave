@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**6 commits** · **1 session(s)** · **4 thème(s)**
+**7 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 1 | [distribue.md](distribue.md) |
+| distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -32,6 +32,7 @@
 | 12:51 | `93f094e5` | GRAPHE — LE PARSEUR PERDAIT LES LIENS MARKDOWN : 42 ARÊTES DEVENAIENT 43, LA FRONTIÈRE PASSAIT DE 12 À 4 |
 | 12:59 | `3b9d179c` | PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET |
 | 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |
+| 13:03 | `48243e3d` | RÉFÉRENCES — LA PASSE DU 31 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET (2 489 MOTS) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -91,4 +92,14 @@ arête écrite `[B10.2bis](…)` — la forme naturelle d'un tableau Markdown �
 disparaissait en silence. Le compte passe de **42 à 43 arêtes**, la frontière de **12 à 4**, et
 `B10.2bis`, dit « sans fiche » alors qu'il est mesuré, retrouve son arête dure. Une arête morte
 ou un cycle écrits en Markdown sont désormais vus.
+
+**N2.h2 — la hiérarchie, deuxième négatif.** Le dispositif N2 avait disparu avec `/tmp` : professeur,
+élève, corpus distillé, points de contrôle. Reconstruit : professeur 23,57 M à 20 000 pas
+(**0,9195** bit/octet contre 0,9036 de référence), élève de base 20 000 pas, puis distillation **par
+segments** en trois bras. Sur 256 fenêtres et **trois graines**, à budget strictement égal, l'état de
+section donne **2,9935** contre **2,9927** au témoin (+0,029 %) ; il bat son propre contrôle **sans
+état** de 0,0017 seulement — la machinerie coûte ce qu'elle rapporte. Le levier est écarté après deux
+mesures. En chemin, une leçon de méthode : la graine ne variait **rien** (modèle chargé, aucun
+dropout, fenêtres déterministes) — `temoin g2` rendait *exactement* le même nombre que `temoin g1` ;
+les graines 2 et 3 décalent désormais les fenêtres de `(graine−1) × 10 000 019`.
 <!-- /notes -->

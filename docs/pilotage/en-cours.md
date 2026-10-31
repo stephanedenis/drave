@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 13 h 05 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 16 h 50 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -30,16 +30,16 @@
   l'ouverture.
 - **Rôle** : **N2, la hiérarchie** — la seule ligne désignée ; **N4** (la consigne courte) prend
   la file si N2 bloque.
-- **Ce qu'elle fait** : l'**ablation de la hiérarchie** est mesurée (N2.h1) : l'état de section
-  transporté entre segments ne se distingue pas d'un état **étranger** (+0,36 % contre +0,37 %
-  sur le témoin) — le levier n'apporte rien à budget court. Fiche
-  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md).
+- **Ce qu'elle fait** : la **hiérarchie est mesurée deux fois, négative deux fois** — 3,9759
+  contre 3,9617 sur le petit corpus, puis **2,9935 contre 2,9927** sur le dispositif de
+  distillation reconstruit (professeur 23,57 M, trois graines). Fiches
+  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md).
 - **Ce que font les autres** : personne — une seule session.
 - **Fichiers réservés** : `models/`, `tools/` (natif), `reports/n2-*`, `journal/sessions/<id>/`.
-- **Prochaine action** : rejouer l'ablation sur le **dispositif de distillation** (49 999 fenêtres,
-  professeur 30 k) avec une **BPTT à deux segments** ; si l'écart reste nul, N2 cherche ailleurs
-  (curriculum, données, capacité) et **N4** prend la file.
-- **Bloquants** : aucun — les GPU sont libres ; **R4.4** reste bloqué (aucun OCR installé).
+- **Prochaine action** : N2 ne porte plus la hiérarchie. Restent **le curriculum et les données**
+  (41 Mo, 4 sources, 20 000 pas) et **la capacité** (le 21,63 M donnait −8,1 % à budget égal) ;
+  **N4** prend la file si N2 bloque.
+- **Bloquants** : aucun — GPU libres ; **R4.4** bloqué (aucun OCR).
 - **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
 
 > **Sessions archivées** : `8156fdcb` (R0.1–R0.5), `c3d0f0bd` (R4, B10.2bis, A8.3b),
@@ -71,10 +71,11 @@
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
-  **N2.h1 — la hiérarchie ne paie pas** : état de section **3,9759** contre témoin **3,9617**,
-  contrôle étranger **3,9764** — hiérarchie et contrôle **confondus** (−0,0005), le contenu de
-  l'état ne se lit pas. Fiche [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) ;
-  suite : [la clôture de la session `f0969e87`](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846/cloture.md).
+  **N2.h1** : 3,9759 contre 3,9617, contrôle étranger 3,9764 — le contenu de l'état ne se lit pas.
+  **N2.h2** (distillation, professeur refait, 3 graines) : **2,9935** contre **2,9927** (+0,029 %) ;
+  l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Fiches
+  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md) ;
+  suite : curriculum et capacité.
 
 ## Les chiffres de l'état
 
@@ -84,7 +85,7 @@
 |---|---|---|
 | portes | **78** (73 vertes, 5 rouges à la passe du 31/10) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **368** / **436** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **369** / **437** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **109** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 37** (31/10 12 h 54) | `docs/pilotage/references-non-regression.md` |
 
@@ -104,7 +105,7 @@ sources de blocage nommées.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
-| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie sans gain ; N4 0/4 ; N5 gelé | **N2** (distillation, BPTT 2) ; **N4** (consigne) |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie **négative 2×** ; N4 0/4 ; N5 gelé | **N2** (curriculum, capacité) ; **N4** (consigne) |
 | **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -116,15 +117,16 @@ documentation · **C7** pensée — mesurés, et désormais du récit, pas du pl
 ## Ce qui reste
 
 **R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 bloqué** (aucun OCR).
-**N2** — la **hiérarchie** testée **sans gain** à budget court ; la distillation et la BPTT à deux
-segments restent à mesurer. **N4** — la **consigne courte**. **B10.3** — le `z` et l'encodeur.
+**N2** — la **hiérarchie est écartée** (deux négatifs) ; **curriculum**, **données** et **capacité**
+restent à mesurer. **N4** — la **consigne
+courte**. **B10.3** — le `z` et l'encodeur.
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
 ## Les questions ouvertes
 
 - **R1** : **1 000 octets** sans refaire 130–256 ? → **N2** (hiérarchie), puis **R1.1**, tranchent.
-- **N2** : **< 2,5** ? → la **distillation** (49 999 fenêtres, BPTT 2) tranche ; l'état de section
-  seul ne suffit pas (N2.h1).
+- **N2** : **< 2,5** ? → le **curriculum** et la **capacité** tranchent ; l'état de section est
+  écarté par deux mesures (N2.h1, N2.h2).
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Backlog** : graphe sans cycle ni arête morte ? → `tools/verifie_backlog.py` tranche.

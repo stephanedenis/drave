@@ -1,0 +1,119 @@
+{
+ "experience": "N2 — hiérarchie (état de section) contre témoin et contrôle, sur le dispositif de distillation",
+ "date": "2026-10-31",
+ "dispositif": {
+  "professeur": {
+   "parametres": 23570000,
+   "pas": 20000,
+   "bits_octet": 0.9195,
+   "ppl": 1.892,
+   "famille": "route",
+   "dim": 384,
+   "couches": 6,
+   "cache": 752,
+   "corpus": "data/corpus_fr_train.txt",
+   "reference_historique": "0,9036 bit/octet"
+  },
+  "eleve_base": {
+   "pas": 20000,
+   "ppl_standard": 3.2064
+  },
+  "distillation": {
+   "pas": 5000,
+   "lot": 8,
+   "nseg": 4,
+   "seg": 128,
+   "octets_vus": 20480000,
+   "lr": 0.0001,
+   "temperature": 2.0,
+   "alpha": 0.7,
+   "bptt": "tronquée à 1 segment"
+  },
+  "bras": {
+   "temoin": "modèle nu",
+   "hierarchie": "état GRUCell(224) transporté",
+   "controle": "même architecture, état roulé (autre document)"
+  },
+  "graines": [
+   1,
+   2,
+   3
+  ],
+  "note_graines": "la graine ne variait d'abord rien (modèle chargé, pas de dropout, fenêtres VDC) ; les graines 2 et 3 décalent les fenêtres de (graine-1)*10 000 019"
+ },
+ "evaluation": {
+  "fenetres": 256,
+  "protocoles": [
+   "standard 128",
+   "segmenté 4x128",
+   "segmenté sans état"
+  ]
+ },
+ "runs": {
+  "temoin": {
+   "ppl_standard": [
+    2.963,
+    2.9649,
+    2.9639
+   ],
+   "ppl_segmente": [
+    2.994,
+    2.9901,
+    2.9939
+   ],
+   "ppl_segmente_sans_etat": [
+    2.994,
+    2.9901,
+    2.9939
+   ],
+   "moyenne_standard": 2.9639,
+   "moyenne_segmente": 2.9927
+  },
+  "hierarchie": {
+   "ppl_standard": [
+    2.9621,
+    2.9658,
+    2.966
+   ],
+   "ppl_segmente": [
+    2.9972,
+    2.9895,
+    2.9939
+   ],
+   "ppl_segmente_sans_etat": [
+    2.9959,
+    2.993,
+    2.9969
+   ],
+   "moyenne_standard": 2.9646,
+   "moyenne_segmente": 2.9935
+  },
+  "controle": {
+   "ppl_standard": [
+    2.9559,
+    2.9696,
+    2.9659
+   ],
+   "ppl_segmente": [
+    2.9933,
+    2.9934,
+    2.9988
+   ],
+   "ppl_segmente_sans_etat": [
+    2.9942,
+    2.9965,
+    2.9988
+   ],
+   "moyenne_standard": 2.9638,
+   "moyenne_segmente": 2.9952
+  }
+ },
+ "deltas": {
+  "hierarchie_moins_temoin_standard": 0.0007,
+  "hierarchie_moins_temoin_segmente": 0.0009,
+  "controle_moins_temoin_segmente": 0.0025,
+  "hierarchie_moins_controle_segmente": -0.0016,
+  "hierarchie_avec_etat_moins_sans_etat": -0.0017
+ },
+ "verdict": "négatif : l'état de section ne bat pas le modèle nu (+0,029 %) ; il transporte un peu d'information contre son propre contrôle sans état, mais coûte ce qu'il rapporte"
+}
