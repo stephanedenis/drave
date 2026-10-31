@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 0.7 h |
+| Durée | 0.8 h |
 | Tours | 2 |
-| Messages | 168 |
-| Appels d'outils | 170 |
+| Messages | 169 |
+| Appels d'outils | 171 |
 | Fichiers touchés | 9 |
-| Commandes | 142 |
+| Commandes | 143 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -79,7 +79,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 2 — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / … [791 caractères tronqués]
 
-*74 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Check campaign status
 - bash — Compute manifest source shares
@@ -159,7 +159,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 102 autres
+- … et 103 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -3227,3 +3227,137 @@ index a518d3fb..9f002e4f 100644
 … [1747 caractères tronqués]
   ```
 
+- **bash** `{"command": "sleep 45; git log --oneline -3; echo \"=== staged remaining\"; git diff --cached --stat | tail -3", "description": "Wait briefly for concurrent commit", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+9f1dcaae N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES)
+660c479c N2 — LA HIÉRARCHIE NE PAIE PAS SUR LA DISTILLATION NON PLUS (2,9935 CONTRE 2,9927, TROIS GRAINES)
+=== staged remaining
+ docs/schemas/natif-portes.svg            |  53 +++
+ docs/theorie/modele-natif.md             | 357 ++++++++++++++++++
+ 17 files changed, 2024 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "python3 tools/index_reports.py 2>&1 | tail -2; git diff reports/INDEX.md | head -20", "description": "Regenerate reports index and inspect diff", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+367 fiches → reports/INDEX.md
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index 287c9418..8a83092c 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tools/index_reports.py` — **364 fiches**. Les fichiers
++> **Généré** par `tools/index_reports.py` — **367 fiches**. Les fichiers
+ > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+ > la page d'état, elle, compte tous les `.md` de `reports/`.
+ 
+@@ -197,6 +197,8 @@
+ | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
+ | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
+ | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
++| [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
++| [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
+ | [rapport-n3.1-etat.m
+… [220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log -1 --format='%B' 3b9d179c | head -20; echo \"=== en-cours dead link?\"; grep -n \"rapport-n2-budget\" docs/pilotage/en-cours.md; ls reports/rapport-n2-budget.md 2>/dev/null || echo \"absent\"; echo \"=== py_compile\"; python3 -m py_compile tools/graphe_document.py tools/graphe_d … [184 caractères tronqués]`
+
+  ```
+PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET
+
+Un audit des outils a trouvé la même faute que celle qui avait coûté les archives de sessions :
+une vérification qui **passe au vert sans avoir rien vérifié**. Cinq cas étaient démontrables,
+chacun avec sa preuve d'injection.
+
+1. **La passe vide.** `toutes-les-portes.sh` filtre par `PORTES` ; un filtre qui ne matche rien
+   ne lançait **aucune** porte et concluait « TOUTES LES PORTES SONT VERTES », code 0. Il sort
+   maintenant en erreur. Contrôle : `PORTES=zzz-inexistant` → code 2, message explicite.
+
+2. **L'assertion perdue.** Cinq blocs `python3 - <<'PY'` (`porte-deepseek` ×3, `porte-jeux` ×2)
+   imprimaient leurs résultats sans que l'échec d'un `assert` remonte : une assertion fausse
+   affichait ✅ et sortait 0. Les blocs portent `|| exit 1`. Même faute dans `porte-topologie`,
+   où deux **refus** étaient imprimés puis jamais assertés (le `| tail` avalait le code) : les
+   codes de sortie sont désormais testés.
+
+3. **Le hook muet.** `tools/hooks/pre-commit` appelait archivage, rapport et journal avec
+   `|| true` — la faute historique, **triplée**. C'est elle qui a fait disparaître 43
+… [243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff docs/pilotage/en-cours.md | head -80", "description": "Review state diff to be committed", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 91bad92d..2f5247d1 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
++**Mis à jour : 2026-10-31, 18 h 10 HAE (heure locale, EDT).**
+ 
+ > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
+ > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
+@@ -23,7 +23,7 @@
+ > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
+ > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
+ 
+-### Session active — N2, le budget complet (`0b0a6a0d`)
++### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2, le budget complet
+ 
+ - **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
+   [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+@@ -37,10 +37,28 @@
+   fichiers réservés, ni cette page sans me le dire.
+ - **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+   `journal/sessions/
+… [3917 caractères tronqués]
+  ```
+
+- **bash** `{"command": "set -e\nPATHS=(\n docs/implantation/encodeur-visuel.md\n docs/pilotage/backlog/R44-encodeur-visuel.md\n docs/pilotage/backlog/index.md\n docs/pilotage/en-cours.md\n docs/pilotage/roadmap.md\n journal/2026-10-31/README.md\n journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md\n  … [771 caractères tronqués]`
+
+  ```
+=== index alternatif :
+A	docs/implantation/encodeur-visuel.md
+M	docs/pilotage/backlog/R44-encodeur-visuel.md
+M	docs/pilotage/backlog/index.md
+M	docs/pilotage/en-cours.md
+M	docs/pilotage/roadmap.md
+M	reports/INDEX.md
+A	reports/r44-ocr-pilote.json
+A	reports/rapport-r44-ocr-pilote.md
+M	tools/graphe_document.py
+A	tools/graphe_document_ocr.py
+A	tools/installer_ocr.sh
+A	tools/mesurer_ocr.py
+A	tools/porte-ocr.sh
+M	tools/taille_documents.py
+=== contrôle du hook avec l'index alternatif :
+  ✅ index : aucun fait stagé sans état
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"[revue ${PIPESTATUS[0]}]\"; bash tools/porte-tableaux.sh >/tmp/tab.log 2>&1; echo \"[tableaux $?]\"; tail -2 /tmp/tab.log", "description": "Final documentation gate check", "timeoutMs": 300000, "workdir": "/home/stephane/Data13 … [28 caractères tronqués]`
+
+  ```
+revue de documentation · 370 fiche(s) · 438 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[revue 0]
+[tableaux 0]
+  ✅ 1257 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+  ```
+
+- **bash** `{"command": "cat > /tmp/r44-msg.txt <<'EOF'\nR4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %\n\nLa ligne R4.4 était bloquée par une ressource, pas par une question : « aucun OCR installé ».\ntesseract 5.5.3 s'installe **sans root** dans … [2121 caractères tronqués]`
+
+  ```
+message prêt : 359 mots
+  ```
+
+- **bash** `{"command": "GIT_INDEX_FILE=/tmp/index.r44 git commit -F /tmp/r44-msg.txt 2>&1 | tail -12; echo \"[commit ${PIPESTATUS[0]}]\"", "description": "Commit result with alternate index", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`

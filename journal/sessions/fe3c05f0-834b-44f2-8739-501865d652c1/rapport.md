@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 145 |
-| Appels d'outils | 163 |
+| Messages | 151 |
+| Appels d'outils | 170 |
 | Fichiers touchés | 7 |
-| Commandes | 139 |
+| Commandes | 146 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 1 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
 
-*163 appels d'outils.* Actions notables :
+*170 appels d'outils.* Actions notables :
 
 - read
 - bash — Check active sessions status
@@ -41,7 +41,7 @@
 - bash — Verify no gate script still running
 - bash — List processes touching the repo
 - bash — List documentary gate scripts
-- … et 137 autres
+- … et 144 autres
 
 **Synthèse produite :**
 
@@ -103,7 +103,7 @@
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 99 autres
+- … et 106 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -180,6 +180,10 @@
 - **T1** `[N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32`
 - **T1** `[N2] lasts 4 days and is 30% complete and is colored in #b26a00`
 - **T1** `+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** | 10`
+- **T1** `2. **L'assertion perdue.** Cinq blocs `python3 - <<'PY'` (`porte-deepseek` ×3, `porte-jeux` ×2)`
+- **T1** `+  **WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à`
+- **T1** `+  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et`
+- **T1** `+  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).`
 
 ## 5. Erreurs rencontrées
 
@@ -191,4 +195,8 @@
 - **T1** : [stderr] head: cannot open '/tmp/ocrout.tsv' for reading: No such file or directory grep: /tmp/ocrout.tsv: No such file or directory [exit code: 2]
 - **T1** : [stderr] ls: cannot access 'work/ocr/root/usr/share/tessdata/': No such file or directory [exit code: 2]
 - **T1** : [code 0]   exactitude de la valeur : natif 100.00% · OCR 83.33%   PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)   page dégradée : WER 17.08% · exactit
+
+## 6. Commits
+
+- GIT_INDEX_FILE=/tmp/index.r44 git commit -F /tmp/r44-msg.txt 2>&1 | tail -12; echo "[commit ${PIPESTATUS[0]}]"
 

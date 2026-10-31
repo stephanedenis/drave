@@ -257,6 +257,10 @@ Le neurone est un **LIF à conductance** (équations 1–2 du papier) :
 Un spike présynaptique ajoute son poids à `g_e` (ou `g_i`) : `g_e ← g_e + w`. Le neurone décharge quand
 `V > V_thr`, puis `V ← V_reset` et il est **réfractaire** pendant quelques millisecondes.
 
+Dans l'équation, `g_e` et `g_i` sont les conductances **normalisées par 1 nS** ; les poids du tableau sont en
+nS, comme dans le code de référence. Un poids de 17 nS n'est donc pas un courant : c'est une **conductance**
+multiplicatrice.
+
 ### Le pas de temps
 
 `dt = 0,5 ms`. Une présentation dure **350 ms = 700 pas** ; le repos dure **150 ms = 300 pas**. Un exemple fait
@@ -389,13 +393,18 @@ def pas(t, etat, params, rng, trace):
     # 7. inhibition : un spike E programme un spike I au pas suivant
     for j in spikes:
         etat["spike_i"][j] = 1
+    trace.append(("I", t, [j for j, a in enumerate(etat["spike_i"]) if a]))
 
     return spikes
 ```
 
 **Ce que ce code ne fait pas** : il ne normalise pas les poids (l'option est choisie ailleurs), il ne gère pas
 le multi-exemple, et il fixe une convention d'ordre : la trace pré est mise à jour **après** les spikes post du
-même pas. C'est un choix, et la porte D1 le vérifie contre le simulateur de référence. C'est volontairement un
+même pas. C'est un choix, et la porte D1 le vérifie contre le simulateur de référence.
+
+**Les délais** : le v0 utilise un délai **nul** pour l'entrée et **un pas** pour l'inhibition. Le papier tire
+des délais de 0–10 ms (entrée) et 0–5 ms (E→I) ; les ajouter change la dynamique et doit être **mesuré**, pas
+supposé. Le simulateur de référence et le bloc Rust doivent utiliser **les mêmes** délais, sinon D1 diverge. C'est volontairement un
 **squelette de pas**, pas un simulateur complet : le simulateur de référence vit dans `tools/neuro/` (fichier `diehl_cook.py`), et le bloc Rust doit
 reproduire **exactement** ses spikes (porte D1).
 

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 89 |
-| Appels d'outils | 116 |
+| Messages | 93 |
+| Appels d'outils | 120 |
 | Fichiers touchés | 9 |
-| Commandes | 84 |
+| Commandes | 87 |
 | Sous-agents | 2 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — fais une documentation détaillée du modèle Drave natif. utilise beaucoup de diagrammes pour expliquer ce qui est origina … [164 caractères tronqués]
 
-*116 appels d'outils.* Actions notables :
+*120 appels d'outils.* Actions notables :
 
 - bash — Lister la structure du dépôt
 - grep
@@ -41,7 +41,7 @@
 - bash — Lire l'archive sur les réseaux impulsionnels
 - bash — Lire le bus et le chemin natif
 - bash — Chercher le principe de séparation
-- … et 95 autres
+- … et 98 autres
 
 **Synthèse produite :**
 
@@ -110,7 +110,7 @@
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 44 autres
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -239,4 +239,5 @@
 ## 6. Commits
 
 - DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 

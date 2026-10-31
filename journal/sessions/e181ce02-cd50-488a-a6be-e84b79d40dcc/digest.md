@@ -2457,3 +2457,60 @@ M docs/README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX\" 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer la documentation et les schémas"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-84]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-84", "wait": true, "timeout_ms": 180000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master bb3bfefe] DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+ 41 files changed, 9820 insertions(+), 31 deletions(-)
+ create mode 100644 docs/implantation/diehl-cook.md
+ create mode 100644 docs/schemas/diehl-cook-architecture.svg
+ create mode 100644 docs/schemas/diehl-cook-boucle.svg
+ create mode 100644 docs/schemas/diehl-cook-contrat.svg
+ create mode 100644 docs/schemas/diehl-cook-pipeline.svg
+ create mode 100644 docs/schemas/diehl-cook-placements.svg
+ create mode 100644 docs/schemas/diehl-cook-temps.svg
+ create mode 100644 docs/schemas/natif-cout-activite.svg
+ create mode 100644 docs/schemas/natif-drvm.svg
+ create mode 100644 docs/schemas/natif-graphe-n0.svg
+ create mode 100644 docs/schemas/natif-niveaux.svg
+ create mode 100644 docs/schemas/natif-original.svg
+ create mode 100644 docs/schemas/natif-pertes.svg
+ create mode 100644 docs/schemas/natif-portes.svg
+ create mode 100644 docs/theorie/modele-natif.md
+ create mode 100644 journal/sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/digest.md
+ create mode 100644 journal/sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/rapport.md
+ create mode 100644 journal/sessio
+… [764 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nt=t.replace(\"\"\"Un spike présynaptique ajoute son poids à `g_e` (ou `g_i`) : `g_e ← g_e + w`. Le neurone décharge quand\n`V > V_t … [2052 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh >/tmp/h1 2>&1; echo \"tableaux=$?\"; python3 tools/verifier_schemas.py >/tmp/h2 2>&1; echo \"schemas=$?\"; python3 tools/revue_documentation.py >/tmp/h3 2>&1; echo \"revue=$?\"; tail -2 /tmp/h3", "descrip … [50 caractères tronqués]`
+
+  ```
+tableaux=0
+schemas=0
+revue=0
+  revue de documentation · 370 fiche(s) · 438 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/implantation/diehl-cook.md && timeout 180 git commit -m \"DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer les précisions du cahi … [21 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-87]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-87", "timeout_ms": 180000, "wait": true}`
