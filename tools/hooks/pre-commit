@@ -18,11 +18,10 @@ fi
 
 # 2. Archive les traces de session DSH avant chaque commit : le journal doit
 #    accompagner le code, pas le suivre.
-python3 tools/archive_sessions.py --quiet >/dev/null 2>&1 || true
-python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
 # Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
 # régénéré ensuite pour lister les fichiers produits.
-python3 tools/journal_auto.py --quiet >/dev/null 2>&1 || true
-python3 tools/session_report.py --quiet >/dev/null 2>&1 || true
-git add journal 2>/dev/null || true
+python3 tools/journal_auto.py --quiet >/dev/null || { echo "  ⛔ journal du jour en échec"; exit 1; }
+git add journal || { echo "  ⛔ journal non ajouté à l'index"; exit 1; }
 exit 0

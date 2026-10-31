@@ -108,9 +108,13 @@ fi
 
 echo "=== 4. les refus (une topologie fausse ne doit pas se mesurer) ==="
 sed "s/\[$COUCHES, $((N-1))\]/[$((COUCHES+1)), $((N-1))]/" "$TOPO" > "$T/trou.json"
-$D "$M" --topologie "$T/trou.json" 2>&1 | tail -1
-$D "$M" --ppl-reparti "127.0.0.1:1" --topologie "$TOPO" --ids-file "$IDS" --limit 8 \
-    --ctx 256 --threads 8 2>&1 | tail -1
+TROU=$($D "$M" --topologie "$T/trou.json" 2>&1); CODE_TROU=$?
+printf '%s\n' "$TROU" | tail -1
+[ "$CODE_TROU" -ne 0 ] || { echo "  ❌ une topologie qui laisse un trou est ACCEPTÉE (code 0)"; exit 1; }
+PORT1=$($D "$M" --ppl-reparti "127.0.0.1:1" --topologie "$TOPO" --ids-file "$IDS" --limit 8 \
+    --ctx 256 --threads 8 2>&1); CODE_PORT1=$?
+printf '%s\n' "$PORT1" | tail -1
+[ "$CODE_PORT1" -ne 0 ] || { echo "  ❌ un nœud injoignable est ACCEPTÉ (code 0)"; exit 1; }
 # ---------------------------------------------------------------- 5. LE RELAIS
 # C1b pas 2 : trois régions sur TROIS instances (pilote + relais + sortie). Le
 # nœud du milieu applique SA plage puis transmet à son successeur ; le retour se

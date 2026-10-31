@@ -309,8 +309,9 @@ def main() -> int:
     slug = "--" + str(repo).strip("/").replace("/", "-") + "--"
     src = dsh / "sessions" / slug
     if not src.is_dir():
+        # pas de session = rien à rapporter, ce n'est PAS une panne
         print(f"aucune session pour {repo}", file=sys.stderr)
-        return 1
+        return 0
 
     # les entrées QUOTIDIENNES (journal/AAAA-MM-JJ.md) et le récit du sprint : ils ne sont pas
     # des sessions, et l'index ne les voyait pas — le journal paraissait ne contenir que des

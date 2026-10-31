@@ -57,10 +57,10 @@ IDS=${IDS:-/tmp/campagne24/ids_0.5B-Q8.txt}
 mkdir -p "$T"
 
 # les morceaux de mesure : deux textes jamais rejoués (m32, m20) et un texte hors domaine
-$P - "$T" <<'PY'
+$P - "$T" "$IDS" <<'PY' || exit 2
 import pathlib, re, sys
 t = pathlib.Path(sys.argv[1])
-ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path("/tmp/campagne24/ids_0.5B-Q8.txt").read_text()) if x.strip()]
+ids = [int(x) for x in re.split(r"[,\s]+", pathlib.Path(sys.argv[2]).read_text()) if x.strip()]
 pas = len(ids) // 34
 for i, nom in ((32, "m32"), (20, "m20")):
     (t / f"{nom}.txt").write_text(",".join(str(x) for x in ids[i * pas: i * pas + 1024]))

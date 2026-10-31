@@ -151,8 +151,9 @@ def main() -> int:
     slug = "--" + str(repo).strip("/").replace("/", "-") + "--"
     src = dsh / "sessions" / slug
     if not src.is_dir():
+        # pas de session = rien à archiver, ce n'est PAS une panne (le hook peut exiger 0)
         print(f"aucune session DSH pour {repo} (cherché : {src})", file=sys.stderr)
-        return 1
+        return 0
 
     dest = repo / "journal" / "sessions"
     dest.mkdir(parents=True, exist_ok=True)

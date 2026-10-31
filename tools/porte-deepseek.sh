@@ -22,7 +22,7 @@ python3 -m unittest discover -s tools/llm/tests -t tools || exit 1
 
 echo "  === dry-run de l'adaptateur ==="
 python3 tools/llm/deepseek.py --prompt "test de la porte" --dry-run --json > "$T/dry.json" || exit 1
-python3 - "$T/dry.json" <<'PY'
+python3 - "$T/dry.json" <<'PY' || exit 1
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
 assert "[dry-run]" in d["contenu"], d
@@ -31,7 +31,7 @@ print("     dry-run déterministe, aucune requête")
 PY
 
 echo "  === prompts publics ==="
-python3 - "$PWD/tools/llm/prompts_publics.jsonl" "$PWD/tools/llm/prompts_publics_300.jsonl" <<'PY'
+python3 - "$PWD/tools/llm/prompts_publics.jsonl" "$PWD/tools/llm/prompts_publics_300.jsonl" <<'PY' || exit 1
 import json, sys
 for chemin, attendu, trad_attendu in ((sys.argv[1], 60, 50), (sys.argv[2], 310, 300)):
     lignes = [json.loads(l) for l in open(chemin, encoding="utf-8") if l.strip()]
@@ -46,7 +46,7 @@ PY
 echo "  === dry-run du corpus professeur (ignoré par la distillation) ==="
 python3 tools/llm/enseignant.py --sortie "$T/enseignant-dry.jsonl" --limite 2 --dry-run >/dev/null || exit 1
 python3 tools/llm/distillation.py --entree "$T/enseignant-dry.jsonl" --sortie "$T/dist" >/dev/null
-python3 - "$T/dist/meta.json" <<'PY'
+python3 - "$T/dist/meta.json" <<'PY' || exit 1
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
 assert d["exemples"] == 0, d

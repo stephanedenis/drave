@@ -265,7 +265,7 @@ if abs(a - b) / a > 0.001:
 " || { echo "  ❌ le réglage transporté n'est pas honoré des deux côtés (cf. commentaire ci-dessus)"; exit 1; }
 echo "  ✅ la fenêtre mord ($R9 → $W9A) ET les deux découpages s'accordent ($W9A = $W9B, écart 0,00 %)"
 
-echo "=== 10. `--attn-sinks` n'est PAS mort : il est CIRCONSTANCIÉ (et le zéro n'existait pas) ==="
+echo "=== 10. \`--attn-sinks\` n'est PAS mort : il est CIRCONSTANCIÉ (et le zéro n'existait pas) ==="
 # CE QUE LE §46 bis AVAIT MAL LU, ET COMMENT L'ERREUR A ÉTÉ FAITE.
 #
 # Le sprint avait conclu que le compteur de puits était « écrit partout, transporté par le v7…

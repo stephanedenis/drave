@@ -22,8 +22,9 @@ D=${D:-./drave-core/target/release/drave}
 M=${MODELE:-$HOME/IA/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf}
 
 if [ ! -s "$M" ]; then
-    echo "  (modèle absent : $M — prérequis non vérifiable ici)"
-    exit 0
+    echo "  ❌ modèle absent : $M — le brouillon ne peut pas être vérifié"
+    echo "     (une porte ne rend pas vert un prérequis qu'elle n'a pas lu)"
+    exit 2
 fi
 
 # 1. la config embarquée déclare le brouillon

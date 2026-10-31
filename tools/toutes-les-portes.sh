@@ -42,6 +42,10 @@ if [ -n "$FILTRE" ]; then
     done
     portes=$(printf '%s\n' $gardees | sort -u)
 fi
+[ -n "$portes" ] || {
+    echo "  ❌ aucune porte ne correspond à PORTES=\"$FILTRE\" : la passe ne vérifierait RIEN"
+    exit 2
+}
 
 vertes=0; rouges=0; liste_rouges=""
 echo "=== PASSE COMPLÈTE DES PORTES ($(printf '%s\n' $portes | grep -c . ) portes, borne ${DELAI} s) ==="

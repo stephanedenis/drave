@@ -34,7 +34,7 @@ python3 tools/mesure_jeux.py --rapide --json "$SORTIE" || exit 1
 
 echo "  === langues (71 langues, 35 concepts) ==="
 python3 tools/mesure_langues.py --rapide --json "$SORTIE_L" >/dev/null || exit 1
-python3 - "$SORTIE_L" <<'PY'
+python3 - "$SORTIE_L" <<'PY' || exit 1
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
 c, co = d["couverture"], d["corpus"]
@@ -55,7 +55,7 @@ PY
 
 echo "  === maîtres (Lasker, Capablanca, Nimzowitsch, Payne, Smith, Cavendish) ==="
 python3 tools/mesure_maitres.py --rapide --json "$SORTIE_M" >/dev/null || exit 1
-python3 - "$SORTIE_M" <<'PY'
+python3 - "$SORTIE_M" <<'PY' || exit 1
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
 e, go, da, ca = d["echecs"], d["go"], d["dames"], d["cartes"]
