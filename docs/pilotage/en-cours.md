@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 11 h 21 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 11 h 50 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -23,28 +23,25 @@
 > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
 > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
 
-### Session `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` — clôture des sessions inachevées
+### Session à ouvrir — N2, la hiérarchie
 
-- **Id** : `22e518ee-81b8-4081-ae1b-f0d7a777a1d7`.
-- **Rôle** : **session unique** — terminer proprement les sessions inachevées avant toute ligne
-  du backlog : résultats committés, archives, plans, journal, état.
-- **Ce qu'elle fait** : `0b69f616` (R0.4, R0.5, R13) est **close et committée** ; les mandats
-  `8156fdcb`, `c3d0f0bd`, `N2-GPU` et la coordination `71d57f53` sont **archivés** dans
-  `journal/sessions/<id>/` (rapport + digest) ; l'outillage lit désormais les traces
-  `session.v4.jsonl.zstd` (le glob ne couvrait que l'ancien nom — d'où les archives manquantes).
-- **Ce que font les autres** : personne — **session unique**.
-- **Fichiers réservés** : `tools/archive_sessions.py`, `tools/session_report.py`,
-  `tools/journal_auto.py`, `journal/sessions/`, `journal/2026-10-30/README.md`,
-  `journal/2026-10-31/`, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`,
-  `reports/INDEX.md`, `docs/pilotage/backlog/`.
-- **Prochaine action** : commit de clôture (portes, revue, journal) ; ensuite **N2** (la
-  hiérarchie) ou **N4** (consigne courte) — les GPU sont libres.
-- **Bloquants** : aucun ; **R4.4** reste bloqué (aucun OCR installé).
+- **Id** : aucune session active — `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` est **close** (clôture
+  committée `eff8d8e4`) ; l'id sera celui de la session qui ouvre N2, et son plan s'écrit à
+  l'ouverture.
+- **Rôle** : **N2, la hiérarchie** — la seule ligne désignée ; **N4** (la consigne courte) prend
+  la file si N2 bloque.
+- **Ce qu'elle fait** : rien encore. Le mandat est de mesurer la **hiérarchie** (meilleur
+  2,6998, porte **< 2,5** non atteinte) et de trancher la question ouverte de R1.
+- **Ce que font les autres** : personne — une seule session.
+- **Fichiers réservés** : `models/`, `tools/` (natif), `reports/n2-*`, `journal/sessions/<id>/`.
+- **Prochaine action** : ouvrir la session, écrire son plan, puis attaquer **N2**.
+- **Bloquants** : aucun — les GPU sont libres ; **R4.4** reste bloqué (aucun OCR installé).
 - **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
 
 > **Sessions archivées** : `8156fdcb` (R0.1–R0.5), `c3d0f0bd` (R4, B10.2bis, A8.3b),
-> `N2-GPU` (distillation native), `71d57f53` (coordination), `0b69f616` (R0.4, R0.5, R13) —
-> rapports dans [`journal/sessions/`](../../journal/sessions/) et récit dans le journal du jour.
+> `N2-GPU` (distillation native), `71d57f53` (coordination), `0b69f616` (R0.4, R0.5, R13) et
+> `22e518ee` (clôture des cinq précédentes) — rapports dans
+> [`journal/sessions/`](../../journal/sessions/) et récit dans le journal du jour.
 
 ## Ce qui est en cours
 

@@ -5,18 +5,25 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**0 commits** · **1 session(s)** · **0 thème(s)**
+**1 commits** · **1 session(s)** · **1 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| docs | 1 | [docs.md](docs.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 11:35 | `eff8d8e4` | SESSIONS — 104 ARCHIVES RETROUVÉES, CINQ CLÔTURES, L'ÉTAT À UNE SEULE SESSION |
 
 ## Le récit de la journée (écrit à la main)
 

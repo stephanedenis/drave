@@ -10,6 +10,6 @@
   `tools/journal_auto.py`, `journal/sessions/`, `journal/2026-10-30/README.md`,
   `journal/2026-10-31/`, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`,
   `reports/INDEX.md`, `docs/pilotage/backlog/`
-- **Heartbeat** : 2026-10-31 11:21 HAE
-- **Prochaine action** : archives générées et vérifiées ; commit de clôture ; **ensuite N2** (la hiérarchie) ou **N4** (consigne courte)
-- **État** : actif
+- **Heartbeat** : 2026-10-31 11:50 HAE
+- **Prochaine action** : clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+- **État** : terminé
