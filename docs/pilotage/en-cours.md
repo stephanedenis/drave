@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 17 h 15 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -23,29 +23,26 @@
 > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
 > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
 
-### Session à ouvrir — N2, la hiérarchie
+### Session active — N2, le budget complet (`0b0a6a0d`)
 
-- **Id** : aucune session active — `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` est **close** (clôture
-  committée `eff8d8e4`) ; l'id sera celui de la session qui ouvre N2, et son plan s'écrit à
-  l'ouverture.
-- **Rôle** : **N2, la hiérarchie** — la seule ligne désignée ; **N4** (la consigne courte) prend
-  la file si N2 bloque.
-- **Ce qu'elle fait** : la **hiérarchie est mesurée deux fois, négative deux fois** — 3,9759
-  contre 3,9617 sur le petit corpus, puis **2,9935 contre 2,9927** sur le dispositif de
-  distillation reconstruit (professeur 23,57 M, trois graines). Fiches
-  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md).
-- **Ce que font les autres** : personne — une seule session.
-- **Fichiers réservés** : `models/`, `tools/` (natif), `reports/n2-*`, `journal/sessions/<id>/`.
-- **Prochaine action** : N2 ne porte plus la hiérarchie. Restent **le curriculum et les données**
-  (41 Mo, 4 sources, 20 000 pas) et **la capacité** (le 21,63 M donnait −8,1 % à budget égal) ;
-  **N4** prend la file si N2 bloque.
-- **Bloquants** : aucun — GPU libres ; **R4.4** bloqué (aucun OCR).
-- **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
+  [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2, le budget complet**.
+- **Ce qu'elle fait** : deux GPU en continu — **A** français seul (3 graines), **B** manifeste
+  4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129
+  sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,
+  20 000 pas, quatre sources) sur le dispositif reconstruit.
+- **Ce que font les autres** : documentation, backlog, **N4** (sans GPU), portes documentaires —
+  mais **pas** `toutes-les-portes.sh` (elle prend les GPU et fausserait la mesure), pas les
+  fichiers réservés, ni cette page sans me le dire.
+- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+  `journal/sessions/0b0a6a0d-…/`.
+- **Prochaine action** : fiche `reports/rapport-n2-budget.md`, journal, roadmap, commit.
+- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** bloqué (aucun OCR).
+- **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
 
-> **Sessions archivées** : `8156fdcb` (R0.1–R0.5), `c3d0f0bd` (R4, B10.2bis, A8.3b),
-> `N2-GPU` (distillation native), `71d57f53` (coordination), `0b69f616` (R0.4, R0.5, R13) et
-> `22e518ee` (clôture des cinq précédentes) — rapports dans
-> [`journal/sessions/`](../../journal/sessions/) et récit dans le journal du jour.
+> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`
+> — rapports dans [`journal/sessions/`](../../journal/sessions/).
 
 ## Ce qui est en cours
 
@@ -76,7 +73,7 @@
   l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Points de
   contrôle **conservés** (Data13TB + disque IA, manifeste vérifié). Fiches
   [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md) ;
-  suite : curriculum et capacité.
+  suite : **campagne budget et données en cours** (`0b0a6a0d`).
 
 ## Les chiffres de l'état
 
@@ -106,7 +103,7 @@ sources de blocage nommées.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
-| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie **négative 2×** ; N4 0/4 ; N5 gelé | **N2** (curriculum, capacité) ; **N4** (consigne) |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie **négative 2×** ; N4 0/4 ; N5 gelé | **N2** (budget et données, en cours) ; **N4** (consigne) |
 | **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |

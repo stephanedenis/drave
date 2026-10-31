@@ -1,0 +1,189 @@
+# Session 0b0a6a0d — Continue session work
+
+> **Journaux :** [le jour](../../2026-10-31/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
+| | |
+|---|---|
+| Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
+| Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
+| Début | 2026-10-31 17:17 |
+| Durée | 0.2 h |
+| Tours | 1 |
+| Messages | 85 |
+| Appels d'outils | 92 |
+| Fichiers touchés | 3 |
+| Commandes | 81 |
+| Sous-agents | 0 |
+| Commits | 1 |
+| Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/p
+… [41 caractères tronqués]
+
+## 1. Ce qui a été demandé
+
+**Tour 1** — continue
+
+## 2. Déroulé, étape par étape
+
+### Tour 1 — continue
+
+*92 appels d'outils.* Actions notables :
+
+- get_goal
+- bash — Show git status and recent commits
+- bash — Check state file sizes and recent journal
+- read
+- bash — Inspect uncommitted changes
+- bash — Check session status
+- bash — Check today's journal files
+- bash — Find N2 section in roadmap
+- bash — Read roadmap N2 details
+- bash — List N2 reports and tooling
+- bash — Find curriculum references and distiller scripts
+- bash — Check GPU availability
+- bash — Read R12 curriculum backlog card
+- bash — Read distillation script header
+- … et 75 autres
+
+**Synthèse produite :**
+
+⏵ Mettant `en-cours` à jour pour déclarer ma session et la carte des conflits
+
+Non — il ne l'était pas : la page datait de 17 h 15 et disait encore « aucune session active ». Je le corrige tout de suite, avec ma session, mes fichiers réservés et ce qu'une autre session peut prendre sans collision.
+
+## 3. Travail accompli
+
+### Fichiers créés ou modifiés
+
+| Fichier | Écritures | Éditions |
+|---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/distiller_budget.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 2 |
+
+### Commandes exécutées (échantillon)
+
+- **T1** Show git status and recent commits
+- **T1** Check state file sizes and recent journal
+- **T1** Inspect uncommitted changes
+- **T1** Check session status
+- **T1** Check today's journal files
+- **T1** Find N2 section in roadmap
+- **T1** Read roadmap N2 details
+- **T1** List N2 reports and tooling
+- **T1** Find curriculum references and distiller scripts
+- **T1** Check GPU availability
+- **T1** Read R12 curriculum backlog card
+- **T1** Read distillation script header
+- **T1** Check original distillation script for curriculum
+- **T1** Read original distillation report
+- **T1** Locate the 2.6998 result and ctx129 report
+- **T1** Find capacity result at 21.63M
+- **T1** List corpus sources
+- **T1** Read capacity reports
+- **T1** Find 4-source distillation recipe
+- **T1** Check archived checkpoints
+- **T1** Read multi-source corpus report
+- **T1** List archived artefacts and read backup README
+- **T1** Read distillation training loop
+- **T1** Inspect multi-source manifest
+- **T1** Read native model config
+- **T1** Read historical protocol JSON
+- **T1** List native reports
+- **T1** Find reports using multi corpus
+- **T1** Read multi-source distillation report
+- **T1** List all native PPL results sorted
+- **T1** Inspect the best chain checkpoints
+- **T1** Find multi-source corpus consumer
+- **T1** Read native corpus builder
+- **T1** Check gitignore and GPU environment
+- **T1** Locate the GPU Python environment
+- **T1** Verify GPU env at home
+- **T1** Read campaign checkpoint notes
+- **T1** Compute historical-protocol PPL for archived checkpoints
+- **T1** Read model forward and VDC helpers
+- **T1** Fix window shapes in campaign script
+- … et 41 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `4442c64c N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %)`
+- **T1** `21a361f9 R13.4 — DEUX GRAINES : BPE512 DANS LE BRUIT, BPE1024 PERD 4,09 %`
+- **T1** `85:[N2] lasts 4 days and is 30% complete and is colored in #b26a00`
+- **T1** `30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont`
+- **T1** `611 ms. La restitution depuis un document lu est **R31**.`
+- **T1** `suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 1`
+- **T1** `| **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %`
+- **T1** `2. **Le saut de calcul existe, le saut de contenu n'existe pas.** La sortie précoce gagne **24,05 %** de temps en`
+- **T1** `Quadro RTX 5000, 16384 MiB, 1 MiB, 0 %`
+- **T1** `/dev/mapper/system-root   11T  8,9T  2,0T  82% /home/stephane/Data13TB`
+- **T1** `- Corpus : `data/corpus_fr_train.txt` ; validation : derniers 5 %.`
+- **T1** `| **gain** | **−4,85 %** |`
+- **T1** `- La distillation **améliore** le student de **4,85 %** sans changer son architecture.`
+- **T1** `| précision principale | 72,80 % | **72,40 %** |`
+- **T1** `| tête 3 | 72,60 % | **72,53 %** |`
+- **T1** `| latence service 53 octets | **650,1 ms** |`
+- **T1** `- **650 ms** pour 53 octets : le service paie le cache par requête, pas la qualité.`
+- **T1** `**N0.15/N4.7 — meilleur student servi** : PPL **2,6998**, parité native, **650 ms**, texte plus`
+- **T1** `# N2.5b — capacité à budget égal : 21,63 M bat 11,47 M de 4,1 %`
+- **T1** `| **écart moyen** | — | **−8,1 %** |`
+- **T1** `| précision principale (moyenne) | **59,23 %** | **60,16 %** |`
+- **T1** `| tête 3 (moyenne) | **57,13 %** | **57,81 %** |`
+- **T1** `- À **budget égal** et **initialisation égale**, le modèle plus gros est **meilleur de 8,1 % en moyenne**`
+- **T1** `- Les précisions sont **proches** (59,1 % vs 58,8 %) : le gain de PPL ne se voit pas encore en top-1.`
+- **T1** `**N2.5b — capacité : positif** (−8,1 % de PPL à budget égal sur trois graines), **mais le prior`
+- **T1** `| précision principale | 67,96 % | **66,80 %** |`
+- **T1** `| tête 3 | 68,01 % | **65,43 %** |`
+- **T1** `- **Plus gros, toujours moins bon** : **3,381** contre **3,123**, soit **+8,3 %**.`
+- **T1** `- La tête 1 reste faible (**34,7 %**) : les premières couches du gros modèle ne sont pas assez`
+- **T1** `49 999 fenêtres, 4 sources ; professeur 30k 1,734 (0,794 bit/octet) ; student 3,123 à 20 000 pas ; meilleur 2,6998 ; plateau 2,708. Le 21,63 M à budget égal donne −8,1 %, mais à 20 000 pas il est pire`
+- **T1** `| `corpus_fr.txt` | 4,63 Mo, 72 403 fenêtres possibles |`
+- **T1** `| `udhr_train.txt` | 4,38 Mo, 68 433 |`
+- **T1** `| `corpus_en.txt` | 100,28 Mo, 1 566 813 |`
+- **T1** `| `corpus_mixte_litt.txt` | 12,23 Mo, 191 143 |`
+- **T1** `- Quotas **équilibrés** : l'anglais, 100 Mo, est sous-représenté par rapport à son volume.`
+- **T1** `| `artefacts/route-teacher-20k/` | 90 Mo | professeur byte-level 23,57 M, 20 000 pas, 0,9195 bit/octet (dossier HF) |`
+- **T1** `| `artefacts/drave-n0-base-20k.pt` | 46 Mo | élève de base, 20 000 pas, PPL 3,2064 |`
+- **T1** `| `artefacts/{temoin,hierarchie,controle}-g{1,2,3}.pt` | 9 × 47 Mo | les neuf points de contrôle de la distillation |`
+- **T1** `| `artefacts/*.pt.drvm` | 9 × 47 Mo | exports DRVM des mêmes points (lecture par le moteur) |`
+- **T1** `distillation 3 bras × 3 graines, 5 000 pas, lot 8, 4 segments de 128, lr 1e-4, T=2, α=0,7.`
+- **T1** ``/home/stephane/Data13TB/stephane/backups/qtrinet/qtrinet-2026-10-31.bundle` (31 Mo, historique`
+- **T1** `- Corpus : `data/corpus_multi_train.txt` (115,4 Mo) ; validation 6,08 Mo.`
+- **T1** `| précision principale | — | **36,34 %** |`
+- **T1** `| têtes précoces | — | **30,10 / 34,08 / 36,83 %** |`
+- **T1** `- **Écart student − professeur** : **-0.055** de PPL (**-0.6 %**).`
+- **T1** `- La **précision** tombe à **36,3 %** : le multi-sources est un autre problème.`
+- **T1** `| précision principale | 72,62 % | **72,80 %** |`
+- **T1** `| tête 3 | 72,69 % | **72,60 %** |`
+- **T1** `- La précision monte à **72,80 %** ; la tête 3 recule légèrement à **72,60 %**.`
+- **T1** `3 bras (temoin, hierarchie, controle) × 3 graines, 5 000 pas, lot 8, 4 segments de 128`
+- **T1** `(= 20,48 Mo vus par run), lr 1e-4, T=2, alpha=0,7, distillation + CE + têtes.`
+- **T1** `(4×128, état transporté). Elles ne sont **pas** comparables à 2,6998 / 3,123 : les fenêtres`
+- **T1** `| bras | standard 128 | segmenté 4×128 | segmenté sans état |`
+- **T1** `Écart total entre les trois bras : **0,0039** (0,13 %). L'état ne domine pas le témoin, et il est`
+- **T1** ``(graine-1) × 10 000 019` ; contrôle : perte au pas 1 = 106,5571 (g1) contre 121,5763 (g2).`
+- **T1** `Loading weights:   0%|          | 0/68 [00:00<?, ?it/s]`
+- **T1** `Loading weights: 100%|██████████| 68/68 [00:00<00:00, 932.90it/s]`
+- **T1** `[still running after 60000ms; moved to background job bash-48]`
+- **T1** `0, 1164 MiB, 82 %`
+- **T1** `1, 1164 MiB, 78 %`
+- **T1** `À côté : 232 transcripts de sessions (413 Mo) et un bundle git du dépôt (31 Mo, historique`
+- **T1** `0, 1164 MiB, 83 %`
+- **T1** `1, 1164 MiB, 83 %`
+- **T1** `# fenêtres (82 %). `equilibre` donne le même quota à chaque source.`
+- **T1** `| 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |`
+
+## 5. Erreurs rencontrées
+
+2 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
+- **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
+
+## 6. Commits
+
+- ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40  Une seconde session peut démarrer : en-cours nomme désormais la session a
+

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **1 session(s)** · **5 thème(s)**
+**9 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,6 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -21,6 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 0.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -35,6 +37,7 @@
 | 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |
 | 13:03 | `48243e3d` | RÉFÉRENCES — LA PASSE DU 31 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET (2 489 MOTS) |
 | 16:38 | `660c479c` | N2 — LA HIÉRARCHIE NE PAIE PAS SUR LA DISTILLATION NON PLUS (2,9935 CONTRE 2,9927, TROIS GRAINES) |
+| 17:02 | `9f1dcaae` | N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES) |
 
 ## Le récit de la journée (écrit à la main)
 
