@@ -3429,3 +3429,162 @@ index 1954d18f..e4dff9ba 100644
   ```
 
 - **bash** `{"command": "set -e\nPATHS=(\n docs/implantation/encodeur-visuel.md\n docs/pilotage/backlog/R44-encodeur-visuel.md\n docs/pilotage/backlog/index.md\n docs/pilotage/en-cours.md\n docs/pilotage/roadmap.md\n reports/INDEX.md\n reports/r44-ocr-pilote.json\n reports/rapport-r44-ocr-pilote.md\n tools/grap … [680 caractères tronqués]`
+
+  ```
+tools/installer_ocr.sh                             |  84 +++
+ tools/mesurer_ocr.py                               | 419 +++++++++++++
+ tools/porte-ocr.sh                                 |  29 +
+ tools/taille_documents.py                          |   6 +-
+ 24 files changed, 1938 insertions(+), 65 deletions(-)
+=== hook check
+  ✅ index : aucun fait stagé sans état
+=== commit
+ 29 files changed, 2176 insertions(+), 85 deletions(-)
+ create mode 100644 docs/implantation/encodeur-visuel.md
+ create mode 100644 reports/r44-ocr-pilote.json
+ create mode 100644 reports/rapport-r44-ocr-pilote.md
+ create mode 100755 tools/graphe_document_ocr.py
+ create mode 100755 tools/installer_ocr.sh
+ create mode 100755 tools/mesurer_ocr.py
+ create mode 100755 tools/porte-ocr.sh
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"=== stat\"; git show --stat --oneline HEAD | head -35; echo \"=== status\"; git status --short | head -25", "description": "Verify commit content and index state", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+58103738 DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+bb3bfefe DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+=== stat
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+ docs/implantation/encodeur-visuel.md               | 128 ++++
+ docs/pilotage/backlog/R44-encodeur-visuel.md       |  29 +-
+ docs/pilotage/backlog/index.md                     |   2 +-
+ docs/pilotage/en-cours.md                          |  39 +-
+ docs/pilotage/roadmap.md                           |  15 +-
+ journal/2026-10-31/README.md                       |   9 +-
+ journal/2026-10-31/apprentissage.md                |   4 +-
+ journal/2026-10-31/distribue.md                    |   7 +-
+ journal/2026-10-31/docs.md                         |   4 +-
+ journal/2026-10-31/mesures.md                      |   4 +-
+ journal/2026-10-31/modele.md                       |   4 +-
+ journal/2026-10-31/portes.md                       |   4 +-
+ journal/README.md                                  
+… [2081 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== staged (real index)\"; git diff --cached --name-only | head -30; echo \"=== reset mixed\"; git reset -q; echo \"[reset $?]\"; git status --short | head -25; echo \"=== diffs restants\"; git diff --stat | tail -8", "description": "Sync index with HEAD and inspect tree", "workd … [55 caractères tronqués]`
+
+  ```
+=== staged (real index)
+docs/implantation/encodeur-visuel.md
+docs/pilotage/backlog/R44-encodeur-visuel.md
+docs/pilotage/backlog/index.md
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+journal/2026-10-31/README.md
+journal/2026-10-31/apprentissage.md
+journal/2026-10-31/distribue.md
+journal/2026-10-31/docs.md
+journal/2026-10-31/mesures.md
+journal/2026-10-31/modele.md
+journal/2026-10-31/portes.md
+journal/README.md
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+reports/INDEX.md
+reports/r44-ocr-pilote.json
+reports/rapport-r44-ocr-pilote.md
+tools/graphe_document.py
+tools/graphe_document_ocr.py
+tools/installer_ocr.sh
+tools/mesurer_ocr.py
+tools/porte-ocr.sh
+tools/taille_documents.py
+=== reset mixed
+[reset 0]
+ M .gitignore
+ m tools/docwatch
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+=== diffs restants
+ .gitignore
+… [66 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 39,90p tools/sessions.py; echo \"=== 142-190\"; sed -n 142,190p tools/sessions.py", "description": "Read session plan parsing and checks", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def lire_plan(chemin: Path) -> dict:
+    champs: dict[str, str] = {}
+    for ligne in chemin.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\s*[-*]\s*\*\*(.+?)\*\*\s*:\s*(.*?)\s*$", ligne)
+        if m:
+            champs[_cle(m.group(1))] = _valeur(m.group(2))
+    # tolérances : Role / Perimetre sans accent
+    for alias, cible in (("role", "rôle"), ("perimetre", "périmètre"),
+                         ("fichiers reserves", "fichiers réservés"),
+                         ("prochaine", "prochaine action"), ("etat", "état")):
+        if cible not in champs and alias in champs:
+            champs[cible] = champs[alias]
+    sid = champs.get("session") or chemin.parent.name
+    per = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("périmètre", "")) if x.strip()]
+    fic = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("fichiers réservés", "")) if x.strip()]
+    hb = champs.get("heartbeat", "")
+    heartbeat = None
+    age = None
+    try:
+        brut = re.sub(r"\s*(HAE|EDT|EST|UTC[−-]?[0-9]+)\s*$", "", hb).strip()
+        if "T" in brut:
+            heartbeat = datetime.fromisoformat(brut)
+        else:
+            heartbeat = datetime.strptime
+… [3381 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"ETATS_CONNUS\\|ACTIFS\\|A_CONFIRMER\\|CHAMPS\" tools/sessions.py | head -8; sed -n \"$(grep -n 'ETATS_CONNUS' tools/sessions.py | head -1 | cut -d: -f1),+12p\" tools/sessions.py", "description": "Read known session states", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Q … [8 caractères tronqués]`
+
+  ```
+23:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+25:ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+26:A_CONFIRMER = {"à confirmer", "a confirmer"}
+27:ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
+146:    actifs = [p for p in plans if p["etat"] in ACTIFS]
+149:        manquants = [c for c in CHAMPS if c not in p["champs"]]
+152:        if p["etat"] not in ETATS_CONNUS:
+154:        if p["etat"] in A_CONFIRMER:
+ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
+PEREMPTION_MIN = 45
+
+
+def _cle(s: str) -> str:
+    return re.sub(r"\s+", " ", s.strip().lower())
+
+
+def _valeur(s: str) -> str:
+    return s.strip().strip("`").strip()
+
+
+def lire_plan(chemin: Path) -> dict:
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# 1. le plan : la session est close sur son résultat\np=pathlib.Path('journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md'); s=p.read_text()\ns=s.replace('- **Heartbeat** : 2026-10-31 18:00','- **Heartbeat** : 2026-10-31 18:15')\ns=s.replace(\ … [1470 caractères tronqués]`
+
+  ```
+clôture écrite
+  ✅ plans cohérents
+[sessions 0]
+  en-cours · 1219 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[en-cours 0]
+44:> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
+45-> `fe3c05f0`
+46-> — rapports dans [`journal/sessions/`](../../journal/sessions/).
+  ```
+
+- **bash** `{"command": "git diff --cached --name-only | head; echo \"[staged: $(git diff --cached --name-only | wc -l)]\"; git add docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md\ncat > /tmp/close-msg.txt <<'EOF'\nSESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ … [769 caractères tronqués]`

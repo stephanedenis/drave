@@ -13,6 +13,7 @@
 - **Fichiers réservés** : `work/ocr/`, `tools/installer_ocr.sh`, `tools/graphe_document_ocr.py`,
   `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`,
   `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`.
-- **Heartbeat** : 2026-10-31 18:00
-- **Prochaine action** : la fiche, le journal, la roadmap, le commit — puis les **scans réels**.
-- **État** : en cours
+- **Heartbeat** : 2026-10-31 18:15
+- **Prochaine action** : aucune — la session se ferme sur le résultat committé (`0088fc2f`).
+  La suite (scans réels, exposants, layout) est une **nouvelle** session ; R4.4 reste ouverte.
+- **État** : terminé

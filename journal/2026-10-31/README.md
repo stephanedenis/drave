@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **8 session(s)** · **6 thème(s)**
+**13 commits** · **8 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -47,6 +47,7 @@
 | 17:31 | `54dc7a26` | ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40 |
 | 18:04 | `bb3bfefe` | DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX |
 | 18:06 | `58103738` | DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS |
+| 18:09 | `0088fc2f` | R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 % |
 
 ## Le récit de la journée (écrit à la main)
 

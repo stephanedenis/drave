@@ -4,11 +4,18 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 17:02 | `9f1dcaae` | N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES) | `en-cours.md`, `README.md`, `apprentissage.md` (+2) |
+| 18:09 | `0088fc2f` | R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 % | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `index.md` (+26) |
+
+## Chiffres du jour
+
+`4,48 %` · `90 %` · `26,7 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -23,7 +30,9 @@
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/rapport-n2-distillation.md](../../reports/rapport-n2-distillation.md)
+- [reports/rapport-r44-ocr-pilote.md](../../reports/rapport-r44-ocr-pilote.md)
 
 <!-- notes -->
 

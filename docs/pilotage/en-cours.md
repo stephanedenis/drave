@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 18 h 10 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 18 h 15 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -41,25 +41,8 @@
 - **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** partielle (OCR installé).
 - **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
 
-### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, l'OCR et sa parité
-
-- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — mandat dans
-  [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
-- **Rôle** : **R4.4, l'OCR et sa parité** — **sans GPU**, pour ne pas concurrencer N2.
-- **Ce qu'elle fait** : installe tesseract **sans root** (`work/ocr/`), le branche sur le graphe
-  R0.1 (même manifeste, **confiance** dans la provenance) et mesure **10 pages** rendues :
-  **WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à
-  **partielle**. Fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
-- **Ce que font les autres** : N2 garde les GPU ; cette session ne prend ni GPU, ni
-  `toutes-les-portes.sh`, ni les fichiers réservés de N2.
-- **Fichiers réservés** : `work/ocr/`, `tools/installer_ocr.sh`, `tools/graphe_document_ocr.py`,
-  `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`,
-  `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`.
-- **Prochaine action** : les **scans réels** (10 pages photocopiées), les **exposants**, le layout.
-- **Bloquants** : aucun — le corpus de scans réels manque, il est nommé.
-- **Journal** : [31/10](../../journal/2026-10-31/README.md).
-
-> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`
+> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
+> `fe3c05f0`
 > — rapports dans [`journal/sessions/`](../../journal/sessions/).
 
 ## Ce qui est en cours

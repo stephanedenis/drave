@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 154 |
-| Appels d'outils | 173 |
+| Messages | 160 |
+| Appels d'outils | 179 |
 | Fichiers touchés | 7 |
-| Commandes | 149 |
+| Commandes | 155 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
 
-*173 appels d'outils.* Actions notables :
+*179 appels d'outils.* Actions notables :
 
 - read
 - bash — Check active sessions status
@@ -41,7 +41,7 @@
 - bash — Verify no gate script still running
 - bash — List processes touching the repo
 - bash — List documentary gate scripts
-- … et 147 autres
+- … et 153 autres
 
 **Synthèse produite :**
 
@@ -103,7 +103,7 @@
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 109 autres
+- … et 115 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -184,6 +184,7 @@
 - **T1** `+  **WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à`
 - **T1** `+  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et`
 - **T1** `+  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).`
+- **T1** `0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %`
 
 ## 5. Erreurs rencontrées
 
@@ -200,4 +201,5 @@
 
 - GIT_INDEX_FILE=/tmp/index.r44 git commit -F /tmp/r44-msg.txt 2>&1 | tail -12; echo "[commit ${PIPESTATUS[0]}]"
 - set -e PATHS=(  docs/implantation/encodeur-visuel.md  docs/pilotage/backlog/R44-encodeur-visuel.md  docs/pilotage/backlog/index.md  docs/pilotage/en-cours.md  d
+- git diff --cached --name-only | head; echo "[staged: $(git diff --cached --name-only | wc -l)]"; git add docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834
 
