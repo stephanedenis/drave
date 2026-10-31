@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **1 session(s)** · **4 thème(s)**
+**8 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -33,6 +34,7 @@
 | 12:59 | `3b9d179c` | PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET |
 | 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |
 | 13:03 | `48243e3d` | RÉFÉRENCES — LA PASSE DU 31 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET (2 489 MOTS) |
+| 16:38 | `660c479c` | N2 — LA HIÉRARCHIE NE PAIE PAS SUR LA DISTILLATION NON PLUS (2,9935 CONTRE 2,9927, TROIS GRAINES) |
 
 ## Le récit de la journée (écrit à la main)
 

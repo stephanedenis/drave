@@ -83,3 +83,17 @@ sur le dispositif de distillation. Il ne doit plus être la prochaine action de 
 l'ordre du graphe : **le curriculum et les données** (41 Mo, 4 sources, 20 000 pas), **la
 capacité** (le 21,63 M à budget égal donnait −8,1 %), et **la fenêtre brute**, que R11 doit
 trancher. La porte **< 2,5** n'est pas atteinte et n'a pas été approchée ici.
+
+## Conservation des points de contrôle
+
+Les poids ne sont pas versionnés (le dépôt ignore `models/` et `data/`), mais ils ne sont plus
+jetés avec `/tmp` : la campagne est archivée sur deux disques, avec empreintes vérifiées.
+
+- **primaire** : `/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/` — 1,4 Go, 65 fichiers,
+  `MANIFESTE.sha256` vérifié, archive `n2-2026-10-31.tar.zst` (1,3 Go) testée ;
+- **secondaire** : `/home/stephane/IA/artefacts/n2/2026-10-31/` — même contenu, autre périphérique ;
+- **hors site** : Google Drive, `rclone` installé, en attente de l'autorisation du compte.
+
+Restauration vérifiée : un point de contrôle extrait de l'archive porte la même empreinte que dans
+le manifeste. Les transcripts des sessions DSH (413 Mo) et un bundle git du dépôt (31 Mo) sont
+sauvegardés à côté. Voir `backups/README.md`.

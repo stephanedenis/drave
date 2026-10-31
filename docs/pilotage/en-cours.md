@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 16 h 50 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 17 h 15 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -71,9 +71,10 @@
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
-  **N2.h1** : 3,9759 contre 3,9617, contrôle étranger 3,9764 — le contenu de l'état ne se lit pas.
+  **N2.h1** : 3,9759 contre 3,9617, contrôle 3,9764 — rien ne se lit.
   **N2.h2** (distillation, professeur refait, 3 graines) : **2,9935** contre **2,9927** (+0,029 %) ;
-  l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Fiches
+  l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Points de
+  contrôle **conservés** (Data13TB + disque IA, manifeste vérifié). Fiches
   [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md) ;
   suite : curriculum et capacité.
 
