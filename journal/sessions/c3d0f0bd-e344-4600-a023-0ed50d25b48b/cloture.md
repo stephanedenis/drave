@@ -9,26 +9,26 @@
 
 - **R4.1 — le bloc tableaux** : 35 tableaux, **996 cellules**, **802** exactes à leur tranche de
   source, `filtre`/`jointure`/`agrégat`, texte plat **0/3**. Fiche
-  [`rapport-r41-bloc-tableaux.md`](../../reports/rapport-r41-bloc-tableaux.md), commit `7fb1c8a6`.
+  [`rapport-r41-bloc-tableaux.md`](../../../reports/rapport-r41-bloc-tableaux.md), commit `7fb1c8a6`.
 - **R4.2 — le bloc code** : **294/294** fichiers de `tools/` (453 038 nœuds), **24/24** extraits
   exécutés, **7/7** refus nommés, texte seul **0/3**. Fiche
-  [`rapport-r42-bloc-code.md`](../../reports/rapport-r42-bloc-code.md), commit `4ccf641f`.
+  [`rapport-r42-bloc-code.md`](../../../reports/rapport-r42-bloc-code.md), commit `4ccf641f`.
 - **R4.3 — le bloc maths** : **32/32** formules exactes et confirmées par **sympy**, **10/10**
   dérivées, **6/6** équations, surface **0/3**. Fiche
-  [`rapport-r43-bloc-maths.md`](../../reports/rapport-r43-bloc-maths.md), commit `6415d58b`.
+  [`rapport-r43-bloc-maths.md`](../../../reports/rapport-r43-bloc-maths.md), commit `6415d58b`.
 - **Le miroir entrée/sortie** (règle 6) : **34/34** tableaux, **296/296** modules, **42/42**
   formules rendus puis relus à l'identique ; trois contrôles négatifs perdus. Fiche
-  [`rapport-miroir-blocs.md`](../../reports/rapport-miroir-blocs.md), commit `d2457e46`.
+  [`rapport-miroir-blocs.md`](../../../reports/rapport-miroir-blocs.md), commit `d2457e46`.
 - **A8.3 — le défaut place+perte** : refusé par la mesure — les portes épinglées bougent de
-  **−5,9 % à +19,5 %**. Fiche [`rapport-a83-defaut.md`](../../reports/rapport-a83-defaut.md),
+  **−5,9 % à +19,5 %**. Fiche [`rapport-a83-defaut.md`](../../../reports/rapport-a83-defaut.md),
   commit `a489d9ff`.
 - **A8.3b — les trois régimes de KV** : f32 / mélange tardif / int8 partout ; le mélange améliore
   **3 mesures sur 6**, l'int8 partout dégrade partout ; `DRAVE_KV_BITS=8` redonne exactement le
-  budget 10 %. Fiche [`rapport-a83b-regimes.md`](../../reports/rapport-a83b-regimes.md).
+  budget 10 %. Fiche [`rapport-a83b-regimes.md`](../../../reports/rapport-a83b-regimes.md).
 - **B10.2bis — le décodeur** : **négatif net** — attention croisée **11,2** contre projection
   **11,1** (plancher **38,5**), 3 bras × 3 graines ; à **1800 pas** la traduction reste entre
   **10,2 et 11,4**. Ce n'était ni l'attention ni la durée. Fiche
-  [`rapport-b102bis-decodeur.md`](../../reports/rapport-b102bis-decodeur.md), commits `0c074374`,
+  [`rapport-b102bis-decodeur.md`](../../../reports/rapport-b102bis-decodeur.md), commits `0c074374`,
   `8c3ba915`.
 - **Le graphe** : 7 fiches créées (A3.2, A3.3, A8.0, B10.2bis, A8.3, A2.6, N3) ; **37 fiches, 42
   arêtes, une seule ligne sans fiche** (N5, gelé), 0 arête morte, 0 cycle.
@@ -45,5 +45,5 @@
 
 ## Journal
 
-- [Journée du 2026-10-29](../2026-10-29/README.md)
-- [Index des sessions](../README.md#sessions)
+- [Journée du 2026-10-29](../../2026-10-29/README.md)
+- [Index des sessions](../../README.md#sessions)

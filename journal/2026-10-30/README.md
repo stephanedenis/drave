@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **0 session(s)** · **7 thème(s)**
+**22 commits** · **5 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
@@ -21,8 +21,13 @@
 
 ## Sessions DSH
 
-Aucune session indexée pour ce jour ; voir
-[l'index des sessions](../README.md#sessions).
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0b69f616-5c75-4c34-b97a-ae05564812af` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | [rapport](../sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) · [digest](../sessions/0b69f616-5c75-4c34-b97a-ae05564812af/digest.md) |
+| `71d57f53-8b41-4220-84dd-7bb9eedc88d9` | Évaluation des techniques de lecture rapide pour Drave | 2026-10-29 07:42 | 29.9 h | [rapport](../sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/rapport.md) · [digest](../sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/digest.md) |
+| `8156fdcb-5033-4ba4-a5f3-f8a078e6e57e` | Réviser roadmap et backlog, établir priorités | 2026-10-29 08:40 | 28.9 h | [rapport](../sessions/8156fdcb-5033-4ba4-a5f3-f8a078e6e57e/rapport.md) · [digest](../sessions/8156fdcb-5033-4ba4-a5f3-f8a078e6e57e/digest.md) |
+| `c3d0f0bd-e344-4600-a023-0ed50d25b48b` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | [rapport](../sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) · [digest](../sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/digest.md) |
+| `cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | [rapport](../sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) · [digest](../sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -49,6 +54,7 @@ Aucune session indexée pour ce jour ; voir
 | 13:25 | `842e1770` | SESSIONS — LES TROIS PLANS CONFIRMÉS : PÉRIMÈTRES, FICHIERS, HEARTBEAT 13:05 |
 | 13:30 | `21a361f9` | R13.4 — DEUX GRAINES : BPE512 DANS LE BRUIT, BPE1024 PERD 4,09 % |
 | 13:32 | `b33b56ab` | LA CARTE DE DÉCISION DES CHANTIERS — LA PROFONDEUR DE DÉPENDANCE COMME AXE, LES SOURCES NOMMÉES |
+| 13:35 | `f590d884` | DOCS — CONTINUITÉ 1 134 MOTS, ORGANISATION 1 579 : T0 3 989 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -95,4 +101,33 @@ en bas, les **sources de blocage** nommées (Colab, FPGA, VRAM, corpus). Elle se
 Et une convention pour l'humain : le **premier item** de la liste de tâches d'un écran TUI porte
 `Session <id> — <rôle>`, le même id que le titre du bloc d'`en-cours` et que le champ `Session`
 du plan. Trois supports, une identité — écrite dans `continuite.md` § 4.
+**Session `0b69f616` — les chantiers du lecteur sont clos, l'état redevient unique.**
+
+Les trois mandats actifs sont terminés : il n'y a plus qu'une session, et elle ferme ce qui
+traînait. **R0.4** d'abord : la tête de survol rejouée sur le **corpus gelé** donne **0,540**
+contre BM25 **0,720** — après quatre versions et deux corpus, l'écart reste de 18 à 24 points.
+Le négatif est robuste ; la porte « la tête bat le classique à budget égal » n'est pas atteinte
+pour le survol, alors que le balayage classique (0,984) et le déclencheur de cascade (0,894,
+publié) sont livrés.
+
+**R0.5** ensuite : le routeur est rejoué sur le corpus gelé, **331 questions**, et le signal
+monte à **0,839**. Mais le meilleur transfert (z-score) donne **0,819** contre **0,871** sur le
+lexical, **0,313** contre **0,373** sur les paraphrases : un signal qui prédit n'est pas une
+règle qui décide. Le gain maximal possible n'est que de 8,2 points. R0.5 est **close en
+négatif**, avec sa condition nommée (calibration apprise, banc de paraphrases plus grand).
+
+Au passage, un **bug de clé** : deux questions de `format-flux.md` ont le même libellé mais deux
+passages d'or différents ; l'appariement `(document, question)` en écrasait une. La clé porte
+maintenant le gold, et les 331 questions sont toutes comptées — un N qui change sans le dire
+est un résultat qui ment.
+
+**R13** enfin : la décision est **octets**. À budget d'octets égal, le BPE 512 est dans le bruit
+(+0,39 % sur deux graines), le 1024 perd 4,09 %, l'anglais 4,22 et 6,59 %. Le « gain de 11 % »
+du pilote était un **artefact de budget** : à pas égaux, le BPE voit deux fois plus d'octets.
+La spécification vit dans `docs/implantation/tokenisation.md`, la fiche dans
+`reports/rapport-r13-decision.md`.
+
+**Trois chantiers clos, un état réécrit.** `en-cours` ne porte plus qu'une session et une
+frontière de graphe de **4 items** (A2.6, N2, N3, N4) ; le reste est mesuré, bloqué nommé,
+ou du récit.
 <!-- /notes -->

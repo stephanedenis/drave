@@ -119,7 +119,7 @@ graphe.
   lisible seul**.
 - **Dépendance au professeur** : la distillation peut plafonner ; le contrôle par permutation et
   le jeu tenu à l'écart sont obligatoires.
-- **Octets** : séquences 3–4× plus longues ; le BPE est une **décision de v1**, pas un prérequis.
+- **Octets** : séquences 3–4× plus longues ; le BPE a été **mesuré et écarté** (R13, bits/octet à budget égal) — il reste une condition de réouverture à 50–100 M, pas un prérequis.
 - **Données** : sans 50 000 séquences, la capacité ne paie pas — B9 l'a déjà montré.
 
 ## 8. La phrase

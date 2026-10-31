@@ -1,13 +1,14 @@
-# R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas
+# R0.5 — le routeur : le signal prédit (0,839), la règle ne transfère pas
 
-> **Ligne de roadmap** : R0.5 · **Date** : 2026-10-29 · **Verdict** : ⚠️ **partiel** — le signal
-> BM25 **prédit** quel lecteur gagne (AUC **0,785**, contrôles à 0,41), mais un **seuil
-> absolu ne transfère pas** d'un banc à l'autre (0,496 et 0,421, contre 0,855 et 0,737 pour le
-> choix fixe). Le routeur n'est **pas déployé**.
+> **Ligne de roadmap** : R0.5 · **Date** : 2026-10-30 · **Verdict** : ❌ **négatif** — sur le
+> corpus **gelé**, le signal BM25 **prédit** quel lecteur gagne (AUC **0,839** ; contrôles à
+> 0,453–0,510), mais **aucune règle ne bat le choix fixe** : le meilleur transfert (z-score)
+> donne **0,819** contre **0,871** sur le lexical et **0,313** contre **0,373** sur les
+> paraphrases. Le routeur n'est **pas déployé** ; R0.5 est **close** avec sa condition nommée.
 >
-> **Dispositif** : ré-analyse des mesures de R0.3 — 267 questions (248 lexicales, 19
-> paraphrases), deux lecteurs, quatre JSON ; deux signaux (max BM25, couverture question ↔
-> document) ; transfert par leave-one-bench-out ; JSON brut
+> **Dispositif** : ré-analyse des mesures de R0.3 sur le **corpus gelé** — 331 questions (248
+> lexicales, 83 paraphrases), deux lecteurs, quatre JSON ; cinq signaux (max BM25, z-score,
+> ratio, couverture, étendue) ; transfert par leave-one-bench-out ; JSON brut
 > [`r07-routeur.json`](r07-routeur.json).
 
 ## La question
@@ -17,7 +18,11 @@ Deux régimes mesurés : le **lexical** gagne sur les questions qui partagent le
 lecteur perd la moitié des cas. Le routeur doit choisir — la seule question qui compte est :
 **le signal prédit-il quel lecteur va gagner, et la règle tient-elle d'un banc à l'autre ?**
 
-## Le dispositif
+## Le dispositif (v1, 267 questions)
+
+> Les versions 1 et 2 ont été mesurées sur les **documents vivants** ; la version 3 les rejoue sur
+> le **corpus gelé**. Les chiffres des sections v1/v2 sont conservés comme histoire — le verdict
+> est celui de la version 3.
 
 - **267 questions** : 248 du banc complet (lexicales) + 19 du banc durci (paraphrases) ;
 - **deux lecteurs** : extractif (R0.2) et modèle (R0.3), sur les mêmes questions ;
@@ -40,7 +45,7 @@ lecteur perd la moitié des cas. Le routeur doit choisir — la seule question q
 | exactitude : fixe modèle | 0,270 |
 | exactitude : **oracle** (le bon lecteur à chaque fois) | **0,888** |
 
-**Le signal BM25 sait quelque chose** (0,785 contre 0,407 au hasard ; la longueur, faux signal,
+**Le signal BM25 sait quelque chose** (0,781 contre 0,407 au hasard ; la longueur, faux signal,
 est à 0,395). La couverture, elle, ne sait rien (0,529) : les paraphrases partagent encore assez
 de mots avec le document pour que la couverture ne baisse pas.
 
@@ -57,7 +62,7 @@ mauvais : **on ne déploie pas**.
 
 ## Ce que ça dit
 
-1. **Le signal existe** : l'AUC 0,785 n'est pas du hasard, et les contrôles le confirment.
+1. **Le signal existe** : l'AUC 0,781 n'est pas du hasard, et les contrôles le confirment.
 2. **La règle manque** : un seuil **absolu** dépend de l'échelle des scores, donc du document et
    du corpus. Il faut un signal **relatif** (z-score, percentile par document) ou un routeur
    **appris avec le test de transfert** — et le banc des paraphrases (19 questions) est trop
@@ -89,59 +94,73 @@ donc « large » ne veut pas dire « facile ».
 le banc des paraphrases (19 questions) ne permet pas d'apprendre le régime. Il faut **plus de
 paraphrases** avant de rejouer le routeur — pas un autre signal.
 
-## La version 3 (332 questions) : le signal monte à 0,826
+## La version 3, rejouée sur le corpus gelé (331 questions)
 
-Le banc élargi ajoute 84 paraphrases aux 248 questions lexicales. Le signal et les contrôles :
+Le banc élargi ajoute les paraphrases aux questions lexicales. Sur le **corpus gelé** (copie
+`tools/tests/documents/corpus/`, manifeste SHA256), le dispositif compte **331 questions** —
+248 lexicales et 83 paraphrases — toutes appariées entre les deux lecteurs.
 
 | mesure | valeur |
 |---|---:|
-| questions où les lecteurs diffèrent | 201 / 332 |
-| **AUC du signal BM25** | **0,826** |
-| AUC du z-score | 0,782 |
-| AUC du ratio | 0,729 |
+| questions où les lecteurs diffèrent | 203 / 331 |
+| dont l'extractif a raison | 176 |
+| **AUC du signal BM25** | **0,839** |
+| AUC du z-score | 0,793 |
+| AUC du ratio | 0,727 |
 | AUC de la couverture | 0,584 |
-| AUC de l'étendue | 0,264 |
-| AUC de la longueur (faux signal) | 0,438 |
-| AUC aléatoire | 0,409 |
+| AUC de l'étendue | 0,265 |
+| AUC de la longueur (faux signal) | 0,453 |
+| AUC aléatoire | 0,510 |
+| exactitude : fixe extractif | **0,719** |
+| exactitude : fixe modèle | 0,269 |
+| exactitude : oracle | 0,801 |
 
-Le signal **monte** (0,781 → 0,826) et les contrôles restent au hasard ou en dessous. Le
-transfert s'améliore aussi :
+Le signal **monte** (0,781 → 0,839) et les contrôles restent au hasard. Le transfert :
 
 | seuil appris sur l'autre banc, testé sur | z-score | brut | choix fixe |
 |---|---:|---:|---:|
-| le banc lexical (n=248) | **0,802** | 0,524 | 0,855 |
-| les paraphrases (n=84) | 0,321 | 0,310 | **0,381** |
+| le banc lexical (n=248) | **0,819** | 0,754 | **0,871** |
+| les paraphrases (n=83) | 0,313 | 0,301 | **0,373** |
 
-**Mais le routeur ne bat toujours pas le choix fixe** : 0,802 contre 0,855 sur le lexical,
-0,321 contre 0,381 sur les paraphrases. L'oracle est à 0,792 (0,899 / 0,476) : le gain maximal
-possible se réduit à mesure que le banc grandit, parce que les deux lecteurs deviennent **moins
-complémentaires** (le modèle ne domine plus nettement les paraphrases).
+**Le routeur ne bat toujours pas le choix fixe** : 0,819 contre 0,871 sur le lexical, 0,313
+contre 0,373 sur les paraphrases. L'oracle est à 0,801 (0,915 / 0,458) : le gain maximal
+possible n'est que de **8,2 points**, et il se réduit à mesure que le banc grandit, parce que les
+deux lecteurs deviennent **moins complémentaires**.
 
-**Conclusion inchangée** : le signal prédit de mieux en mieux, la règle ne décide pas encore.
-Il faut une calibration par document **apprise** (pas un seuil global) — et, pour cela, un banc
-de plusieurs centaines de paraphrases.
+**Un bug de clé corrigé au passage** : deux questions de `format-flux.md` ont le **même libellé**
+mais deux passages d'or différents (« jetons » et « dense »). L'ancien appariement
+`(document, question)` en écrasait une ; la clé porte désormais le passage d'or, et les **331**
+questions sont toutes comptées (330 avant le correctif).
+
+**Conclusion** : le signal prédit de mieux en mieux, la règle ne décide pas. Il faudrait une
+calibration par document **apprise** et un banc de **plusieurs centaines de paraphrases** — la
+condition est nommée, pas atteinte.
 
 ## Ce qui pourrait le rendre faux
 
-- **19 questions paraphrases** : le seuil appris dessus est une estimation à ±0,1 ;
+- **83 questions paraphrases** : le seuil appris dessus reste une estimation à ±0,1 ;
 - **deux bancs de natures différentes** (questions générées vs écrites) : le transfert mesure
   aussi ce changement de nature, pas seulement l'échelle ;
 - **la valeur binaire** (juste/faux) : une réponse partielle compte comme fausse ;
 - **les lecteurs ne sont pas au même coût** : générer coûte 1,9 s, rendre un passage ~0 ; le
   routeur devrait intégrer ce prix, ce n'est pas fait ici ;
 - **l'oracle suppose qu'on sache toujours qui a raison** : c'est un plafond, pas une politique.
+- **le corpus gelé fixe les documents, pas les réponses** : les deux lecteurs ont été rejoués sur
+  la copie ; un désaccord de gold reste possible.
 
 ## Ce que ça change
 
-1. **Le choix par défaut reste l'extractif** : 0,816 contre 0,270, et il ne coûte rien. Le
+1. **Le choix par défaut reste l'extractif** : **0,719** contre 0,269, et il ne coûte rien. Le
    modèle s'appelle **à la demande**, pas par défaut.
-2. **R07 reste ouverte** avec un chemin nommé : un signal relatif par document, un routeur
-   appris, et un banc paraphrase plus grand.
+2. **R0.5 est close (négatif)** : le signal prédit, la règle ne décide pas. Le chemin nommé —
+   calibration apprise par document, banc de plusieurs centaines de paraphrases — appartient à
+   une autre ligne ; il n'est pas ouvert ici.
 3. **La leçon de méthode** : un signal qui prédit n'est pas une règle qui décide. La différence
-   se mesure par le transfert, pas par l'AUC.
+   se mesure par le transfert, pas par l'AUC. Et un appariement de questions doit porter le gold,
+   pas seulement le libellé : un écrasement silencieux change le N.
 
 ## Fichiers
 
-- `tools/routeur.py` — les deux signaux, l'AUC, le transfert, les contrôles.
-- `reports/r07-routeur.json` — les 267 lignes et les agrégats.
+- `tools/routeur.py` — les cinq signaux, l'AUC, le transfert, les contrôles.
+- `reports/r07-routeur.json` — les 331 lignes et les agrégats.
 - `reports/r03-banc-complet.md`, `reports/r03-banc-durci.md` — les deux régimes mesurés.

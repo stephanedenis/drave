@@ -71,6 +71,7 @@
 | [`implantation/format-clusters.md`](implantation/format-clusters.md) | le modèle éclaté en clusters |
 | [`implantation/convertisseur.md`](implantation/convertisseur.md) | le convertisseur et le chargement |
 | [`implantation/contexte-long.md`](implantation/contexte-long.md) | ce que 1 M de contexte veut dire, et par où ça casse |
+| [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |
 | [`implantation/llm-externe.md`](implantation/llm-externe.md) | le banc externe, le professeur et l'élève |
 | [`implantation/numa-segregation.md`](implantation/numa-segregation.md) | la ségrégation NUMA mesurée |
 | [`implantation/configuration-nvme-raid-amd.md`](implantation/configuration-nvme-raid-amd.md) | l'array NVMe et le pari AMD |

@@ -163,10 +163,14 @@ def analyse(recs) -> dict:
                 d["tours"][-1]["actions"].append(f"{nom}")
         elif t == "tool/result":
             msg = data.get("message", {})
-            blocs, err = [], False
+            blocs, err = [], bool(msg.get("isError"))
             for c in msg.get("content", []):
                 if c.get("isError"):
                     err = True
+                # v4 : le bloc porte directement son texte ; l'ancien format imbrique
+                # le texte dans `content` (liste de blocs).
+                if isinstance(c.get("text"), str):
+                    blocs.append(c["text"])
                 for cc in (c.get("content") or []):
                     if isinstance(cc, dict):
                         blocs.append(cc.get("text", ""))
@@ -364,7 +368,9 @@ def main() -> int:
     for sess in sorted(src.iterdir()):
         if not sess.is_dir() or (args.session and not sess.name.startswith(args.session)):
             continue
-        traces = sorted(sess.glob("session.jsonl*"))
+        # DSH nomme les traces `session.jsonl.zstd` (ancien) ou `session.v4.jsonl.zstd` :
+        # le glob doit couvrir les deux, sinon les sessions récentes n'ont pas de rapport.
+        traces = sorted(sess.glob("session*.jsonl*"))
         if not traces:
             continue
         a = analyse(charge(traces[0]))
@@ -383,7 +389,9 @@ def main() -> int:
             print(f"  {sess.name[:8]} : rapport {len(md)/1024:.0f} Ko, "
                   f"{len(a['tours'])} tours, {len(a['fichiers'])} fichiers, "
                   f"{len(a['mesures'])} mesures, {len(a['erreurs'])} erreurs")
-    (repo / "journal" / "README.md").write_text("\n".join(index) + "\n", encoding="utf-8")
+    # Avec `--session`, l'index n'est pas réécrit : il ne contiendrait que la session filtrée.
+    if not args.session:
+        (repo / "journal" / "README.md").write_text("\n".join(index) + "\n", encoding="utf-8")
     return 0
 
 

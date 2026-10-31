@@ -68,7 +68,8 @@ def tronque(s: str, n: int) -> str:
 def digest(chemin: Path) -> tuple[str, dict]:
     """Construit le digest markdown d'une session, et ses statistiques."""
     lignes = ["# Session DSH — relecture", ""]
-    stat = {"tours": 0, "messages": 0, "outils": 0, "erreurs": 0, "compactages": 0}
+    stat = {"tours": 0, "messages": 0, "outils": 0, "erreurs": 0, "compactages": 0,
+            "debut": None}
     tour = 0
     for brute in decompresse(chemin).splitlines():
         if not brute.strip():
@@ -82,6 +83,7 @@ def digest(chemin: Path) -> tuple[str, dict]:
 
         if t == "session":
             # les champs de session sont à la racine de l'enregistrement
+            stat["debut"] = r.get("createdAt") or stat["debut"]
             lignes += [f"- identifiant : `{r.get('id')}`",
                        f"- dossier : `{r.get('cwd')}`",
                        f"- créée : {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(r.get('createdAt', 0) / 1000))}",
@@ -107,6 +109,9 @@ def digest(chemin: Path) -> tuple[str, dict]:
             msg = d.get("message", {})
             blocs = []
             for c in msg.get("content", []):
+                # v4 : le bloc porte directement son texte ; l'ancien format l'imbrique.
+                if isinstance(c.get("text"), str):
+                    blocs.append(c["text"])
                 for cc in (c.get("content") or []):
                     if isinstance(cc, dict):
                         blocs.append(cc.get("text", ""))
@@ -155,7 +160,7 @@ def main() -> int:
     lignes_manifeste = [
         "# Sessions DSH archivées", "",
         "Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la",
-        "trace brute (`session.jsonl.zstd`) reste sur disque et n'est pas suivie par git.",
+        "trace brute (`session*.jsonl.zstd`) reste sur disque et n'est pas suivie par git.",
         "",
         "| Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |",
         "|---|---|---|---|---|---|---|---|---|",
@@ -164,7 +169,9 @@ def main() -> int:
     for sess in sorted(src.iterdir()):
         if not sess.is_dir():
             continue
-        traces = sorted(sess.glob("session.jsonl*"))
+        # DSH nomme les traces `session.jsonl.zstd` (ancien) ou `session.v4.jsonl.zstd` :
+        # le glob doit couvrir les deux, sinon les sessions récentes ne sont jamais archivées.
+        traces = sorted(sess.glob("session*.jsonl*"))
         if not traces:
             continue
         trace = traces[0]
@@ -177,7 +184,9 @@ def main() -> int:
         (cible / "digest.md").write_text(md, encoding="utf-8")
         taille = trace.stat().st_size
         total += taille
-        debut = time.strftime("%Y-%m-%d %H:%M", time.localtime(trace.stat().st_mtime))
+        # `createdAt` de l'enregistrement `session` ; à défaut, la date du fichier.
+        ts_debut = (stat.get("debut") or 0) / 1000 or trace.stat().st_mtime
+        debut = time.strftime("%Y-%m-%d %H:%M", time.localtime(ts_debut))
         lignes_manifeste.append(
             f"| `{sess.name[:8]}` | {debut} | {taille/1e6:.1f} Mo | "
             f"{len(md)/1024:.0f} Ko | {stat['tours']} | {stat['messages']} | "

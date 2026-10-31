@@ -1,7 +1,7 @@
 # R04 — Tête de survol (pertinence d'une région)
 
-> **Statut** : partiel · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
-> **Ligne de roadmap** : R0.4 · **Pilote** : [rapport-r04-tete-survol.md](../../../reports/rapport-r04-tete-survol.md) — v1 **0,601** contre **0,836** ; v2 **0,448** contre **0,811** ; **v3 (498 paires) 0,575 contre 0,745**. La donnée paie, mais une sonde linéaire ne rattrape pas BM25 : il faut des milliers de paires et/ou un encodeur ajusté.
+> **Statut** : mesurée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R03, R01
+> **Ligne de roadmap** : R0.4 · **Pilote** : [rapport-r04-tete-survol.md](../../../reports/rapport-r04-tete-survol.md) — v1 **0,601** contre **0,836** ; v2 **0,448** contre **0,811** ; **v3 (498 paires) 0,575 contre 0,745** ; **v4 (corpus gelé) 0,540 contre 0,720**. Négatif clos : la donnée paie, mais une sonde linéaire ne rattrape pas BM25 ; il faudrait des milliers de paires et/ou un encodeur ajusté.
 > **Résumé** : Prédire, depuis le début d'une région, si elle vaut la peine d'être lue pour le but courant.
 > **Glossaire** : [lecture rapide](../../theorie/glossaire/entrees/lecture-rapide.md) · [AUC](../../theorie/glossaire/entrees/auc.md) · [contrat](../../theorie/glossaire/entrees/contrat.md).
 

@@ -36,6 +36,7 @@ import argparse
 import pathlib
 import re
 import sys
+import time
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BACKLOG = RACINE / "docs/pilotage/backlog"
@@ -256,7 +257,7 @@ def frontiere(noeuds: dict) -> list[str]:
     leve = {"mesurée", "abandonnée"}
     out = []
     for n, d in sorted(noeuds.items()):
-        if d["statut"] in leve or d["bloque"]:
+        if d["statut"] in leve or d["statut"] == "bloquée" or d["bloque"]:
             continue
         libre = True
         for cible, _ in d["dures"]:
@@ -387,8 +388,10 @@ def dessiner(noeuds: dict, niveau: dict, chemin: pathlib.Path) -> None:
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {largeur:.0f} {hauteur:.0f}" '
         f'role="img" width="{largeur:.0f}" height="{hauteur:.0f}">',
         "  <title>Le graphe des dépendances du backlog Drave</title>",
-        "  <desc>Trente-sept nœuds : les vingt-neuf fiches du backlog, les huit lignes "
-        "ouvertes sans fiche et les dépendances dures et douces entre elles. Les flèches "
+        f"  <desc>{len(noeuds)} nœuds : les "
+        f"{sum(1 for d in noeuds.values() if not d['sans_fiche'])} fiches du backlog et "
+        f"{sum(1 for d in noeuds.values() if d['sans_fiche'])} ligne(s) ouverte(s) sans fiche, "
+        "avec les dépendances dures et douces entre elles. Les flèches "
         "pleines sont des dépendances dures, les pointillés des plafonds. La lecture va de "
         "haut en bas ; un nœud sans flèche entrante est non bloqué.</desc>",
         "  <defs>",
@@ -406,7 +409,7 @@ def dessiner(noeuds: dict, niveau: dict, chemin: pathlib.Path) -> None:
         'font-weight="bold" fill="#1a1a1a">Le graphe des dépendances du backlog</text>',
         '  <text x="16" y="42" font-family="Verdana, DejaVu Sans, sans-serif" font-size="9" '
         'fill="#555555">lecture de haut en bas · plein = dépendance dure · pointillé = plafond '
-        '· bord interrompu = bloquée ou sans fiche · 2026-10-29</text>',
+        f"· bord interrompu = bloquée ou sans fiche · {time.strftime('%Y-%m-%d')}</text>",
     ]
 
     for n, (x, y) in sorted(pos.items(), key=lambda kv: (kv[1][1], kv[1][0])):

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **362 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **364 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -313,7 +313,7 @@
 | [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |
 | [rapport-r03-banc-durci.md](rapport-r03-banc-durci.md) | R0.3 durci — 19 puis 84 paraphrases : le lexique tombe, le modèle prend la tête (de moins en moins) |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
-| [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique |
+| [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,540 contre 0,720 sur le corpus gelé) |
 | [rapport-r05-balayage.md](rapport-r05-balayage.md) | R05 — le balayage : 0,984 de rappel@10 sur le lexical, 0,702 sur les paraphrases |
 | [rapport-r06-calibration.md](rapport-r06-calibration.md) | R06 v5 — la courbe de calibration : ~50 golds suffisent, les poids appris n'ajoutent rien |
 | [rapport-r06-cascade-confiance.md](rapport-r06-cascade-confiance.md) | R06 v4 — la cascade à confiance calibrée égale l'oracle, hors échantillon |
@@ -322,13 +322,15 @@
 | [rapport-r06-pipeline.md](rapport-r06-pipeline.md) | R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle |
 | [rapport-r06-publication.md](rapport-r06-publication.md) | R06 v6 — la cascade à confiance est publiée : deux fichiers, un seuil, une recette |
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
-| [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,826), la règle ne transfère pas |
+| [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,839), la règle ne transfère pas |
+| [rapport-r13-decision.md](rapport-r13-decision.md) | R13 — la décision : rester en octets, parce que le BPE ne gagne pas à octets égaux |
 | [rapport-r13-tokenisation.md](rapport-r13-tokenisation.md) | R13.0 — BPE : 3,4 à 5,2 octets par jeton, réversible ; la PPL reste à mesurer |
 | [rapport-r13.1-bpe.md](rapport-r13.1-bpe.md) | R13.1 — pilote : le BPE gagne 11,9 % à 200/400 pas (corrigé 11,0 %) |
 | [rapport-r13.1-campagne.md](rapport-r13.1-campagne.md) | R13.1c — à octets égaux, le BPE ne gagne plus |
 | [rapport-r13.1-condition.md](rapport-r13.1-condition.md) | R13.1 — la PPL BPE-native n’est pas mesurable sans un modèle BPE natif |
 | [rapport-r13.2-vocab1024.md](rapport-r13.2-vocab1024.md) | R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux |
 | [rapport-r13.3-anglais.md](rapport-r13.3-anglais.md) | R13.3 — anglais 100 Mo : le BPE perd encore à octets égaux |
+| [rapport-r13.4-graines.md](rapport-r13.4-graines.md) | R13.4 — deux graines : le BPE 512 est dans le bruit, le 1024 perd |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |

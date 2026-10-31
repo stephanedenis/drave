@@ -8,9 +8,9 @@
 
 - **N0.15/N4.7** : export du meilleur `drave-n0` (PPL **2,6998**, contexte 129) en DRVM ; top-5 natif
   identique à Python ; PPL native **54,1350** contre **54,1327** ; service Rust **650,1 ms**.
-  Fiche [`reports/rapport-native-best-2.md`](../../reports/rapport-native-best-2.md), commit `c8acf22e`.
+  Fiche [`reports/rapport-native-best-2.md`](../../../reports/rapport-native-best-2.md), commit `c8acf22e`.
 - **N4.8** : 2 000 consignes courtes procédurales, 40 paires sur mots tenus → **0/40**. Le SFT mémorise,
-  il ne factorise pas la règle. Fiche [`reports/rapport-native-consignes.md`](../../reports/rapport-native-consignes.md),
+  il ne factorise pas la règle. Fiche [`reports/rapport-native-consignes.md`](../../../reports/rapport-native-consignes.md),
   commit `1853a65b`.
 - **N2** : meilleur **2,6998** (contexte 129) ; porte **< 2,5** non atteinte. Les contextes 130–256 et
   les architectures 8 blocs sont négatifs.
@@ -25,5 +25,5 @@
 
 ## Journal
 
-- [Journée du 2026-10-29](../2026-10-29/README.md)
-- [Index des sessions](../README.md#sessions)
+- [Journée du 2026-10-29](../../2026-10-29/README.md)
+- [Index des sessions](../../README.md#sessions)

@@ -48,9 +48,9 @@ def charge() -> list[dict]:
     lignes = []
     for banc, chemin_banc, chemin_ext, chemin_modele in BANCS:
         bench = json.loads(chemin_banc.read_text(encoding="utf-8"))
-        ext = {(d["document"], d["question"]): d for d in
+        ext = {(d["document"], d["question"], d.get("or")): d for d in
                json.loads(chemin_ext.read_text(encoding="utf-8"))["details"]}
-        modele = {(d["document"], d["question"]): d for d in
+        modele = {(d["document"], d["question"], d.get("or")): d for d in
                   json.loads(chemin_modele.read_text(encoding="utf-8"))["details"]}
         index_par_document = {}
         jetons_par_document = {}
@@ -75,7 +75,7 @@ def charge() -> list[dict]:
             # étendue : quelle part des passages partage un mot de la question
             etendue = sum(1 for s in scores if s > 0.5 * sommet) / len(scores) if scores else 0.0
             lignes.append({
-                "banc": banc, "document": cle[0], "question": cle[1],
+                "banc": banc, "document": cle[0], "question": cle[1], "or": cle[2],
                 "type": detail["type"],
                 "signal": round(sommet, 3),
                 "z": round(z, 3), "ratio": round(ratio, 3), "etendue": round(etendue, 3),
@@ -133,11 +133,20 @@ def main() -> int:
     # 1. le signal prédit-il le gagnant ? (sur les questions où les deux diffèrent)
     differes = [l for l in lignes if l["extractif"] != l["modele"]]
     labels = [l["extractif"] for l in differes]
-    signal_auc = auc([l["signal"] for l in differes], labels)
-    couverture_auc = auc([l["couverture"] for l in differes], labels)
-    longueur_auc = auc([l["longueur"] for l in differes], labels)
     hasard = random.Random(GRAINE)
-    aleatoire_auc = auc([hasard.random() for _ in differes], labels)
+    aucs = {
+        "signal": auc([l["signal"] for l in differes], labels),
+        "z": auc([l["z"] for l in differes], labels),
+        "ratio": auc([l["ratio"] for l in differes], labels),
+        "etendue": auc([l["etendue"] for l in differes], labels),
+        "couverture": auc([l["couverture"] for l in differes], labels),
+        "longueur": auc([l["longueur"] for l in differes], labels),
+        "aleatoire": auc([hasard.random() for _ in differes], labels),
+    }
+    signal_auc = aucs["signal"]
+    couverture_auc = aucs["couverture"]
+    longueur_auc = aucs["longueur"]
+    aleatoire_auc = aucs["aleatoire"]
 
     # 2. exactitude : choix fixes, oracle, routeur réglé sur un banc et testé sur l'autre
     extractif_fixe = sum(l["extractif"] for l in lignes) / len(lignes)
@@ -176,9 +185,11 @@ def main() -> int:
                   f"exactitude {v['exactitude']:.3f}")
     if args.json:
         args.json.write_text(json.dumps({
-            "date": "2026-10-29", "ligne": "R0.5", "questions": len(lignes),
-            "differes": len(differes), "auc_signal": round(signal_auc, 3),
+            "date": "2026-10-30", "ligne": "R0.5", "questions": len(lignes),
+            "differes": len(differes), "differes_extractif": sum(labels),
+            "auc_signal": round(signal_auc, 3),
             "auc_longueur": round(longueur_auc, 3), "auc_aleatoire": round(aleatoire_auc, 3),
+            "aucs": {champ: round(v, 3) for champ, v in aucs.items()},
             "fixe_extractif": round(extractif_fixe, 3), "fixe_modele": round(modele_fixe, 3),
             "oracle": round(oracle, 3), "transferts": transferts,
             "lignes": lignes,

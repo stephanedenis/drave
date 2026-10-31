@@ -171,14 +171,16 @@ def etapes_du_jour(sid: str, jour: str) -> list[tuple[str, str]]:
     Le rapport et le digest de session ne portent pas d'horodatage par tour : les étapes
     extraites de là couvraient donc **toute la session** — un fichier du 9 octobre recevait des
     étapes du 10 (attrapé en voyant « +40 % · 2048 jetons » dans la journée du 9). La trace brute
-    (`session.jsonl.zstd`, écrite par le harnais, non versionnée) porte un `time` par
+    (`session*.jsonl.zstd`, écrite par le harnais, non versionnée) porte un `time` par
     enregistrement : c'est elle qui date. On lit en flux, on ne garde que les messages
     d'assistant contenant `⏵`, et on s'arrête au premier enregistrement du lendemain.
     """
     for d in (JOURNAL / "sessions").glob(f"{sid}-*"):
-        trace = d / "session.jsonl.zstd"
-        if not trace.exists():
+        # DSH nomme les traces `session.jsonl.zstd` (ancien) ou `session.v4.jsonl.zstd`.
+        traces = sorted(d.glob("session*.jsonl*"))
+        if not traces:
             continue
+        trace = traces[0]
         j0 = time.mktime(time.strptime(jour + " 00:00", "%Y-%m-%d %H:%M"))
         j1 = j0 + 86400
         sorties, vus, illisibles = [], set(), 0

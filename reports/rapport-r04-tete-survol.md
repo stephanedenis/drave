@@ -1,15 +1,17 @@
-# R0.4 — la tête de survol perd contre BM25 (0,601 contre 0,836), et gagne sur le juridique
+# R0.4 — la tête de survol perd contre BM25 (0,540 contre 0,720 sur le corpus gelé)
 
-> **Ligne de roadmap** : R0.4 · **Date** : 2026-10-29 · **Verdict** : ❌ **la tête ne bat jamais le
-> scoreur classique** — v1 0,601 contre 0,836 ; v2 0,448 contre 0,811 ; **v3 (498 paires) 0,575
-> contre 0,745**. La donnée paie (+13 points), mais une sonde linéaire ne rattrape pas BM25. ✅ le contrôle des étiquettes mélangées (**0,467**) montre que le
-> signal est réel mais faible, pas une fuite.
+> **Ligne de roadmap** : R0.4 · **Date** : 2026-10-30 · **Verdict** : ❌ **close (négatif) — la
+> tête ne bat jamais le scoreur classique** : v1 0,601 contre 0,836 ; v2 0,448 contre 0,811 ;
+> v3 (498 paires) 0,575 contre 0,745 ; **v4 (corpus gelé) 0,540 contre 0,720**. La donnée paie
+> (+13 points de v2 à v3), mais une sonde linéaire ne rattrape pas BM25 ; le contrôle des
+> étiquettes mélangées (0,467 à 0,548) montre que le signal est réel mais faible, pas une fuite.
 >
-> **Dispositif** : 114 paires (question, passage) — 19 questions du banc durci × (1 gold +
-> 5 négatifs du même document) ; **états précoces** après les 4 premières couches de
-> Qwen2.5-0.5B (896 valeurs, capturés par le moteur) ; tête logistique ridge ; partage
-> **leave-one-document-out** ; JSON bruts [`r04-tete-survol.json`](r04-tete-survol.json) et
-> [`r04-tete-survol-v2.json`](r04-tete-survol-v2.json) (version 2 : couches 8–11, négatifs durs).
+> **Dispositif** : 498 paires (question, passage) — 83 questions × (1 gold + 5 négatifs durs de
+> la même section) ; **états précoces** après les couches 8–11 de Qwen2.5-0.5B (896 valeurs,
+> capturés par le moteur) ; tête logistique ridge ; partage **leave-one-document-out** ; JSON
+> bruts [`r04-tete-survol.json`](r04-tete-survol.json), [`v2`](r04-tete-survol-v2.json),
+> [`v3`](r04-tete-survol-v3.json) et [`v4`](r04-tete-survol-v4.json) (v1 : 114 paires, couches
+> 0–3, négatifs faciles ; v4 : rejeu sur le corpus gelé).
 
 ## La question
 
@@ -112,24 +114,48 @@ mélangées (0,548) est si proche de la tête que son avantage est, sur plusieur
 
 **Ce que ça dit** : la donnée est bien le facteur limitant (×5,5 de paires → +13 points d'AUC),
 mais une **sonde linéaire** sur les états d'un 0,5 B ne rattrapera pas BM25 avec 500 paires.
-Il faudrait des **milliers** de paires et/ou un encodeur **ajusté**. La porte R0.4 reste
-ouverte, avec ce chemin nommé.
+Il faudrait des **milliers** de paires et/ou un encodeur **ajusté**.
+
+## La version 4 (corpus gelé) : 0,540 contre 0,720 — le négatif tient
+
+Le corpus de R0.3 est **gelé** (copie des 30 documents, manifeste SHA256). Le protocole de la
+version 3 est rejoué sur la copie, mêmes états, mêmes négatifs durs, même partage :
+
+| type | AUC tête | AUC BM25 | mélangé |
+|---|---:|---:|---:|
+| prose | 0,723 | 0,882 | 0,611 |
+| code | 0,642 | 0,762 | 0,460 |
+| technique | 0,527 | 0,705 | 0,490 |
+| tableau | 0,433 | 0,610 | 0,590 |
+| juridique | 0,389 | 0,646 | 0,470 |
+| **moyenne** | **0,540** | **0,720** | **0,528** |
+
+**La conclusion ne bouge pas** : 0,575 → 0,540 pour la tête, 0,745 → 0,720 pour BM25 — l'écart
+reste de **18 points**. Le seul changement notable est le **tableau** (0,605 → 0,433), dont les
+documents ont changé au gel ; la tête gagne **8 documents sur 28** (6 en v3), mais l'écart moyen
+reste de 18 points et le contrôle des étiquettes mélangées (0,528) est au niveau de la tête.
+
+**Ce que ça change** : le négatif est **robuste au corpus** ; il ne dépend ni de la dérive des
+documents ni d'un découpage particulier. La porte « la tête bat le contrôle classique à budget
+égal » n'est **pas atteinte** : R0.4 est **close en négatif** pour le survol.
 
 ## Ce qui pourrait le rendre faux
 
-- **Petit N** : 114 paires, 5 plis de 18–24 ; une AUC à ±0,1 par pli.
+- **N moyen** : 498 paires, 28 plis ; une AUC à ±0,1 par pli, et 8 documents gagnés sur 28
+  ne suffisent pas à renverser la moyenne.
 - **Une seule tête linéaire** : une petite MLP ou une régression sur des états plus profonds
   peut changer la conclusion — c'est un négatif **de ce dispositif**, pas de l'idée.
 - **Un seul format de prompt** : « Question / Passage » n'est pas la seule façon d'apparier.
-- **Négatifs aléatoires** : le résultat dit « la tête ne bat pas BM25 sur des négatifs
-  faciles », pas « la tête est inutile ».
+- **Négatifs durs seulement** : le résultat dit « la tête ne bat pas BM25 sur des négatifs
+  durs », pas « la tête est inutile ».
 - **États d'un modèle de 0,5 B** : les états précoces d'un modèle plus grand encodent sans doute
-  plus de contenu.
+  plus de contenu ; un encodeur **ajusté** n'est pas testé ici.
 
 ## Ce que ça change
 
-1. **La porte de R0.4 n'est pas atteinte** : la fiche reste ouverte, avec un chemin nommé —
-   plus de paires, des états plus profonds, des négatifs difficiles, une tête non linéaire.
+1. **R0.4 est close (survol, négatif)** : quatre versions, deux corpus, un écart stable de 18 à
+   24 points sous BM25. Le chemin nommé — milliers de paires, encodeur ajusté, tête non
+   linéaire — n'est pas ouvert ici.
 2. **Le seul signal positif est le régime paraphrase** : la tête gagne là où BM25 est faible.
    Si elle doit exister, c'est pour ce régime — pas pour remplacer BM25 partout.
 3. **La leçon de méthode** : une tête jugée sur des négatifs faciles est une tête jugée sur un
@@ -139,5 +165,5 @@ ouverte, avec ce chemin nommé.
 ## Fichiers
 
 - `tools/tete_survol.py` — capture des états, tête ridge, partage par document, contrôle.
-- `reports/r04-tete-survol.json` — les mesures brutes.
-- `tools/tests/documents/bench-durci.json` — les 19 questions et leurs golds.
+- `reports/r04-tete-survol.json` et `-v2`, `-v3`, `-v4` — les mesures brutes des quatre versions.
+- `tools/tests/documents/bench-durci.json` — les questions du banc durci et leurs golds.

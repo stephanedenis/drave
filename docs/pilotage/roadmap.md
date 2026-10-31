@@ -28,17 +28,18 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10 et B10.2bis closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B11.10 (cartes) ; B10.3 attend un **encodeur qui porte** |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; R0.4 **pilote négatif** ; **R4.1–R4.3 mesurées** | **R0.4** — négatifs difficiles ; **R4.4 bloqué** (OCR) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (OCR) ; R1/R2/R3 attendent N2 |
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-10-29**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-10-30**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
-   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) est un **pilote négatif**
-   (0,601 contre BM25 0,836) et **R0.5** (routeur) un **signal** (AUC 0,785, règle non transférable).
+   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+   **closes en négatif** — 0,540 contre BM25 0,720 sur le corpus gelé, et un signal qui prédit
+   (AUC 0,839) sans règle qui transfère.
    **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
    **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
    le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est bloqué** (OCR).
@@ -50,7 +51,7 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    611 ms. La restitution depuis un document lu est **R31**.
 5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
 6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le gist.
-7. **N3, R13** — les autonomes restants, qui remplissent la file « jamais en attente ».
+7. **N3** — les opérations natives restantes, qui remplissent la file « jamais en attente ».
 8. **Les bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus scientifique) — on prend la ligne
    suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 17,1**), le contrôle `z` montre qu'il ne lit que ~7 % du sens.
 
@@ -77,7 +78,8 @@ Project starts 2026-10-29
 [B12.10] lasts 1 day and is colored in #6a1b9a
 [R0.1–R0.3] lasts 1 day and is 100% complete and is colored in #2e7d32
 [R4.1–R4.3] lasts 1 day and is 100% complete and is colored in #2e7d32
-[R0.5] lasts 2 days and is 60% complete and is colored in #b26a00
+[R0.4] lasts 2 days and is 100% complete and is colored in #6a1b9a
+[R0.5] lasts 2 days and is 100% complete and is colored in #6a1b9a
 [R4.4] lasts 1 day and is colored in #b03a2e
 [N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32
 [N2] lasts 4 days and is 30% complete and is colored in #b26a00
@@ -92,6 +94,7 @@ Project starts 2026-10-29
 [B11.10] starts at [B1–B12]'s end
 [B12.10] starts at [B11.10]'s end
 [R4.1–R4.3] starts at [R0.1–R0.3]'s end
+[R0.4] starts at [R0.1–R0.3]'s end
 [R0.5] starts at [R0.1–R0.3]'s end
 [R4.4] starts at [R4.1–R4.3]'s end
 [N2] starts at [N0/N1]'s end
@@ -143,7 +146,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **c
 | **B8** | les maîtres : 17 principes, 9 sources, livre, parties | ✅ | aucune — livre **10/10**, go 9×9 **10/10** contre 3/10, cartes **44,7 %** |
 | **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
 | **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (**32,5** UDHR, **26,7** JW > plancher 17,1) mais le `z` ne porte que **1,5–2,6** points ; le **contrastif** ne le fait pas lire — le verrou est l'encodeur |
-| **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ / ⚠️ | B11.10 (cartes et ambiguïtés) ; le codec lit **100 %** |
+| **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ | **B11.10 close** (cartes, ambiguïtés refusées) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |
 
@@ -164,9 +167,9 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 | **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ | aucune — N0.3b est **close** (conversion et natif) |
 | **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
 | **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
-| **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) ; B11.10 |
+| **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
 | **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — la **consigne courte** tenue à l'écart (**24/24 vus, 0/4 tenus**) ; la lecture est **R31** |
-| **N5** | l'échelle : 50–100 M, corpus élargi | ⏸ **gelé** | après le verdict de **R11** sur le contexte ; BPE si R13 le justifie |
+| **N5** | l'échelle : 50–100 M, corpus élargi | ⏸ **gelé** | après le verdict de **R11** sur le contexte ; R13 close — **octets**, le BPE n'est pas un prérequis |
 
 **Les trois leçons N qui contraignent R** :
 
@@ -216,8 +219,8 @@ C'est la **priorité** : un lecteur au niveau **système**, avec le moteur exist
 | **R0.2** | **contrôleur de lecture** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, titres, premières/dernières phrases, BM25/regex) | ✅ **1,000** à 30 % sur **5 types** | à 30 % du budget, **≥ 90 %** de la réponse de la lecture intégrale sur **3 types** |
 | **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ✅ **249 questions** : extractif **1,000** à 30 % ; modèle **0,231** contre début **0,042**. **Durci** (84 paraphrases) : modèle **0,375**, lexical **0,269** | une courbe vitesse-compréhension par type ; le contrôle négatif **échoue** |
 | **R0.6** | **pipeline de lecture** : l'assemblage R0.1–R0.3 — budget, provenance, refus, rejeu ; extractif par défaut, modèle sur demande | ✅ **12/20** au pilote, **9/10** refusés, **7/8** au modèle, porte 7/7 ; **voie auto** : +0,109 sur les valeurs, −0,150 sur le mixte | — (livré) |
-| **R0.5** | **routeur extractif / génératif** : choisir le lecteur selon la question (signal BM25), parce qu'aucun des deux ne gagne partout | ⚠️ **signal AUC 0,826** ; z-score transfère 0,802 mais reste sous le choix fixe | le routeur bat chaque lecteur fixe sur les deux bancs |
-| **R0.4** | **têtes de lecture** : `survol` (pertinence d'une région), `balayage` (requête → spans), `relecture` (confiance/contradiction), greffées sur les têtes précoces | ❌ **survol** : v1 0,601/0,836, v2 0,448/0,811, v3 0,575/0,745 ; **relecture** : relire plus ne change rien (0/249) ; **cascade** +1,2 pt (9 appels) ; **balayage** : classique ✅ rappel@10 0,984/0,702 | la tête bat le contrôle classique à budget égal |
+| **R0.5** | **routeur extractif / génératif** : choisir le lecteur selon la question (signal BM25), parce qu'aucun des deux ne gagne partout | ❌ **close (négatif)** : signal AUC **0,839** (331 questions, corpus gelé) ; z-score transfère **0,819 / 0,313**, sous le choix fixe (**0,871 / 0,373**) | non atteinte — condition nommée : calibration apprise par document, banc de plusieurs centaines de paraphrases |
+| **R0.4** | **têtes de lecture** : `survol` (pertinence d'une région), `balayage` (requête → spans), `relecture` (confiance/contradiction), greffées sur les têtes précoces | ❌ **survol** : v1 0,601/0,836, v2 0,448/0,811, v3 0,575/0,745, **v4 (corpus gelé) 0,540/0,720** ; **balayage** : classique ✅ rappel@10 0,984/0,702 ; **relecture** : relire plus ne change rien (0/249), mais la **cascade à confiance calibrée = oracle** (0,894, publiée) | la tête bat le contrôle classique à budget égal : **non atteinte** pour le survol ; le balayage et le déclencheur sont livrés |
 
 **Ordre arrêté** : **R0.1**, puis **R0.2**, puis **R0.3** (la courbe de R0.3 est la mesure jointe de R0.2) ; R0.4
 seulement après la ligne de base.
@@ -231,7 +234,7 @@ test, modèle qui répond de mémoire, petit N, temps mesuré à chaud.
 |---|---|---|---|
 | **R1.1** | **contexte hiérarchique** : span → paragraphe → section → document, avec un **état de section** ; le modèle n'a pas besoin de voir toute la page | ⏳ | PPL à 1 000 octets dans un facteur **1,5** de celle à 129 ; aiguille **native** ≥ 15/18 à 4 000 octets |
 | **R1.2** | **curriculum de contexte** : une recette qui ne refait pas les négatifs 130/136/160/256 ; piste : états de résumé, pas seulement des positions | ⏳ | 1 000 octets **stable**, pas un point isolé |
-| **R1.3** | **tokenisation** : octets ou BPE ; la décision est **mesurée**, pas doctrinale | 🔬 **condition** | à octets égaux, français 2 graines BPE512 **1,8071** contre **1,8001**, BPE1024 **1,8738** ; anglais **2,7522/2,8147** contre **2,6408** |
+| **R1.3** | **tokenisation** : octets ou BPE ; la décision est **mesurée**, pas doctrinale | ✅ **décidée : octets** (R13 close) | à octets égaux, français 2 graines BPE512 **+0,39 %** (bruit), BPE1024 **+4,09 %** ; anglais **+4,22 / +6,59 %** ; réouverture conditionnée à un modèle 50–100 M ou à un contexte égal |
 
 **Ce qui bloque** : les 130–256 sont **tous négatifs**. R1.1 doit être tenté **avant** R1.2 : si la hiérarchie
 suffit, le contexte brut n'est pas le premier chantier.
@@ -296,9 +299,8 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **non bloqué, à faire** : **R0.5** (routeur, `8156fdcb`) ; **R0.4** (négatifs difficiles) ;
-  **N2** (la hiérarchie) ; **N4** (consigne courte) ; **N3/R13** (natif/lecteur) ;
-  **N3** (opérations natives) ; **R13** (octets ou BPE) ; **A8.3b** (mode de lot) ;
+- **non bloqué, à faire** : **N2** (la hiérarchie) ; **N4** (consigne courte) ;
+  **N3** (opérations natives) ; **A8.3b** (mode de lot) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
   B10.3 (B10.2bis absent du backlog), **R4.4** (aucun OCR : ni tesseract ni pytesseract) ;

@@ -11,6 +11,6 @@
   `journal/sessions/README.md`, `journal/sessions/_modele/plan.md`,
   `journal/sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/plan.md`,
   `reports/rapport-sessions-plans.md`, `reports/sessions-plans.json`
-- **Heartbeat** : 2026-10-30 11:06 HAE
-- **Prochaine action** : coordination publiée ; migrer les trois sessions actives vers leur plan
+- **Heartbeat** : 2026-10-30 13:37 HAE
+- **Prochaine action** : aucune — coordination close ; les trois plans migrés et les sessions archivées par `22e518ee`.
 - **État** : terminé

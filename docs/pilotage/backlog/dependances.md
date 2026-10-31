@@ -6,7 +6,7 @@
 > inversées, frontière) et **dessiné** dans
 > [`backlog-dependances.svg`](../../schemas/backlog-dependances.svg).
 >
-> **Relevé du 2026-10-29.** 29 fiches, 8 lignes ouvertes **sans fiche**, 41 arêtes dures,
+> **Relevé du 2026-10-31.** 37 fiches, 1 ligne ouverte **sans fiche**, 42 arêtes dures,
 > 3 plafonds. La roadmap donne l'ordre, l'index donne le statut, ce document donne le graphe ;
 > les trois se contredisent s'ils sont écrits trois fois — d'où l'outil.
 
@@ -60,32 +60,32 @@ contrat, donc pas de porte ni de contrôle négatif.
 
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
-| **A2.6** | partiel | A2 (acquis) | la tête coûte +10 % de PPL en 4 bits | — | [A2.6-ordonnanceur.md](A2.6-ordonnanceur.md) |
+| **A2.6** | partiel | A2 (acquis) | — | — | [A2.6-ordonnanceur.md](A2.6-ordonnanceur.md) |
 | **A3.2** | mesurée | A3 (acquis) | — | A3.3 | [A3.2-granularite.md](A3.2-granularite.md) |
 | **A3.3** | mesurée | A3.2 (dure) | — | — | [A3.3-seuil.md](A3.3-seuil.md) |
 | **A3.4** | bloquée | A3 (acquis) | bloqué : le compte et le runtime Colab | — | [A3.4-colab.md](A3.4-colab.md) |
 | **A5.4** | bloquée | A5 (acquis) | bloqué : la carte Stratix V | — | [A5.4-fpga.md](A5.4-fpga.md) |
 | **A6.2** | bloquée | A6 (acquis) | bloqué : aucun MoE local dans 16 Go de VRAM | — | [A6.2-moe-local.md](A6.2-moe-local.md) |
 | **A8.0** | mesurée | A8 (acquis) | — | A8.3 | [A8.0-portes-ppl.md](A8.0-portes-ppl.md) |
-| **A8.3** | mesurée (négative) | A8.0 (dure) | le mélange déplace les portes de −5,9 % à +19,5 % | — | [A8.3-defaut.md](A8.3-defaut.md) |
+| **A8.3** | mesurée | A8.0 (dure) | — | — | [A8.3-defaut.md](A8.3-defaut.md) |
 
 ### B — l'intelligence
 
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **B1.5** | bloquée | B1 (acquis) | bloqué : aucun corpus parallèle humain d'articles | — | [B1.5-prose-scientifique.md](B1.5-prose-scientifique.md) |
-| **B10.2bis** | mesurée (négative) | — | l'attention ne franchit pas le plancher (16,5/11,2) | B10.3 | [B10.2bis-decodeur-attention-croisee.md](B10.2bis-decodeur-attention-croisee.md) |
-| **B10.3** | bloquée | B10.2bis (dure) | B10.2 négatif (chrF 12,7 / 5,3 contre 39,6) | R52 | [B10.3-raisonnement-z.md](B10.3-raisonnement-z.md) |
-| **B11.10** | prête | B11 (acquis) | — | — | [B11.10-cartes-ambiguites.md](B11.10-cartes-ambiguites.md) |
-| **B12.10** | partiel | B12 (acquis) | — | — | [B12.10-pipeline-m1-m4-m8.md](B12.10-pipeline-m1-m4-m8.md) |
+| **B10.2bis** | mesurée | — | B10.2 négatif (chrF **12,7 / 5,3** contre un plancher **39,6**) | — | [B10.2bis-decodeur-attention-croisee.md](B10.2bis-decodeur-attention-croisee.md) |
+| **B10.3** | bloquée | — | B10.2bis négatif (chrF 11.2 / 16.4 contre 39,6) | R52 | [B10.3-raisonnement-z.md](B10.3-raisonnement-z.md) |
+| **B11.10** | mesurée | B11 (acquis) | — | — | [B11.10-cartes-ambiguites.md](B11.10-cartes-ambiguites.md) |
+| **B12.10** | mesurée | B12 (acquis) | — | — | [B12.10-pipeline-m1-m4-m8.md](B12.10-pipeline-m1-m4-m8.md) |
 
 ### N — le natif
 
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
-| **N0.3b** | prête | N0 (acquis) | — | — | [N0.3b-parite-ppl.md](N0.3b-parite-ppl.md) |
+| **N0.3b** | mesurée | N0 (acquis) | — | — | [N0.3b-parite-ppl.md](N0.3b-parite-ppl.md) |
 | **N2** | en cours | N1 (acquis) | — | N5, R11 | [N2-distillation.md](N2-distillation.md) |
-| **N3** | partiel | N1 (acquis) | variabilité ±10 %, service ≠ mesure | — | [N3-operations-natives.md](N3-operations-natives.md) |
+| **N3** | partiel | N1 (acquis) | — | — | [N3-operations-natives.md](N3-operations-natives.md) |
 | **N4** | partiel | — | N2 (plafond) | N5 | [N4-usage-sft.md](N4-usage-sft.md) |
 | **N5** | sans fiche | N2 (dure), N4 (dure) | — | — | — |
 
@@ -94,22 +94,23 @@ contrat, donc pas de porte ni de contrôle négatif.
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **R01** | mesurée | — | — | R02, R03, R04, R05, R11, R21, R22, R31, R32, R41, R42, R43, R51 | [R01-graphe-document.md](R01-graphe-document.md) |
-| **R02** | mesurée | R01 (dure) | — | R03 | [R02-controleur-lecture.md](R02-controleur-lecture.md) |
-| **R03** | partiel | R01 (dure), R02 (dure) | — | R04, R05, R06, R31, R51 | [R03-banc-lecture-rapide.md](R03-banc-lecture-rapide.md) |
-| **R04** | spécifiée | R03 (dure), R01 (dure) | — | — | [R04-tete-survol.md](R04-tete-survol.md) |
-| **R05** | spécifiée | R03 (dure), R01 (dure) | le manque M4 (aucun encodeur exécutable) | — | [R05-tete-balayage.md](R05-tete-balayage.md) |
-| **R06** | spécifiée | R03 (dure), R21 (dure), R22 (dure) | — | — | [R06-tete-relecture.md](R06-tete-relecture.md) |
+| **R02** | mesurée | R01 (dure) | — | R03, R07 | [R02-controleur-lecture.md](R02-controleur-lecture.md) |
+| **R03** | mesurée | R01 (dure), R02 (dure) | — | R04, R05, R06, R07, R31, R51 | [R03-banc-lecture-rapide.md](R03-banc-lecture-rapide.md) |
+| **R04** | mesurée | R03 (dure), R01 (dure) | — | — | [R04-tete-survol.md](R04-tete-survol.md) |
+| **R05** | mesurée | R03 (dure), R01 (dure) | le manque M4 (aucun encodeur exécutable) | — | [R05-tete-balayage.md](R05-tete-balayage.md) |
+| **R06** | partiel | R03 (dure), R21 (dure), R22 (dure) | — | — | [R06-tete-relecture.md](R06-tete-relecture.md) |
+| **R07** | mesurée | R02 (dure), R03 (dure) | — | — | [R07-routeur-extractif-generatif.md](R07-routeur-extractif-generatif.md) |
 | **R11** | spécifiée | R01 (dure), N1 (acquis), N2 (dure) | — | R12, R21 | [R11-contexte-hierarchique.md](R11-contexte-hierarchique.md) |
 | **R12** | spécifiée | R11 (dure) | les cinq négatifs 129–256 | — | [R12-curriculum-contexte.md](R12-curriculum-contexte.md) |
-| **R13** | spécifiée | — | N2 (plafond) | — | [R13-tokenisation-bpe.md](R13-tokenisation-bpe.md) |
+| **R13** | mesurée | — | N2 (plafond) | — | [R13-tokenisation-bpe.md](R13-tokenisation-bpe.md) |
 | **R21** | spécifiée | R01 (dure), R11 (dure) | la mémoire à 8 pas est négative (mesuré) | R06, R22, R31, R32 | [R21-memoire-travail-gist.md](R21-memoire-travail-gist.md) |
 | **R22** | spécifiée | R01 (dure), R21 (dure) | — | R06 | [R22-memoire-episodique.md](R22-memoire-episodique.md) |
 | **R31** | spécifiée | R01 (dure), R03 (dure), R21 (dure) | N4 (plafond) | R32, R51, R52 | [R31-restitution-sft.md](R31-restitution-sft.md) |
 | **R32** | spécifiée | R31 (dure), R01 (dure), R21 (dure) | — | R51, R52 | [R32-citations-provenance.md](R32-citations-provenance.md) |
-| **R41** | spécifiée | R01 (dure) | — | R44 | [R41-bloc-tableaux.md](R41-bloc-tableaux.md) |
-| **R42** | spécifiée | R01 (dure) | — | R44 | [R42-bloc-code.md](R42-bloc-code.md) |
-| **R43** | spécifiée | R01 (dure) | — | R44 | [R43-bloc-maths.md](R43-bloc-maths.md) |
-| **R44** | spécifiée | R41 (dure), R42 (dure), R43 (dure) | — | — | [R44-encodeur-visuel.md](R44-encodeur-visuel.md) |
+| **R41** | mesurée | R01 (dure) | — | R44 | [R41-bloc-tableaux.md](R41-bloc-tableaux.md) |
+| **R42** | mesurée | R01 (dure) | — | R44 | [R42-bloc-code.md](R42-bloc-code.md) |
+| **R43** | mesurée | R01 (dure) | — | R44 | [R43-bloc-maths.md](R43-bloc-maths.md) |
+| **R44** | bloquée | R41 (dure), R42 (dure), R43 (dure) | bloqué : aucun OCR installé (ni tesseract ni pytesseract) | — | [R44-encodeur-visuel.md](R44-encodeur-visuel.md) |
 | **R51** | spécifiée | R31 (dure), R32 (dure), R03 (dure), R01 (dure) | le manque M4 (aucun encodeur exécutable) | — | [R51-lecture-croisee.md](R51-lecture-croisee.md) |
 | **R52** | spécifiée | B10.3 (dure), R31 (dure), R32 (dure) | — | — | [R52-multilingue-decodeur.md](R52-multilingue-decodeur.md) |
 
@@ -152,29 +153,23 @@ l'avancement de la fiche (`spécifiée`, `prête`, `en cours`) et l'état de la 
 
 ## 5. La frontière : ce qui est réellement non bloqué
 
-Douze items, dont sept fiches et cinq lignes sans fiche. C'est la file « jamais en attente »
-réelle : elle est plus large que l'ordre du jour de la roadmap, et c'est voulu.
+**Quatre items** — c'est la file « jamais en attente » réelle. Une ligne **mesurée**, **bloquée**
+ou dont une dépendance dure n'est pas levée n'y figure pas ; les lignes `bloquée` sans arête
+dure (B10.3, R44) en sont exclues par leur statut.
 
 | item | état | pourquoi c'est libre | la prochaine action |
 |---|---|---|---|
-| **R01** | prête | aucune dépendance ; le contrat est écrit | écrire le schéma de manifeste, brancher un parseur, mesurer 50 pages |
-| **N0.3b** | prête | N0 est mesuré sauf elle | reproduire la PPL GGUF puis DRVM, sur 59 et 1 076 octets |
-| **N4** | partiel | aucune arête dure ; `N2` n'est qu'un plafond | SFT avec partage par document, évalué tenu à l'écart |
-| **N2** | en cours | `N1` acquis ; le levier reste à choisir | données et capacité, 3 graines — laisser la hiérarchie à `R11` |
-| **B11.10** | prête | `B11` mesuré ; le codec lit 100 % | étendre le codec aux cartes, nommer les ambiguïtés |
-| **B12.10** | partiel | `B12` acquis ; les modules existent | jeu de codes neufs et ablation de M4 |
-| **R13** | spécifiée | aucune arête dure ; `N1` suffit à deux tokenisations | chiffrer octets contre BPE à budget égal |
-| **A2.6** | partiel | `A2` mesuré | experts et tête dans la règle `choisir` |
-| **A3.2** | sans fiche | `A3` mesuré | granularité par bloc |
-| **A8.0** | sans fiche | c'est une condition, pas une dépendance | épingler les portes qui mesurent une PPL |
-| **B10.2bis** | sans fiche | le négatif `B10.2` est acquis | décodeur à attention croisée, 20–30 articles, 3 graines |
-| **N3** | partiel | `N1` mesuré | porter sortie précoce et profondeur routée en service |
+| **A2.6** | partiel | `A2` mesuré ; `A6.2` est un plafond, pas une arête | experts et tête dans la règle `choisir` |
+| **N2** | en cours | `N1` acquis | la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** |
+| **N3** | partiel | `N1` mesuré ; le service composé existe (N3.6) | ce qui reste des opérations natives, brique par brique |
+| **N4** | partiel | aucune arête dure ; `N2` est un plafond | la **consigne courte**, tenue à l'écart |
 
 **Ce qui n'y est pas, et pourquoi** : `A3.4`, `A5.4`, `A6.2`, `B1.5` sont bloqués par une
-ressource externe nommée ; `B10.3` et `R52` attendent `B10.2bis` ; `N5` attend `N2` et `N4` ; tout
-le reste du lecteur attend le banc.
+ressource externe nommée ; **R44** est bloqué par l'absence d'OCR ; `B10.3` attend un **encodeur
+qui porte** ; `N5` attend `N2` et `N4` ; R1/R2/R3 attendent **N2** et le banc ; les lignes
+mesurées (R0.4, R0.5, R13, B11.10, B12.10, N0.3b, R41–R43) sont closes.
 
-## 6. Les priorités (arrêtées le 2026-10-29)
+## 6. Les priorités (instantané du 2026-10-29 ; la frontière vivante est § 5)
 
 Le critère n'est pas la date : c'est **valeur / coût / dépendances**. Trois règles en découlent.
 

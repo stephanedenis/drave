@@ -19,7 +19,7 @@
 | tentative | chiffre | la raison |
 |---|---|---|
 | **têtes de lecture** (R0.4) | 0,601/0,836 puis 0,448/0,811 puis **0,540/0,720** | une sonde linéaire sur un 0,5 B, avec 500 paires, ne bat pas BM25 ; la donnée et l'encodeur manquent |
-| **routeur** (R0.5) | signal AUC **0,826**, transfert 0,802/0,321 | un signe qui **prédit** n'est pas une règle qui **décide** : un seuil absolu ne transfère pas d'un corpus à l'autre |
+| **routeur** (R0.5) | signal AUC **0,839**, transfert 0,819/0,313 | un signe qui **prédit** n'est pas une règle qui **décide** : un seuil absolu ne transfère pas d'un corpus à l'autre |
 | **relecture** (R06) | relire plus : **0/249** | le lecteur extractif répond avec le passage le mieux scoré, toujours lu ; la relecture doit changer de **modalité** |
 | ~~déclencheur de la cascade~~ | **levé** (R06 v4/v5) : cascade à confiance **calibrée** = oracle (0,911 / 0,415) avec **~50 golds** | il fallait **calibrer par corpus**, pas transférer un seuil — **publié** (R06 v6 : fichier daté, `--calibration`) |
 
@@ -28,7 +28,7 @@
 1. **Le corpus décide du lecteur, pas la question.** Le vrai gain de la voie auto est sur un
    corpus de valeurs (+0,109) ; sur un corpus mixte, elle **coûte** (−0,150). Un classifieur
    de forme ne sait pas ce que la réponse attend.
-2. **Un signal qui prédit n'est pas une règle qui décide.** L'AUC du signal BM25 est 0,826,
+2. **Un signal qui prédit n'est pas une règle qui décide.** L'AUC du signal BM25 est 0,839,
    ses contrôles au hasard — et pourtant aucun seuil ne transfère. La différence se mesure par
    le **transfert**, pas par l'AUC.
 3. **Pour une valeur, rendre le passage ou le span bat générer** à 0,5 B : le span 0,944 contre
@@ -37,10 +37,12 @@
 
 ## 4. La prochaine action
 
-**Le déclencheur de la cascade** est le verrou unique de R04, R06 et de la relecture : un signal
-**sans échelle** (accord entre lecteurs, dispersion, couverture de la réponse) — ou
-l'acceptation que, sur un corpus de paraphrases, le **modèle seul** est la bonne politique et
-que la cascade n'existe que pour les corpus mixtes.
+**R0 est close** : R0.1–R0.3 et R0.6 mesurés, R0.4 et R0.5 clos en négatif, R0.6 livré. La
+suite n'est plus dans R0 : c'est **R1** (la fenêtre native), qui attend le verdict de **N2**
+sur la hiérarchie, puis **R2/R3** (le gist et la restitution). **R4.4** reste bloqué (OCR).
+
+Le verrou restant du programme n'est pas un signal de plus : c'est un **encodeur qui porte** —
+sans lui, la tête de survol reste sous BM25 et le `z` de B10.3 ne lit que ~7 % du sens.
 
 ## 5. Voir aussi
 
