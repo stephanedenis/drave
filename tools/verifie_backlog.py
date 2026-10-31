@@ -95,6 +95,9 @@ def liste(valeur: str | None) -> list[tuple[str, str]]:
     if not valeur or valeur.strip() in {"—", "-", "aucune"}:
         return []
     out: list[tuple[str, str]] = []
+    # Un lien Markdown « [B10.2bis](B10.2bis-….md) » porte l'identifiant : sans ce déliage,
+    # l'arête disparaît en silence (B10.3 → B10.2bis : 42 arêtes au lieu de 43).
+    valeur = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", valeur)
     # la virgule qui sépare deux dépendances n'est pas celle d'une parenthèse
     for morceau in re.split(r",\s*(?![^()]*\))", valeur):
         m = re.match(r"\s*([A-Za-z]+[0-9][A-Za-z0-9.]*)\s*(?:\((.*?)\))?\s*$", morceau)

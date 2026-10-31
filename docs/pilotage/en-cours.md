@@ -65,7 +65,7 @@
   innocents — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **Backlog — graphe** : 37 fiches, 42 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
+- **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
   Suite : [la clôture de la session `f0969e87`](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846/cloture.md).
 
@@ -100,7 +100,7 @@ sources de blocage nommées.
 | **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; N4 0/4 ; N5 gelé | **N2** (hiérarchie) ; **N4** (consigne) |
 | **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
-| **Backlog — graphe** | **37 fiches, 42 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+| **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
 **Les sept chantiers C** (hors graphe, transférés au journal) : **C1** corpus · **C2**
 traduction · **C3** restitution · **C4** styles (date à contrôler) · **C5** domaines · **C6**

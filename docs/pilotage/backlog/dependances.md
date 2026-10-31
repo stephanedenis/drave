@@ -6,7 +6,7 @@
 > inversées, frontière) et **dessiné** dans
 > [`backlog-dependances.svg`](../../schemas/backlog-dependances.svg).
 >
-> **Relevé du 2026-10-31.** 37 fiches, 1 ligne ouverte **sans fiche**, 42 arêtes dures,
+> **Relevé du 2026-10-31.** 37 fiches, 1 ligne ouverte **sans fiche**, 43 arêtes dures,
 > 3 plafonds. La roadmap donne l'ordre, l'index donne le statut, ce document donne le graphe ;
 > les trois se contredisent s'ils sont écrits trois fois — d'où l'outil.
 
@@ -45,7 +45,7 @@ Trois chiffres se lisent sur le graphe.
 
 - **La profondeur est 5** : `R01 → R02 → R03 → R31 → R32 → R51`. C'est le chemin le plus long du
   backlog ; tout le reste est plus court.
-- **La frontière fait 12 items** : le « jamais en attente » n'est pas une file d'un seul élément.
+- **La frontière fait 4 items** : le « jamais en attente » n'est pas une file d'un seul élément.
 - **Le chemin critique passe par le banc** (`R03`) : `R04`, `R05`, `R06`, `R31`, `R51` en dépendent.
   Le banc n'est pas un instrument parmi d'autres, c'est le nœud par lequel tout le reste se mesure.
 
@@ -74,8 +74,8 @@ contrat, donc pas de porte ni de contrôle négatif.
 | item | état | dépend de (dure) | plafond / contrainte | débloque | fiche |
 |---|---|---|---|---|---|
 | **B1.5** | bloquée | B1 (acquis) | bloqué : aucun corpus parallèle humain d'articles | — | [B1.5-prose-scientifique.md](B1.5-prose-scientifique.md) |
-| **B10.2bis** | mesurée | — | B10.2 négatif (chrF **12,7 / 5,3** contre un plancher **39,6**) | — | [B10.2bis-decodeur-attention-croisee.md](B10.2bis-decodeur-attention-croisee.md) |
-| **B10.3** | bloquée | — | B10.2bis négatif (chrF 11.2 / 16.4 contre 39,6) | R52 | [B10.3-raisonnement-z.md](B10.3-raisonnement-z.md) |
+| **B10.2bis** | mesurée | — | B10.2 négatif (chrF **12,7 / 5,3** contre un plancher **39,6**) | B10.3 | [B10.2bis-decodeur-attention-croisee.md](B10.2bis-decodeur-attention-croisee.md) |
+| **B10.3** | bloquée | B10.2bis (dure) | B10.2bis négatif (chrF 11.2 / 16.4 contre 39,6) | R52 | [B10.3-raisonnement-z.md](B10.3-raisonnement-z.md) |
 | **B11.10** | mesurée | B11 (acquis) | — | — | [B11.10-cartes-ambiguites.md](B11.10-cartes-ambiguites.md) |
 | **B12.10** | mesurée | B12 (acquis) | — | — | [B12.10-pipeline-m1-m4-m8.md](B12.10-pipeline-m1-m4-m8.md) |
 
@@ -127,7 +127,7 @@ dans le graphe.
    réutilisent, pas les faits**.
 2. **Un déblocage sans fiche.** `B10.3` dépendait de `B10.2`, qui est un **négatif**, pas un
    travail. Le travail qui débloque — un décodeur à attention croisée — n'existait nulle part. Il
-   est nommé `B10.2bis` et il est **sans fiche** : c'est un trou nommé, pas une ligne du backlog.
+   est nommé `B10.2bis`, depuis mesuré (fiche du 31/10) : le trou nommé est comblé.
 3. **Une condition sans identifiant.** `A8.3` (« opt-in → défaut ») exige d'« épingler les portes
    qui mesurent une PPL ». Cette condition n'avait ni id ni fiche : elle est nommée `A8.0`.
 4. **Un cycle.** `R06` dépendait de `R22`, et `R22` disait, dans ses étapes, « implémenter le
@@ -154,8 +154,8 @@ l'avancement de la fiche (`spécifiée`, `prête`, `en cours`) et l'état de la 
 ## 5. La frontière : ce qui est réellement non bloqué
 
 **Quatre items** — c'est la file « jamais en attente » réelle. Une ligne **mesurée**, **bloquée**
-ou dont une dépendance dure n'est pas levée n'y figure pas ; les lignes `bloquée` sans arête
-dure (B10.3, R44) en sont exclues par leur statut.
+ou dont une dépendance dure n'est pas levée n'y figure pas ; les lignes `bloquée` (B10.3 par le
+négatif de B10.2bis, R44 par l'OCR) en sont exclues par leur statut.
 
 | item | état | pourquoi c'est libre | la prochaine action |
 |---|---|---|---|

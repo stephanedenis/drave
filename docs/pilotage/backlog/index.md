@@ -7,7 +7,7 @@
 >
 > **La roadmap** est [`../roadmap.md`](../roadmap.md) ; l'**analyse** qui a ouvert le programme R est
 > [`../../theorie/lecture-rapide.md`](../../theorie/lecture-rapide.md) ; l'**état courant** est
-> [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **29 fiches** : 19 pour R, 10 pour les lignes
+> [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **37 fiches** : 20 pour R, 17 pour les lignes
 > ouvertes A/B/N ; le **graphe** des dépendances est dans [`dependances.md`](dependances.md).
 
 ## Comment utiliser une fiche
@@ -70,7 +70,7 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 
 ## Les lignes ouvertes A/B/N
 
-**16 fiches compactes.** Elles ne recopient pas les mesures : elles disent l'état, ce qui bloque, la porte et la
+**17 fiches compactes.** Elles ne recopient pas les mesures : elles disent l'état, ce qui bloque, la porte et la
 prochaine action. Les mesures sont dans `reports/` et dans l'archive de la roadmap.
 
 | id | fiche | statut | prio | dépend de | ligne |

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**2 commits** · **1 session(s)** · **2 thème(s)**
+**3 commits** · **1 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,6 +13,7 @@
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
 | modele | 1 | [modele.md](modele.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -26,6 +27,7 @@
 |---|---|---|
 | 11:35 | `eff8d8e4` | SESSIONS — 104 ARCHIVES RETROUVÉES, CINQ CLÔTURES, L'ÉTAT À UNE SEULE SESSION |
 | 11:41 | `a2344c84` | ÉTAT — LA CLÔTURE `eff8d8e4` ACTÉE, `22e518ee` CLOSE, N2 DÉSIGNÉE |
+| 12:40 | `2edb3079` | JEUX — LE SAN L'EMPORTE SUR LA CASE QUAND UNE POSITION EST FOURNIE (110/112 → 112/112) |
 
 ## Le récit de la journée (écrit à la main)
 

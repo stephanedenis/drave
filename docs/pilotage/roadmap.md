@@ -333,7 +333,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 - **N — détail mesuré** : [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md) (176 lignes,
   archive).
 - **Les fiches** : [`reports/README.md`](../../reports/README.md) et [`reports/INDEX.md`](../../reports/INDEX.md).
-- **Le graphe des dépendances** : [`backlog/dependances.md`](backlog/dependances.md) — 41 arêtes dures,
+- **Le graphe des dépendances** : [`backlog/dependances.md`](backlog/dependances.md) — 43 arêtes dures,
   3 plafonds, la frontière et les sous-items.
 - **Le récit daté** : [`journal/`](../../journal/README.md) ; le journal des décisions de la roadmap est dans
   [`journal/2026-10-27/decisions-roadmap.md`](../../journal/2026-10-27/decisions-roadmap.md).
