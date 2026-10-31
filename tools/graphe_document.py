@@ -284,15 +284,17 @@ def analyse(chemin: pathlib.Path) -> list[dict]:
 
 # ------------------------------------------------------------------- le manifeste
 
-def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
-    """Le manifeste : un flux, des régions qui le partitionnent, et de quoi tout vérifier."""
-    octets_source = chemin.read_bytes()
-    blocs = analyse(chemin)
+def manifeste_de_blocs(blocs: list[dict], source: dict, extraction: dict,
+                       plat: bool = False) -> dict:
+    """Le manifeste à partir de blocs DÉJÀ analysés. C'est la SEULE construction du flux :
+    le Markdown, le PDF et l'OCR passent par ici. Deux constructions concurrentes feraient
+    diverger les offsets d'un extracteur à l'autre, et la comparaison entre deux extracteurs
+    ne mesurerait plus l'extraction, mais deux façons de compter les octets."""
     if plat:  # contrôle négatif : le même flux, mais une seule région — la structure meurt
         blocs = [{"type": "paragraphe", "texte": " ".join(b["texte"] for b in blocs),
                   "prov": {"plat": True}}]
     if not blocs:
-        raise SystemExit(f"aucun bloc : {chemin}")
+        raise SystemExit("aucun bloc")
 
     regions, position, morceaux = [], 0, []
     for indice, bloc in enumerate(blocs):
@@ -318,17 +320,31 @@ def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> 
     types = Counter(r["type"] for r in regions)
     return {
         "version": VERSION,
-        "source": {
-            "chemin": chemin.as_posix(), "sha256": sha256(octets_source),
-            "octets": len(octets_source), "format": chemin.suffix.lstrip(".").lower(),
-            "langue": langue,
-        },
-        "extraction": {"outil": "graphe_document.py", "version": VERSION,
-                       "plat": bool(plat)},
+        "source": source,
+        "extraction": extraction,
         "flux": {"octets": len(flux.encode("utf-8")), "sha256": sha256(flux.encode("utf-8"))},
         "regions": regions,
         "stats": {"regions": len(regions), "types": dict(sorted(types.items()))},
     }
+
+
+def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+    """Le manifeste d'un fichier : un flux, des régions qui le partitionnent, et de quoi
+    tout vérifier."""
+    octets_source = chemin.read_bytes()
+    blocs = analyse(chemin)
+    if not blocs:
+        raise SystemExit(f"aucun bloc : {chemin}")
+    return manifeste_de_blocs(
+        blocs,
+        source={
+            "chemin": chemin.as_posix(), "sha256": sha256(octets_source),
+            "octets": len(octets_source), "format": chemin.suffix.lstrip(".").lower(),
+            "langue": langue,
+        },
+        extraction={"outil": "graphe_document.py", "version": VERSION, "plat": bool(plat)},
+        plat=plat,
+    )
 
 
 def verifie(m: dict, chemin: pathlib.Path | None = None) -> list[str]:

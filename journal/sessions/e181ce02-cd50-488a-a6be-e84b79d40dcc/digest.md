@@ -2514,3 +2514,121 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-87", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 58103738] DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+ 15 files changed, 248 insertions(+), 37 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,220p' tools/taille_documents.py && echo '=== status ===' && git status --porcelain | head -25 && echo '=== log ===' && git log --oneline -3", "description": "Comprendre le budget T0 et l'état du dépôt"}`
+
+  ```
+if "ne pas charger" not in tete.lower() and "ne jamais charger" not in tete.lower():
+                    violations.append(f"{rel} : document daté sans consigne « ne pas charger par défaut »")
+            if budget and n > budget:
+                violations.append(f"{rel} : {n} mots > budget {budget} ({cat})")
+
+    # fiches de résultats trop longues : avertissement, pas échec
+    longues = []
+    for p in sorted((RACINE / "reports").glob("*.md")):
+        if p.name in ("README.md", "INDEX.md") or p.name.startswith("historique-"):
+            continue
+        n = p.read_text(encoding="utf-8", errors="ignore").count("\n") + 1
+        if n > 300:
+            longues.append((n, p.name))
+    if longues:
+        longues.sort(reverse=True)
+        avertissements.append(
+            f"{len(longues)} fiche(s) > 300 lignes : lire le verdict + une section, jamais tout "
+            f"(plus longues : {', '.join(f'{n} l. {nom}' for n, nom in longues[:5])})"
+        )
+
+    # T0 : la somme des trois lectures par défaut
+    def poids(rel: str) -> int:
+        q = RACINE / rel
+        return mots_hors_diagrammes(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
+
+    # Le T0 est «
+… [2299 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,24p' docs/theorie/modele-natif.md && echo '=== D&C ===' && sed -n '1,24p' docs/implantation/diehl-cook.md", "description": "Relire les en-têtes des deux documents"}`
+
+  ```
+# Le modèle Drave natif — un graphe, un flux, trois niveaux
+
+> **Ce que ce document est.** La **théorie** du modèle natif : ce qu'il est (un **graphe de blocs** exécuté sur un
+> **bus de faits**), ce qui le distingue d'un transformeur monolithique, et le **principe de séparation à trois
+> niveaux** — surface, RSN, pensée — qui rend la neutralité **mesurable** au lieu de la promettre. Les **chiffres**
+> de `drave-n0` et des campagnes N sont dans [`reports/`](../../reports/) ; le **format** dans
+> [`architecture-native.md`](architecture-native.md) et [`format-flux.md`](../implantation/format-flux.md) ;
+> l'**implémentation d'un bloc impulsionnel** dans [`diehl-cook.md`](../implantation/diehl-cook.md).
+
+> **Fiche concept — le modèle natif.**
+> Un modèle Drave n'est pas un fichier de tenseurs : c'est un **graphe de blocs** dont les arêtes portent des
+> **contrats typés**, exécuté par un **bus de listes valuées**, et **rejouable** à l'octet. `drave-n0` en est la
+> première instance : 6 blocs, des octets, une attention locale, un FFN creux routé, 3 têtes précoces, une cellule
+> de pensée et un pont.
+> **Glossaire :** [couche / étage](glossaire/entrees/couche-etage.md) · [RSN](glossaire/e
+… [2671 caractères tronqués]
+  ```
+
+- **present** `{"files": [{"path": "docs/theorie/modele-natif.md", "description": "Le modèle Drave natif : graphe de blocs, bus de faits, DRVM et séparation à trois niveaux, avec 7 schémas."}, {"path": "docs/implantation/diehl-cook.md", "description": "Cahier d'implémentation d'un bloc Diehl & Cook (2015) dans Dra … [75 caractères tronqués]`
+
+  ```
+Presented docs/theorie/modele-natif.md
+Presented docs/implantation/diehl-cook.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Documentation livrée : deux pages, treize schémas, deux commits
+
+J'ai écrit deux pages complémentaires, avec **13 schémas SVG** vérifiés :
+
+- **[`docs/theorie/modele-natif.md`](docs/theorie/modele-natif.md)** — le modèle natif : le bus de faits, DRVM, le graphe `drave-n0`, les sept pertes, ce qui est réellement original, les portes N0–N4, et ce qui pourrait rendre le document faux.
+- **[`docs/implantation/diehl-cook.md`](docs/implantation/diehl-cook.md)** — le cahier d'implémentation Diehl & Cook : équations, paramètres, manifeste DRVM, flux DRVF, tête RSN, contrôles négatifs et portes D0–D6.
+
+## L'idée centrale : le niveau est un contrat de port
+
+La séparation à trois niveaux est posée explicitement :
+
+| niveau | ce qu'il porte | ce qu'il rend |
+|---|---|---|
+| **N1 — surface** | texte, image, notation, langue | une **RSN** |
+| **N2 — RSN** | les unités de sens, le corps canonique, l'annotation | une RSN |
+| **N3 — pensée** | les opérations, les règles, les solveurs | une RSN d'action |
+
+**N1 surface → N2 RSN → N3 pensée** : la RSN est au centre, et la surface ne traverse jamais le centre. Deux étages, trois niveaux : l'étage 1 est N1 ↔ N2, l'étage 2 est N3.
+
+## Où placer Diehl & Cook
+
+C'est la réponse qui structure le second document :
+
+1. **En N1 — encodeur** : `surface → RSN`. Il voit les pixels, mais il **rend** une RSN typée. C'est le seul placement où le résultat MNIST publié est reproductible tel quel. C'est le bootstrap.
+2. **En N2 — mémoire** : `RSN → RSN`. Le même code reçoit `φ(RSN)` et jamais la surface ; il apprend des prototypes **de sens**. C'est la cible.
+3. **En N3 — lecture associative** : `RSN → RSN`, légal si l'opération est vérifiable, mais la lecture de référence reste **classique et exacte** ; l'A/B tranche.
+4. **Interdit** : `surface → décision` sans RSN. C'est le raccourci qui rend l'invariance invérifiable.
+
+Le point non négociable : **le code de spikes n'est jamais la RSN**. C'est un code interne, surface-bound en N1. La RSN est un objet **canonique, typé, annoté**, avec une empreinte qui ne dépend pas de la surface. `φ` ne lit que le **corps** ; l'annotation (format, langue, confiance) est un port séparé. La neutralité se mesure par deux sondes : le **format** doit être prédictible depuis le code de spikes (N1), mais **pas** depuis `φ(corps)`.
+
+Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau`, `ports`, les tenseurs (`w_in`, `w_ei`, `w_ie`, `theta`, `assign`), les règles de refus du chargeur, les équations LIF/STDP/θ, le pas de 0,5 ms (350 + 150 ms = 1 000 pas), la correspondance DRVF `population ↔ couche`, `pas ↔ jeton`, `spike ↔ (indice, 1)`, et les contrôles : étiquettes permutées, inhibition coupée, homéostasie coupée, **lecture taux seul** (le modèle est au fond rate-coded — il faut le dire), sonde de format, rejeu exact.
+
+## Les schémas
+
+- **Natif** : `natif-niveaux`, `natif-cout-activite`, `natif-drvm`, `natif-graphe-n0`, `natif-pertes`, `natif-original`, `natif-portes`.
+- **Diehl & Cook** : `diehl-cook-architecture`, `diehl-cook-placements`, `diehl-cook-contrat`, `diehl-cook-temps`, `diehl-cook-pipeline`, `diehl-cook-boucle`.
+
+Ils sont indexés dans [`docs/schemas/README.md`](docs/schemas/README.md) et référencés dans les deux pages.
+
+## Vérifications et commits
+
+- Commits : **`bb3bfefe`** (les deux pages + 13 SVG + index) et **`58103738`** (précisions unités/délais/trace).
+- Passent : `verifier_schemas.py`, `porte-tableaux.sh`, `revue_documentation.py`, `verifie_journal.py`, `verifie_en_cours.py`.
+- Le budget **T0** est à **4 147 mots pour 4 000** : la cause est l'état `en-cours` élargi par les deux sessions actives (N2 et R4.4), pas les deux pages. Je n'ai **pas** commité `en-cours`, qui appartient à ces sessions ; leurs fichiers non suivis (`encodeur-visuel.md`, rapport R4.4) sont inclus dans le décompte courant, d'où les compteurs à 112 documents / 370 fiches dans l'arbre de travail.
+
+Le résultat publié de Diehl & Cook (**95 %** à 6 400 neurones) est cité comme **résultat du papier**, pas comme une mesure Drave. La suite naturelle est le **v0** du simulateur : 100 excitateurs, 2 000 exemples, et les portes D0–D4 avant de prétendre à un score.
+

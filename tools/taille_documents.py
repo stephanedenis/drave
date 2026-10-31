@@ -142,7 +142,11 @@ def main() -> int:
         q = RACINE / rel
         return mots_hors_diagrammes(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
 
-    agents = list((RACINE / "docs/methode").glob("*.md"))
+    # Le T0 est « AGENTS + en-cours + UN document de tâche », et le document de tâche est un
+    # T0 (≤ 1 200 mots) : les trois documents `specifiques` ci-dessus sont des T1, avec leur
+    # propre budget. Les compter ici faisait payer 1 579 mots au T0 (organisation-du-depot.md)
+    # au lieu des 1 134 du plus gros T0 — un budget faux de 445 mots, dans le sens qui bloque.
+    agents = [a for a in (RACINE / "docs/methode").glob("*.md") if a.name not in specifiques]
     t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
         (poids(str(a.relative_to(RACINE))) for a in agents), default=0
     )

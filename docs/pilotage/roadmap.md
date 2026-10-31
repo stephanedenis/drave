@@ -30,7 +30,7 @@
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (OCR) ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
 
 ## L'ordre du jour (carpe diem)
 
@@ -42,7 +42,9 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    (AUC 0,839) sans règle qui transfère.
    **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
    **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
-   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est bloqué** (OCR).
+   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
+   l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de
+   passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.
 2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
    (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
    atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
@@ -80,7 +82,7 @@ Project starts 2026-10-29
 [R4.1–R4.3] lasts 1 day and is 100% complete and is colored in #2e7d32
 [R0.4] lasts 2 days and is 100% complete and is colored in #6a1b9a
 [R0.5] lasts 2 days and is 100% complete and is colored in #6a1b9a
-[R4.4] lasts 1 day and is colored in #b03a2e
+[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00
 [N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32
 [N2] lasts 4 days and is 30% complete and is colored in #b26a00
 [N4] lasts 2 days and is colored in #1565c0
@@ -266,7 +268,7 @@ le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement d
 | **R4.1** | **tableaux** : parseur 2D, en-têtes, cellules, opérations classiques (filtre, jointure, agrégat) | ✅ **996 cellules**, **802** exactes, texte plat **0/3** | extraction exacte sur 100 cellules ; contrôle : texte plat |
 | **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ✅ **294 fichiers**, **24/24** extraits, texte seul **0/3** | réponse par exécution exacte ; contrôle : lecture du texte seul |
 | **R4.3** | **maths** : LaTeX/MathML, définitions, preuve ; CAS bloc | ✅ **32 formules**, **10/10** dérivées, surface **0/3** | évaluation symbolique exacte ; contrôle : surface |
-| **R4.4** | **vision/OCR** : scans, figures, layout | 🧱 **bloqué** : aucun OCR sur la machine | 10 pages scannées, même réponse que le texte natif |
+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** | 10 pages **scannées**, même réponse que le texte natif — **non atteinte** : les scans réels (grain, perspective, colonnes, exposants) restent à faire |
 
 **Principe** : ces blocs sont **classiques d'abord**. Le bus les accepte comme les blocs neuronaux ; un parseur
 de tableaux n'a pas besoin d'être appris.
@@ -300,10 +302,10 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
 - **non bloqué, à faire** : **N2** (la hiérarchie) ; **N4** (consigne courte) ;
-  **N3** (opérations natives) ; **A8.3b** (mode de lot) ;
+  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
-  B10.3 (B10.2bis absent du backlog), **R4.4** (aucun OCR : ni tesseract ni pytesseract) ;
+  B10.3 (B10.2bis absent du backlog) ;
 - **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
   (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF), B12.10 (intégration, négatif).
 
@@ -316,6 +318,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 | B10.3 raisonnement sur `z` | le décodeur est sous le plancher chrF | une attention croisée, 20–30 articles, 3 graines |
+| R4.4 les scans | pas de corpus de scans réels ; le pilote part du PDF vectoriel | 10 pages photocopiées, et une passe de robustesse (nettoyage, redressement, exposants) |
 
 ## Les questions ouvertes
 

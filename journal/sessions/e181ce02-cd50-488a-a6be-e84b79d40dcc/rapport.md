@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 93 |
-| Appels d'outils | 120 |
+| Messages | 97 |
+| Appels d'outils | 123 |
 | Fichiers touchés | 9 |
-| Commandes | 87 |
+| Commandes | 89 |
 | Sous-agents | 2 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — fais une documentation détaillée du modèle Drave natif. utilise beaucoup de diagrammes pour expliquer ce qui est origina … [164 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Lister la structure du dépôt
 - grep
@@ -41,11 +41,42 @@
 - bash — Lire l'archive sur les réseaux impulsionnels
 - bash — Lire le bus et le chemin natif
 - bash — Chercher le principe de séparation
-- … et 98 autres
+- … et 101 autres
 
 **Synthèse produite :**
 
-⏵ Commit des deux documents et des treize schémas
+⏵ Documentation livrée : deux pages, treize schémas, deux commits
+
+J'ai écrit deux pages complémentaires, avec **13 schémas SVG** vérifiés :
+
+- **[`docs/theorie/modele-natif.md`](docs/theorie/modele-natif.md)** — le modèle natif : le bus de faits, DRVM, le graphe `drave-n0`, les sept pertes, ce qui est réellement original, les portes N0–N4, et ce qui pourrait rendre le document faux.
+- **[`docs/implantation/diehl-cook.md`](docs/implantation/diehl-cook.md)** — le cahier d'implémentation Diehl & Cook : équations, paramètres, manifeste DRVM, flux DRVF, tête RSN, contrôles négatifs et portes D0–D6.
+
+\## L'idée centrale : le niveau est un contrat de port
+
+La séparation à trois niveaux est posée explicitement :
+
+| niveau | ce qu'il porte | ce qu'il rend |
+|---|---|---|
+| **N1 — surface** | texte, image, notation, langue | une **RSN** |
+| **N2 — RSN** | les unités de sens, le corps canonique, l'annotation | une RSN |
+| **N3 — pensée** | les opérations, les règles, les solveurs | une RSN d'action |
+
+**N1 surface → N2 RSN → N3 pensée** : la RSN est au centre, et la surface ne traverse jamais le centre. Deux étages, trois niveaux : l'étage 1 est N1 ↔ N2, l'étage 2 est N3.
+
+\## Où placer Diehl & Cook
+
+C'est la réponse qui structure le second document :
+
+1. **En N1 — encodeur** : `surface → RSN`. Il voit les pixels, mais il **rend** une RSN typée. C'est le seul placement où le résultat MNIST publié est reproductible tel quel. C'est le bootstrap.
+2. **En N2 — mémoire** : `RSN → RSN`. Le même code reçoit `φ(RSN)` et jamais la surface ; il apprend des prototypes **de sens**. C'est la cible.
+3. **En N3 — lecture associative** : `RSN → RSN`, légal si l'opération est vérifiable, mais la lecture de référence reste **classique et exacte** ; l'A/B tranche.
+4. **Interdit** : `surface → décision` sans RSN. C'est le raccourci qui rend l'invariance invérifiable.
+
+Le point non négociable : **le code de spikes n'est jamais la RSN**. C'est un code interne, surface-bound en N1. La RSN est un objet **canonique, typé, annoté**, avec une empreinte qui ne dépend pas de la surface. `φ` ne lit que le **corps** ; l'annotation (format, langue, confiance) est un port séparé. La neutralité se mesure par deux sondes : le **format** doit être prédictible depuis le code de spikes (N1), mais **pas** depuis `φ(corps)`.
+
+Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau`, `ports`, les tenseurs (`w_in`, `w_ei`, `w_ie`, `theta`, `assign`), les règles de refus du chargeur, l
+… [1692 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -110,7 +141,7 @@
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 47 autres
+- … et 49 autres
 
 ## 4. Mesures et résultats marquants
 

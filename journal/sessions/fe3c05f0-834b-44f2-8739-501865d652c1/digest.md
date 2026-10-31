@@ -3361,3 +3361,71 @@ message prêt : 359 mots
   ```
 
 - **bash** `{"command": "GIT_INDEX_FILE=/tmp/index.r44 git commit -F /tmp/r44-msg.txt 2>&1 | tail -12; echo \"[commit ${PIPESTATUS[0]}]\"", "description": "Commit result with alternate index", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 581037380749cd9e6c7c5155624255a9412f85fe but expected bb3bfefe7aa105856fd8355d061c3dfa2a368913
+[commit 128]
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"=== stat HEAD\"; git show --stat --oneline HEAD | head -25; echo \"=== status\"; git status --short | head -20", "description": "Inspect concurrent commit and tree state", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+58103738 DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+bb3bfefe DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+=== stat HEAD
+58103738 DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+ docs/implantation/diehl-cook.md                    |  11 +-
+ journal/2026-10-31/README.md                       |   7 +-
+ journal/2026-10-31/apprentissage.md                |   2 +-
+ journal/2026-10-31/distribue.md                    |   2 +-
+ journal/2026-10-31/docs.md                         |   2 +-
+ journal/2026-10-31/mesures.md                      |   2 +-
+ journal/2026-10-31/modele.md                       |   5 +-
+ journal/2026-10-31/portes.md                       |   2 +-
+ journal/README.md                                  |   4 +-
+ .../rapport.md                                     |  12 +-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  57 +++++++++
+ .../rapport.md                                     |  17 +--
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md | 13
+… [829 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:journal/2026-10-31/README.md | grep -c \"R4.4 — l'OCR\"; echo \"=== diff journal README\"; git diff journal/2026-10-31/README.md | head -40; echo \"=== untracked journal\"; git status --short journal | grep '^??' | head", "description": "Check journal state after concurren … [73 caractères tronqués]`
+
+  ```
+1
+=== diff journal README
+diff --git a/journal/2026-10-31/README.md b/journal/2026-10-31/README.md
+index 1954d18f..e4dff9ba 100644
+--- a/journal/2026-10-31/README.md
++++ b/journal/2026-10-31/README.md
+@@ -5,14 +5,14 @@
+ > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+ > [l'index des sessions](../README.md#sessions).
+ 
+-**11 commits** · **8 session(s)** · **6 thème(s)**
++**12 commits** · **8 session(s)** · **6 thème(s)**
+ 
+ ## Thèmes du jour
+ 
+ | thème | commits | fichier |
+ |---|---|---|
+ | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+-| distribue | 3 | [distribue.md](distribue.md) |
++| distribue | 4 | [distribue.md](distribue.md) |
+ | docs | 2 | [docs.md](docs.md) |
+ | mesures | 1 | [mesures.md](mesures.md) |
+ | modele | 2 | [modele.md](modele.md) |
+@@ -22,7 +22,7 @@
+ 
+ | session | titre | début | durée | liens |
+ |---|---|---|---|---|
+-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 0.7 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
++| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session w
+… [1431 caractères tronqués]
+  ```
+
+- **bash** `{"command": "set -e\nPATHS=(\n docs/implantation/encodeur-visuel.md\n docs/pilotage/backlog/R44-encodeur-visuel.md\n docs/pilotage/backlog/index.md\n docs/pilotage/en-cours.md\n docs/pilotage/roadmap.md\n reports/INDEX.md\n reports/r44-ocr-pilote.json\n reports/rapport-r44-ocr-pilote.md\n tools/grap … [680 caractères tronqués]`

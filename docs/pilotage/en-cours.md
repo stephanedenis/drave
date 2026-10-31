@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 18 h 10 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -23,7 +23,7 @@
 > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
 > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
 
-### Session active — N2, le budget complet (`0b0a6a0d`)
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2, le budget complet
 
 - **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
   [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
@@ -37,9 +37,27 @@
   fichiers réservés, ni cette page sans me le dire.
 - **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
   `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : fiche `reports/rapport-n2-budget.md`, journal, roadmap, commit.
-- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** bloqué (aucun OCR).
+- **Prochaine action** : la fiche du budget, le journal, la roadmap, le commit.
+- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** partielle (OCR installé).
 - **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, l'OCR et sa parité
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — mandat dans
+  [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4, l'OCR et sa parité** — **sans GPU**, pour ne pas concurrencer N2.
+- **Ce qu'elle fait** : installe tesseract **sans root** (`work/ocr/`), le branche sur le graphe
+  R0.1 (même manifeste, **confiance** dans la provenance) et mesure **10 pages** rendues :
+  **WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à
+  **partielle**. Fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+- **Ce que font les autres** : N2 garde les GPU ; cette session ne prend ni GPU, ni
+  `toutes-les-portes.sh`, ni les fichiers réservés de N2.
+- **Fichiers réservés** : `work/ocr/`, `tools/installer_ocr.sh`, `tools/graphe_document_ocr.py`,
+  `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`,
+  `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`.
+- **Prochaine action** : les **scans réels** (10 pages photocopiées), les **exposants**, le layout.
+- **Bloquants** : aucun — le corpus de scans réels manque, il est nommé.
+- **Journal** : [31/10](../../journal/2026-10-31/README.md).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`
 > — rapports dans [`journal/sessions/`](../../journal/sessions/).
@@ -54,7 +72,8 @@
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
-  **R4.4 bloqué** (aucun OCR).
+  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et
+  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
@@ -81,10 +100,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **78** (73 vertes, 5 rouges à la passe du 31/10) | `tools/porte-*.sh` |
+| portes | **79** (73 vertes, 5 rouges à la passe du 31/10 ; 1 porte ajoutée depuis, hors passe) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **369** / **437** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **109** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **370** / **438** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **112** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 37** (31/10 12 h 54) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -104,7 +123,7 @@ sources de blocage nommées.
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
 | **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie **négative 2×** ; N4 0/4 ; N5 gelé | **N2** (budget et données, en cours) ; **N4** (consigne) |
-| **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
@@ -114,7 +133,7 @@ documentation · **C7** pensée — mesurés, et désormais du récit, pas du pl
 
 ## Ce qui reste
 
-**R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 bloqué** (aucun OCR).
+**R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 partielle** (OCR, scans réels à faire).
 **N2** — la **hiérarchie est écartée** (deux négatifs) ; **curriculum**, **données** et **capacité**
 restent à mesurer. **N4** — la **consigne
 courte**. **B10.3** — le `z` et l'encodeur.

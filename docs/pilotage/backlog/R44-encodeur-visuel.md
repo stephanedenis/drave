@@ -1,6 +1,6 @@
 # R44 — Encodeur visuel / OCR (scans, figures, layout)
 
-> **Statut** : bloquée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : aucun OCR installé (ni tesseract ni pytesseract)
+> **Statut** : partiel · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : — (l'OCR est installé ; restent les scans réels, le layout et les exposants)
 > **Ligne de roadmap** : R4.4 · **Fiche de résultat attendue** : rapport-r44-encodeur-visuel.md (à créer dans `reports/`)
 > **Résumé** : Lire les pages scannées, les figures et le layout, et retrouver la réponse du texte natif.
 > **Glossaire** : [OCR](../../theorie/glossaire/entrees/ocr.md) · [layout](../../theorie/glossaire/entrees/layout.md) · [WER](../../theorie/glossaire/entrees/wer.md).
@@ -20,9 +20,15 @@ Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit 
 
 ## Ce qui est mesuré
 
-- WER de l'OCR
-- exactitude du layout (colonnes, tableaux, figures)
-- parité de réponse avec le texte natif
+**Pilote du 2026-10-31** — 10 pages rendues à 300 dpi, 6 PDF, 3 langues (détail :
+[`reports/rapport-r44-ocr-pilote.md`](../../../reports/rapport-r44-ocr-pilote.md)) :
+
+- **WER 4,48 %** mot à mot, rappel 97,37 %, confiance 93,2 ;
+- **parité de passage 27/30 (90,0 %)** sur les questions du banc R0.3 ; valeur stricte 25/30 ;
+- contrôles : **sans OCR 0/30** ; page « photo » simulée **WER 17,08 %, parité 26,7 %**.
+
+Reste à mesurer : les **scans réels**, le **layout** (colonnes, tableaux, rotations) et les
+**exposants** — les trois causes des écarts du pilote sont nommées dans la fiche.
 
 ## Portes
 
@@ -43,16 +49,21 @@ Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit 
 
 ## Étapes
 
-1. choisir l'OCR et le modèle de layout
-2. brancher sur R01 (régions et offsets)
-3. mesurer WER, layout et parité ; écrire la fiche
+1. ~~choisir l'OCR~~ — **fait** : tesseract 5.5.3, sans root (`tools/installer_ocr.sh`) ; le
+   modèle de layout reste à choisir
+2. ~~brancher sur R01 (régions et offsets)~~ — **fait** : `tools/graphe_document_ocr.py` rend des
+   blocs au manifeste commun
+3. mesurer WER, layout et parité ; écrire la fiche — **pilote fait** (ci-dessus) ; **la porte
+   de R4.4 reste ouverte** : pages **scannées** réelles, colonnes, exposants
 
 ## Documents à écrire
 
-- `encodeur-visuel.md` (OCR, layout, parité, porte, dans `docs/implantation/`)
-- mettre à jour R4.4
+- ~~`encodeur-visuel.md`~~ — **écrit** : [`docs/implantation/encodeur-visuel.md`](../../implantation/encodeur-visuel.md)
+- mettre à jour R4.4 — fait dans la roadmap
 
 ## Voir aussi
 
+- [La fiche du pilote](../../../reports/rapport-r44-ocr-pilote.md) · [l'installeur](../../../tools/installer_ocr.sh) · [la porte](../../../tools/porte-ocr.sh)
+- [La spécification du bloc](../../implantation/encodeur-visuel.md)
 - [Programme R](../roadmap.md#r4--les-blocs-structurels)
 - [Analyse, § 6](../../theorie/lecture-rapide.md#6-par-type-de-document)

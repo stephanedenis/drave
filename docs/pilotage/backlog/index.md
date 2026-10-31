@@ -64,7 +64,7 @@ long est `R01 → R02 → R03 → R31 → R32 → R51`.
 | R41 | [Bloc tableaux](R41-bloc-tableaux.md) | mesurée | P2 | R01 | R4.1 |
 | R42 | [Bloc code (AST, exécution)](R42-bloc-code.md) | mesurée | P2 | R01 | R4.2 |
 | R43 | [Bloc maths](R43-bloc-maths.md) | mesurée | P3 | R01 | R4.3 |
-| R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | bloquée | P3 | R41, R42, R43 | R4.4 |
+| R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | partiel | P3 | R41, R42, R43 | R4.4 |
 | R51 | [Lecture croisée / multi-documents](R51-lecture-croisee.md) | spécifiée | P3 | R31, R32, R03, R01 | R5.1 |
 | R52 | [Décodeur multilingue](R52-multilingue-decodeur.md) | spécifiée | P3 | B10.3, R31, R32 | R5.2 |
 

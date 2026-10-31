@@ -3168,3 +3168,34 @@ pas  8000 · seq 128 · perte 88.0723 · PPL 128/4 3.7560 · 569 s
   ```
 
 - **job_output** `{"job_id": "bash-132", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in A-fr-g2 B-multi-g2; do tail -1 work/n2d/$f.log; done", "description": "Check campaign status"}`
+
+  ```
+18:07
+work/n2d/A-fr-g1.json
+work/n2d/B-multi-g1.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+pas 16750 · seq 128 · perte 45.9554 · PPL 128/4 2.4000 · 1162 s
+pas 16500 · seq 128 · perte 79.6888 · PPL 128/4 3.7876 · 1163 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/remplit.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"remplit.py — remplit work/n2d/fiche.md avec l'agrégat et écrit reports/rapport-n2-budget.md.\"\"\"\nimport json, pathlib, re, statistics as st\n\nagg = json.loads(pathli … [2589 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/fiche.md'); s=p.read_text()\ns=s.replace(\"\"\"## Ce qui est mesuré\n\n{{TABLE}}\n\"\"\",\"\"\"## Ce qui est mesuré\n\n{{TABLE}}\n\nLes fenêtres **propres** sont 128 fenêtre … [692 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **job_output** `{"job_id": "bash-132", "timeout_ms": 900000, "wait": true}`
