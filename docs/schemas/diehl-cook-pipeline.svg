@@ -1,0 +1,61 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 590" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le pipeline de référence, à trois niveaux</title>
+<desc>Surface → encodeur N1 → RSN → φ → mémoire D&amp;C N2 → RSN&#x27; → lecture N3 → décision ; le miroir redescend par un décodeur N1, jamais par la surface.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="590" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le pipeline de référence, à trois niveaux</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">D&amp;C peut être l&#x27;encodeur (N1) ou la mémoire (N2) ; dans les deux cas, le centre reste la RSN.</text>
+<rect x="30" y="150" width="120" height="90" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="90.0" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">surface</text>
+<text x="90.0" y="196.0" text-anchor="middle" font-size="10.5" fill="#334155">pixels</text>
+<text x="90.0" y="211.225" text-anchor="middle" font-size="10.5" fill="#334155">ou notation</text>
+<rect x="180" y="150" width="140" height="90" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="250.0" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">E · N1</text>
+<text x="250.0" y="196.0" text-anchor="middle" font-size="10.5" fill="#334155">encodeur</text>
+<text x="250.0" y="211.225" text-anchor="middle" font-size="10.5" fill="#334155">surface → RSN</text>
+<rect x="350" y="150" width="130" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="415.0" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">RSN</text>
+<text x="415.0" y="196.0" text-anchor="middle" font-size="10.5" fill="#334155">le centre</text>
+<text x="415.0" y="211.225" text-anchor="middle" font-size="10.5" fill="#334155">typée, neutre</text>
+<rect x="510" y="150" width="80" height="90" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="550.0" y="174" text-anchor="middle" font-size="14" font-weight="bold" fill="#6d28d9">φ</text>
+<text x="550.0" y="196.0" text-anchor="middle" font-size="9.5" fill="#334155">RSN →</text>
+<text x="550.0" y="209.775" text-anchor="middle" font-size="9.5" fill="#334155">vecteur</text>
+<rect x="620" y="150" width="140" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="690.0" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">M · N2</text>
+<text x="690.0" y="196.0" text-anchor="middle" font-size="10.5" fill="#334155">D&amp;C mémoire</text>
+<text x="690.0" y="211.225" text-anchor="middle" font-size="10.5" fill="#334155">RSN → RSN</text>
+<rect x="790" y="150" width="140" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="860.0" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">RSN&#x27;</text>
+<text x="860.0" y="196.0" text-anchor="middle" font-size="10.5" fill="#334155">+ annotation</text>
+<text x="860.0" y="211.225" text-anchor="middle" font-size="10.5" fill="#334155">prototype</text>
+<line x1="150" y1="195.0" x2="179" y2="195.0" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<line x1="320" y1="195.0" x2="349" y2="195.0" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<line x1="480" y1="195.0" x2="509" y2="195.0" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<line x1="590" y1="195.0" x2="619" y2="195.0" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<line x1="760" y1="195.0" x2="789" y2="195.0" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="335" y="136" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">N1</text>
+<text x="690" y="136" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">N2</text>
+<rect x="620" y="340" width="140" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="690.0" y="364" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">T · N3</text>
+<text x="690.0" y="386.0" text-anchor="middle" font-size="10.5" fill="#334155">lecture</text>
+<text x="690.0" y="401.225" text-anchor="middle" font-size="10.5" fill="#334155">RSN → RSN</text>
+<rect x="790" y="340" width="140" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="860.0" y="364" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">décision</text>
+<text x="860.0" y="386.0" text-anchor="middle" font-size="10.5" fill="#334155">RSN d&#x27;action</text>
+<text x="860.0" y="401.225" text-anchor="middle" font-size="10.5" fill="#334155">ou étiquette</text>
+<line x1="860" y1="240" x2="860" y2="338" stroke="#15803d" stroke-width="2.2" marker-end="url(#fv)"/>
+<line x1="760" y1="380" x2="788" y2="380" stroke="#15803d" stroke-width="2.2" marker-end="url(#fv)"/>
+<text x="700" y="326" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">N3</text>
+<rect x="180" y="340" width="140" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="250.0" y="364" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">D · N1</text>
+<text x="250.0" y="386.0" text-anchor="middle" font-size="10.5" fill="#334155">décodeur</text>
+<text x="250.0" y="401.225" text-anchor="middle" font-size="10.5" fill="#334155">RSN&#x27; → surface</text>
+<path d="M790,195 L790,295 L250,295 L250,338" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#fb)"/>
+<text x="520" y="313" text-anchor="middle" font-size="10.5" fill="#1d4ed8">miroir : la RSN&#x27; redescend vers le décodeur, puis vers la surface</text>
+<path d="M180,380 L90,380 L90,242" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#fb)"/>
+<path d="M120,240 L120,480 L710,480 L710,422" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#fr)"/>
+<text x="480" y="500" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#b91c1c">interdit : surface → pensée (T), sans passer par la RSN</text>
+<rect x="30" y="528" width="900" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="555" text-anchor="middle" font-size="11.5" fill="#334155">Deux implémentations du même bloc, deux contrats : la neutralité se mesure au centre, pas dans le code.</text>
+</svg>

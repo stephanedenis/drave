@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 0.2 h |
-| Tours | 1 |
-| Messages | 85 |
-| Appels d'outils | 92 |
-| Fichiers touchés | 3 |
-| Commandes | 81 |
+| Durée | 0.7 h |
+| Tours | 2 |
+| Messages | 168 |
+| Appels d'outils | 170 |
+| Fichiers touchés | 9 |
+| Commandes | 142 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -26,11 +26,13 @@
 
 **Tour 1** — continue
 
+**Tour 2** — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour." Round: 1/1000  Continue working  … [511 caractères tronqués]
+
 ## 2. Déroulé, étape par étape
 
 ### Tour 1 — continue
 
-*92 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Show git status and recent commits
@@ -46,13 +48,58 @@
 - bash — Check GPU availability
 - bash — Read R12 curriculum backlog card
 - bash — Read distillation script header
-- … et 75 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
-⏵ Mettant `en-cours` à jour pour déclarer ma session et la carte des conflits
+⏵ Réponse sur l'état et la carte des conflits
 
-Non — il ne l'était pas : la page datait de 17 h 15 et disait encore « aucune session active ». Je le corrige tout de suite, avec ma session, mes fichiers réservés et ce qu'une autre session peut prendre sans collision.
+**Non, il ne l'était pas** — la page datait de 17 h 15 et disait encore « aucune session active ». C'est corrigé, validé et committé : `54dc7a26`. `tools/sessions.py --status` me voit maintenant « en cours ».
+
+**Ce que l'autre session lira dans `en-cours`**
+
+- Session active `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`, rôle **N2 — le budget complet** (campagne GPU en cours : français seul, manifeste 4 sources, quotas égaux, curriculum 129 ; 3 graines).
+- Fichiers réservés : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`, `journal/sessions/0b0a6a0d-…/`.
+
+**Ce qu'elle peut prendre sans collision**
+
+- La documentation, le backlog, **N4** (consigne courte, sans GPU), et les portes **documentaires** (`PORTES="..."`).
+- Tout ce qui ne touche ni mes fichiers réservés ni les GPU.
+
+**Ce qu'elle ne doit pas prendre (conflits réels, pas théoriques)**
+
+- `bash tools/toutes-les-portes.sh` : la passe complète utilise les **deux cartes** et fausserait mes mesures (c'est écrit dans `docs/methode/portes.md` : portes et mesure GPU ne cohabitent pas). Je la lancerai moi-même à la fin, seule.
+- Un entraînement GPU, pour la même raison.
+- `docs/pilotage/en-cours.md` : **une session écrit à la fois**. Si elle doit y mettre un fait, qu'elle me le dise — je libère la page.
+- La `roadmap` et `reports/n2-*` : je les édite à la clôture.
+
+**Horaires** : la campagne tourne jusqu'à ~19 h 40 (6 runs restants), puis agrégation, fiche, et passe complète des portes (1 h 30–2 h) avant le commit de clôture. Si elle a besoin d'un GPU avant, elle me le dit et je réordonne.
+
+Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` aurait stagé 1–2 Go de points de contrôle. `tools/docwatch` reste modifié en local (sous-module, pas à moi).
+
+### Tour 2 — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / … [791 caractères tronqués]
+
+*74 appels d'outils.* Actions notables :
+
+- bash — Check campaign status
+- bash — Compute manifest source shares
+- bash — Check working tree and generated journal file
+- bash — Quantify the sampling-grid difference
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/evalue-final.py`
+- bash — Check seed 1 completion
+- bash — Check train/val overlap for contamination
+- bash — Read seed 1 final results
+- bash — Check run logs and processes
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py`
+- read
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py`
+- bash — Check for seed 1 final results
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py`
+- … et 52 autres
+
+**Synthèse produite :**
+
+⏵ Versant l'évaluation et la mesure de contamination dans `tools/` (versionnées)
 
 ## 3. Travail accompli
 
@@ -63,6 +110,12 @@ Non — il ne l'était pas : la page datait de 17 h 15 et disait encore « aucun
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/distiller_budget.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/evalue-final.py` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py` | 3 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/fiche.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/journal-notes.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -106,7 +159,7 @@ Non — il ne l'était pas : la page datait de 17 h 15 et disait encore « aucun
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 41 autres
+- … et 102 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -175,13 +228,41 @@ Non — il ne l'était pas : la page datait de 17 h 15 et disait encore « aucun
 - **T1** `1, 1164 MiB, 83 %`
 - **T1** `# fenêtres (82 %). `equilibre` donne le même quota à chaque source.`
 - **T1** `| 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |`
+- **T1** `[still running after 60000ms; moved to background job bash-81]`
+- **T1** `4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129`
+- **T1** `sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,`
+- **T2** `1, 1164 MiB, 81 %`
+- **T2** `data/corpus_fr.txt                 1907    3.8 %`
+- **T2** `data/udhr/udhr_train.txt           1802    3.6 %`
+- **T2** `data/corpus_en.txt                41257   82.5 %`
+- **T2** `data/corpus_mixte_litt.txt         5033   10.1 %`
+- **T2** `[still running after 60000ms; moved to background job bash-95]`
+- **T2** `> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
+- **T2** `> livre 10/10, go 9×9 10/10 contre 3/10, dames 0 défaite, cartes 44,7 % contre 51,0 %). Les **deux rouges**`
+- **T2** `> `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 →`
+- **T2** `> 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**,`
+- **T2** `tools/adaptateur_langue.py:19:      --fr data/corpus_fr.txt --pas 2000 [--rang 8] [--sortie /tmp/adaptateur-fr.pt]`
+- **T2** `- **Un seul corpus**, français, 4,63 Mo.`
+- **T2** `fenêtres de train présentes >1 fois dans train : 47 / 200 (23.5 %)`
+- **T2** `[still running after 60000ms; moved to background job bash-121]`
+- **T2** `- **R0** : un contrôleur **classique** + un modèle externe atteint-il **90 %** de la compréhension à **30 %** du`
+- **T2** `> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par`
+- **T2** `0, 1164 MiB, 78 %`
+- **T2** `1, 1164 MiB, 80 %`
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
+- **T1** : 54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40 9f1dcaae N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES) === é
+- **T2** : 17:35 -- A-fr-g1 pas  8750 · seq 128 · perte 48.6506 · PPL 128/4 2.4483 · 592 s -- B-multi-g1 pas  8750 · seq 128 · perte 91.2001 · PPL 128/4 3.7502 · 591 s -- A-fr-g2 -- B-multi-g2 [exit code: 1]
+- **T2** : 17:37 pas 10250 · seq 128 · perte 51.3992 · PPL 128/4 2.4407 · 695 s pas 10500 · seq 128 · perte 48.7937 · PPL 128/4 2.4455 · 712 s [exit code: 1]
+- **T2** : 17:37 pas 10750 · seq 128 · perte 53.3267 · PPL 128/4 2.4458 · 730 s pas 11000 · seq 128 · perte 44.5797 · PPL 128/4 2.4276 · 748 s [exit code: 2]
+- **T2** : 17:38 pas 12000 · seq 128 · perte 49.2191 · PPL 128/4 2.4135 · 818 s [exit code: 1]
+- **T2** : 17:40:04 pas 13000 · seq 128 · perte 53.7650 · PPL 128/4 2.4008 · 886 s pas 13000 · seq 128 · perte 84.8568 · PPL 128/4 3.7372 · 877 s [exit code: 1]
+- **T2** : 17:42:32 pas 15250 · seq 128 · perte 45.0087 · PPL 128/4 2.4105 · 1037 s pas 15250 · seq 128 · perte 81.7393 · PPL 128/4 3.7293 · 1027 s [exit code: 1]
 
 ## 6. Commits
 

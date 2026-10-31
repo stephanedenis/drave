@@ -1,0 +1,44 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="DejaVu Sans, Arial, sans-serif">
+<title>DRVM : le conteneur du modèle</title>
+<desc>Quatre sections, trois formats, un critère : un bloc se lit seul, se place seul, se rejoue seul.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="500" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">DRVM : le conteneur du modèle</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le format porte le graphe et les contrats ; les tenseurs ne sont qu&#x27;une des quatre sections.</text>
+<rect x="30" y="92" width="430" height="330" rx="12" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+<text x="245" y="118" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">MODÈLE.drvm</text>
+<text x="245" y="136" text-anchor="middle" font-size="10.5" fill="#475569">en-tête 92 o · magie DRVM · deux SHA-256</text>
+<rect x="45" y="152" width="400" height="56" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+<circle cx="70" cy="180" r="13" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="70" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">1</text>
+<text x="92" y="175" text-anchor="start" font-size="12.5" font-weight="bold" fill="#0f172a">Manifeste</text>
+<text x="92" y="194" text-anchor="start" font-size="10.5" fill="#475569">version, hash, provenance, tokenizer, schéma RSN</text>
+<rect x="45" y="218" width="400" height="56" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+<circle cx="70" cy="246" r="13" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="70" y="251" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">2</text>
+<text x="92" y="241" text-anchor="start" font-size="12.5" font-weight="bold" fill="#0f172a">Graphe</text>
+<text x="92" y="260" text-anchor="start" font-size="10.5" fill="#475569">blocs, ports, régions, routes, têtes, pont</text>
+<rect x="45" y="284" width="400" height="56" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+<circle cx="70" cy="312" r="13" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="70" y="317" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">3</text>
+<text x="92" y="307" text-anchor="start" font-size="12.5" font-weight="bold" fill="#0f172a">Tenseurs</text>
+<text x="92" y="326" text-anchor="start" font-size="10.5" fill="#475569">offsets alignés 64 o, dtype, forme, quant, sparsité</text>
+<rect x="45" y="350" width="400" height="56" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+<circle cx="70" cy="378" r="13" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="70" y="383" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">4</text>
+<text x="92" y="373" text-anchor="start" font-size="12.5" font-weight="bold" fill="#0f172a">Exécution</text>
+<text x="92" y="392" text-anchor="start" font-size="10.5" fill="#475569">placement, cache, graines, contrat d&#x27;activation</text>
+<text x="245" y="440" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#b91c1c">un lecteur qui ne connaît pas un bloc le REFUSE, il ne l&#x27;ignore pas</text>
+<rect x="520" y="100" width="410" height="86" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="725.0" y="124" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">DRVM — le modèle</text>
+<text x="725.0" y="146.0" text-anchor="middle" font-size="11.5" fill="#334155">poids + graphe + routes + contrats</text>
+<rect x="520" y="205" width="410" height="86" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+<text x="725.0" y="229" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">DRVF — les activations</text>
+<text x="725.0" y="251.0" text-anchor="middle" font-size="11.5" fill="#334155">trace, rejeu, transport, analyse</text>
+<rect x="520" y="310" width="410" height="86" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="725.0" y="334" text-anchor="middle" font-size="14" font-weight="bold" fill="#b45309">RSN — le sens</text>
+<text x="725.0" y="356.0" text-anchor="middle" font-size="11.5" fill="#334155">champs typés, codec, universaux</text>
+<text x="725" y="435" text-anchor="middle" font-size="12" fill="#475569">trois formats, trois rôles : on ne les confond pas</text>
+<rect x="30" y="456" width="900" height="34" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="478" text-anchor="middle" font-size="12" fill="#334155">Critère de DRVM : un bloc se lit seul (mmap), se place seul, se rejoue seul.</text>
+</svg>

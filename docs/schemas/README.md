@@ -1,7 +1,8 @@
 # Les schémas — index et convention
 
-> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : cinq schémas directs
-> des concepts, deux sources générées par docwatch et les quatorze schémas de la synthèse
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : les schémas directs
+> des concepts, les schémas du natif et de l'impulsionnel, deux sources générées par docwatch et
+> les quatorze schémas de la synthèse
 > (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
 > `role="img"` ; aucun n'utilise de ressource externe.
 >
@@ -19,6 +20,24 @@
 | [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
 | [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
+
+## Les schémas du natif et de l'impulsionnel
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [natif-niveaux.svg](natif-niveaux.svg) | N1 surface → N2 RSN → N3 pensée, et le raccourci interdit | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-cout-activite.svg](natif-cout-activite.svg) | les listes valuées : le coût suit l'activité, pas la taille | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-drvm.svg](natif-drvm.svg) | les quatre sections de DRVM et les trois formats | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-graphe-n0.svg](natif-graphe-n0.svg) | `drave-n0` : blocs, régions, têtes précoces, pont, pensée | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-pertes.svg](natif-pertes.svg) | les sept pertes du natif et ce qu'elles empêchent | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-original.svg](natif-original.svg) | les six gestes qui distinguent Drave | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-portes.svg](natif-portes.svg) | les portes N0 → N4 | [le modèle natif](../theorie/modele-natif.md) |
+| [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-temps.svg](diehl-cook-temps.svg) | du spike au fait DRVF : 0,5 ms, 1 000 pas, une trace | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-pipeline.svg](diehl-cook-pipeline.svg) | le pipeline de référence à trois niveaux et le miroir | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-boucle.svg](diehl-cook-boucle.svg) | la boucle d'entraînement et ses contrôles négatifs | [le bloc D&C](../implantation/diehl-cook.md) |
 
 Le **schéma des chantiers** n'est plus un fichier : c'est un bloc **PlantUML inline** dans
 [`en-cours.md`](../pilotage/en-cours.md) (structure et états, sans axe de temps) et un **Gantt

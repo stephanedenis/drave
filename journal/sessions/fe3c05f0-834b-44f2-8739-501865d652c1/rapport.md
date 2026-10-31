@@ -1,0 +1,194 @@
+# Session fe3c05f0 — Lecture de en-cours.md et choix de tâche
+
+> **Journaux :** [le jour](../../2026-10-31/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
+| | |
+|---|---|
+| Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
+| Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
+| Début | 2026-10-31 17:35 |
+| Durée | 0.5 h |
+| Tours | 1 |
+| Messages | 145 |
+| Appels d'outils | 163 |
+| Fichiers touchés | 7 |
+| Commandes | 139 |
+| Sous-agents | 0 |
+| Commits | 0 |
+| Compactages de contexte | 0 |
+
+## 1. Ce qui a été demandé
+
+**Tour 1** — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
+
+## 2. Déroulé, étape par étape
+
+### Tour 1 — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
+
+*163 appels d'outils.* Actions notables :
+
+- read
+- bash — Check active sessions status
+- bash — Check git working tree and recent commits
+- bash — Read active session mandate plan
+- bash — Run backlog graph verifier
+- bash — Inspect other session files and heartbeat
+- bash — Read start of backlog verifier
+- bash — Find missing-card logic in verifier
+- bash — Check current time and GPU usage
+- bash — Run documentary gates
+- job_kill
+- bash — Verify no gate script still running
+- bash — List processes touching the repo
+- bash — List documentary gate scripts
+- … et 137 autres
+
+**Synthèse produite :**
+
+⏵ Vérification des portes documentaires avant de choisir la tâche
+
+## 3. Travail accompli
+
+### Fichiers créés ou modifiés
+
+| Fichier | Écritures | Éditions |
+|---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/installer_ocr.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-ocr-pilote.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/encodeur-visuel.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md` | 0 | 1 |
+
+### Commandes exécutées (échantillon)
+
+- **T1** Check active sessions status
+- **T1** Check git working tree and recent commits
+- **T1** Read active session mandate plan
+- **T1** Run backlog graph verifier
+- **T1** Inspect other session files and heartbeat
+- **T1** Read start of backlog verifier
+- **T1** Find missing-card logic in verifier
+- **T1** Check current time and GPU usage
+- **T1** Run documentary gates
+- **T1** Verify no gate script still running
+- **T1** List processes touching the repo
+- **T1** List documentary gate scripts
+- **T1** Read documentary gate scripts
+- **T1** Read gate registry runner
+- **T1** Run documentation review
+- **T1** Find N4 reports and backlog cards
+- **T1** Locate N4 short-instruction evidence
+- **T1** Read R4.4 backlog card
+- **T1** Check OCR tools availability
+- **T1** Test PyPI network access
+- **T1** Scan continuity method for session rules
+- **T1** Inspect sessions tool interface
+- **T1** Find PDF corpus in data
+- **T1** Check PDF rendering and extraction tools
+- **T1** Inspect ONU corpus and R0 tools
+- **T1** Trace ONU corpus use in R0.1
+- **T1** Read R0.3 bench report
+- **T1** Read PDF graph parser header
+- **T1** Find bench corpus sources
+- **T1** Check PDF sizes and corpus index
+- **T1** Check OS, python, disk, apt and torch
+- **T1** Check zypper and tesseract packages
+- **T1** Probe openSUSE repo for tesseract RPM
+- **T1** Check RPM tools and tesseract dependencies
+- **T1** List tesseract and leptonica RPM names
+- **T1** Check work dir ignore status
+- **T1** Find leptonica and language data RPMs
+- **T1** List tesseract language RPMs in noarch
+- **T1** Read bench harness start
+- **T1** Inspect reader controller interface
+- … et 99 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `4442c64c N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %)`
+- **T1** `les données** (41 Mo, 4 sources, 20 000 pas) et la capacité. Mesurer le budget complet sur le`
+- **T1** `16 × 128) et **2,6998** (8 lots × 15 × 129), plus le contrôle par permutation.`
+- **T1** `0, 84 %, 1164 MiB, 16384 MiB`
+- **T1** `1, 78 %, 1164 MiB, 16384 MiB`
+- **T1** `[still running after 60000ms; moved to background job bash-9]`
+- **T1** `/dev/mapper/system-root   11T  8,9T  2,0T  82% /home/stephane/Data13TB`
+- **T1** `tmpfs                     63G  546M   63G   1% /tmp`
+- **T1** `# indépendante** (`transformers`) qui dit que la tour **ne concorde pas encore** (55 à 79 % d'écart`
+- **T1** `# pour une quantification de ~1 % ; `reports/rapport-vision-qwen2vl.md`). Une porte qui exigerait`
+- **T1** `#   3. **les formes sont celles du modèle** (256 patchs × 1280 canaux, 64 jetons × 1536 après`
+- **T1** `A_RES_80_10-fr.pdf p2       fra        558   2.15%  97.85%   94.3      5`
+- **T1** `A_RES_80_10-en.pdf p2       eng        546   1.10%  98.90%   94.8      4`
+- **T1** `WER 1.63% · rappel 98.37% · précision 99.45% · confiance 94.5`
+- **T1** `exactitude : natif 100.00% · OCR 66.67% · PARITÉ 66.67% (9 questions)`
+- **T1** `sans OCR : 0.00% de réponses`
+- **T1** `✅ WER ≤ 10%`
+- **T1** `✅ rappel ≥ 90%`
+- **T1** `❌ parité ≥ 90%`
+- **T1** `✅ exactitude natif ≥ 90%`
+- **T1** `❌ exactitude OCR ≥ 90%`
+- **T1** `331:        (f"WER ≤ {SEUILS['wer']:.0%}", agregat["wer"] <= SEUILS["wer"]),`
+- **T1** `332:        (f"rappel ≥ {SEUILS['rappel']:.0%}", agregat["rappel"] >= SEUILS["rappel"]),`
+- **T1** `333:        (f"parité de région ≥ {SEUILS['parite_region']:.0%}",`
+- **T1** `335:        (f"exactitude natif ≥ {SEUILS['exactitude_natif']:.0%}",`
+- **T1** `359:    print(f"  exactitude de la valeur : natif {a['exactitude_natif']:.2%} · OCR {a['exactitude_ocr']:.2%}")`
+- **T1** `360:    print(f"  PARITÉ de région (F1 ≥ 0,90) : {a['parite_region']:.2%} · médiane F1 "`
+- **T1** `361:          f"{a['f1_median']:.3f} · valeur stricte {a['parite_valeur']:.2%} "`
+- **T1** `365:              f" · parité région {a['parite_region_bruitee']:.2%}")`
+- **T1** `363:          f"{a['f1_median']:.3f} · valeur stricte {a['parite_valeur']:.2%} "`
+- **T1** `A_RES_80_10-es.pdf p2       spa        577   2.08%  98.09%   94.5      4`
+- **T1** `A_RES_80_1-en.pdf p1        eng        294   4.76%  98.30%   93.5      3`
+- **T1** `A_RES_80_1-es.pdf p1        spa        326   5.52%  98.77%   92.9      3`
+- **T1** `A_RES_80_1-fr.pdf p1        fra        315   4.44%  99.68%   90.5      3`
+- **T1** `A_RES_80_10-en.pdf p1       eng        316   9.18%  93.04%   91.5      3`
+- **T1** `A_RES_80_10-es.pdf p1       spa        284   9.15%  94.72%   92.1      3`
+- **T1** `A_RES_80_10-fr.pdf p1       fra        305  12.13%  92.79%   89.4      2`
+- **T1** `A_RES_80_1-en.pdf p2        eng        250   0.40%  99.60%   95.7      0`
+- **T1** `WER 4.48% · rappel 97.37% · précision 97.82% · confiance 93.2`
+- **T1** `exactitude de la valeur : natif 100.00% · OCR 83.33%`
+- **T1** `PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)`
+- **T1** `page dégradée : WER 17.08% · exactitude 40.00% · parité région 26.67%`
+- **T1** `✅ parité de région ≥ 90%`
+- **T1** `> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par`
+- **T1** `| [`rapport-native-prof20k-5.md`](rapport-native-prof20k-5.md) | **N2.19** — 30 000 pas : PPL **2,708**, précision **72,80 %** |`
+- **T1** `| [`rapport-native-prof20k-4.md`](rapport-native-prof20k-4.md) | **N2.18** — 30 000 pas : PPL **2,714**, précision **72,62 %** |`
+- **T1** `| [`rapport-native-prof20k-3.md`](rapport-native-prof20k-3.md) | **N2.17** — 30 000 pas : PPL **2,726**, précision **72,34 %** |`
+- **T1** `| [`rapport-native-prof20k-2.md`](rapport-native-prof20k-2.md) | **N2.16** — 20 000 pas de plus : PPL **2,755**, plateau, tête 3 **72,17 %** |`
+- **T1** `| [`rapport-native-prof20k.md`](rapport-native-prof20k.md) | **N2.14** — professeur 20k : PPL **2,787**, précision **71,30 %** |`
+- **T1** `| [`rapport-native-prof10k-2.md`](rapport-native-prof10k-2.md) | **N2.13** — 20 000 pas de plus : PPL **2,876**, précision **70,00 %** |`
+- **T1** `| [`rapport-native-prof10k.md`](rapport-native-prof10k.md) | **N2.12** — professeur 10k : PPL **2,910** contre **3,082**, tête 3 **69,97 %** |`
+- **T1** `85:[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00`
+- **T1** `271:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** |`
+- **T1** `4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129`
+- **T1** `sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,`
+- **T1** `- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE`
+- **T1** `1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche`
+- **T1** `| 13:01 | `4442c64c` | N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %) |`
+- **T1** `section donne **2,9935** contre **2,9927** au témoin (+0,029 %) ; il bat son propre contrôle **sans`
+- **T1** `les graines 2 et 3 décalent désormais les fenêtres de `(graine−1) × 10 000 019`.`
+- **T1** `**WER 4,48 %** (169 éditions sur 3 771 mots), rappel **97,37 %**, confiance **93,2**. Sur les`
+- **T1** `(90 %)**, la **valeur exacte** dans **25 (83,3 %)**. Les écarts sont nommés : trois **appels de note`
+- **T1** `travail : **sans OCR 0/30**, et la page « photo » simulée tombe à **17,08 %** de WER et **26,7 %**`
+- **T1** `**WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à`
+- **T1** `+   l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de`
+- **T1** `+   passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.`
+- **T1** `[R4.1–R4.3] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[R0.4] lasts 2 days and is 100% complete and is colored in #6a1b9a`
+- **T1** `[R0.5] lasts 2 days and is 100% complete and is colored in #6a1b9a`
+- **T1** `+[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00`
+- **T1** `[N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[N2] lasts 4 days and is 30% complete and is colored in #b26a00`
+- **T1** `+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** | 10`
+
+## 5. Erreurs rencontrées
+
+6 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
+- **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
+- **T1** : tools/graphe_document.py:287:def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict: tools/lecteur_controleur.py:65:def passages(manifeste: dict) -> list[dict]: [stderr] 
+- **T1** : [stderr] head: cannot open '/tmp/ocrout.tsv' for reading: No such file or directory grep: /tmp/ocrout.tsv: No such file or directory [exit code: 2]
+- **T1** : [stderr] ls: cannot access 'work/ocr/root/usr/share/tessdata/': No such file or directory [exit code: 2]
+- **T1** : [code 0]   exactitude de la valeur : natif 100.00% · OCR 83.33%   PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)   page dégradée : WER 17.08% · exactit
+

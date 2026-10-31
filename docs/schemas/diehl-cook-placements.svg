@@ -1,0 +1,55 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Où placer un bloc Diehl &amp; Cook : le niveau est un contrat de port</title>
+<desc>Le même algorithme est N1, N2 ou N3 selon ce qu&#x27;il reçoit et ce qu&#x27;il rend ; le raccourci surface → décision est refusé.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Où placer un bloc Diehl &amp; Cook : le niveau est un contrat de port</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Ce n&#x27;est pas l&#x27;algorithme qui a un niveau : c&#x27;est le type de ses ports.</text>
+<rect x="30" y="96" width="280" height="290" rx="12" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="170" y="126" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4ed8">N1 · encodeur</text>
+<text x="170" y="152" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">surface → RSN</text>
+<text x="52" y="190" text-anchor="start" font-size="12" font-weight="bold" fill="#1d4ed8">•</text>
+<text x="66" y="190" text-anchor="start" font-size="11.5" fill="#334155">voit la surface</text>
+<text x="52" y="222" text-anchor="start" font-size="12" font-weight="bold" fill="#1d4ed8">•</text>
+<text x="66" y="222" text-anchor="start" font-size="11.5" fill="#334155">son code est lié au format</text>
+<text x="52" y="254" text-anchor="start" font-size="12" font-weight="bold" fill="#1d4ed8">•</text>
+<text x="66" y="254" text-anchor="start" font-size="11.5" fill="#334155">sortie typée obligatoire</text>
+<text x="52" y="286" text-anchor="start" font-size="12" font-weight="bold" fill="#1d4ed8">•</text>
+<text x="66" y="286" text-anchor="start" font-size="11.5" fill="#334155">reproduit MNIST aujourd&#x27;hui</text>
+<rect x="90" y="340" width="160" height="28" rx="14" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="170.0" y="358.0" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">légal · bootstrap</text>
+<rect x="340" y="96" width="280" height="290" rx="12" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+<text x="480" y="126" text-anchor="middle" font-size="16" font-weight="bold" fill="#b45309">N2 · mémoire</text>
+<text x="480" y="152" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">RSN → RSN</text>
+<text x="362" y="190" text-anchor="start" font-size="12" font-weight="bold" fill="#b45309">•</text>
+<text x="376" y="190" text-anchor="start" font-size="11.5" fill="#334155">voit φ(RSN), jamais la surface</text>
+<text x="362" y="222" text-anchor="start" font-size="12" font-weight="bold" fill="#b45309">•</text>
+<text x="376" y="222" text-anchor="start" font-size="11.5" fill="#334155">prototypes de sens</text>
+<text x="362" y="254" text-anchor="start" font-size="12" font-weight="bold" fill="#b45309">•</text>
+<text x="376" y="254" text-anchor="start" font-size="11.5" fill="#334155">neutre par construction</text>
+<text x="362" y="286" text-anchor="start" font-size="12" font-weight="bold" fill="#b45309">•</text>
+<text x="376" y="286" text-anchor="start" font-size="11.5" fill="#334155">la cible de l&#x27;architecture</text>
+<rect x="400" y="340" width="160" height="28" rx="14" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="480.0" y="358.0" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">la cible</text>
+<rect x="650" y="96" width="280" height="290" rx="12" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+<text x="790" y="126" text-anchor="middle" font-size="16" font-weight="bold" fill="#15803d">N3 · lecture</text>
+<text x="790" y="152" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">RSN → RSN</text>
+<text x="672" y="190" text-anchor="start" font-size="12" font-weight="bold" fill="#15803d">•</text>
+<text x="686" y="190" text-anchor="start" font-size="11.5" fill="#334155">opération vérifiable</text>
+<text x="672" y="222" text-anchor="start" font-size="12" font-weight="bold" fill="#15803d">•</text>
+<text x="686" y="222" text-anchor="start" font-size="11.5" fill="#334155">A/B classique vs neuronal</text>
+<text x="672" y="254" text-anchor="start" font-size="12" font-weight="bold" fill="#15803d">•</text>
+<text x="686" y="254" text-anchor="start" font-size="11.5" fill="#334155">ne voit jamais la surface</text>
+<text x="672" y="286" text-anchor="start" font-size="12" font-weight="bold" fill="#15803d">•</text>
+<text x="686" y="286" text-anchor="start" font-size="11.5" fill="#334155">rend une RSN d&#x27;action</text>
+<rect x="710" y="340" width="160" height="28" rx="14" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+<text x="790.0" y="358.0" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">légal si règle</text>
+<line x1="311" y1="240" x2="339" y2="240" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<line x1="621" y1="240" x2="649" y2="240" stroke="#334155" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="325" y="228" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">RSN</text>
+<text x="635" y="228" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="30" y="412" width="900" height="104" rx="12" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="480" y="440" text-anchor="middle" font-size="15" font-weight="bold" fill="#b91c1c">Interdit : surface → décision, sans passer par la RSN</text>
+<text x="480" y="466" text-anchor="middle" font-size="12" fill="#7f1d1d">Le code de spikes n&#x27;est jamais la RSN : c&#x27;est un code interne, pas un contrat.</text>
+<text x="480" y="490" text-anchor="middle" font-size="11.5" fill="#7f1d1d">Un bloc qui reçoit la surface est N1 ; un bloc qui rend une décision doit rendre une RSN que N3 juge.</text>
+</svg>

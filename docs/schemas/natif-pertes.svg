@@ -1,0 +1,46 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Sept pertes, un seul objectif</title>
+<desc>Le prochain octet ne suffit pas : chaque mécanisme a sa perte, sa porte et son contrôle négatif.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="480" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Sept pertes, un seul objectif</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le prochain octet n&#x27;apprend ni à sortir tôt, ni à penser, ni à se décomposer.</text>
+<rect x="30" y="92" width="440" height="66" rx="9" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<circle cx="58" cy="125" r="14" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="58" y="130" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">1</text>
+<text x="82" y="119" text-anchor="start" font-size="13" font-weight="bold" fill="#1d4ed8">prochain octet</text>
+<text x="82" y="140" text-anchor="start" font-size="11" fill="#475569">le socle : prédire, pas encore comprendre</text>
+<rect x="500" y="92" width="440" height="66" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+<circle cx="528" cy="125" r="14" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="528" y="130" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">2</text>
+<text x="552" y="119" text-anchor="start" font-size="13" font-weight="bold" fill="#0f172a">distillation</text>
+<text x="552" y="140" text-anchor="start" font-size="11" fill="#475569">le professeur donne une distribution, pas la vérité</text>
+<rect x="30" y="172" width="440" height="66" rx="9" fill="#ffffff" stroke="#6d28d9" stroke-width="1.4"/>
+<circle cx="58" cy="205" r="14" fill="#6d28d9" stroke="#6d28d9" stroke-width="1.8"/>
+<text x="58" y="210" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">3</text>
+<text x="82" y="199" text-anchor="start" font-size="13" font-weight="bold" fill="#6d28d9">pertes locales par bloc</text>
+<text x="82" y="220" text-anchor="start" font-size="11" fill="#475569">chaque région doit rester utile seule</text>
+<rect x="500" y="172" width="440" height="66" rx="9" fill="#ffffff" stroke="#15803d" stroke-width="1.4"/>
+<circle cx="528" cy="205" r="14" fill="#15803d" stroke="#15803d" stroke-width="1.8"/>
+<text x="528" y="210" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">4</text>
+<text x="552" y="199" text-anchor="start" font-size="13" font-weight="bold" fill="#15803d">têtes précoces</text>
+<text x="552" y="220" text-anchor="start" font-size="11" fill="#475569">la bonne réponse à la profondeur k</text>
+<rect x="30" y="252" width="440" height="66" rx="9" fill="#ffffff" stroke="#b45309" stroke-width="1.4"/>
+<circle cx="58" cy="285" r="14" fill="#b45309" stroke="#b45309" stroke-width="1.8"/>
+<text x="58" y="290" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">5</text>
+<text x="82" y="279" text-anchor="start" font-size="13" font-weight="bold" fill="#b45309">contraction de la pensée</text>
+<text x="82" y="300" text-anchor="start" font-size="11" fill="#475569">λ &lt; 1, et le contenu conservé après k pas</text>
+<rect x="500" y="252" width="440" height="66" rx="9" fill="#ffffff" stroke="#6d28d9" stroke-width="1.4"/>
+<circle cx="528" cy="285" r="14" fill="#6d28d9" stroke="#6d28d9" stroke-width="1.8"/>
+<text x="528" y="290" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">6</text>
+<text x="552" y="279" text-anchor="start" font-size="13" font-weight="bold" fill="#6d28d9">cohérence du pont</text>
+<text x="552" y="300" text-anchor="start" font-size="11" fill="#475569">la sortie d&#x27;une région reste lisible par la suivante</text>
+<rect x="30" y="332" width="440" height="66" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+<circle cx="58" cy="365" r="14" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="58" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">7</text>
+<text x="82" y="359" text-anchor="start" font-size="13" font-weight="bold" fill="#0f172a">budget de sparsité</text>
+<text x="82" y="380" text-anchor="start" font-size="11" fill="#475569">k-WTA 25 %, pas plus</text>
+<rect x="30" y="408" width="900" height="50" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+<text x="480" y="430" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">Aucune perte ne juge le modèle : chaque perte a sa porte et son contrôle négatif.</text>
+<text x="480" y="449" text-anchor="middle" font-size="10.5" fill="#475569">Une perte qui baisse sans contrôle ne prouve rien — elle peut baisser en collapse.</text>
+</svg>

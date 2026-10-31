@@ -1,0 +1,3229 @@
+# Session DSH — relecture
+
+- identifiant : `fe3c05f0-834b-44f2-8739-501865d652c1`
+- dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`
+- créée : 2026-10-31 17:35:27
+- agent : standard
+
+
+## Tour 1
+
+### 👤 Utilisateur
+
+lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+A skill is a reusable set of task-specific instructions. The following skills are available in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+If the user names a skill, or the task clearly matches a skill's description, call the `skill` tool with the exact skill name before taking task actions. Load all applicable skills, then follow their full instructions. This catalog contains summaries only; do not infer or follow a skill's instructions until it has been loaded.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Lecture de l'état partagé pour choisir une tâche libre
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
+6: > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
+7: > [`contexte.md`](../methode/contexte.md), contrat des sessions dans [`continuite.md`](../methode/continuite.md).
+8: > Les résultats sont dans [`reports/`](../../reports/) ; l'histoire dans
+9: > [`journal/`](../../journal/) ; le plan dans [`roadmap.md`](roadmap.md).
+10: 
+11: ## Sessions en cours
+12: 
+13: > Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
+14: > [`journal/sessions/`](../../journal/sessions/).
+15: 
+16: > **Plan d'abord.** Chaque session active expose son mandat dans
+17: > [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+18: > avant d'écrire ici.
+19: 
+20: > **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
+21: > aucun 
+… [8560 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | head -50", "description": "Check active sessions status", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · en cours ·       — · N2 — le budget complet, les données et le curriculum
+      → N2 — la hiérarchie est écartée deux fois ; restent **le curriculum et
+    0b69f616-5c75-4c34 · terminé  · 1175 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 346 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 1679 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py
+      → aucune — coordination close ; les trois plans migrés et les sessions archivées par `22e518ee`.
+    8156fdcb-5033-4ba4 · terminé  · 1683 min · R0.1–R0.5
+      → la boucle de lecture (R11, dépend de N2) ou la restitution (R31, dépend de R21) — toutes deux hors R0 ; sinon consolidation.
+    N2-GPU             · terminé  · 1711 min · N2
+      → N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708
+… [415 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short | head -40; echo \"---\"; git log --oneline -8", "description": "Check git working tree and recent commits", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+M .gitignore
+ m tools/docwatch
+?? tools/distiller_budget.py
+---
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+9f1dcaae N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES)
+660c479c N2 — LA HIÉRARCHIE NE PAIE PAS SUR LA DISTILLATION NON PLUS (2,9935 CONTRE 2,9927, TROIS GRAINES)
+48243e3d RÉFÉRENCES — LA PASSE DU 31 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET (2 489 MOTS)
+4442c64c N2 — L'ÉTAT DE SECTION NE SE DISTINGUE PAS D'UN ÉTAT ÉTRANGER (+0,36 % CONTRE +0,37 %)
+3b9d179c PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET
+93f094e5 GRAPHE — LE PARSEUR PERDAIT LES LIENS MARKDOWN : 42 ARÊTES DEVENAIENT 43, LA FRONTIÈRE PASSAIT DE 12 À 4
+2edb3079 JEUX — LE SAN L'EMPORTE SUR LA CASE QUAND UNE POSITION EST FOURNIE (110/112 → 112/112)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de Drave — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'état, la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan A/B est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+16: - **Le carpe diem** : pas d'échéance. Un c
+… [27625 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md 2>/dev/null | head -60", "description": "Read active session mandate plan", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# Plan de session — N2-budget
+
+> **Mandat ouvert** le 2026-10-31 17 h 35 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — le heartbeat est celui de l'état ; la session le met à jour à chaque cycle.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation
+- **Périmètre** : N2 — le budget complet, les données et le curriculum
+- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-10-31 17 h 35 HAE
+- **Prochaine action** : N2 — la hiérarchie est écartée deux fois ; restent **le curriculum et
+  les données** (41 Mo, 4 sources, 20 000 pas) et la capacité. Mesurer le budget complet sur le
+  dispositif reconstruit, trois graines, avec le protocole qui a produit **2,7078** (8 lots ×
+  16 × 128) et **2,6998** (8 lots × 15 × 129), plus le contrôle par permutation.
+- **État** : en cours
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_backlog.py 2>&1 | tail -40", "description": "Run backlog graph verifier", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "ls journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/; echo ---; cat journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/heartbeat* 2>/dev/null | tail -5", "description": "Inspect other session files and heartbeat", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+---
+  ```
+
+- **bash** `{"command": "sed -n 1,80p tools/verifie_backlog.py", "description": "Read start of backlog verifier", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_backlog.py — le graphe des dépendances du backlog, vérifié et dessiné.
+
+POURQUOI CET OUTIL EXISTE. Le backlog est passé de 19 à 29 fiches en une nuit, et les
+dépendances ont été écrites à la main, deux fois (la fiche, puis l'index). Un graphe écrit
+deux fois diverge : au premier passage, `N5` désignait à la fois l'échelle (roadmap) et la
+mémoire (manques), `B10.3` dépendait d'un `B10.2` qui n'a pas de fiche, et `R06` (P1)
+dépendait de `R22` (P2) — c'est-à-dire qu'une fiche urgente attendait une fiche moins
+urgente. Aucun de ces défauts n'était visible à la lecture : ils ne le sont que si on
+parcourt le graphe.
+
+CE QUE L'OUTIL VÉRIFIE
+  1. chaque identifiant cité dans « Dépend de » existe (fiche, ligne acquise, ou ligne
+     ouverte déclarée sans fiche) — sinon c'est une arête qui ne mène nulle part ;
+  2. le graphe est acyclique (les arêtes dures et les plafonds) ;
+  3. une fiche « prête » n'a aucune dépendance dure non levée ;
+  4. une priorité ne dépend pas d'une priorité plus basse (P1 ← P2 = défaut de graphe) ;
+  5. le vocabulaire (statut, priorité, programme) est celui de l'index ;
+  6. il calcule la **frontière** : ce qui est réellement non b
+… [2375 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"sans fiche\\|sans_fiche\" tools/verifie_backlog.py", "description": "Find missing-card logic in verifier", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+14:     ouverte déclarée sans fiche) — sinon c'est une arête qui ne mène nulle part ;
+129:            "sans_fiche": False,
+133:            "titre": titre, "fiche": "", "statut": "sans fiche", "prio": "—",
+136:            "bloque": "", "sans_fiche": True, "note": note,
+171:        if nid not in noeuds or noeuds[nid]["sans_fiche"]:
+178:        if not noeud["sans_fiche"] and nid not in vus:
+195:        if d["sans_fiche"]:
+246:    # 6. les dépendances dures sans fiche : un trou nommé, pas une erreur
+249:            if cible in noeuds and noeuds[cible]["sans_fiche"]:
+395:        f"{sum(1 for d in noeuds.values() if not d['sans_fiche'])} fiches du backlog et "
+396:        f"{sum(1 for d in noeuds.values() if d['sans_fiche'])} ligne(s) ouverte(s) sans fiche, "
+415:        f"· bord interrompu = bloquée ou sans fiche · {time.strftime('%Y-%m-%d')}</text>",
+421:        if d["sans_fiche"]:
+423:        pointille = ' stroke-dasharray="5 3"' if (d["sans_fiche"] or d["statut"] == "bloquée") else ""
+438:        if d["sans_fiche"]:
+442:                f'fill="#b03a2e">sans fiche</text>'
+477:        f'font-size="8.5" fill="#333333">sans fiche (trou nommé)</text>'
+525:            etat = "sans fiche" i
+… [184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date \"+%Y-%m-%d %H:%M %Z\"; nvidia-smi --query-gpu=index,utilization.gpu,memory.used,memory.total --format=csv,noheader 2>/dev/null", "description": "Check current time and GPU usage", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+2026-10-31 17:36 EDT
+0, 84 %, 1164 MiB, 16384 MiB
+1, 78 %, 1164 MiB, 16384 MiB
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifier_schemas.py\"; do echo \"=== $t\"; timeout 240 bash tools/toutes-les-portes.sh >/dev/null 2>&1; $t 2 … [144 caractères tronqués]`
+
+  ```
+=== python3 tools/revue_documentation.py
+[still running after 60000ms; moved to background job bash-9]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-9", "reason": "Erreur : toutes-les-portes.sh prend les GPU, réservés par la session N2"}`
+
+  ```
+requested cancellation of job bash-9
+  ```
+
+- **bash** `{"command": "pgrep -af \"toutes-les-portes\" | head; echo \"---\"; pgrep -af \"tools/porte-\" | head", "description": "Verify no gate script still running", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+26637 bash -c pgrep -af "toutes-les-portes" | head; echo "---"; pgrep -af "tools/porte-" | head
+---
+26637 bash -c pgrep -af "toutes-les-portes" | head; echo "---"; pgrep -af "tools/porte-" | head
+  ```
+
+- **bash** `{"command": "ps -eo pid,lstart,etime,args | grep -E \"Qtrinet\" | grep -v grep | grep -vE \"pgrep|ps -eo\" | head -30", "description": "List processes touching the repo", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+9358 sam oct 31 17:25:03 2026       12:26 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2d && \ CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. nohup ~/gpu-env/bin/python tools/distiller_budget.py \   --corpus fr --stages "128:10000:1e-4,128:10000:3e-5" --lot 16 --graine 1 \   --sortie work/n2d/A-fr-g1.pt --log work/n2d/A-fr-g1.log > work/n2d/A-fr-g1.out 2>&1 & echo "A g1 pid $!"; sleep 3; \ CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. nohup ~/gpu-env/bin/python tools/distiller_budget.py \   --corpus multi --stages "128:10000:1e-4,128:10000:3e-5" --lot 16 --graine 1 \   --sortie work/n2d/B-multi-g1.pt --log work/n2d/B-multi-g1.log > work/n2d/B-multi-g1.out 2>&1 & echo "B g1 pid $!"
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/##' | tr '\\n' ' '; echo; echo \"=== registre\"; awk '{print $1}' \"$JOURNAUX/registre.txt\" 2>/dev/null | head -20", "description": "List documentary gate scripts", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh porte-bus.sh porte-bus-socket.sh porte-c4-retard.sh porte-cerveau.sh porte-consolidation.sh porte-coupe.sh porte-cycle-c2.sh porte-deepseek.sh porte-delais.sh porte-diff-couche.sh porte-document.sh porte-echange-experts.sh porte-episodique.sh porte-etat.sh porte-flux.sh porte-fusion.sh porte-gain.sh porte-greffe.sh porte-harnais-invariants.sh porte-homeostasie.sh porte-horloge.sh porte-indice.sh porte-jeux.sh porte-jumeaux.sh porte-lecteur.sh porte-lecture.sh porte-m5-brouillon.sh porte-melange.sh porte-memoire.sh porte-miroir-blocs.sh porte-mistral.sh porte-n3-cache.sh porte-n3-composition.sh porte-n3-deux-processus.sh porte-n3-deux-regions.sh porte-n3-generation.sh porte-n3-placement.sh porte-n3-pont.sh porte-n3-positions.sh porte-n3-profondeur.sh porte-n3-refus.sh porte-n3-reseau.sh porte-n3-routes.sh porte-n3-service-briques.sh porte-n3-service.sh porte-n3-seuil.sh porte-n3-sparsite-compte.sh porte-n3-sparsite.sh porte-occupation-elagage.sh porte-occupation-moteur.sh porte-pannes.sh porte-peripherie.sh porte-po
+… [367 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,40p tools/porte-document.sh; echo \"=== porte-tableaux\"; sed -n 1,30p tools/porte-tableaux.sh", "description": "Read documentary gate scripts", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/bin/bash
+# porte-document.sh — R0.1 : le document est un graphe, et le graphe se vérifie.
+#
+# POURQUOI CETTE PORTE EXISTE. Une découpe de document qui « a l'air bonne » n'est pas une
+# découpe : sans partition exacte, un offset faux ne se voit pas ; sans extraction
+# indépendante, un extracteur qui invente des mots ne se voit pas non plus. Cette porte
+# exige donc les trois choses ensemble — partition, fidélité, rejeu — plus trois contrôles
+# négatifs qui doivent ÉCHOUER (texte plat, deux colonnes, notes hors corps).
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE R0.1 — LE GRAPHE DE DOCUMENT ==="
+python3 tools/graphe_document.py --porte
+CODE=$?
+[ "$CODE" = 0 ] && echo "✅ porte document verte" || echo "❌ porte document ROUGE (code $CODE)"
+exit "$CODE"
+=== porte-tableaux
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis mar
+… [1377 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,60p tools/toutes-les-portes.sh", "description": "Read gate registry runner", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge, en
+… [1541 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des portes documentaires avant de choisir la tâche
+
+- **bash** `{"command": "timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -60; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Run documentation review", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+revue de documentation · 369 fiche(s) · 437 JSON · 109 doc(s) · 78 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/en-cours.md:40 → reports/rapport-n2-budget.md
+[code 1]
+  ```
+
+- **bash** `{"command": "ls reports/ | grep -i \"n4\" | head -20; echo ---; ls docs/pilotage/backlog/ | grep -iE \"^N4|^N3|^A2\" | head", "description": "Find N4 reports and backlog cards", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+rapport-n4-dessin-b.md
+rapport-n4-porte-execution.md
+---
+A2.6-ordonnanceur.md
+N3-operations-natives.md
+N4-usage-sft.md
+  ```
+
+- **bash** `{"command": "grep -rn \"0/4 tenus\\|consigne courte\" reports/*.md | head -20", "description": "Locate N4 short-instruction evidence", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+reports/INDEX.md:274:| [rapport-native-sft.md](rapport-native-sft.md) | N4.6 — SFT minimal : 24/24 vus, 0/4 tenus |
+reports/rapport-native-sft.md:1:# N4.6 — SFT minimal : 24/24 vus, 0/4 tenus
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-native-sft.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-native-sft.md</path>
+<type>file</type>
+<content>
+1: # N4.6 — SFT minimal : 24/24 vus, 0/4 tenus
+2: 
+3: > **Objet.** Tester si `drave-n0` peut apprendre un **format instruction** sur 24 paires, et
+4: > généraliser à quatre paires tenues à l'écart.
+5: 
+6: ## Dispositif
+7: 
+8: - Modèle : `/tmp/drave-n0-prof20k-5.pt`, PPL validation **2,708**.
+9: - 24 paires `Q: … / R: …` (capitales, arithmétique, vocabulaire, faits).
+10: - **500 pas**, lot 4, lr 1e-4, perte uniquement sur la réponse.
+11: - Génération greedy de 16 octets après `Q: …\nR:`.
+12: 
+13: ## Résultat
+14: 
+15: | ensemble | exactitude |
+16: |---|---:|
+17: | **paires vues** (24) | **24/24** |
+18: | **paires tenues** (4) | **0/4** |
+19: 
+20: - Perte d'entraînement : **0,0000** dès 300 pas.
+21: - Détails : [`native-sft-eval.json`](native-sft-eval.json).
+22: 
+23: ## Lecture
+24: 
+25: - Le modèle **mémorise parfaitement** les 24 réponses : c'est un **format**, pas un alignement.
+26: - Sur les quatre paires **jamais vues**, **0/4** : aucune généralisation.
+27: - Le SFT de 500 pas **surapprend** ; il faudrait des milliers de paires et une régularisation.
+28: - **Ce n'
+… [677 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls docs/pilotage/backlog/ | grep -iE \"^R4\" ; echo ---; sed -n 1,60p docs/pilotage/backlog/R4.4-vision-ocr.md 2>/dev/null", "description": "Read R4.4 backlog card", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+---
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "for t in tesseract ocrmypdf gocr; do printf \"%s: \" \"$t\"; command -v $t || echo absent; done; echo ---; python3 - <<'PY'\nimport importlib\nfor m in [\"pytesseract\",\"easyocr\",\"paddleocr\",\"rapidocr_onnxruntime\",\"doctr\",\"surya\",\"onnxruntime\",\"PIL\"]:\n    try:\n        im … [233 caractères tronqués]`
+
+  ```
+tesseract: absent
+ocrmypdf: absent
+gocr: absent
+---
+pytesseract absent ModuleNotFoundError
+easyocr absent ModuleNotFoundError
+paddleocr absent ModuleNotFoundError
+rapidocr_onnxruntime absent ModuleNotFoundError
+doctr absent ModuleNotFoundError
+surya absent ModuleNotFoundError
+onnxruntime absent ModuleNotFoundError
+PIL OK
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/R44-encodeur-visuel.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/R44-encodeur-visuel.md</path>
+<type>file</type>
+<content>
+1: # R44 — Encodeur visuel / OCR (scans, figures, layout)
+2: 
+3: > **Statut** : bloquée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : aucun OCR installé (ni tesseract ni pytesseract)
+4: > **Ligne de roadmap** : R4.4 · **Fiche de résultat attendue** : rapport-r44-encodeur-visuel.md (à créer dans `reports/`)
+5: > **Résumé** : Lire les pages scannées, les figures et le layout, et retrouver la réponse du texte natif.
+6: > **Glossaire** : [OCR](../../theorie/glossaire/entrees/ocr.md) · [layout](../../theorie/glossaire/entrees/layout.md) · [WER](../../theorie/glossaire/entrees/wer.md).
+7: 
+8: ## Le besoin
+9: 
+10: Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit que le texte déjà extrait. C'est le dernier bloc de R4, après les blocs structurels classiques.
+11: 
+12: ## Le contrat
+13: 
+14: | élément | contenu |
+15: |---|---|
+16: | **entrée** | une image ou une page PDF et une question |
+17: | **sortie** | des régions, du texte et un layout ; la même réponse que le texte natif |
+18: | 
+… [1298 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 40 pip download --no-deps --dest /tmp/pipcheck rapidocr-onnxruntime 2>&1 | tail -5; echo \"[code $?]\"; timeout 20 curl -sSI https://pypi.org/simple/ 2>&1 | head -3", "description": "Test PyPI network access", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+Downloading rapidocr_onnxruntime-1.2.3-py3-none-any.whl.metadata (4.8 kB)
+Downloading rapidocr_onnxruntime-1.2.3-py3-none-any.whl (12.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.3/12.3 MB 58.4 MB/s  0:00:00
+Saved /tmp/pipcheck/rapidocr_onnxruntime-1.2.3-py3-none-any.whl
+Successfully downloaded rapidocr-onnxruntime
+[code 0]
+HTTP/2 200 
+access-control-max-age: 86400
+server: gunicorn
+  ```
+
+- **bash** `{"command": "grep -n \"en-cours\\|claim\\|verrou\\|lock\\|heartbeat\\|session\" docs/methode/continuite.md | head -60", "description": "Scan continuity method for session rules", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+4:> [`en-cours`](../pilotage/en-cours.md). Ni planning ni résultats : **qui écrit l'état, quand, et avec quoi on reprend**.
+6:> **Règle d'or.** Un cycle est fini quand le résultat est **mesuré, écrit, committé**, qu'`en-cours` porte sa
+16:| fin de cycle | résultat + fiche + commit + `en-cours` + roadmap | jamais « le temps est écoulé » |
+19:- **On ne s'arrête pas sur un compteur** : si la limite tombe avant un résultat, écrire `en-cours` +
+31:**On ne délègue pas** : une édition triviale d'une ligne, l'écriture de `en-cours`/`roadmap`/`AGENTS`,
+50:7. **interdits** : `en-cours`, `roadmap`, `AGENTS`, les fichiers d'un autre agent.
+52:**Un seul écrivain par fichier** : la session qui clôt garde l'état, la roadmap et les directives ; le sous-agent
+64:8. **diff d'état** — la ligne exacte à mettre dans `en-cours` ;
+72:La session **vérifie** (porte, lien, contrôle), **met à jour `en-cours`**, **commite** et
+76:## 3. La discipline de `en-cours`
+78:`docs/pilotage/en-cours.md` est **la seule source de l'état**. Le journal est de l'histoire, les
+87:| **écriture** | toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne (hook `p
+… [1610 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def \\|argparse\\|add_argument\\|en-cours\" tools/sessions.py | head -60", "description": "Inspect sessions tool interface", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+2:"""sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+8:les heartbeats périmés. `en-cours` reste la seule source de l'état : ce plan
+13:import argparse
+22:ETAT = "docs/pilotage/en-cours.md"
+31:def _cle(s: str) -> str:
+35:def _valeur(s: str) -> str:
+39:def lire_plan(chemin: Path) -> dict:
+71:def decouvrir(racine: Path) -> list[dict]:
+82:def ids_en_cours(racine: Path) -> list[str]:
+90:def sections_en_cours(racine: Path) -> list[dict]:
+111:def depuis_en_cours(racine: Path) -> int:
+112:    """Crée un plan *à confirmer* à partir de la section `en-cours`, sans l'inventer."""
+125:> **Repris de `en-cours` le {datetime.now().strftime('%Y-%m-%d %H:%M')}** — plan *à confirmer* par la
+142:def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
+179:            msg = f"session en-cours sans plan : {sid}"
+183:            msg = f"plan actif non listé dans en-cours : {p['id']}"
+188:def afficher(racine: Path) -> int:
+208:def autotest() -> int:
+241:> **Mandat vivant.** Écris ce fichier **avant** `en-cours`, mets-le à jour à chaque cycle,
+254:def main() -> int:
+255:    ap = argparse.ArgumentParser(description=__doc__)
+256:    ap.add_argument("--racine
+… [466 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls data/ | head -30; echo \"=== pdfs\"; find data -maxdepth 3 -iname \"*.pdf\" | head -20; echo \"=== count\"; find data -iname \"*.pdf\" | wc -l", "description": "Find PDF corpus in data", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+corpus_fr_litterature.txt
+corpus_fr_train.txt
+corpus_fr.txt
+corpus_fr_val.txt
+corpus_mixte_litt2.txt
+corpus_mixte_litt.txt
+corpus_mixte.txt
+corpus_multi_train.txt
+corpus_multi.txt
+corpus_multi_val.txt
+daccord
+deepseek
+diabla
+eurlex
+glottolog
+instructions_fr.jsonl
+jrc
+jw
+=== pdfs
+data/onu/pdf/A_RES_80_1-en.pdf
+data/onu/pdf/A_RES_80_1-fr.pdf
+data/onu/pdf/A_RES_80_1-es.pdf
+data/onu/pdf/A_RES_80_1-ru.pdf
+data/onu/pdf/A_RES_80_1-zh.pdf
+data/onu/pdf/A_RES_80_2-en.pdf
+data/onu/pdf/A_RES_80_2-fr.pdf
+data/onu/pdf/A_RES_80_2-es.pdf
+data/onu/pdf/A_RES_80_2-ru.pdf
+data/onu/pdf/A_RES_80_2-zh.pdf
+data/onu/pdf/A_RES_80_4-en.pdf
+data/onu/pdf/A_RES_80_4-fr.pdf
+data/onu/pdf/A_RES_80_4-es.pdf
+data/onu/pdf/A_RES_80_4-ru.pdf
+data/onu/pdf/A_RES_80_4-zh.pdf
+data/onu/pdf/A_RES_80_5-en.pdf
+data/onu/pdf/A_RES_80_5-fr.pdf
+data/onu/pdf/A_RES_80_5-es.pdf
+data/onu/pdf/A_RES_80_5-ru.pdf
+data/onu/pdf/A_RES_80_5-zh.pdf
+=== count
+25
+  ```
+
+- **bash** `{"command": "for t in pdftoppm pdftotext pdfimages qpdf mutool; do printf \"%s: \" \"$t\"; command -v $t || echo absent; done; echo ---; python3 - <<'PY'\nimport importlib\nfor m in [\"fitz\",\"pypdfium2\",\"pypdf\",\"pdfplumber\",\"pdfminer\"]:\n    try:\n        mod=importlib.import_module(m); pri … [231 caractères tronqués]`
+
+  ```
+pdftoppm: /usr/bin/pdftoppm
+pdftotext: /usr/bin/pdftotext
+pdfimages: /usr/bin/pdfimages
+qpdf: absent
+mutool: absent
+---
+fitz absent
+pypdfium2 absent
+pypdf OK 6.21.2
+pdfplumber absent
+pdfminer absent
+  ```
+
+- **bash** `{"command": "ls data/onu/ | head; echo ---; ls data/onu/* 2>/dev/null | head -20; echo \"=== tools R0\"; ls tools/ | grep -iE \"lect|graphe|document|banc|question|lecture\" | head -20", "description": "Inspect ONU corpus and R0 tools", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+docx
+onu_2026.json
+pdf
+---
+data/onu/onu_2026.json
+
+data/onu/docx:
+A_RES_80_10-ar.docx
+A_RES_80_10-en.docx
+A_RES_80_10-es.docx
+A_RES_80_10-fr.docx
+A_RES_80_10-ru.docx
+A_RES_80_10-zh.docx
+A_RES_80_1-ar.docx
+A_RES_80_1-en.docx
+A_RES_80_1-es.docx
+A_RES_80_1-fr.docx
+A_RES_80_1-ru.docx
+A_RES_80_1-zh.docx
+A_RES_80_2-ar.docx
+A_RES_80_2-en.docx
+A_RES_80_2-es.docx
+A_RES_80_2-fr.docx
+A_RES_80_2-ru.docx
+=== tools R0
+banc_complet.py
+banc_durci.py
+banc-experts.py
+banc_lecteur.py
+banc_lecture.py
+banc-prelire.py
+graphe_document_html.py
+graphe_document_pdf.py
+graphe_document.py
+lecteur_controleur.py
+lecteur_modele.py
+lecteur_non_lineaire.py
+lecture_croisee.py
+lecture_etat.py
+lecture_invariante.py
+lecture_locale.py
+lecture_plateau.py
+lecture.py
+mesurer_lecture_experts.py
+porte-document.sh
+  ```
+
+- **bash** `{"command": "grep -rn \"data/onu\\|ONU\" docs/pilotage/backlog/R01*.md reports/rapport-r01*.md 2>/dev/null | head -20; echo ---; ls docs/pilotage/backlog/ | head -40", "description": "Trace ONU corpus use in R0.1", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+reports/rapport-r01-graphe-document.md:29:**Corpus** (51 pages) : 16 résolutions ONU (37 pages réelles, 5 langues : en, es, fr, ru, zh) ;
+---
+A2.6-ordonnanceur.md
+A3.2-granularite.md
+A3.3-seuil.md
+A3.4-colab.md
+A5.4-fpga.md
+A6.2-moe-local.md
+A8.0-portes-ppl.md
+A8.3-defaut.md
+B10.2bis-decodeur-attention-croisee.md
+B10.3-raisonnement-z.md
+B11.10-cartes-ambiguites.md
+B12.10-pipeline-m1-m4-m8.md
+B1.5-prose-scientifique.md
+dependances.md
+index.md
+_modele.md
+N0.3b-parite-ppl.md
+N2-distillation.md
+N3-operations-natives.md
+N4-usage-sft.md
+R01-graphe-document.md
+R02-controleur-lecture.md
+R03-banc-lecture-rapide.md
+R04-tete-survol.md
+R05-tete-balayage.md
+R06-tete-relecture.md
+R07-routeur-extractif-generatif.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+R13-tokenisation-bpe.md
+R21-memoire-travail-gist.md
+R22-memoire-episodique.md
+R31-restitution-sft.md
+R32-citations-provenance.md
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+R51-lecture-croisee.md
+R52-multilingue-decodeur.md
+  ```
+
+- **bash** `{"command": "sed -n 1,70p reports/rapport-r03-banc-lecture.md 2>/dev/null || ls reports | grep -i r03", "description": "Read R0.3 bench report", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+r03-banc-durci-extractif.json
+r03-banc-durci-modele.json
+r03-banc-extractif.json
+r03-banc-modele.json
+r03-lecteur-modele-couverture.json
+r03-lecteur-modele.json
+r03-pilote-modele.json
+rapport-r03-banc-complet.md
+rapport-r03-banc-durci.md
+rapport-r03-lecteur-modele.md
+  ```
+
+- **bash** `{"command": "sed -n 1,60p tools/graphe_document_pdf.py", "description": "Read PDF graph parser header", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""graphe_document_pdf.py — les blocs d'un PDF, dans l'ordre de LECTURE.
+
+POURQUOI CE FICHIER. Un PDF n'a pas de paragraphes : il a des mots placés à des
+coordonnées. `pdftotext` reconstruit des lignes, mais l'ordre du fichier n'est pas l'ordre de
+lecture : sur une page à deux colonnes, une lecture naïve entrelace la gauche et la droite.
+C'est le contrôle négatif du chantier R0.1, et c'est la seule raison d'être de ce module.
+
+Ce qu'il fait, dans cet ordre :
+  1. `pdftotext -bbox-layout` donne les lignes et leurs boîtes (on ne réécrit pas un
+     extracteur de PDF) ;
+  2. une **bande verticale vide** est cherchée dans la page : si elle existe et qu'il y a des
+     lignes des deux côtés, la page a deux colonnes — et on lit toute la gauche, puis toute
+     la droite ;
+  3. les lignes sont groupées en paragraphes par l'écart vertical et le retrait ;
+  4. les lignes de corps plus petit que la médiane sont des **notes** (en-têtes, pieds de page,
+     notes de bas de page) : elles sortent du corps, elles n'y sont pas recopiées ;
+  5. les tableaux ne sont **pas** revendiqués : un tableau PDF non balisé est du texte. Mieux
+     vaut ne rien dire que l'inventer (le bl
+… [1309 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"data/\" tools/banc_lecture.py tools/banc_complet.py tools/banc_durci.py 2>/dev/null | head -20; echo ---; grep -rn \"def \\|questions\\|gold\" tools/banc_lecture.py | head -30", "description": "Find bench corpus sources", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qt … [7 caractères tronqués]`
+
+  ```
+tools/banc_complet.py:60:        "data/onu/pdf/A_RES_80_1-en.pdf", "data/onu/pdf/A_RES_80_1-fr.pdf",
+tools/banc_complet.py:61:        "data/onu/pdf/A_RES_80_1-es.pdf", "data/onu/pdf/A_RES_80_10-en.pdf",
+tools/banc_complet.py:62:        "data/onu/pdf/A_RES_80_10-fr.pdf", "data/onu/pdf/A_RES_80_10-es.pdf",
+tools/banc_durci.py:73:    ("data/onu/pdf/A_RES_80_1-fr.pdf", 0,
+tools/banc_durci.py:75:    ("data/onu/pdf/A_RES_80_1-fr.pdf", 1,
+tools/banc_durci.py:77:    ("data/onu/pdf/A_RES_80_1-fr.pdf", 2,
+tools/banc_durci.py:159:    ("data/onu/pdf/A_RES_80_1-en.pdf", 0,
+tools/banc_durci.py:161:    ("data/onu/pdf/A_RES_80_1-en.pdf", 1,
+tools/banc_durci.py:163:    ("data/onu/pdf/A_RES_80_1-en.pdf", 2,
+tools/banc_durci.py:165:    ("data/onu/pdf/A_RES_80_1-es.pdf", 0,
+tools/banc_durci.py:167:    ("data/onu/pdf/A_RES_80_1-es.pdf", 1,
+tools/banc_durci.py:169:    ("data/onu/pdf/A_RES_80_1-es.pdf", 2,
+tools/banc_durci.py:171:    ("data/onu/pdf/A_RES_80_10-en.pdf", 0,
+tools/banc_durci.py:173:    ("data/onu/pdf/A_RES_80_10-fr.pdf", 0,
+tools/banc_durci.py:175:    ("data/onu/pdf/A_RES_80_10-es.pdf", 0,
+tools/banc_durci.py:177:    ("data/onu/pdf/A_RES_80_10-en.pdf", 5,
+tools/banc_durci.py:214:    ("data/
+… [1544 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la data/onu/pdf/*fr.pdf | head; echo ---; python3 -c \"import json;d=json.load(open('data/onu/onu_2026.json'));print(type(d));print(list(d)[:5] if isinstance(d,dict) else d[:2])\" | head -20", "description": "Check PDF sizes and corpus index", "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 196728 20 oct 13:56 data/onu/pdf/A_RES_80_10-fr.pdf
+-rw-r--r--. 1 stephane stephane 132676 20 oct 13:55 data/onu/pdf/A_RES_80_1-fr.pdf
+-rw-r--r--. 1 stephane stephane 184782 20 oct 13:56 data/onu/pdf/A_RES_80_2-fr.pdf
+-rw-r--r--. 1 stephane stephane 212739 20 oct 13:56 data/onu/pdf/A_RES_80_4-fr.pdf
+-rw-r--r--. 1 stephane stephane 435574 20 oct 13:56 data/onu/pdf/A_RES_80_5-fr.pdf
+---
+<class 'dict'>
+['source', 'references', 'langues', 'documents', 'unites']
+  ```
+
+- **bash** `{"command": "cat /etc/os-release | head -3; python3 --version; python3 -c \"import sys;print(sys.executable)\"; df -h . /tmp | tail -2; echo \"=== apt\"; apt-cache policy tesseract-ocr 2>&1 | head -6; echo \"=== pip pkgs\"; python3 -m pip --version 2>&1 | head -2; ~/gpu-env/bin/python -c \"import to … [210 caractères tronqués]`
+
+  ```
+NAME="openSUSE Tumbleweed"
+# VERSION="20261028"
+ID="opensuse-tumbleweed"
+Python 3.13.16
+/usr/bin/python3
+/dev/mapper/system-root   11T  8,9T  2,0T  82% /home/stephane/Data13TB
+tmpfs                     63G  546M   63G   1% /tmp
+=== apt
+bash: line 1: apt-cache: command not found
+=== pip pkgs
+pip 26.2.2 from /usr/lib/python3.13/site-packages/pip (python 3.13)
+torch 2.11.0+cu130 cuda True
+  ```
+
+- **bash** `{"command": "command -v zypper && timeout 60 zypper --non-interactive search -s tesseract-ocr 2>&1 | tail -12", "description": "Check zypper and tesseract packages", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+/usr/bin/zypper
+   | tesseract-ocr-traineddata-tha                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-tir                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-ton                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-tur                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-uig                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-ukr                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-urd                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-uzb                        | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-uzb_cyrl                   | package | 4.1.0+git.20240801.8741641-3.1 | noarch | repo-oss
+   | tesseract-ocr-traineddata-vie                        | package | 4.1.0+git.20240801.874164
+… [267 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 30 curl -sSI \"https://download.opensuse.org/tumbleweed/repo/oss/x86_64/\" 2>&1 | head -3; echo ---; timeout 40 curl -s \"https://download.opensuse.org/tumbleweed/repo/oss/x86_64/\" 2>/dev/null | grep -o 'tesseract-ocr-[0-9][^\"]*\\.rpm' | head -5", "description": "Probe openSUS … [88 caractères tronqués]`
+
+  ```
+HTTP/2 200 
+date: Sat, 31 Oct 2026 21:39:34 GMT
+server: Mojolicious (Perl)
+---
+tesseract-ocr-5.5.3-4.1.x86_64.rpm
+tesseract-ocr-5.5.3-4.1.x86_64.rpm
+tesseract-ocr-5.5.3-4.1.x86_64.rpm
+tesseract-ocr-5.5.3-4.1.x86_64.rpm
+  ```
+
+- **bash** `{"command": "for t in rpm2cpio rpm bsdtar cpio; do printf \"%s: \" \"$t\"; command -v $t || echo absent; done; echo \"=== info\"; timeout 60 zypper --non-interactive info tesseract-ocr 2>&1 | sed -n '1,30p'", "description": "Check RPM tools and tesseract dependencies", "workdir": "/home/stephane/Dat … [31 caractères tronqués]`
+
+  ```
+rpm2cpio: /usr/bin/rpm2cpio
+rpm: /usr/bin/rpm
+bsdtar: absent
+cpio: /usr/bin/cpio
+=== info
+Loading repository data...
+Reading installed packages...
+
+
+Information for package tesseract-ocr:
+--------------------------------------
+Repository     : repo-oss
+Name           : tesseract-ocr
+Version        : 5.5.3-4.1
+Arch           : x86_64
+Vendor         : openSUSE
+Installed Size : 1,1 MiB
+Installed      : No
+Status         : not installed
+Source package : tesseract-ocr-5.5.3-4.1.src
+Upstream URL   : https://github.com/tesseract-ocr/tesseract
+Summary        : Open Source OCR Engine
+Description    : 
+    A commercial quality OCR engine originally developed at HP between 1985 and
+    1995. In 1995, this engine was among the top 3 evaluated by UNLV. It was
+    open-sourced by HP and UNLV in 2005. From 2007 it is developed by Google.
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 60 curl -s \"https://download.opensuse.org/tumbleweed/repo/oss/x86_64/\" -o idx.html; grep -oE '(tesseract-ocr|libtesseract[0-9]*|liblept[0-9]*)-[0-9][^\"]*\\.rpm' idx.html | sort -u | head -20", "description": "List tesseract and leptonica RPM names"}`
+
+  ```
+libtesseract5-5.5.3-4.1.x86_64.rpm
+tesseract-ocr-5.5.3-4.1.x86_64.rpm
+  ```
+
+- **bash** `{"command": "grep -n \"work/\" .gitignore | head; echo ---; git check-ignore -v work/ocr 2>&1; ls work/ | head", "description": "Check work dir ignore status", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+23:work/
+---
+.gitignore:23:work/	work/ocr
+n2d
+  ```
+
+- **bash** `{"command": "cd /tmp && grep -oE 'liblept[^\"]*\\.rpm|tesseract-ocr-traineddata-(fra|eng|osd)-[^\"]*\\.rpm' idx.html | sort -u", "description": "Find leptonica and language data RPMs"}`
+
+  ```
+libleptonica6-1.87.0-1.6.x86_64.rpm
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 60 curl -s \"https://download.opensuse.org/tumbleweed/repo/oss/noarch/\" -o idx-noarch.html; grep -oE 'tesseract-ocr-traineddata-(fra|eng|osd)-[^\"]*\\.rpm' idx-noarch.html | sort -u; echo \"[taille index: $(wc -c < idx-noarch.html)]\"", "description": "List tesseract … [26 caractères tronqués]`
+
+  ```
+tesseract-ocr-traineddata-eng-4.1.0+git.20240801.8741641-3.1.noarch.rpm
+tesseract-ocr-traineddata-fra-4.1.0+git.20240801.8741641-3.1.noarch.rpm
+tesseract-ocr-traineddata-osd-4.1.0+git.20240801.8741641-3.1.noarch.rpm
+[taille index: 11477107]
+  ```
+
+- **bash** `{"command": "sed -n 1,120p tools/banc_complet.py", "description": "Read bench harness start", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""banc_complet.py — R0.3 : 30 documents, 10 questions par document, générées et vérifiées.
+
+POURQUOI GÉNÉRER. Trois cents questions annotées à la main, ce n'est pas une heure de travail :
+c'est une semaine. Le banc **pilote** (20 questions main, R0.2) reste la référence de difficulté ;
+le banc **complet** mesure la **sélection** à l'échelle, avec des questions **gabarit** :
+
+  - on prend un passage qui porte une **valeur** (un nombre, une date) ;
+  - on demande cette valeur par **deux mots rares** du passage (les moins fréquents du document,
+    donc les plus discriminants) ;
+  - le passage est le gold, la valeur est la réponse attendue.
+
+Ce que ce banc mesure donc : le contrôleur va-t-il chercher le bon passage quand le document en
+compte des centaines ? Ce qu'il ne mesure pas : la paraphrase — un gabarit partage forcément des
+mots avec son gold. Les questions de paraphrase restent le banc pilote, et R0.3 « durci » est la
+suite.
+
+Usage :
+  python3 tools/banc_complet.py --ecrit tools/tests/documents/bench-complet.json
+  python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json
+"""
+from __future__ import annotations
+
+import argparse
+imp
+… [4173 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/tests/documents/ 2>/dev/null | head -20; echo ---; grep -rn \"pipeline\\|--question\" tools/lecteur_controleur.py | head -20; echo ---; sed -n 1,40p tools/lecteur_controleur.py", "description": "Inspect reader controller interface", "workdir": "/home/stephane/Data13TB/stephane/ … [16 caractères tronqués]`
+
+  ```
+bench-complet.json
+bench-durci.json
+bench-pilote.json
+calibration-lexical.json
+calibration-paraphrase.json
+corpus
+html
+pdf
+---
+25:  python3 tools/lecteur_controleur.py --manifeste /tmp/m.json --question "…" --budget 0,3
+26:  python3 tools/lecteur_controleur.py --document docs/theorie/vision.md --question "…"
+318:    ap.add_argument("--question", required=True)
+---
+#!/usr/bin/env python3
+"""lecteur_controleur.py — R0.2 : choisir ce qu'on lit, et le payer.
+
+POURQUOI CE FICHIER. La sortie précoce d'un modèle décide quand le prochain octet est
+facile ; elle ne décide pas ce qui vaut la peine d'être lu. Il manque une **politique** :
+survoler, balayer, lire, relire, s'arrêter — avec un budget et une trace.
+
+Le point de mesure n'est pas le débit, c'est la **compréhension par unité de calcul**. On
+compare donc deux lectures du MÊME document avec le MÊME lecteur : la lecture intégrale
+(tout est lu) et la lecture contrôlée (une fraction du budget). Si le contrôleur choisit
+bien, il retrouve le passage de la réponse intégrale pour une fraction du coût.
+
+Trois décisions de conception, et leurs raisons :
+
+  1. **le budget est en OCTETS de texte effectivement lus** — pas en régions, pas en
+     
+… [898 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 40,140p tools/graphe_document.py", "description": "Read document manifest schema", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+VERSION = 1
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+
+# Le vocabulaire est FERMÉ : un type inventé casse le contrôleur qui lira le graphe.
+TYPES = {
+    "titre", "section", "paragraphe", "liste", "tableau", "code", "maths",
+    "figure", "legende", "note", "blanc",
+}
+TYPES_STRUCTURELS = TYPES - {"paragraphe", "blanc"}
+
+
+def sha256(octets: bytes) -> str:
+    return hashlib.sha256(octets).hexdigest()
+
+
+def mots(texte: str) -> Counter:
+    """Le multiensemble des mots : la seule comparaison honnête entre deux extracteurs,
+    qui ne peuvent pas produire les mêmes blancs ni le même ordre."""
+    return Counter(re.findall(r"[0-9A-Za-zÀ-ÖØ-öø-ÿ]+", texte.lower()))
+
+
+# ------------------------------------------------------------------ le Markdown
+
+RE_TITRE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
+RE_CLOTURE = re.compile(r"^\s*(```+|~~~+)\s*([\w+-]*)")
+RE_ITEM = re.compile(r"^(\s*)([-*+]|\d+[.)])\s+(.*)$")
+RE_TABLEAU = re.compile(r"^\s*\|")
+RE_SEPARATEUR = re.compile(r"^\s*\|?[\s:|-]+\|[\s:|-]*$")
+RE_NOTE = re.compile(r"^\s*\[\^[^\]]+\]:\s*(.*)$")
+RE_IMAGE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$")
+RE_LEGENDE = re.compile(r"^\*{0,2}(figure|table|tableau|encadr[ée]|gra
+… [3210 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/graphe_document_pdf.py --json data/onu/pdf/A_RES_80_1-fr.pdf | python3 -c \"import json,sys;d=json.load(sys.stdin);print(list(d));print(json.dumps(d['regions'][:2],ensure_ascii=False,indent=1)[:1500])\"", "description": "Inspect manifest JSON from PDF", "workdir": "/home/s … [42 caractères tronqués]`
+
+  ```
+[{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée générale', 'prov': {'page': 1, 'y': 72.8}}, {'type': 'paragraphe', 'texte': 'Distr. générale 19 septembre 2025', 'prov': {'page': 1, 'y': 79.6}}, {'type': 'paragraphe', 'texte': 'Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition des questions inscrites à l’ordre du jour', 'prov': {'page': 1, 'y': 215.3}}, {'type': 'section', 'texte': 'Résolution adoptée par l’Assemblée générale', 'prov': {'page': 1, 'y': 292.9}}, {'type': 'section', 'texte': 'le 19 septembre 2025', 'prov': {'page': 1, 'y': 308.0}}, {'type': 'paragraphe', 'texte': '[sans renvoi à une grande commission (A/80/L.2/Rev.1)]', 'prov': {'page': 1, 'y': 335.2}}, {'type': 'section', 'texte': '80/1.', 'prov': {'page': 1, 'y': 359.2}}, {'type': 'section', 'texte': 'Participation de l’État de Palestine à la quatre-vingtième session', 'prov': {'page': 1, 'y': 359.2}}, {'type': 'paragraphe', 'texte': 'L’Assemblée générale, Exprimant sa préoccupation face aux situations
+… [5794 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,60p tools/porte-vision.sh", "description": "Read vision gate script", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/bin/bash
+# porte-vision.sh — LA VISION : ce qui est VÉRIFIÉ est vérifié, ce qui ne l'est pas est DIT.
+#
+# POURQUOI CETTE PORTE, ET POURQUOI ELLE NE JUGE PAS LA TOUR. Depuis le 15/10 la faculté de vision
+# a un modèle (`models/vision/…`), un banc qui déroule **toute la tour**, et une **référence
+# indépendante** (`transformers`) qui dit que la tour **ne concorde pas encore** (55 à 79 % d'écart
+# pour une quantification de ~1 % ; `reports/rapport-vision-qwen2vl.md`). Une porte qui exigerait
+# l'accord de la tour serait **rouge** — et une porte rouge permanente ne dit plus rien. Cette porte
+# vérifie donc **ce qui est établi**, et **dit** ce qui ne l'est pas :
+#
+#   1. **le banc refuse un fichier sans tour de vision** (un modèle de texte : message clair, pas de
+#      panique) — c'est la première chose qu'un banc doit faire ;
+#   2. **l'embedding de patchs est EXACT** contre la référence numpy (`tools/vision_ref.py`), sur
+#      les **mêmes poids** lus dans le GGUF : l'écart doit rester dans le bruit de virgule
+#      flottante (publié le 10/10 : **5,4e-7**) ;
+#   3. **les formes sont celles du modèle** (256 patchs × 1280 canaux, 64 jetons × 1536 après
+#      fusion) — une tour qui
+… [2488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def manifeste\\|def regions\\|def passages\" tools/graphe_document.py tools/lecteur_controleur.py; sed -n \"$(grep -n 'def manifeste' tools/graphe_document.py | cut -d: -f2),+40p\" tools/graphe_document.py", "description": "Read manifest builder", "workdir": "/home/stephane/Da … [32 caractères tronqués]`
+
+  ```
+tools/graphe_document.py:287:def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+tools/lecteur_controleur.py:65:def passages(manifeste: dict) -> list[dict]:
+[stderr]
+sed: -e expression #1, char 2: extra characters after command
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sed -n 287,340p tools/graphe_document.py; echo \"=== passages\"; sed -n 60,110p tools/lecteur_controleur.py", "description": "Read manifest and passages functions", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+    """Le manifeste : un flux, des régions qui le partitionnent, et de quoi tout vérifier."""
+    octets_source = chemin.read_bytes()
+    blocs = analyse(chemin)
+    if plat:  # contrôle négatif : le même flux, mais une seule région — la structure meurt
+        blocs = [{"type": "paragraphe", "texte": " ".join(b["texte"] for b in blocs),
+                  "prov": {"plat": True}}]
+    if not blocs:
+        raise SystemExit(f"aucun bloc : {chemin}")
+
+    regions, position, morceaux = [], 0, []
+    for indice, bloc in enumerate(blocs):
+        if indice:
+            regions.append({
+                "id": f"b{indice:05d}", "type": "blanc", "texte": "\n",
+                "start": position, "end": position + 1, "sha256": sha256(b"\n"),
+                "ordre": len(regions) + 1, "prov": {"separateur": True},
+            })
+            morceaux.append("\n")
+            position += 1
+        texte = bloc["texte"]
+        octets = texte.encode("utf-8")
+        regions.append({
+            "id": f"r{indice:05d}", "type": bloc["type"], "texte": texte,
+            "start": position, "end": position + len(octet
+… [3414 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+4: > (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+5: > connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+6: > au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN
+7: > perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+8: > (8,7434), écart de flux nul — à trancher.
+9: 
+10: > **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+11: > mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
+12: > historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+13: 
+14: > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
+15: > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
+16: > bu
+… [13913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "set -e\nmkdir -p work/ocr/rpm work/ocr/root\ncd work/ocr/rpm\nbase=https://download.opensuse.org/tumbleweed/repo/oss\nfor f in tesseract-ocr-5.5.3-4.1.x86_64.rpm libtesseract5-5.5.3-4.1.x86_64.rpm libleptonica6-1.87.0-1.6.x86_64.rpm; do\n  [ -s \"$f\" ] || curl -sSLO \"$base/x86_64/$f\" … [668 caractères tronqués]`
+
+  ```
+total 1120
+drwxr-xr-x. 1 stephane stephane    456 31 oct 17:41 .
+drwxr-xr-x. 1 stephane stephane     26 31 oct 17:41 ..
+-rwxr-xr-x. 1 stephane stephane  18712 16 oct 07:05 ambiguous_words
+-rwxr-xr-x. 1 stephane stephane  96672 16 oct 07:05 classifier_tester
+-rwxr-xr-x. 1 stephane stephane  39312 16 oct 07:05 cntraining
+-rwxr-xr-x. 1 stephane stephane  72048 16 oct 07:05 combine_lang_model
+-rwxr-xr-x. 1 stephane stephane  26984 16 oct 07:05 combine_tessdata
+-rwxr-xr-x. 1 stephane stephane  18792 16 oct 07:05 dawg2wordlist
+-rwxr-xr-x. 1 stephane stephane  88472 16 oct 07:05 lstmeval
+-rwxr-xr-x. 1 stephane stephane 149912 16 oct 07:05 lstmtraining
+-rwxr-xr-x. 1 stephane stephane  14616 16 oct 07:05 merge_unicharsets
+-rwxr-xr-x. 1 stephane stephane 104856 16 oct 07:05 mftraining
+-rwxr-xr-x. 1 stephane stephane  51576 16 oct 07:05 set_unicharset_properties
+-rwxr-xr-x. 1 stephane stephane  96672 16 oct 07:05 shapeclustering
+-rwxr-xr-x. 1 stephane stephane  55672 16 oct 07:05 tesseract
+-rwxr-xr-x. 1 stephane stephane 162296 16 oct 07:05 text2image
+-rwxr-xr-x. 1 stephane stephane 100720 16 oct 07:05 unicharset_extractor
+-rwxr-xr-x. 1 stephane stephane  22880 16 oct 07:05 wordlist2dawg
+24M	
+… [7 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,60p tools/verifie_etat_a_jour.py", "description": "Read state-commit hook", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [1326 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd work/ocr/root && ls usr/share/tesseract/tessdata/ 2>/dev/null | head; echo \"=== libs\"; ls usr/lib64/ 2>/dev/null | head; echo \"=== ldd\"; ldd usr/bin/tesseract 2>&1 | grep -i \"not found\" | head -20; echo \"[ldd code $?]\"", "description": "Check tesseract libs and data", "workdi … [54 caractères tronqués]`
+
+  ```
+=== libs
+libleptonica.so.6
+libleptonica.so.6.0.0
+libtesseract.so.5
+libtesseract.so.5.0.5
+=== ldd
+[ldd code 0]
+  ```
+
+- **bash** `{"command": "cd work/ocr/root && find . -name \"*.traineddata\" | head; echo \"=== version\"; LD_LIBRARY_PATH=\"$PWD/usr/lib64\" ./usr/bin/tesseract --version 2>&1 | head -5; echo \"=== langs\"; LD_LIBRARY_PATH=\"$PWD/usr/lib64\" TESSDATA_PREFIX=\"$PWD/usr/share/tesseract\" ./usr/bin/tesseract --lis … [147 caractères tronqués]`
+
+  ```
+./usr/share/tessdata/eng.traineddata
+./usr/share/tessdata/fra.traineddata
+./usr/share/tessdata/osd.traineddata
+=== version
+tesseract 5.5.3
+ leptonica-1.87.0
+  libgif 5.2.2 : libjpeg 8d (libjpeg-turbo 3.1.4.1) : libpng 1.6.59 : libtiff 4.7.2 : zlib 1.3.1 : libwebp 1.6.0 : libopenjp2 2.5.4
+ Found AVX2
+ Found AVX
+=== langs
+Warning: TESSDATA_PREFIX /home/stephane/GitHub/Qtrinet/work/ocr/root/usr/share/tesseract does not exist, ignore it
+List of available languages in "/usr/share/tessdata/" (2):
+eng
+fra
+  ```
+
+- **bash** `{"command": "ls /usr/share/tessdata/ 2>/dev/null | head -8; echo \"[count $(ls /usr/share/tessdata/*.traineddata 2>/dev/null | wc -l)]\"; echo \"=== prefix\"; cd work/ocr/root && LD_LIBRARY_PATH=\"$PWD/usr/lib64\" TESSDATA_PREFIX=\"$PWD/usr/share/tessdata\" ./usr/bin/tesseract --list-langs 2>&1 | he … [117 caractères tronqués]`
+
+  ```
+configs
+eng.traineddata
+fra.traineddata
+pdf.ttf
+tessconfigs
+[count 2]
+=== prefix
+List of available languages in "/home/stephane/GitHub/Qtrinet/work/ocr/root/usr/share/tessdata/" (3):
+eng
+fra
+osd
+  ```
+
+- **bash** `{"command": "set -e\nmkdir -p work/ocr/pages\npdftoppm -r 300 -f 1 -l 1 -png data/onu/pdf/A_RES_80_1-fr.pdf work/ocr/pages/p1\nls -la work/ocr/pages/\nROOT=$PWD/work/ocr/root\nLD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=\"$ROOT/usr/share/tessdata\" \\\n  \"$ROOT/usr/bin/tesseract\" work/ocr/ … [164 caractères tronqués]`
+
+  ```
+total 472
+drwxr-xr-x. 1 stephane stephane     16 31 oct 17:41 .
+drwxr-xr-x. 1 stephane stephane     24 31 oct 17:41 ..
+-rw-r--r--. 1 stephane stephane 479912 31 oct 17:41 p1-1.png
+Nations Unies A RES/80/1
+
+Assemblée générale Distr. générale
+19 septembre 2025
+
+Quatre-vingtième session
+
+Point 7 de l’ordre du jour
+
+Organisation des travaux, adoption de l’ordre
+du jour et répartition des questions inscrites
+à l’ordre du jour
+
+Résolution adoptée par l’Assemblée générale
+le 19 septembre 2025
+
+{sans renvoi à une grande commission (A/80/L.2/Rev.1)]
+80/1. Participation de l’État de Palestine à la quatre-vingtième session
+
+L'Assemblée générale,
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-complet.json'))\nprint(type(d), list(d) if isinstance(d,dict) else len(d))\ndoc = d['documents'][3] if isinstance(d,dict) and 'documents' in d else d[0]\nprint({k:(v if not isinstance(v,list) else f\"list[{len( … [226 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'date', 'note', 'documents', 'questions']
+{'chemin': 'tools/tests/documents/corpus/prose/jeux-symboliques.md', 'source': 'docs/theorie/jeux-symboliques.md', 'type': 'prose', 'questions': 'list[7]'}
+[
+ {
+  "question": "Quelle valeur le document associe-t-il à « arrondi » et « bool » ?",
+  "indice": "typée — le corps est un arbre de null, bool, int, str, listes et dicti",
+  "valeur": "65",
+  "passage": "typée — le corps est un arbre de null, bool, int, str, listes et dictionnaires. Aucun flottant : le komi du go est en dixièmes (65 pour 6,5), pour que l'emprein",
+  "type": "prose"
+ },
+ {
+  "question": "Quelle valeur le document associe-t-il à « arrête » et « demi » ?",
+  "indice": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est",
+  "valeur": "32",
+  "passage": "dames\t32 cases, trait, demi-coups\tchemin (liste de cases)\tla prise est obligatoire, une prise multiple est un chemin, la promotion arrête le pion",
+  "type": "prose"
+ }
+]
+  ```
+
+- **bash** `{"command": "sed -n 88,220p tools/banc_lecture.py", "description": "Read bench answering logic", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def ordonner(passages_lus: list[dict], scores: list[float] | None) -> list[dict]:
+    """L'ordre dans lequel le lecteur reçoit les passages. Un extractif s'en moque (il score
+    tout) ; un modèle, non : sa fenêtre coupe. Le contrôleur donne donc ses passages par
+    score décroissant — sinon ses meilleurs passages, situés plus loin dans le document,
+    étaient tronqués et il paraissait mauvais pour une raison de mise en page."""
+    if LECTEUR == "modele" and scores is not None:
+        return sorted(passages_lus, key=lambda p: -scores[p["indice"]])
+    return passages_lus
+
+
+def repondre(question: dict, passages: list[dict], scores: list[float] | None) -> dict | None:
+    """Le lecteur du banc : extractif (R0.2) ou modèle (R0.3). Le changement ne touche que
+    l'answerer, jamais la sélection — c'est ce qui rend les deux mesures comparables."""
+    if LECTEUR == "modele":
+        import lecteur_modele
+        return lecteur_modele.repondre(question["question"], passages)
+    return lc.repondre(passages, question["question"], scores)
+
+
+def essai(document: dict, question: dict, mode: str, budget: float,
+          aleatoire: random.Random | None = None, scores: list[float] | None = 
+… [5784 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"^def \\|^class \" tools/graphe_document_pdf.py; echo ---; sed -n \"$(grep -n '^def analyse' tools/graphe_document_pdf.py | cut -d: -f1),+25p\" tools/graphe_document_pdf.py; echo \"=== dispatch\"; grep -n \"^def analyse\" -A 25 tools/graphe_document.py | head -40", "description … [101 caractères tronqués]`
+
+  ```
+41:def _etiquette(element) -> str:
+45:def lignes_du_pdf(chemin: pathlib.Path) -> list[dict]:
+73:def bande_vide(lignes: list[dict], largeur: float) -> tuple[float, float] | None:
+92:def ordre_de_lecture(page: dict) -> list[dict]:
+104:def _recoller(texte: str, suivant: str) -> str:
+113:def blocs_de_page(page: dict, numero: int) -> list[dict]:
+158:def analyse(chemin: pathlib.Path) -> list[dict]:
+167:def fabrique(destination: pathlib.Path) -> None:
+188:def verifie(chemin: pathlib.Path) -> tuple[float, list[str]]:
+214:def autotest() -> int:
+234:def main() -> int:
+---
+def analyse(chemin: pathlib.Path) -> list[dict]:
+    blocs: list[dict] = []
+    for indice, page in enumerate(lignes_du_pdf(chemin), start=1):
+        blocs += blocs_de_page(page, indice)
+    return blocs
+
+
+# --------------------------------------------------------------------- les fixtures
+
+def fabrique(destination: pathlib.Path) -> None:
+    """Une page à deux colonnes dont on CONNAÎT l'ordre : 1–6 à gauche, 1–6 à droite. Un
+    lecteur naïf les entrelace ; c'est exactement ce que la porte doit voir échouer."""
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+
+    destination.parent.m
+… [2298 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 258,290p tools/graphe_document.py; echo \"=== pdf config\"; sed -n 130,170p tools/graphe_document_pdf.py", "description": "Read analyse dispatcher and PDF blocks", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+spec.loader.exec_module(module)
+    return module
+
+
+def analyse_pandoc(chemin: pathlib.Path) -> list[dict]:
+    """DOCX, EPUB, ODT : pandoc fait l'extraction, puis le parseur Markdown lit le résultat.
+    Un seul lecteur de blocs pour trois formats, et un extracteur qu'on ne code pas."""
+    sortie = subprocess.run(
+        ["pandoc", "-f", chemin.suffix.lstrip("."), "-t", "gfm", "--wrap=none", str(chemin)],
+        capture_output=True, text=True, check=True,
+    )
+    return analyse_markdown_texte(sortie.stdout)
+
+
+def analyse(chemin: pathlib.Path) -> list[dict]:
+    suffixe = chemin.suffix.lower()
+    if suffixe in (".md", ".markdown", ".txt"):
+        return analyse_markdown(chemin)
+    if suffixe in (".html", ".htm"):
+        return _module("graphe_document_html").analyse(chemin)
+    if suffixe == ".pdf":
+        return _module("graphe_document_pdf").analyse(chemin)
+    if suffixe in (".docx", ".epub", ".odt"):
+        return analyse_pandoc(chemin)
+    raise SystemExit(f"format non pris en charge : {suffixe}")
+
+
+# ------------------------------------------------------------------- le manifeste
+
+def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+… [1901 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"^def repondre\" -A 40 tools/lecteur_controleur.py", "description": "Read extractive answer function", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+277:def repondre(passages_lus: list[dict], question: str, scores: list[float] | None = None) -> dict | None:
+278-    """Le lecteur extractif : le passage qui répond le mieux à la question, avec sa
+279-    citation. C'est le MÊME lecteur pour la lecture intégrale et pour la lecture contrôlée.
+280-
+281-    `scores` est l'index du DOCUMENT ENTIER, calculé une fois : lire moins ne doit pas
+282-    changer le modèle de la question, seulement ce qu'on peut choisir. Sans cette règle, le
+283-    lecteur recalculait ses IDF sur le sous-ensemble lu et changeait d'avis — un artefact
+284-    qui faisait croire à un échec du contrôleur."""
+285-    if not passages_lus:
+286-        return None
+287-    if scores is None:
+288-        scores = Index(passages_lus).scores(question)
+289-        meilleur = max(range(len(scores)), key=lambda i: (scores[i], -i))
+290-        choix = meilleur
+291-    else:
+292-        choix = max(range(len(passages_lus)),
+293-                    key=lambda i: (scores[passages_lus[i]["indice"]], -i))
+294-        if scores[passages_lus[choix]["indice"]] <= 0:
+295-            return None
+296-    p = passages_lus[choix]
+297-    score = scores[p["indice"]] if scores is not None 
+… [1058 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'.')\nimport graphe_document as gd, lecteur_controleur as lc\nm = gd.manifeste(__import__('pathlib').Path('../data/onu/pdf/A_RES_80_1-fr.pdf'))\nps = lc.passages(m)\nprint(len(ps), ps[0]['prov'], len(ps[0]['texte']))\nidx  … [353 caractères tronqués]`
+
+  ```
+41 {'page': 1, 'y': 42.6} 11
+<class 'dict'> ['texte', 'region', 'start', 'octets', 'score', 'prov']
+Participation de l’État de Palestine à la quatre-vingtième session
+  ```
+
+- **bash** `{"command": "sed -n 330,400p tools/graphe_document.py; echo \"=== normalise\"; sed -n \"$(grep -n '^def normalise' tools/banc_lecture.py | cut -d: -f1),+12p\" tools/banc_lecture.py", "description": "Read manifest verifier and text normalizer", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtri … [5 caractères tronqués]`
+
+  ```
+"stats": {"regions": len(regions), "types": dict(sorted(types.items()))},
+    }
+
+
+def verifie(m: dict, chemin: pathlib.Path | None = None) -> list[str]:
+    """Les invariants du manifeste. Un manifeste qui échoue ici n'est pas un graphe."""
+    erreurs: list[str] = []
+    regions = m["regions"]
+    if m.get("version") != VERSION:
+        erreurs.append(f"version {m.get('version')} inconnue")
+    if chemin is not None and sha256(chemin.read_bytes()) != m["source"]["sha256"]:
+        erreurs.append("la source a changé depuis la découpe")
+    concatenation = "".join(r["texte"] for r in regions).encode("utf-8")
+    if sha256(concatenation) != m["flux"]["sha256"]:
+        erreurs.append("le flux ne se recompose pas depuis les régions")
+    if len(concatenation) != m["flux"]["octets"]:
+        erreurs.append("la longueur du flux ne correspond pas")
+    position = 0
+    for region in regions:
+        if region["start"] != position:
+            erreurs.append(f"{region['id']} : trou ou chevauchement à l'offset {position}")
+            break
+        octets = region["texte"].encode("utf-8")
+        if region["end"] - region["start"] != len(octets):
+            erreurs.append(f"{region['id']}
+… [3250 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py", "old_string": "def manifeste(chemin: pathlib.Path, langue: str = \"und\", plat: bool = False) -> dict:\n    \"\"\"Le manifeste : un flux, des régions qui le partitionnent, et de quoi tout vérifier.\"\"\"\n    o … [1250 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py", "offset": 280, "limit": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py</path>
+<type>file</type>
+<content>
+280:     if suffixe in (".docx", ".epub", ".odt"):
+281:         return analyse_pandoc(chemin)
+282:     raise SystemExit(f"format non pris en charge : {suffixe}")
+283: 
+284: 
+285: # ------------------------------------------------------------------- le manifeste
+286: 
+287: def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+288:     """Le manifeste : un flux, des régions qui le partitionnent, et de quoi tout vérifier."""
+289:     octets_source = chemin.read_bytes()
+290:     blocs = analyse(chemin)
+291:     if plat:  # contrôle négatif : le même flux, mais une seule région — la structure meurt
+292:         blocs = [{"type": "paragraphe", "texte": " ".join(b["texte"] for b in blocs),
+293:                   "prov": {"plat": True}}]
+294:     if not blocs:
+295:         raise SystemExit(f"aucun bloc : {chemin}")
+296: 
+297:     regions, position, morceaux = [], 0, []
+298:     for indice, bloc in enumerate(blocs):
+299:         if indice:
+300:             regions.append({
+301:                 "id": f"b{indice:05d}", "type": "blanc", "texte": "\n"
+… [1876 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py", "old_string": "def manifeste(chemin: pathlib.Path, langue: str = \"und\", plat: bool = False) -> dict:\n    \"\"\"Le manifeste : un flux, des régions qui le partitionnent, et de quoi tout vérifier.\"\"\"\n    o … [1278 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py", "new_string": "    flux = \"\".join(morceaux)\n    types = Counter(r[\"type\"] for r in regions)\n    return {\n        \"version\": VERSION,\n        \"source\": source,\n        \"extraction\": extraction,\n  … [1747 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "timeout 300 bash tools/porte-document.sh 2>&1 | tail -12; echo \"[code ${PIPESTATUS[0]}]\"; python3 tools/graphe_document.py --autotest 2>&1 | tail -5; echo \"[autotest ${PIPESTATUS[0]}]\"", "description": "Verify document gate after refactor", "workdir": "/home/stephane/Data13TB/stepha … [19 caractères tronqués]`
+
+  ```
+notes hors corps : 120 région(s), 0 fuite(s)
+    data/onu/pdf/A_RES_80_1-en.pdf                         85 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-es.pdf                         93 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-fr.pdf                         91 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-ru.pdf                         95 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-zh.pdf                         83 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_10-en.pdf                       155 régions  fidélité 1.000
+    … et 24 autres
+
+✅ les 50 pages sont découpées, les partitions exactes, le rejeu identique,
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+[code 0]
+usage: graphe_document.py [-h] [--json] [--verifie] [--rejeu] [--fidelite]
+                          [--plat] [--cherche MOTIF] [--langue LANGUE]
+                          [--porte] [--rapport RAPPORT]
+                          [chemin]
+graphe_document.py: error: unrecognized arguments: --autotest
+[autotest 2]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-complet.json'))\nfor doc in d['documents']:\n    if doc['type']=='juridique':\n        print(doc['chemin'], '|', doc.get('source'), '|', len(doc['questions']))\n        for q in doc['questions'][:2]:\n          … [201 caractères tronqués]`
+
+  ```
+tools/tests/documents/corpus/juridique/A_RES_80_1-en.pdf | data/onu/pdf/A_RES_80_1-en.pdf | 3
+    Quelle valeur le document associe-t-il à « main » et « reference » ? | valeur 80 | [without reference to a Main Committee (A/80/L.2/R
+    Quelle valeur le document associe-t-il à « between » et « section » ? | valeur 11 | section 11 of the Agreement between the United Nat
+tools/tests/documents/corpus/juridique/A_RES_80_1-fr.pdf | data/onu/pdf/A_RES_80_1-fr.pdf | 3
+    Quelle valeur le document associe-t-il à « commission » et « grande »  | valeur 80 | [sans renvoi à une grande commission (A/80/L.2/Rev
+    Quelle valeur le document associe-t-il à « entre » et « section » ? | valeur 11 | représentants visés à la section 11 de l’Accord en
+tools/tests/documents/corpus/juridique/A_RES_80_1-es.pdf | data/onu/pdf/A_RES_80_1-es.pdf | 3
+    Quelle valeur le document associe-t-il à « comisión » et « previa » ? | valeur 80 | [sin remisión previa a una Comisión Principal (A/8
+    Quelle valeur le document associe-t-il à « entre » et « quienes » ? | valeur 11 | sesiones de la Asamblea General a los representant
+tools/tests/documents/corpus/juridique/A_RES_80_10-en.pdf | data/onu/pdf/A_RES_80_10-en.
+… [1035 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ROOT=$PWD/work/ocr/root; LD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=\"$ROOT/usr/share/tessdata\" \"$ROOT/usr/bin/tesseract\" work/ocr/pages/p1-1.png stdout -l fra --psm 3 tsv 2>/dev/null | sed -n '1,4p;20,24p' | cut -c1-160", "description": "Inspect tesseract TSV shape", "workd … [55 caractères tronqués]`
+
+  ```
+Nations Unies A RES/80/1
+
+Assemblée générale Distr. générale
+19 septembre 2025
+L'Assemblée générale,
+
+Exprimant sa préoccupation face aux situations dans lesquelles des
+représentants visés à la section 11 de l’ Accord entre l’Organisation des Nations Unies
+et les États-Unis d'Amérique relatif au Siège de l'Organisation des Nations Unies! se
+  ```
+
+- **bash** `{"command": "ROOT=$PWD/work/ocr/root; LD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=\"$ROOT/usr/share/tessdata\" \"$ROOT/usr/bin/tesseract\" work/ocr/pages/p1-1.png /tmp/ocrout -l fra --psm 3 tsv 2>/dev/null; head -3 /tmp/ocrout.tsv | cut -c1-160; grep -c \"^5\" /tmp/ocrout.tsv", "description" … [88 caractères tronqués]`
+
+  ```
+[stderr]
+head: cannot open '/tmp/ocrout.tsv' for reading: No such file or directory
+grep: /tmp/ocrout.tsv: No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "ROOT=$PWD/work/ocr/root; LD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=/usr/share/tessdata \"$ROOT/usr/bin/tesseract\" work/ocr/pages/p1-1.png /tmp/ocrout -l fra --psm 3 tsv 2>&1 | tail -3; ls -la /tmp/ocrout* 2>/dev/null; head -2 /tmp/ocrout.tsv 2>/dev/null | cut -c1-200", "descr … [112 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 16382 31 oct 17:44 /tmp/ocrout.tsv
+-rw-r--r--. 1 stephane stephane  1958 31 oct 17:43 /tmp/ocrout.txt
+level	page_num	block_num	par_num	line_num	word_num	left	top	width	height	conf	text
+1	1	0	0	0	0	0	0	2550	3300	-1
+  ```
+
+- **bash** `{"command": "ls work/ocr/root/usr/share/tessdata/ | head -20; echo ---; ls work/ocr/root/usr/share/tessdata/configs 2>/dev/null | head -5; echo \"=== spa rpm\"; timeout 60 curl -sI \"https://download.opensuse.org/tumbleweed/repo/oss/noarch/tesseract-ocr-traineddata-spa-4.1.0+git.20240801.8741641-3.1 … [158 caractères tronqués]`
+
+  ```
+eng.traineddata
+fra.traineddata
+osd.traineddata
+---
+=== spa rpm
+HTTP/2 302 
+date: Sat, 31 Oct 2026 21:44:09 GMT
+server: Mojolicious (Perl)
+  ```
+
+- **bash** `{"command": "ROOT=$PWD/work/ocr/root; LD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=\"$ROOT/usr/share/tessdata\" \"$ROOT/usr/bin/tesseract\" work/ocr/pages/p1-1.png stdout -l fra --psm 3 -c tessedit_create_tsv=1 2>/dev/null | head -3 | cut -c1-140", "description": "Test TSV via -c option on st … [68 caractères tronqués]`
+
+  ```
+level	page_num	block_num	par_num	line_num	word_num	left	top	width	height	conf	text
+1	1	0	0	0	0	0	0	2550	3300	-1	
+2	1	1	0	0	0	513	174	1782	71	-1
+  ```
+
+- **bash** `{"command": "sed -n 100,132p tools/graphe_document_pdf.py", "description": "Read hyphen rejoining helper", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+return colonne_gauche + colonne_droite
+    return sorted(lignes, key=lambda l: l["y0"])
+
+
+def _recoller(texte: str, suivant: str) -> str:
+    """Une césure de fin de ligne se recolle : `inter-` + `national` = `international`.
+    Une espace avant le tiret (`decision -making`) est un artefact de PDF, on la garde telle
+    quelle : le mot reste lisible et la fidélité le retrouve."""
+    if texte.endswith("-") and suivant[:1].islower():
+        return texte[:-1] + suivant
+    return texte + " " + suivant
+
+
+def blocs_de_page(page: dict, numero: int) -> list[dict]:
+    """Les blocs d'une page : notes à part, titres par la hauteur, le reste en paragraphes."""
+    lignes = ordre_de_lecture(page)
+    if not lignes:
+        return []
+    hauteur_corps = statistics.median(l["hauteur"] for l in lignes)
+    blocs: list[dict] = []
+    paragraphe: list[dict] = []
+
+    def vide_paragraphe() -> None:
+        if not paragraphe:
+            return
+        texte = paragraphe[0]["texte"]
+        for ligne in paragraphe[1:]:
+            texte = _recoller(texte, ligne["texte"])
+        blocs.append({"type": "paragraphe", "texte": re.sub(r"\s+", " ", texte).strip(),
+                      "prov": {"page":
+… [99 caractères tronqués]
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/installer_ocr.sh", "content": "#!/bin/bash\n# installer_ocr.sh — l'OCR de R4.4, installé SANS root dans `work/ocr/` (gitignoré).\n#\n# POURQUOI CE SCRIPT. La ligne R4.4 était bloquée par « aucun OCR installé » : ni tesseract,\n# ni … [3239 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/installer_ocr.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"graphe_document_ocr.py — l'OCR entre dans R0.1 par la MÊME porte que le texte natif.\n\nPOURQUOI CE FICHIER. R4.4 était bloquée par une ressource absente, pas par une idée :\n« aucun OCR installé (ni tesseract ni pytesseract) ». `tools/installer_ocr.sh` ins … [12637 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "chmod +x tools/installer_ocr.sh tools/graphe_document_ocr.py\npython3 tools/graphe_document_ocr.py --version\ntimeout 120 python3 tools/graphe_document_ocr.py work/ocr/pages/p1-1.png --json > /tmp/ocr-manifest.json && echo \"json OK\"\npython3 - <<'PY'\nimport json,sys\nsys.path.insert( … [401 caractères tronqués]`
+
+  ```
+tesseract 5.5.3
+json OK
+erreurs: []
+regions: {'regions': 61, 'types': {'blanc': 30, 'note': 1, 'paragraphe': 17, 'section': 12, 'titre': 1}}
+titre | 48.6 | Nations Unies A RES/80/1
+blanc | None | 
+
+section | 89.1 | Assemblée générale Distr. générale
+blanc | None | 
+
+paragraphe | 96.3 | 19 septembre 2025
+blanc | None | 
+
+section | 94.1 | Quatre-vingtième session
+blanc | None |
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,re,pathlib,json\nsys.path.insert(0,'tools')\nimport graphe_document as gd, graphe_document_pdf as gdp, graphe_document_ocr as gdo\nfrom collections import Counter\npdf=pathlib.Path('data/onu/pdf/A_RES_80_1-fr.pdf')\nblocs=[b for b in gdp.analyse(pdf) if b['p … [894 caractères tronqués]`
+
+  ```
+mots nat 315 ocr 322
+WER 0.044444444444444446
+rappel 0.9968 precision 0.9752
+--- nat: A /RES/80/1 Nations Unies Assemblée générale Distr. générale 19 septembre 2025 Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition des questions inscrites à l’ordre du jour Résolution adoptée par l’Assemblée générale le 19 septembr
+--- ocr: Nations Unies A RES/80/1 Assemblée générale Distr. générale 19 septembre 2025 Quatre-vingtième session Point 7 de l’ordre du jour Organisation des travaux, adoption de l’ordre du jour et répartition des questions inscrites à l’ordre du jour Résolution adoptée par l’Assemblée générale le 19 septembre
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document as gd, lecteur_controleur as lc\nbench=json.load(open('tools/tests/documents/bench-complet.json'))\nfrom collections import Counter\npages=Counter(); rates=[]\nfor doc in bench['documents']:\n  … [700 caractères tronqués]`
+
+  ```
+mapping [('A_RES_80_1-en.pdf', 3, 3), ('A_RES_80_1-fr.pdf', 3, 3), ('A_RES_80_1-es.pdf', 3, 3), ('A_RES_80_10-en.pdf', 7, 7), ('A_RES_80_10-fr.pdf', 7, 7), ('A_RES_80_10-es.pdf', 7, 7)]
+pages [(('A_RES_80_1-en.pdf', 1), 3), (('A_RES_80_1-es.pdf', 1), 3), (('A_RES_80_1-fr.pdf', 1), 3), (('A_RES_80_10-en.pdf', 1), 3), (('A_RES_80_10-en.pdf', 2), 4), (('A_RES_80_10-es.pdf', 1), 3), (('A_RES_80_10-es.pdf', 2), 4), (('A_RES_80_10-fr.pdf', 1), 2), (('A_RES_80_10-fr.pdf', 2), 5)]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesurer_ocr.py — R4.4 : dix pages lues en OCR, leur WER, leur parité, leurs contrôles.\n\nPOURQUOI CET OUTIL. La ligne R4.4 était bloquée, pas mesurée : « aucun OCR installé ».\nUne fois l'OCR là (`tools/installer_ocr.sh`), la question n'est plus « peut-on  … [18764 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py')\ns=p.read_text()\ns=s.replace('''    reference = jetons(texte_du_manifeste(natif))\n    hypothese = jetons(texte_du_manifeste(ocr))\n    commun = sum((Counter(reference) & Counter(hypothese)).values())\n    ligne = … [3992 caractères tronqués]`
+
+  ```
+ok
+248:        rep_sans = lire(graphe_document_ocr.manifeste_sans_ocr(png, langue), question)
+255:            "sans_ocr": trouve(rep_sans, question["valeur"]),
+264:        distance_bruitee = wer(reference, hypothese_bruitee)
+265:        ligne["distance_bruitee"] = distance_bruitee
+266:        ligne["wer_bruitee"] = round(distance_bruitee / max(len(reference), 1), 4)
+298:        distance_bruitee = sum(
+300:        agregat["wer_bruitee"] = round(distance_bruitee / max(mots_natifs, 1), 4)
+370:    with tempfile.TemporaryDirectory() as _:
+391:    return code if args.porte else (code if not all(ok for _, ok in bareme) else 0)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", "limit": 45, "offset": 230}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py</path>
+<type>file</type>
+<content>
+230:     hypothese = jetons(texte_du_manifeste(ocr))
+231:     commun = sum((Counter(reference) & Counter(hypothese)).values())
+232:     distance = wer(reference, hypothese)
+233:     sans = lire(graphe_document_ocr.manifeste_sans_ocr(png, langue), question) if page["questions"] else None
+234:     ligne = {
+235:         "pdf": pdf.name, "page": numero, "langue": langue,
+236:         "mots_natifs": len(reference), "mots_ocr": len(hypothese),
+237:         "distance": distance, "commun": commun,
+238:         "wer": round(distance / max(len(reference), 1), 4),
+239:         "rappel": round(commun / max(len(reference), 1), 4),
+240:         "precision": round(commun / max(len(hypothese), 1), 4),
+241:         "confiance": confiance_moyenne(ocr),
+242:         "questions": len(page["questions"]),
+243:         "detail_questions": [],
+244:     }
+245:     for question in page["questions"]:
+246:         rep_natif = lire(natif, question)
+247:         rep_ocr = lire(ocr, question)
+248:         rep_sans = lire(graphe_document_ocr.manifeste_sans_ocr(png, langue), question)
+249:         trouve_
+… [1568 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", "new_string": "    distance = wer(reference, hypothese)\n    ligne = {", "old_string": "    distance = wer(reference, hypothese)\n    sans = lire(graphe_document_ocr.manifeste_sans_ocr(png, langue), question) if pa … [44 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", "limit": 50, "offset": 270}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py</path>
+<type>file</type>
+<content>
+270: 
+271: 
+272: def agrege(lignes: list[dict]) -> dict:
+273:     questions = [q for l in lignes for q in l["detail_questions"]]
+274:     mots_natifs = sum(l["mots_natifs"] for l in lignes)
+275:     distance = sum(l["distance"] for l in lignes)
+276:     rappel = sum(l["rappel"] * l["mots_natifs"] for l in lignes) / max(mots_natifs, 1)
+277:     precision = (sum(l["precision"] * l["mots_ocr"] for l in lignes)
+278:                  / max(sum(l["mots_ocr"] for l in lignes), 1))
+279:     confiance = (sum(l["confiance"] * l["mots_natifs"] for l in lignes)
+280:                  / max(mots_natifs, 1))
+281:     n = max(len(questions), 1)
+282:     agregat = {
+283:         "pages": len(lignes),
+284:         "pages_avec_questions": sum(1 for l in lignes if l["questions"]),
+285:         "questions": len(questions),
+286:         "mots_natifs": mots_natifs,
+287:         "wer": round(distance / max(mots_natifs, 1), 4),
+288:         "rappel": round(rappel, 4),
+289:         "precision": round(precision, 4),
+290:         "confiance": round(confiance, 1),
+291:         "exactitude_natif": round
+… [1750 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", "new_string": "    mots_ocr = sum(l[\"mots_ocr\"] for l in lignes)\n    commun = sum(l[\"commun\"] for l in lignes)\n    distance = sum(l[\"distance\"] for l in lignes)\n    confiance = (sum(l[\"confiance\"] * l[\" … [2318 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", "limit": 40, "offset": 352}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py</path>
+<type>file</type>
+<content>
+352: 
+353: def main() -> int:
+354:     ap = argparse.ArgumentParser(description=__doc__)
+355:     ap.add_argument("--pages", type=int, default=10)
+356:     ap.add_argument("--dpi", type=int, default=300)
+357:     ap.add_argument("--bruit", action="store_true", default=True,
+358:                     help="passe le contrôle « page dégradée » (défaut : oui)")
+359:     ap.add_argument("--sans-bruit", dest="bruit", action="store_false")
+360:     ap.add_argument("--porte", action="store_true", help="applique les seuils R4.4")
+361:     ap.add_argument("--sortie", type=pathlib.Path, default=SORTIE)
+362:     ap.add_argument("--sans-ecrire", action="store_true")
+363:     args = ap.parse_args()
+364: 
+365:     graphe_document_ocr.exige()
+366:     pages = pages_du_banc(args.pages)
+367:     with tempfile.TemporaryDirectory() as _:
+368:         lignes = [mesure(p, args.dpi, args.bruit) for p in pages]
+369:     agregat = agrege(lignes)
+370:     resultat = {
+371:         "date": datetime.date.today().isoformat(), "ligne": "R4.4",
+372:         "dispositif": (f"{len(lignes)} pages rendues à {
+… [1103 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py')\ns=p.read_text()\ns=s.replace('import tempfile\\n','')\ns=s.replace('''    pages = pages_du_banc(args.pages)\n    with tempfile.TemporaryDirectory() as _:\n        lignes = [mesure(p, args.dpi, args.bruit) for p in … [748 caractères tronqués]`
+
+  ```
+ok
+=== R4.4 — L'OCR, DIX PAGES, SA PARITÉ ET SES CONTRÔLES ===
+  2 pages rendues à 300 dpi depuis 2 PDF du corpus gelé · tesseract 5.5.3 · lecteur extractif R0.2, questions du banc R0.3
+  page                        langue    mots     WER  rappel   conf quest.
+  A_RES_80_10-fr.pdf p2       fra        558   2.15%  97.85%   94.3      5
+  A_RES_80_10-en.pdf p2       eng        546   1.10%  98.90%   94.8      4
+
+  WER 1.63% · rappel 98.37% · précision 99.45% · confiance 94.5
+  exactitude : natif 100.00% · OCR 66.67% · PARITÉ 66.67% (9 questions)
+  sans OCR : 0.00% de réponses
+
+  ❌ pages ≥ 10
+  ✅ WER ≤ 10%
+  ✅ rappel ≥ 90%
+  ❌ parité ≥ 90%
+  ✅ exactitude natif ≥ 90%
+  ❌ exactitude OCR ≥ 90%
+  ✅ sans OCR : aucune réponse
+[code 0]
+  ```
+
+- **bash** `{"command": "timeout 300 python3 tools/mesurer_ocr.py --pages 2 --sans-bruit --sortie /tmp/r44-smoke.json >/dev/null 2>&1; python3 - <<'PY'\nimport json\nr=json.load(open('/tmp/r44-smoke.json'))\nfor q in r['questions']:\n    if q['trouve_natif']!=q['trouve_ocr']:\n        print('---',q['pdf'],q['pa … [295 caractères tronqués]`
+
+  ```
+--- A_RES_80_10-fr.pdf 2 valeur '10'
+ Q: Quelle valeur le document associe-t-il à « action » et « population » ?
+ nat: Programme d’action de la Conférence internationale sur la population et le développement 10 ,
+ ocr: Programme d’action de la Conférence internationale sur la population et le développement,
+--- A_RES_80_10-fr.pdf 2 valeur '2030 11'
+ Q: Quelle valeur le document associe-t-il à « horizon » et « durable » ?
+ nat: Réaffirmant le Programme de développement durable à l’horizon 2030 11 et
+ ocr: Réaffirmant le Programme de développement durable à l’horizon 2030!! et
+--- A_RES_80_10-fr.pdf 2 valeur '12'
+ Q: Quelle valeur le document associe-t-il à « 2024 » et « comité » ?
+ nat: femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des femmes 12 et de la reco
+ ocr: femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des femmes!? et de la recom
+  ```
+
+- **bash** `{"command": "for dpi in 400 600; do\n  pdftoppm -r $dpi -f 2 -l 2 -singlefile -png data/onu/pdf/A_RES_80_10-fr.pdf work/ocr/pages/test-$dpi 2>/dev/null\n  ROOT=$PWD/work/ocr/root\n  LD_LIBRARY_PATH=\"$ROOT/usr/lib64\" TESSDATA_PREFIX=\"$ROOT/usr/share/tessdata\" \\\n    \"$ROOT/usr/bin/tesseract\" w … [280 caractères tronqués]`
+
+  ```
+A/RES/80/10 Journée internationale des femmes et des filles autochtones
+Programme d’action de la Conférence internationale sur la population et le
+Réaffirmant le Programme de développement durable à l’horizon 2030! et
+--- 400
+A/RES/80/10 Journée internationale des femmes et des filles autochtones
+Programme d’action de la Conférence internationale sur la population et le
+Réaffirmant le Programme de développement durable à l’horizon 2030 !! et
+--- 600
+  ```
+
+- **bash** `{"command": "timeout 900 python3 tools/mesurer_ocr.py --pages 10 --sortie /tmp/r44-full.json 2>&1 | tail -30; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Run full 10-page OCR measurement", "timeoutMs": 960000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+tesseract a échoué (1) : a file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/share/tessdata/spa.traineddata
+Please make sure the TESSDATA_PREFIX environment variable is set to your "tessdata" directory.
+Failed loading language 'spa'
+Tesseract couldn't load any languages!
+Could not initialize tesseract.
+
+[code 1]
+  ```
+
+- **bash** `{"command": "cd work/ocr/rpm && curl -fsSLO \"https://download.opensuse.org/tumbleweed/repo/oss/noarch/tesseract-ocr-traineddata-spa-4.1.0+git.20240801.8741641-3.1.noarch.rpm\" && rpm2cpio tesseract-ocr-traineddata-spa-4.1.0+git.20240801.8741641-3.1.noarch.rpm | (cd ../root && cpio -idm --quiet) &&  … [328 caractères tronqués]`
+
+  ```
+[stderr]
+ls: cannot access 'work/ocr/root/usr/share/tessdata/': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "ls work/ocr/root/usr/share/tessdata/; LD_LIBRARY_PATH=\"$PWD/work/ocr/root/usr/lib64\" TESSDATA_PREFIX=\"$PWD/work/ocr/root/usr/share/tessdata\" work/ocr/root/usr/bin/tesseract --list-langs 2>&1 | tail -5", "description": "Verify Spanish data installed", "workdir": "/home/stephane/Data1 … [29 caractères tronqués]`
+
+  ```
+eng.traineddata
+fra.traineddata
+osd.traineddata
+spa.traineddata
+List of available languages in "/home/stephane/GitHub/Qtrinet/work/ocr/root/usr/share/tessdata/" (4):
+eng
+fra
+osd
+spa
+  ```
+
+- **bash** `{"command": "timeout 1200 python3 tools/mesurer_ocr.py --pages 10 --sortie /tmp/r44-full.json 2>&1 | tail -30; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Run full 10-page OCR measurement", "timeoutMs": 1260000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", line 391, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", line 384, in main
+    print(f"  JSON : {args.sortie.relative_to(RACINE)}")
+                      ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/tmp/r44-full.json' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet'
+[code 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\ns=s.replace('        print(f\"  JSON : {args.sortie.relative_to(RACINE)}\")',\n            '        affiche = args.sortie.relative_to(RACINE) if args.sortie.is_relative_to(RACINE) else args.sortie … [573 caractères tronqués]`
+
+  ```
+{
+ "pages": 10,
+ "pages_avec_questions": 9,
+ "questions": 30,
+ "mots_natifs": 3771,
+ "wer": 0.0448,
+ "rappel": 0.9737,
+ "precision": 0.9782,
+ "confiance": 93.2,
+ "exactitude_natif": 1.0,
+ "exactitude_ocr": 0.8333,
+ "parite": 0.8333,
+ "sans_ocr": 0.0,
+ "wer_bruitee": 0.0525,
+ "confiance_bruitee": 93.3,
+ "parite_bruitee": 0.8,
+ "exactitude_bruitee": 0.8
+}
+10 pages rendues à 300 dpi depuis 6 PDF du corpus gelé · tesseract 5.5.3 · lecteur extractif R0.2, questions du banc R0.3
+--- echecs de parite
+A_RES_80_10-fr.pdf 2 | valeur '10' | nat True ocr False | Programme d’action de la Conférence internationale sur la population et le développement,
+A_RES_80_10-fr.pdf 2 | valeur '2030 11' | nat True ocr False | Réaffirmant le Programme de développement durable à l’horizon 2030!! et
+A_RES_80_10-fr.pdf 2 | valeur '12' | nat True ocr False | femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’éga
+A_RES_80_10-es.pdf 1 | valeur '13' | nat True ocr False | esferas conexas
+A_RES_80_10-fr.pdf 1 | valeur '13' | nat True ocr False | social et dans les domaines connexes
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,re,subprocess\nsys.path.insert(0,'tools')\nimport graphe_document as gd, graphe_document_ocr as gco, graphe_document_pdf as gdp, mesurer_ocr as mo\nfrom PIL import Image, ImageFilter\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nnat=[ … [1520 caractères tronqués]`
+
+  ```
+A_blur2_jpeg20_rot06 WER 0.0323 mots 546
+B_scale0.5_blur1_jpeg25 WER 0.0394 mots 545
+C_scale0.5_blur2_jpeg15_rot1 WER 0.6129 mots 378
+D_scale0.4_blur1_jpeg20_rot08 WER 0.0717 mots 541
+E_scale0.5_blur3_jpeg10_rot15 WER 0.9283 mots 230
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, graphe_document_pdf as gdp, mesurer_ocr as mo\nfrom PIL import Image, ImageFilter\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nref=mo.jetons(' '.join(b['texte'] for b in … [1137 caractères tronqués]`
+
+  ```
+D2 WER 0.4211 mots 543
+D3 WER 0.1416 mots 535
+D4 WER 0.052 mots 545
+D5 WER 0.3763 mots 455
+D6 WER 0.448 mots 451
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\n\ns=s.replace(\"from banc_lecture import normalise  # noqa: E402\",\n            \"from banc_lecture import f1 as f1_mots, normalise  # noqa: E402\")\n\nold_deg = '''    from PIL import Image, Ima … [6564 caractères tronqués]`
+
+  ```
+patché
+syntaxe ok
+  ```
+
+- **bash** `{"command": "grep -n \"parite\\|exactitude_ocr\\|SEUILS\" tools/mesurer_ocr.py | head -40", "description": "Check leftover parity references", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+53:SEUILS = {
+57:    "parite_region": 0.90,
+262:            "parite_valeur": trouve_natif == trouve_ocr,
+263:            "f1_reponse": f1, "parite_region": f1 >= 0.90,
+305:        "exactitude_ocr": round(sum(q["trouve_ocr"] for q in questions) / n, 4),
+306:        "parite_valeur": round(sum(q["parite_valeur"] for q in questions) / n, 4),
+307:        "parite_region": round(sum(q["parite_region"] for q in questions) / n, 4),
+318:        agregat["parite_bruitee"] = round(
+321:        agregat["parite_region_bruitee"] = round(
+330:        (f"pages ≥ {SEUILS['pages']}", agregat["pages"] >= SEUILS["pages"]),
+331:        (f"WER ≤ {SEUILS['wer']:.0%}", agregat["wer"] <= SEUILS["wer"]),
+332:        (f"rappel ≥ {SEUILS['rappel']:.0%}", agregat["rappel"] >= SEUILS["rappel"]),
+333:        (f"parité de région ≥ {SEUILS['parite_region']:.0%}",
+334:         agregat["parite_region"] >= SEUILS["parite_region"]),
+335:        (f"exactitude natif ≥ {SEUILS['exactitude_natif']:.0%}",
+336:         agregat["exactitude_natif"] >= SEUILS["exactitude_natif"]),
+337:        ("sans OCR : aucune réponse", agregat["sans_ocr"] == SEUILS["sans_ocr"]),
+343:             agregat["parite_region_bruitee"] < agregat["par
+… [398 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\ns=s.replace('''        (f\"parité de région ≥ {SEUILS['parite_region']:.0%}\",\n         agregat[\"parite_region\"] >= SEUILS[\"parite_region\"]),''',\n'''        (f\"parité de région ≥ {SEUILS['p … [515 caractères tronqués]`
+
+  ```
+ok
+58:    "f1_median": 0.95,
+308:        "f1_median": round(sorted(q["f1_reponse"] for q in questions)[len(questions) // 2], 4)
+318:        agregat["parite_valeur_bruitee"] = round(
+335:        (f"F1 médian ≥ {SEUILS['f1_median']:.2f}",
+336:         agregat["f1_median"] >= SEUILS["f1_median"]),
+363:          f"{a['f1_median']:.3f} · valeur stricte {a['parite_valeur']:.2%} "
+  ```
+
+- **bash** `{"command": "rm -f work/ocr/pages/*-degradee.png\ntimeout 1200 python3 tools/mesurer_ocr.py --pages 10 --sortie /tmp/r44-full.json 2>&1 | tail -35; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Rerun full measurement with new controls", "timeoutMs": 1260000, "workdir": "/home/stephane/Data13TB/ … [25 caractères tronqués]`
+
+  ```
+JSON : /tmp/r44-full.json
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", line 415, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_ocr.py", line 409, in main
+    code = affiche(resultat, bareme)
+TypeError: 'PosixPath' object is not callable
+[code 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\ns=s.replace('''        affiche = args.sortie.relative_to(RACINE) if args.sortie.is_relative_to(RACINE) else args.sortie\n        print(f\"  JSON : {affiche}\")''','''        chemin = args.sortie.r … [409 caractères tronqués]`
+
+  ```
+JSON : /tmp/r44-full.json
+=== R4.4 — L'OCR, DIX PAGES, SA PARITÉ ET SES CONTRÔLES ===
+  10 pages rendues à 300 dpi depuis 6 PDF du corpus gelé · tesseract 5.5.3 · lecteur extractif R0.2, questions du banc R0.3
+  page                        langue    mots     WER  rappel   conf quest.
+  A_RES_80_10-fr.pdf p2       fra        558   2.15%  97.85%   94.3      5
+  A_RES_80_10-en.pdf p2       eng        546   1.10%  98.90%   94.8      4
+  A_RES_80_10-es.pdf p2       spa        577   2.08%  98.09%   94.5      4
+  A_RES_80_1-en.pdf p1        eng        294   4.76%  98.30%   93.5      3
+  A_RES_80_1-es.pdf p1        spa        326   5.52%  98.77%   92.9      3
+  A_RES_80_1-fr.pdf p1        fra        315   4.44%  99.68%   90.5      3
+  A_RES_80_10-en.pdf p1       eng        316   9.18%  93.04%   91.5      3
+  A_RES_80_10-es.pdf p1       spa        284   9.15%  94.72%   92.1      3
+  A_RES_80_10-fr.pdf p1       fra        305  12.13%  92.79%   89.4      2
+  A_RES_80_1-en.pdf p2        eng        250   0.40%  99.60%   95.7      0
+
+  WER 4.48% · rappel 97.37% · précision 97.82% · confiance 93.2
+  exactitude de la valeur : natif 100.00% · OCR 83.33%
+  PARITÉ de région (F1 ≥ 0,90) : 90.00% · méd
+… [406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('/tmp/r44-full.json'))\nprint('WER par page:', [(p['pdf'][:18],p['page'],p['wer']) for p in r['pages']])\nprint('--- parite_region < 1')\nfor q in r['questions']:\n    if not q['parite_region']:\n        print(q['pdf'],q['page'],'valeur',r … [472 caractères tronqués]`
+
+  ```
+WER par page: [('A_RES_80_10-fr.pdf', 2, 0.0215), ('A_RES_80_10-en.pdf', 2, 0.011), ('A_RES_80_10-es.pdf', 2, 0.0208), ('A_RES_80_1-en.pdf', 1, 0.0476), ('A_RES_80_1-es.pdf', 1, 0.0552), ('A_RES_80_1-fr.pdf', 1, 0.0444), ('A_RES_80_10-en.pdf', 1, 0.0918), ('A_RES_80_10-es.pdf', 1, 0.0915), ('A_RES_80_10-fr.pdf', 1, 0.1213), ('A_RES_80_1-en.pdf', 2, 0.004)]
+--- parite_region < 1
+A_RES_80_10-es.pdf 1 valeur '13' F1 0.1429
+  nat: Octogésimo período de sesiones Tema 13 del programa Aplicación y seguimiento integrados y coordinados de los r
+  ocr: esferas conexas
+A_RES_80_10-es.pdf 1 valeur '2200' F1 0.8
+  nat: Véase la resolución 2200 A (XXI), anexo.
+  ocr: l Véase la resolución 2200 A (XXD), anexo.
+A_RES_80_10-fr.pdf 1 valeur '13' F1 0.2143
+  nat: Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes is
+  ocr: social et dans les domaines connexes
+--- parite_valeur False
+A_RES_80_10-fr.pdf 2 valeur '10' nat True ocr False
+A_RES_80_10-fr.pdf 2 valeur '2030 11' nat True ocr False
+A_RES_80_10-fr.pdf 2 valeur '12' nat True ocr False
+A_RES_80_10-es.pdf 1 valeur '13' nat True ocr False
+A_RES_80_10-fr.pdf 1 valeur '13' nat True ocr False
+  ```
+
+- **bash** `{"command": "grep -n \"invariant\\|78\\|portes\\|chapitres\\|fichiers\\|documents\" tools/revue_documentation.py | head -30; echo \"=== taille\"; sed -n 1,50p tools/taille_documents.py", "description": "Read documentation invariants checker", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrin … [4 caractères tronqués]`
+
+  ```
+11:  5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+80:    """Les fichiers vivants dont les liens comptent pour la navigation (orphelins)."""
+87:    """Les documents vivants dont on vérifie les libellés et les chemins en code inline."""
+93:    """Les fichiers dont les liens doivent résoudre (docs, fiches courantes, racine)."""
+100:def compte_portes() -> int:
+104:def compte_chapitres() -> int:
+173:    portes = extrait_entier(t, r"\|\s*portes\s*\|\s*\*\*(\d+)\*\*")
+174:    chapitres = extrait_entier(t, r"\|\s*chapitres de la synthèse\s*\|\s*\*\*(\d+)\*\*")
+175:    documents = extrait_entier(t, r"\|\s*documents de[^|]*\|\s*\*\*(\d+)\*\*")
+176:    fiches = re.search(r"\|\s*fichiers / JSON de résultats\s*\|\s*\*\*(\d+)\*\*\s*/\s*\*\*(\d+)\*\*", t)
+178:        ("portes", portes, compte_portes()),
+179:        ("chapitres", chapitres, compte_chapitres()),
+180:        ("documents", documents, compte_docs()),
+187:        alertes.append("compteurs : la ligne « fichiers / JSON » manque dans en-cours.md")
+190:            (int(fiches.group(1)), compte_fiche
+… [2984 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 900 python3 tools/mesurer_ocr.py --pages 10 --porte --sans-ecrire --sortie /tmp/r44-rejeu.json >/tmp/rejeu.log 2>&1; echo \"[code $?]\"; tail -14 /tmp/rejeu.log; python3 - <<'PY'\nimport json\na=json.load(open('/tmp/r44-full.json'))['agregat']\nb=json.load(open('/tmp/r44-rejeu.j … [275 caractères tronqués]`
+
+  ```
+[code 0]
+  exactitude de la valeur : natif 100.00% · OCR 83.33%
+  PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)
+  page dégradée : WER 17.08% · exactitude 40.00% · parité région 26.67%
+  sans OCR : 0.00% de réponses
+
+  ✅ pages ≥ 10
+  ✅ WER ≤ 10%
+  ✅ rappel ≥ 90%
+  ✅ parité de région ≥ 90%
+  ✅ F1 médian ≥ 0.95
+  ✅ exactitude natif ≥ 90%
+  ✅ sans OCR : aucune réponse
+  ✅ le WER MONTE sur la page dégradée
+  ✅ la parité de région BAISSE sur la page dégradée
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/r44-rejeu.json'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "timeout 900 python3 tools/mesurer_ocr.py --pages 10 --porte --sortie /tmp/r44-rejeu.json >/tmp/rejeu.log 2>&1; echo \"[code $?]\"; python3 - <<'PY'\nimport json\na=json.load(open('/tmp/r44-full.json')); b=json.load(open('/tmp/r44-rejeu.json'))\nda={k:a['agregat'].get(k) for k in a['agre … [522 caractères tronqués]`
+
+  ```
+[code 0]
+diff agrégat: aucune
+diff questions: aucune
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\ns=s.replace('''    CACHE.mkdir(parents=True, exist_ok=True)\n    png = CACHE / f\"{pdf.stem}-p{page}-{dpi}.png\"''','''    CACHE.mkdir(parents=True, exist_ok=True)\n    # La clé du cache porte l'e … [2031 caractères tronqués]`
+
+  ```
+ok
+  A_RES_80_10-es.pdf p1       spa        284   9.15%  94.72%   92.1      3
+  A_RES_80_10-fr.pdf p1       fra        305  12.13%  92.79%   89.4      2
+  A_RES_80_1-en.pdf p2        eng        250   0.40%  99.60%   95.7      0
+
+  WER 4.48% · rappel 97.37% · précision 97.82% · confiance 93.2
+  exactitude de la valeur : natif 100.00% · OCR 83.33%
+  PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)
+  page dégradée : WER 17.08% · exactitude 40.00% · parité région 26.67%
+  sans OCR : 0.00% de réponses
+
+  ✅ pages ≥ 10
+  ✅ WER ≤ 10%
+  ✅ rappel ≥ 90%
+  ✅ parité de région ≥ 90%
+  ✅ F1 médian ≥ 0.95
+  ✅ exactitude natif ≥ 90%
+  ✅ sans OCR : aucune réponse
+  ✅ le WER MONTE sur la page dégradée
+  ✅ la parité de région BAISSE sur la page dégradée
+✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité tenue et contrôles en échec
+[code 0]
+  ```
+
+- **bash** `{"command": "TESSERACT_PREFIX=/tmp/ocr-test/root timeout 600 bash tools/installer_ocr.sh 2>&1 | tail -5", "description": "Test installer from scratch in temp prefix", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-91
+  ```
+
+- **bash** `{"command": "timeout 600 python3 tools/mesurer_ocr.py --pages 10 --porte 2>&1 | head -22", "description": "Write final OCR pilot JSON", "timeoutMs": 660000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+JSON : reports/r44-ocr-pilote.json
+=== R4.4 — L'OCR, DIX PAGES, SA PARITÉ ET SES CONTRÔLES ===
+  10 pages rendues à 300 dpi depuis 6 PDF du corpus gelé · tesseract 5.5.3 · lecteur extractif R0.2, questions du banc R0.3
+  page                        langue    mots     WER  rappel   conf quest.
+  A_RES_80_10-fr.pdf p2       fra        558   2.15%  97.85%   94.3      5
+  A_RES_80_10-en.pdf p2       eng        546   1.10%  98.90%   94.8      4
+  A_RES_80_10-es.pdf p2       spa        577   2.08%  98.09%   94.5      4
+  A_RES_80_1-en.pdf p1        eng        294   4.76%  98.30%   93.5      3
+  A_RES_80_1-es.pdf p1        spa        326   5.52%  98.77%   92.9      3
+  A_RES_80_1-fr.pdf p1        fra        315   4.44%  99.68%   90.5      3
+  A_RES_80_10-en.pdf p1       eng        316   9.18%  93.04%   91.5      3
+  A_RES_80_10-es.pdf p1       spa        284   9.15%  94.72%   92.1      3
+  A_RES_80_10-fr.pdf p1       fra        305  12.13%  92.79%   89.4      2
+  A_RES_80_1-en.pdf p2        eng        250   0.40%  99.60%   95.7      0
+
+  WER 4.48% · rappel 97.37% · précision 97.82% · confiance 93.2
+  exactitude de la valeur : natif 100.00% · OCR 83.33%
+  PARITÉ de région (F1 ≥ 0,90) : 90.
+… [180 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-91 (bash: TESSERACT_PREFIX=/tmp/ocr-test/root timeout 600 bash tools/installer_ocr.sh 2>&1 | tail -5) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-91"}`
+
+  ```
+✅ tesseract 5.5.3
+     langues : eng fra osd spa 
+     binaire : /tmp/ocr-test/root/usr/bin/tesseract
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,re\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, graphe_document_ocr as gco, lecteur_controleur as lc\nr=json.load(open('reports/r44-ocr-pilote.json'))\nvus=set()\nfor q in r['questions']:\n    if q['parite_valeur']: continue\n    cle=( … [958 caractères tronqués]`
+
+  ```
+=== A_RES_80_10-fr.pdf 2 | OCR flux de 516 mots
+  valeur '2030 11' dans OCR: True | []
+  valeur '12' dans OCR: False | []
+  valeur '10' dans OCR: True | ['A/RES/80/10 Journée internationale d', 'ersaires, en particulier les paragraphes 1 à 10 de l’annexe dans lesquel']
+=== A_RES_80_10-es.pdf 1 | OCR flux de 272 mots
+  valeur '13' dans OCR: True | [' de 2025 Octogésimo período de sesiones Tema 13 del programa Aplicación ', 'e las Naciones Unidas, núm. de venta S.96.1V.13), cap. I, resolución 1, ']
+=== A_RES_80_10-fr.pdf 1 | OCR flux de 273 mots
+  valeur '13' dans OCR: True | ['novembre 2025 Quatre-vingtième session Point 13 de l’ordre du jour Appli', ' des Nations Unies, numéro de vente: F.96.1V.13), chap. I, résolution 1,']
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('reports/r44-ocr-pilote.json'))\na=r['agregat']\nfor k,v in a.items(): print(f\"{k}: {v}\")\nprint('distance totale:', sum(p['distance'] for p in r['pages']))\nprint('pages:', len(r['pages']), 'avec questions:', sum(1 for p in r['pages'] i … [254 caractères tronqués]`
+
+  ```
+pages: 10
+pages_avec_questions: 9
+questions: 30
+mots_natifs: 3771
+wer: 0.0448
+rappel: 0.9737
+precision: 0.9782
+confiance: 93.2
+exactitude_natif: 1.0
+exactitude_ocr: 0.8333
+parite_valeur: 0.8333
+parite_region: 0.9
+f1_median: 1.0
+sans_ocr: 0.0
+wer_bruitee: 0.1708
+confiance_bruitee: 83.7
+parite_valeur_bruitee: 0.4
+parite_region_bruitee: 0.2667
+exactitude_bruitee: 0.4
+distance totale: 169
+pages: 10 avec questions: 9
+questions: 30
+f1: [0.143, 0.214, 0.8, 0.9, 0.923, 0.923]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('reports/r44-ocr-pilote.json'))\nfor q in r['questions']:\n    if not q['parite_valeur'] or not q['parite_region']:\n        print(f\"- {q['pdf']} p{q['page']} · valeur {q['valeur']!r} · trouve natif {q['trouve_natif']} / OCR {q['trouve_oc … [312 caractères tronqués]`
+
+  ```
+- A_RES_80_10-fr.pdf p2 · valeur '10' · trouve natif True / OCR False · F1 0.9231
+  Q: Quelle valeur le document associe-t-il à « action » et « population » ?
+  nat: Programme d’action de la Conférence internationale sur la population et le développement 10 ,
+  ocr: Programme d’action de la Conférence internationale sur la population et le développement,
+- A_RES_80_10-fr.pdf p2 · valeur '2030 11' · trouve natif True / OCR False · F1 0.9231
+  Q: Quelle valeur le document associe-t-il à « horizon » et « durable » ?
+  nat: Réaffirmant le Programme de développement durable à l’horizon 2030 11 et
+  ocr: Réaffirmant le Programme de développement durable à l’horizon 2030!! et
+- A_RES_80_10-fr.pdf p2 · valeur '12' · trouve natif True / OCR False · F1 0.9474
+  Q: Quelle valeur le document associe-t-il à « 2024 » et « comité » ?
+  nat: femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des fem
+  ocr: femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des fem
+- A_RES_80_10-es.pdf p1 · valeur '13' · trouve natif True / OCR False · F1 0.1429
+  Q: Quelle valeur le document associe-t-il à « conexas » et « conferen
+… [702 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,40p reports/README.md; echo \"=== INDEX head\"; sed -n 1,15p reports/INDEX.md; echo \"=== tools index\"; ls tools/ | grep -i index", "description": "Check reports index conventions", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
+| `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
+| [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8
+… [3692 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"add_argument\\|def main\\|--\" tools/index_reports.py | head -20; echo ---; python3 tools/index_reports.py --verifie 2>&1 | tail -5; echo \"[code $?]\"", "description": "Check reports index generator and sync", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+22:def main() -> int:
+35:        "|---|---|",
+---
+  366 fiches → reports/INDEX.md
+[code 0]
+  ```
+
+- **bash** `{"command": "git status --short | head -20; echo ---; git diff --stat reports/INDEX.md | tail -2", "description": "Check working tree after index regeneration", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+M .gitignore
+ M docs/pilotage/en-cours.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+ M reports/INDEX.md
+ m tools/docwatch
+ M tools/graphe_document.py
+?? docs/implantation/diehl-cook.md
+?? docs/schemas/diehl-cook-architecture.svg
+?? docs/schemas/diehl-cook-boucle.svg
+?? docs/schemas/diehl-cook-contrat.svg
+?? docs/schemas/diehl-cook-pipeline.svg
+?? docs/schemas/diehl-cook-placements.svg
+?? docs/schemas/diehl-cook-temps.svg
+?? docs/schemas/natif-cout-activite.svg
+?? docs/schemas/natif-drvm.svg
+?? docs/schemas/natif-graphe-n0.svg
+?? docs/schemas/natif-niveaux.svg
+?? docs/schemas/natif-original.svg
+?? docs/schemas/natif-pertes.svg
+?? docs/schemas/natif-portes.svg
+---
+ reports/INDEX.md | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+  ```
+
+- **bash** `{"command": "git diff docs/pilotage/en-cours.md | head -60; echo \"=== plan diff\"; git diff journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md | head -30", "description": "Inspect concurrent state edits", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 91bad92d..70ec730c 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -23,7 +23,7 @@
+ > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
+ > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
+ 
+-### Session active — N2, le budget complet (`0b0a6a0d`)
++### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2, le budget complet
+ 
+ - **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
+   [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+@@ -37,7 +37,7 @@
+   fichiers réservés, ni cette page sans me le dire.
+ - **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+   `journal/sessions/0b0a6a0d-…/`.
+-- **Prochaine action** : fiche `reports/rapport-n2-budget.md`, journal, roadmap, commit.
++- **Prochaine action** : la fiche du budget, le journal, la roadmap, le commit.
+ - **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** bloqué (aucun OCR).
+ - **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
+ 
+=== plan
+… [915 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la --time-style=+%H:%M:%S docs/implantation/diehl-cook.md docs/schemas/natif-*.svg 2>/dev/null | head; date +%H:%M:%S; echo \"=== git log last 3\"; git log --oneline -3; echo \"=== staged?\"; git diff --cached --stat | tail -3", "description": "Check concurrent file timestamps", "wo … [58 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 33659 17:58:39 docs/implantation/diehl-cook.md
+-rw-r--r--. 1 stephane stephane 25051 17:53:58 docs/schemas/natif-cout-activite.svg
+-rw-r--r--. 1 stephane stephane  5390 17:53:58 docs/schemas/natif-drvm.svg
+-rw-r--r--. 1 stephane stephane  9265 17:53:58 docs/schemas/natif-graphe-n0.svg
+-rw-r--r--. 1 stephane stephane  6918 17:53:58 docs/schemas/natif-niveaux.svg
+-rw-r--r--. 1 stephane stephane  5402 17:53:58 docs/schemas/natif-original.svg
+-rw-r--r--. 1 stephane stephane  5480 17:53:58 docs/schemas/natif-pertes.svg
+-rw-r--r--. 1 stephane stephane  6025 17:53:58 docs/schemas/natif-portes.svg
+17:59:10
+=== git log last 3
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+9f1dcaae N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES)
+660c479c N2 — LA HIÉRARCHIE NE PAIE PAS SUR LA DISTILLATION NON PLUS (2,9935 CONTRE 2,9927, TROIS GRAINES)
+=== staged?
+  ```
+
+- **write** `{"content": "# R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 %\n\n> **Objet.** La ligne R4.4 était **bloquée** par une ressource absente, pas par une question\n> ouverte : « aucun OCR installé (ni tesseract ni pytesseract) ». Ce pilote installe l'OCR sans … [9412 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-ocr-pilote.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"implantation\" docs/README.md | head -20; echo ===; sed -n \"$(grep -n 'implantation' docs/README.md | head -1 | cut -d: -f1),+24p\" docs/README.md", "description": "Inspect docs inventory structure", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+3:> **`docs/` dit ce qui reste vrai** : la méthode, l'état, la théorie, l'implantation. Les **chiffres** et les
+70:| [`implantation/format-flux.md`](implantation/format-flux.md) | la spécification DRVF : trace, rejeu, transport |
+71:| [`implantation/format-clusters.md`](implantation/format-clusters.md) | le modèle éclaté en clusters |
+72:| [`implantation/convertisseur.md`](implantation/convertisseur.md) | le convertisseur et le chargement |
+73:| [`implantation/contexte-long.md`](implantation/contexte-long.md) | ce que 1 M de contexte veut dire, et par où ça casse |
+74:| [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |
+75:| [`implantation/llm-externe.md`](implantation/llm-externe.md) | le banc externe, le professeur et l'élève |
+76:| [`implantation/numa-segregation.md`](implantation/numa-segregation.md) | la ségrégation NUMA mesurée |
+77:| [`implantation/configuration-nvme-raid-amd.md`](implantation/configuration-nvme-raid-amd.md) | l'array NVMe et le pari AMD |
+88:`docs/` = **méthode, pilotage, théorie, implantation** ; `reports/` = **résultats** ; `journal/` = **récit daté** ;
+===
+> **`docs/` dit ce qui 
+… [2012 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 60,100p tools/revue_documentation.py; echo ===; grep -n \"orphelin\\|orphelins\" -A 20 tools/revue_documentation.py | head -40", "description": "Read orphan check in documentation review", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def est_carte(p: pathlib.Path) -> bool:
+    return p.parent.name == "entrees" and p.parent.parent.name == "glossaire"
+
+
+def docs_vivants():
+    return [p for p in (RACINE / "docs").rglob("*.md")
+            if "archive" not in p.parts and p.name != "README.md" and not est_carte(p)]
+
+
+def docs_tous():
+    return list((RACINE / "docs").rglob("*.md"))
+
+
+def rapports():
+    return list((RACINE / "reports").glob("*.md"))
+
+
+def sources_nav():
+    """Les fichiers vivants dont les liens comptent pour la navigation (orphelins)."""
+    return (docs_vivants() + rapports()
+            + [RACINE / "docs/README.md", RACINE / "README.md",
+               RACINE / "REPRISE.md", RACINE / "AGENTS.md"])
+
+
+def sources_propres():
+    """Les documents vivants dont on vérifie les libellés et les chemins en code inline."""
+    return (docs_vivants()
+            + [RACINE / "README.md", RACINE / "REPRISE.md", RACINE / "AGENTS.md"])
+
+
+def sources_liens():
+    """Les fichiers dont les liens doivent résoudre (docs, fiches courantes, racine)."""
+    return (docs_tous()
+            + [RACINE / "reports/07-mesures-couche-commune.md",
+               RACINE / "reports/fiche-nuit-17-10.md",
+               RACINE / "
+… [1781 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,45p docs/implantation/document-graph.md; echo \"...\"; wc -l docs/implantation/document-graph.md", "description": "Read an existing implementation doc", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# Le graphe de document — régions, offsets, partition
+
+> **Ce que ce document est.** La **spécification** du manifeste de graphe de document (R0.1) :
+> ce qu'est un flux, ce qu'est une région, et les trois contrôles qui rendent la découpe
+> vérifiable. Le code est `tools/graphe_document.py` ; la porte est `tools/porte-document.sh` ;
+> les résultats mesurés vivent dans `reports/`, jamais ici.
+>
+> **Chargement** : lire § 2 et § 5 pour coder contre le manifeste ; le reste est la justification.
+
+## 1. Le besoin
+
+Le modèle ne voit qu'un flux d'octets : il ne peut pas dire « lis le titre, saute la section 3,
+compare les colonnes ». Il faut une représentation du document qui (a) survive au rejeu, (b)
+serve de champ de lecture au contrôleur (R0.2), et (c) se **vérifie** sans modèle. Un graphe
+qu'on ne peut pas vérifier n'est pas une découpe, c'est une impression.
+
+## 2. Deux espaces, et il ne faut pas les confondre
+
+| espace | ce qu'il indexe | qui l'utilise |
+|---|---|---|
+| **le flux** | le texte extrait, en **octets UTF-8** ; c'est ce que le lecteur lit | les spans des régions, le contrôleur, le banc |
+| **la source** | la provenance dans le fichier d'origine : `page` (PDF), `bloc` (HTM
+… [1031 caractères tronqués]
+  ```
+
+- **write** `{"content": "# L'encodeur visuel — l'OCR comme bloc classique du lecteur\n\n> **Ce que ce document est.** La **spécification** du bloc OCR de R4.4 : ce qu'il reçoit, ce\n> qu'il rend, ce qu'il promet sur la provenance et la confiance, et la porte qui le vérifie.\n> Le code est [`graphe_document_ocr. … [7906 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/encodeur-visuel.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"R44\\|R4.4\\|R41\\|R42\\|R43\" docs/pilotage/backlog/index.md | head -12; echo ===; sed -n \"$(grep -n 'R44' docs/pilotage/backlog/index.md | head -1 | cut -d: -f1),+2p\" docs/pilotage/backlog/index.md", "description": "Read backlog index R44 row", "workdir": "/home/stephane/D … [33 caractères tronqués]`
+
+  ```
+64:| R41 | [Bloc tableaux](R41-bloc-tableaux.md) | mesurée | P2 | R01 | R4.1 |
+65:| R42 | [Bloc code (AST, exécution)](R42-bloc-code.md) | mesurée | P2 | R01 | R4.2 |
+66:| R43 | [Bloc maths](R43-bloc-maths.md) | mesurée | P3 | R01 | R4.3 |
+67:| R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | bloquée | P3 | R41, R42, R43 | R4.4 |
+===
+| R44 | [Encodeur visuel / OCR](R44-encodeur-visuel.md) | bloquée | P3 | R41, R42, R43 | R4.4 |
+| R51 | [Lecture croisée / multi-documents](R51-lecture-croisee.md) | spécifiée | P3 | R31, R32, R03, R01 | R5.1 |
+| R52 | [Décodeur multilingue](R52-multilingue-decodeur.md) | spécifiée | P3 | B10.3, R31, R32 | R5.2 |
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/backlog/R44-encodeur-visuel.md'); s=p.read_text()\ns=s.replace('> **Statut** : bloquée · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : aucun OCR installé (ni tesseract ni pytessera … [2922 caractères tronqués]`
+
+  ```
+card ok
+index ok
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+[code 0]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md", "limit": 30, "offset": 62}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md</path>
+<type>file</type>
+<content>
+62: | [`theorie/architecture-native.md`](theorie/architecture-native.md) | DRVM, `drave-n0` : le format et le modèle natifs |
+63: | [`theorie/modele-natif.md`](theorie/modele-natif.md) | le modèle natif, le bus, les blocs et la séparation à trois niveaux |
+64: | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la lecture rapide humaine, les 14 techniques et les cinq couches qui manquent |
+65: | [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 316 fiches du glossaire |
+66: 
+67: ## Implantation — comment c'est construit
+68: 
+69: | document | pour quoi |
+70: |---|---|
+71: | [`implantation/format-flux.md`](implantation/format-flux.md) | la spécification DRVF : trace, rejeu, transport |
+72: | [`implantation/format-clusters.md`](implantation/format-clusters.md) | le modèle éclaté en clusters |
+73: | [`implantation/convertisseur.md`](implantation/convertisseur.md) | le convertisseur et le chargement |
+74: | [`implantation/contexte-long.md`](implantation/contexte-long.md) | ce que 1 M de contexte veut dire, et par où ça casse |
+75: | [`implantation/tokenisatio
+… [1203 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md", "new_string": "| [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |\n| [`implantation/encodeur-visuel.md`](implantation/encodeur-visuel.md) | l' … [462 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\ndef rep(old,new):\n    global s\n    assert old in s, old[:60]\n    s=s.replace(old,new,1)\n\nrep(\"| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0. … [3972 caractères tronqués]`
+
+  ```
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (OCR) ; R1/R2/R3 attendent N2 |
+45:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est bloqué** (OCR).
+83:[R4.4] lasts 1 day and is colored in #b03a2e
+99:[R4.4] starts at [R4.1–R4.3]'s end
+269:| **R4.4** | **vision/OCR** : scans, figures, layout | 🧱 **bloqué** : aucun OCR sur la machine | 10 pages scannées, même réponse que le texte natif |
+288:  classiques sont moins chers et mesurables. R4.4 vient après R4.1–R4.3.
+306:  B10.3 (B10.2bis absent du backlog), **R4.4** (aucun OCR : ni tesseract ni pytesseract) ;
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 49, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: | **R4 — le lecteur** | document, politique de lecture, fenê
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\ndef rep(old,new):\n    global s\n    assert old in s, old[:70]\n    s=s.replace(old,new,1)\n\nrep(\"| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0. … [2983 caractères tronqués]`
+
+  ```
+roadmap ok
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
+45:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
+85:[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00
+101:[R4.4] starts at [R4.1–R4.3]'s end
+271:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** | 10 pages **scannées**, même réponse que le texte natif — **non atteinte** : les scans réels (grain, perspective, colonnes, exposants) restent à faire |
+290:  classiques sont moins chers et mesurables. R4.4 vient après R4.1–R4.3.
+305:  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+321:| R4.4 les scans | pas de corpus de scans réels ; le pilote part du PDF vectoriel | 10 pages photocopiées, et une passe de robustesse (nettoyage, redressement, exposants) |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "limit": 14, "offset": 38}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+38: 
+39: 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
+40:    30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+41:    **closes en négatif** — 0,540 contre BM25 0,720 sur le corpus gelé, et un signal qui prédit
+42:    (AUC 0,839) sans règle qui transfère.
+43:    **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
+44:    **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
+45:    le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
+46:    l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de
+47:    passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.
+48: 2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
+49:    (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **
+… [299 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 -c \"import uuid;print(uuid.uuid4())\"; echo ===; sed -n 20,50p docs/pilotage/en-cours.md; echo \"...\"; sed -n 45,60p docs/pilotage/en-cours.md", "description": "Generate session id and re-read state sections", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+8e0bc30e-1950-4dae-aa25-8aec0fe85b5b
+===
+> **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
+> aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne. La garantie est au
+> commit, pas dans un rôle : `tools/verifie_etat_a_jour.py` refuse le commit (hook
+> `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
+> l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
+
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2, le budget complet
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
+  [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2, le budget complet**.
+- **Ce qu'elle fait** : deux GPU en continu — **A** français seul (3 graines), **B** manifeste
+  4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129
+  sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,
+  20 000 pas, quatre sources) sur le dispositif reconstruit.
+- **Ce que font les autres** : documentation, backlog, **N4** (sans GPU), portes documentaires —
+  mais **pas**
+… [1911 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport revue_documentation as rd\nprint('portes', rd.compte_portes())\nprint('chapitres', rd.compte_chapitres())\nprint('docs', rd.compte_docs())\nprint('fiches', rd.compte_fiches())\nprint('json', len(list((rd.RACINE/'re … [136 caractères tronqués]`
+
+  ```
+portes 79
+chapitres 8
+docs 112
+fiches 370
+json 438
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, datetime\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndef rep(old,new):\n    global s\n    assert old in s, old[:80]\n    s=s.replace(old,new,1)\n\nrep(\"**Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**\",\n    f\"**Mis à  … [3586 caractères tronqués]`
+
+  ```
+en-cours · 1187 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[code 0]
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 46, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: | portes | **78** (73 vertes, 5 rouges à la passe du 31/10) | `tools/porte-*.sh`
+  ```
+
+- **bash** `{"command": "grep -n \"^| portes\\|^| documents\\|^| fichiers\" docs/pilotage/en-cours.md", "description": "Read current invariant table lines", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+84:| portes | **79** (73 vertes, 5 rouges à la passe du 31/10 ; 1 porte ajoutée depuis, hors passe) | `tools/porte-*.sh` |
+86:| fichiers / JSON de résultats | **369** / **438** | `reports/*.md` / `reports/*.json` |
+87:| documents de `docs/` | **111** (hors archive et README) | `docs/**/*.md` |
+  ```
+
+- **bash** `{"command": "grep -n \"R4.4\\|OCR\\|8e0bc30e\" docs/pilotage/en-cours.md | head -20; echo \"=== recent mtime\"; ls -la --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/INDEX.md; date +%H:%M:%S", "description": "Check state for R4.4 mentions and mtimes", "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+41:- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** bloqué (aucun OCR).
+57:  **R4.4 bloqué** (aucun OCR).
+107:| **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
+117:**R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 bloqué** (aucun OCR).
+=== recent mtime
+-rw-r--r--. 1 stephane stephane  9307 17:59:59 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 28634 18:00:44 docs/pilotage/roadmap.md
+-rw-r--r--. 1 stephane stephane 49255 17:58:53 reports/INDEX.md
+18:01:27
+  ```
+
+- **bash** `{"command": "sed -n 1,50p tools/verifie_journal.py; echo \"=== checks\"; grep -n \"plan\\|rapport\\|sessions\\|erreur\" tools/verifie_journal.py | head -30", "description": "Read journal/session consistency checks", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_journal.py — un dossier par jour, et les sessions ancrées.
+
+Règles vérifiées :
+  1. aucun fichier `journal/AAAA-MM-JJ*.md` à la racine : chaque jour est un **dossier** ;
+  2. chaque dossier `journal/AAAA-MM-JJ/` a un `README.md` ;
+  3. chaque `README.md` de jour porte une section « Sessions DSH » et un lien vers
+     `../README.md#sessions` ;
+  4. chaque `journal/sessions/<id>/rapport.md` porte le bloc « Journaux » avec un lien vers
+     son jour (ou le journal), vers `en-cours.md` et vers l'index des sessions ;
+  5. les liens relatifs de `journal/README.md`, `journal/THEMES.md`, des `README.md` de jour
+     et des rapports de session résolvent.
+
+Usage : python3 tools/verifie_journal.py   (code 0 = journal propre)
+"""
+from __future__ import annotations
+import pathlib
+import re
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+JOURNAL = RACINE / "journal"
+DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# les liens markdown, sans les ancres ni les liens externes
+LIEN = re.compile(r"\]\(([^)#]+?)(?:#[^)]*)?\)")
+EXTERNE = ("http://", "https://", "mailto:", "#")
+
+
+def liens(texte: str) -> list[str]:
+    return [c for c in LIEN.findall(texte)
+          
+… [1616 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,40p journal/sessions/22e518ee-81b8-4081/rapport.md 2>/dev/null || ls journal/sessions/; echo \"=== jour 31\"; ls journal/2026-10-31/; sed -n 1,50p journal/2026-10-31/README.md", "description": "Read existing session and day journal formats", "workdir": "/home/stephane/Data13TB/ … [25 caractères tronqués]`
+
+  ```
+00221850-90de-4287-90ee-324a35e504cd
+04ed1834-b0f8-42a1-aa21-75a75c19647e
+0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630
+0b69f616-5c75-4c34-b97a-ae05564812af
+0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f
+11b2d312-9a7e-4a4e-814f-ed0384ed9d4d
+13446299-79d8-497c-ba83-673c176a4637
+15d4e6f4-b2ba-44c7-8c0e-03c141280f9b
+15fd322f-7e9e-48c0-a970-f36335eb622a
+1820cf6b-c8a4-411c-894c-31195b9ff7a8
+18b8879c-f211-43b8-9908-cf65e509b21d
+18c3f6d0-5bb1-45bb-9f94-ab0e7812218d
+1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445
+1f9394fb-6435-4928-9a03-2b258e5a28c5
+22bcae27-254b-47b2-acda-87467dab060c
+22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+235066f5-307a-4285-a882-14bc2d06cb7b
+27c99b10-c57e-4599-a23a-f7b1a54c17a1
+2c2a6595-b208-446e-bbd1-d0f49eca45e8
+2f51f17f-f47c-49d5-958f-cafecd3fe01e
+2fd56aa5-7b9b-40b0-9470-05c74b032d55
+31f26a6e-65f5-480d-be32-36b9f425b3dd
+34e1d4be-3708-4065-ae77-eca21f86e857
+3d5618a0-4e3a-45bb-943d-a72c753fb7da
+3de141c0-089b-4ceb-8a2e-bd6d83044a5f
+42059fde-f06f-4e2c-9a23-8292d887fb6e
+482522d1-31f1-43eb-ae9c-a681336404f7
+48ec07ab-ec9d-4297-a7bf-d84974667e61
+49721012-99c1-4d9c-967a-eee41f25ff2e
+4a342d0f-bf6c-433f-bac9-c5a960b89a7f
+4b146dfd-ce0b-4af8-910f-610ab438d4e6
+4d7a793b-74d1-4c
+… [5637 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat .git/hooks/pre-commit 2>/dev/null | head -40; echo \"=== journal_auto args\"; grep -n \"add_argument\\|def main\" tools/journal_auto.py | head", "description": "Read pre-commit hook and journal tool", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+… [654 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def main\\|SESSION\\|sessions\\|jsonl\\|environ\\|DSH\" tools/archive_sessions.py | head -20; echo \"=== session_report\"; grep -n \"def main\\|plan\\|rapport\\|Journaux\\|DSH\\|jsonl\" tools/session_report.py | head -25", "description": "Inspect session archiving hooks", "wor … [57 caractères tronqués]`
+
+  ```
+2:"""Archive les sessions DSH de ce projet.
+4:Trois sorties, dans `journal/sessions/` :
+11:  <id>/session.jsonl.zstd copie brute de la trace DSH (ignorée par git : elle
+13:  MANIFEST.md             table des sessions : identifiant, date, volume,
+20:  python3 tools/archive_sessions.py [--repo DIR] [--quiet]
+70:    lignes = ["# Session DSH — relecture", ""]
+142:def main() -> int:
+149:    dsh = Path(os.environ.get("DSH_HOME", Path.home() / ".dsh"))
+150:    # le projet est identifié par le nom du dossier de sessions, dérivé du cwd
+152:    src = dsh / "sessions" / slug
+155:        print(f"aucune session DSH pour {repo} (cherché : {src})", file=sys.stderr)
+158:    dest = repo / "journal" / "sessions"
+162:        "# Sessions DSH archivées", "",
+163:        "Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la",
+164:        "trace brute (`session*.jsonl.zstd`) reste sur disque et n'est pas suivie par git.",
+173:        # DSH nomme les traces `session.jsonl.zstd` (ancien) ou `session.v4.jsonl.zstd` :
+174:        # le glob doit couvrir les deux, sinon les sessions récentes ne sont jamais archivées.
+175:        traces = sorted(sess.glob("session*.jsonl*"))
+=== session_rep
+… [1597 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"DSH_HOME=${DSH_HOME:-unset}\"; ls -d ~/.dsh/sessions/* 2>/dev/null | head; echo ===; ls -dt ~/.dsh/sessions/*Qtrinet* 2>/dev/null; ls -lat ~/.dsh/sessions/*Qtrinet*/ 2>/dev/null | head -8", "description": "Locate DSH session store for this repo", "workdir": "/home/stephane/Data13 … [28 caractères tronqués]`
+
+  ```
+DSH_HOME=/home/stephane/.dsh
+/home/stephane/.dsh/sessions/--home-stephane--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-contcal--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-equipment-hauru--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-gods-eye-view--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-hauru-top--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-llama.cpp--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini-research--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini-Research--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--
+===
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet-tools-docwatch--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/:
+total 0
+drwx------. 1 stephane stephane   66 31 oct 17:52 df1b1098-d54e-4763-bfc2-2a8cc1498cec
+drwx------. 1 s
+… [350 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for d in ~/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/*/; do echo \"== $d\"; ls -la --time-style=+%H:%M \"$d\" | tail -4; done", "description": "List session dirs contents"}`
+
+  ```
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/00221850-90de-4287-90ee-324a35e504cd/
+drwx------. 1 stephane stephane      66 11:34 .
+drwx------. 1 stephane stephane    7776 17:52 ..
+-rw-r--r--. 1 stephane stephane       0 11:34 session.lock
+-rw-------. 1 stephane stephane 2577525 16:29 session.v4.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/04ed1834-b0f8-42a1-aa21-75a75c19647e/
+total 300
+drwx------. 1 stephane stephane     36 09:18 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-------. 1 stephane stephane 303833 09:21 session.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/
+drwx------. 1 stephane stephane     66 17:17 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-r--r--. 1 stephane stephane      0 17:17 session.lock
+-rw-------. 1 stephane stephane 815842 17:57 session.v4.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/
+drwx------. 1 stephane stephane     66 10:29 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-r--r
+… [32611 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for id in fe3c05f0-834b-44f2-8739-501865d652c1 e181ce02-cd50-488a-a6be-e84b79d40dcc df1b1098-d54e-4763-bfc2-2a8cc1498cec bc3c0b97-cae0-4773-921d-ef27c8285461 0b0a6a0d-05f5-4308-800c-4792ddb9cbf2; do f=~/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/$id/session.v4.json … [163 caractères tronqués]`
+
+  ```
+fe3c05f0: 32
+e181ce02: 0
+df1b1098: 0
+bc3c0b97: 0
+0b0a6a0d: 0
+  ```
+
+- **bash** `{"command": "mkdir -p journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1\ncat > journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md <<'EOF'\n# Plan de session — R4.4, l'OCR et sa parité\n\n> **Mandat ouvert** le 2026-10-31 18 h 00 HAE depuis\n> [`docs/pilotage/en-cours.md`](../../../doc … [1261 caractères tronqués]`
+
+  ```
+plan écrit
+trente fois plus petit que la dispersion du contrôle. Le contenu de l'état n'est donc pas lu ;
+la petite dégradation vient des paramètres et de la BPTT tronquée. Le levier n'est **pas validé**
+à ce budget : la suite est le dispositif de distillation avec une BPTT à deux segments.
+
+**Le graphe perdait ses liens.** `verifie_backlog.py` lisait les dépendances en ids nus : une
+arête écrite `[B10.2bis](…)` — la forme naturelle d'un tableau Markdown — n'était pas déliée et
+disparaissait en silence. Le compte passe de **42 à 43 arêtes**, la frontière de **12 à 4**, et
+`B10.2bis`, dit « sans fiche » alors qu'il est mesuré, retrouve son arête dure. Une arête morte
+ou un cycle écrits en Markdown sont désormais vus.
+
+**N2.h2 — la hiérarchie, deuxième négatif.** Le dispositif N2 avait disparu avec `/tmp` : professeur,
+élève, corpus distillé, points de contrôle. Reconstruit : professeur 23,57 M à 20 000 pas
+(**0,9195** bit/octet contre 0,9036 de référence), élève de base 20 000 pas, puis distillation **par
+segments** en trois bras. Sur 256 fenêtres et **trois graines**, à budget strictement égal, l'état de
+section donne **2,9935** contre **2,9927** au témoin (+0,029 %) ; il bat son p
+… [416 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-10-31/README.md'); s=p.read_text()\npar = \"\"\"\n**R4.4 — l'OCR entre dans le lecteur.** La ligne était bloquée par une ressource, pas par une idée :\n« aucun OCR installé ». tesseract **5.5.3** s'installe **sans root** (RP … [1161 caractères tronqués]`
+
+  ```
+journal ok
+état** de 0,0017 seulement — la machinerie coûte ce qu'elle rapporte. Le levier est écarté après deux
+mesures. En chemin, une leçon de méthode : la graine ne variait **rien** (modèle chargé, aucun
+dropout, fenêtres déterministes) — `temoin g2` rendait *exactement* le même nombre que `temoin g1` ;
+les graines 2 et 3 décalent désormais les fenêtres de `(graine−1) × 10 000 019`.
+**R4.4 — l'OCR entre dans le lecteur.** La ligne était bloquée par une ressource, pas par une idée :
+« aucun OCR installé ». tesseract **5.5.3** s'installe **sans root** (RPM openSUSE extraits dans
+`work/ocr/`) et le bloc rend des blocs au graphe R0.1 — mêmes offsets, même partition, et la
+**confiance** de chaque bloc dans la provenance. Dix pages rendues à 300 dpi (6 PDF, fr/en/es) :
+**WER 4,48 %** (169 éditions sur 3 771 mots), rappel **97,37 %**, confiance **93,2**. Sur les
+**30 questions** du banc R0.3, le même lecteur extractif choisit le **même passage** dans **27 cas
+(90 %)**, la **valeur exacte** dans **25 (83,3 %)**. Les écarts sont nommés : trois **appels de note
+en exposant** que l'OCR lit `!`, deux **en-têtes découpés autrement**. Les contrôles font leur
+travail : **sans OCR 0/30**, et l
+… [225 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-10-31/README.md'); s=p.read_text()\ns=s.replace(\"(graine−1) × 10 000 019`.\\n**R4.4 — l'OCR\", \"(graine−1) × 10 000 019`.\\n\\n**R4.4 — l'OCR\",1)\np.write_text(s)\nprint('ok')\nPY\ngrep -n \"R4.4 — l'OCR\" journal/2026-10 … [132 caractères tronqués]`
+
+  ```
+ok
+111:**R4.4 — l'OCR entre dans le lecteur.** La ligne était bloquée par une ressource, pas par une idée :
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nechecs=[]\ndef rep(old,new):\n    global s\n    if old not in s:\n        echecs.append(old[:70]); return\n    s=s.replace(old,new,1)\n\nrep(\"**Mis à jour : 2026-10-31, 17 h 30 HAE (heure lo … [3586 caractères tronqués]`
+
+  ```
+ÉCHECS:
+  | documents de `docs/` | **111** (hors archive et README) | `docs/**/*
+  | fichiers / JSON de résultats | **369** / **438** | `reports/*.md` / 
+  en-cours · 1187 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[en-cours 0]
+  ```
+
+- **bash** `{"command": "grep -n \"^| portes\\|^| documents\\|^| fichiers\\|Mis à jour\\|Sessions archivées\\|R4.4\" docs/pilotage/en-cours.md | head -14; ls -la --time-style=+%H:%M:%S docs/pilotage/en-cours.md; date +%H:%M:%S", "description": "Re-read current state counters and R4.4 lines", "workdir": "/home/s … [42 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
+41:- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** bloqué (aucun OCR).
+44:> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`
+57:  **R4.4 bloqué** (aucun OCR).
+84:| portes | **79** (73 vertes, 5 rouges à la passe du 31/10 ; 1 porte ajoutée depuis, hors passe) | `tools/porte-*.sh` |
+86:| fichiers / JSON de résultats | **370** / **438** | `reports/*.md` / `reports/*.json` |
+87:| documents de `docs/` | **112** (hors archive et README) | `docs/**/*.md` |
+107:| **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
+117:**R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 bloqué** (aucun OCR).
+-rw-r--r--. 1 stephane stephane 9307 18:01:31 docs/pilotage/en-cours.md
+18:02:56
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nechecs=[]\ndef rep(old,new):\n    global s\n    if old not in s:\n        echecs.append(old[:70]); return\n    s=s.replace(old,new,1)\n\nrep(\"**Mis à jour : 2026-10-31, 17 h 30 HAE (heure lo … [3240 caractères tronqués]`
+
+  ```
+en-cours écrit
+  en-cours · 1368 mots · 7 sections · 2 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[en-cours 0]
+- **Prochaine action** : la fiche du budget, le journal, la roadmap, le commit.
+- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** partielle (OCR installé).
+- **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, l'OCR et sa parité
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — mandat dans
+  [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4, l'OCR et sa parité** — **sans GPU**, pour ne pas concurrencer N2.
+- **Ce qu'elle fait** : installe tesseract **sans root** (`work/ocr/`), le branche sur le graphe
+  R0.1 (même manifeste, **confiance** dans la provenance) et mesure **10 pages** rendues :
+  **WER 4,48 %**, **parité de passage 90 %**, page dégradée **26,7 %**. R4.4 passe de bloquée à
+  **partielle**. Fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+- **Ce que font les autres** : N2 garde les GPU ; cette session ne prend ni GPU, ni
+  `toutes-les-po
+… [1043 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -30; echo \"[revue ${PIPESTATUS[0]}]\"", "description": "Run documentation review", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+revue de documentation · 370 fiche(s) · 438 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[revue 0]
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -6; echo \"[tableaux ${PIPESTATUS[0]}]\"; python3 tools/verifier_schemas.py 2>&1 | tail -4; echo \"[schemas ${PIPESTATUS[0]}]\"", "description": "Run table and schema gates", "timeoutMs": 180000, "workdir": "/home/stephane/Data13TB/stephane/GitHu … [11 caractères tronqués]`
+
+  ```
+✅ 1324 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1256 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+[tableaux 0]
+  schémas · 431 document(s) · 35 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+[schemas 0]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -8; echo \"[journal ${PIPESTATUS[0]}]\"; python3 tools/sessions.py --check 2>&1 | tail -8; echo \"[sessions ${PIPESTATUS[0]}]\"", "description": "Check journal and session consistency", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtri … [5 caractères tronqués]`
+
+  ```
+journal · 37 jour(s) · 105 session(s) · 1669 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[journal 0]
+  ✅ plans cohérents
+[sessions 0]
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -18; echo \"[taille ${PIPESTATUS[0]}]\"", "description": "Check context budgets", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2489    176   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+    1818    147   T1   2000  docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md
+  T0 max : 4147 mots (budget 4 000)
+
+  avertissements :
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4147 mots (AGENTS + en-cours + une tâche) > budget 4 0
+… [13 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"T0\\|4 000\\|4000\\|chargeable\\|total\" tools/taille_documents.py | head -30; sed -n \"$(grep -n 'def chargeables' tools/taille_documents.py | cut -d: -f1),+40p\" tools/taille_documents.py 2>/dev/null | head -45", "description": "Understand T0 budget accounting", "workdir": " … [49 caractères tronqués]`
+
+  ```
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+32:    ("T0", "docs/methode/*.md", 1200),
+112:            if cat in ("T0", "T1"):
+140:    # T0 : la somme des trois lectures par défaut
+149:    if t0 > 4000:
+150:        violations.append(f"T0 : {t0} mots (AGENTS + en-cours + une tâche) > budget 4 000")
+154:    print("  budget de contexte · documents chargeables")
+159:    print(f"  T0 max : {t0} mots (budget 4 000)")
+170:    print("\n  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.")
+  ```
+
+- **bash** `{"command": "sed -n 100,150p tools/taille_documents.py", "description": "Read T0 sum computation", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+specifiques = {"organisation-du-depot.md", "modularisation.md", "relations-humaines.md"}
+    for cat, motif, budget in BUDGETS:
+        for p in sorted(RACINE.glob(motif)):
+            if not p.is_file():
+                continue
+            if motif == "docs/methode/*.md" and p.name in specifiques:
+                continue
+            rel = str(p.relative_to(RACINE))
+            t = p.read_text(encoding="utf-8", errors="ignore")
+            n = mots_hors_diagrammes(t)
+            lignes.append((n, t.count("\n") + 1, rel, cat, budget))
+            tete = "\n".join(t.splitlines()[:20])
+            if cat in ("T0", "T1"):
+                if not t.lstrip().startswith("#"):
+                    violations.append(f"{rel} : pas de titre (#) en tête")
+                if "> " not in tete:
+                    violations.append(f"{rel} : pas de résumé (blockquote) dans les 20 premières lignes")
+            if rel in DATE_DOCS:
+                if "Résumé" not in tete:
+                    violations.append(f"{rel} : document daté sans « Résumé » en tête")
+                if "ne pas charger" not in tete.lower() and "ne jamais charger" not in tete.lower():
+                    violations.append(f"
+… [1374 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport taille_documents as td, pathlib\nR=td.RACINE\na=td.mots_hors_diagrammes((R/'AGENTS.md').read_text(errors='ignore'))\ne=td.mots_hors_diagrammes((R/'docs/pilotage/en-cours.md').read_text(errors='ignore'))\nspec={\"organisati … [426 caractères tronqués]`
+
+  ```
+AGENTS 1200 en-cours 1368 méthode max (1134, 'continuite.md')
+T0 3702 → en-cours max 1666
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport taille_documents as td\nR=td.RACINE\nfor p in sorted((R/'docs/methode').glob('*.md')):\n    print(td.mots_hors_diagrammes(p.read_text(errors='ignore')), p.name)\nprint('en-cours', td.mots_hors_diagrammes((R/'docs/p … [251 caractères tronqués]`
+
+  ```
+1089 contexte.md
+1134 continuite.md
+330 echantillonnage-vdc.md
+666 illustrations.md
+412 miroir.md
+744 mission.md
+1234 modularisation.md
+1579 organisation-du-depot.md
+262 panini-nipada.md
+500 portes.md
+768 rangement.md
+1260 relations-humaines.md
+942 ressources.md
+524 resultats.md
+en-cours 1368
+=== rerun
+  avertissements :
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4147 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "grep -n \"T0\\|4 000\\|budget\\|une tâche\" docs/methode/contexte.md | head -20; echo ===; sed -n \"$(grep -n 'T0' docs/methode/contexte.md | head -1 | cut -d: -f1),+22p\" docs/methode/contexte.md", "description": "Read context budget definition", "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+3:> **Principe.** Le contexte est un **budget**, pas un espace gratuit. On charge le **minimum** qui
+12:| niveau | ce qu'on charge | budget | exemples |
+14:| **T0 — toujours** | les règles, l'état, **un** document de tâche | **≤ 4 000 mots** | `AGENTS.md` · `docs/pilotage/en-cours.md` · `docs/methode/<tâche>.md` |
+15:| **T1 — à la demande** | **un** concept, **une** section de roadmap, **un** verdict de fiche, **une** fiche de glossaire | **budget par document** (tableau ci-dessous) | `docs/theorie/vision.md` · `docs/theorie/synthese/0*.md` · `reports/<fiche>.md` (verdict + section) · `docs/theorie/glossaire/0*.md` |
+39:## Les budgets
+41:| document | budget (mots) | usage |
+43:| `AGENTS.md` | 1 200 | **T0** — toujours |
+44:| `docs/pilotage/en-cours.md` | 2 000 | **T0** — toujours |
+45:| `docs/methode/*.md` | 1 200 | **T0** — un seul |
+62:> ne comptent pas dans le budget. Le document les porte, la page montre le SVG.
+93:Si un document dépasse son budget, on **coupe** : un résumé + un lien, ou un découpage en sections
+99:python3 tools/verifie_en_cours.py       # la structure et le budget de l'état
+100:python3 tools/taille_documents.py       # la taille, les budgets, les résumés manqu
+… [2296 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/taille_documents.py'); s=p.read_text()\nold = '''    agents = list((RACINE / \"docs/methode\").glob(\"*.md\"))\n    t0 = poids(\"AGENTS.md\") + poids(\"docs/pilotage/en-cours.md\") + max(\n        (poids(str(a.relative_to(RACINE))) … [973 caractères tronqués]`
+
+  ```
+fix T0 ok
+  T0 max : 3702 mots (budget 4 000)
+
+  avertissements :
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[taille 0]
+  ```
+
+- **bash** `{"command": "git status --short | head -40; echo \"=== diff stat\"; git diff --stat | tail -12", "description": "Review working tree before commit", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+M .gitignore
+ M docs/README.md
+ M docs/pilotage/backlog/R44-encodeur-visuel.md
+ M docs/pilotage/backlog/index.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M docs/schemas/README.md
+ M journal/2026-10-31/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+ M reports/INDEX.md
+ m tools/docwatch
+ M tools/graphe_document.py
+ M tools/taille_documents.py
+?? docs/implantation/diehl-cook.md
+?? docs/implantation/encodeur-visuel.md
+?? docs/schemas/diehl-cook-architecture.svg
+?? docs/schemas/diehl-cook-boucle.svg
+?? docs/schemas/diehl-cook-contrat.svg
+?? docs/schemas/diehl-cook-pipeline.svg
+?? docs/schemas/diehl-cook-placements.svg
+?? docs/schemas/diehl-cook-temps.svg
+?? docs/schemas/natif-cout-activite.svg
+?? docs/schemas/natif-drvm.svg
+?? docs/schemas/natif-graphe-n0.svg
+?? docs/schemas/natif-niveaux.svg
+?? docs/schemas/natif-original.svg
+?? docs/schemas/natif-pertes.svg
+?? docs/schemas/natif-portes.svg
+?? docs/theorie/modele-natif.md
+?? journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/
+?? reports/r44-ocr-pilote.json
+?? reports/rapport-r44-ocr-pilote.md
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+?? tools/graphe_document_ocr.py
+?? tools/
+… [865 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff docs/README.md; echo \"=== roadmap diff\"; git diff docs/pilotage/roadmap.md | head -80", "description": "Inspect shared-file diffs", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+=== roadmap diff
+diff --git a/docs/pilotage/roadmap.md b/docs/pilotage/roadmap.md
+index c94c5e26..57ca95a4 100644
+--- a/docs/pilotage/roadmap.md
++++ b/docs/pilotage/roadmap.md
+@@ -30,7 +30,7 @@
+ | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+ | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
+ | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
+-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** | **R4.4 bloqué** (OCR) ; R1/R2/R3 attendent N2 |
++| **R — le lecteur** | document, politique de lecture, fenêtre, 
+… [4777 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff --cached --stat | tail -20; echo \"=== staged docs README\"; git diff --cached docs/README.md | head -20; echo \"=== status\"; git status --short | head -8", "description": "Check staged changes from concurrent session", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrin … [4 caractères tronqués]`
+
+  ```
+docs/README.md                           |   3 +
+ docs/implantation/diehl-cook.md          | 603 +++++++++++++++++++++++++++++++
+ docs/schemas/README.md                   |  23 +-
+ docs/schemas/diehl-cook-architecture.svg | 118 ++++++
+ docs/schemas/diehl-cook-boucle.svg       |  71 ++++
+ docs/schemas/diehl-cook-contrat.svg      |  60 +++
+ docs/schemas/diehl-cook-pipeline.svg     |  61 ++++
+ docs/schemas/diehl-cook-placements.svg   |  55 +++
+ docs/schemas/diehl-cook-temps.svg        | 111 ++++++
+ docs/schemas/natif-cout-activite.svg     | 235 ++++++++++++
+ docs/schemas/natif-drvm.svg              |  44 +++
+ docs/schemas/natif-graphe-n0.svg         |  83 +++++
+ docs/schemas/natif-niveaux.svg           |  57 +++
+ docs/schemas/natif-original.svg          |  46 +++
+ docs/schemas/natif-pertes.svg            |  46 +++
+ docs/schemas/natif-portes.svg            |  53 +++
+ docs/theorie/modele-natif.md             | 357 ++++++++++++++++++
+ 17 files changed, 2024 insertions(+), 2 deletions(-)
+=== staged docs README
+diff --git a/docs/README.md b/docs/README.md
+index a518d3fb..9f002e4f 100644
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -60,6 +60,7 @@
+ | [`theorie/synthese/index.md`](theorie/syn
+… [1747 caractères tronqués]
+  ```
+

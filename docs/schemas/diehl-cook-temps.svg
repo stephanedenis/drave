@@ -1,0 +1,111 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Du spike au fait : une seule trace pour apprendre, rejouer, mesurer</title>
+<desc>dt = 0,5 ms ; 350 ms de présentation puis 150 ms de repos = 1 000 pas ; un spike devient un fait (couche, jeton, indice, valeur).</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="500" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Du spike au fait : une seule trace pour apprendre, rejouer, mesurer</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le spike n&#x27;est pas seulement une activation : c&#x27;est un événement daté, donc une ligne de trace.</text>
+<line x1="60" y1="120" x2="900" y2="120" stroke="#94a3b8" stroke-width="2"/>
+<line x1="60" y1="112" x2="60" y2="128" stroke="#94a3b8" stroke-width="2"/>
+<line x1="620" y1="112" x2="620" y2="128" stroke="#94a3b8" stroke-width="2"/>
+<line x1="900" y1="112" x2="900" y2="128" stroke="#94a3b8" stroke-width="2"/>
+<text x="340" y="108" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d4ed8">présentation 350 ms = 700 pas</text>
+<text x="760" y="108" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#475569">repos 150 ms = 300 pas</text>
+<text x="60" y="146" text-anchor="middle" font-size="10" fill="#475569">0</text>
+<text x="620" y="146" text-anchor="middle" font-size="10" fill="#475569">700</text>
+<text x="900" y="146" text-anchor="middle" font-size="10" fill="#475569">1 000</text>
+<text x="34" y="196" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">E</text>
+<text x="34" y="246" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">I</text>
+<line x1="60" y1="200" x2="900" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+<line x1="60" y1="250" x2="900" y2="250" stroke="#e2e8f0" stroke-width="1"/>
+<circle cx="335.54286716319314" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="193.69632261809159" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="603.76626789268" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="129.39775506738505" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="509.4232435314851" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="369.8649118683201" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="117.55911831525958" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="486.0973012153246" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="100.7464399224276" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="425.5894606031564" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="127.28144733118754" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="144.38467094196935" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="418.10573509686145" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="748.0187422310712" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="171.51760814270938" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="253.0559509777519" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="584.4952423725832" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="847.1213328147446" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="543.2244178663489" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="395.2779892136397" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="870.5291865861944" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="108.19779810656016" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="773.9441364199172" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="307.47961479197454" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="188.28916835309877" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="166.58963522426205" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="322.9550957635862" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="739.2236144784257" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="218.19563153762874" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="546.9121342032223" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="593.909044519471" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="375.3659850350996" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="519.1504618818374" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="121.48695947812497" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="118.87295937231079" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="238.88614451184776" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="627.9279780090644" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="420.62569064891034" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="327.60067970896904" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="550.1607280762637" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="441.6111886240358" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="315.80893742821956" cy="200" r="3.2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="721.3911748484428" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="643.1754356582485" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="270.1591387921653" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="541.0274424121103" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="500.66113312539017" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="787.6127463702117" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="668.1451373401584" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="306.10896720995294" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="873.7433749439173" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="166.81393816906893" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="412.8607138638863" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="690.8555622435044" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="194.6273184216139" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="470.94974239016057" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="102.14995077889888" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="617.937002358204" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="696.9481102945067" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="539.8812710274549" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="787.8918057013284" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="327.2729605354393" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="640.1422003444006" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="557.3832992261151" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="545.5140675116436" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="444.0883716671587" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="758.7735800202839" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="844.6384979885087" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="458.7606366841085" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="614.604808489233" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="119.74893062972016" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<circle cx="645.2234574696276" cy="250" r="3.2" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<rect x="30" y="290" width="440" height="70" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="250" y="314" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">un spike = un fait</text>
+<text x="250" y="338" text-anchor="middle" font-size="10.5" fill="#334155">(couche = population, jeton = pas, indice, valeur = 1, échelle = 1)</text>
+<line x1="250" y1="262" x2="250" y2="288" stroke="#1d4ed8" stroke-width="2" marker-end="url(#fb)"/>
+<rect x="500" y="290" width="430" height="70" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.6"/>
+<text x="715" y="314" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">liste valuée → DRVF</text>
+<text x="715" y="338" text-anchor="middle" font-size="10" fill="#334155">3 o par neurone actif (v2) · mêmes octets pour la trace, le rejeu, le transport</text>
+<line x1="472" y1="325" x2="498" y2="325" stroke="#334155" stroke-width="2" marker-end="url(#f)"/>
+<rect x="30" y="392" width="290" height="56" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="175" y="414" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">population  ↔  couche</text>
+<text x="175" y="436" text-anchor="middle" font-size="10" fill="#475569">convention du profil « spikes »</text>
+<rect x="340" y="392" width="290" height="56" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="485" y="414" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">pas de temps  ↔  jeton</text>
+<text x="485" y="436" text-anchor="middle" font-size="10" fill="#475569">convention du profil « spikes »</text>
+<rect x="650" y="392" width="290" height="56" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="795" y="414" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">spike  ↔  (indice, 1)</text>
+<text x="795" y="436" text-anchor="middle" font-size="10" fill="#475569">convention du profil « spikes »</text>
+<text x="480" y="478" text-anchor="middle" font-size="11" fill="#475569">Le rejeu redonne les mêmes spikes, pas seulement la même perte : c&#x27;est ce qui rend le diff possible.</text>
+</svg>

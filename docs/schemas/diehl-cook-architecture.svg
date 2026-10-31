@@ -1,0 +1,118 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Diehl &amp; Cook (2015) : une mémoire compétitive à spikes</title>
+<desc>Entrée Poisson, neurones LIF à conductance, STDP, inhibition latérale et seuil adaptatif : un apprentissage sans étiquette, une assignation de classes après coup.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="570" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Diehl &amp; Cook (2015) : une mémoire compétitive à spikes</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Un apprentissage local, sans rétropropagation et sans étiquette ; les classes ne servent qu&#x27;à nommer les neurones.</text>
+<text x="110" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">surface 28 × 28</text>
+<rect x="47" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="122" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="122" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="138" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="79" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="95" y="138" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="111" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="138" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="154" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="154" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="143" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="154" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="170" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="170" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="127" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="170" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="186" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="186" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="143" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="186" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="202" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="202" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="218" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="218" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="218" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="95" y="218" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="111" y="218" width="14" height="14" rx="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<rect x="127" y="218" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="218" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="218" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="47" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="63" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="79" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="95" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="111" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="127" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="143" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<rect x="159" y="234" width="14" height="14" rx="2" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0"/>
+<text x="110" y="268" text-anchor="middle" font-size="10.5" fill="#475569">Poisson 0–63,75 Hz</text>
+<text x="110" y="286" text-anchor="middle" font-size="10.5" fill="#475569">taux ∝ intensité</text>
+<rect x="300" y="120" width="150" height="320" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="375" y="146" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">E · 6 400 LIF</text>
+<text x="375" y="164" text-anchor="middle" font-size="10.5" fill="#475569">excitateurs</text>
+<circle cx="375" cy="190" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="222" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="254" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="286" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="318" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="350" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<circle cx="375" cy="382" r="11" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="375" y="424" text-anchor="middle" font-size="9.5" fill="#b45309">θ += 0,05 mV / spike</text>
+<text x="375" y="438" text-anchor="middle" font-size="9.5" fill="#b45309">τθ = 1e7 ms</text>
+<rect x="620" y="120" width="150" height="320" rx="12" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+<text x="695" y="146" text-anchor="middle" font-size="13" font-weight="bold" fill="#b91c1c">I · 6 400 LIF</text>
+<text x="695" y="164" text-anchor="middle" font-size="10.5" fill="#475569">inhibiteurs</text>
+<circle cx="695" cy="190" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="222" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="254" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="286" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="318" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="350" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="695" cy="382" r="11" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="695" y="424" text-anchor="middle" font-size="9.5" fill="#b91c1c">un spike E → un spike I</text>
+<line x1="180" y1="180" x2="297" y2="200" stroke="#1d4ed8" stroke-width="1.8" marker-end="url(#fb)"/>
+<line x1="180" y1="230" x2="297" y2="254" stroke="#1d4ed8" stroke-width="1.8" marker-end="url(#fb)"/>
+<line x1="180" y1="280" x2="297" y2="308" stroke="#1d4ed8" stroke-width="1.8" marker-end="url(#fb)"/>
+<text x="235" y="330" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">tout-à-tout</text>
+<text x="235" y="344" text-anchor="middle" font-size="10" fill="#1d4ed8">poids STDP</text>
+<line x1="452" y1="190" x2="617" y2="190" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#fr)"/>
+<line x1="452" y1="254" x2="617" y2="254" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#fr)"/>
+<line x1="452" y1="318" x2="617" y2="318" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#fr)"/>
+<line x1="452" y1="382" x2="617" y2="382" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#fr)"/>
+<text x="535" y="176" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">1:1</text>
+<path d="M617,240 C540,270 500,300 452,318" fill="none" stroke="#b91c1c" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#fr)"/>
+<path d="M617,350 C540,380 500,400 452,404" fill="none" stroke="#b91c1c" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#fr)"/>
+<text x="535" y="460" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">inhibition latérale</text>
+<text x="535" y="476" text-anchor="middle" font-size="9.5" fill="#475569">sauf le neurone source</text>
+<rect x="30" y="500" width="430" height="58" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="245" y="522" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">Apprentissage : STDP local, aucune étiquette</text>
+<text x="245" y="542" text-anchor="middle" font-size="10.5" fill="#475569">la rétropropagation n&#x27;entre pas dans la boucle</text>
+<rect x="500" y="500" width="430" height="58" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1"/>
+<text x="715" y="522" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">Lecture : réponse moyenne par classe</text>
+<text x="715" y="542" text-anchor="middle" font-size="10.5" fill="#475569">l&#x27;assignation est la seule étape qui voit les étiquettes</text>
+</svg>

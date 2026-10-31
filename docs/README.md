@@ -60,6 +60,7 @@
 | [`theorie/synthese/index.md`](theorie/synthese/index.md) | la synthèse en 8 chapitres |
 | [`theorie/glossaire.md`](theorie/glossaire.md) | le vocabulaire : couche vs étage, unité de sens, RSN |
 | [`theorie/architecture-native.md`](theorie/architecture-native.md) | DRVM, `drave-n0` : le format et le modèle natifs |
+| [`theorie/modele-natif.md`](theorie/modele-natif.md) | le modèle natif, le bus, les blocs et la séparation à trois niveaux |
 | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la lecture rapide humaine, les 14 techniques et les cinq couches qui manquent |
 | [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 316 fiches du glossaire |
 
@@ -72,6 +73,8 @@
 | [`implantation/convertisseur.md`](implantation/convertisseur.md) | le convertisseur et le chargement |
 | [`implantation/contexte-long.md`](implantation/contexte-long.md) | ce que 1 M de contexte veut dire, et par où ça casse |
 | [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |
+| [`implantation/encodeur-visuel.md`](implantation/encodeur-visuel.md) | l'OCR comme bloc classique : contrat, confiance, parité, porte |
+| [`implantation/diehl-cook.md`](implantation/diehl-cook.md) | un bloc Diehl & Cook : équations, contrat DRVM, RSN, portes |
 | [`implantation/llm-externe.md`](implantation/llm-externe.md) | le banc externe, le professeur et l'élève |
 | [`implantation/numa-segregation.md`](implantation/numa-segregation.md) | la ségrégation NUMA mesurée |
 | [`implantation/configuration-nvme-raid-amd.md`](implantation/configuration-nvme-raid-amd.md) | l'array NVMe et le pari AMD |

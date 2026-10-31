@@ -1,0 +1,46 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Ce qui est original, en six gestes</title>
+<desc>Ce n&#x27;est ni le spike ni le transformeur : c&#x27;est le contrat autour du calcul.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="420" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Ce qui est original, en six gestes</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">La structure bat la taille — et la structure est dans le format, les ports et la trace.</text>
+<rect x="30" y="92" width="290" height="112" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.6"/>
+<circle cx="54" cy="118" r="13" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="54" y="122" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">1</text>
+<text x="76" y="123" text-anchor="start" font-size="13" font-weight="bold" fill="#1d4ed8">Le bloc, pas la couche</text>
+<text x="50" y="154" text-anchor="start" font-size="11.5" fill="#334155">ports typés, coût, trace</text>
+<text x="50" y="176" text-anchor="start" font-size="11.5" fill="#475569">substituable sans toucher au bus</text>
+<rect x="340" y="92" width="290" height="112" rx="10" fill="#ffffff" stroke="#6d28d9" stroke-width="1.6"/>
+<circle cx="364" cy="118" r="13" fill="#6d28d9" stroke="#6d28d9" stroke-width="1.8"/>
+<text x="364" y="122" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">2</text>
+<text x="386" y="123" text-anchor="start" font-size="13" font-weight="bold" fill="#6d28d9">Le format porte le graphe</text>
+<text x="360" y="154" text-anchor="start" font-size="11.5" fill="#334155">DRVM : manifeste + graphe</text>
+<text x="360" y="176" text-anchor="start" font-size="11.5" fill="#475569">+ contrats, pas un sac de tenseurs</text>
+<rect x="650" y="92" width="290" height="112" rx="10" fill="#ffffff" stroke="#15803d" stroke-width="1.6"/>
+<circle cx="674" cy="118" r="13" fill="#15803d" stroke="#15803d" stroke-width="1.8"/>
+<text x="674" y="122" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">3</text>
+<text x="696" y="123" text-anchor="start" font-size="13" font-weight="bold" fill="#15803d">Le coût suit l&#x27;activité</text>
+<text x="670" y="154" text-anchor="start" font-size="11.5" fill="#334155">listes valuées, poussées</text>
+<text x="670" y="176" text-anchor="start" font-size="11.5" fill="#475569">deux régimes, mesurés</text>
+<rect x="30" y="222" width="290" height="112" rx="10" fill="#ffffff" stroke="#15803d" stroke-width="1.6"/>
+<circle cx="54" cy="248" r="13" fill="#15803d" stroke="#15803d" stroke-width="1.8"/>
+<text x="54" y="252" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">4</text>
+<text x="76" y="253" text-anchor="start" font-size="13" font-weight="bold" fill="#15803d">Le réflexe est entraîné</text>
+<text x="50" y="284" text-anchor="start" font-size="11.5" fill="#334155">sorties précoces formées</text>
+<text x="50" y="306" text-anchor="start" font-size="11.5" fill="#475569">avec le modèle, pas après</text>
+<rect x="340" y="222" width="290" height="112" rx="10" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+<circle cx="364" cy="248" r="13" fill="#b45309" stroke="#b45309" stroke-width="1.8"/>
+<text x="364" y="252" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">5</text>
+<text x="386" y="253" text-anchor="start" font-size="13" font-weight="bold" fill="#b45309">Le centre est un contrat</text>
+<text x="360" y="284" text-anchor="start" font-size="11.5" fill="#334155">RSN neutre, typée, annotée</text>
+<text x="360" y="306" text-anchor="start" font-size="11.5" fill="#475569">la neutralité se mesure</text>
+<rect x="650" y="222" width="290" height="112" rx="10" fill="#ffffff" stroke="#334155" stroke-width="1.6"/>
+<circle cx="674" cy="248" r="13" fill="#334155" stroke="#334155" stroke-width="1.8"/>
+<text x="674" y="252" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">6</text>
+<text x="696" y="253" text-anchor="start" font-size="13" font-weight="bold" fill="#0f172a">Le rejeu est un citoyen</text>
+<text x="670" y="284" text-anchor="start" font-size="11.5" fill="#334155">mêmes octets : trace,</text>
+<text x="670" y="306" text-anchor="start" font-size="11.5" fill="#475569">diff, transport, analyse</text>
+<rect x="30" y="368" width="900" height="34" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="390" text-anchor="middle" font-size="12" fill="#334155">Un modèle Drave se juge aussi sur ce qu&#x27;il refuse : version, bloc, arête interdite.</text>
+</svg>

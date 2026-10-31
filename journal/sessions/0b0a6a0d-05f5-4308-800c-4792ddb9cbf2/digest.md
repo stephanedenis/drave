@@ -2119,3 +2119,1052 @@ Usage :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md journal/README.md && git commit -m \"ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40\n\nUne seconde … [867 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-81]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-81", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 54dc7a26] ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+ 14 files changed, 2387 insertions(+), 29 deletions(-)
+ create mode 100644 journal/2026-10-31/mesures.md
+ create mode 100644 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ create mode 100644 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+ create mode 100644 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo \"=== état ===\"; sed -n 26,52p docs/pilotage/en-cours.md; echo \"=== avancement ===\"; for f in A-fr-g1 B-multi-g1 A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "descri … [46 caractères tronqués]`
+
+  ```
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+9f1dcaae N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES)
+=== état ===
+### Session active — N2, le budget complet (`0b0a6a0d`)
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
+  [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2, le budget complet**.
+- **Ce qu'elle fait** : deux GPU en continu — **A** français seul (3 graines), **B** manifeste
+  4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129
+  sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,
+  20 000 pas, quatre sources) sur le dispositif reconstruit.
+- **Ce que font les autres** : documentation, backlog, **N4** (sans GPU), portes documentaires —
+  mais **pas** `toutes-les-portes.sh` (elle prend les GPU et fausserait la mesure), pas les
+  fichiers réservés, ni cette page sans me le dire.
+- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+  `journal/sessions/0b0a6a0d-…/`.
+- **Prochaine action** : fiche `reports/rap
+… [971 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | head -6; echo \"=== git ===\"; git status --short | head", "description": "Confirm the session is visible in the status tool"}`
+
+  ```
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · en cours ·       — · N2 — le budget complet, les données et le curriculum
+      → N2 — la hiérarchie est écartée deux fois ; restent **le curriculum et
+    0b69f616-5c75-4c34 · terminé  · 1173 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 344 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+=== git ===
+ m tools/docwatch
+?? tools/distiller_budget.py
+?? work/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -q \"^work/$\" .gitignore || printf '\\n# Campagnes GPU : points de contrôle et journaux de run (hors dépôt, archivés à part)\\nwork/\\n' >> .gitignore; tail -4 .gitignore; git status --short | head -3", "description": "Ignore t … [26 caractères tronqués]`
+
+  ```
+docs/**/*.mmd.svg
+
+# Campagnes GPU : points de contrôle et journaux de run (hors dépôt, archivés à part)
+work/
+ M .gitignore
+ m tools/docwatch
+?? tools/distiller_budget.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse sur l'état et la carte des conflits
+
+**Non, il ne l'était pas** — la page datait de 17 h 15 et disait encore « aucune session active ». C'est corrigé, validé et committé : `54dc7a26`. `tools/sessions.py --status` me voit maintenant « en cours ».
+
+**Ce que l'autre session lira dans `en-cours`**
+
+- Session active `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`, rôle **N2 — le budget complet** (campagne GPU en cours : français seul, manifeste 4 sources, quotas égaux, curriculum 129 ; 3 graines).
+- Fichiers réservés : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`, `journal/sessions/0b0a6a0d-…/`.
+
+**Ce qu'elle peut prendre sans collision**
+
+- La documentation, le backlog, **N4** (consigne courte, sans GPU), et les portes **documentaires** (`PORTES="..."`).
+- Tout ce qui ne touche ni mes fichiers réservés ni les GPU.
+
+**Ce qu'elle ne doit pas prendre (conflits réels, pas théoriques)**
+
+- `bash tools/toutes-les-portes.sh` : la passe complète utilise les **deux cartes** et fausserait mes mesures (c'est écrit dans `docs/methode/portes.md` : portes et mesure GPU ne cohabitent pas). Je la lancerai moi-même à la fin, seule.
+- Un entraînement GPU, pour la même raison.
+- `docs/pilotage/en-cours.md` : **une session écrit à la fois**. Si elle doit y mettre un fait, qu'elle me le dise — je libère la page.
+- La `roadmap` et `reports/n2-*` : je les édite à la clôture.
+
+**Horaires** : la campagne tourne jusqu'à ~19 h 40 (6 runs restants), puis agrégation, fiche, et passe complète des portes (1 h 30–2 h) avant le commit de clôture. Si elle a besoin d'un GPU avant, elle me le dit et je réordonne.
+
+Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` aurait stagé 1–2 Go de points de contrôle. `tools/docwatch` reste modifié en local (sous-module, pas à moi).
+
+
+## Tour 2
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Checking campaign progress and aggregating the first completed seeds
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M' && ls work/n2d/*.json | grep -v essai; echo \"=== logs ===\"; for f in A-fr-g1 B-multi-g1 A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done; nvidia-smi --query-gpu=index,memory.used,utiliz … [73 caractères tronqués]`
+
+  ```
+17:33
+=== logs ===
+-- A-fr-g1
+pas  7750 · seq 128 · perte 54.0449 · PPL 128/4 2.4816 · 521 s
+-- B-multi-g1
+pas  7500 · seq 128 · perte 91.3882 · PPL 128/4 3.7118 · 507 s
+-- A-fr-g2
+-- B-multi-g2
+0, 1164 MiB, 83 %
+1, 1164 MiB, 81 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nm=json.load(open('reports/native-corpus-multi.json'))\nS=m['sources']; tot=sum(s['fenetres'] for s in S); M=m['fenetres']\nqs={s['source']: max(1, round(M*s['fenetres']/tot)) for s in S}\ns=sum(qs.valu … [234 caractères tronqués]`
+
+  ```
+data/corpus_fr.txt                 1907    3.8 %
+data/udhr/udhr_train.txt           1802    3.6 %
+data/corpus_en.txt                41257   82.5 %
+data/corpus_mixte_litt.txt         5033   10.1 %
+somme 49999
+B' (équilibré) 12 499 par source, 4 sources = 49 996 retenues sur 49 999
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo \"=== mesures.md ===\"; head -25 journal/2026-10-31/mesures.md", "description": "Check working tree and generated journal file"}`
+
+  ```
+M .gitignore
+ m tools/docwatch
+?? tools/distiller_budget.py
+=== mesures.md ===
+# 2026-10-31 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (1)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 17:02 | `9f1dcaae` | N2 — LES POINTS DE CONTRÔLE SONT CONSERVÉS SUR DEUX DISQUES (1,4 GO, EMPREINTES VÉRIFIÉES) | `en-cours.md`, `README.md`, `apprentissage.md` (+2) |
+
+## Sessions actives ce jour
+
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 0.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` — Compléter les autres sessions avant le backlog (début 2026-10-31 11:13, 0.2 h) → [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md
+… [148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/verifie-grille.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"La grille d'échantillonnage de la campagne (fenêtres de seq+1, borne len-seq-2)\ndéplace-t-elle la PPL par rapport au protocole historique (fenêtres de seq, born … [1695 caractères tronqués]`
+
+  ```
+{"seq": 128, "historique": 2.94059, "campagne": 2.94199, "ecart": 0.0014}
+{"seq": 129, "historique": 2.9631, "campagne": 2.97327, "ecart": 0.01016}
+  ```
+
+### 🤖 Assistant
+
+⏵ Écrivant l'évaluation finale unifiée au protocole historique exact
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"evalue-final.py — PPL de tous les points de contrôle de la campagne N2.d,\nsous le protocole **historique exact** (celui de 2,7078 et de 2,6998).\n\nLa campagne a évalué en interne sur une grille décalée d'un octet (fenêtres de\nseq+1, borne len−seq−2) : l' … [4082 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/evalue-final.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in A-fr-g1 B-multi-g1 A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check seed 1 completion"}`
+
+  ```
+17:35
+-- A-fr-g1
+pas  8750 · seq 128 · perte 48.6506 · PPL 128/4 2.4483 · 592 s
+-- B-multi-g1
+pas  8750 · seq 128 · perte 91.2001 · PPL 128/4 3.7502 · 591 s
+-- A-fr-g2
+-- B-multi-g2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\ntr=pathlib.Path('data/corpus_fr_train.txt').read_bytes()\nva=pathlib.Path('data/corpus_fr_val.txt').read_bytes()\nfr=pathlib.Path('data/corpus_fr.txt').read_bytes()\nprint('train', len(tr), 'val', l … [390 caractères tronqués]`
+
+  ```
+train 4402195 val 231694 fr 4633889
+val est la queue de fr ? True
+train est la tête de fr ? True
+val ⊂ train ? False
+frontière : 200 octets de train fin + 200 de val début
+b"nt 24 h (et jusqu'\xc3\xa0 l'arriv\xc3\xa9e du nouveau mat\xc3\xa9riel), mesurer et documenter ce que l'architecture de Drave \xe2\x80\x94 listes d'\xc3\xa9v\xc3\xa9nements, streaming depuis le disque, r\xc3\xa9partition entre n\xc5\x93uds \xe2\x80\x94 vaut po"
+  ```
+
+- **bash** `{"command": "sleep 55; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2d/*.json | grep -v essai; echo \"---\"; python3 -c \"\nimport json,glob\nfor f in sorted(glob.glob('work/n2d/A-fr-g1.json')+glob.glob('work/n2d/B-multi-g1.json')):\n    d=json.load(open(f))\n    print(f, {k:d[k] f … [134 caractères tronqués]`
+
+  ```
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -3 work/n2d/A-fr-g1.log; echo \"--- B\"; tail -2 work/n2d/B-multi-g1.log; echo \"--- ps\"; ps -eo pid,etime,cmd | grep distiller_budget | grep -v grep | head", "description": "Check run logs and processes"}`
+
+  ```
+17:36:37
+pas  9750 · seq 128 · perte 53.2697 · PPL 128/4 2.4625 · 661 s
+pas 10000 · seq 128 · perte 54.0570 · PPL 128/4 2.4658 · 678 s
+# stage seq 128 · 10000 pas · lr 3e-05
+--- B
+pas 10000 · seq 128 · perte 95.6067 · PPL 128/4 3.7218 · 675 s
+# stage seq 128 · 10000 pas · lr 3e-05
+--- ps
+   9358       11:33 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2d && \ CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. nohup ~/gpu-env/bin/python tools/distiller_budget.py \   --corpus fr --stages "128:10000:1e-4,128:10000:3e-5" --lot 16 --graine 1 \   --sortie work/n2d/A-fr-g1.pt --log work/n2d/A-fr-g1.log > work/n2d/A-fr-g1.out 2>&1 & echo "A g1 pid $!"; sleep 3; \ CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. nohup ~/gpu-env/bin/python tools/distiller_budget.py \   --corpus multi --stages "128:10000:1e-4,128:10000:3e-5" --lot 16 --graine 1 \   --sortie work/n2d/B-multi-g1.pt --log work/n2d/B-multi-g1.log > work/n2d/B-multi-g1.out 2>&1 & echo "B g1 pid $!"
+   9362       11:33 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 1 --sortie work/n2d/A-fr-g1.pt --log work/n2d/A-fr-g1.log
+   9449       11:30 /home
+… [190 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"agrege.py — tableau par bras de la campagne N2.d.\n\nLit l'évaluation unifiée (`work/n2d/evaluations-finales.json`, protocole\nhistorique exact) et les métadonnées d'entraînement (`work/n2d/*.json`).\nÉcrit `reports/n2-budget.json` et imprime le tableau mar … [2592 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py", "limit": 5}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """Agrège les runs N2.d : moyenne, écart-type, étendue par bras."""
+3: import glob, json, pathlib, statistics as st
+4: 
+5: BRAS = {
+
+(Showing lines 1-5 of 44. Use offset=6 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"agrege.py — tableau par bras de la campagne N2.d.\n\nLit l'évaluation unifiée (`work/n2d/evaluations-finales.json`, protocole\nhistorique exact) et les métadonnées d'entraînement (`work/n2d/*.json`).\nÉcrit `reports/n2-budget.json` et imprime le tableau mar … [2568 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2d/A-fr-g1.log; ls work/n2d/*.json | grep -v essai", "description": "Check for seed 1 final results"}`
+
+  ```
+17:37
+pas 10250 · seq 128 · perte 51.3992 · PPL 128/4 2.4407 · 695 s
+pas 10500 · seq 128 · perte 48.7937 · PPL 128/4 2.4455 · 712 s
+[exit code: 1]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"robustesse.py — la PPL tient-elle sur d'autres grilles de fenêtres ?\n\nLa fiche annonce une PPL sous un protocole (8 lots × 16 × 128 depuis le\ncompteur 0). Ce script refait la mesure sur **quatre décalages de compteur**\net **deux tailles de lot**, pour m … [2312 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2d/A-fr-g1.log; ls work/n2d/A-fr-g1.json 2>/dev/null && echo FINI", "description": "Check A seed 1 completion"}`
+
+  ```
+17:37
+pas 10750 · seq 128 · perte 53.3267 · PPL 128/4 2.4458 · 730 s
+pas 11000 · seq 128 · perte 44.5797 · PPL 128/4 2.4276 · 748 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 90; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2d/A-fr-g1.log; tail -2 work/n2d/B-multi-g1.log", "description": "Poll training after 90 seconds"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-95]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2d/A-fr-g1.log; ls work/n2d/*.json | grep -v essai", "description": "Quick progress check"}`
+
+  ```
+17:38
+pas 12000 · seq 128 · perte 49.2191 · PPL 128/4 2.4135 · 818 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2d/A-fr-g1.log; tail -1 work/n2d/B-multi-g1.log", "description": "Poll again"}`
+
+  ```
+17:39:02
+pas 12000 · seq 128 · perte 49.2191 · PPL 128/4 2.4135 · 818 s
+pas 12250 · seq 128 · perte 73.1056 · PPL 128/4 3.7425 · 826 s
+  ```
+
+- **job_output** `{"job_id": "bash-95"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -12", "description": "Run documentation review baseline"}`
+
+  ```
+revue de documentation · 369 fiche(s) · 437 JSON · 109 doc(s) · 78 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/en-cours.md:40 → reports/rapport-n2-budget.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Prochaine action** : fiche `reports/rapport-n2-budget.md`, journal, roadmap, commit.\",\n            \"- **Prochaine a … [276 caractères tronqués]`
+
+  ```
+40:- **Prochaine action** : la fiche du budget, le journal, la roadmap, le commit.
+  revue de documentation · 369 fiche(s) · 437 JSON · 109 doc(s) · 78 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 👤 Utilisateur
+
+background job bash-95 (bash: sleep 90; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2d/A-fr-g1.log; tail -2 work/n2d/B-multi-g1.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/A-fr-g1.json work/n2d/B-multi-g1.json 2>/dev/null; tail -1 work/n2d/A-fr-g1.log; tail -1 work/n2d/B-multi-g1.log", "description": "Check whether seed 1 finished"}`
+
+  ```
+17:39
+pas 12500 · seq 128 · perte 51.3128 · PPL 128/4 2.4063 · 852 s
+pas 12500 · seq 128 · perte 79.6633 · PPL 128/4 3.7048 · 844 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2d/A-fr-g1.log; tail -1 work/n2d/B-multi-g1.log; ls work/n2d/*.json | grep -v essai", "description": "Poll for completion"}`
+
+  ```
+17:40:04
+pas 13000 · seq 128 · perte 53.7650 · PPL 128/4 2.4008 · 886 s
+pas 13000 · seq 128 · perte 84.8568 · PPL 128/4 3.7372 · 877 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; tail -3 work/n2d/A-fr-g1.log", "description": "Wait for seed 1 completion in background", "run_in_background": true}`
+
+  ```
+started background job bash-102
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p docs/pilotage/references-non-regression.md", "description": "Read tolerated gate failures"}`
+
+  ```
+# Références de non-régression
+
+> **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+> (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+> au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN
+> perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+> (8,7434), écart de flux nul — à trancher.
+
+> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+> mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
+> historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+
+> **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
+> les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
+> budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
+> ce fichier ne porte que ce qu'une **porte** vérifie.
+
+> **Passe du 2026-10-28 à 00 h 12** (**49 portes, 4
+… [3172 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-102", "timeout_ms": 120000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2d/A-fr-g1.log; tail -1 work/n2d/B-multi-g1.log; ls work/n2d/*.json | grep -v essai", "description": "Quick progress check"}`
+
+  ```
+17:42:32
+pas 15250 · seq 128 · perte 45.0087 · PPL 128/4 2.4105 · 1037 s
+pas 15250 · seq 128 · perte 81.7393 · PPL 128/4 3.7293 · 1027 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"val\\|meilleur\\|best\" tools/entrainer_native.py | head -20", "description": "Check whether the base uses validation for selection"}`
+
+  ```
+39:    modele.eval(); total = 0.0; n = 0
+66:    n_val = max(10_000, len(data) // 20)
+67:    train, val = data[:-n_val], data[-n_val:]
+85:            p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2)
+86:            print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
+87:    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8)
+89:    modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
+92:            x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)
+97:            n_eval += y.numel()
+98:    prec_main = bons_main / max(1, n_eval)
+99:    prec_early = [b / max(1, n_eval) for b in bons_early]
+100:    modele.eval()
+106:           "perte_finale": pertes[-1], "ppl_val": p_val, "jetons_val": n_tok,
+  ```
+
+- **job_output** `{"job_id": "bash-102", "timeout_ms": 180000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2d/*.json | grep -v essai; tail -2 work/n2d/A-fr-g1.log", "description": "Check final result of seed 1"}`
+
+  ```
+17:45:53
+pas 18000 · seq 128 · perte 44.3504 · PPL 128/4 2.4118 · 1223 s
+pas 18250 · seq 128 · perte 53.3659 · PPL 128/4 2.4010 · 1240 s
+  ```
+
+- **bash** `{"command": "timeout 55 sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2d/*.json | grep -v essai; tail -2 work/n2d/A-fr-g1.log", "description": "Short wait then check results"}`
+
+  ```
+17:46:48
+pas 18750 · seq 128 · perte 50.0082 · PPL 128/4 2.4012 · 1274 s
+pas 19000 · seq 128 · perte 42.5346 · PPL 128/4 2.4020 · 1291 s
+  ```
+
+- **bash** `{"command": "timeout 55 sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2d/*.json | grep -v essai; tail -3 work/n2d/A-fr-g1.log", "description": "Wait for run completion"}`
+
+  ```
+17:47:41
+pas 19250 · seq 128 · perte 45.0611 · PPL 128/4 2.4058 · 1308 s
+pas 19500 · seq 128 · perte 41.7552 · PPL 128/4 2.4053 · 1325 s
+pas 19750 · seq 128 · perte 39.8976 · PPL 128/4 2.3906 · 1342 s
+  ```
+
+### 👤 Utilisateur
+
+background job bash-102 (bash: sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; tail -3 work/n2d/A-fr-g1.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "timeout 55 sleep 35; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2d/*.json | grep -v essai; python3 -c \"\nimport json,glob\nfor f in sorted(glob.glob('work/n2d/A-fr-g1.json')+glob.glob('work/n2d/B-multi-g1.json')):\n    d=json.load(open(f)); print(f … [149 caractères tronqués]`
+
+  ```
+17:48:19
+work/n2d/A-fr-g1.json
+work/n2d/B-multi-g1.json
+work/n2d/A-fr-g1.json {'init': '/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/drave-n0-base-20k.pt', 'corpus': 'fr', 'graine': 1, 'plan': [[128, 10000, 0.0001], [128, 10000, 3e-05]], 'lot': 16, 'temperature': 2.0, 'alpha': 0.7, 'tetes': True, 'pas': 20000, 'octets_vus': 40960000, 'perte_finale': 41.2261, 'ppl_128_lot16': 2.8548, 'ppl_128_lot8': 2.8563, 'ppl_129_lot15': 2.8815, 'ppl_permute': 1016.0988, 'precision_main': 0.6919, 'precision_early': [0.5941162109375, 0.6597900390625, 0.691162109375], 'duree_s': 1360.3769}
+work/n2d/B-multi-g1.json {'init': '/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/drave-n0-base-20k.pt', 'corpus': 'multi', 'graine': 1, 'plan': [[128, 10000, 0.0001], [128, 10000, 3e-05]], 'lot': 16, 'temperature': 2.0, 'alpha': 0.7, 'tetes': True, 'pas': 20000, 'octets_vus': 40960000, 'perte_finale': 70.7852, 'ppl_128_lot16': 3.7902, 'ppl_128_lot8': 3.8375, 'ppl_129_lot15': 3.817, 'ppl_permute': 605.5838, 'ppl_multi_val': 31.8025, 'precision_main': 0.2814, 'precision_early': [0.3944091796875, 0.4111328125, 0.417236328125], 'duree_s': 1349.4514}
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifiant l'écart entre l'évaluation en cours d'entraînement et l'évaluation finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/diagnostic.py <<'EOF'\nimport json, math, pathlib, sys\nimport torch, torch.nn.functional as F\nsys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel\nfrom tools.vdc import departs_vdc\nVAL = … [1614 caractères tronqués]`
+
+  ```
+{"f": "A-fr-g1.pt", "4x2": 2.4179, "16x8": 2.8569, "8x8": 2.8634, "16x1": 2.7749, "16x2": 2.8739, "16x4": 2.8635, "1x1_c0": 1.1627, "1x8_c0": 2.4179, "1x8_c1M": 3.2522}
+{"f": "temoin-g1.pt", "4x2": 2.5327, "16x8": 2.9406, "8x8": 2.9399, "16x1": 2.8871, "16x2": 2.936, "16x4": 2.9399, "1x1_c0": 1.2652, "1x8_c0": 2.5327, "1x8_c1M": 3.3364}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ps -eo pid,etime,cmd | grep distiller_budget | grep -v grep | sed 's/--sortie/\\n    --sortie/'; echo \"=== logs ===\"; ls -la work/n2d/*.log | tail -4; echo \"=== val head ===\"; head -c 200 data/corpus_fr_val.txt; ec … [99 caractères tronqués]`
+
+  ```
+17:49
+  31476       01:30 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus multi --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 2 
+    --sortie work/n2d/B-multi-g2.pt --log work/n2d/B-multi-g2.log
+  31477       01:30 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 2 
+    --sortie work/n2d/A-fr-g2.pt --log work/n2d/A-fr-g2.log
+=== logs ===
+-rw-r--r--. 1 stephane stephane 6246 31 oct 17:47 work/n2d/A-fr-g1.log
+-rw-r--r--. 1 stephane stephane  449 31 oct 17:49 work/n2d/A-fr-g2.log
+-rw-r--r--. 1 stephane stephane 6348 31 oct 17:47 work/n2d/B-multi-g1.log
+-rw-r--r--. 1 stephane stephane  500 31 oct 17:49 work/n2d/B-multi-g2.log
+=== val head ===
+e Drave — listes d'événements, streaming depuis le disque, répartition entre nœuds — vaut pour CHAQUE famille de tâches disponible sur la machine : langage, génération et latence, contexte 
+L'architecture du cerveau — et ce qui manque à Drave pour la porter
+9 octobre 2026. docs/biologie-pour-drave.md traitait de la brique (le
+neurone, la synapse, l'énergie). Ce document traite de l'�
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\ntr=pathlib.Path('data/corpus_fr_train.txt').read_bytes()\nva=pathlib.Path('data/corpus_fr_val.txt').read_bytes()\nsonde=va[10:110]\nprint('sonde:', sonde[:80])\nprint('dans train ?', tr.count(sonde) … [343 caractères tronqués]`
+
+  ```
+sonde: b"\x94 listes d'\xc3\xa9v\xc3\xa9nements, streaming depuis le disque, r\xc3\xa9partition entre n\xc5\x93uds \xe2"
+dans train ? 19
+fenêtres de 128 octets (pas 5000) présentes dans train : 15/47
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte d'une contamination : des fenêtres de validation existent verbatim dans l'entraînement. Je quantifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/contamination.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"contamination.py — la validation française est-elle tenue à l'écart ?\n\n`corpus_fr_val.txt` est la queue de `corpus_fr.txt` et `corpus_fr_train.txt` la tête :\nl … [3626 caractères tronqués]`
+
+  ```
+{"fenetres_echantillon": 300, "contaminees": 92, "taux": 0.3067}
+{"protocole_fenetres": 128, "protocole_contaminees": 42, "taux_protocole": 0.3281}
+{"fichier": "A-fr-g1.pt", "ppl_protocole": 2.8569, "ppl_contaminees": 2.5987, "ppl_propres": 2.9921}
+{"fichier": "temoin-g1.pt", "ppl_protocole": 2.9406, "ppl_contaminees": 2.7285, "ppl_propres": 3.05}
+{"fichier": "drave-n0-base-20k.pt", "ppl_protocole": 3.2161, "ppl_contaminees": 3.1765, "ppl_propres": 3.2356}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"corpus_fr\" tools/*.py | head -10; echo \"=== corpus_gele ===\"; head -40 tools/corpus_gele.py", "description": "Find the French corpus builder"}`
+
+  ```
+tools/adaptateur_langue.py
+tools/comparer_noyaux.py
+tools/contenu_par_couche.py
+tools/corpus_natif.py
+tools/distiller_budget.py
+tools/distiller_natif.py
+tools/distiller_section.py
+tools/entrainer_native.py
+tools/entrainer_section.py
+tools/eval_n2.py
+=== corpus_gele ===
+#!/usr/bin/env python3
+"""corpus_gele.py — le corpus des bancs, figé et vérifiable.
+
+POURQUOI CE FICHIER EXISTE. Les bancs de R0.3 sont adossés à des documents **vivants** : quand
+une session réécrit `continuite.md`, le gold d'une question ne résout plus et le banc ment
+(arrivé le 29/10 : une question perdue, puis deux). Un banc qui bouge avec la documentation ne
+mesure pas une progression, il mesure le dernier commit.
+
+Le gel : chaque document du corpus est **copié** dans `tools/tests/documents/corpus/`, avec son
+sha256 et sa source. Les constructeurs de bancs lisent la copie ; la source peut évoluer sans
+casser le banc. `--verifie` recalcule les empreintes : une copie modifiée est signalée.
+
+Usage :
+  python3 tools/corpus_gele.py --fige      # copie et écrit le manifeste
+  python3 tools/corpus_gele.py --verifie   # recalcule les sha256
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import js
+… [616 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"corpus_fr.txt\" tools/*.py | head -10; echo \"=== shell ===\"; grep -rln \"corpus_fr.txt\" tools/*.sh | head", "description": "Find where corpus_fr.txt is produced"}`
+
+  ```
+tools/adaptateur_langue.py:19:      --fr data/corpus_fr.txt --pas 2000 [--rang 8] [--sortie /tmp/adaptateur-fr.pt]
+tools/adaptateur_langue.py:83:    ap.add_argument("--fr", default="data/corpus_fr.txt")
+tools/comparer_noyaux.py:49:    fr = fenetres("data/corpus_fr.txt", a.longueur, a.fenetres)
+tools/contenu_par_couche.py:21:      --en data/corpus_en.txt --fr data/corpus_fr.txt [--longueur 128] [--fenetres 250]
+tools/contenu_par_couche.py:108:    ap.add_argument("--fr", default="data/corpus_fr.txt")
+tools/corpus_natif.py:63:        "licence": "source locale data/corpus_fr.txt — licence à vérifier avant diffusion",
+tools/corpus_natif.py:70:    ap.add_argument("--source", default="data/corpus_fr.txt")
+tools/entrainer_native.py:52:    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+tools/entrainer_section.py:97:    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+tools/langue_dans_etat.py:27:  python3 tools/langue_dans_etat.py --hf /tmp/jouet-mixte-litt2 --en data/corpus_en.txt --fr data/corpus_fr.txt
+=== shell ===
+tools/porte-r13-bpe.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,45p reports/rapport-native-corpus.md", "description": "Read the French corpus construction report"}`
+
+  ```
+# N2.1 — 50 000 fenêtres pour `drave-n0`
+
+> **Objet.** Construire le corpus d'entraînement de N2 : fenêtres d'octets, split train/validation
+> déterministe, manifeste d'offsets. Le corpus source n'est **pas versionné**.
+
+## Résultat
+
+| mesure | valeur |
+|---|---:|
+| source | `data/corpus_fr.txt` |
+| octets | **4 633 889** |
+| fenêtre | **128** octets |
+| pas | **64** |
+| **fenêtres** | **50 000** |
+| train | **45 000** |
+| validation | **5 000** |
+| graine | 0 |
+
+- Manifeste : [`native-corpus.json`](native-corpus.json) — 50 000 offsets, pas le texte.
+- Découpage : `tools/corpus_natif.py --source data/corpus_fr.txt --max 50000 --val 5000`.
+- Test : `tools/cerveau/tests/test_corpus_natif.py` (100 fenêtres, 90/10).
+
+## Lecture
+
+- **N2.1 est atteint en volume** : 50 000 fenêtres, 45 000/5 000.
+- Ce sont des fenêtres **chevauchantes** (pas 64) du **même** corpus : augmenter le nombre de
+  fenêtres n'ajoute pas de **données nouvelles**, seulement des vues.
+- La **licence** du corpus source reste **à vérifier** avant toute diffusion.
+- Le manifeste ne contient **pas** le texte : `data/` est ignoré par git.
+
+## Verdict
+
+**N2.1 — volume : atteint** (50 000 fenêtres). **N2.1 — diversité : no
+… [410 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécrivant l'évaluation finale avec une colonne décontaminée
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"evalue-final.py — PPL de tous les points de contrôle de la campagne N2.d.\n\nTrois mesures, sur `data/corpus_fr_val.txt` :\n\n  protocole   : 8 lots × 16 fenêtres de 128 (compteur 0) — **le protocole de 2,7078**\n                et de 2,6998 ; c'est celui d … [5405 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/evalue-final.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python work/n2d/evalue-final.py work/n2d/A-fr-g1.pt work/n2d/B-multi-g1.pt /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g1.pt /home/stephane/Dat … [141 caractères tronqués]`
+
+  ```
+{"fichier": "A-fr-g1.pt", "params": 11814792, "ppl_protocole": 2.8569, "ppl_129": 2.8742, "ppl_propres": 2.9881, "ppl_contaminees": 2.5862, "ppl_permute": 1113.2495, "precision_main": 0.6924}
+{"fichier": "B-multi-g1.pt", "params": 11814792, "ppl_protocole": 3.7609, "ppl_129": 3.8249, "ppl_propres": 3.8654, "ppl_contaminees": 3.4402, "ppl_permute": 596.0537, "precision_main": 0.6211, "ppl_multi_val": 31.8025}
+{"fichier": "temoin-g1.pt", "params": 11814792, "ppl_protocole": 2.9406, "ppl_129": 2.9631, "ppl_propres": 3.0612, "ppl_contaminees": 2.7059, "ppl_permute": 1228.3835, "precision_main": 0.6844}
+{"fichier": "drave-n0-base-20k.pt", "params": 11814792, "ppl_protocole": 3.2161, "ppl_129": 3.2653, "ppl_propres": 3.245, "ppl_contaminees": 3.0756, "ppl_permute": 544.3581, "precision_main": 0.6544}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, random\ntr=pathlib.Path('data/corpus_fr_train.txt').read_bytes()\nva=pathlib.Path('data/corpus_fr_val.txt').read_bytes()\nfr=pathlib.Path('data/corpus_fr.txt').read_bytes()\nrng=random.Random(0)\nec … [557 caractères tronqués]`
+
+  ```
+fenêtres de train présentes >1 fois dans train : 47 / 200 (23.5 %)
+occurrences de la sonde de 100 octets : 19
+corpus_fr = train + val ? True 4633889 4633889
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for f in A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log; done", "description": "Check seed 2 progress"}`
+
+  ```
+17:51
+-- A-fr-g2
+pas  3000 · seq 128 · perte 65.0573 · PPL 128/4 2.6769 · 217 s
+-- B-multi-g2
+pas  3000 · seq 128 · perte 103.4934 · PPL 128/4 3.6129 · 211 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's|tools/porte-||;s|\\.sh||' | tr '\\n' ' ' | fold -w 120", "description": "List all gate names"}`
+
+  ```
+adaptateur-sortie audit-drapeaux b1110-hybride balayage bloc-code bloc-maths bloc-tableaux budget bus bus-socket c4-reta
+rd cerveau consolidation coupe cycle-c2 deepseek delais diff-couche document echange-experts episodique etat flux fusion
+ gain greffe harnais-invariants homeostasie horloge indice jeux jumeaux lecteur lecture m5-brouillon melange memoire mir
+oir-blocs mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-placement n3-pont n3-positi
+ons n3-profondeur n3-refus n3-reseau n3-routes n3-service-briques n3-service n3-seuil n3-sparsite-compte n3-sparsite occ
+upation-elagage occupation-moteur pannes peripherie poids-creux pont prechargement profondeur-routee push-paresseux r13-
+bpe recurrence reflexe registre reparti-moteur sauvegarde-modele sessions speculatif tableaux tokenizer-kimi topologie t
+race vision
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"etat registre document tableaux sessions budget\" DELAI=300 timeout 900 bash tools/toutes-les-portes.sh 2>&1 | tail -15", "description": "Run documentation gates early"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-121]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **write** `{"content": "# N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart\n\n> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-10-31 · **Verdict** : le budget\n> complet (20 000 pas, 41 Mo) fait baisser la PPL de **2,9355 à {{A}}** sous le protocole de  … [6658 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/fiche.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+background job bash-121 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES="etat registre document tableaux sessions budget" DELAI=300 timeout 900 bash tools/toutes-les-portes.sh 2>&1 | tail -15) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-121"}`
+
+  ```
+porte-bloc-tableaux    ✅                           1 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          48 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-registre         ✅                          16 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ❌ code 1                    0 s    ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-479
+  porte-tableaux         ✅                           0 s    ✅ la page vivante date du dernier commit (2026-10-31)
+--- 6 vertes, 1 rouges ---
+À RELIRE (les six dernières lignes de chaque rouge) :
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé
+      ⚠ session en-cours sans plan : active
+      ⚠ plan actif non listé dans en-cours : 0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+      ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/jo
+… [158 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p tools/porte-sessions.sh", "description": "Read sessions gate"}`
+
+  ```
+#!/bin/bash
+# porte-sessions.sh — les plans de session sont lisibles et le linter refuse un doublon.
+set -u
+cd "$(dirname "$0")/.."
+python3 tools/sessions.py --autotest || exit 1
+python3 tools/sessions.py --check || exit 1
+python3 tools/sessions.py --status | grep -q '71d57f53' || {
+    echo "  ❌ le plan de la session de coordination n'est pas lisible"; exit 1; }
+echo "PORTE TENUE : plan lisible · autotest doublon/champ manquant · check en-cours"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"heartbeat\\|Heartbeat\\|def .*check\\|actif\\|non listé\" tools/sessions.py | head -30", "description": "Inspect session checker expectations"}`
+
+  ```
+5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+8:les heartbeats périmés. `en-cours` reste la seule source de l'état : ce plan
+23:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+25:ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+54:    hb = champs.get("heartbeat", "")
+55:    heartbeat = None
+60:            heartbeat = datetime.fromisoformat(brut)
+62:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+63:        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+67:            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+96:    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+107:                    "heartbeat": heartbeat})
+119:        heartbeat = s["heartbeat"] or datetime.now().strftime("%Y-%m-%d %H:%M HAE")
+126:> session : le heartbeat est celui de l'état, pas une preuve de vie.
+132:- **Heartbeat** : {heartbeat}
+146:    actifs = [p for p in plans if p["etat"] in ACTIFS]
+158:            erreurs.append(f"{p['chemin']} : heartbeat illisible")
+162:    for i, a in enumerate(actifs):
+164:            msg = f"mandat périmé ({a['age']:.0f} min) :
+… [783 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 40,70p tools/sessions.py; echo \"=== en-cours parse ===\"; sed -n 85,115p tools/sessions.py", "description": "Read heartbeat parser and en-cours extraction"}`
+
+  ```
+champs: dict[str, str] = {}
+    for ligne in chemin.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\s*[-*]\s*\*\*(.+?)\*\*\s*:\s*(.*?)\s*$", ligne)
+        if m:
+            champs[_cle(m.group(1))] = _valeur(m.group(2))
+    # tolérances : Role / Perimetre sans accent
+    for alias, cible in (("role", "rôle"), ("perimetre", "périmètre"),
+                         ("fichiers reserves", "fichiers réservés"),
+                         ("prochaine", "prochaine action"), ("etat", "état")):
+        if cible not in champs and alias in champs:
+            champs[cible] = champs[alias]
+    sid = champs.get("session") or chemin.parent.name
+    per = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("périmètre", "")) if x.strip()]
+    fic = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("fichiers réservés", "")) if x.strip()]
+    hb = champs.get("heartbeat", "")
+    heartbeat = None
+    age = None
+    try:
+        brut = re.sub(r"\s*(HAE|EDT|EST|UTC[−-]?[0-9]+)\s*$", "", hb).strip()
+        if "T" in brut:
+            heartbeat = datetime.fromisoformat(brut)
+        else:
+            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+        age = (d
+… [1727 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Session\\|###\" tools/verifie_en_cours.py | head -20", "description": "Check state validator heading parsing"}`
+
+  ```
+7:  3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
+26:    "Sessions en cours",
+64:    """Rend [(titre, corps)] des sous-sections `### ...` de « Sessions en cours »."""
+65:    titres = list(re.finditer(r"(?m)^### (.+)$", section))
+89:    blocs = sessions(corps_section(texte, "Sessions en cours"))
+91:        alertes.append("« Sessions en cours » n'a aucune sous-section `### Session ...`")
+93:        if not titre.startswith("Session"):
+94:            alertes.append(f"sous-section sans « Session » : « {titre} »")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"### Session active — N2, le budget complet (`0b0a6a0d`)\",\n            \"### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf … [476 caractères tronqués]`
+
+  ```
+✅ plans cohérents
+check=0
+  en-cours · 1180 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"sessions\" DELAI=120 timeout 200 bash tools/toutes-les-portes.sh 2>&1 | tail -5", "description": "Re-run the sessions gate"}`
+
+  ```
+journaux : /tmp/portes-1031-17h54
+  porte-sessions         ✅                           0 s  PORTE TENUE : plan lisible · autotest doublon/champ manquant · check en-cours
+--- 1 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1031-17h54
+  ```
+
+### 🤖 Assistant
+
+⏵ Versant l'évaluation et la mesure de contamination dans `tools/` (versionnées)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_n2_budget.py — N2.d : PPL des points de contrôle, validation décontaminée.\n\nLa campagne N2.d (`tools/distiller_budget.py`) a mesuré le budget, les données et le\ncurriculum. Deux choses ont été trouvées en l'évaluant, et ce script les rend\nreproduct … [8979 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python tools/eval_n2_budget.py work/n2d/A-fr-g1.pt /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g1.pt --grilles 2>&1 | grep -v Loading", "descri … [45 caractères tronqués]`
+
+  ```
+{"fichier": "A-fr-g1.pt", "params": 11814792, "ppl_protocole": 2.8569, "ppl_129": 2.8742, "ppl_propres": 2.9881, "ppl_contaminees": 2.5862, "ppl_permute": 1113.2495, "precision_main": 0.6924, "grilles": {"0/16": 2.8569, "0/8": 2.8634, "1000003/16": 2.9473, "1000003/8": 2.8879, "2000009/16": 2.9298, "2000009/8": 3.0563, "3000029/16": 2.7523, "3000029/8": 2.7231}}
+{"fichier": "temoin-g1.pt", "params": 11814792, "ppl_protocole": 2.9406, "ppl_129": 2.9631, "ppl_propres": 3.0612, "ppl_contaminees": 2.7059, "ppl_permute": 1228.3835, "precision_main": 0.6844, "grilles": {"0/16": 2.9406, "0/8": 2.9399, "1000003/16": 3.0375, "1000003/8": 2.9865, "2000009/16": 3.0428, "2000009/8": 3.1897, "3000029/16": 2.8269, "3000029/8": 2.796}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for f in A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log; done", "description": "Check seed 2 progress"}`
+
+  ```
+17:54
+-- A-fr-g2
+pas  5500 · seq 128 · perte 53.0568 · PPL 128/4 2.5465 · 393 s
+-- B-multi-g2
+pas  5500 · seq 128 · perte 89.1359 · PPL 128/4 3.7486 · 389 s
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py", "limit": 3}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """agrege.py — tableau par bras de la campagne N2.d.
+3: 
+
+(Showing lines 1-3 of 65. Use offset=4 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"agrege.py — tableau par bras de la campagne N2.d.\n\nLit `work/n2d/evaluations-finales.json` (sortie de `tools/eval_n2_budget.py`) et les\nmétadonnées d'entraînement (`work/n2d/*.json`). Écrit `reports/n2-budget.json` et\nimprime le tableau markdown de la f … [2728 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfrom tools.vdc import departs_vdc\ntr=pathlib.Path('data/corpus_fr_train.txt').read_bytes()\nva=pathlib.Path('data/corpus_fr_val.txt').read_bytes()\n# distribution spatiale : 400 fenêtres régulières … [582 caractères tronqués]`
+
+  ```
+taux de contamination par quartile de val (%) : [31.0, 65.0, 17.0, 15.0]
+occurrences de 3 sondes de 100 octets prises au hasard :
+5000 0
+100000 1
+200000 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 176,200p docs/pilotage/roadmap.md; echo \"=== 295,335 ===\"; sed -n 295,335p docs/pilotage/roadmap.md", "description": "Read roadmap N lessons and open questions"}`
+
+  ```
+1. **Le contexte est le verrou.** 129 octets est le meilleur point (**PPL 2,6998**) ; **130** est négatif
+   (**2,7149**), **136** (**2,974**), **160** (**3,804**), **256** (**5,675**). À **2 000 octets**, la PPL native
+   est **54,04**. Le modèle **surapprend sa longueur** : allonger le contexte demande un **autre schéma**, pas un
+   curriculum de plus.
+2. **Le saut de calcul existe, le saut de contenu n'existe pas.** La sortie précoce gagne **24,05 %** de temps en
+   perdant **1,61 point** ; c'est une décision sur la **confiance du prochain octet**, pas sur la **pertinence**.
+3. **La mémoire manque.** Le signal courant est lisible (R² **0,992**), celui d'il y a 8 pas ne l'est pas
+   (**−0,681**), et l'entraînement l'aggrave (**−1,091 → −2,773**). Le tampon gelé lit **+0,879**, mais le réseau
+   ne s'en sert pas.
+
+---
+
+## Programme R
+
+**Synthèse : [le programme R en une page](programme-r.md)** — ce qui tient, ce qui ne tient pas, les trois lois. — Le lecteur (la nouvelle cible)
+
+**La cible** : lire un document **comme un humain lit vite** — survoler, balayer, lire sélectivement, revenir — en
+payant le calcul au prorata de ce qui est lu, et **prouver** la compréhension par la resti
+… [2867 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; tail -1 work/n2d/A-fr-g3.log 2>/dev/null; tail -1 work/n2d/C-129-g1.log 2>/dev/null", "description": "Wait 25 minutes for the campaign", "run_in_background": true … [1 caractères tronqués]`
+
+  ```
+started background job bash-132
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2,6998\\|2,708\\|N2\" reports/README.md | head -12", "description": "Check reports index mentions of N2 best"}`
+
+  ```
+18:| [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
+19:| `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
+20:| [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |
+21:| [`rapport-native-8b-warm.md`](rapport-native-8b-warm.md) | **N2.29** — 8 blocs réchauffés : PPL **2,866**, arrêté |
+22:| [`rapport-native-8b.md`](rapport-native-8b.md) | **N2.28** — 8 blocs : PPL **4,838**, arrêté |
+23:| [`rapport-native-ctx130-2.md`](rapport-native-ctx130-2.md) | **N2.35** — contexte 130 : PPL **2,7149**, négatif |
+24:| [`rapport-native-ctx129-2.md`](rapport-native-ctx129-2.md) | **N2.34** — 129, 10 000 pas de plus : PPL **2,712**, arrêté |
+25:| [`rapport-native-ctx129.md`](rapport-native-ctx129.md) | **N2.33** — contexte 129 : PPL **2,6998**, nouveau meilleur |
+26:| [`rapport-native-ctx130.md`](rapport-native-ctx130.md) | **N2.32** — contexte 130 : PPL **2,786**, arrêté |
+27:| [`rapport-native-ctx136.md`](rapport-native-ctx136.md) | **N2.31** — contexte 136 : PPL **2,974**, arrêté |
+28:| [`rapp
+… [254 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,20p reports/README.md", "description": "Read reports README header"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
+| `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
+| [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8
+… [52 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/verifie_backlog.py 2>&1 | tail -12", "description": "Run backlog verification"}`
+
+  ```
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for f in A-fr-g2 B-multi-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log; done; ls work/n2d/*.json | grep -v essai", "description": "Check seed 2 progress"}`
+
+  ```
+17:56
+-- A-fr-g2
+pas  6750 · seq 128 · perte 65.3890 · PPL 128/4 2.4861 · 480 s
+-- B-multi-g2
+pas  6750 · seq 128 · perte 89.2131 · PPL 128/4 3.8219 · 480 s
+work/n2d/A-fr-g1.json
+work/n2d/B-multi-g1.json
+work/n2d/evaluations-finales.json
+  ```
+
+- **write** `{"content": "### N2 — le budget, les quatre sources, et le mètre faussé\n\nLa journée avait commencé par deux négatifs nets sur la hiérarchie. En reprenant N2 l'après-midi,\nla question était simple : le dispositif reconstruit hier n'avait vu que **20,48 Mo** d'un seul\ncorpus en **5 000 pas** — que … [1783 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/journal-notes.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for f in A-fr-g2 B-multi-g2; do tail -1 work/n2d/$f.log; done", "description": "Poll campaign progress"}`
+
+  ```
+17:56
+pas  7250 · seq 128 · perte 55.2936 · PPL 128/4 2.4851 · 515 s
+pas  7250 · seq 128 · perte 83.5229 · PPL 128/4 3.7776 · 515 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_budget.py /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g2.pt /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefac … [96 caractères tronqués]`
+
+  ```
+{"fichier": "temoin-g2.pt", "params": 11814792, "ppl_protocole": 2.9345, "ppl_129": 2.961, "ppl_propres": 3.056, "ppl_contaminees": 2.6991, "ppl_permute": 1131.9621, "precision_main": 0.6826}
+{"fichier": "temoin-g3.pt", "params": 11814792, "ppl_protocole": 2.9313, "ppl_129": 2.9628, "ppl_propres": 3.0431, "ppl_contaminees": 2.7074, "ppl_permute": 1167.2152, "precision_main": 0.6827}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/eval_n2_budget.py --contamination | tee work/n2d/contamination.json", "description": "Record contamination rates"}`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py", line 41, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python tools/eval_n2_budget.py --contamination | tee work/n2d/contamination.json", "description": "Record contamination rates with GPU env"}`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py", line 198, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py", line 144, in main
+    print(json.dumps(contamination(val, train), ensure_ascii=False))
+                     ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py", line 123, in contamination
+    dupliques = sum(train.count(bytes(w.tolist())) > 1 for w in ech_train)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py", line 123, in <genexpr>
+    dupliques = sum(train.count(bytes(w.tolist())) > 1 for w in ech_train)
+                                      ^^^^^^^^
+AttributeError: 'bytes' object has no attribute 'tolist'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/eval_n2_budget.py'); s=p.read_text()\ns=s.replace(\"dupliques = sum(train.count(bytes(w.tolist())) > 1 for w in ech_train)\",\n            \"dupliques = sum(train.count(w) > 1  … [262 caractères tronqués]`
+
+  ```
+{"echantillon_validation": 300, "taux_validation": 0.3067, "protocole_fenetres": 128, "protocole_contaminees": 42, "taux_protocole": 0.3281, "echantillon_train": 200, "train_duplique": 47, "taux_train_duplique": 0.235}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for f in A-fr-g2 B-multi-g2; do tail -1 work/n2d/$f.log; done; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Poll progress"}`
+
+  ```
+17:57
+pas  8000 · seq 128 · perte 56.0856 · PPL 128/4 2.5025 · 568 s
+pas  8000 · seq 128 · perte 88.0723 · PPL 128/4 3.7560 · 569 s
+0, 1164 MiB, 78 %
+1, 1164 MiB, 80 %
+  ```
+
+- **job_output** `{"job_id": "bash-132", "timeout_ms": 600000, "wait": true}`
