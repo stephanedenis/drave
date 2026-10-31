@@ -1,6 +1,17 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-10-29 à 22 h 09 :**
+> **Dernière passe complète — 2026-10-31 à 12 h 54 :**
+> **78 portes, 73 vertes, 5 rouges, 1 h 37**. Journaux : `/tmp/portes-1031-11h17`. Les cinq rouges :
+> `porte-indice` (826 s) et `porte-melange` (102 s), les deux **structurelles connues**, mêmes
+> diagnostics ; `porte-homeostasie` (exit 2) — **environnementale** : elle exige
+> `/tmp/n4/rang4-lora.pt`, un artefact de balayage effacé au démarrage de 07 h 09 ; `porte-jeux`
+> — **vraie régression**, reproduite et corrigée le jour même (`2edb3079` : le SAN perdait contre
+> la requête de case quand une position était fournie, 110/112) ; `porte-reparti-moteur` — la PPL
+> de référence épinglée (**9,1748**) n'est plus reproduite (**8,7434**, −4,7 %) alors que l'écart
+> de flux entier/réparti est **nul** : à trancher entre référence périmée et changement du modèle
+> régénéré par la porte. Aucune autre rouge.
+
+> **Passe précédente — 2026-10-29 à 22 h 09 :**
 > **62 portes, 60 vertes, 2 rouges, 1 h 46**. Les deux rouges sont les **structurelles connues**
 > (`porte-indice`, 895 s ; `porte-melange`, 110 s), avec les mêmes diagnostics ; **aucune
 > régression**. Depuis, **6 portes ajoutées** dans la journée (le compte du disque est **68**) :

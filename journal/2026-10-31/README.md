@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**4 commits** · **1 session(s)** · **4 thème(s)**
+**5 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 1 | [portes.md](portes.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -30,6 +30,7 @@
 | 11:41 | `a2344c84` | ÉTAT — LA CLÔTURE `eff8d8e4` ACTÉE, `22e518ee` CLOSE, N2 DÉSIGNÉE |
 | 12:40 | `2edb3079` | JEUX — LE SAN L'EMPORTE SUR LA CASE QUAND UNE POSITION EST FOURNIE (110/112 → 112/112) |
 | 12:51 | `93f094e5` | GRAPHE — LE PARSEUR PERDAIT LES LIENS MARKDOWN : 42 ARÊTES DEVENAIENT 43, LA FRONTIÈRE PASSAIT DE 12 À 4 |
+| 12:59 | `3b9d179c` | PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -61,8 +62,32 @@ d'**Id complet** ; `N2-GPU` (job GPU sans trace DSH) reçoit un rapport écrit �
 clôtures de `c3d0f0bd` et `f0969e87` deviennent des `cloture.md`, liens recollés ; `71d57f53`
 et `0b69f616` passent à **terminé**. `22e518ee` ouvre la session unique.
 
-**Le graphe et l'état.** **37 fiches**, **42 arêtes dures**, **4 à la frontière** (A2.6, N2, N3,
+**Le graphe et l'état.** **37 fiches**, **43 arêtes dures**, **4 à la frontière** (A2.6, N2, N3,
 N4) ; le SVG est régénéré avec le compte et la date justes ; la phrase « 7 items » du récit du 30
 est corrigée. `en-cours` ne porte plus qu'une session et nomme la suite : **N2** (la hiérarchie)
 ou **N4** (consigne courte) — les GPU sont libres.
+
+**La passe, et les portes qui mentaient.** La passe complète rend **73 vertes, 5 rouges** en
+1 h 37. Deux rouges sont les structurelles connues, une est environnementale (`/tmp` effacé au
+démarrage), et deux sont des découvertes : `porte-jeux` était une **vraie régression** — le SAN
+perdait contre la requête de case dès qu'une position était fournie, **110/112** — corrigée le
+jour même ; `porte-reparti-moteur` ne reproduit plus sa PPL épinglée (8,7434 contre 9,1748) alors
+que son écart de flux est nul. L'audit des outils a trouvé la faute qui avait coûté les archives,
+en cinq exemplaires : **une passe vide se déclarait verte**, cinq blocs d'assertions perdaient
+leur code de sortie, `porte-tableaux` lisait un fichier inexistant, le `pre-commit` avalait
+toujours ses trois outils avec `|| true`. Corrigés, avec le contrôle qui les prouve :
+`PORTES=zzz-inexistant` échoue au lieu de « tout vert ».
+
+**N2.h1 — la hiérarchie ne paie pas.** L'état de section transporté entre segments ne se
+distingue pas d'un état **étranger** : **3,9759** contre **3,9617** (témoin) et **3,9764**
+(contrôle), soit +0,36 % contre +0,37 % — l'écart entre hiérarchie et contrôle est de **0,0005**,
+trente fois plus petit que la dispersion du contrôle. Le contenu de l'état n'est donc pas lu ;
+la petite dégradation vient des paramètres et de la BPTT tronquée. Le levier n'est **pas validé**
+à ce budget : la suite est le dispositif de distillation avec une BPTT à deux segments.
+
+**Le graphe perdait ses liens.** `verifie_backlog.py` lisait les dépendances en ids nus : une
+arête écrite `[B10.2bis](…)` — la forme naturelle d'un tableau Markdown — n'était pas déliée et
+disparaissait en silence. Le compte passe de **42 à 43 arêtes**, la frontière de **12 à 4**, et
+`B10.2bis`, dit « sans fiche » alors qu'il est mesuré, retrouve son arête dure. Une arête morte
+ou un cycle écrits en Markdown sont désormais vus.
 <!-- /notes -->

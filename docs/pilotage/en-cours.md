@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-10-31, 11 h 50 HAE (heure locale, EDT).**
+**Mis à jour : 2026-10-31, 13 h 05 HAE (heure locale, EDT).**
 
 > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
 > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
@@ -30,11 +30,15 @@
   l'ouverture.
 - **Rôle** : **N2, la hiérarchie** — la seule ligne désignée ; **N4** (la consigne courte) prend
   la file si N2 bloque.
-- **Ce qu'elle fait** : rien encore. Le mandat est de mesurer la **hiérarchie** (meilleur
-  2,6998, porte **< 2,5** non atteinte) et de trancher la question ouverte de R1.
+- **Ce qu'elle fait** : l'**ablation de la hiérarchie** est mesurée (N2.h1) : l'état de section
+  transporté entre segments ne se distingue pas d'un état **étranger** (+0,36 % contre +0,37 %
+  sur le témoin) — le levier n'apporte rien à budget court. Fiche
+  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md).
 - **Ce que font les autres** : personne — une seule session.
 - **Fichiers réservés** : `models/`, `tools/` (natif), `reports/n2-*`, `journal/sessions/<id>/`.
-- **Prochaine action** : ouvrir la session, écrire son plan, puis attaquer **N2**.
+- **Prochaine action** : rejouer l'ablation sur le **dispositif de distillation** (49 999 fenêtres,
+  professeur 30 k) avec une **BPTT à deux segments** ; si l'écart reste nul, N2 cherche ailleurs
+  (curriculum, données, capacité) et **N4** prend la file.
 - **Bloquants** : aucun — les GPU sont libres ; **R4.4** reste bloqué (aucun OCR installé).
 - **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
 
@@ -67,7 +71,10 @@
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
 - **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
-  Suite : [la clôture de la session `f0969e87`](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846/cloture.md).
+  **N2.h1 — la hiérarchie ne paie pas** : état de section **3,9759** contre témoin **3,9617**,
+  contrôle étranger **3,9764** — hiérarchie et contrôle **confondus** (−0,0005), le contenu de
+  l'état ne se lit pas. Fiche [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) ;
+  suite : [la clôture de la session `f0969e87`](../../journal/sessions/f0969e87-af0c-43b1-93cf-f278d9c90846/cloture.md).
 
 ## Les chiffres de l'état
 
@@ -75,11 +82,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **78** (61 vertes, 2 rouges, 15 hors passe) | `tools/porte-*.sh` |
+| portes | **78** (73 vertes, 5 rouges à la passe du 31/10) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **367** / **435** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **368** / **436** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **109** (hors archive et README) | `docs/**/*.md` |
-| dernière passe complète | **1 h 46** (29/10 22 h 09) | `docs/pilotage/references-non-regression.md` |
+| dernière passe complète | **1 h 37** (31/10 12 h 54) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
@@ -97,7 +104,7 @@ sources de blocage nommées.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
-| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; N4 0/4 ; N5 gelé | **N2** (hiérarchie) ; **N4** (consigne) |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie sans gain ; N4 0/4 ; N5 gelé | **N2** (distillation, BPTT 2) ; **N4** (consigne) |
 | **R — le lecteur** | aucune | R4.4 (aucun OCR) | **R4.4 bloqué** ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -109,13 +116,15 @@ documentation · **C7** pensée — mesurés, et désormais du récit, pas du pl
 ## Ce qui reste
 
 **R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 bloqué** (aucun OCR).
-**N2** — la **hiérarchie** ; **N4** — la **consigne courte**. **B10.3** — le `z` et l'encodeur.
+**N2** — la **hiérarchie** testée **sans gain** à budget court ; la distillation et la BPTT à deux
+segments restent à mesurer. **N4** — la **consigne courte**. **B10.3** — le `z` et l'encodeur.
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
 ## Les questions ouvertes
 
 - **R1** : **1 000 octets** sans refaire 130–256 ? → **N2** (hiérarchie), puis **R1.1**, tranchent.
-- **N2** : **< 2,5** ? → **N2** (la hiérarchie) tranche.
+- **N2** : **< 2,5** ? → la **distillation** (49 999 fenêtres, BPTT 2) tranche ; l'état de section
+  seul ne suffit pas (N2.h1).
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Backlog** : graphe sans cycle ni arête morte ? → `tools/verifie_backlog.py` tranche.
