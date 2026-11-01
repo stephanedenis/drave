@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 24.5 h |
+| Durée | 25.0 h |
 | Tours | 11 |
-| Messages | 858 |
-| Appels d'outils | 858 |
+| Messages | 868 |
+| Appels d'outils | 868 |
 | Fichiers touchés | 18 |
-| Commandes | 786 |
+| Commandes | 796 |
 | Sous-agents | 0 |
-| Commits | 40 |
+| Commits | 41 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -587,7 +587,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 ### Tour 11 — es-tu à jour? as-tu fait tout ce que tu pouvais?
 
-*7 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check run progress, git status, and temp files
 - bash — Run gates, heartbeats, and roadmap overview
@@ -596,6 +596,14 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - bash — Wait for full-text run to finish
 - bash — Commit roadmap D/L rows and state update
 - bash — Restore T0 budget and check run
+- bash — Wait for full-text run completion
+- bash — Count total pages in dump index
+- bash — Wait again for full-text run
+- bash — Read full-text manifest numbers
+- bash — Run contamination on full corpus
+- bash — Check 8KB windows on full corpus
+- bash — Update full-text report with complete run
+- … et 3 autres
 
 **Synthèse produite :**
 
@@ -668,7 +676,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 746 autres
+- … et 756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -796,7 +804,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 ## 5. Erreurs rencontrées
 
-37 sorties en erreur ou divergentes. Les premières :
+38 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -856,4 +864,5 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en
 - PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT" 2>&1 | tail -2; git log --oneline -1
 - ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A)" 2>&1 | tail -1 echo "=== run"; ps -p 1454236 -o pid,etime,pcpu --no-headers 2>/dev/null || echo "termi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=re.sub(r"\|
 

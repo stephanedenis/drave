@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**59 commits** · **4 session(s)** · **9 thème(s)**
+**60 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 3 | [distribue.md](distribue.md) |
+| distribue | 4 | [distribue.md](distribue.md) |
 | docs | 15 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
@@ -28,7 +28,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 24.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 23.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 24.5 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 25.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -93,18 +93,21 @@
 | 16:37 | `6fbfbb80` | DONNÉES — LE TEXTE INTÉGRAL DE WIKIPÉDIA : LE PILOTE FR (100 000 ARTICLES, 1,082 GO, 0 FUITE 8 KO) |
 | 16:50 | `1520b875` | N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ |
 | 17:05 | `f4c200d0` | PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT |
+| 17:07 | `993f147e` | ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
-**Le texte intégral de Wikipédia : le pilote FR.** Le plan de travail relu, la session
+**Le texte intégral de Wikipédia : le run FR est terminé.** Le plan de travail relu, la session
 `fe3c05f0` rouverte pour le rôle **D/R/A** (données, lecteur, moteur). L'outil
-`corpus_wikipedia_texte.py` lit le dump (7,13 Go), débalise, déduplique et sépare par article. Le
-**pilote de 100 000 articles** donne **1,082 Go**, **1,045 G caractères**, **168,6 M mots**,
-**1 résidu `{{` sur 20 000 lignes**, **0 / 6 661** fenêtres de 8 Ko de la validation dans
-l'entraînement et **0 / 40** fenêtres sur les cinq jeux d'évaluation (XNLI, UDHR, trois jeux
-locaux). Le run complet (2,5 M, ~26 Go) est lancé ; son manifeste sera committé au prochain
-checkpoint. Fiche [`rapport-corpus-wiki-texte`](../../reports/rapport-corpus-wiki-texte.md).
+`corpus_wikipedia_texte.py` lit le dump (7,13 Go, 5 968 207 pages), débalise, déduplique et sépare
+par article. Le **run complet** donne **2 388 219 articles**, **8,025 G caractères**, **1 294 M
+mots**, **8,34 Go**, **1 résidu `{{` sur 20 000 lignes**, **0 / 49 655** fenêtres de 8 Ko de la
+validation et **0 / 49 148** du test dans l'entraînement, **0 / 40** fenêtres sur les cinq jeux
+d'évaluation. Le texte intégral vaut **2,18×** les résumés — le pilote (100 000 premiers articles,
+10,45 Ko/article) suggérait 7× et une projection de 26 Go : le run la **réfute** (8,34 Go). C'est
+le run qui fait foi ; le pilote reste le manifeste de validation. Fiche
+[`rapport-corpus-wiki-texte`](../../reports/rapport-corpus-wiki-texte.md).
 
 **Le dossier pilotage remis à plat, avec un plan de travail multi-sessions.** Le pilotage a
 maintenant un **index** (`docs/pilotage/README.md`, l'ordre de lecture et qui écrit quoi) et un

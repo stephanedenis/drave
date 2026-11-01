@@ -15528,3 +15528,120 @@ f4c200d0 PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUI
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Ambition** : le français réel pour N2 ; D, carburant de N2/L/S.\",\n            \"- **Ambition** : le français réel pour  … [1009 caractères tronqués]`
+
+  ```
+T0 max : 3997 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 7 files changed, 30 insertions(+), 14 deletions(-)
+=== run
+1454236       31:24 99.5
+  [fr] 3200000 lus · 1334783 gardés · 5.33 G caractères
+5,5G	data/corpus_wiki_fr_texte
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; n=0; while ps -p 1454236 >/dev/null 2>&1; do sleep 20; n=$((n+1)); [ $n -ge 28 ] && break; done; echo \"attente $((n*20))s\"; ps -p 1454236 >/dev/null 2>&1 && echo EN_COURS || echo TERMINE; tail -2 /tmp/run-texte-fr.log; ls -la reports … [209 caractères tronqués]`
+
+  ```
+attente 560s
+EN_COURS
+  [fr] 4200000 lus · 1751187 gardés · 6.31 G caractères
+  [fr] 4400000 lus · 1833075 gardés · 6.50 G caractères
+6,8G	data/corpus_wiki_fr_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 120 bash -c 'bzcat /home/stephane/Data13TB/stephane/data/wikipedia/dumps/fr/frwiki-latest-pages-articles-multistream-index.txt.bz2 | wc -l'; echo \"=== run\"; ps -p 1454236 -o etime,pcpu --no-headers 2>/dev/null; tail -1 /tmp/r … [150 caractères tronqués]`
+
+  ```
+5968207
+=== run
+      41:32 99.4
+  [fr] 4400000 lus · 1833075 gardés · 6.50 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; n=0; while ps -p 1454236 >/dev/null 2>&1; do sleep 20; n=$((n+1)); [ $n -ge 28 ] && break; done; echo \"attente $((n*20))s\"; ps -p 1454236 >/dev/null 2>&1 && echo EN_COURS || echo TERMINE; tail -3 /tmp/run-texte-fr.log; ls -la reports … [204 caractères tronqués]`
+
+  ```
+attente 540s
+TERMINE
+  "lignes_echantillon": 20000
+ }
+}
+-rw-r--r--. 1 stephane stephane 4060  1 nov 17:27 reports/corpus-wiki-fr-texte.json
+7,8G	data/corpus_wiki_fr_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-fr-texte.json').read_text())\nfor k in ('articles_lus','articles_gardes','articles_rediriges','articles_hors_ns','articles_courts','articles_doublons … [380 caractères tronqués]`
+
+  ```
+articles_lus : 5968207
+articles_gardes : 2388219
+articles_rediriges : 1827807
+articles_hors_ns : 1385362
+articles_courts : 366649
+articles_doublons : 170
+caracteres_gardes : 8025059777
+mots_estimes : 1294364480
+troncons : 2755825
+troncons_doublons : 783
+octets : {'train': 7504078589, 'val': 419555119, 'test': 415302543}
+articles : {'train': 2149330, 'val': 119866, 'test': 119023}
+residus : {'modele': 1, 'lien': 0, 'balise': 3, 'lignes_echantillon': 20000}
+echantillon: --- | Antoine Meillet | Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . |  | Biographie | 
+397M	data/corpus_wiki_fr_texte/test.txt
+7,0G	data/corpus_wiki_fr_texte/train.txt
+401M	data/corpus_wiki_fr_texte/val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_fr_texte/train.txt --val data/corpus_wiki_fr_texte/val.txt --test data/corpus_wiki_fr_texte/test.txt --eval data/xnli/XNLI-1.0/xnli.dev.tsv --eval data/udhr/ar … [692 caractères tronqués]`
+
+  ```
+"taux": 0.0
+  }
+ ]
+}
+cross-split: {"train_troncons": 23943149, "par_split": {"val.txt": {"troncons": 1338332, "doublons": 74001, "taux": 0.055293}, "test.txt": {"troncons": 1322490, "doublons": 72352, "taux": 0.054709}}}
+xnli.dev.tsv 40 fenêtres | 0 trouvées
+articles.jsonl 40 fenêtres | 0 trouvées
+test.txt 40 fenêtres | 0 trouvées
+test.txt 40 fenêtres | 0 trouvées
+test.txt 40 fenêtres | 0 trouvées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 - <<'PY'\nimport hashlib, pathlib, time\nbase=pathlib.Path('data/corpus_wiki_fr_texte')\ndef fenetres(p, taille=8192):\n    t=p.read_text(encoding='utf-8'); i=0\n    while i < len(t):\n        j=min(i+taille, len(t) … [704 caractères tronqués]`
+
+  ```
+train 888071 72s
+val 49655 77s
+test 49148 82s
+val fenêtres 8 Ko dupliquées dans train : 0 / 49655 0.000%
+test fenêtres 8 Ko dupliquées dans train : 0 / 49148 0.000%
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-corpus-wiki-texte.md <<'EOF'\n# Le texte intégral de Wikipédia — le pilote et le run FR\n\n> **Verdict.** Le débaliseur `tools/corpus_wikipedia_texte.py` a produit le **texte intégral** du\n> français : **2 388 21 … [5806 caractères tronqués]`
+
+  ```
+972 reports/rapport-corpus-wiki-texte.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 474 JSON, le disque en a 476
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 17 h 10 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 17 h 3 … [2544 caractères tronqués]`
+
+  ```
+état + journal : run complet
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3982 mots (budget 4 000)
+     · compteurs : en-cours.md dit 474 JSON, le disque en a 476
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\* … [406 caractères tronqués]`
+
+  ```
+92:| fichiers / JSON de résultats | **389** / **474** | `reports/*.md` / `reports/*.json` |
+92:| fichiers / JSON de résultats | **388** / **476** | `reports/*.md` / `reports/*.json` |
+     · compteurs : en-cours.md dit 388 fichiers, le disque en a 389
+  T0 max : 3982 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n         \"| fichiers / JSON de résultats | … [2617 caractères tronqués]`

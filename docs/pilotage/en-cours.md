@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 17 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 17 h 35 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -60,9 +60,9 @@
 - **Ambition** : le français réel pour N2 ; D, carburant.
 - **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **pilote FR** (100 000 art., 1,082 Go, **0 fuite 8 Ko**, **0/40** éval) et le **run complet** (2,8 M pages, 1,17 M art., 5,0 Go ; en cours) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral FR** : **2,39 M articles**, **8,03 G caractères**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** éval ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
-- **Prochaine action** : le run complet FR (~26 Go), puis les 9 langues, PDF/OCR.
+- **Prochaine action** : les **9 langues**, puis l'extraction PDF/OCR.
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
 
@@ -89,7 +89,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **389** / **474** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **389** / **476** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
