@@ -11,7 +11,7 @@
 - **Fichiers réservés** : `work/r44/`, `work/ocr/`, `tools/simuler_scan.py`, `tools/nettoyer_scan.py`,
   `tools/mesurer_scans.py`, `tools/graphe_document_ocr.py`, `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`,
   `reports/r44-*`, `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-10-31 22:50
+- **Heartbeat** : 2026-11-01 00:35
 - **État** : en cours
 - **Prochaine action** : la **parité** sur photocopie (6,6 % de WER mais 48 % de parité), puis
   exposants et colonnes.
@@ -59,13 +59,14 @@ rendus vectoriels. Trois idées portent le programme :
 |---|---|---|---|
 | 1 | **corpus** de scans simulés (5 familles, dev/test, manifeste) | `tools/simuler_scan.py`, 100 scans | ✅ fait |
 | 2 | **baseline** brute, WER + parité + contrôles | `work/r44/mesure-brut.json` | ✅ fait |
-| 3 | **prétraitement** (recadrage, éclairage, redressement, échelle, lissage) | `tools/nettoyer_scan.py`, deltas mesurés | 🔬 en cours — photo **55,9 → 7,3 %**, fax **27,1 → 21,9 %** |
-| 4 | **parité** : pourquoi la photocopie est à 48 % de parité pour 6,6 % de WER | diagnostic + correctif (sélection, valeurs) | ⏳ |
-| 5 | **exposants** : passe ciblée chiffres sur les petits mots du TSV | récupération des appels de note | ⏳ |
-| 6 | **colonnes** : gouttière verticale, ordre de lecture | pages 2 colonnes synthétiques | ⏳ |
-| 7 | **tables** : mots → lignes/colonnes → cellules | exactitude de cellules | ⏳ |
-| 8 | **second moteur** : RapidOCR (ONNX, CPU) comparé | un tableau, un verdict | ⏳ |
-| 9 | **consolidation** : porte resserrée, fiche, spec, roadmap, journal | commit final | ⏳ |
+| 3 | **prétraitement** (recadrage, éclairage, redressement, échelle, lissage) | `tools/nettoyer_scan.py`, deltas mesurés | ✅ photo **55,9 → 7,0 %**, papier test **53,2 → 6,2 %** |
+| 4 | **parité** : préservation, pas « les deux échouent » | métrique corrigée + diagnostic | ✅ préservation **86,7 %** (plafond propre **90 %**) |
+| 5 | **exposants** : passe ciblée chiffres sur les petits mots du TSV | récupération des appels de note | ✅ plafond propre **83,3 → 90 %** |
+| 6 | **colonnes** : gouttière verticale, ordre de lecture | pages 2 colonnes synthétiques | ✅ **89,4 → 0,5 %** de WER |
+| 7 | **tables** : mots → lignes/colonnes → cellules | exactitude de cellules | ✅ **92,6 %** (propre), **69,1 %** (photocopie) |
+| 8 | **second moteur** : RapidOCR (ONNX, CPU) comparé | un tableau, un verdict | ✅ contrôle : 3 à 10× pire sur le français |
+| 9 | **scan réel** : Internet Archive + couche OCR | un accord entre moteurs, dit comme tel | ✅ **7,10 %** sur 10 pages |
+| 10 | **consolidation** : porte `porte-ocr-scans`, fiche, spec, roadmap, journal | commit | ✅ fait |
 
 ## Ce que les autres sessions peuvent réutiliser
 

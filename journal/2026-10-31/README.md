@@ -145,4 +145,19 @@ en exposant** que l'OCR lit `!`, deux **en-têtes découpés autrement**. Les co
 travail : **sans OCR 0/30**, et la page « photo » simulée tombe à **17,08 %** de WER et **26,7 %**
 de parité — c'est la mesure de ce qui manque encore : les **scans réels**. R4.4 passe de bloquée à
 **partielle**, et le prochain pas est nommé.
+**R4.4 — les scans, cinq familles et un vrai livre.** La nuit a fabriqué ce que la machine n'a pas :
+des **scans**. Cent dégradations simulées (photocopie, photo, fax, papier, contrôle) sur 20 pages,
+un split dev/test, et une vérité terrain qui ne bouge pas. Le **prétraitement** mesuré étape par
+étape fait passer la photo de **55,9 %** à **7,0 %** de WER (test **5,3 %**), le papier de test de
+**53,2 %** à **6,2 %** ; deux leçons contre-intuitives sont écrites : agrandir une photocopie
+**double** son WER, et l'angle se mesure après le recadrage, jamais avant. La **préservation** des
+réponses du lecteur atteint **86,7 %** (plafond du texte propre : **90 %**), et la passe
+**exposants** relève ce plafond de 83,3 à 90 %. Les **colonnes** tombent de **89,4 %** à **0,5 %**
+de WER ; les **tableaux** donnent **92,6 %** de cellules exactes, **0 %** sans redressement, et
+**0 cellule localisée** en texte à plat. Enfin un **vrai scan** — un Verne d'Internet Archive,
+couche OCR comme référence — s'accorde à **7,10 %** : ce n'est pas une vérité humaine, c'est un
+accord entre moteurs, et c'est dit. La porte `porte-ocr-scans` (la 80e) vérifie les trois bancs.
+La ligne R4.4 reste **ouverte** aux scans réels de bout en bout, au fax 1 bit et à l'exposant
+fusionné — nommés, pas cachés.
+
 <!-- /notes -->

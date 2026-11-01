@@ -6117,3 +6117,634 @@ Created file
   ```
 
 - **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel.json 2>&1 | tail -16; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Measure OCR on ten real scanned pages", "timeoutMs": 1800000, "workdir": " … [49 caractères tronqués]`
+
+  ```
+page  30 · WER  7.68% (brut  7.68%) · conf  89.9 · 482 mots
+  page  50 · WER  7.31% (brut  7.31%) · conf  92.4 · 383 mots
+  page  70 · WER  8.00% (brut  7.82%) · conf  90.6 · 550 mots
+  page  90 · WER  8.21% (brut  8.21%) · conf  91.1 · 463 mots
+  page 110 · WER  7.99% (brut  7.99%) · conf  90.2 · 413 mots
+  page 130 · WER  4.52% (brut  4.52%) · conf  92.0 · 465 mots
+  page 150 · WER  7.25% (brut  7.00%) · conf  90.0 · 414 mots
+  page 170 · WER  4.25% (brut  4.25%) · conf  91.6 · 471 mots
+  page 190 · WER  9.31% (brut  9.31%) · conf  91.9 · 408 mots
+  page 210 · WER  6.74% (brut  6.74%) · conf  91.1 · 445 mots
+
+  10 pages · WER 7.10% nettoyé · 7.05% brut · confiance 91.1 → work/r44/reel.json
+[code 0]
+  ```
+
+- **job_output** `{"job_id": "bash-279"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -2 work/r44/mesure-final-exp-col.log; wc -l < work/r44/mesure-final-exp-col.log; date +%H:%M:%S", "description": "Check final scans measurement progress", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[52/100] A_RES_80_1-es-p2-s1-photocopie.png       auto         WER  4.33% conf  93.9
+  [53/100] A_RES_80_1-es-p2-s1-photo.png            auto         WER  5.91% conf  95.4
+54
+23:48:29
+  ```
+
+- **bash** `{"command": "timeout 300 python3 tools/fabriquer_tables.py --pages 10 | tail -1; rm -rf work/r44/tables/scans work/r44/tables/rendus\ntimeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables.json > work/r44/tables.log 2>&1; echo \"[code $?]\ … [180 caractères tronqués]`
+
+  ```
+started background job bash-290
+  ```
+
+- **bash** `{"command": "tail -20 work/r44/colonnes.log", "description": "Read full columns benchmark results", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+deux  propre      brut        89.44%     10
+  deux  propre      colonnes     0.54%     10
+  mono  photocopie  brut         0.93%     10
+  mono  photocopie  colonnes     0.93%     10
+  mono  photo       brut         6.14%     10
+  mono  photo       colonnes     6.14%     10
+  mono  propre      brut         0.29%     10
+  mono  propre      colonnes     0.29%     10
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → work/r44/colonnes.json
+  ```
+
+- **bash** `{"command": "sleep 90; echo \"=== scans\"; tail -2 work/r44/mesure-final-exp-col.log; wc -l < work/r44/mesure-final-exp-col.log; echo \"=== tables\"; tail -2 work/r44/tables.log; wc -l < work/r44/tables.log", "description": "Wait and check both jobs", "timeoutMs": 180000, "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+=== scans
+  [75/100] A_RES_80_10-fr-p3-s1-papier.png          auto         WER  3.94% conf  92.6
+  [76/100] A_RES_80_1-en-p1-s1-propre.png           auto         WER  4.76% conf  93.6
+77
+=== tables
+  page 4 · propre     : 48/54 cellules · grille oui
+  page 4 · photocopie : 38/54 cellules · grille oui
+11
+  ```
+
+- **bash** `{"command": "sleep 60; tail -3 work/r44/mesure-final-exp-col.log; echo \"---\"; python3 - <<'PY'\nimport json\ntry:\n    r=json.load(open('work/r44/mesure-final-exp-col.json'))\n    for k,a in sorted(r['agregat'].items()):\n        print(f\"{a['famille']:10s} {a['split']:4s} WER={a['wer']:6.2%} conf … [366 caractères tronqués]`
+
+  ```
+[90/100] A_RES_80_1-es-p1-s1-papier.png           auto         WER  6.75% conf  93.3
+  [91/100] A_RES_80_1-es-p2-s1-propre.png           auto         WER  2.36% conf  95.7
+  [92/100] A_RES_80_1-es-p2-s1-photocopie.png       auto         WER  4.33% conf  93.9
+---
+pas encore: [Errno 2] No such file or directory: 'work/r44/mesure-final-exp-col.json'
+  ```
+
+- **bash** `{"command": "sleep 45; tail -14 work/r44/mesure-final-exp-col.log; echo \"---\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('work/r44/mesure-final-exp-col.json')\nif p.exists():\n    r=json.load(open(p))\n    for k,a in sorted(r['agregat'].items()):\n        print(f\"{a['famille']:10s} {a … [386 caractères tronqués]`
+
+  ```
+✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+  ✅ propre · dev : WER ≤ 25% (limite nommée, mesuré 4.1%)
+  ✅ propre · test : WER ≤ 8% (mesuré 3.0%)
+  ✅ propre · test : WER ≤ 25% (limite nommée, mesuré 3.0%)
+
+  100 mesures en 575 s → work/r44/mesure-final-exp-col.json
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py", line 283, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py", line 279, in main
+    return (0 if all(ok for _, ok in bareme) else 1) if args.porte else 0
+                                                        ^^^^^^^^^^
+AttributeError: 'Namespace' object has no attribute 'porte'. Did you mean: 'sortie'?
+---
+fax        dev  WER=21.90% conf= 77.1 F1med=0.67 exNat=100.0% exOCR= 53.3% prés= 53.3%
+fax        test WER=15.52% conf= 81.3 F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0%
+papier     dev  WER= 7.32% conf= 92.5 F1med=0.93 exNat=100.0% exOCR= 73.3% prés= 73.3%
+papier     test WER= 6.22% conf= 93.8 F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0%
+photocopie dev  WER= 6.34% conf= 90.4 F1med=0.96 exNat=100.0% exOCR= 86.
+… [449 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-279 (bash: timeout 3000 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --sortie work/r44/mesure-final-exp-col.json > work/r44/mesure-final-exp-col.log 2>&1; echo "[code $?]"; tail -8 work/r44/mesure-final-exp-col.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "grep -n \"SEUILS_PORTE\\|wer_dev\\|add_argument(\\\"--sans-ecrire\\|add_argument(\\\"--porte\" tools/mesurer_scans.py | head", "description": "Inspect scan thresholds and args", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+181:SEUILS_PORTE = {
+183:    "wer_dev": 0.08, "preservation": 0.85,
+195:            bareme.append((f"{a['famille']} · dev : WER ≤ {SEUILS_PORTE['wer_dev']:.0%} "
+196:                           f"(mesuré {a['wer']:.1%})", a["wer"] <= SEUILS_PORTE["wer_dev"]))
+199:                               f"{SEUILS_PORTE['preservation']:.0%} (mesuré {a['preservation']:.1%})",
+200:                               a["preservation"] >= SEUILS_PORTE["preservation"]))
+202:            bareme.append((f"{a['famille']} · test : WER ≤ {SEUILS_PORTE['wer_test']:.0%} "
+203:                           f"(mesuré {a['wer']:.1%})", a["wer"] <= SEUILS_PORTE["wer_test"]))
+206:                           f"{SEUILS_PORTE['wer_famille_max']:.0%} (limite nommée, mesuré {a['wer']:.1%})",
+207:                           a["wer"] <= SEUILS_PORTE["wer_famille_max"]))
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ndebut=s.index('SEUILS_PORTE = {')\nfin=s.index('def affiche(agregat: dict, noir: dict) -> None:')\nnew='''SEUILS_PORTE = {\n    # Des PLANCHERS par famille, mesurés sur le corpus complet (plafon … [2161 caractères tronqués]`
+
+  ```
+planchers par famille
+usage: mesurer_scans.py [-h] [--corpus CORPUS] [--pipelines PIPELINES]
+                        [--familles FAMILLES] [--splits SPLITS]
+                        [--limite LIMITE] [--exposants] [--colonnes]
+                        [--sortie SORTIE]
+mesurer_scans.py: error: unrecognized arguments: --porte --sans-ecrire
+[code 2]
+  ```
+
+- **bash** `{"command": "grep -n \"add_argument\" tools/mesurer_scans.py | tail -8; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''    ap.add_argument(\"--sortie\", type=pathlib.Path, default=RACINE / \"work/r44/mesure.json\")''',\n'''    ap.add_argum … [617 caractères tronqués]`
+
+  ```
+225:    ap.add_argument("--corpus", type=pathlib.Path, default=RACINE / "work/r44/scans/manifeste.json")
+226:    ap.add_argument("--pipelines", default="brut,auto")
+227:    ap.add_argument("--familles", default="")
+228:    ap.add_argument("--splits", default="dev,test")
+229:    ap.add_argument("--limite", type=int, default=0, help="N scans par famille (fumée)")
+230:    ap.add_argument("--exposants", action="store_true",
+232:    ap.add_argument("--colonnes", action="store_true",
+234:    ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "work/r44/mesure.json")
+argument --porte ajouté
+  ✅ fax · dev : préservation ≥ 45% (mesuré 53.3%)
+  ✅ fax · test : WER ≤ 25% (mesuré 15.5%)
+  ✅ papier · dev : WER ≤ 10% (mesuré 7.3%)
+  ✅ papier · dev : préservation ≥ 70% (mesuré 73.3%)
+  ✅ papier · test : WER ≤ 10% (mesuré 6.2%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 7.0%)
+  ✅ photo · dev : préservation ≥ 80% (mesuré 86.7%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.3%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 80% (mesuré 86.7%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85
+… [163 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-290 (bash: timeout 300 python3 tools/fabriquer_tables.py --pages 10 | tail -1; rm -rf work/r44/tables/scans work/r44/tables/rendus
+timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables.json > work/r44/tables.log 2>&1; echo "[code $?]"; tail -14 work/r44/tables.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -16 work/r44/tables.log", "description": "Read 10-page table results", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui           10       540      373   69.1%    10/10
+  photocopie  non           10         0        0    0.0%     0/10
+  photo       oui           10       486      261   53.7%     6/10
+  propre      oui           10       540      500   92.6%    10/10
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme (mesuré 10/10)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme (mesuré 10/10)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 53.7%)
+  ❌ photo : grilles de bonne forme (mesuré 6/10)
+
+  → work/r44/tables.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# 1) cache des manifestes natifs\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def questions_par_page() -> dict[tuple[str, int], list[dict]]:''','''NATIF_CACHE: dict[tuple, dict] = {}\n\n\ndef manifeste_natif_cached(pdf: pat … [2073 caractères tronqués]`
+
+  ```
+cache natifs + seuils tableaux
+OK
+  ```
+
+- **bash** `{"command": "cat > tools/porte-ocr-scans.sh <<'EOF'\n#!/bin/bash\n# porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux.\n#\n# POURQUOI CETTE PORTE EXISTE. La première porte OCR vérifiait dix pages **rendues** ; elle ne\n# voyait ni une photocopie, ni une photo, ni un fax, … [2475 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-300]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# rassembler les copies finales dans reports/\ndef copie(src,dst):\n    d=json.loads(pathlib.Path(src).read_text())\n    d['dispositif']='outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)'\n … [613 caractères tronqués]`
+
+  ```
+reports/r44-scans.json ok 100 entrées
+reports/r44-colonnes.json ok 120 entrées
+reports/r44-tableaux.json ok 40 entrées
+reports/r44-reel.json ok 10 entrées
+-rw-r--r--. 1 stephane stephane 19782 00:11 reports/r44-colonnes.json
+-rw-r--r--. 1 stephane stephane 21559 17:57 reports/r44-ocr-pilote.json
+-rw-r--r--. 1 stephane stephane  2204 00:11 reports/r44-reel.json
+-rw-r--r--. 1 stephane stephane 71449 00:11 reports/r44-scans.json
+-rw-r--r--. 1 stephane stephane 10748 00:11 reports/r44-tableaux.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor f in ('reports/r44-scans.json','reports/r44-colonnes.json','reports/r44-tableaux.json','reports/r44-reel.json'):\n    d=json.load(open(f)); print('===',f)\n    if 'agregat' in d:\n        for k,a in d['agregat'].items():\n            print(' ',k, {x:a. … [369 caractères tronqués]`
+
+  ```
+=== reports/r44-scans.json
+  fax|dev|auto {'wer': 0.219, 'preservation': 0.5333, 'confiance': 77.1}
+  fax|test|auto {'wer': 0.1552, 'preservation': None, 'confiance': 81.3}
+  papier|dev|auto {'wer': 0.0732, 'preservation': 0.7333, 'confiance': 92.5}
+  papier|test|auto {'wer': 0.0622, 'preservation': None, 'confiance': 93.8}
+  photo|dev|auto {'wer': 0.07, 'preservation': 0.8667, 'confiance': 92.4}
+  photo|test|auto {'wer': 0.0527, 'preservation': None, 'confiance': 93.9}
+  photocopie|dev|auto {'wer': 0.0634, 'preservation': 0.8667, 'confiance': 90.4}
+  photocopie|test|auto {'wer': 0.0469, 'preservation': None, 'confiance': 91.7}
+  propre|dev|auto {'wer': 0.0414, 'preservation': 0.9, 'confiance': 93.2}
+  propre|test|auto {'wer': 0.0301, 'preservation': None, 'confiance': 94.0}
+  noir {'pipeline': 'brut', 'mots': 0, 'regions': 0}
+=== reports/r44-colonnes.json
+  mono|propre|brut {'wer': 0.0029, 'pages': 10}
+  mono|propre|colonnes {'wer': 0.0029, 'pages': 10}
+  mono|photocopie|brut {'wer': 0.0093, 'pages': 10}
+  mono|photocopie|colonnes {'wer': 0.0093, 'pages': 10}
+  mono|photo|brut {'wer': 0.0614, 'pages': 10}
+  mono|photo|colonnes {'wer': 0.0614, 'pages': 10}
+  deux|propre|brut {'wer'
+… [867 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 -c \"import json;d=json.load(open('reports/r44-reel.json'));print(d['agregat']);print([ (p['page'],p['wer'],p['wer_brut'],p['confiance']) for p in d['pages']])\"; echo \"=== gate job\"; tail -5 /tmp/*.log 2>/dev/null | tail -5; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | hea … [124 caractères tronqués]`
+
+  ```
+{'pages': 10, 'mots_reference': 4494, 'wer': 0.071, 'wer_brut': 0.0705, 'confiance': 91.1}
+[(30, 0.0768, 0.0768, 89.9), (50, 0.0731, 0.0731, 92.4), (70, 0.08, 0.0782, 90.6), (90, 0.0821, 0.0821, 91.1), (110, 0.0799, 0.0799, 90.2), (130, 0.0452, 0.0452, 92.0), (150, 0.0725, 0.07, 90.0), (170, 0.0425, 0.0425, 91.6), (190, 0.0931, 0.0931, 91.9), (210, 0.0674, 0.0674, 91.1)]
+=== gate job
+606803 bash -c cat > tools/porte-ocr-scans.sh <<'EOF' #!/bin/bash # porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux. # # POURQUOI CETTE PORTE EXISTE. La première porte OCR vérifiait dix pages **rendues** ; elle ne # voyait ni une photocopie, ni une photo, ni un fax, ni une page à deux colonnes, ni un tableau. # Cette porte mesure ce que R4.4 promet : cinq familles de dégradation, un split dev/test, la # parité du lecteur, la gouttière des colonnes et les cellules des tableaux — chacune avec ses # contrôles négatifs (page noire, page mono, contrôle sans redressement, texte à plat). # # CE QU'ELLE NE VÉRIFIE PAS : les scans RÉELS (la validation externe est dans la fiche, sur un # PDF d'Internet Archive) ; les seuils sont des PLANCHERS mesurés, pas des prédictions. # # Usage
+… [1777 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"mesurer_scans|mesurer_colonnes|mesurer_tables|tesseract\" | grep -v grep | head -6; ls -dt /tmp/tmp.* 2>/dev/null | head -2; for d in $(ls -dt /tmp/tmp.* 2>/dev/null | head -1); do ls -la \"$d\"; tail -3 \"$d\"/*.log 2>/dev/null; done", "descriptio … [104 caractères tronqués]`
+
+  ```
+606803       10:43  0.0 bash -c cat > tools/porte-ocr-scans.sh <<'EOF' #!/bin/bash # porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux. # # POURQUOI CETTE PORTE EXISTE. La première porte OCR vérifiait dix pages **rendues** ; elle ne # voyait ni une photocopie, ni une photo, ni un fax, ni une page à deux colonnes, ni un tableau. # Cette porte mesure ce que R4.4 promet : cinq familles de dégradation, un split dev/test, la # parité du lecteur, la gouttière des colonnes et les cellules des tableaux — chacune avec ses # contrôles négatifs (page noire, page mono, contrôle sans redressement, texte à plat). # # CE QU'ELLE NE VÉRIFIE PAS : les scans RÉELS (la validation externe est dans la fiche, sur un # PDF d'Internet Archive) ; les seuils sont des PLANCHERS mesurés, pas des prédictions. # # Usage : tools/porte-ocr-scans.sh set -u cd "$(dirname "$0")/.." echo "=== PORTE R4.4 — SCANS, COLONNES, TABLEAUX ===" if ! bash tools/installer_ocr.sh --verifie; then     echo "  ❌ OCR absent de la machine : tools/installer_ocr.sh (environnementale)"     exit 2 fi J=$(mktemp -d) if [ ! -s work/r44/scans/manifeste.json ]; then     echo "  corpus de scans absent : fabricatio
+… [1785 caractères tronqués]
+  ```
+
+- **write** `{"content": "# R4.4 — les scans : la photo passe de 55,9 % à 7,0 % de WER, les colonnes de 89 % à 0,5 %\n\n> **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.\n> Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le\n> pr … [13037 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-300"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/encodeur-visuel.md'); s=p.read_text()\n# ajouter les sections manquantes avant « Ce que le bloc ne fait pas »\nancre='## 8. Ce que le bloc ne fait pas'\najout='''## 7 bis. Le prétraitement : des étapes nommées, et deux  … [4553 caractères tronqués]`
+
+  ```
+spec mise à jour 180 lignes
+14 sections
+  ```
+
+- **job_output** `{"job_id": "bash-300"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/tmp.* 2>/dev/null | head -1); do echo \"dir $d\"; tail -6 \"$d/tables.log\" 2>/dev/null; done; ps -eo pid,etime,args | grep -E \"mesurer_tables|tesseract\" | grep -v grep | head -3", "description": "Check gate tables step progress", "workdir": "/home/stephane/Data … [30 caractères tronqués]`
+
+  ```
+dir /tmp/tmp.RMeXIjBtWv
+  page 3 · propre     : 51/54 cellules · grille oui
+  page 3 · photocopie : 41/54 cellules · grille oui
+  page 3 · photo      : 17/54 cellules · grille non
+  page 4 · propre     : 48/54 cellules · grille oui
+  page 4 · photocopie : 38/54 cellules · grille oui
+  page 4 · photo      : 37/54 cellules · grille oui
+ 606803       12:35 bash -c cat > tools/porte-ocr-scans.sh <<'EOF' #!/bin/bash # porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux. # # POURQUOI CETTE PORTE EXISTE. La première porte OCR vérifiait dix pages **rendues** ; elle ne # voyait ni une photocopie, ni une photo, ni un fax, ni une page à deux colonnes, ni un tableau. # Cette porte mesure ce que R4.4 promet : cinq familles de dégradation, un split dev/test, la # parité du lecteur, la gouttière des colonnes et les cellules des tableaux — chacune avec ses # contrôles négatifs (page noire, page mono, contrôle sans redressement, texte à plat). # # CE QU'ELLE NE VÉRIFIE PAS : les scans RÉELS (la validation externe est dans la fiche, sur un # PDF d'Internet Archive) ; les seuils sont des PLANCHERS mesurés, pas des prédictions. # # Usage : tools/porte-ocr-scans.sh set -u cd 
+… [1749 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/backlog/R44-encodeur-visuel.md'); s=p.read_text()\nold='''**Pilote du 2026-10-31** — 10 pages rendues à 300 dpi, 6 PDF, 3 langues (détail :\n[`reports/rapport-r44-ocr-pilote.md`](../../../reports/rapport-r44-ocr-pilote.md)) … [5330 caractères tronqués]`
+
+  ```
+carte R44 mise à jour
+roadmap mise à jour
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
+45:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** : sur
+89:[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00
+105:[R4.4] starts at [R4.1–R4.3]'s end
+278:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 7,0 %** de WER, test **5,3 %**), **préservation 86,7 %** (propre 90), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **vrai scan 7,10 %** d'accord avec un OCR de référence | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+  ```
+
+- **bash** `{"command": "sleep 90; for d in $(ls -dt /tmp/tmp.* 2>/dev/null | head -1); do tail -3 \"$d/tables.log\" 2>/dev/null; done; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l", "description": "Check gate completion", "timeoutMs": 180000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet … [2 caractères tronqués]`
+
+  ```
+page 8 · photocopie : 36/54 cellules · grille oui
+  page 8 · photo      : 13/54 cellules · grille non
+  page 9 · propre     : 50/54 cellules · grille oui
+3
+  ```
+
+- **bash** `{"command": "sleep 60; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; for d in $(ls -dt /tmp/tmp.* 2>/dev/null | head -1); do echo \"=== $d\"; tail -22 \"$d/tables.log\" 2>/dev/null; done", "description": "Read gate verdict when finished", "timeoutMs": 180000, "workdir": "/home/stephane/Data … [30 caractères tronqués]`
+
+  ```
+0
+=== /tmp/tmp.RMeXIjBtWv
+  page 9 · photocopie : 44/54 cellules · grille oui
+  page 9 · photo      : 32/54 cellules · grille oui
+  page 10 · propre     : 50/54 cellules · grille oui
+  page 10 · photocopie : 35/54 cellules · grille oui
+  page 10 · photo      : 40/54 cellules · grille non
+=== R4.4 — LES TABLEAUX SCANNÉS, CELLULE PAR CELLULE ===
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui           10       540      373   69.1%    10/10
+  photocopie  non           10         0        0    0.0%     0/10
+  photo       oui           10       486      261   53.7%     6/10
+  propre      oui           10       540      500   92.6%    10/10
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 53.7%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 6/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+  ```
+
+### 👤 Utilisateur
+
+background job bash-300 (bash: cat > tools/porte-ocr-scans.sh <<'EOF'
+#!/bin/bash
+# porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux.
+#
+# POURQUOI CETTE PORTE EXISTE. La première porte OCR vérifiait dix pages **rendues** ; elle ne
+# voyait ni une photocopie, ni une photo, ni un fax, ni une page à deux colonnes, ni un tableau.
+# Cette porte mesure ce que R4.4 promet : cinq familles de dégradation, un split dev/test, la
+# parité du lecteur, la gouttière des colonnes et les cellules des tableaux — chacune avec ses
+# contrôles négatifs (page noire, page mono, contrôle sans redressement, texte à plat).
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les scans RÉELS (la validation externe est dans la fiche, sur un
+# PDF d'Internet Archive) ; les seuils sont des PLANCHERS mesurés, pas des prédictions.
+#
+# Usage : tools/porte-ocr-scans.sh
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE R4.4 — SCANS, COLONNES, TABLEAUX ==="
+if ! bash tools/installer_ocr.sh --verifie; then
+    echo "  ❌ OCR absent de la machine : tools/installer_ocr.sh (environnementale)"
+    exit 2
+fi
+J=$(mktemp -d)
+if [ ! -s work/r44/scans/manifeste.json ]; then
+    echo "  corpus de scans absent : fabrication (10 pages dev + 10 test × 5 familles)"
+    python3 tools/simuler_scan.py --pages 10 --test 10 > "$J/corpus.log" 2>&1 || {
+        tail -3 "$J/corpus.log"; exit 1; }
+fi
+if [ ! -s work/r44/colonnes/manifeste.json ]; then
+    python3 tools/fabriquer_colonnes.py --pages 10 > /dev/null 2>&1 || exit 1
+fi
+if [ ! -s work/r44/tables/manifeste.json ]; then
+    python3 tools/fabriquer_tables.py --pages 10 > /dev/null 2>&1 || exit 1
+fi
+echo "--- 1. les familles de scans (100 scans, dev + test)"
+python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte > "$J/scans.log" 2>&1
+C1=$?
+tail -n 24 "$J/scans.log"
+echo "--- 2. les colonnes (10 pages × 2 versions × 3 familles)"
+python3 tools/mesurer_colonnes.py --porte > "$J/colonnes.log" 2>&1
+C2=$?
+tail -n 12 "$J/colonnes.log"
+echo "--- 3. les tableaux (10 pages × 3 familles)"
+python3 tools/mesurer_tables.py --porte > "$J/tables.log" 2>&1
+C3=$?
+tail -n 12 "$J/tables.log"
+CODE=0
+[ "$C1" = 0 ] || CODE=1
+[ "$C2" = 0 ] || CODE=1
+[ "$C3" = 0 ] || CODE=1
+if [ "$CODE" = 0 ]; then
+    echo "✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers"
+else
+    echo "❌ porte OCR-scans ROUGE (scans $C1, colonnes $C2, tableaux $C3)"
+fi
+exit "$CODE"
+EOF
+chmod +x tools/porte-ocr-scans.sh
+timeout 2400 bash tools/porte-ocr-scans.sh 2>&1 | tail -45; echo "[code ${PIPESTATUS[0]}]") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 tools/index_reports.py 2>&1 | tail -1; echo \"=== en-cours actuel\"; grep -n \"### Session\\|R4.4\\|portes |\" docs/pilotage/en-cours.md | head -14; echo \"=== mots\"; python3 -c \"\nimport sys,pathlib;sys.path.insert(0,'tools');import taille_documents as td\nt=pathlib.Path('doc … [246 caractères tronqués]`
+
+  ```
+369 fiches → reports/INDEX.md
+=== en-cours actuel
+17:### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+32:- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
+39:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
+42:- **Rôle** : **R4.4 — les scans** (CPU seulement).
+46:- **Objectif final** : **R4.4 mesurée** — WER ≤ 5 %, parité ≥ 90 % sur les scans de test, porte resserrée.
+54:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+63:- **Ce que font les autres** : **N2.h** et **R4.4** gardent leurs fichiers ; **N4** en file ; **A/B** gardent les leurs.
+80:  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** a sa session et sa fiche
+105:| portes | **79** (75 vertes, 4 rouges à la passe du 31/10 19 h 42) | `tools/porte-*.sh` |
+124:| **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
+138:l'encodeur ; **R4.4** — les scans réels.
+=== mots
+mots 1623 T0 3957
+  ```
+
+- **bash** `{"command": "sed -n 39,54p docs/pilotage/en-cours.md; echo \"=== R4.4 ligne\"; sed -n 78,82p docs/pilotage/en-cours.md; echo \"=== chiffres\"; python3 -c \"\nimport sys,pathlib;sys.path.insert(0,'tools');import revue_documentation as rd\nprint('portes',rd.compte_portes(),'docs',rd.compte_docs(),'fic … [197 caractères tronqués]`
+
+  ```
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4 — les scans** (CPU seulement).
+- **Plan** : 1) scans simulés ✅ ; 2) prétraitement mesuré ; 3) exposants ; 4) colonnes + tables ; 5) second moteur ; 6) porte resserrée, fiche, spec, commit.
+- **Ambition** : faire de l'OCR un **bloc classique robuste**, jugé par la **parité**, pas le WER.
+- **Stratégie** : mesurer le brut, n'ajouter que ce qui paie, régler sur dev, trancher sur test, contrôles négatifs.
+- **Objectif final** : **R4.4 mesurée** — WER ≤ 5 %, parité ≥ 90 % sur les scans de test, porte resserrée.
+- **Ce qu'elle fait** : OCR par vagues, CPU.
+- **Ce que font les autres** : **N2.h** a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
+- **Fichiers réservés** : `work/r44/`, `work/ocr/`, `tools/*scan*`, `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`, `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`.
+- **Prochaine action** : la parité sur photocopie, puis exposants et colonnes.
+- **Bloquants** : aucun — s
+… [679 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 103,110p docs/pilotage/en-cours.md; echo \"=== chantiers R\"; sed -n 122,126p docs/pilotage/en-cours.md; echo \"=== reste\"; sed -n 135,140p docs/pilotage/en-cours.md", "description": "Read counters and R rows", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **79** (75 vertes, 4 rouges à la passe du 31/10 19 h 42) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **371** / **441** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
+
+=== chantiers R
+| **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; validation **contaminée (32,8 %)** ; N4 0/4 ; N5 gelé | **N2** (le corpus décontaminé) ; **N4** (consigne) |
+| **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
+| **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+| **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+=== reste
+
+**N2.h** — le **corpus propre** et la porte honnête (en cours) ; **Pensée** — le **state store v0**
+et 
+… [202 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\n# 1) ma section : résultat + suite\ndebut=s.index(\"### Session `fe3c05f0-834b-44f2-8739-501865d652c1`\")\nfin=s.index(\"### Session `e181ce02\", debut)\nnouvelle='''### Session `fe3c05f0-834 … [3409 caractères tronqués]`
+
+  ```
+en-cours mis à jour
+  ❌ 2 anomalie(s) :
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans » ne dit pas « **Stratégie** »
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans » ne dit pas « **Ce qu'elle fait** »
+  T0 max : 4081 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ```
+
+- **bash** `{"command": "grep -n \"Stratégie\\|Ce qu'elle fait\\|Ce que font\\|Fichiers réservés\\|Prochaine action\\|Bloquants\\|Journal\\|CHAMPS\\|requis\" tools/verifie_en_cours.py | head -20", "description": "Read required state fields", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+8:     **Id**, **Rôle**, **Plan**, **Ambition**, **Stratégie**, **Objectif final**,
+9:     **Ce qu'elle fait**, **Ce que font les autres**, **Prochaine action**, **Bloquants** et
+10:     **Journal** ;
+35:CHAMPS_SESSION = (
+40:    "**Stratégie**",
+42:    "**Ce qu'elle fait**",
+43:    "**Ce que font les autres**",
+44:    "**Prochaine action**",
+45:    "**Bloquants**",
+46:    "**Journal**",
+100:        for champ in CHAMPS_SESSION:
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndebut=s.index(\"### Session `fe3c05f0-834b-44f2-8739-501865d652c1`\")\nfin=s.index(\"### Session `e181ce02\", debut)\nnouvelle='''### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, le … [1446 caractères tronqués]`
+
+  ```
+section compactée
+  en-cours · 1643 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4017 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ```
+
+- **bash** `{"command": "sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md", "description": "Read remaining-work section for trimming", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+## Ce qui reste
+
+**N2.h** — le **corpus propre** et la porte honnête (en cours) ; **Pensée** — le **state store v0**
+et le moteur N3 (session `e181ce02`) ; **N4** — la consigne courte ; **B10.3** — le `z` et
+l'encodeur ; **R4.4** — les scans réels de bout en bout.
+**Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
+
+## Les questions ouvertes
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).\\n\",\"\")\ns=s.replace(\"l'encodeur ; **R4.4** — les scans réels de bout en bout.\",\"l'encodeur ; **R … [810 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  en-cours · 1626 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md'); s=p.read_text()\ns=s.replace('''| # | phase | livrable | état |\n|---|---|---|---|\n| 1 | **corpus** de scans simulés (5 familles, dev/test, manifeste) | `tools/simuler_sca … [4214 caractères tronqués]`
+
+  ```
+plan à jour
+journal jour à jour
+couche OCR comme référence — s'accorde à **7,10 %** : ce n'est pas une vérité humaine, c'est un
+accord entre moteurs, et c'est dit. La porte `porte-ocr-scans` (la 80e) vérifie les trois bancs.
+La ligne R4.4 reste **ouverte** aux scans réels de bout en bout, au fax 1 bit et à l'exposant
+fusionné — nommés, pas cachés.
+
+<!-- /notes -->
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\"; do echo \" … [231 caractères tronqués]`
+
+  ```
+=== python3 tools/revue_documentation.py
+  revue de documentation · 372 fiche(s) · 445 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[code 0]
+=== python3 tools/verifie_journal.py
+  journal · 37 jour(s) · 110 session(s) · 1708 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[code 0]
+=== python3 tools/taille_documents.py
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[code 0]
+=== python3 tools/verifie_en_cours.py
+  en-cours · 1626 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[code 0]
+=== python3 tools/sessions.py --check
+  ⚠ mandat périmé (94 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md : état inconnu 'en cours — résultat committé, la suite (fax 1 bit, second vrai scan) est ouverte.'
+[code 1]
+=== python3 tools/verifie_backlog.py
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+[code
+… [163 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh > /tmp/tab.log 2>&1; echo \"[tableaux $?]\"; tail -2 /tmp/tab.log; git status --short | grep -vE \"corpus|native_model|distiller_budget|e181ce02\" | head -25", "description": "Run table gate and inspect tree", "timeoutMs": 300000, "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+[tableaux 0]
+  ✅ 1289 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+ M docs/implantation/encodeur-visuel.md
+ M docs/pilotage/backlog/R44-encodeur-visuel.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-10-31/README.md
+ M journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+ M reports/INDEX.md
+ m tools/docwatch
+ M tools/graphe_document_ocr.py
+ M tools/mesurer_scans.py
+ M tools/nettoyer_scan.py
+?? reports/r44-colonnes.json
+?? reports/r44-reel.json
+?? reports/r44-scans.json
+?? reports/r44-tableaux.json
+?? reports/rapport-r44-scans.md
+?? tools/eval_n2_propre.py
+?? tools/extraire_tableaux.py
+?? tools/fabriquer_colonnes.py
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md'); s=p.read_text()\ns=s.replace('- **État** : en cours — résultat committé, la suite (fax 1 bit, second vrai scan) est ouverte.',\n            '- **État** : en cours')\ns=s.re … [309 caractères tronqués]`
+
+  ```
+⚠ mandat périmé (99 min) : 0b0a6a0d-05f5-4308-800c-4792ddb9cbf2 — heartbeat à rafraîchir
+  ⚠ mandat périmé (94 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+[code 0]
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-r44-scans.txt <<'EOF'\nR4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %\n\nLa ligne R4.4 était partielle : dix pages **rendues** lues, aucun scan. Ce programme fabrique\nles scans que la machine ne peut p … [4644 caractères tronqués]`

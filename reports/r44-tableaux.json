@@ -1,0 +1,680 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "nature": "tableaux synthétiques",
+ "pages": 10,
+ "familles": [
+  "propre",
+  "photocopie",
+  "photo"
+ ],
+ "seuils": {
+  "propre": 0.9,
+  "photocopie": 0.8,
+  "photo": 0.6
+ },
+ "controle_plat": {
+  "cellules": 54,
+  "presentes_texte_plat": 29,
+  "localisees_texte_plat": 0,
+  "taux_present": 0.537
+ },
+ "agregat": {
+  "photo|redresse": {
+   "famille": "photo",
+   "redresser": true,
+   "pages": 10,
+   "cellules": 486,
+   "exactes": 261,
+   "taux": 0.537,
+   "grilles_exactes": 6,
+   "angles": [
+    -0.3,
+    -0.3,
+    0.0,
+    -0.3,
+    -0.5,
+    0.3,
+    -0.8,
+    -0.6,
+    0.4,
+    -0.2
+   ]
+  },
+  "photocopie|sans": {
+   "famille": "photocopie",
+   "redresser": false,
+   "pages": 10,
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grilles_exactes": 0,
+   "angles": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "photocopie|redresse": {
+   "famille": "photocopie",
+   "redresser": true,
+   "pages": 10,
+   "cellules": 540,
+   "exactes": 373,
+   "taux": 0.6907,
+   "grilles_exactes": 10,
+   "angles": [
+    0.4,
+    -0.8,
+    1.2,
+    0.4,
+    -1.1,
+    0.9,
+    0.3,
+    1.0,
+    -0.7,
+    0.2
+   ]
+  },
+  "propre|redresse": {
+   "famille": "propre",
+   "redresser": true,
+   "pages": 10,
+   "cellules": 540,
+   "exactes": 500,
+   "taux": 0.9259,
+   "grilles_exactes": 10,
+   "angles": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "mesures": [
+  {
+   "page": 1,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 51,
+   "taux": 0.9444,
+   "grille": true
+  },
+  {
+   "page": 1,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 0.4,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 35,
+   "taux": 0.6481,
+   "grille": true
+  },
+  {
+   "page": 1,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.3,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 39,
+   "taux": 0.7222,
+   "grille": true
+  },
+  {
+   "page": 1,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 2,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 50,
+   "taux": 0.9259,
+   "grille": true
+  },
+  {
+   "page": 2,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": -0.8,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 38,
+   "taux": 0.7037,
+   "grille": true
+  },
+  {
+   "page": 2,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.3,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 21,
+   "taux": 0.3889,
+   "grille": true
+  },
+  {
+   "page": 2,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 3,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 51,
+   "taux": 0.9444,
+   "grille": true
+  },
+  {
+   "page": 3,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 1.2,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 41,
+   "taux": 0.7593,
+   "grille": true
+  },
+  {
+   "page": 3,
+   "famille": "photo",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 17,
+   "taux": 0.3148,
+   "grille": false
+  },
+  {
+   "page": 3,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 4,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 48,
+   "taux": 0.8889,
+   "grille": true
+  },
+  {
+   "page": 4,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 0.4,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 38,
+   "taux": 0.7037,
+   "grille": true
+  },
+  {
+   "page": 4,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.3,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 37,
+   "taux": 0.6852,
+   "grille": true
+  },
+  {
+   "page": 4,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 5,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 50,
+   "taux": 0.9259,
+   "grille": true
+  },
+  {
+   "page": 5,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": -1.1,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 36,
+   "taux": 0.6667,
+   "grille": true
+  },
+  {
+   "page": 5,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.5,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 29,
+   "taux": 0.537,
+   "grille": true
+  },
+  {
+   "page": 5,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 6,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 49,
+   "taux": 0.9074,
+   "grille": true
+  },
+  {
+   "page": 6,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 0.9,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 37,
+   "taux": 0.6852,
+   "grille": true
+  },
+  {
+   "page": 6,
+   "famille": "photo",
+   "redresser": true,
+   "angle": 0.3,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 33,
+   "taux": 0.6111,
+   "grille": true
+  },
+  {
+   "page": 6,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 7,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 51,
+   "taux": 0.9444,
+   "grille": true
+  },
+  {
+   "page": 7,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 0.3,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 33,
+   "taux": 0.6111,
+   "grille": true
+  },
+  {
+   "page": 7,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.8,
+   "raison": "trop peu de traits verticaux (2)",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 7,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 8,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 50,
+   "taux": 0.9259,
+   "grille": true
+  },
+  {
+   "page": 8,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 1.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 36,
+   "taux": 0.6667,
+   "grille": true
+  },
+  {
+   "page": 8,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.6,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 13,
+   "taux": 0.2407,
+   "grille": false
+  },
+  {
+   "page": 8,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 9,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 50,
+   "taux": 0.9259,
+   "grille": true
+  },
+  {
+   "page": 9,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": -0.7,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 44,
+   "taux": 0.8148,
+   "grille": true
+  },
+  {
+   "page": 9,
+   "famille": "photo",
+   "redresser": true,
+   "angle": 0.4,
+   "raison": "",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "cellules": 54,
+   "exactes": 32,
+   "taux": 0.5926,
+   "grille": true
+  },
+  {
+   "page": 9,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  },
+  {
+   "page": 10,
+   "famille": "propre",
+   "redresser": true,
+   "angle": 0.0,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 50,
+   "taux": 0.9259,
+   "grille": true
+  },
+  {
+   "page": 10,
+   "famille": "photocopie",
+   "redresser": true,
+   "angle": 0.2,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 35,
+   "taux": 0.6481,
+   "grille": true
+  },
+  {
+   "page": 10,
+   "famille": "photo",
+   "redresser": true,
+   "angle": -0.2,
+   "raison": "",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 54,
+   "exactes": 40,
+   "taux": 0.7407,
+   "grille": false
+  },
+  {
+   "page": 10,
+   "famille": "photocopie",
+   "redresser": false,
+   "angle": 0.0,
+   "raison": "trop peu de traits horizontaux (0)",
+   "trace": [
+    "recadrage"
+   ],
+   "cellules": 0,
+   "exactes": 0,
+   "taux": 0.0,
+   "grille": false
+  }
+ ],
+ "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+}

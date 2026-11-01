@@ -42,9 +42,12 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    (AUC 0,839) sans règle qui transfère.
    **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
    **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
-   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
-   l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de
-   passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.
+   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** : sur
+   **100 scans simulés**, la photo passe de **55,9 %** à **7,0 %** de WER (test **5,3 %**) et la
+   **préservation** du lecteur atteint **86,7 %** (propre **90 %**) ; les **colonnes** tombent de
+   **89,4 %** à **0,5 %**, les **tableaux** donnent **92,6 %** de cellules exactes, et un **vrai
+   scan** s'accorde à **7,10 %** avec un OCR de référence — les **scans réels** de bout en bout
+   restent ouverts.
 2. **N2 — la distillation** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734** (0,794
    bit/octet) ; meilleur **2,6998**, plateau **2,708** ; porte **< 2,5 non atteinte**. **N2.d** : le budget
    plein paie **2,9355 → 2,8527**, les quatre sources coûtent **+0,91**, et **la validation est contaminée à
@@ -272,7 +275,7 @@ le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement d
 | **R4.1** | **tableaux** : parseur 2D, en-têtes, cellules, opérations classiques (filtre, jointure, agrégat) | ✅ **996 cellules**, **802** exactes, texte plat **0/3** | extraction exacte sur 100 cellules ; contrôle : texte plat |
 | **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ✅ **294 fichiers**, **24/24** extraits, texte seul **0/3** | réponse par exécution exacte ; contrôle : lecture du texte seul |
 | **R4.3** | **maths** : LaTeX/MathML, définitions, preuve ; CAS bloc | ✅ **32 formules**, **10/10** dérivées, surface **0/3** | évaluation symbolique exacte ; contrôle : surface |
-| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel** : tesseract 5.5.3 installé sans root ; **10 pages rendues** lues à **WER 4,48 %**, **parité 90 %** ; page dégradée **26,7 %** | 10 pages **scannées**, même réponse que le texte natif — **non atteinte** : les scans réels (grain, perspective, colonnes, exposants) restent à faire |
+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 7,0 %** de WER, test **5,3 %**), **préservation 86,7 %** (propre 90), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **vrai scan 7,10 %** d'accord avec un OCR de référence | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
 
 **Principe** : ces blocs sont **classiques d'abord**. Le bus les accepte comme les blocs neuronaux ; un parseur
 de tableaux n'a pas besoin d'être appris.

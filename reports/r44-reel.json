@@ -1,0 +1,127 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "nature": "scan RÉEL",
+ "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
+ "source": "Voyage au centre de la terre, Internet Archive voyageaucentrede00vernuoft (LuraDocument, 300 dpi)",
+ "agregat": {
+  "pages": 10,
+  "mots_reference": 4494,
+  "wer": 0.071,
+  "wer_brut": 0.0705,
+  "confiance": 91.1
+ },
+ "pages": [
+  {
+   "page": 30,
+   "mots_reference": 482,
+   "mots_ocr": 476,
+   "wer": 0.0768,
+   "wer_brut": 0.0768,
+   "confiance": 89.9,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 50,
+   "mots_reference": 383,
+   "mots_ocr": 381,
+   "wer": 0.0731,
+   "wer_brut": 0.0731,
+   "confiance": 92.4,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 70,
+   "mots_reference": 550,
+   "mots_ocr": 547,
+   "wer": 0.08,
+   "wer_brut": 0.0782,
+   "confiance": 90.6,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 90,
+   "mots_reference": 463,
+   "mots_ocr": 460,
+   "wer": 0.0821,
+   "wer_brut": 0.0821,
+   "confiance": 91.1,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 110,
+   "mots_reference": 413,
+   "mots_ocr": 411,
+   "wer": 0.0799,
+   "wer_brut": 0.0799,
+   "confiance": 90.2,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 130,
+   "mots_reference": 465,
+   "mots_ocr": 462,
+   "wer": 0.0452,
+   "wer_brut": 0.0452,
+   "confiance": 92.0,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 150,
+   "mots_reference": 414,
+   "mots_ocr": 411,
+   "wer": 0.0725,
+   "wer_brut": 0.07,
+   "confiance": 90.0,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 170,
+   "mots_reference": 471,
+   "mots_ocr": 468,
+   "wer": 0.0425,
+   "wer_brut": 0.0425,
+   "confiance": 91.6,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 190,
+   "mots_reference": 408,
+   "mots_ocr": 404,
+   "wer": 0.0931,
+   "wer_brut": 0.0931,
+   "confiance": 91.9,
+   "trace": [
+    "recadrage"
+   ]
+  },
+  {
+   "page": 210,
+   "mots_reference": 445,
+   "mots_ocr": 440,
+   "wer": 0.0674,
+   "wer_brut": 0.0674,
+   "confiance": 91.1,
+   "trace": [
+    "recadrage"
+   ]
+  }
+ ],
+ "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+}

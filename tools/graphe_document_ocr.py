@@ -30,9 +30,12 @@ import json
 import os
 import pathlib
 import re
+
+import numpy as np
 import statistics
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import graphe_document  # noqa: E402  (le manifeste commun)
@@ -40,6 +43,8 @@ import graphe_document_pdf  # noqa: E402  (le vocabulaire des lignes de titre)
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 VERSION = 1
+# Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.
+RECUPERATION_VERSION = 2
 PREFIXE = pathlib.Path(os.environ.get("TESSERACT_PREFIX", RACINE / "work/ocr/root"))
 BIN = pathlib.Path(os.environ.get("TESSERACT", PREFIXE / "usr/bin/tesseract"))
 TESSDATA = pathlib.Path(os.environ.get("TESSDATA_PREFIX", PREFIXE / "usr/share/tessdata"))
@@ -109,6 +114,121 @@ def mots(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> list[dict]:
     return out
 
 
+RE_EXPOSANT = re.compile(r"^[!?|Il1'°.,;:*+=]+$")
+
+
+def _ocr_boite(image: pathlib.Path, boite: tuple[int, int, int, int], langue: str,
+               marge: int = 5, hauteur: int = 96, psm: int = 10) -> list[tuple[str, float]]:
+    """OCRise UNE petite boîte, agrandie, avec une liste blanche de chiffres. C'est la
+    deuxième chance d'un appel de note : le premier passage l'a lu « ! » ou « !? »."""
+    from PIL import Image, ImageFilter
+    x0, y0, x1, y1 = boite
+    with Image.open(image) as im:
+        g = im.convert("L").crop((max(x0 - marge, 0), max(y0 - marge, 0),
+                                  x1 + marge, y1 + marge))
+    facteur = max(hauteur / max(g.height, 1), 3.0)
+    g = g.resize((max(int(g.width * facteur), 1), max(int(g.height * facteur), 1)),
+                 Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.4))
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+        chemin = pathlib.Path(tmp.name)
+    try:
+        g.save(chemin)
+        sortie = subprocess.run(
+            [str(BIN), str(chemin), "stdout", "-l", langue, "--psm", str(psm),
+             "-c", "tessedit_char_whitelist=0123456789", "-c", "tessedit_create_tsv=1"],
+            env=_env(), capture_output=True, text=True)
+    finally:
+        chemin.unlink(missing_ok=True)
+    resultats = []
+    for ligne in sortie.stdout.splitlines()[1:]:
+        champs = ligne.split("\t")
+        if len(champs) >= 12 and champs[0] == "5" and champs[11].strip():
+            try:
+                resultats.append((champs[11].strip(), float(champs[10])))
+            except ValueError:
+                pass
+    return resultats
+
+
+def recuperer_exposants(image: pathlib.Path, les_mots: list[dict],
+                        langue: str) -> tuple[list[dict], int]:
+    """Rend les appels de note en exposant que tesseract a lus comme de la ponctuation.
+
+    La règle est TYPOGRAPHIQUE, pas devinée : un mot **petit** (hauteur < 80 % de la ligne)
+    et **fait de ponctuation** (`!`, `!!`, `!?`, `!l`) est un exposant raté. On recadre sa
+    boîte, on l'agrandit ×4 et on refait l'OCR avec une liste blanche de chiffres ; on ne
+    remplace que si le résultat est un nombre court, crédible (confiance ≥ 30)."""
+    par_ligne: dict[tuple, list[dict]] = {}
+    for mot in les_mots:
+        par_ligne.setdefault((mot["bloc"], mot["par"], mot["ligne"]), []).append(mot)
+    recuperes = 0
+    for mots_ligne in par_ligne.values():
+        if len(mots_ligne) < 2:
+            continue
+        hauteurs = sorted(m["height"] for m in mots_ligne)
+        median = hauteurs[len(hauteurs) // 2] or 1
+        for mot in mots_ligne:
+            if mot["height"] >= median * 0.80:
+                continue
+            if not RE_EXPOSANT.match(mot["texte"] or "") or len(mot["texte"]) > 3:
+                continue
+            boite = (mot["left"], mot["top"],
+                     mot["left"] + mot["width"], mot["top"] + mot["height"])
+            candidats = [c for c in _ocr_boite(image, boite, langue)
+                         if 1 <= len(c[0]) <= 2 and c[0].isdigit() and c[1] >= 30]
+            if not candidats:
+                continue
+            texte, conf = max(candidats, key=lambda c: (c[1], len(c[0])))
+            mot["texte"] = texte
+            mot["exposant_recupere"] = round(conf, 1)
+            recuperes += 1
+    return les_mots, recuperes
+
+
+def bande_vide(lignes: list[dict], largeur: float) -> tuple[float, float] | None:
+    """La gouttière entre deux colonnes : une bande verticale SANS encre, entre 15 % et 85 %
+    de la largeur. C'est la même idée que le parseur PDF de R0.1 — sauf qu'ici les boîtes
+    viennent de l'OCR. Rend (début, fin) ou None."""
+    if len(lignes) < 8 or largeur < 100:
+        return None
+    occupation = np.zeros(int(largeur) + 2, dtype=np.int32)
+    for ligne in lignes:
+        occupation[max(int(ligne["x0"]), 0):max(int(ligne["x1"]), 0)] += 1
+    debut, fin = int(largeur * 0.15), int(largeur * 0.85)
+    meilleur = None
+    i = debut
+    while i < fin:
+        if occupation[i] == 0:
+            j = i
+            while j < fin and occupation[j] == 0:
+                j += 1
+            if meilleur is None or (j - i) > (meilleur[1] - meilleur[0]):
+                meilleur = (i, j)
+            i = j
+        else:
+            i += 1
+    if meilleur is None or (meilleur[1] - meilleur[0]) < max(largeur * 0.02, 10):
+        return None
+    centre = (meilleur[0] + meilleur[1]) / 2
+    gauche = sum(1 for l in lignes if (l["x0"] + l["x1"]) / 2 < centre)
+    if gauche < len(lignes) * 0.2 or len(lignes) - gauche < len(lignes) * 0.2:
+        return None
+    return float(meilleur[0]), float(meilleur[1])
+
+
+def ordre_de_lecture(lignes: list[dict], largeur: float) -> list[dict]:
+    """Colonne gauche entière, puis colonne droite. Sans gouttière, l'ordre est (y, x)."""
+    gouttiere = bande_vide(lignes, largeur)
+    if gouttiere is None:
+        return sorted(lignes, key=lambda l: (l["y0"], l["x0"]))
+    centre = sum(gouttiere) / 2
+    gauche = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 < centre),
+                    key=lambda l: (l["y0"], l["x0"]))
+    droite = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 >= centre),
+                    key=lambda l: (l["y0"], l["x0"]))
+    return gauche + droite
+
+
 def _typographie(texte: str) -> str:
     """Les blancs que l'OCR ajoute autour de la ponctuation française. On ne touche à aucun
     mot : seule l'espace fautive part, sinon le WER mesurerait la typographie."""
@@ -117,7 +237,7 @@ def _typographie(texte: str) -> str:
     return re.sub(r"\s+", " ", texte).strip()
 
 
-def lignes_de_mots(les_mots: list[dict]) -> list[dict]:
+def lignes_de_mots(les_mots: list[dict], colonnes: bool = False) -> list[dict]:
     """Les mots groupés en lignes, dans l'ordre de lecture. Tesseract donne déjà les
     numéros de bloc/paragraphe/ligne du TSV : on s'en sert au lieu de recalculer une
     géométrie — mais on ORDONNE par y, parce que l'ordre du TSV n'est pas garanti."""
@@ -133,12 +253,18 @@ def lignes_de_mots(les_mots: list[dict]) -> list[dict]:
         y0 = min(m["top"] for m in mots_ligne)
         y1 = max(m["top"] + m["height"] for m in mots_ligne)
         x0 = min(m["left"] for m in mots_ligne)
+        x1 = max(m["left"] + m["width"] for m in mots_ligne)
         confs = [m["conf"] for m in mots_ligne]
         lignes.append({
-            "texte": texte, "x0": x0, "y0": y0, "y1": y1,
+            "texte": texte, "x0": x0, "x1": x1, "y0": y0, "y1": y1,
             "hauteur": y1 - y0, "conf": round(sum(confs) / len(confs), 1),
             "confs": confs,
         })
+    if not lignes:
+        return []
+    largeur = max(l["x1"] for l in lignes)
+    if colonnes:
+        return ordre_de_lecture(lignes, largeur)
     return sorted(lignes, key=lambda l: (l["y0"], l["x0"]))
 
 
@@ -208,9 +334,13 @@ def blocs_de_page(lignes: list[dict], numero: int = 1,
     return blocs
 
 
-def analyse(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> list[dict]:
+def analyse(image: pathlib.Path, langue: str = "fra", psm: int = 3,
+            exposants: bool = False, colonnes: bool = False) -> list[dict]:
     """Une image, des blocs — exactement la forme que rend `graphe_document_pdf.analyse`."""
-    return blocs_de_page(lignes_de_mots(mots(image, langue, psm)), 1, langue)
+    les_mots = mots(image, langue, psm)
+    if exposants:
+        les_mots, _ = recuperer_exposants(image, les_mots, langue)
+    return blocs_de_page(lignes_de_mots(les_mots, colonnes), 1, langue)
 
 
 def _source(image: pathlib.Path, langue: str) -> dict:
@@ -220,16 +350,21 @@ def _source(image: pathlib.Path, langue: str) -> dict:
             "langue": langue}
 
 
-def manifeste(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> dict:
+def manifeste(image: pathlib.Path, langue: str = "fra", psm: int = 3,
+              exposants: bool = False, colonnes: bool = False) -> dict:
     """Le manifeste d'une page lue en OCR : mêmes régions, mêmes offsets, même partition."""
-    blocs = analyse(image, langue, psm)
+    les_mots = mots(image, langue, psm)
+    recuperes = 0
+    if exposants:
+        les_mots, recuperes = recuperer_exposants(image, les_mots, langue)
+    blocs = blocs_de_page(lignes_de_mots(les_mots, colonnes), 1, langue)
     if not blocs:
         raise SystemExit(f"aucun bloc OCR : {image}")
-    return graphe_document.manifeste_de_blocs(
-        blocs, _source(image, langue),
-        {"outil": "graphe_document_ocr.py", "version": VERSION,
-         "moteur": "tesseract", "version_moteur": version(), "langue": langue},
-    )
+    extraction = {"outil": "graphe_document_ocr.py", "version": VERSION,
+                  "moteur": "tesseract", "version_moteur": version(), "langue": langue}
+    if exposants:
+        extraction["exposants_recuperes"] = recuperes
+    return graphe_document.manifeste_de_blocs(blocs, _source(image, langue), extraction)
 
 
 def manifeste_sans_ocr(image: pathlib.Path, langue: str = "fra") -> dict:
@@ -253,6 +388,8 @@ def main() -> int:
     ap.add_argument("--psm", type=int, default=3)
     ap.add_argument("--json", action="store_true", help="le manifeste, en JSON")
     ap.add_argument("--confiance", action="store_true", help="la confiance moyenne par bloc")
+    ap.add_argument("--exposants", action="store_true",
+                    help="récupère les appels de note en exposant (passe chiffres ciblée)")
     ap.add_argument("--sans-ocr", action="store_true", help="le contrôle négatif : un manifeste vide")
     ap.add_argument("--version", action="store_true")
     args = ap.parse_args()
@@ -264,7 +401,7 @@ def main() -> int:
     if args.sans_ocr:
         m = manifeste_sans_ocr(args.image, args.langue)
     else:
-        m = manifeste(args.image, args.langue, args.psm)
+        m = manifeste(args.image, args.langue, args.psm, exposants=args.exposants)
     if args.json:
         print(json.dumps(m, ensure_ascii=False, indent=1))
         return 0

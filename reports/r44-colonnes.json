@@ -1,0 +1,1214 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "nature": "colonnes synthétiques",
+ "source": "docs/theorie/vision.md",
+ "familles": [
+  "propre",
+  "photocopie",
+  "photo"
+ ],
+ "pages": 10,
+ "seuils": {
+  "deux": {
+   "propre": 0.03,
+   "photocopie": 0.06,
+   "photo": 0.2
+  },
+  "mono_ecart": 0.005,
+  "controle_deux": 0.5
+ },
+ "agregat": {
+  "mono|propre|brut": {
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 10045,
+   "distance": 29,
+   "pages": 10,
+   "wer": 0.0029
+  },
+  "mono|propre|colonnes": {
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 10045,
+   "distance": 29,
+   "pages": 10,
+   "wer": 0.0029
+  },
+  "mono|photocopie|brut": {
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 10045,
+   "distance": 93,
+   "pages": 10,
+   "wer": 0.0093
+  },
+  "mono|photocopie|colonnes": {
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 10045,
+   "distance": 93,
+   "pages": 10,
+   "wer": 0.0093
+  },
+  "mono|photo|brut": {
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 10045,
+   "distance": 617,
+   "pages": 10,
+   "wer": 0.0614
+  },
+  "mono|photo|colonnes": {
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 10045,
+   "distance": 617,
+   "pages": 10,
+   "wer": 0.0614
+  },
+  "deux|propre|brut": {
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 10035,
+   "distance": 8975,
+   "pages": 10,
+   "wer": 0.8944
+  },
+  "deux|propre|colonnes": {
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 10035,
+   "distance": 54,
+   "pages": 10,
+   "wer": 0.0054
+  },
+  "deux|photocopie|brut": {
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 10035,
+   "distance": 9043,
+   "pages": 10,
+   "wer": 0.9011
+  },
+  "deux|photocopie|colonnes": {
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 10035,
+   "distance": 103,
+   "pages": 10,
+   "wer": 0.0103
+  },
+  "deux|photo|brut": {
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 10035,
+   "distance": 8863,
+   "pages": 10,
+   "wer": 0.8832
+  },
+  "deux|photo|colonnes": {
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 10035,
+   "distance": 654,
+   "pages": 10,
+   "wer": 0.0652
+  }
+ },
+ "mesures": [
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 9,
+   "wer": 0.009
+  },
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 9,
+   "wer": 0.009
+  },
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 1,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 872,
+   "wer": 0.8685
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 6,
+   "wer": 0.006
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 874,
+   "wer": 0.8705
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 885,
+   "wer": 0.8815
+  },
+  {
+   "page": 1,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 6,
+   "wer": 0.006
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 16,
+   "wer": 0.016
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 16,
+   "wer": 0.016
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 2,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 879,
+   "wer": 0.8772
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 903,
+   "wer": 0.9012
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 11,
+   "wer": 0.011
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 888,
+   "wer": 0.8862
+  },
+  {
+   "page": 2,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 497,
+   "wer": 0.495
+  },
+  {
+   "page": 3,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 497,
+   "wer": 0.495
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 906,
+   "wer": 0.9033
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 910,
+   "wer": 0.9073
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 13,
+   "wer": 0.013
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 840,
+   "wer": 0.8375
+  },
+  {
+   "page": 3,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 469,
+   "wer": 0.4676
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 4,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1006,
+   "distance": 931,
+   "wer": 0.9254
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1006,
+   "distance": 6,
+   "wer": 0.006
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1006,
+   "distance": 932,
+   "wer": 0.9264
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1006,
+   "distance": 12,
+   "wer": 0.0119
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1006,
+   "distance": 935,
+   "wer": 0.9294
+  },
+  {
+   "page": 4,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1006,
+   "distance": 11,
+   "wer": 0.0109
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 5,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 886,
+   "wer": 0.8825
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 901,
+   "wer": 0.8974
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 6,
+   "wer": 0.006
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 883,
+   "wer": 0.8795
+  },
+  {
+   "page": 5,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 12,
+   "wer": 0.012
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 13,
+   "wer": 0.013
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 13,
+   "wer": 0.013
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 9,
+   "wer": 0.009
+  },
+  {
+   "page": 6,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 9,
+   "wer": 0.009
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 879,
+   "wer": 0.8781
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 881,
+   "wer": 0.8801
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 883,
+   "wer": 0.8821
+  },
+  {
+   "page": 6,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 7,
+   "wer": 0.007
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 53,
+   "wer": 0.0528
+  },
+  {
+   "page": 7,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 53,
+   "wer": 0.0528
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 910,
+   "wer": 0.9073
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 912,
+   "wer": 0.9093
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 15,
+   "wer": 0.015
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1003,
+   "distance": 848,
+   "wer": 0.8455
+  },
+  {
+   "page": 7,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1003,
+   "distance": 83,
+   "wer": 0.0828
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1008,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1008,
+   "distance": 2,
+   "wer": 0.002
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1008,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1008,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1008,
+   "distance": 21,
+   "wer": 0.0208
+  },
+  {
+   "page": 8,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1008,
+   "distance": 21,
+   "wer": 0.0208
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 935,
+   "wer": 0.9285
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 933,
+   "wer": 0.9265
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 10,
+   "wer": 0.0099
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1007,
+   "distance": 919,
+   "wer": 0.9126
+  },
+  {
+   "page": 8,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1007,
+   "distance": 57,
+   "wer": 0.0566
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 11,
+   "wer": 0.011
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 11,
+   "wer": 0.011
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1002,
+   "distance": 17,
+   "wer": 0.017
+  },
+  {
+   "page": 9,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1002,
+   "distance": 17,
+   "wer": 0.017
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 885,
+   "wer": 0.8841
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 5,
+   "wer": 0.005
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 903,
+   "wer": 0.9021
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 8,
+   "wer": 0.008
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1001,
+   "distance": 889,
+   "wer": 0.8881
+  },
+  {
+   "page": 9,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1001,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 3,
+   "wer": 0.003
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 10,
+   "wer": 0.01
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 10,
+   "version": "mono",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1005,
+   "distance": 4,
+   "wer": 0.004
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 892,
+   "wer": 0.8884
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "propre",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 6,
+   "wer": 0.006
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 894,
+   "wer": 0.8904
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "photocopie",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 8,
+   "wer": 0.008
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": false,
+   "mots": 1004,
+   "distance": 893,
+   "wer": 0.8894
+  },
+  {
+   "page": 10,
+   "version": "deux",
+   "famille": "photo",
+   "colonnes": true,
+   "mots": 1004,
+   "distance": 3,
+   "wer": 0.003
+  }
+ ],
+ "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+}

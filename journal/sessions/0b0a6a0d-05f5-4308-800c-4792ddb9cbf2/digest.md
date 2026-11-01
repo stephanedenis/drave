@@ -6041,3 +6041,152 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4\n\nLe bras diversité (moitié dépôt, moitié littérature française, même budget, mêmes trois graines … [435 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-324]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-324", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 26f722e7] ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4
+ 16 files changed, 884 insertions(+), 57 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; for f in C-propre-g1 D-mixte-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check curriculum and mixed seed 2"}`
+
+  ```
+23:48
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/D-mixte-g1.pt 
+-- C-propre-g1
+-- D-mixte-g2
+pas  6000 · seq 128 · perte 35.8956 · PPL 128/4 3.4636 · 418 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; for f in C-propre-g2 R-pos-g1 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait 30 minutes for curriculum and … [50 caractères tronqués]`
+
+  ```
+started background job bash-326
+  ```
+
+- **job_output** `{"job_id": "bash-326", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-308 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | wc -l; for f in A-propre-g3 C-propre-g1 D-mixte-g1 D-mixte-g2; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\\n' ' '; echo; for f in C-propre-g1 C-propre-g2 D-mixte-g2 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check campaign progress"}`
+
+  ```
+23:59
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/A-propre-g3.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/D-mixte-g1.pt 
+-- C-propre-g1
+pas   250 · seq 129 · perte 43.2406 · PPL 128/4 3.2073 · 17 s
+-- C-propre-g2
+-- D-mixte-g2
+pas 15250 · seq 128 · perte 25.1889 · PPL 128/4 3.3999 · 1049 s
+-- D-mixte-g3
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/A-propre-g2.pt work/n2h/A-propre-g3.pt 2>&1 | grep -v Loading", "description": "Evaluate the remaining clean seeds"}`
+
+  ```
+usage: eval_n2_propre.py [-h] [--chunk CHUNK] [--longueurs] [--decomposition]
+                         [--sortie SORTIE] [--device DEVICE]
+                         point
+eval_n2_propre.py: error: unrecognized arguments: work/n2h/A-propre-g3.pt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for g in 2 3; do PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/A-propre-g$g.pt 2>&1 | grep -v Loading; done", "description": "Evaluate seeds 2 and 3 individually"}`
+
+  ```
+{"fichier": "A-propre-g2.pt", "params": 11814792, "val": 3.0883, "test": 3.1914, "litterature": 15.4628, "litterature_propre": 16.5501, "anglais": 55.9666, "wikitext2": 55.2124, "permute": 1221.2743}
+{"fichier": "A-propre-g3.pt", "params": 11814792, "val": 3.0858, "test": 3.1867, "litterature": 15.4773, "litterature_propre": 16.4764, "anglais": 56.0697, "wikitext2": 55.7049, "permute": 1227.5534}
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | wc -l; for f in C-propre-g3 R-pos-g1 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait 30 minutes for curriculum and random positions", "run_ … [21 caractères tronqués]`
+
+  ```
+started background job bash-330
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short | head -5; date '+%H:%M'", "description": "Check repo state and other sessions"}`
+
+  ```
+26f722e7 ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4
+47db37ba ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85
+9a03d2dc ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR
+ M tools/distiller_budget.py
+ m tools/docwatch
+ M tools/graphe_document_ocr.py
+ M tools/mesurer_scans.py
+ M tools/native_model.py
+00:00
+  ```
+
+- **job_output** `{"job_id": "bash-330", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-315 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | wc -l; for f in A-propre-g3 C-propre-g1 D-mixte-g2; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-317 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\n' ' '; echo; for f in C-propre-g1 C-propre-g2 D-mixte-g2; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\\n' ' '; echo; for f in C-propre-g2 R-pos-g1 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check curriculum, mixed seed 3 and random positions"}`
+
+  ```
+00:10
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/A-propre-g3.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/C-propre-g1.pt work/n2h/D-mixte-g1.pt work/n2h/D-mixte-g2.pt 
+-- C-propre-g2
+pas   250 · seq 129 · perte 46.9611 · PPL 128/4 3.2025 · 17 s
+-- R-pos-g1
+-- D-mixte-g3
+pas  5000 · seq 128 · perte 41.4237 · PPL 128/4 3.4275 · 349 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/D-mixte-g2.pt 2>&1 | grep -v Loading; python3 -c \"\nimport json; d=json.load(open('work/n2h/C-propre-g1.json'))\nprint('C g1', {k: … [176 caractères tronqués]`
+
+  ```
+{"fichier": "D-mixte-g2.pt", "params": 11814792, "val": 3.26, "test": 3.3203, "litterature": 3.5217, "litterature_propre": 3.8562, "anglais": 25.3735, "wikitext2": 25.798, "permute": 462.8188}
+C g1 {'ppl_128_lot16': 3.1677, 'ppl_129_lot15': 3.1125}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/evalue-tout.sh <<'EOF'\n#!/bin/bash\n# Évalue tous les points de contrôle N2.h : porte honnête, hors domaine, décomposition, longueurs.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. C … [1015 caractères tronqués]`
+
+  ```
+ok
+00:11
+pas   750 · seq 129 · perte 51.0452 · PPL 128/4 3.2103 · 52 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/journal.md <<'EOF'\n### N2.h — le mètre propre, la généralité, et le verrou de longueur\n\nLa nuit du 31 octobre au 1er novembre, la session a eu **dix heures**. Le premier geste n'a pas été\nd'entraîner plus : il a ét … [1791 caractères tronqués]`
+
+  ```
+ok
+00:11
+pas  1000 · seq 129 · perte 41.2979 · PPL 128/4 3.2025 · 69 s
+  ```
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\\n' ' '; echo; for f in C-propre-g3 R-pos-g1 R-pos-g2 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait 40 minutes for the random-positi … [35 caractères tronqués]`
+
+  ```
+started background job bash-336
+  ```
+
+- **job_output** `{"job_id": "bash-336", "timeout_ms": 2400000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 6.2 h |
+| Durée | 6.7 h |
 | Tours | 2 |
-| Messages | 326 |
-| Appels d'outils | 343 |
-| Fichiers touchés | 17 |
-| Commandes | 289 |
+| Messages | 364 |
+| Appels d'outils | 379 |
+| Fichiers touchés | 18 |
+| Commandes | 322 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*158 appels d'outils.* Actions notables :
+*194 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 131 autres
+- … et 165 autres
 
 **Synthèse produite :**
 
@@ -130,6 +130,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tableaux.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -173,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 249 autres
+- … et 282 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -301,7 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-12 sorties en erreur ou divergentes. Les premières :
+14 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -315,6 +316,8 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 28, in <module>   File "<stdin>", line 16, in prep ValueError: assignment destination is read-only [exit code: 1]
 - **T2** : gouttière + option colonnes ajoutées [stderr] Sorry: IndentationError: expected an indented block after 'if' statement on line 223 (graphe_document_ocr.py, line 224) [exit code: 1]
 - **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 359, in manifeste     blo
+- **T2** : === reports/r44-scans.json   fax|dev|auto {'wer': 0.219, 'preservation': 0.5333, 'confiance': 77.1}   fax|test|auto {'wer': 0.1552, 'preservation': None, 'confiance': 81.3}   papier|dev|auto {'wer': 0
+- **T2** : 606803       10:43  0.0 bash -c cat > tools/porte-ocr-scans.sh <<'EOF' #!/bin/bash # porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux. # # POURQUOI CETTE PORTE EXISTE. La
 
 ## 6. Commits
 
@@ -322,4 +325,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - set -e PATHS=(  docs/implantation/encodeur-visuel.md  docs/pilotage/backlog/R44-encodeur-visuel.md  docs/pilotage/backlog/index.md  docs/pilotage/en-cours.md  d
 - git diff --cached --name-only | head; echo "[staged: $(git diff --cached --name-only | wc -l)]"; git add docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834
 - set -e PATHS=(docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md tools/simuler_scan.py tools/nettoyer_scan.py tools/mesurer
+- cat > /tmp/msg-r44-scans.txt <<'EOF' R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %  La li
 

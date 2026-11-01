@@ -163,11 +163,15 @@ def auto(im: Image.Image) -> tuple[Image.Image, list[str]]:
     if not binaire:
         im = recadrage(im)
         trace.append("recadrage")
-    if d["fond_ratio"] > 1.5:
+    # Le papier japonais du simulateur a un fond à 1,33 : sous l'ancien seuil (1,5) il
+    # n'était pas corrigé, et la page tombait à 62,8 % de WER ; corrigée, elle est à 5,7 %.
+    if d["fond_ratio"] > 1.25:
         im = eclairage(im)
         trace.append("eclairage")
-    angle = angle_de_redressement(im)  # sur l'image recadrée, pas sur la page brute
-    if abs(angle) >= 0.25:
+    # Le redressement n'est appliqué que si l'inclinaison est FRANCHE et l'image assez
+    # définie : tourner une page de 170 dpi de 0,75° la détruit (62,8 → 84,8 % de WER).
+    angle = angle_de_redressement(im) if im.width >= 2000 else 0.0
+    if abs(angle) >= 1.5:
         im = redressement(im, angle)
         trace.append(f"redressement({angle:+.2f})")
     if binaire:

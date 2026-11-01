@@ -20,15 +20,24 @@ Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit 
 
 ## Ce qui est mesuré
 
-**Pilote du 2026-10-31** — 10 pages rendues à 300 dpi, 6 PDF, 3 langues (détail :
-[`reports/rapport-r44-ocr-pilote.md`](../../../reports/rapport-r44-ocr-pilote.md)) :
+**Pilote du 2026-10-31** — 10 pages rendues à 300 dpi, 6 PDF, 3 langues
+([`pilote`](../../../reports/rapport-r44-ocr-pilote.md)) : **WER 4,48 %**, parité de passage
+**90 %**, sans OCR 0/30.
 
-- **WER 4,48 %** mot à mot, rappel 97,37 %, confiance 93,2 ;
-- **parité de passage 27/30 (90,0 %)** sur les questions du banc R0.3 ; valeur stricte 25/30 ;
-- contrôles : **sans OCR 0/30** ; page « photo » simulée **WER 17,08 %, parité 26,7 %**.
+**Programme de la nuit du 31/10 au 1/11** — 100 scans **simulés** (5 familles, dev/test),
+colonnes, tableaux et un **vrai scan** ([`scans`](../../../reports/rapport-r44-scans.md)) :
 
-Reste à mesurer : les **scans réels**, le **layout** (colonnes, tableaux, rotations) et les
-**exposants** — les trois causes des écarts du pilote sont nommées dans la fiche.
+- WER (dev → test) : **propre 4,1 → 3,0 %**, **photocopie 6,3 → 4,7 %**, **photo 7,0 → 5,3 %**,
+  **papier 7,3 → 6,2 %**, **fax 21,9 → 15,5 %** ; la photo partait de **55,9 %** brute ;
+- **préservation** des réponses du lecteur (dev, 30 questions) : **90,0 / 86,7 / 86,7 / 73,3 /
+  53,3 %** ; **exposants** : le plafond du texte propre monte de 83,3 à **90 %** ;
+- **colonnes** : deux colonnes **89,4 % → 0,5 %** de WER (mono inchangée) ;
+- **tableaux** : **92,6 %** de cellules exactes (propre), **69,1 %** (photocopie), **53,7 %**
+  (photo) ; sans redressement **0 %** ; texte à plat **0 cellule localisée** ;
+- **scan réel** (Internet Archive) : **7,10 %** d'accord avec la couche OCR du PDF, 10 pages.
+
+Reste : les **scans réels de bout en bout** (un seul livre, référence = un autre OCR), le **fax**
+1 bit (limite d'information), l'**exposant fusionné**, et les tableaux **sans traits**.
 
 ## Portes
 
@@ -49,12 +58,14 @@ Reste à mesurer : les **scans réels**, le **layout** (colonnes, tableaux, rota
 
 ## Étapes
 
-1. ~~choisir l'OCR~~ — **fait** : tesseract 5.5.3, sans root (`tools/installer_ocr.sh`) ; le
-   modèle de layout reste à choisir
+1. ~~choisir l'OCR~~ — **fait** : tesseract 5.5.3, sans root (`tools/installer_ocr.sh`).
 2. ~~brancher sur R01 (régions et offsets)~~ — **fait** : `tools/graphe_document_ocr.py` rend des
-   blocs au manifeste commun
-3. mesurer WER, layout et parité ; écrire la fiche — **pilote fait** (ci-dessus) ; **la porte
-   de R4.4 reste ouverte** : pages **scannées** réelles, colonnes, exposants
+   blocs au manifeste commun ; le prétraitement, les exposants, les colonnes et les tableaux sont
+   mesurés.
+3. mesurer WER, layout et parité ; écrire la fiche — **fait sur scans simulés + un vrai scan**
+   (ci-dessus). **La porte de R4.4 reste ouverte** : 10 pages **scannées** réelles, de bout en
+   bout, avec une vérité humaine. Les limites (fax, exposant fusionné, tableaux sans traits) sont
+   nommées dans la fiche.
 
 ## Documents à écrire
 
@@ -63,7 +74,7 @@ Reste à mesurer : les **scans réels**, le **layout** (colonnes, tableaux, rota
 
 ## Voir aussi
 
-- [La fiche du pilote](../../../reports/rapport-r44-ocr-pilote.md) · [l'installeur](../../../tools/installer_ocr.sh) · [la porte](../../../tools/porte-ocr.sh)
+- [La fiche des scans](../../../reports/rapport-r44-scans.md) · [le pilote](../../../reports/rapport-r44-ocr-pilote.md) · [l'installeur](../../../tools/installer_ocr.sh) · [la porte](../../../tools/porte-ocr.sh) · [la porte des scans](../../../tools/porte-ocr-scans.sh)
 - [La spécification du bloc](../../implantation/encodeur-visuel.md)
 - [Programme R](../roadmap.md#r4--les-blocs-structurels)
 - [Analyse, § 6](../../theorie/lecture-rapide.md#6-par-type-de-document)

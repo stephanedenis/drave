@@ -97,11 +97,58 @@ zéro** : la mesure de la porte ne modifie pas la fiche JSON commitée. Ses seui
 Ce que la porte **ne vérifie pas** : les **scans réels**, les colonnes denses, les tableaux, les
 exposants. Ce sont les étapes 2 et 3 de R4.4, et elles restent ouvertes.
 
+## 7 bis. Le prétraitement : des étapes nommées, et deux pièges
+
+`nettoyer_scan.py` applique des étapes **nommées** (`recadrage`, `eclairage`, `redressement`,
+`echelle`, `lissage`, `median`, `sauvola`) et un diagnostic choisit (`auto`) : image binaire ?
+éclairage inégal ? petite ? inclinée ? La trace des étapes appliquées est rendue avec l'image.
+
+Deux leçons mesurées, contre-intuitives, sont dans le code :
+
+1. **ne pas agrandir une image déjà propre** — passer une photocopie de 200 dpi à 2 500 px a
+   doublé son WER ; tesseract lit mieux 200 dpi qu'un upscaling ;
+2. **l'angle se mesure après le recadrage, et seulement s'il est franc** — sur la page entière,
+   le bord et le vignettage biaisent le profil ; et redresser une page de 170 dpi de 0,75° la
+   détruit. Le seuil est 1,5° **et** 2 000 px de large.
+
+La **correction d'éclairage** (division par un fond estimé) est le levier principal : une photo
+de téléphone passe de 55,9 % à 7,0 % de WER sur le corpus de R4.4. Une étape qui ne paie pas est
+retirée : le prétraitement est mesuré, pas décoratif.
+
+## 7 ter. Les exposants
+
+Un appel de note est un **petit mot** (hauteur < 80 % de la ligne) fait de ponctuation : tesseract
+le lit `!`, `!!`, `!?`. La passe ciblée recadre sa boîte, l'agrandit ×4, refait l'OCR avec une
+liste blanche de chiffres (`--psm 10`) et ne remplace que si le résultat est un nombre court et
+crédible (confiance ≥ 30). Elle est optionnelle (`exposants=True`) et versionnée
+(`RECUPERATION_VERSION`) : changer la récupération invalide les caches de mesure.
+
+## 7 quater. Les colonnes
+
+`bande_vide` cherche une **gouttière** — une bande verticale sans encre entre 15 % et 85 % de la
+largeur, avec au moins 20 % des lignes de chaque côté — et `ordre_de_lecture` lit alors la
+colonne gauche entière, puis la droite. Sans gouttière, l'ordre reste `(y, x)`. Sur une page
+mono-colonne, la détection ne change rien (contrôle : écart 0,00 pt) ; sur une page à deux
+colonnes, elle fait passer le WER de 89 % à 0,5 %.
+
+## 7 quinquies. Les tableaux
+
+`extraire_tableaux.py` lit la **grille**, pas les mots seuls : les traits horizontaux et verticaux
+sont détectés par **continuité** (la plus longue suite de pixels d'un trait — une ligne de texte
+ne l'est pas), filtrés par une **suite arithmétique** (les traits sont régulièrement espacés, le
+texte non), puis chaque mot est rangé dans la cellule qui contient son centre. Deux préalables
+mesurés : redresser le tableau (l'angle est estimé sur le masque binaire, pas sur le gris) et
+**effacer les traits avant l'OCR** (sinon tesseract saute une ligne sur deux : 56 mots au lieu de
+86). Sans traits, l'outil **refuse** de deviner des colonnes.
+
 ## 8. Ce que le bloc ne fait pas
 
-- **Pas de modèle de layout** : hauteur, écart et retrait. Un scan de travers ou une page à deux
-  colonnes denses ne sont pas revendiqués ; le parseur PDF de R0.1, lui, cherche une bande vide
-  verticale pour les colonnes — l'OCR n'a pas encore cet équivalent.
+- **Pas de modèle de layout** : hauteur, écart, retrait et **gouttière**. Une page à deux
+  colonnes est lue correctement si la gouttière est nette ; une colonne dense, un tableau sans
+  traits ou une mise en page irrégulière ne sont pas revendiqués.
+- **Pas de scans réels de bout en bout** : la validation externe existe (un PDF d'Internet
+  Archive, comparé à sa couche OCR), mais elle n'est pas une vérité humaine et ne remplace pas
+  un corpus de photocopies.
 - **Pas d'exposants** : un appel de note `10` peut devenir `!`. C'est nommé dans la fiche du
   pilote ; la correction (nettoyage typographique, seconde passe ciblée) n'est pas faite.
 - **Pas de tableaux** : un tableau non balisé est du texte, comme en PDF natif (R4.1 le traite).
@@ -125,4 +172,9 @@ installation qui ne dit pas sa version n'est pas reproductible.
 | manifeste commun (natif et OCR) | [`tools/graphe_document.py`](../../tools/graphe_document.py) |
 | mesure (WER, parité, contrôles) | [`tools/mesurer_ocr.py`](../../tools/mesurer_ocr.py) |
 | porte | [`tools/porte-ocr.sh`](../../tools/porte-ocr.sh) |
-| résultat du pilote | [`reports/rapport-r44-ocr-pilote.md`](../../reports/rapport-r44-ocr-pilote.md) |
+| résultat du pilote (pages rendues) | [`reports/rapport-r44-ocr-pilote.md`](../../reports/rapport-r44-ocr-pilote.md) |
+| résultat des scans (5 familles, colonnes, tableaux, réel) | [`reports/rapport-r44-scans.md`](../../reports/rapport-r44-scans.md) |
+| corpus de scans simulés | [`simuler_scan.py`](../../tools/simuler_scan.py) |
+| prétraitement | [`nettoyer_scan.py`](../../tools/nettoyer_scan.py) |
+| colonnes et tableaux | [`extraire_tableaux.py`](../../tools/extraire_tableaux.py) |
+| porte des scans | [`porte-ocr-scans.sh`](../../tools/porte-ocr-scans.sh) |

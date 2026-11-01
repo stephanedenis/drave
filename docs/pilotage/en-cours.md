@@ -38,17 +38,16 @@
 
 ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
 
-- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
-- **Rôle** : **R4.4 — les scans** (CPU seulement).
-- **Plan** : 1) scans simulés ✅ ; 2) prétraitement mesuré ; 3) exposants ; 4) colonnes + tables ; 5) second moteur ; 6) porte resserrée, fiche, spec, commit.
-- **Ambition** : faire de l'OCR un **bloc classique robuste**, jugé par la **parité**, pas le WER.
-- **Stratégie** : mesurer le brut, n'ajouter que ce qui paie, régler sur dev, trancher sur test, contrôles négatifs.
-- **Objectif final** : **R4.4 mesurée** — WER ≤ 5 %, parité ≥ 90 % sur les scans de test, porte resserrée.
-- **Ce qu'elle fait** : OCR par vagues, CPU.
-- **Ce que font les autres** : **N2.h** a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
-- **Fichiers réservés** : `work/r44/`, `work/ocr/`, `tools/*scan*`, `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`, `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`.
-- **Prochaine action** : la parité sur photocopie, puis exposants et colonnes.
-- **Bloquants** : aucun — scans simulés, pas de scanner réel.
+- **Id** : `fe3c05f0-…` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4 — les scans** (CPU).
+- **Plan** : corpus ✅, prétraitement ✅, exposants ✅, colonnes/tables ✅, second moteur ✅, porte `porte-ocr-scans` ✅, fiche ✅.
+- **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
+- **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
+- **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
+- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrai scan **7,10 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
+- **Prochaine action** : le **fax** 1 bit et un **second vrai scan**.
+- **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md).
 
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
@@ -77,8 +76,9 @@
   [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
-  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** a sa session et sa fiche
-  [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+  simulés** — photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**,
+  tableaux **92,6 %**, vrai scan **7,10 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
@@ -102,9 +102,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **79** (75 vertes, 4 rouges à la passe du 31/10 19 h 42) | `tools/porte-*.sh` |
+| portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **371** / **441** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **372** / **445** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
 
@@ -121,7 +121,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
 | **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; validation **contaminée (32,8 %)** ; N4 0/4 ; N5 gelé | **N2** (le corpus décontaminé) ; **N4** (consigne) |
-| **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | aucune | R4.4 : scans réels de bout en bout, fax | **R4.4 mesurée sur scans simulés** ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
@@ -136,7 +136,6 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 **N2.h** — le **corpus propre** et la porte honnête (en cours) ; **Pensée** — le **state store v0**
 et le moteur N3 (session `e181ce02`) ; **N4** — la consigne courte ; **B10.3** — le `z` et
 l'encodeur ; **R4.4** — les scans réels.
-**Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
 ## Les questions ouvertes
 

@@ -45,16 +45,20 @@ def _sha(octets: bytes) -> str:
     return hashlib.sha256(octets).hexdigest()[:16]
 
 
-def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3) -> dict:
+def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3,
+                  exposants: bool = False, colonnes: bool = False) -> dict:
     """L'OCR d'une image, mis en cache par l'empreinte des pixels : une même image n'est
     jamais OCRisée deux fois, et un pipeline qui ne change pas l'image ne recoûte rien."""
     CACHE_OCR.mkdir(parents=True, exist_ok=True)
-    cle = _sha(image.read_bytes()) + f"-{langue}-{psm}"
+    suffixe = (f"-exp{graphe_document_ocr.RECUPERATION_VERSION}" if exposants else "")
+    suffixe += "-col" if colonnes else ""
+    cle = _sha(image.read_bytes()) + f"-{langue}-{psm}" + suffixe
     cache = CACHE_OCR / f"{cle}.json"
     if cache.exists():
         return json.loads(cache.read_text(encoding="utf-8"))
     try:
-        manifeste = graphe_document_ocr.manifeste(image, langue, psm)
+        manifeste = graphe_document_ocr.manifeste(image, langue, psm,
+                                                  exposants=exposants, colonnes=colonnes)
     except SystemExit:
         # Un scan que l'OCR ne lit pas du tout est un POINT DE MESURE (WER 1), pas une panne
         # du banc : la mesure doit continuer et compter ce zéro, pas s'arrêter dessus.
@@ -77,18 +81,31 @@ def nettoyer(image: pathlib.Path, pipeline: str) -> tuple[pathlib.Path, list[str
     return sortie, trace
 
 
+NATIF_CACHE: dict[tuple, dict] = {}
+
+
+def manifeste_natif_cached(pdf: pathlib.Path, page: int, langue: str) -> dict:
+    """Le même PDF est analysé une fois par page, pas une fois par scan : sans ce cache,
+    100 scans = 100 pdftotext, et la porte met sept minutes au lieu d'une."""
+    cle = (str(pdf), page, langue)
+    if cle not in NATIF_CACHE:
+        NATIF_CACHE[cle] = mesurer_ocr.manifeste_natif(pdf, page, langue)
+    return NATIF_CACHE[cle]
+
+
 def questions_par_page() -> dict[tuple[str, int], list[dict]]:
     return {(p["pdf"].name, p["page"]): p["questions"]
             for p in mesurer_ocr.pages_du_banc(10)}
 
 
-def mesure_entree(entree: dict, pipeline: str, questions: dict) -> dict:
+def mesure_entree(entree: dict, pipeline: str, questions: dict,
+                  exposants: bool = False, colonnes: bool = False) -> dict:
     image = (RACINE / "work/r44/scans" / entree["image"])
     pdf = RACINE / "data/onu/pdf" / entree["pdf"]
-    natif = mesurer_ocr.manifeste_natif(pdf, entree["page"], entree["langue"])
+    natif = manifeste_natif_cached(pdf, entree["page"], entree["langue"])
     reference = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(natif))
     chemin, trace = nettoyer(image, pipeline)
-    m = manifeste_ocr(chemin, entree["langue"])
+    m = manifeste_ocr(chemin, entree["langue"], exposants=exposants, colonnes=colonnes)
     hypothese = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m))
     commun = sum((Counter(reference) & Counter(hypothese)).values())
     distance = mesurer_ocr.wer(reference, hypothese)
@@ -101,6 +118,7 @@ def mesure_entree(entree: dict, pipeline: str, questions: dict) -> dict:
         "rappel": round(commun / max(len(reference), 1), 4),
         "precision": round(commun / max(len(hypothese), 1), 4),
         "confiance": mesurer_ocr.confiance_moyenne(m),
+        "exposants": exposants, "colonnes": colonnes,
         "questions": 0, "parite_region": None, "parite_valeur": None,
         "details": [],
     }
@@ -114,9 +132,11 @@ def mesure_entree(entree: dict, pipeline: str, questions: dict) -> dict:
             f1 = (mesurer_ocr.f1_mots(rep_nat["texte"], rep_ocr["texte"])
                   if rep_nat and rep_ocr else 0.0)
             region += f1 >= 0.90
-            valeur += mesurer_ocr.trouve(rep_ocr, q["valeur"]) == mesurer_ocr.trouve(rep_nat, q["valeur"])
+            trouve_nat = mesurer_ocr.trouve(rep_nat, q["valeur"])
+            trouve_ocr = mesurer_ocr.trouve(rep_ocr, q["valeur"])
+            valeur += trouve_ocr == trouve_nat
             ligne["details"].append({"valeur": q["valeur"], "f1": round(f1, 3),
-                                     "trouve": mesurer_ocr.trouve(rep_ocr, q["valeur"])})
+                                     "trouve_natif": trouve_nat, "trouve": trouve_ocr})
         ligne["parite_region"] = round(region / len(qs), 4)
         ligne["parite_valeur"] = round(valeur / len(qs), 4)
     return ligne
@@ -145,8 +165,10 @@ def agrege(lignes: list[dict]) -> dict:
         ocr = sum(l["mots_ocr"] for l in ls)
         commun = sum(l["commun"] for l in ls)
         dist = sum(l["distance"] for l in ls)
-        avec_q = [l for l in ls if l["questions"]]
-        q = sum(l["questions"] for l in avec_q)
+        details = [d for l in ls for d in l["details"]]
+        q = len(details)
+        natifs = sum(d["trouve_natif"] for d in details)
+        f1s = sorted(d["f1"] for d in details)
         out[f"{famille}|{split}|{pipeline}"] = {
             "famille": famille, "split": split, "pipeline": pipeline, "scans": len(ls),
             "mots_natifs": nat,
@@ -154,24 +176,59 @@ def agrege(lignes: list[dict]) -> dict:
             "rappel": round(commun / max(nat, 1), 4),
             "precision": round(commun / max(ocr, 1), 4),
             "confiance": round(sum(l["confiance"] * l["mots_natifs"] for l in ls) / max(nat, 1), 1),
-            "parite_region": (round(sum(l["parite_region"] * l["questions"] for l in avec_q) / q, 4)
-                              if q else None),
-            "parite_valeur": (round(sum(l["parite_valeur"] * l["questions"] for l in avec_q) / q, 4)
-                              if q else None),
             "questions": q,
+            "exactitude_natif": round(natifs / max(q, 1), 4),
+            "exactitude_ocr": round(sum(d["trouve"] for d in details) / max(q, 1), 4),
+            # la préservation est LA mesure de parité : ce que le natif trouvait et que le
+            # scan retrouve. Compter « les deux échouent » comme une parité flatterait le scan.
+            "preservation": (round(sum(d["trouve_natif"] and d["trouve"] for d in details)
+                                    / max(natifs, 1), 4) if natifs else None),
+            "parite_region": (round(sum(d["f1"] >= 0.90 for d in details) / max(q, 1), 4)
+                              if q else None),
+            "f1_median": round(f1s[len(f1s) // 2], 4) if f1s else None,
         }
     return out
 
 
+SEUILS_PORTE = {
+    # Des PLANCHERS par famille, mesurés sur le corpus complet (plafonds de non-régression,
+    # pas des prédictions). Le fax 1 bit à 120 dpi a sa propre limite : l'information y est
+    # en partie détruite, et aucun prétraitement ne la recrée — c'est écrit, pas caché.
+    "par_famille": {
+        "propre":     {"wer": 0.06, "preservation": 0.85},
+        "photocopie": {"wer": 0.08, "preservation": 0.80},
+        "photo":      {"wer": 0.10, "preservation": 0.80},
+        "papier":     {"wer": 0.10, "preservation": 0.70},
+        "fax":        {"wer": 0.25, "preservation": 0.45},
+    },
+}
+
+
+def verdict(agregat: dict, noir: dict) -> list[tuple[str, bool]]:
+    bareme = [("page noire : aucun mot lu", noir["mots"] == 0 and noir["regions"] == 0)]
+    for cle, a in agregat.items():
+        seuil = SEUILS_PORTE["par_famille"].get(a["famille"])
+        if seuil is None or a["pipeline"] != "auto":
+            continue
+        bareme.append((f"{a['famille']} · {a['split']} : WER ≤ {seuil['wer']:.0%} "
+                       f"(mesuré {a['wer']:.1%})", a["wer"] <= seuil["wer"]))
+        if a["split"] == "dev" and a["preservation"] is not None:
+            bareme.append((f"{a['famille']} · dev : préservation ≥ "
+                           f"{seuil['preservation']:.0%} (mesuré {a['preservation']:.1%})",
+                           a["preservation"] >= seuil["preservation"]))
+    return bareme
+
+
 def affiche(agregat: dict, noir: dict) -> None:
     print("=== R4.4 — LES SCANS SIMULÉS, FAMILLE PAR FAMILLE ===")
-    print(f"  {'famille':<11}{'split':<6}{'pipeline':<20}{'scans':>6}{'WER':>8}{'rappel':>8}"
-          f"{'conf':>7}{'parité':>8}{'valeur':>8}")
+    print(f"  {'famille':<11}{'split':<6}{'pipeline':<18}{'scans':>6}{'WER':>8}{'rappel':>8}"
+          f"{'conf':>7}{'F1med':>7}{'préser.':>9}{'exact.':>8}")
     for cle, a in agregat.items():
+        pres = f"{a['preservation']:8.1%}" if a["preservation"] is not None else "       —"
         par = f"{a['parite_region']:7.1%}" if a["parite_region"] is not None else "      —"
-        val = f"{a['parite_valeur']:7.1%}" if a["parite_valeur"] is not None else "      —"
-        print(f"  {a['famille']:<11}{a['split']:<6}{a['pipeline']:<20}{a['scans']:>6}"
-              f"{a['wer']:>8.2%}{a['rappel']:>8.2%}{a['confiance']:>7.1f}{par:>8}{val:>8}")
+        print(f"  {a['famille']:<11}{a['split']:<6}{a['pipeline']:<18}{a['scans']:>6}"
+              f"{a['wer']:>8.2%}{a['rappel']:>8.2%}{a['confiance']:>7.1f}"
+              f"{a['f1_median'] if a['f1_median'] is not None else 0:>7.2f}{pres:>9}{par:>8}")
     print(f"\n  contrôle page noire : {noir['mots']} mot(s) lu(s), {noir['regions']} région(s)")
 
 
@@ -182,7 +239,13 @@ def main() -> int:
     ap.add_argument("--familles", default="")
     ap.add_argument("--splits", default="dev,test")
     ap.add_argument("--limite", type=int, default=0, help="N scans par famille (fumée)")
+    ap.add_argument("--exposants", action="store_true",
+                    help="passe chiffres ciblée sur les appels de note")
+    ap.add_argument("--colonnes", action="store_true",
+                    help="détection de gouttière et ordre de lecture par colonne")
     ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "work/r44/mesure.json")
+    ap.add_argument("--porte", action="store_true",
+                    help="applique les planchers par famille et le contrôle page noire")
     args = ap.parse_args()
     corpus = json.loads(args.corpus.read_text(encoding="utf-8"))
     familles = {f for f in args.familles.split(",") if f}
@@ -205,7 +268,8 @@ def main() -> int:
     t0 = time.time()
     for i, e in enumerate(entrees, 1):
         for pipeline in pipelines:
-            ligne = mesure_entree(e, pipeline, questions)
+            ligne = mesure_entree(e, pipeline, questions, exposants=args.exposants,
+                                  colonnes=args.colonnes)
             lignes.append(ligne)
             print(f"  [{i}/{len(entrees)}] {e['image'][:40]:40s} {pipeline:12s} "
                   f"WER {ligne['wer']:6.2%} conf {ligne['confiance']:5.1f}", flush=True)
@@ -213,14 +277,19 @@ def main() -> int:
     agregat = agrege(lignes)
     resultat = {"date": "2026-10-31", "ligne": "R4.4",
                 "corpus": str(args.corpus.relative_to(RACINE)), "nature": "scans SIMULÉS",
-                "pipelines": pipelines, "controle_noir": noir,
+                "pipelines": pipelines, "exposants": args.exposants,
+                "colonnes": args.colonnes, "controle_noir": noir,
                 "agregat": agregat, "entrees": lignes}
     args.sortie.parent.mkdir(parents=True, exist_ok=True)
     args.sortie.write_text(json.dumps(resultat, ensure_ascii=False, indent=1) + "\n",
                            encoding="utf-8")
     affiche(agregat, noir)
+    bareme = verdict(agregat, noir)
+    print()
+    for libelle, ok in bareme:
+        print(f"  {'✅' if ok else '❌'} {libelle}")
     print(f"\n  {len(lignes)} mesures en {time.time() - t0:.0f} s → {args.sortie}")
-    return 0
+    return (0 if all(ok for _, ok in bareme) else 1) if args.porte else 0
 
 
 if __name__ == "__main__":
