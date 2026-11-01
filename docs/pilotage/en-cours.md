@@ -24,11 +24,10 @@
 - **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
 - **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison et capacité
   mesurées (5 fiches).
-- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
-  — et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
   l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
-  octets de **14,11** à **3,25** ; la base supervisée vaut **12,29**
-  hors domaine : **distiller spécialise**. Les deux leviers **se composent** (DR : **3,47** en
+  octets de **14,11** à **3,25** (au-delà : l'entraînement, pas le masque) ; la base supervisée vaut **12,29**
+  hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** en
   domaine, **4,10** en littérature, **3,49** à 256). La **capacité paie** mais ne couvre pas (21,65 M :
   **3,03** contre 3,09 ; littérature et 256 inchangées). Fiches `n2-propre`, `n2-diversite`,
   `n2-longueur`, `n2-combine`, `n2-capacite`.

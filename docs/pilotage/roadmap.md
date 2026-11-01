@@ -248,8 +248,9 @@ test, modèle qui répond de mémoire, petit N, temps mesuré à chaud.
 
 **Ce qui bloque** : les 130–256 sont **tous négatifs** — mais N2.h3 en donne le mécanisme : la
 **position apprise** verrouille jusqu'à 256 octets (la randomiser fait tomber la PPL de 256 de
-**14,11** à **3,25**), et la **fenêtre locale** verrouille au-delà (**5,93** à 512). R1.1 doit
-être tenté **avant** R1.2, et la validation se mesure sur un jeu **décontaminé** (N2.h1).
+**14,11** à **3,25**), et au-delà c'est l'**entraînement** qui verrouille, pas le masque (élargir
+la fenêtre à l'inférence ne récupère rien : 6,13 → 6,37 à 512). R1.1 doit être tenté **avant**
+R1.2, sur un jeu **décontaminé** (N2.h1).
 
 ### R2 — la mémoire
 

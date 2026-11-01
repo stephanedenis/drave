@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 13.2 h |
-| Tours | 4 |
-| Messages | 663 |
-| Appels d'outils | 624 |
+| Durée | 14.6 h |
+| Tours | 5 |
+| Messages | 676 |
+| Appels d'outils | 635 |
 | Fichiers touchés | 11 |
-| Commandes | 509 |
+| Commandes | 518 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -35,6 +35,8 @@
 **Tour 3** — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
 
 **Tour 4** — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
+
+**Tour 5** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -171,7 +173,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*285 appels d'outils.* Actions notables :
+*291 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +189,55 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 206 autres
+- … et 210 autres
 
 **Synthèse produite :**
 
-⏵ Capacité : évaluation de la graine 2 et rédaction de la cinquième fiche
+⏵ Bilan de la nuit et vérification finale
+
+Tout est committé, les portes sont vertes, l'état est clos. Voici ce que les dix heures ont produit.
+
+\## Le problème que j'ai attaqué
+
+N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mémoire**. 32,8 % des fenêtres de validation étaient verbatim dans l'entraînement. Plutôt que d'ajouter un levier de plus, j'ai reconstruit le mètre, refait la chaîne, puis posé les trois leviers que les chiffres contaminés ne pouvaient pas trancher.
+
+\## Les résultats
+
+| question | réponse | contrôle |
+|---|---|---|
+| la validation fuit ? | **32,8 % → 0 / 2 814** après déduplication (−22,2 % de texte) | `tools/corpus_propre.py`, manifeste |
+| la porte honnête ? | **3,09** en domaine (3,20 au test), pas 2,85 → la porte < 2,5 est à **0,59** | chaîne entièrement réentraînée |
+| un modèle de français ? | **non** : 16,70 sur de la littérature jamais vue, 57,6 en anglais | corpus externe, 3 graines |
+| la distillation ? | elle **spécialise** : base 12,29 hors domaine, élève 16,70 | base vs distillé |
+| la diversité ? | **16,70 → 3,85** (÷ 4,3), anglais ÷ 2,2, pour **+0,17** en domaine | professeur et base mixtes |
+| le verrou de longueur ? | **14,11 → 3,25** à 256 octets avec des positions aléatoires ; au-delà, c'est la **fenêtre locale** (5,93 à 512) | 3 graines, 129→512 |
+| les deux ensemble ? | **oui** : 3,47 / 4,10 / 3,49 à 256 — les coûts s'additionnent comme les gains | 3 graines |
+| la capacité ? | elle **paie** −0,06 en domaine (21,65 M), mais ne couvre ni la généralité ni la longueur | 2 graines |
+
+**Le résultat qui compte pour la suite** : le modèle de N2 n'est pas un mauvais modèle de français, c'est un **spécialiste du dépôt**. Ce n'est pas la distillation qui est en cause, c'est ce qu'elle distille — et le corpus est le levier, pas le budget.
+
+\## Livrables
+
+- **5 fiches** : `n2-propre`, `n2-diversite`, `n2-longueur`, `n2-combine`, `n2-capacite`, plus l'agrégat `n2-propre.json`.
+- **2 corpus propres** avec manifestes et empreintes (`corpus-propre.json`, `corpus-litt-propre.json`).
+- **20 points de contrôle (1,4 Go)** archivés sur **deux disques** (`backups/n2h/2026-11-01/` et `IA/artefacts/n2h/2026-11-01/`).
+- **5 commits** : `e36e8185` (corpus + porte + longueur), `1da58752` (journal), `52cf5853` (combinaison), `88f598c3` (clôture), `3a6ae9ca` (capacité).
+- **Portes** : passe complète 80 portes, **76 vertes**, 4 rouges — les quatre connues (indice, melange, homeostasie, reparti-moteur). Aucune régress
+… [839 caractères tronqués]
+
+### Tour 5 — continue
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Test whether the local window mask is the second lock
+- bash — Add the mask test to the report, roadmap and state
+- bash — Trim the mask addition to fit the budget
+- bash — Final trim for the context budget
+- bash — Commit the mask experiment
+
+**Synthèse produite :**
+
+⏵ Test du second verrou : la fenêtre locale est-elle la masque ou l'entraînement ?
 
 ## 3. Travail accompli
 
@@ -253,7 +299,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 469 autres
+- … et 478 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -412,4 +458,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS  Le corpus mixte (moitié dépôt, moitié littérature) et les positions
 - ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES  La page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-diversite, n2-long
 - N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS  À données, professeur et budget égaux, le modèle de 21,65 M (d_model 296, expert_hidden 416, ×1,
+- N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN  À 512 octets, l'attention locale (fenêtre 256) ne laisse voir
 

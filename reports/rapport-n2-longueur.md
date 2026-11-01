@@ -36,6 +36,22 @@ Le reste est identique (lot 16, lr 1e-4 puis 3e-5). L'évaluation balaie 129, 19
 
 Le verrou **tombe jusqu'à 256 octets** : la PPL passe de **14,11** à **3,25** (÷ 4,3), et à 512 de **32,41** à **5,93** (÷ 5,5). Mais entre 256 et 512, R **remonte** (3,25 → 5,93) : au-delà de la fenêtre d'attention locale (256), le modèle ne voit plus le début de la séquence. Il y a donc **deux verrous** : la **position apprise** jusqu'à 256, la **fenêtre locale** au-delà. En domaine (129 octets), le coût est de **0,148** : la position randomisée n'est pas gratuite, mais elle achète la longueur.
 
+## Le second verrou n'est pas le masque
+
+À 512 octets, l'attention locale ne laisse voir que les 256 octets précédents. Le même modèle a
+été évalué avec une fenêtre élargie **à l'inférence** :
+
+| fenêtre | 256 octets | 512 octets |
+|---|---:|---:|
+| 256 (entraînement) | 3,26 | 6,13 |
+| 512 | 3,26 | 6,37 |
+| 1 024 | 3,26 | 6,37 |
+
+Élargir le masque **ne récupère rien** — il dégrade même un peu. Le second verrou n'est donc
+**pas** la fenêtre : c'est l'**entraînement** (le modèle n'a jamais vu plus de 128 octets de
+contexte). Pour lire 1 000 octets, il faudra entraîner sur des contextes longs — les positions
+aléatoires étant la condition pour que les positions suivent — et non élargir une fenêtre.
+
 ## Ce que ça change pour R1
 
 Le verrou de longueur n'est pas un seul verrou, et aucun n'est l'architecture :

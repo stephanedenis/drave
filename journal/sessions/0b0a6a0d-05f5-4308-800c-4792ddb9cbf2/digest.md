@@ -8446,3 +8446,177 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/README.md'); s = p.read_text()\na = \"| [`rapport-n2-combine.md`](rapport-n2-combine.md) | **N2.h4** — les deux leviers se composent : **3,47** en domaine, **4,10** hors dép … [1466 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-509]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-509", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master 3a6ae9ca] N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS
+ 16 files changed, 501 insertions(+), 27 deletions(-)
+ create mode 100644 journal/2026-11-01/portes.md
+ create mode 100644 reports/rapport-n2-capacite.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rsync -a --exclude 'essai-*' work/n2h/ /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/ && rsync -a --exclude 'essai-*' work/n2h/ /home/stephane/IA/artefacts/n2h/2026-11-01/ && du -sh /home/stephane/Data13TB/stephane/backups/ … [171 caractères tronqués]`
+
+  ```
+1,4G	/home/stephane/Data13TB/stephane/backups/n2h/2026-11-01
+20
+05:30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"etat registre document tableaux sessions budget\" DELAI=300 timeout 900 bash tools/toutes-les-portes.sh 2>&1 | tail -6", "description": "Run the documentation gates after the final commit"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-511]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-511", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-registre         ✅                          15 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ✅                           0 s  PORTE TENUE : plan lisible · autotest doublon/champ manquant · check en-cours
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-01)
+--- 7 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1101-05h30
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8 | head -8; echo \"=== status ===\"; git status --short | grep -v \"^ m tools/docwatch\" | head -5; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | … [217 caractères tronqués]`
+
+  ```
+3a6ae9ca N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS
+88f598c3 ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+52cf5853 N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+4aef1413 R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+=== status ===
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+05:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"État|Heartbeat|Prochaine\" journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md | head -4; echo \"=== en-cours block ===\"; sed -n 18,36p docs/pilotage/en-cours.md", "description": "Check the session plan and final … [14 caractères tronqués]`
+
+  ```
+- **Heartbeat** : 2026-11-01 03:40 HAE
+- **Prochaine action** : close — journal, roadmap, portes, commit.
+- **État** : terminé
+=== en-cours block ===
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : corpus dédupliqué, chaîne refaite (professeur, base, distillation × 3), porte honnête + hors domaine + décomposition, diversité 50/50, verrou de longueur, capacité.
+- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+- **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison et capacité
+  mesurées (5 fiches).
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
+  — et **16,70** sur la littérature ja
+… [813 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la nuit et vérification finale
+
+Tout est committé, les portes sont vertes, l'état est clos. Voici ce que les dix heures ont produit.
+
+## Le problème que j'ai attaqué
+
+N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mémoire**. 32,8 % des fenêtres de validation étaient verbatim dans l'entraînement. Plutôt que d'ajouter un levier de plus, j'ai reconstruit le mètre, refait la chaîne, puis posé les trois leviers que les chiffres contaminés ne pouvaient pas trancher.
+
+## Les résultats
+
+| question | réponse | contrôle |
+|---|---|---|
+| la validation fuit ? | **32,8 % → 0 / 2 814** après déduplication (−22,2 % de texte) | `tools/corpus_propre.py`, manifeste |
+| la porte honnête ? | **3,09** en domaine (3,20 au test), pas 2,85 → la porte < 2,5 est à **0,59** | chaîne entièrement réentraînée |
+| un modèle de français ? | **non** : 16,70 sur de la littérature jamais vue, 57,6 en anglais | corpus externe, 3 graines |
+| la distillation ? | elle **spécialise** : base 12,29 hors domaine, élève 16,70 | base vs distillé |
+| la diversité ? | **16,70 → 3,85** (÷ 4,3), anglais ÷ 2,2, pour **+0,17** en domaine | professeur et base mixtes |
+| le verrou de longueur ? | **14,11 → 3,25** à 256 octets avec des positions aléatoires ; au-delà, c'est la **fenêtre locale** (5,93 à 512) | 3 graines, 129→512 |
+| les deux ensemble ? | **oui** : 3,47 / 4,10 / 3,49 à 256 — les coûts s'additionnent comme les gains | 3 graines |
+| la capacité ? | elle **paie** −0,06 en domaine (21,65 M), mais ne couvre ni la généralité ni la longueur | 2 graines |
+
+**Le résultat qui compte pour la suite** : le modèle de N2 n'est pas un mauvais modèle de français, c'est un **spécialiste du dépôt**. Ce n'est pas la distillation qui est en cause, c'est ce qu'elle distille — et le corpus est le levier, pas le budget.
+
+## Livrables
+
+- **5 fiches** : `n2-propre`, `n2-diversite`, `n2-longueur`, `n2-combine`, `n2-capacite`, plus l'agrégat `n2-propre.json`.
+- **2 corpus propres** avec manifestes et empreintes (`corpus-propre.json`, `corpus-litt-propre.json`).
+- **20 points de contrôle (1,4 Go)** archivés sur **deux disques** (`backups/n2h/2026-11-01/` et `IA/artefacts/n2h/2026-11-01/`).
+- **5 commits** : `e36e8185` (corpus + porte + longueur), `1da58752` (journal), `52cf5853` (combinaison), `88f598c3` (clôture), `3a6ae9ca` (capacité).
+- **Portes** : passe complète 80 portes, **76 vertes**, 4 rouges — les quatre connues (indice, melange, homeostasie, reparti-moteur). Aucune régression.
+- **État et roadmap à jour** : la session N2.h est close, et la prochaine action désignée est **plus de texte français unique** (le corpus d'entraînement fait 3,24 Mo), pas un réglage d'entraînement.
+
+## Ce qui n'est pas fait, et que je te laisse arbitrer
+
+1. **La porte < 2,5 n'est pas atteinte** (0,59). Le levier identifié est la quantité de français unique — pas la capacité (−0,06 seulement) ni le budget (déjà mesuré).
+2. **Un seul ratio de diversité** (50/50) : la courbe coût/gain n'est pas tracée.
+3. **La fenêtre locale** (256) reste le verrou au-delà de 256 octets : c'est désormais une question de schéma bien posée pour R1.
+
+Le journal de la nuit est dans `journal/2026-11-01/mesures.md`, le détail dans chaque fiche, et `docs/pilotage/en-cours.md` porte le plan, l'ambition et la stratégie de la session — comme demandé.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+continue
+
+### 🤖 Assistant
+
+⏵ Test du second verrou : la fenêtre locale est-elle la masque ou l'entraînement ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fenetre.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"fenetre.py — le second verrou (fenêtre locale) est-il la MASQUE ou l'ENTRAÎNEMENT ?\n\nLes modèles R (positions aléatoires) et DR (mixte + positions) s'effondrent au-del … [1385 caractères tronqués]`
+
+  ```
+{"fichier": "R-pos-g1.pt", "256_w256": 3.2596, "256_w512": 3.2596, "256_w1024": 3.2596, "512_w256": 6.1306, "512_w512": 6.3706, "512_w1024": 6.3706}
+{"fichier": "DR-pos-g1.pt", "256_w256": 3.5258, "256_w512": 3.5258, "256_w1024": 3.5258, "512_w256": 5.462, "512_w512": 5.422, "512_w1024": 5.422}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsection = \"\"\"\n## Le second verrou n'est pas le masque\n\nÀ 512 octets, l'attention locale ne laisse voir que les 256 octets précédents. Le même modèle a\nété évalué avec une fenêtre élargie **à l … [2501 caractères tronqués]`
+
+  ```
+ok
+roadmap ok
+en-cours ok
+     · T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\" (et au-delà c'est l'entraînement, pas le masque : 6,13 → 6,37) ;\", \" (au-delà : l'entraînement, pas le masque) ;\" … [279 caractères tronqués]`
+
+  ```
+ok
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85\\n  — et **16,70**\" … [341 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-longueur.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN\n\nÀ 512 octet … [679 caractères tronqués]`
