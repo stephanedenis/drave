@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 18.7 h |
-| Tours | 7 |
-| Messages | 290 |
-| Appels d'outils | 326 |
-| Fichiers touchés | 18 |
-| Commandes | 246 |
+| Durée | 19.1 h |
+| Tours | 8 |
+| Messages | 315 |
+| Appels d'outils | 348 |
+| Fichiers touchés | 20 |
+| Commandes | 265 |
 | Sous-agents | 2 |
-| Commits | 16 |
-| Compactages de contexte | 0 |
+| Commits | 17 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -43,6 +43,8 @@
 **Tour 6** — étudie les sessions dsh actives et assure-toi que notre doc est à jour
 
 **Tour 7** — prends en charge ici les sessions en suspend pour les compléter
+
+**Tour 8** — on une session active sur l'analyse linguistique par heuristique (coloration). J'aimerais de ce côté-ci (cette session parallèle) que tu analyse les bénéfices d'avoir une couche linguistique de prétraitement par heuristique pour l'étiquetage des différents niveaux du mot jusqu'au document en plusieurs langues. Je vise ici à alléger le traitement linguistique des réseaux de neurones en utilisant de … [60 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -416,6 +418,30 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 **N2 — close, non rouverte.** La porte < 2,5 n'est pas atteinte (3,09 en domaine
 … [1557 caractères tronqués]
 
+### Tour 8 — on une session active sur l'analyse linguistique par heuristique (coloration). J'aimerais de ce côté-ci (cette session p … [340 caractères tronqués]
+
+*22 appels d'outils.* Actions notables :
+
+- bash — Lire les universaux et les niveaux de la RSN
+- bash — Lire la lecture rapide et ses couches
+- bash — Lire l'heuristique de coloration
+- write `/tmp/gen_heuristique.py`
+- bash — Générer les schémas heuristiques
+- bash — Lire l'API du kit SVG
+- bash — Voir l'erreur du générateur SVG
+- bash — Générer les quatre schémas
+- bash — Rendre les schémas en PNG pour inspection
+- bash — Ajouter le schéma multilingue et corriger la cascade
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pre-traitement-linguistique.md`
+- bash — Repérer les index à mettre à jour
+- bash — Lire l'index des schémas et l'usage des formules
+- bash — Indexer la note et les cinq schémas
+- … et 8 autres
+
+**Synthèse produite :**
+
+⏵ J'écris l'analyse : niveaux, cascade, coloration, multilingue, coût et protocole de mesure
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -440,6 +466,8 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/moteur-de-pensee.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_export.py` | 1 | 0 |
+| `/tmp/gen_heuristique.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pre-traitement-linguistique.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -488,7 +516,7 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 206 autres
+- … et 225 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -616,9 +644,11 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
+- **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
+- **T8** : [stderr] Traceback (most recent call last):   File "<string>", line 1, in <module>     import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-niveaux.svg', write_to='/tmp/heur-niveaux.png', o
 
 ## 6. Commits
 
@@ -638,4 +668,5 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 - S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

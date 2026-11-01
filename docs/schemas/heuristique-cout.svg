@@ -1,0 +1,34 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le coût : le CPU paie les octets, le réseau paie les jetons</title>
+<desc>La cascade paie si la couverture × la précision dépasse le coût de la porte et des erreurs.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le coût : le CPU paie les octets, le réseau paie les jetons</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le gain n&#x27;est pas gratuit : une heuristique fausse coûte plus qu&#x27;un appel réseau.</text>
+<rect x="30" y="90" width="430" height="270" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="245" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">débit (échelle log, schéma)</text>
+<text x="55" y="150" text-anchor="start" font-size="10" font-weight="bold" fill="#15803d">CPU heuristique</text>
+<rect x="55" y="160" width="360" height="20" rx="3" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="60" y="175" text-anchor="start" font-size="8.5" fill="#334155">Mo/s · O(octets)</text>
+<text x="55" y="205" text-anchor="start" font-size="10" font-weight="bold" fill="#b91c1c">réseau (projection)</text>
+<rect x="55" y="215" width="70" height="20" rx="3" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="60" y="230" text-anchor="start" font-size="8.5" fill="#334155">10²–10³ jetons/s</text>
+<text x="55" y="265" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">ratio par unité</text>
+<text x="55" y="285" text-anchor="start" font-size="10" font-weight="bold" fill="#b45309">10³ à 10⁴ × moins cher par unité</text>
+<text x="245" y="330" text-anchor="middle" font-size="9" font-style="italic" fill="#475569">un CPU fait la surface ; le réseau fait le sens</text>
+<rect x="490" y="90" width="440" height="270" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="710" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">couverture / précision</text>
+<line x1="550" y1="320" x2="890" y2="320" stroke="#94a3b8" stroke-width="1.1"/>
+<line x1="550" y1="140" x2="550" y2="330" stroke="#94a3b8" stroke-width="1.1"/>
+<path d="M560,300 C620,250 700,200 880,160" fill="none" stroke="#15803d" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M560,155 C630,175 720,220 880,300" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="840" y="150" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">précision</text>
+<text x="840" y="315" text-anchor="middle" font-size="9" font-weight="bold" fill="#b91c1c">couverture</text>
+<text x="710" y="345" text-anchor="middle" font-size="9" fill="#475569">seuil τ  →  couverture ↓, précision ↑</text>
+<text x="710" y="360" text-anchor="middle" font-size="9" fill="#475569">le réseau ne voit que (1 − couverture)</text>
+<rect x="30" y="390" width="900" height="80" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.4"/>
+<text x="480" y="414" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">C = c_cpu · B + c_porte · T + c_réseau · (1 − x) · T</text>
+<text x="480" y="438" text-anchor="middle" font-size="10.5" fill="#334155">le gain est positif si x · c_réseau &gt; c_cpu · B/T + c_porte + c_erreur</text>
+<text x="480" y="458" text-anchor="middle" font-size="9" fill="#475569">x = couverture acceptée ; une erreur acceptée se paie dans le corps de la RSN, pas dans la trace.</text>
+<text x="480" y="510" text-anchor="middle" font-size="10" font-style="italic" fill="#475569">Le bon critère n&#x27;est pas « le CPU est plus rapide » : c&#x27;est « la cascade est plus juste par unité de calcul ».</text>
+</svg>

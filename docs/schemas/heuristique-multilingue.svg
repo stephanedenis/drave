@@ -1,0 +1,54 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Multilingue : universel, famille, langue</title>
+<desc>Le CPU traite l&#x27;invariant (Unicode, chiffres, ponctuation) ; les règles de langue sont des paquets ; l&#x27;inconnu va au réseau.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Multilingue : universel, famille, langue</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">La langue est une annotation, pas le corps : l&#x27;heuristique est language-aware sans contaminer la RSN.</text>
+<rect x="30" y="92" width="280" height="230" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="170.0" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">Universel</text>
+<text x="170.0" y="138.0" text-anchor="middle" font-size="10" fill="#334155">Unicode NFC/NFKC</text>
+<text x="170.0" y="152.5" text-anchor="middle" font-size="10" fill="#334155">scripts et directions</text>
+<text x="170.0" y="167.0" text-anchor="middle" font-size="10" fill="#334155">chiffres, dates, URLs</text>
+<text x="170.0" y="181.5" text-anchor="middle" font-size="10" fill="#334155">ponctuation, espaces</text>
+<text x="170.0" y="196.0" text-anchor="middle" font-size="10" fill="#334155">71 langues du dépôt</text>
+<rect x="340" y="92" width="280" height="230" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="480.0" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">Familles</text>
+<text x="480.0" y="138.0" text-anchor="middle" font-size="10" fill="#334155">latin, cyrillique, arabe</text>
+<text x="480.0" y="152.5" text-anchor="middle" font-size="10" fill="#334155">CJK, indien, thaï</text>
+<text x="480.0" y="167.0" text-anchor="middle" font-size="10" fill="#334155">agglutinant / fusional</text>
+<text x="480.0" y="181.5" text-anchor="middle" font-size="10" fill="#334155">règles de segmentation</text>
+<text x="480.0" y="196.0" text-anchor="middle" font-size="10" fill="#334155">paquets par famille</text>
+<rect x="650" y="92" width="280" height="230" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="790.0" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">Langues</text>
+<text x="790.0" y="138.0" text-anchor="middle" font-size="10" fill="#334155">dictionnaires fermés</text>
+<text x="790.0" y="152.5" text-anchor="middle" font-size="10" fill="#334155">morphologie, affixes</text>
+<text x="790.0" y="167.0" text-anchor="middle" font-size="10" fill="#334155">POS fermées, langue ID</text>
+<text x="790.0" y="181.5" text-anchor="middle" font-size="10" fill="#334155">règles de romanisation</text>
+<text x="790.0" y="196.0" text-anchor="middle" font-size="10" fill="#334155">paquets par langue</text>
+<line x1="310" y1="207" x2="338" y2="207" stroke="#15803d" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="620" y1="207" x2="648" y2="207" stroke="#1d4ed8" stroke-width="1.8" marker-end="url(#f)"/>
+<rect x="650" y="350" width="280" height="64" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="790.0" y="374" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">langue inconnue / ambiguë</text>
+<text x="790.0" y="396.0" text-anchor="middle" font-size="9" fill="#334155">repli réseau, dit et tracé</text>
+<line x1="790" y1="322" x2="790" y2="348" stroke="#b45309" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="30" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="102" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">thaï / zh / ja</text>
+<text x="102" y="484" text-anchor="middle" font-size="8.5" fill="#475569">pas d&#x27;espaces</text>
+<rect x="185" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="257" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">arabe / hébreu</text>
+<text x="257" y="484" text-anchor="middle" font-size="8.5" fill="#475569">RTL, formes</text>
+<rect x="340" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="412" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">devanagari</text>
+<text x="412" y="484" text-anchor="middle" font-size="8.5" fill="#475569">ligatures</text>
+<rect x="495" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="567" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">turc / finnois</text>
+<text x="567" y="484" text-anchor="middle" font-size="8.5" fill="#475569">agglutination</text>
+<rect x="650" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="722" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">allemand</text>
+<text x="722" y="484" text-anchor="middle" font-size="8.5" fill="#475569">composés</text>
+<rect x="805" y="444" width="145" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="877" y="466" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#0f172a">coréen</text>
+<text x="877" y="484" text-anchor="middle" font-size="8.5" fill="#475569">espaces, hangul</text>
+<text x="480" y="534" text-anchor="middle" font-size="9.5" font-style="italic" fill="#475569">Le paquet de langue est une donnée versionnée, pas un prompt : il se teste, se rejoue et se retire.</text>
+</svg>

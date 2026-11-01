@@ -6913,3 +6913,679 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 - **N2** : une hypothèse de capacité/architecture, pas un corpus de plus.
 - **Pensée** : AC-3, alpha-bêta, DRVF, banc anytime — la seule session que je peux continuer sans collision.
 
+
+## Tour 8
+
+### 👤 Utilisateur
+
+on une session active sur l'analyse linguistique par heuristique (coloration). J'aimerais de ce côté-ci (cette session parallèle) que tu analyse les bénéfices d'avoir une couche linguistique de prétraitement par heuristique pour l'étiquetage des différents niveaux du mot jusqu'au document en plusieurs langues. Je vise ici à alléger le traitement linguistique des réseaux de neurones en utilisant des heuristiques où les CPU sont extrêmement plus performants.
+
+### 🤖 Assistant
+
+⏵ Analyse de la couche heuristique : je lis les niveaux linguistiques existants et le banc de coloration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' docs/theorie/semantique-universaux.md", "description": "Lire les universaux et les niveaux de la RSN"}`
+
+  ```
+# Universaux sémantiques : ce que les écoles disent, ce que Drave en garde
+
+> **Rôle.** Cette note fonde la **base fixe** de la couche sémantique. Elle ne remplace pas les mesures :
+> elle fixe le vocabulaire, les invariants et les limites. Le protocole est dans
+> [`protocole-semantique.md`](protocole-semantique.md) ; le premier résultat typé dans
+> [`rapport-universaux.md`](../../reports/rapport-universaux.md).
+
+## 1. Pourquoi une base, et pas un vecteur libre
+
+Un `z` contrastif retrouve un article, mais ne dit pas **ce qu'il contient**. Pour une couche **opérable**,
+il faut un code **typé**, **fini**, **déterministe** : un tuple de champs fixes, chacun avec un vocabulaire
+fixe. Le sens devient une **structure** que le raisonnement classique peut lire, et la restitution peut être
+un **codec** exact plutôt qu'un décodeur neuronal approximatif.
+
+## 2. Les écoles
+
+### 2.1 Natural Semantic Metalanguage (NSM)
+
+Wierzbicka et Goddard proposent une **réduction** du sens à des **primes sémantiques** universelles
+(« I », « YOU », « SOMEONE », « THINK », « WANT », « GOOD », « BIG », « BECAUSE », « IF »…), combinées par
+une grammaire minimale, et paraphrasables dans toutes les langues. La for
+… [6019 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,110p' docs/theorie/lecture-rapide.md", "description": "Lire la lecture rapide et ses couches"}`
+
+  ```
+# La lecture rapide — ce que Drave doit construire pour lire comme un humain
+
+> **Ce que ce document est.** L'analyse des **techniques de lecture rapide** humaines et de ce qui manque à Drave
+> pour les rendre utilisables sur les différents types de documents. Ce n'est **pas** une fiche de résultat : les
+> chiffres cités sont ceux des fiches [`reports/`](../../reports/) ; le plan qui en découle est le **programme R**
+> de [`roadmap.md`](../pilotage/roadmap.md) ; les fiches de fonctionnalité sont dans
+> [`backlog/index.md`](../pilotage/backlog/index.md). **Chargement** : à lire quand la question est « que veut dire
+> lire vite pour Drave ? » — pas pour l'état courant.
+
+## En trois idées
+
+1. **La lecture rapide humaine n'est pas une vitesse, c'est une allocation** : survoler, balayer, lire
+   sélectivement, revenir — selon le but et le type de document, avec une perte de compréhension contrôlée.
+2. **Drave a l'économie de cette allocation, pas sa sémantique** : le calcul suit l'activité (FFN creux, sortie
+   précoce), mais rien ne décide **quoi** lire, **dans quel ordre**, **à quelle profondeur**, **pour quel but**.
+3. **Il manque un lecteur, pas une technique** : un graphe de docume
+… [7412 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,90p' tools/structures/generateur.py; echo '...'; grep -n \"^def \\|^class \\|def analyser\\|ROLE\\|PREP\\|attachement\" tools/structures/generateur.py | head -50", "description": "Lire l'heuristique de coloration"}`
+
+  ```
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+
+DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+          "notre nos votre vos leur leurs quel quelle quels quelles".split())
+PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+           "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+RELATIFS = set("qui que qu dont ou quoi".split())
+CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant".split())
+PRON = set("je j tu il elle on nous vous ils elles me te se
+… [3491 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je construis les schémas de l'analyse : niveaux, cascade, coloration, coût, multilingue
+
+- **write** `{"content": "import sys, pathlib\nsys.path.insert(0, \"/tmp\")\nfrom svgkit import *\n\nOUT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas\")\n\n\ndef niveaux():\n    s = SVG(960, 650, \"Du mot au document : ce que le CPU peut étiqueter\",\n            \"Chaque niveau  … [10182 caractères tronqués]`
+
+  ```
+<path>/tmp/gen_heuristique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+
+  ```
+# La lecture rapide — ce que Drave doit construire pour lire comme un humain
+
+> **Ce que ce document est.** L'analyse des **techniques de lecture rapide** humaines et de ce qui manque à Drave
+> pour les rendre utilisables sur les différents types de documents. Ce n'est **pas** une fiche de résultat : les
+> chiffres cités sont ceux des fiches [`reports/`](../../reports/) ; le plan qui en découle est le **programme R**
+> de [`roadmap.md`](../pilotage/roadmap.md) ; les fiches de fonctionnalité sont dans
+> [`backlog/index.md`](../pilotage/backlog/index.md). **Chargement** : à lire quand la question est « que veut dire
+> lire vite pour Drave ? » — pas pour l'état courant.
+
+## En trois idées
+
+1. **La lecture rapide humaine n'est pas une vitesse, c'est une allocation** : survoler, balayer, lire
+   sélectivement, revenir — selon le but et le type de document, avec une perte de compréhension contrôlée.
+2. **Drave a l'économie de cette allocation, pas sa sémantique** : le calcul suit l'activité (FFN creux, sortie
+   précoce), mais rien ne décide **quoi** lire, **dans quel ordre**, **à quelle profondeur**, **pour quel but**.
+3. **Il manque un lecteur, pas une technique** : un graphe de docume
+… [3958 caractères tronqués]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Initial: produce detailed documentation of the **Drave native model**, with many diagrams explaining what is original; explain how to implement a **Diehl & Cook (2015)** model while respecting the **3-level separation** (neutral semantic level at the centre).
+- Evolved: "continue tes réflexions et enrichit le document. Tu dois aller plus loin."
+- Then: blocks must accomplish their tasks **independently of the mode of operation**; extreme modularity where neurons and hardware-native approaches coexist; the interface remains Drave, with typed data flows in dynamic, learning networks.
+- Then: the RSN must be **plural** (several candidates), an internal representation enabling **indefinite iteration in multi-level thought cycles**; requires a **state tree** and **all traditional AI strategies**; "Prends au moins 10 tours de rafinnement"; "tu ne pourras pas résoudre ça avec goal < 1000".
+- Then: `en-cours.md` must contain, for **each session**, its **plan, ambition, strategy and final objective**, kept up to date for synergy with other local sessions.
+- Latest: "étudie les sessions dsh actives et assure-toi que notre doc est à jour."
+
+## Key Technical Concepts
+- Drave: event bus of **valued lists** `(index, value, scale)` pushed to readers; cost proportional to activity; blocks as units with typed ports, cost, trace; replayable DRVF; DRVM container (manifest/graph/tensors/execution).
+- Three levels: **N1 surface**, **N2 RSN**, **N3 thought**; level is a **declared and verified contract**; `code` is internal and never crosses an edge; theorem of no surface leak.
+- RSN as **quotient per candidate** (`c(s)=c(s') ⇔ s~s'`), annotation outside fingerprint, no floats in `corps`, Merkle hash.
+- **Plural RSN**: state = set of candidates + parent + depth + budget + frontier + Merkle fingerprint; statuses `hypothese/retenu/refute/ambigu/ouvert/settled`.
+- Thought engine: **state tree/DAG**, frontier heap, transposition, compaction, anytime, justification path.
+- Portfolio: BFS/DFS, greedy, A*, beam, MCTS/UCT, alpha-beta, AC-3, SAT/SMT, STRIPS/HTN, probabilistic, local search, case-based, meta/bandit.
+- Types: `State`, `Proposal`, `Score`, `Constraint`, `Decision`, `Trace`; engine N3 `state → state` or `state → decision`; operators N1/N2/N3.
+- Technology independence: contract invariant, technology variable; dense/spiking/classical/FPGA/neuromorphic/remote; granularity `coût_total = coût_bloc + k · nombre_d_arêtes`.
+- D&C: LIF conductance, STDP, lateral inhibition, adaptive threshold, Poisson input, label assignment after freeze; rate-coded, not a temporal code.
+- Hidden cost insight: symmetric STDP pre-update touches `n_e · s_pre` weights (as expensive as forward pass); paper's post-only Eq.3 is sparse; normalization ~1/7 of forward.
+- Repo discipline: gates, negative controls, commits, `en-cours` single source of state, session plans, heartbeat.
+
+## Files and Code
+- `docs/theorie/modele-natif.md` — native model: 3 levels, quotient, type system, neutrality, determinism, DRVM, drave-n0 graph, losses, originality, anti-patterns, open questions; ~5,479 words; ~12 schemas.
+- `docs/implantation/diehl-cook.md` — D&C implementation: equations, parameters, DRVM contract, DRVF mapping, N2 memory, cost, pre-registered bench, failure modes, conformance, substitution; ~8,926 words; 11 schemas.
+- `docs/theorie/pensee-iterative.md` — plural RSN, state tree, multi-level cycle, portfolio, contract, anytime, meta-learning, memory/replay, measure, 10-turn table; 2,964 words, 11 sections, 9 schemas.
+- `docs/implantation/moteur-de-pensee.md` — implementation contract: `Candidate/State/Node/Proposal/Score/Decision/Trace`, store API, DAG invariants, loop pseudocode, strategy v0, DRVF `thought`, gates T0–T6, file plan.
+- `tools/pensee/` — real v0 implementation: `coeur.py`, `store.py`, `moteur.py`, `cruches.py`, `autotest.py`, `__init__.py`; `python3 -m tools.pensee.autotest`.
+- `reports/rapport-pensee-v0.md` — 6/6 gates; BFS/greedy/
+… [6674 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Initial: produce detailed documentation of the **Drave native model**, with many diagrams explaining what is original; explain how to implement a **Diehl & Cook (2015)** model while respecting the **3-level separation** (neutral semantic level at the centre).
+- Evolved: "continue tes réflexions et enrichit le document. Tu dois aller plus loin."
+- Then: blocks must accomplish their tasks **independently of the mode of operation**; extreme modularity where neurons and hardware-native approaches coexist; the interface remains Drave, with typed data flows in dynamic, learning networks.
+- Then: the RSN must be **plural** (several candidates), an internal representation enabling **indefinite iteration in multi-level thought cycles**; requires a **state tree** and **all traditional AI strategies**; "Prends au moins 10 tours de rafinnement"; "tu ne pourras pas résoudre ça avec goal < 1000".
+- Then: `en-cours.md` must contain, for **each session**, its **plan, ambition, strategy and final objective**, kept up to date for synergy with other local sessions.
+- Latest: "étudie les sessions dsh actives et assure-toi que notre doc est à jour."
+
+## Key Technical Concepts
+- Drave: event bus of **valued lists** `(index, value, scale)` pushed to readers; cost proportional to activity; blocks as units with typed ports, cost, trace; replayable DRVF; DRVM container (manifest/graph/tensors/execution).
+- Three levels: **N1 surface**, **N2 RSN**, **N3 thought**; level is a **declared and verified contract**; `code` is internal and never crosses an edge; theorem of no surface leak.
+- RSN as **quotient per candidate** (`c(s)=c(s') ⇔ s~s'`), annotation outside fingerprint, no floats in `corps`, Merkle hash.
+- **Plural RSN**: state = set of candidates + parent + depth + budget + frontier + Merkle fingerprint; statuses `hypothese/retenu/refute/ambigu/ouvert/settled`.
+- Thought engine: **state tree/DAG**, frontier heap, transposition, compaction, anytime, justification path.
+- Portfolio: BFS/DFS, greedy, A*, beam, MCTS/UCT, alpha-beta, AC-3, SAT/SMT, STRIPS/HTN, probabilistic, local search, case-based, meta/bandit.
+- Types: `State`, `Proposal`, `Score`, `Constraint`, `Decision`, `Trace`; engine N3 `state → state` or `state → decision`; operators N1/N2/N3.
+- Technology independence: contract invariant, technology variable; dense/spiking/classical/FPGA/neuromorphic/remote; granularity `coût_total = coût_bloc + k · nombre_d_arêtes`.
+- D&C: LIF conductance, STDP, lateral inhibition, adaptive threshold, Poisson input, label assignment after freeze; rate-coded, not a temporal code.
+- Hidden cost insight: symmetric STDP pre-update touches `n_e · s_pre` weights (as expensive as forward pass); paper's post-only Eq.3 is sparse; normalization ~1/7 of forward.
+- Repo discipline: gates, negative controls, commits, `en-cours` single source of state, session plans, heartbeat.
+
+## Files and Code
+- `docs/theorie/modele-natif.md` — native model: 3 levels, quotient, type system, neutrality, determinism, DRVM, drave-n0 graph, losses, originality, anti-patterns, open questions; ~5,479 words; ~12 schemas.
+- `docs/implantation/diehl-cook.md` — D&C implementation: equations, parameters, DRVM contract, DRVF mapping, N2 memory, cost, pre-registered bench, failure modes, conformance, substitution; ~8,926 words; 11 schemas.
+- `docs/theorie/pensee-iterative.md` — plural RSN, state tree, multi-level cycle, portfolio, contract, anytime, meta-learning, memory/replay, measure, 10-turn table; 2,964 words, 11 sections, 9 schemas.
+- `docs/implantation/moteur-de-pensee.md` — implementation contract: `Candidate/State/Node/Proposal/Score/Decision/Trace`, store API, DAG invariants, loop pseudocode, strategy v0, DRVF `thought`, gates T0–T6, file plan.
+- `tools/pensee/` — real v0 implementation: `coeur.py`, `store.py`, `moteur.py`, `cruches.py`, `autotest.py`, `__init__.py`; `python3 -m tools.pensee.autotest`.
+- `reports/rapport-pensee-v0.md` — 6/6 gates; BFS/greedy/A* find (3,4) in 92 nodes; MCTS-lite fails at 200 nodes.
+- `reports/rapport-n2-corpus-elargi.md` — N2.i: 3.1278 own, 3.6996 old val, 14.28 @256; literature 12.93 vs 16.70, English 33.83 vs 57.58, wikitext2 35.53 vs 56.88.
+- `reports/rapport-n2-propre.md`, `rapport-n2-diversite.md`, `rapport-n2-longueur.md`, `rapport-n2-combine.md`, `rapport-n2-capacite.md`, `rapport-r44-scans.md`.
+- `docs/schemas/`: `natif-*` (12), `diehl-cook-*` (11), `pensee-*` (9: rsn-plurielle, arbre, cycle, portefeuille, contrat, anytime, meta, memoire, mesure); indexed in `docs/schemas/README.md`.
+- `docs/pilotage/en-cours.md` — current state; **currently modified/uncommitted**, date says `2026-11-01, 03 h 15 HAE`; still lists N2.h and R4.4 as active session blocks though their plans are terminated.
+- `docs/methode/continuite.md` — session contract updated to 11 fields including plan/ambition/strategy/objective.
+- `tools/verifie_en_cours.py` — now requires `**Plan**`, `**Ambition**`, `**Stratégie**`, `**Objectif final**` for every session.
+- `tools/sessions.py` — plan/state consistency check; `sessions.py --check` currently passes except stale heartbeat warning for `e181ce02`.
+- `journal/sessions/0b0a6a0d-…/plan.md` — N2.h: **État terminé**, heartbeat `2026-11-01 08:35 EST`, next "close — N2.i … et Pensée v0 … committés".
+- `journal/sessions/fe3c05f0-…/plan.md` — R4.4: **État terminé**, heartbeat `2026-11-01 02:55`, next parity/fax.
+- `journal/sessions/e181ce02-…/plan.md` — Pensée: **État actif**, heartbeat `2026-10-31 22:45 HAE` (stale 726 min), next action still says "écrire moteur-de-pensee.md" (already done).
+- `docs/pilotage/roadmap.md` — modified/uncommitted by another session; do not clobber.
+- `git status`: `M .gitmodules`, `M docs/pilotage/en-cours.md`, `M docs/pilotage/roadmap.md`, `M tools/docwatch`, `A tools/structures`.
+
+## Errors and Fixes
+- Vision subagent `hauru-vision` failed twice ("subagent run failed"); used programmatic SVG checks (text width, canvas bounds, text-text overlap, line-text collision) instead.
+- SVG overflows/overlaps/line-through-text fixed iteratively (`natif-quotient`, `natif-niveaux`, `diehl-cook-architecture`, `diehl-cook-boucle`, `diehl-cook-taux`, `pensee-cycle`, `pensee-contrat`, `pensee-meta`).
+- `revue_documentation` dead path `docs/implantation/moteur-de-pensee.md`: resolved by writing the implementation contract.
+- `en-cours` budget violations: 2,000-word budget and T0 4,000; compacted to 1,562 words at commit `9a03d2dc`; later other sessions expanded it again.
+- `sessions.py --check` failed on R4.4 plan missing `Périmètre`, `Fichiers réservés`, `Prochaine action`; added machine-readable bullets.
+- `verifie_en_cours.py` arrow check failed because `→` was on a continuation line; moved to first line.
+- Current issue: `en-cours` is stale vs actual session states (N2/R4.4 closed, Pensée v0 committed).
+
+## Pending Jobs
+- Update `docs/pilotage/en-cours.md` to match active DSH sessions and current facts:
+  - Date to `2026-11-01 10:51 HAE/EST`.
+  - Keep only `e181ce02` (Pensée) as active session block; move N2.h and R4.4 to archived.
+  - Refresh `e181ce02` plan heartbeat to now; next action = AC-3, alpha-beta, DRVF integration, anytime bench (Pensée v0 done, 6/6 gates).
+  - Update N2 results: N2.h closed, N2.i `3,13 / 12,93 / 33,83` (literature/English); R4.4 closed: photo `55,9 → 6,7 %`, 4/5 families >90 %, fax 56.7 %, real scans `7,10 / 88,4 %`.
+  - Update "Ce qui est en cours", "Ce qui reste", "Les chantiers" N/R lines, questions.
+  - Run `python3 tools/revue_documentation.py` for exact counters (docs/reports/JSON/portes) and align.
+  - Ensure `en-cours` ≤2000 words and T0 ≤4000; `sessions.py --check`, `verifie_en_cours`, `taille_documents`, `revue`, `porte-tableaux`, `verifier_schemas`, `verifie_journal` green.
+  - Commit explicitly; do not stage unrelated `roadmap.md`, `tools/docwatch`, `.gitmodules`, `tools/structures` unless needed.
+
+## Current Work
+- Auditing active DSH sessions:
+  - `tools/sessions.py --status`: only `e181ce02` active, stale 726 min; `0b0a6a0d` and `fe3c05f0` terminated.
+  - `git log`: `68b5e819` typoglycemia, `95d17ae6` session close N2.i/Pensée v0, `17ececfc` N2.i, `a20de579` Pensée v0, `43a7b3fe` R4.4 close/Pensée pause/B13, `18f28437` recensement, `d2613e8f` N2.h3b, `3a6ae9ca` N2.h5, `88f598c3` N2.h close, `52cf5853` N2.h4, `0a802a61` R4.4 sans référence, `7452a447` R4.4 close.
+  - `en-cours` still dated `2026-11-01 03:15`, lists N2.h/R4.4/Pensée as active; bottom "Ce qui reste" still says `N2.h … (en cours)` and `Pensée — state store v0` (stale; v0 exists).
+  - `docs/pilotage/en-cours.md` and `roadmap.md` have uncommitted modifications from other sessions.
+  - `tools/pensee/` and `reports/rapport-pensee-v0.md` exist; Pensée v0 is committed and 6/6 gates pass.
+
+## Next Step
+- Rewrite the "Sessions en cours" section of `docs/pilotage/en-cours.md`: keep only `e181ce02` active with refreshed heartbeat/next action; move `0b0a6a0d` and `fe3c05f0` to archived with their results; update the date, bullets, chantiers, questions and counters, then run all gates and commit.
+
+## Critical Context
+- Current real date/time: **2026-11-01 ~10:51 EST**, not Oct 31.
+- Current DSH session id: `e181ce02-cd50-488a-a6be-e84b79d40dcc`; only active plan, but heartbeat `2026-10-31 22:45` is stale.
+- N2.h plan says **terminé** at `2026-11-01 08:35 EST`; N2.i and Pensée v0 committed (`17ececfc`, `a20de579`, close `95d17ae6`).
+- R4.4 plan says **terminé** at `2026-11-01 02:55`; en-cours block says close but still sits under active sessions.
+- Pensée v0: state store, Merkle, BFS/greedy/A*/MCTS-lite, 6/6 gates; **not done**: AC-3, alpha-beta, DRVF integration, recursive compaction.
+- `en-cours` must include four fields per session: **Plan, Ambition, Stratégie, Objectif final**; verifier enforces them.
+- Budgets: `en-cours` ≤2,000 words; T0 (AGENTS + en-cours + one task) ≤4,000; at 1,562 words T0 passed; current expanded version may exceed.
+- Do not touch other sessions' reserved files: N2 `data/`, `tools/corpus*`, `reports/n2-*`, `work/n2i/`, `work/n2h/`; R4.4 `work/r44/`, `work/ocr/`, `tools/*scan*`, `reports/r44-*`; Pensée `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`.
+- User wants the **full plan/ambition/strategy/final objective per session**; compact version + link to `journal/sessions/<id>/plan.md` is the current compromise to respect budgets.
+- The user explicitly asked for **at least 10 refinement turns** and a goal with `max_goal_rounds` 1000; that goal (`goal-c26e365b…`) is completed; the current phase is engine v0 + state maintenance.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "ls -l /tmp/svgkit.py 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_heuristique.py 2>&1 | tail -20; ls -l docs/schemas/heuristique-*.svg 2>/dev/null", "description": "Générer les schémas heuristiques"}`
+
+  ```
+-rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py
+[exit code: 2]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "sed -n '1,220p' /tmp/svgkit.py", "description": "Lire l'API du kit SVG"}`
+
+  ```
+"""Petit kit SVG pour les schémas Drave (hors dépôt : génère des SVG directs)."""
+from __future__ import annotations
+import html
+import pathlib
+from PIL import ImageFont
+
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+_fonts: dict[tuple[int, bool], ImageFont.FreeTypeFont] = {}
+
+BLEU = ("#dbeafe", "#1d4ed8", "#1d4ed8")
+AMBRE = ("#fef3c7", "#b45309", "#b45309")
+VERT = ("#dcfce7", "#15803d", "#15803d")
+GRIS = ("#e2e8f0", "#334155", "#0f172a")
+CLAIR = ("#f1f5f9", "#cbd5e1", "#334155")
+ROUGE = ("#fee2e2", "#b91c1c", "#b91c1c")
+VIOLET = ("#ede9fe", "#6d28d9", "#6d28d9")
+BLANC = ("#ffffff", "#94a3b8", "#334155")
+
+DEFAUT = "#334155"
+ROUGE_T = "#b91c1c"
+VERT_T = "#15803d"
+BLEU_T = "#1d4ed8"
+AMBRE_T = "#b45309"
+
+
+def largeur(texte: str, taille: float = 12, gras: bool = False) -> float:
+    cle = (int(taille), gras)
+    if cle not in _fonts:
+        _fonts[cle] = ImageFont.truetype(BOLD if gras else FONT, int(taille))
+    return _fonts[cle].getlength(texte)
+
+
+class SVG:
+    def __init__(self, w: int, h: int, titre: str, desc: str):
+        self.w, self.h = w, h
+        self.titre, self.desc = titre, desc
+        self.body
+… [8271 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_heuristique.py; echo \"EXIT=$?\"", "description": "Voir l'erreur du générateur SVG"}`
+
+  ```
+EXIT=0
+  ```
+
+- **bash** `{"command": "cat >> /tmp/gen_heuristique.py <<'PY'\n\nif __name__ == \"__main__\":\n    niveaux()\n    cascade()\n    coloration()\n    cout()\nPY\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_heuristique.py; echo \"EXIT=$?\"; ls -l docs/schemas/heuristique-*.svg", "descrip … [36 caractères tronqués]`
+
+  ```
+✓ heuristique-niveaux.svg
+  ✓ heuristique-cascade.svg
+  ✓ heuristique-coloration.svg
+  ✓ heuristique-cout.svg
+EXIT=0
+-rw-r--r--. 1 stephane stephane 5319  1 nov 11:39 docs/schemas/heuristique-cascade.svg
+-rw-r--r--. 1 stephane stephane 6251  1 nov 11:39 docs/schemas/heuristique-coloration.svg
+-rw-r--r--. 1 stephane stephane 4561  1 nov 11:39 docs/schemas/heuristique-cout.svg
+-rw-r--r--. 1 stephane stephane 7809  1 nov 11:39 docs/schemas/heuristique-niveaux.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in niveaux cascade coloration cout; do rsvg-convert -w 1100 docs/schemas/heuristique-$f.svg -o /tmp/heur-$f.png 2>/dev/null || python3 -c \"import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-$f.svg', write_to='/tmp … [126 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-niveaux.svg', write_to='/tmp/heur-niveaux.png', output_width=1100)
+    ^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'cairosvg'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-cascade.svg', write_to='/tmp/heur-cascade.png', output_width=1100)
+    ^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'cairosvg'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-coloration.svg', write_to='/tmp/heur-coloration.png', output_width=1100)
+    ^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'cairosvg'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-cout.svg', write_to='/tmp/heur-cout.png', output_width=1100)
+    ^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'cairosvg'
+ls: cannot access '/tmp/heur-*.png': No such file or directory
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_heuristique.py'); t=p.read_text()\n# corriger les labels et la flèche accepté -> RSN\nt=t.replace('''    s.fleche(750, 150, 750, 238, VERT_T, 1.6, \"4 3\")\n    s.fleche(750, … [2890 caractères tronqués]`
+
+  ```
+✓ heuristique-niveaux.svg
+  ✓ heuristique-cascade.svg
+  ✓ heuristique-coloration.svg
+  ✓ heuristique-cout.svg
+  ✓ heuristique-multilingue.svg
+EXIT=0
+-rw-r--r--. 1 stephane stephane 5189  1 nov 11:40 docs/schemas/heuristique-cascade.svg
+-rw-r--r--. 1 stephane stephane 6251  1 nov 11:40 docs/schemas/heuristique-coloration.svg
+-rw-r--r--. 1 stephane stephane 4561  1 nov 11:40 docs/schemas/heuristique-cout.svg
+-rw-r--r--. 1 stephane stephane 6352  1 nov 11:40 docs/schemas/heuristique-multilingue.svg
+-rw-r--r--. 1 stephane stephane 7809  1 nov 11:40 docs/schemas/heuristique-niveaux.svg
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris l'analyse : niveaux, cascade, coloration, multilingue, coût et protocole de mesure
+
+- **write** `{"content": "# La couche heuristique — ce que le CPU étiquette avant le réseau\n\n> **Rôle.** Cette note analyse une **couche linguistique de prétraitement par heuristiques** : ce\n> qu'elle peut étiqueter, du mot au document, en plusieurs langues, et ce qu'elle **retire au\n> réseau de neurones**.  … [22048 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pre-traitement-linguistique.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Théorie\\|theorie/\" docs/README.md | head -20; echo '=== schemas README tail ==='; tail -25 docs/schemas/README.md; echo '=== carte ==='; wc -w docs/theorie/carte.md; grep -n \"lecture-rapide\\|jeux-symboliques\\|protocole … [179 caractères tronqués]`
+
+  ```
+14:| **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole sémantique](theorie/protocole-semantique.md) · [le glossaire](theorie/glossaire.md) · [la synthèse](theorie/synthese/index.md) |
+48:## Théorie — ce qui reste vrai
+52:| [`theorie/vision.md`](theorie/vision.md) | la vision : les flots, les cinq axes, ce qu'elle n'est pas |
+53:| [`theorie/carte.md`](theorie/carte.md) | la carte des sujets, bloc par bloc |
+54:| [`theorie/histoire.md`](theorie/histoire.md) | Qtrinet → Drave, les trois âges |
+55:| [`theorie/protocole-semantique.md`](theorie/protocole-semantique.md) | rejouer, converger, sens → texte, raisonnement gelé |
+56:| [`theorie/semantique-universaux.md`](theorie/semantique-universaux.md) | la base typée : 15 champs, 502 classes |
+57:| [`theorie/modules-cerveau-langage.md`](theorie/modules-cerveau-langage.md) | les modules M1–M9, le bus et les négatifs |
+58:| [`theorie/jeux-symboliques.md`](theorie/jeux-symboliques.md) | surface → RSN-jeu → pensée, 71 langues, maîtres |
+59:| [`theorie/genealogie-des-langues.md`](theorie/genealogie-des-langues.md) | la généalogie et l'avertissement époque/filiation |
+60:| [`theorie/synth
+… [5856 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,35p' docs/schemas/README.md; echo '=== table rows ==='; grep -n \"| \\[\" docs/schemas/README.md | head -8; echo '=== math usage ==='; grep -n '\\\\\\$\\|\\\\\\[' docs/theorie/*.md | head -5", "description": "Lire l'index d … [36 caractères tronqués]`
+
+  ```
+# Les schémas — index et convention
+
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : les schémas directs
+> des concepts, les schémas du natif et de l'impulsionnel, deux sources générées par docwatch et
+> les quatorze schémas de la synthèse
+> (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
+> `role="img"` ; aucun n'utilise de ressource externe.
+>
+> **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement, converti depuis Mermaid ou
+> PlantUML, ou un **bloc inline** rendu par docwatch. Voir
+> [`docs/methode/illustrations.md`](../methode/illustrations.md) ; vérifier avec
+> `python3 tools/verifier_schemas.py`.
+
+## Les schémas des concepts
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [modules-cerveau-langage.svg](modules-cerveau-langage.svg) | M1 hub → code RSN → bus → M2–M7, M4 → M8 | [les modules](../theorie/modules-cerveau-langage.md) |
+| [protocole-semantique.svg](protocole-semantique.svg) | surface L1 → encodeur → z → décodeur + L2 → surface L2 | [le protocole](../theorie/protocole-semantique.md) |
+| [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'
+… [3053 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pre-traitement-linguistique.md'); t=p.read_text()\nt=t.replace(\"sans changing le contrat\", \"sans changer le contrat\")\nt=t.replace(\"\"\"\\\\[\nC = c_{cpu} \\\\cdot B … [3156 caractères tronqués]`
+
+  ```
+doc ok
+index ok
+  schémas · 434 document(s) · 61 SVG · 2 source(s)
+  ❌ 4 anomalie(s) :
+     · image absente : docs/theorie/pre-traitement-linguistique.md:32 → schemas/heuristique-niveaux.svg
+     · image absente : docs/theorie/pre-traitement-linguistique.md:121 → schemas/heuristique-multilingue.svg
+     · image absente : docs/theorie/pre-traitement-linguistique.md:136 → schemas/heuristique-cascade.svg
+     · image absente : docs/theorie/pre-traitement-linguistique.md:182 → schemas/heuristique-cout.svg
+SCHEMAS=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pre-traitement-linguistique.md'); t=p.read_text()\nt=t.replace(\"](schemas/heuristique-\", \"](../schemas/heuristique-\")\np.write_text(t); print('ok')\nPY\npython3 tools … [94 caractères tronqués]`
+
+  ```
+ok
+  schémas · 434 document(s) · 61 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+SCHEMAS=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short | head -8; echo '=== en-cours ==='; sed -n '1,38p' docs/pilotage/en-cours.md; echo '=== counters ==='; grep -n \"fichiers / JSON\\|documents de\" docs/pilotage/en-cours.md", "description": "Li … [49 caractères tronqués]`
+
+  ```
+8aaa3c13 S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER
+74d7f0b9 DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS
+cdb82916 ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION
+ M docs/README.md
+ M docs/schemas/README.md
+ M tools/corpus_wikipedia.py
+ m tools/docwatch
+ ? tools/structures
+?? docs/schemas/heuristique-cascade.svg
+?? docs/schemas/heuristique-coloration.svg
+?? docs/schemas/heuristique-cout.svg
+=== en-cours ===
+# En ce moment
+
+**Mis à jour : 2026-11-01, 11 h 20 HNE (heure locale, EST).**
+
+> **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+> avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+> [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refu
+… [2735 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Lire le plan Pensée à jour"}`
+
+  ```
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3
+- **Périmètre** : Pensée, R4.4-reste
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-01 11:22 EST
+- **Prochaine action** : la note de limites R4.4 est committée ; puis AC-3, alpha-bêta, DRVF et le
+  banc anytime (S reste à l'autre TUI).
+- **État** : actif
+- **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
+  stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
+  (BFS, greedy, A*, MCTS-li
+… [1494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=t.replace(\"- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3\",\n … [4622 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1425 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ETAT=0
+  ✅ plans cohérents
+SESSIONS=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [189 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/pre-traitement-linguistique.md docs/schemas/heuristique-niveaux.svg docs/schemas/heuristique-cascade.svg docs/schemas/heuristique-coloration.svg docs/schemas/heuristique-cout.svg docs/schemas/heuristique-multilin … [225 caractères tronqués]`
+
+  ```
+docs/README.md                                     |   1 +
+ docs/pilotage/en-cours.md                          |  15 +-
+ docs/schemas/README.md                             |  10 +
+ docs/schemas/heuristique-cascade.svg               |  43 +++
+ docs/schemas/heuristique-coloration.svg            |  51 +++
+ docs/schemas/heuristique-cout.svg                  |  34 ++
+ docs/schemas/heuristique-multilingue.svg           |  54 ++++
+ docs/schemas/heuristique-niveaux.svg               |  65 ++++
+ docs/theorie/pre-traitement-linguistique.md        | 350 +++++++++++++++++++++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  17 +-
+ 10 files changed, 628 insertions(+), 12 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 git commit -m \"COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer l'analyse de la couche heuristique"}`

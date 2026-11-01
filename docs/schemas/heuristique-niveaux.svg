@@ -1,0 +1,65 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 650" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Du mot au document : ce que le CPU peut étiqueter</title>
+<desc>Chaque niveau a une part d&#x27;invariant (heuristique) et une part d&#x27;ambiguïté (réseau) ; le CPU enlève la surface, le réseau garde le sens.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="650" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Du mot au document : ce que le CPU peut étiqueter</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le CPU ne remplace pas le réseau : il lui enlève la surface.</text>
+<rect x="30" y="88" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="109" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">octet / Unicode</text>
+<text x="44" y="126" text-anchor="start" font-size="8.8" fill="#475569">script, normalisation NFC/NFKC, ponctuation, BOM</text>
+<rect x="560" y="102" width="330.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="905" y="118" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">CPU</text>
+<rect x="30" y="150" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="171" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">morphème</text>
+<text x="44" y="188" text-anchor="start" font-size="8.8" fill="#475569">affixes, diacritiques, racine ; irréguliers et agglutinants</text>
+<rect x="560" y="164" width="198.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="758.0" y="164" width="99.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="857.0" y="164" width="33.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="180" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="212" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="233" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">mot</text>
+<text x="44" y="250" text-anchor="start" font-size="8.8" fill="#475569">frontières, nombres, dates, URLs ; CJK et thaï sans espaces</text>
+<rect x="560" y="226" width="165.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="725.0" y="226" width="66.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="791.0" y="226" width="99.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="242" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="274" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="295" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">syntagme</text>
+<text x="44" y="312" text-anchor="start" font-size="8.8" fill="#475569">GN/GV/GP/REL/SUB, rôles, attachements (coloration)</text>
+<rect x="560" y="288" width="99.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="659.0" y="288" width="165.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="824.0" y="288" width="66.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="304" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">cascade</text>
+<rect x="30" y="336" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="357" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">phrase</text>
+<text x="44" y="374" text-anchor="start" font-size="8.8" fill="#475569">frontières, type, négation, modalité ; bruit et OCR</text>
+<rect x="560" y="350" width="198.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="758.0" y="350" width="66.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="824.0" y="350" width="66.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="366" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="398" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="419" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">paragraphe</text>
+<text x="44" y="436" text-anchor="start" font-size="8.8" fill="#475569">titres, listes, tableaux, régions ; layout et scans</text>
+<rect x="560" y="412" width="230.99999999999997" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="791.0" y="412" width="66.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="857.0" y="412" width="33.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="428" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="460" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="481" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">document</text>
+<text x="44" y="498" text-anchor="start" font-size="8.8" fill="#475569">TOC, structure, provenance, renvois</text>
+<rect x="560" y="474" width="165.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="725.0" y="474" width="99.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="824.0" y="474" width="66.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="490" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="522" width="900" height="52" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<text x="44" y="543" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">multilingue</text>
+<text x="44" y="560" text-anchor="start" font-size="8.8" fill="#475569">langue, script, famille, alignement</text>
+<rect x="560" y="536" width="198.0" height="24" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<rect x="758.0" y="536" width="66.0" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<rect x="824.0" y="536" width="66.0" height="24" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="905" y="552" text-anchor="end" font-size="8.5" font-weight="bold" fill="#475569">mixte</text>
+<rect x="30" y="596" width="900" height="22" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="612" text-anchor="middle" font-size="9.5" fill="#334155">vert : heuristique CPU   ·   ambre : cascade (candidats CPU, choix réseau/humain)   ·   rouge : réseau</text>
+<text x="480" y="638" text-anchor="middle" font-size="10" font-style="italic" fill="#475569">Un niveau n&#x27;est pas « heuristique » ou « réseau » : il est un dosage, et le dosage se mesure.</text>
+</svg>

@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 19.2 h |
-| Tours | 14 |
-| Messages | 894 |
-| Appels d'outils | 836 |
+| Durée | 19.4 h |
+| Tours | 15 |
+| Messages | 917 |
+| Appels d'outils | 856 |
 | Fichiers touchés | 11 |
-| Commandes | 697 |
+| Commandes | 713 |
 | Sous-agents | 0 |
 | Commits | 23 |
 | Compactages de contexte | 1 |
@@ -55,6 +55,8 @@
 **Tour 13** — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette ambiguité peut avoir une intention humouristique. on doit donc avoir un nuveau pragmatique pour trancher et conserver les 2 sens.
 
 **Tour 14** — ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
+
+**Tour 15** — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
 ## 2. Déroulé, étape par étape
 
@@ -705,7 +707,7 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 
 ### Tour 14 — ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Add example contexts at different levels
 - bash — Add context levels and the minimal level metric to the server
@@ -720,10 +722,71 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 - bash — Update the plan for context levels
 - bash — Find the current S roadmap line
 - bash — Fix the S line and commit the context levels
+- job_output
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Oui — et je rends ça mesurable : niveaux de contexte, et le niveau minimal pour trancher
+⏵ Oui — et le banc mesure maintenant **combien** de contexte il faut
+
+\## Le contexte est devenu gradué
+
+| niveau | ce qu'on donne | exemple du banc |
+|---|---|---|
+| 0 | rien | la phrase seule |
+| 1 | la phrase d'avant | « Il a couru. » |
+| 2 | le paragraphe | « La voisine est partie ; son chat est resté sur le toit. » |
+| 3 | la section, le document | « Dans ce dessin animé, le canard parle… » |
+| 4 | le genre, le registre | fable, fait divers, slogan |
+
+Chaque verdict enregistre **son niveau** et le texte du contexte. L'outil en déduit le **niveau minimal** : le plus petit niveau où une lecture a été **tranchée** (résolue ou exclue). C'est la mesure exacte de ta remarque — « il faut des contextes plus larges » — transformée en chiffre.
+
+**Vérifié en direct** : p001 (« Le chat de la voisine qui dort… ») tranché au **niveau 2** avec le paragraphe ; les deux autres phrases déjà tranchées l'ont été au **niveau 0** (leur phrase suffisait). L'export porte `niveau_contexte`.
+
+\## Ce qui est branché
+
+- **Interface** : un sélecteur de niveau + un textarea par phrase, préremplis avec un **contexte d'exemple** (p001 et p002 au paragraphe, p007 au document) ; un badge « tranché au niveau N » par phrase.
+- **Grand modèle** : il reçoit le niveau et le contexte, et rend un `niveau_requis` — la comparaison directe entre « ce qu'il lui faut » et « ce qu'il a fallu à l'humain ».
+- **Export** : chaque lecture conservée porte son `niveau_contexte` ; la banque devient un corpus de **(phrase, contexte, niveau, verdict)**.
+
+\## L'état
+
+- Sous-projet : **`733b1a4`** — 12 tests passent, dont le niveau minimal.
+- Dépôt principal : **`8aaa3c13`** — pointeur + plan à jour.
+- **Serveur en ligne** : http://127.0.0.1:8765 — 7 phrases, **8 validations** (dont les tiennes : double sens sur p001/p002, résolu/exclu sur p003, résolu sur p004 ; plus une ligne de test que j'ai ajoutée sur p001 au niveau 2 — la dernière l'emporte à l'affichage, l'historique garde tout).
+- Revue ✅, état ✅, **T0 3 746 / 4 000**.
+
+\## Le point qui compte pour le modèle
+
+Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre :
+
+1. **Le contexte du juge** (humain ou grand modèle) — c'est ce que le banc gradue et mesure.
+2. **Le contexte du modèle** — `drave-n0` voit **256 octets**. Même avec un juge parfait, un modèle qui ne lit que 256 octets ne peut pas utiliser un paragraphe. C'est **R1** (la fenêtre), et la mesure du niveau minimal dit précisément **de combien** il faudra l'agrandir : si l
+… [276 caractères tronqués]
+
+### Tour 15 — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Measure the unambiguous subset of the clean corpus
+- bash — Build the unambiguous and control corpora and launch two bases
+- bash — Read the data inventory report
+- bash — Inspect the paired Wikipedia corpus
+- bash — Locate the Wikipedia data on disk
+- job_output
+- bash — Inspect the French Wikipedia text files
+- bash — Check the actual file sizes per language
+- bash — Inspect the local Wikipedia data
+- bash — List the Wikipedia databases and dumps
+- bash — Inspect the French Wikipedia sqlite schema
+- bash — Sample the French Wikipedia text
+- bash — Extract 120k French Wikipedia articles
+- bash — Deduplicate and split the Wikipedia corpus
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Je lis l'inventaire pour basculer sur les vraies données locales
 
 ## 3. Travail accompli
 
@@ -785,7 +848,7 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 657 autres
+- … et 673 autres
 
 ## 4. Mesures et résultats marquants
 

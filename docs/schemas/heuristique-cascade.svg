@@ -1,0 +1,43 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="DejaVu Sans, Arial, sans-serif">
+<title>La cascade : heuristique, porte de confiance, réseau</title>
+<desc>Le réseau ne voit que le résidu ; la trace dit qui a décidé et avec quelle confiance.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="600" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">La cascade : heuristique, porte de confiance, réseau</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le corps de la RSN reste neutre ; la source et la confiance vont dans l&#x27;annotation.</text>
+<rect x="30" y="120" width="120" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="90.0" y="144" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">octets</text>
+<text x="90.0" y="166.0" text-anchor="middle" font-size="9" fill="#334155">surface brute</text>
+<rect x="180" y="90" width="240" height="130" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="300.0" y="114" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">heuristiques CPU</text>
+<text x="300.0" y="136.0" text-anchor="middle" font-size="9" fill="#334155">normalisation, script, langue</text>
+<text x="300.0" y="149.05" text-anchor="middle" font-size="9" fill="#334155">frontières, POS fermées</text>
+<text x="300.0" y="162.1" text-anchor="middle" font-size="9" fill="#334155">segments candidats</text>
+<rect x="450" y="120" width="110" height="70" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="505.0" y="144" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">porte</text>
+<text x="505.0" y="166.0" text-anchor="middle" font-size="9" fill="#334155">confiance ≥ τ</text>
+<rect x="600" y="70" width="300" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="750.0" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">accepté</text>
+<text x="750.0" y="116.0" text-anchor="middle" font-size="9" fill="#334155">annotation RSN</text>
+<text x="750.0" y="129.05" text-anchor="middle" font-size="9" fill="#334155">source : heuristique</text>
+<rect x="600" y="240" width="300" height="80" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="750.0" y="264" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">résidu</text>
+<text x="750.0" y="286.0" text-anchor="middle" font-size="9" fill="#334155">réseau sur le résidu</text>
+<text x="750.0" y="299.05" text-anchor="middle" font-size="9" fill="#334155">source : neuronal</text>
+<rect x="600" y="390" width="300" height="100" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.6"/>
+<text x="750" y="416" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">RSN</text>
+<text x="750" y="438" text-anchor="middle" font-size="10" fill="#334155">corps : le sens</text>
+<text x="750" y="458" text-anchor="middle" font-size="8.8" fill="#475569">annotation : source, confiance, langue</text>
+<text x="750" y="476" text-anchor="middle" font-size="8.8" fill="#b45309">empreinte = hash(corps)</text>
+<line x1="150" y1="155" x2="178" y2="155" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="420" y1="155" x2="448" y2="155" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="560" y1="140" x2="598" y2="110" stroke="#15803d" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="560" y1="170" x2="598" y2="280" stroke="#b91c1c" stroke-width="1.8" marker-end="url(#f)"/>
+<path d="M900,110 L930,110 L930,440 L900,440" fill="none" stroke="#15803d" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="750" y1="320" x2="750" y2="388" stroke="#b91c1c" stroke-width="1.6" marker-end="url(#f)"/>
+<text x="770" y="200" text-anchor="start" font-size="8.5" fill="#15803d">accepté</text>
+<text x="770" y="360" text-anchor="start" font-size="8.5" fill="#b91c1c">résidu</text>
+<rect x="30" y="516" width="900" height="40" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="541" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#334155">trace : niveau, source, confiance, coût, appel   —   un désaccord se rejoue et se diff</text>
+<text x="480" y="580" text-anchor="middle" font-size="10" font-style="italic" fill="#475569">La cascade ne prouve pas que l&#x27;heuristique a raison : elle prouve qui a parlé, et à quel prix.</text>
+</svg>

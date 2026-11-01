@@ -21,6 +21,16 @@
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
 | [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
 
+## Les schémas de la couche heuristique
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [heuristique-niveaux.svg](heuristique-niveaux.svg) | du mot au document : la part CPU, cascade, réseau | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
+| [heuristique-cascade.svg](heuristique-cascade.svg) | surface → heuristiques → porte → réseau → RSN, et la trace | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
+| [heuristique-coloration.svg](heuristique-coloration.svg) | la coloration : des candidats, pas un verdict | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
+| [heuristique-cout.svg](heuristique-cout.svg) | octets contre jetons, couverture/precision, le seuil | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
+| [heuristique-multilingue.svg](heuristique-multilingue.svg) | universel, famille, langue ; le repli réseau | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
+
 ## Les schémas du natif et de l'impulsionnel
 
 | schéma | ce qu'il montre | où il est utilisé |

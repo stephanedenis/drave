@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 18.8 h |
-| Tours | 5 |
-| Messages | 727 |
-| Appels d'outils | 734 |
+| Durée | 19.2 h |
+| Tours | 6 |
+| Messages | 741 |
+| Appels d'outils | 746 |
 | Fichiers touchés | 18 |
-| Commandes | 672 |
+| Commandes | 682 |
 | Sous-agents | 0 |
 | Commits | 33 |
 | Compactages de contexte | 1 |
@@ -35,6 +35,8 @@
 **Tour 4** — révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entrainement.
 
 **Tour 5** — go
+
+**Tour 6** — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
 
 ## 2. Déroulé, étape par étape
 
@@ -325,6 +327,29 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 1. **N2** : prendre un échantillon de ce cor
 … [475 caractères tronqués]
 
+### Tour 6 — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Inspect all Wikipedia language databases
+- bash — List language DB sizes while counts run
+- job_output
+- job_kill
+- bash — Rewrite multi-language tool and test on Portuguese
+- bash — Launch all-language corpus extraction
+- bash — Check eval sets and extraction progress
+- bash — Inspect XNLI and UDHR eval structures
+- bash — Patch FR manifest and build per-language eval samples
+- bash — Write corpus catalogue generator and check progress
+- bash — Check extraction rate and disk space
+- bash — Poll extraction after ten minutes
+
+**Synthèse produite :**
+
+⏵ Corpus multilingues : vérification des bases, extraction, puis catalogue partagé
+
+Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés), puis j'étends l'outil et je lance les extractions.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -392,7 +417,7 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 632 autres
+- … et 642 autres
 
 ## 4. Mesures et résultats marquants
 

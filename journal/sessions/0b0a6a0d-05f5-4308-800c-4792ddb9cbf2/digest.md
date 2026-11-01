@@ -12011,3 +12011,352 @@ AssertionError: ligne S introuvable
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); lignes = p.read_text().splitlines(keepends=True)\ni = next(k for k, l in enumerate(lignes) if l.startswith(\"| **S — les structures**\"))\nlignes[i] = (\ … [1503 caractères tronqués]`
+
+  ```
+ligne S remplacée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3746 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-697]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-697", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master 8aaa3c13] S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER
+ 20 files changed, 321 insertions(+), 29 deletions(-)
+ create mode 100644 journal/2026-11-01/memoire.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git submodule status | tail -1; curl -s http://127.0.0.1:8765/api/phrases | python3 -c \"import json,sys; d=json.load(sys.stdin); print('serveur :', len(d['phrases']), 'phrases ·', len(d['validations']), 'validations · niveaux minima … [390 caractères tronqués]`
+
+  ```
+733b1a47d0923433ea79aa0d8e4383e9fe933825 tools/structures (remotes/origin/HEAD)
+serveur : 7 phrases · 8 validations · niveaux minimaux {'p003': 0, 'p004': 0, 'p001': 2}
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3746 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+ ? tools/structures
+  ```
+
+### 🤖 Assistant
+
+⏵ Oui — et le banc mesure maintenant **combien** de contexte il faut
+
+## Le contexte est devenu gradué
+
+| niveau | ce qu'on donne | exemple du banc |
+|---|---|---|
+| 0 | rien | la phrase seule |
+| 1 | la phrase d'avant | « Il a couru. » |
+| 2 | le paragraphe | « La voisine est partie ; son chat est resté sur le toit. » |
+| 3 | la section, le document | « Dans ce dessin animé, le canard parle… » |
+| 4 | le genre, le registre | fable, fait divers, slogan |
+
+Chaque verdict enregistre **son niveau** et le texte du contexte. L'outil en déduit le **niveau minimal** : le plus petit niveau où une lecture a été **tranchée** (résolue ou exclue). C'est la mesure exacte de ta remarque — « il faut des contextes plus larges » — transformée en chiffre.
+
+**Vérifié en direct** : p001 (« Le chat de la voisine qui dort… ») tranché au **niveau 2** avec le paragraphe ; les deux autres phrases déjà tranchées l'ont été au **niveau 0** (leur phrase suffisait). L'export porte `niveau_contexte`.
+
+## Ce qui est branché
+
+- **Interface** : un sélecteur de niveau + un textarea par phrase, préremplis avec un **contexte d'exemple** (p001 et p002 au paragraphe, p007 au document) ; un badge « tranché au niveau N » par phrase.
+- **Grand modèle** : il reçoit le niveau et le contexte, et rend un `niveau_requis` — la comparaison directe entre « ce qu'il lui faut » et « ce qu'il a fallu à l'humain ».
+- **Export** : chaque lecture conservée porte son `niveau_contexte` ; la banque devient un corpus de **(phrase, contexte, niveau, verdict)**.
+
+## L'état
+
+- Sous-projet : **`733b1a4`** — 12 tests passent, dont le niveau minimal.
+- Dépôt principal : **`8aaa3c13`** — pointeur + plan à jour.
+- **Serveur en ligne** : http://127.0.0.1:8765 — 7 phrases, **8 validations** (dont les tiennes : double sens sur p001/p002, résolu/exclu sur p003, résolu sur p004 ; plus une ligne de test que j'ai ajoutée sur p001 au niveau 2 — la dernière l'emporte à l'affichage, l'historique garde tout).
+- Revue ✅, état ✅, **T0 3 746 / 4 000**.
+
+## Le point qui compte pour le modèle
+
+Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre :
+
+1. **Le contexte du juge** (humain ou grand modèle) — c'est ce que le banc gradue et mesure.
+2. **Le contexte du modèle** — `drave-n0` voit **256 octets**. Même avec un juge parfait, un modèle qui ne lit que 256 octets ne peut pas utiliser un paragraphe. C'est **R1** (la fenêtre), et la mesure du niveau minimal dit précisément **de combien** il faudra l'agrandir : si la plupart des ambiguïtés se tranchent au niveau 2 (paragraphe), viser 512–1 024 octets suffit ; si c'est le niveau 3 (document), il faut une autre architecture.
+
+Autrement dit : le banc ne fait pas que collecter des verdicts, il **dimensionne la fenêtre** dont R1 aura besoin.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
+
+### 🤖 Assistant
+
+⏵ Expérience : corpus non ambigu contre contrôle de même taille, deux bases en parallèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; python3 - <<'PY'\nimport sys, re, pathlib, random\nsys.path.insert(0, 'tools/structures')\nimport generateur\ntexte = pathlib.Path('data/corpus_propre/tr … [840 caractères tronqués]`
+
+  ```
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+phrases : 20239 · octets 3224415
+non ambiguës : 6030 (29.8 %) · ambiguës : 14209
+octets non ambigus : 345424
+longueur moyenne : non ambiguë 55.1 · toutes 153.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2j data/corpus_nonambigu && python3 - <<'PY'\nimport sys, re, pathlib, random\nsys.path.insert(0, 'tools/structures')\nimport generateur\n\ntexte = pathlib.Path('data/corpus_propre/train.txt').read_text(encoding='utf-8 … [1896 caractères tronqués]`
+
+  ```
+non ambigu : 6030 phrases, 351453 octets, longueur moyenne 55.1
+témoin     : 2077 phrases, 345642 octets, longueur moyenne 158.7
+pas  450 · perte 2.5673 · PPL val 12.143 · 21 s
+pas  400 · perte 2.4935 · PPL val 12.066 · 21 s
+11:38
+  ```
+
+### 👤 Utilisateur
+
+utilise reports/inventaire-donnees-entrainement.md
+
+### 🤖 Assistant
+
+⏵ Je lis l'inventaire pour basculer sur les vraies données locales
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p reports/inventaire-donnees-entrainement.md", "description": "Read the data inventory report"}`
+
+  ```
+# L'inventaire local des données pour l'entraînement
+
+> **Ligne de roadmap** : Données · **Date** : 2026-11-01 · **Verdict** : le disque porte
+> **132 Go de Wikipédia** (10 langues), **12 Go d'articles Wikipédia en texte brut**, **6,6 Go de
+> corpus déjà préparés** (dont 5,36 Mo de prose du dépôt unique), **~228 Go de documents à
+> extraire** (dont 2 345 Kindle sous DRM, exclus), et **2,8 To de vidéos récupérées** qui ne sont
+> pas des données d'entraînement. Le français « réel » hors Wikipédia reste **petit** : c'est le
+> levier à construire, pas un stock à consommer.
+
+## 1. Ce qui est mesuré, et comment
+
+Tour du disque le 1er novembre 2026 : `df -hT`, `lsblk`, `du -sh` par répertoire (avec délais), et
+`find -type f` pour les comptages et les extensions. Le `du` complet de `/home/stephane` (10,9 To)
+a été **interrompu** : trop lent ; les chiffres sont des **mesures ciblées**, pas une somme
+exhaustive. Le JSON joint porte les 59 entrées, leurs tailles, formats, rôles et états.
+
+| volume | taille | utilisé | libre | ce qu'il porte |
+|---|---:|---:|---:|---|
+| `/home/stephane/Data13TB` (btrfs, 10,9 To) | 11 To | **8,9 To** | 2,0 To | archives 3,0 To (dont **2,8 To de vidéos récupérée
+… [5023 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls corpus/wiki_apparie/ 2>/dev/null | head -5; echo \"...\"; ls corpus/wiki_apparie/ 2>/dev/null | sed 's/_.*//' | sort | uniq -c | head; echo \"=== taille par langue ===\"; du -sh corpus/wiki_apparie 2>/dev/null; for l in fr en de e … [229 caractères tronqués]`
+
+  ```
+...
+=== taille par langue ===
+fr : 0 fichiers, 0
+en : 0 fichiers, 0
+de : 0 fichiers, 0
+es : 0 fichiers, 0
+it : 0 fichiers, 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -d corpus data/wikipedia 2>/dev/null; ls corpus 2>/dev/null | head; echo \"=== recherche wiki_apparie ===\"; find /home/stephane/Data13TB/stephane -maxdepth 4 -name \"wiki_apparie\" -o -maxdepth 4 -name \"wikipedia\" -type d 2>/de … [111 caractères tronqués]`
+
+  ```
+=== recherche wiki_apparie ===
+[still running after 60000ms; moved to background job bash-703]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-703", "timeout_ms": 120000, "wait": true}`
+
+  ```
+/home/stephane/Data13TB/stephane/data/wikipedia
+/home/stephane/Data13TB/stephane/corpus/wiki_apparie
+=== data ===
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+corpus_fr_litterature.txt
+corpus_fr_train.txt
+corpus_fr.txt
+corpus_fr_val.txt
+corpus_litt_propre
+corpus_mixte_dev.txt
+corpus_mixte_litt2.txt
+corpus_mixte_litt.txt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && du -sh corpus/wiki_apparie data/corpus_fr_litterature.txt data/corpus_fr.txt 2>/dev/null; ls corpus/wiki_apparie | head -4; ls corpus/wiki_apparie | sed 's/[_-].*//' | sort | uniq -c | sort -rn | head -6; echo \"=== fr ===\"; ls corpus/wiki_apparie … [236 caractères tronqués]`
+
+  ```
+12G	corpus/wiki_apparie
+de_Aaliyah.txt
+de_Aarhus.txt
+de_Aaron.txt
+de_ABBA.txt
+    482 pt
+    482 it
+    482 fr
+    482 es
+    482 en
+    482 de
+=== fr ===
+482
+1,9M	total
+Aaliyah, née le à New York, dans l'État de New York, aux États-Unis, et morte dans un accident d'avion le à Marsh Harbour, dans les Îles Abacos, aux Bahamas, est une chanteuse, actrice, danseuse et mannequin américaine. Produite à l'origine par R. Kelly, elle devient célèbre durant les ann
+[stderr]
+ls: write error: Broken pipe
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane && ls -la corpus/wiki_apparie/fr_Aaliyah.txt corpus/wiki_apparie/fr_*.txt 2>/dev/null | head -3; du -ch corpus/wiki_apparie/fr_*.txt 2>/dev/null | tail -1; echo \"=== par langue ===\"; for l in fr en de; do du -ch corpus/wiki_apparie/${l}_*.txt 2>/dev … [226 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2071  6 oct 13:54 corpus/wiki_apparie/fr_Aaliyah.txt
+-rw-r--r--. 1 stephane stephane 2071  6 oct 13:54 corpus/wiki_apparie/fr_Aaliyah.txt
+-rw-r--r--. 1 stephane stephane 2050  6 oct 13:54 corpus/wiki_apparie/fr_Aarhus.txt
+1,9M	total
+=== par langue ===
+fr : 1,9M	total
+en : 1,9M	total
+de : 1,9M	total
+=== littérature ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/data/wikipedia && ls -la | head -15; echo \"=== tailles ===\"; du -sh * 2>/dev/null | sort -rh | head -12", "description": "Inspect the local Wikipedia data"}`
+
+  ```
+total 0
+drwxr-xr-x. 1 stephane stephane  14 25 mai 14:39 .
+drwxr-xr-x. 1 stephane stephane  18 25 mai 14:39 ..
+drwxr-xr-x. 1 stephane stephane 940  1 nov 11:02 db
+drwxr-xr-x. 1 stephane stephane  40 26 mai 09:14 dumps
+=== tailles ===
+67G	dumps
+66G	db
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/data/wikipedia && ls -la db/ | head -8; echo \"=== dumps ===\"; ls -la dumps/ | head -12; echo \"=== fr ===\"; ls -la db/ | grep -i \"fr\\b\\|fr_\\|fr-\" | head -5; ls -la dumps/ | grep -i \"fr\" | head -5", "description": "List the Wikipedia database … [13 caractères tronqués]`
+
+  ```
+total 68722292
+drwxr-xr-x. 1 stephane stephane         940  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane          14 25 mai 14:39 ..
+-rw-r--r--. 1 stephane stephane  3505520640 26 mai 10:48 arwiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  1 nov 11:29 arwiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  6 oct 13:49 arwiki_v14.db-wal
+-rw-r--r--. 1 stephane stephane  9424920576 25 mai 21:35 dewiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  1 nov 11:30 dewiki_v14.db-shm
+=== dumps ===
+total 0
+drwxr-xr-x. 1 stephane stephane  40 26 mai 09:14 .
+drwxr-xr-x. 1 stephane stephane  14 25 mai 14:39 ..
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:19 ar
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:32 de
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:13 en
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:43 es
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:22 fr
+drwxr-xr-x. 1 stephane stephane 204 26 mai 10:20 it
+drwxr-xr-x. 1 stephane stephane 204 26 mai 10:03 ja
+drwxr-xr-x. 1 stephane stephane 204 28 mai 08:14 pt
+drwxr-xr-x. 1 stephane stephane 204 28 mai 08:17 ru
+=== fr ===
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:22 fr
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/data/wikipedia && ls -la db/ | grep -i fr; echo \"=== schéma ===\"; sqlite3 db/frwiki_v14.db \".tables\" 2>&1 | head -5; sqlite3 db/frwiki_v14.db \".schema\" 2>&1 | head -30", "description": "Inspect the French Wikipedia sqlite schema"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane  7248388096 25 mai 22:50 frwiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  1 nov 11:04 frwiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  1 nov 11:02 frwiki_v14.db-wal
+=== schéma ===
+articles
+CREATE TABLE articles (
+    page_id     INTEGER PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    title_lower TEXT    NOT NULL,
+    lang        TEXT    NOT NULL,
+    n_chars     INTEGER,
+    n_words     INTEGER,
+    summary     TEXT,
+    v14_json    TEXT,
+    v14_top3    TEXT,
+    dominant    TEXT,
+    molecules   TEXT,
+    signed_at   REAL,
+    sign_version TEXT DEFAULT 'v360'
+);
+CREATE INDEX idx_title_lower ON articles(title_lower);
+CREATE INDEX idx_dominant   ON articles(dominant);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/data/wikipedia && sqlite3 db/frwiki_v14.db \"SELECT count(*), sum(n_chars), sum(n_words) FROM articles;\" 2>&1; echo \"=== échantillon ===\"; sqlite3 db/frwiki_v14.db \"SELECT title, substr(summary,1,300) FROM articles WHERE n_chars > 2000 LIMIT 2;\"  … [219 caractères tronqués]`
+
+  ```
+2755035|7017594173|1090303426
+=== échantillon ===
+Antoine Meillet|Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaiseSa famille paternelle est une famille de nota
+Algèbre linéaire|L’algèbre linéaire est la branche des mathématiques qui s'intéresse aux espaces vectoriels et aux transformations linéaires, formalisation générale des théories des systèmes d'équations linéaires. Histoire L'algèbre linéaire est initiée dans son principe par le mathématicien perse Al-Khwârizmî qui s
+=== v14_json ===
+{"ÊTRE": 0.0, "DIFFÉRENCE": 0.0, "RAPPORT": 0.0, "ORIENTATION": 0.03846154, "SUJET": 0.0, "TEMPS": 0.11538462, "MODALITÉ": 0.0, "NOMBRE": 0.0, "ESPACE": 0.0, "OPÉRATION": 0.03846154, "FONCTION": 0.03846154, "STRUCTURE": 0.76923076, "SYMÉTRIE": 0.0, "ÉQUATION": 0.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p data/wiki_fr && python3 - <<'PY'\nimport sqlite3, pathlib\nsrc = \"/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db\"\ncon = sqlite3.connect(f\"file:{src}?mode=ro\", uri=True)\ncur = con.cursor()\nn = cur.exe … [733 caractères tronqués]`
+
+  ```
+articles éligibles : 1965618
+écrit : 237.5 Mo, data/wiki_fr/articles.txt
+-rw-r--r--. 1 stephane stephane 237491315  1 nov 11:41 data/wiki_fr/articles.txt
+Antoine Meillet
+
+Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaiseSa famille paternelle est une famille de notables de Saint-Désiré, commune de l'Allier limitrophe du Cher ; la famille
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/corpus_propre.py --source data/wiki_fr/articles.txt --sortie data/wiki_fr/propre --manifeste reports/corpus-wiki-propre.json --verif-max 3000 > work/n2j/wiki-dedup.log 2>&1 & echo \"dedup $!\"; sleep 60; tail -3 w … [171 caractères tronqués]`
+
+  ```
+dedup 1321753
+[still running after 60000ms; moved to background job bash-711]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-711", "timeout_ms": 300000, "wait": true}`
+
+  ```
+11:43
+pas 7800 · perte 0.9861 · PPL val 4.910 · 319 s
+pas 6600 · perte 1.1835 · PPL val 4.219 · 320 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 work/n2j/wiki-dedup.log; ls -la data/wiki_fr/ 2>/dev/null; date '+%H:%M'", "description": "Check the Wikipedia dedup progress"}`
+
+  ```
+total 231928
+drwxr-xr-x. 1 stephane stephane        24  1 nov 11:41 .
+drwxr-xr-x. 1 stephane stephane      1654  1 nov 11:41 ..
+-rw-r--r--. 1 stephane stephane 237491315  1 nov 11:41 articles.txt
+11:43
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -4 work/n2j/wiki-dedup.log; ls -la data/wiki_fr/ | head -5; tail -1 work/n2j/base-nonambigu.log; tail -1 work/n2j/base-temoin.log", "description": "Wait for the dedup and the two bases"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-713]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-713", "timeout_ms": 400000, "wait": true}`

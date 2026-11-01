@@ -12936,3 +12936,165 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 
 Dis-moi si je lance le pilote N2 sur un échantillon, ou si je passe directement au texte intégral.
 
+
+## Tour 6
+
+### 👤 Utilisateur
+
+constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
+
+### 🤖 Assistant
+
+⏵ Corpus multilingues : vérification des bases, extraction, puis catalogue partagé
+
+Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés), puis j'étends l'outil et je lance les extractions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; python3 - <<'PY'\nimport sqlite3, pathlib, time\nfor db in sorted(pathlib.Path('data/wikipedia/db').glob('*wiki_v14.db')):\n    t=time.time()\n    try:\n        con=sqlite3.connect(f\"file:{db.resolve()}?mode=ro\",uri=True)\n        n=con.execute(\"s … [713 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-673]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane; ls -la data/wikipedia/db/*.db | awk '{print $5, $9}'", "description": "List language DB sizes while counts run", "timeoutMs": 180000, "workdir": "/home/stephane/Data13TB/stephane"}`
+
+  ```
+3505520640 data/wikipedia/db/arwiki_v14.db
+9424920576 data/wikipedia/db/dewiki_v14.db
+19540979712 data/wikipedia/db/enwiki_v14.db
+5506088960 data/wikipedia/db/eswiki_v14.db
+7248388096 data/wikipedia/db/frwiki_v14.db
+4569493504 data/wikipedia/db/itwiki_v14.db
+6133825536 data/wikipedia/db/jawiki_v14.db
+2773049344 data/wikipedia/db/ptwiki_v14.db
+8023691264 data/wikipedia/db/ruwiki_v14.db
+3645382656 data/wikipedia/db/zhwiki_v14.db
+  ```
+
+- **job_output** `{"job_id": "bash-673"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_kill** `{"job_id": "bash-673", "reason": "somme des longueurs trop lente sur 66 Go ; les comptes viendront de l'extraction"}`
+
+  ```
+requested cancellation of job bash-673
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/corpus_wikipedia.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"corpus_wikipedia.py — des corpus de prose par langue depuis les bases Wikipédia v14.\n\nPOURQUOI CE FICHIER. L'inventaire du disque a montré que le seul stock local … [11741 caractères tronqués]`
+
+  ```
+OK
+ "langue": "pt",
+ "articles_lus": 3001,
+ "articles_gardes": 3000,
+ "articles_doublons": 0,
+ "caracteres_gardes": 5236257,
+ "mots_estimes": 844557,
+ "octets": {
+  "train": 4815304,
+  "val": 318378,
+  "test": 272521
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/corpus_wikipedia.py --toutes-les-langues > work/corpus-wiki-langues.log 2>&1 & echo \"job $!\"; sleep 30; tail -8 work/corpus-wiki-langues.log; date +%H:%M", "description": "Launch all-language corpus extraction", " … [108 caractères tronqués]`
+
+  ```
+started background job bash-676
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls data/xnli/ | head -12; echo \"=== udhr\"; ls data/udhr/ | head -8; echo \"=== progress\"; tail -6 work/corpus-wiki-langues.log; ls -la data/ | grep corpus_wiki | head; date +%H:%M", "description": "Check eval sets and extraction pro … [90 caractères tronqués]`
+
+  ```
+__MACOSX
+XNLI-1.0
+XNLI-1.0.zip
+XNLI-MT-1.0
+XNLI-MT-1.0.zip
+=== udhr
+articles.jsonl
+articles_propres.jsonl
+_eng.txt
+familles
+_fra.txt
+genealogie.json
+langues.jsonl
+meta.json
+=== progress
+===== ar (3.5 Go) =====
+drwxr-xr-x. 1 stephane stephane        48  1 nov 11:43 corpus_wiki_ar
+drwxr-xr-x. 1 stephane stephane        48  1 nov 11:02 corpus_wiki_fr
+11:43
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls data/xnli/XNLI-1.0/ | head; head -2 data/xnli/XNLI-1.0/xnli.dev.tsv 2>/dev/null | cut -c1-300; echo \"=== udhr articles\"; head -c 300 data/udhr/articles.jsonl 2>/dev/null; echo; python3 - <<'PY'\nimport json\ntry:\n    n=0\n    for … [340 caractères tronqués]`
+
+  ```
+README.md
+xnli.dev.jsonl
+xnli.dev.tsv
+xnli.test.jsonl
+xnli.test.tsv
+language	gold_label	sentence1_binary_parse	sentence2_binary_parse	sentence1_parse	sentence2_parse	sentence1	sentence2	promptID	pairID	genre	label1	label2	label3	label4	label5	sentence1_tokenized	sentence2_tokenized	match
+ar	neutral					وقال، ماما، لقد عدت للمنزل.	اتصل بأمه حالما أوصلته حافلة المدرسية.	1	1	facetoface	neutral	contradiction	neutral	neutral	neutral	وقال ، ماما ، لقد عدت للمنزل .	اتصل بأمه حالما أوصلته حافلة المدرسية .	True
+=== udhr articles
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 0, "titre": "Préambule", "texte": "Punda dignidade di tudo nguê di mundu e dirêtu d'inem igual e andeji cu a na pô bêndê fa sá stê di liberdade, di justiça e di paz ni mundu; Punda fata di conheximentu
+['fichier', 'iso3', 'nom', 'script', 'art', 'titre', 'texte'] {'fichier': 'udhr_007.xml', 'iso3': 'cri', 'nom': 'Sãotomense', 'script': 'Latn', 'art': 0, 'titre': 'Préambule', 'texte': "Punda dignidade di tudo nguê di mundu e dirêtu d'inem igual e andeji cu a na
+['fichier', 'iso3', 'nom', 'script', 'art', 'titre', 'texte'] {'fichier': 'udhr_007.xml', 'iso3': 'cri', 'nom': 'Sãotome
+… [155 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport csv, json, pathlib\n# 1) FR manifest : langue + note mots\np=pathlib.Path('reports/corpus-wiki-fr.json'); d=json.loads(p.read_text())\nd.setdefault('langue','fr')\nd.setdefault('note_mots',\"caractères / 6,2 :  … [1522 caractères tronqués]`
+
+  ```
+fr manifest patché
+ar 2490 paires
+de 2490 paires
+en 2490 paires
+es 2490 paires
+fr 2490 paires
+ru 2490 paires
+zh 2490 paires
+it 31 articles UDHR
+ja 31 articles UDHR
+pt 62 articles UDHR
+total 3464
+drwxr-xr-x.   2 stephane stephane    240  1 nov 11:44 .
+drwxrwxrwt. 110 root     root       8600  1 nov 11:44 ..
+-rw-r--r--.   1 stephane stephane 598140  1 nov 11:44 ar.txt
+-rw-r--r--.   1 stephane stephane 459743  1 nov 11:44 de.txt
+-rw-r--r--.   1 stephane stephane 398602  1 nov 11:44 en.txt
+-rw-r--r--.   1 stephane stephane 443561  1 nov 11:44 es.txt
+-rw-r--r--.   1 stephane stephane 475243  1 nov 11:44 fr.txt
+-rw-r--r--.   1 stephane stephane  11611  1 nov 11:44 it.txt
+-rw-r--r--.   1 stephane stephane  11898  1 nov 11:44 ja.txt
+-rw-r--r--.   1 stephane stephane  22407  1 nov 11:44 pt.txt
+-rw-r--r--.   1 stephane stephane 751581  1 nov 11:44 ru.txt
+-rw-r--r--.   1 stephane stephane 349990  1 nov 11:44 zh.txt
+===== ar (3.5 Go) =====
+  [ar] 200000/1310867 lus · 199997 gardés · 199997 tronçons
+  ```
+
+### 👤 Utilisateur
+
+background job bash-676 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/corpus_wikipedia.py --toutes-les-langues > work/corpus-wiki-langues.log 2>&1 & echo "job $!"; sleep 30; tail -8 work/corpus-wiki-langues.log; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/catalogue_corpus.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"catalogue_corpus.py — la table des corpus Wikipédia, depuis leurs manifestes.\n\nPOURQUOI CE FICHIER. Chaque corpus de langue a son manifeste `reports/corpus-wiki-< … [2796 caractères tronqués]`
+
+  ```
+| langue | articles | caractères | mots (est.) | train / val / test | manifeste |
+|---|---:|---:|---:|---:|---|
+| **fr** | 2 525 902 | 3.68 G | 594 M | 3.43 / 191 / 190 Go | [`corpus-wiki-fr.json`](corpus-wiki-fr.json) |
+
+**Total : 2 525 902 articles · 3.68 G caractères · 3.8 Go**
+===== ar (3.5 Go) =====
+  [ar] 200000/1310867 lus · 199997 gardés · 199997 tronçons
+  [ar] 400000/1310867 lus · 399990 gardés · 399990 tronçons
+11:44
+  ```
+
