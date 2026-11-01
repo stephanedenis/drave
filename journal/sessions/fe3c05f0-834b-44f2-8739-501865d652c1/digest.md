@@ -9655,3 +9655,221 @@ budget de contexte · documents chargeables
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** ; gradient **1,2 corrigé**, flou **non** — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** — [`r44-scans`]\")\np.write_text(s)\nPY\np … [370 caractères tronqués]`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+[master 55e6adbf] ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000)
+ 8 files changed, 44 insertions(+), 15 deletions(-)
+55e6adbf ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ndebut=s.index('def bande_vide_boites(')\nfin=s.index('def bande_vide(lignes')\nnew='''def bandes_vides(boites: list[tuple[float, float, float, float]],\n                 largeur: float, ha … [5186 caractères tronqués]`
+
+  ```
+gouttières multiples
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 15, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 229, in bandes_vides
+    for k in range(len(bornees) - 1):
+                       ^^^^^^^
+NameError: name 'bornees' is not defined. Did you mean: 'bornes'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('for k in range(len(bornees) - 1):','for k in range(len(bornes) - 1):')\np.write_text(s)\nPY\npython3 -m py_compile tools/graphe_document_ocr.py && python3 - <<'PY'\nimport sys … [961 caractères tronqués]`
+
+  ```
+trois colonnes  bandes [(806, 922), (1526, 1642)]
+deux colonnes   bandes [(1158, 1291)]
+mono            bandes []
+lexique réel    bandes [(853, 944)]
+ONU mono        bandes []
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo\np=pathlib.Path('work/r44/trois-colonnes/trois-p1.png')\nm=gco.manifeste(p,'fra',colonnes=True)\nhyp=mo.jetons(mo.texte_du_manifeste(m))\n# référence : reconstruire dep … [859 caractères tronqués]`
+
+  ```
+WER 3 colonnes (gouttières multiples) : 0.0 mots 804 804
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport simuler_scan as sim, mesurer_scans as ms, mesurer_ocr as mo\nbase=(\"La lecture d'une page ne va pas de soi. Les lignes se suivent, mais leur ordre dépend de la mise en page, \"\n      \"et une colonne ne se l … [1018 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 14, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py", line 148, in fabriquer
+    gris = ImageOps.autocontrast(_reduire(im.convert("L"), 200), cutoff=1)
+                                          ^^^^^^^^^^
+AttributeError: 'PosixPath' object has no attribute 'convert'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess\nsys.path.insert(0,'tools')\nimport simuler_scan as sim, mesurer_scans as ms, mesurer_ocr as mo\nfrom PIL import Image\nbase=(\"La lecture d'une page ne va pas de soi. Les lignes se suivent, mais leur ordre dépend de la mise en page, \"\n  … [1253 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py", line 157, in fabriquer
+    return _jpeg(out, 45, tmp), p
+           ~~~~~^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py", line 59, in _jpeg
+    im.save(tmp, "JPEG", quality=qualite)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 2707, in save
+    fp = builtins.open(filename, "w+b")
+IsADirectoryError: [Errno 21] Is a directory: 'work/r44/trois-colonnes'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess\nsys.path.insert(0,'tools')\nimport simuler_scan as sim, mesurer_scans as ms, mesurer_ocr as mo\nfrom PIL import Image\nbase=(\"La lecture d'une page ne va pas de soi. Les lignes se suivent, mais leur ordre dépend de la mise en page, \"\n  … [1300 caractères tronqués]`
+
+  ```
+photocopie  WER 3 colonnes  1.08% (pages [0.005, 0.0062, 0.0211])
+photo       WER 3 colonnes  0.00% (pages [0.0, 0.0, 0.0])
+papier      WER 3 colonnes  0.00% (pages [0.0, 0.0, 0.0])
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('VERSION_MANIFESTE = 4','VERSION_MANIFESTE = 5')\np.write_text(s)\nPY\npython3 -m py_compile tools/graphe_document_ocr.py && echo OK\ntimeout 2400 python3 tools/mesurer_scans.p … [311 caractères tronqués]`
+
+  ```
+started background job bash-507
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes-v6.json > work/r44/colonnes-v6.log 2>&1; echo \"[colonnes $?]\"; tail -4 work/r44/colonnes-v6.log", "description": "Re-run columns with multi-gutter", "run_in_backgrou … [72 caractères tronqués]`
+
+  ```
+started background job bash-508
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v6.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djv … [679 caractères tronqués]`
+
+  ```
+started background job bash-509
+  ```
+
+- **bash** `{"command": "sleep 240; echo \"=== scans\"; tail -3 work/r44/scans-v6.log; wc -l < work/r44/scans-v6.log; echo \"=== colonnes\"; tail -6 work/r44/colonnes-v6.log; echo \"=== reel\"; ls -la --time-style=+%H:%M work/r44/reel*-v6.json 2>/dev/null; date +%H:%M", "description": "Check multi-gutter regres … [94 caractères tronqués]`
+
+  ```
+=== scans
+  [89/100] A_RES_80_1-es-p1-s1-fax.png              auto         WER 15.95% conf  84.1
+  [90/100] A_RES_80_1-es-p1-s1-papier.png           auto         WER  7.06% conf  93.5
+  [91/100] A_RES_80_1-es-p2-s1-propre.png           auto         WER  2.36% conf  95.7
+92
+=== colonnes
+  page 1 · mono : mesuré
+  page 1 · deux : mesuré
+  page 2 · mono : mesuré
+  page 2 · deux : mesuré
+  page 3 · mono : mesuré
+  page 3 · deux : mesuré
+=== reel
+-rw-r--r--. 1 stephane stephane 3936 01:43 work/r44/reel2-v6.json
+-rw-r--r--. 1 stephane stephane 4081 01:45 work/r44/reel3-v6.json
+-rw-r--r--. 1 stephane stephane 3727 01:44 work/r44/reel-v6.json
+01:46
+  ```
+
+### 👤 Utilisateur
+
+background job bash-509 (bash: timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v6.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djvu-xml work/r44/reel/livre_djvu.xml --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel-v6.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/germinal.pdf --djvu-xml work/r44/reel/germinal_djvu.xml --pages 40,60,80,100,120,140,160,180,200,220 --sortie work/r44/reel3-v6.json >/dev/null 2>&1; python3 -c "
+import json
+for f in ('work/r44/reel-v6.json','work/r44/reel2-v6.json','work/r44/reel3-v6.json'):
+    d=json.load(open(f)); print(f,d['agregat']['wer'],d['agregat']['rappel'])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-509"}`
+
+  ```
+work/r44/reel-v6.json 0.071 0.9372
+work/r44/reel2-v6.json 0.3626 0.8838
+work/r44/reel3-v6.json 0.0873 0.9189
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-507 (bash: python3 - <<'PY'
+import pathlib
+p=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()
+s=s.replace('VERSION_MANIFESTE = 4','VERSION_MANIFESTE = 5')
+p.write_text(s)
+PY
+python3 -m py_compile tools/graphe_document_ocr.py && echo OK
+timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v6.json > work/r44/scans-v6.log 2>&1; echo "[scans $?]"; tail -4 work/r44/scans-v6.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -14 work/r44/scans-v6.log; python3 - <<'PY'\nimport json\na=json.load(open('work/r44/mesure-v5.json'))['agregat']; b=json.load(open('work/r44/mesure-v6.json'))['agregat']\nfor k in sorted(b):\n    same = abs(a[k]['wer']-b[k]['wer'])<1e-9 and (a[k]['preservation'] or 0)==(b[k]['pres … [237 caractères tronqués]`
+
+  ```
+✅ papier · dev : WER ≤ 10% (mesuré 6.9%)
+  ✅ papier · dev : préservation ≥ 55% (mesuré 80.0%)
+  ✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 86.7%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 86.7%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 254 s → work/r44/mesure-v6.json
+fax|dev|auto identique
+fax|test|auto identique
+papier|dev|auto identique
+papier|test|auto identique
+photocopie|dev|auto identique
+photocopie|test|auto identique
+photo|dev|auto identique
+photo|test|auto identique
+propre|dev|auto identique
+propre|test|auto identique
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# JSON\np=pathlib.Path('reports/r44-colonnes.json'); d=json.loads(p.read_text())\nd['sonde_trois_colonnes']={'pages':3,'wer_une_gouttiere':0.5249,\n  'wer_gouttieres_multiples':{'propre':0.0,'photocopie':0.0108,'photo':0.0,'papier':0.0},\n  'note': … [3882 caractères tronqués]`
+
+  ```
+fiche, spec et état : gouttières multiples
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "sleep 420; tail -14 work/r44/colonnes-v6.log; echo \"=== compare\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('work/r44/colonnes-v6.json')\nif p.exists():\n    b=json.load(open(p))['agregat']; a=json.load(open('reports/r44-colonnes.json'))['agregat']\n    for k in sorted(b): … [340 caractères tronqués]`
+
+  ```
+mono  propre      brut         0.29%     10
+  mono  propre      colonnes     0.29%     10
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → work/r44/colonnes-v6.json
+=== compare
+deux|photocopie|brut       identique
+deux|photocopie|colonnes   identique
+deux|photo|brut            identique
+deux|photo|colonnes        identique
+deux|propre|brut           identique
+deux|propre|colonnes       identique
+mono|photocopie|brut       identique
+mono|photocopie|colonnes   identique
+mono|photo|brut            identique
+mono|photo|colonnes        identique
+mono|propre|brut           identique
+mono|propre|colonnes       identique
+  ```
+
+### 👤 Utilisateur
+
+background job bash-508 (bash: timeout 1800 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes-v6.json > work/r44/colonnes-v6.log 2>&1; echo "[colonnes $?]"; tail -4 work/r44/colonnes-v6.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cat > /tmp/msg-multi.txt <<'EOF'\nR4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS\n\nLa détection de colonnes cherchait **une** gouttière (la plus large). Une page à **trois** colonnes\nen a **deux** : la première coupait  … [1627 caractères tronqués]`

@@ -7305,3 +7305,76 @@ Updated 1 path from the index
   ```
 
 - **job_output** `{"job_id": "bash-416", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-405 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅\|❌" work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null; tail -1 work/n2h/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+01:41
+29
+porte-homeostasie 2 0
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sort -k3 -n -r /tmp/portes-1101-n2h/registre.txt | head -6; echo \"---\"; awk '{s+=$3} END {print \"total\", s\" s\"}' /tmp/portes-1101-n2h/registre.txt", "description": "Check the slowest gates so far"}`
+
+  ```
+porte-greffe 0 656
+porte-gain 0 218
+porte-episodique 0 172
+porte-audit-drapeaux 0 171
+porte-coupe 0 139
+porte-cycle-c2 0 130
+---
+total 2172 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Wait 30 minutes for the gates", "run_in_background": true}`
+
+  ```
+started background job bash-424
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n2-propre\\|n2-diversite\\|n2-longueur\" reports/INDEX.md; date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt", "description": "Verify the reports index lists the new fiches"}`
+
+  ```
+202:| [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
+204:| [rapport-n2-longueur.md](rapport-n2-longueur.md) | N2.h3 — Le verrou de longueur : les positions absolues, pas le contexte |
+205:| [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
+01:42
+29
+  ```
+
+- **job_output** `{"job_id": "bash-424", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+01:52
+38
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+  porte-miroir-blocs     ✅                           7 s  ✅ porte miroir verte
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -2 work/n2h/portes.log", "description": "Wait 30 more minutes for the gates", "run_in_background": true}`
+
+  ```
+started background job bash-427
+  ```
+
+- **job_output** `{"job_id": "bash-427", "timeout_ms": 1800000, "wait": true}`

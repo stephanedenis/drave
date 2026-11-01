@@ -1213,8 +1213,13 @@
  "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)",
  "sonde_trois_colonnes": {
   "pages": 3,
-  "wer_ordre_trois_colonnes": 0.5249,
-  "wer_deux_colonnes_controle": 0.0054,
-  "note": "la gouttière unique coupe la page en deux ; la moitié droite contient deux colonnes entrelacées"
+  "wer_une_gouttiere": 0.5249,
+  "wer_gouttieres_multiples": {
+   "propre": 0.0,
+   "photocopie": 0.0108,
+   "photo": 0.0,
+   "papier": 0.0
+  },
+  "note": "toutes les gouttières sont rendues ; trois colonnes lues colonne par colonne ; le garde-fou (≥12 % des mots par groupe) laisse les pages mono intactes"
  }
 }

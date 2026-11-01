@@ -45,7 +45,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 VERSION = 1
 # Version de la CONSTRUCTION du manifeste (lignes, blocs, colonnes) : la changer invalide les
 # caches de mesure — sinon une amélioration de l'ordre de lecture n'est jamais mesurée.
-VERSION_MANIFESTE = 4
+VERSION_MANIFESTE = 5
 # Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.
 RECUPERATION_VERSION = 2
 PREFIXE = pathlib.Path(os.environ.get("TESSERACT_PREFIX", RACINE / "work/ocr/root"))
@@ -188,50 +188,57 @@ def recuperer_exposants(image: pathlib.Path, les_mots: list[dict],
     return les_mots, recuperes
 
 
-def bande_vide_boites(boites: list[tuple[float, float, float, float]],
-                      largeur: float, hauteur: float | None = None) -> tuple[float, float] | None:
-    """La gouttière entre deux colonnes : une bande verticale SANS encre, entre 15 % et 85 %
-    de la largeur, avec au moins 20 % des boîtes de chaque côté.
+def bandes_vides(boites: list[tuple[float, float, float, float]],
+                 largeur: float, hauteur: float | None = None) -> list[tuple[float, float]]:
+    """TOUTES les gouttières : les bandes verticales sans encre, entre 15 % et 85 % de la largeur,
+    larges de 2,5 % à 15 % de la page. Une page à deux colonnes en a une ; une page à trois
+    colonnes en a deux, et la lecture doit alors découper en trois — sinon la moitié droite
+    entrelace deux colonnes (mesuré : 52,5 % de WER à trois colonnes contre 0,5 % à deux).
 
-    On ne compte pas les boîtes : on mesure la **couverture verticale** de chaque colonne de
-    pixels (somme des hauteurs de mots / hauteur de page). Un en-tête centré traverse la
-    gouttière sur 2 % de la hauteur — avec un simple comptage, il la faisait disparaître
-    (mesuré sur un lexique réel à deux colonnes) ; avec la couverture, il ne pèse rien."""
+    L'occupation est une **couverture verticale** (somme des hauteurs de mots / hauteur de page) :
+    un en-tête centré qui traverse une gouttière ne pèse que 2 % et ne la bloque plus. Chaque
+    groupe de mots entre deux gouttières doit peser au moins 12 % des mots, sinon la bande est
+    un faux vide (espace de justification, titre centré)."""
     if len(boites) < 8 or largeur < 100:
-        return None
+        return []
     occupation = np.zeros(int(largeur) + 2, dtype=np.float64)
     for x0, x1, y0, y1 in boites:
         occupation[max(int(x0), 0):max(int(x1), 0)] += float(y1 - y0)
     if hauteur:
         occupation /= max(float(hauteur), 1.0)
-    deb, fin = int(largeur * 0.15), int(largeur * 0.85)
     faible = occupation < 0.10
-    meilleur = None
+    deb, fin = int(largeur * 0.15), int(largeur * 0.85)
+    largeur_min = max(largeur * 0.025, 12)
+    largeur_max = largeur * 0.15
+    bandes = []
     i = deb
     while i < fin:
         if faible[i]:
             j = i
             while j < fin and faible[j]:
                 j += 1
-            if meilleur is None or (j - i) > (meilleur[1] - meilleur[0]):
-                meilleur = (i, j)
+            if largeur_min <= (j - i) <= largeur_max:
+                bandes.append((float(i), float(j)))
             i = j
         else:
             i += 1
-    # GARDE-FOUS DE LARGEUR. Un « vide » de 1,6 % de la largeur est un espace entre deux mots
-    # d'une ligne justifiée, pas une gouttière (mesuré sur une page de résolution) ; un vide de
-    # 70 % est une page à moitié blanche. Une gouttière réelle est étroite et intérieure :
-    # entre 2,5 % et 15 % de la largeur.
-    if meilleur is None:
-        return None
-    largeur_bande = meilleur[1] - meilleur[0]
-    if largeur_bande < max(largeur * 0.025, 12) or largeur_bande > largeur * 0.15:
-        return None
-    centre = (meilleur[0] + meilleur[1]) / 2
-    gauche = sum(1 for x0, x1, _, _ in boites if (x0 + x1) / 2 < centre)
-    if gauche < len(boites) * 0.2 or len(boites) - gauche < len(boites) * 0.2:
-        return None
-    return float(meilleur[0]), float(meilleur[1])
+    if not bandes:
+        return []
+    # chaque groupe entre deux gouttières doit exister : au moins 12 % des mots
+    bornes = [0.0] + [(a + b) / 2 for a, b in bandes] + [float(largeur)]
+    for k in range(len(bornes) - 1):
+        gauche, droite = bornes[k], bornes[k + 1]
+        poids = sum(1 for x0, x1, _, _ in boites if gauche <= (x0 + x1) / 2 < droite)
+        if poids < len(boites) * 0.12:
+            return []
+    return bandes
+
+
+def bande_vide_boites(boites: list[tuple[float, float, float, float]],
+                      largeur: float, hauteur: float | None = None) -> tuple[float, float] | None:
+    """La gouttière la plus large (compatibilité) ; voir `bandes_vides` pour toutes."""
+    bandes = bandes_vides(boites, largeur, hauteur)
+    return max(bandes, key=lambda b: b[1] - b[0]) if bandes else None
 
 
 def bande_vide(lignes: list[dict], largeur: float,
@@ -298,14 +305,17 @@ def lignes_de_mots(les_mots: list[dict], colonnes: bool = False) -> list[dict]:
     if colonnes:
         largeur = max(m["left"] + m["width"] for m in les_mots)
         hauteur = max(m["top"] + m["height"] for m in les_mots)
-        gouttiere = bande_vide_boites(
+        bandes = bandes_vides(
             [(m["left"], m["left"] + m["width"], m["top"], m["top"] + m["height"])
              for m in les_mots], largeur, hauteur)
-        if gouttiere is not None:
-            centre = sum(gouttiere) / 2
-            gauche = [m for m in les_mots if m["left"] + m["width"] / 2 < centre]
-            droite = [m for m in les_mots if m["left"] + m["width"] / 2 >= centre]
-            return _lignes_depuis_mots(gauche) + _lignes_depuis_mots(droite)
+        if bandes:
+            bornes = [0.0] + [(a + b) / 2 for a, b in bandes] + [largeur + 1]
+            sortie = []
+            for k in range(len(bornes) - 1):
+                groupe = [m for m in les_mots
+                          if bornes[k] <= (m["left"] + m["width"] / 2) < bornes[k + 1]]
+                sortie.extend(_lignes_depuis_mots(groupe))
+            return sortie
     return _lignes_depuis_mots(les_mots)
 
 
