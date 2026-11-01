@@ -6775,3 +6775,263 @@ portes 657672
 01:56
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## La porte honnête/,/## Fichiers/p' reports/rapport-n2-propre.md", "description": "Review the port and OOD sections"}`
+
+  ```
+## La porte honnête
+
+Sur le corpus propre, la porte < 2,5 est à **0,59** de l'élève distillé (**3,0904**), et à
+**0,70** du test (**3,1960**). Ce n'est pas un échec de réglage : c'est le premier
+chiffre de N2 qui ne contienne pas de mémoire. Le **curriculum 129** — mesuré sur le protocole 128, 3,0804 contre 3,0904 — ne la
+rapproche pas.
+
+Pour situer l'écart avec l'histoire de N2 : la chaîne d'origine, mesurée sur les fenêtres de son
+propre jeu qui n'étaient pas dans l'entraînement, valait **2,9795** ; la chaîne propre vaut
+**3,0904**, avec **22 % de texte unique en moins** et une sélection plus stricte. Le 2,6998
+historique, lui, vient d'une chaîne **huit fois plus longue** (plus de 100 000 pas) mesurée sur le
+jeu contaminé : il n'est pas comparable, ni dans un sens ni dans l'autre.
+
+## Hors domaine — un spécialiste du dépôt
+
+Le même élève, sur des textes qu'il n'a jamais vus :
+
+| texte | PPL |
+|---|---:|
+| validation propre (dépôt) | **3,0904** |
+| littérature française (Verne, domaine public) | **16,70** |
+| anglais (Wikipédia) | **57,58** |
+| wikitext2 (test standard) | **56,88** |
+
+C'est le vrai résultat de la nuit : le modèle de N2 n'est pas un modèle de français, c'est un
+mod
+… [3027 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. format de la décomposition sans boucle\np = pathlib.Path('work/n2h/remplit.py'); s = p.read_text()\ns = s.replace('\"DECOMP_SANS\": f\"{dec[\\'sans_pensee\\']:.2e}\".replace(\".\", \",\"),',\n   … [638 caractères tronqués]`
+
+  ```
+ok
+long A {'129': 3.13, '192': 8.56, '256': 14.11, '384': 23.9, '512': 32.41} long R {'129': 3.24, '192': 3.23, '256': 3.25, '384': 5.06, '512': 5.93}
+51:| **C — curriculum 129** | 3 | **3,0804** ±0,0103 | **3,1879** ±0,0042 | **16,8172** ±0,3141 | **58,0259** ±1,6809 | **57,7717** ±1,3480 |
+63:chiffre de N2 qui ne contienne pas de mémoire. Le **curriculum 129** vaut mesuré sur le protocole 128, 3,0804 contre 3,0904 : il ne la
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit.py'); s = p.read_text()\ns = s.replace('''\"C_TEXTE\": (f\"mesuré sur le protocole 128, {fm(C128)} contre {fm(A_VAL)}\" if C128 else \"—\"),''',\n              '''\ … [342 caractères tronqués]`
+
+  ```
+ok
+63:chiffre de N2 qui ne contienne pas de mémoire. Le **curriculum 129** vaut 3,0804 sur le protocole 128, contre 3,0904 : il ne la
+110:| principale, sans boucle de pensée | 2,36 × 10^7 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2h/portes.log 2>/dev/null; tail -2 work/n2h/portes.log 2>/dev/null; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null", "description": "Check gate pass progress"}`
+
+  ```
+01:56
+0
+=== PASSE COMPLÈTE DES PORTES (80 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1101-n2h
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md <<'EOF'\n# Plan de session — N2.h, le mètre propre\n\n> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-co … [1571 caractères tronqués]`
+
+  ```
+⚠ mandat périmé (192 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ⚠ mandat périmé (82 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+01:56
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check; echo \"exit=$?\"; sed -n \"$(grep -n 'def verifie' tools/sessions.py | head -1 | cut -d: -f1),+25p\" tools/sessions.py | head -30", "description": "Inspect the session check exit logic"}`
+
+  ```
+⚠ mandat périmé (192 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ⚠ mandat périmé (82 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+exit=0
+def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
+    erreurs: list[str] = []
+    avertissements: list[str] = []
+    plans = decouvrir(racine)
+    actifs = [p for p in plans if p["etat"] in ACTIFS]
+    vus: dict[str, str] = {}
+    for p in plans:
+        manquants = [c for c in CHAMPS if c not in p["champs"]]
+        if manquants:
+            erreurs.append(f"{p['chemin']} : champ(s) manquant(s) — {', '.join(manquants)}")
+        if p["etat"] not in ETATS_CONNUS:
+            erreurs.append(f"{p['chemin']} : état inconnu {p['etat']!r}")
+        if p["etat"] in A_CONFIRMER:
+            (erreurs if strict else avertissements).append(
+                f"plan à confirmer : {p['id']} — la session doit le compléter")
+        if p["age"] is None:
+            erreurs.append(f"{p['chemin']} : heartbeat illisible")
+        if p["id"] in vus:
+            erreurs.append(f"id dupliqué : {p['id']} ({vus[p['id']]} et {p['chemin']})")
+        vus[p["id"]] = str(p["chemin"])
+    for i,
+… [348 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/roadmap.md | head -70", "description": "Review the roadmap diff"}`
+
+  ```
+diff --git a/docs/pilotage/roadmap.md b/docs/pilotage/roadmap.md
+index 6bd54a81..2ee56255 100644
+--- a/docs/pilotage/roadmap.md
++++ b/docs/pilotage/roadmap.md
+@@ -29,7 +29,7 @@
+ |---|---|---|---|
+ | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+ | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
+-| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 : budget **−0,08**, **validation contaminée (32,8 %)** ; N4 partiel | **N2** (le corpus décontaminé), **N4** (consigne courte) |
++| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (c
+… [6847 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"{{\" reports/rapport-n2-*.md; echo \"=== fiche2 ===\"; sed -n '/## Lecture/,/## Ce que ça change/p' reports/rapport-n2-diversite.md; echo \"=== fiche3 suite ===\"; sed -n '/## Ce que ça change pour R1/,/## Ce qui pourrait/p … [108 caractères tronqués]`
+
+  ```
+reports/rapport-n2-budget.md:0
+reports/rapport-n2-distillation.md:0
+reports/rapport-n2-diversite.md:0
+reports/rapport-n2-hierarchie.md:0
+reports/rapport-n2-longueur.md:0
+reports/rapport-n2-propre.md:0
+=== fiche2 ===
+## Lecture
+
+- **Le gain hors domaine est massif** : 16,70 → 3,85 sur de la littérature jamais vue,
+  soit **÷ 4,33**. Le corpus était bien le levier, pas le budget.
+- **Le coût en domaine est réel mais petit** : 3,0904 → 3,2625 (**+0,17**). Le modèle
+  consacre la moitié de ses octets à autre chose, et le dépôt y perd un peu.
+- **L'anglais suit** : 57,58 → 25,68 (**÷ 2,24**) alors que le modèle n'a **jamais**
+  vu un octet d'anglais. La diversité de registre, dans une langue, transfère au niveau des
+  octets.
+- **Le test hors domaine est propre** : le gain n'est pas de la mémoire — la validation de
+  littérature est tenue à l'écart par construction.
+
+## Ce que ça change
+=== fiche3 suite ===
+## Ce que ça change pour R1
+
+Le verrou de longueur n'est pas un seul verrou, et aucun n'est l'architecture :
+
+1. **jusqu'à 256 octets, c'est la position apprise** : quelques lignes de code (tirer l'offset des
+   positions à chaque pas) suffisent à faire tomber la PPL de 256 octets de
+… [494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/fiche3.md'); s = p.read_text()\ns = s.replace(\"font tomber la PPL de 256 octets de 14,46 à 3,26\", \"font tomber la PPL de 256 octets de {{A_256}} à {{R_256}}\")\ns = s.re … [445 caractères tronqués]`
+
+  ```
+ok
+## Ce que ça change pour R1
+
+Le verrou de longueur n'est pas un seul verrou, et aucun n'est l'architecture :
+
+1. **jusqu'à 256 octets, c'est la position apprise** : quelques lignes de code (tirer l'offset des
+   positions à chaque pas) suffisent à faire tomber la PPL de 256 octets de 14,46 à 3,26. Le
+   curriculum n'est plus la seule voie ;
+2. **au-delà, c'est la fenêtre d'attention locale (256)** : R remonte de 3,25 à 5,93 à 512. Ce
+   n'est plus un problème d'exposition mais de **schéma** — exactement ce que R1 doit trancher.
+
+La question de R1 (« 1 000 octets sans refaire les négatifs 130–256 ») se scinde donc en deux :
+la position (résolue, trois graines) et la fenêtre (ouverte, et c'est un vrai choix
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"14,46\" work/n2h/fiche3.md; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/fiche3.md'); s = p.read_text()\ns = s.replace(\"faire tomber la PPL de 256 octets de 14,46 à 3,26\", \"faire tomber la PPL de 256 octe … [253 caractères tronqués]`
+
+  ```
+41:   positions à chaque pas) suffisent à faire tomber la PPL de 256 octets de 14,46 à 3,26. Le
+44:   positions à chaque pas) suffisent à faire tomber la PPL de 256 octets de 14,11 à 3,25. Le
+01:57
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1", "description": "Re-run the documentat … [12 caractères tronqués]`
+
+  ```
+372 fiches → reports/INDEX.md
+  revue de documentation · 375 fiche(s) · 450 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/commit-msg.txt <<'EOF'\nN2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE\n\nLe corpus de N2 se recopiait : 32,8 % des fenêtres du protocole de validation étaient ve … [1812 caractères tronqués]`
+
+  ```
+24 work/n2h/commit-msg.txt
+01:57
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce que ça change/,$p' reports/rapport-n2-diversite.md", "description": "Review the diversity report's conclusion"}`
+
+  ```
+## Ce que ça change
+
+Le modèle de N2 n'est plus évalué sur sa capacité à reproduire le dépôt mais sur sa capacité à
+lire du français. Pour la ligne R, qui lira des documents quelconques, c'est la seule mesure qui
+compte. Et la porte < 2,5, si elle doit rester la cible, se paie en diversité : à 3,2625 en
+domaine, l'élève diversifié en est à 0,76.
+
+## Ce qui pourrait le rendre faux
+
+- **Le test de littérature est du même auteur** que l'entraînement (Verne pour l'essentiel) : le
+  gain mesure l'adaptation à un **genre** et à une **langue**, pas à un auteur.
+- **Le corpus de littérature est daté** (1900) : le gain en anglais ne dit rien d'un anglais
+  moderne.
+- **Le professeur mixte** est plus faible en domaine que le professeur dépôt : une partie du coût
+  en domaine vient de lui, pas du corpus de l'élève.
+- **Trois graines** : l'écart en domaine (+0,17) est petit ; l'intervalle le couvre peut-être.
+- **Le ratio 50/50 est un choix** : ni balayé, ni optimisé ; un autre ratio déplacerait le
+  compromis.
+
+## Fichiers
+
+- Code : [`tools/distiller_budget.py`](../tools/distiller_budget.py) ·
+  [`tools/eval_n2_propre.py`](../tools/eval_n2_propre.py).
+- Corpus : `data/corpus_mixte_propre.txt`
+… [177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null; tail -1 work/n2h/portes.log", "description": "Wait 25 minutes and check the gates", "run_in_background": t … [4 caractères tronqués]`
+
+  ```
+started background job bash-399
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"NativeConfig\\|dim\\|cfg\" tools/entrainer_native.py | head -12; sed -n 50,75p tools/entrainer_native.py", "description": "Inspect the native base trainer config"}`
+
+  ```
+19:from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+68:    cfg = NativeConfig()
+69:    modele = NativeModel(cfg).to(a.device)
+89:    modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
+101:    torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+    ap.add_argument("--pas", type=int, default=200)
+    ap.add_argument("--seq", type=int, default=128)
+    ap.add_argument("--lot", type=int, default=8)
+    ap.add_argument("--lr", type=float, default=3e-4)
+    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
+    ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
+    ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
+                    help="entraîner aussi les têtes précoces")
+    a = ap.parse_args()
+    torch.manual_seed(a.graine)
+    data = charger(a.corpus)
+    n_val = max(10_000, len(data) // 20)
+    train, val = data[:-n_val], data[-n_val:]
+    
+… [323 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-399", "timeout_ms": 1500000, "wait": true}`

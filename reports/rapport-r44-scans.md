@@ -61,6 +61,21 @@ de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées e
 photo **80,7 → 5,7 %**, papier **53,2 → 6,4 %**, fax **23,1 → 15,5 %** sur des pages **jamais
 vues**.
 
+### Le petit texte : une page à 120 dpi, sans autre dégradation
+
+Une sixième famille a été rendue **hors du corpus principal** : la page à **120 dpi** (1 020 px de
+large), sans photocopie, sans photo, sans fax — seulement un **petit texte**. C'est le test de la
+politique d'échelle : le prétraitement agrandit-il, et cela paie-t-il ?
+
+| | WER dev | WER test | préservation dev | rappel |
+|---|---:|---:|---:|---:|
+| brut | 5,49 % | 4,03 % | 83,3 % | 96,1 % |
+| **auto** (agrandi à 1 800 px) | **4,91 %** | **3,75 %** | **83,3 %** | **97,2 %** |
+
+L'agrandissement gagne **0,6 point** en développement et **0,3** en test : le petit texte n'est pas
+une catastrophe pour tesseract, mais l'échelle reste un levier. Cette famille n'est **pas** dans la
+porte : elle est un **sondage**, pas une prétention de couverture.
+
 ## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 90,0 %
 
 Les appels de note sont lus `!`, `!!`, `!?` : ce sont des **petits mots** (hauteur < 80 % de la
@@ -169,24 +184,27 @@ OCR, pas une vérité humaine, et le WER global du second livre n'a de sens que 
 
 ## 5 bis. La variance entre graines : le WER est stable, la préservation ne l'est pas
 
-Le corpus a été régénéré avec une **seconde graine** (mêmes pages, dégradations différentes) et
-mesuré de la même façon. Le WER bouge peu ; la préservation, elle, bouge beaucoup :
+Le corpus a été régénéré avec une **seconde** puis une **troisième graine** (mêmes pages,
+dégradations différentes) et mesuré de la même façon. Le WER bouge peu ; la préservation, elle,
+bouge beaucoup :
 
-| famille | WER graine 1 | WER graine 2 | préservation g1 | préservation g2 |
-|---|---:|---:|---:|---:|
-| propre | 4.14% | 4.14% | 90.0% | **90.0%** |
-| photocopie | 6.34% | 5.44% | 86.7% | **70.0%** |
-| photo | 6.68% | 7.77% | 86.7% | **63.3%** |
-| papier | 6.87% | 6.50% | 80.0% | **80.0%** |
-| fax | 21.90% | 22.73% | 53.3% | **36.7%** |
+| famille | WER g1 | WER g2 | WER g3 | préservation g1 | g2 | g3 |
+|---|---:|---:|---:|---:|---:|---:|
+| propre | 4,14 % | 4,14 % | 4,14 % | 90,0 % | 90,0 % | **90,0 %** |
+| photocopie | 6,34 % | 5,44 % | 5,70 % | 86,7 % | 70,0 % | **76,7 %** |
+| photo | 6,68 % | 7,77 % | 5,52 % | 86,7 % | 63,3 % | **80,0 %** |
+| papier | 6,87 % | 6,50 % | 6,02 % | 80,0 % | 80,0 % | **80,0 %** |
+| fax | 21,90 % | 22,73 % | 22,78 % | 53,3 % | 36,7 % | **50,0 %** |
 
 **Pourquoi.** La préservation porte sur **30 questions** : une question = 3,3 points, et un
 désaccord de 5 questions fait 16,7 points. Le WER, lui, porte sur ~3 800 mots : il est stable à
-±1 point. La préservation est donc un **indicateur à barres d'erreur larges**, pas un chiffre à
-deux décimales ; les planchers de la porte en tiennent compte (60 % pour la photocopie et la photo,
-55 % pour le papier, 30 % pour le fax, 85 % pour le propre) — la photo tombe à 63,3 % sur la
-graine 2, sous l'ancien plancher de 65 % : c'est exactement ce que cette variance interdit. Un banc de paraphrases plus large
-réduirait cette variance — il n'existe pas encore.
+±1 point. Sur trois graines, la photo va de **63,3 % à 86,7 %** de préservation — le même lecteur,
+le même code, un tirage différent. La préservation est donc un **indicateur à barres d'erreur
+larges**, pas un chiffre à deux décimales ; les planchers de la porte en tiennent compte (60 % pour
+la photocopie et la photo, 55 % pour le papier, 30 % pour le fax, 85 % pour le propre) — la photo
+tombe à 63,3 % sur la graine 2, sous l'ancien plancher de 65 % : c'est exactement ce que cette
+variance interdit. Un banc de paraphrases plus large réduirait cette variance — il n'existe pas
+encore.
 
 ## 6. Le second moteur : un contrôle, pas un candidat
 

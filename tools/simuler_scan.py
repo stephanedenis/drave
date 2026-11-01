@@ -39,7 +39,7 @@ import graphe_document_pdf  # noqa: E402
 import mesurer_ocr  # noqa: E402  (les pages du banc et le cache de rendu)
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
-FAMILLES = ("propre", "photocopie", "photo", "fax", "papier")
+FAMILLES = ("propre", "photocopie", "photo", "fax", "papier", "petit")
 
 
 def _rng(graine: int, page: int, famille: str) -> np.random.Generator:
@@ -182,6 +182,13 @@ def fabriquer(im: Image.Image, famille: str, graine: int, page: int,
         out = Image.fromarray(bord.astype(np.uint8)).convert("RGB")
         p.update({"dpi": 120, "binarisation": 128, "sel_poivre": 0.004, "gigue": 0.0})
         return out, p
+    if famille == "petit":
+        # un PETIT TEXTE : la même page rendue à 120 dpi, sans autre dégradation. C'est le
+        # test de la politique d'échelle : l'image fait ~1 060 px de large, le prétraitement
+        # doit décider de l'agrandir (ou pas) — et la mesure dit si c'était le bon choix.
+        petite = _reduire(im, 120)
+        p.update({"dpi": 120})
+        return petite, p
     if famille == "papier":
         base = _reduire(im, 170)
         base = _texture_papier(base, rng)
@@ -220,6 +227,9 @@ def main() -> int:
     ap.add_argument("--test", type=int, default=0,
                     help="pages de test supplémentaires, SANS questions (WER seul)")
     ap.add_argument("--graines", type=int, default=1)
+    ap.add_argument("--graine", type=int, default=0,
+                    help="une seule graine (pour la variance) ; 0 = 1..--graines")
+    ap.add_argument("--splits", default="dev,test")
     ap.add_argument("--familles", default=",".join(FAMILLES))
     ap.add_argument("--liste", action="store_true")
     args = ap.parse_args()
@@ -228,12 +238,15 @@ def main() -> int:
             print(f"  {f}")
         return 0
     familles = [f for f in args.familles.split(",") if f]
+    graines = [args.graine] if args.graine else list(range(1, args.graines + 1))
+    splits = {x for x in args.splits.split(",") if x}
     inconnues = sorted(set(familles) - set(FAMILLES))
     if inconnues:
         raise SystemExit(f"familles inconnues : {inconnues}")
     dev = mesurer_ocr.pages_du_banc(args.pages)
     for p in dev:
         p["split"] = "dev"
+    dev = [p for p in dev if "dev" in splits]
     pages = list(dev)
     if args.test:
         deja = {(p["pdf"].name, p["page"]) for p in dev}
@@ -264,7 +277,7 @@ def main() -> int:
         pdf, numero = page["pdf"], page["page"]
         propre = rendre_300(pdf, numero)
         for famille in familles:
-            for graine in range(1, args.graines + 1):
+            for graine in graines:
                 image, params = fabriquer(propre, famille, graine, numero, tmp)
                 nom = f"{pdf.stem}-p{numero}-s{graine}-{famille}.png"
                 chemin = args.sortie / nom
