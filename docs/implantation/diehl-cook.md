@@ -575,6 +575,17 @@ Avec `s_pre ≈ 5 488` spikes d'entrée et `n_e = 400`, la mise à jour **pré**
 l'ordre des événements du forward. **La règle symétrique du code n'est pas creuse ; la règle post-only du papier
 l'est.** C'est un argument de coût, pas seulement de qualité, pour choisir Eq. 3.
 
+**Les ordres de grandeur** (projection : 784 entrées, 20 Hz, 350 ms, `dt = 0,5 ms`) :
+
+| `n_e` | événements forward | MAC dense | STDP pré | normalisation | `w_in` f32 |
+|---:|---:|---:|---:|---:|---:|
+| 100 | 0,55 M | 54,9 M | 0,55 M | 78 k | 0,3 Mo |
+| 400 | 2,2 M | 219,5 M | 2,2 M | 314 k | 1,3 Mo |
+| 6 400 | 35,1 M | 3 512 M | 35,1 M | 5,0 M | 20,1 Mo |
+
+La colonne **STDP pré** est celle qui compte : elle copie l'ordre des événements du forward. La normalisation,
+elle, reste à ~1/7. C'est le renversement que la fiche doit porter : **le coût caché n'est pas là où on l'attend.**
+
 **Mémoire.** `w_in` : `n_input · n_e` f32 ; les traces : `x_pre` (même taille), `post1/post2` (`n_e`), `θ` (`n_e`).
 Pour 6 400 E et 784 entrées : ~20 Mo de poids, ~20 Mo de traces — portable, mais pas gratuit.
 
@@ -623,14 +634,17 @@ reproduction du 95 %.
 
 **Les hypothèses** :
 
-| # | hypothèse | mesure | contrôle |
-|---|---|---|---|
-| H1 | STDP apprend mieux que des poids gelés | accuracy tenue à l'écart | poids aléatoires gelés |
-| H2 | l'inhibition diversifie les prototypes | similarité pairwise moyenne | inhibition coupée |
-| H3 | l'homéostasie égalise les taux | entropie des taux | seuil fixe |
-| H4 | le taux suffit | accuracy taux vs spikes | lecture taux seul |
-| H5 | la RSN est neutre | sonde de format sur `φ(corps)` | code de spikes (doit réussir) |
-| H6 | le rejeu est exact | diff de spikes | graine changée (doit diverger) |
+| # | hypothèse | mesure | contrôle | seuil provisoire |
+|---|---|---|---|---|
+| H1 | STDP apprend mieux que des poids gelés | accuracy tenue à l'écart | poids aléatoires gelés | **+5 pts** |
+| H2 | l'inhibition diversifie les prototypes | similarité pairwise moyenne | inhibition coupée | **cosine < 0,8 × témoin** |
+| H3 | l'homéostasie égalise les taux | entropie des taux | seuil fixe | **+0,2 bit** |
+| H4 | le taux suffit | accuracy taux vs spikes | lecture taux seul | **écart ≤ 1 pt** |
+| H5 | la RSN est neutre | sonde de format sur `φ(corps)` | code de spikes (doit réussir) | **≤ chance + 5 pts** |
+| H6 | le rejeu est exact | diff de spikes | graine changée (doit diverger) | **diff = 0** |
+
+Les seuils sont **provisoires** et se figent avant la première mesure : c'est la pré-enregistrement, pas une
+prédiction. Un seuil choisi après avoir vu le résultat n'est pas un seuil, c'est une rationalisation.
 
 **Le dispositif** : 100 excitateurs, 2 000 exemples d'entraînement, 1 000 de validation, 1 000 de test ; 1 passage ;
 3 graines ; `dt = 0,5 ms` ; 350 + 150 ms. Le test n'est **jamais** lu avant le gel. Pas d'arrêt sur le test.

@@ -3160,3 +3160,40 @@ python3 tools/verifie_journal.py              EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/modele-natif.md docs/implantation/diehl-cook.md && git diff --cached --stat && timeout 240 git commit -m \"DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES\" 2>&1 | tail - … [114 caractères tronqués]`
+
+  ```
+docs/implantation/diehl-cook.md | 86 ++++++++++++++++++++++++++++++++++-------
+ docs/theorie/modele-natif.md    | 21 +++++++++-
+ 2 files changed, 91 insertions(+), 16 deletions(-)
+[still running after 60000ms; moved to background job bash-116]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-116", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 2ac27021] DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES
+ 13 files changed, 228 insertions(+), 38 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier ajout : seuils pré-enregistrés et table de coût chiffrée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\n\nvieux = \"\"\"| # | hypothèse | mesure | contrôle |\n|---|---|---|---|\n| H1 | STDP apprend mieux que des poids gelés | accuracy  … [3166 caractères tronqués]`
+
+  ```
+ok
+tableaux=0
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+schemas=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/implantation/diehl-cook.md && timeout 240 git commit -m \"DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer les seuils et la t … [14 caractères tronqués]`

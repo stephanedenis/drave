@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 3.4 h |
+| Durée | 3.5 h |
 | Tours | 2 |
-| Messages | 131 |
-| Appels d'outils | 159 |
+| Messages | 134 |
+| Appels d'outils | 162 |
 | Fichiers touchés | 11 |
-| Commandes | 116 |
+| Commandes | 118 |
 | Sous-agents | 2 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -82,7 +82,7 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 
 ### Tour 2 — continue tes réflexions et enrichit le document. Tu dois aller plus loin
 
-*36 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - write `/tmp/gen_plus.py`
 - bash — Générer les quatre nouveaux schémas formels
@@ -98,11 +98,11 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - read
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
-- … et 19 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Ajout des questions ouvertes, la partie que le document ne prétend pas résoudre
+⏵ Dernier ajout : seuils pré-enregistrés et table de coût chiffrée
 
 ## 3. Travail accompli
 
@@ -169,7 +169,7 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 76 autres
+- … et 78 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -301,4 +301,5 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 
