@@ -110,14 +110,17 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("point")
     ap.add_argument("--chunk", type=int, default=8192)
+    ap.add_argument("--corpus-dir", default="data/corpus_propre",
+                    help="répertoire du corpus propre (train/val/test)")
     ap.add_argument("--longueurs", action="store_true")
     ap.add_argument("--decomposition", action="store_true")
     ap.add_argument("--sortie", default=None)
     ap.add_argument("--device", default="cuda")
     a = ap.parse_args()
 
-    val = charger_bytes(CORPUS / "val.txt")
-    test = charger_bytes(CORPUS / "test.txt")
+    corpus = RACINE / a.corpus_dir
+    val = charger_bytes(corpus / "val.txt")
+    test = charger_bytes(corpus / "test.txt")
     lit = charger_bytes(RACINE / "data/corpus_fr_litterature.txt")
     litt_propre = charger_bytes(RACINE / "data/corpus_litt_propre/val.txt")
     ang = charger_bytes(RACINE / "data/corpus_en.txt")

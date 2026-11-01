@@ -20,20 +20,19 @@
 - **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
 - **Plan** : corpus dédupliqué, chaîne refaite, porte honnête, diversité, longueur, capacité.
 - **Ambition** : sortir du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle de français général.
-- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+- **Stratégie** : un changement à la fois, trois graines, contrôle par permutation
 - **Objectif final** : un **mètre honnête**, porte < 2,5 redéfinie.
-- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison et capacité
-  mesurées (5 fiches).
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison, capacité et
+  corpus élargi mesurés (6 fiches).
 - **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
   l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
-  octets de **14,11** à **3,25** ; la base supervisée vaut **12,29**
-  hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** en
-  domaine, **4,10** en littérature, **3,49** à 256). La **capacité paie** peu (21,65 M : **3,03**) sans couvrir. Fiches `n2-propre`, `n2-diversite`,
-  `n2-longueur`, `n2-combine`, `n2-capacite`. Prochain levier : **27,7 Mo de français unique**
-  disponibles dans le dépôt (8,5× le corpus utilisé).
+  octets de **14,11** à **3,25** ; la base vaut **12,29**
+  hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** / **4,10** / **3,49** à 256). La **capacité paie** peu (21,65 M : **3,03**) sans couvrir. Fiches `n2-propre`, `n2-diversite`,
+  `n2-longueur`, `n2-combine`, `n2-capacite`. **N2.i** (4,84 Mo) : **3,13** et **3,70** en domaine, **12,93** en littérature, **33,83** en
+  anglais — la donnée du dépôt **généralise** sans relever le domaine.
 - **Ce que font les autres** : **Pensée** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : **N2.i** (corpus élargi, 4,84 Mo, 3 graines) en cours.
+- **Prochaine action** : **close** — six fiches committées, portes vertes.
 - **Bloquants** : aucun — GPU rendus.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
@@ -109,7 +108,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **378** / **456** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **379** / **456** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

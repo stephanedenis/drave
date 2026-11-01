@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **2 session(s)** · **5 thème(s)**
+**30 commits** · **2 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,13 +15,13 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | mesures | 20 | [mesures.md](mesures.md) |
-| portes | 1 | [portes.md](portes.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 15.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 16.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 10.5 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -57,6 +57,7 @@
 | 06:50 | `d2613e8f` | N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN |
 | 06:58 | `18f28437` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ |
 | 07:07 | `43a7b3fe` | ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE |
+| 07:18 | `a20de579` | PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES |
 
 ## Le récit de la journée (écrit à la main)
 

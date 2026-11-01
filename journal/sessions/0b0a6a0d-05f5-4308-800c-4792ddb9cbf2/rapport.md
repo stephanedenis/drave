@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 15.0 h |
+| Durée | 16.2 h |
 | Tours | 7 |
-| Messages | 750 |
-| Appels d'outils | 709 |
+| Messages | 788 |
+| Appels d'outils | 745 |
 | Fichiers touchés | 11 |
-| Commandes | 586 |
+| Commandes | 613 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -323,7 +323,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 
 ### Tour 7 — fais les deux en parallèle
 
-*30 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Measure corpus candidates
 - bash — Read the Pensée implementation spec
@@ -339,11 +339,11 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - bash — Write the water-jug problem and run the four strategies
 - bash — Debug the engine loop
 - bash — Fix the budget counting and MCTS applicability
-- … et 16 autres
+- … et 44 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de l'état pour la Pensée v0 et le corpus élargi en cours
+⏵ Résultat : le corpus élargi généralise mieux (anglais ÷1,7) mais dilue la prose ; je corrige la fiche
 
 ## 3. Travail accompli
 
@@ -405,7 +405,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 546 autres
+- … et 573 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -533,7 +533,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 
 ## 5. Erreurs rencontrées
 
-41 sorties en erreur ou divergentes. Les premières :
+45 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -568,4 +568,5 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ  Le levier « plus de texte français unique » a un chiffre : avec les mêmes sh
 - ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE  Vérification des trois sessions : N2.h close (0b0a6a0d), R4.4 close (fe
 - PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES  Le contrat docs/implantation/moteur-de-pensee.md a son implémentation : types canoniques (Candidat, E
+- N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE  À recette égale, le corpus du dépôt courant (docs + journal + rapports, 1 308 documen
 

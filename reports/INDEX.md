@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **374 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **376 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -200,6 +200,7 @@
 | [rapport-n2-budget.md](rapport-n2-budget.md) | N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart |
 | [rapport-n2-capacite.md](rapport-n2-capacite.md) | N2.h5 — La capacité sur le mètre propre : 21,65 M contre 11,47 M |
 | [rapport-n2-combine.md](rapport-n2-combine.md) | N2.h4 — Les deux leviers ensemble : lire du français **et** 256 octets |
+| [rapport-n2-corpus-elargi.md](rapport-n2-corpus-elargi.md) | N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24 |
 | [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
 | [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
 | [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
@@ -297,6 +298,7 @@
 | [rapport-passe-k3-disque.md](rapport-passe-k3-disque.md) | Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre |
 | [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
+| [rapport-pensee-v0.md](rapport-pensee-v0.md) | Pensée v0 — le state store, l'arbre hashé et six portes |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |
 | [rapport-pipeline-memoire.md](rapport-pipeline-memoire.md) | B17 — M7-bis dans la chaîne : LFU aide la mémoire, pas M8 |
