@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 18.6 h |
 | Tours | 7 |
-| Messages | 273 |
-| Appels d'outils | 310 |
+| Messages | 277 |
+| Appels d'outils | 314 |
 | Fichiers touchés | 18 |
-| Commandes | 235 |
+| Commandes | 238 |
 | Sous-agents | 2 |
 | Commits | 14 |
 | Compactages de contexte | 0 |
@@ -359,7 +359,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 
 ### Tour 7 — prends en charge ici les sessions en suspend pour les compléter
 
-*41 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - bash — Lire le plan R4.4 et ce qui reste
 - bash — Lire le plan N2 et son objectif final
@@ -375,7 +375,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - bash — Lire la suite de l'OCR et le banc réel
 - bash — Trouver les scans réels et le journal de bord
 - bash — Trouver la page et la boîte de l'exposant fusionné
-- … et 25 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
@@ -453,7 +453,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 195 autres
+- … et 198 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -11787,3 +11787,34 @@ puce S remplacée (ligne 54 )
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE\n\nLe banc de structures ne force plus un verdict  … [1040 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-682]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-682", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master 5a5915a5] S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+ 22 files changed, 1439 insertions(+), 73 deletions(-)
+ create mode 100644 journal/2026-11-01/outils.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && fuser -k 8765/tcp 2>/dev/null; sleep 0.5; nohup python3 tools/structures/serveur.py --port 8765 > /tmp/banc-structures.log 2>&1 & sleep 1.3; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" http://127.0.0.1:8765/; curl -s http://127. … [516 caractères tronqués]`
+
+  ```
+1303240HTTP 200
+7 phrases · 0 validations
+=== checks ===
+     · compteurs : en-cours.md dit 457 JSON, le disque en a 458
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3743 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ M tools/corpus_wikipedia.py
+?? reports/corpus-wiki-fr.json
+?? tools/verifie_contamination.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [498 caractères tronqués]`

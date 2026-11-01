@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 18.9 h |
+| Durée | 19.0 h |
 | Tours | 13 |
-| Messages | 876 |
-| Appels d'outils | 820 |
+| Messages | 878 |
+| Appels d'outils | 822 |
 | Fichiers touchés | 11 |
-| Commandes | 682 |
+| Commandes | 684 |
 | Sous-agents | 0 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -649,7 +649,7 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 
 ### Tour 13 — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette a … [128 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Add the pragmatic statuses to the server
 - bash — Rewrite the LLM client with context and pragmatic statuses
@@ -664,6 +664,8 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 - bash — Replace the S bullet with the pragmatic version
 - bash — Commit the pragmatic layer integration
 - job_output
+- bash — Restart the server cleanly and run the final checks
+- … et 1 autres
 
 **Synthèse produite :**
 
@@ -729,7 +731,7 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 642 autres
+- … et 644 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -898,4 +900,5 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 - S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS  Nouveau sous-projet (submodule : tools/structures, dépôt local drave-struc
 - S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER  Le banc de structures gagne son analyseur v0 (submodule tools/structures, commit a
 - S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE  Le banc de structures ne force plus un verdict unique (submodule 7366191). Chaque l
+- ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON  Le compteur JSON suit les dépôts des autres sessions (corpus-wiki-fr.json) ; la revue rep
 

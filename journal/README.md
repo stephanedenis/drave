@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [attention](2026-11-01/attention.md) · [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [mesures](2026-11-01/mesures.md) · [modele](2026-11-01/modele.md) · [moteur](2026-11-01/moteur.md) · [portes](2026-11-01/portes.md) |
+| **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [attention](2026-11-01/attention.md) · [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [mesures](2026-11-01/mesures.md) · [modele](2026-11-01/modele.md) · [moteur](2026-11-01/moteur.md) · [outils](2026-11-01/outils.md) · [portes](2026-11-01/portes.md) |
 | **2026-10-31** | [2026-10-31/README.md](2026-10-31/README.md) | [apprentissage](2026-10-31/apprentissage.md) · [distribue](2026-10-31/distribue.md) · [docs](2026-10-31/docs.md) · [memoire](2026-10-31/memoire.md) · [mesures](2026-10-31/mesures.md) · [modele](2026-10-31/modele.md) · [moteur](2026-10-31/moteur.md) · [portes](2026-10-31/portes.md) |
 | **2026-10-30** | [2026-10-30/README.md](2026-10-30/README.md) | [distribue](2026-10-30/distribue.md) · [docs](2026-10-30/docs.md) · [memoire](2026-10-30/memoire.md) · [mesures](2026-10-30/mesures.md) · [modele](2026-10-30/modele.md) · [moteur](2026-10-30/moteur.md) · [portes](2026-10-30/portes.md) |
 | **2026-10-29** | [2026-10-29/README.md](2026-10-29/README.md) | [attention](2026-10-29/attention.md) · [distribue](2026-10-29/distribue.md) · [docs](2026-10-29/docs.md) · [etat-transfere](2026-10-29/etat-transfere.md) · [memoire](2026-10-29/memoire.md) · [mesures](2026-10-29/mesures.md) · [modele](2026-10-29/modele.md) · [moteur](2026-10-29/moteur.md) · [portes](2026-10-29/portes.md) |
@@ -64,7 +64,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 |---|---|---|---|---|---|---|---|---|
 | `00221850` | Outillage de présentation de documentation | 2026-10-27 11:34 | 4.9 h | 6 | 529 | 38 | 25 | [rapport](sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md) |
 | `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
-| `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 18.9 h | 13 | 819 | 11 | 21 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
+| `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 19.0 h | 13 | 822 | 11 | 22 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
 | `0b2c86eb` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:29 | 1.5 h | 1 | 128 | 5 | 0 | [rapport](sessions/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/rapport.md) |
 | `0b69f616` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | 1 | 200 | 6 | 0 | [rapport](sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) |
 | `0c631fa9` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 15 | 0 | 0 | [rapport](sessions/0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f/rapport.md) |
@@ -158,7 +158,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.6 h | 7 | 310 | 18 | 14 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.6 h | 7 | 314 | 18 | 14 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
 | `ee19a880` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/ee19a880-cc76-4c5c-9fe0-5972bd73b533/rapport.md) |

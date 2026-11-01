@@ -6598,3 +6598,47 @@ removed ignored data README
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 git commit -m \"S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer la reprise S et la clôture R4.4"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-235]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-235", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 5a5915a587441e6aaae6162451b4d7b470ca0de3 but expected 0ca545eb7ce3c6ee1943fc0aa829573dc1c9977b
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo '=== status ==='; git status --short | head -15; echo '=== diff HEAD stat ==='; git diff HEAD --stat | head -15; echo '=== cached stat ==='; git diff --cached --stat", "description": "Diagnostiquer la cours … [14 caractères tronqués]`
+
+  ```
+5a5915a5 S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+0ca545eb S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER
+48d2c064 ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS
+1c9d3d26 DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE
+ae9ad3be S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS
+=== status ===
+M  docs/pilotage/en-cours.md
+M  journal/2026-11-01/README.md
+M  journal/2026-11-01/mesures.md
+M  journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M tools/corpus_wikipedia.py
+ m tools/docwatch
+?? reports/corpus-wiki-fr.json
+?? tools/verifie_contamination.py
+=== diff HEAD stat ===
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-01/README.md                       |   5 +-
+ journal/2026-11-01/mesures.md                      |   3 +-
+ journal/README.md                                  |   4 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md |  31 +++
+ .../rapport.md          
+… [675 caractères tronqués]
+  ```
+
