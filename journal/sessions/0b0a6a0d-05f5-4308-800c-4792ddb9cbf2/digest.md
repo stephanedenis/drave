@@ -13846,3 +13846,51 @@ syntaxe ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal && python3 tools/canal_structure.py --entree data/w … [439 caractères tronqués]`
+
+  ```
+canal 1495862
+[still running after 60000ms; moved to background job bash-804]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-804", "timeout_ms": 400000, "wait": true}`
+
+  ```
+18:33
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-804 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal && python3 tools/canal_structure.py --entree data/wiki_fr/propre/val.txt --sortie data/wiki_fr/propre/val.canal && python3 tools/canal_structure.py --entree data/wiki_fr/propre/test.txt --sortie data/wiki_fr/propre/test.canal && echo TERMINE' > work/n2j/canal.log 2>&1 & echo "canal $!"; sleep 60; cat work/n2j/canal.log; ls -la data/wiki_fr/propre/*.canal 2>/dev/null; date '+%H:%M'; tail -2 work/n2j/teacher-wiki.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2j/canal.log; ls -la data/wiki_fr/propre/*.canal 2>/dev/null; date '+%H:%M'; tail -3 work/n2j/teacher-wiki.log; ls work/n2j/route-wiki 2>/dev/null | head -2", "description": "Check the canal files and the teacher"}`
+
+  ```
+18:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,pcpu,cmd | grep -E \"canal_structure|entrainer_moteur\" | grep -v grep | head -4; ls -la data/wiki_fr/propre/ | head; echo \"=== log teacher ===\"; ls -la work/n2j/teacher-wiki.log work/n2j/canal.log; date", "descrip … [46 caractères tronqués]`
+
+  ```
+1494417       03:20  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2 --pas 20000 --lot 16 --seq 128 --lr 1e-3 --graine 1 --donnees data/wiki_fr/propre/train.txt --validation data/wiki_fr/propre/dev.txt --sortie work/n2j/route-wiki > work/n2j/teacher-wiki.log 2>&1
+1494419       03:20 93.6 /home/stephane/gpu-env/bin/python tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2 --pas 20000 --lot 16 --seq 128 --lr 1e-3 --graine 1 --donnees data/wiki_fr/propre/train.txt --validation data/wiki_fr/propre/dev.txt --sortie work/n2j/route-wiki
+1495862       01:12  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal && python3 tools/canal_structure.py --entree data/wiki_fr/propre/val.txt --sortie data/wiki_fr/propre/val.canal && python3 tools/canal_structure.py --entree data/w
+… [1268 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1495862 1495864 2>/dev/null; sleep 1; timeout 300 python3 tools/canal_structure.py --entree data/wiki_fr/propre/val.txt --sortie data/wiki_fr/propre/val.canal 2>&1 | tail -3; ls -la data/wiki_fr/propre/val.canal 2>/dev/null", "d … [73 caractères tronqués]`
+
+  ```
+10330018 octets de canal · data/wiki_fr/propre/val.canal
+-rw-r--r--. 1 stephane stephane 10330018  1 nov 18:33 data/wiki_fr/propre/val.canal
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/canal_structure.py'); s = p.read_text()\ns = s.replace('        n = len(t.encode(\"utf-8\"))', '        n = len(t.encode(\"utf-8\", \"surrogateescape\"))')\ns = s.replace('    … [741 caractères tronqués]`
+
+  ```
+ok
+10330112 octets de canal · data/wiki_fr/propre/val.canal
+texte 10330112 · canal 10330112 · alignés True
+  ```
+

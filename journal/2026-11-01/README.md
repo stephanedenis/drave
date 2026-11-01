@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**61 commits** · **4 session(s)** · **9 thème(s)**
+**62 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 15 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 31 | [mesures.md](mesures.md) |
+| mesures | 32 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -25,10 +25,10 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 26.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 26.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 25.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 25.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 26.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -95,6 +95,7 @@
 | 17:05 | `f4c200d0` | PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT |
 | 17:07 | `993f147e` | ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A) |
 | 17:38 | `79bce783` | DONNÉES — LE TEXTE INTÉGRAL FR EST LÀ : 2 388 219 ARTICLES, 8,025 G CARACTÈRES, 8,34 GO, 0 FUITE |
+| 18:31 | `d51b4df0` | DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS |
 
 ## Le récit de la journée (écrit à la main)
 

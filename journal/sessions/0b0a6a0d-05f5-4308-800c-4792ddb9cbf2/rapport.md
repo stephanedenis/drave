@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 26.2 h |
+| Durée | 26.3 h |
 | Tours | 18 |
-| Messages | 1049 |
-| Appels d'outils | 977 |
+| Messages | 1056 |
+| Appels d'outils | 983 |
 | Fichiers touchés | 11 |
-| Commandes | 804 |
+| Commandes | 809 |
 | Sous-agents | 0 |
 | Commits | 28 |
 | Compactages de contexte | 1 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*11 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -959,6 +959,11 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the teacher process
 - bash — Add the channel to the model and the trainer
 - bash — Compute the structure channel for the wiki corpus
+- job_output
+- bash — Check the canal files and the teacher
+- bash — Check the processes and output files
+- bash — Run the canal computation directly on the validation file
+- … et 2 autres
 
 **Synthèse produite :**
 
@@ -1024,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 764 autres
+- … et 769 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -60,7 +60,7 @@
 - **Ambition** : le français réel pour N2 ; D, carburant.
 - **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **texte intégral FR** (**2,39 M articles**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** éval) ; les **9 langues** en cours (en, de, ru, es, ja) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral FR** (**2,39 M articles**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** éval) ; les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
 - **Prochaine action** : les 9 langues, la contamination et les fiches, puis PDF/OCR.
 - **Bloquants** : aucun.

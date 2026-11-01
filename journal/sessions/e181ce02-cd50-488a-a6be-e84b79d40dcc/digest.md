@@ -10043,3 +10043,93 @@ ok
 EXIT=0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-drvf.md <<'MD'\n# B13 — DRVF `thought` : la trace se relit, la corruption se voit\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **9/9 portes** : le fl … [11728 caractères tronqués]`
+
+  ```
+docs ok
+2026-11-01 18:32 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**Mis à jour : 2026-11-01, 16 h 30 HNE (heure locale, EST).**\", \"**Mis à jour : 2026-11-01, 18 h 35 HNE (heure locale, ES … [783 caractères tronqués]`
+
+  ```
+dates ok
+python3 tools/revue_documentation.py       EXIT=1
+  revue de documentation · 390 fiche(s) · 477 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 389 fichiers, le disque en a 390
+     · compteurs : en-cours.md dit 476 JSON, le disque en a 477
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\ … [228 caractères tronqués]`
+
+  ```
+92:| fichiers / JSON de résultats | **389** / **476** | `reports/*.md` / `reports/*.json` |
+counters ok
+  revue de documentation · 390 fiche(s) · 477 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/trace.py tools/pensee/autotest.py docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md journal/sessions/e181ce02-cd50-4 … [362 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |  26 ++---
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   6 +-
+ journal/2026-11-01/README.md                       |   8 ++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  13 ++-
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   |   6 +-
+ reports/README.md                                  |   1 +
+ reports/pensee-drvf.json                           |  18 +++
+ reports/rapport-pensee-drvf.md                     |  70 ++++++++++++
+ tools/pensee/autotest.py                           |  34 +++++-
+ tools/pensee/trace.py                              | 127 +++++++++++++++++++++
+ 13 files changed, 295 insertions(+), 32 deletions(-)
+[still running after 60000ms; moved to background job bash-359]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-359", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at d51b4df0f41374155c85bd44a6c8396a874896a5 but expected 79bce78342a92bb05000ff3c2fe1221902ebccad
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo '=== HEAD stat ==='; git show --stat HEAD | head -20; echo '=== status ==='; git status --short | head -20; echo '=== cached ==='; git diff --cached --stat | tail -12", "description": "Diagnostiquer la cour … [15 caractères tronqués]`
+
+  ```
+d51b4df0 DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS
+79bce783 DONNÉES — LE TEXTE INTÉGRAL FR EST LÀ : 2 388 219 ARTICLES, 8,025 G CARACTÈRES, 8,34 GO, 0 FUITE
+993f147e ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A)
+f4c200d0 PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT
+=== HEAD stat ===
+commit d51b4df0f41374155c85bd44a6c8396a874896a5
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 18:31:43 2026 -0500
+
+    DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS
+
+ docs/implantation/moteur-de-pensee.md              |  10 +-
+ docs/pilotage/chantiers.md                         |   6 +-
+ docs/pilotage/en-cours.md                          |  26 ++--
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   6 +-
+ journal/2026-11-01/README.md                       |  18 ++-
+ journal/2026-11-01/attention.md                    |   6 +-
+ journal/2026-11-01/distribue.md                    |   6 +-
+ journal/2026-11-01/docs.md                         |   6 +-
+ journal/2026-11-01/memoire.md                      |  11 +-
+ journal/
+… [1907 caractères tronqués]
+  ```
+

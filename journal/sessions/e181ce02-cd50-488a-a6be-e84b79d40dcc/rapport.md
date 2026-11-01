@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 25.9 h |
-| Tours | 13 |
-| Messages | 423 |
-| Appels d'outils | 458 |
+| Tours | 14 |
+| Messages | 429 |
+| Appels d'outils | 462 |
 | Fichiers touchés | 25 |
-| Commandes | 359 |
+| Commandes | 362 |
 | Sous-agents | 2 |
 | Commits | 22 |
 | Compactages de contexte | 1 |
@@ -57,6 +57,8 @@
 **Tour 12** — lire docs/pilotage/plan-travail.md et avancer
 
 **Tour 13** — suis le plan, continue jusqu'à 8h demain matin
+
+**Tour 14** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -722,7 +724,7 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est
 
 ### Tour 13 — suis le plan, continue jusqu'à 8h demain matin
 
-*8 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Lire le contrat DRVF thought et les types de trace
@@ -732,10 +734,46 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est
 - bash — Vérifier les compteurs et les portes après le DRVF
 - bash — Aligner les compteurs de la fiche DRVF
 - bash — Committer le profil DRVF thought
+- job_output
+- bash — Diagnostiquer la course de commits
+- bash — Voir ce que le commit concurrent a emporté
+- bash — Voir la modification d'état restante et la cohérence
 
 **Synthèse produite :**
 
-⏵ B13 suite : j'encode la trace en DRVF `thought`, avec rejeu et diff vérifiés
+⏵ DRVF `thought` livré (9/9) ; le goal continue vers le banc anytime
+
+Le tour DRVF est fait, et le goal créé pour tenir jusqu'à **8 h demain** continue.
+
+\## Ce qui est livré
+
+- **`tools/pensee/trace.py`** : enveloppe `DRVF` (magic, version `u16`, profil `thought u16`, longueur `u32`) + charge JSON canonique `{probleme, racine, evenements}`. La racine porte l'état complet ; chaque événement porte `parent`, `enfant`, `operateur`, `params`, `score`, `cout`, `strategie`, `pas`.
+- **Rejeu** : les 93 enfants sont **recalculés** par les opérateurs, empreintes et scores vérifiés ; `diff(trace, rejeu) = None`.
+- **Corruption** : un score modifié dans le fichier **lève** ; `diff_fichiers` localise l'événement 0.
+- **Mesure** : **23 597 octets**, **93 événements**, rejeu identique, diff 0.
+- **Portes** : `python3 -m tools.pensee.autotest` → **9/9** (T0–T6 + T1 DRVF).
+- **Fiche** : [`rapport-pensee-drvf.md`](../../reports/rapport-pensee-drvf.md) ; JSON [`pensee-drvf.json`](../../reports/pensee-drvf.json) ; contrat `moteur-de-pensee.md` §6.
+
+\## La course de commit
+
+Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4df0`** (D/R/A, « texte intégral 9 langues »), qui a **emporté les fichiers déjà stagés** — `trace.py`, `autotest.py`, la fiche, le JSON, les docs. Le contenu est donc **dans HEAD**, mais le message du commit est celui de D/R/A, pas « B13 — DRVF ». Je le note : la prochaine fenêtre d'intégration peut ajouter un commit B13 pour le banc, avec le bon chiffre.
+
+\## L'état
+
+- `en-cours`, `roadmap`, `chantiers`, `plan-travail`, plan `e181ce02` : B13 passe à **DRVF fait (9/9), banc anytime** ; L garde **gold/neuronal**.
+- `revue_documentation` : **390 fiches / 477 JSON / 118 docs / 81 portes** — ✅.
+- `taille`, `porte-tableaux`, `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `autotest 9/9` — ✅.
+- Le working tree a une ligne D/R/A (9 langues en cours) que je n'ai **pas** committée : elle appartient à D/R/A.
+- `sessions.py --check` signale le plan **`fe3c05f0` (R4.4)** actif, non listé et périmé de 45 min ; je ne l'ai pas touché — le hub doit l'intégrer ou le clore.
+
+\## La suite, dans l'ordre du plan
+
+1. **B13 — banc anytime** : budgets croissants, best-so-far, **AUC**, **regret**, par stratégie (BFS, greedy, A*, MCTS-lite) sur les cruches et un taquin 3×3 ; fiche + JSON + porte.
+2. **B13 — DRVF pour AC-3/alpha-bêta** si le banc le demande.
+3. **L — gold** POS/syntagme/pragmatique (100–200 phrases) ; puis **modèle neuronal qualifié**
+… [268 caractères tronqués]
+
+### Tour 14 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -816,7 +854,7 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 319 autres
+- … et 322 autres
 
 ## 4. Mesures et résultats marquants
 

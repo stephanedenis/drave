@@ -16,8 +16,8 @@
   `journal/sessions/fe3c05f0-…/`
 - **Heartbeat** : 2026-11-01 17:50
 - **État** : en cours
-- **Prochaine action** : les **neuf langues** en texte intégral (en, de, ru, es, ja lancés ;
-  it, zh, pt, ar ensuite), puis la contamination, les fiches et l'extraction PDF/OCR.
+- **Prochaine action** : les **neuf langues** en texte intégral (les neuf lancées), puis la contamination, les fiches,
+  le catalogue et l'extraction PDF/OCR.
 
 ## Objectif final
 

@@ -15778,3 +15778,50 @@ ja       00:15 98.8
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# plan\np=pathlib.Path('journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md'); s=p.read_text()\ns=s.replace(\"- **Heartbeat** : 2026-11-01 16:55\",\"- **Heartbeat** : 2026-11-01 17:50\")\ns=s … [3227 caractères tronqués]`
+
+  ```
+état/plan/roadmap/journal : 9 langues
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ mandat périmé (122 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+ create mode 100644 reports/rapport-pensee-drvf.md
+ create mode 100644 tools/pensee/trace.py
+d51b4df0 DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor l in it zh pt ar; do\n  nohup python3 tools/corpus_wikipedia_texte.py --langue $l --sortie data/corpus_wiki_${l}_texte --manifeste reports/corpus-wiki-${l}-texte.json > /tmp/run-texte-${l}.log 2>&1 &\n  echo \"$l $!\" >> /tmp/texte … [386 caractères tronqués]`
+
+  ```
+en 1494795
+de 1494796
+ru 1494797
+es 1494798
+ja 1494799
+it 1497608
+zh 1497609
+pt 1497610
+ar 1497611
+=== état
+1494795 03:05 98.5
+1494796 03:05 98.7
+1494797 03:05 99.1
+1494798 03:05 98.5
+1494799 03:05 99.0
+1497608 00:20 99.5
+1497609 00:20 98.7
+1497610 00:20 99.4
+1497611 00:20 99.4
+100M	data/corpus_wiki_ar_texte
+725M	data/corpus_wiki_de_texte
+612M	data/corpus_wiki_en_texte
+649M	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+69M	data/corpus_wiki_it_texte
+998M	data/corpus_wiki_ja_texte
+70M	data/corpus_wiki_pt_texte
+963M	data/corpus_wiki_ru_texte
+92M	data/corpus_wiki_zh_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les **9 langues** en cours (en, de, ru, es, ja)\",\"les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar)\")\np.wri … [1192 caractères tronqués]`
