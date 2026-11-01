@@ -65,6 +65,10 @@ proportionnel aux spikes. Ce n'est ni un modèle de langue ni un raisonneur ; c'
 qui peut être N1 ou N2, et qui rend le bus plus riche. Le jour où la tâche demande de la composition ou du
 contexte long, ce n'est pas D&C qu'il faut : c'est un autre bloc, au même contrat.
 
+**Dans le moteur de pensée, D&C n'est pas le penseur** : c'est un **opérateur** qui propose des candidats ou des
+prototypes. Le moteur N3 choisit, contraint, évalue ; D&C fournit la mémoire et le code. C'est un bloc parmi
+d'autres, au même contrat — et c'est exactement ce que la modularité extrême demande.
+
 
 ## 2. Ce que le modèle est, et ce qu'il n'est pas
 

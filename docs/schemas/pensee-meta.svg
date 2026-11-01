@@ -1,0 +1,42 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le méta-apprentissage : choisir la politique, pas le candidat</title>
+<desc>Le méta-niveau lit la trace, choisit une stratégie, et apprend du regret. Il ne change pas les types : il change l&#x27;ordre des choix.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le méta-apprentissage : choisir la politique, pas le candidat</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le méta ne remplace pas le moteur : il décide comment le moteur cherche.</text>
+<rect x="360" y="96" width="240" height="80" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="480.0" y="120" text-anchor="middle" font-size="13" font-weight="bold" fill="#6d28d9">méta-politique</text>
+<text x="480.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">bandit, MCTS stats, RL</text>
+<rect x="360" y="230" width="240" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="480.0" y="254" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">stratégie choisie</text>
+<text x="480.0" y="276.0" text-anchor="middle" font-size="9.5" fill="#334155">A*, MCTS, CSP, greedy</text>
+<rect x="360" y="364" width="240" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="480.0" y="388" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">arbre d&#x27;états</text>
+<text x="480.0" y="410.0" text-anchor="middle" font-size="9.5" fill="#334155">opérateurs, frontière</text>
+<line x1="480" y1="176" x2="480" y2="228" stroke="#6d28d9" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="480" y1="310" x2="480" y2="362" stroke="#15803d" stroke-width="1.8" marker-end="url(#f)"/>
+<text x="492" y="200" text-anchor="start" font-size="9" fill="#6d28d9">choisit</text>
+<text x="492" y="336" text-anchor="start" font-size="9" fill="#15803d">applique</text>
+<rect x="40" y="220" width="250" height="130" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+<text x="165.0" y="244" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">trace</text>
+<text x="165.0" y="266.0" text-anchor="middle" font-size="9.5" fill="#334155">états, choix, scores</text>
+<text x="165.0" y="279.775" text-anchor="middle" font-size="9.5" fill="#334155">regret, coût, succès</text>
+<line x1="290" y1="260" x2="358" y2="160" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<text x="250" y="190" text-anchor="start" font-size="9" fill="#334155">apprend</text>
+<line x1="360" y1="404" x2="290" y2="320" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<text x="300" y="380" text-anchor="start" font-size="9" fill="#334155">écrit</text>
+<rect x="700" y="96" width="230" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="815.0" y="120" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b45309">bandit</text>
+<text x="815.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">UCB sur les opérateurs</text>
+<rect x="700" y="220" width="230" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="815.0" y="244" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#15803d">statistiques MCTS</text>
+<text x="815.0" y="266.0" text-anchor="middle" font-size="9.5" fill="#334155">visites + valeur</text>
+<rect x="700" y="344" width="230" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="815.0" y="368" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1d4ed8">hors ligne</text>
+<text x="815.0" y="390.0" text-anchor="middle" font-size="9.5" fill="#334155">politique sur les traces</text>
+<text x="815" y="450" text-anchor="middle" font-size="9.5" fill="#475569">trois façons, un même signal : le regret</text>
+<rect x="30" y="476" width="900" height="54" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.4"/>
+<text x="480" y="500" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0f172a">Le contrôle : un portfolio aléatoire et un portfolio fixe. Si le méta ne les bat pas, il ne paie pas.</text>
+<text x="480" y="518" text-anchor="middle" font-size="9.5" fill="#475569">Le méta-apprentissage peut sur-apprendre la tâche et devenir un routeur de plus.</text>
+</svg>

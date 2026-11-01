@@ -3698,3 +3698,202 @@ python3 tools/verifie_en_cours.py        EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/pensee-iterative.md docs/schemas/pensee-cycle.svg docs/schemas/pensee-portefeuille.svg docs/schemas/README.md && timeout 240 git commit -m \"PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRAT … [98 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-138]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-138", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 0a296b75] PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES
+ 14 files changed, 496 insertions(+), 34 deletions(-)
+ create mode 100644 docs/schemas/pensee-cycle.svg
+ create mode 100644 docs/schemas/pensee-portefeuille.svg
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tours 5-6 — le contrat de la pensée et l'itération anytime
+
+- **bash** `{"command": "cat >> /tmp/gen_pensee.py <<'PY'\n\n\ndef contrat():\n    s = SVG(960, 560, \"Le contrat de la pensée\",\n            \"Des types explicites, un moteur N3, des opérateurs N1/N2, un store d'arbres : le bus ne transporte que des états et des propositions.\")\n    s.texte(480, 58, \"Le mot … [4614 caractères tronqués]`
+
+  ```
+⚠ pensee-contrat.svg
+     trait sur texte : 'proposal' (x=327, y=195)
+     trait sur texte : 'state' (x=624, y=201)
+  ✓ pensee-anytime.svg
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_pensee.py'); t=p.read_text()\nt=t.replace('s.texte(300, 200, \"proposal\", 9, BLEU_T, \"start\", gras=True)', 's.texte(300, 150, \"proposal\", 9, BLEU_T, \"start\", gras=True)')\nt=t.replace('s.texte(620, 205, \"state … [353 caractères tronqués]`
+
+  ```
+ok
+  ✓ pensee-contrat.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pensee-iterative.md'); t=p.read_text()\n\nbloc = \"\"\"## 6. Le contrat de la pensée\n\n| type | contenu | producteur | consommateur |\n|---|---|---|---|\n| `state` | can … [4491 caractères tronqués]`
+
+  ```
+ok
+python3 tools/verifier_schemas.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/revue_documentation.py     EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pensee-portefeuille\" docs/schemas/README.md", "description": "Repérer la ligne du portefeuille"}`
+
+  ```
+45:| [pensee-portefeuille.svg](pensee-portefeuille.svg) | A*, MCTS, alpha-bêta, contraintes, planification, méta autour du même arbre | [la pensée itérative](../theorie/pensee-iterative.md) |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "limit": 4, "offset": 44}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md</path>
+<type>file</type>
+<content>
+44: | [pensee-cycle.svg](pensee-cycle.svg) | trois boucles imbriquées : objet, stratégie, méta | [la pensée itérative](../theorie/pensee-iterative.md) |
+45: | [pensee-portefeuille.svg](pensee-portefeuille.svg) | A*, MCTS, alpha-bêta, contraintes, planification, méta autour du même arbre | [la pensée itérative](../theorie/pensee-iterative.md) |
+46: | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
+47: | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
+
+(Showing lines 44-47 of 104. Use offset=48 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "new_string": "| [pensee-portefeuille.svg](pensee-portefeuille.svg) | A*, MCTS, alpha-bêta, contraintes, planification, méta autour du même arbre | [la pensée itérative](../theorie/pensee-iterative.md) |\n| [pens … [520 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tours 7-9 — méta-apprentissage, mémoire/rejeu, mesure de la pensée
+
+- **bash** `{"command": "cat >> /tmp/gen_pensee.py <<'PY'\n\n\ndef meta():\n    s = SVG(960, 560, \"Le méta-apprentissage : choisir la politique, pas le candidat\",\n            \"Le méta-niveau lit la trace, choisit une stratégie, et apprend du regret. Il ne change pas les types : il change l'ordre des choix.\ … [7605 caractères tronqués]`
+
+  ```
+⚠ pensee-meta.svg
+     trait sur texte : 'apprend' (x=321, y=215)
+  ✓ pensee-memoire.svg
+  ✓ pensee-mesure.svg
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_pensee.py'); t=p.read_text()\nt=t.replace('s.texte(300, 215, \"apprend\", 9, \"#334155\", \"start\")', 's.texte(300, 190, \"apprend\", 9, \"#334155\", \"start\")')\np.write_text(t); print('ok')\nPY\ncd /home/stephane/ … [187 caractères tronqués]`
+
+  ```
+ok
+  ⚠ pensee-meta.svg
+     trait sur texte : 'apprend' (x=338, y=190)
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_pensee.py'); t=p.read_text()\nt=t.replace('s.texte(300, 190, \"apprend\", 9, \"#334155\", \"start\")', 's.texte(250, 190, \"apprend\", 9, \"#334155\", \"start\")')\np.write_text(t); print('ok')\nPY\ncd /home/stephane/ … [180 caractères tronqués]`
+
+  ```
+ok
+  ✓ pensee-meta.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \" docs/theorie/pensee-iterative.md", "description": "Vérifier la structure actuelle du document"}`
+
+  ```
+20:## 1. Le diagnostic : la RSN unique était un résultat, pas une représentation
+49:## 2. La RSN plurielle
+116:## 3. L'arbre d'états
+139:## 4. Le cycle de pensée multi-niveaux
+169:## 5. Le portefeuille de stratégies
+197:## 6. Le contrat de la pensée
+228:## 7. L'itération indéfinie et l'arrêt
+254:## 8. Ce que la suite doit résoudre
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pensee-iterative.md", "limit": 30, "offset": 254}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pensee-iterative.md</path>
+<type>file</type>
+<content>
+254: ## 8. Ce que la suite doit résoudre
+255: 
+256: Ce document est le **premier tour** d'une refonte en **dix tours**. Les tours suivants :
+257: 
+258: 1. ~~le diagnostic et la RSN plurielle~~ ;
+259: 2. ~~l'arbre d'états~~ ;
+260: 3. ~~le cycle de pensée multi-niveaux~~ : observer, proposer, contraindre, évaluer, sélectionner, revenir,
+261:    commettre, arrêter ;
+262: 4. ~~le portefeuille de stratégies~~ : recherche non informée, A*, beam, MCTS, alpha-bêta, contraintes, SAT/SMT,
+263:    planification, probabiliste, locale, cas-based, méta ;
+264: 5. ~~le contrat de la pensée~~ : types `state`, `proposal`, `score`, `constraint`, `decision`, `trace` ;
+265: 6. ~~l'itération indéfinie et l'arrêt~~ : anytime, budget, settled, contradiction, méta-décision ;
+266: 7. **le méta-apprentissage** : choisir la stratégie, apprendre des traces, portfolio ;
+267: 8. **la mémoire et le rejeu** : stocker, requêter, compacter, rejouer l'arbre ;
+268: 9. **la mesure** : anytime AUC, taux de solution, gap, nœuds, regret, justification, contrôles ;
+269: 10. **la révision des documents**
+… [334 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pensee-iterative.md'); t=p.read_text()\ncoupe = t.index(\"## 8. Ce que la suite doit résoudre\")\nnouveau = \"\"\"## 8. Le méta-apprentissage\n\nLe méta-niveau ne choisit … [5046 caractères tronqués]`
+
+  ```
+ok
+python3 tools/verifier_schemas.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/revue_documentation.py     EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nt=t.replace(\"\"\"**La niche de D&C** : une **mémoire de prototypes qui apprend sans étiquette**, avec un coût d'exécution\nproport … [1199 caractères tronqués]`
+
+  ```
+ok
+47:| [pensee-anytime.svg](pensee-anytime.svg) | la courbe anytime et les six critères d'arrêt | [la pensée itérative](../theorie/pensee-iterative.md) |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "limit": 4, "offset": 46}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md</path>
+<type>file</type>
+<content>
+46: | [pensee-contrat.svg](pensee-contrat.svg) | les types `state`, `proposal`, `score`, `decision` et le moteur N3 | [la pensée itérative](../theorie/pensee-iterative.md) |
+47: | [pensee-anytime.svg](pensee-anytime.svg) | la courbe anytime et les six critères d'arrêt | [la pensée itérative](../theorie/pensee-iterative.md) |
+48: | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
+49: | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
+
+(Showing lines 46-49 of 106. Use offset=50 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "new_string": "| [pensee-anytime.svg](pensee-anytime.svg) | la courbe anytime et les six critères d'arrêt | [la pensée itérative](../theorie/pensee-iterative.md) |\n| [pensee-meta.svg](pensee-meta.svg) | la méta- … [589 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | grep -E \"pensee|modele-natif|diehl-cook|schemas/README\" && echo '---' && for t in \"python3 tools/verifier_schemas.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/revue_documentation.py\" \"python3 to … [289 caractères tronqués]`
+
+  ```
+M docs/implantation/diehl-cook.md
+ M docs/schemas/README.md
+ M docs/theorie/modele-natif.md
+ M docs/theorie/pensee-iterative.md
+?? docs/schemas/pensee-anytime.svg
+?? docs/schemas/pensee-contrat.svg
+?? docs/schemas/pensee-memoire.svg
+?? docs/schemas/pensee-mesure.svg
+?? docs/schemas/pensee-meta.svg
+---
+python3 tools/verifier_schemas.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/pensee-iterative.md docs/theorie/modele-natif.md docs/implantation/diehl-cook.md docs/schemas/README.md docs/schemas/pensee-contrat.svg docs/schemas/pensee-anytime.svg docs/schemas/pensee-meta.svg docs/schemas/pe … [276 caractères tronqués]`

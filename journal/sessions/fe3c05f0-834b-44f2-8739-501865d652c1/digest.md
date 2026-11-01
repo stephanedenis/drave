@@ -4310,3 +4310,67 @@ started background job bash-186
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nnat=mo.manifeste_natif(pdf,page,'fra'); ref=mo.jet … [1187 caractères tronqués]`
+
+  ```
+WER=23.66% largeur=2100 flou=1.2 seuil=160 conf= 72.3
+WER=25.99% largeur=3000 flou=1.8 seuil=160 conf= 69.3
+WER=27.78% largeur=2100 flou=0.8 seuil=130 conf= 62.5
+WER=27.96% largeur=1600 flou=0.8 seuil=160 conf= 67.0
+WER=28.14% largeur=2500 flou=1.8 seuil=190 conf= 70.9
+WER=29.75% largeur=2500 flou=1.2 seuil=130 conf= 67.0
+WER=30.65% largeur=2500 flou=1.2 seuil=160 conf= 63.6
+WER=31.54% largeur=3000 flou=1.2 seuil=130 conf= 64.2
+...
+WER=96.42% largeur=1600 flou=1.8 seuil=130 conf= 27.6
+WER=97.67% largeur=2100 flou=1.8 seuil=130 conf= 23.8
+WER=100.36% largeur=1600 flou=1.8 seuil=160 conf= 22.7
+  ```
+
+### 👤 Utilisateur
+
+background job bash-186 (bash: timeout 1800 python3 tools/mesurer_scans.py --pipelines brut --sortie work/r44/mesure-brut.json > work/r44/mesure-brut.log 2>&1; echo "[code $?]"; tail -4 work/r44/mesure-brut.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -30 work/r44/mesure-brut.log", "description": "Read baseline scan measurement table", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[34/100] A_RES_80_10-en-p1-s1-fax.png             brut         WER 34.18% conf  66.3
+  [35/100] A_RES_80_10-en-p1-s1-papier.png          brut         WER 12.34% conf  89.7
+  [36/100] A_RES_80_10-es-p1-s1-propre.png          brut         WER  9.86% conf  91.4
+  [37/100] A_RES_80_10-es-p1-s1-photocopie.png      brut         WER 11.62% conf  90.2
+  [38/100] A_RES_80_10-es-p1-s1-photo.png           brut         WER 55.99% conf  84.7
+  [39/100] A_RES_80_10-es-p1-s1-fax.png             brut         WER 28.87% conf  66.2
+  [40/100] A_RES_80_10-es-p1-s1-papier.png          brut         WER 10.92% conf  92.4
+  [41/100] A_RES_80_10-fr-p1-s1-propre.png          brut         WER 12.13% conf  89.4
+  [42/100] A_RES_80_10-fr-p1-s1-photocopie.png      brut         WER 12.13% conf  87.5
+  [43/100] A_RES_80_10-fr-p1-s1-photo.png           brut         WER 60.66% conf  82.1
+  [44/100] A_RES_80_10-fr-p1-s1-fax.png             brut         WER 44.26% conf  65.3
+  [45/100] A_RES_80_10-fr-p1-s1-papier.png          brut         WER 12.79% conf  85.7
+  [46/100] A_RES_80_1-en-p2-s1-propre.png           brut         WER  0.40% conf  95.7
+  [47/100] A_RES_80_1-en-p2-s1-photocopie.png       brut         WER  3
+… [1432 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\nold='''    manifeste = graphe_document_ocr.manifeste(image, langue, psm)\n    cache.write_text(json.dumps(manifeste, ensure_ascii=False), encoding=\"utf-8\")\n    return manifeste'''\nnew='''    … [976 caractères tronqués]`
+
+  ```
+ok
+[code 0]
+  [93/100] A_RES_80_1-es-p2-s1-photo.png            brut         WER 99.21% conf  71.5
+  [94/100] A_RES_80_1-es-p2-s1-fax.png              brut         WER 20.47% conf  76.4
+  [95/100] A_RES_80_1-es-p2-s1-papier.png           brut         WER 81.10% conf  83.5
+  [96/100] A_RES_80_1-fr-p1-s1-propre.png           brut         WER  3.81% conf  91.6
+  [97/100] A_RES_80_1-fr-p1-s1-photocopie.png       brut         WER  7.30% conf  89.6
+  [98/100] A_RES_80_1-fr-p1-s1-photo.png            brut         WER 52.70% conf  87.0
+  [99/100] A_RES_80_1-fr-p1-s1-fax.png              brut         WER 24.13% conf  71.2
+  [100/100] A_RES_80_1-fr-p1-s1-papier.png           brut         WER  8.57% conf  89.5
+=== R4.4 — LES SCANS SIMULÉS, FAMILLE PAR FAMILLE ===
+  famille    split pipeline             scans     WER  rappel   conf  parité  valeur
+  fax        dev   brut                    10  27.05%  76.35%   70.3    3.3%   50.0%
+  fax        test  brut                    10  23.10%  79.29%   73.2       —       —
+  papier     dev   brut                    10  13.02%  89.37%   91.3   63.3%   73.3%
+  papier     test  brut                    10  53.15%  48.58%   84.3       —       —
+  photo     
+… [601 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms\nman=json.load(open('work/r44/scans/manifeste.json'))\nQ=ms.questions_par_page()\npipes=['brut','recadrage','redressement','echelle','recadrage,redressement','redressement,echelle','recadra … [627 caractères tronqués]`

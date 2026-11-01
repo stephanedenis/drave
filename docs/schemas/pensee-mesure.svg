@@ -1,0 +1,56 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>La mesure de la pensée</title>
+<desc>On ne mesure pas seulement la réponse : on mesure la recherche, le coût, le regret et la justification.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">La mesure de la pensée</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Une réponse sans chemin est une intuition ; une intuition n&#x27;est pas une mesure.</text>
+<rect x="30" y="96" width="440" height="190" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="250" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">anytime AUC</text>
+<line x1="60" y1="250" x2="440" y2="250" stroke="#94a3b8" stroke-width="1.1"/>
+<line x1="60" y1="140" x2="60" y2="258" stroke="#94a3b8" stroke-width="1.1"/>
+<path d="M65,245 C130,220 200,200 270,185 C330,172 390,165 435,160" fill="none" stroke="#15803d" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M65,245 C150,240 260,235 435,230" fill="none" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#f)"/>
+<text x="390" y="150" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">best-so-far</text>
+<text x="390" y="242" text-anchor="middle" font-size="9" fill="#64748b">hasard</text>
+<text x="250" y="278" text-anchor="middle" font-size="9" fill="#334155">budget</text>
+<rect x="490" y="96" width="440" height="190" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="710" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">nœuds par stratégie</text>
+<rect x="540" y="190" width="55" height="60" rx="3" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1"/>
+<text x="567" y="266" text-anchor="middle" font-size="8.5" fill="#475569">A*</text>
+<rect x="635" y="150" width="55" height="100" rx="3" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+<text x="662" y="266" text-anchor="middle" font-size="8.5" fill="#475569">MCTS</text>
+<rect x="730" y="170" width="55" height="80" rx="3" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+<text x="757" y="266" text-anchor="middle" font-size="8.5" fill="#475569">CSP</text>
+<rect x="825" y="210" width="55" height="40" rx="3" fill="#e2e8f0" stroke="#334155" stroke-width="1"/>
+<text x="852" y="266" text-anchor="middle" font-size="8.5" fill="#475569">greedy</text>
+<text x="710" y="278" text-anchor="middle" font-size="9" fill="#475569">même budget, même tâche</text>
+<rect x="30" y="306" width="440" height="190" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="250" y="330" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">regret du méta</text>
+<line x1="60" y1="460" x2="440" y2="460" stroke="#94a3b8" stroke-width="1.1"/>
+<path d="M65,450 C150,430 250,420 435,410" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M65,450 C150,440 250,435 435,430" fill="none" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#f)"/>
+<text x="390" y="402" text-anchor="middle" font-size="9" font-weight="bold" fill="#b91c1c">méta</text>
+<text x="390" y="424" text-anchor="middle" font-size="9" fill="#64748b">fixe</text>
+<text x="250" y="488" text-anchor="middle" font-size="9" fill="#334155">regret cumulé</text>
+<rect x="490" y="306" width="440" height="190" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="710" y="330" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">justification</text>
+<rect x="580" y="370" width="70" height="40" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+<text x="615.0" y="394" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">S0</text>
+<rect x="680" y="370" width="70" height="40" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+<text x="715.0" y="394" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">S1</text>
+<rect x="780" y="370" width="70" height="40" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="815.0" y="394" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">S4</text>
+<rect x="680" y="440" width="70" height="40" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+<text x="715.0" y="464" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">S2</text>
+<rect x="780" y="440" width="70" height="40" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="815.0" y="464" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">S6</text>
+<line x1="650" y1="390" x2="678" y2="390" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="750" y1="390" x2="778" y2="390" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="715" y1="410" x2="715" y2="438" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="750" y1="460" x2="778" y2="460" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<path d="M580,370 L580,350 L815,350 L815,368" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#fv)"/>
+<text x="710" y="484" text-anchor="middle" font-size="9" fill="#475569">le chemin racine → settled est la preuve</text>
+<rect x="30" y="516" width="900" height="30" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="536" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#334155">contrôles : aléatoire, greedy, sans méta, sans mémoire, ablation, même budget</text>
+</svg>

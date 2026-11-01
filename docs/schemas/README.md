@@ -43,6 +43,11 @@
 | [pensee-arbre.svg](pensee-arbre.svg) | l'arbre d'états : frontière, transposition, élagage, meilleur nœud | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [pensee-cycle.svg](pensee-cycle.svg) | trois boucles imbriquées : objet, stratégie, méta | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [pensee-portefeuille.svg](pensee-portefeuille.svg) | A*, MCTS, alpha-bêta, contraintes, planification, méta autour du même arbre | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-contrat.svg](pensee-contrat.svg) | les types `state`, `proposal`, `score`, `decision` et le moteur N3 | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-anytime.svg](pensee-anytime.svg) | la courbe anytime et les six critères d'arrêt | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-meta.svg](pensee-meta.svg) | la méta-politique, la trace et les trois modes d'apprentissage | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-memoire.svg](pensee-memoire.svg) | le store, le compactage, le rejeu et le partage de l'arbre | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-mesure.svg](pensee-mesure.svg) | anytime AUC, nœuds, regret et justification | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |

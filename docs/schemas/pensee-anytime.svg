@@ -1,0 +1,40 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>L&#x27;itération indéfinie et l&#x27;arrêt</title>
+<desc>Un moteur anytime a toujours un meilleur état courant ; l&#x27;arrêt est une décision tracée, pas une panne.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">L&#x27;itération indéfinie et l&#x27;arrêt</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le score ne doit pas baisser ; le budget doit être compté ; l&#x27;arrêt doit être explicite.</text>
+<rect x="30" y="96" width="540" height="330" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<line x1="70" y1="380" x2="540" y2="380" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="70" y1="130" x2="70" y2="395" stroke="#94a3b8" stroke-width="1.2"/>
+<path d="M75,370 C130,340 180,300 240,270 C300,240 380,220 530,200" fill="none" stroke="#15803d" stroke-width="2.4" marker-end="url(#f)"/>
+<path d="M75,360 C140,330 170,300 230,290 C300,280 360,250 530,230" fill="none" stroke="#1d4ed8" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#f)"/>
+<line x1="75" y1="350" x2="530" y2="350" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="420" y="190" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">best-so-far</text>
+<text x="420" y="250" text-anchor="middle" font-size="9.5" fill="#1d4ed8">courant</text>
+<text x="420" y="366" text-anchor="middle" font-size="9.5" fill="#64748b">hasard</text>
+<text x="300" y="414" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">budget  (nœuds, temps, énergie)</text>
+<text x="56" y="120" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">score</text>
+<text x="300" y="440" text-anchor="middle" font-size="9.5" fill="#475569">anytime : la courbe est la réponse, pas le point final</text>
+<rect x="600" y="100" width="330" height="48" rx="7" fill="#ffffff" stroke="#15803d" stroke-width="1.2"/>
+<text x="616" y="120" text-anchor="start" font-size="10.5" font-weight="bold" fill="#15803d">settled</text>
+<text x="616" y="137" text-anchor="start" font-size="8.8" fill="#475569">plus d&#x27;amélioration connue</text>
+<rect x="600" y="158" width="330" height="48" rx="7" fill="#ffffff" stroke="#b45309" stroke-width="1.2"/>
+<text x="616" y="178" text-anchor="start" font-size="10.5" font-weight="bold" fill="#b45309">budget</text>
+<text x="616" y="195" text-anchor="start" font-size="8.8" fill="#475569">nœuds, temps, énergie</text>
+<rect x="600" y="216" width="330" height="48" rx="7" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.2"/>
+<text x="616" y="236" text-anchor="start" font-size="10.5" font-weight="bold" fill="#1d4ed8">confiance</text>
+<text x="616" y="253" text-anchor="start" font-size="8.8" fill="#475569">seuil atteint</text>
+<rect x="600" y="274" width="330" height="48" rx="7" fill="#ffffff" stroke="#b91c1c" stroke-width="1.2"/>
+<text x="616" y="294" text-anchor="start" font-size="10.5" font-weight="bold" fill="#b91c1c">contradiction</text>
+<text x="616" y="311" text-anchor="start" font-size="8.8" fill="#475569">deux candidats incompatibles</text>
+<rect x="600" y="332" width="330" height="48" rx="7" fill="#ffffff" stroke="#6d28d9" stroke-width="1.2"/>
+<text x="616" y="352" text-anchor="start" font-size="10.5" font-weight="bold" fill="#6d28d9">méta</text>
+<text x="616" y="369" text-anchor="start" font-size="8.8" fill="#475569">la politique décide d&#x27;arrêter</text>
+<rect x="600" y="390" width="330" height="48" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="616" y="410" text-anchor="start" font-size="10.5" font-weight="bold" fill="#0f172a">interruption</text>
+<text x="616" y="427" text-anchor="start" font-size="8.8" fill="#475569">humain, sécurité</text>
+<rect x="30" y="452" width="900" height="44" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="480" y="476" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0f172a">Un moteur qui ne compte pas son budget ne peut pas être anytime ; un moteur qui ne s&#x27;arrête jamais ne pense pas, il tourne.</text>
+</svg>

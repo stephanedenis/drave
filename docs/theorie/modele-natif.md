@@ -125,6 +125,10 @@ corps**, pas la copie de l'octet.
 peut la tester : si `c` dépend encore du format, deux surfaces équivalentes n'ont pas le même corps, et le test
 le dit. C'est pour cela que la RSN est un **contrat** et pas un espace latent de plus.
 
+**Mais la RSN de travail est plurielle.** Le quotient décrit **un** candidat ; l'état de pensée est un **ensemble**
+de candidats, avec un arbre, une frontière et des statuts. La RSN canonique unique est le **résultat** d'un cycle,
+pas la représentation de travail. Voir [`pensee-iterative.md`](pensee-iterative.md).
+
 
 ### Niveau, étage, couche — ne pas confondre
 
@@ -170,6 +174,10 @@ permet de **substituer** un encodeur par un autre sans toucher au reste du graph
 **Le raffinement.** `b'` raffine `b` au niveau L si `b'` a la même signature et si, pour toute entrée,
 `c(b'(x)) = c(b(x))` (même corps) et les annotations sont compatibles. La substituabilité est un **raffinement
 + une trace** : on remplace, on rejoue, on compare. C'est la définition opérationnelle du bus.
+
+**Le type `rsn` se décline.** Un bloc N1 rend des **candidats** ; un bloc N2 transforme un **état** (un ensemble
+de candidats) ; un moteur N3 a la signature `state → state` (ou `state → décision`). Le type `rsn` ne disparaît
+pas : il devient le **contenu** d'un état, pas l'état lui-même. Voir [`pensee-iterative.md`](pensee-iterative.md).
 
 
 ### Neutralité et informativité
@@ -600,3 +608,5 @@ partie stable du document.
   [`reports/README.md`](../../reports/README.md)
 - **Un bloc impulsionnel concret** : [`diehl-cook.md`](../implantation/diehl-cook.md) — comment un réseau de type
   Diehl & Cook (2015) devient un bloc Drave sans franchir les niveaux.
+- **La pensée itérative** : [`pensee-iterative.md`](pensee-iterative.md) — la RSN plurielle, l'arbre d'états et
+  le portefeuille de stratégies.

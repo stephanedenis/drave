@@ -194,22 +194,144 @@ embarque un **portefeuille**, et le méta-niveau choisit.
 et il peut être classique (une règle) ou appris (un bandit). La stratégie choisie est un **paramètre** de la
 trace, pas un nouveau type de données.
 
-## 6. Ce que la suite doit résoudre
+## 6. Le contrat de la pensée
 
-Ce document est le **premier tour** d'une refonte en **dix tours**. Les tours suivants :
+| type | contenu | producteur | consommateur |
+|---|---|---|---|
+| `state` | candidats + frontière + parent + empreinte | N1/N2/N3 | N2/N3 |
+| `proposal` | transition candidate (opérateur, paramètres) | N3 | N3 |
+| `score` | valeur, coût, confiance | N3 / classique | stratégie |
+| `constraint` | domaine, clause, refus | N2 / classique | N2/N3 |
+| `decision` | état `settled` + justification | N3 | N1/N3 |
+| `trace` | événements, arbre, diff | tous | rejeu |
 
-1. ~~le diagnostic et la RSN plurielle~~ ;
-2. ~~l'arbre d'états~~ ;
-3. ~~le cycle de pensée multi-niveaux~~ : observer, proposer, contraindre, évaluer, sélectionner, revenir,
-   commettre, arrêter ;
-4. ~~le portefeuille de stratégies~~ : recherche non informée, A*, beam, MCTS, alpha-bêta, contraintes, SAT/SMT,
-   planification, probabiliste, locale, cas-based, méta ;
-5. **le contrat de la pensée** : types `state`, `proposal`, `score`, `constraint`, `decision`, `trace` ;
-6. **l'itération indéfinie et l'arrêt** : anytime, budget, settled, contradiction, méta-décision ;
-7. **le méta-apprentissage** : choisir la stratégie, apprendre des traces, portfolio ;
-8. **la mémoire et le rejeu** : stocker, requêter, compacter, rejouer l'arbre ;
-9. **la mesure** : anytime AUC, taux de solution, gap, nœuds, regret, justification, contrôles ;
-10. **la révision des documents** : `modele-natif.md`, `diehl-cook.md`, index, schémas, portes.
+![Le contrat de la pensée](../schemas/pensee-contrat.svg)
+
+**Les six invariants** :
+
+1. tout état a un **parent** (sauf la racine) et une **empreinte** ;
+2. tout candidat a une **provenance** et un **statut** ;
+3. toute transition est **tracée** (opérateur, entrée, sortie, coût) ;
+4. tout score est une **hypothèse**, pas une vérité ;
+5. tout arrêt est **explicite** (statut, budget, contradiction, méta) ;
+6. tout état `settled` a une **justification** (le chemin racine → état).
+
+**Le moteur** est un bloc N3 `state → state` ou `state → decision`. Il peut appeler des opérateurs N1/N2/N3 ;
+il ne les remplace pas. Il ne lit **jamais** la surface : il lit des états.
+
+**Le store** est un bloc `state ↔ store` : persistance, requête, compaction, rejeu. Il peut être local, distribué,
+versionné. C'est un bloc comme un autre : contrat, coût, trace.
+
+**Le bus** transporte des `state` et des `proposal`, pas des « chaînes de pensée ». Une chaîne de pensée est une
+**vue** sur l'arbre, pas un type de plus.
+
+## 7. L'itération indéfinie et l'arrêt
+
+**Anytime** : à tout moment, le moteur a un **meilleur état courant** ; il peut s'arrêter et le rendre. La
+qualité est une **courbe**, pas un point.
+
+**Le score ne doit pas baisser** : si la stratégie est anytime, le meilleur score est non décroissant ; sinon,
+on garde le **best-so-far** et on le trace. Un moteur qui perd son meilleur état en cours de route ne pense pas :
+il repart.
+
+![L'itération indéfinie et l'arrêt](../schemas/pensee-anytime.svg)
+
+| critère d'arrêt | quand | ce qui est tracé |
+|---|---|---|
+| **settled** | plus d'amélioration connue | le statut, la justification |
+| **budget** | nœuds, temps, énergie | le budget consommé |
+| **confiance** | seuil atteint | la confiance, l'incertitude |
+| **contradiction** | deux candidats incompatibles | la contradiction, les deux branches |
+| **méta** | la politique décide d'arrêter | la décision, le regret |
+| **interruption** | humain, sécurité | l'état, le best-so-far |
+
+**Le budget** : chaque opérateur a un coût mesuré ; le scheduler alloue ; le store compte. Un moteur qui ne
+compte pas son budget ne peut pas être anytime.
+
+**Le piège** : l'itération indéfinie n'est pas l'absence d'arrêt. Un moteur qui ne s'arrête jamais ne pense pas ;
+il tourne. L'arrêt est une **décision** de plus, tracée.
+
+## 8. Le méta-apprentissage
+
+Le méta-niveau ne choisit pas un candidat : il choisit une **politique**. Trois façons, et elles se composent :
+
+| mode | ce qu'il apprend | signal | exemple |
+|---|---|---|---|
+| **bandit** | quelle stratégie/opérateur paie | récompense = score / coût | UCB sur les opérateurs |
+| **statistiques MCTS** | quelles branches méritent d'être développées | visites + valeur | UCT sur l'arbre |
+| **hors ligne** | une politique sur les traces | regret, succès | apprentissage supervisé ou RL |
+
+![Le méta-apprentissage](../schemas/pensee-meta.svg)
+
+**Le signal** : le **regret** (ce qu'on aurait gagné avec la meilleure stratégie), le **coût** (nœuds, temps),
+le **succès** (`settled`, preuve). Le méta-apprentissage est un bloc N3 qui lit la trace et écrit une politique.
+
+**La difficulté** : le méta-apprentissage peut **sur-apprendre la tâche** et devenir un routeur de plus. Le
+contrôle est un **portfolio aléatoire** et un **portfolio fixe** ; si le méta ne bat pas le fixe, il ne paie pas.
+
+**Le lien avec le bus** : la politique est un bloc ; elle a un contrat, un coût, une trace. Elle ne change pas
+les types ; elle change l'**ordre des choix**.
+
+## 9. La mémoire et le rejeu
+
+L'arbre est la **mémoire épisodique** de la pensée. Il ne suffit pas de le garder : il faut pouvoir le
+**requêter**, le **compacter**, le **rejouer** et le **partager**.
+
+![La mémoire et le rejeu de la pensée](../schemas/pensee-memoire.svg)
+
+| opération | ce qu'elle fait | invariant |
+|---|---|---|
+| **store** | persiste les nœuds et les arêtes | empreinte stable |
+| **query** | retrouve un état par empreinte, contenu, statut | index canonique |
+| **compact** | remplace un sous-arbre par son résumé | justification conservée |
+| **replay** | rejoue la recherche depuis la racine | mêmes états, mêmes scores |
+| **diff** | compare deux recherches | premier nœud divergent |
+| **share** | envoie un sous-arbre à un autre nœud | types et traces |
+
+**Le rejeu de la pensée** n'est pas le rejeu d'un tenseur : c'est le rejeu d'une **séquence d'opérateurs** et de
+**décisions de stratégie**. La trace doit contenir les deux, sinon le diff est aveugle.
+
+**Le compactage** est le seul moyen de tenir indéfiniment : on garde la **justification** et le **résumé**, pas
+tous les nœuds. Un arbre qui ne se compacte pas finit par ne plus tenir en mémoire — et un moteur qui ne tient
+pas en mémoire ne pense pas longtemps.
+
+## 10. La mesure de la pensée
+
+On ne mesure pas la pensée par la seule réponse finale. On mesure la **recherche** :
+
+![La mesure de la pensée](../schemas/pensee-mesure.svg)
+
+| métrique | ce qu'elle dit | contrôle |
+|---|---|---|
+| **anytime AUC** | la qualité intégrée sur le budget | recherche aléatoire |
+| **taux de solution** | combien de problèmes atteignent `settled` | greedy |
+| **gap** | distance à l'optimum connu | oracle / exhaustive |
+| **nœuds** | le coût de la solution | même budget |
+| **regret de stratégie** | ce qu'on perd en choisissant | portfolio fixe |
+| **justification** | le chemin est-il valide ? | vérificateur indépendant |
+| **rejeu** | la recherche est-elle reproductible ? | deux runs |
+| **invariance** | même sens, même décision | permutations de surface |
+
+**Les contrôles** : recherche aléatoire, greedy, sans méta, sans mémoire, ablation d'une stratégie, budget
+constant. Un résultat qui ne bat pas le greedy au même budget n'est pas un résultat de pensée.
+
+**Le miroir de la pensée** : la sortie doit pouvoir être **justifiée** par un chemin, et le chemin doit pouvoir
+être **rejoué**. Une réponse sans chemin est une intuition ; une intuition n'est pas une mesure.
+
+## 11. Les dix tours
+
+| tour | question | artefact |
+|---:|---|---|
+| **1** | la RSN unique était-elle la bonne représentation ? | le diagnostic, la RSN plurielle |
+| **2** | comment ordonner les candidats ? | l'arbre d'états |
+| **3** | comment penser en boucle ? | le cycle multi-niveaux |
+| **4** | avec quelles stratégies ? | le portefeuille |
+| **5** | quel contrat ? | les types et le moteur N3 |
+| **6** | quand s'arrêter ? | l'anytime et les critères |
+| **7** | comment choisir la stratégie ? | le méta-apprentissage |
+| **8** | comment garder et rejouer ? | la mémoire et le rejeu |
+| **9** | comment mesurer ? | les métriques et les contrôles |
+| **10** | que change-t-on aux documents ? | la révision, l'index, les portes |
 
 **Ce qui ne changera pas** : la RSN est un **type**, pas un bloc ; le niveau est un **contrat** ; le bus ne voit
 pas des neurones, il voit des types ; la pensée est une **recherche tracée**, pas un forward pass.

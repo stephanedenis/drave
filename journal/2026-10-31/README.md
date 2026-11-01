@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **8 session(s)** · **6 thème(s)**
+**22 commits** · **8 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,6 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 7 | [docs.md](docs.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -28,7 +29,7 @@
 | `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md) |
 | `bc3c0b97-cae0-4773-921d-ef27c8285461` | Cohérence de la documentation et recommandations | 2026-10-27 08:56 | 104.7 h | [rapport](../sessions/bc3c0b97-cae0-4773-921d-ef27c8285461/rapport.md) · [digest](../sessions/bc3c0b97-cae0-4773-921d-ef27c8285461/digest.md) |
 | `df1b1098-d54e-4763-bfc2-2a8cc1498cec` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | [rapport](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) · [digest](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 4.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 4.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 4.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -56,6 +57,7 @@
 | 21:22 | `10fa4f42` | RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET |
 | 22:11 | `77ceb533` | DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE |
 | 22:26 | `3cb15674` | PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS |
+| 22:29 | `0a296b75` | PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES |
 
 ## Le récit de la journée (écrit à la main)
 
