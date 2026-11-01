@@ -4532,3 +4532,164 @@ porte-melange 1 106
   ```
 
 - **job_output** `{"job_id": "bash-179", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -2 work/n2d/portes.log", "description": "Check gate progress"}`
+
+  ```
+21:09
+77
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+porte-reparti-moteur 1 45
+  porte-tokenizer-kimi   ✅                           9 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         100 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -4 work/n2d/portes.log; echo \"=== fin ===\"; ls work/n2d/portes-fin.txt 2>/dev/null; cat /tmp/portes-1031-n2d/registre.txt | awk '$2 != 0'", "description": "Check if the gate pass finished"}`
+
+  ```
+21:19
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-10-31)
+  porte-tokenizer-kimi   ✅                           9 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         100 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          26 s    ✅ la trace fausse est détectée et nommée
+=== fin ===
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+porte-reparti-moteur 1 45
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-179 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while [ ! -f work/n2d/finalise.termine ]; do sleep 20; done; date '+%H:%M' > work/n2d/portes-debut.txt; JOURNAUX=/tmp/portes-1031-n2d DELAI=1800 bash tools/toutes-les-portes.sh > work/n2d/portes.log 2>&1; date '+%H:%M' > work/n2d/portes-fin.txt; echo TERMINE >> work/n2d/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2d/portes-debut.txt work/n2d/portes-fin.txt; tail -6 work/n2d/portes.log; echo \"=== registre ===\"; wc -l < /tmp/portes-1031-n2d/registre.txt; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; echo \"=== duree ===\"; awk '{ … [129 caractères tronqués]`
+
+  ```
+19:42
+21:19
+      perplexité entière : 8.7434
+    === deux nœuds : 2 couches locales, le reste à distance ===
+      perplexité répartie : 8.7434 · écart de flux : 0.00e0
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+Journaux complets : /tmp/portes-1031-n2d
+TERMINE
+=== registre ===
+80
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+porte-reparti-moteur 1 45
+--- 75 vertes, 4 rouges ---
+=== duree ===
+5826 s = 97 min
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"ocr|vision|jeux\" /tmp/portes-1031-n2d/registre.txt; echo \"=== total lignes ===\"; head -1 /tmp/portes-1031-n2d/registre.txt", "description": "Check the new OCR gate result"}`
+
+  ```
+porte-jeux 0 111
+porte-ocr 0 48
+porte-vision 0 600
+=== total lignes ===
+porte-adaptateur-sortie 0 65
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nvieux = \"> **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**\"\nneuf … [1686 caractères tronqués]`
+
+  ```
+references ok
+en-cours ok
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1266 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_backlog.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifier_schemas.py 2>&1 | tail -1; git status --short | grep -v \"^ m tools/docwatch\"", "description": "Final checks be … [13 caractères tronqués]`
+
+  ```
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+ M .gitignore
+ M docs/pilotage/backlog/N2-distillation.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/INDEX.md
+ M reports/README.md
+?? reports/n2-budget.json
+?? reports/rapport-n2-budget.md
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo \"=== plan état ===\"; grep -E \"État|Heartbeat\" journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md; echo \"=== en-cours dans HEAD ? ===\"; git show --stat HEAD | head -20", "description": "Chec … [44 caractères tronqués]`
+
+  ```
+c83f17d5 DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+2ac27021 DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES
+ffad1c53 DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+=== plan état ===
+- **Heartbeat** : 2026-10-31 20:10 HAE
+- **État** : terminé
+=== en-cours dans HEAD ? ===
+commit c83f17d559a97b6a99567779139784c0e4cd69ef
+Author: Stéphane <stephane@localhost>
+Date:   Sat Oct 31 21:06:48 2026 -0400
+
+    DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+
+ docs/implantation/diehl-cook.md                    | 30 +++++++++++++-----
+ journal/2026-10-31/README.md                       |  7 ++--
+ journal/2026-10-31/apprentissage.md                |  2 +-
+ journal/2026-10-31/distribue.md                    |  2 +-
+ journal/2026-10-31/docs.md                         |  5 +--
+ journal/2026-10-31/mesures.md                      |  2 +-
+ journal/2026-10-31/modele.md                       |  2 +-
+ journal/2026-10-31/portes.md                       |  2 +-
+ jour
+… [316 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"le budget, les quatre sources, et le mètre faussé\" journal/2026-10-31/apprentissage.md; sed -n '/<!-- notes -->/,+4p' journal/2026-10-31/apprentissage.md; git diff HEAD --stat journal/2026-10-31/apprentissage.md", "descrip … [43 caractères tronqués]`
+
+  ```
+1
+<!-- notes -->
+### N2 — le budget, les quatre sources, et le mètre faussé
+
+La journée avait commencé par deux négatifs nets sur la hiérarchie. En reprenant N2 l'après-midi,
+la question était simple : le dispositif reconstruit hier n'avait vu que **20,48 Mo** d'un seul
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitignore docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillation.md docs/pilotage/references-non-regression.md reports/rapport-n2-budget.md reports/n2-budget.json reports/INDEX.md reports/RE … [193 caractères tronqués]`

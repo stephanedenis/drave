@@ -18,3 +18,6 @@ target/
 # docwatch — SVG générés depuis les sources .puml/.mmd (docwatch les produit)
 docs/**/*.puml.svg
 docs/**/*.mmd.svg
+
+# Campagnes GPU : points de contrôle et journaux de run (hors dépôt, archivés à part)
+work/

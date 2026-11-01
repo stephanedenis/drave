@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **367 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **368 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -197,6 +197,7 @@
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
+| [rapport-n2-budget.md](rapport-n2-budget.md) | N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart |
 | [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
 | [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |

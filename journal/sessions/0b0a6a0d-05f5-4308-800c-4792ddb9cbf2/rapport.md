@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 3.7 h |
+| Durée | 4.0 h |
 | Tours | 2 |
-| Messages | 281 |
-| Appels d'outils | 280 |
+| Messages | 293 |
+| Appels d'outils | 291 |
 | Fichiers touchés | 9 |
-| Commandes | 233 |
+| Commandes | 242 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -79,7 +79,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 2 — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / … [791 caractères tronqués]
 
-*184 appels d'outils.* Actions notables :
+*195 appels d'outils.* Actions notables :
 
 - bash — Check campaign status
 - bash — Compute manifest source shares
@@ -95,7 +95,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py`
 - bash — Check for seed 1 final results
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py`
-- … et 137 autres
+- … et 145 autres
 
 **Synthèse produite :**
 
@@ -159,7 +159,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 193 autres
+- … et 202 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -308,4 +308,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 ## 6. Commits
 
 - ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40  Une seconde session peut démarrer : en-cours nomme désormais la session a
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitignore docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillatio
 

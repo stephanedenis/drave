@@ -1,6 +1,13 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+> **Dernière passe complète — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+> (journaux `/tmp/portes-1031-n2d`). `porte-indice` (838 s) et `porte-melange` (106 s) : les
+> **structurelles connues**. `porte-homeostasie` (exit 2) : **environnementale** —
+> `/tmp/n4/rang4-lora.pt` effacé au démarrage. `porte-reparti-moteur` : PPL épinglée 9,1748 non
+> reproduite (8,7434), écart de flux nul — **à trancher**. Aucune régression : même liste que la
+> passe de 12 h 54, et la nouvelle `porte-ocr` (48 s) est **verte**.
+
+> **Passe précédente — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
 > (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
 > connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
 > au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN

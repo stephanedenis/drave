@@ -29,7 +29,7 @@
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
-| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 plafonne à 2,708 ; N4 partiel | **N2** (la hiérarchie), **N4** (consigne courte) |
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 : budget **−0,08**, **validation contaminée (32,8 %)** ; N4 partiel | **N2** (le corpus décontaminé), **N4** (consigne courte) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
 
 ## L'ordre du jour (carpe diem)
@@ -45,9 +45,10 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
    l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de
    passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.
-2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
-   (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
-   atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
+2. **N2 — la distillation** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734** (0,794
+   bit/octet) ; meilleur **2,6998**, plateau **2,708** ; porte **< 2,5 non atteinte**. **N2.d** : le budget
+   plein paie **2,9355 → 2,8527**, les quatre sources coûtent **+0,91**, et **la validation est contaminée à
+   32,8 %** — le prochain pas est le **corpus**, pas un levier d'entraînement.
 3. ~~N0.3b — la parité de perplexité DRVM ↔ GGUF~~ **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394**.
 4. **N4 — l'usage** : la **consigne courte** tenue à l'écart ; SFT **24/24 vus, 0/4 tenus** ; service 69 octets /
    611 ms. La restitution depuis un document lu est **R31**.
@@ -168,14 +169,15 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 |---|---|---|---|
 | **N0** | le format DRVM : manifeste, payload, lecture, convertisseurs, trace/rejeu, refus | ✅ | aucune — N0.3b est **close** (conversion et natif) |
 | **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
-| **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2** — la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** non atteinte (meilleur **2,6998**, plateau **2,708**) |
+| **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2.d** — le budget plein paie **2,936 → 2,853** ; les quatre sources coûtent **+0,906** ; **la validation est contaminée à 32,8 %** → **dédupliquer le corpus et séparer par document** avant de courir la porte |
 | **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
 | **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — la **consigne courte** tenue à l'écart (**24/24 vus, 0/4 tenus**) ; la lecture est **R31** |
 | **N5** | l'échelle : 50–100 M, corpus élargi | ⏸ **gelé** | après le verdict de **R11** sur le contexte ; R13 close — **octets**, le BPE n'est pas un prérequis |
 
 **Les trois leçons N qui contraignent R** :
 
-1. **Le contexte est le verrou.** 129 octets est le meilleur point (**PPL 2,6998**) ; **130** est négatif
+1. **Le contexte est le verrou.** 129 octets est le meilleur point (**PPL 2,6998**, mesurée sur un
+   jeu **contaminé à 32,8 %** — voir [N2.d](../../reports/rapport-n2-budget.md)) ; **130** est négatif
    (**2,7149**), **136** (**2,974**), **160** (**3,804**), **256** (**5,675**). À **2 000 octets**, la PPL native
    est **54,04**. Le modèle **surapprend sa longueur** : allonger le contexte demande un **autre schéma**, pas un
    curriculum de plus.
@@ -238,8 +240,10 @@ test, modèle qui répond de mémoire, petit N, temps mesuré à chaud.
 | **R1.2** | **curriculum de contexte** : une recette qui ne refait pas les négatifs 130/136/160/256 ; piste : états de résumé, pas seulement des positions | ⏳ | 1 000 octets **stable**, pas un point isolé |
 | **R1.3** | **tokenisation** : octets ou BPE ; la décision est **mesurée**, pas doctrinale | ✅ **décidée : octets** (R13 close) | à octets égaux, français 2 graines BPE512 **+0,39 %** (bruit), BPE1024 **+4,09 %** ; anglais **+4,22 / +6,59 %** ; réouverture conditionnée à un modèle 50–100 M ou à un contexte égal |
 
-**Ce qui bloque** : les 130–256 sont **tous négatifs**. R1.1 doit être tenté **avant** R1.2 : si la hiérarchie
-suffit, le contexte brut n'est pas le premier chantier.
+**Ce qui bloque** : les 130–256 sont **tous négatifs**. R1.1 doit être tenté **avant** R1.2 : si un état de
+section suffit, le contexte brut n'est pas le premier chantier. Et N2.d a montré que **la validation se
+recopie** (32,8 % des fenêtres verbatim dans l'entraînement) : un schéma de contexte se mesure sur un jeu
+**décontaminé**.
 
 ### R2 — la mémoire
 
@@ -301,7 +305,7 @@ rapide, graphe de document, gist, mesures et blocs structurels.
 
 Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
 
-- **non bloqué, à faire** : **N2** (la hiérarchie) ; **N4** (consigne courte) ;
+- **non bloqué, à faire** : **N2** (le corpus décontaminé) ; **N4** (consigne courte) ;
   **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
@@ -324,9 +328,12 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 
 - **R0** : un contrôleur **classique** + un modèle externe atteint-il **90 %** de la compréhension à **30 %** du
   coût sur trois types de documents ?
-- **R1** : la **hiérarchie portée par N2** suffit-elle à lire **1 000 octets** sans refaire les négatifs 130–256 ?
+- **R1** : quel schéma lit **1 000 octets** sans refaire les négatifs 130–256 ? **R1.1** (état de section)
+  puis **R1.2** (curriculum) tranchent ; la hiérarchie portée par N2 est écartée deux fois.
 - **R2** : un **gist** explicite bat-il le **closed-book** sur une question dont l'indice est loin ?
-- **N2** : le student peut-il descendre sous **2,5** de PPL, ou le plateau **2,708** est-il la capacité du corpus ?
+- **N2** : le student peut-il descendre sous **2,5** de PPL — et **sur quel jeu** ? Le corpus se
+  recopie (32,8 % des fenêtres du protocole sont verbatim dans l'entraînement) : la question n'a de
+  sens qu'après un **split par document**.
 - **B10.3** : un décodeur à attention croisée dépasse-t-il le plancher **39,6** de chrF ?
 
 ## Le détail et l'histoire

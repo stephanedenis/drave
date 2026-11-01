@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0,91**, et **la validation est contaminée à 32,8 %** (PPL propres **2,9795**) |
 | [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
 | `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
 | [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |

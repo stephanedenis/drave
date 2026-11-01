@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 3.5 h |
 | Tours | 2 |
-| Messages | 134 |
-| Appels d'outils | 162 |
+| Messages | 137 |
+| Appels d'outils | 164 |
 | Fichiers touchés | 11 |
-| Commandes | 118 |
+| Commandes | 119 |
 | Sous-agents | 2 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -82,7 +82,7 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 
 ### Tour 2 — continue tes réflexions et enrichit le document. Tu dois aller plus loin
 
-*39 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - write `/tmp/gen_plus.py`
 - bash — Générer les quatre nouveaux schémas formels
@@ -98,11 +98,40 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - read
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
-- … et 21 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ Dernier ajout : seuils pré-enregistrés et table de coût chiffrée
+⏵ Enrichissement terminé : 23 schémas, deux documents approfondis, portes vertes
+
+J'ai poussé les deux pages beaucoup plus loin, et le centre de gravité a changé : la séparation à trois niveaux n'y est plus un schéma, c'est un **système formel** ; et Diehl & Cook n'y est plus un modèle recopié, c'est un **bloc analysé, chiffré et pré-enregistré**.
+
+\## 1. La séparation devient un système de types
+
+- **La RSN est un quotient**, pas un vecteur : `c(s) = c(s') ⇔ s ~ s'`, le corps est l'invariant, l'annotation est le chemin, le miroir est une **rétraction** (`c(d(c(s), a(s))) = c(s)`). Le hash n'est qu'un représentant.
+- **Le niveau est déclaré et vérifié**, pas deviné : une signature `surface → rsn` est N1, `rsn → rsn` peut être N2 ou N3 mais doit le déclarer ; le code interne (`code`) ne traverse **jamais** une arête.
+- **Théorème de non-fuite** : dans un graphe légal, tout chemin du monde à N3 traverse une arête `rsn`. La preuve tient en trois lignes, et c'est le chargeur qui l'applique.
+- **Le raffinement** définit la substituabilité : même signature, même corps, annotations compatibles, même trace. C'est la définition opérationnelle du bus.
+
+\## 2. La neutralité devient mesurable — et piégeuse
+
+Le nouveau schéma `natif-neutralite.svg` pose le couple :
+
+- **neutre** : le format n'est pas prédictible depuis le corps (`P_f` doit échouer) ;
+- **informatif** : la classe est prédictible depuis le corps (`P_y` doit réussir).
+
+Un code constant est parfaitement neutre et parfaitement inutile. Un code de surface est informatif et non neutre. La cible est le quadrant haut-droit ; le **marginal sémantique** est `I − N`. Et la neutralité est **relative au corpus** : un corpus où le format prédit la classe fait réussir `P_f` sans que la RSN fuie.
+
+J'ai ajouté les **six anti-patrons** (le code promu, la surface au raisonneur, l'annotation dans le corps, le jeton déguisé, le faux miroir, le niveau décoratif) avec, pour chacun, le test qui l'attrape.
+
+\## 3. Le rejeu devient une pile de décisions
+
+Six étages : graine → RNG contré → ordre des opérations → arithmétique (f64, pas de fast-math) → trace canonique → hash. Trois niveaux de rejeu : **bit-exact**, **tolérant**, **sémantique**. D&C revendique le bit-exact ; un bloc qui ne dit pas lequel il garantit ne garantit rien.
+
+\## 4. Le résultat le plus utile : le coût caché de la STDP symétrique
+
+C'est le point que je n'avais pas vu en écrivant la première version. La règle du code de démonstration met à jour les poids **à chaq
+… [4153 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -169,7 +198,7 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 78 autres
+- … et 79 autres
 
 ## 4. Mesures et résultats marquants
 

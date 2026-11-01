@@ -14,7 +14,7 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 3.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 4.0 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `0f3b6070-57ce-4642-b9ec-3b3956f75978` — Regarde l'image /tmp/qa/check1.png avec (début 2026-10-31 18:02, 0.0 h) → [rapport](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/rapport.md) · [digest](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/digest.md)
 - `163d631a-6528-4324-b7b3-6487d24feeb5` — — (début 2026-10-31 17:39, 0.0 h) → [rapport](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/rapport.md) · [digest](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/digest.md)
 - `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` — Compléter les autres sessions avant le backlog (début 2026-10-31 11:13, 0.2 h) → [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md)

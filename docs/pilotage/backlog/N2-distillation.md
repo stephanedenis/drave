@@ -27,7 +27,11 @@ PPL < 2,5 sur le jeu tenu à l'écart, avec le contrôle par permutation et le m
 
 ## Prochaine action
 
-Lancer la série **hiérarchie** (état de section, longueurs croissantes) avec 3 graines et le même budget ; garder la porte < 2,5 comme mesure de la distillation, et passer la main à R11 pour la fenêtre. Ne pas allonger le contexte **brut**.
+**Le budget est mesuré (N2.d), le levier suivant est le corpus.** Le budget plein paie
+2,9355 → 2,8527 (−0,08) ; les quatre sources coûtent +0,93 ; le curriculum 129 gagne 0,05 à
+129 ; et **32,8 % des fenêtres du protocole de validation sont verbatim dans l'entraînement**
+— sur fenêtres propres, A est à 2,9795. Prochaine action : **dédupliquer le corpus et séparer
+train/validation par document**, puis remesurer la porte < 2,5 : elle n'a de sens qu'après.
 
 ## Voir aussi
 

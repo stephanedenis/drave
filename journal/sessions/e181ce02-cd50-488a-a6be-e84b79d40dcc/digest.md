@@ -3197,3 +3197,126 @@ schemas=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/implantation/diehl-cook.md && timeout 240 git commit -m \"DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer les seuils et la t … [14 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-118]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-118", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c83f17d5] DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+ 12 files changed, 83 insertions(+), 29 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final et bilan de l'enrichissement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py >/tmp/s1 2>&1; echo \"revue=$?\"; tail -2 /tmp/s1; bash tools/porte-tableaux.sh >/tmp/s2 2>&1; echo \"tableaux=$?\"; tail -2 /tmp/s2; python3 tools/verifier_schemas.py >/tmp/s3 2>&1; echo \"schema … [315 caractères tronqués]`
+
+  ```
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+tableaux=0
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+schemas=0
+     sources et images relatives.
+--- commits ---
+c83f17d5 DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+2ac27021 DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES
+ffad1c53 DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+--- tailles ---
+ 5479 docs/theorie/modele-natif.md
+ 8926 docs/implantation/diehl-cook.md
+14405 total
+--- schemas ---
+23
+  ```
+
+- **present** `{"files": [{"path": "docs/theorie/modele-natif.md", "description": "Version enrichie : quotient de la RSN, système de types, théorème de non-fuite, neutralité/informativité, pile de déterminisme, anti-patrons, questions ouvertes."}, {"path": "docs/implantation/diehl-cook.md", "description": "Version … [155 caractères tronqués]`
+
+  ```
+Presented docs/theorie/modele-natif.md
+Presented docs/implantation/diehl-cook.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Enrichissement terminé : 23 schémas, deux documents approfondis, portes vertes
+
+J'ai poussé les deux pages beaucoup plus loin, et le centre de gravité a changé : la séparation à trois niveaux n'y est plus un schéma, c'est un **système formel** ; et Diehl & Cook n'y est plus un modèle recopié, c'est un **bloc analysé, chiffré et pré-enregistré**.
+
+## 1. La séparation devient un système de types
+
+- **La RSN est un quotient**, pas un vecteur : `c(s) = c(s') ⇔ s ~ s'`, le corps est l'invariant, l'annotation est le chemin, le miroir est une **rétraction** (`c(d(c(s), a(s))) = c(s)`). Le hash n'est qu'un représentant.
+- **Le niveau est déclaré et vérifié**, pas deviné : une signature `surface → rsn` est N1, `rsn → rsn` peut être N2 ou N3 mais doit le déclarer ; le code interne (`code`) ne traverse **jamais** une arête.
+- **Théorème de non-fuite** : dans un graphe légal, tout chemin du monde à N3 traverse une arête `rsn`. La preuve tient en trois lignes, et c'est le chargeur qui l'applique.
+- **Le raffinement** définit la substituabilité : même signature, même corps, annotations compatibles, même trace. C'est la définition opérationnelle du bus.
+
+## 2. La neutralité devient mesurable — et piégeuse
+
+Le nouveau schéma `natif-neutralite.svg` pose le couple :
+
+- **neutre** : le format n'est pas prédictible depuis le corps (`P_f` doit échouer) ;
+- **informatif** : la classe est prédictible depuis le corps (`P_y` doit réussir).
+
+Un code constant est parfaitement neutre et parfaitement inutile. Un code de surface est informatif et non neutre. La cible est le quadrant haut-droit ; le **marginal sémantique** est `I − N`. Et la neutralité est **relative au corpus** : un corpus où le format prédit la classe fait réussir `P_f` sans que la RSN fuie.
+
+J'ai ajouté les **six anti-patrons** (le code promu, la surface au raisonneur, l'annotation dans le corps, le jeton déguisé, le faux miroir, le niveau décoratif) avec, pour chacun, le test qui l'attrape.
+
+## 3. Le rejeu devient une pile de décisions
+
+Six étages : graine → RNG contré → ordre des opérations → arithmétique (f64, pas de fast-math) → trace canonique → hash. Trois niveaux de rejeu : **bit-exact**, **tolérant**, **sémantique**. D&C revendique le bit-exact ; un bloc qui ne dit pas lequel il garantit ne garantit rien.
+
+## 4. Le résultat le plus utile : le coût caché de la STDP symétrique
+
+C'est le point que je n'avais pas vu en écrivant la première version. La règle du code de démonstration met à jour les poids **à chaque spike pré et post**. La mise à jour pré touche `n_e` poids par spike d'entrée, soit `s_pre · n_e` — **exactement l'ordre du forward** (`5 488 × 400 = 2,2 M` poids). La normalisation, elle, n'est que `n_input · n_e ≈ 1/7` de ce coût.
+
+Autrement dit :
+
+- **la règle post-only du papier (Eq. 3) est creuse** : `n_input · s_post`, quelques dizaines de milliers de poids ;
+- **la variante symétrique du code ne l'est pas** : elle copie le coût du forward ;
+- le « coût caché » n'est pas la normalisation, c'est **la mise à jour pré**.
+
+C'est un argument de coût, pas seulement de qualité, pour choisir Eq. 3 — et un argument que presque aucun banc SNN ne compte. La porte **D5b** est définie pour ça : compter les **poids touchés**, pas seulement les spikes.
+
+## 5. D&C : ce qu'il calcule, ce qu'il ne calcule pas
+
+- **Ce qu'il calcule** : un clustering compétitif en ligne, analogie opérationnelle avec un k-means stochastique sous contrainte de norme et contrôle de fréquence.
+- **Ce qu'il ne calcule pas** : la hiérarchie, le temps, la syntaxe, la classe. Une couche de prototypes ne devient pas un raisonneur parce qu'elle a 6 400 neurones.
+- **Pourquoi c'est un modèle de taux** : l'espérance du potentiel est proportionnelle à `Σ γ_i r_i`, la variance décroît en `1/√T` ; le spike est un substrat de parcimonie et d'apprentissage local, **pas un code temporel**. Le contrôle « lecture taux seul » tranche.
+- **Pourquoi D&C et pas un classifieur** : ni le meilleur score (kNN/SVM ~95–97 %, CNN > 99 %), ni le plus profond — mais le seul qui apprend **localement, sans étiquette**, avec des prototypes interprétables et un coût d'exécution événementiel.
+
+## 6. Le banc, la conformité, la mémoire N2
+
+- **Banc v0 pré-enregistré** : 6 hypothèses (H1–H6), 6 contrôles, **seuils provisoires figés avant la première mesure** (+5 pts, cosine < 0,8 × témoin, +0,2 bit, écart ≤ 1 pt, ≤ chance + 5 pts, diff = 0). 100 excitateurs, 2 000 exemples, 1 passage, 3 graines.
+- **Modes de défaillance** : neurones morts, effondrement, monopole, explosion, ordre, biais Poisson, assignation ambiguë, fuite de format, rejeu divergent, coût caché — chacun avec symptôme, cause, test et remède.
+- **Suite de conformité** : unité, propriété, intégration, banc ; tolérances (spikes exacts, poids 1e-6, logits 1e-5, hash exact) ; le test le plus important est qu'un **graphe illégal soit refusé**.
+- **Mémoire N2** : corpus de RSN → `φ(corps)` → prototypes → graphe → annotation ; métriques de récupération, invariance, open-set, complétion. Elle reconnaît, elle n'infère pas.
+- **Exemple pas-à-pas** : un jouet à deux entrées, `g_e` et `V` tick par tick, jusqu'au spike à `t = 3` — avec le piège du premier spike (`post2before = 0` dans la variante du code, pas dans Eq. 3).
+
+## 7. Ce qui reste ouvert
+
+Chaque page a maintenant ses **questions ouvertes** : canonicalisation multi-modale, algèbre de l'annotation, neutralité adversariale, coût de la séparation, composite, rejeu distribué, substitution ; et pour D&C : profondeur, code temporel, local vs gradient, normalisation, mémoire N2, matériel, sûreté.
+
+Le **v0 exécutable n'est pas encore lancé** : le document le pré-enregistre, avec ses seuils et ses portes. C'est la prochaine étape naturelle — et elle est maintenant assez cadrée pour être implémentée sans improvisation.
+
+## Fichiers et commits
+
+- [`docs/theorie/modele-natif.md`](docs/theorie/modele-natif.md) — ~5 500 mots, 12 schémas.
+- [`docs/implantation/diehl-cook.md`](docs/implantation/diehl-cook.md) — ~8 900 mots, 11 schémas.
+- **23 schémas** au total, indexés dans [`docs/schemas/README.md`](docs/schemas/README.md).
+- Commits d'enrichissement : **`ffad1c53`** (10 schémas + sections formelles), **`2ac27021`** (coût, lecture d'un pas, questions ouvertes), **`c83f17d5`** (seuils et table de coût).
+- Portes : `verifier_schemas`, `porte-tableaux`, `revue_documentation`, `taille_documents`, `verifie_en_cours`, `verifie_journal` — **toutes vertes**.
+
+Si tu veux, je passe maintenant au **v0 exécutable** : `tools/neuro/` + le petit corpus + les six hypothèses, avec la fiche et le JSON de résultats. Le document est prêt à être confronté à la mesure.
+

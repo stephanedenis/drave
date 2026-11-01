@@ -23,27 +23,24 @@
 > `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
 > l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
 
-### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2, le budget complet
+### Session à ouvrir — N2, le corpus décontaminé
 
-- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — mandat dans
-  [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
-- **Rôle** : **N2, le budget complet**.
-- **Ce qu'elle fait** : deux GPU en continu — **A** français seul (3 graines), **B** manifeste
-  4 sources, **B′** quotas égaux (le manifeste est à **82 % anglais**), **C** curriculum 129
-  sur A ; la hiérarchie est écartée deux fois, restent **le curriculum et les données** (41 Mo,
-  20 000 pas, quatre sources) sur le dispositif reconstruit.
-- **Ce que font les autres** : documentation, backlog, **N4** (sans GPU), portes documentaires —
-  mais **pas** `toutes-les-portes.sh` (elle prend les GPU et fausserait la mesure), pas les
-  fichiers réservés, ni cette page sans me le dire.
-- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
-  `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : la fiche du budget, le journal, la roadmap, le commit.
-- **Bloquants** : aucun côté N2 — GPU occupés ; **R4.4** partielle (OCR installé).
-- **Journal** : [30/10](../../journal/2026-10-30/README.md) · [31/10](../../journal/2026-10-31/README.md).
+- **Id** : aucune session active — `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` est **close** (la
+  campagne N2.d est committée).
+- **Rôle** : **N2, le corpus** — **32,8 %** des fenêtres de validation sont verbatim dans
+  l'entraînement ; il faut dédupliquer et séparer train/validation **par document** avant que la
+  porte < 2,5 ait un sens.
+- **Ce qu'elle fait** : reconstruire `data/corpus_fr.txt` sans répétitions, un split par document,
+  puis remesurer la base et le meilleur élève ; la porte sera **redéfinie** sur ce jeu-là.
+- **Ce que font les autres** : **R4.4** (les scans réels) est ouverte et non bloquante ; **N4**
+  (consigne courte) prend la file si N2 bloque.
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `journal/sessions/<id>/`.
+- **Prochaine action** : le script de déduplication et le split par document.
+- **Bloquants** : aucun côté N2 ; **R4.4** attend des scans, pas un blocage.
+- **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
-> `fe3c05f0`
-> — rapports dans [`journal/sessions/`](../../journal/sessions/).
+> `fe3c05f0`, `0b0a6a0d` (N2.d) — rapports dans [`journal/sessions/`](../../journal/sessions/).
 
 ## Ce qui est en cours
 
@@ -69,13 +66,14 @@
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
-- **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
-  **N2.h1** : 3,9759 contre 3,9617, contrôle 3,9764 — rien ne se lit.
-  **N2.h2** (distillation, professeur refait, 3 graines) : **2,9935** contre **2,9927** (+0,029 %) ;
-  l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Points de
-  contrôle **conservés** (Data13TB + disque IA, manifeste vérifié). Fiches
-  [`n2-hierarchie`](../../reports/rapport-n2-hierarchie.md) · [`n2-distillation`](../../reports/rapport-n2-distillation.md) ;
-  suite : **campagne budget et données en cours** (`0b0a6a0d`).
+- **N2** : GPU ; **N2.d** — le budget plein (20 000 pas, 41 Mo, 3 graines) paie
+  **2,9355 → 2,8527** ; les quatre sources coûtent **+0,9064** (professeur français, 82,5 %
+  anglais, quotas égaux **3,4350**) ; le curriculum 129 gagne **0,0416**
+  à 129. **La validation n'est pas tenue à l'écart : 32,8 % des fenêtres du protocole sont
+  verbatim dans l'entraînement** — sur fenêtres propres, A est à **2,9795** et le témoin de
+  5 000 pas à **3,0534** ; **2,6998 est mesuré sur le même jeu contaminé**. Fiche
+  [`n2-budget`](../../reports/rapport-n2-budget.md). Suite : **corpus dédupliqué et split par
+  document**, puis la porte ; la capacité attend. N4 **0/40**.
 
 ## Les chiffres de l'état
 
@@ -83,11 +81,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **79** (73 vertes, 5 rouges à la passe du 31/10 ; 1 porte ajoutée depuis, hors passe) | `tools/porte-*.sh` |
+| portes | **79** (75 vertes, 4 rouges à la passe du 31/10 19 h 42) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **370** / **438** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **371** / **439** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **112** (hors archive et README) | `docs/**/*.md` |
-| dernière passe complète | **1 h 37** (31/10 12 h 54) | `docs/pilotage/references-non-regression.md` |
+| dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
@@ -105,7 +103,7 @@ sources de blocage nommées.
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
-| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; hiérarchie **négative 2×** ; N4 0/4 ; N5 gelé | **N2** (budget et données, en cours) ; **N4** (consigne) |
+| **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; validation **contaminée (32,8 %)** ; N4 0/4 ; N5 gelé | **N2** (le corpus décontaminé) ; **N4** (consigne) |
 | **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -117,16 +115,17 @@ documentation · **C7** pensée — mesurés, et désormais du récit, pas du pl
 ## Ce qui reste
 
 **R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 partielle** (OCR, scans réels à faire).
-**N2** — la **hiérarchie est écartée** (deux négatifs) ; **curriculum**, **données** et **capacité**
-restent à mesurer. **N4** — la **consigne
+**N2** — la **hiérarchie** et les **données** sont écartées ; le **budget** paie **−0,08** ; la
+**validation est contaminée à 32,8 %** — le prochain pas est le **corpus**, pas l'entraînement. **N4** — la **consigne
 courte**. **B10.3** — le `z` et l'encodeur.
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
 ## Les questions ouvertes
 
-- **R1** : **1 000 octets** sans refaire 130–256 ? → **N2** (hiérarchie), puis **R1.1**, tranchent.
-- **N2** : **< 2,5** ? → le **curriculum** et la **capacité** tranchent ; l'état de section est
-  écarté par deux mesures (N2.h1, N2.h2).
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (état de section) puis **R1.2**
+  (curriculum) tranchent ; la hiérarchie de N2 est écartée.
+- **N2** : **< 2,5** — et **sur quel jeu** ? La validation se recopie (32,8 % verbatim) →
+  le **split par document** tranche.
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Backlog** : graphe sans cycle ni arête morte ? → `tools/verifie_backlog.py` tranche.

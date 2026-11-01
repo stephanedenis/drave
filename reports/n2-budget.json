@@ -1,0 +1,738 @@
+{
+ "base": {
+  "bras": "base",
+  "nom": "base supervisée 20 000 pas",
+  "n": 1,
+  "runs": [
+   {
+    "fichier": "drave-n0-base-20k.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.2161,
+    "ppl_129": 3.2653,
+    "ppl_propres": 3.245,
+    "ppl_contaminees": 3.0756,
+    "ppl_permute": 544.3581,
+    "precision_main": 0.6544,
+    "grilles": {
+     "0/16": 3.2161,
+     "0/8": 3.2296,
+     "1000003/16": 3.2494,
+     "1000003/8": 3.1856,
+     "2000009/16": 3.2985,
+     "2000009/8": 3.4194,
+     "3000029/16": 3.0943,
+     "3000029/8": 3.0611
+    }
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 3.2161,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    3.2161
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 3.2653,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    3.2653
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 3.245,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    3.245
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 3.0756,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    3.0756
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 544.3581,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    544.3581
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6544,
+   "ecart_type": null,
+   "etendue": null,
+   "valeurs": [
+    0.6544
+   ]
+  }
+ },
+ "T5k": {
+  "bras": "T5k",
+  "nom": "5 000 pas, français (campagne du 31/10)",
+  "n": 3,
+  "runs": [
+   {
+    "fichier": "temoin-g1.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.9406,
+    "ppl_129": 2.9631,
+    "ppl_propres": 3.0612,
+    "ppl_contaminees": 2.7059,
+    "ppl_permute": 1228.3835,
+    "precision_main": 0.6844,
+    "grilles": {
+     "0/16": 2.9406,
+     "0/8": 2.9399,
+     "1000003/16": 3.0375,
+     "1000003/8": 2.9865,
+     "2000009/16": 3.0428,
+     "2000009/8": 3.1897,
+     "3000029/16": 2.8269,
+     "3000029/8": 2.796
+    }
+   },
+   {
+    "fichier": "temoin-g2.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.9345,
+    "ppl_129": 2.961,
+    "ppl_propres": 3.056,
+    "ppl_contaminees": 2.6991,
+    "ppl_permute": 1131.9621,
+    "precision_main": 0.6826,
+    "grilles": {
+     "0/16": 2.9345,
+     "0/8": 2.9369,
+     "1000003/16": 3.0343,
+     "1000003/8": 2.9756,
+     "2000009/16": 3.0378,
+     "2000009/8": 3.1628,
+     "3000029/16": 2.8442,
+     "3000029/8": 2.8115
+    }
+   },
+   {
+    "fichier": "temoin-g3.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.9313,
+    "ppl_129": 2.9628,
+    "ppl_propres": 3.0431,
+    "ppl_contaminees": 2.7074,
+    "ppl_permute": 1167.2152,
+    "precision_main": 0.6827,
+    "grilles": {
+     "0/16": 2.9313,
+     "0/8": 2.9298,
+     "1000003/16": 3.0295,
+     "1000003/8": 2.9645,
+     "2000009/16": 3.0351,
+     "2000009/8": 3.1752,
+     "3000029/16": 2.8458,
+     "3000029/8": 2.8122
+    }
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 2.9355,
+   "ecart_type": 0.0039,
+   "etendue": 0.0093,
+   "valeurs": [
+    2.9406,
+    2.9345,
+    2.9313
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 2.9623,
+   "ecart_type": 0.0009,
+   "etendue": 0.0021,
+   "valeurs": [
+    2.9631,
+    2.961,
+    2.9628
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 3.0534,
+   "ecart_type": 0.0076,
+   "etendue": 0.0181,
+   "valeurs": [
+    3.0612,
+    3.056,
+    3.0431
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 2.7041,
+   "ecart_type": 0.0036,
+   "etendue": 0.0083,
+   "valeurs": [
+    2.7059,
+    2.6991,
+    2.7074
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 1175.8536,
+   "ecart_type": 39.835,
+   "etendue": 96.4214,
+   "valeurs": [
+    1228.3835,
+    1131.9621,
+    1167.2152
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6832,
+   "ecart_type": 0.0008,
+   "etendue": 0.0018,
+   "valeurs": [
+    0.6844,
+    0.6826,
+    0.6827
+   ]
+  }
+ },
+ "A": {
+  "bras": "A",
+  "nom": "20 000 pas, français seul",
+  "n": 3,
+  "runs": [
+   {
+    "fichier": "A-fr-g1.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8569,
+    "ppl_129": 2.8742,
+    "ppl_propres": 2.9881,
+    "ppl_contaminees": 2.5862,
+    "ppl_permute": 1113.2495,
+    "precision_main": 0.6924,
+    "grilles": {
+     "0/16": 2.8569,
+     "0/8": 2.8634,
+     "1000003/16": 2.9473,
+     "1000003/8": 2.8879,
+     "2000009/16": 2.9298,
+     "2000009/8": 3.0563,
+     "3000029/16": 2.7523,
+     "3000029/8": 2.7231
+    }
+   },
+   {
+    "fichier": "A-fr-g2.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8495,
+    "ppl_129": 2.8765,
+    "ppl_propres": 2.9797,
+    "ppl_contaminees": 2.5843,
+    "ppl_permute": 1091.3191,
+    "precision_main": 0.6923,
+    "grilles": {
+     "0/16": 2.8495,
+     "0/8": 2.8498,
+     "1000003/16": 2.9382,
+     "1000003/8": 2.8974,
+     "2000009/16": 2.9211,
+     "2000009/8": 3.0424,
+     "3000029/16": 2.7499,
+     "3000029/8": 2.7234
+    }
+   },
+   {
+    "fichier": "A-fr-g3.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8516,
+    "ppl_129": 2.8723,
+    "ppl_propres": 2.9707,
+    "ppl_contaminees": 2.5882,
+    "ppl_permute": 1055.6693,
+    "precision_main": 0.694,
+    "grilles": {
+     "0/16": 2.8516,
+     "0/8": 2.8503,
+     "1000003/16": 2.9279,
+     "1000003/8": 2.8869,
+     "2000009/16": 2.9114,
+     "2000009/8": 3.0369,
+     "3000029/16": 2.7432,
+     "3000029/8": 2.7175
+    }
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 2.8527,
+   "ecart_type": 0.0031,
+   "etendue": 0.0074,
+   "valeurs": [
+    2.8569,
+    2.8495,
+    2.8516
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 2.8743,
+   "ecart_type": 0.0017,
+   "etendue": 0.0042,
+   "valeurs": [
+    2.8742,
+    2.8765,
+    2.8723
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 2.9795,
+   "ecart_type": 0.0071,
+   "etendue": 0.0174,
+   "valeurs": [
+    2.9881,
+    2.9797,
+    2.9707
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 2.5862,
+   "ecart_type": 0.0016,
+   "etendue": 0.0039,
+   "valeurs": [
+    2.5862,
+    2.5843,
+    2.5882
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 1086.746,
+   "ecart_type": 23.7284,
+   "etendue": 57.5802,
+   "valeurs": [
+    1113.2495,
+    1091.3191,
+    1055.6693
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6929,
+   "ecart_type": 0.0008,
+   "etendue": 0.0017,
+   "valeurs": [
+    0.6924,
+    0.6923,
+    0.694
+   ]
+  }
+ },
+ "B": {
+  "bras": "B",
+  "nom": "20 000 pas, manifeste 4 sources (82,5 % anglais)",
+  "n": 3,
+  "runs": [
+   {
+    "fichier": "B-multi-g1.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.7609,
+    "ppl_129": 3.8249,
+    "ppl_propres": 3.8654,
+    "ppl_contaminees": 3.4402,
+    "ppl_permute": 596.0537,
+    "precision_main": 0.6211,
+    "grilles": {
+     "0/16": 3.7609,
+     "0/8": 3.8089,
+     "1000003/16": 3.7558,
+     "1000003/8": 3.615,
+     "2000009/16": 3.8726,
+     "2000009/8": 3.9929,
+     "3000029/16": 3.6893,
+     "3000029/8": 3.7349
+    },
+    "ppl_multi_val": 31.8025
+   },
+   {
+    "fichier": "B-multi-g2.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.7673,
+    "ppl_129": 3.8313,
+    "ppl_propres": 3.8716,
+    "ppl_contaminees": 3.4651,
+    "ppl_permute": 629.3868,
+    "precision_main": 0.6219,
+    "grilles": {
+     "0/16": 3.7673,
+     "0/8": 3.818,
+     "1000003/16": 3.7697,
+     "1000003/8": 3.6384,
+     "2000009/16": 3.864,
+     "2000009/8": 4.0076,
+     "3000029/16": 3.6805,
+     "3000029/8": 3.7091
+    },
+    "ppl_multi_val": 32.3019
+   },
+   {
+    "fichier": "B-multi-g3.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.7492,
+    "ppl_129": 3.8093,
+    "ppl_propres": 3.8348,
+    "ppl_contaminees": 3.461,
+    "ppl_permute": 608.9795,
+    "precision_main": 0.6221,
+    "grilles": {
+     "0/16": 3.7492,
+     "0/8": 3.7903,
+     "1000003/16": 3.7534,
+     "1000003/8": 3.6206,
+     "2000009/16": 3.8541,
+     "2000009/8": 3.9789,
+     "3000029/16": 3.6763,
+     "3000029/8": 3.7041
+    },
+    "ppl_multi_val": 31.5265
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 3.7591,
+   "ecart_type": 0.0075,
+   "etendue": 0.0181,
+   "valeurs": [
+    3.7609,
+    3.7673,
+    3.7492
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 3.8218,
+   "ecart_type": 0.0092,
+   "etendue": 0.022,
+   "valeurs": [
+    3.8249,
+    3.8313,
+    3.8093
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 3.8573,
+   "ecart_type": 0.0161,
+   "etendue": 0.0368,
+   "valeurs": [
+    3.8654,
+    3.8716,
+    3.8348
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 3.4554,
+   "ecart_type": 0.0109,
+   "etendue": 0.0249,
+   "valeurs": [
+    3.4402,
+    3.4651,
+    3.461
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 611.4733,
+   "ecart_type": 13.722,
+   "etendue": 33.3331,
+   "valeurs": [
+    596.0537,
+    629.3868,
+    608.9795
+   ]
+  },
+  "ppl_multi_val": {
+   "moyenne": 31.877,
+   "ecart_type": 0.3209,
+   "etendue": 0.7754,
+   "valeurs": [
+    31.8025,
+    32.3019,
+    31.5265
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6217,
+   "ecart_type": 0.0004,
+   "etendue": 0.001,
+   "valeurs": [
+    0.6211,
+    0.6219,
+    0.6221
+   ]
+  }
+ },
+ "Bp": {
+  "bras": "Bp",
+  "nom": "20 000 pas, 4 sources à quotas égaux (25 %)",
+  "n": 3,
+  "runs": [
+   {
+    "fichier": "Bp-equilibre-g1.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.4329,
+    "ppl_129": 3.4816,
+    "ppl_propres": 3.5684,
+    "ppl_contaminees": 3.1103,
+    "ppl_permute": 629.151,
+    "precision_main": 0.6486,
+    "grilles": {
+     "0/16": 3.4329,
+     "0/8": 3.4984,
+     "1000003/16": 3.4599,
+     "1000003/8": 3.3377,
+     "2000009/16": 3.5378,
+     "2000009/8": 3.6957,
+     "3000029/16": 3.3869,
+     "3000029/8": 3.3866
+    },
+    "ppl_multi_val": 30.9338
+   },
+   {
+    "fichier": "Bp-equilibre-g2.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.4341,
+    "ppl_129": 3.4822,
+    "ppl_propres": 3.5588,
+    "ppl_contaminees": 3.1221,
+    "ppl_permute": 663.2837,
+    "precision_main": 0.6475,
+    "grilles": {
+     "0/16": 3.4341,
+     "0/8": 3.5026,
+     "1000003/16": 3.4713,
+     "1000003/8": 3.3744,
+     "2000009/16": 3.5458,
+     "2000009/8": 3.7037,
+     "3000029/16": 3.3841,
+     "3000029/8": 3.3802
+    },
+    "ppl_multi_val": 31.3837
+   },
+   {
+    "fichier": "Bp-equilibre-g3.pt",
+    "params": 11814792,
+    "ppl_protocole": 3.438,
+    "ppl_129": 3.4905,
+    "ppl_propres": 3.5629,
+    "ppl_contaminees": 3.1206,
+    "ppl_permute": 637.3861,
+    "precision_main": 0.6467,
+    "grilles": {
+     "0/16": 3.438,
+     "0/8": 3.4922,
+     "1000003/16": 3.4702,
+     "1000003/8": 3.3593,
+     "2000009/16": 3.5403,
+     "2000009/8": 3.6857,
+     "3000029/16": 3.3991,
+     "3000029/8": 3.4011
+    },
+    "ppl_multi_val": 31.1936
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 3.435,
+   "ecart_type": 0.0022,
+   "etendue": 0.0051,
+   "valeurs": [
+    3.4329,
+    3.4341,
+    3.438
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 3.4848,
+   "ecart_type": 0.0041,
+   "etendue": 0.0089,
+   "valeurs": [
+    3.4816,
+    3.4822,
+    3.4905
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 3.5634,
+   "ecart_type": 0.0039,
+   "etendue": 0.0096,
+   "valeurs": [
+    3.5684,
+    3.5588,
+    3.5629
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 3.1177,
+   "ecart_type": 0.0052,
+   "etendue": 0.0118,
+   "valeurs": [
+    3.1103,
+    3.1221,
+    3.1206
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 643.2736,
+   "ecart_type": 14.5432,
+   "etendue": 34.1327,
+   "valeurs": [
+    629.151,
+    663.2837,
+    637.3861
+   ]
+  },
+  "ppl_multi_val": {
+   "moyenne": 31.1704,
+   "ecart_type": 0.1844,
+   "etendue": 0.4499,
+   "valeurs": [
+    30.9338,
+    31.3837,
+    31.1936
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6476,
+   "ecart_type": 0.0008,
+   "etendue": 0.0019,
+   "valeurs": [
+    0.6486,
+    0.6475,
+    0.6467
+   ]
+  }
+ },
+ "C": {
+  "bras": "C",
+  "nom": "curriculum 129 sur A (10 000 pas)",
+  "n": 3,
+  "runs": [
+   {
+    "fichier": "C-129-g1.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8442,
+    "ppl_129": 2.8228,
+    "ppl_propres": 2.9786,
+    "ppl_contaminees": 2.5707,
+    "ppl_permute": 1094.3942,
+    "precision_main": 0.6934,
+    "grilles": {
+     "0/16": 2.8442,
+     "0/8": 2.849,
+     "1000003/16": 2.9279,
+     "1000003/8": 2.8739,
+     "2000009/16": 2.9067,
+     "2000009/8": 3.0308,
+     "3000029/16": 2.7368,
+     "3000029/8": 2.7106
+    }
+   },
+   {
+    "fichier": "C-129-g2.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8523,
+    "ppl_129": 2.8412,
+    "ppl_propres": 2.9838,
+    "ppl_contaminees": 2.5764,
+    "ppl_permute": 1147.5225,
+    "precision_main": 0.6935,
+    "grilles": {
+     "0/16": 2.8523,
+     "0/8": 2.8525,
+     "1000003/16": 2.9414,
+     "1000003/8": 2.8936,
+     "2000009/16": 2.9113,
+     "2000009/8": 3.0335,
+     "3000029/16": 2.7412,
+     "3000029/8": 2.7178
+    }
+   },
+   {
+    "fichier": "C-129-g3.pt",
+    "params": 11814792,
+    "ppl_protocole": 2.8447,
+    "ppl_129": 2.8342,
+    "ppl_propres": 2.9724,
+    "ppl_contaminees": 2.5768,
+    "ppl_permute": 1094.1803,
+    "precision_main": 0.6931,
+    "grilles": {
+     "0/16": 2.8447,
+     "0/8": 2.8433,
+     "1000003/16": 2.9233,
+     "1000003/8": 2.879,
+     "2000009/16": 2.9053,
+     "2000009/8": 3.033,
+     "3000029/16": 2.7338,
+     "3000029/8": 2.6985
+    }
+   }
+  ],
+  "ppl_protocole": {
+   "moyenne": 2.8471,
+   "ecart_type": 0.0037,
+   "etendue": 0.0081,
+   "valeurs": [
+    2.8442,
+    2.8523,
+    2.8447
+   ]
+  },
+  "ppl_129": {
+   "moyenne": 2.8327,
+   "ecart_type": 0.0076,
+   "etendue": 0.0184,
+   "valeurs": [
+    2.8228,
+    2.8412,
+    2.8342
+   ]
+  },
+  "ppl_propres": {
+   "moyenne": 2.9783,
+   "ecart_type": 0.0047,
+   "etendue": 0.0114,
+   "valeurs": [
+    2.9786,
+    2.9838,
+    2.9724
+   ]
+  },
+  "ppl_contaminees": {
+   "moyenne": 2.5746,
+   "ecart_type": 0.0028,
+   "etendue": 0.0061,
+   "valeurs": [
+    2.5707,
+    2.5764,
+    2.5768
+   ]
+  },
+  "ppl_permute": {
+   "moyenne": 1112.0323,
+   "ecart_type": 25.0955,
+   "etendue": 53.3422,
+   "valeurs": [
+    1094.3942,
+    1147.5225,
+    1094.1803
+   ]
+  },
+  "precision_main": {
+   "moyenne": 0.6933,
+   "ecart_type": 0.0002,
+   "etendue": 0.0004,
+   "valeurs": [
+    0.6934,
+    0.6935,
+    0.6931
+   ]
+  }
+ }
+}
