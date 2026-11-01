@@ -16120,3 +16120,14 @@ en:   [en] 600000 lus · 317134 gardés · 3.27 G caractères
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n         \"| fichiers / JSON de résultats | … [1724 caractères tronqués]`
+
+  ```
+compteurs + journal
+  T0 max : 3991 mots (budget 4 000)
+     · compteurs : en-cours.md dit 479 JSON, le disque en a 480
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 550cd76d593708a83fae0c4cf17b5ded90b9e250 but expected d6c422a019798a7f0b3c79ed59da5a6649ee3c86
+550cd76d L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor i in 1 2 3 4; do\n  head_now=$(git rev-parse HEAD)\n  revue=$(python3 tools/revue_documentation.py 2>&1 | grep -o \"[0-9]* fiche(s) · [0-9]* JSON · [0-9]* doc(s) · [0-9]* porte(s)\")\n  fic=$(echo \"$revue\" | awk '{print $1}'); js … [1444 caractères tronqués]`

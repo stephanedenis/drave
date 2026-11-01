@@ -10683,3 +10683,114 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-382", "timeout_ms": 240000, "wait": true}`
+
+  ```
+32 files changed, 2191 insertions(+), 92 deletions(-)
+ create mode 100644 reports/pensee-gold-linguistique.json
+ create mode 100644 reports/rapport-pensee-gold-linguistique.md
+ create mode 100644 tools/tests/linguistique/evaluer_gold.py
+ create mode 100644 tools/tests/linguistique/gold.json
+ create mode 100644 tools/tests/linguistique/gold.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 tools/revue_documentation.py | tail -2; python3 tools/verifie_en_cours.py | tail -2", "description": "Lire le hash et confirmer l'état du round"}`
+
+  ```
+550cd76d L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9
+     · compteurs : en-cours.md dit 389 fichiers, le disque en a 392
+     · compteurs : en-cours.md dit 479 JSON, le disque en a 481
+  en-cours · 1617 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Gold v0 mesuré : POS 0,924, syntagmes 0,356, pragmatique 1,0/1,0/0,95/0,9
+
+Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Commit **`550cd76d`**.
+
+## Le gold
+
+**20 phrases** (14 françaises, 6 anglaises), **105 tokens**, écrites à la main après le bloc — pas tirées du banc S. Chaque phrase porte ses POS, ses segments GN/GV/GP/REL/SUB et son pragmatique (acte, négation, modalité, double sens). Les spans sont calculés par sous-chaîne et vérifiés.
+
+## Les résultats
+
+| lecture | POS | fermé | ouvert | syntagmes F1 | acte | nég. | mod. | double | fraction |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,469 |
+| mock seul | 0,486 | 0,105 | 0,938 | 0,244 | 1,0 | 0,9 | 0,9 | 0,9 | 0,525 |
+| **parallèle** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,525 |
+| **cascade** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,525 |
+
+- Les **classes fermées** sont à 0,912 ; les ouvertes à 0,938 ; les deux erreurs POS sont `que`/`that` lus PRON au lieu de CONJ.
+- Le **syntagme** est le point faible : F1 **0,356** (P 0,471 / R 0,286) — c'est surtout un **désaccord de segmentation** entre le générateur S et le gold.
+- La **fusion a été corrigée** : les types complémentaires d'un même niveau (`phrase.type` / `négation` / `modalité`, `pragmatique.acte` / `double_sens`) ne se suppriment plus entre eux. Avant, le mock effaçait la négation ; maintenant le parallèle et la cascade la **préservent** (1,0).
+- La **cascade** appelle le neuronal 20 fois sur 20 (les niveaux profonds restent sous 0,6) et couvre **52,5 %** en unités sémantiques.
+
+## Le vrai neuronal : refusé, pas simulé
+
+`--reel` essaie `NeuronalLLM` avec `Qwen2.5-0.5B-Q4_0` et 10 s : **`RefusNeuronal`** — le `llama-cli` local n'a pas rendu de JSON. Le mock est un **double de contrat** ; la cascade est mesurée avec lui, pas avec un modèle qualifié. La limite est écrite dans la fiche.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; le gold [`gold.py`](../../tools/tests/linguistique/gold.py) / [`gold.json`](../../tools/tests/linguistique/gold.json).
+- Porte `porte-bloc-linguistique` : **verte** (tests + autotest 398 langues + gold) ; `porte-pensee` autotest : **10/10**.
+- `en-cours` : **1 617 mots**, 2 sessions, T0 dans le budget.
+- **Compteurs en course** : la `revue` lit 392 fiches / 481 JSON sur le disque mais 389/479 dans `en-cours` — deux rapports/JSON ajoutés par d'autres sessions pendant le round ; le fichier `en-cours` en cours est le leur, je ne l'ai pas écrasé. Le prochain round d'intégration alignera.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste actif et périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Étendre le gold à 100–200 phrases** (relatives, portée, double sens, anglais), et évaluer le syntagme **par tête** pour séparer segmentation et attachement.
+2. **Qualifier un vrai modèle neuronal** (tagger ou LLM) sur ce gold ; l'adaptateur `NeuronalLLM` est branché, le `llama-cli` local ne répond pas.
+3. **Mesurer la cascade avec ce modèle**, pas avec le mock ; l'AUC/le regret.
+4. Si la ligne neuronale reste bloquée : les **opérateurs hétérogènes/DRVM** de B13, sans attendre.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque l'extension du gold.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo '=== status ==='; git status --short | head -12; echo '=== revue ==='; python3 tools/revue_documentation.py 2>&1 | tail -4; echo '=== en-cours ==='; grep -n \"fichiers / JSON\\|documents de\" docs/pilotage/ … [164 caractères tronqués]`
+
+  ```
+550cd76d L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9
+d6c422a0 DONNÉES — LE CONTRÔLE 8 KO DEVIENT REPRODUCTIBLE : FR 0/51 250 ET 0/50 730, L'UDHR 2/24 (CITÉE) ; JEUX D'ÉVALUATION PAR LANGUE
+deb0f96f B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE
+=== status ===
+ M docs/pilotage/en-cours.md
+ M journal/2026-11-01/README.md
+ M journal/2026-11-01/mesures.md
+ M journal/README.md
+ M journal/THEMES.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ m tools/docwatch
+ M tools/entrainer_native.py
+ M tools/native_model.py
+ ? tools/structures
+?? reports/corpus-wiki-ar-texte.json
+?? reports/corpus-wiki-pt-texte.json
+=== revue ===
+  revue de documentation · 392 fiche(s) · 482 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 389 fichiers, le disque en a 392
+     · compteurs : en-cours.md dit 479 JSON, le disque en a 482
+=== en-cours ===
+92:| fichiers / JSON de résultats | **389** / **479** | `reports/*.md` / `reports/*.json` |
+93:| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+=== gold ===
+-rw-r--r--. 1 stephane 
+… [235 caractères tronqués]
+  ```
+

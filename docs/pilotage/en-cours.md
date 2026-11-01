@@ -87,10 +87,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+| portes | **118** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **392** / **479** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants

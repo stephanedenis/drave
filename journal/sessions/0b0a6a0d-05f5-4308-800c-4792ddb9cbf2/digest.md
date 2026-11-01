@@ -14084,3 +14084,4 @@ pas 19250 · perte 1.6175 · PPL val 4.471 · 778 s
 The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
   ```
 
+- **job_output** `{"job_id": "bash-823", "timeout_ms": 400000, "wait": true}`

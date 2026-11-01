@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 26.3 h |
-| Tours | 15 |
-| Messages | 453 |
-| Appels d'outils | 484 |
+| Tours | 16 |
+| Messages | 457 |
+| Appels d'outils | 486 |
 | Fichiers touchés | 25 |
-| Commandes | 382 |
+| Commandes | 384 |
 | Sous-agents | 2 |
 | Commits | 24 |
 | Compactages de contexte | 1 |
@@ -61,6 +61,8 @@
 **Tour 14** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 15** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -835,7 +837,7 @@ Le prochain round démarre sur le gold L.
 
 ### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Repérer les lexiques et la POS à enrichir
 - bash — Lire les lexiques et la fonction POS
@@ -850,6 +852,47 @@ Le prochain round démarre sur le gold L.
 - bash — Passer toutes les portes après le gold
 - bash — Committer le gold v0 et l'évaluation
 - job_output
+- bash — Lire le hash et confirmer l'état du round
+
+**Synthèse produite :**
+
+⏵ Gold v0 mesuré : POS 0,924, syntagmes 0,356, pragmatique 1,0/1,0/0,95/0,9
+
+Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Commit **`550cd76d`**.
+
+\## Le gold
+
+**20 phrases** (14 françaises, 6 anglaises), **105 tokens**, écrites à la main après le bloc — pas tirées du banc S. Chaque phrase porte ses POS, ses segments GN/GV/GP/REL/SUB et son pragmatique (acte, négation, modalité, double sens). Les spans sont calculés par sous-chaîne et vérifiés.
+
+\## Les résultats
+
+| lecture | POS | fermé | ouvert | syntagmes F1 | acte | nég. | mod. | double | fraction |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,469 |
+| mock seul | 0,486 | 0,105 | 0,938 | 0,244 | 1,0 | 0,9 | 0,9 | 0,9 | 0,525 |
+| **parallèle** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,525 |
+| **cascade** | **0,924** | **0,912** | **0,938** | **0,356** | **1,0** | **1,0** | **0,95** | **0,9** | 0,525 |
+
+- Les **classes fermées** sont à 0,912 ; les ouvertes à 0,938 ; les deux erreurs POS sont `que`/`that` lus PRON au lieu de CONJ.
+- Le **syntagme** est le point faible : F1 **0,356** (P 0,471 / R 0,286) — c'est surtout un **désaccord de segmentation** entre le générateur S et le gold.
+- La **fusion a été corrigée** : les types complémentaires d'un même niveau (`phrase.type` / `négation` / `modalité`, `pragmatique.acte` / `double_sens`) ne se suppriment plus entre eux. Avant, le mock effaçait la négation ; maintenant le parallèle et la cascade la **préservent** (1,0).
+- La **cascade** appelle le neuronal 20 fois sur 20 (les niveaux profonds restent sous 0,6) et couvre **52,5 %** en unités sémantiques.
+
+\## Le vrai neuronal : refusé, pas simulé
+
+`--reel` essaie `NeuronalLLM` avec `Qwen2.5-0.5B-Q4_0` et 10 s : **`RefusNeuronal`** — le `llama-cli` local n'a pas rendu de JSON. Le mock est un **double de contrat** ; la cascade est mesurée avec lui, pas avec un modèle qualifié. La limite est écrite dans la fiche.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; le gold [`gold.py`](../../tools/tests/linguistique/gold.py) / [`gold.json`](../../tools/tests/linguistique/gold.json).
+- Porte `porte-bloc-linguistique` : **verte** (tests + autotest 398 langues + gold) ; `porte-pens
+… [1086 caractères tronqués]
+
+### Tour 16 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Inspecter l'état courant et les compteurs du round 3
 
 ## 3. Travail accompli
 
@@ -930,7 +973,7 @@ Le prochain round démarre sur le gold L.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 342 autres
+- … et 344 autres
 
 ## 4. Mesures et résultats marquants
 
