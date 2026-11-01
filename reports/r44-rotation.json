@@ -1852,7 +1852,7 @@
    "details": []
   }
  ],
- "dispositif": "rotation ajoutée à une page propre (3° et 0,8°), mesure brut vs auto — sonde de la politique de redressement",
+ "dispositif": "sondes du prétraitement : rotation (0,8/3/6/10°), gradient d'éclairage (0,6/1,2), flou (σ=2/4) — brut vs auto",
  "sondes": {
   "6,0°": {
    "wer_brut": 0.1308,
@@ -1865,6 +1865,22 @@
    "wer_auto": 0.4346,
    "preservation_brut": 0.0,
    "preservation_auto": 0.3684
+  },
+  "gradient_0,6": {
+   "wer_brut": 0.1986,
+   "wer_auto": 0.0313
+  },
+  "gradient_1,2": {
+   "wer_brut": 0.2886,
+   "wer_auto": 0.033
+  },
+  "flou_2": {
+   "wer_brut": 0.0356,
+   "wer_auto": 0.0369
+  },
+  "flou_4": {
+   "wer_brut": 0.4963,
+   "wer_auto": 0.5324
   }
  }
 }

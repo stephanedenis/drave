@@ -9282,3 +9282,56 @@ b859f27f R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNE
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** (trois livres) ; redressement utile **≤ 6°** (10° : **43 %**) — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** ; redressement **≤ 6° … [483 caractères tronqués]`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+[master 5a681326] ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)
+ 8 files changed, 29 insertions(+), 15 deletions(-)
+5a681326 ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)
+01:18
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,os\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import binary_closing, binary_dilation, binary_opening, median_filter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_docum … [1521 caractères tronqués]`
+
+  ```
+fax close3   WER 36.94%
+fax median   WER 38.03%
+fax brut     WER 38.50%
+fax dilat2   WER 39.42%
+fax close2   WER 40.98%
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import binary_closing\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/ … [1132 caractères tronqués]`
+
+  ```
+fax brut      WER 40.28%
+fax fermeture WER 39.99%
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, simuler_scan as sim, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifest … [1706 caractères tronqués]`
+
+  ```
+gradient 0,6|brut 19.86%
+gradient 0,6|auto 3.13%
+flou σ=2|brut 3.56%
+flou σ=2|auto 3.69%
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifeste.json'))\nsel=[e for e in man['entrees']  … [1313 caractères tronqués]`
+
+  ```
+gradient 1,2 {'brut': 0.2886, 'auto': 0.033}
+flou σ=4 {'brut': 0.4963, 'auto': 0.5324}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/r44-rotation.json'); d=json.loads(p.read_text())\nd['dispositif']='sondes du prétraitement : rotation (0,8/3/6/10°), gradient d\\'éclairage (0,6/1,2), flou (σ=2/4) — brut vs auto'\nd.setdefault('sondes',{})\nd['sondes'].upda … [1892 caractères tronqués]`
+
+  ```
+sondes gradient/flou ajoutées
+  T0 max : 4000 mots (budget 4 000)
+  revue de documentation · 375 fiche(s) · 453 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-sondes.txt <<'EOF'\nR4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)\n\nDeux sondes de robustesse sur cinq pages propres, brut contre auto :\n\n- **gradient d'éclairage 0,6** : 19,86 % → **3,13 %** ;\n- **gradient  … [1036 caractères tronqués]`

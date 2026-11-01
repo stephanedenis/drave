@@ -42,7 +42,7 @@
 - **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
 - **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
 - **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
-- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; redressement **≤ 6°** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; gradient **1,2 corrigé**, flou **non** — [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
 - **Prochaine action** : **fax** 1 bit et **exposant fusionné**.
 - **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.

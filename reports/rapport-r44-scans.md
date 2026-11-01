@@ -113,6 +113,22 @@ hasard). À **10°**, il ne suffit plus : **43,5 %** de WER (contre 96,3 % brut)
 la **limite nommée** du redressement. C'est la première mesure du redressement sur des cas où il
 sert : les cinq familles ne le déclenchaient jamais.
 
+### La robustesse du prétraitement : un gradient fort est corrigé, un flou fort ne l'est pas
+
+Deux sondes de plus, sur cinq pages propres :
+
+| sonde | WER brut | WER auto |
+|---|---:|---:|
+| gradient d'éclairage 0,6 | 19,86 % | **3,13 %** |
+| gradient d'éclairage 1,2 | 28,86 % | **3,30 %** |
+| flou σ = 2 | 3,56 % | 3,69 % |
+| flou σ = 4 | **49,63 %** | **53,24 %** |
+
+La correction d'éclairage tient un gradient **très fort** (1,2 : le bord droit est écrasé vers le
+noir) et ramène la page à 3,3 % — c'est le résultat le plus solide du prétraitement. Le **flou
+fort**, lui, n'est **pas** rattrapé : il n'y a pas de déconvolution, et le prétraitement ne fait
+que l'aggraver de 3,6 points. C'est une **limite nommée** : une photo floue ne se répare pas ici.
+
 ## 3. Les colonnes : 89 % de WER sans gouttière, 0,5 % avec
 
 Corpus : 10 pages à **deux colonnes** dont la vérité terrain est la lecture colonne gauche puis

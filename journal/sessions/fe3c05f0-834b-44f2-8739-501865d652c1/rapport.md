@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 8.7 h |
+| Durée | 8.8 h |
 | Tours | 2 |
-| Messages | 528 |
-| Appels d'outils | 531 |
+| Messages | 534 |
+| Appels d'outils | 537 |
 | Fichiers touchés | 18 |
-| Commandes | 473 |
+| Commandes | 479 |
 | Sous-agents | 0 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*346 appels d'outils.* Actions notables :
+*352 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 316 autres
+- … et 322 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 433 autres
+- … et 439 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -341,4 +341,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("restent les **scans réels de bout en bout**, le fax 1 
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-s
 - ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)" 2>&1 | tail -2 git log --oneline -1; date +%H:%M
+- cat > /tmp/msg-sondes.txt <<'EOF' R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)  Deux sondes de rob
 

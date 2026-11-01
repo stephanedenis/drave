@@ -7157,3 +7157,34 @@ porte-coupe 0 139
   ```
 
 - **job_output** `{"job_id": "bash-405", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+01:20
+25
+  porte-gain             ✅                         218 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche4.md <<'EOF'\n# N2.h4 — Les deux leviers ensemble : lire du français **et** 256 octets\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le corpus mixte\n> ([`n2-diversite`](rapport-n2-diversi … [2325 caractères tronqués]`
+
+  ```
+ok
+01:20
+25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/remplit4.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"remplit4.py — remplit la fiche du bras combiné (diversité + positions).\"\"\"\nimport json, pathlib, statistics as st\n\nev = {r[\"fichier\"]: r for r in json.loads(pat … [2519 caractères tronqués]`
+
+  ```
+ok
+01:20
+25
+  ```
+
+- **job_output** `{"job_id": "bash-405", "timeout_ms": 1800000, "wait": true}`
