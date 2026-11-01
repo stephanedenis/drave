@@ -50,7 +50,8 @@ def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3,
     """L'OCR d'une image, mis en cache par l'empreinte des pixels : une même image n'est
     jamais OCRisée deux fois, et un pipeline qui ne change pas l'image ne recoûte rien."""
     CACHE_OCR.mkdir(parents=True, exist_ok=True)
-    suffixe = (f"-exp{graphe_document_ocr.RECUPERATION_VERSION}" if exposants else "")
+    suffixe = f"-m{graphe_document_ocr.VERSION_MANIFESTE}"
+    suffixe += (f"-exp{graphe_document_ocr.RECUPERATION_VERSION}" if exposants else "")
     suffixe += "-col" if colonnes else ""
     cle = _sha(image.read_bytes()) + f"-{langue}-{psm}" + suffixe
     cache = CACHE_OCR / f"{cle}.json"

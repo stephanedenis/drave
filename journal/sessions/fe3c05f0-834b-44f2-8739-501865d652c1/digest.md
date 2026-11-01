@@ -7430,3 +7430,506 @@ started background job bash-362
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"simulés** — photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**,\",\n            \"simulés** — photo **55,9 → 7,0 %**, préservation **70–87 %** selon la g … [1986 caractères tronqués]`
+
+  ```
+T0 3964
+  ✅ index : aucun fait stagé sans état
+[master 944dff2b] R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS
+ 14 files changed, 2860 insertions(+), 49 deletions(-)
+ create mode 100644 reports/r44-seed2.json
+944dff2b R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS
+c51cee41 R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES
+  ```
+
+- **bash** `{"command": "tail -5 work/r44/gate-final.log 2>/dev/null; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M:%S", "description": "Check gate progress", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+=== PORTE R4.4 — SCANS, COLONNES, TABLEAUX ===
+  ✅ tesseract 5.5.3 · langues : eng fra osd spa 
+--- 1. les familles de scans (100 scans, dev + test)
+3
+00:48:17
+  ```
+
+- **bash** `{"command": "cd work/r44/reel\n[ -s verne2_djvu.xml ] || timeout 120 curl -sSL -A \"Mozilla/5.0\" -o verne2_djvu.xml \"https://archive.org/download/vingtmillelieu00vern/vingtmillelieu00vern_djvu.xml\"\nls -la verne2_djvu.xml; grep -o 'usemap=\"[^\"]*\"' verne2_djvu.xml | sed -n '178,182p'; echo \"== … [656 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 4207644  1 nov 00:48 verne2_djvu.xml
+usemap="vingtmillelieu00vern_0180.djvu"
+usemap="vingtmillelieu00vern_0181.djvu"
+usemap="vingtmillelieu00vern_0182.djvu"
+usemap="vingtmillelieu00vern_0183.djvu"
+usemap="vingtmillelieu00vern_0184.djvu"
+=== vocab p180
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/usr/lib64/python3.13/xml/etree/ElementTree.py", line 1219, in parse
+    tree.parse(source, parser)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/xml/etree/ElementTree.py", line 562, in parse
+    source = open(source, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'work/r44/reel/verne2_djvu.xml'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport xml.etree.ElementTree as ET, pathlib\np=pathlib.Path('work/r44/reel/verne2_djvu.xml')\nroot=ET.parse(p).getroot()\nobjects=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\nprint('objets',len(objects))\no=objects[179]\nmots=[w.text or '' for w in o.ite … [359 caractères tronqués]`
+
+  ```
+objets 216
+mots page 180 251
+I/O VOCABULARY envie,/.,  longing,  wish,  désire. environ,  about. environs,  m.  pL,  vicinity,  envi- rons. envoyer,  to  send. épais,  -se,  thick,  heavy. épaisseur,/.,  thickness. épargner,  to  spare,  save. épars,  -e,  scattered, épaté,  -€,  flat. épaule,/,  shoulder. épauler,  to  press  to  the 
+[('235,210,328,161', 'I/O'), ('864,192,1227,155', 'VOCABULARY'), ('216,321,457,270', 'envie,/., '), ('457,321,671,270', 'longing, '), ('671,314,814,267', 'wish, ')]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,xml.etree.ElementTree as ET\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\nroot=ET.parse('work/r44/reel/verne2_djvu.xml').getroot()\nobjects=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\ndef ref_djvu(page):\ … [734 caractères tronqués]`
+
+  ```
+page 180: djvu-order WER 93.55% rappel 88.71% | mots ref 248 ocr 248
+page 210: djvu-order WER 93.60% rappel 90.00% | mots ref 250 ocr 249
+page 160: djvu-order WER 30.34% rappel 71.16% | mots ref 267 ocr 256
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,xml.etree.ElementTree as ET\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\nroot=ET.parse('work/r44/reel/verne2_djvu.xml').getroot()\nobjects=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\ndef mots_page(page): … [1239 caractères tronqués]`
+
+  ```
+page 180 colonnes G->D: WER 97.58% (mots 248 vs 248)
+page 180 colonnes D->G: WER 96.77% (mots 248 vs 248)
+page 210 colonnes G->D: WER 96.40% (mots 250 vs 249)
+page 210 colonnes D->G: WER 98.00% (mots 250 vs 249)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,xml.etree.ElementTree as ET\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\nroot=ET.parse('work/r44/reel/verne2_djvu.xml').getroot()\nobjects=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\no=objects[179]\nword … [866 caractères tronqués]`
+
+  ```
+ref G->D x30: I/O wish,  désire. envie,/.,  longing,  about. environ,  envi- vicinity,  environs,  pL,  m.  rons. send. envoyer,  to  épais,  thick,  heavy. -se,  épaisseur,/.,  thickness. épargner,  to  save. spare,  scattered, épars,  -e,  épaté, 
+ocr x30: VOCABULARY 170 esprit, #., mind, spirit. envie, /., longing, wish, desire. essayer, to try, feel. environ, about. est, 77., East. environs, #7. 2/., vicinity, envi- estimer, to estimate, value. rons. établir, to establish, fix, make. envoyer, to send. étanche, water-tight. épais, -se, thick, heavy. 
+--- blocs
+note VOCABULARY
+paragraphe 170
+paragraphe esprit, #., mind, spirit.
+titre envie, /., longing, wish, desire.
+  ```
+
+- **bash** `{"command": "grep -n \"def bande_vide\\|def ordre_de_lecture\\|def lignes_de_mots\" tools/graphe_document_ocr.py; sed -n \"$(grep -n 'def lignes_de_mots' tools/graphe_document_ocr.py | cut -d: -f1),+40p\" tools/graphe_document_ocr.py", "description": "Read current line grouping code for refactor", " … [60 caractères tronqués]`
+
+  ```
+188:def bande_vide(lignes: list[dict], largeur: float) -> tuple[float, float] | None:
+219:def ordre_de_lecture(lignes: list[dict], largeur: float) -> list[dict]:
+240:def lignes_de_mots(les_mots: list[dict], colonnes: bool = False) -> list[dict]:
+def lignes_de_mots(les_mots: list[dict], colonnes: bool = False) -> list[dict]:
+    """Les mots groupés en lignes, dans l'ordre de lecture. Tesseract donne déjà les
+    numéros de bloc/paragraphe/ligne du TSV : on s'en sert au lieu de recalculer une
+    géométrie — mais on ORDONNE par y, parce que l'ordre du TSV n'est pas garanti."""
+    groupes: dict[tuple, list[dict]] = {}
+    for mot in les_mots:
+        groupes.setdefault((mot["bloc"], mot["par"], mot["ligne"]), []).append(mot)
+    lignes = []
+    for mots_ligne in groupes.values():
+        mots_ligne.sort(key=lambda m: m["left"])
+        texte = _typographie(" ".join(m["texte"] for m in mots_ligne))
+        if not texte:
+            continue
+        y0 = min(m["top"] for m in mots_ligne)
+        y1 = max(m["top"] + m["height"] for m in mots_ligne)
+        x0 = min(m["left"] for m in mots_ligne)
+        x1 = max(m["left"] + m["width"] for m in mots_ligne)
+        confs = [m["conf"] for 
+… [882 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\n# 1) bande_vide sur des boîtes génériques\ns=s.replace('''def bande_vide(lignes: list[dict], largeur: float) -> tuple[float, float] | None:\n    \"\"\"La gouttière entre deux colonnes : un … [4802 caractères tronqués]`
+
+  ```
+gouttière sur les mots
+OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,xml.etree.ElementTree as ET\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo, mesurer_scans as ms\nroot=ET.parse('work/r44/reel/verne2_djvu.xml').getroot()\nobjects=[o for o in root.iter() if o.tag.split('}')[-1]=='OB … [1102 caractères tronqués]`
+
+  ```
+page 180 size 2008 3088
+ocr x25: VOCABULARY 170 esprit, #., mind, spirit. envie, /., longing, wish, desire. essayer, to try, feel. environ, about. est, 77., East. environs, #7. 2/., vicinity, envi- estimer, to estimate, value. rons. établir, to establish, fix, make. envoyer, to send. étanche,
+réf G->D WER 0.9758 mots 248 248
+ref x25: I/O wish,  désire. envie,/.,  longing,  about. environ,  envi- vicinity,  environs,  pL,  m.  rons. send. envoyer,  to  épais,  thick,  heavy. -se,  épaisseur,/.,  thickness. épargner,  to  save.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\np=pathlib.Path('work/r44/reel/verne2-p180-net.png')\nmots=gco.mots(p,'fra')\nlargeur=max(m['left']+m['width'] for m in mots)\nocc=np.zeros(int(largeur)+2,dtype=np.int … [693 caractères tronqués]`
+
+  ```
+largeur 1785 bandes vides []
+gouttière détectée None
+largeur 1% 17.85
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\nold=s[s.index('def bande_vide_boites('):s.index('def bande_vide(lignes')]\nnew='''def bande_vide_boites(boites: list[tuple[float, float, float, float]],\n                      largeur: flo … [3471 caractères tronqués]`
+
+  ```
+gouttière par couverture verticale
+ocr x30: 170 envie, /., longing, wish, desire. environ, about. environs, #7. 2/., vicinity, envi- rons. envoyer, to send. épais, -se, thick, heavy. épaisseur, /., thickness. épargner, to spare, save. épars, —-e, scattered. épaté, —e, flat. épaule, /., shoulder. épauler, to press to the shoulder (of rifles). 
+--- blocs
+paragraphe 170
+titre envie, /., longing, wish, desire.
+paragraphe environ, about. environs, #7. 2/., vicinity, envi-
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('''VERSION = 1\n# Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.\nRECUPERATION_VERSION = 2''','''VERSION = 1\n# Version de la CONSTRUC … [2752 caractères tronqués]`
+
+  ```
+version du manifeste dans la clé de cache
+djvu lignes G->D WER 0.8024 mots 248
+djvu lignes D->G WER 0.8589 mots 248
+ocr x20: 170 envie longing wish desire environ about environs 7 2 vicinity envi rons envoyer to send épais se thick heavy épaisseur thickness épargner to spare save épars e scattered épaté
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,xml.etree.ElementTree as ET,statistics\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, graphe_document_ocr as gco\nroot=ET.parse('work/r44/reel/verne2_djvu.xml').getroot(); objects=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\nde … [1519 caractères tronqués]`
+
+  ```
+page 180 djvu mots-colonnes G->D WER 15.32% mots 248
+page 180 djvu mots-colonnes D->G WER 97.98% mots 248
+page 210 djvu mots-colonnes G->D WER 12.80% mots 250
+page 210 djvu mots-colonnes D->G WER 99.20% mots 250
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''RACINE = pathlib.Path(__file__).resolve().parent.parent\nCACHE = RACINE / \"work/r44/reel\"''','''RACINE = pathlib.Path(__file__).resolve().parent.parent\nCACHE = RACINE / \"work/r … [6100 caractères tronqués]`
+
+  ```
+option djvu-xml ajoutée
+  page  40 · WER 12.87% (brut 12.87%) · rappel 90.10% · conf  91.1 · 303 mots · colonnes 91.12% (inverse 92.43%)
+  page  60 · WER  9.35% (brut  9.76%) · rappel 90.65% · conf  90.7 · 246 mots · colonnes 94.31% (inverse 88.21%)
+  page  80 · WER 12.23% (brut 13.31%) · rappel 89.21% · conf  92.2 · 278 mots · colonnes 91.37% (inverse 91.73%)
+  page 100 · WER  9.80% (brut  9.80%) · rappel 90.98% · conf  91.6 · 255 mots · colonnes 89.80% (inverse 90.20%)
+  page 120 · WER 11.83% (brut 12.19%) · rappel 89.61% · conf  92.3 · 279 mots · colonnes 90.32% (inverse 92.11%)
+  page 140 · WER 14.05% (brut 12.42%) · rappel 89.87% · conf  91.1 · 306 mots · colonnes 87.95% (inverse 94.46%)
+  page 160 · WER 30.34% (brut 29.21%) · rappel 71.16% · conf  80.9 · 267 mots · colonnes 86.89% (inverse 85.39%)
+  page 180 · WER 93.15% (brut 92.34%) · rappel 88.71% · conf  86.1 · 248 mots · colonnes 15.32% (inverse 97.98%)
+  page 200 · WER 92.52% (brut 92.13%) · rappel 94.49% · conf  87.5 · 254 mots · colonnes  7.09% (inverse 96.06%)
+  page 210 · WER 92.00% (brut 93.60%) · rappel 89.20% · conf  87.7 · 250 mots · colonnes 12.80% (inverse 99.20%)
+
+  10 pages · WER 36.26% nettoyé · 36.19% brut
+… [69 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_colonnes.py --pages 4 --familles propre,photocopie,photo --sortie work/r44/colonnes-nouveau.json > work/r44/colonnes-nouveau.log 2>&1; echo \"[colonnes $?]\"; tail -12 work/r44/colonnes-nouveau.log", "description": "Re-run columns benchmark with new gu … [95 caractères tronqués]`
+
+  ```
+started background job bash-378
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte > work/r44/scans-nouveau.log 2>&1; echo \"[scans $?]\"; tail -8 work/r44/scans-nouveau.log", "description": "Re-run scans gate with new manifest version", "run_in_background": true, "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+started background job bash-379
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ndebut=s.index(\"## 5. Les vrais scans\")\nfin=s.index(\"## 5 bis. La variance\")\nnew='''## 5. Les vrais scans : 7,10 % sur un texte, et l'ordre des colonnes prouvé sur un lexique\n\nDeux  … [3315 caractères tronqués]`
+
+  ```
+fiche section 5 réécrite
+132:| *Vingt mille lieues sous les mers*, 1902 (`vingtmillelieu00vern`) | 10 | **36,26 %** | **88,38 %** | 89,2 |
+141:| page | WER vs couche layout | WER vs **ordre des colonnes** | **ordre inverse** (contrôle) |
+143:| 180 | 93,15 % | **15,32 %** | 97,98 % |
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djvu-xml work/r44/reel/livre_djvu.xml --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel.json 2>&1 | tail -4; python3 - <<'PY'\nimport json,pathlib\nfor src,dst,source in (\n    ('work/r44/reel.js … [780 caractères tronqués]`
+
+  ```
+page 190 · WER  9.31% (brut  9.31%) · rappel 94.61% · conf  91.9 · 408 mots · colonnes 91.42% (inverse 88.97%)
+  page 210 · WER  6.74% (brut  6.74%) · rappel 94.61% · conf  91.1 · 445 mots · colonnes 93.71% (inverse 90.11%)
+
+  10 pages · WER 7.10% nettoyé · 7.05% brut · rappel multiensemble 93.72% · confiance 91.1 → work/r44/reel.json
+reports/r44-reel.json ok {'pages': 10, 'mots_reference': 4494, 'wer': 0.071, 'wer_brut': 0.0705, 'rappel': 0.9372, 'confiance': 91.1, 'wer_colonnes': 0.8996, 'wer_colonnes_inverse': 0.9101}
+reports/r44-reel-second.json ok {'pages': 10, 'mots_reference': 2686, 'wer': 0.3626, 'wer_brut': 0.3619, 'rappel': 0.8838, 'confiance': 89.2, 'wer_colonnes': 0.6821, 'wer_colonnes_inverse': 0.9274}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''                \"agregat\": agrege(lignes), \"pages\": lignes}''','''                \"note_colonnes\": (\"la référence d'ordre des colonnes ne s'applique qu'aux pages à \"\n      … [1719 caractères tronqués]`
+
+  ```
+reports/r44-reel.json ok
+reports/r44-reel-second.json ok
+=== colonnes job
+  page 2 · mono : mesuré
+  page 2 · deux : mesuré
+  page 3 · mono : mesuré
+  page 3 · deux : mesuré
+=== scans job
+  [28/100] A_RES_80_1-fr-p1-s1-photo.png            auto         WER  6.98% conf  90.4
+  [29/100] A_RES_80_1-fr-p1-s1-fax.png              auto         WER 14.92% conf  81.4
+  [30/100] A_RES_80_1-fr-p1-s1-papier.png           auto         WER  5.08% conf  91.9
+  ```
+
+- **bash** `{"command": "grep -n \"88,5\\|23,3\\|61 %\\|61,3\\|un vrai scan\" reports/rapport-r44-scans.md | head -10", "description": "Find stale numbers in report", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+242:**R4.4 — les scans sont mesurés, la mise en page est mesurée, un vrai scan est validé ; la ligne
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace(\"puis valide la chaîne sur un **vrai scan** d'Internet Archive.\",\"puis valide la chaîne sur **deux vrais scans** d'Internet Archive.\")\ns=s.replace('''**R4.4 — les scans so … [1193 caractères tronqués]`
+
+  ```
+verdict mis à jour
+=== colonnes
+  mono  propre      brut         0.27%      4
+  mono  propre      colonnes     0.27%      4
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.6%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.1%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 12.2%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.4%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → work/r44/colonnes-nouveau.json
+=== scans
+  [38/100] A_RES_80_10-es-p1-s1-photo.png           auto         WER 13.73% conf  90.1
+  [39/100] A_RES_80_10-es-p1-s1-fax.png             auto         WER 25.35% conf  78.4
+  [40/100] A_RES_80_10-es-p1-s1-papier.png          auto         WER 13.03% conf  91.8
+41
+  ```
+
+### 👤 Utilisateur
+
+background job bash-378 (bash: timeout 1800 python3 tools/mesurer_colonnes.py --pages 4 --familles propre,photocopie,photo --sortie work/r44/colonnes-nouveau.json > work/r44/colonnes-nouveau.log 2>&1; echo "[colonnes $?]"; tail -12 work/r44/colonnes-nouveau.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 180; tail -3 work/r44/scans-nouveau.log; wc -l < work/r44/scans-nouveau.log; pgrep -af \"mesurer_scans.py --pipelines auto --exposants --colonnes --porte\" | grep -v pgrep | wc -l", "description": "Wait for scans job", "timeoutMs": 240000, "workdir": "/home/stephane/Data13TB/steph … [20 caractères tronqués]`
+
+  ```
+[73/100] A_RES_80_10-fr-p3-s1-photo.png           auto         WER  2.96% conf  94.0
+  [74/100] A_RES_80_10-fr-p3-s1-fax.png             auto         WER 13.30% conf  76.7
+  [75/100] A_RES_80_10-fr-p3-s1-papier.png          auto         WER  3.94% conf  92.6
+76
+3
+  ```
+
+- **bash** `{"command": "sleep 90; tail -8 work/r44/scans-nouveau.log; echo \"===\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('work/r44/mesure.json')\nif p.exists():\n    a=json.load(open('reports/r44-scans.json'))['agregat']; b=json.load(open(p))['agregat']\n    for k in sorted(a):\n        if k i … [442 caractères tronqués]`
+
+  ```
+✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 65% (mesuré 86.7%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 5.9%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+  ❌ propre · test : WER ≤ 6% (mesuré 10.1%)
+
+  100 mesures en 574 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+===
+fax|test|auto WER 0.1552 -> 0.1647 | prés None -> None
+papier|test|auto WER 0.0622 -> 0.0725 | prés None -> None
+photocopie|test|auto WER 0.0469 -> 0.0585 | prés None -> None
+photo|test|auto WER 0.0527 -> 0.1231 | prés None -> None
+propre|test|auto WER 0.0301 -> 0.1005 | prés None -> None
+agrégats comparés
+  ```
+
+### 👤 Utilisateur
+
+background job bash-379 (bash: timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte > work/r44/scans-nouveau.log 2>&1; echo "[scans $?]"; tail -8 work/r44/scans-nouveau.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\na={l['image']:l for l in json.load(open('reports/r44-scans.json'))['entrees']}\nb={l['image']:l for l in json.load(open('work/r44/mesure.json'))['entrees']}\nd=[]\nfor k in a:\n    if k in b and a[k]['split']=='test':\n        d.append((b[k]['wer']-a[k]['w … [267 caractères tronqués]`
+
+  ```
+A_RES_80_10-es-p3-s1-propre.png               0.53% -> 72.87% mots 187
+A_RES_80_10-es-p3-s1-photo.png                4.26% -> 75.53% mots 187
+A_RES_80_10-en-p3-s1-photo.png                0.00% -> 58.73% mots 63
+A_RES_80_10-en-p3-s1-propre.png               0.00% -> 55.56% mots 63
+A_RES_80_10-en-p3-s1-photocopie.png          11.11% -> 55.56% mots 56
+A_RES_80_10-en-p3-s1-papier.png              19.05% -> 58.73% mots 63
+A_RES_80_10-en-p3-s1-fax.png                 30.16% -> 66.67% mots 59
+A_RES_80_10-fr-p3-s1-propre.png               0.49% ->  0.49% mots 202
+A_RES_80_10-fr-p3-s1-photocopie.png           1.97% ->  1.97% mots 202
+A_RES_80_10-fr-p3-s1-photo.png                2.96% ->  2.96% mots 200
+A_RES_80_10-fr-p3-s1-papier.png               3.94% ->  3.94% mots 198
+A_RES_80_10-fr-p3-s1-fax.png                 13.30% -> 13.30% mots 200
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nfor image in ('work/r44/scans/A_RES_80_10-es-p3-s1-propre.png','work/r44/scans/A_RES_80_10-en-p3-s1-propre.png',\n              'work/r44/scans/A_RES_80_10-fr-p3-s1-propre.png','work/r44 … [995 caractères tronqués]`
+
+  ```
+A_RES_80_10-es-p3-s1-propre.png          mots 182 largeur 2298 gouttière None
+A_RES_80_10-en-p3-s1-propre.png          mots  57 largeur 2298 gouttière (344.0, 1953.0)
+   gauche(n, étendue y, xmin,xmax) (25, 0.93, 250, 1148)  droite (32, 0.93, 1078, 2298)
+A_RES_80_10-fr-p3-s1-propre.png          mots 193 largeur 2298 gouttière None
+verne2-p180-net.png                      mots 262 largeur 1785 gouttière (853.0, 944.0)
+   gauche(n, étendue y, xmin,xmax) (126, 0.99, 21, 862)  droite (136, 0.99, 712, 1785)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_scans as ms\nfor image in ('A_RES_80_10-es-p3-s1-propre.png','A_RES_80_10-en-p3-s1-propre.png','A_RES_80_10-fr-p3-s1-propre.png'):\n    p=pathlib.Path('work/r44/scans')/image\n   … [1017 caractères tronqués]`
+
+  ```
+A_RES_80_10-es-p3-s1-propre.png trace ['recadrage'] mots 182 gouttière (1115.0, 1153.0)
+   gauche 105 y 0.99 x 29 1173
+   droite 77 y 0.99 x 1112 2077
+A_RES_80_10-en-p3-s1-propre.png trace ['recadrage'] mots 57 gouttière (344.0, 1953.0)
+   gauche 25 y 0.93 x 250 1148
+   droite 32 y 0.93 x 1078 2298
+A_RES_80_10-fr-p3-s1-propre.png trace ['recadrage'] mots 193 gouttière None
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\nold='''    if meilleur is None or (meilleur[1] - meilleur[0]) < max(largeur * 0.008, 8):\n        return None'''\nnew='''    # GARDE-FOUS DE LARGEUR. Un « vide » de 1,6 % de la largeur est … [1660 caractères tronqués]`
+
+  ```
+garde-fous de largeur, version 4
+A_RES_80_10-es-p3-s1-propre.png              gouttière None                   attendu non
+A_RES_80_10-en-p3-s1-propre.png              gouttière None                   attendu non
+verne2-p180-net.png                          gouttière (853.0, 944.0)         attendu oui
+colonnes-deux-p1.png                         gouttière (1158.0, 1291.0)       attendu oui
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v4.json > work/r44/scans-v4.log 2>&1; echo \"[scans $?]\"; tail -6 work/r44/scans-v4.log", "description": "Re-run scans with v4 guards", "run_in_background": true, "workd … [55 caractères tronqués]`
+
+  ```
+started background job bash-391
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes-v4.json > work/r44/colonnes-v4.log 2>&1; echo \"[colonnes $?]\"; tail -4 work/r44/colonnes-v4.log", "description": "Re-run full columns with v4", "run_in_background":  … [67 caractères tronqués]`
+
+  ```
+started background job bash-392
+  ```
+
+- **bash** `{"command": "timeout 1200 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v4.json >/dev/null 2>&1; timeout 1200 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djv … [422 caractères tronqués]`
+
+  ```
+started background job bash-393
+  ```
+
+- **bash** `{"command": "sleep 240; for j in bash-391 bash-392 bash-393; do echo \"== $j\"; done; tail -2 work/r44/scans-v4.log 2>/dev/null; tail -2 work/r44/colonnes-v4.log 2>/dev/null; ls -la --time-style=+%H:%M work/r44/reel-v4.json work/r44/reel2-v4.json 2>/dev/null; date +%H:%M", "description": "Check v4 m … [100 caractères tronqués]`
+
+  ```
+== bash-391
+== bash-392
+== bash-393
+  [35/100] A_RES_80_10-en-p1-s1-papier.png          auto         WER 11.71% conf  89.6
+  [36/100] A_RES_80_10-es-p1-s1-propre.png          auto         WER 10.56% conf  91.1
+  page 3 · deux : mesuré
+  page 4 · mono : mesuré
+-rw-r--r--. 1 stephane stephane 3936 01:06 work/r44/reel2-v4.json
+-rw-r--r--. 1 stephane stephane 3727 01:08 work/r44/reel-v4.json
+01:09
+  ```
+
+### 👤 Utilisateur
+
+background job bash-393 (bash: timeout 1200 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v4.json >/dev/null 2>&1; timeout 1200 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djvu-xml work/r44/reel/livre_djvu.xml --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel-v4.json >/dev/null 2>&1; echo "[reel $?]"; python3 -c "
+import json
+for f in ('work/r44/reel-v4.json','work/r44/reel2-v4.json'):
+    d=json.load(open(f)); print(f, d['agregat'])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-393"}`
+
+  ```
+[reel 0]
+work/r44/reel-v4.json {'pages': 10, 'mots_reference': 4494, 'wer': 0.071, 'wer_brut': 0.0705, 'rappel': 0.9372, 'confiance': 91.1, 'wer_colonnes': 0.8996, 'wer_colonnes_inverse': 0.9101}
+work/r44/reel2-v4.json {'pages': 10, 'mots_reference': 2686, 'wer': 0.3626, 'wer_brut': 0.3619, 'rappel': 0.8838, 'confiance': 89.2, 'wer_colonnes': 0.6821, 'wer_colonnes_inverse': 0.9274}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 work/r44/scans-v4.log; wc -l < work/r44/scans-v4.log; echo \"=== colonnes\"; tail -4 work/r44/colonnes-v4.log", "description": "Wait for scans and columns v4", "timeoutMs": 420000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[97/100] A_RES_80_1-fr-p1-s1-photocopie.png       auto         WER  7.30% conf  89.6
+  [98/100] A_RES_80_1-fr-p1-s1-photo.png            auto         WER  6.98% conf  90.4
+  [99/100] A_RES_80_1-fr-p1-s1-fax.png              auto         WER 14.92% conf  81.4
+100
+=== colonnes
+  page 7 · deux : mesuré
+  page 8 · mono : mesuré
+  page 8 · deux : mesuré
+  page 9 · mono : mesuré
+  ```
+
+### 👤 Utilisateur
+
+background job bash-362 (bash: timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-final.log 2>&1; echo "[gate $?]"; tail -8 work/r44/gate-final.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('work/r44/mesure-v4.json')\nif p.exists():\n    b=json.load(open(p))['agregat']\n    a=json.load(open('reports/r44-scans.json'))['agregat']\n    print(f\"{'clé':28s} {'committé':>9s} {'v4':>9s}\")\n    for k in sorted(b):\n        pr … [282 caractères tronqués]`
+
+  ```
+clé                           committé        v4
+fax|dev|auto                    21.90%    21.90%  prés 0.5333
+fax|test|auto                   15.52%    15.52%  prés None
+papier|dev|auto                  7.32%     7.32%  prés 0.7333
+papier|test|auto                 6.22%     6.22%  prés None
+photocopie|dev|auto              6.34%     6.34%  prés 0.8667
+photocopie|test|auto             4.69%     4.69%  prés None
+photo|dev|auto                   7.00%     7.00%  prés 0.8667
+photo|test|auto                  5.27%     5.27%  prés None
+propre|dev|auto                  4.14%     4.14%  prés 0.9
+propre|test|auto                 3.01%     3.01%  prés None
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 576 s → work/r44/mesure-v4.json
+  ```
+
+### 👤 Utilisateur
+
+background job bash-391 (bash: timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v4.json > work/r44/scans-v4.log 2>&1; echo "[scans $?]"; tail -6 work/r44/scans-v4.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 90; tail -16 work/r44/colonnes-v4.log; echo \"===\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('work/r44/colonnes-v4.json')\nif p.exists():\n    b=json.load(open(p))['agregat']; a=json.load(open('reports/r44-colonnes.json'))['agregat']\n    for k in sorted(b):\n        … [222 caractères tronqués]`
+
+  ```
+mono  photo       brut         6.14%     10
+  mono  photo       colonnes     6.14%     10
+  mono  propre      brut         0.29%     10
+  mono  propre      colonnes     0.29%     10
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → work/r44/colonnes-v4.json
+===
+deux|photocopie|brut       committé  90.11% v4  90.11%
+deux|photocopie|colonnes   committé   1.03% v4   1.03%
+deux|photo|brut            committé  88.32% v4  88.32%
+deux|photo|colonnes        committé   6.52% v4   6.52%
+deux|propre|brut           committé  89.44% v4  89.44%
+deux|propre|colonnes       committé   0.54% v4   0.54%
+mono|photocopie|brut       committé   0.93% v4   0.93%
+mono|photocopie|colonnes   committé   0.93% v4   0.93%
+mono|photo|brut    
+… [200 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-392 (bash: timeout 1800 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes-v4.json > work/r44/colonnes-v4.log 2>&1; echo "[colonnes $?]"; tail -4 work/r44/colonnes-v4.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# roadmap : la ligne R4.4 et l'ordre du jour\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\ns=s.replace(\"**vrai scan 7,10 %** d'accord avec un OCR de référence\", \"**deux vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 … [2338 caractères tronqués]`
+
+  ```
+roadmap, carte, état, plan mis à jour
+T0 3970
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\"; do timeout 300 $t > /tmp/g.log 2>&1; c=$?; print … [212 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py   [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+python3 tools/taille_documents.py      [1]      · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+python3 tools/verifie_en_cours.py      [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py       [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py       [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+python3 tools/verifier_schemas.py      [0]      sources et images relatives.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"préservation **70–87 %** selon la graine, colonnes\",\"préservation **70–87 %**, colonnes\")\ns=s.replace(\"vrais scans **7,10 / 88,4 %** (colonnes **7–15 %**, inverse **98 %**) … [491 caractères tronqués]`
+
+  ```
+T0 3958
+  T0 max : 3998 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-gouttiere.txt <<'EOF'\nR4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %\n\nLe corpus synthétique trouvait la gouttière ; le premier lexique **réel** d'un livre scanné (Verne,\n1902, page de vocabulaire à  … [2466 caractères tronqués]`

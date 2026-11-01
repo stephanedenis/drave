@@ -34,7 +34,10 @@ colonnes, tableaux et un **vrai scan** ([`scans`](../../../reports/rapport-r44-s
 - **colonnes** : deux colonnes **89,4 % → 0,5 %** de WER (mono inchangée) ;
 - **tableaux** : **92,6 %** de cellules exactes (propre), **69,1 %** (photocopie), **53,7 %**
   (photo) ; sans redressement **0 %** ; texte à plat **0 cellule localisée** ;
-- **scan réel** (Internet Archive) : **7,10 %** d'accord avec la couche OCR du PDF, 10 pages.
+- **scan réel** (Internet Archive) : **7,10 %** d'accord avec la couche OCR du PDF ; un second
+  livre à lexiques **prouve l'ordre des colonnes** (**15,3 / 7,1 / 12,8 %** contre **98 %** en ordre
+  inverse), et la validation réelle a corrigé le lecteur : un en-tête centré traversait la
+  gouttière (ligne cherchée sur les mots + couverture verticale).
 
 Reste : les **scans réels de bout en bout** (un seul livre, référence = un autre OCR), le **fax**
 1 bit (limite d'information), l'**exposant fusionné**, et les tableaux **sans traits**.

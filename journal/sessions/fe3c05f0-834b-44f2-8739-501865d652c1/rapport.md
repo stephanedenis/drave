@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 7.2 h |
+| Durée | 7.7 h |
 | Tours | 2 |
-| Messages | 405 |
-| Appels d'outils | 420 |
+| Messages | 447 |
+| Appels d'outils | 459 |
 | Fichiers touchés | 18 |
-| Commandes | 363 |
+| Commandes | 401 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*235 appels d'outils.* Actions notables :
+*274 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 206 autres
+- … et 244 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 323 autres
+- … et 361 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,7 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-17 sorties en erreur ou divergentes. Les premières :
+18 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -331,4 +331,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT" 2>&1 | tail -3 python3 tools/revue_documentation.py 2>&1 | tail -2; ech
 - cat > /tmp/msg-reel2.txt <<'EOF' R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES  La validation réelle ne tenait qu
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("simulés** — photo **55,9 → 7,0 %**, préservation **86,
+- cat > /tmp/msg-gouttiere.txt <<'EOF' R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %  Le co
 

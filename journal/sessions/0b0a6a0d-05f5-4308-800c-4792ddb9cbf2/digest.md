@@ -6317,3 +6317,142 @@ backlog N2 mis à jour
   ```
 
 - **job_output** `{"job_id": "bash-346", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-336 (bash: sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\n' ' '; echo; for f in C-propre-g3 R-pos-g1 R-pos-g2 D-mixte-g3; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-341 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\n' ' '; echo; for f in R-pos-g1 R-pos-g2; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g2.log 2>/dev/null; tail -1 work/n2h/R-pos-g1.log", "description": "Check random positions seed 1"}`
+
+  ```
+00:54
+pas 17500 · seq 128 · perte 62.8936 · PPL 128/4 3.4724 · 1217 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 30,34p docs/pilotage/roadmap.md; echo \"---\"; grep -n \"N2.h\\|N2\\.d\\|N2 \" docs/pilotage/roadmap.md | head -8; echo \"---\"; sed -n 168,180p docs/pilotage/roadmap.md", "description": "Read the current roadmap N sections"}`
+
+  ```
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 : budget **−0,08**, **validation contaminée (32,8 %)** ; N4 partiel | **N2** (le corpus décontaminé), **N4** (consigne courte) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
+
+---
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 : budget **−0,08**, **validation contaminée (32,8 %)** ; N4 p
+… [2918 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/R-pos-g1.pt --longueurs 2>&1 | grep -v Loading", "description": "Evaluate the … [24 caractères tronqués]`
+
+  ```
+00:54
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/R-pos-g1.pt --longueurs 2>&1 | grep -v Loading", "description": "W … [63 caractères tronqués]`
+
+  ```
+started background job bash-351
+  ```
+
+- **job_output** `{"job_id": "bash-351", "timeout_ms": 900000, "wait": true}`
+
+  ```
+00:59
+work/n2h/R-pos-g1.pt
+{"fichier": "R-pos-g1.pt", "params": 11814792, "val": 3.2438, "test": 3.3491, "litterature": 15.7824, "litterature_propre": 17.1343, "anglais": 61.1611, "wikitext2": 60.3335, "permute": 1279.864, "longueurs": {"129": 3.2516, "192": 3.2331, "256": 3.2596, "384": 5.203, "512": 6.1306}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-344 (bash: sleep 1400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le verrou de longueur tombe : 14,46 → 3,26 à 256 octets avec des positions aléatoires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit.py'); s = p.read_text()\ndebut = s.index(\"if long_R[\\\"256\\\"] < long_A[\\\"256\\\"] * 0.7:\")\nfin = s.index(\"vals = {\")\nneuf = '''lecture = (f\"Le verrou ** … [1086 caractères tronqués]`
+
+  ```
+ok
+parse ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/fiche3.md'); s = p.read_text()\nvieux = \"\"\"Si le verrou est la position, alors **allonger le contexte n'est pas un problème d'architecture**\nmais d'**exposition** : que … [1250 caractères tronqués]`
+
+  ```
+ok
+01:00
+pas  2500 · seq 128 · perte 171.4217 · PPL 128/4 3.8114 · 177 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/maj-roadmap.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"maj-roadmap.py — roadmap après N2.h (mètre propre, diversité, longueur).\"\"\"\nimport json, pathlib\n\na = json.loads(pathlib.Path('reports/n2-propre.json').read_te … [5254 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('work/n2h/maj-roadmap.py').read()); print('parse ok')\"; date '+%H:%M'; tail -1 work/n2h/R-pos-g2.log", "description": "Verify the roadmap script parses"}`
+
+  ```
+parse ok
+01:00
+pas  3000 · seq 128 · perte 179.5137 · PPL 128/4 3.8810 · 212 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null", "description": "Wait for random positions seed 2", "run_in_background": true}`
+
+  ```
+started background job bash-356
+  ```
+
+### 👤 Utilisateur
+
+background job bash-346 (bash: sleep 1000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/R-pos-g2.pt --longueurs 2>&1 | grep -v Loading", "description": "Evaluate ran … [22 caractères tronqués]`
+
+  ```
+01:00
+[exit code: 2]
+  ```
+
+- **job_output** `{"job_id": "bash-356", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null; tail -1 work/n2h/R-pos-g2.log", "description": "Check R seed 2"}`
+
+  ```
+01:10
+pas 12000 · seq 128 · perte 64.4050 · PPL 128/4 3.5028 · 830 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null", "description": "Wait for R seed 2 completion", "run_in_background": true}`
+
+  ```
+started background job bash-359
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2h/R-pos-g2.log; tail -1 work/n2h/R-pos-g3.log 2>/dev/null", "description": "Check R progress"}`
+
+  ```
+01:11
+pas 12250 · seq 128 · perte 75.0291 · PPL 128/4 3.5246 · 847 s
+[exit code: 1]
+  ```
+
+- **job_output** `{"job_id": "bash-359", "timeout_ms": 1200000, "wait": true}`

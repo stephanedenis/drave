@@ -3,14 +3,18 @@
  "ligne": "R4.4",
  "nature": "scan RÉEL",
  "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
- "source": "Voyage au centre de la terre — Internet Archive voyageaucentrede00vernuoft, scan 300 dpi",
+ "djvu": "work/r44/reel/livre_djvu.xml",
+ "source": "Voyage au centre de la terre — Internet Archive voyageaucentrede00vernuoft, scan LuraDocument 300 dpi",
+ "note_colonnes": "la référence d'ordre des colonnes ne s'applique qu'aux pages à deux colonnes ; l'agrégat wer_colonnes mélange donc les deux mises en page — lire le détail page par page",
  "agregat": {
   "pages": 10,
   "mots_reference": 4494,
   "wer": 0.071,
   "wer_brut": 0.0705,
   "rappel": 0.9372,
-  "confiance": 91.1
+  "confiance": 91.1,
+  "wer_colonnes": 0.8996,
+  "wer_colonnes_inverse": 0.9101
  },
  "pages": [
   {
@@ -24,7 +28,10 @@
    "confiance": 89.9,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9212,
+   "wer_colonnes_inverse": 0.9274,
+   "mots_reference_colonnes": 482
   },
   {
    "page": 50,
@@ -37,7 +44,10 @@
    "confiance": 92.4,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.8433,
+   "wer_colonnes_inverse": 0.8799,
+   "mots_reference_colonnes": 383
   },
   {
    "page": 70,
@@ -50,7 +60,10 @@
    "confiance": 90.6,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9145,
+   "wer_colonnes_inverse": 0.9164,
+   "mots_reference_colonnes": 550
   },
   {
    "page": 90,
@@ -63,7 +76,10 @@
    "confiance": 91.1,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.8834,
+   "wer_colonnes_inverse": 0.9352,
+   "mots_reference_colonnes": 463
   },
   {
    "page": 110,
@@ -76,7 +92,10 @@
    "confiance": 90.2,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9419,
+   "wer_colonnes_inverse": 0.9201,
+   "mots_reference_colonnes": 413
   },
   {
    "page": 130,
@@ -89,7 +108,10 @@
    "confiance": 92.0,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.8473,
+   "wer_colonnes_inverse": 0.8753,
+   "mots_reference_colonnes": 465
   },
   {
    "page": 150,
@@ -102,7 +124,10 @@
    "confiance": 90.0,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9034,
+   "wer_colonnes_inverse": 0.9034,
+   "mots_reference_colonnes": 414
   },
   {
    "page": 170,
@@ -115,7 +140,10 @@
    "confiance": 91.6,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.8854,
+   "wer_colonnes_inverse": 0.9427,
+   "mots_reference_colonnes": 471
   },
   {
    "page": 190,
@@ -128,7 +156,10 @@
    "confiance": 91.9,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9142,
+   "wer_colonnes_inverse": 0.8897,
+   "mots_reference_colonnes": 408
   },
   {
    "page": 210,
@@ -141,8 +172,11 @@
    "confiance": 91.1,
    "trace": [
     "recadrage"
-   ]
+   ],
+   "wer_colonnes": 0.9371,
+   "wer_colonnes_inverse": 0.9011,
+   "mots_reference_colonnes": 445
   }
  ],
- "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence, dite comme telle)"
+ "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence ; ordre des colonnes depuis les coordonnées DjVu)"
 }

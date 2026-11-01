@@ -120,30 +120,45 @@ La détection de grille par **continuité** (plus longue suite de pixels d'un tr
 la trouver sur un scan bruité ; un simple comptage de pixels sombres prenait les lignes de texte
 denses pour des traits et décalait toutes les lignes (mesuré : 56 mots lus au lieu de 86).
 
-## 5. Les vrais scans : 7,10 % sur un texte, 88,5 % de mots retrouvés sur un second
+## 5. Les vrais scans : 7,10 % sur un texte, et l'ordre des colonnes prouvé sur un lexique
 
 Deux PDF **réellement scannés** d'Internet Archive, leur **couche texte** comme référence, page par
-page, même page. La référence est un **autre moteur**, pas une vérité humaine : les chiffres sont
-des **accords entre moteurs**, pas des exactitudes.
+page. La référence est un **autre moteur**, pas une vérité humaine : les chiffres sont des
+**accords entre moteurs**, pas des exactitudes.
 
-| livre | pages | WER | rappel multiensemble | confiance |
+| livre | pages | WER vs couche layout | rappel multiensemble | confiance |
 |---|---:|---:|---:|---:|
 | *Voyage au centre de la terre* (`voyageaucentrede00vernuoft`) | 10 | **7,10 %** | **93,72 %** | 91,1 |
-| *Vingt mille lieues sous les mers*, 1902 (`vingtmillelieu00vern`) | 10 | **23,27 %** | **88,53 %** | 89,2 |
+| *Vingt mille lieues sous les mers*, 1902 (`vingtmillelieu00vern`) | 10 | **36,26 %** | **88,38 %** | 89,2 |
 
-Le second livre est le cas intéressant : son WER est **23,3 %** mais son **rappel multiensemble**
-est **88,5 %** — les mots sont lus, c'est l'**ordre** qui diffère. La raison est nommée : plusieurs
-pages sont des **lexiques à deux colonnes** ; la couche OCR de référence lit les lignes
-**entrelacées** (ordre visuel), notre lecteur lit la **colonne gauche puis la droite**. Le WER
-compte ce désaccord d'ordre, le rappel ne le compte pas. C'est la capacité « colonnes » qui
-fonctionne — contre une référence qui, elle, ne la fait pas. Les deux chiffres sont publiés
-ensemble, et la page la plus faible (rappel 71,2 %, une planche illustrée) est dans le JSON.
+Le second livre est le cas intéressant. Son WER contre la couche `pdftotext -layout` est **36,3 %**,
+mais son **rappel multiensemble** est **88,4 %** : les mots sont lus, c'est l'**ordre** qui
+diverge. Trois de ses pages sont un **lexique à deux colonnes** ; la couche de référence y lit les
+lignes dans l'ordre visuel (gauche et droite entrelacées), notre lecteur lit la **colonne gauche
+puis la droite**. Pour le prouver, une référence d'**ordre des colonnes** est construite depuis les
+**coordonnées des mots du DjVu** (mots à gauche du centre, groupés en lignes, puis ceux de droite) :
+
+| page | WER vs couche layout | WER vs **ordre des colonnes** | **ordre inverse** (contrôle) |
+|---|---:|---:|---:|
+| 180 | 93,15 % | **15,32 %** | 97,98 % |
+| 200 | 92,52 % | **7,09 %** | 96,06 % |
+| 210 | 92,00 % | **12,80 %** | 99,20 % |
+
+L'ordre **inverse** échoue à 96–99 % : la direction de lecture est donc **prouvée**, pas supposée.
+Les 7 autres pages (prose, une colonne) restent à 9–14 % de WER contre la couche layout, sauf une
+planche illustrée à 30,3 % (rappel 71,2 %) — la page la plus faible est dans le JSON.
+
+**Ce que la validation réelle a trouvé.** Le lexique réel a révélé un défaut que le corpus
+synthétique ne voyait pas : un **en-tête centré** traverse la gouttière, et une gouttière cherchée
+sur les **lignes** n'existe pas (tesseract groupe la gauche et la droite dans la même ligne TSV).
+La correction — **couverture verticale** par colonne de pixels, gouttière cherchée sur les
+**mots** — fait passer la page de **93 % à 15 %** de WER. C'est exactement ce qu'une validation sur
+du réel doit apporter : un cas que le synthétique avait lissé.
 
 **Ce que ces chiffres valent.** La chaîne tourne sur du papier réel ; le prétraitement y est neutre
 (7,05 % brut contre 7,10 % nettoyé) parce qu'un scan de bibliothèque est propre — c'est la photo de
-téléphone qui pose problème, et c'est là que la correction d'éclairage paie. Un seul des deux
-livres est de la prose pure : le second prouve la lecture par colonnes, pas la reconnaissance sur
-des pages illustrées.
+téléphone qui pose problème, et c'est là que la correction d'éclairage paie. La référence reste un
+OCR, pas une vérité humaine, et le WER global du second livre n'a de sens que page par page.
 
 ## 5 bis. La variance entre graines : le WER est stable, la préservation ne l'est pas
 
@@ -224,18 +239,20 @@ Les seuils sont des **planchers mesurés** écrits dans les outils :
 
 ## Verdict
 
-**R4.4 — les scans sont mesurés, la mise en page est mesurée, un vrai scan est validé ; la ligne
-reste ouverte pour les scans réels de bout en bout.** Le bloc OCR devient un **bloc classique
-robuste** du lecteur : cinq familles de dégradation, un split dev/test qui transfère, des colonnes
-à 0,5 % de WER, des cellules à 92,6 %, et une porte qui refuse les régressions.
+**R4.4 — les scans sont mesurés, la mise en page est mesurée, deux vrais scans sont validés —
+dont l'ordre des colonnes, prouvé sur un lexique réel (15,3 % de WER contre 98,0 % en ordre
+inverse) ; la ligne reste ouverte pour les scans réels de bout en bout.** Le bloc OCR devient un
+**bloc classique robuste** du lecteur : cinq familles de dégradation, un split dev/test qui
+transfère, des colonnes à 0,5 % de WER, des cellules à 92,6 %, et une porte qui refuse les
+régressions.
 
 ## Ce qui pourrait le rendre faux
 
 - **Le corpus est le mien** : cinq familles choisies et réglées par moi ; une vraie photocopie de
   ces pages aurait d'autres défauts (agrafe, recto-verso, couleur).
 - **Les seuils sont postérieurs** à la mesure : bornes de non-régression, pas prédictions.
-- **La référence réelle est un OCR** : 7,10 % et 88,5 % sont des accords, pas des vérités ; deux
-  livres, deux éditions, dont un avec des lexiques à deux colonnes.
+- **La référence réelle est un OCR** : 7,10 %, 36,3 % et 88,4 % sont des accords, pas des
+  vérités ; deux livres, deux éditions, dont un avec des lexiques à deux colonnes.
 - **Les questions sont gabarits** (le premier nombre du passage) : les appels de note y jouent un
   rôle démesuré ; un banc de paraphrases dirait autre chose.
 - **Les tableaux synthétiques** ont des traits nets : un tableau sans traits (aligné par espaces)

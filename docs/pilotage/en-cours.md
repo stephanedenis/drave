@@ -44,7 +44,7 @@
 - **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
 - **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
 - **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
-- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **70–87 %** selon la graine, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,5 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
 - **Prochaine action** : **fax** 1 bit et **exposant fusionné**.
 - **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
@@ -77,8 +77,8 @@
   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
-  simulés** — photo **55,9 → 7,0 %**, préservation **70–87 %** selon la graine, colonnes **89,4 → 0,5 %**,
-  tableaux **92,6 %**, vrais scans **7,10 / 88,5 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  simulés** — photo **55,9 → 7,0 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**,
+  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification

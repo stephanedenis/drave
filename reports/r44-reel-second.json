@@ -3,14 +3,18 @@
  "ligne": "R4.4",
  "nature": "scan RÉEL",
  "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
+ "djvu": "work/r44/reel/verne2_djvu.xml",
  "source": "Vingt mille lieues sous les mers (1902) — Internet Archive vingtmillelieu00vern, scan 300 dpi",
+ "note_colonnes": "la référence d'ordre des colonnes ne s'applique qu'aux pages à deux colonnes ; l'agrégat wer_colonnes mélange donc les deux mises en page — lire le détail page par page",
  "agregat": {
   "pages": 10,
   "mots_reference": 2686,
-  "wer": 0.2327,
-  "wer_brut": 0.2301,
-  "rappel": 0.8853,
-  "confiance": 89.2
+  "wer": 0.3626,
+  "wer_brut": 0.3619,
+  "rappel": 0.8838,
+  "confiance": 89.2,
+  "wer_colonnes": 0.6821,
+  "wer_colonnes_inverse": 0.9274
  },
  "pages": [
   {
@@ -25,7 +29,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.9112,
+   "wer_colonnes_inverse": 0.9243,
+   "mots_reference_colonnes": 304
   },
   {
    "page": 60,
@@ -39,7 +46,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.9431,
+   "wer_colonnes_inverse": 0.8821,
+   "mots_reference_colonnes": 246
   },
   {
    "page": 80,
@@ -53,7 +63,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.9137,
+   "wer_colonnes_inverse": 0.9173,
+   "mots_reference_colonnes": 278
   },
   {
    "page": 100,
@@ -67,7 +80,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.898,
+   "wer_colonnes_inverse": 0.902,
+   "mots_reference_colonnes": 255
   },
   {
    "page": 120,
@@ -81,7 +97,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.9032,
+   "wer_colonnes_inverse": 0.9211,
+   "mots_reference_colonnes": 279
   },
   {
    "page": 140,
@@ -95,7 +114,10 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.8795,
+   "wer_colonnes_inverse": 0.9446,
+   "mots_reference_colonnes": 307
   },
   {
    "page": 160,
@@ -109,50 +131,62 @@
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.8689,
+   "wer_colonnes_inverse": 0.8539,
+   "mots_reference_colonnes": 267
   },
   {
    "page": 180,
    "mots_reference": 248,
    "mots_ocr": 248,
-   "wer": 0.6129,
-   "wer_brut": 0.621,
+   "wer": 0.9315,
+   "wer_brut": 0.9234,
    "rappel": 0.8871,
    "precision": 0.8871,
-   "confiance": 86.2,
+   "confiance": 86.1,
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.1532,
+   "wer_colonnes_inverse": 0.9798,
+   "mots_reference_colonnes": 248
   },
   {
    "page": 200,
    "mots_reference": 254,
-   "mots_ocr": 254,
-   "wer": 0.1693,
-   "wer_brut": 0.1299,
-   "rappel": 0.9528,
-   "precision": 0.9528,
-   "confiance": 87.6,
+   "mots_ocr": 253,
+   "wer": 0.9252,
+   "wer_brut": 0.9213,
+   "rappel": 0.9449,
+   "precision": 0.9486,
+   "confiance": 87.5,
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.0709,
+   "wer_colonnes_inverse": 0.9606,
+   "mots_reference_colonnes": 254
   },
   {
    "page": 210,
    "mots_reference": 250,
-   "mots_ocr": 249,
-   "wer": 0.608,
-   "wer_brut": 0.624,
-   "rappel": 0.9,
-   "precision": 0.9036,
+   "mots_ocr": 248,
+   "wer": 0.92,
+   "wer_brut": 0.936,
+   "rappel": 0.892,
+   "precision": 0.8992,
    "confiance": 87.7,
    "trace": [
     "recadrage",
     "echelle(1800)"
-   ]
+   ],
+   "wer_colonnes": 0.128,
+   "wer_colonnes_inverse": 0.992,
+   "mots_reference_colonnes": 250
   }
  ],
- "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence, dite comme telle)"
+ "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence ; ordre des colonnes depuis les coordonnées DjVu)"
 }

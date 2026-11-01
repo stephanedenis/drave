@@ -45,8 +45,8 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** : sur
    **100 scans simulés**, la photo passe de **55,9 %** à **7,0 %** de WER (test **5,3 %**) et la
    **préservation** du lecteur atteint **86,7 %** (propre **90 %**) ; les **colonnes** tombent de
-   **89,4 %** à **0,5 %**, les **tableaux** donnent **92,6 %** de cellules exactes, et un **vrai
-   scan** s'accorde à **7,10 %** avec un OCR de référence — les **scans réels** de bout en bout
+   **89,4 %** à **0,5 %**, les **tableaux** donnent **92,6 %** de cellules exactes, et **deux vrais scans** s'accordent à **7,10 %** et **88,4 %** de mots, et l'**ordre des colonnes** y est
+   prouvé (**15,3 %** contre **98,0 %** en ordre inverse) — les **scans réels** de bout en bout
    restent ouverts.
 2. **N2 — la distillation** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734** (0,794
    bit/octet) ; meilleur **2,6998**, plateau **2,708** ; porte **< 2,5 non atteinte**. **N2.d** : le budget
@@ -275,7 +275,7 @@ le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement d
 | **R4.1** | **tableaux** : parseur 2D, en-têtes, cellules, opérations classiques (filtre, jointure, agrégat) | ✅ **996 cellules**, **802** exactes, texte plat **0/3** | extraction exacte sur 100 cellules ; contrôle : texte plat |
 | **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ✅ **294 fichiers**, **24/24** extraits, texte seul **0/3** | réponse par exécution exacte ; contrôle : lecture du texte seul |
 | **R4.3** | **maths** : LaTeX/MathML, définitions, preuve ; CAS bloc | ✅ **32 formules**, **10/10** dérivées, surface **0/3** | évaluation symbolique exacte ; contrôle : surface |
-| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 7,0 %** de WER, test **5,3 %**), **préservation 86,7 %** (propre 90), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **vrai scan 7,10 %** d'accord avec un OCR de référence | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 7,0 %** de WER, test **5,3 %**), **préservation 86,7 %** (propre 90), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **deux vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
 
 **Principe** : ces blocs sont **classiques d'abord**. Le bus les accepte comme les blocs neuronaux ; un parseur
 de tableaux n'a pas besoin d'être appris.
