@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 5.4 h |
+| Durée | 6.1 h |
 | Tours | 4 |
-| Messages | 362 |
-| Appels d'outils | 356 |
+| Messages | 386 |
+| Appels d'outils | 377 |
 | Fichiers touchés | 11 |
-| Commandes | 292 |
+| Commandes | 310 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,7 +187,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 2 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 252 autres
+- … et 270 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -405,4 +405,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitignore docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillatio
 - RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET  La passe complète de clôture (79 portes, 75 vertes, 4 rouges, 1 h 39, journa
 - ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT  La page d'état doit suffire à une autre session : en-cours expose maint
+- ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85  Le premier point de contrôle de la chaîne refaite sur le corpus dédupliqué est évalué : 3,10 en 
 

@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 5.2 h |
 | Tours | 5 |
-| Messages | 221 |
-| Appels d'outils | 245 |
+| Messages | 223 |
+| Appels d'outils | 246 |
 | Fichiers touchés | 16 |
-| Commandes | 177 |
+| Commandes | 178 |
 | Sous-agents | 2 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -251,7 +251,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 
 ### Tour 5 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Lire l'état courant et les variables DSH
 - bash — Lire le contrat des sessions
@@ -267,11 +267,32 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Mettre à jour l'état avec la session Pensée
 - bash — Compter les sessions et lire la question
-- … et 17 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ Le chemin mort révèle la prochaine action : j'écris le contrat d'implémentation du moteur
+⏵ État à jour : trois sessions, onze champs, contrat du moteur écrit
+
+`en-cours.md` porte maintenant **trois sessions actives**, chacune avec son **plan**, son **ambition**, sa **stratégie** et son **objectif final** — les quatre champs que tu demandais, en plus des champs de coordination (rôle, action, autres sessions, interfaces, fichiers réservés, prochaine action, bloquants, journal).
+
+\## Les trois sessions
+
+| session | plan | ambition | objectif final |
+|---|---|---|---|
+| **N2.h** — le mètre propre | dédup + split par document, chaîne propre, porte honnête, diversité FR, verrou de longueur | sortir N2 du chiffre contaminé (2,85 sur 32,8 %) | un mètre honnête : corpus dédupliqué, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés |
+| **R4.4** — les scans | scans simulés, prétraitement mesuré, exposants, colonnes, second moteur, porte resserrée | faire de l'OCR un bloc classique robuste, jugé par la parité | WER ≤ 5 %, parité ≥ 90 % sur les scans de test, porte resserrée |
+| **Pensée** — RSN plurielle et moteur N3 | state store, moteur v0, banc anytime, intégration DRVM/DRVF | un runtime cognitif où penser est une recherche tracée sur des états pluriels | un moteur de pensée v0 exécutable : state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles |
+
+Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.md` ; `en-cours` garde la version compacte pour tenir les budgets (2 000 mots pour l'état, 4 000 pour le T0). Le détail — phases, fichiers, contrôles, échéances — est dans le plan lié.
+
+\## Ce qui rend la synergie vérifiable
+
+- **`tools/verifie_en_cours.py` exige désormais les quatre champs** (`Plan`, `Ambition`, `Stratégie`, `Objectif final`) pour **chaque** session : une session sans eux ne passe plus la porte.
+- **`docs/methode/continuite.md`** documente le **contrat de synergie** : les quatre champs disent ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+- **`tools/sessions.py --check`** confronte les plans et l'état : trois plans actifs, trois sessions listées, périmètres et fichiers réservés sans recouvrement.
+- **`Pensée`** expose ses **interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state` ou `state → proposal`. Une autre session peut brancher un opérateur sans toucher au moteur.
+- J'ai ajouté les champs machine-readables manquants au plan **R4.4** (`Périmètre`, `Fichiers réservés`, `Prochaine action`) pour que 
+… [1419 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -343,7 +364,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 137 autres
+- … et 138 autres
 
 ## 4. Mesures et résultats marquants
 

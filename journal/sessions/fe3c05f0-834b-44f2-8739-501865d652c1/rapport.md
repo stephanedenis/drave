@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 5.3 h |
+| Durée | 5.9 h |
 | Tours | 2 |
-| Messages | 227 |
-| Appels d'outils | 245 |
-| Fichiers touchés | 11 |
-| Commandes | 207 |
+| Messages | 285 |
+| Appels d'outils | 302 |
+| Fichiers touchés | 14 |
+| Commandes | 253 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*60 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 42 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
@@ -124,6 +124,9 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/nettoyer_scan.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/fabriquer_colonnes.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_colonnes.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/fabriquer_tables.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -167,7 +170,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 167 autres
+- … et 213 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -295,7 +298,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -304,6 +307,11 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** : [stderr] ls: cannot access 'work/ocr/root/usr/share/tessdata/': No such file or directory [exit code: 2]
 - **T1** : [code 0]   exactitude de la valeur : natif 100.00% · OCR 83.33%   PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)   page dégradée : WER 17.08% · exactit
 - **T2** : brut                               psm3 WER=29.93% conf= 64.9 med3_x2                            psm3 WER=97.85% conf= 23.8 med3_x2_flou05                     psm3 WER=98.39% conf= 23.3 med3_x3       
+- **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 22, in <module>   File "<stdin>", line 12, in ocr_box AttributeError: module 'PIL' has no attribute 'ImageFilter'. Did you mean: 'Ima
+- **T2** : famille    split pipe      WER  rappel  conf  F1med  exNat  exOCR  preser [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module> KeyError: 'f1_median' [exit code: 1]
+- **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 28, in <module>   File "<stdin>", line 16, in prep ValueError: assignment destination is read-only [exit code: 1]
+- **T2** : gouttière + option colonnes ajoutées [stderr] Sorry: IndentationError: expected an indented block after 'if' statement on line 223 (graphe_document_ocr.py, line 224) [exit code: 1]
+- **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 359, in manifeste     blo
 
 ## 6. Commits
 

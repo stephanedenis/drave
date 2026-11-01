@@ -24,10 +24,15 @@
 - **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
 - **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
 - **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
-- **Ce qu'elle fait** : la dédup et le split, puis la distillation A (3 graines) et la porte honnête.
+- **Ce qu'elle fait** : la dédup et le split sont faits ; la distillation A tourne (3 graines).
+- **Résultat intermédiaire** (graine 1) : **3,10** en domaine, **3,21** au test ; **17,1** sur
+  la littérature jamais vue, **60,7** en anglais ; le verrou de longueur est intact (**3,13** à
+  129, **14,46** à 256) ; la tête précoce du 6ᵉ bloc bat le complet (**3,0562** contre
+  **3,1298**) — la boucle de pensée coûte **0,07**.
 - **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : distillation A (3 graines) puis la porte honnête.
+- **Prochaine action** : les 3 graines de A, puis la diversité française (D) et les positions
+  aléatoires (R) ; fiches `n2-propre`, journal, roadmap, portes.
 - **Bloquants** : aucun — GPU occupés.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
@@ -85,8 +90,8 @@
   innocents — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2.h — le mètre propre** : le **corpus d'abord** (dédup, split par document), puis la
-  distillation A et la porte honnête ; la validation est contaminée à **32,8 %**. Fiche [`n2-budget`](../../reports/rapport-n2-budget.md). N4 **0/40**.
+- **N2.h — le mètre propre** : corpus dédupliqué fait (0 % de fuite), distillation en cours ;
+  fiche [`n2-budget`](../../reports/rapport-n2-budget.md). N4 **0/40**.
 - **Pensée — RSN plurielle** : doc `pensee-iterative.md` (10 tours, 9 schémas) ; le **state store
   v0** est la prochaine action ; fichiers réservés dans la session `e181ce02`.
 

@@ -4669,3 +4669,797 @@ photocopie {'valeur présente, autre passage choisi': 4, 'valeur absente du text
 [status: running]
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\nold='''            region += f1 >= 0.90\n            valeur += mesurer_ocr.trouve(rep_ocr, q[\"valeur\"]) == mesurer_ocr.trouve(rep_nat, q[\"valeur\"])\n            ligne[\"details\"].append({\" … [4591 caractères tronqués]`
+
+  ```
+métrique de parité corrigée
+OK
+  ```
+
+- **job_output** `{"job_id": "bash-202"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "set -e\nmkdir -p work/rapidocr\nif [ ! -x work/rapidocr/venv/bin/python ]; then python3 -m venv work/rapidocr/venv; fi\nwork/rapidocr/venv/bin/pip install -q --upgrade pip 2>&1 | tail -1\nwork/rapidocr/venv/bin/pip install -q rapidocr-onnxruntime 2>&1 | tail -3\nwork/rapidocr/venv/bin/p … [312 caractères tronqués]`
+
+  ```
+started background job bash-205
+  ```
+
+- **job_output** `{"job_id": "bash-205"}`
+
+  ```
+return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: libgthread-2.0.so.0: cannot open shared object file: No such file or directory
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-205 (bash: set -e
+mkdir -p work/rapidocr
+if [ ! -x work/rapidocr/venv/bin/python ]; then python3 -m venv work/rapidocr/venv; fi
+work/rapidocr/venv/bin/pip install -q --upgrade pip 2>&1 | tail -1
+work/rapidocr/venv/bin/pip install -q rapidocr-onnxruntime 2>&1 | tail -3
+work/rapidocr/venv/bin/python -c "import rapidocr_onnxruntime,sys;print('rapidocr OK', rapidocr_onnxruntime.__version__ if hasattr(rapidocr_onnxruntime,'__version__') else '')" 2>&1 | tail -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "ldconfig -p 2>/dev/null | grep -E \"libgthread|libglib\" | head -3; echo \"=== opencv\"; work/rapidocr/venv/bin/pip uninstall -y -q opencv-python 2>&1 | tail -1; work/rapidocr/venv/bin/pip install -q opencv-python-headless 2>&1 | tail -2; work/rapidocr/venv/bin/python -c \"import rapido … [193 caractères tronqués]`
+
+  ```
+=== opencv
+rapidocr import OK
+  ```
+
+- **bash** `{"command": "timeout 600 work/rapidocr/venv/bin/python - <<'PY'\nimport sys,pathlib,time\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo\nfrom rapidocr_onnxruntime import RapidOCR\nengine=RapidOCR()\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nnat=mo.manifeste_natif(pdf,page,' … [665 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-propre.png            blocs=51 WER=14.87% 5.8s
+  exemple: A/RES/80/10 Journee internationale des femmes et des filles autochtones Programme d'action de la Conférence internationale sur la population et le développement
+A_RES_80_10-fr-p2-s1-photocopie.png        blocs=51 WER=23.84% 4.0s
+A_RES_80_10-fr-p2-s1-photo.png             blocs=51 WER=26.34% 3.7s
+A_RES_80_10-fr-p2-s1-fax.png               blocs=51 WER=66.67% 3.2s
+  ```
+
+- **job_output** `{"job_id": "bash-202"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -3 work/r44/mesure-brut-auto.log; wc -l work/r44/mesure-brut-auto.log; ls work/r44/ocr | wc -l; date +%H:%M:%S", "description": "Check measurement progress", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[29/100] A_RES_80_1-fr-p1-s1-fax.png              brut         WER 24.13% conf  71.2
+  [29/100] A_RES_80_1-fr-p1-s1-fax.png              auto         WER 14.92% conf  81.4
+  [30/100] A_RES_80_1-fr-p1-s1-papier.png           brut         WER  8.57% conf  89.5
+60 work/r44/mesure-brut-auto.log
+200
+22:51:29
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nROOT=pathlib.Path('work/ocr/root')\nenv=dict(os.environ); env['LD_LIBRARY_PATH']=str(ROOT/'usr/lib64');  … [1113 caractères tronqués]`
+
+  ```
+{'text': 'A/RES/80/10', 'conf': '90.257095', 'left': '249', 'top': '222', 'width': '193', 'height': '25', 'block_num': '1', 'par_num': '1', 'line_num': '1'}
+{'text': '2030', 'conf': '67.945427', 'left': '1866', 'top': '457', 'width': '85', 'height': '29', 'block_num': '4', 'par_num': '1', 'line_num': '1'}
+{'text': '!!', 'conf': '67.945427', 'left': '1965', 'top': '452', 'width': '20', 'height': '18', 'block_num': '4', 'par_num': '1', 'line_num': '1'}
+{'text': '10', 'conf': '96.313339', 'left': '926', 'top': '832', 'width': '37', 'height': '29', 'block_num': '5', 'par_num': '1', 'line_num': '5'}
+{'text': '!?', 'conf': '11.870079', 'left': '911', 'top': '1627', 'width': '22', 'height': '18', 'block_num': '7', 'par_num': '1', 'line_num': '3'}
+{'text': '10', 'conf': '95.610664', 'left': '478', 'top': '2804', 'width': '19', 'height': '16', 'block_num': '12', 'par_num': '1', 'line_num': '1'}
+{'text': '!l', 'conf': '44.333191', 'left': '478', 'top': '2936', 'width': '17', 'height': '15', 'block_num': '12', 'par_num': '2', 'line_num': '1'}
+{'text': 'et', 'conf': '95.380157', 'left': '1940', 'top': '335', 'width': '29', 'height': '26'}
+{'text': 'le', 'conf': '91.074173', 'left': '2001', 'to
+… [552 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os,tempfile\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nim=Image.open(img)\nROOT=pathlib.Path('work/ocr/root')\nenv=dict(os.envi … [1461 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 22, in <module>
+  File "<stdin>", line 12, in ocr_box
+AttributeError: module 'PIL' has no attribute 'ImageFilter'. Did you mean: 'ImageFile'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nim=Image.open(img)\nROOT=pathlib.Path('work/ocr/root')\nenv=dict(os.environ); env['LD_LIBRARY_PATH']=st … [1153 caractères tronqués]`
+
+  ```
+!! -> [('11', 80.2)]
+!? -> [('12', 95.8)]
+!l -> [('11', 53.4)]
+fin développement -> []
+  moitié fin -> [('10', 0.0)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nfrom PIL import Image, ImageFilter\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png'); im=Image.open(img)\nROOT=pathlib.Path('work/ocr/root'); env=dict(os.environ)\nenv['LD_LIBRARY_PATH']=str(ROOT/'usr/lib64'); env['TE … [1030 caractères tronqués]`
+
+  ```
+mot entier marge 2 -> développement!",
+mot entier marge 6 -> développement",
+mot entier marge 10 -> développement °,
+queue 60 -> 1410. | ] |  | t!0 |  | 9
+queue 90 -> ent!°. | cn |  | t!0 |  | 9
+queue 120 -> ment!?, | men |  | ati.
+  ```
+
+- **job_output** `{"job_id": "bash-202"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -n \"def mots\\|def manifeste\\|def main\\|extraction\" tools/graphe_document_ocr.py | head -12", "description": "Locate insertion points in OCR module", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+72:def mots(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> list[dict]:
+223:def manifeste(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> dict:
+235:def manifeste_sans_ocr(image: pathlib.Path, langue: str = "fra") -> dict:
+241:        "extraction": {"outil": "graphe_document_ocr.py", "version": VERSION,
+249:def main() -> int:
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", "limit": 60, "offset": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py</path>
+<type>file</type>
+<content>
+180:         petit = ligne["hauteur"] < corps * 0.85
+181:         grand = ligne["hauteur"] > corps * 1.12
+182:         court = len(ligne["texte"]) < 90
+183:         if petit:
+184:             fin_paragraphe()
+185:             blocs.append({
+186:                 "type": "note", "texte": ligne["texte"],
+187:                 "prov": {"page": numero, "y": round(ligne["y0"], 1),
+188:                          "confiance": ligne["conf"], "moteur": "tesseract", "langue": langue},
+189:             })
+190:             continue
+191:         if grand or (court and graphe_document_pdf.TYPES_LIGNES.match(ligne["texte"])):
+192:             fin_paragraphe()
+193:             premier = not any(b["type"] in ("titre", "section") for b in blocs)
+194:             blocs.append({
+195:                 "type": "titre" if premier and grand else "section",
+196:                 "texte": ligne["texte"],
+197:                 "prov": {"page": numero, "y": round(ligne["y0"], 1),
+198:                          "confiance": ligne["conf"], "moteur": "tesseract", "langue": langue},
+199:             })
+2
+… [1955 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\n\n# 1) imports\ns=s.replace('''import subprocess\nimport sys''','''import subprocess\nimport sys\nimport tempfile''')\n\n# 2) récupération des exposants, insérée avant _typographie\nancre  … [6671 caractères tronqués]`
+
+  ```
+récupération des exposants ajoutée
+OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3) -> dict:''',\n            '''def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3,\n                  … [3015 caractères tronqués]`
+
+  ```
+option exposants ajoutée
+  exposants False récupérés [] valeur 10..12: [{'valeur': '10', 'f1': 0.923, 'trouve_natif': True, 'trouve': False}, {'valeur': '2030 11', 'f1': 0.923, 'trouve_natif': True, 'trouve': False}, {'valeur': '12', 'f1': 0.947, 'trouve_natif': True, 'trouve': False}]
+exposants False exact natif 1.0 ocr 0.833 préservation 0.833 F1med 1.0
+  exposants True récupérés [] valeur 10..12: [{'valeur': '10', 'f1': 0.923, 'trouve_natif': True, 'trouve': False}, {'valeur': '2030 11', 'f1': 1.0, 'trouve_natif': True, 'trouve': True}, {'valeur': '12', 'f1': 0.947, 'trouve_natif': True, 'trouve': False}]
+exposants True exact natif 1.0 ocr 0.867 préservation 0.867 F1med 1.0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nmots=gco.mots(img,'fra')\n# lignes\nfrom collections import defaultdict\nlignes=defaultdict(list)\nfor m in mots: lign … [782 caractères tronqués]`
+
+  ```
+(4, 1, 1) med 30 | !! h 18 w 20 conf 67.9 left 1965 top 452
+   ligne: Réaffirmant le Programme de développement durable à l’horizon 2030 !! et
+(5, 1, 5) med 30 | 1 h 28 w 11 conf 94.7 left 825 top 832
+   ligne: les paragraphes 1 à 10 de l’annexe dans lesquels sont énumérés les critères
+(7, 1, 4) med 30 | l, h 40 w 30 conf 7.7 left 1863 top 1677
+   ligne: représentation égale et inclusive des femmes dans les systèmes de décision l,
+(12, 1, 2) med 26 | : h 17 w 4 conf 92.8 left 1624 top 2860
+   ligne: 5-13 septembre 1994 (publication des Nations Unies, numéro de vente : F.95.XIII1.18), chap. I,
+(12, 1, 2) med 26 | I, h 30 w 19 conf 92.7 left 1963 top 2852
+   ligne: 5-13 septembre 1994 (publication des Nations Unies, numéro de vente : F.95.XIII1.18), chap. I,
+(12, 1, 3) med 26 | 1, h 30 w 22 conf 96.1 left 684 top 2896
+   ligne: résolution 1, annexe.
+(12, 2, 1) med 26 | !l h 15 w 17 conf 44.3 left 478 top 2936
+   ligne: !l Résolution 70/1.
+récupérés: 2
+  -> 11 37.6
+  -> 11 45.7
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,hashlib,json\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\ndef sig(ms):\n    return hashlib.sha256(json.dumps([(m['texte'],m['left'],m['top'],m['width'],m['height'] … [411 caractères tronqués]`
+
+  ```
+519 519 519 4d013a40263abaf0 4d013a40263abaf0 4d013a40263abaf0
+identique a/b True b/c True
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('RE_EXPOSANT = re.compile(r\"^[!|Il1\\'°.,;:]+$\")',\n            'RE_EXPOSANT = re.compile(r\"^[!?|Il1\\'°.,;:*+=]+$\")')\np.write_text(s)\nprint('classe des exposants complét … [880 caractères tronqués]`
+
+  ```
+classe des exposants complétée (?)
+  détails 10..12: [('10', False), ('2030 11', True), ('12', False)]
+  détails 10..12: []
+  détails 10..12: []
+  détails 10..12: []
+exact ocr 0.867 préservation 0.867
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nmots=gco.mots(img,'fra')\nfor i,m in enumerate(mots):\n    if 'femmes' in m['texte'] or 'élimination' in m['texte']:\n … [608 caractères tronqués]`
+
+  ```
+--- 4 femmes
+    'internationale' h 25 w 211 conf 96.3 top 222 left 1540
+    'des' h 25 w 48 conf 96.6 top 222 left 1761
+    'femmes' h 25 w 115 conf 95.3 top 222 left 1819
+    'et' h 23 w 27 conf 96.0 top 224 left 1944
+    'des' h 25 w 47 conf 96.8 top 222 left 1981
+    'filles' h 25 w 69 conf 96.0 top 222 left 2039
+    'autochtones' h 25 w 178 conf 96.3 top 222 left 2119
+    'Programme' h 37 w 203 conf 93.1 top 332 left 514
+candidat '!!' h 18 conf 67.9 left 1965 top 452
+candidat '!?' h 18 conf 11.9 left 911 top 1627
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nfrom collections import defaultdict\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nmots=gco.mots(img,'fra')\ncible=[m for m in mots if m['texte']=='!?'][0]\nprint(' … [582 caractères tronqués]`
+
+  ```
+cible 7 1 3 h 18
+ligne: [('l’égard', 38, 82.447472, 1631), ('des', 30, 96.6343, 1631), ('femmes', 30, 93.282928, 1631), ('!?', 18, 11.870079, 1627), ('et', 26, 96.076103, 1635), ('de', 30, 95.485016, 1631), ('la', 29, 95.675644, 1631), ('recommandation', 30, 95.749214, 1631), ('générale', 38, 96.525223, 1631), ('n°40', 29, 80.880539, 1632), ('(2024)', 38, 96.662323, 1631), ('sur', 20, 96.134544, 1641), ('la', 29, 93.953339, 1631)]
+med 30
+récupérés 3
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nmots=gco.mots(img,'fra')\nmots2,n=gco.recuperer_exposants(img,[dict(m) for m in mots],'fra')\nprint('récupérés',n)\nfo … [495 caractères tronqués]`
+
+  ```
+récupérés 3
+   '11' 37.6 top 452
+   '12' 95.2 top 1627
+   '11' 45.7 top 2936
+extraction {'outil': 'graphe_document_ocr.py', 'version': 1, 'moteur': 'tesseract', 'version_moteur': 'tesseract 5.5.3', 'langue': 'fra', 'exposants_recuperes': 3}
+contexte:
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nm=gco.manifeste(img,'fra',exposants=True)\nt=mo.texte_du_manifeste(m)\nprint('len',len(t))\nfor nee … [425 caractères tronqués]`
+
+  ```
+len 3511
+12 -> 1858 'u Comité pour l’élimination de la discrimination à l’égard des femmes 12 et de la recommandation générale n°40 (2024) su'
+femmes -> 39 'A/RES/80/10 Journée internationale des femmes et des filles autochtones Programme d’actio'
+recommandation -> 1698 'otion de la médecine autochtone et traditionnelle, Prenant note de la recommandation générale n° 39 (2022) sur les droit'
+2030 -> 224 'pement, Réaffirmant le Programme de développement durable à l’horizon 2030 11 et réaffirmant que l’avancement de toutes '
+11 -> 229 't, Réaffirmant le Programme de développement durable à l’horizon 2030 11 et réaffirmant que l’avancement de toutes les f'
+--- début: A/RES/80/10 Journée internationale des femmes et des filles autochtones Programme d’action de la Conférence internationale sur la population et le développement, Réaffirmant le Programme de développement durable à l’horizon 2030 11 et réaffirmant que l’avancement de toutes les femmes et toutes les f
+--- nb régions 47
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, lecteur_controleur as lc, graphe_document_ocr as gco\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nQ=ms.questions_par_page(); qs=Q[('A_RES_80_10-fr.pdf', … [666 caractères tronqués]`
+
+  ```
+natif -> femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des femmes 12 et de la recommandation
+   contient 12: True | score 4.286
+ocr -> femmes et des filles autochtones du Comité pour l’élimination de la discrimination à l’égard des femmes 12 et de la recommandation
+   contient 12: True | score 4.492
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('VERSION = 1\\n','VERSION = 1\\n# Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.\\nRECUPERATION_VERSION = 2\\n')\np.write_text(s)\np=p … [1224 caractères tronqués]`
+
+  ```
+cache versionné
+exposants False exact ocr 0.833 préservation 0.833
+exposants True exact ocr 0.9 préservation 0.9
+  ```
+
+- **job_output** `{"job_id": "bash-202"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -2 work/r44/mesure-brut-auto.log; wc -l < work/r44/mesure-brut-auto.log; date +%H:%M:%S; ps -o pid,etime,pcpu,args -p $(pgrep -f \"mesurer_scans.py --pipelines\" | head -1) 2>/dev/null", "description": "Check measurement job speed", "workdir": "/home/stephane/Data13TB/stephane/GitH … [12 caractères tronqués]`
+
+  ```
+[95/100] A_RES_80_1-es-p2-s1-papier.png           auto         WER 87.01% conf  86.6
+  [96/100] A_RES_80_1-fr-p1-s1-propre.png           brut         WER  3.81% conf  91.6
+192
+22:56:40
+    PID     ELAPSED %CPU COMMAND
+ 574006       07:30  0.0 bash -c cat >> work/r44/journal.md <<'EOF'  ## 22:45 — baseline + premier prétraitement (dev, 10 pages) - baseline brut (dev) : propre 4,46 | photocopie 6,55 | papier 13,02 | fax 27,05 | photo 55,85 - baseline brut (test) : propre 2,84 | photocopie 4,69 | papier 53,15 | fax 23,10 | photo 80,65 - auto : photo 55,85→7,29 ; fax 27,05→21,93 ; papier 13,02→13,07 ; photocopie 6,55→6,58 - parité dev : propre 87,0 | photocopie 62,2 (auto 48,0) | photo 7,4 (auto 69,6) | fax 2,2 (auto 11,5) | papier 62,6 (auto 73,9) - leçons : agrandir une photocopie double le WER (6,6→12,9) ; l'angle se mesure APRÈS recadrage   (mesuré sur la page entière : 13→42 %) - prochain : parité (pourquoi 48 % à 6,6 % de WER) ; exposants ; run complet dev+test EOF timeout 2400 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-brut-auto.json > work/r44/mesure-brut-auto.log 2>&1; echo "[code $?]"; tail -18 work/r44/mesure-brut-auto.log
+  ```
+
+- **bash** `{"command": "cat >> work/r44/journal.md <<'EOF'\n\n## 23:00 — exposants : passe chiffres ciblée\n- les appels de note sont lus `!`, `!!`, `!?` (petits mots, hauteur < 80 % de la ligne) ;\n- recadrage + ×4 + whitelist chiffres : `!!`→11, `!?`→12, `!l`→11 (conf ≥ 30 requise) ;\n- pages propres dev : e … [814 caractères tronqués]`
+
+  ```
+contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  200 mesures en 467 s → work/r44/mesure-brut-auto.json
+---
+  photo      dev   auto                    10   7.29%  95.84%   92.4   70.0%   83.3%
+  photo      dev   brut                    10  55.85%  45.88%   86.6    6.7%   13.3%
+  photo      test  auto                    10   5.27%  97.82%   93.9       —       —
+  photo      test  brut                    10  80.65%  20.71%   71.1       —       —
+  photocopie dev   auto                    10   6.58%  96.08%   90.1   46.7%   76.7%
+  photocopie dev   brut                    10   6.55%  96.02%   90.4   63.3%   83.3%
+  photocopie test  auto                    10   5.02%  97.94%   91.2       —       —
+  photocopie test  brut                    10   4.69%  97.90%   91.7       —       —
+  propre     dev   auto                    10   4.46%  97.32%   93.2   90.0%   83.3%
+  propre     dev   brut                    10   4.46%  97.30%   93.3   90.0%   83.3%
+  propre     test  auto                    10   3.01%  99.18%   94.0       —       —
+  propre     test  brut                    10   2.84%  99.14%   94.3       —       —
+
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  200 mesures e
+… [40 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-202 (bash: cat >> work/r44/journal.md <<'EOF'
+
+## 22:45 — baseline + premier prétraitement (dev, 10 pages)
+- baseline brut (dev) : propre 4,46 | photocopie 6,55 | papier 13,02 | fax 27,05 | photo 55,85
+- baseline brut (test) : propre 2,84 | photocopie 4,69 | papier 53,15 | fax 23,10 | photo 80,65
+- auto : photo 55,85→7,29 ; fax 27,05→21,93 ; papier 13,02→13,07 ; photocopie 6,55→6,58
+- parité dev : propre 87,0 | photocopie 62,2 (auto 48,0) | photo 7,4 (auto 69,6) | fax 2,2 (auto 11,5) | papier 62,6 (auto 73,9)
+- leçons : agrandir une photocopie double le WER (6,6→12,9) ; l'angle se mesure APRÈS recadrage
+  (mesuré sur la page entière : 13→42 %)
+- prochain : parité (pourquoi 48 % à 6,6 % de WER) ; exposants ; run complet dev+test
+EOF
+timeout 2400 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-brut-auto.json > work/r44/mesure-brut-auto.log 2>&1; echo "[code $?]"; tail -18 work/r44/mesure-brut-auto.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('work/r44/mesure-brut-auto.json'))\nprint(f\"{'famille':10s} {'split':5s} {'pipe':5s} {'WER':>7s} {'rappel':>7s} {'conf':>5s} {'F1med':>6s} {'exNat':>6s} {'exOCR':>6s} {'preser':>7s}\")\nfor k,a in sorted(r['agregat'].items()):\n    print( … [599 caractères tronqués]`
+
+  ```
+famille    split pipe      WER  rappel  conf  F1med  exNat  exOCR  preser
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+KeyError: 'f1_median'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-brut-auto.json > work/r44/mesure-brut-auto.log 2>&1; echo \"[code $?]\"; tail -20 work/r44/mesure-brut-auto.log", "description": "Rerun measurement with fixed parity metric", "run_in_background":  … [67 caractères tronqués]`
+
+  ```
+started background job bash-228
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,statistics\nsys.path.insert(0,'tools')\nimport graphe_document as gd, graphe_document_ocr as gco, graphe_document_pdf as gdp\nimport mesurer_ocr as mo, mesurer_scans as ms, lecteur_controleur as lc\n\ndef blocs_param(lignes, gap, court_max, peti … [2971 caractères tronqués]`
+
+  ```
+actuel(gap0.9,court90)   nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+gap0.6                   nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+gap1.2                   nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+gap1.5                   nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+court60                  nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+court120                 nat=30/30 ocr=25/30 préservation=25/30 région=19/30
+  ```
+
+- **job_output** `{"job_id": "bash-228"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, graphe_document_pdf as gdp\npdf=pathlib.Path('data/onu/pdf/A_RES_80_1-fr.pdf'); page=2\nnat=mo.manifeste_natif(pdf,page,'fra')\nprint('natif:',nat['stats'])\nfor r in na … [553 caractères tronqués]`
+
+  ```
+natif: {'regions': 39, 'types': {'blanc': 19, 'note': 4, 'paragraphe': 15, 'titre': 1}}
+   note A/RES/80/1
+   note Participation de l’État de Palestine à la quatre-vingtième session
+   paragraphe a)
+   paragraphe l’État de Palestine peut présenter une déclaration préenregistrée de son
+   paragraphe Président, qui sera diffusée dans la salle de l’Assemblée générale lors du débat
+   paragraphe b) L’État de Palestine peut faire des déclarations par visioconférence ou
+   paragraphe soumettre une déclaration préenregistrée aux réunions de la Conférence internati
+ocr papier: {'regions': 35, 'types': {'blanc': 17, 'note': 7, 'paragraphe': 4, 'section': 6, 'titre': 1}}
+  début: pacifique de la questio d tats; L k de Palestine peut présenter une déclaration préenregistrée de son autre représentant de haut niveau, à toute réunion de haut niveau ns Unies et aux conférences et réunions internationall nérale ou, le cas
+WER 0.628 mots 131 / 282
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, graphe_document_ocr as gco, nettoyer_scan as ns\npdf=pathlib.Path('data/onu/pdf/A_RES_80_1-fr.pdf'); page=2\nnat=mo.manifeste_natif(pdf,pag … [1141 caractères tronqués]`
+
+  ```
+diagnostic {'largeur': 1445, 'hauteur': 1870, 'binaire': 0.0, 'fond_ratio': 1.33, 'petit': True, 'inclinaison': -0.75}
+brut                         WER=62.77% mots= 131 conf= 84.9
+rot-1.2                      WER=82.62% mots=  63 conf= 82.8
+rot-0.6                      WER=84.75% mots=  53 conf= 85.0
+rot+0.0                      WER=62.77% mots= 131 conf= 84.9
+rot+0.6                      WER=90.43% mots=  30 conf= 90.1
+rot+1.2                      WER=83.69% mots=  56 conf= 87.6
+x1.5                         WER=62.77% mots= 124 conf= 88.4
+x2.0                         WER=69.86% mots= 106 conf= 82.1
+median3                      WER=68.44% mots= 129 conf= 82.3
+eclairage                    WER= 5.67% mots= 279 conf= 92.7
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/nettoyer_scan.py'); s=p.read_text()\ns=s.replace('''    if d[\"fond_ratio\"] > 1.5:\n        im = eclairage(im)\n        trace.append(\"eclairage\")\n    angle = angle_de_redressement(im)  # sur l'image recadrée, pas sur la page br … [1870 caractères tronqués]`
+
+  ```
+auto corrigé (éclairage 1.25, redressement ≥ 1,5° et ≥ 2000 px)
+trace ['recadrage', 'eclairage']
+brut WER 0.6277 mots 131
+auto WER 0.0567 mots 281
+  ```
+
+- **job_output** `{"job_id": "bash-228"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "wc -l < work/r44/mesure-brut-auto.log 2>/dev/null; tail -2 work/r44/mesure-brut-auto.log 2>/dev/null; date +%H:%M:%S; ps -eo pid,etime,pcpu,args | grep \"mesurer_scans\" | grep -v grep | head -2", "description": "Check rerun progress", "workdir": "/home/stephane/Data13TB/stephane/GitHub … [10 caractères tronqués]`
+
+  ```
+54
+  [26/100] A_RES_80_1-fr-p1-s1-propre.png           auto         WER  4.44% conf  90.5
+  [27/100] A_RES_80_1-fr-p1-s1-photocopie.png       brut         WER  7.30% conf  89.6
+22:59:37
+ 579152       02:03  0.0 bash -c timeout 1800 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-brut-auto.json > work/r44/mesure-brut-auto.log 2>&1; echo "[code $?]"; tail -20 work/r44/mesure-brut-auto.log
+ 579159       02:03  0.0 timeout 1800 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-brut-auto.json
+  ```
+
+- **job_kill** `{"job_id": "bash-228", "reason": "Remplacé par une mesure après correction du prétraitement"}`
+
+  ```
+requested cancellation of job bash-228
+  ```
+
+- **bash** `{"command": "pkill -f \"mesurer_scans.py --pipelines brut,auto\" 2>/dev/null; sleep 1\ntimeout 1800 python3 tools/mesurer_scans.py --pipelines brut,auto --splits dev --sortie work/r44/mesure-dev-auto2.json 2>&1 | tail -14; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Measure dev with corrected … [100 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"mesurer_scans\" | grep -v pgrep | head -2; timeout 1800 python3 tools/mesurer_scans.py --pipelines brut,auto --splits dev --sortie work/r44/mesure-dev-auto2.json 2>&1 | tail -14; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Rerun dev measurement after cleanup", "timeou … [76 caractères tronqués]`
+
+  ```
+fax        dev   auto                  10  21.93%  79.85%   77.1   0.67    50.0%   13.3%
+  fax        dev   brut                  10  27.05%  76.35%   70.3   0.56    50.0%    3.3%
+  papier     dev   auto                  10   7.48%  94.86%   92.5   0.93    73.3%   60.0%
+  papier     dev   brut                  10  13.02%  89.37%   91.3   1.00    73.3%   63.3%
+  photo      dev   auto                  10   7.29%  95.84%   92.4   0.96    83.3%   70.0%
+  photo      dev   brut                  10  55.85%  45.88%   86.6   0.00    13.3%    6.7%
+  photocopie dev   auto                  10   6.55%  96.02%   90.4   0.95    83.3%   63.3%
+  photocopie dev   brut                  10   6.55%  96.02%   90.4   0.95    83.3%   63.3%
+  propre     dev   auto                  10   4.46%  97.32%   93.2   1.00    83.3%   90.0%
+  propre     dev   brut                  10   4.46%  97.30%   93.3   1.00    83.3%   90.0%
+
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  100 mesures en 229 s → work/r44/mesure-dev-auto2.json
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('work/r44/mesure-dev-auto2.json'))\nfor k,a in sorted(r['agregat'].items()):\n    print(f\"{a['famille']:10s} {a['split']:4s} {a['pipeline']:5s} WER={a['wer']:6.2%} conf={a['confiance']:5.1f} \"\n          f\"F1med={a['f1_median']:.2f} exN … [288 caractères tronqués]`
+
+  ```
+fax        dev  auto  WER=21.93% conf= 77.1 F1med=0.67 exNat=100.0% exOCR= 50.0% prés= 50.0% région= 13.3% Q=30
+fax        dev  brut  WER=27.05% conf= 70.3 F1med=0.56 exNat=100.0% exOCR= 50.0% prés= 50.0% région=  3.3% Q=30
+papier     dev  auto  WER= 7.48% conf= 92.5 F1med=0.93 exNat=100.0% exOCR= 73.3% prés= 73.3% région= 60.0% Q=30
+papier     dev  brut  WER=13.02% conf= 91.3 F1med=1.00 exNat=100.0% exOCR= 73.3% prés= 73.3% région= 63.3% Q=30
+photocopie dev  auto  WER= 6.55% conf= 90.4 F1med=0.95 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 63.3% Q=30
+photocopie dev  brut  WER= 6.55% conf= 90.4 F1med=0.95 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 63.3% Q=30
+photo      dev  auto  WER= 7.29% conf= 92.4 F1med=0.96 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 70.0% Q=30
+photo      dev  brut  WER=55.85% conf= 86.6 F1med=0.00 exNat=100.0% exOCR= 13.3% prés= 13.3% région=  6.7% Q=30
+propre     dev  auto  WER= 4.46% conf= 93.2 F1med=1.00 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 90.0% Q=30
+propre     dev  brut  WER= 4.46% conf= 93.3 F1med=1.00 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 90.0% Q=30
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifeste.json'))\nsel=[e for e in man['entrees'] if e['famille']=='fax' and e['split']=='dev']\nfor psm i … [647 caractères tronqués]`
+
+  ```
+fax auto psm3: WER=21.93%
+fax auto psm4: WER=22.30%
+fax auto psm6: WER=24.42%
+fax auto psm11: WER=24.40%
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import median_filter, grey_opening, label\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(o … [1690 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 28, in <module>
+  File "<stdin>", line 16, in prep
+ValueError: assignment destination is read-only
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import median_filter, grey_opening, label\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(o … [1667 caractères tronqués]`
+
+  ```
+auto                   WER=20.17%
+net_2100_170_1.0       WER=45.33%
+net_2100_160_1.2       WER=46.81%
+ouv_2100_160_1.2       WER=58.37%
+med_1800_170_1.0       WER=94.74%
+med_2400_140_1.5       WER=95.13%
+med_2100_160_1.2       WER=95.18%
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --splits dev --exposants --sortie work/r44/mesure-dev-exp.json 2>&1 | tail -10; echo \"[code ${PIPESTATUS[0]}]\"; python3 - <<'PY'\nimport json\nr=json.load(open('work/r44/mesure-dev-exp.json'))\nfor k,a in sorted(r['agregat'] … [405 caractères tronqués]`
+
+  ```
+famille    split pipeline           scans     WER  rappel   conf  F1med  préser.  exact.
+  fax        dev   auto                  10  21.90%  79.87%   77.1   0.67    53.3%   13.3%
+  papier     dev   auto                  10   7.32%  95.01%   92.5   0.93    73.3%   60.0%
+  photo      dev   auto                  10   7.00%  96.15%   92.4   0.97    86.7%   70.0%
+  photocopie dev   auto                  10   6.34%  96.21%   90.4   0.96    86.7%   66.7%
+  propre     dev   auto                  10   4.14%  97.61%   93.2   1.00    90.0%   90.0%
+
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  50 mesures en 330 s → work/r44/mesure-dev-exp.json
+[code 0]
+fax        WER=21.90% conf= 77.1 F1med=0.67 exNat=100.0% exOCR= 53.3% prés= 53.3% région= 13.3%
+papier     WER= 7.32% conf= 92.5 F1med=0.93 exNat=100.0% exOCR= 73.3% prés= 73.3% région= 60.0%
+photocopie WER= 6.34% conf= 90.4 F1med=0.96 exNat=100.0% exOCR= 86.7% prés= 86.7% région= 66.7%
+photo      WER= 7.00% conf= 92.4 F1med=0.97 exNat=100.0% exOCR= 86.7% prés= 86.7% région= 70.0%
+propre     WER= 4.14% conf= 93.2 F1med=1.00 exNat=100.0% exOCR= 90.0% prés= 90.0% région= 90.0%
+  ```
+
+- **bash** `{"command": "cat >> work/r44/journal.md <<'EOF'\n\n## 23:20 — auto corrigé : l'éclairage est le levier, le redressement est un piège\n- seuil d'éclairage 1,5 → **1,25** : la page papier qui tombait à 62,8 % passe à **5,7 %** ;\n- redressement seulement si |angle| ≥ 1,5° ET largeur ≥ 2000 px : tourne … [922 caractères tronqués]`
+
+  ```
+started background job bash-241
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"fabriquer_colonnes.py — un corpus de pages à DEUX COLONNES, avec sa vérité terrain.\n\nPOURQUOI CE FICHIER. R4.4 doit mesurer la **mise en page**, pas seulement les mots : sur une\npage à deux colonnes, un lecteur naïf entrelace la gauche et la droite, et l … [5086 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/fabriquer_colonnes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\nancre='''def _typographie(texte: str) -> str:'''\nbloc='''def bande_vide(lignes: list[dict], largeur: float) -> tuple[float, float] | None:\n    \"\"\"La gouttière entre deux colonnes : un … [4133 caractères tronqués]`
+
+  ```
+gouttière + option colonnes ajoutées
+[stderr]
+Sorry: IndentationError: expected an indented block after 'if' statement on line 223 (graphe_document_ocr.py, line 224)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sed -n 205,240p tools/graphe_document_ocr.py", "description": "Inspect broken function code", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+if meilleur is None or (j - i) > (meilleur[1] - meilleur[0]):
+                meilleur = (i, j)
+            i = j
+        else:
+            i += 1
+    if meilleur is None or (meilleur[1] - meilleur[0]) < max(largeur * 0.02, 10):
+        return None
+    centre = (meilleur[0] + meilleur[1]) / 2
+    gauche = sum(1 for l in lignes if (l["x0"] + l["x1"]) / 2 < centre)
+    if gauche < len(lignes) * 0.2 or len(lignes) - gauche < len(lignes) * 0.2:
+        return None
+    return float(meilleur[0]), float(meilleur[1])
+
+
+def ordre_de_lecture(lignes: list[dict], largeur: float) -> list[dict]:
+    """Colonne gauche entière, puis colonne droite. Sans gouttière, l'ordre est (y, x)."""
+    gouttiere = bande_vide(lignes, largeur)
+    if gouttiere is None:
+        if not lignes:
+        return []
+    largeur = max(l["x1"] for l in lignes)
+    if colonnes:
+        return ordre_de_lecture(lignes, largeur)
+    return sorted(lignes, key=lambda l: (l["y0"], l["x0"]))
+    centre = sum(gouttiere) / 2
+    gauche = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 < centre),
+                    key=lambda l: (l["y0"], l["x0"]))
+    droite = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 >= centre),
+… [347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def lignes_de_mots\" -A 30 tools/graphe_document_ocr.py | tail -12; echo \"=== ordre\"; grep -n \"def ordre_de_lecture\" -A 14 tools/graphe_document_ocr.py", "description": "Inspect both functions for repair", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+264-            "hauteur": y1 - y0, "conf": round(sum(confs) / len(confs), 1),
+265-            "confs": confs,
+266-        })
+267-    if not lignes:
+268-        return []
+269-    largeur = max(l["x1"] for l in lignes)
+270-    if colonnes:
+271-        return ordre_de_lecture(lignes, largeur)
+272-    return sorted(lignes, key=lambda l: (l["y0"], l["x0"]))
+273-
+274-
+275-def _recoller(texte: str, suivant: str) -> str:
+=== ordre
+219:def ordre_de_lecture(lignes: list[dict], largeur: float) -> list[dict]:
+220-    """Colonne gauche entière, puis colonne droite. Sans gouttière, l'ordre est (y, x)."""
+221-    gouttiere = bande_vide(lignes, largeur)
+222-    if gouttiere is None:
+223-        if not lignes:
+224-        return []
+225-    largeur = max(l["x1"] for l in lignes)
+226-    if colonnes:
+227-        return ordre_de_lecture(lignes, largeur)
+228-    return sorted(lignes, key=lambda l: (l["y0"], l["x0"]))
+229-    centre = sum(gouttiere) / 2
+230-    gauche = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 < centre),
+231-                    key=lambda l: (l["y0"], l["x0"]))
+232-    droite = sorted((l for l in lignes if (l["x0"] + l["x1"]) / 2 >= centre),
+233-                    key=lamb
+… [25 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\nold='''    gouttiere = bande_vide(lignes, largeur)\n    if gouttiere is None:\n        if not lignes:\n        return []\n    largeur = max(l[\"x1\"] for l in lignes)\n    if colonnes:\n   … [711 caractères tronqués]`
+
+  ```
+ordre_de_lecture réparé
+compile
+  3 pages × 2 versions → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes/manifeste.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,subprocess\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, graphe_document_ocr as gco, simuler_scan as ss\nfrom PIL import Image\nman=json.load(open('work/r44/colonnes/manifeste.json'))\ndef rendu(pdf):\n    png=pathlib.Path('/tmp')/f'col … [1305 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 359, in manifeste
+    blocs = blocs_de_page(lignes_de_mots(les_mots, colonnes), 1, langue)
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 264, in lignes_de_mots
+    largeur = max(l["x1"] for l in lignes)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 264, in <genexpr>
+    largeur = max(l["x1"] for l in lignes)
+                  ~^^^^^^
+KeyError: 'x1'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('''        x0 = min(m[\"left\"] for m in mots_ligne)\n        confs = [m[\"conf\"] for m in mots_ligne]\n        lignes.append({\n            \"texte\": texte, \"x0\": x0, \"y0 … [1905 caractères tronqués]`
+
+  ```
+x1 ajouté aux lignes
+propre {'mono/col=0': '0.5%', 'mono/col=1': '0.5%', 'deux/col=0': '89.1%', 'deux/col=1': '0.9%'}
+photocopie {'mono/col=0': '1.3%', 'mono/col=1': '1.3%', 'deux/col=0': '89.9%', 'deux/col=1': '1.4%'}
+photo {'mono/col=0': '17.0%', 'mono/col=1': '17.0%', 'deux/col=0': '87.2%', 'deux/col=1': '16.3%'}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/fabriquer_colonnes.py'); s=p.read_text()\ns=s.replace('''            c = canvas.Canvas(str(chemin), pagesize=A4)\n            c.setFont(\"Helvetica-Bold\", 13)\n            c.drawString(MARGE, HAUTEUR - MARGE, f\"R4.4 — page {page} … [1629 caractères tronqués]`
+
+  ```
+vérité : en-tête inclus
+  10 pages × 2 versions → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes/manifeste.json
+R4.4 — page 1 — deux colonnes Drave — la vision « Stream of logs » : le flux des listes. Et, en français d'ici, la drave
+...
+R4.4 — page 1 — mono-colonne (contrôle) Drave — la vision « Stream of logs » : le flux des listes. Et, en français d'ici
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def manifeste_ocr(image: pathlib.Path, langue: str, psm: int = 3,\n                  exposants: bool = False) -> dict:''',\n'''def manifeste_ocr(image: pathlib.Path, langue: str,  … [856 caractères tronqués]`
+
+  ```
+cache colonnes ajouté
+OK
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesurer_colonnes.py — R4.4 : la mise en page à deux colonnes, mesurée et corrigée.\n\nPOURQUOI CE FICHIER. Sur une page à deux colonnes, un lecteur naïf entrelace la gauche et la\ndroite : le WER mot à mot le voit (l'ordre compte), mais un sac de mots ne le … [7921 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_colonnes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_colonnes.py'); s=p.read_text()\ns=s.replace('''                \"distance\": distance, \"wer\": round(distance / max(len(reference), 1), 4),\n                \"gouttiere\": graphe_document_ocr.bande_vide(\n                  … [1906 caractères tronqués]`
+
+  ```
+nettoyé
+  page 1 · mono : mesuré
+  page 1 · deux : mesuré
+  page 2 · mono : mesuré
+  page 2 · deux : mesuré
+  page 3 · mono : mesuré
+  page 3 · deux : mesuré
+  page 4 · mono : mesuré
+  page 4 · deux : mesuré
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_colonnes.py", line 162, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_colonnes.py", line 149, in main
+    bareme = verdict(a)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_colonnes.py", line 112, in verdict
+    ecart = abs(mono_c["wer"] - mono_b["wer"])
+                ~~~~~~^^^^^^^
+TypeError: string indices must be integers, not 'str'
+[code 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-241 (bash: cat >> work/r44/journal.md <<'EOF'
+
+## 23:20 — auto corrigé : l'éclairage est le levier, le redressement est un piège
+- seuil d'éclairage 1,5 → **1,25** : la page papier qui tombait à 62,8 % passe à **5,7 %** ;
+- redressement seulement si |angle| ≥ 1,5° ET largeur ≥ 2000 px : tourner une page de 170 dpi
+  de 0,75° la détruit (62,8 → 84,8 %) ;
+- auto (dev) : photocopie 6,34 | photo 7,00 | papier 7,32 | fax 21,90 | propre 4,14 ;
+- préservation avec exposants : propre 90,0 | photo 86,7 | photocopie 86,7 | papier 73,3 | fax 53,3 ;
+- le plafond propre est 90 % : les 3 échecs sont un exposant fusionné ("10") et deux en-têtes
+  dont la découpe de phrase diffère (13) ;
+- fax : psm 3 meilleur que 4/6/11 ; médian/ouverture/CC avant upscale = 95 % (destruction) ;
+  le meilleur reste upscale 2100 + lissage. Fax = limite d'information (120 dpi 1 bit).
+EOF
+timeout 2400 python3 tools/mesurer_scans.py --pipelines brut,auto --sortie work/r44/mesure-final.json > work/r44/mesure-final.log 2>&1; echo "[code $?]"; tail -6 work/r44/mesure-final.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_colonnes.py'); s=p.read_text()\ns=s.replace('ecart = abs(mono_c[\"wer\"] - mono_b[\"wer\"])','ecart = abs(a[mono_c][\"wer\"] - a[mono_b][\"wer\"])')\np.write_text(s)\nPY\npython3 -m py_compile tools/mesurer_colonnes.py && t … [276 caractères tronqués]`
+
+  ```
+deux  photo       brut        88.37%      4
+  deux  photo       colonnes    12.23%      4
+  deux  propre      brut        89.36%      4
+  deux  propre      colonnes     0.60%      4
+  mono  photocopie  brut         0.97%      4
+  mono  photocopie  colonnes     0.97%      4
+  mono  photo       brut        12.66%      4
+  mono  photo       colonnes    12.66%      4
+  mono  propre      brut         0.27%      4
+  mono  propre      colonnes     0.27%      4
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.6%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.1%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 12.2%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.4%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes.json
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nr=json.load(open('work/r44/mesure-final.json'))\nfor k,a in sorted(r['agregat'].items()):\n    print(f\"{a['famille']:10s} {a['split']:4s} {a['pipeline']:5s} WER={a['wer']:6.2%} F1med={(a['f1_median'] or 0):.2f} exNat={(a['exactitude_natif'] or 0):6.1%} ex … [237 caractères tronqués]`
+
+  ```
+fax        dev  auto  WER=21.93% F1med=0.67 exNat=100.0% exOCR= 50.0% prés= 50.0% région= 13.3%
+fax        dev  brut  WER=27.05% F1med=0.56 exNat=100.0% exOCR= 50.0% prés= 50.0% région=  3.3%
+fax        test auto  WER=15.52% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+fax        test brut  WER=23.10% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+papier     dev  auto  WER= 7.48% F1med=0.93 exNat=100.0% exOCR= 73.3% prés= 73.3% région= 60.0%
+papier     dev  brut  WER=13.02% F1med=1.00 exNat=100.0% exOCR= 73.3% prés= 73.3% région= 63.3%
+papier     test auto  WER= 6.22% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+papier     test brut  WER=53.15% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+photocopie dev  auto  WER= 6.55% F1med=0.95 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 63.3%
+photocopie dev  brut  WER= 6.55% F1med=0.95 exNat=100.0% exOCR= 83.3% prés= 83.3% région= 63.3%
+photocopie test auto  WER= 4.69% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+photocopie test brut  WER= 4.69% F1med=0.00 exNat=  0.0% exOCR=  0.0% prés=  0.0% région=  0.0%
+photo      dev  auto  WER= 7.29% F1med=0.96 exNa
+… [719 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes.json > work/r44/colonnes.log 2>&1; echo \"[code $?]\"; tail -16 work/r44/colonnes.log", "description": "Run full 10-page column benchmark", "run_in_background": true,  … [61 caractères tronqués]`
+
+  ```
+started background job bash-253
+  ```
+

@@ -5609,3 +5609,267 @@ work/n2h/base-propre.pt
   ```
 
 - **job_output** `{"job_id": "bash-291", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; tail -1 work/n2h/A-propre-g1.log 2>/dev/null; tail -1 work/n2h/teacher-mixte.log", "description": "Check campaign progress"}`
+
+  ```
+22:53
+work/n2h/base-propre.pt
+pas  3250 · seq 128 · perte 63.3133 · PPL 128/4 3.3356 · 235 s
+  pas  12000 · perte 1.2389 · val 1.5388 bits/octet · 993 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat reports/corpus-propre.json", "description": "Review the clean corpus manifest"}`
+
+  ```
+{
+ "source": "data/corpus_fr.txt",
+ "source_octets": 4633889,
+ "source_sha256": "1e39f1a8aeac403d7b7ff5adc598fd8dd14233287707d5849a37c3e667f145d4",
+ "methode": {
+  "deduplication": "shingles de Rabin-Karp (base 257, mod 2^61−1), première occurrence gardée, runs gardés ≥ 64 octets, joints par \\n",
+  "fenetre_shingle": 96,
+  "chunk_octets": 8192,
+  "split": "un chunk sur 20 en validation, le suivant sur 20 en test"
+ },
+ "propre_octets": 3605306,
+ "deduplication": {
+  "retires": 1029993,
+  "runs": 1411,
+  "plus_long_run": 540086,
+  "retires_pct": 22.23
+ },
+ "train_octets": 3244858,
+ "val_octets": 180224,
+ "test_octets": 180224,
+ "chunks": {
+  "train": -360007,
+  "val": 180224,
+  "test": 180224
+ },
+ "sha256": {
+  "train": "8a1856022ed5eb58e773652fb2fcba827cb9d30958a39c3f2cf05c69efb73a71",
+  "val": "d9ffb0bb49d5fe088062d411e0b1b7b1d373c2d602e2c6f4556c93a101819f57",
+  "test": "566d467e3c7ecdbd280fbc6766627adc6d8d37560c04a69d6b8c554be6983531"
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ },
+ "plus_longue_repetition_val_train": 0,
+ "licence": "corpus local, l
+… [129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\n# 1. corriger le manifeste (comptes de chunks, pas d'octets)\np = pathlib.Path('reports/corpus-propre.json'); m = json.loads(p.read_text())\nm[\"chunks\"] = {\"train\": 397, \"val\": 22, \"tes … [1313 caractères tronqués]`
+
+  ```
+manifeste {'train': 397, 'val': 22, 'test': 22}
+outil corrigé
+{'train': 397, 'val': 22, 'test': 22}
+  ```
+
+- **job_output** `{"job_id": "bash-291", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-280 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; for f in A-propre-g1 A-propre-g2; do tail -1 work/n2h/$f.log 2>/dev/null; done; tail -1 work/n2h/teacher-mixte.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; tail -2 work/n2h/A-propre-g1.log 2>/dev/null; tail -1 work/n2h/teacher-mixte.log; tail -1 work/n2h/base-mixte.log 2>/dev/null", "description": "Check the clean and mixed chains"}`
+
+  ```
+23:03
+work/n2h/base-propre.pt
+pas 12250 · seq 128 · perte 46.8716 · PPL 128/4 3.2025 · 845 s
+pas 12500 · seq 128 · perte 48.4809 · PPL 128/4 3.1871 · 862 s
+  # écrit dans work/n2h/route-teacher-mixte · 23.57 M paramètres · 1.46 M poids lus/jeton/couche
+pas  700 · perte 2.3717 · PPL val 10.655 · 29 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/A-propre-g1.pt 2>/dev/null && echo A1_OK; tail -1 work/n2h/A-propre-g2.log 2>/dev/null; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null", "description": "Wait for the first clean distillation to fini … [31 caractères tronqués]`
+
+  ```
+started background job bash-297
+  ```
+
+- **job_output** `{"job_id": "bash-297", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-291 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; for f in A-propre-g1 A-propre-g2; do tail -1 work/n2h/$f.log 2>/dev/null; done; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; tail -2 work/n2h/A-propre-g1.log; tail -1 work/n2h/A-propre-g2.log 2>/dev/null", "description": "Check whether the first clean run finished"}`
+
+  ```
+23:13
+work/n2h/A-propre-g1.pt
+work/n2h/base-propre.pt
+ "positions_aleatoires": 0
+}
+pas  1250 · seq 128 · perte 75.0892 · PPL 128/4 3.3555 · 86 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json; d=json.load(open('work/n2h/A-propre-g1.json'))\nprint({k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129_lot15','ppl_128_lot8','ppl_permute','duree_s','octet … [233 caractères tronqués]`
+
+  ```
+{'octets_vus': 40960000, 'ppl_128_lot16': 3.1925, 'ppl_128_lot8': 3.1671, 'ppl_129_lot15': 3.1739, 'ppl_permute': 1380.8955, 'duree_s': 1381.8896}
+{"fichier": "A-propre-g1.pt", "params": 11814792, "val": 3.0971, "test": 3.2098, "litterature": 15.9854, "litterature_propre": 17.0838, "anglais": 60.6957, "wikitext2": 59.729, "permute": 1356.6433, "decomposition": {"complete": 3.1298, "apres_2_blocs": 3.8236, "apres_4_blocs": 3.2291, "apres_6_blocs": 3.0562, "sans_pensee": 23636033.02}, "longueurs": {"129": 3.1334, "192": 8.7137, "256": 14.4554, "384": 24.8061, "512": 34.0535}}
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; for f in A-propre-g3 C-propre-g1 D-mixte-g1; do tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait 25 minutes for seeds 2 and 3", "run_in_bac … [15 caractères tronqués]`
+
+  ```
+started background job bash-300
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nvieux = \"\"\"- **Prochaine action** : attendre la distillation A (3 graines) puis évaluer la porte honnête.\"\"\"\nneuf = \"\"\"- ** … [817 caractères tronqués]`
+
+  ```
+en-cours · 1570 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 11,100p docs/pilotage/en-cours.md", "description": "Re-read the updated state page"}`
+
+  ```
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+> le corrige.
+
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Stratégie** : un seul changement à la fois, trois graine
+… [6494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nvieux = \"\"\"- **Ce qu'elle fait** : la dédup et le split, puis la distillation A (3 graines) et la porte honnête.\"\"\"\nneuf = \"\ … [1213 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1650 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4024 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 371 fiche(s) · 441 JSON · 114 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"- **N2.h — le mètre propre** : le **corpus d'abord** (dédup, split par document), puis la\n  distillation A et la porte hon … [1332 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **job_output** `{"job_id": "bash-300", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-297 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/A-propre-g1.pt 2>/dev/null && echo A1_OK; tail -1 work/n2h/A-propre-g2.log 2>/dev/null; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; tail -1 work/n2h/A-propre-g3.log 2>/dev/null; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null", "description": "Check seed 3 and mixed arm progress"}`
+
+  ```
+23:25
+work/n2h/A-propre-g1.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt 
+pas  6250 · seq 128 · perte 37.6891 · PPL 128/4 3.4493 · 428 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2h/ | grep -E \"A-propre|D-mixte|base-mixte\" ; tail -3 work/n2h/A-propre-g2.log; echo \"=== D ===\"; ls work/n2h/D-mixte-g1.log 2>/dev/null && tail -1 work/n2h/D-mixte-g1.log", "description": "Inspect A g2 output and D  … [7 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane     8649 31 oct 23:12 A-propre-g1.json
+-rw-r--r--. 1 stephane stephane     6155 31 oct 23:12 A-propre-g1.log
+-rw-r--r--. 1 stephane stephane     6657 31 oct 23:12 A-propre-g1.out
+-rw-r--r--. 1 stephane stephane 47302035 31 oct 23:12 A-propre-g1.pt
+-rw-r--r--. 1 stephane stephane     3241 31 oct 23:25 A-propre-g2.log
+-rw-r--r--. 1 stephane stephane     3744 31 oct 23:25 A-propre-g2.out
+-rw-r--r--. 1 stephane stephane 47278428 31 oct 23:18 base-mixte.drvm
+-rw-r--r--. 1 stephane stephane    21522 31 oct 23:18 base-mixte.log
+-rw-r--r--. 1 stephane stephane 47301903 31 oct 23:18 base-mixte.pt
+-rw-r--r--. 1 stephane stephane      545 31 oct 23:18 base-mixte.pt.json
+-rw-r--r--. 1 stephane stephane     1785 31 oct 23:25 D-mixte-g1.log
+-rw-r--r--. 1 stephane stephane     2288 31 oct 23:25 D-mixte-g1.out
+pas 11000 · seq 128 · perte 52.2104 · PPL 128/4 3.2036 · 767 s
+pas 11250 · seq 128 · perte 55.0901 · PPL 128/4 3.2288 · 784 s
+pas 11500 · seq 128 · perte 42.3927 · PPL 128/4 3.2116 · 801 s
+=== D ===
+work/n2h/D-mixte-g1.log
+pas  6250 · seq 128 · perte 37.6891 · PPL 128/4 3.4493 · 428 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche2.md <<'EOF'\n# N2.h2 — La diversité française : ce que coûte un modèle qui sait lire autre chose que le dépôt\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : entraîné moitié sur le dépôt,\n … [4927 caractères tronqués]`
+
+  ```
+ok
+23:26
+pas 12000 · seq 128 · perte 44.3240 · PPL 128/4 3.1885 · 835 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | wc -l; for f in A-propre-g3 C-propre-g1 D-mixte-g1 D-mixte-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait for seed 3 and the mixed arm … [29 caractères tronqués]`
+
+  ```
+started background job bash-308
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; git status --short | head -8; date '+%H:%M'", "description": "Check other sessions' commits and the working tree"}`
+
+  ```
+9a03d2dc ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR
+7408441e R4.4 — CENT SCANS SIMULÉS, CINQ FAMILLES : LA PHOTO PASSE DE 55,9 % À 7,3 % DE WER
+3dc2fe27 ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT
+91f31faa PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE
+0a296b75 PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES
+ M docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+23:26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85\n\nLe premier point de contrôle de la chaîne refaite sur le corpus dédupliqué est évalué : 3,10 en\ndomai … [439 caractères tronqués]`

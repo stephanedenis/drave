@@ -4589,3 +4589,91 @@ python3 tools/sessions.py --check          EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/methode/continuite.md tools/verifie_en_cours.py docs/theorie/pensee-iterative.md docs/implantation/moteur-de-pensee.md docs/README.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.m … [338 caractères tronqués]`
+
+  ```
+docs/README.md                                     |   1 +
+ docs/implantation/moteur-de-pensee.md              | 205 +++++++++++++++++++
+ docs/methode/continuite.md                         |  10 +-
+ docs/pilotage/en-cours.md                          | 161 +++++----------
+ docs/theorie/pensee-iterative.md                   |   2 +-
+ journal/2026-10-31/README.md                       |   9 +-
+ journal/2026-10-31/apprentissage.md                |   4 +-
+ journal/2026-10-31/distribue.md                    |   4 +-
+ journal/2026-10-31/docs.md                         |   4 +-
+ journal/2026-10-31/memoire.md                      |   4 +-
+ journal/2026-10-31/mesures.md                      |   4 +-
+ journal/2026-10-31/modele.md                       |   4 +-
+ journal/2026-10-31/portes.md                       |   7 +-
+ journal/README.md                                  |   6 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md |  50 -----
+ .../rapport.md                                     |  18 +-
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 221 ---------------------
+ .../rapport.md                                     
+… [463 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-177", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 9a03d2dc] ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR
+ 21 files changed, 620 insertions(+), 162 deletions(-)
+ create mode 100644 docs/implantation/moteur-de-pensee.md
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/sessions.py --check\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/taille_documents.py\" \"python3 tools/revue_documentation.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\ … [405 caractères tronqués]`
+
+  ```
+python3 tools/sessions.py --check          EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+python3 tools/revue_documentation.py       EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+---
+3
+13
+  ```
+
+### 🤖 Assistant
+
+⏵ État à jour : trois sessions, onze champs, contrat du moteur écrit
+
+`en-cours.md` porte maintenant **trois sessions actives**, chacune avec son **plan**, son **ambition**, sa **stratégie** et son **objectif final** — les quatre champs que tu demandais, en plus des champs de coordination (rôle, action, autres sessions, interfaces, fichiers réservés, prochaine action, bloquants, journal).
+
+## Les trois sessions
+
+| session | plan | ambition | objectif final |
+|---|---|---|---|
+| **N2.h** — le mètre propre | dédup + split par document, chaîne propre, porte honnête, diversité FR, verrou de longueur | sortir N2 du chiffre contaminé (2,85 sur 32,8 %) | un mètre honnête : corpus dédupliqué, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés |
+| **R4.4** — les scans | scans simulés, prétraitement mesuré, exposants, colonnes, second moteur, porte resserrée | faire de l'OCR un bloc classique robuste, jugé par la parité | WER ≤ 5 %, parité ≥ 90 % sur les scans de test, porte resserrée |
+| **Pensée** — RSN plurielle et moteur N3 | state store, moteur v0, banc anytime, intégration DRVM/DRVF | un runtime cognitif où penser est une recherche tracée sur des états pluriels | un moteur de pensée v0 exécutable : state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles |
+
+Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.md` ; `en-cours` garde la version compacte pour tenir les budgets (2 000 mots pour l'état, 4 000 pour le T0). Le détail — phases, fichiers, contrôles, échéances — est dans le plan lié.
+
+## Ce qui rend la synergie vérifiable
+
+- **`tools/verifie_en_cours.py` exige désormais les quatre champs** (`Plan`, `Ambition`, `Stratégie`, `Objectif final`) pour **chaque** session : une session sans eux ne passe plus la porte.
+- **`docs/methode/continuite.md`** documente le **contrat de synergie** : les quatre champs disent ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+- **`tools/sessions.py --check`** confronte les plans et l'état : trois plans actifs, trois sessions listées, périmètres et fichiers réservés sans recouvrement.
+- **`Pensée`** expose ses **interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state` ou `state → proposal`. Une autre session peut brancher un opérateur sans toucher au moteur.
+- J'ai ajouté les champs machine-readables manquants au plan **R4.4** (`Périmètre`, `Fichiers réservés`, `Prochaine action`) pour que `sessions.py --check` passe ; son contenu n'a pas été modifié.
+
+## Le prochain pas est déjà écrit
+
+Le chemin mort signalé par la revue (`docs/implantation/moteur-de-pensee.md`) était la prochaine action de la session Pensée. Je l'ai écrit : le **contrat d'implémentation** du moteur — types `Candidate`/`State`/`Node`/`Proposal`, state store canonique (Merkle, compaction, replay, diff), arbre DAG, boucle anytime, interfaces opérateur/stratégie, stratégies v0 (BFS, greedy, A*, MCTS-lite), trace DRVF `thought`, portes **T0–T6**, et plan de fichiers.
+
+La **prochaine action** de la session est maintenant : le **state store v0** dans `tools/pensee/` — candidats, hash Merkle, arbre, trace — puis le moteur v0.
+
+## Commit et portes
+
+- Commit : **`9a03d2dc`** — état des trois sessions, contrat de synergie, contrat du moteur.
+- `sessions.py --check`, `verifie_en_cours`, `taille_documents`, `revue_documentation`, `porte-tableaux`, `verifier_schemas`, `verifie_journal` : **toutes vertes**.
+- `en-cours` : **1 562 mots**, 3 sessions, 8 puces, 5 questions.
+
+Le compromis est assumé : `en-cours` porte les quatre champs en version **compacte** et le lien vers le plan complet. Si tu veux le plan **intégral** dans `en-cours`, il faut relever le budget de l'état (et le T0) — sinon la page devient un journal, ce que la méthode interdit. Dis-moi si tu préfères cette seconde option, ou si j'enchaîne sur le state store v0.
+
