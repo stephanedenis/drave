@@ -12772,3 +12772,103 @@ troncons_par_split {'train': 2273294, 'val': 126636, 'test': 125972}
      · compteurs : en-cours.md dit 381 fichiers, le disque en a 382
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **381** / **457** |\",\"| fichiers / JSON de résultats | **382** / **459** |\")\ns=s.replace … [1469 caractères tronqués]`
+
+  ```
+T0 max : 3742 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 381 fichiers, le disque en a 382
+  ```
+
+- **bash** `{"command": "grep -n \"JSON de résultats\" docs/pilotage/en-cours.md; ls reports/*.md | wc -l; ls reports/*.json | wc -l", "description": "Check current counters line", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+89:| fichiers / JSON de résultats | **381** / **459** | `reports/*.md` / `reports/*.json` |
+382
+459
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **381** / **459** |\",\"| fichiers / JSON de résultats | **382** / **459** |\")\np.write_tex … [1289 caractères tronqués]`
+
+  ```
+journal : corpus ajouté
+  revue de documentation · 382 fiche(s) · 459 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3742 mots (budget 4 000)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | head -20; echo \"=== manifest\"; python3 -c \"import json;d=json.load(open('reports/corpus-wiki-fr.json'));print(d['articles_gardes'],d['mots_estimes'],d['octets'])\"", "description": "Check tree and manifest befor … [93 caractères tronqués]`
+
+  ```
+MM docs/pilotage/en-cours.md
+ M journal/2026-11-01/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+ M tools/corpus_wikipedia.py
+ m tools/docwatch
+?? reports/corpus-wiki-fr-contamination.json
+?? reports/corpus-wiki-fr.json
+?? reports/rapport-corpus-wiki-fr.md
+?? tools/verifie_contamination.py
+=== manifest
+2525902 593608754 {'train': 3425588868, 'val': 191095576, 'test': 189680293}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > /tmp/msg-wiki.txt <<'EOF'\nDONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS\n\nPremier corpus local d'un autre ordre de grandeur que les 5,36 Mo de prose du dépôt, construit\ndepuis … [2127 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at cdb829164964ed2a4014b555d134f7503df5ab10 but expected 4ff739cfd29991d076f9d731efdff11195a1d8d6
+cdb82916 ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION
+?? reports/corpus-wiki-fr-contamination.json
+?? reports/corpus-wiki-fr.json
+?? reports/rapport-corpus-wiki-fr.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline -3; grep -n \"JSON de résultats\\|corpus FR\\|corpus-wiki\" docs/pilotage/en-cours.md | head -4; git status --short | grep -E \"en-cours|corpus-wiki|journal/2026\" | head -6", "description": "Check HEAD movement and s … [100 caractères tronqués]`
+
+  ```
+cdb82916 ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION
+4ff739cf ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)
+1145834c ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON
+54:  **corpus FR** : **2,5 M articles**, **594 M mots**, train/val/test, **0 fuite** — fiches
+56:  [`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+89:| fichiers / JSON de résultats | **382** / **459** | `reports/*.md` / `reports/*.json` |
+ M docs/pilotage/en-cours.md
+ M journal/2026-11-01/README.md
+ M journal/2026-11-01/docs.md
+?? reports/corpus-wiki-fr-contamination.json
+?? reports/corpus-wiki-fr.json
+?? reports/rapport-corpus-wiki-fr.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git ls-files tools/corpus_wikipedia.py tools/verifie_contamination.py; git diff HEAD --stat -- docs/pilotage/en-cours.md; git diff HEAD -- docs/pilotage/en-cours.md | head -20", "description": "Check tools tracked and state diff", "tim … [78 caractères tronqués]`
+
+  ```
+tools/corpus_wikipedia.py
+ docs/pilotage/en-cours.md | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 809dca18..c79f4675 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -50,8 +50,10 @@
+   32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ; **typoglycémie** : le modèle lit les
+   lettres (×17,8 au mélange intérieur, ×62,7 tout) ; fiches
+   [`r44-scans`](../../reports/rapport-r44-scans.md) · [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+-- **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
+-  (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
++- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ;
++  **corpus FR** : **2,5 M articles**, **594 M mots**, train/val/test, **0 fuite** — fiches
++  [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md),
++  [`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+ - **S — le banc de structures** : outil web (`tools/structures`, submod
+… [359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nset -e\nrm -f /tmp/index.r44\nGIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD\nGIT_INDEX_FILE=/tmp/index.r44 git add tools/verifie_contamination.py tools/corpus_wikipedia.py reports/rapport-corpus-wiki-fr.md reports/corpus-wiki-fr.jso … [477 caractères tronqués]`

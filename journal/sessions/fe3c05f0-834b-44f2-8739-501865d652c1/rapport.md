@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 18.8 h |
 | Tours | 5 |
-| Messages | 723 |
-| Appels d'outils | 731 |
+| Messages | 726 |
+| Appels d'outils | 734 |
 | Fichiers touchés | 18 |
-| Commandes | 669 |
+| Commandes | 672 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -258,7 +258,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 
 ### Tour 5 — go
 
-*26 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inspect French Wikipedia sqlite schema
 - bash — Check DB summaries and French wiki text files
@@ -274,7 +274,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 - bash — Write contamination checker for corpus
 - bash — Check extraction and text join artifacts
 - bash — Stop extraction and strengthen text cleanup
-- … et 12 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -349,7 +349,7 @@ Je commence par la base FR : schéma, volume d'articles, format du texte — pui
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 629 autres
+- … et 632 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -529,4 +529,5 @@ Je commence par la base FR : schéma, volume d'articles, format du texte — pui
 - R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER" 2>&1 | tail -2 git log --oneline -1
 - for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en_cours.py" "python3 tools/verifie_journal.py" "pyth
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg-wiki.txt <<'EOF' DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet set -e rm -f /tmp/index.r44 GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD GIT_INDEX_FILE=/tmp/index.r44 gi
 

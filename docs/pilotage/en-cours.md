@@ -50,8 +50,10 @@
   32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ; **typoglycémie** : le modèle lit les
   lettres (×17,8 au mélange intérieur, ×62,7 tout) ; fiches
   [`r44-scans`](../../reports/rapport-r44-scans.md) · [`typoglycemie`](../../reports/rapport-typoglycemie.md).
-- **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
-  (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
+- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ;
+  **corpus FR** : **2,5 M articles**, **594 M mots**, train/val/test, **0 fuite** — fiches
+  [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md),
+  [`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
 - **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
   heuristique, **niveau pragmatique** (contexte, statuts, **double sens conservé**) et **export
   corpus** JSONL (11 tests) ; 7 phrases, 14 candidats ; banque vide tant qu'un humain ne valide
@@ -84,7 +86,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **381** / **459** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **382** / **459** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

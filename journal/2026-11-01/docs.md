@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 07:07 | `43a7b3fe` | ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE | `en-cours.md`, `roadmap.md`, `README.md` (+10) |
 | 10:54 | `1c9d3d26` | DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE | `en-cours.md`, `README.md`, `attention.md` (+16) |
 | 10:56 | `48d2c064` | ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS | `en-cours.md`, `README.md`, `docs.md` (+7) |
+| 11:19 | `cdb82916` | ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION | `en-cours.md`, `README.md`, `attention.md` (+13) |
 
 ## Chiffres du jour
 

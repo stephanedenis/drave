@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 18.7 h |
 | Tours | 7 |
-| Messages | 286 |
-| Appels d'outils | 323 |
+| Messages | 290 |
+| Appels d'outils | 326 |
 | Fichiers touchés | 18 |
-| Commandes | 245 |
+| Commandes | 246 |
 | Sous-agents | 2 |
 | Commits | 16 |
 | Compactages de contexte | 0 |
@@ -24,6 +24,8 @@
 - **complete** — Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA cla
 … [256 caractères tronqués]
 - **create** — Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent p
+… [114 caractères tronqués]
+- **complete** — Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent p
 … [114 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -359,7 +361,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 
 ### Tour 7 — prends en charge ici les sessions en suspend pour les compléter
 
-*54 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Lire le plan R4.4 et ce qui reste
 - bash — Lire le plan N2 et son objectif final
@@ -375,11 +377,44 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - bash — Lire la suite de l'OCR et le banc réel
 - bash — Trouver les scans réels et le journal de bord
 - bash — Trouver la page et la boîte de l'exposant fusionné
-- … et 36 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
-⏵ S a été repris par une autre TUI pendant mon travail : je corrige l'état pour ne pas mentir sur l'export
+⏵ Reprise terminée : R4.4 close par ses limites, S laissé à sa TUI active
+
+J'ai audité les sessions DSH actives avant de reprendre quoi que ce soit. Résultat : **deux sessions étaient closes, une était active, et une travaillait déjà** — la situation n'était pas « trois sessions suspendues ».
+
+\## Ce que disent les mandats
+
+| session | plan | état réel |
+|---|---|---|
+| `0b0a6a0d` — N2.h/N2.i | terminé, heartbeat 08 h 35 | **close** ; N2.i committé (`17ececfc`) |
+| `fe3c05f0` — R4.4 | terminé, heartbeat 02 h 55 | **close** ; reste trois limites nommées |
+| `e181ce02` — Pensée | actif | **active** ; state store v0, 6/6 portes |
+| S — banc de structures | **aucun plan** | **active dans une autre TUI** ; commits `0ca545eb` et `5a5915a5` pendant mon travail |
+
+La leçon de l'audit : S n'était **pas suspendue**, elle était en cours. J'ai donc arrêté de la reprendre pour ne pas écraser son travail.
+
+\## Ce que j'ai complété
+
+**R4.4 — close par ses limites, pas par une correction fictive.** J'ai ajouté à [`reports/rapport-r44-scans.md`](../../reports/rapport-r44-scans.md) la section « Ce qui reste — trois limites nommées » :
+
+- **fax 1 bit** : 120 dpi, information détruite ; médian/ouverture/CC et `psm` 4/6/11 essayés, **56,7 %** de parité ;
+- **exposant fusionné** : le `10` de « développement 10 » a une boîte de **confiance 0** ; il n'y a pas de boîte séparée à recadrer, un split textuel serait une devinette ;
+- **scans réels de bout en bout** : Verne 1 à **7,10 %** de WER, ordre des colonnes prouvé ; la **parité** exige des questions humaines sur le scan.
+
+Ce qui rouvrirait : un scanner réel, une vérité humaine, ou un OCR qui retrouve le 1 bit. Sans cela, R4.4 est close — et le banc tourne tel quel sur des scans réels.
+
+**S — je n'ai pas dupliqué ; j'ai corrigé l'état.** La TUI S a committé pendant mon travail :
+
+- `0ca545eb` — le générateur de candidats (phrase brute → structures) ;
+- `5a5915a5` — le **statut pragmatique** (`resolu`, `compatible`, `exclu`, `double_sens`) avec contexte, et l'export **une ligne par lecture conservée** (statut, contexte, groupe), **11 tests**.
+
+Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté** par ce commit ; il n'est pas dans l'arbre. L'état dit maintenant la vérité : **S est actif dans une autre TUI**, pas repris par moi. La seule chose qui reste à S est de **brancher l'export sur `data/`** ; c'est son mandat, pas le mien.
+
+**N2 — close, non rouverte.** La porte < 2,5 n'est pas atteinte (3,09 en domaine
+… [1557 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -453,7 +488,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 205 autres
+- … et 206 autres
 
 ## 4. Mesures et résultats marquants
 

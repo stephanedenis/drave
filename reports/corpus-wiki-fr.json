@@ -1,0 +1,56 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "nature": "corpus Wikipédia FR (résumés)",
+ "source": {
+  "db": "/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db",
+  "table": "articles",
+  "champ": "summary",
+  "octets_db": 7248388096,
+  "note": "résumé d'article tronqué à 8 000 caractères, déjà débalisé"
+ },
+ "methode": {
+  "filtre": "n_chars >= 300",
+  "nettoyage": "entités HTML, balises résiduelles, espaces, caractères de contrôle ; espace aux jointures minuscule→majuscule et apostrophe restaurée devant majuscule",
+  "deduplication_articles": "empreinte BLAKE2b du texte normalisé, première occurrence gardée",
+  "deduplication_troncons": "tronçons de 8192 caractères coupés aux mots, BLAKE2b, première occurrence gardée (train seulement)",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test, le reste train ; un article n'est que dans un split",
+  "mots": "caractères / 6,2 (estimation)"
+ },
+ "articles_db": 2755035,
+ "articles_lus": 2526107,
+ "articles_gardes": 2525902,
+ "articles_courts": 0,
+ "articles_vides": 1,
+ "articles_doublons": 204,
+ "caracteres_gardes": 3680374275,
+ "troncons": 2525902,
+ "troncons_doublons": 0,
+ "octets": {
+  "train": 3425588868,
+  "val": 191095576,
+  "test": 189680293
+ },
+ "articles": {
+  "train": 2273294,
+  "val": 126636,
+  "test": 125972
+ },
+ "troncons_par_split": {
+  "train": 2273294,
+  "val": 126636,
+  "test": 125972
+ },
+ "mots_estimes": 593608754,
+ "duree_s": null,
+ "sha256_train": "4c1e649b5984d8859b88e04ae865f8a902537247c61443d0bc7e0ace2eddd6da",
+ "sha256_val": "b0fff5a426386afb8ca13d86e9661752b7af8e28210ab4e8b15c9a98ae3eb428",
+ "sha256_test": "b798628729b6cf01c9eabbd7b557a091f8dd536006ba9c1a85dd84535e3541ce",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local, non diffusé",
+ "limites": [
+  "résumés tronqués à 8 000 caractères (le lead et le début des sections), pas l'article entier",
+  "artefacts de débalisage : dates de modèles vides (« né le à »), parenthèses de prononciation",
+  "déduplication exacte seulement : les quasi-doublons (stubs similaires) restent",
+  "le texte intégral demanderait le dump xml.bz2 et un débaliseur complet"
+ ]
+}

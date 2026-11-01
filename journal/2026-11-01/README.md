@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**40 commits** · **3 session(s)** · **8 thème(s)**
+**41 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 7 | [docs.md](docs.md) |
+| docs | 8 | [docs.md](docs.md) |
 | mesures | 24 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -72,6 +72,7 @@
 | 11:13 | `5a5915a5` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE |
 | 11:15 | `1145834c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON |
 | 11:17 | `4ff739cf` | ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) |
+| 11:19 | `cdb82916` | ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION |
 
 ## Le récit de la journée (écrit à la main)
 

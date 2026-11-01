@@ -6800,3 +6800,116 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 240 git commit -m \"ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION\" 2>&1 | tail -6; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer le compteur JSON à jour"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-245]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-245", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master cdb82916] ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION
+ 16 files changed, 172 insertions(+), 43 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py | tail -2; echo '---'; python3 tools/sessions.py --status | tail -5; echo '---'; git log --oneline -3; git status --short | head -8", "description": "Contrôle final de l'état et des sessions"}`
+
+  ```
+revue de documentation · 382 fiche(s) · 459 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---
+      → **B10.2bis** suite (encodeur) ; **A8.3b** ; **R4.4 bloqué**.
+    e181ce02-cd50-488a · actif    ·  -0 min · Pensée, R4.4-reste
+      → la note de limites R4.4 est committée ; puis AC-3, alpha-bêta, DRVF et le
+    fe3c05f0-834b-44f2 · terminé  · 507 min · R4.4 — les scans (OCR, prétraitement, exposants, colonnes, second moteur)
+      → la **parité** sur photocopie (6,6 % de WER mais 48 % de parité), puis
+---
+cdb82916 ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION
+4ff739cf ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)
+1145834c ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON
+ M docs/pilotage/en-cours.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+ M tools/corpus_wikipedia.py
+ m tools/docwatch
+ ? tools/structures
+?? reports/corpus-wiki-fr-contamination.json
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-ccfa4ca3-ce3f-4d12-8dd0-bce263a1c405","revision":1,"objective":"Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent pas, et committer. Ne pas rouvrir N2 (close, porte < 2,5 non atteinte) sans nouvelle hypothèse de capacité/données.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-ccfa4ca3-ce3f-4d12-8dd0-bce263a1c405", "revision": 1}`
+
+> **Objectif** (complete) : Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent pas, et committer. Ne pas rouvrir N2 (close, porte < 2,5 non atteinte) sans nouvelle hypothèse de capacité/données.
+
+
+  ```
+{"goal":{"id":"goal-ccfa4ca3-ce3f-4d12-8dd0-bce263a1c405","revision":2,"objective":"Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent pas, et committer. Ne pas rouvrir N2 (close, porte < 2,5 non atteinte) sans nouvelle hypothèse de capacité/données.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise terminée : R4.4 close par ses limites, S laissé à sa TUI active
+
+J'ai audité les sessions DSH actives avant de reprendre quoi que ce soit. Résultat : **deux sessions étaient closes, une était active, et une travaillait déjà** — la situation n'était pas « trois sessions suspendues ».
+
+## Ce que disent les mandats
+
+| session | plan | état réel |
+|---|---|---|
+| `0b0a6a0d` — N2.h/N2.i | terminé, heartbeat 08 h 35 | **close** ; N2.i committé (`17ececfc`) |
+| `fe3c05f0` — R4.4 | terminé, heartbeat 02 h 55 | **close** ; reste trois limites nommées |
+| `e181ce02` — Pensée | actif | **active** ; state store v0, 6/6 portes |
+| S — banc de structures | **aucun plan** | **active dans une autre TUI** ; commits `0ca545eb` et `5a5915a5` pendant mon travail |
+
+La leçon de l'audit : S n'était **pas suspendue**, elle était en cours. J'ai donc arrêté de la reprendre pour ne pas écraser son travail.
+
+## Ce que j'ai complété
+
+**R4.4 — close par ses limites, pas par une correction fictive.** J'ai ajouté à [`reports/rapport-r44-scans.md`](../../reports/rapport-r44-scans.md) la section « Ce qui reste — trois limites nommées » :
+
+- **fax 1 bit** : 120 dpi, information détruite ; médian/ouverture/CC et `psm` 4/6/11 essayés, **56,7 %** de parité ;
+- **exposant fusionné** : le `10` de « développement 10 » a une boîte de **confiance 0** ; il n'y a pas de boîte séparée à recadrer, un split textuel serait une devinette ;
+- **scans réels de bout en bout** : Verne 1 à **7,10 %** de WER, ordre des colonnes prouvé ; la **parité** exige des questions humaines sur le scan.
+
+Ce qui rouvrirait : un scanner réel, une vérité humaine, ou un OCR qui retrouve le 1 bit. Sans cela, R4.4 est close — et le banc tourne tel quel sur des scans réels.
+
+**S — je n'ai pas dupliqué ; j'ai corrigé l'état.** La TUI S a committé pendant mon travail :
+
+- `0ca545eb` — le générateur de candidats (phrase brute → structures) ;
+- `5a5915a5` — le **statut pragmatique** (`resolu`, `compatible`, `exclu`, `double_sens`) avec contexte, et l'export **une ligne par lecture conservée** (statut, contexte, groupe), **11 tests**.
+
+Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté** par ce commit ; il n'est pas dans l'arbre. L'état dit maintenant la vérité : **S est actif dans une autre TUI**, pas repris par moi. La seule chose qui reste à S est de **brancher l'export sur `data/`** ; c'est son mandat, pas le mien.
+
+**N2 — close, non rouverte.** La porte < 2,5 n'est pas atteinte (3,09 en domaine, 12,93 en littérature, 33,83 en anglais) ; la rouvrir demande une nouvelle hypothèse de **capacité/architecture**, pas un nouveau corpus. Le goal de reprise l'excluait explicitement.
+
+## L'état
+
+- `en-cours` : **une session active** (Pensée), N2.h/N2.i et R4.4 archivées, S en puce « actif dans une autre TUI ».
+- Pensée : **Reprise R4.4** (limites committées), puis **AC-3, alpha-bêta, DRVF, banc anytime**.
+- Plan `e181ce02` : périmètre **Pensée, R4.4-reste** ; `tools/structures` retiré des fichiers réservés (c'est S).
+- Compteurs de travail : **382 fiches / 459 JSON / 114 docs / 80 portes** ; `revue_documentation`, `verifie_en_cours`, `sessions.py --check`, `taille_documents`, `porte-tableaux`, `verifier_schemas`, `verifie_journal` — **verts**.
+
+## Les commits
+
+- **`4ff739cf`** — état corrigé : R4.4 close par ses limites, S laissé à l'autre TUI.
+- **`cdb82916`** — compteur JSON 459.
+- La TUI S a de son côté **`0ca545eb`** et **`5a5915a5`**.
+- Une course de commits a eu lieu : mon premier commit a échoué sur `HEAD` déplacé ; le commit concurrent a emporté ma note R4.4 et mon état, puis je les ai corrigés pour ne pas attribuer à S un export qui n'était pas le sien.
+
+## Ce qui reste, nommé
+
+- **S** : brancher l'export pragmatique sur `data/` et versionner la banque — **TUI S**.
+- **R4.4** : un scanner réel ou une vérité humaine pour rouvrir — sinon close.
+- **N2** : une hypothèse de capacité/architecture, pas un corpus de plus.
+- **Pensée** : AC-3, alpha-bêta, DRVF, banc anytime — la seule session que je peux continuer sans collision.
+
