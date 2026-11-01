@@ -48,7 +48,7 @@ le lecteur R0.2 trouvait sur le texte natif et qu'il retrouve sur le scan (dev, 
 
 **Ce que le prétraitement fait, et pourquoi.** La **correction d'éclairage** est le levier
 principal : la photo passe de **55,9 %** à **6,7 %** de WER, et la page papier d'une résolution
-de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées et écrites :
+de test de **53,2 %** à **6,4 %**. Deux contre-intuitions ont été mesurées et écrites :
 
 1. **agrandir une photocopie dégrade** : passer de 200 dpi à 2 500 px a **doublé** son WER
    (6,6 % → 12,9 %) — tesseract lit mieux 200 dpi qu'un upscaling ;

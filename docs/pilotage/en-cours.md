@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 00 h 25 HAE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 01 h 30 HAE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :

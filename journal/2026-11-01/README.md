@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **2 session(s)** · **3 thème(s)**
+**12 commits** · **2 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
-| mesures | 9 | [mesures.md](mesures.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 9.1 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -35,11 +35,40 @@
 | 01:15 | `b859f27f` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER |
 | 01:17 | `5a681326` | ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS) |
 | 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % |
+| 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) |
 | 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**R4.4 — la nuit des scans.** La ligne R4.4 était partielle : dix pages *rendues* lues, aucun
+scan. La nuit a fabriqué ce que la machine ne peut pas produire — cent dégradations simulées,
+cinq familles, un split dev/test, une vérité qui ne bouge pas — puis a mesuré, corrigé, et
+recommencé. Ce qui tient au matin : la photo passe de **55,9 %** à **6,7 %** de WER (test
+**5,7 %**), le papier de **53,2 %** à **6,4 %**, le fax de **27,1 %** à **21,9 %** ; les colonnes
+tombent de **89,4 %** à **0,5 %** ; les tableaux donnent **92,6 %** de cellules exactes sur un
+rendu, **69,1 %** sur une photocopie, **62,4 %** sur une photo (8 grilles sur 10) ; et la
+préservation des réponses du lecteur atteint **86,7 %** (plafond du texte propre : 90 %).
 
+Trois lectures réelles ont servi de juge, et **deux fois elles ont corrigé le lecteur** : un
+**en-tête centré** traversait la gouttière d'un lexique (la gouttière se cherche maintenant sur
+les mots, en couverture verticale — la page passe de **93 % à 15 %**), et un **fond d'éclairage**
+estimé sur 8 millions de pixels coûtait **9,5 s** pour un champ basse fréquence (il se calcule
+sur une vignette : **1,4 s**, et le papier gagne 6,6 points de préservation). Le troisième livre,
+*Germinal* 1900, est le premier où le nettoyage **paie** (9,4 → 8,7 %) ; sur les deux Verne il est
+neutre, jamais nuisible.
+
+Les contre-intuitions sont écrites, pas cachées : **agrandir une photocopie double son WER**,
+l'angle se mesure **après** le recadrage, et le redressement **sert jusqu'à 6° puis décroche**
+(10° : 43,5 %), parce que l'estimateur cherche dans ±3°. La **variance entre graines** est
+mesurée, pas supposée : le WER tient à ±1 point, la préservation varie de **23 points** (63,3 à
+86,7 % sur la photo) — les planchers de la porte sont dessous, et c'est dit. Un gradient
+d'éclairage de **1,2** est corrigé (28,9 → 3,3 %) ; un flou σ=4 ne l'est **pas** (49,6 → 53,2 %) :
+pas de déconvolution, limite nommée.
+
+La porte `porte-ocr-scans` (la 80e) est **verte** : familles, colonnes et tableaux tiennent leurs
+planchers, page noire comprise. Restent ouverts, nommés : les scans réels de bout en bout avec
+vérité humaine, le fax 1 bit (limite d'information), l'exposant fusionné, les tableaux sans
+traits. Le bloc OCR est devenu un **bloc classique robuste** — et il a appris en lisant du vrai.
 <!-- /notes -->

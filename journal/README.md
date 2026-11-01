@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [docs](2026-11-01/docs.md) · [mesures](2026-11-01/mesures.md) |
+| **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [mesures](2026-11-01/mesures.md) |
 | **2026-10-31** | [2026-10-31/README.md](2026-10-31/README.md) | [apprentissage](2026-10-31/apprentissage.md) · [distribue](2026-10-31/distribue.md) · [docs](2026-10-31/docs.md) · [memoire](2026-10-31/memoire.md) · [mesures](2026-10-31/mesures.md) · [modele](2026-10-31/modele.md) · [moteur](2026-10-31/moteur.md) · [portes](2026-10-31/portes.md) |
 | **2026-10-30** | [2026-10-30/README.md](2026-10-30/README.md) | [distribue](2026-10-30/distribue.md) · [docs](2026-10-30/docs.md) · [memoire](2026-10-30/memoire.md) · [mesures](2026-10-30/mesures.md) · [modele](2026-10-30/modele.md) · [moteur](2026-10-30/moteur.md) · [portes](2026-10-30/portes.md) |
 | **2026-10-29** | [2026-10-29/README.md](2026-10-29/README.md) | [attention](2026-10-29/attention.md) · [distribue](2026-10-29/distribue.md) · [docs](2026-10-29/docs.md) · [etat-transfere](2026-10-29/etat-transfere.md) · [memoire](2026-10-29/memoire.md) · [mesures](2026-10-29/mesures.md) · [modele](2026-10-29/modele.md) · [moteur](2026-10-29/moteur.md) · [portes](2026-10-29/portes.md) |
@@ -169,5 +169,5 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `fba448b3` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 26 | 0 | 0 | [rapport](sessions/fba448b3-e237-4eb3-b77d-fcbf7da1c93d/rapport.md) |
 | `fc167f70` | Projet Drave continuer | 2026-10-14 13:07 | 118.4 h | 187 | 2339 | 80 | 279 | [rapport](sessions/fc167f70-be8b-4c63-be5e-3c0d3c0ba1c3/rapport.md) |
 | `fd4b8df1` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.6 h | 1 | 90 | 6 | 0 | [rapport](sessions/fd4b8df1-abc9-4dd6-94df-fcf484cc9017/rapport.md) |
-| `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.8 h | 2 | 537 | 18 | 20 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
+| `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.9 h | 2 | 544 | 18 | 21 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |

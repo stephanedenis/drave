@@ -9335,3 +9335,118 @@ sondes gradient/flou ajoutées
   ```
 
 - **bash** `{"command": "cat > /tmp/msg-sondes.txt <<'EOF'\nR4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)\n\nDeux sondes de robustesse sur cinq pages propres, brut contre auto :\n\n- **gradient d'éclairage 0,6** : 19,86 % → **3,13 %** ;\n- **gradient  … [1036 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+ 14 files changed, 168 insertions(+), 28 deletions(-)
+ create mode 100644 journal/2026-11-01/distribue.md
+50e59804 R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)
+01:26
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifeste.json'))\nsel=[e for e in man['en … [1453 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-fax.png       2100 23.48% (c 72.3) · 3000 26.34% (c 68.6) · choisi 23.48%
+A_RES_80_10-en-p2-s1-fax.png       2100 17.58% (c 79.2) · 3000 24.91% (c 72.8) · choisi 17.58%
+A_RES_80_10-es-p2-s1-fax.png       2100 21.84% (c 80.2) · 3000 24.26% (c 80.1) · choisi 21.84%
+A_RES_80_1-en-p1-s1-fax.png        2100 19.73% (c 76.9) · 3000 22.45% (c 76.7) · choisi 19.73%
+A_RES_80_1-es-p1-s1-fax.png        2100 15.95% (c 84.1) · 3000 20.55% (c 82.7) · choisi 15.95%
+A_RES_80_1-fr-p1-s1-fax.png        2100 14.92% (c 81.4) · 3000 20.00% (c 76.8) · choisi 14.92%
+A_RES_80_10-en-p1-s1-fax.png       2100 33.54% (c 70.1) · 3000 36.08% (c 66.0) · choisi 33.54%
+A_RES_80_10-es-p1-s1-fax.png       2100 25.35% (c 78.4) · 3000 32.04% (c 74.9) · choisi 25.35%
+A_RES_80_10-fr-p1-s1-fax.png       2100 35.08% (c 68.1) · 3000 41.31% (c 62.2) · choisi 35.08%
+A_RES_80_1-en-p2-s1-fax.png        2100 12.40% (c 80.2) · 3000 14.80% (c 81.2) · choisi 14.80%
+choix confiance correct 9 / 10 gain moyen -0.0024
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28figaro%29+AND+year%3A%5B1900+TO+1910%5D&fl%5B%5D=identifier&fl%5B%5D=year&rows=6&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs']]\" 2>&1 | head -6", "des … [123 caractères tronqués]`
+
+  ```
+{'identifier': '78_nozze-di-figaro-voi-che-sapete-what-is-this-feeling_mme-melba-victor-orchestra-m_gbia7027753a', 'year': 1910}
+{'identifier': 'delightfuljoyoco00moza', 'year': 1908}
+{'identifier': 'leuropedanslamr00garzgoog', 'year': 1908}
+{'identifier': 'pat-3712', 'year': 1902}
+{'identifier': 'figaroetsesdevan00funcuoft', 'year': 1909}
+{'identifier': 'voichesapetetell00moza', 'year': 1908}
+  ```
+
+- **bash** `{"command": "sed -n '/## 1. Les cinq familles/,/## 2. Les exposants/p' reports/rapport-r44-scans.md | head -30; echo \"=== JSON\"; python3 - <<'PY'\nimport json\na=json.load(open('reports/r44-scans.json'))['agregat']\nfor k in sorted(a):\n    v=a[k]; print(k,'wer',round(v['wer'],4),'pres',v.get('pre … [179 caractères tronqués]`
+
+  ```
+## 1. Les cinq familles, avant et après prétraitement
+
+WER mot à mot contre le texte natif de la même page ; **préservation** = la part des réponses que
+le lecteur R0.2 trouvait sur le texte natif et qu'il retrouve sur le scan (dev, 30 questions).
+
+| famille | WER brut | WER **auto** | test brut | test **auto** | préservation brute | préservation **auto + exp** |
+|---|---:|---:|---:|---:|---:|---:|
+| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **90,0 %** |
+| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **86,7 %** |
+| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **86,7 %** |
+| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
+| fax | 27,05 % | 21,90 % | 23,10 % | **15,52 %** | 50,0 % | **53,3 %** |
+| **contrôle page noire** | — | **0 mot lu** | — | — | — | — |
+
+**Ce que le prétraitement fait, et pourquoi.** La **correction d'éclairage** est le levier
+principal : la photo passe de **55,9 %** à **6,7 %** de WER, et la page papier d'une résolution
+de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées et écrites :
+
+1. **agrandir une photocopie dégrade** : passer de 200
+… [1207 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace(\"de test de **53,2 %** à **6,2 %**. Deux contre-intuitions\",\"de test de **53,2 %** à **6,4 %**. Deux contre-intuitions\")\np.write_text(s)\nprint('6,2 -> 6,4 corrigé' if '** … [211 caractères tronqués]`
+
+  ```
+6,2 -> 6,4 corrigé
+51:de test de **53,2 %** à **6,4 %**. Deux contre-intuitions ont été mesurées et écrites :
+  ```
+
+- **bash** `{"command": "sed -n '1,60p' journal/2026-11-01/README.md", "description": "Read today's journal page", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# 2026-11-01
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-01/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**11 commits** · **2 session(s)** · **3 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| distribue | 1 | [distribue.md](distribue.md) |
+| docs | 1 | [docs.md](docs.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 9.1 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait 
+… [1445 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M\"; python3 - <<'PY'\nimport pathlib,datetime\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\nrecit='''**R4.4 — la nuit des scans.** La ligne R4.4 était partielle : dix pages *rendues* lues, aucun\nscan. La nuit a fabriqué ce que la machine ne peut pas pro … [3161 caractères tronqués]`
+
+  ```
+01:29
+récit ajouté
+45:**R4.4 — la nuit des scans.** La ligne R4.4 était partielle : dix pages *rendues* lues, aucun
+- **dev** : WER ≤ 5 %, parité de passage **≥ 90 %**, parité de valeur rapportée ;
+- **test** : WER ≤ 8 % (le transfert), parité non mesurable (pas de questions) ;
+- **contrôles** : page noire → 0 mot ; page propre → plafond ; rejeu → identique ;
+- **porte** : les seuils ci-dessus, écrits dans `mesurer_scans.py`, et la porte échoue si on
+  lui donne une page noire ou une image sans OCR.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns2=re.sub(r\"\\*\\*Mis à jour : [^*]+\\*\\*\", \"**Mis à jour : 2026-11-01, 01 h 30 HAE (heure locale, EST).**\", s, count=1)\nassert s2!=s\np.write_text(s2)\nPY\npython3 tools/revue_docum … [1463 caractères tronqués]`
