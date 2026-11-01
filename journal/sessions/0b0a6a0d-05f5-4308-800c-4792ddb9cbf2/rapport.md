@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 10.5 h |
 | Tours | 4 |
-| Messages | 562 |
-| Appels d'outils | 536 |
+| Messages | 571 |
+| Appels d'outils | 545 |
 | Fichiers touchés | 11 |
-| Commandes | 441 |
+| Commandes | 449 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*197 appels d'outils.* Actions notables :
+*206 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 141 autres
+- … et 149 autres
 
 **Synthèse produite :**
 
-⏵ Portes : 80 portes, 76 vertes, 4 rouges connues — aucune régression
+⏵ Commit principal fait (`e36e8185`) ; lancement du bras combiné (diversité + positions)
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 401 autres
+- … et 409 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -408,4 +408,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85  Le premier point de contrôle de la chaîne refaite sur le corpus dédupliqué est évalué : 3,10 en 
 - ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4  Le bras diversité (moitié dépôt, moitié littérature française, même budget, mêmes trois g
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md docs/pilotage/references-non-re
+- JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR  Le récit de la nuit : la validation se recopiait (32,8 %), le corpus dédupliqué tombe
 

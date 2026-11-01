@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**18 commits** · **2 session(s)** · **3 thème(s)**
+**19 commits** · **2 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 14 | [mesures.md](mesures.md) |
+| mesures | 15 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
@@ -44,6 +44,7 @@
 | 01:54 | `69bf5ecb` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER |
 | 02:24 | `e7b51508` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) |
+| 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE |
 
 ## Le récit de la journée (écrit à la main)
 

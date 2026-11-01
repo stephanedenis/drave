@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,6 +22,7 @@
 | 01:54 | `69bf5ecb` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 | 02:24 | `e7b51508` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+18) |
+| 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE | `N2-distillation.md`, `en-cours.md`, `references-non-regression.md` (+23) |
 
 ## Chiffres du jour
 
@@ -37,8 +38,45 @@
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-n2-diversite.md](../../reports/rapport-n2-diversite.md)
+- [reports/rapport-n2-longueur.md](../../reports/rapport-n2-longueur.md)
+- [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-r44-scans.md](../../reports/rapport-r44-scans.md)
 
 <!-- notes -->
+### N2.h — le mètre propre, la généralité, et le verrou de longueur
 
+La nuit du 31 octobre au 1er novembre, la session a eu **dix heures**. Le premier geste n'a pas été
+d'entraîner plus : il a été de **refaire le mètre**. N2.d venait de montrer que **32,8 %** des
+fenêtres de validation étaient verbatim dans l'entraînement — toute PPL de la ligne N2 était une
+PPL de mémoire.
+
+**Le corpus d'abord.** `tools/corpus_propre.py` retire les passages répétés par shingles de 96
+octets (**22,2 %** du texte, 127 blocs jusqu'à 1,8 Ko), découpe en chunks de 8 Ko et sépare
+train/val/test : la contamination tombe à **zéro sur 2 814 fenêtres**, contre 923 avant. Puis toute
+la chaîne est refaite — professeur 23,5 M, base 20 000 pas, distillation 20 000 pas × 3 graines —
+pour qu'aucune pièce n'ait vu la validation.
+
+**Le mètre honnête** : **3,09** en domaine (3,20 au test), pas 2,85. La différence, c'est la
+mémoire. Et hors domaine, le chiffre qui fait mal : **16,7** sur de la littérature française jamais
+vue, **57,6** en anglais, **56,9** sur wikitext2. Le modèle de N2 est un **spécialiste du dépôt**.
+
+**La diversité** : en entraînant moitié sur le dépôt, moitié sur de la littérature (professeur et
+base réentraînés sur le mélange), la PPL hors dépôt tombe de **16,70 à 3,85** (÷ 4,3) et l'anglais
+de **57,6 à 25,7** (÷ 2,2), pour **+0,17** en domaine (3,09 → 3,26). Le corpus était le levier.
+
+**La longueur** : le modèle surapprend sa longueur (3,13 à 129, **14,11** à 256, **32,41** à 512) ;
+en tirant les **positions au hasard** à l'entraînement, la PPL à 256 tombe à **3,25** et celle à
+512 à **5,93**. Le premier verrou était la **position apprise** (jusqu'à 256 octets) ; le second
+est la **fenêtre d'attention locale** (au-delà : R remonte à 384 et 512).
+
+**La décomposition** : la tête précoce du 6ᵉ bloc, lue **avant** la boucle de pensée, fait mieux que
+la tête principale lue après (**3,05** contre **3,12**) ; sans la boucle, la tête principale ne
+reconnaît plus rien (PPL × 10⁷) — la boucle transforme l'état mais n'ajoute pas d'information
+décodable. Le curriculum 129, lui, ne déplace pas la porte.
+
+Trois fiches, un corpus propre et ses manifestes, des points de contrôle archivés sur deux disques.
+La prochaine question n'est plus « quel levier » mais « **combien de français unique** » : le corpus
+propre fait 3,2 Mo.
 <!-- /notes -->

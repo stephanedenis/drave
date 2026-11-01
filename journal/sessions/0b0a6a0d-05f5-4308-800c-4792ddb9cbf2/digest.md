@@ -7586,3 +7586,115 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md reports/INDEX.md reports/README.md reports/corpus-litt-propre.json reports/corpus-propre.json reports/n2-propre.jso … [300 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-441]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-441", "timeout_ms": 240000, "wait": true}`
+
+  ```
+create mode 100644 reports/corpus-litt-propre.json
+ create mode 100644 reports/corpus-propre.json
+ create mode 100644 reports/n2-propre.json
+ create mode 100644 reports/rapport-n2-diversite.md
+ create mode 100644 reports/rapport-n2-longueur.md
+ create mode 100644 reports/rapport-n2-propre.md
+ create mode 100644 tools/corpus_propre.py
+ create mode 100644 tools/eval_n2_propre.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; git status --short | grep -v \"^ m tools/docwatch\" | head -8; date '+%H:%M'", "description": "Verify the commit and working tree"}`
+
+  ```
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)
+ M docs/implantation/encodeur-visuel.md
+ M docs/pilotage/backlog/R44-encodeur-visuel.md
+ M docs/pilotage/roadmap.md
+ M reports/r44-sans-exposants.json
+ M reports/r44-scans.json
+ M reports/r44-seed2.json
+ M reports/r44-seed3.json
+ M reports/rapport-r44-scans.md
+02:47
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit principal fait (`e36e8185`) ; lancement du bras combiné (diversité + positions)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n2h/file-combine.sh > work/n2h/file-combine.out 2>&1 & echo \"combine $!\"; sleep 20; tail -2 work/n2h/DR-pos-g1.log 2>/dev/null; date '+%H:%M'", "description": "Launch the combined diversity + positions arm"}`
+
+  ```
+combine 1137372
+# init work/n2h/base-mixte.pt · manquants [] · graine 1 · décalage 0
+# stage seq 128 · 10000 pas · lr 0.0001
+02:47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/2026-11-01/; echo \"=== notes apprentissage ===\"; sed -n '/<!-- notes -->/,$p' journal/2026-11-01/apprentissage.md 2>/dev/null | head -10", "description": "Check the 01/11 journal files"}`
+
+  ```
+distribue.md
+docs.md
+mesures.md
+README.md
+=== notes apprentissage ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-01 --dry-run 2>&1 | tail -8; grep -n \"e36e8185\" journal/2026-11-01/*.md | head -3", "description": "Check where the commit lands in the journal"}`
+
+  ```
+2026-11-01 : 19 commits
+  (sec) journal/2026-11-01/distribue.md
+  (sec) journal/2026-11-01/docs.md
+  (sec) journal/2026-11-01/mesures.md
+  (sec) journal/2026-11-01/README.md
+  (sec) journal/THEMES.md
+5 fichiers (simulation) · 19 commits classés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-01 2>&1 | tail -3; grep -ln \"e36e8185\" journal/2026-11-01/*.md", "description": "Regenerate the 01/11 journal"}`
+
+  ```
+journal/2026-11-01/README.md
+  journal/THEMES.md
+5 fichiers écrits · 19 commits classés
+journal/2026-11-01/mesures.md
+journal/2026-11-01/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/<!-- notes -->/,$p' journal/2026-11-01/mesures.md; echo \"=== head ===\"; head -8 journal/2026-11-01/mesures.md", "description": "Inspect the mesures journal file"}`
+
+  ```
+<!-- notes -->
+
+<!-- /notes -->
+=== head ===
+# 2026-11-01 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/2026-11-01/mesures.md'); s = p.read_text()\nnotes = pathlib.Path('work/n2h/journal.md').read_text().strip()\nassert \"<!-- notes -->\\n\\n<!-- /notes -->\" in s\ns = s.repla … [312 caractères tronqués]`
+
+  ```
+ok
+<!-- notes -->
+
+### N2.h — le mètre propre, la généralité, et le verrou de longueur
+
+La nuit du 31 octobre au 1er novembre, la session a eu **dix heures**. Le premier geste n'a pas été
+d'entraîner plus : il a été de **refaire le mètre**. N2.d venait de montrer que **32,8 %** des
+fenêtres de validation étaient verbatim dans l'entraînement — toute PPL de la ligne N2 était une
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-01/mesures.md && timeout 300 git commit -m \"JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR\n\nLe récit de la nuit : la validation se recopiait (32,8 %), le corpus dédupliqué tombe à … [442 caractères tronqués]`
