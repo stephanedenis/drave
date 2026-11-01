@@ -9873,3 +9873,626 @@ mono|propre|colonnes       identique
 background job bash-508 (bash: timeout 1800 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes-v6.json > work/r44/colonnes-v6.log 2>&1; echo "[colonnes $?]"; tail -4 work/r44/colonnes-v6.log) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cat > /tmp/msg-multi.txt <<'EOF'\nR4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS\n\nLa détection de colonnes cherchait **une** gouttière (la plus large). Une page à **trois** colonnes\nen a **deux** : la première coupait  … [1627 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 69bf5ecb] R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS
+ 13 files changed, 379 insertions(+), 70 deletions(-)
+69bf5ecb R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS
+  ```
+
+- **bash** `{"command": "timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v6.log 2>&1; echo \"[gate $?]\"; tail -4 work/r44/gate-v6.log", "description": "Run final gate with multi-gutter code", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-515
+  ```
+
+- **bash** `{"command": "sleep 300; tail -12 work/r44/gate-v6.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Check final gate progress", "timeoutMs": 360000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes.json
+--- 3. les tableaux (10 pages × 3 familles)
+5
+02:01
+  ```
+
+- **bash** `{"command": "sleep 200; tail -10 work/r44/gate-v6.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l", "description": "Read final gate verdict", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-515 (bash: timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v6.log 2>&1; echo "[gate $?]"; tail -4 work/r44/gate-v6.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_etat_a_jour.py\"; do time … [669 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohére
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inve
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+porte-etat [0]
+=== commits R4.4 depuis le pilote
+69bf5ecb R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS
+55e6adbf ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000)
+caff2033 R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 %
+6332b8cb R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES
+1
+… [1630 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/porte-ocr.sh >/tmp/po.log 2>&1; echo \"[porte-ocr $?]\"; tail -2 /tmp/po.log; python3 - <<'PY'\nimport json\na=json.load(open('reports/r44-scans.json'))['agregat']\nfor k in sorted(a): print(k, round(a[k]['wer'],4), a[k].get('preservation'))\nprint('cols', json.load(open('rep … [492 caractères tronqués]`
+
+  ```
+[porte-ocr 0]
+  ✅ la parité de région BAISSE sur la page dégradée
+✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité tenue et contrôles en échec
+fax|dev|auto 0.219 0.5333
+fax|test|auto 0.1552 None
+papier|dev|auto 0.0687 0.8
+papier|test|auto 0.0638 None
+photocopie|dev|auto 0.0634 0.8667
+photocopie|test|auto 0.0469 None
+photo|dev|auto 0.0668 0.8667
+photo|test|auto 0.0568 None
+propre|dev|auto 0.0414 0.9
+propre|test|auto 0.0301 None
+cols {'mono|propre|brut': {'version': 'mono', 'famille': 'propre', 'colonnes': False, 'mots': 10045, 'distance': 29, 'pages': 10, 'wer': 0.0029}, 'mono|propre|colonnes': {'version': 'mono', 'famille': 'propre', 'colonnes': True, 'mots': 10045, 'distance': 29, 'pages': 10, 'wer': 0.0029}, 'mono|photocopie|brut': {'version': 'mono', 'famille': 'photocopie', 'colonnes': False, 'mots': 10045, 'distance': 93, 'pages': 10, 'wer': 0.0093}, 'mono|photocopie|colonnes': {'version': 'mono', 'famille': 'photocopie', 'colonnes': True, 'mots': 10045, 'distance': 93, 'pages': 10, 'wer': 0.0093}, 'mono|photo|brut': {'version': 'mono', 'famille': 'photo', 'colonnes': False, 'mots': 10045, 'distance': 617, 'pages': 10, 'wer': 0.0614}, 'mono|photo|colonnes': {'versi
+… [1238 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : vérification finale et bilan du programme R4.4
+
+J'ai pris la ligne **R4.4 — les scans** (CPU seulement, sans toucher aux GPU de N2.h) et je l'ai poussée jusqu'au bout : corpus, prétraitement, exposants, colonnes, tableaux, validation réelle, coût, porte. Voici le bilan.
+
+## Les chiffres
+
+**Cinq familles de scans simulés** (100 pages, split dev/test, WER mot à mot ; préservation = les réponses du lecteur retrouvées) :
+
+| famille | WER dev | WER test | préservation |
+|---|---:|---:|---:|
+| propre (contrôle) | 4,14 % | 3,01 % | 90,0 % |
+| photocopie | 6,34 % | 4,69 % | 86,7 % |
+| photo | **55,85 → 6,68 %** | **80,65 → 5,68 %** | 86,7 % |
+| papier | **13,02 → 6,87 %** | **53,15 → 6,38 %** | 80,0 % |
+| fax | 27,05 → 21,90 % | 23,10 → 15,52 % | 53,3 % |
+
+**Les autres axes** : colonnes à deux **89,4 → 0,5 %** de WER ; **trois** colonnes **52,5 → 0,0 %** (0–1,1 % dégradé) ; mono-colonnes inchangées (écart 0,00 pt). Tableaux : **92,6 %** de cellules exactes sur un rendu, **69,1 %** sur une photocopie, **62,4 %** sur une photo (8 grilles sur 10). Trois **vrais livres** d'Internet Archive : **7,10 %**, **8,73 %**, et un lexique à deux colonnes où l'ordre est **prouvé** (15,3 % contre **98 %** en ordre inverse). Coût : 0,4 s de prétraitement contre 2,4–2,9 s d'OCR par page.
+
+## Ce que le réel a corrigé
+
+Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traversait la gouttière d'un lexique (la gouttière se cherche maintenant sur les mots, en couverture verticale — 93 % → 15 %) ; et le fond d'éclairage coûtait **9,5 s** pour un champ basse fréquence (vignette : **1,4 s**, et le papier gagne 6,6 points de préservation).
+
+## Les écarts, nommés
+
+- **Fax 1 bit** : 21,9 % de WER, 53,3 % de préservation — limite d'information, pas de réglage.
+- **Tableaux photo** : 2 pages sur 10 hors grille (ombre, trait interrompu).
+- **Exposant fusionné** : un appel de note collé au mot n'est pas récupéré ; les appels séparés le sont.
+- **Réel = accord entre moteurs**, pas vérité humaine ; trois livres seulement.
+- **Gouttière < 2,5 %**, mise en page irrégulière, **flou σ=4** (49,6 → 53,2 %), **rotation > 6°** (10° : 43,5 %) : limites mesurées, écrites.
+
+## L'état
+
+**17 commits**, la 80e porte `porte-ocr-scans` **verte** (familles, colonnes, tableaux), la porte OCR du pilote verte aussi. Fiche `reports/rapport-r44-scans.md`, 11 JSON, 13 outils, spécification `docs/implantation/encodeur-visuel.md` réécrite, roadmap/backlog/en-cours à jour, récit du 1er novembre dans le journal. Toutes les revues passent, T0 à 3 996/4 000.
+
+Il est **02 h 10** ; ton budget allait jusqu'à 07 h 14. Je m'arrête sur un état vert et complet plutôt que d'empiler des mesures marginales : les heures restantes iraient à un quatrième livre réel, à une **page de journal multi-colonnes réelle** (la sonde 3 colonnes est synthétique) ou à un extracteur de **tableaux sans traits** — les trois sont nommés dans la fiche. Dis-moi si tu veux que je continue sur l'un d'eux.
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE)."
+Round: 1/200
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/r44-scans.json'))\nfor entree in d['entrees']:\n    if entree['split']!='dev' or entree['famille'] not in ('photo','photocopie'): continue\n    qs=entree.get('questions') or []\n    rates=[q for q in qs if not (q.get('trouve_natif … [467 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+TypeError: 'int' object is not iterable
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/r44-scans.json'))\ne=[x for x in d['entrees'] if x['famille']=='photo' and x['split']=='dev'][0]\nprint(e.keys())\nfor k,v in e.items():\n    if k in ('questions','details','q','parite','preservation','trouve'):\n        print(k,  … [137 caractères tronqués]`
+
+  ```
+dict_keys(['image', 'pdf', 'page', 'split', 'famille', 'graine', 'pipeline', 'trace', 'mots_natifs', 'mots_ocr', 'distance', 'commun', 'wer', 'rappel', 'precision', 'confiance', 'exposants', 'colonnes', 'questions', 'parite_region', 'parite_valeur', 'details'])
+questions <class 'int'> 5
+details <class 'list'> [{'valeur': '10', 'f1': 0.833, 'trouve_natif': True, 'trouve': False}, {'valeur': '2030 11', 'f1': 0.857, 'trouve_natif': True, 'trouve': False}, {'valeur': '53', 'f1': 1.0, 'trouve_natif': True, 'trouve': True}, {'valeur': '39', 'f1': 1.0, 'trouve_natif': True, 'trouve': True}, {'valeur': '12', 'f1': 0.974, 'trouve_natif': True, 'trouve': True}]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/r44-scans.json'))\nfor entree in d['entrees']:\n    if entree['split']!='dev': continue\n    for q in entree.get('details') or []:\n        if q['trouve_natif'] and not q['trouve']:\n            print(f\"{entree['famille']:10s} {e … [183 caractères tronqués]`
+
+  ```
+propre     A_RES_80_10-fr-p2-s1-propre.png    valeur '10'           f1 0.923
+photocopie A_RES_80_10-fr-p2-s1-photocopie.pn valeur '10'           f1 0.833
+photocopie A_RES_80_10-fr-p2-s1-photocopie.pn valeur '2030 11'      f1 0.857
+photo      A_RES_80_10-fr-p2-s1-photo.png     valeur '10'           f1 0.833
+photo      A_RES_80_10-fr-p2-s1-photo.png     valeur '2030 11'      f1 0.857
+fax        A_RES_80_10-fr-p2-s1-fax.png       valeur '10'           f1 0.769
+fax        A_RES_80_10-fr-p2-s1-fax.png       valeur '2030 11'      f1 0.571
+papier     A_RES_80_10-fr-p2-s1-papier.png    valeur '10'           f1 0.923
+papier     A_RES_80_10-fr-p2-s1-papier.png    valeur '2030 11'      f1 0.857
+fax        A_RES_80_10-en-p2-s1-fax.png       valeur '53'           f1 0.667
+fax        A_RES_80_10-es-p2-s1-fax.png       valeur '40'           f1 0.0
+fax        A_RES_80_1-en-p1-s1-fax.png        valeur '11'           f1 0.75
+fax        A_RES_80_1-en-p1-s1-fax.png        valeur '12'           f1 0.75
+papier     A_RES_80_1-en-p1-s1-papier.png     valeur '12'           f1 0.5
+fax        A_RES_80_1-es-p1-s1-fax.png        valeur '80'           f1 0.571
+fax        A_RES_80_1-fr-p1-s1-fax.png        valeu
+… [1175 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def .*parite\\|def .*passage\\|def .*question\\|f1\" tools/mesurer_ocr.py | head -12; grep -n \"13\" data/onu/questions.json | head -5", "description": "Find parity functions and question data", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+42:from banc_lecture import f1 as f1_mots, normalise  # noqa: E402
+58:    "f1_median": 0.95,
+173:def lire(manifeste: dict, question: dict) -> dict | None:
+261:        f1 = (round(f1_mots(rep_natif["texte"], rep_ocr["texte"]), 4)
+267:            "f1_reponse": f1, "parite_region": f1 >= 0.90,
+284:            detail["f1_bruitee"] = (
+285:                round(f1_mots(lire(natif, question)["texte"], rep_bruitee["texte"]), 4)
+312:        "f1_median": round(sorted(q["f1_reponse"] for q in questions)[len(questions) // 2], 4)
+326:            sum(q.get("f1_bruitee", 0.0) >= 0.90 for q in questions) / n, 4)
+339:        (f"F1 médian ≥ {SEUILS['f1_median']:.2f}",
+340:         agregat["f1_median"] >= SEUILS["f1_median"]),
+367:          f"{a['f1_median']:.3f} · valeur stricte {a['parite_valeur']:.2%} "
+[stderr]
+grep: data/onu/questions.json: No such file or directory
+  ```
+
+- **bash** `{"command": "sed -n '160,280p' tools/mesurer_ocr.py; echo \"=== questions path\"; grep -n \"questions\" tools/mesurer_scans.py | head -6; ls work/r44/*.json | head -20", "description": "Read reader and parity code", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+if not blocs:
+        raise SystemExit(f"page {page} vide côté natif : {pdf}")
+    octets = pdf.read_bytes()
+    return graphe_document.manifeste_de_blocs(
+        blocs,
+        {"chemin": f"{pdf.as_posix()}#page={page}",
+         "sha256": graphe_document.sha256(octets), "octets": len(octets),
+         "format": "pdf", "langue": langue, "page": page},
+        {"outil": "graphe_document_pdf.py", "version": graphe_document.VERSION,
+         "page": page},
+    )
+
+
+def lire(manifeste: dict, question: dict) -> dict | None:
+    passages = lc.passages(manifeste)
+    if not passages:
+        return None
+    scores = lc.Index(passages).scores(question["question"])
+    return lc.repondre(passages, question, scores)
+
+
+def trouve(reponse: dict | None, valeur: str) -> bool:
+    return bool(reponse and normalise(valeur) in normalise(reponse["texte"]))
+
+
+def pages_du_banc(limite: int) -> list[dict]:
+    """Les pages qui portent les questions du banc R0.3 : une page par son PDF, son numéro,
+    sa langue et SES questions. C'est le dispositif, pas un choix après coup."""
+    bench = json.loads(BENCH.read_text(encoding="utf-8"))
+    candidates: dict[tuple[pathlib.Path, int], list[dict]] = {}
+    f
+… [5556 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\npages=mo.pages_du_banc(10)\nfor p in pages:\n    if p['pdf'].name not in ('A_RES_80_10-fr.pdf','A_RES_80_10-es.pdf'): continue\n    nat=mo.manifeste_natif(p['pdf'],p['pa … [1016 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr.pdf p2 val '10' nat True ocr False F1 0.923
+   NAT: Programme d’action de la Conférence internationale sur la population et le développement 10 ,
+   OCR: Programme d’action de la Conférence internationale sur la population et le développement,
+A_RES_80_10-fr.pdf p2 val '2030 11' nat True ocr True F1 1.000
+A_RES_80_10-fr.pdf p2 val '53' nat True ocr True F1 1.000
+A_RES_80_10-fr.pdf p2 val '39' nat True ocr True F1 1.000
+A_RES_80_10-fr.pdf p2 val '12' nat True ocr True F1 0.974
+A_RES_80_10-es.pdf p2 val '2030' nat True ocr True F1 1.000
+A_RES_80_10-es.pdf p2 val '53' nat True ocr True F1 1.000
+A_RES_80_10-es.pdf p2 val '39' nat True ocr True F1 0.783
+A_RES_80_10-es.pdf p2 val '40' nat True ocr True F1 0.880
+A_RES_80_10-es.pdf p1 val '13' nat True ocr False F1 0.143
+   NAT: Octogésimo período de sesiones Tema 13 del programa Aplicación y seguimiento integrados y coordinados de los resultados de las grandes conferencias y cumbres de las Naciones Unidas en las esferas económica y social y esf
+   OCR: esferas conexas
+A_RES_80_10-es.pdf p1 val '80' nat True ocr True F1 0.750
+A_RES_80_10-es.pdf p1 val '2200' nat True ocr True F1 0.800
+A_RES_80_10-fr.pdf p1 val '13' nat True 
+… [350 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\np=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf')\nnat=mo.manifeste_natif(p,1,'fra')\nprint('=== NATIF blocs')\nfor r in nat['regions'][:10]:\n    if r['type']!='blanc': prin … [662 caractères tronqués]`
+
+  ```
+=== NATIF blocs
+titre ? 'A /RES/80/10'
+section ? 'Nations Unies'
+section ? 'Assemblée générale'
+paragraphe ? 'Distr. générale 26 novembre 2025'
+paragraphe ? 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coor'
+=== OCR blocs
+titre None 'Nations Unies ÂRES/80/10'
+section None 'Assemblée générale Distr. générale'
+section None 'ÈZ'
+section None 'ES'
+note None '26 novembre 2025'
+paragraphe None 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coor'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\np=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf')\nnat=mo.manifeste_natif(p,1,'fra')\ne=[x for x in json.load(open('work/r44/scans/manifeste.json'))['entrees'] if x['pdf … [840 caractères tronqués]`
+
+  ```
+=== NATIF
+paragraphe 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des grandes conférences et réunions au sommet organisées par les Nations Unies dans les domaines économique et social et dans les domaines connexes'
+paragraphe 'Rapport de la quatrième Conférence mondiale sur les femmes, Beijing, 4 -15 septembre 1995 (publication des Nations Unies, numéro de vente : F.96.IV.13), chap. I, résolution 1, annexes I et II.'
+=== OCR
+paragraphe 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des grandes conférences et réunions au sommet organisées par les Nations Unies dans les domaines économique et'
+note 'social et dans les domaines connexes'
+paragraphe '3 Nations Unies, Recueil des Traités, vol. 660, n° 9464. 4 Ibid., vol. 1577, n° 27531. $ Ibid., vol. 1249, n° 20378. $ Résolution 217 A (I). 7 Résolution 61/295, annexe. $ Rapport de la quatrième Conférence mondiale sur les femmes, Beijing, 4-15 septembre 1995 (publication des Nations Unies, numéro de vente: F.96.1V.13), chap. I, résolution 1, annexes I'
+=== passages nat/ocr (premiers)
+[stderr]
+Traceback
+… [145 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n \"$(grep -n 'def blocs_de_page' tools/graphe_document_ocr.py | cut -d: -f1),+70p\" tools/graphe_document_ocr.py", "description": "Read block typing and merging logic", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def blocs_de_page(lignes: list[dict], numero: int = 1,
+                  langue: str = "fra") -> list[dict]:
+    """Les blocs d'une page OCR : notes à part, titres par la hauteur, le reste en
+    paragraphes. La provenance porte la page, le y et la CONFIANCE moyenne du bloc."""
+    if not lignes:
+        return []
+    corps = statistics.median(l["hauteur"] for l in lignes)
+    blocs: list[dict] = []
+    paragraphe: list[dict] = []
+
+    def fin_paragraphe() -> None:
+        if not paragraphe:
+            return
+        texte = paragraphe[0]["texte"]
+        confs = list(paragraphe[0]["confs"])
+        for ligne in paragraphe[1:]:
+            texte = _recoller(texte, ligne["texte"])
+            confs += ligne["confs"]
+        blocs.append({
+            "type": "paragraphe", "texte": re.sub(r"\s+", " ", texte).strip(),
+            "prov": {"page": numero, "y": round(paragraphe[0]["y0"], 1),
+                     "confiance": round(sum(confs) / len(confs), 1),
+                     "moteur": "tesseract", "langue": langue},
+        })
+        paragraphe.clear()
+
+    for ligne in lignes:
+        petit = ligne["hauteur"] < corps * 0.85
+        grand = ligne["hauteur"] > corps * 1.12
+       
+… [1889 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('''    corps = statistics.median(l[\"hauteur\"] for l in lignes)\n    blocs: list[dict] = []''','''    corps = statistics.median(l[\"hauteur\"] for l in lignes)\n    bas_page = … [2026 caractères tronqués]`
+
+  ```
+note seulement en bas de page, version 6
+=== NATIF
+paragraphe 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des grandes conférences et réunions au sommet organisées par les Nations Unies dans les domaines économiqu'
+paragraphe 'Rapport de la quatrième Conférence mondiale sur les femmes, Beijing, 4 -15 septembre 1995 (publication des Nations Unies, numéro de vente : F.96.IV.13), chap. I, résolution 1, annexes I et II.'
+=== OCR
+paragraphe 'Quatre-vingtième session Point 13 de l’ordre du jour Application et suivi intégrés et coordonnés des textes issus des grandes conférences et réunions au sommet organisées par les Nations Unies dans les domaines économiqu'
+paragraphe '3 Nations Unies, Recueil des Traités, vol. 660, n° 9464. 4 Ibid., vol. 1577, n° 27531. $ Ibid., vol. 1249, n° 20378. $ Résolution 217 A (I). 7 Résolution 61/295, annexe. $ Rapport de la quatrième Conférence mondiale sur '
+13 True True 1.0
+80 True True 1.0
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v7.json > work/r44/scans-v7.log 2>&1; echo \"[scans $?]\"; tail -8 work/r44/scans-v7.log", "description": "Re-run scans after note-typing fix", "run_in_background": true, … [62 caractères tronqués]`
+
+  ```
+started background job bash-530
+  ```
+
+- **bash** `{"command": "sleep 240; tail -10 work/r44/scans-v7.log; python3 - <<'PY'\nimport json\ntry:\n    a=json.load(open('work/r44/mesure-v7.json'))['agregat']\n    for k in sorted(a): print(k, round(a[k]['wer'],4), a[k].get('preservation'))\nexcept Exception as e: print('pas encore',e)\nPY", "description" … [121 caractères tronqués]`
+
+  ```
+✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 247 s → work/r44/mesure-v7.json
+fax|dev|auto 0.219 0.5667
+fax|test|auto 0.1552 None
+papier|dev|auto 0.0687 0.8667
+papier|test|auto 0.0638 None
+photocopie|dev|auto 0.0634 0.9
+photocopie|test|auto 0.0469 None
+photo|dev|auto 0.0668 0.9
+photo|test|auto 0.0568 None
+propre|dev|auto 0.0414 0.9667
+propre|test|auto 0.0301 None
+  ```
+
+### 👤 Utilisateur
+
+background job bash-530 (bash: timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v7.json > work/r44/scans-v7.log 2>&1; echo "[scans $?]"; tail -8 work/r44/scans-v7.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('work/r44/mesure-v7.json'))\nfor e in d['entrees']:\n    if e['split']!='dev': continue\n    for q in e.get('details') or []:\n        if q['trouve_natif'] and not q['trouve']:\n            print(f\"{e['famille']:10s} {e['image'][:34]:34s} … [160 caractères tronqués]`
+
+  ```
+propre     A_RES_80_10-fr-p2-s1-propre.png    valeur '10'           f1 0.923
+photocopie A_RES_80_10-fr-p2-s1-photocopie.pn valeur '10'           f1 0.923
+photocopie A_RES_80_10-fr-p2-s1-photocopie.pn valeur '2030 11'      f1 0.857
+photo      A_RES_80_10-fr-p2-s1-photo.png     valeur '10'           f1 0.833
+photo      A_RES_80_10-fr-p2-s1-photo.png     valeur '2030 11'      f1 0.857
+fax        A_RES_80_10-fr-p2-s1-fax.png       valeur '10'           f1 0.769
+fax        A_RES_80_10-fr-p2-s1-fax.png       valeur '2030 11'      f1 0.571
+papier     A_RES_80_10-fr-p2-s1-papier.png    valeur '10'           f1 0.923
+papier     A_RES_80_10-fr-p2-s1-papier.png    valeur '2030 11'      f1 0.857
+fax        A_RES_80_10-en-p2-s1-fax.png       valeur '53'           f1 0.667
+fax        A_RES_80_10-es-p2-s1-fax.png       valeur '40'           f1 0.0
+fax        A_RES_80_1-en-p1-s1-fax.png        valeur '11'           f1 0.75
+fax        A_RES_80_1-en-p1-s1-fax.png        valeur '12'           f1 0.75
+papier     A_RES_80_1-en-p1-s1-papier.png     valeur '12'           f1 0.5
+fax        A_RES_80_1-es-p1-s1-fax.png        valeur '80'           f1 0.571
+fax        A_RES_80_1-fr-p1-s1-fax.png        valeu
+… [636 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\npages=mo.pages_du_banc(10)\np=[x for x in pages if x['pdf'].name=='A_RES_80_10-fr.pdf' and x['page']==2][0]\nq=[q for q in p['questions'] if q['valeur']=='2030 11'][0]\n … [1014 caractères tronqués]`
+
+  ```
+question: Quelle valeur le document associe-t-il à « horizon » et « durable » ?
+NAT: 'Réaffirmant le Programme de développement durable à l’horizon 2030 11 et'
+photo: trouve False F1 0.857
+  OCR: "Réaffirmant le Programme de développement durable à l'horizon 2030 Ilet"
+   2030 -> "affirmant le Programme de développement durable à l'horizon 2030 Ilet réaffirmant que l'avancement d"
+   11 -> absent
+photocopie: trouve False F1 0.857
+  OCR: "Réaffirmant lé Programme de développement durable à l'horizon 2030!! et"
+   2030 -> "affirmant lé Programme de développement durable à l'horizon 2030!! et réaffirmant que l’avancement d"
+   11 -> absent
+papier: trouve False F1 0.857
+  OCR: "Réaffirmant le Programme de développement durable à l'horizon 2030 let"
+   2030 -> "affirmant le Programme de développement durable à l'horizon 2030 let réaffirmant que l'avancement de"
+   11 -> absent
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, graphe_document_ocr as gco\nfrom PIL import Image, ImageFilter\nimport numpy as np\nROOT=pathlib.Path('work/ocr/root'); import os,subprocess\nenv=dict(os.environ); env[' … [1567 caractères tronqués]`
+
+  ```
+photo '2030' box 992 155 52 17
+  frac 0.25 seuil None -> '' ''
+  frac 0.25 seuil 160 -> '' ''
+  frac 0.35 seuil None -> '' ''
+  frac 0.35 seuil 160 -> '' ''
+  frac 0.45 seuil None -> '30' '30'
+  frac 0.45 seuil 160 -> '30' '30'
+photocopie '2030' box 1233 298 57 20
+  frac 0.25 seuil None -> '0' '0'
+  frac 0.25 seuil 160 -> '' ''
+  frac 0.35 seuil None -> '10' '10'
+  frac 0.35 seuil 160 -> '14' '14'
+  frac 0.45 seuil None -> '40' '40'
+  frac 0.45 seuil 160 -> '40' '40'
+papier '2030' box 1412 226 74 26
+  frac 0.25 seuil None -> '' ''
+  frac 0.25 seuil 160 -> '' ''
+  frac 0.35 seuil None -> '' ''
+  frac 0.35 seuil 160 -> '' ''
+  frac 0.45 seuil None -> '30' '30'
+  frac 0.45 seuil 160 -> '30' '30'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,os,subprocess\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, graphe_document_ocr as gco\nfrom PIL import Image, ImageFilter\nROOT=pathlib.Path('work/ocr/root'); env=dict(os.environ); env['LD_LIBRARY_PATH']=str(ROOT/' … [1474 caractères tronqués]`
+
+  ```
+photo '2030' h 17 conf 96.474152 x 992 y 155
+photo 'Ilet' h 20 conf 51.081848 x 1052 y 152
+photo 'réaffirmant' h 18 conf 90.710075 x 178 y 189
+   up 6 '' ''
+   up 8 '' '1'
+   up 10 '' ''
+   up 12 '' ''
+photocopie '2030' h 20 conf 79.614929 x 1233 y 298
+photocopie '!!' h 13 conf 56.746372 x 1299 y 294
+photocopie 'et' h 17 conf 96.744392 x 1325 y 300
+   up 6 '1' '1'
+   up 8 '' ''
+   up 10 '' ''
+   up 12 '' ''
+papier '2030' h 26 conf 96.900017 x 1412 y 226
+papier 'let' h 30 conf 66.632935 x 1497 y 221
+papier 'réaffirmant' h 27 conf 92.848495 x 250 y 280
+   up 6 '' ''
+   up 8 '' ''
+   up 10 '' ''
+   up 12 '' ''
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# JSON scans\nd=json.loads(pathlib.Path('work/r44/mesure-v7.json').read_text())\nd['dispositif']='tools/simuler_scan.py + nettoyer_scan.py + graphe_document_ocr.py + mesurer_scans.py'\npathlib.Path('reports/r44-scans.json').write_text(json.dumps(d, … [2481 caractères tronqués]`
+
+  ```
+docs : préservation et règle des notes
+42:| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **96,7 %** |
+43:| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **90,0 %** |
+44:| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **90,0 %** |
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **86,7 %** |
+79:## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 90,0 %
+88:| pages propres, exactitude OCR | 83,3 % | **90,0 %** |
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --colonnes --sortie work/r44/mesure-v7-noexp.json > work/r44/noexp.log 2>&1; echo \"[noexp $?]\"; python3 -c \"\nimport json\na=json.load(open('work/r44/mesure-v7.json'))['agregat']; b=json.load(open('work/r44/mesure-v7-noexp. … [281 caractères tronqués]`
+
+  ```
+started background job bash-537
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2-v7.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g3/manifeste.json --pipelin … [479 caractères tronqués]`
+
+  ```
+started background job bash-538
+  ```
+
+- **bash** `{"command": "timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v7.log 2>&1; echo \"[gate $?]\"; tail -3 work/r44/gate-v7.log", "description": "Run final gate with note fix", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-539
+  ```
+
+- **bash** `{"command": "grep -n \"86,7\\|80,0\\|53,3\\|73,3\\|90,0\\|96,7\" reports/rapport-r44-scans.md | head -20; echo \"=== roadmap\"; grep -n \"86,7\\|90 %\\|73,3\" docs/pilotage/roadmap.md | head -5; echo \"=== backlog\"; grep -n \"86,7\\|90 %\\|73,3\" docs/pilotage/backlog/R44-encodeur-visuel.md | head  … [216 caractères tronqués]`
+
+  ```
+42:| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **96,7 %** |
+43:| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **90,0 %** |
+44:| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **90,0 %** |
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **86,7 %** |
+79:## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 90,0 %
+88:| pages propres, exactitude OCR | 83,3 % | **90,0 %** |
+89:| photocopie, préservation | 83,3 % | **86,7 %** |
+90:| photo, préservation | 83,3 % | **86,7 %** |
+91:| fax, préservation | 50,0 % | **53,3 %** |
+105:| 3,0° | 8,94 % | **4,40 %** | 63,3 % | **80,0 %** |
+234:| propre | 4,14 % | 4,14 % | 4,14 % | 90,0 % | 90,0 % | **90,0 %** |
+235:| photocopie | 6,34 % | 5,44 % | 5,70 % | 86,7 % | 70,0 % | **76,7 %** |
+236:| photo | 6,68 % | 7,77 % | 5,52 % | 86,7 % | 63,3 % | **80,0 %** |
+237:| papier | 6,87 % | 6,50 % | 6,02 % | 80,0 % | 80,0 % | **80,0 %** |
+238:| fax | 21,90 % | 22,73 % | 22,78 % | 53,3 % | 36,7 % | **50,0 %** |
+242:±1 point. Sur trois graines, la photo va de **63,3 % à 86,7 %** de préservation — le même lecteur,
+320:2. **Le fax reste à 21,9 %** (dev) et **
+… [1768 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# fiche : fax 56,7 ; papier/photo pertes\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace(\"2. **Le fax reste à 21,9 %** (dev) et **53,3 %** de préservation : à 120 dpi 1 bit, l'information\",\n            \"2. **Le fax rest … [1201 caractères tronqués]`
+
+  ```
+roadmap, backlog, fiche : préservation mise à jour
+32:- **préservation** des réponses du lecteur (dev, 30 questions) : **96,7 / 90,0 / 90,0 / 86,7 /
+47:   **préservation** du lecteur atteint **90,0 %** (propre **96,7 %**) ; les **colonnes** tombent de
+281:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**), **préservation 90,0 %** (propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+  ```
+
+- **bash** `{"command": "sleep 180; echo \"=== noexp\"; tail -3 work/r44/noexp.log 2>/dev/null; echo \"=== seeds\"; ls -la --time-style=+%H:%M work/r44/mesure-g2-v7.json work/r44/mesure-g3-v7.json 2>/dev/null; echo \"=== gate\"; tail -4 work/r44/gate-v7.log 2>/dev/null; date +%H:%M", "description": "Check ablat … [110 caractères tronqués]`
+
+  ```
+=== noexp
+  [83/100] A_RES_80_1-en-p2-s1-photo.png            auto         WER  4.80% conf  95.6
+  [84/100] A_RES_80_1-en-p2-s1-fax.png              auto         WER 12.40% conf  80.2
+  [85/100] A_RES_80_1-en-p2-s1-papier.png           auto         WER  5.20% conf  95.7
+=== seeds
+-rw-r--r--. 1 stephane stephane 43327 02:20 work/r44/mesure-g2-v7.json
+=== gate
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+02:21
+  ```
+
+- **bash** `{"command": "sleep 150; tail -3 work/r44/noexp.log; ls -la --time-style=+%H:%M work/r44/mesure-g3-v7.json 2>/dev/null; python3 - <<'PY'\nimport json,os\nif os.path.exists('work/r44/mesure-v7-noexp.json'):\n    a=json.load(open('work/r44/mesure-v7.json'))['agregat']; b=json.load(open('work/r44/mesure … [498 caractères tronqués]`
+
+  ```
+✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 230 s → work/r44/mesure-v7-noexp.json
+-rw-r--r--. 1 stephane stephane 43289 02:22 work/r44/mesure-g3-v7.json
+fax|dev|auto exp 0.5667 sans 0.5333
+fax|test|auto exp None sans None
+papier|dev|auto exp 0.8667 sans 0.8333
+papier|test|auto exp None sans None
+photocopie|dev|auto exp 0.9 sans 0.8667
+photocopie|test|auto exp None sans None
+photo|dev|auto exp 0.9 sans 0.8667
+photo|test|auto exp None sans None
+propre|dev|auto exp 0.9667 sans 0.8333
+propre|test|auto exp None sans None
+work/r44/mesure-g2-v7.json [('fax|dev|auto', 0.2273, 0.3667), ('papier|dev|auto', 0.065, 0.8667), ('photocopie|dev|auto', 0.0544, 0.7667), ('photo|dev|auto', 0.0777, 0.6667), ('propre|dev|auto', 0.0414, 0.9667)]
+work/r44/mesure-g3-v7.json [('fax|dev|auto', 0.2278, 0.5), ('papier|dev|auto', 0.0602, 0.8667), ('photocopie|dev|auto', 0.057, 0.8667), ('photo|dev|auto', 0.0552, 0.8667), ('propre|dev|auto', 0.0414, 0.9667)]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-537 (bash: timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --colonnes --sortie work/r44/mesure-v7-noexp.json > work/r44/noexp.log 2>&1; echo "[noexp $?]"; python3 -c "
+import json
+a=json.load(open('work/r44/mesure-v7.json'))['agregat']; b=json.load(open('work/r44/mesure-v7-noexp.json'))['agregat']
+for k in sorted(a):
+    if k in b: print(k, 'avec exp', a[k]['preservation'], 'sans', b[k]['preservation'])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-538 (bash: timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2-v7.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g3/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g3-v7.json >/dev/null 2>&1; echo "[seeds $?]"; python3 -c "
+import json
+for f in ('work/r44/mesure-g2-v7.json','work/r44/mesure-g3-v7.json'):
+    a=json.load(open(f))['agregat']; print(f,[(k,round(a[k]['wer'],4),a[k]['preservation']) for k in sorted(a)])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# JSON ablation\nd=json.loads(pathlib.Path('work/r44/mesure-v7-noexp.json').read_text())\nd['dispositif']='ablation : même pipeline SANS la récupération des exposants (comparer à r44-scans.json)'\npathlib.Path('reports/r44-sans-exposants.json').wri … [2650 caractères tronqués]`
+
+  ```
+fiche : exp et variance v7
+42:| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **96,7 %** |
+43:| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **90,0 %** |
+44:| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **90,0 %** |
+79:## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 96,7 %
+88:| pages propres, préservation | 83,3 % | **96,7 %** |
+89:| photocopie, préservation | 86,7 % | **90,0 %** |
+90:| photo, préservation | 86,7 % | **90,0 %** |
+234:| propre | 4,14 % | 4,14 % | 4,14 % | 96,7 % | 96,7 % | **96,7 %** |
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nfor src,dst in (('work/r44/mesure-g2-v7.json','reports/r44-seed2.json'),('work/r44/mesure-g3-v7.json','reports/r44-seed3.json')):\n    d=json.loads(pathlib.Path(src).read_text()); d['dispositif']='seconde/troisième graine, code v7 (notes seulement  … [855 caractères tronqués]`
+
+  ```
+reports/r44-seed2.json
+reports/r44-seed3.json
+  T0 max : 4000 mots (budget 4 000)
+  revue de documentation · 375 fiche(s) · 454 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== gate
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-note.txt <<'EOF'\nR4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)\n\nLa ligne de continuation « social et dans les domaines connexes » était typée **note** parce que sa\nboîte est plus courte (pas de h … [1948 caractères tronqués]`

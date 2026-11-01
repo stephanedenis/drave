@@ -26,10 +26,10 @@
    "confiance": 77.1,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.5333,
-   "preservation": 0.5333,
+   "exactitude_ocr": 0.5667,
+   "preservation": 0.5667,
    "parite_region": 0.1333,
-   "f1_median": 0.667
+   "f1_median": 0.714
   },
   "fax|test|auto": {
    "famille": "fax",
@@ -60,10 +60,10 @@
    "confiance": 92.4,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8,
-   "preservation": 0.8,
-   "parite_region": 0.6,
-   "f1_median": 0.941
+   "exactitude_ocr": 0.8667,
+   "preservation": 0.8667,
+   "parite_region": 0.7333,
+   "f1_median": 1.0
   },
   "papier|test|auto": {
    "famille": "papier",
@@ -94,9 +94,9 @@
    "confiance": 92.6,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8667,
-   "preservation": 0.8667,
-   "parite_region": 0.7333,
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9,
+   "parite_region": 0.8,
    "f1_median": 1.0
   },
   "photo|test|auto": {
@@ -128,10 +128,10 @@
    "confiance": 90.4,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8667,
-   "preservation": 0.8667,
-   "parite_region": 0.6667,
-   "f1_median": 0.957
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9,
+   "parite_region": 0.7667,
+   "f1_median": 1.0
   },
   "photocopie|test|auto": {
    "famille": "photocopie",
@@ -162,9 +162,9 @@
    "confiance": 93.2,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.9,
-   "preservation": 0.9,
-   "parite_region": 0.9,
+   "exactitude_ocr": 0.9667,
+   "preservation": 0.9667,
+   "parite_region": 0.9667,
    "f1_median": 1.0
   },
   "propre|test|auto": {
@@ -265,12 +265,12 @@
    "exposants": true,
    "colonnes": true,
    "questions": 5,
-   "parite_region": 0.6,
+   "parite_region": 0.8,
    "parite_valeur": 0.6,
    "details": [
     {
      "valeur": "10",
-     "f1": 0.833,
+     "f1": 0.923,
      "trouve_natif": true,
      "trouve": false
     },
@@ -648,7 +648,7 @@
    "wer": 0.1758,
    "rappel": 0.8242,
    "precision": 0.8475,
-   "confiance": 79.2,
+   "confiance": 79.1,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -1332,7 +1332,7 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
@@ -1343,7 +1343,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1424,7 +1424,7 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
@@ -1435,7 +1435,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1742,12 +1742,12 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.833,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1880,12 +1880,12 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.833,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1925,14 +1925,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1970,14 +1970,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2063,13 +2063,13 @@
    "colonnes": true,
    "questions": 3,
    "parite_region": 0.0,
-   "parite_valeur": 0.3333,
+   "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 0.808,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2108,14 +2108,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2153,14 +2153,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2197,7 +2197,7 @@
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 0.837,
      "trouve_natif": true,
      "trouve": false
     },
@@ -2232,14 +2232,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 0.98,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2277,7 +2277,7 @@
    "details": [
     {
      "valeur": "13",
-     "f1": 0.667,
+     "f1": 0.679,
      "trouve_natif": true,
      "trouve": true
     },
@@ -2312,14 +2312,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2826,7 +2826,7 @@
    "wer": 0.3016,
    "rappel": 0.6984,
    "precision": 0.7458,
-   "confiance": 72.4,
+   "confiance": 72.3,
    "exposants": true,
    "colonnes": true,
    "questions": 0,
@@ -2905,7 +2905,7 @@
    "wer": 0.016,
    "rappel": 0.984,
    "precision": 0.9893,
-   "confiance": 92.8,
+   "confiance": 92.7,
    "exposants": true,
    "colonnes": true,
    "questions": 0,
@@ -2959,7 +2959,7 @@
    "wer": 0.1489,
    "rappel": 0.8564,
    "precision": 0.875,
-   "confiance": 86.3,
+   "confiance": 86.2,
    "exposants": true,
    "colonnes": true,
    "questions": 0,
@@ -3793,5 +3793,5 @@
    "details": []
   }
  ],
- "dispositif": "R4.4 — mesures du programme scans"
+ "dispositif": "tools/simuler_scan.py + nettoyer_scan.py + graphe_document_ocr.py + mesurer_scans.py"
 }

@@ -7378,3 +7378,109 @@ started background job bash-427
   ```
 
 - **job_output** `{"job_id": "bash-427", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-416 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+02:02
+58
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+  porte-occupation-moteur ✅                          56 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/journal.md'); s = p.read_text()\ns = s.replace(\"**16,7 à 3,86** (÷ 4,3) et l'anglais\\nde **57,6 à 25,9** (÷ 2,2)\", \"**16,70 à 3,85** (÷ 4,3) et l'anglais\\nde **57,6 à  … [697 caractères tronqués]`
+
+  ```
+ok
+19:base réentraînés sur le mélange), la PPL hors dépôt tombe de **16,70 à 3,85** (÷ 4,3) et l'anglais
+22:**La longueur** : le modèle surapprend sa longueur (3,13 à 129, **14,11** à 256, **32,41** à 512) ;
+28:la tête principale lue après (**3,05** contre **3,12**) ; sans la boucle, la tête principale ne
+02:02
+58
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,26p work/n2h/journal.md", "description": "Check the length paragraph in the journal"}`
+
+  ```
+de **57,6 à 25,7** (÷ 2,2), pour **+0,17** en domaine (3,09 → 3,26). Le corpus était le levier.
+
+**La longueur** : le modèle surapprend sa longueur (3,13 à 129, **14,11** à 256, **32,41** à 512) ;
+en tirant les **positions au hasard** à l'entraînement, la PPL à 256 tombe à **3,25** et celle à
+512 à **5,95**. Le premier verrou était la **position apprise** (jusqu'à 256 octets) ; le second
+est la **fenêtre d'attention locale** (au-delà : R remonte à 384 et 512).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/512 à \\*\\*5,95\\*\\*/512 à **5,93**/' work/n2h/journal.md && sed -n 22,24p work/n2h/journal.md; date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt", "description": "Fix the last number in the journal"}`
+
+  ```
+**La longueur** : le modèle surapprend sa longueur (3,13 à 129, **14,11** à 256, **32,41** à 512) ;
+en tirant les **positions au hasard** à l'entraînement, la PPL à 256 tombe à **3,25** et celle à
+512 à **5,93**. Le premier verrou était la **position apprise** (jusqu'à 256 octets) ; le second
+02:02
+58
+  ```
+
+- **job_output** `{"job_id": "bash-427", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-424 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log; ps -eo pid,etime,cmd | grep toutes-les-portes | grep -v grep | head -1", "description": "Check wh … [30 caractères tronqués]`
+
+  ```
+02:13
+64
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+  porte-pont             ✅                          87 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+ 657672    01:16:59 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=/tmp/portes-1101-n2h DELAI=1800 bash tools/toutes-les-portes.sh > work/n2h/portes.log 2>&1 & echo "portes $!"; date '+%H:%M'
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -3 work/n2h/portes.log", "description": "Wait 25 minutes for the gate pass to finish", "run_in_background": t … [4 caractères tronqués]`
+
+  ```
+started background job bash-433
+  ```
+
+- **job_output** `{"job_id": "bash-433", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-427 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -2 work/n2h/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -2 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+02:23
+65
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+  porte-pont             ✅                          87 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         169 s    PORTE TENUE
+  ```
+
+- **job_output** `{"job_id": "bash-433", "timeout_ms": 1800000, "wait": true}`

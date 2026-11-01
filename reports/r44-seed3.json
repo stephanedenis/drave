@@ -43,9 +43,9 @@
    "confiance": 92.8,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8,
-   "preservation": 0.8,
-   "parite_region": 0.7333,
+   "exactitude_ocr": 0.8667,
+   "preservation": 0.8667,
+   "parite_region": 0.8333,
    "f1_median": 1.0
   },
   "photo|dev|auto": {
@@ -60,9 +60,9 @@
    "confiance": 92.8,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8,
-   "preservation": 0.8,
-   "parite_region": 0.7,
+   "exactitude_ocr": 0.8667,
+   "preservation": 0.8667,
+   "parite_region": 0.8333,
    "f1_median": 1.0
   },
   "photocopie|dev|auto": {
@@ -77,10 +77,10 @@
    "confiance": 90.0,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.7667,
-   "preservation": 0.7667,
-   "parite_region": 0.6333,
-   "f1_median": 0.957
+   "exactitude_ocr": 0.8667,
+   "preservation": 0.8667,
+   "parite_region": 0.7667,
+   "f1_median": 1.0
   },
   "propre|dev|auto": {
    "famille": "propre",
@@ -94,9 +94,9 @@
    "confiance": 93.2,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.9,
-   "preservation": 0.9,
-   "parite_region": 0.9,
+   "exactitude_ocr": 0.9667,
+   "preservation": 0.9667,
+   "parite_region": 0.9667,
    "f1_median": 1.0
   }
  },
@@ -292,7 +292,7 @@
    "wer": 0.2151,
    "rappel": 0.7885,
    "precision": 0.8148,
-   "confiance": 73.4,
+   "confiance": 73.3,
    "exposants": true,
    "colonnes": true,
    "questions": 5,
@@ -1201,7 +1201,7 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
+   "parite_region": 0.6667,
    "parite_valeur": 0.6667,
    "details": [
     {
@@ -1212,7 +1212,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.87,
+     "f1": 0.98,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1247,7 +1247,7 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
@@ -1258,7 +1258,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1339,7 +1339,7 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
@@ -1350,7 +1350,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1563,7 +1563,7 @@
    "wer": 0.073,
    "rappel": 0.9683,
    "precision": 0.9502,
-   "confiance": 90.4,
+   "confiance": 90.7,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1653,18 +1653,18 @@
    "wer": 0.0918,
    "rappel": 0.9304,
    "precision": 0.9608,
-   "confiance": 85.8,
+   "confiance": 85.9,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.645,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1703,12 +1703,12 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.833,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1840,14 +1840,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1885,14 +1885,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1931,14 +1931,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2023,14 +2023,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2068,14 +2068,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2107,14 +2107,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2147,14 +2147,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2183,7 +2183,7 @@
    "wer": 0.3607,
    "rappel": 0.6885,
    "precision": 0.75,
-   "confiance": 67.9,
+   "confiance": 67.8,
    "exposants": true,
    "colonnes": true,
    "questions": 2,
@@ -2192,7 +2192,7 @@
    "details": [
     {
      "valeur": "13",
-     "f1": 0.68,
+     "f1": 0.679,
      "trouve_natif": true,
      "trouve": true
     },
@@ -2227,14 +2227,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2378,5 +2378,5 @@
    "details": []
   }
  ],
- "dispositif": "R4.4 — sonde petit texte / variance entre graines"
+ "dispositif": "seconde/troisième graine, code v7 (notes seulement en bas de page)"
 }

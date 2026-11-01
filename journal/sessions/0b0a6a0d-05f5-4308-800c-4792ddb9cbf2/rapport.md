@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 9.6 h |
+| Durée | 10.1 h |
 | Tours | 4 |
-| Messages | 540 |
-| Appels d'outils | 517 |
+| Messages | 553 |
+| Appels d'outils | 527 |
 | Fichiers touchés | 11 |
-| Commandes | 427 |
+| Commandes | 434 |
 | Sous-agents | 0 |
 | Commits | 6 |
 | Compactages de contexte | 0 |
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*178 appels d'outils.* Actions notables :
+*188 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,7 +187,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 129 autres
+- … et 134 autres
 
 **Synthèse produite :**
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 387 autres
+- … et 394 autres
 
 ## 4. Mesures et résultats marquants
 

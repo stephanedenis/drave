@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,18 +19,19 @@
 | 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 01:36 | `caff2033` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % | `encodeur-visuel.md`, `en-cours.md`, `README.md` (+7) |
 | 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+19) |
+| 01:54 | `69bf5ecb` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 
 ## Chiffres du jour
 
-`52,5 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %` · `88,5 %` · `55,9 %` · `7,0 %` · `89 %`
+`52,5 %` · `1,1 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %` · `88,5 %` · `55,9 %` · `7,0 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 9.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 9.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 10.1 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 9.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 

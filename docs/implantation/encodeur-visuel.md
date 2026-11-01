@@ -43,7 +43,7 @@ rejeu.
 | 1. **rendu** | `pdftoppm -r 300 -png -singlefile` rend **la** page demandée | la clé du cache porte l'empreinte du PDF : un PDF modifié ne relit pas l'ancienne page |
 | 2. **OCR** | `tesseract image stdout -l <langue> --psm 3 -c tessedit_create_tsv=1` | le TSV est **explicite** : les configs `tsv`/`hocr` ne sont pas dans le paquet de données |
 | 3. **mots → lignes** | les mots du TSV sont groupés par `(bloc, paragraphe, ligne)`, ordonnés par `y`, puis par `x` | l'ordre du TSV n'est pas garanti ; la géométrie, si |
-| 4. **lignes → blocs** | hauteur de ligne, écart vertical, retrait — la même heuristique que le parseur PDF | les césures de fin de ligne se recollent comme en natif |
+| 4. **lignes → blocs** | hauteur de ligne, écart vertical, retrait — la même heuristique que le parseur PDF ; une ligne **petite** n'est une **note** que dans le bas de la page | une ligne de continuation sans hampe était typée note, coupait le paragraphe et faisait perdre la réponse au lecteur (mesuré, corrigé) |
 | 5. **blocs → manifeste** | `graphe_document.manifeste_de_blocs` : flux, offsets, partition, hash | `verifie()` refuse une partition trouée ou un span faux |
 
 Le point important est l'étape 5 : **une seule construction du flux** pour le natif et pour

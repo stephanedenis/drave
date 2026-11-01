@@ -37,16 +37,16 @@
    "pipeline": "auto",
    "scans": 10,
    "mots_natifs": 3771,
-   "wer": 0.0639,
-   "rappel": 0.9565,
-   "precision": 0.9738,
+   "wer": 0.065,
+   "rappel": 0.9615,
+   "precision": 0.9713,
    "confiance": 92.3,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.7667,
-   "preservation": 0.7667,
-   "parite_region": 0.6667,
-   "f1_median": 0.957
+   "exactitude_ocr": 0.8667,
+   "preservation": 0.8667,
+   "parite_region": 0.7333,
+   "f1_median": 1.0
   },
   "photo|dev|auto": {
    "famille": "photo",
@@ -54,16 +54,16 @@
    "pipeline": "auto",
    "scans": 10,
    "mots_natifs": 3771,
-   "wer": 0.0745,
-   "rappel": 0.9549,
-   "precision": 0.9639,
-   "confiance": 91.1,
+   "wer": 0.0777,
+   "rappel": 0.9494,
+   "precision": 0.9588,
+   "confiance": 91.0,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.7,
-   "preservation": 0.7,
-   "parite_region": 0.5333,
-   "f1_median": 0.941
+   "exactitude_ocr": 0.6667,
+   "preservation": 0.6667,
+   "parite_region": 0.5,
+   "f1_median": 0.909
   },
   "photocopie|dev|auto": {
    "famille": "photocopie",
@@ -77,10 +77,10 @@
    "confiance": 90.4,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.7,
-   "preservation": 0.7,
-   "parite_region": 0.7,
-   "f1_median": 0.957
+   "exactitude_ocr": 0.7667,
+   "preservation": 0.7667,
+   "parite_region": 0.8,
+   "f1_median": 0.96
   },
   "propre|dev|auto": {
    "famille": "propre",
@@ -94,9 +94,9 @@
    "confiance": 93.2,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.9,
-   "preservation": 0.9,
-   "parite_region": 0.9,
+   "exactitude_ocr": 0.9667,
+   "preservation": 0.9667,
+   "parite_region": 0.9667,
    "f1_median": 1.0
   }
  },
@@ -180,12 +180,12 @@
    "exposants": true,
    "colonnes": true,
    "questions": 5,
-   "parite_region": 0.8,
+   "parite_region": 1.0,
    "parite_valeur": 0.4,
    "details": [
     {
      "valeur": "10",
-     "f1": 0.833,
+     "f1": 0.923,
      "trouve_natif": true,
      "trouve": false
     },
@@ -229,17 +229,17 @@
    ],
    "mots_natifs": 558,
    "mots_ocr": 549,
-   "distance": 13,
-   "commun": 545,
-   "wer": 0.0233,
-   "rappel": 0.9767,
-   "precision": 0.9927,
-   "confiance": 93.7,
+   "distance": 14,
+   "commun": 544,
+   "wer": 0.0251,
+   "rappel": 0.9749,
+   "precision": 0.9909,
+   "confiance": 93.5,
    "exposants": true,
    "colonnes": true,
    "questions": 5,
    "parite_region": 0.6,
-   "parite_valeur": 0.8,
+   "parite_valeur": 0.6,
    "details": [
     {
      "valeur": "10",
@@ -249,9 +249,9 @@
     },
     {
      "valeur": "2030 11",
-     "f1": 1.0,
+     "f1": 0.923,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": false
     },
     {
      "valeur": "53",
@@ -341,21 +341,22 @@
    "pipeline": "auto",
    "trace": [
     "recadrage",
+    "eclairage",
     "echelle(1800)"
    ],
    "mots_natifs": 558,
-   "mots_ocr": 541,
-   "distance": 28,
-   "commun": 532,
-   "wer": 0.0502,
-   "rappel": 0.9534,
-   "precision": 0.9834,
-   "confiance": 91.6,
+   "mots_ocr": 549,
+   "distance": 16,
+   "commun": 544,
+   "wer": 0.0287,
+   "rappel": 0.9749,
+   "precision": 0.9909,
+   "confiance": 92.9,
    "exposants": true,
    "colonnes": true,
    "questions": 5,
    "parite_region": 0.6,
-   "parite_valeur": 0.4,
+   "parite_valeur": 0.6,
    "details": [
     {
      "valeur": "10",
@@ -365,7 +366,7 @@
     },
     {
      "valeur": "2030 11",
-     "f1": 0.923,
+     "f1": 0.857,
      "trouve_natif": true,
      "trouve": false
     },
@@ -377,15 +378,15 @@
     },
     {
      "valeur": "39",
-     "f1": 0.857,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
     {
      "valeur": "12",
-     "f1": 0.75,
+     "f1": 0.788,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     }
    ]
   },
@@ -510,7 +511,7 @@
    "wer": 0.0256,
    "rappel": 0.989,
    "precision": 0.9963,
-   "confiance": 94.9,
+   "confiance": 94.7,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -604,16 +605,17 @@
    "graine": 2,
    "pipeline": "auto",
    "trace": [
-    "recadrage"
+    "recadrage",
+    "eclairage"
    ],
    "mots_natifs": 546,
-   "mots_ocr": 537,
-   "distance": 21,
-   "commun": 533,
-   "wer": 0.0385,
-   "rappel": 0.9762,
-   "precision": 0.9926,
-   "confiance": 93.9,
+   "mots_ocr": 540,
+   "distance": 15,
+   "commun": 539,
+   "wer": 0.0275,
+   "rappel": 0.9872,
+   "precision": 0.9981,
+   "confiance": 94.4,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -762,12 +764,12 @@
    ],
    "mots_natifs": 577,
    "mots_ocr": 570,
-   "distance": 22,
-   "commun": 564,
-   "wer": 0.0381,
-   "rappel": 0.9775,
-   "precision": 0.9895,
-   "confiance": 94.3,
+   "distance": 23,
+   "commun": 562,
+   "wer": 0.0399,
+   "rappel": 0.974,
+   "precision": 0.986,
+   "confiance": 94.5,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -861,16 +863,17 @@
    "graine": 2,
    "pipeline": "auto",
    "trace": [
-    "recadrage"
+    "recadrage",
+    "eclairage"
    ],
    "mots_natifs": 577,
-   "mots_ocr": 567,
-   "distance": 32,
-   "commun": 555,
-   "wer": 0.0555,
-   "rappel": 0.9619,
-   "precision": 0.9788,
-   "confiance": 93.7,
+   "mots_ocr": 569,
+   "distance": 29,
+   "commun": 557,
+   "wer": 0.0503,
+   "rappel": 0.9653,
+   "precision": 0.9789,
+   "confiance": 92.9,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -891,7 +894,7 @@
     },
     {
      "valeur": "39",
-     "f1": 0.667,
+     "f1": 0.87,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1006,36 +1009,36 @@
     "eclairage"
    ],
    "mots_natifs": 294,
-   "mots_ocr": 293,
-   "distance": 20,
-   "commun": 281,
-   "wer": 0.068,
-   "rappel": 0.9558,
-   "precision": 0.959,
-   "confiance": 92.1,
+   "mots_ocr": 304,
+   "distance": 30,
+   "commun": 280,
+   "wer": 0.102,
+   "rappel": 0.9524,
+   "precision": 0.9211,
+   "confiance": 89.2,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 1.0,
+   "parite_region": 0.0,
+   "parite_valeur": 0.3333,
    "details": [
     {
      "valeur": "80",
-     "f1": 0.667,
+     "f1": 0.833,
      "trouve_natif": true,
      "trouve": true
     },
     {
      "valeur": "11",
-     "f1": 1.0,
+     "f1": 0.519,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": false
     },
     {
      "valeur": "12",
-     "f1": 1.0,
+     "f1": 0.5,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": false
     }
    ]
   },
@@ -1098,22 +1101,22 @@
     "eclairage"
    ],
    "mots_natifs": 294,
-   "mots_ocr": 294,
-   "distance": 16,
-   "commun": 285,
-   "wer": 0.0544,
-   "rappel": 0.9694,
-   "precision": 0.9694,
-   "confiance": 93.2,
+   "mots_ocr": 293,
+   "distance": 20,
+   "commun": 284,
+   "wer": 0.068,
+   "rappel": 0.966,
+   "precision": 0.9693,
+   "confiance": 93.5,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 0.3333,
    "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "80",
-     "f1": 1.0,
+     "f1": 0.8,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1234,24 +1237,24 @@
     "eclairage"
    ],
    "mots_natifs": 326,
-   "mots_ocr": 335,
-   "distance": 31,
+   "mots_ocr": 333,
+   "distance": 26,
    "commun": 312,
-   "wer": 0.0951,
+   "wer": 0.0798,
    "rappel": 0.9571,
-   "precision": 0.9313,
-   "confiance": 91.6,
+   "precision": 0.9369,
+   "confiance": 92.7,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
-     "f1": 0.615,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "11",
@@ -1326,17 +1329,17 @@
     "eclairage"
    ],
    "mots_natifs": 326,
-   "mots_ocr": 329,
-   "distance": 20,
-   "commun": 315,
-   "wer": 0.0613,
-   "rappel": 0.9663,
-   "precision": 0.9574,
-   "confiance": 93.4,
+   "mots_ocr": 324,
+   "distance": 14,
+   "commun": 316,
+   "wer": 0.0429,
+   "rappel": 0.9693,
+   "precision": 0.9753,
+   "confiance": 94.0,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 1.0,
    "parite_valeur": 1.0,
    "details": [
     {
@@ -1347,7 +1350,7 @@
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1462,30 +1465,30 @@
     "eclairage"
    ],
    "mots_natifs": 315,
-   "mots_ocr": 320,
-   "distance": 20,
-   "commun": 307,
-   "wer": 0.0635,
-   "rappel": 0.9746,
-   "precision": 0.9594,
-   "confiance": 88.8,
+   "mots_ocr": 325,
+   "distance": 34,
+   "commun": 297,
+   "wer": 0.1079,
+   "rappel": 0.9429,
+   "precision": 0.9138,
+   "confiance": 88.4,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 0.3333,
    "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "80",
-     "f1": 1.0,
+     "f1": 0.667,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": false
     },
     {
      "valeur": "11",
-     "f1": 0.824,
+     "f1": 0.889,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "12",
@@ -1554,13 +1557,13 @@
     "eclairage"
    ],
    "mots_natifs": 315,
-   "mots_ocr": 316,
-   "distance": 13,
+   "mots_ocr": 320,
+   "distance": 19,
    "commun": 308,
-   "wer": 0.0413,
+   "wer": 0.0603,
    "rappel": 0.9778,
-   "precision": 0.9747,
-   "confiance": 92.7,
+   "precision": 0.9625,
+   "confiance": 92.2,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1690,13 +1693,13 @@
     "eclairage"
    ],
    "mots_natifs": 316,
-   "mots_ocr": 305,
-   "distance": 55,
-   "commun": 278,
-   "wer": 0.1741,
-   "rappel": 0.8797,
-   "precision": 0.9115,
-   "confiance": 82.3,
+   "mots_ocr": 298,
+   "distance": 49,
+   "commun": 277,
+   "wer": 0.1551,
+   "rappel": 0.8766,
+   "precision": 0.9295,
+   "confiance": 83.6,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1711,7 +1714,7 @@
     },
     {
      "valeur": "80",
-     "f1": 1.0,
+     "f1": 0.909,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1782,13 +1785,13 @@
     "eclairage"
    ],
    "mots_natifs": 316,
-   "mots_ocr": 301,
-   "distance": 32,
-   "commun": 288,
-   "wer": 0.1013,
-   "rappel": 0.9114,
-   "precision": 0.9568,
-   "confiance": 89.2,
+   "mots_ocr": 304,
+   "distance": 37,
+   "commun": 287,
+   "wer": 0.1171,
+   "rappel": 0.9082,
+   "precision": 0.9441,
+   "confiance": 87.7,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1797,7 +1800,7 @@
    "details": [
     {
      "valeur": "13",
-     "f1": 0.833,
+     "f1": 1.0,
      "trouve_natif": true,
      "trouve": true
     },
@@ -1809,7 +1812,7 @@
     },
     {
      "valeur": "189",
-     "f1": 1.0,
+     "f1": 0.875,
      "trouve_natif": true,
      "trouve": true
     }
@@ -1837,14 +1840,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1882,14 +1885,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -1919,23 +1922,23 @@
    ],
    "mots_natifs": 284,
    "mots_ocr": 280,
-   "distance": 45,
-   "commun": 258,
-   "wer": 0.1585,
-   "rappel": 0.9085,
-   "precision": 0.9214,
+   "distance": 43,
+   "commun": 259,
+   "wer": 0.1514,
+   "rappel": 0.912,
+   "precision": 0.925,
    "confiance": 87.5,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.3333,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2010,24 +2013,24 @@
     "eclairage"
    ],
    "mots_natifs": 284,
-   "mots_ocr": 278,
-   "distance": 31,
-   "commun": 264,
-   "wer": 0.1092,
-   "rappel": 0.9296,
-   "precision": 0.9496,
-   "confiance": 91.6,
+   "mots_ocr": 284,
+   "distance": 37,
+   "commun": 265,
+   "wer": 0.1303,
+   "rappel": 0.9331,
+   "precision": 0.9331,
+   "confiance": 91.9,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.143,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2065,14 +2068,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2104,14 +2107,14 @@
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2134,13 +2137,13 @@
     "eclairage"
    ],
    "mots_natifs": 305,
-   "mots_ocr": 293,
-   "distance": 52,
-   "commun": 267,
-   "wer": 0.1705,
-   "rappel": 0.8754,
-   "precision": 0.9113,
-   "confiance": 83.2,
+   "mots_ocr": 284,
+   "distance": 51,
+   "commun": 260,
+   "wer": 0.1672,
+   "rappel": 0.8525,
+   "precision": 0.9155,
+   "confiance": 83.7,
    "exposants": true,
    "colonnes": true,
    "questions": 2,
@@ -2214,24 +2217,24 @@
     "eclairage"
    ],
    "mots_natifs": 305,
-   "mots_ocr": 293,
-   "distance": 37,
+   "mots_ocr": 302,
+   "distance": 46,
    "commun": 280,
-   "wer": 0.1213,
+   "wer": 0.1508,
    "rappel": 0.918,
-   "precision": 0.9556,
-   "confiance": 88.7,
+   "precision": 0.9272,
+   "confiance": 86.1,
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 0.5,
-   "parite_valeur": 0.5,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
-     "f1": 0.214,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true
     },
     {
      "valeur": "80",
@@ -2312,7 +2315,7 @@
    "wer": 0.036,
    "rappel": 0.996,
    "precision": 1.0,
-   "confiance": 95.5,
+   "confiance": 95.0,
    "exposants": true,
    "colonnes": true,
    "questions": 0,
@@ -2361,12 +2364,12 @@
    ],
    "mots_natifs": 250,
    "mots_ocr": 248,
-   "distance": 11,
-   "commun": 247,
-   "wer": 0.044,
-   "rappel": 0.988,
-   "precision": 0.996,
-   "confiance": 93.8,
+   "distance": 12,
+   "commun": 246,
+   "wer": 0.048,
+   "rappel": 0.984,
+   "precision": 0.9919,
+   "confiance": 94.7,
    "exposants": true,
    "colonnes": true,
    "questions": 0,
@@ -2375,5 +2378,5 @@
    "details": []
   }
  ],
- "dispositif": "seconde graine du corpus de scans (mêmes pages, dégradations différentes)"
+ "dispositif": "seconde/troisième graine, code v7 (notes seulement en bas de page)"
 }

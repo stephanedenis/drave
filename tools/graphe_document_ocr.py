@@ -45,7 +45,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 VERSION = 1
 # Version de la CONSTRUCTION du manifeste (lignes, blocs, colonnes) : la changer invalide les
 # caches de mesure — sinon une amélioration de l'ordre de lecture n'est jamais mesurée.
-VERSION_MANIFESTE = 5
+VERSION_MANIFESTE = 6
 # Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.
 RECUPERATION_VERSION = 2
 PREFIXE = pathlib.Path(os.environ.get("TESSERACT_PREFIX", RACINE / "work/ocr/root"))
@@ -334,6 +334,7 @@ def blocs_de_page(lignes: list[dict], numero: int = 1,
     if not lignes:
         return []
     corps = statistics.median(l["hauteur"] for l in lignes)
+    bas_page = max(l["y1"] for l in lignes)
     blocs: list[dict] = []
     paragraphe: list[dict] = []
 
@@ -354,7 +355,11 @@ def blocs_de_page(lignes: list[dict], numero: int = 1,
         paragraphe.clear()
 
     for ligne in lignes:
-        petit = ligne["hauteur"] < corps * 0.85
+        # Une ligne « petite » n'est une NOTE que dans le bas de la page. Au milieu du corps,
+        # c'est une ligne de continuation sans hampe ni jambage (mesuré : « social et dans les
+        # domaines connexes » était typée note, coupait le paragraphe, et la question « point 13 »
+        # perdait sa réponse sur TOUTES les familles, page propre comprise).
+        petit = ligne["hauteur"] < corps * 0.85 and ligne["y0"] > bas_page * 0.62
         grand = ligne["hauteur"] > corps * 1.12
         court = len(ligne["texte"]) < 90
         if petit:

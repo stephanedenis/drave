@@ -39,11 +39,11 @@ le lecteur R0.2 trouvait sur le texte natif et qu'il retrouve sur le scan (dev, 
 
 | famille | WER brut | WER **auto** | test brut | test **auto** | préservation brute | préservation **auto + exp** |
 |---|---:|---:|---:|---:|---:|---:|
-| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **90,0 %** |
-| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **86,7 %** |
-| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **86,7 %** |
-| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
-| fax | 27,05 % | 21,90 % | 23,10 % | **15,52 %** | 50,0 % | **53,3 %** |
+| propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **96,7 %** |
+| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **90,0 %** |
+| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **90,0 %** |
+| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **86,7 %** |
+| fax | 27,05 % | 21,90 % | 23,10 % | **15,52 %** | 50,0 % | **56,7 %** |
 | **contrôle page noire** | — | **0 mot lu** | — | — | — | — |
 
 **Ce que le prétraitement fait, et pourquoi.** La **correction d'éclairage** est le levier
@@ -76,7 +76,7 @@ L'agrandissement gagne **0,6 point** en développement et **0,3** en test : le p
 une catastrophe pour tesseract, mais l'échelle reste un levier. Cette famille n'est **pas** dans la
 porte : elle est un **sondage**, pas une prétention de couverture.
 
-## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 90,0 %
+## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 96,7 %
 
 Les appels de note sont lus `!`, `!!`, `!?` : ce sont des **petits mots** (hauteur < 80 % de la
 ligne) faits de ponctuation. La passe ciblée recadre la boîte, l'agrandit ×4 et refait l'OCR avec
@@ -85,10 +85,10 @@ crédible (confiance ≥ 30).
 
 | | sans passe | avec passe |
 |---|---:|---:|
-| pages propres, exactitude OCR | 83,3 % | **90,0 %** |
-| photocopie, préservation | 83,3 % | **86,7 %** |
-| photo, préservation | 83,3 % | **86,7 %** |
-| fax, préservation | 50,0 % | **53,3 %** |
+| pages propres, préservation | 83,3 % | **96,7 %** |
+| photocopie, préservation | 86,7 % | **90,0 %** |
+| photo, préservation | 86,7 % | **90,0 %** |
+| fax, préservation | 53,3 % | **56,7 %** |
 
 Le plafond du texte **propre** est 90 % : les trois échecs restants sont un exposant **fusionné**
 dans son mot (« développement 10, » — la boîte a une confiance nulle, non récupérée) et deux
@@ -231,20 +231,19 @@ bouge beaucoup :
 
 | famille | WER g1 | WER g2 | WER g3 | préservation g1 | g2 | g3 |
 |---|---:|---:|---:|---:|---:|---:|
-| propre | 4,14 % | 4,14 % | 4,14 % | 90,0 % | 90,0 % | **90,0 %** |
-| photocopie | 6,34 % | 5,44 % | 5,70 % | 86,7 % | 70,0 % | **76,7 %** |
-| photo | 6,68 % | 7,77 % | 5,52 % | 86,7 % | 63,3 % | **80,0 %** |
-| papier | 6,87 % | 6,50 % | 6,02 % | 80,0 % | 80,0 % | **80,0 %** |
-| fax | 21,90 % | 22,73 % | 22,78 % | 53,3 % | 36,7 % | **50,0 %** |
+| propre | 4,14 % | 4,14 % | 4,14 % | 96,7 % | 96,7 % | **96,7 %** |
+| photocopie | 6,34 % | 5,44 % | 5,70 % | 90,0 % | 76,7 % | **86,7 %** |
+| photo | 6,68 % | 7,77 % | 5,52 % | 90,0 % | 66,7 % | **86,7 %** |
+| papier | 6,87 % | 6,50 % | 6,02 % | 86,7 % | 86,7 % | **86,7 %** |
+| fax | 21,90 % | 22,73 % | 22,78 % | 56,7 % | 36,7 % | **50,0 %** |
 
 **Pourquoi.** La préservation porte sur **30 questions** : une question = 3,3 points, et un
 désaccord de 5 questions fait 16,7 points. Le WER, lui, porte sur ~3 800 mots : il est stable à
-±1 point. Sur trois graines, la photo va de **63,3 % à 86,7 %** de préservation — le même lecteur,
+±1 point. Sur trois graines, la photo va de **66,7 % à 90,0 %** de préservation — le même lecteur,
 le même code, un tirage différent. La préservation est donc un **indicateur à barres d'erreur
 larges**, pas un chiffre à deux décimales ; les planchers de la porte en tiennent compte (60 % pour
-la photocopie et la photo, 55 % pour le papier, 30 % pour le fax, 85 % pour le propre) — la photo
-tombe à 63,3 % sur la graine 2, sous l'ancien plancher de 65 % : c'est exactement ce que cette
-variance interdit. Un banc de paraphrases plus large réduirait cette variance — il n'existe pas
+la photocopie et la photo, 55 % pour le papier, 30 % pour le fax, 85 % pour le propre) — la photo tombe à **66,7 %** sur la graine 2 : les planchers (60 %) restent dessous, et c'est
+exactement ce que cette variance interdit de lire comme un chiffre à deux décimales. Un banc de paraphrases plus large réduirait cette variance — il n'existe pas
 encore.
 
 ## 6. Le second moteur : un contrôle, pas un candidat
@@ -317,10 +316,10 @@ Vérifiée **verte** le 2026-11-01 : les trois bancs passent, contrôles compris
 
 1. **Les scans sont simulés.** La validation réelle existe (7,10 % d'accord), mais elle compare à
    une couche OCR, pas à une vérité humaine, et un seul livre.
-2. **Le fax reste à 21,9 %** (dev) et **53,3 %** de préservation : à 120 dpi 1 bit, l'information
+2. **Le fax reste à 21,9 %** (dev) et **56,7 %** de préservation : à 120 dpi 1 bit, l'information
    est en partie détruite — les meilleurs réglages (psm 3, upscale 2 100 + lissage) ne la
    recréent pas. Les filtres médian/ouverture, essayés, **détruisent** le texte (95 %).
-3. **Le papier perd 6 réponses** (80,0 %) et **la photo 4** (86,7 %) sur les 30 questions : le
+3. **Le papier perd 4 réponses** (86,7 %) et **la photo 3** (90,0 %) sur les 30 questions : le
    plafond propre est 90 %, et le scan n'y arrive pas encore tout à fait.
 4. **Les tableaux photo** perdent encore la grille **2 fois sur 10** (pages 7 et 9 : ombre et
    trait interrompu) ; les cellules exactes y tombent à **62,4 %**. Les seuils adaptatifs de

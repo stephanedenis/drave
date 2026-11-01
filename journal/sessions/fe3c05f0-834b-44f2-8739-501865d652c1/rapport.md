@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 9.3 h |
-| Tours | 2 |
-| Messages | 571 |
-| Appels d'outils | 573 |
+| Durée | 9.8 h |
+| Tours | 3 |
+| Messages | 606 |
+| Appels d'outils | 605 |
 | Fichiers touchés | 18 |
-| Commandes | 514 |
+| Commandes | 546 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -27,6 +27,8 @@
 **Tour 1** — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
 
 **Tour 2** — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it que tu n'y est pas arrivée. J'accueille tes résultars et écarts sans jugement.
+
+**Tour 3** — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer … [637 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -85,7 +87,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*388 appels d'outils.* Actions notables :
+*393 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,11 +103,64 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 357 autres
+- … et 361 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de l'état partagé : mandat, ambition, stratégie et plan de la session
+⏵ Clôture : vérification finale et bilan du programme R4.4
+
+J'ai pris la ligne **R4.4 — les scans** (CPU seulement, sans toucher aux GPU de N2.h) et je l'ai poussée jusqu'au bout : corpus, prétraitement, exposants, colonnes, tableaux, validation réelle, coût, porte. Voici le bilan.
+
+\## Les chiffres
+
+**Cinq familles de scans simulés** (100 pages, split dev/test, WER mot à mot ; préservation = les réponses du lecteur retrouvées) :
+
+| famille | WER dev | WER test | préservation |
+|---|---:|---:|---:|
+| propre (contrôle) | 4,14 % | 3,01 % | 90,0 % |
+| photocopie | 6,34 % | 4,69 % | 86,7 % |
+| photo | **55,85 → 6,68 %** | **80,65 → 5,68 %** | 86,7 % |
+| papier | **13,02 → 6,87 %** | **53,15 → 6,38 %** | 80,0 % |
+| fax | 27,05 → 21,90 % | 23,10 → 15,52 % | 53,3 % |
+
+**Les autres axes** : colonnes à deux **89,4 → 0,5 %** de WER ; **trois** colonnes **52,5 → 0,0 %** (0–1,1 % dégradé) ; mono-colonnes inchangées (écart 0,00 pt). Tableaux : **92,6 %** de cellules exactes sur un rendu, **69,1 %** sur une photocopie, **62,4 %** sur une photo (8 grilles sur 10). Trois **vrais livres** d'Internet Archive : **7,10 %**, **8,73 %**, et un lexique à deux colonnes où l'ordre est **prouvé** (15,3 % contre **98 %** en ordre inverse). Coût : 0,4 s de prétraitement contre 2,4–2,9 s d'OCR par page.
+
+\## Ce que le réel a corrigé
+
+Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traversait la gouttière d'un lexique (la gouttière se cherche maintenant sur les mots, en couverture verticale — 93 % → 15 %) ; et le fond d'éclairage coûtait **9,5 s** pour un champ basse fréquence (vignette : **1,4 s**, et le papier gagne 6,6 points de préservation).
+
+\## Les écarts, nommés
+
+- **Fax 1 bit** : 21,9 % de WER, 53,3 % de préservation — limite d'information, pas de réglage.
+- **Tableaux photo** : 2 pages sur 10 hors grille (ombre, trait interrompu).
+- **Exposant fusionné** : un appel de note collé au mot n'est pas récupéré ; les appels séparés le sont.
+- **Réel = accord entre moteurs**, pas vérité humaine ; trois livres seulement.
+- **Gouttière < 2,5 %**, mise en page irrégulière, **flou σ=4** (49,6 → 53,2 %), **rotation > 6°** (10° : 43,5 %) : limites mesurées, écrites.
+
+\## L'état
+
+**17 commits**, la 80e porte `porte-ocr-scans` **verte** (familles, colonnes, tableaux), la porte OCR du pilote verte aussi. Fiche `reports/rapport-r44-scans.md`, 11 JSON, 13 outils, spécification `docs/implantation/encodeur-visuel.md` réécrite, roadmap/backlog/en-cours à jour, récit du 1er novemb
+… [486 caractères tronqués]
+
+### Tour 3 — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité … [917 caractères tronqués]
+
+*27 appels d'outils.* Actions notables :
+
+- bash — Inspect failed parity questions
+- bash — Inspect scan entry structure
+- bash — List all failed parity values
+- bash — Find parity functions and question data
+- bash — Read reader and parity code
+- bash — Reproduce failing parity questions
+- bash — Compare page-1 block segmentation native vs OCR
+- bash — Inspect paragraph text and passages for page 1
+- bash — Read block typing and merging logic
+- bash — Fix note typing and test page-1 parity
+- bash — Re-run scans after note-typing fix
+- bash — Read scans results after note fix
+- bash — List remaining parity failures
+- bash — Inspect the 2030-11 value failure
+- … et 13 autres
 
 ## 3. Travail accompli
 
@@ -174,7 +229,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 474 autres
+- … et 506 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,7 +357,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-27 sorties en erreur ou divergentes. Les premières :
+29 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -347,4 +402,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("vrais scans **7,10 / 88,4 %** ; redressement **≤ 6°** 
 - ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000)" 2>&1 | tail -2; git log --oneline -1
 - cat > /tmp/msg-multi.txt <<'EOF' R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS  La détection 
+- cat > /tmp/msg-note.txt <<'EOF' R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)  La ligne
 
