@@ -92,7 +92,8 @@ def reference(pdf: pathlib.Path, page: int) -> str:
                            str(pdf), "-"], capture_output=True, text=True, check=True).stdout
 
 
-def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None) -> dict:
+def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None,
+           langue: str = "fra") -> dict:
     from PIL import Image
     png = rendu(pdf, page)
     im = Image.open(png).convert("RGB")
@@ -101,7 +102,7 @@ def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None) -> dic
     if not chemin.exists():
         propre.save(chemin)
     ref = mesurer_ocr.jetons(reference(pdf, page))
-    m = mesurer_scans.manifeste_ocr(chemin, "fra", exposants=True, colonnes=True)
+    m = mesurer_scans.manifeste_ocr(chemin, langue, exposants=True, colonnes=True)
     hyp = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m))
     # le RAPPEL MULTIENSEMBLE ne dépend pas de l'ordre : sur une page à deux colonnes, la
     # couche de référence peut lire en lignes entrelacées et notre lecteur par colonne — le WER
@@ -110,7 +111,7 @@ def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None) -> dic
     commun = sum((Counter(ref) & Counter(hyp)).values())
     # contrôle : la même page sans prétraitement (l'écart dit ce que le nettoyage apporte
     # sur un scan réel — parfois rien, et c'est une information)
-    m_brut = mesurer_scans.manifeste_ocr(png, "fra", exposants=True, colonnes=True)
+    m_brut = mesurer_scans.manifeste_ocr(png, langue, exposants=True, colonnes=True)
     hyp_brut = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m_brut))
     ligne = {"page": page, "mots_reference": len(ref), "mots_ocr": len(hyp),
              "wer": round(mesurer_ocr.wer(ref, hyp) / max(len(ref), 1), 4),
@@ -146,6 +147,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--pdf", type=pathlib.Path, required=True)
     ap.add_argument("--pages", default="30,50,70,90,110,130,150,170,190,210")
+    ap.add_argument("--langue", default="fra")
     ap.add_argument("--djvu-xml", type=pathlib.Path,
                     help="référence d'ordre des colonnes depuis les coordonnées DjVu")
     ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "work/r44/reel.json")
@@ -153,7 +155,7 @@ def main() -> int:
     pages = [int(p) for p in args.pages.split(",") if p.strip()]
     lignes = []
     for page in pages:
-        ligne = mesure(args.pdf, page, args.djvu_xml)
+        ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)
         lignes.append(ligne)
         print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
               f"· rappel {ligne['rappel']:6.2%} · conf {ligne['confiance']:5.1f} "

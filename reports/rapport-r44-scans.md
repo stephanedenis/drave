@@ -130,6 +130,7 @@ page. La référence est un **autre moteur**, pas une vérité humaine : les chi
 |---|---:|---:|---:|---:|
 | *Voyage au centre de la terre* (`voyageaucentrede00vernuoft`) | 10 | **7,10 %** | **93,72 %** | 91,1 |
 | *Vingt mille lieues sous les mers*, 1902 (`vingtmillelieu00vern`) | 10 | **36,26 %** | **88,38 %** | 89,2 |
+| *Germinal*, 1900 (`germinal02zola`) | 10 | **8,73 %** | **91,89 %** | 90,9 |
 
 Le second livre est le cas intéressant. Son WER contre la couche `pdftotext -layout` est **36,3 %**,
 mais son **rappel multiensemble** est **88,4 %** : les mots sont lus, c'est l'**ordre** qui
@@ -147,6 +148,12 @@ puis la droite**. Pour le prouver, une référence d'**ordre des colonnes** est 
 L'ordre **inverse** échoue à 96–99 % : la direction de lecture est donc **prouvée**, pas supposée.
 Les 7 autres pages (prose, une colonne) restent à 9–14 % de WER contre la couche layout, sauf une
 planche illustrée à 30,3 % (rappel 71,2 %) — la page la plus faible est dans le JSON.
+
+**Le troisième livre fait payer le prétraitement.** Sur *Germinal* (scan 1900), le WER passe de
+**9,38 %** brut à **8,73 %** nettoyé (−0,65 point) : c'est le premier livre où le nettoyage gagne,
+et il le doit à la correction d'éclairage et au recadrage — un scan plus ancien, plus sale. Sur
+les deux Verne, il est neutre (7,05 → 7,10 %) : le nettoyage ne dégrade jamais, il aide quand la
+page en a besoin.
 
 **Ce que la validation réelle a trouvé.** Le lexique réel a révélé un défaut que le corpus
 synthétique ne voyait pas : un **en-tête centré** traverse la gouttière, et une gouttière cherchée
@@ -236,7 +243,8 @@ page propre — et la photo de **51,8 % à 3,8 %** de WER reste acquise.
 [`porte-ocr-scans.sh`](../tools/porte-ocr-scans.sh) (la 80e porte) vérifie les trois bancs :
 familles de scans (WER et préservation par famille, page noire), colonnes (deux colonnes, contrôle
 mono, contrôle sans gouttière), tableaux (cellules, grilles, sans redressement, texte à plat).
-Les seuils sont des **planchers mesurés** écrits dans les outils :
+Vérifiée **verte** le 2026-11-01 : les trois bancs passent, contrôles compris. Les seuils sont des
+**planchers mesurés** écrits dans les outils :
 
 | famille | WER ≤ | préservation ≥ |
 |---|---:|---:|

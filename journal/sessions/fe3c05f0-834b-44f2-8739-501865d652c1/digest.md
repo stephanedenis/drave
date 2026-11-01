@@ -8419,3 +8419,220 @@ python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancr�
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **372** / **447** |\",\"| fichiers / JSON de résultats | **372** / **448** |\")\np.write_text(s)\nPY\npython3 tools/revue_documentation.py 2>&1  … [2587 caractères tronqués]`
+
+  ```
+revue de documentation · 372 fiche(s) · 448 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3998 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+ 22 files changed, 1354 insertions(+), 369 deletions(-)
+ create mode 100644 reports/r44-cout.json
+ create mode 100644 tools/mesurer_cout.py
+dc737497 R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION
+53fa2e5a R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28pride+and+prejudice%29+AND+language%3Aeng+AND+year%3A%5B1890+TO+1925%5D&fl%5B%5D=identifier&fl%5B%5D=year&rows=8&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response'][ … [161 caractères tronqués]`
+
+  ```
+{'identifier': 'prideandprejudi01austgoog', 'year': 1892}
+{'identifier': 'prideprejudice0000jane_y6u8', 'year': 1918}
+{'identifier': 'bwb_S0-BWG-515', 'year': 1917}
+{'identifier': 'prideprejudice0000unse_d2r0', 'year': 1898}
+{'identifier': 'bwb_W8-AAE-980', 'year': 1900}
+{'identifier': 'sentimentaljourn0000ster', 'year': 1917}
+{'identifier': 'bwb_Y0-BOP-811', 'year': 1919}
+{'identifier': 'prideprejudice00aust_5', 'year': 1917}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None) -> dict:''',\n            '''def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None,\n   … [1367 caractères tronqués]`
+
+  ```
+option langue ajoutée
+titre Pride and prejudice | langue eng
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/metadata/prideandprejudi01austgoog\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nfor f in d.get('files',[]):\n    print(f['name'], f.get('size'))\n\" 2>&1 | head -20", "description": "List files of the English scan", "timeoutMs": 12 … [67 caractères tronqués]`
+
+  ```
+__ia_thumb.jpg 11707
+prideandprejudi01austgoog.djvu 3967908
+prideandprejudi01austgoog.gif 112763
+prideandprejudi01austgoog_archive.torrent 4093
+prideandprejudi01austgoog_dc.xml 1123
+prideandprejudi01austgoog_desc.html 39708
+prideandprejudi01austgoog_files.xml None
+prideandprejudi01austgoog_marc.xml 6129
+prideandprejudi01austgoog_meta.xml 1641
+prideandprejudi01austgoog_metasource.xml 557
+prideandprejudi01austgoog_scandata.xml 78169
+prideandprejudi01austgoog_tif.zip 23255027
+  ```
+
+- **bash** `{"command": "timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v5.log 2>&1; echo \"[gate $?]\"; tail -10 work/r44/gate-v5.log", "description": "Run final scan gate on current code", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-434
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28germinal%29+AND+creator%3A%28zola%29+AND+language%3Afre&fl%5B%5D=identifier&fl%5B%5D=year&rows=6&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs']]\" 2>&1  … [147 caractères tronqués]`
+
+  ```
+{'identifier': 'germinal0000zola_r5h2', 'year': 1990}
+{'identifier': 'germinal02zola', 'year': 1900}
+{'identifier': 'germinal0000zola_w5g3', 'year': 2008}
+{'identifier': 'germinal0000zola_s2i6', 'year': 1991}
+{'identifier': 'germinalromanext0000zola', 'year': 2005}
+{'identifier': 'germinal1968zola', 'year': 1968}
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/metadata/germinal02zola\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin); m=d.get('metadata',{}); print('titre',m.get('title'),'| langue',m.get('language'))\nfor f in d.get('files',[]):\n    if f['name'].endswith(('.pdf','_djvu.xml')):  … [178 caractères tronqués]`
+
+  ```
+titre Germinal | langue fre
+germinal02zola.pdf 13231204
+germinal02zola_djvu.xml 6034391
+  ```
+
+- **bash** `{"command": "set -e\ncd work/r44/reel\n[ -s germinal.pdf ] || timeout 180 curl -sSL -A \"Mozilla/5.0\" -o germinal.pdf \"https://archive.org/download/germinal02zola/germinal02zola.pdf\"\n[ -s germinal_djvu.xml ] || timeout 180 curl -sSL -A \"Mozilla/5.0\" -o germinal_djvu.xml \"https://archive.org/d … [531 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane      170 01:46 germinal_djvu.xml
+-rw-r--r--. 1 stephane stephane 13231204 01:46 germinal.pdf
+Pages:           274
+Page size:       293 x 488.16 pts
+    ordre = mesurer_ocr.jetons(reference_colonnes(xml, page))
+                               ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 47, in reference_colonnes
+    root = ET.parse(xml).getroot()
+           ~~~~~~~~^^^^^
+  File "/usr/lib64/python3.13/xml/etree/ElementTree.py", line 1219, in parse
+    tree.parse(source, parser)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/xml/etree/ElementTree.py", line 573, in parse
+    self._root = parser._parse_whole(source)
+                 ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+xml.etree.ElementTree.ParseError: mismatched tag: line 6, column 2
+  ```
+
+- **bash** `{"command": "head -c 120 work/r44/reel/germinal_djvu.xml; echo; cd work/r44/reel; timeout 120 curl -sSL -A \"Mozilla/5.0\" -o germinal_djvu.xml \"https://archive.org/download/germinal02zola/germinal02zola_djvu.xml\"; ls -la germinal_djvu.xml; head -c 60 germinal_djvu.xml; cd ../../..; pdftotext -f 4 … [191 caractères tronqués]`
+
+  ```
+<html>
+<head><title>500 Internal Server Error</title></head>
+<body>
+<center><h1>500 Internal Server Error</h1></cente
+-rw-r--r--. 1 stephane stephane 6034391  1 nov 01:46 germinal_djvu.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DjVuXML>
+<D:j2                LES ROUGON-MACQDART.
+cre Deneulin de la légitimité de leur action révolution-
+        naire. Mais celui-ci répondait par le droit au travail.
+D'ailleurs, il refusait de discuter ces bêtises, il voulaût
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/germinal.pdf --djvu-xml work/r44/reel/germinal_djvu.xml --pages 40,60,80,100,120,140,160,180,200,220 --sortie work/r44/reel3.json 2>&1 | tail -12", "description": "Measure third real book", "timeoutMs": 1800000, "workdir": " … [49 caractères tronqués]`
+
+  ```
+page  40 · WER  6.31% (brut  7.89%) · rappel 93.69% · conf  92.1 · 317 mots · colonnes 91.80% (inverse 90.22%)
+  page  60 · WER  9.57% (brut 10.80%) · rappel 90.74% · conf  90.2 · 324 mots · colonnes 88.00% (inverse 88.92%)
+  page  80 · WER  4.13% (brut  6.88%) · rappel 95.87% · conf  91.8 · 218 mots · colonnes 88.07% (inverse 89.91%)
+  page 100 · WER  6.46% (brut  8.62%) · rappel 93.85% · conf  89.9 · 325 mots · colonnes 91.08% (inverse 93.54%)
+  page 120 · WER 10.50% (brut 11.95%) · rappel 90.38% · conf  91.8 · 343 mots · colonnes 92.71% (inverse 93.59%)
+  page 140 · WER  8.57% (brut  7.62%) · rappel 92.86% · conf  92.0 · 210 mots · colonnes 89.05% (inverse 89.52%)
+  page 160 · WER  5.42% (brut  4.52%) · rappel 94.58% · conf  91.9 · 332 mots · colonnes 87.65% (inverse 93.07%)
+  page 180 · WER 14.11% (brut 11.41%) · rappel 88.89% · conf  88.5 · 333 mots · colonnes 93.99% (inverse 91.29%)
+  page 200 · WER  8.31% (brut  8.92%) · rappel 91.69% · conf  91.9 · 325 mots · colonnes 91.08% (inverse 92.62%)
+  page 220 · WER 11.92% (brut 13.37%) · rappel 88.37% · conf  90.1 · 344 mots · colonnes 94.19% (inverse 92.15%)
+
+  10 pages · WER 8.73% nettoyé · 9.38% brut · rappel multiensemble 91.8
+… [41 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('work/r44/reel3.json').read_text())\nd['source']='Germinal (1900) — Internet Archive germinal02zola, scan 300 dpi'\nd['dispositif']=\"tools/mesurer_reel.py (couche OCR du PDF comme référence ; ordre des colonnes depuis les … [2118 caractères tronqués]`
+
+  ```
+troisième livre ajouté
+T0 3962
+=== gate
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 86.7%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 86.7%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+  ```
+
+- **bash** `{"command": "sleep 240; tail -16 work/r44/gate-v5.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Wait for final gate result", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes.json
+--- 3. les tableaux (10 pages × 3 familles)
+3
+01:52
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28time+machine%29+AND+creator%3A%28wells%29&fl%5B%5D=identifier&fl%5B%5D=year&rows=6&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs']]\" 2>&1 | head -6", "d … [138 caractères tronqués]`
+
+  ```
+{'identifier': 'bwb_S0-ECY-638', 'year': 1997}
+{'identifier': 'bwb_W9-CVU-919', 'year': 1956}
+{'identifier': 'bwb_S0-EDN-910', 'year': 1983}
+{'identifier': 'warofworldstimem0000hgwe_c1c6', 'year': 1956}
+{'identifier': 'isbn_0897110153'}
+{'identifier': 'thetimemachine00035gut'}
+  ```
+
+- **bash** `{"command": "sleep 180; tail -14 work/r44/gate-v5.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l", "description": "Read final gate verdict", "timeoutMs": 240000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+--- 3. les tableaux (10 pages × 3 familles)
+  propre      oui           10       540      500   92.6%    10/10
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-434 (bash: timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v5.log 2>&1; echo "[gate $?]"; tail -10 work/r44/gate-v5.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace('''Les seuils sont des **planchers mesurés** écrits dans les outils :''','''Vérifiée **verte** le 2026-11-01 : les trois bancs passent, contrôles compris. Les seuils sont des\n … [662 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, na
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-trois.txt <<'EOF'\nR4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER\n\nLes deux premiers livres (Verne) donnaient au prétraitement un bilan neutre : un scan de\nbibliothèque est propre, la correction d'éclairage n'y a rien à faire. Un … [1520 caractères tronqués]`

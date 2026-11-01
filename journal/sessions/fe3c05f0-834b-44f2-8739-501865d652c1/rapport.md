@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 8.1 h |
+| Durée | 8.3 h |
 | Tours | 2 |
-| Messages | 478 |
-| Appels d'outils | 488 |
+| Messages | 494 |
+| Appels d'outils | 503 |
 | Fichiers touchés | 18 |
-| Commandes | 430 |
+| Commandes | 445 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*303 appels d'outils.* Actions notables :
+*318 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 273 autres
+- … et 288 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 390 autres
+- … et 405 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -333,4 +333,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("simulés** — photo **55,9 → 7,0 %**, préservation **86,
 - cat > /tmp/msg-gouttiere.txt <<'EOF' R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %  Le co
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| fichiers / JSON de résultats | **372** / **447** |",
+- cat > /tmp/msg-trois.txt <<'EOF' R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER  Les deux premiers livres (Verne) donnai
 

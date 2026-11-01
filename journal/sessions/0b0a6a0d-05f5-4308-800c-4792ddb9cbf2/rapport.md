@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 8.4 h |
+| Durée | 8.7 h |
 | Tours | 4 |
-| Messages | 473 |
-| Appels d'outils | 452 |
+| Messages | 496 |
+| Appels d'outils | 475 |
 | Fichiers touchés | 11 |
-| Commandes | 369 |
+| Commandes | 391 |
 | Sous-agents | 0 |
 | Commits | 6 |
 | Compactages de contexte | 0 |
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*113 appels d'outils.* Actions notables :
+*136 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 77 autres
+- … et 99 autres
 
 **Synthèse produite :**
 
-⏵ Le verrou de longueur tombe : 14,46 → 3,26 à 256 octets avec des positions aléatoires
+⏵ Lancement de la passe complète des portes (seule sur les GPU) pendant la rédaction
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 329 autres
+- … et 351 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -381,7 +381,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-31 sorties en erreur ou divergentes. Les premières :
+33 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

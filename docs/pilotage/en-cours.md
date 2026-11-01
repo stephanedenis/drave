@@ -22,17 +22,15 @@
 - **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
 - **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
 - **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
-- **Ce qu'elle fait** : la dédup et le split sont faits ; la distillation A tourne (3 graines).
-- **Résultat intermédiaire** : la chaîne propre vaut **3,10** en domaine (3,21 au test) — pas
-  2,85 — et **17,1** sur la littérature jamais vue : c'est un spécialiste du dépôt. Le bras
-  **diversité** (moitié dépôt, moitié littérature) la ramène à **3,86** (÷ 4,4) et l'anglais de
-  **60,7** à **26,3**, pour **+0,16** en domaine. Le verrou de longueur est intact
-  (**3,13** à 129, **14,46** à 256) ; la tête du 6ᵉ bloc bat le complet (**3,0562** contre
-  **3,1298**) : la boucle de pensée coûte **0,07**.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité et longueur mesurées (3 fiches).
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
+  — et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
+  l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
+  octets de **14,11** à **3,25** et 512 de **32,41** à **5,93** ; la base supervisée vaut **12,29**
+  hors domaine : **la distillation spécialise**. Fiches `n2-propre`, `n2-diversite`, `n2-longueur`.
 - **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : les 3 graines de A, puis la diversité française (D) et les positions
-  aléatoires (R) ; fiches `n2-propre`, journal, roadmap, portes.
+- **Prochaine action** : clôture — journal, roadmap, portes, commit.
 - **Bloquants** : aucun — GPU occupés.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
@@ -44,7 +42,7 @@
 - **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
 - **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
 - **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
-- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
 - **Prochaine action** : **fax** 1 bit et **exposant fusionné**.
 - **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
@@ -78,7 +76,7 @@
 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
   simulés** — photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**,
-  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
@@ -90,8 +88,9 @@
   innocents — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2.h — le mètre propre** : corpus dédupliqué fait (0 % de fuite), distillation en cours ;
-  fiche [`n2-budget`](../../reports/rapport-n2-budget.md). N4 **0/40**.
+- **N2.h — le mètre propre** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en
+  domaine, diversité (÷ 4,3 hors dépôt) et longueur (14,11 → 3,25 à 256) mesurées ; fiches
+  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-diversite`](../../reports/rapport-n2-diversite.md) · [`n2-longueur`](../../reports/rapport-n2-longueur.md). N4 **0/40**.
 - **Pensée — RSN plurielle** : doc `pensee-iterative.md` (10 tours, 9 schémas) ; le **state store
   v0** est la prochaine action ; fichiers réservés dans la session `e181ce02`.
 
@@ -104,7 +103,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **372** / **448** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **375** / **450** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
 

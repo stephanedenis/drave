@@ -9,19 +9,16 @@
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
   `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
   `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
-- **Heartbeat** : 2026-10-31 22:40 HAE
+- **Heartbeat** : 2026-11-01 03:40 HAE
 - **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
   validation dans l'entraînement), chaîne refaite dessus, porte < 2,5 redéfinie — puis trancher
   ce que les chiffres contaminés ne pouvaient pas trancher : la **généralité hors dépôt** et le
   **verrou de longueur**.
-- **Plan** : 1) `tools/corpus_propre.py` (dédup shingles, split par chunks, vérification) ;
-  2) chaîne propre (professeur 23,5 M, base 20 000 pas, distillation 20 000 pas × 3 graines,
-  curriculum 129 × 3) ; 3) porte honnête + hors domaine (littérature, anglais, wikitext2) +
-  décomposition (têtes précoces, pensée) ; 4) diversité française 50/50 dépôt-littérature, × 3 ;
-  5) verrou de longueur : courbe 129→512 et **positions aléatoires** × 3 ; 6) fiches, portes, commit.
-- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus
-  d'abord — un levier mesuré sur un mètre faux ne vaut rien.
-- **Ambition** : sortir N2 du chiffre qui flattait (2,85 sur un jeu contaminé à 32,8 %), donner à R
-  un modèle qui lit du français général, trancher le verrou de longueur par une expérience.
-- **Prochaine action** : distillation A (3 graines) puis évaluation de la porte honnête.
-- **État** : en cours
+- **Résultat** : corpus 4,63 → 3,61 Mo (−22,2 %), **0 / 2 814** fenêtres de validation dans
+  l'entraînement (contre 32,8 %) ; chaîne propre **3,09** en domaine, **16,70** sur la littérature
+  jamais vue ; diversité française **3,86** (÷ 4,3) pour **+0,17** en domaine ; positions
+  aléatoires : 256 octets **14,11 → 3,25**, 512 **32,41 → 5,93** ; la base supervisée vaut
+  **12,29** hors domaine — la distillation spécialise. Trois fiches : `n2-propre`,
+  `n2-diversite`, `n2-longueur`.
+- **Prochaine action** : close — journal, roadmap, portes, commit.
+- **État** : terminé

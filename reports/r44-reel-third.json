@@ -1,0 +1,200 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "nature": "scan RÉEL",
+ "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
+ "djvu": "work/r44/reel/germinal_djvu.xml",
+ "source": "Germinal (1900) — Internet Archive germinal02zola, scan 300 dpi",
+ "note_colonnes": "la référence d'ordre des colonnes ne s'applique qu'aux pages à deux colonnes ; l'agrégat wer_colonnes mélange donc les deux mises en page — lire le détail page par page",
+ "agregat": {
+  "pages": 10,
+  "mots_reference": 3071,
+  "wer": 0.0873,
+  "wer_brut": 0.0938,
+  "rappel": 0.9189,
+  "confiance": 90.9,
+  "wer_colonnes": 0.9095,
+  "wer_colonnes_inverse": 0.9163
+ },
+ "pages": [
+  {
+   "page": 40,
+   "mots_reference": 317,
+   "mots_ocr": 310,
+   "wer": 0.0631,
+   "wer_brut": 0.0789,
+   "rappel": 0.9369,
+   "precision": 0.9581,
+   "confiance": 92.1,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.918,
+   "wer_colonnes_inverse": 0.9022,
+   "mots_reference_colonnes": 317
+  },
+  {
+   "page": 60,
+   "mots_reference": 324,
+   "mots_ocr": 313,
+   "wer": 0.0957,
+   "wer_brut": 0.108,
+   "rappel": 0.9074,
+   "precision": 0.9393,
+   "confiance": 90.2,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.88,
+   "wer_colonnes_inverse": 0.8892,
+   "mots_reference_colonnes": 325
+  },
+  {
+   "page": 80,
+   "mots_reference": 218,
+   "mots_ocr": 216,
+   "wer": 0.0413,
+   "wer_brut": 0.0688,
+   "rappel": 0.9587,
+   "precision": 0.9676,
+   "confiance": 91.8,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.8807,
+   "wer_colonnes_inverse": 0.8991,
+   "mots_reference_colonnes": 218
+  },
+  {
+   "page": 100,
+   "mots_reference": 325,
+   "mots_ocr": 321,
+   "wer": 0.0646,
+   "wer_brut": 0.0862,
+   "rappel": 0.9385,
+   "precision": 0.9502,
+   "confiance": 89.9,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.9108,
+   "wer_colonnes_inverse": 0.9354,
+   "mots_reference_colonnes": 325
+  },
+  {
+   "page": 120,
+   "mots_reference": 343,
+   "mots_ocr": 336,
+   "wer": 0.105,
+   "wer_brut": 0.1195,
+   "rappel": 0.9038,
+   "precision": 0.9226,
+   "confiance": 91.8,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.9271,
+   "wer_colonnes_inverse": 0.9359,
+   "mots_reference_colonnes": 343
+  },
+  {
+   "page": 140,
+   "mots_reference": 210,
+   "mots_ocr": 206,
+   "wer": 0.0857,
+   "wer_brut": 0.0762,
+   "rappel": 0.9286,
+   "precision": 0.9466,
+   "confiance": 92.0,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.8905,
+   "wer_colonnes_inverse": 0.8952,
+   "mots_reference_colonnes": 210
+  },
+  {
+   "page": 160,
+   "mots_reference": 332,
+   "mots_ocr": 328,
+   "wer": 0.0542,
+   "wer_brut": 0.0452,
+   "rappel": 0.9458,
+   "precision": 0.9573,
+   "confiance": 91.9,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.8765,
+   "wer_colonnes_inverse": 0.9307,
+   "mots_reference_colonnes": 332
+  },
+  {
+   "page": 180,
+   "mots_reference": 333,
+   "mots_ocr": 336,
+   "wer": 0.1411,
+   "wer_brut": 0.1141,
+   "rappel": 0.8889,
+   "precision": 0.881,
+   "confiance": 88.5,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.9399,
+   "wer_colonnes_inverse": 0.9129,
+   "mots_reference_colonnes": 333
+  },
+  {
+   "page": 200,
+   "mots_reference": 325,
+   "mots_ocr": 319,
+   "wer": 0.0831,
+   "wer_brut": 0.0892,
+   "rappel": 0.9169,
+   "precision": 0.9342,
+   "confiance": 91.9,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.9108,
+   "wer_colonnes_inverse": 0.9262,
+   "mots_reference_colonnes": 325
+  },
+  {
+   "page": 220,
+   "mots_reference": 344,
+   "mots_ocr": 332,
+   "wer": 0.1192,
+   "wer_brut": 0.1337,
+   "rappel": 0.8837,
+   "precision": 0.9157,
+   "confiance": 90.1,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ],
+   "wer_colonnes": 0.9419,
+   "wer_colonnes_inverse": 0.9215,
+   "mots_reference_colonnes": 344
+  }
+ ],
+ "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence ; ordre des colonnes depuis les coordonnées DjVu)"
+}

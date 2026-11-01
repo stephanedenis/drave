@@ -6562,3 +6562,216 @@ started background job bash-369
   ```
 
 - **job_output** `{"job_id": "bash-369", "timeout_ms": 600000, "wait": true}`
+
+  ```
+01:47
+work/n2h/R-pos-g3.pt
+R3_OK
+work/n2h/gpu0.termine
+GPU0_FINI
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Campagne terminée : évaluation finale des 16 points de contrôle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n2h/evalue-tout.sh > work/n2h/eval-tout.out 2>&1 & echo \"eval $!\"; date '+%H:%M'", "description": "Run the final evaluation of all checkpoints"}`
+
+  ```
+eval 653953
+01:47
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls -la work/n2h/eval.json 2>/dev/null; ls work/n2h/eval.termine 2>/dev/null && echo FINI; tail -2 work/n2h/eval-tout.log", "description": "Wait for the batch evaluation", "run_in_background": true}`
+
+  ```
+started background job bash-371
+  ```
+
+- **job_output** `{"job_id": "bash-371", "timeout_ms": 900000, "wait": true}`
+
+  ```
+01:54
+-rw-r--r--. 1 stephane stephane 7966  1 nov 01:52 work/n2h/eval.json
+work/n2h/eval.termine
+FINI
+{"fichier": "D-mixte-g2.pt", "params": 11814792, "val": 3.26, "test": 3.3203, "litterature": 3.5217, "litterature_propre": 3.8562, "anglais": 25.3735, "wikitext2": 25.798, "permute": 462.8188, "decomposition": {"complete": 3.2872, "apres_2_blocs": 4.2686, "apres_4_blocs": 3.5046, "apres_6_blocs": 3.2613, "sans_pensee": 4777258.3125}, "longueurs": {"129": 3.3003, "192": 7.4877, "256": 11.0491, "384": 16.1717, "512": 19.652}}
+{"fichier": "D-mixte-g3.pt", "params": 11814792, "val": 3.2671, "test": 3.3266, "litterature": 3.519, "litterature_propre": 3.851, "anglais": 25.3341, "wikitext2": 25.8465, "permute": 470.7997, "decomposition": {"complete": 3.297, "apres_2_blocs": 4.2705, "apres_4_blocs": 3.5015, "apres_6_blocs": 3.2625, "sans_pensee": 4553894.5856}, "longueurs": {"129": 3.3124, "192": 7.4968, "256": 11.0655, "384": 16.11, "512": 19.5992}}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2h/remplit.py", "description": "Fill the three reports from the evaluation"}`
+
+  ```
+rapport-n2-propre.md restes: []
+rapport-n2-diversite.md restes: []
+rapport-n2-longueur.md restes: []
+A 3,0904 C128 3,0804 D 3,2625 R 3,2381
+long A {'129': 3.13, '192': 8.56, '256': 14.11, '384': 23.9, '512': 32.41} long R {'129': 3.24, '192': 3.23, '256': 3.25, '384': 5.06, '512': 5.93}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,12p reports/rapport-n2-propre.md; echo \"...\"; sed -n '/## Ce qui est mesuré/,/## La porte/p' reports/rapport-n2-propre.md; echo \"=== fiche3 lecture ===\"; sed -n '/## Ce qui est mesuré/,/## Ce que ça change/p' reports/rap … [68 caractères tronqués]`
+
+  ```
+# N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le corpus de N2 se recopiait
+> (**32,8 %** des fenêtres de validation étaient verbatim dans l'entraînement) ; dédupliqué, il
+> perd **22,2 %** de son texte et la contamination tombe à **zéro**. La chaîne refaite vaut
+> **3,0904** en domaine — pas 2,85 — et **16,70** sur de la littérature jamais vue : la
+> porte < 2,5 est **redéfinie**, et elle est à **0,59**.
+
+## La question
+
+N2.d a montré que la PPL de N2 se mesurait sur un jeu où un tiers des fenêtres étaient
+mémorisables (2,5862 sur les fenêtres contaminées contre 2,9795 sur les propres). La question
+...
+## Ce qui est mesuré
+
+| bras | graines | val | test | littérature | anglais | wikitext2 |
+|---|---:|---:|---:|---:|---:|---:|
+| base propre | 1 | **3,2402** | **3,2880** | **12,2861** | **32,9009** | **33,2883** |
+| **A — dépôt seul** | 3 | **3,0904** ±0,0048 | **3,1960** ±0,0100 | **16,7034** ±0,2706 | **57,5773** ±2,2054 | **56,8821** ±2,0231 |
+| **C — curriculum 129** | 3 | **3,0804** ±0,0103 | **3,1879** ±0,0042 | **16,8172** ±0,3141 | **58,0259** ±1,6809 |
+… [1860 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit.py'); s = p.read_text()\ns = s.replace('    \"TABLE\": table1,\\n', '')\ns = s.replace('    \"R_VAL\": fm(R_VAL), \"R_256\": fm2(long_R[\"256\"]), \"R_512\": fm2(lo … [1652 caractères tronqués]`
+
+  ```
+ok
+rapport-n2-longueur.md restes: []
+A 3,0904 C128 3,0804 D 3,2625 R 3,2381
+long A {'129': 3.13, '192': 8.56, '256': 14.11, '384': 23.9, '512': 32.41} long R {'129': 3.24, '192': 3.23, '256': 3.25, '384': 5.06, '512': 5.93}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce qui est mesuré/,/## Lecture/p' reports/rapport-n2-longueur.md; echo \"=== distille ===\"; sed -n '/## La distillation spécialise/,/## La décomposition/p' reports/rapport-n2-propre.md", "description": "Verify the fixed  … [28 caractères tronqués]`
+
+  ```
+## Ce qui est mesuré
+
+| octets | 129 | 192 | 256 | 384 | 512 |
+|---|---:|---:|---:|---:|---:|
+| **A** (positions 0–127) | 3,13 | 8,56 | 14,11 | 23,90 | 32,41 |
+| **R** (positions aléatoires) | 3,24 | 3,23 | 3,25 | 5,06 | 5,93 |
+
+## Lecture
+=== distille ===
+## La distillation spécialise
+
+Le tableau ci-dessus contient une surprise : la **base supervisée** — qui n'a jamais vu le
+professeur — vaut **3,2402** en domaine mais **12,29** sur la littérature et
+**32,90** en anglais. La distillation lui fait gagner **-0,150** en domaine et lui
+coûte **4,42** hors domaine. Distiller vers un professeur qui ne connaît que le dépôt,
+c'est **spécialiser** l'élève : le professeur n'est pas seulement un enseignant, c'est un
+**prisme**.
+
+C'est la même leçon que la fiche [`n2-diversite`](rapport-n2-diversite.md), par l'autre bout : ce
+n'est pas la distillation qui est en cause, c'est **ce qu'elle distille**.
+
+## La décomposition — où va le calcul
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit.py'); s = p.read_text()\ns = s.replace('\"DIST_VAL\": fm(A_VAL - moy(\"base-propre\", \"val\"), 3),',\n              '\"DIST_VAL\": fm(A_VAL - moy(\"base-propre\",  … [234 caractères tronqués]`
+
+  ```
+ok
+long A {'129': 3.13, '192': 8.56, '256': 14.11, '384': 23.9, '512': 32.41} long R {'129': 3.24, '192': 3.23, '256': 3.25, '384': 5.06, '512': 5.93}
+91:**32,90** en anglais. La distillation lui fait gagner **−0,150** en domaine et lui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2h/maj-roadmap.py && git diff --stat docs/pilotage/roadmap.md", "description": "Apply the roadmap update"}`
+
+  ```
+roadmap : 7 remplacements
+A 3,0904 D 3,2625 R 3,2381 | 256: 14,11 -> 3,25 | 512: 32,41 -> 5,93
+ docs/pilotage/roadmap.md | 37 ++++++++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 17 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def date_dernier_commit' tools/revue_documentation.py | cut -d: -f1),+8p\" tools/revue_documentation.py; date '+%Y-%m-%d %H:%M'", "description": "Check how the review computes the last commit date"}`
+
+  ```
+def date_dernier_commit() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--format=%ad", "--date=short"], cwd=RACINE, text=True
+        ).strip()
+    except Exception:
+        return ""
+
+
+2026-11-01 01:55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 18,40p docs/pilotage/en-cours.md; echo \"=== maj ===\"; head -3 docs/pilotage/en-cours.md", "description": "Re-read the current session block"}`
+
+  ```
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+- **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : la dédup et le split sont faits ; la distillation A tourne (3 graines).
+- **Résultat intermédiaire** : la chaîne propre vaut **3,10** en domaine (3,21 au test) — pas
+  2,85 — et **17,1** sur la littérature jamais vue : c'est u
+… [1136 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%ad' --date=short; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"- **Ce qu'elle fait** : la dédup et le split sont faits ; la distillation A tourne  … [1786 caractères tronqués]`
+
+  ```
+2026-11-01
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 372 fichiers, le disque en a 375
+     · compteurs : en-cours.md dit 448 JSON, le disque en a 450
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nimport re\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / J … [888 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 375 fiche(s) · 450 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py 2>&1 | tail -2; du -sh work/n2h; df -h /home/stephane/IA | tail -1", "description": "Regenerate the reports index and check sizes"}`
+
+  ```
+372 fiches → reports/INDEX.md
+903M	work/n2h
+/dev/md0        938G  893G   35G  97% /home/stephane/IA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01 && rsync -a --exclude 'essai-*' work/n2h/ /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/ && du -sh /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01 &&  … [137 caractères tronqués]`
+
+  ```
+903M	/home/stephane/Data13TB/stephane/backups/n2h/2026-11-01
+14
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/IA/artefacts/n2h/2026-11-01 && rsync -a /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/ /home/stephane/IA/artefacts/n2h/2026-11-01/ && du -sh /home/stephane/IA/artefacts/n2h/2026-11-01 && df -h /home/stephane/IA | tail -1", "description": "Replicate the  … [32 caractères tronqués]`
+
+  ```
+903M	/home/stephane/IA/artefacts/n2h/2026-11-01
+/dev/md0        938G  894G   35G  97% /home/stephane/IA
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la passe complète des portes (seule sur les GPU) pendant la rédaction
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=/tmp/portes-1101-n2h DELAI=1800 bash tools/toutes-les-portes.sh > work/n2h/portes.log 2>&1 & echo \"portes $!\"; date '+%H:%M'", "description": "Launch the full gate pass"}`
+
+  ```
+portes 657672
+01:56
+  ```
+
