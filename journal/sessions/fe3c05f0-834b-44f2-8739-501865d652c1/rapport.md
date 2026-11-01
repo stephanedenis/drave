@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 18.5 h |
+| Durée | 18.6 h |
 | Tours | 5 |
-| Messages | 714 |
-| Appels d'outils | 723 |
+| Messages | 716 |
+| Appels d'outils | 724 |
 | Fichiers touchés | 18 |
-| Commandes | 661 |
+| Commandes | 662 |
 | Sous-agents | 0 |
 | Commits | 31 |
 | Compactages de contexte | 1 |
@@ -258,7 +258,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 
 ### Tour 5 — go
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Inspect French Wikipedia sqlite schema
 - bash — Check DB summaries and French wiki text files
@@ -274,7 +274,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 - bash — Write contamination checker for corpus
 - bash — Check extraction and text join artifacts
 - bash — Stop extraction and strengthen text cleanup
-- … et 4 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -349,7 +349,7 @@ Je commence par la base FR : schéma, volume d'articles, format du texte — pui
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 621 autres
+- … et 622 autres
 
 ## 4. Mesures et résultats marquants
 

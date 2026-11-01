@@ -12663,3 +12663,29 @@ Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher
 === lOfficial restants
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpus-wiki-fr.json > work/corpus-wiki.log 2>&1 & echo \"job $!\"; sleep 30; … [214 caractères tronqués]`
+
+  ```
+started background job bash-660
+  ```
+
+- **bash** `{"command": "sleep 300; tail -3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/corpus-wiki.log; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr/; date +%H:%M", "description": "Check full extraction progress", "timeoutMs": 360000, "workdir": "/home/stephane/Data13TB/s … [24 caractères tronqués]`
+
+  ```
+800000/2755035 lus · 799968 gardés · 799968 tronçons
+  1000000/2755035 lus · 999966 gardés · 999966 tronçons
+  1200000/2755035 lus · 1199961 gardés · 1199961 tronçons
+total 2052076
+drwxr-xr-x. 1 stephane stephane         48  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:02 ..
+-rw-r--r--. 1 stephane stephane  104720880  1 nov 11:10 test.txt
+-rw-r--r--. 1 stephane stephane 1890718666  1 nov 11:10 train.txt
+-rw-r--r--. 1 stephane stephane  105877892  1 nov 11:10 val.txt
+11:10
+  ```
+
+### 👤 Utilisateur
+
+background job bash-660 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpus-wiki-fr.json > work/corpus-wiki.log 2>&1 & echo "job $!"; sleep 30; tail -3 work/corpus-wiki.log; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 420; tail -4 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/corpus-wiki.log; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr/; pgrep -af \"corpus_wikipedia.py\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Wait for extraction completion", … [83 caractères tronqués]`

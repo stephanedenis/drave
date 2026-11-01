@@ -11574,3 +11574,216 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER\n\nLe banc de structures gagne son analyseur v0 ( … [936 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-668]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-668", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 0ca545eb] S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER
+ 19 files changed, 1263 insertions(+), 62 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && fuser -k 8765/tcp 2>/dev/null; sleep 0.5; nohup python3 tools/structures/serveur.py --port 8765 > /tmp/banc-structures.log 2>&1 & sleep 1.3; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" http://127.0.0.1:8765/; curl -s http://127. … [654 caractères tronqués]`
+
+  ```
+1298713HTTP 200
+6 phrases, 0 validations
+  banc de structures · http://127.0.0.1:8765 · 6 phrases
+  127.0.0.1 · "GET / HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+=== submodule ===
+?? donnees/llm.jsonl
+ a4070958f6094d0bc600ba24d15863331efc5cac tools/structures (remotes/origin/HEAD)
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3646 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+ M tools/corpus_wikipedia.py
+ ? tools/structures
+?? tools/verifie_contamination.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f tools/structures/donnees/llm.jsonl && git -C tools/structures status --short; echo \"---\"; git status --short | grep -v \"^ m tools/docwatch\" | head -4; echo \"=== serveur ===\"; curl -s http://127.0.0.1:8765/api/phrases | py … [237 caractères tronqués]`
+
+  ```
+---
+ M tools/corpus_wikipedia.py
+?? tools/verifie_contamination.py
+=== serveur ===
+phrases 6 · validations 0
+phrases.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Serveur en ligne ; le générateur de candidats est branché et testé
+
+## Le serveur tourne
+
+**http://127.0.0.1:8765** — 6 phrases, 0 validation, données propres. Pour l'arrêter : `fuser -k 8765/tcp` ; pour le relancer : `python3 tools/structures/serveur.py`. Sur le réseau local : `--hote 0.0.0.0`.
+
+## Ce que j'ai ajouté depuis le lancement : le générateur
+
+Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
+
+- **Segmentation** par lexique de mots grammaticaux et règles de frontière : GN, GV, GP, REL, SUB ;
+- **Rôles devinés par la préposition** : lieu, temps, but, moyen, thème, destinataire ;
+- **Attachements candidats** : pour un GP ou une relative, il propose la tête du GP, le GN et le GV — exactement les ambiguïtés qui comptent ;
+- **Rôles ambigus** : `pour` → but *ou* cause, `avec` → moyen *ou* attribut, `de` → thème *ou* possession.
+
+**La boucle est complète** : on tape une phrase, `POST /api/ajouter` génère et persiste les candidats, on valide (✓ / ~ / ✗), et l'export ne garde que les acceptés. Vérifié de bout en bout :
+
+> « Le chien du voisin qui aboie la nuit réveille tout le quartier. » → **2 candidats** (`→ voisin`, `→ Le chien`), validation acceptée, export JSONL correct.
+
+**Dix tests passent** (cinq serveur, cinq générateur) : alignement des segments, deux lectures de la relative, rôle `pour` ambigu, deux lectures du GP, et l'invariant **« une seule variation par candidat »**.
+
+## L'état
+
+- Sous-projet `drave-structures` : commit **`a407095`** (générateur + intégration + tests).
+- Dépôt principal : commit **`0ca545eb`** (pointeur du submodule + ligne S).
+- `tools/structures` est **propre** ; les seuls changements restants dans l'arbre sont ceux de l'autre session.
+- Vérifications : revue ✅, état ✅, **T0 3 646 / 4 000**, journal ✅.
+
+## À quoi ça sert, concrètement
+
+1. **Voir** : la phrase colorée par type, les blocs indentés par profondeur, l'attachement affiché — la charpente avant la traduction.
+2. **Trancher** : l'humain valide les lectures ; chaque ✓ devient une ligne de la banque.
+3. **Comparer** : le bouton « interroger le modèle » oppose la baseline (attachement le plus proche) — et DeepSeek dès que `DEEPSEEK_API_KEY` est exportée, sans simulation.
+4. **Grandir** : le générateur permet d'ingérer n'importe quelle phrase, pas seulement les six écrites à la main.
+
+## La suite immédiate
+
+- **Enrichir l'analyseur** : subordonnées (que/parce que), coordination, pronoms objets — les cas où le générateur se trompe aujourd'hui ;
+- **Alimenter la banque** : un lot de phrases du corpus, validées par lots ;
+- **Brancher l'export** sur le corpus d'entraînement, puis l'expérience E2 (canal de structure en entrée du modèle, avec placebo et ablation) — la question qui relie tout : **la structure aide-t-elle le modèle à cette échelle ?**
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette ambiguité peut avoir une intention humouristique. on doit donc avoir un nuveau pragmatique pour trancher et conserver les 2 sens.
+
+### 🤖 Assistant
+
+⏵ Le point est juste : j'ajoute le niveau pragmatique — contexte, statuts, double sens conservé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('serveur.py'); s = p.read_text()\n\ns = s.replace('VERDICTS = {\"ok\", \"non\", \"partiel\"}',\n'''# Le niveau pragmatique : un sens n'est pas « vrai » hors contexte, il est … [4881 caractères tronqués]`
+
+  ```
+serveur : niveau pragmatique
+syntaxe ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > llm.py <<'PY'\n\"\"\"llm.py — l'évaluation des interprétations par un grand modèle, **avec le contexte**.\n\nLe niveau pragmatique : une phrase hors contexte est ambiguë ; c'est le contexte qui tranche, et\nparfois l'a … [4886 caractères tronqués]`
+
+  ```
+{'fournisseur': 'baseline', 'modele': 'attachement-le-plus-proche', 'mode': 'local', 'lectures': [{'id': 'p001-c2', 'statut': 'compatible'}], 'intention': 'inconnu', 'confiance': 0.5, 'justification': 'Attachement à la cible la plus proche.'}
+sans-clé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > static/app.js <<'JS'\nconst $ = (s) => document.querySelector(s);\nconst esc = (t) => t.replace(/&/g, \"&amp;\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");\n\nlet etat = { phrases: [], validations: [], llm: [] }; … [7765 caractères tronqués]`
+
+  ```
+ui pragmatique ok
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tests/test_serveur.py'); s = p.read_text()\ns = s.replace('''    def test_valider_et_export(self):\n        with Banc() as b:\n            code, r = b.post(\"/api/valider\" … [4610 caractères tronqués]`
+
+  ```
+tests patchés
+----------------------------------------------------------------------
+Ran 11 tests in 3.139s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('construire_donnees.py'); s = p.read_text()\ns = s.replace(''']\n\ndef spans(''', '''    (\"p007\", \"Le canard est prêt à manger.\",\n     [(\"Le canard\", \"GN\", \"agent\ … [1082 caractères tronqués]`
+
+  ```
+p007 ajouté
+7 phrases, 14 candidats, spans vérifiés
+alignement ok · 7 phrases, 14 candidats
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tests/test_serveur.py'); s = p.read_text()\ns = s.replace('self.assertEqual(len(d[\"phrases\"]), 6)', 'self.assertEqual(len(d[\"phrases\"]), 7)')\ns = s.replace('self.asser … [2853 caractères tronqués]`
+
+  ```
+readme ok
+Ran 11 tests in 3.122s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && git add -A && git -c user.name=\"Stéphane\" -c user.email=\"stephane@local\" commit -q -m \"PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE\n\nUne phrase hors contexte est ambiguë, même pour un humain ; en cont … [996 caractères tronqués]`
+
+  ```
+7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && fuser -k 8765/tcp 2>/dev/null; sleep 0.4; git -C tools/structures fetch -q origin && git -C tools/structures checkout -q 7366191 && git -C tools/structures log --oneline -1; nohup python3 tools/structures/serveur.py --port 8765 > /tm … [1041 caractères tronqués]`
+
+  ```
+13005197366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+7 phrases
+=== double sens de bout en bout ===
+p007-c1 double_sens
+p007-c2 double_sens
+=== export ===
+2 lignes · groupes: {'p007-double'} · statuts: {'double_sens'}
+contexte conservé : Le canard est un personnage de dessin animé qui pa
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f tools/structures/donnees/validations.jsonl tools/structures/donnees/llm.jsonl && git -C tools/structures status --short; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \" … [1239 caractères tronqués]`
+
+  ```
+T0 max : 3739 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError: puce S introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A2 \"banc de structures\" docs/pilotage/en-cours.md", "description": "Find the current S bullet"}`
+
+  ```
+30:- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+31-  avance ; **N4** en file ; **A/B** gardent les leurs.
+32-- **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
+--
+54:- **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
+55-  heuristique et **export corpus** JSONL (14 tests, spans vérifiés, manifeste) ; 6 phrases,
+56-  12 candidats ; banque vide tant qu'un humain ne valide pas ; [`README`](../../tools/structures/README.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); lignes = p.read_text().splitlines(keepends=True)\ni = next(k for k, l in enumerate(lignes) if l.startswith(\"- **S — le banc de structures**\"))\nnouvel … [724 caractères tronqués]`
+
+  ```
+puce S remplacée (ligne 54 )
+  T0 max : 3743 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+- **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
+  (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
+- **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
+  heuristique, **niveau pragmatique** (contexte, statuts, **double sens conservé**) et **export
+  corpus** JSONL (11 tests) ; 7 phrases, 14 candidats ; banque vide tant qu'un humain ne valide
+  pas ; [`README`](../../tools/structures/README.md).
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE\n\nLe banc de structures ne force plus un verdict  … [1040 caractères tronqués]`

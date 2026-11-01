@@ -7,13 +7,14 @@
 
 - **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
 - **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3
-- **Périmètre** : Pensée
+- **Périmètre** : Pensée, S, R4.4-reste
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
   `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
-  `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-01 10:55 EST
-- **Prochaine action** : AC-3, alpha-bêta, l'intégration DRVF et le banc anytime — le state store
-  v0 et ses six portes sont committés (`a20de579`).
+  `tools/structures/`, `data/structures/`, `reports/r44-*`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-01 11:20 EST
+- **Prochaine action** : S — l'export corpus est committé (14 tests) ; R4.4 — la note de limites
+  (fax 1 bit, exposant fusionné, parité réelle sans questions) ; puis AC-3, alpha-bêta, DRVF et
+  le banc anytime.
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
@@ -25,6 +26,8 @@
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** (un store, trois stratégies, un
   jeu jouet) avant toute généralisation ; réserver les fichiers ; livrer des schémas, des traces
   et des portes ; ne pas toucher aux GPU de N2 ; ne pas modifier `en-cours` sans prévenir.
+- **Reprise** : **S** — `exporter_corpus.py` (dernier verdict, spans vérifiés, manifeste SHA-256) ;
+  **R4.4** — les trois restes sont des **limites nommées**, pas des tâches ouvertes.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.

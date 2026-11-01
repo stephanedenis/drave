@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 18.8 h |
-| Tours | 12 |
-| Messages | 858 |
-| Appels d'outils | 804 |
+| Durée | 18.9 h |
+| Tours | 13 |
+| Messages | 876 |
+| Appels d'outils | 820 |
 | Fichiers touchés | 11 |
-| Commandes | 668 |
+| Commandes | 682 |
 | Sous-agents | 0 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 11** — allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidatees. On a donc un moyen de voir et valider les interprétations par un humain. On peut aussi soumettre cet ensemble à au grss modèle comme DeepSeek via l'API pour étudier son évaluation. et se construire ainsi un banque de corpus  … [28 caractères tronqués]
 
 **Tour 12** — lance le serveur et continue
+
+**Tour 13** — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette ambiguité peut avoir une intention humouristique. on doit donc avoir un nuveau pragmatique pour trancher et conserver les 2 sens.
 
 ## 2. Déroulé, étape par étape
 
@@ -585,7 +587,7 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 
 ### Tour 12 — lance le serveur et continue
 
-*15 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Launch the structures server in the background
 - bash — Write the candidate generator and test it
@@ -601,11 +603,71 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - bash — Update the submodule checkout to the new commit
 - bash — Test the full generate-validate-export loop
 - bash — Clean the demo artifacts and update the plan
-- … et 1 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
-⏵ Serveur lancé ; je construis le générateur de candidats (l'analyseur) pour la suite
+⏵ Serveur en ligne ; le générateur de candidats est branché et testé
+
+\## Le serveur tourne
+
+**http://127.0.0.1:8765** — 6 phrases, 0 validation, données propres. Pour l'arrêter : `fuser -k 8765/tcp` ; pour le relancer : `python3 tools/structures/serveur.py`. Sur le réseau local : `--hote 0.0.0.0`.
+
+\## Ce que j'ai ajouté depuis le lancement : le générateur
+
+Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
+
+- **Segmentation** par lexique de mots grammaticaux et règles de frontière : GN, GV, GP, REL, SUB ;
+- **Rôles devinés par la préposition** : lieu, temps, but, moyen, thème, destinataire ;
+- **Attachements candidats** : pour un GP ou une relative, il propose la tête du GP, le GN et le GV — exactement les ambiguïtés qui comptent ;
+- **Rôles ambigus** : `pour` → but *ou* cause, `avec` → moyen *ou* attribut, `de` → thème *ou* possession.
+
+**La boucle est complète** : on tape une phrase, `POST /api/ajouter` génère et persiste les candidats, on valide (✓ / ~ / ✗), et l'export ne garde que les acceptés. Vérifié de bout en bout :
+
+> « Le chien du voisin qui aboie la nuit réveille tout le quartier. » → **2 candidats** (`→ voisin`, `→ Le chien`), validation acceptée, export JSONL correct.
+
+**Dix tests passent** (cinq serveur, cinq générateur) : alignement des segments, deux lectures de la relative, rôle `pour` ambigu, deux lectures du GP, et l'invariant **« une seule variation par candidat »**.
+
+\## L'état
+
+- Sous-projet `drave-structures` : commit **`a407095`** (générateur + intégration + tests).
+- Dépôt principal : commit **`0ca545eb`** (pointeur du submodule + ligne S).
+- `tools/structures` est **propre** ; les seuls changements restants dans l'arbre sont ceux de l'autre session.
+- Vérifications : revue ✅, état ✅, **T0 3 646 / 4 000**, journal ✅.
+
+\## À quoi ça sert, concrètement
+
+1. **Voir** : la phrase colorée par type, les blocs indentés par profondeur, l'attachement affiché — la charpente avant la traduction.
+2. **Trancher** : l'humain valide les lectures ; chaque ✓ devient une ligne de la banque.
+3. **Comparer** : le bouton « interroger le modèle » oppose la baseline (attachement le plus proche) — et DeepSeek dès que `DEEPSEEK_API_KEY` est exportée, sans simulation.
+4. **Grandir** : le générateur permet d'ingérer n'importe quelle phrase, pas seulement les six écrites à la main.
+
+\## La suite immédiate
+
+- **Enrichir l'analyseur** : subordonnées (que/parce que), coordination, pronoms objets — les cas où le générateur se trompe aujourd'
+… [312 caractères tronqués]
+
+### Tour 13 — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette a … [128 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Add the pragmatic statuses to the server
+- bash — Rewrite the LLM client with context and pragmatic statuses
+- bash — Update the UI for context and pragmatic statuses
+- bash — Update the tests for pragmatic statuses
+- bash — Add a humorous ambiguity to the seed data
+- bash — Update the tests and README for the pragmatic layer
+- bash — Commit the pragmatic layer in the sub-project
+- bash — Update the submodule and test the pragmatic loop
+- bash — Clean the demo and update the plan for the pragmatic layer
+- bash — Find the current S bullet
+- bash — Replace the S bullet with the pragmatic version
+- bash — Commit the pragmatic layer integration
+- job_output
+
+**Synthèse produite :**
+
+⏵ Le point est juste : j'ajoute le niveau pragmatique — contexte, statuts, double sens conservé
 
 ## 3. Travail accompli
 
@@ -667,7 +729,7 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 628 autres
+- … et 642 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -835,4 +897,5 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)  Trois variantes du même texte de validation, mêmes octets, même protocole : p
 - S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS  Nouveau sous-projet (submodule : tools/structures, dépôt local drave-struc
 - S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER  Le banc de structures gagne son analyseur v0 (submodule tools/structures, commit a
+- S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE  Le banc de structures ne force plus un verdict unique (submodule 7366191). Chaque l
 

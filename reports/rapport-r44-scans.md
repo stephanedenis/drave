@@ -372,3 +372,16 @@ régressions.
   [`r44-reel-second.json`](r44-reel-second.json).
 - Spécification : [`docs/implantation/encodeur-visuel.md`](../docs/implantation/encodeur-visuel.md).
 - Ligne de roadmap : **R4.4** (programme R).
+
+
+## Ce qui reste — trois limites nommées, pas trois tâches ouvertes
+
+| reste | ce qui a été essayé | pourquoi ça s'arrête |
+|---|---|---|
+| **fax 1 bit** | médian / ouverture / composantes connexes avant upscale (95 % de destruction), `psm` 4, 6, 11 | 120 dpi, 1 bit : l'information n'est plus dans l'image ; **56,7 %** de parité, le pire des cinq |
+| **exposant fusionné** | passe chiffres sur les petits mots (`!`, `!!`, `!?`) ; le `10` de « développement 10 » a une boîte de **confiance 0** | il n'y a pas de boîte séparée à recadrer ; un split textuel serait une **devinette**, pas une mesure |
+| **scans réels de bout en bout** | Verne 1 : **WER 7,10 %**, rappel **93,7 %**, ordre des colonnes prouvé sur Verne 2 | la **parité** exige des questions humaines sur le scan ; sans elles, le WER est la mesure, et la parité n'est pas mesurable |
+
+**Ce qui rouvrirait** : un scanner réel, une vérité humaine sur dix pages, ou un moteur OCR qui
+retrouve le 1 bit. Tant que ce n'est pas là, R4.4 est **close avec ses limites nommées** — et le
+banc, lui, tourne tel quel sur des scans réels sans changer une ligne.

@@ -17,11 +17,12 @@
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
-- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3.
-- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration.
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; **reprise** de S et des restes de R4.4.
+- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) **reprise S/R4.4** : export corpus, note de limites.
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+- **Reprise** : **S** — export corpus JSONL vérifié (14 tests, manifeste) ; **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné, parité réelle sans questions).
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
   T2 stratégies, T3 anytime, T4 justification) sur le jouet des cruches ; BFS, greedy, A* et
   MCTS-lite ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md). Fait en parallèle par la
@@ -29,14 +30,14 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
-- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : AC-3, alpha-bêta, l'intégration **DRVF** et le banc anytime.
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `tools/structures/`, `data/structures/`, `reports/r44-*`, `journal/sessions/e181ce02-…/`.
+- **Prochaine action** : **S** — export ✅ ; **R4.4** — note de limites ; puis **AC-3, alpha-bêta, DRVF, banc anytime**.
 - **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
-> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close) — rapports dans
-> [`journal/sessions/`](../../journal/sessions/).
+> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+> exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
 
 ## Ce qui est en cours
 
@@ -50,8 +51,10 @@
   [`r44-scans`](../../reports/rapport-r44-scans.md) · [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
   (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
-- **S — le banc de structures** : outil web (`tools/structures`, submodule) : 6 phrases,
-  **générateur** de candidats, validation, LLM, export.
+- **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
+  heuristique, **niveau pragmatique** (contexte, statuts, **double sens conservé**) et **export
+  corpus** JSONL (11 tests) ; 7 phrases, 14 candidats ; banque vide tant qu'un humain ne valide
+  pas ; [`README`](../../tools/structures/README.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
