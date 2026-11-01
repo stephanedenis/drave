@@ -1,0 +1,20 @@
+{
+ "objet": "recensement du français unique disponible dans le dépôt au 2026-11-01",
+ "methode": "mêmes shingles de 96 octets que tools/corpus_propre.py, archives exclues",
+ "docs+journal": {
+  "documents": 995,
+  "brut_octets": 48730000,
+  "unique_octets": 27670000,
+  "retire_pct": 43.3,
+  "ratio_corpus_utilise": 8.5
+ },
+ "docs+journal+reports": {
+  "documents": 1540,
+  "brut_octets": 51970000,
+  "unique_octets": 30350000,
+  "retire_pct": 41.7,
+  "ratio_corpus_utilise": 9.4
+ },
+ "corpus_utilise_octets": 3244858,
+ "note": "mesure approximative (arrondie) ; journal/sessions contient des transcripts, à filtrer pour un corpus d'entraînement"
+}

@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 14.6 h |
+| Durée | 14.7 h |
 | Tours | 5 |
-| Messages | 676 |
-| Appels d'outils | 635 |
+| Messages | 688 |
+| Appels d'outils | 647 |
 | Fichiers touchés | 11 |
-| Commandes | 518 |
+| Commandes | 526 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -227,17 +227,26 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 
 ### Tour 5 — continue
 
-*5 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Test whether the local window mask is the second lock
 - bash — Add the mask test to the report, roadmap and state
 - bash — Trim the mask addition to fit the budget
 - bash — Final trim for the context budget
 - bash — Commit the mask experiment
+- job_output
+- bash — Census of the unique French text available in the repo
+- bash — Run the corpus census in the background
+- bash — Check the actual system time and last commit time
+- bash — Read the census result
+- bash — Read the full census result
+- bash — Record the census in the repo and the state
+- bash — Trim the state to fit after the census
+- bash — Commit the census
 
 **Synthèse produite :**
 
-⏵ Test du second verrou : la fenêtre locale est-elle la masque ou l'entraînement ?
+⏵ Enregistrement du recensement : 27,7 Mo de français unique, 8,5× le corpus utilisé
 
 ## 3. Travail accompli
 
@@ -299,7 +308,7 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 478 autres
+- … et 486 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -459,4 +468,5 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 - ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES  La page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-diversite, n2-long
 - N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS  À données, professeur et budget égaux, le modèle de 21,65 M (d_model 296, expert_hidden 416, ×1,
 - N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN  À 512 octets, l'attention locale (fenêtre 256) ne laisse voir
+- RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ  Le levier « plus de texte français unique » a un chiffre : avec les mêmes sh
 

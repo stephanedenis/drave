@@ -8620,3 +8620,116 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-longueur.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN\n\nÀ 512 octet … [679 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-518]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-518", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master d2613e8f] N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN
+ 12 files changed, 267 insertions(+), 27 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recensement : combien de français unique le dépôt contient-il, au-delà des 3,24 Mo utilisés ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, sys\nsys.path.insert(0, 'tools')\nfrom corpus_propre import deduit\n\ndef recense(racines):\n    morceaux = []\n    for r in racines:\n        for p in sorted(pathlib.Path(r).rglob('*.md')):\n        … [734 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-519]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-519", "timeout_ms": 300000, "wait": true}`
+
+  ```
+documents : 1540
+brut : 51,969,822 octets (51.97 Mo)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+KeyError: 'retires_pct'
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/recensement.py <<'PY'\nimport pathlib, sys\nsys.path.insert(0, 'tools')\nfrom corpus_propre import deduit\n\ndef recense(racines, etiquette):\n    morceaux = []\n    for r in racines:\n        for p in sorted(pathlib.P … [785 caractères tronqués]`
+
+  ```
+recensement 1222705
+06:53
+  ```
+
+- **bash** `{"command": "date; uptime; ls -la --time-style=full-iso /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index | cut -d' ' -f6-7; git -C /home/stephane/Data13TB/stephane/GitHub/Qtrinet log -1 --format='%ad' --date=iso", "description": "Check the actual system time and last commit time"}`
+
+  ```
+dim 01 nov 2026 06:53:54 EST
+ 06:53:55  up 14:37,  2 users,  load average: 4,47, 3,31, 2,47
+2026-11-01 06:52:18.774274746
+2026-11-01 06:50:53 -0500
+  ```
+
+- **bash** `{"command": "sleep 90; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2h/recensement.log 2>/dev/null; ls work/n2h/recensement.log && echo \"---\"; ps -eo pid,etime,cmd | grep recensement | grep -v grep | head -1", "description": "Read the census result"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-522]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-522", "timeout_ms": 300000, "wait": true}`
+
+  ```
+docs+journal : 995 documents · brut 48.73 Mo · unique 27.67 Mo · retiré 43.3 % · 8.5 × le corpus utilisé
+work/n2h/recensement.log
+---
+1222705       01:43 python3 work/n2h/recensement.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2h/recensement.log; date '+%H:%M'", "description": "Read the full census result"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-523]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-523", "timeout_ms": 300000, "wait": true}`
+
+  ```
+docs+journal : 995 documents · brut 48.73 Mo · unique 27.67 Mo · retiré 43.3 % · 8.5 × le corpus utilisé
+docs+journal+reports : 1540 documents · brut 51.97 Mo · unique 30.35 Mo · retiré 41.7 % · 9.4 × le corpus utilisé
+06:57
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Enregistrement du recensement : 27,7 Mo de français unique, 8,5× le corpus utilisé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nm = {\n \"objet\": \"recensement du français unique disponible dans le dépôt au 2026-11-01\",\n \"methode\": \"mêmes shingles de 96 octets que tools/corpus_propre.py, archives exclues\",\n \"do … [1767 caractères tronqués]`
+
+  ```
+ok
+roadmap ok
+en-cours ok
+
+  ❌ 1 violation(s) :
+     · T0 : 4014 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\" de **14,11** à **3,25** (au-delà : l'entraînement, pas le masque) ;\", \" de **14,11** à **3,25** ;\")\ns = s.replac … [422 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 454 JSON, le disque en a 455
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1037 caractères tronqués]`
