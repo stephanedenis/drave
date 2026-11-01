@@ -177,6 +177,55 @@ existante (quatre couloirs) est dans [chantiers-decision.svg](../schemas/chantie
 | 6 | **R1.1/R1.2** (contexte natif) | R | R0/R4 sont closes ; R1 attend N2 |
 | 7 | **texte intégral** des 10 corpus + PDF/OCR | D | 38,8 Go de résumés, pas encore les articles entiers |
 
+## 8. La capacité simultanée
+
+Combien de chantiers peuvent tourner **en même temps**, avec les moyens d'aujourd'hui ? Mesuré
+le 2026-11-01 : **40 cœurs**, **125 Go de RAM** (109 disponibles), **2 GPU Quadro RTX 5000 de
+16 Go** (libres), **2,0 To libres** sur `Data13TB`, **34 Go libres** sur `IA` (97 % plein), et
+**4 processus `dsh`-TUI actifs** (l'état ne déclare qu'une session active, Pensée).
+
+| ressource | ce qu'elle permet | ce qu'elle limite |
+|---|---|---|
+| 40 cœurs, 125 Go | 6 à 10 tâches CPU simultanées (OCR 1–2 cœurs, entraînement 8–16, éval 4–8) | les gros entraînements CPU se disputent les cœurs |
+| 2 × 16 Go GPU | **1 à 2 chantiers GPU** (un entraînement par GPU ; le modèle 32 B et le professeur ne tiennent pas en 16 Go) | la VRAM, pas les cœurs |
+| disque | les corpus (38,8 Go) et les sorties | **IA à 34 Go libres** : pas de nouveau gros modèle sans supprimer |
+| sessions | **3 à 4 sessions DSH** avec des territoires disjoints | l'**état s'écrit une session à la fois**, et les commits se disputent l'index Git |
+
+**Ce qui est prêt maintenant** (non bloqué) : **N2** (GPU, libre), **L** (contrat + cascade),
+**S** (analyseur + export), **D** (texte intégral, PDF/OCR), **A2.6/A8.3** (CPU), **B13**
+(AC-3, alpha-bêta). Soit **6 chantiers** possibles sur le papier. **Ce qui est bloqué** : B10.3
+(encodeur), A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), R2/R3 (N5/N4), R5 (B10.3), N5 (gelé).
+
+**La capacité réaliste est plus basse que le matériel** : **4 sessions** — N2 (GPU), Pensée
+(L + B13), S (structures), D/lecteur/A (corpus, R1.1/R1.2, A2.6) — et **2 à 4 sous-agents par
+session** pour les tâches bornées (la cascade de L, AC-3/alpha-bêta, l'analyseur de S, l'extraction
+PDF, le texte intégral). Soit **4 à 6 chantiers en vol** et **6 à 8 tâches bornées**, pas plus,
+parce que :
+
+- l'**état** s'écrit une session à la fois (la règle de `continuite.md`) ; au-delà de 4 écrivains,
+  les compteurs dérivent et les commits se verrouillent (observé le 01/11 : `cannot lock ref
+  'HEAD'` sur deux commits concurrents) ;
+- les **territoires de fichiers** se chevauchent vite (N2 réserve `data/`, `tools/corpus*`,
+  `reports/n2-*` ; Pensée `tools/pensee/`, `reports/pensee-*`, `r44-*` ; S `tools/structures` ;
+  D `data/corpus*`, `reports/corpus-*`) ;
+- la **mesure** est un point de sérialisation (R03, les portes, les JSON) ;
+- l'**humain** est le vrai goulot : S, la pragmatique, le contrat de L et les choix de design
+  demandent sa relecture — plus d'agents produisent plus à relire, pas plus de **validé**.
+
+**Sessions ou sous-agents ?** Les deux, à des échelles différentes :
+
+| besoin | unité | pourquoi |
+|---|---|---|
+| un **mandat long** (heures, objectif propre, contexte qui compacte, territoire réservé) | **session DSH** | elle survit, elle écrit son plan et son état, elle peut être reprise ; elle coûte la coordination |
+| une **tâche bornée** (une mesure, un outil, une fiche, un audit) | **sous-agent** (2 à 4, AGENTS § 10) | il rend un diff, la session intègre et commite ; il ne touche ni `en-cours` ni la roadmap |
+| un **audit massif** en lecture seule (110 sessions, 435 documents) | **workflow** (fan-out) | il parallélise la lecture, pas l'écriture |
+
+Une **seule session avec beaucoup de sous-agents** ne remplace pas les sessions : le contexte
+d'une session unique compacte, l'état reste un écrivain unique, et 8 sous-agents qui écrivent
+dans le même arbre se sérialisent à l'intégration. Les sessions sont l'**unité de mandat**, les
+sous-agents l'**unité de tâche**. Le bon régime aujourd'hui : **4 sessions + 2 à 4 sous-agents
+par session**, un écrivain d'état à la fois, et l'humain sur S, L et la pragmatique.
+
 ## 7. Où lire quoi
 
 | question | document |

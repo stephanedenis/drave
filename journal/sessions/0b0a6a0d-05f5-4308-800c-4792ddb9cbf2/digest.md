@@ -13224,3 +13224,74 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [663 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-770]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-770", "timeout_ms": 300000, "wait": true}`
+
+  ```
+0f2dbdca ÉTAT — COMPTEUR JSON 471 (DIX LANGUES)
+291f0f72 N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4
+651bfc90 BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3915 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ ? tools/structures
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : dix langues entraînées, et la dilution mesurée séparément de l'effet de données
+
+## Ce qui a été fait
+
+**Dix langues** extraites des bases sqlite locales (fr, en, de, es, it, pt, ru, ar, ja, zh), **11 000 articles chacune** (page_ids 200 000+, disjoints de N2.j), entrelacées par chunks de 8 Ko pour que chaque langue soit partout : **275,5 Mo bruts → 237,0 Mo** d'entraînement après déduplication, **0/60 fenêtres contaminées par langue**. Une base 11,47 M, 20 000 pas, recette N2.h.
+
+Et le contrôle qui sépare la **dilution** de l'**effet de données** : la même base entraînée sur les **21 Mo de français seuls** du corpus (sans les 9 autres langues).
+
+## Les mesures
+
+| langue | FR seul (186 Mo) | FR seul (21 Mo) | **10 langues** | écart multi / FR 21 Mo |
+|---|---:|---:|---:|---:|
+| **fr** | 3,7633 | 3,6230 | **5,6842** | **+57 %** |
+| en | 11,0366 | 10,9509 | **6,3024** | −42 % |
+| de | 16,3009 | 17,5431 | **6,5047** | −63 % |
+| es | 13,0054 | 13,3105 | **6,0866** | −54 % |
+| it | 13,6259 | 13,8877 | **6,0605** | −56 % |
+| pt | 15,2688 | 15,9746 | **6,8002** | −57 % |
+| ru | 10,7419 | 8,3772 | **3,6809** | −56 % |
+| ar | 13,0103 | 16,5414 | **3,6064** | −78 % |
+| ja | 53,8382 | 43,5327 | **5,7423** | −87 % |
+| zh | 85,0273 | 107,8443 | **9,6509** | −91 % |
+
+**La lecture.** Le français paie **+0,65 bit/octet** — et ce n'est pas un manque de données : à 21 Mo de français seuls, la base vaut **3,62**, *mieux* que les 186 Mo (3,76) sur cette validation. C'est donc bien la **dilution** : dix langues partagent 11,47 M de paramètres. En face, les gains sont énormes : anglais ÷1,7, allemand ÷2,7, japonais ÷7,6, chinois ÷11,2 — les écritures non latines, que la base française ne lisait pas du tout, deviennent lisibles.
+
+Sur les jeux externes français (littérature, anglais, wikitext2), le multilingue vaut **8,81 / 7,05 / 7,34** contre 7,42 / 12,41 / 13,91 pour la base française : il perd en français, il gagne largement en anglais.
+
+## Ce que ça dit pour le projet
+
+- **Pour la porte N2**, la base française seule reste la référence : à 11,47 M, on ne peut pas être à la fois précis en français et polyglotte.
+- **Pour la ligne R** (lire des documents dans dix langues), c'est un levier direct : un lecteur n'a pas besoin d'un français au bit près, il a besoin de lire dix langues.
+- **La question ouverte est une loi d'échelle** : combien de langues par million de paramètres ? Elle se mesure en refaisant tourner les trois bases à 21,65 M (le bras capacité de N2.h5 existe déjà).
+
+## L'état
+
+- **`291f0f72`** — fiche `reports/rapport-n2-multilingue.md`, manifeste `reports/corpus-multi-propre.json`, JSON d'évaluation dans `work/n2k/`.
+- **`0f2dbdca`** — compteurs à jour.
+- Vérifications : revue ✅, état ✅, **T0 3 915 / 4 000**, journal ✅. Le serveur du banc reste en ligne.
+
+## La suite immédiate
+
+1. **La distillation sur le corpus réel** (N2.j) : le gain OOD de la base (7,42 / 12,41) survivra-t-il au professeur ? C'est le test qui manque pour que le résultat entre dans le modèle livré.
+2. **La loi d'échelle multilingue** : les trois bases à 21,65 M, pour savoir combien de langues par million de paramètres.
+3. **Le canal d'annotation** (la structure ajoutée, pas retirée) — la seule voie que le filtre non ambigu n'a pas fermée.
+

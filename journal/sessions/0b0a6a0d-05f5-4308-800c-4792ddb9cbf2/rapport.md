@@ -7,10 +7,10 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 21.9 h |
+| Durée | 22.0 h |
 | Tours | 16 |
-| Messages | 996 |
-| Appels d'outils | 930 |
+| Messages | 998 |
+| Appels d'outils | 931 |
 | Fichiers touchés | 11 |
 | Commandes | 770 |
 | Sous-agents | 0 |
@@ -820,7 +820,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 ### Tour 16 — continue avec de trèes gros corpus multilingues
 
-*33 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — List the Wikipedia language bases and GPU status
 - bash — Extract 10-language Wikipedia articles
@@ -840,7 +840,39 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 **Synthèse produite :**
 
-⏵ Corpus multilingue : 9 langues de Wikipédia, entraînement et mesure par langue
+⏵ Résultat : dix langues entraînées, et la dilution mesurée séparément de l'effet de données
+
+\## Ce qui a été fait
+
+**Dix langues** extraites des bases sqlite locales (fr, en, de, es, it, pt, ru, ar, ja, zh), **11 000 articles chacune** (page_ids 200 000+, disjoints de N2.j), entrelacées par chunks de 8 Ko pour que chaque langue soit partout : **275,5 Mo bruts → 237,0 Mo** d'entraînement après déduplication, **0/60 fenêtres contaminées par langue**. Une base 11,47 M, 20 000 pas, recette N2.h.
+
+Et le contrôle qui sépare la **dilution** de l'**effet de données** : la même base entraînée sur les **21 Mo de français seuls** du corpus (sans les 9 autres langues).
+
+\## Les mesures
+
+| langue | FR seul (186 Mo) | FR seul (21 Mo) | **10 langues** | écart multi / FR 21 Mo |
+|---|---:|---:|---:|---:|
+| **fr** | 3,7633 | 3,6230 | **5,6842** | **+57 %** |
+| en | 11,0366 | 10,9509 | **6,3024** | −42 % |
+| de | 16,3009 | 17,5431 | **6,5047** | −63 % |
+| es | 13,0054 | 13,3105 | **6,0866** | −54 % |
+| it | 13,6259 | 13,8877 | **6,0605** | −56 % |
+| pt | 15,2688 | 15,9746 | **6,8002** | −57 % |
+| ru | 10,7419 | 8,3772 | **3,6809** | −56 % |
+| ar | 13,0103 | 16,5414 | **3,6064** | −78 % |
+| ja | 53,8382 | 43,5327 | **5,7423** | −87 % |
+| zh | 85,0273 | 107,8443 | **9,6509** | −91 % |
+
+**La lecture.** Le français paie **+0,65 bit/octet** — et ce n'est pas un manque de données : à 21 Mo de français seuls, la base vaut **3,62**, *mieux* que les 186 Mo (3,76) sur cette validation. C'est donc bien la **dilution** : dix langues partagent 11,47 M de paramètres. En face, les gains sont énormes : anglais ÷1,7, allemand ÷2,7, japonais ÷7,6, chinois ÷11,2 — les écritures non latines, que la base française ne lisait pas du tout, deviennent lisibles.
+
+Sur les jeux externes français (littérature, anglais, wikitext2), le multilingue vaut **8,81 / 7,05 / 7,34** contre 7,42 / 12,41 / 13,91 pour la base française : il perd en français, il gagne largement en anglais.
+
+\## Ce que ça dit pour le projet
+
+- **Pour la porte N2**, la base française seule reste la référence : à 11,47 M, on ne peut pas être à la fois précis en français et polyglotte.
+- **Pour la ligne R** (lire des documents dans dix langues), c'est un levier direct : un lecteur n'a pas besoin d'un français au bit près, il a besoin de lire dix langues.
+- **La question ouverte est une loi d'échelle** : combien de langues par million de paramètres ? Elle se mesure en refaisant tourner les trois bases à 21,65 M (le bras capacité de N2.h5 
+… [771 caractères tronqués]
 
 ## 3. Travail accompli
 

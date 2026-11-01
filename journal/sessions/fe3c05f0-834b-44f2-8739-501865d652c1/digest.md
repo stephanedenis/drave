@@ -14234,3 +14234,68 @@ La frontière heuristique/réseau (à mesurer en couverture × précision par un
 
 À noter : pendant la relecture, la session Pensée a créé `docs/implantation/bloc-linguistique.md` — c'est le même chantier **L** ; mon inventaire le nomme et le relie, sans toucher à son fichier.
 
+
+## Tour 8
+
+### 👤 Utilisateur
+
+combien de chantiers simultanés on peut faire en ce moment? Est0il préférable d'avoir plusieurs sessions dsh ou bien une seule avec beaucoup de sub-agents?
+
+### 🤖 Assistant
+
+⏵ Capacité de parallélisme : ressources, sessions actives, et politique de sous-agents
+
+Je regarde les moyens réels (cœurs, RAM, GPU, disque), les sessions en cours et ce que la méthode dit déjà des sous-agents.
+
+- **bash** `{"command": "nproc; free -g | head -2; nvidia-smi --query-gpu=index,name,memory.total,memory.used,utilization.gpu --format=csv,noheader 2>/dev/null; df -h /home/stephane/Data13TB /home/stephane/IA 2>/dev/null | tail -2; echo \"=== processus agents\"; ps -eo pid,etime,pcpu,pmem,cmd --sort=-pcpu | gre … [251 caractères tronqués]`
+
+  ```
+40
+               total        used        free      shared  buff/cache   available
+Mem:             125          16          37           6          79         109
+0, Quadro RTX 5000, 16384 MiB, 1 MiB, 0 %
+1, Quadro RTX 5000, 16384 MiB, 1 MiB, 0 %
+/dev/mapper/system-root   11T  8,9T  2,0T  83% /home/stephane/Data13TB
+/dev/md0                 938G  895G   34G  97% /home/stephane/IA
+=== processus agents
+   6207    23:01:01 50.5  0.6 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  13617    22:43:20 28.4  0.8 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   7237    22:59:53 12.1  0.8 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   4217    23:01:29 10.8  0.0 /usr/bin/konsole -session 10bd617572000179112224900000035610079_1793481209_58624
+1357580    01:49:52  3.3  0.4 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+   4247    23:01:29  2.2  0.0 /usr/bin/konsole -session 10bd617572000179346088000001015070002_1793481209_55895
+   4278    23:01:29  2.0  0.0 /usr/bin/konsole -session 10bd617572000179346854600001015070006_1793481209_55918
+   2912    23:02:30  0.1  0.0 node /home/stephane/.local/bin/dsh web --no-open
+   4285    23:
+… [211 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"sous-agent\\|sous-agents\\|session\" docs/methode/continuite.md | head -15; echo \"=== relations\"; grep -n \"sous-agent\\|session\\|parall\" docs/methode/relations-humaines.md | head -10; echo \"=== plans réservations\"; gre … [220 caractères tronqués]`
+
+  ```
+1:# Continuité — cycles longs, sous-agents, état unique
+3:> **Objet.** Comment un travail continue : cycles DSH, sous-agents, discipline de
+23:## 2. Les sous-agents
+52:**Un seul écrivain par fichier** : la session qui clôt garde l'état, la roadmap et les directives ; le sous-agent
+55:### Le rapport d'un sous-agent (10 lignes)
+72:La session **vérifie** (porte, lien, contrôle), **met à jour `en-cours`**, **commite** et
+73:**marque la roadmap**. Un résultat de sous-agent n'est **pas fini** tant qu'il n'est pas intégré :
+74:le sous-agent ne clôt pas la tâche, il la rend intégrale.
+87:| **écriture** | toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne (hook `pre-commit`) |
+88:| **sessions actives** | une sous-section par session : Id, rôle, **plan, ambition, stratégie, objectif final**, action, autres sessions, prochaine action, bloquants, journal ; le rôle nomme le chantier |
+89:| **plan** | `journal/sessions/<id>/plan.md` |
+96:ils disent ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+101:**Écriture** : toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, road
+… [889 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/chantiers.md'); s=p.read_text()\nsection='''## 8. La capacité simultanée\n\nCombien de chantiers peuvent tourner **en même temps**, avec les moyens d'aujourd'hui ? Mesuré\ … [4102 caractères tronqués]`
+
+  ```
+section capacité ajoutée
+  T0 max : 3915 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git add docs/pilotage/chantiers.md; git commit -m \"PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES\" 2>&1 | tail -2; git log --oneline -1", "description": "Commit capacity se … [90 caractères tronqués]`

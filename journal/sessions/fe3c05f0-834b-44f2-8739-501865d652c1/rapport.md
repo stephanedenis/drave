@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 21.2 h |
-| Tours | 7 |
-| Messages | 800 |
-| Appels d'outils | 805 |
+| Durée | 22.7 h |
+| Tours | 8 |
+| Messages | 804 |
+| Appels d'outils | 809 |
 | Fichiers touchés | 18 |
-| Commandes | 736 |
+| Commandes | 740 |
 | Sous-agents | 0 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 **Tour 6** — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
 
 **Tour 7** — relis mes demandes de toutes les sessions des derniers 48h pour compredre la vision à jour du projet. creuse l'historique au besoin pour garantir la cohérence et élargir l'inventaire de chantier pour mieux comprendre leurs relations.
+
+**Tour 8** — combien de chantiers simultanés on peut faire en ce moment? Est0il préférable d'avoir plusieurs sessions dsh ou bien une seule avec beaucoup de sub-agents?
 
 ## 2. Déroulé, étape par étape
 
@@ -434,6 +436,21 @@ Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs
 | **B — l'intelligence** | le sens, la logique, les jeux, les maîtres | ✅ B1–B12 ; B10.3 bloqué ; B13 v0 (6/6 portes) | B10
 … [2796 caractères tronqués]
 
+### Tour 8 — combien de chantiers simultanés on peut faire en ce moment? Est0il préférable d'avoir plusieurs sessions dsh ou bien une … [35 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Measure CPU, RAM, GPU, disk, and active agent processes
+- bash — Read session and subagent method guidance
+- bash — Add simultaneous capacity section to chantiers doc
+- bash — Commit capacity section
+
+**Synthèse produite :**
+
+⏵ Capacité de parallélisme : ressources, sessions actives, et politique de sous-agents
+
+Je regarde les moyens réels (cœurs, RAM, GPU, disque), les sessions en cours et ce que la méthode dit déjà des sous-agents.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -501,7 +518,7 @@ Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 696 autres
+- … et 700 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -684,4 +701,5 @@ Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet set -e rm -f /tmp/index.r44 GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD GIT_INDEX_FILE=/tmp/index.r44 gi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/verifie_journal.py" "python3 tools/verifie_backlog.py" "python3 tools/verifie_etat_a_
+- PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES" 2>&1 | tail -2; git log --oneline -1
 
