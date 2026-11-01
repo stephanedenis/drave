@@ -7,15 +7,15 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 16.2 h |
+| Durée | 16.3 h |
 | Tours | 7 |
-| Messages | 788 |
-| Appels d'outils | 745 |
+| Messages | 794 |
+| Appels d'outils | 748 |
 | Fichiers touchés | 11 |
-| Commandes | 613 |
+| Commandes | 615 |
 | Sous-agents | 0 |
-| Commits | 16 |
-| Compactages de contexte | 0 |
+| Commits | 17 |
+| Compactages de contexte | 1 |
 
 ## Objectifs déclarés
 
@@ -323,7 +323,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 
 ### Tour 7 — fais les deux en parallèle
 
-*66 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - bash — Measure corpus candidates
 - bash — Read the Pensée implementation spec
@@ -339,11 +339,11 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - bash — Write the water-jug problem and run the four strategies
 - bash — Debug the engine loop
 - bash — Fix the budget counting and MCTS applicability
-- … et 44 autres
+- … et 46 autres
 
 **Synthèse produite :**
 
-⏵ Résultat : le corpus élargi généralise mieux (anglais ÷1,7) mais dilue la prose ; je corrige la fiche
+⏵ Clôture des deux chantiers parallèles
 
 ## 3. Travail accompli
 
@@ -405,7 +405,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 573 autres
+- … et 575 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -569,4 +569,5 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE  Vérification des trois sessions : N2.h close (0b0a6a0d), R4.4 close (fe
 - PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES  Le contrat docs/implantation/moteur-de-pensee.md a son implémentation : types canoniques (Candidat, E
 - N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE  À recette égale, le corpus du dépôt courant (docs + journal + rapports, 1 308 documen
+- SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES  Les deux chantiers menés en parallèle sont committés : N2.i (17ececf
 

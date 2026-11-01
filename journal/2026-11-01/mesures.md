@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (20)
+## Commits du jour (21)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -28,16 +28,17 @@
 | 03:58 | `52cf5853` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 | 05:28 | `3a6ae9ca` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
 | 06:58 | `18f28437` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
+| 08:32 | `17ececfc` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
 
 ## Chiffres du jour
 
-`27,7 Mo` · `27200 %` · `97 %` · `90 %` · `96,7 %` · `52,5 %` · `1,1 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %`
+`÷1,7` · `27,7 Mo` · `27200 %` · `97 %` · `90 %` · `96,7 %` · `52,5 %` · `1,1 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 16.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 16.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 10.5 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -46,6 +47,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-capacite.md](../../reports/rapport-n2-capacite.md)
 - [reports/rapport-n2-combine.md](../../reports/rapport-n2-combine.md)
+- [reports/rapport-n2-corpus-elargi.md](../../reports/rapport-n2-corpus-elargi.md)
 - [reports/rapport-n2-diversite.md](../../reports/rapport-n2-diversite.md)
 - [reports/rapport-n2-longueur.md](../../reports/rapport-n2-longueur.md)
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)

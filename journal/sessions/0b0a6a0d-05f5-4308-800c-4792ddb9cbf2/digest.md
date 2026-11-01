@@ -10140,3 +10140,266 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-corpus-elargi.md reports/corpus-repo-propre.json reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md tools/eval_n2_propre.py && timeout 300 git commit -m \"N2.i — LE CORPUS ÉLARGI GÉNÉRALISE … [980 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-613]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-613", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master 17ececfc] N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE
+ 16 files changed, 546 insertions(+), 36 deletions(-)
+ create mode 100644 reports/corpus-repo-propre.json
+ create mode 100644 reports/rapport-n2-corpus-elargi.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md'); s = p.read_text()\ns = s.replace(\"- **Heartbeat** : 2026-11-01 07:20 EST\", \"- **Heartbeat** : 2026-11-01 08:35 ES … [817 caractères tronqués]`
+
+  ```
+ok
+  ⚠ mandat périmé (589 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+check=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+<compacted-summary>
+
+## Primary Request and Intent
+- Initial: "continue" — resume autonomous work on the Drave/Qtrinet project (N2 line), following `AGENTS.md` (French project conventions, gates, état page, commits carrying numbers).
+- Then: "je vais démarrer une session en parallèle. est-ce que en-cours.md est à jour pour que l'autre session travaille sans conflit avec toi?" — state page must declare active sessions, reserved files, conflict map.
+- Then: "en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux."
+- Overarching mandate: "je te donnes 10h de liberté totale. impressionne-moi. je serai déçu si tu as terminé à temps." → deliver a substantial, rigorous, multi-result night programme; keep working until near the 10 h deadline (~06:40 EST / 11:40 UTC on 2026-11-01).
+
+## Key Technical Concepts
+- Byte-level LM `drave-n0` (11,472,792 params; `NativeConfig(d_model=224, n_blocks=6, expert_hidden=288, n_experts=8, top_k=2, kwta=0.25, window=256, max_pos=2048, thought_steps=2, early_blocks=(1,3,5))`), local attention window 256, early heads after blocks 2/4/6, "thought loop" (2 tanh steps), learned **absolute positional embeddings**.
+- Distillation: teacher `route-teacher-20k`/`route-teacher-propre`/`route-teacher-mixte` (23.57 M, `tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2`), KD T=2 α=0.7 + CE + early/local heads (0.1/0.05 weights), VDC window sampling, seed shift `(graine−1)×10 000 019`.
+- Contamination discovery (N2.d): 32.8 % of protocol validation windows verbatim in training; 127 contiguous duplicated blocks up to 1,792 B; 23.5 % of train windows duplicated.
+- Dedup by Rabin–Karp 96-byte shingles (base 257, mod 2^61−1), content chunks 8,192 B, split every 20th chunk to val / 20th−1 to test; verification = 0/2,814 contamination.
+- Protocols: "historique" 8 lots × 16 × 128 (comparable to 2,7078), 8 × 15 × 129 (2,6998); chunk-aware eval (windows never straddle a chunk seam).
+- Random position offsets `o ~ U(0, 384)` at training (`--positions-aleatoires`, `NativeModel.forward(ids, pos_debut=0)`) to break the length lock.
+- Project rules: `bash tools/toutes-les-portes.sh` (read verdict via `awk '$2 != 0' registre.txt`), `python3 tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤ 4000 words = AGENTS 1200 + en-cours + max `docs/methode/*.md`), `tools/verifie_en_cours.py` (≤ 2000 words, required bullets **Id/Rôle/Ce qu'elle fait/Ce que font les autres/Fichiers réservés/Prochaine action/Bloquants/Journal**), `tools/sessions.py --check` (heading `### Session \`<id>\` — <rôle>`, heartbeat `%Y-%m-%d %H:%M HAE`), pre-commit hook requires en-cours staged with any `reports/`, roadmap, backlog fact and runs `git add journal`.
+
+## Files and Code
+- `tools/corpus_propre.py` (new, committed): shingle dedup + chunk split + manifest + verification; CLI `--source --sortie --manifeste --fenetre 96 --chunk 8192 --val 20 --test 20 --verif-max`; fixed chunk counts (397/22/22), test offset `i % test_un_sur == test_un_sur - 2`.
+- `tools/eval_n2_propre.py` (new, committed): `val`, `test`, `litterature`, `litterature_propre`, `anglais`, `wikitext2`, `permute`, `--decomposition` (early heads, `sans_pensee`), `--longueurs` (129/192/256/384/512), `--sortie` (appends JSON).
+- `tools/distiller_budget.py` (committed): `--corpus fr|multi`, `--quotas {proportionnel,equilibre}`, `--stages seq:pas:lr`, `--graine`, `--positions-aleatoires N`; precision now on validation.
+- `tools/native_model.py` (committed): `forward(ids, pos_debut: int = 0)` and `forward_jusqua(..., pos_debut=0)`, backward-compatible.
+- `docs/pilotage/en-cours.md`: 3 session blocks (N2.h `0b0a6a0d…`, R4.4 `fe3c05f0…`, Pensée `e181ce02…`), each with Plan/Ambition/Stratégie/Objectif final; N2.h result bullet; portes line "80 (76 vertes, 4 r
+… [5563 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+<compacted-summary>
+
+## Primary Request and Intent
+- Initial: "continue" — resume autonomous work on the Drave/Qtrinet project (N2 line), following `AGENTS.md` (French project conventions, gates, état page, commits carrying numbers).
+- Then: "je vais démarrer une session en parallèle. est-ce que en-cours.md est à jour pour que l'autre session travaille sans conflit avec toi?" — state page must declare active sessions, reserved files, conflict map.
+- Then: "en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux."
+- Overarching mandate: "je te donnes 10h de liberté totale. impressionne-moi. je serai déçu si tu as terminé à temps." → deliver a substantial, rigorous, multi-result night programme; keep working until near the 10 h deadline (~06:40 EST / 11:40 UTC on 2026-11-01).
+
+## Key Technical Concepts
+- Byte-level LM `drave-n0` (11,472,792 params; `NativeConfig(d_model=224, n_blocks=6, expert_hidden=288, n_experts=8, top_k=2, kwta=0.25, window=256, max_pos=2048, thought_steps=2, early_blocks=(1,3,5))`), local attention window 256, early heads after blocks 2/4/6, "thought loop" (2 tanh steps), learned **absolute positional embeddings**.
+- Distillation: teacher `route-teacher-20k`/`route-teacher-propre`/`route-teacher-mixte` (23.57 M, `tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2`), KD T=2 α=0.7 + CE + early/local heads (0.1/0.05 weights), VDC window sampling, seed shift `(graine−1)×10 000 019`.
+- Contamination discovery (N2.d): 32.8 % of protocol validation windows verbatim in training; 127 contiguous duplicated blocks up to 1,792 B; 23.5 % of train windows duplicated.
+- Dedup by Rabin–Karp 96-byte shingles (base 257, mod 2^61−1), content chunks 8,192 B, split every 20th chunk to val / 20th−1 to test; verification = 0/2,814 contamination.
+- Protocols: "historique" 8 lots × 16 × 128 (comparable to 2,7078), 8 × 15 × 129 (2,6998); chunk-aware eval (windows never straddle a chunk seam).
+- Random position offsets `o ~ U(0, 384)` at training (`--positions-aleatoires`, `NativeModel.forward(ids, pos_debut=0)`) to break the length lock.
+- Project rules: `bash tools/toutes-les-portes.sh` (read verdict via `awk '$2 != 0' registre.txt`), `python3 tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤ 4000 words = AGENTS 1200 + en-cours + max `docs/methode/*.md`), `tools/verifie_en_cours.py` (≤ 2000 words, required bullets **Id/Rôle/Ce qu'elle fait/Ce que font les autres/Fichiers réservés/Prochaine action/Bloquants/Journal**), `tools/sessions.py --check` (heading `### Session \`<id>\` — <rôle>`, heartbeat `%Y-%m-%d %H:%M HAE`), pre-commit hook requires en-cours staged with any `reports/`, roadmap, backlog fact and runs `git add journal`.
+
+## Files and Code
+- `tools/corpus_propre.py` (new, committed): shingle dedup + chunk split + manifest + verification; CLI `--source --sortie --manifeste --fenetre 96 --chunk 8192 --val 20 --test 20 --verif-max`; fixed chunk counts (397/22/22), test offset `i % test_un_sur == test_un_sur - 2`.
+- `tools/eval_n2_propre.py` (new, committed): `val`, `test`, `litterature`, `litterature_propre`, `anglais`, `wikitext2`, `permute`, `--decomposition` (early heads, `sans_pensee`), `--longueurs` (129/192/256/384/512), `--sortie` (appends JSON).
+- `tools/distiller_budget.py` (committed): `--corpus fr|multi`, `--quotas {proportionnel,equilibre}`, `--stages seq:pas:lr`, `--graine`, `--positions-aleatoires N`; precision now on validation.
+- `tools/native_model.py` (committed): `forward(ids, pos_debut: int = 0)` and `forward_jusqua(..., pos_debut=0)`, backward-compatible.
+- `docs/pilotage/en-cours.md`: 3 session blocks (N2.h `0b0a6a0d…`, R4.4 `fe3c05f0…`, Pensée `e181ce02…`), each with Plan/Ambition/Stratégie/Objectif final; N2.h result bullet; portes line "80 (76 vertes, 4 rouges à la passe du 01/11 00 h 56)"; last pass "1 h 46"; counters 375/454 (JSON count moved with parallel session).
+- `docs/pilotage/roadmap.md`: N2 row and lessons updated with N2.h numbers (`3,0904`, `16,70 → 3,85`, `14,11 → 3,25`), N2 open question and R1 block now cite positions vs local window.
+- `docs/pilotage/backlog/N2-distillation.md`: L'état/porte/next action rewritten for N2.h.
+- `reports/rapport-n2-propre.md` (N2.h1), `rapport-n2-diversite.md` (N2.h2), `rapport-n2-longueur.md` (N2.h3) — generated by `work/n2h/remplit.py`; `reports/n2-propre.json`, `reports/corpus-propre.json`, `reports/corpus-litt-propre.json`.
+- `work/n2h/`: checkpoints (14 `.pt`, 903 Mo), queues `file-gpu0.sh`, `file-gpu1.sh`, `file-combine.sh`, `file-capacite.sh` (unused), `evalue-tout.sh`, `remplit.py`, `remplit4.py`, `maj-roadmap.py`, `maj-portes.py`, `fiche4.md`, `journal.md`, `commit-msg.txt`.
+- `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md`: N2.h mandate, heartbeat 2026-11-01 03:40, **État : terminé**.
+- `journal/2026-11-01/mesures.md`: N2.h narrative inserted in `<!-- notes -->` block (committed `1da58752`).
+- Archived checkpoints: `/home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/` and `/home/stephane/IA/artefacts/n2h/2026-11-01/` (903 Mo each).
+
+## Errors and Fixes
+- `sessions.py` "heartbeat illisible" / "plan actif non listé": fixed heading to `### Session \`0b0a6a0d-…\` — …` and heartbeat to `2026-10-31 17:35 HAE`.
+- `math.exp()` with 2 args in `eval_n2_propre.py` decompose → fixed parenthesis.
+- `CorpusMulti` quota off by 2 → `round` reproduces manifest 49,999.
+- `corpus_propre` manifest wrote byte counts instead of chunk counts → fixed to 397/22/22 and tool patched.
+- `remplit.py` replaced `{{TABLE}}` twice (TABLE in vals) → removed; fiche3 showed wrong table, fixed.
+- Stale numbers (14,46/3,26/6,13) in fiche3 texts → replaced by placeholders and regenerated.
+- T0 budget overflow (4031/4024/4010 words) after state edits → trimmed header, C-chantiers line, N2.h bullet; restored `**C1**…**C7**` tokens required by `revue_documentation.py` ("0 chantiers sur 7").
+- `references-non-regression.md` 2,543 > 2,500 words → compacted two pass blocks.
+- `entrainer_native.py --dim/--expert-hidden` added then reverted (`git checkout`) as untested.
+- DST rollback at 02:00 EDT → clock jumped to 01:00 EST (deadline ~06:40 EST, not 07:40).
+
+## Pending Jobs
+- Background job `bash-467`: evaluating `DR-pos-g1/g2/g3` with `--decomposition --longueurs --sortie work/n2h/eval.json` (started ~03:57).
+- Then: `python3 work/n2h/remplit4.py` → `reports/rapport-n2-combine.md`; update en-cours/roadmap; regenerate `reports/INDEX.md`; run doc-gate subset; commit the combined-arm result.
+- Final closing message to the user summarising the 10 h.
+
+## Current Work
+- Combined arm (mixte corpus + random positions) finished: `DR-pos-g1` val 3.4618, litt 4.0995, anglais 29.80, lengths 3.46/3.45/3.53/4.45/5.46; g2/g3 evaluated by running job.
+- `work/n2h/fiche4.md` drafted ("Les deux leviers ensemble") with `{{DR_VAL}}`, `{{DR_LITT}}`, `{{DR_ANG}}`, `{{DR_256}}`, `{{DR_512}}`, `{{A_VAL}}`, `{{A_LITT}}`, `{{A_256}}`, `{{TABLE}}`, `{{LECTURE}}`; filler `remplit4.py` ready (A_LITT added).
+- Main results committed: `e36e8185` (N2.h corpus propre/diversité/longueur, portes 80/76 vertes, references updated) and `1da58752` (journal narrative).
+
+## Next Step
+- Read `bash-467` output, run `python3 work/n2h/remplit4.py`, then update en-cours + roadmap N2 rows with the DR numbers, regenerate INDEX/counters, commit `reports/rapport-n2-combine.md` (staging en-cours so the hook passes), run the doc-gate subset, and write the final summary.
+
+## Critical Context
+- Committed numbers (means over 3 seeds, historical protocol, chunk-aware eval): base propre val 3.2402 / litt 12.2861 / angl 32.9009 / wt 33.2883; **A** (dépôt seul) val **3.0904 ±0.0048**, test 3.1960, litt **16.7034 ±0.2706**, anglais **57.5773 ±2.2054**, wt 56.8821; **C** (curriculum 129) val 3.0804, litt 16.8172; **D** (mixte 50/50) val **3.2625 ±0.0032**, test 3.3221, litt **3.8546**, anglais **25.6755**, wt 26.0589; **R** (positions aléatoires) val **3.2381**, lengths **3.24/3.23/3.25/5.06/5.93**; A lengths **3.13/8.56/14.11/23.90/32.41**; decomposition A: complete 3.1162, after 2/4/6 blocks 3.8245/3.2238/**3.0462**, sans pensée 2.36e7.
+- Interpretations committed: gate <2,5 now 0,59 away on clean corpus; 2,6998 historical is contaminated and from an ~8× longer chain; distillation **specializes** (base 12.29 OOD vs A 16.70 for −0,15 in-domain); diversity divides OOD by 4.3 for +0,17; length lock = absolute positions up to 256 (×4.3), local attention window beyond (5.93 at 512); thought loop costs ~0.07 (indice, heads trained differently); DR costs add (+0,36 vs A).
+- Gates pass `JOURNAUX=/tmp/portes-1101-n2h`: 80 gates, 76 green, 4 known reds (`porte-indice` 921 s, `porte-melange` 112 s, `porte-homeostasie` env exit 2, `porte-reparti-moteur`), 1 h 46, started 2026-11-01 00 h 56 EST.
+- Corpus stats: 4,633,889 → 3,605,306 B (−22,23 %); train 3,244,858 / val 180,224 / test 180,224; 1,411 runs, longest 540,086; residual 2.3 % val windows share 64 B, 0 % share 128 B.
+- Parallel sessions are active and their hooks commit my journal/docs changes; always `git add` explicit paths, never stage `tools/docwatch`, `tools/graphe_document_ocr.py`, `tools/mesurer_scans.py`, `reports/r44-*`.
+- Deadline ~06:40 EST; remaining work is documentation/commit only (no new GPU arms planned; capacity arm prepared but skipped as too tight).
+
+</compacted-summary>
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Clôture des deux chantiers parallèles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md && timeout 300 git commit -m \"SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES\n\nLes deux chantiers menés en parallèle  … [538 caractères tronqués]`
